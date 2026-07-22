@@ -248,7 +248,13 @@ EXPECTED = {
     # [2026-07-05, Step 4 fix, same rationale as 'unit'/'cell' above] re-recorded again.
     # [2026-07-08, same fix as 'unit' above] re-recorded.
     # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
-    'unit_field': '40649feb7c634509831e4ca124a9ecbd346bd7e3485699480be01961b86c814f',
+    # [2026-07-22, ED-MB-0011, DG-10 field-movement freeze fix, Jordan-ruled "fields, not grids"]
+    # re-recorded (field modes only). _node_advance no longer floors a sub-Discipline-5 body's velocity
+    # to 0 -> a unit that degrades below disc-5 mid-battle keeps moving at its true rate instead of
+    # freezing. Both GRID modes ('unit'/'cell') confirmed BYTE-IDENTICAL (the fix is gated on
+    # FIELD_MOVEMENT; test_mass_battle_byte_exact.py, which pins FIELD_MOVEMENT=0, still passes). Only
+    # the two _field modes move. See units.py:_node_advance + audit/2026-07-22-mass-battle-stress-test/.
+    'unit_field': '918940cb3d8be5d4aa0b645ab381fe21de1f4b93a0f7c9865616c65fd5a9aaa2',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -281,7 +287,12 @@ EXPECTED = {
     # those 3 modes); only `cell_field` moves.
     # [2026-07-08, same fix as 'unit' above] re-recorded.
     # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
-    'cell_field': '7b3b0a8d61429e07042dd61095bb14bae208179bf09e67f50bbd5f6546dcbed5',
+    # [2026-07-22, ED-MB-0011, DG-10 field-movement freeze fix — see the 'unit_field' note above]
+    # re-recorded. Per-row diff (old vs fix): mirror/ranged (Line-vs-Line, no moving unit degrades
+    # below disc-5) BYTE-IDENTICAL; the 8 decisive rows (wedge/cannae/oblique/manipular/envelop/
+    # cav_charge/cav_braced/cav_shaken) move because a unit degrading below disc-5 mid-battle used to
+    # freeze and now advances at its true reduced rate (trace: wedge seed 0, side B -> disc 3).
+    'cell_field': 'a87cb75252e7babd40762a201c9247b67fb90a1336221c31596f91a77ac5e5e0',
 }
 
 

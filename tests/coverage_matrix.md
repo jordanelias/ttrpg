@@ -1,6 +1,18 @@
 # Coverage Matrix — Weapon System v2 (Active)
 
 Archived entries in tests/coverage_matrix_archive.md
+
+## 2026-07-22 — ED-MB-0011: DG-10 field-movement freeze fix + field-based stress test (condensed)
+- DG-10 (ED-MB-0007) fixed: `_node_advance` floored sub-Discipline-5 velocity to 0
+  (`floor(1*0.7)=0`) → most §B.2 troop types (all disc<5) never closed on the live field path. The
+  continuous-velocity accumulator meant to prevent it sat dead in the legacy grid `advance_cells`. Fix
+  (Jordan-ruled "fields, not grids. no grids."): FIELD-path `step` is the real velocity (no floor, no
+  accumulator; anchor/pos already float, consumer uses `min(step,mag)`); whole velocities stay int so
+  disc≥5 is byte-exact, fractions advance at true rate. GRID path untouched (`if FIELD_MOVEMENT`) → CI
+  byte-exact still 2 passed; FIELD goldens re-recorded (mirror/ranged byte-identical, 8 decisive rows
+  move because units degrading below disc-5 mid-battle used to freeze). maneuvers+yield 12 passed/1
+  xpassed. MOVEMENT-only; shifts the DG-6-gated Cannae gauge, no balance constant tuned. Full detail:
+  `audit/2026-07-22-mass-battle-stress-test/` + ED-MB-0011.
 ## 2026-06-15/20 — ED-1013 through ED-1032 (archived — condensed)
 - Smooth command-sigma pool + continuous discipline penalty (ED-1013); gauge recalibration (ED-1014);
   cavalry-construction gauge fix, not an engine defect (ED-1015); per-subunit stat/stamina/troop-type/

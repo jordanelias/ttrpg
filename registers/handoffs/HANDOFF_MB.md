@@ -15,6 +15,35 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0011 (2026-07-22): DG-10 field-movement freeze FIXED + full field-based stress test.**
+  Jordan asked for a field-based (not grid) stress test with all flags/gates activated on the
+  *active* engine (`tests/sim/mass_battle/`, NOT the wired `systems/mass_battle/sim/` bare port,
+  which has none of these flags). The stress test surfaced the dominant field-path defect: `_node_advance`
+  floored any sub-Discipline-5 body's velocity to 0 (`floor(1×0.7)=0`), so the MAJORITY of canonical
+  troop types (levy/light_inf/heavy_inf/archers/crossbow/sling/artillery, all disc<5 per §B.2) NEVER
+  advanced to contact on the live field path — every such battle a vacuous 0-casualty draw. This is
+  **DG-10** (opened by ED-MB-0007) generalized: the continuous-velocity accumulator meant to prevent it
+  was wired only into the legacy grid `advance_cells` and sat dead there. **Jordan ruled in-session**
+  ("fields, not grids. no grids." / "if it's broken and not commensurate with system, disable" / "what
+  even is the point of the continuous velocity accumulator?"): the `math.floor` is the grid-snap the
+  field exists to remove; the accumulator is itself just a Bresenham workaround. **Fix:** on the FIELD
+  path `step` is now the real velocity (no floor, no accumulator) — anchor/pos are already floats and
+  the sole consumer moves by `min(step,mag)`; whole velocities stay int so disc≥5 rows are byte-exact,
+  fractions (disc<5) advance the float anchor at their true 0.7 cells/tick. **Legacy GRID path
+  untouched** (gated on `if FIELD_MOVEMENT`) → CI byte-exact grid oracle still passes (2 passed). Field
+  goldens (bat.py cell_field/unit_field, NOT CI-checked) re-recorded: mirror/ranged byte-identical, the
+  8 decisive rows change because a unit degrading below disc-5 MID-battle used to freeze and now keeps
+  moving (trace: wedge seed 0 → disc 3). maneuvers+yield: 12 passed/1 xpassed. **Scope: MOVEMENT only** —
+  it shifts the 20-row Cannae balance gauge (frozen units now fight), which is the **DG-6-gated**
+  calibration surface; NOT a balance claim, no balance constant tuned. Stress harness + full findings:
+  `audit/2026-07-22-mass-battle-stress-test/` (S0 wiring: all 30 MECHANICS resolve; S1 fuzz: 0 engine
+  failures / 77.7% contact / 1-of-197 minor cell-vs-hp accounting drift on a clean unit; S3: 12/16 gates
+  proven WIRED by A/B, 4 inert-on-scenario incl. by-design-exempt PC_BRACE_SETUP_DELAY; S4: PC_FACING_MODEL/
+  FIELD_CONTACT/REFORM_CHECK all SAFE when activated; S5: determinism + perfect mirror symmetry).
+  **Next for this lane:** (1) the residual cell-vs-hp accounting drift (RC-1 family, 1/197 clean units)
+  and the fragile envelopment-shock validators (V-SHOCK/V-BRACE proxy ≈0) are both DG-6-layer, Jordan-
+  gated; (2) DG-6 itself (the resolution-architecture calibration) remains the open highest-leverage gate.
+
 - **Mass battle — Stages A–D + LC-8 landed on `main` (2026-06-30 → 2026-07-02, PRs #45/#52/#56/#57/#59).**
   Coordinate-field true-adjacency contact (Stage A), facing/attention/reaction physics (Stage B), the command layer
   (`build_army`/timed `Order`s/escort — Stage C), and role/doctrine wiring + `build_envelopment`/

@@ -833,9 +833,44 @@ class Subunit:
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
         base = min(nz) if nz else 0
-        step = max(0, math.floor(base * disc_mult) + stance_mod)
-        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
-            step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
+        # [DG-10 fix, 2026-07-22 — Jordan ruling "if it's broken and not commensurate with system,
+        # disable ... fields, not grids. no grids." + "what even is the point of the continuous
+        # velocity accumulator?"] The node/field path is the LIVE default: since ED-1089,
+        # FIELD_MOVEMENT=1 routes movement HERE, not to advance_cells. It previously took a raw integer
+        # floor `max(0, math.floor(base*disc_mult) + stance_mod)`, which grid-snaps any sub-Discipline-5
+        # body's velocity to 0 (floor(1*0.7)=0), so a balanced disc<5 formation NEVER advanced to
+        # contact on the field (levy/light_inf/heavy_inf/archers/crossbow/sling/artillery are all
+        # disc<5 in §B.2 -> the MAJORITY of canonical troop types could not close). That floor is the
+        # not-commensurate grid discretization the coordinate FIELD exists to remove. The correct field
+        # answer is NOT the fractional-velocity accumulator advance_cells carries (that is itself only a
+        # Bresenham-style workaround for keeping INTEGER positions on a grid): _node_anchor/_node_pos
+        # are already floats, and the sole downstream consumer moves the anchor by `eff = min(step,
+        # mag)` along a unit vector -- fully float-safe. So on the FIELD path we keep `step` as the REAL
+        # velocity (no floor, no accumulator): a disc4 body simply advances 0.7 cells/tick on the
+        # continuous field. A WHOLE-number velocity is kept as an int (below) so that WHILE a body holds
+        # Discipline>=5 it moves bit-for-bit as the old integer path did -- Line-vs-Line gauge rows
+        # (mirror/ranged), where no MOVING unit ever degrades below 5, stay byte-identical. The decisive
+        # rows DO change, for the right reason: a unit that degrades below Discipline 5 MID-battle
+        # (combat / charge shock) previously had its step floored to 0 and FROZE in place; it now keeps
+        # moving at its true reduced rate (disc3 -> 0.4 cells/tick). Verified by per-row digest diff +
+        # trace (wedge seed 0: side B degrades to disc 3). The legacy grid path (FIELD_MOVEMENT off)
+        # keeps its integer floor untouched -> the CI byte-exact grid oracle is preserved. Field gauge
+        # goldens (bat.py cell_field/unit_field, not CI-checked) re-recorded for this ruled change.
+        vel = base * disc_mult
+        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+            vel *= PC_CAVALRY_SPEED_MULT
+        if FIELD_MOVEMENT:
+            _sf = max(0.0, vel + stance_mod)                       # continuous field velocity (no grid floor)
+            # Keep a whole velocity as an int: a float 1.0 vs int 1 changes downstream int-typed
+            # speed-differential / cell_last_speed / charge-momentum reads (and the recorded digest),
+            # so an undegraded disc>=5 body stays bit-for-bit. Only a genuinely FRACTIONAL velocity
+            # (disc<5 -- previously floored to a frozen 0) stays a float and advances the anchor at its
+            # true sub-cell rate. "fields, not grids": the fraction is no longer floored away.
+            step = int(_sf) if _sf == int(_sf) else _sf
+        else:
+            step = max(0, math.floor(base * disc_mult) + stance_mod)   # legacy grid oracle: integer floor
+            if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
+                step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
         # [DG-2 §2.5 anti-abuse, Jordan-ruled "build it now" 2026-07-08] "Speed capped below any
         # realistic pursuer's closing speed (1 cell/tick ceiling)" -- a yielding body cannot
         # indefinitely maintain a standoff gap the way a true kiter can. Applies regardless of the
