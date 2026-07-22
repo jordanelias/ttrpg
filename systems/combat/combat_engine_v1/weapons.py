@@ -126,7 +126,7 @@ WEAPONS = {
    elements=[
      # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 1.75->1.414kg, pommel 0.548->0.884kg (same
      # 2.751kg total) — brings PoB from 30.4cm to 18.0cm, into the ratified greatsword band (8-20cm).
-     dict(x_m=0.63, mass_kg=1.414, extent_m=1.26, orient_deg=0, material='steel'),  # blade (with ricasso, often flanked by parrying lugs)
+     dict(x_m=0.63, mass_kg=1.414, extent_m=1.26, orient_deg=0, material='steel', grippable=True),  # blade — the ricasso (flanked by parrying lugs) is the attested half-sword grip zone; grants the half-sword affordance emergently (PC-2/JD-3, ED-PC-0016)
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.19, extent_m=0.26, type='cross', orient_deg=90, material='steel'),  # cross guard with recurved/S-shaped quillons
@@ -687,7 +687,7 @@ WEAPONS = {
    elements=[
      dict(x_m=0.3, mass_kg=0.8859, extent_m=0.75, orient_deg=0, material='steel', edge_undulation=dict(amplitude_mm=15.0, period_mm=90.0)),  # blade (flame-ground section, forte-to-mid)
      dict(x_m=0.98, mass_kg=0.4641, extent_m=0.45, orient_deg=0, material='steel'),  # blade tip (plain distal section + Parierhaken zone)
-     dict(x_m=0.0, mass_kg=0.1688, extent_m=0.18, orient_deg=0, material='steel'),  # ricasso (blunted forward gripping section)
+     dict(x_m=0.0, mass_kg=0.1688, extent_m=0.18, orient_deg=0, material='steel', grippable=True),  # ricasso (blunted forward gripping section) — the attested half-sword grip zone (grip the plain ricasso/forte, waves stay behind the hand; the Parierhaken is the forward grip stop); grants the half-sword affordance emergently (PC-2/JD-3, ED-PC-0016)
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.2953, extent_m=0.3, type='cross', orient_deg=90, material='steel'),  # main cross-guard with quillons
@@ -862,4 +862,13 @@ GEOMETRY = {_w: _rec['geometry'] for _w, _rec in WEAPONS.items()}
 # HALF-SWORD FORM mapping (weapon data): which base weapon switches to which shortened gripped-blade form. The
 # inverse is DERIVED (not a second hand-maintained dict). Read by systems.halfsword_target + capabilities.
 HALFSWORD_FORM = {'longsword': 'longsword_halfsword', 'estoc': 'estoc_halfsword'}
+# PC-2/ED-PC-0016 (2026-07-22) HELD: greatsword/flamberge carry attested ricassos (grippable=True below, so
+# affords_halfsword=True — the physical CAPABILITY is recorded), but their auto-switch is deliberately NOT wired here.
+# The adversarial pass found the unconditional switch is a NET LIABILITY for these reach+mass-dominant weapons (their
+# base form already out-fights the half-sword when closed: greatsword vs arming @medium 93%->50%, @heavy 71%->55%),
+# and that a cheap per-form conditional (single-strike closed-damage comparison) is UNSOUND — it is strength-fragile
+# and contradicts the full-duel outcome (the real signal is armour-defeat sigma-control + reach + multi-exchange, not
+# one strike). Activation needs a DUEL-AWARE decision (the reach differential lives at the wrapper) — a design call
+# held for Jordan. The authored greatsword_halfsword/flamberge_halfsword form records + full analysis live in
+# audit/2026-07-22-combat-engine-stress-test/pc2_halfsword_expansion.md, ready to activate once the decision lands.
 HALFSWORD_BASE = {_form: _base for _base, _form in HALFSWORD_FORM.items()}
