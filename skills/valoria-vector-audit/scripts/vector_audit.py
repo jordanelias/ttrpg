@@ -626,16 +626,28 @@ def _pattern_for(label, abbr=None):
     return pats
 
 
-# Canonical-source `systems:` keys that are lore/meta/migration docs, not mechanics —
-# excluded from derivation to keep the token set signal-heavy.
-SKIP_SYSTEMS = {
-    'module_contracts', 'ui_ux', 'videogame_mode_spec', 'core_engine',
-    'narrative_voice_canon', 'solmund_voice', 'solmund_philosophy', 'solmund_artifacts',
-    'character_generation_questionnaire', 'character_histories', 'character_canon_consolidation',
-    'faction_canon_consolidation', 'political_dynamics_keys_migration',
-    'conviction_migration_roster', 'throughlines_framework',
-    'tc_political',  # deprecated pre-CI naming variant; the 'CI Political' seed token is canonical
+# Canonical-source `systems:` keys NOT tokenized — each paired with WHY (never a silent drop;
+# a core purpose of this tool is to SURFACE what is excluded, not hide it — see audit_exclusions()
+# and the Incompleteness Ledger). An exclusion is a claim you can audit and challenge, not noise.
+SKIP_SYSTEMS_REASONS = {
+    'module_contracts': 'index/spine doc, not a mechanic surface (the contracts themselves)',
+    'ui_ux': 'presentation-layer spec, not a mechanic',
+    'videogame_mode_spec': 'platform/mode spec, not a mechanic',
+    'core_engine': 'substrate/kernel doc, not a domain mechanic',
+    'narrative_voice_canon': 'voice/style canon, not a mechanic',
+    'solmund_voice': 'voice/style canon, not a mechanic',
+    'solmund_philosophy': 'philosophy canon, not a mechanic',
+    'solmund_artifacts': 'lore artifacts, not a mechanic',
+    'character_generation_questionnaire': 'authoring aid, not a mechanic',
+    'character_histories': 'lore/backstory, not a mechanic',
+    'character_canon_consolidation': 'consolidation/migration doc, not a mechanic',
+    'faction_canon_consolidation': 'consolidation/migration doc, not a mechanic',
+    'political_dynamics_keys_migration': 'migration doc, not a mechanic',
+    'conviction_migration_roster': 'migration roster, not a mechanic',
+    'throughlines_framework': 'meta-framework doc, not a mechanic',
+    'tc_political': 'DEPRECATED pre-CI naming variant; superseded by the CI Political token',
 }
+SKIP_SYSTEMS = set(SKIP_SYSTEMS_REASONS)  # keys only, for the fast membership test in derive_tokens
 
 _ACRONYMS = {'Npc': 'NPC', 'Ci': 'CI', 'Ms': 'MS', 'Ip': 'IP', 'Ui': 'UI',
              'Ux': 'UX', 'Ap': 'AP', 'Pi': 'PI', 'Ts': 'TS', 'Rm': 'RM'}
@@ -649,9 +661,14 @@ def _humanize_system(key):
     return ' '.join(_ACRONYMS.get(w, w) for w in label.split())
 
 
-def derive_tokens(root):
+def derive_tokens(root, record_drops=None):
     """Build the token table from the LIVE central registries (NS2: derived, not a
-    hardcoded frozen list), layered on the curated SEED_TOKENS core. The curated core
+    hardcoded frozen list), layered on the curated SEED_TOKENS core.
+
+    `record_drops`: optional list; when provided, every candidate the cull rules reject is
+    appended (with a reason) so nothing is dropped silently. The returned token table is
+    IDENTICAL whether or not recording is on — recording is pure observation (audit_exclusions
+    uses it to surface the culls into the Incompleteness Ledger). The curated core
     carries the validated §3.5 disambiguation context plus the foundation / 7-Conviction
     / 4-Pressure-Point / clock sets that P2 validation and the class taxonomy depend on,
     and it WINS on any name collision — so the English-word collision tokens
@@ -667,9 +684,28 @@ def derive_tokens(root):
     seen = {norm(n) for n in tokens}
 
     def add(name, patterns, scale, source):
+        # SURFACE, never silently cull (the tool's purpose is to expose what's missing).
+        # When a drop recorder is attached, every rejected candidate is recorded with a reason
+        # so audit_exclusions()/the Incompleteness Ledger can list it. The token OUTPUT is
+        # unchanged whether or not recording is on — recording is pure observation.
         n = norm(name)
-        if not name or not patterns or not n or n in seen or len(name) < 3:
+        if not name or not n:
+            if record_drops is not None and name:
+                record_drops.append({'candidate': str(name), 'scale': scale, 'source': source,
+                                     'reason': 'empty_after_normalization'})
             return
+        if len(name) < 3:
+            if record_drops is not None:
+                record_drops.append({'candidate': name, 'scale': scale, 'source': source,
+                                     'reason': 'name_shorter_than_3_chars'})
+            return
+        if not patterns:
+            if record_drops is not None:
+                record_drops.append({'candidate': name, 'scale': scale, 'source': source,
+                                     'reason': 'no_match_patterns'})
+            return
+        if n in seen:
+            return  # dedup of an already-present entity, not a cull of a missing thing
         seen.add(n)
         tokens[name] = {'patterns': patterns, 'scale': scale, 'status': 'canonical',
                         'source': source, 'context': []}
@@ -677,6 +713,10 @@ def derive_tokens(root):
     cs = _yaml(root, 'references/canonical_sources.yaml')
     for key in sorted((cs.get('systems', {}) or {})):
         if key in SKIP_SYSTEMS:
+            if record_drops is not None:
+                record_drops.append({'candidate': _humanize_system(key), 'scale': 'system',
+                                     'source': 'canonical_sources:' + key, 'reason': 'skip_systems_denylist',
+                                     'detail': SKIP_SYSTEMS_REASONS.get(key, '')})
             continue
         label = _humanize_system(key)
         add(label, _pattern_for(label) + [re.escape(key)], 'system', 'derived:canonical_sources')
@@ -775,6 +815,43 @@ def derive_tokens(root):
     # Coreference consolidation: unify every surface form of one named entity into a
     # single token (registry aliases + proper-noun substring). "Just search Baralta."
     return consolidate_tokens(tokens, _build_coref(root))
+
+
+# Corpus-level methodology floors (documented, not hidden — surfaced by audit_exclusions).
+# These are analysis parameters, not a denylist; listed so their culling effect is visible.
+AUDIT_FLOORS = {
+    'paragraph_min_chars': 50,       # to_paragraphs drops shorter blocks
+    'citation_min_mentions': 2,      # build_g_cite drops edges below this
+    'alias_min_chars': 4,            # registry aliases shorter than this are not added as patterns
+    'name_min_chars': 3,             # add() rejects shorter token names
+}
+
+
+def audit_exclusions(root):
+    """SURFACE everything the token pipeline culls — the whole point of the tool is to expose
+    what is missing/excluded, never to hide it. Returns a structured manifest of:
+      - skip_systems: the hand-maintained denylist, each with its reason + would-be label
+      - dropped_candidates: every registry-derived candidate the cull rules rejected, with reason
+      - floors: the corpus-level methodology parameters and their culling effect
+    Consumed by the Incompleteness Ledger (build_incompleteness.py) so the culls appear there."""
+    from pathlib import Path as _P
+    root = _P(root) if not hasattr(root, 'joinpath') else root
+    drops = []
+    derive_tokens(root, record_drops=drops)  # token output ignored; we want the drop record
+    cs = _yaml(root, 'references/canonical_sources.yaml')
+    present = set((cs.get('systems', {}) or {}))
+    skip = [{'system': k, 'would_be_label': _humanize_system(k),
+             'reason': SKIP_SYSTEMS_REASONS.get(k, ''), 'present_in_canonical_sources': k in present}
+            for k in sorted(SKIP_SYSTEMS_REASONS)]
+    from collections import Counter as _C
+    by_reason = _C(d['reason'] for d in drops)
+    return {
+        'skip_systems': skip,
+        'dropped_candidates': drops,
+        'dropped_by_reason': dict(by_reason),
+        'floors': AUDIT_FLOORS,
+        'totals': {'skip_systems': len(skip), 'dropped_candidates': len(drops)},
+    }
 
 
 def curate_tokens(design, token_defs):
