@@ -1348,32 +1348,113 @@ _CANDIDATE_STOPWORDS = {
     'Roll', 'Test', 'Tests', 'Tier', 'Level', 'Point', 'Points', 'Count', 'Total', 'Draft', 'Final',
     'Current', 'Canonical', 'Reference', 'Proposed', 'Provisional', 'Open', 'Closed', 'Yes', 'No',
     'The', 'This', 'That', 'When', 'What', 'Where', 'How', 'Why', 'For', 'And', 'But', 'Not',
-    # doc-structure / formatting noise (not design concepts)
+    # doc-structure / formatting noise (not design concepts) — adversarial-pass (c) expansion
     'Board Game', 'Heading Index', 'Section Sizes', 'Table Of', 'Open Items', 'Year-End',
-    'Design Doc', 'Index File', 'Infill File', 'Co-File',
+    'Design Doc', 'Index File', 'Infill File', 'Co-File', 'Design Principle', 'Design Principles',
+    'Philosophical Foundations', 'Starting Values', 'Personal Phase', 'Strategic Phase',
+    'Cascade Phase', 'Design Note', 'Design Notes', 'Design Goal', 'Design Intent', 'Worked Example',
+    'Section Size', 'Line Count', 'Word Count', 'Key Insight', 'Core Loop', 'Core Idea',
+    # repudiated / external / generic-TTRPG (NOT candidate registrations)
+    'Game Master', 'Player Character', 'Player Characters', 'Non-Player Character',
+    'Non-Player Characters', 'Crusader Kings', 'Koei', 'Paradox', 'Total War', 'Martial Law',
+    'Royal Decree', 'Real World', 'Real Time', 'Disco Elysium', 'Derived Value', 'Derived Values',
+    'Primary Attribute', 'Primary Attributes', 'Worked Examples', 'Hybrid Mode',
 }
 _CAND_BOLD = re.compile(r'\*\*([A-Z][A-Za-z][A-Za-z0-9 /-]{2,38}[A-Za-z0-9])\*\*')
 _CAND_HEAD = re.compile(r'^#{2,5}\s+([A-Z][A-Za-z][A-Za-z0-9 /-]{2,38}[A-Za-z0-9])\s*$', re.M)
 _CAND_TITLE = re.compile(r'\b([A-Z][a-z]{2,}(?:[ -][A-Z][a-z]{2,}){1,3})\b')
+# a leading article/honorific stripped so "The Church"==Church, "Magnus Vaynard"==Duke … Vaynard
+_LEAD_RE = re.compile(r'^(the|a|an|king|queen|prince|princess|duke|duchess|cardinal|confessor'
+                      r'|grandmaster|consul|senator|tribune|warden|guildmaster|doux|lord|lady|sir)\s+',
+                      re.I)
 
 
-def discover_unregistered_candidates(root, design=None, token_defs=None, min_docs=4, top=60):
-    """Corpus terms that NO registered token matches — candidate MISSING registrations.
-    (root, or a prebuilt design/token_defs to reuse an in-flight run.) Structured signals only
-    (bold defs / headers / Title-Case phrases) + a frequency floor to stay high-signal."""
+def _known_ontology(root, token_defs):
+    """Every concept the central ontology ALREADY knows: token names+aliases, module ids (raw +
+    humanized) + their aliases, descriptor attribute/stat names, and graph node ids/names. A
+    candidate matching any of these (name-level, with plural folding) is NOT an unregistered term.
+    Fixes the substring predicate (adversarial-pass a): it neither drops a multi-word extension of
+    a registered head-word (false-neg) nor re-surfaces a concept another scanner already carries
+    (redundancy f)."""
+    def norm(s):
+        return re.sub(r'[^a-z0-9]+', '', (s or '').lower())
+    def fold(s):  # plural-fold each word so "Domain Action" == module "domain_actions"
+        return ''.join(re.sub(r's$', '', w) for w in re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).split())
+    known = set()
+    def add(s):
+        if s:
+            known.add(norm(s)); known.add(fold(s))
+    # a leading article/honorific-title variant is also "known" (so "The Church" == Church,
+    # "Magnus Vaynard" == Duke Magnus Vaynard) — the residual surface-form false-positives.
+    def add2(s):
+        add(s)
+        if s:
+            add(_LEAD_RE.sub('', s))
+    for name, meta in token_defs.items():
+        add2(name)
+        for a in (meta.get('aliases_merged') or []):
+            add2(a)
+    mc = _yaml(root, 'references/module_contracts.yaml') or {}
+    for m in (mc.get('modules') or []):
+        if isinstance(m, dict) and m.get('module'):
+            add(m['module']); add2(_humanize_system(m['module']))
+            for a in (m.get('aliases') or []):
+                add2(a)
+    pn = _yaml(root, 'references/proper_noun_registry.yaml') or {}
+    for grp in pn.values():
+        if isinstance(grp, dict):
+            for item in grp.values():
+                if isinstance(item, dict):
+                    add2(item.get('canonical'))
+                    for a in (item.get('aliases') or []):
+                        add2(a)
+    dr = _yaml(root, 'references/descriptor_registry.yaml') or {}
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k in ('name', 'key', 'canonical') and isinstance(v, str):
+                    add(v)
+                walk(v)
+        elif isinstance(node, list):
+            for it in node:
+                walk(it)
+    walk(dr)
+    g = _load_json_local(root, 'tools/observability/graph.json')
+    for grp in ('systems', 'keys', 'scalars'):
+        for n in (g.get(grp, []) if g else []):
+            add(n.get('id')); add(n.get('name'))
+    return known, norm, fold
+
+
+def _load_json_local(root, rel):
+    fp = root / rel
+    if not fp.exists():
+        return None
+    try:
+        return json.loads(fp.read_text(encoding='utf-8'))
+    except Exception:
+        return None
+
+
+def discover_unregistered_candidates(root, design=None, token_defs=None, min_docs=8):
+    """Corpus terms the central ontology does NOT know — candidate MISSING registrations. Uses a
+    NAME-LEVEL (not substring) known-set over tokens+modules+descriptors+graph nodes, so it neither
+    drops multi-word extensions of a registered head-word nor re-reports concepts other scanners
+    already carry. No hard top-N cap (churn-proof: the `min_docs` floor is the only cutoff — a
+    boundary tie can't reshuffle a committed slice). Each finding back-links to its top docs.
+    (root, or a prebuilt design/token_defs to reuse an in-flight run — the reuse hook is now live.)"""
     from pathlib import Path as _P
     root = _P(root) if not hasattr(root, 'joinpath') else root
     if design is None:
         design, _, _ = extract_corpus(root, layer='L1')
     if token_defs is None:
         token_defs = derive_tokens(root)
-    covered = []  # compiled patterns of the whole token universe
-    for meta in token_defs.values():
-        covered += _compiled(meta.get('patterns') or [])
-    def is_registered(term):
-        return any(rx.search(term) for rx in covered)
-    doc_count, total = Counter(), Counter()
-    for content in design.values():
+    known, norm, fold = _known_ontology(root, token_defs)
+    def is_known(term):
+        t2 = _LEAD_RE.sub('', term)   # "The Church" -> "Church"; "Magnus Vaynard" stays
+        return any(norm(x) in known or fold(x) in known for x in (term, t2))
+    doc_count, total, doc_hits = Counter(), Counter(), defaultdict(Counter)
+    for doc, content in design.items():
         seen_here = set()
         for rx in (_CAND_BOLD, _CAND_HEAD, _CAND_TITLE):
             for m in rx.finditer(content):
@@ -1383,16 +1464,18 @@ def discover_unregistered_candidates(root, design=None, token_defs=None, min_doc
                 if all(w in _CANDIDATE_STOPWORDS for w in term.split()):
                     continue
                 total[term] += 1
+                doc_hits[term][doc] += 1
                 seen_here.add(term)
         for term in seen_here:
             doc_count[term] += 1
     out = []
     for term, dc in doc_count.items():
-        if dc < min_docs or is_registered(term):
+        if dc < min_docs or is_known(term):
             continue
-        out.append({'term': term, 'docs': dc, 'total': total[term]})
+        top_docs = [d for d, _ in doc_hits[term].most_common(3)]
+        out.append({'term': term, 'docs': dc, 'total': total[term], 'top_docs': top_docs})
     out.sort(key=lambda r: (-r['docs'], -r['total'], r['term']))
-    return out[:top]
+    return out
 
 
 def throughline_orphans(rows, design):

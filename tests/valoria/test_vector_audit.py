@@ -324,23 +324,29 @@ def test_corpus_layer_L1_extends_L0_corpus_breadth():
 
 def test_discover_unregistered_candidates_surfaces_missing_registrations():
     """The token universe is registry-derived, so a design term never registered is invisible to
-    the whole audit. discover_unregistered_candidates surfaces frequent authored terms that NO
-    registered token matches — candidate missing registrations (the fix for that root blind spot)."""
+    the whole audit. discover_unregistered_candidates surfaces frequent authored terms the central
+    ontology does NOT know — candidate missing registrations. Post adversarial-pass: the known-set
+    is NAME-LEVEL (tokens/modules/descriptors/graph nodes, article/title-folded), NOT a substring
+    match — so it neither drops multi-word extensions of a registered head-word nor re-surfaces
+    concepts other scanners carry, and there is NO hard top-N cap (churn-proof)."""
     import os
     from pathlib import Path
     root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    cands = va.discover_unregistered_candidates(root, min_docs=6, top=50)
+    cands = va.discover_unregistered_candidates(root, min_docs=12)
     assert isinstance(cands, list) and cands, 'should surface at least some unregistered terms'
     terms = {c['term'] for c in cands}
-    # a registered token (e.g. a conviction) must NOT appear as "unregistered"
-    assert 'Faith' not in terms and 'Conviction' not in terms
-    # every candidate must genuinely be unmatched by the token universe + meet the freq floor
-    defs = va.derive_tokens(root)
-    covered = []
-    for m in defs.values():
-        covered += va._compiled(m.get('patterns') or [])
+    # a term the ontology KNOWS must NOT be surfaced — incl. article/title/plural surface-forms
+    # (the false-positive classes the adversarial pass caught) and cross-scanner-known concepts.
+    for known_surface in ('Faith', 'Conviction', 'The Church', 'The Crown', 'The Leap',
+                          'Domain Action', 'Game Master', 'Player Character', 'Crusader Kings',
+                          'Magnus Vaynard'):
+        assert known_surface not in terms, known_surface
+    # a multi-word EXTENSION of a registered head-word must NOT be blanket-dropped (the false-neg
+    # the substring predicate caused): "Combat Pool"/"Church Mandate" extend Combat/Church but are
+    # distinct unregistered concepts — at least one such head-word extension should survive.
+    assert any(' ' in t and t.split()[0] in {'Combat', 'Church', 'Crown', 'Thread'} for t in terms)
+    # each carries a doc back-link + meets the floor
     for c in cands[:10]:
-        assert c['docs'] >= 6, c
-        assert not any(rx.search(c['term']) for rx in covered), c['term']
-    # deterministic ordering (docs desc, then total desc, then term)
+        assert c['docs'] >= 12 and c.get('top_docs'), c
+    # deterministic total order, no cap (floor is the only cutoff)
     assert cands == sorted(cands, key=lambda r: (-r['docs'], -r['total'], r['term']))

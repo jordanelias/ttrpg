@@ -219,12 +219,18 @@ const REV = window.VALORIA_REVIEW || null;                       // CI health si
 const PROP = window.VALORIA_PROPOSALS || {items:[],by_lane:{},counts:{}};
 const DEC = window.VALORIA_DECISIONS || {decisions:[],meta:{}};
 const INC = window.VALORIA_INCOMPLETENESS || {findings:[],totals:{by_category:{}},by_lane:{}}; // the Missing ledger
-const INC_CAT_LABEL={contract_doc_null:'doc:null contract',contract_island:'island (no I/O)',
-  contract_missing_entirely:'no contract entry',contract_no_resolver:'no resolver',
-  contract_assumption:'[ASSUMPTION] contract',key_orphan_emit:'orphan-emit Key',
-  key_unemitted_consume:'unemitted-consume Key',sim_stub:'sim/engine stub',
-  integrity_unverified_pin:'unverified pin',register_quarantined:'quarantined register',
-  audit_excluded_system:'audit-denylisted system'};
+// kept in sync with build_incompleteness.CATEGORY_LABEL (adversarial-pass e: was stale, dropping
+// new categories to raw-key labels).
+const INC_CAT_LABEL={contract_doc_null:'doc:null contract',contract_doc_dead:'dead doc path',
+  contract_island:'island (no I/O)',contract_missing_entirely:'no contract entry',
+  contract_no_resolver:'no resolver',contract_assumption:'[ASSUMPTION] contract',
+  key_orphan_emit:'orphan-emit Key',key_unemitted_consume:'unemitted-consume Key',
+  sim_not_implemented:'NotImplementedError stub',code_marker:'code marker (TODO/FIXME)',
+  prose_marker:'prose marker (.md)',status_noncurrent:'non-current Status',
+  apparatus_orphan:'orphaned tool',integrity_unverified_pin:'unverified pin',
+  register_quarantined:'quarantined register',register_phantom_source:'phantom source rows',
+  stale_retired_pointer:'retired-tree pointer',audit_excluded_system:'audit-denylisted system',
+  unregistered_term:'unregistered term',parse_failure:'parse failure'};
 const LANES=['MB','PC','FI','SC','FA','WR','IN','GO','SE','unassigned'];
 // index governance items by lane for the cross-cut lens
 const propByLane={},decByLane={},sigByLane={},incByLane={};

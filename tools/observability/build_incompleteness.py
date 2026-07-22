@@ -448,17 +448,21 @@ def scan_unregistered_terms():
     if _va is None:
         return []
     try:
-        cands = _va.discover_unregistered_candidates(REPO, min_docs=6, top=50)
+        # min_docs=12 (not a hard top-N cap): the floor is the only cutoff, so a boundary tie can't
+        # reshuffle the committed slice (churn-proof). Name-level ontology match keeps it high-signal.
+        cands = _va.discover_unregistered_candidates(REPO, min_docs=12)
     except Exception:
         return []
     out = []
     for c in cands:
+        top = (c.get('top_docs') or [])
+        back = (" — e.g. " + ", ".join(top)) if top else ""
         out.append(finding("unregistered_term", f"term::{c['term']}",
                            f"“{c['term']}” — in {c['docs']} docs, unregistered",
-                           f"appears in {c['docs']} design docs ({c['total']} mentions) but NO registered "
-                           f"token matches it — a candidate missing registration in names_index/"
-                           f"proper_noun/descriptor (register it, or confirm it is not a canonical term)",
-                           path="", lane="IN"))
+                           f"appears in {c['docs']} design docs ({c['total']} mentions) but the central "
+                           f"ontology (tokens/modules/descriptors/graph nodes) has no match — a candidate "
+                           f"missing registration; register it or confirm it is not canonical{back}",
+                           path=(top[0] if top else ""), lane="IN"))
     return out
 
 
