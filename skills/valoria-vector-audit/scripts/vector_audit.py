@@ -364,6 +364,32 @@ def _canonical_paths(root):
     return sorted(paths)
 
 
+# Design-content trees the EXTENDED layer (L1) traces — the whole authored corpus, not just the
+# canonical_sources slice. This is how "audit performance" extends in the corpus-breadth direction:
+# L0 sees ~6% (the curated heads); L1 sees every design/world/narrative doc so the cite/throughline/
+# mu/pp graphs trace connections across the WHOLE tree, not a slice. Excludes non-design trees
+# (tests/ narrative, deprecated/ history, tooling) and VCS/cache.
+_L1_TREES = ('systems', 'engine', 'canon', 'arcs', 'godot', 'proposals', 'workplans')
+_L1_SKIP_DIRS = {'.git', '.pytest_cache', '__pycache__', '.ruff_cache', '.mypy_cache',
+                 'deprecated', 'sim', 'node_modules'}
+
+
+def _design_tree_paths(root):
+    """Every .md under the design-content trees (_L1_TREES) — the L1 extended-corpus scope.
+    Co-file _index/_infill halves are INCLUDED (they are authored content). Skips history/tooling."""
+    paths = set()
+    for tree in _L1_TREES:
+        base = root / tree
+        if not base.exists():
+            continue
+        for p in base.rglob('*.md'):
+            rel = p.relative_to(root)
+            if any(part in _L1_SKIP_DIRS for part in rel.parts):
+                continue
+            paths.add(str(rel))
+    return paths
+
+
 def _restructure_remap(root):
     """Old→new path map from `references/restructure_ledger.md` (working tree, root-honoring).
     Only the root-parameterized read is local — this pipeline is `--repo-root` driven while
@@ -395,13 +421,22 @@ def _resolve_live(root, rel, remap):
     return mapped if (mapped and (root / mapped).exists()) else None
 
 
-def extract_corpus(root):
+def extract_corpus(root, layer='L0'):
     """Return (design, discourse, manifest): {relpath: content} maps + a manifest dict.
-    Banner-classifies each doc (design / discourse / excluded)."""
+    Banner-classifies each doc (design / discourse / excluded).
+
+    `layer`: 'L0' (default) = the curated canonical_sources slice (~6% of the repo; the validated
+    methodology scope). 'L1' = extend the trace to the WHOLE design tree (_design_tree_paths) so
+    the graphs trace connections across every authored doc — "extend audit performance in the
+    corpus-breadth direction". L0 stays default so P1/P2/P3 calibration + tests are unchanged."""
     design, discourse = {}, {}
-    manifest = {'design_files': [], 'discourse_files': [], 'excluded': [], 'missing': []}
+    manifest = {'design_files': [], 'discourse_files': [], 'excluded': [], 'missing': [],
+                'layer': layer}
     remap = _restructure_remap(root)
-    for rel in _canonical_paths(root):
+    scope = set(_canonical_paths(root))
+    if layer == 'L1':
+        scope |= _design_tree_paths(root)
+    for rel in sorted(scope):
         live = _resolve_live(root, rel, remap)  # self-heal a moved input via the ledger
         if live is None:
             manifest['missing'].append(rel)
@@ -1347,18 +1382,23 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
     # 02_weakness_register.md — primary deliverable
     conf = "leads, not verdicts" if validation['verdict'] == 'FAILED' else "structural findings"
     _cov = manifest.get('coverage', {})
+    _layer = manifest.get('layer', 'L0')
+    _scope_note = ("the curated `canonical_sources.yaml` slice — most of `systems/`, all of "
+                   "`engine/`/`sim/`/`tests/`/`canon/` prose not named there is invisible"
+                   if _layer == 'L0' else
+                   "the whole design tree (systems/engine/canon/arcs/godot/proposals/workplans); "
+                   "still excludes tests/ narrative, deprecated/, audit prose, and non-.md")
     wr = [f'# Weakness register — vector audit v3 ({conf})', '',
           f"Corpus: {manifest['design_count']} design docs, "
           f"{len(tokens)} tokens. Validation: **{validation['verdict']}** "
           f"({validation['passed']}/3). Confidence inherits from validation (methodology §3.8).",
           '',
-          f"**Coverage disclosure (capstone #6):** this L0 layer is a CURATED slice — "
+          f"**Coverage disclosure (capstone #6):** layer **{_layer}** traces "
           f"{_cov.get('design_files_scanned', manifest['design_count'])} design docs = "
-          f"only {_cov.get('pct_of_repo_md', '?')}% of the repo's "
-          f"{_cov.get('repo_total_md', '?')} `.md` files. Everything outside `_canonical_paths()` "
-          f"(most of `systems/`, all of `engine/params/`/`sim/`/`tests/`/`canon/` prose not named in "
-          f"`canonical_sources.yaml`) is structurally invisible to L0 — a green result here is NOT "
-          f"whole-repo coverage.",
+          f"{_cov.get('pct_of_repo_md', '?')}% of the repo's "
+          f"{_cov.get('repo_total_md', '?')} `.md` files — {_scope_note}. A green result at this "
+          f"layer is NOT whole-repo coverage; run `--layer L1` to extend the trace across the "
+          f"whole design tree (L0 stays the validated default).",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
           f"notional={diag.get('C_notional_total', len(diag['C_notional']))}, "
@@ -1411,14 +1451,16 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
 
 # ──────────────────────────── DRIVER ─────────────────────────────────────────
 
-def run(root, out):
+def run(root, out, layer='L0'):
     root, out = Path(root), Path(out)
     (out / 'data').mkdir(parents=True, exist_ok=True)
 
-    print('[stage 1] extracting corpus (working tree)...')
-    design, discourse, manifest = extract_corpus(root)
+    print(f'[stage 1] extracting corpus (working tree, layer {layer})...')
+    design, discourse, manifest = extract_corpus(root, layer=layer)
+    cov = manifest.get('coverage', {})
     print(f'          {manifest["design_count"]} design / {manifest["discourse_count"]} discourse '
-          f'/ {manifest["missing_count"]} missing')
+          f'/ {manifest["missing_count"]} missing  ({cov.get("pct_of_repo_md", "?")}% of '
+          f'{cov.get("repo_total_md", "?")} repo .md)')
 
     print('[stage 2] deriving + curating tokens (registries + seed core)...')
     token_defs = derive_tokens(root)
@@ -1463,13 +1505,16 @@ def main():
     ap.add_argument('--output-dir', required=True, help='audit output folder')
     ap.add_argument('--mode', default='all', help='(reserved) stage selector')
     ap.add_argument('--repo-root', default='.', help='repo root (working tree)')
+    ap.add_argument('--layer', default='L0', choices=['L0', 'L1'],
+                    help="corpus breadth: L0 = curated canonical_sources slice (~6%%, validated "
+                         "scope); L1 = extend the trace to the whole design tree (all directions)")
     args = ap.parse_args()
 
     root = Path(args.repo_root)
     if not (root / 'references' / 'canonical_sources.yaml').exists():
         sys.exit(f"not a Valoria repo root (no references/canonical_sources.yaml): {root}")
     print(f"[vector_audit v3] corpus root (working tree): {root.resolve()}")
-    run(root, args.output_dir)
+    run(root, args.output_dir, layer=args.layer)
 
 
 if __name__ == '__main__':

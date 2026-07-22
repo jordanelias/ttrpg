@@ -299,3 +299,21 @@ def test_vector_audit_reuses_the_real_names_reader():
     import importlib
     real_names = importlib.import_module('names')
     assert va.names is real_names
+
+
+def test_corpus_layer_L1_extends_L0_in_all_directions():
+    """`--layer L1` extends the audit's trace from the curated canonical slice (L0, ~6%) to the
+    whole design tree — the corpus-breadth 'extend performance in all directions'. L0 stays the
+    validated default and is a strict subset of L1 (nothing dropped by extending)."""
+    import os
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from pathlib import Path
+    d0, _, m0 = va.extract_corpus(Path(root), layer='L0')
+    d1, _, m1 = va.extract_corpus(Path(root), layer='L1')
+    assert m0['layer'] == 'L0' and m1['layer'] == 'L1'
+    assert len(d1) > len(d0), (len(d0), len(d1))            # L1 genuinely extends coverage
+    assert set(d0) <= set(d1)                               # strict superset — L0 not narrowed
+    assert m1['coverage']['pct_of_repo_md'] > m0['coverage']['pct_of_repo_md']
+    # default is L0 (validated scope preserved)
+    d_def, _, m_def = va.extract_corpus(Path(root))
+    assert m_def['layer'] == 'L0' and set(d_def) == set(d0)

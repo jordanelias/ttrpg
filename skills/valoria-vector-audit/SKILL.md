@@ -85,6 +85,15 @@ it directly:
 python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --output-dir <run-dir>
 ```
 
+**Corpus-breadth layers (`--layer`).** The default **L0** is a CURATED slice — only the
+`canonical_sources.yaml` heads (~6% of the repo's `.md`); it is the calibrated P1/P2/P3 scope, so a
+green L0 result is **not** whole-repo coverage. To **extend the trace in all directions** across the
+whole design tree (systems/engine/canon/arcs/godot/proposals/workplans), run `--layer L1` (~15% of
+all `.md` = the full design corpus; empirically ~2.5× the docs and fewer structural isolates, since
+the broader trace connects tokens L0 can't see). L0 stays the default so validation calibration and
+tests are untouched; L1 is the exhaustive-coverage pass. The coverage % + layer is disclosed in every
+run's weakness register (capstone #6) — surface the slice, never let a green slice read as the whole.
+
 It is **working-tree only** (no GitHub fetch) and degrades gracefully without `numpy`/`sklearn` (the
 supporting TF-IDF graph is skipped; the multi-graph core still runs). Stage table:
 
