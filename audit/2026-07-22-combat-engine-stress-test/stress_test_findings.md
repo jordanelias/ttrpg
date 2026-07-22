@@ -138,6 +138,29 @@ swordsman is genuinely strong — pike squares — so the answer may be "yes, bu
 targets; they set where each lever lands. Once the bands are fixed I can implement all three, joint-tune, and
 validate (matrices + `pytest` + re-export). Run `python phasec_probe.py` to reproduce.
 
+## Trace + backward-causal analysis (2026-07-22) — `trace_backward.py`
+
+A new lens: instrument the engine's `_TRACE` seam + spy `assemble_net_sigma` (the net-σ decomposition) and
+`core.strike` (damage inputs), so **every input every decision node consumes** is captured; then walk each
+battle **backward from its terminal state to its origin**. Three archetypal battles, each auto-selected by
+outcome, reconstruct the causal chain — and independently confirm the findings above:
+
+- **Half-sword loss (longsword vs arming, both plate).** Backward chain: felling blow `AR→LS cut_thrust
+  dmg 7` — but *LS was already at 3 wounds*, and the run's tally is **AR 11 attacking beats vs LS 5**. The
+  half-sworded longsword (origin reach **5.55**, down from 5.99) died by **accumulated volume**, even though
+  its *own* blows were bigger (a traced `dmg 14` overwhelming at adef +0.51). This is the causal proof that the
+  half-sword liability is volume-driven — and *why* the per-hit `adef` fixes I tried couldn't rescue it (they
+  raise per-blow power; the loss is beat-count).
+- **Reach win (spear vs arming, unarmoured).** The felling blow (`dmg 40`, overwhelming) is a **stop-hit during
+  the approach** at gap 2.37 — the spear killed *before ever closing*. Lever-1 (reach-dominance = approach
+  stop-hit) made visible end-to-end.
+- **Anti-armour dagger (rondel vs arming, both plate).** Rondel wins on **armour-defeat σ = 0.53** (the
+  gap-thrust through plate), from origin reach 4.51 (shorter — it first had to close). The grounded
+  anti-harness dagger, causally traced.
+
+Incidental: the **contact axis fires** (`CONTACT throw` / `escape` observed in the traces) — not an inert
+lever. Run `python trace_backward.py` to reproduce (forward trace + backward chain per battle).
+
 ## Part A — Mechanical correctness (`stress_battery.py`)
 
 | category | result | evidence |
