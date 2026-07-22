@@ -107,23 +107,30 @@ Following "Phase C", I traced the reach-class dominance + half-sword liability t
 (`phasec_probe.py`). Result: **not one knob — three coupled levers, each with a cross-constraint that a naive
 fix trips.** I confirmed each empirically and committed **no** engine change (all deep-copied CFG / monkeypatch).
 
-- **Lever 1 — reach-class dominance @ heavy is the APPROACH stop-hit.** `STOPHIT_CHANCE×0.5` compresses spear
-  93→69 and yari 91→76 vs an arming baseline (toward the ~55–75 contested band). **But** the same cut drops
-  **spear-vs-arming at *none* from 80 → 59 → 31** — and a spear *should* beat a sword unarmoured (reach wins
-  the duel; grounded). So the lever must be **armour-conditional** (compress reach's approach threat as the
-  *closer's* armour rises — an armoured man walks through the spear — not a global stop-hit cut). Note `poleaxe`
-  and `guandao` barely move (90→~88): their plate win is their own anti-armour mode, not just reach — correctly
-  untouched.
+- **Lever 1 — reach-class dominance is the APPROACH stop-hit, and the "reach class" is HETEROGENEOUS.**
+  Full ablation (`STOPHIT_CHANCE=0`) collapses **spear 93→38 / yari 91→45** at plate — the stop-hit is their
+  whole game. **But `poleaxe` barely moves (91→88)** and guandao only 96→56 — poleaxe's dominance is *not*
+  the stop-hit at all; it is its own mass/percussion/adef (plausibly grounded — a poleaxe *should* win the
+  armoured press). So Phase C must **not lump the reach class**: the stop-hit lever targets spear/yari, not
+  poleaxe. **Cross-constraint (confirmed):** the stop-hit also carries the *grounded* unarmoured reach
+  (spear-vs-arming at *none* 80→19 at `STOPHIT=0`), so it can't be globally cut — it must be
+  **armour-conditional** (compress the approach threat as the *closer's* armour rises; an armoured man walks
+  through a spear).
 - **Lever 2 — the half-sword liability is SEPARATE.** The stop-hit fix leaves the half-sword switch-benefit
   negative (−27 → −29). The half-sword fights *in the close*; its loss is reach-volume there (surrendering the
   reach that throttles the opponent's attack count — traced: half-swording gives the arming sword +36% more
   attacking beats), not the approach stop-hit. It needs its own close-range lever (reach must decay hard once
   genuinely closed, so the leveraged half-sword thrust can win at grappling range).
-- **Lever 3 — heft-ordering is the spear SHAFT-MASS model.** `heft(spear)=1.43 > longsword 1.00` (backwards)
-  because the spear's `elements` model only the **0.4 kg head** — the ~1.6 kg ash shaft is unmodelled, so the
-  derived balance sits far too forward. A modelled shaft pulls PoB back toward the hand and drops heft below
-  arming/longsword (physical, and turns the accepted-red `test_falsifiable_heft_ordering` green). This is
-  grounded per-part *data* work across the reach roster, not a constant tweak.
+- **Lever 3 — heft-ordering is a FORWARD-BALANCE / normalization effect [CORRECTED — my first read was wrong].**
+  I initially claimed the spear's ~1.6 kg shaft was *unmodelled*; the adversarial pass falsified that. The spear
+  **is** fully mass-modelled — `_all_parts` = head 0.4 kg @ 1.51 m **+ haft 1.354 kg @ 0.645 m + butt 0.25 kg**,
+  summing to the full 2.0 kg (my earlier probe printed only `elements` and missed the `haft` field; adding a
+  shaft *element* would in fact double-count and corrupt `m_head`, which sums `elements`). The real cause:
+  `heft = m_head × PoB_frac`, and the spear's **PoB_frac 0.34 is ~3× the swords' ~0.12** because
+  `PoB_frac = PoB/(head_len+grip_len)` reads the long spear as strongly forward-balanced. So the fix is the
+  **PoB_frac normalization / haft-position calibration (a formula question)**, not "add missing mass" — and it
+  is **decoupled from reach-dominance** (mass doesn't move `reach_base`, which is geometry). Harder and more
+  design-laden than a data patch.
 
 **The blocker is a design call, not code:** Levers 1 & 2 need **target win-rate bands** — e.g. *should a spear
 beat an arming sword when both are in full plate, and by how much?* (Historically a spear/pike vs a harnessed

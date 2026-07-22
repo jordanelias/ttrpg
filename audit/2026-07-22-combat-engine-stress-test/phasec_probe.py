@@ -25,15 +25,27 @@ print('LEVER 1 — reach-class dominance @heavy is the APPROACH stop-hit; but a 
 acc(CFG, 'baseline')
 for sh in (0.5, 0.3):
     c = copy.deepcopy(CFG); c['STOPHIT_CHANCE'] = CFG['STOPHIT_CHANCE'] * sh; acc(c, f'STOPHIT×{sh}')
-print('  -> compresses reach@heavy (good) BUT spear@none collapses below 55 (ungrounded) -> needs ARMOUR-CONDITIONAL stop-hit\n')
+print('  -> compresses reach@heavy (good) BUT spear@none collapses below 55 (ungrounded) -> needs ARMOUR-CONDITIONAL stop-hit')
+print('  HETEROGENEITY (adversarial): full ablation STOPHIT=0 -> spear/yari collapse but poleaxe barely moves:')
+c0 = copy.deepcopy(CFG); c0['STOPHIT_CHANCE'] = 0.0
+for w in ('spear', 'yari', 'poleaxe'):
+    print(f'    {w:8} heavy base={wr(w,"heavy",CFG):.0f} STOPHIT=0->{wr(w,"heavy",c0):.0f}')
+print('  -> the "reach class" is NOT monolithic: spear/yari are stop-hit-driven; poleaxe is its own mass/adef (dont lump).\n')
 
 print('LEVER 2 — the half-sword liability is SEPARATE (the stop-hit fix above leaves HS-switch negative):')
 print('  the half-sword fights in the CLOSE; its loss is reach-volume there, not the approach stop-hit.\n')
 
-print('LEVER 3 — heft-ordering (spear<arming) is the spear SHAFT-MASS model: only the 0.4kg head is an element;')
-sp = WEAPONS['spear']
-print(f'  spear elements={sp["elements"]} (1.6kg shaft unmodeled) -> heft(spear)={WP.heft(sp):.2f} > longsword 1.00 (backwards)')
-print('  a modelled shaft pulls PoB back toward the hand and drops heft below arming/longsword (physical).')
+print('LEVER 3 — heft-ordering (spear<arming) is a FORWARD-BALANCE / normalization effect, NOT a missing shaft.')
+print('  [CORRECTED by the adversarial pass — the earlier "1.6kg shaft unmodelled" claim was WRONG:]')
+sp = WEAPONS['spear']; d = WP.derive(sp)
+print(f'  spear IS fully mass-modelled: all_parts={[(round(m,2),round(x,2)) for m,x,_ in WP._all_parts(sp)]} (head+haft+butt=2.0kg)')
+for n in ('spear', 'arming', 'longsword', 'greatsword'):
+    dd = WP.derive(WEAPONS[n])
+    print(f'    {n:11} m_head={dd["m_head"]:.2f} PoB_frac={dd["PoB_frac"]:.3f} heft={WP.heft(WEAPONS[n]):.2f}')
+print('  -> spear heft is high because its PoB_frac (0.34) is ~3x the swords\' (~0.12): heft=m_head*PoB_frac, and')
+print('     PoB_frac=PoB/(head_len+grip_len) reads the long spear as very forward-balanced. The real fix is the')
+print('     PoB_frac normalization / haft-position calibration (a formula question), NOT adding mass. And it is')
+print('     DECOUPLED from reach-dominance (mass does not move reach_base, which is geometry).')
 
 if __name__ == '__main__':
     pass
