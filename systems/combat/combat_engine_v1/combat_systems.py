@@ -621,15 +621,29 @@ def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
 # weapons that have a half-sword form, and the form mapping (base <-> shortened)
 # HALFSWORD_FORM / HALFSWORD_BASE are weapon DATA (single source in weapons.py, inverse derived); imported above.
 
+def affords_halfsword(w):
+    """EMERGENT half-sword affordance (P3/JD-3, ED-PC-0014): does the weapon offer a safe forward gripping zone
+    (a `grippable` element — ricasso / attested gauntleted hand-on-blade) AND a blade that can present a controlled
+    gap-thrust when gripped (`geo['halfsword']` = geometry.can_halfsword_thrust(curvature, point_concentration))?
+    Both are physical/attested facts on the record, so the capability EMERGES rather than being name-whitelisted —
+    this de-vestigialises `geo['halfsword']` (was computed by geometry.bake but read nowhere) and retires
+    `HALFSWORD_FORM`/`HALFSWORD_BASE` AS BEHAVIOUR GATES (they remain only the base<->form NAME data below). On the
+    un-extended roster the derived set is exactly {longsword, estoc} (byte-identical; only those two carry a
+    grippable element); marking a further attested ricasso grippable=True is the JD-3 roster-expansion decision."""
+    return (any(e.get('grippable') for e in w.get('elements', ()))
+            and bool(w.get('geo', {}).get('halfsword', False)))
+
 def halfsword_target(c, closed, opp_armor):
     """PURE predicate: the weapon-form a half-sword-capable fighter SHOULD be in for the current range/armour
     (mit dem kurzen Schwert). Half-sword vs ARMOUR in the CLOSE (gap-thrust/leverage excel); full form at reach / vs
     unarmoured. Returns the target weapon string; the WRAPPER applies the mutation (mutation stays wrapper-owned).
-    Weapons without a half-sword form return their current weapon unchanged."""
+    The CAPABILITY gate is now the emergent `affords_halfsword` (ED-PC-0014), not `base in HALFSWORD_FORM`; the
+    HALFSWORD_FORM/HALFSWORD_BASE dicts survive only as the base<->form NAME mapping (the shifted-origin form
+    records remain data). Weapons that do not afford the half-sword (or lack a form record) are unchanged."""
     base = HALFSWORD_BASE.get(c.weapon, c.weapon)
-    if base not in HALFSWORD_FORM: return c.weapon
-    want_half = closed and opp_armor in ('medium','heavy')
-    return HALFSWORD_FORM[base] if want_half else base
+    form = HALFSWORD_FORM.get(base)
+    want_half = closed and opp_armor in ('medium','heavy') and affords_halfsword(WEAPONS[base])
+    return form if (want_half and form) else base
 
 # ============================================================================
 # RESOLUTION-CONTRIBUTION MODULES (functional: pure, role-objects-in, contribution-out).
