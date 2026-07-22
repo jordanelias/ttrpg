@@ -15,6 +15,21 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0017 (2026-07-22): multi-unit deployment geometry + envelopment pathing fix** (Jordan-flagged
+  from the hierarchy snapshot: overlapping subunits, both envelopment wings on one side, refused flank
+  level with the line). Root cause: `build_army` deployed subunit i at `col=15+i*4` (fixed step < subunit
+  frontage). Fixed with frontage-aware anchor-centred deployment (`_centered_line_cols`, fit-to-field, no
+  overlap 1–11 subunits), symmetric opposite-flank envelopment wings (mirror double envelopment), and an
+  echeloned-back refused wing. **Speed (Jordan):** envelopers must be fast — `PC_ENVELOP_SPEED_MULT=2.0`
+  (envelop maneuver) + `PC_CAVALRY_SPEED_MULT` 2.0→3.0 (cavalry ~3× infantry); cavalry double envelopment
+  now wraps behind by ~t6–8 (was t16–20). Independent adversarial critic run: F1 over-wide crash + F2
+  gauge_mb same-defect FIXED, F3/F4 tested. Machine-vision comparison + sources saved to
+  `research/diagrams/mass_battle_formations/`. All 4 bat.py goldens re-recorded (3 multi-subunit rows
+  re-baselined, ED-909 precedent; 7 single-subunit unchanged; byte-exact green). `test_deployment_geometry.py`
+  (16). **Follow-on:** the wrap seals a horseshoe not a full ring (no cavalry rear-transit); single line only
+  (no triplex depth-lines); envelopment still often loses the outcome (DG-6 "envelopment not rewarded" —
+  ED-MB-0016 friction + a still-needed conjunctive envelopment gate; this fast correct wrap is its precondition).
+
 - **ED-MB-0015 (2026-07-22): spatial-model v2 Stage F — verification + golden re-record + P-DEC-4
   historical revalidation.** All I1–I7 hold; stress harness S0–S5 green; Lanchester exponent + depth-2
   preserved; field goldens re-recorded (`unit_field 2da5183…` verified, `cell_field 5f5db96…`; grid

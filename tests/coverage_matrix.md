@@ -2,6 +2,29 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-22 — ED-MB-0017: multi-unit deployment geometry + envelopment pathing fix
+- Jordan-flagged from the hierarchy snapshot (overlapping subunits; "double envelopment" with both wings
+  on one side; refused flank level with the line). Root cause: `build_army` deployed subunit i at
+  `col=15+i*4` (fixed step < subunit frontage).
+- **Fix (P-1/P-2/P-3):** `_spec_span` + `_centered_line_cols` (frontage-aware, anchor-centred, provably
+  non-overlapping 1–11 subunits, fit-to-field so over-wide armies degrade to overlap instead of crashing
+  off-board); `build_envelopment` symmetric opposite-flank wings (mirror double envelopment);
+  `build_refused_flank` echeloned-back refused wing.
+- **Speed (P-4, Jordan):** envelopers must be fast or they arrive piecemeal. `PC_ENVELOP_SPEED_MULT=2.0`
+  (envelop/sweep maneuver = rapid flanking march) + `PC_CAVALRY_SPEED_MULT` 2.0→3.0 (cavalry ~3× an
+  infantry march). Measured infantry 1.0 / cavalry 3.0 / cavalry-envelop ~6.0 cells/tick → cavalry double
+  envelopment wraps behind by ~t6–8 (was t16–20). Both inert for line-vs-line battles.
+- **Adversarial critic (independent):** F1 over-wide-army crash FIXED (fit-to-field, 0/200 fuzz crashes) +
+  F2 `gauge_mb.make_mixed_unit` same defect FIXED + F3 odd-wings tested + F4 refused-dynamic tested; F5/F7
+  nits follow-on; F8 no-overlap verified sound by construction.
+- **Machine-vision comparison:** `research/diagrams/mass_battle_formations/` (schematic vs sim tick-by-tick,
+  rendered PNGs + sources).
+- **Tests:** `tests/valoria/test_deployment_geometry.py` (16). **I4:** 7 single-subunit byte-exact rows
+  unchanged; 3 multi-subunit rows re-baselined in every mode (ED-909 precedent); all 4 goldens re-recorded;
+  byte-exact grid oracle green. **Still open:** horseshoe-not-ring (no cavalry rear-transit), single line
+  (no triplex depth-lines), envelopment-not-rewarded outcome (DG-6 / ED-MB-0016). Full detail: ED-MB-0017.
+
+
 ## 2026-07-22 — ED-MB-0016: DG-6 grounded partial resolution — per-battle combat-effectiveness (CEV) friction
 - Root cause of DG-6 over-decisiveness confirmed: melee pool sums N independent dice → CV self-averages
   ~1/√N → `compute_degree` deterministic from force ratio → 100%/0% vs historical bands. Fix (grounded in

@@ -967,6 +967,13 @@ class Subunit:
         vel = base * disc_mult
         if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
             vel *= PC_CAVALRY_SPEED_MULT
+        # [ED-MB-0017, Jordan 2026-07-22] The envelop/sweep MANEUVER is a rapid flanking march (envelopment
+        # is a timing race — the wing must reach the flank/rear before it is defeated in detail). A cell
+        # executing it moves PC_ENVELOP_SPEED_MULT× faster; INERT for any cell without envelop/sweep
+        # (byte-exact for the line-vs-line gauge/signature battles). Applies on the field path regardless
+        # of PER_CELL so infantry envelopers speed up too, not only PER_CELL cavalry.
+        if 'envelop' in self.instructions or 'sweep' in self.instructions:
+            vel *= PC_ENVELOP_SPEED_MULT
         if FIELD_MOVEMENT:
             _sf = max(0.0, vel + stance_mod)                       # continuous field velocity (no grid floor)
             # Keep a whole velocity as an int: a float 1.0 vs int 1 changes downstream int-typed

@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on p
 from mass_battle.engine import (  # noqa: E402
     Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
     run_battle, run_multi_turn_battle, build_unit, build_envelopment, build_refused_flank,
-    resolve_battle)
+    resolve_battle, _centered_line_cols)
 from mass_battle.config import TROOPS_PER_TIER  # noqa: E402
 
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
@@ -57,10 +57,16 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
     fallbacks below, so a spec list of non-canonical types with no overrides still reproduces a homogeneous
     unit. make_unit (single-subunit) is unchanged.
     [canonical: derived_stats architecture -- unit stats composed from subunits]"""
+    # [ED-MB-0017, adversarial-review finding 2] Frontage-aware centred line for un-positioned subunits
+    # (was `(10 + i*4, 15)` — same row-stagger-at-fixed-col defect that stacked subunits, the P-1 bug the
+    # engine builders fixed). No live gauge row hits this branch (every multi-subunit gauge row below sets
+    # explicit `starting_position`), so this closes the latent default without changing any gauge result.
+    _start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    _auto_cols = _centered_line_cols(specs, 25)
     subs = []
     for i, sp in enumerate(specs):
         sp = dict(sp)
-        pos = sp.pop('starting_position', (10 + i * 4, 15))  # deployment-layout convenience default (not historically cited); staggers un-positioned subunits down the battlefield
+        pos = sp.pop('starting_position', (_start_row, _auto_cols[i]))
         tt = sp.pop('troop_type', 'infantry')
         # build typed subunits via Subunit.of_type so a canonical troop type draws its
         # §B.2 Power/Discipline/Morale presets (the taxonomy stat home, ED-1018). Only forward the
