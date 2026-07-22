@@ -352,6 +352,32 @@ def test_discover_unregistered_candidates_surfaces_missing_registrations():
     assert cands == sorted(cands, key=lambda r: (-r['docs'], -r['total'], r['term']))
 
 
+def test_throughline_graph_extended_by_second_registry_source():
+    """Directions-audit #3: the throughline graph draws from TWO registries now — the meta table
+    (parse_throughlines) + throughlines_complete.md's POST-ATOMIZATION `Systems:` lines
+    (parse_throughlines_complete), same co-membership relation, broader coverage. The extra source
+    must genuinely ADD edges (measured net-positive: it surfaces more structure, doesn't shrink it),
+    and `extra_rows=None` must reproduce the meta-only graph exactly (opt-in, no silent behavior
+    change for callers that don't pass it). The μ graph is NOT extended (this source has no Μ data)."""
+    import os
+    from pathlib import Path
+    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    defs = va.derive_tokens(root)
+    design = va.extract_corpus(root, 'L0')[0]
+    tokens, _ = va.curate_tokens(design, defs)
+    meta = va.parse_throughlines(root)
+    extra = va.parse_throughlines_complete(root)
+    assert extra, 'complete-doc POST-ATOMIZATION Systems lines should parse'
+    assert all(len(r) == 4 and r[1] == '' and r[2] == '' for r in extra)   # shape matches; no μ
+    g_base = va.build_g_throughline(meta, tokens)
+    g_ext = va.build_g_throughline(meta, tokens, extra_rows=extra)
+    edges = lambda g: {frozenset((a, b)) for a in g for b in g[a]}
+    e_base, e_ext = edges(g_base), edges(g_ext)
+    assert e_base < e_ext, (len(e_base), len(e_ext))       # strictly more edges, none lost
+    # opt-in: no extra_rows reproduces meta-only exactly (callers unaffected unless they pass it)
+    assert edges(va.build_g_throughline(meta, tokens, extra_rows=None)) == e_base
+
+
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     """SURFACE-NEVER-CULL (SKILL.md doctrine): the structural-findings feed must EMIT every Mode-B
     and Mode-H finding — lower-confidence ones (hub×hub pairs, Key-token isolates) are RETAINED with

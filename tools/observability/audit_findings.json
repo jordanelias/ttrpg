@@ -123,6 +123,15 @@
       "filter_reason": null
     },
     {
+      "a": "Conviction Track",
+      "b": "Peninsular Strain",
+      "meta_links": 2,
+      "a_doc": "systems/factions/faction_politics_v30.md",
+      "b_doc": "systems/factions/faction_layer_v30.md",
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
+    },
+    {
       "a": "Derived Stats",
       "b": "Self-Rendering",
       "meta_links": 2,
@@ -292,6 +301,15 @@
       "b_doc": "engine/params/bg/victory.md",
       "filtered": false,
       "filter_reason": null
+    },
+    {
+      "a": "Threadwork",
+      "b": "Victory",
+      "meta_links": 2,
+      "a_doc": "systems/threadwork/threadwork_v30.md",
+      "b_doc": "engine/params/bg/victory.md",
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     }
   ],
   "isolates": [

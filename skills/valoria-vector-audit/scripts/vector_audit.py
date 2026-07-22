@@ -367,8 +367,9 @@ def _canonical_paths(root):
 # Design-content trees the EXTENDED layer (L1) traces — the whole authored DESIGN corpus, not just
 # the canonical_sources slice. IMPORTANT SCOPE HONESTY (adversarial-pass H1/H2, 2026-07-22): L1
 # extends ONLY the corpus-breadth direction, and within the 4-graph triangulation ONLY the CITE
-# graph consumes the doc corpus. The throughline and mu graphs derive from throughlines_meta (a
-# registry), and the token universe derives from names_index/proper_noun/module_contracts — NONE of
+# graph consumes the doc corpus. The throughline graph derives from two registries
+# (throughlines_meta + throughlines_complete's POST-ATOMIZATION Systems lines) and the mu graph from
+# throughlines_meta, and the token universe derives from names_index/proper_noun/module_contracts — NONE of
 # those grow with L1. So L1 = more DOCS, same TOKENS, cite-graph only. Narrative (arcs/) and planning
 # (workplans/) trees are EXCLUDED: they are not design mechanics, and letting a token's primary_doc
 # migrate to a narrative doc would pollute cite with story co-mention (H2). The design corpus is
@@ -1013,10 +1014,42 @@ def parse_throughlines(root):
     return rows
 
 
-def build_g_throughline(rows, tokens):
+# The POST-ATOMIZATION section of references/throughlines_complete.md carries a SECOND, richer
+# throughline→systems membership (T-04 lists 6 systems there vs 4 in the meta table). Same relation
+# (systems co-listed under a throughline), broader source. Directions-audit #3 (2026-07-22): folding
+# it in was MEASURED before adopting (unlike the reverted bridge attempt) — +2 implied-missing
+# surfaced, +1 legitimate hub (Player Agency), 0 new isolates, no dense-blob inflation. (The doc's
+# INTERACTION MATRIX was measured and REJECTED: 20/21 throughline pairs "interact", a near-complete
+# graph that would just inflate the Clocks/MS hubs with no discrimination.)
+_TL_COMPLETE_RE = re.compile(
+    r'^### (T-\d+):.*?\n\*\*Chain:.*?\n\*\*Systems:\*\*\s*([^\n]+)', re.S | re.M)
+
+
+def parse_throughlines_complete(root):
+    """Yield (T-id, '', '', [system_slugs]) from throughlines_complete.md's POST-ATOMIZATION
+    `**Systems:**` lines. Shape matches parse_throughlines so it composes with build_g_throughline;
+    the two μ fields are empty (this source carries no Μ-mode data — μ stays meta-table-only)."""
+    fp = root / 'references' / 'throughlines_complete.md'
+    if not fp.exists():
+        return []
+    rows = []
+    for tid, line in _TL_COMPLETE_RE.findall(fp.read_text(encoding='utf-8', errors='replace')):
+        # strip parentheticals + section refs, then split — the prose qualifiers ("(Church tree)",
+        # "§3.2") are not systems; only the bare slugs map to tokens (unmapped prose is dropped by
+        # the lut membership test in build_g_throughline, same as the meta parser).
+        clean = re.sub(r'\([^)]*\)', '', line)
+        clean = re.sub(r'§[0-9.]+', '', clean)
+        systems = [s.strip() for s in re.split(r'[;,]', clean) if s.strip()]
+        rows.append((tid, '', '', systems))
+    return rows
+
+
+def build_g_throughline(rows, tokens, extra_rows=None):
+    """Systems co-listed under a throughline are connected. `extra_rows` folds in a second
+    membership source (parse_throughlines_complete) — same relation, broader coverage."""
     lut, norm = _slug_lookup(tokens)
     g = {}
-    for _tid, _p, _s, systems in rows:
+    for _tid, _p, _s, systems in list(rows) + list(extra_rows or []):
         members = [lut[norm(s)] for s in systems if norm(s) in lut]
         for i in range(len(members)):
             for j in range(i + 1, len(members)):
@@ -1549,7 +1582,8 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
                    "arcs/ narrative, workplans/, tests/, deprecated/, audit prose, and non-.md")
     # H1/M1 honesty: name the directions L1 does NOT extend + that validation is L0-calibrated.
     _extend_note = ("L1 extends the corpus-breadth direction and the CITE graph ONLY. NOT extended: "
-                    "the throughline & mu graphs (registry-derived from throughlines_meta), the token "
+                    "the throughline & mu graphs (registry-derived: throughline from throughlines_meta "
+                    "+ throughlines_complete, mu from throughlines_meta), the token "
                     "universe (registry-derived; a token absent from names_index/proper_noun/"
                     "module_contracts is invisible at EVERY layer), non-.md content (sim .py, "
                     "engine/params values, the Key propagation graph), and the P1/P2/P3 thresholds "
@@ -1651,7 +1685,7 @@ def run(root, out, layer='L0'):
 
     print('[stage 4] metadata graphs (throughline / mu / pp)...')
     rows = parse_throughlines(root)
-    g_tl = build_g_throughline(rows, tokens)
+    g_tl = build_g_throughline(rows, tokens, extra_rows=parse_throughlines_complete(root))
     g_mu = build_g_mu(rows, tokens)
     g_pp = build_g_pp(root, tokens)
 
@@ -1714,7 +1748,9 @@ def emit_structural_findings(root, out_path, layer='L0'):
     tokens, _ = curate_tokens(design, token_defs)
     g_cite = build_g_cite(tokens, design)
     rows = parse_throughlines(root)
-    graphs = {'cite': g_cite, 'throughline': build_g_throughline(rows, tokens),
+    graphs = {'cite': g_cite,
+              'throughline': build_g_throughline(rows, tokens,
+                                                 extra_rows=parse_throughlines_complete(root)),
               'mu': build_g_mu(rows, tokens), 'pp': build_g_pp(root, tokens)}
     names = list(tokens)
     degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp')}
