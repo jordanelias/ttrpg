@@ -142,19 +142,21 @@ validate (matrices + `pytest` + re-export). Run `python phasec_probe.py` to repr
 
 Hammering the L0 primitive-law (behaviour *emerges* from geometry primitives; no weapon-name tables):
 
-- **Finding P1 (novel) — half-sword capability is ANTI-EMERGENT: a 2-name fiat list + a dead primitive.**
-  Who can half-sword is decided by a hardcoded data table `HALFSWORD_FORM = {longsword, estoc}` — a name-table
-  (in the data layer, so the `test_no_weapon_name_literal_in_resolution` guard doesn't catch it). Meanwhile the
-  engine *contains* a primitive-derived rule for exactly this — `geometry.can_halfsword_thrust(curvature,
-  point_concentration)` → `geo['halfsword']` — but that coefficient is **DEAD**: `bake()` computes it for every
-  weapon and **nothing reads it** (the geo surface has no anti-orphan gate, unlike the wrapper's circumstance
-  fields). So the emergent path was designed and then abandoned in favour of fiat. And the dead rule is *also*
-  **mis-specified** — it has no length/two-handed term, so as written it wrongly flags daggers (rondel/stiletto,
-  already at gap range) and spears/poleaxes (which *choke the haft*, a different mechanic). A properly
-  length/2H-gated version would add ~15 long two-handed straight blades the fiat list denies — **greatsword,
-  changdao, odachi, tachi, glaive, …** — exactly the class that historically half-sworded vs harness. This
-  compounds the half-sword liability finding: the mechanic is both fiat-restricted to 2 weapons *and*, where it
-  is enabled, a net loss.
+- **Finding P1 [CORRECTED — NOT novel; this is RATIFIED-BUT-UNIMPLEMENTED design] — half-sword capability is a
+  2-name fiat list + a dead primitive.** The current code decides who can half-sword by a hardcoded data table
+  `HALFSWORD_FORM = {longsword, estoc}` (a name-table in the data layer, so the
+  `test_no_weapon_name_literal_in_resolution` guard doesn't catch it), and `geometry.can_halfsword_thrust →
+  geo['halfsword']` is a **dead** coefficient (`bake()` computes it; nothing reads it). **All of this was already
+  diagnosed and a fix ratified** — the 2026-07-04 morphology-granularity **audit G3** ("a name-keyed behaviour
+  whitelist — the exact shape the primitive-law forbids… `can_halfsword_thrust` exists but only gates, never
+  grants") and **plan P3 / consolidation JD-3**: add `elements[].grippable = True` (the **ricasso** / attested
+  safe forward grip), make `affords_halfsword(w) = (∃ grippable forward element) ∧ can_halfsword_thrust(cv, pc)`,
+  **retire `HALFSWORD_FORM`/`HALFSWORD_BASE` as behaviour gates**, landing **byte-identical at {longsword, estoc}**
+  on the un-extended roster, with any roster expansion (flamberge's/greatsword's attested ricassos) a **loud
+  Jordan decision (JD-3)**. **Status: ratified plan-of-record, never wired into code.** So this is not an
+  emergence *gap* — it is **implementation debt on a ratified design**, and my earlier "novel" framing was a
+  search failure (I did not check the audit corpus before claiming novelty — see the prevention note). It is the
+  first entry in the ratified-but-unimplemented register (`ratified_unimplemented_register.md`).
 - **Finding P2 (reassuring) — the RAW primitives are all LIVE.** Zeroing/maxing each of the 5 raw geometry
   primitives roster-wide and re-baking moves a win-rate basket by 29–87pp — none is a dead/inert lever. The
   raw-primitive emergence is real (`curvature`/`edge_keenness` → cut; `point_concentration`/`cross_section` →
