@@ -320,3 +320,27 @@ def test_corpus_layer_L1_extends_L0_corpus_breadth():
     # default is L0 (validated scope preserved)
     d_def, _, m_def = va.extract_corpus(Path(root))
     assert m_def['layer'] == 'L0' and set(d_def) == set(d0)
+
+
+def test_discover_unregistered_candidates_surfaces_missing_registrations():
+    """The token universe is registry-derived, so a design term never registered is invisible to
+    the whole audit. discover_unregistered_candidates surfaces frequent authored terms that NO
+    registered token matches — candidate missing registrations (the fix for that root blind spot)."""
+    import os
+    from pathlib import Path
+    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    cands = va.discover_unregistered_candidates(root, min_docs=6, top=50)
+    assert isinstance(cands, list) and cands, 'should surface at least some unregistered terms'
+    terms = {c['term'] for c in cands}
+    # a registered token (e.g. a conviction) must NOT appear as "unregistered"
+    assert 'Faith' not in terms and 'Conviction' not in terms
+    # every candidate must genuinely be unmatched by the token universe + meet the freq floor
+    defs = va.derive_tokens(root)
+    covered = []
+    for m in defs.values():
+        covered += va._compiled(m.get('patterns') or [])
+    for c in cands[:10]:
+        assert c['docs'] >= 6, c
+        assert not any(rx.search(c['term']) for rx in covered), c['term']
+    # deterministic ordering (docs desc, then total desc, then term)
+    assert cands == sorted(cands, key=lambda r: (-r['docs'], -r['total'], r['term']))

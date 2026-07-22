@@ -1332,6 +1332,69 @@ def vocabulary_debt(design, struck_terms):
     return sorted(rows, key=lambda r: -r['total'])
 
 
+# ── Token-universe extension: DISCOVER authored terms the registries don't know ──
+# The token universe is registry-derived, so a design term never registered is invisible to the
+# WHOLE audit (every graph, every layer). This finds candidate terms in the corpus that NO token
+# pattern matches — i.e. MISSING REGISTRATIONS — so the audit surfaces what it cannot yet see and
+# the terms can be registered (then everything downstream can trace them). Leads, not verdicts.
+_CANDIDATE_STOPWORDS = {
+    'Status', 'Version', 'Scope', 'Section', 'Overview', 'Design', 'Note', 'Notes', 'Example',
+    'Examples', 'Table', 'Figure', 'Appendix', 'Summary', 'Rationale', 'Purpose', 'Goal', 'Goals',
+    'Context', 'Background', 'Detail', 'Details', 'Definition', 'Definitions', 'Mechanic',
+    'Mechanics', 'System', 'Systems', 'Phase', 'Stage', 'Step', 'Steps', 'Rule', 'Rules', 'Case',
+    'Cases', 'Type', 'Types', 'Value', 'Values', 'State', 'States', 'Event', 'Events', 'Action',
+    'Actions', 'Result', 'Results', 'Output', 'Input', 'Change', 'Model', 'Layer', 'Track', 'Clock',
+    'Key', 'Keys', 'Token', 'Tokens', 'Player', 'Game', 'Turn', 'Round', 'Score', 'Pool', 'Check',
+    'Roll', 'Test', 'Tests', 'Tier', 'Level', 'Point', 'Points', 'Count', 'Total', 'Draft', 'Final',
+    'Current', 'Canonical', 'Reference', 'Proposed', 'Provisional', 'Open', 'Closed', 'Yes', 'No',
+    'The', 'This', 'That', 'When', 'What', 'Where', 'How', 'Why', 'For', 'And', 'But', 'Not',
+    # doc-structure / formatting noise (not design concepts)
+    'Board Game', 'Heading Index', 'Section Sizes', 'Table Of', 'Open Items', 'Year-End',
+    'Design Doc', 'Index File', 'Infill File', 'Co-File',
+}
+_CAND_BOLD = re.compile(r'\*\*([A-Z][A-Za-z][A-Za-z0-9 /-]{2,38}[A-Za-z0-9])\*\*')
+_CAND_HEAD = re.compile(r'^#{2,5}\s+([A-Z][A-Za-z][A-Za-z0-9 /-]{2,38}[A-Za-z0-9])\s*$', re.M)
+_CAND_TITLE = re.compile(r'\b([A-Z][a-z]{2,}(?:[ -][A-Z][a-z]{2,}){1,3})\b')
+
+
+def discover_unregistered_candidates(root, design=None, token_defs=None, min_docs=4, top=60):
+    """Corpus terms that NO registered token matches — candidate MISSING registrations.
+    (root, or a prebuilt design/token_defs to reuse an in-flight run.) Structured signals only
+    (bold defs / headers / Title-Case phrases) + a frequency floor to stay high-signal."""
+    from pathlib import Path as _P
+    root = _P(root) if not hasattr(root, 'joinpath') else root
+    if design is None:
+        design, _, _ = extract_corpus(root, layer='L1')
+    if token_defs is None:
+        token_defs = derive_tokens(root)
+    covered = []  # compiled patterns of the whole token universe
+    for meta in token_defs.values():
+        covered += _compiled(meta.get('patterns') or [])
+    def is_registered(term):
+        return any(rx.search(term) for rx in covered)
+    doc_count, total = Counter(), Counter()
+    for content in design.values():
+        seen_here = set()
+        for rx in (_CAND_BOLD, _CAND_HEAD, _CAND_TITLE):
+            for m in rx.finditer(content):
+                term = m.group(1).strip().rstrip(' -/')
+                if len(term) < 4 or term in _CANDIDATE_STOPWORDS:
+                    continue
+                if all(w in _CANDIDATE_STOPWORDS for w in term.split()):
+                    continue
+                total[term] += 1
+                seen_here.add(term)
+        for term in seen_here:
+            doc_count[term] += 1
+    out = []
+    for term, dc in doc_count.items():
+        if dc < min_docs or is_registered(term):
+            continue
+        out.append({'term': term, 'docs': dc, 'total': total[term]})
+    out.sort(key=lambda r: (-r['docs'], -r['total'], r['term']))
+    return out[:top]
+
+
 def throughline_orphans(rows, design):
     """Mode F: throughlines with <=2 substantiating paragraphs (>=2 load-bearing
     systems mentioned in the paragraph)."""

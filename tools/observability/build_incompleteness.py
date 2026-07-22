@@ -440,6 +440,28 @@ def scan_audit_exclusions():
     return out
 
 
+def scan_unregistered_terms():
+    """MISSING REGISTRATIONS — authored design terms that appear across many docs but that NO
+    registered token matches, so the vector-audit is structurally blind to them (the token universe
+    is registry-derived). This is the audit's token-discovery TALKING to the ledger: a frequent
+    unregistered term is a gap in the central registers. Leads, not verdicts."""
+    if _va is None:
+        return []
+    try:
+        cands = _va.discover_unregistered_candidates(REPO, min_docs=6, top=50)
+    except Exception:
+        return []
+    out = []
+    for c in cands:
+        out.append(finding("unregistered_term", f"term::{c['term']}",
+                           f"“{c['term']}” — in {c['docs']} docs, unregistered",
+                           f"appears in {c['docs']} design docs ({c['total']} mentions) but NO registered "
+                           f"token matches it — a candidate missing registration in names_index/"
+                           f"proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+                           path="", lane="IN"))
+    return out
+
+
 def prose_marker_rollup():
     """Cross-reference the decisions digest's prose gap/assumption/stub/todo counts (not re-scanned)."""
     d = _load_json("tools/observability/decisions.json")
@@ -461,6 +483,7 @@ def build():
     findings += scan_status_headers()
     findings += scan_retired_tree_pointers()
     findings += scan_orphan_tools()
+    findings += scan_unregistered_terms()
     findings += scan_integrity_pins()
     findings += scan_quarantine()
     findings += scan_audit_exclusions()
@@ -522,6 +545,7 @@ CATEGORY_LABEL = {
     "status_noncurrent": "Docs whose Status is not current (PROPOSED/DRAFT/STALE/…)",
     "apparatus_orphan": "Orphaned tools/skills (no importer/invoker)",
     "stale_retired_pointer": "Registries still pointing at the retired designs/ tree (alias-hidden)",
+    "unregistered_term": "Frequent authored terms with NO registered token (missing registrations)",
     "integrity_unverified_pin": "Unverified integrity pins (canonical_sha)",
     "register_quarantined": "Quarantined/stale registers",
     "register_phantom_source": "Registry rows indexing a non-existent source file",

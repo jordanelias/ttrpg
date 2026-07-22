@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 154,
+    "findings": 204,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
@@ -19,7 +19,8 @@
       "register_quarantined": 1,
       "sim_not_implemented": 39,
       "stale_retired_pointer": 15,
-      "status_noncurrent": 25
+      "status_noncurrent": 25,
+      "unregistered_term": 50
     }
   },
   "by_lane": {
@@ -54,7 +55,7 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 51,
+      "total": 101,
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
       "integrity_unverified_pin": 1,
@@ -63,7 +64,8 @@
       "register_quarantined": 1,
       "sim_not_implemented": 7,
       "stale_retired_pointer": 15,
-      "status_noncurrent": 2
+      "status_noncurrent": 2,
+      "unregistered_term": 50
     },
     "SE": {
       "total": 6,
@@ -995,8 +997,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:519",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:519",
+      "id": "tools/observability/build_incompleteness.py:542",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:542",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN"
@@ -1328,6 +1330,406 @@
       "detail": "doc Status is not current: DRAFT",
       "path": "systems/world/solmund_master_document.md",
       "lane": "WR"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Attention Pool",
+      "title": "\u201cAttention Pool\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (14 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Calamity Drift",
+      "title": "\u201cCalamity Drift\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (25 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Cascade Phase",
+      "title": "\u201cCascade Phase\u201d \u2014 in 16 docs, unregistered",
+      "detail": "appears in 16 design docs (28 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Casus Belli",
+      "title": "\u201cCasus Belli\u201d \u2014 in 24 docs, unregistered",
+      "detail": "appears in 24 design docs (69 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Categorical Imperative",
+      "title": "\u201cCategorical Imperative\u201d \u2014 in 17 docs, unregistered",
+      "detail": "appears in 17 design docs (26 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Community Organizing",
+      "title": "\u201cCommunity Organizing\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (31 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Community Weaving",
+      "title": "\u201cCommunity Weaving\u201d \u2014 in 19 docs, unregistered",
+      "detail": "appears in 19 design docs (35 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Consul Inward",
+      "title": "\u201cConsul Inward\u201d \u2014 in 16 docs, unregistered",
+      "detail": "appears in 16 design docs (45 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Coup Counter",
+      "title": "\u201cCoup Counter\u201d \u2014 in 25 docs, unregistered",
+      "detail": "appears in 25 design docs (98 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Crusader Kings",
+      "title": "\u201cCrusader Kings\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (16 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Cultural Reformation",
+      "title": "\u201cCultural Reformation\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (23 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Decision Fork",
+      "title": "\u201cDecision Fork\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (34 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Design Principle",
+      "title": "\u201cDesign Principle\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (18 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Discovery Event",
+      "title": "\u201cDiscovery Event\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (27 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Domain Action",
+      "title": "\u201cDomain Action\u201d \u2014 in 46 docs, unregistered",
+      "detail": "appears in 46 design docs (96 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Ein Sof",
+      "title": "\u201cEin Sof\u201d \u2014 in 19 docs, unregistered",
+      "detail": "appears in 19 design docs (76 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Ethical Framework",
+      "title": "\u201cEthical Framework\u201d \u2014 in 17 docs, unregistered",
+      "detail": "appears in 17 design docs (66 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Framework Drift",
+      "title": "\u201cFramework Drift\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (25 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Game Master",
+      "title": "\u201cGame Master\u201d \u2014 in 19 docs, unregistered",
+      "detail": "appears in 19 design docs (62 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Grand Contest",
+      "title": "\u201cGrand Contest\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (23 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::History Resonance",
+      "title": "\u201cHistory Resonance\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (18 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Inert Knowledge",
+      "title": "\u201cInert Knowledge\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (20 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Institutional Pressure",
+      "title": "\u201cInstitutional Pressure\u201d \u2014 in 16 docs, unregistered",
+      "detail": "appears in 16 design docs (19 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Leadership Deviation",
+      "title": "\u201cLeadership Deviation\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (48 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Martial Law",
+      "title": "\u201cMartial Law\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (21 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Mass Seizure",
+      "title": "\u201cMass Seizure\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (41 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Moral Relativism",
+      "title": "\u201cMoral Relativism\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (16 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Movement Card",
+      "title": "\u201cMovement Card\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (14 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Non-Player Character",
+      "title": "\u201cNon-Player Character\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (34 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Parliamentary Manoeuvre",
+      "title": "\u201cParliamentary Manoeuvre\u201d \u2014 in 18 docs, unregistered",
+      "detail": "appears in 18 design docs (38 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Parliamentary Vote",
+      "title": "\u201cParliamentary Vote\u201d \u2014 in 19 docs, unregistered",
+      "detail": "appears in 19 design docs (34 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Past-Oriented Pulling",
+      "title": "\u201cPast-Oriented Pulling\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (35 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Personal Phase",
+      "title": "\u201cPersonal Phase\u201d \u2014 in 17 docs, unregistered",
+      "detail": "appears in 17 design docs (57 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Philosophical Foundations",
+      "title": "\u201cPhilosophical Foundations\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (19 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Player Character",
+      "title": "\u201cPlayer Character\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (51 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Primary Attribute",
+      "title": "\u201cPrimary Attribute\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (27 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Priority Tree",
+      "title": "\u201cPriority Tree\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (99 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Private Collection",
+      "title": "\u201cPrivate Collection\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (22 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Proximity Rating",
+      "title": "\u201cProximity Rating\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (27 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Resonant Style",
+      "title": "\u201cResonant Style\u201d \u2014 in 33 docs, unregistered",
+      "detail": "appears in 33 design docs (159 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Royal Decree",
+      "title": "\u201cRoyal Decree\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (20 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Self-Other",
+      "title": "\u201cSelf-Other\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (50 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Shifting Object",
+      "title": "\u201cShifting Object\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (50 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Stance Triangles",
+      "title": "\u201cStance Triangles\u201d \u2014 in 10 docs, unregistered",
+      "detail": "appears in 10 design docs (19 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Starting Values",
+      "title": "\u201cStarting Values\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (20 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Strategic Phase",
+      "title": "\u201cStrategic Phase\u201d \u2014 in 18 docs, unregistered",
+      "detail": "appears in 18 design docs (33 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Sufficient Scope",
+      "title": "\u201cSufficient Scope\u201d \u2014 in 13 docs, unregistered",
+      "detail": "appears in 13 design docs (33 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::The Thread",
+      "title": "\u201cThe Thread\u201d \u2014 in 11 docs, unregistered",
+      "detail": "appears in 11 design docs (16 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Thread Tension",
+      "title": "\u201cThread Tension\u201d \u2014 in 18 docs, unregistered",
+      "detail": "appears in 18 design docs (54 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Thread-Read",
+      "title": "\u201cThread-Read\u201d \u2014 in 28 docs, unregistered",
+      "detail": "appears in 28 design docs (119 mentions) but NO registered token matches it \u2014 a candidate missing registration in names_index/proper_noun/descriptor (register it, or confirm it is not a canonical term)",
+      "path": "",
+      "lane": "IN"
     }
   ]
 }
