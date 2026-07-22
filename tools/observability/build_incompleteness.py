@@ -440,6 +440,46 @@ def scan_audit_exclusions():
     return out
 
 
+def scan_bridge_gaps():
+    """CROSS-GRAPH RECONCILIATION — make the two graph systems talk. The vector-audit's token
+    graph (design concepts) and build_graph's Key graph (engine modules) are separate; this
+    surfaces where they DISAGREE: a design SUBSYSTEM the token vocabulary tracks (scale 'system')
+    that has NO module_contracts entry / engine node — a design concept with no engine
+    representation (either it should be a module, or the token is mis-scaled). The inverse
+    (engine node with no token) is already covered by contract_doc_null/contract_missing_entirely,
+    so it is not re-surfaced here (no redundancy)."""
+    import re as _re
+    if _va is None:
+        return []
+    g = _load_json("tools/observability/graph.json")
+    if not g:
+        return []
+    try:
+        toks = _va.derive_tokens(REPO)
+    except Exception:
+        return []
+    norm = lambda s: _re.sub(r'[^a-z0-9]+', '', (s or '').lower())
+    node_norms = set()
+    for s in g.get("systems", []):
+        node_norms.add(norm(s.get("id")))
+        try:
+            node_norms.add(norm(_va._humanize_system(s.get("id") or "")))
+        except Exception:
+            pass
+    out = []
+    for name, meta in toks.items():
+        if meta.get("scale") != "system":
+            continue  # subsystem heads only — mechanic stats (Stability/Mandate/…) are fields, not modules
+        if norm(name) in node_norms:
+            continue
+        out.append(finding("bridge_design_no_engine_node", f"token::{name}", name,
+                           "tracked as a design SUBSYSTEM token but has NO module_contracts entry / "
+                           "engine graph node — the design vocabulary and the Key graph disagree "
+                           "(author a contract, or confirm it is not an engine module)",
+                           path="", lane="IN"))
+    return out
+
+
 def scan_unregistered_terms():
     """MISSING REGISTRATIONS — authored design terms that appear across many docs but that NO
     registered token matches, so the vector-audit is structurally blind to them (the token universe
@@ -487,6 +527,7 @@ def build():
     findings += scan_status_headers()
     findings += scan_retired_tree_pointers()
     findings += scan_orphan_tools()
+    findings += scan_bridge_gaps()
     findings += scan_unregistered_terms()
     findings += scan_integrity_pins()
     findings += scan_quarantine()
@@ -550,6 +591,7 @@ CATEGORY_LABEL = {
     "apparatus_orphan": "Orphaned tools/skills (no importer/invoker)",
     "stale_retired_pointer": "Registries still pointing at the retired designs/ tree (alias-hidden)",
     "unregistered_term": "Frequent authored terms with NO registered token (missing registrations)",
+    "bridge_design_no_engine_node": "Design subsystems with no engine module node (graph disagreement)",
     "integrity_unverified_pin": "Unverified integrity pins (canonical_sha)",
     "register_quarantined": "Quarantined/stale registers",
     "register_phantom_source": "Registry rows indexing a non-existent source file",
