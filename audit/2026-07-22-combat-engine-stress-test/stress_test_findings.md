@@ -101,6 +101,36 @@ was committed** (all three attempts were in-process only); the working tree stay
 
 ---
 
+## Phase-C investigation (2026-07-22) — the recalibration is a THREE-lever joint problem
+
+Following "Phase C", I traced the reach-class dominance + half-sword liability to their actual drivers
+(`phasec_probe.py`). Result: **not one knob — three coupled levers, each with a cross-constraint that a naive
+fix trips.** I confirmed each empirically and committed **no** engine change (all deep-copied CFG / monkeypatch).
+
+- **Lever 1 — reach-class dominance @ heavy is the APPROACH stop-hit.** `STOPHIT_CHANCE×0.5` compresses spear
+  93→69 and yari 91→76 vs an arming baseline (toward the ~55–75 contested band). **But** the same cut drops
+  **spear-vs-arming at *none* from 80 → 59 → 31** — and a spear *should* beat a sword unarmoured (reach wins
+  the duel; grounded). So the lever must be **armour-conditional** (compress reach's approach threat as the
+  *closer's* armour rises — an armoured man walks through the spear — not a global stop-hit cut). Note `poleaxe`
+  and `guandao` barely move (90→~88): their plate win is their own anti-armour mode, not just reach — correctly
+  untouched.
+- **Lever 2 — the half-sword liability is SEPARATE.** The stop-hit fix leaves the half-sword switch-benefit
+  negative (−27 → −29). The half-sword fights *in the close*; its loss is reach-volume there (surrendering the
+  reach that throttles the opponent's attack count — traced: half-swording gives the arming sword +36% more
+  attacking beats), not the approach stop-hit. It needs its own close-range lever (reach must decay hard once
+  genuinely closed, so the leveraged half-sword thrust can win at grappling range).
+- **Lever 3 — heft-ordering is the spear SHAFT-MASS model.** `heft(spear)=1.43 > longsword 1.00` (backwards)
+  because the spear's `elements` model only the **0.4 kg head** — the ~1.6 kg ash shaft is unmodelled, so the
+  derived balance sits far too forward. A modelled shaft pulls PoB back toward the hand and drops heft below
+  arming/longsword (physical, and turns the accepted-red `test_falsifiable_heft_ordering` green). This is
+  grounded per-part *data* work across the reach roster, not a constant tweak.
+
+**The blocker is a design call, not code:** Levers 1 & 2 need **target win-rate bands** — e.g. *should a spear
+beat an arming sword when both are in full plate, and by how much?* (Historically a spear/pike vs a harnessed
+swordsman is genuinely strong — pike squares — so the answer may be "yes, but not 93%.") I can't invent those
+targets; they set where each lever lands. Once the bands are fixed I can implement all three, joint-tune, and
+validate (matrices + `pytest` + re-export). Run `python phasec_probe.py` to reproduce.
+
 ## Part A — Mechanical correctness (`stress_battery.py`)
 
 | category | result | evidence |
