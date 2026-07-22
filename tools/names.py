@@ -147,6 +147,10 @@ def by_token_class(token_class, path=None):
     An entry's token class is its explicit `token_class` field if present, else its `category`.
     This lets a proper_noun (world.*) entry ALSO carry an audit class (e.g. `faction`) without
     disturbing its naming category/mirror — the single home for the vector-audit CLASSES rosters
-    and their §3.5 disambiguation (CLAUDE.md §8)."""
+    and their §3.5 disambiguation (CLAUDE.md §8).
+
+    NOTE: an explicit `token_class` MASKS the entry's `category` here, so `by_token_class('proper_noun')`
+    will NOT return an entry tagged `token_class: faction`. That is intended for the audit (an entry
+    belongs to its token class, not its naming category) — use `by_category()` for category queries."""
     return {k: e for k, e in entries(path).items()
             if isinstance(e, dict) and (e.get('token_class') or e.get('category')) == token_class}

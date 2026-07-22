@@ -234,6 +234,10 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # sourced via token_class (a proper_noun that ALSO carries an audit class), not category
     assert {m['canonical'] for m in names.by_token_class('faction').values()} == set(FAC_PATS)
     assert names.canonical('world.guilds') == 'Guilds'   # world.guilds added + mirrored
+    # SOURCING-LINKAGE guard (adversarial-pass hardening): the classes are actually driven through
+    # the names_index sourcing loop, so a revert that re-hardcodes identical dicts but drops the
+    # sourcing is caught, not just a value-identical pass.
+    assert set(EXPECTED) | {'faction'} <= set(va._INDEX_TOKEN_CLASSES)
 
 
 def test_vector_audit_reuses_the_real_names_reader():

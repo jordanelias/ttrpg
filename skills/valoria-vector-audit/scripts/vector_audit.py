@@ -87,8 +87,9 @@ CLASSES = {
     #   npc → central home is names_index world.* but the audit's short match-forms ('Torben',
     #     surname-only) don't map 1:1 to the formal world.* canonicals; needs the short<->formal
     #     reconciliation before sourcing (risk to name-coreference). Reserved prefix npc. (§3.2).
-    #   clock → systems/overview/clock_registry_v30.md is prose (abbreviations vs full names);
-    #     author clock.* entries once that registry is machine-readable.
+    #   clock → 2 of 6 already have clock.* entries (clock.church_influence, clock.mending_stability)
+    #     but as FULL-NAME canonicals, while the audit roster is ABBREVIATIONS (MS/CI/IP/PI/TS/TCV)
+    #     and 4/6 have no entry at all — needs the abbreviation<->full-name mapping before sourcing.
     'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
             'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
