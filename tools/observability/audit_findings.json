@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
-  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: this audit sees only the design CITATION/throughline/mu/pp graphs, NOT the Key propagation graph \u2014 so hub\u00d7hub Mode-B pairs and Key-token Mode-H isolates are filtered out as artifacts.",
+  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: this audit sees only the design cite/throughline/mu/pp graphs, NOT the Key propagation graph. Per the SURFACE-NEVER-CULL doctrine EVERY finding is emitted; lower-confidence ones carry a `filtered`+`filter_reason` flag (hub\u00d7hub Mode-B, Key-token Mode-H) and the ledger reads only the unfiltered rows for its Missing face \u2014 nothing is dropped from the feed.",
   "layer": "L0",
   "design_docs": 110,
   "implied_missing": [
@@ -10,242 +10,389 @@
       "b": "Clocks",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_politics_v30.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md"
+      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Campaign Architecture",
       "b": "Faction Layer",
       "meta_links": 2,
       "a_doc": "systems/threadwork/threadwork_v30.md",
-      "b_doc": "systems/factions/faction_canon_v30.md"
+      "b_doc": "systems/factions/faction_canon_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Campaign Architecture",
       "b": "Peninsular Strain",
       "meta_links": 2,
       "a_doc": "systems/threadwork/threadwork_v30.md",
-      "b_doc": "systems/factions/faction_layer_v30.md"
+      "b_doc": "systems/factions/faction_layer_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Campaign Architecture",
       "b": "Scale Transitions",
       "meta_links": 2,
       "a_doc": "systems/threadwork/threadwork_v30.md",
-      "b_doc": "systems/_architecture/propagation_spec_v1.md"
+      "b_doc": "systems/_architecture/propagation_spec_v1.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Clocks",
       "b": "Faction Layer",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/factions/faction_canon_v30.md"
+      "b_doc": "systems/factions/faction_canon_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Clocks",
       "b": "MS Trajectory",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "canon/02_foundations_amendment_leap_mechanism.md"
+      "b_doc": "canon/02_foundations_amendment_leap_mechanism.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Clocks",
       "b": "Peninsular Strain",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/factions/faction_layer_v30.md"
+      "b_doc": "systems/factions/faction_layer_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Clocks",
       "b": "Royal Assassination Fuse",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/npcs/npc_behavior_v30.md"
+      "b_doc": "systems/npcs/npc_behavior_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Clocks",
       "b": "Threadwork",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/threadwork/threadwork_v30.md"
+      "b_doc": "systems/threadwork/threadwork_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Clocks",
       "b": "Victory",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "engine/params/bg/victory.md"
+      "b_doc": "engine/params/bg/victory.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Conflict Architecture",
       "b": "Leap Mechanism",
       "meta_links": 2,
       "a_doc": "systems/settlements/settlement_layer_v30.md",
-      "b_doc": "systems/threadwork/threadwork_v30.md"
+      "b_doc": "systems/threadwork/threadwork_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Conflict Architecture",
       "b": "Tensions Deck",
       "meta_links": 2,
       "a_doc": "systems/settlements/settlement_layer_v30.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md"
+      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Conviction Track",
       "b": "Derived Stats",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_politics_v30.md",
-      "b_doc": "systems/mass_battle/mass_battle_v30.md"
+      "b_doc": "systems/mass_battle/mass_battle_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Derived Stats",
       "b": "Self-Rendering",
       "meta_links": 2,
       "a_doc": "systems/mass_battle/mass_battle_v30.md",
-      "b_doc": "canon/01_foundations_amendment_self_rendering.md"
+      "b_doc": "canon/01_foundations_amendment_self_rendering.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Derived Stats",
       "b": "Solmund",
       "meta_links": 2,
       "a_doc": "systems/mass_battle/mass_battle_v30.md",
-      "b_doc": "systems/world/solmund_voice_v30.md"
+      "b_doc": "systems/world/solmund_voice_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Faction Layer",
       "b": "Mass Combat",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_canon_v30.md",
-      "b_doc": "systems/mass_battle/mass_battle_integration_v30.md"
+      "b_doc": "systems/mass_battle/mass_battle_integration_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Faction Layer",
       "b": "Scale Transitions",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_canon_v30.md",
-      "b_doc": "systems/_architecture/propagation_spec_v1.md"
+      "b_doc": "systems/_architecture/propagation_spec_v1.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Factions",
       "b": "MS Trajectory",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_politics_v30.md",
-      "b_doc": "canon/02_foundations_amendment_leap_mechanism.md"
+      "b_doc": "canon/02_foundations_amendment_leap_mechanism.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Factions",
       "b": "Miraculous Event",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_politics_v30.md",
-      "b_doc": "systems/world/miraculous_event_v30.md"
+      "b_doc": "systems/world/miraculous_event_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "MS Trajectory",
       "b": "Peninsular Strain",
       "meta_links": 2,
       "a_doc": "canon/02_foundations_amendment_leap_mechanism.md",
-      "b_doc": "systems/factions/faction_layer_v30.md"
+      "b_doc": "systems/factions/faction_layer_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "MS Trajectory",
       "b": "Settlement Layer",
       "meta_links": 2,
       "a_doc": "canon/02_foundations_amendment_leap_mechanism.md",
-      "b_doc": "systems/factions/faction_canon_v30.md"
+      "b_doc": "systems/factions/faction_canon_v30.md",
+      "filtered": false,
+      "filter_reason": null
+    },
+    {
+      "a": "Mass Combat",
+      "b": "Settlement Layer",
+      "meta_links": 2,
+      "a_doc": "systems/mass_battle/mass_battle_integration_v30.md",
+      "b_doc": "systems/factions/faction_canon_v30.md",
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
+    },
+    {
+      "a": "Mass Combat",
+      "b": "Victory",
+      "meta_links": 2,
+      "a_doc": "systems/mass_battle/mass_battle_integration_v30.md",
+      "b_doc": "engine/params/bg/victory.md",
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     },
     {
       "a": "Military Layer",
       "b": "Settlement Layer",
       "meta_links": 2,
       "a_doc": "systems/factions/ci_political_v30.md",
-      "b_doc": "systems/factions/faction_canon_v30.md"
+      "b_doc": "systems/factions/faction_canon_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Miraculous Event",
       "b": "Threadwork",
       "meta_links": 2,
       "a_doc": "systems/world/miraculous_event_v30.md",
-      "b_doc": "systems/threadwork/threadwork_v30.md"
+      "b_doc": "systems/threadwork/threadwork_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Peninsular Strain",
       "b": "Tensions Deck",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_layer_v30.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md"
+      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Royal Assassination Fuse",
       "b": "Tensions Deck",
       "meta_links": 2,
       "a_doc": "systems/npcs/npc_behavior_v30.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md"
+      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Scale Transitions",
       "b": "Self-Rendering",
       "meta_links": 2,
       "a_doc": "systems/_architecture/propagation_spec_v1.md",
-      "b_doc": "canon/01_foundations_amendment_self_rendering.md"
+      "b_doc": "canon/01_foundations_amendment_self_rendering.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Scale Transitions",
       "b": "Tensions Deck",
       "meta_links": 2,
       "a_doc": "systems/_architecture/propagation_spec_v1.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md"
+      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Scale Transitions",
       "b": "Threadwork",
       "meta_links": 2,
       "a_doc": "systems/_architecture/propagation_spec_v1.md",
-      "b_doc": "systems/threadwork/threadwork_v30.md"
+      "b_doc": "systems/threadwork/threadwork_v30.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Scale Transitions",
       "b": "Victory",
       "meta_links": 2,
       "a_doc": "systems/_architecture/propagation_spec_v1.md",
-      "b_doc": "engine/params/bg/victory.md"
+      "b_doc": "engine/params/bg/victory.md",
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "a": "Tensions Deck",
       "b": "Victory",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "engine/params/bg/victory.md"
+      "b_doc": "engine/params/bg/victory.md",
+      "filtered": false,
+      "filter_reason": null
     }
   ],
   "isolates": [
     {
       "token": "Active Inquisition",
       "status": "canonical",
-      "doc": null
+      "doc": null,
+      "registry": "references/action_vocabulary.yaml",
+      "max_deg": 0,
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "token": "Body",
       "status": "canonical",
-      "doc": null
+      "doc": null,
+      "registry": "references/names_index.yaml",
+      "max_deg": 0,
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "token": "Counter-Intelligence",
       "status": "canonical",
-      "doc": null
+      "doc": null,
+      "registry": "references/action_vocabulary.yaml",
+      "max_deg": 0,
+      "filtered": false,
+      "filter_reason": null
+    },
+    {
+      "token": "Key: mechanical.scene_exited",
+      "status": "canonical",
+      "doc": null,
+      "registry": "references/module_contracts.yaml",
+      "max_deg": 0,
+      "filtered": true,
+      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
+    },
+    {
+      "token": "Key: mechanical.scene_skipped",
+      "status": "canonical",
+      "doc": null,
+      "registry": "references/module_contracts.yaml",
+      "max_deg": 0,
+      "filtered": true,
+      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
+    },
+    {
+      "token": "Key: scene_outcome.battle_concluded",
+      "status": "canonical",
+      "doc": null,
+      "registry": "references/module_contracts.yaml",
+      "max_deg": 0,
+      "filtered": true,
+      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
     },
     {
       "token": "NPC Relational Graph",
       "status": "canonical",
-      "doc": null
+      "doc": null,
+      "registry": "references/canonical_sources.yaml",
+      "max_deg": 0,
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "token": "Territorial Piety",
       "status": "canonical",
-      "doc": null
+      "doc": null,
+      "registry": "references/module_contracts.yaml",
+      "max_deg": 0,
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "token": "Territory Temperaments",
       "status": "canonical",
-      "doc": null
+      "doc": null,
+      "registry": "references/canonical_sources.yaml",
+      "max_deg": 0,
+      "filtered": false,
+      "filter_reason": null
+    },
+    {
+      "token": "faction Mandate (cross-module \u2192 faction_state)",
+      "status": "canonical",
+      "doc": null,
+      "registry": "references/module_contracts.yaml",
+      "max_deg": 0,
+      "filtered": true,
+      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
+    },
+    {
+      "token": "faction Treasury income (cross-module \u2192 faction_state)",
+      "status": "canonical",
+      "doc": null,
+      "registry": "references/module_contracts.yaml",
+      "max_deg": 0,
+      "filtered": true,
+      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
     }
   ]
 }

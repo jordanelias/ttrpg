@@ -1678,6 +1678,29 @@ def run(root, out, layer='L0'):
     return validation
 
 
+# Map a token's `source` label (derive_tokens) → the registry file that DEFINES it, so a Mode-H
+# isolate (a term with no design-prose home, hence no primary_doc) still links SOMEWHERE navigable:
+# the register you'd edit to author a doc for it or de-register it. Verified all paths exist.
+_SOURCE_REGISTRY = {
+    'derived:names_index': 'references/names_index.yaml',
+    'derived:module_contracts': 'references/module_contracts.yaml',
+    'derived:descriptor_registry': 'references/descriptor_registry.yaml',
+    'derived:proper_noun_registry': 'references/proper_noun_registry.yaml',
+    'derived:canonical_sources': 'references/canonical_sources.yaml',
+    'seed:action': 'references/action_vocabulary.yaml',
+    'seed': 'skills/valoria-vector-audit/scripts/vector_audit.py',  # hardcoded SEED constants
+}
+
+
+def _source_registry(source):
+    """Registry file that defines a token, from its `source` label (best-effort, longest match)."""
+    if not source:
+        return None
+    if source in _SOURCE_REGISTRY:
+        return _SOURCE_REGISTRY[source]
+    return _SOURCE_REGISTRY.get(source.split(':', 1)[0])
+
+
 def emit_structural_findings(root, out_path, layer='L0'):
     """Write a COMPACT, deterministic feed of the audit's UNIQUE structural findings — Mode B
     (implied-but-missing: two design concepts linked in >=2 metadata graphs but never cited
@@ -1697,36 +1720,59 @@ def emit_structural_findings(root, out_path, layer='L0'):
     degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp')}
     diag = diagnostics(tokens, graphs, degs)
     pdoc = lambda t: (tokens.get(t) or {}).get('primary_doc')
-    # (a) FILTER the adversarial-pass artifacts, so the surfaced findings are high-signal:
-    #   Mode B — drop hub×hub pairs: a multi-graph HUB (Mode A) with a narrow primary_doc
-    #   mechanically implies a "missing" edge to every other hub — that's the metric's signature,
-    #   not an authoring gap. Keep pairs where at least one side is NOT a hub (a genuine surprise).
+    # SURFACE, NEVER CULL (SKILL.md doctrine). The adversarial pass caught the prior cut DROPPING
+    # findings — the exact anti-pattern this apparatus exists to kill. So we emit EVERY finding and
+    # instead ANNOTATE the lower-confidence ones with `filtered` + `filter_reason`. Nothing vanishes
+    # from the feed; the Incompleteness Ledger consumes the unfiltered subset for its high-signal
+    # Missing face, but a reader auditing the feed sees the full picture and can judge the flags.
     hubs = {r['token'] for r in diag.get('A_multigraph_hubs', [])}
-    #   Mode H — drop Key tokens + cross-module Key-flow tokens: they are isolated ONLY in the
-    #   design-citation graph (prose rarely cites a Key by name) but are CENTRAL in the Key
-    #   propagation graph this audit does not compute. Flagging them "isolated" is a false alarm.
-    def _is_key_token(t):
-        return t.startswith('Key:') or 'cross-module' in t
+    def _im_filter(r):
+        # Mode B hub×hub: BOTH endpoints are multi-graph hubs. Lower-confidence (a hub co-occurs
+        # with many tokens, so a missing edge is less surprising) — but NOT a mechanical artifact
+        # (empirically only ~2 of C(hubs,2) pairs clear the ≥2-meta-links/no-cite/cross-class bar),
+        # so these are RETAINED-BUT-FLAGGED, potentially the highest-value gaps (two central systems
+        # that arguably should cross-reference and don't).
+        if r['a'] in hubs and r['b'] in hubs:
+            return 'both-endpoints-are-multigraph-hubs (lower confidence, not dropped)'
+        return None
+    def _iso_filter(t):
+        # Mode H Key/cross-module tokens: isolated in the design-CITATION graph by CONSTRUCTION
+        # (prose rarely cites a Key by name) but central in the Key propagation graph this audit does
+        # not compute — so "isolated" is expected, not a gap. Flagged, not dropped.
+        if t.startswith('Key:') or 'cross-module' in t:
+            return 'Key-graph construct — citation-graph isolation is expected by construction'
+        return None
     payload = {
         'schema_version': 1,
         'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
         'note': 'GENERATED — the vector-audit\'s unique cross-graph structural findings (Mode B '
                 'implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. '
                 'Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: this audit sees only '
-                'the design CITATION/throughline/mu/pp graphs, NOT the Key propagation graph — so '
-                'hub×hub Mode-B pairs and Key-token Mode-H isolates are filtered out as artifacts.',
+                'the design cite/throughline/mu/pp graphs, NOT the Key propagation graph. Per the '
+                'SURFACE-NEVER-CULL doctrine EVERY finding is emitted; lower-confidence ones carry a '
+                '`filtered`+`filter_reason` flag (hub×hub Mode-B, Key-token Mode-H) and the ledger '
+                'reads only the unfiltered rows for its Missing face — nothing is dropped from the feed.',
         'layer': layer,
         'design_docs': manifest.get('design_count'),
         'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links'),
-                             'a_doc': pdoc(r['a']), 'b_doc': pdoc(r['b'])}
-                            for r in diag.get('B_implied_missing', [])
-                            if not (r['a'] in hubs and r['b'] in hubs)],
-        'isolates': [{'token': r['token'], 'status': r.get('status'), 'doc': pdoc(r['token'])}
-                     for r in diag.get('H_isolates', []) if not _is_key_token(r['token'])],
+                             'a_doc': pdoc(r['a']), 'b_doc': pdoc(r['b']),
+                             'filtered': bool(_im_filter(r)), 'filter_reason': _im_filter(r)}
+                            for r in diag.get('B_implied_missing', [])],
+        'isolates': [{'token': r['token'], 'status': r.get('status'), 'doc': pdoc(r['token']),
+                      'registry': _source_registry((tokens.get(r['token']) or {}).get('source')),
+                      # max degree across the four graphs (Mode-H is max-deg<=1) — carried so the
+                      # ledger text can be ACCURATE (degree 0 = truly untouched; degree 1 = a single
+                      # thread) rather than assuming 0.
+                      'max_deg': max(r.get(k, 0) for k in ('cite', 'throughline', 'mu', 'pp')),
+                      'filtered': bool(_iso_filter(r['token'])),
+                      'filter_reason': _iso_filter(r['token'])}
+                     for r in diag.get('H_isolates', [])],
     }
     out_path.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
-    print(f'[emit] {len(payload["implied_missing"])} implied-missing + {len(payload["isolates"])} '
-          f'isolates -> {out_path}')
+    kept_im = sum(1 for r in payload['implied_missing'] if not r['filtered'])
+    kept_iso = sum(1 for r in payload['isolates'] if not r['filtered'])
+    print(f'[emit] {len(payload["implied_missing"])} implied-missing ({kept_im} unfiltered) + '
+          f'{len(payload["isolates"])} isolates ({kept_iso} unfiltered) -> {out_path}')
     return payload
 
 

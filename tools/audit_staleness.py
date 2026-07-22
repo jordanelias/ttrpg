@@ -52,9 +52,14 @@ FAMILIES = [
         # audit_findings.json every audit-refresh, and the Incompleteness Ledger reads it. This is
         # the artifact whose drift actually matters now (the snapshot the ledger surfaces).
         "artifact_paths": ["tools/observability/audit_findings.json"],
-        # The audit's corpus is the design tree + the central registries it derives its token
-        # universe from (see extract_corpus / derive_tokens in vector_audit.py).
-        "scope_prefixes": ("systems/", "canon/", "engine/", "godot/", "proposals/", "references/"),
+        # Scope = the REAL inputs to the L0 feed (verified empirically, corrected 2026-07-22 after an
+        # adversarial pass caught a drift blind spot). The L0 corpus spans systems/ engine/ canon/
+        # arcs/ audit/ references/, and the `pp` graph reads registers/patch_register_active.yaml —
+        # so a patch-register edit changes the emitted findings and MUST count as drift. godot/ +
+        # proposals/ were WRONG here: they contribute 0 docs at L0 (only at L1), so their churn was
+        # inflating false "stale". (If --emit-findings is ever switched to --layer L1, add them back.)
+        "scope_prefixes": ("systems/", "engine/", "canon/", "arcs/", "audit/",
+                           "references/", "registers/patch_register_active.yaml"),
     },
     {
         "name": "decisions-digest",

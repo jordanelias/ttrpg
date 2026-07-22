@@ -350,3 +350,33 @@ def test_discover_unregistered_candidates_surfaces_missing_registrations():
         assert c['docs'] >= 12 and c.get('top_docs'), c
     # deterministic total order, no cap (floor is the only cutoff)
     assert cands == sorted(cands, key=lambda r: (-r['docs'], -r['total'], r['term']))
+
+
+def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
+    """SURFACE-NEVER-CULL (SKILL.md doctrine): the structural-findings feed must EMIT every Mode-B
+    and Mode-H finding — lower-confidence ones (hub×hub pairs, Key-token isolates) are RETAINED with
+    a `filtered`+`filter_reason` flag, never dropped. And every finding must link SOMEWHERE: an
+    implied-missing row carries a_doc/b_doc, an isolate carries `registry` (the register defining a
+    term with no design-prose home). This is the anti-cull invariant an adversarial pass restored."""
+    import os, json
+    from pathlib import Path
+    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    out = tmp_path / 'findings.json'
+    va.emit_structural_findings(root, out)
+    d = json.loads(out.read_text())
+    assert d['schema_version'] == 1                      # the handshake the ledger validates
+    im, iso = d['implied_missing'], d['isolates']
+    assert im and iso
+    # every row carries the flag pair (present, typed) — nothing is silently dropped
+    for r in im + iso:
+        assert 'filtered' in r and isinstance(r['filtered'], bool)
+        # a flagged row MUST explain itself; an unflagged row has no reason
+        assert (r['filter_reason'] is not None) == r['filtered']
+    # navigability: an implied-missing row links to at least one real doc; an isolate to a registry
+    for r in im:
+        assert (r.get('a_doc') or r.get('b_doc')), r
+    for r in iso:
+        assert r.get('registry') or r.get('doc'), r     # no orphan row
+        # a kept (unfiltered) isolate is genuinely marooned: max degree <=1 (Mode-H invariant)
+        if not r['filtered']:
+            assert r['max_deg'] <= 1, r

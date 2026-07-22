@@ -35,6 +35,12 @@ description: >
 > - If you find yourself filtering results to look "cleaner," STOP: that is the failure mode this
 >   doctrine exists to prevent (recorded 2026-07-22 after the audit was found silently culling 16
 >   systems + four length/threshold floors).
+> - **The `--emit-findings` feed obeys this too (retain-and-flag, added 2026-07-22).** An adversarial
+>   pass caught the first cut *dropping* lower-confidence findings (hub×hub Mode-B pairs, Key-token
+>   Mode-H isolates) from `audit_findings.json`. FIX: emit EVERY finding; attach `filtered` +
+>   `filter_reason` to the lower-confidence ones. The Incompleteness Ledger reads only the unfiltered
+>   rows for its Missing face, but the feed itself is complete — a reader auditing it sees everything
+>   and can overrule a flag. Never delete a finding from the feed to raise the ledger's signal.
 
 Surface project weaknesses that hand-curation cannot reliably find: implied-but-missing cross-references, notional citations (cited but content-empty), citation-graph cascades without return paths, hub overload, sparse-context tokens, multi-graph isolates, throughline orphans, vocabulary debt, and discourse/design divergence. Operates over corpus-derived structural graphs, not LLM judgment.
 

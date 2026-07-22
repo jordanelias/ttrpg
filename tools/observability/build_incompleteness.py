@@ -450,14 +450,29 @@ def scan_audit_structural():
     d = _load_json("tools/observability/audit_findings.json")
     if not d:
         return []
+    # SCHEMA HANDSHAKE (L2): the two observatories agree on schema_version 1. If the emit side bumps
+    # it (renamed fields), degrade LOUDLY to a self-surfacing marker rather than silently emitting
+    # empty/partial rows via all-optional .get() — the ledger's job is to never hide a break.
+    sv = d.get("schema_version")
+    if sv != 1:
+        return [finding("audit_schema_mismatch", "audit_findings_schema",
+                        f"audit_findings.json schema_version {sv!r} ≠ expected 1",
+                        f"the vector-audit feed changed its schema (got {sv!r}, expected 1) — "
+                        f"scan_audit_structural in build_incompleteness.py must be updated to match "
+                        f"before its Mode-B/Mode-H findings can be trusted",
+                        path="tools/observability/audit_findings.json", lane="IN")]
     # SNAPSHOT disclosure: these rows are read from a weekly-committed feed, not recomputed here
     # (the 70s audit runs in audit-refresh). audit_staleness.py watches the feed for drift.
     snap = "snapshot (audit_findings.json, refreshed weekly by audit-refresh)"
     out = []
     for r in d.get("implied_missing", []):
+        # SURFACE-NEVER-CULL: the feed retains every finding; the ledger's high-signal Missing face
+        # consumes only the UNfiltered rows (hub×hub pairs are flagged in the feed, not here). A
+        # reader wanting the full set reads audit_findings.json directly.
+        if r.get("filtered"):
+            continue
         a, b = r.get("a"), r.get("b")
-        # (e) navigability: carry the tokens' primary_doc(s) as the finding path so the row links
-        # somewhere. Prefer a's doc; fall back to b's. Emitted by --emit-findings as a_doc/b_doc.
+        # navigability: carry the tokens' primary_doc(s) as the finding path. Prefer a's doc.
         p = r.get("a_doc") or r.get("b_doc") or ""
         out.append(finding("audit_implied_missing", f"impl::{a}||{b}",
                            f"{a} ⋯ {b} — implied but never cited",
@@ -466,13 +481,33 @@ def scan_audit_structural():
                            f"design should make explicit or is a real gap (vector-audit Mode B; {snap})",
                            path=p, lane="IN"))
     for r in d.get("isolates", []):
+        if r.get("filtered"):
+            continue
         t = r.get("token")
-        out.append(finding("audit_isolate", f"iso::{t}",
-                           f"{t} — structurally isolated",
-                           f"“{t}” has degree <=1 across ALL of the cite/throughline/mu/pp graphs — "
-                           f"isolated in the design CITATION graph (this audit does not see the Key "
-                           f"propagation graph, where it may be central); vector-audit Mode H; "
-                           f"status {r.get('status','?')} ({snap})", path=r.get("doc") or "", lane="IN"))
+        # (M2) Do NOT soften this — a Mode-H isolate is one of the strongest gap signals. Be exact
+        # about HOW isolated (the feed carries max_deg + doc so we don't assume): a token with a home
+        # doc but max-degree ≤1 is structurally marooned; a token with NO home doc is a registered
+        # term with no design-prose home at all — the strongest case. (L1) path links to the doc if
+        # there is one, else to the REGISTRY that defines it (where you'd author a doc or de-register).
+        doc = r.get("doc")
+        reg = r.get("registry") or ""
+        md = r.get("max_deg", 0)
+        if doc:
+            title = f"{t} — structurally marooned"
+            body = (f"“{t}” appears in {doc} but has max degree {md} (≤1) across ALL FOUR design "
+                    f"graphs (cite/throughline/mu/pp) — structurally disconnected from the rest of "
+                    f"the design; make its connections explicit or confirm it is genuinely standalone")
+            path = doc
+        else:
+            title = f"{t} — no design-prose home"
+            body = (f"“{t}” has max degree {md} (≤1) across ALL FOUR design graphs "
+                    f"(cite/throughline/mu/pp) AND has no primary design doc — a registered term with "
+                    f"no design-prose home (the strongest incompleteness signal: it exists in the "
+                    f"registers but nothing in the design corpus uses it); registered via {reg or '?'}")
+            path = reg
+        out.append(finding("audit_isolate", f"iso::{t}", title,
+                           f"{body}. vector-audit Mode H; status {r.get('status','?')} ({snap})",
+                           path=path, lane="IN"))
     return out
 
 
