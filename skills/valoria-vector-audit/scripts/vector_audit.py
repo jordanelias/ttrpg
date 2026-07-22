@@ -1014,21 +1014,31 @@ def parse_throughlines(root):
     return rows
 
 
-# The POST-ATOMIZATION section of references/throughlines_complete.md carries a SECOND, richer
-# throughline→systems membership (T-04 lists 6 systems there vs 4 in the meta table). Same relation
-# (systems co-listed under a throughline), broader source. Directions-audit #3 (2026-07-22): folding
-# it in was MEASURED before adopting (unlike the reverted bridge attempt) — +2 implied-missing
-# surfaced, +1 legitimate hub (Player Agency), 0 new isolates, no dense-blob inflation. (The doc's
-# INTERACTION MATRIX was measured and REJECTED: 20/21 throughline pairs "interact", a near-complete
-# graph that would just inflate the Clocks/MS hubs with no discrimination.)
+# references/throughlines_complete.md carries a SECOND, richer throughline→systems membership than
+# the meta table: EVERY `### T-NN:` block (T-01..T-41, both the main sections AND the post-atomization
+# T-31..T-41) has a `**Systems:**` line, and it lists more systems than the meta table's row (T-04:
+# 7 systems here vs 4 there). Same relation (systems co-listed under a throughline), broader source.
+# Directions-audit #3 (2026-07-22): folding it in was MEASURED before adopting (unlike the reverted
+# bridge attempt) — +2 implied-missing surfaced, +1 legitimate hub (Player Agency), 0 new isolates,
+# no dense-blob inflation. (The doc's INTERACTION MATRIX was measured and REJECTED: 20/21 throughline
+# pairs "interact", a near-complete graph that would just inflate the Clocks/MS hubs with no
+# discrimination.) SCOPE-HONESTY (adversarial pass, 2026-07-22): this reads the WHOLE doc, not just
+# §VIII — an earlier cut mislabeled it "POST-ATOMIZATION only". The regex is (a) letter-suffix aware
+# (`T-\d+[a-z]?` catches T-15b/T-15c) and (b) BLOCK-BOUNDED via a tempered dot that will not cross the
+# next `### `/`## ` header — so a STRUCK Chain-less block (T-10) can't bleed its match into T-11.
 _TL_COMPLETE_RE = re.compile(
-    r'^### (T-\d+):.*?\n\*\*Chain:.*?\n\*\*Systems:\*\*\s*([^\n]+)', re.S | re.M)
+    r'^### (T-\d+[a-z]?):[^\n]*\n'          # header line (letter-suffix aware)
+    r'(?:(?!^### )(?!^## ).)*?'             # body, tempered: never crosses another header
+    r'^\*\*Systems:\*\*[ \t]*([^\n]+)',     # the Systems line, within THIS block
+    re.S | re.M)
 
 
 def parse_throughlines_complete(root):
-    """Yield (T-id, '', '', [system_slugs]) from throughlines_complete.md's POST-ATOMIZATION
-    `**Systems:**` lines. Shape matches parse_throughlines so it composes with build_g_throughline;
-    the two μ fields are empty (this source carries no Μ-mode data — μ stays meta-table-only)."""
+    """Yield (T-id, '', '', [system_slugs]) from EVERY `### T-NN:` block's `**Systems:**` line in
+    throughlines_complete.md (whole doc — T-01..T-41, letter-suffixed T-15b/T-15c included; the
+    STRUCK T-10 has no Systems line so it is correctly skipped). Shape matches parse_throughlines so
+    it composes with build_g_throughline; the two μ fields are empty (this source carries no Μ-mode
+    data — μ stays meta-table-only)."""
     fp = root / 'references' / 'throughlines_complete.md'
     if not fp.exists():
         return []

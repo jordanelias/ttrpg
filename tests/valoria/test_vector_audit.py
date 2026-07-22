@@ -354,11 +354,14 @@ def test_discover_unregistered_candidates_surfaces_missing_registrations():
 
 def test_throughline_graph_extended_by_second_registry_source():
     """Directions-audit #3: the throughline graph draws from TWO registries now — the meta table
-    (parse_throughlines) + throughlines_complete.md's POST-ATOMIZATION `Systems:` lines
+    (parse_throughlines) + throughlines_complete.md's `### T-NN:` block `Systems:` lines
     (parse_throughlines_complete), same co-membership relation, broader coverage. The extra source
     must genuinely ADD edges (measured net-positive: it surfaces more structure, doesn't shrink it),
     and `extra_rows=None` must reproduce the meta-only graph exactly (opt-in, no silent behavior
-    change for callers that don't pass it). The μ graph is NOT extended (this source has no Μ data)."""
+    change for callers that don't pass it). The μ graph is NOT extended (this source has no Μ data).
+    SCOPE + BLOCK-COVERAGE (adversarial pass): the parser reads the WHOLE doc (NOT just §VIII
+    post-atomization) and must catch letter-suffixed headers (T-15b/T-15c) while skipping the STRUCK
+    Chain-less T-10 without bleeding its match into T-11."""
     import os
     from pathlib import Path
     root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -367,8 +370,17 @@ def test_throughline_graph_extended_by_second_registry_source():
     tokens, _ = va.curate_tokens(design, defs)
     meta = va.parse_throughlines(root)
     extra = va.parse_throughlines_complete(root)
-    assert extra, 'complete-doc POST-ATOMIZATION Systems lines should parse'
+    assert extra, 'complete-doc Systems lines should parse'
     assert all(len(r) == 4 and r[1] == '' and r[2] == '' for r in extra)   # shape matches; no μ
+    tids = [r[0] for r in extra]
+    # scope honesty: it reads the WHOLE doc, so main-section throughlines (T-01..T-30) are present,
+    # not only the post-atomization T-31..T-41 — the exact mislabel the adversarial pass caught.
+    assert 'T-04' in tids and 'T-31' in tids, tids
+    assert any(t.startswith('T-') and int(t[2:].rstrip('abcdefghij')) <= 30 for t in tids)
+    # block-coverage: letter-suffixed headers caught; STRUCK T-10 (no Systems line) skipped
+    assert 'T-15b' in tids and 'T-15c' in tids, tids
+    assert 'T-11' in tids and 'T-10' not in tids, tids   # T-10 STRUCK must not bleed into T-11
+    assert tids == sorted(set(tids), key=tids.index) and len(tids) == len(set(tids))  # no dup labels
     g_base = va.build_g_throughline(meta, tokens)
     g_ext = va.build_g_throughline(meta, tokens, extra_rows=extra)
     edges = lambda g: {frozenset((a, b)) for a in g for b in g[a]}
