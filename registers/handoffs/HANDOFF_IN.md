@@ -806,4 +806,18 @@ allocate, bump, co-commit; never max+1.)_
     inflate Clocks/MS hubs). The **μ graph is NOT extended** — no clean second Μ-mode source
     (`silo_overlap_matrix.yaml` is a frozen snapshot; the complete doc has no μ data). A critic is
     auditing #3 now.
-  - **Dir #4 (pending)** — L1-layer validation calibration (P1/P2/P3 thresholds are L0-tuned).
+  - **Dir #5 (DONE, commit c0f913e6) — "why not key propagation too" (Jordan steer).** Folded the
+    engine **Key-propagation graph** into the audit as a 5th structural graph: `build_g_key` reads
+    `module_contracts.yaml`'s emit→consume flow (the IN→resolver→OUT wiring the Godot engine runs),
+    projected to token level (system↔system via shared Keys + keytype↔system). Now Mode-A hubs /
+    Mode-B implied-missing / Mode-H isolates triangulate **design intent against engine data-flow**.
+    MEASURED: hubs 11→16 (the +5 are genuinely engine-central; Domain Actions being a doc:null
+    contract that's heavily wired is itself signal), implied-missing +1, isolates 11→9. **RETIRED
+    the Mode-H Key-token filter** — the audit now SEES the Key graph, so wired Key tokens resolve
+    for real and the ones that stay isolated (e.g. `Key: scene_outcome.battle_concluded`, a
+    dangling/misnamed Key no module emits) SURFACE as honest gaps. A critic is auditing #5 now.
+    (Possible DRY note to watch: build_g_key re-parses module_contracts emit/consume, which
+    build_graph.py also parses — different projections, but flagged for the critic.)
+  - **Dir #4 (pending, now lowest priority)** — L1-layer validation calibration: P3's absolute
+    `n_cite_edges≥100` bar is trivially met at L1's larger corpus; make it scale-relative. Already
+    honestly DISCLOSED as "L0-calibrated, not re-validated for L1", so the gap is surfaced not hidden.
