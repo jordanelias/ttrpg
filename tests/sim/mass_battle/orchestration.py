@@ -965,8 +965,12 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             # contact (frontage-capped); DAMAGE_BY_DEGREE retained as per-soldier exchange
             # quality. Numbers-in-contact lives ONLY here under Lanchester (the run_battle
             # opp_frac post-scaler is skipped) — one variable, one role (Lesson 1).
-            lin_b = _lanchester_strength(p["b_cells"], unit_b)   # B's contacting strength -> casualties to A
-            lin_a = _lanchester_strength(p["a_cells"], unit_a)   # A's contacting strength -> casualties to B
+            # [v2 Stage D, ED-MB-0013] Pass the continuous engaged frontage width (OBB front-overlap)
+            # when the FIELD_MOVEMENT contact path recorded it; p.get(...) is None on the grid/OFF path
+            # (whose pairs carry no *_front key) -> _lanchester_strength falls back to the legacy integer
+            # column count, keeping the byte-exact grid oracle untouched (I4).
+            lin_b = _lanchester_strength(p["b_cells"], unit_b, p.get("b_front"))   # B's contacting strength -> casualties to A
+            lin_a = _lanchester_strength(p["a_cells"], unit_a, p.get("a_front"))   # A's contacting strength -> casualties to B
             dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr)
             dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr)
         else:

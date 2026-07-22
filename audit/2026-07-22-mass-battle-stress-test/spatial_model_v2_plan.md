@@ -153,6 +153,24 @@ deleting that one recording snap.
 - **Gate:** conservation fuzz; the depth-2 experiment (must preserve); Lanchester-signature exponent
   check (melee stays ≤ its bound); **A/B the 20-row gauge** and record the shift (DG-6, disclose).
 
+> **STATUS (2026-07-22): Stage D DONE + verified (ED-MB-0013).** `geometry.engaged_frontage` derives the
+> frontage as the continuous union-length of engaged cell bodies' width-intervals clipped to the enemy's
+> covered meeting span; `_find_contacts_standoff` threads `a_front`/`b_front` onto each pair;
+> `_lanchester_strength(front_width=…)` consumes it, falling back to the integer column count when it's
+> absent (grid/OFF path → **I4 byte-exact, grid oracle green**). The snapped `(rank,file)` cell identities
+> are **kept** — they key the formation-lattice casualty/density/stamina substrate (a discrete troop-block
+> identity, I3's defensible-quantization carve-out); only the frontage **magnitude** moved to continuous.
+> Gates green: `test_frontage_conservation.py` (15) — reduces to the integer count in the axis-aligned
+> limit, fractional on offset, **depth-invariant** (depth-2 no longer collapses/inflates),
+> **frontage-capped** (Lanchester stays linear), I1 conservation over 5 seeds, I2 determinism; v2
+> acceptance (30) + maneuvers/movement/yield (20 passed, 1 xpassed pre-existing) green. **DG-6 disclosure
+> (not tuned):** A/B (12-seed field battery) — axis-aligned symmetric meetings **byte-identical**; the
+> shift appears only on offset/rotated/width-asymmetric meetings — Line4-vs-Line2's wide-attacker overkill
+> softens (A_win 12→10/12, defender hp-retained .452→.487) as its frontage is capped to the narrow
+> defender's meeting width. Lanchester melee exponent **unchanged** (p=2.50 before/after — the pre-existing
+> DG-6 pool-variance artifact is independent of frontage). Field goldens deliberately **not** re-recorded
+> (Stage F, per §7). No balance constant tuned.
+
 ### Stage E — weapon-class reach wired to the front face
 - Add `WEAPON_CLASS[troop_type] → reach` (P-DEC-1 map) feeding the OBB front reach. Ranged unchanged.
 - **Trace:** `_effective_reach`/`standoff` now read weapon reach not the flat `REACH_SHORT`.

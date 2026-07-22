@@ -2,6 +2,34 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-22 — ED-MB-0013: spatial-model v2 Stage D — continuous frontage (last live integer removed)
+- Stage D of `spatial_model_v2_plan.md`. The melee Lanchester frontage term `len(set(int_col))` (the
+  only integer left on the live position/contact path, per `backwards_analysis.md`) → a **continuous
+  OBB front-overlap width**. New `geometry.engaged_frontage(a_boxes, b_boxes, heading)` = the union
+  length, along a side's frontage axis (⊥ facing), of each engaged cell body's width-interval clipped
+  to the enemy's covered meeting span (pure float projection + interval merge; helpers
+  `_project_interval`/`_merge_intervals`/`_interval_union_length`). `_find_contacts_standoff` threads
+  `a_front`/`b_front` onto each contact pair; `_lanchester_strength` gains `front_width` that replaces
+  the integer count when supplied.
+- **Scoping:** the snapped `(rank,file)` cell identities are KEPT — they key the formation-lattice
+  casualty/density/stamina substrate (`distribute_casualties`/`col_grid`/`_defender_depth`/
+  `_fatigue_sigma`), a discrete troop-block identity (I3 defensible-quantization carve-out), NOT a
+  live-position integer. Only the frontage MAGNITUDE moved to continuous.
+- **I4:** grid/OFF pairs carry no `*_front` key → `orchestration` passes `p.get(...)=None` →
+  `_lanchester_strength` falls back to the integer count byte-exact. **Byte-exact grid oracle green (30
+  passed).**
+- **Tests:** `tests/valoria/test_frontage_conservation.py` (15) — integer-limit reduction,
+  fractional-on-offset, **depth-invariant** (depth-2 no longer collapses/inflates), **frontage-capped**
+  (Lanchester stays linear), I1 conservation ×5 seeds, I2 determinism, grid-fallback byte-exact.
+  maneuvers/movement/yield: 20 passed / 1 xpassed (pre-existing).
+- **[DG-6 DISCLOSURE, not tuned]** A/B (12-seed field battery, stash vs current): axis-aligned symmetric
+  meetings **byte-identical**; shift only on offset/rotated/width-asymmetric meetings — Line4-vs-Line2
+  wide-attacker overkill softens (A_win 12→10/12, defender hp-retained .452→.487) as its frontage caps to
+  the narrow defender's meeting width. Lanchester melee exponent **unchanged** (p=2.50 before/after — the
+  pre-existing DG-6 pool-variance artifact is frontage-independent). Field goldens NOT re-recorded (Stage
+  F, per plan §7). No balance constant tuned. Full detail: `audit/2026-07-22-mass-battle-stress-test/` +
+  ED-MB-0013.
+
 ## 2026-07-22 — ED-MB-0012: spatial-model v2 Stage B+C — CIRCLE→OBB contact + collide-not-decelerate
 - Stage B+C of `spatial_model_v2_plan.md` (Jordan "Euclidean motion, boxed footprint"). (1) **Analytic
   swept-SAT TOI**: replaced the parked scan+bisection (~200k SAT calls/battle, field path 20–60× slow)

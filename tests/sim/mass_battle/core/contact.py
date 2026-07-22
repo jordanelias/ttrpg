@@ -291,8 +291,18 @@ def _find_contacts_standoff(unit_a, unit_b):
             # (orchestration.py sums len(a_cells) directly, uncounted duplicates inflate it). Converted
             # to sorted lists at the end for deterministic output.
             contact_cells_a, contact_cells_b, contact_cols = set(), set(), set()
-            for (ar, ac), box_a in zip(fa, boxes_a):
-                for (br, bc), box_b in zip(fb, boxes_b):
+            # [v2 Stage D, ED-MB-0013] Collect the ENGAGED cell boxes (index-deduped) alongside the
+            # snapped cell identities. The snapped (rank, file) identities stay -- they key the
+            # formation-lattice casualty/density/stamina substrate (distribute_casualties, col_grid,
+            # _defender_depth), a discrete troop-block identity, NOT a live-position integer (I3's
+            # defensible-quantization carve-out). What Stage D removes is the integer FRONTAGE MAGNITUDE:
+            # the engaged boxes below feed engaged_frontage() -> a CONTINUOUS front-overlap width that
+            # replaces len(set(int_col)) in the Lanchester term (the last integer on the live contact
+            # path, per backwards_analysis.md).
+            eng_boxes_a, eng_boxes_b = [], []
+            seen_a, seen_b = set(), set()
+            for ia, ((ar, ac), box_a) in enumerate(zip(fa, boxes_a)):
+                for ib, ((br, bc), box_b) in enumerate(zip(fb, boxes_b)):
                     # [v2 Stage B perf reconcile, ED-MB-0011] Cheap bounding-circle reject before the
                     # full SAT: two unit boxes (half-diagonal √2/2 ≈ 0.707) each grown by ≤ reach on the
                     # front face can only engage if their centres are within 2·(0.707 + reach). With the
@@ -305,10 +315,21 @@ def _find_contacts_standoff(unit_a, unit_b):
                         contact_cells_a.add((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
                         contact_cells_b.add((int(round(br)), int(round(bc / _u.COL_WIDTH))))
                         contact_cols.add(round(((ac + bc) / 2.0) / _u.COL_WIDTH))
+                        if ia not in seen_a:
+                            seen_a.add(ia); eng_boxes_a.append(box_a)
+                        if ib not in seen_b:
+                            seen_b.add(ib); eng_boxes_b.append(box_b)
             if contact_cols:
+                # Representative frontage axis per side = perpendicular to the atom's live facing
+                # (matches _cell_facing_for_box's fallback chain: node facing, else advance_dir).
+                head_a = getattr(atom_a, '_node_facing', None) or (atom_a.advance_dir, 0)
+                head_b = getattr(atom_b, '_node_facing', None) or (atom_b.advance_dir, 0)
+                a_front = engaged_frontage(eng_boxes_a, eng_boxes_b, head_a)
+                b_front = engaged_frontage(eng_boxes_b, eng_boxes_a, head_b)
                 pairs.append({"atom_a": atom_a, "atom_b": atom_b,
                                "a_cells": sorted(contact_cells_a), "b_cells": sorted(contact_cells_b),
-                               "cols": sorted(contact_cols)})
+                               "cols": sorted(contact_cols),
+                               "a_front": a_front, "b_front": b_front})
     return pairs
 
 

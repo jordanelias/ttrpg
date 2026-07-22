@@ -15,6 +15,29 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0013 (2026-07-22): spatial-model v2 Stage D — the LAST live integer on the field contact
+  path removed.** Per `audit/2026-07-22-mass-battle-stress-test/spatial_model_v2_plan.md` §3 Stage D.
+  The melee Lanchester frontage term `len(set(int_col))` (the only integer left on the live position/
+  contact path, per `backwards_analysis.md`) is now a CONTINUOUS OBB front-overlap **width**:
+  `geometry.engaged_frontage(a_boxes, b_boxes, heading)` = the union length, along a side's frontage
+  axis, of each engaged cell body's width-interval clipped to the enemy's covered meeting span.
+  `_find_contacts_standoff` threads `a_front`/`b_front` onto pairs; `_lanchester_strength(front_width=…)`
+  consumes it, falling back to the integer count on the grid/OFF path (**I4 byte-exact — grid oracle
+  green, 30 passed**). **Scoping call:** the snapped `(rank,file)` cell identities are KEPT — they key the
+  formation-lattice casualty/density/stamina substrate (a discrete troop-block identity, I3's
+  defensible-quantization carve-out, NOT a live-position integer); only the frontage MAGNITUDE moved to
+  continuous. Gates green: `tests/valoria/test_frontage_conservation.py` (15) — integer-limit reduction,
+  fractional on offset, depth-invariant, frontage-capped (Lanchester linear), I1 conservation ×5 seeds,
+  I2; maneuvers/movement/yield 20 passed/1 xpassed (pre-existing). **DG-6 disclosure (not tuned):** A/B
+  12-seed field battery — axis-aligned symmetric meetings byte-identical; shift only on offset/asymmetric
+  meetings (Line4-vs-Line2 wide-attacker overkill capped to the narrow defender's meeting width, A_win
+  12→10/12, def hp .452→.487). Lanchester melee exponent unchanged (p=2.50 before/after — pre-existing
+  DG-6 artifact, frontage-independent). **Field goldens NOT re-recorded (Stage F, per plan §7).** Next
+  in this v2 sequence: **Stage E** (weapon-class reach 0.1/0.2/0.3 + author the `pike` troop type, P-DEC-1;
+  P-DEC-3 cavalry density cap), then **Stage F** (full verification + digest re-record + historical
+  revalidation), then **Stage G** (retire the integer `systems/mass_battle/sim` engine, route
+  `resolve_mass_battle` onto the field engine — P-DEC-2 RESOLVED=retire).
+
 - **ED-MB-0011 (2026-07-22): DG-10 field-movement freeze FIXED + full field-based stress test.**
   Jordan asked for a field-based (not grid) stress test with all flags/gates activated on the
   *active* engine (`tests/sim/mass_battle/`, NOT the wired `systems/mass_battle/sim/` bare port,
