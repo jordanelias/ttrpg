@@ -365,13 +365,15 @@ FACING_PROFILE_K = 0.03    # [FIAT — C1 unresolved] small profile term in reac
 FACING_VOID_GAIN = 0.15    # [SIM-CALIBRATE] how much facing speeds the close (close_rate multiplier).
 
 def facing_target(c, closed, cfg):
-    """The per-beat facing state (I6, D6) — keyed ONLY on stance (closed/not) and grip_position, NEVER weapon
-    class (C2: a test asserts two weapons with identical stance/measure/grip get identical facing). Ships
-    near-neutral: C1 (polearm facing direction) is unresolved, so this stays a small, non-load-bearing signal — a
-    fighter angles slightly off-line (a partial void), more so once engaged and more gathered-in. Pure (returns
-    facing; the wrapper writes c.facing)."""
+    """The per-beat facing state (I6, D6) — stance (closed/not) × grip_position × the U7 weapon-class facing REGIME
+    (weapon_physics.facing_pref: a 1H fighter angles PROFILE, a 2H weapon SQUARES up). [U7/ED-PC-0020] the regime term
+    is multiplicative and K=0-gated (FACING_REGIME_K), so at landing the multiplier is exactly 1.0 — byte-identical,
+    and the C2 property (two weapons, same stance/grip → identical facing) still holds NUMERICALLY at K=0; the U9
+    recalibration flips FACING_REGIME_K, at which point facing becomes weapon-class-aware (the C2 reversal, Jordan-
+    resolved). Ships near-neutral (C1 polearm facing DIRECTION still unresolved). Pure (returns facing; wrapper writes c.facing)."""
     base = FACING_VOID_K * (1.0 if closed else 0.5)
-    return base * (0.5 + 0.5 * getattr(c, 'grip_position', 0.0))
+    base = base * (0.5 + 0.5 * getattr(c, 'grip_position', 0.0))
+    return base * (1.0 + cfg['FACING_REGIME_K'] * WP.facing_pref(c.w))   # U7/ED-PC-0020: weapon-class facing regime (1H profile / 2H square) — K=0 makes the multiplier exactly 1.0 (byte-identical, C2 still holds numerically), the U9 recalibration flips FACING_REGIME_K
 
 def range_utilization(c, measure_gap, cfg):
     """The AVAILABLE swing-room this beat, in [0,1], derived from how close the exchange is (measure_gap). 1.0 at

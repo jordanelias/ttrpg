@@ -533,14 +533,36 @@ def test_stophit_range_term_zero_at_full_room():
 
 # ── I6 FACING STATE + LATERAL-VOID CLOSING (D6, 2026-07-03) ─────────────────────────────────────────
 # designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
-def test_facing_never_reads_weapon_class():
-    """I6 gate #3 (C2): two weapons with identical stance/measure/grip get IDENTICAL facing — facing_target is
-    keyed ONLY on closed/grip_position, never weapon class."""
+def test_facing_weapon_class_blind_at_k_zero():
+    """I6 gate #3 (C2), as the U7/ED-PC-0020 byte-identity guard: at FACING_REGIME_K=0 the weapon-class facing regime
+    is INERT (the multiplier is exactly 1.0), so two weapons with identical stance/grip still get IDENTICAL facing —
+    the property the pre-U7 engine had, preserved byte-identically at landing. (The C2 reversal activates only when
+    U9 flips FACING_REGIME_K; see test_facing_regime_separation for the wired-but-gated weapon-awareness.)"""
     C, core, S, WP, CFG = _mods()
+    assert CFG['FACING_REGIME_K'] == 0.0
     c1 = C.Combatant('a', weapon='spear'); c1.grip_position = 0.4
     c2 = C.Combatant('b', weapon='mace'); c2.grip_position = 0.4
     assert S.facing_target(c1, True, CFG) == S.facing_target(c2, True, CFG)
     assert S.facing_target(c1, False, CFG) == S.facing_target(c2, False, CFG)
+
+
+def test_facing_regime_separation():
+    """U7/ED-PC-0020: the facing REGIME is wired (inert at K=0, live at K>0). facing_pref is signed by hands — a 1H
+    weapon fights PROFILE (+), a 2H weapon SQUARES up (−) — and 'hands separates the twins' (a 1H vs 2H blade of the
+    same reach face opposite regimes). Once FACING_REGIME_K>0, facing_target reads the weapon class (the C2 reversal)."""
+    C, core, S, WP, CFG = _mods()
+    assert WP.facing_pref(C.WEAPONS['sabre']) > 0 and WP.facing_pref(C.WEAPONS['arming']) > 0      # 1H -> profile (+)
+    assert WP.facing_pref(C.WEAPONS['longsword']) < 0 and WP.facing_pref(C.WEAPONS['spear']) < 0   # 2H -> square (−)
+    # hands separates twins: same head_len, opposite sign
+    class _W(dict):
+        pass
+    w1h = {'hands': 1, 'head_len': 0.84}; w2h = {'hands': 2, 'head_len': 0.84}
+    assert WP.facing_pref(w1h) == -WP.facing_pref(w2h) and WP.facing_pref(w1h) > 0
+    # live at K>0: two weapons of different class now get different facing
+    cfgk = dict(CFG, FACING_REGIME_K=0.6)
+    c1 = C.Combatant('a', weapon='sabre'); c1.grip_position = 0.4      # 1H
+    c2 = C.Combatant('b', weapon='longsword'); c2.grip_position = 0.4  # 2H
+    assert S.facing_target(c1, True, cfgk) != S.facing_target(c2, True, cfgk)
 
 
 def test_facing_near_neutral_small():
