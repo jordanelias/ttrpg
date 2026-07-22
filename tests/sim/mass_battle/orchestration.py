@@ -1229,6 +1229,20 @@ def _unit_snapshot(unit):
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
+def _draw_friction_cev(unit):
+    """[ED-MB-0016, DG-6 resolution] Draw `unit`'s per-battle combat-effectiveness friction factor ONCE.
+    Idempotent within a battle: a fresh unit has no `_friction_cev`; once set it is never redrawn (so a
+    multi-turn battle's repeated run_battle entries keep the single per-battle draw). M ~ LogNormal(0,
+    PC_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. PC_FRICTION_CEV off -> 1.0
+    (default-inert, byte-exact). See config.py PC_FRICTION_CEV for the full grounding."""
+    if getattr(unit, '_friction_cev', None) is not None:
+        return
+    if PC_FRICTION_CEV and PC_FRICTION_SIGMA > 0.0:
+        unit._friction_cev = math.exp(random.gauss(0.0, PC_FRICTION_SIGMA))
+    else:
+        unit._friction_cev = 1.0
+
+
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
     v16: max_turns=18 = one battle turn's engagement cap (3 phases).
@@ -1247,6 +1261,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     # FIELD_MOVEMENT is OFF (byte-exact).
     assert (not FIELD_MOVEMENT) or PC_NODE_COHESION, \
         "FIELD_MOVEMENT=1 requires PC_NODE_COHESION=1 (the coordinate field runs on the node float path)"
+    # [ED-MB-0016, DG-6 resolution] Draw each side's per-BATTLE combat-effectiveness (CEV) friction factor
+    # ONCE, lazily: the FIRST run_battle entry for a fresh unit draws it; subsequent turns of a multi-turn
+    # battle (which re-enter run_battle with persistent unit state) see it already set and do NOT re-draw
+    # -- so the shock is drawn once per battle, not per turn (per-turn re-draws would self-average away the
+    # very variance this restores). A fresh unit per gauge trial gets a fresh draw. Default-inert: with
+    # PC_FRICTION_CEV off, _draw_friction_cev sets 1.0 (no behaviour change; byte-exact). Uses the seeded
+    # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
+    _draw_friction_cev(unit_a)
+    _draw_friction_cev(unit_b)
     turns = 0
     current_phase = 0
     for t in range(1, max_turns + 1):

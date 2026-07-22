@@ -2,6 +2,23 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-22 — ED-MB-0016: DG-6 grounded partial resolution — per-battle combat-effectiveness (CEV) friction
+- Root cause of DG-6 over-decisiveness confirmed: melee pool sums N independent dice → CV self-averages
+  ~1/√N → `compute_degree` deterministic from force ratio → 100%/0% vs historical bands. Fix (grounded in
+  two research passes; `dg6_friction_resolution.md`): a per-battle, per-side CEV factor `M ~ LogNormal(0,
+  σ²)` drawn ONCE per battle (`orchestration._draw_friction_cev`, lazy) multiplying the subunit combat
+  pool (`core/exchange`). Law of total variance → scale-invariant outcome variance (Dupuy CEV / Clausewitz
+  friction / stochastic-Lanchester). **σ=1.1 calibrated gauge-INDEPENDENTLY** to the Dupuy DLEDB force-
+  ratio curve (57/62/70/82% at 1.2/1.5/2/3:1 vs targets 55/62/70/80). `config.PC_FRICTION_CEV`, **default
+  OFF** (byte-exact / I4-safe).
+- **Verified** (`test_friction_cev.py`, 7): inert-when-off; drawn once/battle not per-turn; large-force
+  2:1 collapses ≥95% without friction, stays banded <90% with it (the fix); I1/I2 hold.
+- **HONEST FINDING — necessary but NOT sufficient (ships OFF):** uniform friction moves the 20-row gauge
+  6/20 → 4/20 — envelopment (H3/H4) stays ~100% (structural, needs a conjunctive gate) and friction
+  BREAKS the Stage E brace repel (C2/C6 REPELLED→NOT-REPELLED). Complete DG-6 resolution = friction +
+  conjunctive-envelopment gate + brace-repel preservation (follow-on; ED-MB-0016 needs_jordan). No
+  constant tuned to the gauge. Full detail: `dg6_friction_resolution.md`.
+
 ## 2026-07-22 — ED-MB-0015: spatial-model v2 Stage F — verification + golden re-record + historical revalidation
 - Full verification of Stages D+E (no new mechanics). **I1–I7 all hold**: I1 conservation 0 violations /
   300-battle field fuzz; I2/I6 stress-harness S5 (determinism PASS, mirror |skew|=0/48); I3 no live-path
