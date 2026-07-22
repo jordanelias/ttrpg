@@ -273,22 +273,35 @@ def _find_contacts_standoff(unit_a, unit_b):
     PREDICATE is continuous; the reported cell identities stay on the existing snap convention."""
     import mass_battle.hierarchy.units as _u
     pairs = []
-    af = {id(a): (a.cells_float(), _u.reach_for(a.troop_type)) for a in unit_a.subunits}
-    bf = {id(b): (b.cells_float(), _u.reach_for(b.troop_type)) for b in unit_b.subunits}
+    # [v2 Stage B] Each cell is now an oriented unit box (CellBox) grown by its melee reach on the FRONT
+    # face; contact fires on obb_front_reach_overlap (the boxed engagement surface) instead of the
+    # isotropic circle math.hypot(Δ) <= standoff_from_reach. reach unchanged this stage (reach_for ->
+    # REACH_SHORT=0.5); this is a pure CIRCLE->BOX shape swap at unchanged reach. The boxes are built by
+    # _u.cell_boxes_for, index-aligned with cells_float() and orientation/reach-identical to the boxes
+    # resolve_toi_and_commit halts on (Stage C), so contact and halt share one touch surface exactly.
+    af = {id(a): (a.cells_float(), _u.cell_boxes_for(a, _u.reach_for(a.troop_type))) for a in unit_a.subunits}
+    bf = {id(b): (b.cells_float(), _u.cell_boxes_for(b, _u.reach_for(b.troop_type))) for b in unit_b.subunits}
     for atom_a in unit_a.subunits:
-        fa, ra = af[id(atom_a)]
+        fa, boxes_a = af[id(atom_a)]
         for atom_b in unit_b.subunits:
-            fb, rb = bf[id(atom_b)]
-            sd = _u.standoff_from_reach(ra, rb)
-            # Sets, not lists: the standoff radius (>=2.0) is wide enough that one cell can be within
-            # range of several enemy cells at once, which would otherwise append the SAME snapped
-            # identity multiple times -- confirmed by adversarial review to silently over-count stamina
-            # drain downstream (orchestration.py sums len(a_cells) directly, uncounted duplicates
-            # inflate it). Converted to sorted lists at the end for deterministic output.
+            fb, boxes_b = bf[id(atom_b)]
+            # Sets, not lists: the engagement envelope is wide enough that one cell can meet several
+            # enemy cells at once, which would otherwise append the SAME snapped identity multiple times
+            # -- confirmed by adversarial review to silently over-count stamina drain downstream
+            # (orchestration.py sums len(a_cells) directly, uncounted duplicates inflate it). Converted
+            # to sorted lists at the end for deterministic output.
             contact_cells_a, contact_cells_b, contact_cols = set(), set(), set()
-            for (ar, ac) in fa:
-                for (br, bc) in fb:
-                    if math.hypot(ar - br, ac - bc) <= sd:
+            for (ar, ac), box_a in zip(fa, boxes_a):
+                for (br, bc), box_b in zip(fb, boxes_b):
+                    # [v2 Stage B perf reconcile, ED-MB-0011] Cheap bounding-circle reject before the
+                    # full SAT: two unit boxes (half-diagonal √2/2 ≈ 0.707) each grown by ≤ reach on the
+                    # front face can only engage if their centres are within 2·(0.707 + reach). With the
+                    # widest melee reach in play (REACH_SHORT=0.5 this stage) that bound is ≤ ~2.42; 2.6
+                    # is a safe, conservative cap. Far pairs (the vast majority) skip the SAT in O(1).
+                    # [canonical: geometry — derived bounding-circle reject bound 2·(CELL_RADIUS·√2 + REACH_SHORT) ≈ 2.42; 2.6 = conservative superset, never wrongly skips (perf-only, not a game value)]
+                    if (ar - br) * (ar - br) + (ac - bc) * (ac - bc) > 2.6 * 2.6:
+                        continue
+                    if obb_front_reach_overlap(box_a, box_b):
                         contact_cells_a.add((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
                         contact_cells_b.add((int(round(br)), int(round(bc / _u.COL_WIDTH))))
                         contact_cols.add(round(((ac + bc) / 2.0) / _u.COL_WIDTH))

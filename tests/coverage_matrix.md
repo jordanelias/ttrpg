@@ -2,6 +2,27 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-22 — ED-MB-0012: spatial-model v2 Stage B+C — CIRCLE→OBB contact + collide-not-decelerate
+- Stage B+C of `spatial_model_v2_plan.md` (Jordan "Euclidean motion, boxed footprint"). (1) **Analytic
+  swept-SAT TOI**: replaced the parked scan+bisection (~200k SAT calls/battle, field path 20–60× slow)
+  with a closed-form `_swept_first_overlap_s` — each ≤4 SAT axes is a linear-in-`s` overlap band,
+  intersect, first-touch = left edge; O(4)/pair, ~15µs. Verified vs the bisection oracle to **1.7e-15
+  over 700 seeded fuzzed pairs** (281 touches, 0 mismatches). (2) **Collide-not-decelerate correction**
+  (Jordan in-session: "why decelerate instead of collide? / wouldn't that break charging?"). The plan
+  made the TOI **halt** surface == the **contact** surface (reach box) — that DEADLOCKS: cells park on
+  the `obb_front_reach_overlap` touch boundary where the strict contact predicate is False, so contact
+  never fires (head-on Line-vs-Line froze at gap 1.5, 0 casualties). Fix: hard stop = **BODY vs BODY**
+  (unit squares, reach 0); contact stays on the reach box (strictly outside the body), so contact fires
+  as bodies close through the reach band. Bodies collide; weapons reach across the gap. Reach throttle
+  retired (symmetric body-touch cap). **Charging restored** (`_momentum_speed` reads the pre-cap step;
+  under the old reach-stop contact never fired so charge shock never triggered). Verified: head-on closes
+  to body-touch and trades casualties; Fast cavalry charge reaches contact, deals more than it takes on
+  impact (INF −21 vs CAV −10). Tests: `test_obb_contact_toi.py`(7)+`test_obb_primitive.py`(21)=28 passed;
+  mass_battle/field subset 57 passed/0 failed. **I4 grid oracle byte-exact 2 passed** (code runs only
+  under `if FIELD_MOVEMENT`, orchestration.py:1405). FIELD goldens re-recorded (`unit_field a73237df`,
+  `cell_field 9d0b63b9`) — moves the DG-6-gated Cannae gauge (units that froze at range now engage),
+  disclosed, no constant tuned. Departs from the plan's shared-surface premise → Stage C + R1 amended,
+  flagged for merge-ratification. Full detail: `audit/2026-07-22-mass-battle-stress-test/` + ED-MB-0012.
 ## 2026-07-22 — ED-MB-0011: DG-10 field-movement freeze fix + field-based stress test (condensed)
 - DG-10 (ED-MB-0007) fixed: `_node_advance` floored sub-Discipline-5 velocity to 0
   (`floor(1*0.7)=0`) → most §B.2 troop types (all disc<5) never closed on the live field path. The

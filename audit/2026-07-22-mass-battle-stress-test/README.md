@@ -1,4 +1,9 @@
-# Mass-battle field-based stress test — 2026-07-22 (MB lane, ED-MB-0011)
+# Mass-battle field-based stress test — 2026-07-22 (MB lane, ED-MB-0011 + ED-MB-0012)
+
+> **Two landings on this branch.** §1–§6 are the DG-10 movement-freeze fix (**ED-MB-0011**, merged
+> as PR #207). §7 is the follow-up **spatial-model v2 Stage B+C** (**ED-MB-0012**): the CIRCLE→OBB
+> contact upgrade + the *collide-not-decelerate* correction (analytic swept-SAT TOI; halt on the BODY
+> box, engage across the reach gap). See `spatial_model_v2_plan.md` for the full staged plan.
 
 **Task (Jordan):** "Stress test mass battle as much as you can. Ensure all wiring, ensure all
 flags/gates are activated with caveat that we are using field-based and not grid-based. Ensure use
@@ -160,8 +165,12 @@ touched.
 - `tests/sim/mass_battle/bat.py` — field goldens re-recorded (`cell_field`/`unit_field`).
 - `systems/mass_battle/sim/units.py` — DG-10 fix in the **wired** engine (`advance_cells`, grid clamp-to-1).
 - `tests/valoria/test_mass_battle_systems_movement.py` — wired-engine movement tests (8).
-- `audit/2026-07-22-mass-battle-stress-test/` — this harness + report.
-- `registers/editorial_ledger_mb.jsonl` — ED-MB-0011.
+- `audit/2026-07-22-mass-battle-stress-test/` — this harness + report + `spatial_model_v2_plan.md`.
+- `registers/editorial_ledger_mb.jsonl` — ED-MB-0011 (DG-10), ED-MB-0012 (Stage B+C).
+- **Stage B+C (ED-MB-0012):** `tests/sim/mass_battle/hierarchy/units.py` (analytic swept-SAT TOI +
+  body-stop `resolve_toi_and_commit`), `tests/sim/mass_battle/core/contact.py` (OBB contact predicate),
+  `tests/sim/mass_battle/geometry.py` (Stage A OBB primitive), `tests/valoria/test_obb_contact_toi.py`,
+  `tests/valoria/test_obb_primitive.py`.
 
 ## 6. Adversarial pass (self-review)
 
@@ -186,3 +195,73 @@ Ran an antagonist pass against the two claims most likely to be wrong. Two survi
   overclaimed. The fix itself stands — an integer-contact grid can't carry sub-cell velocity without
   the rejected accumulator or float positions — but the wording in `units.py`, this README, and the
   ledger is corrected to name it a clamp/stopgap and point at the field engine as the faithful one.
+
+## 7. Spatial-model v2 Stage B+C (ED-MB-0012) — CIRCLE→OBB contact + collide-not-decelerate
+
+Follow-up to DG-10, executing Stages B+C of `spatial_model_v2_plan.md` (Jordan-directed "Euclidean
+motion, boxed footprint"). Two parts.
+
+### 7.1 Analytic swept-SAT time-of-impact (perf)
+The parked Stage B+C prototype computed each cell-pair's contact fraction with a **scan+bisection** on
+`obb_front_reach_overlap` (~200k list-allocating SAT calls/battle → the field path ran 20–60× slow and
+stalled the producing agent). Replaced with a closed-form **`_swept_first_overlap_s`**: over one tick
+the box axes and corner-offsets are constant (Euclidean motion translates only the centre), so on each
+of the ≤4 SAT axes the strict-overlap condition `band_lo < P(s) < band_hi` is **linear in `s`** — an
+`s`-interval. Intersect the ≤4 intervals; the first touch is the window's left edge. O(4)/pair, zero
+iteration, ~15 µs/pair. **Verified** against the reference scan+bisection to **max error 1.7e-15 over
+700 seeded fuzzed pairs** (281 genuine touches, 0 existence/value mismatches) — machine epsilon.
+
+### 7.2 Collide, don't decelerate (the design correction)
+Jordan, mid-review: *"why are we decelerating to halt instead of just colliding at whatever speed?"*
+and *"wouldn't that break charging?"* — both land on a real bug.
+
+**The bug.** The plan (and the prototype) made the TOI **halt** surface EQUAL the **contact** surface —
+both the reach-extended box. That deadlocks: `resolve_toi_and_commit` parks a closing cell EXACTLY on
+the `obb_front_reach_overlap` *touch* boundary, where the **strict**-overlap contact predicate returns
+False. So contact never fires. Reproduced: a head-on Line-vs-Line **froze at gap 1.5 for the entire
+battle, 0 casualties** (`reach_for=0.5` → reach surfaces touch at gap `2·(0.5+0.5)−0.5 = 1.5`), while
+clean `main` (circle model) reaches contact. Isolation confirmed it was the contact-surface swap, not
+the TOI: TOI-change + *circle* contact still reached contact.
+
+**Why it happened.** Reach was being treated as a *wall to decelerate against* rather than a *weapon
+envelope reaching across a gap*.
+
+**The fix.** The hard geometric stop is **BODY vs BODY** — two unit squares (reach 0), the only thing
+that physically cannot interpenetrate. **Contact/engagement stays on the reach-extended box** (Stage B,
+unchanged). The body surface sits strictly *inside* the reach surface (reach>0 always), so contact
+fires as cells close *through* the reach band into body contact. **Bodies collide; weapons reach across
+the closing gap.** The stop is symmetric and reach-independent, so the reach **throttle**
+(`_reach_throttle`/`_effective_reach`) is retired from the stop path — both cells cap at the shared
+body-touch fraction; reach asymmetry (a longer weapon striking first) is expressed by contact firing
+earlier for the longer-reach box, not a movement handicap.
+
+**Charging — the answer to "wouldn't that break charging?": no, it RESTORES it.** Charge shock reads
+`_momentum_speed` → `cell_last_speed`, which `_node_advance` sets to the cell's **pre-cap intended
+step** (the charge velocity). So momentum reflects closing speed regardless of the body cap. Under the
+old reach-stop, contact *never fired*, so `_charge_shock_sigma` never triggered at all — charging was
+already dead. Post-fix, verified: head-on now closes to **gap 1.0 (body-touch)** and exchanges
+casualties over time; a **Fast cavalry charge reaches contact and deals more than it takes on the
+impact tick** (turn 8: INF −21 vs CAV −10).
+
+### 7.3 Verification
+- `tests/valoria/test_obb_contact_toi.py` (7): contact-fires-at-OBB, head-on **no body-interpenetration
+  + no-stall**, **cavalry-charge-reaches-contact**, grid-path-**never**-calls-OBB (poisoned primitive),
+  conservation (I1), determinism (I2). + `test_obb_primitive.py` (21, Stage A). **28 passed.**
+- **I4 grid oracle untouched:** `resolve_toi_and_commit` runs only under `if FIELD_MOVEMENT`
+  (`orchestration.py:1405`); the FIELD_MOVEMENT=0 byte-exact oracle is structurally unreachable.
+  `test_mass_battle_byte_exact.py` → **`2 passed`** (grid `unit`/`cell` byte-identical).
+- Full mass_battle/obb/field/movement subset → **57 passed, 13 skipped, 0 failed**.
+- FIELD behaviour changes by design (bodies now close to touch and fight instead of standing off at
+  gap 1.5 doing nothing) → `bat.py` field goldens (`cell_field`/`unit_field`, NOT CI-checked)
+  re-recorded. **This moves the DG-6-gated 20-row Cannae gauge** (units that used to freeze at range
+  now engage) — disclosed; **no balance constant tuned** (I5).
+
+### 7.4 Departure from the written plan (flagged for merge-ratification)
+Plan Stage C + risk R1 said halt == contact surface ("halt distance must equal the contact trigger").
+The body-stop correction **departs from that shared-surface premise** — halt on the body, strictly
+inside the reach-contact surface. `spatial_model_v2_plan.md` Stage C and R1 are amended to record it.
+Per CLAUDE.md §2 (merge ratifies PROPOSED contents), merge-review of this PR ratifies the correction.
+
+**Remaining v2 stages:** D (continuous frontage / delete the last recording integer), E (weapon-class
+reach 0.1/0.2/0.3 + author a `pike` troop type), F (historical revalidation + digest re-record),
+G (retire the integer engine, route `resolve_mass_battle` onto the field engine).
