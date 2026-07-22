@@ -816,6 +816,53 @@ for _w, _rec in WEAPONS.items():
     _rec['gap'] = _b['gap']
     _rec['geo'] = _b   # full baked surface available to modules
 
+# ── U3/ED-PC-0018: per-element EDGE-COUNT primitive (edges = {sides∈{0,1,2}, false_edge_frac}) ─────────────────────
+# consolidation_v1.md §2.1 (ADOPT B's schema; A's authored table is the migration data). A physical/attested blade
+# fact — double(2)/single(1)/edgeless(0) cutting edges + a clipped false/back-edge fraction — authored per striking
+# element and INJECTED onto the top-level `elements` below (one reviewable table, not ~60 scattered literals). Grounded
+# top-down against treatises/typology; S-grades + per-row justification + the JD-2 disputed calls live in
+# audit/2026-07-04-weapon-morphology-granularity/edges_data_v1.md. Read by weapon_physics.edge_lines/spine/grab_hazard,
+# each wired K=0 until the U9 recal. Per-element order matches each record's `elements=[...]`; None = a blunt/omit
+# element with no cutting edge. CI invariants (test_combat_edges): sides==0 ⇒ element edge_keenness ≤ 0.1;
+# false_edge_frac>0 ⇒ sides==1. JD-2 (Jordan data sign-off) resolved bottom-up-from-morphology per the ED-PC-0009
+# ruling pattern; two S3 catch-element calls were adversarially corrected from the first draft (voulge heel-spike and
+# dangpa flank-tines: sides 2->1 — a thrusting spike / catch-lug is not a symmetric double-edged blade).
+def _E(sides, false_edge_frac=0.0): return dict(sides=sides, false_edge_frac=false_edge_frac)
+_EDGES = {
+  # double-edged (sides=2) — straight knightly/thrusting swords, jian-family, European spear/leaf heads, dagger-class
+  'rapier':[_E(2)], 'arming':[_E(2)], 'longsword':[_E(2)], 'greatsword':[_E(2)], 'dagger':[_E(2)],
+  'paired_short':[_E(2)], 'spear':[_E(2)], 'yari':[_E(2)], 'bear_spear':[_E(2)], 'ranseur':[_E(2)],
+  'tsurugi':[_E(2)], 'jian':[_E(2)], 'cinquedea':[_E(2)], 'main_gauche':[_E(2)],
+  # single-edged with a clipped FALSE/back edge (sides=1, false_edge_frac>0)
+  'sabre':[_E(1,0.2)], 'szabla':[_E(1,0.2)], 'falchion':[_E(1,0.2)],
+  'katana':[_E(1,0.15)], 'tachi':[_E(1,0.15)], 'odachi':[_E(1,0.15)], 'naginata':[_E(1,0.15)], 'scimitar':[_E(1,0.15)],
+  'changdao':[_E(1,0.1)],
+  # single-edged, plain spine (sides=1, no false edge) — curved/cleaver slashers & axe-blades
+  'glaive':[_E(1)], 'podao':[_E(1)], 'bardiche':[_E(1)], 'sparr_axe':[_E(1)], 'nandao':[_E(1)],
+  'pulwar':[_E(1)], 'shamshir':[_E(1)],
+  # edgeless (sides=0) — armoured thrusters / stiletto-class needles
+  'estoc':[_E(0)], 'rondel':[_E(0)], 'stiletto':[_E(0)], 'misericorde':[_E(0)],
+  # blunt striking tip — no cutting edge at all (omit)
+  'staff':[None], 'mace':[None],
+  # composites (order matches elements=[...]; blunt/edgeless spikes contribute 0 to the readers' MAX):
+  'poleaxe':[None,_E(0),_E(0)], 'bec_de_corbin':[None,_E(0),_E(0)], 'lucerne_hammer':[None,_E(0),_E(0)],
+  'goedendag':[None,_E(0)],
+  'kama_yari':[_E(2),_E(1),_E(1)],   # main_point double (su-yari), two kama cross-blades single
+  'dangpa':[_E(2),_E(1),_E(1)],      # center prong double; flank tines single (corrected from S3 draft double — catch-lugs, not blades)
+  'spetum':[_E(2),_E(1),_E(1)], 'partisan':[_E(2),_E(1),_E(1)],   # central blade double; sharpened wing-lugs single
+  'guandao':[_E(1),_E(0)], 'fauchard':[_E(1),_E(0)], 'guisarme':[_E(1),_E(0)], 'hook_sword':[_E(1),_E(0)],
+  'voulge':[_E(1),_E(1),_E(1)],      # cleaver + heel-spike (corrected from S3 draft double) + rear-fluke, all single
+  'ji':[_E(2),_E(1)],                # straight jian-like spearhead double; yueyadao crescent single
+  'flamberge':[_E(2),_E(2),None],    # continuous double edge (flame-ground + plain tip); ricasso (grip zone) no edge
+}
+for _wn, _edgelist in _EDGES.items():
+    _els = WEAPONS[_wn]['elements']
+    assert len(_edgelist) == len(_els), ('edges/element count mismatch', _wn, len(_edgelist), len(_els))
+    for _el, _ed in zip(_els, _edgelist):
+        if _ed is not None:
+            _el['edges'] = _ed
+assert set(_EDGES) == {n for n, r in WEAPONS.items() if 'base' not in r}, 'every non-base weapon must carry an edges row'
+
 # Bake each MULTI-MODE composite's per-element combat geometry ONCE at import (morphology-rearch Phase B2:
 # the located mass elements now have a parallel combat-geometry view for weapons whose parts afford genuinely
 # different fight-modes — a bec de corbin's hammer face vs beak vs spike — grounded per-element against Phase 0
