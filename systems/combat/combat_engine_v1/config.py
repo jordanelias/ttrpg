@@ -36,6 +36,11 @@ CFG = dict(
   #     surface (weapon_physics.spine differential -> bind_sigma); GRAB_EDGE_K: a live edge self-injures an unskilled
   #     bare-hand grab (weapon_physics.grab_hazard -> contact.grab_sigma). See weapon_physics.py's U3 block + §2.3.
   LEGIB_EDGELINE_K=0.0,
+  # U5/ED-PC-0019 polearm choke counterbalance: CHOKE_ACCURACY_K [K=0] — a head-heavy pole choked up to
+  # counterbalance loses fine precision -> reads easier (systems.choke_counterbalance -> legibility, activated in U9).
+  # CHOKE_RC_REF — pole-class rear_clearance reference the choke normalises by (poleaxe-class ~0.9); used only inside
+  # the K=0-gated term, so its value is inert until U9. The thrust side is weapon_physics.CHOKE_THRUST_K.
+  CHOKE_ACCURACY_K=0.0, CHOKE_RC_REF=0.9,
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
