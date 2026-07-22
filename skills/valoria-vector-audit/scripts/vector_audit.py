@@ -90,6 +90,9 @@ CLASSES = {
     #   clock → 2 of 6 already have clock.* entries (clock.church_influence, clock.mending_stability)
     #     but as FULL-NAME canonicals, while the audit roster is ABBREVIATIONS (MS/CI/IP/PI/TS/TCV)
     #     and 4/6 have no entry at all — needs the abbreviation<->full-name mapping before sourcing.
+    # npc: DEFERRED — namespacing npc.* into names_index empirically collapses name-coreference
+    # (the generic-layer derived pattern [King\ Almud] overrode the SEED match-forms [Almud,
+    # Almqvist], reducing P1 coverage). Needs a coreference-aware fix before sourcing. Kept hardcoded.
     'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
             'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
@@ -219,24 +222,13 @@ SEED_TOKENS = {
                              'scale': 'peninsula', 'status': 'provisional', 'source': 'seed'},
     'Miraculous Event':     {'patterns': ['Miraculous Event', 'miraculous_event'],
                              'scale': 'peninsula', 'status': 'provisional', 'source': 'seed'},
-    # Clocks
-    'MS':                   {'patterns': [r'\bMS\b(?![A-Za-z])', 'Mending Stability'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'CI':                   {'patterns': [r'\bCI\b(?![A-Za-z])', 'Church Influence'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'IP':                   {'patterns': [r'\bIP\b(?![A-Za-z])', 'Invasion Pressure'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'PI':                   {'patterns': [r'\bPI\b(?![A-Za-z])', 'Political Instability'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'TS':                   {'patterns': [r'\bTS\b(?![A-Za-z])', 'Thread Sensitivity'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
-    'TCV':                  {'patterns': [r'\bTCV\b'],
-                             'scale': 'clock', 'status': 'canonical', 'source': 'seed'},
+    # Clocks (abbreviations): sourced from names_index clock.* (token_class: clock_track) AFTER
+    # this literal (§8; R2/ED-IN-0082) — collision-safe ids for MS/CI/IP/PI/TS/TCV.
     # Convictions: sourced from references/names_index.yaml conv.* entries just AFTER this
     # literal (§8 — the §3.5 disambiguation `context` lives ONCE there; R2/ED-IN-0082).
     # Pressure Points: sourced from references/names_index.yaml ppt.* entries AFTER this literal
     # (§8; R2/ED-IN-0082) — the hardcoded roster + §3.5 context moved into the central registry.
-    # NPCs
+    # NPCs (disambiguated) — kept hardcoded (see CLASSES['npc'] note: namespacing breaks coreference).
     'King Almud':           {'patterns': ['Almud', 'Almqvist'],
                              'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
     'Confessor Arne':       {'patterns': ['Arne', 'Himlensendt', 'Confessor'],
@@ -277,7 +269,7 @@ SEED_TOKENS = {
 # Built byte-identically to the former hardcoded blocks (test_vector_audit pins each). If
 # names_index is unreadable (no PyYAML) these degrade to absent — the same failure mode
 # derive_tokens already has, since the whole audit reads the index.
-_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction', 'mech')
+_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction', 'mech', 'clock')
 if names is not None:
     for _cls in _INDEX_TOKEN_CLASSES:
         _members = names.by_token_class(_cls)

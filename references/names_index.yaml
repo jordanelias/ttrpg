@@ -125,6 +125,17 @@ entries:
   mech.mandate:     {canonical: Mandate,     aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bMandate\b']}
   mech.tensions:    {canonical: Tensions,    aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bTensions\b']}
 
+
+  # ── CLOCK TRACKS (abbreviation audit tokens; new 2026-07-22, R2 namespacing / ED-IN-0082) ──
+  # clock.<abbr> ids for the 6 peninsular clocks (full-name clock.church_influence etc. stay
+  # separate). token_class clock_track so the 2 existing full-name clock.* aren't pulled.
+  clock.ms: {canonical: "MS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bMS\b(?![A-Za-z])', 'Mending Stability']}
+  clock.ci: {canonical: "CI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bCI\b(?![A-Za-z])', 'Church Influence']}
+  clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Invasion Pressure']}
+  clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Political Instability']}
+  clock.ts: {canonical: "TS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTS\b(?![A-Za-z])', 'Thread Sensitivity']}
+  clock.tcv: {canonical: "TCV", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTCV\b']}
+
   # ── FACTION STATS (mirror: descriptor_registry.yaml faction_stats; scalar 1-7) ─
   fac.influence:  {canonical: Influence, aliases: [], legacy: [], category: faction_stat, enforce: warn}
   fac.wealth:     {canonical: Wealth,    aliases: [], legacy: [], category: faction_stat, enforce: warn}
@@ -158,12 +169,14 @@ entries:
     aliases: []
     legacy: ["Theocracy Counter"]
     category: clock
+    token_class: clock_full
     enforce: warn
   clock.mending_stability:
     canonical: Mending Stability
     aliases: []
     legacy: ["Rendering Stability"]
     category: clock
+    token_class: clock_full
     enforce: warn
   mass.power:
     canonical: Power

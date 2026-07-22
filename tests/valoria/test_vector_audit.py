@@ -246,6 +246,17 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # the collision-safe id exists in the register, distinct from the faction stat
     assert names.canonical('mech.stability') == 'Stability' and names.canonical('fac.stability') == 'Stability'
     assert 'mech' in va._INDEX_TOKEN_CLASSES
+
+    # clocks (abbreviations): namespaced clock.* (token_class 'clock'); the 2 full-name clock
+    # entries are tagged token_class 'clock_full' so the roster stays the 6 abbreviations.
+    CLK = {'MS': [r'\bMS\b(?![A-Za-z])', 'Mending Stability'], 'CI': [r'\bCI\b(?![A-Za-z])', 'Church Influence'],
+           'IP': [r'\bIP\b(?![A-Za-z])', 'Invasion Pressure'], 'PI': [r'\bPI\b(?![A-Za-z])', 'Political Instability'],
+           'TS': [r'\bTS\b(?![A-Za-z])', 'Thread Sensitivity'], 'TCV': [r'\bTCV\b']}
+    assert set(va.CLASSES['clock']) == set(CLK)
+    for disp, pats in CLK.items():
+        tok = va.SEED_TOKENS.get(disp)
+        assert tok is not None and tok['scale'] == 'clock' and tok['patterns'] == pats, disp
+    assert names.canonical('clock.ms') == 'MS' and 'clock' in va._INDEX_TOKEN_CLASSES
     # SOURCING-LINKAGE guard (adversarial-pass hardening): the classes are actually driven through
     # the names_index sourcing loop, so a revert that re-hardcodes identical dicts but drops the
     # sourcing is caught, not just a value-identical pass.

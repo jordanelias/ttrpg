@@ -5,7 +5,7 @@
 # here: `python tools/definitions_store.py --get <key>`. Drift-locked: `--check` asserts this equals
 # a fresh rebuild and that name fields agree across the source registers (extends ci_names_consistency).
 # `in_registers` records provenance; `gap` flags a key present in only one register (surfaced, not fixed).
-count: 111
+count: 117
 definitions:
   agg.body:
     canonical: Body
@@ -140,6 +140,18 @@ definitions:
     - names_index
     legacy:
     - Theocracy Counter
+  clock.ci:
+    canonical: CI
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.ip:
+    canonical: IP
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
   clock.mending_stability:
     canonical: Mending Stability
     category: clock
@@ -148,6 +160,30 @@ definitions:
     - names_index
     legacy:
     - Rendering Stability
+  clock.ms:
+    canonical: MS
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.pi:
+    canonical: PI
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.tcv:
+    canonical: TCV
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
+  clock.ts:
+    canonical: TS
+    category: clock
+    enforce: warn
+    in_registers:
+    - names_index
   conv.autonomy:
     canonical: Autonomy
     category: conviction
