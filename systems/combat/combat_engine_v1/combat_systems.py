@@ -688,6 +688,7 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
+    legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)   # U3/ED-PC-0018: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction) — K=0 until U9, 0 for a plain-single/edgeless weapon
     # SWING-ROOM LEGIBILITY (I5, D4/D5): a broad swing that cannot fully develop in cramped quarters is MORE
     # constrained and reads EASIER — weighted by the SELECTED element's own (1-pc_sel) (a thrust, pc_sel~1, is
     # unaffected) and by how little room is left (1-range_avail). Exactly 0 at range_avail=1.0 (the I1/I5
@@ -737,8 +738,9 @@ def bind_sigma(aggressor, defender, cfg, TR):
                * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(aggressor.w))   # the AGGRESSOR's wavy edge disrupts the defender's read
     tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
+    spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w) - WP.spine(defender.w))   # U3/ED-PC-0018: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press, winden) — a separate physical fact from the lever-arm in `lev`, so it stays its own K=0-ablatable primitive (not multiplied into leverage, which would destroy its ablation-falsifiability — §2.3). 0 for a double-edged/edgeless weapon.
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
-    return lev + catch + tac + strq + wound
+    return lev + catch + tac + strq + spine + wound
 
 # ---------- initiative substrate (three-phase Vor / Nach / Indes ~ sen; culture-neutral) ----------
 # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert): seizure_score + initiative_seize removed. The

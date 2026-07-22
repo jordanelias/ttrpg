@@ -29,6 +29,13 @@ CFG = dict(
   # weapons with attested adornments (ranseur/guandao/jian) are period-documented as ceremonial-phase features,
   # so this is deliberately a SMALL knock, not a primary legibility axis. See weapon_physics.distraction().
   LEGIB_DISTRACT_K=0.15,
+  # U3/ED-PC-0018 edges primitive — the three edge-effect channels (§2.3, one channel per physical fact), all K=0
+  # (byte-identical) until the U9 joint recalibration flips them under ablation-gate:
+  #   LEGIB_EDGELINE_K: a double/false edge's return-cut ambiguity degrades the defender's read (weapon_physics.edge_lines
+  #     -> legibility, same sign as LEGIB_DISTRACT_K); BIND_SPINE_K: a single edge's rigid spine wins the bind bearing-
+  #     surface (weapon_physics.spine differential -> bind_sigma); GRAB_EDGE_K: a live edge self-injures an unskilled
+  #     bare-hand grab (weapon_physics.grab_hazard -> contact.grab_sigma). See weapon_physics.py's U3 block + §2.3.
+  LEGIB_EDGELINE_K=0.0,
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
@@ -103,7 +110,7 @@ CFG = dict(
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
   RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
-  BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
+  BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156, BIND_SPINE_K=0.0,   # BIND_SPINE_K [U3/ED-PC-0018, K=0]: single-edge spine-press bearing surface (weapon_physics.spine differential)
   # morphology-rearch Phase B5: a wavy/flame-ground edge (weapon_physics.edge_vibration, 0 for a plain edge)
   # degrades the OPPONENT's tactile read in the bind and boosts the wielder's own initiative-steal there.
   # [SIM-CALIBRATE] — flamberge's 15mm amplitude is the only roster weapon that currently reads nonzero.
@@ -168,7 +175,7 @@ CFG = dict(
   # (paired_short / half-sworded 2H forms, head_len>=0.399) — the open-contact exemption for a weapon
   # already functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
   # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
-  GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25,
+  GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25, GRAB_EDGE_K=0.0,   # GRAB_EDGE_K [U3/ED-PC-0018, K=0]: a live edge self-injures an unskilled bare-hand grab (weapon_physics.grab_hazard of the GRABBED weapon)
 )
 # HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.
 # handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone.

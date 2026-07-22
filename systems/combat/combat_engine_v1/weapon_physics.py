@@ -518,6 +518,59 @@ def edge_vibration(w):
     return math.tanh(VIBRATION_K * amp)
 
 
+# ════════════════════ U3 — EDGE-COUNT PRIMITIVE: per-element edges={sides∈{0,1,2}, false_edge_frac} (ED-PC-0018) ═
+# consolidation_v1.md §2.1-2.3. `elements[].edges` is a physical/attested blade fact (double vs single vs edgeless;
+# a clipped false/back edge), landed as data like edge_undulation/adornments. It wires ONE channel per physical fact
+# (§2.3, no double-counts): a double/false edge buys read-difficulty (edge_lines -> systems.legibility) + grab-resist
+# (grab_hazard -> contact.grab_sigma); a single edge buys the spine-press bearing surface (spine -> systems.bind_sigma).
+# Every reader is pure, iterates only elements that carry an `edges` key (a blunt/edgeless element has none), returns
+# 0 for a weapon with no edges data (BYTE-IDENTICAL until the data + the K=0-gated downstream constants land — U9
+# flips the constants). No weapon name — emergent from the per-element data.
+
+def _blade_edges(w):
+    """Yield each striking element's edges descriptor {sides, false_edge_frac} — only elements that carry one (a
+    blunt/edgeless element with no `edges` key is skipped). Pure helper."""
+    for e in w.get('elements', ()):
+        ed = e.get('edges')
+        if ed is not None:
+            yield ed
+
+def edge_lines(w):
+    """Cut-line entropy — a double or false/back edge affords off-line and RETURN cuts, so the wielder's intent reads
+    HARDER (the mechanical payload of a back-swing cut IS the unreadable return line; §2.3, JD-5). Per blade element:
+    a double edge (sides==2) contributes the full return-line ambiguity (1.0); a single edge with a sharpened false
+    edge contributes its false_edge_frac; a plain single or an edgeless element contributes 0. Weapon value = MAX over
+    its blade elements (the most ambiguous edge dominates the read). In [0,1]; 0 for a plain-single/edgeless weapon.
+    Pure — wired into systems.legibility (LEGIB_EDGELINE_K, K=0 until U9)."""
+    def _el(ed):
+        s = ed.get('sides', 1)
+        if s == 2: return 1.0
+        if s == 1: return ed.get('false_edge_frac', 0.0)
+        return 0.0
+    return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
+
+def spine(w):
+    """Spine as bearing surface — a SINGLE edge leaves a rigid non-cutting back (a spine) to press/bind against the
+    opposing blade (hand-high spine-press, Fühlen/winden); a double edge has no spine, an edgeless needle none worth
+    pressing. Continuous: (sides==1)·(1−false_edge_frac) per element — a longer false/back edge eats the plain spine.
+    Weapon value = MAX over blade elements. In [0,1]; 0 for a double-edged or edgeless weapon. Pure — wired into
+    systems.bind_sigma (BIND_SPINE_K, K=0 until U9)."""
+    def _el(ed):
+        return (1.0 - ed.get('false_edge_frac', 0.0)) if ed.get('sides', 1) == 1 else 0.0
+    return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
+
+def grab_hazard(w):
+    """Grab hazard — a LIVE double edge resists being seized bare-handed (an unskilled/ill-timed grab self-injures); a
+    plain single edge is half-hazardous (the spine is safe to grab); an edgeless element is safe. Per element:
+    (sides + (sides==1)·false_edge_frac)/2 -> 0 edgeless, 0.5 plain single, up to ~0.6 clipped single, 1.0 double.
+    Weapon value = MAX over blade elements. In [0,1]; 0 for an edgeless weapon. Pure — wired into contact.grab_sigma
+    (GRAB_EDGE_K, K=0 until U9)."""
+    def _el(ed):
+        s = ed.get('sides', 1)
+        return (s + (ed.get('false_edge_frac', 0.0) if s == 1 else 0.0)) / 2.0
+    return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
+
+
 # ════════════════════ STAGE 3e — HEFT / TEMPO_SHAPE / HANDLING: the wt/spd/hand de-leak (Phase B6) ════════════════
 # The three remaining fiat aggregates — wt{light,heavy}, spd (a bare per-weapon tempo bonus), hand{Forgiving,
 # Standard,Demanding} — replaced with derivations off the SAME real per-part mass model every other Phase-B stage
