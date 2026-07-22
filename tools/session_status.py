@@ -51,16 +51,6 @@ def main():
     except Exception:
         pass
 
-    # audit-family staleness (Phase 5a, ED-IN-0032 planning): at most two stalest
-    # one-line warnings. Renderer lives once in audit_staleness.py; never allowed to
-    # break session start.
-    try:
-        import audit_staleness as ast
-        for warn in ast.top_stale():
-            print(warn)
-    except Exception:
-        pass
-
     # Repository State Armature (ED-IN-0077): one-line repo-state grade from the single review
     # engine. fast=True reads the last committed review_state.json only (no subprocess, no hang);
     # silent if absent. Renderer lives once in review_core.py; never allowed to break session start.
@@ -68,6 +58,20 @@ def main():
         import review_core
         for ln in review_core.summary_lines(fast=True):
             print(ln)
+    except Exception:
+        pass
+
+    # Open-work block (ED-IN-0081): the surfaces that were silently missed at start —
+    # the ACTIVE LANE's HANDOFF_<LANE>.md pending items, open editorial debt (+ the
+    # needs_jordan inbox), schema-in-flux flags, and ALL stale audit families (not just
+    # the top-2). Composed once in session_open_work.py from the obs_core / audit_staleness
+    # single-owner primitives; never allowed to break session start.
+    try:
+        import session_open_work as sow
+        lines = sow.summary_lines()
+        if lines:
+            print()
+            print('\n'.join(lines))
     except Exception:
         pass
 

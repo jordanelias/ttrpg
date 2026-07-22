@@ -1,0 +1,175 @@
+FIELD-BASED MASS-BATTLE STRESS TEST  ·  2026-07-22  ·  engine: tests/sim/mass_battle/
+
+============================================================================================
+S0  WIRING CENSUS + FIELD-CONFIG ACTIVATION
+============================================================================================
+mechanics_selftest: ok=True  missing=[]  (30 registered mechanics)
+field triad: {'FIELD_MOVEMENT': True, 'PC_NODE_COHESION': True, 'PER_CELL': True}   -> field-based=True  grid-oracle-active=False
+
+mechanic                 fn                           toggle                 live     status
+cell_layout              oriented_pattern             None                   (always) WIRED
+octagon_facing           octagon_angle                None                   (always) WIRED
+support_vector           _support_along_vector        None                   (always) WIRED
+cell_speed               cell_speed                   None                   (always) WIRED
+pool_roll                roll_pool                    None                   (always) WIRED
+degree                   compute_degree               None                   (always) WIRED
+sigma_net_boost          _sigma_net_boost             SIGMA_HEAD             ?        WIRED
+sigma_softcap            _sigma_softcap               None                   (always) WIRED
+morale_sigma             _morale_sigma                MORALE_FIX             True     WIRED
+casualties               distribute_casualties        None                   (always) WIRED
+column_grid              build_column_grid            PER_CELL               True     WIRED
+fatigue                  _fatigue_sigma               PER_CELL               True     WIRED
+defender_depth           _defender_depth              PER_CELL               True     WIRED
+charge_shock             _charge_shock_sigma          PER_CELL               True     WIRED
+envelopment_wrap         _momentum_speed              PC_REFUSE              True     WIRED
+assign_targets           assign_targets               None                   (always) WIRED
+find_contacts            find_contacts                None                   (always) WIRED
+engage                   resolve_engagements          None                   (always) WIRED
+cascade_order            resolve_engagements_cascading CASCADING_ENABLED      True     WIRED
+volley                   volley_phase                 VOLLEY_ENABLED         True     WIRED
+battle_turn              run_battle                   None                   (always) WIRED
+multi_turn               run_multi_turn_battle        None                   (always) WIRED
+rout                     rout_resolution              None                   (always) WIRED
+pursuit                  pursuit_damage               None                   (always) WIRED
+recall                   recall_check                 None                   (always) WIRED
+morale_cascade           discipline_check_cascade     None                   (always) WIRED
+between_turn_recovery    between_turn_recovery        None                   (always) WIRED
+lanchester_attrition     _lanchester_strength         LANCHESTER_ENABLED     True     WIRED
+command_sigma_base       command_base_pool            COMMAND_SIGMA_ENABLED  True     WIRED
+command_derivation       derive_command               COMMAND_SIGMA_ENABLED  True     WIRED
+
+WIRED mechanics whose gate is OFF under field defaults: none
+
+field gates ON by default   : {'FIELD_MOVEMENT': True, 'PC_NODE_COHESION': True, 'PER_CELL': True, 'LANCHESTER_ENABLED': True, 'POOL_QUALITY_MODEL': True, 'COMMAND_SIGMA_ENABLED': True, 'MORALE_FIX': True, 'SIGMA_HEAD_ENABLED': True, 'VOLLEY_ENABLED': True, 'CASCADING_ENABLED': True, 'PC_BRACE_ENABLED': True, 'PC_RECOIL_FRONTAL': True, 'PC_BRACE_SETUP_DELAY': True, 'PC_RECOIL_CHARGER_GATE': True, 'PC_WHEEL': True, 'PC_REFUSE': True, 'PC_VOLLEY_DENSITY_ENABLED': True, 'PC_KITE_ENABLED': True, 'PC_ENVELOP_PATH': True, 'PC_SWEEP': True}
+gates OFF by default        : {'PC_FACING_MODEL': False, 'FIELD_CONTACT': False, 'REFORM_CHECK_ENABLED': False}
+do-not-enable (unratified)  : PC_FACING_SLEW_BASE=60.0 (CALIBRATED-DEBT, left OFF deliberately)
+
+============================================================================================
+S1  AGGREGATE FUZZ  (n=200, field defaults, full input surface)
+============================================================================================
+constructed & ran : 197   (rejected at construction: 3  [incl. 0 over-cap ValueError — correct SUBUNIT_CAP=11 enforcement])
+ENGINE FAILURES   : 0    <- defect surface (exceptions during run_battle)
+INVARIANT VIOL.   : 1    <- defect surface (NaN/hp-range/cell!=hp/bad-winner)
+made contact      : 153/197 (0.777)   <- post-DG-10-fix closing health (rest are hold/retreat/never-in-range, legitimate)
+outcomes          : {'A': 6, 'B': 3, 'draw': 188, 'None': 0}   mean turns: 39.5
+    VIOL  ['A:cell!=hp(444vs410)']  A=['Line'] B=['Line', 'Line', 'Line']
+
+============================================================================================
+S1b  MOVEMENT CENSUS  (DG-10 field-closing fix — isolation proof per troop type)
+============================================================================================
+Every canonical troop type, plain Line, balanced stance, must CLOSE to contact on the field
+path. Pre-fix: all disc<5 types (levy/light_inf/heavy_inf/archers/crossbow/sling/artillery)
+froze at advance-step 0 and never met the enemy. Post-fix: all close.
+
+troop_type       eff_disc  closed?  defender_hp_left
+archers                 3  yes                  288
+artillery               2  yes                  1038
+cavalry                 5  yes                  47
+crossbow                3  yes                  288
+heavy_infantry          4  yes                  50
+knights_templar         6  yes                  0
+levy                    1  yes                  1709
+light_infantry          3  yes                  275
+sling                   2  yes                  1038
+infantry                5  yes                  88
+
+all troop types close: True
+
+============================================================================================
+S2  ISOLATION VALIDATORS  (per-mechanic historical-goal probes)
+============================================================================================
+Combat-mechanic validators run under the ambient FIELD default (PER_CELL=1, node path).
+Movement-instruction validators (V-ENVELOP/V-SWEEP) are reported on BOTH the grid arm
+(their regression default) and the field/node arm (the live path, known-flaky — xfail in CI).
+
+[FAIL] V-CANNAE   measured=0.0079  | Cannae 216 BC; du Picq
+[PASS] V-FIXING   measured=(0.0079, 0.0)  | fixing-force doctrine
+[FAIL] V-SHOCK    measured=0.0  | Cannae 216 BC; du Picq
+[FAIL] V-BRACE    measured=(0.0, 0.0)  | Waterloo squares; brace-floor calibration
+[PASS] V-REFORM   measured=(7, 7)  | mass_battle_v30.md §A.5 Reform Phase; Command-asymmetry rule
+[PASS] V-ARCHER   measured=(75.2, 0)  | Crecy/Agincourt longbow fire discipline; A.7 directed volley
+[PASS] V-ENVELOP  grid  measured=(-2.26, 2.5, 12, 0)
+[PASS] V-ENVELOP  field measured=(-2.44, 0.0, 12, 0)   (field/node arm — ED-MB-0002..0005 known-flaky)
+[PASS] V-SWEEP    grid  measured=(3.0, 0.06)
+[PASS] V-SWEEP    field measured=(2.49, 0.0)   (field/node arm — ED-MB-0002..0005 known-flaky)
+
+============================================================================================
+S3  PER-FLAG A/B ISOLATION  (each gate flipped in a clean subprocess -> WIRED or inert?)
+============================================================================================
+A gate is 'WIRED' if flipping it changes the outcome vector on a sensitive scenario.
+
+[WIRED] PER_CELL                   (charge_vs_brace) A:0/0.6664 -> 0/0.9141
+[WIRED] LANCHESTER_ENABLED         (big_vs_small   ) A:0/0.9891 -> 0/0.9966
+[WIRED] POOL_QUALITY_MODEL         (big_vs_small   ) A:0/0.9891 -> 0/0.9122
+[WIRED] COMMAND_SIGMA_ENABLED      (mirror         ) A:0/0.8411 -> 0/0.859
+[INERT] MORALE_FIX                 (mirror         ) A:0/0.6997 -> 0/0.6997
+[WIRED] SIGMA_HEAD                 (mirror         ) A:0/0.6997 -> 0/0.676
+[WIRED] PC_BRACE_ENABLED           (charge_vs_brace) A:0/0.6664 -> 0/0.8952
+[INERT] PC_RECOIL_FRONTAL          (charge_vs_brace) A:0/0.6664 -> 0/0.6664
+[INERT] PC_BRACE_SETUP_DELAY       (charge_vs_brace) A:0/0.6664 -> 0/0.6664
+[WIRED] PC_CHARGE_RECOIL           (charge_vs_brace) A:0/0.6664 -> 0/0.8952
+[INERT] PC_WHEEL                   (envelop        ) A:0/0.8717 -> 0/0.8717
+[WIRED] PC_REFUSE                  (envelop        ) A:0/0.8717 -> 0/0.8785
+[WIRED] PC_VOLLEY_DENSITY_ENABLED  (ranged_dense   ) A:0/0.6793 -> 0/0.6711
+[WIRED] PC_ENVELOP_MOD             (envelop        ) A:0/0.8717 -> 0/0.8741
+[WIRED] K_LINEAR                   (big_vs_small   ) A:0/0.9891 -> 12/0.987
+[WIRED] POOL_QUALITY_SCALE         (mirror         ) A:0/0.6997 -> 0/0.7596
+
+============================================================================================
+S4  ACTIVATE OFF-BY-DEFAULT GATES  (turn ON, check for breakage under field mode)
+============================================================================================
+These default OFF but are legitimate field-mode gates. Turn each ON (and combined) over
+every probe scenario; a gate is SAFE if no scenario errors or breaks invariants.
+
+[SAFE] baseline(field)
+         mirror           A0/B0/d12 viol=0
+         charge_vs_brace  A0/B0/d12 viol=0
+         envelop          A0/B0/d12 viol=0
+         ranged_dense     A0/B0/d12 viol=0
+         big_vs_small     A0/B0/d12 viol=0
+[SAFE] PC_FACING_MODEL=1
+         mirror           A0/B0/d12 viol=0
+         charge_vs_brace  A0/B0/d12 viol=0
+         envelop          A0/B0/d12 viol=0
+         ranged_dense     A0/B0/d12 viol=0
+         big_vs_small     A0/B0/d12 viol=0
+[SAFE] FIELD_CONTACT=1
+         mirror           A0/B0/d12 viol=0
+         charge_vs_brace  A0/B0/d12 viol=0
+         envelop          A0/B0/d12 viol=0
+         ranged_dense     A0/B0/d12 viol=0
+         big_vs_small     A0/B0/d12 viol=0
+[SAFE] REFORM_CHECK_ENABLED=1
+         mirror           A0/B0/d12 viol=0
+         charge_vs_brace  A0/B0/d12 viol=0
+         envelop          A0/B0/d12 viol=0
+         ranged_dense     A0/B0/d12 viol=0
+         big_vs_small     A0/B0/d12 viol=0
+[SAFE] ALL_THREE_ON
+         mirror           A0/B0/d12 viol=0
+         charge_vs_brace  A0/B0/d12 viol=0
+         envelop          A0/B0/d12 viol=0
+         ranged_dense     A0/B0/d12 viol=0
+         big_vs_small     A0/B0/d12 viol=0
+
+PC_FACING_SLEW_BASE deliberately NOT activated (config comment: 'NOT ratified -- do not enable').
+
+============================================================================================
+S5  CONTROLS  (determinism + order-cancelled mirror symmetry)
+============================================================================================
+[PASS] determinism: identical result vector on repeat  (True)
+[PASS] mirror symmetry: A-favoured 2  B-favoured 2  draw 44  |skew|=0/48
+
+============================================================================================
+VERDICT
+============================================================================================
+  [PASS] S0 wiring
+  [FAIL/ATTN] S1 fuzz
+  [PASS] S1b movement
+  [FAIL/ATTN] S2 validators
+  [FAIL/ATTN] S3 flag A/B
+  [PASS] S4 off-gates
+  [PASS] S5 controls
+
+wrote results.json
+EXIT 0

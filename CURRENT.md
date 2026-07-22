@@ -28,7 +28,12 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-22 (**R2 canonical-identifier namespacing (ED-IN-0082)** — conviction/pressure_point/faction/mechanic token ids seeded into `names_index.yaml`; regenerated `definitions.yaml` + `value_pointer_links.json` views. **Prior:** **Repository State Armature v1 row added (ED-IN-0077) + currency reconcile** — repointed 11 stale designs-era audit paths to their `audit/` homes (the designs/ retirement) and retired one genuinely-gone folder ref; prior reconcile note follows. **ED-IN-0071 repo-reorganization path reconciliation** — updated CURRENT.md's
+_Last reconciled: 2026-07-22 (**MB-lane stamp reconcile — ED-MB-0011**: DG-10 field-movement freeze fix
+(sub-Discipline-5 bodies were floored to advance-step 0 on the live node/field path and never closed to
+contact; fixed to a continuous float velocity, grid oracle untouched) + a field-based mass-battle stress
+test (`audit/2026-07-22-mass-battle-stress-test/`). Engine-level change to `tests/sim/mass_battle/`; no
+CURRENT.md head *row* changed — the Mass battle head remains `systems/mass_battle/mass_battle_v30.md`.
+Stamp bumped only to clear the id_reservations.yaml allocation drift.) **Prior:** **R2 canonical-identifier namespacing (ED-IN-0082)** — conviction/pressure_point/faction/mechanic token ids seeded into `names_index.yaml`; regenerated `definitions.yaml` + `value_pointer_links.json` views. **Prior:** **Repository State Armature v1 row added (ED-IN-0077) + currency reconcile** — repointed 11 stale designs-era audit paths to their `audit/` homes (the designs/ retirement) and retired one genuinely-gone folder ref; prior reconcile note follows. **ED-IN-0071 repo-reorganization path reconciliation** — updated CURRENT.md's
 head-row paths to the executed reorg slices (`godot/`, `arcs/`, `arcs/simulated/`, `registers/`,
 `registers/handoffs/`, `engine/engine_params/`, `engine/params/`, the sim engine-core → `engine/` move, P4 slice 1
 moving the npcs / articulation / ui subsystems into `systems/`, P4 slice 2 moving threadwork's

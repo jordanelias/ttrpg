@@ -248,7 +248,20 @@ EXPECTED = {
     # [2026-07-05, Step 4 fix, same rationale as 'unit'/'cell' above] re-recorded again.
     # [2026-07-08, same fix as 'unit' above] re-recorded.
     # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
-    'unit_field': '40649feb7c634509831e4ca124a9ecbd346bd7e3485699480be01961b86c814f',
+    # [2026-07-22, ED-MB-0011, DG-10 field-movement freeze fix, Jordan-ruled "fields, not grids"]
+    # re-recorded (field modes only). _node_advance no longer floors a sub-Discipline-5 body's velocity
+    # to 0 -> a unit that degrades below disc-5 mid-battle keeps moving at its true rate instead of
+    # freezing. Both GRID modes ('unit'/'cell') confirmed BYTE-IDENTICAL (the fix is gated on
+    # FIELD_MOVEMENT; test_mass_battle_byte_exact.py, which pins FIELD_MOVEMENT=0, still passes). Only
+    # the two _field modes move. See units.py:_node_advance + audit/2026-07-22-mass-battle-stress-test/.
+    # [2026-07-22, ED-MB-0012, spatial-model v2 Stage B+C — CIRCLE->OBB contact + collide-not-decelerate]
+    # re-recorded (field modes only). resolve_toi_and_commit now halts on the BODY box (not the reach-
+    # extended box): bodies close to touch and FIGHT instead of standing off at gap 2*(CELL_RADIUS+reach)
+    # doing nothing (the reach-touch-boundary deadlock). This MOVES the field gauge broadly (units that
+    # used to freeze at range now engage) — a DG-6-gated balance surface, disclosed, no constant tuned.
+    # Both GRID modes stay BYTE-IDENTICAL (resolve_toi_and_commit runs only under `if FIELD_MOVEMENT`,
+    # orchestration.py:1405; test_mass_battle_byte_exact.py pins FIELD_MOVEMENT=0 and still passes: 2 passed).
+    'unit_field': 'a73237df3142b991dd64234a4d8e760e48e8e506b707387a3a9ea486648e6f73',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -281,7 +294,16 @@ EXPECTED = {
     # those 3 modes); only `cell_field` moves.
     # [2026-07-08, same fix as 'unit' above] re-recorded.
     # [2026-07-08, ED-MB-0006, same as 'unit' above] re-recorded.
-    'cell_field': '7b3b0a8d61429e07042dd61095bb14bae208179bf09e67f50bbd5f6546dcbed5',
+    # [2026-07-22, ED-MB-0011, DG-10 field-movement freeze fix — see the 'unit_field' note above]
+    # re-recorded. Per-row diff (old vs fix): mirror/ranged (Line-vs-Line, no moving unit degrades
+    # below disc-5) BYTE-IDENTICAL; the 8 decisive rows (wedge/cannae/oblique/manipular/envelop/
+    # cav_charge/cav_braced/cav_shaken) move because a unit degrading below disc-5 mid-battle used to
+    # freeze and now advances at its true reduced rate (trace: wedge seed 0, side B -> disc 3).
+    # [2026-07-22, ED-MB-0012, spatial-model v2 Stage B+C — see the 'unit_field' note above] re-recorded.
+    # resolve_toi_and_commit halts on the BODY box (not the reach-extended box): bodies close to touch and
+    # fight rather than freezing at the reach-touch boundary (a 0-casualty standoff). Moves the field gauge
+    # broadly (DG-6-gated, disclosed, no constant tuned); GRID modes byte-identical (FIELD_MOVEMENT-gated).
+    'cell_field': '9d0b63b90314e9d95ddcd1effcdd14b05652a449eee1174eeae249c015202a3d',
 }
 
 

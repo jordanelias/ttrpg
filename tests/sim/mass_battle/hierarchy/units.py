@@ -77,6 +77,31 @@ def standoff(troop_type_a, troop_type_b):
     return standoff_from_reach(reach_for(troop_type_a), reach_for(troop_type_b))
 
 
+def _cell_facing_for_box(atom, cid):
+    """[v2 Stage B/C] The heading used to orient a cell's CellBox -- the SAME expression
+    resolve_toi_and_commit._flat uses for its _ToiCell.facing, so the contact predicate (Stage B) and
+    the TOI halt (Stage C) build byte-identical boxes for the same cell/position and therefore agree on
+    the touch surface exactly. Committed cell facing (cell_facing_vec) if present, else the sub-unit's
+    live node facing, else the raw advance direction (advance_dir, 0). NOT get_cell_facing: the
+    PC_FACING_ROUT away-facing flip is a targeting/reach-adjudication concern, deliberately NOT applied
+    to the physical-body box geometry (a fleeing body still occupies its square)."""
+    return atom.cell_facing_vec.get(cid, getattr(atom, '_node_facing', None) or (atom.advance_dir, 0))
+
+
+def cell_boxes_for(atom, reach_front):
+    """[v2 Stage B] One CellBox per cell of `atom`, aligned index-for-index with atom.cells_float()
+    (both iterate _oriented(atom) order, so zip() pairs each float centre with its own box). Standard
+    unit square (w=d=1.0); heading = the cell's facing (_cell_facing_for_box); reach_front = the atom's
+    melee reach, passed in by the caller (reach_for(troop_type) this stage -- REACH_SHORT=0.5) so contact
+    and TOI feed the identical value. Pure/deterministic; no mutation of atom."""
+    boxes = []
+    for (orig_r, orig_c, _o_r, _o_c), (r, c) in zip(_oriented(atom), atom.cells_float()):
+        fv = _cell_facing_for_box(atom, (orig_r, orig_c))
+        boxes.append(cellbox_from(float(r), float(c), (float(fv[0]), float(fv[1])),
+                                  w=1.0, d=1.0, reach_front=reach_front))
+    return boxes
+
+
 # [TOI refactor] Reach bonus only projects within the forward FOV arc (reuses Stage B's FOV_HALF_DEG) --
 # default ON, no-op unless FIELD_MOVEMENT (only the new cross-side TOI resolve consults this).
 PC_REACH_FACING_GATE = (_hu_os.environ.get('PC_REACH_FACING_GATE', '1') == '1')
@@ -152,6 +177,89 @@ def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, targ
     if hi <= 0.0 or lo > 1.0:
         return None  # the violation window (if any) falls entirely outside this tick
     return max(0.0, lo)
+
+
+# [v2 Stage C, ED-MB-0011] ANALYTIC swept-SAT time-of-impact on the OBB touch predicate -- the closed-
+# form replacement for the original scan+bisection (which called obb_front_reach_overlap ~178x per near-
+# contact pair per tick and made the field path ~60x slower, stalling the byte-exact battery). Over one
+# tick the box axes and corner-offsets are CONSTANT -- Euclidean motion translates only the centre --
+# so on each SAT axis the strict-overlap band is a linear-in-s inequality, i.e. an s-interval;
+# intersecting the <=4 axes' intervals gives the overlap window and its left edge is the first touch.
+# No iteration, no tolerance knobs. Verified against the reference scan+bisection to machine epsilon
+# (max_err 1.7e-15 over 700 seeded fuzzed pairs, 281 genuine touches) -- see test_obb_contact_toi.py /
+# the scratch verify probe. ~15 us/pair (was several hundred us under bisection).
+
+
+def _swept_first_overlap_s(a0, va, off_a, b0, vb, off_b, axes):
+    """First s in [0,1] at which the two moving boxes overlap (strict SAT) on ALL candidate `axes`,
+    or None. Box A occupies {a0 + s*va + corner : corner in off_a}; B likewise. Over one tick the box
+    axes and corner-offsets are CONSTANT (Euclidean motion translates only the centre), so on each axis
+    n the SAT overlap condition `bmin-amax < P(s) < bmax-amin` (P(s)=(A_centre-B_centre)·n, LINEAR in s)
+    is a half-open band -> an s-interval. Intersecting the ≤4 axes' intervals gives the overlap window
+    (lo, hi); the first touch is its left edge. O(len(axes)) analytic -- replaces the per-pair scan+
+    bisection (~30 SAT calls/pair) that made the field path ~20-60x slower. Deterministic, no iteration."""
+    lo, hi = 0.0, 1.0
+    for (nr, nc) in axes:
+        amin = amax = off_a[0][0] * nr + off_a[0][1] * nc
+        for o in off_a[1:]:
+            p = o[0] * nr + o[1] * nc
+            if p < amin: amin = p
+            elif p > amax: amax = p
+        bmin = bmax = off_b[0][0] * nr + off_b[0][1] * nc
+        for o in off_b[1:]:
+            p = o[0] * nr + o[1] * nc
+            if p < bmin: bmin = p
+            elif p > bmax: bmax = p
+        p0 = (a0[0] - b0[0]) * nr + (a0[1] - b0[1]) * nc
+        dp = (va[0] - vb[0]) * nr + (va[1] - vb[1]) * nc
+        band_lo = bmin - amax   # P must be strictly ABOVE this to overlap on n
+        band_hi = bmax - amin   # ...and strictly BELOW this
+        if band_hi <= band_lo:
+            return None          # degenerate (zero-area box) -> never overlaps
+        if -1e-15 < dp < 1e-15:  # P constant on this axis
+            if not (band_lo < p0 < band_hi):
+                return None
+            continue             # overlaps for all s on this axis -> no constraint
+        s1 = (band_lo - p0) / dp
+        s2 = (band_hi - p0) / dp
+        axlo, axhi = (s1, s2) if s1 <= s2 else (s2, s1)
+        if axlo > lo: lo = axlo
+        if axhi < hi: hi = axhi
+        if lo >= hi:
+            return None
+    if hi <= 0.0:
+        return None              # overlap window is entirely in the past (already separating)
+    if lo <= 0.0:
+        return 0.0               # already overlapping at s=0
+    if lo > 1.0:
+        return None              # first overlap beyond this tick's motion
+    return lo                    # first touch = the overlap band's left edge
+
+
+def _pair_toi_box_scale(start_a, prop_a, start_b, prop_b, rho_a, rho_b, head_a, reach_a, head_b, reach_b):
+    """[v2 Stage C] Smallest tick-fraction s in [0,1] at which cell A (centre gliding start_a->prop_a,
+    throttled by rho_a) and cell B (start_b->prop_b, rho_b) first bring their OBB engagement surfaces
+    into contact (obb_front_reach_overlap = a's reach-extended box meets b's body OR vice-versa), or
+    None if they never touch across this tick's throttled motion. Analytic swept-SAT (see
+    _swept_first_overlap_s): O(1) per pair, no iteration. Headings/reach fixed over the tick (motion is
+    Euclidean -- only the centre translates); each box is the unit square grown by reach_front on its
+    FRONT face. Deterministic. Returns 0.0 if already touching at s=0 (a pre-existing contact). Verified
+    to match the reference scan+bisection to <1e-6 over fuzzed pairs (see test_obb_contact_toi.py)."""
+    _ba0 = cellbox_from(0.0, 0.0, head_a, w=1.0, d=1.0, reach_front=reach_a)  # centre at origin
+    _bb0 = cellbox_from(0.0, 0.0, head_b, w=1.0, d=1.0, reach_front=reach_b)
+    axes = _cellbox_axes(_ba0) + _cellbox_axes(_bb0)   # 4 candidates: A depth/width + B depth/width
+    off_a_reach = _cellbox_corners(_ba0, use_reach=True)   # config 1: a extended vs b plain
+    off_b_plain = _cellbox_corners(_bb0, use_reach=False)
+    off_a_plain = _cellbox_corners(_ba0, use_reach=False)  # config 2: a plain vs b extended
+    off_b_reach = _cellbox_corners(_bb0, use_reach=True)
+    a0 = (start_a[0], start_a[1]); b0 = (start_b[0], start_b[1])
+    va = (rho_a * (prop_a[0] - start_a[0]), rho_a * (prop_a[1] - start_a[1]))
+    vb = (rho_b * (prop_b[0] - start_b[0]), rho_b * (prop_b[1] - start_b[1]))
+    s1 = _swept_first_overlap_s(a0, va, off_a_reach, b0, vb, off_b_plain, axes)
+    s2 = _swept_first_overlap_s(a0, va, off_a_plain, b0, vb, off_b_reach, axes)
+    if s1 is None: return s2
+    if s2 is None: return s1
+    return s1 if s1 <= s2 else s2
 
 
 def _slew_facing(cur, desired, discipline):
@@ -833,9 +941,44 @@ class Subunit:
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
         base = min(nz) if nz else 0
-        step = max(0, math.floor(base * disc_mult) + stance_mod)
-        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
-            step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
+        # [DG-10 fix, 2026-07-22 — Jordan ruling "if it's broken and not commensurate with system,
+        # disable ... fields, not grids. no grids." + "what even is the point of the continuous
+        # velocity accumulator?"] The node/field path is the LIVE default: since ED-1089,
+        # FIELD_MOVEMENT=1 routes movement HERE, not to advance_cells. It previously took a raw integer
+        # floor `max(0, math.floor(base*disc_mult) + stance_mod)`, which grid-snaps any sub-Discipline-5
+        # body's velocity to 0 (floor(1*0.7)=0), so a balanced disc<5 formation NEVER advanced to
+        # contact on the field (levy/light_inf/heavy_inf/archers/crossbow/sling/artillery are all
+        # disc<5 in §B.2 -> the MAJORITY of canonical troop types could not close). That floor is the
+        # not-commensurate grid discretization the coordinate FIELD exists to remove. The correct field
+        # answer is NOT the fractional-velocity accumulator advance_cells carries (that is itself only a
+        # Bresenham-style workaround for keeping INTEGER positions on a grid): _node_anchor/_node_pos
+        # are already floats, and the sole downstream consumer moves the anchor by `eff = min(step,
+        # mag)` along a unit vector -- fully float-safe. So on the FIELD path we keep `step` as the REAL
+        # velocity (no floor, no accumulator): a disc4 body simply advances 0.7 cells/tick on the
+        # continuous field. A WHOLE-number velocity is kept as an int (below) so that WHILE a body holds
+        # Discipline>=5 it moves bit-for-bit as the old integer path did -- Line-vs-Line gauge rows
+        # (mirror/ranged), where no MOVING unit ever degrades below 5, stay byte-identical. The decisive
+        # rows DO change, for the right reason: a unit that degrades below Discipline 5 MID-battle
+        # (combat / charge shock) previously had its step floored to 0 and FROZE in place; it now keeps
+        # moving at its true reduced rate (disc3 -> 0.4 cells/tick). Verified by per-row digest diff +
+        # trace (wedge seed 0: side B degrades to disc 3). The legacy grid path (FIELD_MOVEMENT off)
+        # keeps its integer floor untouched -> the CI byte-exact grid oracle is preserved. Field gauge
+        # goldens (bat.py cell_field/unit_field, not CI-checked) re-recorded for this ruled change.
+        vel = base * disc_mult
+        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+            vel *= PC_CAVALRY_SPEED_MULT
+        if FIELD_MOVEMENT:
+            _sf = max(0.0, vel + stance_mod)                       # continuous field velocity (no grid floor)
+            # Keep a whole velocity as an int: a float 1.0 vs int 1 changes downstream int-typed
+            # speed-differential / cell_last_speed / charge-momentum reads (and the recorded digest),
+            # so an undegraded disc>=5 body stays bit-for-bit. Only a genuinely FRACTIONAL velocity
+            # (disc<5 -- previously floored to a frozen 0) stays a float and advances the anchor at its
+            # true sub-cell rate. "fields, not grids": the fraction is no longer floored away.
+            step = int(_sf) if _sf == int(_sf) else _sf
+        else:
+            step = max(0, math.floor(base * disc_mult) + stance_mod)   # legacy grid oracle: integer floor
+            if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
+                step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
         # [DG-2 §2.5 anti-abuse, Jordan-ruled "build it now" 2026-07-08] "Speed capped below any
         # realistic pursuer's closing speed (1 cell/tick ceiling)" -- a yielding body cannot
         # indefinitely maintain a standoff gap the way a true kiter can. Applies regardless of the
@@ -1403,25 +1546,23 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
     subset would silently let an enemy pass into/through a not-yet-targeting friendly formation for a
     tick, an adversarial-review-caught regression versus the pre-refactor behaviour.
 
-    For every cross-side cell pair, first checks whether the pair is safe at BOTH cells' full (rho=1,1,
-    i.e. completely un-throttled) proposed motion -- if so, neither cell is capped by this pair at all
-    (the common "not close enough to matter yet" case; using the pair's actual full endpoints, not just
-    a nearer intermediate one, correctly catches paths that CROSS -- both endpoints safe, but dipping
-    inside standoff in between). Only once that fast check shows a cap is unavoidable does the
-    reach-and-facing-throttled solve run (see _reach_throttle: the longer-effective-reach side is
-    capped to a smaller share of the closing motion, so it reaches its own engagement position first) --
-    and if THAT throttled solve itself reports "safe" (i.e. the throttle ceiling alone, with no further
-    reduction, already keeps the pair outside standoff), the throttle ceiling (rho_a, rho_b) is used
-    directly as the cap, rather than being discarded as "no cap needed": a longer-reach cell must not
-    silently fall back to its FULL, un-throttled motion just because the throttled sub-range happened to
-    already be safe -- that was the second adversarial-review-caught bug (the safety check and the
-    eventual commit were evaluating two different endpoints).
+    For every cross-side cell pair the stop surface is BODY vs BODY (two unit squares, reach 0 -- see
+    the ED-MB-0012 note at the pair loop): a circular reject on the body circumscribed circles skips
+    far pairs O(1), then an analytic swept-SAT (_pair_toi_box_scale at reach 0 -> _swept_first_overlap_s)
+    gives the first tick-fraction s at which the two bodies touch across their full (rho=1,1) proposed
+    motion -- using the actual full endpoints, not a nearer intermediate one, so it catches paths that
+    CROSS (both endpoints apart, bodies meeting in between). None -> no cap this pair. The stop is
+    symmetric and reach-INDEPENDENT (reach is a weapon envelope that engages across a gap via the Stage B
+    contact box, NOT a wall two bodies decelerate against), so both cells cap at the SAME body-touch
+    fraction s -- no reach throttle. (The prior reach-throttled model halted cells on the reach surface,
+    which deadlocked closing pairs on the strict-overlap contact boundary at a 0-casualty standoff; see
+    the ED-MB-0012 note.)
 
     A cell that is party to several violating pairs takes the MOST restrictive (smallest) cap across all
     of them -- exact and monotonic (unlike the old iterative worst-violator pull-back this replaces),
-    since each pair's own solved fraction is the FIRST point at which that specific pair reaches its
-    boundary: at any smaller fraction, that pair (and, by taking the overall minimum, every pair) is
-    guaranteed still outside standoff.
+    since each pair's own solved fraction is the FIRST point at which that specific pair's bodies touch:
+    at any smaller fraction, that pair (and, by taking the overall minimum, every pair) is guaranteed
+    still body-disjoint.
 
     Halted cells (already in contact, frozen) are included in the position data so moving cells on
     either side correctly treat them as fixed obstacles, but never themselves receive a cap (they don't
@@ -1452,38 +1593,44 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
             b_halted = eb.cid in eb.atom.halted_cells
             if a_halted and b_halted:
                 continue  # both frozen -- nothing to resolve between two static cells
-            # [design note] target (the final resting distance) ALWAYS uses base, non-facing-gated
-            # reach -- standoff_from_reach(reach_a, reach_b), the same formula find_contacts uses --
-            # so contact and halt stay in sync exactly per Stage A's invariant, and every existing
-            # symmetric (equal-reach) matchup keeps its already-validated stopping distance
-            # byte-identically. Facing ONLY gates which side EARNS the throttle advantage below (a
-            # cell not yet facing its target doesn't get to hold ground while its reach goes unused);
-            # it never shrinks the boundary two closing bodies actually stop at, which would let them
-            # pass closer than find_contacts' own trigger radius for a tick before contact catches up.
-            target = standoff_from_reach(ea.reach, eb.reach)
+            # [v2 Stage C reconcile, ED-MB-0011 -- "why decelerate instead of collide?"] The hard
+            # geometric stop is BODY vs BODY: two unit squares that must never interpenetrate -- NOT the
+            # reach-extended engagement box. Reach is a WEAPON envelope that engages ACROSS a gap
+            # (find_contacts / Stage B fires contact on the reach box); it is not a wall two bodies
+            # decelerate against. Halting on the reach surface parked closing cells EXACTLY on the
+            # obb_front_reach_overlap TOUCH boundary, where the strict-overlap contact predicate returns
+            # False -- a permanent standoff at gap = 2*(CELL_RADIUS+reach) with ZERO casualties: contact
+            # never fired, so engagement/charge-shock never triggered (the whole battle drew at range 1.5).
+            # Stopping on the BODY lets cells close until their bodies meet; the reach surfaces overlap on
+            # the way in, so contact fires (and halts the pair) BEFORE bodies touch whenever reach>0 --
+            # bodies collide, weapons reach across the closing gap. Charge is preserved: cell_last_speed
+            # (read by _momentum_speed at contact) is the PRE-cap step, so a charge's shock reflects its
+            # closing velocity, not the throttled crawl. The stop is symmetric and reach-independent, so
+            # there is no reach throttle here any more -- both cells cap at the SAME body-touch fraction s;
+            # reach asymmetry (a longer weapon engaging first) is expressed by contact firing earlier for
+            # the longer-reach box, not by a movement handicap. (_effective_reach/_reach_throttle retained
+            # as defined helpers but no longer called; the reach-standoff model they served is retired.)
             start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
             start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
-            # Fast path: is this pair safe across its FULL, un-throttled motion at all? (rho=1,1 --
-            # the un-scaled trajectory.) If so, nothing here caps either cell.
-            full_s = _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, 1.0, 1.0, target)
-            if full_s is None:
+            # (1) circular REJECT on the two BODY circumscribed circles (radius hypot(CELL_RADIUS,
+            #     CELL_RADIUS) = √2/2 about each centre, reach-INDEPENDENT). A superset of body-box touch,
+            #     so it never wrongly skips a pair whose bodies actually meet across this tick's full
+            #     (un-throttled) motion. Uses the exact circular quadratic already proven here.
+            R_body = math.hypot(CELL_RADIUS, CELL_RADIUS)
+            if _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, 1.0, 1.0, 2.0 * R_body) is None:
                 continue
-            dxr, dxc = eb.pr - ea.pr, eb.pc - ea.pc
-            eff_a = _effective_reach(ea.reach, ea.facing, dxr, dxc)
-            eff_b = _effective_reach(eb.reach, eb.facing, -dxr, -dxc)
-            rho_a, rho_b = _reach_throttle(CELL_RADIUS + eff_a, CELL_RADIUS + eff_b)
-            # A cap IS needed somewhere along the full path -- solve within the throttled sub-range.
-            # If THAT reports "safe" (None), the throttle ceiling itself (rho_a, rho_b) is the cap --
-            # NOT "no cap" (see docstring: this was the second review-caught bug). Otherwise the
-            # throttled solve's own s scales the ceiling down further.
-            s = _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, target)
-            t_a = rho_a if s is None else max(0.0, min(1.0, rho_a * s))
-            t_b = rho_b if s is None else max(0.0, min(1.0, rho_b * s))
-            # A halted cell's proposed==start (zero motion) regardless of any cap, so it never needs
-            # (and never receives, below) one -- but it still correctly acted as a fixed obstacle for
-            # the other, still-moving side via this same pair solve.
-            if not a_halted and t_a < ea.best_t: ea.best_t = t_a
-            if not b_halted and t_b < eb.best_t: eb.best_t = t_b
+            # (2) exact BODY-box swept-SAT -- first fraction s at which the two unit-square bodies touch
+            #     (reach 0 on BOTH sides -> _pair_toi_box_scale collapses to pure body-OBB touch). None ->
+            #     a glancing near-miss the circle over-approximated; no cap this pair.
+            s = _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, 1.0, 1.0,
+                                    ea.facing, 0.0, eb.facing, 0.0)
+            if s is None:
+                continue
+            # A cap IS needed: both cells stop at the SHARED body-touch fraction (symmetric, no throttle).
+            # A halted cell's proposed==start (zero motion), so it never needs (nor receives) a cap -- but
+            # it still acted as a fixed obstacle for the other, still-moving side via this same pair solve.
+            if not a_halted and s < ea.best_t: ea.best_t = s
+            if not b_halted and s < eb.best_t: eb.best_t = s
     for entries in (cells_a, cells_b):
         for e in entries:
             if not e.movable or e.cid in e.atom.halted_cells:

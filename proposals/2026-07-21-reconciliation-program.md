@@ -1,6 +1,6 @@
 # The Reconciliation Program — engine↔prose iteration as the design workflow
 
-## Status: RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0081.)
+## Status: RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)
 
 **Date:** 2026-07-21
 **Lane:** IN (cross-cutting observatory / vocabulary / dashboard)

@@ -140,7 +140,7 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # a 4.7-point gap below bec_de_corbin with zero overlap) still score 0.22-0.28 — correctly discounted, losing
 # to a weapon's own cut/thrust at low armour and only competitive vs rigid armour it cannot otherwise defeat.
 PERC_AUTH_REF=8.0; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
-def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
+def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0):
     t=1.0-RESIST[mat][mode]
     if mode=='puncture':                                           # SITUATIONAL GAP GAME: a thrust takes through-
         # material OR the reach-ladder gap it seeks. The gap term is GAP-SEEKING: the material's thrust-accessible gap
@@ -148,7 +148,13 @@ def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
         # the gap; a whippy point deflects). Replaces the old fixed COVERAGE_GAP floor — plate is no longer a flat 0.15
         # for every point; the poleaxe spike / rondel now beat the through-material 0.30, the rapier's whippy point does
         # not. Emergent in gap_prec (= w['gap']); no weapon name.
-        return max(t, GAP_EXPOSURE[mat]*gap_prec)
+        # PC-5 (ED-PC-0015): thrust_auth (point-to-hand lever authority) scales the GAP-PRESS term ONLY — pressing a
+        # point INTO a harness gap is exactly the pommel-backed short-lever act (Fiore/Talhoffer half-sword, the rondel
+        # to the visor); a long reach-thrust at extension cannot press the same way. The THROUGH-MATERIAL term `t` is
+        # NOT scaled: a thrust that lands on flesh/cloth (none/cloth: t=1.0/0.88) is lethal regardless of lever — reach
+        # weapons stay deadly vs soft targets, they only lose the GAP-penetration edge vs mail/plate. Inert at
+        # thrust_auth=1.0 (short-lever/half-sword/dagger) — byte-identical to before this parameter existed.
+        return max(t, GAP_EXPOSURE[mat]*gap_prec*thrust_auth)
     if mode=='percussion':                                          # FIX-1b, extended U2/ED-PC-0011: authority-scaled
         ref = PERC_AUTH_REF if mat in ('mail', 'plate') else PERC_AUTH_REF_SOFT   # rigid armour keeps the original, pre-existing reference; none/cloth uses the softer one (see comment above)
         t*=max(PERC_TRANSMIT_FLOOR, min(1.0, perc/ref))
@@ -177,7 +183,25 @@ def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF):
 # sourced puncture>>shear-vs-cloth asymmetry doing that — a real, already-grounded, pre-existing mechanism, not
 # a DELIVERY-ordering bug).
 CUT_AUTH_REF=0.70
-def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None):
+# THRUST_LEVER_REF / _FLOOR [PC-5 / ED-PC-0015, 2026-07-22]: thrust AUTHORITY — the capacity to drive a point home
+# behind body-weight and a pommel-press — is a PRIMITIVE derived from the point-to-controlling-hand lever (head_len,
+# METRES). A SHORT lever (a rondel dagger, head_len 0.21; a half-sworded longsword, head_len 0.42) can be pressed home
+# with the off-hand on the pommel and full body-mass stacked behind a rigid short column — the historical armour answer
+# (Fiore/Talhoffer half-sword, the rondel to the visor/armpit). A LONG lever (a spear/pike thrust at full extension,
+# head_len 1.6-1.9) delivers the SAME point but cannot be backed the same way: the reach is bought by surrendering the
+# short-column pommel-press, so per-contact penetrating authority falls. Emergent in head_len — NO weapon name. Anchored
+# (THRUST_LEVER_REF=0.55 m) so the dagger/half-sword class (head_len<=0.42) saturates at full authority (ratio>=1.0,
+# clamped) and the reach-thrust class is scaled down toward the floor; THRUST_LEVER_FLOOR=0.30 keeps even a pike's point
+# a real (never-zero) threat. Scoped to the THRUST family only (the 'point' head + the cut_thrust half-sword/gap-thrust
+# term); shear/percussion do not gap-press and are untouched. Distinct from ED-PC-0012's proposed THRUST_AUTH_REF (that
+# is a point-TOKEN-magnitude anchor; this is a head_len LEVER factor) — different axis, deliberately different name.
+THRUST_LEVER_REF=0.55; THRUST_LEVER_FLOOR=0.30
+def thrust_authority(head_len):
+    """Point-to-hand lever -> thrust authority factor in [THRUST_LEVER_FLOOR, 1.0]. Short lever (dagger/half-sword) =
+    1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
+    if head_len is None or head_len<=0: return 1.0
+    return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
+def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
@@ -188,16 +212,22 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     gap-seek). Defaults to a neutral point (GAP_PREC_REF); the live path threads the real w['gap'].
     `eff` [U2/ED-PC-0011] scales the 'cut' token's DELIVERY by its own derived edge-quality vs CUT_AUTH_REF — see
     that constant's comment for the full reasoning. None (the default, every pre-existing caller) means "no
-    scaling" (ratio 1.0, byte-identical to before this parameter existed); ignored for every head but 'cut'."""
+    scaling" (ratio 1.0, byte-identical to before this parameter existed); ignored for every head but 'cut'.
+    `thrust_auth` [PC-5/ED-PC-0015] scales the GAP-PRESS term of the puncture path (the 'point' head + the cut_thrust
+    half-sword thrust) by the point-to-hand lever authority (thrust_authority(head_len)). It scopes to the gap game vs
+    a harness ONLY — a thrust that lands on soft targets (through-material) is untouched, so reach weapons stay lethal
+    vs the unarmoured. 1.0 (the default) is byte-identical to before this parameter existed; inert for shear/percussion."""
     mat=TIER2MAT[armor]
     if head=='cut_thrust':
+        # VERSATILE: better of the edge (shear — a cut is not pommel-pressed, no lever term) or the half-sword/gap
+        # thrust (puncture, whose GAP-PRESS term carries thrust_auth — the short-lever pommel-press that defeats a harness).
         return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
-                   DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec))
+                   DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth))
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
-    return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec)
-def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_REF, perc=8, q=None, eff=None):
+    return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
+def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -213,7 +243,7 @@ def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_RE
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
-    return max(0, int(round(impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff) * qf * DMG_SCALE)))   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling
+    return max(0, int(round(impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth) * qf * DMG_SCALE)))   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority (short/half-sword pressed home, reach-thrust decayed)
 
 def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
@@ -237,5 +267,6 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     perc=getattr(attacker, 'sel_perc', None); perc = perc if perc is not None else WP.percussion_authority(attacker.w)
     eff=getattr(attacker, 'sel_eff', None)                        # SELECTED element's own derived cut/thrust magnitude (U2/ED-PC-0011); None for a native-fallback attacker, inert for every head but 'cut'
     grip=getattr(attacker, 'grip_position', 0.0); sel_pc=getattr(attacker, 'sel_pc', None)
+    tauth=thrust_authority(attacker.w.get('head_len'))            # PC-5: point-to-hand lever authority from the SELECTED weapon record (the half-sword swap already gives the short-lever form its own head_len); inert for shear/percussion heads
     return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc), head, attacker.strength,
-                  defender.armor, close, gap, perc, q=q, eff=eff)
+                  defender.armor, close, gap, perc, q=q, eff=eff, thrust_auth=tauth)
