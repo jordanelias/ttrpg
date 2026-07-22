@@ -493,7 +493,12 @@ def main():
     if lex_path.exists():
         lex_js = lex_path.read_text(encoding="utf-8")
 
-    # self-contained single-file bundle (data inlined) for zero-friction double-click
+    # self-contained single-file bundle (data inlined) for zero-friction double-click.
+    # Inlines all FIVE feeds so the unified dashboard (graph + lexicon + the three governance
+    # feeds: decisions, proposals, review-state) works offline from one file. The governance
+    # feeds are presence-guarded: decisions/proposals snapshots are committed, but the
+    # review-state feed is git-ignored (live CI state) so it inlines only when present — the
+    # viewer degrades gracefully when a feed is absent.
     index = OUT_DIR / "index.html"
     if index.exists():
         html = index.read_text(encoding="utf-8")
@@ -501,6 +506,17 @@ def main():
                             "<script>/*inlined*/" + data_js + "</script>")
         html = html.replace('<script src="lexicon_data.js"></script>',
                             "<script>/*inlined*/" + lex_js + "</script>")
+        # governance feeds — inline the on-disk bundle if present, else drop the <script src>
+        # (the viewer treats a missing window.VALORIA_* as an empty feed).
+        for src, var in (("decisions_data.js", "VALORIA_DECISIONS"),
+                         ("proposals_data.js", "VALORIA_PROPOSALS"),
+                         ("review_state_data.js", "VALORIA_REVIEW")):
+            tag = f'<script src="{src}"></script>'
+            p = OUT_DIR / src
+            if p.exists():
+                html = html.replace(tag, "<script>/*inlined*/" + p.read_text(encoding="utf-8") + "</script>")
+            else:
+                html = html.replace(tag, f"<!-- {src} absent at build time ({var} feed empty) -->")
         (OUT_DIR / "console.html").write_text(html, encoding="utf-8")
 
     s = payload["meta"]["stats"]

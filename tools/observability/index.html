@@ -32,9 +32,35 @@
   .search{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:7px;
     color:var(--ink);padding:7px 9px;font-size:12px}
   .tabs{display:flex;gap:4px;margin:8px 0}
+  .tabs2{margin-top:0}
   .tab{flex:1;text-align:center;padding:6px 4px;border:1px solid var(--line);border-radius:6px;
     background:var(--panel2);color:var(--muted);cursor:pointer;font-size:11px;user-select:none}
   .tab.on{background:var(--accent);color:#04122b;border-color:var(--accent);font-weight:650}
+  .tab.gov.on{background:#ffd27a;border-color:#ffd27a;color:#2a1e05}
+  .lanebar{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
+  .lanechip{font-size:10px;padding:2px 7px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--muted);cursor:pointer;user-select:none}
+  .lanechip.on{background:var(--accent);color:#04122b;border-color:var(--accent);font-weight:700}
+  .gov-grade{font-weight:700}
+  .v-pass{color:#3fb950}.v-fail{color:#ff6b6b}.v-regress{color:#ff8c42}
+  .prio1{color:#ff6b6b}.prio2{color:#ffd27a}.prio3{color:var(--muted)}
+  .njdot{width:7px;height:7px;border-radius:50%;background:#ffd27a;flex:none}
+  .loc{font-size:10px;color:var(--accent);cursor:pointer;display:block;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .loc:hover{text-decoration:underline}
+  .matrix{border-collapse:collapse;font-size:11px}
+  .matrix td,.matrix th{border:1px solid var(--line);padding:4px 8px;text-align:center}
+  .matrix th{color:var(--muted);font-weight:600}
+  .matrix td.lane{color:var(--ink);font-weight:700;text-align:left;cursor:pointer}
+  .matrix td.lane:hover{color:var(--accent)}
+  .cell-none{color:#2b3340}
+  .hbar{height:9px;border-radius:4px;display:inline-block;vertical-align:middle}
+  .healthpanel{position:absolute;inset:0;overflow:auto;padding:56px 18px 18px;z-index:6;background:radial-gradient(circle at 50% 40%,#121826,#0e1116)}
+  .healthpanel h2{font-size:15px;margin:0 0 4px} .healthpanel h3{font-size:12px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.5px;margin:18px 0 8px}
+  .grade-banner{display:inline-flex;align-items:center;gap:12px;padding:8px 14px;border-radius:10px;
+    border:1px solid var(--line);background:var(--panel);margin-bottom:6px}
+  .grade-banner .g{font-size:22px;font-weight:800}
   .filters{display:flex;gap:6px;margin-bottom:6px}
   .filters select{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:6px;
     color:var(--ink);padding:5px;font-size:11px}
@@ -47,7 +73,7 @@
   .row .nm{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .row .meta{margin-left:auto;color:var(--muted);font-size:10px;flex:none}
   main{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#121826,#0e1116)}
-  .toolbar{position:absolute;top:10px;left:10px;z-index:5;display:flex;gap:8px;align-items:center;
+  .toolbar{position:absolute;top:10px;left:10px;z-index:8;display:flex;gap:8px;align-items:center;
     background:rgba(22,27,34,.85);border:1px solid var(--line);border-radius:8px;padding:6px 10px;
     backdrop-filter:blur(4px)}
   .toolbar .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -112,6 +138,12 @@
         <div class="tab" data-tab="scalar">Scalars</div>
         <div class="tab" data-tab="lexicon">Lexicon</div>
       </div>
+      <div class="tabs tabs2">
+        <div class="tab gov" data-tab="review">Health</div>
+        <div class="tab gov" data-tab="proposal">Proposals</div>
+        <div class="tab gov" data-tab="decision">Decisions</div>
+      </div>
+      <div class="lanebar" id="lanebar"></div>
       <div class="filters">
         <select id="f-scale"><option value="">all scales</option></select>
         <select id="f-extra"><option value="">all</option></select>
@@ -126,11 +158,13 @@
         <button data-mode="ripple" class="on">Ripple</button>
         <button data-mode="atlas">Atlas</button>
         <button data-mode="handshakes">Handshakes</button>
+        <button data-mode="health">Health</button>
       </div>
       <label>depth <input type="range" id="depth" min="1" max="5" value="3" style="vertical-align:middle"> <b id="depthv">3</b></label>
       <button id="reset" class="seg" style="padding:5px 10px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:6px;cursor:pointer">recenter</button>
     </div>
     <svg id="canvas"></svg>
+    <div class="healthpanel scrollthin" id="healthpanel" style="display:none"></div>
     <div class="hint" id="hint">Select a Key, system, or scalar on the left to trace its ripple.</div>
     <div class="legend" id="legend"></div>
     <div class="trace" id="trace" style="display:none"></div>
@@ -145,6 +179,9 @@
 
 <script src="graph_data.js"></script>
 <script src="lexicon_data.js"></script>
+<script src="decisions_data.js"></script>
+<script src="proposals_data.js"></script>
+<script src="review_state_data.js"></script>
 <script>
 "use strict";
 const G = window.VALORIA_GRAPH;
@@ -175,6 +212,30 @@ function resolveName(q){const hit=(LEX.name_index||{})[q.trim().toLowerCase()];r
 function nodeColor(id){const k=kindOf(id);if(k==='system')return sysById[id].id==='engine'?'var(--engine)':'var(--system)';if(k==='key')return 'var(--key)';if(k==='scalar')return 'var(--scalar)';return 'var(--scale)';}
 function label(id){const k=kindOf(id);if(k==='scalar')return scById[id].name;return id;}
 
+// ---- governance feeds (the three cross-linked layers over the graph) ----
+const REV = window.VALORIA_REVIEW || null;                       // CI health signals (may be absent)
+const PROP = window.VALORIA_PROPOSALS || {items:[],by_lane:{},counts:{}};
+const DEC = window.VALORIA_DECISIONS || {decisions:[],meta:{}};
+const LANES=['MB','PC','FI','SC','FA','WR','IN','GO','SE','unassigned'];
+// index governance items by lane for the cross-cut lens
+const propByLane={},decByLane={},sigByLane={};
+LANES.forEach(l=>{propByLane[l]=[];decByLane[l]=[];sigByLane[l]=[];});
+(PROP.items||[]).forEach(p=>{const l=LANES.includes(p.lane)?p.lane:'unassigned';propByLane[l].push(p);});
+(DEC.decisions||[]).forEach(d=>{const l=LANES.includes(d.lane)?d.lane:'unassigned';decByLane[l].push(d);});
+(REV&&REV.signals||[]).forEach(s=>{const l=LANES.includes(s.lane)?s.lane:'unassigned';(sigByLane[l]=sigByLane[l]||[]).push(s);});
+// a governance item's file(s) — for file↔node cross-linking
+function propFile(p){return p.source||p.id||'';}
+function decFiles(d){return (d.locations||[]).map(l=>String(l).split(':')[0]);}
+// which decisions/proposals touch a given graph node (by declared systems[], or by shared doc file)
+function govForNode(id){
+  const sys=sysById[id]; const doc=sys&&sys.doc;
+  const decs=(DEC.decisions||[]).filter(d=>(d.systems||[]).includes(id)||(doc&&decFiles(d).includes(doc)));
+  const props=(PROP.items||[]).filter(p=>doc&&propFile(p)===doc);
+  return {decs,props};
+}
+function verdictClass(s){return s.regressed?'v-regress':(s.verdict==='pass'?'v-pass':'v-fail');}
+function verdictWord(s){return s.regressed?'REGRESSED':(s.verdict==='pass'?'pass':'FAIL');}
+
 // scalar links: gate (scalar -> keys it fires) and derivation provenance
 function scalarGates(sc){const o=sysById[sc.owner];if(!o)return[];return (o.gates||[]).filter(g=>g['on']===sc.name);}
 
@@ -196,8 +257,9 @@ function inOf(id){
 }
 
 // ---- state ----
-let TAB='system', SELECTED=null, SELTERM=null, MODE='ripple', DEPTH=3, FILTER_SCALE='', FILTER_EXTRA='';
+let TAB='system', SELECTED=null, SELTERM=null, SELGOV=null, MODE='ripple', DEPTH=3, FILTER_SCALE='', FILTER_EXTRA='', LANE='';
 let view={x:0,y:0,k:1};
+const GOV_TABS=new Set(['review','proposal','decision']);
 
 // ---- header chips ----
 (function(){
@@ -216,6 +278,18 @@ let view={x:0,y:0,k:1};
   if(ls){add(`<b>${ls.terms}</b> terms`);add(`<b>${ls.abbreviations}</b> abbr`);
     if(ls.collisions)add(`<b style="color:#ff8c42">${ls.collisions}</b> collisions`);
     add(`<b>${ls.handshakes}</b> handshakes`);}
+  // governance rollup — the health grade + open-work counts, the fourth face of the console
+  c.append(el('span',{class:'chip muted',html:'│'}));
+  if(REV&&REV.rollup){
+    const g=REV.rollup, col={GREEN:'#3fb950',AMBER:'#ffd27a',RED:'#ff6b6b'}[g.grade]||'#8b97a7';
+    const chip=el('span',{class:'chip',html:`repo-state <b class="gov-grade" style="color:${col}">${g.grade}</b>`
+      +` · ${g.blocking_failures} block · ${g.regressions_vs_baseline} regress`});
+    chip.style.cursor='pointer';chip.title='CI health — click for the Health matrix';
+    chip.onclick=()=>{setMode('health');switchTab('review');};
+    c.append(chip);
+  } else { add('repo-state <b class="muted">n/a</b>'); }
+  if(PROP.counts&&PROP.counts.total!=null)add(`<b>${PROP.counts.total}</b> proposals · <b style="color:#ffd27a">${PROP.counts.needs_jordan||0}</b> need Jordan`);
+  if(DEC.meta&&DEC.meta.total_open!=null)add(`<b>${DEC.meta.total_open}</b> open decisions`);
 })();
 
 // ---- filters ----
@@ -229,48 +303,75 @@ function refreshExtraFilter(){
   if(TAB==='system'){opts=[...new Set(G.systems.map(s=>s.resolver).filter(Boolean))].sort();sel.append(el('option',{value:''},'all resolvers'));}
   else if(TAB==='key'){opts=G.families.slice();sel.append(el('option',{value:''},'all families'));}
   else if(TAB==='scalar'){opts=[...new Set(G.scalars.map(s=>s.bucket).filter(Boolean))].sort();sel.append(el('option',{value:''},'all buckets'));}
-  else{opts=[...new Set(LEX.terms.map(t=>t.type).filter(Boolean))].sort();sel.append(el('option',{value:''},'all types'));}
+  else if(TAB==='lexicon'){opts=[...new Set(LEX.terms.map(t=>t.type).filter(Boolean))].sort();sel.append(el('option',{value:''},'all types'));}
+  else if(TAB==='review'){opts=['blocking','report_only'];sel.append(el('option',{value:''},'all tiers'));}
+  else if(TAB==='proposal'){opts=[...new Set((PROP.items||[]).map(p=>p.kind).filter(Boolean))].sort();sel.append(el('option',{value:''},'all kinds'));}
+  else if(TAB==='decision'){opts=Object.keys((DEC.meta&&DEC.meta.by_category)||{}).sort();sel.append(el('option',{value:''},'all categories'));}
   opts.forEach(o=>sel.append(el('option',{value:o},o)));
   FILTER_EXTRA='';
 }
 
 // ---- node list ----
+function laneOK(l){return !LANE || (LANES.includes(l)?l:'unassigned')===LANE;}
 function listItems(){
   const q=$('#search').value.trim().toLowerCase();
   let items=[];
   if(TAB==='system')items=G.systems.map(s=>({id:s.id,meta:s.resolver||s.status,scales:s.scales,extra:s.resolver}));
   else if(TAB==='key')items=G.keys.map(k=>({id:k.id,meta:k.family,scales:k.scale_signature,extra:k.family}));
   else if(TAB==='scalar')items=G.scalars.map(s=>({id:s.id,name:s.name,meta:s.bucket,scales:[sysById[s.owner]?.scales||[]].flat(),extra:s.bucket}));
-  else items=LEX.terms.map(t=>({term:t,id:'lex:'+t.canonical,name:t.canonical,isTerm:true,
+  else if(TAB==='lexicon')items=LEX.terms.map(t=>({term:t,id:'lex:'+t.canonical,name:t.canonical,isTerm:true,
         meta:(t.status!=='canonical'?t.status:(t.abbreviations[0]||t.type||'')),extra:t.type||'',
         search:[t.canonical,...t.aliases,...t.abbreviations,...t.legacy].join(' ').toLowerCase()}));
+  else if(TAB==='review')items=((REV&&REV.signals)||[]).map((s,i)=>({gov:{type:'signal',data:s},id:'sig:'+s.id,name:s.id,isGov:true,
+        lane:s.lane,dotc:verdictClass(s),meta:verdictWord(s),extra:s.tier,search:(s.id+' '+s.source+' '+s.lane).toLowerCase()}));
+  else if(TAB==='proposal')items=(PROP.items||[]).map((p,i)=>({gov:{type:'proposal',data:p},id:'prop:'+i,name:p.title||p.id,isGov:true,
+        lane:p.lane,nj:p.needs_jordan,dotc:p.needs_jordan?'v-regress':'v-pass',meta:p.lane,extra:p.kind,
+        search:((p.title||'')+' '+(p.id||'')+' '+(p.status||'')+' '+p.lane).toLowerCase()}));
+  else if(TAB==='decision')items=(DEC.decisions||[]).map((d,i)=>({gov:{type:'decision',data:d},id:'dec:'+i,name:(d.label||d.category)+' — '+(d.text||'').slice(0,60),isGov:true,
+        lane:d.lane,prio:d.priority,dotc:'prio'+(d.priority||3),meta:'P'+(d.priority||3)+(d.count>1?' ×'+d.count:''),extra:d.category,
+        search:((d.text||'')+' '+(d.label||'')+' '+d.category+' '+(d.systems||[]).join(' ')+' '+d.lane).toLowerCase()}));
   return items.filter(it=>{
-    if(q){const hay=it.isTerm?it.search:(it.name||it.id).toLowerCase();if(!hay.includes(q))return false;}
-    if(!it.isTerm && FILTER_SCALE && !(it.scales||[]).includes(FILTER_SCALE))return false;
+    if(q){const hay=(it.isTerm||it.isGov)?it.search:(it.name||it.id).toLowerCase();if(!hay.includes(q))return false;}
+    if(it.isGov && !laneOK(it.lane))return false;
+    if(!it.isTerm && !it.isGov && FILTER_SCALE && !(it.scales||[]).includes(FILTER_SCALE))return false;
     if(FILTER_EXTRA && it.extra!==FILTER_EXTRA)return false;
     return true;
   });
 }
 function renderList(){
   const box=$('#nodelist');box.innerHTML='';
-  const items=listItems();
-  items.sort((a,b)=>(a.name||a.id).localeCompare(b.name||b.id));
+  let items=listItems();
+  if(TAB==='decision')items.sort((a,b)=>(a.prio-b.prio)||(a.name).localeCompare(b.name)); // priority-first
+  else if(TAB==='review')items.sort((a,b)=>(b.gov.data.regressed-a.gov.data.regressed)||a.name.localeCompare(b.name));
+  else if(TAB==='proposal')items.sort((a,b)=>(b.nj-a.nj)||a.name.localeCompare(b.name)); // needs-Jordan first
+  else items.sort((a,b)=>(a.name||a.id).localeCompare(b.name||b.id));
   items.forEach(it=>{
-    const isSel=it.isTerm?(SELTERM&&SELTERM.canonical===it.term.canonical):(it.id===SELECTED);
+    const isSel=it.isTerm?(SELTERM&&SELTERM.canonical===it.term.canonical):
+                it.isGov?(SELGOV&&SELGOV.id===it.id):(it.id===SELECTED);
     const row=el('div',{class:'row'+(isSel?' sel':'')});
     row.append(el('span',{class:'dot'}));
-    row.lastChild.style.background=it.isTerm?(STATUS_COL[it.term.status]||'#7d8aa0'):nodeColor(it.id);
+    row.lastChild.style.background=it.isTerm?(STATUS_COL[it.term.status]||'#7d8aa0'):
+      it.isGov?govDotColor(it.dotc):nodeColor(it.id);
     row.append(el('span',{class:'nm'},it.name||it.id));
-    row.append(el('span',{class:'meta'},it.meta||''));
-    row.onclick=it.isTerm?(()=>selectTerm(it.term)):(()=>select(it.id));
+    if(it.nj)row.append(el('span',{class:'njdot',title:'needs Jordan'}));
+    row.append(el('span',{class:'meta'+(it.isGov?' '+it.dotc:'')},it.meta||''));
+    row.onclick=it.isTerm?(()=>selectTerm(it.term)):it.isGov?(()=>selectGov(it)):(()=>select(it.id));
     box.append(row);
   });
   if(!items.length)box.append(el('div',{class:'pad muted small'},'no matches'));
 }
+function govDotColor(cls){return {'v-pass':'#3fb950','v-fail':'#ff6b6b','v-regress':'#ff8c42',
+  'prio1':'#ff6b6b','prio2':'#ffd27a','prio3':'#7d8aa0'}[cls]||'#7d8aa0';}
 
 // ---- selection ----
-function select(id){SELECTED=id;SELTERM=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
-function selectTerm(t){SELTERM=t;SELECTED=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
+function select(id){SELECTED=id;SELTERM=null;SELGOV=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
+function selectTerm(t){SELTERM=t;SELECTED=null;SELGOV=null;view={x:0,y:0,k:1};$('#hint').style.display='none';renderList();renderDetail();render();}
+function selectGov(it){SELGOV=it;SELECTED=null;SELTERM=null;$('#hint').style.display='none';renderList();renderDetail();
+  // a governance item selects nothing on the canvas by itself; keep whatever mode is showing,
+  // but if a decision declares systems[], jump the graph to the first one for context.
+  const d=it.gov;
+  if(d.type==='decision'&&(d.data.systems||[]).some(s=>kindOf(s))){/* detail panel offers the jump */}
+  render();}
 
 // ---- ripple BFS ----
 function ripple(root,dir,maxD){
@@ -295,6 +396,10 @@ function ripple(root,dir,maxD){
 const canvas=$('#canvas');
 function render(){
   canvas.innerHTML='';$('#trace').style.display='none';
+  const hp=$('#healthpanel');
+  $('#legend').style.display=MODE==='health'?'none':'flex';
+  if(MODE!=='health'){hp.style.display='none';canvas.style.display='block';}
+  if(MODE==='health'){$('#hint').style.display='none';renderHealth();return;}
   if(MODE==='handshakes'){renderHandshakes();return;}
   if(SELTERM){renderTermCard();return;}
   if(!SELECTED)return;
@@ -328,7 +433,7 @@ function drawNode(g,id,x,y,opts={}){
   t.textContent=lab;nd.append(t);
   nd.style.cursor='pointer';
   nd.onclick=()=>select(id);
-  nd.append(svgEl('title')).textContent=`${kindOf(id)} · ${id}`;
+  const ttl=svgEl('title');ttl.textContent=`${kindOf(id)} · ${id}`;nd.append(ttl);
   g.append(nd);
   return {w,h};
 }
@@ -478,15 +583,140 @@ function renderHandshakes(){
   (LEX.handshakes||[]).forEach(h=>box.append(el('div',{class:'lv',html:`<b>${h.id}</b> ${esc(h.name)} &nbsp;<span class="muted">${esc((h.gist||'').slice(0,130))}</span>`})));
 }
 
+// ---- Health mode: the single-screen governance overview (lane × everything) ----
+// This is the integrative capstone view — it ties the three governance feeds to the lane
+// cross-cut so CI health, unratified work, and decision debt read together per lane, each
+// cell a click-through into the filtered lists.
+function renderHealth(){
+  const hp=$('#healthpanel');canvas.style.display='none';hp.style.display='block';hp.innerHTML='';
+  // grade banner
+  if(REV&&REV.rollup){
+    const g=REV.rollup,col={GREEN:'#3fb950',AMBER:'#ffd27a',RED:'#ff6b6b'}[g.grade]||'#8b97a7';
+    const b=el('div',{class:'grade-banner'});
+    b.append(el('span',{class:'g',html:g.grade}));b.lastChild.style.color=col;
+    b.append(el('span',{class:'small',html:`${g.blocking_failures} blocking · ${g.regressions_vs_baseline} regressions · ${g.report_only_failures} report-only · ${g.signal_count} signals`
+      +(REV.head_sha?` · <span class="muted">@${String(REV.head_sha).slice(0,8)}</span>`:'')}));
+    hp.append(el('h2',{},'Repository health & open-work — by lane'));hp.append(b);
+  } else {
+    hp.append(el('h2',{},'Repository health & open-work — by lane'));
+    hp.append(el('div',{class:'note'},'review-state feed absent (git-ignored live state). Run '
+      +'`python3 tools/review_core.py --json` to populate CI health, then rebuild the bundle.'));
+  }
+  // lane × governance matrix
+  hp.append(el('h3',{},'Lane matrix — click any lane or cell to focus'));
+  const tbl=el('table',{class:'matrix'});
+  const hr=el('tr');['lane','CI signals','proposals','needs Jordan','open decisions','P1'].forEach(h=>hr.append(el('th',{},h)));
+  tbl.append(hr);
+  const activeLanes=LANES.filter(l=>(propByLane[l]||[]).length||(decByLane[l]||[]).length||(sigByLane[l]||[]).length);
+  activeLanes.forEach(l=>{
+    const tr=el('tr');
+    const laneTd=el('td',{class:'lane'},l);laneTd.onclick=()=>{setLane(LANE===l?'':l);};tr.append(laneTd);
+    const sigs=sigByLane[l]||[],bad=sigs.filter(x=>x.verdict!=='pass'||x.regressed).length;
+    const sc=el('td',{html:sigs.length?`${sigs.length}${bad?` <span class="v-fail">(${bad}✗)</span>`:' <span class="v-pass">✓</span>'}`:'<span class="cell-none">·</span>'});
+    sc.style.cursor='pointer';sc.onclick=()=>{setLane(l);switchTab('review');};tr.append(sc);
+    const props=propByLane[l]||[],nj=props.filter(p=>p.needs_jordan).length;
+    const pc=el('td',{html:props.length?String(props.length):'<span class="cell-none">·</span>'});
+    pc.style.cursor='pointer';pc.onclick=()=>{setLane(l);switchTab('proposal');};tr.append(pc);
+    tr.append(el('td',{class:nj?'v-regress':'',html:nj?String(nj):'<span class="cell-none">·</span>'}));
+    const decs=decByLane[l]||[],p1=decs.filter(d=>d.priority===1).length;
+    const dc=el('td',{html:decs.length?String(decs.length):'<span class="cell-none">·</span>'});
+    dc.style.cursor='pointer';dc.onclick=()=>{setLane(l);switchTab('decision');};tr.append(dc);
+    tr.append(el('td',{class:p1?'prio1':'',html:p1?String(p1):'<span class="cell-none">·</span>'}));
+    if(LANE===l)tr.style.background='#243044';
+    tbl.append(tr);
+  });
+  hp.append(tbl);
+  // CI signal roster (the actual gates)
+  if(REV&&REV.signals){
+    hp.append(el('h3',{},'CI signals'));
+    REV.signals.slice().sort((a,b)=>(b.regressed-a.regressed)||(a.verdict==='pass')-(b.verdict==='pass')).forEach(s=>{
+      const d=el('div',{class:'note',html:`<span class="${verdictClass(s)}">●</span> <b>${esc(s.id)}</b> `
+        +`<span class="muted">${s.tier} · lane ${s.lane}</span> — <span class="${verdictClass(s)}">${verdictWord(s)}</span>`
+        +` <span class="muted">(count ${s.count}${s.baseline!=null?`/${s.baseline}`:''})</span>`});
+      d.style.cursor='pointer';d.onclick=()=>{switchTab('review');selectGov({id:'sig:'+s.id,gov:{type:'signal',data:s}});};
+      hp.append(d);
+    });
+  }
+  // decision hotspots (the files carrying the most debt — a findability lever)
+  const hs=(DEC.meta&&DEC.meta.hotspots)||[];
+  if(hs.length){
+    hp.append(el('h3',{},'Decision-debt hotspots (files)'));
+    hs.slice(0,12).forEach(([file,n])=>{
+      const owner=G.systems.find(s=>s.doc===file);
+      const d=el('div',{class:'note',html:`<b>${n}</b> &nbsp;<code>${esc(file)}</code>`
+        +(owner?` <span class="muted">→ ${owner.id}</span>`:'')});
+      if(owner){d.style.cursor='pointer';d.onclick=()=>{setMode('ripple');select(owner.id);};}
+      hp.append(d);
+    });
+  }
+}
+
 // ---- detail panel ----
 function renderDetail(){
   const box=$('#detail');box.innerHTML='';
+  if(SELGOV){detailGov(SELGOV);return;}
   if(SELTERM){detailTerm(SELTERM);return;}
   if(!SELECTED){box.append(el('div',{class:'pad muted small'},'Nothing selected.'));return;}
   const k=kindOf(SELECTED);
   if(k==='system')detailSystem(sysById[SELECTED]);
   else if(k==='key')detailKey(keyById[SELECTED]);
   else detailScalar(scById[SELECTED]);
+}
+// clickable file location -> opens the file on GitHub if a repo base is known, else copies path
+function locRow(container,loc){
+  const r=el('div',{class:'loc',title:'copy path'},loc);
+  r.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(loc);r.textContent='✓ '+loc;setTimeout(()=>r.textContent=loc,900);};
+  container.append(r);
+}
+// governance detail: a CI signal, a proposal, or a decision — each cross-links back to the graph
+function detailGov(it){
+  const d=it.gov;
+  if(d.type==='signal')return detailSignal(d.data);
+  if(d.type==='proposal')return detailProposal(d.data);
+  return detailDecision(d.data);
+}
+function detailSignal(s){
+  head(s.id,'CI signal · '+s.tier,govDotColor(verdictClass(s)));
+  let m=sec('verdict');
+  m.append(el('div',{class:'small '+verdictClass(s),html:`<b>${verdictWord(s)}</b> · lane ${s.lane} · count ${s.count}${s.baseline!=null?` (baseline ${s.baseline})`:''}`}));
+  m.append(el('div',{class:'small muted',html:`source <code>${esc(s.source)}</code>${s.elapsed_ms!=null?` · ${s.elapsed_ms}ms`:''}`}));
+  if(s.tier==='report_only')m.append(el('div',{class:'note'},'report-only: fails the ratchet only when it exceeds its accepted baseline (a regression).'));
+  if((s.detail||[]).length){let dt=sec('detail');(s.detail||[]).forEach(x=>dt.append(el('div',{class:'note'},esc(String(x)))));}
+  govLaneLink(s.lane);
+}
+function detailProposal(p){
+  head(p.title||p.id,'proposal · '+(p.kind||'').replace(/_/g,' '),p.needs_jordan?'#ffd27a':'#3fb950');
+  let m=sec('status');
+  m.append(el('div',{class:'small'},esc(p.status||'—')));
+  m.append(el('div',{class:'small muted',html:`lane ${p.lane}${p.needs_jordan?' · <b style="color:#ffd27a">needs Jordan</b>':''}`}));
+  let f=sec('source');locRow(f,propFile(p));
+  // graph cross-link: if this proposal's source file is a system's home doc, offer the jump
+  const owner=G.systems.find(s=>s.doc&&s.doc===propFile(p));
+  if(owner){let g=sec('maps to graph');const pl=el('span',{class:'pill'});pl.append(el('span',{class:'dot'}));pl.lastChild.style.background=nodeColor(owner.id);pl.append(document.createTextNode(owner.id));pl.onclick=()=>select(owner.id);g.append(pl);}
+  if((p.links||[]).length){let l=sec('links');(p.links||[]).forEach(x=>l.append(el('div',{class:'note',html:'<code>'+esc(String(x))+'</code>'})));}
+  govLaneLink(p.lane);
+}
+function detailDecision(d){
+  head(d.label||d.category,'decision · '+d.category,govDotColor('prio'+(d.priority||3)));
+  let m=sec('marker');
+  m.append(el('div',{class:'small'},esc(d.text||'')));
+  m.append(el('div',{class:'small muted',html:`priority <b class="prio${d.priority||3}">P${d.priority||3}</b> · lane ${d.lane} · category ${d.category}${d.count>1?` · ${d.count} occurrences`:''}`}));
+  // graph cross-link via declared systems[]
+  const sysHits=[...new Set((d.systems||[]).filter(s=>kindOf(s)))];
+  if(sysHits.length){let g=sec('affects systems');pills(g,sysHits);}
+  if((d.locations||[]).length){let f=sec(`locations (${d.locations.length})`);(d.locations||[]).slice(0,40).forEach(l=>locRow(f,String(l)));if(d.locations.length>40)f.append(el('div',{class:'muted small'},`… +${d.locations.length-40} more`));}
+  govLaneLink(d.lane);
+}
+// every governance detail ends with a one-click lane lens, tying it into the cross-cut
+function govLaneLink(lane){
+  const l=LANES.includes(lane)?lane:'unassigned';
+  let s=sec('lane lens');
+  const b=el('span',{class:'pill'},`focus lane ${l} across all panels`);
+  b.onclick=()=>setLane(LANE===l?'':l);
+  s.append(b);
+  const pc=(propByLane[l]||[]).length, dc=(decByLane[l]||[]).length, sg=(sigByLane[l]||[]);
+  const bad=sg.filter(x=>x.verdict!=='pass'||x.regressed).length;
+  s.append(el('div',{class:'small muted',html:`lane ${l}: ${pc} proposals · ${dc} open decisions · ${sg.length} CI signals${bad?` (<span class="v-fail">${bad} not-green</span>)`:''}`}));
 }
 function detailTerm(t){
   head(t.canonical,'term · '+(t.type||t.status),STATUS_COL[t.status]||'#7d8aa0');
@@ -525,6 +755,20 @@ function detailSystem(s){
   if((s.gates||[]).length){let gt=sec(`gates (${s.gates.length})`);s.gates.forEach(g=>{gt.append(el('div',{class:'note',html:`<b>${g.id}</b>: when ${esc(g.when)} → ${esc(g.then)}${(g.emits_keys||[]).length?` <span class="muted">[${g.emits_keys.join(', ')}]</span>`:''}`}));});}
   if((s.transitions||[]).length){let tr=sec('cross-scale transitions');s.transitions.forEach(t=>tr.append(el('div',{class:'note'},esc(t))));}
   if((s.gap_notes||[]).length){let gp=sec('open notes / gaps');s.gap_notes.forEach(t=>gp.append(el('div',{class:'note'},esc(t))));}
+  govSection(s.id);
+}
+// reverse cross-link: the governance debt attached to a graph node — decisions that name it
+// (systems[]) or share its home doc, and proposals filed against that doc. Ties the graph back
+// to the health/proposals/decisions feeds so a node inspection surfaces its open work.
+function govSection(nodeId){
+  const {decs,props}=govForNode(nodeId);
+  if(!decs.length&&!props.length)return;
+  let g=sec(`governance — open work (${decs.length+props.length})`);
+  props.forEach(p=>{const d=el('div',{class:'note',html:`<span class="njdot" style="display:inline-block"></span> <b>proposal</b> ${esc(p.title||p.id)} <span class="muted">${p.lane}${p.needs_jordan?' · needs Jordan':''}</span>`});
+    d.style.cursor='pointer';d.onclick=()=>{const i=(PROP.items||[]).indexOf(p);switchTab('proposal');selectGov({id:'prop:'+i,gov:{type:'proposal',data:p}});};g.append(d);});
+  decs.slice(0,10).forEach(dc=>{const d=el('div',{class:'note',html:`<span class="prio${dc.priority||3}">●</span> <b>${esc(dc.label||dc.category)}</b> <span class="muted">P${dc.priority||3} · ${dc.category} · ${dc.lane}</span>`});
+    d.style.cursor='pointer';d.onclick=()=>{const i=(DEC.decisions||[]).indexOf(dc);switchTab('decision');selectGov({id:'dec:'+i,gov:{type:'decision',data:dc}});};g.append(d);});
+  if(decs.length>10)g.append(el('div',{class:'muted small'},`… +${decs.length-10} more decisions`));
 }
 function detailKey(k){
   head(k.id,'key · '+k.family,nodeColor(k.id));
@@ -533,6 +777,7 @@ function detailKey(k){
   m.append(el('div',{class:'small muted',html:`scale <code>${(k.scale_signature||[]).join(', ')||'—'}</code> · permanence <code>${k.permanence||'—'}</code> · class ${k.cls||'A'}${k.registered?'':' · <b style="color:#ffd27a">UNREGISTERED</b>'}${k.broadcast?' · <b style="color:#ffd27a">broadcast (all observers)</b>':''}`}));
   let e=sec(`emitted by (${k.emitters.length})`);pills(e,k.emitters);
   let c=sec(`consumed by (${k.consumers.length}${k.broadcast?' + all':''})`);pills(c,k.consumers);
+  govSection(k.id);
 }
 function detailScalar(s){
   head(s.name,'scalar · '+(s.bucket||'?'),nodeColor(s.id));
@@ -544,6 +789,7 @@ function detailScalar(s){
   if((s.derived_by||[]).length){let d=sec('derivation');s.derived_by.forEach(f=>d.append(el('div',{class:'note',html:'<code>'+esc(f)+'</code>'})));}
   const gs=scalarGates(s);
   if(gs.length){let g=sec(`gates that fire on this scalar (${gs.length})`);gs.forEach(x=>g.append(el('div',{class:'note',html:`<b>${x.id}</b>: ${esc(x.when)} → ${esc(x.then)}${(x.emits_keys||[]).length?` <span class="muted">fires [${x.emits_keys.join(', ')}]</span>`:''}`})));}
+  govSection(s.id);
 }
 function esc(s){return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 
@@ -556,12 +802,39 @@ function esc(s){return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;',
   [['var(--emits)','emits →'],['var(--consumes)','consumed by →'],['var(--gates)','gate fires'],['var(--owns)','owns']].forEach(([c,t])=>L.append(sw(c,t)));
 })();
 
+// ---- lane cross-cut ----
+function renderLaneBar(){
+  const bar=$('#lanebar');bar.innerHTML='';
+  if(!GOV_TABS.has(TAB)){bar.style.display='none';return;}
+  bar.style.display='flex';
+  const all=el('span',{class:'lanechip'+(LANE===''?' on':'')},'all lanes');all.onclick=()=>setLane('');bar.append(all);
+  LANES.forEach(l=>{
+    const n=(propByLane[l]||[]).length+(decByLane[l]||[]).length+((sigByLane[l]||[]).length);
+    if(!n)return;
+    const c=el('span',{class:'lanechip'+(LANE===l?' on':'')},l);
+    c.onclick=()=>setLane(LANE===l?'':l);bar.append(c);
+  });
+}
+function setLane(l){LANE=l;renderLaneBar();renderList();if(MODE==='health')render();}
+function switchTab(name){
+  TAB=name;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.tab===name));
+  renderLaneBar();refreshExtraFilter();
+  const gov=GOV_TABS.has(name);
+  $('#f-scale').style.display=gov?'none':'';
+  renderList();
+}
+function setMode(name){
+  MODE=name;document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x.dataset.mode===name));
+  view={x:0,y:0,k:1};render();
+}
+
 // ---- interactions ----
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');TAB=t.dataset.tab;refreshExtraFilter();renderList();});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchTab(t.dataset.tab));
 $('#search').oninput=renderList;
 $('#f-scale').onchange=e=>{FILTER_SCALE=e.target.value;renderList();};
 $('#f-extra').onchange=e=>{FILTER_EXTRA=e.target.value;renderList();};
-document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mode button').forEach(x=>x.classList.remove('on'));b.classList.add('on');MODE=b.dataset.mode;view={x:0,y:0,k:1};render();});
+document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 $('#depth').oninput=e=>{DEPTH=+e.target.value;$('#depthv').textContent=DEPTH;render();};
 $('#reset').onclick=()=>{view={x:0,y:0,k:1};render();};
 // pan/zoom
@@ -573,10 +846,10 @@ canvas.addEventListener('wheel',e=>{e.preventDefault();const f=e.deltaY<0?1.12:0
 window.addEventListener('resize',render);
 
 // ---- boot ----
-refreshExtraFilter();renderList();
+renderLaneBar();refreshExtraFilter();renderList();
 // auto-select a high-traffic key to show the tool working immediately
 const seed = keyById['scene.dialogue']?'scene.dialogue':(G.keys[0]&&G.keys[0].id);
-if(seed){TAB='key';document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.tab==='key'));refreshExtraFilter();renderList();select(seed);}
+if(seed){switchTab('key');select(seed);}
 </script>
 </body>
 </html>

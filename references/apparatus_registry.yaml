@@ -868,7 +868,9 @@ entries:
   has_cli: true
   uses_cli_args: true
   invoked_by:
+  - ci:audit-refresh.yml
   - ci:dashboard.yml
+  - ci:valoria-ci.yml
   - tool:imported
   imported_internally: true
   orphaned: false
@@ -1626,6 +1628,7 @@ entries:
   - tools/observability/build_decisions.py
   - tools/observability/build_graph.py
   - tools/observability/build_proposals.py
+  - tools/review_core.py
   emits:
   - commit/PR
   writes: []
@@ -1669,6 +1672,7 @@ entries:
   - tools/freshness_gate.py
   - tools/mechanics_index_gen.py
   - tools/patch_propagation_checker.py
+  - tools/review_core.py
   - tools/validate_ed_citations.py
   - tools/wiring_map_check.py
   emits:
