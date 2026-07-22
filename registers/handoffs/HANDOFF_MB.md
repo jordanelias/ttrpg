@@ -15,6 +15,26 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0014 (2026-07-22): spatial-model v2 Stage E — weapon-class reach + the `pike` troop type.**
+  Per `spatial_model_v2_plan.md` §3 Stage E / Jordan P-DEC-1. `reach_for`/`TROOP_TYPE_REACH` now return
+  the per-type front-face reach (non-pole 0.1 / pole 0.2 / **pike 0.3** / lance 0.2 / ranged 0.1 sidearm),
+  replacing the flat `REACH_SHORT=0.5` placeholder Stages B/C carried; feeds `cell_boxes_for →
+  obb_front_reach_overlap` + the TOI halt. Authored the **`pike`** troop type end-to-end (stats mirror
+  heavy_infantry — reach 0.3 the sole differentiator, provisional-by-analogy since §B.2 has no pike row;
+  pike weapon + ('pike','medium') loadout + ShieldWall/Hold/Anvil roles). **Reach advantage emerges** via
+  the already-wired charge-recoil reach gate: braced pike/spear (reach ≥ lance 0.2) repel a cavalry charge
+  (defender ~96.7% hp, cavalry recoils ~88.3%), levy (0.1) is run down (~90.7%) — the anti-cavalry pike
+  role, emergent from the reach data. **Disclosed finding:** reach differentiation does NOT change
+  symmetric standing melee (mutual exchange once contact fires; reach only shifts timing) — reach is a
+  charge/brace lever, not a standing-melee one. A directional-reach exchange term (pike-pins-forever
+  hazard under halt-on-contact) is flagged for Jordan, NOT introduced. Gates green:
+  `test_reach_weapon_class.py` (10); **I4 byte-exact grid oracle green** (no kite in the battery). Two
+  items flagged for Stage F: (1) the 0.1/0.2/0.3 scale vs PP-290's 0.5/1.5 meter-grounding needs
+  reconciliation (deferred, not overwritten); (2) **P-DEC-3 cavalry density cap (< infantry) deferred** as
+  a separate follow-up (kept out of Stage E to keep the reach A/B clean). Next: **Stage F** (full
+  verification + field-golden re-record + historical revalidation), then **Stage G** (retire the integer
+  `systems/mass_battle/sim` engine, route `resolve_mass_battle` onto the field engine — P-DEC-2 resolved).
+
 - **ED-MB-0013 (2026-07-22): spatial-model v2 Stage D — the LAST live integer on the field contact
   path removed.** Per `audit/2026-07-22-mass-battle-stress-test/spatial_model_v2_plan.md` §3 Stage D.
   The melee Lanchester frontage term `len(set(int_col))` (the only integer left on the live position/

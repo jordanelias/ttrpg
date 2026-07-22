@@ -2,6 +2,33 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-22 — ED-MB-0014: spatial-model v2 Stage E — weapon-class reach + pike troop type
+- Stage E of `spatial_model_v2_plan.md` (Jordan P-DEC-1). The flat `REACH_SHORT=0.5` placeholder →
+  per-troop-type **front-face reach** (`reach_for`/`TROOP_TYPE_REACH`): non-pole melee 0.1, pole/spear
+  0.2, **pike 0.3**, cavalry/knights lance 0.2, ranged 0.1 melee sidearm (projectile band stays
+  `VOLLEY_MAX_RANGE`). Feeds `cell_boxes_for → obb_front_reach_overlap` (contact) + `resolve_toi_and_commit`
+  (TOI halt).
+- **Authored the `pike` troop type** end-to-end: `TROOP_TYPE_STATS['pike']` mirrors heavy_infantry (reach
+  0.3 the sole differentiator; provisional-by-analogy — §B.2 has no pike row), a `pike` weapon
+  (pole/pierce/heavy, anti_cavalry) in `equipment.weapons`, `('pike','medium')` loadout, ShieldWall/Hold/
+  Anvil roles.
+- **Reach advantage — MEASURED (the gate):** emerges via the already-wired charge-recoil reach gate
+  (`PC_RECOIL_CHARGER_GATE`). Braced pike (0.3) / spear-heavy (0.2) repel a cavalry lance (0.2) — defender
+  keeps ~96.7% hp, cavalry recoils to ~88.3% — while braced levy (0.1 < 0.2) is run down (~90.7%). The
+  anti-cavalry pike role, emergent from the reach data (before Stage E all reaches were 0.5, so the gate
+  fired for everyone).
+- **Disclosed finding:** reach differentiation does NOT change symmetric standing melee (pike-vs-levy
+  standing == levy-vs-levy) — the exchange is mutual once contact fires; reach only shifts contact timing.
+  Reach is a charge/brace lever here, not a standing-melee one. A directional-reach exchange term is a
+  possible future increment (pike-pins-forever hazard under halt-on-contact) — flagged for Jordan, not
+  introduced.
+- **Tests:** `tests/valoria/test_reach_weapon_class.py` (10) — reach map, pike authored, reach-advantage
+  emergence, standing-melee independence, I7 facing gate, ranged independence, I1×3 seeds + I2 with pike.
+- **I4:** `reach_for` reaches the grid path only via the `'kite'` block; the byte-exact battery fields no
+  kite units → grid oracle byte-exact green. **[DG-6, not tuned]** standing-melee A/B (Stage D→E)
+  negligible (only rotated Arrowhead shifts). PP-290 meter-scale reconciliation flagged for Stage F. No
+  balance constant tuned. Full detail: ED-MB-0014.
+
 ## 2026-07-22 — ED-MB-0013: spatial-model v2 Stage D — continuous frontage (last live integer removed)
 - Stage D of `spatial_model_v2_plan.md`. The melee Lanchester frontage term `len(set(int_col))` (the
   only integer left on the live position/contact path, per `backwards_analysis.md`) → a **continuous

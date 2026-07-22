@@ -8,7 +8,7 @@ from mass_battle.config import *
 from mass_battle.equipment import loadout_for
 
 __all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
-           'REACH_SHORT', 'REACH_LONG', 'TROOP_TYPE_REACH', 'reach_for',
+           'REACH_SHORT', 'REACH_LONG', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
            'unit_type_for']
 
 
@@ -44,6 +44,13 @@ TROOP_TYPE_STATS = {
     "sling":            {"power": 2, "discipline": 2, "morale": 3},
     "artillery":        {"power": 2, "discipline": 2, "morale": 3},
     "knights_templar":  {"power": 5, "discipline": 6, "morale": 6},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
+    # [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22 "add a pike troop type carrying reach 0.3"]
+    # A pike block is disciplined heavy formation infantry whose edge is the pike's REACH (0.3, the
+    # longest melee in TROOP_TYPE_REACH below), not raw per-soldier power. Stats mirror heavy_infantry
+    # EXACTLY so reach is the sole, isolated differentiator (no fabricated stat line): §B.2 carries no
+    # pike row, so mirroring the closest canonical type is the non-inventing choice, pending an explicit
+    # §B.2 pike grounding. [provisional-by-analogy: heavy_infantry base + P-DEC-1 reach 0.3]
+    "pike":             {"power": 4, "discipline": 4, "morale": 5},
 }
 
 
@@ -65,21 +72,44 @@ def stats_for(troop_type):
 REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
 REACH_LONG = 1.5   # [canonical: params/core.md §Reach Terminology (PP-290) — "Long Reach... <=3 metres", 3x ratio]
 
-# No TROOP_TYPE_STATS key today is textually a polearm/spear unit (PP-290's literal Long-Reach
-# examples). cavalry/knights_templar plausibly carry lances, but PP-290's cited text does not
-# actually say "lances" -- that would be an inference beyond the citation, not licensed by it. Left
-# empty (every type falls through to Short) rather than fabricating an assignment; extend this table
-# when a troop type explicitly wielding a polearm/spear is added, or Jordan rules on cavalry/lances.
-TROOP_TYPE_REACH = {}
+# [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22] Per-troop-type FRONT-FACE weapon reach, in
+# lattice units (COL_WIDTH=1.0 pitch), feeding the OBB front-reach envelope (hierarchy/units.cell_boxes_for
+# -> geometry.obb_front_reach_overlap). Jordan-ruled weapon-class map: non-pole melee 0.1, pole/spear
+# 0.2, PIKE 0.3, cavalry/knights lance 0.2, ranged = projectile band (VOLLEY_MAX_RANGE, handled
+# separately) + a 0.1 melee sidearm. This SUPERSEDES the flat REACH_SHORT=0.5 placeholder that Stages
+# B/C carried while the shape swap (circle->OBB) was validated at unchanged reach. NOTE (flagged for
+# Stage F / Jordan): the 0.1/0.2/0.3 scale is a FINER differentiation than PP-290's Short≤1m (0.5) /
+# Long≤3m (1.5) meter-grounding above -- P-DEC-1 is the newer, explicit ruling and governs the field OBB
+# model; the PP-290 meter→lattice reconciliation (do the two scales coexist, or does one re-ground the
+# other?) is deferred to Stage F's historical-revalidation pass, NOT silently overwritten here (REACH_
+# SHORT/REACH_LONG stay defined + exported for any PP-290 consumer).
+# [canonical: audit/2026-07-22-mass-battle-stress-test/spatial_model_v2_plan.md §9 P-DEC-1 — weapon-class reach map (ED-MB-0014)]
+REACH_MELEE_DEFAULT = 0.1   # non-pole melee (P-DEC-1); the fallthrough for unmapped/bare 'infantry'
+TROOP_TYPE_REACH = {
+    "levy":             0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee (ED-MB-0014)]
+    "light_infantry":   0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee (ED-MB-0014)]
+    "infantry":         0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — bare-default non-pole melee (ED-MB-0014)]
+    "heavy_infantry":   0.2,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — pole/spear (ED-MB-0014)]
+    "pike":             0.3,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — PIKE, longest melee reach (ED-MB-0014)]
+    "cavalry":          0.2,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — lance (ED-MB-0014)]
+    "knights_templar":  0.2,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — lance (ED-MB-0014)]
+    "archers":          0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
+    "crossbow":         0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
+    "sling":            0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
+    "artillery":        0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
+    "mounted_archers":  0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
+}
 
 
 def reach_for(troop_type):
-    """PP-290 reach class for a troop type, in lattice units (COL_WIDTH=1.0 pitch). Unmapped types,
-    including bare 'infantry' (a real call-site default, not a TROOP_TYPE_STATS key), fall through
-    to Short Reach -- stated here as intended, not an implicit side effect. Lookup is
-    case-insensitive, matching stats_for."""
-    cls = TROOP_TYPE_REACH.get(str(troop_type).strip().lower()) if troop_type else None
-    return REACH_LONG if cls == 'long' else REACH_SHORT
+    """[v2 Stage E, ED-MB-0014] Per-troop-type front-face weapon reach in lattice units (COL_WIDTH=1.0
+    pitch), from the Jordan-ruled P-DEC-1 weapon-class map (TROOP_TYPE_REACH). Unmapped types, including
+    bare 'infantry' (a real call-site default, not a TROOP_TYPE_STATS key), fall through to
+    REACH_MELEE_DEFAULT=0.1 (non-pole melee) -- stated as intended, not an implicit side effect. Lookup
+    is case-insensitive, matching stats_for."""
+    if troop_type is None:
+        return REACH_MELEE_DEFAULT
+    return TROOP_TYPE_REACH.get(str(troop_type).strip().lower(), REACH_MELEE_DEFAULT)
 
 
 # ─── unit_type (movement audit gate 2, ED-MB-0001) ──────────────────────────────

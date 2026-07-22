@@ -157,10 +157,16 @@ def test_yield_facing_stays_locked_toward_engaged_enemy():
     assert atk._moved_this_turn or atk.cell_offsets, "yielding subunit never moved at all"
     # Facing must point TOWARD the defender's centroid, not away (the flee direction).
     assert atk.target_atom is not None, "yielding attacker never acquired a target to face"
+    # Reference the yielding subunit's CURRENT centroid, not its hardcoded start (20, 25): a yielding
+    # body flees, so "faces toward the enemy" means toward the target FROM WHERE IT NOW IS. Pinning the
+    # start position made this assertion sensitive to the defender's lateral centroid drift once the
+    # engagement geometry shifted (v2 Stage E's reach change surfaced it); the current-centroid reference
+    # tests the actual intent (facing at the enemy, unlike a rout that turns its back).
+    my = atk.centroid()
     for (orig_r, orig_c), fv in atk.cell_facing_vec.items():
         tc = atk.target_atom.centroid()
         # the raw movement/anchor-relative facing vector should have a non-negative dot product
         # with the direction toward the target -- i.e. it points roughly AT the enemy, not away.
-        to_target = (tc[0] - 20, tc[1] - 25)
+        to_target = (tc[0] - my[0], tc[1] - my[1])
         dot = fv[0] * to_target[0] + fv[1] * to_target[1]
         assert dot >= 0, f"cell {(orig_r, orig_c)} facing {fv} points away from the target {to_target}"

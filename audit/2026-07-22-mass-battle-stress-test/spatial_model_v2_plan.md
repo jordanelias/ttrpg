@@ -178,6 +178,22 @@ deleting that one recording snap.
   reach; ranged unaffected. I1/I2.
 - **Gate:** reach-advantage test; fuzz; A/B gauge (disclose).
 
+> **STATUS (2026-07-22): Stage E DONE + verified (ED-MB-0014).** `reach_for`/`TROOP_TYPE_REACH` now
+> return the P-DEC-1 per-type front-face reach (non-pole 0.1 / pole 0.2 / **pike 0.3** / lance 0.2 /
+> ranged 0.1 sidearm), replacing the flat `REACH_SHORT=0.5` placeholder; the **`pike` troop type** is
+> authored end-to-end (stats mirror heavy_infantry, pike weapon, ShieldWall/Hold/Anvil roles).
+> **Reach advantage emerges** through the already-wired charge-recoil reach gate: braced pike/spear
+> (reach ≥ lance) repel a cavalry charge (defender ~96.7% hp, cavalry recoils ~88.3%) while levy
+> (reach < lance) is run down (~90.7%) — the anti-cavalry pike role, emergent from the reach data, no
+> special case. **Disclosed finding:** reach differentiation does *not* change symmetric standing melee
+> (mutual exchange once contact fires; reach only shifts timing) — reach is a charge/brace lever here, not
+> a standing-melee one; a directional-reach exchange term (pike-pins-forever hazard) is flagged for Jordan,
+> not introduced. I7 preserved (facing-away → 0 reach). Gates green: `test_reach_weapon_class.py` (10);
+> **I4 byte-exact grid oracle green** (no kite in the battery). **[DG-6, not tuned]** standing-melee A/B
+> negligible. **Flagged for Stage F:** the 0.1/0.2/0.3 scale vs PP-290's 0.5/1.5 meter-grounding needs
+> reconciliation (deferred, not overwritten). **Deferred (separate follow-up):** P-DEC-3 cavalry density
+> cap (< infantry) — kept out of Stage E to keep the reach A/B clean.
+
 ### Stage F — full verification, digest re-record, disclosure
 - Re-run: `tests/valoria` (byte-exact grid green = I4), maneuvers/yield, the stress harness S0–S5,
   the depth-2 experiment, Lanchester signature, conservation fuzz (n≥300).

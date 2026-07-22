@@ -208,6 +208,7 @@ POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.5'))
 TROOP_TYPE_ROLES = {
     # taxonomy grounded in the historical troop-roles research (Research_Report.md) + design §3.5
     "heavy_infantry":  ["ShieldWall", "Hold", "Anvil", "Push"],
+    "pike":            ["ShieldWall", "Hold", "Anvil"],   # [v2 Stage E, ED-MB-0014] pike block: defensive/anti-cavalry braced formation (its reach 0.3 is the edge, not mobility)
     "light_infantry":  ["Skirmish", "Screen", "Pursue"],
     "cavalry":         ["Shock", "Flanker", "Feint", "Screen", "Pursue"],
     "archers":         ["VolleyLine", "Harass"],
