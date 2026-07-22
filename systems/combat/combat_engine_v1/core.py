@@ -195,6 +195,24 @@ CUT_AUTH_REF=0.70
 # a real (never-zero) threat. Scoped to the THRUST family only (the 'point' head + the cut_thrust half-sword/gap-thrust
 # term); shear/percussion do not gap-press and are untouched. Distinct from ED-PC-0012's proposed THRUST_AUTH_REF (that
 # is a point-TOKEN-magnitude anchor; this is a head_len LEVER factor) — different axis, deliberately different name.
+# THRUST_AUTH_REF [PC-4 / ED-PC-0012, 2026-07-22]: the point-TOKEN-MAGNITUDE analog of CUT_AUTH_REF — the second,
+# structurally identical gap the ED-PC-0011 adversarial Workflow found on 'point'. core._transmit's puncture gap-seeking
+# term is floor-locked to the raw material transmission for any physically-plausible gap_prec, so DELIVERY['point']=1.45
+# is credited IN FULL to a weak incidental point on a dedicated slasher regardless of how poor that point actually is
+# (verified: scimitar point_eff 0.16, sabre 0.26, falchion 0.23 all scored the SAME point coupling as a real thruster) —
+# so every cutter with any secondary point token eventually switched to 'point' vs armour purely on the fixed constant,
+# a floor-locked artifact, not earned thrust geometry (the sabre/scimitar/falchion spurious plate-switch ED-PC-0012
+# flagged). Fix = scale DELIVERY['point'] by the SELECTED point's own derived thrust magnitude (eff) vs a reference,
+# exactly as 'cut' scales by eff/CUT_AUTH_REF. Anchored — per the same weakest-of-the-genuine-population principle as
+# CUT_AUTH_REF (hook_sword, the weakest dedicated cutter) and PERC_AUTH_REF_SOFT — on the WEAKEST attested NATIVE
+# pointer in the roster (bear_spear, point_eff 0.530; ED-PC-0012's cited 0.37/bec_de_corbin was stale — bec's native
+# head is 'blunt', its beak a SECONDARY point, and its live magnitude has since drifted to 0.80). 0.52 sits just below
+# bear_spear's 0.530, so every native point-headed weapon (bear_spear 0.53, rapier 0.61, spear 0.72, estoc 0.89, …)
+# clamps to ratio 1.0 and is UNAFFECTED by construction — only SECONDARY/incidental points on cutters (all < 0.53) are
+# scaled by their true geometric quality. Scoped to the 'point' HEAD only (the cut_thrust half-sword thrust keeps its
+# own eff = the EDGE magnitude, a different quantity); distinct axis from PC-5's THRUST_LEVER_REF (head_len lever) —
+# both refine the point path, one by geometry-magnitude, one by pommel-press lever.
+THRUST_AUTH_REF=0.52
 THRUST_LEVER_REF=0.55; THRUST_LEVER_FLOOR=0.30
 def thrust_authority(head_len):
     """Point-to-hand lever -> thrust authority factor in [THRUST_LEVER_FLOOR, 1.0]. Short lever (dagger/half-sword) =
@@ -210,9 +228,10 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     gap game): a stiff concentrated point defeats plate at the gaps, a whippy one is deflected. Threaded for every
     thrusting head (point + the cut_thrust half-sword thrust); percussion/shear ignore it (a broad blow/cut does not
     gap-seek). Defaults to a neutral point (GAP_PREC_REF); the live path threads the real w['gap'].
-    `eff` [U2/ED-PC-0011] scales the 'cut' token's DELIVERY by its own derived edge-quality vs CUT_AUTH_REF — see
-    that constant's comment for the full reasoning. None (the default, every pre-existing caller) means "no
-    scaling" (ratio 1.0, byte-identical to before this parameter existed); ignored for every head but 'cut'.
+    `eff` [U2/ED-PC-0011] scales the 'cut' token's DELIVERY by its own derived edge-quality vs CUT_AUTH_REF, and
+    [PC-4/ED-PC-0012] the 'point' token's DELIVERY by its own derived thrust-magnitude vs THRUST_AUTH_REF — see those
+    constants' comments. None (the default, every pre-existing caller) means "no scaling" (ratio 1.0, byte-identical to
+    before this parameter existed); ignored for every head but 'cut'/'point'.
     `thrust_auth` [PC-5/ED-PC-0015] scales the GAP-PRESS term of the puncture path (the 'point' head + the cut_thrust
     half-sword thrust) by the point-to-hand lever authority (thrust_authority(head_len)). It scopes to the gap game vs
     a harness ONLY — a thrust that lands on soft targets (through-material) is untouched, so reach weapons stay lethal
@@ -226,6 +245,8 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
+    elif head=='point' and eff is not None:
+        d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
     return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
 def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
