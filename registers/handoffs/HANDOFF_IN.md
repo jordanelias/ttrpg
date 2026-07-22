@@ -786,19 +786,24 @@ allocate, bump, co-commit; never max+1.)_
   - **Dir #1 (DONE)** — `discover_unregistered_candidates`: name-level ontology match over the
     whole design corpus (folding + expanded stopwords; critic caught a substring-unsound first cut
     at ~50% noise → rebuilt to 39 high-signal). Feeds the ledger's `unregistered_term` face.
-  - **Dir #2 (DONE)** — the two observatories now TALK: `vector_audit --emit-findings` writes
-    `tools/observability/audit_findings.json` (its UNIQUE cross-graph Mode-B implied-missing +
-    Mode-H isolates), the Incompleteness Ledger surfaces them. Adversarial-pass fixes (commit
-    ed617d07): filter Mode-B hub×hub artifacts + Mode-H Key-token false alarms; carry each token's
-    `primary_doc` as a navigable back-link (30/30 implied-missing rows now link); repoint the dead
-    `audit_staleness` `vector-audit` + `npc-audit` families to live artifacts; snapshot-disclosure
-    + de-overclaim on the ledger rows. A second critic is auditing these fixes now.
-  - **Dir #3 (SCOPED, not built)** — broaden the throughline/μ metadata graphs beyond the single
-    `throughlines_meta_infill.md` source. Two design-encoded sources the audit is currently blind
-    to: (a) `references/throughlines_complete.md` §THROUGHLINE INTERACTION MATRIX — a parseable
-    throughline×throughline adjacency (T-04↔T-05…) + a §COMPLETENESS CHECK throughline→system-doc
-    table; (b) `references/silo_overlap_matrix.yaml` — a shared-vocabulary-silo (μ-like) relation,
-    but a FROZEN historical snapshot ("no live regeneration path") → stale-edge risk, use with care.
-    Graph edges don't touch the token-universe byte-identity fingerprint (tokens unchanged), only
-    diagnostics — exactly the point. Needs its own adversarial pass.
+  - **Dir #2 (DONE + reconciled)** — the two observatories now TALK: `vector_audit --emit-findings`
+    writes `tools/observability/audit_findings.json` (its UNIQUE cross-graph Mode-B implied-missing +
+    Mode-H isolates), the Incompleteness Ledger surfaces them. TWO adversarial passes. Final state
+    (commit 68a29955): **retain-and-flag, never cull** — the feed emits EVERY finding with a
+    `filtered`+`filter_reason` flag (hub×hub Mode-B, Key-token Mode-H); the ledger consumes the
+    unfiltered subset. Every implied-missing row carries a `primary_doc` back-link; every isolate
+    links to the REGISTRY that defines it (source→registry map). Isolate text states the STRONG,
+    accurate signal (max-deg ≤1 across all four graphs, no design-prose home) — the 2nd critic
+    caught the 1st fix *softening* it. `audit_staleness` `vector-audit`+`npc-audit` families
+    repointed to live artifacts; scope corrected to the real L0 inputs (systems/engine/canon/arcs/
+    audit/references + registers/patch_register_active.yaml — the pp-graph source). Schema
+    handshake (`schema_version==1`) self-surfaces a mismatch. Doctrine in SKILL.md.
+  - **Dir #3 (DONE, commit 7cb3d432)** — broadened the **throughline graph** from a second registry
+    source: `throughlines_complete.md`'s POST-ATOMIZATION `**Systems:**` lines (`parse_throughlines_
+    complete` + `build_g_throughline(extra_rows=…)`, opt-in). MEASURED before adopting: +2
+    implied-missing, +1 legit hub (Player Agency), 0 new isolates, no blob. The doc's INTERACTION
+    MATRIX was measured + REJECTED (20/21 pairs interact → dense, 149/181 edges redundant, would
+    inflate Clocks/MS hubs). The **μ graph is NOT extended** — no clean second Μ-mode source
+    (`silo_overlap_matrix.yaml` is a frozen snapshot; the complete doc has no μ data). A critic is
+    auditing #3 now.
   - **Dir #4 (pending)** — L1-layer validation calibration (P1/P2/P3 thresholds are L0-tuned).
