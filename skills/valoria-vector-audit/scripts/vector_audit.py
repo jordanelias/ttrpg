@@ -265,17 +265,9 @@ SEED_TOKENS = {
                              'scale': 'crosscutting', 'status': 'provisional', 'source': 'seed'},
     'Event Impact Matrix':  {'patterns': ['Event Impact Matrix', 'EventImpact'],
                              'scale': 'crosscutting', 'status': 'provisional', 'source': 'seed'},
-    # Mechanics
-    'Disposition':          {'patterns': [r'\bDisposition\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Standing':             {'patterns': [r'\bStanding\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Stability':            {'patterns': [r'\bStability\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Mandate':              {'patterns': [r'\bMandate\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
-    'Tensions':             {'patterns': [r'\bTensions\b'],
-                             'scale': 'mechanic', 'status': 'canonical', 'source': 'seed'},
+    # Mechanics: sourced from references/names_index.yaml mech.* (token_class: mechanic) AFTER this
+    # literal (§8; R2 namespacing / ED-IN-0082) — namespaced ids make "Stability"/"Mandate" etc.
+    # collision-safe from the faction stats (fac.stability …).
 }
 
 # Token classes sourced from references/names_index.yaml (§8 — the class ROSTERS and their §3.5
@@ -285,7 +277,7 @@ SEED_TOKENS = {
 # Built byte-identically to the former hardcoded blocks (test_vector_audit pins each). If
 # names_index is unreadable (no PyYAML) these degrade to absent — the same failure mode
 # derive_tokens already has, since the whole audit reads the index.
-_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction')
+_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction', 'mech')
 if names is not None:
     for _cls in _INDEX_TOKEN_CLASSES:
         _members = names.by_token_class(_cls)
@@ -298,7 +290,7 @@ if names is not None:
                 continue
             SEED_TOKENS[_disp] = {
                 'patterns': list(_e.get('patterns') or []) or [r'\b' + _disp + r'\b'],
-                'scale': _cls, 'status': 'canonical', 'source': 'seed',
+                'scale': _e.get('scale') or _cls, 'status': 'canonical', 'source': 'seed',
                 'context': list(_e.get('context') or [])}
 
 

@@ -234,6 +234,18 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # sourced via token_class (a proper_noun that ALSO carries an audit class), not category
     assert {m['canonical'] for m in names.by_token_class('faction').values()} == set(FAC_PATS)
     assert names.canonical('world.guilds') == 'Guilds'   # world.guilds added + mirrored
+
+    # mechanics: namespaced ids (mech.*) so a generic "Stability" is collision-safe from the
+    # faction stat fac.stability. Sourced via token_class 'mech' with scale 'mechanic'.
+    MECH = {'Disposition': [r'\bDisposition\b'], 'Standing': [r'\bStanding\b'],
+            'Stability': [r'\bStability\b'], 'Mandate': [r'\bMandate\b'], 'Tensions': [r'\bTensions\b']}
+    assert set(va.CLASSES.get('mech', [])) == set(MECH)
+    for disp, pats in MECH.items():
+        tok = va.SEED_TOKENS.get(disp)
+        assert tok is not None and tok['scale'] == 'mechanic' and tok['patterns'] == pats, disp
+    # the collision-safe id exists in the register, distinct from the faction stat
+    assert names.canonical('mech.stability') == 'Stability' and names.canonical('fac.stability') == 'Stability'
+    assert 'mech' in va._INDEX_TOKEN_CLASSES
     # SOURCING-LINKAGE guard (adversarial-pass hardening): the classes are actually driven through
     # the names_index sourcing loop, so a revert that re-hardcodes identical dicts but drops the
     # sourcing is caught, not just a value-identical pass.

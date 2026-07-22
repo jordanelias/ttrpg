@@ -61,6 +61,11 @@
 #   substrate. Key substrate primitive                                             [existing]
 #   conv.      character conviction (the 7-axis class)                              [NEW 2026-07-21]
 #   ppt.       social-contest pressure point (the 4-axis class)                     [NEW 2026-07-21]
+#   mech.      strategic-layer mechanic (Disposition/Standing/Stability/Mandate/…)  [NEW 2026-07-22]
+# An entry MAY also carry `token_class: <cls>` (audit vocabulary class) distinct from its naming
+# `category` — e.g. a world.* proper_noun tagged `token_class: faction`, or a mech.* tagged
+# `token_class: mech` — so the vector-audit CLASSES roster + §3.5 disambiguation live here (§8)
+# without disturbing the category/mirror. `scale:` overrides the audit scale when it differs.
 # Reserved for the R2 migration wave (authored as entries land, not pre-populated):
 #   npc.  named character · place.  location · org.  organisation/order
 #   ppl.  people/populace group · concept.  design concept · act.  performable action verb
@@ -108,6 +113,17 @@ entries:
   ppt.consequence: {canonical: Consequence, aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bConsequentialist\b']}
   ppt.authority:   {canonical: Authority,   aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bAuthority Challenge\b', '\binstitutional\b']}
   ppt.loyalty:     {canonical: Loyalty,     aliases: [], legacy: [], category: pressure_point, enforce: warn, context: ['\bPressure Point\b', '\bKnot\b', '\brelational\b']}
+
+  # ── MECHANICS (strategic-layer mechanic tokens; new 2026-07-22, R2 namespacing / ED-IN-0082) ──
+  # Namespaced ids so a generic "Stability"/"Mandate"/"Standing" is COLLISION-SAFE from the faction
+  # stat fac.stability etc. — author or wire with [[mech.stability]] vs [[fac.stability]]. patterns
+  # migrated verbatim from the hardcoded SEED; token_class: mechanic sources them into the audit
+  # (category mechanic has no proper-noun mirror). enforce: warn (all collide with common words).
+  mech.disposition: {canonical: Disposition, aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bDisposition\b']}
+  mech.standing:    {canonical: Standing,    aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bStanding\b']}
+  mech.stability:   {canonical: Stability,   aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bStability\b']}
+  mech.mandate:     {canonical: Mandate,     aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bMandate\b']}
+  mech.tensions:    {canonical: Tensions,    aliases: [], legacy: [], category: mechanic, token_class: mech, scale: mechanic, enforce: warn, patterns: ['\bTensions\b']}
 
   # ── FACTION STATS (mirror: descriptor_registry.yaml faction_stats; scalar 1-7) ─
   fac.influence:  {canonical: Influence, aliases: [], legacy: [], category: faction_stat, enforce: warn}
