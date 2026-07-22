@@ -354,7 +354,11 @@ def _normalize_heading(heading):
     up-field heading (-1.0, 0.0) -- matches advance_dir=-1 ("up-field")."""
     dr, dc = heading
     mag = math.hypot(dr, dc)
-    if mag < 1e-9:  # [canonical: epsilon: float magnitude guard]
+    # [antagonist reconcile, ED-MB-0011 v2 Stage A] Guard non-finite as well as near-zero: a NaN/inf
+    # heading would otherwise propagate NaN axes into SAT and silently return garbage overlaps. Out of
+    # the intended domain (headings are finite movement vectors) but cheap defense-in-depth on the
+    # foundation everything else builds on.
+    if not math.isfinite(mag) or mag < 1e-9:  # [canonical: epsilon: float magnitude guard]
         return (-1.0, 0.0)
     return (dr / mag, dc / mag)
 

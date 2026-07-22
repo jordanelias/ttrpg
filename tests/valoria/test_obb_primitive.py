@@ -320,3 +320,16 @@ def test_determinism_repeated_calls():
         r4 = obb_front_reach_overlap(a, b)
         assert r1 == r2
         assert r3 == r4
+
+
+def test_non_finite_heading_guarded():
+    """[antagonist reconcile] NaN/inf heading must not propagate NaN axes into SAT (would return
+    garbage overlaps). It guards to the default up-field heading, same as the zero-vector case."""
+    import math
+    from mass_battle.geometry import CellBox, obb_overlap
+    for bad in [(float('nan'), 0.0), (float('inf'), 0.0), (0.0, float('nan')), (float('inf'), float('inf'))]:
+        box = CellBox(cr=0.0, cc=0.0, heading=bad)
+        assert all(math.isfinite(x) for x in box.heading), f"heading {bad} not sanitized -> {box.heading}"
+        # a box must overlap itself and a coincident box (no NaN-poisoned separation)
+        assert obb_overlap(box, box) is True
+        assert obb_overlap(box, CellBox(cr=0.0, cc=0.0, heading=(-1.0, 0.0))) is True
