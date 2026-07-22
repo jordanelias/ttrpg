@@ -191,14 +191,26 @@ cross-checked with pattern), honest directional reach (front-face growth by weap
 Euclidean motion with **no integer on the live position/contact path** — the "no grids" endgame for the
 field engine, with the wired engine's reconciliation scoped as Stage G.
 
-## 9. Open decisions needing Jordan (P-DEC) — do not block Stages A–C
+## 9. Decisions — RESOLVED by Jordan 2026-07-22
 
-- **P-DEC-1 — weapon-class → troop-type map** (for Stage E reach): default proposed in
-  `geometric_contact_proposal_v1.md` §P2 (levy/light=0.1, heavy=0.2, cav/knights=0.2, ranged=0.1
-  sidearm; no pike type yet). Confirm/edit.
-- **P-DEC-2 — wired engine (Stage G):** route `resolve_mass_battle` onto the field engine and retire
-  the integer engine (preferred), or port OBB into the wired engine.
-- **P-DEC-3 — non-standard cell dims:** do heavier/lighter troop types get non-1×1 footprints (e.g.
-  cavalry deeper), or is the box always 1×1 with density carrying mass? (Affects area/density.)
-- **P-DEC-4 — gauge re-baseline authority:** the v2 frontage change WILL move the 20-row Cannae gauge;
-  confirm re-record is authorized as part of this work (it is a DG-6-adjacent balance shift).
+- **P-DEC-1 — weapon-class → troop reach: RESOLVED.** non-pole melee **0.1**, pole **0.2**, **pike 0.3**
+  — and **add a `pike` troop type** carrying reach 0.3. Ranged = projectile band (+ 0.1 melee sidearm).
+  Final map (Stage E): levy/light_infantry = 0.1; heavy_infantry = 0.2 (pole/spear); pike = **0.3**;
+  cavalry/knights_templar = 0.2 (lance); archers/crossbow/sling/artillery = ranged + 0.1 sidearm.
+- **P-DEC-2 — wired engine: RESOLVED → RETIRE THE INTEGER ENGINE.** Stage G is now GO: route
+  `resolve_mass_battle` (and `faction_action`'s call) onto the v2 field engine and **retire
+  `systems/mass_battle/sim`**'s integer engine. The ED-MB-0011 DG-10 clamp there becomes moot on
+  retirement (delete, don't maintain two). This is the "no grids" endgame, now authorized.
+- **P-DEC-3 — cell dims: RESOLVED → every cell is 1×1; density carries mass.** No per-type box
+  resizing. **Nuance to model:** a **cavalry cell has a lower MAX density than infantry** (fewer
+  horses than men fit per unit area) — implement as a per-troop-type **density cap** (cavalry cap <
+  infantry cap), NOT a larger box. Everything stays a unit square.
+- **P-DEC-4 — gauge re-baseline: RESOLVED → authorized, AND re-validate against history.** The v2
+  frontage/contact change WILL move the 20-row Cannae gauge; re-record is authorized. Beyond
+  re-recording, **re-validate the historical bands against precedent** under the new geometry (the
+  gauge's Cannae/Leuctra/Waterloo/etc. targets get re-checked against the OBB model, not just
+  re-digested). Fold into Stage F + a dedicated historical-revalidation pass.
+
+**Effect on staging:** all stages A–G are now unblocked. Stage E gains "author a `pike` troop type."
+Stage G (retire integer engine) is confirmed and becomes the closing epic. Stage F gains a historical-
+precedent re-validation sub-pass (not just a digest re-record).
