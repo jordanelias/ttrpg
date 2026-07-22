@@ -14,6 +14,14 @@ is the root cause; see **§Prevention**.
 **Status legend:** `NOT STARTED` · `PARTIAL` (formula/data built, not wired live) · `BLOCKED` (needs a named
 prerequisite) · `NEEDS-JORDAN` (a ratified default exists but the expansion is a held-back call).
 
+**Rollup (25 items across 7 lanes; MB clean, GO has none independent of engine_clock).** Highest-leverage:
+- **IN-1 engine_clock** — the single **T0 blocker for M1** *and* the GO lane (ratified design, zero code).
+- **FA-1 B12 scale-tier rewrite** — `CURRENT.md`'s own "highest-priority open wiring gap" (no `Territory` symbol in code).
+- **WR-1 MS→RS sweep** — **gates any Godot engine-params export** (CLAUDE.md §5).
+- **PC-1 grippable/ricasso half-sword** — the safest to *do*: ratified **and byte-identical at parity**.
+- **A cheap-flip cluster** — FA-4/FA-5/SE-1/SE-2/SC-1 are ratified items whose docs were never flipped
+  `PROPOSED → CANONICAL` (a `## Status:` line each); high value, near-zero risk.
+
 ---
 
 ## PC — Personal combat (verified against code this session)
@@ -37,9 +45,22 @@ mechanic, so PC-1 and PC-5 should land together, not PC-1 alone.
 
 ---
 
-## SC / IN / GO — (populating from corpus sweep)
+## SC / IN / GO / engine_clock — (corpus sweep, code-verified)
 
-_pending subagent verification_
+**GO lane: no qualifying item** — the governing `godot_conversion_strategy_v1.md` is itself still `PROPOSED` and
+Gate-0 (KeyStore v2, base classes, RNG service) is unruled (`HANDOFF_GO.md`); nothing has crossed PROPOSED →
+ratified, so there's no ratified-but-unbuilt GO item *except* engine_clock (below), which blocks GO but is filed
+as an architecture/IN ratification.
+
+| # | Item | Ratified where | Requires | State | Evidence |
+|---|---|---|---|---|---|
+| IN-1 | **engine_clock module contract** (the M1 T0 blocker + GO gate) | `propagation_spec_v1.md:69-90` §O.2, CANONICAL via ED-1093/1094 (2026-07-02) | an `engine_clock`/`clock_advance` resolver implementing the season-tick/accounting-boundary contract | **NOT STARTED** | no `engine_clock`/`clock_advance` code anywhere in `engine/`|`systems/`; `module_contracts.yaml:702` still `doc:null, status:extracted`. (Nuance: the *design* is ratified via §O.2, but the closure ticket **ED-1051** is itself still `open/needs_jordan` — `editorial_ledger.jsonl:261` — so the adjudication step is unratified while the contract sits unbuilt) |
+| IN-2 | **ED-IN-0075 Certainty→Truth rename** (finish the sweep) | `editorial_ledger_in.jsonl` ED-IN-0075 RULED 2026-07-18 (Jordan ruling A) | complete the corpus-wide rename where "Certainty" denotes the per-character Truth axis | **PARTIAL** | 89-file sweep left live surfaces: `godot/godot_architecture_specification.md:810,878`; `systems/threadwork/sim/co_movement.py:49` ("Certainty pressure" string in live sim); `skills/{prose-writer,valoria-mechanic-audit,valoria-simulator}` instructions — none in the stated exclusion list |
+| SC-1 | **ED-SC-0008 refresh social_contest module contract** | ledger RATIFIED 2026-07-05 (PR #80) | fix stale `resolver: dice_pool` + dead Key literals (`state.opinion_revised`, `scene.dialogue/insult/threat`) to match the δσ kernel; add `godot_home`/`typed_params` | **NOT STARTED** | `module_contracts.yaml:437-459` still `resolver: dice_pool` + the dead literals; grep of those 4 strings across `systems/social_contest/sim/contest/*.py` = 0 hits (contract names Keys the kernel never emits) |
+| SC-2 | **ED-SC-0009 Face/Rattled strain channel + Thread hooks** (Stage-4 entry) | ledger RATIFIED 2026-07-05 | wire `strain ≥ Face → Rattled → −1D` via a real `Standing.strip()`; wire SS9.3–9.4b thread hooks | **NOT STARTED** | `contest/primitives.py:83-90` states outright "`Standing.strip()` is NEVER called… Face has NO strip/strain channel wired"; no thread hooks in resolver/contract/wrapper |
+| SC-3 | **ED-SC-0010 Chronicle focalization + first consumer** | ledger RATIFIED 2026-07-05 | add chronicler/focalization field (P-03); give the Chronicle record a real consumer | **NOT STARTED** | `contest/narrative.py:40-50` Chronicle dataclass has no focalization field; no arc-generator/engine consumer imports it |
+| SC-4 | **ED-SC-0011 / ED-SC-0013 FORK-C — auto/played parity harness** | ED-SC-0011 RATIFIED 2026-07-05; reframed by ED-SC-0013 RULED 2026-07-08 (forks A/B/D resolved) | a parity harness proving `parliamentary_bridge` auto-resolve ≈ the played kernel; event-parameterize the auto-resolver to specific Slate motions | **NOT STARTED** (FORK-C still needs_jordan) | no parity-harness file (`agon_harness.py` is a different, human-play harness); `parliamentary_bridge.py:34-49 _derive_vote` still a generic per-season roll |
+| SC-5 | **ED-SC-0014 Standing homonym scope-tag** | ledger RATIFIED 2026-07-08 ("execution deferred, FA co-sign required") | scope-tag the "Standing" homonym (BG 0–10 vs contest kernel); add a `name_collision_database` entry | **NOT STARTED** | `clock_registry_v30.md:53` still "Standing | 0–5"; `name_collision_database.yaml:142` no new entry; independently confirmed stale by `audit/2026-07-13-multi-agent-audit/.../number_systems_audit.md:12` |
 
 ## MB / FA / WR / FI / SE — (corpus sweep, code-verified)
 
