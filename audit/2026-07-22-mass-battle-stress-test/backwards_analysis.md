@@ -104,6 +104,38 @@ The wired `systems/mass_battle/sim` engine is integer-grid end-to-end (positions
 my own DG-10 `round()` clamp there, itself a ⚠), so it cannot be de-gridded in place; that is the
 field↔grid reconciliation (ED-IN-0074 D5).
 
+### Depth-2 integer test (2026-07-22, per Jordan "test what would happen to depth of two if rounded to .1")
+
+Experiment: a **depth-2** Line (2 ranks × 3 files = 6 float cells, ranks 1.0 apart at rows 24.0/25.0)
+advancing tick-by-tick; at each tick, snap the 6 float cells with `int(round)` vs `round(.1)` and count
+distinct cells / rank-rows.
+
+| tick | float cells | distinct under `int(round)` | distinct under `round(.1)` | depth-2 preserved? |
+|---|---|---|---|---|
+| 0–6 | 6 | 6 | 6 | yes |
+| **7** | 6 | **3** (rank-rows → **[21]**, one rank) | **6** | **`int(round)` COLLAPSES 2 ranks → 1; `.1` preserves both** |
+
+**Root cause — and it implicates the DG-10 fix.** `_node_cells` deliberately keeps the row
+"rank-snapped (ranks are integer bins)" (units.py:620-627). That was safe while movement was integer
+(both ranks stepped by whole cells, staying exactly 1.0 apart → distinct integers). **The DG-10
+float-velocity fix (ED-MB-0011) makes positions fractional** (a disc-4 body advances 0.7 cells/tick),
+so the two ranks drift to float rows straddling a half-integer (e.g. front 20.6, rear 21.4 → both
+`round`→21) and **collapse to depth-1** under the rank-snap. Depth feeds charge-shock absorption,
+depth-damping, and per-cell density; frontage (file count) feeds Lanchester — so an integer-collapsed
+formation fights with the wrong depth/frontage exactly when its cells straddle a boundary. `round(.1)`
+(10× finer bins) preserves the structure. **Net: the float-movement fix and the integer position-snap
+are not commensurate; the snap must go to `.1` (or finer) to match.**
+
+**Every site computing the shared abs-position cell-key** (must change together for cross-matching):
+`units.py:631` (`_node_cells`), `units.py:1017` (node probe), `orchestration.py:403` (contention),
+`contact.py:292-293` (standoff engaged cells). Separate semantics, NOT a plain `.1` swap:
+`contact.py:175` + the contention resolver rely on **exact** integer key-collision for movement
+priority (two enemies on the *same* cell) — at `.1` two floats ~never collide exactly, so that site
+needs distance-based co-location, not rounding. A further layered hazard: `iter_cells` (units.py:553)
+yields **raw-float** columns while `distribute_casualties` matches them against the **int-snapped**
+engaged columns via loose int==float equality — the DG-10 fractional columns already perturb that
+match, so the casualty-column path must be reconciled to the same `.1` key in the same pass.
+
 ### What "ban grids" concretely requires (scoped, not yet executed)
 1. **Field engine contact** → replace the `int(round)` cell-snap in `core/contact.py` (`_find_contacts`
    / `_find_contacts_field`) and the `cells()` / halted-probe snaps (`units.py:631/1017`) with raw-float
