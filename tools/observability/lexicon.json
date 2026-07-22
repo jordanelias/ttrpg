@@ -13,7 +13,7 @@
       "designs/architecture/scale_transitions_v30.md"
     ],
     "stats": {
-      "terms": 392,
+      "terms": 393,
       "abbreviations": 35,
       "collisions": 4,
       "deprecated": 20,
@@ -878,51 +878,13 @@
       "abbreviations": [],
       "aliases": [],
       "legacy": [],
-      "definition": "RESOLVED \u2014 active stat",
-      "range": "RESOLVED \u2014 active stat",
+      "definition": "SUPERSEDED \u2014 renamed to Truth",
+      "range": "SUPERSEDED \u2014 renamed to Truth",
       "status": "canonical",
       "replacement": "",
       "collision_note": "",
       "sources": [
         "references/glossary.md"
-      ]
-    },
-    {
-      "canonical": "Certainty",
-      "type": "mechanic",
-      "category": "stat",
-      "silo": "silo_1 \u00b7 Character Attributes",
-      "abbreviations": [
-        "CERT"
-      ],
-      "aliases": [],
-      "legacy": [],
-      "definition": "Cosmological worldview track. Solmund orthodoxy (5) \u2192 Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty. CERT not standalone \u2014 write Certainty.",
-      "range": "0-5",
-      "status": "canonical",
-      "replacement": "",
-      "collision_note": "",
-      "sources": [
-        "references/alias_registry.yaml",
-        "references/name_collision_database.yaml",
-        "references/glossary.md"
-      ]
-    },
-    {
-      "canonical": "Certainty Axis",
-      "type": "",
-      "category": "",
-      "silo": "silo_4 \u00b7 World / Cosmological State",
-      "abbreviations": [],
-      "aliases": [],
-      "legacy": [],
-      "definition": "",
-      "range": "",
-      "status": "canonical",
-      "replacement": "",
-      "collision_note": "",
-      "sources": [
-        "references/name_collision_database.yaml"
       ]
     },
     {
@@ -3095,6 +3057,23 @@
       ]
     },
     {
+      "canonical": "Guilds",
+      "type": "faction",
+      "category": "factions",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "triage"
+      ]
+    },
+    {
       "canonical": "Hafenmark",
       "type": "faction",
       "category": "factions",
@@ -4871,7 +4850,7 @@
       ],
       "aliases": [],
       "legacy": [],
-      "definition": "Debate position tracker. Side A wins at \u2265 7; Side B wins at \u2264 3. Compromise zone: 4\u20136. Canonical doc: designs/personal/conviction_track_v1.md (promoted PP-681).",
+      "definition": "Debate position tracker. Side A wins at \u2265 7; Side B wins at \u2264 3. Compromise zone: 4\u20136. Canonical doc: systems/characters/conviction_track_v1.md (promoted PP-681). \u26a0 NAMING: systems/social_contest/social_contest_v30.md calls this same debate tracker Persuasion Track \u2014 unresolved glossary\u2194social-contest name collision (also tangles with the ED-IN-0075 character-Piety\u2192Truth rename); flagged for reconciliation.",
       "range": "0\u201310",
       "status": "canonical",
       "replacement": "",
@@ -6713,6 +6692,47 @@
       ]
     },
     {
+      "canonical": "Truth",
+      "type": "mechanic",
+      "category": "track",
+      "silo": "silo_1 \u00b7 Character Attributes",
+      "abbreviations": [],
+      "aliases": [
+        "Certainty",
+        "Certainty Track"
+      ],
+      "legacy": [
+        "CERT"
+      ],
+      "definition": "Per-character metaphysical stance (formerly \"Certainty\"; also consolidates the retired character \"Piety Track\" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, Himmelenger pole) \u2192 Thread-truth acceptance (0, Edeyja pole). Engine-internal 0\u20135; players see qualitative bands, never the number. All PCs have it; named NPCs at GM discretion; factions do not hold Truth. Legacy \"Certainty\"/CERT resolve to Truth pending the corpus rename (ED-IN-0075 staged sweep).",
+      "range": "0-5",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/alias_registry.yaml",
+        "references/name_collision_database.yaml",
+        "references/glossary.md"
+      ]
+    },
+    {
+      "canonical": "Truth Axis",
+      "type": "",
+      "category": "",
+      "silo": "silo_4 \u00b7 World / Cosmological State",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/name_collision_database.yaml"
+      ]
+    },
+    {
       "canonical": "Turmoil",
       "type": "",
       "category": "",
@@ -8206,11 +8226,17 @@
     "focus": [
       "Focus"
     ],
+    "truth": [
+      "Truth"
+    ],
     "certainty": [
-      "Certainty"
+      "Truth"
+    ],
+    "certainty track": [
+      "Truth"
     ],
     "cert": [
-      "Certainty",
+      "Truth",
       "CERT"
     ],
     "momentum": [
@@ -8873,8 +8899,8 @@
     "trade route": [
       "Trade Route"
     ],
-    "certainty axis": [
-      "Certainty Axis"
+    "truth axis": [
+      "Truth Axis"
     ],
     "substrate": [
       "Substrate"
@@ -9531,6 +9557,9 @@
     ],
     "valorsplatz": [
       "Valorsplatz"
+    ],
+    "guilds": [
+      "Guilds"
     ],
     "church": [
       "Church"

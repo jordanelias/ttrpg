@@ -4,24 +4,23 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 99
+  total: 102
   by_kind:
-    tool: 84
-    skill-script: 8
+    tool: 85
+    skill-script: 10
     hook: 4
     workflow: 3
   by_role:
-    A:writes-artifact: 20
+    A:writes-artifact: 22
     B:stdout-or-gate: 39
-    D:import-only-library: 37
+    D:import-only-library: 38
     workflow: 3
-  orphaned: 4
+  orphaned: 3
   prune_candidates: 0
 prune_candidates: []
 orphaned_no_cli:
 - tools/build_audit_registry_backfill.py
 - tools/geography/jsx_to_canonical.py
-- tools/observability/build_graph.py
 - tools/observability/npc_audit_report_gen.py
 entries:
 - path: tools/atomizer.py
@@ -725,9 +724,10 @@ entries:
   prints_stdout: true
   has_cli: true
   uses_cli_args: false
-  invoked_by: []
+  invoked_by:
+  - ci:audit-refresh.yml
   imported_internally: false
-  orphaned: true
+  orphaned: false
   prune_candidate: false
   role: A:writes-artifact
   imports:
@@ -1292,6 +1292,21 @@ entries:
   prune_candidate: false
   role: D:import-only-library
   imports: []
+- path: tools/tag_normalizer.py
+  kind: tool
+  stem: tag_normalizer
+  writes: []
+  prints_stdout: false
+  has_cli: false
+  uses_cli_args: false
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: D:import-only-library
+  imports:
+  - names
 - path: tools/validate_ed_citations.py
   kind: tool
   stem: validate_ed_citations
@@ -1457,6 +1472,7 @@ entries:
   has_cli: true
   invoked_by:
   - skill:valoria-vector-audit
+  - tool:imported
   orphaned: false
   role: A:writes-artifact
   imports: []
@@ -1486,6 +1502,23 @@ entries:
     mode: write
   - dest: <name>
     format: unknown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  invoked_by:
+  - skill:valoria-vector-audit
+  orphaned: false
+  role: A:writes-artifact
+  imports: []
+- path: skills/valoria-vector-audit/scripts/ripple_audit.py
+  kind: skill-script
+  stem: ripple_audit
+  writes:
+  - dest: ripple_register.md
+    format: markdown
+    mode: write
+  - dest: ripple_graph.json
+    format: json
     mode: write
   prints_stdout: true
   has_cli: true
@@ -1534,6 +1567,26 @@ entries:
   orphaned: false
   role: A:writes-artifact
   imports: []
+- path: skills/valoria-vector-audit/scripts/workbench.py
+  kind: skill-script
+  stem: workbench
+  writes:
+  - dest: <f-string>
+    format: unknown
+    mode: write
+  - dest: workbench_corpus.md
+    format: markdown
+    mode: write
+  - dest: workbench_corpus.json
+    format: json
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  invoked_by:
+  - skill:valoria-vector-audit
+  orphaned: false
+  role: A:writes-artifact
+  imports: []
 - path: .githooks/pre-commit
   kind: hook
   trigger: git pre-commit
@@ -1571,6 +1624,7 @@ entries:
   runs:
   - tools/build_apparatus_registry.py
   - tools/observability/build_decisions.py
+  - tools/observability/build_graph.py
   - tools/observability/build_proposals.py
   emits:
   - commit/PR
