@@ -72,3 +72,36 @@ for a in b.ATTRS:
     p, *_ = b.winrate(up, base, CFG, 600, seed=b._seed(('b4', a))); rows.append((a, round(100 * p, 1)))
 rows.sort(key=lambda r: -r[1])
 print('  ' + '  '.join(f'{a}:{p}' for a, p in rows[:4]) + '  ...  (agi still dominant -> robust, not a baseline artifact)')
+
+# ── 6. FIX INVESTIGATION — three attempts, all fail the switch-benefit ∧ arming-mirror=50 bars ──
+# (Attempt 1 = §3 above: leverage→adef never flips the switch positive.)
+print('\n=== 6. Fix investigation: does ANY adef lever make half-swording beneficial without breaking fairness? ===')
+_oh = S.halfsword_target
+def switch_benefit_and_mirror(patch_adef):
+    S.adef_cap = patch_adef if patch_adef else _oa
+    mir = {a: wr('arming', a, 300) for a in ('medium', 'heavy')}          # arming vs arming mirror (must be ~50)
+    live = {a: wr('longsword', a, 300) for a in ('medium', 'heavy')}
+    S.halfsword_target = lambda c, cl, oa: c.weapon
+    abl = {a: wr('longsword', a, 300) for a in ('medium', 'heavy')}
+    S.halfsword_target = _oh; S.adef_cap = _oa
+    return mir, {a: live[a] - abl[a] for a in ('medium', 'heavy')}, live
+
+# Attempt 2: standing cut_thrust bounces entirely (only the half-sword 'point' form gap-thrusts)
+def bounce(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
+    h = head if head is not None else w['head']
+    return cfg['ADEF_CUT'] if h == 'cut_thrust' else _oa(w, cfg, head, gap, grip, room)
+mir, ben, live = switch_benefit_and_mirror(bounce)
+print(f'  attempt-2 (bounce):  arming mirror med/hvy={mir["medium"]:.0f}/{mir["heavy"]:.0f} (want~50)  '
+      f'switch-benefit med/hvy={ben["medium"]:+.0f}/{ben["heavy"]:+.0f}  -> mirror BREAKS at plate')
+
+# Attempt 3: partial standing gap-thrust (scale by f)
+for f in (0.6, 0.4, 0.2):
+    def partial(w, cfg, head=None, gap=None, grip=0.0, room=1.0, _f=f):
+        h = head if head is not None else w['head']; gg = gap if gap is not None else w['gap']
+        return (max(cfg['ADEF_CUT'], _f * cfg['ADEF_POINT'] * gg) if h == 'cut_thrust'
+                else _oa(w, cfg, head, gap, grip, room))
+    mir, ben, live = switch_benefit_and_mirror(partial)
+    print(f'  attempt-3 (f={f:.1f}):   arming mirror med/hvy={mir["medium"]:.0f}/{mir["heavy"]:.0f}  '
+          f'switch-benefit med/hvy={ben["medium"]:+.0f}/{ben["heavy"]:+.0f}  (mail stays negative)')
+print('  CONCLUSION: no adef lever makes the switch beneficial at MAIL without drifting the mirror ->')
+print('  the half-sword liability is coupled to reach-over-weighting (Phase-C / G4), not an independent bug.')

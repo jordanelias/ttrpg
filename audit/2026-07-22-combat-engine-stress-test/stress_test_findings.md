@@ -77,6 +77,28 @@ Unchanged by the adversarial pass: M1 (overflow), G1 (cutting-polearm cliff — 
 adjacent), G3/G4 (confirmed **known**, deferred to Phase-C), and the physics-layer MATCH set (the point-superiority
 check even survived a cherry-pick test: every real weapon's own `gap_prec` still out-couples a cut vs plate).
 
+### Fix investigation (half-sword) — a rigorous negative result: NOT independently fixable
+
+Following Jordan's ruling, I tried to make half-swording the armour-penetration answer it should be. Three
+attempts, all validated against **switch-benefit** (live-with-switch vs the same-config no-switch ablation)
+AND the **arming mirror = 50** fairness invariant. None succeeded, and the failures triangulate the root cause:
+
+| attempt | idea | result |
+|---|---|---|
+| 1. leverage → adef | credit the half-sword's ~3× leverage into `adef_cap` (point/cut_thrust) | **fails** — helps the full form too; switch stays −26/−14pp even at large K |
+| 2. full form bounces | standing `cut_thrust` gets no gap-thrust adef vs armour (only the half-sword `point` does) | switch flips **+25/+10pp** and the longsword arc becomes 44/44/84/94 — BUT the **arming mirror at plate collapses to 0%** (arming has no half-sword form → helpless vs plate → degenerate), and everything inflates against the crippled baseline (mace 20→97) |
+| 3. partial factor | scale the standing gap-thrust adef by `f∈{0.6,0.4,0.2}` (middle ground) | at **no** `f` does the switch become beneficial at the **mail (medium)** tier (−36/−25/−25/−11); pushing `f` low enough to help at plate starts drifting the arming mirror off 50 (47→56) |
+
+**Conclusion: the half-sword liability is a symptom of the reach-over-weighting (Phase-C / G4) debt, not an
+independent bug.** The reach given up by half-swording is worth more than any armour-defeat bonus `adef_cap`
+can return — because **reach keeps dominating even in the close** (`reach_sigma` applies in the closed exchange
+and the longer weapon can re-open distance). At grappling range the half-sword's control/leverage *should*
+dominate reach; it doesn't. So the real fix is the **joint** Phase-C recalibration — suppress reach's grip in
+the close **and** credit the leveraged weight-bearing thrust, together — not any single `adef`/`coupling` knob.
+This is the methodology's own "multi-parameter joint optimization, not single-knob" (§4). **No engine change
+was committed** (all three attempts were in-process only); the working tree stays clean. Reproducible in
+`adversarial_pass.py` (§6 fix-investigation).
+
 ---
 
 ## Part A — Mechanical correctness (`stress_battery.py`)
