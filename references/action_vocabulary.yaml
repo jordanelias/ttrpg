@@ -19,7 +19,10 @@
 # references/module_contracts.yaml as emitted Key types — those are the Keys domain-action
 # resolution EMITS; the verbs below are the actions a player SELECTS.
 status: provisional
-superseded_by: ED-FA-0002
+# awaiting/pending: this roster is provisional until the authoritative domain_actions
+# home is authored; regenerate or fold in then. ED-FA-0002 is OPEN (a forward dependency,
+# not a resolved basis) — reported as OPEN_INFO by the ED-citation gate, never a basis claim.
+blocked_on: ED-FA-0002
 token_class: action
 source_note: >-
   curated from references/module_contracts.yaml (ED-FA-0006 verb note) +
