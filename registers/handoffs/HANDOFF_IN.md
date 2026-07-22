@@ -780,3 +780,25 @@ allocate, bump, co-commit; never max+1.)_
   `clock_registry`/overview, `territorial_piety`→`conviction_track`) and mark any inferred edge
   `[ASSUMPTION]`, held back loudly per CLAUDE.md §2. `engine_clock` (ED-1051) + `domain_actions`
   (ED-FA-0002) need canon before their edges are real.
+
+- **"Extend audit in all directions" — trace-completeness pass (2026-07-22, PR #205, in flight).**
+  Working most→least impactful with an **adversarial pass at the end of each direction**:
+  - **Dir #1 (DONE)** — `discover_unregistered_candidates`: name-level ontology match over the
+    whole design corpus (folding + expanded stopwords; critic caught a substring-unsound first cut
+    at ~50% noise → rebuilt to 39 high-signal). Feeds the ledger's `unregistered_term` face.
+  - **Dir #2 (DONE)** — the two observatories now TALK: `vector_audit --emit-findings` writes
+    `tools/observability/audit_findings.json` (its UNIQUE cross-graph Mode-B implied-missing +
+    Mode-H isolates), the Incompleteness Ledger surfaces them. Adversarial-pass fixes (commit
+    ed617d07): filter Mode-B hub×hub artifacts + Mode-H Key-token false alarms; carry each token's
+    `primary_doc` as a navigable back-link (30/30 implied-missing rows now link); repoint the dead
+    `audit_staleness` `vector-audit` + `npc-audit` families to live artifacts; snapshot-disclosure
+    + de-overclaim on the ledger rows. A second critic is auditing these fixes now.
+  - **Dir #3 (SCOPED, not built)** — broaden the throughline/μ metadata graphs beyond the single
+    `throughlines_meta_infill.md` source. Two design-encoded sources the audit is currently blind
+    to: (a) `references/throughlines_complete.md` §THROUGHLINE INTERACTION MATRIX — a parseable
+    throughline×throughline adjacency (T-04↔T-05…) + a §COMPLETENESS CHECK throughline→system-doc
+    table; (b) `references/silo_overlap_matrix.yaml` — a shared-vocabulary-silo (μ-like) relation,
+    but a FROZEN historical snapshot ("no live regeneration path") → stale-edge risk, use with care.
+    Graph edges don't touch the token-universe byte-identity fingerprint (tokens unchanged), only
+    diagnostics — exactly the point. Needs its own adversarial pass.
+  - **Dir #4 (pending)** — L1-layer validation calibration (P1/P2/P3 thresholds are L0-tuned).
