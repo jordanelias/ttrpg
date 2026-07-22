@@ -131,8 +131,22 @@ class Subunit:
             if (orig_r, orig_c) in self.halted_cells: continue
             base_speed = _mb.cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
-            actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
-            if actual_speed == 0: continue
+            # [DG-10 fix, 2026-07-22, ED-MB-0011 — "subunits aren't moving when they have previously" /
+            #  "if it's broken and not commensurate with system, disable" / "fields, not grids. no grids."]
+            # The old `math.floor(base_speed * disc_mult)` grid-snapped any sub-Discipline-5 body's
+            # velocity to 0 (floor(1*0.7)=0) and the `== 0: continue` then FROZE it in place, so
+            # levy/light_inf/heavy_inf/archers/crossbow/sling/artillery (all disc<5 in §B.2) never
+            # advanced to contact. This is the wired engine's copy of the coordinate-field engine's
+            # DG-10 freeze (fixed there the same day). This engine holds INTEGER cell positions —
+            # contact detection is set-membership on integer coords — so it cannot carry a true
+            # sub-cell field velocity the way the field engine does (the two are unreconciled,
+            # ED-IN-0074 D5); the minimal non-breaking unfreeze is to take the REAL velocity (no floor)
+            # and let an advancing body take at least one whole cell rather than a frozen zero. NOT an
+            # accumulator. Discipline>=5 (incl. the wired resolve_mass_battle default) is unchanged
+            # bit-for-bit: round(1.0)=1 == floor(1.0). Only the previously-frozen sub-disc-5 space moves.
+            vel = base_speed * disc_mult + stance_mod
+            if vel <= 0: continue                      # 'hold' (stance_mod -99) / non-advancing → no move
+            actual_speed = max(1, round(vel))
             if _mb.TIP_SUPPORT_ENABLED and base_speed > min_speed:
                 current_offset = self.cell_offsets.get((orig_r, orig_c), 0)
                 slow_offsets = [

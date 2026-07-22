@@ -18,8 +18,19 @@ audit ED-IN-0074 D5):
 
 Every flag this task names (`FIELD_MOVEMENT`, `PER_CELL`, `PC_NODE_COHESION`, `LANCHESTER_ENABLED`,
 `POOL_QUALITY_MODEL`, …) lives only in `tests/sim/mass_battle/`. "All flags/gates, field-based, most
-recent work" therefore targets that engine. The `systems/` bare port has no such surface and is not
-exercised here (it is the GDScript-port reference, grid-model, no field path).
+recent work" therefore targets that engine for the flag/gate stress surface (S0–S5 below).
+
+**The DG-10 movement-freeze fix, however, was applied to BOTH engines** — because the *wired* engine
+(`systems/mass_battle/sim`, the one `resolve_mass_battle`/`faction_action` actually call) carries the
+**same** grid-floor freeze (`advance_cells`: `floor(1×0.7)=0` → `== 0: continue`). Per Jordan's
+"subunits aren't moving when they have previously" / "if it's broken and not commensurate with system,
+disable" / "fields, not grids. no grids." the freeze is disabled there too. That engine holds *integer*
+cell positions (contact = set-membership on integer coords), so it cannot carry a true sub-cell field
+velocity the way the field engine can (the two are unreconciled, ED-IN-0074 D5); the fix takes the real
+velocity with no floor and lets an advancing body take at least one whole cell instead of freezing —
+Discipline≥5 (incl. the wired `resolve_mass_battle` default) is **byte-identical** (`round(1.0)==floor(1.0)`),
+only the previously-frozen sub-disc-5 space moves. Guarded by `tests/valoria/test_mass_battle_systems_movement.py`
+(8 tests: per-disc closing isolation + all-disc aggregate + disc≥5 regression/determinism).
 
 ## 1. Headline finding + fix (DG-10) — field movement was broken
 
