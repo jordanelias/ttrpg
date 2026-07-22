@@ -1128,9 +1128,13 @@ def build_g_pp(root, tokens):
 
 
 def _keytype_token(kt, tokens):
-    """Map a contract Key-TYPE string (e.g. 'mechanical.scene_exited') to the token that names it,
-    by full-matching the token's patterns. Deterministic first match over insertion order."""
+    """Map a contract Key-TYPE string (e.g. 'mechanical.scene_exited') to the `Key:`-named token that
+    names it, by full-matching the token's patterns. HARDENING (adversarial pass, LOW): restricted to
+    Key-type tokens (name starts with 'Key:') so a future broad SYSTEM-token pattern can't silently
+    steal a key-type mapping — a key type only ever maps to a key token. Deterministic first match."""
     for name, rec in tokens.items():
+        if not name.startswith('Key:'):
+            continue
         for pat in rec['patterns']:
             try:
                 if re.fullmatch(pat, kt):
@@ -1141,17 +1145,26 @@ def _keytype_token(kt, tokens):
 
 
 def build_g_key(root, tokens):
-    """G_key — the KEY PROPAGATION graph (Direction #5, 2026-07-22): the engine's actual
-    IN→resolver→OUT data flow, read from references/module_contracts.yaml (the SAME source
-    tools/observability/build_graph.py uses). Two edge kinds, projected to token level:
+    """G_key — the KEY PROPAGATION graph (Direction #5, 2026-07-22): the engine's IN→resolver→OUT data
+    flow, projected to token level. Two edge kinds:
       • system↔system: module A emits Key K, module B consumes K → A and B are wired (data flows).
       • keytype↔system: a Key-TYPE token (e.g. 'Key: mechanical.scene_exited') ↔ every module that
         emits/consumes it — this is what UN-ISOLATES Key-type tokens (they are absent from the design
         CITATION graph by construction — prose rarely cites a Key by name — but CENTRAL here).
     This is the graph the audit was previously BLIND to (it used to filter Key tokens out of Mode-H
-    as 'expected false alarms'); folding it in RESOLVES them for real instead of apologising, and
-    triangulates design intent (cite/tl/mu/pp) against engine wiring. A Key-type token that maps to
-    NO emit/consume type stays isolated — correctly: it is a dangling/misnamed Key, a real gap."""
+    as 'expected false alarms'); folding it in RESOLVES them for real, and triangulates design intent
+    (cite/tl/mu/pp) against engine wiring. A Key-type token that stays isolated is a real finding —
+    an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a flow declared only via
+    `derivations:` — NOT necessarily "un-emitted"; the register carries the mechanism.
+
+    DRY / SCOPE HONESTY (adversarial pass, §8 'every rule lives once'): this reads the SAME FILE as
+    tools/observability/build_graph.py but is a DELIBERATELY NARROWER projection — typed module-level
+    `emits`/`consumes` only, at TOKEN granularity. build_graph.py is the AUTHORITATIVE, richer engine
+    graph: it additionally folds the Key Type Registry's emitting/consuming_systems, `from:` fields,
+    key-name-drift normalization, and DROP/BROADCAST sentinels, at system/key/scalar granularity. Do
+    NOT treat this token-projection as build_graph's graph. The two agree on system↔system edges today
+    (0 consumed types lack a module emitter); if that ever diverges, single-source the module-level
+    parse. (A follow-up to lift the shared emit/consume parse into one owner is tracked in HANDOFF_IN.)"""
     fp = root / 'references' / 'module_contracts.yaml'
     g = {}
     if not fp.exists():
@@ -1862,8 +1875,11 @@ def emit_structural_findings(root, out_path, layer='L0'):
     # NOTE (Direction #5): the Mode-H Key-token filter is GONE. It used to flag Key/cross-module
     # tokens as "expected false alarms" because the audit couldn't see the Key graph. Now it CAN
     # (build_g_key), so those tokens are genuinely un-isolated when they are wired — and the ones that
-    # REMAIN isolated (a Key type no module emits/consumes) are real dangling-Key gaps we SURFACE.
-    # No isolate is filtered anymore; every isolate is an honest finding.
+    # REMAIN isolated are real findings we SURFACE, whose mechanism is NOT assumed (an adversarial
+    # pass caught the earlier text calling an orphan-emit "un-emitted"): a still-isolated Key may be a
+    # dangling emit (emitted, unconsumed — structure_audit's `dangling_emit`, e.g. mass_battle's
+    # scene_outcome.battle_concluded), an unemitted/unconsumed Key, or a cross-module `derivations`
+    # flow this typed-emit/consume graph does not read. No isolate is filtered; each is honest.
     payload = {
         'schema_version': 1,
         'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
@@ -1875,7 +1891,8 @@ def emit_structural_findings(root, out_path, layer='L0'):
                 'emitted; lower-confidence Mode-B hub×hub pairs carry a `filtered`+`filter_reason` '
                 'flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing '
                 'face. Isolates are NO LONGER filtered — the Key graph resolves the ones that are '
-                'genuinely wired, and a still-isolated Key is a real dangling-Key gap.',
+                'genuinely wired; a still-isolated Key is a real finding (orphan/dangling emit, '
+                'unemitted/unconsumed Key, or a derivations-only flow) — mechanism per the register.',
         'layer': layer,
         'design_docs': manifest.get('design_count'),
         'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links'),

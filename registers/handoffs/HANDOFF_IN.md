@@ -816,8 +816,25 @@ allocate, bump, co-commit; never max+1.)_
     the Mode-H Key-token filter** — the audit now SEES the Key graph, so wired Key tokens resolve
     for real and the ones that stay isolated (e.g. `Key: scene_outcome.battle_concluded`, a
     dangling/misnamed Key no module emits) SURFACE as honest gaps. A critic is auditing #5 now.
-    (Possible DRY note to watch: build_g_key re-parses module_contracts emit/consume, which
-    build_graph.py also parses — different projections, but flagged for the critic.)
+    **Adversarial pass reconciled (commit follows):** the critic verified all deltas (hubs 11→16,
+    isolates 11→9, deterministic, backward-compat, 18/18) and caught two MED issues, both fixed:
+    (1) **honesty** — I had mislabeled `Key: scene_outcome.battle_concluded` as "a Key no module
+    emits"; it is EMITTED by mass_battle (`module_contracts.yaml:473`, a known naming-drift
+    `[OPEN — Jordan]`) but CONSUMED by nothing = an **orphan/dangling emit** (deg 1). Fixed the
+    ledger text (now reports the structural fact + points to the register for mechanism, asserts no
+    cause), SKILL.md, the emit note, and the test; (2) **`_keytype_token` hardened** to only map to
+    `Key:`-named tokens (no future broad system pattern can steal a key-type mapping). Also documented
+    the 2 `faction … (cross-module → faction_state)` isolates honestly — they are `derivations:` outputs
+    (real settlement→faction flows) the typed emit/consume graph structurally can't see.
+    **DRY FOLLOW-UP (tracked, MED, NOT yet done):** `build_g_key` re-parses `module_contracts`
+    emit/consume that `tools/observability/build_graph.py` (+ `structure_audit.py`'s `dangling_emit`)
+    already own — §8 "every rule lives once". They're deliberately different projections (token-level
+    narrow vs system/key/scalar rich) and agree on system↔system edges today (latent, not diverging),
+    so I DID NOT force a risky refactor: build_graph reads a richer normalized graph, and consuming its
+    generated `graph.json` would create an audit-refresh ordering hazard (graph.json regenerates AFTER
+    emit-findings). The clean fix is to lift the shared module-level emit/consume parse into ONE owner
+    both import — deferred as its own change with an expected-delta test. Comment in `build_g_key`
+    now states the narrowness + names build_graph.py as authoritative (no more "mirrors build_graph").
   - **Dir #4 (pending, now lowest priority)** — L1-layer validation calibration: P3's absolute
     `n_cite_edges≥100` bar is trivially met at L1's larger corpus; make it scale-relative. Already
     honestly DISCLOSED as "L0-calibrated, not re-validated for L1", so the gap is surfaced not hidden.

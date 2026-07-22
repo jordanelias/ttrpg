@@ -483,7 +483,7 @@
       "category": "audit_isolate",
       "id": "iso::Active Inquisition",
       "title": "Active Inquisition \u2014 no design-prose home",
-      "detail": "\u201cActive Inquisition\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cActive Inquisition\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/action_vocabulary.yaml",
       "lane": "IN"
     },
@@ -491,7 +491,7 @@
       "category": "audit_isolate",
       "id": "iso::Body",
       "title": "Body \u2014 no design-prose home",
-      "detail": "\u201cBody\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/names_index.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cBody\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/names_index.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/names_index.yaml",
       "lane": "IN"
     },
@@ -499,7 +499,7 @@
       "category": "audit_isolate",
       "id": "iso::Counter-Intelligence",
       "title": "Counter-Intelligence \u2014 no design-prose home",
-      "detail": "\u201cCounter-Intelligence\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cCounter-Intelligence\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/action_vocabulary.yaml",
       "lane": "IN"
     },
@@ -507,7 +507,7 @@
       "category": "audit_isolate",
       "id": "iso::Key: scene_outcome.battle_concluded",
       "title": "Key: scene_outcome.battle_concluded \u2014 no design-prose home",
-      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has max degree 1 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has max degree 1 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
@@ -515,7 +515,7 @@
       "category": "audit_isolate",
       "id": "iso::NPC Relational Graph",
       "title": "NPC Relational Graph \u2014 no design-prose home",
-      "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
       "lane": "IN"
     },
@@ -523,7 +523,7 @@
       "category": "audit_isolate",
       "id": "iso::Territorial Piety",
       "title": "Territorial Piety \u2014 no design-prose home",
-      "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
@@ -531,7 +531,7 @@
       "category": "audit_isolate",
       "id": "iso::Territory Temperaments",
       "title": "Territory Temperaments \u2014 no design-prose home",
-      "detail": "\u201cTerritory Temperaments\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cTerritory Temperaments\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
       "lane": "IN"
     },
@@ -539,7 +539,7 @@
       "category": "audit_isolate",
       "id": "iso::faction Mandate (cross-module \u2192 faction_state)",
       "title": "faction Mandate (cross-module \u2192 faction_state) \u2014 no design-prose home",
-      "detail": "\u201cfaction Mandate (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cfaction Mandate (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
@@ -547,7 +547,7 @@
       "category": "audit_isolate",
       "id": "iso::faction Treasury income (cross-module \u2192 faction_state)",
       "title": "faction Treasury income (cross-module \u2192 faction_state) \u2014 no design-prose home",
-      "detail": "\u201cfaction Treasury income (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cfaction Treasury income (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
@@ -1297,8 +1297,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:620",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:620",
+      "id": "tools/observability/build_incompleteness.py:627",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:627",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN"

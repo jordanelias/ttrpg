@@ -501,11 +501,18 @@ def scan_audit_structural():
             path = doc
         else:
             title = f"{t} — no design-prose home"
+            # Report the STRUCTURAL fact only; do NOT assert a mechanism the ledger can't verify. A
+            # degree-≤1 Key token can be an orphan EMIT (emitted, unconsumed — e.g. mass_battle's
+            # scene_outcome.battle_concluded, ED-MB-0010), a Key consumed-but-unemitted, or a
+            # cross-module flow declared only in `derivations:` (which the Key graph does not read) —
+            # the register is where you investigate which. (Corrected after an adversarial pass caught
+            # the text mislabeling an orphan-emit as "no module emits or consumes".)
             body = (f"“{t}” has max degree {md} (≤1) across ALL FIVE structural graphs "
                     f"(cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc "
-                    f"— a registered term with no home in the design corpus OR the engine Key flow "
-                    f"(the strongest incompleteness signal; a still-isolated Key here is a dangling/"
-                    f"misnamed Key no module emits or consumes); registered via {reg or '?'}")
+                    f"— a registered term with no home the graphs can see (a strong incompleteness "
+                    f"signal). If it is a Key type, check the register for the mechanism: an orphan "
+                    f"emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module "
+                    f"`derivations` flow the Key graph does not read; registered via {reg or '?'}")
             path = reg
         out.append(finding("audit_isolate", f"iso::{t}", title,
                            f"{body}. vector-audit Mode H; status {r.get('status','?')} ({snap})",

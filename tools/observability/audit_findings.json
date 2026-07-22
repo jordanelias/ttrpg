@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
-  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). Per SURFACE-NEVER-CULL EVERY finding is emitted; lower-confidence Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing face. Isolates are NO LONGER filtered \u2014 the Key graph resolves the ones that are genuinely wired, and a still-isolated Key is a real dangling-Key gap.",
+  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). Per SURFACE-NEVER-CULL EVERY finding is emitted; lower-confidence Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing face. Isolates are NO LONGER filtered \u2014 the Key graph resolves the ones that are genuinely wired; a still-isolated Key is a real finding (orphan/dangling emit, unemitted/unconsumed Key, or a derivations-only flow) \u2014 mechanism per the register.",
   "layer": "L0",
   "design_docs": 110,
   "implied_missing": [

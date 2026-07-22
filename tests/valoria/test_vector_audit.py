@@ -395,7 +395,8 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     emit→consume flow — the engine's actual IN→resolver→OUT wiring — as a 5th structural graph. It
     must (a) connect systems that share a Key (A emits, B consumes), (b) connect a Key-TYPE token to
     the systems that emit/consume it — which un-isolates Key tokens the design CITATION graph can't
-    see — while (c) leaving a Key that NO module emits/consumes isolated (a real dangling-Key gap),
+    see — while (c) leaving a Key with no CONSUMER isolated (a real finding: an orphan/dangling emit —
+    emitted but consumed by nothing — NOT an un-emitted Key; corrected after an adversarial pass),
     and (d) be deterministic. This is what lets the emit DELETE its old Key-token isolate filter."""
     import os, json
     from pathlib import Path
@@ -414,7 +415,7 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     canon = lambda g: json.dumps({k: dict(sorted(v.items())) for k, v in sorted(g.items())})
     assert canon(g_key) == canon(va.build_g_key(root, tokens))
     # folding key into diagnostics resolves the wired Key-tokens as Mode-H isolates but NOT the
-    # genuinely-unwired ones (dangling Keys / registry terms stay surfaced — SURFACE-NEVER-CULL).
+    # ones with no consumer (orphan/dangling emits stay surfaced — SURFACE-NEVER-CULL).
     rows = va.parse_throughlines(root)
     graphs = {'cite': va.build_g_cite(tokens, design),
               'throughline': va.build_g_throughline(rows, tokens,
@@ -423,8 +424,10 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     degs = {k: va._degrees(graphs[k], names) for k in graphs}
     iso = {r['token'] for r in va.diagnostics(tokens, graphs, degs)['H_isolates']}
     assert 'Key: mechanical.scene_exited' not in iso   # resolved by the key graph, not filtered
-    # a Key type no module emits/consumes stays isolated — a real gap we now SURFACE (was filtered)
+    # scene_outcome.battle_concluded IS emitted by mass_battle (module_contracts.yaml:473) but
+    # consumed by NOTHING — an orphan/dangling emit (deg 1, not 0). Stays isolated, surfaced honestly.
     assert 'Key: scene_outcome.battle_concluded' in iso
+    assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 1  # emitted-once, not un-emitted
 
 
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
