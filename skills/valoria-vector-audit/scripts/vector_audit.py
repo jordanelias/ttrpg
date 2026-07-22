@@ -1678,20 +1678,65 @@ def run(root, out, layer='L0'):
     return validation
 
 
+def emit_structural_findings(root, out_path, layer='L0'):
+    """Write a COMPACT, deterministic feed of the audit's UNIQUE structural findings — Mode B
+    (implied-but-missing: two design concepts linked in >=2 metadata graphs but never cited
+    together) + Mode H (multi-graph isolates: structurally disconnected tokens). This is how the
+    vector-audit TALKS to the Incompleteness Ledger / dashboard: its cross-graph findings, which
+    no other tool computes, become surfaced findings. No timestamps (churn-proof). Skips tf-idf
+    (supporting-only) for speed."""
+    root, out_path = Path(root), Path(out_path)
+    design, _, manifest = extract_corpus(root, layer=layer)
+    token_defs = derive_tokens(root)
+    tokens, _ = curate_tokens(design, token_defs)
+    g_cite = build_g_cite(tokens, design)
+    rows = parse_throughlines(root)
+    graphs = {'cite': g_cite, 'throughline': build_g_throughline(rows, tokens),
+              'mu': build_g_mu(rows, tokens), 'pp': build_g_pp(root, tokens)}
+    names = list(tokens)
+    degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp')}
+    diag = diagnostics(tokens, graphs, degs)
+    payload = {
+        'schema_version': 1,
+        'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
+        'note': 'GENERATED — the vector-audit\'s unique cross-graph structural findings (Mode B '
+                'implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. '
+                'Layer ' + layer + ' (curated slice — not whole-repo).',
+        'layer': layer,
+        'design_docs': manifest.get('design_count'),
+        'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links')}
+                            for r in diag.get('B_implied_missing', [])],
+        'isolates': [{'token': r['token'], 'status': r.get('status')}
+                     for r in diag.get('H_isolates', [])],
+    }
+    out_path.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
+    print(f'[emit] {len(payload["implied_missing"])} implied-missing + {len(payload["isolates"])} '
+          f'isolates -> {out_path}')
+    return payload
+
+
 def main():
     ap = argparse.ArgumentParser(description='Valoria v3 multi-graph vector audit (working-tree).')
-    ap.add_argument('--output-dir', required=True, help='audit output folder')
+    ap.add_argument('--output-dir', help='audit output folder (full run)')
     ap.add_argument('--mode', default='all', help='(reserved) stage selector')
     ap.add_argument('--repo-root', default='.', help='repo root (working tree)')
     ap.add_argument('--layer', default='L0', choices=['L0', 'L1'],
                     help="corpus breadth: L0 = curated canonical_sources slice (~6%%, validated "
                          "scope); L1 = extend the trace to the whole design tree (all directions)")
+    ap.add_argument('--emit-findings', metavar='PATH',
+                    help="write ONLY the compact structural-findings feed (Mode B implied-missing "
+                         "+ Mode H isolates) to PATH — for the Incompleteness Ledger to surface")
     args = ap.parse_args()
 
     root = Path(args.repo_root)
     if not (root / 'references' / 'canonical_sources.yaml').exists():
         sys.exit(f"not a Valoria repo root (no references/canonical_sources.yaml): {root}")
     print(f"[vector_audit v3] corpus root (working tree): {root.resolve()}")
+    if args.emit_findings:
+        emit_structural_findings(root, args.emit_findings, layer=args.layer)
+        return
+    if not args.output_dir:
+        sys.exit("either --output-dir (full run) or --emit-findings PATH is required")
     run(root, args.output_dir, layer=args.layer)
 
 

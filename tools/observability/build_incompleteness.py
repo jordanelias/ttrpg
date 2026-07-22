@@ -440,6 +440,35 @@ def scan_audit_exclusions():
     return out
 
 
+def scan_audit_structural():
+    """Surface the vector-audit's UNIQUE cross-graph findings from its committed feed
+    (audit_findings.json, refreshed weekly by --emit-findings): Mode B implied-but-missing
+    connections (two design concepts linked in >=2 metadata graphs but NEVER cited together — a
+    structural gap no other tool computes) + Mode H multi-graph isolates. This is how the two
+    observatories TALK: the audit's structural analysis lands in the unified ledger. Reads a
+    committed snapshot (fast) — the 70s audit run happens in audit-refresh, not per ledger build."""
+    d = _load_json("tools/observability/audit_findings.json")
+    if not d:
+        return []
+    out = []
+    for r in d.get("implied_missing", []):
+        a, b = r.get("a"), r.get("b")
+        out.append(finding("audit_implied_missing", f"impl::{a}||{b}",
+                           f"{a} ⋯ {b} — implied but never cited",
+                           f"“{a}” and “{b}” are linked in {r.get('meta_links','?')} metadata graphs "
+                           f"(throughline/mu/pp) but are NEVER cited together — a missing connection the "
+                           f"design should make explicit or is a real gap (vector-audit Mode B)",
+                           path="", lane="IN"))
+    for r in d.get("isolates", []):
+        t = r.get("token")
+        out.append(finding("audit_isolate", f"iso::{t}",
+                           f"{t} — structurally isolated",
+                           f"“{t}” has degree <=1 across ALL of the cite/throughline/mu/pp graphs — "
+                           f"structurally disconnected from the rest of the design (vector-audit Mode H); "
+                           f"status {r.get('status','?')}", path="", lane="IN"))
+    return out
+
+
 def scan_unregistered_terms():
     """MISSING REGISTRATIONS — authored design terms that appear across many docs but that NO
     registered token matches, so the vector-audit is structurally blind to them (the token universe
@@ -487,6 +516,7 @@ def build():
     findings += scan_status_headers()
     findings += scan_retired_tree_pointers()
     findings += scan_orphan_tools()
+    findings += scan_audit_structural()
     findings += scan_unregistered_terms()
     findings += scan_integrity_pins()
     findings += scan_quarantine()
@@ -550,6 +580,8 @@ CATEGORY_LABEL = {
     "apparatus_orphan": "Orphaned tools/skills (no importer/invoker)",
     "stale_retired_pointer": "Registries still pointing at the retired designs/ tree (alias-hidden)",
     "unregistered_term": "Frequent authored terms with NO registered token (missing registrations)",
+    "audit_implied_missing": "Implied-but-never-cited connections (vector-audit Mode B)",
+    "audit_isolate": "Structurally isolated tokens (vector-audit Mode H)",
     "integrity_unverified_pin": "Unverified integrity pins (canonical_sha)",
     "register_quarantined": "Quarantined/stale registers",
     "register_phantom_source": "Registry rows indexing a non-existent source file",

@@ -75,7 +75,14 @@ jobs:
       - name: Regenerate apparatus registry
         run: python3 tools/build_apparatus_registry.py
 
-      - name: Regenerate the Incompleteness Ledger (absorb-everything: stubs/nulls/missing)
+      - name: Emit the vector-audit's structural findings feed (implied-missing + isolates)
+        # The audit's UNIQUE cross-graph findings (Mode B implied-but-missing connections + Mode H
+        # isolates) — no other tool computes them. Written as a committed feed the Incompleteness
+        # Ledger surfaces (the two observatories talk). ~70s (curate_tokens); weekly cadence, fine.
+        # MUST run before build_incompleteness, which reads audit_findings.json.
+        run: python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --emit-findings tools/observability/audit_findings.json
+
+      - name: "Regenerate the Incompleteness Ledger (absorb-everything: stubs/nulls/missing)"
         # The vectorization apparatus exists to SURFACE WHAT IS MISSING. This scans the whole
         # tree for every stub/null/missing/excluded/unverified thing and refreshes the ledger +
         # the dashboard's Missing face on the same cadence.
@@ -106,7 +113,7 @@ jobs:
           # (whose volatile fields build_graph strips), so gating on it could still churn; the
           # corpus/content feeds here are the real "is there work?" signal. It IS git-added so it
           # ships fresh whenever a real change opens a PR.
-          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js; then
+          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -127,7 +134,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/console.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js
+          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/console.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json
           git commit -m "[infrastructure] Scheduled decisions-digest + proposals + apparatus refresh (${DATE})"
           git push origin "$BRANCH"
           URL=$(gh pr create \

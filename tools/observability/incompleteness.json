@@ -3,10 +3,12 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 193,
+    "findings": 236,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
+      "audit_implied_missing": 32,
+      "audit_isolate": 11,
       "code_marker": 3,
       "contract_doc_null": 9,
       "contract_island": 5,
@@ -55,9 +57,11 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 90,
+      "total": 133,
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
+      "audit_implied_missing": 32,
+      "audit_isolate": 11,
       "integrity_unverified_pin": 1,
       "prose_marker": 5,
       "register_phantom_source": 1,
@@ -249,6 +253,350 @@
       "title": "Videogame Mode Spec",
       "detail": "vector-audit denylists this system: platform/mode spec, not a mechanic",
       "path": "canonical_sources:videogame_mode_spec",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::CI Political||Clocks",
+      "title": "CI Political \u22ef Clocks \u2014 implied but never cited",
+      "detail": "\u201cCI Political\u201d and \u201cClocks\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Campaign Architecture||Faction Layer",
+      "title": "Campaign Architecture \u22ef Faction Layer \u2014 implied but never cited",
+      "detail": "\u201cCampaign Architecture\u201d and \u201cFaction Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Campaign Architecture||Peninsular Strain",
+      "title": "Campaign Architecture \u22ef Peninsular Strain \u2014 implied but never cited",
+      "detail": "\u201cCampaign Architecture\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Campaign Architecture||Scale Transitions",
+      "title": "Campaign Architecture \u22ef Scale Transitions \u2014 implied but never cited",
+      "detail": "\u201cCampaign Architecture\u201d and \u201cScale Transitions\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Clocks||Faction Layer",
+      "title": "Clocks \u22ef Faction Layer \u2014 implied but never cited",
+      "detail": "\u201cClocks\u201d and \u201cFaction Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Clocks||MS Trajectory",
+      "title": "Clocks \u22ef MS Trajectory \u2014 implied but never cited",
+      "detail": "\u201cClocks\u201d and \u201cMS Trajectory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Clocks||Peninsular Strain",
+      "title": "Clocks \u22ef Peninsular Strain \u2014 implied but never cited",
+      "detail": "\u201cClocks\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Clocks||Royal Assassination Fuse",
+      "title": "Clocks \u22ef Royal Assassination Fuse \u2014 implied but never cited",
+      "detail": "\u201cClocks\u201d and \u201cRoyal Assassination Fuse\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Clocks||Threadwork",
+      "title": "Clocks \u22ef Threadwork \u2014 implied but never cited",
+      "detail": "\u201cClocks\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Clocks||Victory",
+      "title": "Clocks \u22ef Victory \u2014 implied but never cited",
+      "detail": "\u201cClocks\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Conflict Architecture||Leap Mechanism",
+      "title": "Conflict Architecture \u22ef Leap Mechanism \u2014 implied but never cited",
+      "detail": "\u201cConflict Architecture\u201d and \u201cLeap Mechanism\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Conflict Architecture||Tensions Deck",
+      "title": "Conflict Architecture \u22ef Tensions Deck \u2014 implied but never cited",
+      "detail": "\u201cConflict Architecture\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Conviction Track||Derived Stats",
+      "title": "Conviction Track \u22ef Derived Stats \u2014 implied but never cited",
+      "detail": "\u201cConviction Track\u201d and \u201cDerived Stats\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Derived Stats||Self-Rendering",
+      "title": "Derived Stats \u22ef Self-Rendering \u2014 implied but never cited",
+      "detail": "\u201cDerived Stats\u201d and \u201cSelf-Rendering\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Derived Stats||Solmund",
+      "title": "Derived Stats \u22ef Solmund \u2014 implied but never cited",
+      "detail": "\u201cDerived Stats\u201d and \u201cSolmund\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Faction Layer||Mass Combat",
+      "title": "Faction Layer \u22ef Mass Combat \u2014 implied but never cited",
+      "detail": "\u201cFaction Layer\u201d and \u201cMass Combat\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Faction Layer||Scale Transitions",
+      "title": "Faction Layer \u22ef Scale Transitions \u2014 implied but never cited",
+      "detail": "\u201cFaction Layer\u201d and \u201cScale Transitions\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Factions||MS Trajectory",
+      "title": "Factions \u22ef MS Trajectory \u2014 implied but never cited",
+      "detail": "\u201cFactions\u201d and \u201cMS Trajectory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Factions||Miraculous Event",
+      "title": "Factions \u22ef Miraculous Event \u2014 implied but never cited",
+      "detail": "\u201cFactions\u201d and \u201cMiraculous Event\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::MS Trajectory||Peninsular Strain",
+      "title": "MS Trajectory \u22ef Peninsular Strain \u2014 implied but never cited",
+      "detail": "\u201cMS Trajectory\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::MS Trajectory||Settlement Layer",
+      "title": "MS Trajectory \u22ef Settlement Layer \u2014 implied but never cited",
+      "detail": "\u201cMS Trajectory\u201d and \u201cSettlement Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Mass Combat||Settlement Layer",
+      "title": "Mass Combat \u22ef Settlement Layer \u2014 implied but never cited",
+      "detail": "\u201cMass Combat\u201d and \u201cSettlement Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Mass Combat||Victory",
+      "title": "Mass Combat \u22ef Victory \u2014 implied but never cited",
+      "detail": "\u201cMass Combat\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Military Layer||Settlement Layer",
+      "title": "Military Layer \u22ef Settlement Layer \u2014 implied but never cited",
+      "detail": "\u201cMilitary Layer\u201d and \u201cSettlement Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Miraculous Event||Threadwork",
+      "title": "Miraculous Event \u22ef Threadwork \u2014 implied but never cited",
+      "detail": "\u201cMiraculous Event\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Peninsular Strain||Tensions Deck",
+      "title": "Peninsular Strain \u22ef Tensions Deck \u2014 implied but never cited",
+      "detail": "\u201cPeninsular Strain\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Royal Assassination Fuse||Tensions Deck",
+      "title": "Royal Assassination Fuse \u22ef Tensions Deck \u2014 implied but never cited",
+      "detail": "\u201cRoyal Assassination Fuse\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Scale Transitions||Self-Rendering",
+      "title": "Scale Transitions \u22ef Self-Rendering \u2014 implied but never cited",
+      "detail": "\u201cScale Transitions\u201d and \u201cSelf-Rendering\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Scale Transitions||Tensions Deck",
+      "title": "Scale Transitions \u22ef Tensions Deck \u2014 implied but never cited",
+      "detail": "\u201cScale Transitions\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Scale Transitions||Threadwork",
+      "title": "Scale Transitions \u22ef Threadwork \u2014 implied but never cited",
+      "detail": "\u201cScale Transitions\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Scale Transitions||Victory",
+      "title": "Scale Transitions \u22ef Victory \u2014 implied but never cited",
+      "detail": "\u201cScale Transitions\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_implied_missing",
+      "id": "impl::Tensions Deck||Victory",
+      "title": "Tensions Deck \u22ef Victory \u2014 implied but never cited",
+      "detail": "\u201cTensions Deck\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B)",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Active Inquisition",
+      "title": "Active Inquisition \u2014 structurally isolated",
+      "detail": "\u201cActive Inquisition\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Body",
+      "title": "Body \u2014 structurally isolated",
+      "detail": "\u201cBody\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Counter-Intelligence",
+      "title": "Counter-Intelligence \u2014 structurally isolated",
+      "detail": "\u201cCounter-Intelligence\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Key: mechanical.scene_exited",
+      "title": "Key: mechanical.scene_exited \u2014 structurally isolated",
+      "detail": "\u201cKey: mechanical.scene_exited\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Key: mechanical.scene_skipped",
+      "title": "Key: mechanical.scene_skipped \u2014 structurally isolated",
+      "detail": "\u201cKey: mechanical.scene_skipped\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Key: scene_outcome.battle_concluded",
+      "title": "Key: scene_outcome.battle_concluded \u2014 structurally isolated",
+      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::NPC Relational Graph",
+      "title": "NPC Relational Graph \u2014 structurally isolated",
+      "detail": "\u201cNPC Relational Graph\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Territorial Piety",
+      "title": "Territorial Piety \u2014 structurally isolated",
+      "detail": "\u201cTerritorial Piety\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Territory Temperaments",
+      "title": "Territory Temperaments \u2014 structurally isolated",
+      "detail": "\u201cTerritory Temperaments\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::faction Mandate (cross-module \u2192 faction_state)",
+      "title": "faction Mandate (cross-module \u2192 faction_state) \u2014 structurally isolated",
+      "detail": "\u201cfaction Mandate (cross-module \u2192 faction_state)\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::faction Treasury income (cross-module \u2192 faction_state)",
+      "title": "faction Treasury income (cross-module \u2192 faction_state) \u2014 structurally isolated",
+      "detail": "\u201cfaction Treasury income (cross-module \u2192 faction_state)\u201d has degree <=1 across ALL of the cite/throughline/mu/pp graphs \u2014 structurally disconnected from the rest of the design (vector-audit Mode H); status canonical",
+      "path": "",
       "lane": "IN"
     },
     {
@@ -997,8 +1345,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:546",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:546",
+      "id": "tools/observability/build_incompleteness.py:576",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:576",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN"

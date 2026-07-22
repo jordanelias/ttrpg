@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
+  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo).",
+  "layer": "L0",
+  "design_docs": 110,
+  "implied_missing": [
+    {
+      "a": "CI Political",
+      "b": "Clocks",
+      "meta_links": 2
+    },
+    {
+      "a": "Campaign Architecture",
+      "b": "Faction Layer",
+      "meta_links": 2
+    },
+    {
+      "a": "Campaign Architecture",
+      "b": "Peninsular Strain",
+      "meta_links": 2
+    },
+    {
+      "a": "Campaign Architecture",
+      "b": "Scale Transitions",
+      "meta_links": 2
+    },
+    {
+      "a": "Clocks",
+      "b": "Faction Layer",
+      "meta_links": 2
+    },
+    {
+      "a": "Clocks",
+      "b": "MS Trajectory",
+      "meta_links": 2
+    },
+    {
+      "a": "Clocks",
+      "b": "Peninsular Strain",
+      "meta_links": 2
+    },
+    {
+      "a": "Clocks",
+      "b": "Royal Assassination Fuse",
+      "meta_links": 2
+    },
+    {
+      "a": "Clocks",
+      "b": "Threadwork",
+      "meta_links": 2
+    },
+    {
+      "a": "Clocks",
+      "b": "Victory",
+      "meta_links": 2
+    },
+    {
+      "a": "Conflict Architecture",
+      "b": "Leap Mechanism",
+      "meta_links": 2
+    },
+    {
+      "a": "Conflict Architecture",
+      "b": "Tensions Deck",
+      "meta_links": 2
+    },
+    {
+      "a": "Conviction Track",
+      "b": "Derived Stats",
+      "meta_links": 2
+    },
+    {
+      "a": "Derived Stats",
+      "b": "Self-Rendering",
+      "meta_links": 2
+    },
+    {
+      "a": "Derived Stats",
+      "b": "Solmund",
+      "meta_links": 2
+    },
+    {
+      "a": "Faction Layer",
+      "b": "Mass Combat",
+      "meta_links": 2
+    },
+    {
+      "a": "Faction Layer",
+      "b": "Scale Transitions",
+      "meta_links": 2
+    },
+    {
+      "a": "Factions",
+      "b": "MS Trajectory",
+      "meta_links": 2
+    },
+    {
+      "a": "Factions",
+      "b": "Miraculous Event",
+      "meta_links": 2
+    },
+    {
+      "a": "MS Trajectory",
+      "b": "Peninsular Strain",
+      "meta_links": 2
+    },
+    {
+      "a": "MS Trajectory",
+      "b": "Settlement Layer",
+      "meta_links": 2
+    },
+    {
+      "a": "Mass Combat",
+      "b": "Settlement Layer",
+      "meta_links": 2
+    },
+    {
+      "a": "Mass Combat",
+      "b": "Victory",
+      "meta_links": 2
+    },
+    {
+      "a": "Military Layer",
+      "b": "Settlement Layer",
+      "meta_links": 2
+    },
+    {
+      "a": "Miraculous Event",
+      "b": "Threadwork",
+      "meta_links": 2
+    },
+    {
+      "a": "Peninsular Strain",
+      "b": "Tensions Deck",
+      "meta_links": 2
+    },
+    {
+      "a": "Royal Assassination Fuse",
+      "b": "Tensions Deck",
+      "meta_links": 2
+    },
+    {
+      "a": "Scale Transitions",
+      "b": "Self-Rendering",
+      "meta_links": 2
+    },
+    {
+      "a": "Scale Transitions",
+      "b": "Tensions Deck",
+      "meta_links": 2
+    },
+    {
+      "a": "Scale Transitions",
+      "b": "Threadwork",
+      "meta_links": 2
+    },
+    {
+      "a": "Scale Transitions",
+      "b": "Victory",
+      "meta_links": 2
+    },
+    {
+      "a": "Tensions Deck",
+      "b": "Victory",
+      "meta_links": 2
+    }
+  ],
+  "isolates": [
+    {
+      "token": "Active Inquisition",
+      "status": "canonical"
+    },
+    {
+      "token": "Body",
+      "status": "canonical"
+    },
+    {
+      "token": "Counter-Intelligence",
+      "status": "canonical"
+    },
+    {
+      "token": "Key: mechanical.scene_exited",
+      "status": "canonical"
+    },
+    {
+      "token": "Key: mechanical.scene_skipped",
+      "status": "canonical"
+    },
+    {
+      "token": "Key: scene_outcome.battle_concluded",
+      "status": "canonical"
+    },
+    {
+      "token": "NPC Relational Graph",
+      "status": "canonical"
+    },
+    {
+      "token": "Territorial Piety",
+      "status": "canonical"
+    },
+    {
+      "token": "Territory Temperaments",
+      "status": "canonical"
+    },
+    {
+      "token": "faction Mandate (cross-module \u2192 faction_state)",
+      "status": "canonical"
+    },
+    {
+      "token": "faction Treasury income (cross-module \u2192 faction_state)",
+      "status": "canonical"
+    }
+  ]
+}
