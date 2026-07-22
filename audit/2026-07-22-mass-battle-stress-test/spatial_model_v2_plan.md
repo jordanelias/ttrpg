@@ -83,6 +83,19 @@ deleting that one recording snap.
   translation/rotation invariant, reduces to the circle test within tolerance for axis-aligned unit
   boxes at reach 0. **Gate:** new tests green; zero behaviour change (nothing calls it yet).
 
+> **STATUS (2026-07-22): Stage A DONE + verified (committed). Stage B+C PROTOTYPED but PARKED on a
+> perf wall — needs the analytic TOI before it can land.** An agonist wired the OBB into
+> `_find_contacts_standoff` (contact) and `resolve_toi_and_commit` (halt); it is *correct* (conserves
+> Σcells=hp, deterministic, contact fires, single battles resolve) — but its TOI uses a per-cell-pair
+> **scan+bisection** on `obb_front_reach_overlap` (~200k list-allocating SAT calls/battle), making the
+> field path **~20–60× slower** (~4–8 s/battle vs 0.22 s). It stalled the producing agent on its own
+> byte-exact run. A contact-loop pre-filter + iteration cuts + corner-offset caching each helped but
+> could not crack it — the bisection is architecturally wrong for Python at this call volume. Prototype
+> preserved (`stageBC_prototype_slow_TOI.patch` + `stageBC_test_obb_contact_toi.py`); tree reverted to
+> clean Stage A. **Resume = replace the bisection with an analytic swept-SAT interval TOI** (each ≤4 SAT
+> axes gives a linear-in-s overlap interval; intersect; touch = left end — O(4)/pair, zero iteration),
+> verified by diff against the parked bisection as an oracle. A dedicated careful pass, not a quick patch.
+
 ### Stage B — contact decision on OBB (swap the circle test)
 - In `_find_contacts_standoff`, replace `hypot(Δ) ≤ standoff_from_reach(...)` with
   `obb_front_reach_overlap(boxA, boxB)`; boxes built from `cells_float()` centre + `cell_facing_vec`

@@ -1,0 +1,245 @@
+diff --git a/tests/sim/mass_battle/core/contact.py b/tests/sim/mass_battle/core/contact.py
+index b2ffb65..46c42f3 100644
+--- a/tests/sim/mass_battle/core/contact.py
++++ b/tests/sim/mass_battle/core/contact.py
+@@ -273,22 +273,34 @@ def _find_contacts_standoff(unit_a, unit_b):
+     PREDICATE is continuous; the reported cell identities stay on the existing snap convention."""
+     import mass_battle.hierarchy.units as _u
+     pairs = []
+-    af = {id(a): (a.cells_float(), _u.reach_for(a.troop_type)) for a in unit_a.subunits}
+-    bf = {id(b): (b.cells_float(), _u.reach_for(b.troop_type)) for b in unit_b.subunits}
++    # [v2 Stage B] Each cell is now an oriented unit box (CellBox) grown by its melee reach on the FRONT
++    # face; contact fires on obb_front_reach_overlap (the boxed engagement surface) instead of the
++    # isotropic circle math.hypot(Δ) <= standoff_from_reach. reach unchanged this stage (reach_for ->
++    # REACH_SHORT=0.5); this is a pure CIRCLE->BOX shape swap at unchanged reach. The boxes are built by
++    # _u.cell_boxes_for, index-aligned with cells_float() and orientation/reach-identical to the boxes
++    # resolve_toi_and_commit halts on (Stage C), so contact and halt share one touch surface exactly.
++    af = {id(a): (a.cells_float(), _u.cell_boxes_for(a, _u.reach_for(a.troop_type))) for a in unit_a.subunits}
++    bf = {id(b): (b.cells_float(), _u.cell_boxes_for(b, _u.reach_for(b.troop_type))) for b in unit_b.subunits}
+     for atom_a in unit_a.subunits:
+-        fa, ra = af[id(atom_a)]
++        fa, boxes_a = af[id(atom_a)]
+         for atom_b in unit_b.subunits:
+-            fb, rb = bf[id(atom_b)]
+-            sd = _u.standoff_from_reach(ra, rb)
+-            # Sets, not lists: the standoff radius (>=2.0) is wide enough that one cell can be within
+-            # range of several enemy cells at once, which would otherwise append the SAME snapped
+-            # identity multiple times -- confirmed by adversarial review to silently over-count stamina
+-            # drain downstream (orchestration.py sums len(a_cells) directly, uncounted duplicates
+-            # inflate it). Converted to sorted lists at the end for deterministic output.
++            fb, boxes_b = bf[id(atom_b)]
++            # Sets, not lists: the engagement envelope is wide enough that one cell can meet several
++            # enemy cells at once, which would otherwise append the SAME snapped identity multiple times
++            # -- confirmed by adversarial review to silently over-count stamina drain downstream
++            # (orchestration.py sums len(a_cells) directly, uncounted duplicates inflate it). Converted
++            # to sorted lists at the end for deterministic output.
+             contact_cells_a, contact_cells_b, contact_cols = set(), set(), set()
+-            for (ar, ac) in fa:
+-                for (br, bc) in fb:
+-                    if math.hypot(ar - br, ac - bc) <= sd:
++            for (ar, ac), box_a in zip(fa, boxes_a):
++                for (br, bc), box_b in zip(fb, boxes_b):
++                    # [v2 Stage B perf reconcile, ED-MB-0011] Cheap bounding-circle reject before the
++                    # full SAT: two unit boxes (half-diagonal √2/2 ≈ 0.707) each grown by ≤ reach on the
++                    # front face can only engage if their centres are within 2·(0.707 + reach). With the
++                    # widest melee reach in play (REACH_SHORT=0.5 this stage) that bound is ≤ ~2.42; 2.6
++                    # is a safe, conservative cap. Far pairs (the vast majority) skip the SAT in O(1).
++                    if (ar - br) * (ar - br) + (ac - bc) * (ac - bc) > 2.6 * 2.6:
++                        continue
++                    if obb_front_reach_overlap(box_a, box_b):
+                         contact_cells_a.add((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
+                         contact_cells_b.add((int(round(br)), int(round(bc / _u.COL_WIDTH))))
+                         contact_cols.add(round(((ac + bc) / 2.0) / _u.COL_WIDTH))
+diff --git a/tests/sim/mass_battle/hierarchy/units.py b/tests/sim/mass_battle/hierarchy/units.py
+index e8f48a4..7435c40 100644
+--- a/tests/sim/mass_battle/hierarchy/units.py
++++ b/tests/sim/mass_battle/hierarchy/units.py
+@@ -77,6 +77,31 @@ def standoff(troop_type_a, troop_type_b):
+     return standoff_from_reach(reach_for(troop_type_a), reach_for(troop_type_b))
+ 
+ 
++def _cell_facing_for_box(atom, cid):
++    """[v2 Stage B/C] The heading used to orient a cell's CellBox -- the SAME expression
++    resolve_toi_and_commit._flat uses for its _ToiCell.facing, so the contact predicate (Stage B) and
++    the TOI halt (Stage C) build byte-identical boxes for the same cell/position and therefore agree on
++    the touch surface exactly. Committed cell facing (cell_facing_vec) if present, else the sub-unit's
++    live node facing, else the raw advance direction (advance_dir, 0). NOT get_cell_facing: the
++    PC_FACING_ROUT away-facing flip is a targeting/reach-adjudication concern, deliberately NOT applied
++    to the physical-body box geometry (a fleeing body still occupies its square)."""
++    return atom.cell_facing_vec.get(cid, getattr(atom, '_node_facing', None) or (atom.advance_dir, 0))
++
++
++def cell_boxes_for(atom, reach_front):
++    """[v2 Stage B] One CellBox per cell of `atom`, aligned index-for-index with atom.cells_float()
++    (both iterate _oriented(atom) order, so zip() pairs each float centre with its own box). Standard
++    unit square (w=d=1.0); heading = the cell's facing (_cell_facing_for_box); reach_front = the atom's
++    melee reach, passed in by the caller (reach_for(troop_type) this stage -- REACH_SHORT=0.5) so contact
++    and TOI feed the identical value. Pure/deterministic; no mutation of atom."""
++    boxes = []
++    for (orig_r, orig_c, _o_r, _o_c), (r, c) in zip(_oriented(atom), atom.cells_float()):
++        fv = _cell_facing_for_box(atom, (orig_r, orig_c))
++        boxes.append(cellbox_from(float(r), float(c), (float(fv[0]), float(fv[1])),
++                                  w=1.0, d=1.0, reach_front=reach_front))
++    return boxes
++
++
+ # [TOI refactor] Reach bonus only projects within the forward FOV arc (reuses Stage B's FOV_HALF_DEG) --
+ # default ON, no-op unless FIELD_MOVEMENT (only the new cross-side TOI resolve consults this).
+ PC_REACH_FACING_GATE = (_hu_os.environ.get('PC_REACH_FACING_GATE', '1') == '1')
+@@ -154,6 +179,91 @@ def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, targ
+     return max(0.0, lo)
+ 
+ 
++# [v2 Stage C] Bounded-bisection time-of-impact on the OBB touch predicate. SCAN grids the throttled
++# closing ray [0,1] coarsely to bracket the first tick-fraction at which the two boxes' engagement
++# surfaces meet (obb_front_reach_overlap true); BISECT then converges that bracket. The circular
++# reject in resolve_toi_and_commit already filters far-apart pairs, so only genuinely near-contact
++# pairs ever run this. Precision of the returned fraction: bracket width (1/SCAN)/2^BISECT ~=
++# (1/128)/2^50 ~= 7e-18 -- machine epsilon; the returned point is on the TRUE (just-overlapping) side,
++# so residual box overlap after commit is closing_rate * that width ~= 1e-17 lattice units (well under
++# any ep) yet obb_front_reach_overlap still fires there, so contact triggers (no stall). A touch
++# interval narrower than the SCAN step (1/128 in s) can be skipped -- only a near-tangential grazing
++# pass; the effect is contact deferred one tick (bodies re-evaluated next tick), never a rest-state
++# interpenetration.
++# [v2 Stage C perf reconcile, ED-MB-0011] Scan/bisect counts cut 128/50 -> 32/24. The original 178
++# obb_front_reach_overlap calls per near-contact pair per tick made the field path ~60x slower (the
++# byte-exact battery could not finish — it stalled the producing agent). 32-step scan brackets the
++# first touch fraction (the touch region [touch,1] is monotone for a closing pair, so a coarse scan
++# never misses it once closing); 24 bisections converge the bracket to 1/2^24 ≈ 6e-8 of the tick's
++# throttled motion — far tighter than any physically meaningful cell spacing. Correctness unchanged;
++# only the cost drops ~3.2x, and the far-pair circular reject upstream still keeps this off most pairs.
++_TOI_BOX_SCAN = 32
++_TOI_BOX_BISECT = 24
++
++
++def _pair_toi_box_scale(start_a, prop_a, start_b, prop_b, rho_a, rho_b, head_a, reach_a, head_b, reach_b):
++    """[v2 Stage C] Smallest tick-fraction s in (0,1] at which cell A (centre gliding start_a->prop_a,
++    throttled by rho_a) and cell B (start_b->prop_b, rho_b) first bring their OBB engagement surfaces
++    into contact (obb_front_reach_overlap), or None if the boxes never touch across this tick's
++    throttled motion. Headings/reach are fixed over the tick (motion stays Euclidean -- only the centre
++    translates); each box is the unit square grown by reach_front on its front face. Deterministic (no
++    RNG, no set iteration). Returns 0.0 if already touching at s=0 (a pre-existing contact -- normally
++    caught by halted_cells; defensive freeze here). See _TOI_BOX_SCAN/_TOI_BOX_BISECT for precision."""
++    # [v2 Stage C perf reconcile, ED-MB-0011] Precompute the constant per-tick geometry ONCE, not
++    # ~30x inside the bisection. Over a single tick the headings, reach and box extents are FIXED and
++    # only the CENTRES translate linearly in s, so each corner's OFFSET from its centre is constant.
++    # Profiling showed the old _touch rebuilt both CellBoxes (cellbox_from + _cellbox_corners, the trig/
++    # corner reconstruction) on every one of ~30 iterations per pair -- ~4.5s of a 9s battle. Caching
++    # the axes + corner-offset vectors and lerping only the centre drops that to plain adds. Same SAT
++    # algorithm, same result (verified by diff against the pre-cache bisection as an oracle).
++    _ba0 = cellbox_from(0.0, 0.0, head_a, w=1.0, d=1.0, reach_front=reach_a)  # centre at origin
++    _bb0 = cellbox_from(0.0, 0.0, head_b, w=1.0, d=1.0, reach_front=reach_b)
++    axes_a = _cellbox_axes(_ba0)
++    axes_b = _cellbox_axes(_bb0)
++    # offsets for the two directional configs of obb_front_reach_overlap:
++    off_a_reach = _cellbox_corners(_ba0, use_reach=True)   # a extended, vs b plain
++    off_b_plain = _cellbox_corners(_bb0, use_reach=False)
++    off_a_plain = _cellbox_corners(_ba0, use_reach=False)  # a plain, vs b extended
++    off_b_reach = _cellbox_corners(_bb0, use_reach=True)
++    dar, dac = prop_a[0] - start_a[0], prop_a[1] - start_a[1]
++    dbr, dbc = prop_b[0] - start_b[0], prop_b[1] - start_b[1]
++
++    def _touch(s):
++        ar = start_a[0] + rho_a * s * dar
++        ac = start_a[1] + rho_a * s * dac
++        br = start_b[0] + rho_b * s * dbr
++        bc = start_b[1] + rho_b * s * dbc
++        ca_reach = [(ar + o[0], ac + o[1]) for o in off_a_reach]
++        cb_plain = [(br + o[0], bc + o[1]) for o in off_b_plain]
++        # a's reach meets b's body: overlap iff NO candidate axis (a's 2 + b's 2) separates
++        if not (_sat_separated(ca_reach, cb_plain, axes_a[0]) or _sat_separated(ca_reach, cb_plain, axes_a[1])
++                or _sat_separated(ca_reach, cb_plain, axes_b[0]) or _sat_separated(ca_reach, cb_plain, axes_b[1])):
++            return True
++        ca_plain = [(ar + o[0], ac + o[1]) for o in off_a_plain]
++        cb_reach = [(br + o[0], bc + o[1]) for o in off_b_reach]
++        return not (_sat_separated(ca_plain, cb_reach, axes_a[0]) or _sat_separated(ca_plain, cb_reach, axes_a[1])
++                    or _sat_separated(ca_plain, cb_reach, axes_b[0]) or _sat_separated(ca_plain, cb_reach, axes_b[1]))
++    if _touch(0.0):
++        return 0.0
++    lo = 0.0
++    hi = None
++    for i in range(1, _TOI_BOX_SCAN + 1):
++        s = i / _TOI_BOX_SCAN
++        if _touch(s):
++            hi = s
++            lo = (i - 1) / _TOI_BOX_SCAN
++            break
++    if hi is None:
++        return None  # boxes never touch across the full throttled motion this tick
++    for _ in range(_TOI_BOX_BISECT):
++        mid = 0.5 * (lo + hi)
++        if _touch(mid):
++            hi = mid
++        else:
++            lo = mid
++    return hi  # smallest known TRUE fraction: boxes just overlapping -> contact fires, overlap ~= 0
++
++
+ def _slew_facing(cur, desired, discipline):
+     """Rotate `cur` toward `desired` by at most PC_FACING_SLEW_BASE*disc_mult degrees; return a unit vector.
+     Zero-mag `desired` returns `cur` unchanged. Deterministic (no RNG). [movement-substrate review 06 — facing (b)]"""
+@@ -1487,31 +1597,46 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
+             b_halted = eb.cid in eb.atom.halted_cells
+             if a_halted and b_halted:
+                 continue  # both frozen -- nothing to resolve between two static cells
+-            # [design note] target (the final resting distance) ALWAYS uses base, non-facing-gated
+-            # reach -- standoff_from_reach(reach_a, reach_b), the same formula find_contacts uses --
+-            # so contact and halt stay in sync exactly per Stage A's invariant, and every existing
+-            # symmetric (equal-reach) matchup keeps its already-validated stopping distance
+-            # byte-identically. Facing ONLY gates which side EARNS the throttle advantage below (a
+-            # cell not yet facing its target doesn't get to hold ground while its reach goes unused);
+-            # it never shrinks the boundary two closing bodies actually stop at, which would let them
+-            # pass closer than find_contacts' own trigger radius for a tick before contact catches up.
+-            target = standoff_from_reach(ea.reach, eb.reach)
++            # [design note, v2 Stage C] The stop SURFACE is the OBB itself -- each cell's unit square
++            # grown by its BASE, non-facing-gated melee reach on the front face (reach_front = ea.reach),
++            # the SAME boxes find_contacts (_find_contacts_standoff) fires contact on -- so contact and
++            # halt share one touch surface exactly and every symmetric (equal-reach) matchup keeps a
++            # deterministic stopping geometry. Facing enters the box as ORIENTATION (directional reach is
++            # now geometric, not a scalar bubble) and STILL gates which side earns the throttle advantage
++            # below (via _effective_reach); it never shrinks the box boundary two closing bodies stop at,
++            # which would let them pass closer than find_contacts' own trigger for a tick.
+             start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
+             start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
+-            # Fast path: is this pair safe across its FULL, un-throttled motion at all? (rho=1,1 --
+-            # the un-scaled trajectory.) If so, nothing here caps either cell.
+-            full_s = _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, 1.0, 1.0, target)
+-            if full_s is None:
++            # [v2 Stage C] Stop surface is the OBB (obb_front_reach_overlap), NOT the circular standoff --
++            # the SAME predicate Stage B (_find_contacts_standoff) fires contact on, so halt and contact
++            # agree exactly. Two-tier fast path preserves the old O(1) reject for the many far pairs:
++            #   (1) circular REJECT -- the reach-extended unit box is contained in the circle of radius
++            #       hypot(CELL_RADIUS+reach, CELL_RADIUS) about the centre (front corner is the farthest
++            #       envelope point), so if the two circumscribed circles never meet across the full,
++            #       un-throttled motion this tick, the boxes certainly never touch. Superset of box-touch
++            #       => never wrongly skips. (Uses the exact circular quadratic already proven here.)
++            R_a = math.hypot(CELL_RADIUS + ea.reach, CELL_RADIUS)
++            R_b = math.hypot(CELL_RADIUS + eb.reach, CELL_RADIUS)
++            if _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, 1.0, 1.0, R_a + R_b) is None:
++                continue
++            #   (2) exact box fast path -- circumscribed circles met, but do the boxes THEMSELVES touch at
++            #       full (rho=1,1) motion? If not (a glancing near-miss the circle over-approximated),
++            #       no cap.
++            if _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, 1.0, 1.0,
++                                   ea.facing, ea.reach, eb.facing, eb.reach) is None:
+                 continue
++            # A cap IS needed. Keep the reach/facing THROTTLE exactly as the circular model computed it
++            # (rho split unchanged this stage -- only the stop SURFACE became the box); the box solve
++            # then finds where the throttled trajectories first touch. If the throttled solve reports
++            # "safe" (None -- the throttle ceiling alone already keeps them apart), the ceiling itself
++            # (rho_a, rho_b) is the cap, NOT "no cap" -- mirroring the circular version's second
++            # review-caught-bug fix.
+             dxr, dxc = eb.pr - ea.pr, eb.pc - ea.pc
+             eff_a = _effective_reach(ea.reach, ea.facing, dxr, dxc)
+             eff_b = _effective_reach(eb.reach, eb.facing, -dxr, -dxc)
+             rho_a, rho_b = _reach_throttle(CELL_RADIUS + eff_a, CELL_RADIUS + eff_b)
+-            # A cap IS needed somewhere along the full path -- solve within the throttled sub-range.
+-            # If THAT reports "safe" (None), the throttle ceiling itself (rho_a, rho_b) is the cap --
+-            # NOT "no cap" (see docstring: this was the second review-caught bug). Otherwise the
+-            # throttled solve's own s scales the ceiling down further.
+-            s = _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, target)
++            s = _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, rho_a, rho_b,
++                                    ea.facing, ea.reach, eb.facing, eb.reach)
+             t_a = rho_a if s is None else max(0.0, min(1.0, rho_a * s))
+             t_b = rho_b if s is None else max(0.0, min(1.0, rho_b * s))
+             # A halted cell's proposed==start (zero motion) regardless of any cap, so it never needs
