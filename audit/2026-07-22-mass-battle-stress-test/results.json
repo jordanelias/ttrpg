@@ -1,0 +1,641 @@
+{
+  "s0": {
+    "selftest_ok": true,
+    "missing": [],
+    "n_mechanics": 30,
+    "field": {
+      "FIELD_MOVEMENT": true,
+      "PC_NODE_COHESION": true,
+      "PER_CELL": true
+    },
+    "field_based": true,
+    "gates_off_under_field": [],
+    "on_flags": {
+      "FIELD_MOVEMENT": true,
+      "PC_NODE_COHESION": true,
+      "PER_CELL": true,
+      "LANCHESTER_ENABLED": true,
+      "POOL_QUALITY_MODEL": true,
+      "COMMAND_SIGMA_ENABLED": true,
+      "MORALE_FIX": true,
+      "SIGMA_HEAD_ENABLED": true,
+      "VOLLEY_ENABLED": true,
+      "CASCADING_ENABLED": true,
+      "PC_BRACE_ENABLED": true,
+      "PC_RECOIL_FRONTAL": true,
+      "PC_BRACE_SETUP_DELAY": true,
+      "PC_RECOIL_CHARGER_GATE": true,
+      "PC_WHEEL": true,
+      "PC_REFUSE": true,
+      "PC_VOLLEY_DENSITY_ENABLED": true,
+      "PC_KITE_ENABLED": true,
+      "PC_ENVELOP_PATH": true,
+      "PC_SWEEP": true
+    },
+    "off_flags": {
+      "PC_FACING_MODEL": false,
+      "FIELD_CONTACT": false,
+      "REFORM_CHECK_ENABLED": false
+    }
+  },
+  "s1": {
+    "n": 200,
+    "rej": 3,
+    "over_cap": 0,
+    "engfail": 0,
+    "viol": 1,
+    "wins": {
+      "A": 6,
+      "B": 3,
+      "draw": 188,
+      "None": 0
+    },
+    "fail_ex": [],
+    "viol_ex": [
+      [
+        [
+          "A:cell!=hp(444vs410)"
+        ],
+        [
+          "Line"
+        ],
+        [
+          "Line",
+          "Line",
+          "Line"
+        ]
+      ]
+    ],
+    "contact": 153,
+    "built": 197,
+    "contact_rate": 0.777,
+    "mean_turns": 39.5
+  },
+  "s1b": {
+    "all_closed": true,
+    "rows": [
+      [
+        "archers",
+        3,
+        true,
+        288.0
+      ],
+      [
+        "artillery",
+        2,
+        true,
+        1038.0
+      ],
+      [
+        "cavalry",
+        5,
+        true,
+        47.0
+      ],
+      [
+        "crossbow",
+        3,
+        true,
+        288.0
+      ],
+      [
+        "heavy_infantry",
+        4,
+        true,
+        50.0
+      ],
+      [
+        "knights_templar",
+        6,
+        true,
+        0
+      ],
+      [
+        "levy",
+        1,
+        true,
+        1709.0
+      ],
+      [
+        "light_infantry",
+        3,
+        true,
+        275.0
+      ],
+      [
+        "sling",
+        2,
+        true,
+        1038.0
+      ],
+      [
+        "infantry",
+        5,
+        true,
+        88.0
+      ]
+    ]
+  },
+  "s2": {
+    "V-CANNAE": false,
+    "V-FIXING": true,
+    "V-SHOCK": false,
+    "V-BRACE": false,
+    "V-REFORM": true,
+    "V-ARCHER": true,
+    "V-ENVELOP/grid": true,
+    "V-ENVELOP/field": true,
+    "V-SWEEP/grid": true,
+    "V-SWEEP/field": true
+  },
+  "s3": {
+    "PER_CELL": {
+      "scenario": "charge_vs_brace",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.9141,
+        "meanB": 0.4369,
+        "viol": 12
+      }
+    },
+    "LANCHESTER_ENABLED": {
+      "scenario": "big_vs_small",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "big_vs_small",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.9891,
+        "meanB": 0.2489,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "big_vs_small",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.9966,
+        "meanB": 0.9123,
+        "viol": 0
+      }
+    },
+    "POOL_QUALITY_MODEL": {
+      "scenario": "big_vs_small",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "big_vs_small",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.9891,
+        "meanB": 0.2489,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "big_vs_small",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.9122,
+        "meanB": 0.8337,
+        "viol": 0
+      }
+    },
+    "COMMAND_SIGMA_ENABLED": {
+      "scenario": "mirror",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8411,
+        "meanB": 0.867,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.859,
+        "meanB": 0.8497,
+        "viol": 0
+      }
+    },
+    "MORALE_FIX": {
+      "scenario": "mirror",
+      "verdict": "INERT",
+      "default": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6997,
+        "meanB": 0.8237,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6997,
+        "meanB": 0.8237,
+        "viol": 0
+      }
+    },
+    "SIGMA_HEAD": {
+      "scenario": "mirror",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6997,
+        "meanB": 0.8237,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.676,
+        "meanB": 0.8311,
+        "viol": 0
+      }
+    },
+    "PC_BRACE_ENABLED": {
+      "scenario": "charge_vs_brace",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8952,
+        "meanB": 0.3109,
+        "viol": 0
+      }
+    },
+    "PC_RECOIL_FRONTAL": {
+      "scenario": "charge_vs_brace",
+      "verdict": "INERT",
+      "default": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      }
+    },
+    "PC_BRACE_SETUP_DELAY": {
+      "scenario": "charge_vs_brace",
+      "verdict": "INERT",
+      "default": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      }
+    },
+    "PC_CHARGE_RECOIL": {
+      "scenario": "charge_vs_brace",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6664,
+        "meanB": 0.7095,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "charge_vs_brace",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8952,
+        "meanB": 0.3109,
+        "viol": 0
+      }
+    },
+    "PC_WHEEL": {
+      "scenario": "envelop",
+      "verdict": "INERT",
+      "default": {
+        "scenario": "envelop",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8717,
+        "meanB": 0.9737,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "envelop",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8717,
+        "meanB": 0.9737,
+        "viol": 0
+      }
+    },
+    "PC_REFUSE": {
+      "scenario": "envelop",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "envelop",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8717,
+        "meanB": 0.9737,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "envelop",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8785,
+        "meanB": 0.9659,
+        "viol": 0
+      }
+    },
+    "PC_VOLLEY_DENSITY_ENABLED": {
+      "scenario": "ranged_dense",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "ranged_dense",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6793,
+        "meanB": 0.9759,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "ranged_dense",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6711,
+        "meanB": 0.9837,
+        "viol": 0
+      }
+    },
+    "PC_ENVELOP_MOD": {
+      "scenario": "envelop",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "envelop",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8717,
+        "meanB": 0.9737,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "envelop",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.8741,
+        "meanB": 0.9712,
+        "viol": 0
+      }
+    },
+    "K_LINEAR": {
+      "scenario": "big_vs_small",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "big_vs_small",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.9891,
+        "meanB": 0.2489,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "big_vs_small",
+        "seeds": 12,
+        "winA": 12,
+        "winB": 0,
+        "draw": 0,
+        "none": 0,
+        "meanA": 0.987,
+        "meanB": 0.0039,
+        "viol": 0
+      }
+    },
+    "POOL_QUALITY_SCALE": {
+      "scenario": "mirror",
+      "verdict": "WIRED",
+      "default": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.6997,
+        "meanB": 0.8237,
+        "viol": 0
+      },
+      "flipped": {
+        "scenario": "mirror",
+        "seeds": 12,
+        "winA": 0,
+        "winB": 0,
+        "draw": 12,
+        "none": 0,
+        "meanA": 0.7596,
+        "meanB": 0.7836,
+        "viol": 0
+      }
+    }
+  },
+  "s4": {
+    "baseline(field)": {
+      "safe": true,
+      "scenarios": {
+        "mirror": "A0/B0/d12 viol=0",
+        "charge_vs_brace": "A0/B0/d12 viol=0",
+        "envelop": "A0/B0/d12 viol=0",
+        "ranged_dense": "A0/B0/d12 viol=0",
+        "big_vs_small": "A0/B0/d12 viol=0"
+      }
+    },
+    "PC_FACING_MODEL=1": {
+      "safe": true,
+      "scenarios": {
+        "mirror": "A0/B0/d12 viol=0",
+        "charge_vs_brace": "A0/B0/d12 viol=0",
+        "envelop": "A0/B0/d12 viol=0",
+        "ranged_dense": "A0/B0/d12 viol=0",
+        "big_vs_small": "A0/B0/d12 viol=0"
+      }
+    },
+    "FIELD_CONTACT=1": {
+      "safe": true,
+      "scenarios": {
+        "mirror": "A0/B0/d12 viol=0",
+        "charge_vs_brace": "A0/B0/d12 viol=0",
+        "envelop": "A0/B0/d12 viol=0",
+        "ranged_dense": "A0/B0/d12 viol=0",
+        "big_vs_small": "A0/B0/d12 viol=0"
+      }
+    },
+    "REFORM_CHECK_ENABLED=1": {
+      "safe": true,
+      "scenarios": {
+        "mirror": "A0/B0/d12 viol=0",
+        "charge_vs_brace": "A0/B0/d12 viol=0",
+        "envelop": "A0/B0/d12 viol=0",
+        "ranged_dense": "A0/B0/d12 viol=0",
+        "big_vs_small": "A0/B0/d12 viol=0"
+      }
+    },
+    "ALL_THREE_ON": {
+      "safe": true,
+      "scenarios": {
+        "mirror": "A0/B0/d12 viol=0",
+        "charge_vs_brace": "A0/B0/d12 viol=0",
+        "envelop": "A0/B0/d12 viol=0",
+        "ranged_dense": "A0/B0/d12 viol=0",
+        "big_vs_small": "A0/B0/d12 viol=0"
+      }
+    }
+  },
+  "s5": {
+    "determinism": true,
+    "mirror": {
+      "aw": 2,
+      "bw": 2,
+      "draw": 44,
+      "skew": 0,
+      "tot": 48,
+      "ok": true
+    }
+  },
+  "verdict": {
+    "S0 wiring": true,
+    "S1 fuzz": false,
+    "S1b movement": true,
+    "S2 validators": false,
+    "S3 flag A/B": false,
+    "S4 off-gates": true,
+    "S5 controls": true
+  }
+}
