@@ -89,17 +89,11 @@ CLASSES = {
     # generic-layer token_class-skip stops the double-source that used to collapse coreference.
     'npc': [],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
-    # The performable ACTION vocabulary (verbs). No structured registry exists yet — the
-    # `domain_actions` home is the open M1 blocker (ED-FA-0002); until it is authored these
-    # are enumerated ONLY in prose (module_contracts.yaml's ED-FA-0006 verb note +
-    # wiring_manifest.yaml "conquest/muster/govern/uniques"). Curated here from that
-    # enumeration, exactly as the other seed classes are registry-backed hand lists.
-    # Replace with the authored registry once ED-FA-0002 lands.
-    'action': ['Muster', 'March', 'Fortify', 'Blockade', 'Conquest', 'Govern', 'Trade',
-               'Subsidy', 'Treaty', 'Diplomacy', 'Spy', 'Investigate', 'Counter-Intelligence',
-               'Censure', 'Embargo', 'Outlawry', 'Excommunication', 'Active Inquisition',
-               'Church Seizure', 'Recognition Challenge', 'Succession Endorsement',
-               'War Authorisation', 'Piety Spread', 'Community Organising', 'Martial Governance'],
+    # The performable ACTION vocabulary (verbs) is sourced from references/action_vocabulary.yaml
+    # AFTER this literal (§8; R2 / ED-IN-0082) — the hand-list moved OUT of this hardcoded audit
+    # into a central (provisional) register. It stays PROVISIONAL because the authoritative
+    # `domain_actions` home is unbuilt (ED-FA-0002); when that lands, regenerate the register.
+    'action': [],
 }
 
 
@@ -262,6 +256,20 @@ if names is not None:
                 'patterns': list(_e.get('patterns') or []) or [r'\b' + _disp + r'\b'],
                 'scale': _e.get('scale') or _cls, 'status': 'canonical', 'source': 'seed',
                 'context': list(_e.get('context') or [])}
+
+# The performable-action verb roster is sourced from references/action_vocabulary.yaml (§8; the
+# provisional central home — see that file's PROVISIONAL banner + ED-FA-0002). It is NOT in
+# names_index, so it does NOT go through _INDEX_TOKEN_CLASSES / SEED_TOKENS: the derive_tokens
+# ACTIONS loop reads CLASSES['action'] and applies _pattern_for, exactly as before — only the
+# roster's HOME moved out of this file. Loaded from the real repo (via __file__) at import.
+_ACTION_VOCAB = os.path.join(
+    os.path.dirname(_TOOLS_DIR), 'references', 'action_vocabulary.yaml')
+try:
+    with open(_ACTION_VOCAB, encoding='utf-8') as _af:
+        _av = yaml.safe_load(_af) or {}
+    CLASSES['action'] = [v for v in (_av.get('verbs') or []) if isinstance(v, str) and v.strip()]
+except Exception:  # pragma: no cover — degrade to empty (same failure mode as a missing register)
+    CLASSES['action'] = []
 
 
 # ──────────────────────────── HELPERS ────────────────────────────────────────
