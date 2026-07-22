@@ -390,6 +390,43 @@ def test_throughline_graph_extended_by_second_registry_source():
     assert edges(va.build_g_throughline(meta, tokens, extra_rows=None)) == e_base
 
 
+def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates():
+    """Direction #5 (answers 'why not key propagation too'): build_g_key reads module_contracts.yaml's
+    emit→consume flow — the engine's actual IN→resolver→OUT wiring — as a 5th structural graph. It
+    must (a) connect systems that share a Key (A emits, B consumes), (b) connect a Key-TYPE token to
+    the systems that emit/consume it — which un-isolates Key tokens the design CITATION graph can't
+    see — while (c) leaving a Key that NO module emits/consumes isolated (a real dangling-Key gap),
+    and (d) be deterministic. This is what lets the emit DELETE its old Key-token isolate filter."""
+    import os, json
+    from pathlib import Path
+    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    defs = va.derive_tokens(root)
+    design = va.extract_corpus(root, 'L0')[0]
+    tokens, _ = va.curate_tokens(design, defs)
+    g_key = va.build_g_key(root, tokens)
+    assert g_key, 'key graph should be non-empty (module_contracts has emit/consume flow)'
+    names = list(tokens)
+    kdeg = va._degrees(g_key, names)
+    # (a) a system heavily wired in the engine has real key-degree; (b) a wired Key-type token too
+    assert kdeg.get('Faction State', 0) > 5, kdeg.get('Faction State')
+    assert kdeg.get('Key: mechanical.scene_exited', 0) >= 1   # was a filtered "false" isolate before
+    # (d) determinism — identical across two builds
+    canon = lambda g: json.dumps({k: dict(sorted(v.items())) for k, v in sorted(g.items())})
+    assert canon(g_key) == canon(va.build_g_key(root, tokens))
+    # folding key into diagnostics resolves the wired Key-tokens as Mode-H isolates but NOT the
+    # genuinely-unwired ones (dangling Keys / registry terms stay surfaced — SURFACE-NEVER-CULL).
+    rows = va.parse_throughlines(root)
+    graphs = {'cite': va.build_g_cite(tokens, design),
+              'throughline': va.build_g_throughline(rows, tokens,
+                                                    extra_rows=va.parse_throughlines_complete(root)),
+              'mu': va.build_g_mu(rows, tokens), 'pp': va.build_g_pp(root, tokens), 'key': g_key}
+    degs = {k: va._degrees(graphs[k], names) for k in graphs}
+    iso = {r['token'] for r in va.diagnostics(tokens, graphs, degs)['H_isolates']}
+    assert 'Key: mechanical.scene_exited' not in iso   # resolved by the key graph, not filtered
+    # a Key type no module emits/consumes stays isolated — a real gap we now SURFACE (was filtered)
+    assert 'Key: scene_outcome.battle_concluded' in iso
+
+
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     """SURFACE-NEVER-CULL (SKILL.md doctrine): the structural-findings feed must EMIT every Mode-B
     and Mode-H finding — lower-confidence ones (hub×hub pairs, Key-token isolates) are RETAINED with

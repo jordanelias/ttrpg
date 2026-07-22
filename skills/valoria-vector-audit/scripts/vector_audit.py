@@ -1127,6 +1127,73 @@ def build_g_pp(root, tokens):
     return g
 
 
+def _keytype_token(kt, tokens):
+    """Map a contract Key-TYPE string (e.g. 'mechanical.scene_exited') to the token that names it,
+    by full-matching the token's patterns. Deterministic first match over insertion order."""
+    for name, rec in tokens.items():
+        for pat in rec['patterns']:
+            try:
+                if re.fullmatch(pat, kt):
+                    return name
+            except re.error:
+                continue
+    return None
+
+
+def build_g_key(root, tokens):
+    """G_key — the KEY PROPAGATION graph (Direction #5, 2026-07-22): the engine's actual
+    IN→resolver→OUT data flow, read from references/module_contracts.yaml (the SAME source
+    tools/observability/build_graph.py uses). Two edge kinds, projected to token level:
+      • system↔system: module A emits Key K, module B consumes K → A and B are wired (data flows).
+      • keytype↔system: a Key-TYPE token (e.g. 'Key: mechanical.scene_exited') ↔ every module that
+        emits/consumes it — this is what UN-ISOLATES Key-type tokens (they are absent from the design
+        CITATION graph by construction — prose rarely cites a Key by name — but CENTRAL here).
+    This is the graph the audit was previously BLIND to (it used to filter Key tokens out of Mode-H
+    as 'expected false alarms'); folding it in RESOLVES them for real instead of apologising, and
+    triangulates design intent (cite/tl/mu/pp) against engine wiring. A Key-type token that maps to
+    NO emit/consume type stays isolated — correctly: it is a dangling/misnamed Key, a real gap."""
+    fp = root / 'references' / 'module_contracts.yaml'
+    g = {}
+    if not fp.exists():
+        return g
+    try:
+        data = yaml.safe_load(fp.read_text(encoding='utf-8', errors='replace')) or {}
+    except Exception:
+        return g
+    lut, norm = _slug_lookup(tokens)
+    emitters, consumers = defaultdict(set), defaultdict(set)
+    modtok = {}
+    for m in data.get('modules', []) or []:
+        if not isinstance(m, dict):
+            continue
+        name = m.get('module')
+        if name and norm(name) in lut:
+            modtok[name] = lut[norm(name)]
+        for em in m.get('emits') or []:
+            if isinstance(em, dict) and em.get('type'):
+                emitters[em['type']].add(name)
+        for co in m.get('consumes') or []:
+            if isinstance(co, dict) and co.get('type'):
+                consumers[co['type']].add(name)
+    # FULLSTREAM consume ('*' = subscribes to the whole Key stream) is NOT a discriminating edge —
+    # it would connect one module to every emitter, a blob. Excluded (mirrors build_graph's handling).
+    for k in sorted(set(emitters) | set(consumers)):
+        if k == '*':
+            continue
+        es, cs = emitters.get(k, set()), consumers.get(k, set())
+        for a in sorted(es):
+            for b in sorted(cs):
+                if modtok.get(a) and modtok.get(b):
+                    _add_edge(g, modtok[a], modtok[b])
+        ktok = _keytype_token(k, tokens)
+        if ktok:
+            for s in sorted(es | cs):
+                if modtok.get(s):
+                    _add_edge(g, ktok, modtok[s])
+    g.pop(None, None)  # defensive: _add_edge guards a==b but never inserts None (both sides checked)
+    return g
+
+
 # ──────────────────────────── STAGE 3 — TF-IDF (supporting, optional) ────────
 
 def build_g_tfidf(tokens, paras_by_doc):
@@ -1256,10 +1323,13 @@ def _percentile_10_cut(values):
 def diagnostics(tokens, graphs, degs):
     names = list(tokens)
     g_cite = graphs['cite']
-    dg = {k: degs[k] for k in ('cite', 'throughline', 'mu', 'pp')}
+    # The structural graphs, in fixed order. `key` (the engine Key-propagation graph, Direction #5)
+    # is included WHEN PRESENT — diagnostics stays backward-compatible for callers that build only
+    # the design-4. With key, hubs/isolates triangulate design intent AND engine data-flow.
+    dg = {k: degs[k] for k in ('cite', 'throughline', 'mu', 'pp', 'key') if k in degs}
     out = {}
 
-    # A — multi-graph hubs (top quintile in >=3 of 4)
+    # A — multi-graph hubs (top quintile in >=3 of the structural graphs)
     tq = {k: _top_quintile(dg[k]) for k in dg}
     hubs = []
     for t in names:
@@ -1272,7 +1342,9 @@ def diagnostics(tokens, graphs, degs):
     # B — implied-but-missing (>=2 metadata graphs link, no cite edge, cross-class)
     def cite_linked(a, b):
         return b in g_cite.get(a, {}) or a in g_cite.get(b, {})
-    meta = ('throughline', 'mu', 'pp')
+    # metadata graphs (everything but cite): a pair linked here but NOT cited is implied-missing.
+    # `key` joins when present — "engine-wired but never cited" is a genuine port-relevant gap.
+    meta = tuple(k for k in ('throughline', 'mu', 'pp', 'key') if k in graphs)
     implied = []
     for a in names:
         for b in names:
@@ -1554,7 +1626,8 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
     dump('tokens.json', {'tokens': _clean_tokens(tokens)})
     dump('g_cite.json', graphs['cite'])
     dump('g_metadata.json', {'throughline': graphs['throughline'],
-                             'mu': graphs['mu'], 'pp': graphs['pp']})
+                             'mu': graphs['mu'], 'pp': graphs['pp'],
+                             'key': graphs.get('key', {})})
     dump('degrees.json', degs)
     dump('validation.json', validation)
     diag = dict(diag)
@@ -1592,15 +1665,16 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
                    "arcs/ narrative, workplans/, tests/, deprecated/, audit prose, and non-.md")
     # H1/M1 honesty: name the directions L1 does NOT extend + that validation is L0-calibrated.
     _extend_note = ("L1 extends the corpus-breadth direction and the CITE graph ONLY. NOT extended: "
-                    "the throughline & mu graphs (registry-derived: throughline from throughlines_meta "
-                    "+ throughlines_complete, mu from throughlines_meta), the token "
-                    "universe (registry-derived; a token absent from names_index/proper_noun/"
+                    "the throughline/mu/key graphs (registry-derived: throughline from throughlines_meta "
+                    "+ throughlines_complete, mu from throughlines_meta, key from module_contracts), the "
+                    "token universe (registry-derived; a token absent from names_index/proper_noun/"
                     "module_contracts is invisible at EVERY layer), non-.md content (sim .py, "
-                    "engine/params values, the Key propagation graph), and the P1/P2/P3 thresholds "
+                    "engine/params values), and the P1/P2/P3 thresholds "
                     "(calibrated on L0 — the verdict below is NOT re-validated for the L1 corpus)."
                     if _layer == 'L1' else
                     "Directions this tool does not trace at any layer: non-.md content (sim .py, "
-                    "typed engine/params, the Key propagation graph) and registry-absent tokens.")
+                    "typed engine/params values) and registry-absent tokens. (The engine Key-propagation "
+                    "graph IS traced now — build_g_key, Direction #5 — as a 5th structural graph.)")
     _run_hint = ("" if _layer == 'L1' else
                  " Run `--layer L1` to extend the CITE trace across the whole design tree "
                  "(L0 stays the validated default; L1 does NOT re-validate).")
@@ -1693,18 +1767,21 @@ def run(root, out, layer='L0'):
     print('[stage 2.5] citation graph...')
     g_cite = build_g_cite(tokens, design)
 
-    print('[stage 4] metadata graphs (throughline / mu / pp)...')
+    print('[stage 4] metadata graphs (throughline / mu / pp / key)...')
     rows = parse_throughlines(root)
     g_tl = build_g_throughline(rows, tokens, extra_rows=parse_throughlines_complete(root))
     g_mu = build_g_mu(rows, tokens)
     g_pp = build_g_pp(root, tokens)
+    g_key = build_g_key(root, tokens)   # Direction #5 — the engine Key-propagation graph
 
     print('[stage 3] tf-idf (supporting)...')
     g_tfidf, tfidf_on = build_g_tfidf(tokens, paras_by_doc)
 
-    graphs = {'cite': g_cite, 'throughline': g_tl, 'mu': g_mu, 'pp': g_pp, 'tfidf': g_tfidf}
+    graphs = {'cite': g_cite, 'throughline': g_tl, 'mu': g_mu, 'pp': g_pp,
+              'key': g_key, 'tfidf': g_tfidf}
     names = list(tokens)
-    degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp', 'tfidf')}
+    degs = {k: _degrees(graphs[k], names)
+            for k in ('cite', 'throughline', 'mu', 'pp', 'key', 'tfidf')}
 
     print('[stage 5] validation...')
     validation = validate(tokens, degs['cite'], degs['throughline'], g_cite)
@@ -1761,9 +1838,10 @@ def emit_structural_findings(root, out_path, layer='L0'):
     graphs = {'cite': g_cite,
               'throughline': build_g_throughline(rows, tokens,
                                                  extra_rows=parse_throughlines_complete(root)),
-              'mu': build_g_mu(rows, tokens), 'pp': build_g_pp(root, tokens)}
+              'mu': build_g_mu(rows, tokens), 'pp': build_g_pp(root, tokens),
+              'key': build_g_key(root, tokens)}   # Direction #5 — engine Key-propagation graph
     names = list(tokens)
-    degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp')}
+    degs = {k: _degrees(graphs[k], names) for k in ('cite', 'throughline', 'mu', 'pp', 'key')}
     diag = diagnostics(tokens, graphs, degs)
     pdoc = lambda t: (tokens.get(t) or {}).get('primary_doc')
     # SURFACE, NEVER CULL (SKILL.md doctrine). The adversarial pass caught the prior cut DROPPING
@@ -1781,23 +1859,23 @@ def emit_structural_findings(root, out_path, layer='L0'):
         if r['a'] in hubs and r['b'] in hubs:
             return 'both-endpoints-are-multigraph-hubs (lower confidence, not dropped)'
         return None
-    def _iso_filter(t):
-        # Mode H Key/cross-module tokens: isolated in the design-CITATION graph by CONSTRUCTION
-        # (prose rarely cites a Key by name) but central in the Key propagation graph this audit does
-        # not compute — so "isolated" is expected, not a gap. Flagged, not dropped.
-        if t.startswith('Key:') or 'cross-module' in t:
-            return 'Key-graph construct — citation-graph isolation is expected by construction'
-        return None
+    # NOTE (Direction #5): the Mode-H Key-token filter is GONE. It used to flag Key/cross-module
+    # tokens as "expected false alarms" because the audit couldn't see the Key graph. Now it CAN
+    # (build_g_key), so those tokens are genuinely un-isolated when they are wired — and the ones that
+    # REMAIN isolated (a Key type no module emits/consumes) are real dangling-Key gaps we SURFACE.
+    # No isolate is filtered anymore; every isolate is an honest finding.
     payload = {
         'schema_version': 1,
         'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
         'note': 'GENERATED — the vector-audit\'s unique cross-graph structural findings (Mode B '
                 'implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. '
-                'Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: this audit sees only '
-                'the design cite/throughline/mu/pp graphs, NOT the Key propagation graph. Per the '
-                'SURFACE-NEVER-CULL doctrine EVERY finding is emitted; lower-confidence ones carry a '
-                '`filtered`+`filter_reason` flag (hub×hub Mode-B, Key-token Mode-H) and the ledger '
-                'reads only the unfiltered rows for its Missing face — nothing is dropped from the feed.',
+                'Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: triangulates FIVE '
+                'structural graphs — design cite/throughline/mu/pp AND the engine Key-propagation '
+                'graph (module_contracts emit→consume). Per SURFACE-NEVER-CULL EVERY finding is '
+                'emitted; lower-confidence Mode-B hub×hub pairs carry a `filtered`+`filter_reason` '
+                'flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing '
+                'face. Isolates are NO LONGER filtered — the Key graph resolves the ones that are '
+                'genuinely wired, and a still-isolated Key is a real dangling-Key gap.',
         'layer': layer,
         'design_docs': manifest.get('design_count'),
         'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links'),
@@ -1806,12 +1884,11 @@ def emit_structural_findings(root, out_path, layer='L0'):
                             for r in diag.get('B_implied_missing', [])],
         'isolates': [{'token': r['token'], 'status': r.get('status'), 'doc': pdoc(r['token']),
                       'registry': _source_registry((tokens.get(r['token']) or {}).get('source')),
-                      # max degree across the four graphs (Mode-H is max-deg<=1) — carried so the
-                      # ledger text can be ACCURATE (degree 0 = truly untouched; degree 1 = a single
-                      # thread) rather than assuming 0.
-                      'max_deg': max(r.get(k, 0) for k in ('cite', 'throughline', 'mu', 'pp')),
-                      'filtered': bool(_iso_filter(r['token'])),
-                      'filter_reason': _iso_filter(r['token'])}
+                      # max degree across ALL FIVE graphs (Mode-H is max-deg<=1) — carried so the
+                      # ledger text is ACCURATE (degree 0 = truly untouched everywhere, engine
+                      # wiring included) rather than assuming a value.
+                      'max_deg': max(r.get(k, 0) for k in ('cite', 'throughline', 'mu', 'pp', 'key')),
+                      'filtered': False, 'filter_reason': None}
                      for r in diag.get('H_isolates', [])],
     }
     out_path.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')

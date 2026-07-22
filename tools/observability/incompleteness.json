@@ -3,12 +3,12 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 229,
+    "findings": 230,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
-      "audit_implied_missing": 30,
-      "audit_isolate": 6,
+      "audit_implied_missing": 28,
+      "audit_isolate": 9,
       "code_marker": 3,
       "contract_doc_null": 9,
       "contract_island": 5,
@@ -57,11 +57,11 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 126,
+      "total": 127,
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
-      "audit_implied_missing": 30,
-      "audit_isolate": 6,
+      "audit_implied_missing": 28,
+      "audit_isolate": 9,
       "integrity_unverified_pin": 1,
       "prose_marker": 5,
       "register_phantom_source": 1,
@@ -401,14 +401,6 @@
     },
     {
       "category": "audit_implied_missing",
-      "id": "impl::Factions||Miraculous Event",
-      "title": "Factions \u22ef Miraculous Event \u2014 implied but never cited",
-      "detail": "\u201cFactions\u201d and \u201cMiraculous Event\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/factions/faction_politics_v30.md",
-      "lane": "IN"
-    },
-    {
-      "category": "audit_implied_missing",
       "id": "impl::MS Trajectory||Peninsular Strain",
       "title": "MS Trajectory \u22ef Peninsular Strain \u2014 implied but never cited",
       "detail": "\u201cMS Trajectory\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
@@ -429,14 +421,6 @@
       "title": "Military Layer \u22ef Settlement Layer \u2014 implied but never cited",
       "detail": "\u201cMilitary Layer\u201d and \u201cSettlement Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/ci_political_v30.md",
-      "lane": "IN"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Miraculous Event||Threadwork",
-      "title": "Miraculous Event \u22ef Threadwork \u2014 implied but never cited",
-      "detail": "\u201cMiraculous Event\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/world/miraculous_event_v30.md",
       "lane": "IN"
     },
     {
@@ -499,7 +483,7 @@
       "category": "audit_isolate",
       "id": "iso::Active Inquisition",
       "title": "Active Inquisition \u2014 no design-prose home",
-      "detail": "\u201cActive Inquisition\u201d has max degree 0 (\u22641) across ALL FOUR design graphs (cite/throughline/mu/pp) AND has no primary design doc \u2014 a registered term with no design-prose home (the strongest incompleteness signal: it exists in the registers but nothing in the design corpus uses it); registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cActive Inquisition\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/action_vocabulary.yaml",
       "lane": "IN"
     },
@@ -507,7 +491,7 @@
       "category": "audit_isolate",
       "id": "iso::Body",
       "title": "Body \u2014 no design-prose home",
-      "detail": "\u201cBody\u201d has max degree 0 (\u22641) across ALL FOUR design graphs (cite/throughline/mu/pp) AND has no primary design doc \u2014 a registered term with no design-prose home (the strongest incompleteness signal: it exists in the registers but nothing in the design corpus uses it); registered via references/names_index.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cBody\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/names_index.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/names_index.yaml",
       "lane": "IN"
     },
@@ -515,15 +499,23 @@
       "category": "audit_isolate",
       "id": "iso::Counter-Intelligence",
       "title": "Counter-Intelligence \u2014 no design-prose home",
-      "detail": "\u201cCounter-Intelligence\u201d has max degree 0 (\u22641) across ALL FOUR design graphs (cite/throughline/mu/pp) AND has no primary design doc \u2014 a registered term with no design-prose home (the strongest incompleteness signal: it exists in the registers but nothing in the design corpus uses it); registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cCounter-Intelligence\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/action_vocabulary.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::Key: scene_outcome.battle_concluded",
+      "title": "Key: scene_outcome.battle_concluded \u2014 no design-prose home",
+      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has max degree 1 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
     {
       "category": "audit_isolate",
       "id": "iso::NPC Relational Graph",
       "title": "NPC Relational Graph \u2014 no design-prose home",
-      "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FOUR design graphs (cite/throughline/mu/pp) AND has no primary design doc \u2014 a registered term with no design-prose home (the strongest incompleteness signal: it exists in the registers but nothing in the design corpus uses it); registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
       "lane": "IN"
     },
@@ -531,7 +523,7 @@
       "category": "audit_isolate",
       "id": "iso::Territorial Piety",
       "title": "Territorial Piety \u2014 no design-prose home",
-      "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FOUR design graphs (cite/throughline/mu/pp) AND has no primary design doc \u2014 a registered term with no design-prose home (the strongest incompleteness signal: it exists in the registers but nothing in the design corpus uses it); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
@@ -539,8 +531,24 @@
       "category": "audit_isolate",
       "id": "iso::Territory Temperaments",
       "title": "Territory Temperaments \u2014 no design-prose home",
-      "detail": "\u201cTerritory Temperaments\u201d has max degree 0 (\u22641) across ALL FOUR design graphs (cite/throughline/mu/pp) AND has no primary design doc \u2014 a registered term with no design-prose home (the strongest incompleteness signal: it exists in the registers but nothing in the design corpus uses it); registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "\u201cTerritory Temperaments\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::faction Mandate (cross-module \u2192 faction_state)",
+      "title": "faction Mandate (cross-module \u2192 faction_state) \u2014 no design-prose home",
+      "detail": "\u201cfaction Mandate (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "references/module_contracts.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "audit_isolate",
+      "id": "iso::faction Treasury income (cross-module \u2192 faction_state)",
+      "title": "faction Treasury income (cross-module \u2192 faction_state) \u2014 no design-prose home",
+      "detail": "\u201cfaction Treasury income (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home in the design corpus OR the engine Key flow (the strongest incompleteness signal; a still-isolated Key here is a dangling/misnamed Key no module emits or consumes); registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "references/module_contracts.yaml",
       "lane": "IN"
     },
     {
@@ -1289,8 +1297,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:618",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:618",
+      "id": "tools/observability/build_incompleteness.py:620",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:620",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN"

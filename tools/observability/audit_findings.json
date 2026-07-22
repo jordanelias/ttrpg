@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
-  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: this audit sees only the design cite/throughline/mu/pp graphs, NOT the Key propagation graph. Per the SURFACE-NEVER-CULL doctrine EVERY finding is emitted; lower-confidence ones carry a `filtered`+`filter_reason` flag (hub\u00d7hub Mode-B, Key-token Mode-H) and the ledger reads only the unfiltered rows for its Missing face \u2014 nothing is dropped from the feed.",
+  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). Per SURFACE-NEVER-CULL EVERY finding is emitted; lower-confidence Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing face. Isolates are NO LONGER filtered \u2014 the Key graph resolves the ones that are genuinely wired, and a still-isolated Key is a real dangling-Key gap.",
   "layer": "L0",
   "design_docs": 110,
   "implied_missing": [
@@ -182,8 +182,8 @@
       "meta_links": 2,
       "a_doc": "systems/factions/faction_politics_v30.md",
       "b_doc": "systems/world/miraculous_event_v30.md",
-      "filtered": false,
-      "filter_reason": null
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     },
     {
       "a": "MS Trajectory",
@@ -236,8 +236,17 @@
       "meta_links": 2,
       "a_doc": "systems/world/miraculous_event_v30.md",
       "b_doc": "systems/threadwork/threadwork_v30.md",
-      "filtered": false,
-      "filter_reason": null
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
+    },
+    {
+      "a": "NPC Behavior",
+      "b": "Peninsular Strain",
+      "meta_links": 2,
+      "a_doc": "systems/npcs/character_canon_v30.md",
+      "b_doc": "systems/factions/faction_layer_v30.md",
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     },
     {
       "a": "Peninsular Strain",
@@ -341,31 +350,13 @@
       "filter_reason": null
     },
     {
-      "token": "Key: mechanical.scene_exited",
-      "status": "canonical",
-      "doc": null,
-      "registry": "references/module_contracts.yaml",
-      "max_deg": 0,
-      "filtered": true,
-      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
-    },
-    {
-      "token": "Key: mechanical.scene_skipped",
-      "status": "canonical",
-      "doc": null,
-      "registry": "references/module_contracts.yaml",
-      "max_deg": 0,
-      "filtered": true,
-      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
-    },
-    {
       "token": "Key: scene_outcome.battle_concluded",
       "status": "canonical",
       "doc": null,
       "registry": "references/module_contracts.yaml",
-      "max_deg": 0,
-      "filtered": true,
-      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
+      "max_deg": 1,
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "token": "NPC Relational Graph",
@@ -400,8 +391,8 @@
       "doc": null,
       "registry": "references/module_contracts.yaml",
       "max_deg": 0,
-      "filtered": true,
-      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
+      "filtered": false,
+      "filter_reason": null
     },
     {
       "token": "faction Treasury income (cross-module \u2192 faction_state)",
@@ -409,8 +400,8 @@
       "doc": null,
       "registry": "references/module_contracts.yaml",
       "max_deg": 0,
-      "filtered": true,
-      "filter_reason": "Key-graph construct \u2014 citation-graph isolation is expected by construction"
+      "filtered": false,
+      "filter_reason": null
     }
   ]
 }

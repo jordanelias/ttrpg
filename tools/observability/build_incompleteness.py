@@ -494,16 +494,18 @@ def scan_audit_structural():
         md = r.get("max_deg", 0)
         if doc:
             title = f"{t} — structurally marooned"
-            body = (f"“{t}” appears in {doc} but has max degree {md} (≤1) across ALL FOUR design "
-                    f"graphs (cite/throughline/mu/pp) — structurally disconnected from the rest of "
-                    f"the design; make its connections explicit or confirm it is genuinely standalone")
+            body = (f"“{t}” appears in {doc} but has max degree {md} (≤1) across ALL FIVE structural "
+                    f"graphs (cite/throughline/mu/pp + the engine Key-propagation graph) — disconnected "
+                    f"from the rest of the design AND the engine wiring; make its connections explicit "
+                    f"or confirm it is genuinely standalone")
             path = doc
         else:
             title = f"{t} — no design-prose home"
-            body = (f"“{t}” has max degree {md} (≤1) across ALL FOUR design graphs "
-                    f"(cite/throughline/mu/pp) AND has no primary design doc — a registered term with "
-                    f"no design-prose home (the strongest incompleteness signal: it exists in the "
-                    f"registers but nothing in the design corpus uses it); registered via {reg or '?'}")
+            body = (f"“{t}” has max degree {md} (≤1) across ALL FIVE structural graphs "
+                    f"(cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc "
+                    f"— a registered term with no home in the design corpus OR the engine Key flow "
+                    f"(the strongest incompleteness signal; a still-isolated Key here is a dangling/"
+                    f"misnamed Key no module emits or consumes); registered via {reg or '?'}")
             path = reg
         out.append(finding("audit_isolate", f"iso::{t}", title,
                            f"{body}. vector-audit Mode H; status {r.get('status','?')} ({snap})",
