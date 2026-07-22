@@ -138,6 +138,35 @@ swordsman is genuinely strong — pike squares — so the answer may be "yes, bu
 targets; they set where each lever lands. Once the bands are fixed I can implement all three, joint-tune, and
 validate (matrices + `pytest` + re-export). Run `python phasec_probe.py` to reproduce.
 
+## Primitives & emergence adversarial pass (2026-07-22) — `primitives_probe.py`
+
+Hammering the L0 primitive-law (behaviour *emerges* from geometry primitives; no weapon-name tables):
+
+- **Finding P1 (novel) — half-sword capability is ANTI-EMERGENT: a 2-name fiat list + a dead primitive.**
+  Who can half-sword is decided by a hardcoded data table `HALFSWORD_FORM = {longsword, estoc}` — a name-table
+  (in the data layer, so the `test_no_weapon_name_literal_in_resolution` guard doesn't catch it). Meanwhile the
+  engine *contains* a primitive-derived rule for exactly this — `geometry.can_halfsword_thrust(curvature,
+  point_concentration)` → `geo['halfsword']` — but that coefficient is **DEAD**: `bake()` computes it for every
+  weapon and **nothing reads it** (the geo surface has no anti-orphan gate, unlike the wrapper's circumstance
+  fields). So the emergent path was designed and then abandoned in favour of fiat. And the dead rule is *also*
+  **mis-specified** — it has no length/two-handed term, so as written it wrongly flags daggers (rondel/stiletto,
+  already at gap range) and spears/poleaxes (which *choke the haft*, a different mechanic). A properly
+  length/2H-gated version would add ~15 long two-handed straight blades the fiat list denies — **greatsword,
+  changdao, odachi, tachi, glaive, …** — exactly the class that historically half-sworded vs harness. This
+  compounds the half-sword liability finding: the mechanic is both fiat-restricted to 2 weapons *and*, where it
+  is enabled, a net loss.
+- **Finding P2 (reassuring) — the RAW primitives are all LIVE.** Zeroing/maxing each of the 5 raw geometry
+  primitives roster-wide and re-baking moves a win-rate basket by 29–87pp — none is a dead/inert lever. The
+  raw-primitive emergence is real (`curvature`/`edge_keenness` → cut; `point_concentration`/`cross_section` →
+  gap+thrust; `strike_concentration` → percussion pierce). *(Caveat: the roster-wide ablation also perturbs the
+  arming baseline, so per-cell magnitudes are confounded — the identical stiletto shift under two different
+  primitives is arming's edge moving; the "all live" conclusion is unaffected.)*
+- **Watch item — the derivation is calibrated to REPRODUCE hand-set values.** `geometry.py`'s own docstring:
+  the derived coefficients are "calibrated to REPRODUCE the already-validated §4-grounded values." So the
+  emergence is partly *curve-fit to a top-down tier list* (magic constants like `0.25+0.75·pc`,
+  `cross_section**1.15`, `1.0−0.6·curvature`) rather than predicted from physical units — real emergence at the
+  raw-primitive level, but the fitting constants are a latent place for hand-tuning to masquerade as physics.
+
 ## Trace + backward-causal analysis (2026-07-22) — `trace_backward.py`
 
 A new lens: instrument the engine's `_TRACE` seam + spy `assemble_net_sigma` (the net-σ decomposition) and
