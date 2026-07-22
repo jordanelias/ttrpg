@@ -364,12 +364,16 @@ def _canonical_paths(root):
     return sorted(paths)
 
 
-# Design-content trees the EXTENDED layer (L1) traces — the whole authored corpus, not just the
-# canonical_sources slice. This is how "audit performance" extends in the corpus-breadth direction:
-# L0 sees ~6% (the curated heads); L1 sees every design/world/narrative doc so the cite/throughline/
-# mu/pp graphs trace connections across the WHOLE tree, not a slice. Excludes non-design trees
-# (tests/ narrative, deprecated/ history, tooling) and VCS/cache.
-_L1_TREES = ('systems', 'engine', 'canon', 'arcs', 'godot', 'proposals', 'workplans')
+# Design-content trees the EXTENDED layer (L1) traces — the whole authored DESIGN corpus, not just
+# the canonical_sources slice. IMPORTANT SCOPE HONESTY (adversarial-pass H1/H2, 2026-07-22): L1
+# extends ONLY the corpus-breadth direction, and within the 4-graph triangulation ONLY the CITE
+# graph consumes the doc corpus. The throughline and mu graphs derive from throughlines_meta (a
+# registry), and the token universe derives from names_index/proper_noun/module_contracts — NONE of
+# those grow with L1. So L1 = more DOCS, same TOKENS, cite-graph only. Narrative (arcs/) and planning
+# (workplans/) trees are EXCLUDED: they are not design mechanics, and letting a token's primary_doc
+# migrate to a narrative doc would pollute cite with story co-mention (H2). The design corpus is
+# systems/engine/canon/godot/proposals.
+_L1_TREES = ('systems', 'engine', 'canon', 'godot', 'proposals')
 _L1_SKIP_DIRS = {'.git', '.pytest_cache', '__pycache__', '.ruff_cache', '.mypy_cache',
                  'deprecated', 'sim', 'node_modules'}
 
@@ -436,11 +440,15 @@ def extract_corpus(root, layer='L0'):
     scope = set(_canonical_paths(root))
     if layer == 'L1':
         scope |= _design_tree_paths(root)
+    seen_live = set()  # dedup by LIVE path, not scope key (guards the L1 alias↔glob double-count)
     for rel in sorted(scope):
         live = _resolve_live(root, rel, remap)  # self-heal a moved input via the ledger
         if live is None:
             manifest['missing'].append(rel)
             continue
+        if live in seen_live:
+            continue  # same physical file reached by two scope keys (alias + glob) — read once
+        seen_live.add(live)
         fp = root / live
         try:
             content = fp.read_text(encoding='utf-8', errors='replace')
@@ -1249,6 +1257,8 @@ def diagnostics(tokens, graphs, degs):
     # D — cascade-without-return (chains len>=3, no return path)
     sinks = Counter()
     adj = {a: set(g_cite.get(a, {})) for a in names}
+    _trunc = [0]  # M2: count reaches() calls that hit the traversal cap — a capped 'False' may be a
+                  # FALSE 'does-not-return' (=> false cascade-sink). SURFACE it, never hide it.
     def reaches(start, target):
         stack, seen2 = [start], {start}
         steps = 0
@@ -1260,6 +1270,8 @@ def diagnostics(tokens, graphs, degs):
                     return True
                 if nx not in seen2 and len(seen2) < 200:
                     seen2.add(nx); stack.append(nx)
+        if steps >= 5000 or len(seen2) >= 200:
+            _trunc[0] += 1   # cap tripped: this False is unreliable
         return False
     for a in names:
         for b in adj.get(a, ()):
@@ -1269,6 +1281,7 @@ def diagnostics(tokens, graphs, degs):
     sinks_ranked = sinks.most_common()
     out['D_cascade_sinks'] = [{'terminal': t, 'chains': n} for t, n in sinks_ranked[:15]]
     out['D_cascade_sinks_total'] = len(sinks_ranked)   # true total (side channel; not just the shown 15)
+    out['D_cascade_truncated_calls'] = _trunc[0]       # >0 => some sinks may be cap-artifacts (denser corpora)
 
     # E — sparse-context (paragraph AND cite-degree in bottom 10th pct)
     pcut = _percentile_10_cut([tokens[t]['paragraph_count'] for t in names])
@@ -1386,25 +1399,44 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
     _scope_note = ("the curated `canonical_sources.yaml` slice — most of `systems/`, all of "
                    "`engine/`/`sim/`/`tests/`/`canon/` prose not named there is invisible"
                    if _layer == 'L0' else
-                   "the whole design tree (systems/engine/canon/arcs/godot/proposals/workplans); "
-                   "still excludes tests/ narrative, deprecated/, audit prose, and non-.md")
+                   "the whole DESIGN tree (systems/engine/canon/godot/proposals); still excludes "
+                   "arcs/ narrative, workplans/, tests/, deprecated/, audit prose, and non-.md")
+    # H1/M1 honesty: name the directions L1 does NOT extend + that validation is L0-calibrated.
+    _extend_note = ("L1 extends the corpus-breadth direction and the CITE graph ONLY. NOT extended: "
+                    "the throughline & mu graphs (registry-derived from throughlines_meta), the token "
+                    "universe (registry-derived; a token absent from names_index/proper_noun/"
+                    "module_contracts is invisible at EVERY layer), non-.md content (sim .py, "
+                    "engine/params values, the Key propagation graph), and the P1/P2/P3 thresholds "
+                    "(calibrated on L0 — the verdict below is NOT re-validated for the L1 corpus)."
+                    if _layer == 'L1' else
+                    "Directions this tool does not trace at any layer: non-.md content (sim .py, "
+                    "typed engine/params, the Key propagation graph) and registry-absent tokens.")
+    _run_hint = ("" if _layer == 'L1' else
+                 " Run `--layer L1` to extend the CITE trace across the whole design tree "
+                 "(L0 stays the validated default; L1 does NOT re-validate).")
     wr = [f'# Weakness register — vector audit v3 ({conf})', '',
           f"Corpus: {manifest['design_count']} design docs, "
           f"{len(tokens)} tokens. Validation: **{validation['verdict']}** "
-          f"({validation['passed']}/3). Confidence inherits from validation (methodology §3.8).",
+          f"({validation['passed']}/3){' — L0-calibrated thresholds, NOT re-validated for L1' if _layer=='L1' else ''}. "
+          f"Confidence inherits from validation (methodology §3.8).",
           '',
           f"**Coverage disclosure (capstone #6):** layer **{_layer}** traces "
           f"{_cov.get('design_files_scanned', manifest['design_count'])} design docs = "
           f"{_cov.get('pct_of_repo_md', '?')}% of the repo's "
           f"{_cov.get('repo_total_md', '?')} `.md` files — {_scope_note}. A green result at this "
-          f"layer is NOT whole-repo coverage; run `--layer L1` to extend the trace across the "
-          f"whole design tree (L0 stays the validated default).",
+          f"layer is NOT whole-repo coverage.{_run_hint}",
+          '',
+          f"**Direction disclosure:** {_extend_note}",
           f"Scorecard: cite-edges={validation['p3']['n_cite_edges']}, "
           f"hubs={len(diag['A_multigraph_hubs'])}, implied-missing={len(diag['B_implied_missing'])}, "
           f"notional={diag.get('C_notional_total', len(diag['C_notional']))}, "
           f"cascade-sinks={diag.get('D_cascade_sinks_total', len(diag['D_cascade_sinks']))}, "
           f"sparse={len(diag['E_sparse_context'])}, "
-          f"isolates={len(diag['H_isolates'])}, vocab-debt-terms={len(vocab)}.", '']
+          f"isolates={len(diag['H_isolates'])}, vocab-debt-terms={len(vocab)}.",
+          (f"⚠ Mode D reachability hit its traversal cap on {diag['D_cascade_truncated_calls']} "
+           f"call(s) — some cascade-sinks may be cap artifacts, not true sinks (denser corpus / L1). "
+           f"Treat cascade-sinks as leads here." if diag.get('D_cascade_truncated_calls') else ''),
+          '']
     def section(title, rows, fmt, empty='(none)', total=None):
         # total overrides len(rows) when the caller already capped `rows` upstream (Modes
         # C/D), so the disclosed "… N more" reflects the TRUE count, not the shown slice.

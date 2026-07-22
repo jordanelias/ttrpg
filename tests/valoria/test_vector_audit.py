@@ -301,10 +301,13 @@ def test_vector_audit_reuses_the_real_names_reader():
     assert va.names is real_names
 
 
-def test_corpus_layer_L1_extends_L0_in_all_directions():
+def test_corpus_layer_L1_extends_L0_corpus_breadth():
     """`--layer L1` extends the audit's trace from the curated canonical slice (L0, ~6%) to the
-    whole design tree — the corpus-breadth 'extend performance in all directions'. L0 stays the
-    validated default and is a strict subset of L1 (nothing dropped by extending)."""
+    whole design tree — the corpus-breadth direction (the CITE graph only; NOT tl/mu, which are
+    registry-derived, nor the token universe). L0 stays the validated default and its DOC SET is a
+    strict subset of L1's. NOTE: only the doc set is a guaranteed superset — derived graphs/edges
+    are not monotone (a token's primary_doc can shift under the wider corpus), which is why the
+    narrative arcs/ tree is excluded from L1 (would pollute cite with story co-mention)."""
     import os
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from pathlib import Path
