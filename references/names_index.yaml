@@ -228,16 +228,17 @@ entries:
   world.stillhelm: {canonical: "Stillhelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valorsplatz: {canonical: "Valorsplatz", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- factions --
-  world.church: {canonical: "Church", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.guilds: {canonical: "Guilds", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bGuilds?\b']}
+  world.church: {canonical: "Church", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
+  world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
+  world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bHafenmark\b']}
   world.uncontrolled: {canonical: "Uncontrolled", aliases: [], legacy: [], category: proper_noun, enforce: warn}
-  world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  world.varfell: {canonical: "Varfell", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bVarfell\b']}
   # -- subfactions --
-  world.lowenritter: {canonical: "Löwenritter", aliases: ["Lions"], legacy: [], category: proper_noun, enforce: warn}
+  world.lowenritter: {canonical: "Löwenritter", aliases: ["Lions"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['L[oö]wenritter']}
   world.wardens: {canonical: "Wardens", aliases: ["Warden"], legacy: [], category: proper_noun, enforce: warn}
   # -- organizations --
-  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement"], legacy: [], category: proper_noun, enforce: warn}
+  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['Restoration Movement', '\bRM\b(?![a-z])']}
   # -- realms --
   world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}

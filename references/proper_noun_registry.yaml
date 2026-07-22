@@ -329,6 +329,12 @@ territories:
     files_count: 9
 
 factions:
+  guilds:
+    canonical: "Guilds"
+    aliases: []
+    source: triage
+    added_via_triage: true
+    entry_note: "vector-audit faction-class member (CLASSES['faction']); classification pending Jordan confirmation — ED-IN-0082"
   church:
     canonical: "Church"
     aliases: []

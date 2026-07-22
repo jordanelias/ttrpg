@@ -5,7 +5,7 @@
 # here: `python tools/definitions_store.py --get <key>`. Drift-locked: `--check` asserts this equals
 # a fresh rebuild and that name fields agree across the source registers (extends ci_names_consistency).
 # `in_registers` records provenance; `gap` flags a key present in only one register (surfaced, not fixed).
-count: 105
+count: 106
 definitions:
   agg.body:
     canonical: Body
@@ -556,6 +556,12 @@ definitions:
     - names_index
   world.grauwald:
     canonical: Grauwald
+    category: proper_noun
+    enforce: warn
+    in_registers:
+    - names_index
+  world.guilds:
+    canonical: Guilds
     category: proper_noun
     enforce: warn
     in_registers:

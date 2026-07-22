@@ -78,19 +78,17 @@ CLASSES = {
     'conviction': [],
     # pressure_point ROSTER sourced from names_index ppt.* below (§8; R2/ED-IN-0082)
     'pressure_point': [],
-    # ── DEFERRED to the R2 migration wave (still hardcoded here; FLAGGED, not silently left, per
-    # the hardcode-elimination directive). Each needs reconciliation before it can source from the
-    # central registry the way conviction/pressure_point now do:
-    #   faction / npc → central home is names_index world.* (the proper_noun mirror of
-    #     references/proper_noun_registry.yaml). Blocked on (a) the audit's short match-forms —
-    #     'Crown', 'Torben', surname-only — don't map 1:1 to the formal world.* canonicals, and
-    #     (b) the disambiguation `context` + custom patterns (negative lookaheads) must move
-    #     WITHOUT disturbing the world.* ↔ proper_noun_registry mirror (ci_names_consistency).
-    #     Reserved prefixes: org. (faction/order), npc. (named character) — §3.2 names_index header.
-    #   clock → systems/overview/clock_registry_v30.md is prose, not machine-readable; author
-    #     clock.* entries once that registry is structured.
-    'faction': ['Crown', 'Church', 'Hafenmark', 'Varfell', 'Löwenritter',
-                'Restoration Movement', 'Guilds'],
+    # faction ROSTER + disambiguation sourced from names_index world.* entries tagged
+    # `token_class: faction` below (§8; R2/ED-IN-0082) — patterns/context migrated verbatim; the
+    # world.* proper_noun mirror is undisturbed (canonical unchanged). world.guilds added +
+    # mirrored in proper_noun_registry (flagged for Jordan). Order-independent (verified).
+    'faction': [],
+    # ── STILL DEFERRED (FLAGGED, not silently left):
+    #   npc → central home is names_index world.* but the audit's short match-forms ('Torben',
+    #     surname-only) don't map 1:1 to the formal world.* canonicals; needs the short<->formal
+    #     reconciliation before sourcing (risk to name-coreference). Reserved prefix npc. (§3.2).
+    #   clock → systems/overview/clock_registry_v30.md is prose (abbreviations vs full names);
+    #     author clock.* entries once that registry is machine-readable.
     'npc': ['King Almud', 'Confessor Arne', 'Inge Baralta', 'Magnus Vaynard',
             'Lisbeth Ehrenwall', 'Yrsa Vossen', 'Torben', 'Elske', 'Edeyja', 'Lenneth'],
     'clock': ['MS', 'CI', 'IP', 'PI', 'TS', 'TCV'],
@@ -258,26 +256,9 @@ SEED_TOKENS = {
                              'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
     'Lenneth':              {'patterns': [r'\bLenneth\b'],
                              'scale': 'npc', 'status': 'canonical', 'source': 'seed'},
-    # Factions (disambiguated)
-    'Crown':                {'patterns': [r'\bCrown\b(?! Treaty)'], 'scale': 'faction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b',
-                                         r'\bTreaty\b', r'\bTorben\b']},
-    'Church':               {'patterns': [r'\bChurch\b(?! Influence)'], 'scale': 'faction',
-                             'status': 'canonical', 'source': 'seed',
-                             'context': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b',
-                                         r'\bHeresy\b', r'\bfaction\b', r'\bConfessor\b',
-                                         r'\bdoctrine\b']},
-    'Hafenmark':            {'patterns': [r'\bHafenmark\b'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Varfell':              {'patterns': [r'\bVarfell\b'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Löwenritter':          {'patterns': [r'L[oö]wenritter'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Restoration Movement': {'patterns': ['Restoration Movement', r'\bRM\b(?![a-z])'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
-    'Guilds':               {'patterns': [r'\bGuilds?\b'],
-                             'scale': 'faction', 'status': 'canonical', 'source': 'seed'},
+    # Factions: sourced from references/names_index.yaml world.* entries tagged
+    # `token_class: faction` AFTER this literal (§8; R2/ED-IN-0082) — roster + custom patterns
+    # (negative lookaheads) + §3.5 disambiguation context migrated to the central registry.
     # Cross-cutting
     'Armature System':      {'patterns': ['Armature System', 'Armature'],
                              'scale': 'crosscutting', 'status': 'provisional', 'source': 'seed'},
@@ -303,10 +284,10 @@ SEED_TOKENS = {
 # Built byte-identically to the former hardcoded blocks (test_vector_audit pins each). If
 # names_index is unreadable (no PyYAML) these degrade to absent — the same failure mode
 # derive_tokens already has, since the whole audit reads the index.
-_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point')
+_INDEX_TOKEN_CLASSES = ('conviction', 'pressure_point', 'faction')
 if names is not None:
     for _cls in _INDEX_TOKEN_CLASSES:
-        _members = names.by_category(_cls)
+        _members = names.by_token_class(_cls)
         # ordered display roster (index order matches the former hardcoded order, so P2's
         # per-conviction vector and the class taxonomy are unchanged)
         CLASSES[_cls] = [_e['canonical'] for _e in _members.values() if _e.get('canonical')]

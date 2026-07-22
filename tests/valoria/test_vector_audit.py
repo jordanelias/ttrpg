@@ -213,6 +213,28 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     assert names.context('conv.order') == EXPECTED['conviction']['Order']
     assert names.context('ppt.loyalty') == EXPECTED['pressure_point']['Loyalty']
 
+    # factions: sourced from names_index world.* (token_class: faction) with CUSTOM patterns
+    # (negative lookaheads) — roster is order-independent (verified), so checked as a SET.
+    FAC_PATS = {
+        'Crown': [r'\bCrown\b(?! Treaty)'], 'Church': [r'\bChurch\b(?! Influence)'],
+        'Hafenmark': [r'\bHafenmark\b'], 'Varfell': [r'\bVarfell\b'],
+        'Löwenritter': [r'L[oö]wenritter'],
+        'Restoration Movement': ['Restoration Movement', r'\bRM\b(?![a-z])'],
+        'Guilds': [r'\bGuilds?\b'],
+    }
+    FAC_CTX = {'Crown': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b', r'\bTreaty\b', r'\bTorben\b'],
+               'Church': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b', r'\bfaction\b',
+                          r'\bConfessor\b', r'\bdoctrine\b']}
+    assert set(va.CLASSES['faction']) == set(FAC_PATS)
+    for disp, pats in FAC_PATS.items():
+        tok = va.SEED_TOKENS.get(disp)
+        assert tok is not None and tok['scale'] == 'faction', disp
+        assert tok['patterns'] == pats, disp
+        assert tok['context'] == FAC_CTX.get(disp, []), disp
+    # sourced via token_class (a proper_noun that ALSO carries an audit class), not category
+    assert {m['canonical'] for m in names.by_token_class('faction').values()} == set(FAC_PATS)
+    assert names.canonical('world.guilds') == 'Guilds'   # world.guilds added + mirrored
+
 
 def test_vector_audit_reuses_the_real_names_reader():
     # Fable-5 finding: §8 "every rule lives once" — vector_audit must import the
