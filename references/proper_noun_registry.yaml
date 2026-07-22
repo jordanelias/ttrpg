@@ -102,7 +102,7 @@ characters:
     files_count: 4
   grandmaster_ehrenwall:
     canonical: "Grandmaster Ehrenwall"
-    aliases: ["Ehrenwall"]
+    aliases: ["Ehrenwall", "Lisbeth"]
     source: "systems/npcs/npc_character_analyses_v30.md"
     occurrences_count: 2
     files_count: 2

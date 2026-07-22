@@ -231,7 +231,7 @@ entries:
   world.confessor_arne_himlensendt: {canonical: "Confessor Arne Himlensendt", aliases: ["Himlensendt", "Confessor"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bArne\b', '\bHimlensendt\b', '\bConfessor\b']}
   world.dalla_virke: {canonical: "Dalla Virke", aliases: ["Virke"], legacy: [], category: proper_noun, enforce: warn}
   world.doux_alexios_laskaris: {canonical: "Doux Alexios Laskaris", aliases: ["Laskaris"], legacy: [], category: proper_noun, enforce: warn}
-  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bBaralta\b', '\bInge\b']}
+  world.duchess_inge_baralta: {canonical: "Duchess Inge Baralta", aliases: ["Baralta"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bBaralta\b']}
   world.duke_magnus_vaynard: {canonical: "Duke Magnus Vaynard", aliases: ["Vaynard", "Duke"], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bVaynard\b']}
   world.edeyja: {canonical: "Edeyja", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: npc, patterns: ['\bEdeyja\b']}
   world.gerik_strand: {canonical: "Gerik Strand", aliases: [], legacy: [], category: proper_noun, enforce: warn}

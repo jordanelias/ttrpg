@@ -271,7 +271,7 @@ def test_token_classes_sourced_from_names_index_byte_identical():
         'Prince Torben Almqvist':     [r'\bTorben\b'],
         'Princess Elske Almqvist':    [r'\bElske\b'],
         'Queen Lenneth Almqvist':     [r'\bLenneth\b'],
-        'Duchess Inge Baralta':       [r'\bBaralta\b', r'\bInge\b'],
+        'Duchess Inge Baralta':       [r'\bBaralta\b'],
         'Duke Magnus Vaynard':        [r'\bVaynard\b'],
         'Confessor Arne Himlensendt': [r'\bArne\b', r'\bHimlensendt\b', r'\bConfessor\b'],
         'Yrsa Vossen':                [r'\bYrsa\b', r'\bVossen\b'],
