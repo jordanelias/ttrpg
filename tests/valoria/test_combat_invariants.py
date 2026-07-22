@@ -156,9 +156,20 @@ def test_use_mode_selection_emerges_from_primitives():
             changers.append(n)
     # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above. sabre/scimitar/falchion ARE included (the
     # engine genuinely changes them today) but are a FLAGGED, NOT-YET-FIXED bug (ED-PC-0012) — see docstring.
-    expected = ['greatsword', 'sabre', 'kama_yari', 'glaive', 'guandao', 'podao', 'fauchard', 'voulge',
-                'guisarme', 'ji', 'bec_de_corbin', 'katana', 'tachi', 'nandao', 'scimitar', 'falchion',
-                'hook_sword']
+    # [PC-5/ED-PC-0015, 2026-07-22] thrust_authority(head_len) scales the puncture GAP-PRESS term (core._transmit),
+    # so select_mode's greedy comparator now weights each candidate point by its point-to-hand lever. TWO grounded
+    # shifts in the changer set (verified this pass, not silently accepted):
+    #   +estoc/flamberge/changdao/odachi JOIN — stiff two-handed thrust-blades whose short-enough-lever half-sword
+    #    thrust now out-couples their own edge vs mail/plate (estoc is a purpose-built armour-thruster; the others
+    #    are the same two-handed-cutter-gains-a-secondary-thrust class as the ED-PC-0011 changers already here).
+    #   -bec_de_corbin/voulge DROP — their armour-defeat is a SWUNG beak/spike (percussion), not a static pommel-
+    #    pressed thrust; PC-5 correctly declines to credit their long-haft 'point' with short-lever thrust authority,
+    #    so they route to their percussion/versatile mode instead. Their plate-defeat OUTCOME is fully preserved
+    #    (bec_de_corbin still wins ~91% / voulge ~63% vs arming at heavy — verified), i.e. the shift is a corrected
+    #    MODE LABEL (swing, not thrust), not a lost capability. The blunt path is untouched by thrust_auth by design.
+    expected = ['greatsword', 'sabre', 'kama_yari', 'glaive', 'guandao', 'podao', 'fauchard', 'guisarme',
+                'ji', 'katana', 'tachi', 'odachi', 'changdao', 'nandao', 'scimitar', 'flamberge', 'estoc',
+                'falchion', 'hook_sword']
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -742,16 +753,24 @@ def test_facing_void_ablation_moves_close_rate_and_reach_sigma():
 
 
 def test_reach_class_beats_arming_not_inverted():
-    """I8 acceptance #1: the reach-class weapons (spear/yari/guisarme/poleaxe) must still decisively beat a
-    uniform arming-sword baseline at every armour tier — R2's new grip/room/facing/rear_clearance/contact
-    degradation levers must not INVERT the reach advantage into a loss. (The plan's tighter ~55-75%
-    CONTESTED band is a separate, NOT-yet-met finding — see i8_capstone_audit.md item 1; it traces to a
-    pre-existing Phase-B mass-model calibration debt shared with the accepted test_gap_game_poleaxe_spikes_
-    plate red, out of this redesign's scope. This test only guards against an actual inversion.)"""
+    """Reach vs a uniform arming-sword baseline — the GROUNDED, armour-CONDITIONAL ladder.
+    [ORIGINAL, I8] guarded that reach (spear/yari/guisarme/poleaxe) never INVERTS into a loss at any armour tier
+    — R2's grip/room/facing degradation must not zero the reach advantage.
+    [REWRITTEN, PC-5/ED-PC-0015, 2026-07-22] The old blanket "reach beats arming at EVERY tier incl. heavy"
+    encoded the pre-PC-5 UNIFORM-plate-defeat assumption (every point defeated plate at the gaps with equal
+    authority — the flat ~85% reach dominance that the stress-test session flagged as G4 reach-over-dominance).
+    thrust_authority(head_len) grounds it: a point pressed into a harness gap is a SHORT-LEVER pommel-backed act,
+    so a long reach-thrust at full extension (spear head_len 1.65, yari 1.86) can no longer defeat plate the way a
+    short one can. The reach advantage is now ARMOUR-CONDITIONAL — real vs flesh/cloth/mail, decaying to a loss vs
+    plate for a PURE-POINT reach weapon, while a DEDICATED armour-defeating reach weapon (poleaxe: swung spike/
+    hammer, percussion path, untouched by thrust_auth) still dominates plate. This test now asserts that grounded
+    shape, NOT a blanket dominance. (Guards preserved: reach still dominates every NON-plate tier; nothing is
+    annihilated to ~0 — a real zeroing bug still trips the floor.)"""
     import random
     import zlib
     import wrapper
     C, core, S, WP, CFG = _mods()
+    share = {}
     for w in ('spear', 'yari', 'guisarme', 'poleaxe'):
         for armor in ('none', 'light', 'medium', 'heavy'):
             # crc32, not hash() — hash() is PYTHONHASHSEED-salted (non-reproducible run-to-run); see
@@ -767,4 +786,17 @@ def test_reach_class_beats_arming_not_inverted():
                 if r == 1: wins += 1; dec += 1
                 elif r == -1: dec += 1
             assert dec > 0, (w, armor)
-            assert wins / dec > 0.5, f"{w} vs arming at {armor}: reach class INVERTED ({wins}/{dec})"
+            share[(w, armor)] = wins / dec
+    # (1) reach dominates every NON-plate tier for every reach weapon — the reach advantage vs flesh/cloth/mail is real.
+    for w in ('spear', 'yari', 'guisarme', 'poleaxe'):
+        for armor in ('none', 'light', 'medium'):
+            assert share[(w, armor)] > 0.5, f"{w} vs arming at {armor}: reach INVERTED off-plate ({share[(w, armor)]:.2f})"
+    # (2) at HEAVY, the dedicated armour-defeating reach weapon still dominates (poleaxe's swung spike/hammer defeats plate).
+    assert share[('poleaxe', 'heavy')] > 0.5, f"poleaxe vs arming at heavy should still defeat plate ({share[('poleaxe','heavy')]:.2f})"
+    # (3) at HEAVY, a PURE-POINT reach weapon is correctly brought BELOW dominance (the grounded G4 correction — a long
+    #     reach-thrust cannot press a point into a harness gap), but NOT annihilated (a real zeroing bug still trips the floor).
+    for w in ('spear', 'yari'):
+        s = share[(w, 'heavy')]
+        assert 0.10 <= s < 0.5, f"{w} vs arming at heavy: expect a grounded contest-or-loss [0.10,0.5), got {s:.2f}"
+    # (4) the versatile mid-reach cut_thrust polearm (guisarme) contests plate around even — neither dominant nor lost.
+    assert 0.30 <= share[('guisarme', 'heavy')] <= 0.65, f"guisarme vs arming at heavy should contest ({share[('guisarme','heavy')]:.2f})"

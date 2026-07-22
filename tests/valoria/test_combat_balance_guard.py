@@ -78,15 +78,30 @@ def test_mirror_fairness(weapon):
     assert 0.40 <= rate <= 0.60, f"mirror {weapon} A-winrate {rate:.3f} outside [0.40,0.60] — role-symmetry break?"
 
 
+# PC-5/ED-PC-0015 (2026-07-22): the heavy mirror splits by whether the weapon can DEFEAT ITS OWN PLATE CLASS.
+#   DEFEATS_PLATE — a short-lever pommel-pressed thrust (dagger), a half-sword thrust (longsword — the swap gives it a
+#     short-lever form), or percussion (poleaxe spike/hammer, mace) — resolves a plate mirror -> stays DECISIVE.
+#   STALEMATE_CLASS — a pure long-lever reach-thrust (spear) or a one-handed light-authority cut+thrust (arming) can NOT
+#     reliably defeat its own plate class, so an identical-armour mirror mostly DRAWS (the historical why-men-at-arms-
+#     wrestled-and-daggered — the grounded consequence of thrust_authority scaling the gap-press by point-to-hand lever).
+_DEFEATS_PLATE = {'dagger', 'poleaxe', 'longsword', 'mace'}
+_STALEMATE_CLASS = {'spear', 'arming'}
+
+
 @pytest.mark.parametrize("weapon", ['dagger', 'spear', 'poleaxe', 'longsword', 'mace', 'arming'])
 def test_heavy_mirror_fair_and_decisive(weapon):
-    """HEAVY-armour mirror — symmetry AND non-degeneracy. The Gate-1 audit + the gap game (2026-06-30) exposed a latent
-    artifact the light-only `test_mirror_fairness` never covered: pre-gap-game, pure-thrust weapons vs plate produced
-    ~65-80% DRAWS (no mode could defeat the harness), so the tiny decided population was first-mover-dominated and a
-    naive mirror read far from 50. This guards BOTH: (a) win-share among decided fights ~50/50 (role-symmetry), and
-    (b) the DECIDED fraction stays healthy (>=0.40) — a regression that re-breaks armour-defeat (every mode failing vs
-    plate -> draw-stalemate) trips (b). Seeded -> deterministic. Current engine decides ~0.98-1.00; the old broken
-    state was ~0.17-0.35 — the 0.40 floor sits robustly between."""
+    """HEAVY-armour mirror — role-symmetry ALWAYS; decisiveness CONDITIONED on armour-defeat capability.
+    The Gate-1 audit + the gap game (2026-06-30) exposed a latent artifact the light-only `test_mirror_fairness`
+    never covered: pre-gap-game, pure-thrust weapons vs plate produced ~65-80% DRAWS, so the tiny decided population
+    was first-mover-dominated and a naive mirror read far from 50.
+    [REWRITTEN, PC-5/ED-PC-0015, 2026-07-22] The blanket `frac_decided >= 0.40` for EVERY weapon encoded the pre-PC-5
+    assumption that every weapon defeats plate. thrust_authority(head_len) grounds it: only a weapon that can actually
+    defeat its own plate class resolves an identical-armour mirror. So the guard now SPLITS — (a) win-share ~50/50 for
+    EVERY weapon (role-symmetry is universal and unconditional); (b) the DECIDED fraction is high (>=0.40) ONLY for the
+    armour-defeating weapons (_DEFEATS_PLATE), and LOW (<0.40, a genuine draw-stalemate) for the stalemate class
+    (_STALEMATE_CLASS: an arming sword / spear plate mirror historically could not kill). A regression that re-breaks
+    armour-defeat for a defeater (its mirror goes drawish) still trips (b); a regression that lets a stalemate weapon
+    trivially defeat its own plate again (mirror goes decisive) ALSO trips (b) now — the test is strictly stronger."""
     np, C, W, CFG = _engine()   # np is the rng factory shim (stdlib contract, ED-1085)
     rng = np.default_rng(20260630)
     n = 300
@@ -100,7 +115,13 @@ def test_heavy_mirror_fair_and_decisive(weapon):
             a_wins += (r == 1)
     frac_decided = decided / n
     win_share = a_wins / decided if decided else 0.5
-    assert frac_decided >= 0.40, (
-        f"heavy mirror {weapon}: only {frac_decided:.2f} decided — draw-stalemate (armour-defeat broken vs plate?)")
     assert 0.38 <= win_share <= 0.62, (
         f"heavy mirror {weapon} A win-share {win_share:.3f} outside [0.38,0.62] — role-symmetry break?")
+    if weapon in _DEFEATS_PLATE:
+        assert frac_decided >= 0.40, (
+            f"heavy mirror {weapon}: only {frac_decided:.2f} decided — armour-defeater should resolve its plate mirror")
+    else:
+        assert weapon in _STALEMATE_CLASS, f"unclassified weapon {weapon} — add it to _DEFEATS_PLATE or _STALEMATE_CLASS"
+        assert frac_decided < 0.40, (
+            f"heavy mirror {weapon}: {frac_decided:.2f} decided — a non-armour-defeating weapon should STALEMATE its "
+            f"own plate class (PC-5 grounding); trivial plate-defeat has regressed")

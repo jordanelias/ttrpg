@@ -112,7 +112,7 @@ WEAPONS = {
      # tolerance of the REC_I_REF/REC_S_REF anchors — those [SIM-CALIBRATE] constants are UNCHANGED, deferred
      # to Phase C per that test's own docstring; U1 only corrects the mass that feeds them). heft()'s HEFT_REF
      # anchor is re-derived from this weapon below (weapon_physics.py) to preserve heft(longsword)==1.0.
-     dict(x_m=0.42, mass_kg=0.755, extent_m=0.84, orient_deg=0, material='steel'),  # blade
+     dict(x_m=0.42, mass_kg=0.755, extent_m=0.84, orient_deg=0, material='steel', grippable=True),  # blade — a safe forward gripping zone (attested gauntleted half-swording of a sharp longsword blade); grants the half-sword affordance emergently (P3/JD-3, ED-PC-0014)
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.12, extent_m=0.2, type='cross', orient_deg=90, material='steel'),  # straight cross guard (occasionally slightly curved quillons)
@@ -700,7 +700,7 @@ WEAPONS = {
    mass=2.0, head_len=1.12449, grip_len=0.44451, hands=2, head='point', hand_guard=0.35, blade_guard=0.75, reach_adj=0.1,
    wclass='bladed', hilt='compound',
    elements=[
-     dict(x_m=0.55, mass_kg=1.15, extent_m=1.149, orient_deg=0, material='steel'),  # blade
+     dict(x_m=0.55, mass_kg=1.15, extent_m=1.149, orient_deg=0, material='steel', grippable=True),  # blade — the edgeless armoured-thruster blade is the archetypal half-sword grip zone (mit dem kurzen Schwert); grants the half-sword affordance emergently (P3/JD-3, ED-PC-0014)
     ],
    guards=[
      dict(x_m=0.0, mass_kg=0.18, extent_m=0.24, type='cross', orient_deg=90, material='steel'),  # cruciform guard with long quillons
