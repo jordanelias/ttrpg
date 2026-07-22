@@ -516,6 +516,16 @@ def distraction(w):
 VIBRATION_K = 0.04  # [SIM-CALIBRATE] per mm of edge-undulation amplitude; flamberge's 15mm amplitude -> ~0.45, a
                      #   real but not dominant tactile disruption (bind_sigma's tac term is one of five summands).
 
+def facing_pref(w):
+    """U7/ED-PC-0020 — a weapon's preferred FACING REGIME, signed in [-1, 1]: a ONE-handed fighter keeps the off-side
+    back and fights bladed/PROFILE (+, a narrower target, more voiding); a TWO-handed weapon commits both hands and
+    must SQUARE UP to bring it on line (−, more profile presented). Emergent from `hands` (the regime is nearly
+    categorical there — 'hands separates the twins': a 1H vs 2H version of the same blade face opposite regimes),
+    with a mild reach saturation (a longer weapon commits its regime harder). No weapon name. Pure. Wired multiplicative
+    into systems.facing_target (FACING_REGIME_K, K=0 -> inert/byte-identical until the U9 recalibration)."""
+    sign = 1.0 if w['hands'] == 1 else -1.0
+    return sign * (0.85 + 0.15 * math.tanh(2.0 * w['head_len']))
+
 def edge_vibration(w):
     """The weapon's peak edge-undulation intensity — the MAX amplitude across its located elements (the most
     extreme undulating segment dominates the tactile signature felt by an opponent bound against it). In [0,1);

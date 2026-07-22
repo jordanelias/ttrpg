@@ -41,6 +41,11 @@ CFG = dict(
   # CHOKE_RC_REF — pole-class rear_clearance reference the choke normalises by (poleaxe-class ~0.9); used only inside
   # the K=0-gated term, so its value is inert until U9. The thrust side is weapon_physics.CHOKE_THRUST_K.
   CHOKE_ACCURACY_K=0.0, CHOKE_RC_REF=0.9,
+  # U7/ED-PC-0020 weapon-class-aware facing: FACING_REGIME_K [K=0] — scales the signed facing regime
+  # (weapon_physics.facing_pref: 1H profile / 2H square) multiplicatively in systems.facing_target. K=0 makes the
+  # multiplier exactly 1.0 (byte-identical, C2 holds numerically); the U9 recalibration flips it (the Jordan-resolved
+  # C2 reversal). Ships toward ~0.6 at U9 per the plan.
+  FACING_REGIME_K=0.0,
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
