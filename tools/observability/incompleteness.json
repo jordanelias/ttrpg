@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 139,
+    "findings": 154,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
@@ -18,6 +18,7 @@
       "register_phantom_source": 1,
       "register_quarantined": 1,
       "sim_not_implemented": 39,
+      "stale_retired_pointer": 15,
       "status_noncurrent": 25
     }
   },
@@ -53,7 +54,7 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 36,
+      "total": 51,
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
       "integrity_unverified_pin": 1,
@@ -61,6 +62,7 @@
       "register_phantom_source": 1,
       "register_quarantined": 1,
       "sim_not_implemented": 7,
+      "stale_retired_pointer": 15,
       "status_noncurrent": 2
     },
     "SE": {
@@ -89,7 +91,7 @@
   "coverage_gaps": [
     "null/empty REQUIRED fields in registries other than module_contracts (id_reservations, descriptor_registry 'IN FLUX' roster, names_index, \u2026) are not yet structurally scanned",
     "co-file _index/_infill pairing gaps are owned by ci_co_file_checker and not yet absorbed here",
-    "broken restructure_ledger.md pointers are not yet validated",
+    "retired designs/-tree pointers in references/ & registers/ ARE now surfaced (stale_retired_pointer); pointers in docs/comments and non-designs/ dead paths are not yet validated",
     "which of the canonical_sha pins are actually STALE (vs merely advisory) is delegated to freshness_gate.py --update, not enumerated here",
     "the alias(<4)/paragraph(<50)/citation(<2) audit floors are recorded as COUNTS by vector_audit.audit_exclusions, not enumerated per-item",
     "prose/status scans cover the canonical doc roots only; audit/ and workplans/ working docs are intentionally out of scope (they PROPOSE, not assert)"
@@ -993,8 +995,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:483",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:483",
+      "id": "tools/observability/build_incompleteness.py:519",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:519",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN"
@@ -1005,6 +1007,126 @@
       "title": "NotImplementedError @ tools/sim_harness/adapters/dice_pool_demo.py:118",
       "detail": "raise NotImplementedError(",
       "path": "tools/sim_harness/adapters/dice_pool_demo.py",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/alias_registry.yaml",
+      "title": "references/alias_registry.yaml",
+      "detail": "2 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md",
+      "path": "references/alias_registry.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/canonical_sources_provenance.md",
+      "title": "references/canonical_sources_provenance.md",
+      "detail": "20 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/conflict_architecture_proposal.md, designs/audit/2026-05-17-v18-integration/integration_plan_v18.md, designs/factions/faction_systems_overview_v30.md (+16 more)",
+      "path": "references/canonical_sources_provenance.md",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/censured_vocabulary.yaml",
+      "title": "references/censured_vocabulary.yaml",
+      "detail": "3 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/peninsular_strain_v30.md, designs/provincial/victory_v30.md",
+      "path": "references/censured_vocabulary.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/ci_checks_registry.yaml",
+      "title": "references/ci_checks_registry.yaml",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md",
+      "path": "references/ci_checks_registry.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/collation_report_summary.yaml",
+      "title": "references/collation_report_summary.yaml",
+      "detail": "594 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/campaign_architecture_v30.md, designs/architecture/campaign_modes_v30.md, designs/architecture/campaign_modes_v30_infill.md (+83 more)",
+      "path": "references/collation_report_summary.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/glossary.md",
+      "title": "references/glossary.md",
+      "detail": "5 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md, designs/provincial/peninsular_strain_v30.md (+1 more)",
+      "path": "references/glossary.md",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/id_reservations.yaml",
+      "title": "references/id_reservations.yaml",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md",
+      "path": "references/id_reservations.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/module_contracts.yaml",
+      "title": "references/module_contracts.yaml",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md",
+      "path": "references/module_contracts.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/npc_registry.yaml",
+      "title": "references/npc_registry.yaml",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/faction_canon_v30.md",
+      "path": "references/npc_registry.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/numeric_bounds_report.yaml",
+      "title": "references/numeric_bounds_report.yaml",
+      "detail": "139 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/campaign_modes_v30.md, designs/architecture/canonical_registry.md, designs/architecture/complete_systems_reference.md (+52 more)",
+      "path": "references/numeric_bounds_report.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/propagation_map.md",
+      "title": "references/propagation_map.md",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/scene/derived_stats_v30.md",
+      "path": "references/propagation_map.md",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/wiring_manifest.yaml",
+      "title": "references/wiring_manifest.yaml",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/clock_registry_v30.md",
+      "path": "references/wiring_manifest.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "registers/mechanics_index.yaml",
+      "title": "registers/mechanics_index.yaml",
+      "detail": "27 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md, designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md, designs/provincial/altonian_reinforcements_v30.md (+11 more)",
+      "path": "registers/mechanics_index.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "registers/patch_register_active.yaml",
+      "title": "registers/patch_register_active.yaml",
+      "detail": "5 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-04-29-terminology-conversion/00_workplan.md, designs/audit/2026-04-29-topographic-analysis/00_workplan.md, designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md (+1 more)",
+      "path": "registers/patch_register_active.yaml",
+      "lane": "IN"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "registers/supersession_register.yaml",
+      "title": "registers/supersession_register.yaml",
+      "detail": "20 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-04-30-architecture-session/00_index.md, designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md, designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md (+11 more)",
+      "path": "registers/supersession_register.yaml",
       "lane": "IN"
     },
     {

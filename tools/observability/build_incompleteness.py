@@ -300,6 +300,40 @@ def scan_status_headers():
     return out
 
 
+RETIRED_TREES = ("designs/",)  # designs/ was retired 2026-07-19 (ED-IN-0071 P4/P5)
+
+
+def scan_retired_tree_pointers():
+    """Machine-read registries that still reference the RETIRED designs/ tree (F/critic follow-up).
+    These resolve only via the restructure_ledger alias map — i.e. they are stale pointers hiding
+    behind the alias, invisible until now. The alias map itself and append-only ledgers legitimately
+    carry the old paths, so they are excluded."""
+    out = []
+    EXCLUDE = ("restructure_ledger",)  # the alias map: designs/ paths are its KEYS, legitimate
+    rel_re = re.compile(r"designs/[A-Za-z0-9_./\-]+\.md")
+    for sub in ("references", "registers"):
+        base = REPO / sub
+        if not base.exists():
+            continue
+        for f in list(base.glob("*.yaml")) + list(base.glob("*.md")):
+            rel = str(f.relative_to(REPO))
+            if any(x in rel for x in EXCLUDE):
+                continue
+            try:
+                text = f.read_text(encoding="utf-8")
+            except Exception:
+                continue
+            hits = rel_re.findall(text)
+            if hits:
+                uniq = sorted(set(hits))
+                out.append(finding("stale_retired_pointer", rel, rel,
+                                   f"{len(hits)} reference(s) to the retired designs/ tree "
+                                   f"(alias-resolved, not live): e.g. {', '.join(uniq[:3])}"
+                                   + (f" (+{len(uniq)-3} more)" if len(uniq) > 3 else ""),
+                                   path=rel, lane="IN"))
+    return out
+
+
 def scan_orphan_tools():
     """Tools/skills/hooks the apparatus registry flags as orphaned (no importer/invoker) (F5)."""
     out = []
@@ -425,6 +459,7 @@ def build():
     findings += scan_sim_stubs()
     findings += scan_prose_markers()
     findings += scan_status_headers()
+    findings += scan_retired_tree_pointers()
     findings += scan_orphan_tools()
     findings += scan_integrity_pins()
     findings += scan_quarantine()
@@ -461,7 +496,8 @@ COVERAGE_GAPS = [
     "null/empty REQUIRED fields in registries other than module_contracts (id_reservations, "
     "descriptor_registry 'IN FLUX' roster, names_index, …) are not yet structurally scanned",
     "co-file _index/_infill pairing gaps are owned by ci_co_file_checker and not yet absorbed here",
-    "broken restructure_ledger.md pointers are not yet validated",
+    "retired designs/-tree pointers in references/ & registers/ ARE now surfaced "
+    "(stale_retired_pointer); pointers in docs/comments and non-designs/ dead paths are not yet validated",
     "which of the canonical_sha pins are actually STALE (vs merely advisory) is delegated to "
     "freshness_gate.py --update, not enumerated here",
     "the alias(<4)/paragraph(<50)/citation(<2) audit floors are recorded as COUNTS by "
@@ -485,6 +521,7 @@ CATEGORY_LABEL = {
     "prose_marker": "Prose gap markers (TODO/FIXME/TBD/??? in .md docs)",
     "status_noncurrent": "Docs whose Status is not current (PROPOSED/DRAFT/STALE/…)",
     "apparatus_orphan": "Orphaned tools/skills (no importer/invoker)",
+    "stale_retired_pointer": "Registries still pointing at the retired designs/ tree (alias-hidden)",
     "integrity_unverified_pin": "Unverified integrity pins (canonical_sha)",
     "register_quarantined": "Quarantined/stale registers",
     "register_phantom_source": "Registry rows indexing a non-existent source file",
