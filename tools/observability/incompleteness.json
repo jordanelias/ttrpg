@@ -3,12 +3,11 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 145,
+    "findings": 139,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
       "code_marker": 3,
-      "contract_doc_dead": 6,
       "contract_doc_null": 9,
       "contract_island": 5,
       "contract_missing_entirely": 2,
@@ -49,17 +48,14 @@
       "status_noncurrent": 2
     },
     "WR": {
-      "total": 9,
-      "contract_doc_dead": 1,
+      "total": 8,
       "sim_not_implemented": 5,
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 38,
+      "total": 36,
       "apparatus_orphan": 3,
       "audit_excluded_system": 16,
-      "contract_doc_dead": 1,
-      "contract_island": 1,
       "integrity_unverified_pin": 1,
       "prose_marker": 5,
       "register_phantom_source": 1,
@@ -68,16 +64,14 @@
       "status_noncurrent": 2
     },
     "SE": {
-      "total": 7,
-      "contract_doc_dead": 1,
+      "total": 6,
       "prose_marker": 3,
       "sim_not_implemented": 3
     },
     "unassigned": {
-      "total": 46,
-      "contract_doc_dead": 3,
+      "total": 44,
       "contract_doc_null": 9,
-      "contract_island": 3,
+      "contract_island": 4,
       "contract_missing_entirely": 2,
       "contract_no_resolver": 1,
       "key_orphan_emit": 1,
@@ -278,54 +272,6 @@
       "lane": "SC"
     },
     {
-      "category": "contract_doc_dead",
-      "id": "clock_registry",
-      "title": "clock_registry",
-      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/provincial/clock_registry_v30.md",
-      "path": "designs/provincial/clock_registry_v30.md",
-      "lane": "IN"
-    },
-    {
-      "category": "contract_doc_dead",
-      "id": "miraculous_event",
-      "title": "miraculous_event",
-      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/scene/miraculous_event_v30.md",
-      "path": "designs/scene/miraculous_event_v30.md",
-      "lane": "WR"
-    },
-    {
-      "category": "contract_doc_dead",
-      "id": "peninsular_strain",
-      "title": "peninsular_strain",
-      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/provincial/peninsular_strain_v30.md",
-      "path": "designs/provincial/peninsular_strain_v30.md",
-      "lane": "SE"
-    },
-    {
-      "category": "contract_doc_dead",
-      "id": "piety_track",
-      "title": "piety_track",
-      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/personal/conviction_track_v1.md",
-      "path": "designs/personal/conviction_track_v1.md",
-      "lane": "unassigned"
-    },
-    {
-      "category": "contract_doc_dead",
-      "id": "territorial_piety",
-      "title": "territorial_piety",
-      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/scene/conviction_track_v30.md",
-      "path": "designs/scene/conviction_track_v30.md",
-      "lane": "unassigned"
-    },
-    {
-      "category": "contract_doc_dead",
-      "id": "victory",
-      "title": "victory",
-      "detail": "module doc points at a NON-EXISTENT file (dead path): designs/provincial/victory_v30.md",
-      "path": "designs/provincial/victory_v30.md",
-      "lane": "unassigned"
-    },
-    {
       "category": "contract_doc_null",
       "id": "audit",
       "title": "audit",
@@ -418,15 +364,15 @@
       "id": "clock_registry",
       "title": "clock_registry",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
-      "path": "designs/provincial/clock_registry_v30.md",
-      "lane": "IN"
+      "path": "systems/overview/clock_registry_v30.md",
+      "lane": "unassigned"
     },
     {
       "category": "contract_island",
       "id": "territorial_piety",
       "title": "territorial_piety",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
-      "path": "designs/scene/conviction_track_v30.md",
+      "path": "systems/characters/conviction_track_v30.md",
       "lane": "unassigned"
     },
     {
@@ -434,7 +380,7 @@
       "id": "victory",
       "title": "victory",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
-      "path": "designs/provincial/victory_v30.md",
+      "path": "systems/victory/victory_v30.md",
       "lane": "unassigned"
     },
     {

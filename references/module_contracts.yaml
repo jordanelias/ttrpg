@@ -209,7 +209,7 @@ modules:
   - module: piety_track
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
-    doc: designs/personal/conviction_track_v1.md
+    doc: systems/characters/conviction_track_v1.md
     scales: [personal]
     resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
     consumes:
@@ -240,7 +240,7 @@ modules:
         "on": "conviction scars"
         source: "conviction_track_v1 §2 (PP-718 per-Conviction)"
     gap_notes:
-      - "NAME COLLISION (3-way) [OPEN — Jordan]: substrate §8.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home designs/personal/conviction_track_v1.md) vs designs/scene/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) — two different systems share both names"
+      - "NAME COLLISION (3-way) [OPEN — Jordan]: substrate §8.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) — two different systems share both names"
     status: extracted
     sources:
       - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
@@ -248,7 +248,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: territorial_piety
-    doc: designs/scene/conviction_track_v30.md
+    doc: systems/characters/conviction_track_v30.md
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
     consumes: []
@@ -514,7 +514,7 @@ modules:
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
-    doc: designs/provincial/peninsular_strain_v30.md
+    doc: systems/overview/peninsular_strain_v30.md
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]
     consumes: []
@@ -667,7 +667,7 @@ modules:
       - "clock_registry_v30 Shared Clocks [READ: 2026-06-10]"
 
   - module: victory
-    doc: designs/provincial/victory_v30.md
+    doc: systems/victory/victory_v30.md
     scales: [provincial, peninsula]
     resolver: state_reader   # reads aggregated clocks/state at Accounting; era transitions are deterministic
     consumes: []
@@ -749,7 +749,7 @@ modules:
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
-    doc: designs/scene/miraculous_event_v30.md   # [verification P6: doc:null was stale — the doc exists; resolve its CANONICAL-vs-PROVISIONAL header]
+    doc: systems/world/miraculous_event_v30.md   # [verification P6: doc:null was stale — the doc exists; resolve its CANONICAL-vs-PROVISIONAL header]
     scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
     resolver: state_reader   # [ASSUMPTION] gated emitter: fires on high-Ob Mending near T15
     consumes: []
@@ -759,7 +759,7 @@ modules:
     transitions: []
     loops: []
     gap_notes:
-      - "registry-derived; system-vs-event-source classification [OPEN — Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): designs/scene/miraculous_event_v30.md, ## Status: CANONICAL — the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
+      - "registry-derived; system-vs-event-source classification [OPEN — Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL — the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -801,7 +801,7 @@ modules:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: clock_registry
-    doc: designs/provincial/clock_registry_v30.md
+    doc: systems/overview/clock_registry_v30.md
     scales: [provincial]
     resolver: manifest   # catalog of clocks/tracks; owns no state, resolves nothing
     consumes: []

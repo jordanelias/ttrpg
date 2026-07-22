@@ -301,8 +301,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "clock_registry",
-      "doc": "designs/provincial/clock_registry_v30.md",
-      "lane": "IN",
+      "doc": "systems/overview/clock_registry_v30.md",
+      "lane": null,
       "resolver": "manifest",
       "scales": [
         "provincial"
@@ -928,7 +928,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "miraculous_event",
-      "doc": "designs/scene/miraculous_event_v30.md",
+      "doc": "systems/world/miraculous_event_v30.md",
       "lane": "WR",
       "resolver": "state_reader",
       "scales": [
@@ -941,7 +941,7 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): designs/scene/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
+        "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
       ],
       "sources": [
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -1339,8 +1339,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "peninsular_strain",
-      "doc": "designs/provincial/peninsular_strain_v30.md",
-      "lane": "SE",
+      "doc": "systems/overview/peninsular_strain_v30.md",
+      "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
         "peninsula"
@@ -1550,7 +1550,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "conviction_track",
-      "doc": "designs/personal/conviction_track_v1.md",
+      "doc": "systems/characters/conviction_track_v1.md",
       "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
@@ -1561,7 +1561,7 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home designs/personal/conviction_track_v1.md) vs designs/scene/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) \u2014 two different systems share both names"
+        "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) \u2014 two different systems share both names"
       ],
       "sources": [
         "key_substrate_v30 \u00a78.4 [READ: 2026-06-10]",
@@ -2126,7 +2126,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "territorial_piety",
-      "doc": "designs/scene/conviction_track_v30.md",
+      "doc": "systems/characters/conviction_track_v30.md",
       "lane": null,
       "resolver": "deterministic_accounting",
       "scales": [
@@ -2247,7 +2247,7 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "victory",
-      "doc": "designs/provincial/victory_v30.md",
+      "doc": "systems/victory/victory_v30.md",
       "lane": null,
       "resolver": "state_reader",
       "scales": [
