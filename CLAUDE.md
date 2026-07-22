@@ -11,6 +11,40 @@ the videogame's layers.
 
 ---
 
+## 0. How we work (method, not location)
+
+§1–§10 tell you *where things are* and *what's current*. This section tells you *how to work* — the
+default posture for every non-trivial task in this repo, not just orchestrated fan-outs. (The
+multi-agent mechanics live in §10; the disposition below applies whether you're solo or fanning out.)
+
+- **Plan before you touch the tree.** Establish currency (§1 → `CURRENT.md` + your lane's
+  `HANDOFF_<LANE>.md`), read the subsystem head and its `## Status:` line, and state the plan —
+  what you'll change, in what order, and how you'll verify — *before* the first edit. For anything
+  ambiguous or spanning lanes, get the plan approved (or ask a focused question) rather than guessing.
+  A wrong assumption caught in a plan is free; caught in a merged commit it becomes editorial debt.
+- **Build bottom-up from primitives.** Find the single-owner primitive first and compose on top of it
+  — never re-implement a rule that already lives once (§8's core invariant). New tooling reuses
+  `obs_core` / `audit_staleness` / `review_core` / the registries; new mechanics resolve from the
+  Key substrate up. Emergence is the goal: small correct primitives, composed, not a bespoke
+  top-level special case. If you find yourself special-casing an entity or outcome, stop — that's
+  scripting drift (§10 guardrails).
+- **Adversarial pass at every stage that gates a result.** Producing and checking are different jobs:
+  after you draft canon, a number, or a fix, *try to break it* — verify provenance by hand against
+  the cited `PP-NNN`/`ED-NNN` (the anti-fabrication gate is leaky, §7), run the relevant `tools/`
+  validator, and for a judgment call put a genuinely independent critic on it (structural
+  independence, read-only, §10). Don't report a result you haven't attacked.
+- **Max effort by default.** Reach for the most thorough path the task warrants — exhaustive over
+  cursory, verified over plausible, the harder-but-correct fix over the local patch. Tier *down*
+  only deliberately and per-task (§10), never as an excuse to under-invest on the judgment nodes.
+- **Close the loop, honestly.** Run `pytest tests/valoria` + the lane's validator, commit with the
+  `[scope]` format citing the `PP/ED`, and capture next actions in your lane's `HANDOFF_<LANE>.md`.
+  If a check failed or a step was skipped, say so plainly — a green claim you didn't verify is worse
+  than a red one you did. The SessionStart banner (§1, `tools/session_status.py`) surfaces your
+  lane's pending work, open editorial debt, schema-in-flux flags, and stale audits at start — read
+  it; it exists so these stop getting missed (ED-IN-0081).
+
+---
+
 ## 1. Read these first (currency)
 
 The live canonical surface is **Generation v40** (consolidated, contracts-bound, Godot-ready). There

@@ -8,6 +8,20 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **✅ SessionStart open-work surfacing DONE (2026-07-22, ED-IN-0081).** Closed the "audits /
+  editorial / schema / mechanics keep getting missed at session start" gap. New
+  `tools/session_open_work.py` composes a `── open work ──` banner block — active-lane
+  `HANDOFF_<LANE>.md` pending items (lane inferred from working-tree + recent-commit paths via
+  `obs_core.infer_lane`; settled bullets filtered via `build_decisions.RESOLVED_SKIP`), open
+  editorial debt + the `needs_jordan` inbox, schema-in-flux flags, and ALL stale audit families
+  (was top-2). Wired into `session_status.py` (the superseded top-2 audit call removed);
+  defensive-by-contract (degrades to `[]`, never breaks session start); test at
+  `tests/valoria/test_session_open_work.py`. Also landed **CLAUDE.md §0 "How we work"** — the
+  standing method doctrine (plan-first / bottom-up-from-primitives / adversarial-pass / max-effort /
+  honest loop-closure), distinct from §10's fan-out-only patterns. Routines deliberately out of
+  scope (remote-layer, not git-readable from a hook). *Follow-up candidate:* a per-lane mechanics
+  "inert count" line if `mechanics_index.yaml` gains a cheap inert flag (currently only its
+  staleness is surfaced, via the audit family).
 - **✅ IN lane-ledger archive pass DONE (2026-07-18).** `registers/editorial_ledger_in.jsonl` was at 99.7% of
   its 50k cap (after `ED-IN-0074`/`ED-IN-0075`). Established the **per-lane archive convention**:
   `registers/editorial_ledger_in_archive.jsonl` (the first lane archive; mirrors the flat
