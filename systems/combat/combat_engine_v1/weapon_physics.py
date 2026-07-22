@@ -212,6 +212,12 @@ def derive(w):
 # redesign/) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a SEPARATE floored Phi_room for
 # percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone heft-room multiply violates C4).
 SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation (a fully-gathered swing never drops below half its open-measure authority)
+# U5/ED-PC-0019 — polearm choke counterbalance (thrust side): choking UP a head-heavy pole (grip>0) to counterbalance
+# its forward mass shortens the effective lever a hair, a SHALLOW, FLOORED loss even on an axial thrust. K=0 keeps
+# the grip-invariant-thrust first principle EXACTLY (phi_grip('point')==1.0 at every grip); the U9 recalibration
+# flips CHOKE_THRUST_K under ablation-gate. The accuracy/legibility side is systems.choke_counterbalance (CHOKE_ACCURACY_K).
+CHOKE_THRUST_K = 0.0      # [U5/ED-PC-0019, K=0] shallow thrust-authority loss per unit choke (grip_position in [0,1])
+CHOKE_THRUST_FLOOR = 0.75 # a choked thrust never drops below this fraction (a thrust is still a thrust)
 PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
 
 def grip_swing_ratio(w, grip):
@@ -238,7 +244,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
     if sel_head == 'point':
-        return 1.0
+        return max(CHOKE_THRUST_FLOOR, 1.0 - CHOKE_THRUST_K * grip)   # U5: grip-invariant (==1.0) at K=0 — the first principle intact; a shallow floored choke-loss once U9 flips CHOKE_THRUST_K
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']

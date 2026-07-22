@@ -73,6 +73,22 @@ def rear_clearance(c, cfg):
     unread until now). Pure."""
     return WP.at_circumstance(c.w, getattr(c,'grip_position',0.0))['rear_clearance']
 
+def choke_counterbalance(c, cfg):
+    """U5/ED-PC-0019 — how much a head-heavy pole is CHOKED UP to counterbalance its forward mass this beat: the live
+    grip_position (0 at the open measure, ->1 gathered to the working balance) weighted by how much shaft TRAILS the
+    hand to counterbalance (rear_clearance, normalised by a pole-class reference). A compact one-hander (low
+    rear_clearance) barely counterbalances; a poleaxe/staff (high rear_clearance) does so strongly. The COST of that
+    control — a gathered pole telegraphs and loses fine precision — routes to the accuracy/legibility channel
+    (CHOKE_ACCURACY_K); the thrust side is weapon_physics.phi_grip (CHOKE_THRUST_K). Half-sword forms are EXEMPT: their
+    grip is the blade-grip (a different mechanic), and the derived short-lever form reads ~0 here anyway — an explicit
+    base-form guard makes that exact. In [0,1]; 0 at grip=0. Reuses the rear-clearance delta (no new primitive). Pure."""
+    if 'base' in c.w:                                   # a *_halfsword form — not a pole choke-counterbalance
+        return 0.0
+    grip = getattr(c, 'grip_position', 0.0)
+    if grip <= 0.0:
+        return 0.0
+    return min(1.0, grip * (rear_clearance(c, cfg) / cfg['CHOKE_RC_REF']))
+
 def close_tempo(c, cfg, fatigue=0.0):
     """Cadence IN THE CLOSE — conditional (fatigue/grip). A long two-handed pole (spear/staff) is SLOW to recover
     once a faster weapon is inside UNLESS it chokes up (grip adjustment to act in close quarters). Spread COMPRESSED
@@ -689,6 +705,7 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
     legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)   # U3/ED-PC-0018: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction) — K=0 until U9, 0 for a plain-single/edgeless weapon
+    legib += cfg['CHOKE_ACCURACY_K']*choke_counterbalance(aggressor, cfg)   # U5/ED-PC-0019: a head-heavy pole CHOKED UP to counterbalance telegraphs / loses fine precision -> reads EASIER (more legible). K=0 until U9; 0 at grip=0 / for a compact weapon / a half-sword form.
     # SWING-ROOM LEGIBILITY (I5, D4/D5): a broad swing that cannot fully develop in cramped quarters is MORE
     # constrained and reads EASIER — weighted by the SELECTED element's own (1-pc_sel) (a thrust, pc_sel~1, is
     # unaffected) and by how little room is left (1-range_avail). Exactly 0 at range_avail=1.0 (the I1/I5
