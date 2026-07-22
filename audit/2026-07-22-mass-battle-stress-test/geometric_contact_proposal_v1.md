@@ -12,16 +12,34 @@
   `standoff = (CELL_RADIUS + reach_a) + (CELL_RADIUS + reach_b)` (units.py:65-68). Two short-reach cells
   engage at centre-distance ≤ 2.0. This is surface-to-surface + reach, exactly "do their bodies meet."
 - **Integer collision survives in only two vestigial places that IGNORE that geometry:**
-  1. **Contention** — `resolve_cross_side_contention` (contact.py:183-185): "same space" is
-     `set(int(round)-keys) & set(int(round)-keys)` — *exact integer-cell equality*, not surface overlap.
-     This is the key-collision: at `.1` two floats never share an integer key, so it would never fire.
-  2. **Engaged-cell recording** (contact.py:292-293): `int(round)` cell-ids, consumed only for
-     casualty **column** matching + `_lanchester_strength` frontage (`set(c for r,c)`).
+  1. ~~**Contention**~~ — **VERIFIED ALREADY GEOMETRIC / integer version is DEAD on the field path.**
+     `resolve_cross_side_contention` short-circuits `return 0` when `FIELD_MOVEMENT` (contact.py:151-156):
+     co-location is prevented upstream by the **geometric TOI halt** (`resolve_toi_and_commit` /
+     `_node_advance` halts each cell at `standoff()` before it reaches an enemy). Instrumented a field
+     battle: **contention resolved 0 over 30 ticks; TOI ran 30×.** The integer key-collision
+     (contact.py:175/185) executes ONLY on the grid oracle (`FIELD_MOVEMENT=0`), which we don't touch.
+     So the key-collision problem is already solved geometrically on the live path — no change needed.
+  2. **Engaged-cell recording** (contact.py:292-293): `int(round)` cell-ids — **the ONE remaining live
+     integer on the field path** — consumed only for casualty **column** matching + `_lanchester_strength`
+     frontage (`set(c for r,c)`).
 - **Depth is NOT affected by the snap** (Stage-0 trace): `_formation_depth`/`_subunit_depth` read the
   static pattern; `_defender_depth`/`build_column_grid` read `col_grid` (legacy `cell_offsets_c`), keyed
   by column. No mechanic counts distinct *snapped rows*. So the earlier "depth-of-two collapse" is
   cosmetic in `cells()` output; the mechanically-live snap axis is **columns (frontage)**, via contention
   + recording.
+
+## Kinematics & dimensions (Jordan, 2026-07-22) — verified against the code
+
+- **Standard travel/tick = the cell's own size (full self-displacement).** Verified: `cell_speed(Line)=1`
+  and cell diameter `= 2·CELL_RADIUS = 1.0` and lattice pitch `COL_WIDTH = 1.0`. So base move = 1 =
+  diameter = one pitch. The engine already runs on "move one body-length per tick."
+- **Standard cell area = 1; density = troop count.** `density = Σ troops` per cell / `tpc = hp/ncells`
+  (troops per cell). At area 1, density ≡ troops.
+- **Modeling fork — RESOLVED by Jordan (2026-07-22): circular cell, `CELL_RADIUS = 0.5` confirmed
+  ("oh, they already have a radius of .5? good").** Keep the existing Euclidean model (`math.hypot`);
+  the square/box alternative is not taken. Diameter = 1 = travel = pitch stands; circular area ≈ 0.785
+  is accepted. Geometric contention therefore uses the Euclidean body-overlap threshold
+  `hypot(Δr, Δc) < 2·CELL_RADIUS = 1.0`, and weapon reach extends the engagement stand-off radius.
 
 ## Proposal
 
