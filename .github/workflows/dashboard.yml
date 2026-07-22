@@ -27,6 +27,9 @@ on:
       - 'engine/engine_params/sim_params.json'         # the values-layer 'By value' browse surface
       - 'engine/engine_params/value_pointer_links.json'  # value<->pointer links rendered in browse
       - 'tools/observability/obs_core.py'   # shared primitives the inline proposals section uses
+      - 'references/module_contracts.yaml'  # Missing card: contract doc_null/island/orphan-emit + key graph
+      - 'tools/observability/build_incompleteness.py'  # the Missing-face scanner itself
+      - 'skills/valoria-vector-audit/scripts/vector_audit.py'  # emits the Missing card's audit rows
       - '.github/workflows/dashboard.yml'
   schedule:
     # Daily fallback — staleness (workplan drift, CI status) can change even with
@@ -62,6 +65,27 @@ jobs:
 
       - name: Install deps
         run: pip install pyyaml
+
+      # ── Missing-face feed regeneration (bundled with deploy) ──────────────────
+      # The dashboard's "Missing" card reads tools/observability/incompleteness.json.
+      # These three explicitly-named steps REGENERATE that feed here, at deploy time,
+      # so the published card is fresh with the tree being deployed — NOT the weekly
+      # audit-refresh.yml snapshot. They write into the runner only (not committed):
+      # the committed feed stays the weekly snapshot that serves the console + the
+      # INCOMPLETENESS.md view; this deploy build gets its own fresh copy. Order is
+      # load-bearing — each step's output is the next's input, ending at data.json.
+      - name: Regenerate decisions digest (Missing-face prose rollup input)
+        run: python3 tools/observability/build_decisions.py
+
+      - name: Emit vector-audit structural findings (Missing-face input)
+        # ~70s (curate_tokens): the audit's Mode-B implied-missing + Mode-H isolate
+        # rows the ledger surfaces. MUST run before build_incompleteness.
+        run: python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --emit-findings tools/observability/audit_findings.json
+
+      - name: Regenerate Incompleteness Ledger (Missing face)
+        # Whole-tree scan for every stub/null/missing/excluded/unverified thing;
+        # writes incompleteness.json that the next step's build_incompleteness card reads.
+        run: python3 tools/observability/build_incompleteness.py
 
       - name: Build dashboard data.json
         env:

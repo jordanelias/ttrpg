@@ -344,6 +344,11 @@
     <div id="proposals-body" class="empty-state">loading…</div>
   </section>
 
+  <section class="card" id="missing-card">
+    <h2>Missing &mdash; what's incomplete</h2>
+    <div id="missing-body" class="empty-state">loading…</div>
+  </section>
+
   <section class="card" id="audits-card">
     <h2>Audit &amp; balance verdicts</h2>
     <div id="audits-body" class="empty-state">loading…</div>
@@ -908,6 +913,55 @@ function renderActions(d) {
   el.innerHTML = html;
 }
 
+function renderIncompleteness(d) {
+  const el = document.getElementById('missing-body');
+  const m = d.incompleteness;
+  if (!m || m.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  if (!m.total) { el.innerHTML = '<div class="empty-state">nothing outstanding — the whole-tree scan is clean.</div>'; return; }
+  let html = `<div style="margin-bottom:8px;"><span class="chip warning">▲ ${m.total} findings</span> `
+    + `<span class="chip">${m.category_count} categories</span></div>`;
+  // per-lane spread
+  const lanes = m.by_lane || {};
+  if (Object.keys(lanes).length) {
+    html += '<div style="margin-bottom:10px;">'
+      + Object.entries(lanes).map(([k, v]) => `<span class="chip">${esc(k)} ${v}</span>`).join(' ')
+      + '</div>';
+  }
+  // engine-spine highlights: the structural / port-blocking holes, with sample findings
+  if ((m.highlights || []).length) {
+    html += '<div class="ref-note" style="margin:6px 0;">Structural &amp; engine-spine holes (samples; full detail in INCOMPLETENESS.md):</div>';
+    for (const h of m.highlights) {
+      html += `<details class="acc"><summary>${esc(h.label)} <span class="acc-count">— ${h.count}</span></summary><div class="acc-body"><ul class="tight">`
+        + h.items.map(it => {
+            const link = it.path ? srcLink(it.path) : `<span>${esc(it.title)}</span>`;
+            const lane = it.lane ? ` <span class="status-pill">${esc(it.lane)}</span>` : '';
+            return `<li>${link}${lane}</li>`;
+          }).join('')
+        + (h.count > h.items.length ? `<li class="ref-note">…${h.count - h.items.length} more</li>` : '')
+        + `</ul></div></details>`;
+    }
+  }
+  // full category census
+  html += `<details class="acc"><summary>All categories <span class="acc-count">— ${m.category_count}</span></summary><div class="acc-body"><table class="lane-table"><tbody>`
+    + (m.categories || []).map(c => `<tr><td>${esc(c.label)}</td><td style="text-align:right;">${c.count}</td></tr>`).join('')
+    + `</tbody></table></div></details>`;
+  // prose rollup
+  const pr = m.prose_rollup || {};
+  if (Object.keys(pr).length) {
+    html += '<div style="margin:8px 0;">'
+      + Object.entries(pr).map(([k, v]) => `<span class="chip">${esc(k)} ${v}</span>`).join(' ')
+      + '</div>';
+  }
+  // honest self-surfaced blind spots
+  if ((m.coverage_gaps || []).length) {
+    html += `<details class="acc"><summary>Ledger blind spots <span class="acc-count">— ${m.coverage_gaps.length}</span></summary><div class="acc-body"><ul class="tight">`
+      + m.coverage_gaps.map(g => `<li>${esc(g)}</li>`).join('')
+      + `</ul></div></details>`;
+  }
+  html += `<div class="ref-note">${esc(m.note)}</div>`;
+  el.innerHTML = html;
+}
+
 async function load() {
   try {
     const res = await fetch('data.json', { cache: 'no-store' });
@@ -919,6 +973,7 @@ async function load() {
     renderWorkplan(d);
     renderQueue(d);
     renderProposals(d);
+    renderIncompleteness(d);
     renderAudits(d);
     renderBalance(d);
     renderRegisters(d);
