@@ -6,6 +6,29 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **'BUILD ALL' PASS DONE (ED-PC-0026/0027/0028, 2026-07-23) — Phases 1-4, all committed & pushed to PR #227.**
+  - **Phase 1 (ED-PC-0026):** HEMA grounding corrections — atajo measure→leverage, zwerchhau edge_read→counter_select,
+    guardia REMOVED (facing_regime now a bare lever), phi_grip tag narrowed, stale winden comment fixed.
+  - **Phase 2 (ED-PC-0027):** T_vuln undefended-time model + mode-aware heft. Thrust heft PoB-DECOUPLED
+    (m_head*THRUST_POB=0.16) — fixes spear flat-dominance + heft ordering (ED-PC-0010). T_vuln exposure
+    (EXPOSE_CLOSE_K=0.6, EXPOSE_SELECT_K=0.3) makes swings cost their undefended window in the fight AND in
+    select_mode → thrust-capable weapons prefer the point in the 1v1 (poleaxe spikes every tier), pure cutters keep
+    cutting. Resolves poleaxe gap-game (ED-PC-0012 lineage).
+  - **Phase 3:** the 9 pre-existing intentional-red failures all resolved emergence-first (heft ordering via Phase 2;
+    poleaxe → thrust-in-1v1; sabre pure-cutter fiat retired via continuous THRUST_AUTH_REF de-rating; element-parity +
+    r3_identity + heft goldens regenerated/reshaped for the roster growth + new signatures). Combat suite 160 green;
+    full suite 639 passed / 0 non-combat regressions.
+  - **Phase 4 (ED-PC-0028):** tradition-gate on equipped — an untaught cross-tradition technique is inert (closes the
+    interaction-critic's build-legality gap); cross-training via `known_traditions`.
+  - **OPEN / NEXT ACTIONS:**
+    1. **Balance re-verification** — the independent adversarial balance critic was LOST to a worker restart mid-run;
+       I finalized calibration on my own foreground measurement (defensible: rapier rules the light duel, plate-defeaters
+       vs plate, mirrors fair). RE-RUN an independent balance critic to double-check the roster-wide thrust-lean.
+    2. **Jordan's steer on the roster-wide thrust-lean** — the emergent consequence (cut+point weapons prefer the point
+       in a 1v1) is [SIM-CALIBRATE]-magnitude (THRUST_POB/EXPOSE_SELECT_K); confirm the feel is desired vs. giving
+       cut-primary weapons more cut-identity. Watch items: spear/yari soft vs longsword (0.33/0.37), guandao strong
+       (0.84) — within the PRE-EXISTING reach-above-band (i8 item 1), reduced not worsened by this change.
+
 - **COMBINATORIAL/ISOLATION AUDIT + NODE INTERROGATION DONE (ED-PC-0025, 2026-07-23).** Isolation sweep +
   node-grouped interaction matrix + all-node pipeline trace + two adversarial critics (dead-wire forensics,
   interaction degeneracy). **VERDICT: no dead wires** — the morphology levers are situational-per-event and
