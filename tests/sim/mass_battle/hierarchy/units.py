@@ -384,6 +384,11 @@ class Subunit:
     # None keeps the legacy tier path (byte-exact).
     troops: Optional[float] = None
     concentration: Optional[float] = None
+    # [ED-MB-0025, Jordan directive] Depth density gradient: how the subunit's troops distribute across
+    # its ranks. 'uniform' (default, byte-exact) = equal per cell; 'front' = leading ranks denser (shock /
+    # weight at the point of contact); 'rear' = trailing ranks denser (depth / staying-power reserve — the
+    # Theban deep wing at Leuctra). r=0 is the leading rank in the footprint. Sum over cells == troop_count.
+    distribution: str = 'uniform'
     # Per-subunit quality stats (Jordan directive): a subunit is a homogeneous typed body
     # with its OWN combat stats; None INHERITS the parent Unit (back-ref _unit set in Unit.__post_init__),
     # so single-subunit / homogeneous units stay byte-exact. Mixed units (e.g. a cavalry subunit + an
@@ -472,8 +477,20 @@ class Subunit:
         # troop_count spreads uniformly over the subunit's cells at spawn; columns + unit hp become
         # emergent sums over these. [arch: cell = primitive; column = first-level emergence.]
         _ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(self)]
-        _per = self.troop_count / len(_ids) if _ids else 0.0
-        self.cell_troops = {pid: _per for pid in _ids}
+        # [ED-MB-0025] Distribute troop_count across cells by the depth gradient. 'uniform' -> equal per
+        # cell (byte-exact with the prior spread). 'front'/'rear' weight cells by their rank r (r=0 = front):
+        # front-heavy loads the leading ranks (shock), rear-heavy the trailing ranks (depth reserve). The
+        # weights are normalised so sum(cell_troops) == troop_count exactly (conservation preserved).
+        if _ids and self.distribution in ('front', 'rear'):
+            _rmax = max(o_r for o_r, _o_c in _ids)
+            # linear ramp over depth; front: weight = (rmax - r + 1), rear: weight = (r + 1). Flat if depth 1.
+            _w = {(o_r, o_c): ((_rmax - o_r + 1) if self.distribution == 'front' else (o_r + 1))
+                  for (o_r, o_c) in _ids}
+            _wsum = sum(_w.values()) or 1.0
+            self.cell_troops = {pid: self.troop_count * _w[pid] / _wsum for pid in _ids}
+        else:
+            _per = self.troop_count / len(_ids) if _ids else 0.0
+            self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
         self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)

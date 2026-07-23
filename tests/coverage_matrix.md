@@ -2,6 +2,22 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0025: explicit subunit deployment primitives + build_envelopment wing fix
+- **Explicit density honored:** `footprint_for` now interprets `concentration` as target troops/cell and
+  builds the exact implied cell count via `_build_shape_n` (arbitrary-N shape builders) — fixes the M2 bug
+  where a 133-troop Line collapsed to 1 cell at every concentration (density silently inert), the root of
+  the 8–12× composed-vs-single per-cell density mismatch.
+- **Density gradient:** new `Subunit.distribution` ∈ {uniform, front, rear} weights `cell_troops` across
+  ranks (front = shock/leading-rank-heavy, rear = depth/Leuctra deep wing), conserving `troop_count`.
+- **build_envelopment wing fix:** wings placed relative to the center's *actual* column (honors a pre-set
+  `starting_position`) instead of a phantom field-center anchor — pre-fix wings landed at 21/27 while the
+  center sat at col 9 (never wrapped); now they straddle it. Explicit wing positions also honored.
+- **Verified:** mirror-symmetry (n=120 × 4 seed bases) ~50/50, no bias → combat/movement already Jacobi.
+  Honest gauge (matched-density explicit blocks): envelopment 100% → ~40% → density artifact gone, mechanic
+  under-performs (real work remains). All 4 bat.py goldens re-recorded (deliberate composed-row change;
+  tier mode → density/gradient inert there): unit b70a9348, cell d46c8808, unit_field 3cc40104, cell_field f9c6dea1.
+- Tests: `tests/valoria/test_deployment_primitives.py` (6).
+
 ## 2026-07-23 — ED-MB-0024: DG-2 fighting-withdrawal residuals (emergent entry + rally + pocket exits)
 - Completes the three parts ED-MB-0005 deferred after shipping the yield state + commanded entry
   (`proposals/mass_battle_fighting_withdrawal_v1.md` §2.2/§2.4):
@@ -684,14 +700,3 @@ conserve p≤1.4 (linear law); this was tested extensively before landing:
 
 Filed as ED-MB-0006 (supersedes ED-899's Command-only base for the pool term).
 
-## 2026-07-18 — audit-corpus relocation: provenance-comment path fixes only [no mechanical change]
-- Repo-wide audit reorg moved `tests/audit/all_directions_ners_v27.md` to
-  `audit/lane-a/all_directions_ners_v27.md` (see CLAUDE.md §3). Updated the stale `[canonical: tests/audit/...]`
-  provenance comments citing that file in phase4_agi_dominance_2026-05-15.py, phase5_continuous_engine_2026-05-15.py,
-  phase6_dominance_solvers_2026-05-15.py, phase7_action_triangle_2026-05-15.py, phase8_smart_ai_v2_2026-05-15.py —
-  path text only, no formula/threshold/logic touched. Co-file satisfied (documentation-only trip).
-
-## 2026-07-18b — adversarial-pass follow-up: two more stale path fixes [no mechanical change]
-- mass_battle/engine.py comment + phase6_sim_verification_ledger.json `canonical_source` both still cited the
-  pre-move `tests/audit/...` path; repointed to `audit/lane-*/...`. Path text only. Register near its 10k-token
-  cap — trim to the archive file at the next real entry.

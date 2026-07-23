@@ -398,12 +398,24 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     APEX = 2  # [canonical: Cannae research §1 — centre apex ~2-4 rank-units forward of the flank line]
     center = [dict(sp) for sp in center_specs]
     n_center = len(center)
-    c_cols = _centered_line_cols(center, 25)  # field-centre anchor (BATTLEFIELD_SIZE 50)
     c_spans = [_spec_span(sp) for sp in center]
+    # [ED-MB-0025 wing-placement fix] The wings must flank the centre's ACTUAL column. Previously the
+    # wing boundaries (c_left/c_right) were derived from `_centered_line_cols(center, 25)` — a phantom
+    # field-centre-anchored placement — even when the caller PRE-SET the centre's starting_position (as
+    # the gauge's `_envelop_army` does, at the enemy's column). The wings then wrapped a centre that
+    # wasn't there (landed cols 21/27 while the centre sat at col 9), so no ring ever formed around the
+    # real body. Now: honour a pre-set centre column and place wings relative to THAT; only fall back to
+    # the field-centre placement for centres with no explicit position (production/bat.py path unchanged).
+    default_cols = _centered_line_cols(center, 25)  # field-centre anchor (BATTLEFIELD_SIZE 50)
+    c_cols = []
+    for sp, dcol in zip(center, default_cols):
+        if 'starting_position' in sp:
+            c_cols.append(sp['starting_position'][1])            # honour caller's real centre placement
+        else:
+            sp['starting_position'] = (start_row + APEX * advance_dir, dcol)  # apex forward (field-centre)
+            c_cols.append(dcol)
     c_left = min(col + s[0] for col, s in zip(c_cols, c_spans))
     c_right = max(col + s[1] for col, s in zip(c_cols, c_spans))
-    for sp, col in zip(center, c_cols):
-        sp.setdefault('starting_position', (start_row + APEX * advance_dir, col))  # apex forward
     left_x = c_left - ENVELOP_WING_GAP    # right boundary of the left wing group (grows leftward)
     right_x = c_right + ENVELOP_WING_GAP  # left boundary of the right wing group (grows rightward)
     wings = []
@@ -411,13 +423,17 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
         sp = dict(sp0)
         sp.setdefault('stance', 'hold')
         cmin, cmax = _spec_span(sp)
-        if i % 2 == 0:  # left wing: place its RIGHT edge at left_x, then extend further left
-            col = int(round(left_x - cmax))
-            left_x = (col + cmin) - ENVELOP_WING_GAP
-        else:           # right wing: place its LEFT edge at right_x, then extend further right
-            col = int(round(right_x - cmin))
-            right_x = (col + cmax) + ENVELOP_WING_GAP
-        sp['starting_position'] = (start_row, col)  # wings at the flank base line, behind the apex
+        # [ED-MB-0025] Honour an EXPLICIT wing position if the caller gave one (explicit-placement
+        # directive); only auto-compute the flank-split placement when none is supplied. Previously this
+        # was an unconditional assignment that silently discarded a caller's `starting_position`.
+        if 'starting_position' not in sp:
+            if i % 2 == 0:  # left wing: place its RIGHT edge at left_x, then extend further left
+                col = int(round(left_x - cmax))
+                left_x = (col + cmin) - ENVELOP_WING_GAP
+            else:           # right wing: place its LEFT edge at right_x, then extend further right
+                col = int(round(right_x - cmin))
+                right_x = (col + cmax) + ENVELOP_WING_GAP
+            sp['starting_position'] = (start_row, col)  # wings at the flank base line, behind the apex
         wings.append(sp)
     specs = center + wings
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
