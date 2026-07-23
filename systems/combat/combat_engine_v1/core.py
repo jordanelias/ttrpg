@@ -15,8 +15,25 @@ sys.path.insert(0, os.path.dirname(__file__))
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
-from math import tanh
+from math import tanh, exp
 from engine.autoload import sigma_leverage as SL
+
+# ---------- logistic (single source, ED-PC-0025) ----------
+# The 1/(1+e^-x) squash was open-coded FIVE ways across the resolver (combat_systems.bind_dominance_p /
+# disrupt_resist_p / the two read-contest sites, contact.grab_outcome) — a §8 "every rule lives once"
+# violation AND an overflow hazard: a grossly out-of-contract net-sigma (e.g. an attribute/skill orders of
+# magnitude past the legal ceiling of 5) drives `exp(-x)` past the float range and CRASHES fight resolution
+# with OverflowError (combinatorial-audit finding: strength/skills=50000 -> 99/300 fights crash). Measured
+# legal-build |argument| never exceeds ~2.4 (n=2500 fights, all weapon/armour/tradition mixes), so the clamp
+# below sits ~200x outside any reachable value — BYTE-IDENTICAL for every legal build, guarding pathology
+# only ("every build available" without crashing the engine on out-of-contract inputs). Pure.
+_LOGISTIC_CLAMP = 500.0   # exp(500) is finite (< 1e218); exp(710)+ overflows. Legal max |arg| ~2.4.
+def logistic(x):
+    """Numerically-safe logistic squash 1/(1+e^-x) -> (0,1). Clamps the argument to [-500, 500] so an
+    out-of-contract net-sigma cannot overflow exp() and crash resolution; unchanged for all in-contract x."""
+    if x < -_LOGISTIC_CLAMP: x = -_LOGISTIC_CLAMP
+    elif x > _LOGISTIC_CLAMP: x = _LOGISTIC_CLAMP
+    return 1.0 / (1.0 + exp(-x))
 import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
                               # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
                               # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math

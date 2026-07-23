@@ -6,6 +6,32 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **COMBINATORIAL/ISOLATION AUDIT + NODE INTERROGATION DONE (ED-PC-0025, 2026-07-23).** Isolation sweep +
+  node-grouped interaction matrix + all-node pipeline trace + two adversarial critics (dead-wire forensics,
+  interaction degeneracy). **VERDICT: no dead wires** — the morphology levers are situational-per-event and
+  *frequency-gated by their enabling skill* (no bind skill → no binds → spine lever has nothing to amplify;
+  deep+paired investment = +13pp vs an equal opponent). Contact axis is decisive (35% dagger flip); only its knobs
+  are aggregate-neutral. **FIXED (ratified):** single-source overflow-safe `core.logistic()` (5-way open-coded squash
+  collapsed; out-of-contract OverflowError 99/300→0/300, byte-identical legal builds); `INJECTION_POINTS`
+  imposition-doctrine residual → emergent model. See `audit/2026-07-23-combat-combinatorial-audit/findings_v1.md`.
+  - **DEFERRED / NEXT ACTIONS (surfaced, awaiting Jordan — Jordan is actively designing #1):**
+    1. **Mode-exposure / undefended-time model `T_vuln`** — Jordan directive 2026-07-23: swing-vs-thrust
+       exposure-to-counterattack is NOT modelled at the mode level (`select_mode` is exposure-blind;
+       `overcommit_exposure`→`recoverability_factor` reads whole-weapon pc, not `sel_pc`). Design agreed: a
+       vulnerability window `T_vuln` = delivery + recovery + measure, blended by point_concentration, driving the
+       counter/exposure path and feeding mode selection so the poleaxe spike *emerges* vs plate. Grounding hierarchy:
+       structure from first-principles kinematics (self-consistent with `_recovery_mode_commitment`), magnitudes
+       cross-checked against HEMA-biomechanics **mocap** (supplement), direction from Silver's "times" / Le Jeu de la
+       Hache. **NOT BUILT — Jordan paused implementation; build on his word.**
+    2. **HEMA historical-grounding corrections** (adversarial critic): `guardia`→facing_regime WRONG (guardia stretta
+       = close-*measure* guard, not body-facing), `atajo`→measure WRONG (→leverage), `zwerchhau`→edge_read WRONG-leaning
+       (real function tempo-interception), `phi_grip` `[ASSERTED]` tag overclaims, stale `combat_systems.py:766`
+       "German Winden" comment → shinogi. Not applied.
+    3. **No-tradition-gate on `equipped`** — build-legality gap (any fighter can equip every tradition's kit).
+    4. **The 9 pre-existing intentional-red failures** — Jordan chose "fix all emergence-first" (element-parity golden
+       regen; sabre pure-cutter = retire the fiat assertion; poleaxe = resolve via `T_vuln` #1, NOT a test-relax;
+       spear heft/ED-PC-0010 = derivation fix). Not executed (paused with #1).
+
 - **LEVELS OF INVESTMENT FOR TECHNIQUES DONE (ED-PC-0024, 2026-07-23) + PR #226 ratification-flip.** Graded the
   binary equipped-ability into a continuum: `ability_factor` = product of `value**level`, `ability_bonus` = sum of
   `value*level`; `equipped` supports a list (level 1.0, back-compat) or `{name: level}` (level>=0; 0=inert). Efficacy

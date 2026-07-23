@@ -12,8 +12,7 @@ identical to the `clinch` scalar D9 deletes — explicitly forbidden.
 Callers (wrapper.py) own the `opening_created` flag: a real prior opening this beat (a bind, a
 beaten-aside/slip-inside displace, or a deep-commit reopen moment) — never re-derived here."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import math
-import combat_systems as S
+import combat_systems as S   # exposes S.core.logistic (single-source overflow-safe squash, ED-PC-0025)
 import ability_primitives as ABIL   # U10/ED-PC-0022: 'edge_grab' modulation (Ringen am Schwert seizes a live blade with less self-injury)
 
 # ── contact axis (I7b) ──────────────────────────────────────────────────────────────────────────
@@ -61,7 +60,7 @@ def grab_outcome(gsig, rng, cfg):
     `beats` counter, which lives entirely in wrapper.engagement and is never touched here)."""
     if rng.random() < cfg['GRAB_ESCAPE_P']:
         return 'escape'
-    p = 1.0 / (1.0 + math.exp(-gsig))   # logistic squash of the dominance edge into [0,1]
+    p = S.core.logistic(gsig)   # logistic squash of the dominance edge into [0,1] (single-source, overflow-safe, ED-PC-0025)
     weights = (
         ('disarm',   0.15 + 0.25 * p),
         ('throw',    0.15 + 0.20 * p),

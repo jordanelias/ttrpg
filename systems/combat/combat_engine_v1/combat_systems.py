@@ -2,7 +2,7 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-from math import exp, tanh, sqrt
+from math import tanh, sqrt   # logistic/exp single-sourced in core.logistic (ED-PC-0025)
 import core
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
 import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
@@ -741,7 +741,7 @@ def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
     RR-02: takes the longer fighter's actual fatigue (was hardcoded 0). RR-03: normalises by REACH_W['none']."""
     id_read = reading(longer,cfg)*TR.eff_cw(longer, 'visual')
     deny_read = reading(shorter,cfg)*TR.eff_cw(shorter, 'visual')
-    read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
+    read_edge = core.logistic((id_read-deny_read)/2.0)
     foot = balance_eff(longer,fat_longer,cfg)/3
     p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/cfg['REACH_W']['none']
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
@@ -821,7 +821,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     legib=legibility(aggressor, commit, cfg, defender.armor)
     read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
     read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
-    p_read=1/(1+exp(-(read_d-read_a)/1.0))
+    p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
     modes=['parry','dodge','wind']
     msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
@@ -948,9 +948,9 @@ def counter_success_prob(defender, cfg, TR):
 
 def bind_dominance_p(bsig):
     """Logistic of the bind net-sigma: P(aggressor dominates this bind iteration). Pure."""
-    return 1/(1+exp(-bsig))
+    return core.logistic(bsig)
 
 def disrupt_resist_p(c, cfg):
     """Concentration disruption-resistance: P(the fighter completes a simultaneous strike despite being hit),
     logistic in Focus. Pure."""
-    return 1/(1+exp(-cfg['DISRUPT_K']*(c.focus-3)))
+    return core.logistic(cfg['DISRUPT_K']*(c.focus-3))
