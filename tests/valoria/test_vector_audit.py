@@ -442,7 +442,7 @@ def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     out = tmp_path / 'findings.json'
     va.emit_structural_findings(root, out)
     d = json.loads(out.read_text())
-    assert d['schema_version'] == 1                      # the handshake the ledger validates
+    assert d['schema_version'] == 2                      # the handshake the ledger validates
     im, iso = d['implied_missing'], d['isolates']
     assert im and iso
     # every row carries the flag pair (present, typed) — nothing is silently dropped
@@ -458,3 +458,10 @@ def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
         # a kept (unfiltered) isolate is genuinely marooned: max degree <=1 (Mode-H invariant)
         if not r['filtered']:
             assert r['max_deg'] <= 1, r
+    # ALL EIGHT modes present (fix #1 — the feed used to carry only B + H). C/D are high-volume, so
+    # they carry a bounded sample + a TRUE _total (SURFACE-NEVER-CULL: never a silent cap).
+    for key in ('notional', 'cascade_sinks', 'sparse_context', 'throughline_orphans', 'vocab_debt'):
+        assert key in d, key
+    assert d['notional_total'] >= len(d['notional'])         # sample ≤ true total, total disclosed
+    assert d['cascade_sinks_total'] >= len(d['cascade_sinks'])
+    assert 'cascade_truncated_calls' in d                    # the false-sink caveat is carried

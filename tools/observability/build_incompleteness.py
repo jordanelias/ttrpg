@@ -97,9 +97,30 @@ def scan_parse_failures():
 
 
 # ── each finding: {category, id, title, detail, lane, path} — uniform across categories ──
+# Severity per category (fix #4, 2026-07-23 — the ledger had no ranking; every finding read equal,
+# so a port-blocking isolated `victory` contract sat level with a sparse token in an arc doc).
+# high = engine-spine / a concept with no home; med = a real gap needing authoring; low = hygiene.
+SEVERITY = {
+    "contract_missing_entirely": "high", "contract_no_resolver": "high", "contract_doc_null": "high",
+    "key_orphan_emit": "high", "key_unemitted_consume": "high", "audit_isolate": "high",
+    "audit_schema_mismatch": "high", "register_quarantined": "high", "register_phantom_source": "high",
+    "parse_failure": "high",
+    "contract_island": "med", "contract_assumption": "med", "contract_doc_dead": "med",
+    "audit_implied_missing": "med", "audit_cascade_sink": "med", "audit_throughline_orphan": "med",
+    "sim_not_implemented": "med", "status_noncurrent": "med", "stale_retired_pointer": "med",
+    "integrity_unverified_pin": "med",
+    "prose_marker": "low", "code_marker": "low", "unregistered_term": "low", "audit_notional": "low",
+    "audit_sparse": "low", "audit_vocab_debt": "low", "audit_excluded_system": "low",
+    "apparatus_orphan": "low",
+}
+DEFAULT_SEVERITY = "med"
+SEVERITY_RANK = {"high": 0, "med": 1, "low": 2}
+
+
 def finding(cat, ident, title, detail, path=None, lane=None):
     return {"category": cat, "id": ident, "title": title, "detail": detail,
-            "path": path or "", "lane": lane or infer_lane(path or "")}
+            "path": path or "", "lane": lane or infer_lane(path or ""),
+            "severity": SEVERITY.get(cat, DEFAULT_SEVERITY)}
 
 
 def scan_module_contracts():
@@ -441,25 +462,25 @@ def scan_audit_exclusions():
 
 
 def scan_audit_structural():
-    """Surface the vector-audit's UNIQUE cross-graph findings from its committed feed
-    (audit_findings.json, refreshed weekly by --emit-findings): Mode B implied-but-missing
-    connections (two design concepts linked in >=2 metadata graphs but NEVER cited together — a
-    structural gap no other tool computes) + Mode H multi-graph isolates. This is how the two
-    observatories TALK: the audit's structural analysis lands in the unified ledger. Reads a
-    committed snapshot (fast) — the 70s audit run happens in audit-refresh, not per ledger build."""
+    """Surface ALL EIGHT of the vector-audit's diagnostic modes from its committed feed
+    (audit_findings.json, refreshed by --emit-findings): B implied-missing, C notional, D
+    cascade-sinks, E sparse-context, F throughline-orphans, G vocabulary-debt, H isolates (A hubs are
+    context). This is how the two observatories TALK — the audit's full structural analysis lands in
+    the unified ledger, not just ¼ of it. Reads a committed snapshot (fast) — the 70s audit run
+    happens in audit-refresh / the dashboard deploy, not per ledger build."""
     d = _load_json("tools/observability/audit_findings.json")
     if not d:
         return []
-    # SCHEMA HANDSHAKE (L2): the two observatories agree on schema_version 1. If the emit side bumps
-    # it (renamed fields), degrade LOUDLY to a self-surfacing marker rather than silently emitting
+    # SCHEMA HANDSHAKE: the two observatories agree on schema_version 2 (all-eight-modes feed). If the
+    # emit side bumps it, degrade LOUDLY to a self-surfacing marker rather than silently emitting
     # empty/partial rows via all-optional .get() — the ledger's job is to never hide a break.
     sv = d.get("schema_version")
-    if sv != 1:
+    if sv != 2:
         return [finding("audit_schema_mismatch", "audit_findings_schema",
-                        f"audit_findings.json schema_version {sv!r} ≠ expected 1",
-                        f"the vector-audit feed changed its schema (got {sv!r}, expected 1) — "
+                        f"audit_findings.json schema_version {sv!r} ≠ expected 2",
+                        f"the vector-audit feed changed its schema (got {sv!r}, expected 2) — "
                         f"scan_audit_structural in build_incompleteness.py must be updated to match "
-                        f"before its Mode-B/Mode-H findings can be trusted",
+                        f"before its findings can be trusted",
                         path="tools/observability/audit_findings.json", lane="IN")]
     # SNAPSHOT disclosure: these rows are read from a weekly-committed feed, not recomputed here
     # (the 70s audit runs in audit-refresh). audit_staleness.py watches the feed for drift.
@@ -517,6 +538,59 @@ def scan_audit_structural():
         out.append(finding("audit_isolate", f"iso::{t}", title,
                            f"{body}. vector-audit Mode H; status {r.get('status','?')} ({snap})",
                            path=path, lane="IN"))
+
+    # ── Modes C–G (added 2026-07-23 — the feed used to surface only B + H) ────────────────────────
+    # C — notional citations (cited but content-empty): high volume (~14k), so a SINGLE summary row
+    # carrying the TRUE total + top examples (SURFACE-NEVER-CULL: total shown, not silently capped).
+    nt = d.get("notional_total", 0)
+    if nt:
+        top = d.get("notional", [])
+        egs = "; ".join(f"{r.get('source')}→{r.get('target')} (w{r.get('cite_weight')})" for r in top[:5])
+        out.append(finding("audit_notional", "notional::rollup",
+                           f"{nt} notional citations — cited but content-empty",
+                           f"{nt} token pairs are cited together but share NO metadata-graph support "
+                           f"(throughline/mu/pp/key) — a citation with nothing structural behind it "
+                           f"(vector-audit Mode C). Top by weight: {egs or '—'}. Full ranked list: the "
+                           f"audit's C_notional ({snap})", path="", lane="IN"))
+    # D — cascade sinks (flowed into, never back out): few (<=15 shown); emit each + truncation caveat.
+    trunc = d.get("cascade_truncated_calls", 0)
+    dtot = d.get("cascade_sinks_total", 0)
+    for r in d.get("cascade_sinks", []):
+        term = r.get("terminal")
+        cav = (" ⚠ some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) — verify"
+               if trunc else "")
+        out.append(finding("audit_cascade_sink", f"sink::{term}",
+                           f"{term} — cascade sink ({r.get('chains')} chains)",
+                           f"“{term}” is reached by {r.get('chains')} citation chains (len≥3) but never "
+                           f"cites back — a concept things flow INTO but nothing flows back from "
+                           f"(vector-audit Mode D; {dtot} sinks total). Terminal-by-design or a broken "
+                           f"feedback loop.{cav} ({snap})", path=r.get("doc") or "", lane="IN"))
+    # E — sparse-context tokens (bottom decile in paragraphs AND cite-degree): emit each (bounded).
+    for r in d.get("sparse_context", []):
+        t = r.get("token")
+        out.append(finding("audit_sparse", f"sparse::{t}",
+                           f"{t} — thinly developed",
+                           f"“{t}” is in the bottom decile of BOTH prose volume ({r.get('paragraphs')} "
+                           f"paragraphs) and citation degree ({r.get('cite_deg')}) — an under-developed "
+                           f"concept (vector-audit Mode E); status {r.get('status','?')} ({snap})",
+                           path=r.get("doc") or "", lane="IN"))
+    # F — throughline orphans (<=2 substantiating paragraphs): emit each.
+    for r in d.get("throughline_orphans", []):
+        tid = r.get("throughline")
+        systems = ", ".join((r.get("systems") or [])[:5])
+        out.append(finding("audit_throughline_orphan", f"tl_orphan::{tid}",
+                           f"{tid} — throughline barely substantiated",
+                           f"throughline {tid} has only {r.get('substantiating')} paragraph(s) where ≥2 "
+                           f"of its systems ({systems}) co-appear — a narrative chain the prose barely "
+                           f"grounds (vector-audit Mode F; {snap})", path="", lane="IN"))
+    # G — vocabulary debt (struck/deprecated terms still in use): emit each.
+    for r in d.get("vocab_debt", []):
+        term = r.get("term")
+        out.append(finding("audit_vocab_debt", f"vocab::{term}",
+                           f"“{term}” — struck term still in use",
+                           f"the struck/deprecated term “{term}” still appears {r.get('total')}× across "
+                           f"{r.get('docs')} doc(s) (vector-audit Mode G) — vocabulary debt to sweep; "
+                           f"e.g. {r.get('top_doc','')} ({snap})", path=r.get("top_doc") or "", lane="IN"))
     return out
 
 
@@ -576,20 +650,26 @@ def build():
     # stable order: category, then id — deterministic (no timestamps anywhere)
     findings.sort(key=lambda f: (f["category"], f["id"]))
 
+    # stable within-category order is already set; now also rank by severity for consumers that want
+    # a triaged view (fix #4). Keep the canonical `findings` in (category,id) order for determinism;
+    # expose the severity rollup in totals so the dashboard can sort/filter without re-deriving it.
     by_cat = Counter(f["category"] for f in findings)
+    by_sev = Counter(f.get("severity", DEFAULT_SEVERITY) for f in findings)
     by_lane = defaultdict(lambda: defaultdict(int))
     for f in findings:
         by_lane[f["lane"]]["total"] += 1
         by_lane[f["lane"]][f["category"]] += 1
 
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generator": "tools/observability/build_incompleteness.py",
         "note": "GENERATED — the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, "
-                "GROWING set of categories (see totals.by_category). It is deliberately NOT claimed "
-                "exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces "
-                "its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
-        "totals": {"findings": len(findings), "by_category": dict(sorted(by_cat.items()))},
+                "GROWING set of categories (see totals.by_category), each carrying a `severity` "
+                "(high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: "
+                "known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN "
+                "incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
+        "totals": {"findings": len(findings), "by_category": dict(sorted(by_cat.items())),
+                   "by_severity": {s: by_sev.get(s, 0) for s in ("high", "med", "low")}},
         "by_lane": {ln: dict(by_lane[ln]) for ln in LANE_ORDER if ln in by_lane},
         "prose_marker_rollup": prose_marker_rollup(),
         "coverage_gaps": COVERAGE_GAPS,
@@ -633,6 +713,12 @@ CATEGORY_LABEL = {
     "unregistered_term": "Frequent authored terms with NO registered token (missing registrations)",
     "audit_implied_missing": "Implied-but-never-cited connections (vector-audit Mode B)",
     "audit_isolate": "Structurally isolated tokens (vector-audit Mode H)",
+    "audit_notional": "Notional citations — cited but no metadata support (vector-audit Mode C)",
+    "audit_cascade_sink": "Cascade sinks — flowed into, never back out (vector-audit Mode D)",
+    "audit_sparse": "Sparse-context tokens — thinly developed (vector-audit Mode E)",
+    "audit_throughline_orphan": "Throughline orphans — ≤2 substantiating paragraphs (vector-audit Mode F)",
+    "audit_vocab_debt": "Vocabulary debt — struck/deprecated terms still in use (vector-audit Mode G)",
+    "audit_schema_mismatch": "Audit feed schema mismatch (two-observatory handshake broke)",
     "integrity_unverified_pin": "Unverified integrity pins (canonical_sha)",
     "register_quarantined": "Quarantined/stale registers",
     "register_phantom_source": "Registry rows indexing a non-existent source file",

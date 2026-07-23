@@ -918,7 +918,11 @@ function renderIncompleteness(d) {
   const m = d.incompleteness;
   if (!m || m.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
   if (!m.total) { el.innerHTML = '<div class="empty-state">nothing outstanding — the whole-tree scan is clean.</div>'; return; }
+  const sev = m.by_severity || {};
   let html = `<div style="margin-bottom:8px;"><span class="chip warning">▲ ${m.total} findings</span> `
+    + `<span class="chip critical">${sev.high || 0} high</span> `
+    + `<span class="chip warning">${sev.med || 0} med</span> `
+    + `<span class="chip">${sev.low || 0} low</span> `
     + `<span class="chip">${m.category_count} categories</span></div>`;
   // per-lane spread
   const lanes = m.by_lane || {};
@@ -927,9 +931,9 @@ function renderIncompleteness(d) {
       + Object.entries(lanes).map(([k, v]) => `<span class="chip">${esc(k)} ${v}</span>`).join(' ')
       + '</div>';
   }
-  // engine-spine highlights: the structural / port-blocking holes, with sample findings
+  // HIGH-severity highlights: the port-blocking holes, grouped by category, with sample findings
   if ((m.highlights || []).length) {
-    html += '<div class="ref-note" style="margin:6px 0;">Structural &amp; engine-spine holes (samples; full detail in INCOMPLETENESS.md):</div>';
+    html += '<div class="ref-note" style="margin:6px 0;">High-severity findings (samples; full detail in INCOMPLETENESS.md):</div>';
     for (const h of m.highlights) {
       html += `<details class="acc"><summary>${esc(h.label)} <span class="acc-count">— ${h.count}</span></summary><div class="acc-body"><ul class="tight">`
         + h.items.map(it => {
@@ -941,9 +945,10 @@ function renderIncompleteness(d) {
         + `</ul></div></details>`;
     }
   }
-  // full category census
+  // full category census (severity-ordered), with a severity dot
+  const sevDot = { high: '🔴', med: '🟡', low: '⚪' };
   html += `<details class="acc"><summary>All categories <span class="acc-count">— ${m.category_count}</span></summary><div class="acc-body"><table class="lane-table"><tbody>`
-    + (m.categories || []).map(c => `<tr><td>${esc(c.label)}</td><td style="text-align:right;">${c.count}</td></tr>`).join('')
+    + (m.categories || []).map(c => `<tr><td>${sevDot[c.severity] || ''} ${esc(c.label)}</td><td style="text-align:right;">${c.count}</td></tr>`).join('')
     + `</tbody></table></div></details>`;
   // prose rollup
   const pr = m.prose_rollup || {};

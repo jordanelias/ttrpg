@@ -1,14 +1,19 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generator": "tools/observability/build_incompleteness.py",
-  "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
+  "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 230,
+    "findings": 266,
     "by_category": {
       "apparatus_orphan": 3,
+      "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
       "audit_isolate": 9,
+      "audit_notional": 1,
+      "audit_sparse": 16,
+      "audit_throughline_orphan": 1,
+      "audit_vocab_debt": 3,
       "code_marker": 3,
       "contract_doc_null": 9,
       "contract_island": 5,
@@ -23,6 +28,11 @@
       "stale_retired_pointer": 15,
       "status_noncurrent": 25,
       "unregistered_term": 39
+    },
+    "by_severity": {
+      "high": 24,
+      "med": 129,
+      "low": 113
     }
   },
   "by_lane": {
@@ -57,11 +67,16 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 127,
+      "total": 163,
       "apparatus_orphan": 3,
+      "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
       "audit_isolate": 9,
+      "audit_notional": 1,
+      "audit_sparse": 16,
+      "audit_throughline_orphan": 1,
+      "audit_vocab_debt": 3,
       "integrity_unverified_pin": 1,
       "prose_marker": 5,
       "register_phantom_source": 1,
@@ -109,7 +124,8 @@
       "title": "tools/build_audit_registry_backfill.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
       "path": "tools/build_audit_registry_backfill.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "apparatus_orphan",
@@ -117,7 +133,8 @@
       "title": "tools/geography/jsx_to_canonical.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
       "path": "tools/geography/jsx_to_canonical.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "apparatus_orphan",
@@ -125,7 +142,143 @@
       "title": "tools/observability/npc_audit_report_gen.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
       "path": "tools/observability/npc_audit_report_gen.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Audit",
+      "title": "Audit \u2014 cascade sink (847 chains)",
+      "detail": "\u201cAudit\u201d is reached by 847 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "audit/2026-05-17-v18-integration/integration_plan_v18.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Church",
+      "title": "Church \u2014 cascade sink (701 chains)",
+      "detail": "\u201cChurch\u201d is reached by 701 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/faction_politics_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Conviction",
+      "title": "Conviction \u2014 cascade sink (977 chains)",
+      "detail": "\u201cConviction\u201d is reached by 977 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/npcs/npc_behavior_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Disposition",
+      "title": "Disposition \u2014 cascade sink (833 chains)",
+      "detail": "\u201cDisposition\u201d is reached by 833 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/fieldwork/fieldwork_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Investigation",
+      "title": "Investigation \u2014 cascade sink (682 chains)",
+      "detail": "\u201cInvestigation\u201d is reached by 682 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/fieldwork/fieldwork_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Key: mechanical.accounting",
+      "title": "Key: mechanical.accounting \u2014 cascade sink (891 chains)",
+      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 891 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/faction_layer_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Knot",
+      "title": "Knot \u2014 cascade sink (712 chains)",
+      "detail": "\u201cKnot\u201d is reached by 712 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/fieldwork/knots_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Mass Battle",
+      "title": "Mass Battle \u2014 cascade sink (671 chains)",
+      "detail": "\u201cMass Battle\u201d is reached by 671 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/mass_battle/mass_battle_integration_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Mass Combat",
+      "title": "Mass Combat \u2014 cascade sink (671 chains)",
+      "detail": "\u201cMass Combat\u201d is reached by 671 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/mass_battle/mass_battle_integration_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Restoration Movement",
+      "title": "Restoration Movement \u2014 cascade sink (664 chains)",
+      "detail": "\u201cRestoration Movement\u201d is reached by 664 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/victory/victory_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Scene Slate",
+      "title": "Scene Slate \u2014 cascade sink (731 chains)",
+      "detail": "\u201cScene Slate\u201d is reached by 731 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/_architecture/player_agency_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Social Contest",
+      "title": "Social Contest \u2014 cascade sink (794 chains)",
+      "detail": "\u201cSocial Contest\u201d is reached by 794 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/fieldwork/fieldwork_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Stability",
+      "title": "Stability \u2014 cascade sink (764 chains)",
+      "detail": "\u201cStability\u201d is reached by 764 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/faction_layer_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Territories",
+      "title": "Territories \u2014 cascade sink (829 chains)",
+      "detail": "\u201cTerritories\u201d is reached by 829 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/victory/victory_v30.md",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Threadwork",
+      "title": "Threadwork \u2014 cascade sink (854 chains)",
+      "detail": "\u201cThreadwork\u201d is reached by 854 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) \u2014 verify (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/threadwork/threadwork_v30.md",
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_excluded_system",
@@ -133,7 +286,8 @@
       "title": "Character Canon Consolidation",
       "detail": "vector-audit denylists this system: consolidation/migration doc, not a mechanic",
       "path": "canonical_sources:character_canon_consolidation",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -141,7 +295,8 @@
       "title": "Character Generation Questionnaire",
       "detail": "vector-audit denylists this system: authoring aid, not a mechanic",
       "path": "canonical_sources:character_generation_questionnaire",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -149,7 +304,8 @@
       "title": "Character Histories",
       "detail": "vector-audit denylists this system: lore/backstory, not a mechanic",
       "path": "canonical_sources:character_histories",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -157,7 +313,8 @@
       "title": "Conviction Migration Roster",
       "detail": "vector-audit denylists this system: migration roster, not a mechanic",
       "path": "canonical_sources:conviction_migration_roster",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -165,7 +322,8 @@
       "title": "Core Engine",
       "detail": "vector-audit denylists this system: substrate/kernel doc, not a domain mechanic",
       "path": "canonical_sources:core_engine",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -173,7 +331,8 @@
       "title": "Faction Canon Consolidation",
       "detail": "vector-audit denylists this system: consolidation/migration doc, not a mechanic",
       "path": "canonical_sources:faction_canon_consolidation",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -181,7 +340,8 @@
       "title": "Module Contracts",
       "detail": "vector-audit denylists this system: index/spine doc, not a mechanic surface (the contracts themselves)",
       "path": "canonical_sources:module_contracts",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -189,7 +349,8 @@
       "title": "Narrative Voice Canon",
       "detail": "vector-audit denylists this system: voice/style canon, not a mechanic",
       "path": "canonical_sources:narrative_voice_canon",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -197,7 +358,8 @@
       "title": "Political Dynamics Keys Migration",
       "detail": "vector-audit denylists this system: migration doc, not a mechanic",
       "path": "canonical_sources:political_dynamics_keys_migration",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -205,7 +367,8 @@
       "title": "Solmund Artifacts",
       "detail": "vector-audit denylists this system: lore artifacts, not a mechanic",
       "path": "canonical_sources:solmund_artifacts",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -213,7 +376,8 @@
       "title": "Solmund Philosophy",
       "detail": "vector-audit denylists this system: philosophy canon, not a mechanic",
       "path": "canonical_sources:solmund_philosophy",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -221,7 +385,8 @@
       "title": "Solmund Voice",
       "detail": "vector-audit denylists this system: voice/style canon, not a mechanic",
       "path": "canonical_sources:solmund_voice",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -229,7 +394,8 @@
       "title": "Tc Political",
       "detail": "vector-audit denylists this system: DEPRECATED pre-CI naming variant; superseded by the CI Political token",
       "path": "canonical_sources:tc_political",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -237,7 +403,8 @@
       "title": "Throughlines Framework",
       "detail": "vector-audit denylists this system: meta-framework doc, not a mechanic",
       "path": "canonical_sources:throughlines_framework",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -245,7 +412,8 @@
       "title": "UI UX",
       "detail": "vector-audit denylists this system: presentation-layer spec, not a mechanic",
       "path": "canonical_sources:ui_ux",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_excluded_system",
@@ -253,7 +421,8 @@
       "title": "Videogame Mode Spec",
       "detail": "vector-audit denylists this system: platform/mode spec, not a mechanic",
       "path": "canonical_sources:videogame_mode_spec",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "audit_implied_missing",
@@ -261,7 +430,8 @@
       "title": "CI Political \u22ef Clocks \u2014 implied but never cited",
       "detail": "\u201cCI Political\u201d and \u201cClocks\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_politics_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -269,7 +439,8 @@
       "title": "Campaign Architecture \u22ef Faction Layer \u2014 implied but never cited",
       "detail": "\u201cCampaign Architecture\u201d and \u201cFaction Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -277,7 +448,8 @@
       "title": "Campaign Architecture \u22ef Peninsular Strain \u2014 implied but never cited",
       "detail": "\u201cCampaign Architecture\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -285,7 +457,8 @@
       "title": "Campaign Architecture \u22ef Scale Transitions \u2014 implied but never cited",
       "detail": "\u201cCampaign Architecture\u201d and \u201cScale Transitions\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -293,7 +466,8 @@
       "title": "Clocks \u22ef Faction Layer \u2014 implied but never cited",
       "detail": "\u201cClocks\u201d and \u201cFaction Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -301,7 +475,8 @@
       "title": "Clocks \u22ef MS Trajectory \u2014 implied but never cited",
       "detail": "\u201cClocks\u201d and \u201cMS Trajectory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -309,7 +484,8 @@
       "title": "Clocks \u22ef Peninsular Strain \u2014 implied but never cited",
       "detail": "\u201cClocks\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -317,7 +493,8 @@
       "title": "Clocks \u22ef Royal Assassination Fuse \u2014 implied but never cited",
       "detail": "\u201cClocks\u201d and \u201cRoyal Assassination Fuse\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -325,7 +502,8 @@
       "title": "Clocks \u22ef Threadwork \u2014 implied but never cited",
       "detail": "\u201cClocks\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -333,7 +511,8 @@
       "title": "Clocks \u22ef Victory \u2014 implied but never cited",
       "detail": "\u201cClocks\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -341,7 +520,8 @@
       "title": "Conflict Architecture \u22ef Leap Mechanism \u2014 implied but never cited",
       "detail": "\u201cConflict Architecture\u201d and \u201cLeap Mechanism\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/settlements/settlement_layer_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -349,7 +529,8 @@
       "title": "Conflict Architecture \u22ef Tensions Deck \u2014 implied but never cited",
       "detail": "\u201cConflict Architecture\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/settlements/settlement_layer_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -357,7 +538,8 @@
       "title": "Conviction Track \u22ef Derived Stats \u2014 implied but never cited",
       "detail": "\u201cConviction Track\u201d and \u201cDerived Stats\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_politics_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -365,7 +547,8 @@
       "title": "Derived Stats \u22ef Self-Rendering \u2014 implied but never cited",
       "detail": "\u201cDerived Stats\u201d and \u201cSelf-Rendering\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -373,7 +556,8 @@
       "title": "Derived Stats \u22ef Solmund \u2014 implied but never cited",
       "detail": "\u201cDerived Stats\u201d and \u201cSolmund\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -381,7 +565,8 @@
       "title": "Faction Layer \u22ef Mass Combat \u2014 implied but never cited",
       "detail": "\u201cFaction Layer\u201d and \u201cMass Combat\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_canon_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -389,7 +574,8 @@
       "title": "Faction Layer \u22ef Scale Transitions \u2014 implied but never cited",
       "detail": "\u201cFaction Layer\u201d and \u201cScale Transitions\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_canon_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -397,7 +583,8 @@
       "title": "Factions \u22ef MS Trajectory \u2014 implied but never cited",
       "detail": "\u201cFactions\u201d and \u201cMS Trajectory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_politics_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -405,7 +592,8 @@
       "title": "MS Trajectory \u22ef Peninsular Strain \u2014 implied but never cited",
       "detail": "\u201cMS Trajectory\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "canon/02_foundations_amendment_leap_mechanism.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -413,7 +601,8 @@
       "title": "MS Trajectory \u22ef Settlement Layer \u2014 implied but never cited",
       "detail": "\u201cMS Trajectory\u201d and \u201cSettlement Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "canon/02_foundations_amendment_leap_mechanism.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -421,7 +610,8 @@
       "title": "Military Layer \u22ef Settlement Layer \u2014 implied but never cited",
       "detail": "\u201cMilitary Layer\u201d and \u201cSettlement Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/ci_political_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -429,7 +619,8 @@
       "title": "Peninsular Strain \u22ef Tensions Deck \u2014 implied but never cited",
       "detail": "\u201cPeninsular Strain\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -437,7 +628,8 @@
       "title": "Royal Assassination Fuse \u22ef Tensions Deck \u2014 implied but never cited",
       "detail": "\u201cRoyal Assassination Fuse\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/npcs/npc_behavior_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -445,7 +637,8 @@
       "title": "Scale Transitions \u22ef Self-Rendering \u2014 implied but never cited",
       "detail": "\u201cScale Transitions\u201d and \u201cSelf-Rendering\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/propagation_spec_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -453,7 +646,8 @@
       "title": "Scale Transitions \u22ef Tensions Deck \u2014 implied but never cited",
       "detail": "\u201cScale Transitions\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/propagation_spec_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -461,7 +655,8 @@
       "title": "Scale Transitions \u22ef Threadwork \u2014 implied but never cited",
       "detail": "\u201cScale Transitions\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/propagation_spec_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -469,7 +664,8 @@
       "title": "Scale Transitions \u22ef Victory \u2014 implied but never cited",
       "detail": "\u201cScale Transitions\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/propagation_spec_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_implied_missing",
@@ -477,7 +673,8 @@
       "title": "Tensions Deck \u22ef Victory \u2014 implied but never cited",
       "detail": "\u201cTensions Deck\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "audit_isolate",
@@ -485,7 +682,8 @@
       "title": "Active Inquisition \u2014 no design-prose home",
       "detail": "\u201cActive Inquisition\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/action_vocabulary.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -493,7 +691,8 @@
       "title": "Body \u2014 no design-prose home",
       "detail": "\u201cBody\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/names_index.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/names_index.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -501,7 +700,8 @@
       "title": "Counter-Intelligence \u2014 no design-prose home",
       "detail": "\u201cCounter-Intelligence\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/action_vocabulary.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/action_vocabulary.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -509,7 +709,8 @@
       "title": "Key: scene_outcome.battle_concluded \u2014 no design-prose home",
       "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has max degree 1 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -517,7 +718,8 @@
       "title": "NPC Relational Graph \u2014 no design-prose home",
       "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -525,7 +727,8 @@
       "title": "Territorial Piety \u2014 no design-prose home",
       "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -533,7 +736,8 @@
       "title": "Territory Temperaments \u2014 no design-prose home",
       "detail": "\u201cTerritory Temperaments\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -541,7 +745,8 @@
       "title": "faction Mandate (cross-module \u2192 faction_state) \u2014 no design-prose home",
       "detail": "\u201cfaction Mandate (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "audit_isolate",
@@ -549,7 +754,197 @@
       "title": "faction Treasury income (cross-module \u2192 faction_state) \u2014 no design-prose home",
       "detail": "\u201cfaction Treasury income (cross-module \u2192 faction_state)\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/module_contracts.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
+    },
+    {
+      "category": "audit_notional",
+      "id": "notional::rollup",
+      "title": "14662 notional citations \u2014 cited but content-empty",
+      "detail": "14662 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: CI Political\u2192Crown (w183); Guilds\u2192Crown (w183); Church\u2192Crown (w183); Hafenmark\u2192Crown (w183); Varfell\u2192Crown (w183). Full ranked list: the audit's C_notional (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Active Inquisition",
+      "title": "Active Inquisition \u2014 thinly developed",
+      "detail": "\u201cActive Inquisition\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Body",
+      "title": "Body \u2014 thinly developed",
+      "detail": "\u201cBody\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Counter-Intelligence",
+      "title": "Counter-Intelligence \u2014 thinly developed",
+      "detail": "\u201cCounter-Intelligence\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Fieldwork Knots",
+      "title": "Fieldwork Knots \u2014 thinly developed",
+      "detail": "\u201cFieldwork Knots\u201d is in the bottom decile of BOTH prose volume (1 paragraphs) and citation degree (16) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/fieldwork/knots_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Fractional Province",
+      "title": "Fractional Province \u2014 thinly developed",
+      "detail": "\u201cFractional Province\u201d is in the bottom decile of BOTH prose volume (1 paragraphs) and citation degree (23) \u2014 an under-developed concept (vector-audit Mode E); status provisional (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/faction_succession_split_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Game Director",
+      "title": "Game Director \u2014 thinly developed",
+      "detail": "\u201cGame Director\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (6) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Key: mechanical.scene_exited",
+      "title": "Key: mechanical.scene_exited \u2014 thinly developed",
+      "detail": "\u201cKey: mechanical.scene_exited\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Key: mechanical.scene_skipped",
+      "title": "Key: mechanical.scene_skipped \u2014 thinly developed",
+      "detail": "\u201cKey: mechanical.scene_skipped\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Key: scene_outcome.battle_concluded",
+      "title": "Key: scene_outcome.battle_concluded \u2014 thinly developed",
+      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Mind",
+      "title": "Mind \u2014 thinly developed",
+      "detail": "\u201cMind\u201d is in the bottom decile of BOTH prose volume (1 paragraphs) and citation degree (12) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/world/solmund_voice_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::NPC Relational Graph",
+      "title": "NPC Relational Graph \u2014 thinly developed",
+      "detail": "\u201cNPC Relational Graph\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Scene Timer",
+      "title": "Scene Timer \u2014 thinly developed",
+      "detail": "\u201cScene Timer\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (6) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Territorial Piety",
+      "title": "Territorial Piety \u2014 thinly developed",
+      "detail": "\u201cTerritorial Piety\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Territory Temperaments",
+      "title": "Territory Temperaments \u2014 thinly developed",
+      "detail": "\u201cTerritory Temperaments\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::faction Mandate (cross-module \u2192 faction_state)",
+      "title": "faction Mandate (cross-module \u2192 faction_state) \u2014 thinly developed",
+      "detail": "\u201cfaction Mandate (cross-module \u2192 faction_state)\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::faction Treasury income (cross-module \u2192 faction_state)",
+      "title": "faction Treasury income (cross-module \u2192 faction_state) \u2014 thinly developed",
+      "detail": "\u201cfaction Treasury income (cross-module \u2192 faction_state)\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_throughline_orphan",
+      "id": "tl_orphan::T-10",
+      "title": "T-10 \u2014 throughline barely substantiated",
+      "detail": "throughline T-10 has only 0 paragraph(s) where \u22652 of its systems (\u2014) co-appear \u2014 a narrative chain the prose barely grounds (vector-audit Mode F; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "audit_vocab_debt",
+      "id": "vocab::Coup Counter",
+      "title": "\u201cCoup Counter\u201d \u2014 struck term still in use",
+      "detail": "the struck/deprecated term \u201cCoup Counter\u201d still appears 57\u00d7 across 13 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. arcs/arc_expansion_v30.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "arcs/arc_expansion_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_vocab_debt",
+      "id": "vocab::Cultural Reformation",
+      "title": "\u201cCultural Reformation\u201d \u2014 struck term still in use",
+      "detail": "the struck/deprecated term \u201cCultural Reformation\u201d still appears 23\u00d7 across 9 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. systems/overview/peninsular_strain_v30.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/overview/peninsular_strain_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_vocab_debt",
+      "id": "vocab::Game Master",
+      "title": "\u201cGame Master\u201d \u2014 struck term still in use",
+      "detail": "the struck/deprecated term \u201cGame Master\u201d still appears 21\u00d7 across 8 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. arcs/throughline_resolutions_v30.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "arcs/throughline_resolutions_v30.md",
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "code_marker",
@@ -557,7 +952,8 @@
       "title": "TODO @ systems/factions/sim/parliamentary_action.py:162",
       "detail": "# TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
       "path": "systems/factions/sim/parliamentary_action.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "code_marker",
@@ -565,7 +961,8 @@
       "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:148",
       "detail": "INSTITUTIONAL_MODES = {            # placeholder keys (mechanism, not world); Jordan assigns Valorian names",
       "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "low"
     },
     {
       "category": "code_marker",
@@ -573,7 +970,8 @@
       "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:316",
       "detail": "CROSS_CULTURAL_VENUES = {          # placeholder keys; Valorian names are Jordan's to assign",
       "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "low"
     },
     {
       "category": "contract_doc_null",
@@ -581,7 +979,8 @@
       "title": "audit",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -589,7 +988,8 @@
       "title": "domain_actions",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -597,7 +997,8 @@
       "title": "engine_clock",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -605,7 +1006,8 @@
       "title": "game_director",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -613,7 +1015,8 @@
       "title": "npc_memory",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -621,7 +1024,8 @@
       "title": "scenario_authoring",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -629,7 +1033,8 @@
       "title": "scene_slate",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -637,7 +1042,8 @@
       "title": "scene_timer",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_doc_null",
@@ -645,7 +1051,8 @@
       "title": "settlement_economy",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_island",
@@ -653,7 +1060,8 @@
       "title": "campaign_architecture",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "contract_island",
@@ -661,7 +1069,8 @@
       "title": "ci_political",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/factions/ci_political_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "contract_island",
@@ -669,7 +1078,8 @@
       "title": "clock_registry",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/overview/clock_registry_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "contract_island",
@@ -677,7 +1087,8 @@
       "title": "territorial_piety",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/characters/conviction_track_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "contract_island",
@@ -685,7 +1096,8 @@
       "title": "victory",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/victory/victory_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "contract_missing_entirely",
@@ -693,7 +1105,8 @@
       "title": "engine",
       "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_missing_entirely",
@@ -701,7 +1114,8 @@
       "title": "player_input",
       "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "contract_no_resolver",
@@ -709,7 +1123,8 @@
       "title": "campaign_architecture",
       "detail": "module declares no resolver",
       "path": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "integrity_unverified_pin",
@@ -717,7 +1132,8 @@
       "title": "163 canonical_sha pins \u2014 all advisory",
       "detail": "CLAUDE.md \u00a71: the entire canonical_sha pin layer (163 pins) is NOT verified against the working tree \u2014 treat as advisory, not an integrity signal. Stale subset via freshness_gate.py --update.",
       "path": "references/canonical_sources.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "key_orphan_emit",
@@ -725,7 +1141,8 @@
       "title": "meta.legacy_event",
       "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
       "path": "",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "high"
     },
     {
       "category": "prose_marker",
@@ -733,7 +1150,8 @@
       "title": "canon/03_canonical_timeline.md",
       "detail": "prose gap markers: TBD\u00d74",
       "path": "canon/03_canonical_timeline.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -741,7 +1159,8 @@
       "title": "engine/params/bg/ci_seizure.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "engine/params/bg/ci_seizure.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -749,7 +1168,8 @@
       "title": "engine/params/bg/core.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "engine/params/bg/core.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -757,7 +1177,8 @@
       "title": "engine/params/bg/faction_actions.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "engine/params/bg/faction_actions.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -765,7 +1186,8 @@
       "title": "engine/params/bg/institutions.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "engine/params/bg/institutions.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -773,7 +1195,8 @@
       "title": "engine/params/bg/phases.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "engine/params/bg/phases.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -781,7 +1204,8 @@
       "title": "engine/params/bg/stress_patches.md",
       "detail": "prose gap markers: TODO\u00d72",
       "path": "engine/params/bg/stress_patches.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -789,7 +1213,8 @@
       "title": "engine/params/board_game.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "engine/params/board_game.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -797,7 +1222,8 @@
       "title": "engine/params/factions/riskbreakers_identity.md",
       "detail": "prose gap markers: TODO\u00d72",
       "path": "engine/params/factions/riskbreakers_identity.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -805,7 +1231,8 @@
       "title": "engine/params/factions/stats_1_7_scale.md",
       "detail": "prose gap markers: TODO\u00d71",
       "path": "engine/params/factions/stats_1_7_scale.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -813,7 +1240,8 @@
       "title": "engine/params/mass_combat.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "engine/params/mass_combat.md",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -821,7 +1249,8 @@
       "title": "proposals/mass_battle_fighting_withdrawal_v1.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -829,7 +1258,8 @@
       "title": "references/throughlines_meta_infill.md",
       "detail": "prose gap markers: XXX\u00d71",
       "path": "references/throughlines_meta_infill.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -837,7 +1267,8 @@
       "title": "registers/handoffs/HANDOFF_SC.md",
       "detail": "prose gap markers: TODO\u00d71",
       "path": "registers/handoffs/HANDOFF_SC.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -845,7 +1276,8 @@
       "title": "systems/_architecture/derived_stats_v30.md",
       "detail": "prose gap markers: TODO\u00d72",
       "path": "systems/_architecture/derived_stats_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -853,7 +1285,8 @@
       "title": "systems/_architecture/player_agency_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/_architecture/player_agency_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -861,7 +1294,8 @@
       "title": "systems/_architecture/player_agency_v30_index.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "systems/_architecture/player_agency_v30_index.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -869,7 +1303,8 @@
       "title": "systems/factions/ci_political_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/factions/ci_political_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -877,7 +1312,8 @@
       "title": "systems/factions/faction_layer_v30.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "systems/factions/faction_layer_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -885,7 +1321,8 @@
       "title": "systems/factions/faction_politics_v30.md",
       "detail": "prose gap markers: TBD\u00d77",
       "path": "systems/factions/faction_politics_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -893,7 +1330,8 @@
       "title": "systems/factions/faction_state_authoring_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/factions/faction_state_authoring_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -901,7 +1339,8 @@
       "title": "systems/factions/fractional_province_ownership_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/factions/fractional_province_ownership_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -909,7 +1348,8 @@
       "title": "systems/factions/franchise_v30.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "systems/factions/franchise_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -917,7 +1357,8 @@
       "title": "systems/fieldwork/fieldwork_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/fieldwork/fieldwork_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -925,7 +1366,8 @@
       "title": "systems/fieldwork/knots_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/fieldwork/knots_v30.md",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -933,7 +1375,8 @@
       "title": "systems/mass_battle/mass_battle_integration_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/mass_battle/mass_battle_integration_v30.md",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -941,7 +1384,8 @@
       "title": "systems/mass_battle/military_layer_v30.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "systems/mass_battle/military_layer_v30.md",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -949,7 +1393,8 @@
       "title": "systems/npcs/npc_character_analyses_v30_infill.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/npcs/npc_character_analyses_v30_infill.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -957,7 +1402,8 @@
       "title": "systems/npcs/npc_relational_graph_v30.md",
       "detail": "prose gap markers: TBD\u00d71, XXX\u00d71",
       "path": "systems/npcs/npc_relational_graph_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -965,7 +1411,8 @@
       "title": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
-      "lane": "SE"
+      "lane": "SE",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -973,7 +1420,8 @@
       "title": "systems/settlements/settlement_layer_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/settlements/settlement_layer_v30.md",
-      "lane": "SE"
+      "lane": "SE",
+      "severity": "low"
     },
     {
       "category": "prose_marker",
@@ -981,7 +1429,8 @@
       "title": "systems/settlements/valoria_political_hierarchy_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/settlements/valoria_political_hierarchy_v30.md",
-      "lane": "SE"
+      "lane": "SE",
+      "severity": "low"
     },
     {
       "category": "register_phantom_source",
@@ -989,7 +1438,8 @@
       "title": "69 entries index a NON-EXISTENT source: engine/params/combat.md",
       "detail": "values_master.yaml has 69 entries whose source file engine/params/combat.md does not exist on disk \u2014 phantom index rows (CLAUDE.md \u00a75)",
       "path": "references/values_master.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "register_quarantined",
@@ -997,7 +1447,8 @@
       "title": "values_master.yaml",
       "detail": "quarantined-stale (CLAUDE.md \u00a77): free-text formulas, indexes a nonexistent combat.md, pulls from a superseded threadwork doc \u2014 do not lift as canonical",
       "path": "references/values_master.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "high"
     },
     {
       "category": "sim_not_implemented",
@@ -1005,7 +1456,8 @@
       "title": "NotImplementedError @ engine/autoload/npc_ai.py:23",
       "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
       "path": "engine/autoload/npc_ai.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1013,7 +1465,8 @@
       "title": "NotImplementedError @ engine/autoload/npc_ai.py:27",
       "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
       "path": "engine/autoload/npc_ai.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1021,7 +1474,8 @@
       "title": "NotImplementedError @ engine/cross_scale/articulation.py:24",
       "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
       "path": "engine/cross_scale/articulation.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1029,7 +1483,8 @@
       "title": "NotImplementedError @ engine/cross_scale/articulation.py:28",
       "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
       "path": "engine/cross_scale/articulation.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1037,7 +1492,8 @@
       "title": "NotImplementedError @ engine/cross_scale/articulation.py:32",
       "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
       "path": "engine/cross_scale/articulation.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1045,7 +1501,8 @@
       "title": "NotImplementedError @ systems/characters/sim/companion.py:21",
       "detail": "raise NotImplementedError(\"sim/personal/companion.py \u2014 Pass 2l armature stub\")",
       "path": "systems/characters/sim/companion.py",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1053,7 +1510,8 @@
       "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:20",
       "detail": "raise NotImplementedError(\"systems/factions/sim/charter_liberties.py \u2014 Pass 2l armature stub\")",
       "path": "systems/factions/sim/charter_liberties.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1061,7 +1519,8 @@
       "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:22",
       "detail": "raise NotImplementedError(\"systems/factions/sim/hafenmark_equipment.py \u2014 content pending contamination audit\")",
       "path": "systems/factions/sim/hafenmark_equipment.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1069,7 +1528,8 @@
       "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:21",
       "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
       "path": "systems/factions/sim/home_sanctuary.py",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1077,7 +1537,8 @@
       "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:25",
       "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
       "path": "systems/factions/sim/home_sanctuary.py",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1085,7 +1546,8 @@
       "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:21",
       "detail": "raise NotImplementedError(\"systems/factions/sim/infrastructure_reclamation.py \u2014 Pass 2l armature stub\")",
       "path": "systems/factions/sim/infrastructure_reclamation.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1093,7 +1555,8 @@
       "title": "NotImplementedError @ systems/factions/sim/treaty.py:107",
       "detail": "raise NotImplementedError(",
       "path": "systems/factions/sim/treaty.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1101,7 +1564,8 @@
       "title": "NotImplementedError @ systems/factions/sim/tribunal.py:149",
       "detail": "raise NotImplementedError(",
       "path": "systems/factions/sim/tribunal.py",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1109,7 +1573,8 @@
       "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:31",
       "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_mandate_action.py \u2014 Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)\")",
       "path": "systems/factions/sim/varfell_mandate_action.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1117,7 +1582,8 @@
       "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:33",
       "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_territorial_acquisition.py \u2014 Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)",
       "path": "systems/factions/sim/varfell_territorial_acquisition.py",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1125,7 +1591,8 @@
       "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:25",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
       "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1133,7 +1600,8 @@
       "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:29",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
       "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1141,7 +1609,8 @@
       "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:33",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
       "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1149,7 +1618,8 @@
       "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:23",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
       "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1157,7 +1627,8 @@
       "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:27",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
       "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1165,7 +1636,8 @@
       "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:31",
       "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
       "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI"
+      "lane": "FI",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1173,7 +1645,8 @@
       "title": "NotImplementedError @ systems/mass_battle/sim/altonian_reinforcements.py:21",
       "detail": "raise NotImplementedError(\"systems/mass_battle/sim/altonian_reinforcements.py \u2014 Pass 2l armature stub\")",
       "path": "systems/mass_battle/sim/altonian_reinforcements.py",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1181,7 +1654,8 @@
       "title": "NotImplementedError @ systems/overview/sim/ip_track.py:22",
       "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
       "path": "systems/overview/sim/ip_track.py",
-      "lane": "SE"
+      "lane": "SE",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1189,7 +1663,8 @@
       "title": "NotImplementedError @ systems/overview/sim/ip_track.py:26",
       "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
       "path": "systems/overview/sim/ip_track.py",
-      "lane": "SE"
+      "lane": "SE",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1197,7 +1672,8 @@
       "title": "NotImplementedError @ systems/overview/sim/rs_track.py:21",
       "detail": "raise NotImplementedError(\"sim/peninsular/rs_track.py \u2014 Pass 2l armature stub\")",
       "path": "systems/overview/sim/rs_track.py",
-      "lane": "SE"
+      "lane": "SE",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1205,7 +1681,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/dictionaries.py:710",
       "detail": "raise NotImplementedError(",
       "path": "systems/social_contest/sim/contest/dictionaries.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1213,7 +1690,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:328",
       "detail": "def play(self, *a, **k): raise NotImplementedError(\"dyadic counsel is a separate sub-system \u2014 scaffold only\")",
       "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1221,7 +1699,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:331",
       "detail": "def play(self, *a, **k): raise NotImplementedError(\"negotiation is a separate sub-system \u2014 scaffold only\")",
       "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1229,7 +1708,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:334",
       "detail": "def play(self, *a, **k): raise NotImplementedError(\"ceremonial is a separate sub-system \u2014 scaffold only\")",
       "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1237,7 +1717,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/resolver.py:51",
       "detail": "def resolve(self, s, closing, adj=None): raise NotImplementedError",
       "path": "systems/social_contest/sim/contest/resolver.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1245,7 +1726,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:201",
       "detail": "raise NotImplementedError(",
       "path": "systems/social_contest/sim/contest/wrapper.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1253,7 +1735,8 @@
       "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:222",
       "detail": "games are STUBs (raise NotImplementedError) pending later stages. `policy_a`/`policy_b` name a",
       "path": "systems/social_contest/sim/contest/wrapper.py",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1261,7 +1744,8 @@
       "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:22",
       "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
       "path": "systems/threadwork/sim/rendering.py",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1269,7 +1753,8 @@
       "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:26",
       "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
       "path": "systems/threadwork/sim/rendering.py",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1277,7 +1762,8 @@
       "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:21",
       "detail": "raise NotImplementedError(\"systems/world/sim/miraculous_event.py \u2014 Pass 2l armature stub\")",
       "path": "systems/world/sim/miraculous_event.py",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1285,7 +1771,8 @@
       "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:23",
       "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
       "path": "systems/world/sim/restoration_movement.py",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1293,15 +1780,17 @@
       "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:27",
       "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
       "path": "systems/world/sim/restoration_movement.py",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:627",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:627",
+      "id": "tools/observability/build_incompleteness.py:707",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:707",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "sim_not_implemented",
@@ -1309,7 +1798,8 @@
       "title": "NotImplementedError @ tools/sim_harness/adapters/dice_pool_demo.py:118",
       "detail": "raise NotImplementedError(",
       "path": "tools/sim_harness/adapters/dice_pool_demo.py",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1317,7 +1807,8 @@
       "title": "references/alias_registry.yaml",
       "detail": "2 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md",
       "path": "references/alias_registry.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1325,7 +1816,8 @@
       "title": "references/canonical_sources_provenance.md",
       "detail": "20 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/conflict_architecture_proposal.md, designs/audit/2026-05-17-v18-integration/integration_plan_v18.md, designs/factions/faction_systems_overview_v30.md (+16 more)",
       "path": "references/canonical_sources_provenance.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1333,7 +1825,8 @@
       "title": "references/censured_vocabulary.yaml",
       "detail": "3 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/peninsular_strain_v30.md, designs/provincial/victory_v30.md",
       "path": "references/censured_vocabulary.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1341,7 +1834,8 @@
       "title": "references/ci_checks_registry.yaml",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md",
       "path": "references/ci_checks_registry.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1349,7 +1843,8 @@
       "title": "references/collation_report_summary.yaml",
       "detail": "594 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/campaign_architecture_v30.md, designs/architecture/campaign_modes_v30.md, designs/architecture/campaign_modes_v30_infill.md (+83 more)",
       "path": "references/collation_report_summary.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1357,7 +1852,8 @@
       "title": "references/glossary.md",
       "detail": "5 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md, designs/provincial/peninsular_strain_v30.md (+1 more)",
       "path": "references/glossary.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1365,7 +1861,8 @@
       "title": "references/id_reservations.yaml",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md",
       "path": "references/id_reservations.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1373,7 +1870,8 @@
       "title": "references/module_contracts.yaml",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md",
       "path": "references/module_contracts.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1381,7 +1879,8 @@
       "title": "references/npc_registry.yaml",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/faction_canon_v30.md",
       "path": "references/npc_registry.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1389,7 +1888,8 @@
       "title": "references/numeric_bounds_report.yaml",
       "detail": "139 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/campaign_modes_v30.md, designs/architecture/canonical_registry.md, designs/architecture/complete_systems_reference.md (+52 more)",
       "path": "references/numeric_bounds_report.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1397,7 +1897,8 @@
       "title": "references/propagation_map.md",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/scene/derived_stats_v30.md",
       "path": "references/propagation_map.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1405,7 +1906,8 @@
       "title": "references/wiring_manifest.yaml",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/clock_registry_v30.md",
       "path": "references/wiring_manifest.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1413,7 +1915,8 @@
       "title": "registers/mechanics_index.yaml",
       "detail": "27 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md, designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md, designs/provincial/altonian_reinforcements_v30.md (+11 more)",
       "path": "registers/mechanics_index.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1421,7 +1924,8 @@
       "title": "registers/patch_register_active.yaml",
       "detail": "5 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-04-29-terminology-conversion/00_workplan.md, designs/audit/2026-04-29-topographic-analysis/00_workplan.md, designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md (+1 more)",
       "path": "registers/patch_register_active.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
@@ -1429,7 +1933,8 @@
       "title": "registers/supersession_register.yaml",
       "detail": "20 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-04-30-architecture-session/00_index.md, designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md, designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md (+11 more)",
       "path": "registers/supersession_register.yaml",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1437,7 +1942,8 @@
       "title": "engine/params/history/mass_combat.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "engine/params/history/mass_combat.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1445,7 +1951,8 @@
       "title": "engine/sim_reference_CONVENTIONS.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "engine/sim_reference_CONVENTIONS.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1453,7 +1960,8 @@
       "title": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1461,7 +1969,8 @@
       "title": "proposals/2026-05-16-faction-audit-followup-plan.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "proposals/2026-05-16-faction-audit-followup-plan.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1469,7 +1978,8 @@
       "title": "proposals/2026-05-25-mechanics-integration-v3_1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1477,7 +1987,8 @@
       "title": "proposals/grounded_event_card_deck_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/grounded_event_card_deck_v1.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1485,7 +1996,8 @@
       "title": "proposals/mass_battle_fighting_withdrawal_v1.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1493,7 +2005,8 @@
       "title": "proposals/mass_battle_shape_echelon_revamp.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "proposals/mass_battle_shape_echelon_revamp.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1501,7 +2014,8 @@
       "title": "proposals/multiunit_envelopment_plan.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/multiunit_envelopment_plan.md",
-      "lane": "MB"
+      "lane": "MB",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1509,7 +2023,8 @@
       "title": "proposals/pc_formation_system.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "proposals/pc_formation_system.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1517,7 +2032,8 @@
       "title": "proposals/stub_infill_plan.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "proposals/stub_infill_plan.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1525,7 +2041,8 @@
       "title": "proposals/weapon_physics_and_concentration_model.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "proposals/weapon_physics_and_concentration_model.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1533,7 +2050,8 @@
       "title": "systems/_architecture/canonical_registry.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/_architecture/canonical_registry.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1541,7 +2059,8 @@
       "title": "systems/_architecture/complete_systems_reference.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/_architecture/complete_systems_reference.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1549,7 +2068,8 @@
       "title": "systems/_architecture/governance_ripple_substrate_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/_architecture/governance_ripple_substrate_v1.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1557,7 +2077,8 @@
       "title": "systems/_architecture/governance_type_registry_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/_architecture/governance_type_registry_v1.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1565,7 +2086,8 @@
       "title": "systems/factions/faction_canon_v30.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "systems/factions/faction_canon_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1573,7 +2095,8 @@
       "title": "systems/factions/franchise_v30.md",
       "detail": "doc Status is not current: DRAFT",
       "path": "systems/factions/franchise_v30.md",
-      "lane": "FA"
+      "lane": "FA",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1581,7 +2104,8 @@
       "title": "systems/npcs/character_canon_v30.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "systems/npcs/character_canon_v30.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1589,7 +2113,8 @@
       "title": "systems/npcs/npc_behavior_system_v1.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/npcs/npc_behavior_system_v1.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1597,7 +2122,8 @@
       "title": "systems/settlements/lps_wiring_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/settlements/lps_wiring_v1.md",
-      "lane": "unassigned"
+      "lane": "unassigned",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1605,7 +2131,8 @@
       "title": "systems/social_contest/social_contest_system_v2.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/social_contest/social_contest_system_v2.md",
-      "lane": "SC"
+      "lane": "SC",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1613,7 +2140,8 @@
       "title": "systems/world/ms_trajectory_v1.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "systems/world/ms_trajectory_v1.md",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1621,7 +2149,8 @@
       "title": "systems/world/narrative_voice_canon_v30.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "systems/world/narrative_voice_canon_v30.md",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "status_noncurrent",
@@ -1629,7 +2158,8 @@
       "title": "systems/world/solmund_master_document.md",
       "detail": "doc Status is not current: DRAFT",
       "path": "systems/world/solmund_master_document.md",
-      "lane": "WR"
+      "lane": "WR",
+      "severity": "med"
     },
     {
       "category": "unregistered_term",
@@ -1637,7 +2167,8 @@
       "title": "\u201cCasus Belli\u201d \u2014 in 24 docs, unregistered",
       "detail": "appears in 24 design docs (69 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/_architecture/early_game_ignition_analysis.md, systems/factions/faction_layer_v30.md, engine/params/bg/ci_seizure.md",
       "path": "systems/_architecture/early_game_ignition_analysis.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1645,7 +2176,8 @@
       "title": "\u201cCategorical Imperative\u201d \u2014 in 17 docs, unregistered",
       "detail": "appears in 17 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/characters/conviction_taxonomy_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/npcs/npc_behavior_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1653,7 +2185,8 @@
       "title": "\u201cChurch Attention Pool\u201d \u2014 in 23 docs, unregistered",
       "detail": "appears in 23 design docs (37 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/fieldwork_v30.md, systems/factions/faction_politics_v30.md, systems/threadwork/threadwork_v30.md",
       "path": "systems/fieldwork/fieldwork_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1661,7 +2194,8 @@
       "title": "\u201cChurch Mandate\u201d \u2014 in 22 docs, unregistered",
       "detail": "appears in 22 design docs (61 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/victory/victory_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1669,7 +2203,8 @@
       "title": "\u201cChurch Stability\u201d \u2014 in 18 docs, unregistered",
       "detail": "appears in 18 design docs (68 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/factions/baralta_crown_claim_v30.md, systems/npcs/npc_behavior_v30.md",
       "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1677,7 +2212,8 @@
       "title": "\u201cClose Knot\u201d \u2014 in 15 docs, unregistered",
       "detail": "appears in 15 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/knots_v30.md, systems/fieldwork/fieldwork_editorial.md, systems/npcs/npc_behavior_system_v1.md",
       "path": "systems/fieldwork/knots_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1685,7 +2221,8 @@
       "title": "\u201cCombat Pool\u201d \u2014 in 14 docs, unregistered",
       "detail": "appears in 14 design docs (34 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, engine/params/core.md",
       "path": "systems/combat/combat_design_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1693,7 +2230,8 @@
       "title": "\u201cCommunity Weaving\u201d \u2014 in 19 docs, unregistered",
       "detail": "appears in 19 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, engine/params/factions/riskbreakers_identity.md",
       "path": "systems/characters/conviction_track_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1701,7 +2239,8 @@
       "title": "\u201cConsul Inward\u201d \u2014 in 16 docs, unregistered",
       "detail": "appears in 16 design docs (45 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/npcs/npc_behavior_system_v1.md, engine/params/bg/ministry.md",
       "path": "systems/npcs/npc_behavior_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1709,7 +2248,8 @@
       "title": "\u201cCoup Counter\u201d \u2014 in 25 docs, unregistered",
       "detail": "appears in 25 design docs (98 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/early_game_ignition_analysis.md, arcs/throughline_resolutions_v30.md",
       "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1717,7 +2257,8 @@
       "title": "\u201cCrown Mandate\u201d \u2014 in 17 docs, unregistered",
       "detail": "appears in 17 design docs (46 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/baralta_crown_claim_v30.md, systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md",
       "path": "systems/factions/baralta_crown_claim_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1725,7 +2266,8 @@
       "title": "\u201cCrown Stability\u201d \u2014 in 13 docs, unregistered",
       "detail": "appears in 13 design docs (22 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/campaign_architecture_v30.md, systems/_architecture/conflict_architecture_proposal.md",
       "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1733,7 +2275,8 @@
       "title": "\u201cCrown Treaty\u201d \u2014 in 13 docs, unregistered",
       "detail": "appears in 13 design docs (34 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/faction_layer_v30.md, systems/overview/peninsular_strain_v30.md, systems/factions/ci_political_v30.md",
       "path": "systems/factions/faction_layer_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1741,7 +2284,8 @@
       "title": "\u201cDomain Echoes\u201d \u2014 in 16 docs, unregistered",
       "detail": "appears in 16 design docs (29 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_roster_v30.md, godot/godot_architecture_specification.md, systems/_architecture/campaign_modes_v30_infill.md",
       "path": "systems/npcs/npc_roster_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1749,7 +2293,8 @@
       "title": "\u201cEin Sof\u201d \u2014 in 19 docs, unregistered",
       "detail": "appears in 19 design docs (76 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/threadwork/threadwork_v30_infill.md",
       "path": "canon/00_philosophical_foundations.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1757,7 +2302,8 @@
       "title": "\u201cEthical Framework\u201d \u2014 in 17 docs, unregistered",
       "detail": "appears in 17 design docs (66 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/npcs/npc_behavior_system_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1765,7 +2311,8 @@
       "title": "\u201cFramework Drift\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/ui/valoria_ui_ux_v4.md, systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30.md",
       "path": "systems/ui/valoria_ui_ux_v4.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1773,7 +2320,8 @@
       "title": "\u201cGrand Contest\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (23 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/social_contest/social_contest_v30.md, systems/ui/valoria_ui_ux_v4.md, engine/params/contest.md",
       "path": "systems/social_contest/social_contest_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1781,7 +2329,8 @@
       "title": "\u201cHeresy Investigation\u201d \u2014 in 31 docs, unregistered",
       "detail": "appears in 31 design docs (64 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/social_contest/social_contest_v30.md, systems/factions/factions_personal_v30.md",
       "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1789,7 +2338,8 @@
       "title": "\u201cInstitutional Pressure\u201d \u2014 in 16 docs, unregistered",
       "detail": "appears in 16 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. proposals/2026-07-18-precedent-to-mechanism-design-brief.md, systems/_architecture/hybrid_gaps_v30.md, systems/world/geography_v30.md",
       "path": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1797,7 +2347,8 @@
       "title": "\u201cMass Seizure\u201d \u2014 in 14 docs, unregistered",
       "detail": "appears in 14 design docs (41 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, engine/params/bg/ci_seizure.md",
       "path": "systems/victory/victory_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1805,7 +2356,8 @@
       "title": "\u201cMoral Relativism\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (16 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/_architecture/complete_systems_reference.md, systems/npcs/npc_behavior_system_v1.md",
       "path": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1813,7 +2365,8 @@
       "title": "\u201cParliamentary Manoeuvre\u201d \u2014 in 18 docs, unregistered",
       "detail": "appears in 18 design docs (38 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/ministry.md, engine/params/bg/institutions.md, systems/factions/faction_layer_v30.md",
       "path": "engine/params/bg/ministry.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1821,7 +2374,8 @@
       "title": "\u201cParliamentary Vote\u201d \u2014 in 19 docs, unregistered",
       "detail": "appears in 19 design docs (34 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/parliamentary_transfer_v30.md, systems/social_contest/social_contest_v30.md, systems/social_contest/social_contest_system_v2.md",
       "path": "systems/factions/parliamentary_transfer_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1829,7 +2383,8 @@
       "title": "\u201cPast-Oriented Pulling\u201d \u2014 in 14 docs, unregistered",
       "detail": "appears in 14 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/threadwork_superseded.md, systems/threadwork/threadwork_v30.md, systems/threadwork/threadwork_v30_infill.md",
       "path": "engine/params/threadwork_superseded.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1837,7 +2392,8 @@
       "title": "\u201cPeninsular Sovereignty\u201d \u2014 in 19 docs, unregistered",
       "detail": "appears in 19 design docs (46 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/overview/peninsular_strain_v30.md, systems/overview/peninsular_strain_v30_index.md",
       "path": "systems/victory/victory_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1845,7 +2401,8 @@
       "title": "\u201cPriority Tree\u201d \u2014 in 14 docs, unregistered",
       "detail": "appears in 14 design docs (99 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30_index.md, systems/npcs/npc_behavior_system_v1_index.md, systems/npcs/npc_behavior_v30.md",
       "path": "systems/npcs/npc_behavior_v30_index.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1853,7 +2410,8 @@
       "title": "\u201cRendering Crisis\u201d \u2014 in 15 docs, unregistered",
       "detail": "appears in 15 design docs (31 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/threadwork/threadwork_v30.md, systems/threadwork/threadwork_v30_infill.md, engine/params/threadwork_superseded.md",
       "path": "systems/threadwork/threadwork_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1861,7 +2419,8 @@
       "title": "\u201cResonant Style\u201d \u2014 in 33 docs, unregistered",
       "detail": "appears in 33 design docs (159 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30_infill.md, systems/npcs/npc_behavior_v30.md",
       "path": "systems/npcs/npc_behavior_system_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1869,7 +2428,8 @@
       "title": "\u201cSelf-Other\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (50 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v1_pp718_vetting.md, systems/characters/conviction_taxonomy_v30.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
       "path": "systems/characters/conviction_track_v1_pp718_vetting.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1877,7 +2437,8 @@
       "title": "\u201cSouthernmost Dominion\u201d \u2014 in 13 docs, unregistered",
       "detail": "appears in 13 design docs (20 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/02_canon_constraints.md, engine/params/bg/geography.md, engine/params/bg/victory.md",
       "path": "canon/02_canon_constraints.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1885,7 +2446,8 @@
       "title": "\u201cSovereign Authority Doctrine\u201d \u2014 in 14 docs, unregistered",
       "detail": "appears in 14 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/factions/faction_politics_v30.md",
       "path": "systems/npcs/npc_behavior_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1893,7 +2455,8 @@
       "title": "\u201cSufficient Scope\u201d \u2014 in 13 docs, unregistered",
       "detail": "appears in 13 design docs (33 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/_architecture/scale_transitions_v30.md, systems/_architecture/integration_proposal_v30.md, systems/_architecture/propagation_spec_v1.md",
       "path": "systems/_architecture/scale_transitions_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1901,7 +2464,8 @@
       "title": "\u201cThread Operation\u201d \u2014 in 14 docs, unregistered",
       "detail": "appears in 14 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v1.md, systems/characters/conviction_track_v30_index.md, systems/npcs/npc_behavior_v30.md",
       "path": "systems/characters/conviction_track_v1.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1909,7 +2473,8 @@
       "title": "\u201cThread Tension\u201d \u2014 in 18 docs, unregistered",
       "detail": "appears in 18 design docs (54 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
       "path": "systems/world/southernmost_v30_infill.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1917,7 +2482,8 @@
       "title": "\u201cThread-Read\u201d \u2014 in 28 docs, unregistered",
       "detail": "appears in 28 design docs (119 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/fieldwork_v30.md, systems/fieldwork/fieldwork_v30_infill.md, systems/fieldwork/fieldwork_rationale.md",
       "path": "systems/fieldwork/fieldwork_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1925,7 +2491,8 @@
       "title": "\u201cTorben Loyalty\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/early_game_ignition_analysis.md, systems/npcs/npc_behavior_v30.md",
       "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1933,7 +2500,8 @@
       "title": "\u201cWarden Cooperation\u201d \u2014 in 19 docs, unregistered",
       "detail": "appears in 19 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/geography.md, engine/params/bg/phases.md, engine/params/threadwork.md",
       "path": "engine/params/bg/geography.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     },
     {
       "category": "unregistered_term",
@@ -1941,7 +2509,8 @@
       "title": "\u201cWarden Recognition\u201d \u2014 in 13 docs, unregistered",
       "detail": "appears in 13 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/fieldwork/fieldwork_bg_v30.md",
       "path": "systems/victory/victory_v30.md",
-      "lane": "IN"
+      "lane": "IN",
+      "severity": "low"
     }
   ]
 }

@@ -35,6 +35,13 @@ description: >
 > - If you find yourself filtering results to look "cleaner," STOP: that is the failure mode this
 >   doctrine exists to prevent (recorded 2026-07-22 after the audit was found silently culling 16
 >   systems + four length/threshold floors).
+> - **The `--emit-findings` feed carries ALL EIGHT modes now (2026-07-23, schema 2).** It used to
+>   surface only B (implied-missing) + H (isolates) — the ledger saw ¼ of what the audit computed.
+>   Now C (notional), D (cascade-sinks), E (sparse-context), F (throughline-orphans), G (vocab-debt)
+>   ride the feed too; high-volume modes carry a bounded sample + a true `_total` (never a silent cap).
+>   The Incompleteness Ledger stamps a **severity** (high/med/low) per category so findings can be
+>   triaged — the port-blocking spine (isolates, doc:null, orphan-emit) ranks above hygiene (notional,
+>   sparse, vocab-debt). Adding a mode = extend `emit_structural_findings` + `scan_audit_structural`.
 > - **The `--emit-findings` feed obeys this too (retain-and-flag, added 2026-07-22).** An adversarial
 >   pass caught the first cut *dropping* lower-confidence findings (hub×hub Mode-B pairs, and — before
 >   Direction #5 — Key-token Mode-H isolates) from `audit_findings.json`. FIX: emit EVERY finding;
