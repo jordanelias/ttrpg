@@ -470,14 +470,27 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     refused = [dict(sp) for sp in refused_specs]
     n_strong = len(strong)
     all_specs = strong + refused
-    cols = _centered_line_cols(all_specs, 25)  # field-centre anchor
-    for i, sp in enumerate(all_specs):
-        if i < n_strong:
-            sp.setdefault('starting_position', (start_row, cols[i]))                       # strong: front line
-        else:
-            sp.setdefault('stance', 'hold')
-            sp.setdefault('starting_position',
-                          (start_row - REFUSE_ECHELON * advance_dir, cols[i]))             # refused: echeloned BACK
+    # [ED-MB-0025 wing-placement fix, sibling of build_envelopment] Honour an EXPLICIT starting_position
+    # and anchor the REFUSED wing on the strong wing's ACTUAL column span, not a phantom field-centre.
+    # Previously every column came from `_centered_line_cols(all_specs, 25)` (field-centre) applied via
+    # setdefault, so a caller pre-setting the strong wing at col 9 (the `_envelop_army`/`_refused_army`
+    # idiom) but leaving the refused spec unset placed the refused wing at ~col 26 — nowhere near the
+    # strong wing, breaking the oblique "staircase" the function documents.
+    default_cols = _centered_line_cols(all_specs, 25)          # field-centre fallback for un-placed specs
+    resolved_cols = [sp['starting_position'][1] if 'starting_position' in sp else default_cols[i]
+                     for i, sp in enumerate(all_specs)]
+    for i, sp in enumerate(strong):
+        sp.setdefault('starting_position', (start_row, resolved_cols[i]))                  # strong: front line
+    # refused wing echeloned BACK, its default column just to the RIGHT of the strong wing's real span
+    s_right = max(resolved_cols[i] + _spec_span(all_specs[i])[1] for i in range(n_strong))
+    _next = s_right + DEPLOY_GAP
+    for j, sp in enumerate(refused):
+        sp.setdefault('stance', 'hold')
+        if 'starting_position' not in sp:
+            cmin, cmax = _spec_span(sp)
+            col = int(round(_next - cmin))
+            _next = col + cmax + DEPLOY_GAP
+            sp['starting_position'] = (start_row - REFUSE_ECHELON * advance_dir, col)       # refused: echeloned BACK
     specs = all_specs
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)

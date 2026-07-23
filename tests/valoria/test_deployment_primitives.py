@@ -92,3 +92,24 @@ def test_build_envelopment_honors_explicit_wing_positions():
     u = build_envelopment(center, wings, 'A', 'A')
     wing_cols = sorted(min(c for _r, c in a.cells()) for a in u.subunits[1:])
     assert wing_cols == [2, 20], f"explicit wing columns must be honored, got {wing_cols}"
+
+
+def test_build_refused_flank_honors_strong_position():
+    """build_refused_flank sibling fix: with the strong wing explicitly placed and the refused wing
+    auto-placed, the refused wing sits adjacent to the strong wing's ACTUAL span (echeloned back), not
+    against a phantom field-center."""
+    from mass_battle.engine import build_refused_flank  # noqa: E402
+    row = SIDE_A_START_ROW
+    strong = [{'shape': 'Line', 'troop_type': 'infantry', 'troops': 133, 'concentration': 100,
+               'starting_position': (row, 9)}]
+    refused = [{'shape': 'Line', 'troop_type': 'infantry', 'troops': 133, 'concentration': 100}]
+    u = build_refused_flank(strong, refused, 'A', 'A')
+    strong_col = sum(c for _r, c in u.subunits[0].cells()) / len(u.subunits[0].cells())
+    refused_col = sum(c for _r, c in u.subunits[1].cells()) / len(u.subunits[1].cells())
+    # refused wing must be near the strong wing (to its right), not off at the phantom field-center (~26)
+    assert refused_col - strong_col <= 8, \
+        f"refused wing must be adjacent to the strong wing at col {strong_col:.0f}, got {refused_col:.0f}"
+    # and echeloned BACK (different row from the strong wing)
+    strong_row = sum(r for r, _c in u.subunits[0].cells()) / len(u.subunits[0].cells())
+    refused_row = sum(r for r, _c in u.subunits[1].cells()) / len(u.subunits[1].cells())
+    assert strong_row != refused_row, "refused wing must be echeloned back (different row)"

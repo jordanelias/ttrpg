@@ -16,7 +16,11 @@ Archived entries in tests/coverage_matrix_archive.md
   Honest gauge (matched-density explicit blocks): envelopment 100% → ~40% → density artifact gone, mechanic
   under-performs (real work remains). All 4 bat.py goldens re-recorded (deliberate composed-row change;
   tier mode → density/gradient inert there): unit b70a9348, cell d46c8808, unit_field 3cc40104, cell_field f9c6dea1.
-- Tests: `tests/valoria/test_deployment_primitives.py` (6).
+- **Adversarial-review fix:** `build_refused_flank` had the *same* phantom-anchor bug (5th-critic finding) —
+  refused wing placed against the field-center, ignoring an explicitly-placed strong wing. Same fix applied
+  (honor pre-set positions; place the refused wing on the strong wing's actual span). Latent (the gauge sets
+  both positions explicitly → byte-exact unchanged), was uncovered by tests; now covered.
+- Tests: `tests/valoria/test_deployment_primitives.py` (7 — incl. refused-flank sibling-fix).
 
 ## 2026-07-23 — ED-MB-0024: DG-2 fighting-withdrawal residuals (emergent entry + rally + pocket exits)
 - Completes the three parts ED-MB-0005 deferred after shipping the yield state + commanded entry
