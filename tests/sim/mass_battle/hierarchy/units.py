@@ -1680,6 +1680,12 @@ class Unit:
     hp_max: int = 0
     routed: bool = False
     broken: bool = False
+    # ED-MB-0022: Feigned Retreat (PP-256). `feigned` = this unit declared a Feigned Retreat and is
+    # withdrawing to bait a pursuer (its "rout" is a ruse). `overextended` = a pursuer that failed the
+    # PP-256 Discipline check while chasing a feigning enemy — its NEXT engagement pool is cut by
+    # OVEREXTEND_PENALTY. Both are inert unless PC_FEIGNED_RETREAT is ON (default OFF, byte-exact).
+    feigned: bool = False
+    overextended: bool = False
     stance: str = "balanced"
     # v22/G-11: Speed tier — determines pursuit capability.
     # [canonical: designs/provincial/mass_battle_v30.md L120 — "Slow / Standard / Fast"]
@@ -1796,6 +1802,11 @@ class Unit:
             raw = self.command * (1.0 + cohesion) + pen + stam_pen
         else:
             raw = min(self.effective_size, self.command) + self.command + pen + stam_pen
+        # ED-MB-0022: an OVEREXTENDED pursuer (failed the PP-256 Feigned Retreat Discipline check)
+        # re-engages at a bounded pool penalty. Gated by PC_FEIGNED_RETREAT (default OFF -> flag never
+        # set -> branch inert -> byte-exact). [canonical: mass_battle_v30.md §B.4 — Overextended -2D]
+        if PC_FEIGNED_RETREAT and self.overextended:
+            raw -= OVEREXTEND_PENALTY
         return max(1, math.floor(raw))
 
     def check_drift(self):

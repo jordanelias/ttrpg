@@ -2,6 +2,24 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0022: Feigned Retreat tactic (PP-256)
+- Wires the previously-inert Feigned Retreat dice-modifier row (mass_battle_v30 §A.12 / §B.4) into the
+  field engine's pursuit path. A unit that declares a Feigned Retreat (`Unit.feigned`) withdraws as if
+  routing to bait a pursuer; when a Fast victor pursues it, `resolve_feigned_retreat` runs the two-stage
+  resolution — (1) pursuing general rolls Command Ob 2 to **recognise** the feint (success → no effect);
+  (2) if deceived, a Discipline **Ob 1** check (PP-256). Failing (2) marks the pursuer `overextended`,
+  cutting its next engagement pool by `OVEREXTEND_PENALTY` (=2) via a gated branch in `base_combat_pool`.
+- **Convention (verified, not a bug):** the checks use the shared `roll_pool` net-successes convention
+  (botch die included) that every §A check uses. Realized hold rates: Disc-1 ~40% (matches PP-256 exactly),
+  Disc-4 ~74.5% vs the doc's no-botch binomial ~87%. A bespoke botch-free counter was rejected (scale-local
+  dialect = CLAUDE.md §10 guardrail).
+- **Gated OFF** (`PC_FEIGNED_RETREAT`, default 0) → flags never set + pool branch inert → byte-exact;
+  additionally the pursuit path is in `run_multi_unit_battle`, NOT the bat.py single-pair golden battery →
+  double-safe. Transient flags cleared at `reset_morale_between_battles`. `needs_jordan` on the default-flip
+  + the `OVEREXTEND_PENALTY` magnitude (reuses the §B.4 strategic −2D at field scale — confirm transfer).
+- Tests: `tests/valoria/test_feigned_retreat.py` (6) — Disc-rate band + monotonicity, recognise rises with
+  Command, overextend only when deceived+failed, non-feigning no-op, gate-OFF inert, pool-penalty ON vs OFF.
+
 ## 2026-07-23 — ED-MB-0021: P-DEC-3 per-troop-type density cap
 - Jordan-ratified mechanism (spatial_model_v2_plan §9 P-DEC-3): a cavalry cell holds fewer troops than an
   infantry cell ("fewer horses than men fit per unit area") — a per-troop-type density cap, NOT a larger box.
@@ -267,64 +285,6 @@ Archived entries in tests/coverage_matrix_archive.md
   (`resolve_toi_and_commit`) plus reach/facing-gated throttling; 5 real bugs found+fixed. G5 byte-exact
   both grid modes unchanged; mirror cav-vs-cav fully balanced (0-0-30). Full detail:
   `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — mass_battle Stage D: role wiring (ED-907 L3) + Envelopment/Refused-Flank presets (archived — condensed)
-- Wired the previously-inert `Subunit.role`; new `engine.build_envelopment`/`build_refused_flank`
-  (ED-909 Unit-level presets, composed from existing primitives, zero new flanking mechanic). LC-8's
-  literal shape retirement deliberately deferred pending Jordan sign-off (executed in the next entry).
-  One real bug found+fixed (adversarial review): `orders` key not forwarded by `build_army`. G5
-  byte-exact unchanged. Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — mass_battle LC-8: retire Horseshoe/RefusedFlank as Subunit.shape values (ED-909) (archived — condensed)
-- Jordan-approved retirement: `Horseshoe`/`RefusedFlank` removed from `geometry.CELL_PATTERN_FN`/
-  `config.MIN_DISCIPLINE`; only `Line`/`Arrowhead`/`GappedLine`/`Column` remain valid subunit-level
-  shapes; envelopment/refused-flank now exist only as Unit-level `build_envelopment`/`build_refused_flank`
-  compositions. `reset_positions` fixed (per-subunit own spawn column, was one shared shape anchor).
-  `bat.py`/`gauge_mb.py` battery migrated + re-baselined, byte-exact verified. `tests/valoria`
-  81 passed/10 skipped. Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — mass_battle workbench: multi-subunit preset dispatch + visualization battery (archived — condensed)
-- Workbench extended to visualize real multi-subunit compositions (`army`/`envelopment`/
-  `refused_flank` preset dispatch); a real frontend preset-dispatch bug found+fixed (stale-dropdown
-  values silently overriding the actual multi-subunit preset). Two new symmetric multi-subunit-vs-
-  multi-subunit presets (`M3`, `OBL`). Verified via Playwright across all 8 presets, both movement
-  modes. Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — three Jordan rulings executed: field default flip (ED-1089), subunit cap 11 (ED-1090), frontal recoil gate (ED-1091) (archived — condensed)
-- ED-1089: `FIELD_MOVEMENT`/`PC_NODE_COHESION` defaults flipped 0→1 (field is now the default engine
-  path); CI-gate `_PINNED_OFF` fix (env.pop→explicit pins) closed a real silent-regression risk.
-  ED-1090: videogame subunit cap = 11 (`build_army`). ED-1091: frontal-only charge-recoil
-  (`PC_RECOIL_FRONTAL`, "a brace cannot repel what it cannot face"). All grid digests byte-identical
-  under pins. Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — Stage E: Army Configuration Mode (deployment UI) (archived — condensed)
-- Click-to-place deployment UI ("Deploy Army" tab, additive to Quick Match): `SUBUNIT_CAP` hoisted to
-  module scope; new `/api/roster-options` endpoint (single source, no frontend drift); one shared
-  canvas for placement + replay. Verified via Playwright (cap enforcement, role gating, LC-8 shape
-  removal all correct). Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — mass_battle: T1-T4 charge-recoil actor/timing/reach ruling (ED-1095) (archived — condensed)
-- T1 actor-gate (recoil requires charger troop_type=='cavalry'); T2 brace-setup delay (≥1 tick before
-  braced counts); T3 reach-gate (structural, TROOP_TYPE_REACH stays empty pending a separate ruling);
-  T4 mounted-archer default kiting (`role='Kite'`). Byte-exact verified. Discovered but not fixed
-  here: `envelop`/`sweep`/`wheel` only exist on the legacy grid path, unreachable on the default node
-  path (led directly into the next entry's movement/pathing audit). Full detail:
-  `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — Movement/pathing audit (ED-1096) fix plan execution (ED-MB-0001) (archived — condensed)
-- Fable-led audit (ED-1096) + 8-step fix plan executed: node-path drift/reset-position corruption
-  fixes, weapon-derived unit_type wiring (gate 2), lateral file-holding + WHEEL facing-stall fixes,
-  the waypoint primitive (`_resolve_maneuver_goal`/`_envelop_goal`/`_sweep_goal`/`_kite_goal` —
-  first real steering for envelop/sweep/kite on the live node/field path), and `PER_CELL`'s default
-  flip to `'1'` (gate 4). A 5-dimension adversarial review found 6 more real defects, all fixed same
-  session (kite never ported to the node path; an escort column-override regression; a test-fixture
-  toggle leak; two minor dead-param/sentinel-semantics bugs; stale digest-provenance documentation).
-  **Disclosed, not fixed:** enabling `PER_CELL`'s previously-inert combat mechanics made a two-subunit
-  pinning-body-plus-detachment validator fixture rout before its detour could complete (a combat-pacing
-  interaction, not a movement regression) — landed as a loud `xfail`, flagged for whoever next works
-  PER_CELL=1 combat balance. All 4 `bat.py` digest modes re-recorded where genuinely changed (grid
-  modes confirmed byte-exact where the change was node-path-only); `tests/valoria` 84 passed/10
-  skipped/1 xfailed. Full detail: `tests/coverage_matrix_archive.md`.
 
 ## 2026-07-04 — mass_battle: Cannae gauge audit (ED-MB-0002) ratified; DG-3/DG-4 implemented (archived — condensed)
 - ED-MB-0002 ratified (PR #73 merge = ratification, ED-1094 convention). Two bug fixes landed first

@@ -1829,6 +1829,10 @@ def reset_morale_between_battles(unit):
     unit.morale = unit.morale_start
     unit.routed = False
     unit.broken = False
+    # ED-MB-0022: Feigned Retreat is a per-battle tactic; clear its transient flags at the battle
+    # boundary so a feint/overextension does not leak into the next battle (inert when the toggle is OFF).
+    unit.feigned = False
+    unit.overextended = False
     for atom in unit.subunits:
         if atom.morale is not None:
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
@@ -2006,6 +2010,42 @@ def recall_check(pursuer):
     [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
     net = roll_pool(pursuer.command)
     return net >= RECALL_OB
+
+
+def feigned_retreat_recognized(pursuer):
+    """Pursuing-side general rolls Command d10s vs Ob 2 to RECOGNISE a Feigned Retreat as a feint.
+    Returns True if recognised — the feint has no effect and pursuit proceeds normally.
+    [canonical: mass_battle_v30.md §A.12 Clarification — "d10s equal to the opposing general's
+     Command against Ob 2 to recognise the Feigned Retreat as a feint"]"""
+    net = roll_pool(pursuer.command)
+    return net >= FEIGNED_RECOGNIZE_OB
+
+
+def feigned_retreat_check(pursuer):
+    """A pursuer deceived by a Feigned Retreat makes a Discipline check Ob 1 to HOLD (not overextend).
+    Returns True if it holds; False if it OVEREXTENDS (chases into the trap).
+    [canonical: PP-256 / mass_combat.md §PP-256 — pursuing-side Discipline check Ob 1; hold
+     P~87% at Discipline 4, ~40% at Discipline 1]"""
+    net = roll_pool(pursuer.discipline)
+    return net >= FEIGNED_RETREAT_OB
+
+
+def resolve_feigned_retreat(pursuer, feigning_unit):
+    """Resolve a Feigned Retreat when `pursuer` begins chasing a `feigning_unit`. Inert unless
+    PC_FEIGNED_RETREAT is ON. Two-stage per §A.12: recognise (Command Ob 2) then, if deceived,
+    Discipline Ob 1. On a failed Discipline check the pursuer is marked OVEREXTENDED (its next
+    engagement pool is cut by OVEREXTEND_PENALTY — see units.base_combat_pool). Returns a dict
+    describing the outcome, or None if the feint did not apply.
+    [canonical: PP-256, mass_battle_v30.md §A.12 / §B.4 tactic card — Overextended]"""
+    if not PC_FEIGNED_RETREAT or not getattr(feigning_unit, 'feigned', False):
+        return None
+    if feigned_retreat_recognized(pursuer):
+        return {'recognized': True, 'overextended': False}
+    # Deceived — Discipline check to avoid overextending.
+    held = feigned_retreat_check(pursuer)
+    if not held:
+        pursuer.overextended = True
+    return {'recognized': False, 'overextended': not held}
 
 
 # ─── MULTI-UNIT BATTLE ORCHESTRATOR (D-3, D-5, v22) ──────────────────────────
@@ -2257,6 +2297,14 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 if victor.speed == "Fast" and routing.hp > 0:
                     # Fast unit pursues — track for ongoing pursuit
                     # [canonical: §A.12 L513 — "Pursuit: Fast units only"]
+                    # ED-MB-0022: if the "routing" unit is actually feigning (Feigned Retreat, PP-256),
+                    # the pursuer may be deceived and overextend. Inert unless PC_FEIGNED_RETREAT is ON.
+                    fr = resolve_feigned_retreat(victor, routing)
+                    if fr is not None:
+                        turn_log.setdefault('feigned_retreats', []).append({
+                            'pursuer': victor.name, 'feigning': routing.name,
+                            'recognized': fr['recognized'], 'overextended': fr['overextended'],
+                        })
                     pursuing_units.append((victor, routing, victor_side, pair_idx))
                 else:
                     # Non-Fast: freed attacker joins adjacent engagement
