@@ -52,7 +52,8 @@
       "status_noncurrent": 2
     },
     "WR": {
-      "total": 8,
+      "total": 9,
+      "contract_doc_null": 1,
       "sim_not_implemented": 5,
       "status_noncurrent": 3
     },
@@ -77,8 +78,8 @@
       "sim_not_implemented": 3
     },
     "unassigned": {
-      "total": 44,
-      "contract_doc_null": 9,
+      "total": 43,
+      "contract_doc_null": 8,
       "contract_island": 4,
       "contract_missing_entirely": 2,
       "contract_no_resolver": 1,
@@ -89,10 +90,10 @@
     }
   },
   "prose_marker_rollup": {
-    "gap": 274,
-    "assumption": 246,
-    "stub": 30,
-    "todo": 14
+    "gap": 64,
+    "assumption": 61,
+    "stub": 4,
+    "todo": 8
   },
   "coverage_gaps": [
     "null/empty REQUIRED fields in registries other than module_contracts (id_reservations, descriptor_registry 'IN FLUX' roster, names_index, \u2026) are not yet structurally scanned",
@@ -581,7 +582,7 @@
       "title": "audit",
       "detail": "module has no home design doc (doc: null) \u2014 contract unauthored",
       "path": "",
-      "lane": "unassigned"
+      "lane": "WR"
     },
     {
       "category": "contract_doc_null",

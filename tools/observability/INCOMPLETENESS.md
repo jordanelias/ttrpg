@@ -29,7 +29,7 @@ The point of the vectorization tool is to surface what is missing. This ledger a
 | Docs whose Status is not current (PROPOSED/DRAFT/STALE/…) | 25 |
 | Frequent authored terms with NO registered token (missing registrations) | 39 |
 
-_Cross-reference — prose markers in the decisions digest: gap 274, assumption 246, stub 30, todo 14._
+_Cross-reference — prose markers in the decisions digest: gap 64, assumption 61, stub 4, todo 8._
 
 ## By lane
 
@@ -39,10 +39,10 @@ _Cross-reference — prose markers in the decisions digest: gap 274, assumption 
 | FI | 7 |
 | SC | 10 |
 | FA | 21 |
-| WR | 8 |
+| WR | 9 |
 | IN | 127 |
 | SE | 6 |
-| unassigned | 44 |
+| unassigned | 43 |
 
 ## ⚠ Known coverage gaps (this ledger's OWN incompleteness)
 
@@ -134,7 +134,7 @@ _The ledger is not exhaustive. Categories it does not yet scan:_
 
 ### Module contracts with no home doc (doc:null)
 
-- **audit** (unassigned): module has no home design doc (doc: null) — contract unauthored
+- **audit** (WR): module has no home design doc (doc: null) — contract unauthored
 - **domain_actions** (unassigned): module has no home design doc (doc: null) — contract unauthored
 - **engine_clock** (unassigned): module has no home design doc (doc: null) — contract unauthored
 - **game_director** (unassigned): module has no home design doc (doc: null) — contract unauthored
