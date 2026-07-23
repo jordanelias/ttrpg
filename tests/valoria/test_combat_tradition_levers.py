@@ -43,11 +43,25 @@ def test_surface_exists_and_is_inert_by_default():
         assert ABIL.ability_factor(plain, ch) == 1.0, ch
 
 
-def test_every_new_ability_targets_a_live_channel():
-    """The four U10 abilities each target one of the five morphology-lever channels (no typo'd/dead lever)."""
-    live = {'edge_read', 'spine_press', 'edge_grab', 'choke_control', 'facing_regime'}
-    for name in ('shinogi', 'zwerchhau', 'ringen_am_schwert', 'guardia'):
-        assert ABIL.ABILITIES[name]['lever'] in live, name
+def test_every_ability_targets_a_live_consumed_lever():
+    """No ability targets a typo'd/dead lever. Every ability's lever must be one actually CONSUMED in the engine —
+    the five morphology channels OR a live tradition channel/counter lever. (ED-PC-0026: after the adversarial HEMA
+    regrounding, the morphology-lever abilities are exactly shinogi->spine_press and ringen_am_schwert->edge_grab;
+    zwerchhau re-homed to counter_select, guardia removed — edge_read/choke_control/facing_regime are BARE levers,
+    fired by weapon geometry, awaiting grounded content.)"""
+    morphology = {'edge_read', 'spine_press', 'edge_grab', 'choke_control', 'facing_regime'}
+    channels = {'measure', 'tempo', 'visual', 'precommit', 'leverage', 'tactile', 'balance',
+                'counter_success', 'counter_select', 'anti_overcommit'}
+    live = morphology | channels
+    for name, a in ABIL.ABILITIES.items():
+        assert a['lever'] in live, f"{name} targets unknown/dead lever {a['lever']!r}"
+    # the two morphology-lever abilities whose HEMA grounding held
+    assert ABIL.ABILITIES['shinogi']['lever'] == 'spine_press'
+    assert ABIL.ABILITIES['ringen_am_schwert']['lever'] == 'edge_grab'
+    # the regrounded ones landed on their corrected homes; guardia is gone
+    assert ABIL.ABILITIES['zwerchhau']['lever'] == 'counter_select'
+    assert ABIL.ABILITIES['atajo']['lever'] == 'leverage'
+    assert 'guardia' not in ABIL.ABILITIES
 
 
 def test_shinogi_amplifies_the_bind_PER_EVENT_not_aggregate():
@@ -75,12 +89,21 @@ def test_ringen_mitigates_the_grab_self_hazard():
     assert CT.grab_sigma(grappler, opp, CFG) > CT.grab_sigma(grabber, opp, CFG)
 
 
-def test_guardia_amplifies_facing_regime():
-    """The Italian single-time profile (guardia) commits the facing regime harder — a larger facing_target for the
-    same stance/grip/weapon."""
-    plain = Combatant('a', weapon='sabre'); plain.grip_position = 0.5
-    ital = Combatant('a', weapon='sabre', tradition='italian', equipped=['guardia']); ital.grip_position = 0.5
-    assert abs(S.facing_target(ital, True, CFG)) > abs(S.facing_target(plain, True, CFG))
+def test_facing_regime_lever_live_from_weapon_class():
+    """facing_regime is a BARE morphology lever (ED-PC-0026: the guardia ability was REMOVED — "guardia stretta"
+    names a close-MEASURE guard, not body-FACING, a winden-class misattribution per the adversarial HEMA critic).
+    The lever still fires from weapon geometry: a ONE-handed weapon fights bladed/PROFILE (facing_pref +) and a
+    TWO-handed weapon squares up (facing_pref −), so facing_target carries opposite-signed regimes for a 1H vs a 2H
+    weapon — live from WP.facing_pref, no ability. Isolated by toggling FACING_REGIME_K so there is no cross-weapon
+    confound in the null direction."""
+    off = dict(CFG); off['FACING_REGIME_K'] = 0.0
+    oneH = Combatant('a', weapon='sabre'); oneH.grip_position = 0.5           # 1H: facing_pref > 0
+    twoH = Combatant('a', weapon='longsword'); twoH.grip_position = 0.5       # 2H: facing_pref < 0
+    # the lever moves facing_target off its lever-off baseline, in opposite directions for 1H vs 2H
+    assert S.facing_target(oneH, True, CFG) != S.facing_target(oneH, True, off)
+    assert (S.facing_target(oneH, True, CFG) - S.facing_target(oneH, True, off)) \
+         * (S.facing_target(twoH, True, CFG) - S.facing_target(twoH, True, off)) < 0, \
+        "the facing_regime lever should push a 1H (profile) and a 2H (square) weapon in opposite directions"
 
 
 def test_levers_add_texture_without_shifting_balance():

@@ -249,7 +249,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
     if sel_head == 'point':
-        return 1.0   # D2 gate: an axial point thrust is grip-INVARIANT in FORCE — a rigid shaft transmits axial compression independent of hand position (`[ASSERTED — rigid-body first principles]`). The choke CONTROL cost lives in systems.choke_counterbalance -> CHOKE_ACCURACY_K, NOT here (U10/ED-PC-0022 re-home; the retired CHOKE_THRUST_K false-dilemma note is above phi_room_percussion).
+        return 1.0   # D2 gate: an axial point thrust's TRANSMISSION is grip-invariant — a rigid shaft carries axial compression from the hands to the point independent of WHERE on the shaft it is gripped (`[ASSERTED — rigid-body transmission only]`). NARROWED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): the prior tag `[ASSERTED — rigid-body first principles]` OVERCLAIMED — the force is human-GENERATED (choking up shortens the rear body-lever available to drive the thrust), which is a real grip-dependent cost. That cost is not zero; it is booked ELSEWHERE as a CONTROL/authority cost — systems.choke_counterbalance -> CHOKE_ACCURACY_K (the legibility/control channel) and thrust_authority(head_len) (the gap-press lever) — NOT as a phi_grip force term. So this 1.0 is the transmission invariant, not a claim of zero total cost.
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']

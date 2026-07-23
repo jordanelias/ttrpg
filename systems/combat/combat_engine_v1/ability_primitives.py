@@ -17,10 +17,12 @@ rather than a hand-set value": the per-ability `value` is now the level-1 anchor
 LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcommit are live (eff_cw consumed at
 ~9 sites). U10/ED-PC-0022 added FIVE morphology-lever channels — 'edge_read', 'spine_press', 'edge_grab',
 'choke_control', 'facing_regime' — consumed at the six U3/U5/U7 lever sites (combat_systems.legibility ×2 /
-bind_sigma / facing_target, contact.grab_sigma). Four are populated (shinogi/zwerchhau/ringen_am_schwert/guardia; ILLUSTRATIVE — per-event effect, ~0 aggregate, see the block below);
-'choke_control' has the SURFACE (the ability_factor hook is live) but no ability yet — a deliberate honest gap: no
-pole/staff tradition in the roster has treatise grounding I would assert, so the channel waits for grounded content
-rather than inventing it. The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen
+bind_sigma / facing_target, contact.grab_sigma). TWO are populated with abilities whose grounding HELD under the
+2026-07-23 adversarial HEMA pass (shinogi->spine_press, ringen_am_schwert->edge_grab; ILLUSTRATIVE — per-event
+effect, ~0 aggregate, see the block below). The other three morphology levers — 'edge_read', 'choke_control',
+'facing_regime' — are BARE (the ability_factor hook is live, factor 1.0 default, byte-identical) awaiting grounded
+content: a deliberate honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
+and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen
 do nothing when equipped — slated for retire-or-reroute (Phase 4 / Jordan's call).
 """
 
@@ -39,8 +41,8 @@ ABILITIES = {
     'true_times':     dict(tradition='english',  grade='S2',    lever='anti_overcommit', op='+', value=0.25,
                            desc="True Times — Silver's true-vs-false times: commitment discipline, fewer over-commits"),
     # Iberian Destreza (S2/S3 — partly reliable; flagged)
-    'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='measure',         op='*', value=1.18,
-                           desc="Atajo — Destreza blade-constraint / measure off the círculo (channel lever; S2/S3)"),
+    'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='leverage',        op='*', value=1.18,
+                           desc="Atajo — Destreza OCCUPATION/interruption of the opponent's line: a blade-constraint/control action via angulation on the círculo, conceptually a bind/LEVERAGE action (analogous to German Stärke-Schwäche), NOT a distance concept — Destreza's distance runs through compás/footwork. [GROUNDING-CORRECTED 2026-07-23, ED-PC-0026: was mis-wired to 'measure'; adversarial HEMA critic — atajo is line-occupation, a leverage action. S2/S3]"),
     # ── U10/ED-PC-0022 MORPHOLOGY-LEVER modulators — the tradition surface the six U3/U5/U7 levers lacked.
     # HONESTY (ED-PC-0023 adversarial review): these are ILLUSTRATIVE seed content for the surface, NOT a proven
     # balance feature. The adversarial balance pass showed the abilities' AGGREGATE win-rate edge is ~0 once
@@ -53,12 +55,18 @@ ABILITIES = {
     # is tradition-AGNOSTIC; more traditions gain grounded abilities as authored (not privileged by construction).
     'shinogi':        dict(tradition='japanese', grade='S2',    lever='spine_press',     op='*', value=1.6,   # [SIM-CALIBRATE]
                            desc="Shinogi — pressing/binding along the single-edged blade's ridge-and-spine (shinogi/mune) to dominate the bind's bearing surface. Grounded to the tradition whose weapon (katana) actually HAS a spine — the physical prerequisite spine() encodes; [provisional grounding — kenjutsu shinogi-receiving, SIM-CALIBRATE value]. Amplifies BIND_SPINE."),
-    'zwerchhau':      dict(tradition='german',   grade='S1/S2', lever='edge_read',       op='*', value=1.6,   # [SIM-CALIBRATE]
-                           desc="Zwerchhau — the Thwart-cut driven with the SHORT/false edge: weaponizes the double/false-edge return-line ambiguity to attack unread (Liechtenauer; amplifies LEGIB_EDGELINE)"),
+    'zwerchhau':      dict(tradition='german',   grade='S1/S2', lever='counter_select',  op='*', value=1.4,   # [SIM-CALIBRATE]
+                           desc="Zwerchhau — the Thwart-cut, a Liechtenauer Meisterhau: crossing the hands to form a structural 'roof' that INTERCEPTS an incoming Oberhau and strikes in the SAME TEMPO. Its documented function is tempo-interception (Ringeck / pseudo-Peter-von-Danzig glosses) — reaching for the single-time counter — NOT false-edge unreadability. [GROUNDING-CORRECTED 2026-07-23, ED-PC-0026: was mis-wired to 'edge_read' on a return-line-ambiguity claim the glosses don't give; adversarial HEMA critic. Now amplifies COUNTER_SELECT alongside Italian mezzo_tempo — the in-tempo counter reach.]"),
     'ringen_am_schwert': dict(tradition='german', grade='S1/S2', lever='edge_grab',      op='*', value=0.4,   # [SIM-CALIBRATE]
                            desc="Ringen am Schwert — wrestling at the sword: a trained grappler seizes the strong/bind of a live blade with far less self-injury (a MITIGATOR, factor<1 on GRAB_EDGE self-hazard)"),
-    'guardia':        dict(tradition='italian',  grade='S2',    lever='facing_regime',   op='*', value=1.5,   # [SIM-CALIBRATE]
-                           desc="Guardia stretta — the Italian single-time strong-side PROFILE (Capoferro/Fabris fight markedly side-on, vs the German square-on), committing the facing regime harder; amplifies FACING_REGIME. [weak grounding — a stance emphasis, not a discrete named technique]"),
+    # 'guardia' REMOVED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): it wired "guardia stretta" onto the
+    # facing_regime (body side-on-vs-square) lever, but "stretta" names a NARROW blade-position / close-MEASURE
+    # guard (paired with misura stretta), a different referent than body facing — the same winden-class category
+    # error (real period term, wrong lever). The Italian profiled-stance TENDENCY facing_regime models is real,
+    # but it has no discrete named technique to anchor an ability honestly, so facing_regime stays a BARE
+    # morphology lever (fires from WP.facing_pref weapon geometry; honest-gap for a tradition amplifier, exactly
+    # like choke_control) rather than ship a misnamed one. edge_read is likewise now bare (zwerchhau re-homed to
+    # counter_select above): both await grounded content, not invented privilege.
 }
 
 

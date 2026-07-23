@@ -86,7 +86,7 @@ INJECTION_POINTS = {
                             'injects': 'defence-mode preference: German prefers wind, Italian refuses it (stay at the point)'},
     'exchange.bind_entry': {'node': 'Bind',
                             'generic': 'bind on wind/partial',
-                            'injects': 'bind-channel modulation: invested spine/edge abilities (shinogi->spine_press, zwerchhau->edge_read) amplify the bind\'s legibility/spine levers a fighter who INVESTED in the bind (bind skill opens the node, the ability sharpens it); refusal (cavazione/disengage) is a measure/disposition choice, NOT an imposed refuse-probability — imposition retired ED-PC-0023'},
+                            'injects': 'bind-channel modulation: an invested spine ability (shinogi->spine_press) amplifies the bind\'s spine lever for a fighter who INVESTED in the bind (bind skill opens the node, the ability sharpens it); the edge-read/legibility lever fires from weapon geometry (bare — no grounded ability, ED-PC-0026); refusal (cavazione/disengage) is a measure/disposition choice, NOT an imposed refuse-probability — imposition retired ED-PC-0023'},
     'exchange.counter':    {'node': 'Riposte',
                             'generic': 'single-time counter select',
                             'injects': 'Italian mezzo_tempo / Japanese sen-no-sen / English true-times'},

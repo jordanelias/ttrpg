@@ -37,7 +37,7 @@ CFG = dict(
   # so a school that specializes in a lever amplifies it into a SITUATIONALLY-DECISIVE edge without distorting field
   # balance. Channels: edge_lines->'edge_read' (legibility), spine->'spine_press' (bind), grab_hazard->'edge_grab'
   # (contact). BASELINE MAGNITUDES [SIM-CALIBRATE] set so the physics is live but the field spread stays within the
-  # ~±4pp harness noise floor; the ability multipliers (winden/zwerchhau/ringen) carry the decisive weight.
+  # ~±4pp harness noise floor; the invested ability multipliers (shinogi/ringen — the two morphology-lever abilities whose HEMA grounding held, ED-PC-0026) carry the decisive weight.
   #   LEGIB_EDGELINE_K: a double/false edge's return-cut ambiguity degrades the defender's read (weapon_physics.edge_lines
   #     -> legibility, same sign as LEGIB_DISTRACT_K); BIND_SPINE_K: a single edge's rigid spine wins the bind bearing-
   #     surface (weapon_physics.spine differential -> bind_sigma); GRAB_EDGE_K: a live edge self-injures an unskilled
