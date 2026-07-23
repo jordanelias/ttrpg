@@ -430,6 +430,60 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 1  # emitted-once, not un-emitted
 
 
+def test_key_graph_does_not_diverge_from_authoritative_engine_graph():
+    """§8 DRIFT GUARD (fix #7): build_g_key re-reads module_contracts emit/consume that
+    tools/observability/build_graph.py already owns — a second parser. They are deliberately DIFFERENT
+    projections (build_graph normalizes types via the Key Type Registry + resolve_key; build_g_key
+    uses raw types at token granularity), so they can't share one kernel without changing outputs.
+    The real §8 hazard is SILENT DIVERGENCE — so pin the invariant instead: build_g_key's
+    system↔system edges must be a SUBSET of build_graph's authoritative graph (graph.json). The token
+    projection may be NARROWER (build_graph adds registry-declared edges) but must never claim
+    connectivity the engine graph denies. If this fails, the two observatories drifted OR graph.json
+    is stale vs module_contracts — either way a human reconciles."""
+    import os, json
+    from pathlib import Path
+    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    gpath = root / 'tools' / 'observability' / 'graph.json'
+    if not gpath.exists():
+        import pytest
+        pytest.skip("graph.json not generated")
+    g = json.loads(gpath.read_text())
+    # build_graph's authoritative system↔system edges: for each key, emitters × consumers
+    from collections import defaultdict
+    emit, cons = defaultdict(set), defaultdict(set)
+    for e in g.get('edges', []):
+        if e.get('kind') == 'emits':
+            emit[e['dst']].add(e['src'])          # dst=key, src=system
+        elif e.get('kind') == 'consumes':
+            cons[e['src']].add(e['dst'])          # src=key, dst=system
+    bg_pairs = set()
+    for k in set(emit) | set(cons):
+        for a in emit.get(k, ()):
+            for b in cons.get(k, ()):
+                if a != b:
+                    bg_pairs.add(frozenset((a, b)))   # module-name pairs
+    # build_g_key's system↔system edges (drop keytype↔system edges — those touch a 'Key:' token)
+    defs = va.derive_tokens(root)
+    design = va.extract_corpus(root, 'L0')[0]
+    tokens, _ = va.curate_tokens(design, defs)
+    lut, norm = va._slug_lookup(tokens)
+    gk = va.build_g_key(root, tokens)
+    # map build_graph module names → tokens so the two are comparable
+    bg_tok_pairs = set()
+    for pr in bg_pairs:
+        a, b = tuple(pr)
+        ta, tb = lut.get(norm(a)), lut.get(norm(b))
+        if ta and tb and ta != tb:
+            bg_tok_pairs.add(frozenset((ta, tb)))
+    gk_sys_pairs = {frozenset((a, b)) for a in gk for b in gk[a]
+                    if not a.startswith('Key:') and not b.startswith('Key:') and a != b}
+    # the invariant: no build_g_key system edge is absent from the authoritative graph
+    spurious = gk_sys_pairs - bg_tok_pairs
+    assert not spurious, (f"build_g_key claims {len(spurious)} system↔system edge(s) the authoritative "
+                          f"engine graph (graph.json) does not — drift or stale graph.json: "
+                          f"{sorted(tuple(sorted(p)) for p in spurious)[:5]}")
+
+
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     """SURFACE-NEVER-CULL (SKILL.md doctrine): the structural-findings feed must EMIT every Mode-B
     and Mode-H finding — lower-confidence ones (hub×hub pairs, Key-token isolates) are RETAINED with

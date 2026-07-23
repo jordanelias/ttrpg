@@ -1162,9 +1162,13 @@ def build_g_key(root, tokens):
     `emits`/`consumes` only, at TOKEN granularity. build_graph.py is the AUTHORITATIVE, richer engine
     graph: it additionally folds the Key Type Registry's emitting/consuming_systems, `from:` fields,
     key-name-drift normalization, and DROP/BROADCAST sentinels, at system/key/scalar granularity. Do
-    NOT treat this token-projection as build_graph's graph. The two agree on system↔system edges today
-    (0 consumed types lack a module emitter); if that ever diverges, single-source the module-level
-    parse. (A follow-up to lift the shared emit/consume parse into one owner is tracked in HANDOFF_IN.)"""
+    NOT treat this token-projection as build_graph's graph. They are DIFFERENT projections by design —
+    build_graph normalizes types via the Key Type Registry + resolve_key, this uses raw types at token
+    granularity — so there is no clean shared kernel to extract without changing outputs. The §8 hazard
+    (silent divergence) is instead pinned by a DRIFT GUARD: test_key_graph_does_not_diverge_from_
+    authoritative_engine_graph asserts this graph's system↔system edges are a SUBSET of build_graph's
+    graph.json — narrower is fine, but it can never claim connectivity the authoritative engine graph
+    denies. If they drift, CI fails and a human reconciles."""
     fp = root / 'references' / 'module_contracts.yaml'
     g = {}
     if not fp.exists():
