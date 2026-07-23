@@ -82,12 +82,14 @@ _SHAPE_BUILD = {
     "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
 }
 
-def footprint_for(shape, troops, concentration):
+def footprint_for(shape, troops, concentration, troop_type=None):
     """Lay `troops` into `shape` at ~`concentration` troops/cell, bounded so per-cell stays
-    in [CELL_FLOOR, CELL_CAP]; returns the cell-set [(r,c), ...]. Achievable density is the
-    closest the shape's discrete geometry allows within the bound."""
+    in [CELL_FLOOR, cell_cap_for(troop_type)]; returns the cell-set [(r,c), ...]. Achievable density
+    is the closest the shape's discrete geometry allows within the bound. [P-DEC-3] A mounted troop_type
+    caps lower (cell_cap_for) so the same troops deploy over MORE cells (wider frontage); troop_type=None
+    or the gate OFF -> CELL_CAP (byte-exact)."""
     troops = max(1, int(troops))
-    lo = math.ceil(troops / CELL_CAP)
+    lo = math.ceil(troops / cell_cap_for(troop_type))
     hi = max(lo, troops // CELL_FLOOR)
     target = min(hi, max(lo, round(troops / max(1.0, float(concentration)))))
     mk, build = _SHAPE_BUILD[shape]
@@ -332,7 +334,7 @@ def _oriented(su):
     oriented_pattern exactly. [Jordan directive — continuous footprint]"""
     troops = getattr(su, 'troops', None)
     if troops is not None:
-        pat = footprint_for(su.shape, troops, su.concentration)
+        pat = footprint_for(su.shape, troops, su.concentration, getattr(su, 'troop_type', None))
         if su.advance_dir == -1:
             return [(r, c, r, c) for r, c in pat]
         max_r = max(r for r, c in pat)

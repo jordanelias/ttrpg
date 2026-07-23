@@ -2,6 +2,19 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0021: P-DEC-3 per-troop-type density cap
+- Jordan-ratified mechanism (spatial_model_v2_plan §9 P-DEC-3): a cavalry cell holds fewer troops than an
+  infantry cell ("fewer horses than men fit per unit area") — a per-troop-type density cap, NOT a larger box.
+- `cell_cap_for(troop_type)` (config): mounted types (cavalry/knights_templar/mounted_archers) cap at 100
+  (half of `CELL_CAP=200`); foot types keep the full cap. Threaded into `footprint_for(…, troop_type)` +
+  its two callers. A mounted body deploys over MORE cells (wider frontage); the combat density factor drops
+  naturally via the higher `ncells` (no attrition edit).
+- **Gated OFF** (`PC_TROOP_DENSITY_CAP`, default 0) → byte-exact (cell_cap_for → CELL_CAP; and the byte-exact
+  cavalry rows use tier mode, not footprint_for). The cavalry cap **value** (100) is a calibration →
+  `needs_jordan` on the value + default-flip (mirrors ED-MB-0016).
+- Tests: `tests/valoria/test_troop_density_cap.py` (4) — OFF byte-exact, ON caps mounted lower, cavalry
+  deploys wider, None-type uses full cap.
+
 ## 2026-07-23 — perimeter target-point / face-normal geometry primitive (Jordan ruling 2026-07-23)
 - New `tests/sim/mass_battle/perimeter.py`: pure-geometry primitive from `perimeter_targeting_geometry_v1.md`.
   A subunit's perimeter carries TARGET POINTS an attacker aims at, each with an outward NORMAL (the

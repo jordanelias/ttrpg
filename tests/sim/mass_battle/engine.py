@@ -120,7 +120,7 @@ def _spec_span(sp):
         shape = ROLE_SPEC[sp['role']]['shape']
     shape = shape or 'Line'
     troops, conc = sp.get('troops'), sp.get('concentration')
-    pat = footprint_for(shape, troops, conc) if (troops is not None and conc is not None) \
+    pat = footprint_for(shape, troops, conc, sp.get('troop_type')) if (troops is not None and conc is not None) \
         else CELL_PATTERN_FN[shape](sp.get('tier', 3))
     cs = [c for _r, c in pat]
     return (min(cs), max(cs)) if cs else (0, 0)
