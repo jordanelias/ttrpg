@@ -64,8 +64,8 @@ pool — until its depth is spent; a **shallow** one thins at the front immediat
 
 1. **T1 Phase 1b — literal coverage shrink + lateral close-up.** Dissolve sub-`CELL_FLOOR` cells, merge
    remnants into neighbours, and slide columns in when a whole column dies (the "shrink not holes"
-   lifecycle, task #29). Higher blast radius (mutates the cell set mid-battle: facing vectors, node
-   cohesion, col grid) → its own increment with a targeted regression.
+   lifecycle, task #29). Higher blast radius (mutates the cell set mid-battle: facing vectors, the
+   node-relational offsets, the column grid) → its own increment with a targeted regression.
 2. **T2 — inter-subunit rotation.** A relief order that, over several ticks, blends two same-army
    subunits' cells at the shared boundary (cascading rotate-by-cell), transfers the front, then separates
    — the spent subunit rotates to the rear. Composes on T1's cell-reflow primitive.

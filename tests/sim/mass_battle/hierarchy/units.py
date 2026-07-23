@@ -742,7 +742,8 @@ class Subunit:
             else:
                 ct[pid] = tgt
                 rem -= tgt
-        if rem > 1e-9:  # leftover (only if total exceeded sum of targets — rounding safety) tops the front
+        if rem > 0:  # leftover (only if living total exceeded sum of spawn targets — a float-rounding
+            # safety that cannot arise from casualties, which only reduce the total) tops the front cell
             ct[min(ct.keys(), key=lambda pid: (pid[0], pid[1]))] += rem
 
     def _init_node_state(self):
