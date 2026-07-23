@@ -301,6 +301,27 @@ Five structurally-independent read-only critics were tasked to **refute** the lo
   co-occurring channels **77–91%**. Precision fix: it is two *correlated* zone classifiers, not one shared
   zone (wording narrowed in §3b).
 
+### M1 REFINED (5th critic — directional claim holds, precision corrected + a new bug)
+
+The 5th critic partially confirmed M1 and sharpened it:
+- **"Density alone" overstates.** `_lanchester_strength = n_eng_cols × (min(tpc,CELL_CAP)/DENSITY_REF)` —
+  density and frontage are **multiplicatively entangled**; within one shape you cannot vary density
+  independent of engaged-column count. The real driver is **compactness** (density × frontage), not a clean
+  density variable. My A/B "dense" opponent was 67/cell, not the envelop army's true 133/cell (footprint_for's
+  coarse search can't hit 133/cell for a single Line) — so the A/B was directionally right but imprecise.
+- **Directional claim SURVIVES** on three independent probes that don't use the flawed A/B: the null test
+  (dense-v-thin 100%), a **fragment test** (3 dense 1-cell blobs, NO envelopment posture → still 100% vs
+  thin), and a **frozen-wings test** (`freeze_wings=True`, envelopment maneuver disabled → still 100% vs
+  thin, 0% vs dense). Compactness dominance is *general*, not envelopment-specific. H3=100% is NOT the
+  flanking maneuver.
+- **NEW BUG (independent finding, not in the original register): `build_envelopment` wing mis-placement.**
+  The center spec pre-sets `starting_position`, so `_centered_line_cols(center, 25)` computes a *phantom*
+  field-center column (24) that the center never uses (its real anchor stays col 9 via `setdefault` no-op),
+  yet the **wings are positioned relative to that phantom column** → they land at cols 21/27, 12–18 columns
+  from the center's real position instead of wrapping it. Affects **every** gauge row using `_envelop_army`
+  (H3/H4/H5/C4/C7): the "envelopment" wings aren't deployed where the code/docstrings claim, so the
+  envelopment mechanic was never cleanly exercised. **Must be fixed as part of measurement integrity (§1).**
+
 ### NARROWED (core survives, wording corrected)
 
 - **V1 — rout determinism.** The gauge-exercised primary rout *is* fully deterministic (confirmed). But
