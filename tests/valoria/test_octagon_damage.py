@@ -93,7 +93,13 @@ def test_front_takes_no_arc_penalty(mb):
     for seed in range(12):
         front, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed)
         rear, _ = _dmg_b(orch, contact, def_adv=+1, seed=seed)
-        assert front <= rear + 1e-9, f"seed {seed}: front {front} should never exceed rear {rear}"
+        # [test-critic T2] Bound front at rear/2 (i.e. front never exceeds 1.0x when rear is 2.0x): the
+        # broken global-centroid variant inflated a wide line's head-on WINGS to ~1.4x, which makes front
+        # EXCEED rear/2 -> caught here. (A braced front can parry to 0 while rear>0, so this is an upper
+        # bound, not equality; the exact 2.0x ratio is pinned by test_rear_is_exactly_double_front.)
+        if rear > 0:
+            assert front <= rear / 2.0 + 1e-9, (
+                f"seed {seed}: front {front} must not exceed rear/2 ({rear/2.0}) -- wing cells must stay GREEN")
 
 
 def test_rear_penalty_persists_across_reaction_window(mb):
@@ -117,41 +123,81 @@ def test_rear_penalty_persists_across_reaction_window(mb):
 
 
 def test_visible_flank_refuses_after_delay(mb):
-    """(2) A flank threat the cell CAN see (within FOV, not pinned) is refused once it has had
-    FACING_REACTION_TICKS to wheel: the reaction clock, once older than the window, drops the penalty.
-    Asserted on the persistent per-cell clock the multiplier reads."""
+    """(2) A seen flank threat (in FOV, not pinned) is refused once the cell has had FACING_REACTION_TICKS
+    to wheel. [test-critic T4] The old test only asserted the clock got STAMPED -- it passed even if the
+    penalty were permanent. This asserts the per-cell reaction COUNTER actually reaches the wheel
+    threshold (the exact condition, `_cnt >= FACING_REACTION_TICKS`, under which the source drops the
+    penalty to m=0), by ticking a PERSISTENT subunit across the window."""
     orch, contact, C = mb
-    # B faces EAST; attacker due north = a seen left-flank threat (<=105deg FOV, not frontally pinned).
     ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
     for cid in list(subB.cell_troops):
-        subB.cell_facing_vec[cid] = (0, 1)   # face east
+        subB.cell_facing_vec[cid] = (0, 1)   # face east; attacker due north = seen left flank (<=105deg FOV)
     ua, _ = _mk(orch, (BROW - 3, BCOL), +1, 'A')
-    # tick the same units across the reaction window; the clock is stamped at first contact tick
-    first = None
-    faced = None
-    for t in range(1, C.FACING_REACTION_TICKS + 4):
-        pairs = contact.find_contacts(ua, ub)
-        orch.resolve_engagements(ua, ub, pairs, t=t)
-        rs = getattr(subB, '_react_since', {})
-        if rs and first is None:
-            first = min(rs.values())
-    assert first is not None, "a seen flank threat should stamp the reaction clock"
+    for t in range(1, C.FACING_REACTION_TICKS + 3):
+        random.seed(900 + t)
+        orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)
+    rs = getattr(subB, '_react_since', {})
+    # the clock stores (last_tick, consecutive_count); after > FACING_REACTION_TICKS consecutive ticks the
+    # count must have reached the threshold -> the cell has wheeled -> the source zeroes the arc penalty.
+    counts = [v[1] for v in rs.values()]
+    assert counts, "a seen flank threat must stamp the reaction clock"
+    assert max(counts) >= C.FACING_REACTION_TICKS, (
+        f"seen-flank reaction counter must reach the wheel threshold {C.FACING_REACTION_TICKS}, got {max(counts)}")
 
 
-def test_multi_side_shock_compounds(mb):
-    """(3) A subunit engaged from >=2 sides takes an EXTRA (1+MULTI_SIDE_SHOCK) factor on top of the arc
-    multiplier -- rank-relief collapses under encirclement shock. Two attackers (front + rear) on one
-    defender must deal strictly more than the un-shocked sum of the two arcs would."""
+def _pincer_dmgb(orch, contact, attackers, seed=13, t=5):
+    """Defender B (faces north) struck by a list of attacker bodies at (row_offset, advance_dir)."""
+    random.seed(2000 + seed)
+    ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
+    subs = [orch.Subunit(shape='Line', troop_type='infantry', tier=2,
+                         starting_position=(BROW + dr, BCOL), advance_dir=adv) for dr, adv in attackers]
+    ua = orch.Unit(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+                   morale=6, morale_start=6, subunits=subs, dr=1)
+    for su in subs:
+        su._unit = ua
+    return orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)['dmg_b']
+
+
+def test_multi_side_shock_is_face_based_not_pair_count(mb):
+    """(3) + balance-critic A1/A1-gap + arch-critic #1: the shock triggers on the number of DISTINCT FACES
+    struck (front/rear/left/right, nearest-perimeter-face of each enemy body), NOT the arc-blind pair count
+    `eng_counts` used before. [test-critic T5] The old test never called the engine (only checked the
+    INPUTS existed), so deleting the whole mechanic passed it. Here the shock CONSTANT is toggled on
+    IDENTICAL geometry+dice, cleanly isolating (a) that a genuine front+rear pincer IS shocked, and (b)
+    the A1 fix: two co-FRONT bodies are ONE face, so the shock must NOT apply to them."""
     orch, contact, C = mb
-    random.seed(11)
-    ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')   # B faces north
-    uaN, suN = _mk(orch, (BROW - 3, BCOL), +1, 'N')
-    # add a second attacker to B's rear (south), same unit so it counts as a 2nd engagement side
-    suS = orch.Subunit(shape='Line', troop_type='infantry', tier=2,
-                       starting_position=(BROW + 3, BCOL), advance_dir=-1)
-    uaN.subunits.append(suS)
-    suS._unit = uaN
-    pairs = contact.find_contacts(uaN, ub)
-    counts = orch.count_engagements_per_atom(pairs)
-    assert counts.get(id(subB), 0) >= 2, "defender should register as engaged from >=2 sides"
-    assert C.MULTI_SIDE_SHOCK > 0, "the shock factor must be a positive compounding term"
+
+    def with_shock(shock, attackers):
+        old = orch.MULTI_SIDE_SHOCK
+        orch.MULTI_SIDE_SHOCK = shock
+        try:
+            return _pincer_dmgb(orch, contact, attackers, seed=13)
+        finally:
+            orch.MULTI_SIDE_SHOCK = old
+
+    PINCER = [(-3, +1), (+3, -1)]          # front pinner + rear body -> faces {F, B} -> 2 sides -> SHOCK
+    TWO_FRONT = [(-3, +1), (-4, +1)]       # two bodies BOTH to the front -> face {F} -> 1 side -> NO shock
+    # (a) the effect is real and points the right way: turning the shock ON strictly raises the enveloped
+    # defender's casualties (same dice, only the shock constant differs).
+    assert with_shock(0.5, PINCER) > with_shock(0.0, PINCER), (
+        "a front+rear pincer (2 faces) must take MORE damage with the multi-side shock on")
+    # (b) A1 FIX: two co-front bodies are the SAME face -> the shock must be inert for them (identical
+    # damage shock-on vs shock-off). The old eng_counts>=2 trigger WOULD have shocked this (2 pairs).
+    assert with_shock(0.5, TWO_FRONT) == pytest.approx(with_shock(0.0, TWO_FRONT)), (
+        "two co-front bodies are one face -> the multi-side shock must NOT fire (balance-critic A1 fix)")
+
+
+def test_reaction_clock_resets_between_battles(mb):
+    """reaction-critic R1: the per-cell reaction clock is per-engagement transient state on a persistent
+    Subunit -- it MUST be cleared at the battle boundary, or a stamp from battle 1 mis-scores battle 2's
+    opening ticks. Asserts reset_morale_between_battles clears it."""
+    orch, contact, C = mb
+    ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
+    for cid in list(subB.cell_troops):
+        subB.cell_facing_vec[cid] = (0, 1)   # face east -> a seen flank stamps the clock
+    ua, _ = _mk(orch, (BROW - 3, BCOL), +1, 'A')
+    random.seed(5)
+    orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=3)
+    assert getattr(subB, '_react_since', {}), "a seen-flank engagement should stamp the reaction clock"
+    orch.reset_morale_between_battles(ub)
+    assert not subB._react_since, "reset_morale_between_battles must CLEAR the reaction clock (R1 leak fix)"

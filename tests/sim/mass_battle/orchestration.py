@@ -570,6 +570,57 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
     threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
+    # [ED-MB-0018 fix, balance-critic A1/A1-gap + arch-critic #1] MULTI-SIDE = the set of DISTINCT octagon
+    # SIDES a subunit is actually struck from, aggregated over its contact pairs' real attacker-cell
+    # BEARINGS (front / left / right / rear, relative to the subunit's own facing) -- NOT the arc-blind
+    # pair COUNT (`eng_counts`) the shock used before. The pair count fired on TWO attackers both in the
+    # FRONT arc (a concentric frontal pinch, not an encirclement -> false +50%) and MISSED one wide body
+    # that genuinely wraps two arcs (`eng_count==1` -> no shock). Deriving the trigger from the cells'
+    # bearings fixes both and makes "engaged from >=2 sides" a genuine aggregation over contacts. Only
+    # computed under the octagon-damage flag (it drives the graded multi-side shock in the damage block).
+    _atom_sides = {}
+    if PC_OCTAGON_DMG:
+        def _mean_facing(_atom):
+            _fv = getattr(_atom, 'cell_facing_vec', None)
+            if _fv:
+                _rs = sum(v[0] for v in _fv.values()); _cs = sum(v[1] for v in _fv.values())
+                if _rs or _cs:
+                    return (_rs, _cs)                       # average of the atom's per-cell (wheeled) facings
+            return (_atom.advance_dir, 0)                   # nominal facing (no wheel recorded)
+        def _nearest_face(_dcells, _dfac, _acen):
+            # [Jordan geometry ruling] A subunit's perimeter has four FACE midpoints -- front / rear / left /
+            # right lines -- and an attacking body engages the face NEAREST it: a side attack targets the
+            # OUTERMOST side line, a rear attack the BACKMOST line (not the centroid, which mislabels both).
+            # Faces are the extremes of the footprint projected onto the facing axis (front/rear) and its
+            # perpendicular (left/right) -- emergent from the cells, so this stays cell-up.
+            _n = len(_dcells)
+            _cr = sum(r for r, c in _dcells) / _n; _cc = sum(c for r, c in _dcells) / _n
+            _fm = (_dfac[0] ** 2 + _dfac[1] ** 2) ** 0.5 or 1.0
+            _fu = (_dfac[0] / _fm, _dfac[1] / _fm)          # facing (front) unit normal
+            _pu = (-_fu[1], _fu[0])                          # left-perpendicular unit
+            _al = [(r - _cr) * _fu[0] + (c - _cc) * _fu[1] for r, c in _dcells]
+            _pp = [(r - _cr) * _pu[0] + (c - _cc) * _pu[1] for r, c in _dcells]
+            _faces = {
+                'F': (_cr + max(_al) * _fu[0], _cc + max(_al) * _fu[1]),
+                'B': (_cr + min(_al) * _fu[0], _cc + min(_al) * _fu[1]),
+                'L': (_cr + max(_pp) * _pu[0], _cc + max(_pp) * _pu[1]),
+                'R': (_cr + min(_pp) * _pu[0], _cc + min(_pp) * _pu[1]),
+            }
+            return min(_faces, key=lambda k: (_faces[k][0] - _acen[0]) ** 2 + (_faces[k][1] - _acen[1]) ** 2)
+        # MULTI-SIDE = the set of distinct FACES a subunit is struck on, ONE face per contacting enemy body
+        # (its contact-cell centroid -> nearest defender face). A wide head-on line hits ONE face (front);
+        # two enemy bodies front+rear hit TWO faces -> the genuine encirclement Jordan's "relief divided"
+        # describes. Per-cell arc lethality is handled separately in _octagon_dmg_mod; this only gates the
+        # graded multi-side shock.
+        for _p in pairs:
+            for _datom, _atk_cells in ((_p["atom_b"], _p["a_cells"]), (_p["atom_a"], _p["b_cells"])):
+                _dcells = list(_datom.cells())
+                _ac = list(set(_atk_cells))
+                if not _dcells or not _ac:
+                    continue
+                _acen = (sum(r for r, c in _ac) / len(_ac), sum(c for r, c in _ac) / len(_ac))
+                _face = _nearest_face(_dcells, _mean_facing(_datom), _acen)
+                _atom_sides.setdefault(id(_datom), set()).add(_face)
     # [partition-invariance fix] conv_scale is precomputed ONCE per TICK on the FULL tick's pairs
     # by the caller (run_battle, before any CASCADING_ENABLED sub-phase split -- see
     # resolve_engagements_cascading) so a convergence group spanning multiple cascade sub-phases is
@@ -882,6 +933,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 zone, ang = octagon_angle(lc, d_pos, facing)
                 m = ANGLE_DEF_MOD[zone]
                 _rk = orig if orig else d_pos
+                _clear = True   # clear this cell's reaction clock unless it is actively counting toward a wheel
                 if m < 0:
                     # frontally pinned? an attacker in the front arc within reach holds the cell so it
                     # cannot wheel to face the flank/rear threat (the fixing-force half of envelopment).
@@ -893,15 +945,34 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                                 and (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2 <= PC_PIN_REACH ** 2):
                             pinned = True; break
                     can_react = (ang <= FOV_HALF_DEG) and (not pinned)   # must SEE it AND be free to turn
-                    if can_react and t is not None and FACING_REACTION_TICKS > 0:
-                        if t - _rs.setdefault(_rk, t) >= FACING_REACTION_TICKS:
-                            m = 0   # reaction window elapsed -> wheeled to face -> no penalty
-                        # else: still turning this tick -> the arc penalty stands
-                    elif can_react:
-                        m = 0       # no tick context / delay disabled -> instant face (legacy-safe)
-                    # else (rear/blind or pinned): never turns -> full penalty persists
-                else:
-                    _rs.pop(_rk, None)   # facing the threat now -> reset the reaction clock
+                    if can_react:
+                        if FACING_REACTION_TICKS <= 0:
+                            m = 0                       # reaction delay disabled -> instant face
+                        elif t is None:
+                            pass                        # [ED-MB-0018 fix, arc-critic A4] no tick context -> cannot
+                            #                             time the wheel -> penalty STANDS (was: instant-face footgun
+                            #                             that silently zeroed every flank/side penalty on a t=None call)
+                        else:
+                            # [ED-MB-0018 fix, reaction-critic R1/R2] Frame-INDEPENDENT consecutive-tick counter,
+                            # idempotent within a tick. Stored as (last_tick, count): survives run_battle's per-turn
+                            # `t` restart (a continuous multi-turn flank keeps accumulating -- no absolute-tick
+                            # arithmetic, which previously left a cell "stuck" penalized when t reset below its
+                            # stamp), and a cell struck in >=2 pairs in ONE tick advances the counter ONCE (same
+                            # `t` -> no double-count, which previously made a 2-sided cell's wheel order-dependent).
+                            # The clock is RESET at engagement boundaries (reset_positions / reset_morale_between_
+                            # battles) so it never leaks a stale stamp into a later, asymmetric re-engagement.
+                            _prev = _rs.get(_rk)
+                            if _prev is None or _prev[0] != t:
+                                _cnt = (0 if _prev is None else _prev[1]) + 1
+                                _rs[_rk] = (t, _cnt)
+                            else:
+                                _cnt = _prev[1]
+                            _clear = False              # actively counting toward the wheel -> keep the clock
+                            if _cnt >= FACING_REACTION_TICKS:
+                                m = 0                   # reaction window elapsed -> wheeled to face -> penalty drops
+                    # else (rear/blind or pinned): never wheels -> full penalty persists; clock cleared below
+                if _clear:
+                    _rs.pop(_rk, None)   # faced/green, rear/blind/pinned, or no-tick -> not counting -> reset clock
                 mods.append(m)
             return sum(mods) / len(mods) if mods else 0.0
 
@@ -993,8 +1064,13 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                                 and (not PC_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
                                                                      and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
-            if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
-            if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
+            # [ED-MB-0018 fix, arch-critic #2] The legacy ENCIRCLEMENT_PENALTY fires on the SAME >=2 trigger
+            # as the new multi-side damage shock -> under the octagon flag it would DOUBLE-COUNT encirclement
+            # (once as an offence/sigma penalty here, once as a defence damage multiplier below). Gate it off
+            # so the octagon multi-side shock is the single owner of the multi-engagement effect.
+            if not PC_OCTAGON_DMG:
+                if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
+                if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
             if atom_b.unit_type == 'ranged': ns_b += RANGED_MELEE_SIGMA
             ns_a += _morale_sigma(unit_a, atom_a)    # graded morale effectiveness (du Picq): per-subunit morale
@@ -1019,8 +1095,9 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 b_mom = _momentum_speed(atom_b, p["b_cells"])
                 if a_mom > b_mom:   a_pool += min(PUNCTURE_CAP, int(a_mom - b_mom))
                 elif b_mom > a_mom: b_pool += min(PUNCTURE_CAP, int(b_mom - a_mom))
-            if eng_counts.get(id(atom_a), 0) >= 2: a_pool = max(1, a_pool - ENCIRCLEMENT_PENALTY)
-            if eng_counts.get(id(atom_b), 0) >= 2: b_pool = max(1, b_pool - ENCIRCLEMENT_PENALTY)
+            if not PC_OCTAGON_DMG:   # [ED-MB-0018 fix, arch-critic #2] see the sigma-head gate above — no double-count
+                if eng_counts.get(id(atom_a), 0) >= 2: a_pool = max(1, a_pool - ENCIRCLEMENT_PENALTY)
+                if eng_counts.get(id(atom_b), 0) >= 2: b_pool = max(1, b_pool - ENCIRCLEMENT_PENALTY)
             if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
             if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
             a_net = roll_pool(a_pool)
@@ -1053,8 +1130,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             b_arc = _octagon_dmg_mod(atom_b, list(set(p["b_cells"])), list(set(p["a_cells"])))
             _a_dmg_mult = min(_red, 1.0 - a_arc * (_red - 1.0) / 2.0)
             _b_dmg_mult = min(_red, 1.0 - b_arc * (_red - 1.0) / 2.0)
-            if eng_counts.get(id(atom_a), 0) >= 2: _a_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK)
-            if eng_counts.get(id(atom_b), 0) >= 2: _b_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK)
+            # MULTI-SIDE SHOCK, GRADED by the number of DISTINCT sides struck (`_atom_sides` above): the
+            # rotate-in/out relief system is progressively more compromised the more directions a body is
+            # engaged from -- 2 sides -> x1.5, 3 -> x2.0, 4 -> x2.5 (was a flat x1.5 on a 2-pair count that
+            # both over- and under-fired). Compounds on the arc AFTER the cap, so a rear pair on a 2-sided
+            # body reaches ~3.0x -- the annihilation-by-encirclement regime (du Picq / Cannae).
+            _na = len(_atom_sides.get(id(atom_a), ()))
+            _nb = len(_atom_sides.get(id(atom_b), ()))
+            if _na >= 2: _a_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK * (_na - 1))
+            if _nb >= 2: _b_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK * (_nb - 1))
         else:
             _a_dmg_mult = _b_dmg_mult = 1   # int 1 (not 1.0): `X * 1` preserves X's exact type -> the
             #                                 legacy PC_OCTAGON_DMG=0 path stays byte-exact (a float 1.0
@@ -1750,6 +1834,11 @@ def reset_morale_between_battles(unit):
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
         atom.routed = False
         atom.broken = False
+        # [ED-MB-0018, reaction-critic R1] A new battle is a fresh engagement -> clear the facing-reaction
+        # clock (per-engagement transient state must not survive the battle boundary onto a persistent atom).
+        _rs = getattr(atom, '_react_since', None)
+        if _rs is not None:
+            _rs.clear()
 
 
 def reset_positions(unit, shape, anchor_map):
@@ -1798,6 +1887,12 @@ def reset_positions(unit, shape, anchor_map):
         atom.starting_position = (start_row, anchor_col)
         atom.cell_offsets = {}
         atom.cell_offsets_c = {}
+        # [ED-MB-0018, reaction-critic R1] A GRID re-approach is a FRESH engagement -> clear the per-cell
+        # facing-reaction clock so a stamp from the prior turn cannot mis-score the opening ticks. (Field/
+        # node atoms hit the `continue` above -> their continuous engagement correctly keeps the clock.)
+        _rs = getattr(atom, '_react_since', None)
+        if _rs is not None:
+            _rs.clear()
 
 
 def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,

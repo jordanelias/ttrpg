@@ -193,7 +193,7 @@ EXPECTED = {
     # modes move on the 3 flanking rows (envelop/cannae/oblique). The head-on single-subunit rows stay
     # all-GREEN -> mult 1.0 -> byte-identical. Legacy PC_OCTAGON_DMG=0 path preserved byte-exact
     # (`_a_dmg_mult=1` int, not 1.0 -> no float coercion). See octagon_damage_model.md.
-    'unit': '4049714e944a78175cc0eedd144858ba140287e1f4b877577581d6824eb9d023',
+    'unit': 'db048bbbc1966d89dc5e88d0907e52677230043d320c6fdea752a63ae2de59c9',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -212,8 +212,8 @@ EXPECTED = {
     # 'cell' (PER_CELL=1) additionally moves vs 'unit' because PC_CAVALRY_SPEED_MULT 2.0→3.0 is PER_CELL-
     # gated (cavalry rows). 'unit' (PER_CELL=0) is deployment-only — the cavalry-speed change doesn't
     # reach it — so 'unit' is unchanged from the deployment-only recording.]
-    # [2026-07-23, ED-MB-0018 — see the 'unit' note above] re-recorded.
-    'cell': 'ef90551054c9244dcf4cbdc109344a1623cc0e7e08f5e1642e2b49c80e650b3b',
+    # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
+    'cell': 'ab2f13b6aaa621fbda2d5418ab361136f6fdd33cad048e1dd1f3251ac08e1249',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -286,8 +286,8 @@ EXPECTED = {
     # offset/asymmetric-width/charge-brace meetings shift. GRID modes stay BYTE-IDENTICAL (field-gated;
     # test_mass_battle_byte_exact.py pins FIELD_MOVEMENT=0 and passes).
     # [2026-07-22, ED-MB-0017 — deployment geometry + cavalry/envelop-march speed re-baseline]
-    # [2026-07-23, ED-MB-0018 — see the 'unit' note above] re-recorded.
-    'unit_field': '473720d1ed5b42b06b5eef4709066cb7ba69381ee0e53eb899f689accb4366f4',
+    # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
+    'unit_field': '6ec1cd8ae6e98ed0115a9b951ca39570c3aaa3880e8250e9e7e25695f1c0f170',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -333,8 +333,8 @@ EXPECTED = {
     # (Stage F). Continuous OBB frontage (D) + per-troop-type reach (E). DG-6-gated field-gauge shift,
     # disclosed, no constant tuned; GRID modes byte-identical (field-gated).
     # [2026-07-22, ED-MB-0017 — deployment geometry + cavalry/envelop-march speed re-baseline]
-    # [2026-07-23, ED-MB-0018 — see the 'unit' note above] re-recorded.
-    'cell_field': '9b02bb059d1fd39b6ff912113acb2e80daa1e97ff759f609446ae2eb5ada4b0e',
+    # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
+    'cell_field': '28754306b083877d991d673c0b759446d995031017ef2aec51bd48c1c7348471',
 }
 
 

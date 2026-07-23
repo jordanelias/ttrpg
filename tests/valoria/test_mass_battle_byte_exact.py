@@ -72,7 +72,11 @@ BAT_PY = os.path.join(REPO_ROOT, 'tests', 'sim', 'mass_battle', 'bat.py')
 # path against grid digests (exactly the failure mode this test exists to prevent). CONTACT_REACH is a
 # float env; its OFF value is '0.0'.
 _PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': '0',
-               'PC_FACING_MODEL': '0', 'CONTACT_REACH': '0.0'}
+               'PC_FACING_MODEL': '0', 'CONTACT_REACH': '0.0',
+               # [ED-MB-0018] PC_OCTAGON_DMG defaults ON and the grid goldens are recorded ON -- pin it
+               # explicitly so an ambient PC_OCTAGON_DMG=0 can't silently check the ON golden against the
+               # legacy path (same defense-in-depth as the other toggles here).
+               'PC_OCTAGON_DMG': '1'}
 
 
 def _run_bat(per_cell):

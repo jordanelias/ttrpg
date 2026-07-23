@@ -2,6 +2,28 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0019: ED-MB-0018 adversarial-review fix batch
+- Jordan directive: "comprehensive max effort adversarial review." Ran 5 structurally-independent read-only
+  critics (arc-math, reaction-clock, byte-exact/determinism, multi-side/balance, test-quality) + an
+  architectural cell-up audit + a full-campaign gauge A/B (n=60).
+- **Reaction-clock lifecycle (R1/R2):** `_react_since` was per-engagement transient state stamped with the
+  per-turn tick but stored on the persistent Subunit and never reset → asymmetric re-engagement mis-scored.
+  Fixed with a frame-independent, per-tick-idempotent consecutive-tick counter + reset at
+  `reset_positions`/`reset_morale_between_battles` (field continuous engagements keep it via the node-skip).
+- **Multi-side shock re-triggered (A1/A1-gap, arch #1):** was `eng_counts≥2` (arc-blind pair count) — two
+  attackers both in front wrongly shocked (1.75×), one wide wrapping body missed. Now a **nearest-perimeter-
+  FACE** bearing model (distinct faces struck), **graded** `×(1+shock·(nsides−1))`.
+- **Double-count (arch #2):** `ENCIRCLEMENT_PENALTY` fired on the same trigger, ungated → gated
+  `if not PC_OCTAGON_DMG`. **t=None footgun** guarded. **CI `_PINNED_OFF`** now pins `PC_OCTAGON_DMG=1`.
+- **Tests strengthened:** T2/T4/T5 tested inputs/stamps not effects → now measure the actual effect; added
+  face-model + reaction-reset regressions (6 green). Legacy `PC_OCTAGON_DMG=0` proven byte-identical 240/240
+  vs parent. **All 4 bat.py goldens re-recorded under CORRECT envs** (the first cut recorded grid under a
+  bare env — wrong digest; grid oracle needs full `_PINNED_OFF` incl `PC_NODE_COHESION=0`).
+- **Gauge A/B:** mirror byte-identical; moved rows shift TOWARD bands (H2/H5/H6); no row more over-decisive;
+  H3/H4 already 100%-decisive under both flags → octagon deepens the casualty exchange ratio (DG-6 caveat).
+- Disclosure: `octagon_damage_model.md` adversarial-review addendum; geometry spec
+  `perimeter_targeting_geometry_v1.md`; readiness synthesis `historical_fidelity_readiness.md`.
+
 ## 2026-07-23 — ED-MB-0018: octagon facing = damage-received multiplier + reaction delay + multi-side shock
 - Jordan directive: "the facing octagon is a **damage-received multiplier** — attacks from behind do ~**2×**
   the damage of from the front; cells **cannot turn instantaneously** (needs a couple-tick reaction); attacked
