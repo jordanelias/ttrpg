@@ -78,7 +78,7 @@ attrition core, so a force/tactic edge converts to a near-certain outcome.
 
 | # | Fiat | Location | Class | Why it kills emergence |
 |---|---|---|---|---|
-| **V1** | **Rout is a hard deterministic cliff** — `agg_morale() <= 0`, fed by fixed **50%/25% strength-fraction** step triggers (on the hp/hp_max survival ratio) with flat −1.0 magnitudes and a −3.0/phase cap | `units.py:1781` (`derive_rout`); `core/state.py:55-56,71` | **Zero stochastic breakpoint.** A given casualty trajectory → identical rout tick every time. Every unit in the engine breaks at *exactly* 50%/25%, no per-unit dispersion. Directly contradicts the history the DG-6 doc itself cites (du Picq; Clark 1954; Dupuy "40% rule" — breakpoints are *distributed*, not hard lines). This is the **second determinism layer** the DG-6 CEV-friction work underweighted. |
+| **V1** | **Rout is a hard deterministic cliff** — `agg_morale() <= 0`, fed by fixed **50%/25% strength-fraction** step triggers (on the hp/hp_max survival ratio) with flat −1.0 magnitudes and a −3.0/phase cap | `units.py:1781` (`derive_rout`); `core/state.py:55-56,71` | **[adversarial-narrowed]** On the **gauge-exercised path** (`run_battle`/`run_multi_turn_battle`) the primary rout is fully deterministic: zero RNG, identical rout tick for a given casualty trajectory, every unit breaks at exactly 50%/25%. (Exception found by the review: `discipline_check_cascade` in `run_multi_unit_battle` *does* carry a `roll_pool` gate — but only on **secondary/contagion** rout, never the first break, and that path is dead/unexercised by the gauge. So the claim is "the gauge-path rout is deterministic," not "zero variance anywhere.") The **50%/25% triggers are themselves canonical** (§A.4, ED-1019) — the fiat is the *determinism*, not the thresholds. Second determinism layer the DG-6 CEV-friction work underweighted. |
 | **V2** | **`compute_degree` hard tier thresholds** (net ≥ 1×ob → Success; ≥ 2×ob & ≥3 → Overwhelming) | `resolution.py:44-48` | Converts a continuous (and, at scale, self-averaging) net-ratio into a 4-bucket step function. Once army size makes `net_A/net_B` reliably land on one side, degree — and damage — is a near-deterministic step of the force ratio. |
 | **V3** | **`DAMAGE_BY_DEGREE` flat buckets** — `Partial→1`, `Failure→0` discard all pool magnitude | `config.py:158-159` | A pool of 2 and a pool of 40 landing "Partial" deal identical damage; amplifies V2's discretization. |
 | **V4** | **CEV friction built, grounded, but gated OFF** | `config.py:178` `PC_FRICTION_CEV=0`; `exchange.py:129` | The one variance layer that bands force-ratio outcomes (σ=1.1, Dupuy-DLEDB-calibrated) is inert by default — so nothing counteracts V1/V2. (This is an *absence-of-mitigation*, the remedy, not a fiat itself.) |
@@ -110,7 +110,10 @@ terrain, each <1 — Goldsworthy/Sabin) so it usually *doesn't* annihilate, matc
 
 ### 3b. The confirmed damage double-count (sigma channel) — a falsifiable bug
 
-The charge-shock sigma channel double-counts the *same* flank/rear fact the octagon multiplier prices:
+The charge-shock sigma channel double-counts the flank/rear fact the octagon multiplier prices — via **two
+correlated (not literally identical) zone estimates** feeding two lethality pathways (per the review; `_zb`
+comes from `_per_cell_angle_mod`'s global-centroid+wrap zone, `b_arc` from `_octagon_dmg_mod`'s local-centroid
+zone — different classifiers, same underlying "B struck from an exposed arc" fact, no cross-channel dedup):
 - `_charge_shock_sigma(unit_b, …, zone)` lowers `b_net`; `compute_degree(a_net, max(1, b_net))` then uses
   the shrunk `b_net` as A's **opposition threshold**, making it structurally easier for A to reach
   Overwhelming — *and* the same zone directly multiplies `dmg_b` via `_b_dmg_mult`. One geometric fact
@@ -201,22 +204,40 @@ the engine bands. No asymmetric matchup bands.
 
 ---
 
-## 8. Emergence-restoration plan (sequenced; each step A/B'd vs the gauge AND the independent Dupuy curve)
+## 8. Emergence-restoration plan (REVISED post-adversarial-review; each step A/B'd vs the gauge AND the independent Dupuy curve)
 
-1. **Measurement integrity (§1):** unify deployment density so only geometry differs; align COM. Re-run
-   the gauge on an honest ruler — several "failures" may evaporate before any engine change.
-2. **Variance layers (§2):** un-gate CEV friction (V4) + **new distributed rout breakpoint** (V1);
-   soften compute_degree/DAMAGE_BY_DEGREE (V2/V3). Turns saturation into bands.
-3. **De-double-count encirclement (§3):** one flank/rear owner; cap multi-side (D1/D2); conjunctive
-   envelopment gate (Goldsworthy/Sabin).
-4. **Brace-repel (P2)** + **cavalry charge (C1)** grounded fixes.
-5. **De-fiat shape behavior (§5):** derive MIN_DISCIPLINE / cell_speed / aspect from geometry.
-6. **Emergent maneuvers (§4):** perception-driven local steering — the largest, last.
+**Do NOT touch (ratified canon — the review caught these as false-positive "fiats"):** `compute_degree`
+tiers (universal PP-232 dice mechanic — de-fiating forks the engine), the octagon `1.0/1.5/2.0` table +
+`MULTI_SIDE_SHOCK` (a *direct transcription* of Jordan's stated octagon directive, ED-MB-0018), the
+50%/25% morale triggers (canon §A.4, ED-1019), and the `CELL_FLOOR/CELL_CAP` *values* (grounded — fix the
+path, not the bounds).
+
+1. **Measurement integrity (§1) — CONFIRMED #1 lever.** Unify deployment density so `build_unit` respects
+   the same `CELL_FLOOR/CELL_CAP` band as `build_army` → density becomes a property of troops+concentration,
+   not of which constructor built the unit. **Also investigate density's over-power** (control: a 4×
+   density edge → 100% win at equal troops — the `LANCHESTER_DENSITY_REF` linear weight is likely too steep).
+2. **Sigma de-double-count + cap (D2/3b) — CONFIRMED bug.** Make the octagon the single flank/rear owner
+   (damp/remove the charge-shock zone's redundant contribution); fix the `PC_CHARGE_SIGMA` real-ceiling
+   (1.76 vs documented 0.55) so one channel can't crowd out the others via the shared softcap.
+3. **CEV friction (V4) FIRST, then measure — do NOT stack.** Un-gate CEV friction, validate the
+   force-ratio curve vs the independent Dupuy DLEDB, and **check the brace-repel interaction** (the DG-6
+   doc already found CEV can break C2/C6). Only *after* measuring do we decide whether a **second**
+   stochastic layer (distributed rout breakpoint) is still needed — the review flagged stacking two
+   independently-designed variance injectors at once as the same "multiple mechanisms, same fact" anti-
+   pattern the register condemns. Distributed-rout is the higher-risk item (bigger transfer leap onto a
+   canonical §A.4 rule); sequence it last among the variance work, gated on the CEV measurement.
+4. **`DAMAGE_BY_DEGREE` magnitude-blindness (V3):** apply the design doc's **already-ratified continuous
+   mode** (`magnitude = net − Ob`, `core.md`), NOT an invented curve — the fix must not fork canon.
+5. **Brace-repel (P2) + cavalry charge (C1)** grounded fixes.
+6. **De-fiat the conceded fiats (§4/§5/§6):** scripted maneuvers (S1-S5), calibration-debt constants
+   (P1-P4), flat penalties (D5-D7). Emergent perception-driven maneuvers are the largest, last.
+7. **Stage G (§9):** wire the field engine into `resolve_mass_battle` — the multiplier on everything, since
+   nothing above reaches the player until it lands.
 
 **North star:** replace fiats with grounded emergent primitives; calibrate magnitudes to **independent
 history** (Dupuy DLEDB, Sabin bands), never to the 20 gauge rows — the gauge must stay an independent
 validation surface, not a training target. "Nothing is sacred" applies to the fiats and the byte-exact
-goldens (a regression oracle), NOT to overfitting the validator.
+goldens (a regression oracle), NOT to ratified canon or to overfitting the validator.
 
 ---
 
@@ -254,3 +275,53 @@ density" — it is "equalize density **and** make the envelopment geometry deliv
 (else H3/H4 will swing from 100% to ~0%, still out of band, just the other way). This is why measurement
 integrity must precede engine tuning: only on a fair ruler can we see whether the envelopment *mechanic*
 works at all.
+
+---
+
+## 11. Adversarial review verdict (self-refutation pass, 2026-07-23)
+
+Five structurally-independent read-only critics were tasked to **refute** the load-bearing claims
+(default to "refuted if uncertain"), plus an owner-run controlled null-test. Outcome: the diagnosis is
+**substantially confirmed**, two claims narrowed, and **four false-positives caught before any code change.**
+
+### CONFIRMED (survived refutation)
+
+- **M1 — density is the dominant lever.** Owner-run control (equal 400 troops, n=50, verified equal
+  hp_max): symmetry controls fair (thin-v-thin 50.0, dense-v-dense 51.0); **NULL TEST — dense line vs thin
+  line, no envelopment: 100%/0%.** envelop-vs-thin 100%, envelop-vs-**dense** **2%**. Density alone, with
+  zero geometry, reproduces the entire H3=100%. No troop-count, cell-count, or build_army confound
+  survived. **Corollary the review surfaced:** density is *wildly over-powered* — a 4× edge → certain
+  victory at equal troops — so the fix is both (a) unify the paths AND (b) tame density's combat-power weight.
+- **G1 — integer engine is faction-blind.** CONFIRMED, understated: the `Faction` dataclass has **no**
+  composition field to even discard; `terrain` is a fully inert parameter; 3 of 4 factions start with
+  identical `Mil=4.0`. Sole live battle entry point; `run_multi_unit_battle` has zero production callers.
+- **Sigma double-count (D2) + mis-cap (3b).** Both CONFIRMED, numerically bit-for-bit: real
+  `_charge_shock_sigma` ceiling = **1.76** (3.2× the documented 0.55), reachable on ordinary
+  charge-into-shallow-wavering-line inputs; the shared aggregate softcap empirically suppresses
+  co-occurring channels **77–91%**. Precision fix: it is two *correlated* zone classifiers, not one shared
+  zone (wording narrowed in §3b).
+
+### NARROWED (core survives, wording corrected)
+
+- **V1 — rout determinism.** The gauge-exercised primary rout *is* fully deterministic (confirmed). But
+  "zero variance **anywhere**" was overbroad: `discipline_check_cascade` carries a `roll_pool` gate — on
+  *secondary* contagion rout only, in the dead `run_multi_unit_battle` path. Wording narrowed; fix
+  implication unchanged.
+
+### FALSE POSITIVES (do NOT "fix" — would fork canon)
+
+- **V2 `compute_degree` tiers** — the universal PP-232 dice mechanic shared by every subsystem; the
+  determinism is CLT self-averaging, not the tiers. De-fiating mass-battle alone violates "one rule lives
+  once." (The real V3 kernel — `DAMAGE_BY_DEGREE` Partial→1/Failure→0 magnitude-blindness — is fixed by the
+  doc's *already-ratified* continuous mode, not an invented curve.)
+- **D1/D3 octagon `1.0/1.5/2.0` + `MULTI_SIDE_SHOCK`** — a direct transcription of Jordan's explicit stated
+  directive (ED-MB-0018). Mechanism ratified; the only real issue is the D2 double-count, not the table.
+- **50%/25% morale triggers** — canonical §A.4 (ED-1019), not engineer drift.
+- **`CELL_FLOOR/CELL_CAP` values** — grounded/validated; fix the *path mismatch*, not the bounds.
+
+### SEQUENCING CORRECTION (the most important review output)
+
+Do **not** stack CEV friction (V4) and a new distributed rout breakpoint simultaneously. The register's own
+grounding doc already showed CEV variance can break the near-deterministic brace-repel (C2/C6). **Turn on
+CEV first, measure the force-ratio curve vs Dupuy and the brace-repel interaction, THEN** decide whether a
+second (higher-risk) stochastic layer on the rout trigger is still warranted. See revised §8.
