@@ -113,3 +113,33 @@ def test_build_refused_flank_honors_strong_position():
     strong_row = sum(r for r, _c in u.subunits[0].cells()) / len(u.subunits[0].cells())
     refused_row = sum(r for r, _c in u.subunits[1].cells()) / len(u.subunits[1].cells())
     assert strong_row != refused_row, "refused wing must be echeloned back (different row)"
+
+
+def test_explicit_width_depth_grid():
+    """ED-MB-0026: explicit width×depth defines an exact frontage×depth grid; the two axes are coupled
+    (cells = width·depth, density = troops/cells). Wide-shallow vs narrow-deep, same troops."""
+    from mass_battle.geometry import footprint_for  # noqa: E402
+    wide = footprint_for('Line', 400, None, None, width=8, depth=2)
+    deep = footprint_for('Line', 400, None, None, width=2, depth=8)
+    assert len(wide) == len(deep) == 16, "width×depth sets the exact cell count"
+    assert max(c for _r, c in wide) + 1 == 8 and max(r for r, _c in wide) + 1 == 2, "wide = 8 cols × 2 rows"
+    assert max(c for _r, c in deep) + 1 == 2 and max(r for r, _c in deep) + 1 == 8, "deep = 2 cols × 8 rows"
+
+
+def test_width_depth_via_build_army_spec_and_gradient_forwarding():
+    """width/depth AND distribution reach the Subunit through the build_army spec path (the ED-MB-0025
+    gradient-forwarding gap is closed)."""
+    from collections import defaultdict
+    row = SIDE_A_START_ROW
+    specs = [{'shape': 'Line', 'troop_type': 'infantry', 'troops': 400, 'width': 2, 'depth': 8,
+              'starting_position': (row, 11), 'distribution': 'front'}]
+    u = build_army(specs, 'A', 'A')
+    a = u.subunits[0]
+    assert a.distribution == 'front', "distribution must reach the Subunit via the spec"
+    assert len(list(a.cells())) == 16, "width×depth must reach the Subunit via the spec"
+    by = defaultdict(float)
+    for (r, _c), t in a.cell_troops.items():
+        by[r] += t
+    rows = sorted(by)
+    assert by[rows[0]] > by[rows[-1]], "front gradient: leading rank denser"
+    assert abs(sum(a.cell_troops.values()) - 400) < 1e-6, "conservation"

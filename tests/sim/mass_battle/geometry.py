@@ -121,14 +121,22 @@ def _build_shape_n(shape, n):
     return cells[:n]
 
 
-def footprint_for(shape, troops, concentration, troop_type=None):
-    """Lay `troops` into `shape` at an EXPLICIT `concentration` = target troops/cell, which now truly
-    BOUNDS the cell count (ED-MB-0025): `cells = round(troops/concentration)`, clamped so per-cell stays
-    in [CELL_FLOOR, cell_cap_for(troop_type)] — then built exactly via `_build_shape_n`. This honours the
-    density knob the design intends (a first-class subunit primitive: 'density of troops per cell, which
-    bounds how many cells the subunit can use'); the previous sparse size-parameter search silently
-    ignored it (a 133-troop Line collapsed to 1 cell at every concentration — the M2 measurement bug).
+def footprint_for(shape, troops, concentration, troop_type=None, width=None, depth=None):
+    """Lay `troops` into `shape`, choosing the cell layout by the EXPLICIT primitive the caller gave
+    (ED-MB-0025):
+      • `width` (columns/frontage) AND `depth` (rows) both set -> an EXACT width×depth rectangular grid.
+        Frontage and depth are the coupled tactical axes (wide-shallow = frontage/envelopment; narrow-deep
+        = breakthrough/staying-power). Per-cell density = troops/(width·depth) falls out of the choice
+        (combat caps it at CELL_CAP downstream), so this honours 'explicitly define the number of columns
+        vs rows, which affect each other.'
+      • else `concentration` = target troops/cell, which BOUNDS the cell count: cells = round(troops/
+        concentration), clamped so per-cell stays in [CELL_FLOOR, cell_cap_for(troop_type)], built via
+        `_build_shape_n`. (The old sparse size-parameter search silently ignored this — a 133-troop Line
+        collapsed to 1 cell at every concentration, the M2 measurement bug.)
     [P-DEC-3] A mounted troop_type caps lower (cell_cap_for) so the same troops deploy over MORE cells."""
+    if width is not None and depth is not None:                     # explicit frontage×depth grid
+        w, d = max(1, int(width)), max(1, int(depth))
+        return [(r, c) for r in range(d) for c in range(w)]
     troops = max(1, int(troops))
     lo = math.ceil(troops / cell_cap_for(troop_type))               # densest allowed (>= CELL_CAP/cell)
     hi = max(lo, troops // CELL_FLOOR)                               # sparsest allowed (>= CELL_FLOOR/cell)
@@ -363,7 +371,8 @@ def _oriented(su):
     oriented_pattern exactly. [Jordan directive — continuous footprint]"""
     troops = getattr(su, 'troops', None)
     if troops is not None:
-        pat = footprint_for(su.shape, troops, su.concentration, getattr(su, 'troop_type', None))
+        pat = footprint_for(su.shape, troops, su.concentration, getattr(su, 'troop_type', None),
+                            width=getattr(su, 'width', None), depth=getattr(su, 'depth', None))
         if su.advance_dir == -1:
             return [(r, c, r, c) for r, c in pat]
         max_r = max(r for r, c in pat)

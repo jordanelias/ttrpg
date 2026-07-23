@@ -1307,3 +1307,98 @@ and step 7, the waypoint primitive itself, still pending):
 - mass_battle/engine.py comment + phase6_sim_verification_ledger.json `canonical_source` both still cited the
   pre-move `tests/audit/...` path; repointed to `audit/lane-*/...`. Path text only. Register near its 10k-token
   cap — trim to the archive file at the next real entry.
+
+<!-- Relocated from active coverage_matrix.md 2026-07-23 (register-size cap). -->
+## 2026-07-01 — mass_battle workbench: tick-by-tick visualizer (server + frontend)
+- ADDED tests/sim/mass_battle/workbench/{trace.py,server.py,static/index.html} (mirrors
+  designs/scene/combat_engine_v1/workbench's pattern: a tiny stdlib HTTP server, no external deps, no
+  build step). trace.run_traced_battle() runs ONE battle via engine.build_unit/resolve_battle (the
+  wrapper contract, never reaches past it) with tracing on, returning the full 'tick'/'melee'/
+  'volley'/'positions' event stream. server.py serves a canvas SPA with playback controls (scrub/play/
+  step), a preset picker mirroring gauge_mb.py's named matchups, and per-tick HP/morale/rout/event-log
+  panels. VERIFIED end-to-end live (not just imported): all 4 endpoints (GET /, /api/mode, /api/presets,
+  POST /api/trace) tested via a running server instance in both PER_CELL=0 (grid) and
+  FIELD_MOVEMENT=1 PC_NODE_COHESION=1 PER_CELL=1 (coordinate-field) modes.
+- IMPORTANT (documented in server.py): PER_CELL/FIELD_MOVEMENT/PC_NODE_COHESION are read from
+  os.environ once at import time and star-imported as independent copies into every consumer — a
+  running server's mode is FIXED at process start (no live toggle); comparing grid vs field means two
+  server instances. GET /api/mode reports the actual running config.
+- FINDING from using the tool (not a bug): confirmed by reading _node_cells() (hierarchy/units.py) that
+  the coordinate-field candidate keeps ROW positions integer-rank-snapped by design ("ranks are integer
+  bins" — a real military structure) and only bins COLUMNS to their file; positions are not yet fully
+  continuous floats end-to-end. Accurately reflected by the visualizer, not a rendering defect.
+- Engine untouched by this addition (workbench/ only). G5 byte-exact both modes unchanged (unit
+  7be8499b / cell 1c5b2851). Fabrication clean (HTTP status codes + dev port named+ledgered as
+  non-sim-mechanical tooling constants, not fabricated citations). Co-file satisfied.
+
+**Partition-invariance fix.** `subunit_combat_pool` is, by Jordan's own DG-3 characterization, a
+per-atom COMBAT SCORE (Command + per-subunit discipline/cohesion/stamina), not a per-troop rate —
+`pair_pool_contribution` correctly renormalizes when ONE atom is itself split across MULTIPLE enemies,
+but does nothing when SEVERAL atoms of one side each independently, fully engage the SAME single
+opposing atom (a pinning center + 2 wings all converging on one Line/Arrowhead defender — exactly
+H3-H6/C4/C7's shape). Each converging atom got its own near-full `base_pool` with no reduction, so
+splitting a fixed total force into more simultaneously-converging atoms multiplied total dice against
+that one shared target, purely from the split — the mirror-image of the bug DG-3's "intensive" fix
+already closed on the defender side. Confirmed by direct formula trace (no ablation needed): a fully-
+engaged atom's `pair_pool_contribution` ≈ its own `base_pool` regardless of troop count, so N converging
+atoms contribute ≈N×base_pool for identical total troops.
+
+**Fix** (`core/exchange.py`'s new `_pair_engaged_troops` + `orchestration.py`'s new
+`_convergence_scale`/`PC_CONVERGENCE_NORM`, default ON): groups pairs by shared target atom on each
+side; for any group of ≥2, computes the troop-weighted-mean base score across the group and the group's
+combined own-troop count, derives what ONE merged atom of that combined size would contribute, and
+scales every member's own contribution down uniformly so the group's total is capped there. A group of
+size 1 (the overwhelming majority of pairs — every single-subunit gauge row) is a no-op by construction
+(skipped outright, scale 1.0 via dict-miss). Computed ONCE per tick on the FULL pairs list (before
+`CASCADING_ENABLED`'s sub-phase split, which would otherwise fragment a convergence group across
+separate `resolve_engagements` calls and under-correct it).
+
+**Verified live, not just via digest motion:** a direct trace of an H3-style envelopment-army-vs-Line
+battle confirmed `_convergence_scale` returns a non-trivial scale for 1446/1686 sampled ticks (max
+simultaneous-convergence group size 3) — the mechanism genuinely engages this battery, this isn't inert
+code. All 4 `bat.py` digests re-recorded (shared, non-gated combat-resolution code, same as every prior
+DG-3/DG-4/Step-4 landing in this lane): `unit` 204d4d7…→444afdd4…, `cell` 84e606c…→cc13e17b…,
+`unit_field` 79c1910…→4ab1b5a1…, `cell_field` c3de830…→ffe54c49… (full hashes in `bat.py`). `tests/valoria`:
+112 passed / 57 skipped / 1 xfailed / 0 failed (7 pre-existing `test_names.py` failures confirmed
+unrelated via `git stash` bisection — an environment/fixture issue, not caused by this change).
+
+**Honest gauge result (multi mode, n=60):** the fix does **NOT** move H3/H4/H5/H6/C4's win/loss/draw
+split at all — bit-for-bit identical `decA`/`dec_n` to the pre-fix baseline, even though exact per-trial
+hp/turn/morale values changed (confirming the digest move is real but small relative to these rows'
+dominant mechanism, envelopment/charge-shock morale collapse, not raw pool magnitude). Full 20-row gauge
+unchanged at single=2/20, multi=6/20. **This is disclosed honestly, not oversold as a gauge-band fix** —
+the partition-invariance defect was real and is now closed, but it was never the dominant lever for
+H3-H6's overshoot; DG-1's composition and the still-live envelopment-shock magnitude remain the larger
+levers there.
+
+**RC-5 preliminary finding (diagnostic, not a fix):** a controlled A/B-slot-swap experiment on 3 of
+RC-5's 9 single-subunit rows found a **slot/deployment-dependent asymmetry that does not track shape
+superiority consistently**:
+
+| Matchup | A wins / B wins / draws (n=30) |
+|---|---|
+| Arrowhead(A) vs Line(B) | 30/0/0 |
+| Line(A) vs Arrowhead(B) | 29/1/0 |
+| Line(A) vs Line(B) [mirror] | 17/13/0 |
+| GappedLine(A) vs Line(B) | 22/8/0 |
+| Line(A) vs GappedLine(B) | 2/28/0 |
+| GappedLine(A) vs Arrowhead(B) | 11/19/0 |
+| Arrowhead(A) vs GappedLine(B) | 2/28/0 |
+
+Arrowhead-vs-Line flips to whichever shape occupies slot A (H2/H9's WIN-OUT in both directions is this,
+not two independent shape effects); GappedLine-vs-Line favors GappedLine regardless of slot (a real,
+slot-independent shape effect); GappedLine-vs-Arrowhead favors whichever shape occupies slot B. No single
+rule (side bias, shape hierarchy) explains all three pairs — a true mirror (Line-Line, Arrowhead absent)
+stays near-even (17/13), ruling out a blanket "slot A always wins" engine bug. The likely shared
+ingredient across the inconsistent cases: `ANCHOR_MAP`'s per-shape deployment column (Line=9,
+Arrowhead=8, GappedLine=7) is applied identically regardless of which side (A/B) carries that shape, so
+two different-shaped sides deploy at two different absolute columns — a small (1-2 cell) lateral
+deployment offset whose interaction with facing/approach geometry was not traced further this pass.
+**Not root-caused to a specific mechanism** — flagged as the next concrete lead for whoever continues
+RC-5's triage, not claimed as solved. RC-5's other 6 rows (H7, H8, R1, R3, C1, C3, C5) were not
+investigated this pass.
+
+**Verification:** `tests/valoria` full suite green (above); gauge_mb.py re-run both modes (numbers above);
+`_convergence_scale` engagement traced directly (not inferred). Filed as ED-MB-0004 (resolves the open
+"gauge triage continuation" item).
+

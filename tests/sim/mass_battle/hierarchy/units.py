@@ -384,6 +384,13 @@ class Subunit:
     # None keeps the legacy tier path (byte-exact).
     troops: Optional[float] = None
     concentration: Optional[float] = None
+    # [ED-MB-0026, Jordan directive] Explicit frontage×depth: `width` (columns/frontage) and `depth` (rows).
+    # When BOTH are set they define an exact width×depth rectangular footprint (troops set for the count),
+    # and per-cell density = troops/(width·depth) follows — the coupled tactical axes ('columns vs rows,
+    # which affect each other': wide-shallow = frontage/envelopment, narrow-deep = breakthrough/depth).
+    # None (either) falls back to the density (`concentration`) path or the legacy tier path.
+    width: Optional[int] = None
+    depth: Optional[int] = None
     # [ED-MB-0025, Jordan directive] Depth density gradient: how the subunit's troops distribute across
     # its ranks. 'uniform' (default, byte-exact) = equal per cell; 'front' = leading ranks denser (shock /
     # weight at the point of contact); 'rear' = trailing ranks denser (depth / staying-power reserve — the
@@ -463,8 +470,13 @@ class Subunit:
         # (cell_offsets are 0 here); dynamic movement past the edge is a separate concern.
         if self.shape not in CELL_PATTERN_FN:
             raise ValueError(f"Subunit shape {self.shape!r} unknown; valid shapes: {sorted(CELL_PATTERN_FN)}")
-        if (self.troops is None) != (self.concentration is None):
-            raise ValueError("Subunit: continuous mode needs both troops and concentration (or neither, for the tier path)")
+        # Continuous mode = troops set, with EITHER a density (concentration) OR an explicit width×depth
+        # grid (ED-MB-0026). Legacy tier path = troops None (and no concentration/grid).
+        _has_grid = self.width is not None and self.depth is not None
+        if self.troops is None and (self.concentration is not None or _has_grid):
+            raise ValueError("Subunit: continuous mode (concentration or width×depth) needs troops set")
+        if self.troops is not None and self.concentration is None and not _has_grid:
+            raise ValueError("Subunit: continuous mode needs a concentration (density) or an explicit width×depth")
         if self.troops is None and self.tier not in TROOPS_PER_TIER:
             raise ValueError(f"Subunit (shape={self.shape}) tier must be one of {sorted(TROOPS_PER_TIER)}, got {self.tier!r}")
         for ar, ac in self.cells():

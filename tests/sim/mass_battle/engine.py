@@ -120,7 +120,9 @@ def _spec_span(sp):
         shape = ROLE_SPEC[sp['role']]['shape']
     shape = shape or 'Line'
     troops, conc = sp.get('troops'), sp.get('concentration')
-    pat = footprint_for(shape, troops, conc, sp.get('troop_type')) if (troops is not None and conc is not None) \
+    w, d = sp.get('width'), sp.get('depth')                         # [ED-MB-0026] explicit frontage×depth
+    _continuous = troops is not None and (conc is not None or (w is not None and d is not None))
+    pat = footprint_for(shape, troops, conc, sp.get('troop_type'), width=w, depth=d) if _continuous \
         else CELL_PATTERN_FN[shape](sp.get('tier', 3))
     cs = [c for _r, c in pat]
     return (min(cs), max(cs)) if cs else (0, 0)
@@ -318,7 +320,8 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
-                  'troops', 'concentration', 'orders'):
+                  'troops', 'concentration', 'orders',
+                  'width', 'depth', 'distribution'):  # [ED-MB-0025/0026] explicit grid + density gradient
             if k in sp:
                 kw[k] = sp.pop(k)
         # [DG-4, ED-MB-0002, 2026-07-04 ruling: "Morale is blend of per-subunit as well as whole
