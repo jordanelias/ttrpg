@@ -263,6 +263,48 @@ continuous approach/pool/commit model (feint-as-attack, WS-5) — not a gap, a d
   from every other `systems/<sub>/sim/` package; it's the scar tissue of the `import systems` collision (the
   slice-8 rename). Works, but it's a local convention the rest of the corpus doesn't share.
 
+### 4.5 Module-vs-module comparative scorecard (quantitative)
+
+Every module scored against the *same* axes so they can be ranked against each other. Metrics are measured
+(grep over the source): **grounded** = in-code references to a physics/biomechanics/HEMA first principle
+(Williams/Oh/Nathan/Cross/Fleisig/Fiore/rigid-body/joule/treatise); **bare** = `[SIM-CALIBRATE]`/`[FIAT]`/
+`[ASSUMPTION]` tuning tags; **name-branch** = weapon-NAME membership tests in *executable* lines.
+
+| Module | LOC / defs | grounded | bare-knob | name-branch | Single-owner role | Grade |
+|---|---|---|---|---|---|---|
+| `geometry` | 96 / 6 | 13 | **0** | 0 | OWNER of gap/thrust/cut/perc factors; pure bake | **A** — small, pure, grounded, zero knobs |
+| `core` | 293 / 11 | 19 | 2 | 0 | OWNER of pool/resolve/coupling/damage; RESIST=Williams joules | **A-** — exemplary grounding; ≈8.0 anchor + damage literals dup'd |
+| `weapon_physics` | 756 / 37 | **40** | 25 | 0 | OWNER of heft/percussion/agility; reach-diagnostic labelled | **A-** — the physics heart; densest grounding, honest fiat; biggest knob load (physics-shaped) |
+| `combat_systems` | 950 / 69 | 22 | 17 | 0 | OWNER of reach_base/wield_heft/the σ-functions | **B+** — name-free across 950 LOC (impressive); 2nd tuning surface; `sel_*` positional-tuple shape-divergence lives here |
+| `combatant` | 151 / 17 | 3 | 0 | 0¹ | HOSTS derived stats ("consume, never recompute") | **B+** — clean host, ledger-cited; **the one single-owner violation (pool dup) lives here** |
+| `wrapper` | 371 / 4 | 4 | 0 | 0 | orchestrator / state-graph executor | **B** — plumbing; hosts the 2 dead separation branches + dead `ready` field |
+| `contact` | 78 / 4 | 4 | 2 | 0 | consumer (reaches through `S.WP` — cycle-break smell) | **B** — clean idiom, built-not-fully-activated |
+| `ability_primitives` | 79 / 4 | 4 | 0 | 0 | the `eff_cw` hook | **B-** — hook wired, content absent (inert 1.0); `kit` orphan here |
+| `traditions` | 61 / 3 | 4 | 0 | 0 | tradition profiles | **C+** — thin; `profile` orphan/superseded |
+| `config` | 191 / 0 | 17² | 13² | 0 | the CFG knob store (~200 constants) | **C+** — honest tuning surface, but "single-source" docstring is false (~60 knobs leak to module globals) |
+| `capabilities` | 169 / 4 | 5 | 0 | **1** | a 2nd, name-keyed source of truth for half-sword | **C** — the weakest emergence link: the sole executable name-gate (`:36`), quarantined to the diagnostic layer |
+
+¹ `combatant`'s single name literal is a *default parameter* (`weapon='arming'`), not a branch — emergence-clean.
+² `config`'s "grounded"/"bare" counts are comment references, not derivations — CFG is bare *by design*.
+
+**How the modules compare — the through-line:**
+- **Emergence is uniformly strong.** Ten of eleven modules have **zero** weapon-name branches in executable
+  code, including the 950-LOC `combat_systems`. The *only* name-gate is `capabilities.py:36`, and it lives in
+  the diagnostic layer, not the resolution path. On the "never special-case an entity" axis the engine is
+  near-exemplary; `capabilities` is the single module that regresses, and only in a non-load-bearing surface.
+- **Grounding concentrates where it should.** The physics lives in `weapon_physics` (40) + `core` (19) +
+  `geometry` (13) — the derivation layer — while `config` is honestly the tuning surface. The gradient is
+  correct: the modules that *compute physical quantities* cite physics; the modules that *orchestrate* (wrapper,
+  traditions, ability_primitives) don't need to and don't pretend to. No module fakes grounding it lacks.
+- **Single-owner is upheld with three named exceptions.** Reach and impact-force each have exactly one live
+  owner (`combat_systems.reach_base`, `weapon_physics.heft`), with the `weapon_physics` duplicates explicitly
+  demoted to "diagnostic-only" (`weapon_physics.py:23`) — the CLAUDE.md-flagged reach fork is **resolved**. The
+  live violations are narrow and itemised: the pool formula (`combatant` vs `core`), the ≈8.0 anchor
+  (`core`/`weapon_physics`/`config`), and `config`'s false single-source claim.
+- **The composition idiom is consistent** (σ-return contributions summed at `assemble_net_sigma`) with two
+  local dialects: the `sel_*` positional tuple (`combat_systems`) and the non-package import path — both
+  cosmetic, both in the "restore the idiom" bucket, neither a correctness risk.
+
 ---
 
 ## PART 5 — RANKED FINDINGS & RECOMMENDATIONS
