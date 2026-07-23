@@ -115,7 +115,10 @@ class Combatant:
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
-        self.pool=max(5, history+6)                          # resolution pool (History)
+        # (resolution pool is NOT hosted here: the live engine calls core.resolution_pool(history) directly, and a
+        # second hardcoded `self.pool=max(5,history+6)` here was a dead re-implementation of that rule with ZERO
+        # readers — removed ED-PC-0023 audit, §8 "every rule lives once". Any consumer needing the pool calls
+        # core.resolution_pool.)
         self.wt=WoundTracker(end, spirit=self.spirit, strength=self.strength)
         self.health_full=self.wt.health_full                 # total Health (End+Spirit+Str buffer)
         self.wound_interval=self.wt.wi                       # damage per wound-gate (WI)

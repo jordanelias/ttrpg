@@ -19,13 +19,14 @@ WIRING STATUS (2026-06-30, Gate-1 audit — SUPERSEDES the prior "BUILD-ONLY; no
 which is now FALSE):
   · LIVE consumers (read by systems.py / core via Phase-3 wiring): derive(), agility(), defense_affinities(),
     percussion_authority(), puncture_pressure(), at_grip(), grip_choke_max().
-  · NOT YET WIRED — the live engine derives these in PARALLEL elsewhere (the open single-source debt): reach()
-    [live path = systems.reach_base], authority() and armour_defeat_mode() [diagnostic-only]. Consolidating the
-    parallel derivations onto this module is the deferred single-source RE-BASELINE (Gate-1 finding; it changes
-    balance numbers, so it is Jordan-gated — the percussion-authority split core.p_auth vs WP.percussion_authority,
-    which read DIFFERENT inputs (hand-set pob_frac vs derived PoB_frac), is the sharpest case).
-  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) were DELETED 2026-06-30 —
-    a dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
+  · DIAGNOSTIC-ONLY (still defined, called only from __main__): armour_defeat_mode(). (STALE-DOC FIX, ED-PC-0023
+    audit: the prior text here listed authority()/reach() as "NOT YET WIRED / diagnostic-only" and cited an OPEN
+    "core.p_auth vs WP.percussion_authority" single-source debt — but authority()/reach() were DELETED outright the
+    SAME day, 2026-06-30, see the deletion note below the STAGE-3 block, and core.p_auth was retired, see core.py's
+    header. Both claims described functions/debt that no longer exist; struck. percussion_authority now lives ONCE in
+    this module, read by core.strike — the split is closed.)
+  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) AND authority()/reach()
+    were DELETED 2026-06-30 — dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
 
 CALIBRATION: the composite constants are physically sourced; the engine-scale K_* gains are [SIM-CALIBRATE] —
 fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
@@ -212,12 +213,16 @@ def derive(w):
 # redesign/) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a SEPARATE floored Phi_room for
 # percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone heft-room multiply violates C4).
 SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation (a fully-gathered swing never drops below half its open-measure authority)
-# U5/ED-PC-0019 — polearm choke counterbalance (thrust side): choking UP a head-heavy pole (grip>0) to counterbalance
-# its forward mass shortens the effective lever a hair, a SHALLOW, FLOORED loss even on an axial thrust. K=0 keeps
-# the grip-invariant-thrust first principle EXACTLY (phi_grip('point')==1.0 at every grip); the U9 recalibration
-# flips CHOKE_THRUST_K under ablation-gate. The accuracy/legibility side is systems.choke_counterbalance (CHOKE_ACCURACY_K).
-CHOKE_THRUST_K = 0.0      # [U5/ED-PC-0019, K=0] shallow thrust-authority loss per unit choke (grip_position in [0,1])
-CHOKE_THRUST_FLOOR = 0.75 # a choked thrust never drops below this fraction (a thrust is still a thrust)
+# U5/ED-PC-0019 CHOKE_THRUST — RETIRED FROM THE FORCE CHANNEL (U10/ED-PC-0022, 2026-07-23). U5 parked a choke
+# CONTROL cost against phi_grip('point') — the axial-FORCE multiplier — where the ratified D2 grip-invariant-thrust
+# gate (phi>=0.9 at full gather) correctly zeroed it, manufacturing a false "break D2 or kill the lever" dilemma.
+# Radical re-examination (ED-PC-0022): the grip-invariant-thrust principle is PHYSICALLY CORRECT for FORCE MAGNITUDE
+# — a rigid shaft transmits axial compression independent of hand position, so choking up a pole does NOT reduce the
+# force delivered by an axial thrust. What choking up DOES cost is CONTROL: a shortened rear lever lets the point be
+# beaten off-line more easily, and the gathered posture telegraphs. That cost is a legibility/accuracy effect and
+# already has its correct home in systems.choke_counterbalance -> CHOKE_ACCURACY_K (the SAME channel, all modes). So
+# CHOKE_THRUST is not "activated" or "cut" (the U9 false dilemma) — it is RE-HOMED to the channel it always belonged
+# in, and phi_grip('point') is grip-invariant UNCONDITIONALLY (no constant), keeping the D2 gate byte-identical.
 PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
 
 def grip_swing_ratio(w, grip):
@@ -244,7 +249,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
     if sel_head == 'point':
-        return max(CHOKE_THRUST_FLOOR, 1.0 - CHOKE_THRUST_K * grip)   # U5: grip-invariant (==1.0) at K=0 — the first principle intact; a shallow floored choke-loss once U9 flips CHOKE_THRUST_K
+        return 1.0   # D2 gate: an axial point thrust is grip-INVARIANT in FORCE — a rigid shaft transmits axial compression independent of hand position (`[ASSERTED — rigid-body first principles]`). The choke CONTROL cost lives in systems.choke_counterbalance -> CHOKE_ACCURACY_K, NOT here (U10/ED-PC-0022 re-home; the retired CHOKE_THRUST_K false-dilemma note is above phi_room_percussion).
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']

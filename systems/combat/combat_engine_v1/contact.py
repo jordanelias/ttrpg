@@ -14,6 +14,7 @@ beaten-aside/slip-inside displace, or a deep-commit reopen moment) — never re-
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 import math
 import combat_systems as S
+import ability_primitives as ABIL   # U10/ED-PC-0022: 'edge_grab' modulation (Ringen am Schwert seizes a live blade with less self-injury)
 
 # ── contact axis (I7b) ──────────────────────────────────────────────────────────────────────────
 def _short_reach_exempt(c, cfg):
@@ -44,7 +45,7 @@ def grab_sigma(actor, opponent, cfg):
     term (D9/JD-7 retraction). +ve favours actor. Pure."""
     lev = S.leverage(actor, cfg) - S.leverage(opponent, cfg)
     strq = (actor.strength - opponent.strength) * cfg['GRAB_STR_K']
-    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * (1.0 - actor.skill('grab'))   # U3/ED-PC-0018: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill. K=0 until U9; 0 for an edgeless weapon.
+    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * (1.0 - actor.skill('grab')) * ABIL.ability_factor(actor, 'edge_grab')   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill AND by a grappling tradition ('edge_grab' factor<1, Ringen am Schwert — seizing the strong/bind of a live blade safely). 0 for an edgeless weapon.
     return strq + cfg['GRAB_LEV_K'] * lev - edge
 
 

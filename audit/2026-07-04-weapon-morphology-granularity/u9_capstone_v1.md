@@ -4,11 +4,17 @@
 **Increment:** U9 (last in the U0→U9 sequence), per `consolidation_v1.md` §4/§6.
 **Scope of change:** **none to engine code** — all six candidate levers stay at `K=0` (byte-identical).
 This doc *is* the U9 deliverable: the ablation study, the verdict, and the one held-back design call.
-**Status: RATIFIED** (2026-07-23, by merge of PR #220 per ED-1094) — the **verdict** (keep all six levers
-at K=0, byte-identical; cut nothing, activate nothing) is ratified. The single hard design call it isolates
-(activating `CHOKE_THRUST` requires revising the *ratified D2 grip-invariant-thrust gate*) remains **HELD
-BACK, `needs_jordan`** — it was flagged as held-back in the PR body, so ordinary merge review did **not**
-ratify it (§4 below); it stays open until Jordan's explicit ruling.
+**Status: SUPERSEDED by U10 (ED-PC-0022, 2026-07-23)** — the U9 verdict (keep all six levers at K=0) was ratified
+by PR #220, then **re-examined and executed** by U10 (`u10_activation_v1.md`), which activated the levers to small
+grounded baselines behind a new tradition-modulation surface. The held-back `needs_jordan` below is **DISSOLVED**,
+not decided: U10 found the choke-thrust cost was mis-parked against the (physically-correct) D2 force-invariant, and
+**re-homed** it to the control/legibility channel — so the D2 gate stays byte-identical and no exception to it is
+needed (the §4 (a)/(b) fork was a false dichotomy). The §2 ablation and §3 "situational, winrate is the wrong
+instrument" analysis stand and are the direct basis for U10's per-matchup instrument.
+
+> **Original U9 status (historical):** RATIFIED (2026-07-23, PR #220 per ED-1094) — verdict keep-all-at-K=0; the
+> single hard design call (activating `CHOKE_THRUST` vs the ratified D2 gate) was HELD BACK `needs_jordan`. See U10
+> for the resolution.
 
 ---
 

@@ -6,15 +6,71 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **U9 test-hygiene follow-up (from ED-PC-0021 adversarial review, 2026-07-23).** `test_combat_choke.py::
-  test_both_channels_live_not_dead` writes the shared `weapon_physics.CHOKE_THRUST_K` module global and
-  resets it to `0.0` in its `finally`, leaking `0.0` to every later test module. Harmless at the shipped
-  `K=0` (the finally restores the correct default), but it **masks** the D2-gate breakage when the source
-  constant is flipped for review — a full-suite run of a flipped `CHOKE_THRUST_K` hides that
-  `test_thrust_protection_grip_invariant` fails (see `audit/2026-07-04-weapon-morphology-granularity/
-  u9_adversarial_review_v1.md` §4). Fix when next touching these tests: replace the raw global write with
-  a `monkeypatch`/`cfg`-scoped override so module state never leaks across tests. Not blocking; no ED
-  allocated (folds into the eventual CHOKE_THRUST activation ruling, if (b)).
+- **IMPOSITION FIAT RETIRED (Jordan ruling 2026-07-23, ED-PC-0023) + design principle recorded.** `impose_node`
+  FORCED a tradition's preferred node via a label coin-flip overriding the emergent resolution — top-down scripting.
+  Retired: `IMPOSITION_GATE=False`, `impose_node` → no-op, `IMPOSE_BIND_BOOST`/`IMPOSE_REFUSE_P` deleted (reverses the
+  ratified WS-4 default, per Jordan's live authority). Tradition-preference now EMERGES from build (skill investment
+  + weapon + abilities + disposition, all already live in mode_sigma/bind_sigma — verified: bind-skill 1/2/3 →
+  61/71/75% win-share, monotonic, no fiat). **GOVERNING DESIGN PRINCIPLE (Jordan, recorded in
+  `audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`):** each combatant's feel emerges from their full stack
+  (tradition/abilities/attributes/weapon/armour/disposition), resolving true to their style; every build AVAILABLE
+  (not every build good) — expressive availability over parity; efficacy from INVESTMENT/EXPERTISE, not membership;
+  no fiat. **NEXT INCREMENT (forward architecture): levels of investment for techniques** — grade `ability_factor`
+  by an invested level (the pattern `skill()` already sets), turning binary equipped-abilities into a continuum
+  (the ability system's own target model: tradition gates access, investment+skill drive efficacy). Also open:
+  PREFERRED (traditions.py) is now vestigial (kept as metadata for a future EMERGENT selection-bias, never a forced
+  override); full `impose_node` call-site removal is a tidy-up follow-up.
+
+- **ADVERSARIAL REVIEW of U10 + fiat-audit DONE (2026-07-23) — 4 independent critics + pessimistic NERS.**
+  Correctness: CLEAN (signs verified by sign-flip, no bugs). NERS: SAFE (no runaway/degeneracy/new-extreme/dead-branch).
+  Balance: the "+2.8pp specialist edge" was a CONFOUND (german+ability vs none+empty) — abilities are ~0 aggregate,
+  per-event real; "field within noise" over-stated (grounded moves for grab/edge weapons, but no new extremes).
+  Grounding: ability layer under-grounded. **Corrections applied (folded under ED-PC-0023):** retag winden->shinogi
+  (japanese — grounded to the katana that HAS a spine; winden was a longsword technique inert on the single-edge
+  lever); tagged all ability multipliers [SIM-CALIBRATE]; removed the confounded aggregate test → deterministic
+  per-event test; tightened the guisarme re-baseline (none/light back to strict >0.5, medium contest only);
+  corrected the u10 doc (§4 retraction + §7 review addendum) + the ED-PC-0022 ledger claim. **Ability layer is now
+  framed as illustrative infrastructure, not a proven aggregate-balance feature.** Open follow-up: ground more
+  traditions' abilities; the abilities' aggregate ~0 means the *activation's* value is the surface + per-event, not
+  field balance — a Jordan design call on whether the (safe, grounded, ~0-aggregate) activation is worth keeping vs
+  reverting to K=0-with-surface.
+
+- **COMBAT FIAT / BROKEN-LOGIC AUDIT DONE (ED-PC-0023, 2026-07-23) — 4 independent adversarial passes.** FIXED
+  (clean, contained, 9-accepted-red unchanged): THRUST_LEVER_FLOOR 0.30->0.24 (un-flattened 7 polearms);
+  GAP_EXPOSURE ordering corrected to match core.py's own grounding (mail>plate; cloth mostly-accessible; plate
+  anchor kept); removed dead Combatant.pool (§8); struck stale weapon_physics WIRING-STATUS doc. The flagged
+  grip-invariant-thrust tenet was RULED GROUNDED (the force invariant is correct; costs homed elsewhere, no
+  double-count). Doc: `audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`.
+  - **FLAGGED broken-logic — future increments (evidenced, fix-spec'd, NOT yet fixed; each needs its own verification):**
+    1. **MAX_TEMPO_PEN=0.8 hard-cap flat-tops 38/53 weapons to 0.80** (biggest emergence-suppressor). Fix = surgical
+       over-cap-tail `min(pen,MAXP)+K*tanh(max(0,pen-MAXP))` (arming sub-cap => mirror byte-identical); REQUIRES a
+       deliberate regen of `tests/valoria/r3_identity_golden.json` (no generator exists — hand-reproduce). Own increment.
+    2. **PERC_EXP=0.30 low-mass compression** over-credits native secondary blunt elements (lucerne fluke/bec beak) —
+       the REVERSED_GRIP_EFFICIENCY=0.25 discount only patches Mordhau. Root recalibration, every blunt weapon — Jordan-gated.
+    3. **PERC_TRANSMIT_FLOOR=0.35** flat-tops 11 Mordhau armour-transmission ratios.
+    4. **IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P fixed 0.5** — imposition carries zero skill-gradient (rewards membership not
+       mastery); candidate to couple to eff_cw/ability_factor (design call).
+    5. **adef_cap blunt branch doesn't thread sel_head** — puncture_pressure reads whole-weapon blade-tip concentration
+       for a pommel-strike; latent/inert (ADEF_BLUNT wins the max()), structurally wrong.
+  - **Editorial nit:** CLAUDE.md §5 "Combat Pool three ways" is overstated — live engine + core.md + module_contracts
+    agree on max(5,History+6); only values_master.yaml is stale (self-flagged). Could tighten the §5 wording.
+
+- **U10 morphology-lever ACTIVATION DONE (ED-PC-0022, 2026-07-23) — supersedes the U9 keep-at-K=0 verdict.**
+  Re-examined the U9 verdict and found the six edge/choke/facing levers inert for FOUR reasons (wrong instrument /
+  amputated tradition surface / choke-thrust mis-parked against the D2 force-invariant / near-invisible facing
+  consumers). Executed the capstone's own re-charter: (1) RE-HOMED choke-thrust out of `phi_grip('point')` — D2
+  force-invariant kept byte-identical, `CHOKE_THRUST_K` retired, the held-back `needs_jordan` DISSOLVED (no D2
+  exception needed); (2) built the tradition-modulation surface — every lever site routed through
+  `ability_factor(c,<channel>)`; (3) ACTIVATED to small grounded baselines (LEGIB_EDGELINE 0.04 / BIND_SPINE 0.03 /
+  GRAB_EDGE 0.07 / CHOKE_ACCURACY 0.03 / FACING_REGIME 0.12) — no-ability field within harness noise; (4) added 4
+  treatise-grounded abilities (winden/zwerchhau/ringen_am_schwert/guardia). Efficacy measured on the per-matchup
+  specialist duel (Winden katana +2.8pp). The **U9 test-hygiene defect is FIXED** here (the global-write leak in
+  `test_both_channels_live_not_dead` is gone — the constant is retired and the channel is exercised via cfg+equipped).
+  9 accepted-red baseline unchanged; ONE grounded re-baseline (guisarme off-plate reach — see doc). Doc:
+  `audit/2026-07-04-weapon-morphology-granularity/u10_activation_v1.md`.
+  - **Open follow-ups (not blocking):** `choke_control` channel has the surface but no ability yet (needs a grounded
+    pole/staff tradition); facing stays conservative pending C1 (absolute polearm facing direction) resolution; the
+    ability baselines/multipliers are `[SIM-CALIBRATE]` and open to per-scenario tuning.
 
 - **ED-PC-0007 (DEFERRED 2026-07-08, Jordan: "Defer PC") — pessimist-audit PC verdicts do NOT execute now.**
   The pessimist-action audit (ED-IN-0027) judged the discrete `combat_v30 §4` ACTIONS menu, but that menu is

@@ -533,17 +533,17 @@ def test_stophit_range_term_zero_at_full_room():
 
 # ── I6 FACING STATE + LATERAL-VOID CLOSING (D6, 2026-07-03) ─────────────────────────────────────────
 # designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
-def test_facing_weapon_class_blind_at_k_zero():
-    """I6 gate #3 (C2), as the U7/ED-PC-0020 byte-identity guard: at FACING_REGIME_K=0 the weapon-class facing regime
-    is INERT (the multiplier is exactly 1.0), so two weapons with identical stance/grip still get IDENTICAL facing —
-    the property the pre-U7 engine had, preserved byte-identically at landing. (The C2 reversal activates only when
-    U9 flips FACING_REGIME_K; see test_facing_regime_separation for the wired-but-gated weapon-awareness.)"""
+def test_facing_weapon_class_aware_at_shipped_k():
+    """I6 gate #3 (C2 REVERSAL), now ACTIVE (U10/ED-PC-0022): FACING_REGIME_K is shipped >0, so the facing regime
+    reads weapon class — a 1H weapon (profile, +) and a 2H weapon (square, −) at identical stance/grip now get
+    DIFFERENT facing. This is the Jordan-resolved C2 reversal the U7 pin held at K=0; U10 activates it at a
+    conservative K (C1 absolute direction still unresolved — see test_facing_near_neutral_small, which still holds)."""
     C, core, S, WP, CFG = _mods()
-    assert CFG['FACING_REGIME_K'] == 0.0
-    c1 = C.Combatant('a', weapon='spear'); c1.grip_position = 0.4
-    c2 = C.Combatant('b', weapon='mace'); c2.grip_position = 0.4
-    assert S.facing_target(c1, True, CFG) == S.facing_target(c2, True, CFG)
-    assert S.facing_target(c1, False, CFG) == S.facing_target(c2, False, CFG)
+    assert CFG['FACING_REGIME_K'] > 0.0
+    oneh = C.Combatant('a', weapon='sabre'); oneh.grip_position = 0.4       # 1H -> profile (+)
+    twoh = C.Combatant('b', weapon='longsword'); twoh.grip_position = 0.4   # 2H -> square (−)
+    assert S.facing_target(oneh, True, CFG) != S.facing_target(twoh, True, CFG)
+    assert S.facing_target(oneh, False, CFG) != S.facing_target(twoh, False, CFG)
 
 
 def test_facing_regime_separation():
@@ -811,10 +811,21 @@ def test_reach_class_beats_arming_not_inverted():
                 elif r == -1: dec += 1
             assert dec > 0, (w, armor)
             share[(w, armor)] = wins / dec
-    # (1) reach dominates every NON-plate tier for every reach weapon — the reach advantage vs flesh/cloth/mail is real.
-    for w in ('spear', 'yari', 'guisarme', 'poleaxe'):
+    # (1) reach dominates every NON-plate tier for the DEDICATED reach weapons — the reach advantage vs flesh/cloth/mail
+    #     is real. (spear/yari long point + poleaxe percussion; guisarme handled separately below.)
+    for w in ('spear', 'yari', 'poleaxe'):
         for armor in ('none', 'light', 'medium'):
             assert share[(w, armor)] > 0.5, f"{w} vs arming at {armor}: reach INVERTED off-plate ({share[(w, armor)]:.2f})"
+    # (1b) [RE-BASELINED, U10/ED-PC-0022; TIGHTENED ED-PC-0023 per the adversarial review]. The guisarme (versatile
+    #     mid-reach hooked polearm) keeps the STRICT >0.5 guard at none/light — the review confirmed it stays solidly
+    #     dominant there (~0.68-0.78 at N>=300), so those tiers never needed loosening (my first re-baseline over-broadly
+    #     relaxed all three). ONLY the MEDIUM tier is a genuine near-even contest (~0.51-0.53 true, n=60/cell → SE~0.09,
+    #     so the hardcoded seed can land ~0.45): activating the edge_lines/choke legibility effects shaves the arming
+    #     matchup there (arming's double edge reads harder; the 2H bill telegraphs when gathered — grounded). So medium
+    #     gets a tight CONTEST band; none/light stay strict. A real zeroing bug still trips the medium floor.
+    for armor in ('none', 'light'):
+        assert share[('guisarme', armor)] > 0.5, f"guisarme vs arming at {armor}: reach INVERTED off-plate ({share[('guisarme', armor)]:.2f})"
+    assert share[('guisarme', 'medium')] > 0.42, f"guisarme vs arming at medium: reach ANNIHILATED ({share[('guisarme', 'medium')]:.2f}) — expected a near-even contest"
     # (2) at HEAVY, the dedicated armour-defeating reach weapon still dominates (poleaxe's swung spike/hammer defeats plate).
     assert share[('poleaxe', 'heavy')] > 0.5, f"poleaxe vs arming at heavy should still defeat plate ({share[('poleaxe','heavy')]:.2f})"
     # (3) at HEAVY, a PURE-POINT reach weapon is correctly brought BELOW dominance (the grounded G4 correction — a long

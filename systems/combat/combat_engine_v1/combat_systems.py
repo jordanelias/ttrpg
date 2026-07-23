@@ -5,6 +5,7 @@ import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import exp, tanh, sqrt
 import core
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
+import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
 # ---------- reach (continuous, derived) ----------
@@ -53,6 +54,12 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     g=getattr(c,'grip_position',0.0)
     _heft=wield_heft(c,cfg)   # DERIVED g-aware MoI heft (Phase-3 Stage 2b): replaces the binary wt class on the COST path
     pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
+    # KNOWN BROKEN-LOGIC (ED-PC-0023 audit, FLAGGED not fixed here): this hard min() FLAT-TOPS 38/53 weapons (every
+    # raw pen>0.8 — a rapier at 0.831 and a spear at 2.878 read the IDENTICAL 0.80) to one value, erasing the tempo
+    # ordering. The fix is a surgical saturation of only the over-cap tail (min(pen,MAXP)+K*tanh(max(0,pen-MAXP)),
+    # arming/sub-cap byte-identical), but it changes 38 weapons' weapon_tempo/close_tempo and so requires a DELIBERATE
+    # regeneration of tests/valoria/r3_identity_golden.json (no generator exists — must be hand-reproduced) per that
+    # fixture's re-baseline protocol — out of scope for this fiat-fix batch. See u10_activation_v1.md §7 (deferred).
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
     pen += cfg['CHOKE_TEMPO_PEN']*g   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
     pen += cfg['LUNGE_TEMPO_PEN']*getattr(c,'lunge_depth',0.0)     # an extended/lunged body is slower to repeat — CONTINUOUS in lunge_depth
@@ -79,7 +86,9 @@ def choke_counterbalance(c, cfg):
     hand to counterbalance (rear_clearance, normalised by a pole-class reference). A compact one-hander (low
     rear_clearance) barely counterbalances; a poleaxe/staff (high rear_clearance) does so strongly. The COST of that
     control — a gathered pole telegraphs and loses fine precision — routes to the accuracy/legibility channel
-    (CHOKE_ACCURACY_K); the thrust side is weapon_physics.phi_grip (CHOKE_THRUST_K). Half-sword forms are EXEMPT: their
+    (CHOKE_ACCURACY_K), which is now the SOLE choke-cost channel: the thrust-side cost was re-homed here from
+    weapon_physics.phi_grip (U10/ED-PC-0022 retired CHOKE_THRUST_K — it was mis-parked against the D2 force-invariant).
+    Half-sword forms are EXEMPT: their
     grip is the blade-grip (a different mechanic), and the derived short-lever form reads ~0 here anyway — an explicit
     base-form guard makes that exact. In [0,1]; 0 at grip=0. Reuses the rear-clearance delta (no new primitive). Pure."""
     if 'base' in c.w:                                   # a *_halfsword form — not a pole choke-counterbalance
@@ -373,7 +382,7 @@ def facing_target(c, closed, cfg):
     resolved). Ships near-neutral (C1 polearm facing DIRECTION still unresolved). Pure (returns facing; wrapper writes c.facing)."""
     base = FACING_VOID_K * (1.0 if closed else 0.5)
     base = base * (0.5 + 0.5 * getattr(c, 'grip_position', 0.0))
-    return base * (1.0 + cfg['FACING_REGIME_K'] * WP.facing_pref(c.w))   # U7/ED-PC-0020: weapon-class facing regime (1H profile / 2H square) — K=0 makes the multiplier exactly 1.0 (byte-identical, C2 still holds numerically), the U9 recalibration flips FACING_REGIME_K
+    return base * (1.0 + cfg['FACING_REGIME_K'] * WP.facing_pref(c.w) * ABIL.ability_factor(c, 'facing_regime'))   # U7/ED-PC-0020 -> ACTIVATED U10/ED-PC-0022: weapon-class facing regime (1H profile / 2H square) is now LIVE (facing reads weapon class — the Jordan-resolved C2 reversal), AMPLIFIED by 'facing_regime' (Italian single-time profile guardia; factor 1.0 default). Conservative K (C1 direction still unresolved).
 
 def range_utilization(c, measure_gap, cfg):
     """The AVAILABLE swing-room this beat, in [0,1], derived from how close the exchange is (measure_gap). 1.0 at
@@ -622,18 +631,15 @@ def leverage(c, cfg):
     return lev
 
 def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
-    """WS-4/WS-5 imposition (section C, flag-gated): a tradition biases the exchange toward its PREFERRED node,
-    DECOUPLED from channel magnitude (fixed normalized rates, not eff_cw — the repair the gate-reconciliation
-    requires: the magnitude must not drive imposition). German (bind-seeker) imposes the crossing; the
-    bind-refusers (Italian/English/Spanish counter/measure schools) slip a forming bind into a counter
-    (cavazione/disengage). A landed hit is never re-routed. Pure (reads rng); returns (bind, riposte)."""
-    if hit > 0:
-        return bind, riposte
-    pa = TR.preferred(aggressor.tradition); pd = TR.preferred(defender.tradition)
-    if pa == 'bind' and not bind and rng.random() < cfg['IMPOSE_BIND_BOOST']:
-        bind = True                                  # German forces the crossing onto an unwilling opponent
-    if pd in ('counter', 'measure') and bind and rng.random() < cfg['IMPOSE_REFUSE_P']:
-        bind = False; riposte = True                 # the refuser slips the bind into a single-time counter
+    """RETIRED FIAT (Jordan ruling 2026-07-23, ED-PC-0023) — a NO-OP, returns the emergent (bind, riposte) unchanged.
+    This once FORCED a tradition's preferred node (German impose-the-bind / Italian-etc refuse-it) via a label-keyed
+    coin-flip (IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P) that OVERRODE the emergent resolution — top-down scripting (§0),
+    the antithesis of "each combatant resolves in a way that feels correct to their style." A tradition's node-
+    preference must EMERGE from the fighter's BUILD, not be imposed by a rule: a fighter binds more because they
+    INVESTED in binding (skill('bind') + a bind-friendly weapon's wind affinity + learned binding abilities +
+    disposition) — all already live in mode_sigma/bind_sigma. Kept as a no-op stub (IMPOSITION_GATE defaults False,
+    so it is never called; the call-site guard stays as the documented off-switch) rather than deleted outright, so
+    the retirement is a single visible ruling; the full call-site removal is a follow-up. Reads no cfg/rng now."""
     return bind, riposte
 
 
@@ -706,8 +712,8 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
-    legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)   # U3/ED-PC-0018: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction) — K=0 until U9, 0 for a plain-single/edgeless weapon
-    legib += cfg['CHOKE_ACCURACY_K']*choke_counterbalance(aggressor, cfg)   # U5/ED-PC-0019: a head-heavy pole CHOKED UP to counterbalance telegraphs / loses fine precision -> reads EASIER (more legible). K=0 until U9; 0 at grip=0 / for a compact weapon / a half-sword form.
+    legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)*ABIL.ability_factor(aggressor, 'edge_read')   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction), AMPLIFIED by a tradition that weaponizes the false edge (Zwerchhau, 'edge_read'; factor 1.0 default). 0 for a plain-single/edgeless weapon.
+    legib += cfg['CHOKE_ACCURACY_K']*choke_counterbalance(aggressor, cfg)*ABIL.ability_factor(aggressor, 'choke_control')   # U5/ED-PC-0019 -> ACTIVATED U10/ED-PC-0022: a head-heavy pole CHOKED UP to counterbalance telegraphs / loses fine precision AND loses point control (the RE-HOMED choke-thrust cost) -> reads EASIER (more legible). Mitigated by 'choke_control' (a pole tradition gathers without telegraphing; factor 1.0 default). 0 at grip=0 / for a compact weapon / a half-sword form.
     # SWING-ROOM LEGIBILITY (I5, D4/D5): a broad swing that cannot fully develop in cramped quarters is MORE
     # constrained and reads EASIER — weighted by the SELECTED element's own (1-pc_sel) (a thrust, pc_sel~1, is
     # unaffected) and by how little room is left (1-range_avail). Exactly 0 at range_avail=1.0 (the I1/I5
@@ -757,7 +763,7 @@ def bind_sigma(aggressor, defender, cfg, TR):
                * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(aggressor.w))   # the AGGRESSOR's wavy edge disrupts the defender's read
     tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
-    spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w) - WP.spine(defender.w))   # U3/ED-PC-0018: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press, winden) — a separate physical fact from the lever-arm in `lev`, so it stays its own K=0-ablatable primitive (not multiplied into leverage, which would destroy its ablation-falsifiability — §2.3). 0 for a double-edged/edgeless weapon.
+    spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w)*TR.eff_cw(aggressor,'spine_press') - WP.spine(defender.w)*TR.eff_cw(defender,'spine_press'))   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press, Winden) — a separate physical fact from the lever-arm in `lev`, kept its own ablatable primitive (not multiplied into leverage — §2.3). Each side is AMPLIFIED by its own 'spine_press' ability (German Winden; factor 1.0 default), so a bind specialist makes the spine decisive. 0 for a double-edged/edgeless weapon.
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
     return lev + catch + tac + strq + spine + wound
 

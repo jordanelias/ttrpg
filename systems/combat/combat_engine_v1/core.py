@@ -102,7 +102,7 @@ COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_mo
 # the visor/armpit/groin/palm gaps; mail exposes more (open weave/edges); cloth/none are mostly accessible. The plate
 # value is set at ~the poleaxe hammer->spike flip (systems.select_mode) so the reach-ladder truth holds; the
 # orchestrator tunes the final magnitudes. GROUNDING (direction): Williams (puncture succeeds at gaps/weak-points).
-GAP_EXPOSURE={'none':1.0,'cloth':0.85,'mail':0.90,'plate':0.90}     # [SIM-CALIBRATE] thrust-accessible gap fraction / material (reach-ladder)
+GAP_EXPOSURE={'none':1.0,'cloth':0.97,'mail':0.95,'plate':0.90}     # [SIM-CALIBRATE] thrust-accessible gap fraction / material (reach-ladder). BROKEN-LOGIC FIX (ED-PC-0023): the old {cloth:0.85, mail:0.90, plate:0.90} CONTRADICTED this block's own grounding prose above — "mail exposes MORE (open weave/edges)" than plate (was mail==plate) and "cloth/none are mostly accessible" (cloth was the LOWEST, below both armours). Corrected to the monotone none>cloth>mail>plate the prose states: mail 0.95 now exposes more than plate 0.90 (LIVE — the gap term binds for mail); cloth 0.97 matches "mostly accessible" (mostly inert — the through-material floor t=0.88 dominates for soft cloth). The plate=0.90 anchor (the poleaxe hammer->spike flip) is UNCHANGED — the heavy-armour gap game is preserved exactly.
 GAP_PREC_REF=0.65                                                   # neutral gap_precision default for the puncture path (a mid-roster point) — the LIVE combat path always THREADS the weapon's real w['gap'] (systems.select_mode / core.strike), so this default only guards a hypothetical unthreaded caller.
 # FIX-1b [FIAT — no melee-speed behind-plate data exists; ballistic BABT is the wrong regime, per Phase-3 grounding]:
 # percussion transmitted through RIGID armour (mail/plate) scales with the blow's percussion AUTHORITY — a steel
@@ -213,7 +213,14 @@ CUT_AUTH_REF=0.70
 # own eff = the EDGE magnitude, a different quantity); distinct axis from PC-5's THRUST_LEVER_REF (head_len lever) —
 # both refine the point path, one by geometry-magnitude, one by pommel-press lever.
 THRUST_AUTH_REF=0.52
-THRUST_LEVER_REF=0.55; THRUST_LEVER_FLOOR=0.30
+# THRUST_LEVER_FLOOR lowered 0.30 -> 0.24 (BROKEN-LOGIC FIX, ED-PC-0023): at 0.30 the floor BOUND for the 7 longest
+# polearms (guandao/dangpa/bear_spear/ranseur/yari/fauchard/voulge, head_len 1.85-2.03m), flat-topping their real
+# THRUST_LEVER_REF/head_len spread (~0.271-0.297) to one identical 0.300 — erasing the head_len-driven ordering the
+# primitive is meant to express. 0.24 sits just below the roster's natural minimum (~0.271), so it only guards genuinely
+# pathological/future weapon data (its stated intent — "a pike's point is never zero") and the polearm class regains its
+# emergent spread. The longest reach-thrusts now read slightly LOWER gap-press authority (grounded: a longer lever
+# presses a harness gap less well) instead of tying at the floor.
+THRUST_LEVER_REF=0.55; THRUST_LEVER_FLOOR=0.24
 def thrust_authority(head_len):
     """Point-to-hand lever -> thrust authority factor in [THRUST_LEVER_FLOOR, 1.0]. Short lever (dagger/half-sword) =
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
