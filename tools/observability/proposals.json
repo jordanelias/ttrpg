@@ -5,14 +5,14 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 257,
-    "needs_jordan": 98,
+    "total": 246,
+    "needs_jordan": 97,
     "by_kind": {
-      "provisional_status_doc": 20,
-      "proposal_doc": 16,
+      "proposal_doc": 18,
+      "provisional_status_doc": 6,
       "ledger_actionable": 119,
       "ledger_needs_jordan": 85,
-      "audit_partial": 17
+      "audit_partial": 18
     },
     "by_lane": {
       "FA": {
@@ -24,7 +24,7 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 33,
+        "total": 35,
         "needs_jordan": 15
       },
       "MB": {
@@ -32,7 +32,7 @@
         "needs_jordan": 5
       },
       "PC": {
-        "total": 6,
+        "total": 5,
         "needs_jordan": 1
       },
       "SC": {
@@ -48,156 +48,16 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 108,
-        "needs_jordan": 28
+        "total": 96,
+        "needs_jordan": 27
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 108,
-      "needs_jordan": 28,
+      "total": 96,
+      "needs_jordan": 27,
       "items": [
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/00_index.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/00_index.md",
-          "title": "00 index",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Read-only research consolidation. NOT canon; nothing here flips a `Status:` line. The single home for this session's entire governance-design body of work, so nothing is left stranded as unused research.",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md",
-          "title": "42 action verb catalogue",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — compiled 2026-07-12, Lane: IN (cross-cutting; touches FA, SE, MB, GO)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/43_directive_types.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/43_directive_types.md",
-          "title": "43 directive types",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md`)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md",
-          "title": "44 standing institutions",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md` / `settlement_layer_v30.md`)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md",
-          "title": "45 hidden longfuse stats",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — needs a granularity ruling",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/event_cards/00_integration_map.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/event_cards/00_integration_map.md",
-          "title": "00 integration map",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — compendium integration pass, not yet Jordan-ratified",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md",
-          "id": "designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md",
-          "title": "reeval jp se",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED / provisional re-evaluation artifact — 2026-07-12. Re-judges the 8 kept Japan-origin proposals (`FA-JP-*`, `SE-JP-*`) from the 2026-07-09 comparative-governance research docket (STEP-3, 44 KEPT) against the newly-discovered **BUILT** substrate (`sim/territory/`, `goldenfurt_slice/`, `settlement_mgmt_stress_01`), reading each item's prior NERS verdict from the 2026-07-11 pessimist-NERS audit as the starting point. Not itself canon — a review artifact feeding the docket's next authoring/decision pass. **Scope note:** the STEP-3 44-KEPT table uses only civilization-prefixed codes (`BYZ-`, `CHN-`, `HRE-`, `VEN-SE-`, `VEN-FA-`, `IT-`, `HAB-`, `FA-JP-`, `SE-JP-`) — no bare `SE-*`/`FA-*` codes exist outside a civilization prefix, so \"remaining SE-*/FA-*\" resolves to the empty set for this pass; all 8 Japan-lane items are covered below in full.",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
-          "id": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
-          "title": "remediation plan v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0066",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-14-holistic-unification/unification_v1.md",
-          "id": "designs/audit/2026-07-14-holistic-unification/unification_v1.md",
-          "title": "unification v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED (audit synthesis; ED-IN-0065, 2026-07-14)",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
-          "id": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
-          "title": "governance cluster reconciliation v1",
-          "lane": "unassigned",
-          "needs_jordan": true,
-          "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
-          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
-          "title": "00 findings",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — read-only, docket unruled",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
-          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
-          "title": "01 remediation L1 L2",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
-          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
-          "title": "02 emergence oracle spec",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED",
-          "links": []
-        },
-        {
-          "kind": "provisional_status_doc",
-          "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
-          "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
-          "title": "03 remediation program",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "PROPOSED — Jordan-gated. Phase-0 docket UNRULED except D1 (ruled per-NPC, 2026-07-18).",
-          "links": []
-        },
         {
           "kind": "proposal_doc",
           "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
@@ -266,6 +126,26 @@
           "lane": "unassigned",
           "needs_jordan": false,
           "status": "(no Status line — proposals/)",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-21-observatory-holonic-refactor.md",
+          "id": "proposals/2026-07-21-observatory-holonic-refactor.md",
+          "title": "2026-07-21-observatory-holonic-refactor",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "RATIFIED (r2) — 2026-07-21 (merge of PR #202 ratifies the Assay/Atlas/Augur architecture by default per ED-1094; its §7 phasing is amended/subsumed by the Reconciliation Program's R1–R6, 2026-07-21-reconciliation-program.md §6). The §8 P2-redefinition + mean==0 sentinel fix is now RULED (option A) and applied as ED-IN-0080. STILL HELD for separate Jordan sign-off — the remaining §8 items, NOT ratified by this merge: any Assay change altering P1 medians, unbuilt dispositions, elevating a symmetry probe to a Tier-3 gate / making the workflow blocking, build_graph↔substrate unification, and the four-bloc win-probability gate. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-21-reconciliation-program.md",
+          "id": "proposals/2026-07-21-reconciliation-program.md",
+          "title": "2026-07-21-reconciliation-program",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
           "links": []
         },
         {
@@ -1663,7 +1543,7 @@
       ]
     },
     "IN": {
-      "total": 33,
+      "total": 35,
       "needs_jordan": 15,
       "items": [
         {
@@ -1937,6 +1817,16 @@
           "links": []
         },
         {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0079",
+          "title": "Values/formulae unification, first slice (Jordan directive: 'I need all values and formulae'; redirect: 'what happened to the .py stuff and pointers'). The computational values live as ~324 typed module-scope constants in the sim reference ",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
           "kind": "audit_partial",
           "source": "references/audit_registry.jsonl",
           "id": "valoria-mechanic-audit-2026-07-13:architecture:architecture",
@@ -2007,11 +1897,23 @@
           "links": [
             "designs/audit/2026-07-14-gameplay-subsystem-observatory"
           ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-vector-audit-2026-07-21:corpus_wide:2026-07-21-repo-state-vector-audit",
+          "title": "[PARTIAL] vector_audit / corpus_wide: validation FAILED 1/3 (P3 pass; P1/P2 fail) → findings are leads; fixed 4 instrument staleness bugs from the designs/ retirement + register moves (input path, coverage denominator, banner classifier aud",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "audit/2026-07-21-repo-state-vector-audit"
+          ]
         }
       ]
     },
     "PC": {
-      "total": 6,
+      "total": 5,
       "needs_jordan": 1,
       "items": [
         {
@@ -2041,16 +1943,6 @@
           "title": "U2 scoping findings -- attempted U2 (graded mode affordance + Phase-C percussion enactment, consolidation_v1.md section 4) this session, immediately after U1/ED-PC-0010 landed and unblocked it. Found U2's one-line spec ('drop cut_factor 0.4",
           "lane": "PC",
           "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-PC-0012",
-          "title": "Found via the ED-PC-0011 agonist/antagonist roster-wide adversarial validation Workflow (13 agents: 6 Sonnet producer verdicts x 6 Sonnet independent critics x 1 Opus synthesis) — a SECOND, structurally identical gap to the one ED-PC-0011 f",
-          "lane": "PC",
-          "needs_jordan": false,
           "status": "open",
           "links": []
         },
@@ -2715,146 +2607,6 @@
   },
   "items": [
     {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/00_index.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/00_index.md",
-      "title": "00 index",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Read-only research consolidation. NOT canon; nothing here flips a `Status:` line. The single home for this session's entire governance-design body of work, so nothing is left stranded as unused research.",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md",
-      "title": "42 action verb catalogue",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — compiled 2026-07-12, Lane: IN (cross-cutting; touches FA, SE, MB, GO)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/43_directive_types.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/43_directive_types.md",
-      "title": "43 directive types",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md`)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md",
-      "title": "44 standing institutions",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md` / `settlement_layer_v30.md`)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md",
-      "title": "45 hidden longfuse stats",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — needs a granularity ruling",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/event_cards/00_integration_map.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/event_cards/00_integration_map.md",
-      "title": "00 integration map",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — compendium integration pass, not yet Jordan-ratified",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md",
-      "id": "designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md",
-      "title": "reeval jp se",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED / provisional re-evaluation artifact — 2026-07-12. Re-judges the 8 kept Japan-origin proposals (`FA-JP-*`, `SE-JP-*`) from the 2026-07-09 comparative-governance research docket (STEP-3, 44 KEPT) against the newly-discovered **BUILT** substrate (`sim/territory/`, `goldenfurt_slice/`, `settlement_mgmt_stress_01`), reading each item's prior NERS verdict from the 2026-07-11 pessimist-NERS audit as the starting point. Not itself canon — a review artifact feeding the docket's next authoring/decision pass. **Scope note:** the STEP-3 44-KEPT table uses only civilization-prefixed codes (`BYZ-`, `CHN-`, `HRE-`, `VEN-SE-`, `VEN-FA-`, `IT-`, `HAB-`, `FA-JP-`, `SE-JP-`) — no bare `SE-*`/`FA-*` codes exist outside a civilization prefix, so \"remaining SE-*/FA-*\" resolves to the empty set for this pass; all 8 Japan-lane items are covered below in full.",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
-      "id": "designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md",
-      "title": "remediation plan v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0066",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-14-holistic-unification/unification_v1.md",
-      "id": "designs/audit/2026-07-14-holistic-unification/unification_v1.md",
-      "title": "unification v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED (audit synthesis; ED-IN-0065, 2026-07-14)",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
-      "id": "designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md",
-      "title": "governance cluster reconciliation v1",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
-      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md",
-      "title": "00 findings",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — read-only, docket unruled",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
-      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md",
-      "title": "01 remediation L1 L2",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
-      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md",
-      "title": "02 emergence oracle spec",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED",
-      "links": []
-    },
-    {
-      "kind": "provisional_status_doc",
-      "source": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
-      "id": "designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md",
-      "title": "03 remediation program",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "PROPOSED — Jordan-gated. Phase-0 docket UNRULED except D1 (ruled per-NPC, 2026-07-18).",
-      "links": []
-    },
-    {
       "kind": "proposal_doc",
       "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
       "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
@@ -2922,6 +2674,26 @@
       "lane": "unassigned",
       "needs_jordan": false,
       "status": "(no Status line — proposals/)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-21-observatory-holonic-refactor.md",
+      "id": "proposals/2026-07-21-observatory-holonic-refactor.md",
+      "title": "2026-07-21-observatory-holonic-refactor",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "RATIFIED (r2) — 2026-07-21 (merge of PR #202 ratifies the Assay/Atlas/Augur architecture by default per ED-1094; its §7 phasing is amended/subsumed by the Reconciliation Program's R1–R6, 2026-07-21-reconciliation-program.md §6). The §8 P2-redefinition + mean==0 sentinel fix is now RULED (option A) and applied as ED-IN-0080. STILL HELD for separate Jordan sign-off — the remaining §8 items, NOT ratified by this merge: any Assay change altering P1 medians, unbuilt dispositions, elevating a symmetry probe to a Tier-3 gate / making the workflow blocking, build_graph↔substrate unification, and the four-bloc win-probability gate. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-21-reconciliation-program.md",
+      "id": "proposals/2026-07-21-reconciliation-program.md",
+      "title": "2026-07-21-reconciliation-program",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
       "links": []
     },
     {
@@ -4415,6 +4187,16 @@
       "links": []
     },
     {
+      "kind": "ledger_actionable",
+      "source": "registers/editorial_ledger",
+      "id": "ED-IN-0079",
+      "title": "Values/formulae unification, first slice (Jordan directive: 'I need all values and formulae'; redirect: 'what happened to the .py stuff and pointers'). The computational values live as ~324 typed module-scope constants in the sim reference ",
+      "lane": "IN",
+      "needs_jordan": false,
+      "status": "open",
+      "links": []
+    },
+    {
       "kind": "ledger_needs_jordan",
       "source": "registers/editorial_ledger",
       "id": "ED-MB-0008",
@@ -4471,16 +4253,6 @@
       "title": "U2 scoping findings -- attempted U2 (graded mode affordance + Phase-C percussion enactment, consolidation_v1.md section 4) this session, immediately after U1/ED-PC-0010 landed and unblocked it. Found U2's one-line spec ('drop cut_factor 0.4",
       "lane": "PC",
       "needs_jordan": true,
-      "status": "open",
-      "links": []
-    },
-    {
-      "kind": "ledger_actionable",
-      "source": "registers/editorial_ledger",
-      "id": "ED-PC-0012",
-      "title": "Found via the ED-PC-0011 agonist/antagonist roster-wide adversarial validation Workflow (13 agents: 6 Sonnet producer verdicts x 6 Sonnet independent critics x 1 Opus synthesis) — a SECOND, structurally identical gap to the one ED-PC-0011 f",
-      "lane": "PC",
-      "needs_jordan": false,
       "status": "open",
       "links": []
     },
@@ -5316,6 +5088,18 @@
       "status": "PARTIAL",
       "links": [
         "designs/audit/2026-07-14-gameplay-subsystem-observatory"
+      ]
+    },
+    {
+      "kind": "audit_partial",
+      "source": "references/audit_registry.jsonl",
+      "id": "valoria-vector-audit-2026-07-21:corpus_wide:2026-07-21-repo-state-vector-audit",
+      "title": "[PARTIAL] vector_audit / corpus_wide: validation FAILED 1/3 (P3 pass; P1/P2 fail) → findings are leads; fixed 4 instrument staleness bugs from the designs/ retirement + register moves (input path, coverage denominator, banner classifier aud",
+      "lane": "IN",
+      "needs_jordan": false,
+      "status": "PARTIAL",
+      "links": [
+        "audit/2026-07-21-repo-state-vector-audit"
       ]
     }
   ]

@@ -4,15 +4,15 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 103
+  total: 104
   by_kind:
-    tool: 86
+    tool: 87
     skill-script: 10
     hook: 4
     workflow: 3
   by_role:
     A:writes-artifact: 22
-    B:stdout-or-gate: 40
+    B:stdout-or-gate: 41
     D:import-only-library: 38
     workflow: 3
   orphaned: 3
@@ -700,6 +700,7 @@ entries:
   uses_cli_args: false
   invoked_by:
   - ci:audit-refresh.yml
+  - ci:dashboard.yml
   - tool:imported
   imported_internally: true
   orphaned: false
@@ -726,6 +727,7 @@ entries:
   uses_cli_args: false
   invoked_by:
   - ci:audit-refresh.yml
+  - skill:valoria-vector-audit
   imported_internally: false
   orphaned: false
   prune_candidate: false
@@ -750,6 +752,7 @@ entries:
   uses_cli_args: true
   invoked_by:
   - ci:audit-refresh.yml
+  - ci:dashboard.yml
   - skill:valoria-vector-audit
   imported_internally: false
   orphaned: false
@@ -919,6 +922,21 @@ entries:
   role: D:import-only-library
   imports:
   - workplan_status
+- path: tools/session_open_work.py
+  kind: tool
+  stem: session_open_work
+  writes: []
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: false
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
+  imports:
+  - audit_staleness
 - path: tools/session_status.py
   kind: tool
   stem: session_status
@@ -934,7 +952,6 @@ entries:
   prune_candidate: false
   role: B:stdout-or-gate
   imports:
-  - audit_staleness
   - workplan_status
 - path: tools/sim_harness/__init__.py
   kind: tool
@@ -1582,6 +1599,9 @@ entries:
   - dest: 02_weakness_register.md
     format: markdown
     mode: write
+  - dest: <out_path>
+    format: unknown
+    mode: write
   - dest: <name>
     format: unknown
     mode: write
@@ -1589,6 +1609,7 @@ entries:
   has_cli: true
   invoked_by:
   - ci:audit-refresh.yml
+  - ci:dashboard.yml
   - skill:valoria-vector-audit
   - tool:imported
   orphaned: false
@@ -1649,6 +1670,7 @@ entries:
 - path: .github/workflows/audit-refresh.yml
   kind: workflow
   runs:
+  - skills/valoria-vector-audit/scripts/vector_audit.py
   - tools/build_apparatus_registry.py
   - tools/observability/build_decisions.py
   - tools/observability/build_graph.py
@@ -1664,7 +1686,10 @@ entries:
 - path: .github/workflows/dashboard.yml
   kind: workflow
   runs:
+  - skills/valoria-vector-audit/scripts/vector_audit.py
   - tools/dashboard_data.py
+  - tools/observability/build_decisions.py
+  - tools/observability/build_incompleteness.py
   emits:
   - github-pages
   writes: []

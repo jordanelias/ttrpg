@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**257 open work items** · **98 need your decision**.
+**246 open work items** · **97 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 16, Provisional / draft design docs — 20
+By kind: Audit verdicts — PARTIAL / OPEN — 18, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 85, Proposal docs (proposals/) — 18, Provisional / draft design docs — 6
 
 ## MB — Mass battle  (6 items, 5 need decision)
 
@@ -20,12 +20,11 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-MB-0010` — The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl  _(open)_
 - `valoria-mechanic-audit-2026-07-13:mass_battle:mass_battle` — [PARTIAL] mechanic_audit / mass_battle: 12 findings (2 P1 contradictory-table/orphaned-rule, 7 P2, 3 P3); no ED IDs allocated by this pass, 2 P1s proposed for lane=MB filing by a later step  _(PARTIAL)_
 
-## PC — Personal combat  (6 items, 1 need decision)
+## PC — Personal combat  (5 items, 1 need decision)
 
 - 🔸 `ED-PC-0008` — U2 scoping findings -- attempted U2 (graded mode affordance + Phase-C percussion enactment, consolidation_v1.md section 4) this session, immediately after U1/ED-PC-0010 landed and unblocked it. Found U2's one-line spec ('drop cut_factor 0.4  _(open)_
 - `ED-PC-0001` — Schedule combat's player-input surface and thread interface (ED-911) as named post-R3 sequence increments. wrapper.engagement() has no player-decision parameter (verified; DELIBERATE sim-first staging per audit refutation R-1) and the R2/R3  _(open)_
 - `ED-PC-0003` — OPT-10, filed per Jordan's 2026-07-07 "ratify all" ruling (ED-IN-0026). Sigma band-discipline unification, executing armature §5.12's ruling: apply the ER-2 continuity correction and pool-aware Overwhelming-bar behavior to the shared resolu  _(open)_
-- `ED-PC-0012` — Found via the ED-PC-0011 agonist/antagonist roster-wide adversarial validation Workflow (13 agents: 6 Sonnet producer verdicts x 6 Sonnet independent critics x 1 Opus synthesis) — a SECOND, structurally identical gap to the one ED-PC-0011 f  _(open)_
 - `ED-PC-0013` — Bundle of three attribute/value coherence audit (ED-IN-0029) items, decision-ratified, execution deferred to the PC lane (+MB co-sign where noted): (1) OPT-AV-15 RESIST re-export -- combat_config.gd carries pre-2026-06-30 values, 4/12 cells  _(open)_
 - `combat-critique-2026-06-28:personal_combat:2026-06-28-combat-critique` — [PARTIAL] resolution_diagnostic / personal_combat:   _(PARTIAL)_
 
@@ -97,7 +96,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-WR-0006` — OPT-12, filed per Jordan's 2026-07-07 "ratify all" ruling (ED-IN-0026). NPC orphan triage ED (the workplan T2 default, executed per the C-NPC disposition proposal): one consolidated Conviction/Ethics/TS migration-completion ED (~250-300 fin  _(open)_
 - `valoria-mechanic-audit-2026-07-13:threadwork:threadwork` — [PARTIAL] mechanic_audit / threadwork: 1 new P1 (P-25 Scale-based Mending Stability override table truncated to zero data rows, A7/D1) + 7 new P2 (History-bonus dual-phrasing A2/D8, Pulling-only 5D pool floor A3/D9, fractional wound-Ob no r  _(PARTIAL)_
 
-## IN — Infrastructure / cross-cutting  (33 items, 15 need decision)
+## IN — Infrastructure / cross-cutting  (35 items, 15 need decision)
 
 - 🔸 `ED-IN-0029` — Attribute/value coherence audit -- the quantity-layer extension of the Key & Echo Armature (Jordan directive 2026-07-08: 'we desperately lack unity, consistency and coherence with our explosion of attributes and derived scores across all ou  _(open)_
 - 🔸 `ED-IN-0030` — Phantom 'debt scene' mechanic -- dangling citation surfaced while executing ED-IN-0016's citation-repoint pass. designs/architecture/scale_transitions_v30.md §4.3.2 row 8 (Rank Advancement Recognition Event) reads: 'Recognition can be withh  _(open)_
@@ -126,12 +125,14 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-IN-0020` — Renumbered off the ED-IN-0013 double-allocation (armature §5.10 ruling, ED-IN-0026). GM-token sweep of the cross-scale handoffs (edge-playability EP-1/SIG-3) from the edge-playability §7 batch (PR #81/#82): GM-era adjudication language surv  _(open)_
 - `ED-IN-0045` — Four independent quick-win findings from the ED-IN-0044 simulation-harness sweep, filed separately per Jordan's explicit ruling (design doc section 11 item 4, 'File separately') rather than bundled into that architecture PR. Each is cheap a  _(open)_
 - `ED-IN-0071` — Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa  _(open)_
+- `ED-IN-0079` — Values/formulae unification, first slice (Jordan directive: 'I need all values and formulae'; redirect: 'what happened to the .py stuff and pointers'). The computational values live as ~324 typed module-scope constants in the sim reference   _(open)_
 - 🔸 `valoria-module-adjudicator-2026-07-13:cross_cutting:module_adjudicator` — [OPEN] module_adjudicator / cross_cutting: 22 violations, 61 warnings; consume-closure 100%, cycle-closure 100%, gate/derivation/sequence 100%, emit-closure 97.9%; 20/22 violations collapse to one un-propagated ED-1038 scale_transitions §12  _(OPEN)_
 - 🔸 `valoria-vector-audit-2026-07-13:corpus_wide:vector_audit` — [OPEN] vector_audit / corpus_wide: scripts/vector_audit.py confirmed a stub end-to-end (no Stage 1-7 dispatcher; docstring/scaffolding only; main() prints a pointer, writes nothing); last real run (deprecated/archives/audit/2026-04-29-topog  _(OPEN)_
 - `valoria-mechanic-audit-2026-07-13:architecture:architecture` — [PARTIAL] mechanic_audit / architecture: 2 P1 gaps (empty §3.3 Handoff Rule; uncorrected literal-GM language vs no-GM invariant) proposed for ED-IN filing; 6 P2s, several already-tracked items confirmed still open, no new ED allocated by th  _(PARTIAL)_
 - `valoria-vector-audit-2026-07-14:architecture:2026-07-14-gameplay-subsystem-observatory` — [PARTIAL] vector_audit / architecture: 16 gameplay modules; 9 doc:null/13 [ASSUMPTION]/4 dangling; 2 GENUINE reclassified CTC by adversarial gate; ED-IN-0064  _(PARTIAL)_
 - `valoria-vector-audit-2026-07-14:corpus_wide:2026-07-14-governance-vector-audit` — [PARTIAL] vector_audit / corpus_wide: L0 validation FAILED 1/3 (P2 conviction-symmetry, a real finding per methodology §3.8); structural: 9 doc:null, 6 dangling-emit, 4 unregistered-canonical, 1 currency-drift — folded into the ED-IN-0064 c  _(PARTIAL)_
 - `valoria-vector-audit-2026-07-14:corpus_wide:vector_audit` — [PARTIAL] vector_audit / corpus_wide: validation FAILED 1/3 (P1 foundation-periphery, P2 conviction-symmetry) -> leads not verdicts; ED-IN-0064  _(PARTIAL)_
+- `valoria-vector-audit-2026-07-21:corpus_wide:2026-07-21-repo-state-vector-audit` — [PARTIAL] vector_audit / corpus_wide: validation FAILED 1/3 (P3 pass; P1/P2 fail) → findings are leads; fixed 4 instrument staleness bugs from the designs/ retirement + register moves (input path, coverage denominator, banner classifier aud  _(PARTIAL)_
 
 ## SE — Settlements  (48 items, 23 need decision)
 
@@ -177,7 +178,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (108 items, 28 need decision)
+## unassigned — Unassigned / cross-lane  (96 items, 27 need decision)
 
 - 🔸 `proposals/2026-05-16-PC-4.4-unified-success-stress.md` — 2026-05-16-PC-4.4-unified-success-stress  _(PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible])_
 - 🔸 `proposals/2026-05-25-mechanics-integration-v3_1.md` — 2026-05-25-mechanics-integration-v3 1  _(PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15])_
@@ -188,27 +189,15 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - `proposals/2026-07-17-world-factions-npcs-narrative-assessment.md` — 2026-07-17-world-factions-npcs-narrative-assessment  _((no Status line — proposals/))_
 - `proposals/2026-07-17-world-factions-npcs-narrative-companion.md` — 2026-07-17-world-factions-npcs-narrative-companion  _((no Status line — proposals/))_
 - `proposals/2026-07-18-precedent-to-mechanism-design-brief.md` — 2026-07-18-precedent-to-mechanism-design-brief  _((no Status line — proposals/))_
+- `proposals/2026-07-21-observatory-holonic-refactor.md` — 2026-07-21-observatory-holonic-refactor  _(RATIFIED (r2) — 2026-07-21 (merge of PR #202 ratifies the Assay/Atlas/Augur architecture by default per ED-1094; its §7 phasing is amended/subsumed by the Reconciliation Program's R1–R6, 2026-07-21-reconciliation-program.md §6). The §8 P2-redefinition + mean==0 sentinel fix is now RULED (option A) and applied as ED-IN-0080. STILL HELD for separate Jordan sign-off — the remaining §8 items, NOT ratified by this merge: any Assay change altering P1 medians, unbuilt dispositions, elevating a symmetry probe to a Tier-3 gate / making the workflow blocking, build_graph↔substrate unification, and the four-bloc win-probability gate. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.))_
+- `proposals/2026-07-21-reconciliation-program.md` — 2026-07-21-reconciliation-program  _(RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.))_
 - `proposals/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
 - `proposals/mass_battle_shape_echelon_revamp.md` — mass battle shape echelon revamp  _(SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED'])_
 - `proposals/pessimist_ners_audit_v1.md` — pessimist ners audit v1  _(FILED — 2026-07-11 · Lane: IN (cross-cutting; FA, SE). Max-effort adversarial audit (canonical §8.2-A, `references/throughlines_meta.md`) of the 44 proposals kept by the 2026-07-09 comparative-governance research docket, cross-referenced against the 2026-07-10 historical-concerns action catalogue. Read-only — NOT canon; a review artifact. The 12 already-authored-into-canon items sit live in the open PR, so their verdicts here are directly actionable (edit/hold before merge).)_
 - `proposals/repo-reorganization-v1.md` — repo-reorganization-v1  _(RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.)_
 - `proposals/stub_infill_plan.md` — stub infill plan  _(SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15])_
-- 🔸 `designs/audit/2026-07-15-proposal-reconciliation/governance_cluster_reconciliation_v1.md` — governance cluster reconciliation v1  _(PROPOSED — 2026-07-15 · Lane: IN (cross-cutting; SE, FA, WR) · ED-IN-0070 · Jordan-vetoable throughout)_
 - 🔸 `systems/_architecture/governance_type_registry_v1.md` — governance type registry v1  _(PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.)_
 - 🔸 `systems/npcs/character_canon_v30.md` — character canon v30  _(PROVISIONAL — pending ratification.)_
-- `designs/audit/2026-07-12-governance-compendium/00_index.md` — 00 index  _(PROPOSED — 2026-07-12 · Lane: IN (cross-cutting; SE, FA, GO) · Read-only research consolidation. NOT canon; nothing here flips a `Status:` line. The single home for this session's entire governance-design body of work, so nothing is left stranded as unused research.)_
-- `designs/audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md` — 42 action verb catalogue  _(PROPOSED — compiled 2026-07-12, Lane: IN (cross-cutting; touches FA, SE, MB, GO))_
-- `designs/audit/2026-07-12-governance-compendium/43_directive_types.md` — 43 directive types  _(PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md`))_
-- `designs/audit/2026-07-12-governance-compendium/44_standing_institutions.md` — 44 standing institutions  _(PROPOSED (research-derived; not yet ratified into `faction_politics_v30.md` / `governance_play_redesign_v1.md` / `settlement_layer_v30.md`))_
-- `designs/audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md` — 45 hidden longfuse stats  _(PROPOSED — needs a granularity ruling)_
-- `designs/audit/2026-07-12-governance-compendium/event_cards/00_integration_map.md` — 00 integration map  _(PROPOSED — compendium integration pass, not yet Jordan-ratified)_
-- `designs/audit/2026-07-12-governance-compendium/reeval/reeval_jp_se.md` — reeval jp se  _(PROPOSED / provisional re-evaluation artifact — 2026-07-12. Re-judges the 8 kept Japan-origin proposals (`FA-JP-*`, `SE-JP-*`) from the 2026-07-09 comparative-governance research docket (STEP-3, 44 KEPT) against the newly-discovered **BUILT** substrate (`sim/territory/`, `goldenfurt_slice/`, `settlement_mgmt_stress_01`), reading each item's prior NERS verdict from the 2026-07-11 pessimist-NERS audit as the starting point. Not itself canon — a review artifact feeding the docket's next authoring/decision pass. **Scope note:** the STEP-3 44-KEPT table uses only civilization-prefixed codes (`BYZ-`, `CHN-`, `HRE-`, `VEN-SE-`, `VEN-FA-`, `IT-`, `HAB-`, `FA-JP-`, `SE-JP-`) — no bare `SE-*`/`FA-*` codes exist outside a civilization prefix, so "remaining SE-*/FA-*" resolves to the empty set for this pass; all 8 Japan-lane items are covered below in full.)_
-- `designs/audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md` — remediation plan v1  _(PROPOSED — 2026-07-14 · Lane: IN (program umbrella; execution fans to FA/SC/SE/WR/PC/MB/GO/IN) · ED-IN-0066)_
-- `designs/audit/2026-07-14-holistic-unification/unification_v1.md` — unification v1  _(PROPOSED (audit synthesis; ED-IN-0065, 2026-07-14))_
-- `designs/audit/2026-07-17-character-decision-adversarial-audit/00_findings.md` — 00 findings  _(PROPOSED — read-only, docket unruled)_
-- `designs/audit/2026-07-17-character-decision-adversarial-audit/01_remediation_L1_L2.md` — 01 remediation L1 L2  _(PROPOSED)_
-- `designs/audit/2026-07-17-character-decision-adversarial-audit/02_emergence_oracle_spec.md` — 02 emergence oracle spec  _(PROPOSED)_
-- `designs/audit/2026-07-17-character-decision-adversarial-audit/03_remediation_program.md` — 03 remediation program  _(PROPOSED — Jordan-gated. Phase-0 docket UNRULED except D1 (ruled per-NPC, 2026-07-18).)_
 - `systems/_architecture/governance_ripple_substrate_v1.md` — governance ripple substrate v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting) · Author-pass, not yet Jordan-ratified)_
 - `systems/settlements/lps_wiring_v1.md` — lps wiring v1  _(PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007)_
 - 🔸 `ED-1006` — Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3  _(open)_
@@ -219,5 +208,17 @@ By kind: Audit verdicts — PARTIAL / OPEN — 17, Editorial ledger — actionab
 - 🔸 `ED-507` — POI catalog per territory: each needs 2-6 authored POIs across depth levels (authorial). P2.  _(open)_
 - 🔸 `ED-508` — Specific starting Dispositions for named NPC roster (lifepath formula canonical; roster values pending Jordan).  _(open)_
 - 🔸 `ED-595` — Ehrenwall full arc (A/B/C) proposed; explicitly 'Requires user approval'. Creative NPC arc profile.  _(open)_
-- …and 68 more (see `proposals.json`).
+- 🔸 `ED-596` — Torsvald (Riskbreaker) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-597` — Vossen full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-598` — Hann full arc expansion proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-599` — Orm (Warden second) full arc proposed; 'Requires user approval'. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-601` — Almud Arc C three-trajectory expansion (Abdicant/Pretender/Broken) proposed. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-602` — Vaynard Arc A and Arc B full specification proposed. Creative NPC arc profile.  _(open)_
+- 🔸 `ED-610` — Baralta successor (unnamed Hafenmark heir) — requires design (P3). Creative NPC/naming intent.  _(open)_
+- 🔸 `ED-634` — Crown inner-circle names (Voss, Reichard, Thale, Linder, Kreutz) proposed §1.1d; §10.2 P1 'confirm names and Stance Triangles'. Also umbrella range-label ED-634-ED-658.  _(open)_
+- 🔸 `ED-651` — Markamt Minister — explicit name and Stance Triangle needed. [Jordan name + Stance-Triangle pass] needs Jordan's name (creative layer) + a Stance Triangle from the faction template (absent in ministry.md). Part of the ED-634-658 NPC cluster  _(open)_
+- 🔸 `ED-879` — [GATE G8 - Jordan decision] Faction/combat C3: out-of-bounds x Pool-Floor-5 interaction underspecified - does the Pool-Floor-5 apply when a combatant is pushed out-of-bounds? Re-assessed as needing OWNER DESIGN INTENT (not an evidence-patte  _(open)_
+- 🔸 `ED-885` — canonical_sources cites ED-885 as 'Jordan-ratified' for 2026-05-30 F-RESID migration (4 bare-stat Unique Actions -> d+sigma resolver), but ED-885 was never written (outside ED-874-882 block). Real ratification plausibly ED-874; unverified —  _(open)_
+- 🔸 `ED-911` — Comprehensive personal-combat audit 2026-06-09 (designs/audit/2026-06-09-personal-combat-comprehensive/comprehensive_analysis_personal_combat.md, F1). combat_engine_v1 is ratified as THE canonical personal-combat resolver superseding the RE  _(open)_
+- …and 56 more (see `proposals.json`).
 
