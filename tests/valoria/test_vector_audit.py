@@ -87,17 +87,19 @@ def test_same_class_groups_and_separates():
 def test_diagnostics_records_true_notional_total_not_just_shown_slice():
     # Fable-5 2026-07-14 audit, Obs-1: Mode C used to cap at [:25] with the true count
     # destroyed (scorecard read "25" as complete). It must now record C_notional_total.
-    # Build a star cite-graph with >50 notional edges (no metadata graphs, so every cite
+    # Build a star cite-graph with >100 notional edges (no metadata graphs, so every cite
     # edge is notional) and assert the recorded total exceeds the shown (capped) list.
-    n = 60
+    # (Cap raised 50→100 2026-07-23 after an adversarial pass; the total-preservation invariant
+    # this test guards is unchanged.)
+    n = 130
     toks = {f't{i}': {'paragraph_count': 1, 'status': 'design'} for i in range(n + 1)}
-    cite = {'t0': {f't{i}': 1 for i in range(1, n + 1)}}   # t0 -> t1..t60, all notional
+    cite = {'t0': {f't{i}': 1 for i in range(1, n + 1)}}   # t0 -> t1..t130, all notional
     graphs = {'cite': cite, 'throughline': {}, 'mu': {}, 'pp': {}}
     degs = {'cite': {'t0': n, **{f't{i}': 1 for i in range(1, n + 1)}},
             'throughline': {}, 'mu': {}, 'pp': {}}
     diag = va.diagnostics(toks, graphs, degs)
     assert diag['C_notional_total'] == n            # the TRUE count is recorded
-    assert len(diag['C_notional']) <= 50            # the itemized list is capped
+    assert len(diag['C_notional']) <= 100           # the itemized list is capped
     assert diag['C_notional_total'] > len(diag['C_notional'])  # cap did not destroy the total
     assert 'D_cascade_sinks_total' in diag          # Mode D total side channel also present
 
@@ -430,58 +432,100 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 1  # emitted-once, not un-emitted
 
 
-def test_key_graph_does_not_diverge_from_authoritative_engine_graph():
-    """§8 DRIFT GUARD (fix #7): build_g_key re-reads module_contracts emit/consume that
-    tools/observability/build_graph.py already owns — a second parser. They are deliberately DIFFERENT
-    projections (build_graph normalizes types via the Key Type Registry + resolve_key; build_g_key
-    uses raw types at token granularity), so they can't share one kernel without changing outputs.
-    The real §8 hazard is SILENT DIVERGENCE — so pin the invariant instead: build_g_key's
-    system↔system edges must be a SUBSET of build_graph's authoritative graph (graph.json). The token
-    projection may be NARROWER (build_graph adds registry-declared edges) but must never claim
-    connectivity the engine graph denies. If this fails, the two observatories drifted OR graph.json
-    is stale vs module_contracts — either way a human reconciles."""
-    import os, json
+def test_key_graph_matches_an_independent_rederivation_from_contracts():
+    """§8 DRIFT GUARD (fix #7, rewritten after an adversarial pass). The first cut only subset-checked
+    the 40 system↔system edges against build_graph's graph.json — it EXCLUDED the 128 keytype↔system
+    edges build_g_key exists to compute (a bad _keytype_token → false isolate went unguarded), a subset
+    check can't catch build_g_key going too NARROW (the dangerous drift for an isolate hunter), and it
+    depended on graph.json being co-fresh with module_contracts. This rewrite instead validates
+    build_g_key against an INDEPENDENT re-derivation straight from module_contracts.yaml — ALL edges,
+    EQUALITY (catches both spurious and missing edges), no graph.json dependency. The keytype
+    correspondence is checked by TOKEN NAME (a 'Key: <type>' token ↔ the contract type), independent of
+    _keytype_token's regex, so a regex bug shows up as a diff."""
+    import os
+    import yaml
     from pathlib import Path
-    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    gpath = root / 'tools' / 'observability' / 'graph.json'
-    if not gpath.exists():
-        import pytest
-        pytest.skip("graph.json not generated")
-    g = json.loads(gpath.read_text())
-    # build_graph's authoritative system↔system edges: for each key, emitters × consumers
     from collections import defaultdict
-    emit, cons = defaultdict(set), defaultdict(set)
-    for e in g.get('edges', []):
-        if e.get('kind') == 'emits':
-            emit[e['dst']].add(e['src'])          # dst=key, src=system
-        elif e.get('kind') == 'consumes':
-            cons[e['src']].add(e['dst'])          # src=key, dst=system
-    bg_pairs = set()
-    for k in set(emit) | set(cons):
-        for a in emit.get(k, ()):
-            for b in cons.get(k, ()):
-                if a != b:
-                    bg_pairs.add(frozenset((a, b)))   # module-name pairs
-    # build_g_key's system↔system edges (drop keytype↔system edges — those touch a 'Key:' token)
+    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     defs = va.derive_tokens(root)
     design = va.extract_corpus(root, 'L0')[0]
     tokens, _ = va.curate_tokens(design, defs)
     lut, norm = va._slug_lookup(tokens)
+    mc = yaml.safe_load((root / 'references' / 'module_contracts.yaml').read_text())
+    # Key-type tokens indexed by the dotted type in their name ('Key: mechanical.scene_exited' → type)
+    keytok_by_type = {}
+    for name in tokens:
+        if name.startswith('Key:'):
+            keytok_by_type[name.split('Key:', 1)[1].strip()] = name
+    emit, cons, modtok = defaultdict(set), defaultdict(set), {}
+    for m in mc.get('modules', []):
+        n = m.get('module')
+        if n and norm(n) in lut:
+            modtok[n] = lut[norm(n)]
+        for e in m.get('emits') or []:
+            if isinstance(e, dict) and e.get('type'):
+                emit[e['type']].add(n)
+        for c in m.get('consumes') or []:
+            if isinstance(c, dict) and c.get('type'):
+                cons[c['type']].add(n)
+    expected = set()
+    for t in set(emit) | set(cons):
+        if t == '*':
+            continue
+        es, cs = emit.get(t, set()), cons.get(t, set())
+        for a in es:                                   # system↔system: emitter × consumer
+            for b in cs:
+                if modtok.get(a) and modtok.get(b) and modtok[a] != modtok[b]:
+                    expected.add(frozenset((modtok[a], modtok[b])))
+        kt = keytok_by_type.get(t)                     # keytype↔system: by NAME, not the regex
+        if kt:
+            for s in es | cs:
+                if modtok.get(s):
+                    expected.add(frozenset((kt, modtok[s])))
     gk = va.build_g_key(root, tokens)
-    # map build_graph module names → tokens so the two are comparable
-    bg_tok_pairs = set()
-    for pr in bg_pairs:
-        a, b = tuple(pr)
-        ta, tb = lut.get(norm(a)), lut.get(norm(b))
-        if ta and tb and ta != tb:
-            bg_tok_pairs.add(frozenset((ta, tb)))
-    gk_sys_pairs = {frozenset((a, b)) for a in gk for b in gk[a]
-                    if not a.startswith('Key:') and not b.startswith('Key:') and a != b}
-    # the invariant: no build_g_key system edge is absent from the authoritative graph
-    spurious = gk_sys_pairs - bg_tok_pairs
-    assert not spurious, (f"build_g_key claims {len(spurious)} system↔system edge(s) the authoritative "
-                          f"engine graph (graph.json) does not — drift or stale graph.json: "
-                          f"{sorted(tuple(sorted(p)) for p in spurious)[:5]}")
+    actual = {frozenset((a, b)) for a in gk for b in gk[a] if a != b}
+    spurious = actual - expected      # build_g_key claims an edge the contracts don't support
+    missing = expected - actual       # build_g_key MISSES an edge the contracts declare (→ false isolate)
+    assert not spurious, f"build_g_key has {len(spurious)} edge(s) not in module_contracts: {sorted(tuple(sorted(p)) for p in spurious)[:5]}"
+    assert not missing, f"build_g_key MISSES {len(missing)} contract edge(s) (too narrow → false isolates): {sorted(tuple(sorted(p)) for p in missing)[:5]}"
+
+
+def test_cascade_mode_d_is_deterministic_across_neighbor_order():
+    """Mode D (cascade sinks) does a return-path DFS under a traversal cap; a capped search's answer
+    depends on VISIT ORDER, so iterating hash-randomized set() adjacency made it churn across runs
+    (adversarial pass HIGH). The fix sorts adjacency. This pins order-independence: run diagnostics on
+    the SAME cite graph with each node's neighbor dict in two different insertion orders and assert the
+    Mode-D output is identical. A regression to set()-typed adjacency would make these differ."""
+    def _tok(names):
+        return {n: {'paragraph_count': 3, 'status': 'canonical', 'primary_doc': 'd.md',
+                    'patterns': [n], 'source': 'seed'} for n in names}
+    # a graph with cascade structure: A→B→C→D→B (B..D loop, A feeds in, no path back to A)
+    fwd = {'A': {'B': 1}, 'B': {'C': 1}, 'C': {'D': 1}, 'D': {'B': 1}}
+    rev = {k: dict(reversed(list(v.items()))) for k, v in reversed(list(fwd.items()))}
+    def run(cite):
+        toks = _tok(['A', 'B', 'C', 'D'])
+        graphs = {'cite': cite, 'throughline': {}, 'mu': {}, 'pp': {}, 'key': {}}
+        names = list(toks)
+        degs = {k: va._degrees(graphs[k], names) for k in graphs}
+        return va.diagnostics(toks, graphs, degs)
+    a, b = run(fwd), run(rev)
+    assert a['D_cascade_sinks'] == b['D_cascade_sinks'], (a['D_cascade_sinks'], b['D_cascade_sinks'])
+    assert a['D_cascade_truncated_calls'] == b['D_cascade_truncated_calls']
+
+
+def test_every_emitted_ledger_category_has_an_explicit_severity():
+    """Fix #4 gate (added after an adversarial pass flagged it ungated): finding() defaults an
+    unmapped category to 'med' silently, so a NEW scanner category would ship unranked and nobody would
+    notice. Pin it — every category the ledger actually emits must be in the SEVERITY map explicitly."""
+    import importlib.util, os
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    spec = importlib.util.spec_from_file_location(
+        'build_incompleteness', os.path.join(root, 'tools', 'observability', 'build_incompleteness.py'))
+    bi = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bi)
+    emitted = {f['category'] for f in bi.build()['findings']}
+    unmapped = emitted - set(bi.SEVERITY)
+    assert not unmapped, f"categories emitted but missing from SEVERITY (silently default med): {sorted(unmapped)}"
 
 
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):

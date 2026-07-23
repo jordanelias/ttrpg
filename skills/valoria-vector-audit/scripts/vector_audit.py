@@ -1309,13 +1309,15 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
         cv = None
     p2 = bool(measurable and cv <= 0.5)
 
-    # P3 citation-density. REVISED 2026-07-23 (fix #3): the old absolute bar `n_edges >= 100` was
-    # scale-BLIND — with the current 275-token universe the L0 graph alone has ~15k directed edges, so
-    # ≥100 passed trivially at EVERY layer and added no signal (the v1 problem it was meant to catch —
-    # ~11 edges / 84 tokens ≈ 0.26 mean degree — would still fail a proper density floor, but so would
-    # nothing real). Replaced with a DENSITY floor that scales with the token universe (the stable
-    # denominator — tokens are registry-derived, identical across L0/L1): mean directed cite-degree
-    # ≥ 6. This is meaningful at any layer/corpus size, unlike a raw count.
+    # P3 citation-density. REVISED 2026-07-23 (fix #3, then corrected by an adversarial pass): the old
+    # absolute bar `n_edges >= 100` was scale-blind. Replaced with a density floor — mean directed
+    # cite-degree ≥ 6 — which at least scales in FORM with the token universe. HONEST FRAMING (the
+    # pass was right to push): on a mature corpus this floor does NOT bind (L0 measures ~55, a 9×
+    # margin), and because tokens are a constant denominator across layers while edges grow, it binds
+    # even less at L1 — so it does NOT "fix trivial-at-L1" and is NOT an under-citation sensitivity
+    # test. It is a CATASTROPHIC-SPARSITY REGRESSION GUARD (it would fire only if the cite graph
+    # collapsed ~89%, e.g. the v1 pathology at 0.26). A real per-layer under-citation sensitivity
+    # metric is a deferred methodology question, not claimed here.
     n_edges = sum(len(v) for v in g_cite.values())   # directed sum (each undirected edge counted 2×)
     n_tokens = max(1, len(names))
     mean_cite_deg = n_edges / n_tokens
@@ -1402,13 +1404,23 @@ def diagnostics(tokens, graphs, degs):
         for b, w in edges.items():
             if not any(b in graphs[k].get(a, {}) or a in graphs[k].get(b, {}) for k in meta):
                 notional.append({'source': a, 'target': b, 'cite_weight': w})
-    notional_sorted = sorted(notional, key=lambda r: -r['cite_weight'])
-    out['C_notional'] = notional_sorted[:50]
+    # BOUNDED SAMPLE, honestly (adversarial pass MED, 2026-07-23): C is high-volume (~14.6k). Unlike
+    # B/H (every item retained with a filter flag), C carries a top-N-by-weight SAMPLE + the true
+    # total — the non-sampled items are NOT in the committed feed. That's an acceptable exception for
+    # C's volume ONLY because Mode C is now deterministic (sorted inputs), so the full ranked list is
+    # exactly reproducible by re-running the audit. Sorted by (-weight, source, target) for stability.
+    notional_sorted = sorted(notional, key=lambda r: (-r['cite_weight'], r['source'], r['target']))
+    out['C_notional'] = notional_sorted[:100]
     out['C_notional_total'] = len(notional_sorted)
 
     # D — cascade-without-return (chains len>=3, no return path)
     sinks = Counter()
-    adj = {a: set(g_cite.get(a, {})) for a in names}
+    # DETERMINISM (fix, 2026-07-23 — adversarial pass HIGH): the return-path DFS below hits a
+    # traversal cap, and a CAPPED search's answer depends on VISIT ORDER. Iterating `set()`-typed
+    # adjacency made that order hash-seed-randomized, so cascade_sinks + cascade_truncated_calls
+    # churned across runs (measured 51,908 vs 57,943 truncations) — breaking the churn-proof committed
+    # feed. Fixed by SORTING adjacency: DFS visit order is now stable regardless of PYTHONHASHSEED.
+    adj = {a: sorted(g_cite.get(a, {})) for a in names}
     _trunc = [0]  # M2: count reaches() calls that hit the traversal cap — a capped 'False' may be a
                   # FALSE 'does-not-return' (=> false cascade-sink). SURFACE it, never hide it.
     def reaches(start, target):
@@ -1636,7 +1648,13 @@ def throughline_orphans(rows, design):
     all_paras = [p for c in design.values() for p in to_paragraphs(c)]
     out = []
     for tid, _p, _s, systems in rows:
-        slugs = [re.sub(r'[^a-z0-9]+', ' ', s.lower()).strip() for s in systems]
+        # Skip STRUCK / dissolved throughlines (fix, 2026-07-23 — adversarial pass): a row whose
+        # systems are only placeholders (e.g. T-10 "Niflhel dissolved", systems "—") has NOTHING to
+        # substantiate BY DESIGN — flagging it "barely substantiated" is a false positive, not a gap.
+        real_systems = [s for s in systems if s.strip() not in ('—', '-', '')]
+        if not real_systems:
+            continue
+        slugs = [re.sub(r'[^a-z0-9]+', ' ', s.lower()).strip() for s in real_systems]
         subst = 0
         for para in all_paras:
             low = re.sub(r'[^a-z0-9]+', ' ', para.lower())
@@ -1923,10 +1941,11 @@ def emit_structural_findings(root, out_path, layer='L0'):
                 'throughline-orphans, G vocabulary-debt, H isolates), for the Incompleteness Ledger to '
                 'surface. Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: triangulates '
                 'FIVE structural graphs — design cite/throughline/mu/pp AND the engine Key-propagation '
-                'graph (module_contracts emit→consume). Per SURFACE-NEVER-CULL every finding is emitted; '
-                'high-volume modes (C, and D/E when large) carry a bounded sample + a true `_total` so '
-                'nothing is silently capped. Lower-confidence Mode-B hub×hub pairs carry a '
-                '`filtered`+`filter_reason` flag (retained). Severity is assigned by the ledger, by category.',
+                'graph (module_contracts emit→consume). B/D/E/F/G/H retain EVERY item (Mode-B hub×hub '
+                'pairs carry a `filtered`+`filter_reason` flag, not dropped). Mode C is the ONE '
+                'exception — ~14.6k items, so it carries a top-100-by-weight SAMPLE + the true '
+                '`notional_total`; the non-sampled items are reproducible by re-running the (now '
+                'deterministic) audit. Severity is assigned by the ledger, by category.',
         'layer': layer,
         'design_docs': manifest.get('design_count'),
         # B — implied-but-missing (linked in >=2 metadata graphs, never cited)
