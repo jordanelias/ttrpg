@@ -2,6 +2,26 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0024: DG-2 fighting-withdrawal residuals (emergent entry + rally + pocket exits)
+- Completes the three parts ED-MB-0005 deferred after shipping the yield state + commanded entry
+  (`proposals/mass_battle_fighting_withdrawal_v1.md` §2.2/§2.4):
+  - **Emergent auto-entry** (§2.2, `morale_check_phase`): a disciplined subunit (`eff_discipline >=
+    D_YIELD`, `command>0`, non-ranged) crossing the §A.4 `frac<0.50` casualty trigger **enters yielding**
+    instead of only eroding. Sets state only — the erosion-brake calibration stays deferred (`needs_jordan`).
+  - **Rally exit** (§2.4, `between_turn_recovery`): at the turn-break lull a yielding subunit whose morale
+    recovered to `>= YIELD_RALLY_MORALE_FRAC` (0.75) of start reverts to normal combat.
+  - **Pocket exit** (§2.4, new `Subunit.pocketed` via `_yield_pocketed`): rearward motion blocked (flee
+    vector off-map, or an enemy within `YIELD_POCKET_REACH` in the retreat path) → yielding holds with the
+    combat malus **removed** (Cannae's pinned-and-annihilated kill condition). Reuses only `enemy_cells` +
+    `BATTLEFIELD_SIZE`, no new collision code.
+- **All three gated OFF** (`PC_YIELD_EMERGENT` / `PC_YIELD_RALLY` / `PC_YIELD_POCKET`) → yielding never
+  auto-set, rally never fires, `pocketed` never set + the exchange guard reduces to the ED-MB-0005 malus →
+  **byte-exact** (bat.py all 4 digests byte-identical). `pocketed` cleared at the battle boundary.
+  `needs_jordan` on the three flips, the emergent path's blast radius (§4.3), and both CALIBRATED-DEBT
+  magnitudes.
+- Tests: `tests/valoria/test_dg2_yield_residuals.py` (10) — emergent on/skip-low-disc/off-inert, rally
+  revert/keep/off-inert, pocket map-edge/enemy-behind/open/malus-removed.
+
 ## 2026-07-23 — ED-MB-0023: Reserve formation Phase-3-commit rule (PP-MB-04 / §A.6)
 - Wires the previously-inert `reserve` instruction (config `ROLE_SPEC` "Reserve"/"Support", zero code
   consumed it) into `run_multi_unit_battle`. A unit held in Reserve (`unit_in_reserve` — any subunit

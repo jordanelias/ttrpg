@@ -1814,6 +1814,16 @@ def between_turn_recovery(unit):
     for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
         if atom.morale is not None:
             atom.morale = min(atom.eff_morale_start, atom.morale + BETWEEN_TURN_MORALE_RECOVERY)
+    # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
+    # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
+    # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
+    # relieved, reformed"). Gated OFF -> inert. `pocketed` is cleared alongside (fresh next engagement).
+    if PC_YIELD_RALLY:
+        for atom in unit.subunits:
+            if atom.yielding and not atom.routed and not atom.broken:
+                if atom.eff_morale >= YIELD_RALLY_MORALE_FRAC * atom.eff_morale_start:
+                    atom.yielding = False
+                    atom.pocketed = False
 
 
 def reset_morale_between_battles(unit):
@@ -1838,6 +1848,9 @@ def reset_morale_between_battles(unit):
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
         atom.routed = False
         atom.broken = False
+        # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
+        # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
+        atom.pocketed = False
         # [ED-MB-0018, reaction-critic R1] A new battle is a fresh engagement -> clear the facing-reaction
         # clock (per-engagement transient state must not survive the battle boundary onto a persistent atom).
         _rs = getattr(atom, '_react_since', None)

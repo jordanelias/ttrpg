@@ -417,6 +417,11 @@ class Subunit:
     # `eff_discipline >= D_YIELD` at every CONSUMPTION site (movement/facing/combat pool), not at
     # entry -- ordering a too-disordered subunit to yield is simply a no-op, not a special case.
     yielding: bool = False
+    # [ED-MB-0024, DG-2 §2.4 pocket exit] Set live during the yield movement pass when rearward motion is
+    # structurally blocked (map edge in the flee direction, or an enemy has gotten behind into the retreat
+    # path). While pocketed, yielding converts to a HOLD with the combat malus REMOVED (Cannae's pinned-
+    # and-annihilated kill condition). Default False -> inert; only ever set when PC_YIELD_POCKET is on.
+    pocketed: bool = False
     # [Stage C] Timed/conditional order queue -- fired in sequence by check_orders (core/contact.py),
     # called once per tick per side, before assign_targets. Empty tuple -> the consumer's loop body
     # never executes for any existing Subunit (byte-exact).
@@ -901,10 +906,38 @@ class Subunit:
         §6 path-budget bound are both enforced by the caller (`_node_advance`'s step-cap), not here,
         matching how `_envelop_goal`/`_sweep_goal`/`_kite_goal` all leave step-magnitude to the caller."""
         if not enemy_cells:
+            if PC_YIELD_POCKET:
+                self.pocketed = False
             return None
         ar, ac = self._node_anchor
         nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
-        return (2 * ar - nearest[0], 2 * ac - nearest[1])  # reflect through anchor -> flee vector
+        flee = (2 * ar - nearest[0], 2 * ac - nearest[1])  # reflect through anchor -> flee vector
+        # [ED-MB-0024, DG-2 §2.4] Pocket detection: rearward motion structurally blocked -> the body has
+        # nowhere left to give ground. Set live so subunit_combat_pool drops the yield malus this tick.
+        if PC_YIELD_POCKET:
+            self.pocketed = self._yield_pocketed(flee, enemy_cells)
+        return flee
+
+    def _yield_pocketed(self, flee, enemy_cells):
+        """DG-2 §2.4 pocket: True iff the yielding body cannot give ground -- (a) stepping one cell along
+        the flee vector leaves the battlefield (map edge), or (b) an enemy cell lies in the retreat
+        direction within YIELD_POCKET_REACH (an enemy has gotten behind it). Reuses only enemy_cells +
+        BATTLEFIELD_SIZE -- no new collision substrate, per the design doc's 'emerges from the existing
+        standoff/collision detection' accounting."""
+        ar, ac = self._node_anchor
+        fr, fc = flee[0] - ar, flee[1] - ac
+        fmag = math.hypot(fr, fc)
+        if fmag < 1e-9:                       # [canonical: epsilon: float magnitude guard] threat coincident with anchor -> nowhere to flee
+            return True
+        ur, uc = fr / fmag, fc / fmag         # unit flee direction
+        nr, nc = ar + ur, ac + uc             # one cell of retreat
+        if not (0 <= nr < BATTLEFIELD_SIZE and 0 <= nc < BATTLEFIELD_SIZE):
+            return True                       # (a) map edge in the flee direction
+        for e in enemy_cells:                 # (b) an enemy in the retreat path (gotten behind)
+            er, ec = e[0] - ar, e[1] - ac
+            if er * ur + ec * uc > 0 and (er * er + ec * ec) <= YIELD_POCKET_REACH ** 2:
+                return True
+        return False
 
     def _node_advance(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """Node-path advance (step 2, increment a): the formation translates toward the target as a
