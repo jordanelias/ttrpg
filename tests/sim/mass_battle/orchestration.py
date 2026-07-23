@@ -832,6 +832,79 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                     mods.append(ANGLE_DEF_MOD[zone])
             return sum(mods) / len(mods) if mods else 0
 
+        # [ED-MB-0018, Jordan 2026-07-22] The OCTAGON = a DAMAGE-RECEIVED MULTIPLIER, not a dice penalty.
+        # This computes the pure per-cell FACING ARC that feeds that multiplier -- SEPARATE from
+        # `_per_cell_angle_mod` above (which bundles the wrapper/pocket/roll-up tactical POOL penalties of
+        # the legacy paradigm Jordan is replacing). Three Jordan requirements are modelled here:
+        #   (1) arc = damage multiplier: front GREEN 0, flank YELLOW -1, rear RED -2 -> mult 1.0/1.5/2.0.
+        #   (2) reaction is NOT instantaneous: a cell hit outside its front arc keeps its EXPOSED facing
+        #       (penalty stands) until it has had FACING_REACTION_TICKS to wheel -- and only if it can SEE
+        #       the threat (within FOV) and is not pinned frontally. A REAR strike (in the blind arc) is
+        #       never seen -> the cell never turns -> the 2x lands for the whole engagement (the surprise
+        #       rear attack). The per-cell reaction clock persists on the subunit across ticks.
+        #   (3) multi-side compounding is applied by the CALLER (eng_counts>=2 -> *(1+MULTI_SIDE_SHOCK)):
+        #       orderly rank-relief collapses when hit from >=2 sides -- worse than a mere halving.
+        # Uses the LOCAL attacker centroid (attacker cells within OCTAGON_LOCAL_REACH of each defender
+        # cell; global fallback) so a wing cell of a WIDE line in a head-on clash stays GREEN instead of
+        # reading the whole enemy line's centre as an oblique (flank) bearing -- verified front->1.00x,
+        # rear->2.00x exactly. [canonical: Jordan design -- octagon damage multiplier; du Picq flank/rear
+        # lethality + reaction time under surprise]
+        def _octagon_dmg_mod(defender_subunit, defender_cells, attacker_cells):
+            if not defender_cells or not attacker_cells:
+                return 0.0
+            atk = list(set(attacker_cells))
+            op = _oriented(defender_subunit)
+            abs_to_orig = {}
+            for orig_r, orig_c, or_r, or_c in op:
+                abs_r = (defender_subunit.starting_position[0] + or_r
+                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
+                         * defender_subunit.advance_dir)
+                abs_c = (defender_subunit.starting_position[1] + or_c
+                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
+                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
+            _rs = getattr(defender_subunit, '_react_since', None)
+            if _rs is None:
+                _rs = {}; defender_subunit._react_since = _rs
+            mods = []
+            seen = set()
+            for d_pos in defender_cells:
+                if d_pos in seen:
+                    continue
+                seen.add(d_pos)
+                orig = abs_to_orig.get(d_pos)
+                facing = (defender_subunit.get_cell_facing(*orig)
+                          if orig else (defender_subunit.advance_dir, 0))
+                near = [a for a in atk
+                        if (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2 <= OCTAGON_LOCAL_REACH ** 2]
+                if not near:
+                    near = atk
+                lc = (sum(r for r, c in near) / len(near), sum(c for r, c in near) / len(near))
+                zone, ang = octagon_angle(lc, d_pos, facing)
+                m = ANGLE_DEF_MOD[zone]
+                _rk = orig if orig else d_pos
+                if m < 0:
+                    # frontally pinned? an attacker in the front arc within reach holds the cell so it
+                    # cannot wheel to face the flank/rear threat (the fixing-force half of envelopment).
+                    pinned = False
+                    for a in atk:
+                        _z2, _a2 = octagon_angle(a, d_pos, facing)
+                        # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary]
+                        if (_a2 < 45.0
+                                and (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2 <= PC_PIN_REACH ** 2):
+                            pinned = True; break
+                    can_react = (ang <= FOV_HALF_DEG) and (not pinned)   # must SEE it AND be free to turn
+                    if can_react and t is not None and FACING_REACTION_TICKS > 0:
+                        if t - _rs.setdefault(_rk, t) >= FACING_REACTION_TICKS:
+                            m = 0   # reaction window elapsed -> wheeled to face -> no penalty
+                        # else: still turning this tick -> the arc penalty stands
+                    elif can_react:
+                        m = 0       # no tick context / delay disabled -> instant face (legacy-safe)
+                    # else (rear/blind or pinned): never turns -> full penalty persists
+                else:
+                    _rs.pop(_rk, None)   # facing the threat now -> reset the reaction clock
+                mods.append(m)
+            return sum(mods) / len(mods) if mods else 0.0
+
         a_fixed_other = bool(_front_fixers.get(id(atom_a), set()) - {id(atom_b)})
         b_fixed_other = bool(_front_fixers.get(id(atom_b), set()) - {id(atom_a)})
         a_angle_mod = _per_cell_angle_mod(atom_a, list(set(p["a_cells"])),
@@ -847,8 +920,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
         #  params/core.md continuous engine + modifier_system_spec.md §2.1/§3.1]
         ns_a = ns_b = 0.0   # legacy-path default so the mechanical trace can read these uniformly
         if SIGMA_HEAD_ENABLED:
-            ns_a = a_angle_mod * SIGMA_PER_D     # a_angle_mod<=0 when A flanked -> A disadvantaged
-            ns_b = b_angle_mod * SIGMA_PER_D
+            # [ED-MB-0018] Under PC_OCTAGON_DMG the octagon is a DAMAGE-RECEIVED MULTIPLIER (applied to
+            # dmg_a/dmg_b below), NOT a net-successes penalty -- so it is REMOVED from the sigma head here
+            # to avoid double-counting. The zone is still read for charge-shock / brace gating below.
+            ns_a = 0.0 if PC_OCTAGON_DMG else a_angle_mod * SIGMA_PER_D     # a_angle_mod<=0 when A flanked
+            ns_b = 0.0 if PC_OCTAGON_DMG else b_angle_mod * SIGMA_PER_D
             if PUNCTURE_ENABLED:
                 a_mom = _momentum_speed(atom_a, p["a_cells"])
                 b_mom = _momentum_speed(atom_b, p["b_cells"])
@@ -935,8 +1011,9 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
-            a_pool = max(1, a_pool + round(a_angle_mod))
-            b_pool = max(1, b_pool + round(b_angle_mod))
+            # [ED-MB-0018] octagon = damage multiplier under PC_OCTAGON_DMG -> not a pool penalty here
+            a_pool = max(1, a_pool + (0 if PC_OCTAGON_DMG else round(a_angle_mod)))
+            b_pool = max(1, b_pool + (0 if PC_OCTAGON_DMG else round(b_angle_mod)))
             if PUNCTURE_ENABLED:
                 a_mom = _momentum_speed(atom_a, p["a_cells"])
                 b_mom = _momentum_speed(atom_b, p["b_cells"])
@@ -960,6 +1037,28 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
         if b_dead: b_net = 0
         a_deg = compute_degree(a_net, max(1, b_net))
         b_deg = compute_degree(b_net, max(1, a_net))
+        # [ED-MB-0018] Octagon = DAMAGE-RECEIVED MULTIPLIER (Jordan): the arc the attacker strikes from
+        # multiplies the DEFENDER's casualties -- front 1.0x, flank 1.5x, rear 2.0x -- interpolated from the
+        # dedicated per-cell FACING-ARC (`_octagon_dmg_mod`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
+        # RED). This is the pure octagon arc (local-centroid, reaction-gated), NOT the legacy
+        # `a_angle_mod`/`b_angle_mod` bundle (which also carries wrapper/pocket/roll-up pool penalties and
+        # spuriously reads a wide line's wings as flanked head-on). Under PC_OCTAGON_DMG the legacy pool
+        # angle-penalty is zeroed above, so this multiplier + MULTI-SIDE SHOCK are the single envelopment
+        # model. MULTI-SIDE SHOCK: a subunit engaged from >=2 sides has its rank-relief divided AND
+        # shock-compromised -> an extra COMPOUNDING factor (1+MULTI_SIDE_SHOCK), not a mere halving.
+        # `a_arc`/`b_arc` are each side's own exposure, scaling that side's incoming damage (dmg_a = A's).
+        _red = OCTAGON_DMG_MULT["RED"]
+        if PC_OCTAGON_DMG:
+            a_arc = _octagon_dmg_mod(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
+            b_arc = _octagon_dmg_mod(atom_b, list(set(p["b_cells"])), list(set(p["a_cells"])))
+            _a_dmg_mult = min(_red, 1.0 - a_arc * (_red - 1.0) / 2.0)
+            _b_dmg_mult = min(_red, 1.0 - b_arc * (_red - 1.0) / 2.0)
+            if eng_counts.get(id(atom_a), 0) >= 2: _a_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK)
+            if eng_counts.get(id(atom_b), 0) >= 2: _b_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK)
+        else:
+            _a_dmg_mult = _b_dmg_mult = 1   # int 1 (not 1.0): `X * 1` preserves X's exact type -> the
+            #                                 legacy PC_OCTAGON_DMG=0 path stays byte-exact (a float 1.0
+            #                                 would coerce integer casualties to float and move the digest)
         if LANCHESTER_ENABLED:
             # P-L Linear Law: casualties to X scale with the ENEMY's engaged strength in
             # contact (frontage-capped); DAMAGE_BY_DEGREE retained as per-soldier exchange
@@ -971,11 +1070,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             # column count, keeping the byte-exact grid oracle untouched (I4).
             lin_b = _lanchester_strength(p["b_cells"], unit_b, p.get("b_front"))   # B's contacting strength -> casualties to A
             lin_a = _lanchester_strength(p["a_cells"], unit_a, p.get("a_front"))   # A's contacting strength -> casualties to B
-            dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr)
-            dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr)
+            dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
+            dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
         else:
-            dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr)
-            dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr)
+            dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
+            dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
         trace_event('melee', a_pool=a_pool, b_pool=b_pool,
                     ns_a=round(ns_a, 3), ns_b=round(ns_b, 3),
                     a_net=round(a_net, 2), b_net=round(b_net, 2),

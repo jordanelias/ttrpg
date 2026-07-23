@@ -15,6 +15,25 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0018 (2026-07-23): octagon facing = DAMAGE-RECEIVED MULTIPLIER + reaction delay + multi-side
+  shock** (Jordan directive, verbatim: "the facing octagon is a damage-received multiplier — attacks from
+  behind do ~**2×** the damage of from the front; cells **cannot turn instantaneously** (needs a couple-tick
+  reaction); attacked from **multiple sides** is **extra bad**, not just divide-by-two"). Replaces the legacy
+  `-2`-dice octagon **pool** penalty (too weak: legacy rear was only 1.25× front). New `_octagon_dmg_mod`
+  (orchestration.py) → pure per-cell facing arc (front **1.0×** / flank **1.5×** / rear **2.0×**) multiplying
+  the defender's casualties; reads the arc against the **LOCAL** attacker centroid (`OCTAGON_LOCAL_REACH=2.0`)
+  so a wide line's wing stays GREEN head-on — **verified front→1.00×, rear→2.00× exactly per-seed**. Reaction:
+  a cell hit outside its front arc keeps its exposed facing until `FACING_REACTION_TICKS=2` elapse, and only
+  refuses if it can SEE the threat (≤105° FOV) and isn't frontally pinned — a **rear** strike is blind → 2×
+  persists the whole engagement. Multi-side: `eng_counts≥2` → `×(1+MULTI_SIDE_SHOCK=0.5)` compounding.
+  `PC_OCTAGON_DMG` **default ON**; legacy path preserved **byte-exact** under `=0` (the wrapper/pocket/roll-up
+  pool machinery goes dormant under the flag — subsumed by arc + shock). Compounds with frontal-brace
+  stripping → a braced front that parries to 0 is annihilated from behind (Cannae). **All 4 bat.py goldens
+  re-recorded** (grid+field; head-on single-subunit rows all-GREEN→unchanged; envelop/cannae/oblique move).
+  `test_octagon_damage.py` (5). Disclosure: `audit/2026-07-22-mass-battle-stress-test/octagon_damage_model.md`.
+  **Follow-on:** graded ≥2/3/4-side escalation; full-campaign A/B of the default-ON flip once ED-MB-0016
+  friction + the conjunctive-envelopment gate land (all three interact on the envelopment rows).
+
 - **ED-MB-0017 (2026-07-22): multi-unit deployment geometry + envelopment pathing fix** (Jordan-flagged
   from the hierarchy snapshot: overlapping subunits, both envelopment wings on one side, refused flank
   level with the line). Root cause: `build_army` deployed subunit i at `col=15+i*4` (fixed step < subunit

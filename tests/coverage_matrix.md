@@ -2,6 +2,38 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0018: octagon facing = damage-received multiplier + reaction delay + multi-side shock
+- Jordan directive: "the facing octagon is a **damage-received multiplier** — attacks from behind do ~**2×**
+  the damage of from the front; cells **cannot turn instantaneously** (needs a couple-tick reaction); attacked
+  from **multiple sides** is **extra bad**, not just a divide-by-two." Replaces the legacy `-2`-dice octagon
+  **pool** penalty (too weak — legacy rear was only 1.25× front, flank often 1.00× after `round()`).
+- **(1) Arc = damage multiplier.** New `_octagon_dmg_mod` (orchestration.py) computes the pure per-cell
+  facing arc — front GREEN **1.0×** / flank YELLOW **1.5×** / rear RED **2.0×** (`mult = 1 − arc·(RED−1)/2`),
+  multiplying the **defender's** casualties; the pool/sigma angle-penalty is zeroed under the flag (no
+  double-count). Reads the arc against the **LOCAL** attacker centroid (cells within `OCTAGON_LOCAL_REACH=2.0`)
+  so a **wide** line's wing cell in a head-on clash stays GREEN instead of mis-reading the enemy centre as an
+  oblique flank — verified **front→1.00×, rear→2.00× exactly per-seed**. Compounds with frontal-brace/charge-
+  shock stripping → a braced front that parries to 0 is annihilated from behind (Cannae).
+- **(2) Reaction delay.** A cell hit outside its front arc keeps its exposed facing until
+  `FACING_REACTION_TICKS=2` elapse, and only refuses if it can **see** the threat (≤`FOV_HALF_DEG`=105°) and
+  is not frontally **pinned**. A **rear** strike is in the blind arc → never perceived → the 2× persists the
+  whole engagement (du Picq: reaction time under surprise).
+- **(3) Multi-side shock.** `eng_counts≥2` → extra `×(1+MULTI_SIDE_SHOCK=0.5)` **compounding** (rank-relief
+  collapse under encirclement) — worse than a halving.
+- **Supersession (deliberate):** under `PC_OCTAGON_DMG=1` (**default ON**) the legacy wrapper/pocket/roll-up
+  pool-penalty envelopment machinery goes dormant (wrap→rear arc 2×, pocket→multi-side shock; roll-up dropped,
+  depth still tells via Lanchester). Legacy path preserved **verbatim** under `PC_OCTAGON_DMG=0`.
+- **I4:** the multiplier runs on both grid+field paths (else field≠grid). Head-on single-subunit rows are
+  all-GREEN→mult 1.0→byte-identical; the 3 flanking rows (envelop/cannae/oblique) move. **All 4 `bat.py`
+  goldens re-recorded** (ED-909 re-baseline precedent). No constant tuned to the gauge (anchors are Jordan's
+  stated design values).
+- **Tests:** `tests/valoria/test_octagon_damage.py` (5) — 2.0× rear ratio, front never > rear (local-centroid
+  fix), rear penalty persists across the reaction window, seen-flank stamps the reaction clock, multi-side
+  shock present. Full `tests/valoria` green.
+- **Disclosure:** `audit/2026-07-22-mass-battle-stress-test/octagon_damage_model.md`.
+- **Follow-on:** graded ≥2/3/4-side escalation; full-campaign A/B of the default-ON flip once ED-MB-0016
+  friction + the conjunctive-envelopment gate land (all three interact on the envelopment rows).
+
 ## 2026-07-22 — ED-MB-0017: multi-unit deployment geometry + envelopment pathing fix
 - Jordan-flagged from the hierarchy snapshot (overlapping subunits; "double envelopment" with both wings
   on one side; refused flank level with the line). Root cause: `build_army` deployed subunit i at
