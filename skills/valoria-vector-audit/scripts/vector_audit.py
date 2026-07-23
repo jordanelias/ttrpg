@@ -31,7 +31,10 @@ POSTCONDITIONS:
 
 DESIGN NOTES:
     - In+out neighbor union for cite-degree, never out-only
-    - Pre-committed thresholds locked; do not edit without methodology revision
+    - Pre-committed thresholds locked; do not edit without methodology revision.
+      REVISION 2026-07-23 (fix #3): P3 changed from the scale-blind absolute `n_edges>=100` to a
+      density floor `mean cite-degree >= 6` (scales with the registry token universe, meaningful at
+      any layer). P1 (median-relative) and P2 (CV bar) are already scale-robust and unchanged.
     - Class taxonomy filters within-class implied-missing pairs
     - Disambiguation rules required for English-word collision tokens
     - Provisional design IS design (banner-classified into design corpus)
@@ -1069,7 +1072,14 @@ def build_g_throughline(rows, tokens, extra_rows=None):
 
 def build_g_mu(rows, tokens):
     """Tokens sharing an Μ mode: collect each Μ field's member-systems across all
-    throughlines, connect within the Μ collection."""
+    throughlines, connect within the Μ collection.
+
+    SINGLE-SOURCE BY NECESSITY (fix #2, verified 2026-07-23): unlike the throughline graph — which
+    Direction #3 broadened with a second source (throughlines_complete) — μ has ONLY throughlines_meta.
+    A repo-wide sweep found NO other Μ-mode assignment anywhere (the complete doc's "mode" mentions are
+    prose, not a Μ column; the Solmund appendix has none; silo_overlap_matrix is a frozen snapshot of a
+    DIFFERENT relation). So μ's narrowness vs throughline is inherent, not a fixable gap — extending it
+    would mean fabricating mode assignments the design never made. Left single-source, honestly."""
     lut, norm = _slug_lookup(tokens)
     by_mu = defaultdict(set)
     for _tid, pmu, smu, systems in rows:
@@ -1299,8 +1309,17 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
         cv = None
     p2 = bool(measurable and cv <= 0.5)
 
-    n_edges = sum(len(v) for v in g_cite.values())
-    p3 = bool(n_edges >= 100)
+    # P3 citation-density. REVISED 2026-07-23 (fix #3): the old absolute bar `n_edges >= 100` was
+    # scale-BLIND — with the current 275-token universe the L0 graph alone has ~15k directed edges, so
+    # ≥100 passed trivially at EVERY layer and added no signal (the v1 problem it was meant to catch —
+    # ~11 edges / 84 tokens ≈ 0.26 mean degree — would still fail a proper density floor, but so would
+    # nothing real). Replaced with a DENSITY floor that scales with the token universe (the stable
+    # denominator — tokens are registry-derived, identical across L0/L1): mean directed cite-degree
+    # ≥ 6. This is meaningful at any layer/corpus size, unlike a raw count.
+    n_edges = sum(len(v) for v in g_cite.values())   # directed sum (each undirected edge counted 2×)
+    n_tokens = max(1, len(names))
+    mean_cite_deg = n_edges / n_tokens
+    p3 = bool(mean_cite_deg >= 6.0)
 
     passed = sum([p1, p2, p3])
     return {
@@ -1310,7 +1329,8 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
         'p2': {'pass': p2, 'measure': 'context_gated_paragraphs', 'measurable': measurable,
                'conviction_presence': cd, 'mean': round(mean, 3),
                'cv': round(cv, 3) if cv is not None else None},
-        'p3': {'pass': p3, 'n_cite_edges': n_edges},
+        'p3': {'pass': p3, 'n_cite_edges': n_edges, 'n_tokens': n_tokens,
+               'mean_cite_degree': round(mean_cite_deg, 2), 'floor': 6.0},
         'passed': passed, 'verdict': 'VALIDATED' if passed >= 2 else 'FAILED',
     }
 
@@ -1667,7 +1687,10 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
              f"context-gated paragraph CV {validation['p2']['cv']} (≤0.5 to pass), presence "
              f"{validation['p2']['conviction_presence']}"),
           f"- **P3 citation-density:** {'PASS' if validation['p3']['pass'] else 'FAIL'} — "
-          f"{validation['p3']['n_cite_edges']} cite token-edges (≥100 to pass)", '',
+          f"mean cite-degree {validation['p3'].get('mean_cite_degree','?')} "
+          f"({validation['p3']['n_cite_edges']} edges / {validation['p3'].get('n_tokens','?')} tokens; "
+          f"floor {validation['p3'].get('floor', 6.0)}, scale-relative — revised from the old ≥100 "
+          f"absolute bar, fix #3)", '',
           f"TF-IDF supporting graph: {'built' if tfidf_on else 'skipped (numpy/sklearn absent)'}."]
     (out / '03_validation_report.md').write_text('\n'.join(vr), encoding='utf-8')
 
