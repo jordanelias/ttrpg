@@ -1814,6 +1814,16 @@ def between_turn_recovery(unit):
     for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
         if atom.morale is not None:
             atom.morale = min(atom.eff_morale_start, atom.morale + BETWEEN_TURN_MORALE_RECOVERY)
+    # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
+    # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
+    # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
+    # relieved, reformed"). Gated OFF -> inert. `pocketed` is cleared alongside (fresh next engagement).
+    if PC_YIELD_RALLY:
+        for atom in unit.subunits:
+            if atom.yielding and not atom.routed and not atom.broken:
+                if atom.eff_morale >= YIELD_RALLY_MORALE_FRAC * atom.eff_morale_start:
+                    atom.yielding = False
+                    atom.pocketed = False
 
 
 def reset_morale_between_battles(unit):
@@ -1829,11 +1839,18 @@ def reset_morale_between_battles(unit):
     unit.morale = unit.morale_start
     unit.routed = False
     unit.broken = False
+    # ED-MB-0022: Feigned Retreat is a per-battle tactic; clear its transient flags at the battle
+    # boundary so a feint/overextension does not leak into the next battle (inert when the toggle is OFF).
+    unit.feigned = False
+    unit.overextended = False
     for atom in unit.subunits:
         if atom.morale is not None:
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
         atom.routed = False
         atom.broken = False
+        # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
+        # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
+        atom.pocketed = False
         # [ED-MB-0018, reaction-critic R1] A new battle is a fresh engagement -> clear the facing-reaction
         # clock (per-engagement transient state must not survive the battle boundary onto a persistent atom).
         _rs = getattr(atom, '_react_since', None)
@@ -2008,6 +2025,48 @@ def recall_check(pursuer):
     return net >= RECALL_OB
 
 
+def feigned_retreat_recognized(pursuer):
+    """Pursuing-side general rolls Command d10s vs Ob 2 to RECOGNISE a Feigned Retreat as a feint.
+    Returns True if recognised — the feint has no effect and pursuit proceeds normally.
+    [canonical: mass_battle_v30.md §A.12 Clarification — "d10s equal to the opposing general's
+     Command against Ob 2 to recognise the Feigned Retreat as a feint"]"""
+    net = roll_pool(pursuer.command)
+    return net >= FEIGNED_RECOGNIZE_OB
+
+
+def feigned_retreat_check(pursuer):
+    """A pursuer deceived by a Feigned Retreat makes a Discipline check Ob 1 to HOLD (not overextend).
+    Returns True if it holds; False if it OVEREXTENDS (chases into the trap).
+    [canonical: PP-256 / mass_combat.md §PP-256 — pursuing-side Discipline check Ob 1; hold
+     P~87% at Discipline 4, ~40% at Discipline 1]"""
+    net = roll_pool(pursuer.discipline)
+    return net >= FEIGNED_RETREAT_OB
+
+
+def unit_in_reserve(unit):
+    """True if the unit is held in Reserve (any subunit carries the 'reserve' instruction).
+    [canonical: mass_battle_v30.md §A.6 — Reserve formation: 'cannot engage; commits Phase 3 next turn']"""
+    return any('reserve' in getattr(a, 'instructions', ()) for a in unit.subunits)
+
+
+def resolve_feigned_retreat(pursuer, feigning_unit):
+    """Resolve a Feigned Retreat when `pursuer` begins chasing a `feigning_unit`. Inert unless
+    PC_FEIGNED_RETREAT is ON. Two-stage per §A.12: recognise (Command Ob 2) then, if deceived,
+    Discipline Ob 1. On a failed Discipline check the pursuer is marked OVEREXTENDED (its next
+    engagement pool is cut by OVEREXTEND_PENALTY — see units.base_combat_pool). Returns a dict
+    describing the outcome, or None if the feint did not apply.
+    [canonical: PP-256, mass_battle_v30.md §A.12 / §B.4 tactic card — Overextended]"""
+    if not PC_FEIGNED_RETREAT or not getattr(feigning_unit, 'feigned', False):
+        return None
+    if feigned_retreat_recognized(pursuer):
+        return {'recognized': True, 'overextended': False}
+    # Deceived — Discipline check to avoid overextending.
+    held = feigned_retreat_check(pursuer)
+    if not held:
+        pursuer.overextended = True
+    return {'recognized': False, 'overextended': not held}
+
+
 # ─── MULTI-UNIT BATTLE ORCHESTRATOR (D-3, D-5, v22) ──────────────────────────
 # Models battles with multiple units per side. Each engagement pair runs through
 # run_battle (1v1). After all pairs resolve: morale cascade, rout contagion,
@@ -2078,6 +2137,17 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
     freed_units = []  # (unit, owner_side, source_pair_idx)
     pursuing_units = []  # (pursuer, routing_unit, pursuer_side, source_pair_idx)
 
+    # ED-MB-0023: Reserve formation (PP-MB-04 / PP-499, §A.6). A pair whose unit is held in Reserve
+    # "cannot engage" its first turn -> it is benched now and its pairing COMMITS (re-activates) at
+    # RESERVE_COMMIT_TURN (Phase 3 of the next battle-turn), engaging from that turn on. Gated OFF ->
+    # reserve is inert and every pair is active from turn 1 (byte-exact).
+    reserve_pairs = {}  # pair_idx -> commit battle-turn
+    if PC_RESERVE_COMMIT:
+        for _pi, (_ai, _bi) in enumerate(pairings):
+            if unit_in_reserve(side_a[_ai]) or unit_in_reserve(side_b[_bi]):
+                reserve_pairs[_pi] = RESERVE_COMMIT_TURN
+        active_pairs = [p for p in active_pairs if p not in reserve_pairs]
+
     for battle_turn in range(1, max_battle_turns + 1):
         turn_log = {
             'turn': battle_turn,
@@ -2087,6 +2157,16 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             'pursuits': [],
             'routs_this_turn': [],
         }
+
+        # ── Reserve commitment: a benched reserve pair commits at Phase 3 of its commit turn and may
+        #    engage from Phase 5 of that same turn. Its first engagement uses the default equal Off/Def
+        #    split (no Phase 1 window) — already this path's behaviour. [canonical: §A.6 P3-02, PP-MB-04]
+        if reserve_pairs:
+            for _pi, _commit in list(reserve_pairs.items()):
+                if battle_turn >= _commit:
+                    active_pairs.append(_pi)
+                    turn_log.setdefault('reserve_commits', []).append({'pair': _pi, 'turn': battle_turn})
+                    del reserve_pairs[_pi]
 
         # ── Pursuit phase: Fast units pursuing routing enemies ──
         # [canonical: §A.12 L513 — "Routing unit loses Size equal to pursuer
@@ -2257,6 +2337,14 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 if victor.speed == "Fast" and routing.hp > 0:
                     # Fast unit pursues — track for ongoing pursuit
                     # [canonical: §A.12 L513 — "Pursuit: Fast units only"]
+                    # ED-MB-0022: if the "routing" unit is actually feigning (Feigned Retreat, PP-256),
+                    # the pursuer may be deceived and overextend. Inert unless PC_FEIGNED_RETREAT is ON.
+                    fr = resolve_feigned_retreat(victor, routing)
+                    if fr is not None:
+                        turn_log.setdefault('feigned_retreats', []).append({
+                            'pursuer': victor.name, 'feigning': routing.name,
+                            'recognized': fr['recognized'], 'overextended': fr['overextended'],
+                        })
                     pursuing_units.append((victor, routing, victor_side, pair_idx))
                 else:
                     # Non-Fast: freed attacker joins adjacent engagement
@@ -2286,8 +2374,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         b_all_routed = all(u.routed for u in side_b)
         if a_all_routed and b_all_routed:
             break  # mutual rout — no one left to pursue
-        if not active_pairs and not pursuing_units:
-            # No engagements and no pursuit — freed attackers can't do anything
+        if not active_pairs and not pursuing_units and not reserve_pairs:
+            # No engagements, no pursuit, and no reserve still waiting to commit (ED-MB-0023) —
+            # freed attackers can't do anything.
             break
 
         # ── Between-turn recovery ──

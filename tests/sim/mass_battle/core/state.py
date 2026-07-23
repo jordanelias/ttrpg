@@ -7,6 +7,7 @@ orchestration via star-import so phase_boundary and every caller are unchanged.
 [canonical: mass_battle_v30.md §A.4 morale/discipline, §A.12 rout]"""
 import math
 from mass_battle.config import *
+from mass_battle.core.exchange import D_YIELD  # [ED-MB-0024] DG-2 yield discipline gate (single owner: core.exchange)
 
 __all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase']
 
@@ -56,6 +57,16 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             if u.broken: loss += 1.0       # unit formation-broken pressure (kept unit-scoped for byte-exactness)
             if atom.eff_stamina <= 0 and atom.eff_discipline > 0 and u.command > 0:
                 loss += 1.0 / (atom.eff_discipline * u.command)   # per-subunit exhaustion pressure
+            # [ED-MB-0024, DG-2 §2.2 EMERGENT auto-entry] When the casualty-fraction trigger pushes a
+            # disciplined subunit (eff_discipline >= D_YIELD, parent command > 0) toward the rout cliff, it
+            # ENTERS `yielding` -- it starts giving ground in good order rather than only eroding. Sets the
+            # state; the already-built yield consumption sites (give-ground movement, facing-lock, pool
+            # malus) do the rest. A sub-D_YIELD subunit is unaffected (routs as today). Gated OFF by default
+            # (highest blast radius per §4.3) -> inert/byte-exact. The erosion-BRAKE calibration (whether
+            # yielding should also reduce `loss`) stays deferred (needs_jordan) -- state entry only here.
+            if (PC_YIELD_EMERGENT and not atom.yielding and frac < 0.50  # [canonical: mass_battle_v30.md §A.4 — Size<50% trigger, same threshold as the loss line above]
+                    and atom.eff_discipline >= D_YIELD and u.command > 0 and atom.unit_type != 'ranged'):
+                atom.yielding = True
             if loss:
                 atom.erode_morale(min(loss, 3.0))   # cap -3 per Cascade Phase (§A.4); routes own-else-Unit
 

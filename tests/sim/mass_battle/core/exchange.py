@@ -118,7 +118,11 @@ def subunit_combat_pool(unit, atom):
     # just doesn't get the malus removed; it fights at full pool as if not yielding at all, since a
     # low-discipline 'yield' order below D_YIELD is a no-op by design, not a punishment). Default
     # `yielding=False` on every Subunit -> inert for every existing scenario.
-    if getattr(atom, 'yield_active', False):
+    # [ED-MB-0024, DG-2 §2.4 pocket exit] A POCKETED yielding body (rearward motion blocked -> holds in
+    # place, nowhere left to give ground) fights at FULL pool -- the malus is REMOVED, modeling Cannae's
+    # center pinned and fighting for its life. `pocketed` is only ever set when PC_YIELD_POCKET is on
+    # (default OFF) -> this reduces to the plain yield malus for every existing scenario.
+    if getattr(atom, 'yield_active', False) and not getattr(atom, 'pocketed', False):
         raw *= YIELD_POOL_MULT
     # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness (CEV) friction: scale this subunit's
     # combat score by its UNIT's once-per-battle LogNormal draw (`_friction_cev`, set by orchestration.

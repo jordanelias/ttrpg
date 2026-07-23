@@ -1,6 +1,6 @@
 # Fighting-Withdrawal / Yield Mechanic — Design Workplan (DG-2)
 
-## Status: PARTIALLY SUPERSEDED — the §4 step-1 yield scope is BUILT (ED-MB-0005, 2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green). Live record = registers/handoffs/HANDOFF_MB.md. Residual (emergent auto-entry §2.2; rally/pocket exits §2.4; D_YIELD/YIELD_POOL_MULT calibration debt) tracked there, HELD. [## Status: heading added 2026-07-15]
+## Status: BUILT (gated) — the §4 step-1 yield scope shipped in ED-MB-0005 (2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green); the three residuals (emergent auto-entry §2.2, rally exit + pocket exit §2.4) shipped in ED-MB-0024 (2026-07-23; tests/valoria/test_dg2_yield_residuals.py, 10 green) — all GATED OFF (PC_YIELD_EMERGENT / PC_YIELD_RALLY / PC_YIELD_POCKET), byte-exact. HELD for Jordan: the three default-flips, the emergent path's blast-radius measurement pass (§4.3), the deferred erosion-brake, and the D_YIELD/YIELD_POOL_MULT/YIELD_RALLY_MORALE_FRAC/YIELD_POCKET_REACH calibration debt (§5). Live record = registers/handoffs/HANDOFF_MB.md. [## Status: heading added 2026-07-15; updated 2026-07-23, ED-MB-0024]
 
 **Status: PROPOSAL — pending Jordan sign-off before implementation.** Not canon yet. Date 2026-07-05.
 Ratified scope for THIS document (Jordan, 2026-07-05): *"Create as workplan"* — i.e. this doc captures

@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'PC_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'PC_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'PC_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'PC_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
 
 BATTLEFIELD_SIZE = 50  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
 UNIT_GRID_SIZE = 30  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
@@ -26,6 +26,22 @@ CELL_FLOOR = 40             # min troops/cell; below this a cell merges into a n
 CELL_CAP = 200              # max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 SUBUNIT_ROUT_FLOOR = 80     # a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
+# [ED-MB-0021 / P-DEC-3, spatial_model_v2_plan.md §9 — Jordan-RATIFIED mechanism: "a cavalry cell has a
+#  lower MAX density than infantry (fewer horses than men fit per unit area) — implement as a per-troop-
+#  type density cap (cavalry cap < infantry cap), NOT a larger box."] MECHANISM ratified; the cavalry cap
+#  VALUE is a calibration (needs_jordan) so this ships GATED OFF (byte-exact). When ON, a mounted type's
+#  cells hold fewer troops -> the SAME troop count deploys over MORE cells (wider frontage) -> the combat
+#  density factor (attrition `min(tpc,CELL_CAP)`) drops naturally via the higher ncells, no attrition edit.
+PC_TROOP_DENSITY_CAP = (_sigma_os.environ.get('PC_TROOP_DENSITY_CAP', '0') == '1')
+TROOP_TYPE_DENSITY_CAP = {   # mounted: ~half infantry density (a horse+rider occupies ~2x a man's ground). GROUNDED default, needs_jordan on the value.  # [canonical: P-DEC-3 mechanism; value calibration pending]
+    'cavalry': 100, 'knights_templar': 100, 'mounted_archers': 100,
+}
+def cell_cap_for(troop_type):
+    """Max fighting troops per 1x1 cell for a troop type (P-DEC-3). Mounted types pack looser; every
+    other type (and the whole engine when PC_TROOP_DENSITY_CAP is OFF) uses CELL_CAP -> byte-exact."""
+    if PC_TROOP_DENSITY_CAP and troop_type in TROOP_TYPE_DENSITY_CAP:
+        return TROOP_TYPE_DENSITY_CAP[troop_type]
+    return CELL_CAP
 LINE_ASPECT = 1.4           # generator: Line width:depth ratio (from the per-tier tables' progression)  # [canonical: sim_verification_ledger.json — CALIBRATED, engine generator ratio (coverage_matrix_archive.md "Line=1.4xdepth"), not independently historically cited]
 ENCIRCLEMENT_PENALTY = 1
 SUPPORT_STACK_ENABLED = True
@@ -95,6 +111,48 @@ MULTI_SIDE_SHOCK = float(_sigma_os.environ.get('MULTI_SIDE_SHOCK', '0.5'))  # [c
 # line in a head-on clash stays GREEN instead of reading the enemy line's distant centre as an
 # oblique (flank) bearing. 2.0 verified: front->1.00x, rear->2.00x exactly. [canonical: Jordan design]
 OCTAGON_LOCAL_REACH = float(_sigma_os.environ.get('OCTAGON_LOCAL_REACH', '2.0'))
+# [ED-MB-0022 — Feigned Retreat (PP-256 / mass_battle_v30.md §A.12, tactic card §B.4).] A unit that
+# declares a Feigned Retreat withdraws as if routing to bait a pursuer. Two rolls resolve it:
+#  (1) the pursuing-side general rolls Command d10s vs Ob 2 to RECOGNISE the feint (mass_battle_v30
+#      §Clarification: "Roll d10s equal to the opposing general's Command against Ob 2 to recognise
+#      the Feigned Retreat as a feint"). Success -> feint has no effect (pursuit proceeds normally).
+#      Failure (or no roll) -> the pursuer is deceived and (2) makes a Discipline check Ob 1
+#      (PP-256: "Pursuing-side Discipline check = Ob 1; hold P~87% at Disc4, ~40% at Disc1").
+#  Failing (2) -> the pursuer is OVEREXTENDED: it re-engages next turn at a bounded pool penalty
+#  (the feigning unit turns and re-engages the disorganised pursuer with advantage). GATED OFF by
+#  default so the multi-unit RNG stream is unchanged unless explicitly enabled (flip needs_jordan).
+PC_FEIGNED_RETREAT = (_sigma_os.environ.get('PC_FEIGNED_RETREAT', '0') == '1')
+FEIGNED_RECOGNIZE_OB = int(_sigma_os.environ.get('FEIGNED_RECOGNIZE_OB', '2'))  # [canonical: mass_battle_v30.md §A.12 Clarification — Command Ob 2 to recognise the feint]
+FEIGNED_RETREAT_OB = int(_sigma_os.environ.get('FEIGNED_RETREAT_OB', '1'))      # [canonical: PP-256 / mass_combat.md §PP-256 — pursuing-side Discipline check Ob 1]
+OVEREXTEND_PENALTY = int(_sigma_os.environ.get('OVEREXTEND_PENALTY', '2'))      # [canonical: mass_battle_v30.md §B.4 tactic card — "Overextended (−2D)"]
+# [ED-MB-0023 — Reserve formation (PP-MB-04 / PP-499, mass_battle_v30.md §A.6).] A unit held in Reserve
+# "cannot engage" during its first turn; it COMMITS at Phase 3 of the NEXT turn and may then engage from
+# Phase 5 of that same turn (declare Reserve turn N -> commit Phase 3 turn N+1 -> engage Phase 5 turn N+1;
+# NOT delayed to N+2). Its first engagement uses the default equal Off/Def split (no Phase 1 declaration
+# window) — already this path's behaviour. Modeled at battle-turn granularity: a reserve unit sits out
+# battle-turn 1 and its pairing activates from RESERVE_COMMIT_TURN onward. GATED OFF (byte-exact; the
+# reserve instruction stays inert, all pairs active from turn 1). Flip needs_jordan.
+PC_RESERVE_COMMIT = (_sigma_os.environ.get('PC_RESERVE_COMMIT', '0') == '1')
+RESERVE_COMMIT_TURN = int(_sigma_os.environ.get('RESERVE_COMMIT_TURN', '2'))    # [canonical: mass_battle_v30.md §A.6 P3-02 / PP-MB-04 — commit at Phase 3 of the NEXT (2nd) battle-turn]
+# [ED-MB-0024 — DG-2 residuals: emergent auto-entry (§2.2), rally exit + pocket exit (§2.4) of the
+# fighting-withdrawal mechanic (proposals/mass_battle_fighting_withdrawal_v1.md). The state + COMMANDED
+# entry shipped in ED-MB-0005; these are the three explicitly-deferred residuals.]
+# EMERGENT auto-entry: at a phase boundary where the §A.4 casualty-fraction trigger would push a
+# disciplined subunit toward the rout cliff, it ENTERS yielding (gives ground in good order) instead of
+# only eroding. Highest blast radius (touches rout dynamics in every scenario) -> ships OFF by default
+# per the design doc §4.3. Sets the state only; the erosion-brake calibration stays deferred (needs_jordan).
+PC_YIELD_EMERGENT = (_sigma_os.environ.get('PC_YIELD_EMERGENT', '0') == '1')
+# RALLY exit: at a battle-turn boundary (the lull), a yielding subunit whose morale has recovered above
+# YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure relieved,
+# reformed"). Gated OFF -> inert.
+PC_YIELD_RALLY = (_sigma_os.environ.get('PC_YIELD_RALLY', '0') == '1')
+YIELD_RALLY_MORALE_FRAC = float(_sigma_os.environ.get('YIELD_RALLY_MORALE_FRAC', '0.75'))  # [CALIBRATED-DEBT — rally when morale recovered to 3/4 of start; not independently derived, flagged per §5]
+# POCKET exit: while yielding, if rearward movement is structurally blocked (map edge in the flee
+# direction, or an enemy has gotten behind into the retreat path), yielding converts to a HOLD with the
+# combat malus REMOVED — Cannae's kill condition (pinned with nowhere to give ground, annihilated in
+# place) emerging from the standoff substrate. Gated OFF -> `pocketed` never set -> malus path unchanged.
+PC_YIELD_POCKET = (_sigma_os.environ.get('PC_YIELD_POCKET', '0') == '1')
+YIELD_POCKET_REACH = float(_sigma_os.environ.get('YIELD_POCKET_REACH', '3.0'))  # [CALIBRATED-DEBT — an enemy within 3 cells in the retreat direction counts as 'gotten behind'; not independently derived, flagged per §5]
 # [canonical: sim_verification_ledger.json — CALIBRATED, -99 is a structural sentinel (effectively-zero speed for 'hold'), not a magnitude independently historically cited]
 STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
