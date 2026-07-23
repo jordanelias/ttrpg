@@ -82,29 +82,58 @@ _SHAPE_BUILD = {
     "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
 }
 
+def _build_shape_n(shape, n):
+    """Build a footprint of EXACTLY `n` cells in `shape`'s aspect, for any n>=1 (ED-MB-0025).
+    The legacy `_SHAPE_BUILD` size-parameter families only yield a SPARSE set of cell counts (a Line
+    could be 1,5,11,… never 2,3,4), so an explicit troops-per-cell density could not be honoured — a
+    133-troop subunit collapsed to 1 cell at every concentration. These builders instead lay out n cells
+    directly in the shape's characteristic silhouette, so `density` (troops/cell) truly bounds the cell
+    count. Cells are row-major (r = rank/depth, c = file/frontage); r=0 is the leading rank."""
+    n = max(1, int(n))
+    if shape == "Column":                                  # deep-narrow: LINE_ASPECT^2 depth:width
+        width = max(1, round(math.sqrt(n / (LINE_ASPECT * LINE_ASPECT))))
+        depth = math.ceil(n / width)
+        cells = [(r, c) for r in range(depth) for c in range(width)]
+    elif shape == "Arrowhead":                             # triangular wedge, apex forward (r=0 narrowest)
+        cells = []
+        r = 0
+        while len(cells) < n:
+            w = 2 * r + 1
+            for c in range(-r, -r + w):
+                cells.append((r, c));
+                if len(cells) >= n: break
+            r += 1
+        cmin = min(c for _r, c in cells)
+        cells = [(r, c - cmin) for r, c in cells]          # normalise cols to >=0
+    elif shape == "GappedLine":                            # two blocks with a 1-file central gap
+        half = max(1, round(math.sqrt(n / (2.0 * LINE_ASPECT))))
+        depth = max(1, math.ceil(n / (2 * half)))
+        cells = []
+        for r in range(depth):
+            for c in list(range(half)) + list(range(half + 1, 2 * half + 1)):
+                cells.append((r, c))
+                if len(cells) >= n: break
+            if len(cells) >= n: break
+    else:                                                  # Line (default): width:depth ~ LINE_ASPECT
+        depth = max(1, round(math.sqrt(n / LINE_ASPECT)))
+        width = math.ceil(n / depth)
+        cells = [(r, c) for r in range(depth) for c in range(width)]
+    return cells[:n]
+
+
 def footprint_for(shape, troops, concentration, troop_type=None):
-    """Lay `troops` into `shape` at ~`concentration` troops/cell, bounded so per-cell stays
-    in [CELL_FLOOR, cell_cap_for(troop_type)]; returns the cell-set [(r,c), ...]. Achievable density
-    is the closest the shape's discrete geometry allows within the bound. [P-DEC-3] A mounted troop_type
-    caps lower (cell_cap_for) so the same troops deploy over MORE cells (wider frontage); troop_type=None
-    or the gate OFF -> CELL_CAP (byte-exact)."""
+    """Lay `troops` into `shape` at an EXPLICIT `concentration` = target troops/cell, which now truly
+    BOUNDS the cell count (ED-MB-0025): `cells = round(troops/concentration)`, clamped so per-cell stays
+    in [CELL_FLOOR, cell_cap_for(troop_type)] — then built exactly via `_build_shape_n`. This honours the
+    density knob the design intends (a first-class subunit primitive: 'density of troops per cell, which
+    bounds how many cells the subunit can use'); the previous sparse size-parameter search silently
+    ignored it (a 133-troop Line collapsed to 1 cell at every concentration — the M2 measurement bug).
+    [P-DEC-3] A mounted troop_type caps lower (cell_cap_for) so the same troops deploy over MORE cells."""
     troops = max(1, int(troops))
-    lo = math.ceil(troops / cell_cap_for(troop_type))
-    hi = max(lo, troops // CELL_FLOOR)
-    target = min(hi, max(lo, round(troops / max(1.0, float(concentration)))))
-    mk, build = _SHAPE_BUILD[shape]
-    max_s = max(2, math.isqrt(hi) + 2)
-    best = None
-    for s in range(1, max_s + 1):
-        n = len(build(**mk(s)))
-        if lo <= n <= hi and (best is None or abs(n - target) < abs(best[1] - target)):
-            best = (s, n)
-    if best is None:                                  # granularity skipped [lo,hi]; nearest overall
-        for s in range(1, max_s + 1):
-            n = len(build(**mk(s)))
-            if best is None or abs(n - target) < abs(best[1] - target): best = (s, n)
-    s, n = best
-    return build(**mk(s))
+    lo = math.ceil(troops / cell_cap_for(troop_type))               # densest allowed (>= CELL_CAP/cell)
+    hi = max(lo, troops // CELL_FLOOR)                               # sparsest allowed (>= CELL_FLOOR/cell)
+    n = min(hi, max(lo, round(troops / max(1.0, float(concentration)))))
+    return _build_shape_n(shape, n)
 
 def oriented_pattern(shape, tier, advance_dir):
     pattern = CELL_PATTERN_FN[shape](tier)
