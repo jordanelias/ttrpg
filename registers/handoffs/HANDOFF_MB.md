@@ -15,6 +15,100 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0018 (2026-07-23): octagon facing = DAMAGE-RECEIVED MULTIPLIER + reaction delay + multi-side
+  shock** (Jordan directive, verbatim: "the facing octagon is a damage-received multiplier — attacks from
+  behind do ~**2×** the damage of from the front; cells **cannot turn instantaneously** (needs a couple-tick
+  reaction); attacked from **multiple sides** is **extra bad**, not just divide-by-two"). Replaces the legacy
+  `-2`-dice octagon **pool** penalty (too weak: legacy rear was only 1.25× front). New `_octagon_dmg_mod`
+  (orchestration.py) → pure per-cell facing arc (front **1.0×** / flank **1.5×** / rear **2.0×**) multiplying
+  the defender's casualties; reads the arc against the **LOCAL** attacker centroid (`OCTAGON_LOCAL_REACH=2.0`)
+  so a wide line's wing stays GREEN head-on — **verified front→1.00×, rear→2.00× exactly per-seed**. Reaction:
+  a cell hit outside its front arc keeps its exposed facing until `FACING_REACTION_TICKS=2` elapse, and only
+  refuses if it can SEE the threat (≤105° FOV) and isn't frontally pinned — a **rear** strike is blind → 2×
+  persists the whole engagement. Multi-side: `eng_counts≥2` → `×(1+MULTI_SIDE_SHOCK=0.5)` compounding.
+  `PC_OCTAGON_DMG` **default ON**; legacy path preserved **byte-exact** under `=0` (the wrapper/pocket/roll-up
+  pool machinery goes dormant under the flag — subsumed by arc + shock). Compounds with frontal-brace
+  stripping → a braced front that parries to 0 is annihilated from behind (Cannae). **All 4 bat.py goldens
+  re-recorded** (grid+field; head-on single-subunit rows all-GREEN→unchanged; envelop/cannae/oblique move).
+  `test_octagon_damage.py` (5). Disclosure: `audit/2026-07-22-mass-battle-stress-test/octagon_damage_model.md`.
+  **Follow-on:** graded ≥2/3/4-side escalation; full-campaign A/B of the default-ON flip once ED-MB-0016
+  friction + the conjunctive-envelopment gate land (all three interact on the envelopment rows).
+
+- **ED-MB-0017 (2026-07-22): multi-unit deployment geometry + envelopment pathing fix** (Jordan-flagged
+  from the hierarchy snapshot: overlapping subunits, both envelopment wings on one side, refused flank
+  level with the line). Root cause: `build_army` deployed subunit i at `col=15+i*4` (fixed step < subunit
+  frontage). Fixed with frontage-aware anchor-centred deployment (`_centered_line_cols`, fit-to-field, no
+  overlap 1–11 subunits), symmetric opposite-flank envelopment wings (mirror double envelopment), and an
+  echeloned-back refused wing. **Speed (Jordan):** envelopers must be fast — `PC_ENVELOP_SPEED_MULT=2.0`
+  (envelop maneuver) + `PC_CAVALRY_SPEED_MULT` 2.0→3.0 (cavalry ~3× infantry); cavalry double envelopment
+  now wraps behind by ~t6–8 (was t16–20). Independent adversarial critic run: F1 over-wide crash + F2
+  gauge_mb same-defect FIXED, F3/F4 tested. Machine-vision comparison + sources saved to
+  `research/diagrams/mass_battle_formations/`. All 4 bat.py goldens re-recorded (3 multi-subunit rows
+  re-baselined, ED-909 precedent; 7 single-subunit unchanged; byte-exact green). `test_deployment_geometry.py`
+  (16). **Follow-on:** the wrap seals a horseshoe not a full ring (no cavalry rear-transit); single line only
+  (no triplex depth-lines); envelopment still often loses the outcome (DG-6 "envelopment not rewarded" —
+  ED-MB-0016 friction + a still-needed conjunctive envelopment gate; this fast correct wrap is its precondition).
+
+- **ED-MB-0015 (2026-07-22): spatial-model v2 Stage F — verification + golden re-record + P-DEC-4
+  historical revalidation.** All I1–I7 hold; stress harness S0–S5 green; Lanchester exponent + depth-2
+  preserved; field goldens re-recorded (`unit_field 2da5183…` verified, `cell_field 5f5db96…`; grid
+  unchanged). **P-DEC-4:** gauge pre-D baseline (A–C) = **10/20**, v2 (A–E) = **6/20** multi — D+E moved
+  it down 4 rows (authorized re-baseline, but material; see `stage_F_verification.md` §5). Dominant
+  failure = **DG-6 over-decisiveness**, root-caused: melee pool sums N independent dice → CV collapses
+  ~1/√N → `compute_degree` deterministic from force ratio → 100%/0% vs historical bands. **Now being
+  RESOLVED** (Jordan directive 2026-07-22: extend code to resolve standing issues via academic research /
+  military theory / mathematics / historical precedent) — the DG-6 grounded resolution (restore
+  scale-invariant outcome variance so a large advantage is decisive-but-uncertain/banded) is UNDERWAY as
+  a follow-on ED-MB, built on stochastic-Lanchester/breakpoint models + Sabin's *Lost Battles*
+  decisiveness bands. **Stage G (retire integer engine)** remains after: note the field engine lives in
+  `tests/sim/mass_battle` (not `systems/`), so routing `resolve_mass_battle` (`systems/mass_battle/sim/
+  massbattle.py`, called by `systems/factions/sim/faction_action.py:_try_conquest`) onto it needs a
+  faction→army adapter + outcome→`{degree,attacker_wins}` mapping + likely a field-engine relocation —
+  an architecturally-significant, cross-lane (MB+FA) epic.
+
+- **ED-MB-0014 (2026-07-22): spatial-model v2 Stage E — weapon-class reach + the `pike` troop type.**
+  Per `spatial_model_v2_plan.md` §3 Stage E / Jordan P-DEC-1. `reach_for`/`TROOP_TYPE_REACH` now return
+  the per-type front-face reach (non-pole 0.1 / pole 0.2 / **pike 0.3** / lance 0.2 / ranged 0.1 sidearm),
+  replacing the flat `REACH_SHORT=0.5` placeholder Stages B/C carried; feeds `cell_boxes_for →
+  obb_front_reach_overlap` + the TOI halt. Authored the **`pike`** troop type end-to-end (stats mirror
+  heavy_infantry — reach 0.3 the sole differentiator, provisional-by-analogy since §B.2 has no pike row;
+  pike weapon + ('pike','medium') loadout + ShieldWall/Hold/Anvil roles). **Reach advantage emerges** via
+  the already-wired charge-recoil reach gate: braced pike/spear (reach ≥ lance 0.2) repel a cavalry charge
+  (defender ~96.7% hp, cavalry recoils ~88.3%), levy (0.1) is run down (~90.7%) — the anti-cavalry pike
+  role, emergent from the reach data. **Disclosed finding:** reach differentiation does NOT change
+  symmetric standing melee (mutual exchange once contact fires; reach only shifts timing) — reach is a
+  charge/brace lever, not a standing-melee one. A directional-reach exchange term (pike-pins-forever
+  hazard under halt-on-contact) is flagged for Jordan, NOT introduced. Gates green:
+  `test_reach_weapon_class.py` (10); **I4 byte-exact grid oracle green** (no kite in the battery). Two
+  items flagged for Stage F: (1) the 0.1/0.2/0.3 scale vs PP-290's 0.5/1.5 meter-grounding needs
+  reconciliation (deferred, not overwritten); (2) **P-DEC-3 cavalry density cap (< infantry) deferred** as
+  a separate follow-up (kept out of Stage E to keep the reach A/B clean). Next: **Stage F** (full
+  verification + field-golden re-record + historical revalidation), then **Stage G** (retire the integer
+  `systems/mass_battle/sim` engine, route `resolve_mass_battle` onto the field engine — P-DEC-2 resolved).
+
+- **ED-MB-0013 (2026-07-22): spatial-model v2 Stage D — the LAST live integer on the field contact
+  path removed.** Per `audit/2026-07-22-mass-battle-stress-test/spatial_model_v2_plan.md` §3 Stage D.
+  The melee Lanchester frontage term `len(set(int_col))` (the only integer left on the live position/
+  contact path, per `backwards_analysis.md`) is now a CONTINUOUS OBB front-overlap **width**:
+  `geometry.engaged_frontage(a_boxes, b_boxes, heading)` = the union length, along a side's frontage
+  axis, of each engaged cell body's width-interval clipped to the enemy's covered meeting span.
+  `_find_contacts_standoff` threads `a_front`/`b_front` onto pairs; `_lanchester_strength(front_width=…)`
+  consumes it, falling back to the integer count on the grid/OFF path (**I4 byte-exact — grid oracle
+  green, 30 passed**). **Scoping call:** the snapped `(rank,file)` cell identities are KEPT — they key the
+  formation-lattice casualty/density/stamina substrate (a discrete troop-block identity, I3's
+  defensible-quantization carve-out, NOT a live-position integer); only the frontage MAGNITUDE moved to
+  continuous. Gates green: `tests/valoria/test_frontage_conservation.py` (15) — integer-limit reduction,
+  fractional on offset, depth-invariant, frontage-capped (Lanchester linear), I1 conservation ×5 seeds,
+  I2; maneuvers/movement/yield 20 passed/1 xpassed (pre-existing). **DG-6 disclosure (not tuned):** A/B
+  12-seed field battery — axis-aligned symmetric meetings byte-identical; shift only on offset/asymmetric
+  meetings (Line4-vs-Line2 wide-attacker overkill capped to the narrow defender's meeting width, A_win
+  12→10/12, def hp .452→.487). Lanchester melee exponent unchanged (p=2.50 before/after — pre-existing
+  DG-6 artifact, frontage-independent). **Field goldens NOT re-recorded (Stage F, per plan §7).** Next
+  in this v2 sequence: **Stage E** (weapon-class reach 0.1/0.2/0.3 + author the `pike` troop type, P-DEC-1;
+  P-DEC-3 cavalry density cap), then **Stage F** (full verification + digest re-record + historical
+  revalidation), then **Stage G** (retire the integer `systems/mass_battle/sim` engine, route
+  `resolve_mass_battle` onto the field engine — P-DEC-2 RESOLVED=retire).
+
 - **ED-MB-0011 (2026-07-22): DG-10 field-movement freeze FIXED + full field-based stress test.**
   Jordan asked for a field-based (not grid) stress test with all flags/gates activated on the
   *active* engine (`tests/sim/mass_battle/`, NOT the wired `systems/mass_battle/sim/` bare port,

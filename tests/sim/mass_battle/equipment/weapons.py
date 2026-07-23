@@ -38,6 +38,7 @@ def _seed():
     R("light_cut",  damage_type="cut",   weight="light", reach="melee",  keywords=(),                          provisional=True)
     R("heavy_cut",  damage_type="cut",   weight="heavy", reach="melee",  keywords=(),                          provisional=True)
     R("heavy_blunt",damage_type="blunt", weight="heavy", reach="melee",  keywords=("anti_armour",),            provisional=True)  # §B.2 Anti-Armour keyword
+    R("pike",       damage_type="pierce",weight="heavy", reach="melee",  keywords=("pole", "anti_cavalry"),    provisional=True)  # [v2 Stage E, ED-MB-0014 / P-DEC-1] the pike: a pole weapon, longest melee reach (0.3, TROOP_TYPE_REACH)
     R("bow",        damage_type="pierce",weight="light", reach="ranged", keywords=("volley",),                 provisional=True)
     R("crossbow",   damage_type="pierce",weight="light", reach="ranged", keywords=("volley", "armour_piercing"),provisional=True)  # §B.2 +1 vs med/heavy post-DR
     R("sling",      damage_type="blunt", weight="light", reach="ranged", keywords=("volley",),                 provisional=True)

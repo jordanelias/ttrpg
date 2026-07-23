@@ -120,6 +120,13 @@ def subunit_combat_pool(unit, atom):
     # `yielding=False` on every Subunit -> inert for every existing scenario.
     if getattr(atom, 'yield_active', False):
         raw *= YIELD_POOL_MULT
+    # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness (CEV) friction: scale this subunit's
+    # combat score by its UNIT's once-per-battle LogNormal draw (`_friction_cev`, set by orchestration.
+    # _draw_friction_cev at battle start). 1.0 when PC_FRICTION_CEV is off -> byte-exact. This is the
+    # Dupuy-style CEV multiplier on the whole combat power; the force-independent, once-per-battle
+    # variance it injects is what turns a certain (100%) large-advantage outcome into a decisive-but-
+    # uncertain (historically-banded) one. [grounding: config.py PC_FRICTION_CEV]
+    raw *= getattr(unit, '_friction_cev', 1.0)
     return max(1, math.floor(raw))
 
 

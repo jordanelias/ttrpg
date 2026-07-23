@@ -98,6 +98,78 @@ def mechanics_selftest():
 # subordinate officers) — that reconciliation is queued for canon, not silently invented here.
 SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command Rating — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
 
+# ─── ARMY-LEVEL DEPLOYMENT GEOMETRY (ED-MB-0017) ──────────────────────────────
+# [canonical: audit/2026-07-22-mass-battle-stress-test/pathing_deployment_diagnosis.md — multi-unit
+#  deployment fix; historical geometry per the Cannae/Leuctra/triplex-acies research synthesis]
+# The pre-fix `build_army` deployed subunit i at column `15 + i*4` — a rightward column-of-columns with a
+# fixed 4-col step narrower than a battle-scale subunit's frontage, so subunits OVERLAPPED (P-1), the
+# envelopment's "wings" both landed on ONE side of the centre (P-2, no double envelopment), and the
+# refused wing sat level with the line, overlapping it (P-3). These helpers replace the fixed step with
+# FRONTAGE-AWARE placement: a battle line centred on the anchor, symmetric wings for envelopment, and an
+# echeloned-rear refused wing.
+DEPLOY_GAP = 1        # [canonical: pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent subunits; a coherent line (hoplite ~0) not the wide manipular quincunx]
+ENVELOP_WING_GAP = 3  # [canonical: pathing_deployment_diagnosis.md §3 / Cannae research §1 — wings sit WIDE of the centre's flanks (columns, refused slightly), clear of its frontage]
+REFUSE_ECHELON = 6    # [canonical: pathing_deployment_diagnosis.md §2 / Leuctra research §2 — refused wing echeloned back so it cannot reach contact when the strong wing does (depth-ratio-grounded offset in rows)]
+
+
+def _spec_span(sp):
+    """(cmin, cmax) column span of a spec's footprint pattern, computed PRE-construction (so deployment
+    can space subunits by their true frontage). Resolves shape from an explicit `shape` or a `role`."""
+    shape = sp.get('shape')
+    if shape is None and sp.get('role') is not None and sp['role'] in ROLE_SPEC:
+        shape = ROLE_SPEC[sp['role']]['shape']
+    shape = shape or 'Line'
+    troops, conc = sp.get('troops'), sp.get('concentration')
+    pat = footprint_for(shape, troops, conc) if (troops is not None and conc is not None) \
+        else CELL_PATTERN_FN[shape](sp.get('tier', 3))
+    cs = [c for _r, c in pat]
+    return (min(cs), max(cs)) if cs else (0, 0)
+
+
+def _centered_line_cols(specs, anchor_col, gap=DEPLOY_GAP):
+    """Deployment columns (the `starting_position` col for each spec) laying `specs` out as a battle line
+    CENTRED on `anchor_col`, spaced by each subunit's own frontage + `gap` — so no two subunits overlap
+    at any subunit count (P-1). Returns [col_i]; col_i places spec i's pattern so the block is centred.
+
+    [ED-MB-0017, adversarial-review finding 1] The block is FIT to the battlefield so it can never place
+    a cell off-board (which Subunit.__post_init__ rejects with a hard ValueError). A block that fits is
+    left exactly centred (a no-op for every normal army — the presets and the ≤11-subunit test cases);
+    an over-wide block (an army wider than the 50-cell field even at gap 0) is first re-tried at gap 0,
+    then, if still too wide, LINEARLY COMPRESSED to fit — subunits then abut/overlap (no worse than the
+    pre-fix `15 + i*4` layout, which also overlapped) rather than CRASHING. Degrade, don't crash."""
+    spans = [_spec_span(s) for s in specs]
+
+    def _place(g):
+        widths = [cmax - cmin + 1 for cmin, cmax in spans]
+        total = sum(widths) + g * (len(specs) - 1)
+        x = anchor_col - total / 2.0
+        cols = []
+        for (cmin, _cmax), w in zip(spans, widths):
+            cols.append(int(round(x - cmin)))
+            x += w + g
+        return cols
+
+    lo_bound, hi_bound = 1, BATTLEFIELD_SIZE - 2          # keep a 1-cell margin inside [0, 49]
+    cols = _place(gap)
+    lo = min(c + s[0] for c, s in zip(cols, spans))
+    hi = max(c + s[1] for c, s in zip(cols, spans))
+    if lo < lo_bound or hi > hi_bound:                   # overflows the field
+        cols = _place(0)                                 # first: close the gaps
+        lo = min(c + s[0] for c, s in zip(cols, spans))
+        hi = max(c + s[1] for c, s in zip(cols, spans))
+        if hi > lo and (hi - lo) > (hi_bound - lo_bound):  # genuinely wider than the field -> compress
+            scale = (hi_bound - lo_bound) / float(hi - lo)
+            cols = [int(round(lo_bound + (c - lo) * scale)) for c in cols]
+        else:                                            # fits after gap-0 -> just translate on-board
+            shift = (lo_bound - lo) if lo < lo_bound else (hi_bound - hi)
+            cols = [c + shift for c in cols]
+    # Final per-subunit clamp: every subunit's own cells must land on-board even when the army is wider
+    # than the field can hold at all (11 large blocks) -- clamp its start so [col+cmin, col+cmax] ⊆
+    # [0, FIELD-1]. For a fitting army this is a no-op; for an impossible one subunits pile up/overlap at
+    # the edge (no worse than the pre-fix overlap) instead of raising an off-board ValueError.
+    cols = [max(-s[0], min(BATTLEFIELD_SIZE - 1 - s[1], c)) for c, s in zip(cols, spans)]
+    return cols
+
 
 def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type=None,
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
@@ -137,7 +209,7 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
 
 
 def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit]
-               morale_start=None, dr=1, stance='balanced', speed='Standard'):
+               morale_start=None, dr=1, stance='balanced', speed='Standard', anchor_col=25):
     """Faction→ARMY adapter: construct a MULTI-subunit Unit from a list of per-subunit spec dicts.
     `gauge_mb.make_mixed_unit` already proves the data model supports independently-placed/typed/tasked
     subunits, but that constructor is gauge-harness-local; this is the public, workbench-facing
@@ -194,10 +266,15 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                           f"{SUBUNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    # [ED-MB-0017] Frontage-aware, anchor-centred battle line: space subunits by their own frontage so
+    # they never overlap (fixes P-1, the `15 + i*4` fixed-step overlap). A spec's explicit
+    # `starting_position` always wins (envelopment/refused-flank presets and callers doing bespoke
+    # placement); only specs that omit it get an auto column here.
+    _auto_cols = _centered_line_cols(specs, anchor_col)
     subs = []
     for i, sp in enumerate(specs):
         sp = dict(sp)
-        pos = sp.pop('starting_position', (start_row, 15 + i * 4))  # [canonical: sim_verification_ledger.json — CALIBRATED gauge_mb.py make_mixed_unit deployment-layout convenience default]
+        pos = sp.pop('starting_position', (start_row, _auto_cols[i]))
         tt = sp.pop('troop_type', 'infantry')
         role = sp.pop('role', None)
         # [ED-1095, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
@@ -309,12 +386,40 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     to freeze position, no separate position-pinning mechanism needed. Used by the frozen-vs-wheeling
     gauge ablation to settle DG-5 (is a genuine maneuver-timing race live, or was RC-1's accounting
     layer sufficient on its own) -- an instrumentation-only toggle, not a design change."""
-    specs = [dict(sp) for sp in center_specs]
-    n_center = len(specs)
-    for sp in wing_specs:
-        sp = dict(sp)
+    # [ED-MB-0017] SYMMETRIC deployment (fixes P-2). The centre is bowed FORWARD on the field-centre
+    # anchor (the convex crescent apex); the wings are split to OPPOSITE flanks — left wings well left of
+    # the centre, right wings well right — so `_envelop_goal` sends each around the OPPOSITE flank
+    # (`ac < enemy-centre` -> wrap left; `ac > enemy-centre` -> wrap right), i.e. the two wings wheel in
+    # MIRROR (opposite rotational sense), the load-bearing invariant of a double envelopment
+    # (Cannae research §1/§5). Pre-fix, `build_army`'s `15 + i*4` put both wings to the RIGHT of centre,
+    # so both wrapped the same flank — no ring ever formed.
+    advance_dir = -1 if faction == 'A' else 1
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    APEX = 2  # [canonical: Cannae research §1 — centre apex ~2-4 rank-units forward of the flank line]
+    center = [dict(sp) for sp in center_specs]
+    n_center = len(center)
+    c_cols = _centered_line_cols(center, 25)  # field-centre anchor (BATTLEFIELD_SIZE 50)
+    c_spans = [_spec_span(sp) for sp in center]
+    c_left = min(col + s[0] for col, s in zip(c_cols, c_spans))
+    c_right = max(col + s[1] for col, s in zip(c_cols, c_spans))
+    for sp, col in zip(center, c_cols):
+        sp.setdefault('starting_position', (start_row + APEX * advance_dir, col))  # apex forward
+    left_x = c_left - ENVELOP_WING_GAP    # right boundary of the left wing group (grows leftward)
+    right_x = c_right + ENVELOP_WING_GAP  # left boundary of the right wing group (grows rightward)
+    wings = []
+    for i, sp0 in enumerate(wing_specs):
+        sp = dict(sp0)
         sp.setdefault('stance', 'hold')
-        specs.append(sp)
+        cmin, cmax = _spec_span(sp)
+        if i % 2 == 0:  # left wing: place its RIGHT edge at left_x, then extend further left
+            col = int(round(left_x - cmax))
+            left_x = (col + cmin) - ENVELOP_WING_GAP
+        else:           # right wing: place its LEFT edge at right_x, then extend further right
+            col = int(round(right_x - cmin))
+            right_x = (col + cmax) + ENVELOP_WING_GAP
+        sp['starting_position'] = (start_row, col)  # wings at the flank base line, behind the apex
+        wings.append(sp)
+    specs = center + wings
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
     if not freeze_wings:
@@ -337,12 +442,27 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     once an enemy actually closes to that range, matching the historical "declines general engagement,
     holds if directly pressed" doctrine. Reuses Stage C's existing enemy_range order trigger; no new
     mechanic. Same LC-8 retirement note as build_envelopment (see its docstring) applies here."""
-    specs = [dict(sp) for sp in strong_specs]
-    n_strong = len(specs)
-    for sp in refused_specs:
-        sp = dict(sp)
-        sp.setdefault('stance', 'hold')
-        specs.append(sp)
+    # [ED-MB-0017] OBLIQUE deployment (fixes P-3). Lay strong + refused across one centred frontage
+    # (so no lateral overlap), then push the REFUSED subunits ECHELONED BACK by REFUSE_ECHELON rows —
+    # out of contact range while the strong wing engages (Leuctra/Leuthen research §2/§4). Strong subunits
+    # take the left of the line and lead at the front; refused take the right and trail rearward: the
+    # diagonal "staircase" of an oblique order. Pre-fix, `build_refused_flank` never moved the refused
+    # wing at all — it sat level with the strong wing AND overlapped it (P-3, "makes no sense").
+    advance_dir = -1 if faction == 'A' else 1
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    strong = [dict(sp) for sp in strong_specs]
+    refused = [dict(sp) for sp in refused_specs]
+    n_strong = len(strong)
+    all_specs = strong + refused
+    cols = _centered_line_cols(all_specs, 25)  # field-centre anchor
+    for i, sp in enumerate(all_specs):
+        if i < n_strong:
+            sp.setdefault('starting_position', (start_row, cols[i]))                       # strong: front line
+        else:
+            sp.setdefault('stance', 'hold')
+            sp.setdefault('starting_position',
+                          (start_row - REFUSE_ECHELON * advance_dir, cols[i]))             # refused: echeloned BACK
+    specs = all_specs
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
     for atom in unit.subunits[n_strong:]:

@@ -123,13 +123,16 @@ def _unit_troops(unit):
 # ─── (a) head-on contact fires at OBB touch ─────────────────────────────────
 
 def test_head_on_contact_fires_at_obb_touch(field_path):
-    """Two head-on short-reach cells: contact fires strictly inside OBB touch distance (centre gap <
-    1.5 = 2*(0.5 body-half + 0.5 reach) - 0.5... i.e. reach envelope meets body), and NOT at a gap the
-    old circle test (standoff 2.0) would have fired. Exercises the real _find_contacts_standoff."""
+    """Two head-on cells: contact fires strictly inside the OBB touch distance and NOT beyond it.
+    The touch distance is BODY + reach envelope = 2*CELL_RADIUS + reach (one weapon reaching the other's
+    body across the gap) -- reach-DERIVED so this stays correct as weapon-class reach changes (v2 Stage E
+    moved the default melee reach from 0.5 to reach_for('infantry')=0.1, so the threshold moved 1.5->1.1;
+    pinning it to the live reach keeps the test a real geometry check, not a frozen constant)."""
     from mass_battle.core.contact import find_contacts
+    thr = 2 * _hu.CELL_RADIUS + _hu.reach_for('infantry')   # the OBB reach-touch centre-gap
     # place B just closer than OBB touch -> contact; and just beyond -> none. Build via a small helper.
     a = build_unit('Line', 3, 'A', 'A', 9)
-    for gap, want in [(1.49, True), (1.51, False), (1.9, False)]:
+    for gap, want in [(thr - 0.02, True), (thr + 0.02, False), (thr + 0.4, False)]:
         b = build_unit('Line', 3, 'B', 'B', 9)
         # pin both single cells head-on `gap` apart on the same column (node path floats).
         a_cid = next(iter(a.subunits[0]._node_pos))

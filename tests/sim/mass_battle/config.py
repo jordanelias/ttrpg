@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
 
 BATTLEFIELD_SIZE = 50  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
 UNIT_GRID_SIZE = 30  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
@@ -73,6 +73,28 @@ ANGLE_DEF_MOD = {
     "GREEN": 0, "YELLOW": -1, "RED": -2,
     "FRONT": 0, "FLANK": -1, "REAR": -2,  # legacy aliases
 }
+# [ED-MB-0018, Jordan 2026-07-22: "the facing octagon is a DAMAGE-RECEIVED MULTIPLIER — attacks from
+# behind do ~2x the damage of attacks from the front."] The octagon is NOT a -2-dice pool penalty (that
+# under-rewards the rear attack); it MULTIPLIES the casualties the defender takes by the arc the ATTACKER
+# strikes from. Anchor points: front 1.0x, flank 1.5x, rear 2.0x; the per-cell-averaged angle_mod (0..-2)
+# interpolates between them (mult = 1 - angle_mod * (RED_MULT-1)/2).
+OCTAGON_DMG_MULT = {"GREEN": 1.0, "YELLOW": 1.5, "RED": 2.0}  # [canonical: Jordan design — octagon = damage-received multiplier; du Picq flank/rear lethality]
+PC_OCTAGON_DMG = (_sigma_os.environ.get('PC_OCTAGON_DMG', '1') == '1')  # ON: octagon is a damage multiplier (above) AND is removed from the net/pool (no double-count). OFF: legacy -2D pool/sigma penalty.
+# [ED-MB-0018, Jordan: "cells cannot turn around instantaneously upon contact — reacting/turning must
+# take at least a couple ticks."] A cell hit outside its front arc keeps its OLD (exposed) facing for
+# this many ticks before the turn-to-face completes, so a rear/flank strike lands at full multiplier
+# during the reaction window instead of being negated by an instant pivot.
+FACING_REACTION_TICKS = int(_sigma_os.environ.get('FACING_REACTION_TICKS', '2'))  # [canonical: Jordan design — turn/react latency; du Picq on reaction time under surprise]
+# [ED-MB-0018, Jordan: "attacked from multiple sides, the rotate-in/out support logic is divided AND
+# compromised by shock+distraction — extra bad, not just a divide-by-two."] A subunit engaged from ≥2
+# sides takes this ADDITIONAL damage multiplier on top of the octagon arc multiplier (compounding, not
+# additive) — the collapse of orderly rank relief under encirclement shock.
+MULTI_SIDE_SHOCK = float(_sigma_os.environ.get('MULTI_SIDE_SHOCK', '0.5'))  # [canonical: Jordan design — encirclement shock/distraction compounds; du Picq / Cannae annihilation-by-encirclement]
+# The octagon damage multiplier reads each defender cell's facing arc against the LOCAL attacker
+# centroid — only attacker cells within this lattice radius of the cell — so a wing cell of a WIDE
+# line in a head-on clash stays GREEN instead of reading the enemy line's distant centre as an
+# oblique (flank) bearing. 2.0 verified: front->1.00x, rear->2.00x exactly. [canonical: Jordan design]
+OCTAGON_LOCAL_REACH = float(_sigma_os.environ.get('OCTAGON_LOCAL_REACH', '2.0'))
 # [canonical: sim_verification_ledger.json — CALIBRATED, -99 is a structural sentinel (effectively-zero speed for 'hold'), not a magnitude independently historically cited]
 STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
@@ -81,6 +103,24 @@ SIGMA_HEAD_ENABLED = _sigma_os.environ.get('SIGMA_HEAD', '1') == '1'   # toggle 
 SIGMA_PER_D = 0.2            # [class-B sim-tunable] sigma-units per die-equivalent of a legacy pool modifier  # [canonical: sim_verification_ledger.json — CALIBRATED, sigma-head/pool-modifier conversion rate, not independently historically cited]
 RANGED_MELEE_SIGMA = -1.0    # [class-B sim-tunable] ranged-in-melee disadvantage as delta-sigma (replaces pool//3)
 MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF reproduces the pre-fix sigma prototype exactly
+
+# [ED-MB-0016 — DG-6 resolution: scale-invariant combat friction] Per-battle, per-side multiplicative
+# combat-EFFECTIVENESS factor M ~ LogNormal(0, PC_FRICTION_SIGMA^2), drawn ONCE per battle (not per
+# soldier), modelling Clausewitzian friction / Dupuy's Combat Effectiveness Value / the "fog of war"
+# (command quality, terrain draw, intel/surprise, cohesion of the day). The pooled-dice ATTRITION core
+# correctly self-averages as ~1/sqrt(N) (Kingman 2002, stochastic Lanchester); this once-per-battle
+# latent shock adds a SECOND variance layer whose magnitude is force-INDEPENDENT (law of total variance:
+# Var = E[Var|M] + Var(E[·|M]); the first term ->0 with N, the second stays O(1)). Effect: a large
+# force/tactical advantage produces a DECISIVE-but-UNCERTAIN (historically-banded ~65-83%) outcome
+# instead of a certain (100%) one. Grounding: Kingman, J.F.C. (2002) J.Appl.Prob. 39(3):455-465;
+# Beyerchen (1992) Int.Security 17(3) DOI 10.2307/2539130; Dupuy DLEDB 752-case force-ratio win-rate
+# table; Rowland "The Stress of Battle"; Sabin "Lost Battles" (2007). See audit/2026-07-22-mass-battle-
+# stress-test/dg6_friction_resolution.md. Default OFF pending A/B + default-flip ratification (mirrors
+# the PER_CELL/FIELD_MOVEMENT field-default precedent; the byte-exact grid oracle pins it OFF).
+PC_FRICTION_CEV = _sigma_os.environ.get('PC_FRICTION_CEV', '0') == '1'
+# per-side log-SD; CALIBRATED against the Dupuy DLEDB win-rate curve (see dg6_friction_resolution.md),
+# not fitted to the gauge. [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md — Dupuy-DLEDB-calibrated combat-friction log-SD]
+PC_FRICTION_SIGMA = float(_sigma_os.environ.get('PC_FRICTION_SIGMA', '1.1'))
 MORALE_EROSION_DAMP = 0.7    # [class-B] <1 slows morale erosion -> longer, more attritional battles  # [canonical: sim_verification_ledger.json — CALIBRATED, morale-erosion damping factor, not independently historically cited]
 MORALE_SIGMA_SCALE  = 0.8    # [class-B] morale->effectiveness: falling morale lowers a unit's sigma-leverage  # [canonical: sim_verification_ledger.json — CALIBRATED, morale-to-sigma-leverage scaling, not independently historically cited]
 MORALE_SIBLING_PULL = 0.15   # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of
@@ -115,7 +155,17 @@ PC_SHOCK_DISC_FULL   = 0.35  # discipline>=5 (steady troops hold formation) cuts
 PC_SHOCK_DEPTH_FULL  = 0.5   # deep (>=PC_SHOCK_DEPTH_REF ranks) halves shock (mass absorbs)
 PC_SHOCK_DEPTH_REF   = 4.0   # rank depth treated as fully "deep"  # [canonical: designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md §5]
 PC_SHOCK_SHAKEN_GAIN = 1.0   # already-shaken defender (morale<<start) takes up to 2x shock (Hastings-post-feint)
-PC_CAVALRY_SPEED_MULT = 2.0  # cavalry velocity primitive: cavalry closes this much faster (PER_CELL), triggering the charge
+# [canonical: mass_battle_v30.md §A.7 manoeuvre — cavalry tactical pace ~3× an infantry formation march (ED-MB-0017, Jordan 2026-07-22: "cavalry has to be 2-3/tick or higher; infantry marched to keep formation, cavalry did not")]
+PC_CAVALRY_SPEED_MULT = 3.0  # cavalry velocity primitive: cavalry moves 3× a marching infantry line (grounds the charge-closing speed too). Was 2.0.
+# [ED-MB-0017, Jordan 2026-07-22: "units that envelop are typically fast, especially cavalry; if you
+# aren't applying speed to these units the envelopment will always be worse — it's just units being
+# assaulted on their own for way too long."] A cell executing the envelop/sweep MANEUVER (a wide
+# flanking march, out of contact) moves this much faster than a grinding battle line: envelopment is a
+# TIMING RACE — the enveloping force must reach the flank/rear before it is defeated in detail (du Picq
+# on the decisive flank/rear attack; the Crécy/Leuctra timing precedent already cited in
+# resolve_cross_side_contention). INERT for any cell without 'envelop'/'sweep' in its instructions ->
+# byte-exact for every line-vs-line gauge/signature battle; only the envelopment/sweep presets move.
+PC_ENVELOP_SPEED_MULT = float(_sigma_os.environ.get('PC_ENVELOP_SPEED_MULT', '2.0'))  # [canonical: mass_battle_v30.md §A.7 manoeuvre; du Picq flank/rear decisiveness; Crécy/Leuctra envelopment-timing precedent]
 PC_KITE_ENABLED = True  # §13 kiting primitive: ranged units with the 'kite' instruction maintain the volley band instead of closing. INERT without the instruction -> byte-exact.
 PC_KITE_STANDOFF = 5  # [class-B] kiter retreat-trigger (Chebyshev distance): open the gap when nearest enemy is nearer than this; hold+volley in [this, VOLLEY_MAX_RANGE]; close when beyond. Calibrate by measurement. §13.  # [canonical: sim_verification_ledger.json — CALIBRATED, §13 kiting primitive retreat-trigger, not independently historically cited]
 PC_BRACE_ENABLED = _sigma_os.environ.get('PC_BRACE_ENABLED', '1') == '1'  # [class-B] brace-instruction effects (charge-resistance + reciprocal recoil); gated on the 'brace' instruction so instruction-less scenarios stay byte-exact
@@ -208,6 +258,7 @@ POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.5'))
 TROOP_TYPE_ROLES = {
     # taxonomy grounded in the historical troop-roles research (Research_Report.md) + design §3.5
     "heavy_infantry":  ["ShieldWall", "Hold", "Anvil", "Push"],
+    "pike":            ["ShieldWall", "Hold", "Anvil"],   # [v2 Stage E, ED-MB-0014] pike block: defensive/anti-cavalry braced formation (its reach 0.3 is the edge, not mobility)
     "light_infantry":  ["Skirmish", "Screen", "Pursue"],
     "cavalry":         ["Shock", "Flanker", "Feint", "Screen", "Pursue"],
     "archers":         ["VolleyLine", "Harass"],

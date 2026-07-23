@@ -153,12 +153,46 @@ deleting that one recording snap.
 - **Gate:** conservation fuzz; the depth-2 experiment (must preserve); Lanchester-signature exponent
   check (melee stays ≤ its bound); **A/B the 20-row gauge** and record the shift (DG-6, disclose).
 
+> **STATUS (2026-07-22): Stage D DONE + verified (ED-MB-0013).** `geometry.engaged_frontage` derives the
+> frontage as the continuous union-length of engaged cell bodies' width-intervals clipped to the enemy's
+> covered meeting span; `_find_contacts_standoff` threads `a_front`/`b_front` onto each pair;
+> `_lanchester_strength(front_width=…)` consumes it, falling back to the integer column count when it's
+> absent (grid/OFF path → **I4 byte-exact, grid oracle green**). The snapped `(rank,file)` cell identities
+> are **kept** — they key the formation-lattice casualty/density/stamina substrate (a discrete troop-block
+> identity, I3's defensible-quantization carve-out); only the frontage **magnitude** moved to continuous.
+> Gates green: `test_frontage_conservation.py` (15) — reduces to the integer count in the axis-aligned
+> limit, fractional on offset, **depth-invariant** (depth-2 no longer collapses/inflates),
+> **frontage-capped** (Lanchester stays linear), I1 conservation over 5 seeds, I2 determinism; v2
+> acceptance (30) + maneuvers/movement/yield (20 passed, 1 xpassed pre-existing) green. **DG-6 disclosure
+> (not tuned):** A/B (12-seed field battery) — axis-aligned symmetric meetings **byte-identical**; the
+> shift appears only on offset/rotated/width-asymmetric meetings — Line4-vs-Line2's wide-attacker overkill
+> softens (A_win 12→10/12, defender hp-retained .452→.487) as its frontage is capped to the narrow
+> defender's meeting width. Lanchester melee exponent **unchanged** (p=2.50 before/after — the pre-existing
+> DG-6 pool-variance artifact is independent of frontage). Field goldens deliberately **not** re-recorded
+> (Stage F, per §7). No balance constant tuned.
+
 ### Stage E — weapon-class reach wired to the front face
 - Add `WEAPON_CLASS[troop_type] → reach` (P-DEC-1 map) feeding the OBB front reach. Ranged unchanged.
 - **Trace:** `_effective_reach`/`standoff` now read weapon reach not the flat `REACH_SHORT`.
 - **Adversarial:** pike-vs-sword reach advantage emerges (measure); a facing-away cell still gets no
   reach; ranged unaffected. I1/I2.
 - **Gate:** reach-advantage test; fuzz; A/B gauge (disclose).
+
+> **STATUS (2026-07-22): Stage E DONE + verified (ED-MB-0014).** `reach_for`/`TROOP_TYPE_REACH` now
+> return the P-DEC-1 per-type front-face reach (non-pole 0.1 / pole 0.2 / **pike 0.3** / lance 0.2 /
+> ranged 0.1 sidearm), replacing the flat `REACH_SHORT=0.5` placeholder; the **`pike` troop type** is
+> authored end-to-end (stats mirror heavy_infantry, pike weapon, ShieldWall/Hold/Anvil roles).
+> **Reach advantage emerges** through the already-wired charge-recoil reach gate: braced pike/spear
+> (reach ≥ lance) repel a cavalry charge (defender ~96.7% hp, cavalry recoils ~88.3%) while levy
+> (reach < lance) is run down (~90.7%) — the anti-cavalry pike role, emergent from the reach data, no
+> special case. **Disclosed finding:** reach differentiation does *not* change symmetric standing melee
+> (mutual exchange once contact fires; reach only shifts timing) — reach is a charge/brace lever here, not
+> a standing-melee one; a directional-reach exchange term (pike-pins-forever hazard) is flagged for Jordan,
+> not introduced. I7 preserved (facing-away → 0 reach). Gates green: `test_reach_weapon_class.py` (10);
+> **I4 byte-exact grid oracle green** (no kite in the battery). **[DG-6, not tuned]** standing-melee A/B
+> negligible. **Flagged for Stage F:** the 0.1/0.2/0.3 scale vs PP-290's 0.5/1.5 meter-grounding needs
+> reconciliation (deferred, not overwritten). **Deferred (separate follow-up):** P-DEC-3 cavalry density
+> cap (< infantry) — kept out of Stage E to keep the reach A/B clean.
 
 ### Stage F — full verification, digest re-record, disclosure
 - Re-run: `tests/valoria` (byte-exact grid green = I4), maneuvers/yield, the stress harness S0–S5,

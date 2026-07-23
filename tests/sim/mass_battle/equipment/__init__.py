@@ -28,6 +28,7 @@ TROOP_LOADOUT = {
     "sling":            ("sling",       "light"),
     "artillery":        ("siege",       "none"),
     "knights_templar":  ("heavy_blunt", "heavy"),
+    "pike":             ("pike",        "medium"),  # [v2 Stage E, ED-MB-0014 / P-DEC-1] pike + medium armour (disciplined heavy formation)
     # [ED-MB-0001, gate 2] mounted_archers isn't a §B.2 troop type -- added by ED-1095/T4 (Jordan
     # 2026-07-02) with no loadout entry yet. Same weapon as archers (a bow), light armour to keep
     # it mobile -- the whole point of the troop type is speed + range, not endurance.

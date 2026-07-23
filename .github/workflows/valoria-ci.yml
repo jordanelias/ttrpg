@@ -518,9 +518,9 @@ jobs:
     name: Validator Unit Tests
     runs-on: ubuntu-latest
     needs: syntax-check
-    # tests/valoria alone runs ~7 min on hosted runners (combat/sim-heavy cases),
-    # plus pip install + tests/contracts — the old 5-min cap cancelled the job
-    # mid-run at ~90% (green locally: 424 passed), failing "All Gates Green".
+    # tests/valoria alone runs ~9m on hosted runners (combat/sim-heavy cases + the two grid-mode
+    # byte-exact subprocess batteries), plus pip install + tests/contracts — the old 5-min cap
+    # cancelled the job mid-run. 12 min gives headroom above the observed ~9m23s full-suite time.
     timeout-minutes: 12
     permissions:
       contents: read

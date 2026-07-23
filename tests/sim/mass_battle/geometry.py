@@ -5,7 +5,7 @@ import math
 from dataclasses import dataclass
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated']
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
 def arrowhead_cells(tier):
     cells = []
@@ -490,3 +490,78 @@ def obb_front_reach_overlap(a, b):
     b_ext = _cellbox_corners(b, use_reach=True)
     a_body = _cellbox_corners(a, use_reach=False)
     return _sat_overlap(b_ext, _cellbox_axes(b), a_body, _cellbox_axes(a))
+
+
+# ─── CONTINUOUS ENGAGED FRONTAGE (v2 Stage D — the last live integer removed) ──
+# [spatial_model_v2_plan.md §3 Stage D, ED-MB-0013] The pre-v2 melee frontage term
+# was len(set(int_col)) over the snapped engaged-cell recording — the ONLY integer
+# left on the live contact path (backwards_analysis.md). These helpers derive the
+# frontage as a CONTINUOUS front-overlap WIDTH from the OBB bodies instead: the
+# union length, along a side's frontage axis (perpendicular to its facing), of each
+# engaged cell body's width-interval clipped to the span the enemy bodies actually
+# cover on that axis. Pure/deterministic (float projection + interval merge, no set
+# iteration). Reduces to the old distinct-file count for axis-aligned unit boxes on
+# the integer lattice (each meeting file contributes ~1.0), so the grid-aligned
+# limit is recovered; the gauge shift comes only from offset/partial/rotated
+# meetings that integer snapping used to round to a whole file.
+
+def _project_interval(corners, axis):
+    """[Stage D] Min/max scalar projection of a corner set onto a (unit) axis."""
+    ps = [p[0] * axis[0] + p[1] * axis[1] for p in corners]
+    return (min(ps), max(ps))
+
+
+def _merge_intervals(intervals):
+    """[Stage D] Merge a list of (lo, hi) intervals into a sorted disjoint list.
+    Deterministic (sort on the float pairs); [] -> []."""
+    if not intervals:
+        return []
+    xs = sorted(intervals)
+    merged = [list(xs[0])]
+    for lo, hi in xs[1:]:
+        if lo > merged[-1][1]:
+            merged.append([lo, hi])
+        elif hi > merged[-1][1]:
+            merged[-1][1] = hi
+    return [(lo, hi) for lo, hi in merged]
+
+
+def _interval_union_length(intervals):
+    """[Stage D] Total covered length of a set of (lo, hi) intervals (union, not sum
+    -- overlapping/duplicate intervals count once, so depth-stacked cells in the same
+    file do not multiply-count the frontage)."""
+    return sum(hi - lo for lo, hi in _merge_intervals(intervals))
+
+
+def engaged_frontage(a_boxes, b_boxes, heading):
+    """[Stage D] Continuous engaged frontage WIDTH of side A (the `a_boxes` side).
+
+    A's frontage axis is perpendicular to `heading` (A's representative facing).
+    For each engaged A-cell body, take its width-interval on that axis clipped to
+    the span B's engaged cell bodies actually cover; union all such clipped pieces
+    and return the covered length. Bodies only (reach is a depth envelope, not a
+    lateral one -- frontage is a physical meeting width). Properties:
+      * axis-aligned integer-lattice limit: each distinct meeting file contributes
+        ~1.0 -> reduces to the legacy len(set(int_col)) distinct-column count;
+      * continuous: a half-file lateral offset yields ~0.5, not a rounded whole file;
+      * frontage-capped: can never exceed the enemy's covered span (the Lanchester
+        linear-law guarantee -- numerical superiority is a linear edge via overlap,
+        never square).
+    `a_boxes`/`b_boxes` are the ENGAGED cell boxes (those whose reach-box met an
+    enemy body); empty on either side -> 0.0."""
+    if not a_boxes or not b_boxes:
+        return 0.0
+    axis = _rotate90(_normalize_heading(heading))
+    b_ivals = _merge_intervals(
+        [_project_interval(_cellbox_corners(b, use_reach=False), axis) for b in b_boxes])
+    if not b_ivals:
+        return 0.0
+    pieces = []
+    for a in a_boxes:
+        a_lo, a_hi = _project_interval(_cellbox_corners(a, use_reach=False), axis)
+        for b_lo, b_hi in b_ivals:
+            lo = max(a_lo, b_lo)
+            hi = min(a_hi, b_hi)
+            if hi > lo:
+                pieces.append((lo, hi))
+    return _interval_union_length(pieces)
