@@ -37,7 +37,7 @@ attrition (which self-averages) but by **correlated, battle-level phenomena**: m
 command friction, "fog of war". These are drawn *once (or a few times) per battle*, not once per
 soldier, so their variance is **force-independent** — it does not vanish at scale.
 
-**Model:** keep the self-averaging attrition core, and multiply each side's combat power by a
+**Model:** keep the self-averaging attrition core, and multiply each side's fighting power by a
 **per-battle, per-side combat-effectiveness (CEV) factor** drawn once per battle:
 
 > `M_side ~ LogNormal(0, σ²)`, `σ = PC_FRICTION_SIGMA`
@@ -49,7 +49,7 @@ to a fixed, non-degenerate number (a band), not to 0/1.
 
 This is the standard hierarchical/mixture structure underlying the "friction multiplier" and
 "breakpoint / first-passage boundary" treatments in the combat-modelling literature. It is exactly
-Dupuy's **Combat Effectiveness Value (CEV)**: a per-force multiplier on combat power capturing command,
+Dupuy's **Combat Effectiveness Value (CEV)**: a per-force multiplier on fighting power capturing command,
 training, morale, surprise, terrain — the human factors treated as first-class causal variables.
 
 ## 3. Grounding (citations)
@@ -75,7 +75,7 @@ training, morale, surprise, terrain — the human factors treated as first-class
 - D. Rowland, *The Stress of Battle* — combat effectiveness degrades as a **shared, correlated** unit
   state under fire (~15% of range effectiveness), not per-shot independent draws.
 - T.N. Dupuy, *Numbers, Predictions and War* (1979) — the QJM/TNDM CEV: human factors as multipliers
-  on combat power.
+  on fighting power.
 
 **Historical decisiveness bands (the calibration target — see §4):**
 - The Dupuy Institute **Division-level Engagement Database (DLEDB)**, 752 cases 1904–1991: attacker
@@ -88,7 +88,7 @@ training, morale, surprise, terrain — the human factors treated as first-class
 - Envelopment (Cannae) is **conjunctive** — center-holds × cavalry-sufficiency × terrain, each < 1.0;
   attempts *usually failed* (Frederick, Moltke, Schlieffen). Only the completed case annihilates.
   (Goldsworthy, *Cannae* 2001; Polybius 3.107–118.)
-- Cavalry vs infantry is a **cohesion-state switch** (Keegan, *Face of Battle*; Waterloo squares 11/11;
+- Cavalry vs infantry is a **formation-integrity switch** (Keegan, *Face of Battle*; Waterloo squares 11/11;
   Bannockburn schiltrons) — already modelled by the Stage E brace/reach mechanic (gauge C2/C6 REPEL).
 
 ## 4. Calibration (gauge-INDEPENDENT — vs the Dupuy DLEDB curve, not the gauge)

@@ -23,7 +23,7 @@ the engine tree, available to formalize on request).
 `shape`'s cell pattern (`geometry.CELL_PATTERN_FN`: `Line`, `Arrowhead`, `GappedLine`, `Column`). Each
 cell holds `CELL_FLOOR(40)..CELL_CAP(200)` troops; the cell *count* is emergent from troop-count ÷
 density. On the live field the cells are **nodes** held in relative formation by `PC_NODE_COHESION` — the
-shape is the *initial* layout, and cohesion (relational offsets), not a re-imposed pattern, keeps the
+shape is the *initial* layout, and the relational-offset binding, not a re-imposed pattern, keeps the
 cells together as the subunit moves/wheels/rotates (`Subunit._node_pos`, `cell_facing_vec`).
 
 **Subunit → army.** Three constructors compose subunits into an army (`engine.py`):
@@ -72,7 +72,7 @@ and pick up `[envelop]` at tick 5 (released by their `tick:4` order), then wheel
 | **the manager / general** | `Unit.command` (governs morale, order-issuing, formation-hold speed) | ✓ |
 
 The model **is** the FM/Total War hierarchy, and in one respect goes further than Total War: subunits
-maneuver on a **continuous** field with per-cell facing and cohesion (a subunit can wheel/refuse/wrap as
+maneuver on a **continuous** field with per-cell facing and relational binding (a subunit can wheel/refuse/wrap as
 a deformable body), rather than rigid unit-blocks on a grid.
 
 ## 4. Honest gaps (what the visual snapshot and the code expose)
@@ -102,7 +102,7 @@ a deformable body), rather than rigid unit-blocks on a grid.
 
 The cell → subunit → army hierarchy is **correctly and cleanly implemented** and maps faithfully onto
 the FM/Total War paradigm, with a genuine advance (continuous, deformable subunit bodies with per-cell
-facing/cohesion). The two substantive gaps are both *quality/granularity* rather than structure:
+facing/relational-binding). The two substantive gaps are both *quality/granularity* rather than structure:
 **per-cell heterogeneity** (veteran-front/levy-rear) and **subformation legibility at low troop counts**.
 Neither is a defect in the hierarchy; both are the next architectural increments to make the subunit
 level as rich as the army level already is.
