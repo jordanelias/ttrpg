@@ -505,6 +505,7 @@ class Subunit:
             self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
+        self._cell_target = dict(self.cell_troops)  # [ED-MB-0028] prescribed per-cell density at spawn (close_ranks fill target)
         self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
         self._brace_since_tick = 0 if 'brace' in self.instructions else -1  # [ED-1095] prepared before the battle if deployed already braced
         if PC_NODE_COHESION:
@@ -701,6 +702,48 @@ class Subunit:
 
     def troop_total(self):
         return sum(self.cell_troops.values())
+
+    def close_ranks(self):
+        """[ED-MB-0028, task #29; Jordan 2026-07-23] Cell-level closing-ranks — the internal-subunit
+        version of rotating troops. After casualties, redistribute the subunit's LIVING troops so the
+        LEADING ranks (orig_r ascending; r=0 is the front/engaged edge) are refilled toward their spawn
+        prescribed density (`_cell_target`) by pulling troops FORWARD from the rear; the rearmost cells
+        deplete first. So a DEEP formation sustains full front-cell density — and thus full front combat
+        pool, since `_pair_engaged_troops` weights the exchange by the actual troops in the engaged front
+        cells — until its depth is spent, while a SHALLOW one thins at the front immediately. This is the
+        reserve/rotation the depth machinery abstracts (stamina fatigue-damping), now made literal at the
+        troop level: rear ranks step up as the front falls.
+
+        Relational, not absolute — troops close toward the front rather than leaving sub-density holes
+        scattered through the block ("troops will always be as close together as possible", Jordan). A
+        cell emptied by the reflow keeps its key at 0.0 (every `iter_cells` consumer already gates on
+        troops>0, so it contributes nothing to combat/contact — functional coverage shrinks from the rear
+        without mutating the cell SET this pass; literal cell dissolution + lateral close-up is a later
+        increment). CONSERVATION: sum(cell_troops) is unchanged by this pass — only casualties (applied
+        elsewhere) reduce the total. Gated by PC_CLOSE_RANKS (default OFF → cell_troops untouched,
+        byte-exact)."""
+        if not PC_CLOSE_RANKS:
+            return
+        ct = self.cell_troops
+        if not ct:
+            return
+        total = sum(ct.values())
+        if total <= 0:
+            return
+        targets = getattr(self, '_cell_target', None) or ct
+        # Fill priority: leading rank first (orig_r asc), then column order — the frontage is held while
+        # depth is spent from the rear. A cell is filled to its spawn target; the pool empties front-to-back.
+        rem = total
+        for pid in sorted(ct.keys(), key=lambda pid: (pid[0], pid[1])):
+            tgt = targets.get(pid, 0.0)
+            if tgt >= rem:
+                ct[pid] = rem
+                rem = 0.0
+            else:
+                ct[pid] = tgt
+                rem -= tgt
+        if rem > 1e-9:  # leftover (only if total exceeded sum of targets — rounding safety) tops the front
+            ct[min(ct.keys(), key=lambda pid: (pid[0], pid[1]))] += rem
 
     def _init_node_state(self):
         """Node-relational cohesion (step 2): cells are nodes at live positions, held in formation by

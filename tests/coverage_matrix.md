@@ -2,6 +2,19 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0028: cell-level closing-ranks lifecycle (T1 Phase 1a)
+- Foundational primitive for Jordan's rotation directive: `Subunit.close_ranks()` reflows a subunit's
+  **living** troops front-rank-first (`orig_r` asc) toward each cell's spawn density (`_cell_target`),
+  depleting the rear. A **deep** formation holds full front-cell density — hence full front combat pool
+  (`_pair_engaged_troops` weights by engaged-front-cell troops) — until depth is spent; a shallow one
+  thins at the front immediately. Makes literal the reserve the depth machinery only abstracted;
+  `PC_REFILL_FLOOR` was never wired.
+- Conservation exact; relational (troops close toward the front, no scattered holes); emptied cells keep
+  key at 0.0 (functional coverage-shrink, no cell-set mutation — Phase 1b handles literal dissolution).
+- Wired into the tick **after** both units' casualties (stays simultaneous) + col-grid resync.
+- Gated `PC_CLOSE_RANKS` (default OFF → byte-exact; bat.py 4 modes EXIT=0). Effect: DEEP(3×4) vs
+  SEMI(6×2) **81%→94%** ON. Tests: `test_close_ranks.py` (7). Detail: `rotation_model_v1.md`.
+
 ## 2026-07-23 — ED-MB-0027: honest-gauge measurement integrity (density held at 100/cell)
 - Fixed the confirmed #1 gauge distortion (fiat register M1): the per-cell **density mismatch** between
   `make_unit→build_unit` (legacy tier footprint, ~16/cell) and the composed presets (`concentration=100`).
