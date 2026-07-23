@@ -2,6 +2,21 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — perimeter target-point / face-normal geometry primitive (Jordan ruling 2026-07-23)
+- New `tests/sim/mass_battle/perimeter.py`: pure-geometry primitive from `perimeter_targeting_geometry_v1.md`.
+  A subunit's perimeter carries TARGET POINTS an attacker aims at, each with an outward NORMAL (the
+  required approach angle): **major** = face midpoints (normal ⊥ face), **minor** = corners (bisector
+  normal), sharp vertex (interior angle ≤ `SHARP_TIP_DEG=60`) flagged (the pointed-formation exception).
+  Faces from the convex hull (clean straight + diagonal faces; matches Jordan's drawing). `target_points`,
+  `perimeter_faces`, `nearest_target` (the face an attacker engages), `approach_alignment` (how square-on
+  a heading is vs the inward normal — the signal a future alignment gate/bonus consumes).
+- **Pure geometry, no engine wiring** → zero golden/regression impact. The behavioural wiring
+  (approach-along-normal pathing, alignment gate, interception) is the Jordan-gated next step.
+- Tests: `tests/valoria/test_perimeter_geometry.py` (7) — Line=4-face rectangle, cardinal face normals,
+  Arrowhead sharp-tip flagging, nearest-face targeting, square-on alignment=1.0, degenerate fallback,
+  determinism. Known limitation: convex hull bridges a concave gap (GappedLine's lane) — concave/internal-
+  face handling is a documented follow-up.
+
 ## 2026-07-23 — ED-MB-0019: ED-MB-0018 adversarial-review fix batch
 - Jordan directive: "comprehensive max effort adversarial review." Ran 5 structurally-independent read-only
   critics (arc-math, reaction-clock, byte-exact/determinism, multi-side/balance, test-quality) + an
