@@ -35,6 +35,13 @@ description: >
 > - If you find yourself filtering results to look "cleaner," STOP: that is the failure mode this
 >   doctrine exists to prevent (recorded 2026-07-22 after the audit was found silently culling 16
 >   systems + four length/threshold floors).
+> - **The `--emit-findings` feed carries ALL EIGHT modes now (2026-07-23, schema 2).** It used to
+>   surface only B (implied-missing) + H (isolates) — the ledger saw ¼ of what the audit computed.
+>   Now C (notional), D (cascade-sinks), E (sparse-context), F (throughline-orphans), G (vocab-debt)
+>   ride the feed too; high-volume modes carry a bounded sample + a true `_total` (never a silent cap).
+>   The Incompleteness Ledger stamps a **severity** (high/med/low) per category so findings can be
+>   triaged — the port-blocking spine (isolates, doc:null, orphan-emit) ranks above hygiene (notional,
+>   sparse, vocab-debt). Adding a mode = extend `emit_structural_findings` + `scan_audit_structural`.
 > - **The `--emit-findings` feed obeys this too (retain-and-flag, added 2026-07-22).** An adversarial
 >   pass caught the first cut *dropping* lower-confidence findings (hub×hub Mode-B pairs, and — before
 >   Direction #5 — Key-token Mode-H isolates) from `audit_findings.json`. FIX: emit EVERY finding;
@@ -46,6 +53,8 @@ description: >
 >   filtered anymore.)
 
 Surface project weaknesses that hand-curation cannot reliably find: implied-but-missing cross-references, notional citations (cited but content-empty), citation-graph cascades without return paths, hub overload, sparse-context tokens, multi-graph isolates, throughline orphans, vocabulary debt, and discourse/design divergence. Operates over corpus-derived structural graphs, not LLM judgment.
+
+**⚠️ What it is BLIND to (state this with every result).** It sees the design **citation/registry STRUCTURE** — not the `sim/*.py` behaviour, not the typed `engine/params` **values**, not actual runtime. A wrong number, a mis-tuned formula, or a broken simulation is invisible to it (sim *stubs* are surfaced via the ledger's `sim_not_implemented`, but only that a stub exists, never that live logic is wrong). And **Mode D (cascade sinks)** uses a capped return-path search that trips heavily on a dense corpus — Mode-D findings are UNVERIFIED LEADS carrying their own trip count, not confirmed gaps (the ledger's `coverage_gaps` says so too).
 
 **Five structural graphs (Direction #5, 2026-07-22 — "why not key propagation too"):** the triangulation is `cite` (citation), `throughline` + `mu` (throughlines_meta + throughlines_complete), `pp` (patch co-affects), and **`key` — the engine KEY-PROPAGATION graph** (`build_g_key`, from `module_contracts.yaml`'s emit→consume flow: the actual IN→resolver→OUT wiring the Godot engine runs). Folding `key` in means Mode-A hubs / Mode-B implied-missing / Mode-H isolates now triangulate **design intent against engine data-flow** — "wired in the engine but never cited in the design" is a real port gap; a Key-type token isolated in the citation graph but central in the Key graph is *resolved*, not filtered; and a Key that stays isolated is a real finding whose mechanism is NOT assumed — an **orphan/dangling emit** (emitted but unconsumed, per `structure_audit`'s `dangling_emit`), an unemitted/unconsumed Key, or a `derivations`-only cross-module flow this typed graph doesn't read. This retired the old "filter Key tokens as expected false alarms" cull — the audit now SEES the Key graph instead of apologising for not seeing it. ⚠️ `build_g_key` is a deliberately-narrower TOKEN projection of `module_contracts` emit/consume; **`tools/observability/build_graph.py` is the authoritative richer engine graph** (folds the Key Type Registry, `from:`, drift-normalization) — do not treat the two as equal (§8 single-source follow-up tracked).
 

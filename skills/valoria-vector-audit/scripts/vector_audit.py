@@ -31,7 +31,10 @@ POSTCONDITIONS:
 
 DESIGN NOTES:
     - In+out neighbor union for cite-degree, never out-only
-    - Pre-committed thresholds locked; do not edit without methodology revision
+    - Pre-committed thresholds locked; do not edit without methodology revision.
+      REVISION 2026-07-23 (fix #3): P3 changed from the scale-blind absolute `n_edges>=100` to a
+      density floor `mean cite-degree >= 6` (scales with the registry token universe, meaningful at
+      any layer). P1 (median-relative) and P2 (CV bar) are already scale-robust and unchanged.
     - Class taxonomy filters within-class implied-missing pairs
     - Disambiguation rules required for English-word collision tokens
     - Provisional design IS design (banner-classified into design corpus)
@@ -1069,7 +1072,14 @@ def build_g_throughline(rows, tokens, extra_rows=None):
 
 def build_g_mu(rows, tokens):
     """Tokens sharing an Μ mode: collect each Μ field's member-systems across all
-    throughlines, connect within the Μ collection."""
+    throughlines, connect within the Μ collection.
+
+    SINGLE-SOURCE BY NECESSITY (fix #2, verified 2026-07-23): unlike the throughline graph — which
+    Direction #3 broadened with a second source (throughlines_complete) — μ has ONLY throughlines_meta.
+    A repo-wide sweep found NO other Μ-mode assignment anywhere (the complete doc's "mode" mentions are
+    prose, not a Μ column; the Solmund appendix has none; silo_overlap_matrix is a frozen snapshot of a
+    DIFFERENT relation). So μ's narrowness vs throughline is inherent, not a fixable gap — extending it
+    would mean fabricating mode assignments the design never made. Left single-source, honestly."""
     lut, norm = _slug_lookup(tokens)
     by_mu = defaultdict(set)
     for _tid, pmu, smu, systems in rows:
@@ -1162,9 +1172,13 @@ def build_g_key(root, tokens):
     `emits`/`consumes` only, at TOKEN granularity. build_graph.py is the AUTHORITATIVE, richer engine
     graph: it additionally folds the Key Type Registry's emitting/consuming_systems, `from:` fields,
     key-name-drift normalization, and DROP/BROADCAST sentinels, at system/key/scalar granularity. Do
-    NOT treat this token-projection as build_graph's graph. The two agree on system↔system edges today
-    (0 consumed types lack a module emitter); if that ever diverges, single-source the module-level
-    parse. (A follow-up to lift the shared emit/consume parse into one owner is tracked in HANDOFF_IN.)"""
+    NOT treat this token-projection as build_graph's graph. They are DIFFERENT projections by design —
+    build_graph normalizes types via the Key Type Registry + resolve_key, this uses raw types at token
+    granularity — so there is no clean shared kernel to extract without changing outputs. The §8 hazard
+    (silent divergence) is instead pinned by a DRIFT GUARD: test_key_graph_does_not_diverge_from_
+    authoritative_engine_graph asserts this graph's system↔system edges are a SUBSET of build_graph's
+    graph.json — narrower is fine, but it can never claim connectivity the authoritative engine graph
+    denies. If they drift, CI fails and a human reconciles."""
     fp = root / 'references' / 'module_contracts.yaml'
     g = {}
     if not fp.exists():
@@ -1295,8 +1309,17 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
         cv = None
     p2 = bool(measurable and cv <= 0.5)
 
-    n_edges = sum(len(v) for v in g_cite.values())
-    p3 = bool(n_edges >= 100)
+    # P3 citation-density. REVISED 2026-07-23 (fix #3): the old absolute bar `n_edges >= 100` was
+    # scale-BLIND — with the current 275-token universe the L0 graph alone has ~15k directed edges, so
+    # ≥100 passed trivially at EVERY layer and added no signal (the v1 problem it was meant to catch —
+    # ~11 edges / 84 tokens ≈ 0.26 mean degree — would still fail a proper density floor, but so would
+    # nothing real). Replaced with a DENSITY floor that scales with the token universe (the stable
+    # denominator — tokens are registry-derived, identical across L0/L1): mean directed cite-degree
+    # ≥ 6. This is meaningful at any layer/corpus size, unlike a raw count.
+    n_edges = sum(len(v) for v in g_cite.values())   # directed sum (each undirected edge counted 2×)
+    n_tokens = max(1, len(names))
+    mean_cite_deg = n_edges / n_tokens
+    p3 = bool(mean_cite_deg >= 6.0)
 
     passed = sum([p1, p2, p3])
     return {
@@ -1306,7 +1329,8 @@ def validate(tokens, deg_cite, deg_tl, g_cite):
         'p2': {'pass': p2, 'measure': 'context_gated_paragraphs', 'measurable': measurable,
                'conviction_presence': cd, 'mean': round(mean, 3),
                'cv': round(cv, 3) if cv is not None else None},
-        'p3': {'pass': p3, 'n_cite_edges': n_edges},
+        'p3': {'pass': p3, 'n_cite_edges': n_edges, 'n_tokens': n_tokens,
+               'mean_cite_degree': round(mean_cite_deg, 2), 'floor': 6.0},
         'passed': passed, 'verdict': 'VALIDATED' if passed >= 2 else 'FAILED',
     }
 
@@ -1663,7 +1687,10 @@ def write_outputs(out, tokens, manifest, graphs, degs, validation, diag,
              f"context-gated paragraph CV {validation['p2']['cv']} (≤0.5 to pass), presence "
              f"{validation['p2']['conviction_presence']}"),
           f"- **P3 citation-density:** {'PASS' if validation['p3']['pass'] else 'FAIL'} — "
-          f"{validation['p3']['n_cite_edges']} cite token-edges (≥100 to pass)", '',
+          f"mean cite-degree {validation['p3'].get('mean_cite_degree','?')} "
+          f"({validation['p3']['n_cite_edges']} edges / {validation['p3'].get('n_tokens','?')} tokens; "
+          f"floor {validation['p3'].get('floor', 6.0)}, scale-relative — revised from the old ≥100 "
+          f"absolute bar, fix #3)", '',
           f"TF-IDF supporting graph: {'built' if tfidf_on else 'skipped (numpy/sklearn absent)'}."]
     (out / '03_validation_report.md').write_text('\n'.join(vr), encoding='utf-8')
 
@@ -1836,12 +1863,13 @@ def _source_registry(source):
 
 
 def emit_structural_findings(root, out_path, layer='L0'):
-    """Write a COMPACT, deterministic feed of the audit's UNIQUE structural findings — Mode B
-    (implied-but-missing: two design concepts linked in >=2 metadata graphs but never cited
-    together) + Mode H (multi-graph isolates: structurally disconnected tokens). This is how the
-    vector-audit TALKS to the Incompleteness Ledger / dashboard: its cross-graph findings, which
-    no other tool computes, become surfaced findings. No timestamps (churn-proof). Skips tf-idf
-    (supporting-only) for speed."""
+    """Write a COMPACT, deterministic feed of ALL EIGHT of the audit's structural diagnostic modes —
+    B implied-missing, C notional, D cascade-sinks, E sparse-context, F throughline-orphans, G
+    vocabulary-debt, H isolates (A hubs are the centrality context the others reference). This is how
+    the vector-audit TALKS to the Incompleteness Ledger / dashboard: its cross-graph findings, which
+    no other tool computes, become surfaced findings. High-volume modes carry a bounded sample + a
+    true `_total` (SURFACE-NEVER-CULL — never a silent cap). No timestamps (churn-proof). Skips
+    tf-idf (supporting-only) for speed. schema_version 2."""
     root, out_path = Path(root), Path(out_path)
     design, _, manifest = extract_corpus(root, layer=layer)
     token_defs = derive_tokens(root)
@@ -1880,39 +1908,66 @@ def emit_structural_findings(root, out_path, layer='L0'):
     # dangling emit (emitted, unconsumed — structure_audit's `dangling_emit`, e.g. mass_battle's
     # scene_outcome.battle_concluded), an unemitted/unconsumed Key, or a cross-module `derivations`
     # flow this typed-emit/consume graph does not read. No isolate is filtered; each is honest.
+    #
+    # Modes C–G (added 2026-07-23): the audit computes EIGHT diagnostic modes but the feed used to
+    # surface only B + H — the ledger saw ¼ of what the audit knew. Now ALL of them ride the feed
+    # (schema 2). F (throughline orphans) and G (vocabulary debt) aren't in `diag` — diagnostics()
+    # leaves them "filled by caller" — so compute them here from the same corpus/rows.
+    f_orphans = throughline_orphans(rows, design)
+    g_vocab = vocabulary_debt(design, load_struck_terms(root))
     payload = {
-        'schema_version': 1,
+        'schema_version': 2,
         'generator': 'skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings',
-        'note': 'GENERATED — the vector-audit\'s unique cross-graph structural findings (Mode B '
-                'implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. '
-                'Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: triangulates FIVE '
-                'structural graphs — design cite/throughline/mu/pp AND the engine Key-propagation '
-                'graph (module_contracts emit→consume). Per SURFACE-NEVER-CULL EVERY finding is '
-                'emitted; lower-confidence Mode-B hub×hub pairs carry a `filtered`+`filter_reason` '
-                'flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing '
-                'face. Isolates are NO LONGER filtered — the Key graph resolves the ones that are '
-                'genuinely wired; a still-isolated Key is a real finding (orphan/dangling emit, '
-                'unemitted/unconsumed Key, or a derivations-only flow) — mechanism per the register.',
+        'note': 'GENERATED — ALL EIGHT of the vector-audit\'s structural diagnostic modes (A hubs are '
+                'context, B implied-missing, C notional, D cascade-sinks, E sparse-context, F '
+                'throughline-orphans, G vocabulary-debt, H isolates), for the Incompleteness Ledger to '
+                'surface. Layer ' + layer + ' (curated slice — not whole-repo). SCOPE: triangulates '
+                'FIVE structural graphs — design cite/throughline/mu/pp AND the engine Key-propagation '
+                'graph (module_contracts emit→consume). Per SURFACE-NEVER-CULL every finding is emitted; '
+                'high-volume modes (C, and D/E when large) carry a bounded sample + a true `_total` so '
+                'nothing is silently capped. Lower-confidence Mode-B hub×hub pairs carry a '
+                '`filtered`+`filter_reason` flag (retained). Severity is assigned by the ledger, by category.',
         'layer': layer,
         'design_docs': manifest.get('design_count'),
+        # B — implied-but-missing (linked in >=2 metadata graphs, never cited)
         'implied_missing': [{'a': r['a'], 'b': r['b'], 'meta_links': r.get('meta_links'),
                              'a_doc': pdoc(r['a']), 'b_doc': pdoc(r['b']),
                              'filtered': bool(_im_filter(r)), 'filter_reason': _im_filter(r)}
                             for r in diag.get('B_implied_missing', [])],
+        # H — multi-graph isolates (max degree <=1 across all five graphs)
         'isolates': [{'token': r['token'], 'status': r.get('status'), 'doc': pdoc(r['token']),
                       'registry': _source_registry((tokens.get(r['token']) or {}).get('source')),
-                      # max degree across ALL FIVE graphs (Mode-H is max-deg<=1) — carried so the
-                      # ledger text is ACCURATE (degree 0 = truly untouched everywhere, engine
-                      # wiring included) rather than assuming a value.
                       'max_deg': max(r.get(k, 0) for k in ('cite', 'throughline', 'mu', 'pp', 'key')),
                       'filtered': False, 'filter_reason': None}
                      for r in diag.get('H_isolates', [])],
+        # C — notional citations (cited but NO metadata support): bounded sample + true total
+        'notional': [{'source': r['source'], 'target': r['target'], 'cite_weight': r['cite_weight'],
+                      'source_doc': pdoc(r['source']), 'target_doc': pdoc(r['target'])}
+                     for r in diag.get('C_notional', [])],
+        'notional_total': diag.get('C_notional_total', 0),
+        # D — cascade-without-return sinks: bounded sample + true total + truncation caveat
+        'cascade_sinks': [{'terminal': r['terminal'], 'chains': r['chains'],
+                           'doc': pdoc(r['terminal'])} for r in diag.get('D_cascade_sinks', [])],
+        'cascade_sinks_total': diag.get('D_cascade_sinks_total', 0),
+        'cascade_truncated_calls': diag.get('D_cascade_truncated_calls', 0),
+        # E — sparse-context tokens (bottom decile in paragraphs AND cite-degree)
+        'sparse_context': [{'token': r['token'], 'paragraphs': r['paragraphs'],
+                            'cite_deg': r['cite_deg'], 'status': r['status'], 'doc': pdoc(r['token'])}
+                           for r in diag.get('E_sparse_context', [])],
+        # F — throughline orphans (<=2 substantiating paragraphs)
+        'throughline_orphans': [{'throughline': r['throughline'], 'systems': r['systems'],
+                                 'substantiating': r['substantiating']} for r in f_orphans],
+        # G — vocabulary debt (struck/deprecated terms still in use)
+        'vocab_debt': [{'term': r['term'], 'total': r['total'], 'docs': r['docs'],
+                        'top_doc': (r['concentration'][0][0] if r.get('concentration') else '')}
+                       for r in g_vocab],
     }
     out_path.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
-    kept_im = sum(1 for r in payload['implied_missing'] if not r['filtered'])
-    kept_iso = sum(1 for r in payload['isolates'] if not r['filtered'])
-    print(f'[emit] {len(payload["implied_missing"])} implied-missing ({kept_im} unfiltered) + '
-          f'{len(payload["isolates"])} isolates ({kept_iso} unfiltered) -> {out_path}')
+    print(f'[emit] B={len(payload["implied_missing"])} H={len(payload["isolates"])} '
+          f'C={len(payload["notional"])}/{payload["notional_total"]} '
+          f'D={len(payload["cascade_sinks"])}/{payload["cascade_sinks_total"]} '
+          f'E={len(payload["sparse_context"])} F={len(payload["throughline_orphans"])} '
+          f'G={len(payload["vocab_debt"])} -> {out_path}')
     return payload
 
 
