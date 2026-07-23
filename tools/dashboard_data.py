@@ -1054,6 +1054,53 @@ _INC_CAT_LABEL = {
 _SEV_LABEL = {"high": "High", "med": "Medium", "low": "Low"}
 
 
+def build_vector_audit():
+    """The Vector Audit's OWN surface (its own top-level dashboard section) — all eight structural
+    diagnostic modes from the audit's committed feed (audit_findings.json, schema 2), distinct from
+    the whole-tree Missing ledger. Reads the feed the dashboard-deploy workflow regenerates."""
+    path = os.path.join(HERE, '..', 'tools', 'observability', 'audit_findings.json')
+    if not os.path.exists(path):
+        return {"available": False, "note": "audit_findings.json not generated — the dashboard-deploy "
+                "workflow emits it; run vector_audit.py --emit-findings locally."}
+    d = json.load(open(path, encoding='utf-8'))
+    # (mode key, label, list-field, optional true-total field, sample formatter)
+    def _pair(r): return f"{r.get('a')} ⋯ {r.get('b')}"
+    def _iso(r): return r.get('token', '')
+    def _not(r): return f"{r.get('source')}→{r.get('target')} (w{r.get('cite_weight')})"
+    def _sink(r): return f"{r.get('terminal')} ({r.get('chains')} chains)"
+    def _sparse(r): return r.get('token', '')
+    def _orph(r): return f"{r.get('throughline')} ({r.get('substantiating')} subst.)"
+    def _vocab(r): return f"{r.get('term')} ×{r.get('total')}"
+    spec = [
+        ("B", "Implied-but-missing", "implied_missing", None, _pair),
+        ("C", "Notional (cited, empty)", "notional", "notional_total", _not),
+        ("D", "Cascade sinks", "cascade_sinks", "cascade_sinks_total", _sink),
+        ("E", "Sparse-context", "sparse_context", None, _sparse),
+        ("F", "Throughline orphans", "throughline_orphans", None, _orph),
+        ("G", "Vocabulary debt", "vocab_debt", None, _vocab),
+        ("H", "Structural isolates", "isolates", None, _iso),
+    ]
+    modes = []
+    for key, label, field, total_field, fmt in spec:
+        rows = d.get(field) or []
+        modes.append({
+            "mode": key, "label": label, "shown": len(rows),
+            "total": d.get(total_field) if total_field else len(rows),
+            "sample": [fmt(r) for r in rows[:6]],
+        })
+    return {
+        "available": True,
+        "layer": d.get("layer"),
+        "design_docs": d.get("design_docs"),
+        "cascade_truncated_calls": d.get("cascade_truncated_calls", 0),
+        "modes": modes,
+        "note": ("The vector-audit triangulates FIVE structural graphs (cite / throughline / mu / pp / "
+                 "the engine Key-propagation graph) to find weaknesses hand-review misses. All 8 modes "
+                 "below; C and D show a bounded sample of a larger true total. Mode D is a cap-limited "
+                 "UNVERIFIED LEAD (see cascade_truncated_calls). Full detail: 02_weakness_register.md."),
+    }
+
+
 def build_incompleteness():
     """The Missing face — the Incompleteness Ledger's whole-tree scan of every stub / null / missing /
     excluded / unverified thing. Reads tools/observability/incompleteness.json, which the dashboard
@@ -1143,6 +1190,7 @@ def build_all():
         "drift": _safe('drift', build_drift),
         "queue": _safe('queue', build_queue),
         "proposals": _safe('proposals', build_proposals),
+        "vector_audit": _safe('vector_audit', build_vector_audit),
         "incompleteness": _safe('incompleteness', build_incompleteness),
         "repo_shape": _safe('repo_shape', build_repo_shape),
         "keys": _safe('keys', build_keys),
