@@ -32,9 +32,30 @@ import sys, os, random, statistics
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
 from mass_battle.engine import (  # noqa: E402
     Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
-    run_battle, run_multi_turn_battle, build_unit, build_envelopment, build_refused_flank,
+    run_battle, run_multi_turn_battle, build_unit, build_army, build_envelopment, build_refused_flank,
     resolve_battle, _centered_line_cols)
 from mass_battle.config import TROOPS_PER_TIER  # noqa: E402
+
+# ─────────────────────────────────────────────────────────────────────────────────────────────────
+# [ED-MB-0027] HONEST-GAUGE density-matching constants (fiat register §1 measurement integrity).
+# The gauge's confirmed #1 distortion (M1) was a per-cell DENSITY MISMATCH between the two deployment
+# paths: single-subunit opponents built via the legacy tier footprint (make_unit → build_unit → ~16
+# troops/cell for a tier-3 Line spread over ~25 cells) while the composed Envelopment/Refused presets
+# set an explicit concentration=100 (~133/cell after the pin_frac split). Since density enters
+# `_lanchester_strength` LINEARLY, that 8× gap — not the flanking geometry — drove H3/H4/C4 to a hard
+# 100% (null test: dense-vs-thin, ZERO envelopment, already reproduces 100%; adversarial review 2026-
+# 07-23). A ruler that varies density cannot measure geometry. FIX: hold per-cell density CONSTANT at
+# GAUGE_CONC across EVERY unit — single and composed alike — by building all units from the SAME
+# explicit troops/concentration path (footprint_for), and by choosing GAUGE_TROOPS so every historical
+# split (pin_frac 1/3 & 2/3, strong_frac 1/2) divides evenly by GAUGE_CONC → integer-cell quantization
+# is EXACT (no density overshoot). 600 @ 100/cell: single Line = 6 cells; 1/3-split = 200 → 2 cells;
+# 2/3-split = 400 → 4 cells; wings 200/100 → 2/1 cells; 1/2-split = 300 → 3 cells — ALL exactly
+# 100/cell. Now the only thing that varies across rows is frontage + geometry + posture — the ruler is
+# fair, and any residual envelopment edge (or deficit) is the MECHANIC, not the density artifact.
+# North star (fiat register §8): calibrate to independent history (Dupuy DLEDB, Sabin), NOT to these
+# rows — the gauge stays a validation surface, never a training target.
+GAUGE_TROOPS = 600.0   # [canonical: audit/2026-07-22-mass-battle-stress-test/honest_gauge_readout.md §"What changed" — per-unit total chosen so every historical split (pin 1/3, 2/3; strong 1/2) divides evenly by GAUGE_CONC → exact integer-cell quantization; harness calibration, not a mechanical constant]
+GAUGE_CONC = 100.0     # per-cell troop density held constant across ALL gauge units (mid CELL_FLOOR..CELL_CAP band)
 
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
     # [LC-8, ED-909, Jordan-approved 2026-07-02] Horseshoe/RefusedFlank entries retired along with
@@ -87,7 +108,8 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
 
 def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,   # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4]
               discipline=5, morale=6, stance='balanced',                          # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats D5/M6]
-              troop_type='infantry', speed='Standard', morale_start=None, instructions=()):
+              troop_type='infantry', speed='Standard', morale_start=None, instructions=(),
+              troops=None, concentration=None):  # [ED-MB-0027] explicit density (default GAUGE_TROOPS/GAUGE_CONC) — honest-gauge matching
     # troop_type/speed default to the historical infantry baseline so the original
     # 13 tests construct byte-identically; cavalry rows pass troop_type='cavalry',
     # speed='Fast' by kwargs. Cavalry charge mechanics (charge_pen,
@@ -108,16 +130,28 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
     #     (a unit that has LOST morale), not a low absolute ceiling -> a shaken line
     #     needs morale<morale_start, which make_unit's old morale_start==morale
     #     could not express.
-    # Delegates to the wrapper's faction->unit ADAPTER (engine.build_unit): resolve the
-    # deployment anchor_col from THIS gauge's own ANCHOR_MAP (its table differs from
-    # bat.py's), then hand off the identical single-subunit build (advance_dir/start_row
-    # computation, Subunit(...), Unit(...), dr=1 default) that used to be inlined here.
-    # build_unit is proven byte-exact-transparent by bat.py's digest gate.
+    # [ED-MB-0027, honest-gauge density-matching] Route the single-subunit gauge unit through the SAME
+    # explicit troops/concentration path (build_army → footprint_for) the composed Envelopment/Refused
+    # presets use, so per-cell density is IDENTICAL (GAUGE_CONC) on both sides of every matchup. Was
+    # `build_unit(...)`, whose legacy tier footprint gave a tier-3 Line ~16 troops/cell (~25 cells) vs
+    # the presets' ~100–133/cell — the M1 density artifact that drove H3/H4/C4 to a fiat 100%. `troops`/
+    # `concentration` (default GAUGE_TROOPS/GAUGE_CONC, overridable for bespoke rows) build a single
+    # spec placed at THIS gauge's ANCHOR_MAP column. Every make_unit kwarg (unit_type/stance/
+    # instructions/discipline/morale/morale_start/speed/power/command/dr) forwards through build_army's
+    # spec + unit-level params exactly as before, so R1/R3 ranged, C2/C6 brace+d8, and C5 shaken rows
+    # keep their posture; only the DENSITY is now matched. build_unit remains the public single-subunit
+    # constructor (bat.py's byte-exact digest path is unaffected — it does not import this gauge).
     anchor_col = ANCHOR_MAP.get((shape, tier), 10)
-    return build_unit(shape, tier, name, faction, anchor_col, troop_type=troop_type,
-                       unit_type=unit_type, power=power, command=command,
+    start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+    _troops = GAUGE_TROOPS if troops is None else troops
+    _conc = GAUGE_CONC if concentration is None else concentration
+    spec = {'shape': shape, 'tier': tier, 'troop_type': troop_type, 'unit_type': unit_type,
+            'stance': stance, 'instructions': tuple(instructions),
+            'troops': _troops, 'concentration': _conc,
+            'starting_position': (start_row, anchor_col)}
+    return build_army([spec], name, faction, power=power, command=command,
                        discipline=discipline, morale=morale, morale_start=morale_start,
-                       stance=stance, speed=speed, instructions=instructions, dr=1)
+                       dr=1, stance=stance, speed=speed)
 
 
 def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
@@ -147,11 +181,11 @@ def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
        (no new mechanic -- an army-composition choice fed into an already-verified constructor)."""
     anchor = ANCHOR_MAP.get(('Line', tier), 10)
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    total_troops = kw.pop('total_troops', TROOPS_PER_TIER[tier])
+    total_troops = kw.pop('total_troops', GAUGE_TROOPS)  # [ED-MB-0027] honest-gauge total (divisible by GAUGE_CONC under 1/3 & 2/3 splits) — was TROOPS_PER_TIER[tier]=400 (133/cell after split, the M1 density artifact)
     pin_frac = kw.pop('pin_frac', 1.0 / 3)
     wing_troop_type = kw.pop('wing_troop_type', troop_type)
     wing_speed = kw.pop('wing_speed', speed)
-    conc = kw.pop('concentration', 100)  # mid-range density; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200 -- the valid per-cell troop-density band]
+    conc = kw.pop('concentration', GAUGE_CONC)  # [ED-MB-0027] density held at GAUGE_CONC to match make_unit; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200 band]
     center_troops = total_troops * pin_frac
     wing_troops = (total_troops - center_troops) / 2
     # [2026-07-05 adversarial-review fix] `Subunit` has NO `speed` field at all -- a per-subunit
@@ -192,9 +226,9 @@ def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     matches _envelop_army's own total when the two face off (H5)."""
     anchor = ANCHOR_MAP.get(('Line', tier), 10)
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    total_troops = kw.pop('total_troops', TROOPS_PER_TIER[tier])
+    total_troops = kw.pop('total_troops', GAUGE_TROOPS)  # [ED-MB-0027] honest-gauge total (600, 1/2-split → 300 → 3 cells @100); was TROOPS_PER_TIER[tier]=400
     strong_frac = kw.pop('strong_frac', 0.5)
-    conc = kw.pop('concentration', 100)  # mid-range density; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200]
+    conc = kw.pop('concentration', GAUGE_CONC)  # [ED-MB-0027] density held at GAUGE_CONC to match make_unit; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200]
     strong_troops = total_troops * strong_frac
     refused_troops = total_troops - strong_troops
     # [2026-07-05 adversarial-review fix, same rationale as _envelop_army above] per-subunit 'speed'

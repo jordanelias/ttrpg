@@ -1736,6 +1736,17 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 apply_to_subunit(unit_a, _su, _d * _sa)
             for _su, _d in _ord_b:
                 apply_to_subunit(unit_b, _su, _d * _sb)
+            if PC_CLOSE_RANKS:
+                # [ED-MB-0028] Cell-level closing-ranks: AFTER both units' casualties are applied (so it
+                # stays simultaneous — neither side's reflow sees the other mid-tick), rear cells step up
+                # to refill the leading ranks toward spawn density, depleting from the back. Re-sync the
+                # emergent column grid from the moved cell state. Gated OFF -> byte-exact (skipped entirely).
+                for _a in unit_a.subunits:
+                    _a.close_ranks()
+                for _a in unit_b.subunits:
+                    _a.close_ranks()
+                sync_col_grid(unit_a)
+                sync_col_grid(unit_b)
             update_stamina(unit_a, pairs)   # Increment 3: drain engaged (depth-damped), rest others
             update_stamina(unit_b, pairs)
         unit_a.recalc_size()
