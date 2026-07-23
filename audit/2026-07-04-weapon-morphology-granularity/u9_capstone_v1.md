@@ -4,9 +4,11 @@
 **Increment:** U9 (last in the U0→U9 sequence), per `consolidation_v1.md` §4/§6.
 **Scope of change:** **none to engine code** — all six candidate levers stay at `K=0` (byte-identical).
 This doc *is* the U9 deliverable: the ablation study, the verdict, and the one held-back design call.
-**Status: PROPOSED** — the verdict (keep all six at K=0) lands on merge per ED-1094; the single hard
-design call it isolates (activating `CHOKE_THRUST` requires revising a *ratified* first principle) is
-**held back, `needs_jordan`** — loudly, not bundled (§4 below).
+**Status: RATIFIED** (2026-07-23, by merge of PR #220 per ED-1094) — the **verdict** (keep all six levers
+at K=0, byte-identical; cut nothing, activate nothing) is ratified. The single hard design call it isolates
+(activating `CHOKE_THRUST` requires revising the *ratified D2 grip-invariant-thrust gate*) remains **HELD
+BACK, `needs_jordan`** — it was flagged as held-back in the PR body, so ordinary merge review did **not**
+ratify it (§4 below); it stays open until Jordan's explicit ruling.
 
 ---
 
