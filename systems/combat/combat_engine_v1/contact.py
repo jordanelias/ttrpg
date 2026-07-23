@@ -44,7 +44,8 @@ def grab_sigma(actor, opponent, cfg):
     term (D9/JD-7 retraction). +ve favours actor. Pure."""
     lev = S.leverage(actor, cfg) - S.leverage(opponent, cfg)
     strq = (actor.strength - opponent.strength) * cfg['GRAB_STR_K']
-    return strq + cfg['GRAB_LEV_K'] * lev
+    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * (1.0 - actor.skill('grab'))   # U3/ED-PC-0018: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill. K=0 until U9; 0 for an edgeless weapon.
+    return strq + cfg['GRAB_LEV_K'] * lev - edge
 
 
 # Branching grapple menu (Fiore's 2nd Remedy four-branch + a foot-pin/escape pair) — reachable

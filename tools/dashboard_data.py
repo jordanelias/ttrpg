@@ -1022,6 +1022,137 @@ def build_definitions():
 
 # ── values layer: typed sim constants + their pointer links (ED-IN-0079) ─────
 
+# Category labels for the Missing card — kept in sync with the observatory console
+# (tools/observability/index.html INC_CAT_LABEL). Absent labels fall back to the raw category.
+_INC_CAT_LABEL = {
+    "contract_doc_null": "Module contract — no design doc",
+    "contract_island": "Module wired to nothing (island)",
+    "contract_missing_entirely": "Referenced contract that doesn't exist",
+    "contract_no_resolver": "Contract with no resolver named",
+    "key_orphan_emit": "Orphan Key emit (emitted, unconsumed)",
+    "sim_not_implemented": "Sim function raising NotImplementedError",
+    "code_marker": "TODO / FIXME / STUB in code",
+    "prose_marker": "GAP / TODO / TBD in design prose",
+    "status_noncurrent": "Doc with a non-current Status line",
+    "stale_retired_pointer": "Pointer into a retired tree",
+    "unregistered_term": "Frequent term in no register",
+    "audit_implied_missing": "Wired/grouped but never cited together",
+    "audit_isolate": "Token isolated across all 5 graphs",
+    "audit_excluded_system": "System the audit deliberately excludes",
+    "integrity_unverified_pin": "Unverified canonical_sha pins (advisory)",
+    "register_quarantined": "Quarantined-stale register",
+    "register_phantom_source": "Register citing a nonexistent source",
+    "apparatus_orphan": "Tool nothing invokes",
+    "parse_failure": "File the ledger could not parse",
+    "audit_notional": "Cited but content-empty (Mode C)",
+    "audit_cascade_sink": "Cascade sink — flowed into, never out (Mode D)",
+    "audit_sparse": "Thinly-developed concept (Mode E)",
+    "audit_throughline_orphan": "Throughline barely substantiated (Mode F)",
+    "audit_vocab_debt": "Struck term still in use (Mode G)",
+    "audit_schema_mismatch": "Audit-feed schema handshake broke",
+}
+_SEV_LABEL = {"high": "High", "med": "Medium", "low": "Low"}
+
+
+def build_vector_audit():
+    """The Vector Audit's OWN surface (its own top-level dashboard section) — all eight structural
+    diagnostic modes from the audit's committed feed (audit_findings.json, schema 2), distinct from
+    the whole-tree Missing ledger. Reads the feed the dashboard-deploy workflow regenerates."""
+    path = os.path.join(HERE, '..', 'tools', 'observability', 'audit_findings.json')
+    if not os.path.exists(path):
+        return {"available": False, "note": "audit_findings.json not generated — the dashboard-deploy "
+                "workflow emits it; run vector_audit.py --emit-findings locally."}
+    d = json.load(open(path, encoding='utf-8'))
+    # (mode key, label, list-field, optional true-total field, sample formatter)
+    def _pair(r): return f"{r.get('a')} ⋯ {r.get('b')}"
+    def _iso(r): return r.get('token', '')
+    def _not(r): return f"{r.get('source')}→{r.get('target')} (w{r.get('cite_weight')})"
+    def _sink(r): return f"{r.get('terminal')} ({r.get('chains')} chains)"
+    def _sparse(r): return r.get('token', '')
+    def _orph(r): return f"{r.get('throughline')} ({r.get('substantiating')} subst.)"
+    def _vocab(r): return f"{r.get('term')} ×{r.get('total')}"
+    spec = [
+        ("B", "Implied-but-missing", "implied_missing", None, _pair),
+        ("C", "Notional (cited, empty)", "notional", "notional_total", _not),
+        ("D", "Cascade sinks", "cascade_sinks", "cascade_sinks_total", _sink),
+        ("E", "Sparse-context", "sparse_context", None, _sparse),
+        ("F", "Throughline orphans", "throughline_orphans", None, _orph),
+        ("G", "Vocabulary debt", "vocab_debt", None, _vocab),
+        ("H", "Structural isolates", "isolates", None, _iso),
+    ]
+    modes = []
+    for key, label, field, total_field, fmt in spec:
+        rows = d.get(field) or []
+        modes.append({
+            "mode": key, "label": label, "shown": len(rows),
+            "total": d.get(total_field) if total_field else len(rows),
+            "sample": [fmt(r) for r in rows[:6]],
+        })
+    return {
+        "available": True,
+        "layer": d.get("layer"),
+        "design_docs": d.get("design_docs"),
+        "cascade_truncated_calls": d.get("cascade_truncated_calls", 0),
+        "modes": modes,
+        "note": ("The vector-audit triangulates FIVE structural graphs (cite / throughline / mu / pp / "
+                 "the engine Key-propagation graph) to find weaknesses hand-review misses. All 8 modes "
+                 "below; C and D show a bounded sample of a larger true total. Mode D is a cap-limited "
+                 "UNVERIFIED LEAD (see cascade_truncated_calls). Full detail: 02_weakness_register.md."),
+    }
+
+
+def build_incompleteness():
+    """The Missing face — the Incompleteness Ledger's whole-tree scan of every stub / null / missing /
+    excluded / unverified thing. Reads tools/observability/incompleteness.json, which the dashboard
+    deployment workflow REGENERATES immediately before this runs (explicit named steps in
+    dashboard.yml: 'Emit vector-audit findings' -> 'Regenerate Incompleteness Ledger'), so the
+    deployed card is fresh at deploy time — NOT the weekly audit-refresh snapshot. Degrades to
+    available:False if the feed is absent (e.g. a bare local run without the regen step)."""
+    path = os.path.join(HERE, '..', 'tools', 'observability', 'incompleteness.json')
+    if not os.path.exists(path):
+        return {"available": False, "note": "incompleteness.json not generated — dashboard.yml "
+                "regenerates it at deploy; run tools/observability/build_incompleteness.py locally."}
+    d = json.load(open(path, encoding='utf-8'))
+    findings = d.get("findings") or []
+    by_cat = (d.get("totals") or {}).get("by_category") or {}
+    by_sev = (d.get("totals") or {}).get("by_severity") or {}
+    # per-category severity (consistent per category — read the first finding of each)
+    cat_sev = {}
+    for f in findings:
+        cat_sev.setdefault(f.get("category"), f.get("severity", "med"))
+    _rank = {"high": 0, "med": 1, "low": 2}
+    categories = [{"category": c, "label": _INC_CAT_LABEL.get(c, c), "count": n,
+                   "severity": cat_sev.get(c, "med")}
+                  for c, n in sorted(by_cat.items(),
+                                     key=lambda kv: (_rank.get(cat_sev.get(kv[0], "med"), 1), -kv[1], kv[0]))]
+    # HIGHLIGHTS are now severity-driven (fix #4): every HIGH-severity finding, grouped by category —
+    # auto-tracks the ledger's SEVERITY map instead of a hardcoded list. These are the port-blockers.
+    hi = [f for f in findings if f.get("severity") == "high"]
+    hl_groups = {}
+    for f in hi:
+        hl_groups.setdefault(f.get("category"), []).append(f)
+    highlights = [{
+        "category": c, "label": _INC_CAT_LABEL.get(c, c), "count": len(rows),
+        "items": [{"title": f.get("title", ""), "path": f.get("path", ""),
+                   "lane": f.get("lane", "")} for f in rows[:8]],
+    } for c, rows in sorted(hl_groups.items(), key=lambda kv: (-len(kv[1]), kv[0]))]
+    lanes = {k: v.get("total", 0) for k, v in (d.get("by_lane") or {}).items()}
+    return {
+        "available": True,
+        "total": (d.get("totals") or {}).get("findings", len(findings)),
+        "category_count": len(by_cat),
+        "by_severity": {s: by_sev.get(s, 0) for s in ("high", "med", "low")},
+        "categories": categories,
+        "by_lane": dict(sorted(lanes.items(), key=lambda kv: -kv[1])),
+        "highlights": highlights,
+        "prose_rollup": d.get("prose_marker_rollup") or {},
+        "coverage_gaps": d.get("coverage_gaps") or [],
+        "note": ("Whole-tree scan for every stub / null / missing / excluded / unverified thing across "
+                 "ALL 8 vector-audit modes, ranked by severity (SURFACE, NEVER CULL). Regenerated by "
+                 "the dashboard deploy workflow. Full detail: tools/observability/INCOMPLETENESS.md."),
+    }
+
+
 def build_values():
     """The values-to-pointers browse surface: the typed sim constants + which pointers each
     references. Reads the generated engine/engine_params/{sim_params,value_pointer_links}.json."""
@@ -1059,6 +1190,8 @@ def build_all():
         "drift": _safe('drift', build_drift),
         "queue": _safe('queue', build_queue),
         "proposals": _safe('proposals', build_proposals),
+        "vector_audit": _safe('vector_audit', build_vector_audit),
+        "incompleteness": _safe('incompleteness', build_incompleteness),
         "repo_shape": _safe('repo_shape', build_repo_shape),
         "keys": _safe('keys', build_keys),
         "actions": _safe('actions', build_actions),

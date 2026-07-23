@@ -104,16 +104,20 @@ def test_grab_available_dagger_exempt_regardless_of_opening():
 
 
 class _StubActor:
-    """Minimal stand-in exposing only the attributes contact.grab_sigma reads (.w, .strength) — used to
-    prove it is blind to any extra 'hardware' keys a weapon dict might carry."""
+    """Minimal stand-in exposing the attributes contact.grab_sigma reads (.w, .strength, .skill) — used to
+    prove it is blind to any extra 'hardware' keys a weapon dict might carry. (U3/ED-PC-0018 added a grab-skill
+    read for the edge-hazard mitigation; the stub mirrors a Combatant's untrained skill() -> 0.0.)"""
     def __init__(self, w, strength):
         self.w = w; self.strength = strength
+    def skill(self, axis):
+        return 0.0
 
 
 def test_grab_sigma_has_no_hook_hardware_term():
-    """I7b acceptance #3 (D9/JD-7): grab_sigma reads ONLY strength + systems.leverage (grip_len/head_len/
-    hands) — two weapon dicts identical on those fields but carrying different guard-type/hook-flavoured
-    extra keys must produce an IDENTICAL grab_sigma (the retracted hook-hardware axis is inert here)."""
+    """I7b acceptance #3 (D9/JD-7): the retracted HOOK-HARDWARE axis stays inert — two weapon dicts identical on
+    grab_sigma's real inputs but carrying different guard-type/hook-flavoured extra keys must produce an IDENTICAL
+    grab_sigma. (U3/ED-PC-0018 added a grab_hazard channel that reads `edges` + grab-skill, but neither test weapon
+    carries `edges` and GRAB_EDGE_K=0, so it is inert here; the guard_type/hook keys remain read by nothing.)"""
     base = dict(grip_len=0.8, head_len=2.4, hands=1)
     w_plain = dict(base, guard_type='none')
     w_hooked = dict(base, guard_type='lug', hook=True, hook_affordance=True)   # extraneous — must be ignored

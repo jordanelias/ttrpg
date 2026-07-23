@@ -518,11 +518,10 @@ jobs:
     name: Validator Unit Tests
     runs-on: ubuntu-latest
     needs: syntax-check
-    # 5→8: `pytest tests/valoria` now runs ~5m17s on slower runners (317s, observed cancelled
-    # on PR #215) — dominated by test_mass_battle_byte_exact.py's two grid-mode subprocess
-    # batteries (~150-170s combined, near-budget by that test's own docstring) + tests/contracts.
-    # The suite genuinely outgrew the 5-min budget; this is a headroom bump, no gate weakened.
-    timeout-minutes: 8
+    # tests/valoria alone runs ~9m on hosted runners (combat/sim-heavy cases + the two grid-mode
+    # byte-exact subprocess batteries), plus pip install + tests/contracts — the old 5-min cap
+    # cancelled the job mid-run. 12 min gives headroom above the observed ~9m23s full-suite time.
+    timeout-minutes: 12
     permissions:
       contents: read
     steps:

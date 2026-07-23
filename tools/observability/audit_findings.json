@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
-  "note": "GENERATED \u2014 the vector-audit's unique cross-graph structural findings (Mode B implied-missing + Mode H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). Per SURFACE-NEVER-CULL EVERY finding is emitted; lower-confidence Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag (retained, not dropped); the ledger reads the unfiltered rows for its Missing face. Isolates are NO LONGER filtered \u2014 the Key graph resolves the ones that are genuinely wired; a still-isolated Key is a real finding (orphan/dangling emit, unemitted/unconsumed Key, or a derivations-only flow) \u2014 mechanism per the register.",
+  "note": "GENERATED \u2014 ALL EIGHT of the vector-audit's structural diagnostic modes (A hubs are context, B implied-missing, C notional, D cascade-sinks, E sparse-context, F throughline-orphans, G vocabulary-debt, H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). Per SURFACE-NEVER-CULL every finding is emitted; high-volume modes (C, and D/E when large) carry a bounded sample + a true `_total` so nothing is silently capped. Lower-confidence Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag (retained). Severity is assigned by the ledger, by category.",
   "layer": "L0",
   "design_docs": 110,
   "implied_missing": [
@@ -402,6 +402,581 @@
       "max_deg": 0,
       "filtered": false,
       "filter_reason": null
+    }
+  ],
+  "notional": [
+    {
+      "source": "CI Political",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Guilds",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Church",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Hafenmark",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Varfell",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "L\u00f6wenritter",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Standing",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Duchess Inge Baralta",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Prince Torben Almqvist",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Conviction Track",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Factions",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "NPC Roster",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Aldric Tormann",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Arnlod Olafsson",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Osten Jarnstal",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Gerik Strand",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Maret Uln",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Peder Almstedt",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Wardens",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Einhir",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Riskbreaker",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: scene.witness",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: state.succession",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Leap",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Coherence",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Campaign Architecture",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Threadwork",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Thread Revelation",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "TS",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Leap Mechanism",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Will",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Mending Stability",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Thread Sensitivity",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "Thread Pool Score",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "source": "CI Political",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Guilds",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Church",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Crown",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Hafenmark",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Varfell",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "L\u00f6wenritter",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Duchess Inge Baralta",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Prince Torben Almqvist",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Conviction Track",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Factions",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "NPC Roster",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Aldric Tormann",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Arnlod Olafsson",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Osten Jarnstal",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Gerik Strand",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    }
+  ],
+  "notional_total": 14662,
+  "cascade_sinks": [
+    {
+      "terminal": "Conviction",
+      "chains": 977,
+      "doc": "systems/npcs/npc_behavior_v30.md"
+    },
+    {
+      "terminal": "Key: mechanical.accounting",
+      "chains": 891,
+      "doc": "systems/factions/faction_layer_v30.md"
+    },
+    {
+      "terminal": "Threadwork",
+      "chains": 854,
+      "doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "terminal": "Audit",
+      "chains": 847,
+      "doc": "audit/2026-05-17-v18-integration/integration_plan_v18.md"
+    },
+    {
+      "terminal": "Disposition",
+      "chains": 833,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Territories",
+      "chains": 829,
+      "doc": "systems/victory/victory_v30.md"
+    },
+    {
+      "terminal": "Social Contest",
+      "chains": 794,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Stability",
+      "chains": 764,
+      "doc": "systems/factions/faction_layer_v30.md"
+    },
+    {
+      "terminal": "Scene Slate",
+      "chains": 731,
+      "doc": "systems/_architecture/player_agency_v30.md"
+    },
+    {
+      "terminal": "Knot",
+      "chains": 712,
+      "doc": "systems/fieldwork/knots_v30.md"
+    },
+    {
+      "terminal": "Church",
+      "chains": 701,
+      "doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "terminal": "Investigation",
+      "chains": 682,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Mass Combat",
+      "chains": 671,
+      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
+    },
+    {
+      "terminal": "Mass Battle",
+      "chains": 671,
+      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
+    },
+    {
+      "terminal": "Restoration Movement",
+      "chains": 664,
+      "doc": "systems/victory/victory_v30.md"
+    }
+  ],
+  "cascade_sinks_total": 234,
+  "cascade_truncated_calls": 59858,
+  "sparse_context": [
+    {
+      "token": "Active Inquisition",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Body",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Counter-Intelligence",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Game Director",
+      "paragraphs": 0,
+      "cite_deg": 6,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Key: mechanical.scene_exited",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Key: mechanical.scene_skipped",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Key: scene_outcome.battle_concluded",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "NPC Relational Graph",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Scene Timer",
+      "paragraphs": 0,
+      "cite_deg": 6,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Territorial Piety",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Territory Temperaments",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "faction Mandate (cross-module \u2192 faction_state)",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "faction Treasury income (cross-module \u2192 faction_state)",
+      "paragraphs": 0,
+      "cite_deg": 0,
+      "status": "canonical",
+      "doc": null
+    },
+    {
+      "token": "Fieldwork Knots",
+      "paragraphs": 1,
+      "cite_deg": 16,
+      "status": "canonical",
+      "doc": "systems/fieldwork/knots_v30.md"
+    },
+    {
+      "token": "Fractional Province",
+      "paragraphs": 1,
+      "cite_deg": 23,
+      "status": "provisional",
+      "doc": "systems/factions/faction_succession_split_v30.md"
+    },
+    {
+      "token": "Mind",
+      "paragraphs": 1,
+      "cite_deg": 12,
+      "status": "canonical",
+      "doc": "systems/world/solmund_voice_v30.md"
+    }
+  ],
+  "throughline_orphans": [
+    {
+      "throughline": "T-10",
+      "systems": [
+        "\u2014"
+      ],
+      "substantiating": 0
+    }
+  ],
+  "vocab_debt": [
+    {
+      "term": "Coup Counter",
+      "total": 57,
+      "docs": 13,
+      "top_doc": "arcs/arc_expansion_v30.md"
+    },
+    {
+      "term": "Cultural Reformation",
+      "total": 23,
+      "docs": 9,
+      "top_doc": "systems/overview/peninsular_strain_v30.md"
+    },
+    {
+      "term": "Game Master",
+      "total": 21,
+      "docs": 8,
+      "top_doc": "arcs/throughline_resolutions_v30.md"
     }
   ]
 }

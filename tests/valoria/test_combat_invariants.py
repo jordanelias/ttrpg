@@ -154,22 +154,24 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above. sabre/scimitar/falchion ARE included (the
-    # engine genuinely changes them today) but are a FLAGGED, NOT-YET-FIXED bug (ED-PC-0012) — see docstring.
+    # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above.
     # [PC-5/ED-PC-0015, 2026-07-22] thrust_authority(head_len) scales the puncture GAP-PRESS term (core._transmit),
     # so select_mode's greedy comparator now weights each candidate point by its point-to-hand lever. TWO grounded
-    # shifts in the changer set (verified this pass, not silently accepted):
-    #   +estoc/flamberge/changdao/odachi JOIN — stiff two-handed thrust-blades whose short-enough-lever half-sword
-    #    thrust now out-couples their own edge vs mail/plate (estoc is a purpose-built armour-thruster; the others
-    #    are the same two-handed-cutter-gains-a-secondary-thrust class as the ED-PC-0011 changers already here).
-    #   -bec_de_corbin/voulge DROP — their armour-defeat is a SWUNG beak/spike (percussion), not a static pommel-
-    #    pressed thrust; PC-5 correctly declines to credit their long-haft 'point' with short-lever thrust authority,
-    #    so they route to their percussion/versatile mode instead. Their plate-defeat OUTCOME is fully preserved
-    #    (bec_de_corbin still wins ~91% / voulge ~63% vs arming at heavy — verified), i.e. the shift is a corrected
-    #    MODE LABEL (swing, not thrust), not a lost capability. The blunt path is untouched by thrust_auth by design.
-    expected = ['greatsword', 'sabre', 'kama_yari', 'glaive', 'guandao', 'podao', 'fauchard', 'guisarme',
-                'ji', 'katana', 'tachi', 'odachi', 'changdao', 'nandao', 'scimitar', 'flamberge', 'estoc',
-                'falchion', 'hook_sword']
+    # shifts in the changer set: +estoc/flamberge/changdao/odachi JOIN (stiff two-handed thrust-blades whose
+    # short-enough-lever half-sword thrust now out-couples their edge vs mail/plate); -bec_de_corbin/voulge DROP
+    # (their armour-defeat is a SWUNG beak/spike, not a static pommel-press — routed to their percussion path,
+    # plate-defeat outcome preserved ~91%/63% at heavy).
+    # [PC-4/ED-PC-0012, 2026-07-22 — RESOLVED] THRUST_AUTH_REF now scales DELIVERY['point'] by the SELECTED point's
+    # own derived thrust magnitude (the 'cut'/CUT_AUTH_REF analog), removing the FLOOR-LOCKED artifact where a weak
+    # incidental point on a slasher scored the same coupling as a real thruster. FOUR weapons DROP as changers (their
+    # spurious armour-tier point-switch was the artifact, now correctly gone — they stay dedicated cutters at every
+    # tier): sabre (point_eff 0.26), scimitar (0.16 — the roster's weakest), falchion (0.23), podao (0.24). The
+    # remaining low-point two-handed cutters STAY changers on GROUNDED, geometry-earned grounds (verified this pass):
+    # katana (0.44) keeps its thrust at light/medium and Mordhaus vs plate; tachi/nandao route to their own attested
+    # Mordhau/blunt vs mail/plate (exactly the ED-anticipated shift); glaive keeps an earned mid-tier point. Every
+    # NATIVE pointer (bear_spear 0.53, rapier, spear, estoc, yari, …) clamps to ratio 1.0 and is UNAFFECTED.
+    expected = ['greatsword', 'kama_yari', 'glaive', 'guandao', 'fauchard', 'guisarme', 'ji', 'katana', 'tachi',
+                'odachi', 'changdao', 'nandao', 'flamberge', 'estoc', 'hook_sword']
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -531,14 +533,36 @@ def test_stophit_range_term_zero_at_full_room():
 
 # ── I6 FACING STATE + LATERAL-VOID CLOSING (D6, 2026-07-03) ─────────────────────────────────────────
 # designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md
-def test_facing_never_reads_weapon_class():
-    """I6 gate #3 (C2): two weapons with identical stance/measure/grip get IDENTICAL facing — facing_target is
-    keyed ONLY on closed/grip_position, never weapon class."""
+def test_facing_weapon_class_blind_at_k_zero():
+    """I6 gate #3 (C2), as the U7/ED-PC-0020 byte-identity guard: at FACING_REGIME_K=0 the weapon-class facing regime
+    is INERT (the multiplier is exactly 1.0), so two weapons with identical stance/grip still get IDENTICAL facing —
+    the property the pre-U7 engine had, preserved byte-identically at landing. (The C2 reversal activates only when
+    U9 flips FACING_REGIME_K; see test_facing_regime_separation for the wired-but-gated weapon-awareness.)"""
     C, core, S, WP, CFG = _mods()
+    assert CFG['FACING_REGIME_K'] == 0.0
     c1 = C.Combatant('a', weapon='spear'); c1.grip_position = 0.4
     c2 = C.Combatant('b', weapon='mace'); c2.grip_position = 0.4
     assert S.facing_target(c1, True, CFG) == S.facing_target(c2, True, CFG)
     assert S.facing_target(c1, False, CFG) == S.facing_target(c2, False, CFG)
+
+
+def test_facing_regime_separation():
+    """U7/ED-PC-0020: the facing REGIME is wired (inert at K=0, live at K>0). facing_pref is signed by hands — a 1H
+    weapon fights PROFILE (+), a 2H weapon SQUARES up (−) — and 'hands separates the twins' (a 1H vs 2H blade of the
+    same reach face opposite regimes). Once FACING_REGIME_K>0, facing_target reads the weapon class (the C2 reversal)."""
+    C, core, S, WP, CFG = _mods()
+    assert WP.facing_pref(C.WEAPONS['sabre']) > 0 and WP.facing_pref(C.WEAPONS['arming']) > 0      # 1H -> profile (+)
+    assert WP.facing_pref(C.WEAPONS['longsword']) < 0 and WP.facing_pref(C.WEAPONS['spear']) < 0   # 2H -> square (−)
+    # hands separates twins: same head_len, opposite sign
+    class _W(dict):
+        pass
+    w1h = {'hands': 1, 'head_len': 0.84}; w2h = {'hands': 2, 'head_len': 0.84}
+    assert WP.facing_pref(w1h) == -WP.facing_pref(w2h) and WP.facing_pref(w1h) > 0
+    # live at K>0: two weapons of different class now get different facing
+    cfgk = dict(CFG, FACING_REGIME_K=0.6)
+    c1 = C.Combatant('a', weapon='sabre'); c1.grip_position = 0.4      # 1H
+    c2 = C.Combatant('b', weapon='longsword'); c2.grip_position = 0.4  # 2H
+    assert S.facing_target(c1, True, cfgk) != S.facing_target(c2, True, cfgk)
 
 
 def test_facing_near_neutral_small():

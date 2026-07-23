@@ -73,6 +73,22 @@ def rear_clearance(c, cfg):
     unread until now). Pure."""
     return WP.at_circumstance(c.w, getattr(c,'grip_position',0.0))['rear_clearance']
 
+def choke_counterbalance(c, cfg):
+    """U5/ED-PC-0019 — how much a head-heavy pole is CHOKED UP to counterbalance its forward mass this beat: the live
+    grip_position (0 at the open measure, ->1 gathered to the working balance) weighted by how much shaft TRAILS the
+    hand to counterbalance (rear_clearance, normalised by a pole-class reference). A compact one-hander (low
+    rear_clearance) barely counterbalances; a poleaxe/staff (high rear_clearance) does so strongly. The COST of that
+    control — a gathered pole telegraphs and loses fine precision — routes to the accuracy/legibility channel
+    (CHOKE_ACCURACY_K); the thrust side is weapon_physics.phi_grip (CHOKE_THRUST_K). Half-sword forms are EXEMPT: their
+    grip is the blade-grip (a different mechanic), and the derived short-lever form reads ~0 here anyway — an explicit
+    base-form guard makes that exact. In [0,1]; 0 at grip=0. Reuses the rear-clearance delta (no new primitive). Pure."""
+    if 'base' in c.w:                                   # a *_halfsword form — not a pole choke-counterbalance
+        return 0.0
+    grip = getattr(c, 'grip_position', 0.0)
+    if grip <= 0.0:
+        return 0.0
+    return min(1.0, grip * (rear_clearance(c, cfg) / cfg['CHOKE_RC_REF']))
+
 def close_tempo(c, cfg, fatigue=0.0):
     """Cadence IN THE CLOSE — conditional (fatigue/grip). A long two-handed pole (spear/staff) is SLOW to recover
     once a faster weapon is inside UNLESS it chokes up (grip adjustment to act in close quarters). Spread COMPRESSED
@@ -349,13 +365,15 @@ FACING_PROFILE_K = 0.03    # [FIAT — C1 unresolved] small profile term in reac
 FACING_VOID_GAIN = 0.15    # [SIM-CALIBRATE] how much facing speeds the close (close_rate multiplier).
 
 def facing_target(c, closed, cfg):
-    """The per-beat facing state (I6, D6) — keyed ONLY on stance (closed/not) and grip_position, NEVER weapon
-    class (C2: a test asserts two weapons with identical stance/measure/grip get identical facing). Ships
-    near-neutral: C1 (polearm facing direction) is unresolved, so this stays a small, non-load-bearing signal — a
-    fighter angles slightly off-line (a partial void), more so once engaged and more gathered-in. Pure (returns
-    facing; the wrapper writes c.facing)."""
+    """The per-beat facing state (I6, D6) — stance (closed/not) × grip_position × the U7 weapon-class facing REGIME
+    (weapon_physics.facing_pref: a 1H fighter angles PROFILE, a 2H weapon SQUARES up). [U7/ED-PC-0020] the regime term
+    is multiplicative and K=0-gated (FACING_REGIME_K), so at landing the multiplier is exactly 1.0 — byte-identical,
+    and the C2 property (two weapons, same stance/grip → identical facing) still holds NUMERICALLY at K=0; the U9
+    recalibration flips FACING_REGIME_K, at which point facing becomes weapon-class-aware (the C2 reversal, Jordan-
+    resolved). Ships near-neutral (C1 polearm facing DIRECTION still unresolved). Pure (returns facing; wrapper writes c.facing)."""
     base = FACING_VOID_K * (1.0 if closed else 0.5)
-    return base * (0.5 + 0.5 * getattr(c, 'grip_position', 0.0))
+    base = base * (0.5 + 0.5 * getattr(c, 'grip_position', 0.0))
+    return base * (1.0 + cfg['FACING_REGIME_K'] * WP.facing_pref(c.w))   # U7/ED-PC-0020: weapon-class facing regime (1H profile / 2H square) — K=0 makes the multiplier exactly 1.0 (byte-identical, C2 still holds numerically), the U9 recalibration flips FACING_REGIME_K
 
 def range_utilization(c, measure_gap, cfg):
     """The AVAILABLE swing-room this beat, in [0,1], derived from how close the exchange is (measure_gap). 1.0 at
@@ -688,6 +706,8 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
     legib -= cfg['LEGIB_DISTRACT_K']*WP.distraction(aggressor.w)   # morphology-rearch Phase B5: a feathered/tasselled weapon's ornament motion degrades the read — DERIVED, 0 for the (typical) unadorned weapon
+    legib -= cfg['LEGIB_EDGELINE_K']*WP.edge_lines(aggressor.w)   # U3/ED-PC-0018: a double/false edge's return-cut ambiguity degrades the read (same sign as distraction) — K=0 until U9, 0 for a plain-single/edgeless weapon
+    legib += cfg['CHOKE_ACCURACY_K']*choke_counterbalance(aggressor, cfg)   # U5/ED-PC-0019: a head-heavy pole CHOKED UP to counterbalance telegraphs / loses fine precision -> reads EASIER (more legible). K=0 until U9; 0 at grip=0 / for a compact weapon / a half-sword form.
     # SWING-ROOM LEGIBILITY (I5, D4/D5): a broad swing that cannot fully develop in cramped quarters is MORE
     # constrained and reads EASIER — weighted by the SELECTED element's own (1-pc_sel) (a thrust, pc_sel~1, is
     # unaffected) and by how little room is left (1-range_avail). Exactly 0 at range_avail=1.0 (the I1/I5
@@ -737,8 +757,9 @@ def bind_sigma(aggressor, defender, cfg, TR):
                * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(aggressor.w))   # the AGGRESSOR's wavy edge disrupts the defender's read
     tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
+    spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w) - WP.spine(defender.w))   # U3/ED-PC-0018: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press, winden) — a separate physical fact from the lever-arm in `lev`, so it stays its own K=0-ablatable primitive (not multiplied into leverage, which would destroy its ablation-falsifiability — §2.3). 0 for a double-edged/edgeless weapon.
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
-    return lev + catch + tac + strq + wound
+    return lev + catch + tac + strq + spine + wound
 
 # ---------- initiative substrate (three-phase Vor / Nach / Indes ~ sen; culture-neutral) ----------
 # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert): seizure_score + initiative_seize removed. The

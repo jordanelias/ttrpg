@@ -6,6 +6,16 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **U9 test-hygiene follow-up (from ED-PC-0021 adversarial review, 2026-07-23).** `test_combat_choke.py::
+  test_both_channels_live_not_dead` writes the shared `weapon_physics.CHOKE_THRUST_K` module global and
+  resets it to `0.0` in its `finally`, leaking `0.0` to every later test module. Harmless at the shipped
+  `K=0` (the finally restores the correct default), but it **masks** the D2-gate breakage when the source
+  constant is flipped for review — a full-suite run of a flipped `CHOKE_THRUST_K` hides that
+  `test_thrust_protection_grip_invariant` fails (see `audit/2026-07-04-weapon-morphology-granularity/
+  u9_adversarial_review_v1.md` §4). Fix when next touching these tests: replace the raw global write with
+  a `monkeypatch`/`cfg`-scoped override so module state never leaks across tests. Not blocking; no ED
+  allocated (folds into the eventual CHOKE_THRUST activation ruling, if (b)).
+
 - **ED-PC-0007 (DEFERRED 2026-07-08, Jordan: "Defer PC") — pessimist-audit PC verdicts do NOT execute now.**
   The pessimist-action audit (ED-IN-0027) judged the discrete `combat_v30 §4` ACTIONS menu, but that menu is
   **PARTIALLY SUPERSEDED** (ED-900): its resolution layer is replaced by the canonical continuous resolver

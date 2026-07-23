@@ -44,6 +44,7 @@
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     background: var(--page-plane);
     color: var(--text-primary);
@@ -52,7 +53,12 @@
     padding: 12px;
     max-width: 900px;
     margin: 0 auto;
+    /* Long file paths / URLs / Key types must wrap, never push the page wider than the viewport */
+    overflow-wrap: anywhere;
   }
+
+  /* Wide content (tables) scrolls inside its own container — the page body never scrolls sideways */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   h1 { font-size: 1.25rem; margin: 4px 0 2px; }
   h2 { font-size: 1rem; margin: 0 0 10px; color: var(--text-primary); }
@@ -76,6 +82,18 @@
   .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
   @media (min-width: 700px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Phone tuning: tighter chrome, comfortable tap targets, no cramped headings */
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    section.card { padding: 12px; border-radius: 8px; }
+    h1 { font-size: 1.15rem; }
+    .stat-tile .value { font-size: 1.3rem; }
+    /* give accordion headers a finger-friendly height */
+    details.acc > summary { padding: 12px; }
+    /* let long key names wrap instead of forcing the 2-col reference tables wide */
+    .kv-table td.k { white-space: normal; }
   }
 
   ul.plain { list-style: none; margin: 0; padding: 0; }
@@ -289,85 +307,127 @@
   .kv-table td.k { font-weight: 600; white-space: nowrap; color: var(--text-primary); }
   .ref-note { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; }
   .status-pill { font-size: 0.72rem; padding: 1px 6px; border-radius: 4px; background: var(--page-plane); border: 1px solid var(--border); color: var(--text-secondary); }
+
+  /* top-level section menu — separates the dashboard into explicit areas */
+  nav.sections { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 10px 0 12px; margin-bottom: 6px; background: var(--page); border-bottom: 1px solid var(--border); }
+  nav.sections button { font: inherit; font-size: 0.86rem; padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--page-plane); color: var(--text-secondary);
+    cursor: pointer; white-space: nowrap; }
+  nav.sections button:hover { color: var(--text-primary); }
+  nav.sections button.active { background: var(--accent, #ff8c42); border-color: var(--accent, #ff8c42);
+    color: #fff; font-weight: 600; }
+  nav.sections a.navlink { text-decoration: none; }
+  @media (max-width: 640px) { nav.sections { gap: 4px; padding: 8px 0; }
+    nav.sections button { padding: 5px 9px; font-size: 0.8rem; } }
+  section.card[hidden] { display: none; }
 </style>
 </head>
 <body>
   <h1>Valoria — what's been happening</h1>
-  <div class="meta"><a href="browse.html">⇄ browse modules &amp; primitives</a> — the interactive by-chain / by-primitive explorer</div>
   <div class="meta" id="generated-meta">loading…</div>
 
-  <section class="card" id="decisions-card">
+  <nav class="sections" id="section-nav">
+    <button data-target="audit" class="active">🔬 Vector Audit</button>
+    <button data-target="work">📋 Work &amp; Decisions</button>
+    <button data-target="balance">⚔ Balance &amp; Victory</button>
+    <button data-target="audits">✔ Audits</button>
+    <a class="navlink" href="browse.html"><button>🧭 Explore ↗</button></a>
+    <button data-target="explore">🔑 Keys &amp; Actions</button>
+    <button data-target="overview">🗺 Overview</button>
+    <button data-target="meta">⚙ Meta</button>
+  </nav>
+
+  <!-- ═══ Vector Audit ═══ -->
+  <section class="card" data-section="audit" id="vectoraudit-card">
+    <h2>Vector Audit &mdash; structural findings (8 modes)</h2>
+    <div id="vectoraudit-body" class="empty-state">loading…</div>
+  </section>
+  <section class="card" data-section="audit" id="vectoraudit-note">
+    <div class="ref-note">These 8 modes feed the whole-tree <b>Missing</b> ledger (which also scans
+      contracts, sim stubs, prose markers, …), ranked by severity — see <b>Work &amp; Decisions</b>.</div>
+  </section>
+
+  <!-- ═══ Work & Decisions ═══ -->
+  <section class="card" data-section="work" id="decisions-card">
     <h2>Needs your decision</h2>
     <div id="decisions-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="reviewstate-card">
-    <h2>Repository state</h2>
-    <div id="reviewstate-body" class="empty-state">loading…</div>
+  <section class="card" data-section="work" id="missing-card">
+    <h2>Missing &mdash; what's incomplete</h2>
+    <div id="missing-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="drift-card">
-    <h2>Reconciliation status</h2>
-    <div id="drift-body" class="empty-state">loading…</div>
-  </section>
-
-  <section class="card" id="workplan-card">
+  <section class="card" data-section="work" id="workplan-card">
     <h2>North star — workplan</h2>
     <div id="workplan-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="queue-card">
+  <section class="card" data-section="work" id="queue-card">
     <h2>Work by area</h2>
     <div id="queue-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="proposals-card">
+  <section class="card" data-section="work" id="proposals-card">
     <h2>Proposals awaiting ratification</h2>
     <div id="proposals-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="audits-card">
-    <h2>Audit &amp; balance verdicts</h2>
-    <div id="audits-body" class="empty-state">loading…</div>
+  <section class="card" data-section="work" id="drift-card">
+    <h2>Reconciliation status</h2>
+    <div id="drift-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="balance-card">
-    <h2>Balance &amp; victory data</h2>
-    <div id="balance-body" class="empty-state">loading…</div>
-  </section>
-
-  <section class="card" id="registers-card">
+  <section class="card" data-section="work" id="registers-card">
     <h2>Registers</h2>
     <div id="registers-body" class="empty-state">loading…</div>
   </section>
 
-  <section class="card" id="shape-card">
-    <h2>Repository shape</h2>
-    <div id="shape-body" class="empty-state">loading…</div>
+  <!-- ═══ Balance & Victory ═══ -->
+  <section class="card" data-section="balance" id="balance-card">
+    <h2>Balance &amp; victory data</h2>
+    <div id="balance-body" class="empty-state">loading…</div>
   </section>
 
-  <section class="card" id="keys-card">
+  <!-- ═══ Audits ═══ -->
+  <section class="card" data-section="audits" id="audits-card">
+    <h2>Audit &amp; balance verdicts</h2>
+    <div id="audits-body" class="empty-state">loading…</div>
+  </section>
+
+  <!-- ═══ Keys & Actions (deep Explore lives in browse.html) ═══ -->
+  <section class="card" data-section="explore" id="explore-intro-card">
+    <h2>Explore the module spine</h2>
+    <div class="ref-note">The full interactive explorer — modules · primitives · values · definitions,
+      by chain / by primitive / by definition / by value — is on the
+      <a href="browse.html">browse page ↗</a>. Quick reference below.</div>
+  </section>
+  <section class="card" data-section="explore" id="keys-card">
     <h2>Keys &amp; substrates</h2>
     <div id="keys-body" class="empty-state">loading…</div>
   </section>
-
-  <section class="card" id="actions-card">
+  <section class="card" data-section="explore" id="actions-card">
     <h2>Character actions &amp; interactions</h2>
     <div id="actions-body" class="empty-state">loading…</div>
   </section>
 
-  <div class="grid-2">
-    <section class="card" id="ci-card">
+  <!-- ═══ Overview ═══ -->
+  <section class="card" data-section="overview" id="reviewstate-card">
+    <h2>Repository state</h2>
+    <div id="reviewstate-body" class="empty-state">loading…</div>
+  </section>
+  <section class="card" data-section="overview" id="shape-card">
+    <h2>Repository shape</h2>
+    <div id="shape-body" class="empty-state">loading…</div>
+  </section>
+
+  <!-- ═══ Meta ═══ -->
+  <div class="grid-2" data-section="meta">
+    <section class="card" data-section="meta" id="ci-card">
       <h2>CI health</h2>
       <div id="ci-body" class="empty-state">loading…</div>
     </section>
-    <section class="card" id="currency-card">
+    <section class="card" data-section="meta" id="currency-card">
       <h2>Currency drift</h2>
       <div id="currency-body" class="empty-state">loading…</div>
     </section>
   </div>
-
-  <section class="card" id="activity-card">
+  <section class="card" data-section="meta" id="activity-card">
     <h2>Recent activity</h2>
     <div id="github-stats" class="stat-row" style="margin-bottom:10px;"></div>
     <div id="activity-body" class="empty-state">loading…</div>
@@ -598,7 +658,7 @@ function renderAudits(d) {
     const key = e.subsystem || 'uncategorized';
     (bySubsystem[key] = bySubsystem[key] || []).push(e);
   }
-  let html = '<table class="audit-table"><thead><tr><th>Type</th><th>Verdict</th><th>Date</th><th>Scope</th></tr></thead><tbody>';
+  let html = '<div class="table-wrap"><table class="audit-table"><thead><tr><th>Type</th><th>Verdict</th><th>Date</th><th>Scope</th></tr></thead><tbody>';
   for (const subsystem of Object.keys(bySubsystem).sort()) {
     html += `<tr><td colspan="4" class="subsystem-group-header">${esc(subsystem)}</td></tr>`;
     for (const e of bySubsystem[subsystem].sort((a, b) => (a.audit_type || '').localeCompare(b.audit_type || ''))) {
@@ -615,7 +675,7 @@ function renderAudits(d) {
       </tr>`;
     }
   }
-  html += '</tbody></table>';
+  html += '</tbody></table></div>';
   if (au.entries.some(e => e.audit_type === 'simulation_balance')) {
     html += `<div class="decision-source" style="margin-top:8px;">
       ⚠ no n≥100 full-campaign balance run is persisted anywhere in the repo — only two small-n
@@ -734,10 +794,10 @@ function renderRegisters(d) {
       <div class="stat-tile"><div class="value">${ed.total_needs_jordan ?? 0}</div><div class="label">need Jordan's ruling</div></div>
       <div class="stat-tile"><div class="value">${patch.total ?? 0}</div><div class="label">active patches</div></div>
     </div>
-    <table class="lane-table">
+    <div class="table-wrap"><table class="lane-table">
       <thead><tr><th>Lane</th><th>Open</th><th>Needs Jordan</th></tr></thead>
       <tbody>${laneRows}</tbody>
-    </table>
+    </table></div>
     ${patchStatuses ? `<div class="decision-source">patch register: ${patchStatuses}</div>` : ''}`;
 }
 
@@ -890,6 +950,84 @@ function renderActions(d) {
   el.innerHTML = html;
 }
 
+function renderVectorAudit(d) {
+  const el = document.getElementById('vectoraudit-body');
+  const v = d.vector_audit;
+  if (!v || v.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  let html = `<div style="margin-bottom:8px;"><span class="chip">layer ${esc(v.layer||'?')}</span> `
+    + `<span class="chip">${v.design_docs||'?'} docs</span>`
+    + (v.cascade_truncated_calls ? ` <span class="chip critical">Mode-D cap tripped ${v.cascade_truncated_calls.toLocaleString()}×</span>` : '')
+    + `</div>`;
+  html += '<table class="lane-table"><thead><tr><th>Mode</th><th style="text-align:right;white-space:nowrap;">Count</th></tr></thead><tbody>';
+  for (const m of (v.modes || [])) {
+    const cnt = (m.total > m.shown) ? `${m.shown} / ${m.total}` : `${m.total}`;
+    html += `<tr><td style="white-space:nowrap;"><b>${esc(m.mode)}</b> ${esc(m.label)}</td>`
+      + `<td style="text-align:right;white-space:nowrap;">${cnt}</td></tr>`;
+    if (m.sample && m.sample.length) {
+      html += `<tr><td colspan="2" class="ref-note" style="padding-top:0;">`
+        + m.sample.map(s => esc(s)).join(' · ')
+        + (m.total > m.sample.length ? ` …` : '') + `</td></tr>`;
+    }
+  }
+  html += '</tbody></table>';
+  html += `<div class="ref-note">${esc(v.note)}</div>`;
+  el.innerHTML = html;
+}
+
+function renderIncompleteness(d) {
+  const el = document.getElementById('missing-body');
+  const m = d.incompleteness;
+  if (!m || m.available === false) { el.innerHTML = '<div class="unavailable">data unavailable</div>'; return; }
+  if (!m.total) { el.innerHTML = '<div class="empty-state">nothing outstanding — the whole-tree scan is clean.</div>'; return; }
+  const sev = m.by_severity || {};
+  let html = `<div style="margin-bottom:8px;"><span class="chip warning">▲ ${m.total} findings</span> `
+    + `<span class="chip critical">${sev.high || 0} high</span> `
+    + `<span class="chip warning">${sev.med || 0} med</span> `
+    + `<span class="chip">${sev.low || 0} low</span> `
+    + `<span class="chip">${m.category_count} categories</span></div>`;
+  // per-lane spread
+  const lanes = m.by_lane || {};
+  if (Object.keys(lanes).length) {
+    html += '<div style="margin-bottom:10px;">'
+      + Object.entries(lanes).map(([k, v]) => `<span class="chip">${esc(k)} ${v}</span>`).join(' ')
+      + '</div>';
+  }
+  // HIGH-severity highlights: the port-blocking holes, grouped by category, with sample findings
+  if ((m.highlights || []).length) {
+    html += '<div class="ref-note" style="margin:6px 0;">High-severity findings (samples; full detail in INCOMPLETENESS.md):</div>';
+    for (const h of m.highlights) {
+      html += `<details class="acc"><summary>${esc(h.label)} <span class="acc-count">— ${h.count}</span></summary><div class="acc-body"><ul class="tight">`
+        + h.items.map(it => {
+            const link = it.path ? srcLink(it.path) : `<span>${esc(it.title)}</span>`;
+            const lane = it.lane ? ` <span class="status-pill">${esc(it.lane)}</span>` : '';
+            return `<li>${link}${lane}</li>`;
+          }).join('')
+        + (h.count > h.items.length ? `<li class="ref-note">…${h.count - h.items.length} more</li>` : '')
+        + `</ul></div></details>`;
+    }
+  }
+  // full category census (severity-ordered), with a severity dot
+  const sevDot = { high: '🔴', med: '🟡', low: '⚪' };
+  html += `<details class="acc"><summary>All categories <span class="acc-count">— ${m.category_count}</span></summary><div class="acc-body"><table class="lane-table"><tbody>`
+    + (m.categories || []).map(c => `<tr><td>${sevDot[c.severity] || ''} ${esc(c.label)}</td><td style="text-align:right;">${c.count}</td></tr>`).join('')
+    + `</tbody></table></div></details>`;
+  // prose rollup
+  const pr = m.prose_rollup || {};
+  if (Object.keys(pr).length) {
+    html += '<div style="margin:8px 0;">'
+      + Object.entries(pr).map(([k, v]) => `<span class="chip">${esc(k)} ${v}</span>`).join(' ')
+      + '</div>';
+  }
+  // honest self-surfaced blind spots
+  if ((m.coverage_gaps || []).length) {
+    html += `<details class="acc"><summary>Ledger blind spots <span class="acc-count">— ${m.coverage_gaps.length}</span></summary><div class="acc-body"><ul class="tight">`
+      + m.coverage_gaps.map(g => `<li>${esc(g)}</li>`).join('')
+      + `</ul></div></details>`;
+  }
+  html += `<div class="ref-note">${esc(m.note)}</div>`;
+  el.innerHTML = html;
+}
+
 async function load() {
   try {
     const res = await fetch('data.json', { cache: 'no-store' });
@@ -901,6 +1039,8 @@ async function load() {
     renderWorkplan(d);
     renderQueue(d);
     renderProposals(d);
+    renderVectorAudit(d);
+    renderIncompleteness(d);
     renderAudits(d);
     renderBalance(d);
     renderRegisters(d);
@@ -914,6 +1054,25 @@ async function load() {
     document.getElementById('generated-meta').textContent = 'failed to load data.json: ' + e;
   }
 }
+
+// ── top-level section switching: show one area at a time (explicit separation) ──
+function showSection(target) {
+  document.querySelectorAll('section.card[data-section], [data-section].grid-2').forEach(c => {
+    c.hidden = (c.getAttribute('data-section') !== target);
+  });
+  document.querySelectorAll('nav.sections button[data-target]').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-target') === target);
+  });
+  try { history.replaceState(null, '', '#' + target); } catch (_) {}
+}
+document.querySelectorAll('nav.sections button[data-target]').forEach(b => {
+  b.addEventListener('click', () => showSection(b.getAttribute('data-target')));
+});
+// default section from the URL hash, else Vector Audit
+const _initial = (location.hash || '').replace('#', '');
+const _known = new Set(['audit', 'work', 'balance', 'audits', 'explore', 'overview', 'meta']);
+showSection(_known.has(_initial) ? _initial : 'audit');
+
 load();
 </script>
 </body>

@@ -212,6 +212,12 @@ def derive(w):
 # redesign/) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a SEPARATE floored Phi_room for
 # percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone heft-room multiply violates C4).
 SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation (a fully-gathered swing never drops below half its open-measure authority)
+# U5/ED-PC-0019 — polearm choke counterbalance (thrust side): choking UP a head-heavy pole (grip>0) to counterbalance
+# its forward mass shortens the effective lever a hair, a SHALLOW, FLOORED loss even on an axial thrust. K=0 keeps
+# the grip-invariant-thrust first principle EXACTLY (phi_grip('point')==1.0 at every grip); the U9 recalibration
+# flips CHOKE_THRUST_K under ablation-gate. The accuracy/legibility side is systems.choke_counterbalance (CHOKE_ACCURACY_K).
+CHOKE_THRUST_K = 0.0      # [U5/ED-PC-0019, K=0] shallow thrust-authority loss per unit choke (grip_position in [0,1])
+CHOKE_THRUST_FLOOR = 0.75 # a choked thrust never drops below this fraction (a thrust is still a thrust)
 PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
 
 def grip_swing_ratio(w, grip):
@@ -238,7 +244,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
     if sel_head == 'point':
-        return 1.0
+        return max(CHOKE_THRUST_FLOOR, 1.0 - CHOKE_THRUST_K * grip)   # U5: grip-invariant (==1.0) at K=0 — the first principle intact; a shallow floored choke-loss once U9 flips CHOKE_THRUST_K
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']
@@ -510,12 +516,75 @@ def distraction(w):
 VIBRATION_K = 0.04  # [SIM-CALIBRATE] per mm of edge-undulation amplitude; flamberge's 15mm amplitude -> ~0.45, a
                      #   real but not dominant tactile disruption (bind_sigma's tac term is one of five summands).
 
+def facing_pref(w):
+    """U7/ED-PC-0020 — a weapon's preferred FACING REGIME, signed in [-1, 1]: a ONE-handed fighter keeps the off-side
+    back and fights bladed/PROFILE (+, a narrower target, more voiding); a TWO-handed weapon commits both hands and
+    must SQUARE UP to bring it on line (−, more profile presented). Emergent from `hands` (the regime is nearly
+    categorical there — 'hands separates the twins': a 1H vs 2H version of the same blade face opposite regimes),
+    with a mild reach saturation (a longer weapon commits its regime harder). No weapon name. Pure. Wired multiplicative
+    into systems.facing_target (FACING_REGIME_K, K=0 -> inert/byte-identical until the U9 recalibration)."""
+    sign = 1.0 if w['hands'] == 1 else -1.0
+    return sign * (0.85 + 0.15 * math.tanh(2.0 * w['head_len']))
+
 def edge_vibration(w):
     """The weapon's peak edge-undulation intensity — the MAX amplitude across its located elements (the most
     extreme undulating segment dominates the tactile signature felt by an opponent bound against it). In [0,1);
     0 for the (typical) plain-edged weapon. Pure."""
     amp = max((e.get('edge_undulation', {}).get('amplitude_mm', 0.0) for e in w.get('elements', ())), default=0.0)
     return math.tanh(VIBRATION_K * amp)
+
+
+# ════════════════════ U3 — EDGE-COUNT PRIMITIVE: per-element edges={sides∈{0,1,2}, false_edge_frac} (ED-PC-0018) ═
+# consolidation_v1.md §2.1-2.3. `elements[].edges` is a physical/attested blade fact (double vs single vs edgeless;
+# a clipped false/back edge), landed as data like edge_undulation/adornments. It wires ONE channel per physical fact
+# (§2.3, no double-counts): a double/false edge buys read-difficulty (edge_lines -> systems.legibility) + grab-resist
+# (grab_hazard -> contact.grab_sigma); a single edge buys the spine-press bearing surface (spine -> systems.bind_sigma).
+# Every reader is pure, iterates only elements that carry an `edges` key (a blunt/edgeless element has none), returns
+# 0 for a weapon with no edges data (BYTE-IDENTICAL until the data + the K=0-gated downstream constants land — U9
+# flips the constants). No weapon name — emergent from the per-element data.
+
+def _blade_edges(w):
+    """Yield each striking element's edges descriptor {sides, false_edge_frac} — only elements that carry one (a
+    blunt/edgeless element with no `edges` key is skipped). Pure helper."""
+    for e in w.get('elements', ()):
+        ed = e.get('edges')
+        if ed is not None:
+            yield ed
+
+def edge_lines(w):
+    """Cut-line entropy — a double or false/back edge affords off-line and RETURN cuts, so the wielder's intent reads
+    HARDER (the mechanical payload of a back-swing cut IS the unreadable return line; §2.3, JD-5). Per blade element:
+    a double edge (sides==2) contributes the full return-line ambiguity (1.0); a single edge with a sharpened false
+    edge contributes its false_edge_frac; a plain single or an edgeless element contributes 0. Weapon value = MAX over
+    its blade elements (the most ambiguous edge dominates the read). In [0,1]; 0 for a plain-single/edgeless weapon.
+    Pure — wired into systems.legibility (LEGIB_EDGELINE_K, K=0 until U9)."""
+    def _el(ed):
+        s = ed.get('sides', 1)
+        if s == 2: return 1.0
+        if s == 1: return ed.get('false_edge_frac', 0.0)
+        return 0.0
+    return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
+
+def spine(w):
+    """Spine as bearing surface — a SINGLE edge leaves a rigid non-cutting back (a spine) to press/bind against the
+    opposing blade (hand-high spine-press, Fühlen/winden); a double edge has no spine, an edgeless needle none worth
+    pressing. Continuous: (sides==1)·(1−false_edge_frac) per element — a longer false/back edge eats the plain spine.
+    Weapon value = MAX over blade elements. In [0,1]; 0 for a double-edged or edgeless weapon. Pure — wired into
+    systems.bind_sigma (BIND_SPINE_K, K=0 until U9)."""
+    def _el(ed):
+        return (1.0 - ed.get('false_edge_frac', 0.0)) if ed.get('sides', 1) == 1 else 0.0
+    return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
+
+def grab_hazard(w):
+    """Grab hazard — a LIVE double edge resists being seized bare-handed (an unskilled/ill-timed grab self-injures); a
+    plain single edge is half-hazardous (the spine is safe to grab); an edgeless element is safe. Per element:
+    (sides + (sides==1)·false_edge_frac)/2 -> 0 edgeless, 0.5 plain single, up to ~0.6 clipped single, 1.0 double.
+    Weapon value = MAX over blade elements. In [0,1]; 0 for an edgeless weapon. Pure — wired into contact.grab_sigma
+    (GRAB_EDGE_K, K=0 until U9)."""
+    def _el(ed):
+        s = ed.get('sides', 1)
+        return (s + (ed.get('false_edge_frac', 0.0) if s == 1 else 0.0)) / 2.0
+    return max((_el(ed) for ed in _blade_edges(w)), default=0.0)
 
 
 # ════════════════════ STAGE 3e — HEFT / TEMPO_SHAPE / HANDLING: the wt/spd/hand de-leak (Phase B6) ════════════════
