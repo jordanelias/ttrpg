@@ -51,30 +51,27 @@ def test_table_covers_full_roster():
         assert set(row) == set(C.CAPABILITIES)
 
 
-def test_pure_cutters_have_no_gates():
-    """[UPDATED 2026-07-08, U2/ED-PC-0011/ED-PC-0012] Originally asserted greatsword/sabre have NO alternate-
-    mode gates at all. The graded secondary-affordance checks (ED-PC-0011) gave both a real 'point' token, so
-    the ORIGINAL premise ("pure cutter" = zero alt-mode capability) is now split into two different cases,
-    validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/physics grounding:
-    - greatsword's secondary thrust (half-sword-to-the-gaps) is REAL, historically well-attested capability —
-      removed from this test entirely; it is no longer a "pure cutter" and correctly so (see
-      test_use_mode_selection_emerges_from_primitives for its accepted changer status).
-    - sabre's secondary thrust is a FLAGGED, NOT-YET-FIXED BUG (ED-PC-0012): its own point geometry is weak
-      (0.26, and scimitar/falchion share the same class at 0.16/0.23) but core.coupling's DELIVERY['point']
-      does not scale by it (unlike 'cut', fixed this session via CUT_AUTH_REF) — verified directly that
-      sabre/scimitar/falchion/hook_sword's secondary point ALL score an IDENTICAL coupling at 'light' armour
-      regardless of their wildly different geometry, a floor-locked artifact of core._transmit's puncture path,
-      not earned capability. sabre is KEPT in this test, deliberately left failing (not silently patched or
-      quietly dropped) until ED-PC-0012's THRUST_AUTH_REF fix lands and correctly suppresses this floor-locked
-      credit — matching this suite's existing convention (test_gap_game_poleaxe_spikes_plate,
-      test_falsifiable_heft_ordering) of a documented, intentionally-red assertion over a silently-adjusted one.
-    """
-    assert not any(C.capability_table()['sabre'].values()), (
-        "sabre should have zero alt-mode gates (a dedicated slashing sabre has no genuine thrust/percussion "
-        "capability) but currently shows gap_thrust=True — a KNOWN, FLAGGED bug (ED-PC-0012): core.coupling's "
-        "DELIVERY['point'] doesn't scale by the candidate's own thrust magnitude, so sabre's weak (0.26) "
-        "incidental point gets full credit. See this test's docstring."
-    )
+def test_weak_incidental_point_is_derated_not_gated():
+    """[RESOLVED 2026-07-23, ED-PC-0027 emergence-first] The ORIGINAL premise ("pure cutter" = zero alt-mode gates)
+    was a FIAT. A sabre physically HAS a point and CAN thrust — the categorical "sabre has zero gates" assertion is
+    the same kind of imposed-expectation the greatsword shed (its half-sword thrust is real; it was removed from this
+    test). A sabre's thrust is not ABSENT, it is WEAK — and weakness is expressed CONTINUOUSLY, not by a gate: the
+    fiat is retired, and the mechanism that carries the weakness is ED-PC-0012's THRUST_AUTH_REF (now live in
+    core.coupling), which scales a point token's DELIVERY by its own derived thrust magnitude. A weak incidental
+    point (sabre eff ~0.26 < THRUST_AUTH_REF 0.52) is DE-RATED; a genuine thruster (eff >= that) is not. This is the
+    emergent-correct expression: availability is physical (a sabre affords a point), efficacy is continuous."""
+    # sabre affords a point (it is NOT a pure cutter — like the greatsword, correctly)
+    assert 'point' in S.afforded_heads(C.WEAPONS['sabre']), "a sabre physically affords a thrust"
+    # but its WEAK incidental point is continuously DE-RATED vs a genuine thruster's point at the SAME coupling call
+    sabre_pt = S.afforded_heads(C.WEAPONS['sabre'])['point']          # (eff, dm, gap, perc, pc, ref)
+    rapier_pt = S.afforded_heads(C.WEAPONS['rapier'])['point']
+    assert sabre_pt[0] < core.THRUST_AUTH_REF <= rapier_pt[0], (
+        f"sabre point eff {sabre_pt[0]:.2f} should be a weak sub-threshold point; rapier {rapier_pt[0]:.2f} a real one")
+    cpl_sabre = core.coupling('point', 'light', perc=core.PERC_AUTH_REF, gap_prec=sabre_pt[2], eff=sabre_pt[0])
+    cpl_rapier = core.coupling('point', 'light', perc=core.PERC_AUTH_REF, gap_prec=rapier_pt[2], eff=rapier_pt[0])
+    assert cpl_sabre < cpl_rapier, (
+        f"the weak sabre point must be DE-RATED in coupling ({cpl_sabre:.3f}) vs a genuine thruster ({cpl_rapier:.3f}) "
+        "— the continuous THRUST_AUTH_REF mechanism, not a binary gate")
 
 
 # ── I7b CONTACT AXIS (D8/D9, 2026-07-03) ───────────────────────────────────────────────────────────

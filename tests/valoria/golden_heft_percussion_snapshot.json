@@ -8,7 +8,7 @@
   "percussion": 0.0
  },
  "bear_spear": {
-  "heft": 2.5465849179479694,
+  "heft": 0.7659179237231075,
   "percussion": 0.0
  },
  "bec_de_corbin": {
@@ -28,11 +28,11 @@
   "percussion": 0.0
  },
  "dangpa": {
-  "heft": 2.7341689470893003,
+  "heft": 0.9157714305384983,
   "percussion": 0.0
  },
  "estoc": {
-  "heft": 1.5013146100758952,
+  "heft": 1.914794809307769,
   "percussion": 1.7133200487497202
  },
  "falchion": {
@@ -100,11 +100,11 @@
   "percussion": 8.0
  },
  "main_gauche": {
-  "heft": 0.2560193141516861,
+  "heft": 0.39960935150770827,
   "percussion": 0.0
  },
  "misericorde": {
-  "heft": 0.3415335562482936,
+  "heft": 0.3080322084538585,
   "percussion": 0.0
  },
  "naginata": {
@@ -144,11 +144,11 @@
   "percussion": 0.0
  },
  "rapier": {
-  "heft": 0.3736300320709167,
+  "heft": 0.7575927289000304,
   "percussion": 0.0
  },
  "rondel": {
-  "heft": 0.4425237486314279,
+  "heft": 0.39128415668463107,
   "percussion": 0.0
  },
  "sabre": {
@@ -168,7 +168,7 @@
   "percussion": 0.0
  },
  "spear": {
-  "heft": 1.4336740119139546,
+  "heft": 0.6660155858461805,
   "percussion": 0.0
  },
  "spetum": {
@@ -180,7 +180,7 @@
   "percussion": 0.0
  },
  "stiletto": {
-  "heft": 0.34034437086092706,
+  "heft": 0.25808103951539496,
   "percussion": 0.0
  },
  "szabla": {
@@ -200,7 +200,7 @@
   "percussion": 0.0
  },
  "yari": {
-  "heft": 1.367882839512296,
+  "heft": 0.4662109100923264,
   "percussion": 0.0
  }
 }

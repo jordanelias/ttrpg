@@ -142,7 +142,7 @@ def balance_eff(c, fat, cfg):
     return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
 
-def _recovery_mode_commitment(w, g, cfg):
+def _recovery_mode_commitment(w, g, cfg, sel_pc=None, room=1.0):
     """The mode-blended balance-recovery commitment at grip-position g — the shared physical core BOTH
     recoverability_factor and weapon_tempo's own balance-recovery term read: SWING arrest (sqrt of the re-
     pivoted MoI, GATED by the forward static moment so a centre-balanced pole is not mis-ranked as
@@ -152,12 +152,26 @@ def _recovery_mode_commitment(w, g, cfg):
     facts a weapon's balance-recovery genuinely depends on. Dimensionless vs the 2H cut-thrust anchor (1.0 =
     neutral). Extracted so weapon_tempo can reuse this core WITHOUT recoverability_factor's own 1H/2H-control-
     credit and lunge terms, which weapon_tempo already applies as its own separate, differently-scoped cadence
-    penalties (re-applying them here would double-count). Pure."""
+    penalties (re-applying them here would double-count). Pure.
+
+    MODE-AWARE + MEASURE-AMPLIFIED (ED-PC-0027, the T_vuln undefended-time model): this core doubles as the
+    SELECTED-MODE vulnerability window a fighter carries while executing an attack (delivery + recovery), driven by
+    two args that DEFAULT to the byte-identical prior behaviour:
+      · `sel_pc` — the point_concentration of the SELECTED use-mode (None -> whole-weapon pc). A poleaxe that chose
+        its spike (sel_pc high) retracts on-line like a thrust (low commitment); one that chose its hammer (sel_pc
+        low) carries the full swing-arc commitment. So *choosing* the thrust genuinely lowers the window — the mode
+        asymmetry the whole-weapon pc could not see.
+      · `room` — the swing-arc's available measure (1.0 = full, default). A swing in TIGHT measure is caught mid-arc
+        (cannot develop or arrest cleanly) so its commitment RISES (EXPOSE_CLOSE_K); a thrust retracts along the line
+        regardless, so the C_thrust branch is measure-INVARIANT (the same rigid-body reasoning as close_efficacy's
+        point->1.0). Grounding: Silver's 'times' (the thrust is the shortest, safest line) + 'closer = less able to
+        swing'. room=1.0 -> no amplification -> byte-identical."""
     a = WP.at_grip(w, g)
     I_g, S_g = max(1e-9, a['I_g']), a['S_g']
     I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
-    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
-    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref)
+    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']   # SELECTED-mode thrust-ness (fallback: whole-weapon)
+    close = 1.0 + cfg['EXPOSE_CLOSE_K'] * (1.0 - max(0.0, min(1.0, room)))         # tighter room -> a swing is caught mid-arc; thrust invariant
+    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref) * close
     C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
     return pc * C_thrust + (1 - pc) * C_swing
 
@@ -174,8 +188,10 @@ def recoverability_factor(c, cfg):
     I_g = max(1e-9, WP.at_grip(w, g)['I_g'])
     I_ref = cfg['REC_I_REF']
     two = 1.0 if w['hands'] == 2 else 0.0
-    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
-    C_mode = _recovery_mode_commitment(w, g, cfg)
+    sel_pc = getattr(c, 'sel_pc', None)                                        # SELECTED-mode thrust-ness (ED-PC-0027: T_vuln is mode-aware)
+    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']   # fallback: whole-weapon (single-mode weapons: sel_pc==whole-weapon pc, byte-identical)
+    room = getattr(c, 'range_avail', 1.0)                                      # tight measure amplifies a SWING's window (a thrust is measure-invariant)
+    C_mode = _recovery_mode_commitment(w, g, cfg, sel_pc=sel_pc, room=room)
     # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
     tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * two)               # grip_len in metres (U0)
     tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'])               # REC_GRIP_REF in metres (U0)
@@ -569,14 +585,19 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         h=next(iter(heads))
     else:
         # greedy: the mode delivering the most damage-coupling THROUGH this armour, weighted by close-efficacy (D5:
-        # a broad arc that cannot fully develop in the close is discounted, a thrust barely). perc carries the blunt
-        # authority (a high-authority hammer's through-plate transmit) and gap_prec carries the thrust's GAP-SEEKING
-        # plate-defeat (the situational gap game), so the poleaxe's hammer and its spike are compared on the same
-        # coupling scale — and the spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02).
+        # a broad arc that cannot fully develop in the close is discounted, a thrust barely) AND discounted by its
+        # UNDEFENDED-TIME (T_vuln, ED-PC-0027). perc carries the blunt authority, gap_prec the thrust's GAP-SEEKING
+        # plate-defeat. The T_vuln safety factor 1/(1+EXPOSE_SELECT_K*max(0,exposure-1)) prices the vulnerability window
+        # of each mode: a heavy committed SWING (low sel_pc, large swing-arc MoI) leaves you open far longer than a
+        # controlled THRUST (high sel_pc, retracts on-line) — so a fighter trades damage vs exposure and, in the 1v1
+        # (no ally to cover a swing — Jordan 2026-07-23: the poleaxe's swing was a man-advantage move, the THRUST its
+        # dueling staple), thrust-capable weapons prefer the point EMERGENTLY (the poleaxe spikes at every tier), while
+        # a pure cutter with no real point keeps cutting. A mode with exposure<=1 (a clean thrust) is undiscounted.
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
                   perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
                   eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']))
-              * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd))
+              * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
+              / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift

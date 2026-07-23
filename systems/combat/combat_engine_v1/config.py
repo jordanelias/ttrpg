@@ -108,6 +108,16 @@ CFG = dict(
   # lunge). REF is the longsword anchor recomputed for the exponent (1.4**1.5 * 0.14 = 0.232) so it stays mult 1.0.
   EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=(1.4**1.5)*0.14, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,   # REF = the longsword anchor (mass**exp * pob), exact so longsword stays mult 1.0
   MOMENT_MASS_EXP=1.5, LUNGE_REF_MASS=1.4,
+  # ── T_vuln undefended-time / mode-exposure model (ED-PC-0027, 2026-07-23). The vulnerability window a fighter
+  # carries while executing an attack (delivery+recovery), reusing _recovery_mode_commitment's swing-arrest/thrust-
+  # retract core made mode-aware (sel_pc) + measure-amplified. EXPOSE_CLOSE_K: how much tight measure amplifies a
+  # SWING's window (caught mid-arc; a thrust is measure-invariant). EXPOSE_SELECT_K: how much a mode's undefended
+  # window discounts its damage-coupling in select_mode's greedy pick — so a fighter trades damage vs exposure and
+  # the poleaxe's spike EMERGES vs plate (the hammer's long window outweighs its marginal damage edge) rather than
+  # by fiat. Both [SIM-CALIBRATE] — structure from kinematics (self-consistent with _recovery_mode_commitment),
+  # magnitudes to be cross-checked against HEMA-biomechanics mocap; EXPOSE_SELECT_K calibrated so the poleaxe flips
+  # to its spike vs plate while single-mode weapons (which never reach the comparator) are untouched.
+  EXPOSE_CLOSE_K=0.6, EXPOSE_SELECT_K=0.3,
   # ── recovery model (Phase-3 Stage 2): commitment=recovery, GRIP-AWARE, normalized to a 2H cut-thrust anchor.
   # recoverability_factor reads WP.at_grip(I_g,S_g) + point_concentration + hands at the chosen grip-position. The
   # STRUCTURE (sqrt(I) swing-arrest / parallel-axis / the 1H-2H force-couple) is [ASSERTED — first-principles;
