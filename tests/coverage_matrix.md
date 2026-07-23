@@ -2,6 +2,21 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0027: honest-gauge measurement integrity (density held at 100/cell)
+- Fixed the confirmed #1 gauge distortion (fiat register M1): the per-cell **density mismatch** between
+  `make_unit→build_unit` (legacy tier footprint, ~16/cell) and the composed presets (`concentration=100`).
+  Density enters `_lanchester_strength` **linearly**, so the ~8× gap — not flanking geometry — drove
+  H3/H4/C4 to a fiat 100% (null test: dense-vs-thin, zero envelopment, already 100%).
+- **Fix:** hold density constant at `GAUGE_CONC=100` across every gauge unit by building single AND
+  composed units from the same explicit troops/concentration path (`build_army→footprint_for`);
+  `GAUGE_TROOPS=600` divides evenly under every split (1/3,2/3,1/2) → exact quantization. Verified all
+  unit types build at exactly 100.0/cell, hp_max=600.
+- **Fair-ruler result:** H1 mirror 50/50 (was 44/56); envelop/refused/wedge **flip to ~0%** (force-
+  splitting is pure downside — geometry converts to no outcome); 15/20 rows flag real engine divergence
+  (brace P2 not repelling C2/C6=57 raw; cav mirror C3=71 asym; GappedLine H7/H8 over-strong).
+- Bands NOT re-fit (§8 north star). Gauge is a manual harness (no `test_` funcs → not CI); `bat.py` has
+  its own `make_unit` → byte-exact goldens unaffected. Detail: `honest_gauge_readout.md`.
+
 ## 2026-07-23 — ED-MB-0026: explicit frontage×depth (columns×rows) + gradient-forwarding fix
 - `Subunit.width`/`depth`: both set → `footprint_for` builds an exact width×depth rectangular grid
   (density = troops/(w·d) follows) — the coupled tactical axes (wide-shallow = frontage/envelopment;
