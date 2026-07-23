@@ -1,7 +1,10 @@
 """Wide-mirror symmetry probe: is there a width-scaling side bias? A perfect mirror
 MUST be ~50/50. Test increasing frontage width across multiple seed bases."""
 import sys, os, random, statistics
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SIM = os.path.abspath(os.path.join(_HERE, '..', '..', 'tests', 'sim'))
+if _SIM not in sys.path:
+    sys.path.insert(0, _SIM)
 from mass_battle.engine import build_army, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW
 import mass_battle.config as c
 

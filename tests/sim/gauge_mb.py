@@ -54,7 +54,7 @@ from mass_battle.config import TROOPS_PER_TIER  # noqa: E402
 # fair, and any residual envelopment edge (or deficit) is the MECHANIC, not the density artifact.
 # North star (fiat register §8): calibrate to independent history (Dupuy DLEDB, Sabin), NOT to these
 # rows — the gauge stays a validation surface, never a training target.
-GAUGE_TROOPS = 600.0   # per-unit total troops; divisible by GAUGE_CONC under every historical split
+GAUGE_TROOPS = 600.0   # [canonical: audit/2026-07-22-mass-battle-stress-test/honest_gauge_readout.md §"What changed" — per-unit total chosen so every historical split (pin 1/3, 2/3; strong 1/2) divides evenly by GAUGE_CONC → exact integer-cell quantization; harness calibration, not a mechanical constant]
 GAUGE_CONC = 100.0     # per-cell troop density held constant across ALL gauge units (mid CELL_FLOOR..CELL_CAP band)
 
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]

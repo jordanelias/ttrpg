@@ -32,7 +32,7 @@ gate). `bat.py` (the byte-exact digest oracle) has its **own** `make_unit` copy 
 |----|---------|------|------------------|-------------------|---------|
 | H1 | Line vs Line (mirror) | 42–58 | 44.4 | **42.9** | OK — mirror now fair |
 | H2 | Arrowhead(wedge) vs Line | 48–62 | — | **0.0** | OUT — wedge loses frontally |
-| H3 | Envelopment vs Line | 55–72 | 100.0 | **0.0** | OUT — **flipped**; splitting force is downside |
+| H3 | Envelopment vs Line | 55–72 | 100.0 | **0.0** | OUT — **flipped** (scale/construction artifact — see note) |
 | H4 | Envelop vs Arrowhead (Cannae) | 45–62 | 100.0 | **35.7** | OUT — envelop under-delivers |
 | H5 | RefusedFlank vs Envelopment | 48–62 | — | **0.0 (92.9% draw)** | OUT — two split armies stalemate |
 | H6 | RefusedFlank vs Line | 48–60 | — | **0.0** | OUT — split loses to single body |
@@ -62,7 +62,7 @@ itself a scale + construction artifact — retracted.** Jordan's Cannae-diagram 
 deep Roman block vs. Hannibal's thin, wide, *withdrawing* crescent + enveloping wings) plus two follow-up
 probes show why the gauge's envelop rows read ~0%, and it is **not** that the maneuver is worthless:
 
-- **Depth-reserve WORKS (probe `_depth_probe.py`, equal troops + equal 100/cell density, only aspect
+- **Depth-reserve WORKS (probe `depth_probe.py`, equal troops + equal 100/cell density, only aspect
   varies):** a narrow-DEEP column beats a wide-SHALLOW line **100%** (6×4 / 4×6 / 3×8 all beat 24×1). The
   depth machinery (`PC_DEPTH_ROTATE` fatigue-damping, `PC_REFILL_FLOOR` rear-rank refill, `PC_FRONT_RANKS`)
   is real and decisive at scale. So depth is *not* worthless — the opposite.
