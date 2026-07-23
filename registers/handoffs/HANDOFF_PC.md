@@ -6,6 +6,17 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **LEVELS OF INVESTMENT FOR TECHNIQUES DONE (ED-PC-0024, 2026-07-23) + PR #226 ratification-flip.** Graded the
+  binary equipped-ability into a continuum: `ability_factor` = product of `value**level`, `ability_bonus` = sum of
+  `value*level`; `equipped` supports a list (level 1.0, back-compat) or `{name: level}` (level>=0; 0=inert). Efficacy
+  emerges from the invested level, not tradition membership (tradition gates access; investment+skill drive efficacy
+  — realises ability_primitives' own TARGET MODEL). Back-compat byte-identical; suite 9 accepted-red + 2 investment
+  tests. Also flipped the PR #226 ratification bookkeeping (ED-1094): u10_activation_v1.md + fiat_audit_v1.md
+  Status PROPOSED→RATIFIED, ED-PC-0022/0023 needs_jordan→false, CURRENT.md combat row corrected to the post-review
+  final state (shinogi not winden; +2.8pp retracted; texture instrument; imposition retired; design principle).
+  Forward: a character-gen/economy layer to BOUND investment (out of engine scope); the roster `value` constants are
+  the level-1 anchors [SIM-CALIBRATE].
+
 - **IMPOSITION FIAT RETIRED (Jordan ruling 2026-07-23, ED-PC-0023) + design principle recorded.** `impose_node`
   FORCED a tradition's preferred node via a label coin-flip overriding the emergent resolution — top-down scripting.
   Retired: `IMPOSITION_GATE=False`, `impose_node` → no-op, `IMPOSE_BIND_BOOST`/`IMPOSE_REFUSE_P` deleted (reverses the

@@ -113,7 +113,7 @@ class Combatant:
         self.range_avail=1.0                  # CONTINUOUS swing-room available in [0,1] (I5/D4, systems.range_utilization); 1.0 = full room (ideal, identity). Reshapes commit_depth's Beta draw + the swing-room legibility term; never adds/reorders a draw.
         self.facing=0.0                       # CONTINUOUS facing state (I6/D6, systems.facing_target); 0.0 = neutral (identity). Feeds a lateral-void closing term + a small profile term in reach_sigma/legibility; keyed on stance/measure/grip only (C2), never weapon class.
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
-        self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
+        self.equipped=equipped or []        # LEARNED techniques (ability_primitives): a LIST of names (each level 1.0) OR a DICT {name: level} for graded levels-of-investment (level>=0; 0=untrained/inert). Efficacy emerges from the invested level, not tradition membership (ED-PC-0023). Default none.
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
         # (resolution pool is NOT hosted here: the live engine calls core.resolution_pool(history) directly, and a
         # second hardcoded `self.pool=max(5,history+6)` here was a dead re-implementation of that rule with ZERO

@@ -5,11 +5,14 @@ are basically tradition primitives" (Jordan): just as a weapon is a bundle of ph
 bundle of ability primitives — the named techniques/concepts it teaches (Indes, Winden, mezzo tempo, atajo,
 sen-no-sen, true-times…), grounded in the historical-combat-manuals corpus.
 
-CURRENT MODEL (scaffold — the modulator form): an ability is a tradition-learned MODULATOR a fighter EQUIPS
-(c.equipped, default empty -> no change -> invariant-safe). Each targets a named LEVER with op '+' (additive) or
-'*' (multiplicative). TARGET MODEL (REARCHITECTURE_v1 Phase 4): an ability becomes learned ACCESS (permission to
-attempt a graph transition), with the op extended to 'gate' and a phase-slot + prereq; effectiveness then EMERGES
-from primitives rather than a hand-set value. This module is where that upgrade lands.
+CURRENT MODEL (levels-of-investment, ED-PC-0023 — Jordan directive "we'll probably have levels of investment for
+techniques"): an ability is a tradition-learned MODULATOR a fighter INVESTS IN. `c.equipped` is either a LIST of
+names (each at level 1.0 — full baseline mastery, back-compat) or a DICT {name: level} (graded investment, level>=0).
+Each ability targets a named LEVER with op '+' (additive, scaled value*level) or '*' (multiplicative, value**level).
+Level 0 -> inert (invariant-safe); efficacy EMERGES from the invested level, not tradition membership — the
+tradition gates ACCESS to the kit, investment + skill drive efficacy (the design principle recorded in
+audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md). This realises the old TARGET MODEL's "effectiveness emerges
+rather than a hand-set value": the per-ability `value` is now the level-1 anchor of a continuum, not a fixed effect.
 
 LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcommit are live (eff_cw consumed at
 ~9 sites). U10/ED-PC-0022 added FIVE morphology-lever channels — 'edge_read', 'spine_press', 'edge_grab',
@@ -74,24 +77,57 @@ def kit(trad):
     return TRADITION_KIT.get(trad, [])
 
 
+# Investment scale is BOUNDED (ED-PC-0024 adversarial-review fix): an unbounded level made value**level overflow the
+# downstream 1/(1+exp(-x)) sigmoids (bind_dominance_p / read_contest / grab_outcome) and CRASH fight resolution at a
+# plausible deep-investment level (~15-22). MAX_INVESTMENT_LEVEL caps the per-technique investment (a character-gen /
+# XP layer will bound it too — this is the engine's own safety floor); ABIL_FACTOR_{FLOOR,CEIL} additionally clamp the
+# COMPOSED multiplicative factor so even several abilities stacked on one lever at max level cannot overflow (or a
+# mitigator underflow to exactly 0.0). The clamps sit FAR above/below any sane use (level 8 shinogi=1.6**8≈43 << CEIL;
+# ringen 0.4**8≈6.5e-4 > FLOOR), so they guard pathology only — graded behaviour at sane levels is unchanged.
+MAX_INVESTMENT_LEVEL = 8.0
+ABIL_FACTOR_FLOOR = 1e-4
+ABIL_FACTOR_CEIL = 1e3
+
+
+def _invested(c):
+    """Yield (ability_name, level) over the fighter's LEARNED techniques — the levels-of-investment model
+    (ED-PC-0024, Jordan directive "we'll probably have levels of investment for techniques"; efficacy emerges from
+    what the fighter INVESTED, not tradition membership). `c.equipped` supports either:
+      · a LIST of names        -> each at level 1.0 (full baseline mastery) — BACK-COMPAT, byte-identical to before;
+      · a DICT {name: level}   -> graded investment (level in [0, MAX_INVESTMENT_LEVEL]; 0 = untrained/inert).
+    Level is clamped to [0, MAX_INVESTMENT_LEVEL] (bounded scale; also the overflow safety guard). Pure."""
+    eq = getattr(c, 'equipped', ()) or ()
+    if isinstance(eq, dict):
+        for name, lvl in eq.items():
+            yield name, min(MAX_INVESTMENT_LEVEL, max(0.0, float(lvl)))
+    else:
+        for name in eq:
+            yield name, 1.0
+
+
 def ability_bonus(c, lever):
-    """Sum of ADDITIVE ('+') modulations for `lever` across the fighter's equipped abilities. Default 0.0."""
+    """Sum of ADDITIVE ('+') modulations for `lever`, each SCALED BY the invested level (value*level). Default 0.0.
+    Level 0 -> 0 (inert); level 1 -> value (baseline); deeper investment adds proportionally."""
     tot = 0.0
-    for name in getattr(c, 'equipped', ()) or ():
+    for name, lvl in _invested(c):
         a = ABILITIES.get(name)
         if a and a['lever'] == lever and a['op'] == '+':
-            tot += a['value']
+            tot += a['value'] * lvl
     return tot
 
 
 def ability_factor(c, lever):
-    """Product of MULTIPLICATIVE ('*') modulations for `lever` across the fighter's equipped abilities. Default 1.0."""
+    """Product of MULTIPLICATIVE ('*') modulations for `lever`, each RAISED TO the invested level (value**level).
+    Default 1.0. Level 0 -> 1.0 (inert); level 1 -> value (baseline); deeper investment COMPOUNDS — an amplifier
+    (value>1) grows, a mitigator (value<1) approaches 0 — and value**level never crosses sign or goes negative, the
+    correct graded form for BOTH (unlike a linear 1+level*(value-1), which would drive a mitigator negative). The
+    tradition gates ACCESS to the technique; the invested level drives its EFFICACY."""
     f = 1.0
-    for name in getattr(c, 'equipped', ()) or ():
+    for name, lvl in _invested(c):
         a = ABILITIES.get(name)
         if a and a['lever'] == lever and a['op'] == '*':
-            f *= a['value']
-    return f
+            f *= a['value'] ** lvl
+    return min(ABIL_FACTOR_CEIL, max(ABIL_FACTOR_FLOOR, f))   # bound the composed factor (overflow/underflow guard; far from any sane level, guards pathology only)
 
 
 def eff_cw(c, channel):

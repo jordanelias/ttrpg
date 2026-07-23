@@ -25,10 +25,12 @@ ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat'
 sys.path.insert(0, ENGINE)
 pytest.importorskip("numpy")
 
+import random  # noqa: E402
 import ability_primitives as ABIL  # noqa: E402
 import combat_systems as S  # noqa: E402
 import contact as CT  # noqa: E402
 import tradition as TR  # noqa: E402
+import wrapper as W  # noqa: E402
 from combatant import Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 
@@ -119,6 +121,66 @@ def test_levers_add_texture_without_shifting_balance():
                 flipped += 1
         assert diverged >= 4, f"{wa} vs {wb}: levers produced almost no per-fight texture ({diverged}/{n} diverged)"
         assert flipped <= n * 0.20, f"{wa} vs {wb}: levers shifted the OUTCOME too often ({flipped}/{n}) — not balance-neutral"
+
+
+def test_levels_of_investment_grade_technique_efficacy():
+    """LEVELS OF INVESTMENT (ED-PC-0023): a technique's efficacy scales with how much the fighter INVESTED, not
+    tradition membership. `equipped` supports a graded dict {name: level}. Pins: (1) BACK-COMPAT — a list is
+    level 1.0, byte-identical to the dict at level 1; (2) level 0 is fully INERT (1.0); (3) an AMPLIFIER grows
+    monotonically with level; (4) a MITIGATOR shrinks monotonically toward 0 and never goes negative/crosses sign;
+    (5) the additive path scales value*level."""
+    class _C:  # minimal stub — ability_factor/bonus read only c.equipped
+        def __init__(self, eq): self.equipped = eq
+    # (1) back-compat: list == dict at level 1.0
+    assert ABIL.ability_factor(_C(['shinogi']), 'spine_press') == ABIL.ability_factor(_C({'shinogi': 1.0}), 'spine_press')
+    assert ABIL.ability_factor(_C(['shinogi']), 'spine_press') == ABIL.ABILITIES['shinogi']['value']
+    # (2) level 0 inert
+    assert ABIL.ability_factor(_C({'shinogi': 0.0}), 'spine_press') == 1.0
+    # (3) amplifier monotone increasing in level
+    amp = [ABIL.ability_factor(_C({'shinogi': L}), 'spine_press') for L in (0.0, 0.5, 1.0, 2.0)]
+    assert amp == sorted(amp) and amp[0] == 1.0 and amp[-1] > amp[2] > 1.0
+    # (4) mitigator monotone DECREASING, stays in (0,1], never negative
+    mit = [ABIL.ability_factor(_C({'ringen_am_schwert': L}), 'edge_grab') for L in (0.0, 1.0, 2.0, 3.0)]
+    assert mit == sorted(mit, reverse=True) and all(0.0 < m <= 1.0 for m in mit) and mit[-1] < mit[1]
+    # (5) additive path scales with level (indes is an existing '+' ability on counter_success)
+    b1 = ABIL.ability_bonus(_C({'indes': 1.0}), 'counter_success')
+    b2 = ABIL.ability_bonus(_C({'indes': 2.0}), 'counter_success')
+    assert b1 == pytest.approx(ABIL.ABILITIES['indes']['value']) and b2 == pytest.approx(2 * b1)
+
+
+def test_investment_is_bounded_no_overflow_crash():
+    """ED-PC-0024 adversarial-review fix: an unbounded value**level overflowed the downstream 1/(1+exp(-x)) sigmoids
+    and CRASHED fight resolution at a plausible deep-investment level (~15-22). Pins: (1) the level is capped at
+    MAX_INVESTMENT_LEVEL; (2) the composed factor is bounded [FLOOR, CEIL], finite, never 0/negative — even at an
+    absurd level and with several abilities stacked on one lever; (3) a real fight with an extreme-investment fighter
+    RESOLVES (no OverflowError)."""
+    import math
+    class _C:
+        def __init__(self, eq): self.equipped = eq
+    # level clamped, factor finite/bounded even at absurd level
+    for L in (8.0, 30.0, 1000.0):
+        fac = ABIL.ability_factor(_C({'shinogi': L}), 'spine_press')
+        assert math.isfinite(fac) and ABIL.ABIL_FACTOR_FLOOR <= fac <= ABIL.ABIL_FACTOR_CEIL, (L, fac)
+    # a mitigator never underflows to exactly 0 or crosses sign, even absurdly deep
+    mit = ABIL.ability_factor(_C({'ringen_am_schwert': 1000.0}), 'edge_grab')
+    assert 0.0 < mit <= 1.0
+    # levels above the cap saturate (level 30 == level MAX)
+    assert ABIL.ability_factor(_C({'shinogi': 30.0}), 'spine_press') == ABIL.ability_factor(_C({'shinogi': ABIL.MAX_INVESTMENT_LEVEL}), 'spine_press')
+    # a real fight with an extreme-investment fighter must RESOLVE, not crash
+    import random as _r
+    a = Combatant('A', weapon='katana', tradition='japanese', equipped={'shinogi': 999})
+    b = Combatant('B', weapon='arming', tradition='german', equipped={'zwerchhau': 999, 'ringen_am_schwert': 999})
+    W.fight(a, b, CFG, _r.Random(3))   # no OverflowError
+
+
+def test_investment_level_moves_the_per_event_effect():
+    """Deeper investment in a technique produces a LARGER per-event effect — emergent expertise, not a flat grant.
+    A level-2 shinogi katana out-binds a level-1 one (bind_sigma), which out-binds an uninvested one."""
+    defr = Combatant('B', weapon='arming')
+    b0 = S.bind_sigma(Combatant('A', weapon='katana'), defr, CFG, TR)
+    b1 = S.bind_sigma(Combatant('A', weapon='katana', tradition='japanese', equipped={'shinogi': 1.0}), defr, CFG, TR)
+    b2 = S.bind_sigma(Combatant('A', weapon='katana', tradition='japanese', equipped={'shinogi': 2.0}), defr, CFG, TR)
+    assert b2 > b1 > b0
 
 
 def test_ability_inert_when_weapon_lacks_the_feature():
