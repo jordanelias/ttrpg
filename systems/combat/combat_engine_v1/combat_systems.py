@@ -631,18 +631,15 @@ def leverage(c, cfg):
     return lev
 
 def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
-    """WS-4/WS-5 imposition (section C, flag-gated): a tradition biases the exchange toward its PREFERRED node,
-    DECOUPLED from channel magnitude (fixed normalized rates, not eff_cw — the repair the gate-reconciliation
-    requires: the magnitude must not drive imposition). German (bind-seeker) imposes the crossing; the
-    bind-refusers (Italian/English/Spanish counter/measure schools) slip a forming bind into a counter
-    (cavazione/disengage). A landed hit is never re-routed. Pure (reads rng); returns (bind, riposte)."""
-    if hit > 0:
-        return bind, riposte
-    pa = TR.preferred(aggressor.tradition); pd = TR.preferred(defender.tradition)
-    if pa == 'bind' and not bind and rng.random() < cfg['IMPOSE_BIND_BOOST']:
-        bind = True                                  # German forces the crossing onto an unwilling opponent
-    if pd in ('counter', 'measure') and bind and rng.random() < cfg['IMPOSE_REFUSE_P']:
-        bind = False; riposte = True                 # the refuser slips the bind into a single-time counter
+    """RETIRED FIAT (Jordan ruling 2026-07-23, ED-PC-0023) — a NO-OP, returns the emergent (bind, riposte) unchanged.
+    This once FORCED a tradition's preferred node (German impose-the-bind / Italian-etc refuse-it) via a label-keyed
+    coin-flip (IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P) that OVERRODE the emergent resolution — top-down scripting (§0),
+    the antithesis of "each combatant resolves in a way that feels correct to their style." A tradition's node-
+    preference must EMERGE from the fighter's BUILD, not be imposed by a rule: a fighter binds more because they
+    INVESTED in binding (skill('bind') + a bind-friendly weapon's wind affinity + learned binding abilities +
+    disposition) — all already live in mode_sigma/bind_sigma. Kept as a no-op stub (IMPOSITION_GATE defaults False,
+    so it is never called; the call-site guard stays as the documented off-switch) rather than deleted outright, so
+    the retirement is a single visible ruling; the full call-site removal is a follow-up. Reads no cfg/rng now."""
     return bind, riposte
 
 

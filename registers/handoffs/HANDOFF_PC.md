@@ -6,6 +6,21 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **IMPOSITION FIAT RETIRED (Jordan ruling 2026-07-23, ED-PC-0023) + design principle recorded.** `impose_node`
+  FORCED a tradition's preferred node via a label coin-flip overriding the emergent resolution — top-down scripting.
+  Retired: `IMPOSITION_GATE=False`, `impose_node` → no-op, `IMPOSE_BIND_BOOST`/`IMPOSE_REFUSE_P` deleted (reverses the
+  ratified WS-4 default, per Jordan's live authority). Tradition-preference now EMERGES from build (skill investment
+  + weapon + abilities + disposition, all already live in mode_sigma/bind_sigma — verified: bind-skill 1/2/3 →
+  61/71/75% win-share, monotonic, no fiat). **GOVERNING DESIGN PRINCIPLE (Jordan, recorded in
+  `audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`):** each combatant's feel emerges from their full stack
+  (tradition/abilities/attributes/weapon/armour/disposition), resolving true to their style; every build AVAILABLE
+  (not every build good) — expressive availability over parity; efficacy from INVESTMENT/EXPERTISE, not membership;
+  no fiat. **NEXT INCREMENT (forward architecture): levels of investment for techniques** — grade `ability_factor`
+  by an invested level (the pattern `skill()` already sets), turning binary equipped-abilities into a continuum
+  (the ability system's own target model: tradition gates access, investment+skill drive efficacy). Also open:
+  PREFERRED (traditions.py) is now vestigial (kept as metadata for a future EMERGENT selection-bias, never a forced
+  override); full `impose_node` call-site removal is a tidy-up follow-up.
+
 - **ADVERSARIAL REVIEW of U10 + fiat-audit DONE (2026-07-23) — 4 independent critics + pessimistic NERS.**
   Correctness: CLEAN (signs verified by sign-flip, no bugs). NERS: SAFE (no runaway/degeneracy/new-extreme/dead-branch).
   Balance: the "+2.8pp specialist edge" was a CONFOUND (german+ability vs none+empty) — abilities are ~0 aggregate,

@@ -183,7 +183,7 @@ CFG = dict(
   # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
   # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it
   # beats that baseline on legibility + vacuum-balance (section C), else it stays off.
-  IMPOSITION_GATE=True, IMPOSE_BIND_BOOST=0.5, IMPOSE_REFUSE_P=0.5,   # ON by default (WS-4 dissolution): with the affinity budget it beats the keep-bias baseline on spread + none-fairness + qualitative differentiation (section C). Toggle off to compare.
+  IMPOSITION_GATE=False,   # RETIRED FIAT (Jordan design ruling 2026-07-23, ED-PC-0023): impose_node FORCED a tradition's preferred node (German impose-the-bind / Italian-etc refuse-it) via a label-keyed coin-flip that OVERRODE the emergent bind/counter resolution — top-down scripting (§0), the antithesis of "each combatant resolves in a way that feels correct to their style". Turned OFF: tradition-preference now EMERGES from BUILD — a fighter binds more because they INVESTED in it (skill('bind') + a bind-friendly weapon's wind affinity + learned binding abilities + disposition), all already live in mode_sigma/bind_sigma. The tradition gates ACCESS to a technique kit; investment + skill drive efficacy (the ability system's own target model). IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P deleted with the fiat. (PREFERRED in traditions.py is now vestigial — kept as metadata pending a future EMERGENT selection-bias, never again a forced override.)
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —

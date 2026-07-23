@@ -50,9 +50,16 @@ fix.** The "suspicious" feeling was pointing at the *wiring* (U5's mis-park), no
   `percussion_element_authority` applies the same undiscounted form to native secondary blunt elements
   (lucerne fluke, bec beak) — likely over-crediting them. Root recalibration touching every blunt weapon → Jordan-gated.
 - **`PERC_TRANSMIT_FLOOR=0.35`** flat-tops 11 two-handed-sword Mordhau armour-transmission ratios (0.215–0.308) to 0.35.
-- **`IMPOSE_BIND_BOOST` / `IMPOSE_REFUSE_P` fixed 0.5 rates** are "decoupled from channel magnitude" — imposition
-  contributes **zero skill-gradient** (rewards tradition *membership*, not *mastery*). Candidate to couple to
-  `eff_cw`/`ability_factor` (the pattern U10 just added elsewhere) — a design call.
+- **`impose_node` (the whole imposition mechanism) — RETIRED as fiat (Jordan ruling 2026-07-23).** Flagged first as
+  "fixed 0.5 rates, zero skill-gradient — candidate to couple to `eff_cw`". Jordan's ruling went deeper: the
+  mechanism *itself* is fiat — it FORCES a tradition's preferred node (German impose-the-bind / Italian refuse-it)
+  via a label-keyed coin-flip that OVERRIDES the emergent bind/counter resolution. Coupling it to skill would only
+  dress the fiat as style. **A tradition's node-preference must EMERGE from the fighter's BUILD, not be imposed.**
+  Executed: `IMPOSITION_GATE=False`, `impose_node` → no-op stub, `IMPOSE_BIND_BOOST`/`IMPOSE_REFUSE_P` deleted (this
+  reverses the ratified WS-4 `IMPOSITION_GATE` default, per Jordan's live design authority). Verified the emergent
+  channels carry the differentiation: a fighter who **invests** in a skill wins more, monotonically and with no fiat
+  — `bind`-skill 1.0/2.0/3.0 → 61.3% / 71.1% / 74.7% win-share (through `bind_sigma`/`mode_sigma`); `parry` 1.0/2.0
+  → 57.2% / 65.6%. Combat suite unchanged (9 accepted-red); the texture instrument still passes with imposition off.
 - **`adef_cap` blunt branch doesn't thread `sel_head`/`sel_pc`** (unlike `core.strike`): `puncture_pressure`
   multiplies a pommel-strike by the whole-weapon *blade-tip* `strike_concentration`. Latent — currently inert
   (`ADEF_BLUNT` always wins the `max()`), structurally wrong.
@@ -73,3 +80,35 @@ fix.** The "suspicious" feeling was pointing at the *wiring* (U5's mis-park), no
 Fixes in `core.py` (THRUST_LEVER_FLOOR, GAP_EXPOSURE), `combatant.py` (pool removal), `weapon_physics.py`
 (doc). Engine-params JSON re-exported (round-trip green). `pytest tests/valoria -k combat` → 9 accepted-red,
 146 passed. No change to core damage/σ resolution.
+
+---
+
+## Design principle (Jordan ruling, 2026-07-23) — emergent expression over fiat
+
+The imposition retirement crystallised a governing principle for the combat engine (and the wider design):
+
+> **Each combatant should have their own feel, emergent from their full stack — tradition, abilities, attributes,
+> weapon, armour, and preferences/biases/inclinations — and their fights should resolve in a way that feels real
+> and correct to *their* style. It doesn't mean every build is good, but every build should be *available*. Hence
+> all the surfaces.**
+
+Consequences this pass acts on:
+
+1. **No fiat.** A tradition (or any trait) must never *force* an outcome by label. It expresses through the
+   fighter's build tilting the *emergent* resolution. `impose_node` violated this and is retired; the morphology
+   levers + ability surface (U10) are the *right* shape — they modulate grounded primitives, they don't override.
+2. **Expressive availability, not parity.** Balance-to-flat (the aggregate-winrate gate that drove U9's "keep at
+   K=0" and the old 7-channel-weight removal) is the wrong target. The right target is that every build is
+   *playable and distinct*; some are stronger than others, and that is fine. The correct instrument for a
+   situational lever is therefore **per-fight texture with outcome-preservation** (§ u10 doc §8), not aggregate
+   win-rate.
+3. **Efficacy from investment/expertise.** "Feel" and strength come from *what the fighter invested in* — skill
+   level in a technique, learned abilities — not from tradition membership. `skill('bind')` already demonstrates
+   this emergently (investment scales outcome monotonically, above). The forward architecture is **levels of
+   investment for techniques**: `ability_factor` graded by an invested level (the pattern `skill()` already sets),
+   turning binary equipped-abilities into a continuum — the ability system's own stated target model
+   ("learned ACCESS … effectiveness EMERGES from primitives"). Tradition gates *access* to a kit; investment +
+   skill drive *efficacy*. (Scoped as the next increment, not built here.)
+4. **The surfaces are the mechanism.** Every surface (`edge_read`/`spine_press`/`edge_grab`/`choke_control`/
+   `facing_regime`, and the future graded-technique hooks) exists so a facet of the fighter's identity expresses
+   in resolution. That is why they are worth having even at ~0 aggregate effect.
