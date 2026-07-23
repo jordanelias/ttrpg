@@ -19,13 +19,14 @@ WIRING STATUS (2026-06-30, Gate-1 audit — SUPERSEDES the prior "BUILD-ONLY; no
 which is now FALSE):
   · LIVE consumers (read by systems.py / core via Phase-3 wiring): derive(), agility(), defense_affinities(),
     percussion_authority(), puncture_pressure(), at_grip(), grip_choke_max().
-  · NOT YET WIRED — the live engine derives these in PARALLEL elsewhere (the open single-source debt): reach()
-    [live path = systems.reach_base], authority() and armour_defeat_mode() [diagnostic-only]. Consolidating the
-    parallel derivations onto this module is the deferred single-source RE-BASELINE (Gate-1 finding; it changes
-    balance numbers, so it is Jordan-gated — the percussion-authority split core.p_auth vs WP.percussion_authority,
-    which read DIFFERENT inputs (hand-set pob_frac vs derived PoB_frac), is the sharpest case).
-  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) were DELETED 2026-06-30 —
-    a dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
+  · DIAGNOSTIC-ONLY (still defined, called only from __main__): armour_defeat_mode(). (STALE-DOC FIX, ED-PC-0023
+    audit: the prior text here listed authority()/reach() as "NOT YET WIRED / diagnostic-only" and cited an OPEN
+    "core.p_auth vs WP.percussion_authority" single-source debt — but authority()/reach() were DELETED outright the
+    SAME day, 2026-06-30, see the deletion note below the STAGE-3 block, and core.p_auth was retired, see core.py's
+    header. Both claims described functions/debt that no longer exist; struck. percussion_authority now lives ONCE in
+    this module, read by core.strike — the split is closed.)
+  · The STAGE-4 consumer-term helpers (reach_term/heft_term/tempo_penalty/strdemand_term) AND authority()/reach()
+    were DELETED 2026-06-30 — dead alternative-wiring the live systems.* derivations (reach_base/wield_heft) superseded.
 
 CALIBRATION: the composite constants are physically sourced; the engine-scale K_* gains are [SIM-CALIBRATE] —
 fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.

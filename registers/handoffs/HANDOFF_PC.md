@@ -6,6 +6,26 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **COMBAT FIAT / BROKEN-LOGIC AUDIT DONE (ED-PC-0023, 2026-07-23) — 4 independent adversarial passes.** FIXED
+  (clean, contained, 9-accepted-red unchanged): THRUST_LEVER_FLOOR 0.30->0.24 (un-flattened 7 polearms);
+  GAP_EXPOSURE ordering corrected to match core.py's own grounding (mail>plate; cloth mostly-accessible; plate
+  anchor kept); removed dead Combatant.pool (§8); struck stale weapon_physics WIRING-STATUS doc. The flagged
+  grip-invariant-thrust tenet was RULED GROUNDED (the force invariant is correct; costs homed elsewhere, no
+  double-count). Doc: `audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`.
+  - **FLAGGED broken-logic — future increments (evidenced, fix-spec'd, NOT yet fixed; each needs its own verification):**
+    1. **MAX_TEMPO_PEN=0.8 hard-cap flat-tops 38/53 weapons to 0.80** (biggest emergence-suppressor). Fix = surgical
+       over-cap-tail `min(pen,MAXP)+K*tanh(max(0,pen-MAXP))` (arming sub-cap => mirror byte-identical); REQUIRES a
+       deliberate regen of `tests/valoria/r3_identity_golden.json` (no generator exists — hand-reproduce). Own increment.
+    2. **PERC_EXP=0.30 low-mass compression** over-credits native secondary blunt elements (lucerne fluke/bec beak) —
+       the REVERSED_GRIP_EFFICIENCY=0.25 discount only patches Mordhau. Root recalibration, every blunt weapon — Jordan-gated.
+    3. **PERC_TRANSMIT_FLOOR=0.35** flat-tops 11 Mordhau armour-transmission ratios.
+    4. **IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P fixed 0.5** — imposition carries zero skill-gradient (rewards membership not
+       mastery); candidate to couple to eff_cw/ability_factor (design call).
+    5. **adef_cap blunt branch doesn't thread sel_head** — puncture_pressure reads whole-weapon blade-tip concentration
+       for a pommel-strike; latent/inert (ADEF_BLUNT wins the max()), structurally wrong.
+  - **Editorial nit:** CLAUDE.md §5 "Combat Pool three ways" is overstated — live engine + core.md + module_contracts
+    agree on max(5,History+6); only values_master.yaml is stale (self-flagged). Could tighten the §5 wording.
+
 - **U10 morphology-lever ACTIVATION DONE (ED-PC-0022, 2026-07-23) — supersedes the U9 keep-at-K=0 verdict.**
   Re-examined the U9 verdict and found the six edge/choke/facing levers inert for FOUR reasons (wrong instrument /
   amputated tradition surface / choke-thrust mis-parked against the D2 force-invariant / near-invisible facing

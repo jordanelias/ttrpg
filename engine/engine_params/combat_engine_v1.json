@@ -225,8 +225,8 @@
    },
    "DMG_SCALE": 1.55,
    "GAP_EXPOSURE": {
-    "cloth": 0.85,
-    "mail": 0.9,
+    "cloth": 0.97,
+    "mail": 0.95,
     "none": 1.0,
     "plate": 0.9
    },
@@ -275,7 +275,7 @@
     }
    },
    "THRUST_AUTH_REF": 0.52,
-   "THRUST_LEVER_FLOOR": 0.3,
+   "THRUST_LEVER_FLOOR": 0.24,
    "THRUST_LEVER_REF": 0.55,
    "TIER2MAT": {
     "heavy": "plate",

@@ -54,6 +54,12 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     g=getattr(c,'grip_position',0.0)
     _heft=wield_heft(c,cfg)   # DERIVED g-aware MoI heft (Phase-3 Stage 2b): replaces the binary wt class on the COST path
     pen=cfg['WEIGHT_PEN']*_heft+cfg['HANDS_COMMIT']*(w['hands']==2)*_heft
+    # KNOWN BROKEN-LOGIC (ED-PC-0023 audit, FLAGGED not fixed here): this hard min() FLAT-TOPS 38/53 weapons (every
+    # raw pen>0.8 — a rapier at 0.831 and a spear at 2.878 read the IDENTICAL 0.80) to one value, erasing the tempo
+    # ordering. The fix is a surgical saturation of only the over-cap tail (min(pen,MAXP)+K*tanh(max(0,pen-MAXP)),
+    # arming/sub-cap byte-identical), but it changes 38 weapons' weapon_tempo/close_tempo and so requires a DELIBERATE
+    # regeneration of tests/valoria/r3_identity_golden.json (no generator exists — must be hand-reproduced) per that
+    # fixture's re-baseline protocol — out of scope for this fiat-fix batch. See u10_activation_v1.md §7 (deferred).
     pen=min(pen, cfg['MAX_TEMPO_PEN'])
     pen += cfg['CHOKE_TEMPO_PEN']*g   # gathering in trades cadence for close control — CONTINUOUS in grip_position (no choke string)
     pen += cfg['LUNGE_TEMPO_PEN']*getattr(c,'lunge_depth',0.0)     # an extended/lunged body is slower to repeat — CONTINUOUS in lunge_depth
