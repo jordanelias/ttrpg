@@ -2,9 +2,10 @@
 
 consolidation_v1.md §2.1-2.3. A physical/attested blade fact landed as data (like edge_undulation), read by three
 pure functions, each wired into ONE channel (no double-counts): edge_lines→legibility (read-difficulty), spine→
-bind_sigma (spine-press), grab_hazard→contact.grab_sigma (grab-resist). All three downstream constants are K=0 until
-the U9 recalibration, so the increment lands byte-identical. These tests pin (1) the reader FORMULAE, (2) the K=0
-byte-identity guarantee, (3) the authored data's CI invariants, and (4) the grounded ordering of known blades.
+bind_sigma (spine-press), grab_hazard→contact.grab_sigma (grab-resist). The three downstream constants were K=0 at
+landing and were ACTIVATED to small grounded baselines in U10/ED-PC-0022 (routed through the tradition surface).
+These tests pin (1) the reader FORMULAE, (2) that the constants are now active + tradition-modulable, (3) the
+authored data's CI invariants, and (4) the grounded ordering of known blades.
 """
 import os
 import sys
@@ -78,16 +79,18 @@ def test_edge_read_lever_live_and_amplified_by_zwerchhau():
     assert S.legibility(estoc, 3, CFG) == S.legibility(estoc0, 3, CFG)
 
 
-def test_spine_press_lever_live_and_amplified_by_winden():
+def test_spine_press_lever_live_and_amplified_by_shinogi():
     """spine -> bind_sigma is live (a single-edged rigid spine wins the bind bearing-surface vs a spineless double
-    edge), and the German Winden ('spine_press') amplifies the wielder's own spine term."""
+    edge), and the Japanese shinogi ('spine_press', grounded to the katana that actually HAS a spine) amplifies the
+    wielder's own spine term. (Retag from the mis-grounded 'winden' — a double-edged LONGSWORD technique inert on the
+    single-edge lever — per the ED-PC-0023 adversarial review.)"""
     katana = Combatant('A', weapon='katana')                                 # spine > 0
-    katana_w = Combatant('A', weapon='katana', tradition='german', equipped=['winden'])
+    katana_s = Combatant('A', weapon='katana', tradition='japanese', equipped=['shinogi'])
     arming = Combatant('B', weapon='arming')                                 # spine 0 (double-edged)
     b_plain = S.bind_sigma(katana, arming, CFG, TR)
-    b_winden = S.bind_sigma(katana_w, arming, CFG, TR)
+    b_shinogi = S.bind_sigma(katana_s, arming, CFG, TR)
     assert b_plain > 0, "a single-edge rigid spine should win the bind vs a spineless double edge"
-    assert b_winden > b_plain, "Winden should amplify the spine-press bind edge"
+    assert b_shinogi > b_plain, "shinogi should amplify the spine-press bind edge"
 
 
 def test_authored_data_conforms_invariants():

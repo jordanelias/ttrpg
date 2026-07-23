@@ -6,6 +6,20 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **ADVERSARIAL REVIEW of U10 + fiat-audit DONE (2026-07-23) — 4 independent critics + pessimistic NERS.**
+  Correctness: CLEAN (signs verified by sign-flip, no bugs). NERS: SAFE (no runaway/degeneracy/new-extreme/dead-branch).
+  Balance: the "+2.8pp specialist edge" was a CONFOUND (german+ability vs none+empty) — abilities are ~0 aggregate,
+  per-event real; "field within noise" over-stated (grounded moves for grab/edge weapons, but no new extremes).
+  Grounding: ability layer under-grounded. **Corrections applied (folded under ED-PC-0023):** retag winden->shinogi
+  (japanese — grounded to the katana that HAS a spine; winden was a longsword technique inert on the single-edge
+  lever); tagged all ability multipliers [SIM-CALIBRATE]; removed the confounded aggregate test → deterministic
+  per-event test; tightened the guisarme re-baseline (none/light back to strict >0.5, medium contest only);
+  corrected the u10 doc (§4 retraction + §7 review addendum) + the ED-PC-0022 ledger claim. **Ability layer is now
+  framed as illustrative infrastructure, not a proven aggregate-balance feature.** Open follow-up: ground more
+  traditions' abilities; the abilities' aggregate ~0 means the *activation's* value is the surface + per-event, not
+  field balance — a Jordan design call on whether the (safe, grounded, ~0-aggregate) activation is worth keeping vs
+  reverting to K=0-with-surface.
+
 - **COMBAT FIAT / BROKEN-LOGIC AUDIT DONE (ED-PC-0023, 2026-07-23) — 4 independent adversarial passes.** FIXED
   (clean, contained, 9-accepted-red unchanged): THRUST_LEVER_FLOOR 0.30->0.24 (un-flattened 7 polearms);
   GAP_EXPOSURE ordering corrected to match core.py's own grounding (mail>plate; cloth mostly-accessible; plate

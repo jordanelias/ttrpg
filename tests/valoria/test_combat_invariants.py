@@ -816,16 +816,16 @@ def test_reach_class_beats_arming_not_inverted():
     for w in ('spear', 'yari', 'poleaxe'):
         for armor in ('none', 'light', 'medium'):
             assert share[(w, armor)] > 0.5, f"{w} vs arming at {armor}: reach INVERTED off-plate ({share[(w, armor)]:.2f})"
-    # (1b) [RE-BASELINED, U10/ED-PC-0022] the guisarme is the VERSATILE mid-reach hooked polearm — already a near-even
-    #     contest vs a handy arming sword off-plate (~0.53 pre-U10). Activating the morphology levers legitimately shaves
-    #     that marginal edge: the arming's DOUBLE EDGE reads harder (edge_lines -> legibility) and the head-heavy 2H bill
-    #     TELEGRAPHS as it gathers to fight close (choke_counterbalance -> legibility). Both are grounded morphology
-    #     effects, and at n=60/cell the shift sits inside the guard's own noise (SE ~0.09). So the guisarme off-plate
-    #     assertion is a CONTEST band [not annihilated, not required to dominate], never the strict >0.5 that encoded the
-    #     K=0 engine's blindness to these effects. The true reach weapons above keep the strict guard; a real zeroing bug
-    #     still trips this floor. See audit/2026-07-04-weapon-morphology-granularity/u10_activation_v1.md.
-    for armor in ('none', 'light', 'medium'):
-        assert share[('guisarme', armor)] > 0.40, f"guisarme vs arming at {armor}: reach ANNIHILATED off-plate ({share[('guisarme', armor)]:.2f})"
+    # (1b) [RE-BASELINED, U10/ED-PC-0022; TIGHTENED ED-PC-0023 per the adversarial review]. The guisarme (versatile
+    #     mid-reach hooked polearm) keeps the STRICT >0.5 guard at none/light — the review confirmed it stays solidly
+    #     dominant there (~0.68-0.78 at N>=300), so those tiers never needed loosening (my first re-baseline over-broadly
+    #     relaxed all three). ONLY the MEDIUM tier is a genuine near-even contest (~0.51-0.53 true, n=60/cell → SE~0.09,
+    #     so the hardcoded seed can land ~0.45): activating the edge_lines/choke legibility effects shaves the arming
+    #     matchup there (arming's double edge reads harder; the 2H bill telegraphs when gathered — grounded). So medium
+    #     gets a tight CONTEST band; none/light stay strict. A real zeroing bug still trips the medium floor.
+    for armor in ('none', 'light'):
+        assert share[('guisarme', armor)] > 0.5, f"guisarme vs arming at {armor}: reach INVERTED off-plate ({share[('guisarme', armor)]:.2f})"
+    assert share[('guisarme', 'medium')] > 0.42, f"guisarme vs arming at medium: reach ANNIHILATED ({share[('guisarme', 'medium')]:.2f}) — expected a near-even contest"
     # (2) at HEAVY, the dedicated armour-defeating reach weapon still dominates (poleaxe's swung spike/hammer defeats plate).
     assert share[('poleaxe', 'heavy')] > 0.5, f"poleaxe vs arming at heavy should still defeat plate ({share[('poleaxe','heavy')]:.2f})"
     # (3) at HEAVY, a PURE-POINT reach weapon is correctly brought BELOW dominance (the grounded G4 correction — a long
