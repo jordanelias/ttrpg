@@ -103,14 +103,27 @@ def _invested(c):
     what the fighter INVESTED, not tradition membership). `c.equipped` supports either:
       · a LIST of names        -> each at level 1.0 (full baseline mastery) — BACK-COMPAT, byte-identical to before;
       · a DICT {name: level}   -> graded investment (level in [0, MAX_INVESTMENT_LEVEL]; 0 = untrained/inert).
-    Level is clamped to [0, MAX_INVESTMENT_LEVEL] (bounded scale; also the overflow safety guard). Pure."""
+    Level is clamped to [0, MAX_INVESTMENT_LEVEL] (bounded scale; also the overflow safety guard).
+
+    TRADITION GATE (ED-PC-0028): the tradition gates ACCESS to the kit — a fighter can only invest in a technique a
+    tradition they KNOW teaches (the design principle in audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md;
+    closes the build-legality gap the interaction-degeneracy critic flagged: a fighter could equip every tradition's
+    kit at once). An equipped technique NOT in the fighter's tradition's kit is INERT (you cannot use a technique you
+    were never taught) — silently skipped, not an error, so an illegal-but-harmless equip degrades to no-op rather
+    than crashing ('every build available'). The gate reads `c.known_traditions` (a set/list, for cross-training) if
+    present, else the single `c.tradition`. If the fighter has NO tradition attribute at all (a raw-mechanism unit
+    stub), the gate is OFF (ungated) — the gate is a fighter-layer legality rule, not part of the raw factor/bonus
+    math the stub tests. Pure."""
     eq = getattr(c, 'equipped', ()) or ()
-    if isinstance(eq, dict):
-        for name, lvl in eq.items():
-            yield name, min(MAX_INVESTMENT_LEVEL, max(0.0, float(lvl)))
-    else:
-        for name in eq:
-            yield name, 1.0
+    known = getattr(c, 'known_traditions', None)
+    if known is None and hasattr(c, 'tradition'):
+        known = (getattr(c, 'tradition'),)
+    allowed = None if known is None else {a for t in known for a in kit(t)}   # None -> ungated (stub); else the union of known kits
+    items = eq.items() if isinstance(eq, dict) else ((name, 1.0) for name in eq)
+    for name, lvl in items:
+        if allowed is not None and name not in allowed:
+            continue                                                          # untaught technique -> inert (tradition gates ACCESS)
+        yield name, min(MAX_INVESTMENT_LEVEL, max(0.0, float(lvl)))
 
 
 def ability_bonus(c, lever):

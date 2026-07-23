@@ -213,3 +213,21 @@ def test_ability_inert_when_weapon_lacks_the_feature():
     spineless0 = Combatant('A', weapon='arming')
     defr = Combatant('B', weapon='longsword')
     assert S.bind_sigma(spineless, defr, CFG, TR) == S.bind_sigma(spineless0, defr, CFG, TR)
+
+
+def test_tradition_gate_untaught_technique_is_inert():
+    """TRADITION GATE (ED-PC-0028): the tradition gates ACCESS — a fighter can only invest in a technique a tradition
+    they KNOW teaches; an untaught cross-tradition equip is INERT (closes the build-legality gap the interaction
+    critic flagged: a fighter equipping every tradition's kit at once). shinogi is JAPANESE — a GERMAN fighter who
+    equips it gets NOTHING (the factor stays 1.0), while a japanese fighter gets the real modulation."""
+    class _C:
+        def __init__(self, trad, eq): self.tradition = trad; self.equipped = eq
+    # a german fighter cannot use the japanese shinogi (untaught -> inert)
+    assert ABIL.ability_factor(_C('german', ['shinogi']), 'spine_press') == 1.0
+    # the japanese fighter can
+    assert ABIL.ability_factor(_C('japanese', ['shinogi']), 'spine_press') == ABIL.ABILITIES['shinogi']['value']
+    # cross-training: a fighter who KNOWS both traditions accesses both kits
+    kt = _C('german', {'shinogi': 1.0}); kt.known_traditions = ('german', 'japanese')
+    assert ABIL.ability_factor(kt, 'spine_press') == ABIL.ABILITIES['shinogi']['value']
+    # a traditionless equip of a german ability is likewise inert (no kit teaches you)
+    assert ABIL.ability_bonus(_C('none', ['indes']), 'counter_success') == 0.0
