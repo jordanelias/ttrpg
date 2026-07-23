@@ -2030,6 +2030,12 @@ def feigned_retreat_check(pursuer):
     return net >= FEIGNED_RETREAT_OB
 
 
+def unit_in_reserve(unit):
+    """True if the unit is held in Reserve (any subunit carries the 'reserve' instruction).
+    [canonical: mass_battle_v30.md §A.6 — Reserve formation: 'cannot engage; commits Phase 3 next turn']"""
+    return any('reserve' in getattr(a, 'instructions', ()) for a in unit.subunits)
+
+
 def resolve_feigned_retreat(pursuer, feigning_unit):
     """Resolve a Feigned Retreat when `pursuer` begins chasing a `feigning_unit`. Inert unless
     PC_FEIGNED_RETREAT is ON. Two-stage per §A.12: recognise (Command Ob 2) then, if deceived,
@@ -2118,6 +2124,17 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
     freed_units = []  # (unit, owner_side, source_pair_idx)
     pursuing_units = []  # (pursuer, routing_unit, pursuer_side, source_pair_idx)
 
+    # ED-MB-0023: Reserve formation (PP-MB-04 / PP-499, §A.6). A pair whose unit is held in Reserve
+    # "cannot engage" its first turn -> it is benched now and its pairing COMMITS (re-activates) at
+    # RESERVE_COMMIT_TURN (Phase 3 of the next battle-turn), engaging from that turn on. Gated OFF ->
+    # reserve is inert and every pair is active from turn 1 (byte-exact).
+    reserve_pairs = {}  # pair_idx -> commit battle-turn
+    if PC_RESERVE_COMMIT:
+        for _pi, (_ai, _bi) in enumerate(pairings):
+            if unit_in_reserve(side_a[_ai]) or unit_in_reserve(side_b[_bi]):
+                reserve_pairs[_pi] = RESERVE_COMMIT_TURN
+        active_pairs = [p for p in active_pairs if p not in reserve_pairs]
+
     for battle_turn in range(1, max_battle_turns + 1):
         turn_log = {
             'turn': battle_turn,
@@ -2127,6 +2144,16 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             'pursuits': [],
             'routs_this_turn': [],
         }
+
+        # ── Reserve commitment: a benched reserve pair commits at Phase 3 of its commit turn and may
+        #    engage from Phase 5 of that same turn. Its first engagement uses the default equal Off/Def
+        #    split (no Phase 1 window) — already this path's behaviour. [canonical: §A.6 P3-02, PP-MB-04]
+        if reserve_pairs:
+            for _pi, _commit in list(reserve_pairs.items()):
+                if battle_turn >= _commit:
+                    active_pairs.append(_pi)
+                    turn_log.setdefault('reserve_commits', []).append({'pair': _pi, 'turn': battle_turn})
+                    del reserve_pairs[_pi]
 
         # ── Pursuit phase: Fast units pursuing routing enemies ──
         # [canonical: §A.12 L513 — "Routing unit loses Size equal to pursuer
@@ -2334,8 +2361,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         b_all_routed = all(u.routed for u in side_b)
         if a_all_routed and b_all_routed:
             break  # mutual rout — no one left to pursue
-        if not active_pairs and not pursuing_units:
-            # No engagements and no pursuit — freed attackers can't do anything
+        if not active_pairs and not pursuing_units and not reserve_pairs:
+            # No engagements, no pursuit, and no reserve still waiting to commit (ED-MB-0023) —
+            # freed attackers can't do anything.
             break
 
         # ── Between-turn recovery ──

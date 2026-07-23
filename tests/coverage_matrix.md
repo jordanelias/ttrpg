@@ -2,6 +2,21 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0023: Reserve formation Phase-3-commit rule (PP-MB-04 / §A.6)
+- Wires the previously-inert `reserve` instruction (config `ROLE_SPEC` "Reserve"/"Support", zero code
+  consumed it) into `run_multi_unit_battle`. A unit held in Reserve (`unit_in_reserve` — any subunit
+  carries `reserve`) is **benched turn 1** and its pairing **commits** (re-activates) at
+  `RESERVE_COMMIT_TURN`=2 (Phase 3 of the next turn), engaging from Phase 5 of that turn — canonical
+  "declare turn N → commit Phase 3 turn N+1 → engage Phase 5 turn N+1", not delayed to N+2. First
+  engagement uses the default equal Off/Def split (no Phase 1 window) — already this path's behaviour.
+- Termination guard extended so a battle whose only pair is a still-benched reserve doesn't break early.
+- **Gated OFF** (`PC_RESERVE_COMMIT`, default 0) → reserve inert, all pairs active turn 1 → byte-exact;
+  `run_multi_unit_battle` isn't in the bat.py golden battery → double-safe. `needs_jordan` on the flip +
+  the battle-turn-granularity modeling (whole engagements per turn, so "commit P3 / engage P5" collapses
+  to "engages from turn 2").
+- Tests: `tests/valoria/test_reserve_commit.py` (4) — predicate, ON bench-then-commit-turn-2, OFF inert,
+  no-reserve battle unaffected.
+
 ## 2026-07-23 — ED-MB-0022: Feigned Retreat tactic (PP-256)
 - Wires the previously-inert Feigned Retreat dice-modifier row (mass_battle_v30 §A.12 / §B.4) into the
   field engine's pursuit path. A unit that declares a Feigned Retreat (`Unit.feigned`) withdraws as if
