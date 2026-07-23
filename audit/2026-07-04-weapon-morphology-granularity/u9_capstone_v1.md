@@ -70,7 +70,7 @@ balance the harness measures, beyond noise, in the grounded direction?"*
 | `FACING_REGIME=.6` (sabre vs longsword, light) | 31.2 | 29.1 | −2.1pp | — |
 
 **Not one lever clears the noise floor even in its own best-case matchup at n=500.** `BIND_SPINE`
-comes closest (+3.5pp) but sits *under* the floor and does not survive re-seeding (2.2).
+comes closest (+3.5pp) but sits *under* the floor at moderate K (it *does* register at extreme K — §2.5).
 
 ### 2.2 Multi-seed confirmation — no lever is robust
 
@@ -84,6 +84,35 @@ CHOKE_ACCURACY .15   +1.8  +0.8  -1.2  -1.4     (sign-flips)
 CHOKE_THRUST   .30   +0.0  -3.1  -0.3  -2.9     (same sign-ish, |mean| ~1.6, never ≥4)
 FACING_REGIME  .6    -2.1  +0.6  +0.3  -0.7     (sign-flips)
 ```
+
+### 2.5 Harness-integrity + extreme-K coverage (adversarial pass, `u9_adversarial_review_v1.md`)
+
+Before trusting "sub-noise", the adversarial pass ruled out the killer confound: that a lever reads Δ≈0
+because the harness never *exercises* it (constant not threaded, or the enabling state never occurs). A
+site-firing probe (every consumption site instrumented over a real `winrate`) confirms **all six fire** —
+the choke levers correctly only in pole matchups (poleaxe/spear, `grip_position` reaching 0.865), silent
+for compact blades; `grab_edge` when the opponent has an edge; the rest always. **None is plumbing-dead.**
+
+Then each K pushed to an **extreme** value (10–20× the tested working value) on its best matchup, Δ over 5
+seeds at n=500:
+
+```
+LEVER            K_ext  matchup            deltas(pp)                       mean   reading
+LEGIB_EDGELINE   2.0    arming vs estoc    +4.0 -1.6 +0.2 +2.4 +0.4        +1.1   sub-noise (matchup floor-compressed*)
+BIND_SPINE       2.0    katana vs arming   +3.1 +7.5 +7.3 +1.5 +7.1        +5.3   MOVES, robustly directional
+GRAB_EDGE        3.0    dagger vs arming   +1.6 +2.8 +3.2 +0.3 -1.9        +1.2   sub-noise
+CHOKE_ACCURACY   3.0    poleaxe vs arming  +0.4 +2.6 -2.2 +1.0 -0.2        +0.3   sub-noise (weakest lever)
+FACING_REGIME    3.0    sabre vs longsword +3.5 +4.1 +2.9 -1.5 +2.9        +2.4   weak-but-present
+CHOKE_THRUST     0.9    spear vs arming    +0.0 -3.1 -0.3 -2.9 -4.5        -2.1   weak, grounded sign (−)
+```
+`*` the LEGIB_EDGELINE matchup (arming already loses ~94% to estoc) is **floor-compressed** — a flaw in my
+original matchup choice, not evidence the lever is dead; a fair legibility test needs a ~50/50 pairing.
+
+**Correction to §2.1–2.2:** `BIND_SPINE` is in fact the **strongest** of the six — robustly directional at
+extreme K (single-edge rigid spine wins the bind vs a double-edged blade → katana up), *situational* at
+moderate K. It is the best candidate for eventual scenario-specific activation. `CHOKE_ACCURACY` is the
+weakest (flat even at K=3.0). The verdict below ("situational, not dead") is thereby **evidence-backed**,
+not asserted.
 
 ### 2.3 The one that *looked* live — CHOKE_THRUST — is a seed artifact
 
@@ -102,19 +131,31 @@ The mean effect is −0.1…−1.9pp with signs flipping across seeds — **with
 The earlier "robust" reading was seed cherry-picking, corrected here at higher N. *(This is itself the
 adversarial-pass finding of U9: the producer's own promising result did not survive the critic.)*
 
-### 2.4 …and activating it independently violates a ratified first principle
+### 2.4 …and activating it independently violates a *ratified D2 gate*
 
-Even setting aside 2.3, `CHOKE_THRUST` cannot be flipped in routine work. Flipping
-`CHOKE_THRUST_K 0→0.30` and running the combat suite:
+Even setting aside 2.3, `CHOKE_THRUST` cannot be flipped in routine work. The principle it breaks is
+`test_combat_invariants.py::test_thrust_protection_grip_invariant` — a **ratified D2 gate** (ED-1029
+D-series, pre-existing, *not* authored this session): bear_spear/spear/yari select `point` and
+`phi_grip>=0.9` at full gather (*an axial point-head thrust is grip-invariant on a rigid shaft*). Direct
+computation:
 
-- **K=0 baseline:** 9 failed (the accepted-red byte-identity set), 138 passed.
-- **K=0.30:** 12 failed — **3 net new breakages**, headed by
-  `test_combat_choke.py::test_thrust_grip_invariant_at_k_zero`, which pins the **ratified
-  grip-invariant-thrust first principle**: *an axial thrust with a point head is grip-invariant
-  (`phi_grip==1.0`) at every grip.* A choked-thrust cost by construction breaks this — the other new
-  reds (`test_heavy_mirror_fair_and_decisive[spear]`, and the live-not-dead helper's own K-toggle)
-  are downstream of the same change. Revising a ratified first principle is exactly the class of hard
-  design call ED-1094 forbids bundling into routine implementation work.
+```
+CHOKE_THRUST_K=0.0  →  phi_grip('point', grip=1.0) = 1.0000   OK
+CHOKE_THRUST_K=0.30 →  phi_grip('point', grip=1.0) = 0.7500   BREAKS D2 (0.75 < 0.9)
+```
+Run in isolation, `test_thrust_protection_grip_invariant` **fails** at K=0.30
+(`AssertionError: bear_spear ... 0.75, assert 0.75 >= 0.9`). Revising a ratified D2 gate is exactly the
+class of hard design call ED-1094 forbids bundling into routine implementation work.
+
+> **⚠ Review hazard (from the adversarial pass, `u9_adversarial_review_v1.md` §4).** In the *full* suite
+> at K=0.30 the D2 gate does **not** appear in the failures — `test_combat_choke.py::test_both_channels_
+> live_not_dead` writes the shared `weapon_physics.CHOKE_THRUST_K` global and resets it to `0.0` in its
+> `finally`, leaking `0.0` to every later test module and masking the breakage. So *flipping the source
+> constant and running the suite hides the D2 hit* — only an isolated run (or direct `phi_grip` call)
+> surfaces it. The shipped `K=0` state is unaffected (the `finally` restores the correct default); this
+> is a review-hazard/test-hygiene item, flagged for follow-up, not a shipped defect. (At K=0.30 the suite
+> shows 12 failed = 9 accepted-red + `test_thrust_grip_invariant_at_k_zero` [my U5 pin] +
+> `test_both_channels_live_not_dead` [its own toggle] + `test_heavy_mirror_fair_and_decisive[spear]`.)
 
 ---
 
@@ -158,10 +199,11 @@ its net effect on engine balance is **zero by design**, and every mechanism it w
 **Does the ratified grip-invariant-thrust first principle admit a shallow, floored choke exception?**
 
 The physical claim behind `CHOKE_THRUST` is sound: a pole gathered up to counterbalance its forward
-mass *does* trade a little axial authority (§0 lever 5). But the engine currently holds a **ratified**
-first principle that a point-head thrust is grip-invariant (`phi_grip==1.0` at every grip;
-`test_thrust_grip_invariant_at_k_zero`). Activating `CHOKE_THRUST` — even to the floored, shallow
-`max(0.75, 1 − K·grip)` form already wired — **contradicts** that ratified principle.
+mass *does* trade a little axial authority (§0 lever 5). But the engine currently holds a **ratified D2
+gate** that a point-head thrust is grip-invariant (`phi_grip>=0.9` at full gather;
+`test_thrust_protection_grip_invariant`, ED-1029 D-series — the authoritative pre-existing principle, not
+my U5 byte-identity pin). Activating `CHOKE_THRUST` — even to the floored, shallow `max(0.75, 1 − K·grip)`
+form already wired — **contradicts** that ratified gate (§2.4: phi drops to 0.75 < 0.9).
 
 Per ED-1094, this is a hard design call that must **not** be bundled into routine work and is flagged
 here loudly rather than resolved unilaterally. The options for Jordan:
@@ -170,10 +212,13 @@ here loudly rather than resolved unilaterally. The options for Jordan:
   (retire lever 5, keep lever 4's accuracy channel at K=0 as above). *Recommended default* — §2.3
   shows the lever doesn't move aggregate balance anyway, so the principle costs nothing to keep.
 - **(b) Admit the floored exception** — ratify that a *choked* (grip_position>0), *head-heavy pole*
-  thrust may lose up to 25% authority; re-baseline `test_thrust_grip_invariant_at_k_zero` to scope
-  its invariant to *un-choked* grips, and set `CHOKE_THRUST_K` from a scenario-specific fit (not the
-  aggregate gate). This is a genuine amendment to a ratified principle — it needs the explicit ruling
-  §4 exists to request.
+  thrust may lose authority, and set `CHOKE_THRUST_K` from a scenario-specific fit (not the aggregate
+  gate). **Note the scale of this call** (adversarial-pass correction, §2.4): the D2 gate's tolerance is
+  `phi>=0.9` — i.e. **≤10%** loss — so the already-wired 25% floor (phi=0.75) does not merely re-scope a
+  pin, it **widens the ratified D2 gate from 10% to 25%**. Any (b) ruling must re-baseline
+  `test_thrust_protection_grip_invariant` (the D2 gate) *and* my `test_thrust_grip_invariant_at_k_zero`
+  pin, and pick a floor consistent with the chosen tolerance. This is a genuine amendment to a ratified
+  gate — it needs the explicit ruling §4 exists to request.
 
 No code changes ride on this call landing either way; the lever is at `K=0` and stays there until
 a ruling. The `CHOKE_ACCURACY` channel (lever 4) is unaffected by this fork — it never touches the
