@@ -5,19 +5,24 @@ are basically tradition primitives" (Jordan): just as a weapon is a bundle of ph
 bundle of ability primitives — the named techniques/concepts it teaches (Indes, Winden, mezzo tempo, atajo,
 sen-no-sen, true-times…), grounded in the historical-combat-manuals corpus.
 
-CURRENT MODEL (scaffold — the modulator form): an ability is a tradition-learned MODULATOR a fighter EQUIPS
-(c.equipped, default empty -> no change -> invariant-safe). Each targets a named LEVER with op '+' (additive) or
-'*' (multiplicative). TARGET MODEL (REARCHITECTURE_v1 Phase 4): an ability becomes learned ACCESS (permission to
-attempt a graph transition), with the op extended to 'gate' and a phase-slot + prereq; effectiveness then EMERGES
-from primitives rather than a hand-set value. This module is where that upgrade lands.
+CURRENT MODEL (levels-of-investment, ED-PC-0023 — Jordan directive "we'll probably have levels of investment for
+techniques"): an ability is a tradition-learned MODULATOR a fighter INVESTS IN. `c.equipped` is either a LIST of
+names (each at level 1.0 — full baseline mastery, back-compat) or a DICT {name: level} (graded investment, level>=0).
+Each ability targets a named LEVER with op '+' (additive, scaled value*level) or '*' (multiplicative, value**level).
+Level 0 -> inert (invariant-safe); efficacy EMERGES from the invested level, not tradition membership — the
+tradition gates ACCESS to the kit, investment + skill drive efficacy (the design principle recorded in
+audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md). This realises the old TARGET MODEL's "effectiveness emerges
+rather than a hand-set value": the per-ability `value` is now the level-1 anchor of a continuum, not a fixed effect.
 
 LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcommit are live (eff_cw consumed at
 ~9 sites). U10/ED-PC-0022 added FIVE morphology-lever channels — 'edge_read', 'spine_press', 'edge_grab',
 'choke_control', 'facing_regime' — consumed at the six U3/U5/U7 lever sites (combat_systems.legibility ×2 /
-bind_sigma / facing_target, contact.grab_sigma). Four are populated (shinogi/zwerchhau/ringen_am_schwert/guardia; ILLUSTRATIVE — per-event effect, ~0 aggregate, see the block below);
-'choke_control' has the SURFACE (the ability_factor hook is live) but no ability yet — a deliberate honest gap: no
-pole/staff tradition in the roster has treatise grounding I would assert, so the channel waits for grounded content
-rather than inventing it. The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen
+bind_sigma / facing_target, contact.grab_sigma). TWO are populated with abilities whose grounding HELD under the
+2026-07-23 adversarial HEMA pass (shinogi->spine_press, ringen_am_schwert->edge_grab; ILLUSTRATIVE — per-event
+effect, ~0 aggregate, see the block below). The other three morphology levers — 'edge_read', 'choke_control',
+'facing_regime' — are BARE (the ability_factor hook is live, factor 1.0 default, byte-identical) awaiting grounded
+content: a deliberate honest gap, NOT invented privilege. ('zwerchhau' was re-homed off edge_read to counter_select
+and 'guardia' removed off facing_regime — both were winden-class category errors, ED-PC-0026.) The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen
 do nothing when equipped — slated for retire-or-reroute (Phase 4 / Jordan's call).
 """
 
@@ -36,8 +41,8 @@ ABILITIES = {
     'true_times':     dict(tradition='english',  grade='S2',    lever='anti_overcommit', op='+', value=0.25,
                            desc="True Times — Silver's true-vs-false times: commitment discipline, fewer over-commits"),
     # Iberian Destreza (S2/S3 — partly reliable; flagged)
-    'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='measure',         op='*', value=1.18,
-                           desc="Atajo — Destreza blade-constraint / measure off the círculo (channel lever; S2/S3)"),
+    'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='leverage',        op='*', value=1.18,
+                           desc="Atajo — Destreza OCCUPATION/interruption of the opponent's line: a blade-constraint/control action via angulation on the círculo, conceptually a bind/LEVERAGE action (analogous to German Stärke-Schwäche), NOT a distance concept — Destreza's distance runs through compás/footwork. [GROUNDING-CORRECTED 2026-07-23, ED-PC-0026: was mis-wired to 'measure'; adversarial HEMA critic — atajo is line-occupation, a leverage action. S2/S3]"),
     # ── U10/ED-PC-0022 MORPHOLOGY-LEVER modulators — the tradition surface the six U3/U5/U7 levers lacked.
     # HONESTY (ED-PC-0023 adversarial review): these are ILLUSTRATIVE seed content for the surface, NOT a proven
     # balance feature. The adversarial balance pass showed the abilities' AGGREGATE win-rate edge is ~0 once
@@ -50,12 +55,18 @@ ABILITIES = {
     # is tradition-AGNOSTIC; more traditions gain grounded abilities as authored (not privileged by construction).
     'shinogi':        dict(tradition='japanese', grade='S2',    lever='spine_press',     op='*', value=1.6,   # [SIM-CALIBRATE]
                            desc="Shinogi — pressing/binding along the single-edged blade's ridge-and-spine (shinogi/mune) to dominate the bind's bearing surface. Grounded to the tradition whose weapon (katana) actually HAS a spine — the physical prerequisite spine() encodes; [provisional grounding — kenjutsu shinogi-receiving, SIM-CALIBRATE value]. Amplifies BIND_SPINE."),
-    'zwerchhau':      dict(tradition='german',   grade='S1/S2', lever='edge_read',       op='*', value=1.6,   # [SIM-CALIBRATE]
-                           desc="Zwerchhau — the Thwart-cut driven with the SHORT/false edge: weaponizes the double/false-edge return-line ambiguity to attack unread (Liechtenauer; amplifies LEGIB_EDGELINE)"),
+    'zwerchhau':      dict(tradition='german',   grade='S1/S2', lever='counter_select',  op='*', value=1.4,   # [SIM-CALIBRATE]
+                           desc="Zwerchhau — the Thwart-cut, a Liechtenauer Meisterhau: crossing the hands to form a structural 'roof' that INTERCEPTS an incoming Oberhau and strikes in the SAME TEMPO. Its documented function is tempo-interception (Ringeck / pseudo-Peter-von-Danzig glosses) — reaching for the single-time counter — NOT false-edge unreadability. [GROUNDING-CORRECTED 2026-07-23, ED-PC-0026: was mis-wired to 'edge_read' on a return-line-ambiguity claim the glosses don't give; adversarial HEMA critic. Now amplifies COUNTER_SELECT alongside Italian mezzo_tempo — the in-tempo counter reach.]"),
     'ringen_am_schwert': dict(tradition='german', grade='S1/S2', lever='edge_grab',      op='*', value=0.4,   # [SIM-CALIBRATE]
                            desc="Ringen am Schwert — wrestling at the sword: a trained grappler seizes the strong/bind of a live blade with far less self-injury (a MITIGATOR, factor<1 on GRAB_EDGE self-hazard)"),
-    'guardia':        dict(tradition='italian',  grade='S2',    lever='facing_regime',   op='*', value=1.5,   # [SIM-CALIBRATE]
-                           desc="Guardia stretta — the Italian single-time strong-side PROFILE (Capoferro/Fabris fight markedly side-on, vs the German square-on), committing the facing regime harder; amplifies FACING_REGIME. [weak grounding — a stance emphasis, not a discrete named technique]"),
+    # 'guardia' REMOVED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): it wired "guardia stretta" onto the
+    # facing_regime (body side-on-vs-square) lever, but "stretta" names a NARROW blade-position / close-MEASURE
+    # guard (paired with misura stretta), a different referent than body facing — the same winden-class category
+    # error (real period term, wrong lever). The Italian profiled-stance TENDENCY facing_regime models is real,
+    # but it has no discrete named technique to anchor an ability honestly, so facing_regime stays a BARE
+    # morphology lever (fires from WP.facing_pref weapon geometry; honest-gap for a tradition amplifier, exactly
+    # like choke_control) rather than ship a misnamed one. edge_read is likewise now bare (zwerchhau re-homed to
+    # counter_select above): both await grounded content, not invented privilege.
 }
 
 
@@ -74,24 +85,70 @@ def kit(trad):
     return TRADITION_KIT.get(trad, [])
 
 
+# Investment scale is BOUNDED (ED-PC-0024 adversarial-review fix): an unbounded level made value**level overflow the
+# downstream 1/(1+exp(-x)) sigmoids (bind_dominance_p / read_contest / grab_outcome) and CRASH fight resolution at a
+# plausible deep-investment level (~15-22). MAX_INVESTMENT_LEVEL caps the per-technique investment (a character-gen /
+# XP layer will bound it too — this is the engine's own safety floor); ABIL_FACTOR_{FLOOR,CEIL} additionally clamp the
+# COMPOSED multiplicative factor so even several abilities stacked on one lever at max level cannot overflow (or a
+# mitigator underflow to exactly 0.0). The clamps sit FAR above/below any sane use (level 8 shinogi=1.6**8≈43 << CEIL;
+# ringen 0.4**8≈6.5e-4 > FLOOR), so they guard pathology only — graded behaviour at sane levels is unchanged.
+MAX_INVESTMENT_LEVEL = 8.0
+ABIL_FACTOR_FLOOR = 1e-4
+ABIL_FACTOR_CEIL = 1e3
+
+
+def _invested(c):
+    """Yield (ability_name, level) over the fighter's LEARNED techniques — the levels-of-investment model
+    (ED-PC-0024, Jordan directive "we'll probably have levels of investment for techniques"; efficacy emerges from
+    what the fighter INVESTED, not tradition membership). `c.equipped` supports either:
+      · a LIST of names        -> each at level 1.0 (full baseline mastery) — BACK-COMPAT, byte-identical to before;
+      · a DICT {name: level}   -> graded investment (level in [0, MAX_INVESTMENT_LEVEL]; 0 = untrained/inert).
+    Level is clamped to [0, MAX_INVESTMENT_LEVEL] (bounded scale; also the overflow safety guard).
+
+    TRADITION GATE (ED-PC-0028): the tradition gates ACCESS to the kit — a fighter can only invest in a technique a
+    tradition they KNOW teaches (the design principle in audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md;
+    closes the build-legality gap the interaction-degeneracy critic flagged: a fighter could equip every tradition's
+    kit at once). An equipped technique NOT in the fighter's tradition's kit is INERT (you cannot use a technique you
+    were never taught) — silently skipped, not an error, so an illegal-but-harmless equip degrades to no-op rather
+    than crashing ('every build available'). The gate reads `c.known_traditions` (a set/list, for cross-training) if
+    present, else the single `c.tradition`. If the fighter has NO tradition attribute at all (a raw-mechanism unit
+    stub), the gate is OFF (ungated) — the gate is a fighter-layer legality rule, not part of the raw factor/bonus
+    math the stub tests. Pure."""
+    eq = getattr(c, 'equipped', ()) or ()
+    known = getattr(c, 'known_traditions', None)
+    if known is None and hasattr(c, 'tradition'):
+        known = (getattr(c, 'tradition'),)
+    allowed = None if known is None else {a for t in known for a in kit(t)}   # None -> ungated (stub); else the union of known kits
+    items = eq.items() if isinstance(eq, dict) else ((name, 1.0) for name in eq)
+    for name, lvl in items:
+        if allowed is not None and name not in allowed:
+            continue                                                          # untaught technique -> inert (tradition gates ACCESS)
+        yield name, min(MAX_INVESTMENT_LEVEL, max(0.0, float(lvl)))
+
+
 def ability_bonus(c, lever):
-    """Sum of ADDITIVE ('+') modulations for `lever` across the fighter's equipped abilities. Default 0.0."""
+    """Sum of ADDITIVE ('+') modulations for `lever`, each SCALED BY the invested level (value*level). Default 0.0.
+    Level 0 -> 0 (inert); level 1 -> value (baseline); deeper investment adds proportionally."""
     tot = 0.0
-    for name in getattr(c, 'equipped', ()) or ():
+    for name, lvl in _invested(c):
         a = ABILITIES.get(name)
         if a and a['lever'] == lever and a['op'] == '+':
-            tot += a['value']
+            tot += a['value'] * lvl
     return tot
 
 
 def ability_factor(c, lever):
-    """Product of MULTIPLICATIVE ('*') modulations for `lever` across the fighter's equipped abilities. Default 1.0."""
+    """Product of MULTIPLICATIVE ('*') modulations for `lever`, each RAISED TO the invested level (value**level).
+    Default 1.0. Level 0 -> 1.0 (inert); level 1 -> value (baseline); deeper investment COMPOUNDS — an amplifier
+    (value>1) grows, a mitigator (value<1) approaches 0 — and value**level never crosses sign or goes negative, the
+    correct graded form for BOTH (unlike a linear 1+level*(value-1), which would drive a mitigator negative). The
+    tradition gates ACCESS to the technique; the invested level drives its EFFICACY."""
     f = 1.0
-    for name in getattr(c, 'equipped', ()) or ():
+    for name, lvl in _invested(c):
         a = ABILITIES.get(name)
         if a and a['lever'] == lever and a['op'] == '*':
-            f *= a['value']
-    return f
+            f *= a['value'] ** lvl
+    return min(ABIL_FACTOR_CEIL, max(ABIL_FACTOR_FLOOR, f))   # bound the composed factor (overflow/underflow guard; far from any sane level, guards pathology only)
 
 
 def eff_cw(c, channel):

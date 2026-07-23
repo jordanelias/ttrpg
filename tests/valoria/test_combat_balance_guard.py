@@ -115,8 +115,15 @@ def test_heavy_mirror_fair_and_decisive(weapon):
             a_wins += (r == 1)
     frac_decided = decided / n
     win_share = a_wins / decided if decided else 0.5
-    assert 0.38 <= win_share <= 0.62, (
-        f"heavy mirror {weapon} A win-share {win_share:.3f} outside [0.38,0.62] — role-symmetry break?")
+    # (a) role-symmetry — but only MEASURABLE when enough fights decide. [ED-PC-0027] the mode-aware heft correction
+    # pushed the spear deeper into the plate-stalemate class (its lighter thrust can't defeat plate), so its heavy
+    # mirror now decides in only ~3% of fights; a win-share over <~10 decided fights is pure first-mover NOISE, not a
+    # role-symmetry break (an identical-weapon/identical-armour mirror is symmetric BY CONSTRUCTION). Assert symmetry
+    # only when the decided population is large enough to measure it; the stalemate classification (b) below still
+    # guards the draw-rate unconditionally, so a genuine trivial-plate-defeat regression is still caught.
+    if decided >= 25:
+        assert 0.38 <= win_share <= 0.62, (
+            f"heavy mirror {weapon} A win-share {win_share:.3f} outside [0.38,0.62] over {decided} decided — role-symmetry break?")
     if weapon in _DEFEATS_PLATE:
         assert frac_decided >= 0.40, (
             f"heavy mirror {weapon}: only {frac_decided:.2f} decided — armour-defeater should resolve its plate mirror")

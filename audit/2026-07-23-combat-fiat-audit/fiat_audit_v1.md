@@ -3,7 +3,7 @@
 **Author:** PC-lane audit node (CLAUDE.md §0/§10) · **Date:** 2026-07-23 · **ED:** ED-PC-0023
 **Follow-on to:** ED-PC-0022 (U10 morphology-lever activation).
 **Charter:** find WHERE top-down *fiat* occurs and fix broken LOGIC that suppresses emergence — radically
-questioning ratified tenets, not just calibration. **Status: PROPOSED** (ratifies by merge, ED-1094).
+questioning ratified tenets, not just calibration. **Status: RATIFIED** (by merge of PR #226, 2026-07-23, ED-1094).
 
 ## Method — four independent passes
 

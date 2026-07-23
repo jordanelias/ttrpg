@@ -74,7 +74,7 @@ INJECTION_POINTS = {
                             'injects': 'measure-control: Spanish circulo / Italian misura bias close_rate + preferred measure'},
     'reopen.measure':      {'node': 'AwaitTempo',
                             'generic': 'reopen vs stay closed (reopen_prob)',
-                            'injects': 'reach/measure-hold: Spanish/Reach impose re-opening (the geometric Vor hold)'},
+                            'injects': 'reach/measure-hold: invested measure abilities (misura/atajo) modulate the measure lever a reach fighter reopens on (the geometric Vor hold) — EMERGENT via the lever, not an imposed reopen-probability (imposition retired ED-PC-0023)'},
     'exchange.commit':     {'node': 'Exchange',
                             'generic': 'commit depth 2-5, disposition-skewed',
                             'injects': 'Stance posture (The Approach) + wariness vs unread tradition (WS-5)'},
@@ -86,7 +86,7 @@ INJECTION_POINTS = {
                             'injects': 'defence-mode preference: German prefers wind, Italian refuses it (stay at the point)'},
     'exchange.bind_entry': {'node': 'Bind',
                             'generic': 'bind on wind/partial',
-                            'injects': 'German IMPOSE the bind (Winden); Italian/English REFUSE it (cavazione/disengage) — the contact axis'},
+                            'injects': 'bind-channel modulation: an invested spine ability (shinogi->spine_press) amplifies the bind\'s spine lever for a fighter who INVESTED in the bind (bind skill opens the node, the ability sharpens it); the edge-read/legibility lever fires from weapon geometry (bare — no grounded ability, ED-PC-0026); refusal (cavazione/disengage) is a measure/disposition choice, NOT an imposed refuse-probability — imposition retired ED-PC-0023'},
     'exchange.counter':    {'node': 'Riposte',
                             'generic': 'single-time counter select',
                             'injects': 'Italian mezzo_tempo / Japanese sen-no-sen / English true-times'},
@@ -95,7 +95,7 @@ INJECTION_POINTS = {
                             'injects': 'Chinese/Filipino flow: extend the burst on a clean beat'},
     'contact.axis':        {'node': 'Contact',
                             'generic': 'strength+leverage grab affinity; a flat branching menu (disarm/throw/pin/control/foot_pin/escape)',
-                            'injects': 'German Ringen imposes/prefers the bind-entry grab; Italian/English favour the disengage/escape branch — BUILT (I7b, D8/D9), tradition-weighting of the menu is a FUTURE increment, not yet wired'},
+                            'injects': 'grab-hazard modulation: invested ringen_am_schwert (edge_grab) mitigates the self-injury of seizing a live blade — an EMERGENT ability effect on the grab lever, NOT a tradition-imposed branch. Menu-weighting of the outcome table is a FUTURE increment, not yet wired (imposition retired ED-PC-0023)'},
 }
 
 

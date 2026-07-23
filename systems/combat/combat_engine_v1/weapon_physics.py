@@ -249,7 +249,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
     if sel_head == 'point':
-        return 1.0   # D2 gate: an axial point thrust is grip-INVARIANT in FORCE — a rigid shaft transmits axial compression independent of hand position (`[ASSERTED — rigid-body first principles]`). The choke CONTROL cost lives in systems.choke_counterbalance -> CHOKE_ACCURACY_K, NOT here (U10/ED-PC-0022 re-home; the retired CHOKE_THRUST_K false-dilemma note is above phi_room_percussion).
+        return 1.0   # D2 gate: an axial point thrust's TRANSMISSION is grip-invariant — a rigid shaft carries axial compression from the hands to the point independent of WHERE on the shaft it is gripped (`[ASSERTED — rigid-body transmission only]`). NARROWED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): the prior tag `[ASSERTED — rigid-body first principles]` OVERCLAIMED — the force is human-GENERATED (choking up shortens the rear body-lever available to drive the thrust), which is a real grip-dependent cost. That cost is not zero; it is booked ELSEWHERE as a CONTROL/authority cost — systems.choke_counterbalance -> CHOKE_ACCURACY_K (the legibility/control channel) and thrust_authority(head_len) (the gap-press lever) — NOT as a phi_grip force term. So this 1.0 is the transmission invariant, not a claim of zero total cost.
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']
@@ -611,7 +611,18 @@ HEFT_REF = 0.09609384729140724  # [ANCHOR, RE-DERIVED U1/ED-PC-0010, 2026-07-08]
                     #   spear's own (untouched) heft numerator — test_falsifiable_heft_ordering's spear<arming
                     #   term now fails; see that test's updated docstring (test_combat_heft.py) — this is the
                     #   SAME reach-class dominance already tracked in registers/handoffs/HANDOFF_PC.md ("SPEAR flat-
-                    #   dominance"), not a new defect, and is deliberately left failing pending that fix.
+                    #   dominance"). RESOLVED 2026-07-23 (ED-PC-0027): the defect was heft() crediting a THRUST with
+                    #   the SWING moment (m_head*PoB_frac) — see THRUST_POB below.
+THRUST_POB = 0.16   # [SIM-CALIBRATE] the PoB-DECOUPLED effective lever for a THRUST's axial impact (ED-PC-0027,
+                    # Jordan-ruled). A thrust delivers momentum ALONG THE LINE — its penetrating impact scales with
+                    # the STRIKING MASS at the business end (m_head) but is INDEPENDENT of the weapon's forward
+                    # balance (PoB_frac), unlike a swing (whose impact IS the forward-balance moment). Using the swing
+                    # moment for a thrust was the SPEAR flat-dominance root: the spear is very forward-balanced
+                    # (PoB_frac 0.344) yet light-headed, so its thrust wrongly read hefty (1.43 > arming's 0.77). With
+                    # the PoB decoupled, the spear's light head reads a low thrust heft (0.46 < 0.77) — the falsifiable
+                    # ordering spear<arming<longsword<greatsword holds. Value ~ a hand-neutral balance (the controlled
+                    # posture a thrust is delivered from), well below the forward swing PoBs (0.08-0.34). Total mass was
+                    # rejected (the long light shaft does not add to point impact and would keep the 2.0kg spear heavy).
 
 def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
@@ -630,8 +641,12 @@ def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     point_concentration). At grip=0 this is byte-identical to the pre-I2 return for EVERY weapon (phi_grip(w,0,
     ...)==1.0 always, by construction — see phi_grip). Pure."""
     d = derive(w)
-    base = (d['m_head'] * max(0.0, d['PoB_frac'])) / HEFT_REF
     head = sel_head if sel_head is not None else w['head']
+    # MODE-SPLIT (ED-PC-0027): a SWING's impact is the forward-balance moment (m_head*PoB_frac); a THRUST's is axial,
+    # PoB-DECOUPLED (m_head*THRUST_POB) — see THRUST_POB. phi_grip already grip-splits (point->1.0); this splits the
+    # BASE lever too, so a forward-balanced light-headed weapon (spear) no longer over-credits its thrust.
+    lever = THRUST_POB if head == 'point' else max(0.0, d['PoB_frac'])
+    base = (d['m_head'] * lever) / HEFT_REF
     return base * phi_grip(w, grip, head, sel_pc)
 
 # tempo_shape() RETIRED at authoring time (a shallow point_concentration/head-length-ratio proxy, corrected before

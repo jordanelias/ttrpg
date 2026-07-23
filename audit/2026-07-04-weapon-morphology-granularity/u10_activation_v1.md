@@ -3,8 +3,9 @@
 **Author:** PC-lane implementation node (CLAUDE.md §10) · **Date:** 2026-07-23 · **ED:** ED-PC-0022
 **Executes:** the U9 capstone's own re-charter (`u9_capstone_v1.md` §3: "activation, if it ever comes, is a
 scenario-specific micro-calibration … out of U9's scope").
-**Status: PROPOSED** (ratifies by merge per ED-1094 unless a section is flagged held-back; none is — the one
-prior held-back call is *dissolved* here, §3).
+**Status: RATIFIED** (by merge of PR #226, 2026-07-23, per ED-1094 — no section was held back; the one prior
+held-back call is *dissolved* in §3). The abilities remain *illustrative/provisional content* (§7); ratification
+covers the mechanism (re-home, surface, activation), not a claim that the current ability roster is final.
 **Scope of change:** engine code (config + 4 modules), 4 new abilities, tests. Core damage/σ resolution untouched.
 
 ---

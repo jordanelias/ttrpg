@@ -170,7 +170,18 @@ def test_use_mode_selection_emerges_from_primitives():
     # katana (0.44) keeps its thrust at light/medium and Mordhaus vs plate; tachi/nandao route to their own attested
     # Mordhau/blunt vs mail/plate (exactly the ED-anticipated shift); glaive keeps an earned mid-tier point. Every
     # NATIVE pointer (bear_spear 0.53, rapier, spear, estoc, yari, …) clamps to ratio 1.0 and is UNAFFECTED.
-    expected = ['greatsword', 'kama_yari', 'glaive', 'guandao', 'fauchard', 'guisarme', 'ji', 'katana', 'tachi',
+    # [ED-PC-0027, 2026-07-23 — T_vuln undefended-time model + mode-aware heft] select_mode's greedy comparator now
+    # discounts each mode's coupling by its EXPOSURE (a committed swing leaves you open longer than a controlled
+    # thrust, EXPOSE_SELECT_K), so in the 1v1 thrust-capable weapons prefer the point. This RE-SHAPES the changer set:
+    #   - DROP kama_yari/guandao/fauchard/ji: they now thrust at EVERY tier (the point wins the exposure trade even
+    #     unarmoured — grounded: their big pole-cut is exposing, the point is the dueling staple), so their selected
+    #     head no longer CHANGES with armour → they are point-primary, not changers.
+    #   - JOIN lucerne_hammer/goedendag: they now thrust at soft tiers but HAMMER vs mail/plate (their weak point
+    #     can't gap-seek plate, so the resisted-but-heavy percussion wins there) → a genuine armour-conditional switch.
+    # poleaxe is NO LONGER excluded here: it thrusts at every tier (see test_gap_game_poleaxe_thrusts_in_the_duel), so
+    # its head does not change with armour → correctly absent from the changer set for a different reason than the old
+    # [PHASE-C FLAG] (it is point-primary now, not blunt-locked).
+    expected = ['greatsword', 'glaive', 'guisarme', 'lucerne_hammer', 'goedendag', 'katana', 'tachi',
                 'odachi', 'changdao', 'nandao', 'flamberge', 'estoc', 'hook_sword']
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
@@ -209,23 +220,23 @@ def test_afforded_heads_emerge_from_phase_b2_mode_elements():
 
 
 # ── GAP GAME ──────────────────────────────────────────────────────────────────────────────────────
-def test_gap_game_poleaxe_spikes_plate():
-    """The situational gap game: vs plate the poleaxe SELECTS its spike (puncture/point — the reach-ladder); unarmoured
-    it does not. Emergent from gap_precision × GAP_EXPOSURE, no name conditional.
-    [PHASE-C FLAG, 2026-07-02] see weapon_physics.percussion_authority's docstring — morphology-rearch Phase B's
-    real poleaxe mass distribution lifts its percussion authority above the mace's, so it now selects its hammer
-    face (percussion) instead of the spike (puncture) vs heavy armour. Deliberately left failing pending Phase C's
-    engine-scale recalibration against the grounded masses, not silently patched to accept the new selection.
-    [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (I0->I8, the closing-distance/facing/grip/contact redesign) is
-    now complete and did NOT touch this root cause — it's the SAME Phase-B mass-model debt I8's own balance
-    sweep found driving the whole reach-class roster (spear/yari/guisarme/poleaxe) above the plan's ~55-75%
-    contested target band, see i8_capstone_audit.md item 1. Still correctly deferred to Phase C, now with a
-    wider measured scope; not a regression from R2."""
+def test_gap_game_poleaxe_thrusts_in_the_duel():
+    """In the 1v1 the engine models, the poleaxe SELECTS its spike (puncture/point) at EVERY armour tier —
+    RESOLVED 2026-07-23 (ED-PC-0027, the T_vuln undefended-time model + Jordan's historical grounding). The spike
+    defeats plate at the reach-ladder gaps (gap_precision × GAP_EXPOSURE), AND the thrust is the poleaxe's dueling
+    staple at all measures because its heavy SWING (the hammer/bec) leaves you open far longer than a controlled
+    thrust — the T_vuln vulnerability window. Per Jordan (2026-07-23): the poleaxe's swing 'was a man-advantage
+    move, used when they had opportunity to do so without being struck themselves' — i.e. group combat, NOT the
+    1v1. So the OLD assertion 'unarmoured it does NOT spike' was a fiat encoding the videogame trope that a heavy
+    weapon hammers soft targets; it is retired (like the sabre pure-cutter assertion). The hammer is not gone —
+    it remains afforded and would win selection if its exposure window were covered (a group-combat model, future);
+    it simply loses the 1v1 exposure trade. Emergent from gap_precision + T_vuln, no name conditional."""
     C, core, S, WP, CFG = _mods()
-    dm_heavy, h_heavy = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'heavy', False, CFG)[:2]
-    assert (dm_heavy, h_heavy) == ('puncture', 'point'), f"poleaxe vs plate should spike; got {(dm_heavy, h_heavy)}"
-    h_none = S.select_mode(C.Combatant('x', weapon='poleaxe'), 'none', False, CFG)[1]
-    assert h_none != 'point', "poleaxe unarmoured should not default to the spike (the gap game is situational)"
+    for tier in ('none', 'light', 'medium', 'heavy'):
+        dm, h = S.select_mode(C.Combatant('x', weapon='poleaxe'), tier, False, CFG)[:2]
+        assert (dm, h) == ('puncture', 'point'), f"poleaxe should thrust (the 1v1 staple) vs {tier}; got {(dm, h)}"
+    # the hammer is still AFFORDED (not removed) — it just loses the 1v1 exposure trade
+    assert 'blunt' in S.afforded_heads(C.WEAPONS['poleaxe']), "the poleaxe's hammer face is still afforded"
 
 
 # ── I2 CIRCUMSTANCE DEGRADATION (D1/D2/D2b/D5, 2026-07-03) ──────────────────────────────────────────
@@ -287,28 +298,32 @@ def test_heft_percussion_byte_identical_at_grip_zero():
 
 
 def test_damage_retention_worst_case_material_lever():
-    """D2/I2 gate #3: full-damage retention through core.damage (armour=none, success), WORST-CASE across STR
-    2/4/6/8, clears the plan's material-lever bar: guandao <=0.76, voulge/bardiche <=0.88 (borderline, JD-1)."""
+    """D2/I2 gate #3: a gathered SWING's full-damage retention through core.damage (armour=none, success),
+    WORST-CASE across STR 2/4/6/8, clears the plan's material-lever bar: guandao <=0.76, voulge/bardiche <=0.88
+    (borderline, JD-1). The gate is about the SWING/CUT degradation (a broad arc loses power when you cannot fully
+    extend). [ED-PC-0027: these weapons now SELECT the grip-invariant THRUST in the 1v1 (the T_vuln exposure trade),
+    whose damage correctly does NOT degrade with grip — phi_grip('point')==1.0 — so the material lever is measured on
+    each weapon's CUT head EXPLICITLY, the mode the gate governs; the thrust's grip-invariance is a separate, correct
+    property tested elsewhere.]"""
     C, core, S, WP, CFG = _mods()
 
-    def worst_retention(name, grip_star):
+    def worst_retention(name, grip_star, cut_head):
         w = C.WEAPONS[name]
-        c = C.Combatant('x', weapon=name)
-        dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG)
-        gap = sg if sg is not None else w['gap']
-        perc = sp if sp is not None else WP.percussion_authority(w)
+        eff, dm, gap, perc, spc, ref = S.afforded_heads(w)[cut_head]
+        gap = gap if gap is not None else w['gap']
+        perc = perc if perc is not None else WP.percussion_authority(w)
         worst = 0.0
         for STR in (2, 4, 6, 8):
-            heft_open = core.heft_resp(w, CFG, grip=0.0, sel_head=h, sel_pc=spc)
-            heft_closed = core.heft_resp(w, CFG, grip=grip_star, sel_head=h, sel_pc=spc)
-            dmg_open = core.damage('success', heft_open, h, STR, 'none', False, gap, perc)
-            dmg_closed = core.damage('success', heft_closed, h, STR, 'none', False, gap, perc)
+            heft_open = core.heft_resp(w, CFG, grip=0.0, sel_head=cut_head, sel_pc=spc)
+            heft_closed = core.heft_resp(w, CFG, grip=grip_star, sel_head=cut_head, sel_pc=spc)
+            dmg_open = core.damage('success', heft_open, cut_head, STR, 'none', False, gap, perc)
+            dmg_closed = core.damage('success', heft_closed, cut_head, STR, 'none', False, gap, perc)
             worst = max(worst, dmg_closed / dmg_open if dmg_open else 0.0)
         return worst
 
-    assert worst_retention('guandao', 1.0) <= 0.76
-    assert worst_retention('voulge', 1.0) <= 0.88
-    assert worst_retention('bardiche', 0.627) <= 0.88
+    assert worst_retention('guandao', 1.0, 'curved_cut') <= 0.76
+    assert worst_retention('voulge', 1.0, 'cut_thrust') <= 0.88
+    assert worst_retention('bardiche', 0.627, 'straight_cut') <= 0.88
 
 
 def test_room_no_lever_falls_monotone_down():
@@ -443,11 +458,17 @@ def test_close_efficacy_arc_vs_thrust_from_selected_element():
 
 def test_close_efficacy_shifts_selection_in_tight_quarters():
     """D5: guandao's afforded point element (rear spike, I4/JD-5) out-couples its degraded cleaver once quarters
-    are tight enough, even unarmoured — a real, measurable selection shift, not just a magnitude tweak."""
+    are tight enough, even unarmoured — a real, measurable selection shift, not just a magnitude tweak. [ED-PC-0027:
+    the T_vuln exposure layer (EXPOSE_SELECT_K) now ALSO prefers the thrust in OPEN measure (the guandao's big cut is
+    exposing in a 1v1), which pre-empts and SUBSUMES this shift — the guandao thrusts at every measure. To isolate
+    close_efficacy's OWN mechanism (the D5 gate this test governs), the exposure layer is disabled here (K=0); the
+    two effects are complementary — close_efficacy discounts a broad arc in the close, exposure discounts it for its
+    vulnerability window — and both point the same way.]"""
     C, core, S, WP, CFG = _mods()
+    iso = dict(CFG); iso['EXPOSE_SELECT_K'] = 0.0   # isolate close_efficacy from the T_vuln exposure discount
     c = C.Combatant('x', weapon='guandao')
-    h_open = S.select_mode(c, 'none', False, CFG, measure_gap=None)[1]
-    h_close = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)[1]
+    h_open = S.select_mode(c, 'none', False, iso, measure_gap=None)[1]
+    h_close = S.select_mode(c, 'none', True, iso, measure_gap=0.0)[1]
     assert h_open == 'curved_cut'
     assert h_close == 'point'
 
@@ -813,9 +834,18 @@ def test_reach_class_beats_arming_not_inverted():
             share[(w, armor)] = wins / dec
     # (1) reach dominates every NON-plate tier for the DEDICATED reach weapons — the reach advantage vs flesh/cloth/mail
     #     is real. (spear/yari long point + poleaxe percussion; guisarme handled separately below.)
-    for w in ('spear', 'yari', 'poleaxe'):
-        for armor in ('none', 'light', 'medium'):
+    #     [ED-PC-0027, 2026-07-23] the mode-aware heft correction (a thrust no longer carries the swing moment — the
+    #     SPEAR flat-dominance root) reduced the spear/yari OFF-plate thrust damage toward the target band: they stay
+    #     STRICTLY dominant at none/light (reach unresisted → ~0.70-0.78) but MEDIUM (mail) is now a genuine near-even
+    #     contest (~0.50 true, n=60/cell SE~0.09 so the seed can land ~0.45), because mail resists the (now lighter)
+    #     thrust while the reach edge persists — EXACTLY the guisarme (1b) situation, given the same near-even guard.
+    #     The poleaxe (armour-defeating percussion + spike) stays strictly dominant at every off-plate tier.
+    for armor in ('none', 'light', 'medium'):
+        assert share[('poleaxe', armor)] > 0.5, f"poleaxe vs arming at {armor}: reach INVERTED off-plate ({share[('poleaxe', armor)]:.2f})"
+    for w in ('spear', 'yari'):
+        for armor in ('none', 'light'):
             assert share[(w, armor)] > 0.5, f"{w} vs arming at {armor}: reach INVERTED off-plate ({share[(w, armor)]:.2f})"
+        assert share[(w, 'medium')] > 0.42, f"{w} vs arming at medium: reach ANNIHILATED ({share[(w, 'medium')]:.2f}) — expected a near-even contest (ED-PC-0027)"
     # (1b) [RE-BASELINED, U10/ED-PC-0022; TIGHTENED ED-PC-0023 per the adversarial review]. The guisarme (versatile
     #     mid-reach hooked polearm) keeps the STRICT >0.5 guard at none/light — the review confirmed it stays solidly
     #     dominant there (~0.68-0.78 at N>=300), so those tiers never needed loosening (my first re-baseline over-broadly
@@ -829,9 +859,18 @@ def test_reach_class_beats_arming_not_inverted():
     # (2) at HEAVY, the dedicated armour-defeating reach weapon still dominates (poleaxe's swung spike/hammer defeats plate).
     assert share[('poleaxe', 'heavy')] > 0.5, f"poleaxe vs arming at heavy should still defeat plate ({share[('poleaxe','heavy')]:.2f})"
     # (3) at HEAVY, a PURE-POINT reach weapon is correctly brought BELOW dominance (the grounded G4 correction — a long
-    #     reach-thrust cannot press a point into a harness gap), but NOT annihilated (a real zeroing bug still trips the floor).
+    #     reach-thrust cannot press a point into a harness gap). [ED-PC-0027] the mode-aware heft correction dropped the
+    #     spear/yari thrust heft (a thrust no longer carries the swing moment), so vs PLATE they are now a near-total
+    #     STALEMATE LOSS (~0.05) — historically correct (a spear cannot defeat full plate; the arming can at least close
+    #     and attempt the gaps). The old 0.10 floor was calibrated to the pre-correction inflated thrust; a genuine
+    #     ZEROING bug (the reach lever going fully dead) is already caught by the STRICT >0.5 none/light assertions
+    #     above, so here we assert only that plate correctly brings them below dominance.
     for w in ('spear', 'yari'):
         s = share[(w, 'heavy')]
-        assert 0.10 <= s < 0.5, f"{w} vs arming at heavy: expect a grounded contest-or-loss [0.10,0.5), got {s:.2f}"
-    # (4) the versatile mid-reach cut_thrust polearm (guisarme) contests plate around even — neither dominant nor lost.
-    assert 0.30 <= share[('guisarme', 'heavy')] <= 0.65, f"guisarme vs arming at heavy should contest ({share[('guisarme','heavy')]:.2f})"
+        assert s < 0.5, f"{w} vs arming at heavy: plate should bring a pure-point reach weapon below dominance, got {s:.2f}"
+    # (4) the versatile mid-reach cut_thrust polearm (guisarme) contests plate — neither lost nor runaway. [ED-PC-0027]
+    #     it now SELECTS its gap-thrust (point) vs plate under the T_vuln exposure trade (its hooked bill thrusts to the
+    #     gaps rather than swinging into a harness), so it contests a bit more strongly than before: true ~0.64 (n=300),
+    #     n=60/seed reads ~0.71 (SE~0.07 over ~45 decided) — a favoured contest vs the plate-stalemate arming, not
+    #     runaway dominance. Band widened accordingly.
+    assert 0.30 <= share[('guisarme', 'heavy')] <= 0.75, f"guisarme vs arming at heavy should contest ({share[('guisarme','heavy')]:.2f})"

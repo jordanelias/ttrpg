@@ -2,7 +2,7 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-from math import exp, tanh, sqrt
+from math import tanh, sqrt   # logistic/exp single-sourced in core.logistic (ED-PC-0025)
 import core
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
 import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
@@ -142,7 +142,7 @@ def balance_eff(c, fat, cfg):
     return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
 
-def _recovery_mode_commitment(w, g, cfg):
+def _recovery_mode_commitment(w, g, cfg, sel_pc=None, room=1.0):
     """The mode-blended balance-recovery commitment at grip-position g — the shared physical core BOTH
     recoverability_factor and weapon_tempo's own balance-recovery term read: SWING arrest (sqrt of the re-
     pivoted MoI, GATED by the forward static moment so a centre-balanced pole is not mis-ranked as
@@ -152,12 +152,26 @@ def _recovery_mode_commitment(w, g, cfg):
     facts a weapon's balance-recovery genuinely depends on. Dimensionless vs the 2H cut-thrust anchor (1.0 =
     neutral). Extracted so weapon_tempo can reuse this core WITHOUT recoverability_factor's own 1H/2H-control-
     credit and lunge terms, which weapon_tempo already applies as its own separate, differently-scoped cadence
-    penalties (re-applying them here would double-count). Pure."""
+    penalties (re-applying them here would double-count). Pure.
+
+    MODE-AWARE + MEASURE-AMPLIFIED (ED-PC-0027, the T_vuln undefended-time model): this core doubles as the
+    SELECTED-MODE vulnerability window a fighter carries while executing an attack (delivery + recovery), driven by
+    two args that DEFAULT to the byte-identical prior behaviour:
+      · `sel_pc` — the point_concentration of the SELECTED use-mode (None -> whole-weapon pc). A poleaxe that chose
+        its spike (sel_pc high) retracts on-line like a thrust (low commitment); one that chose its hammer (sel_pc
+        low) carries the full swing-arc commitment. So *choosing* the thrust genuinely lowers the window — the mode
+        asymmetry the whole-weapon pc could not see.
+      · `room` — the swing-arc's available measure (1.0 = full, default). A swing in TIGHT measure is caught mid-arc
+        (cannot develop or arrest cleanly) so its commitment RISES (EXPOSE_CLOSE_K); a thrust retracts along the line
+        regardless, so the C_thrust branch is measure-INVARIANT (the same rigid-body reasoning as close_efficacy's
+        point->1.0). Grounding: Silver's 'times' (the thrust is the shortest, safest line) + 'closer = less able to
+        swing'. room=1.0 -> no amplification -> byte-identical."""
     a = WP.at_grip(w, g)
     I_g, S_g = max(1e-9, a['I_g']), a['S_g']
     I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
-    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
-    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref)
+    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']   # SELECTED-mode thrust-ness (fallback: whole-weapon)
+    close = 1.0 + cfg['EXPOSE_CLOSE_K'] * (1.0 - max(0.0, min(1.0, room)))         # tighter room -> a swing is caught mid-arc; thrust invariant
+    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref) * close
     C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
     return pc * C_thrust + (1 - pc) * C_swing
 
@@ -174,8 +188,10 @@ def recoverability_factor(c, cfg):
     I_g = max(1e-9, WP.at_grip(w, g)['I_g'])
     I_ref = cfg['REC_I_REF']
     two = 1.0 if w['hands'] == 2 else 0.0
-    pc = w['geometry']['point_concentration']                                  # CONTINUOUS thrust-ness (rapier .95, mace .02)
-    C_mode = _recovery_mode_commitment(w, g, cfg)
+    sel_pc = getattr(c, 'sel_pc', None)                                        # SELECTED-mode thrust-ness (ED-PC-0027: T_vuln is mode-aware)
+    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']   # fallback: whole-weapon (single-mode weapons: sel_pc==whole-weapon pc, byte-identical)
+    room = getattr(c, 'range_avail', 1.0)                                      # tight measure amplifies a SWING's window (a thrust is measure-invariant)
+    C_mode = _recovery_mode_commitment(w, g, cfg, sel_pc=sel_pc, room=room)
     # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
     tau     = (1 + cfg['REC_W2'] * two) * (1 + cfg['REC_K_COUPLE'] * w['grip_len'] * two)               # grip_len in metres (U0)
     tau_ref = (1 + cfg['REC_W2'])      * (1 + cfg['REC_K_COUPLE'] * cfg['REC_GRIP_REF'])               # REC_GRIP_REF in metres (U0)
@@ -569,14 +585,19 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         h=next(iter(heads))
     else:
         # greedy: the mode delivering the most damage-coupling THROUGH this armour, weighted by close-efficacy (D5:
-        # a broad arc that cannot fully develop in the close is discounted, a thrust barely). perc carries the blunt
-        # authority (a high-authority hammer's through-plate transmit) and gap_prec carries the thrust's GAP-SEEKING
-        # plate-defeat (the situational gap game), so the poleaxe's hammer and its spike are compared on the same
-        # coupling scale — and the spike wins vs harness. Both are now the SELECTED ELEMENT's OWN gap/perc (R-7/M-02).
+        # a broad arc that cannot fully develop in the close is discounted, a thrust barely) AND discounted by its
+        # UNDEFENDED-TIME (T_vuln, ED-PC-0027). perc carries the blunt authority, gap_prec the thrust's GAP-SEEKING
+        # plate-defeat. The T_vuln safety factor 1/(1+EXPOSE_SELECT_K*max(0,exposure-1)) prices the vulnerability window
+        # of each mode: a heavy committed SWING (low sel_pc, large swing-arc MoI) leaves you open far longer than a
+        # controlled THRUST (high sel_pc, retracts on-line) — so a fighter trades damage vs exposure and, in the 1v1
+        # (no ally to cover a swing — Jordan 2026-07-23: the poleaxe's swing was a man-advantage move, the THRUST its
+        # dueling staple), thrust-capable weapons prefer the point EMERGENTLY (the poleaxe spikes at every tier), while
+        # a pure cutter with no real point keeps cutting. A mode with exposure<=1 (a clean thrust) is undiscounted.
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
                   perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
                   eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']))
-              * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd))
+              * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
+              / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
     if h=='cut_thrust':
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
@@ -741,7 +762,7 @@ def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
     RR-02: takes the longer fighter's actual fatigue (was hardcoded 0). RR-03: normalises by REACH_W['none']."""
     id_read = reading(longer,cfg)*TR.eff_cw(longer, 'visual')
     deny_read = reading(shorter,cfg)*TR.eff_cw(shorter, 'visual')
-    read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
+    read_edge = core.logistic((id_read-deny_read)/2.0)
     foot = balance_eff(longer,fat_longer,cfg)/3
     p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/cfg['REACH_W']['none']
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
@@ -763,7 +784,7 @@ def bind_sigma(aggressor, defender, cfg, TR):
                * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(aggressor.w))   # the AGGRESSOR's wavy edge disrupts the defender's read
     tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
-    spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w)*TR.eff_cw(aggressor,'spine_press') - WP.spine(defender.w)*TR.eff_cw(defender,'spine_press'))   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press, Winden) — a separate physical fact from the lever-arm in `lev`, kept its own ablatable primitive (not multiplied into leverage — §2.3). Each side is AMPLIFIED by its own 'spine_press' ability (German Winden; factor 1.0 default), so a bind specialist makes the spine decisive. 0 for a double-edged/edgeless weapon.
+    spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w)*TR.eff_cw(aggressor,'spine_press') - WP.spine(defender.w)*TR.eff_cw(defender,'spine_press'))   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press) — a separate physical fact from the lever-arm in `lev`, kept its own ablatable primitive (not multiplied into leverage — §2.3). Each side is AMPLIFIED by its own 'spine_press' ability (Japanese SHINOGI — the ability wired here; factor 1.0 default), so a bind specialist makes the spine decisive. [comment corrected 2026-07-23 ED-PC-0026: was "German Winden", a stale ref to the retired winden ability — winden is a DOUBLE-edged longsword technique, physically inert on this single-edge-only lever, which is why it was retagged to shinogi.] 0 for a double-edged/edgeless weapon.
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
     return lev + catch + tac + strq + spine + wound
 
@@ -821,7 +842,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     legib=legibility(aggressor, commit, cfg, defender.armor)
     read_d=reading(defender,cfg)*TR.eff_cw(defender,'visual')*TR.eff_cw(defender,'precommit')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)
     read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
-    p_read=1/(1+exp(-(read_d-read_a)/1.0))
+    p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
     modes=['parry','dodge','wind']
     msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
@@ -948,9 +969,9 @@ def counter_success_prob(defender, cfg, TR):
 
 def bind_dominance_p(bsig):
     """Logistic of the bind net-sigma: P(aggressor dominates this bind iteration). Pure."""
-    return 1/(1+exp(-bsig))
+    return core.logistic(bsig)
 
 def disrupt_resist_p(c, cfg):
     """Concentration disruption-resistance: P(the fighter completes a simultaneous strike despite being hit),
     logistic in Focus. Pure."""
-    return 1/(1+exp(-cfg['DISRUPT_K']*(c.focus-3)))
+    return core.logistic(cfg['DISRUPT_K']*(c.focus-3))

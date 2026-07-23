@@ -6,6 +6,66 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **'BUILD ALL' PASS DONE (ED-PC-0026/0027/0028, 2026-07-23) — Phases 1-4, all committed & pushed to PR #227.**
+  - **Phase 1 (ED-PC-0026):** HEMA grounding corrections — atajo measure→leverage, zwerchhau edge_read→counter_select,
+    guardia REMOVED (facing_regime now a bare lever), phi_grip tag narrowed, stale winden comment fixed.
+  - **Phase 2 (ED-PC-0027):** T_vuln undefended-time model + mode-aware heft. Thrust heft PoB-DECOUPLED
+    (m_head*THRUST_POB=0.16) — fixes spear flat-dominance + heft ordering (ED-PC-0010). T_vuln exposure
+    (EXPOSE_CLOSE_K=0.6, EXPOSE_SELECT_K=0.3) makes swings cost their undefended window in the fight AND in
+    select_mode → thrust-capable weapons prefer the point in the 1v1 (poleaxe spikes every tier), pure cutters keep
+    cutting. Resolves poleaxe gap-game (ED-PC-0012 lineage).
+  - **Phase 3:** the 9 pre-existing intentional-red failures all resolved emergence-first (heft ordering via Phase 2;
+    poleaxe → thrust-in-1v1; sabre pure-cutter fiat retired via continuous THRUST_AUTH_REF de-rating; element-parity +
+    r3_identity + heft goldens regenerated/reshaped for the roster growth + new signatures). Combat suite 160 green;
+    full suite 639 passed / 0 non-combat regressions.
+  - **Phase 4 (ED-PC-0028):** tradition-gate on equipped — an untaught cross-tradition technique is inert (closes the
+    interaction-critic's build-legality gap); cross-training via `known_traditions`.
+  - **OPEN / NEXT ACTIONS:**
+    1. **Balance re-verification** — the independent adversarial balance critic was LOST to a worker restart mid-run;
+       I finalized calibration on my own foreground measurement (defensible: rapier rules the light duel, plate-defeaters
+       vs plate, mirrors fair). RE-RUN an independent balance critic to double-check the roster-wide thrust-lean.
+    2. **Jordan's steer on the roster-wide thrust-lean** — the emergent consequence (cut+point weapons prefer the point
+       in a 1v1) is [SIM-CALIBRATE]-magnitude (THRUST_POB/EXPOSE_SELECT_K); confirm the feel is desired vs. giving
+       cut-primary weapons more cut-identity. Watch items: spear/yari soft vs longsword (0.33/0.37), guandao strong
+       (0.84) — within the PRE-EXISTING reach-above-band (i8 item 1), reduced not worsened by this change.
+
+- **COMBINATORIAL/ISOLATION AUDIT + NODE INTERROGATION DONE (ED-PC-0025, 2026-07-23).** Isolation sweep +
+  node-grouped interaction matrix + all-node pipeline trace + two adversarial critics (dead-wire forensics,
+  interaction degeneracy). **VERDICT: no dead wires** — the morphology levers are situational-per-event and
+  *frequency-gated by their enabling skill* (no bind skill → no binds → spine lever has nothing to amplify;
+  deep+paired investment = +13pp vs an equal opponent). Contact axis is decisive (35% dagger flip); only its knobs
+  are aggregate-neutral. **FIXED (ratified):** single-source overflow-safe `core.logistic()` (5-way open-coded squash
+  collapsed; out-of-contract OverflowError 99/300→0/300, byte-identical legal builds); `INJECTION_POINTS`
+  imposition-doctrine residual → emergent model. See `audit/2026-07-23-combat-combinatorial-audit/findings_v1.md`.
+  - **DEFERRED / NEXT ACTIONS (surfaced, awaiting Jordan — Jordan is actively designing #1):**
+    1. **Mode-exposure / undefended-time model `T_vuln`** — Jordan directive 2026-07-23: swing-vs-thrust
+       exposure-to-counterattack is NOT modelled at the mode level (`select_mode` is exposure-blind;
+       `overcommit_exposure`→`recoverability_factor` reads whole-weapon pc, not `sel_pc`). Design agreed: a
+       vulnerability window `T_vuln` = delivery + recovery + measure, blended by point_concentration, driving the
+       counter/exposure path and feeding mode selection so the poleaxe spike *emerges* vs plate. Grounding hierarchy:
+       structure from first-principles kinematics (self-consistent with `_recovery_mode_commitment`), magnitudes
+       cross-checked against HEMA-biomechanics **mocap** (supplement), direction from Silver's "times" / Le Jeu de la
+       Hache. **NOT BUILT — Jordan paused implementation; build on his word.**
+    2. **HEMA historical-grounding corrections** (adversarial critic): `guardia`→facing_regime WRONG (guardia stretta
+       = close-*measure* guard, not body-facing), `atajo`→measure WRONG (→leverage), `zwerchhau`→edge_read WRONG-leaning
+       (real function tempo-interception), `phi_grip` `[ASSERTED]` tag overclaims, stale `combat_systems.py:766`
+       "German Winden" comment → shinogi. Not applied.
+    3. **No-tradition-gate on `equipped`** — build-legality gap (any fighter can equip every tradition's kit).
+    4. **The 9 pre-existing intentional-red failures** — Jordan chose "fix all emergence-first" (element-parity golden
+       regen; sabre pure-cutter = retire the fiat assertion; poleaxe = resolve via `T_vuln` #1, NOT a test-relax;
+       spear heft/ED-PC-0010 = derivation fix). Not executed (paused with #1).
+
+- **LEVELS OF INVESTMENT FOR TECHNIQUES DONE (ED-PC-0024, 2026-07-23) + PR #226 ratification-flip.** Graded the
+  binary equipped-ability into a continuum: `ability_factor` = product of `value**level`, `ability_bonus` = sum of
+  `value*level`; `equipped` supports a list (level 1.0, back-compat) or `{name: level}` (level>=0; 0=inert). Efficacy
+  emerges from the invested level, not tradition membership (tradition gates access; investment+skill drive efficacy
+  — realises ability_primitives' own TARGET MODEL). Back-compat byte-identical; suite 9 accepted-red + 2 investment
+  tests. Also flipped the PR #226 ratification bookkeeping (ED-1094): u10_activation_v1.md + fiat_audit_v1.md
+  Status PROPOSED→RATIFIED, ED-PC-0022/0023 needs_jordan→false, CURRENT.md combat row corrected to the post-review
+  final state (shinogi not winden; +2.8pp retracted; texture instrument; imposition retired; design principle).
+  Forward: a character-gen/economy layer to BOUND investment (out of engine scope); the roster `value` constants are
+  the level-1 anchors [SIM-CALIBRATE].
+
 - **IMPOSITION FIAT RETIRED (Jordan ruling 2026-07-23, ED-PC-0023) + design principle recorded.** `impose_node`
   FORCED a tradition's preferred node via a label coin-flip overriding the emergent resolution — top-down scripting.
   Retired: `IMPOSITION_GATE=False`, `impose_node` → no-op, `IMPOSE_BIND_BOOST`/`IMPOSE_REFUSE_P` deleted (reverses the

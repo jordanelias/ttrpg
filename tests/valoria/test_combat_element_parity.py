@@ -83,7 +83,8 @@ def test_afforded_heads_parity():
     for n, g in golden.items():
         af = S.afforded_heads(C.WEAPONS[n])
         assert set(af) == set(g['afforded']), f"{n}: afforded tokens {set(af)} != golden {set(g['afforded'])}"
-        for tok, (eff, dm) in af.items():
+        for tok, vals in af.items():                 # vals is the widened (eff, dm, gap, perc, pc, ref) tuple (I2/M2)
+            eff, dm = vals[0], vals[1]
             geff, gdm = g['afforded'][tok]
             assert abs(eff - geff) <= 1e-6, f"{n}.{tok} effectiveness {eff} != {geff}"
             assert dm == gdm, f"{n}.{tok} damage_mode {dm} != {gdm}"
