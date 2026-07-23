@@ -106,12 +106,15 @@ SEVERITY = {
     "audit_schema_mismatch": "high", "register_quarantined": "high", "register_phantom_source": "high",
     "parse_failure": "high",
     "contract_island": "med", "contract_assumption": "med", "contract_doc_dead": "med",
-    "audit_implied_missing": "med", "audit_cascade_sink": "med", "audit_throughline_orphan": "med",
+    "audit_implied_missing": "med", "audit_throughline_orphan": "med",
     "sim_not_implemented": "med", "status_noncurrent": "med", "stale_retired_pointer": "med",
     "integrity_unverified_pin": "med",
     "prose_marker": "low", "code_marker": "low", "unregistered_term": "low", "audit_notional": "low",
     "audit_sparse": "low", "audit_vocab_debt": "low", "audit_excluded_system": "low",
     "apparatus_orphan": "low",
+    # audit_cascade_sink is LOW, not med: it's an UNVERIFIED LEAD (the return-path search is
+    # cap-limited and trips heavily on a dense corpus — see coverage_gaps), not a confirmed gap.
+    "audit_cascade_sink": "low",
 }
 DEFAULT_SEVERITY = "med"
 SEVERITY_RANK = {"high": 0, "med": 1, "low": 2}
@@ -555,10 +558,14 @@ def scan_audit_structural():
     # D — cascade sinks (flowed into, never back out): few (<=15 shown); emit each + truncation caveat.
     trunc = d.get("cascade_truncated_calls", 0)
     dtot = d.get("cascade_sinks_total", 0)
+    # QUANTITATIVE honesty (fix #6): the return-path search is capped (5000 steps / 200 nodes). In a
+    # dense corpus that cap trips often, and a capped 'no-return' can be a FALSE sink. Print the actual
+    # trip count so the reader knows HOW unreliable — "some" understates a 5-figure number.
+    cav = (f" ⚠ UNVERIFIED LEAD: the return-path search hit its traversal cap {trunc:,} times this "
+           f"run, so this 'no-return' may be a cap artifact, not a real sink — verify by hand"
+           if trunc else "")
     for r in d.get("cascade_sinks", []):
         term = r.get("terminal")
-        cav = (" ⚠ some sinks may be traversal-cap artifacts (D_cascade_truncated_calls>0) — verify"
-               if trunc else "")
         out.append(finding("audit_cascade_sink", f"sink::{term}",
                            f"{term} — cascade sink ({r.get('chains')} chains)",
                            f"“{term}” is reached by {r.get('chains')} citation chains (len≥3) but never "
@@ -692,6 +699,12 @@ COVERAGE_GAPS = [
     "vector_audit.audit_exclusions, not enumerated per-item",
     "prose/status scans cover the canonical doc roots only; audit/ and workplans/ working docs are "
     "intentionally out of scope (they PROPOSE, not assert)",
+    "the vector-audit sees the design CITATION/registry structure, NOT the sim .py behaviour, the "
+    "typed engine/params VALUES, or actual runtime — a wrong number or a broken simulation is "
+    "invisible to it (sim stubs ARE surfaced via sim_not_implemented, but only the stubs, not logic)",
+    "vector-audit Mode D (cascade sinks) uses a capped return-path search; in this dense corpus the "
+    "cap trips heavily, so Mode-D findings are UNVERIFIED LEADS (each carries the trip count) — the "
+    "cap is not yet raised/replaced with an SCC decomposition",
 ]
 
 
