@@ -212,12 +212,16 @@ def derive(w):
 # redesign/) — mode-split, thrust-protected, floored, NaN-guarded Phi_grip; a SEPARATE floored Phi_room for
 # percussion only (Phi_room is CUT from the heft path — JD-1(d), R-8: a monotone heft-room multiply violates C4).
 SWING_FLOOR = 0.5      # [SIM-CALIBRATE] floor on the swing-fraction degradation (a fully-gathered swing never drops below half its open-measure authority)
-# U5/ED-PC-0019 — polearm choke counterbalance (thrust side): choking UP a head-heavy pole (grip>0) to counterbalance
-# its forward mass shortens the effective lever a hair, a SHALLOW, FLOORED loss even on an axial thrust. K=0 keeps
-# the grip-invariant-thrust first principle EXACTLY (phi_grip('point')==1.0 at every grip); the U9 recalibration
-# flips CHOKE_THRUST_K under ablation-gate. The accuracy/legibility side is systems.choke_counterbalance (CHOKE_ACCURACY_K).
-CHOKE_THRUST_K = 0.0      # [U5/ED-PC-0019, K=0] shallow thrust-authority loss per unit choke (grip_position in [0,1])
-CHOKE_THRUST_FLOOR = 0.75 # a choked thrust never drops below this fraction (a thrust is still a thrust)
+# U5/ED-PC-0019 CHOKE_THRUST — RETIRED FROM THE FORCE CHANNEL (U10/ED-PC-0022, 2026-07-23). U5 parked a choke
+# CONTROL cost against phi_grip('point') — the axial-FORCE multiplier — where the ratified D2 grip-invariant-thrust
+# gate (phi>=0.9 at full gather) correctly zeroed it, manufacturing a false "break D2 or kill the lever" dilemma.
+# Radical re-examination (ED-PC-0022): the grip-invariant-thrust principle is PHYSICALLY CORRECT for FORCE MAGNITUDE
+# — a rigid shaft transmits axial compression independent of hand position, so choking up a pole does NOT reduce the
+# force delivered by an axial thrust. What choking up DOES cost is CONTROL: a shortened rear lever lets the point be
+# beaten off-line more easily, and the gathered posture telegraphs. That cost is a legibility/accuracy effect and
+# already has its correct home in systems.choke_counterbalance -> CHOKE_ACCURACY_K (the SAME channel, all modes). So
+# CHOKE_THRUST is not "activated" or "cut" (the U9 false dilemma) — it is RE-HOMED to the channel it always belonged
+# in, and phi_grip('point') is grip-invariant UNCONDITIONALLY (no constant), keeping the D2 gate byte-identical.
 PERC_ROOM_FLOOR = 0.5  # [SIM-CALIBRATE] floor on percussion's room degradation (identity at room=1.0/r*; monotone-down FORBIDDEN, C4)
 
 def grip_swing_ratio(w, grip):
@@ -244,7 +248,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
     if sel_head == 'point':
-        return max(CHOKE_THRUST_FLOOR, 1.0 - CHOKE_THRUST_K * grip)   # U5: grip-invariant (==1.0) at K=0 — the first principle intact; a shallow floored choke-loss once U9 flips CHOKE_THRUST_K
+        return 1.0   # D2 gate: an axial point thrust is grip-INVARIANT in FORCE — a rigid shaft transmits axial compression independent of hand position (`[ASSERTED — rigid-body first principles]`). The choke CONTROL cost lives in systems.choke_counterbalance -> CHOKE_ACCURACY_K, NOT here (U10/ED-PC-0022 re-home; the retired CHOKE_THRUST_K false-dilemma note is above phi_room_percussion).
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
     pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']

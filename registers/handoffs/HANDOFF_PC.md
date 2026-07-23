@@ -6,15 +6,22 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **U9 test-hygiene follow-up (from ED-PC-0021 adversarial review, 2026-07-23).** `test_combat_choke.py::
-  test_both_channels_live_not_dead` writes the shared `weapon_physics.CHOKE_THRUST_K` module global and
-  resets it to `0.0` in its `finally`, leaking `0.0` to every later test module. Harmless at the shipped
-  `K=0` (the finally restores the correct default), but it **masks** the D2-gate breakage when the source
-  constant is flipped for review — a full-suite run of a flipped `CHOKE_THRUST_K` hides that
-  `test_thrust_protection_grip_invariant` fails (see `audit/2026-07-04-weapon-morphology-granularity/
-  u9_adversarial_review_v1.md` §4). Fix when next touching these tests: replace the raw global write with
-  a `monkeypatch`/`cfg`-scoped override so module state never leaks across tests. Not blocking; no ED
-  allocated (folds into the eventual CHOKE_THRUST activation ruling, if (b)).
+- **U10 morphology-lever ACTIVATION DONE (ED-PC-0022, 2026-07-23) — supersedes the U9 keep-at-K=0 verdict.**
+  Re-examined the U9 verdict and found the six edge/choke/facing levers inert for FOUR reasons (wrong instrument /
+  amputated tradition surface / choke-thrust mis-parked against the D2 force-invariant / near-invisible facing
+  consumers). Executed the capstone's own re-charter: (1) RE-HOMED choke-thrust out of `phi_grip('point')` — D2
+  force-invariant kept byte-identical, `CHOKE_THRUST_K` retired, the held-back `needs_jordan` DISSOLVED (no D2
+  exception needed); (2) built the tradition-modulation surface — every lever site routed through
+  `ability_factor(c,<channel>)`; (3) ACTIVATED to small grounded baselines (LEGIB_EDGELINE 0.04 / BIND_SPINE 0.03 /
+  GRAB_EDGE 0.07 / CHOKE_ACCURACY 0.03 / FACING_REGIME 0.12) — no-ability field within harness noise; (4) added 4
+  treatise-grounded abilities (winden/zwerchhau/ringen_am_schwert/guardia). Efficacy measured on the per-matchup
+  specialist duel (Winden katana +2.8pp). The **U9 test-hygiene defect is FIXED** here (the global-write leak in
+  `test_both_channels_live_not_dead` is gone — the constant is retired and the channel is exercised via cfg+equipped).
+  9 accepted-red baseline unchanged; ONE grounded re-baseline (guisarme off-plate reach — see doc). Doc:
+  `audit/2026-07-04-weapon-morphology-granularity/u10_activation_v1.md`.
+  - **Open follow-ups (not blocking):** `choke_control` channel has the surface but no ability yet (needs a grounded
+    pole/staff tradition); facing stays conservative pending C1 (absolute polearm facing direction) resolution; the
+    ability baselines/multipliers are `[SIM-CALIBRATE]` and open to per-scenario tuning.
 
 - **ED-PC-0007 (DEFERRED 2026-07-08, Jordan: "Defer PC") — pessimist-audit PC verdicts do NOT execute now.**
   The pessimist-action audit (ED-IN-0027) judged the discrete `combat_v30 §4` ACTIONS menu, but that menu is

@@ -12,8 +12,13 @@ attempt a graph transition), with the op extended to 'gate' and a phase-slot + p
 from primitives rather than a hand-set value. This module is where that upgrade lands.
 
 LEVER STATUS: the 7 channel levers + counter_success/counter_select/anti_overcommit are live (eff_cw consumed at
-~9 sites). The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen do
-nothing when equipped — slated for retire-or-reroute (Phase 4 / Jordan's call).
+~9 sites). U10/ED-PC-0022 added FIVE morphology-lever channels — 'edge_read', 'spine_press', 'edge_grab',
+'choke_control', 'facing_regime' — consumed at the six U3/U5/U7 lever sites (combat_systems.legibility ×2 /
+bind_sigma / facing_target, contact.grab_sigma). Four are populated (winden/zwerchhau/ringen_am_schwert/guardia);
+'choke_control' has the SURFACE (the ability_factor hook is live) but no ability yet — a deliberate honest gap: no
+pole/staff tradition in the roster has treatise grounding I would assert, so the channel waits for grounded content
+rather than inventing it. The 'seize' lever is DEAD (its pre-contact consumer was cut 2026-06-05): vorschlag/sen_no_sen
+do nothing when equipped — slated for retire-or-reroute (Phase 4 / Jordan's call).
 """
 
 ABILITIES = {
@@ -33,6 +38,17 @@ ABILITIES = {
     # Iberian Destreza (S2/S3 — partly reliable; flagged)
     'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='measure',         op='*', value=1.18,
                            desc="Atajo — Destreza blade-constraint / measure off the círculo (channel lever; S2/S3)"),
+    # ── U10/ED-PC-0022: the MORPHOLOGY-LEVER modulators — the tradition surface the six U3/U5/U7 levers lacked.
+    # Each amplifies (or, for a mitigator, dampens) a grounded physical lever so a school that specializes in it turns
+    # a situational primitive into a decisive edge — efficacy BEYOND rote physics. All treatise-grounded (S1/S2).
+    'winden':         dict(tradition='german',   grade='S1/S2', lever='spine_press',     op='*', value=1.7,
+                           desc="Winden — winding at the bind: pressing the single-edge rigid spine hand-high to dominate the bind's bearing surface (Liechtenauer; amplifies BIND_SPINE)"),
+    'zwerchhau':      dict(tradition='german',   grade='S1/S2', lever='edge_read',       op='*', value=1.6,
+                           desc="Zwerchhau — the Thwart-cut driven with the SHORT/false edge: weaponizes the double/false-edge return-line ambiguity to attack unread (Liechtenauer; amplifies LEGIB_EDGELINE)"),
+    'ringen_am_schwert': dict(tradition='german', grade='S1/S2', lever='edge_grab',      op='*', value=0.4,
+                           desc="Ringen am Schwert — wrestling at the sword: a trained grappler seizes the strong/bind of a live blade with far less self-injury (a MITIGATOR, factor<1 on GRAB_EDGE self-hazard)"),
+    'guardia':        dict(tradition='italian',  grade='S2',    lever='facing_regime',   op='*', value=1.5,
+                           desc="Guardia — the Italian single-time strong-profile stance: commits the facing regime harder (side-on 1H profile / squared 2H), amplifying FACING_REGIME (Fiore/Capoferro)"),
 }
 
 

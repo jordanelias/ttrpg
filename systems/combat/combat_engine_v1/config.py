@@ -29,23 +29,33 @@ CFG = dict(
   # weapons with attested adornments (ranseur/guandao/jian) are period-documented as ceremonial-phase features,
   # so this is deliberately a SMALL knock, not a primary legibility axis. See weapon_physics.distraction().
   LEGIB_DISTRACT_K=0.15,
-  # U3/ED-PC-0018 edges primitive — the three edge-effect channels (§2.3, one channel per physical fact), all K=0
-  # (byte-identical) until the U9 joint recalibration flips them under ablation-gate:
+  # U3/ED-PC-0018 edges primitive — the three edge-effect channels (§2.3, one channel per physical fact). ACTIVATED
+  # (U10/ED-PC-0022, 2026-07-23) to small GROUNDED baselines (were all K=0 until U9). The U9 capstone found no lever
+  # robustly moves aggregate FIELD winrate — correct, because flat physics cancels in a mirror-ish field; that is not
+  # evidence the physics is inert (the live_not_dead tests prove it responds). Efficacy BEYOND rote physics comes from
+  # the TRADITION-MODULATION SURFACE: each lever is now routed through ability_primitives.ability_factor(c, <channel>),
+  # so a school that specializes in a lever amplifies it into a SITUATIONALLY-DECISIVE edge without distorting field
+  # balance. Channels: edge_lines->'edge_read' (legibility), spine->'spine_press' (bind), grab_hazard->'edge_grab'
+  # (contact). BASELINE MAGNITUDES [SIM-CALIBRATE] set so the physics is live but the field spread stays within the
+  # ~±4pp harness noise floor; the ability multipliers (winden/zwerchhau/ringen) carry the decisive weight.
   #   LEGIB_EDGELINE_K: a double/false edge's return-cut ambiguity degrades the defender's read (weapon_physics.edge_lines
   #     -> legibility, same sign as LEGIB_DISTRACT_K); BIND_SPINE_K: a single edge's rigid spine wins the bind bearing-
   #     surface (weapon_physics.spine differential -> bind_sigma); GRAB_EDGE_K: a live edge self-injures an unskilled
   #     bare-hand grab (weapon_physics.grab_hazard -> contact.grab_sigma). See weapon_physics.py's U3 block + §2.3.
-  LEGIB_EDGELINE_K=0.0,
-  # U5/ED-PC-0019 polearm choke counterbalance: CHOKE_ACCURACY_K [K=0] — a head-heavy pole choked up to
-  # counterbalance loses fine precision -> reads easier (systems.choke_counterbalance -> legibility, activated in U9).
-  # CHOKE_RC_REF — pole-class rear_clearance reference the choke normalises by (poleaxe-class ~0.9); used only inside
-  # the K=0-gated term, so its value is inert until U9. The thrust side is weapon_physics.CHOKE_THRUST_K.
-  CHOKE_ACCURACY_K=0.0, CHOKE_RC_REF=0.9,
-  # U7/ED-PC-0020 weapon-class-aware facing: FACING_REGIME_K [K=0] — scales the signed facing regime
-  # (weapon_physics.facing_pref: 1H profile / 2H square) multiplicatively in systems.facing_target. K=0 makes the
-  # multiplier exactly 1.0 (byte-identical, C2 holds numerically); the U9 recalibration flips it (the Jordan-resolved
-  # C2 reversal). Ships toward ~0.6 at U9 per the plan.
-  FACING_REGIME_K=0.0,
+  LEGIB_EDGELINE_K=0.04,
+  # U5/ED-PC-0019 polearm choke counterbalance: CHOKE_ACCURACY_K — a head-heavy pole choked up to counterbalance loses
+  # fine precision -> reads easier (systems.choke_counterbalance -> legibility). ACTIVATED (U10/ED-PC-0022). This is now
+  # the SOLE choke-cost channel: the thrust-side CHOKE_THRUST was RE-HOMED here (it was mis-parked against the D2 force-
+  # invariant — see weapon_physics.py's retired-CHOKE_THRUST note). Modulated by ability_factor(c,'choke_control') (a
+  # pole tradition gathers without telegraphing — mitigates; default 1.0). CHOKE_RC_REF — pole-class rear_clearance
+  # reference the choke normalises by (poleaxe-class ~0.9).
+  CHOKE_ACCURACY_K=0.03, CHOKE_RC_REF=0.9,
+  # U7/ED-PC-0020 weapon-class-aware facing: FACING_REGIME_K — scales the signed facing regime (weapon_physics.facing_pref:
+  # 1H profile / 2H square) multiplicatively in systems.facing_target, modulated by ability_factor(c,'facing_regime').
+  # ACTIVATED (U10/ED-PC-0022) at a CONSERVATIVE 0.12: the C2 REGIME (1H-profile vs 2H-square) is Jordan-resolved and now
+  # live (facing reads weapon class), but C1 (absolute polearm facing DIRECTION) stays unresolved, so facing must not
+  # become load-bearing — the K stays modest and its consumers (FACING_VOID_K/FACING_PROFILE_K) stay small by design.
+  FACING_REGIME_K=0.12,
   # lever-arm primitive: redirect/bind capacity from an EXPLICIT hand-to-contact lever arm = grip_len − LEVER_HEAD_K·head_len
   # (Phase-3 grounding fix: the prior grip/(grip+head) ratio let compact weapons out-bind long ones — dagger > spear).
   # Structure grounded; magnitudes [SIM-CALIBRATE] (fit the bind win-rate in the re-baseline). LEVER_REF = a 1H sword's net lever.
@@ -120,7 +130,7 @@ CFG = dict(
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
   RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
-  BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156, BIND_SPINE_K=0.0,   # BIND_SPINE_K [U3/ED-PC-0018, K=0]: single-edge spine-press bearing surface (weapon_physics.spine differential)
+  BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156, BIND_SPINE_K=0.03,   # BIND_SPINE_K [U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022]: single-edge spine-press bearing surface (weapon_physics.spine differential), modulated by ability_factor 'spine_press' (German Winden). The strongest of the six levers per the U9 adversarial pass (robustly directional) — a small baseline here, decisive with the ability.
   # morphology-rearch Phase B5: a wavy/flame-ground edge (weapon_physics.edge_vibration, 0 for a plain edge)
   # degrades the OPPONENT's tactile read in the bind and boosts the wielder's own initiative-steal there.
   # [SIM-CALIBRATE] — flamberge's 15mm amplitude is the only roster weapon that currently reads nonzero.
@@ -185,7 +195,7 @@ CFG = dict(
   # (paired_short / half-sworded 2H forms, head_len>=0.399) — the open-contact exemption for a weapon
   # already functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
   # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
-  GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25, GRAB_EDGE_K=0.0,   # GRAB_EDGE_K [U3/ED-PC-0018, K=0]: a live edge self-injures an unskilled bare-hand grab (weapon_physics.grab_hazard of the GRABBED weapon)
+  GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25, GRAB_EDGE_K=0.07,   # GRAB_EDGE_K [U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022]: a live edge self-injures an unskilled bare-hand grab (weapon_physics.grab_hazard of the GRABBED weapon), mitigated by grab skill AND ability_factor 'edge_grab' (German Ringen am Schwert seizes a live blade safely — factor<1)
 )
 # HANDLE_RANK RETIRED (morphology-rearch Phase B6, 2026-07-02) — systems.str_demand now reads weapon_physics.
 # handling() (PoB_frac/hand_guard, real per-part data); the Forgiving/Standard/Demanding category is gone.

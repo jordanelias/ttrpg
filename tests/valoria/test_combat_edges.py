@@ -16,7 +16,10 @@ sys.path.insert(0, ENGINE)
 pytest.importorskip("numpy")
 
 import weapon_physics as WP  # noqa: E402
-from combatant import WEAPONS  # noqa: E402
+import combat_systems as S  # noqa: E402
+import ability_primitives as ABIL  # noqa: E402
+import tradition as TR  # noqa: E402
+from combatant import WEAPONS, Combatant  # noqa: E402
 from config import CFG  # noqa: E402
 
 
@@ -52,12 +55,39 @@ def test_reader_formulae():
     assert WP.edge_lines({'elements': [{}]}) == 0.0 and WP.spine({}) == 0.0 and WP.grab_hazard({}) == 0.0
 
 
-def test_k_zero_byte_identical():
-    """The byte-identity guarantee: every edge-effect constant is 0.0 at landing, so the readers cannot move any
-    outcome until the U9 recalibration flips them (ablation-gated)."""
-    assert CFG['LEGIB_EDGELINE_K'] == 0.0
-    assert CFG['BIND_SPINE_K'] == 0.0
-    assert CFG['GRAB_EDGE_K'] == 0.0
+def test_edge_levers_activated_and_grounded():
+    """U10/ED-PC-0022: the three edge-effect constants are now ACTIVATED (>0) to small grounded baselines. The U9
+    capstone found no lever moves aggregate FIELD winrate — correct, because flat physics cancels in a mirror-ish
+    field, not evidence of inertness. Efficacy comes from the tradition-modulation surface (below)."""
+    assert CFG['LEGIB_EDGELINE_K'] > 0.0
+    assert CFG['BIND_SPINE_K'] > 0.0
+    assert CFG['GRAB_EDGE_K'] > 0.0
+
+
+def test_edge_read_lever_live_and_amplified_by_zwerchhau():
+    """edge_lines -> legibility is live (a double-edged blade reads HARDER — lower legibility), and the German
+    Zwerchhau ('edge_read') AMPLIFIES it: a school built on the short-edge return-cut extracts more read-difficulty
+    from the same physical edge. A plain-single/edgeless weapon is unaffected (edge_lines 0)."""
+    plain = Combatant('A', weapon='arming')                                  # double-edged: edge_lines 1.0
+    zwr = Combatant('A', weapon='arming', tradition='german', equipped=['zwerchhau'])
+    l_plain, l_zwr = S.legibility(plain, 3, CFG), S.legibility(zwr, 3, CFG)
+    assert l_zwr < l_plain, "zwerchhau should make the double-edge attack HARDER to read (lower legibility)"
+    # an edgeless weapon has no return-line ambiguity to weaponize -> the ability is inert on it
+    estoc = Combatant('A', weapon='estoc', tradition='german', equipped=['zwerchhau'])
+    estoc0 = Combatant('A', weapon='estoc')
+    assert S.legibility(estoc, 3, CFG) == S.legibility(estoc0, 3, CFG)
+
+
+def test_spine_press_lever_live_and_amplified_by_winden():
+    """spine -> bind_sigma is live (a single-edged rigid spine wins the bind bearing-surface vs a spineless double
+    edge), and the German Winden ('spine_press') amplifies the wielder's own spine term."""
+    katana = Combatant('A', weapon='katana')                                 # spine > 0
+    katana_w = Combatant('A', weapon='katana', tradition='german', equipped=['winden'])
+    arming = Combatant('B', weapon='arming')                                 # spine 0 (double-edged)
+    b_plain = S.bind_sigma(katana, arming, CFG, TR)
+    b_winden = S.bind_sigma(katana_w, arming, CFG, TR)
+    assert b_plain > 0, "a single-edge rigid spine should win the bind vs a spineless double edge"
+    assert b_winden > b_plain, "Winden should amplify the spine-press bind edge"
 
 
 def test_authored_data_conforms_invariants():
