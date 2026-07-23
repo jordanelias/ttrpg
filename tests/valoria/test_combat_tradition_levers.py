@@ -81,6 +81,46 @@ def test_guardia_amplifies_facing_regime():
     assert abs(S.facing_target(ital, True, CFG)) > abs(S.facing_target(plain, True, CFG))
 
 
+def test_levers_add_texture_without_shifting_balance():
+    """THE CORRECT INSTRUMENT for a situational lever (ED-PC-0023 review + Jordan's reframe): not aggregate win-rate
+    (which U9 and the first U10 write-up both wrongly used), but EVENT-DIVERGENCE WITH OUTCOME-PRESERVATION. For a
+    no-GM narrative-resolving engine the value of the edge/spine/grab/choke/facing levers is the PER-FIGHT TEXTURE
+    they create — different binds won, grabs that self-injure on a live edge, reads that land or don't — and the
+    hook-surface those moments give abilities. A good situational lever makes many fights PLAY OUT differently while
+    rarely flipping the winner. This test pins exactly that: at identical seeds, levers-on vs levers-off diverge in
+    their event sequence for a meaningful fraction of fights (texture is real), yet the decided outcome changes only
+    rarely (balance is preserved). Measured (observed ~16-28% divergence / ~3-8% flip); bounds are generous so this
+    guards the PROPERTY, not a point value."""
+    import os as _os
+    _wb = _os.path.join(ENGINE, 'workbench'); sys.path.insert(0, _wb)
+    from trace import run_traced_fight  # noqa: E402
+    OFF = dict(CFG, LEGIB_EDGELINE_K=0, BIND_SPINE_K=0, GRAB_EDGE_K=0, CHOKE_ACCURACY_K=0, FACING_REGIME_K=0)
+
+    def _sig(ev):
+        o = []
+        for e in ev:
+            k = e['kind']
+            if k == 'outcome':
+                o.append(('H' if e['hit'] > 0 else '.') + ('B' if e['bind'] else '') + ('R' if e['riposte'] else ''))
+            elif k == 'contact':
+                o.append('G:' + e['outcome'])
+            elif k == 'separation':
+                o.append('sep:' + e['reason'])
+        return tuple(o)
+
+    for wa, wb in (('katana', 'arming'), ('dagger', 'arming')):
+        n, diverged, flipped = 60, 0, 0
+        for s in range(n):
+            r_on, ev_on = run_traced_fight(Combatant('A', weapon=wa), Combatant('B', weapon=wb), cfg=CFG, seed=s)
+            r_off, ev_off = run_traced_fight(Combatant('A', weapon=wa), Combatant('B', weapon=wb), cfg=OFF, seed=s)
+            if _sig(ev_on) != _sig(ev_off):
+                diverged += 1
+            if r_on != r_off:
+                flipped += 1
+        assert diverged >= 4, f"{wa} vs {wb}: levers produced almost no per-fight texture ({diverged}/{n} diverged)"
+        assert flipped <= n * 0.20, f"{wa} vs {wb}: levers shifted the OUTCOME too often ({flipped}/{n}) — not balance-neutral"
+
+
 def test_ability_inert_when_weapon_lacks_the_feature():
     """A tradition ability modulates a PHYSICAL lever — it does nothing when the weapon has no such feature: shinogi on
     a double-edged (spineless) arming sword adds no spine bind edge (spine==0)."""

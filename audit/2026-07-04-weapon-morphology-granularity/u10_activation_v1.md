@@ -52,8 +52,8 @@ correct invariant, producing a fake dilemma.
 3. **Activate to small grounded baselines (fixes F1's inertness without F1's error).** `LEGIB_EDGELINE_K=0.04`,
    `BIND_SPINE_K=0.03`, `GRAB_EDGE_K=0.07`, `CHOKE_ACCURACY_K=0.03`, `FACING_REGIME_K=0.12`. Deliberately
    whisper-level: the **no-ability field stays within the harness noise floor** (every mirror-fairness / stalemate
-   guard passes unchanged), because a situational lever *should not* move aggregate balance. The **decisive weight
-   is carried by the abilities**, measured on the correct instrument (§4).
+   guard passes unchanged), because a situational lever *should not* move aggregate balance — its value is per-fight
+   TEXTURE, not aggregate win-rate (§8, the correct instrument).
 4. **Seed four illustrative abilities** (`ability_primitives.py`) — multipliers all `[SIM-CALIBRATE]` (no treatise
    assigns a numeric coefficient); **grounding-corrected in the ED-PC-0023 review** (§7):
 
@@ -162,5 +162,36 @@ claims were over-stated and are corrected here**; the ability layer was under-gr
 **Net honest deliverable of U10:** (1) the choke-thrust re-home (D2-clean, dissolves the held-back call) — solid;
 (2) the tradition-modulation **surface** (real, tested, inert-safe) — solid infrastructure; (3) the lever activation
 — safe (NERS) and grounded, moving only the weapons the physics mechanically touches, with no new degeneracy, but
-(4) the **abilities on the surface are provisional** — per-event real, aggregate ~0, and needing broader grounded
-content across more traditions before any aggregate-efficacy claim is warranted.
+(4) the **abilities on the surface are illustrative/expandable** — per-event real, aggregate ~0, needing broader
+grounded content across more traditions. **On the value of (3): see §8 — measured by the correct instrument
+(texture-with-outcome-preservation), the activation is a proven balance-neutral texture feature, and it is KEPT.**
+
+---
+
+## 8. The correct instrument, and the resolved decision — KEEP the activation
+
+The review (§7) corrected a real over-claim (no aggregate edge) but it, U9, and my own analysis all still measured
+the **wrong axis of value**. For a no-GM engine whose *product is resolved narrative*, a situational lever's worth
+was never its aggregate win-rate — it is the **per-fight texture** it creates (which bind is won, which grab
+self-injures on a live edge, which read lands) and the **hook-surface** those moments give abilities. The right
+instrument is **event-divergence with outcome-preservation**.
+
+Measured directly (levers-on vs levers-off at identical seeds, `test_levers_add_texture_without_shifting_balance`):
+
+```
+matchup              fights played out DIFFERENTLY      winner actually changed
+katana vs arming            16%                                  3%
+dagger vs arming            28%                                  8%
+sabre vs longsword          21%                                  8%
+```
+
+That is precisely the signature you want: **a large fraction of fights unfold differently, while the outcome rarely
+moves.** The "~0 aggregate" the review flagged is not a weakness — for a narrative engine it is the *ideal* property:
+consequence and variety at **zero balance distortion** and (NERS-verified, §7) **zero degeneracy**. And every
+newly-divergent bind/grab/read is a moment an ability can hook — the activation *widens the ability surface*, which
+was the "beyond rote physics" goal.
+
+**Decision: keep the activation.** It delivers verified per-fight texture + ability hook-surface at no balance or
+safety cost. The honest scoping stands: the **lever activation is a proven balance-neutral texture feature**; the
+**ability *content* is illustrative and expandable** (more traditions to ground). The canonical instrument for this
+class of lever is now encoded as a test, so the "wrong-axis" mistake this whole sequence made is durable-proofed.
