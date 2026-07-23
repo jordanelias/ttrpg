@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 266,
+    "findings": 265,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_cascade_sink": 15,
@@ -12,7 +12,6 @@
       "audit_isolate": 9,
       "audit_notional": 1,
       "audit_sparse": 16,
-      "audit_throughline_orphan": 1,
       "audit_vocab_debt": 3,
       "code_marker": 3,
       "contract_doc_null": 9,
@@ -31,7 +30,7 @@
     },
     "by_severity": {
       "high": 24,
-      "med": 114,
+      "med": 113,
       "low": 128
     }
   },
@@ -67,7 +66,7 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 163,
+      "total": 162,
       "apparatus_orphan": 3,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
@@ -75,7 +74,6 @@
       "audit_isolate": 9,
       "audit_notional": 1,
       "audit_sparse": 16,
-      "audit_throughline_orphan": 1,
       "audit_vocab_debt": 3,
       "integrity_unverified_pin": 1,
       "prose_marker": 5,
@@ -149,9 +147,18 @@
     },
     {
       "category": "audit_cascade_sink",
+      "id": "sink::Altonia",
+      "title": "Altonia \u2014 cascade sink (576 chains)",
+      "detail": "\u201cAltonia\u201d is reached by 576 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "canon/03_canonical_timeline.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_cascade_sink",
       "id": "sink::Audit",
-      "title": "Audit \u2014 cascade sink (847 chains)",
-      "detail": "\u201cAudit\u201d is reached by 847 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Audit \u2014 cascade sink (792 chains)",
+      "detail": "\u201cAudit\u201d is reached by 792 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "audit/2026-05-17-v18-integration/integration_plan_v18.md",
       "lane": "IN",
       "severity": "low"
@@ -159,8 +166,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Church",
-      "title": "Church \u2014 cascade sink (701 chains)",
-      "detail": "\u201cChurch\u201d is reached by 701 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Church \u2014 cascade sink (597 chains)",
+      "detail": "\u201cChurch\u201d is reached by 597 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_politics_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -168,8 +175,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Conviction",
-      "title": "Conviction \u2014 cascade sink (977 chains)",
-      "detail": "\u201cConviction\u201d is reached by 977 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Conviction \u2014 cascade sink (639 chains)",
+      "detail": "\u201cConviction\u201d is reached by 639 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/npcs/npc_behavior_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -177,17 +184,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Disposition",
-      "title": "Disposition \u2014 cascade sink (833 chains)",
-      "detail": "\u201cDisposition\u201d is reached by 833 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/fieldwork/fieldwork_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_cascade_sink",
-      "id": "sink::Investigation",
-      "title": "Investigation \u2014 cascade sink (682 chains)",
-      "detail": "\u201cInvestigation\u201d is reached by 682 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Disposition \u2014 cascade sink (609 chains)",
+      "detail": "\u201cDisposition\u201d is reached by 609 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -195,8 +193,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Key: mechanical.accounting",
-      "title": "Key: mechanical.accounting \u2014 cascade sink (891 chains)",
-      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 891 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Key: mechanical.accounting \u2014 cascade sink (682 chains)",
+      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 682 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -204,8 +202,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Knot",
-      "title": "Knot \u2014 cascade sink (712 chains)",
-      "detail": "\u201cKnot\u201d is reached by 712 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Knot \u2014 cascade sink (663 chains)",
+      "detail": "\u201cKnot\u201d is reached by 663 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/knots_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -213,8 +211,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Mass Battle",
-      "title": "Mass Battle \u2014 cascade sink (671 chains)",
-      "detail": "\u201cMass Battle\u201d is reached by 671 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Mass Battle \u2014 cascade sink (612 chains)",
+      "detail": "\u201cMass Battle\u201d is reached by 612 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_integration_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -222,35 +220,35 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Mass Combat",
-      "title": "Mass Combat \u2014 cascade sink (671 chains)",
-      "detail": "\u201cMass Combat\u201d is reached by 671 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Mass Combat \u2014 cascade sink (612 chains)",
+      "detail": "\u201cMass Combat\u201d is reached by 612 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_integration_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_cascade_sink",
+      "id": "sink::NPC Behavior",
+      "title": "NPC Behavior \u2014 cascade sink (581 chains)",
+      "detail": "\u201cNPC Behavior\u201d is reached by 581 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/npcs/character_canon_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_cascade_sink",
       "id": "sink::Restoration Movement",
-      "title": "Restoration Movement \u2014 cascade sink (664 chains)",
-      "detail": "\u201cRestoration Movement\u201d is reached by 664 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Restoration Movement \u2014 cascade sink (601 chains)",
+      "detail": "\u201cRestoration Movement\u201d is reached by 601 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_cascade_sink",
-      "id": "sink::Scene Slate",
-      "title": "Scene Slate \u2014 cascade sink (731 chains)",
-      "detail": "\u201cScene Slate\u201d is reached by 731 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/player_agency_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_cascade_sink",
       "id": "sink::Social Contest",
-      "title": "Social Contest \u2014 cascade sink (794 chains)",
-      "detail": "\u201cSocial Contest\u201d is reached by 794 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Social Contest \u2014 cascade sink (592 chains)",
+      "detail": "\u201cSocial Contest\u201d is reached by 592 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -258,8 +256,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Stability",
-      "title": "Stability \u2014 cascade sink (764 chains)",
-      "detail": "\u201cStability\u201d is reached by 764 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Stability \u2014 cascade sink (579 chains)",
+      "detail": "\u201cStability\u201d is reached by 579 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -267,8 +265,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Territories",
-      "title": "Territories \u2014 cascade sink (829 chains)",
-      "detail": "\u201cTerritories\u201d is reached by 829 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Territories \u2014 cascade sink (747 chains)",
+      "detail": "\u201cTerritories\u201d is reached by 747 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -276,8 +274,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Threadwork",
-      "title": "Threadwork \u2014 cascade sink (854 chains)",
-      "detail": "\u201cThreadwork\u201d is reached by 854 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 59,858 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Threadwork \u2014 cascade sink (676 chains)",
+      "detail": "\u201cThreadwork\u201d is reached by 676 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -763,7 +761,7 @@
       "category": "audit_notional",
       "id": "notional::rollup",
       "title": "14662 notional citations \u2014 cited but content-empty",
-      "detail": "14662 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: CI Political\u2192Crown (w183); Guilds\u2192Crown (w183); Church\u2192Crown (w183); Hafenmark\u2192Crown (w183); Varfell\u2192Crown (w183). Full ranked list: the audit's C_notional (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "detail": "14662 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: Aldric Tormann\u2192Crown (w183); CI Political\u2192Crown (w183); Cardinal Arnlod Olafsson\u2192Crown (w183); Cardinal Osten Jarnstal\u2192Crown (w183); Church\u2192Crown (w183). The feed carries a top-100 sample (not all 14662); the full ranked list is reproducible by re-running the deterministic audit (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -911,15 +909,6 @@
       "path": "",
       "lane": "IN",
       "severity": "low"
-    },
-    {
-      "category": "audit_throughline_orphan",
-      "id": "tl_orphan::T-10",
-      "title": "T-10 \u2014 throughline barely substantiated",
-      "detail": "throughline T-10 has only 0 paragraph(s) where \u22652 of its systems (\u2014) co-appear \u2014 a narrative chain the prose barely grounds (vector-audit Mode F; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "",
-      "lane": "IN",
-      "severity": "med"
     },
     {
       "category": "audit_vocab_debt",
@@ -1787,8 +1776,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:720",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:720",
+      "id": "tools/observability/build_incompleteness.py:721",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:721",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN",

@@ -107,6 +107,10 @@ SEVERITY = {
     "parse_failure": "high",
     "contract_island": "med", "contract_assumption": "med", "contract_doc_dead": "med",
     "audit_implied_missing": "med", "audit_throughline_orphan": "med",
+    # sim_not_implemented kept MED (an adversarial pass argued high — a NotImplementedError in the
+    # port's ORACLE, CLAUDE.md §7, is a port-blocker): kept med deliberately so the HIGH tier stays
+    # the tight "drop-everything" triage set (39 sim stubs would swamp it); a known stub is incomplete,
+    # not necessarily blocking a module the port hasn't reached. Judgment call, documented.
     "sim_not_implemented": "med", "status_noncurrent": "med", "stale_retired_pointer": "med",
     "integrity_unverified_pin": "med",
     "prose_marker": "low", "code_marker": "low", "unregistered_term": "low", "audit_notional": "low",
@@ -553,8 +557,9 @@ def scan_audit_structural():
                            f"{nt} notional citations — cited but content-empty",
                            f"{nt} token pairs are cited together but share NO metadata-graph support "
                            f"(throughline/mu/pp/key) — a citation with nothing structural behind it "
-                           f"(vector-audit Mode C). Top by weight: {egs or '—'}. Full ranked list: the "
-                           f"audit's C_notional ({snap})", path="", lane="IN"))
+                           f"(vector-audit Mode C). Top by weight: {egs or '—'}. The feed carries a "
+                           f"top-100 sample (not all {nt}); the full ranked list is reproducible by "
+                           f"re-running the deterministic audit ({snap})", path="", lane="IN"))
     # D — cascade sinks (flowed into, never back out): few (<=15 shown); emit each + truncation caveat.
     trunc = d.get("cascade_truncated_calls", 0)
     dtot = d.get("cascade_sinks_total", 0)

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
-  "note": "GENERATED \u2014 ALL EIGHT of the vector-audit's structural diagnostic modes (A hubs are context, B implied-missing, C notional, D cascade-sinks, E sparse-context, F throughline-orphans, G vocabulary-debt, H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). Per SURFACE-NEVER-CULL every finding is emitted; high-volume modes (C, and D/E when large) carry a bounded sample + a true `_total` so nothing is silently capped. Lower-confidence Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag (retained). Severity is assigned by the ledger, by category.",
+  "note": "GENERATED \u2014 ALL EIGHT of the vector-audit's structural diagnostic modes (A hubs are context, B implied-missing, C notional, D cascade-sinks, E sparse-context, F throughline-orphans, G vocabulary-debt, H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). B/D/E/F/G/H retain EVERY item (Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag, not dropped). Mode C is the ONE exception \u2014 ~14.6k items, so it carries a top-100-by-weight SAMPLE + the true `notional_total`; the non-sampled items are reproducible by re-running the (now deterministic) audit. Severity is assigned by the ledger, by category.",
   "layer": "L0",
   "design_docs": 110,
   "implied_missing": [
@@ -406,91 +406,14 @@
   ],
   "notional": [
     {
-      "source": "CI Political",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Guilds",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Church",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Hafenmark",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Varfell",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "L\u00f6wenritter",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Standing",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Duchess Inge Baralta",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Prince Torben Almqvist",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Conviction Track",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Factions",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "NPC Roster",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
       "source": "Aldric Tormann",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "CI Political",
       "target": "Crown",
       "cite_weight": 183,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -511,28 +434,21 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
-      "source": "Gerik Strand",
+      "source": "Church",
       "target": "Crown",
       "cite_weight": 183,
       "source_doc": "systems/factions/faction_politics_v30.md",
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
-      "source": "Maret Uln",
+      "source": "Conviction Track",
       "target": "Crown",
       "cite_weight": 183,
       "source_doc": "systems/factions/faction_politics_v30.md",
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
-      "source": "Peder Almstedt",
-      "target": "Crown",
-      "cite_weight": 183,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Wardens",
+      "source": "Duchess Inge Baralta",
       "target": "Crown",
       "cite_weight": 183,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -546,7 +462,28 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
-      "source": "Riskbreaker",
+      "source": "Factions",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Gerik Strand",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Guilds",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Hafenmark",
       "target": "Crown",
       "cite_weight": 183,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -567,7 +504,70 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
-      "source": "Leap",
+      "source": "L\u00f6wenritter",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Maret Uln",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "NPC Roster",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Peder Almstedt",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Prince Torben Almqvist",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Riskbreaker",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Standing",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Varfell",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Wardens",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Campaign Architecture",
       "target": "MS",
       "cite_weight": 153,
       "source_doc": "systems/threadwork/threadwork_v30.md",
@@ -581,28 +581,7 @@
       "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "Campaign Architecture",
-      "target": "MS",
-      "cite_weight": 153,
-      "source_doc": "systems/threadwork/threadwork_v30.md",
-      "target_doc": "systems/threadwork/threadwork_v30.md"
-    },
-    {
-      "source": "Threadwork",
-      "target": "MS",
-      "cite_weight": 153,
-      "source_doc": "systems/threadwork/threadwork_v30.md",
-      "target_doc": "systems/threadwork/threadwork_v30.md"
-    },
-    {
-      "source": "Thread Revelation",
-      "target": "MS",
-      "cite_weight": 153,
-      "source_doc": "systems/threadwork/threadwork_v30.md",
-      "target_doc": "systems/threadwork/threadwork_v30.md"
-    },
-    {
-      "source": "TS",
+      "source": "Leap",
       "target": "MS",
       "cite_weight": 153,
       "source_doc": "systems/threadwork/threadwork_v30.md",
@@ -616,13 +595,6 @@
       "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "Will",
-      "target": "MS",
-      "cite_weight": 153,
-      "source_doc": "systems/threadwork/threadwork_v30.md",
-      "target_doc": "systems/threadwork/threadwork_v30.md"
-    },
-    {
       "source": "Mending Stability",
       "target": "MS",
       "cite_weight": 153,
@@ -630,7 +602,7 @@
       "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "Thread Sensitivity",
+      "source": "TS",
       "target": "MS",
       "cite_weight": 153,
       "source_doc": "systems/threadwork/threadwork_v30.md",
@@ -644,91 +616,42 @@
       "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "CI Political",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
+      "source": "Thread Revelation",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "Guilds",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
+      "source": "Thread Sensitivity",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "Church",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
+      "source": "Threadwork",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "source": "Crown",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Hafenmark",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Varfell",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "L\u00f6wenritter",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Duchess Inge Baralta",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Prince Torben Almqvist",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Conviction Track",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Factions",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "NPC Roster",
-      "target": "Standing",
-      "cite_weight": 149,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
+      "source": "Will",
+      "target": "MS",
+      "cite_weight": 153,
+      "source_doc": "systems/threadwork/threadwork_v30.md",
+      "target_doc": "systems/threadwork/threadwork_v30.md"
     },
     {
       "source": "Aldric Tormann",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "CI Political",
       "target": "Standing",
       "cite_weight": 149,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -749,9 +672,436 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
+      "source": "Church",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Conviction Track",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Crown",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Duchess Inge Baralta",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Einhir",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Factions",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "source": "Gerik Strand",
       "target": "Standing",
       "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Guilds",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Hafenmark",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: scene.witness",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: state.succession",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "L\u00f6wenritter",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Maret Uln",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "NPC Roster",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Peder Almstedt",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Prince Torben Almqvist",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Riskbreaker",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Varfell",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Wardens",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Aldric Tormann",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "CI Political",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Arnlod Olafsson",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Osten Jarnstal",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Church",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Conviction Track",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Crown",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Duchess Inge Baralta",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Einhir",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Factions",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Gerik Strand",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Guilds",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: scene.witness",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: state.succession",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "L\u00f6wenritter",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Maret Uln",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "NPC Roster",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Peder Almstedt",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Prince Torben Almqvist",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Riskbreaker",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Standing",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Varfell",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Wardens",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Aldric Tormann",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "CI Political",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Arnlod Olafsson",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Cardinal Osten Jarnstal",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Conviction Track",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Crown",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Duchess Inge Baralta",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Einhir",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Factions",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Gerik Strand",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Guilds",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Hafenmark",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: scene.witness",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Key: state.succession",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "L\u00f6wenritter",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Maret Uln",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "NPC Roster",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Peder Almstedt",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Prince Torben Almqvist",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Riskbreaker",
+      "target": "Church",
+      "cite_weight": 133,
       "source_doc": "systems/factions/faction_politics_v30.md",
       "target_doc": "systems/factions/faction_politics_v30.md"
     }
@@ -759,83 +1109,83 @@
   "notional_total": 14662,
   "cascade_sinks": [
     {
-      "terminal": "Conviction",
-      "chains": 977,
-      "doc": "systems/npcs/npc_behavior_v30.md"
+      "terminal": "Audit",
+      "chains": 792,
+      "doc": "audit/2026-05-17-v18-integration/integration_plan_v18.md"
+    },
+    {
+      "terminal": "Territories",
+      "chains": 747,
+      "doc": "systems/victory/victory_v30.md"
     },
     {
       "terminal": "Key: mechanical.accounting",
-      "chains": 891,
+      "chains": 682,
       "doc": "systems/factions/faction_layer_v30.md"
     },
     {
       "terminal": "Threadwork",
-      "chains": 854,
+      "chains": 676,
       "doc": "systems/threadwork/threadwork_v30.md"
     },
     {
-      "terminal": "Audit",
-      "chains": 847,
-      "doc": "audit/2026-05-17-v18-integration/integration_plan_v18.md"
-    },
-    {
-      "terminal": "Disposition",
-      "chains": 833,
-      "doc": "systems/fieldwork/fieldwork_v30.md"
-    },
-    {
-      "terminal": "Territories",
-      "chains": 829,
-      "doc": "systems/victory/victory_v30.md"
-    },
-    {
-      "terminal": "Social Contest",
-      "chains": 794,
-      "doc": "systems/fieldwork/fieldwork_v30.md"
-    },
-    {
-      "terminal": "Stability",
-      "chains": 764,
-      "doc": "systems/factions/faction_layer_v30.md"
-    },
-    {
-      "terminal": "Scene Slate",
-      "chains": 731,
-      "doc": "systems/_architecture/player_agency_v30.md"
-    },
-    {
       "terminal": "Knot",
-      "chains": 712,
+      "chains": 663,
       "doc": "systems/fieldwork/knots_v30.md"
     },
     {
-      "terminal": "Church",
-      "chains": 701,
-      "doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "terminal": "Investigation",
-      "chains": 682,
-      "doc": "systems/fieldwork/fieldwork_v30.md"
-    },
-    {
-      "terminal": "Mass Combat",
-      "chains": 671,
-      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
+      "terminal": "Conviction",
+      "chains": 639,
+      "doc": "systems/npcs/npc_behavior_v30.md"
     },
     {
       "terminal": "Mass Battle",
-      "chains": 671,
+      "chains": 612,
       "doc": "systems/mass_battle/mass_battle_integration_v30.md"
     },
     {
+      "terminal": "Mass Combat",
+      "chains": 612,
+      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
+    },
+    {
+      "terminal": "Disposition",
+      "chains": 609,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
       "terminal": "Restoration Movement",
-      "chains": 664,
+      "chains": 601,
       "doc": "systems/victory/victory_v30.md"
+    },
+    {
+      "terminal": "Church",
+      "chains": 597,
+      "doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "terminal": "Social Contest",
+      "chains": 592,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "NPC Behavior",
+      "chains": 581,
+      "doc": "systems/npcs/character_canon_v30.md"
+    },
+    {
+      "terminal": "Stability",
+      "chains": 579,
+      "doc": "systems/factions/faction_layer_v30.md"
+    },
+    {
+      "terminal": "Altonia",
+      "chains": 576,
+      "doc": "canon/03_canonical_timeline.md"
     }
   ],
   "cascade_sinks_total": 234,
-  "cascade_truncated_calls": 59858,
+  "cascade_truncated_calls": 51459,
   "sparse_context": [
     {
       "token": "Active Inquisition",
@@ -950,15 +1300,7 @@
       "doc": "systems/world/solmund_voice_v30.md"
     }
   ],
-  "throughline_orphans": [
-    {
-      "throughline": "T-10",
-      "systems": [
-        "\u2014"
-      ],
-      "substantiating": 0
-    }
-  ],
+  "throughline_orphans": [],
   "vocab_debt": [
     {
       "term": "Coup Counter",
