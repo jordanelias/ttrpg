@@ -958,12 +958,13 @@ function renderVectorAudit(d) {
     + `<span class="chip">${v.design_docs||'?'} docs</span>`
     + (v.cascade_truncated_calls ? ` <span class="chip critical">Mode-D cap tripped ${v.cascade_truncated_calls.toLocaleString()}×</span>` : '')
     + `</div>`;
-  html += '<table class="lane-table"><thead><tr><th>Mode</th><th>Finding</th><th style="text-align:right;">Count</th></tr></thead><tbody>';
+  html += '<table class="lane-table"><thead><tr><th>Mode</th><th style="text-align:right;white-space:nowrap;">Count</th></tr></thead><tbody>';
   for (const m of (v.modes || [])) {
     const cnt = (m.total > m.shown) ? `${m.shown} / ${m.total}` : `${m.total}`;
-    html += `<tr><td><b>${esc(m.mode)}</b></td><td>${esc(m.label)}</td><td style="text-align:right;">${cnt}</td></tr>`;
+    html += `<tr><td style="white-space:nowrap;"><b>${esc(m.mode)}</b> ${esc(m.label)}</td>`
+      + `<td style="text-align:right;white-space:nowrap;">${cnt}</td></tr>`;
     if (m.sample && m.sample.length) {
-      html += `<tr><td></td><td colspan="2" class="ref-note" style="padding-top:0;">`
+      html += `<tr><td colspan="2" class="ref-note" style="padding-top:0;">`
         + m.sample.map(s => esc(s)).join(' · ')
         + (m.total > m.sample.length ? ` …` : '') + `</td></tr>`;
     }
