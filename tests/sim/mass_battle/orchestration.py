@@ -1097,8 +1097,16 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
                 ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
                 ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
-            a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
-            b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
+            if PC_FRACTIONAL_POOL:
+                # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
+                # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
+                _apr = a_pool_raw if not a_dead else 0.0
+                _bpr = b_pool_raw if not b_dead else 0.0
+                a_net = roll_pool_fractional(_apr) + _sigma_net_boost(ns_a, _apr)
+                b_net = roll_pool_fractional(_bpr) + _sigma_net_boost(ns_b, _bpr)
+            else:
+                a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
+                b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
             # [ED-MB-0018] octagon = damage multiplier under PC_OCTAGON_DMG -> not a pool penalty here

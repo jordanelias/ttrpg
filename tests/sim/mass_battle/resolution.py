@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace', 'tracing_on']
+__all__ = ['roll_pool', 'roll_pool_fractional', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace', 'tracing_on']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
@@ -40,6 +40,18 @@ def roll_pool(n, tn=7):  # [canonical: params/core.md §TN Values — TN 7 stand
         elif tn <= f <= 9: net += 1  # [canonical: params/core.md — canonical face rule 1=-1, 2-6=0, 7-9=+1, 10=+2]
         elif f == 10:      net += 2
     return net
+
+def roll_pool_fractional(pool, tn=7):
+    """[ED-MB-0032, Jordan: "pool must be fractional."] Roll a CONTINUOUS combat pool without flooring it
+    to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
+    fractional remainder contributes its EXPECTED net (PER_DIE_NET_EV per full die) so the pool's
+    fractional precision is preserved instead of discarded. A sub-1 pool contributes only its fractional
+    EV (no spurious floor to one guaranteed die). [canonical: params/core.md continuous engine — the
+    fractional die's variance is neglected here (< a full die's); the discrete base carries the variance.]"""
+    lo = math.floor(max(0.0, pool))
+    frac = max(0.0, pool - lo)
+    base = roll_pool(lo, tn) if lo >= 1 else 0
+    return base + frac * PER_DIE_NET_EV
 
 def compute_degree(net, ob):
     if net <= 0:                    return "Failure"
