@@ -189,3 +189,46 @@ Three findings, all material:
 calibrate from there. Default-OFF gating exists for golden byte-exactness, a *regression-testing*
 concern, not a *design-truth* one — the two need separating (a documented **"full-kit" profile** vs the
 byte-exact legacy profile).
+
+## Leave-one-out flag ablation (friction pinned ON) — answer: nothing else improves
+
+Jordan: *"if we leave that on and strategically turn on/off other flags, does anything else improve?"*
+`flag_ablation.py`, historical Cannae OOB, baseline = **all flags ON, 41.7 %** (A 25.0 / B 58.3), n=12/side.
+
+| flag removed | avg | delta |
+|---|---|---|
+| `PC_FEIGNED_RETREAT`, `PC_INTENT_RESOLUTION`, `PC_RESERVE_COMMIT`, `PC_TROOP_DENSITY_CAP`, `PC_YIELD_EMERGENT`, `PC_YIELD_POCKET`, `PC_YIELD_RALLY` | 41.7 % | **+0.0 pp** |
+| `PC_FRACTIONAL_POOL` | 45.8 % | +4.2 pp |
+| `PC_CELL_DAMAGE`, `PC_CLOSE_RANKS`, `PC_STOCHASTIC_ROUT` | 47.0 % | +5.3 pp |
+
+**Statistical honesty first:** at n=12/side one battle ≈ 4.2 pp, so every non-zero row above is a
+**one-battle flip — indistinguishable from noise.** Nothing here is evidence that removing those four
+flags "helps"; the correct reading is *no measurable effect at this sample size*. The only flag with an
+effect large enough to resolve is **`PC_FRICTION_CEV`** (41.7 % vs 2.5 % — ~10 battles).
+
+**The seven exact zeros are the real finding.** Seven flags changed **no outcome at all**, and for the two
+that matter most to the Cannae plan there is a structural reason:
+
+- **`PC_FEIGNED_RETREAT` cannot express the Cannae bait.** Its only call site is
+  `orchestration.py:2511`, inside the **post-rout pursuit** block — `resolve_feigned_retreat(victor,
+  routing)`. It models *a broken unit being chased into a trap*. Cannae's centre does the opposite: it
+  withdraws **while still fighting and unbroken**, deliberately, to draw the enemy in. **That mechanic
+  does not exist in the engine.** The flag being ON is irrelevant because nothing in a
+  still-fighting scenario can reach the code path.
+- **`PC_INTENT_RESOLUTION` is a small sigma nudge, not a survivability mode.**
+  `STANCE_COMMITMENT = {aggressive: +1, balanced: 0, hold: -1, retreat: -1}` shifts the offence sigma by
+  `c·INTENT_OFFENSE_D`. A holding centre trades away its own offence and blunts the enemy's a little —
+  it does **not** confer the "fight to survive, give ground, do not break" behaviour the plan needs.
+
+So the honest answer to *"does anything else improve?"* is **no** — and the reason is not that the flags
+are mis-tuned, it is that **the Cannae centre's core behaviour (deliberate elastic fighting withdrawal)
+is unimplemented**, exactly as Jordan's *"pathing timing is huge"* message implies. The bait is the
+missing primitive, and it must be authored, not switched on.
+
+**Revised build order:** (1) **deliberate fighting withdrawal** — a still-cohesive subunit that yields
+ground under pressure on purpose, at a controlled rate, without routing (this is the primitive; the
+existing feigned-retreat/pursuit code is a different mechanic and should not be overloaded);
+(2) **per-cell morale** so the pocket's shell degrades locally before the whole centre;
+(3) **tempo calibration of the cavalry race** (`PC_CAVALRY_SPEED_MULT`, `ENVELOP_STANDOFF`, wing release
+tick) against the centre's survival clock; (4) re-run the historical OOB as the acceptance test, at
+n≥60/side so effects smaller than ~8 pp are actually resolvable.
