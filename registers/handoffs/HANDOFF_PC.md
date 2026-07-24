@@ -22,9 +22,21 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
   penalizes TEMPO, not exchange power — so a crowded spear still wins the bind. **The honest fix is a closed-
   measure EXCHANGE penalty for crowded long weapons** (a spear should be out-fought inside its point; choking
   shouldn't fully rescue it) **coupled with a `REPRESENT_BASE`<1 off-plate contest** (a pressing swordsman denies
-  re-presentation even unarmoured). That is a real closed-phase mechanic (its own ED, PC lane) with cross-cutting
-  risk (touches every closed exchange) — deserves a focused session + full-suite + matrix re-validation, NOT a
-  rushed knob. Experimental knobs were reverted; ED-PC-0033 state is clean/green.
+  re-presentation even unarmoured). **ATTEMPTED 2026-07-24 as a prototype ED-PC-0034 and REVERTED — even the
+  closed-measure exchange penalty is INSUFFICIENT.** Built `close_crowd_sigma` (grip × native over-length →
+  net-σ penalty, added to reach_pen) + `REPRESENT_BASE` + `STOPHIT_COMMIT`; joint-swept all four levers.
+  Findings: (a) the crowd penalty barely moves forced-closed spear (0.92→~0.87) — the spear out-fights the sword
+  in the close through MULTIPLE composing channels (2H leverage in the bind, damage, reach-even-when-choked), so a
+  single σ penalty can't overturn it; (b) it TANKS guisarme@heavy below its 0.30 floor (guisarme is also long → is
+  crowd-penalized at plate where it must win); (c) off-plate the kill often happens in ENGAGEMENT 1's approach
+  (prev_closed=False → the re-presentation gate is inert on turn 1), so `REPRESENT_BASE` can't bite; (d)
+  `STOPHIT_COMMIT`/`STOPHIT_CHANCE` barely move off-plate (reach wins even at 0.35 chance / 0.4 commit) yet also
+  break guisarme@heavy. **Conclusion: bringing off-plate reach to ~0.75 is NOT achievable via approach/represent/
+  crowd levers without violating guisarme@heavy — it needs a fundamental rework of the closed-phase LEVERAGE/
+  DAMAGE model (why a spear out-fights a sword in the bind at all), a large high-risk change with no bounded fix.**
+  All experiments reverted; ED-PC-0033 state is clean/green (656). Recommend either accepting off-plate reach at
+  ~0.93-0.95 (honest un-bugged value) or scheduling a dedicated closed-phase-model session with its own
+  invariant-safety plan.
 - **OPEN (matrix quirks, pre-existing — NOT from the reach arc; PC-lane roster calibration):**
   1. **`sparr_axe` armour cliff (0.94 light → 0.20 medium → 0.06 heavy).** Weapon record has a SINGLE
      `straight_cut` element, `adef_cap=−0.90` — it cannot defeat *any* armour. A sparth/war-axe realistically has
