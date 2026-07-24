@@ -344,8 +344,11 @@ CAV_TESTS = [
     # Judged on RAW cavalry win-rate (must be LOW): a repelled charge is a HOLD, not a decisive result,
     # so decisive-split is uninformative here (tiny decisive n) and high draws are EXPECTED (Waterloo
     # squares held all day; cavalry could not charge a solid formation -- Burkholder 2007; Barua 2011).
-    ('C2','Cav vs BRACED Line (hold+d8+brace)','Arrowhead','Line',dict(CAV),
-        {'stance':'hold','discipline':8,'instructions':('brace',)},0,30,'high','rawA'),  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels; raw cav-a LOW]
+    # [ED-MB-0041] C2 now builds a genuinely DEEP braced block (width 3 x depth 6) — a pike block /
+    # schiltron / square, which is what the band's Courtrai/Swiss/Waterloo grounding describes. It
+    # previously passed no width/depth, so it built the default 3x2 and was BIT-IDENTICAL to C6.
+    ('C2','Cav vs BRACED deep block (hold+d8+brace)','Arrowhead','Line',dict(CAV),
+        {'stance':'hold','discipline':8,'instructions':('brace',),'width':3,'depth':6,'troop_type':'pike'},0,30,'high','rawA'),  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels; raw cav-a LOW]
     # C3: cavalry mirror -- side-symmetry control of the charge/momentum path. Even.
     ('C3','Cav vs Cav (mirror control)','Arrowhead','Arrowhead',dict(CAV),dict(CAV),42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — C3 cav mirror]
     # C4: mounted ENVELOPMENT of a line -- flank/rear is devastating (Cannae; Adrianople; Boddy 2015).
@@ -367,8 +370,11 @@ CAV_TESTS = [
     # C6: cavalry vs a BRACED-shallow line (hold + disc8 + 'brace') -- a faced brace still repels
     # frontally (the recoil needs discipline x some depth, not maximal depth). Control duplicate of C2
     # on a shallower wall; same RAW cav-a-LOW judgement, draws expected.
+    # [ED-MB-0041] C6 is now genuinely SHALLOW (width 6 x depth 1) so it actually tests what its label
+    # claims — a thin braced line vs C2's deep block. The two rows were previously identical inputs
+    # with a fixed seed_base, i.e. the same run counted as two passes.
     ('C6','Cav vs BRACED-shallow Line (hold+d8+brace)','Arrowhead','Line',dict(CAV),
-        {'stance':'hold','discipline':8,'instructions':('brace',)},0,30,'high','rawA'),  # [canonical: mass_battle_gauge_grounding.md §3 — C6 = C2; raw cav-a LOW]
+        {'stance':'hold','discipline':8,'instructions':('brace',),'width':6,'depth':1,'troop_type':'pike'},0,30,'high','rawA'),  # [canonical: mass_battle_gauge_grounding.md §3 — C6 = C2; raw cav-a LOW]
     # C7: cavalry ENVELOPS a holding line (Horseshoe vs hold+disc8) -- the flank/rear bypasses the
     # frontal brace (you cannot face the rear, Burkholder 2007). An immobile (hold-stance) line that
     # cannot turn to face the encirclement is ANNIHILATED when resolved (Cannae/Adrianople) -> decA

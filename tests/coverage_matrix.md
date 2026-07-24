@@ -2,6 +2,33 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0041 remediation: Tier-0/Tier-1 execution (adversarial audit)
+- **Reach gate silently disabled the braced-wall repel (biggest live defect).** `orchestration.py`'s comment
+  claimed *"TROOP_TYPE_REACH is deliberately empty → this half of the gate is a no-op"*. It has **12 entries**
+  (ED-MB-0014). The gate needs `reach_for(defender) >= reach_for(charger)`; `infantry 0.1 < cavalry 0.2`, so
+  `PC_CHARGE_RECOIL` **never fired** for a braced generic-infantry wall — switching off the
+  Courtrai/Bannockburn/Waterloo anchor and causing C2/C6 NOT-REPELLED. Comment corrected; C2/C6 defenders are
+  now **pole-armed** (a brace IS a hedge of set poles; pike 0.3 ≥ 0.2 passes).
+  **Measured honestly: 100.0 → 95.0 rawA.** The gate defect is confirmed and fixed, but unblocking it is
+  **NOT sufficient** — the recoil now fires and is simply too weak (`PC_CHARGE_RECOIL=6 × SIGMA_PER_D=0.2`).
+  The subagent's counterfactual of 0.0% did NOT reproduce at n=20. Residual gap is a magnitude problem.
+- **C2 ≡ C6 duplicate broken.** They were bit-identical inputs with a fixed seed counted as two passes. C2 is
+  now a genuinely DEEP block (3×6), C6 genuinely SHALLOW (6×1), both pole-armed.
+- **`refuse_range` 3 → 10.** Measured minimum centroid-to-enemy approach is ~9.5, so the refused-flank release
+  order NEVER fired in any caller (none overrides the default). Verified now firing (`_order_idx` 0 → 1), and
+  the H6-style matchup produces casualties instead of the previous 0.0/0.0 freeze.
+- **Anti-fabrication gate accepts honest provenance.** It recognised only `[canonical: ...]`, so the ONLY way
+  to pass was to call a value canonical — a direct incentive for the false tags the audit found. It now also
+  accepts `[GROUNDED: ]`, `[JUSTIFIED: ]`, `[DECLARED-DIVERGENCE: ]`, `[CALIBRATED-DEBT: ]` with equal force.
+- **False citations corrected** (verified by hand): the 45° octagon boundary cited to `mass_battle_v30.md`
+  (which contains **zero** occurrences of "octagon"); `PC_CAVALRY_SPEED_MULT` cited to a §A.7 that has no
+  speed ratios; `K_LINEAR`/`LANCHESTER_STRENGTH_REF` cited to a doc whose §6 explicitly declines to supply
+  magnitudes.
+- **Declared divergences** (Jordan 2026-07-24: canon may be broken for tuning — it must be *visible*):
+  `MORALE_EROSION_DAMP` makes the §A.4 cap −2.1 not −3 (comment previously asserted the cap was intact);
+  `DISCIPLINE_LOSS_THRESHOLD` replaces canon's variable "> Discipline this turn" with a fixed cumulative 1.0.
+- Deleted `tests/sim_verification_ledger.json` (26-entry bare-integer self-whitelist, `source=orchestration.py`).
+
 ## 2026-07-24 — ED-MB-0040: cell-primitive damage (the aggregate-smear bug) + historical Cannae oracle
 - Jordan directive: "the cell is the primitive… each cell has its own octagon facing… its own capacity to
   receive and issue damage… flank/rear damage is supposed to be cellular… damage is done to cells."

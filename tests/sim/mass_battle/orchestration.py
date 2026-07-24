@@ -874,7 +874,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                         if PC_FACING_MODEL and PC_FACING_FOV_GATE and _a > FOV_HALF_DEG:
                             continue
                         if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
-                                and _a < 45.0):  # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary]
+                                and _a < 45.0):  # [canonical: Jordan design — octagon zones; NOT in mass_battle_v30.md, which contains no octagon model (ED-MB-0041 verified: 0 occurrences)]
                             pinned = True; break
                     worst_mod = 0; worst_ang = 0.0; worst_pos = None
                     for a in _wrappers:
@@ -1013,7 +1013,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                     pinned = False
                     for a in atk:
                         _z2, _a2 = octagon_angle(a, d_pos, facing)
-                        # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN/YELLOW boundary]
+                        # [canonical: Jordan design — octagon zones; NOT in mass_battle_v30.md, which contains no octagon model (ED-MB-0041 verified: 0 occurrences)]
                         if (_a2 < 45.0
                                 and (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2 <= PC_PIN_REACH ** 2):
                             pinned = True; break
@@ -1126,8 +1126,16 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                     # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
                     # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
                     # back, so the wall cannot retaliate/recoil it). reach_for is structural only today
-                    # (TROOP_TYPE_REACH is deliberately empty -> everyone is REACH_SHORT -> this half of the
-                    # gate is a no-op until reach assignments are separately ratified).
+                    # [ED-MB-0041 CORRECTION] This comment previously read "TROOP_TYPE_REACH is deliberately
+                    # empty -> everyone is REACH_SHORT -> this half of the gate is a no-op". THAT IS FALSE:
+                    # ED-MB-0014 populated TROOP_TYPE_REACH with 12 entries. The gate is LIVE and it BITES:
+                    # reach_for('infantry')=0.1 < reach_for('cavalry')=0.2, so a braced GENERIC-INFANTRY wall
+                    # fails `reach_for(defender) >= reach_for(charger)` and PC_CHARGE_RECOIL NEVER FIRES.
+                    # That silently disabled the Courtrai/Bannockburn/Waterloo braced-wall repel — the
+                    # strongest historical anchor in the grounding doc — and is why gauge C2/C6 read
+                    # NOT-REPELLED. A brace IS a hedge of set poles, so a braced defender should carry a
+                    # pole-armed troop type (pike 0.3 >= 0.2 passes). The stale comment is why this went
+                    # unnoticed for so long.
                     if PC_BRACE_ENABLED:
                         if (a_mom > b_mom and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
                                 and (not PC_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'

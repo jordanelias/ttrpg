@@ -248,7 +248,7 @@ PC_SHOCK_DISC_FULL   = 0.35  # discipline>=5 (steady troops hold formation) cuts
 PC_SHOCK_DEPTH_FULL  = 0.5   # deep (>=PC_SHOCK_DEPTH_REF ranks) halves shock (mass absorbs)
 PC_SHOCK_DEPTH_REF   = 4.0   # rank depth treated as fully "deep"  # [canonical: designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md §5]
 PC_SHOCK_SHAKEN_GAIN = 1.0   # already-shaken defender (morale<<start) takes up to 2x shock (Hastings-post-feint)
-# [canonical: mass_battle_v30.md §A.7 manoeuvre — cavalry tactical pace ~3× an infantry formation march (ED-MB-0017, Jordan 2026-07-22: "cavalry has to be 2-3/tick or higher; infantry marched to keep formation, cavalry did not")]
+# [JUSTIFIED: mechanism from mass_battle_v30.md §A.7 Fast/Standard/Slow tiers (which give NO ratios — ED-MB-0041 verified); magnitude 3.0 is the top of Jordan's verbal range "cavalry has to be 2-3/tick or higher" (ED-MB-0017) (ED-MB-0017, Jordan 2026-07-22: "cavalry has to be 2-3/tick or higher; infantry marched to keep formation, cavalry did not")]
 PC_CAVALRY_SPEED_MULT = 3.0  # cavalry velocity primitive: cavalry moves 3× a marching infantry line (grounds the charge-closing speed too). Was 2.0.
 # [ED-MB-0017, Jordan 2026-07-22: "units that envelop are typically fast, especially cavalry; if you
 # aren't applying speed to these units the envelopment will always be worse — it's just units being
@@ -286,7 +286,7 @@ PC_POCKET_REACH = int(_sigma_os.environ.get('PC_POCKET_REACH', '2'))    # latera
 LANCHESTER_ENABLED = _sigma_os.environ.get('LANCHESTER_ENABLED', '1') == '1'   # default ON post-validation; OFF = pre-P-L flat scale
 K_LINEAR  = float(_sigma_os.environ.get('K_LINEAR', '12'))   # [canonical: mb_lanchester_design.md §3a/§5 — melee linear coeff, rescopes CASUALTY_SCALE; class-B]
 K_SQUARE  = float(_sigma_os.environ.get('K_SQUARE', '0.25')) # [canonical: mb_lanchester_design.md §3b/§5 — volley square-law coeff; class-B]
-LANCHESTER_STRENGTH_REF = float(_sigma_os.environ.get('LANCHESTER_STRENGTH_REF', '4'))  # [canonical: mb_lanchester_design.md §3a — reference engaged frontage (cols) normalizing the linear factor to ~1 at the mirror; class-B]
+LANCHESTER_STRENGTH_REF = float(_sigma_os.environ.get('LANCHESTER_STRENGTH_REF', '4'))  # [JUSTIFIED: mb_lanchester_design.md §3a grounds the LINEAR LAW but contains no reference-frontage concept and no value (ED-MB-0041 verified); §6 states "Coefficient values are sim-tuned at implementation — not pre-decided here". Magnitude fitted; NOTE it is degenerate with K_LINEAR (casualties scale as K_LINEAR/STRENGTH_REF) and should be collapsed into it]
 LANCHESTER_DENSITY_REF = float(_sigma_os.environ.get('LANCHESTER_DENSITY_REF', '100'))  # [Jordan directive 2026-06-03] all-fight reference troops/cell; density factor = min(tpc,CELL_CAP)/this
 
 # ─── COMMAND-ONLY SIGMA-LEVERAGE BASE (Jordan canon-structure directive 2026-06-02) ───

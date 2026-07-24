@@ -108,7 +108,13 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 # exhaustion morale erosion (<1 slows the bleed -> longer, more attritional battles, per the
                 # constant's own intent). Applied ONLY to this gradual erosion, NOT to the stochastic-rout
                 # punch below (which must reach <=0 to force the break) — so damping cannot cancel a rout.
-                atom.erode_morale(min(loss, 3.0) * MORALE_EROSION_DAMP)   # cap -3 per Cascade Phase (§A.4); routes own-else-Unit
+                atom.erode_morale(min(loss, 3.0) * MORALE_EROSION_DAMP)   # [DECLARED-DIVERGENCE from §A.4, ED-MB-0041]
+                # §A.4's canonical cap is -3 per Cascade Phase. MORALE_EROSION_DAMP (0.7) scales the whole
+                # capped quantity, so the EFFECTIVE cap is -2.1, NOT -3. This is a deliberate tuning
+                # divergence (Jordan 2026-07-24: "we are allowed to break canon values in the pursuit of
+                # balancing/tuning") — slower morale bleed => longer, more attritional battles. It is
+                # recorded here because the previous comment asserted the -3 cap was still in force,
+                # which was false and misled the v30 §A.4 engine note as well. routes own-else-Unit.
             # [ED-MB-0031] Stochastic morale break at the historical 15-30% casualty band (du Picq): the
             # canonical §A.4 steps above don't fire until 50% losses, so units grind to ~58% before breaking.
             # When gated on, a subunit whose casualties cross its own drawn break-point routs NOW (drive its
@@ -182,6 +188,16 @@ def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 my_loss = (u.hp_max - u.hp) / BLOCK_SIZE if BLOCK_SIZE else 0   # exact old value -> byte-exact
             else:
                 my_loss = (atom._start_troops - atom.cur_troops) / BLOCK_SIZE if BLOCK_SIZE else 0
+            # [DECLARED-DIVERGENCE from §A.4/PP-502, ED-MB-0041] Canon fires discipline degradation when
+            # "total Size lost THIS TURN > current Discipline rating" (mass_battle_v30.md:197,
+            # engine/params/mass_combat.md:147) — a per-turn comparison against a VARIABLE stat, so a
+            # disciplined unit resists degradation. The engine instead divides CUMULATIVE loss by a fixed
+            # DISCIPLINE_LOSS_THRESHOLD (1.0 Size), which (a) fires ~5x more often at canonical Discipline 5
+            # and (b) makes the trigger a monotone ratchet independent of the unit's own Discipline.
+            # This is a SHAPE divergence (a variable replaced by a constant), not just a magnitude one:
+            # a Discipline-5 veteran degrades on the same loss as a Discipline-1 levy. Canon-breaking for
+            # tuning is permitted (Jordan 2026-07-24); this is flagged so the choice is visible and can be
+            # ruled on deliberately rather than inherited as an unnoticed misreading.
             disc_hits = int(my_loss / DISCIPLINE_LOSS_THRESHOLD)
             # already applied for THIS subunit (single-subunit: == u.discipline_start - u.discipline)
             already_applied = atom.eff_discipline_start - atom.eff_discipline
