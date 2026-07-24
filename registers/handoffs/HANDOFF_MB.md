@@ -15,6 +15,21 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0039 (2026-07-24, needs_jordan): ENVELOPMENT STABILITY DIAGNOSIS — the ED-MB-0038 side-asymmetry
+  root-caused.** Pure-infantry envelopment at strict parity is DEPLOYMENT-CHAOTIC: the parity centre (2
+  cells) is narrower than the 3-command enemy (6) → out-flanked → a Lanchester-amplified knife-edge race
+  whose tip is set by integer deployment parity (start-row sweep swings env win 54→50→17→9pp). Side-
+  symmetric avg ~44% (envelop slightly LOSES); H3's 70.7 is the favourable side. Three regimes measured
+  (`envelopment_stability_probe.py`): pure-infantry = chaotic ~44%±54pp; deep-narrow centre = stable
+  (swing 51→7pp) but LOSES (bypassed — depth confers no holding without frontage; `width` alone is silently
+  ignored, need `width`+`depth`); combined-arms (infantry pin + cavalry orbital-wheel rear, ED-MB-0035) =
+  STABLE + side-symmetric + ~100% vs EVERY defender toughness. **Engine has two envelopment regimes and
+  nothing between; the moderate 55-72/45-62 bands sit in an engine gap.** FORK for Jordan (both change
+  history-grounded bands / a core mechanic; C4/C7 currently pass): **(A)** reframe H3/H4 as combined-arms
+  (bands → ~75-100, loses inf/cav distinction) or **(B, recommended)** gated seal-failure/breakout variance
+  → envelopment becomes a gradient (blast radius: lowers passing C4/C7 — needs A/B). Full write-up:
+  `audit/2026-07-22-mass-battle-stress-test/envelopment_stability_diagnosis_v1.md`.
+
 - **ED-MB-0038 (2026-07-24): MATCHED COMMAND-GRANULARITY honest gauge — envelopment artifact fixed, H3
   flagship 0→70.7%.** The density-matched gauge (ED-MB-0027) had unmasked a SECOND measurement artifact
   one axis up: the composed enveloper/refused presets always faced a SINGLE-subunit opponent, and a
