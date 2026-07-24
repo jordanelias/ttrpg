@@ -2,6 +2,20 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0029: intent as an offence/defence resolution axis
+- Jordan directive: "hold-and-defend vs rout-the-other resolve differently — intent makes a big
+  difference." `stance` (was movement-speed only) is now a signed offence/defence **commitment** in the
+  exchange: `cX` ∈ {aggressive +1, balanced 0, hold/retreat −1} enters the sigma head as delta-sigma net
+  `ns_a += (cA·OFF + cB·DEF)·SIGMA_PER_D` (own press + enemy exposure/blunting), symmetric for B —
+  uniform-impact like the octagon/puncture terms, **not** a raw damage multiplier.
+- Anchored to the §A tactic-card **asymmetry** (Disciplined Defence +1D; Standard Advance no effect) →
+  `DEF=1.0 > OFF=0.5`: a holding pin **survives** a pressing foe (buys time, Cannae centre); aggression
+  is punished vs a steady wall.
+- Effect (intent_probe, OFF→ON): hold-vs-balanced holder casualties 67→57 & win 35%→50%;
+  aggressive-vs-hold holder wins 65/35.
+- Gated `PC_INTENT_RESOLUTION` (default OFF; balanced=0 → inert; byte-exact, bat.py EXIT=0). Tests:
+  `test_intent_resolution.py` (8). Detail: `rotation_model_v1.md`.
+
 ## 2026-07-23 — ED-MB-0028: cell-level closing-ranks lifecycle (T1 Phase 1a)
 - Foundational primitive for Jordan's rotation directive: `Subunit.close_ranks()` reflows a subunit's
   **living** troops front-rank-first (`orig_r` asc) toward each cell's spawn density (`_cell_target`),

@@ -1083,6 +1083,20 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 env_b = _envelopment_sigma(unit_b, unit_a)   # B wider -> B gets it
                 ns_a += env_a
                 ns_b += env_b
+            if PC_INTENT_RESOLUTION:
+                # [ED-MB-0029] INTENT as an offence/defence commitment (mass_battle_v30 §A Offensive/
+                # Defensive axis). A subunit's own commitment cX (aggressive +1 / balanced 0 / hold,
+                # retreat -1) shifts its OWN offence (cX·INTENT_OFFENSE_D) and the ENEMY's offence against
+                # it (cX·INTENT_DEFENSE_D — aggressive EXPOSES, defensive BLUNTS). So A's offence net rises
+                # with A's aggression and with B's exposure, and falls when B holds: ns_a gains
+                # (cA·OFF + cB·DEF). Symmetric for B. A holding pin (cA=-1) vs a pressing foe (cB=+1) nets
+                # ~even at OFF≈DEF — the pin is NOT crushed, it survives to buy time (Cannae centre); two
+                # holders grind slowly; two aggressors trade fast and bloody. Delta-sigma (uniform-impact),
+                # like every other advantage above — NOT a raw damage multiplier. Gated; balanced=0 -> inert.
+                cA = STANCE_COMMITMENT.get(atom_a.stance, 0)
+                cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
+                ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
+                ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
             a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
             b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
