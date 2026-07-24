@@ -5,7 +5,7 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
+__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -110,6 +110,54 @@ def distribute_casualties(unit, dmg, pairs):
     for a, pid, troops in cells:                   # proportional per cell (assoc.-equiv to the per-column spread)
         a.cell_troops[pid] = max(0.0, troops - dmg * (troops / tot))
     sync_col_grid(unit)                            # refresh emergent column densities from cells
+
+def distribute_casualties_cellwise(unit, dmg, cell_dmg):
+    """[ED-MB-0040, Jordan directive: "the cell is the primitive ... damage is supposed to be done to
+    cells ... flank/rear damage is supposed to be cellular"] Apply `dmg` to the unit's CONTACT CELLS using
+    the per-cell facing-weighted shares the resolver accumulated (`cell_dmg`: {id(atom): (atom, {abs_cell:
+    share})}), instead of `distribute_casualties`' uniform density-proportional spread over every engaged
+    cell. The shares are used as RELATIVE WEIGHTS and renormalised to the caller's `dmg`, so the total is
+    exactly the resolver's (post-scaled) figure and the cells==hp invariant holds regardless of any
+    post-scaling upstream. Effect: a flanked/rear cell loses ~2x what a front-facing sibling in the SAME
+    subunit loses, so an enveloped body is stripped shell-inward rather than thinning uniformly.
+    Falls back to the aggregate spread when no cellular shares exist (e.g. contact with no live cells)."""
+    if dmg <= 0:
+        return
+    tot = 0.0
+    for _k, (_atom, cells) in cell_dmg.items():
+        tot += sum(cells.values())
+    if tot <= 0:
+        return
+    # Resolve to (atom, orig_cell, weight) once, then fill in passes so a cell that cannot absorb its
+    # full share (it has fewer troops than the share) spills the remainder onto the still-living cells
+    # instead of silently vanishing — without this the cells==hp invariant drifts exactly in the
+    # annihilation cases (encirclement) this mechanic exists to model.
+    targets = []
+    for _k, (atom, cells) in cell_dmg.items():
+        amap = _oriented_abs_map(atom)
+        for abs_cell, share in cells.items():
+            orig = amap.get(abs_cell)
+            if orig is None or share <= 0:
+                continue
+            if atom.cell_troops.get(orig, 0.0) > 0:
+                targets.append((atom, orig, share))
+    remaining = dmg
+    for _ in range(8):   # [canonical: epsilon: bounded spill passes; float residual guard 1e-9 below]                                  # bounded spill passes; residual below tolerance stops early
+        live = [(a, o, w) for (a, o, w) in targets if a.cell_troops.get(o, 0.0) > 0]
+        wtot = sum(w for _a, _o, w in live)
+        if remaining <= 1e-9 or not live or wtot <= 0:   # [canonical: epsilon: float residual guard]
+            break
+        applied = 0.0
+        for atom, orig, w in live:
+            cur = atom.cell_troops.get(orig, 0.0)
+            take = min(cur, remaining * (w / wtot))
+            atom.cell_troops[orig] = cur - take
+            applied += take
+        remaining -= applied
+        if applied <= 1e-9:   # [canonical: epsilon: float residual guard]
+            break
+    sync_col_grid(unit)
+
 
 def apply_to_subunit(unit, subunit, dmg):
     """Apply `dmg` troop-casualties to a SINGLE subunit's living cells, proportional to density,

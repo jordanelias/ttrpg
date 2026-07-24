@@ -604,6 +604,56 @@ def _compute_atom_sides(pairs):
     return sides
 
 
+def _cell_damage_weights(atom, cell_mods, red):
+    """[ED-MB-0040] Per-cell casualty-allocation weights for one defender in one contact pair.
+    weight(cell) = troops_in_cell x that cell's OWN facing multiplier (front 1.0 / flank 1.5 / rear 2.0,
+    interpolated from its own arc mod exactly as the subunit scalar is). Jordan: "the cell is the
+    primitive... each cell has its own octagon facing... its own capacity to receive damage" — so a rear
+    cell of a subunit dies ~2x faster than a front-facing sibling in the SAME subunit, and an enveloped
+    body is stripped shell-inward. Troops are read live (`cell_troops` via the identity map), so an
+    already-hollowed cell stops attracting casualties it no longer has."""
+    if not cell_mods:
+        return {}
+    amap = _oriented_abs_map(atom)
+    out = {}
+    for abs_cell, m in cell_mods.items():
+        orig = amap.get(abs_cell)
+        troops = atom.cell_troops.get(orig, 0.0) if orig else 0.0
+        if troops <= 0:
+            continue
+        out[abs_cell] = troops * min(red, 1.0 - m * (red - 1.0) / 2.0)
+    return out
+
+
+def _accum_cell_damage(store, atom, weights, dmg):
+    """[ED-MB-0040] Split `dmg` across `weights` (see _cell_damage_weights) into
+    store[id(atom)] = (atom, {abs_cell: dmg}). No weights (all cells empty) -> the caller's aggregate
+    total still stands and the residual is reconciled by the aggregate spread at apply time."""
+    if dmg <= 0 or not weights:
+        return
+    tot = sum(weights.values())
+    if tot <= 0:
+        return
+    slot = store.get(id(atom))
+    if slot is None:
+        slot = (atom, {}); store[id(atom)] = slot
+    acc = slot[1]
+    for cell, w in weights.items():
+        acc[cell] = acc.get(cell, 0.0) + dmg * (w / tot)
+
+
+def _merge_cell_damage(dst, src):
+    """[ED-MB-0040] Merge one cascade sub-phase's per-cell damage into the tick's accumulator."""
+    for k, (atom, cells) in src.items():
+        slot = dst.get(k)
+        if slot is None:
+            dst[k] = (atom, dict(cells))
+        else:
+            acc = slot[1]
+            for cell, d in cells.items():
+                acc[cell] = acc.get(cell, 0.0) + d
+
+
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None,
                         eng_counts=None, atom_sides=None):
     """Resolve all contact pairs.
@@ -616,6 +666,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
     in so the multi-side shock + encirclement penalty see the whole tick's engagement, not a cascade group;
     None -> computed locally from `pairs` (direct callers / non-cascading path -> identical, same pairs)."""
     dmg_a, dmg_b = 0, 0
+    cell_dmg_a, cell_dmg_b = {}, {}   # [ED-MB-0040] {id(atom): (atom, {abs_cell: dmg})}, PC_CELL_DAMAGE only
     if eng_counts is None:
         eng_counts = count_engagements_per_atom(pairs)
     # [ED-MB-0018 fix, balance-critic A1/A1-gap + arch-critic #1] MULTI-SIDE = the set of DISTINCT octagon
@@ -911,8 +962,20 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
         # rear->2.00x exactly. [canonical: Jordan design -- octagon damage multiplier; du Picq flank/rear
         # lethality + reaction time under surprise]
         def _octagon_dmg_mod(defender_subunit, defender_cells, attacker_cells):
+            """Subunit-scalar arc = the MEAN of the per-cell arcs (see _octagon_cell_mods, the single
+            owner of the per-cell logic). Byte-exact: identical value, same iteration order."""
+            cm = _octagon_cell_mods(defender_subunit, defender_cells, attacker_cells)
+            return sum(cm.values()) / len(cm) if cm else 0.0
+
+        def _octagon_cell_mods(defender_subunit, defender_cells, attacker_cells):
+            """[ED-MB-0040] THE single owner of the per-cell octagon arc (Jordan: "each cell has its own
+            octagon facing"). Returns {abs_cell: arc_mod} — 0 (GREEN/front) .. -2 (RED/rear) per ANGLE_DEF_MOD,
+            each cell judged against ITS OWN facing, its own local attacker centroid, its own pin/FOV state and
+            its own reaction clock. `_octagon_dmg_mod` is the troop-blind MEAN of this map (byte-exact,
+            unchanged); PC_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
+            exposed instead of being averaged into one subunit scalar and smeared back uniformly."""
             if not defender_cells or not attacker_cells:
-                return 0.0
+                return {}
             atk = list(set(attacker_cells))
             # [Fable-audit B3 fix, 2026-07-24] Use the single live identity map instead of open-coding the
             # abs->orig recovery off the DEAD starting_position+cell_offsets spawn lattice. On the field/node
@@ -926,7 +989,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             _rs = getattr(defender_subunit, '_react_since', None)
             if _rs is None:
                 _rs = {}; defender_subunit._react_since = _rs
-            mods = []
+            mods = {}
             seen = set()
             for d_pos in defender_cells:
                 if d_pos in seen:
@@ -983,8 +1046,8 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                     # else (rear/blind or pinned): never wheels -> full penalty persists; clock cleared below
                 if _clear:
                     _rs.pop(_rk, None)   # faced/green, rear/blind/pinned, or no-tick -> not counting -> reset clock
-                mods.append(m)
-            return sum(mods) / len(mods) if mods else 0.0
+                mods[d_pos] = m
+            return mods
 
         a_fixed_other = bool(_front_fixers.get(id(atom_a), set()) - {id(atom_b)})
         b_fixed_other = bool(_front_fixers.get(id(atom_b), set()) - {id(atom_a)})
@@ -1163,11 +1226,21 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
         # shock-compromised -> an extra COMPOUNDING factor (1+MULTI_SIDE_SHOCK), not a mere halving.
         # `a_arc`/`b_arc` are each side's own exposure, scaling that side's incoming damage (dmg_a = A's).
         _red = OCTAGON_DMG_MULT["RED"]
+        _a_cw = _b_cw = None
         if PC_OCTAGON_DMG:
-            a_arc = _octagon_dmg_mod(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
-            b_arc = _octagon_dmg_mod(atom_b, list(set(p["b_cells"])), list(set(p["a_cells"])))
+            # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN (exactly
+            # what _octagon_dmg_mod returns — byte-exact), and under PC_CELL_DAMAGE the SAME map also
+            # yields the per-cell allocation weights. The pair TOTAL is unchanged either way; the flag only
+            # changes WHERE those casualties land (see _cell_damage_weights).
+            _a_cm = _octagon_cell_mods(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
+            _b_cm = _octagon_cell_mods(atom_b, list(set(p["b_cells"])), list(set(p["a_cells"])))
+            a_arc = sum(_a_cm.values()) / len(_a_cm) if _a_cm else 0.0
+            b_arc = sum(_b_cm.values()) / len(_b_cm) if _b_cm else 0.0
             _a_dmg_mult = min(_red, 1.0 - a_arc * (_red - 1.0) / 2.0)
             _b_dmg_mult = min(_red, 1.0 - b_arc * (_red - 1.0) / 2.0)
+            if PC_CELL_DAMAGE:
+                _a_cw = _cell_damage_weights(atom_a, _a_cm, _red)
+                _b_cw = _cell_damage_weights(atom_b, _b_cm, _red)
             # MULTI-SIDE SHOCK, GRADED by the number of DISTINCT sides struck (`_atom_sides` above): the
             # rotate-in/out relief system is progressively more compromised the more directions a body is
             # engaged from -- 2 sides -> x1.5, 3 -> x2.0, 4 -> x2.5 (was a flat x1.5 on a 2-pair count that
@@ -1192,16 +1265,27 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             # column count, keeping the byte-exact grid oracle untouched (I4).
             lin_b = _lanchester_strength(p["b_cells"], unit_b, p.get("b_front"))   # B's contacting strength -> casualties to A
             lin_a = _lanchester_strength(p["a_cells"], unit_a, p.get("a_front"))   # A's contacting strength -> casualties to B
-            dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
-            dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
+            _pair_a = K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
+            _pair_b = K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
+            dmg_a += _pair_a
+            dmg_b += _pair_b
         else:
-            dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
-            dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
+            _pair_a = CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr) * _a_dmg_mult
+            _pair_b = CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
+            dmg_a += _pair_a
+            dmg_b += _pair_b
+        if PC_CELL_DAMAGE:
+            # [ED-MB-0040] Land THIS pair's casualties on the defender's CONTACT CELLS, split by each cell's
+            # own exposure weight (troops x its own facing multiplier) — the cell is the primitive. Totals are
+            # identical to the aggregate path; only the placement differs.
+            _accum_cell_damage(cell_dmg_a, atom_a, _a_cw, _pair_a)
+            _accum_cell_damage(cell_dmg_b, atom_b, _b_cw, _pair_b)
         trace_event('melee', a_pool=a_pool, b_pool=b_pool,
                     ns_a=round(ns_a, 3), ns_b=round(ns_b, 3),
                     a_net=round(a_net, 2), b_net=round(b_net, 2),
                     a_deg=a_deg, b_deg=b_deg)
-    return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
+    return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs),
+            "cell_dmg_a": cell_dmg_a, "cell_dmg_b": cell_dmg_b}
 
 def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     """F-iii: cascading sub-phase resolution with facing rotation.
@@ -1231,12 +1315,13 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
+    total_cell_a, total_cell_b = {}, {}   # [ED-MB-0040] per-cell damage merged across sub-phases
     resolved_keys = set()
 
     # Sort by attacker depth; group into sub-phases by proximity (1-row buckets)
     sorted_pairs = sorted(pairs, key=_cascade_depth_key)
     if not sorted_pairs:
-        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0}
+        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0, "cell_dmg_a": {}, "cell_dmg_b": {}}
 
     groups = []
     cur_group = [sorted_pairs[0]]
@@ -1264,13 +1349,17 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
+        if PC_CELL_DAMAGE:   # [ED-MB-0040] accumulate this sub-phase's cellular placement
+            _merge_cell_damage(total_cell_a, result.get("cell_dmg_a", {}))
+            _merge_cell_damage(total_cell_b, result.get("cell_dmg_b", {}))
         for p in active:
             resolved_keys.add((id(p["atom_a"]), id(p["atom_b"])))
             # Rotate engaged cells toward their opponents
             _rotate_defender_facing(p["atom_b"], p["b_cells"], p["a_cells"], dynamic_facings)
             _rotate_defender_facing(p["atom_a"], p["a_cells"], p["b_cells"], dynamic_facings)
 
-    return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements}
+    return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements,
+            "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b}
 
 # ─── VOLLEY (Phase 2 — ranged fire at distance) ──────────────────────────────
 # [canonical: mass_battle_v30.md §A.7 Phase 2 — Volley fires before Manoeuvre.
@@ -1777,8 +1866,22 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             _ord_b = vol.get("ordered_b", [])
             _ord_a_tot = sum(_d for _su, _d in _ord_a)
             _ord_b_tot = sum(_d for _su, _d in _ord_b)
-            distribute_casualties(unit_a, result["dmg_a"] + (volley_dmg_a - _ord_a_tot) * _sa, pairs)
-            distribute_casualties(unit_b, result["dmg_b"] + (volley_dmg_b - _ord_b_tot) * _sb, pairs)
+            # [ED-MB-0040] MELEE casualties land CELLWISE (per-cell facing weights from the resolver) when
+            # PC_CELL_DAMAGE is on; the VOLLEY remainder keeps the aggregate density spread (area fire is not
+            # a contact-facing exchange, so it has no per-cell arc). Flag OFF -> one combined aggregate call,
+            # byte-exact as before.
+            _cda = result.get("cell_dmg_a") if PC_CELL_DAMAGE else None
+            _cdb = result.get("cell_dmg_b") if PC_CELL_DAMAGE else None
+            if _cda:
+                distribute_casualties_cellwise(unit_a, result["dmg_a"], _cda)
+                distribute_casualties(unit_a, (volley_dmg_a - _ord_a_tot) * _sa, pairs)
+            else:
+                distribute_casualties(unit_a, result["dmg_a"] + (volley_dmg_a - _ord_a_tot) * _sa, pairs)
+            if _cdb:
+                distribute_casualties_cellwise(unit_b, result["dmg_b"], _cdb)
+                distribute_casualties(unit_b, (volley_dmg_b - _ord_b_tot) * _sb, pairs)
+            else:
+                distribute_casualties(unit_b, result["dmg_b"] + (volley_dmg_b - _ord_b_tot) * _sb, pairs)
             for _su, _d in _ord_a:
                 apply_to_subunit(unit_a, _su, _d * _sa)
             for _su, _d in _ord_b:
