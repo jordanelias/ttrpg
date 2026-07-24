@@ -15,6 +15,40 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0038 (2026-07-24): MATCHED COMMAND-GRANULARITY honest gauge — envelopment artifact fixed, H3
+  flagship 0→70.7%.** The density-matched gauge (ED-MB-0027) had unmasked a SECOND measurement artifact
+  one axis up: the composed enveloper/refused presets always faced a SINGLE-subunit opponent, and a
+  monolith is unbreakable by envelopment (casualties dilute across one HP pool; the ED-1019 per-subunit
+  rout cascade has nothing to bite), pinning H3/H4/H6 to 0% regardless of geometry. `granularity_probe.py`:
+  H3 = 0%@1-command → ~53%@3 → ~95%@6. **Fix** (the granularity analog of the density-constant): new
+  `_command_army(shape,n_cmd=3)` builds the composed side's opponent as a 3-command tripartite battle line
+  (Polybius VI / triplex acies) at constant density; wired H3/H4/H6/H10/H11. **Gauge multi 6→8/20** — H3
+  0→70.7 (band 55-72 OK), H11 0→45.6 (OK), **zero regressions** (only all-failing envelop rows touched).
+  Refuted en route: naive persistent defender reface (made it worse — a multiply-engaged subunit can't face
+  everyone). Gauge-harness only; no engine .py, byte-exact goldens untouched.
+  **NEXT (remaining envelop misses, characterized this session):**
+  1. **SIDE-ASYMMETRY (highest value — contaminates every reverse row).** Enveloper wins **73.7% as side A,
+     22.5% as side B** vs the same 3-command line, same seeds (`side_probe.py`). CONFIRMED not an RNG-stream
+     artifact (construction doesn't consume `random`). Composed MIRRORS show only a modest intrinsic side-A
+     bias (~53-58% @ n=40, near noise) — so the 51pp swing is an **INTERACTION**, not a pure side bias:
+     the enveloper's APEX-forward centre (`build_envelopment`, `start_row+APEX*advance_dir`) + wing placement
+     vs the flat command-line flips favorability by closing direction. `side_face_probe.py` shows the granular
+     defender is struck **F-only** both sides (the win is frontage/overlap + rout-cascade, NOT flank-arc —
+     the defender refaces). Needs a tick-by-tick geometry trace of the enveloper-as-B closing; do NOT hack
+     blind. This is a genuine engine deployment bug, not a gauge calibration knob.
+  2. **H4** envelop-vs-3-command-Arrowhead = 0% (the wedge centre punches the holding line).
+  3. **H5** refused-vs-envelop = 100% (refused too strong).
+  4. **H6** refused-vs-line = all-draw stalemate (UNRESOLVED at n=60).
+  Plus the Cannae deep-baiting-centre + cavalry-rear composition (Jordan: ≥6 subunits, deep centre holds via
+  rotational depth, cavalry wheels the rear, baiting) and the box-brace primitive (C2/C6, currently
+  NOT-REPELLED at 86.7 raw cav-a). Evidence + probes: `audit/2026-07-22-mass-battle-stress-test/`
+  (granularity_probe, cannae_calib, depth_factorial, cluster_probe, reface_probe, side_probe, side_face_probe;
+  honest_gauge_readout.md §"Matched command-granularity").
+
+- **ED-MB-0034..0037 (2026-07-24):** field-coordinate unification (abandon the dead spawn lattice) + orphaned
+  `perimeter.py`/cavalry orbital-wheel envelopment + B6 multi-side + MORALE_EROSION_DAMP/SUBUNIT_ROUT_FLOOR
+  wiring + dead-mechanic removal. See `registers/editorial_ledger_mb.jsonl` + `tests/coverage_matrix.md`.
+
 - **ED-MB-0018 (2026-07-23): octagon facing = DAMAGE-RECEIVED MULTIPLIER + reaction delay + multi-side
   shock** (Jordan directive, verbatim: "the facing octagon is a damage-received multiplier — attacks from
   behind do ~**2×** the damage of from the front; cells **cannot turn instantaneously** (needs a couple-tick

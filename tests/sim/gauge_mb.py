@@ -164,6 +164,51 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
                        dr=1, stance=stance, speed=speed)
 
 
+def _command_army(shape, tier=3, n_cmd=3):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 tier; n_cmd=3 = the ancient tripartite battle line (Polybius VI / Roman triplex acies)]
+    """[ED-MB-0038] MATCHED COMMAND-GRANULARITY builder — a shape deployed as `n_cmd` side-by-side
+    commands (the canonical ancient tripartite battle line: left wing / centre / right wing — Roman
+    triplex acies; Polybius VI) at constant density (GAUGE_CONC), summing to GAUGE_TROOPS. Returns a
+    matchup-callable (name, faction, **kw) so it drops into a TESTS row exactly where a shape-STRING
+    would, but yields a MULTI-BODY unit instead of one monolith.
+
+    Motivation (honest-gauge measurement integrity, the granularity analog of ED-MB-0027's density
+    match). The composed enveloper/refused presets (`_envelop_army`, 3 bodies: centre + 2 wings;
+    `_refused_army`, 2) always faced a SINGLE-subunit opponent built by `make_unit`. A monolithic
+    subunit is nearly UNBREAKABLE by envelopment: the flank/rear octagon multiplier + multi-side shock
+    land on its cells, but the casualties DILUTE across its whole HP pool (distribute_casualties) and no
+    section can rout independently, so the per-subunit rout cascade (ED-1019 — a section of the line
+    breaks while a fresh sibling holds) has nothing to bite. Direct measurement (2026-07-24, audit
+    2026-07-22-mass-battle-stress-test/granularity_probe.py): H3 envelop vs a monolithic Line = 0%
+    decisive-for-A; vs a 3-command Line ~53%; vs 6-command ~95% — granularity is a FIRST-ORDER
+    determinant that the single-subunit opponent was silently pinning to 0. A ruler whose defender
+    cannot fracture cannot measure envelopment. FIX: match the composed side's command-granularity —
+    the enveloper is 3 bodies, so its opponent is 3 commands, and the only thing that varies across the
+    matchup is geometry/posture (exactly ED-MB-0027's density-constant argument, one axis up).
+    [canonical: honest-gauge granularity match — audit/2026-07-22-mass-battle-stress-test/honest_gauge_readout.md;
+     ancient tripartite deployment (Polybius VI, Roman triplex acies) as the independent granularity anchor.]"""
+    anchor = ANCHOR_MAP.get((shape, tier), 10)
+
+    def _build(name, faction, unit_type='melee', power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 baseline P4/C4/D5/M6, same defaults as make_unit]
+               stance='balanced', troop_type='infantry', speed='Standard', morale_start=None,
+               instructions=(), troops=None, concentration=None):
+        start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
+        total = GAUGE_TROOPS if troops is None else troops
+        conc = GAUGE_CONC if concentration is None else concentration
+        per = total / n_cmd
+        cells_per = per / conc                        # frontage (cols) of one command
+        c0 = anchor - (n_cmd * cells_per) / 2.0        # centre the whole line on the shape's anchor
+        specs = [{'shape': shape, 'tier': tier, 'troop_type': troop_type, 'unit_type': unit_type,
+                  'stance': stance, 'instructions': tuple(instructions),
+                  'power': power, 'discipline': discipline,
+                  'troops': per, 'concentration': conc,
+                  'starting_position': (start_row, int(round(c0 + (k + 0.5) * cells_per)))}
+                 for k in range(n_cmd)]
+        return build_army(specs, name, faction, power=power, command=command,
+                          discipline=discipline, morale=morale, morale_start=morale_start,
+                          dr=1, stance=stance, speed=speed)
+    return _build
+
+
 def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
     """[LC-8, ED-909] Composed replacement for the retired Horseshoe shape: a held center + two
     wide-placed wings released into 'envelop' via a Stage C timed order -- ED-909's Unit-level
@@ -267,15 +312,19 @@ def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
 TESTS = [
     ('H1','Line vs Line (mirror)','Line','Line',{},{},42,58,'high'),                       # [canonical: mass_battle_gauge_grounding.md §3 — H1 mirror symmetry]
     ('H2','Arrowhead(wedge) vs Line','Arrowhead','Line',{},{},48,62,'high'),               # [canonical: mass_battle_gauge_grounding.md §3 — H2 modest wedge edge]
-    ('H3','Envelopment vs Line',_envelop_army,'Line',{},{},55,72,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H3 full envelopment]
-    ('H4','Envelopment vs Arrowhead (Cannae)',_envelop_army,'Arrowhead',{},{},45,62,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H4 Cannae proper]
+    # [ED-MB-0038] MATCHED COMMAND-GRANULARITY: the composed enveloper/refused presets face a 3-command
+    # (tripartite) opponent, not a single monolith — a monolithic subunit is unbreakable by envelopment
+    # (casualties dilute across one HP pool; the ED-1019 per-subunit rout cascade has nothing to bite),
+    # pinning H3/H4/H6 to 0% regardless of geometry. See _command_army for the granularity-match rationale.
+    ('H3','Envelopment vs Line',_envelop_army,_command_army('Line'),{},{},55,72,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H3 full envelopment]
+    ('H4','Envelopment vs Arrowhead (Cannae)',_envelop_army,_command_army('Arrowhead'),{},{},45,62,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H4 Cannae proper]
     ('H5','RefusedFlank vs Envelopment',_refused_army,_envelop_army,{},{},48,62,'high'),       # [canonical: mass_battle_gauge_grounding.md §3 — H5 oblique counter]
-    ('H6','RefusedFlank vs Line',_refused_army,'Line',{},{},48,60,'high'),                 # [canonical: mass_battle_gauge_grounding.md §3 — H6 oblique order]
+    ('H6','RefusedFlank vs Line',_refused_army,_command_army('Line'),{},{},48,60,'high'),                 # [canonical: mass_battle_gauge_grounding.md §3 — H6 oblique order]
     ('H7','GappedLine(manip) vs Line','GappedLine','Line',{},{},48,62,'high'),              # [canonical: mass_battle_gauge_grounding.md §3 — H7 manipular flex]
     ('H8','GappedLine vs Arrowhead','GappedLine','Arrowhead',{},{},50,65,'high'),           # [canonical: mass_battle_gauge_grounding.md §3 — H8 maniples absorb wedge]
     ('H9','Line vs Arrowhead (rev H2)','Line','Arrowhead',{},{},38,52,'high'),              # [canonical: mass_battle_gauge_grounding.md §3 — H9 inverse H2]
-    ('H10','Line vs Envelopment (rev H3)','Line',_envelop_army,{},{},28,45,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H10 inverse H3]
-    ('H11','Arrowhead vs Envelopment (rev H4)','Arrowhead',_envelop_army,{},{},38,55,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H11 symmetric H4]
+    ('H10','Line vs Envelopment (rev H3)',_command_army('Line'),_envelop_army,{},{},28,45,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H10 inverse H3; ED-MB-0038 matched granularity]
+    ('H11','Arrowhead vs Envelopment (rev H4)',_command_army('Arrowhead'),_envelop_army,{},{},38,55,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H11 symmetric H4; ED-MB-0038 matched granularity]
     ('R1','Ranged vs Line (open field)','Line','Line',
         {'unit_type':'ranged','stance':'hold'},{},0,30,'low'),                             # [canonical: mass_battle_gauge_grounding.md §3 — R1 ranged loses open field]
     ('R3','Ranged vs Ranged (mirror)','Line','Line',

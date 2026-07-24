@@ -2,6 +2,40 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0038: matched command-granularity honest gauge (envelopment artifact fix)
+- The honest gauge's composed enveloper/refused presets always faced a SINGLE-subunit opponent. A
+  monolithic subunit is unbreakable by envelopment — flank/rear octagon mult + multi-side shock land on
+  its cells but casualties DILUTE across one HP pool (`distribute_casualties`) and no section can rout
+  independently, so the ED-1019 per-subunit rout cascade has nothing to bite. This pinned H3/H4/H6 (and
+  reverses H10/H11) to 0% regardless of geometry: the density-matched gauge (ED-MB-0027) had unmasked a
+  SECOND artifact one axis up — GRANULARITY. `granularity_probe.py`: H3 = 0% @ monolith, ~53% @ 3-command,
+  ~95% @ 6-command.
+- **FIX** (granularity analog of ED-MB-0027's density-constant): new `_command_army(shape, n_cmd=3)`
+  deploys the composed side's opponent as a 3-command tripartite battle line (Polybius VI / triplex acies)
+  at constant density, summing to GAUGE_TROOPS. Wired H3/H4/H6/H10/H11.
+- **Result:** gauge multi **6 → 8/20** — H3 "full envelopment" flagship **0 → 70.7%** (band 55-72 OK),
+  H11 **0 → 45.6** (band 38-55 OK); ZERO regressions (only all-failing envelop rows touched; H1/R1/C3/C4/
+  C5/C7 untouched). Refuted en route: naive persistent defender reface (made it worse). Gauge-harness only
+  (tests/sim/gauge_mb.py); no engine .py, byte-exact goldens unaffected.
+- **Next:** side-asymmetry (H10 envelop-weak-as-B 83%), H4 wedge-centre-punch (0%), H5 refused-too-strong
+  (100%), H6 stalemate; Cannae deep-baiting-centre + cavalry-rear; box-brace C2/C6.
+
+
+## 2026-07-24 — ED-MB-0037: remove superseded dead-mechanic constants + zeroed _envelopment_sigma
+- Wire-or-remove sweep, removal half (Jordan "obviously you can unwire a dead mechanic if it's useless").
+  Removed constants that were defined+exported but read nowhere and superseded by live mechanics:
+  **PC_ENVELOP_SIGMA** + its `_envelopment_sigma` (percell.py) Increment-6 term — dormant at 0.0, the
+  unit-level col-grid "wider side" overhang mis-targeted a split envelop army; superseded by the octagon
+  flank multiplier + multi-side shock (B6) + perimeter/orbital-wheel envelopment (ED-MB-0035).
+  **ROUT_FLOOR_LOSS_PCT** / **ROUT_EXHAUSTION_MORALE_HIT** (superseded by ED-MB-0036 SUBUNIT_ROUT_FLOOR +
+  stochastic rout), **PC_FLANK_DEPTH_RESIST** / **PC_FRONT_RANKS** / **PC_FLANK_CAP** (never-wired flank
+  scaffolding, superseded by the octagon per-cell angle model), **REACH_LONG** (registry.py, unread).
+- **Byte-exact:** every removed term was already 0.0 or unreferenced on the live path; the Increment-6
+  `_envelopment_sigma` call added 0.0 and is replaced by a comment. Goldens unchanged (4 modes verified).
+- Measured **PC_FACING_MODEL=1 → gauge 3/20** (regresses from 5/20) — confirms its "do not enable"
+  calibration-debt (PC_FACING_SLEW_BASE unratified). Left OFF; flagged for Jordan. Gauge holds 5/20.
+
+
 ## 2026-07-24 — ED-MB-0036: wire orphaned MORALE_EROSION_DAMP + SUBUNIT_ROUT_FLOOR
 - Wire-or-remove dead-mechanic sweep (Jordan directive). Both were defined+exported but never read.
   **MORALE_EROSION_DAMP** (0.7) → the §A.4 casualty/exhaustion morale erosion (`erode_morale(min(loss,3.0)*

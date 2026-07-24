@@ -5,7 +5,7 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'sync_col_grid', '_fatigue_sigma', '_envelopment_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
+__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -147,28 +147,10 @@ def _fatigue_sigma(unit, engaged_cols):
     frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
     return PC_STAM_SIGMA * (frac - 1.0)
 
-def _envelopment_sigma(wide_unit, narrow_unit):
-    """Increment 6: the wider formation's overhang wheels into the narrow side's flanks (a delta-sigma
-    advantage to the WIDER side), but the narrow side's RESERVE DEPTH refuses it — reserve ranks beyond
-    PC_FRONT_RANKS reform to meet each enveloper evenly. Returns (sigma_to_wide, sigma_to_narrow_penalty=0).
-    [historical anchor: envelopment (Cannae) vs a deep formation refusing/bending its flank.]"""
-    wg = getattr(wide_unit, 'col_grid', None)
-    ng = getattr(narrow_unit, 'col_grid', None)
-    if not wg or not ng:
-        return 0.0
-    w_cols = sum(1 for b in wg if b.alive())
-    n_cols = sum(1 for b in ng if b.alive())
-    overhang = w_cols - n_cols
-    if overhang <= 0:
-        return 0.0
-    overhang = min(overhang, PC_FLANK_CAP)
-    # narrow side's reserve depth available to reform to the flanks
-    n_min_depth = min((b.depth for b in ng if b.alive()), default=1)
-    reform_capacity = max(0, n_min_depth - PC_FRONT_RANKS)
-    enveloping = max(0, overhang - reform_capacity)        # overhang columns NOT refused by depth
-    if enveloping <= 0:
-        return 0.0
-    return PC_ENVELOP_SIGMA * enveloping
+# [ED-MB-0036 sweep, 2026-07-24] _envelopment_sigma (Increment 6) REMOVED — it was dormant at
+# PC_ENVELOP_SIGMA=0.0 and its unit-level col-grid "wider side" overhang test mis-targeted a split envelop
+# army. Superseded by the octagon flank multiplier + multi-side shock (B6) + perimeter/orbital-wheel
+# envelopment (ED-MB-0035). Removing the always-zero term is byte-exact (see orchestration.py Increment-6 note).
 
 def _defender_depth(unit, contact_cells):
     """Increment 5: representative depth of the defender's engaged columns (charge absorption).

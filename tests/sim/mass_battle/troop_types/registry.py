@@ -8,7 +8,7 @@ from mass_battle.config import *
 from mass_battle.equipment import loadout_for
 
 __all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
-           'REACH_SHORT', 'REACH_LONG', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
+           'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
            'unit_type_for']
 
 
@@ -70,7 +70,6 @@ def stats_for(troop_type):
 # The 3x ratio is applied to the movement lattice's own pitch (COL_WIDTH=1.0, hierarchy/units.py)
 # rather than injecting an unratified meters-per-lattice-unit conversion.
 REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
-REACH_LONG = 1.5   # [canonical: params/core.md §Reach Terminology (PP-290) — "Long Reach... <=3 metres", 3x ratio]
 
 # [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22] Per-troop-type FRONT-FACE weapon reach, in
 # lattice units (COL_WIDTH=1.0 pitch), feeding the OBB front-reach envelope (hierarchy/units.cell_boxes_for

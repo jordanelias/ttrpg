@@ -1088,11 +1088,12 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             if PER_CELL:    # Increment 3: fatigue of the engaged front (depth-damped) as delta-sigma
                 ns_a += _fatigue_sigma(unit_a, set(c for r, c in p["a_cells"]))
                 ns_b += _fatigue_sigma(unit_b, set(c for r, c in p["b_cells"]))
-            if PER_CELL:    # Increment 6: envelopment — wider side pressures flanks, refused by enemy depth
-                env_a = _envelopment_sigma(unit_a, unit_b)   # A wider -> A gets the envelopment bonus
-                env_b = _envelopment_sigma(unit_b, unit_a)   # B wider -> B gets it
-                ns_a += env_a
-                ns_b += env_b
+            # [ED-MB-0036 sweep, 2026-07-24] REMOVED the Increment-6 _envelopment_sigma term. It computed the
+            # wider side's overhang bonus every tick then multiplied by a hardcoded PC_ENVELOP_SIGMA=0.0 (adding
+            # 0.0 to the net -> byte-exact removal), and its unit-level col-grid "wider side" test mis-targets a
+            # split envelop army (thin wings read narrower than one enemy line -> it rewarded the DEFENDER).
+            # SUPERSEDED: overhang/flank pressure is delivered by the octagon flank multiplier + graded
+            # multi-side shock (B6) + the perimeter/orbital-wheel envelopment (ED-MB-0035), not this term.
             if PC_INTENT_RESOLUTION:
                 # [ED-MB-0029] INTENT as an offence/defence commitment (mass_battle_v30 §A Offensive/
                 # Defensive axis). A subunit's own commitment cX (aggressive +1 / balanced 0 / hold,
