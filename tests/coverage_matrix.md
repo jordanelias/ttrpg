@@ -2,6 +2,17 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0036: wire orphaned MORALE_EROSION_DAMP + SUBUNIT_ROUT_FLOOR
+- Wire-or-remove dead-mechanic sweep (Jordan directive). Both were defined+exported but never read.
+  **MORALE_EROSION_DAMP** (0.7) → the §A.4 casualty/exhaustion morale erosion (`erode_morale(min(loss,3.0)*
+  DAMP)`) — slows the bleed → longer, attritional battles; applied ONLY to gradual erosion, not the
+  stochastic-rout punch. **SUBUNIT_ROUT_FLOOR** (80) → `rout_resolution`: a subunit also breaks when its
+  troop total falls below the floor (too few to hold), independent of morale.
+- Gauge unchanged (5/20, no regression); rout/morale tests green (22 passed). Goldens re-recorded (4 modes).
+- Next: remove superseded constants (ROUT floors, PC_FLANK_DEPTH_RESIST, REACH_LONG, structural) + zeroed
+  PC_ENVELOP_SIGMA; keep PC_ROTATE_FLOOR/REFILL_FLOOR (planned rotation T2/T3); measure PC_FACING_MODEL.
+
+
 ## 2026-07-24 — ED-MB-0035: wire perimeter.py + cavalry orbital-wheel envelopment + B6
 - Orphan audit found **`perimeter.py`** (target-point/face-normal primitive, task #18) built but never
   wired. **Wired** into `_envelop_goal`: infantry enveloping wings turn onto the enemy's nearest FLANK
