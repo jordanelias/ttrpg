@@ -169,3 +169,40 @@ pre-existing geometry bugs** the same audit catalogued (B1 wedge iterates the le
 atom footprint → H2/H9/H11; B2 `col_grid` frozen at spawn columns → H7/H8 GappedLine over-strong; B3
 octagon on a dead spawn-lattice map; B4 numbers double-count in casualties → the density over-power). Those
 **move goldens and need Jordan's ratification** — they are the real root of the divergence, not the gauge.
+
+## Matched command-granularity — the SECOND artifact (ED-MB-0038, 2026-07-24)
+
+After the density-match (ED-MB-0027) unmasked it, envelopment read a hard **0%** (H3/H4/H6) — the
+opposite extreme from the pre-fix 100%. Diagnosis (`granularity_probe.py`, `cluster_probe.py`): the
+composed enveloper/refused presets (`_envelop_army` = 3 bodies, `_refused_army` = 2) always faced a
+**single-subunit** opponent from `make_unit`. A monolith is **unbreakable by envelopment** — the octagon
+flank/rear multiplier + multi-side shock land on its cells, but the casualties **dilute across its whole
+HP pool** (`distribute_casualties`) and **no section can rout independently**, so the ED-1019 per-subunit
+rout cascade ("a section of the line breaks while a fresh sibling holds") has nothing to bite. Granularity
+is a **first-order determinant** the single-subunit opponent silently pinned to 0:
+
+| H3 Envelop-vs-Line, defender granularity | decA (envelop wins) |
+|---|---|
+| 1 command (monolith — the old gauge) | **0%** |
+| 3 commands (tripartite line) | **~53–71%** (band 55–72) |
+| 6 commands | ~95% (over-decisive) |
+| 9 commands | 100% |
+
+**Fix** — the granularity analog of ED-MB-0027's density-constant: `_command_army(shape, n_cmd=3)` builds
+the composed side's **opponent** as a 3-command tripartite battle line (the canonical ancient deployment —
+Polybius VI, Roman *triplex acies*) at constant density, summing to `GAUGE_TROOPS`. The enveloper is 3
+bodies, so its opponent is 3 commands, and the only thing that varies across the matchup is geometry/posture
+(exactly the density argument, one axis up — not band-fitting: 3 is the independently-grounded battle-line
+structure). Wired H3/H4/H6/H10/H11.
+
+**Result: gauge multi 6 → 8/20.** H3 "full envelopment" flagship **0 → 70.7%** (band 55–72, **OK**);
+H11 **0 → 45.6** (band 38–55, **OK**); **zero regressions** (only all-failing envelop rows touched —
+H1/R1/C3/C4/C5/C7 untouched). Refuted en route: **naive persistent defender reface** (`reface_probe.py`) —
+a multiply-engaged subunit cannot face everyone; refacing toward the wing exposes its flank to the centre,
+making it *worse* (95 → 100).
+
+**Remaining envelop misses = next increment.** (1) **Side-asymmetry**: H10 (Line-vs-envelop, envelop as
+side B) reads 83% while forward H3 = 70.7% — the enveloper is materially weaker as side B, a deployment/side
+bug contaminating every reverse row. (2) **H4** envelop-vs-3-command-Arrowhead = 0% (the wedge centre punches
+the holding line). (3) **H5** refused-vs-envelop = 100% (refused too strong). (4) **H6** refused-vs-line =
+all-draw stalemate. Plus the Cannae deep-baiting-centre + cavalry-rear composition and the box-brace (C2/C6).
