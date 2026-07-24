@@ -870,7 +870,14 @@ def test_reach_class_beats_arming_not_inverted():
         assert s < 0.5, f"{w} vs arming at heavy: plate should bring a pure-point reach weapon below dominance, got {s:.2f}"
     # (4) the versatile mid-reach cut_thrust polearm (guisarme) contests plate — neither lost nor runaway. [ED-PC-0027]
     #     it now SELECTS its gap-thrust (point) vs plate under the T_vuln exposure trade (its hooked bill thrusts to the
-    #     gaps rather than swinging into a harness), so it contests a bit more strongly than before: true ~0.64 (n=300),
-    #     n=60/seed reads ~0.71 (SE~0.07 over ~45 decided) — a favoured contest vs the plate-stalemate arming, not
-    #     runaway dominance. Band widened accordingly.
-    assert 0.30 <= share[('guisarme', 'heavy')] <= 0.75, f"guisarme vs arming at heavy should contest ({share[('guisarme','heavy')]:.2f})"
+    #     gaps rather than swinging into a harness), so it contests strongly vs the plate-stalemate arming.
+    #     [RE-BASELINED, ED-PC-0029, 2026-07-24] the ceiling rose 0.75->0.87 when `thrust_extension` was RETIRED (an
+    #     adversarial physics/HEMA audit found that heft-penalty wrongly de-rated 2H gap-thrusts — the guisarme's plate
+    #     bill among them — identically to a greatsword; thrust_authority(head_len) already grounds the long-reach-thrust-
+    #     vs-plate decay, so thrust_extension was a spurious DOUBLE penalty). Removing it restored the guisarme's gap-
+    #     thrust to its un-penalised strength: true ~0.83-0.85 (n=300). A 2H hooked bill that thrusts to the gaps SHOULD
+    #     dominate a 1H arming sword that can barely mark plate — a favoured contest, still bounded below total dominance
+    #     (the spear/yari pure-point stalemate-loss guard at (3) confirms plate is not free reach). CEILING 0.92 carries
+    #     ~2·SE of n=60 sampling margin over the ~0.85 true value (this hardcoded-seed cell reads 0.80-0.89 across
+    #     calibration; SE~0.06 on ~45 decided) — it is a runaway/inversion guard, not a fine balance assertion.
+    assert 0.30 <= share[('guisarme', 'heavy')] <= 0.92, f"guisarme vs arming at heavy should contest ({share[('guisarme','heavy')]:.2f})"

@@ -918,16 +918,53 @@ def clamp_poise(x, cfg):
 # RIPOSTE_ON_* gate, the bind-entry steal multiply) is the orchestrator sequencing pre-derived values, not
 # assembling a formula of its own (per the Gate-1 audit's adversarial ruling on those sites).
 # ============================================================================
+# ── TRUE TIME (George Silver) — the hand is swifter than the foot ────────────────────────────────────────────────
+# "The time of the hand being swifter than the time of the foot, overtakes him with blow or thrust in the arm, hand,
+# head, face and body" (Silver, Paradoxes of Defence). The longer weapon completes a THRUST (a hand action) in the
+# tempo the closer needs to move body-mass (a foot action) into its own measure; the further the point reaches BEYOND
+# the closer's reach, the more of that hand-before-foot window it owns. So the true-time edge is the STANDING REACH
+# ADVANTAGE (reach_longer − reach_shorter) — Silver's "time of the hand vs time of the foot" IS a measure/distance
+# statement. An earlier head-inertia form (point re-presentation ∝ 1/m_head^0.25) was RETIRED after an adversarial
+# audit: the cited sporting-implement law (Cross & Nathan 2009) is about MoI, and by the honest inertia — MoI for a
+# swing, total mass for the axial slide — the polearm is NOT faster (a long lever's MoI is large; the spear is not
+# lighter than an estoc); m_head was the one proxy that happened to give the doctrinal answer, and it spuriously
+# credited a short closer's light point with "answering" a thrust it was still stepping into reach of. Reach is the
+# honest quantity, and it makes the spear-vs-estoc edge small (they are nearly the same length) — the real reason
+# that residual exists. This is why a perfect-length polearm out-fights a heavy two-hand sword AT REACH (Jordan
+# 2026-07-24) yet only modestly out-fights a near-length one.
+TRUE_TIME_REF = 1.5    # [DESIGN] reach-gap (reach-points) at which the true-time edge is ~tanh(1)=0.76 of its max —
+                       #   sets where the hand-before-foot benefit saturates (a ~1.5 gap already buys most of it)
+def true_time_edge(longer, shorter, cfg):
+    """Silver's TRUE TIME as a net-sigma edge on the approach stop-hit: the longer weapon strikes in the tempo of a
+    hand-action while the closer must move body-mass into measure, so its stop-hit dominates in proportion to its
+    STANDING REACH ADVANTAGE = K·(reach_base(longer) − reach_base(shorter)), clamped ≥0 (the longer weapon by
+    definition has the reach; a short closer's own quickness does not answer a thrust it is still closing into range
+    of — the mechanism's own doctrine, and the fix to an audit finding that the prior head-inertia form over-buffed
+    daggers-as-closers). ARMOUR-FADE: Silver's doctrine is UNARMOURED (backsword/rapier-era, out of harness) — vs a
+    harness the game is armour-DEFEAT (gap/percussion), not reach-tempo, so the edge fades to 0 as the closer's
+    armour rises (keyed on ADEF_W[closer]); the plate regime stays an armour-defeat contest owned by reach_threat +
+    arrest_impulse. Composes with them (a distinct, structural-reach channel from stophit_sigma's dynamic
+    REACH_DISADV_K·measure_gap gap term). SATURATING: the hand-before-foot benefit has a CEILING — a 3 m reach edge
+    does not confer three times the tempo of a 1 m edge (past a step or two the closer is out of time either way),
+    so the gap passes through tanh(·/TRUE_TIME_REF) and TRUE_TIME_K is the MAX sigma. A LINEAR form let a huge gap
+    (spear 7.8 vs dagger 4.4 → 3.4) run to a degenerate ~60σ that shut the closer out entirely (the dagger never
+    reached Contact); the tanh keeps the common 0.5–2 m gaps well-differentiated while bounding the tail. Pure."""
+    fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W']['heavy'])
+    gap = max(0.0, reach_base(longer, cfg) - reach_base(shorter, cfg))
+    return cfg['TRUE_TIME_K'] * fade * tanh(gap / TRUE_TIME_REF)
+
 def stophit_sigma(longer, shorter, measure_gap, cfg):
     """The APPROACH-path stop-hit net-sigma (the longer weapon threatening across the closing gap). The analog of
-    assemble_net_sigma for the approach: reach-disadvantage by gap + base + bilateral wound-Ob. I5/D4: gains a
+    assemble_net_sigma for the approach: reach-disadvantage by gap + base + bilateral wound-Ob + Silver's true-time
+    point-tempo edge (true_time_edge — the light-point reach weapon's hand-speed advantage). I5/D4: gains a
     commitment-depth term — a stop-hit thrown with full room to extend threatens more than one snapped off into a
     rapidly-closing, cramped gap, the SAME range_avail the closed exchange's commit-window reads (I5's gate #4).
     Exactly 0 at range_avail=1.0 (the I1/I5 default). Pure."""
     range_avail=getattr(longer,'range_avail',1.0)
     return (cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
             + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
-            + STOPHIT_RANGE_K*(range_avail-1.0))
+            + STOPHIT_RANGE_K*(range_avail-1.0)
+            + true_time_edge(longer, shorter, cfg))
 
 def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     """Measure-domain closing RATE for the shorter weapon walking in: athletic close-speed (balance x cadence),
@@ -937,6 +974,45 @@ def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     cr = cfg['CLOSE_RATE_K']*balance_eff(shorter,ffat_shorter,cfg)/3 * weapon_tempo(shorter,cfg,ffat_shorter)/2
     cr *= (1.0 + FACING_VOID_GAIN*getattr(shorter,'facing',0.0))
     return cr*(1+displ)*(2.0-rt)
+
+ARREST_POB_REF = 0.6   # [DESIGN] PoB_frac at/above which a weapon is too FRONT-HEAVY to brace as a pole-jab (the
+                       #   rear/centre-balanced staff/spear braces a charge; a front-heavy glaive/guandao cannot be
+                       #   set butt-planted). rear_balance ramps 1.0 (PoB_frac 0, staff) -> 0 (PoB_frac >= REF).
+                       #   0.5->0.6 (audit #4): a boar/bear-spear (PoB~0.53, the docstring's own braced-charge exemplar)
+                       #   keeps a residual jab path rather than reading as a worse arrester than a sword.
+def arrest_impulse(longer, cfg):
+    """The IMPULSE a braced stop-thrust transmits to a CHARGING body during the approach, opposing the close (HEMA:
+    the longer weapon 'sets' against the step-in / Nachreisen). Physically an ARREST — momentum checked, NOT a wound:
+    a braced point halts (or drives back) a charge whether or not it penetrates (boar-spear lugs exist precisely
+    because penetration != arrest; a fable audit corrected the earlier recoil = K*damage model, which wrongly crowned
+    big CUTTERS — a swing does not stop a closing body — and stranded the staff). So this reads ONLY the weapon's
+    reach + braceable structure, never damage:
+      • reach beyond a body-length FLOOR — a long weapon meets the charge with leverage; a DAGGER (reach < floor) can
+        arrest nothing (there is no charge to arrest at grappling distance) -> 0 by construction.
+      • brace = the better of a THRUST point (buckling-discounted by cross_section — a whippy rapier blade buckles
+        under the axial load and transmits little) OR a rigid straight REAR/centre-balanced POLE-jab (the staff path:
+        no point needed — a braced quarterstaff stops you cold; killed for front-heavy or curved swingers).
+    Armour is NOT read here (a plated man run onto a braced spear is still halted) — armour enters the approach ONLY
+    via reach_threat (rt) in the stop-hit's landing probability, so it is counted ONCE, not thrice. ARREST_K /
+    ARREST_REACH_FLOOR are [SIM-CALIBRATE]; the structure (reach x braceability, cutter/dagger-excluded) is grounded.
+    Pure."""
+    w = longer.w
+    geo = w['geo']
+    pob = WP.derive(w)['PoB_frac']
+    cs, cv, th = geo['cross_section'], geo['curvature'], geo['thrust']
+    rear_balance = max(0.0, min(1.0, 1.0 - pob/ARREST_POB_REF))   # CLAMPED to [0,1] (audit #4): a shifted-origin half-
+                                                                 #   sword form has PoB_frac<0 (mass behind the working
+                                                                 #   hand) which must not read as >1 super-braceable
+    brace = max(th*cs,                       # thrust point, buckling(cross_section)-discounted (whippy rapier loses)
+                cs*(1.0-cv)*rear_balance)    # rigid straight rear/centre-balanced pole-jab (staff; no point required)
+    return cfg['ARREST_K'] * max(0.0, reach_base(longer, cfg) - cfg['ARREST_REACH_FLOOR']) * brace
+
+def approach_step(measure_gap, base_gap, close_rate, recoil):
+    """Net measure-domain movement for one approach beat: the closer's ADVANCE (close_rate) minus the stop-thrust's
+    ARREST (recoil), clamped to [0, base_gap]. A penetrating/braced stop that arrests more than the closer advances
+    nets them BACKWARD (driven out); one that does not, nets them still forward (they walk in). Single owner of the
+    approach arithmetic (the wrapper is an orchestrator — no formula there, per the file's own convention). Pure."""
+    return min(base_gap, max(0.0, measure_gap - close_rate + recoil))
 
 def init_emphasis_sigma(aggressor, defender, cfg, TR):
     """Initiative/tempo EMPHASIS sigma fed into attack_sigma: tempo(Agi) + reading(Cog/Att) + experience(History),

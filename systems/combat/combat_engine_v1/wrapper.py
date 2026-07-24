@@ -85,19 +85,27 @@ def engagement(A, B, first, cfg, rng):
                 reopen_moment=False; push_avail=False
                 continue
         reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
-        # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
+        # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
         if not closed:
             rt = S.reach_threat(longer, shorter, cfg)               # FIX-1: a long weapon that can't defeat the closer's armour loses its reach edge (1.0 unarmoured by construction)
             displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
-            close_rate=S.close_rate(shorter, ffat[shorter], displ, rt, cfg)   # TA-02 fatigued closer + displace point + walk through un-threatening reach (FIX-1); assembled in systems.close_rate
-            measure_gap=max(0.0, measure_gap-close_rate)
-            just_closed = (measure_gap<=0.3)
-            if just_closed:
-                closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
+            base_gap = er[longer]-er[shorter]
+            # STOP-THRUST RESOLVES FIRST, AND A LANDED ONE ARRESTS THE CLOSE (ED-PC-0029, HEMA Nachreisen / the
+            # stop-thrust against a step-in). The longer weapon threatens the point across the closing gap BEFORE the
+            # shorter completes its entry; a landed stop-thrust both WOUNDS (core.strike -> apply_wound) and, distinctly,
+            # delivers an ARREST that checks the closer's advance — the momentum a braced weapon transmits to a charging
+            # body (systems.arrest_impulse), which depends on the weapon's reach + braceable structure, NOT on how much
+            # it penetrates (a braced point halts a charge whether or not it draws blood — boar-spear lugs: penetration
+            # != arrest). Armour has ALREADY entered once, via reach_threat (rt) in stophit_p below (a point that can't
+            # threaten the harness lands fewer meaningful stop-hits); it is NOT re-counted in the arrest magnitude. The
+            # beat's net movement is the closer's advance MINUS that arrest (systems.approach_step): a long braced pole
+            # nets the closer backward (driven out -> reach controls); a short/whippy/cutting weapon arrests little and
+            # the closer walks in. (A fable physics/HEMA audit retired the prior recoil = K*damage: damage is wound, not
+            # impulse; keying arrest on it crowned big CUTTERS and stranded the staff Silver's Paradoxes crowns.)
+            close_rate=S.close_rate(shorter, ffat[shorter], displ, rt, cfg)   # TA-02 fatigued closer + displace point + walk through un-threatening reach (FIX-1)
+            recoil = 0.0
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
-            _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
-                  close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
-            if rng.random() < stophit_p:
+            if measure_gap > 0.0 and rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
                 deg, net = core.resolve(pool, nsig, rng)
@@ -107,6 +115,13 @@ def engagement(A, B, first, cfg, rng):
                     d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     if shorter.felled: return shorter
+                    recoil = S.arrest_impulse(longer, cfg)   # the ARREST: braced-weapon impulse vs the charge (reach+structure, not wound)
+            measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
+            just_closed = (measure_gap<=0.3)
+            if just_closed:
+                closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
+            _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
+                  close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if not closed:
                 if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
                 continue

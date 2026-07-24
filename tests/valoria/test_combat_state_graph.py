@@ -109,13 +109,20 @@ def test_contact_reachable_from_all_three_precondition_sites():
 
 def test_contact_node_live_trace_fires():
     """A live sweep including a short-reach (dagger) matchup must actually visit Contact — the open-contact
-    exemption fires it on essentially every closed beat for that wielder, so this is not a rare branch."""
+    exemption fires it on essentially every closed beat for that wielder, so this is not a rare branch.
+    [VEHICLE UPDATED, ED-PC-0029, 2026-07-24] was spear-vs-dagger; the approach/reach re-architecture (arrest_impulse
+    + true_time_edge) makes a perfect-length spear DOMINATE the approach so a dagger can no longer close it at all
+    (Silver: the dagger cannot beat the spear — spear-vs-dagger now resolves in the APPROACH, never reaching Contact,
+    which is the intended new balance, not a dead node). The Contact node's LIVENESS is unchanged — it fires whenever
+    a short-reach weapon DOES close, which it still does against a non-reach opponent; arming-vs-dagger keeps the
+    test's intent (the dagger is the short-reach closer and reaches Contact). Reachability of the node from all three
+    precondition sites is separately guarded by test_contact_reachable_from_all_three_precondition_sites."""
     pytest.importorskip("numpy")
     from combatant import Combatant
     from trace import run_traced_fight
     fired = set()
     for s in range(20):
-        A = Combatant('A', weapon='spear'); B = Combatant('B', weapon='dagger')
+        A = Combatant('A', weapon='arming'); B = Combatant('B', weapon='dagger')
         _, ev = run_traced_fight(A, B, seed=s)
         fired |= G.fired_states_from_events(ev)
     assert 'Contact' in fired
