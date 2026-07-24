@@ -307,23 +307,26 @@ _ORDER_SAFE_FIELDS = frozenset({
 # for the rest of the battle (the two failure modes -- "malformed trigger" and "condition legitimately
 # never met" -- are otherwise behaviourally indistinguishable to a caller; a condition that's correctly
 # never satisfied SHOULD stay pending forever, that's by design, but a typo should not get that far).
-_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:')
+_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:', 'own_strength:')
 
 
 @dataclass
 class Order:
     """[Stage C] A single timed/conditional instruction queued on a Subunit. trigger:
-    'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref). behavior: a dict of
-    attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
-    'instructions':('envelop',)}) -- restricted to _ORDER_SAFE_FIELDS (behavioral/targeting switches,
-    including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an order),
-    not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why)."""
+    'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref) |
+    'own_strength:FRAC' (ED-MB-0030 — fires when this subunit's current troops fall to <= FRAC of its
+    spawn count, e.g. 'own_strength:0.5' = "act once I'm down to half": withdraw a spent body, commit a
+    weakened one, brace when thinned, etc.). behavior: a dict of attribute->value, applied via setattr
+    when the trigger fires (e.g. {'stance':'balanced', 'instructions':('envelop',)}) -- restricted to
+    _ORDER_SAFE_FIELDS (behavioral/targeting switches, including escort_of/escort_offset -- a subunit can
+    switch INTO escort mode mid-battle via an order), not geometry/troop-accounting fields (see
+    _ORDER_SAFE_FIELDS's own note for why)."""
     trigger: str
     behavior: dict = field(default_factory=dict)
     waypoint_ref: Optional[object] = field(default=None, repr=False)  # only consulted for 'ally_at:D'
 
     def __post_init__(self):
-        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:')):
+        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:', 'own_strength:')):
             raise ValueError(f"Order.trigger {self.trigger!r} unrecognized; expected one of {_ORDER_TRIGGER_KINDS}")
         bad = set(self.behavior) - _ORDER_SAFE_FIELDS
         if bad:

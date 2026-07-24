@@ -2,6 +2,20 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0030: conditional orders (own_strength trigger + locked distance-conditional)
+- Jordan directive: "conditionals — a unit only starts retreating when the opponent is within X /
+  advancing then withdrawing when X." **Verified** the existing `Order` primitive already covers the
+  DISTANCE case: `Order(trigger='enemy_range:D', behavior={'stance':'retreat'|'yielding':True})` fires
+  when the subunit closes within D; `stance`/`yielding` are both `_ORDER_SAFE_FIELDS`; `build_army`
+  forwards the spec `orders` key. Locked in with `test_conditional_orders.py` (fires on close; does not
+  fire out of range) — no redundant knob added (bottom-up reuse).
+- **Added** the missing `own_strength:FRAC` trigger: fires once `troop_total()/_start_troops <= FRAC` —
+  a unit reacting to its OWN attrition (withdraw a spent body, commit a weakened one, brace when
+  thinned). Wired in `units.py` Order validation + `_ORDER_TRIGGER_KINDS` + `contact.py` `check_orders`;
+  reuses the `_start_troops` spawn denominator (no new state).
+- Byte-exact (orders default `()`; goldens carry none; bat.py EXIT=0). Tests: 8 in
+  `test_conditional_orders.py`.
+
 ## 2026-07-23 — ED-MB-0029: intent as an offence/defence resolution axis
 - Jordan directive: "hold-and-defend vs rout-the-other resolve differently — intent makes a big
   difference." `stance` (was movement-speed only) is now a signed offence/defence **commitment** in the

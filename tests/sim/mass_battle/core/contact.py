@@ -42,6 +42,15 @@ def check_orders(unit, t, enemy_cells):
                 if order.waypoint_ref is not None:
                     my = sub.centroid(); wp = order.waypoint_ref.centroid()
                     fired = math.hypot(my[0] - wp[0], my[1] - wp[1]) <= D
+            elif order.trigger.startswith('own_strength:'):
+                # [ED-MB-0030] fire once THIS subunit is attrited to <= FRAC of its spawn count — a unit
+                # reacting to its OWN losses (withdraw a spent body / commit a weakened one / brace when
+                # thinned). Uses the same _start_troops spawn denominator the §A.4 casualty triggers +
+                # per-subunit cohesion already use; no new state. A subunit that never thins that far keeps
+                # the order pending forever (by design, same as an unmet enemy_range).
+                frac = float(order.trigger.split(':', 1)[1])
+                start = getattr(sub, '_start_troops', 0) or 0
+                fired = start > 0 and (sub.troop_total() / start) <= frac
             if not fired:
                 break
             for k, v in order.behavior.items():
