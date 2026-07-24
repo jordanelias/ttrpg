@@ -5,7 +5,7 @@ import math
 from dataclasses import dataclass
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
 def arrowhead_cells(tier):
     cells = []
@@ -249,13 +249,28 @@ def _oriented_abs_map(atom):
     import mass_battle.hierarchy.units as _u
     amap = {}
     if _u.FIELD_MOVEMENT and _u.PC_NODE_COHESION and hasattr(atom, '_node_pos'):
-        for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
-            _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+        # [Fable-audit B1 fix, 2026-07-24] Iterate the atom's LIVE continuous footprint (_oriented) and
+        # SKIP any id absent from _node_pos -- do NOT default a missing key to the origin (0,0). The prior
+        # version iterated oriented_pattern(shape,tier) (the LEGACY CELL_PATTERN_FN tier ids) while _node_pos
+        # is keyed by the continuous _build_shape_n/footprint_for ids. For any density-built subunit whose
+        # continuous footprint diverges from the tier pattern (Arrowhead: only 1/6 ids matched) every miss
+        # collapsed to abs (0,0) -> contact cells resolved to [] -> the pool floored -> the wedge lost 0/100.
+        # _oriented(atom) IS the footprint _node_pos was populated from, so the keys now match.
+        for orig_r, orig_c, or_r, or_c in _oriented(atom):
+            if (orig_r, orig_c) not in atom._node_pos:
+                continue                                        # unseeded cell: skip, never default to origin
+            _pr, _pc = atom._node_pos[(orig_r, orig_c)]
             abs_r = int(round(_pr))
             abs_c = int(round(_pc / _u.COL_WIDTH))
             amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the file-binned cells() keys
         return amap
-    for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
+    # [Fable-audit B1/B3 fix, 2026-07-24] Grid path: iterate _oriented(atom) — the SAME footprint
+    # cell_offsets is keyed by (units.py: "_oriented(self) is the sole source of the (or_r,or_c) offset").
+    # The prior version iterated oriented_pattern(shape,tier), which diverges from the footprint ids for any
+    # density-built continuous subunit, so this map disagreed with the octagon damage layer (which already
+    # open-coded off _oriented). Byte-identical for legacy troops=None subunits (_oriented falls back to
+    # oriented_pattern); consistent for continuous ones. This makes _oriented_abs_map the single identity map.
+    for orig_r, orig_c, or_r, or_c in _oriented(atom):
         abs_r = (atom.starting_position[0] + or_r
                  + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
         abs_c = (atom.starting_position[1] + or_c

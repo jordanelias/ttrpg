@@ -715,7 +715,24 @@ class Subunit:
 
     def iter_cells(self):
         """Cell-primary view (step 1): yield (cell_id, (abs_r,abs_c), troops) per cell in _oriented
-        order. cell_id = (orig_r, orig_c) pattern identity (stable under movement)."""
+        order. cell_id = (orig_r, orig_c) pattern identity (stable under movement).
+
+        [Fable-audit B2 fix, 2026-07-24] On the field/node path the abs position is the LIVE _node_pos
+        (file-binned EXACTLY as _node_cells()/cells() do), NOT the dead starting_position+cell_offsets spawn
+        lattice — cell_offsets is not updated under node cohesion, so the old build froze col_grid at SPAWN
+        columns while the contact layer engaged on LIVE files. For a laterally-drifted formation (GappedLine)
+        the spawn columns ∩ live engaged columns = ∅, so _fatigue_sigma/update_stamina/distribute_casualties
+        (all fed by iter_cells) never fired — one-sided fatigue immunity. Now iter_cells shares cells()'s live
+        coordinate source, so column identity is consistent end-to-end. Grid path (node cohesion off) unchanged."""
+        if PC_NODE_COHESION and hasattr(self, '_node_pos'):
+            for orig_r, orig_c, or_r, or_c in _oriented(self):
+                r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                if FIELD_MOVEMENT:
+                    abs_r, abs_c = int(round(r)), int(round(c / COL_WIDTH))   # field-ON: rank-snapped row, file-binned column (== _node_cells)
+                else:
+                    abs_r, abs_c = int(round(r)), int(round(c))               # node-cohesion, field-off: exact prior snap
+                yield (orig_r, orig_c), (abs_r, abs_c), self.cell_troops.get((orig_r, orig_c), 0.0)
+            return
         for orig_r, orig_c, or_r, or_c in _oriented(self):
             abs_r = (self.starting_position[0] + or_r
                      + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)

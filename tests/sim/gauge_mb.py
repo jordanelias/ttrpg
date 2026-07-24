@@ -109,7 +109,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
 def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,   # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4]
               discipline=5, morale=6, stance='balanced',                          # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats D5/M6]
               troop_type='infantry', speed='Standard', morale_start=None, instructions=(),
-              troops=None, concentration=None):  # [ED-MB-0027] explicit density (default GAUGE_TROOPS/GAUGE_CONC) — honest-gauge matching
+              troops=None, concentration=None, width=None, depth=None):  # [ED-MB-0027] explicit density; [ED-MB-0034] width/depth for deep-formation rows (braced pike-block/schiltron: brace-recoil is depth-gated)
     # troop_type/speed default to the historical infantry baseline so the original
     # 13 tests construct byte-identically; cavalry rows pass troop_type='cavalry',
     # speed='Fast' by kwargs. Cavalry charge mechanics (charge_pen,
@@ -157,6 +157,8 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
             'power': power, 'discipline': discipline,
             'troops': _troops, 'concentration': _conc,
             'starting_position': (start_row, anchor_col)}
+    if width is not None:  spec['width'] = width    # [ED-MB-0034] explicit frontage×depth grid (footprint_for)
+    if depth is not None:  spec['depth'] = depth    # deep braced formations need real depth for the depth-gated recoil
     return build_army([spec], name, faction, power=power, command=command,
                        discipline=discipline, morale=morale, morale_start=morale_start,
                        dr=1, stance=stance, speed=speed)

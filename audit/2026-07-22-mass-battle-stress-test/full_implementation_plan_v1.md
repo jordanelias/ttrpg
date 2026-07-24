@@ -75,6 +75,21 @@ audit's ablation number, then shows the fix moving it). *Foundation; low risk.*
   re-center `ANCHOR_MAP` for the 6-cell footprints. Also fixes B2b (`distribute_casualties` engaged-front
   filter) and `_defender_depth`. *Repro: H7 87/13 → 27/70, H1 → 50/50.*
 
+### Phase 1.5 — SYSTEMIC FINDING (2026-07-24): the geometry layer needs a coordinated rebuild
+Building the frame revealed the honest (density-matched) gauge exposes systemic failures, not isolated
+bugs — **only ~4/20 rows pass**, and the dominant one is **envelopment delivering 0%** (H3/H4/H5/H6 all
+0/100; C4 = 6). The density-match (ED-MB-0027, merged) correctly removed the density artifact that used to
+drive envelopment to 100%, exposing that the flanking geometry delivers ~nothing at matched force. Root:
+an enveloping army (center + wings) *loses* to a single line because the split center is crushed before the
+wings arrive — the "Cannae centre marches forward instead of holding" problem. This couples:
+- **intent** (ED-MB-0029, gated OFF) — the Cannae centre must HOLD to pull the enemy in; flip it on.
+- **B6** — multi-side shock is computed per cascade sub-phase, so it never fires for a front+rear body.
+- **wing timing/pathing** — the wings must reach flank/rear before the centre breaks.
+- **B3 octagon** (now fixed) — the flank/rear damage multiplier now reads the live map.
+**Consequence:** the gauge will not climb until several mechanics land *together* (intent-on + B6 + wing
+timing + brace box-model + fatigue col-grid). Land the correct field-coordinate fixes (B1/B2/B3) first as
+tested increments, then rebuild envelopment+intent+B6 as a coordinated set, THEN calibrate.
+
 ### Phase 2 — Damage model reformulation (per §1) + accounting
 - **B4 / per-troop model** — strip `eff_size` from the degree; density = linear emitter count on
   casualties. Config toggle (`MB_NUMBERS_MODEL`, default `linear`) so the alternative (numbers-in-pool)
