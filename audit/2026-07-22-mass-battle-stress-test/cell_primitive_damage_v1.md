@@ -124,7 +124,7 @@ This names the primitive the engine lacks, and it is a **scheduling/pathing** pr
 2. **Advance → bait → elastic withdrawal.** The centre moves *forward* to make contact, then **gives
    ground under pressure while remaining unbroken**, drawing the enemy mass *into* the pocket. The engine
    has `feigned retreat` (PC_FEIGNED_RETREAT) but it is a discrete tactic-check, not a *continuous*
-   fighting-withdrawal that preserves cohesion while yielding distance.
+   fighting-withdrawal that preserves formation integrity while yielding distance.
 3. **A race with an explicit clock.** The battle is won iff `t_cavalry_reaches_rear < t_centre_routs`.
    That makes **movement rates, release timing and path length first-class balance parameters** — the
    cavalry's speed multiplier, the orbital-wheel radius (`ENVELOP_STANDOFF`), the wing release tick, and
