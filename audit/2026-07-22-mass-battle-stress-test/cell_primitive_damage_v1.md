@@ -302,3 +302,36 @@ to *do* something in isolation is a scenario-level A/B meaningful.
 session each had a different mundane cause — an unissued order, an unreachable trigger, and now a
 set-but-unconsumed state. A null result on a gated mechanic should be treated as "the harness probably did
 not reach the mechanic" until the mechanic is instrumented directly.
+
+### Unit-level test of the yield consumption sites — the pool malus WORKS, and it is backwards for Cannae
+
+Isolating the mechanic (rally/pocket/emergent OFF, state set directly) instead of another end-to-end A/B:
+
+```
+yield_active = True
+subunit_combat_pool:  no-yield 12.0000   yielding 4.0000   ratio 0.333  (YIELD_POOL_MULT 0.35)
+```
+
+So the **combat-pool consumption site fires correctly** — `yield_active` gates on `eff_discipline (5) >=
+D_YIELD (3)` and the pool takes `YIELD_POOL_MULT`. The primitive is *not* dead. Two conclusions follow, and
+the second is a design question for Jordan:
+
+1. **The battle-level null is a state-LIFECYCLE problem, not a dead consumption site.** Since the pool malus
+   demonstrably applies when `yielding` is set, the bit-identical A/B means the state is not *held* through
+   resolution — the leading candidate remains `PC_YIELD_RALLY` exiting it (the centre ends the battle at
+   `yielding=False`). Next step is a tick-trace of `yielding` across a single battle to see when it is set
+   and when it clears.
+2. **As modelled, yielding makes the centre ~3x WEAKER (pool 12 → 4) — the opposite of what the Cannae bait
+   needs.** The historical crescent gave ground *and held*: it traded space to buy time without collapsing.
+   A 0.35x pool multiplier means a yielding centre is crushed *faster*, so even a perfectly-working bait
+   would lose the race it exists to win. `YIELD_POOL_MULT` is explicitly `[CALIBRATED-DEBT]` in
+   `core/exchange.py` — "reused from the nearest existing precedent (`PC_SHOCK_HOLD_BRACE`) rather than
+   invented, and disclosed as such". **This constant is the lever**: the bait needs a yielding body to lose
+   *offensive output* while gaining (or at least not losing) *staying power* — currently it loses both,
+   because the same multiplier scales the pool that feeds its casualty resistance.
+
+**This reframes task #37 from "wire the bait" to a real design call:** what does a fighting withdrawal cost
+and what does it buy? Proposal to put to Jordan — split the single multiplier into two terms: an
+**offence** malus (a withdrawing body strikes less) and a **survivability** term at or above 1.0 (it is
+giving ground precisely to avoid being destroyed), so trading space for time is mechanically expressible.
+That is exactly the "centre holds long enough for the cavalry to reach the rear" tempo race.
