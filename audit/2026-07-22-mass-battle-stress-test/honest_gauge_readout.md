@@ -107,6 +107,25 @@ probes show why the gauge's envelop rows read ~0%, and it is **not** that the ma
 6. **GappedLine over-strong.** H7=86, H8=100 (bands cap 62/65) — likely a frontage/contact-count artifact
    (gapped cells present more engaged columns per troop). Re-examine after the intent/scale work.
 
+## Validation-loop progress — stochastic rout ON (2026-07-23, ED-MB-0031)
+
+First closure of the validation loop: re-ran the full honest gauge with the grounded stochastic-rout
+mechanic ON (`PC_STOCHASTIC_ROUT=1`, `gauge_run.py`, n=14). **PASS 5/20 → 8/20.**
+
+- **Newly in-band (the resolution-timing rows):** C2 & C6 (braced-repel — now the cavalry can't grind
+  through the wall before the battle resolves: rawA 57→14, into 0–30), C3 (cav mirror 71→50, now fair),
+  C5 (cav-vs-shaken 66.7, in 65–98), plus H1/R1/R3 hold. Battle lengths dropped to t≈1–2 (≈3–6 phases,
+  the documented 30–90-minute window), and casualty-at-rout fell from ~90% to ~30%.
+- **Still OUT (the shape/geometry rows) — unaffected by rout timing:** H2/H9 (wedge loses), H3–H6/H10/H11
+  (envelopment & refused-flank), H7/H8 (GappedLine over-strong), C1 (cav vs steady foot), C4 (mounted
+  envelopment). These are the **force-splitting / envelopment-geometry** deficit from the section above —
+  they need the deep-holding-centre + wing-delivery-at-scale work, not resolution-layer tuning.
+
+So the diagnosis sharpens cleanly: **the rout fix closed the resolution-timing gap; the remaining
+out-of-band rows are all geometry/envelopment.** That is the next validation target (with lethality +
+fractional-dice as supporting refinements). The gauge bands were NOT touched — this is the engine moving
+toward history, measured on the fixed ruler.
+
 ## Guardrails honored
 
 - **Bands were NOT lowered to make the engine pass** (fiat register §8 north star: calibrate to
