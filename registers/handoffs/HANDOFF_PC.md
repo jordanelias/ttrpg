@@ -6,6 +6,36 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **REACH-ARC (ED-PC-0029..0033) LANDED on PR #231 (2026-07-24) — full suite green (656).** arrest-impulse +
+  tanh true_time (0029); closed-phase disengage (0030); percussion→stamina + poise stagger (0031); rapier plate
+  fall-off via penetration threshold (0032, `core.PEN_THR`); **stale-grip fix + measure continuity (0033):**
+  engagement() resets grip/lunge to open measure each engagement and threads `prev_closed`; `represent_measure_p`
+  crowds a reach weapon off measure at plate (exp(−K·ADEF_W·deficit), exactly 1.0 off-plate so the RNG stream/
+  tradition-texture is inert). Spear heavy 0.97→0.08; poleaxe 0.95, guisarme 0.61 (gap-defeaters still present).
+- **OPEN (Jordan-flagged on PR #231): off-plate reach re-baseline — turn the lever down.** Fixing the grip bug
+  (0033) globally strengthened reach weapons off-plate (spear ~0.93–0.95 at none/light/medium, was bug-suppressed
+  ~0.75). Jordan chose **turn it down** (target ~0.75, "duel edge not auto-win"). **INVESTIGATED 2026-07-24 — it
+  is NOT a knob:** ablation proved off-plate dominance is *structural* — the spear beats arming **0.92 even when
+  forced fully closed** (represent=0), i.e. it out-fights the sword at every measure, not just via approach stop-
+  hits. `STOPHIT_CHANCE`/`STOPHIT_COMMIT`/`REPRESENT_BASE` all fail to reach 0.75 without breaking guisarme@heavy
+  (proven by sweep). Root cause: a crowded long weapon "chokes up" (`grip_target`→1) and `close_unwieldiness` only
+  penalizes TEMPO, not exchange power — so a crowded spear still wins the bind. **The honest fix is a closed-
+  measure EXCHANGE penalty for crowded long weapons** (a spear should be out-fought inside its point; choking
+  shouldn't fully rescue it) **coupled with a `REPRESENT_BASE`<1 off-plate contest** (a pressing swordsman denies
+  re-presentation even unarmoured). That is a real closed-phase mechanic (its own ED, PC lane) with cross-cutting
+  risk (touches every closed exchange) — deserves a focused session + full-suite + matrix re-validation, NOT a
+  rushed knob. Experimental knobs were reverted; ED-PC-0033 state is clean/green.
+- **OPEN (matrix quirks, pre-existing — NOT from the reach arc; PC-lane roster calibration):**
+  1. **`sparr_axe` armour cliff (0.94 light → 0.20 medium → 0.06 heavy).** Weapon record has a SINGLE
+     `straight_cut` element, `adef_cap=−0.90` — it cannot defeat *any* armour. A sparth/war-axe realistically has
+     a concentrated edge (and, poleaxe-family, a top-spike) that defeats mail; cf. `poleaxe` = 3 elements
+     (blunt+spike). Fix = give it a proper armour-defeating mode (design call: spike vs concentrated-edge
+     percussion). `bardiche` shares the single-`straight_cut` record but is a genuine cleaver, so its fall-off is
+     more defensible (borderline).
+  2. **`jian`/`tsurugi` marginal plate edge (heavy ~0.94 but decided only 17–45% → mostly stalemate).** Their
+     geometry yields `adef_cap` 0.543/0.535 > arming's 0.504, so a light straight sword slightly out-points the
+     arming in the plate stalemate. Minor geometry recalibration; low-decided so low-impact.
+
 - **'BUILD ALL' PASS DONE (ED-PC-0026/0027/0028, 2026-07-23) — Phases 1-4, all committed & pushed to PR #227.**
   - **Phase 1 (ED-PC-0026):** HEMA grounding corrections — atajo measure→leverage, zwerchhau edge_read→counter_select,
     guardia REMOVED (facing_regime now a bare lever), phi_grip tag narrowed, stale winden comment fixed.
