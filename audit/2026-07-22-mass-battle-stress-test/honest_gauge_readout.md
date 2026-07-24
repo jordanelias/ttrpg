@@ -206,3 +206,16 @@ side B) reads 83% while forward H3 = 70.7% — the enveloper is materially weake
 bug contaminating every reverse row. (2) **H4** envelop-vs-3-command-Arrowhead = 0% (the wedge centre punches
 the holding line). (3) **H5** refused-vs-envelop = 100% (refused too strong). (4) **H6** refused-vs-line =
 all-draw stalemate. Plus the Cannae deep-baiting-centre + cavalry-rear composition and the box-brace (C2/C6).
+
+## Caveat on ED-MB-0038's H3 pass — envelopment is bimodal (ED-MB-0039, 2026-07-24)
+
+Follow-up root-cause (`envelopment_stability_diagnosis_v1.md`): H3's **70.7% is the favourable side of a
+deployment-chaotic knife-edge**, not a robust edge. Pure-infantry envelopment at strict parity is
+side-asymmetric by ~54pp (env ~71% as A, ~17% as B) because the parity centre is narrower than the
+3-command enemy → out-flanked → a Lanchester-amplified race; the side-symmetric average is ~44% (envelop
+slightly loses). The engine has only **two envelopment regimes — chaotic-even pure-infantry (~44%) and
+total combined-arms cavalry (~100%)** — with nothing in the moderate 55-72 band. The H10/H11 reverse-row
+failures are this same chaos seen from the other side. Fix is an engine-design fork for Jordan (reframe
+H3/H4 as combined-arms, or add gated seal-failure/breakout variance for a gradient) — see the diagnosis
+doc. Matched granularity (ED-MB-0038) stands; it correctly unmasked the mechanic and the gauge is
+correctly flagging the side-asymmetry via the reverse rows.

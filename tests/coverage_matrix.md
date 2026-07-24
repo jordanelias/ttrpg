@@ -2,6 +2,27 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0040: cell-primitive damage (the aggregate-smear bug) + historical Cannae oracle
+- Jordan directive: "the cell is the primitive… each cell has its own octagon facing… its own capacity to
+  receive and issue damage… flank/rear damage is supposed to be cellular… damage is done to cells."
+  **BUG FOUND:** `_octagon_dmg_mod` evaluated each defender cell's own arc then **averaged** them into one
+  subunit scalar; `distribute_casualties` then spread that total by **density only** — so a rear cell and a
+  front cell in the SAME subunit lost identical troops, envelopment could not strip a formation
+  shell-inward, and a monolith was near-unbreakable. **This is the upstream cause of BOTH the ED-MB-0038
+  granularity workaround and the ED-MB-0039 "engine gap".**
+- **FIX:** `_octagon_cell_mods` = the single owner of the per-cell arc; `_octagon_dmg_mod` = its mean
+  (byte-identical). Gated **`PC_CELL_DAMAGE`** allocates each pair's casualties to defender **cells** by
+  (troops × that cell's own facing mult) via `distribute_casualties_cellwise` (overflow-spilling, cells==hp
+  holds under annihilation). Pair total unchanged — only placement. Volley keeps the aggregate spread.
+- **Measured:** infantry envelop side-swing **41.0→15.5pp**, side-symmetric avg **43.8→57.8%** (into the
+  55-72 band) — ED-MB-0039's "needs a new mechanic" was really this bug. **But** it re-bases the battery
+  (gauge **8/20→4/20**: C4 93→71, H11 46→15) since bands were implicitly fitted to the smear → **ships
+  GATED OFF**, byte-exactness verified vs the pre-change engine (identical winners + hp to 6dp).
+- **HEADLINE (the real oracle):** the historical Cannae OOB (**5000 vs 8600**, real spread/subunit counts)
+  yields **Carthage 0/20 both sides, flag ON or OFF** — the engine cannot reproduce history's defining
+  envelopment. Missing: **per-cell morale** (local breaking), **a cost to useless depth**, **the elastic
+  baiting centre**. Next: re-test all 20 precedents against their REAL orders of battle.
+
 ## 2026-07-24 — ED-MB-0038: matched command-granularity honest gauge (envelopment artifact fix)
 - The honest gauge's composed enveloper/refused presets always faced a SINGLE-subunit opponent. A
   monolithic subunit is unbreakable by envelopment — flank/rear octagon mult + multi-side shock land on
@@ -20,7 +41,6 @@ Archived entries in tests/coverage_matrix_archive.md
 - **Next:** side-asymmetry (H10 envelop-weak-as-B 83%), H4 wedge-centre-punch (0%), H5 refused-too-strong
   (100%), H6 stalemate; Cannae deep-baiting-centre + cavalry-rear; box-brace C2/C6.
 
-
 ## 2026-07-24 — ED-MB-0037: remove superseded dead-mechanic constants + zeroed _envelopment_sigma
 - Wire-or-remove sweep, removal half (Jordan "obviously you can unwire a dead mechanic if it's useless").
   Removed constants that were defined+exported but read nowhere and superseded by live mechanics:
@@ -35,7 +55,6 @@ Archived entries in tests/coverage_matrix_archive.md
 - Measured **PC_FACING_MODEL=1 → gauge 3/20** (regresses from 5/20) — confirms its "do not enable"
   calibration-debt (PC_FACING_SLEW_BASE unratified). Left OFF; flagged for Jordan. Gauge holds 5/20.
 
-
 ## 2026-07-24 — ED-MB-0036: wire orphaned MORALE_EROSION_DAMP + SUBUNIT_ROUT_FLOOR
 - Wire-or-remove dead-mechanic sweep (Jordan directive). Both were defined+exported but never read.
   **MORALE_EROSION_DAMP** (0.7) → the §A.4 casualty/exhaustion morale erosion (`erode_morale(min(loss,3.0)*
@@ -45,7 +64,6 @@ Archived entries in tests/coverage_matrix_archive.md
 - Gauge unchanged (5/20, no regression); rout/morale tests green (22 passed). Goldens re-recorded (4 modes).
 - Next: remove superseded constants (ROUT floors, PC_FLANK_DEPTH_RESIST, REACH_LONG, structural) + zeroed
   PC_ENVELOP_SIGMA; keep PC_ROTATE_FLOOR/REFILL_FLOOR (planned rotation T2/T3); measure PC_FACING_MODEL.
-
 
 ## 2026-07-24 — ED-MB-0035: wire perimeter.py + cavalry orbital-wheel envelopment + B6
 - Orphan audit found **`perimeter.py`** (target-point/face-normal primitive, task #18) built but never
@@ -59,7 +77,6 @@ Archived entries in tests/coverage_matrix_archive.md
 - `PC_ENVELOP_SIGMA` left 0.0 (Incr6 targeting mis-IDs the split army's thin wings; naive enable rewarded
   the defender). Full orphan inventory: `audit/2026-07-22-mass-battle-stress-test/orphaned_mechanics_audit_v1.md`.
 - Goldens re-recorded 4 modes; `tests/valoria` maneuver/octagon/perimeter/reserve green (20 passed).
-
 
 ## 2026-07-24 — ED-MB-0034: field-coordinate unification (Fable-audit B1+B2+B3)
 - Jordan directive ("nothing is golden"; "we're using field coordinates ... abandon [the spawn lattice]").
@@ -76,7 +93,6 @@ Archived entries in tests/coverage_matrix_archive.md
   contact map) — now honestly failing pending the box-brace. **Dominant remaining issue: envelopment
   delivers 0%** (H3–H6) — the split centre is crushed before the wings arrive; needs intent-on + B6 +
   wing timing + box-brace + B2b (col-grid per-tick rebuild). See `full_implementation_plan_v1.md` §1.5.
-
 
 ## 2026-07-24 — ED-MB-0033: Fable logic audit — Part A remediation (9 defects in this session's own work)
 - Five Fable-tier read-only adversarial auditors (one per logical lane) traced ED-MB-0027..0032 and found
@@ -370,7 +386,6 @@ Archived entries in tests/coverage_matrix_archive.md
   byte-exact grid oracle green. **Still open:** horseshoe-not-ring (no cavalry rear-transit), single line
   (no triplex depth-lines), envelopment-not-rewarded outcome (DG-6 / ED-MB-0016). Full detail: ED-MB-0017.
 
-
 ## 2026-07-22 — ED-MB-0016: DG-6 grounded partial resolution — per-battle combat-effectiveness (CEV) friction
 - Root cause of DG-6 over-decisiveness confirmed: melee pool sums N independent dice → CV self-averages
   ~1/√N → `compute_degree` deterministic from force ratio → 100%/0% vs historical bands. Fix (grounded in
@@ -480,6 +495,7 @@ Archived entries in tests/coverage_matrix_archive.md
   `cell_field 9d0b63b9`) — moves the DG-6-gated Cannae gauge (units that froze at range now engage),
   disclosed, no constant tuned. Departs from the plan's shared-surface premise → Stage C + R1 amended,
   flagged for merge-ratification. Full detail: `audit/2026-07-22-mass-battle-stress-test/` + ED-MB-0012.
+
 ## 2026-07-22 — ED-MB-0011: DG-10 field-movement freeze fix + field-based stress test (condensed)
 - DG-10 (ED-MB-0007) fixed: `_node_advance` floored sub-Discipline-5 velocity to 0
   (`floor(1*0.7)=0`) → most §B.2 troop types (all disc<5) never closed on the live field path. The
@@ -491,6 +507,7 @@ Archived entries in tests/coverage_matrix_archive.md
   move because units degrading below disc-5 mid-battle used to freeze). maneuvers+yield 12 passed/1
   xpassed. MOVEMENT-only; shifts the DG-6-gated Cannae gauge, no balance constant tuned. Full detail:
   `audit/2026-07-22-mass-battle-stress-test/` + ED-MB-0011.
+
 ## 2026-06-15/20 — ED-1013 through ED-1032 (archived — condensed)
 - Smooth command-sigma pool + continuous discipline penalty (ED-1013); gauge recalibration (ED-1014);
   cavalry-construction gauge fix, not an engine defect (ED-1015); per-subunit stat/stamina/troop-type/
@@ -526,149 +543,10 @@ Archived entries in tests/coverage_matrix_archive.md
   verified real lateral wheel movement, zero new flanking mechanics). G5 byte-exact both grid modes
   unchanged throughout. Full detail: `tests/coverage_matrix_archive.md`.
 
+## Archived 2026-05-29 (pre-v32 sim rows; armature-reset coverage trim)
+
 ## 2026-07-08 — mass_battle: partition-invariance fix (ED-MB-0004) + RC-5 preliminary finding
 
 **Jordan's rulings (AskUserQuestion, 2026-07-08):** the partition-invariance question left open by
 ED-MB-0003 = **"genuine defect — fix it"** (not the historically-correct-mechanism reading); DG-2
 (fighting-withdrawal/yield) = **"build it now"**; RC-5 triage = **start now, in parallel**.
-
-## 2026-07-08 — mass_battle: DG-2 fighting-withdrawal/yield mechanic, commanded-entry slice built
-
-Jordan ruled DG-2 = **"build it now"**. Built exactly the proposal doc's (`proposals/
-mass_battle_fighting_withdrawal_v1.md`) own §4 step 1, the "lowest-risk slice": **state +
-commanded-entry only** — no emergent auto-entry (§2.2's second bullet), no "rally"/"pocket" exits
-(§2.4, beyond the free "collapse to routed" which needed no new code). Disclosed, not silently
-narrowed: whoever continues this should treat emergent-entry/rally/pocket as still open, not covered.
-
-**Built:**
-- `Subunit.yielding: bool = False` (new field, default-inert) + a `yield_active` property — the
-  single shared gate every consumption site reads: `yielding and eff_discipline >= D_YIELD and
-  unit_type != 'ranged'` (discipline-gated + melee-only, per §2.5's anti-abuse requirements; one
-  property, not five repeated inline conditions, so the gate can't drift between call sites).
-- `'yielding'` added to `_ORDER_SAFE_FIELDS` — a `'yield'` order (`Order('immediate',
-  {'yielding': True})`) composes with the EXISTING Stage-C `Order`/`check_orders` machinery with
-  zero new order-primitive code, exactly as the doc's §3 table says it should.
-- Movement: new `Subunit._yield_goal` (reuses `_kite_goal`'s reflect-through-anchor flee vector,
-  always active rather than standoff-band-gated) wired into `_resolve_maneuver_goal` behind
-  `yield_active`; step magnitude capped at 1 cell/tick (§2.5's anti-abuse ceiling) at the same site
-  `_node_advance` already computes its per-tick step. **Node/field path only** (`_resolve_maneuver_
-  goal` is only called from `_node_advance`) — same scope boundary 'envelop'/'sweep' already have;
-  the legacy grid `advance_cells` path has its own separate inline dispatch, untouched.
-- Facing: a bespoke `yield_active`-gated override at BOTH `cell_facing_vec` write sites (node path
-  and legacy grid path), firing **regardless of `PC_FACING_MODEL`** (which defaults OFF) — locks
-  facing toward `target_atom`'s centroid even while the anchor moves away. This is the doc's
-  "mechanically load-bearing" distinction from rout (which turns away); without this override a
-  yielding body would inherit the default raw-movement-vector facing and point in its flee
-  direction, reproducing rout's problem.
-- Combat pool: `core/exchange.py`'s `subunit_combat_pool` multiplies by `YIELD_POOL_MULT` when
-  `yield_active` — "traded ground at a cost", reduced but never zero.
-- Anti-abuse: `orchestration.py`'s volley `fire()` refuses to fire for a `yield_active` atom
-  (matches the existing 'kite' precedent — already redundant with the melee-only gate, kept for
-  defence-in-depth).
-- **Both new magnitudes explicitly flagged [CALIBRATED-DEBT]**, per the proposal doc's own §5 (not
-  independently derived, reused from the nearest existing precedent, disclosed as such):
-  `D_YIELD=3` reuses this file's own `disc_mult` tier break (disc≥5 full speed / disc≥3 0.7x / else
-  0.4x — a subunit needs enough order to give ground at all, not the severely-degraded tier);
-  `YIELD_POOL_MULT` reuses `PC_SHOCK_HOLD_BRACE` (0.35) verbatim, exactly as the doc's §5 suggested.
-
-**Verification:** all 4 `bat.py` digests confirmed BYTE-IDENTICAL (no re-record needed — `yielding`
-defaults False everywhere in the battery, so this is genuinely inert-by-default, not just claimed
-to be). New `tests/valoria/test_mass_battle_yield.py` (9 tests): default-inert, discipline gate,
-melee-only gate, `_yield_goal`'s flee-vector math, order-safety, pool malus (present/absent), and an
-integration test running a real short battle confirming the yielding attacker actually moves AND its
-facing vector keeps a non-negative dot product toward its target (stays roughly pointed at the enemy,
-not away). Full `tests/valoria` suite: all green, no regressions (see this file's own 2026-07-08
-entry above for the exact pass/skip/fail counts, unchanged by this addition).
-
-**Honest measurement (§4 step 2's ask — center-yields-from-tick-0 vs no-yield, n=20, node path,
-`build_envelopment` center+2-wings vs a single-subunit Line defender):**
-
-| Configuration | Center hp retained (mean) | Battle turns (mean) | A wins / B wins / draws |
-|---|---|---|---|
-| No yield (baseline) | 35.8% | 15.65 | 14/0/6 |
-| Center orders 'yield' from tick 0 | 40.6% | 16.5 | 0/19/1 |
-
-The center DOES survive marginally better yielding (+4.8pp hp retained) — the mechanism works as
-built. But ordering it to yield **unconditionally from the very first tick, for the whole battle**,
-collapses the attacking army's win rate from 70% to essentially 0%: a permanently-backpedaling,
-pool-discounted center contributes far less offense than the wings' encirclement gains back within
-this scenario's timeframe. **This is not evidence the mechanic is broken** — it's the expected cost
-of the crudest possible commanded-entry policy (always-on, no timing). Historically, Cannae's yield
-was timed to buy exactly enough time for the wings to close, not sustained for the whole battle; this
-session did not build or measure a timed/conditional entry (e.g. an `Order` with a `tick:N` trigger,
-or an emergent entry keyed to encirclement progress) — flagged as the natural next experiment, not
-attempted here. Reported honestly per the doc's own §4 step 2 instruction ("reported honestly
-regardless of outcome"), not oversold as "DG-2 helps."
-
-**Not built this pass (disclosed, matching the doc's own staged rollout):** emergent auto-entry
-(§2.2), "rally" exit (§2.4's first bullet — morale-recovery-triggered reversion), "pocket" exit
-(§2.4's third bullet — blocked-retreat malus removal). The "collapse to routed" exit needed no new
-code (existing `derive_rout` fires regardless of `yielding`) and is therefore the only exit path
-this build actually has.
-
-## 2026-07-08 — mass_battle: pool abandons Command entirely (ED-MB-0006) — troop type/quality/numbers
-
-Jordan directive (verbatim): "consider abandoning combat pools being related to the commander, and
-instead being solely derived from the subunit troop type, quality and numbers." New
-`POOL_QUALITY_MODEL` (default ON, `config.py`): base pool = `eff_power x eff_size x
-POOL_QUALITY_SCALE` — `eff_power` is the troop-TYPE quality stat (`TROOP_TYPE_STATS`/§B.2, §A.1's
-own "Power... determines dice rolled"), `eff_size` is NUMBERS (troops/BLOCK_SIZE, continuously
-degrading with casualties), `POOL_QUALITY_SCALE=0.5` renormalizes the product to the historical
-T3-baseline magnitude (~8, matching the old command=4/full-cohesion baseline). Discipline/stamina
-penalties (`pen`/`stam_pen`) are unchanged. Command is absent from the pool entirely — it still
-governs morale, formation-hold speed, order-issuing, and `derive_rout`'s Command-0 condition.
-`COMMAND_SIGMA_ENABLED` branches remain selectable (`POOL_QUALITY_MODEL=0`) for A/B. Applied to
-both `core/exchange.py:subunit_combat_pool` and `hierarchy/units.py:Unit.base_combat_pool` (the
-pursuit/rout path) for consistency. Per Jordan's follow-up ("subunit power is the aggregate or
-derivation of cell power"): `eff_power x eff_size` is already exactly that aggregate whenever a
-subunit's cells share one troop type (true today — no per-cell troop_type exists yet); documented
-as such rather than adding a redundant cell loop, since `pair_pool_contribution`/
-`_pair_engaged_troops` already do the real per-cell redistribution for pair-scoped resolution and
-will pick up true per-cell power the moment that data exists, no change needed there.
-
-**Verification — all 4 `bat.py` digests re-recorded** (shared, non-gated code): `unit`
-d9ca7c7e→444afdd4 is now `d9ca7c7e`, `cell`→`88481bbd`, `unit_field`→`40649feb`, `cell_field`→
-`7b3b0a8d` (full hashes in `bat.py`). `tests/valoria`: 121 passed/57 skipped/1 xpassed/7 failed (6
-pre-existing `test_names.py` + the expected digest-drift failure now fixed by the re-record) — see
-`test_mass_battle_maneuvers.py`'s updated xfail note for the 1 xpass (unexpectedly passing once,
-not re-verified across seeds, marker left in place).
-
-**Gauge (multi, n=60): 6/20 → 7/20.** Newly passing: C4 (cavalry envelopment, WIN-OUT before,
-now 83.3% — inside its 75-95 band), C5 (shaken-line exploit, now 95%, inside 65-98). Newly
-failing/changed: **H4 (the actual Cannae matchup) flips from attacker WIN-OUT to attacker LOSING
-badly** (1.7% A / 65% B / 33% draws, was 96.6% A before) — a genuinely mixed, not uniformly
-positive, result: giving Size direct pool weight helps the SINGLE-large-subunit cavalry rows
-(bigger force = bigger pool, working as intended) but hurts the multi-subunit envelopment-army
-rows where the composed army's PER-ATOM numbers are now smaller than the single consolidated
-defender's. H1/C1/C3 stay OK-band with mild reshuffled percentages. Single-mode stays 2/20
-(structurally uninformative, unaffected).
-
-**Honest, disclosed residual — `lanchester_signature.py`'s law-exponent check.** Melee should
-conserve p≤1.4 (linear law); this was tested extensively before landing:
-- The PRE-EXISTING Command-driven baseline (`POOL_QUALITY_MODEL=0`, i.e. what was in production
-  before today) already **fails this exact check** (p≈1.55) — a previously-undetected gap,
-  confirmed unrelated to this session (reproduces identically on the pre-session commit). The
-  same baseline's `check_linear` (a 2:1 melee army should win decisively) ALSO fails today
-  (big_win=3.0%, i.e. the bigger army loses 97% of the time) — flagged, not chased: a quick trace
-  showed this specific check calls `run_battle` for a single 18-tick engagement, which usually
-  ends in a draw at this troop ratio (mild ~10-15% casualties either way), so the 3%/97% split may
-  be measuring decisive-outcome noise in a rarely-decisive sample rather than a structural defect;
-  not confirmed either way, left for whoever next touches this test.
-- Under the new model, `check_linear`'s win-rate check now correctly **PASSES** (100% big-army
-  win, cas_diff +53.7) — the qualitative "bigger army should win" property is restored. But the
-  stricter trajectory-fit exponent check gets WORSE (p≈2.50, not better) — swept extensively
-  (sqrt-of-size variant: p≈2.35, barely moved; uniform pool-magnitude scale in
-  {1, 0.5, 0.25, 0.2, 0.15, 0.1, 0.0625, 0.03}: plateaus at p≈1.65-1.7 below ~0.15, never reaching
-  ≤1.4). Confirmed NOT a Lanchester double-count (disabling `LANCHESTER_ENABLED` entirely leaves
-  the exponent completely unchanged at p=2.5) — the amplification is internal to the
-  pool→net-successes→`compute_degree` tier→`DAMAGE_BY_DEGREE` pipeline: larger absolute pools have
-  proportionally lower variance, so which discrete degree tier (Partial/Success/Overwhelming) each
-  side lands in becomes near-deterministic from the pool ratio alone, and that tier assignment
-  compounds the ratio rather than passing it through linearly. **Not silently patched** — a uniform
-  scale provably cannot fix it (it doesn't change the win/loss ratio the test measures), and fixing
-  it for real likely means revisiting `compute_degree`'s threshold logic or the degree/damage
-  mapping, not the pool formula alone. Flagged as an open follow-up in `designs/provincial/
-  mass_battle_v30.md`'s ED-MB-0006 note and here.
-
-Filed as ED-MB-0006 (supersedes ED-899's Command-only base for the pool term).
-
