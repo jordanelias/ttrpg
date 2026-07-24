@@ -271,3 +271,34 @@ The same correction applies to `PC_FEIGNED_RETREAT`: that flag really is unreach
 scenario (its only call site is the post-rout pursuit block), but it is **not** the mechanism the Cannae
 centre needs — `yielding` is. Feigned retreat models *a broken unit chased into a trap*; `yielding` models
 *an unbroken unit giving ground on purpose*. Two different mechanics; only the second is the bait.
+
+### Bait A/B result — the order now fires, but the outcome is bit-identical (open)
+
+With the corrected trigger (`enemy_range:6`), the yield order **does** fire and `yielding=True` is set on all
+three crescent maniples (verified by direct instrumentation). The A/B is nevertheless **bit-identical**:
+
+| Carthaginian centre (all flags ON, n=20/side) | as A | as B | avg |
+|---|---|---|---|
+| no bait | 20.0 % | 55.0 % | 37.5 % |
+| commanded yield bait (`enemy_range:6`) | 20.0 % | 55.0 % | **37.5 %** |
+
+Single-seed internals are identical to 3 d.p. (`A_hp=4965.021`, `B_hp=850.274` in both arms), so the yield
+state is being set and then **not consumed in any outcome-affecting way** in this scenario. Two candidate
+explanations, both unverified:
+
+1. **Rally immediately exits the state.** With `PC_YIELD_RALLY` ON the centre ends the battle at
+   `yielding=False` — it entered and left. If rally fires the same tick, give-ground never accumulates.
+2. **The give-ground movement is dominated by the advance/goal logic.** `_yield_active()` gates
+   movement/facing/pool at the consumption sites; if the maneuver goal still pulls the subunit forward,
+   the net displacement may be ~zero.
+
+**This is NOT evidence that DG-2 yielding is broken** — it is evidence that an end-to-end battle A/B is the
+wrong instrument for it. The next step is a **focused unit-level test of the three consumption sites**
+(does a yielding subunit actually retreat a cell? does its facing lock? does its pool take
+`YIELD_POOL_MULT`?), with `PC_YIELD_RALLY` OFF to isolate entry from exit. Only once the primitive is shown
+to *do* something in isolation is a scenario-level A/B meaningful.
+
+**Standing caution for this whole line of work:** three successive "+0.0 pp / bit-identical" results in this
+session each had a different mundane cause — an unissued order, an unreachable trigger, and now a
+set-but-unconsumed state. A null result on a gated mechanic should be treated as "the harness probably did
+not reach the mechanic" until the mechanic is instrumented directly.
