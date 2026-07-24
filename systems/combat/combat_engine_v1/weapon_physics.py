@@ -624,6 +624,17 @@ THRUST_POB = 0.16   # [SIM-CALIBRATE] the PoB-DECOUPLED effective lever for a TH
                     # posture a thrust is delivered from), well below the forward swing PoBs (0.08-0.34). Total mass was
                     # rejected (the long light shaft does not add to point impact and would keep the 2.0kg spear heavy).
 
+# NOTE (ED-PC-0029, 2026-07-24): a `thrust_extension` heft-penalty for a 2H sword's thrust was PROTOTYPED here and
+# RETIRED before commit after an adversarial (fable) physics/HEMA audit. It de-rated a POINT thrust by a
+# head_len/m_head "light-and-forward" proxy — but that proxy discriminates "light head", not "polearm", so it
+# penalised the armour-defeating SPIKE polearms (poleaxe/bec_de_corbin/lucerne_hammer) and the half-sword forms
+# (the very technique that makes a sword thrust polearm-like) identically to a greatsword, and it created 1H>2H
+# inversions (arming > estoc). It also largely MISSED its target — the armoured sword thrust rides the `cut_thrust`
+# token, which bypasses the `head=='point'` heft branch. The "polearm out-thrusts a 2H sword at range" intent
+# (Jordan review 2026-07-24, option A) is delivered where it physically lives — the REACH/ARREST exchange during
+# the approach (systems.arrest_impulse), not a raw-heft penalty. THRUST_POB (the PoB-decoupled thrust lever,
+# ED-PC-0027) stays; it is the correct, already-merged thrust-heft model.
+
 def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
     harder than a light, hand-balanced one), normalised so the 2H cut-thrust anchor (longsword) reads 1.0. PoB_frac

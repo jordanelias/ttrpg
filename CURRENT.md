@@ -28,7 +28,7 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-24 (**MB-lane stamp reconcile — ED-MB-0025..0029**: mass-battle emergence
+_Last reconciled: 2026-07-24 (**PC-lane stamp reconcile — ED-PC-0029..0033**: the reach/approach re-architecture arc landed in `systems/combat/combat_engine_v1/` + regenerated `engine/engine_params/combat_engine_v1.json` — arrest-impulse + tanh true-time reach edge (retire thrust_extension), closed-phase bind disengage, percussion→stamina + strong poise stagger, rapier plate fall-off (penetration threshold), and the stale-grip fix + measure continuity. **The Personal-combat HEAD is UNCHANGED** (still `combat_engine_v1/`, no doc supersession) — internal engine mechanics/config, not a head move. Full detail: `registers/editorial_ledger_pc.jsonl` + PR #231.) **Prior:** 2026-07-24 (**MB-lane stamp reconcile — ED-MB-0025..0029**: mass-battle emergence
 campaign continued — explicit subunit deployment primitives (density/gradient/frontage×depth), the
 **honest-gauge** measurement-integrity fix (per-cell density held constant at 100/cell across all units),
 cell-level **closing-ranks** rotation (T1 Phase 1a), and **intent-as-resolution** (stance as a signed
