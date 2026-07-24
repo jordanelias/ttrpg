@@ -1,7 +1,9 @@
 """ED-MB-0032 — fractional combat pool (Jordan directive 2026-07-23: "pool must be fractional").
 The live path floors the continuous pool to an integer die count before rolling, discarding the
 fractional remainder. roll_pool_fractional keeps the pool at full precision: the integer part rolls
-real d10s, the fractional remainder contributes its expected net (PER_DIE_NET_EV per full die).
+real d10s, the fractional remainder is realised as ONE extra real die rolled with probability `frac`
+(Fable-audit A3 fix — stochastic, not a deterministic EV mu-shift, so it preserves EV AND variance
+AND the net<=0 Failure boundary that compute_degree thresholds on).
 """
 import os
 import statistics
@@ -27,10 +29,22 @@ def test_per_die_ev_is_tn7_expectation():
     assert C.PER_DIE_NET_EV == pytest.approx(0.4)
 
 
-def test_sub_one_pool_is_fractional_ev():
-    # a pool below 1 contributes ONLY its fractional EV (no spurious floor to a guaranteed die)
-    assert R.roll_pool_fractional(0.5) == pytest.approx(0.5 * C.PER_DIE_NET_EV)
-    assert R.roll_pool_fractional(0.0) == pytest.approx(0.0)
+def test_sub_one_pool_has_fractional_ev_stochastically():
+    # [A3] a sub-1 pool contributes its fractional EV IN EXPECTATION (one extra die drawn w.p. frac),
+    # not as a deterministic constant — so its mean matches frac*PER_DIE_NET_EV over many trials.
+    random.seed(3)
+    m = statistics.mean(R.roll_pool_fractional(0.5) for _ in range(8000))
+    assert m == pytest.approx(0.5 * C.PER_DIE_NET_EV, abs=0.05)
+    assert R.roll_pool_fractional(0.0) == 0   # an empty pool is a guaranteed 0 (no die drawn)
+
+
+def test_sub_one_pool_can_fail():
+    # [A3] the Failure boundary must survive: a near-dead sliver is NOT a guaranteed chip-damage machine.
+    # With p=frac it rolls one real die, which can come up 1 -> net<0 -> compute_degree == 'Failure'.
+    random.seed(5)
+    nets = [R.roll_pool_fractional(0.6) for _ in range(4000)]
+    assert any(n < 0 for n in nets), "a sub-1 fractional pool must be able to Fail (roll a natural 1)"
+    assert any(n == 0 for n in nets), "and must also be able to net 0 (no extra die drawn, or a wash)"
 
 
 def test_fractional_remainder_shifts_the_mean():

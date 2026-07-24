@@ -18,9 +18,13 @@ def _rout_resilience(atom):
     Discipline (2->0, 5->1, saturating) blended with starting Morale (eff_morale_start on the 1-7 scale
     normalized by 7). A steady, disciplined, high-morale body (resilience -> 1) skews its break-point toward
     the ROUT_CAP (holds to ~30% losses); a loose, shaken one (resilience -> 0) breaks toward ROUT_ONSET
-    (~15%). Uses starting morale (not live) so the break-point reflects inherent quality; live morale
-    erosion still routs a unit independently via the canonical §A.4 path."""
-    disc = max(0.0, min(1.0, (atom.eff_discipline - 2.0) / 3.0))
+    (~15%). Uses starting morale AND starting discipline (not live) so the break-point reflects inherent
+    quality; live morale erosion still routs a unit independently via the canonical §A.4 path.
+    [Fable-audit A8 fix, 2026-07-24] eff_discipline_start, not eff_discipline: the break-point is drawn
+    lazily on first check, which happens AFTER phase-1 discipline degradation — reading LIVE discipline gave
+    identical-quality units different break distributions purely by casualty *timing*, contradicting the
+    'stable quality' contract above."""
+    disc = max(0.0, min(1.0, (atom.eff_discipline_start - 2.0) / 3.0))  # [canonical: params/factions/stats_1_7_scale.md — discipline 2->0/5->1 normalization, same curve as resolution._disc_prep]
     ms = getattr(atom, 'eff_morale_start', 0) or 0
     # [canonical: params/factions/stats_1_7_scale.md — attributes on the 1-7 scale] normalize starting morale to 0..1
     mor = max(0.0, min(1.0, ms / 7.0)) if ms else 0.5
@@ -107,7 +111,17 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             # morale <=0 -> rout_resolution breaks it this phase). Fires AFTER the §A.4 erosion so a unit
             # already collapsing by canon still routs; this only pulls the break EARLIER, into the band.
             if PC_STOCHASTIC_ROUT and not atom.routed and _stochastic_break(atom, 1.0 - frac):
-                atom.erode_morale(atom.eff_morale + 1.0)   # will breaks -> morale <=0 -> routs
+                # [Fable-audit A5 fix, 2026-07-24] Materialize OWN morale before the rout punch. Otherwise a
+                # subunit that inherits the shared unit pool (morale=None) writes that pool <=0, and every
+                # sibling — including 0-casualty reserves — reads morale<=0 and routs too, defeating the whole
+                # point of a per-subunit break. Setting atom.morale here makes the punch local.
+                if atom.morale is None:
+                    atom.morale = atom.eff_morale
+                # [Fable-audit A7 fix, 2026-07-24] Clamp the erode amount to >=0. When eff_morale is already
+                # <=-1 (reachable via §A.4 -3/phase stacking), eff_morale+1.0 is negative and erode_morale
+                # would ADD — RAISING a subunit's morale and cancelling a rout canon already earned. max(...,0)
+                # drives morale to -1 (rout) without ever un-routing.
+                atom.erode_morale(max(atom.eff_morale + 1.0, 0.0))   # will breaks -> morale <=0 -> routs
 
 
 def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001

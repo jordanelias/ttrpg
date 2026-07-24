@@ -145,8 +145,16 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     _troops = GAUGE_TROOPS if troops is None else troops
     _conc = GAUGE_CONC if concentration is None else concentration
+    # [Fable-audit A1 fix, 2026-07-24] Forward power/discipline INTO the spec dict. Without them,
+    # build_army -> Subunit.of_type fills the canonical §B.2 troop-type PRESET (cavalry Power 5), silently
+    # changing the gauge's cavalry from the documented uniform baseline P4 to P5 when make_unit was routed
+    # through build_army for the ED-MB-0027 density match — an unintended stat change that inverted the
+    # C-battery verdicts. Explicit spec keys beat of_type's setdefault (engine.py), so this restores P4
+    # and is a NO-OP for the infantry rows (which carry no preset). To adopt §B.2 stats as the gauge
+    # baseline instead, this is the one place to change it — deliberately, with the C-bands rebaselined.
     spec = {'shape': shape, 'tier': tier, 'troop_type': troop_type, 'unit_type': unit_type,
             'stance': stance, 'instructions': tuple(instructions),
+            'power': power, 'discipline': discipline,
             'troops': _troops, 'concentration': _conc,
             'starting_position': (start_row, anchor_col)}
     return build_army([spec], name, faction, power=power, command=command,

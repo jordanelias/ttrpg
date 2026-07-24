@@ -328,6 +328,26 @@ class Order:
     def __post_init__(self):
         if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:', 'own_strength:')):
             raise ValueError(f"Order.trigger {self.trigger!r} unrecognized; expected one of {_ORDER_TRIGGER_KINDS}")
+        # [Fable-audit A9 fix, 2026-07-24] Range-check the numeric payload EAGERLY at construction. Before,
+        # a malformed payload ('own_strength:0.x5', 'tick:foo') raised inside check_orders on the tick the
+        # trigger was tested — long after the order was queued — defeating the whole point of validating
+        # order specs up front. own_strength FRAC must be STRICTLY in (0.0, 1.0): FRAC>=1 fires at spawn
+        # (full strength, never the intent), FRAC<=0 is permanently unfireable AND dams every order queued
+        # behind it (check_orders stops at the first unfired order). tick/range payloads must be >= 0.
+        for _pfx in ('tick:', 'enemy_range:', 'ally_at:', 'own_strength:'):
+            if self.trigger.startswith(_pfx):
+                _pay = self.trigger[len(_pfx):]
+                try:
+                    _v = float(_pay)
+                except ValueError:
+                    raise ValueError(f"Order.trigger {self.trigger!r}: payload {_pay!r} is not numeric")
+                if _pfx == 'own_strength:':
+                    if not (0.0 < _v < 1.0):
+                        raise ValueError(f"Order.trigger {self.trigger!r}: own_strength FRAC must be strictly "
+                                         f"in (0.0, 1.0) — FRAC>=1 fires at spawn, FRAC<=0 never fires")
+                elif _v < 0:
+                    raise ValueError(f"Order.trigger {self.trigger!r}: {_pfx.rstrip(':')} payload must be >= 0")
+                break
         bad = set(self.behavior) - _ORDER_SAFE_FIELDS
         if bad:
             raise ValueError(f"Order.behavior sets unsafe field(s) {sorted(bad)}; "

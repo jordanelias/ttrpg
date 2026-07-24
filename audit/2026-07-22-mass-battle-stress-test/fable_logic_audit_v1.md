@@ -8,9 +8,15 @@ pre-existing engine bugs (ratification/decision needed)**. Severity in caps.
 
 ---
 
-## Part A — MY defects (this session's ED-MB work) — fix now
+## Part A — MY defects (this session's ED-MB work) — ✅ ALL FIXED (ED-MB-0033, 2026-07-24)
 
-Several **contaminate conclusions I already reported** — flagged ⚠.
+All nine A-findings are remediated and committed under **ED-MB-0033**. Byte-exact preserved (all fixes
+live in `PC_*`-gated branches, the campaign-boundary `reset_morale_between_battles`, or a construction-time
+validator; bat.py 4/4 modes byte-exact). Honest re-measurement after A1+A2: baseline **5/20**, +stochastic
+rout **6/20** (the earlier "8/20" was inflated by A2's dropped guards + A1's P5-cavalry contamination). The
+per-finding detail below is retained as the fix record.
+
+Several **contaminated conclusions I already reported** — flagged ⚠ (now corrected in `honest_gauge_readout.md`).
 
 ### A1 ⚠ CRITICAL — ED-MB-0027 silently changed gauge cavalry Power 4→5 (gauge lane F1)
 Routing `make_unit` through `build_army` sends canonical troop types through `Subunit.of_type`, which

@@ -1102,8 +1102,13 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
                 _apr = a_pool_raw if not a_dead else 0.0
                 _bpr = b_pool_raw if not b_dead else 0.0
-                a_net = roll_pool_fractional(_apr) + _sigma_net_boost(ns_a, _apr)
-                b_net = roll_pool_fractional(_bpr) + _sigma_net_boost(ns_b, _bpr)
+                # [Fable-audit A4 fix, 2026-07-24] The σ-boost scales by sqrt(dice), but the fractional
+                # remainder adds only an EXPECTED fraction of a die's worth of *variance* (A3), not a full
+                # die — so feeding the raw fractional pool over-stated advantages ~38% just below each
+                # integer and gave sub-1 pools a phantom full-die conversion. Pass floor(pool): the σ-boost
+                # counts only the guaranteed integer dice, matching the discrete base's real die count.
+                a_net = roll_pool_fractional(_apr) + _sigma_net_boost(ns_a, math.floor(_apr))
+                b_net = roll_pool_fractional(_bpr) + _sigma_net_boost(ns_b, math.floor(_bpr))
             else:
                 a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
                 b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
@@ -1881,6 +1886,14 @@ def reset_morale_between_battles(unit):
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
         atom.routed = False
         atom.broken = False
+        # [Fable-audit A6 fix, 2026-07-24] Clear the cached stochastic-rout break-point (ED-MB-0031) and
+        # re-base the casualty denominator to this battle's starting strength. Otherwise a subunit that ended
+        # the prior battle past its drawn break-point (~15-30% losses) carries BOTH that break-point AND its
+        # spawn-based loss fraction into the next battle, so it auto-routs on phase 1 of EVERY later battle
+        # with zero new casualties. A rout is a per-BATTLE will-to-fight collapse; both reset at the campaign
+        # boundary. (Only consumed under PC_STOCHASTIC_ROUT; between-battle only -> single-battle goldens inert.)
+        atom._rout_breakpoint = None
+        atom._start_troops = atom.cur_troops
         # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
         # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
         atom.pocketed = False

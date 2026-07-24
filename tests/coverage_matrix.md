@@ -2,6 +2,29 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0033: Fable logic audit — Part A remediation (9 defects in this session's own work)
+- Five Fable-tier read-only adversarial auditors (one per logical lane) traced ED-MB-0027..0032 and found
+  9 defects; all fixed. A1 (CRITICAL): `make_unit`→`build_army` filled the §B.2 cavalry preset Power 5
+  (spec never forwarded power/discipline) → gauge cavalry silently P4→P5, contaminating C-row verdicts;
+  forward power/discipline explicitly. A2 (HIGH): `gauge_run.py` re-implemented the verdict and dropped
+  both guards (`dec_n>0`, draw gate) → all-draw R3 false-passed on the `decA=50` sentinel → the reported
+  "8/20" was inflated; delegate to `g.run()`. A3 (HIGH): ED-MB-0032's deterministic `frac·EV` mu-shift
+  crossed the `net<=0` degree boundary (Jensen gap; sub-1 pools never Failed) → realise the fractional die
+  STOCHASTICALLY (one extra die w.p. `frac`) — preserves EV+variance+Failure boundary. A4 (MED): frac-pool
+  σ-boost read `sqrt(fractional)` → pass `floor(pool)`. A5 (HIGH): stochastic-break `erode_morale` on a
+  None-morale subunit wrote the SHARED pool negative → routed every sibling; materialise own morale first.
+  A6 (HIGH): `reset_morale_between_battles` never cleared `_rout_breakpoint` and loss was spawn-based →
+  auto-rout on phase 1 of every later battle; clear breakpoint + re-base `_start_troops`. A7 (MED-HIGH):
+  `erode_morale(eff+1)` with `eff<=-1` RAISED morale → clamp `max(eff+1,0)`. A8 (MED): `_rout_resilience`
+  read LIVE discipline → `eff_discipline_start`. A9 (LOW-MED): `own_strength:FRAC` + numeric trigger
+  payloads never range-checked → eager `(0,1)`-strict validation in `Order.__post_init__`.
+- Honest re-measurement (A1+A2 corrected, n=20): baseline **5/20**; +`PC_STOCHASTIC_ROUT` **6/20** (R3 now
+  correctly UNRESOLVED, not a false pass). Remaining 14 out-of-band rows are Part B pre-existing geometry
+  bugs (B1-B4) — move goldens, filed for Jordan ratification.
+- Byte-exact: every fix is `PC_*`-gated / campaign-boundary / validator-only → bat.py **4/4 modes**
+  (unit, cell, unit_field, cell_field) byte-exact. `tests/valoria` green; `test_fractional_pool.py` updated
+  (sub-1 pool now stochastic-EV + can-Fail, replacing the deterministic-EV assertions that codified A3).
+
 ## 2026-07-23 — ED-MB-0032: fractional combat pool ("pool must be fractional")
 - Jordan directive: the continuous pool was floored to an integer die count before `roll_pool`,
   discarding the fractional remainder. `roll_pool_fractional`: integer part rolls real d10s, fractional
