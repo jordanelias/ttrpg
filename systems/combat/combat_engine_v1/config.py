@@ -20,6 +20,12 @@ CFG = dict(
   # heavy-weapon viability: bound the stacked weight+2H tempo penalty so a poleaxe can act (not 7x slower)
   MAX_TEMPO_PEN=0.8, TEMPO_FLOOR=0.7, REOPEN_K=0.34, REOPEN_MAX=0.6, CLOSE_TEMPO_MEAN=1.5, CLOSE_TEMPO_COMPRESS=0.38,
   PUSH_AVAIL_P=0.22, PUSH_REOPEN_BONUS=0.18,
+  # PROACTIVE FIGHTING WITHDRAWAL (ED-PC-0030): a reach weapon out-leveraged in the bind refuses it, breaks measure,
+  # and re-presents its point at its dominant measure (Silver's staff/spear game) — the closed-phase lever for the
+  # reach-weapon-loses-the-bind residual. VOLUNTARY (any beat, unlike the created-moment reopen) + read-contested;
+  # a failed/read withdrawal is PURSUED (Nachreisen). systems.disengage_prob gates it EMERGENTLY on the bind
+  # leverage deficit (a bind-dominant poleaxe never triggers). [SIM-CALIBRATE] magnitudes; the structure is grounded.
+  DISENGAGE_BASE_P=0.5, DISENGAGE_MAX=0.5, DISENGAGE_GAP_REF=3.0, DISENGAGE_LEV_SCALE=0.1, DISENGAGE_PURSUIT_NSIG=-0.3,
   # conditional tempo (correction 2): fatigue slows cadence; choke/lunge grips trade cadence for control/reach
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)

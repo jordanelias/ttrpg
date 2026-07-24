@@ -768,6 +768,33 @@ def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
     return min(cfg['REOPEN_MAX'], p)
 
+def disengage_attempt_p(longer, shorter, base_gap, fat_longer, cfg):
+    """PROACTIVE fighting withdrawal (ED-PC-0030) — the rate at which a reach weapon closed into a bind it LOSES
+    ATTEMPTS to refuse it: break measure with footwork and re-present its point at the measure where it dominates
+    (HEMA: the spear/quarterstaff's whole game is the measure; Silver's staff keeps the swordsman at the weapon's
+    length — you do NOT stand and bind when out-matched in it). Distinct from reopen_prob (which needs a created
+    moment): a VOLUNTARY attempt any beat. This returns only the ATTEMPT INCLINATION; the READ CONTEST that decides
+    a clean break vs a pursued (Nachreisen) withdrawal is resolved at the call site — so when this is 0 (e.g. faded
+    at plate) NO attempt is made and there is NO pursuit. EMERGENT gate (no weapon names): only worth withdrawing
+    when OUT-LEVERAGED in the bind — bind_deficit ramps to 1 when leverage(shorter) exceeds leverage(longer) (a
+    light spear out-bound by a rigid estoc), ~0 when the longer weapon DOMINATES the bind (a poleaxe over a rondel
+    stays and wins). Scales with footwork and the reach gap re-opened into. ARMOUR-FADE (same doctrine as
+    true_time_edge): keeping distance only PAYS if the reach weapon can THREATEN the closer at range; vs a harness
+    it cannot defeat, re-opening just cedes the close (the plated closer walks back in), so it fades to 0 as the
+    closer's armour rises — at plate the reach weapon must ENGAGE the armour (gap-thrust/wrestle), not keep
+    distance. Keyed on ADEF_W[closer]. Pure (the call site ANDs reach_threat too)."""
+    bind_deficit = core.logistic((leverage(shorter, cfg) - leverage(longer, cfg)) / cfg['DISENGAGE_LEV_SCALE'])
+    foot = balance_eff(longer, fat_longer, cfg)/3
+    fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W']['heavy'])
+    p = cfg['DISENGAGE_BASE_P'] * bind_deficit * foot * fade * min(1.0, base_gap/cfg['DISENGAGE_GAP_REF'])
+    return min(cfg['DISENGAGE_MAX'], p)
+
+def disengage_clean_p(longer, shorter, cfg, TR):
+    """Given a withdrawal is ATTEMPTED, the probability it is a CLEAN break (the withdrawer out-reads the closer's
+    pursuit) rather than READ-and-pursued (Nachreisen). The read contest: the withdrawer's reading vs the closer's,
+    each through their visual channel. Pure (returns a probability in (0,1))."""
+    return core.logistic((reading(longer,cfg)*TR.eff_cw(longer,'visual') - reading(shorter,cfg)*TR.eff_cw(shorter,'visual'))/2.0)
+
 def bind_sigma(aggressor, defender, cfg, TR):
     """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross

@@ -85,6 +85,33 @@ def engagement(A, B, first, cfg, rng):
                 reopen_moment=False; push_avail=False
                 continue
         reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
+        # PROACTIVE FIGHTING WITHDRAWAL (ED-PC-0030): a reach weapon closed into a bind it LOSES does not have to
+        # trade exchanges to a decision — it can REFUSE the bind, break measure with footwork, and re-present its
+        # point at the measure where ED-PC-0029 makes it dominant (Silver's staff/spear keeps the swordsman at the
+        # weapon's length). VOLUNTARY (any closed beat, unlike the reactive created-moment reopen above) and
+        # READ-CONTESTED: the closer who reads it stays glued and PURSUES (HEMA Nachreisen — striking the
+        # withdrawing weapon as it turns). EMERGENT gate lives in systems.disengage_prob (fires only when the longer
+        # weapon is OUT-LEVERAGED in the bind — a light spear out-bound by a rigid estoc; a bind-dominant poleaxe
+        # stays and wins). This is the closed-phase lever for the reach-weapon-loses-the-bind residual: cycling
+        # approach<->bind, the long weapon wins on accumulated stop-hits instead of a bind it cannot win.
+        if closed and beats>1:
+            base_gap=er[longer]-er[shorter]
+            # ATTEMPT a withdrawal only per the inclination (out-leveraged + can threaten at range); no attempt -> no
+            # pursuit (fixes the fade case, where 0 attempt-rate must NOT trigger a free pursuing strike every beat).
+            if base_gap>0.3 and rng.random() < S.disengage_attempt_p(longer, shorter, base_gap, ffat[longer], cfg)*S.reach_threat(longer, shorter, cfg):
+                if rng.random() < S.disengage_clean_p(longer, shorter, cfg, TR):
+                    closed=False; measure_gap=base_gap; ready={A:0.0,B:0.0}   # CLEAN break -> re-open to measure
+                    _emit('disengage', longer=longer.label, shorter=shorter.label, ok=True, gap=round(base_gap,2))
+                    continue
+                else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
+                    pool=max(1, core.resolution_pool(shorter.history))
+                    deg,net=core.resolve(pool, cfg['DISENGAGE_PURSUIT_NSIG'], rng)
+                    _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
+                    if deg in ('success','overwhelming'):
+                        d=core.strike(shorter, longer, deg, True, cfg, net=net, pool=pool)
+                        longer.apply_wound(d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
+                        if longer.felled: return longer
+                    ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
         # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
         if not closed:
             rt = S.reach_threat(longer, shorter, cfg)               # FIX-1: a long weapon that can't defeat the closer's armour loses its reach edge (1.0 unarmoured by construction)
