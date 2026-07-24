@@ -51,8 +51,8 @@ writes the shared pool negative → in `rout_resolution` every sibling (incl. 0%
 None: atom.morale = atom.eff_morale`), then set it ≤0.
 
 ### A6 HIGH — ED-MB-0031 cached `_rout_breakpoint` never reset + loss measured from spawn (rout lane F2)
-`reset_morale_between_battles` clears `routed`/`broken` but not `_rout_breakpoint`, and `cohesion` uses
-spawn denominators — so a unit ending battle 1 past ~15% losses auto-routs on the first phase of **every
+`reset_morale_between_battles` clears `routed`/`broken` but not `_rout_breakpoint`, and the per-subunit
+survival fraction uses spawn denominators — so a unit ending battle 1 past ~15% losses auto-routs on the first phase of **every
 subsequent battle** with zero new casualties. **Fix:** clear `_rout_breakpoint` (and re-base loss to
 battle-start strength) in `reset_morale_between_battles`.
 
