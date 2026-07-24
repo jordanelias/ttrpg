@@ -542,7 +542,20 @@ def _convergence_scale(unit_a, unit_b, pairs):
             merged_troops = sum(i[1].cur_troops for i in infos)
             if total_wt <= 0 or merged_troops <= 0:
                 continue
-            merged_base = sum(i[2] * i[3] for i in infos) / total_wt
+            # [ED-MB-0041 FIX] merged_base must be EXTENSIVE (a sum), to match merged_troops (a sum).
+            # It was a troop-weighted MEAN, which for N identical converging atoms gives
+            # merged_base=B, merged_troops=N*T, corrected=B*W/T against naive=N*B*W/T — i.e.
+            # factor == 1/N EXACTLY: N subunits converging on one target dealt the damage of ONE.
+            # That fires precisely on Cannae/double-envelopment geometry (many bodies, one pinned
+            # target), which is the geometry the whole envelopment battery measures.
+            # The mean was only correct under the ED-899 premise that `base` is SIZE-INDEPENDENT
+            # (base = command*(1+cohesion)). core/exchange.py:7 records that premise as SUPERSEDED
+            # by Jordan's 2026-07-08 directive; the live POOL_QUALITY_MODEL base is
+            # eff_power*eff_size*SCALE, i.e. PROPORTIONAL to troops. Under the live model a genuinely
+            # merged atom of N*T troops has base ~N*B, so the extensive form makes factor == 1.0 —
+            # the correction correctly becomes a no-op — while still correcting the command model.
+            # This is the same partition-invariance class as the a_troops_frac bug already fixed below.
+            merged_base = sum(i[2] for i in infos)
             corrected_total = (merged_base / merged_troops) * total_wt
             naive_total = sum((i[2] / i[1].cur_troops) * i[3] for i in infos)
             if naive_total <= 0:
@@ -1487,7 +1500,13 @@ def volley_phase(unit_a, unit_b):
         pool = max(1, shooter_atom.eff_power - _vpen)
         net = _roll_volley_pool(pool)
         # DR subtracts from net successes (Ranged DR Table)
-        net_after_dr = max(0, net - RANGED_DR_DEFAULT)
+        # [ED-MB-0041 FIX] Use the TARGET's OWN armour, not a global constant. This line previously read
+        # `max(0, net - RANGED_DR_DEFAULT)`, so a target's real `dr` never reduced incoming fire — armour
+        # had no protective effect at all in the volley phase. RANGED_DR_DEFAULT remains the fallback for
+        # a target with no own dr. [canonical: mass_battle_v30.md §A.4 Ranged DR table — DR subtracts from
+        # net successes; None 0 / Light 1 / Medium 2 / Heavy 3 vs Piercing.]
+        _tdr = getattr(best_target, 'eff_dr', None)
+        net_after_dr = max(0, net - (_tdr if _tdr is not None else RANGED_DR_DEFAULT))
         if LANCHESTER_ENABLED:
             # P-L Square Law: aimed fire lifts the frontage cap — every shooter engages the
             # target area, so volley effectiveness scales with SHOOTER COUNT (toward N²-type
@@ -1809,7 +1828,19 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # captures that volley size loss is less lethal per unit than melee size loss.
         # Reduces R1 (Ranged vs Line) without breaking R3 (mirror — same scaling on both sides).
         # [canonical: Jordan design 2026-05-12 — volley hp scaling tuned for historical match]
-        volley_hp_scale = lambda u: max(1, (u.h_per_size + 1) // 2)
+        # [ED-MB-0041 FIX] Volley loss -> troop conversion must NOT depend on the target's own quality.
+        # This previously read `max(1, (u.h_per_size + 1) // 2)` where
+        # `h_per_size = max(1, min(discipline, command) + dr)`, so BETTER ARMOUR, DISCIPLINE OR COMMAND
+        # STRICTLY INCREASED the missile casualties that unit took (dr 1 -> x3, dr 3 -> x4). Historically
+        # backwards without qualification. It is a fossil of the retired `hp = size x h_per_size` model;
+        # `hp_max` is now the raw troop count (hierarchy/units.py:1924), so the factor is a pure
+        # Size->troops lethality scale and has no business reading the target's stats.
+        # Held at 3 = the value the gauge baseline (disc 5, cmd 4, dr 1) produced, so this removes the
+        # inversion WITHOUT silently re-tuning ranged lethality; armour's real effect now lives where it
+        # belongs, in the DR subtraction above.
+        # [JUSTIFIED: magnitude preserved from the prior baseline to isolate the inversion fix; the
+        #  underlying scale is admitted band-fitting (file header v12 note #4) and is Tier-3 debt.]
+        volley_hp_scale = lambda u: VOLLEY_LETHALITY_SCALE
         # v20: scale engagement damage by contact fraction.
         # More cells in contact = more soldiers fighting = more damage dealt.
         # Bottom-up: the envelopment advantage EMERGES from having more cells engaged.

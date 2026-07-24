@@ -2,6 +2,28 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0041 Tier-1: convergence partition-invariance + volley armour inversion
+- **Convergence `factor = 1/N`.** `_convergence_scale`'s `merged_base` was a troop-weighted MEAN while
+  `merged_troops` was a SUM, so N bodies converging on one target dealt the damage of **ONE** — firing on
+  exactly Cannae/double-envelopment geometry. Made extensive (`sum`). Its premise (size-independent base,
+  ED-899) is recorded as SUPERSEDED at `core/exchange.py:7`; under the live `POOL_QUALITY_MODEL` the
+  correction now correctly becomes a no-op. **Measured honestly: side-swing 27.6 → 20.0pp (more symmetric),
+  but average 38.8 → 35.0 — it does NOT move toward the band. A correctness fix, not a balance fix.**
+- **Volley armour inversion (two compounding defects).** `volley_hp_scale` read the target's own
+  `min(discipline,command)+dr`, so better armour/discipline/command **strictly increased** that unit's own
+  missile casualties (a fossil of the retired `hp = size × h_per_size` model — `hp_max` is now raw troops).
+  Separately, `net_after_dr` used a global `RANGED_DR_DEFAULT`, so real armour never protected at all.
+  Now: flat `VOLLEY_LETHALITY_SCALE=3` (**exactly the prior gauge baseline** — inversion removed without
+  silently re-tuning ranged lethality) + the target's own `eff_dr` routed into the volley.
+  **Measured: casualties at dr 0/1/3 = 514.6 / 281.8 / 49.8 — armour is now monotonically protective.**
+- **Regression tests, each verified to FAIL on the old code** (a test that passes both ways is worthless):
+  `test_partition_invariance.py` (4 failures pre-fix), `test_volley_armour_direction.py` (2 failures pre-fix).
+  Process note: my FIRST armour test passed against the buggy code — it measured total battle casualties,
+  so melee DR protection masked the volley inversion; and the rewrite then deployed units 18 apart, outside
+  `VOLLEY_MAX_RANGE=8`, asserting on all-zeros. Both corrected; it now drives `volley_phase` directly.
+- **Goldens re-recorded (both CI-gated grid modes)** — deliberate, verified behaviour change in shared
+  non-gated resolution code. `unit` 4c465e09 → c7a2eb3d, `cell` e5f09403 → 733c4547. Suite: 563 passed.
+
 ## 2026-07-24 — ED-MB-0041 remediation: Tier-0/Tier-1 execution (adversarial audit)
 - **Reach gate silently disabled the braced-wall repel (biggest live defect).** `orchestration.py`'s comment
   claimed *"TROOP_TYPE_REACH is deliberately empty → this half of the gate is a no-op"*. It has **12 entries**

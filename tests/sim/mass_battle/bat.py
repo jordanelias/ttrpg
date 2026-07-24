@@ -193,7 +193,19 @@ EXPECTED = {
     # modes move on the 3 flanking rows (envelop/cannae/oblique). The head-on single-subunit rows stay
     # all-GREEN -> mult 1.0 -> byte-identical. Legacy PC_OCTAGON_DMG=0 path preserved byte-exact
     # (`_a_dmg_mult=1` int, not 1.0 -> no float coercion). See octagon_damage_model.md.
-    'unit': '4c465e09fff139bb7301b7d553d3351a14953fe02ab4505600d60f8281e322e6',
+    # [2026-07-24, ED-MB-0041 adversarial-audit remediation] Re-recorded (both grid modes). Two
+    # deliberate, verified behaviour changes in shared non-gated resolution code:
+    #  (1) _convergence_scale's `merged_base` is now EXTENSIVE (sum) not a troop-weighted MEAN. The
+    #      mean-vs-sum mismatch gave `factor == 1/N` exactly, so N bodies converging on one target
+    #      dealt the damage of ONE — on precisely Cannae/double-envelopment geometry. Pinned by
+    #      tests/valoria/test_partition_invariance.py (verified to FAIL on the old form).
+    #  (2) The volley armour inversion is fixed: `volley_hp_scale` no longer reads the target's own
+    #      min(discipline,command)+dr (better armour STRICTLY INCREASED that unit's own missile
+    #      casualties), and the target's real eff_dr now subtracts from volley net successes instead
+    #      of a global RANGED_DR_DEFAULT. Pinned by tests/valoria/test_volley_armour_direction.py
+    #      (verified to FAIL on the old form). Measured: casualties at dr 0/1/3 = 514.6/281.8/49.8,
+    #      i.e. armour is now monotonically protective; it was previously harmful.
+    'unit': 'c7a2eb3d7984377b6ada758303f922c19e2fd0c26a2ec1ff9e23bc4216781c44',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -213,7 +225,7 @@ EXPECTED = {
     # gated (cavalry rows). 'unit' (PER_CELL=0) is deployment-only — the cavalry-speed change doesn't
     # reach it — so 'unit' is unchanged from the deployment-only recording.]
     # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
-    'cell': 'e5f094033b8a8cea23f92bffd5f513a62ad03ae04861b1975e71efcd35616387',
+    'cell': '733c454792b95b9c63c57d2e78fa038b3b687ac0cc20d2ea70b9e3ba6cf925af',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
