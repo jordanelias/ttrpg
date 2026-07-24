@@ -168,8 +168,17 @@ CFG = dict(
   # degrades tempo AND defence; recovers each beat toward 1.0. This is the DYNAMIC tempo-vs-structure fix deferred
   # from the initiative build (replaces the rejected static balance->tempo coupling — structure is dynamic, balance
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
-  POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C)
+  POISE_FLOOR=0.40, POISE_EFFECT_FLOOR=0.72, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C). ED-PC-0031 (Jordan "strong strong poise break"): poise DEEPENED so a stagger is decisive — FLOOR 0.5->0.35 (a hard concussion drives structure lower) + EFFECT_FLOOR 0.88->0.60 (a fully-staggered fighter acts/defends at 0.60x, not 0.88x — the "wind knocked out" is real, not a ±12% nudge).
   POISE_BREAK_OVERCOMMIT=0.09, POISE_BREAK_BIND=0.05, POISE_BREAK_HIT=0.07, POISE_SOLID_HIT=8.0,
+  # PERCUSSION -> STAMINA (wind) + POISE (stagger) — ED-PC-0031 (Jordan). A landed blow delivers a concussive IMPULSE
+  # DISTINCT from the wound: it drains the defender's STAMINA (wind knocked out / attrition) and BREAKS their POISE
+  # (stagger). ARMOUR-GATED by physics: a BLUNT/percussion head transmits its impulse THROUGH the harness (mace/
+  # warhammer/staff-butt concuss even when the plate holds — the anti-plate blunt path; Medieval Chronicles, tempered
+  # by Devereaux's 'plate+padding soaks much'), scaled by percussion_authority × a per-tier absorption; a POINT/edge
+  # transmits impulse only where it BITES — its load IS the wound d (a deflected point pings off plate ~0, preserving
+  # the gap-specialist's plate close). [SIM-CALIBRATE] magnitudes; the blunt-vs-point transmission split is grounded.
+  PERC_STAM_K=0.4, PERC_POISE_K=0.04, PERC_BLUNT_HEFT=2.2, PERC_POINT_FRAC=0.20,
+  PERC_BLUNT_TRANSMIT={'none':1.0,'light':0.85,'medium':0.7,'heavy':0.55},
   # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
   # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
   # the aggressor role alternates over a fight. Added to net_sigma.

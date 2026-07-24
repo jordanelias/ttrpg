@@ -141,6 +141,8 @@ def engagement(A, B, first, cfg, rng):
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
+                    _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
+                    shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
                     if shorter.felled: return shorter
                     recoil = S.arrest_impulse(longer, cfg)   # the ARREST: braced-weapon impulse vs the charge (reach+structure, not wound)
             measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
@@ -311,6 +313,8 @@ def engagement(A, B, first, cfg, rng):
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
             defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
+            _sd,_pb=S.percussion_stagger(aggressor, defender, hit, deg, cfg)   # ED-PC-0031: concussive wind + strong stagger (armour-gated; the blunt-through-plate path the wound-only break above cannot see)
+            defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
             if defender.felled: return defender
         if bind:
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
@@ -330,6 +334,8 @@ def engagement(A, B, first, cfg, rng):
                     if rng.random()<cfg['BIND_HIT_P']:
                         d=core.strike(aggressor, defender, 'success', close, cfg)
                         defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+                        _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
+                        defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
                         if defender.felled: return defender
                         break
                 else: riposte=True; break
@@ -339,6 +345,8 @@ def engagement(A, B, first, cfg, rng):
                 if rng.random() > S.disrupt_resist_p(aggressor, cfg):
                     d=core.strike(defender, aggressor, 'graze', close, cfg)
                     aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
+                    _sd,_pb=S.percussion_stagger(defender, aggressor, d, 'graze', cfg)   # ED-PC-0031: riposte wind + stagger
+                    aggressor.stamina-=_sd; aggressor.poise=S.clamp_poise(aggressor.poise-_pb, cfg)
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe

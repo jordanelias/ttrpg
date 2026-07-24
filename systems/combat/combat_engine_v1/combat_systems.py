@@ -935,6 +935,36 @@ def clamp_poise(x, cfg):
     """Bound structure to [POISE_FLOOR, 1.0]."""
     return max(cfg['POISE_FLOOR'], min(1.0, x))
 
+def percussion_stagger(striker, victim, wound, deg, cfg):
+    """The concussive LOAD a landed blow delivers to the VICTIM, DISTINCT from the wound (ED-PC-0031, Jordan) —
+    drained as STAMINA (wind knocked out / attrition) and broken as POISE (a strong stagger). ARMOUR-GATED by
+    physics: a BLUNT/percussion head transmits its impulse THROUGH the harness (a mace/warhammer/staff-butt concusses
+    even when the plate holds — the anti-plate blunt path; Medieval Chronicles, tempered by Devereaux's 'plate+
+    padding soaks much'), scaled by the head's percussion_authority × a per-tier absorption (PERC_BLUNT_TRANSMIT); a
+    POINT/edge transmits impulse only where it BITES — its load IS the wound (a deflected point pings off plate → ~0,
+    so a gap-specialist can still close a non-piercing reach weapon at plate). This is why a STAFF (m_head≈0, wound
+    ≈0) is still effective — its concussive impulse winds and staggers without drawing blood. Returns (stamina_drain,
+    poise_break), both ≥ 0. Pure (the wrapper applies them to the victim's stamina/poise)."""
+    if deg not in ('graze', 'success', 'overwhelming'):
+        return 0.0, 0.0
+    head = getattr(striker, 'sel_head', None) or striker.head
+    if head == 'blunt':
+        qf = {'graze': 0.4, 'success': 1.0, 'overwhelming': 1.6}[deg]
+        grip = getattr(striker, 'grip_position', 0.0)
+        load = ((0.5 + striker.strength/4.0) * cfg['PERC_BLUNT_HEFT']
+                * WP.percussion_authority(striker.w, grip=grip) * cfg['PERC_BLUNT_TRANSMIT'][victim.armor] * qf)
+    else:
+        # a THRUST/CUT delivers its energy as the WOUND (penetration), only a FRACTION as concussion/wind — a stab
+        # winds far less than a mace-blow of the same lethality (the energy went into the hole, not the body's inertia).
+        # PERC_POINT_FRAC keeps the concussion path a BLUNT specialty. And a point/cut winds via FLESH contact: vs a
+        # harness it CANNOT defeat it glances/deflects and delivers ~0 concussion (unlike a blunt head, which drives
+        # its impulse THROUGH the plate), so the point-wind FADES with the victim's armour (same ADEF doctrine) — this
+        # keeps a plate STALEMATE a stalemate (two swords that can't defeat each other's plate don't wind each other
+        # to a decision) and stops a weak plate-poke from over-draining a gap-specialist's wind at range.
+        fade = max(0.0, 1.0 - cfg['ADEF_W'][victim.armor]/cfg['ADEF_W']['heavy'])
+        load = cfg['PERC_POINT_FRAC'] * float(max(0, wound)) * fade
+    return cfg['PERC_STAM_K']*load, cfg['PERC_POISE_K']*load
+
 # ============================================================================
 # WRAPPER DE-LEAK (Phase-3 tail — completes the Phase-2 invariant "the wrapper computes NO sigma of its own").
 # The Phase-2 pass moved the CLOSED-exchange net-sigma + commit + read into pure systems.*; these are the
