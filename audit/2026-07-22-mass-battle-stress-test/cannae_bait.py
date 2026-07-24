@@ -1,4 +1,6 @@
-"""Cannae WITH the commanded bait (ED-MB-0041 probe). The DG-2 `yielding` primitive already exists —
+"""Cannae WITH the commanded bait (ED-MB-0041 probe). NOTE the trigger distance: check_orders measures
+the subunit CENTROID to the nearest enemy cell, and a 3x2 maniple centroid sits ~1-2 cells behind its own
+front edge, so `enemy_range:3` NEVER fires (measured) while `enemy_range:6` fires reliably at contact. The DG-2 `yielding` primitive already exists —
 "gives ground under pressure but keeps FIGHTING and keeps FACING the threat" — and its entry is
 COMMANDED: an Order whose behavior dict sets {'yielding': True} (check_orders applies it by generic
 setattr). The earlier Cannae runs never issued that order, which is why PC_FEIGNED_RETREAT/yield showed
@@ -12,7 +14,7 @@ import cannae_historical as C
 from mass_battle.engine import build_army, SIDE_A_START_ROW, SIDE_B_START_ROW, Order
 
 
-def carthage_bait(name, faction, yield_trigger='enemy_range:3'):
+def carthage_bait(name, faction, yield_trigger='enemy_range:6'):
     """Same OOB as cannae_historical.carthage, but the 3 centre maniples get a YIELD order that fires
     once the enemy closes — the deliberate fighting withdrawal that draws Rome into the pocket."""
     u = C.carthage(name, faction)
