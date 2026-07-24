@@ -2,6 +2,20 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-23 — ED-MB-0031: stochastic rout breakpoint at the historical 15-30% casualty band
+- Jordan historical research: "routs occur as early as 15% losses with 30% the upper hand." The canonical
+  §A.4 casualty→morale steps don't fire until 50% losses, so units grind to ~90% before breaking. Models
+  du Picq cohesion-collapse: each subunit draws a **fractional** break-point in [ROUT_ONSET=0.15,
+  ROUT_CAP=0.30], skewed by resilience (discipline + starting morale) — a steady body holds toward 30%, a
+  shaken one breaks toward 15% — and routs when its casualty fraction crosses it.
+- Result (rout_probe OFF→ON): loser casualty-at-rout **91.7%→31.8%** (even), 88.8%→30.3% (disc5v3);
+  winner ~20%→~10%; length 2.5→1.1 turns.
+- Fractional throughout (random draw + fractional band + fractional loss), reproducible under the seeded
+  RNG. Gated `PC_STOCHASTIC_ROUT` (default OFF → no draw → **byte-exact**, bat.py EXIT=0; NOT inert when
+  on — moves goldens, needs_jordan). Tests: `test_stochastic_rout.py` (7).
+- **Coupled next:** lower per-tick lethality (battles now end at ~30% but in ~1.1 turns; casualty chunks
+  overshoot the break-point) + fractional dice, then re-gauge vs Dupuy/Sabin.
+
 ## 2026-07-23 — ED-MB-0030: conditional orders (own_strength trigger + locked distance-conditional)
 - Jordan directive: "conditionals — a unit only starts retreating when the opponent is within X /
   advancing then withdrawing when X." **Verified** the existing `Order` primitive already covers the

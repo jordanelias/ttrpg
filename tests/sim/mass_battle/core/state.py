@@ -6,10 +6,41 @@ degrade_discipline, ...) only; imports nothing from orchestration (no cycle). Re
 orchestration via star-import so phase_boundary and every caller are unchanged.
 [canonical: mass_battle_v30.md §A.4 morale/discipline, §A.12 rout]"""
 import math
+import random  # [ED-MB-0031] stochastic-rout draw — the SAME seeded global stream roll_pool uses (reproducible per seed)
 from mass_battle.config import *
 from mass_battle.core.exchange import D_YIELD  # [ED-MB-0024] DG-2 yield discipline gate (single owner: core.exchange)
 
 __all__ = ['morale_check_phase', 'rout_resolution', 'discipline_check_phase']
+
+
+def _rout_resilience(atom):
+    """[ED-MB-0031] A subunit's inherent resistance to cohesion-collapse, 0..1, from its stable quality:
+    Discipline (2->0, 5->1, saturating) blended with starting Morale (eff_morale_start on the 1-7 scale
+    normalized by 7). A steady, disciplined, high-morale body (resilience -> 1) skews its break-point toward
+    the ROUT_CAP (holds to ~30% losses); a loose, shaken one (resilience -> 0) breaks toward ROUT_ONSET
+    (~15%). Uses starting morale (not live) so the break-point reflects inherent quality; live morale
+    erosion still routs a unit independently via the canonical §A.4 path."""
+    disc = max(0.0, min(1.0, (atom.eff_discipline - 2.0) / 3.0))
+    ms = getattr(atom, 'eff_morale_start', 0) or 0
+    mor = max(0.0, min(1.0, ms / 7.0)) if ms else 0.5
+    return 0.5 * disc + 0.5 * mor
+
+
+def _stochastic_break(atom):
+    """[ED-MB-0031, Jordan 2026-07-23: routs at 15% (early) to 30% (upper).] du Picq cohesion-collapse:
+    each subunit draws ONE fractional break-point in the [ROUT_ONSET, ROUT_CAP] casualty band, skewed by
+    its resilience, and routs once its casualty fraction crosses it. Returns True if the subunit breaks
+    this check. Fractional throughout (random draw + fractional band + fractional loss). Reproducible under
+    the seeded RNG; only consumed when PC_STOCHASTIC_ROUT is on (else never called -> byte-exact)."""
+    bp = getattr(atom, '_rout_breakpoint', None)
+    if bp is None:
+        resil = _rout_resilience(atom)
+        # skew the uniform draw toward the CAP (later break) as resilience rises: exponent < 1 pushes high.
+        skewed = random.random() ** (1.0 / (0.5 + resil))
+        bp = ROUT_ONSET_FRAC + (ROUT_CAP_FRAC - ROUT_ONSET_FRAC) * skewed
+        atom._rout_breakpoint = bp
+    loss_frac = 1.0 - atom.cohesion
+    return loss_frac >= bp
 
 
 def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -69,6 +100,13 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 atom.yielding = True
             if loss:
                 atom.erode_morale(min(loss, 3.0))   # cap -3 per Cascade Phase (§A.4); routes own-else-Unit
+            # [ED-MB-0031] Stochastic cohesion-break at the historical 15-30% casualty band (du Picq): the
+            # canonical §A.4 steps above don't fire until 50% losses, so units grind to ~58% before breaking.
+            # When gated on, a subunit whose casualties cross its own drawn break-point routs NOW (drive its
+            # morale <=0 -> rout_resolution breaks it this phase). Fires AFTER the §A.4 erosion so a unit
+            # already collapsing by canon still routs; this only pulls the break EARLIER, into the band.
+            if PC_STOCHASTIC_ROUT and not atom.routed and _stochastic_break(atom):
+                atom.erode_morale(atom.eff_morale + 1.0)   # snap cohesion -> morale <=0 -> routs
 
 
 def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
