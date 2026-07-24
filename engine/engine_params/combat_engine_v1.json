@@ -260,6 +260,12 @@
    "HEFT_HEAVY": 3.0,
    "OW_MAX": 2.5,
    "OW_Z": 1.5,
+   "PEN_THR": {
+    "heavy": 6.5,
+    "light": 0.0,
+    "medium": 2.5,
+    "none": 0.0
+   },
    "PERC_AUTH_REF": 8.0,
    "PERC_AUTH_REF_SOFT": 6.5,
    "PERC_TRANSMIT_FLOOR": 0.35,

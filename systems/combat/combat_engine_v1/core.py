@@ -89,6 +89,15 @@ def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None):
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
+# PENETRATION THRESHOLD (ED-PC-0032, rapier plate fall-off): armour resists up to a floor — a blow whose coupling-
+# reduced impact does not clear the tier's resistance inflicts little LASTING WOUND (it is stopped/deflected), so a
+# weapon that CANNOT defeat the harness cannot win by VOLUME of sub-penetration pokes (the rapier's inverted field
+# curve: field-win was RISING with armour because many fast light hits accumulated on plate). Applied as a SOFT knee
+# on the post-coupling damage: eff = d · d²/(d²+PEN_THR²) — a blow at the threshold keeps half, well above keeps ~all,
+# well below collapses toward 0. Unarmoured PEN_THR=0 (knee inert → open combat byte-identical). Emergent, not a
+# rapier special-case: a gap-dagger/spike/blunt that DEFEATS plate produces a large d (kept); a rapier/arming/spear
+# point that pings off it produces a small d (collapsed). [SIM-CALIBRATE] per-tier floors.
+PEN_THR={'none':0.0,'light':0.0,'medium':2.5,'heavy':6.5}   # light (soft gambeson) needs no penetration floor; the rapier inversion is a HEAVY-tier effect (heavy 74->16), medium a smaller gate
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
 DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
 # Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED 2026-06-30 (Alan Williams, The Knight
@@ -288,7 +297,11 @@ def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_RE
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
-    return max(0, int(round(impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth) * qf * DMG_SCALE)))   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority (short/half-sword pressed home, reach-thrust decayed)
+    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
+    t = PEN_THR.get(armor, 0.0)                                   # PENETRATION THRESHOLD (ED-PC-0032): armour resists up to a floor
+    if t > 0.0 and raw > 0.0:
+        raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
+    return max(0, int(round(raw)))
 
 def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
