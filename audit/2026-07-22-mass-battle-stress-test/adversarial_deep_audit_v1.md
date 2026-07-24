@@ -186,3 +186,56 @@ is instrumented directly.
 violated three distinguishable ways — raising ceilings, choosing a free construction parameter until the
 row lands, and citing an engine measurement as a band's justification. The second is the most powerful
 and the least visible.
+
+---
+
+## 5. REACHABILITY (fifth critic) — verified additions
+
+Reachability is **prior to grounding**: a value cannot be justified *or* grounded if the mechanism it
+parameterises never runs. These were confirmed by hand and by runtime probe.
+
+### 5.1 H6 produces ZERO COMBAT — a live break in the measuring instrument
+`RefusedFlank vs Line` reads `a_cas = 0.0, b_cas = 0.0, dec_n = 0, d = 100.0` across **60/60 seeds**. Not a
+stalemate — **no casualties at all**. The two bodies close to ~2 units apart and then freeze permanently.
+
+Mechanism: `_node_advance`'s lateral-file-holding rule (`hierarchy/units.py:1239-1246`) pins any subunit
+with ≥1 sibling to its **own spawn column**, and nothing closes a lateral gap unless the subunit carries an
+active `envelop`/`sweep`/`kite`/yield instruction. The refused army's strong wing carries none. The
+time-of-impact halt independently stops the row-wise approach. H5 resolves only because *its* opponent has
+manoeuvring wings that close the gap from the other side.
+
+**This was visible in the session's own gauge output as `UNRESOLVED` and was recorded as "an all-draw
+stalemate" without investigation.** A row reporting 0.0/0.0 casualties is not a balance result; it is a
+broken instrument, and it should have been chased on first sight.
+
+### 5.2 The refused-flank preset is broken in shipped code
+`engine.py:453` `refuse_range=3`, and **no caller anywhere overrides it** (gauge, bat.py, workbench all
+take the default). Measured minimum centroid-to-enemy distance the refused wing ever reaches: **~9.5** — so
+`Order('enemy_range:3', ...)` at `engine.py:502` never fires and the wing holds all battle. It needs ≈10.
+Same centroid-trigger class as the session's yield-probe bug, but in **production** code; and its
+provenance tag cites a `sim_verification_ledger.json` row that does not exist.
+
+### 5.3 `PC_WHEEL` defaults ON and is a no-op
+Its only consumer is `hierarchy/units.py:1513`, inside legacy `advance_cells()`, which returns early on the
+default node path. Kite/envelop/sweep were ported to `_node_advance`; the overhang wheel was missed. A flag
+that ships ON and does nothing is worse than one that ships OFF.
+
+### 5.4 The cascade never produces more than one group
+Instrumented across the rows most likely to produce multi-rank contact: the simultaneous-group count is
+**always 1**. So `MAX_SUB_PHASES = 5` never binds and "cascading resolution" degenerates to a single pass.
+This independently corroborates §2's finding that `dynamic_facings` is write-only — the mechanism is both
+**unread and never triggered**, from two different directions.
+
+### 5.5 Further dead surface
+- `equipment/armour.py` (`ARMOURY`, `dr_vs_piercing`, `tiers`) — its only consumer discards the armour half
+  (`weapon, _armour = loadout_for(...)`); live ranged DR comes from the flat `RANGED_DR_DEFAULT = 2`.
+- Order triggers `immediate`, `ally_at:D`, `own_strength:FRAC` — implemented and validated, **zero
+  producers**. Only `tick:N` has a working producer/consumer path.
+- The escort mechanism (`escort_of` and friends) — consumption fully wired, `escort_of` never assigned.
+- `PC_RESERVE_COMMIT` — doubly unreachable: its only reader lives in `run_multi_unit_battle` (never called
+  in scope), and nothing ever tags a subunit `'reserve'`.
+- `yielding` is **never cleared** by `reset_morale_between_battles` (every sibling transient is), so with
+  rally off it persists across battles for the rest of a campaign.
+
+**Consequence for the census:** any constant whose mechanism is unreachable should be classified as such
+*before* its provenance is argued about. Fixing reachability changes what the other findings even mean.
