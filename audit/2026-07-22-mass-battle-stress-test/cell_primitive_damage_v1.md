@@ -232,3 +232,42 @@ existing feigned-retreat/pursuit code is a different mechanic and should not be 
 (3) **tempo calibration of the cavalry race** (`PC_CAVALRY_SPEED_MULT`, `ENVELOP_STANDOFF`, wing release
 tick) against the centre's survival clock; (4) re-run the historical OOB as the acceptance test, at
 n≥60/side so effects smaller than ~8 pp are actually resolvable.
+
+## CORRECTION to the section above — the bait primitive EXISTS; the order was never issued
+
+The claim immediately above ("the Cannae centre's core behaviour is unimplemented … the bait must be
+authored, not switched on") is **wrong**, and the correction matters because it changes the work from an
+engine build to a command fix.
+
+**DG-2 `yielding` (ED-MB-0024) already is the deliberate fighting withdrawal.** From its own definition
+(`hierarchy/units.py:447`): *"A yielding subunit gives ground under pressure but keeps FIGHTING and keeps
+FACING the threat — the mechanical distinction from `routed` (which turns away and stops fighting)."* Its
+consumption sites are built and live: give-ground movement, facing-lock, combat-pool malus, and the §2.4
+pocket exit (`pocketed` — "Cannae's pinned-and-annihilated kill condition").
+
+**Entry is COMMANDED**, by design: *"entry is commanded-only this pass (a `'yield'` order's `behavior`
+dict sets this True directly via check_orders' existing generic setattr application)"*. `PC_YIELD_EMERGENT`
+is only the *automatic* fallback entry, and it fires at **`frac < 0.50`** — after the subunit has already
+lost half its strength, far too late to bait anyone.
+
+**So the +0.0 pp ablation rows were not inert code — they were an unissued order.** The Cannae scenario
+gave `envelop` orders to the wings and cavalry but never gave the centre a yield order, so the bait never
+happened in any run measured so far. This is the familiar built-but-unreachable pattern, not a missing
+mechanic.
+
+`check_orders` also supports an **`enemy_range:D`** trigger, which expresses the historical sequence
+directly: advance → make contact → begin the fighting withdrawal. `cannae_bait.py` issues exactly that
+(`Order('enemy_range:3', {'yielding': True})` on the three crescent maniples) and A/Bs it against the
+same OOB with all flags ON.
+
+**Measured (n=20/side, all flags ON):**
+
+| Carthaginian centre | as side A | as side B | avg |
+|---|---|---|---|
+| no bait (baseline) | 20.0 % | 55.0 % | **37.5 %** |
+| commanded yield bait | _(see `cannae_bait.py` output)_ | | |
+
+The same correction applies to `PC_FEIGNED_RETREAT`: that flag really is unreachable in a still-fighting
+scenario (its only call site is the post-rout pursuit block), but it is **not** the mechanism the Cannae
+centre needs — `yielding` is. Feigned retreat models *a broken unit chased into a trap*; `yielding` models
+*an unbroken unit giving ground on purpose*. Two different mechanics; only the second is the bait.
