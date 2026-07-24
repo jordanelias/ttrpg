@@ -2,6 +2,21 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0037: remove superseded dead-mechanic constants + zeroed _envelopment_sigma
+- Wire-or-remove sweep, removal half (Jordan "obviously you can unwire a dead mechanic if it's useless").
+  Removed constants that were defined+exported but read nowhere and superseded by live mechanics:
+  **PC_ENVELOP_SIGMA** + its `_envelopment_sigma` (percell.py) Increment-6 term — dormant at 0.0, the
+  unit-level col-grid "wider side" overhang mis-targeted a split envelop army; superseded by the octagon
+  flank multiplier + multi-side shock (B6) + perimeter/orbital-wheel envelopment (ED-MB-0035).
+  **ROUT_FLOOR_LOSS_PCT** / **ROUT_EXHAUSTION_MORALE_HIT** (superseded by ED-MB-0036 SUBUNIT_ROUT_FLOOR +
+  stochastic rout), **PC_FLANK_DEPTH_RESIST** / **PC_FRONT_RANKS** / **PC_FLANK_CAP** (never-wired flank
+  scaffolding, superseded by the octagon per-cell angle model), **REACH_LONG** (registry.py, unread).
+- **Byte-exact:** every removed term was already 0.0 or unreferenced on the live path; the Increment-6
+  `_envelopment_sigma` call added 0.0 and is replaced by a comment. Goldens unchanged (4 modes verified).
+- Measured **PC_FACING_MODEL=1 → gauge 3/20** (regresses from 5/20) — confirms its "do not enable"
+  calibration-debt (PC_FACING_SLEW_BASE unratified). Left OFF; flagged for Jordan. Gauge holds 5/20.
+
+
 ## 2026-07-24 — ED-MB-0036: wire orphaned MORALE_EROSION_DAMP + SUBUNIT_ROUT_FLOOR
 - Wire-or-remove dead-mechanic sweep (Jordan directive). Both were defined+exported but never read.
   **MORALE_EROSION_DAMP** (0.7) → the §A.4 casualty/exhaustion morale erosion (`erode_morale(min(loss,3.0)*
