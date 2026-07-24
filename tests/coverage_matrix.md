@@ -2,6 +2,23 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0034: field-coordinate unification (Fable-audit B1+B2+B3)
+- Jordan directive ("nothing is golden"; "we're using field coordinates ... abandon [the spawn lattice]").
+  Unified the cell-position accessors onto the live `_node_pos` field, off the dead `starting_position +
+  cell_offsets` spawn lattice (not updated on the field path). **B1** `_oriented_abs_map` node branch →
+  `_oriented(atom)`, skip absent ids (no `(0,0)` default): wedge contact cells stop collapsing to origin
+  (**H2 decA 0.0 → 40.0**); grid branch also → `_oriented` (byte-identical for legacy). **B3** octagon
+  `_octagon_dmg_mod`/`_per_cell_angle_mod` → `_oriented_abs_map` (live map; **H1 mirror → 52.5, in band**).
+  **B2** `iter_cells` reads live `_node_pos` (feeds col-grid/fatigue/casualties). Added `width`/`depth` to
+  gauge `make_unit`.
+- **Goldens re-recorded all 4 modes** (nothing-is-golden): `unit`/`cell`/`unit_field`/`cell_field`;
+  byte-exact test EXPECTED updated. `tests/valoria` green.
+- Honest gauge still ~4/20: the prior 5/20 included FALSE C2/C6 passes (brace "repelling" off the broken
+  contact map) — now honestly failing pending the box-brace. **Dominant remaining issue: envelopment
+  delivers 0%** (H3–H6) — the split centre is crushed before the wings arrive; needs intent-on + B6 +
+  wing timing + box-brace + B2b (col-grid per-tick rebuild). See `full_implementation_plan_v1.md` §1.5.
+
+
 ## 2026-07-24 — ED-MB-0033: Fable logic audit — Part A remediation (9 defects in this session's own work)
 - Five Fable-tier read-only adversarial auditors (one per logical lane) traced ED-MB-0027..0032 and found
   9 defects; all fixed. A1 (CRITICAL): `make_unit`→`build_army` filled the §B.2 cavalry preset Power 5

@@ -754,15 +754,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             atk_cc = sum(c for r,c in attacker_cells) / len(attacker_cells)
             atk_centroid = (atk_cr, atk_cc)
             mods = []
-            op = _oriented(defender_subunit)
-            abs_to_orig = {}
-            for orig_r, orig_c, or_r, or_c in op:
-                abs_r = (defender_subunit.starting_position[0] + or_r
-                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
-                         * defender_subunit.advance_dir)
-                abs_c = (defender_subunit.starting_position[1] + or_c
-                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
-                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
+            op = _oriented(defender_subunit)   # kept: frontage SPAN (_dc below) reads the static oriented pattern
+            # [Fable-audit B3 fix, 2026-07-24] abs->orig from the single live identity map, not the dead
+            # spawn lattice (see _octagon_dmg_mod). Live _node_pos on the field path; byte-identical
+            # starting_position+cell_offsets on the grid path.
+            abs_to_orig = _oriented_abs_map(defender_subunit)
             seen = set()
             _pc_refuse = PER_CELL and PC_REFUSE
             atk_sorted = sorted(set(attacker_cells)) if _pc_refuse else None
@@ -904,15 +900,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             if not defender_cells or not attacker_cells:
                 return 0.0
             atk = list(set(attacker_cells))
-            op = _oriented(defender_subunit)
-            abs_to_orig = {}
-            for orig_r, orig_c, or_r, or_c in op:
-                abs_r = (defender_subunit.starting_position[0] + or_r
-                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
-                         * defender_subunit.advance_dir)
-                abs_c = (defender_subunit.starting_position[1] + or_c
-                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
-                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
+            # [Fable-audit B3 fix, 2026-07-24] Use the single live identity map instead of open-coding the
+            # abs->orig recovery off the DEAD starting_position+cell_offsets spawn lattice. On the field/node
+            # path movement lives in _node_pos (cell_offsets is not updated there), so after a couple of turns
+            # the spawn map had ZERO overlap with the unit's live cells -> every cell fell back to nominal
+            # (advance_dir,0) facing -> the flank/rear octagon multiplier silently degraded to nominal for any
+            # moved unit, muting real wedge/envelopment geometry. _oriented_abs_map keys off _node_pos on the
+            # field path (live) and off the identical starting_position+cell_offsets build on the grid path
+            # (byte-identical to this old open-code, now that its grid branch also iterates _oriented).
+            abs_to_orig = _oriented_abs_map(defender_subunit)
             _rs = getattr(defender_subunit, '_react_since', None)
             if _rs is None:
                 _rs = {}; defender_subunit._react_since = _rs
