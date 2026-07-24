@@ -41,7 +41,7 @@ def test_breakpoint_in_band():
     for disc in (2, 3, 4, 5):
         su = _unit('A', disc=disc).subunits[0]
         assert getattr(su, '_rout_breakpoint', None) is None
-        S._stochastic_break(su)  # draws the break-point lazily
+        S._stochastic_break(su, 0.0)  # draws the break-point lazily
         bp = su._rout_breakpoint
         assert C.ROUT_ONSET_FRAC <= bp <= C.ROUT_CAP_FRAC, f"break-point {bp} outside the 15-30% band"
 
@@ -60,21 +60,17 @@ def test_disciplined_skews_breakpoint_higher():
         random.seed(999)
         for _ in range(n):
             su = _unit('A', disc=disc).subunits[0]
-            S._stochastic_break(su)
+            S._stochastic_break(su, 0.0)
             bps.append(su._rout_breakpoint)
         return statistics.mean(bps)
     assert mean_bp(5) > mean_bp(2) + 0.01, "disciplined units must break later on average"
 
 
 def test_break_fires_when_casualties_cross():
-    # cohesion for a single-subunit unit reads the parent unit's hp/hp_max -> drive casualties via hp
-    u = _unit('A', disc=5)
-    su = u.subunits[0]
+    su = _unit('A', disc=5).subunits[0]
     su._rout_breakpoint = 0.20  # pin a known break-point
-    u.hp = u.hp_max * 0.90      # 10% losses -> below the point -> no break
-    assert S._stochastic_break(su) is False
-    u.hp = u.hp_max * 0.75      # 25% losses -> past the point -> break
-    assert S._stochastic_break(su) is True
+    assert S._stochastic_break(su, 0.10) is False   # 10% losses -> below the point -> no break
+    assert S._stochastic_break(su, 0.25) is True    # 25% losses -> past the point -> break
 
 
 def _mean_loser_casualties(on, n=16):
