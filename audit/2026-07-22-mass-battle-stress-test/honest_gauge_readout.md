@@ -107,6 +107,25 @@ probes show why the gauge's envelop rows read ~0%, and it is **not** that the ma
 6. **GappedLine over-strong.** H7=86, H8=100 (bands cap 62/65) — likely a frontage/contact-count artifact
    (gapped cells present more engaged columns per troop). Re-examine after the intent/scale work.
 
+## Validation-loop progress — stochastic rout ON (2026-07-23, ED-MB-0031)
+
+First closure of the validation loop: re-ran the full honest gauge with the grounded stochastic-rout
+mechanic ON (`PC_STOCHASTIC_ROUT=1`, `gauge_run.py`, n=14). **PASS 5/20 → 8/20.**
+
+- **Newly in-band (the resolution-timing rows):** C2 & C6 (braced-repel — now the cavalry can't grind
+  through the wall before the battle resolves: rawA 57→14, into 0–30), C3 (cav mirror 71→50, now fair),
+  C5 (cav-vs-shaken 66.7, in 65–98), plus H1/R1/R3 hold. Battle lengths dropped to t≈1–2 (≈3–6 phases,
+  the documented 30–90-minute window), and casualty-at-rout fell from ~90% to ~30%.
+- **Still OUT (the shape/geometry rows) — unaffected by rout timing:** H2/H9 (wedge loses), H3–H6/H10/H11
+  (envelopment & refused-flank), H7/H8 (GappedLine over-strong), C1 (cav vs steady foot), C4 (mounted
+  envelopment). These are the **force-splitting / envelopment-geometry** deficit from the section above —
+  they need the deep-holding-centre + wing-delivery-at-scale work, not resolution-layer tuning.
+
+So the diagnosis sharpens cleanly: **the rout fix closed the resolution-timing gap; the remaining
+out-of-band rows are all geometry/envelopment.** That is the next validation target (with lethality +
+fractional-dice as supporting refinements). The gauge bands were NOT touched — this is the engine moving
+toward history, measured on the fixed ruler.
+
 ## Guardrails honored
 
 - **Bands were NOT lowered to make the engine pass** (fiat register §8 north star: calibrate to
@@ -116,3 +135,37 @@ probes show why the gauge's envelop rows read ~0%, and it is **not** that the ma
   50/25 morale triggers, and the `CELL_FLOOR/CELL_CAP` values are all left intact (§11 false-positives).
 - The measurement fix is isolated to the harness; the engine change (item 1 above) is the next
   adversarially-reviewed step.
+
+---
+
+## Correction — Fable logic audit (ED-MB-0033, 2026-07-24)
+
+A five-lane Fable adversarial audit (`fable_logic_audit_v1.md`) found that **two of this readout's own
+measurements were not honest**, and corrected them:
+
+- **A1 (CRITICAL) — the density-match was NOT the only change.** Routing `make_unit` through `build_army`
+  (ED-MB-0027) also sent gauge cavalry through `Subunit.of_type`, which filled the §B.2 cavalry preset
+  **Power 5** because the spec never forwarded `power`/`discipline`. So gauge cavalry silently became a
+  P5/D5/M6 chimera (was P4), contaminating the **C-row** verdicts (C1/C2/C5/C6 flip between P4 and P5).
+  The "everything now builds at exactly 100/cell, only frontage/geometry/posture vary" claim was true for
+  *density* but **false for cavalry Power**. Fixed: `make_unit` now forwards `power`/`discipline`
+  explicitly (P4 restored; infantry unchanged).
+- **A2 (HIGH) — the pass count was inflated.** The full-gauge runner (`gauge_run.py`) re-implemented the
+  verdict as `inband = lo<=val<=hi`, dropping **both** of `gauge_mb.run()`'s guards — the `dec_n>0` gate
+  and the `draw_exp` gate. Because `matchup()` returns the sentinel `decA=50.0` when every seed draws,
+  the **all-draw R3 row** (and any draw-flooded row) scored a **false PASS** (10 of 20 bands contain 50).
+  Fixed: delegate to `g.run()` (one verdict, one rule).
+
+### Honest re-measurement (A1+A2 corrected, n=20)
+
+| config | pass | note |
+|---|---|---|
+| baseline (all PC_* off) | **5/20** | unchanged — the fair-ruler floor |
+| + `PC_STOCHASTIC_ROUT` | **6/20** | was reported **8/20** — inflated by A2 (R3 false-pass) + A1 (P5 cavalry). R3 now correctly reads **UNRESOLVED** (all-draw), not a pass. |
+
+The gain from stochastic rout is real but modest (**+1 honest row**, plus the loser-casualty-at-rout drop
+into the historical 15–30 % band). The remaining **14 out-of-band rows are dominated by the Part B
+pre-existing geometry bugs** the same audit catalogued (B1 wedge iterates the legacy tier pattern not the
+atom footprint → H2/H9/H11; B2 `col_grid` frozen at spawn columns → H7/H8 GappedLine over-strong; B3
+octagon on a dead spawn-lattice map; B4 numbers double-count in casualties → the density over-power). Those
+**move goldens and need Jordan's ratification** — they are the real root of the divergence, not the gauge.

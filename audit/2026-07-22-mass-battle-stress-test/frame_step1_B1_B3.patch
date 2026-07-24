@@ -1,0 +1,117 @@
+diff --git a/tests/sim/gauge_mb.py b/tests/sim/gauge_mb.py
+index 60228d8..24dae35 100644
+--- a/tests/sim/gauge_mb.py
++++ b/tests/sim/gauge_mb.py
+@@ -109,7 +109,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
+ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,   # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4]
+               discipline=5, morale=6, stance='balanced',                          # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats D5/M6]
+               troop_type='infantry', speed='Standard', morale_start=None, instructions=(),
+-              troops=None, concentration=None):  # [ED-MB-0027] explicit density (default GAUGE_TROOPS/GAUGE_CONC) — honest-gauge matching
++              troops=None, concentration=None, width=None, depth=None):  # [ED-MB-0027] explicit density; [ED-MB-0034] width/depth for deep-formation rows (braced pike-block/schiltron: brace-recoil is depth-gated)
+     # troop_type/speed default to the historical infantry baseline so the original
+     # 13 tests construct byte-identically; cavalry rows pass troop_type='cavalry',
+     # speed='Fast' by kwargs. Cavalry charge mechanics (charge_pen,
+@@ -157,6 +157,8 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
+             'power': power, 'discipline': discipline,
+             'troops': _troops, 'concentration': _conc,
+             'starting_position': (start_row, anchor_col)}
++    if width is not None:  spec['width'] = width    # [ED-MB-0034] explicit frontage×depth grid (footprint_for)
++    if depth is not None:  spec['depth'] = depth    # deep braced formations need real depth for the depth-gated recoil
+     return build_army([spec], name, faction, power=power, command=command,
+                        discipline=discipline, morale=morale, morale_start=morale_start,
+                        dr=1, stance=stance, speed=speed)
+diff --git a/tests/sim/mass_battle/geometry.py b/tests/sim/mass_battle/geometry.py
+index 8185657..ba93a1d 100644
+--- a/tests/sim/mass_battle/geometry.py
++++ b/tests/sim/mass_battle/geometry.py
+@@ -5,7 +5,7 @@ import math
+ from dataclasses import dataclass
+ from mass_battle.config import *
+ 
+-__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
++__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
+ 
+ def arrowhead_cells(tier):
+     cells = []
+@@ -249,13 +249,28 @@ def _oriented_abs_map(atom):
+     import mass_battle.hierarchy.units as _u
+     amap = {}
+     if _u.FIELD_MOVEMENT and _u.PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+-        for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
+-            _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
++        # [Fable-audit B1 fix, 2026-07-24] Iterate the atom's LIVE continuous footprint (_oriented) and
++        # SKIP any id absent from _node_pos -- do NOT default a missing key to the origin (0,0). The prior
++        # version iterated oriented_pattern(shape,tier) (the LEGACY CELL_PATTERN_FN tier ids) while _node_pos
++        # is keyed by the continuous _build_shape_n/footprint_for ids. For any density-built subunit whose
++        # continuous footprint diverges from the tier pattern (Arrowhead: only 1/6 ids matched) every miss
++        # collapsed to abs (0,0) -> contact cells resolved to [] -> the pool floored -> the wedge lost 0/100.
++        # _oriented(atom) IS the footprint _node_pos was populated from, so the keys now match.
++        for orig_r, orig_c, or_r, or_c in _oriented(atom):
++            if (orig_r, orig_c) not in atom._node_pos:
++                continue                                        # unseeded cell: skip, never default to origin
++            _pr, _pc = atom._node_pos[(orig_r, orig_c)]
+             abs_r = int(round(_pr))
+             abs_c = int(round(_pc / _u.COL_WIDTH))
+             amap.setdefault((abs_r, abs_c), (orig_r, orig_c))   # FIRST-wins: matches the file-binned cells() keys
+         return amap
+-    for orig_r, orig_c, or_r, or_c in oriented_pattern(atom.shape, atom.tier, atom.advance_dir):
++    # [Fable-audit B1/B3 fix, 2026-07-24] Grid path: iterate _oriented(atom) — the SAME footprint
++    # cell_offsets is keyed by (units.py: "_oriented(self) is the sole source of the (or_r,or_c) offset").
++    # The prior version iterated oriented_pattern(shape,tier), which diverges from the footprint ids for any
++    # density-built continuous subunit, so this map disagreed with the octagon damage layer (which already
++    # open-coded off _oriented). Byte-identical for legacy troops=None subunits (_oriented falls back to
++    # oriented_pattern); consistent for continuous ones. This makes _oriented_abs_map the single identity map.
++    for orig_r, orig_c, or_r, or_c in _oriented(atom):
+         abs_r = (atom.starting_position[0] + or_r
+                  + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
+         abs_c = (atom.starting_position[1] + or_c
+diff --git a/tests/sim/mass_battle/orchestration.py b/tests/sim/mass_battle/orchestration.py
+index 49be2ca..c52e40f 100644
+--- a/tests/sim/mass_battle/orchestration.py
++++ b/tests/sim/mass_battle/orchestration.py
+@@ -754,15 +754,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
+             atk_cc = sum(c for r,c in attacker_cells) / len(attacker_cells)
+             atk_centroid = (atk_cr, atk_cc)
+             mods = []
+-            op = _oriented(defender_subunit)
+-            abs_to_orig = {}
+-            for orig_r, orig_c, or_r, or_c in op:
+-                abs_r = (defender_subunit.starting_position[0] + or_r
+-                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
+-                         * defender_subunit.advance_dir)
+-                abs_c = (defender_subunit.starting_position[1] + or_c
+-                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
+-                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
++            op = _oriented(defender_subunit)   # kept: frontage SPAN (_dc below) reads the static oriented pattern
++            # [Fable-audit B3 fix, 2026-07-24] abs->orig from the single live identity map, not the dead
++            # spawn lattice (see _octagon_dmg_mod). Live _node_pos on the field path; byte-identical
++            # starting_position+cell_offsets on the grid path.
++            abs_to_orig = _oriented_abs_map(defender_subunit)
+             seen = set()
+             _pc_refuse = PER_CELL and PC_REFUSE
+             atk_sorted = sorted(set(attacker_cells)) if _pc_refuse else None
+@@ -904,15 +900,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
+             if not defender_cells or not attacker_cells:
+                 return 0.0
+             atk = list(set(attacker_cells))
+-            op = _oriented(defender_subunit)
+-            abs_to_orig = {}
+-            for orig_r, orig_c, or_r, or_c in op:
+-                abs_r = (defender_subunit.starting_position[0] + or_r
+-                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
+-                         * defender_subunit.advance_dir)
+-                abs_c = (defender_subunit.starting_position[1] + or_c
+-                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
+-                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
++            # [Fable-audit B3 fix, 2026-07-24] Use the single live identity map instead of open-coding the
++            # abs->orig recovery off the DEAD starting_position+cell_offsets spawn lattice. On the field/node
++            # path movement lives in _node_pos (cell_offsets is not updated there), so after a couple of turns
++            # the spawn map had ZERO overlap with the unit's live cells -> every cell fell back to nominal
++            # (advance_dir,0) facing -> the flank/rear octagon multiplier silently degraded to nominal for any
++            # moved unit, muting real wedge/envelopment geometry. _oriented_abs_map keys off _node_pos on the
++            # field path (live) and off the identical starting_position+cell_offsets build on the grid path
++            # (byte-identical to this old open-code, now that its grid branch also iterates _oriented).
++            abs_to_orig = _oriented_abs_map(defender_subunit)
+             _rs = getattr(defender_subunit, '_react_since', None)
+             if _rs is None:
+                 _rs = {}; defender_subunit._react_since = _rs

@@ -561,15 +561,63 @@ def _convergence_scale(unit_a, unit_b, pairs):
     return a_scale, b_scale
 
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None):
+def _compute_atom_sides(pairs):
+    """[Fable-audit B6, 2026-07-24] The set of DISTINCT octagon FACES (F/B/L/R) each defender subunit is
+    struck on this TICK, ONE face per contacting enemy body (its contact-cell centroid -> nearest defender
+    face). Extracted to module scope so it can be computed ONCE on the FULL tick's pairs (like conv_scale)
+    and threaded into every cascade sub-phase's resolve_engagements -- otherwise the depth-group split fed
+    each sub-call only its own group's pairs, so a front+rear/flank-enveloped body showed 1 face per call
+    and the graded MULTI-SIDE SHOCK (2 sides x1.5, 3 x2.0) NEVER FIRED for the encircled defender -- the
+    root of envelopment delivering 0% at matched density (H3-H6)."""
+    def _mean_facing(_atom):
+        _fv = getattr(_atom, 'cell_facing_vec', None)
+        if _fv:
+            _rs = sum(v[0] for v in _fv.values()); _cs = sum(v[1] for v in _fv.values())
+            if _rs or _cs:
+                return (_rs, _cs)
+        return (_atom.advance_dir, 0)
+    def _nearest_face(_dcells, _dfac, _acen):
+        _n = len(_dcells)
+        _cr = sum(r for r, c in _dcells) / _n; _cc = sum(c for r, c in _dcells) / _n
+        _fm = (_dfac[0] ** 2 + _dfac[1] ** 2) ** 0.5 or 1.0
+        _fu = (_dfac[0] / _fm, _dfac[1] / _fm)
+        _pu = (-_fu[1], _fu[0])
+        _al = [(r - _cr) * _fu[0] + (c - _cc) * _fu[1] for r, c in _dcells]
+        _pp = [(r - _cr) * _pu[0] + (c - _cc) * _pu[1] for r, c in _dcells]
+        _faces = {
+            'F': (_cr + max(_al) * _fu[0], _cc + max(_al) * _fu[1]),
+            'B': (_cr + min(_al) * _fu[0], _cc + min(_al) * _fu[1]),
+            'L': (_cr + max(_pp) * _pu[0], _cc + max(_pp) * _pu[1]),
+            'R': (_cr + min(_pp) * _pu[0], _cc + min(_pp) * _pu[1]),
+        }
+        return min(_faces, key=lambda k: (_faces[k][0] - _acen[0]) ** 2 + (_faces[k][1] - _acen[1]) ** 2)
+    sides = {}
+    for _p in pairs:
+        for _datom, _atk_cells in ((_p["atom_b"], _p["a_cells"]), (_p["atom_a"], _p["b_cells"])):
+            _dcells = list(_datom.cells())
+            _ac = list(set(_atk_cells))
+            if not _dcells or not _ac:
+                continue
+            _acen = (sum(r for r, c in _ac) / len(_ac), sum(c for r, c in _ac) / len(_ac))
+            _face = _nearest_face(_dcells, _mean_facing(_datom), _acen)
+            sides.setdefault(id(_datom), set()).add(_face)
+    return sides
+
+
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None,
+                        eng_counts=None, atom_sides=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
     dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
     t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
-    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
+    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]
+    eng_counts/atom_sides: [B6] precomputed on the FULL tick by resolve_engagements_cascading and threaded
+    in so the multi-side shock + encirclement penalty see the whole tick's engagement, not a cascade group;
+    None -> computed locally from `pairs` (direct callers / non-cascading path -> identical, same pairs)."""
     dmg_a, dmg_b = 0, 0
-    eng_counts = count_engagements_per_atom(pairs)
+    if eng_counts is None:
+        eng_counts = count_engagements_per_atom(pairs)
     # [ED-MB-0018 fix, balance-critic A1/A1-gap + arch-critic #1] MULTI-SIDE = the set of DISTINCT octagon
     # SIDES a subunit is actually struck from, aggregated over its contact pairs' real attacker-cell
     # BEARINGS (front / left / right / rear, relative to the subunit's own facing) -- NOT the arc-blind
@@ -578,49 +626,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
     # that genuinely wraps two arcs (`eng_count==1` -> no shock). Deriving the trigger from the cells'
     # bearings fixes both and makes "engaged from >=2 sides" a genuine aggregation over contacts. Only
     # computed under the octagon-damage flag (it drives the graded multi-side shock in the damage block).
-    _atom_sides = {}
-    if PC_OCTAGON_DMG:
-        def _mean_facing(_atom):
-            _fv = getattr(_atom, 'cell_facing_vec', None)
-            if _fv:
-                _rs = sum(v[0] for v in _fv.values()); _cs = sum(v[1] for v in _fv.values())
-                if _rs or _cs:
-                    return (_rs, _cs)                       # average of the atom's per-cell (wheeled) facings
-            return (_atom.advance_dir, 0)                   # nominal facing (no wheel recorded)
-        def _nearest_face(_dcells, _dfac, _acen):
-            # [Jordan geometry ruling] A subunit's perimeter has four FACE midpoints -- front / rear / left /
-            # right lines -- and an attacking body engages the face NEAREST it: a side attack targets the
-            # OUTERMOST side line, a rear attack the BACKMOST line (not the centroid, which mislabels both).
-            # Faces are the extremes of the footprint projected onto the facing axis (front/rear) and its
-            # perpendicular (left/right) -- emergent from the cells, so this stays cell-up.
-            _n = len(_dcells)
-            _cr = sum(r for r, c in _dcells) / _n; _cc = sum(c for r, c in _dcells) / _n
-            _fm = (_dfac[0] ** 2 + _dfac[1] ** 2) ** 0.5 or 1.0
-            _fu = (_dfac[0] / _fm, _dfac[1] / _fm)          # facing (front) unit normal
-            _pu = (-_fu[1], _fu[0])                          # left-perpendicular unit
-            _al = [(r - _cr) * _fu[0] + (c - _cc) * _fu[1] for r, c in _dcells]
-            _pp = [(r - _cr) * _pu[0] + (c - _cc) * _pu[1] for r, c in _dcells]
-            _faces = {
-                'F': (_cr + max(_al) * _fu[0], _cc + max(_al) * _fu[1]),
-                'B': (_cr + min(_al) * _fu[0], _cc + min(_al) * _fu[1]),
-                'L': (_cr + max(_pp) * _pu[0], _cc + max(_pp) * _pu[1]),
-                'R': (_cr + min(_pp) * _pu[0], _cc + min(_pp) * _pu[1]),
-            }
-            return min(_faces, key=lambda k: (_faces[k][0] - _acen[0]) ** 2 + (_faces[k][1] - _acen[1]) ** 2)
-        # MULTI-SIDE = the set of distinct FACES a subunit is struck on, ONE face per contacting enemy body
-        # (its contact-cell centroid -> nearest defender face). A wide head-on line hits ONE face (front);
-        # two enemy bodies front+rear hit TWO faces -> the genuine encirclement Jordan's "relief divided"
-        # describes. Per-cell arc lethality is handled separately in _octagon_dmg_mod; this only gates the
-        # graded multi-side shock.
-        for _p in pairs:
-            for _datom, _atk_cells in ((_p["atom_b"], _p["a_cells"]), (_p["atom_a"], _p["b_cells"])):
-                _dcells = list(_datom.cells())
-                _ac = list(set(_atk_cells))
-                if not _dcells or not _ac:
-                    continue
-                _acen = (sum(r for r, c in _ac) / len(_ac), sum(c for r, c in _ac) / len(_ac))
-                _face = _nearest_face(_dcells, _mean_facing(_datom), _acen)
-                _atom_sides.setdefault(id(_datom), set()).add(_face)
+    # [B6] MULTI-SIDE = distinct FACES a subunit is struck on (see _compute_atom_sides). Threaded in from
+    # the FULL tick by resolve_engagements_cascading; else computed here from `pairs` (identical when pairs
+    # IS the full tick). Only under the octagon-damage flag (it gates the graded multi-side shock below).
+    if atom_sides is not None:
+        _atom_sides = atom_sides
+    elif PC_OCTAGON_DMG:
+        _atom_sides = _compute_atom_sides(pairs)
+    else:
+        _atom_sides = {}
     # [partition-invariance fix] conv_scale is precomputed ONCE per TICK on the FULL tick's pairs
     # by the caller (run_battle, before any CASCADING_ENABLED sub-phase split -- see
     # resolve_engagements_cascading) so a convergence group spanning multiple cascade sub-phases is
@@ -754,15 +768,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             atk_cc = sum(c for r,c in attacker_cells) / len(attacker_cells)
             atk_centroid = (atk_cr, atk_cc)
             mods = []
-            op = _oriented(defender_subunit)
-            abs_to_orig = {}
-            for orig_r, orig_c, or_r, or_c in op:
-                abs_r = (defender_subunit.starting_position[0] + or_r
-                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
-                         * defender_subunit.advance_dir)
-                abs_c = (defender_subunit.starting_position[1] + or_c
-                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
-                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
+            op = _oriented(defender_subunit)   # kept: frontage SPAN (_dc below) reads the static oriented pattern
+            # [Fable-audit B3 fix, 2026-07-24] abs->orig from the single live identity map, not the dead
+            # spawn lattice (see _octagon_dmg_mod). Live _node_pos on the field path; byte-identical
+            # starting_position+cell_offsets on the grid path.
+            abs_to_orig = _oriented_abs_map(defender_subunit)
             seen = set()
             _pc_refuse = PER_CELL and PC_REFUSE
             atk_sorted = sorted(set(attacker_cells)) if _pc_refuse else None
@@ -904,15 +914,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
             if not defender_cells or not attacker_cells:
                 return 0.0
             atk = list(set(attacker_cells))
-            op = _oriented(defender_subunit)
-            abs_to_orig = {}
-            for orig_r, orig_c, or_r, or_c in op:
-                abs_r = (defender_subunit.starting_position[0] + or_r
-                         + defender_subunit.cell_offsets.get((orig_r, orig_c), 0)
-                         * defender_subunit.advance_dir)
-                abs_c = (defender_subunit.starting_position[1] + or_c
-                         + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
-                abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
+            # [Fable-audit B3 fix, 2026-07-24] Use the single live identity map instead of open-coding the
+            # abs->orig recovery off the DEAD starting_position+cell_offsets spawn lattice. On the field/node
+            # path movement lives in _node_pos (cell_offsets is not updated there), so after a couple of turns
+            # the spawn map had ZERO overlap with the unit's live cells -> every cell fell back to nominal
+            # (advance_dir,0) facing -> the flank/rear octagon multiplier silently degraded to nominal for any
+            # moved unit, muting real wedge/envelopment geometry. _oriented_abs_map keys off _node_pos on the
+            # field path (live) and off the identical starting_position+cell_offsets build on the grid path
+            # (byte-identical to this old open-code, now that its grid branch also iterates _oriented).
+            abs_to_orig = _oriented_abs_map(defender_subunit)
             _rs = getattr(defender_subunit, '_react_since', None)
             if _rs is None:
                 _rs = {}; defender_subunit._react_since = _rs
@@ -1083,8 +1093,35 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 env_b = _envelopment_sigma(unit_b, unit_a)   # B wider -> B gets it
                 ns_a += env_a
                 ns_b += env_b
-            a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
-            b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
+            if PC_INTENT_RESOLUTION:
+                # [ED-MB-0029] INTENT as an offence/defence commitment (mass_battle_v30 §A Offensive/
+                # Defensive axis). A subunit's own commitment cX (aggressive +1 / balanced 0 / hold,
+                # retreat -1) shifts its OWN offence (cX·INTENT_OFFENSE_D) and the ENEMY's offence against
+                # it (cX·INTENT_DEFENSE_D — aggressive EXPOSES, defensive BLUNTS). So A's offence net rises
+                # with A's aggression and with B's exposure, and falls when B holds: ns_a gains
+                # (cA·OFF + cB·DEF). Symmetric for B. A holding pin (cA=-1) vs a pressing foe (cB=+1) nets
+                # ~even at OFF≈DEF — the pin is NOT crushed, it survives to buy time (Cannae centre); two
+                # holders grind slowly; two aggressors trade fast and bloody. Delta-sigma (uniform-impact),
+                # like every other advantage above — NOT a raw damage multiplier. Gated; balanced=0 -> inert.
+                cA = STANCE_COMMITMENT.get(atom_a.stance, 0)
+                cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
+                ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
+                ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
+            if PC_FRACTIONAL_POOL:
+                # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
+                # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
+                _apr = a_pool_raw if not a_dead else 0.0
+                _bpr = b_pool_raw if not b_dead else 0.0
+                # [Fable-audit A4 fix, 2026-07-24] The σ-boost scales by sqrt(dice), but the fractional
+                # remainder adds only an EXPECTED fraction of a die's worth of *variance* (A3), not a full
+                # die — so feeding the raw fractional pool over-stated advantages ~38% just below each
+                # integer and gave sub-1 pools a phantom full-die conversion. Pass floor(pool): the σ-boost
+                # counts only the guaranteed integer dice, matching the discrete base's real die count.
+                a_net = roll_pool_fractional(_apr) + _sigma_net_boost(ns_a, math.floor(_apr))
+                b_net = roll_pool_fractional(_bpr) + _sigma_net_boost(ns_b, math.floor(_bpr))
+            else:
+                a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
+                b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
             # [ED-MB-0018] octagon = damage multiplier under PC_OCTAGON_DMG -> not a pool penalty here
@@ -1180,8 +1217,16 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # in an early sub-phase, a wing's pair in a later one) must be seen as a whole to be corrected
     # correctly; splitting it across sub-phase calls would under-count each sub-phase's group size.
     conv_scale = _convergence_scale(unit_a, unit_b, pairs)
+    # [Fable-audit B6, 2026-07-24] Compute the multi-side face set AND the per-atom engagement count ONCE on
+    # the FULL tick's pairs (exactly as conv_scale is), then thread them into every sub-phase's
+    # resolve_engagements. Otherwise the depth-group split fed each sub-call only its group's pairs, so an
+    # encircled body showed 1 face / 1 engagement per call and the multi-side shock (2 sides x1.5, 3 x2.0)
+    # + encirclement penalty never fired -- envelopment delivered ~0% at matched density.
+    full_sides = _compute_atom_sides(pairs) if PC_OCTAGON_DMG else {}
+    full_eng = count_engagements_per_atom(pairs)
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale)
+        return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale,
+                                   eng_counts=full_eng, atom_sides=full_sides)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -1213,7 +1258,8 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale,
+                                     eng_counts=full_eng, atom_sides=full_sides)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -1859,6 +1905,14 @@ def reset_morale_between_battles(unit):
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
         atom.routed = False
         atom.broken = False
+        # [Fable-audit A6 fix, 2026-07-24] Clear the cached stochastic-rout break-point (ED-MB-0031) and
+        # re-base the casualty denominator to this battle's starting strength. Otherwise a subunit that ended
+        # the prior battle past its drawn break-point (~15-30% losses) carries BOTH that break-point AND its
+        # spawn-based loss fraction into the next battle, so it auto-routs on phase 1 of EVERY later battle
+        # with zero new casualties. A rout is a per-BATTLE will-to-fight collapse; both reset at the campaign
+        # boundary. (Only consumed under PC_STOCHASTIC_ROUT; between-battle only -> single-battle goldens inert.)
+        atom._rout_breakpoint = None
+        atom._start_troops = atom.cur_troops
         # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
         # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
         atom.pocketed = False

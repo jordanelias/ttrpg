@@ -374,3 +374,69 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   paired with whichever DG-6/DG-7 direction is chosen, then re-run the full 20-row gauge (no surface
   in this audit ran the complete battery — only directional/single-row causal evidence exists for
   any proposed fix).
+
+---
+
+## 2026-07-24 — "Nothing is golden" campaign: Part-A flips + Part-B fixes (IN PROGRESS)
+
+Jordan directive: *"implement all proposals. nothing is golden here."* The byte-exact golden constraint
+is LIFTED — goldens become a re-recorded regression snapshot; the **honest gauge is now the primary
+oracle**. Full steering doc + 6-phase plan: `audit/2026-07-22-mass-battle-stress-test/full_implementation_plan_v1.md`
+(committed). Per-troop damage primitive (Jordan): troop = sub-cell isolate carrying weapon/quality/intent/
+morale; density is LINEAR; the σ-head resolves per-troop quality → degree; count scales magnitude. This
+resolves B4 = casualties-only-linear (behind a toggle). Decisions locked: PC_ flags KEPT; rotation DEFERRED.
+
+**WORKING-TREE STATE (uncommitted): B1 applied to `tests/sim/mass_battle/geometry.py`** — the
+`_oriented_abs_map` node branch now iterates `_oriented(atom)` (the continuous footprint _node_pos is keyed
+by) and SKIPS absent ids instead of defaulting misses to origin `(0,0)`. **Verified:** H2 wedge decA
+0.0 → 37.5 (audit predicted ~33). ✅
+
+**CRITICAL COUPLING FOUND (do not commit B1 alone):** measuring the FULL gauge after B1 shows the
+braced-wall C-rows REGRESS — C2/C6 `REPELLED` → `NOT-REPELLED` (cav wins 87.5% vs a braced wall), net
+gauge 5/20 → 4/20. Root: the brace-repel silently relied on the broken `(0,0)`-collapsed contact map
+feeding charge-shock / `_wall_prep` / `_defender_depth`; and the octagon-damage path
+(`_per_cell_angle_mod`/`_octagon_dmg_mod`, orchestration ~L1156, zone binning ~L1021-1066) is STILL on the
+dead `starting_position + cell_offsets` lattice (B3, unfixed) — so after B1 the contact map and the
+octagon map DISAGREE. **The geometry frame (B1 + B2 + B3) and the B5 charge-zone fix are COUPLED through
+the contact map and MUST land as ONE coherent set, measured together.**
+
+**NEXT ACTION (resume here):**
+1. B3 — route `_per_cell_angle_mod`/`_octagon_dmg_mod` onto the same live `_node_pos` identity map (kill
+   the dead spawn-lattice open-code at geometry.py ~L259-262 path for these functions).
+2. B5 — derive the charge/recoil zone (`_zb`/`_za`, orchestration L1021-1066) from the TRUE arc
+   (`a_arc`/`b_arc`) not the `PC_REFUSE`-bundled `angle_mod`.
+3. Re-measure the full gauge with B1+B3+B5 together; confirm C2/C6 return to REPELLED AND H2 stays fixed.
+4. B2 — rebuild `col_grid` from live file bins per tick + re-center ANCHOR_MAP (H7/H8 fatigue-immunity).
+5. Only when the frame set is NET-POSITIVE on the gauge: re-record bat.py goldens (4 modes) as the new
+   baseline, update the byte-exact digest tests, run pytest, commit + ledger (ED-MB-0034), PR.
+
+### 2026-07-24 continued — B1+B3 verified correct but NET-NEGATIVE on gauge alone (frame must land whole)
+
+**Verified this increment (code preserved as `audit/2026-07-22-mass-battle-stress-test/frame_step1_B1_B3.patch`,
+working tree reverted to keep the branch clean / avoid committing a gauge regression):**
+- **B1** (geometry.py `_oriented_abs_map` node branch): iterate `_oriented(atom)`, skip absent `_node_pos`
+  ids (no `(0,0)` default). **H2 wedge decA 0.0 → 40.0** ✅ (audit predicted ~33).
+- **B1-grid** (same fn, grid branch): iterate `_oriented(atom)` not `oriented_pattern(shape,tier)` — matches
+  `cell_offsets` keying (units.py: "_oriented is the sole source of the offset"); byte-identical for legacy
+  troops=None. Makes `_oriented_abs_map` the SINGLE identity map. Add `_oriented_abs_map` to geometry `__all__`.
+- **B3** (orchestration.py `_octagon_dmg_mod` L903 + `_per_cell_angle_mod` L748): replace the open-coded
+  `abs_to_orig` (dead `starting_position+cell_offsets` lattice) with `abs_to_orig = _oriented_abs_map(defender_subunit)`.
+  Live `_node_pos` on the field path; byte-identical on grid. H1 mirror → 52.5 (IN BAND).
+- **make_unit** (gauge_mb.py): added `width`/`depth` params → spec (for deep-formation rows).
+
+**KEY FINDING — the brace-repel (C2/C6) gap is DEEPER than B1/B3/B5:** with the contact map fixed, a braced
+LINE cannot cleanly repel a charge. The reciprocal charge-recoil is depth-gated (`_wall_prep = _disc_prep ×
+_depth_prep`; `_depth_prep(1)=0`, `(2)=0.33`, `(3)=0.67`), but the density-matched gauge units are only 2
+ranks. Scaling depth at EQUAL FORCE: cav-win 62% (d2) → 40% (d6) → 70% (d8) — depth helps but a narrow-deep
+line gets FLANKED by the wider wedge (envelopment), so it never cleanly repels. **A repelling formation is a
+SQUARE/BOX (all-around brace), not a frontal deep line.** So C2/C6 need: (a) **B5** (charge/recoil zone from
+the true arc, not the PC_REFUSE-bundled angle_mod), AND (b) a **box/square brace primitive** (all-around
+facing), AND (c) gauge C-rows scaled up (bigger, deeper, fair force). The old brace-"repel" was an ARTIFACT
+of the broken `(0,0)`-collapsed contact map — B1/B3 correctly remove it and expose the real gap.
+
+**Full gauge with B1+B3 alone = 4/20 (was 5/20)** — net -1 because C2/C6 flip (brace-model gap) while the
+H-rows improve directionally but aren't yet in band (need B2 + the brace/box work). **CONCLUSION: the
+geometry frame (B1+B2+B3) + B5 + the box-brace primitive + the gauge C-row rescale must land as ONE
+net-positive set — no piecemeal geometry commit reaches net-positive.** Next increment: apply
+`frame_step1_B1_B3.patch`, then build B2 (col_grid live), B5 (arc zone), the box-brace primitive, and the
+gauge C-row rescale together; measure the full 20-row gauge; re-record 4 goldens; land as ED-MB-0034.

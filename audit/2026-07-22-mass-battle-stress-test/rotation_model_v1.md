@@ -74,6 +74,37 @@ pool — until its depth is spent; a **shallow** one thins at the front immediat
    Interacts with the DG-2 yielding/rally work; must not let a unit heal back to full (cap to a fraction
    of losses, decaying).
 
+## Intent as a resolution axis (ED-MB-0029) — LANDED
+
+Separate from rotation but the same directive family ("intent makes a big difference in how things
+resolve"). `stance` was movement-speed only; it is now a **signed offence/defence commitment** on the
+exchange, entering the sigma-leverage head as a delta-sigma net term (uniform-impact, like the
+octagon/puncture advantages — **not** a raw damage multiplier):
+
+```
+cX = STANCE_COMMITMENT[stance]   # aggressive +1 / balanced 0 / hold, retreat -1
+ns_a += (cA·INTENT_OFFENSE_D + cB·INTENT_DEFENSE_D)·SIGMA_PER_D   # own press + enemy exposure/blunting
+ns_b += (cB·INTENT_OFFENSE_D + cA·INTENT_DEFENSE_D)·SIGMA_PER_D   # symmetric
+```
+
+**Grounding:** `mass_battle_v30.md §A`'s tactic cards are *asymmetric* — *Disciplined Defence* grants
+**+1D Defence**, but *Standard Advance* has "no additional effect." So the doctrine favours the defender:
+`INTENT_DEFENSE_D=1.0 > INTENT_OFFENSE_D=0.5`. A holding pin therefore **survives** a pressing foe
+(buys time — the Cannae centre) instead of cancelling to an even fight, and an aggressor **pays for
+exposure** vs a steady wall.
+
+**Emergent (intent_probe, matched-density mirror lines, OFF→ON):**
+- hold vs balanced: holder casualties **67→57**, win-rate **35%→50%** — the pin survives.
+- aggressive vs hold: the holder **wins 65/35** — the immovable object beats the reckless charge.
+- aggressive vs aggressive: more balanced/bloody.
+
+Gated `PC_INTENT_RESOLUTION` (default OFF; balanced=0 → inert; byte-exact — bat.py 4 modes EXIT=0).
+`INTENT_OFFENSE_D/DEFENSE_D` are class-B calibration-debt anchored to the +1D/+2D convention; the visible
+magnitude scales with battle **duration**, so the current 2–3-turn hyper-decisive resolution (DG-6, still
+open) caps how large the effect reads — longer battles amplify it. **Next in this family:** expose
+fighting-withdrawal (`stance='retreat'` + yielding) as a deliberate **bait** order, the actual Cannae
+centre maneuver.
+
 **North star unchanged:** grounded emergent primitives, calibrated to independent history, never to the
 gauge rows; every new mechanic gated OFF until measured and (where it changes canon-adjacent behavior)
 ratified.

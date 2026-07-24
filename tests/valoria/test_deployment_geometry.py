@@ -89,13 +89,15 @@ def test_envelopment_wings_straddle_center(field_path):
 def test_envelopment_wings_wrap_behind_opposite_flanks(field_path):
     """The load-bearing double-envelopment invariant: with a corrected deployment, the two wings wheel to
     OPPOSITE flanks and both get BEHIND the enemy (past its far row edge) — a mirror wrap, not both wings
-    piling onto one side."""
+    piling onto one side. [ED-MB-0035: wrapping to the REAR is now a CAVALRY behaviour — the orbital wheel;
+    infantry wings envelop the FLANK, not the rear (Cannae's division of labour). So the wings here are
+    cavalry, matching the mechanic that actually reaches behind.]"""
     import random
     random.seed(3)
     a = build_envelopment(
         [{'shape': 'Line', 'troops': 600, 'concentration': 50}],
-        [{'shape': 'Line', 'troops': 500, 'concentration': 50},
-         {'shape': 'Line', 'troops': 500, 'concentration': 50}], 'A', 'A')
+        [{'shape': 'Line', 'troop_type': 'cavalry', 'troops': 500, 'concentration': 50},
+         {'shape': 'Line', 'troop_type': 'cavalry', 'troops': 500, 'concentration': 50}], 'A', 'A', speed='Fast')
     b = build_army([{'shape': 'Line', 'troops': 900, 'concentration': 50}], 'B', 'B', anchor_col=25)
     _orch.run_multi_turn_battle(a, b, 'Line', 'Line', {'A': 25, 'B': 25}, max_battle_turns=12)
     spans = _spans(a)
