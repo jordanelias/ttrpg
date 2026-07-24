@@ -41,7 +41,7 @@ def roll_pool(n, tn=7):  # [canonical: params/core.md §TN Values — TN 7 stand
         elif f == 10:      net += 2
     return net
 
-def roll_pool_fractional(pool, tn=7):
+def roll_pool_fractional(pool, tn=7):  # [canonical: params/core.md §TN Values — TN 7 standard]
     """[ED-MB-0032, Jordan: "pool must be fractional."] Roll a CONTINUOUS combat pool without flooring it
     to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
     fractional remainder contributes its EXPECTED net (PER_DIE_NET_EV per full die) so the pool's
