@@ -25,10 +25,20 @@ def _init_live(c, cfg):
     c.initiative=0.0
     c.poise=1.0
 
-def engagement(A, B, first, cfg, rng):
-    """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. Returns the
-    felled Combatant or None (separation). A and B are fixed objects throughout — never swapped."""
+def engagement(A, B, first, cfg, rng, prev_closed=False):
+    """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. `prev_closed` is the
+    measure state the PREVIOUS engagement ended in (see the re-presentation gate below). Returns (felled Combatant or
+    None, ended_closed) — the second element threads forward as the next engagement's prev_closed. A and B are fixed
+    objects throughout — never swapped."""
     aggressor = first; defender = B if first is A else A
+    # OPEN-MEASURE RESET (ED-PC-0033): a NEW engagement begins at open measure — weapons at full extension, no lunge
+    # committed. The per-beat transient geometry (grip_position, lunge_depth) is otherwise carried on the Combatant
+    # object from the PRIOR engagement's final beat; without this reset a weapon that ended the last engagement choked
+    # in (grip_position≈1) would UNDER-READ its own reach at THIS engagement's opening reach_base — corrupting the
+    # frozen longer/shorter labels and measure_gap for the whole new engagement. Reset before the reach_base below so
+    # the opening geometry is the honest open-measure one (grip_target re-derives per-beat inside the loop anyway).
+    for c in (A, B):
+        c.grip_position = 0.0; c.lunge_depth = 0.0
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
@@ -36,6 +46,20 @@ def engagement(A, B, first, cfg, rng):
     # matchups), which the attacker-favouring mechanics amplified. Different reach is deterministic as before.
     longer = A if erA>erB else (B if erB>erA else (A if rng.random()<0.5 else B)); shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter]); closed=(measure_gap<=0.3)
+    # RE-PRESENTATION GATE (ED-PC-0033): the reset above restores the HONEST open-measure geometry, but a fresh
+    # engagement does not always open at measure — it opens at measure only if the reach weapon can RE-PRESENT its
+    # point against a (re-)closing opponent. An armoured closer who does not fear a point that cannot defeat his
+    # harness crowds in and STAYS glued from the prior close, so if the previous engagement ended CLOSED and the longer
+    # weapon fails its re-presentation roll (systems.represent_measure_p — armour-faded via reach_threat, footwork-
+    # lifted), the shorter has crowded to grips: this engagement starts CLOSED, and the reach advantage never gets to
+    # speak. UNARMOURED -> represent_p 1.0 -> always re-presents (reach dominates off-plate); PLATE -> floored -> crowded
+    # almost every engagement (a spear cannot keep a determined plate-armoured man at the point — the honest physics the
+    # naive always-reset would have violated, letting the spear field-win at heavy). First engagement (prev_closed=False)
+    # always opens at measure — the initial approach is real.
+    if prev_closed and not closed and measure_gap>0.3:
+        _rep = S.represent_measure_p(longer, shorter, cfg, TR)
+        if _rep < 1.0 and rng.random() >= _rep:   # short-circuit: represent_p==1.0 (none/light) draws NO rng — the gate is inert on the stream off-plate
+            closed=True; measure_gap=0.0
     # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert - ablation ~0, washed out by per-beat dynamics):
     # initiatives start even (0.0 from _init_live); the ongoing Vor (hit-gains/steals/decay) decides who holds it.
     A.initiative, B.initiative = 0.0, 0.0
@@ -110,7 +134,7 @@ def engagement(A, B, first, cfg, rng):
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, True, cfg, net=net, pool=pool)
                         longer.apply_wound(d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
-                        if longer.felled: return longer
+                        if longer.felled: return longer, closed
                     ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
         # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
         if not closed:
@@ -143,7 +167,7 @@ def engagement(A, B, first, cfg, rng):
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
                     shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
-                    if shorter.felled: return shorter
+                    if shorter.felled: return shorter, closed
                     recoil = S.arrest_impulse(longer, cfg)   # the ARREST: braced-weapon impulse vs the charge (reach+structure, not wound)
             measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
             just_closed = (measure_gap<=0.3)
@@ -152,7 +176,7 @@ def engagement(A, B, first, cfg, rng):
             _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
                   close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if not closed:
-                if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
+                if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None, closed
                 continue
         # ----- CLOSED: tempo-gated exchange -----
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
@@ -293,7 +317,7 @@ def engagement(A, B, first, cfg, rng):
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
                     d=core.strike(aggressor, defender, 'graze', False, cfg)
                     defender.apply_wound(d)
-                    if defender.felled: return defender
+                    if defender.felled: return defender, closed
                 riposte=True   # defender now inside with initiative
         # ---- distance-creating moments for re-opening (corrections 1+3), benefiting the LONGER weapon ----
         # (a) opponent over-committed: a deep commit by the SHORTER weapon (the one who must stay close) leaves it
@@ -315,7 +339,7 @@ def engagement(A, B, first, cfg, rng):
             defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
             _sd,_pb=S.percussion_stagger(aggressor, defender, hit, deg, cfg)   # ED-PC-0031: concussive wind + strong stagger (armour-gated; the blunt-through-plate path the wound-only break above cannot see)
             defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
-            if defender.felled: return defender
+            if defender.felled: return defender, closed
         if bind:
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
@@ -336,7 +360,7 @@ def engagement(A, B, first, cfg, rng):
                         defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
                         defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
-                        if defender.felled: return defender
+                        if defender.felled: return defender, closed
                         break
                 else: riposte=True; break
         if riposte:
@@ -347,7 +371,7 @@ def engagement(A, B, first, cfg, rng):
                     aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(defender, aggressor, d, 'graze', cfg)   # ED-PC-0031: riposte wind + stagger
                     aggressor.stamina-=_sd; aggressor.poise=S.clamp_poise(aggressor.poise-_pb, cfg)
-                    if aggressor.felled: return aggressor
+                    if aggressor.felled: return aggressor, closed
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
         # CONTACT AXIS (I7b, D8/D9): the ONE insertion point, after hit/bind/riposte all resolve — reads the
@@ -383,10 +407,10 @@ def engagement(A, B, first, cfg, rng):
         # measure breaks (the floor: one swing, one dodge, separate = 1 exchange). A landed hit, a riposte (role flip),
         # or a bind CONTINUES the pressing. Felling / stamina-collapse exits are handled above. Combat = many such
         # turns; wounds persist across them, so equal fighters take several turns to resolve (emergent, not enforced).
-        if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
-        if exchanges >= cfg['BURST_MAX']: _emit('separation', reason='burst_ceiling'); return None
-        if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None
-    _emit('separation', reason='beat_exhaustion'); return None
+        if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None, closed
+        if exchanges >= cfg['BURST_MAX']: _emit('separation', reason='burst_ceiling'); return None, closed
+        if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None, closed
+    _emit('separation', reason='beat_exhaustion'); return None, closed
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
     import random
@@ -399,10 +423,11 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
           armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
+    prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
     for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
-        loser = engagement(A,B,first,cfg,rng)
+        loser, prev_closed = engagement(A,B,first,cfg,rng,prev_closed)
         _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None))
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won

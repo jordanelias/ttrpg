@@ -2,7 +2,7 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-from math import tanh, sqrt   # logistic/exp single-sourced in core.logistic (ED-PC-0025)
+from math import tanh, sqrt, exp   # logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade
 import core
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
 import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
@@ -636,6 +636,42 @@ def reach_threat(longer, defender, cfg):
                  grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
     deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - cap)
     return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
+
+def represent_measure_p(longer, shorter, cfg, TR):
+    """P(a reach weapon RE-PRESENTS its point at open measure entering a fresh engagement, rather than being crowded to
+    grips). A new engagement (turn) nominally opens at measure — the fighters have broken and reset — but a reach weapon
+    only KEEPS that measure if the (re-)closing opponent still RESPECTS the point. An armoured closer who does not fear a
+    point that cannot defeat his harness crowds in and STAYS glued, so the reach weapon never recovers its distance and
+    the fight stays close (where the shorter, bind-dominant weapon decides it). The fade shares reach_threat's grounded
+    structure — the armour-defeat DEFICIT (how far the weapon's realised armour-defeat capability falls short of the
+    tier threshold) weighted by the armour's substance (ADEF_W) — but a STEEPER exp() response, because holding a
+    determined armoured man at the point over a whole engagement is a harder ask than merely deterring one stop-hit
+    (reach_threat, which is deliberately shallow to avoid triple-counting, floors at 0.35 — too generous to CROWD a
+    pure point off plate). So:
+      • UNARMOURED (ADEF_W 0) -> 1.0: the reach weapon always re-presents — reach dominates off-plate, as it must.
+      • LIGHT (gambeson, low ADEF_W) -> ~1.0 even for a non-'defeating' point: soft armour still respects a thrust, so
+        crowding barely happens (the reach edge survives — light-tier reach invariants hold).
+      • PLATE (heavy ADEF_W) -> collapses for a PURE POINT (spear/yari, large deficit) so it is crowded almost every
+        engagement (a spear cannot keep a determined plate-armoured man at its point — the honest physics), while a
+        gap-defeating reach weapon (poleaxe spike ~clears the tier; guisarme bill smaller deficit) still re-presents
+        often enough to bring its plate-defeat to bear. This is the emergent discriminator the equal per-hit damage
+        could not provide: at plate, spear and guisarme wound alike per hit, but the guisarme EARNS more presentations.
+    Lifted mildly by the wielder's FOOTWORK (Agility differential) — nimble feet break and re-make measure — bounded so
+    armour, not stats, dominates the gate (0 for a stat mirror). Reuses adef_cap (single owner of armour-defeat), same
+    head/gap/grip/room reads as reach_threat. REPRESENT_DECAY_K / REPRESENT_FOOT_K [SIM-CALIBRATE]. Pure."""
+    aw = cfg['ADEF_W'][shorter.armor]
+    if aw <= cfg['ADEF_W']['light']:
+        return 1.0   # CROWDING IS A HARD-ARMOUR PHENOMENON: soft gambeson (and bare) still respects a thrust, so a reach
+                     # weapon is never crowded off measure through it (reach survives at none/light — the light-tier reach
+                     # dominance the invariants require). Only mail/plate let a closer fearlessly crowd the point. Returning
+                     # exactly 1.0 (not ~0.99) also means the wrapper consumes NO rng draw here, so the gate is inert on the
+                     # RNG stream at light — where the tradition-lever texture regression runs.
+    cap = adef_cap(longer.w, cfg, head=getattr(longer,'sel_head',None), gap=getattr(longer,'sel_gap',None),
+                   grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
+    deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - cap)
+    base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
+    foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
+    return max(0.0, min(1.0, base*foot))
 
 def leverage(c, cfg):
     """Lever-arm primitive: capacity to redirect/bind/displace another weapon. EXPLICIT hand-to-contact lever arm

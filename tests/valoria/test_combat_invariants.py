@@ -835,11 +835,15 @@ def test_reach_class_beats_arming_not_inverted():
     # (1) reach dominates every NON-plate tier for the DEDICATED reach weapons — the reach advantage vs flesh/cloth/mail
     #     is real. (spear/yari long point + poleaxe percussion; guisarme handled separately below.)
     #     [ED-PC-0027, 2026-07-23] the mode-aware heft correction (a thrust no longer carries the swing moment — the
-    #     SPEAR flat-dominance root) reduced the spear/yari OFF-plate thrust damage toward the target band: they stay
-    #     STRICTLY dominant at none/light (reach unresisted → ~0.70-0.78) but MEDIUM (mail) is now a genuine near-even
-    #     contest (~0.50 true, n=60/cell SE~0.09 so the seed can land ~0.45), because mail resists the (now lighter)
-    #     thrust while the reach edge persists — EXACTLY the guisarme (1b) situation, given the same near-even guard.
-    #     The poleaxe (armour-defeating percussion + spike) stays strictly dominant at every off-plate tier.
+    #     SPEAR flat-dominance root) reduced the spear/yari OFF-plate thrust damage toward the target band.
+    #     [RE-BASELINED, ED-PC-0033, 2026-07-24] fixing the stale-grip bug (a reach weapon now RE-PRESENTS at open measure
+    #     each fresh engagement instead of staying wrongly choked from the prior close — the represent_measure_p gate) lifted
+    #     the OFF-plate reach values: mail (medium) no longer CROWDS the point (crowding is a plate phenomenon — the gate is
+    #     exactly 1.0 at none/light and only bites at medium+), so the reach edge persists across every engagement and the
+    #     spear/yari now DOMINATE medium (~0.90-0.95 true), not the old bug-suppressed ~0.50 near-even. The old ~0.50 was an
+    #     artifact of the reach weapon being unable to re-open measure; the honest value is dominance (a mail-armoured man
+    #     cannot hold a spearman off, and mail does not stop the thrust). The assertions stay one-sided floors (>0.42) — the
+    #     re-baseline moved the true value UP, well clear of them. The poleaxe stays strictly dominant at every off-plate tier.
     for armor in ('none', 'light', 'medium'):
         assert share[('poleaxe', armor)] > 0.5, f"poleaxe vs arming at {armor}: reach INVERTED off-plate ({share[('poleaxe', armor)]:.2f})"
     for w in ('spear', 'yari'):
@@ -855,7 +859,9 @@ def test_reach_class_beats_arming_not_inverted():
     #     gets a tight CONTEST band; none/light stay strict. A real zeroing bug still trips the medium floor.
     for armor in ('none', 'light'):
         assert share[('guisarme', armor)] > 0.5, f"guisarme vs arming at {armor}: reach INVERTED off-plate ({share[('guisarme', armor)]:.2f})"
-    assert share[('guisarme', 'medium')] > 0.42, f"guisarme vs arming at medium: reach ANNIHILATED ({share[('guisarme', 'medium')]:.2f}) — expected a near-even contest"
+    # [ED-PC-0033] like spear/yari (1), the grip-bug fix lifted the guisarme's medium value to dominance (~0.92 true) — mail
+    #     no longer crowds its bill off measure. The >0.42 floor is now a slack ANNIHILATION guard, not a near-even band.
+    assert share[('guisarme', 'medium')] > 0.42, f"guisarme vs arming at medium: reach ANNIHILATED ({share[('guisarme', 'medium')]:.2f})"
     # (2) at HEAVY, the dedicated armour-defeating reach weapon still dominates (poleaxe's swung spike/hammer defeats plate).
     assert share[('poleaxe', 'heavy')] > 0.5, f"poleaxe vs arming at heavy should still defeat plate ({share[('poleaxe','heavy')]:.2f})"
     # (3) at HEAVY, a PURE-POINT reach weapon is correctly brought BELOW dominance (the grounded G4 correction — a long
@@ -865,6 +871,10 @@ def test_reach_class_beats_arming_not_inverted():
     #     and attempt the gaps). The old 0.10 floor was calibrated to the pre-correction inflated thrust; a genuine
     #     ZEROING bug (the reach lever going fully dead) is already caught by the STRICT >0.5 none/light assertions
     #     above, so here we assert only that plate correctly brings them below dominance.
+    #     [ED-PC-0033] the stale-grip fix could have INVERTED this (a freely re-presenting spear field-WON heavy at ~0.97),
+    #     but the represent_measure_p gate crowds a pure point off plate (an armoured man who does not fear the point walks
+    #     it down), holding the spear at ~0.08 true (yari ~0.40) — the near-total loss is PRESERVED, now grounded in the
+    #     crowding physics rather than an accidental grip artifact.
     for w in ('spear', 'yari'):
         s = share[(w, 'heavy')]
         assert s < 0.5, f"{w} vs arming at heavy: plate should bring a pure-point reach weapon below dominance, got {s:.2f}"
@@ -880,4 +890,9 @@ def test_reach_class_beats_arming_not_inverted():
     #     (the spear/yari pure-point stalemate-loss guard at (3) confirms plate is not free reach). CEILING 0.92 carries
     #     ~2·SE of n=60 sampling margin over the ~0.85 true value (this hardcoded-seed cell reads 0.80-0.89 across
     #     calibration; SE~0.06 on ~45 decided) — it is a runaway/inversion guard, not a fine balance assertion.
+    #     [ED-PC-0033, 2026-07-24] the grip-bug fix + represent_measure_p gate lowered the guisarme's heavy value to ~0.61
+    #     true (n=300): it re-presents more often than a pure point (its bill's smaller armour-defeat deficit earns more
+    #     presentations against the crowding plate man) but LESS than off-plate — so it stays FAVOURED-but-contested, not
+    #     the old ~0.85 dominance. Still comfortably inside [0.30, 0.92]; the emergent discriminator (guisarme > spear at
+    #     plate) now comes from re-presentation frequency, not per-hit damage (both wound plate ~alike per landed hit).
     assert 0.30 <= share[('guisarme', 'heavy')] <= 0.92, f"guisarme vs arming at heavy should contest ({share[('guisarme','heavy')]:.2f})"
