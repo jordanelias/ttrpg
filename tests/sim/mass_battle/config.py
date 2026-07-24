@@ -65,14 +65,14 @@ ROUT_EXHAUSTION_MORALE_HIT = 1      # morale loss per phase boundary when exhaus
 # [ED-MB-0031, Jordan 2026-07-23: "routs would occur as early as 15% losses with 30% the upper hand."]
 # STOCHASTIC ROUT BREAKPOINT: the canonical §A.4 casualty→morale steps don't even fire until 50% losses,
 # so units grind to ~58% casualties before breaking — far past the historical break point. This models the
-# du Picq cohesion-collapse directly: each subunit draws its OWN break-point (fraction of casualties at
-# which cohesion snaps) in the [ROUT_ONSET, ROUT_CAP] band, SKEWED by its resilience (discipline + starting
+# du Picq will-to-fight collapse directly: each subunit draws its OWN break-point (fraction of casualties at
+# at which the will to fight snaps) in the [ROUT_ONSET, ROUT_CAP] band, SKEWED by its resilience (discipline + starting
 # morale) — a steady, disciplined body holds toward 30%, a shaken/loose one breaks toward 15%. When its
 # casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
 # band + fractional loss fraction), reproducible under the seeded RNG. Gated OFF by default (moves the
 # byte-exact goldens when on — it is NOT inert like the other PC_ flags; the draw is only consumed when on).
 PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '0') == '1')
-ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where cohesion-break risk begins
+ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where morale-break risk begins
 ROUT_CAP_FRAC   = 0.30  # [canonical: Jordan historical research 2026-07-23 — 30% the upper bound] casualty fraction by which a break is near-certain
 MORALE_PHASE_CAP = 3  # [canonical: sim_verification_ledger.json — CALIBRATED, per-phase morale-loss bound, not independently historically cited]
 DISCIPLINE_LOSS_THRESHOLD = 1.0  # [canonical: params/mass_combat.md §Discipline Degradation]

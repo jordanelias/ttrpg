@@ -5,7 +5,7 @@ Archived entries in tests/coverage_matrix_archive.md
 ## 2026-07-23 — ED-MB-0031: stochastic rout breakpoint at the historical 15-30% casualty band
 - Jordan historical research: "routs occur as early as 15% losses with 30% the upper hand." The canonical
   §A.4 casualty→morale steps don't fire until 50% losses, so units grind to ~90% before breaking. Models
-  du Picq cohesion-collapse: each subunit draws a **fractional** break-point in [ROUT_ONSET=0.15,
+  du Picq will-to-fight collapse: each subunit draws a **fractional** break-point in [ROUT_ONSET=0.15,
   ROUT_CAP=0.30], skewed by resilience (discipline + starting morale) — a steady body holds toward 30%, a
   shaken one breaks toward 15% — and routs when its casualty fraction crosses it.
 - Result (rout_probe OFF→ON): loser casualty-at-rout **91.7%→31.8%** (even), 88.8%→30.3% (disc5v3);

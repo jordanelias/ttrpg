@@ -46,7 +46,7 @@ def check_orders(unit, t, enemy_cells):
                 # [ED-MB-0030] fire once THIS subunit is attrited to <= FRAC of its spawn count — a unit
                 # reacting to its OWN losses (withdraw a spent body / commit a weakened one / brace when
                 # thinned). Uses the same _start_troops spawn denominator the §A.4 casualty triggers +
-                # per-subunit cohesion already use; no new state. A subunit that never thins that far keeps
+                # per-subunit survival fraction already use; no new state. A subunit that never thins that far keeps
                 # the order pending forever (by design, same as an unmet enemy_range).
                 frac = float(order.trigger.split(':', 1)[1])
                 start = getattr(sub, '_start_troops', 0) or 0
