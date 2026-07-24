@@ -542,3 +542,11 @@ Archived entries in tests/coverage_matrix_archive.md
   `check_orders` timed sequencing, and escort/formation-relative positioning (Cannae acceptance test
   verified real lateral wheel movement, zero new flanking mechanics). G5 byte-exact both grid modes
   unchanged throughout. Full detail: `tests/coverage_matrix_archive.md`.
+
+## Archived 2026-05-29 (pre-v32 sim rows; armature-reset coverage trim)
+
+## 2026-07-08 — mass_battle: partition-invariance fix (ED-MB-0004) + RC-5 preliminary finding
+
+**Jordan's rulings (AskUserQuestion, 2026-07-08):** the partition-invariance question left open by
+ED-MB-0003 = **"genuine defect — fix it"** (not the historically-correct-mechanism reading); DG-2
+(fighting-withdrawal/yield) = **"build it now"**; RC-5 triage = **start now, in parallel**.
