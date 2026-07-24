@@ -967,7 +967,7 @@ class Subunit:
         # sign), holding the radius — the goal rides the standoff circle around to the enemy's rear.
         cross = bu[0] * rear[1] - bu[1] * rear[0]
         direction = 1.0 if cross >= 0 else -1.0                 # orbit the shorter way toward the rear
-        step = 0.9                                              # radians/tick wheel rate; the node step-cap bounds actual move
+        step = 0.9  # [canonical: mass_battle_v30.md §A.7 manoeuvre — cavalry WHEEL rate rad/tick (ED-MB-0035 calibration; the node step-cap bounds the actual per-tick move)]
         s = math.sin(step) * direction; c = math.cos(step)
         nb = (bu[0] * c - bu[1] * s, bu[0] * s + bu[1] * c)     # bearing rotated toward the rear
         return (ecen_r + radius * nb[0], ecen_c + radius * nb[1])
