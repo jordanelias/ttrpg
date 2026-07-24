@@ -561,15 +561,63 @@ def _convergence_scale(unit_a, unit_b, pairs):
     return a_scale, b_scale
 
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None):
+def _compute_atom_sides(pairs):
+    """[Fable-audit B6, 2026-07-24] The set of DISTINCT octagon FACES (F/B/L/R) each defender subunit is
+    struck on this TICK, ONE face per contacting enemy body (its contact-cell centroid -> nearest defender
+    face). Extracted to module scope so it can be computed ONCE on the FULL tick's pairs (like conv_scale)
+    and threaded into every cascade sub-phase's resolve_engagements -- otherwise the depth-group split fed
+    each sub-call only its own group's pairs, so a front+rear/flank-enveloped body showed 1 face per call
+    and the graded MULTI-SIDE SHOCK (2 sides x1.5, 3 x2.0) NEVER FIRED for the encircled defender -- the
+    root of envelopment delivering 0% at matched density (H3-H6)."""
+    def _mean_facing(_atom):
+        _fv = getattr(_atom, 'cell_facing_vec', None)
+        if _fv:
+            _rs = sum(v[0] for v in _fv.values()); _cs = sum(v[1] for v in _fv.values())
+            if _rs or _cs:
+                return (_rs, _cs)
+        return (_atom.advance_dir, 0)
+    def _nearest_face(_dcells, _dfac, _acen):
+        _n = len(_dcells)
+        _cr = sum(r for r, c in _dcells) / _n; _cc = sum(c for r, c in _dcells) / _n
+        _fm = (_dfac[0] ** 2 + _dfac[1] ** 2) ** 0.5 or 1.0
+        _fu = (_dfac[0] / _fm, _dfac[1] / _fm)
+        _pu = (-_fu[1], _fu[0])
+        _al = [(r - _cr) * _fu[0] + (c - _cc) * _fu[1] for r, c in _dcells]
+        _pp = [(r - _cr) * _pu[0] + (c - _cc) * _pu[1] for r, c in _dcells]
+        _faces = {
+            'F': (_cr + max(_al) * _fu[0], _cc + max(_al) * _fu[1]),
+            'B': (_cr + min(_al) * _fu[0], _cc + min(_al) * _fu[1]),
+            'L': (_cr + max(_pp) * _pu[0], _cc + max(_pp) * _pu[1]),
+            'R': (_cr + min(_pp) * _pu[0], _cc + min(_pp) * _pu[1]),
+        }
+        return min(_faces, key=lambda k: (_faces[k][0] - _acen[0]) ** 2 + (_faces[k][1] - _acen[1]) ** 2)
+    sides = {}
+    for _p in pairs:
+        for _datom, _atk_cells in ((_p["atom_b"], _p["a_cells"]), (_p["atom_a"], _p["b_cells"])):
+            _dcells = list(_datom.cells())
+            _ac = list(set(_atk_cells))
+            if not _dcells or not _ac:
+                continue
+            _acen = (sum(r for r, c in _ac) / len(_ac), sum(c for r, c in _ac) / len(_ac))
+            _face = _nearest_face(_dcells, _mean_facing(_datom), _acen)
+            sides.setdefault(id(_datom), set()).add(_face)
+    return sides
+
+
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None,
+                        eng_counts=None, atom_sides=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
     dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
     t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
-    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]"""
+    threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]
+    eng_counts/atom_sides: [B6] precomputed on the FULL tick by resolve_engagements_cascading and threaded
+    in so the multi-side shock + encirclement penalty see the whole tick's engagement, not a cascade group;
+    None -> computed locally from `pairs` (direct callers / non-cascading path -> identical, same pairs)."""
     dmg_a, dmg_b = 0, 0
-    eng_counts = count_engagements_per_atom(pairs)
+    if eng_counts is None:
+        eng_counts = count_engagements_per_atom(pairs)
     # [ED-MB-0018 fix, balance-critic A1/A1-gap + arch-critic #1] MULTI-SIDE = the set of DISTINCT octagon
     # SIDES a subunit is actually struck from, aggregated over its contact pairs' real attacker-cell
     # BEARINGS (front / left / right / rear, relative to the subunit's own facing) -- NOT the arc-blind
@@ -578,49 +626,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
     # that genuinely wraps two arcs (`eng_count==1` -> no shock). Deriving the trigger from the cells'
     # bearings fixes both and makes "engaged from >=2 sides" a genuine aggregation over contacts. Only
     # computed under the octagon-damage flag (it drives the graded multi-side shock in the damage block).
-    _atom_sides = {}
-    if PC_OCTAGON_DMG:
-        def _mean_facing(_atom):
-            _fv = getattr(_atom, 'cell_facing_vec', None)
-            if _fv:
-                _rs = sum(v[0] for v in _fv.values()); _cs = sum(v[1] for v in _fv.values())
-                if _rs or _cs:
-                    return (_rs, _cs)                       # average of the atom's per-cell (wheeled) facings
-            return (_atom.advance_dir, 0)                   # nominal facing (no wheel recorded)
-        def _nearest_face(_dcells, _dfac, _acen):
-            # [Jordan geometry ruling] A subunit's perimeter has four FACE midpoints -- front / rear / left /
-            # right lines -- and an attacking body engages the face NEAREST it: a side attack targets the
-            # OUTERMOST side line, a rear attack the BACKMOST line (not the centroid, which mislabels both).
-            # Faces are the extremes of the footprint projected onto the facing axis (front/rear) and its
-            # perpendicular (left/right) -- emergent from the cells, so this stays cell-up.
-            _n = len(_dcells)
-            _cr = sum(r for r, c in _dcells) / _n; _cc = sum(c for r, c in _dcells) / _n
-            _fm = (_dfac[0] ** 2 + _dfac[1] ** 2) ** 0.5 or 1.0
-            _fu = (_dfac[0] / _fm, _dfac[1] / _fm)          # facing (front) unit normal
-            _pu = (-_fu[1], _fu[0])                          # left-perpendicular unit
-            _al = [(r - _cr) * _fu[0] + (c - _cc) * _fu[1] for r, c in _dcells]
-            _pp = [(r - _cr) * _pu[0] + (c - _cc) * _pu[1] for r, c in _dcells]
-            _faces = {
-                'F': (_cr + max(_al) * _fu[0], _cc + max(_al) * _fu[1]),
-                'B': (_cr + min(_al) * _fu[0], _cc + min(_al) * _fu[1]),
-                'L': (_cr + max(_pp) * _pu[0], _cc + max(_pp) * _pu[1]),
-                'R': (_cr + min(_pp) * _pu[0], _cc + min(_pp) * _pu[1]),
-            }
-            return min(_faces, key=lambda k: (_faces[k][0] - _acen[0]) ** 2 + (_faces[k][1] - _acen[1]) ** 2)
-        # MULTI-SIDE = the set of distinct FACES a subunit is struck on, ONE face per contacting enemy body
-        # (its contact-cell centroid -> nearest defender face). A wide head-on line hits ONE face (front);
-        # two enemy bodies front+rear hit TWO faces -> the genuine encirclement Jordan's "relief divided"
-        # describes. Per-cell arc lethality is handled separately in _octagon_dmg_mod; this only gates the
-        # graded multi-side shock.
-        for _p in pairs:
-            for _datom, _atk_cells in ((_p["atom_b"], _p["a_cells"]), (_p["atom_a"], _p["b_cells"])):
-                _dcells = list(_datom.cells())
-                _ac = list(set(_atk_cells))
-                if not _dcells or not _ac:
-                    continue
-                _acen = (sum(r for r, c in _ac) / len(_ac), sum(c for r, c in _ac) / len(_ac))
-                _face = _nearest_face(_dcells, _mean_facing(_datom), _acen)
-                _atom_sides.setdefault(id(_datom), set()).add(_face)
+    # [B6] MULTI-SIDE = distinct FACES a subunit is struck on (see _compute_atom_sides). Threaded in from
+    # the FULL tick by resolve_engagements_cascading; else computed here from `pairs` (identical when pairs
+    # IS the full tick). Only under the octagon-damage flag (it gates the graded multi-side shock below).
+    if atom_sides is not None:
+        _atom_sides = atom_sides
+    elif PC_OCTAGON_DMG:
+        _atom_sides = _compute_atom_sides(pairs)
+    else:
+        _atom_sides = {}
     # [partition-invariance fix] conv_scale is precomputed ONCE per TICK on the FULL tick's pairs
     # by the caller (run_battle, before any CASCADING_ENABLED sub-phase split -- see
     # resolve_engagements_cascading) so a convergence group spanning multiple cascade sub-phases is
@@ -1203,8 +1217,16 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # in an early sub-phase, a wing's pair in a later one) must be seen as a whole to be corrected
     # correctly; splitting it across sub-phase calls would under-count each sub-phase's group size.
     conv_scale = _convergence_scale(unit_a, unit_b, pairs)
+    # [Fable-audit B6, 2026-07-24] Compute the multi-side face set AND the per-atom engagement count ONCE on
+    # the FULL tick's pairs (exactly as conv_scale is), then thread them into every sub-phase's
+    # resolve_engagements. Otherwise the depth-group split fed each sub-call only its group's pairs, so an
+    # encircled body showed 1 face / 1 engagement per call and the multi-side shock (2 sides x1.5, 3 x2.0)
+    # + encirclement penalty never fired -- envelopment delivered ~0% at matched density.
+    full_sides = _compute_atom_sides(pairs) if PC_OCTAGON_DMG else {}
+    full_eng = count_engagements_per_atom(pairs)
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale)
+        return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale,
+                                   eng_counts=full_eng, atom_sides=full_sides)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -1236,7 +1258,8 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale,
+                                     eng_counts=full_eng, atom_sides=full_sides)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]

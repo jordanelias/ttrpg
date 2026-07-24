@@ -90,6 +90,24 @@ wings arrive — the "Cannae centre marches forward instead of holding" problem.
 timing + brace box-model + fatigue col-grid). Land the correct field-coordinate fixes (B1/B2/B3) first as
 tested increments, then rebuild envelopment+intent+B6 as a coordinated set, THEN calibrate.
 
+**ENVELOPMENT DIAGNOSIS (2026-07-24, `envelop_probe.py` + intent test):**
+- The wings reach the enemy's **flanks (L/R) but NEVER the rear (B face)** — partial envelopment, not
+  encirclement. Faces struck over a 20-battle H3 run: `{F, L, R}`, never `B`.
+- Multi-side shock **is eligible** (max 3 distinct faces; 380/440 contact ticks ≥2 faces) — the enemy line
+  IS hit on 3 sides. Yet the envelop army loses **0/20**.
+- A **holding centre** (stance=hold) + `PC_INTENT_RESOLUTION=1` did **NOT** help (still 0/24) — intent
+  alone is insufficient.
+- **B6 implemented** (multi-side shock now computed on the full tick, threaded into cascade sub-phases) —
+  correct, but H3 didn't move because H3's pairs are a single depth-group (multi-side was already firing
+  there); B6 matters for genuine front+**rear** encirclement, which the gauge H3 doesn't yet produce.
+- **Root:** the split army (centre + 2 wings, same total troops) fights *divided*; the single line pounds
+  the 1/3-strength centre at full frontage while the thin wings only lightly contact the flanks, so the
+  ×2 multi-side on the line's flank-contact is a ×2 on a small base — not decisive. The real fix is
+  **wings reaching the REAR** (full encirclement → B-face contact → B6 rear-shock at full strength) AND an
+  **encircled-army effectiveness collapse** (a surrounded body can only fight on its perimeter; its
+  interior numbers are idle — the historical Cannae mechanism). This is the next increment: wings-to-rear
+  maneuver (wheel/waypoint behind the enemy) + perimeter-only effectiveness for a multi-side-engaged body.
+
 ### Phase 2 — Damage model reformulation (per §1) + accounting
 - **B4 / per-troop model** — strip `eff_size` from the degree; density = linear emitter count on
   casualties. Config toggle (`MB_NUMBERS_MODEL`, default `linear`) so the alternative (numbers-in-pool)

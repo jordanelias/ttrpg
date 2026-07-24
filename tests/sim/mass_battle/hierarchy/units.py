@@ -908,6 +908,71 @@ class Subunit:
         return None
 
     def _envelop_goal(self, enemy_cells):
+        """[ED-MB-0035, 2026-07-24 — WIRES the orphaned perimeter.py target-point/normal primitive
+        (Jordan 2026-07-23) into the maneuver pathing; supersedes the ad-hoc wide_c/rear_r geometry now
+        kept as _envelop_goal_legacy]. An enveloping body picks a TARGET FACE on the enemy's perimeter and
+        approaches it SQUARE-ON along that face's OUTWARD normal (swing wide, come in perpendicular) — the
+        approach-along-normal behaviour perimeter.py was built for but never wired. Face choice depends on
+        MOBILITY (Jordan: 'envelopment needs cavalry that moves quickly'): a FAST encircler (cavalry) aims
+        for the enemy's REAR face (the far side it can actually wheel behind); a slower body turns onto the
+        nearest FLANK face (infantry envelops the flank, cavalry the rear — Cannae's division of labour)."""
+        # FAST (cavalry) keeps the PROVEN legacy wide-then-rear wrap — it already wheels behind and
+        # annihilates (C7). Perimeter's contribution is for the SLOWER (infantry) case the legacy gets wrong:
+        # infantry cannot wrap to the rear (too slow / too far), so it should turn onto the enemy's nearest
+        # FLANK face (infantry envelops the flank, cavalry the rear — Cannae's division of labour). The full
+        # relative-waypoint standoff approach ("maintain distance D from the nearest enemy face while
+        # circling") is the next build on top of this face-selection.
+        fast = getattr(self, 'troop_type', None) == 'cavalry' or getattr(self, 'unit_type', None) == 'cavalry'
+        if fast:
+            return self._envelop_wheel_goal(enemy_cells)
+        from mass_battle import perimeter as _peri   # wired here; perimeter imports only geometry/config (no cycle)
+        faces = _peri.perimeter_faces(enemy_cells)
+        if not faces:
+            return self._envelop_goal_legacy(enemy_cells)
+        ar, ac = self._node_anchor
+        ecen_c = sum(c for _r, c in enemy_cells) / len(enemy_cells)
+        side = -1.0 if ac < ecen_c else 1.0                     # left wing -> left flank, right wing -> right
+        lateral = [f for f in faces if abs(f.normal[1]) >= abs(f.normal[0])]
+        tgt = min(lateral or faces, key=lambda f: (f.normal[1] - side) ** 2)
+        return min(enemy_cells, key=lambda e: (e[0] - tgt.mid[0]) ** 2 + (e[1] - tgt.mid[1]) ** 2)
+
+    def _envelop_wheel_goal(self, enemy_cells):
+        """[ED-MB-0035, Jordan 2026-07-24 — the cavalry ORBITAL WHEEL]. A fast encircler MAINTAINS a field-
+        coordinate RADIUS (the enemy's half-extent + ENVELOP_STANDOFF) from the enemy centre and WHEELS
+        around it toward the enemy's REAR, then closes to strike — 'maintain distance … it can be understood
+        as a radius since it's a field coordinate, which helps define wheeling.' Keeping the standoff radius
+        means the sweep does NOT blunder into the front/flank mid-orbit (the failure the legacy wide-then-rear
+        version only half-avoided against a MOVING enemy — C4). The rear is the enemy's far side = the
+        direction WE advance (self.advance_dir); we orbit the shorter way toward it, then drive in."""
+        import math
+        ar, ac = self._node_anchor
+        er = [r for r, _c in enemy_cells]; ec = [c for _r, c in enemy_cells]
+        ecen_r = sum(er) / len(er); ecen_c = sum(ec) / len(ec)
+        e_rad = 0.5 * max(max(er) - min(er), max(ec) - min(ec)) + 1.0
+        radius = e_rad + ENVELOP_STANDOFF                       # the orbit radius we hold while wheeling
+        rear = (float(self.advance_dir), 0.0)                   # enemy's far side = our advance direction
+        br, bc = ar - ecen_r, ac - ecen_c                       # our current bearing from the enemy centre
+        bmag = math.hypot(br, bc) or 1.0
+        bu = (br / bmag, bc / bmag)
+        aligned = bu[0] * rear[0] + bu[1] * rear[1]             # +1 = we're already behind the enemy
+        orbits = getattr(self, '_envelop_orbit_ticks', 0)
+        # Behind, already committed, OR orbited long enough: stop wheeling, close and strike the nearest
+        # (now rear/flank) cell. The orbit CAP force-commits so a wing that can't reach dead-behind (a moving
+        # or blocking enemy) still ENGAGES instead of orbiting to the tick cap (robustness + battle length).
+        if aligned > 0.5 or self._envelop_committed or orbits >= ENVELOP_ORBIT_CAP:
+            self._envelop_committed = True
+            return min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
+        self._envelop_orbit_ticks = orbits + 1
+        # Otherwise WHEEL: rotate the bearing toward `rear` by a step (shorter way via the cross-product
+        # sign), holding the radius — the goal rides the standoff circle around to the enemy's rear.
+        cross = bu[0] * rear[1] - bu[1] * rear[0]
+        direction = 1.0 if cross >= 0 else -1.0                 # orbit the shorter way toward the rear
+        step = 0.9                                              # radians/tick wheel rate; the node step-cap bounds actual move
+        s = math.sin(step) * direction; c = math.cos(step)
+        nb = (bu[0] * c - bu[1] * s, bu[0] * s + bu[1] * c)     # bearing rotated toward the rear
+        return (ecen_r + radius * nb[0], ecen_c + radius * nb[1])
+
+    def _envelop_goal_legacy(self, enemy_cells):
         """Two-phase wrap-to-rear, ported from the legacy per-cell version verbatim (same
         clearance/rear-margin magnitudes: +2 frontage clearance, +/-2 rear margin -- ported, not
         reinvented). Phase 1 (not yet past the enemy's depth): steer wide of the nearer flank and

@@ -2,6 +2,20 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0035: wire perimeter.py + cavalry orbital-wheel envelopment + B6
+- Orphan audit found **`perimeter.py`** (target-point/face-normal primitive, task #18) built but never
+  wired. **Wired** into `_envelop_goal`: infantry enveloping wings turn onto the enemy's nearest FLANK
+  face. **Cavalry orbital wheel** (`_envelop_wheel_goal`, Jordan "maintain distance = radius = wheeling"):
+  a fast encircler holds a field-coordinate radius (enemy half-extent + `ENVELOP_STANDOFF=8`) and wheels to
+  the enemy REAR, then closes — reaches the rear of a MOVING enemy. **B6**: multi-side shock now computed
+  once on the full tick (`_compute_atom_sides`) and threaded through cascade sub-phases (was per-sub-phase
+  → never fired for a front+rear body).
+- **Result:** C4 cav-envelop-vs-Line **6 → 83** (into band 75-95); C7 holds 100; honest gauge **4 → 5 / 20**.
+- `PC_ENVELOP_SIGMA` left 0.0 (Incr6 targeting mis-IDs the split army's thin wings; naive enable rewarded
+  the defender). Full orphan inventory: `audit/2026-07-22-mass-battle-stress-test/orphaned_mechanics_audit_v1.md`.
+- Goldens re-recorded 4 modes; `tests/valoria` maneuver/octagon/perimeter/reserve green (20 passed).
+
+
 ## 2026-07-24 — ED-MB-0034: field-coordinate unification (Fable-audit B1+B2+B3)
 - Jordan directive ("nothing is golden"; "we're using field coordinates ... abandon [the spawn lattice]").
   Unified the cell-position accessors onto the live `_node_pos` field, off the dead `starting_position +
