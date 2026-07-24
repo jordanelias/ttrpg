@@ -2,6 +2,48 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0036: wire orphaned MORALE_EROSION_DAMP + SUBUNIT_ROUT_FLOOR
+- Wire-or-remove dead-mechanic sweep (Jordan directive). Both were defined+exported but never read.
+  **MORALE_EROSION_DAMP** (0.7) → the §A.4 casualty/exhaustion morale erosion (`erode_morale(min(loss,3.0)*
+  DAMP)`) — slows the bleed → longer, attritional battles; applied ONLY to gradual erosion, not the
+  stochastic-rout punch. **SUBUNIT_ROUT_FLOOR** (80) → `rout_resolution`: a subunit also breaks when its
+  troop total falls below the floor (too few to hold), independent of morale.
+- Gauge unchanged (5/20, no regression); rout/morale tests green (22 passed). Goldens re-recorded (4 modes).
+- Next: remove superseded constants (ROUT floors, PC_FLANK_DEPTH_RESIST, REACH_LONG, structural) + zeroed
+  PC_ENVELOP_SIGMA; keep PC_ROTATE_FLOOR/REFILL_FLOOR (planned rotation T2/T3); measure PC_FACING_MODEL.
+
+
+## 2026-07-24 — ED-MB-0035: wire perimeter.py + cavalry orbital-wheel envelopment + B6
+- Orphan audit found **`perimeter.py`** (target-point/face-normal primitive, task #18) built but never
+  wired. **Wired** into `_envelop_goal`: infantry enveloping wings turn onto the enemy's nearest FLANK
+  face. **Cavalry orbital wheel** (`_envelop_wheel_goal`, Jordan "maintain distance = radius = wheeling"):
+  a fast encircler holds a field-coordinate radius (enemy half-extent + `ENVELOP_STANDOFF=8`) and wheels to
+  the enemy REAR, then closes — reaches the rear of a MOVING enemy. **B6**: multi-side shock now computed
+  once on the full tick (`_compute_atom_sides`) and threaded through cascade sub-phases (was per-sub-phase
+  → never fired for a front+rear body).
+- **Result:** C4 cav-envelop-vs-Line **6 → 83** (into band 75-95); C7 holds 100; honest gauge **4 → 5 / 20**.
+- `PC_ENVELOP_SIGMA` left 0.0 (Incr6 targeting mis-IDs the split army's thin wings; naive enable rewarded
+  the defender). Full orphan inventory: `audit/2026-07-22-mass-battle-stress-test/orphaned_mechanics_audit_v1.md`.
+- Goldens re-recorded 4 modes; `tests/valoria` maneuver/octagon/perimeter/reserve green (20 passed).
+
+
+## 2026-07-24 — ED-MB-0034: field-coordinate unification (Fable-audit B1+B2+B3)
+- Jordan directive ("nothing is golden"; "we're using field coordinates ... abandon [the spawn lattice]").
+  Unified the cell-position accessors onto the live `_node_pos` field, off the dead `starting_position +
+  cell_offsets` spawn lattice (not updated on the field path). **B1** `_oriented_abs_map` node branch →
+  `_oriented(atom)`, skip absent ids (no `(0,0)` default): wedge contact cells stop collapsing to origin
+  (**H2 decA 0.0 → 40.0**); grid branch also → `_oriented` (byte-identical for legacy). **B3** octagon
+  `_octagon_dmg_mod`/`_per_cell_angle_mod` → `_oriented_abs_map` (live map; **H1 mirror → 52.5, in band**).
+  **B2** `iter_cells` reads live `_node_pos` (feeds col-grid/fatigue/casualties). Added `width`/`depth` to
+  gauge `make_unit`.
+- **Goldens re-recorded all 4 modes** (nothing-is-golden): `unit`/`cell`/`unit_field`/`cell_field`;
+  byte-exact test EXPECTED updated. `tests/valoria` green.
+- Honest gauge still ~4/20: the prior 5/20 included FALSE C2/C6 passes (brace "repelling" off the broken
+  contact map) — now honestly failing pending the box-brace. **Dominant remaining issue: envelopment
+  delivers 0%** (H3–H6) — the split centre is crushed before the wings arrive; needs intent-on + B6 +
+  wing timing + box-brace + B2b (col-grid per-tick rebuild). See `full_implementation_plan_v1.md` §1.5.
+
+
 ## 2026-07-24 — ED-MB-0033: Fable logic audit — Part A remediation (9 defects in this session's own work)
 - Five Fable-tier read-only adversarial auditors (one per logical lane) traced ED-MB-0027..0032 and found
   9 defects; all fixed. A1 (CRITICAL): `make_unit`→`build_army` filled the §B.2 cavalry preset Power 5

@@ -104,7 +104,11 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                     and atom.eff_discipline >= D_YIELD and u.command > 0 and atom.unit_type != 'ranged'):
                 atom.yielding = True
             if loss:
-                atom.erode_morale(min(loss, 3.0))   # cap -3 per Cascade Phase (§A.4); routes own-else-Unit
+                # [ED-MB-0036, 2026-07-24 — wire the orphaned MORALE_EROSION_DAMP]. Damp the §A.4 casualty/
+                # exhaustion morale erosion (<1 slows the bleed -> longer, more attritional battles, per the
+                # constant's own intent). Applied ONLY to this gradual erosion, NOT to the stochastic-rout
+                # punch below (which must reach <=0 to force the break) — so damping cannot cancel a rout.
+                atom.erode_morale(min(loss, 3.0) * MORALE_EROSION_DAMP)   # cap -3 per Cascade Phase (§A.4); routes own-else-Unit
             # [ED-MB-0031] Stochastic morale break at the historical 15-30% casualty band (du Picq): the
             # canonical §A.4 steps above don't fire until 50% losses, so units grind to ~58% before breaking.
             # When gated on, a subunit whose casualties cross its own drawn break-point routs NOW (drive its
@@ -138,8 +142,14 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
         if u.routed or u.broken:
             continue
         for atom in u.subunits:
-            if not atom.routed and atom.eff_morale <= 0:
-                atom.routed = True   # this subunit's eroding morale reached 0 -> it breaks ("a section of the line")
+            if atom.routed:
+                continue
+            # [ED-MB-0036, 2026-07-24 — wire the orphaned SUBUNIT_ROUT_FLOOR]. A subunit also breaks when its
+            # aggregate troop total falls below SUBUNIT_ROUT_FLOOR — too few men left to hold as a coherent
+            # body, independent of the morale track (config.py: "a subunit routs when its aggregate total
+            # falls below this"). Complements the morale<=0 break above.
+            if atom.eff_morale <= 0 or atom.troop_total() < SUBUNIT_ROUT_FLOOR:
+                atom.routed = True   # this subunit breaks ("a section of the line") — morale collapse OR too few left
         u.derive_rout()              # unit routs iff agg morale <= 0 / all subunits routed / general gone (byte-exact single-subunit)
             # No pursuit damage from Standard infantry (canonical: Fast only).
             # Pursuit damage will be handled at the battle-map level (level 2)
