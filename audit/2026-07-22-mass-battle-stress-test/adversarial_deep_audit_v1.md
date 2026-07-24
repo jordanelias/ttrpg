@@ -239,3 +239,37 @@ This independently corroborates §2's finding that `dynamic_facings` is write-on
 
 **Consequence for the census:** any constant whose mechanism is unreachable should be classified as such
 *before* its provenance is argued about. Fixing reachability changes what the other findings even mean.
+
+---
+
+## 6. JORDAN RULING (2026-07-24): canon values MAY be broken for balance/tuning
+
+> *"we are allowed to break canon values in the pursuit of balancing/tuning"*
+
+This **reclassifies several findings** and must be applied before remediation:
+
+- A deliberate, documented divergence from a canonical magnitude is **legitimate**, not a defect.
+- What remains a defect is a divergence that is **silent or actively misdescribed** — where a comment,
+  tag or doc asserts canon is being followed while the code does something else. That misleads the next
+  reader and corrupts the provenance layer, which is the actual problem this audit found.
+
+Applied to the specific items:
+
+| finding | old framing | corrected action under the ruling |
+|---|---|---|
+| `MORALE_EROSION_DAMP` makes the §A.4 cap −2.1 | "restore the −3 cap" | **Keep the value.** Fix the comment, which still claims *"cap −3 per Cascade Phase (§A.4)"*. Label it a deliberate tuning divergence. |
+| `DISCIPLINE_LOSS_THRESHOLD = 1.0` vs canon's "> Discipline this turn" | "implement the canonical trigger" | **Jordan's call.** It is a *shape* change (a variable replaced by a constant), not just a magnitude — a Discipline-5 veteran now cracks on the same loss as a Discipline-1 levy, inverting what the stat is for. Flagged for decision; either is defensible, but it must be **declared**. |
+| `OVEREXTEND_PENALTY` applied per-turn vs canon's per-season | "context mismatch" | Legitimate tuning; **document the transfer**. |
+
+**The rule this establishes:** the engine is free to diverge from canon, and free to use fitted
+magnitudes — provided the divergence is *visible*. Every constant should say which it is:
+GROUNDED (magnitude from an external source), JUSTIFIED (mechanism sourced, magnitude fitted — the
+honest default), or DECLARED-DIVERGENCE (deliberately unlike canon, with the reason). A false
+`[canonical: ...]` tag is the only genuinely unacceptable state.
+
+### Tier-0.1 executed — `tests/sim_verification_ledger.json` deleted
+The 26-entry bare-integer self-whitelist is gone. **Effect is latent, not immediate**: the
+anti-fabrication gate scans only *changed* sim files (`ci_sim_fabrication_check.py:378`), so removing the
+whitelist surfaces nothing until the next sim edit — at which point previously-laundered bare integers
+in that file will be flagged. That is the intended behaviour: the laundering mechanism is removed, and
+the debt becomes visible as the code is touched, rather than all at once.
