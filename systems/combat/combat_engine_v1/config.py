@@ -20,6 +20,12 @@ CFG = dict(
   # heavy-weapon viability: bound the stacked weight+2H tempo penalty so a poleaxe can act (not 7x slower)
   MAX_TEMPO_PEN=0.8, TEMPO_FLOOR=0.7, REOPEN_K=0.34, REOPEN_MAX=0.6, CLOSE_TEMPO_MEAN=1.5, CLOSE_TEMPO_COMPRESS=0.38,
   PUSH_AVAIL_P=0.22, PUSH_REOPEN_BONUS=0.18,
+  # PROACTIVE FIGHTING WITHDRAWAL (ED-PC-0030): a reach weapon out-leveraged in the bind refuses it, breaks measure,
+  # and re-presents its point at its dominant measure (Silver's staff/spear game) — the closed-phase lever for the
+  # reach-weapon-loses-the-bind residual. VOLUNTARY (any beat, unlike the created-moment reopen) + read-contested;
+  # a failed/read withdrawal is PURSUED (Nachreisen). systems.disengage_prob gates it EMERGENTLY on the bind
+  # leverage deficit (a bind-dominant poleaxe never triggers). [SIM-CALIBRATE] magnitudes; the structure is grounded.
+  DISENGAGE_BASE_P=0.5, DISENGAGE_MAX=0.5, DISENGAGE_GAP_REF=3.0, DISENGAGE_LEV_SCALE=0.1, DISENGAGE_PURSUIT_NSIG=-0.3,
   # conditional tempo (correction 2): fatigue slows cadence; choke/lunge grips trade cadence for control/reach
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
@@ -76,7 +82,7 @@ CFG = dict(
   # + ADEF_CUT, which already remove most cut-vs-plate reach value]. FLOOR keeps a residual (an armoured man still works to close).
   REACH_DECAY_K=0.35, REACH_THREAT_FLOOR=0.35,
   ADEF_THRESHOLD={'none':0.0,'light':0.30,'medium':0.45,'heavy':0.72},   # MONOTONE (ED-1050 resolved, Jordan 2026-06-30): the armour-defeat threshold RISES with armour — a gambeson (light) is soft/easily defeated, mail (medium) harder, plate (heavy) hardest. light 0.70->0.30 fixes the backwards inversion (light>medium) that systems.armor_defeat_sigma's docstring forbids; medium/heavy KEPT (calibrated). Re-swept in canon + re-exported to combat_config.gd (retiring the port's private [AUDIT-FIX], CLAUDE.md §6). [SIM-CALIBRATE] values within the grounded monotone frame; validated (mirror-50, light matchups sane).
-  CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,
+  CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0, ARREST_K=0.12, ARREST_REACH_FLOOR=5.0,   # ARREST_K/ARREST_REACH_FLOOR (ED-PC-0029): a LANDED stop-thrust checks the closer's advance by the braced-weapon IMPULSE it transmits (systems.arrest_impulse = K·(reach−FLOOR)·braceability), netted against close_rate. This is an ARREST, not a wound — a braced point halts a charge whether or not it penetrates (boar-spear lugs: penetration≠arrest), so it reads reach+structure, never damage (a fable audit retired the earlier recoil=K·d, which crowned big cutters and stranded the staff). FLOOR (~arm+dagger length) zeroes a dagger's arrest — nothing to brace against a charge at grappling distance. Armour enters ONCE, via reach_threat in the stop-hit's landing prob. Grounded in HEMA Nachreisen. [SIM-CALIBRATE]
   # tempo
   BASE_TEMPO=2.0, TEMPO_RECOVER_K=0.4, TEMPO_RECOVER_SHAPE=0.35, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # SPEED_K RETIRED, replaced by TEMPO_RECOVER_K/_SHAPE (morphology-rearch Phase B6 correction, 2026-07-02): scales systems._recovery_mode_commitment's grip-aware balance-recovery delta from the anchor (tanh-saturating — the raw commitment spans ~0.2 to ~68 across the roster), replacing the retired per-weapon `spd` scalar. [SIM-CALIBRATE] both. AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
   # stamina / recovery
@@ -146,7 +152,7 @@ CFG = dict(
   # [SIM-CALIBRATE] — flamberge's 15mm amplitude is the only roster weapon that currently reads nonzero.
   BIND_VIBRATION_K=0.5,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
-  STOPHIT_NSIG_BASE=0.4, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,
+  STOPHIT_NSIG_BASE=0.4, TRUE_TIME_K=3.5, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,   # TRUE_TIME_K (ED-PC-0029): magnitude of Silver's true-time point-tempo edge (systems.true_time_edge) on the approach stop-hit — the light-point reach weapon's hand-speed advantage over a heavy-pointed closer. [SIM-CALIBRATE]; the point-tempo law (V∝1/I^0.25, Cross & Nathan 2009) is grounded.
   RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4,
   # mental-fatigue weights (calibrated): how much fatigue degrades the read vs the defence
   MENTAL_FAT_READ_K=0.4, MENTAL_FAT_DEF_K=0.3,
@@ -162,8 +168,17 @@ CFG = dict(
   # degrades tempo AND defence; recovers each beat toward 1.0. This is the DYNAMIC tempo-vs-structure fix deferred
   # from the initiative build (replaces the rejected static balance->tempo coupling — structure is dynamic, balance
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
-  POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C)
+  POISE_FLOOR=0.40, POISE_EFFECT_FLOOR=0.72, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C). ED-PC-0031 (Jordan "strong strong poise break"): poise DEEPENED so a stagger is decisive — FLOOR 0.5->0.35 (a hard concussion drives structure lower) + EFFECT_FLOOR 0.88->0.60 (a fully-staggered fighter acts/defends at 0.60x, not 0.88x — the "wind knocked out" is real, not a ±12% nudge).
   POISE_BREAK_OVERCOMMIT=0.09, POISE_BREAK_BIND=0.05, POISE_BREAK_HIT=0.07, POISE_SOLID_HIT=8.0,
+  # PERCUSSION -> STAMINA (wind) + POISE (stagger) — ED-PC-0031 (Jordan). A landed blow delivers a concussive IMPULSE
+  # DISTINCT from the wound: it drains the defender's STAMINA (wind knocked out / attrition) and BREAKS their POISE
+  # (stagger). ARMOUR-GATED by physics: a BLUNT/percussion head transmits its impulse THROUGH the harness (mace/
+  # warhammer/staff-butt concuss even when the plate holds — the anti-plate blunt path; Medieval Chronicles, tempered
+  # by Devereaux's 'plate+padding soaks much'), scaled by percussion_authority × a per-tier absorption; a POINT/edge
+  # transmits impulse only where it BITES — its load IS the wound d (a deflected point pings off plate ~0, preserving
+  # the gap-specialist's plate close). [SIM-CALIBRATE] magnitudes; the blunt-vs-point transmission split is grounded.
+  PERC_STAM_K=0.4, PERC_POISE_K=0.04, PERC_BLUNT_HEFT=2.2, PERC_POINT_FRAC=0.20,
+  PERC_BLUNT_TRANSMIT={'none':1.0,'light':0.85,'medium':0.7,'heavy':0.55},
   # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
   # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
   # the aggressor role alternates over a fight. Added to net_sigma.

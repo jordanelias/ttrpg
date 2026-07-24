@@ -85,19 +85,54 @@ def engagement(A, B, first, cfg, rng):
                 reopen_moment=False; push_avail=False
                 continue
         reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
-        # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
+        # PROACTIVE FIGHTING WITHDRAWAL (ED-PC-0030): a reach weapon closed into a bind it LOSES does not have to
+        # trade exchanges to a decision — it can REFUSE the bind, break measure with footwork, and re-present its
+        # point at the measure where ED-PC-0029 makes it dominant (Silver's staff/spear keeps the swordsman at the
+        # weapon's length). VOLUNTARY (any closed beat, unlike the reactive created-moment reopen above) and
+        # READ-CONTESTED: the closer who reads it stays glued and PURSUES (HEMA Nachreisen — striking the
+        # withdrawing weapon as it turns). EMERGENT gate lives in systems.disengage_prob (fires only when the longer
+        # weapon is OUT-LEVERAGED in the bind — a light spear out-bound by a rigid estoc; a bind-dominant poleaxe
+        # stays and wins). This is the closed-phase lever for the reach-weapon-loses-the-bind residual: cycling
+        # approach<->bind, the long weapon wins on accumulated stop-hits instead of a bind it cannot win.
+        if closed and beats>1:
+            base_gap=er[longer]-er[shorter]
+            # ATTEMPT a withdrawal only per the inclination (out-leveraged + can threaten at range); no attempt -> no
+            # pursuit (fixes the fade case, where 0 attempt-rate must NOT trigger a free pursuing strike every beat).
+            if base_gap>0.3 and rng.random() < S.disengage_attempt_p(longer, shorter, base_gap, ffat[longer], cfg)*S.reach_threat(longer, shorter, cfg):
+                if rng.random() < S.disengage_clean_p(longer, shorter, cfg, TR):
+                    closed=False; measure_gap=base_gap; ready={A:0.0,B:0.0}   # CLEAN break -> re-open to measure
+                    _emit('disengage', longer=longer.label, shorter=shorter.label, ok=True, gap=round(base_gap,2))
+                    continue
+                else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
+                    pool=max(1, core.resolution_pool(shorter.history))
+                    deg,net=core.resolve(pool, cfg['DISENGAGE_PURSUIT_NSIG'], rng)
+                    _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
+                    if deg in ('success','overwhelming'):
+                        d=core.strike(shorter, longer, deg, True, cfg, net=net, pool=pool)
+                        longer.apply_wound(d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
+                        if longer.felled: return longer
+                    ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
+        # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
         if not closed:
             rt = S.reach_threat(longer, shorter, cfg)               # FIX-1: a long weapon that can't defeat the closer's armour loses its reach edge (1.0 unarmoured by construction)
             displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
-            close_rate=S.close_rate(shorter, ffat[shorter], displ, rt, cfg)   # TA-02 fatigued closer + displace point + walk through un-threatening reach (FIX-1); assembled in systems.close_rate
-            measure_gap=max(0.0, measure_gap-close_rate)
-            just_closed = (measure_gap<=0.3)
-            if just_closed:
-                closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
+            base_gap = er[longer]-er[shorter]
+            # STOP-THRUST RESOLVES FIRST, AND A LANDED ONE ARRESTS THE CLOSE (ED-PC-0029, HEMA Nachreisen / the
+            # stop-thrust against a step-in). The longer weapon threatens the point across the closing gap BEFORE the
+            # shorter completes its entry; a landed stop-thrust both WOUNDS (core.strike -> apply_wound) and, distinctly,
+            # delivers an ARREST that checks the closer's advance — the momentum a braced weapon transmits to a charging
+            # body (systems.arrest_impulse), which depends on the weapon's reach + braceable structure, NOT on how much
+            # it penetrates (a braced point halts a charge whether or not it draws blood — boar-spear lugs: penetration
+            # != arrest). Armour has ALREADY entered once, via reach_threat (rt) in stophit_p below (a point that can't
+            # threaten the harness lands fewer meaningful stop-hits); it is NOT re-counted in the arrest magnitude. The
+            # beat's net movement is the closer's advance MINUS that arrest (systems.approach_step): a long braced pole
+            # nets the closer backward (driven out -> reach controls); a short/whippy/cutting weapon arrests little and
+            # the closer walks in. (A fable physics/HEMA audit retired the prior recoil = K*damage: damage is wound, not
+            # impulse; keying arrest on it crowned big CUTTERS and stranded the staff Silver's Paradoxes crowns.)
+            close_rate=S.close_rate(shorter, ffat[shorter], displ, rt, cfg)   # TA-02 fatigued closer + displace point + walk through un-threatening reach (FIX-1)
+            recoil = 0.0
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
-            _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
-                  close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
-            if rng.random() < stophit_p:
+            if measure_gap > 0.0 and rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
                 deg, net = core.resolve(pool, nsig, rng)
@@ -106,7 +141,16 @@ def engagement(A, B, first, cfg, rng):
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
+                    _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
+                    shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
                     if shorter.felled: return shorter
+                    recoil = S.arrest_impulse(longer, cfg)   # the ARREST: braced-weapon impulse vs the charge (reach+structure, not wound)
+            measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
+            just_closed = (measure_gap<=0.3)
+            if just_closed:
+                closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
+            _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
+                  close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if not closed:
                 if A.stamina<=-4 or B.stamina<=-4: _emit('separation', reason='collapse'); return None
                 continue
@@ -269,6 +313,8 @@ def engagement(A, B, first, cfg, rng):
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
             defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
+            _sd,_pb=S.percussion_stagger(aggressor, defender, hit, deg, cfg)   # ED-PC-0031: concussive wind + strong stagger (armour-gated; the blunt-through-plate path the wound-only break above cannot see)
+            defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
             if defender.felled: return defender
         if bind:
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
@@ -288,6 +334,8 @@ def engagement(A, B, first, cfg, rng):
                     if rng.random()<cfg['BIND_HIT_P']:
                         d=core.strike(aggressor, defender, 'success', close, cfg)
                         defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+                        _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
+                        defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
                         if defender.felled: return defender
                         break
                 else: riposte=True; break
@@ -297,6 +345,8 @@ def engagement(A, B, first, cfg, rng):
                 if rng.random() > S.disrupt_resist_p(aggressor, cfg):
                     d=core.strike(defender, aggressor, 'graze', close, cfg)
                     aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
+                    _sd,_pb=S.percussion_stagger(defender, aggressor, d, 'graze', cfg)   # ED-PC-0031: riposte wind + stagger
+                    aggressor.stamina-=_sd; aggressor.poise=S.clamp_poise(aggressor.poise-_pb, cfg)
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe

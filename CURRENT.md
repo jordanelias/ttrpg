@@ -28,7 +28,7 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-22 (**MB-lane stamp reconcile — ED-MB-0011**: DG-10 field-movement freeze fix
+_Last reconciled: 2026-07-24 (**PC-lane stamp reconcile — ED-PC-0029**: approach/reach re-architecture (arrest-impulse + true-time reach edge, retire thrust_extension) landed in `systems/combat/combat_engine_v1/` + regenerated `engine/engine_params/combat_engine_v1.json`. **The Personal-combat HEAD is UNCHANGED** (still `combat_engine_v1/`, no doc supersession) — this is an internal engine mechanics/config change, not a head move; stamp bumped only to clear the currency-drift the 2026-07-24 engine/systems commit created against the prior stamp.) **Prior:** 2026-07-22 (**MB-lane stamp reconcile — ED-MB-0011**: DG-10 field-movement freeze fix
 (sub-Discipline-5 bodies were floored to advance-step 0 on the live node/field path and never closed to
 contact; fixed to a continuous float velocity, grid oracle untouched) + a field-based mass-battle stress
 test (`audit/2026-07-22-mass-battle-stress-test/`). Engine-level change to `tests/sim/mass_battle/`; no
