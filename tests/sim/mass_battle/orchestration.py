@@ -1083,8 +1083,35 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                 env_b = _envelopment_sigma(unit_b, unit_a)   # B wider -> B gets it
                 ns_a += env_a
                 ns_b += env_b
-            a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
-            b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
+            if PC_INTENT_RESOLUTION:
+                # [ED-MB-0029] INTENT as an offence/defence commitment (mass_battle_v30 §A Offensive/
+                # Defensive axis). A subunit's own commitment cX (aggressive +1 / balanced 0 / hold,
+                # retreat -1) shifts its OWN offence (cX·INTENT_OFFENSE_D) and the ENEMY's offence against
+                # it (cX·INTENT_DEFENSE_D — aggressive EXPOSES, defensive BLUNTS). So A's offence net rises
+                # with A's aggression and with B's exposure, and falls when B holds: ns_a gains
+                # (cA·OFF + cB·DEF). Symmetric for B. A holding pin (cA=-1) vs a pressing foe (cB=+1) nets
+                # ~even at OFF≈DEF — the pin is NOT crushed, it survives to buy time (Cannae centre); two
+                # holders grind slowly; two aggressors trade fast and bloody. Delta-sigma (uniform-impact),
+                # like every other advantage above — NOT a raw damage multiplier. Gated; balanced=0 -> inert.
+                cA = STANCE_COMMITMENT.get(atom_a.stance, 0)
+                cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
+                ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
+                ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
+            if PC_FRACTIONAL_POOL:
+                # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
+                # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
+                _apr = a_pool_raw if not a_dead else 0.0
+                _bpr = b_pool_raw if not b_dead else 0.0
+                # [Fable-audit A4 fix, 2026-07-24] The σ-boost scales by sqrt(dice), but the fractional
+                # remainder adds only an EXPECTED fraction of a die's worth of *variance* (A3), not a full
+                # die — so feeding the raw fractional pool over-stated advantages ~38% just below each
+                # integer and gave sub-1 pools a phantom full-die conversion. Pass floor(pool): the σ-boost
+                # counts only the guaranteed integer dice, matching the discrete base's real die count.
+                a_net = roll_pool_fractional(_apr) + _sigma_net_boost(ns_a, math.floor(_apr))
+                b_net = roll_pool_fractional(_bpr) + _sigma_net_boost(ns_b, math.floor(_bpr))
+            else:
+                a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
+                b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
             # [ED-MB-0018] octagon = damage multiplier under PC_OCTAGON_DMG -> not a pool penalty here
@@ -1859,6 +1886,14 @@ def reset_morale_between_battles(unit):
             atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
         atom.routed = False
         atom.broken = False
+        # [Fable-audit A6 fix, 2026-07-24] Clear the cached stochastic-rout break-point (ED-MB-0031) and
+        # re-base the casualty denominator to this battle's starting strength. Otherwise a subunit that ended
+        # the prior battle past its drawn break-point (~15-30% losses) carries BOTH that break-point AND its
+        # spawn-based loss fraction into the next battle, so it auto-routs on phase 1 of EVERY later battle
+        # with zero new casualties. A rout is a per-BATTLE will-to-fight collapse; both reset at the campaign
+        # boundary. (Only consumed under PC_STOCHASTIC_ROUT; between-battle only -> single-battle goldens inert.)
+        atom._rout_breakpoint = None
+        atom._start_troops = atom.cur_troops
         # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
         # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
         atom.pocketed = False

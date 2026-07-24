@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'PC_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'PC_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'PC_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'PC_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_CLOSE_RANKS', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'PC_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'PC_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'PC_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'PC_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'PC_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'PC_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'PC_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_CLOSE_RANKS', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
 
 BATTLEFIELD_SIZE = 50  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
 UNIT_GRID_SIZE = 30  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
@@ -62,6 +62,18 @@ STAMINA_POOL_THRESHOLDS = [(1, 0)]  # no penalty while stamina > 0
 STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 ROUT_FLOOR_LOSS_PCT = 0.20          # casualty% at which exhausted unit loses morale floor  # [canonical: sim_verification_ledger.json — CALIBRATED, exhaustion/rout-floor threshold, not independently historically cited]
 ROUT_EXHAUSTION_MORALE_HIT = 1      # morale loss per phase boundary when exhausted
+# [ED-MB-0031, Jordan 2026-07-23: "routs would occur as early as 15% losses with 30% the upper hand."]
+# STOCHASTIC ROUT BREAKPOINT: the canonical §A.4 casualty→morale steps don't even fire until 50% losses,
+# so units grind to ~58% casualties before breaking — far past the historical break point. This models the
+# du Picq will-to-fight collapse directly: each subunit draws its OWN break-point (fraction of casualties at
+# at which the will to fight snaps) in the [ROUT_ONSET, ROUT_CAP] band, SKEWED by its resilience (discipline + starting
+# morale) — a steady, disciplined body holds toward 30%, a shaken/loose one breaks toward 15%. When its
+# casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
+# band + fractional loss fraction), reproducible under the seeded RNG. Gated OFF by default (moves the
+# byte-exact goldens when on — it is NOT inert like the other PC_ flags; the draw is only consumed when on).
+PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '0') == '1')
+ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where morale-break risk begins
+ROUT_CAP_FRAC   = 0.30  # [canonical: Jordan historical research 2026-07-23 — 30% the upper bound] casualty fraction by which a break is near-certain
 MORALE_PHASE_CAP = 3  # [canonical: sim_verification_ledger.json — CALIBRATED, per-phase morale-loss bound, not independently historically cited]
 DISCIPLINE_LOSS_THRESHOLD = 1.0  # [canonical: params/mass_combat.md §Discipline Degradation]
 VOLLEY_ENABLED = True
@@ -155,6 +167,33 @@ PC_YIELD_POCKET = (_sigma_os.environ.get('PC_YIELD_POCKET', '0') == '1')
 YIELD_POCKET_REACH = float(_sigma_os.environ.get('YIELD_POCKET_REACH', '3.0'))  # [CALIBRATED-DEBT — an enemy within 3 cells in the retreat direction counts as 'gotten behind'; not independently derived, flagged per §5]
 # [canonical: sim_verification_ledger.json — CALIBRATED, -99 is a structural sentinel (effectively-zero speed for 'hold'), not a magnitude independently historically cited]
 STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
+# [ED-MB-0029, Jordan directive 2026-07-23: "a subunit trying to hold ground and defend versus a subunit
+# trying to rout the other resolve differently — intent makes a big difference in how things resolve."]
+# INTENT AS RESOLUTION: stance is a signed offence/defence commitment on the exchange, not just a movement
+# speed. A subunit PRESSING to break (aggressive) boosts its OWN offence but EXPOSES itself (the enemy's
+# offence against it rises); one HOLDING to defend (hold/retreat) eases its own offence but BLUNTS the
+# enemy's — so a holding pin survives without winning, buying time (the Cannae centre). Enters the exchange
+# as a delta-sigma net term (uniform-impact), exactly like the octagon/puncture advantages and the
+# mass_battle_v30 §A Offensive/Defensive tactic-card +1D/+2D convention it is anchored to — NOT a raw
+# damage multiplier. Gated OFF by default (byte-exact); balanced commitment 0 -> inert even when on.
+PC_INTENT_RESOLUTION = (_sigma_os.environ.get('PC_INTENT_RESOLUTION', '0') == '1')
+STANCE_COMMITMENT = {"aggressive": 1, "balanced": 0, "hold": -1, "retreat": -1}  # signed offence/defence commitment per stance
+# [class-B, CALIBRATED to the §A tactic-card ASYMMETRY: "Disciplined Defence +1D Defence" but "Standard
+# Advance: no additional effect" — the doctrine favours the defender, so DEFENSE outweighs raw OFFENSE.
+# This makes a holding pin demonstrably SURVIVE a pressing foe (buys time) rather than cancel to an even
+# fight, while an aggressor still pays for exposure. Anchored to the +1D/+2D die convention, tuned by the
+# intent_probe casualty differential — flagged calibration-debt per §5.]
+INTENT_OFFENSE_D = 0.5  # die-equivalents a full-commitment stance shifts its OWN offence net (aggressive +, hold -)
+INTENT_DEFENSE_D = 1.0  # die-equivalents a full DEFENSIVE commitment blunts the enemy's offence against it (aggressive instead EXPOSES: + to enemy)
+# [ED-MB-0032, Jordan directive 2026-07-23: "pool must be fractional."] The combat pool
+# (eff_power·eff_size·SCALE·engage_frac) is a CONTINUOUS quantity, but the live path floors it to an
+# integer die count before rolling (math.floor(a_pool_raw)) — discarding the fractional remainder and
+# injecting quantization. When gated on, the integer part still rolls real d10s (the discrete base) but
+# the fractional remainder contributes its EXPECTED net (PER_DIE_NET_EV per full die) so the pool is used
+# at full fractional precision, and the σ-boost reads the fractional pool too. Gated OFF (moves goldens
+# when on — the floored roll is the byte-exact grid oracle).
+PC_FRACTIONAL_POOL = (_sigma_os.environ.get('PC_FRACTIONAL_POOL', '0') == '1')
+PER_DIE_NET_EV = 0.4  # [canonical: params/core.md — face rule 1=-1, 2-6=0, 7-9=+1, 10=+2 -> net EV = (-1+3+2)/10] expected net successes per full TN-7 die
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
                      "Partial": lambda p: 1,        "Failure": lambda p: 0}
 SIGMA_HEAD_ENABLED = _sigma_os.environ.get('SIGMA_HEAD', '1') == '1'   # toggle via SIGMA_HEAD env; default ON

@@ -307,24 +307,47 @@ _ORDER_SAFE_FIELDS = frozenset({
 # for the rest of the battle (the two failure modes -- "malformed trigger" and "condition legitimately
 # never met" -- are otherwise behaviourally indistinguishable to a caller; a condition that's correctly
 # never satisfied SHOULD stay pending forever, that's by design, but a typo should not get that far).
-_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:')
+_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:', 'own_strength:')
 
 
 @dataclass
 class Order:
     """[Stage C] A single timed/conditional instruction queued on a Subunit. trigger:
-    'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref). behavior: a dict of
-    attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
-    'instructions':('envelop',)}) -- restricted to _ORDER_SAFE_FIELDS (behavioral/targeting switches,
-    including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an order),
-    not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why)."""
+    'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref) |
+    'own_strength:FRAC' (ED-MB-0030 — fires when this subunit's current troops fall to <= FRAC of its
+    spawn count, e.g. 'own_strength:0.5' = "act once I'm down to half": withdraw a spent body, commit a
+    weakened one, brace when thinned, etc.). behavior: a dict of attribute->value, applied via setattr
+    when the trigger fires (e.g. {'stance':'balanced', 'instructions':('envelop',)}) -- restricted to
+    _ORDER_SAFE_FIELDS (behavioral/targeting switches, including escort_of/escort_offset -- a subunit can
+    switch INTO escort mode mid-battle via an order), not geometry/troop-accounting fields (see
+    _ORDER_SAFE_FIELDS's own note for why)."""
     trigger: str
     behavior: dict = field(default_factory=dict)
     waypoint_ref: Optional[object] = field(default=None, repr=False)  # only consulted for 'ally_at:D'
 
     def __post_init__(self):
-        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:')):
+        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:', 'own_strength:')):
             raise ValueError(f"Order.trigger {self.trigger!r} unrecognized; expected one of {_ORDER_TRIGGER_KINDS}")
+        # [Fable-audit A9 fix, 2026-07-24] Range-check the numeric payload EAGERLY at construction. Before,
+        # a malformed payload ('own_strength:0.x5', 'tick:foo') raised inside check_orders on the tick the
+        # trigger was tested — long after the order was queued — defeating the whole point of validating
+        # order specs up front. own_strength FRAC must be STRICTLY in (0.0, 1.0): FRAC>=1 fires at spawn
+        # (full strength, never the intent), FRAC<=0 is permanently unfireable AND dams every order queued
+        # behind it (check_orders stops at the first unfired order). tick/range payloads must be >= 0.
+        for _pfx in ('tick:', 'enemy_range:', 'ally_at:', 'own_strength:'):
+            if self.trigger.startswith(_pfx):
+                _pay = self.trigger[len(_pfx):]
+                try:
+                    _v = float(_pay)
+                except ValueError:
+                    raise ValueError(f"Order.trigger {self.trigger!r}: payload {_pay!r} is not numeric")
+                if _pfx == 'own_strength:':
+                    if not (0.0 < _v < 1.0):
+                        raise ValueError(f"Order.trigger {self.trigger!r}: own_strength FRAC must be strictly "
+                                         f"in (0.0, 1.0) — FRAC>=1 fires at spawn, FRAC<=0 never fires")
+                elif _v < 0:
+                    raise ValueError(f"Order.trigger {self.trigger!r}: {_pfx.rstrip(':')} payload must be >= 0")
+                break
         bad = set(self.behavior) - _ORDER_SAFE_FIELDS
         if bad:
             raise ValueError(f"Order.behavior sets unsafe field(s) {sorted(bad)}; "

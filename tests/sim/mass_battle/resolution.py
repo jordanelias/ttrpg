@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace', 'tracing_on']
+__all__ = ['roll_pool', 'roll_pool_fractional', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace', 'tracing_on']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
@@ -39,6 +39,26 @@ def roll_pool(n, tn=7):  # [canonical: params/core.md §TN Values — TN 7 stand
         if f == 1:         net -= 1
         elif tn <= f <= 9: net += 1  # [canonical: params/core.md — canonical face rule 1=-1, 2-6=0, 7-9=+1, 10=+2]
         elif f == 10:      net += 2
+    return net
+
+def roll_pool_fractional(pool, tn=7):  # [canonical: params/core.md §TN Values — TN 7 standard]
+    """[ED-MB-0032, Jordan: "pool must be fractional."] Roll a CONTINUOUS combat pool without flooring it
+    to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
+    fractional remainder is realised as ONE extra real die rolled with probability `frac`.
+
+    [Fable-audit A3 fix, 2026-07-24] The prior version added a DETERMINISTIC `frac*PER_DIE_NET_EV` mu-shift.
+    Because `compute_degree` thresholds at `net<=0` (Failure), that constant EV crossed the boundary
+    discontinuously — P(Failure) jumped ~31.8%->10% between pool 3.0 and 3.000001, and a sub-1 pool could
+    NEVER Fail (a near-dead sliver became a guaranteed chip-damage machine). Realising the die stochastically
+    preserves the EV EXACTLY (E[extra die] = PER_DIE_NET_EV = frac contribution when drawn w.p. frac), AND
+    restores the die's own variance, AND keeps the Failure boundary intact (an all-fractional sub-1 pool can
+    now roll a 1 -> net<0 -> Failure). [canonical: params/core.md continuous engine — the discrete dice carry
+    all variance; no deterministic mu-shift.]"""
+    lo = math.floor(max(0.0, pool))
+    frac = max(0.0, pool - lo)
+    net = roll_pool(lo, tn) if lo >= 1 else 0
+    if frac > 0.0 and random.random() < frac:
+        net += roll_pool(1, tn)
     return net
 
 def compute_degree(net, ob):

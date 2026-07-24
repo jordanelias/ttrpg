@@ -2,6 +2,83 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-24 — ED-MB-0033: Fable logic audit — Part A remediation (9 defects in this session's own work)
+- Five Fable-tier read-only adversarial auditors (one per logical lane) traced ED-MB-0027..0032 and found
+  9 defects; all fixed. A1 (CRITICAL): `make_unit`→`build_army` filled the §B.2 cavalry preset Power 5
+  (spec never forwarded power/discipline) → gauge cavalry silently P4→P5, contaminating C-row verdicts;
+  forward power/discipline explicitly. A2 (HIGH): `gauge_run.py` re-implemented the verdict and dropped
+  both guards (`dec_n>0`, draw gate) → all-draw R3 false-passed on the `decA=50` sentinel → the reported
+  "8/20" was inflated; delegate to `g.run()`. A3 (HIGH): ED-MB-0032's deterministic `frac·EV` mu-shift
+  crossed the `net<=0` degree boundary (Jensen gap; sub-1 pools never Failed) → realise the fractional die
+  STOCHASTICALLY (one extra die w.p. `frac`) — preserves EV+variance+Failure boundary. A4 (MED): frac-pool
+  σ-boost read `sqrt(fractional)` → pass `floor(pool)`. A5 (HIGH): stochastic-break `erode_morale` on a
+  None-morale subunit wrote the SHARED pool negative → routed every sibling; materialise own morale first.
+  A6 (HIGH): `reset_morale_between_battles` never cleared `_rout_breakpoint` and loss was spawn-based →
+  auto-rout on phase 1 of every later battle; clear breakpoint + re-base `_start_troops`. A7 (MED-HIGH):
+  `erode_morale(eff+1)` with `eff<=-1` RAISED morale → clamp `max(eff+1,0)`. A8 (MED): `_rout_resilience`
+  read LIVE discipline → `eff_discipline_start`. A9 (LOW-MED): `own_strength:FRAC` + numeric trigger
+  payloads never range-checked → eager `(0,1)`-strict validation in `Order.__post_init__`.
+- Honest re-measurement (A1+A2 corrected, n=20): baseline **5/20**; +`PC_STOCHASTIC_ROUT` **6/20** (R3 now
+  correctly UNRESOLVED, not a false pass). Remaining 14 out-of-band rows are Part B pre-existing geometry
+  bugs (B1-B4) — move goldens, filed for Jordan ratification.
+- Byte-exact: every fix is `PC_*`-gated / campaign-boundary / validator-only → bat.py **4/4 modes**
+  (unit, cell, unit_field, cell_field) byte-exact. `tests/valoria` green; `test_fractional_pool.py` updated
+  (sub-1 pool now stochastic-EV + can-Fail, replacing the deterministic-EV assertions that codified A3).
+
+## 2026-07-23 — ED-MB-0032: fractional combat pool ("pool must be fractional")
+- Jordan directive: the continuous pool was floored to an integer die count before `roll_pool`,
+  discarding the fractional remainder. `roll_pool_fractional`: integer part rolls real d10s, fractional
+  remainder contributes its EV (`PER_DIE_NET_EV=0.4`, the TN-7 face-rule EV); sub-1 pool contributes only
+  its fractional EV (no floor to a guaranteed die). Sigma-boost reads the fractional pool. Wired into the
+  sigma-head `a_net`/`b_net`.
+- Verified: pool 3.0 vs 3.7 differ in mean net by ~0.7·0.4; integer pools reduce to `roll_pool`; monotone
+  across integer gaps. Gated `PC_FRACTIONAL_POOL` (default OFF → byte-exact, bat.py EXIT=0). Tests:
+  `test_fractional_pool.py` (6).
+- Gauge ~neutral (correctness/precision fix, not band-optimizer); fair fractional ruler needs its own
+  calibration pass. (Archived the 2026-07-02/04/05 blocks to `coverage_matrix_archive_2026-07-23.md`.)
+
+## 2026-07-23 — ED-MB-0031: stochastic rout breakpoint at the historical 15-30% casualty band
+- Jordan historical research: "routs occur as early as 15% losses with 30% the upper hand." The canonical
+  §A.4 casualty→morale steps don't fire until 50% losses, so units grind to ~90% before breaking. Models
+  du Picq will-to-fight collapse: each subunit draws a **fractional** break-point in [ROUT_ONSET=0.15,
+  ROUT_CAP=0.30], skewed by resilience (discipline + starting morale) — a steady body holds toward 30%, a
+  shaken one breaks toward 15% — and routs when its casualty fraction crosses it.
+- Result (rout_probe OFF→ON): loser casualty-at-rout **91.7%→31.8%** (even), 88.8%→30.3% (disc5v3);
+  winner ~20%→~10%; length 2.5→1.1 turns.
+- Fractional throughout (random draw + fractional band + fractional loss), reproducible under the seeded
+  RNG. Gated `PC_STOCHASTIC_ROUT` (default OFF → no draw → **byte-exact**, bat.py EXIT=0; NOT inert when
+  on — moves goldens, needs_jordan). Tests: `test_stochastic_rout.py` (7).
+- **Coupled next:** lower per-tick lethality (battles now end at ~30% but in ~1.1 turns; casualty chunks
+  overshoot the break-point) + fractional dice, then re-gauge vs Dupuy/Sabin.
+
+## 2026-07-23 — ED-MB-0030: conditional orders (own_strength trigger + locked distance-conditional)
+- Jordan directive: "conditionals — a unit only starts retreating when the opponent is within X /
+  advancing then withdrawing when X." **Verified** the existing `Order` primitive already covers the
+  DISTANCE case: `Order(trigger='enemy_range:D', behavior={'stance':'retreat'|'yielding':True})` fires
+  when the subunit closes within D; `stance`/`yielding` are both `_ORDER_SAFE_FIELDS`; `build_army`
+  forwards the spec `orders` key. Locked in with `test_conditional_orders.py` (fires on close; does not
+  fire out of range) — no redundant knob added (bottom-up reuse).
+- **Added** the missing `own_strength:FRAC` trigger: fires once `troop_total()/_start_troops <= FRAC` —
+  a unit reacting to its OWN attrition (withdraw a spent body, commit a weakened one, brace when
+  thinned). Wired in `units.py` Order validation + `_ORDER_TRIGGER_KINDS` + `contact.py` `check_orders`;
+  reuses the `_start_troops` spawn denominator (no new state).
+- Byte-exact (orders default `()`; goldens carry none; bat.py EXIT=0). Tests: 8 in
+  `test_conditional_orders.py`.
+
+## 2026-07-23 — ED-MB-0029: intent as an offence/defence resolution axis
+- Jordan directive: "hold-and-defend vs rout-the-other resolve differently — intent makes a big
+  difference." `stance` (was movement-speed only) is now a signed offence/defence **commitment** in the
+  exchange: `cX` ∈ {aggressive +1, balanced 0, hold/retreat −1} enters the sigma head as delta-sigma net
+  `ns_a += (cA·OFF + cB·DEF)·SIGMA_PER_D` (own press + enemy exposure/blunting), symmetric for B —
+  uniform-impact like the octagon/puncture terms, **not** a raw damage multiplier.
+- Anchored to the §A tactic-card **asymmetry** (Disciplined Defence +1D; Standard Advance no effect) →
+  `DEF=1.0 > OFF=0.5`: a holding pin **survives** a pressing foe (buys time, Cannae centre); aggression
+  is punished vs a steady wall.
+- Effect (intent_probe, OFF→ON): hold-vs-balanced holder casualties 67→57 & win 35%→50%;
+  aggressive-vs-hold holder wins 65/35.
+- Gated `PC_INTENT_RESOLUTION` (default OFF; balanced=0 → inert; byte-exact, bat.py EXIT=0). Tests:
+  `test_intent_resolution.py` (8). Detail: `rotation_model_v1.md`.
+
 ## 2026-07-23 — ED-MB-0028: cell-level closing-ranks lifecycle (T1 Phase 1a)
 - Foundational primitive for Jordan's rotation directive: `Subunit.close_ranks()` reflows a subunit's
   **living** troops front-rank-first (`orig_r` asc) toward each cell's spawn density (`_cell_target`),
@@ -372,136 +449,6 @@ Archived entries in tests/coverage_matrix_archive.md
   `check_orders` timed sequencing, and escort/formation-relative positioning (Cannae acceptance test
   verified real lateral wheel movement, zero new flanking mechanics). G5 byte-exact both grid modes
   unchanged throughout. Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-02 — mass_battle: TOI refactor (archived — condensed)
-- Jordan-directed replacement of Stage A/B's halving hack with exact time-of-impact collision solving
-  (`resolve_toi_and_commit`) plus reach/facing-gated throttling; 5 real bugs found+fixed. G5 byte-exact
-  both grid modes unchanged; mirror cav-vs-cav fully balanced (0-0-30). Full detail:
-  `tests/coverage_matrix_archive.md`.
-
-## 2026-07-04 — mass_battle: Cannae gauge audit (ED-MB-0002) ratified; DG-3/DG-4 implemented (archived — condensed)
-- ED-MB-0002 ratified (PR #73 merge = ratification, ED-1094 convention). Two bug fixes landed first
-  (validators.py ghost-cell construction; orchestration.py float-epsilon pool-floor). Root-cause audit
-  (RC-1 through RC-5) found composition-coupling defects in the pool/morale accounting layer explained
-  the H3-H6 Cannae-pattern gauge collapse, not the "two racing clocks" theory. Jordan ruled DG-3
-  ("intensive, per-troop, bottom-up" pool -- combat pool per cell as per troop type/quality/density,
-  not a flat subunit-level split) and DG-4 (per-subunit + whole-unit morale blend, wiring already-
-  existing agg_morale/derive_rout/cascade_morale_hit machinery, no new state). Both implemented
-  (new `pair_pool_contribution` in core/exchange.py; sibling-morale pull in core/state.py +
-  hierarchy/units.py). All 4 `bat.py` digest modes re-recorded (shared, non-gated code). DG-5
-  (racing-clocks) closed: a frozen-vs-wheeling-wings ablation showed byte-identical outcomes, refuting
-  the theory outright. **Honest result: draws GONE (100%→resolves decisively) but H3-H6/C4 now
-  OVERSHOOT their bands in the attacker's favor** instead of landing in them -- not a clean fix, a
-  change in failure mode. `tests/valoria` green throughout. Full detail: `tests/coverage_matrix_archive.md`.
-
-## 2026-07-05 — mass_battle: Cannae follow-up audit (ED-MB-0003) — 4 defects fixed, DG-1/DG-3 completed, DG-2 captured as workplan
-
-A fresh Fable-5-led adversarial audit of the already-shipped DG-3/DG-4 fix (ED-MB-0002) found the
-"RC-1 is fully fixed, remaining gap is pure DG-1/DG-2" story was **false** — 4 concrete engine defects
-survived that fix, plus a harness composition bug. Jordan ruled the 3 open decision gates
-(AskUserQuestion) the same session; all fixes + ratified decisions implemented, then independently
-adversarially reviewed (2 more real bugs found+fixed in that pass).
-
-**Defects found+fixed:**
-- **D1** — `orchestration.py`'s `POOL_VARIANT=="C-ii"` branch applied an outer `a_troops_frac`
-  (`troop_count/unit.total_troops()`) multiplier to `a_base` BEFORE `pair_pool_contribution`'s own
-  internal per-troop normalization — double-diluting a composed subunit's pool by army-size share on
-  top of its own troop density. **Fixed per Jordan's ratified "intensive" pool semantics: removed
-  entirely** (still computed/used by the untouched `baseline` variant).
-- **D2** — `hierarchy/units.py`'s `_envelop_goal` shared one threshold for its phase-1/phase-2
-  transition (no hysteresis) — a wing wheeling to its rear waypoint immediately re-crossed the same
-  threshold turning in, yanked back to phase 1, forever. **Fixed** with a one-shot `_envelop_committed`
-  latch. A second, related bug (**D2b**) in `_node_advance`'s step formula could freeze a body forever
-  within 0.5 combined units of ANY goal (a fixed step overshoots when close, and the old code took no
-  action below that threshold) — **fixed** by capping the step at `min(step, mag)`.
-- **D3** — `orchestration.py`'s `max(1, math.floor(a_pool_raw+1e-9))` floor resurrected a
-  routed/broken atom's pool to 1, letting it keep dealing damage post-rout (§A.12 violation). First-pass
-  fix (zeroing `a_pool`/`b_pool` for a dead atom) was **found to be a no-op by adversarial review** —
-  `roll_pool`/`_sigma_net_boost` (resolution.py) both independently re-floor their own `pool` arg to a
-  minimum of 1 internally, so the zeroed input never reached the actual dice math (confirmed by a
-  revert-and-diff test: byte-identical digest with/without the first-pass fix). **Corrected fix** forces
-  `a_net`/`b_net` to exactly 0 directly for a dead atom (both SIGMA_HEAD and legacy branches).
-- **D4** — `percell.py`'s `distribute_casualties` tracked engaged columns as ONE union across a whole
-  Unit, letting an uninvolved subunit (e.g. a wide-placed wing 20+ rows from any enemy) absorb a share
-  of a DIFFERENT subunit's (the center's) casualties purely by column coincidence. **Fixed** — engagement
-  now tracked per-subunit (`eng_by_sub`), with an `any_engaged` whole-unit fallback preserving the
-  original degenerate-case semantics.
-- **Harness composition bug** (not an engine defect) — `gauge_mb.py`'s `_envelop_army`/`_refused_army`
-  fielded a FULL tier's troops per subunit via the legacy tier path, so a 3-subunit envelopment army
-  silently fielded 3x (2x for `_refused_army`) its single-subunit opponent's troops — a side effect of
-  the LC-8 migration, making every DG-1 composition question untestable. **Fixed**: both now take a
-  `total_troops` param (default = the single-subunit baseline) split via the continuous-scale
-  troops/concentration path.
-
-**Jordan's rulings (AskUserQuestion, 2026-07-05), implemented:**
-- **DG-3 completion = "Intensive (per-troop, partition-invariant)"** — see D1 above.
-- **DG-1 = "symmetric at parity + majority pin cavalry wing so long as bottom-up emergent primitives
-  approach"** — `_envelop_army`/`_refused_army` rebuilt at force parity (§ above); infantry rows
-  (H3/H5/H6) keep the symmetric center+2-wings shape at parity (`pin_frac=1/3` default); cavalry rows
-  (C4/C7) rebuilt as majority (2/3) infantry pin + minority cavalry wings via `wing_troop_type`/
-  `pin_frac=2/3`, matching Polybius/Livy order of battle, built entirely from `engine.build_envelopment`
-  unmodified.
-- **DG-2 = "create as workplan"** — NOT implemented. Captured as
-  `proposals/mass_battle_fighting_withdrawal_v1.md` (status PROPOSED): a per-subunit `yielding`
-  state, facing preserved toward the enemy (unlike rout), commanded-entry first via a discipline-gated
-  `'yield'` order, emergent auto-entry flagged default-off pending measurement, reuses `_kite_goal`'s
-  reflect vector + the TOI/halt substrate + ED-MB-0001 §6's path-budget formula (NOT the audit's
-  originally-proposed "recoil/knock-back idiom," confirmed to not exist as a displacement primitive).
-
-**Adversarial-review pass (independent) — 2 real bugs found+fixed, rest checked out clean:**
-1. D3's no-op (above).
-2. `wing_speed`/`speed` kwargs in `_envelop_army`/`_refused_army` never reached `Unit.speed` —
-   `Subunit` has no `speed` field at all (per-subunit `'speed'` spec keys were pure dead decoration,
-   silently dropped by `build_army`), and the Unit-level `speed` was never forwarded to
-   `build_envelopment`/`build_refused_flank`. Fixed: per-subunit `'speed'` keys removed (cleanup); real
-   `speed=` now forwarded at the Unit level (the only granularity the engine's pursuit-check logic,
-   `orchestration.py`'s `routing_unit.speed`/`victor.speed` checks, actually reads).
-3. Everything else checked out clean (D2/D2b, D4, Step-4/5's arithmetic, all 4 digests independently
-   re-verified).
-
-**Verification:** all 4 `bat.py` digest modes re-recorded across the sequence of fixes (this touches
-shared, non-gated combat-resolution code — same as ED-MB-0002's own landing); `unit`/`cell`/`unit_field`
-stayed byte-identical through D2/D3(part 2)/D4 (this battery doesn't happen to exercise those bugs on
-those 3 modes); only `cell_field` moved at each PER_CELL-gated step, plus `unit`+`cell`+`unit_field`+
-`cell_field` ALL moved once at the Step-4 pool-semantics change (shared, non-gated code). `tests/valoria`:
-88 passed, 16 skipped (all pre-existing `numpy`-unavailable skips, unrelated to this change), 1 xfailed
-(`test_envelop_reaches_rear_node` — its xfail reason/docstring rewritten to retract the now-falsified
-"steering mechanism proven correct" claim and record this session's findings).
-
-**Honest gauge result (multi mode, n=30, final/corrected numbers):**
-
-| Row | Before (ED-MB-0002 baseline) | After (this session) | Band | Verdict |
-|---|---|---|---|---|
-| H3 | 100% draws | 100/0/0 | 55-72 | WIN-OUT |
-| H4 | 90% draws | 86.7/6.7/6.7 (val 92.9) | 45-62 | WIN-OUT |
-| H5 | 100% draws | 83.3/0/16.7 (val 100) | 48-62 | WIN-OUT |
-| H6 | 100% draws | 96.7/3.3/0 | 48-60 | WIN-OUT |
-| C4 | 66.7% (val) | 100/0/0 | 75-95 | WIN-OUT |
-| C7 | passing (100) | 100/0/0 | 65-100 | OK |
-
-Draws are **entirely gone** — a real, dramatic change from the 100%-draw lock. But every row now
-**overshoots decisively in the attacker's favor** instead of landing in-band (except C7, unaffected by
-the composition change, which continues to pass). Full 20-row gauge aggregate: **4/20 → 5/20** passing
-(H1,C1,C2,C6,C7 — C1 newly passes; every other previously-failing row, including RC-5's 9 untouched
-single-subunit rows, remains failing, now mostly via the same overshoot signature rather than draws or
-mixed results). **Not a clean net win or loss — a change in which rows fail and how.**
-
-**New, unresolved finding (not decided, disclosed not chased):** a controlled experiment (co-located vs.
-spatially-separated equal-troop subunit splits, both vs. an identical single-subunit opponent) suggests
-why: `subunit_combat_pool`'s Command-driven score does not scale by a subunit's own troop share, so
-multiple SPATIALLY-SEPARATED attacking fronts (center + 2 wings hitting one defender from different
-angles) each roll close to a full, independent combat score at once, tempered only by a small
-`ENCIRCLEMENT_PENALTY` tax that falls on the *defender*, not the attacker. Co-located splits stayed
-roughly partition-invariant (13-16-1 vs a 14-16-0 mirror baseline); spatially-separated splits did not.
-Whether this is a genuine partition-invariance defect or the historically-correct mechanism for why real
-encirclements are devastating (bands needing reconsideration instead) is **explicitly left open** — a
-new architecture question beyond DG-1/DG-3's scope, needing its own Jordan ruling, not a silent tweak.
-**DG-5 correction:** the frozen-vs-wheeling ablation's "no race" null result is RE-CONFIRMED for a
-DIFFERENT reason — both configurations' wings never reached contact at all (the now-fixed D2 bug), not
-because there was genuinely no race.
-
-Branch `claude/mass-battle-cannae-gauge-dg-rulings`. Next: Jordan's ruling on the partition-invariance
-question and on DG-2's build sequencing (workplan doc §4).
 
 ## 2026-07-08 — mass_battle: partition-invariance fix (ED-MB-0004) + RC-5 preliminary finding
 
