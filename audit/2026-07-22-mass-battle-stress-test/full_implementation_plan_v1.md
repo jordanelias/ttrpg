@@ -55,6 +55,13 @@ gauge runner + a per-finding **ablation-repro harness** (each Phase-1+ fix begin
 audit's ablation number, then shows the fix moving it). *Foundation; low risk.*
 
 ### Phase 1 — The geometry frame (root of the out-of-band rows)
+> **Coupling discovered 2026-07-24 (measuring B1 in isolation):** B1 fixes the wedge (H2 0→37.5 as the
+> audit predicted) but the **braced-wall C-rows regress** (`REPELLED`→`NOT-REPELLED`, C2/C6 cav wins
+> 87.5%). The brace-repel was silently relying on the broken `(0,0)`-collapsed contact map feeding the
+> charge-shock / `_wall_prep` / defender-depth inputs. **Consequence:** B1+B2+B3 + the **B5 charge-zone
+> fix** are coupled through the contact map and MUST land as ONE coherent set, measured together — B1
+> alone commits a net gauge regression (5/20→4/20). Do NOT land the frame pieces piecemeal.
+
 - **B1** (CRITICAL, verified) — `_oriented_abs_map` node branch (`geometry.py:252`) iterates
   `oriented_pattern(shape,tier)` but keys `_node_pos` by the continuous `_build_shape_n` ids; the
   `.get(..., (0,0))` default silently collapses every mismatch to the origin (Arrowhead: 1/6 ids match →
