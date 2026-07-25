@@ -5,7 +5,7 @@ Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
 [ED-1085 container de-leak, 2026-07-01] This module previously reached into the FROZEN
 tests/sim/v32-combat-balance/ validation station via a sys.path hack (r1/r8/m1 imports),
 dragging numpy into the engine runtime. The sigma math now comes from sigma_leverage
-(parity-tested against the numpy originals at 1e-9 — sim/tests/test_sigma_leverage_parity.py);
+(parity-tested against the numpy originals at 1e-9 — engine/tests/test_sigma_leverage_parity.py);
 the engine's own combat-state constants live here / in combatant.py. NOTE the RNG contract
 changed with the substrate: `rng` is a stdlib random.Random (rng.gauss), no longer a numpy
 Generator (rng.normal). The continuous engine's distribution is unchanged
@@ -47,7 +47,9 @@ BASE_POOL = 6      # [class-C: armature — History-driven pool base; pool = max
 def resolution_pool(history):
     """Agility-INDEPENDENT resolution pool (ED-901; re-ratified ED-900/904): max(5, History + 6)."""
     return max(POOL_FLOOR, int(round(history)) + BASE_POOL)
-def effective_ob(pool, net_sigma): return SL.eff_ob(DECISIVE_OB, pool, net_sigma)
+# ED-PC-0035: `effective_ob` REMOVED — zero callers anywhere in the package/workbench/tests, and resolve()'s own
+# docstring records that the Ob-shift path it wrapped is DISPLAY-ONLY and distorts the degree bands. Leaving a
+# mis-resolving helper sitting next to the live resolver is a trap for a future caller, not a convenience.
 def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)
 def degree(net, ob):
     """Band a CONTINUOUS net into a degree, with the ER-2 continuity correction applied (params/core.md
@@ -87,6 +89,16 @@ def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None):
     identical at grip=0 (the default) for every weapon."""
     return WP.heft(w, grip=grip, sel_head=sel_head, sel_pc=sel_pc)
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
+# ED-PC-0036 ('partial' was reported as a dead entry) — RETAINED, but the first rationale given for keeping it was
+# WRONG and the adversarial review caught it. The claim was that a complete QUAL mapping stops a future partial
+# caller from silently taking the 0 branch. It does not: damage() gates on the LITERAL tuple
+# ('graze','success','overwhelming'), not on QUAL membership, so a partial takes the 0 branch whether or not this
+# entry exists — and removing it could not even raise KeyError (which would have been the louder, safer failure).
+# The honest reason to keep it is narrower: 'partial' IS a real degree from degree() (1 <= net < ob), the wrapper
+# maps it to an explicit graze/bind rather than a damage call, and a quality table that silently omits a member of
+# its own domain is a worse artifact than an unused row. NOTE COVERAGE_GAP['partial'] below is NOT the same thing —
+# that key is the `coverage` (hit-location) level, unrelated to degrees; conflating them was a category error in
+# this comment's first draft. It is retained as the not-yet-wired hit-location hook.
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 # PENETRATION THRESHOLD (ED-PC-0032, rapier plate fall-off): armour resists up to a floor — a blow whose coupling-
@@ -97,9 +109,14 @@ DMG_SCALE=1.55                                                      # [damage_mo
 # well below collapses toward 0. Unarmoured PEN_THR=0 (knee inert → open combat byte-identical). Emergent, not a
 # rapier special-case: a gap-dagger/spike/blunt that DEFEATS plate produces a large d (kept); a rapier/arming/spear
 # point that pings off it produces a small d (collapsed). [SIM-CALIBRATE] per-tier floors.
+PEN_DEFICIT_K=6.0   # [SIM-CALIBRATE] how sharply the penetration knee rises with the weapon's armour-defeat DEFICIT (ED-PC-0038). 0 restores the raw-magnitude-only knee.
 PEN_THR={'none':0.0,'light':0.0,'medium':2.5,'heavy':6.5}   # light (soft gambeson) needs no penetration floor; the rapier inversion is a HEAVY-tier effect (heavy 74->16), medium a smaller gate
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
-DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
+DELIVERY={'blunt':1.6,'point':1.45,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
+# ED-PC-0037: the 'cut_thrust' entry (1.35) is REMOVED. It was the pre-max BLENDED constant for a weapon modelled as
+# one mode; once cut_thrust_arm resolved the two arms on their own tokens nothing read it, yet export_engine_params
+# kept shipping the dead 1.35 into the Godot-facing contract — the exact 'dead keys leaking into the typed contract'
+# class ED-PC-0035 existed to clean, recreated one batch later. Caught by the batch-3 adversarial review.
 # Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED 2026-06-30 (Alan Williams, The Knight
 # and the Blast Furnace, 2003) — designs/audit/2026-06-30-combat-grounding/. CHANGED 4 cells: cloth.shear .35->.45
 # (a 16-30 layer jack sheds a ~60-130 J cut); cloth.puncture .15->.12 (a point stops at only ~50 J vs ~80 J cut — the
@@ -252,7 +269,37 @@ def thrust_authority(head_len):
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
     if head_len is None or head_len<=0: return 1.0
     return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
-def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0):
+def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0):
+    """SINGLE OWNER of the cut-and-thrust versatility contest. Returns `(value, mode)` — the winning arm's coupling and
+    which arm won ('shear' | 'puncture') — so the DAMAGE and the REPORTED MODE can never disagree (ED-PC-0036).
+
+    They used to. `coupling` took max(cut, thrust) internally while `select_mode` labelled the mode from a separate
+    armour rule, and the two contradicted each other in every unarmoured/light cell: the coupling paid the THRUST arm
+    at all four tiers (the legacy blended DELIVERY['cut_thrust']=1.35 could never beat point's 1.45, since shear-resist
+    >= puncture-resist at every tier), so a cut-and-thrust sword was damaged as a thrust and READ as a swing — and
+    legibility, which scores thrust HARD (0.80) vs swing EASY (1.25), graded a mode the fighter never performed. It
+    also meant the "versatile max" the docstring advertises never once selected the edge across 76 weapon x tier cells.
+
+    Two corrections make the contest real: the cut arm is graded on its OWN token (DELIVERY['cut']) rather than the
+    pre-max blended constant, and BOTH arms carry the same `eff` quality scaling their standalone tokens use (this
+    branch previously ignored `eff` outright, discarding the derived edge-quality and thrust-magnitude of all 19
+    cut_thrust weapons). The result is the doctrine this module already claimed: CUT the unarmoured man, half-sword
+    THRUST anything armoured — and a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point
+    even unarmoured, which an armour-keyed label rule could not express. Pure."""
+    cut_arm = DELIVERY['cut']*_transmit('shear',mat,coverage)
+    thr_arm = DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth)
+    # PER-ARM quality [ED-PC-0037, adversarial-review fix]. Each arm is de-rated by ITS OWN derived magnitude — the
+    # edge by geo['cut'], the point by geo['thrust']. The first revision scaled BOTH by the element's blended
+    # sel_eff = max(cut, thrust), which credited an incidental edge with a dedicated point's quality: a ranseur
+    # (cut 0.30 — squarely inside the 0.20-0.50 band CUT_AUTH_REF's own comment says must never earn the full
+    # constant) was paid the full cutter DELIVERY 1.500 at none and reported as a SWING, purely because its 0.84
+    # thrust rode through the max. That is the ED-PC-0011 mis-crediting class re-opened through a blend. Per-arm,
+    # the ranseur's cut scales to 1.5*0.30/0.70 = 0.643 and its point correctly wins.
+    if eff_cut is not None:    cut_arm *= min(1.0, eff_cut/CUT_AUTH_REF)
+    if eff_thrust is not None: thr_arm *= min(1.0, eff_thrust/THRUST_AUTH_REF)
+    return (cut_arm, 'shear') if cut_arm >= thr_arm else (thr_arm, 'puncture')
+
+def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
@@ -273,15 +320,67 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     if head=='cut_thrust':
         # VERSATILE: better of the edge (shear — a cut is not pommel-pressed, no lever term) or the half-sword/gap
         # thrust (puncture, whose GAP-PRESS term carries thrust_auth — the short-lever pommel-press that defeats a harness).
-        return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
-                   DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth))
+        # [ED-PC-0036] Both arms now carry the SAME `eff` quality scaling their standalone tokens use. This branch
+        # previously IGNORED `eff` outright — coupling('cut_thrust', ...) returned an identical value whether eff was
+        # 0.1 or 0.9 — so the derived edge-quality and thrust-magnitude of all 19 cut_thrust weapons (sel_eff spans
+        # 0.63-1.14) were silently discarded. That is the "a composite is graded on something other than its own
+        # element" class the sel_* contract exists to prevent, and a live reason near-identical swords read alike. A
+        # weak edge now de-rates the cut arm and a weak point the thrust arm, so the max() is a contest between the
+        # weapon's REAL two capabilities instead of between two hand-set DELIVERY constants.
+        # The cut arm is graded as a CUT (DELIVERY['cut']), not by the legacy BLENDED 'cut_thrust' constant. That 1.35
+        # predates this max() — a single averaged number from when the weapon was modelled as one mode. Once the branch
+        # resolves two arms explicitly, a cut-and-thrust sword's cut IS a cut and has no reason to be weaker than a
+        # dedicated cutter's. Keeping the blend made the comparison unwinnable by construction (1.35 < point's 1.45,
+        # with shear-resist >= puncture-resist at EVERY tier), so the "versatile max" never once selected the edge
+        # across 76 weapon x tier cells — the documented armour-conditional shift was decided by constant ordering
+        # rather than by physics. On its own token the shift is REAL and matches the doctrine stated above: cut the
+        # unarmoured man (1.500 > 1.450), half-sword-thrust anything armoured (light 0.926 < 1.276, more so at
+        # medium/heavy) — because padding and plate resist an edge far more than they resist a point.
+        return cut_thrust_arm(mat, coverage, gap_prec, eff_cut, eff_thrust, thrust_auth)[0]
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
     return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
-def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0):
+def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
+    """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
+    can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
+    deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
+    concentrated beak/spike that pierces plate — the poleaxe queue); both DERIVED (Phase-3b retires hand-set
+    `percussion`): concussion~percussion_authority, puncture~percussion_authority x strike_concentration (a broad
+    mace face sc~0 -> no puncture; a spike sc high -> pierces). A wooden staff (low authority) does NEITHER. A
+    cut-and-thrust sword takes the better of its cut or a half-sword gap-thrust; a point thrusts to gaps; a pure
+    cutter collapses (ADEF_CUT).
+
+    `head` (the SELECTED mode-head from select_mode) overrides w['head'] when the wielder has committed to a specific
+    mode this exchange: a poleaxe whose select_mode chose 'point' (the spike) is scored on the spike's gap-thrust, not
+    the better-of-blunt max. head=None keeps the native head (the per-head max over the weapon's intrinsic modes) — so
+    every existing caller is byte-identical. percussion_authority now carries the §1 energy-credit (poleaxe 5.83 < mace
+    7.45 — the poleaxe's plate edge is NOT concussion; see select_mode).
+    CIRCUMSTANCE-DEGRADED (I2, D2b): `gap` overrides w['gap'] (None = native fallback — the sel_gap object-
+    confusion fix, M-02); `grip`/`room` thread the SAME mode-split/room-floored Phi as the damage path into the
+    blunt branch's percussion_authority/puncture_pressure, so armour-defeat capability and reach_threat resolve
+    the SAME grip as core.strike (D2b). Byte-identical at grip=0/room=1.0/gap=None for every weapon."""
+    head = head if head is not None else w['head']
+    gap = gap if gap is not None else w['gap']
+    tauth = thrust_authority(w['head_len'])   # PC-5: point-to-hand lever authority — scales the gap-THRUST armour-defeat terms (a short/half-sword thrust presses the harness; a reach-thrust at extension cannot), keeping adef consistent with coupling. NOT applied to the blunt-puncture beak (a poleaxe's spike authority is its percussion energy, already in puncture_pressure) nor to the pure-cut collapse.
+    if head=='blunt':
+        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
+                   cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
+    if head=='point':      return cfg['ADEF_POINT']*gap*tauth
+    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
+    return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
+
+# ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
+# grounded_weapon_armour_usemode_model.md §3-4 (tasks wht7pkx1c / w4bekmb5e). There is NO per-weapon mode table:
+# the AFFORDED modes + their effectiveness DERIVE from each weapon's existing geometry primitives, so poleaxe/mace/
+# staff are just bundles of primitives, never a name-keyed list (the L0 primitive-law). The modes are the UNIVERSAL
+# set {thrust, cut, percuss, puncture}; each maps to one of the engine's existing head TOKENS (so the downstream
+# coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
+# head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
+# blunt max(concussion,puncture) from 2 modes to N. Pure.
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -297,13 +396,38 @@ def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_RE
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
-    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
-    t = PEN_THR.get(armor, 0.0)                                   # PENETRATION THRESHOLD (ED-PC-0032): armour resists up to a floor
+    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
+    # PENETRATION THRESHOLD (ED-PC-0032), now CAPABILITY-RELATIVE (ED-PC-0038). The knee used to key on RAW magnitude
+    # alone, which let a heavy-headed weapon buy its way through a harness it demonstrably cannot defeat: measured vs
+    # plate, a partisan (adef_cap 0.176 against a 0.72 threshold — the worst armour-defeat on the board) landed 11
+    # damage, a guandao (0.169) landed 12, while a spear with BETTER capability (0.288) landed 3 and a yari 2. The
+    # damage path was rewarding head mass exactly where the sigma path says the weapon cannot find a gap, which is
+    # both physically inverted (a narrow point seeks a gap better than a broad blade) and a silent contradiction of
+    # the armour-defeat model the rest of the engine resolves on. The threshold now RISES with the weapon's own
+    # armour-defeat DEFICIT, so what gets through a harness is governed by whether the weapon can defeat it — not by
+    # how heavy its head is. Zero deficit (a weapon that clears the tier) leaves the ED-PC-0032 behaviour untouched,
+    # and every tier with PEN_THR 0 (none/light) stays completely inert.
+    t = PEN_THR.get(armor, 0.0)
+    if t > 0.0:
+        _cap = (adef_cap(weapon_geo, cfg_adef, head=weapon_head, gap=gap, grip=grip, room=room)
+                if (weapon_geo is not None and cfg_adef is not None) else None)
+        if _cap is not None:
+            # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0039, adversarial-review fix]. adef_cap can
+            # return a NEGATIVE number — ADEF_CUT is -0.9, a sigma-domain CONTROL PENALTY calibrated for
+            # armor_defeat_sigma's +/- scale, not a capability magnitude. Feeding it raw gave a pure cutter a deficit of
+            # 1.62 at plate (more than twice the entire threshold scale) and inflated its knee ~x10.7, which silently
+            # annihilated the whole cutter class: bardiche 17->1, podao 13->1, sparr_axe 11->1 per hit, and at MEDIUM —
+            # a tier the fix was never meant to touch — sparr_axe 0.32->0.05, staff 0.22->0.04. "Cannot defeat the
+            # harness" is a floor at zero capability, not an unbounded negative one; a weapon with no armour-defeat is
+            # simply at deficit = threshold, and the grading of HOW badly a given cut fails is ADEF_CUT's job in the
+            # sigma path (and the batch-6 mass/keenness work), not this knee's.
+            _deficit = max(0.0, cfg_adef['ADEF_THRESHOLD'][armor] - max(0.0, _cap))
+            t *= (1.0 + PEN_DEFICIT_K * _deficit)
     if t > 0.0 and raw > 0.0:
         raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
     return max(0, int(round(raw)))
 
-def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
+def strike(attacker, defender, deg, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
     DEFENDER, returning the int damage. Single call-site for every blow so the 9-arg positional surface (the
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
@@ -326,5 +450,14 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     eff=getattr(attacker, 'sel_eff', None)                        # SELECTED element's own derived cut/thrust magnitude (U2/ED-PC-0011); None for a native-fallback attacker, inert for every head but 'cut'
     grip=getattr(attacker, 'grip_position', 0.0); sel_pc=getattr(attacker, 'sel_pc', None)
     tauth=thrust_authority(attacker.w.get('head_len'))            # PC-5: point-to-hand lever authority from the SELECTED weapon record (the half-sword swap already gives the short-lever form its own head_len); inert for shear/percussion heads
+    # [ED-PC-0037.1] ELEMENT-LOCAL per-arm magnitudes, written by the wrapper from systems.selected_arm_magnitudes.
+    # The whole-weapon bake is only a fallback for callers that never went through select_mode (direct/test callers):
+    # grading a composite's blow on the WEAPON's cut/thrust rather than the struck ELEMENT's is the M-02 object
+    # confusion the sel_* contract exists to prevent, and it survived one batch here after select_mode was fixed.
+    _geo = attacker.w.get('geo', {})
+    _ec = getattr(attacker, 'sel_eff_cut', None);  _et = getattr(attacker, 'sel_eff_thrust', None)
     return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc), head, attacker.strength,
-                  defender.armor, close, gap, perc, q=q, eff=eff, thrust_auth=tauth)
+                  defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
+                  eff_cut=(_ec if _ec is not None else _geo.get('cut')),
+                  eff_thrust=(_et if _et is not None else _geo.get('thrust')),
+                  weapon_geo=attacker.w, cfg_adef=cfg, grip=grip, room=getattr(attacker,'range_avail',1.0))   # [ED-PC-0039] same grip/room the sigma path threads, so the two cannot disagree about the same question

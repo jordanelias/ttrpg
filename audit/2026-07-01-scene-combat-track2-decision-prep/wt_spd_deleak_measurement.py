@@ -95,9 +95,9 @@ def damage_table():
         cur_h, cand_h = current_heft(w), candidate_heft(w)
         dmgs_cur, dmgs_cand = [], []
         for arm in ARMORS:
-            d_cur = core.damage('success', cur_h, w['head'], STRENGTH, arm, close=False,
+            d_cur = core.damage('success', cur_h, w['head'], STRENGTH, arm,   # ED-PC-0036: `close=` retired from core.damage
                                  gap=w['gap'], perc=WP.percussion_authority(w))
-            d_cand = core.damage('success', cand_h, w['head'], STRENGTH, arm, close=False,
+            d_cand = core.damage('success', cand_h, w['head'], STRENGTH, arm,   # ED-PC-0036: `close=` retired from core.damage
                                   gap=w['gap'], perc=WP.percussion_authority(w))
             dmgs_cur.append(d_cur)
             dmgs_cand.append(d_cand)

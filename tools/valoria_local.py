@@ -41,6 +41,12 @@ def main(argv):
         ('ci_audit_registry_check.py',   [],          False),  # report-only audit-registry freshness gate
         ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
         ('ci_formula_prose_check.py',    [],          False),  # A18 report-only formula prose-drift (ED-1052 / OPT-AV-5)
+        ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
+        # ED-PC-0040: freshness was CI-only, so five consecutive local-green commits shipped a stale
+        # canonical_sha__ pin (ED-PC-0035 edited references/module_contracts.yaml without refreshing it) and it
+        # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking
+        # boundary — but local-green now at least SEES it. Refresh with `python3 tools/freshness_gate.py --update`.
+        ('freshness_gate.py',            [],          False),  # report-only canonical-SHA staleness (blocking in CI's integrity job)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

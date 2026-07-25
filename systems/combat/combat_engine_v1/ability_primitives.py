@@ -5,7 +5,7 @@ are basically tradition primitives" (Jordan): just as a weapon is a bundle of ph
 bundle of ability primitives — the named techniques/concepts it teaches (Indes, Winden, mezzo tempo, atajo,
 sen-no-sen, true-times…), grounded in the historical-combat-manuals corpus.
 
-CURRENT MODEL (levels-of-investment, ED-PC-0023 — Jordan directive "we'll probably have levels of investment for
+CURRENT MODEL (levels-of-investment, ED-PC-0024 — ED-PC-0035 citation fix: 0023 is the fiat audit that RECORDED the principle; 0024 is the entry that filed the model. Jordan directive "we'll probably have levels of investment for
 techniques"): an ability is a tradition-learned MODULATOR a fighter INVESTS IN. `c.equipped` is either a LIST of
 names (each at level 1.0 — full baseline mastery, back-compat) or a DICT {name: level} (graded investment, level>=0).
 Each ability targets a named LEVER with op '+' (additive, scaled value*level) or '*' (multiplicative, value**level).

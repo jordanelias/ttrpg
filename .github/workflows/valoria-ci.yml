@@ -450,6 +450,26 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_sim_fabrication_check.py
 
+  claim-provenance-check:
+    # ED-PC-0040. Sibling to sim-fabrication above and aimed at the gap it leaves: that gate asks whether a CONSTANT
+    # in code is cited, this one asks whether a MEASURED CLAIM in a ledger entry names an instrument that can
+    # reproduce it. Three consecutive PC-lane batches shipped confident numbers ("estoc -> 0" for the roster's most
+    # decisive plate weapon; "a tier the fix was never meant to touch" for a tier it moved 23 points) that only an
+    # expensive adversarial review caught, batches later.
+    name: Claim Provenance (measured claims name a re-runnable source)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Every quantitative ledger claim names an instrument that exists
+        run: python3 tools/ci_claim_provenance_check.py
+
   supersession-check:
     name: Supersession Churn Guard (warn)
     runs-on: ubuntu-latest
@@ -520,8 +540,15 @@ jobs:
     needs: syntax-check
     # tests/valoria alone runs ~9m on hosted runners (combat/sim-heavy cases + the two grid-mode
     # byte-exact subprocess batteries), plus pip install + tests/contracts — the old 5-min cap
-    # cancelled the job mid-run. 12 min gives headroom above the observed ~9m23s full-suite time.
-    timeout-minutes: 12
+    # cancelled the job mid-run. 12 min gave headroom above the observed ~9m23s full-suite time.
+    # [RAISED 12 -> 16, ED-PC-0040] That headroom is now spent. This batch added ~2m20s of roster-wide
+    # combat sweeps — the primitive-derived plate-participation guard (~25s), its four mutation cases
+    # (~58s), and the armour-reference drift gate (~54s) — all of which sweep all 54 weapons by design,
+    # because restricting them to a watched subset is the exact blind spot they exist to close. At the
+    # old cap a slow runner would have landed ~11m43s against 12m and cancelled mid-run, which reads as
+    # a mysterious red rather than as "the suite got slower". Sized so the added cost is visible in this
+    # comment rather than discovered by a cancelled job.
+    timeout-minutes: 16
     permissions:
       contents: read
     steps:

@@ -161,6 +161,24 @@ ci_checks:
     ci_job: sim-fabrication-check
     notes: "Ports valoria_hooks.sim_fabrication_check (deprecated/skills/valoria-orchestrator/) into a standalone validator. Also runs locally via valoria_local.py --staged (blocking)."
 
+  - path: tools/ci_claim_provenance_check.py
+    level: 5
+    role: "Blocking claim-provenance guard: a ledger entry stating MEASURED numbers must carry `MEASURED-BY: <path>` naming a re-runnable instrument that exists in the tree."
+    paired_hook: ""
+    ci_job: claim-provenance-check
+    notes: >-
+      ED-PC-0040. Sibling to ci_sim_fabrication_check and aimed at the gap it leaves: that gate asks whether a
+      CONSTANT in code is cited; this asks whether a MEASURED CLAIM in a ledger is reproducible. Built after three
+      consecutive PC-lane batches half-stood on adversarial review for the same cause — confident quantitative claims
+      written faster than they were measured, with the falsifying scripts ad-hoc and discarded ("spear/yari/estoc ->
+      0" for the roster's MOST decisive plate weapon; "a tier the fix was never meant to touch" for a tier it moved 23
+      points). Cutover is an ID, not a date (LEDGERS maps ledger -> first bound entry id): every entry in the failing
+      arc shares the date of the entry that establishes the rule, so a date cutover would either exempt the rule from
+      itself or demand mass-editing an append-only ledger. Currently scoped to the PC lane; widen lane by lane as each
+      gains an instrument to point at. LIMIT, stated plainly: it verifies a source is NAMED and PRESENT, not that the
+      number is CORRECT — same class of limit CLAUDE.md §7 records for the anti-fabrication gate. Also runs locally
+      via valoria_local.py --staged (blocking).
+
   - path: tools/ci_supersession_check.py
     level: 5
     role: "Warn-only churn guard: flags changesets touching a path listed in a supersession_register.yaml entry's files_to_recheck."

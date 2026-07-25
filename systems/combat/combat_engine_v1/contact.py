@@ -44,7 +44,7 @@ def grab_sigma(actor, opponent, cfg):
     term (D9/JD-7 retraction). +ve favours actor. Pure."""
     lev = S.leverage(actor, cfg) - S.leverage(opponent, cfg)
     strq = (actor.strength - opponent.strength) * cfg['GRAB_STR_K']
-    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * (1.0 - actor.skill('grab')) * ABIL.ability_factor(actor, 'edge_grab')   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill AND by a grappling tradition ('edge_grab' factor<1, Ringen am Schwert — seizing the strong/bind of a live blade safely). 0 for an edgeless weapon.
+    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * max(0.0, 1.0 - actor.skill('grab')) * ABIL.ability_factor(actor, 'edge_grab')   # ED-PC-0034 fix: the skill mitigation is CLAMPED at 0. Skills are uncapped ("positive = trained bonus", combatant.py), so any grab skill >1 sent (1-skill) NEGATIVE and flipped the sign of the whole term — seizing an opponent's LIVE double edge bare-handed then IMPROVED the grab, scaling with how sharp the grabbed blade is. A highly-trained grappler is now immune to the hazard, never rewarded by it.   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill AND by a grappling tradition ('edge_grab' factor<1, Ringen am Schwert — seizing the strong/bind of a live blade safely). 0 for an edgeless weapon.
     return strq + cfg['GRAB_LEV_K'] * lev - edge
 
 

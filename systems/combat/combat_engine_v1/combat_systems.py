@@ -114,14 +114,14 @@ def close_tempo(c, cfg, fatigue=0.0):
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
 # ---------- stamina ----------
-def stamina_max(c):
-    return c.stamina_max          # the combatant HOSTS its derived figures; thin accessor (back-compat)
+# ED-PC-0035: the `stamina_max(c)` back-compat accessor is REMOVED (zero callers; read c.stamina_max directly —
+# the combatant hosts its own derived figures).
 def act_cost(c, commit, cfg):
     return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
-def conc_max(c, cfg):
-    c.derive_stats(cfg); return c.conc_max   # the combatant HOSTS it (3F+2S, ED-902); thin accessor (back-compat)
+# ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.derive_stats(cfg) and read
+# c.conc_max — the combatant hosts it, 3F+2S, ED-902).
 def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
@@ -248,7 +248,7 @@ def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fa
 # agility x one-handedness (light + free hand voids); wind from blade_guard x rigidity(cross_section) x bind-leverage
 # (MoI) x edge-length. So a rapier's parry-1.0 EMERGES from its hand_guard, a poleaxe's wind from its blade-leverage.
 assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-set(GEOMETRY)}"
-def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
+def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
     rd=reading(defender,cfg)-reading(aggressor,cfg)
     rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
@@ -263,7 +263,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     elif mode=='dodge':
         sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill('dodge')
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
-        sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + cfg['CHOKE_BIND_K']*choke + defender.skill('bind')
+        sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + defender.skill('bind')   # ED-PC-0035: the `+ CHOKE_BIND_K*choke` term is GONE — `choke` was hardcoded 0.0 by the only caller, so it was a structural zero (see config.py)
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
     _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
     _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
@@ -272,75 +272,13 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     return (base+sig)*cap
 
 def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
-    """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
-    can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
-    deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
-    concentrated beak/spike that pierces plate — the poleaxe queue); both DERIVED (Phase-3b retires hand-set
-    `percussion`): concussion~percussion_authority, puncture~percussion_authority x strike_concentration (a broad
-    mace face sc~0 -> no puncture; a spike sc high -> pierces). A wooden staff (low authority) does NEITHER. A
-    cut-and-thrust sword takes the better of its cut or a half-sword gap-thrust; a point thrusts to gaps; a pure
-    cutter collapses (ADEF_CUT).
-
-    `head` (the SELECTED mode-head from select_mode) overrides w['head'] when the wielder has committed to a specific
-    mode this exchange: a poleaxe whose select_mode chose 'point' (the spike) is scored on the spike's gap-thrust, not
-    the better-of-blunt max. head=None keeps the native head (the per-head max over the weapon's intrinsic modes) — so
-    every existing caller is byte-identical. percussion_authority now carries the §1 energy-credit (poleaxe 5.83 < mace
-    7.45 — the poleaxe's plate edge is NOT concussion; see select_mode).
-    CIRCUMSTANCE-DEGRADED (I2, D2b): `gap` overrides w['gap'] (None = native fallback — the sel_gap object-
-    confusion fix, M-02); `grip`/`room` thread the SAME mode-split/room-floored Phi as the damage path into the
-    blunt branch's percussion_authority/puncture_pressure, so armour-defeat capability and reach_threat resolve
-    the SAME grip as core.strike (D2b). Byte-identical at grip=0/room=1.0/gap=None for every weapon."""
-    head = head if head is not None else w['head']
-    gap = gap if gap is not None else w['gap']
-    tauth = core.thrust_authority(w['head_len'])   # PC-5: point-to-hand lever authority — scales the gap-THRUST armour-defeat terms (a short/half-sword thrust presses the harness; a reach-thrust at extension cannot), keeping adef consistent with coupling. NOT applied to the blunt-puncture beak (a poleaxe's spike authority is its percussion energy, already in puncture_pressure) nor to the pure-cut collapse.
-    if head=='blunt':
-        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
-                   cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
-    if head=='point':      return cfg['ADEF_POINT']*gap*tauth
-    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
-    return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
-
-# ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
-# grounded_weapon_armour_usemode_model.md §3-4 (tasks wht7pkx1c / w4bekmb5e). There is NO per-weapon mode table:
-# the AFFORDED modes + their effectiveness DERIVE from each weapon's existing geometry primitives, so poleaxe/mace/
-# staff are just bundles of primitives, never a name-keyed list (the L0 primitive-law). The modes are the UNIVERSAL
-# set {thrust, cut, percuss, puncture}; each maps to one of the engine's existing head TOKENS (so the downstream
-# coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
-# head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
-# blunt max(concussion,puncture) from 2 modes to N. Pure.
-SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
-                          #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
-                          #   Still used for each mode's OWN native-head branch below (unchanged from pre-U2).
-MODE_EDGE_MIN = 0.15      # [DESIGN, U2/ED-PC-0008, 2026-07-08] per-primitive cut-affordance floor for the GRADED,
-                          #   head-independent secondary check (a weapon whose native head ISN'T a cut category
-                          #   can still afford an incidental cut if its own geo['cut'] clears this). Consolidation_
-                          #   v1.md §2.3 already assumed this exact value: "sides==0 => ek<=0.1 < MODE_EDGE_MIN
-                          #   ~=0.15" (the roster's own edgeless-consistency invariant, V14). Verified against the
-                          #   full roster post-geometry.cut_factor's floor drop: mace/staff read 0.0, the needle
-                          #   class (stiletto/estoc/rondel, ek<=0.1) reads 0.02-0.05, comfortably below; rapier
-                          #   (ek=0.30) reads 0.30, comfortably above.
-MODE_TIP_MIN = 0.15       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive thrust-affordance floor, the JD-9
-                          #   resolution. Matched to MODE_EDGE_MIN for a clean, symmetric pair. Verified against
-                          #   the full roster post-geometry.thrust_factor's floor drop: mace (0.02) and staff
-                          #   (0.04) read comfortably below; every weapon test_greatsword_katana_sabre_afford_
-                          #   thrust names reads 0.26+ (sabre, the lowest of the three); the heavily-curved-slasher
-                          #   family (shamshir/pulwar/scimitar) correctly collapses toward the floor too (curvature
-                          #   offsets the point off the hand-target line — HEMA: these are cutting-primary blades).
-MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive percussion-affordance floor for the
-                          #   graded secondary blunt check (weapon_physics.percussion_authority's non-blunt branch,
-                          #   the Mordhau/reversed-grip option). Set well below the ~1.4-1.8 range every eligible
-                          #   two-handed sword reads (see reversed_grip_percussion) and well above 0 (one-handed
-                          #   swords and daggers, which the function gates to exactly 0 — no comparable technique
-                          #   is attested for them in the sourced material).
-# ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-# plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
-# quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
-# throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
-# ablation-gated, not load-bearing, per D4].
-CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over (shares
-                          #   CLOSE_REACH_REF's magnitude — the same "how close is close" reference).
-CLOSE_EFF_FLOOR = 0.5     # [SIM-CALIBRATE] cap on f(measure_gap, range_avail): even the tightest quarters/least
-                          #   room never fully collapses a broad element's affordance.
+    """Armour-defeat CAPABILITY — see core.adef_cap, which now OWNS this rule.
+    [ED-PC-0038] Relocated to core so the DAMAGE path can consult the same capability the sigma path does. They had
+    disagreed: a partisan (adef_cap 0.176, the worst on the board vs plate's 0.72 threshold) was landing 11 damage
+    through a harness while a spear with BETTER capability (0.288) landed 3, because damage keyed on head mass and
+    capability keyed on gap access. Duplicating the formula in core would have broken the repo's own "every rule
+    lives once" invariant, so it moved and this delegates. Signature and results are unchanged."""
+    return core.adef_cap(w, cfg, head=head, gap=gap, grip=grip, room=room)
 
 def close_efficacy(pc, measure_gap, range_avail=1.0, closed=False, head=None):
     """The close-efficacy factor (D5): 1 - (1-pc)*f(measure_gap, range_avail). `pc` is the CANDIDATE element's own
@@ -459,6 +397,41 @@ def _element_mass_x(w, el):
     e = w['elements'][ref]
     return e['mass_kg'], e['x_m']
 
+MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive percussion-affordance floor for the
+                          #   graded secondary blunt check (weapon_physics.percussion_authority's non-blunt branch,
+                          #   the Mordhau/reversed-grip option). Set well below the ~1.4-1.8 range every eligible
+                          #   two-handed sword reads (see reversed_grip_percussion) and well above 0 (one-handed
+                          #   swords and daggers, which the function gates to exactly 0 — no comparable technique
+                          #   is attested for them in the sourced material).
+# ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+# plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
+# quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
+# throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
+# ablation-gated, not load-bearing, per D4].
+CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over (shares
+                          #   CLOSE_REACH_REF's magnitude — the same "how close is close" reference).
+CLOSE_EFF_FLOOR = 0.5     # [SIM-CALIBRATE] cap on f(measure_gap, range_avail): even the tightest quarters/least
+                          #   room never fully collapses a broad element's affordance.
+
+MODE_EDGE_MIN = 0.15      # [DESIGN, U2/ED-PC-0008, 2026-07-08] per-primitive cut-affordance floor for the GRADED,
+                          #   head-independent secondary check (a weapon whose native head ISN'T a cut category
+                          #   can still afford an incidental cut if its own geo['cut'] clears this). Consolidation_
+                          #   v1.md §2.3 already assumed this exact value: "sides==0 => ek<=0.1 < MODE_EDGE_MIN
+                          #   ~=0.15" (the roster's own edgeless-consistency invariant, V14). Verified against the
+                          #   full roster post-geometry.cut_factor's floor drop: mace/staff read 0.0, the needle
+                          #   class (stiletto/estoc/rondel, ek<=0.1) reads 0.02-0.05, comfortably below; rapier
+                          #   (ek=0.30) reads 0.30, comfortably above.
+MODE_TIP_MIN = 0.15       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive thrust-affordance floor, the JD-9
+                          #   resolution. Matched to MODE_EDGE_MIN for a clean, symmetric pair. Verified against
+                          #   the full roster post-geometry.thrust_factor's floor drop: mace (0.02) and staff
+                          #   (0.04) read comfortably below; every weapon test_greatsword_katana_sabre_afford_
+                          #   thrust names reads 0.26+ (sabre, the lowest of the three); the heavily-curved-slasher
+                          #   family (shamshir/pulwar/scimitar) correctly collapses toward the floor too (curvature
+                          #   offsets the point off the hand-target line — HEMA: these are cutting-primary blades).
+SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
+                          #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
+                          #   Still used for each mode's OWN native-head branch below (unchanged from pre-U2).
+
 def element_afforded(el, w, grip=0.0, room=1.0):
     """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
     Morphology-rearch Phase B3 (2026-07-02): a 'point' token affords iff geo['gap']>SELECT_EPS, same floor as
@@ -492,7 +465,12 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     gap=geo['gap']; pc=geo['point_concentration']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
-        heads['cut_thrust']=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc)
+        # [ED-PC-0037.1] carry the ELEMENT's OWN cut/thrust alongside the blended max. The blend is retained at
+        # index 0 because sel_eff's downstream contract expects it; indices 5/6 are the per-arm truth, so the
+        # versatility contest can be scored on the element that is actually being swung rather than on the
+        # whole-weapon bake (a guisarme's BILL is cut 0.76 / thrust 0.19; the weapon scalar says 0.64 / 0.41,
+        # which credits a hook with a point it does not have — the M-02 object confusion this docstring forbids).
+        heads['cut_thrust']=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc, geo['cut'], geo['thrust'])
     elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
         if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear', gap, None, pc)
     elif head=='point':                                              # a real point (element-tokened, not inferred)
@@ -544,15 +522,32 @@ def afforded_heads(w, grip=0.0, room=1.0):
     primitive-law). Pure."""
     heads={}
     for el in _mode_elements(w):
-        for tok,(eff,dm,gap,perc,pc) in element_afforded(el, w, grip=grip, room=room).items():
+        for tok,vals in element_afforded(el, w, grip=grip, room=room).items():
+            eff,dm,gap,perc,pc = vals[:5]
+            # [ED-PC-0037.1] indices 6/7 carry the ELEMENT's own cut/thrust magnitudes (None for heads that have no
+            # two-armed contest). element_ref stays at 5 — the per-arm pair is appended AFTER it, not over it.
+            ct_cut, ct_thr = (vals[5], vals[6]) if len(vals)>6 else (None, None)
             if tok not in heads or eff>heads[tok][0]:
-                heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'))
+                heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'),ct_cut,ct_thr)
     if not heads:                                                    # degenerate fallback: never strip all modes
         h=w['head']
-        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None)
+        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None, None, None)
     return heads
 
-def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
+def selected_arm_magnitudes(c, head, grip=None, room=None):
+    """The ELEMENT-LOCAL (cut, thrust) magnitudes of the currently-selected head — (None, None) for any head with no
+    two-armed contest. [ED-PC-0037.1] core.strike needs these to grade a cut-and-thrust blow on the element actually
+    being swung. It cannot read them from select_mode's return (that tuple's 6-wide shape is depended on by the
+    wrapper, the goldens and a dozen tests) and it cannot import this module (core is imported BY it — a cycle), so
+    the wrapper writes them onto the combatant alongside the other sel_* fields, exactly as it does for sel_gap/
+    sel_perc/sel_pc. Without this, core.strike fell back to the WHOLE-WEAPON bake and re-created the object confusion
+    at the damage path even after select_mode was fixed: a guisarme's bill (element 0.76/0.19) was being damaged as
+    though it carried the weapon's 0.41 thrust. Pure."""
+    h = afforded_heads(c.w, grip=(getattr(c, 'grip_position', 0.0) if grip is None else grip),
+                       room=(getattr(c, 'range_avail', 1.0) if room is None else room)).get(head)
+    return (h[6], h[7]) if h is not None and len(h) > 7 else (None, None)
+
+def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, room=None):
     """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
     then greedily SELECTS the one whose resulting damage-coupling vs defender_armor is highest — the effectiveness-vs-
     armour baseline the design §3 names ('exactly the existing coupling/adef_cap max(), generalized from 2 modes to
@@ -579,7 +574,11 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
     point_concentration — a broad arc-requiring swing collapses in tight quarters; a point-selected thrust barely
     degrades. `closed`/`measure_gap`/`range_avail` were previously received (`closed`) and ignored."""
     w=c.w
-    grip=getattr(c,'grip_position',0.0); room=getattr(c,'range_avail',1.0)
+    # `grip`/`room` follow reach_base's JD-9 override idiom: None (the default, and every wrapper call) reads the
+    # combatant's LIVE circumstance; an explicit value pins the geometry for a HYPOTHETICAL evaluation that must not
+    # depend on live state (represent_measure_p asks "what would this weapon present at OPEN measure?" — ED-PC-0034).
+    grip=getattr(c,'grip_position',0.0) if grip is None else grip
+    room=getattr(c,'range_avail',1.0) if room is None else room
     heads=afforded_heads(w, grip=grip, room=room)
     if len(heads)==1:                                                # single afforded mode: no choice (the common case)
         h=next(iter(heads))
@@ -595,7 +594,9 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         # a pure cutter with no real point keeps cutting. A mode with exposure<=1 (a clean thrust) is undiscounted.
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
                   perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
-                  eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']))
+                  eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']),
+                  eff_cut=(heads[hd][6] if len(heads[hd])>6 else None),
+                  eff_thrust=(heads[hd][7] if len(heads[hd])>7 else None))
               * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
               / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
     if h=='cut_thrust':
@@ -603,10 +604,19 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
         # the engine has always modelled: a cut-thrust sword SWINGS (cuts) — reads easy — until it must half-sword-
         # thrust to the gaps vs a harness (medium/heavy), then reads hard. This reproduces the prior legibility exactly.
-        dm = 'puncture' if defender_armor in ('medium','heavy') else 'shear'
+        # [ED-PC-0036] The label is READ FROM the coupling contest itself (core.cut_thrust_arm, its single owner), so
+        # damage and reported mode cannot diverge. This used to be an independent armour rule ('shear' at none/light,
+        # else 'puncture') that contradicted what coupling actually paid — the thrust arm won at EVERY tier, so a
+        # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
+        # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
+        # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
+        _ct_cut = heads[h][6] if len(heads[h])>6 else None
+        _ct_thr = heads[h][7] if len(heads[h])>7 else None
+        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h][2],
+                                 _ct_cut, _ct_thr, core.thrust_authority(w['head_len']))[1]
     else:
         dm=core.HEAD_MODE.get(h, 'shear')
-    sel_eff, _dm0, sel_gap, sel_perc, sel_pc, _eref = heads[h]
+    sel_eff, _dm0, sel_gap, sel_perc, sel_pc = heads[h][:5]   # [ED-PC-0037.1] the cut_thrust entry is now 7 wide (per-arm magnitudes at 5/6); slice so every head unpacks uniformly
     return dm, h, sel_gap, sel_perc, sel_pc, sel_eff
 
 def armor_defeat_sigma(aggressor, defender, cfg):
@@ -637,7 +647,7 @@ def reach_threat(longer, defender, cfg):
     deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - cap)
     return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
 
-def represent_measure_p(longer, shorter, cfg, TR):
+def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     """P(a reach weapon RE-PRESENTS its point at open measure entering a fresh engagement, rather than being crowded to
     grips). A new engagement (turn) nominally opens at measure — the fighters have broken and reset — but a reach weapon
     only KEEPS that measure if the (re-)closing opponent still RESPECTS the point. An armoured closer who does not fear a
@@ -657,8 +667,8 @@ def represent_measure_p(longer, shorter, cfg, TR):
         often enough to bring its plate-defeat to bear. This is the emergent discriminator the equal per-hit damage
         could not provide: at plate, spear and guisarme wound alike per hit, but the guisarme EARNS more presentations.
     Lifted mildly by the wielder's FOOTWORK (Agility differential) — nimble feet break and re-make measure — bounded so
-    armour, not stats, dominates the gate (0 for a stat mirror). Reuses adef_cap (single owner of armour-defeat), same
-    head/gap/grip/room reads as reach_threat. REPRESENT_DECAY_K / REPRESENT_FOOT_K [SIM-CALIBRATE]. Pure."""
+    armour, not stats, dominates the gate (0 for a stat mirror). Reuses adef_cap (single owner of armour-defeat) on the
+    PRESENTING mode this derives itself (below). REPRESENT_DECAY_K / REPRESENT_FOOT_K [SIM-CALIBRATE]. Pure."""
     aw = cfg['ADEF_W'][shorter.armor]
     if aw <= cfg['ADEF_W']['light']:
         return 1.0   # CROWDING IS A HARD-ARMOUR PHENOMENON: soft gambeson (and bare) still respects a thrust, so a reach
@@ -666,8 +676,27 @@ def represent_measure_p(longer, shorter, cfg, TR):
                      # dominance the invariants require). Only mail/plate let a closer fearlessly crowd the point. Returning
                      # exactly 1.0 (not ~0.99) also means the wrapper consumes NO rng draw here, so the gate is inert on the
                      # RNG stream at light — where the tradition-lever texture regression runs.
-    cap = adef_cap(longer.w, cfg, head=getattr(longer,'sel_head',None), gap=getattr(longer,'sel_gap',None),
-                   grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
+    # PRESENTING MODE (ED-PC-0034 bugfix). Derive — purely, here — the mode this weapon WOULD present at OPEN measure,
+    # instead of reading the live sel_*/grip state. This gate is evaluated at ENGAGEMENT START, outside the per-beat loop
+    # that refreshes sel_*, so the live fields still carry the PRIOR engagement's closed-phase selection (or, on the very
+    # first engagement, nothing — so adef_cap fell back to the bare NATIVE head). Measured consequence: a multi-mode
+    # weapon whose native head is a CUTTER read as maximally crowded on engagement 1 and differently later — katana
+    # 0.000 -> 0.274, guisarme 0.092 -> 0.236, hook_sword 0.000 -> 0.425 for the identical matchup. That is the same
+    # state-carryover defect class ED-PC-0033 fixed for grip_position, reintroduced one call up. A weapon is gated on
+    # the point it would actually present, so the geometry is the OPEN-measure one explicitly: grip 0.0 (full extension,
+    # nothing gathered) and room 1.0 (open measure) — path-independent by construction, never a stale read.
+    # [ED-PC-0036, adversarial-review correction] The geometry is the engine's HONEST opening geometry, not a
+    # counterfactual. grip=0.0 is right — a fresh engagement opens at full extension, nothing gathered — but the first
+    # revision also pinned room=1.0, which the engine never occupies at this moment: the wrapper's own beat-1 room is
+    # range_utilization(measure_gap) = FLOOR + (1-FLOOR)*min(1, gap/CLOSE_EFF_GAP_REF), i.e. ~0.43-0.66 in every cell
+    # where this gate is live (room=1.0 would need a reach differential >= CLOSE_EFF_GAP_REF, which no matchup has).
+    # That pin was not inert: at guisarme-vs-arming/medium it made select_mode grade the BILL'S CUT (cut_thrust) rather
+    # than the point, dropping the gate 1.0 -> 0.413 and the matchup ~4pp — against the gate's own fiction, which is
+    # whether the closer still respects the POINT. Deriving room from measure_gap keeps full path-independence (it is a
+    # pure function of a local, never of carried state) AND makes the measure_gap parameter genuinely load-bearing.
+    room = range_utilization(longer, measure_gap, cfg)
+    sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=room)
+    cap = adef_cap(longer.w, cfg, head=sel[1], gap=sel[2], grip=0.0, room=room)
     deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - cap)
     base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
     foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
@@ -687,17 +716,9 @@ def leverage(c, cfg):
     if w['hands']==2: lev += cfg['LEVER_2H']                    # two hands = more control over the lever
     return lev
 
-def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
-    """RETIRED FIAT (Jordan ruling 2026-07-23, ED-PC-0023) — a NO-OP, returns the emergent (bind, riposte) unchanged.
-    This once FORCED a tradition's preferred node (German impose-the-bind / Italian-etc refuse-it) via a label-keyed
-    coin-flip (IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P) that OVERRODE the emergent resolution — top-down scripting (§0),
-    the antithesis of "each combatant resolves in a way that feels correct to their style." A tradition's node-
-    preference must EMERGE from the fighter's BUILD, not be imposed by a rule: a fighter binds more because they
-    INVESTED in binding (skill('bind') + a bind-friendly weapon's wind affinity + learned binding abilities +
-    disposition) — all already live in mode_sigma/bind_sigma. Kept as a no-op stub (IMPOSITION_GATE defaults False,
-    so it is never called; the call-site guard stays as the documented off-switch) rather than deleted outright, so
-    the retirement is a single visible ruling; the full call-site removal is a follow-up. Reads no cfg/rng now."""
-    return bind, riposte
+# ED-PC-0035: `impose_node` (the retired imposition-gate no-op stub) and its call-site guard are DELETED — the
+# follow-up ED-PC-0023 explicitly owed. The ruling stands in the ledger; a no-op that still appears in the
+# resolution path only invites someone to 'reconnect' it.
 
 
 # weapons that have a half-sword form, and the form mapping (base <-> shortened)
@@ -710,8 +731,14 @@ def affords_halfsword(w):
     Both are physical/attested facts on the record, so the capability EMERGES rather than being name-whitelisted —
     this de-vestigialises `geo['halfsword']` (was computed by geometry.bake but read nowhere) and retires
     `HALFSWORD_FORM`/`HALFSWORD_BASE` AS BEHAVIOUR GATES (they remain only the base<->form NAME data below). On the
-    un-extended roster the derived set is exactly {longsword, estoc} (byte-identical; only those two carry a
-    grippable element); marking a further attested ricasso grippable=True is the JD-3 roster-expansion decision."""
+    un-extended roster the derived set was exactly {longsword, estoc}; marking a further attested ricasso
+    grippable=True is the JD-3 roster-expansion decision.
+    [ED-PC-0035 correction] That set is STALE: ED-PC-0016 marked greatsword and flamberge grippable too, so the
+    derived set is now {longsword, greatsword, flamberge, estoc} — FOUR weapons. What still limits the auto-SWITCH to
+    two is `HALFSWORD_FORM` (whose two entries the ED-PC-0016 auto-switch decision deliberately HELD), which means
+    that name table is currently doing exactly the behaviour-gating this docstring says it no longer does. Tracked as
+    a live inconsistency, not silently reworded: giving greatsword/odachi real half-sword forms is the Batch-6 roster
+    item (they presently lose EVERY decided plate fight — an arming sword beats a greatsword at plate)."""
     return (any(e.get('grippable') for e in w.get('elements', ()))
             and bool(w.get('geo', {}).get('halfsword', False)))
 
@@ -736,7 +763,11 @@ def halfsword_target(c, closed, opp_armor):
 def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     """Standing measure-domain sigma the DEFENDER's reach imposes on the aggressor (proportional to gap, weighted
     high unarmoured, falling with armour). +ve lowers the attacker's net. I6/D6: a small facing PROFILE term
-    (`[FIAT — C1]`) — a defender presenting more profile (higher facing) is a slightly easier standing target;
+    (`[FIAT — C1]`) — a defender presenting more profile (higher facing) is a slightly HARDER standing target (a narrower
+    presentation, more voiding — matching weapon_physics.facing_pref's own "+ = 1H profile = narrower target" convention).
+    [ED-PC-0035 correction: this line previously said "easier", which INVERTED the implemented direction — `profile` is
+    ADDED to reach_pen and assemble_net_sigma SUBTRACTS reach_pen, so raising the defender's facing lowers the attacker's
+    net. A future "fix" trusting the old prose would have silently flipped a live signed term.];
     exactly 0 at neutral facing (0.0, the pre-I6 default). Pure."""
     gap=er[defender]-er[aggressor]
     foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.eff_cw(defender, 'balance')
@@ -876,7 +907,17 @@ def attack_sigma(aggressor, commit, init, oob, fat_a, consistency_a, cfg):
 def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg):
     """The net σ the core resolves against: attack - defence - reach + armour-defeat + Vor-edge + attacker-bias +
     bilateral wound-Ob. Pure; the wrapper SEQUENCES the contributions, this owns the arithmetic. Mirror stays 50."""
-    return (atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']
+    # [ED-PC-0037] The flat `+ cfg['ATTACKER_BIAS']` (0.12 sigma on EVERY closed exchange) is GONE. It was untagged,
+    # unledgered fiat that DUPLICATED the initiative/Vor system — two independently-calibrated mechanisms for the same
+    # first-mover physics, the "every rule lives once" violation this repo forbids — and the 2026-06-28 critique
+    # (W-08/W-10) had already recommended removal. Its own mirror-fairness defence ("the aggressor role alternates")
+    # held only at fight aggregate: inside a burst (BURST_MAX=4) one fighter could hold the role for four consecutive
+    # exchanges and bank the full bias each time. Removal was DEFERRED from batch 3 to here deliberately, because it
+    # compounded with the deterministic first-actor monopoly — deleting it then would have been tuning against a moving
+    # target. With that monopoly fixed (arbitrary cadence phase + tempo_pressure) removal measures small and clean:
+    # mirrors hold at 0.50 and matchups move <=0.01, apart from katana/mace which were the biggest beneficiaries of
+    # banking the bias behind a tempo edge. First-mover advantage now lives ONLY in the Vor, where it is earned.
+    return (atk_sig - dsig - reach_pen + adef + init_edge
             + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds)
 
 def commit_depth(aggressor, defender, cfg, rng, TR):
@@ -908,7 +949,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
     modes=['parry','dodge','wind']
-    msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
+    msig={m:mode_sigma(m,aggressor,defender,commit,read_win,fat_d,cfg) for m in modes}
     mode=max(msig,key=msig.get) if read_win else modes[rng.randrange(3)]   # stdlib uniform int (ED-1085)
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
 
@@ -926,8 +967,16 @@ def counter_select(defender, cfg, rng, TR):
 
 def overcommit_exposure(aggressor, commit, fat_a, cfg, TR):
     """The aggressor's exposure to the riposte from over-committing: commit-depth x irrecoverability, minus the
-    anti-overcommit (balance) curb and trained discipline. Pure; floored at 0. The wrapper applies the loss."""
-    return max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*recoverability_factor(aggressor,cfg)) - anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
+    anti-overcommit (balance) curb and trained discipline. Pure; floored at 0 (ED-PC-0034 fix: the floor now wraps the
+    WHOLE expression, not just the commit term — previously a balanced/disciplined fighter at shallow commit returned a
+    NEGATIVE exposure, e.g. -0.37 for an agile true_times fighter at commit 2. The wrapper guards its initiative/poise
+    loss with `if >0`, but fed the un-floored value straight into RIPOSTE_ON_FAIL/ON_NEUTRALIZE, so negative exposure
+    silently pushed the defender's riposte chance BELOW its configured base — a mechanic the docstring said could not
+    exist. Not over-committing means you are not EXTRA exposed; it does not make you harder to riposte than the base
+    contemplates, and anti-overcommit is a MITIGATION of exposure, not a bonus that can invert it). The wrapper applies
+    the loss."""
+    return max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*recoverability_factor(aggressor,cfg)
+                    - anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit'))
 
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
@@ -985,10 +1034,19 @@ def percussion_stagger(striker, victim, wound, deg, cfg):
         return 0.0, 0.0
     head = getattr(striker, 'sel_head', None) or striker.head
     if head == 'blunt':
-        qf = {'graze': 0.4, 'success': 1.0, 'overwhelming': 1.6}[deg]
+        qf = cfg['PERC_QUAL'][deg]
         grip = getattr(striker, 'grip_position', 0.0)
-        load = ((0.5 + striker.strength/4.0) * cfg['PERC_BLUNT_HEFT']
-                * WP.percussion_authority(striker.w, grip=grip) * cfg['PERC_BLUNT_TRANSMIT'][victim.armor] * qf)
+        # SELECTED-ELEMENT percussion (ED-PC-0036 fix): read the striker's sel_perc — the percussion authority of the
+        # element select_mode actually chose — with the whole-weapon value only as the native fallback, exactly as
+        # core.strike does. This closes a bypass of the sel_* SINGLE-SOURCE contract that core.strike's docstring
+        # declares canonical ("a composite routed to a blunt sub-element is damaged on THAT element's percussion"):
+        # percussion_stagger was landing on the WHOLE-WEAPON value, so a lucerne_hammer's rear fluke and its hammer
+        # face delivered identical stagger. That is the object-confusion bug class (M-02) the architecture exists to
+        # prevent, re-opened by ED-PC-0031 — which post-dates the doctrine it broke.
+        perc = getattr(striker, 'sel_perc', None)
+        perc = perc if perc is not None else WP.percussion_authority(striker.w, grip=grip)
+        load = ((cfg['PERC_STR_BASE'] + cfg['PERC_STR_K']*striker.strength) * cfg['PERC_BLUNT_HEFT']
+                * perc * cfg['PERC_BLUNT_TRANSMIT'][victim.armor] * qf)
     else:
         # a THRUST/CUT delivers its energy as the WOUND (penetration), only a FRACTION as concussion/wind — a stab
         # winds far less than a mace-blow of the same lethality (the energy went into the hole, not the body's inertia).
@@ -1058,6 +1116,63 @@ def stophit_sigma(longer, shorter, measure_gap, cfg):
             + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
             + STOPHIT_RANGE_K*(range_avail-1.0)
             + true_time_edge(longer, shorter, cfg))
+
+def tempo_pressure(c, opp, cfg, TR):
+    """ANTICIPATION — how much sooner a fighter brings their next action to bear than raw weapon cadence implies.
+    Multiplies the per-beat readiness accumulation (the wrapper applies it). Pure.
+
+    [ED-PC-0037, F16] Who acts first was previously decided by weapon cadence ALONE, accumulated metronomically, so
+    the marginally faster weapon crossed ACT_THRESHOLD first every single time: a jian's +1.5% close-tempo edge over an
+    arming sword bought it a 2:1 action economy (679 vs 342 closed rolls / 150 fights), and cloning an arming sword to
+    step its mass 1.18 -> 1.20 kg flipped the win-rate 57% <-> 42% on a cadence delta of 0.0002. That is a weapon
+    STATISTIC deciding the fight's most important question.
+
+    It is the wrong question to answer with cadence, and equally wrong to answer with noise. In the fight this engine
+    models, who moves first is decided by the VOR and the READ — you begin as your opponent begins because you
+    anticipated them, and you keep the initiative because you took it. Both quantities are already first-class here:
+      • `initiative` — the Vor. It is not static: it decays per beat (init_hold_decay, tradition-held), drifts with
+        disposition, and is STOLEN on hits and in the bind (init_steal_factor). A fighter who has been dictating the
+        exchange gets to keep dictating it — earned, not owned.
+      • `reading` — cog/attention/experience. Anticipating the opponent's commitment is precisely what lets you act
+        into it rather than after it. (The feint is not a separate action here — WS-5 dissolved it into the attack's
+        commit-depth and legibility — so its influence arrives through the read, which is where it belongs.)
+    Floored at 0 so a badly out-read fighter stalls rather than accumulating backwards. Both K's [SIM-CALIBRATE].
+    [HONESTY CORRECTION, ED-PC-0037.1] Measure this before believing it. An adversarial ablation (both K's -> 0,
+    20 weapons x 4 tiers, n=400/cell) found the aggregate outcome effect to be -0.06pp +- 0.27 (z=-0.23), with no
+    cell exceeding |z|=2.5 — i.e. currently OUTCOME-INVISIBLE. Worse, the READ term is identically ZERO in any
+    same-stats fight, because reading() and eff_cw depend only on stats and tradition — and same-stats is exactly
+    the weapon-balance surface the ED-PC-0037 entry cited as its result. So this function does NOT carry the
+    first-actor fix: the operative mechanism is the uniform cadence-phase draw at engagement start, which breaks
+    the lockstep by itself. This is a correctly-signed, correctly-grounded hook (a Vor-holder does act sooner:
+    tp 1.6 vs 0.4 at the clamp) that will matter once builds diverge in stats/Vor, and it belongs here rather
+    than as noise — but describing it as the answer to 'what happened to anticipating' oversold it, and the
+    honest statement is that the anticipation channel exists and is currently near-silent at default builds."""
+    return max(0.0, 1.0 + cfg['INIT_TEMPO_K']*(c.initiative - opp.initiative)
+                        + cfg['READ_TEMPO_K']*(reading(c, cfg)*TR.eff_cw(c, 'tempo')
+                                               - reading(opp, cfg)*TR.eff_cw(opp, 'tempo')))
+
+def pursuit_sigma(pursuer, withdrawer, fat_p, fat_w, cfg, TR):
+    """The NACHREISEN pursuit net-sigma — the closer striking a reach weapon that is turning out of the bind to break
+    measure (ED-PC-0030's read-lost branch). Modelled on stophit_sigma, the engine's other opportunistic-strike sigma.
+    [ED-PC-0036] This REPLACES a flat cfg['DISENGAGE_PURSUIT_NSIG'] passed straight to core.resolve: that shortcut let
+    the single most violent branch in the closed phase bypass the ENTIRE sigma-assembly — no armour, no wounds, no
+    attribute of the withdrawer at all, so every fighter pair in this branch resolved identically and the pursuer
+    contributed only History (the pool). The mechanism ED-PC-0030 grounded is the attempt/clean/pursued STRUCTURE; the
+    flat resolution was grounded nowhere. Terms, each already canonical elsewhere:
+      • the base anchor — catching a withdrawing opponent is HARD (negative), the one part the old constant had right;
+      • bilateral wound-Ob, on the same sign convention as every other sigma (a wounded target is easier, a wounded
+        striker is worse) — its absence here was a silent inconsistency;
+      • armour-defeat (armor_defeat_sigma) — you cannot punish a withdrawal you cannot pierce. A spear pursuing a
+        plated man reads deeply negative; a poleaxe barely suffers. Exactly 0 unarmoured, so open-measure duels keep
+        the old character;
+      • a FOOTWORK differential — Nachreisen is literally "travelling after": catching the break is a feet contest, so
+        the pursuer's balance/footwork against the withdrawer's is what decides whether the strike lands in the gap.
+    Pure; the wrapper rolls it."""
+    return (cfg['DISENGAGE_PURSUIT_NSIG']
+            + cfg['WOUND_DEF_OB']*withdrawer.wt.wounds - cfg['WOUND_ATK_OB']*pursuer.wt.wounds
+            + armor_defeat_sigma(pursuer, withdrawer, cfg)
+            + cfg['PURSUIT_FOOT_K']*(balance_eff(pursuer, fat_p, cfg)*TR.eff_cw(pursuer, 'balance')
+                                     - balance_eff(withdrawer, fat_w, cfg)*TR.eff_cw(withdrawer, 'balance')))
 
 def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     """Measure-domain closing RATE for the shorter weapon walking in: athletic close-speed (balance x cadence),

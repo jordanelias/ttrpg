@@ -16,7 +16,7 @@ from config import CFG  # noqa: E402
 out = []
 def check(claim, cite, ok, detail=''): out.append(('MATCH' if ok else 'DIVERGE', claim, cite, detail))
 def dmg(head, armor, strg=5, gap=0.5, perc=8.0, heftw=1.0, deg='success'):
-    return core.damage(deg, heftw, head, strg, armor, True, gap=gap, perc=perc)
+    return core.damage(deg, heftw, head, strg, armor, gap=gap, perc=perc)   # ED-PC-0036: the `close` positional was removed from core.damage (never read in the body); leaving it here made `True` fill `gap` and collide with the keyword.
 def sel(name, armor, closed=False, gap=None):
     return S.select_mode(Combatant('x', weapon=name), armor, closed, CFG, measure_gap=gap)[1]
 

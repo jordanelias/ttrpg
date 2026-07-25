@@ -337,7 +337,7 @@ def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     against the Phase-A whole-weapon-lump PoB; morphology-rearch Phase B's located-part model gives the poleaxe
     a materially more forward, more accurate PoB_frac (0.091->0.206), lifting it to ~7.48. Mace itself now pins
     at PERC_CAP=8.0 (Phase B also raised its own PoB_frac) — mace remains the ceiling, poleaxe close behind;
-    test_gap_game_poleaxe_spikes_plate and test_use_mode_selection_emerges_from_primitives' poleaxe-switches
+    test_gap_game_poleaxe_thrusts_in_the_duel (ED-PC-0035: was cited here as "test_gap_game_poleaxe_spikes_plate", a name retired with the ED-PC-0027 resolution — the poleaxe now thrusts at EVERY tier and the test PASSES) and test_use_mode_selection_emerges_from_primitives' poleaxe-switches
     finding are still deliberately left red pending Phase C's PERC_SCALE/PERC_EXP re-fit (unchanged by U2 — this
     docstring previously described mace as 7.45, stale since the Phase-B mass re-baseline; corrected here, no
     behaviour change).

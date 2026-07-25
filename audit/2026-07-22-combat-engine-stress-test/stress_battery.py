@@ -97,7 +97,7 @@ def cat_numerical():
                 for strg in (0, 4, 20, 1000):
                     ck += 1
                     try:
-                        d = core.damage(deg, WP.heft(wv), wv['head'], strg, ar, True,
+                        d = core.damage(deg, WP.heft(wv), wv['head'], strg, ar,   # ED-PC-0036: dropped the retired `close` positional (it collided with the `gap=` keyword below, and this call sits inside a try/except so the whole `numerical` category was silently recording FAIL rather than testing anything).
                                         gap=wv.get('gap', 0.5), perc=WP.percussion_authority(wv))
                     except Exception as e:
                         bad += 1; record('numerical', f'damage {w}/{ar}/{deg}', 'FAIL', str(e)); continue

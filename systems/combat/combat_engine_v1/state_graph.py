@@ -108,8 +108,7 @@ def injection_markdown():
     return "\n".join(out)
 
 
-def transitions_from(state):
-    return STATES[state]['to']
+# ED-PC-0035: `transitions_from` REMOVED — zero callers; even this module's own self-test uses reachable_from().
 
 
 def reachable_from(start):
@@ -157,7 +156,6 @@ def separation_reasons_from_events(events):
 
 # ============================== self-test ==============================
 if __name__ == '__main__':
-    import numpy as np
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'workbench'))
     from combatant import Combatant
     from trace import run_traced_fight

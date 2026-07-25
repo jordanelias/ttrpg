@@ -6,6 +6,56 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **FOUR-DIMENSION AUDIT + REMEDIATION (ED-PC-0034..0040) — batches 1–5.2 landed, batch 6 pending.**
+  *(This block was missing until 2026-07-25 — the lane handoff had not been updated since batch 3, flagged by the
+  ED-PC-0039 adversarial review. Note the "prototype ED-PC-0034" mentioned further down in the off-plate-reach item
+  is an ABANDONED experiment label, not this ED-PC-0034; the number was reallocated after that prototype was reverted.)*
+  Jordan's charter: four independent read-only audits — **fiat, orphans, conflicts, tuning/balance**, each covering
+  *all directions and conditionals* — then resolve every finding in priority order, batch by batch, adversarially
+  reviewing after each batch. Full record: `audit/2026-07-24-combat-four-dimension-audit/` (index + infill, co-filed).
+  - **Landed:** 0034 correctness (represent-gate path-dependence, riposte exposure floor, grab sign-flip) ·
+    0035 dead code + stale prose · 0036 fiat retirement (percussion single-source, cut_thrust branch, pursuit σ) ·
+    0037 (+0037.1) structural thresholds — first-actor race resolved as **cadence × anticipation from an arbitrary
+    initial phase**, not noise (Jordan: *"what happened to feinting and anticipating"*), soft closed-latch,
+    `ATTACKER_BIAS` retired · 0038 capability-gated penetration (`adef_cap` moved to `core` as single owner) ·
+    0039 knee corrections (clamp capability at ≥0; grip/room threaded; K swept) · **0040 the 0039 review response.**
+  - **Review record, unflattering on purpose:** batches 4, 5 **and 5.1** each returned **half-stands**. Every
+    correction is in the ledger; nothing was quietly re-based.
+  - **META-REVIEW → ENFORCEMENT (ED-PC-0040).** All three half-stands share one cause: quantitative claims written
+    faster than they were measured, with the falsifying scripts ad-hoc and discarded. Converted into gates, not
+    resolutions (a resolution is what failed three times) — **use these rather than re-deriving them**:
+    - **`workbench/armour_participation.py`** — the armour-interaction instrument. `participation` (capability
+      partition vs measured decided-rate), `strikes` (per-strike damage **by selected head** — this is what found
+      F24), `tiers` (all four tiers; run in a worktree at another sha and diff), `--update` / `--drift`.
+      **Every armour claim should be a query against this, not a recollection.**
+    - **`tests/valoria/data/combat_armour_reference.json`** + `test_combat_armour_reference.py` — full roster × all
+      four tiers, drift gate at 0.15. If your change trips it: *intended* → regenerate with `--update` and commit,
+      **the diff is the required disclosure**; *unintended* → you just learned your blast radius. Do NOT regenerate
+      to turn a build green without reading the diff — that defeats the gate entirely.
+    - **`test_plate_participation_guard_is_not_blind`** — declared mutations that must make the participation guard
+      fail *and* be named in its message. Add a mutation when you add a guard; never weaken a guard until a mutation
+      stops being caught.
+    - **`tools/ci_claim_provenance_check.py`** (blocking, CI + local) — a PC-lane ledger entry from ED-PC-0040 onward
+      that states measured numbers must carry `MEASURED-BY: <path>` pointing at something that exists.
+    - The CI guard **imports** its capability derivation from the instrument (CLAUDE.md §8 — every rule lives once).
+      Do not inline a second copy; the first draft did, and that is the same duplication class as the bug.
+  - **NEXT — batch 6, in this order:**
+    1. **F24 (new, high) — selection contradicts damage.** `select_mode` picks heads that provably cannot wound:
+       falchion selects `point` on 46/47 plate strikes for 0 damage; podao picks `point` (mean 0.00) over its own
+       `curved_cut` (mean 2.40) 78% of the time; every 2H sword flips to `blunt` at *mail* (odachi 703/703 strikes,
+       mean 2.77 vs the arming sword's 8.48). Selection is keyed on afforded effectiveness with no reference to
+       whether the head can defeat the armour in front of it — the ED-PC-0038 defect class one layer up. Golden-parity
+       blast radius: budget it a batch of its own.
+    2. **F21 — `ADEF_CUT` grading by mass/keenness.** Now load-bearing: ED-PC-0039's clamp floors every pure cutter
+       to capability 0, so nothing distinguishes a bardiche from a shamshir. The sigma path has to carry it.
+    3. **F22 — roster gaps** (sparr_axe horn, falchion point, greatsword/odachi half-sword, staff wound-coupling).
+    4. **F23 — hollow `eff_cw` channels** (5 of 8 are identity ×1.0 for every legal build).
+  - **Carried open (do not re-discover):** off-plate reach still ~0.94 vs Jordan's ~0.75 (see the item below — proven
+    NOT reachable by lever); the **ranseur** is a surviving covert plate-killer (cap 0.284, settles ~12% of plate
+    fights, wins ~100% of them); the medium tier never round-tripped after 0038 (odachi −41pp, naginata −25pp,
+    staff −12pp); the four-channel armour-defeat double-count has no recorded budget; `PEN_DEFICIT_K` is exported to
+    a Godot contract whose port has no penetration knee.
+
 - **REACH-ARC (ED-PC-0029..0033) LANDED on PR #231 (2026-07-24) — full suite green (656).** arrest-impulse +
   tanh true_time (0029); closed-phase disengage (0030); percussion→stamina + poise stagger (0031); rapier plate
   fall-off via penetration threshold (0032, `core.PEN_THR`); **stale-grip fix + measure continuity (0033):**

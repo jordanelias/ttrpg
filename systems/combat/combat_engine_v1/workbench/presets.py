@@ -109,5 +109,5 @@ if __name__ == '__main__':
     s = param_surface()
     for cls in ('A', 'B', 'C', 'M'):
         print(f"[{cls}] {s[cls]['label']}: {len(s[cls]['params'])} params (editable={s[cls]['editable']})")
-    cfg = effective_cfg({'ATTACKER_BIAS': 0.20})
-    print("effective_cfg override OK: ATTACKER_BIAS =", cfg['ATTACKER_BIAS'], "(base", config.CFG['ATTACKER_BIAS'], ")")
+    cfg = effective_cfg({'COMMIT_SIGMA': 0.20})   # ED-PC-0037: the demo override used ATTACKER_BIAS, now retired
+    print("effective_cfg override OK: COMMIT_SIGMA =", cfg['COMMIT_SIGMA'], "(base", config.CFG['COMMIT_SIGMA'], ")")

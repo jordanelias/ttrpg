@@ -3,7 +3,7 @@ CFG = dict(
   # reach (continuous, derived from weapon vector)
   L0=4.0,   # live reach_base anchor. (HANDS2 removed 2026-06-30 with the dead WP.reach_term; LONG/HEADR/HEAD_REACH retired Phase-3b — reach is geometry-derived; head is a primitive, not a categorical reach table.)
 
-  REACH_DISADV_K=0.22, REACH_ADV_K=0.12, RESIDUAL_REACH_FRAC=0.3, FOOT_MEASURE_K=0.15,
+  REACH_DISADV_K=0.22, FOOT_MEASURE_K=0.15,   # ED-PC-0035: REACH_ADV_K / RESIDUAL_REACH_FRAC REMOVED — set but read nowhere (reach advantage is carried by REACH_FRAC/REACH_W in systems.reach_sigma). They were also being exported into the Godot-facing engine_params JSON as if live.
   # Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' + HEAD_REACH + the reach_adj triple-duty).
   # reach_base = L0 + REACH_GEOM_SCALE*(head_len + REACH_2H_K*grip_len*[2H]) + reach_adj. SCALE [SIM-CALIBRATE] fit so
   # the spread maps onto the old 4.5-7.8 band (spear longest, dagger shortest); a centre-gripped pole reaches less than
@@ -23,9 +23,13 @@ CFG = dict(
   # PROACTIVE FIGHTING WITHDRAWAL (ED-PC-0030): a reach weapon out-leveraged in the bind refuses it, breaks measure,
   # and re-presents its point at its dominant measure (Silver's staff/spear game) — the closed-phase lever for the
   # reach-weapon-loses-the-bind residual. VOLUNTARY (any beat, unlike the created-moment reopen) + read-contested;
-  # a failed/read withdrawal is PURSUED (Nachreisen). systems.disengage_prob gates it EMERGENTLY on the bind
+  # a failed/read withdrawal is PURSUED (Nachreisen). systems.disengage_attempt_p / systems.disengage_clean_p gate it EMERGENTLY on the bind
   # leverage deficit (a bind-dominant poleaxe never triggers). [SIM-CALIBRATE] magnitudes; the structure is grounded.
-  DISENGAGE_BASE_P=0.5, DISENGAGE_MAX=0.5, DISENGAGE_GAP_REF=3.0, DISENGAGE_LEV_SCALE=0.1, DISENGAGE_PURSUIT_NSIG=-0.3,
+  DISENGAGE_BASE_P=0.5, DISENGAGE_MAX=0.5, DISENGAGE_GAP_REF=3.0, DISENGAGE_LEV_SCALE=0.1, DISENGAGE_PURSUIT_NSIG=-0.3, PURSUIT_FOOT_K=0.15,
+  # DISENGAGE_PURSUIT_NSIG is now the BASE ANCHOR of systems.pursuit_sigma (catching a withdrawing opponent is hard),
+  # not the whole resolution — ED-PC-0036 retired the flat-sigma shortcut that let this branch bypass the sigma-assembly.
+  # PURSUIT_FOOT_K weights the footwork differential that decides the chase (Nachreisen = "travelling after"); scaled to
+  # match FOOT_MEASURE_K, the engine's other footwork-into-sigma term. [SIM-CALIBRATE]
   # conditional tempo (correction 2): fatigue slows cadence; choke/lunge grips trade cadence for control/reach
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
@@ -81,25 +85,37 @@ CFG = dict(
   # unarmoured by construction. REACH_DECAY_K [FIAT — designer-set; deliberately LOW to avoid triple-counting REACH_W
   # + ADEF_CUT, which already remove most cut-vs-plate reach value]. FLOOR keeps a residual (an armoured man still works to close).
   REACH_DECAY_K=0.35, REACH_THREAT_FLOOR=0.35,
-  REPRESENT_DECAY_K=3.5, REPRESENT_FOOT_K=0.06,   # ED-PC-0033: represent_measure_p armour-fade — P(a reach weapon re-presents at open measure entering a fresh engagement) = exp(-DECAY_K·ADEF_W·armour_defeat_deficit)·footwork. DECAY_K steeper than reach_threat's REACH_DECAY (holding an armoured man off a whole engagement is harder than deterring one stop-hit); crowds a PURE POINT off plate (spear ~0.16) while a gap-defeating reach weapon still presents (poleaxe ~0.60, guisarme ~0.36). FOOT_K small — armour dominates, Agility only nudges (0 for a stat mirror). [SIM-CALIBRATE]
+  REPRESENT_DECAY_K=3.5, REPRESENT_FOOT_K=0.06,   # ED-PC-0033: represent_measure_p armour-fade — P(a reach weapon re-presents at open measure entering a fresh engagement) = exp(-DECAY_K·ADEF_W·armour_defeat_deficit)·footwork. DECAY_K steeper than reach_threat's REACH_DECAY (holding an armoured man off a whole engagement is harder than deterring one stop-hit); crowds a PURE POINT off plate while a gap-defeating reach weapon still presents. MEASURED at the shipped DECAY_K=3.5 vs heavy (ED-PC-0035 re-measure; the previous comment quoted ~0.16/~0.60/~0.36 from a pre-final draft and matched no live read): spear 0.077, yari 0.070, guisarme 0.236, poleaxe 0.494. FOOT_K small — armour dominates, Agility only nudges (0 for a stat mirror). [SIM-CALIBRATE]
   ADEF_THRESHOLD={'none':0.0,'light':0.30,'medium':0.45,'heavy':0.72},   # MONOTONE (ED-1050 resolved, Jordan 2026-06-30): the armour-defeat threshold RISES with armour — a gambeson (light) is soft/easily defeated, mail (medium) harder, plate (heavy) hardest. light 0.70->0.30 fixes the backwards inversion (light>medium) that systems.armor_defeat_sigma's docstring forbids; medium/heavy KEPT (calibrated). Re-swept in canon + re-exported to combat_config.gd (retiring the port's private [AUDIT-FIX], CLAUDE.md §6). [SIM-CALIBRATE] values within the grounded monotone frame; validated (mirror-50, light matchups sane).
+  # STRUCTURAL THRESHOLD SOFTENING (ED-PC-0037) — the two discontinuities the four-dimension audit found dominating
+  # the whole balance surface, making win-rate nearly a STEP FUNCTION of which side of a line a weapon fell on.
+  # INIT_TEMPO_K / READ_TEMPO_K: the ANTICIPATION half of "who acts first" (systems.tempo_pressure). Weapon cadence
+  #   alone used to decide it, metronomically and therefore deterministically. These make the Vor (initiative) and the
+  #   READ modulate how fast a fighter's next action comes to bear — you begin as your opponent begins because you
+  #   anticipated them, and you keep dictating because you took the Vor. Both 0 restores cadence-only behaviour.
+  #   Deliberately NOT noise: an unexplained random term would answer the right objection with the wrong mechanism.
+  # CLOSE_GAP_REF / CLOSE_LATCH_BAND: the engagement-start closed latch is a probabilistic ramp across REF +- BAND
+  #   instead of a hard step at REF (worth +9pp across 2 cm of reach). BAND 0 restores the step.
+  # All [SIM-CALIBRATE]; the STRUCTURE (a threshold should not be a cliff; cadence proposes, the Vor and read dispose)
+  # is the grounded part.
+  INIT_TEMPO_K=0.30, READ_TEMPO_K=0.05, CLOSE_GAP_REF=0.3, CLOSE_LATCH_BAND=0.3,
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0, ARREST_K=0.12, ARREST_REACH_FLOOR=5.0,   # ARREST_K/ARREST_REACH_FLOOR (ED-PC-0029): a LANDED stop-thrust checks the closer's advance by the braced-weapon IMPULSE it transmits (systems.arrest_impulse = K·(reach−FLOOR)·braceability), netted against close_rate. This is an ARREST, not a wound — a braced point halts a charge whether or not it penetrates (boar-spear lugs: penetration≠arrest), so it reads reach+structure, never damage (a fable audit retired the earlier recoil=K·d, which crowned big cutters and stranded the staff). FLOOR (~arm+dagger length) zeroes a dagger's arrest — nothing to brace against a charge at grappling distance. Armour enters ONCE, via reach_threat in the stop-hit's landing prob. Grounded in HEMA Nachreisen. [SIM-CALIBRATE]
   # tempo
-  BASE_TEMPO=2.0, TEMPO_RECOVER_K=0.4, TEMPO_RECOVER_SHAPE=0.35, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # SPEED_K RETIRED, replaced by TEMPO_RECOVER_K/_SHAPE (morphology-rearch Phase B6 correction, 2026-07-02): scales systems._recovery_mode_commitment's grip-aware balance-recovery delta from the anchor (tanh-saturating — the raw commitment spans ~0.2 to ~68 across the roster), replacing the retired per-weapon `spd` scalar. [SIM-CALIBRATE] both. AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
+  BASE_TEMPO=2.0, TEMPO_RECOVER_K=0.4, TEMPO_RECOVER_SHAPE=0.35, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, ACT_THRESHOLD=2.5, BURST_MAX=4,   # SPEED_K RETIRED, replaced by TEMPO_RECOVER_K/_SHAPE (morphology-rearch Phase B6 correction, 2026-07-02): scales systems._recovery_mode_commitment's grip-aware balance-recovery delta from the anchor (tanh-saturating — the raw commitment spans ~0.2 to ~68 across the roster), replacing the retired per-weapon `spd` scalar. [SIM-CALIBRATE] both. AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
   # stamina / recovery
   STAMINA_REF=18.0, RECOVERY_FRAC=0.5, COST_SCALE=0.5, ACT_BASE=2.0, ACT_WEIGHT=1.0, ACT_COMMIT=0.4, OOB=2,
   # WS-2 req4 heft: HEFT_MODE/HEFT_MASS_K RETIRED (morphology-rearch Phase B6, 2026-07-02) — core.heft_resp now
   # reads weapon_physics.heft() unconditionally (mass x forward-balance, real per-part data); there is no fiat
   # binary/continuous toggle left to select between.
   # concentration (Focus+Spirit tracker; baseline-consistency + fatigue-resistance)
-  CONC_SPIRIT=2.0, CONC_FOCUS=3.0, CONC_BASE_K=4.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,   # Concentration = 3*Focus + 2*Spirit (Jordan 2026-06-03; was 3*Foc+1*Spi)
+  CONC_SPIRIT=2.0, CONC_FOCUS=3.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,   # Concentration = 3*Focus + 2*Spirit (Jordan 2026-06-03; was 3*Foc+1*Spi)
   CONC_RECOVER_FRAC=0.4, FOCUS_MENTAL_K=0.5, FOCUS_CONSISTENCY_K=0.10, DISRUPT_K=0.7,
   # reading / tempo channels
   READ_K=0.5, REFLEX_AGI=2.0, REFLEX_ATT=1.0, INIT_K=0.045, COMMIT_SIGMA=0.18,
     WOUND_ATK_OB=0.15, WOUND_DEF_OB=0.25,   # ED-1041 wound obstacle (bilateral, tunable): +0.15 Ob attacking / +0.25 Ob defending per wound; supersedes the -1D aggressor-only pool penalty (ED-1021). Defender has no pool, so defence-impairment must be an Ob channel.
   READ_HISTORY_K=0.2, INIT_READING_K=0.03, INIT_HISTORY_K=0.02,   # reading=experience(History) term; initiative reading/History terms (Jordan 2026-06-03; Class-C)
   # defense modes
-  PARRY_K=0.9, DODGE_K=0.9, WIND_K=0.9, CHOKE_BIND_K=0.30,
+  PARRY_K=0.9, DODGE_K=0.9, WIND_K=0.9,   # ED-PC-0035: CHOKE_BIND_K REMOVED — its only reader (systems.mode_sigma's wind branch) multiplied it by a `choke` argument its ONLY caller (read_contest) hardcoded to 0.0, so the term was a structural zero in every regime (ablation at 0 AND 100: 0 outcome changes over 32 cells x 150 seeds). Leftover of the retired choke/normal/lunge stance strings; grip is now the continuous grip_position. If "a gathered grip aids the wind" is wanted it must be DESIGNED against a double-count check vs systems.leverage (bind capacity) and CHOKE_ACCURACY_K (the re-homed choke cost, ED-PC-0026) — not silently revived here.
   # strength handling + endurance fatigue
   D0=1.0, D_LEN=0.35, D_WT=1.0, D_HAND=0.6, D_2H=0.4, HANDLE_K=0.10,
   FATIGUE_HANDLE_K=0.20, FATIGUE_FOOT_K=0.30, FOOT_COMMIT_DISC_K=0.06, FOOT_STANCE_K=0.05,
@@ -113,7 +129,7 @@ CFG = dict(
   # = gathered = recoverable). Weight is NON-LINEAR in recovery: the forward moment and the lunge cost scale as
   # mass**MOMENT_MASS_EXP, so a heavy weapon is disproportionately hard to arrest (a longsword lunge != a rapier
   # lunge). REF is the longsword anchor recomputed for the exponent (1.4**1.5 * 0.14 = 0.232) so it stays mult 1.0.
-  EXPOSE_MOMENT_K=0.8, EXPOSE_MOMENT_REF=(1.4**1.5)*0.14, EXPOSE_LUNGE_K=0.4, EXPOSE_CHOKE_K=0.2,   # REF = the longsword anchor (mass**exp * pob), exact so longsword stays mult 1.0
+  EXPOSE_MOMENT_K=0.8, EXPOSE_LUNGE_K=0.4,   # ED-PC-0035: EXPOSE_MOMENT_REF / EXPOSE_CHOKE_K REMOVED — set but read nowhere (the anchor machinery moved to REC_I_REF/REC_S_REF; the "choke = gathered = recoverable" axis was never wired).   # REF = the longsword anchor (mass**exp * pob), exact so longsword stays mult 1.0
   MOMENT_MASS_EXP=1.5, LUNGE_REF_MASS=1.4,
   # ── T_vuln undefended-time / mode-exposure model (ED-PC-0027, 2026-07-23). The vulnerability window a fighter
   # carries while executing an attack (delivery+recovery), reusing _recovery_mode_commitment's swing-arrest/thrust-
@@ -153,7 +169,7 @@ CFG = dict(
   # [SIM-CALIBRATE] — flamberge's 15mm amplitude is the only roster weapon that currently reads nonzero.
   BIND_VIBRATION_K=0.5,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
-  STOPHIT_NSIG_BASE=0.4, TRUE_TIME_K=3.5, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,   # TRUE_TIME_K (ED-PC-0029): magnitude of Silver's true-time point-tempo edge (systems.true_time_edge) on the approach stop-hit — the light-point reach weapon's hand-speed advantage over a heavy-pointed closer. [SIM-CALIBRATE]; the point-tempo law (V∝1/I^0.25, Cross & Nathan 2009) is grounded.
+  STOPHIT_NSIG_BASE=0.4, TRUE_TIME_K=3.5, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,   # TRUE_TIME_K (ED-PC-0029): magnitude of Silver's true-time point-tempo edge (systems.true_time_edge) on the approach stop-hit — the light-point reach weapon's hand-speed advantage over a heavy-pointed closer. [SIM-CALIBRATE]. [ED-PC-0035 correction: this used to claim "the point-tempo law (V∝1/I^0.25, Cross & Nathan 2009) is grounded" — but ED-PC-0029 RETIRED that head-inertia form as dishonestly grounded (the m_head proxy was cherry-picked: it happened to give the doctrinal answer and over-buffed daggers). The LIVE mechanism is systems.true_time_edge, a tanh-saturating STANDING REACH differential, armour-faded to exactly 0 at plate — grounded in Silver's hand-before-foot, not in a head-inertia law.]
   RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4,
   # mental-fatigue weights (calibrated): how much fatigue degrades the read vs the defence
   MENTAL_FAT_READ_K=0.4, MENTAL_FAT_DEF_K=0.3,
@@ -169,7 +185,7 @@ CFG = dict(
   # degrades tempo AND defence; recovers each beat toward 1.0. This is the DYNAMIC tempo-vs-structure fix deferred
   # from the initiative build (replaces the rejected static balance->tempo coupling — structure is dynamic, balance
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
-  POISE_FLOOR=0.40, POISE_EFFECT_FLOOR=0.72, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C). ED-PC-0031 (Jordan "strong strong poise break"): poise DEEPENED so a stagger is decisive — FLOOR 0.5->0.35 (a hard concussion drives structure lower) + EFFECT_FLOOR 0.88->0.60 (a fully-staggered fighter acts/defends at 0.60x, not 0.88x — the "wind knocked out" is real, not a ±12% nudge).
+  POISE_FLOOR=0.40, POISE_EFFECT_FLOOR=0.72, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C). ED-PC-0031 (Jordan "strong strong poise break"): poise DEEPENED so a stagger is decisive — FLOOR 0.5->0.40 (a hard concussion drives structure lower) + EFFECT_FLOOR 0.88->0.72 (a fully-staggered fighter acts/defends at 0.72x, not 0.88x — the "wind knocked out" is real, not a ±12% nudge). [ED-PC-0035 correction: this comment previously read "0.5->0.35 / 0.88->0.60", describing a PROTOTYPE calibration that was never shipped — the code and the ED-PC-0031 ledger entry both say 0.40/0.72, and the shipped pair is what the PC-5 plate-stalemate + lever-texture invariants were fitted against.]
   POISE_BREAK_OVERCOMMIT=0.09, POISE_BREAK_BIND=0.05, POISE_BREAK_HIT=0.07, POISE_SOLID_HIT=8.0,
   # PERCUSSION -> STAMINA (wind) + POISE (stagger) — ED-PC-0031 (Jordan). A landed blow delivers a concussive IMPULSE
   # DISTINCT from the wound: it drains the defender's STAMINA (wind knocked out / attrition) and BREAKS their POISE
@@ -179,11 +195,20 @@ CFG = dict(
   # transmits impulse only where it BITES — its load IS the wound d (a deflected point pings off plate ~0, preserving
   # the gap-specialist's plate close). [SIM-CALIBRATE] magnitudes; the blunt-vs-point transmission split is grounded.
   PERC_STAM_K=0.4, PERC_POISE_K=0.04, PERC_BLUNT_HEFT=2.2, PERC_POINT_FRAC=0.20,
+  # ED-PC-0036: these two were INLINE MAGIC NUMBERS inside systems.percussion_stagger, violating this file's own
+  # header contract ("All tunable coefficients in ONE place") on the path that produces ED-PC-0031's headline result.
+  # PERC_QUAL is the concussive-impulse quality ladder. It is DELIBERATELY NOT core.QUAL: core's ladder scales a
+  # WOUND (0.25/0.5/1.0/1.5) whereas this scales transmitted IMPULSE, and a graze that barely breaks skin still
+  # delivers real percussion (0.4 > core's 0.25) while an overwhelming blow concentrates more of the body's momentum
+  # (1.6 > 1.5). Two ladders for one degree system is a smell, so the divergence is stated rather than left implicit.
+  # PERC_STR_BASE/PERC_STR_K: the striker's mass-behind-the-blow term, = 0.5 + strength/4 (unchanged magnitudes).
+  PERC_QUAL={'graze':0.4,'success':1.0,'overwhelming':1.6}, PERC_STR_BASE=0.5, PERC_STR_K=0.25,   # [SIM-CALIBRATE]
   PERC_BLUNT_TRANSMIT={'none':1.0,'light':0.85,'medium':0.7,'heavy':0.55},
   # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
   # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
   # the aggressor role alternates over a fight. Added to net_sigma.
-  ATTACKER_BIAS=0.12,
+  # ED-PC-0037: ATTACKER_BIAS REMOVED (see systems.assemble_net_sigma). Untagged fiat duplicating the Vor;
+  # retired together with the first-actor monopoly it compounded with, per the batch-3 deferral.
   # single-time counter (a tier of the unified counter): UNIVERSAL but skill-gated. SELECTION is tempo-driven (how
   # often a fighter reaches for it); SUCCESS scales with training (history)+reflex — the untrained single-time counter
   # is a desperate-idiot move that mostly fails and is punished (eats the attack undefended, cedes the seized Vor).
@@ -205,13 +230,28 @@ CFG = dict(
   # with the disposition+wariness skew _k shaping the Beta (neutral a=b -> centred ~3.5; aggressive -> toward 5;
   # cautious/wary -> toward 2). Param floor 0.25 = the spread-floor. Replaces the old integer {2,3,4,5} draw.
   COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6, LUNGE_COMMIT=4.0,   # LUNGE_COMMIT: a THRUST committed at/above this depth IS a lunge (the body extends — reach+commitment, low recovery, more readable)
-  # WS-4/WS-5 imposition gate (section C EXPERIMENT, default OFF): a tradition imposes/refuses its PREFERRED node
-  # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
-  # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it
-  # beats that baseline on legibility + vacuum-balance (section C), else it stays off.
-  IMPOSITION_GATE=False,   # RETIRED FIAT (Jordan design ruling 2026-07-23, ED-PC-0023): impose_node FORCED a tradition's preferred node (German impose-the-bind / Italian-etc refuse-it) via a label-keyed coin-flip that OVERRODE the emergent bind/counter resolution — top-down scripting (§0), the antithesis of "each combatant resolves in a way that feels correct to their style". Turned OFF: tradition-preference now EMERGES from BUILD — a fighter binds more because they INVESTED in it (skill('bind') + a bind-friendly weapon's wind affinity + learned binding abilities + disposition), all already live in mode_sigma/bind_sigma. The tradition gates ACCESS to a technique kit; investment + skill drive efficacy (the ability system's own target model). IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P deleted with the fiat. (PREFERRED in traditions.py is now vestigial — kept as metadata pending a future EMERGENT selection-bias, never again a forced override.)
+  # (The WS-4/WS-5 'section C EXPERIMENT' blurb that stood here — present-tense instructions to 'turn on via the
+  # workbench' a gate this very block records as DELETED — was removed with it. ED-PC-0036 second pass: a
+  # stale-prose commit that leaves a contradiction sandwiched above its own correction has not finished the job.)
+  # ED-PC-0035: IMPOSITION_GATE (and impose_node, and traditions.PREFERRED/preferred) are DELETED — the cleanup
+  # ED-PC-0023 explicitly deferred. That ruling (Jordan, 2026-07-23) retired the gate as top-down scripting: it
+  # FORCED a tradition's preferred node via a label-keyed coin-flip that OVERRODE the emergent bind/counter
+  # resolution — the antithesis of "each combatant resolves in a way that feels correct to their style". Tradition
+  # preference EMERGES from BUILD: a fighter binds more because they INVESTED in it (skill('bind') + a bind-friendly
+  # weapon's wind affinity + learned binding abilities + disposition), all already live in mode_sigma/bind_sigma.
+  # The tradition gates ACCESS to a technique kit; investment + skill drive efficacy.
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
-  UPSET_FLOOR=0.05,
+  UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
+  # The '95% cap': with this probability the DECIDED loser steals the win, so no matchup is ever certain. This is the
+  # one place the engine deliberately OVERRIDES its own emergent outcome — the trace stream emits `engagement_end
+  # felled=X` and then `fight_result winner=X`, with no in-model event corresponding to the reversal. It is a
+  # legitimate videogame design choice and is NOT being removed; it is tagged because it was previously
+  # indistinguishable from ungrounded fiat, and because it has a MEASUREMENT consequence every reader should know:
+  # every win-rate this engine reports (including the ledgered calibration figures) is COMPRESSED toward
+  # [UPSET_FLOOR, 1-UPSET_FLOOR], so an observed 0.95 is a raw ~1.00 and the roster's apparent ceiling at ~0.94-0.95
+  # is partly this clamp rather than pure physics. If the design ever wants upsets to be diegetic instead of a
+  # scoreboard edit, the in-fight home for them is a critical-opening mechanic, not a post-hoc flip — Jordan's call.
+
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
   # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
   # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M
