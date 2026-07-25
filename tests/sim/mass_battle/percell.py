@@ -187,7 +187,12 @@ def _erode_cell_morale_from_damage(atom, cid, killed, before):
     cells look braver purely for being dense. Bounded by the same per-phase cap the aggregate erosion
     uses, so one savage tick cannot instantly zero a cell that the cohesion pull would otherwise recover.
     """
-    if not atom.cell_morale or killed <= 0 or before <= 0:
+    # getattr, not attribute access: this helper hangs off `_apply_with_spill`, the SINGLE owner of
+    # casualty application, which is deliberately duck-typed — callers pass anything with cell_troops
+    # (including test doubles). Requiring `cell_morale` on every such object would make a morale feature
+    # impose a structural requirement on the damage substrate, which is backwards. CI caught this via
+    # test_hp_cell_ledger's _FakeAtom; the lesson is about the coupling, not the double.
+    if not getattr(atom, 'cell_morale', None) or killed <= 0 or before <= 0:
         return
     frac = min(1.0, killed / before)
     atom.erode_cell_morale(cid, MORALE_PHASE_CAP * frac)

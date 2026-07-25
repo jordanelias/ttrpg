@@ -682,6 +682,24 @@ class Subunit:
     def erode_morale(self, amount):
         # Reduce effective morale (may pass <=0 -> rout, matching the unit `morale -= loss`). Writes to own
         # morale if set, else routes to the inherited Unit -> single-subunit reproduces the old unit erosion.
+        #
+        # [ED-MB-0041 phase 1 — DEFECT I INTRODUCED, then caught] When per-cell morale is seeded,
+        # `eff_morale` is the weighted mean of the CELLS and ignores the scalar entirely. This method
+        # writes the scalar. So the moment cell morale was wired, every body-wide morale path silently
+        # became a no-op: the canonical §A.4 casualty/exhaustion erosion, the sibling pull, AND the
+        # stochastic-rout punch that drives morale <=0 to force a break — i.e. the flag ratified hours
+        # earlier stopped working whenever this one was on. Measured: erode_morale(4.0) left the
+        # aggregate at 6.0 while writing scalar 2.0. That is precisely the "machinery that documents
+        # itself as working and does not" pattern this audit exists to find, introduced by me.
+        #
+        # A body-wide loss is pressure on the WHOLE body, so it applies to every cell uniformly. Since
+        # the aggregate is the weighted mean, subtracting `amount` from every cell lowers the aggregate
+        # by exactly `amount` — the scalar and cellular models stay numerically identical for body-wide
+        # effects, and cells only diverge through LOCAL (per-cell damage) erosion, which is the point.
+        if self.cell_morale:
+            for cid in self.cell_morale:
+                self.cell_morale[cid] -= amount
+            return
         new = self.eff_morale - amount
         if self.morale is not None: self.morale = new
         else:
@@ -699,6 +717,16 @@ class Subunit:
         # strength cannot rally a subunit ABOVE its own pristine ceiling); no floor on the wilt
         # side, matching erode_morale's own unbounded-negative convention (rout is a <=0 threshold
         # check elsewhere, not enforced here).
+        # [ED-MB-0041 phase 1] Same cell-routing as erode_morale — see its note. Uniform across cells so
+        # the aggregate moves by exactly `delta`; the rally-side cap is applied to the aggregate, then
+        # realised as the same shift on every cell, so no cell is lifted above the body's own ceiling.
+        if self.cell_morale:
+            capped = min(self.eff_morale_start, self.eff_morale + delta)
+            shift = capped - self.eff_morale
+            if shift:
+                for cid in self.cell_morale:
+                    self.cell_morale[cid] += shift
+            return
         new = min(self.eff_morale_start, self.eff_morale + delta)
         if self.morale is not None: self.morale = new
         else:
