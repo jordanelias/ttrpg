@@ -2,6 +2,35 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0041 phase 1 MEASURED: modest, as predicted; flag stays OFF
+
+Measured on corrected code (the first run measured the silent-no-op configuration and was discarded).
+
+| | rout ON baseline | + `PC_CELL_MORALE=1` |
+|---|---|---|
+| casualty realism | 2/20 | **1/20** |
+| win-share | 7/20 | **8/20** |
+| loser casualties | 29-41% | 29.8-45.4% |
+| **H6 specifically** | **79.2%** | **45.4%** |
+
+**The 2/20 → 1/20 is NOT a regression.** One row crossed a sharp edge: R1 moved 29.9% → 30.2% against a
+30.0% ceiling. Calling that "phase 1 lost a row" would be the band-edge artifact already flagged when it
+ran the other way, and the caveat has to apply symmetrically or it is just advocacy.
+
+**The real movement is H6, 79.2% → 45.4%** — the row no rout-contagion threshold could touch, because
+H6's stubbornness is not at subunit granularity. Per-cell morale reaches it. Win-share also gained a row.
+
+**Verdict: roughly neutral, one structural gain, flag STAYS OFF.** The reason is the one stated *before*
+the measurement: **nothing consumes per-cell morale as a break condition yet.** Rout still evaluates the
+whole-body aggregate — now better-informed, since it is derived from where damage actually landed, but
+still whole-body. The map is populated and correct; nothing reads it to decide a SECTION has gone. That
+is phase 2 (local break), and it is where the payoff should appear.
+
+**The prediction is the point.** It was recorded before the first run and held across a discarded
+measurement and a corrected one. Its first job was catching the silent no-op (a swing far larger than
+predicted); its second is refusing to over-read a neutral result now that the direction is mildly
+favourable. A prediction that only fires against bad news is not a control.
+
 ## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring
 
 **1. A silent no-op I introduced — the exact pattern this audit exists to find.** With cell morale
