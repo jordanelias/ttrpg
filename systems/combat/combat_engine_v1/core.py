@@ -380,7 +380,7 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
 # head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
-def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None):
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -409,9 +409,19 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     # and every tier with PEN_THR 0 (none/light) stays completely inert.
     t = PEN_THR.get(armor, 0.0)
     if t > 0.0:
-        _cap = adef_cap(weapon_geo, cfg_adef, head=weapon_head, gap=gap) if (weapon_geo is not None and cfg_adef is not None) else None
+        _cap = (adef_cap(weapon_geo, cfg_adef, head=weapon_head, gap=gap, grip=grip, room=room)
+                if (weapon_geo is not None and cfg_adef is not None) else None)
         if _cap is not None:
-            _deficit = max(0.0, cfg_adef['ADEF_THRESHOLD'][armor] - _cap)
+            # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0039, adversarial-review fix]. adef_cap can
+            # return a NEGATIVE number — ADEF_CUT is -0.9, a sigma-domain CONTROL PENALTY calibrated for
+            # armor_defeat_sigma's +/- scale, not a capability magnitude. Feeding it raw gave a pure cutter a deficit of
+            # 1.62 at plate (more than twice the entire threshold scale) and inflated its knee ~x10.7, which silently
+            # annihilated the whole cutter class: bardiche 17->1, podao 13->1, sparr_axe 11->1 per hit, and at MEDIUM —
+            # a tier the fix was never meant to touch — sparr_axe 0.32->0.05, staff 0.22->0.04. "Cannot defeat the
+            # harness" is a floor at zero capability, not an unbounded negative one; a weapon with no armour-defeat is
+            # simply at deficit = threshold, and the grading of HOW badly a given cut fails is ADEF_CUT's job in the
+            # sigma path (and the batch-6 mass/keenness work), not this knee's.
+            _deficit = max(0.0, cfg_adef['ADEF_THRESHOLD'][armor] - max(0.0, _cap))
             t *= (1.0 + PEN_DEFICIT_K * _deficit)
     if t > 0.0 and raw > 0.0:
         raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
@@ -450,4 +460,4 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
                   defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
                   eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                   eff_thrust=(_et if _et is not None else _geo.get('thrust')),
-                  weapon_geo=attacker.w, cfg_adef=cfg)
+                  weapon_geo=attacker.w, cfg_adef=cfg, grip=grip, room=getattr(attacker,'range_avail',1.0))   # [ED-PC-0039] same grip/room the sigma path threads, so the two cannot disagree about the same question

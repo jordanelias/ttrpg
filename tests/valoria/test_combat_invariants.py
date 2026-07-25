@@ -978,3 +978,14 @@ def test_reach_class_beats_arming_not_inverted():
     # runaway to bound. What is still guarded: if the guisarme DOES decide fights, it must not sweep them.
     _g = share[('guisarme', 'heavy')]
     assert _g is None or _g <= 0.97, f"guisarme vs arming at heavy should not sweep plate ({_g!r})"
+    # [RESTORED ED-PC-0039] Tolerating `None` everywhere at plate deleted a LOAD-BEARING guard, and the adversarial
+    # review proved it with two mutations the suite then sailed through: (a) core.strike returning 0 for the guisarme
+    # vs heavy, and (b) every long-lever point returning 0 vs heavy — a whole weapon class silently losing all plate
+    # function — both of which the parent's `0.30 <= share` floor had caught. The property that must survive
+    # capability-gating is not "these weapons win at plate" (they should not) but "PLATE COMBAT IS NOT UNIVERSALLY
+    # MUTE": weapons that genuinely defeat a harness must still settle fights there. Guarded on a defeater, whose
+    # capability clears the tier by construction, so it cannot be satisfied by luck.
+    assert decided[('poleaxe', 'heavy')] > 0.50, (
+        f"the poleaxe DEFEATS plate (adef_cap clears the tier) yet settled only "
+        f"{decided[('poleaxe', 'heavy')]:.0%} of its heavy fights — plate has gone mute for weapons that "
+        f"should decide there")
