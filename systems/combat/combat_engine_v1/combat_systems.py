@@ -552,7 +552,7 @@ def afforded_heads(w, grip=0.0, room=1.0):
         heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None)
     return heads
 
-def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
+def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, room=None):
     """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
     then greedily SELECTS the one whose resulting damage-coupling vs defender_armor is highest — the effectiveness-vs-
     armour baseline the design §3 names ('exactly the existing coupling/adef_cap max(), generalized from 2 modes to
@@ -579,7 +579,11 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None):
     point_concentration — a broad arc-requiring swing collapses in tight quarters; a point-selected thrust barely
     degrades. `closed`/`measure_gap`/`range_avail` were previously received (`closed`) and ignored."""
     w=c.w
-    grip=getattr(c,'grip_position',0.0); room=getattr(c,'range_avail',1.0)
+    # `grip`/`room` follow reach_base's JD-9 override idiom: None (the default, and every wrapper call) reads the
+    # combatant's LIVE circumstance; an explicit value pins the geometry for a HYPOTHETICAL evaluation that must not
+    # depend on live state (represent_measure_p asks "what would this weapon present at OPEN measure?" — ED-PC-0034).
+    grip=getattr(c,'grip_position',0.0) if grip is None else grip
+    room=getattr(c,'range_avail',1.0) if room is None else room
     heads=afforded_heads(w, grip=grip, room=room)
     if len(heads)==1:                                                # single afforded mode: no choice (the common case)
         h=next(iter(heads))
@@ -637,7 +641,7 @@ def reach_threat(longer, defender, cfg):
     deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - cap)
     return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
 
-def represent_measure_p(longer, shorter, cfg, TR):
+def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     """P(a reach weapon RE-PRESENTS its point at open measure entering a fresh engagement, rather than being crowded to
     grips). A new engagement (turn) nominally opens at measure — the fighters have broken and reset — but a reach weapon
     only KEEPS that measure if the (re-)closing opponent still RESPECTS the point. An armoured closer who does not fear a
@@ -657,8 +661,8 @@ def represent_measure_p(longer, shorter, cfg, TR):
         often enough to bring its plate-defeat to bear. This is the emergent discriminator the equal per-hit damage
         could not provide: at plate, spear and guisarme wound alike per hit, but the guisarme EARNS more presentations.
     Lifted mildly by the wielder's FOOTWORK (Agility differential) — nimble feet break and re-make measure — bounded so
-    armour, not stats, dominates the gate (0 for a stat mirror). Reuses adef_cap (single owner of armour-defeat), same
-    head/gap/grip/room reads as reach_threat. REPRESENT_DECAY_K / REPRESENT_FOOT_K [SIM-CALIBRATE]. Pure."""
+    armour, not stats, dominates the gate (0 for a stat mirror). Reuses adef_cap (single owner of armour-defeat) on the
+    PRESENTING mode this derives itself (below). REPRESENT_DECAY_K / REPRESENT_FOOT_K [SIM-CALIBRATE]. Pure."""
     aw = cfg['ADEF_W'][shorter.armor]
     if aw <= cfg['ADEF_W']['light']:
         return 1.0   # CROWDING IS A HARD-ARMOUR PHENOMENON: soft gambeson (and bare) still respects a thrust, so a reach
@@ -666,8 +670,17 @@ def represent_measure_p(longer, shorter, cfg, TR):
                      # dominance the invariants require). Only mail/plate let a closer fearlessly crowd the point. Returning
                      # exactly 1.0 (not ~0.99) also means the wrapper consumes NO rng draw here, so the gate is inert on the
                      # RNG stream at light — where the tradition-lever texture regression runs.
-    cap = adef_cap(longer.w, cfg, head=getattr(longer,'sel_head',None), gap=getattr(longer,'sel_gap',None),
-                   grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
+    # PRESENTING MODE (ED-PC-0034 bugfix). Derive — purely, here — the mode this weapon WOULD present at OPEN measure,
+    # instead of reading the live sel_*/grip state. This gate is evaluated at ENGAGEMENT START, outside the per-beat loop
+    # that refreshes sel_*, so the live fields still carry the PRIOR engagement's closed-phase selection (or, on the very
+    # first engagement, nothing — so adef_cap fell back to the bare NATIVE head). Measured consequence: a multi-mode
+    # weapon whose native head is a CUTTER read as maximally crowded on engagement 1 and differently later — katana
+    # 0.000 -> 0.274, guisarme 0.092 -> 0.236, hook_sword 0.000 -> 0.425 for the identical matchup. That is the same
+    # state-carryover defect class ED-PC-0033 fixed for grip_position, reintroduced one call up. A weapon is gated on
+    # the point it would actually present, so the geometry is the OPEN-measure one explicitly: grip 0.0 (full extension,
+    # nothing gathered) and room 1.0 (open measure) — path-independent by construction, never a stale read.
+    sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=1.0)
+    cap = adef_cap(longer.w, cfg, head=sel[1], gap=sel[2], grip=0.0, room=1.0)
     deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - cap)
     base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
     foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
@@ -926,8 +939,16 @@ def counter_select(defender, cfg, rng, TR):
 
 def overcommit_exposure(aggressor, commit, fat_a, cfg, TR):
     """The aggressor's exposure to the riposte from over-committing: commit-depth x irrecoverability, minus the
-    anti-overcommit (balance) curb and trained discipline. Pure; floored at 0. The wrapper applies the loss."""
-    return max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*recoverability_factor(aggressor,cfg)) - anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
+    anti-overcommit (balance) curb and trained discipline. Pure; floored at 0 (ED-PC-0034 fix: the floor now wraps the
+    WHOLE expression, not just the commit term — previously a balanced/disciplined fighter at shallow commit returned a
+    NEGATIVE exposure, e.g. -0.37 for an agile true_times fighter at commit 2. The wrapper guards its initiative/poise
+    loss with `if >0`, but fed the un-floored value straight into RIPOSTE_ON_FAIL/ON_NEUTRALIZE, so negative exposure
+    silently pushed the defender's riposte chance BELOW its configured base — a mechanic the docstring said could not
+    exist. Not over-committing means you are not EXTRA exposed; it does not make you harder to riposte than the base
+    contemplates, and anti-overcommit is a MITIGATION of exposure, not a bonus that can invert it). The wrapper applies
+    the loss."""
+    return max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)*recoverability_factor(aggressor,cfg)
+                    - anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit'))
 
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""

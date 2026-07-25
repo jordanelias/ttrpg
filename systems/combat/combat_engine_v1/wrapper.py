@@ -57,7 +57,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
     # naive always-reset would have violated, letting the spear field-win at heavy). First engagement (prev_closed=False)
     # always opens at measure — the initial approach is real.
     if prev_closed and not closed and measure_gap>0.3:
-        _rep = S.represent_measure_p(longer, shorter, cfg, TR)
+        _rep = S.represent_measure_p(longer, shorter, cfg, TR, measure_gap=measure_gap)
         if _rep < 1.0 and rng.random() >= _rep:   # short-circuit: represent_p==1.0 (none/light) draws NO rng — the gate is inert on the stream off-plate
             closed=True; measure_gap=0.0
     # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert - ablation ~0, washed out by per-beat dynamics):

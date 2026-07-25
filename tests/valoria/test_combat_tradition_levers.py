@@ -114,8 +114,15 @@ def test_levers_add_texture_without_shifting_balance():
     hook-surface those moments give abilities. A good situational lever makes many fights PLAY OUT differently while
     rarely flipping the winner. This test pins exactly that: at identical seeds, levers-on vs levers-off diverge in
     their event sequence for a meaningful fraction of fights (texture is real), yet the decided outcome changes only
-    rarely (balance is preserved). Measured (observed ~16-28% divergence / ~3-8% flip); bounds are generous so this
-    guards the PROPERTY, not a point value."""
+    rarely (balance is preserved). Bounds are generous so this guards the PROPERTY, not a point value.
+    [INSTRUMENT RE-BASELINED, ED-PC-0034, 2026-07-24] n was 60, which is UNDER-POWERED for this measurement and made the
+    test a knife-edge: the true divergence rate is ~12-13% (measured n=200: katana/arming 25/200, dagger/arming 26/200),
+    so n=60 expects ~7.5 successes with SE~2.6 — the specific first-60 seeds happened to yield 3-4, i.e. the old `>=4`
+    floor sat ~1 SE below the mean and ANY unrelated change to the RNG trajectory could trip it. (It did: ED-PC-0034's
+    overcommit_exposure floor-fix moved katana 4->3 without touching a single lever.) The old docstring's "observed
+    ~16-28%" was never reproducible at n=60. Fixed by RAISING n to 200 (a stronger instrument, ~4s) and setting the
+    floor at a proportional 5% — ~2.5x margin below the true 12-13%, while still failing loudly if the levers go dead
+    (which reads 0). This tightens rigour rather than relaxing the guard."""
     import os as _os
     _wb = _os.path.join(ENGINE, 'workbench'); sys.path.insert(0, _wb)
     from trace import run_traced_fight  # noqa: E402
@@ -134,7 +141,7 @@ def test_levers_add_texture_without_shifting_balance():
         return tuple(o)
 
     for wa, wb in (('katana', 'arming'), ('dagger', 'arming')):
-        n, diverged, flipped = 60, 0, 0
+        n, diverged, flipped = 200, 0, 0
         for s in range(n):
             r_on, ev_on = run_traced_fight(Combatant('A', weapon=wa), Combatant('B', weapon=wb), cfg=CFG, seed=s)
             r_off, ev_off = run_traced_fight(Combatant('A', weapon=wa), Combatant('B', weapon=wb), cfg=OFF, seed=s)
@@ -142,7 +149,7 @@ def test_levers_add_texture_without_shifting_balance():
                 diverged += 1
             if r_on != r_off:
                 flipped += 1
-        assert diverged >= 4, f"{wa} vs {wb}: levers produced almost no per-fight texture ({diverged}/{n} diverged)"
+        assert diverged >= n * 0.05, f"{wa} vs {wb}: levers produced almost no per-fight texture ({diverged}/{n} diverged; true rate ~12-13%)"
         assert flipped <= n * 0.20, f"{wa} vs {wb}: levers shifted the OUTCOME too often ({flipped}/{n}) — not balance-neutral"
 
 
