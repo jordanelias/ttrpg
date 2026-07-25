@@ -248,12 +248,12 @@
         1.03
       ],
       "medium": [
-        "puncture",
-        "cut_thrust",
+        "percussion",
+        "blunt",
         0.51,
-        null,
+        1.7819361715915734,
         0.55,
-        1.03
+        1.7819361715915734
       ],
       "none": [
         "shear",
@@ -952,27 +952,27 @@
       ],
       "light": [
         "puncture",
-        "cut_thrust",
-        0.31,
+        "point",
+        0.75,
         null,
-        0.3,
-        0.76
+        0.8,
+        0.75
       ],
       "medium": [
         "puncture",
-        "cut_thrust",
-        0.31,
+        "point",
+        0.75,
         null,
-        0.3,
-        0.76
+        0.8,
+        0.75
       ],
       "none": [
-        "shear",
-        "cut_thrust",
-        0.31,
+        "puncture",
+        "point",
+        0.75,
         null,
-        0.3,
-        0.76
+        0.8,
+        0.75
       ]
     },
     "static_moment": 0.04390721
@@ -1603,7 +1603,7 @@
     "perc_auth": 0.0,
     "select_mode": {
       "heavy": [
-        "puncture",
+        "shear",
         "cut_thrust",
         0.4,
         null,
@@ -1611,7 +1611,7 @@
         1.14
       ],
       "light": [
-        "puncture",
+        "shear",
         "cut_thrust",
         0.4,
         null,
@@ -1619,7 +1619,7 @@
         1.14
       ],
       "medium": [
-        "puncture",
+        "shear",
         "cut_thrust",
         0.4,
         null,
@@ -1733,12 +1733,12 @@
         0.94
       ],
       "medium": [
-        "puncture",
-        "cut_thrust",
+        "percussion",
+        "blunt",
         0.47,
-        null,
+        1.5174755099131467,
         0.55,
-        0.94
+        1.5174755099131467
       ],
       "none": [
         "shear",
@@ -2055,7 +2055,7 @@
         0.84
       ],
       "none": [
-        "shear",
+        "puncture",
         "cut_thrust",
         0.81,
         null,

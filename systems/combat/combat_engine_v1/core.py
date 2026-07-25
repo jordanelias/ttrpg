@@ -111,7 +111,11 @@ DMG_SCALE=1.55                                                      # [damage_mo
 # point that pings off it produces a small d (collapsed). [SIM-CALIBRATE] per-tier floors.
 PEN_THR={'none':0.0,'light':0.0,'medium':2.5,'heavy':6.5}   # light (soft gambeson) needs no penetration floor; the rapier inversion is a HEAVY-tier effect (heavy 74->16), medium a smaller gate
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
-DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
+DELIVERY={'blunt':1.6,'point':1.45,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
+# ED-PC-0037: the 'cut_thrust' entry (1.35) is REMOVED. It was the pre-max BLENDED constant for a weapon modelled as
+# one mode; once cut_thrust_arm resolved the two arms on their own tokens nothing read it, yet export_engine_params
+# kept shipping the dead 1.35 into the Godot-facing contract — the exact 'dead keys leaking into the typed contract'
+# class ED-PC-0035 existed to clean, recreated one batch later. Caught by the batch-3 adversarial review.
 # Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED 2026-06-30 (Alan Williams, The Knight
 # and the Blast Furnace, 2003) — designs/audit/2026-06-30-combat-grounding/. CHANGED 4 cells: cloth.shear .35->.45
 # (a 16-30 layer jack sheds a ~60-130 J cut); cloth.puncture .15->.12 (a point stops at only ~50 J vs ~80 J cut — the
@@ -264,7 +268,7 @@ def thrust_authority(head_len):
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
     if head_len is None or head_len<=0: return 1.0
     return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
-def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0):
+def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff_cut=None, eff_thrust=None, thrust_auth=1.0):
     """SINGLE OWNER of the cut-and-thrust versatility contest. Returns `(value, mode)` — the winning arm's coupling and
     which arm won ('shear' | 'puncture') — so the DAMAGE and the REPORTED MODE can never disagree (ED-PC-0036).
 
@@ -283,12 +287,18 @@ def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff=None, thrust
     even unarmoured, which an armour-keyed label rule could not express. Pure."""
     cut_arm = DELIVERY['cut']*_transmit('shear',mat,coverage)
     thr_arm = DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth)
-    if eff is not None:
-        cut_arm *= min(1.0, eff/CUT_AUTH_REF)
-        thr_arm *= min(1.0, eff/THRUST_AUTH_REF)
+    # PER-ARM quality [ED-PC-0037, adversarial-review fix]. Each arm is de-rated by ITS OWN derived magnitude — the
+    # edge by geo['cut'], the point by geo['thrust']. The first revision scaled BOTH by the element's blended
+    # sel_eff = max(cut, thrust), which credited an incidental edge with a dedicated point's quality: a ranseur
+    # (cut 0.30 — squarely inside the 0.20-0.50 band CUT_AUTH_REF's own comment says must never earn the full
+    # constant) was paid the full cutter DELIVERY 1.500 at none and reported as a SWING, purely because its 0.84
+    # thrust rode through the max. That is the ED-PC-0011 mis-crediting class re-opened through a blend. Per-arm,
+    # the ranseur's cut scales to 1.5*0.30/0.70 = 0.643 and its point correctly wins.
+    if eff_cut is not None:    cut_arm *= min(1.0, eff_cut/CUT_AUTH_REF)
+    if eff_thrust is not None: thr_arm *= min(1.0, eff_thrust/THRUST_AUTH_REF)
     return (cut_arm, 'shear') if cut_arm >= thr_arm else (thr_arm, 'puncture')
 
-def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0):
+def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
     engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]
@@ -325,14 +335,14 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
         # rather than by physics. On its own token the shift is REAL and matches the doctrine stated above: cut the
         # unarmoured man (1.500 > 1.450), half-sword-thrust anything armoured (light 0.926 < 1.276, more so at
         # medium/heavy) — because padding and plate resist an edge far more than they resist a point.
-        return cut_thrust_arm(mat, coverage, gap_prec, eff, thrust_auth)[0]
+        return cut_thrust_arm(mat, coverage, gap_prec, eff_cut, eff_thrust, thrust_auth)[0]
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
     return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
-def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0):
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -348,7 +358,7 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
-    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
+    raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
     t = PEN_THR.get(armor, 0.0)                                   # PENETRATION THRESHOLD (ED-PC-0032): armour resists up to a floor
     if t > 0.0 and raw > 0.0:
         raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
@@ -377,5 +387,7 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     eff=getattr(attacker, 'sel_eff', None)                        # SELECTED element's own derived cut/thrust magnitude (U2/ED-PC-0011); None for a native-fallback attacker, inert for every head but 'cut'
     grip=getattr(attacker, 'grip_position', 0.0); sel_pc=getattr(attacker, 'sel_pc', None)
     tauth=thrust_authority(attacker.w.get('head_len'))            # PC-5: point-to-hand lever authority from the SELECTED weapon record (the half-sword swap already gives the short-lever form its own head_len); inert for shear/percussion heads
+    _geo = attacker.w.get('geo', {})
     return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc), head, attacker.strength,
-                  defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth)
+                  defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
+                  eff_cut=_geo.get('cut'), eff_thrust=_geo.get('thrust'))

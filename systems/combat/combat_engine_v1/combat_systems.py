@@ -599,7 +599,8 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # a pure cutter with no real point keeps cutting. A mode with exposure<=1 (a clean thrust) is undiscounted.
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
                   perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
-                  eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']))
+                  eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']),
+                  eff_cut=w.get('geo',{}).get('cut'), eff_thrust=w.get('geo',{}).get('thrust'))
               * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
               / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
     if h=='cut_thrust':
@@ -613,8 +614,9 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
         # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
-        _sel_eff_ct, _gap_ct = heads[h][0], heads[h][2]
-        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', _gap_ct, _sel_eff_ct,
+        _geo_ct = w.get('geo', {})
+        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h][2],
+                                 _geo_ct.get('cut'), _geo_ct.get('thrust'),
                                  core.thrust_authority(w['head_len']))[1]
     else:
         dm=core.HEAD_MODE.get(h, 'shear')
@@ -909,7 +911,17 @@ def attack_sigma(aggressor, commit, init, oob, fat_a, consistency_a, cfg):
 def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, defender, cfg):
     """The net σ the core resolves against: attack - defence - reach + armour-defeat + Vor-edge + attacker-bias +
     bilateral wound-Ob. Pure; the wrapper SEQUENCES the contributions, this owns the arithmetic. Mirror stays 50."""
-    return (atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']
+    # [ED-PC-0037] The flat `+ cfg['ATTACKER_BIAS']` (0.12 sigma on EVERY closed exchange) is GONE. It was untagged,
+    # unledgered fiat that DUPLICATED the initiative/Vor system — two independently-calibrated mechanisms for the same
+    # first-mover physics, the "every rule lives once" violation this repo forbids — and the 2026-06-28 critique
+    # (W-08/W-10) had already recommended removal. Its own mirror-fairness defence ("the aggressor role alternates")
+    # held only at fight aggregate: inside a burst (BURST_MAX=4) one fighter could hold the role for four consecutive
+    # exchanges and bank the full bias each time. Removal was DEFERRED from batch 3 to here deliberately, because it
+    # compounded with the deterministic first-actor monopoly — deleting it then would have been tuning against a moving
+    # target. With that monopoly fixed (arbitrary cadence phase + tempo_pressure) removal measures small and clean:
+    # mirrors hold at 0.50 and matchups move <=0.01, apart from katana/mace which were the biggest beneficiaries of
+    # banking the bias behind a tempo edge. First-mover advantage now lives ONLY in the Vor, where it is earned.
+    return (atk_sig - dsig - reach_pen + adef + init_edge
             + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds)
 
 def commit_depth(aggressor, defender, cfg, rng, TR):
@@ -1108,6 +1120,31 @@ def stophit_sigma(longer, shorter, measure_gap, cfg):
             + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
             + STOPHIT_RANGE_K*(range_avail-1.0)
             + true_time_edge(longer, shorter, cfg))
+
+def tempo_pressure(c, opp, cfg, TR):
+    """ANTICIPATION — how much sooner a fighter brings their next action to bear than raw weapon cadence implies.
+    Multiplies the per-beat readiness accumulation (the wrapper applies it). Pure.
+
+    [ED-PC-0037, F16] Who acts first was previously decided by weapon cadence ALONE, accumulated metronomically, so
+    the marginally faster weapon crossed ACT_THRESHOLD first every single time: a jian's +1.5% close-tempo edge over an
+    arming sword bought it a 2:1 action economy (679 vs 342 closed rolls / 150 fights), and cloning an arming sword to
+    step its mass 1.18 -> 1.20 kg flipped the win-rate 57% <-> 42% on a cadence delta of 0.0002. That is a weapon
+    STATISTIC deciding the fight's most important question.
+
+    It is the wrong question to answer with cadence, and equally wrong to answer with noise. In the fight this engine
+    models, who moves first is decided by the VOR and the READ — you begin as your opponent begins because you
+    anticipated them, and you keep the initiative because you took it. Both quantities are already first-class here:
+      • `initiative` — the Vor. It is not static: it decays per beat (init_hold_decay, tradition-held), drifts with
+        disposition, and is STOLEN on hits and in the bind (init_steal_factor). A fighter who has been dictating the
+        exchange gets to keep dictating it — earned, not owned.
+      • `reading` — cog/attention/experience. Anticipating the opponent's commitment is precisely what lets you act
+        into it rather than after it. (The feint is not a separate action here — WS-5 dissolved it into the attack's
+        commit-depth and legibility — so its influence arrives through the read, which is where it belongs.)
+    Floored at 0 so a badly out-read fighter stalls rather than accumulating backwards. Both K's [SIM-CALIBRATE]; the
+    structure — cadence proposes, the Vor and the read dispose — is the grounded part."""
+    return max(0.0, 1.0 + cfg['INIT_TEMPO_K']*(c.initiative - opp.initiative)
+                        + cfg['READ_TEMPO_K']*(reading(c, cfg)*TR.eff_cw(c, 'tempo')
+                                               - reading(opp, cfg)*TR.eff_cw(opp, 'tempo')))
 
 def pursuit_sigma(pursuer, withdrawer, fat_p, fat_w, cfg, TR):
     """The NACHREISEN pursuit net-sigma — the closer striking a reach weapon that is turning out of the bind to break

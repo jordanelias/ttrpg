@@ -87,6 +87,18 @@ CFG = dict(
   REACH_DECAY_K=0.35, REACH_THREAT_FLOOR=0.35,
   REPRESENT_DECAY_K=3.5, REPRESENT_FOOT_K=0.06,   # ED-PC-0033: represent_measure_p armour-fade — P(a reach weapon re-presents at open measure entering a fresh engagement) = exp(-DECAY_K·ADEF_W·armour_defeat_deficit)·footwork. DECAY_K steeper than reach_threat's REACH_DECAY (holding an armoured man off a whole engagement is harder than deterring one stop-hit); crowds a PURE POINT off plate while a gap-defeating reach weapon still presents. MEASURED at the shipped DECAY_K=3.5 vs heavy (ED-PC-0035 re-measure; the previous comment quoted ~0.16/~0.60/~0.36 from a pre-final draft and matched no live read): spear 0.077, yari 0.070, guisarme 0.236, poleaxe 0.494. FOOT_K small — armour dominates, Agility only nudges (0 for a stat mirror). [SIM-CALIBRATE]
   ADEF_THRESHOLD={'none':0.0,'light':0.30,'medium':0.45,'heavy':0.72},   # MONOTONE (ED-1050 resolved, Jordan 2026-06-30): the armour-defeat threshold RISES with armour — a gambeson (light) is soft/easily defeated, mail (medium) harder, plate (heavy) hardest. light 0.70->0.30 fixes the backwards inversion (light>medium) that systems.armor_defeat_sigma's docstring forbids; medium/heavy KEPT (calibrated). Re-swept in canon + re-exported to combat_config.gd (retiring the port's private [AUDIT-FIX], CLAUDE.md §6). [SIM-CALIBRATE] values within the grounded monotone frame; validated (mirror-50, light matchups sane).
+  # STRUCTURAL THRESHOLD SOFTENING (ED-PC-0037) — the two discontinuities the four-dimension audit found dominating
+  # the whole balance surface, making win-rate nearly a STEP FUNCTION of which side of a line a weapon fell on.
+  # INIT_TEMPO_K / READ_TEMPO_K: the ANTICIPATION half of "who acts first" (systems.tempo_pressure). Weapon cadence
+  #   alone used to decide it, metronomically and therefore deterministically. These make the Vor (initiative) and the
+  #   READ modulate how fast a fighter's next action comes to bear — you begin as your opponent begins because you
+  #   anticipated them, and you keep dictating because you took the Vor. Both 0 restores cadence-only behaviour.
+  #   Deliberately NOT noise: an unexplained random term would answer the right objection with the wrong mechanism.
+  # CLOSE_GAP_REF / CLOSE_LATCH_BAND: the engagement-start closed latch is a probabilistic ramp across REF +- BAND
+  #   instead of a hard step at REF (worth +9pp across 2 cm of reach). BAND 0 restores the step.
+  # All [SIM-CALIBRATE]; the STRUCTURE (a threshold should not be a cliff; cadence proposes, the Vor and read dispose)
+  # is the grounded part.
+  INIT_TEMPO_K=0.30, READ_TEMPO_K=0.05, CLOSE_GAP_REF=0.3, CLOSE_LATCH_BAND=0.3,
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0, ARREST_K=0.12, ARREST_REACH_FLOOR=5.0,   # ARREST_K/ARREST_REACH_FLOOR (ED-PC-0029): a LANDED stop-thrust checks the closer's advance by the braced-weapon IMPULSE it transmits (systems.arrest_impulse = K·(reach−FLOOR)·braceability), netted against close_rate. This is an ARREST, not a wound — a braced point halts a charge whether or not it penetrates (boar-spear lugs: penetration≠arrest), so it reads reach+structure, never damage (a fable audit retired the earlier recoil=K·d, which crowned big cutters and stranded the staff). FLOOR (~arm+dagger length) zeroes a dagger's arrest — nothing to brace against a charge at grappling distance. Armour enters ONCE, via reach_threat in the stop-hit's landing prob. Grounded in HEMA Nachreisen. [SIM-CALIBRATE]
   # tempo
   BASE_TEMPO=2.0, TEMPO_RECOVER_K=0.4, TEMPO_RECOVER_SHAPE=0.35, AGI_TEMPO_K=0.03, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, ACT_THRESHOLD=2.5, BURST_MAX=4,   # SPEED_K RETIRED, replaced by TEMPO_RECOVER_K/_SHAPE (morphology-rearch Phase B6 correction, 2026-07-02): scales systems._recovery_mode_commitment's grip-aware balance-recovery delta from the anchor (tanh-saturating — the raw commitment spans ~0.2 to ~68 across the roster), replacing the retired per-weapon `spd` scalar. [SIM-CALIBRATE] both. AGI_TEMPO_K: athleticism adds a little cadence (Jordan 2026-06-04, centred at agi 4; 0.03 = modest). BURST_MAX: per-TURN burst ceiling 1-~4
@@ -195,18 +207,8 @@ CFG = dict(
   # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
   # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
   # the aggressor role alternates over a fight. Added to net_sigma.
-  ATTACKER_BIAS=0.12,   # [FIAT — designer-set, UNGROUNDED; flagged ED-PC-0036, REMOVAL DEFERRED TO THE FIRST-ACTOR FIX]
-  # A flat +0.12σ added to EVERY closed exchange in assemble_net_sigma. It carried no provenance tag and no ED until
-  # now. Two problems, both real: (1) it DUPLICATES the initiative/Vor system — two independently-calibrated
-  # mechanisms for the same first-mover physics, which is precisely the 'every rule lives once' violation the repo
-  # forbids; (2) its own mirror-fairness justification ('the aggressor role alternates') holds only at FIGHT
-  # AGGREGATE — within a burst (BURST_MAX=4) one fighter can hold the aggressor role for up to four consecutive
-  # exchanges, each carrying the full +0.12. The 2026-06-28 combat critique (W-08/W-10) reached the same conclusion
-  # and recommended removal; it was never actioned. DELIBERATELY NOT REMOVED HERE: the four-dimension audit showed
-  # this constant COMPOUNDS with the deterministic first-actor race (a marginally faster weapon is strictly first in
-  # every burst and banks the bias every time), so deleting it in isolation would be tuning against a moving target.
-  # It is retired together with that structural fix, where the interaction can be measured once. See the audit index.
-
+  # ED-PC-0037: ATTACKER_BIAS REMOVED (see systems.assemble_net_sigma). Untagged fiat duplicating the Vor;
+  # retired together with the first-actor monopoly it compounded with, per the batch-3 deferral.
   # single-time counter (a tier of the unified counter): UNIVERSAL but skill-gated. SELECTION is tempo-driven (how
   # often a fighter reaches for it); SUCCESS scales with training (history)+reflex — the untrained single-time counter
   # is a desperate-idiot move that mostly fails and is punished (eats the attack undefended, cedes the seized Vor).

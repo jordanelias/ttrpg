@@ -5,7 +5,7 @@ audit's own adversarial review of the first remediation batch made the point sha
 state-carryover bugs in two days (ED-PC-0033 grip_position, ED-PC-0034 sel_head) and nothing in the suite pinned
 against a third. These are those pins.
 
-Full account: audit/2026-07-24-combat-four-dimension-audit/ (index + infill). EDs: ED-PC-0034, ED-PC-0035.
+Full account: audit/2026-07-24-combat-four-dimension-audit/ (index + infill). EDs: ED-PC-0034, ED-PC-0035, ED-PC-0036, ED-PC-0037.
 """
 import os
 import sys
@@ -57,16 +57,22 @@ def test_represent_measure_p_is_path_independent(weapon, armor):
 
 
 def test_represent_gate_reads_the_point_not_the_cut():
-    """ED-PC-0035 (adversarial review of batch 1). The gate's whole fiction is whether a closing opponent still
+    """ED-PC-0036 (adversarial review of batch 1). The gate's whole fiction is whether a closing opponent still
     RESPECTS THE POINT, so it must grade the mode the weapon would actually present at the opening measure. The first
     revision pinned room=1.0 — a geometry the engine never occupies here (its real beat-1 room is
     range_utilization(gap) ~ 0.48 at this gap) — which made select_mode grade the guisarme's BILL-CUT instead of its
     point and cost the matchup ~4pp. Pin the honest geometry."""
     a = Combatant('A', weapon='guisarme', armor='medium')
+    b = Combatant('B', weapon='arming', armor='medium')
     room = S.range_utilization(a, 1.67, CFG)
     assert room < 1.0, "the opening room at a realistic gap must not be the counterfactual 1.0"
     head = S.select_mode(a, 'medium', False, CFG, measure_gap=1.67, grip=0.0, room=room)[1]
     assert head == 'point', f"the guisarme should present its POINT at open measure, not {head!r}"
+    # [ED-PC-0037] The batch-3 review noted this pin never CALLED the gate, so reverting the room correction passed it.
+    # Pin the gate's own output: at the honest opening room the guisarme is respected (it presents a point it can press
+    # into mail), which the counterfactual room=1.0 destroyed by grading its bill-cut instead.
+    assert S.represent_measure_p(a, b, CFG, TR, measure_gap=1.67) > 0.5, (
+        "the guisarme should not be crowded off measure at mail when it presents its point")
 
 
 @pytest.mark.parametrize('tradition', ['english', 'german', 'italian', 'spanish', 'japanese', 'none'])
@@ -106,7 +112,7 @@ def test_grab_hazard_never_rewards_a_trained_grappler():
     ('FACING_REGIME_K', ('longsword', 'arming')),
 ])
 def test_each_morphology_lever_is_individually_live(lever, weapons):
-    """ED-PC-0035 (adversarial review of batch 1). `test_levers_add_texture_without_shifting_balance` measures the
+    """ED-PC-0036 (adversarial review of batch 1). `test_levers_add_texture_without_shifting_balance` measures the
     UNION of the five morphology levers, and the review proved that union can pass while four of the five are dead:
     with only LEGIB_EDGELINE_K alive the metric still read ~10% (over the 5% floor), whereas BIND_SPINE_K alone read
     0.5%, CHOKE_ACCURACY_K 0%, FACING_REGIME_K 0-0.5%, GRAB_EDGE_K 2-2.5%. The pinned matchups structurally cannot
@@ -141,7 +147,7 @@ def test_each_morphology_lever_is_individually_live(lever, weapons):
 @pytest.mark.parametrize('weapon', [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust'])
 @pytest.mark.parametrize('armor', ['none', 'light', 'medium', 'heavy'])
 def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
-    """ED-PC-0035 (F12). `coupling` resolves a cut-and-thrust weapon as max(cut arm, half-sword thrust arm), and
+    """ED-PC-0036 (F12). `coupling` resolves a cut-and-thrust weapon as max(cut arm, half-sword thrust arm), and
     `select_mode` reports the damage-mode that legibility scores (thrust reads HARD 0.80, swing EASY 1.25). Those two
     were decided INDEPENDENTLY and contradicted each other: the thrust arm won at every tier — the pre-max blended
     DELIVERY['cut_thrust']=1.35 could never beat point's 1.45, since shear-resist >= puncture-resist everywhere — so a
@@ -155,30 +161,39 @@ def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
     dm, head, gap, perc, pc, eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
     if head != 'cut_thrust':
         pytest.skip(f"{weapon} selects {head!r} at {armor}, not the versatile head")
-    _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, eff,
+    _geo = c.w.get('geo', {})
+    _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, _geo.get('cut'), _geo.get('thrust'),
                                        core.thrust_authority(c.w['head_len']))
     assert dm == mode, (f"{weapon}@{armor}: select_mode reports {dm!r} but coupling pays the {mode!r} arm — "
                         f"the damage path and the read contest disagree about what the fighter did")
 
 
 def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():
-    """ED-PC-0035 (F12). The whole point of the versatile head is an ARMOUR-CONDITIONAL shift. If one arm wins in every
+    """ED-PC-0036 (F12). The whole point of the versatile head is an ARMOUR-CONDITIONAL shift. If one arm wins in every
     cell, the max() is decorative and the shift is a constant ordering wearing physics' clothes — which is exactly what
     the audit found. Pin that BOTH arms win somewhere across the tier range for a well-edged sword."""
     c = Combatant('X', weapon='arming')
     modes = set()
     for armor in ('none', 'light', 'medium', 'heavy'):
         dm, head, gap, perc, pc, eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
-        modes.add(core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, eff,
+        _geo = c.w.get('geo', {})
+        modes.add(core.cut_thrust_arm(core.TIER2MAT[armor], 'full', gap, _geo.get('cut'), _geo.get('thrust'),
                                       core.thrust_authority(c.w['head_len']))[1])
     assert modes == {'shear', 'puncture'}, (
         f"the cut/thrust contest resolved to {modes} across all four armour tiers — one arm is structurally dead")
 
 
 def test_cut_thrust_coupling_respects_weapon_quality():
-    """ED-PC-0035 (F12). The versatile branch IGNORED its `eff` argument, so coupling('cut_thrust', ...) returned an
+    """ED-PC-0036 (F12). The versatile branch IGNORED its `eff` argument, so coupling('cut_thrust', ...) returned an
     identical value whether the weapon's derived edge/point quality was 0.1 or 0.9 — silently discarding the graded
     quality of all 19 cut_thrust weapons (sel_eff spans 0.63-1.14) and making near-identical swords read identically."""
-    poor = core.coupling('cut_thrust', 'none', eff=0.1)
-    good = core.coupling('cut_thrust', 'none', eff=0.9)
-    assert poor < good, f"weapon quality is inert on the cut_thrust path (eff 0.1 -> {poor}, eff 0.9 -> {good})"
+    poor = core.coupling('cut_thrust', 'none', eff_cut=0.1, eff_thrust=0.1)
+    good = core.coupling('cut_thrust', 'none', eff_cut=0.9, eff_thrust=0.9)
+    assert poor < good, f"weapon quality is inert on the cut_thrust path ({poor} vs {good})"
+    # [ED-PC-0037] Each arm must read its OWN magnitude, not a blended max: a weapon with a fine point and an
+    # incidental edge (ranseur: cut 0.30, thrust 0.84) must NOT be paid a dedicated cutter's edge because its thrust
+    # rode through a max(). That mis-crediting is the ED-PC-0011 defect class, and it shipped for one batch.
+    keen_edge = core.coupling('cut_thrust', 'none', eff_cut=0.9, eff_thrust=0.1)
+    keen_point = core.coupling('cut_thrust', 'none', eff_cut=0.1, eff_thrust=0.9)
+    assert keen_edge != pytest.approx(keen_point, abs=1e-9), (
+        "the two arms are being scaled by the same blended quality — a fine point would pay for a poor edge")
