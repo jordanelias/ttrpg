@@ -5,7 +5,7 @@ import math
 from dataclasses import dataclass
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
 def arrowhead_cells(tier):
     cells = []
@@ -315,54 +315,23 @@ def support_engage_frac(atom, contact_abs_cells):
     effective_engaged = len(contact_orig) + supporter_total
     return min(1.0, effective_engaged / max_w)
 
-# ─── F-iii: FACING HELPERS ───────────────────────────────────────────────────
-
-def _cell_facing_key(atom, orig_r, orig_c):
-    return (id(atom), orig_r, orig_c)
-
-def _rotate_defender_facing(defender_atom, defender_abs_cells, attacker_abs_cells,
-                             dynamic_facings):
-    """Rotate engaged defender cells toward attacker (Rule A: full pivot).
-    [canonical: Jordan handoff §(3a)]"""
-    if not attacker_abs_cells or not defender_abs_cells:
-        return
-    att_r = sum(c[0] for c in attacker_abs_cells) / len(attacker_abs_cells)
-    att_c = sum(c[1] for c in attacker_abs_cells) / len(attacker_abs_cells)
-    amap = _oriented_abs_map(defender_atom)
-    for abs_r, abs_c in defender_abs_cells:
-        oc = amap.get((abs_r, abs_c))
-        if oc is None:
-            continue
-        orig_r, orig_c = oc
-        dr = att_r - abs_r
-        dc = att_c - abs_c
-        mag = max(1e-9, (dr*dr + dc*dc)**0.5)  # [canonical: epsilon: float magnitude guard]
-        dynamic_facings[_cell_facing_key(defender_atom, orig_r, orig_c)] = \
-            (round(dr / mag), round(dc / mag))
-
-def _init_dynamic_facings(unit_a, unit_b):
-    df = {}
-    for u in [unit_a, unit_b]:
-        for atom in u.subunits:
-            op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
-            for orig_r, orig_c, _, _ in op:
-                df[_cell_facing_key(atom, orig_r, orig_c)] = cell_facing(atom.advance_dir)
-    return df
-
-def _atom_avg_facing(atom, contact_abs_cells, dynamic_facings):
-    """Compute average facing for an atom's contact cells from dynamic_facings."""
-    amap = _oriented_abs_map(atom)
-    facings = []
-    for abs_r, abs_c in contact_abs_cells:
-        oc = amap.get((abs_r, abs_c))
-        if oc is None:
-            continue
-        key = _cell_facing_key(atom, oc[0], oc[1])
-        facings.append(dynamic_facings.get(key, cell_facing(atom.advance_dir)))
-    if not facings:
-        return cell_facing(atom.advance_dir)
-    return (sum(f[0] for f in facings) / len(facings),
-            sum(f[1] for f in facings) / len(facings))
+# ─── F-iii: FACING HELPERS — RETIRED (ED-MB-0041 Tier-2) ─────────────────────
+#
+# `_cell_facing_key` / `_rotate_defender_facing` / `_init_dynamic_facings` / `_atom_avg_facing`
+# and the `dynamic_facings` dict they operated on are DELETED. They were a **write-only** parallel
+# facing store: `run_battle` built the dict, passed it into `resolve_engagements` (which never read
+# it), and `_rotate_defender_facing` wrote rotations into it after each sub-phase. Its only reader,
+# `_atom_avg_facing`, had ZERO call sites anywhere in the corpus.
+#
+# The concept it encoded — "an engaged defender's cells pivot to face their attacker" — is LIVE and
+# strictly better implemented by `Subunit.cell_facing_vec` (`hierarchy/units.py`): PC_FACING_ATTENTION
+# turns each cell toward the committed target, `_slew_facing` gates the turn rate by Discipline
+# (no instant full pivot), PC_FACING_ROUT flips a routed body's facing, and `get_cell_facing` is what
+# `_octagon_cell_mods` / `_cell_facing_for_box` actually read. `dynamic_facings` was the superseded
+# duplicate, not the mechanism.
+#
+# Deletion is behaviour-preserving by construction (nothing read the dict), so the byte-exact goldens
+# are unchanged. Per the audit's Tier-2 rule: wire or delete, no third option.
 
 # ─── PER-CELL SPEED ──────────────────────────────────────────────────────────
 

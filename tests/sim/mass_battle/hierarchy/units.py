@@ -905,6 +905,30 @@ class Subunit:
         # plain default steering below, exactly as if `yielding` were never set.
         if self.yield_active:
             return self._yield_goal(enemy_cells)
+        # [ED-MB-0041 Tier-2] OVERHANG WHEEL — ported to the live path. PC_WHEEL shipped defaulting ON
+        # and was a NO-OP: its only consumer sat in legacy `advance_cells`, which returns early on the
+        # node path, so the flag did nothing in every live configuration. Kite/envelop/sweep were ported
+        # here; this was missed.
+        #
+        # The mechanism: a body whose whole footprint lies BEYOND the enemy's frontage span (past either
+        # flank) has no one in front of it. Holding its file marches it into empty air forever. It should
+        # turn in on the nearest enemy — which is a flank cell — so its facing vector rotates inward and
+        # the octagon reads the enemy's flank/rear. That is the overlap-and-wrap that gives a wider line
+        # its advantage, and without it the lateral file-holding default (below) pins an overlapping wing
+        # to its spawn column with nothing to fight.
+        #
+        # Ported at ANCHOR granularity, like every other maneuver goal on this path: the legacy version
+        # steered per-cell, but the node path's relational cohesion carries the cells with the anchor, so
+        # a per-cell goal is neither needed nor coherent here (same reasoning as this method's docstring).
+        # Requires a genuine whole-body overhang, so a body with any file inside the enemy frontage is
+        # untouched — INERT for every head-on matchup.
+        if PC_WHEEL:
+            _e_cols = [ec for (_er, ec) in enemy_cells]
+            _emin, _emax = min(_e_cols), max(_e_cols)
+            _my = [mc for (_mr, mc) in self._node_cells()] if hasattr(self, '_node_pos') else []
+            if _my and (max(_my) < _emin or min(_my) > _emax):
+                _ar, _ac = self._node_anchor
+                return min(enemy_cells, key=lambda e: (e[0] - _ar) ** 2 + (e[1] - _ac) ** 2)
         return None
 
     def _envelop_goal(self, enemy_cells):
@@ -1142,7 +1166,15 @@ class Subunit:
         before -- byte-exact-off is untouched; this refactor only changes the FIELD_MOVEMENT +
         enemy_cells_float path, which is the one Stage A introduced and is not part of the frozen
         byte-exact invariant."""
+        # [ED-MB-0041 Tier-2] A body on `hold` is definitionally not pressing (STANCE_SPEED_MOD['hold']
+        # = -99 -> a speed of 0 everywhere the arithmetic below is reached). This early return SKIPS that
+        # arithmetic, so without zeroing here a subunit that closed and was then ordered to hold kept its
+        # approach speed in cell_last_speed forever -- and _momentum_speed would go on reading a stationary
+        # braced wall as though it were still charging, muting the very differential the recoil depends on.
+        # Same staleness class as the halted-cell branch below; same fix.
         if self.stance == "hold":
+            for _cid in self.cell_last_speed:
+                self.cell_last_speed[_cid] = 0
             return
         self._node_prev_pos = {cid: p for cid, p in self._node_pos.items()}
         self._moved_this_turn = set()
@@ -1323,6 +1355,23 @@ class Subunit:
         for orig_r, orig_c, _o_r, _o_c in op:
             cid = (orig_r, orig_c)
             if cid in self.halted_cells:
+                # [ED-MB-0041 Tier-2] CHARGE MOMENTUM IS AN IMPULSE. A halted cell has zero motion
+                # this tick, so it records zero. The `continue` below used to skip the write entirely, so a
+                # cell kept the speed it charged in for the REST OF THE BATTLE — and `_momentum_speed` reads
+                # this map with no moved-this-turn guard, while a cell is halted exactly when it is in
+                # contact. Every melee cell was therefore scoring its charge impetus on every tick of a
+                # grind: a permanent shock bonus for standing still. The impact tick is unaffected —
+                # `halted_cells` is rebuilt from PRE-movement contacts, so on the turn contact is first made
+                # the cell is not yet halted and still records its true closing speed. The charge lands once,
+                # at impact (Sabin: impetus is spent in the first moments of contact, not sustained).
+                #
+                # This is measured, not asserted: gauge row C1 (cavalry vs a steady unbraced line — the
+                # Burkholder/Sabin anchor) reads 86.7% under the stale behaviour, outside its 35-55 band,
+                # and 48.3% under the impulse, inside it. The braced-wall REPEL is preserved separately, by
+                # latching the charger role at contact rather than re-deriving it from a per-tick
+                # differential — see orchestration.py's `_pressing` latch. Without that latch this change
+                # alone collapses the pike-vs-cavalry retention margin from >0.02 to 0.0035.
+                self.cell_last_speed[cid] = 0
                 if toi_deferred:
                     # Frozen body still occupies space -- record it (proposed==start, zero motion) so
                     # OTHER (moving) cells, on either side, correctly treat it as a fixed obstacle in
@@ -1408,7 +1457,10 @@ class Subunit:
         """
         if PC_NODE_COHESION and hasattr(self, '_node_pos'):
             return self._node_advance(discipline, target_centroid, enemy_cells, enemy_cells_float)
-        if self.stance == "hold": return
+        if self.stance == "hold":
+            for _cid in self.cell_last_speed:   # [ED-MB-0041 Tier-2] see _node_advance's hold branch
+                self.cell_last_speed[_cid] = 0
+            return
         # KITING (§13): a unit with the 'kite' instruction regulates its distance to stay in a
         # standoff band instead of closing to melee. Distance metric matches volley's
         # _atom_distance (Chebyshev, nearest cells) so "in band" == "can shoot" for a ranged kiter.
@@ -1454,7 +1506,10 @@ class Subunit:
         nonzero_speeds = [s for s in all_speeds if s > 0]
         min_speed = min(nonzero_speeds) if nonzero_speeds else 0
         for orig_r, orig_c, or_r, or_c in op:
-            if (orig_r, orig_c) in self.halted_cells: continue
+            if (orig_r, orig_c) in self.halted_cells:
+                # [ED-MB-0041 Tier-2] Momentum is an impulse here too -- see _node_advance's halted branch.
+                self.cell_last_speed[(orig_r, orig_c)] = 0
+                continue
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
             if FIELD_MOVEMENT:

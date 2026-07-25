@@ -62,7 +62,19 @@ except ImportError:
 # fragments. The `(?<![\w.])`/`(?![\w.])` guards keep us off identifiers (`v18`) and
 # dotted runs.
 _MECHANICAL_NUMERIC_PATTERN = re.compile(r'(?<![\w.])(\d+(?:\.\d+)?)(?![\w.])')
-_CANONICAL_COMMENT_PATTERN = re.compile(r'#\s*\[canonical:\s*[^\]]+\]')
+# [ED-MB-0041] Accept the HONEST provenance vocabulary, not only `[canonical: ...]`.
+# The old pattern recognised exactly one marker, so the only way to satisfy this gate was to call a
+# value "canonical" — including values that are fitted, inherited, or deliberately unlike canon. That
+# incentive is a direct cause of the false `[canonical: ...]` tags this audit found. The gate now also
+# accepts, with identical force:
+#   [GROUNDED: ...]            magnitude traces to evidence outside the engine
+#   [JUSTIFIED: ...]           mechanism sourced, magnitude fitted/inherited (the honest default)
+#   [DECLARED-DIVERGENCE: ...] deliberately unlike canon, with the reason (Jordan 2026-07-24: breaking
+#                              canon for balance/tuning is permitted — it must simply be visible)
+#   [CALIBRATED-DEBT: ...]     pre-existing honest self-label already used in the engine
+# Labelling a value honestly must never be harder than mislabelling it.
+_CANONICAL_COMMENT_PATTERN = re.compile(
+    r'#\s*\[(?:canonical|GROUNDED|JUSTIFIED|DECLARED-DIVERGENCE|CALIBRATED-DEBT):\s*[^\]]+\]')
 # Associates a numeric literal with its assignment target / keyword-arg name, so a
 # constant can be matched against the ledger by (variable, value) rather than value
 # alone — `CFG = dict(adef=1.7)` associates `1.7` with `adef`.

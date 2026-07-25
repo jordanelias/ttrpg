@@ -489,3 +489,46 @@ geometry frame (B1+B2+B3) + B5 + the box-brace primitive + the gauge C-row resca
 net-positive set — no piecemeal geometry commit reaches net-positive.** Next increment: apply
 `frame_step1_B1_B3.patch`, then build B2 (col_grid live), B5 (arc zone), the box-brace primitive, and the
 gauge C-row rescale together; measure the full 20-row gauge; re-record 4 goldens; land as ED-MB-0034.
+
+### 2026-07-25 — ED-MB-0041 Tier-2 executed (dead machinery wired or deleted); gauge multi 5/20 → 10/20
+
+**Shipped.** Seven Tier-2 items from `audit/2026-07-22-mass-battle-stress-test/adversarial_deep_audit_v1.md`
+§4, all with regression tests verified to FAIL against the pre-fix code:
+
+| item | verdict |
+|---|---|
+| `dynamic_facings` | **deleted** — write-only parallel facing store, zero readers; `cell_facing_vec` supersedes it |
+| `_front_fixers` | **hoisted to full-tick scope** — was per cascade group, so the Cannae fixing-force never fired |
+| `cell_last_speed` | **impulse + charger-role latch** — halted/`hold` cells record 0; the braced-wall repel now latches the charger role at impact instead of re-deriving it from a per-tick differential |
+| `col_grid` | **rebuilt from live cells** — membership was frozen at spawn, so fatigue and depth-absorption both returned 0.0 for any moved body |
+| rout triggers | **aligned on the tick clock** — the annihilation trigger lagged up to 5 ticks behind morale collapse |
+| `PC_WHEEL` | **ported to `_node_advance`** — shipped ON, was a no-op; this fixed H6's 0.0/0.0-casualty broken instrument |
+| `yielding` | **cleared at the battle boundary** — the one DG-2 transient the reset missed |
+
+Plus **24 dangling `sim_verification_ledger.json` citations retagged `CALIBRATED-DEBT`** (Tier-0.1 deleted
+that file; the tags still pointed at it as `canonical:`). Goldens re-recorded, both grid modes.
+
+**Correction carried in the record:** I first wrote the momentum item up as a Tier-3 punt, believing the
+impulse cost gauge row C1. Bisecting a clean pre-Tier-2 tree showed C1 was **already 86.7%** at baseline and
+the impulse brings it to **48.3%, in band**. The audit doc §7.1 and the coverage-matrix entry both carry the
+correction rather than the original claim.
+
+**Gauge (multi) 10/20.** In band: H1 H2 H3 H7 H8 H11 C1 C3 C5 C7. Out: H4 H5 H6 H9 H10 R1 R3 C2 C4 C6.
+
+### Next actions (MB)
+
+1. **Reverse-row asymmetry.** H3 (Envelopment vs Line) 61.0 and its reverse H10 76.7 are the same physical
+   matchup with the armies swapped between slots; complementary bands mean they should sum to ~100 and they
+   sum to ~138. H2/H9 sum to 114. The mirrors are clean (H1 50.0, C3 50.8), so this is matchup-specific, not
+   a uniform slot bias. Undiagnosed — this is the largest single cluster of remaining failures (4 rows).
+2. **H5/H6 RefusedFlank = 100%.** Newly *live* rather than newly broken (H6 previously produced literally
+   zero casualties across 60/60 seeds). Direction is historically right — the oblique order is supposed to
+   win — but 100% is not. Check whether the ported overhang wheel is too permissive for a wing that is
+   deployed wide of the enemy frontage by construction.
+3. **C2/C6 still NOT-REPELLED (95.0 / 96.7 rawA, band 0-30).** The latch removed the *timing* problem;
+   what remains is magnitude — `PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2` against `_wall_prep`. Already on
+   the Tier-3 list for Jordan.
+4. **Tier-3 list** (`adversarial_deep_audit_v1.md` §4) is otherwise untouched and needs Jordan: depth
+   support-stack cap, envelopment-as-morale-collapse, graded cavalry charge refusal, the Biddle σ-ceiling,
+   the rout band + `PC_STOCHASTIC_ROUT` default, the `YIELD_POOL_MULT` split, and the missing
+   disengage-and-recharge cycle (new, §7.1).

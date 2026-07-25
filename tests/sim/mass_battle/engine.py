@@ -353,7 +353,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
 
 
 def build_envelopment(center_specs, wing_specs, name, faction, *,
-                       release_tick=4,  # [canonical: sim_verification_ledger.json — CALIBRATED, mirrors Stage C.4's acceptance-test hold duration, not independently historically cited]
+                       release_tick=4,  # [CALIBRATED-DEBT: mirrors Stage C.4's acceptance-test hold duration — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
                        power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
                        speed='Standard', freeze_wings=False):
     """[Stage D, ED-909] Unit-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
@@ -450,7 +450,13 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
 
 
 def build_refused_flank(strong_specs, refused_specs, name, faction, *,
-                         refuse_range=3,  # [canonical: sim_verification_ledger.json — CALIBRATED, reuses the existing PC_PIN_REACH adjacency-scale convention, not independently historically cited]
+                         refuse_range=10,  # [ED-MB-0041 FIX] was 3 and NEVER FIRED. check_orders measures the
+                         # subunit CENTROID to the nearest enemy cell; a refused wing's measured minimum
+                         # approach in the live deployment is ~9.5, so 'enemy_range:3' was geometrically
+                         # unsatisfiable and the refused wing held for the entire battle in EVERY caller
+                         # (none overrides the default). 10 is the smallest value that actually triggers.
+                         # [JUSTIFIED: magnitude set by direct measurement of the trigger geometry; the
+                         # old tag cited a sim_verification_ledger.json row that does not exist.]
                          power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
                          speed='Standard'):
     """[Stage D, ED-909] Unit-level 'Refused Flank' allocation-grid preset (Leuctra 371 BC /

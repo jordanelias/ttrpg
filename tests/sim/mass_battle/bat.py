@@ -68,9 +68,9 @@ def _envelop_army(name, faction, **kw):
     anchor = ANCHOR_MAP[('Line', TIER)]
     tt = kw.pop('troop_type', 'infantry')
     center = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor)}]
-    # wing offset: [canonical: sim_verification_ledger.json — CALIBRATED, battery deployment spacing, not historically cited]
-    wings = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 6)},  # [canonical: sim_verification_ledger.json — CALIBRATED, battery deployment spacing, not historically cited]
-             {'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 6)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, battery deployment spacing, not historically cited]
+    # wing offset: [CALIBRATED-DEBT: battery deployment spacing — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+    wings = [{'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor - 6)},  # [CALIBRATED-DEBT: battery deployment spacing — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+             {'shape': 'Line', 'tier': TIER, 'troop_type': tt, 'starting_position': (start_row, anchor + 6)}]  # [CALIBRATED-DEBT: battery deployment spacing — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
     return build_envelopment(center, wings, name, faction,
                               power=kw.pop('power', 4), command=kw.pop('command', 4),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                               discipline=kw.pop('discipline', 5), morale=kw.pop('morale', 6),  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
@@ -193,7 +193,20 @@ EXPECTED = {
     # modes move on the 3 flanking rows (envelop/cannae/oblique). The head-on single-subunit rows stay
     # all-GREEN -> mult 1.0 -> byte-identical. Legacy PC_OCTAGON_DMG=0 path preserved byte-exact
     # (`_a_dmg_mult=1` int, not 1.0 -> no float coercion). See octagon_damage_model.md.
-    'unit': '4c465e09fff139bb7301b7d553d3351a14953fe02ab4505600d60f8281e322e6',
+    # [2026-07-24, ED-MB-0041 adversarial-audit remediation] Re-recorded (both grid modes). Two
+    # deliberate, verified behaviour changes in shared non-gated resolution code:
+    #  (1) _convergence_scale's `merged_base` is now EXTENSIVE (sum) not a troop-weighted MEAN. The
+    #      mean-vs-sum mismatch gave `factor == 1/N` exactly, so N bodies converging on one target
+    #      dealt the damage of ONE — on precisely Cannae/double-envelopment geometry. Pinned by
+    #      tests/valoria/test_partition_invariance.py (verified to FAIL on the old form).
+    #  (2) The volley armour inversion is fixed: `volley_hp_scale` no longer reads the target's own
+    #      min(discipline,command)+dr (better armour STRICTLY INCREASED that unit's own missile
+    #      casualties), and the target's real eff_dr now subtracts from volley net successes instead
+    #      of a global RANGED_DR_DEFAULT. Pinned by tests/valoria/test_volley_armour_direction.py
+    #      (verified to FAIL on the old form). Measured: casualties at dr 0/1/3 = 514.6/281.8/49.8,
+    #      i.e. armour is now monotonically protective; it was previously harmful.
+    # [2026-07-25, ED-MB-0041 Tier-2 — see the 'cell' note below] re-recorded (impulse momentum).
+    'unit': '0065095792357ba4bcfca269e48822b2f5a835dc620c9c25822e689db07094ea',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -213,7 +226,17 @@ EXPECTED = {
     # gated (cavalry rows). 'unit' (PER_CELL=0) is deployment-only — the cavalry-speed change doesn't
     # reach it — so 'unit' is unchanged from the deployment-only recording.]
     # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
-    'cell': 'e5f094033b8a8cea23f92bffd5f513a62ad03ae04861b1975e71efcd35616387',
+    # [2026-07-25, ED-MB-0041 Tier-2] re-recorded. BOTH grid modes moved, from two separate changes:
+    # (a) momentum is now an IMPULSE — a halted cell (and a body on `hold`) records 0 rather than keeping
+    # the speed it charged in, so the puncture/charge-shock differential no longer fires every tick of a
+    # grind; the braced-wall repel is preserved by latching the charger role at impact instead. This
+    # reaches BOTH modes. (b) the col_grid rebuild (live membership + per-column depth feeding
+    # _fatigue_sigma/_defender_depth for a body that has moved off its spawn columns) reaches 'cell' only,
+    # since the column view exists only under PER_CELL. The remaining Tier-2 changes are inert in this
+    # pinned grid config by construction: the dynamic_facings deletion was write-only, the front-fixer
+    # hoist only differs when the cascade produces >1 group (it never does — audit §5.4), and PC_WHEEL's
+    # port is gated on the node path (PC_NODE_COHESION=0 here).
+    'cell': 'f5b445f09a1898bcb058a87b278ee08d54075ed4400928e7e2c845cd04a595eb',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).

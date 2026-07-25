@@ -68,7 +68,7 @@ _RB = _cfg.SIDE_B_START_ROW  # [canonical: config.py SIDE_B_START_ROW]
 _ENVELOP_CENTER_B = [{'shape': 'Line', 'starting_position': (_RB, 9)}]
 _ENVELOP_WINGS_B = [{'shape': 'Line', 'starting_position': (_RB, 3)}, {'shape': 'Line', 'starting_position': (_RB, 15)}]
 _REFUSED_STRONG = [{'shape': 'Line', 'starting_position': (_R, 5)}]
-_REFUSED_REFUSED = [{'shape': 'Line', 'starting_position': (_R, 13)}]  # [canonical: sim_verification_ledger.json — CALIBRATED, workbench deployment spacing, not historically cited]
+_REFUSED_REFUSED = [{'shape': 'Line', 'starting_position': (_R, 13)}]  # [CALIBRATED-DEBT: workbench deployment spacing — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 
 PRESETS = [
     {'id': 'H1', 'label': 'Line vs Line (mirror)', 'a': {'shape': 'Line'}, 'b': {'shape': 'Line'}},
