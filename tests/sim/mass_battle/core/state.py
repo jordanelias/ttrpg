@@ -135,6 +135,11 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             # half of the loop existed, was tested, and never ran in a battle. The phase-1 gauge
             # measurement was therefore of aggregate-up ONLY. Wired here.
             if atom.cell_morale:
+                # [phase 2b] Local break-points FIRST: a cell gives way at its own casualty fraction,
+                # before contagion spreads from it and before cohesion tries to close it. Without this
+                # the only thing that ever broke a cell was the body-wide rout punch, i.e. strictly
+                # after the body had already gone -- measured, see check_cell_breaks.
+                atom.check_cell_breaks()
                 atom.propagate_cell_breaks()
                 atom.cohere_cells()
                 # A subunit whose broken cells hold a decisive share of its men has come apart as a

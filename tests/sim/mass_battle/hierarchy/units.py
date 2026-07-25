@@ -6,6 +6,7 @@ troop_types.registry (stats_for), percell (build_column_grid) — and never impo
 (no cycle). Re-imported by orchestration via star-import so every Subunit(...)/Unit(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
 import math
+import random as _cell_random
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
 from mass_battle.config import *
@@ -385,6 +386,9 @@ class Subunit:
     # to have worse morale than another cell in same subunit"). EMPTY until seeded, and empty means the
     # scalar path below is used verbatim -- so an unseeded subunit is byte-exact.
     cell_morale: Dict[Tuple[int, int], float] = field(default_factory=dict)
+    # [ED-MB-0041 phase 2b] Per-cell strength at seed time + each cell's OWN drawn break-point.
+    cell_start_troops: Dict[Tuple[int, int], float] = field(default_factory=dict)
+    cell_breakpoint: Dict[Tuple[int, int], float] = field(default_factory=dict)
     # v13: position snapshot at start of advance_cells, used to revert on
     # discipline-pass collision (cell returns to its formation slot).
     # [canonical: Jordan design 2026-05-12 — discipline-gated formation hold]
@@ -612,6 +616,8 @@ class Subunit:
         """
         m = self.eff_morale
         self.cell_morale = {cid: float(m) for cid in self.cell_troops}
+        self.cell_start_troops = dict(self.cell_troops)
+        self.cell_breakpoint = {}
 
     def erode_cell_morale(self, cid, amount):
         """Local morale loss on one cell. No floor — rout is a <=0 threshold, matching erode_morale."""
@@ -1775,6 +1781,46 @@ class Subunit:
                 self.cell_facing_vec[(orig_r, orig_c)] = _desired
             # v13: mark cell as having moved this turn (for cross-side contention)
             self._moved_this_turn.add((orig_r, orig_c))
+
+    def check_cell_breaks(self):
+        """[ED-MB-0041 phase 2b] A cell breaks at ITS OWN casualty break-point — the missing symmetry.
+
+        Phase 2 shipped with local break unreachable, and the measurement proved it: phases 1+2 were
+        byte-identical to phase 1 across all 20 gauge rows, and instrumenting found 72 of 144 cells
+        "broken" at EXACTLY -1.0 — the signature of the body-wide stochastic-rout punch writing every
+        cell at once, not of local damage breaking anything. Cells were breaking as a CONSEQUENCE of
+        the body routing, strictly after the event they were supposed to precede.
+
+        The cause was an asymmetry, not a magnitude. The BODY has gradual erosion PLUS a du Picq
+        break-point short-circuit (`_stochastic_break`, 15-30% casualties). Cells had gradual erosion
+        only — and at MORALE_PHASE_CAP=3 against a 6.0 pool, a cell had to be destroyed TWICE OVER to
+        break by erosion. So the body always broke first, by construction.
+
+        This gives the cell the same mechanism at its own scale: each cell draws one break-point in the
+        same historical band and breaks when its own casualty fraction crosses it. Same band, same
+        rationale, one level down — men in a savaged corner give way at the same fraction of loss that
+        makes a whole body give way, which is the du Picq claim in the first place.
+        """
+        if not self.cell_morale:
+            return 0
+        broke = 0
+        for cid, start in self.cell_start_troops.items():
+            if start <= 0 or self.cell_broken(cid):
+                continue
+            bp = self.cell_breakpoint.get(cid)
+            if bp is None:
+                # skew toward the CAP as the body's discipline rises: a steadier body's cells hold
+                # longer before giving, mirroring _rout_resilience's treatment one scale up.
+                _d = max(0.0, min(1.0, self.eff_discipline / 6.0))  # [canonical: mass_battle_v30.md §B.2 — Discipline 1-6]
+                bp = ROUT_ONSET_FRAC + (ROUT_CAP_FRAC - ROUT_ONSET_FRAC) * (_cell_random.random() ** (1.0 / (0.5 + _d)))
+                self.cell_breakpoint[cid] = bp
+            lost = 1.0 - (self.cell_troops.get(cid, 0.0) / start)
+            if lost >= bp:
+                # drive THIS cell below zero without touching its siblings -- the whole point of a
+                # LOCAL break. Body-wide paths still go through erode_morale.
+                self.cell_morale[cid] = min(self.cell_morale.get(cid, 0.0), -1.0)
+                broke += 1
+        return broke
 
     def cell_broken(self, cid):
         """[ED-MB-0041 phase 2] A cell whose morale has collapsed. Local break, not a whole-body rout.

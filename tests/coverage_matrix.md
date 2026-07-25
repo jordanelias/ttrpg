@@ -2,6 +2,39 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry
+
+**Phases 1+2 measured byte-identical to phase 1** — every one of 20 rows to the decimal, 1/20 casualty
+and 8/20 win-share. Not a small effect: *zero*. Byte-identical is a far stronger signal than
+disappointing, because a smaller-than-hoped number would have been absorbed as "phase 2 helps a little",
+whereas identical across twenty rows can only mean the code never ran in a way that mattered.
+
+**Instrumented: 72 of 144 cells "broken" at EXACTLY −1.0.** The uniformity was the diagnosis — local
+damage produces a spread, so one repeated value means a single uniform write. It was the body-wide
+stochastic-rout punch (`erode_morale(max(eff_morale + 1.0, 0))`, designed to land at −1.0), which phase
+1 routes across all cells. **Cells were breaking as a CONSEQUENCE of the body routing**, strictly after
+the event phase 2 exists to precede: `propagate_cell_breaks` only ever saw already-dead bodies, the
+formation-break check is guarded by `not atom.routed`, and a routed subunit's emission is already zero.
+
+**The cause was an asymmetry, not a magnitude** — which is why tuning would have been the wrong move:
+
+| | gradual erosion | break-point short-circuit |
+|---|---|---|
+| body | yes | **yes** — `_stochastic_break`, du Picq 15–30% |
+| cell | yes | **none** |
+
+At `MORALE_PHASE_CAP=3` against a 6.0 pool a cell had to be **destroyed twice over** to break by erosion
+alone, so the body always won that race by construction.
+
+**Fix (`check_cell_breaks`)**: each cell draws its own break-point in the same historical band, skewed
+by discipline, and breaks when its own casualty fraction crosses it — the body's mechanism at the
+cell's scale, not a coefficient nudge. Morale values are now a genuine spread (−4.85, −2.79, −1.12,
+−0.89, −0.47, +0.13 …) rather than every cell at −1.0.
+
+**⚠ Early measurement shows OVER-FIRING**: single-mode draw rates of 76–100%. Bodies may now break so
+early that nothing resolves. Recorded before the multi-mode scoreboard lands, so the concern is on the
+record independent of how the final number reads. Flag remains OFF.
+
 ## 2026-07-25 — ED-MB-0041 phase 2: local break, cell-scale contagion, and the half of phase 1 I never wired
 
 **First, a correction to phase 1.** `cohere_cells` shipped with **zero live call sites**. The
