@@ -10,6 +10,21 @@ Method: one subprocess per (row, config) so `mass_battle.config` re-reads the en
 (every toggle is an import-time `os.environ.get`). Per-row, not per-battery, so the cost is tractable
 and a row's own sensitivity is isolated from the others'.
 
+SAMPLE SIZE IS NOT A FREE KNOB — read this before trusting a positive result.
+The gauge's own n is 60. Running this sweep at a smaller n to save time makes IN-BAND hits
+untrustworthy while leaving NOT-REACHABLE verdicts intact, and the asymmetry is not subtle: measured
+on row R1, the SAME configuration (baseline, nothing changed) reads **26.7 / OK at n=16 and 44.1 /
+WIN-OUT at n=60**. The first sweep run at n=16 accordingly reported 76 of 85 configs putting R1 in
+band; at n=60 the row is 14 points outside it and none of them do.
+
+The asymmetry follows from what noise does to a span: sampling error can only WIDEN the observed
+range of a row's values, so
+  • a NEGATIVE verdict ("the whole span misses the band") is conservative — noise made the span
+    generous and it still missed, so the row really is out of reach; while
+  • a POSITIVE verdict ("this config reaches the band") is exactly what noise manufactures.
+So: negatives may be read at low n; **every positive must be re-verified at the gauge's own n=60
+before it is reported as a finding.** `--n` below 40 prints a warning for this reason.
+
 Usage:
     python audit/2026-07-22-mass-battle-stress-test/reachability_sweep.py [--n 30] [--rows H4,H5,...]
 """
@@ -138,6 +153,13 @@ def main():
                     help='after the single-toggle sweep, greedily stack the strongest movers')
     args = ap.parse_args()
 
+    if args.n < 40:
+        print(f'!! WARNING: n={args.n} is below the gauge\'s own n=60. NEGATIVE verdicts '
+              f'(NOT REACHABLE) remain valid — noise only widens a span, so a span that still misses '
+              f'its band really misses it. But every IN-BAND hit at this n is untrustworthy and MUST '
+              f'be re-verified at n=60 before being reported: measured on R1, the identical baseline '
+              f'config reads 26.7/OK at n=16 and 44.1/WIN-OUT at n=60.\n', flush=True)
+
     configs = [('BASELINE', {})]
     for t in TOGGLES:
         cur = os.environ.get(t)
@@ -149,9 +171,25 @@ def main():
             configs.append((f'{k}={v}', {k: v}))
 
     # Bands, read from the gauge itself so this tool can never drift from the register it measures.
+    #
+    # [FIX, found by reading this tool's own output] The row tuples are RAGGED: a normal row is 9 fields
+    # ending (..., lo, hi, dexp), but a braced-repel row carries a 10th trailing metric ('rawA'), so the
+    # naive t[-3], t[-2] read (30, 'high') as C2's band instead of (0, 30). That silently mis-stated the
+    # band for exactly the two rows the cavalry-repel question turns on, and pointed the greedy stack at
+    # the wrong target for them. Anchor on the dexp token instead of counting from the end.
     sys.path.insert(0, SIM)
     import gauge_mb as _G
-    bands = {t[0]: (t[-3], t[-2]) for t in (_G.TESTS + _G.CAV_TESTS)}
+
+    def _band(t):
+        for i in range(len(t) - 1, 1, -1):
+            if t[i] in ('high', 'low') and isinstance(t[i - 1], (int, float)) \
+                    and isinstance(t[i - 2], (int, float)):
+                return (t[i - 2], t[i - 1])
+        return (None, None)
+
+    bands = {t[0]: _band(t) for t in (_G.TESTS + _G.CAV_TESTS)}
+    assert bands['C2'] == (0, 30), f"band parse regressed: C2 -> {bands['C2']}"
+    assert bands['H1'] == (42, 58), f"band parse regressed: H1 -> {bands['H1']}"
 
     results = {}
     for rid in args.rows.split(','):
