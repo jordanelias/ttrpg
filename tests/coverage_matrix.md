@@ -2,6 +2,34 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring
+
+**1. A silent no-op I introduced — the exact pattern this audit exists to find.** With cell morale
+seeded, `eff_morale` reads the CELL MAP and ignores the scalar; but `erode_morale`/`pull_morale` WRITE
+the scalar. So enabling per-cell morale silently disabled: the canonical §A.4 casualty/exhaustion
+erosion, the DG-4 sibling-coupling pull, and the stochastic-rout punch that drives morale ≤0 to force a
+break — meaning **`PC_STOCHASTIC_ROUT`, ratified an hour earlier, stopped working whenever
+`PC_CELL_MORALE` was on.** Measured: `erode_morale(4.0)` left the aggregate at 6.0 while writing 2.0 to
+a field nobody read. Fixed by routing body-wide morale uniformly across cells: the aggregate is the
+weighted mean, so subtracting `amount` from every cell lowers it by exactly `amount`. Scalar and
+cellular models stay numerically identical for body-wide effects; cells diverge only through LOCAL
+damage, which is the point.
+
+**What caught it was a prediction made before looking.** I stated that phase 1 should move the gauge
+*modestly* and that a large swing would be a warning sign rather than a win. H3 swinging ~66 → 40
+tripped that immediately. Without the prediction there was a ready-made explanation — "per-cell break
+makes bodies come apart earlier" — and a broken configuration would have been banked as a success.
+
+**2. A coupling fault.** `_erode_cell_morale_from_damage` hangs off `_apply_with_spill`, the single
+owner of casualty application, which is deliberately duck-typed. Reading `atom.cell_morale` directly
+made a MORALE feature impose a structural requirement on the DAMAGE substrate. `getattr` now; the fault
+was the coupling, not the test double that exposed it.
+
+**Process note, recorded because it caused a bad push.** I ran `valoria_local --staged | tail -2 && git
+commit`. The pipe means the chain sees `tail`'s exit status, not the gate's — so a FAILING co-file gate
+was masked and the commit proceeded. Gate output must not be piped when its exit code is what gates the
+next command.
+
 ## 2026-07-25 — ED-MB-0041 phase 1: the cell is the primitive for MORALE
 
 Jordan's directive ("the cell needs to be the primitive for morale, discipline, quality, stamina,
