@@ -491,3 +491,27 @@ ineffective. That is the sharpest argument yet for the per-cell directive: **an 
 has no line to come apart.** At cell granularity every body has sections that can break independently
 and the same contagion applies *within* a subunit. The residual 30-33% on exactly those rows is the gap
 per-cell morale exists to close.
+
+### 9.4 The rout flip ALSO largely fixed the side-asymmetry (unpredicted)
+
+Re-measured at n=60 after the default flip, because the unit suite XPASSed two symmetry rows and this
+audit's own protocol says an XPASS at suite-n is a prompt to re-measure, never evidence of a fix:
+
+| pair | rout OFF | rout ON | |
+|---|---|---|---|
+| H2/H9 | 114.2 (+1.6σ) | **102.8 (+0.3σ)** | was already OK |
+| H3/H10 | 137.7 (**+4.5σ**) | **115.3 (+1.7σ)** | **defect resolved** |
+| H4/H11 | 61.7 (−5.3σ) | **75.0 (−3.8σ)** | improved, still real |
+
+**I expected this to be noise and said so.** The reasoning was that N=40 underpowers H3, which is true
+in general and was the wrong call here — the authoritative n=60 run confirms a genuine improvement. The
+XPASS was a true signal. This is the protocol working as designed: the suite-n test cannot prove a fix,
+but it flagged something worth the expensive measurement, and the expensive measurement paid.
+
+**Why it happens.** The longer a battle runs, the more deployment and positional asymmetries compound.
+Ending at the historical break point (~30% casualties) instead of at annihilation (~84%) truncates that
+compounding. So the side-asymmetry was *substantially* an artifact of battles running far past the point
+where real ones stop — which means it was never the independent "deployment geometry bug" the earlier
+diagnosis assumed, and the fix for it was a lethality/termination fix all along.
+
+**H4/H11 at −3.8σ remains a real, independent defect** and is the surviving symmetry item.

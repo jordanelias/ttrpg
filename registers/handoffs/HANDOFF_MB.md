@@ -585,3 +585,32 @@ the mechanism under test (`PC_ENVELOP_PATH=0` passes Cannae) or refitting an alr
    third granularity that is neither the primitive nor the holistic body (shape divergence).
 6. Mechanism gaps: charge/recoil/re-charge cycle; a resolution path for the ranged mirror (R3); local
    (per-cell) break rather than whole-subunit rout.
+
+
+### 2026-07-25 — instruments built; PC_STOCHASTIC_ROUT ratified ON; symmetry largely resolved
+
+Jordan approved the two instruments and granted Tier-3 experiment permission. Both built
+(`reverse_pair_symmetry.py`, casualty/duration scoreboard in `gauge_mb`, `test_gauge_invariants.py`).
+
+**Ratified:** `PC_STOCHASTIC_ROUT` default OFF -> ON. Loser casualties 61-87% -> 29-41% (band 15-30);
+win-share 10/20 -> 7/20 and the flip is still right. Both grid goldens re-recorded. Full suite green
+(593 passed).
+
+**Unpredicted second effect:** the flip also largely fixed the reverse-pair side-asymmetry — H3/H10 went
++4.5σ -> +1.7σ (resolved), H2/H9 +1.6σ -> +0.3σ, H4/H11 -5.3σ -> -3.8σ. The asymmetry was substantially
+an artifact of battles running to annihilation, not an independent deployment-geometry bug. **H4/H11 at
+-3.8σ is the surviving symmetry defect.**
+
+**Held:** `ROUT_CASCADE_FRAC` (du Picq contagion) built and gated inert at 1.0. ⅔-of-line gives casualty
+5/20 and fixes H6's 79.2% outlier; ⅓-of-line gives 7/20 but costs a win-share row and makes H6
+undershoot. Not chosen, because per-cell state redefines what a "section" is.
+
+### Next actions (MB)
+
+1. **Per-cell state (Jordan directive).** Morale first. The contagion experiment pointed here
+   independently: H1/H2/H7/H8/H9 are unmoved by ANY contagion threshold because they are single-subunit
+   armies — no line to come apart. Their residual 30-33% loser casualties is the gap per-cell break closes.
+2. **H4/H11 −3.8σ** — the surviving side-asymmetry, now isolated from the lethality confound.
+3. **Re-decide `ROUT_CASCADE_FRAC`** once per-cell granularity lands (the "section" it counts changes).
+4. Remaining Tier-3: box/square all-around brace (C2/C6 — mechanism, not magnitude, §8.4); ranged-mirror
+   resolution path (R3, the only UNMEASURED row); disengage-and-recharge cycle.
