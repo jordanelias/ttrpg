@@ -492,7 +492,12 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     gap=geo['gap']; pc=geo['point_concentration']
     heads={}
     if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
-        heads['cut_thrust']=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc)
+        # [ED-PC-0037.1] carry the ELEMENT's OWN cut/thrust alongside the blended max. The blend is retained at
+        # index 0 because sel_eff's downstream contract expects it; indices 5/6 are the per-arm truth, so the
+        # versatility contest can be scored on the element that is actually being swung rather than on the
+        # whole-weapon bake (a guisarme's BILL is cut 0.76 / thrust 0.19; the weapon scalar says 0.64 / 0.41,
+        # which credits a hook with a point it does not have — the M-02 object confusion this docstring forbids).
+        heads['cut_thrust']=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc, geo['cut'], geo['thrust'])
     elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
         if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear', gap, None, pc)
     elif head=='point':                                              # a real point (element-tokened, not inferred)
@@ -544,12 +549,16 @@ def afforded_heads(w, grip=0.0, room=1.0):
     primitive-law). Pure."""
     heads={}
     for el in _mode_elements(w):
-        for tok,(eff,dm,gap,perc,pc) in element_afforded(el, w, grip=grip, room=room).items():
+        for tok,vals in element_afforded(el, w, grip=grip, room=room).items():
+            eff,dm,gap,perc,pc = vals[:5]
+            # [ED-PC-0037.1] indices 6/7 carry the ELEMENT's own cut/thrust magnitudes (None for heads that have no
+            # two-armed contest). element_ref stays at 5 — the per-arm pair is appended AFTER it, not over it.
+            ct_cut, ct_thr = (vals[5], vals[6]) if len(vals)>6 else (None, None)
             if tok not in heads or eff>heads[tok][0]:
-                heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'))
+                heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'),ct_cut,ct_thr)
     if not heads:                                                    # degenerate fallback: never strip all modes
         h=w['head']
-        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None)
+        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None, None, None)
     return heads
 
 def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, room=None):
@@ -600,7 +609,8 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
                   perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
                   eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']),
-                  eff_cut=w.get('geo',{}).get('cut'), eff_thrust=w.get('geo',{}).get('thrust'))
+                  eff_cut=(heads[hd][6] if len(heads[hd])>6 else None),
+                  eff_thrust=(heads[hd][7] if len(heads[hd])>7 else None))
               * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
               / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
     if h=='cut_thrust':
@@ -614,13 +624,13 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
         # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
-        _geo_ct = w.get('geo', {})
+        _ct_cut = heads[h][6] if len(heads[h])>6 else None
+        _ct_thr = heads[h][7] if len(heads[h])>7 else None
         dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h][2],
-                                 _geo_ct.get('cut'), _geo_ct.get('thrust'),
-                                 core.thrust_authority(w['head_len']))[1]
+                                 _ct_cut, _ct_thr, core.thrust_authority(w['head_len']))[1]
     else:
         dm=core.HEAD_MODE.get(h, 'shear')
-    sel_eff, _dm0, sel_gap, sel_perc, sel_pc, _eref = heads[h]
+    sel_eff, _dm0, sel_gap, sel_perc, sel_pc = heads[h][:5]   # [ED-PC-0037.1] the cut_thrust entry is now 7 wide (per-arm magnitudes at 5/6); slice so every head unpacks uniformly
     return dm, h, sel_gap, sel_perc, sel_pc, sel_eff
 
 def armor_defeat_sigma(aggressor, defender, cfg):
@@ -1140,8 +1150,17 @@ def tempo_pressure(c, opp, cfg, TR):
       • `reading` — cog/attention/experience. Anticipating the opponent's commitment is precisely what lets you act
         into it rather than after it. (The feint is not a separate action here — WS-5 dissolved it into the attack's
         commit-depth and legibility — so its influence arrives through the read, which is where it belongs.)
-    Floored at 0 so a badly out-read fighter stalls rather than accumulating backwards. Both K's [SIM-CALIBRATE]; the
-    structure — cadence proposes, the Vor and the read dispose — is the grounded part."""
+    Floored at 0 so a badly out-read fighter stalls rather than accumulating backwards. Both K's [SIM-CALIBRATE].
+    [HONESTY CORRECTION, ED-PC-0037.1] Measure this before believing it. An adversarial ablation (both K's -> 0,
+    20 weapons x 4 tiers, n=400/cell) found the aggregate outcome effect to be -0.06pp +- 0.27 (z=-0.23), with no
+    cell exceeding |z|=2.5 — i.e. currently OUTCOME-INVISIBLE. Worse, the READ term is identically ZERO in any
+    same-stats fight, because reading() and eff_cw depend only on stats and tradition — and same-stats is exactly
+    the weapon-balance surface the ED-PC-0037 entry cited as its result. So this function does NOT carry the
+    first-actor fix: the operative mechanism is the uniform cadence-phase draw at engagement start, which breaks
+    the lockstep by itself. This is a correctly-signed, correctly-grounded hook (a Vor-holder does act sooner:
+    tp 1.6 vs 0.4 at the clamp) that will matter once builds diverge in stats/Vor, and it belongs here rather
+    than as noise — but describing it as the answer to 'what happened to anticipating' oversold it, and the
+    honest statement is that the anticipation channel exists and is currently near-silent at default builds."""
     return max(0.0, 1.0 + cfg['INIT_TEMPO_K']*(c.initiative - opp.initiative)
                         + cfg['READ_TEMPO_K']*(reading(c, cfg)*TR.eff_cw(c, 'tempo')
                                                - reading(opp, cfg)*TR.eff_cw(opp, 'tempo')))

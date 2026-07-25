@@ -34,7 +34,14 @@ def _carry(ready, cfg):
     economy. Keeping the residual (ready mod ACT_THRESHOLD) preserves the real intent — nobody carries a free
     completed action across the transition — while leaving each fighter where their own cadence actually left them.
     A fighter mid-recovery when the measure closes is genuinely a beat behind one who had just recovered."""
-    return {c: (r % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
+    # [ED-PC-0037.1] max(0.0, r) BEFORE the modulo. Python's `%` maps a NEGATIVE readiness — recovery DEBT, which
+    # overcommit can drive deeply negative (recoverability_factor spans 0.3-67.8, so a committed guandao can owe
+    # ~-30) — onto a near-CREDIT: -1.0 % 2.5 = 1.5, and -30.5 wraps to ~2.0, granting the most over-committed
+    # fighter 80% of a banked action at a phase transition. That inverts this function's own contract ('a fighter
+    # mid-recovery is genuinely a beat behind'). Latent when found (0 occurrences in ~3300 instrumented fights,
+    # because separations end engagements before a transition catches a debtor) but one reopen-timing change from
+    # going live. Debt now clamps to 0 — no banked action, and no free one either.
+    return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
 
 def engagement(A, B, first, cfg, rng, prev_closed=False):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. `prev_closed` is the
