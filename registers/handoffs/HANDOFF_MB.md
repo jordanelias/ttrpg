@@ -24,21 +24,38 @@ namespace and are folded into Next actions below, which carries the full narrati
   8-neighbourhood lattice. **Phase 2 was unreachable** until cells got their OWN du Picq break-point —
   bodies had erosion *and* a break-point, cells had erosion only, so a cell had to be destroyed twice
   over to break and the body always won that race by construction. An asymmetry, not a magnitude.
-  **`PC_CELL_MORALE` flipped default ON** against a same-session flag-OFF control at n=60, multi mode:
-  win-share 7→8/20, casualty realism 2→7/20 (loser losses 31–40% → 26–30%). Disclosed costs: single
-  7→5/20 (sub-1σ band-edge moves in the non-resolving mode), C4 +0.5σ over its ceiling. Both goldens
-  re-recorded; `_PINNED_OFF` gains `PC_CELL_MORALE: '1'`.
+  **⚠ The default flip was made and RETRACTED the same day. `PC_CELL_MORALE` is OFF.** The measurement
+  (win-share 7→8/20, casualty realism 2→7/20) was confounded: `between_turn_recovery` and
+  `reset_morale_between_battles` write the morale **scalar**, which `eff_morale` stops reading once
+  cells are seeded, so under the flag they are **silent no-ops**. Multi mode runs multi-turn battles
+  and resets morale between them — the ON arm fought with morale that never recovered, the OFF arm's
+  did. "The loser breaks earlier" is exactly what an unrecoverable body also produces. Goldens and the
+  `_PINNED_OFF` pin are back to their pre-flip values; net shipped behaviour change is zero.
 
-  **Next in this thread, in order:**
-  1. **Phase 3 — stamina + discipline + quality per cell.** This is the one that retires `col_grid`,
-     the third granularity sitting between cell and subunit.
-  2. **Phase 4 — hp + armour per cell.**
-  3. **Decide `PC_STOCHASTIC_ROUT`'s fate.** It is now **inert in the shipped configuration** (loser
-     casualties 35.6% off vs 36.1% on — no separation) because the cells break first. It remains
-     load-bearing on the unseeded fallback path, so it is a retirement *candidate*, not dead code:
-     enumerate that path's remaining consumers before touching it. Pinned by
-     `test_per_cell_break_subsumes_the_body_level_one`.
-  4. **Re-decide `ROUT_CASCADE_FRAC`** (still inert at 1.0) once phase 3 settles what a "section" is.
+  Same defect class as the `erode_morale` silent no-op earlier in this lane. That was fixed as a single
+  instance with no sweep, so it recurred — and this time reached a shipped default. **When the cause is
+  "a representation change orphaned its writers", the unit of repair is every writer, found by grep.**
+
+  Two genuine bugs the failing suite exposed are **kept** (both independent of the flip): subunits that
+  inherit their morale were **born broken** (seeded at `eff_morale`'s no-parent 0 because `_unit` is set
+  after `Subunit.__post_init__`), and the weighted mean returned a **1-ulp** value for a uniform body,
+  which crossed a `DAMAGE_BY_DEGREE` boundary via `_morale_sigma` and zeroed exchanges.
+
+  **Next in this thread, in strict order:**
+  1. **The scalar-write sweep — the blocker.** Every site that assigns `.morale` must route through the
+     cells when they are seeded. Known: `between_turn_recovery` (unit + atom),
+     `reset_morale_between_battles` (unit + atom), the rout write `u.morale = 0.0`,
+     `Unit.erode_morale`, `core/state.py`'s `atom.morale = atom.eff_morale`. Prefer a single owner
+     (a `set_morale`-style writer) over five parallel patches — five patches is how this recurred.
+  2. **Re-measure the flag honestly**, then decide the flip. Not before 1.
+  3. **Phase 3 — stamina + discipline + quality per cell.** Retires `col_grid`, the third granularity
+     between cell and subunit.
+  4. **Phase 4 — hp + armour per cell.**
+  5. **Decide `PC_STOCHASTIC_ROUT`'s fate.** Measured inert under cell morale (35.6% vs 36.1%) — but
+     those absolutes were taken under the same no-recovery confound and must be re-taken after 1. The
+     OFF-vs-ON *comparison* is still fair (both arms share the confound). Still load-bearing on the
+     unseeded path, so a retirement candidate, not dead code.
+  6. **Re-decide `ROUT_CASCADE_FRAC`** (still inert at 1.0) once phase 3 settles what a "section" is.
 
 - **ED-MB-0043 candidate — R3 is a DEFINITIONAL gap, not a balance one.** Ranged-vs-ranged is the only
   UNMEASURED gauge row: 100% draws at **0.0% casualties on both sides**, i.e. no engagement at all.

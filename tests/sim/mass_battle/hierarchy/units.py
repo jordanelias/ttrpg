@@ -538,7 +538,21 @@ class Subunit:
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
         # [ED-MB-0041 phase 1] Seed per-cell morale from the scalar, so the aggregate is IDENTICAL to the
         # scalar at t=0 and any divergence between cells is earned in play. Gated -> unseeded -> inert.
-        if PC_CELL_MORALE:
+        #
+        # [ED-MB-0042, 2026-07-25] `self.morale is not None` is LOAD-BEARING, not defensive. A subunit
+        # whose morale is None INHERITS it from its parent Unit, and the back-ref `_unit` is not set
+        # until `Unit.__post_init__` runs -- which is strictly AFTER this, because the Unit is
+        # constructed from an already-built subunit list. Seeding here would therefore read
+        # `eff_morale`'s no-parent fallback of 0 and give every cell morale 0.0, i.e. **born broken**:
+        # `cell_broken` is a <=0 test, `_pair_engaged_troops` excludes broken cells, so the body would
+        # emit no combat weight at all -- and it would never recover, because once cells exist
+        # `eff_morale` reads THEM and no longer falls through to the (correct) parent scalar.
+        #
+        # Caught by 10 suite failures on the default flip (octagon/OBB/maneuver/reach/DG-2 tests all
+        # build Subunit-then-Unit). The gauge path was unaffected -- build_unit/build_army pass morale
+        # explicitly -- which is exactly why the targeted tests and the measurement were both green
+        # while the broad suite was not. Subunits that inherit are seeded by Unit.__post_init__ instead.
+        if PC_CELL_MORALE and self.morale is not None:
             self.seed_cell_morale()
         self._cell_target = dict(self.cell_troops)  # [ED-MB-0028] prescribed per-cell density at spawn (close_ranks fill target)
         self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
@@ -598,11 +612,22 @@ class Subunit:
         """
         if self.cell_morale:
             tot = 0.0; acc = 0.0
+            live = []
             for cid, m in self.cell_morale.items():
                 w = self.cell_troops.get(cid, 0.0)
                 if w > 0:
-                    tot += w; acc += m * w
+                    tot += w; acc += m * w; live.append(m)
             if tot > 0:
+                # [ED-MB-0042] A UNIFORM body returns its cells' value EXACTLY. The weighted mean of N
+                # equal values is mathematically that value, but in floats it is off by an ulp
+                # (15 cells at 6.0 -> 5.999999999999999), and that ulp is not harmless: `_morale_sigma`
+                # divides by morale_start, so a body at full morale reported a sigma of -1.8e-16 instead
+                # of 0, which is enough to cross a DAMAGE_BY_DEGREE boundary and turn a 6.0 exchange into
+                # a 0.0 one. That is how the octagon micro-tests failed. This is not a tolerance fudge —
+                # it returns the arithmetically correct answer where the float mean cannot.
+                first = live[0]
+                if all(m == first for m in live):
+                    return first
                 return acc / tot
         if self.morale is not None: return self.morale
         return self._u().morale if self._u() else 0
@@ -2177,6 +2202,14 @@ class Unit:
         for a in self.subunits:
             if a.stance == "balanced": a.stance = self.stance
             a._unit = self                     # stat-inheritance back-ref (per-subunit eff_* falls back here)
+            # [ED-MB-0042] Seed any subunit that INHERITS its morale. This is the first moment that
+            # value is knowable — the back-ref above is what makes `eff_morale` resolve to the parent's
+            # scalar instead of the no-parent 0 — so it is the only correct place to seed an inheriting
+            # subunit. Explicit-morale subunits already seeded in their own __post_init__; the
+            # `not a.cell_morale` guard keeps this from re-seeding (and so from silently discarding
+            # morale a subunit has already lost, if a Unit is ever rebuilt around live subunits).
+            if PC_CELL_MORALE and not a.cell_morale:
+                a.seed_cell_morale()
         # Increment 1: per-column block grid (state only; resolution wires in at Increment 2).
         self.col_grid = build_column_grid(self) if PER_CELL else None
 

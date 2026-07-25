@@ -586,3 +586,47 @@ looks identical to a fix, until the right-scale mechanism arrives.*
 It is **not** removed. It remains load-bearing on the unseeded fallback path, so it is a retirement
 **candidate**, pinned by `test_per_cell_break_subsumes_the_body_level_one` and left for a pass that first
 enumerates that path's consumers.
+
+### 10.5 RETRACTION (same day): §10.2's measurement compared two incomparable arms
+
+**§10.2's flip is withdrawn. Its numbers must not be cited.** The mechanism (§10.1) stands.
+
+`between_turn_recovery` and `reset_morale_between_battles` both write the morale **scalar**, which
+`eff_morale` stops reading the moment cells are seeded. Under `PC_CELL_MORALE` they are **silent
+no-ops** — verified directly: knock a body's cells to 2.0, call both, it is still at 2.0. The gauge's
+multi mode runs multi-turn battles and resets morale between them. So **the ON arm fought with morale
+that never recovered and the OFF arm's did**, and "the loser breaks earlier" is precisely what a body
+that cannot recover also produces. The gain is not attributable to the mechanism.
+
+Reverted: default OFF, `_PINNED_OFF` back to `'0'`, both goldens back to their pre-flip digests. Net
+shipped behaviour change: **zero**.
+
+**This is the audit's own §3 pattern, committed by the auditor.** §3 names the repo's dominant failure
+mode as *machinery that documents itself as working and does not*. §10.4 recorded a subsumption finding
+one section above — and the subsumption reading was itself downstream of the same confound. The
+`erode_morale` silent no-op earlier in this session was the **same defect class**, fixed as a single
+instance with no sweep for the pattern; it recurred within hours and reached a shipped default and a
+golden re-record before the suite caught it.
+
+The transferable finding is about the **unit of repair**. When a defect's cause is *"a representation
+change orphaned its writers"*, the repair is **every writer, enumerated by grep** — not the one that
+happened to fail. A single-site fix on a pattern defect is indistinguishable from a real fix until the
+next writer fires.
+
+**Two genuine bugs the failing suite exposed, both kept:**
+
+- **Born-broken subunits.** `seed_cell_morale()` ran in `Subunit.__post_init__`, but an inheriting
+  subunit's `_unit` back-ref is not set until `Unit.__post_init__`, strictly later — so it seeded every
+  cell at `eff_morale`'s no-parent fallback of **0**: born broken, emitting no combat weight, and unable
+  to recover because once cells exist `eff_morale` reads them and never falls back to the parent scalar.
+  The gauge path passes morale explicitly, which is exactly why the targeted tests and the measurement
+  were green while ten unrelated suite tests were not — **a green targeted test on a changed primitive
+  says nothing about the primitive's other callers.**
+- **A 1-ulp aggregate defeating an identity.** The troop-weighted mean of N equal values is that value
+  mathematically, not in floats (15 cells at 6.0 → `5.999999999999999`). `_morale_sigma` divides by
+  `morale_start`, so a full-morale body reported σ = −1.8e−16, enough to cross a `DAMAGE_BY_DEGREE`
+  boundary and turn a 6.0 exchange into 0.0. **My own t=0 identity test hid it** by asserting with
+  `pytest.approx` — the one assertion form that cannot see an ulp. An identity claim must be asserted
+  with `==`, or it is not testing the identity.
+
+**Blocker for re-flipping: the scalar-write sweep, not another gauge run.**

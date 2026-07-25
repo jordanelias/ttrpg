@@ -64,8 +64,21 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # which is the same contagion mechanism one level down.
 #
 # [ED-MB-0042, 2026-07-25 — the ledger entry covering all of phases 1/2/2b, allocated after the
-# in-code "ED-MB-0041 phase N" labels above were written] FLIPPED ON by measurement, against a same-session flag-OFF control
-# run at the gauge's own n=60, in the RESOLVING (multi) mode, on BOTH scoreboards:
+# in-code "ED-MB-0041 phase N" labels above were written]
+#
+# ⚠ FLIPPED ON, THEN RETRACTED THE SAME DAY. The measurement below is CONFOUNDED and must not be
+# cited. `between_turn_recovery` and `reset_morale_between_battles` both write the subunit/unit
+# morale SCALAR, which `eff_morale` stops reading the moment cells are seeded — so with the flag ON
+# they are silent no-ops. The multi-mode gauge runs multi-turn battles and resets morale between
+# them, so the ON arm fought with morale that never recovered while the OFF arm's did. "The loser
+# breaks earlier" is exactly what a body that cannot recover would also produce. The two arms were
+# not comparable, and I did not check before reporting the gain.
+#
+# This is the SAME defect class as the `erode_morale` silent no-op caught earlier in this lane —
+# a scalar write that the cell aggregate shadows. I fixed that one instance and did not sweep for
+# the rest of the pattern, which is why it recurred. The sweep is the prerequisite for re-measuring.
+#
+# The retracted numbers, kept only so the retraction is checkable:
 #
 #            win-share bands   casualty/duration realism
 #     OFF          7/20                  2/20
@@ -84,7 +97,7 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # pinned OFF (the test pins it explicitly ON, as it does PC_OCTAGON_DMG) so the change-detector keeps
 # tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
 # quietly ending their coverage of what the engine actually does.
-PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '1') == '1'   # default ON (2026-07-25) -- see above
+PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '0') == '1'   # RETRACTED to OFF 2026-07-25 -- see above
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
 # what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),

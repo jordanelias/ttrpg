@@ -77,13 +77,11 @@ _PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': 
                # explicitly so an ambient PC_OCTAGON_DMG=0 can't silently check the ON golden against the
                # legacy path (same defense-in-depth as the other toggles here).
                'PC_OCTAGON_DMG': '1',
-               # [ED-MB-0042, 2026-07-25] PC_CELL_MORALE defaults ON and the grid goldens were
-               # RE-RECORDED under it. Pinning it ON (rather than pinning it off and keeping the old
-               # digests) is the deliberate choice: this flag is not a path selector like FIELD_MOVEMENT
-               # — it changes the state model on the per-cell path 'cell' mode exercises — so pinning it
-               # off would have kept the goldens stable while quietly ending their coverage of the
-               # SHIPPED engine. Same treatment, and same reason, as PC_OCTAGON_DMG above.
-               'PC_CELL_MORALE': '1'}
+               # [ED-MB-0042, 2026-07-25] Pinned OFF because the DEFAULT is off — the flip to ON was
+               # retracted the same day (its measurement was confounded; see config.py at the flag).
+               # Pinned explicitly rather than left ambient so that when the flip is re-attempted, the
+               # pin has to be changed deliberately and the goldens re-recorded with it.
+               'PC_CELL_MORALE': '0'}
 
 
 def _run_bat(per_cell):

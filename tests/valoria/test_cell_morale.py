@@ -16,9 +16,10 @@ The model is a two-way loop, not a broadcast:
   MODULATE DOWN    that holistic value pulls its own cells back toward it, discipline-gated (du Picq:
                    men hold because the men beside them hold).
 
-Gated behind `PC_CELL_MORALE`. It shipped OFF for phases 1/2/2b and was flipped **ON 2026-07-25** on
-measurement (see `config.py`'s block, and `test_default_is_on` below). An unseeded subunit still takes
-the scalar path verbatim, so every aggregate/erosion path below is exercised in both directions.
+Gated behind `PC_CELL_MORALE`, default **OFF**. It was flipped ON on 2026-07-25 and retracted the same
+day — the measurement was confounded by scalar morale writes the cell aggregate shadows (see
+`test_default_is_gated_off` below and `config.py`'s block). An unseeded subunit takes the scalar path
+verbatim, so every aggregate/erosion path below is exercised in both directions.
 """
 import os
 import sys
@@ -59,19 +60,35 @@ def test_a_cell_can_have_worse_morale_than_its_sibling():
 
 
 def test_seeding_leaves_the_aggregate_identical_to_the_scalar():
-    """At t=0 the two models must agree exactly — divergence has to be EARNED, not injected at birth."""
+    """At t=0 the two models must agree exactly — divergence has to be EARNED, not injected at birth.
+
+    Asserted with `==`, deliberately, NOT `pytest.approx`. This test originally used approx and that is
+    exactly why it passed while the engine was wrong: the weighted mean of N equal values is off by an
+    ulp in floats (15 cells at 6.0 -> 5.999999999999999), `_morale_sigma` divides by morale_start, and a
+    body at nominally full morale got a sigma of -1.8e-16 instead of 0 — enough to cross a
+    DAMAGE_BY_DEGREE boundary and zero out an exchange. An approx assertion on an identity claim hides
+    the only failure that identity was there to prevent.
+    """
     a = _atom()
     before = a.eff_morale
     a.seed_cell_morale()
-    assert a.eff_morale == pytest.approx(float(before))
+    assert a.eff_morale == float(before)
+
+
+def test_a_uniform_body_reports_its_cells_value_exactly():
+    """The identity above, stated as its own invariant so it survives independent of seeding."""
+    a = _seeded()
+    for cid in a.cell_morale:
+        a.cell_morale[cid] = 4.0
+    assert a.eff_morale == 4.0, "a body whose sections all hold the same morale has exactly that morale"
 
 
 def test_unseeded_is_the_scalar_path_verbatim():
     """The fallback. No cell morale -> the old expression, untouched.
 
-    This WAS the shipped default and is no longer (PC_CELL_MORALE flipped ON 2026-07-25), so the atom is
-    now un-seeded explicitly rather than by relying on the flag. The fallback still has to hold: every
-    subunit built outside `__post_init__`'s seeding — and every consumer reached before it — takes it.
+    The atom is un-seeded EXPLICITLY rather than by relying on the flag's default, so this keeps testing
+    the fallback whichever way the default points. The fallback has to hold regardless: every subunit
+    built outside `__post_init__`'s seeding — and every consumer reached before it — takes it.
     """
     a = _atom()
     a.cell_morale, a.cell_start_troops, a.cell_breakpoint = {}, {}, {}
@@ -174,15 +191,22 @@ def test_erosion_scales_by_fraction_of_the_cell_not_absolute_count():
         "equal FRACTIONAL loss must cost equal morale regardless of cell density"
 
 
-def test_default_is_on():
+def test_default_is_gated_off():
     """A test pinning a default is pinning a DECISION, so it carries the decision's evidence.
 
-    Phases 1/2/2b shipped OFF pending measurement. Measured 2026-07-25 against a same-session flag-OFF
-    control at the gauge's own n=60, in the resolving (multi) mode: win-share bands 7/20 -> 8/20, and
-    casualty/duration realism 2/20 -> 7/20. Flipped ON. If a future change makes this assertion fail,
-    the question to answer is not "how do I make the test pass" but "which of those two numbers moved".
+    This was flipped to `is True` on 2026-07-25 and RETRACTED the same day. The measurement that
+    justified the flip (multi-mode win-share 7->8/20, casualty realism 2->7/20) was confounded:
+    `between_turn_recovery` and `reset_morale_between_battles` write the morale SCALAR, which
+    `eff_morale` stops reading once cells are seeded, so with the flag ON they are silent no-ops. The
+    gauge's multi mode runs multi-turn battles and resets morale between them — so the ON arm fought
+    with morale that never recovered and the OFF arm's did. "The loser breaks earlier" is precisely
+    what a body that cannot recover also produces. The arms were not comparable.
+
+    The blocker for re-flipping is therefore NOT another gauge run. It is the scalar-write sweep: every
+    site that assigns `.morale` has to route through the cells first (see HANDOFF_MB). Only then is a
+    measurement of this flag a measurement of this flag.
     """
-    assert C.PC_CELL_MORALE is True, "flipped ON 2026-07-25 on both scoreboards — see config.py"
+    assert C.PC_CELL_MORALE is False, "flip retracted 2026-07-25 — confounded measurement, see config.py"
 
 
 # ─── phase 2: local break ────────────────────────────────────────────────────

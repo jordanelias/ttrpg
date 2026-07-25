@@ -2,7 +2,51 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
-## 2026-07-25 — ED-MB-0042: PC_CELL_MORALE flipped ON; per-cell breaks subsume the body-level one
+## 2026-07-25 — ED-MB-0042 RETRACTED: the flip was measured against an arm that couldn't recover
+
+**The flip below was made and then withdrawn the same day. Do not cite its numbers.**
+
+`between_turn_recovery` and `reset_morale_between_battles` both write the morale **scalar**, which
+`eff_morale` stops reading the moment cells are seeded — so with `PC_CELL_MORALE` ON they are **silent
+no-ops**. Verified directly: knock a body's cells to 2.0, call both, and it is still at 2.0. The gauge's
+multi mode runs multi-turn battles and resets morale between them, so **the ON arm fought with morale
+that never recovered and the OFF arm's did.** "The loser breaks earlier" is exactly what a body that
+cannot recover would also produce. The two arms were not comparable and I reported the gain without
+checking that they were.
+
+This is the **same defect class** as the `erode_morale` silent no-op caught earlier in this lane — a
+scalar write shadowed by the cell aggregate. I fixed that one instance and never swept for the pattern,
+so it recurred, in the same session, and this time it reached a shipped default and a golden re-record.
+**The lesson is about scope of fix, not about morale:** when a defect's cause is "a representation
+change orphaned its writers", the unit of repair is *every writer*, found by grep, not the one that
+happened to fail.
+
+Reverted: default back OFF, `_PINNED_OFF` back to `'0'`, both goldens back to their pre-flip digests
+(`241f04e5…` / `dc3d3414…`), `test_default_is_gated_off` restored with the retraction reason.
+
+**Two genuine defects were found by the failing suite and are KEPT** (both real bugs in the phase-1/2b
+work, independent of the flip):
+
+1. **Born-broken subunits.** `seed_cell_morale()` ran in `Subunit.__post_init__`, but a subunit whose
+   morale is `None` inherits from its parent Unit and the `_unit` back-ref is not set until
+   `Unit.__post_init__` — strictly later. So an inheriting subunit seeded every cell at `eff_morale`'s
+   no-parent fallback of **0**, i.e. every cell broken at birth, emitting no combat weight and never
+   recovering (once cells exist, `eff_morale` reads them and never falls back to the correct parent
+   scalar). Now seeded from `Unit.__post_init__` for inheriting subunits. The gauge path passes morale
+   explicitly, which is exactly why the targeted tests and the measurement were green while ten
+   unrelated suite tests were not.
+2. **A 1-ulp aggregate defeating an identity.** The troop-weighted mean of N *equal* values is that
+   value mathematically but not in floats (15 cells at 6.0 → `5.999999999999999`). `_morale_sigma`
+   divides by `morale_start`, so a body at full morale reported σ = −1.8e−16 instead of 0 — enough to
+   cross a `DAMAGE_BY_DEGREE` boundary and turn a 6.0 exchange into a 0.0 one. A uniform body now
+   returns its cells' value exactly. **My own test hid this**: it asserted the t=0 identity with
+   `pytest.approx`, which is precisely the assertion that cannot see an ulp. Now `==`.
+
+**Blocker for re-flipping** is not another gauge run — it is the scalar-write sweep. Known sites:
+`between_turn_recovery` (unit + atom), `reset_morale_between_battles` (unit + atom), the rout write
+`u.morale = 0.0`, `Unit.erode_morale`, and `core/state.py`'s `atom.morale = atom.eff_morale`.
+
+## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): PC_CELL_MORALE flipped ON; per-cell breaks subsume the body-level one
 
 Measured against a **same-session flag-OFF control** at the gauge's own n=60, in the resolving (multi)
 mode, on both scoreboards:

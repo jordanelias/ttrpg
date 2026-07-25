@@ -209,13 +209,11 @@ EXPECTED = {
     # [2026-07-25, ED-MB-0041] re-recorded: PC_STOCHASTIC_ROUT default flipped OFF->ON on the casualty
     # scoreboard's evidence (loser 61-87% -> 29-41%). Both grid modes move, because the break band
     # changes WHEN a subunit routs and therefore the whole downstream casualty trajectory.
-    # [2026-07-25, ED-MB-0042] re-recorded: PC_CELL_MORALE default flipped OFF->ON. Every
-    # subunit now carries per-cell morale (troop-weighted aggregate up, discipline-gated cohesion down)
-    # and a per-CELL du Picq break-point, so sections of a body break locally before the body does —
-    # which changes when combat weight leaves the line and therefore the whole casualty trajectory in
-    # both grid modes. The goldens were re-recorded rather than the flag pinned off; see
-    # test_mass_battle_byte_exact.py's _PINNED_OFF note for why.
-    'unit': 'ee0fdec4c4365f07ccfd3250dc1bc58051d95033b5f1c441ac88b4b78b1a7b0a',
+    # [2026-07-25, ED-MB-0042] NOT re-recorded. PC_CELL_MORALE was flipped ON and the goldens moved to
+    # ee0fdec4.../a7b01a0d..., then the flip was RETRACTED the same day (confounded measurement — see
+    # config.py at the flag), so these revert to their pre-flip values. Recorded here because the next
+    # attempt will move them again and should be able to see that this is the second, not the first.
+    'unit': '241f04e5b2a4e3d626024816872d7903f9a43507abd205cedc8a6c030d2f7794',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -246,8 +244,8 @@ EXPECTED = {
     # hoist only differs when the cascade produces >1 group (it never does — audit §5.4), and PC_WHEEL's
     # port is gated on the node path (PC_NODE_COHESION=0 here).
     # [2026-07-25, ED-MB-0041 — see the 'unit' note above] re-recorded (stochastic-rout default ON).
-    # [2026-07-25, ED-MB-0042 — see the 'unit' note above] re-recorded.
-    'cell': 'a7b01a0d8fbdae06defc1bbc1c3156eb9edc778f596da94727462d36b187748e',
+    # [2026-07-25, ED-MB-0042 — see the 'unit' note above] flip retracted; reverted.
+    'cell': 'dc3d3414d815d7b42a086afefe6464ab5c44defa00babdca7b529eacaed5b233',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
