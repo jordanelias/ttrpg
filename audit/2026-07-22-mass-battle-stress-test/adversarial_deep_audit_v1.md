@@ -181,6 +181,10 @@ is instrumented directly.
 - Command: restore a Biddle-shaped σ-ceiling term, or retract the Biddle grounding.
 - Rout band: flip `PC_STOCHASTIC_ROUT` default ON and align the §A.4 ladder to 15-30%.
 - Yield: split `YIELD_POOL_MULT` into offence-malus + survivability terms.
+- **The disengage-and-recharge cycle the engine lacks (noted 2026-07-25, §7.1).** Contact, once made, is
+  permanent: there is no way to express "the charge is spent; the horsemen draw off and come again". The
+  impulse + charger-latch pair models it adequately for the braced-wall case, but a real cycle would also
+  give cavalry a way to break off an unfavourable grind instead of grinding to destruction.
 
 **Standing principle to restore:** *"the band is not lowered to make the engine pass."* It is currently
 violated three distinguishable ways — raising ceilings, choosing a free construction parameter until the
@@ -273,3 +277,69 @@ anti-fabrication gate scans only *changed* sim files (`ci_sim_fabrication_check.
 whitelist surfaces nothing until the next sim edit — at which point previously-laundered bare integers
 in that file will be flagged. That is the intended behaviour: the laundering mechanism is removed, and
 the debt becomes visible as the code is touched, rather than all at once.
+
+---
+
+## 7. TIER-2 EXECUTED (2026-07-24) — dead machinery: wired or deleted
+
+The Tier-2 rule was *wire or delete, no third option*. Seven items, all resolved. Each carries a
+regression test that was verified to FAIL against the pre-fix code, not merely to pass after it.
+
+| item | verdict | what was actually wrong |
+|---|---|---|
+| cascade `dynamic_facings` | **deleted** | A write-only parallel facing store. `run_battle` built the dict, `resolve_engagements` received it and never read it, `_rotate_defender_facing` wrote rotations into it; its only reader `_atom_avg_facing` had **zero call sites**. The concept — engaged cells pivot toward their attacker — is live and better implemented by `Subunit.cell_facing_vec` (discipline-gated slew, rout flip, and what `_octagon_cell_mods` actually reads). Deletion is behaviour-preserving by construction; goldens unchanged. |
+| `_front_fixers` scoping | **wired** | Computed inside `resolve_engagements` from whatever pair list that call received — which under `CASCADING_ENABLED` is one cascade sub-phase *group*, not the tick. A defender pinned frontally by a body in group 0 and flanked by a detachment in group 1 saw an **empty fixer set** and wheeled freely. That is the Cannae shape exactly: the mechanism was dead in the case it exists for. Hoisted to `_compute_front_fixers`, computed once per tick, threaded in like `eng_counts`/`atom_sides` already were. |
+| `cell_last_speed` decay | **wired** | Both paths `continue`d past a halted cell without touching the speed map, so a cell kept the speed it charged in for the rest of the battle — and a cell is halted exactly when it is in contact, so every melee cell scored its charge impetus every tick of a grind. Momentum is now an impulse (halted → 0; `hold` → 0), with the braced-wall repel preserved by latching the *charger role* at impact rather than re-deriving it from the per-tick differential. See §7.1, including a correction to my own first diagnosis. |
+| `col_grid` rebuild | **wired** | Built once, in `Unit.__post_init__`, from the spawn footprint; `sync_col_grid` refreshed only `density`, only for the columns already in the list. Column *membership* was therefore frozen at spawn. A body that wheeled or drifted occupied columns absent from its own grid, at which point `_fatigue_sigma` found no live blocks and returned 0.0 and `_defender_depth` returned 0.0 — **no fatigue and no depth-based charge absorption, for precisely the manoeuvring units**. Membership and per-column `depth` now track live cells; stamina carries over for surviving columns. |
+| per-tick rout trigger | **wired** | Morale collapse was checked every tick; the annihilation trigger (`troop_total < SUBUNIT_ROUT_FLOOR`) only in `rout_resolution`, at a phase boundary — every `TICKS_PER_PHASE`(=6) ticks. A subunit ground below the floor kept fighting at full effectiveness for up to 5 further ticks. Both triggers are now on the tick clock; `rout_resolution` keeps its boundary check (idempotent), so §A.12 sequencing is untouched. |
+| `PC_WHEEL` (§5.3) | **wired** | Shipped defaulting **ON** and was a no-op: its only consumer sat in legacy `advance_cells`, which returns early on the node path. Kite/envelop/sweep were ported to `_node_advance`; the overhang wheel was missed. Now a `_resolve_maneuver_goal` branch: a body whose whole footprint lies beyond the enemy's frontage turns in on the nearest enemy cell instead of marching its spawn file into empty air. Inert for any body with a file inside the enemy frontage, i.e. every head-on matchup. |
+| `yielding` never cleared (§5.5) | **wired** | The one DG-2 transient `reset_morale_between_battles` missed — every sibling (`pocketed`, `feigned`, `overextended`, the rout break-point, the reaction clock) was cleared. With rally off nothing else clears it, so a subunit that yielded once stayed flagged for the rest of the campaign. Now cleared at the battle boundary with the others. |
+
+
+### 7.1 Momentum-at-halt: an impulse, plus a latch — and a correction to my own first diagnosis
+
+`cell_last_speed` at a contact halt was frozen at whatever the cell charged in with, and
+`_momentum_speed` reads it with no moved-this-turn guard — so every melee cell scored its charge impetus
+on every tick of a grind. Making it an **impulse** (a halted cell records 0) is the physically correct
+primitive: `halted_cells` is rebuilt from *pre*-movement contacts, so the impact tick still records the
+real closing speed and the charge lands once, where Sabin puts it.
+
+That alone broke the braced-wall repel: `test_reach_weapon_class`'s pike-vs-cavalry retention margin
+collapsed from >0.02 to **0.0035**. The cause is a modelling error one level up. `a_mom > b_mom` is how
+the engine identifies **who the charger is** — it is not the cause of the recoil. The cause is a mounted
+body pressed onto a hedge of set poles, and a wall does not stop repelling after one tick. With
+impulse momentum the differential is true only at impact, so re-deriving the role every tick reduced the
+repel to a single tick. The fix is to **latch the charger role at impact** (`atom._pressing`) and hold it
+while the pair stays in contact; every other condition on the gate — brace, frontal zone, cavalry-only,
+the reach test — is still re-evaluated every tick, so the wall stops repelling the moment it is broken,
+flanked or out-reached. The latch expires when the bodies part and at the battle boundary.
+
+**Correction to my first pass.** I initially recorded this as a Tier-3 punt, on the reading that the
+impulse *cost* gauge row C1 (cavalry vs a steady unbraced line, the Burkholder/Sabin anchor), which I had
+seen at 85-87%. Bisecting against a clean pre-Tier-2 tree showed the opposite: **C1 reads 86.7% at the
+baseline** and the impulse is what brings it to **48.3%, inside its 35-55 band**. I had attributed a
+pre-existing failure to my own change and drawn a trade-off that did not exist. With the latch, both
+anchors hold at once — C1 in band *and* the pike repel intact — which is what a correct primitive plus a
+correct role model should do, and is why the punt was wrong.
+
+### Provenance: the 24 dangling `sim_verification_ledger.json` citations
+
+Tier-0.1 deleted that file; 24 constants across `config.py`, `bat.py`, `engine.py` and
+`workbench/server.py` still cited it. They were at least honest about being fitted ("CALIBRATED, not
+independently historically cited") but they were tagged `[canonical: ...]` and pointed at a file that
+no longer exists — the false-tag state §6 calls the only unacceptable one. All 24 are retagged
+**`[CALIBRATED-DEBT: … — magnitude fitted to engine behaviour, no external source]`**, naming the
+deleted whitelist as the former citation so the history is not laundered away either.
+
+`CALIBRATED-DEBT` is a fourth honest label alongside GROUNDED / JUSTIFIED / DECLARED-DIVERGENCE, and is
+accepted by the anti-fabrication gate's tag pattern. It says something the other three do not: *this
+number has no source at all and is known debt*. Twenty-four of them is the honest count of that debt in
+the engine's constant layer today.
+
+### What Tier-2 does NOT claim
+None of these were balance changes and none were tuned. Three of them (fixers, col_grid, rout clock)
+had been silently *removing* effects the model intended to have, so the gauge moving after them is
+expected and is not evidence either way about the bands — same caveat as Tier-1. The fourth (momentum at
+halt) *does* move a band row, and deliberately: it takes C1 from 86.7% to 48.3%, into its 35-55 band, by
+removing a permanent shock bonus for standing still. That is a defect removal whose direction happens to
+be favourable, not a tuning pass — no constant was touched.

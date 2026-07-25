@@ -21,7 +21,7 @@ SIDE_B_START_ROW = 15  # step-2 rescale to fit 10k (50-grid)  # [canonical: desi
 POOL_VARIANT = "C-ii"
 TIP_SUPPORT_ENABLED = True
 TIP_SUPPORT_GAP = 2
-# [canonical: sim_verification_ledger.json — CALIBRATED, engine's own tier-generator doubling progression (100/200/400/800), not independently historically cited]
+# [CALIBRATED-DEBT: engine's own tier-generator doubling progression (100/200/400/800) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 TROOPS_PER_TIER = {1: 100, 2: 200, 3: 400, 4: 800}
 TROOPS_PER_SIZE = 100
 # ─── CONTINUOUS-SCALE CELL MODEL (Jordan directive 2026-06-03) ───
@@ -49,22 +49,22 @@ def cell_cap_for(troop_type):
     if PC_TROOP_DENSITY_CAP and troop_type in TROOP_TYPE_DENSITY_CAP:
         return TROOP_TYPE_DENSITY_CAP[troop_type]
     return CELL_CAP
-LINE_ASPECT = 1.4           # generator: Line width:depth ratio (from the per-tier tables' progression)  # [canonical: sim_verification_ledger.json — CALIBRATED, engine generator ratio (coverage_matrix_archive.md "Line=1.4xdepth"), not independently historically cited]
+LINE_ASPECT = 1.4           # generator: Line width:depth ratio (from the per-tier tables' progression)  # [CALIBRATED-DEBT: engine generator ratio (coverage_matrix_archive.md "Line=1.4xdepth") — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 ENCIRCLEMENT_PENALTY = 1
 SUPPORT_STACK_ENABLED = True
-# [canonical: sim_verification_ledger.json — CALIBRATED, cell-support-stacking taper (F-i), not independently historically cited]
+# [CALIBRATED-DEBT: cell-support-stacking taper (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
-SUPPORT_WEIGHT_FLOOR = 0.3  # [canonical: sim_verification_ledger.json — CALIBRATED, cell-support-stacking floor (F-i), not independently historically cited]
+SUPPORT_WEIGHT_FLOOR = 0.3  # [CALIBRATED-DEBT: cell-support-stacking floor (F-i) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 PUNCTURE_ENABLED = True
 PUNCTURE_CAP = 3
 CASCADING_ENABLED = True
-MAX_SUB_PHASES = 5  # [canonical: sim_verification_ledger.json — CALIBRATED, cascading sub-phase resolution bound (F-iii), not independently historically cited]
-TICKS_PER_PHASE = 6  # [canonical: sim_verification_ledger.json — CALIBRATED, engine tick-resolution granularity, not independently historically cited]
+MAX_SUB_PHASES = 5  # [CALIBRATED-DEBT: cascading sub-phase resolution bound (F-iii) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+TICKS_PER_PHASE = 6  # [CALIBRATED-DEBT: engine tick-resolution granularity — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 BLOCK_SIZE = 100  # [canonical: designs/provincial/mass_battle_v30.md §A.3 — Company scale]
 CASUALTY_SCALE = float(_os.environ.get('CASUALTY_SCALE','4'))  # D-B: per-tick lethality. Default 4 = even units take ~3 turns to resolve (playable). TUNING.
 STAMINA_MAX = 100
 STAMINA_DRAIN_PER_CONTACT_CELL = 1   # drain per cell in contact per tick
-STAMINA_RECOVERY_PER_RESERVE_RANK = 8  # [canonical: sim_verification_ledger.json — CALIBRATED, per-subunit fatigue-chain recovery rate (ED-1017), not independently historically cited]
+STAMINA_RECOVERY_PER_RESERVE_RANK = 8  # [CALIBRATED-DEBT: per-subunit fatigue-chain recovery rate (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 STAMINA_POOL_THRESHOLDS = [(1, 0)]  # no penalty while stamina > 0
 STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 # [ED-MB-0031, Jordan 2026-07-23: "routs would occur as early as 15% losses with 30% the upper hand."]
@@ -79,13 +79,13 @@ STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '0') == '1')
 ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where morale-break risk begins
 ROUT_CAP_FRAC   = 0.30  # [canonical: Jordan historical research 2026-07-23 — 30% the upper bound] casualty fraction by which a break is near-certain
-MORALE_PHASE_CAP = 3  # [canonical: sim_verification_ledger.json — CALIBRATED, per-phase morale-loss bound, not independently historically cited]
+MORALE_PHASE_CAP = 3  # [CALIBRATED-DEBT: per-phase morale-loss bound — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 DISCIPLINE_LOSS_THRESHOLD = 1.0  # [canonical: params/mass_combat.md §Discipline Degradation]
 VOLLEY_ENABLED = True
 VOLLEY_TN = 6  # [canonical: params/mass_combat.md §Volley TN (ED-037 resolved — provisional) — "Volley phase uses TN 6 (not TN 7)"]
 RANGED_DR_DEFAULT = 2
 VOLLEY_MIN_RANGE = 2
-VOLLEY_MAX_RANGE = 8  # [canonical: sim_verification_ledger.json — CALIBRATED, engine volley-band ceiling paired with VOLLEY_MIN_RANGE, not independently historically cited]
+VOLLEY_MAX_RANGE = 8  # [CALIBRATED-DEBT: engine volley-band ceiling paired with VOLLEY_MIN_RANGE — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 PC_VOLLEY_DENSITY_ENABLED = _sigma_os.environ.get('PC_VOLLEY_DENSITY_ENABLED', '1') == '1'  # [class-B] volley casualties scale with TARGET formation density (packed/deep -> more hits); ranged-only path so the melee gauge stays byte-exact
 PC_VOLLEY_DENSITY_REF = float(_sigma_os.environ.get('PC_VOLLEY_DENSITY_REF', '80'))  # [class-B sim-tunable] reference column density (a standard line) at which the multiplier is 1.0
 PC_VOLLEY_DENSITY_FLOOR = float(_sigma_os.environ.get('PC_VOLLEY_DENSITY_FLOOR', '0.5'))  # [class-B sim-tunable] a dispersed/skirmish-order target bleeds at least this fraction
@@ -170,7 +170,7 @@ YIELD_RALLY_MORALE_FRAC = float(_sigma_os.environ.get('YIELD_RALLY_MORALE_FRAC',
 # place) emerging from the standoff substrate. Gated OFF -> `pocketed` never set -> malus path unchanged.
 PC_YIELD_POCKET = (_sigma_os.environ.get('PC_YIELD_POCKET', '0') == '1')
 YIELD_POCKET_REACH = float(_sigma_os.environ.get('YIELD_POCKET_REACH', '3.0'))  # [CALIBRATED-DEBT — an enemy within 3 cells in the retreat direction counts as 'gotten behind'; not independently derived, flagged per §5]
-# [canonical: sim_verification_ledger.json — CALIBRATED, -99 is a structural sentinel (effectively-zero speed for 'hold'), not a magnitude independently historically cited]
+# [CALIBRATED-DEBT: -99 is a structural sentinel (effectively-zero speed for 'hold') — no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
 # [ED-MB-0029, Jordan directive 2026-07-23: "a subunit trying to hold ground and defend versus a subunit
 # trying to rout the other resolve differently — intent makes a big difference in how things resolve."]
@@ -202,7 +202,7 @@ PER_DIE_NET_EV = 0.4  # [canonical: params/core.md — face rule 1=-1, 2-6=0, 7-
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
                      "Partial": lambda p: 1,        "Failure": lambda p: 0}
 SIGMA_HEAD_ENABLED = _sigma_os.environ.get('SIGMA_HEAD', '1') == '1'   # toggle via SIGMA_HEAD env; default ON
-SIGMA_PER_D = 0.2            # [class-B sim-tunable] sigma-units per die-equivalent of a legacy pool modifier  # [canonical: sim_verification_ledger.json — CALIBRATED, sigma-head/pool-modifier conversion rate, not independently historically cited]
+SIGMA_PER_D = 0.2            # [class-B sim-tunable] sigma-units per die-equivalent of a legacy pool modifier  # [CALIBRATED-DEBT: sigma-head/pool-modifier conversion rate — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 RANGED_MELEE_SIGMA = -1.0    # [class-B sim-tunable] ranged-in-melee disadvantage as delta-sigma (replaces pool//3)
 MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF reproduces the pre-fix sigma prototype exactly
 
@@ -223,8 +223,8 @@ PC_FRICTION_CEV = _sigma_os.environ.get('PC_FRICTION_CEV', '0') == '1'
 # per-side log-SD; CALIBRATED against the Dupuy DLEDB win-rate curve (see dg6_friction_resolution.md),
 # not fitted to the gauge. [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md — Dupuy-DLEDB-calibrated combat-friction log-SD]
 PC_FRICTION_SIGMA = float(_sigma_os.environ.get('PC_FRICTION_SIGMA', '1.1'))
-MORALE_EROSION_DAMP = 0.7    # [class-B] <1 slows morale erosion -> longer, more attritional battles  # [canonical: sim_verification_ledger.json — CALIBRATED, morale-erosion damping factor, not independently historically cited]
-MORALE_SIGMA_SCALE  = 0.8    # [class-B] morale->effectiveness: falling morale lowers a unit's sigma-leverage  # [canonical: sim_verification_ledger.json — CALIBRATED, morale-to-sigma-leverage scaling, not independently historically cited]
+MORALE_EROSION_DAMP = 0.7    # [class-B] <1 slows morale erosion -> longer, more attritional battles  # [CALIBRATED-DEBT: morale-erosion damping factor — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+MORALE_SIGMA_SCALE  = 0.8    # [class-B] morale->effectiveness: falling morale lowers a unit's sigma-leverage  # [CALIBRATED-DEBT: morale-to-sigma-leverage scaling — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 MORALE_SIBLING_PULL = 0.15   # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of
 # own morale and overall morale; more likely to wilt if other subunits losing, more likely to rally if
 # other subunits winning."] [ASSUMPTION: class-B, Jordan-vetoable] Fraction of the gap between a subunit's
@@ -235,14 +235,14 @@ MORALE_SIBLING_PULL = 0.15   # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Sub
 # derive the exact magnitude from; the mechanic itself is Jordan-ruled, the constant is not.
 PER_CELL = _sigma_os.environ.get('PER_CELL', '1') == '1'   # per-column density/depth/fatigue/charge layer. [movement/pathing audit gate 4, ED-MB-0001, Jordan-ratified 2026-07-02: "yes, all options/modules must be turned on."] DEFAULT FLIPPED 0 -> 1, same ED-1089 precedent as FIELD_MOVEMENT/PC_NODE_COHESION: unlocks charge shock, brace recoil, cavalry speed, fatigue, and the ED-1091/ED-1095 gates in the default/visualized configuration; grid oracle = explicit '0' pin (bat.py/test_mass_battle_byte_exact.py already pin both PER_CELL=0 and PER_CELL=1 explicitly per mode, not via ambient default, so no CI-pin gap here)
 PC_NODE_COHESION = _sigma_os.environ.get('PC_NODE_COHESION', '1') == '1'   # step 2: node-relational cohesion (cells=nodes at live positions, held by relational offsets). [ED-1089, Jordan-ratified 2026-07-02] DEFAULT FLIPPED 0 -> 1 together with FIELD_MOVEMENT (units.py) — the field toggle requires the node float path (run_battle asserts FIELD_MOVEMENT => PC_NODE_COHESION); grid oracle = both pinned '0'
-PC_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights  # [canonical: sim_verification_ledger.json — CALIBRATED, per-column fatigue chain (ED-1017), not independently historically cited]
-PC_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this per tick  # [canonical: sim_verification_ledger.json — CALIBRATED, per-column fatigue chain (ED-1017), not independently historically cited]
-PC_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists  # [canonical: sim_verification_ledger.json — CALIBRATED, per-column fatigue chain (ED-1017), not independently historically cited]
-PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)  # [canonical: sim_verification_ledger.json — CALIBRATED, per-column fatigue chain (ED-1017), not independently historically cited]
+PC_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+PC_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this per tick  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+PC_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
+PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)  # [CALIBRATED-DEBT: per-column fatigue chain (ED-1017) — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 PC_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = PC_STAMINA_DRAIN/(1+PC_DEPTH_ROTATE*(depth-1))
 PC_FRONTAGE_BLEND  = 0.0    # Incr4 contact-fraction: 0=pure width (more cols=more men), 1=pure frontage (depth-neutral)
 PC_FRONTAGE_REF    = 7.0    # reference frontage (columns) for the width term normalization  # [canonical: tests/coverage_matrix_archive.md §"PER_CELL Increment 4" — depth-aware contact-fraction width-term normalization; CALIBRATED, not independently historically cited]
-PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density  # [canonical: sim_verification_ledger.json — CALIBRATED, rear-rank refill trigger, not independently historically cited]
+PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density  # [CALIBRATED-DEBT: rear-rank refill trigger — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 PC_CLOSE_RANKS     = (_sigma_os.environ.get('PC_CLOSE_RANKS', '0') == '1')  # [ED-MB-0028, Jordan directive 2026-07-23: "as cells lose troops, unengaged troops from other cells fill them in to keep engaged cells at prescribed density; coverage shrinks as minimums aren't met — the internal-subunit version of rotating troops"] cell-level closing-ranks lifecycle. Default OFF (byte-exact).
 PC_CELL_DAMAGE     = (_sigma_os.environ.get('PC_CELL_DAMAGE', '0') == '1')  # [ED-MB-0040, Jordan directive 2026-07-24: "the cell is the primitive", "each cell has its own octagon facing", "each cell has its own capacity to receive and issue damage", "flank/rear damage is supposed to be cellular", "damage is supposed to be done to cells"] CELL-PRIMITIVE damage: a pair's casualties are allocated to the defender's CONTACT CELLS in proportion to (cell troops x THAT CELL's own octagon facing multiplier), instead of being smeared uniformly-by-density across every engaged cell after the per-cell arcs were averaged into one subunit scalar. Same pair total (the scalar becomes the troop-weighted mean of the same per-cell mults) -> the change is WHERE the casualties land: a flanked/rear cell dies faster than its front-facing sibling in the same subunit, so an enveloped formation is stripped shell-inward instead of thinning uniformly. Default OFF (byte-exact).
 PC_CHARGE_SIGMA    = 0.55   # MAX defender moral-shock delta-sigma on a charge impact (du Picq: cavalry's  # [canonical: designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md §5 (PART 5 — CONSTANTS)]
@@ -269,7 +269,7 @@ PC_ENVELOP_SPEED_MULT = float(_sigma_os.environ.get('PC_ENVELOP_SPEED_MULT', '2.
 ENVELOP_STANDOFF = float(_sigma_os.environ.get('ENVELOP_STANDOFF', '8.0'))  # [ED-MB-0035, Jordan 2026-07-24] cavalry envelop WHEEL radius margin (field cells) beyond the enemy's half-extent: the encircler MAINTAINS this distance from the enemy centre while wheeling around to the rear (a field-coordinate radius that DEFINES the wheeling orbit), then closes — so it does not blunder into the front/flank mid-sweep. Calibrate by measurement.
 ENVELOP_ORBIT_CAP = int(_sigma_os.environ.get('ENVELOP_ORBIT_CAP', '10'))  # [ED-MB-0035] max ticks a cavalry wing WHEELS at standoff before it force-commits to close & strike — bounds the orbit so a wing that can't reach dead-behind (moving/blocking enemy) still engages instead of orbiting to the tick cap (robustness + keeps battles from running long).
 PC_KITE_ENABLED = True  # §13 kiting primitive: ranged units with the 'kite' instruction maintain the volley band instead of closing. INERT without the instruction -> byte-exact.
-PC_KITE_STANDOFF = 5  # [class-B] kiter retreat-trigger (Chebyshev distance): open the gap when nearest enemy is nearer than this; hold+volley in [this, VOLLEY_MAX_RANGE]; close when beyond. Calibrate by measurement. §13.  # [canonical: sim_verification_ledger.json — CALIBRATED, §13 kiting primitive retreat-trigger, not independently historically cited]
+PC_KITE_STANDOFF = 5  # [class-B] kiter retreat-trigger (Chebyshev distance): open the gap when nearest enemy is nearer than this; hold+volley in [this, VOLLEY_MAX_RANGE]; close when beyond. Calibrate by measurement. §13.  # [CALIBRATED-DEBT: §13 kiting primitive retreat-trigger — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 PC_BRACE_ENABLED = _sigma_os.environ.get('PC_BRACE_ENABLED', '1') == '1'  # [class-B] brace-instruction effects (charge-resistance + reciprocal recoil); gated on the 'brace' instruction so instruction-less scenarios stay byte-exact
 PC_RECOIL_FRONTAL = _sigma_os.environ.get('PC_RECOIL_FRONTAL', '1') == '1'  # [ED-1091, Jordan-approved 2026-07-02 "c7 if it is historically valid"] the reciprocal charge-recoil fires ONLY when the braced wall FACES the charge (GREEN octagon zone) — a brace cannot repel what it cannot face; OFF reproduces the prior any-direction recoil  # [canonical: mass_battle_gauge_grounding.md §4.3 — Burkholder 2007; the flagged fix candidate "gate the recoil on the frontal (GREEN) octagon zone"]
 PC_CHARGE_RECOIL = float(_sigma_os.environ.get('PC_CHARGE_RECOIL', '6'))  # [class-B sim-tunable; CALIBRATED vs Courtrai/Swiss/Waterloo pike-vs-cavalry: braced+deep+disciplined wall beats a frontal charge ~75%, cavalry takes the heavier losses; shallow/green is ridden down] net-success cost a charger suffers hitting a fully-prepared braced wall (x prep x SIGMA_PER_D)

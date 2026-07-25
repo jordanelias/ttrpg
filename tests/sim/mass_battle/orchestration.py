@@ -667,12 +667,70 @@ def _merge_cell_damage(dst, src):
                 acc[cell] = acc.get(cell, 0.0) + d
 
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, conv_scale=None,
-                        eng_counts=None, atom_sides=None):
+def _expire_charger_latches(unit_a, unit_b, pairs):
+    """[ED-MB-0041 Tier-2] Drop each atom's latched charger-role for opponents it is no longer touching.
+
+    The latch (`atom._pressing`, set in resolve_engagements) holds "I charged this body" across the ticks
+    after impact, because momentum is an impulse and the braced-wall repel must not expire with it. It has
+    to be released when the bodies part, or a cavalry subunit that charged a pike wall, broke off, and
+    later engaged a DIFFERENT wall would arrive already flagged as its charger.
+
+    Computed from the FULL tick's pair list by resolve_engagements_cascading, for the same reason
+    `_compute_front_fixers` is: a cascade sub-phase group is not the tick, and clearing from a partial
+    view would expire latches for pairs that are still very much in contact.
+    """
+    live = {}
+    for p in pairs:
+        a, b = p["atom_a"], p["atom_b"]
+        live.setdefault(id(a), set()).add(id(b))
+        live.setdefault(id(b), set()).add(id(a))
+    for u in (unit_a, unit_b):
+        for atom in u.subunits:
+            pressing = getattr(atom, '_pressing', None)
+            if pressing:
+                pressing &= live.get(id(atom), set())
+
+
+def _compute_front_fixers(pairs):
+    """[ED-MB-0041 Tier-2] THE single owner of the atomized fixing-force relation, computed on a
+    pair list: {id(defender): {id(enemy) that is contacting its FRONT arc}}.
+
+    A subunit engaged on its FRONT by an enemy body cannot wheel as a body to face a SEPARATE
+    detachment on its flank/rear -- so that detachment's hit lands with the zone penalty (the
+    envelopment of a fixed unit). "Fixed" is emergent from frontal contact and requires a DIFFERENT
+    enemy subunit than the flanker, so it is impossible in any single-subunit clash. Centroid-based,
+    per contacting pair.
+
+    SCOPING (the Tier-2 defect this hoist fixes): this used to be computed INSIDE resolve_engagements
+    off whatever `pairs` that call received. Under CASCADING_ENABLED that is one cascade sub-phase
+    GROUP, not the tick -- so a defender pinned frontally by a body in group 0 and flanked by a
+    detachment in group 1 saw an EMPTY fixer set in group 1 and wheeled freely. That is precisely the
+    Cannae shape (centre fixes, wings envelop), i.e. the mechanism was dead in the case it exists for.
+    It is now computed ONCE on the full tick by resolve_engagements_cascading and threaded in, the
+    same treatment eng_counts/atom_sides already get for the same reason."""
+    def _su_centroid(_su):
+        _cs = _su.cells()
+        return (sum(r for r, c in _cs) / len(_cs), sum(c for r, c in _cs) / len(_cs)) if _cs else None
+    ff = {}
+    for _p in pairs:
+        for _d, _e in ((_p["atom_a"], _p["atom_b"]), (_p["atom_b"], _p["atom_a"])):
+            _dc = _su_centroid(_d); _ec = _su_centroid(_e)
+            if _dc is None or _ec is None:
+                continue
+            _fz0, _ = octagon_angle(_ec, _dc, (_d.advance_dir, 0))
+            if _fz0 == "GREEN":
+                ff.setdefault(id(_d), set()).add(id(_e))
+    return ff
+
+
+def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
+                        eng_counts=None, atom_sides=None, front_fixers=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
-    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
+    F-iii: per-cell facing comes from the subunit's LIVE `cell_facing_vec` (via get_cell_facing),
+    read inside _octagon_cell_mods. The old write-only `dynamic_facings` side-channel parameter is
+    deleted (ED-MB-0041 Tier-2 — see geometry.py's retirement note).
     t: current battle tick (None -> old instantaneous-brace behaviour; see resolution._brace_setup_ok),
     threaded to _charge_shock_sigma and the reciprocal-recoil _subunit_braced calls. [ED-1095]
     eng_counts/atom_sides: [B6] precomputed on the FULL tick by resolve_engagements_cascading and threaded
@@ -710,23 +768,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
         a_conv_scale, b_conv_scale = _convergence_scale(unit_a, unit_b, pairs)
     else:
         a_conv_scale, b_conv_scale = conv_scale
-    # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
-    # wheel as a body to face a SEPARATE detachment on its flank/rear -- so that detachment's hit lands
-    # with the zone penalty (the envelopment of a fixed unit). "Fixed" is emergent from frontal contact
-    # and requires a DIFFERENT enemy subunit than the flanker -> impossible in any single-subunit clash
-    # (byte-exact for the counters). Centroid-based, per contacting pair.
-    def _su_centroid(_su):
-        _cs = _su.cells()
-        return (sum(r for r, c in _cs) / len(_cs), sum(c for r, c in _cs) / len(_cs)) if _cs else None
-    _front_fixers = {}
-    for _p in pairs:
-        for _d, _e in ((_p["atom_a"], _p["atom_b"]), (_p["atom_b"], _p["atom_a"])):
-            _dc = _su_centroid(_d); _ec = _su_centroid(_e)
-            if _dc is None or _ec is None:
-                continue
-            _fz0, _ = octagon_angle(_ec, _dc, (_d.advance_dir, 0))
-            if _fz0 == "GREEN":
-                _front_fixers.setdefault(id(_d), set()).add(id(_e))
+    # A (atomized fixing-force, subunit-scale) -- see _compute_front_fixers for the mechanism and for
+    # why it must be scoped to the FULL tick rather than a cascade sub-phase group. Threaded in by
+    # resolve_engagements_cascading; a direct caller (tests / non-cascading path, where `pairs` already
+    # IS the full tick) gets it computed here instead -- identical math either way.
+    _front_fixers = _compute_front_fixers(pairs) if front_fixers is None else front_fixers
     for p in pairs:
         atom_a, atom_b = p["atom_a"], p["atom_b"]
         a_troops_frac = atom_a.troop_count / unit_a.total_troops()
@@ -1149,12 +1195,33 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, t=None, con
                     # NOT-REPELLED. A brace IS a hedge of set poles, so a braced defender should carry a
                     # pole-armed troop type (pike 0.3 >= 0.2 passes). The stale comment is why this went
                     # unnoticed for so long.
+                    # [ED-MB-0041 Tier-2] CHARGER-ROLE LATCH. `a_mom > b_mom` is how the engine identifies
+                    # WHO is the charger; it is not itself the cause of the recoil. The cause is a mounted
+                    # body being pressed onto a hedge of set poles, and a wall does not stop repelling after
+                    # one tick. Once momentum became an impulse (units.py: a halted cell records 0), the
+                    # differential is true only on the tick of impact, so re-deriving the role from it every
+                    # tick silently reduced the braced-wall repel to a single tick — measured: the
+                    # pike-vs-cavalry retention margin collapsed from >0.02 to 0.0035.
+                    #
+                    # So the ROLE is latched at impact and held while the pair stays in contact: the atom
+                    # remembers which opponents it charged. Everything else about the gate is unchanged —
+                    # brace, frontal zone, cavalry-only and the reach test all still have to pass every tick,
+                    # so the wall stops repelling the moment it is broken, flanked or out-reached. Cleared
+                    # when the pair leaves contact (below) and at the battle boundary.
+                    _a_press = getattr(atom_a, '_pressing', None)
+                    if _a_press is None: _a_press = atom_a._pressing = set()
+                    _b_press = getattr(atom_b, '_pressing', None)
+                    if _b_press is None: _b_press = atom_b._pressing = set()
+                    if a_mom > b_mom: _a_press.add(id(atom_b))
+                    if b_mom > a_mom: _b_press.add(id(atom_a))
+                    a_charging = (a_mom > b_mom) or (id(atom_b) in _a_press)
+                    b_charging = (b_mom > a_mom) or (id(atom_a) in _b_press)
                     if PC_BRACE_ENABLED:
-                        if (a_mom > b_mom and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
+                        if (a_charging and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
                                 and (not PC_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
                                                                      and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
                             ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif (b_mom > a_mom and _subunit_braced(atom_a, t) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5)
+                        elif (b_charging and _subunit_braced(atom_a, t) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5)
                                 and (not PC_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
                                                                      and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
                             ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
@@ -1330,11 +1397,13 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # + encirclement penalty never fired -- envelopment delivered ~0% at matched density.
     full_sides = _compute_atom_sides(pairs) if PC_OCTAGON_DMG else {}
     full_eng = count_engagements_per_atom(pairs)
+    full_fixers = _compute_front_fixers(pairs)   # [ED-MB-0041 Tier-2] full-tick scope, not per-group
+    _expire_charger_latches(unit_a, unit_b, pairs)   # [ED-MB-0041 Tier-2] see the latch note in resolve_engagements
     if not CASCADING_ENABLED:
         return resolve_engagements(unit_a, unit_b, pairs, t=t, conv_scale=conv_scale,
-                                   eng_counts=full_eng, atom_sides=full_sides)
+                                   eng_counts=full_eng, atom_sides=full_sides,
+                                   front_fixers=full_fixers)
 
-    dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
     total_cell_a, total_cell_b = {}, {}   # [ED-MB-0040] per-cell damage merged across sub-phases
     resolved_keys = set()
@@ -1365,8 +1434,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, t=t, conv_scale=conv_scale,
-                                     eng_counts=full_eng, atom_sides=full_sides)
+        result = resolve_engagements(unit_a, unit_b, active, t=t, conv_scale=conv_scale,
+                                     eng_counts=full_eng, atom_sides=full_sides,
+                                     front_fixers=full_fixers)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -1375,9 +1445,10 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
             _merge_cell_damage(total_cell_b, result.get("cell_dmg_b", {}))
         for p in active:
             resolved_keys.add((id(p["atom_a"]), id(p["atom_b"])))
-            # Rotate engaged cells toward their opponents
-            _rotate_defender_facing(p["atom_b"], p["b_cells"], p["a_cells"], dynamic_facings)
-            _rotate_defender_facing(p["atom_a"], p["a_cells"], p["b_cells"], dynamic_facings)
+            # (ED-MB-0041 Tier-2) The per-sub-phase `_rotate_defender_facing` writes are gone with the
+            # dict they wrote into. Engaged cells still turn toward their opponents — via the live
+            # `cell_facing_vec` slew in _node_advance (PC_FACING_ATTENTION), which is what the octagon
+            # actually reads.
 
     return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements,
             "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b}
@@ -1962,11 +2033,19 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 continue  # rout check below
 
         # Rout check AFTER both erosions applied — per-subunit, then derive the unit rout
+        # [ED-MB-0041 Tier-2] The two rout triggers are now aligned. Morale collapse was checked here,
+        # per TICK; the annihilation trigger (troop_total below SUBUNIT_ROUT_FLOOR) was checked only in
+        # rout_resolution, which runs at a PHASE boundary — every TICKS_PER_PHASE (=6) ticks. So a
+        # subunit ground below the floor kept fighting, at full effectiveness, for up to 5 more ticks
+        # before it was allowed to break. Both are "this body has stopped being a body"; both belong on
+        # the same clock. rout_resolution still runs the same check at the boundary (harmless: setting
+        # an already-set flag), so its canonical §A.12 sequencing is untouched.
         for u in [unit_a, unit_b]:
             if u.routed:
                 continue
             for atom in u.subunits:
-                if not atom.routed and atom.eff_morale <= 0:
+                if not atom.routed and (atom.eff_morale <= 0
+                                        or atom.troop_total() < SUBUNIT_ROUT_FLOOR):
                     atom.routed = True
             u.derive_rout()   # single-subunit: fires iff old `u.morale<=0` did (byte-exact)
         # v15: phase boundary — stamina_check, morale_check_phase, rout_resolution
@@ -2059,6 +2138,17 @@ def reset_morale_between_battles(unit):
         # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
         # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
         atom.pocketed = False
+        # [ED-MB-0041 Tier-2] `yielding` is the OTHER half of the DG-2 yield signal and was the one
+        # transient here that never got cleared -- every sibling (pocketed, feigned, overextended, the
+        # rout break-point, the reaction clock) was. With PC_YIELD_RALLY off nothing else clears it
+        # either, so a subunit that yielded once stayed flagged as yielding for the remainder of the
+        # campaign, carrying its yield-state pool malus into every later battle. Same per-battle
+        # transient, same boundary.
+        atom.yielding = False
+        # [ED-MB-0041 Tier-2] The charger-role latch is per-engagement state: a body that charged a wall
+        # in the last battle must not open the next one already flagged as its charger.
+        _p = getattr(atom, '_pressing', None)
+        if _p is not None: _p.clear()
         # [ED-MB-0018, reaction-critic R1] A new battle is a fresh engagement -> clear the facing-reaction
         # clock (per-engagement transient state must not survive the battle boundary onto a persistent atom).
         _rs = getattr(atom, '_react_since', None)
@@ -2399,6 +2489,12 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             dmg = pursuit_damage(pursuer, routing)
             if dmg > 0:
                 routing.hp = max(0, routing.hp - dmg)
+                # [ED-MB-0041] Pursuit damage previously mutated hp ONLY, never the cells — so the two
+                # ledgers diverged permanently. They feed DIFFERENT mechanics (hp -> _lanchester_strength,
+                # recalc_size, the single-subunit cohesion fast path; cells -> pair_pool_contribution,
+                # troop_total()'s SUBUNIT_ROUT_FLOOR check), so a unit ground down by pursuit still fought
+                # at full per-troop pool and could never hit the troop-floor rout.
+                distribute_casualties(routing, dmg, [])
                 routing.recalc_size()
             turn_log['pursuits'].append({
                 'pursuer': pursuer.name, 'target': routing.name,
@@ -2455,6 +2551,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 if dmg > 0:
                     # [canonical: params/mass_combat.md PP-233 — simultaneous damage]
                     target.hp = max(0, target.hp - dmg)
+                    # [ED-MB-0041] same hp-only divergence as the pursuit path above — mirror the loss
+                    # onto the cells so sum(cell_troops) tracks hp.
+                    distribute_casualties(target, dmg, [])
                     target.recalc_size()
                     # Morale erosion from flanking damage
                     # [canonical: designs/provincial/mass_battle_v30.md §A.4]
