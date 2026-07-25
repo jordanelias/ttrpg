@@ -1,4 +1,4 @@
-"""[ED-MB-0041 phase 1] The cell is the primitive for MORALE.
+"""[ED-MB-0042] The cell is the primitive for MORALE.
 
 Jordan, 2026-07-25: *"the cell needs to be the primitive for morale, discipline, quality, stamina,
 route, health, armour, facing, damage, troops count, etc"*, and earlier: *"cells get modulated /
@@ -16,7 +16,9 @@ The model is a two-way loop, not a broadcast:
   MODULATE DOWN    that holistic value pulls its own cells back toward it, discipline-gated (du Picq:
                    men hold because the men beside them hold).
 
-Gated behind `PC_CELL_MORALE`, default OFF, so an unseeded subunit takes the scalar path verbatim.
+Gated behind `PC_CELL_MORALE`. It shipped OFF for phases 1/2/2b and was flipped **ON 2026-07-25** on
+measurement (see `config.py`'s block, and `test_default_is_on` below). An unseeded subunit still takes
+the scalar path verbatim, so every aggregate/erosion path below is exercised in both directions.
 """
 import os
 import sys
@@ -65,9 +67,14 @@ def test_seeding_leaves_the_aggregate_identical_to_the_scalar():
 
 
 def test_unseeded_is_the_scalar_path_verbatim():
-    """The shipped default. No cell morale -> the old expression, untouched."""
+    """The fallback. No cell morale -> the old expression, untouched.
+
+    This WAS the shipped default and is no longer (PC_CELL_MORALE flipped ON 2026-07-25), so the atom is
+    now un-seeded explicitly rather than by relying on the flag. The fallback still has to hold: every
+    subunit built outside `__post_init__`'s seeding — and every consumer reached before it — takes it.
+    """
     a = _atom()
-    assert not a.cell_morale
+    a.cell_morale, a.cell_start_troops, a.cell_breakpoint = {}, {}, {}
     assert a.eff_morale == (a.morale if a.morale is not None else a._u().morale)
 
 
@@ -167,8 +174,15 @@ def test_erosion_scales_by_fraction_of_the_cell_not_absolute_count():
         "equal FRACTIONAL loss must cost equal morale regardless of cell density"
 
 
-def test_default_is_gated_off():
-    assert C.PC_CELL_MORALE is False, "phase 1 ships gated OFF until measured on both scoreboards"
+def test_default_is_on():
+    """A test pinning a default is pinning a DECISION, so it carries the decision's evidence.
+
+    Phases 1/2/2b shipped OFF pending measurement. Measured 2026-07-25 against a same-session flag-OFF
+    control at the gauge's own n=60, in the resolving (multi) mode: win-share bands 7/20 -> 8/20, and
+    casualty/duration realism 2/20 -> 7/20. Flipped ON. If a future change makes this assertion fail,
+    the question to answer is not "how do I make the test pass" but "which of those two numbers moved".
+    """
+    assert C.PC_CELL_MORALE is True, "flipped ON 2026-07-25 on both scoreboards — see config.py"
 
 
 # ─── phase 2: local break ────────────────────────────────────────────────────

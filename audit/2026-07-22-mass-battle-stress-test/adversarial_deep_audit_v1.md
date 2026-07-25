@@ -515,3 +515,74 @@ where real ones stop — which means it was never the independent "deployment ge
 diagnosis assumed, and the fix for it was a lethality/termination fix all along.
 
 **H4/H11 at −3.8σ remains a real, independent defect** and is the surviving symmetry item.
+
+---
+
+## 10. THE CELL AS THE PRIMITIVE FOR MORALE (ED-MB-0042, 2026-07-25)
+
+Jordan's directive: *"the cell needs to be the primitive for morale, discipline, quality, stamina,
+route, health, armour, facing, damage, troops count, etc"*. This section records the first state moved
+— morale — and the flip it earned. Full mechanism notes live in `tests/coverage_matrix.md`; what
+belongs *here*, in an adversarial audit, is the reasoning and the two errors.
+
+### 10.1 The finding that mattered was an asymmetry, not a magnitude
+
+Phases 1+2 measured **byte-identical to phase 1** across all twenty rows. Identical is a far stronger
+signal than disappointing: a smaller-than-hoped number gets absorbed as "it helps a little", whereas
+identical across twenty rows can only mean the code never ran in a way that mattered.
+
+Instrumenting it showed 72 of 144 cells "broken" at *exactly* −1.0. The uniformity was the diagnosis —
+local damage produces a spread, so one repeated value means one uniform write. It was the body-wide
+rout punch. Cells were breaking as a **consequence** of the body routing, strictly after the event
+phase 2 exists to precede.
+
+| | gradual erosion | break-point short-circuit |
+|---|---|---|
+| body | yes | **yes** — du Picq 15–30%, `_stochastic_break` |
+| cell | yes | **none** |
+
+A cell had to be destroyed twice over to break by erosion alone, so the body won that race by
+construction. Tuning any coefficient would have been the wrong move; the missing thing was a *symmetry*.
+
+### 10.2 The flip, and what it cost
+
+Measured against a same-session flag-OFF control at n=60, resolving (multi) mode:
+
+| | win-share bands | casualty/duration realism |
+|---|---|---|
+| OFF | 7/20 | 2/20 |
+| **ON** | **8/20** | **7/20** |
+
+The casualty column is the evidence, and it is a mechanism producing a *shape* rather than a fitted
+number: loser losses fall out of 31–40% into 26–30% (H6 79.2 → 48.9, C7 39.9 → 32.1) — du Picq's claim
+that a body comes apart before it is destroyed, falling out of cells that stop being a formation before
+they stop existing. Costs: single mode 7/20 → 5/20 (both flipped rows sub-1σ band-edge moves at n=60 in
+the mode the gauge documents as non-resolving); C4 91.5 → 96.7 against a 95 ceiling (~0.5σ).
+**Reverse-pair symmetry 3.8σ → 3.4σ — H4/H11 is still ASYMMETRIC and is still the surviving item.**
+
+### 10.3 Error on the record: I reported a worrying number without its control
+
+I flagged an "over-firing" signal — 76–100% single-mode draw rates — from the phase-2b run, and put it
+in the coverage matrix before the multi-mode scoreboard landed. The flag-OFF control then showed those
+same rows at **100% draws with the flag off too**: the pre-existing tick-cap artifact the gauge's own
+docstring documents, present before phase 2b and unmoved by it.
+
+The failure is the same one §8's phantom-positive finding names, pointed the other way. I had internalised
+"a flattering number needs a control" and not the general form: **a number without its control is not a
+measurement, whichever direction it points.** Recording a concern early is good practice; recording it
+as *caused by my change* without a control arm is not.
+
+### 10.4 Unplanned finding: `PC_STOCHASTIC_ROUT` is now inert in the shipped configuration
+
+With cells carrying their own break-points, the body-level flag stops separating: loser casualties
+**35.6%** with it OFF and **36.1%** with it ON. The cells break first — same 15–30% band,
+discipline-skewed — and `CELL_BREAK_ROUT_FRAC` ends the body before the subunit-level draw is consulted.
+
+Note the shape of this: §9.1 flipped that flag ON eight hours earlier on strong evidence, and the very
+next mechanism built one scale down **subsumed it**. That is not a reversal of §9.1 — it was correct on
+the engine that existed — but it is a standing hazard worth naming: *a fix installed at the wrong scale
+looks identical to a fix, until the right-scale mechanism arrives.*
+
+It is **not** removed. It remains load-bearing on the unseeded fallback path, so it is a retirement
+**candidate**, pinned by `test_per_cell_break_subsumes_the_body_level_one` and left for a pass that first
+enumerates that path's consumers.

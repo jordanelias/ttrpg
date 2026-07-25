@@ -2,6 +2,40 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0042: PC_CELL_MORALE flipped ON; per-cell breaks subsume the body-level one
+
+Measured against a **same-session flag-OFF control** at the gauge's own n=60, in the resolving (multi)
+mode, on both scoreboards:
+
+| | win-share bands | casualty/duration realism |
+|---|---|---|
+| OFF | 7/20 | 2/20 |
+| **ON** | **8/20** | **7/20** |
+
+**The casualty column is the evidence, and it is a mechanism producing a shape rather than a fitted
+number.** Loser losses fall out of the 31–40% range into 26–30%: H6's loser goes 79.2% → 48.9%, C7's
+39.9% → 32.1%. That is du Picq's claim — a body comes apart before it is destroyed — falling out of
+cells that stop being a formation earlier than they stop existing. Nothing was tuned to hit a band.
+
+**Costs, stated not buried.** `single` mode drops 7/20 → 5/20, but both flipped rows (H2 51.4→46.2,
+H9 47.5→52.8) are sub-1σ moves across a band edge at n=60 (SE ≈ 6.5pp) in the mode the gauge documents
+as non-resolving — not evidence. C4 goes 91.5 → 96.7 against a 95 ceiling (≈0.5σ). Reverse-pair
+symmetry improves 3.8σ → 3.4σ; **H4/H11 stays ASYMMETRIC and stays open.**
+
+**Goldens re-recorded, not pinned off.** `unit` and `cell` both move; `_PINNED_OFF` gains
+`PC_CELL_MORALE: '1'`. Pinning it off would have kept the digests stable while quietly ending their
+coverage of the shipped engine — this flag is not a path selector like `FIELD_MOVEMENT`, it changes the
+state model on the path `cell` mode exercises. Same treatment as `PC_OCTAGON_DMG`.
+
+**Unplanned finding: `PC_STOCHASTIC_ROUT` is now inert in the shipped configuration.** With cells
+carrying their own break-points, the loser reaches **35.6%** casualties with body-level stochastic rout
+OFF and **36.1%** with it ON — no separation. The cells break first (same 15–30% band, discipline-
+skewed) and `CELL_BREAK_ROUT_FRAC` ends the body before the subunit-level draw is consulted. Recorded
+and pinned by `test_per_cell_break_subsumes_the_body_level_one` rather than acted on: the flag is still
+load-bearing on the unseeded fallback path, so it is a retirement **candidate**, not dead code.
+`test_loser_breaks_near_historical_band` now pins `PC_CELL_MORALE=OFF` — it measures the body-level
+mechanism, and inheriting the live default made its control arm already-broken and the test a no-op.
+
 ## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry
 
 **Phases 1+2 measured byte-identical to phase 1** — every one of 20 rows to the decimal, 1/20 casualty
@@ -34,6 +68,13 @@ cell's scale, not a coefficient nudge. Morale values are now a genuine spread (�
 **⚠ Early measurement shows OVER-FIRING**: single-mode draw rates of 76–100%. Bodies may now break so
 early that nothing resolves. Recorded before the multi-mode scoreboard lands, so the concern is on the
 record independent of how the final number reads. Flag remains OFF.
+
+> **That concern was WRONG, and the error is instructive.** The flag-OFF control run (below) shows
+> H3/H5/H6/H10/R3 at **100% draws in single mode with the flag off too** — the pre-existing tick-cap
+> artifact the gauge's own docstring documents, present before phase 2b and unmoved by it. I read
+> single-mode rows from a run that had no control beside it and attributed a standing artifact to my
+> own change. The rule this cost me: **a number without its control is not a measurement**, and that
+> applies to a worrying number exactly as much as to a flattering one.
 
 ## 2026-07-25 — ED-MB-0041 phase 2: local break, cell-scale contagion, and the half of phase 1 I never wired
 

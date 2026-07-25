@@ -89,9 +89,14 @@ def test_break_fires_when_casualties_cross():
     assert S._stochastic_break(su, 0.25) is True    # 25% losses -> past the point -> break
 
 
-def _mean_loser_casualties(on, n=16):
+def _mean_loser_casualties(on, n=16, cells=False):
+    """`cells` controls PC_CELL_MORALE, which must be pinned rather than inherited — see
+    test_loser_breaks_near_historical_band and test_per_cell_break_subsumes_the_body_level_one."""
+    import mass_battle.hierarchy.units as U
     prev = S.PC_STOCHASTIC_ROUT
+    prev_cells = U.PC_CELL_MORALE
     S.PC_STOCHASTIC_ROUT = on
+    U.PC_CELL_MORALE = cells       # read by Subunit.__post_init__ to decide whether to seed cells
     try:
         loser = []
         for s in range(n):
@@ -107,12 +112,41 @@ def _mean_loser_casualties(on, n=16):
         return statistics.mean(loser) if loser else 0.0
     finally:
         S.PC_STOCHASTIC_ROUT = prev
+        U.PC_CELL_MORALE = prev_cells
 
 
 def test_loser_breaks_near_historical_band():
-    """With the gate ON the loser breaks far earlier than the ~90% grind — into/near the 15-30% band."""
-    off = _mean_loser_casualties(False)
-    on = _mean_loser_casualties(True)
+    """With the gate ON the loser breaks far earlier than the ~90% grind — into/near the 15-30% band.
+
+    Pinned to PC_CELL_MORALE=OFF, and that pin is the point: this test measures the BODY-LEVEL
+    break-point, and per-cell morale (default ON since 2026-07-25) supplies its own break-point one
+    scale down. Inheriting the live default would leave the OFF arm already broken by the cells and
+    make this read as a no-op — see test_per_cell_break_subsumes_the_body_level_one, which asserts
+    exactly that and is the reason for the pin rather than a separate curiosity.
+    """
+    off = _mean_loser_casualties(False, cells=False)
+    on = _mean_loser_casualties(True, cells=False)
     assert off > 60.0, f"baseline should grind to high casualties (got {off:.1f})"
     assert on < 45.0, f"stochastic rout must break the loser far earlier (got {on:.1f})"
     assert on < off - 30.0
+
+
+def test_per_cell_break_subsumes_the_body_level_one():
+    """[ED-MB-0042] With cells carrying their own break-points, the body-level flag stops mattering.
+
+    Measured 2026-07-25: with PC_CELL_MORALE ON, the loser reaches ~35.6% casualties with stochastic
+    body-rout OFF and ~36.1% with it ON — no separation at all. The cells break first (each drawing from
+    the same 15-30% band, discipline-skewed) and CELL_BREAK_ROUT_FRAC ends the body before the
+    subunit-level draw is ever consulted.
+
+    This is recorded rather than quietly acted on. It means PC_STOCHASTIC_ROUT is now inert in the
+    SHIPPED configuration while remaining load-bearing on the unseeded fallback path above, so it is a
+    retirement CANDIDATE, not dead code — deleting it today would silently remove the only break-point
+    a subunit built outside `__post_init__`'s seeding has.
+    """
+    off = _mean_loser_casualties(False, cells=True)
+    on = _mean_loser_casualties(True, cells=True)
+    assert abs(on - off) < 10.0, (
+        f"per-cell breaks should already be doing this work (off {off:.1f} vs on {on:.1f}); if these "
+        f"have separated again, the cell break-point has stopped firing before the body-level one")
+    assert off < 45.0, f"cells alone must break the loser well short of the grind (got {off:.1f})"

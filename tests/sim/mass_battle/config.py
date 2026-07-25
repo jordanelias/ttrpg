@@ -62,12 +62,34 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # could move are exactly the SINGLE-SUBUNIT ones (H1/H2/H7/H8/H9), because an army of one subunit has no
 # line to come apart. Per-cell morale gives every body internal sections that can break independently,
 # which is the same contagion mechanism one level down.
-PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '0') == '1'   # gated OFF -> byte-exact
+#
+# [ED-MB-0042, 2026-07-25 — the ledger entry covering all of phases 1/2/2b, allocated after the
+# in-code "ED-MB-0041 phase N" labels above were written] FLIPPED ON by measurement, against a same-session flag-OFF control
+# run at the gauge's own n=60, in the RESOLVING (multi) mode, on BOTH scoreboards:
+#
+#            win-share bands   casualty/duration realism
+#     OFF          7/20                  2/20
+#     ON           8/20                  7/20
+#
+# The casualty column is the real evidence, and it is a mechanism producing the right SHAPE rather than
+# a fitted number: loser losses fall out of the 31-40% range into 26-30%, which is du Picq's claim that
+# a body comes apart before it is destroyed. H6's loser goes 79.2% -> 48.9%, C7's 39.9% -> 32.1%.
+# Nothing here was tuned to hit a band; cells simply stop being a formation earlier than they stop
+# existing. Costs, stated rather than buried: `single` mode drops 7/20 -> 5/20, but both flipped rows
+# (H2 51.4->46.2, H9 47.5->52.8) are sub-1-sigma moves across a band edge at n=60 (SE ~6.5pp) in the
+# mode the gauge documents as non-resolving; and C4 goes 91.5 -> 96.7 against a 95 ceiling (~0.5 sigma).
+# Reverse-pair symmetry improves 3.8 -> 3.4 sigma; H4/H11 stays ASYMMETRIC and stays open.
+#
+# Reversible with PC_CELL_MORALE=0. The byte-exact goldens were RE-RECORDED under the flip rather than
+# pinned OFF (the test pins it explicitly ON, as it does PC_OCTAGON_DMG) so the change-detector keeps
+# tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
+# quietly ending their coverage of what the engine actually does.
+PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '1') == '1'   # default ON (2026-07-25) -- see above
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
 # what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),
 # and deliberately the same UNCHOSEN status: the mechanism is du Picq's, the magnitude is not fitted.
-CELL_BREAK_ROUT_FRAC = float(_sigma_os.environ.get('CELL_BREAK_ROUT_FRAC', '0.5'))  # [CALIBRATED-DEBT: half the body's men in broken cells; mechanism grounded, magnitude unfitted — and only reachable at all under PC_CELL_MORALE, which is OFF]
+CELL_BREAK_ROUT_FRAC = float(_sigma_os.environ.get('CELL_BREAK_ROUT_FRAC', '0.5'))  # [CALIBRATED-DEBT: half the body's men in broken cells; mechanism grounded, magnitude unfitted — LIVE since PC_CELL_MORALE flipped ON 2026-07-25, so this is now a shipped unfitted magnitude, not a dormant one]
 CELL_MORALE_PULL = float(_sigma_os.environ.get('CELL_MORALE_PULL', '0.25'))  # [CALIBRATED-DEBT: cohesion pull rate toward the subunit mean; mechanism is du Picq's "men hold because their neighbours hold", magnitude unfitted]
 
 ROUT_CASCADE_FRAC = float(_sigma_os.environ.get('ROUT_CASCADE_FRAC', '1.0'))  # [JUSTIFIED: mechanism from du Picq (armies break by contagion once a decisive portion goes); magnitude UNCHOSEN — 1.0 is the inert default reproducing prior behaviour]
