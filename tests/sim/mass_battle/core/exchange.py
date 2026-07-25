@@ -187,8 +187,16 @@ def _pair_engaged_troops(atom, contact_abs_cells):
     front_r = min(r for r, c in contact_orig)
     weighted_troops = 0.0
     cell_troops = getattr(atom, 'cell_troops', None) or {}
+    _broken = getattr(atom, 'cell_broken', None)
     for pid, troops in cell_troops.items():
         if troops <= 0:
+            continue
+        # [ED-MB-0041 phase 2] A broken cell stops FIGHTING. This is the one place per-cell troops
+        # become emitted combat weight, so excluding them here is the whole of "a section that has
+        # given way no longer contributes" -- no other emission path needs to know. The men are still
+        # there (cell_troops is untouched, so they can still be killed and still count as casualties);
+        # they have simply stopped being a fighting part of the line, which is what a local break IS.
+        if _broken is not None and _broken(pid):
             continue
         orig_r, orig_c = pid
         if pid in contact_orig:

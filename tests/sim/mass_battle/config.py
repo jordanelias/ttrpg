@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'PC_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'PC_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'PC_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'PC_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'PC_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'PC_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'PC_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_REFILL_FLOOR', 'PC_CLOSE_RANKS', 'PC_CELL_DAMAGE', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'PC_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'PC_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'PC_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'PC_VOLLEY_DENSITY_ENABLED', 'PC_VOLLEY_DENSITY_REF', 'PC_VOLLEY_DENSITY_FLOOR', 'PC_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'PC_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'PC_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'PC_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'PC_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'PC_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'PC_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'PC_FRICTION_CEV', 'PC_FRICTION_SIGMA', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_REFILL_FLOOR', 'PC_CLOSE_RANKS', 'PC_CELL_DAMAGE', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL', 'PC_CHARGE_RECOIL', 'PC_BRACE_SETUP_DELAY', 'PC_RECOIL_CHARGER_GATE', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'PC_KITE_ENABLED', 'PC_KITE_STANDOFF', 'PC_NODE_COHESION']
 
 # [ED-MB-0041] Volley Size-loss -> troop-casualty scale. Replaces the per-target
 # `max(1,(h_per_size+1)//2)`, which made better armour/discipline/command INCREASE a unit's own missile
@@ -31,6 +31,81 @@ TROOPS_PER_SIZE = 100
 # contributes to the exchange (bounded-square, capped at CELL_CAP).
 CELL_FLOOR = 40             # min troops/cell; below this a cell merges into a neighbour (lifecycle)  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 CELL_CAP = 200              # max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
+# [ED-MB-0041, Tier-3 experiment under Jordan's 2026-07-25 permission] ARMY BREAKS BY CONTAGION, not
+# by fighting to the last section. `Unit.derive_rout` requires ALL subunits routed before the unit
+# breaks, and `run_battle` only stops when a UNIT routs -- so with per-subunit breaking at the historical
+# 15-30% band, the sections that have already broken sit on the field absorbing casualties while their
+# siblings fight on. Measured consequence: the loser reaches 61-87% total casualties on EVERY gauge row
+# against a 15-30% expectation (the casualty scoreboard, ED-MB-0041). Armies do not do this; they come
+# apart once a decisive portion of the line goes, and the rest routs by contagion rather than being
+# destroyed in place (du Picq's central claim about the moral, not physical, end of a battle).
+#
+# This is the fraction of a unit's SPAWN strength that must sit in broken subunits before the whole body
+# breaks. 1.0 reproduces the current all-subunits behaviour exactly, and is the default until the value
+# is chosen on evidence rather than asserted -- the sweep over candidate values is the experiment, and
+# the number that lands is CALIBRATED-DEBT until something outside the engine supports it.
+# [ED-MB-0041, Jordan directive 2026-07-25: "the cell needs to be the primitive for morale, discipline,
+# quality, stamina, route, health, armour, facing, damage, troops count, etc"] PHASE 1: MORALE.
+#
+# Today a subunit's morale is ONE scalar. The cell is the primitive for geometry (position, facing,
+# contact, casualty placement) but for no STATE at all -- so a rear cell being cut down and a front cell
+# holding its ground share a single number, and Jordan's own test case ("a cell should be able to have
+# worse morale than another cell in same subunit") is not representable.
+#
+# The model is aggregate-up / modulate-down, per Jordan's framing: cells carry morale; the subunit's
+# holistic morale is the troop-weighted MEAN of its cells (so it is derived, not stored); and that
+# holistic value pulls its own cells back toward it (a steady body steadies a shaky corner, a
+# disintegrating one drags a firm corner down). Cohesion is what a formation IS -- men hold because the
+# men beside them hold -- so the pull rate is discipline-gated.
+#
+# Why this matters beyond tidiness: the casualty scoreboard showed the rows no rout-contagion threshold
+# could move are exactly the SINGLE-SUBUNIT ones (H1/H2/H7/H8/H9), because an army of one subunit has no
+# line to come apart. Per-cell morale gives every body internal sections that can break independently,
+# which is the same contagion mechanism one level down.
+#
+# [ED-MB-0042, 2026-07-25 — the ledger entry covering all of phases 1/2/2b, allocated after the
+# in-code "ED-MB-0041 phase N" labels above were written]
+#
+# ⚠ FLIPPED ON, THEN RETRACTED THE SAME DAY. The measurement below is CONFOUNDED and must not be
+# cited. `between_turn_recovery` and `reset_morale_between_battles` both write the subunit/unit
+# morale SCALAR, which `eff_morale` stops reading the moment cells are seeded — so with the flag ON
+# they are silent no-ops. The multi-mode gauge runs multi-turn battles and resets morale between
+# them, so the ON arm fought with morale that never recovered while the OFF arm's did. "The loser
+# breaks earlier" is exactly what a body that cannot recover would also produce. The two arms were
+# not comparable, and I did not check before reporting the gain.
+#
+# This is the SAME defect class as the `erode_morale` silent no-op caught earlier in this lane —
+# a scalar write that the cell aggregate shadows. I fixed that one instance and did not sweep for
+# the rest of the pattern, which is why it recurred. The sweep is the prerequisite for re-measuring.
+#
+# The retracted numbers, kept only so the retraction is checkable:
+#
+#            win-share bands   casualty/duration realism
+#     OFF          7/20                  2/20
+#     ON           8/20                  7/20
+#
+# The casualty column is the real evidence, and it is a mechanism producing the right SHAPE rather than
+# a fitted number: loser losses fall out of the 31-40% range into 26-30%, which is du Picq's claim that
+# a body comes apart before it is destroyed. H6's loser goes 79.2% -> 48.9%, C7's 39.9% -> 32.1%.
+# Nothing here was tuned to hit a band; cells simply stop being a formation earlier than they stop
+# existing. Costs, stated rather than buried: `single` mode drops 7/20 -> 5/20, but both flipped rows
+# (H2 51.4->46.2, H9 47.5->52.8) are sub-1-sigma moves across a band edge at n=60 (SE ~6.5pp) in the
+# mode the gauge documents as non-resolving; and C4 goes 91.5 -> 96.7 against a 95 ceiling (~0.5 sigma).
+# Reverse-pair symmetry improves 3.8 -> 3.4 sigma; H4/H11 stays ASYMMETRIC and stays open.
+#
+# Reversible with PC_CELL_MORALE=0. The byte-exact goldens were RE-RECORDED under the flip rather than
+# pinned OFF (the test pins it explicitly ON, as it does PC_OCTAGON_DMG) so the change-detector keeps
+# tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
+# quietly ending their coverage of what the engine actually does.
+PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '0') == '1'   # RETRACTED to OFF 2026-07-25 -- see above
+# [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
+# no longer a formation. The men are still present -- they have stopped being a fighting line, which is
+# what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),
+# and deliberately the same UNCHOSEN status: the mechanism is du Picq's, the magnitude is not fitted.
+CELL_BREAK_ROUT_FRAC = float(_sigma_os.environ.get('CELL_BREAK_ROUT_FRAC', '0.5'))  # [CALIBRATED-DEBT: half the body's men in broken cells; mechanism grounded, magnitude unfitted — LIVE since PC_CELL_MORALE flipped ON 2026-07-25, so this is now a shipped unfitted magnitude, not a dormant one]
+CELL_MORALE_PULL = float(_sigma_os.environ.get('CELL_MORALE_PULL', '0.25'))  # [CALIBRATED-DEBT: cohesion pull rate toward the subunit mean; mechanism is du Picq's "men hold because their neighbours hold", magnitude unfitted]
+
+ROUT_CASCADE_FRAC = float(_sigma_os.environ.get('ROUT_CASCADE_FRAC', '1.0'))  # [JUSTIFIED: mechanism from du Picq (armies break by contagion once a decisive portion goes); magnitude UNCHOSEN — 1.0 is the inert default reproducing prior behaviour]
 SUBUNIT_ROUT_FLOOR = 80     # a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 # [ED-MB-0021 / P-DEC-3, spatial_model_v2_plan.md §9 — Jordan-RATIFIED mechanism: "a cavalry cell has a
@@ -76,7 +151,20 @@ STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 # casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
 # band + fractional loss fraction), reproducible under the seeded RNG. Gated OFF by default (moves the
 # byte-exact goldens when on — it is NOT inert like the other PC_ flags; the draw is only consumed when on).
-PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '0') == '1')
+# [ED-MB-0041, 2026-07-25] DEFAULT FLIPPED OFF -> ON, on the casualty scoreboard's evidence.
+# This implements the du Picq 15-30% break band (ED-MB-0031); OFF, the engine's own comment notes that
+# "units grind to ~58% before breaking". Measured across all 20 gauge rows:
+#     loser casualties   61-87%  ->  29-41%   (band 15-30)
+#     winner casualties 7.8-38%  ->  3.3-17%  (cap 15)
+#     casualty realism     0/20  ->    2/20
+#     win-share           10/20  ->    7/20
+# The win-share count DROPS BY THREE ROWS and the flip is still correct. That trade is the whole point
+# of the second scoreboard: a win-share gauge cannot tell a double envelopment from two lines colliding
+# (the reachability sweep found a config that passes Cannae with envelopment pathing switched OFF), so
+# it scored "stop annihilating both armies" as a regression. The reachability sweep itself had already
+# tried this flag, found "passes C4, fails H9", and recorded it as a wash -- on the wrong instrument.
+# Reversible in one step (PC_STOCHASTIC_ROUT=0) if the trade is judged wrong.
+PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '1') == '1')
 ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where morale-break risk begins
 ROUT_CAP_FRAC   = 0.30  # [canonical: Jordan historical research 2026-07-23 — 30% the upper bound] casualty fraction by which a break is near-certain
 MORALE_PHASE_CAP = 3  # [CALIBRATED-DEBT: per-phase morale-loss bound — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]

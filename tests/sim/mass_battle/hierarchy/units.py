@@ -6,6 +6,7 @@ troop_types.registry (stats_for), percell (build_column_grid) — and never impo
 (no cycle). Re-imported by orchestration via star-import so every Subunit(...)/Unit(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
 import math
+import random as _cell_random
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
 from mass_battle.config import *
@@ -381,6 +382,13 @@ class Subunit:
     # Initialized to advance_dir on first use. Updated whenever a cell moves.
     # [canonical: Jordan design — octagon facing = raw movement vector]
     cell_facing_vec: Dict[Tuple[int, int], Tuple[int, int]] = field(default_factory=dict)
+    # [ED-MB-0041 phase 1] Per-cell morale (Jordan: "the cell is the primitive ... a cell should be able
+    # to have worse morale than another cell in same subunit"). EMPTY until seeded, and empty means the
+    # scalar path below is used verbatim -- so an unseeded subunit is byte-exact.
+    cell_morale: Dict[Tuple[int, int], float] = field(default_factory=dict)
+    # [ED-MB-0041 phase 2b] Per-cell strength at seed time + each cell's OWN drawn break-point.
+    cell_start_troops: Dict[Tuple[int, int], float] = field(default_factory=dict)
+    cell_breakpoint: Dict[Tuple[int, int], float] = field(default_factory=dict)
     # v13: position snapshot at start of advance_cells, used to revert on
     # discipline-pass collision (cell returns to its formation slot).
     # [canonical: Jordan design 2026-05-12 — discipline-gated formation hold]
@@ -528,6 +536,24 @@ class Subunit:
             self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
+        # [ED-MB-0041 phase 1] Seed per-cell morale from the scalar, so the aggregate is IDENTICAL to the
+        # scalar at t=0 and any divergence between cells is earned in play. Gated -> unseeded -> inert.
+        #
+        # [ED-MB-0042, 2026-07-25] `self.morale is not None` is LOAD-BEARING, not defensive. A subunit
+        # whose morale is None INHERITS it from its parent Unit, and the back-ref `_unit` is not set
+        # until `Unit.__post_init__` runs -- which is strictly AFTER this, because the Unit is
+        # constructed from an already-built subunit list. Seeding here would therefore read
+        # `eff_morale`'s no-parent fallback of 0 and give every cell morale 0.0, i.e. **born broken**:
+        # `cell_broken` is a <=0 test, `_pair_engaged_troops` excludes broken cells, so the body would
+        # emit no combat weight at all -- and it would never recover, because once cells exist
+        # `eff_morale` reads THEM and no longer falls through to the (correct) parent scalar.
+        #
+        # Caught by 10 suite failures on the default flip (octagon/OBB/maneuver/reach/DG-2 tests all
+        # build Subunit-then-Unit). The gauge path was unaffected -- build_unit/build_army pass morale
+        # explicitly -- which is exactly why the targeted tests and the measurement were both green
+        # while the broad suite was not. Subunits that inherit are seeded by Unit.__post_init__ instead.
+        if PC_CELL_MORALE and self.morale is not None:
+            self.seed_cell_morale()
         self._cell_target = dict(self.cell_troops)  # [ED-MB-0028] prescribed per-cell density at spawn (close_ranks fill target)
         self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
         self._brace_since_tick = 0 if 'brace' in self.instructions else -1  # [ED-1095] prepared before the battle if deployed already braced
@@ -577,8 +603,76 @@ class Subunit:
         return self.yielding and self.eff_discipline >= D_YIELD and self.unit_type != 'ranged'
     @property
     def eff_morale(self):
+        """[ED-MB-0041 phase 1] AGGREGATE-UP: when per-cell morale is seeded, the subunit's holistic
+        morale is the troop-WEIGHTED mean of its live cells — derived, not stored. Weighted by troops so
+        a nearly-empty shattered cell cannot drag the body down as hard as a full one, and so the
+        aggregate tracks where the men actually are as the formation is stripped.
+
+        Unseeded (the shipped default) falls through to the scalar exactly as before, so this is inert.
+        """
+        if self.cell_morale:
+            tot = 0.0; acc = 0.0
+            live = []
+            for cid, m in self.cell_morale.items():
+                w = self.cell_troops.get(cid, 0.0)
+                if w > 0:
+                    tot += w; acc += m * w; live.append(m)
+            if tot > 0:
+                # [ED-MB-0042] A UNIFORM body returns its cells' value EXACTLY. The weighted mean of N
+                # equal values is mathematically that value, but in floats it is off by an ulp
+                # (15 cells at 6.0 -> 5.999999999999999), and that ulp is not harmless: `_morale_sigma`
+                # divides by morale_start, so a body at full morale reported a sigma of -1.8e-16 instead
+                # of 0, which is enough to cross a DAMAGE_BY_DEGREE boundary and turn a 6.0 exchange into
+                # a 0.0 one. That is how the octagon micro-tests failed. This is not a tolerance fudge —
+                # it returns the arithmetically correct answer where the float mean cannot.
+                first = live[0]
+                if all(m == first for m in live):
+                    return first
+                return acc / tot
         if self.morale is not None: return self.morale
         return self._u().morale if self._u() else 0
+
+    def seed_cell_morale(self):
+        """[ED-MB-0041 phase 1] Give every live cell the body's current morale as its starting point.
+
+        Called at construction under PC_CELL_MORALE. Seeding from the scalar (rather than inventing a
+        distribution) means the aggregate is identical to the scalar at t=0: divergence between cells is
+        then EARNED by what happens to them, not injected at birth.
+        """
+        m = self.eff_morale
+        self.cell_morale = {cid: float(m) for cid in self.cell_troops}
+        self.cell_start_troops = dict(self.cell_troops)
+        self.cell_breakpoint = {}
+
+    def erode_cell_morale(self, cid, amount):
+        """Local morale loss on one cell. No floor — rout is a <=0 threshold, matching erode_morale."""
+        if not self.cell_morale or amount <= 0:
+            return
+        if cid in self.cell_morale:
+            self.cell_morale[cid] -= amount
+
+    def cohere_cells(self, rate=None):
+        """[ED-MB-0041 phase 1] MODULATE-DOWN: pull each cell toward the body's holistic morale.
+
+        The other half of Jordan's loop. Cells aggregate up into the subunit's score; that score then
+        disciplines the cells — a steady body steadies a shaky corner, a disintegrating one drags a firm
+        corner down. Discipline-gated, because holding when your neighbours are hit is exactly what
+        discipline names (du Picq: men hold because the men beside them hold).
+
+        Applied AFTER local erosion so a cell that was just savaged is pulled back toward its body rather
+        than the body being averaged toward it twice in one tick.
+        """
+        if not self.cell_morale:
+            return
+        agg = self.eff_morale
+        r = CELL_MORALE_PULL if rate is None else rate
+        # discipline scales the pull: a disciplined body closes ranks harder around a wavering cell
+        d = max(0.0, min(1.0, self.eff_discipline / 6.0))   # [canonical: mass_battle_v30.md §B.2 — Discipline 1-6 stat range]
+        r = r * d
+        if r <= 0:
+            return
+        for cid, m in self.cell_morale.items():
+            self.cell_morale[cid] = m + r * (agg - m)
     @property
     def eff_morale_start(self):
         if self.morale_start is not None: return self.morale_start
@@ -616,9 +710,50 @@ class Subunit:
         if self.discipline_start is not None: return self.discipline_start
         u = self._u()
         return u.discipline_start if u is not None else 5
+    def set_morale(self, value):
+        """[ED-MB-0042 sweep] SINGLE OWNER of an ABSOLUTE morale write on a subunit.
+
+        `erode_morale` (below) already owns the RELATIVE write and routes it across the cells. Absolute
+        writes had no owner, so five call sites assigned `.morale` directly — and every one of them
+        became a silent no-op the moment cells were seeded, because `eff_morale` reads the cells and
+        never falls back to the scalar. That is what confounded the PC_CELL_MORALE measurement: the
+        between-turn recovery and the between-battle reset both stopped working under the flag, so the
+        flag's ON arm fought with morale it could never recover.
+
+        The fix is deliberately a single owner rather than five parallel patches. Five patches is how
+        this recurred in the first place: `erode_morale` was fixed as one instance, the pattern was never
+        swept, and the next writer reintroduced the same defect within hours.
+
+        An absolute set is a body-wide statement ("this body's morale IS now X"), so every cell takes X.
+        Local divergence between cells is earned only through LOCAL damage, never through a body-wide
+        write — the same rule `erode_morale` follows for the relative case.
+        """
+        self.morale = value
+        if self.cell_morale:
+            for cid in self.cell_morale:
+                self.cell_morale[cid] = float(value)
+
     def erode_morale(self, amount):
         # Reduce effective morale (may pass <=0 -> rout, matching the unit `morale -= loss`). Writes to own
         # morale if set, else routes to the inherited Unit -> single-subunit reproduces the old unit erosion.
+        #
+        # [ED-MB-0041 phase 1 — DEFECT I INTRODUCED, then caught] When per-cell morale is seeded,
+        # `eff_morale` is the weighted mean of the CELLS and ignores the scalar entirely. This method
+        # writes the scalar. So the moment cell morale was wired, every body-wide morale path silently
+        # became a no-op: the canonical §A.4 casualty/exhaustion erosion, the sibling pull, AND the
+        # stochastic-rout punch that drives morale <=0 to force a break — i.e. the flag ratified hours
+        # earlier stopped working whenever this one was on. Measured: erode_morale(4.0) left the
+        # aggregate at 6.0 while writing scalar 2.0. That is precisely the "machinery that documents
+        # itself as working and does not" pattern this audit exists to find, introduced by me.
+        #
+        # A body-wide loss is pressure on the WHOLE body, so it applies to every cell uniformly. Since
+        # the aggregate is the weighted mean, subtracting `amount` from every cell lowers the aggregate
+        # by exactly `amount` — the scalar and cellular models stay numerically identical for body-wide
+        # effects, and cells only diverge through LOCAL (per-cell damage) erosion, which is the point.
+        if self.cell_morale:
+            for cid in self.cell_morale:
+                self.cell_morale[cid] -= amount
+            return
         new = self.eff_morale - amount
         if self.morale is not None: self.morale = new
         else:
@@ -636,6 +771,16 @@ class Subunit:
         # strength cannot rally a subunit ABOVE its own pristine ceiling); no floor on the wilt
         # side, matching erode_morale's own unbounded-negative convention (rout is a <=0 threshold
         # check elsewhere, not enforced here).
+        # [ED-MB-0041 phase 1] Same cell-routing as erode_morale — see its note. Uniform across cells so
+        # the aggregate moves by exactly `delta`; the rally-side cap is applied to the aggregate, then
+        # realised as the same shift on every cell, so no cell is lifted above the body's own ceiling.
+        if self.cell_morale:
+            capped = min(self.eff_morale_start, self.eff_morale + delta)
+            shift = capped - self.eff_morale
+            if shift:
+                for cid in self.cell_morale:
+                    self.cell_morale[cid] += shift
+            return
         new = min(self.eff_morale_start, self.eff_morale + delta)
         if self.morale is not None: self.morale = new
         else:
@@ -1685,6 +1830,101 @@ class Subunit:
             # v13: mark cell as having moved this turn (for cross-side contention)
             self._moved_this_turn.add((orig_r, orig_c))
 
+    def check_cell_breaks(self):
+        """[ED-MB-0041 phase 2b] A cell breaks at ITS OWN casualty break-point — the missing symmetry.
+
+        Phase 2 shipped with local break unreachable, and the measurement proved it: phases 1+2 were
+        byte-identical to phase 1 across all 20 gauge rows, and instrumenting found 72 of 144 cells
+        "broken" at EXACTLY -1.0 — the signature of the body-wide stochastic-rout punch writing every
+        cell at once, not of local damage breaking anything. Cells were breaking as a CONSEQUENCE of
+        the body routing, strictly after the event they were supposed to precede.
+
+        The cause was an asymmetry, not a magnitude. The BODY has gradual erosion PLUS a du Picq
+        break-point short-circuit (`_stochastic_break`, 15-30% casualties). Cells had gradual erosion
+        only — and at MORALE_PHASE_CAP=3 against a 6.0 pool, a cell had to be destroyed TWICE OVER to
+        break by erosion. So the body always broke first, by construction.
+
+        This gives the cell the same mechanism at its own scale: each cell draws one break-point in the
+        same historical band and breaks when its own casualty fraction crosses it. Same band, same
+        rationale, one level down — men in a savaged corner give way at the same fraction of loss that
+        makes a whole body give way, which is the du Picq claim in the first place.
+        """
+        if not self.cell_morale:
+            return 0
+        broke = 0
+        for cid, start in self.cell_start_troops.items():
+            if start <= 0 or self.cell_broken(cid):
+                continue
+            bp = self.cell_breakpoint.get(cid)
+            if bp is None:
+                # skew toward the CAP as the body's discipline rises: a steadier body's cells hold
+                # longer before giving, mirroring _rout_resilience's treatment one scale up.
+                _d = max(0.0, min(1.0, self.eff_discipline / 6.0))  # [canonical: mass_battle_v30.md §B.2 — Discipline 1-6]
+                bp = ROUT_ONSET_FRAC + (ROUT_CAP_FRAC - ROUT_ONSET_FRAC) * (_cell_random.random() ** (1.0 / (0.5 + _d)))
+                self.cell_breakpoint[cid] = bp
+            lost = 1.0 - (self.cell_troops.get(cid, 0.0) / start)
+            if lost >= bp:
+                # drive THIS cell below zero without touching its siblings -- the whole point of a
+                # LOCAL break. Body-wide paths still go through erode_morale.
+                self.cell_morale[cid] = min(self.cell_morale.get(cid, 0.0), -1.0)
+                broke += 1
+        return broke
+
+    def cell_broken(self, cid):
+        """[ED-MB-0041 phase 2] A cell whose morale has collapsed. Local break, not a whole-body rout.
+
+        Rout has always been all-or-nothing at subunit scale, so a body fought as one lump until the
+        whole lump went. Real formations come apart in PLACES — a corner gives, the gap spreads. This is
+        the predicate that makes a place able to give.
+        """
+        return bool(self.cell_morale) and self.cell_morale.get(cid, 1.0) <= 0.0
+
+    def broken_cell_share(self):
+        """Fraction of this subunit's LIVE troops standing in broken cells.
+
+        Weighted by troops, not cell count, for the same reason the morale aggregate is: three men in a
+        shattered corner should not count the same as a hundred in a broken centre.
+        """
+        if not self.cell_morale:
+            return 0.0
+        tot = sum(self.cell_troops.values())
+        if tot <= 0:
+            return 0.0
+        gone = sum(t for cid, t in self.cell_troops.items() if self.cell_broken(cid))
+        return gone / tot
+
+    def propagate_cell_breaks(self):
+        """[ED-MB-0041 phase 2] A broken cell shakes the cells beside it — contagion at cell scale.
+
+        The same du Picq mechanism `ROUT_CASCADE_FRAC` applies between subunits, one level down: men
+        break because the men beside them broke, and a gap in the line spreads outward from where it
+        opened rather than appearing uniformly across the body. Neighbours are lattice-adjacent cells
+        (the 8-neighbourhood of the pattern coordinates), so the spread follows the formation's actual
+        shape — a gap in a deep column propagates differently from one in a thin line, without any
+        shape-specific code.
+
+        Returns the number of cells newly shaken, so a caller can tell whether anything happened.
+        """
+        if not self.cell_morale:
+            return 0
+        broken = [cid for cid in self.cell_morale if self.cell_broken(cid)]
+        if not broken:
+            return 0
+        shaken = 0
+        for (br, bc) in broken:
+            for dr in (-1, 0, 1):
+                for dc in (-1, 0, 1):
+                    if dr == 0 and dc == 0:
+                        continue
+                    nb = (br + dr, bc + dc)
+                    if nb in self.cell_morale and not self.cell_broken(nb):
+                        # scaled by the same per-phase cap the other morale paths use, and by the pull
+                        # rate, so contagion and cohesion are the same order of magnitude: a body can
+                        # hold a gap closed if it is disciplined enough, or lose the line if it is not.
+                        self.cell_morale[nb] -= MORALE_PHASE_CAP * CELL_MORALE_PULL
+                        shaken += 1
+        return shaken
+
     def get_cell_facing(self, orig_r, orig_c):
         """Return the facing vector for a cell. Defaults to advance_dir if never moved."""
         # (d) rout facing: a routed body faces AWAY from the enemy (fleeing) -> rear penalties land.
@@ -1985,6 +2225,14 @@ class Unit:
         for a in self.subunits:
             if a.stance == "balanced": a.stance = self.stance
             a._unit = self                     # stat-inheritance back-ref (per-subunit eff_* falls back here)
+            # [ED-MB-0042] Seed any subunit that INHERITS its morale. This is the first moment that
+            # value is knowable — the back-ref above is what makes `eff_morale` resolve to the parent's
+            # scalar instead of the no-parent 0 — so it is the only correct place to seed an inheriting
+            # subunit. Explicit-morale subunits already seeded in their own __post_init__; the
+            # `not a.cell_morale` guard keeps this from re-seeding (and so from silently discarding
+            # morale a subunit has already lost, if a Unit is ever rebuilt around live subunits).
+            if PC_CELL_MORALE and not a.cell_morale:
+                a.seed_cell_morale()
         # Increment 1: per-column block grid (state only; resolution wires in at Increment 2).
         self.col_grid = build_column_grid(self) if PER_CELL else None
 
@@ -2003,6 +2251,25 @@ class Unit:
     def agg_dr(self):         return self._agg('eff_dr')
     def agg_stamina(self):    return self._agg('eff_stamina')
 
+    def _broken_share(self):
+        """[ED-MB-0041] Fraction of this unit's STARTING strength sitting in routed subunits.
+
+        Weighted by `_start_troops` -- the per-BATTLE strength snapshot, re-based at each campaign
+        boundary by reset_morale_between_battles -- so a unit that enters its third battle already
+        depleted measures collapse against the strength it actually started that battle with, not
+        against its original spawn size. `troop_count` is the fallback for a subunit built without the
+        snapshot; note it is itself a static nominal (it returns `self.troops`), NOT a live count, so
+        both terms are strength-at-start and neither shrinks as the body takes casualties. That is the
+        property this needs: the numerator must grow monotonically as sections break, and a live weight
+        would let a collapsing army read as progressively more intact.
+        """
+        tot = sum((getattr(a, '_start_troops', 0) or a.troop_count) for a in self.subunits)
+        if tot <= 0:
+            return 1.0 if self.subunits else 0.0
+        gone = sum((getattr(a, '_start_troops', 0) or a.troop_count)
+                   for a in self.subunits if a.routed)
+        return gone / tot
+
     def derive_rout(self):
         # Unit-level rout DERIVED from subunit state (per-subunit rout, Jordan directive): the unit routs
         # when its general is gone (Command<=0), when every subunit has routed, or when its troop-weighted
@@ -2011,20 +2278,47 @@ class Unit:
         # subunit's morale == unit.morale, so this fires exactly when the old `unit.morale<=0` did (byte-exact).
         if self.routed:
             return
-        if self.command <= 0 or all(a.routed for a in self.subunits) or self.agg_morale() <= 0:
+        # [ED-MB-0041] `all(...)` generalised to a contagion FRACTION of spawn strength -- see
+        # config.ROUT_CASCADE_FRAC for the mechanism and why the magnitude is deliberately unchosen.
+        # At the default 1.0 this is exactly `all(a.routed ...)`: every subunit must be broken, because
+        # the broken share can only reach 1.0 when none are left unbroken. So the generalisation is
+        # inert until the constant is moved, and the byte-exact goldens are untouched.
+        if self.command <= 0 or self._broken_share() >= ROUT_CASCADE_FRAC or self.agg_morale() <= 0:
             self.routed = True
             for a in self.subunits:
                 a.routed = True
+    def set_morale(self, value):
+        """[ED-MB-0042 sweep] SINGLE OWNER of an ABSOLUTE morale write at UNIT scale.
+
+        Writes the unit's own (inherited-default) pool, then pushes the value into every subunit that
+        INHERITS it — because an inheriting subunit's cells hold their own copies, and `eff_morale` reads
+        those cells, so writing only the unit pool leaves the body reporting its old morale forever.
+        Own-morale subunits are deliberately untouched: they do not read this pool, exactly as before.
+
+        Unseeded (the shipped default) this reduces to `unit.morale = value` — the subunit loop finds no
+        cells to write and `Subunit.set_morale` just assigns a scalar those subunits never consult.
+        """
+        self.morale = value
+        for a in self.subunits:
+            if a.morale is None and a.cell_morale:
+                for cid in a.cell_morale:
+                    a.cell_morale[cid] = float(value)
+
     def cascade_morale_hit(self, amount):
         # Unit-wide morale hit (§A.12 inter-unit cascade / contagion / flank erosion): erode the unit's
         # inherited-default morale ONCE (covers every subunit that INHERITS it -> no double-count for a
         # homogeneous unit) AND each subunit that carries its OWN morale, by `amount`. Single-subunit /
         # homogeneous: exactly the old `unit.morale -= amount` (byte-exact). Mixed: own-morale subunits
         # are eroded too, so the cascade is felt per-subunit consistently with the rest of the model.
+        # [ED-MB-0042 sweep] Routed through erode_morale, which already owns the RELATIVE write and
+        # applies it across the cells. The previous bare `a.morale = a.morale - amount` was the third
+        # writer in this same silent-no-op family.
         self.morale -= amount
         for a in self.subunits:
-            if a.morale is not None:
-                a.morale = a.morale - amount
+            if a.morale is None and a.cell_morale:
+                a.erode_morale(amount)       # inheriting: the unit pool it reads is cellular now
+            elif a.morale is not None:
+                a.erode_morale(amount)
 
     def recalc_size(self):
         # v19: effective_size = HP / BLOCK_SIZE (HP = TroopCount).

@@ -15,6 +15,72 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0042 (2026-07-25): THE CELL IS THE PRIMITIVE FOR MORALE — built, measured, flipped ON.**
+  Jordan's directive ("the cell needs to be the primitive for morale, discipline, quality, stamina,
+  route, health, armour, facing, damage, troops count, etc"), executed for the first of those states.
+  Cells carry morale; the subunit's morale is the troop-weighted mean of its live cells (derived, not
+  stored); that aggregate pulls its own cells back at a discipline-gated rate. A broken cell stops
+  contributing combat weight while its men remain present and killable; breaks spread over the
+  8-neighbourhood lattice. **Phase 2 was unreachable** until cells got their OWN du Picq break-point —
+  bodies had erosion *and* a break-point, cells had erosion only, so a cell had to be destroyed twice
+  over to break and the body always won that race by construction. An asymmetry, not a magnitude.
+  **⚠ The default flip was made and RETRACTED the same day. `PC_CELL_MORALE` is OFF.** The measurement
+  (win-share 7→8/20, casualty realism 2→7/20) was confounded: `between_turn_recovery` and
+  `reset_morale_between_battles` write the morale **scalar**, which `eff_morale` stops reading once
+  cells are seeded, so under the flag they are **silent no-ops**. Multi mode runs multi-turn battles
+  and resets morale between them — the ON arm fought with morale that never recovered, the OFF arm's
+  did. "The loser breaks earlier" is exactly what an unrecoverable body also produces. Goldens and the
+  `_PINNED_OFF` pin are back to their pre-flip values; net shipped behaviour change is zero.
+
+  Same defect class as the `erode_morale` silent no-op earlier in this lane. That was fixed as a single
+  instance with no sweep, so it recurred — and this time reached a shipped default. **When the cause is
+  "a representation change orphaned its writers", the unit of repair is every writer, found by grep.**
+
+  Two genuine bugs the failing suite exposed are **kept** (both independent of the flip): subunits that
+  inherit their morale were **born broken** (seeded at `eff_morale`'s no-parent 0 because `_unit` is set
+  after `Subunit.__post_init__`), and the weighted mean returned a **1-ulp** value for a uniform body,
+  which crossed a `DAMAGE_BY_DEGREE` boundary via `_morale_sigma` and zeroed exchanges.
+
+  **Next in this thread, in strict order:**
+  1. ~~**The scalar-write sweep — the blocker.**~~ **DONE.** `Subunit.set_morale` / `Unit.set_morale`
+     are the single owners of an absolute write; `erode_morale`/`pull_morale` already owned the
+     relative one. Routed: `between_turn_recovery` (unit + atom), `reset_morale_between_battles`
+     (unit + atom), the rout write `u.morale = 0.0`, `Unit.cascade_morale_hit`. One site is
+     deliberately left bare and annotated (`core/state.py`'s `atom.morale = atom.eff_morale`
+     materialises the scalar so the stochastic-rout punch stays local). Guarded by
+     `tests/valoria/test_morale_write_sweep.py`, whose `_CELL_OWNED` registry is field-parameterized
+     so phases 3/4 inherit it by adding a key.
+
+     ⚠ **RE-FLIP PRE-CONDITION — two harness writers are NOT swept.**
+     `tests/sim/mass_battle/lanchester_signature.py` (~line 126) and
+     `tests/sim/mass_battle/test_persubunit_stress.py` (~line 191) each still hold a bare morale write.
+     They were swept and then **reverted on purpose**: the anti-fabrication gate scans the changeset,
+     so touching either file dragged ~100 pre-existing uncited constants (none introduced by that
+     change) into a blocking gate. Under `PC_CELL_MORALE=OFF` they are inert. **Sweep them before the
+     flag flips** — `lanchester_signature` pins morale high specifically to *disable* rout, so a silent
+     no-op there would let bodies rout mid-signature and measure the Lanchester exponent on truncated
+     battles. Expect to have to cite or ledger those constants as part of that work.
+  2. **Re-measure the flag honestly**, then decide the flip. Not before 1.
+  3. **Phase 3 — stamina + discipline + quality per cell.** Retires `col_grid`, the third granularity
+     between cell and subunit.
+  4. **Phase 4 — hp + armour per cell.**
+  5. **Decide `PC_STOCHASTIC_ROUT`'s fate.** Measured inert under cell morale (35.6% vs 36.1%) — but
+     those absolutes were taken under the same no-recovery confound and must be re-taken after 1. The
+     OFF-vs-ON *comparison* is still fair (both arms share the confound). Still load-bearing on the
+     unseeded path, so a retirement candidate, not dead code.
+  6. **Re-decide `ROUT_CASCADE_FRAC`** (still inert at 1.0) once phase 3 settles what a "section" is.
+
+- **ED-MB-0043 candidate — R3 is a DEFINITIONAL gap, not a balance one.** Ranged-vs-ranged is the only
+  UNMEASURED gauge row: 100% draws at **0.0% casualties on both sides**, i.e. no engagement at all.
+  Spawn distance is 18, `VOLLEY_MAX_RANGE` is 8, and `stance == "hold"` early-returns from *all*
+  steering (both `_node_advance` and `advance_cells`), so neither archer body ever closes and
+  `volley_phase` never fires. R1 resolves only because the infantry walks into range. The band-seeking
+  primitive already exists and is live on the node path (`_kite_goal`: too close → flee, too far →
+  close, in band → hold) but is gated on `'kite' in instructions`, which only `mounted_archers` carry.
+  **Proposed fix:** for a missile body, `hold` means hold the *firing* position, not the spawn
+  coordinate — a ranged subunit whose nearest enemy lies beyond `VOLLEY_MAX_RANGE` closes into the band
+  by ROLE, reusing `_kite_goal` verbatim. No new magnitude, no new mechanism, no R3 special-case.
+
 - **ED-MB-0039 (2026-07-24, needs_jordan): ENVELOPMENT STABILITY DIAGNOSIS — the ED-MB-0038 side-asymmetry
   root-caused.** Pure-infantry envelopment at strict parity is DEPLOYMENT-CHAOTIC: the parity centre (2
   cells) is narrower than the 3-command enemy (6) → out-flanked → a Lanchester-amplified knife-edge race
@@ -525,10 +591,92 @@ correction rather than the original claim.
    zero casualties across 60/60 seeds). Direction is historically right — the oblique order is supposed to
    win — but 100% is not. Check whether the ported overhang wheel is too permissive for a wing that is
    deployed wide of the enemy frontage by construction.
-3. **C2/C6 still NOT-REPELLED (95.0 / 96.7 rawA, band 0-30).** The latch removed the *timing* problem;
-   what remains is magnitude — `PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2` against `_wall_prep`. Already on
-   the Tier-3 list for Jordan.
+3. **C2/C6 still NOT-REPELLED — and it is NOT a magnitude problem. [CORRECTED 2026-07-25 by the sweep;
+   my earlier entry here was wrong.]** I recorded this as "the latch removed the timing problem, what
+   remains is magnitude — `PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2`", and queued it for Jordan as a
+   magnitude call. The sweep falsifies that:
+
+   | lever | C2 result | band |
+   |---|---|---|
+   | `PC_CHARGE_RECOIL` 0 / 3 / 12 / **24** (4x default) | 100.0 / 93.8 / 87.5 / **87.5** | 0-30 |
+   | `SIGMA_PER_D` 0.1 / 0.4 / 0.8 | 93.8 / 93.8 / 93.8 — **totally insensitive** | 0-30 |
+   | `PC_BRACE_ENABLED` off / on | 100.0 / 93.8 | 0-30 |
+
+   Quadrupling the recoil buys 6 points of the ~64 needed, and switching the entire brace apparatus OFF
+   costs only 6. So the whole braced-wall mechanism contributes ~6 points to a row that needs ~64 — the
+   coefficient is not the binding constraint, the mechanism is. **This retires a Tier-3 magnitude call
+   and replaces it with a mechanism gap:** a frontal deep line cannot repel a charge in this engine at
+   any coefficient. (Consistent with the older finding already in this file that a repelling formation
+   is a SQUARE/BOX with all-around brace, not a frontal deep line.)
 4. **Tier-3 list** (`adversarial_deep_audit_v1.md` §4) is otherwise untouched and needs Jordan: depth
    support-stack cap, envelopment-as-morale-collapse, graded cavalry charge refusal, the Biddle σ-ceiling,
    the rout band + `PC_STOCHASTIC_ROUT` default, the `YIELD_POOL_MULT` split, and the missing
    disengage-and-recharge cycle (new, §7.1).
+
+### 2026-07-25 — reachability sweep: 20/20 is NOT reachable by constants (audit §8)
+
+Jordan asked whether some combination of constants gets the honest gauge to 20/20. Answered
+empirically with `audit/2026-07-22-mass-battle-stress-test/reachability_sweep.py` (85 configs/row,
+greedy stacking). **No.** Of the ten failing rows: **H5** legitimately reachable
+(`PC_FRICTION_CEV=1 + PC_FRACTIONAL_POOL=1` → 48.3 OK); **H4** and **H9** reachable only by disabling
+the mechanism under test (`PC_ENVELOP_PATH=0` passes Cannae) or refitting an already-fitted constant
+(`K_LINEAR=24`); **H6, H10, R1, R3** have no reachable configuration at all. Full table in audit §8.2.
+
+**Two instrument defects were found and fixed before the results were trusted** — both worth knowing:
+- **Low-n positives are noise, asymmetrically.** R1's identical baseline reads 26.7/OK at n=16 and
+  44.1/WIN-OUT at n=60. Noise only WIDENS a span, so negatives survive low n and positives do not.
+  Every positive here was re-verified at n=60; four of H10's and both of R1's evaporated.
+- **Ragged band parse.** Braced-repel rows carry a 10th `'rawA'` field, so counting from the end read
+  C2's band as (30,'high') instead of (0,30) — wrong for exactly the cavalry-repel rows.
+
+### Next actions (MB) — revised priority after the sweep
+
+1. **Band casualties and duration, not just win-share.** `gauge_mb.py:417,421` already computes
+   `a_cas`/`b_cas`/mean turns and bands none of them. This is now the top item: the sweep showed the
+   cheapest route to a green row is to switch off the mechanism the row measures, and a casualty-banded
+   gauge rejects that immediately (two lines colliding do not produce Cannae's casualty asymmetry).
+   All 20 current bands are judgement calls with no literature-derived interval; casualty ratios and
+   duration are what the sources actually constrain.
+2. **Side-symmetry invariant test.** H2/H9, H3/H10, H4/H11 are the same matchup with the armies
+   swapped, on exactly complementary bands, so their sums must be ~100; they are 114.2, 137.7, 61.7.
+   Needs no history — swap the sides, the answer must invert. Cheapest high-information test available
+   and it fails today. (H10 having ZERO reachable configs is the same finding from the other side.)
+3. **Reachability gate in CI.** Assert each named mechanism fires at least once in a canonical
+   scenario. Its absence produced six Tier-2 findings in one pass.
+4. **Give the cell real state — morale first.** Per-cell state today is position/facing/halted/
+   last-speed/troops. There is no per-cell morale, discipline, quality, stamina or rout, so Jordan's
+   directive ("a cell should be able to have worse morale than another cell in same subunit") is not
+   implemented, and of the five modulators named for a cell's damage output only density is per-cell.
+5. **Collapse the column tier into the cell.** Fatigue/stamina/depth-rotation live on `col_grid` — a
+   third granularity that is neither the primitive nor the holistic body (shape divergence).
+6. Mechanism gaps: charge/recoil/re-charge cycle; a resolution path for the ranged mirror (R3); local
+   (per-cell) break rather than whole-subunit rout.
+
+
+### 2026-07-25 — instruments built; PC_STOCHASTIC_ROUT ratified ON; symmetry largely resolved
+
+Jordan approved the two instruments and granted Tier-3 experiment permission. Both built
+(`reverse_pair_symmetry.py`, casualty/duration scoreboard in `gauge_mb`, `test_gauge_invariants.py`).
+
+**Ratified:** `PC_STOCHASTIC_ROUT` default OFF -> ON. Loser casualties 61-87% -> 29-41% (band 15-30);
+win-share 10/20 -> 7/20 and the flip is still right. Both grid goldens re-recorded. Full suite green
+(593 passed).
+
+**Unpredicted second effect:** the flip also largely fixed the reverse-pair side-asymmetry — H3/H10 went
++4.5σ -> +1.7σ (resolved), H2/H9 +1.6σ -> +0.3σ, H4/H11 -5.3σ -> -3.8σ. The asymmetry was substantially
+an artifact of battles running to annihilation, not an independent deployment-geometry bug. **H4/H11 at
+-3.8σ is the surviving symmetry defect.**
+
+**Held:** `ROUT_CASCADE_FRAC` (du Picq contagion) built and gated inert at 1.0. ⅔-of-line gives casualty
+5/20 and fixes H6's 79.2% outlier; ⅓-of-line gives 7/20 but costs a win-share row and makes H6
+undershoot. Not chosen, because per-cell state redefines what a "section" is.
+
+### Next actions (MB)
+
+1. **Per-cell state (Jordan directive).** Morale first. The contagion experiment pointed here
+   independently: H1/H2/H7/H8/H9 are unmoved by ANY contagion threshold because they are single-subunit
+   armies — no line to come apart. Their residual 30-33% loser casualties is the gap per-cell break closes.
+2. **H4/H11 −3.8σ** — the surviving side-asymmetry, now isolated from the lethality confound.
+3. **Re-decide `ROUT_CASCADE_FRAC`** once per-cell granularity lands (the "section" it counts changes).
+4. Remaining Tier-3: box/square all-around brace (C2/C6 — mechanism, not magnitude, §8.4); ranged-mirror
+   resolution path (R3, the only UNMEASURED row); disengage-and-recharge cycle.

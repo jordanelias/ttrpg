@@ -76,7 +76,12 @@ _PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': 
                # [ED-MB-0018] PC_OCTAGON_DMG defaults ON and the grid goldens are recorded ON -- pin it
                # explicitly so an ambient PC_OCTAGON_DMG=0 can't silently check the ON golden against the
                # legacy path (same defense-in-depth as the other toggles here).
-               'PC_OCTAGON_DMG': '1'}
+               'PC_OCTAGON_DMG': '1',
+               # [ED-MB-0042, 2026-07-25] Pinned OFF because the DEFAULT is off — the flip to ON was
+               # retracted the same day (its measurement was confounded; see config.py at the flag).
+               # Pinned explicitly rather than left ambient so that when the flip is re-attempted, the
+               # pin has to be changed deliberately and the goldens re-recorded with it.
+               'PC_CELL_MORALE': '0'}
 
 
 def _run_bat(per_cell):

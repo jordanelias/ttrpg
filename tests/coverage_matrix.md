@@ -2,6 +2,414 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0042: morale-write sweep + the measurement discipline it produced (CLAUDE.md §0.1)
+
+**The sweep.** `eff_morale` reads the cells once seeded and never falls back to the scalar, so every
+`.morale =` in the engine was a silent no-op under the flag — which is what confounded the retracted
+measurement. Two owners now: `Subunit.set_morale` / `Unit.set_morale` (absolute), with
+`erode_morale`/`pull_morale` already owning the relative write. Routed: `between_turn_recovery`,
+`reset_morale_between_battles`, the Command=0 rout write, `Unit.cascade_morale_hit`. One site stays
+bare and annotated — `core/state.py` materialises the scalar so the stochastic-rout punch stays local
+to one subunit; rewriting the cells there would flatten genuine divergence.
+
+**A defect in the sweep, found by probing rather than assuming.** Routing `between_turn_recovery`'s
+*unit-level* line through `set_morale` **re-inflated damaged bodies**: recovery is a bounded increment,
+not an absolute statement, and the unit pool is stale once cells own the state. A body knocked to 2.0
+came back at 6.0 with the recovery constant at 0. That line stays bare; inheriting subunits recover via
+`pull_morale`.
+
+**The guard is field-parameterized on purpose.** `test_morale_write_sweep.py`'s `_CELL_OWNED` registry
+means phases 3/4 (stamina, discipline, quality, hp, armour) inherit the same protection by adding a
+key. Re-deriving the guard per field would repeat the exact mistake — fixing an instance instead of the
+pattern — that caused the retraction. `test_the_guard_itself_can_fail` proves each registered pattern
+still flags a planted write, because a guard that cannot fail reports safety it does not provide.
+
+**Deliberately NOT swept, and recorded as a re-flip pre-condition:** the two harness writers in
+`lanchester_signature.py` and `test_persubunit_stress.py`. They were swept, then reverted — the
+anti-fabrication gate scans the changeset, so touching either file dragged ~100 pre-existing uncited
+constants into a blocking gate. Inert while the flag is OFF; **must be swept before it flips**, because
+`lanchester_signature` pins morale high specifically to *disable* rout. This is the cost that CLAUDE.md
+§0.1's "sweep only what the task is load-bearing on, file the rest" exists to respect, and it showed up
+within an hour of the rule being written.
+
+**CLAUDE.md §0.1** records the five checks distilled from the retraction. The load-bearing observation:
+§0 *already* demanded an adversarial pass, and one was performed — on the result's statistics, never on
+its setup. Restating principles does nothing; the fix is naming what to attack and requiring an
+artifact that proves it happened.
+
+## 2026-07-25 — ED-MB-0042 RETRACTED: the flip was measured against an arm that couldn't recover
+
+**The flip below was made and then withdrawn the same day. Do not cite its numbers.**
+
+`between_turn_recovery` and `reset_morale_between_battles` both write the morale **scalar**, which
+`eff_morale` stops reading the moment cells are seeded — so with `PC_CELL_MORALE` ON they are **silent
+no-ops**. Verified directly: knock a body's cells to 2.0, call both, and it is still at 2.0. The gauge's
+multi mode runs multi-turn battles and resets morale between them, so **the ON arm fought with morale
+that never recovered and the OFF arm's did.** "The loser breaks earlier" is exactly what a body that
+cannot recover would also produce. The two arms were not comparable and I reported the gain without
+checking that they were.
+
+This is the **same defect class** as the `erode_morale` silent no-op caught earlier in this lane — a
+scalar write shadowed by the cell aggregate. I fixed that one instance and never swept for the pattern,
+so it recurred, in the same session, and this time it reached a shipped default and a golden re-record.
+**The lesson is about scope of fix, not about morale:** when a defect's cause is "a representation
+change orphaned its writers", the unit of repair is *every writer*, found by grep, not the one that
+happened to fail.
+
+Reverted: default back OFF, `_PINNED_OFF` back to `'0'`, both goldens back to their pre-flip digests
+(`241f04e5…` / `dc3d3414…`), `test_default_is_gated_off` restored with the retraction reason.
+
+**Two genuine defects were found by the failing suite and are KEPT** (both real bugs in the phase-1/2b
+work, independent of the flip):
+
+1. **Born-broken subunits.** `seed_cell_morale()` ran in `Subunit.__post_init__`, but a subunit whose
+   morale is `None` inherits from its parent Unit and the `_unit` back-ref is not set until
+   `Unit.__post_init__` — strictly later. So an inheriting subunit seeded every cell at `eff_morale`'s
+   no-parent fallback of **0**, i.e. every cell broken at birth, emitting no combat weight and never
+   recovering (once cells exist, `eff_morale` reads them and never falls back to the correct parent
+   scalar). Now seeded from `Unit.__post_init__` for inheriting subunits. The gauge path passes morale
+   explicitly, which is exactly why the targeted tests and the measurement were green while ten
+   unrelated suite tests were not.
+2. **A 1-ulp aggregate defeating an identity.** The troop-weighted mean of N *equal* values is that
+   value mathematically but not in floats (15 cells at 6.0 → `5.999999999999999`). `_morale_sigma`
+   divides by `morale_start`, so a body at full morale reported σ = −1.8e−16 instead of 0 — enough to
+   cross a `DAMAGE_BY_DEGREE` boundary and turn a 6.0 exchange into a 0.0 one. A uniform body now
+   returns its cells' value exactly. **My own test hid this**: it asserted the t=0 identity with
+   `pytest.approx`, which is precisely the assertion that cannot see an ulp. Now `==`.
+
+**Blocker for re-flipping** is not another gauge run — it is the scalar-write sweep. Known sites:
+`between_turn_recovery` (unit + atom), `reset_morale_between_battles` (unit + atom), the rout write
+`u.morale = 0.0`, `Unit.erode_morale`, and `core/state.py`'s `atom.morale = atom.eff_morale`.
+
+## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): PC_CELL_MORALE flipped ON; per-cell breaks subsume the body-level one
+
+Measured against a **same-session flag-OFF control** at the gauge's own n=60, in the resolving (multi)
+mode, on both scoreboards:
+
+| | win-share bands | casualty/duration realism |
+|---|---|---|
+| OFF | 7/20 | 2/20 |
+| **ON** | **8/20** | **7/20** |
+
+**The casualty column is the evidence, and it is a mechanism producing a shape rather than a fitted
+number.** Loser losses fall out of the 31–40% range into 26–30%: H6's loser goes 79.2% → 48.9%, C7's
+39.9% → 32.1%. That is du Picq's claim — a body comes apart before it is destroyed — falling out of
+cells that stop being a formation earlier than they stop existing. Nothing was tuned to hit a band.
+
+**Costs, stated not buried.** `single` mode drops 7/20 → 5/20, but both flipped rows (H2 51.4→46.2,
+H9 47.5→52.8) are sub-1σ moves across a band edge at n=60 (SE ≈ 6.5pp) in the mode the gauge documents
+as non-resolving — not evidence. C4 goes 91.5 → 96.7 against a 95 ceiling (≈0.5σ). Reverse-pair
+symmetry improves 3.8σ → 3.4σ; **H4/H11 stays ASYMMETRIC and stays open.**
+
+**Goldens re-recorded, not pinned off.** `unit` and `cell` both move; `_PINNED_OFF` gains
+`PC_CELL_MORALE: '1'`. Pinning it off would have kept the digests stable while quietly ending their
+coverage of the shipped engine — this flag is not a path selector like `FIELD_MOVEMENT`, it changes the
+state model on the path `cell` mode exercises. Same treatment as `PC_OCTAGON_DMG`.
+
+**Unplanned finding: `PC_STOCHASTIC_ROUT` is now inert in the shipped configuration.** With cells
+carrying their own break-points, the loser reaches **35.6%** casualties with body-level stochastic rout
+OFF and **36.1%** with it ON — no separation. The cells break first (same 15–30% band, discipline-
+skewed) and `CELL_BREAK_ROUT_FRAC` ends the body before the subunit-level draw is consulted. Recorded
+and pinned by `test_per_cell_break_subsumes_the_body_level_one` rather than acted on: the flag is still
+load-bearing on the unseeded fallback path, so it is a retirement **candidate**, not dead code.
+`test_loser_breaks_near_historical_band` now pins `PC_CELL_MORALE=OFF` — it measures the body-level
+mechanism, and inheriting the live default made its control arm already-broken and the test a no-op.
+
+## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry
+
+**Phases 1+2 measured byte-identical to phase 1** — every one of 20 rows to the decimal, 1/20 casualty
+and 8/20 win-share. Not a small effect: *zero*. Byte-identical is a far stronger signal than
+disappointing, because a smaller-than-hoped number would have been absorbed as "phase 2 helps a little",
+whereas identical across twenty rows can only mean the code never ran in a way that mattered.
+
+**Instrumented: 72 of 144 cells "broken" at EXACTLY −1.0.** The uniformity was the diagnosis — local
+damage produces a spread, so one repeated value means a single uniform write. It was the body-wide
+stochastic-rout punch (`erode_morale(max(eff_morale + 1.0, 0))`, designed to land at −1.0), which phase
+1 routes across all cells. **Cells were breaking as a CONSEQUENCE of the body routing**, strictly after
+the event phase 2 exists to precede: `propagate_cell_breaks` only ever saw already-dead bodies, the
+formation-break check is guarded by `not atom.routed`, and a routed subunit's emission is already zero.
+
+**The cause was an asymmetry, not a magnitude** — which is why tuning would have been the wrong move:
+
+| | gradual erosion | break-point short-circuit |
+|---|---|---|
+| body | yes | **yes** — `_stochastic_break`, du Picq 15–30% |
+| cell | yes | **none** |
+
+At `MORALE_PHASE_CAP=3` against a 6.0 pool a cell had to be **destroyed twice over** to break by erosion
+alone, so the body always won that race by construction.
+
+**Fix (`check_cell_breaks`)**: each cell draws its own break-point in the same historical band, skewed
+by discipline, and breaks when its own casualty fraction crosses it — the body's mechanism at the
+cell's scale, not a coefficient nudge. Morale values are now a genuine spread (−4.85, −2.79, −1.12,
+−0.89, −0.47, +0.13 …) rather than every cell at −1.0.
+
+**⚠ Early measurement shows OVER-FIRING**: single-mode draw rates of 76–100%. Bodies may now break so
+early that nothing resolves. Recorded before the multi-mode scoreboard lands, so the concern is on the
+record independent of how the final number reads. Flag remains OFF.
+
+> **That concern was WRONG, and the error is instructive.** The flag-OFF control run (below) shows
+> H3/H5/H6/H10/R3 at **100% draws in single mode with the flag off too** — the pre-existing tick-cap
+> artifact the gauge's own docstring documents, present before phase 2b and unmoved by it. I read
+> single-mode rows from a run that had no control beside it and attributed a standing artifact to my
+> own change. The rule this cost me: **a number without its control is not a measurement**, and that
+> applies to a worrying number exactly as much as to a flattering one.
+
+## 2026-07-25 — ED-MB-0041 phase 2: local break, cell-scale contagion, and the half of phase 1 I never wired
+
+**First, a correction to phase 1.** `cohere_cells` shipped with **zero live call sites**. The
+modulate-down half of the loop existed, was tested, and never ran in a battle — so the phase-1 gauge
+measurement was of **aggregate-up only**. Same dead-machinery pattern this audit exists to find, built
+into my own work while documenting the pattern. Now wired.
+
+**Phase 2 mechanisms, all gated behind `PC_CELL_MORALE` (OFF):**
+- **Local break** (`cell_broken`) — a cell whose morale reaches 0 stops FIGHTING. Implemented in
+  `_pair_engaged_troops`, the single place per-cell troops become emitted combat weight, so no other
+  emission path needs to know. `cell_troops` is untouched: the men are still there to be killed and
+  still count as casualties. They have stopped being a fighting part of the line, which is what a local
+  break *is* — zeroing them would make a break indistinguishable from annihilation.
+- **Cell-scale contagion** (`propagate_cell_breaks`) — a broken cell shakes its lattice neighbours, so a
+  gap spreads outward from where it opened. Neighbours are the 8-neighbourhood of pattern coordinates,
+  so the spread follows the formation's actual shape with no shape-specific code.
+- **Formation break** — a subunit whose broken cells hold `CELL_BREAK_ROUT_FRAC` of its live men has
+  come apart as a body even with positive aggregate morale. Same shape as `ROUT_CASCADE_FRAC` one scale
+  down; same deliberately **unchosen** magnitude.
+- **Order matters**: contagion runs *before* cohesion each phase. Reversed, the body would paper over a
+  break before it spread and contagion would never do anything.
+
+**The emergent property — nothing says "disciplined units close gaps".** Contagion pushes down, cohesion
+pulls toward the body's morale at a discipline-gated rate, and the behaviour falls out of the contest.
+Measured over four phases from one broken cell:
+
+| discipline | broken cell | outcome |
+|---|---|---|
+| 6 | **+3.08** | gap **closed**, broken share 0.00 |
+| 1 | **−0.13** | still broken, share 0.11 |
+
+**A test of mine asserted the wrong thing, and being wrong found the mechanism.** I expected cohesion to
+lift the *shaken neighbours*. It doesn't — cohesion pulls toward the mean, and freshly-shaken neighbours
+sit just *above* a mean the broken cell has dragged down, so they are pulled slightly further down. The
+contest that matters is over the **broken** cell: whether the body can haul it back across zero. The
+test now asserts that, with the wrong first version recorded in its docstring.
+
+`test_cell_morale.py` now 16 tests. Not yet measured on the gauge — phases 1+2 will be measured together,
+since phase 1's number was taken with half the mechanism dead.
+
+## 2026-07-25 — ED-MB-0041 phase 1 MEASURED: modest, as predicted; flag stays OFF
+
+Measured on corrected code (the first run measured the silent-no-op configuration and was discarded).
+
+| | rout ON baseline | + `PC_CELL_MORALE=1` |
+|---|---|---|
+| casualty realism | 2/20 | **1/20** |
+| win-share | 7/20 | **8/20** |
+| loser casualties | 29-41% | 29.8-45.4% |
+| **H6 specifically** | **79.2%** | **45.4%** |
+
+**The 2/20 → 1/20 is NOT a regression.** One row crossed a sharp edge: R1 moved 29.9% → 30.2% against a
+30.0% ceiling. Calling that "phase 1 lost a row" would be the band-edge artifact already flagged when it
+ran the other way, and the caveat has to apply symmetrically or it is just advocacy.
+
+**The real movement is H6, 79.2% → 45.4%** — the row no rout-contagion threshold could touch, because
+H6's stubbornness is not at subunit granularity. Per-cell morale reaches it. Win-share also gained a row.
+
+**Verdict: roughly neutral, one structural gain, flag STAYS OFF.** The reason is the one stated *before*
+the measurement: **nothing consumes per-cell morale as a break condition yet.** Rout still evaluates the
+whole-body aggregate — now better-informed, since it is derived from where damage actually landed, but
+still whole-body. The map is populated and correct; nothing reads it to decide a SECTION has gone. That
+is phase 2 (local break), and it is where the payoff should appear.
+
+**The prediction is the point.** It was recorded before the first run and held across a discarded
+measurement and a corrected one. Its first job was catching the silent no-op (a swing far larger than
+predicted); its second is refusing to over-read a neutral result now that the direction is mildly
+favourable. A prediction that only fires against bad news is not a control.
+
+## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring
+
+**1. A silent no-op I introduced — the exact pattern this audit exists to find.** With cell morale
+seeded, `eff_morale` reads the CELL MAP and ignores the scalar; but `erode_morale`/`pull_morale` WRITE
+the scalar. So enabling per-cell morale silently disabled: the canonical §A.4 casualty/exhaustion
+erosion, the DG-4 sibling-coupling pull, and the stochastic-rout punch that drives morale ≤0 to force a
+break — meaning **`PC_STOCHASTIC_ROUT`, ratified an hour earlier, stopped working whenever
+`PC_CELL_MORALE` was on.** Measured: `erode_morale(4.0)` left the aggregate at 6.0 while writing 2.0 to
+a field nobody read. Fixed by routing body-wide morale uniformly across cells: the aggregate is the
+weighted mean, so subtracting `amount` from every cell lowers it by exactly `amount`. Scalar and
+cellular models stay numerically identical for body-wide effects; cells diverge only through LOCAL
+damage, which is the point.
+
+**What caught it was a prediction made before looking.** I stated that phase 1 should move the gauge
+*modestly* and that a large swing would be a warning sign rather than a win. H3 swinging ~66 → 40
+tripped that immediately. Without the prediction there was a ready-made explanation — "per-cell break
+makes bodies come apart earlier" — and a broken configuration would have been banked as a success.
+
+**2. A coupling fault.** `_erode_cell_morale_from_damage` hangs off `_apply_with_spill`, the single
+owner of casualty application, which is deliberately duck-typed. Reading `atom.cell_morale` directly
+made a MORALE feature impose a structural requirement on the DAMAGE substrate. `getattr` now; the fault
+was the coupling, not the test double that exposed it.
+
+**Process note, recorded because it caused a bad push.** I ran `valoria_local --staged | tail -2 && git
+commit`. The pipe means the chain sees `tail`'s exit status, not the gate's — so a FAILING co-file gate
+was masked and the commit proceeded. Gate output must not be piped when its exit code is what gates the
+next command.
+
+## 2026-07-25 — ED-MB-0041 phase 1: the cell is the primitive for MORALE
+
+Jordan's directive ("the cell needs to be the primitive for morale, discipline, quality, stamina,
+route, health, armour, facing, damage, troops count") and its earlier statement of the mechanism:
+*"cells get modulated by subunit holistic scoring, but the cells themselves are what aggregate into
+those scorings in the first place, so a cell should be able to have worse morale than another cell in
+same subunit."* **That last sentence was literally unrepresentable** — the cell was the primitive for
+geometry only (position, facing, contact, casualty placement); every piece of STATE was a subunit
+scalar, so a rear cell being cut down and a front cell holding shared one number.
+
+**Two-way loop, not a broadcast:**
+- **AGGREGATE UP** — `eff_morale` is now the troop-**weighted** mean of live cells, derived rather than
+  stored. Weighted so a nearly-empty shattered cell cannot drag the body as hard as a full one; a flat
+  mean would let a cell holding three men count as much as one holding a hundred, and a body would read
+  as broken while nearly all its strength was still steady.
+- **MODULATE DOWN** — `cohere_cells` pulls each cell toward the body's holistic value, **signed** (a
+  steady body steadies a shaky corner; a disintegrating one drags a firm corner down) and
+  discipline-gated, because holding when your neighbours are hit is what discipline names.
+
+**Erosion rides on `_apply_with_spill`**, the single owner of casualty application, so *every* path that
+kills men — melee, volley, pursuit, freed-attacker, cellwise facing-weighted — shakes the cells it
+killed them in, with no caller needing to remember. Scaled by the FRACTION of the cell destroyed, not
+the absolute count: losing 20 of 100 beside you is the same shock at any body size, and an absolute
+scale would make dense cells look braver purely for being dense.
+
+Demonstrated: concentrate damage on one cell of three and it holds **4.51 morale while its siblings
+hold 5.94** — Jordan's test case, earned in play rather than injected.
+
+`tests/valoria/test_cell_morale.py` (11 tests) pins the directive itself, both directions of the loop,
+the troop-weighting, the discipline gate, the fraction-not-count erosion shape, and one invariant worth
+calling out: **cohesion CONSERVES the aggregate** (`new_m = m + r(agg−m)` ⇒ weighted mean is unchanged).
+If that ever fails, cohesion has become a free morale source and a body could steady itself forever.
+
+Gated `PC_CELL_MORALE`, **default OFF** — verified inert: byte-exact goldens, stochastic-rout and
+rout-contagion suites all green unchanged. Not yet measured on the gauge; that is the next step, and the
+flag stays off until it is.
+
+## 2026-07-25 — ED-MB-0041: PC_STOCHASTIC_ROUT default flipped ON; contagion magnitude deliberately held
+
+**Flipped, on the casualty scoreboard's evidence.** Loser 61-87% → 29-41%, winner 7.8-38% → 3.3-17%,
+casualty realism 0/20 → 2/20 — while **win-share drops 10/20 → 7/20**. The count going down and the flip
+still being right is the whole case for the second scoreboard. The reachability sweep had tested this
+same flag hours earlier, found "passes C4, fails H9", and filed it as a wash; that was the wrong
+instrument. Reversible with `PC_STOCHASTIC_ROUT=0`. Both grid goldens re-recorded (the break band
+changes *when* a subunit routs, so the whole downstream casualty trajectory moves).
+
+**`ROUT_CASCADE_FRAC` left inert at 1.0** despite measuring better: ⅔-of-line gives casualty 5/20 (and
+fixes H6's 79.2% outlier → 29.7%), ⅓-of-line gives 7/20 but costs a win-share row and makes H6
+*undershoot* at 14.1%. Held because (a) that is a real trade, not a clear win, and (b) per-cell state
+redefines what a "section" is, so any value chosen now is fitted to a granularity about to change.
+
+**Two methodological failures in my own experiment, recorded rather than quietly fixed:**
+- **`0.34` and `0.5` returned byte-identical results — not robustness.** Three-subunit armies mean the
+  broken share can only be 0, ⅓, ⅔ or 1, so both thresholds first fire at ⅔: I ran one experiment
+  twice. Unexamined, "insensitive across a 47% range" would have entered the record as a robust
+  plateau. A sweep over a continuous parameter must be checked against the DISCRETENESS of its target.
+- **The rows that did not move were the informative ones.** H1/H2/H7/H8/H9 are identical to the decimal
+  across every arm because `make_unit` builds them as a SINGLE subunit per side — broken share is 0 or
+  1, so no threshold below 1.0 can fire. Inert by construction, not ineffective. An army of one subunit
+  has no line to come apart, which is the sharpest argument yet for the per-cell directive: the residual
+  30-33% sits on exactly those rows.
+
+## 2026-07-25 — ED-MB-0041: the new instrument immediately overturns a default (PC_STOCHASTIC_ROUT)
+
+**The casualty scoreboard's first act was to show that the win-share gauge has been penalising the
+change that makes the engine historically correct.** `PC_STOCHASTIC_ROUT` implements the du Picq
+15-30% break band (ED-MB-0031) and ships **OFF**; its own code comment says that without it "units
+grind to ~58% before breaking". Measured across all 20 rows:
+
+| | OFF (shipped) | ON |
+|---|---|---|
+| loser casualties | **61-87%** | **29-41%** (band 15-30) |
+| winner casualties | 7.8-37.8% | **3.3-17.4%** (cap 15) |
+| casualty realism | 0/20 | **2/20** |
+| win-share | 10/20 | 7/20 |
+
+One flag moves the loser from ~84% to ~31% — from annihilation to a few points outside the band — and
+the win-share gauge scores it as a **three-row regression**. The reachability sweep had already found
+`PC_STOCHASTIC_ROUT=1` "passes C4 and fails H9" and recorded it as a wash; that judgement was made on
+the wrong instrument.
+
+**Root cause of the residual, traced.** `Unit.derive_rout` breaks the army only when **every** subunit
+has routed (`all(a.routed ...)`), and `run_battle` stops only when a UNIT routs. So sections break at
+15-30% each, and then sit on the field absorbing casualties while their siblings fight on — the loser's
+*total* climbs well past any individual section's break-point. Armies do not do this; they come apart
+once a decisive portion of the line goes and the rest routs by contagion (du Picq: the end of a battle
+is moral, not physical).
+
+**New mechanism, gated inert:** `ROUT_CASCADE_FRAC` generalises `all(...)` to a fraction of a unit's
+*starting* strength held in broken subunits. **Default 1.0 = exactly the old behaviour** (the share can
+only reach 1.0 when no subunit is left unbroken), so goldens and gauge are untouched until the value is
+moved. The magnitude is deliberately **unchosen** — the mechanism is du Picq-grounded, the number is
+not, and picking one before measuring is the failure this whole audit has been about.
+`tests/valoria/test_rout_contagion.py` (9 tests) pins the mechanism and — importantly — the *float
+equality* of the inert default: `>= 1.0` on a computed ratio is exactly the kind of expression that
+silently becomes 0.9999999 and changes when an army breaks.
+
+**Two self-corrections while building it**, both caught by reading rather than by a failing test:
+- My first `_broken_share` docstring said it weights by spawn strength "not the current one, which
+  would shrink the numerator". That overstates: `troop_count` is *itself* a static nominal (it returns
+  `self.troops`), so there was never a live alternative in play. The real reason to prefer
+  `_start_troops` is that it is re-based per BATTLE, so a unit entering its third battle depleted
+  measures collapse against what it started that battle with. Comment and test both corrected to the
+  true property.
+- Two of my own tests failed on harness errors, not engine defects (`troop_count` has no setter;
+  5-7 subunits at 8-column spacing deploy off-field).
+
+## 2026-07-25 — ED-MB-0041: the two gauge invariants that need no band (Jordan-approved)
+
+The win-share gauge cannot tell a double envelopment from two lines colliding — both can produce the
+same number, which is how the reachability sweep found a config that passes the Cannae row with
+envelopment pathing switched OFF. Two properties close that gap from opposite directions, and neither
+needs a band or a judgement call.
+
+**1. Reverse-pair side symmetry** (`audit/.../reverse_pair_symmetry.py`). `decA(X vs Y) + decA(Y vs X)`
+must be 100: which army occupies the engine's "side A" slot is bookkeeping, not physics. Distinct from
+the pre-existing `symmetry_probe.py`, which tests MIRROR symmetry (identical armies → 50/50) and is
+structurally blind to an interaction asymmetry. Measured at n=60:
+
+| pair | fwd | rev | sum | deviation | sigma | verdict |
+|---|---|---|---|---|---|---|
+| H2/H9 | 49.2 | 65.0 | 114.2 | +14.2 | **+1.6** | OK — *not* a defect |
+| H3/H10 | 61.0 | 76.7 | 137.7 | +37.7 | **+4.5** | ASYMMETRIC |
+| H4/H11 | 6.7 | 55.0 | 61.7 | −38.3 | **−5.3** | ASYMMETRIC |
+
+**This corrects my own earlier reporting.** I had described all three sums (114.2 / 137.7 / 61.7) as
+evidence of a side-dependent mechanism. Reporting the deviation in units of its own standard error
+shows H2/H9 is **+1.6σ — consistent with noise**. The defect is confined to the *envelopment* rows,
+which localises it far more sharply and is consistent with ED-MB-0039's envelopment-stability
+diagnosis. A raw percentage-point threshold would have hidden that distinction entirely.
+
+**2. Casualty/duration realism** — a SECOND scoreboard in `gauge_mb`, reported beside the win-share
+count and deliberately *not* folded into it, so the existing 10/20 figure stays comparable with every
+number already in the ledger, handoff and PR bodies.
+- `matchup()` previously averaged `a_cas`/`b_cas` over **all** seeds regardless of who won — the wrong
+  quantity: the sources constrain what the LOSER lost and how much less the WINNER lost, and a near-even
+  matchup washes that asymmetry out. Now conditioned on the outcome (`win_cas`/`lose_cas`), plus a
+  `capped` rate (seeds that ran to the turn cap without resolving).
+- Bands are in-repo or logical consequences of in-repo values, **not invented literature intervals**:
+  loser 15–30% is the repo's own rout-onset band (ED-MB-0031); winner <15% is that band's
+  *contrapositive* (the winner did not break, so it sits below the break floor); the cap rate is
+  structural, not historical.
+- **Duration is deliberately NOT banded absolutely.** An engine turn has no defensible mapping to real
+  time, so any interval in turns would be fabricated to look grounded. Only the cap-hit rate is banded.
+- `None` (not `0.0`) when nothing resolved — treating an absent measurement as "the winner lost
+  nothing" would turn the engine's most broken rows into its cleanest passes.
+
+**First result, and it is stark.** The H1 *mirror* passes win-share at 50.0 while killing **~85% of the
+loser and ~26% of the winner** against a 15–30% / <15% expectation. Casualty-realism scores **0/20**.
+The win-share gauge has been reporting a green mirror on a battle that annihilates both sides.
+
+Pinned by `tests/valoria/test_gauge_invariants.py` (8 tests). Both invariants are currently RED and
+marked **xfail, not skipped**: the assertion runs every time, does not redden CI for a known-open design
+gap, and flips to XPASS the moment it is fixed. Sample size is documented as a **power** limitation
+rather than glossed — H3/H10, a +4.5σ defect at n=60, XPASSed at n=24, so an XPASS at suite-n is a
+prompt to re-measure at n=60, not evidence of a fix. Also single-sourced the 18/20 turn caps, which
+were duplicated literals about to become four copies.
+
 ## 2026-07-25 — ED-MB-0041 Tier-2: dead machinery wired or deleted + provenance retag
 
 Seven items from the deep adversarial audit's Tier-2 list ("wire or delete, no third option"). Every fix
@@ -260,171 +668,13 @@ slot bias. Not diagnosed here.
   (unit, cell, unit_field, cell_field) byte-exact. `tests/valoria` green; `test_fractional_pool.py` updated
   (sub-1 pool now stochastic-EV + can-Fail, replacing the deterministic-EV assertions that codified A3).
 
-## 2026-07-23 — ED-MB-0032: fractional combat pool ("pool must be fractional")
-- Jordan directive: the continuous pool was floored to an integer die count before `roll_pool`,
-  discarding the fractional remainder. `roll_pool_fractional`: integer part rolls real d10s, fractional
-  remainder contributes its EV (`PER_DIE_NET_EV=0.4`, the TN-7 face-rule EV); sub-1 pool contributes only
-  its fractional EV (no floor to a guaranteed die). Sigma-boost reads the fractional pool. Wired into the
-  sigma-head `a_net`/`b_net`.
-- Verified: pool 3.0 vs 3.7 differ in mean net by ~0.7·0.4; integer pools reduce to `roll_pool`; monotone
-  across integer gaps. Gated `PC_FRACTIONAL_POOL` (default OFF → byte-exact, bat.py EXIT=0). Tests:
-  `test_fractional_pool.py` (6).
-- Gauge ~neutral (correctness/precision fix, not band-optimizer); fair fractional ruler needs its own
-  calibration pass. (Archived the 2026-07-02/04/05 blocks to `coverage_matrix_archive_2026-07-23.md`.)
 
-## 2026-07-23 — ED-MB-0031: stochastic rout breakpoint at the historical 15-30% casualty band
-- Jordan historical research: "routs occur as early as 15% losses with 30% the upper hand." The canonical
-  §A.4 casualty→morale steps don't fire until 50% losses, so units grind to ~90% before breaking. Models
-  du Picq will-to-fight collapse: each subunit draws a **fractional** break-point in [ROUT_ONSET=0.15,
-  ROUT_CAP=0.30], skewed by resilience (discipline + starting morale) — a steady body holds toward 30%, a
-  shaken one breaks toward 15% — and routs when its casualty fraction crosses it.
-- Result (rout_probe OFF→ON): loser casualty-at-rout **91.7%→31.8%** (even), 88.8%→30.3% (disc5v3);
-  winner ~20%→~10%; length 2.5→1.1 turns.
-- Fractional throughout (random draw + fractional band + fractional loss), reproducible under the seeded
-  RNG. Gated `PC_STOCHASTIC_ROUT` (default OFF → no draw → **byte-exact**, bat.py EXIT=0; NOT inert when
-  on — moves goldens, needs_jordan). Tests: `test_stochastic_rout.py` (7).
-- **Coupled next:** lower per-tick lethality (battles now end at ~30% but in ~1.1 turns; casualty chunks
-  overshoot the break-point) + fractional dice, then re-gauge vs Dupuy/Sabin.
-
-## 2026-07-23 — ED-MB-0030: conditional orders (own_strength trigger + locked distance-conditional)
-- Jordan directive: "conditionals — a unit only starts retreating when the opponent is within X /
-  advancing then withdrawing when X." **Verified** the existing `Order` primitive already covers the
-  DISTANCE case: `Order(trigger='enemy_range:D', behavior={'stance':'retreat'|'yielding':True})` fires
-  when the subunit closes within D; `stance`/`yielding` are both `_ORDER_SAFE_FIELDS`; `build_army`
-  forwards the spec `orders` key. Locked in with `test_conditional_orders.py` (fires on close; does not
-  fire out of range) — no redundant knob added (bottom-up reuse).
-- **Added** the missing `own_strength:FRAC` trigger: fires once `troop_total()/_start_troops <= FRAC` —
-  a unit reacting to its OWN attrition (withdraw a spent body, commit a weakened one, brace when
-  thinned). Wired in `units.py` Order validation + `_ORDER_TRIGGER_KINDS` + `contact.py` `check_orders`;
-  reuses the `_start_troops` spawn denominator (no new state).
-- Byte-exact (orders default `()`; goldens carry none; bat.py EXIT=0). Tests: 8 in
-  `test_conditional_orders.py`.
-
-## 2026-07-23 — ED-MB-0029: intent as an offence/defence resolution axis
-- Jordan directive: "hold-and-defend vs rout-the-other resolve differently — intent makes a big
-  difference." `stance` (was movement-speed only) is now a signed offence/defence **commitment** in the
-  exchange: `cX` ∈ {aggressive +1, balanced 0, hold/retreat −1} enters the sigma head as delta-sigma net
-  `ns_a += (cA·OFF + cB·DEF)·SIGMA_PER_D` (own press + enemy exposure/blunting), symmetric for B —
-  uniform-impact like the octagon/puncture terms, **not** a raw damage multiplier.
-- Anchored to the §A tactic-card **asymmetry** (Disciplined Defence +1D; Standard Advance no effect) →
-  `DEF=1.0 > OFF=0.5`: a holding pin **survives** a pressing foe (buys time, Cannae centre); aggression
-  is punished vs a steady wall.
-- Effect (intent_probe, OFF→ON): hold-vs-balanced holder casualties 67→57 & win 35%→50%;
-  aggressive-vs-hold holder wins 65/35.
-- Gated `PC_INTENT_RESOLUTION` (default OFF; balanced=0 → inert; byte-exact, bat.py EXIT=0). Tests:
-  `test_intent_resolution.py` (8). Detail: `rotation_model_v1.md`.
-
-## 2026-07-23 — ED-MB-0028: cell-level closing-ranks lifecycle (T1 Phase 1a)
-- Foundational primitive for Jordan's rotation directive: `Subunit.close_ranks()` reflows a subunit's
-  **living** troops front-rank-first (`orig_r` asc) toward each cell's spawn density (`_cell_target`),
-  depleting the rear. A **deep** formation holds full front-cell density — hence full front combat pool
-  (`_pair_engaged_troops` weights by engaged-front-cell troops) — until depth is spent; a shallow one
-  thins at the front immediately. Makes literal the reserve the depth machinery only abstracted;
-  `PC_REFILL_FLOOR` was never wired.
-- Conservation exact; relational (troops close toward the front, no scattered holes); emptied cells keep
-  key at 0.0 (functional coverage-shrink, no cell-set mutation — Phase 1b handles literal dissolution).
-- Wired into the tick **after** both units' casualties (stays simultaneous) + col-grid resync.
-- Gated `PC_CLOSE_RANKS` (default OFF → byte-exact; bat.py 4 modes EXIT=0). Effect: DEEP(3×4) vs
-  SEMI(6×2) **81%→94%** ON. Tests: `test_close_ranks.py` (7). Detail: `rotation_model_v1.md`.
-
-## 2026-07-23 — ED-MB-0027: honest-gauge measurement integrity (density held at 100/cell)
-- Fixed the confirmed #1 gauge distortion (fiat register M1): the per-cell **density mismatch** between
-  `make_unit→build_unit` (legacy tier footprint, ~16/cell) and the composed presets (`concentration=100`).
-  Density enters `_lanchester_strength` **linearly**, so the ~8× gap — not flanking geometry — drove
-  H3/H4/C4 to a fiat 100% (null test: dense-vs-thin, zero envelopment, already 100%).
-- **Fix:** hold density constant at `GAUGE_CONC=100` across every gauge unit by building single AND
-  composed units from the same explicit troops/concentration path (`build_army→footprint_for`);
-  `GAUGE_TROOPS=600` divides evenly under every split (1/3,2/3,1/2) → exact quantization. Verified all
-  unit types build at exactly 100.0/cell, hp_max=600.
-- **Fair-ruler result:** H1 mirror 50/50 (was 44/56); envelop/refused/wedge **flip to ~0%** (force-
-  splitting is pure downside — geometry converts to no outcome); 15/20 rows flag real engine divergence
-  (brace P2 not repelling C2/C6=57 raw; cav mirror C3=71 asym; GappedLine H7/H8 over-strong).
-- Bands NOT re-fit (§8 north star). Gauge is a manual harness (no `test_` funcs → not CI); `bat.py` has
-  its own `make_unit` → byte-exact goldens unaffected. Detail: `honest_gauge_readout.md`.
-
-## 2026-07-23 — ED-MB-0026: explicit frontage×depth (columns×rows) + gradient-forwarding fix
-- `Subunit.width`/`depth`: both set → `footprint_for` builds an exact width×depth rectangular grid
-  (density = troops/(w·d) follows) — the coupled tactical axes (wide-shallow = frontage/envelopment;
-  narrow-deep = breakthrough/depth). Threaded through `_oriented`, `_spec_span`, `build_army` forwarding;
-  Subunit validation now accepts troops + (concentration OR width×depth).
-- Closes an ED-MB-0025 gap: `build_army` never forwarded `distribution` (gradient) nor width/depth from the
-  spec dict — now all forwarded, so the full deployment-primitive set is reachable via the army-builder.
-- Byte-exact unaffected (all inert in tier mode; bat.py uses tier). Tests: `test_deployment_primitives.py`
-  (+2 = 9); 138-test mass-battle sweep green.
-
-## 2026-07-23 — ED-MB-0025: explicit subunit deployment primitives + build_envelopment wing fix
-- **Explicit density honored:** `footprint_for` now interprets `concentration` as target troops/cell and
-  builds the exact implied cell count via `_build_shape_n` (arbitrary-N shape builders) — fixes the M2 bug
-  where a 133-troop Line collapsed to 1 cell at every concentration (density silently inert), the root of
-  the 8–12× composed-vs-single per-cell density mismatch.
-- **Density gradient:** new `Subunit.distribution` ∈ {uniform, front, rear} weights `cell_troops` across
-  ranks (front = shock/leading-rank-heavy, rear = depth/Leuctra deep wing), conserving `troop_count`.
-- **build_envelopment wing fix:** wings placed relative to the center's *actual* column (honors a pre-set
-  `starting_position`) instead of a phantom field-center anchor — pre-fix wings landed at 21/27 while the
-  center sat at col 9 (never wrapped); now they straddle it. Explicit wing positions also honored.
-- **Verified:** mirror-symmetry (n=120 × 4 seed bases) ~50/50, no bias → combat/movement already Jacobi.
-  Honest gauge (matched-density explicit blocks): envelopment 100% → ~40% → density artifact gone, mechanic
-  under-performs (real work remains). All 4 bat.py goldens re-recorded (deliberate composed-row change;
-  tier mode → density/gradient inert there): unit b70a9348, cell d46c8808, unit_field 3cc40104, cell_field f9c6dea1.
-- **Adversarial-review fix:** `build_refused_flank` had the *same* phantom-anchor bug (5th-critic finding) —
-  refused wing placed against the field-center, ignoring an explicitly-placed strong wing. Same fix applied
-  (honor pre-set positions; place the refused wing on the strong wing's actual span). Latent (the gauge sets
-  both positions explicitly → byte-exact unchanged), was uncovered by tests; now covered.
-- Tests: `tests/valoria/test_deployment_primitives.py` (7 — incl. refused-flank sibling-fix).
-
-## 2026-07-23 — ED-MB-0024: DG-2 fighting-withdrawal residuals (emergent entry + rally + pocket exits)
-- Completes the three parts ED-MB-0005 deferred after shipping the yield state + commanded entry
-  (`proposals/mass_battle_fighting_withdrawal_v1.md` §2.2/§2.4):
-  - **Emergent auto-entry** (§2.2, `morale_check_phase`): a disciplined subunit (`eff_discipline >=
-    D_YIELD`, `command>0`, non-ranged) crossing the §A.4 `frac<0.50` casualty trigger **enters yielding**
-    instead of only eroding. Sets state only — the erosion-brake calibration stays deferred (`needs_jordan`).
-  - **Rally exit** (§2.4, `between_turn_recovery`): at the turn-break lull a yielding subunit whose morale
-    recovered to `>= YIELD_RALLY_MORALE_FRAC` (0.75) of start reverts to normal combat.
-  - **Pocket exit** (§2.4, new `Subunit.pocketed` via `_yield_pocketed`): rearward motion blocked (flee
-    vector off-map, or an enemy within `YIELD_POCKET_REACH` in the retreat path) → yielding holds with the
-    combat malus **removed** (Cannae's pinned-and-annihilated kill condition). Reuses only `enemy_cells` +
-    `BATTLEFIELD_SIZE`, no new collision code.
-- **All three gated OFF** (`PC_YIELD_EMERGENT` / `PC_YIELD_RALLY` / `PC_YIELD_POCKET`) → yielding never
-  auto-set, rally never fires, `pocketed` never set + the exchange guard reduces to the ED-MB-0005 malus →
-  **byte-exact** (bat.py all 4 digests byte-identical). `pocketed` cleared at the battle boundary.
-  `needs_jordan` on the three flips, the emergent path's blast radius (§4.3), and both CALIBRATED-DEBT
-  magnitudes.
-- Tests: `tests/valoria/test_dg2_yield_residuals.py` (10) — emergent on/skip-low-disc/off-inert, rally
-  revert/keep/off-inert, pocket map-edge/enemy-behind/open/malus-removed.
-
-## 2026-07-23 — ED-MB-0023: Reserve formation Phase-3-commit rule (PP-MB-04 / §A.6)
-- Wires the previously-inert `reserve` instruction (config `ROLE_SPEC` "Reserve"/"Support", zero code
-  consumed it) into `run_multi_unit_battle`. A unit held in Reserve (`unit_in_reserve` — any subunit
-  carries `reserve`) is **benched turn 1** and its pairing **commits** (re-activates) at
-  `RESERVE_COMMIT_TURN`=2 (Phase 3 of the next turn), engaging from Phase 5 of that turn — canonical
-  "declare turn N → commit Phase 3 turn N+1 → engage Phase 5 turn N+1", not delayed to N+2. First
-  engagement uses the default equal Off/Def split (no Phase 1 window) — already this path's behaviour.
-- Termination guard extended so a battle whose only pair is a still-benched reserve doesn't break early.
-- **Gated OFF** (`PC_RESERVE_COMMIT`, default 0) → reserve inert, all pairs active turn 1 → byte-exact;
-  `run_multi_unit_battle` isn't in the bat.py golden battery → double-safe. `needs_jordan` on the flip +
-  the battle-turn-granularity modeling (whole engagements per turn, so "commit P3 / engage P5" collapses
-  to "engages from turn 2").
-- Tests: `tests/valoria/test_reserve_commit.py` (4) — predicate, ON bench-then-commit-turn-2, OFF inert,
-  no-reserve battle unaffected.
-
-## 2026-07-23 — ED-MB-0022: Feigned Retreat tactic (PP-256)
-- Wires the previously-inert Feigned Retreat dice-modifier row (mass_battle_v30 §A.12 / §B.4) into the
-  field engine's pursuit path. A unit that declares a Feigned Retreat (`Unit.feigned`) withdraws as if
-  routing to bait a pursuer; when a Fast victor pursues it, `resolve_feigned_retreat` runs the two-stage
-  resolution — (1) pursuing general rolls Command Ob 2 to **recognise** the feint (success → no effect);
-  (2) if deceived, a Discipline **Ob 1** check (PP-256). Failing (2) marks the pursuer `overextended`,
-  cutting its next engagement pool by `OVEREXTEND_PENALTY` (=2) via a gated branch in `base_combat_pool`.
-- **Convention (verified, not a bug):** the checks use the shared `roll_pool` net-successes convention
-  (botch die included) that every §A check uses. Realized hold rates: Disc-1 ~40% (matches PP-256 exactly),
-  Disc-4 ~74.5% vs the doc's no-botch binomial ~87%. A bespoke botch-free counter was rejected (scale-local
-  dialect = CLAUDE.md §10 guardrail).
-- **Gated OFF** (`PC_FEIGNED_RETREAT`, default 0) → flags never set + pool branch inert → byte-exact;
-  additionally the pursuit path is in `run_multi_unit_battle`, NOT the bat.py single-pair golden battery →
-  double-safe. Transient flags cleared at `reset_morale_between_battles`. `needs_jordan` on the default-flip
-  + the `OVEREXTEND_PENALTY` magnitude (reuses the §B.4 strategic −2D at field scale — confirm transfer).
-- Tests: `tests/valoria/test_feigned_retreat.py` (6) — Disc-rate band + monotonicity, recognise rises with
-  Command, overextend only when deceived+failed, non-feigning no-op, gate-OFF inert, pool-penalty ON vs OFF.
-
+## 2026-07-23 — ED-MB-0022 through ED-MB-0032 (archived — verbatim)
+- Feigned Retreat (PP-256), Reserve Phase-3 commit (PP-MB-04), DG-2 fighting-withdrawal
+  residuals, explicit subunit deployment primitives + frontage×depth, honest-gauge density
+  integrity, cell closing-ranks, intent as an offence/defence axis, conditional orders, the
+  stochastic-rout breakpoint at the historical 15-30% band, and the fractional combat pool.
+  Full text: `tests/coverage_matrix_archive_2026-07-25b.md` (moved verbatim, not condensed).
 
 ## 2026-07-22/23 — ED-MB-0011 through ED-MB-0021 (archived — verbatim)
 - spatial-model v2 Stages B-F (OBB contact / continuous frontage / weapon-class reach + pike /

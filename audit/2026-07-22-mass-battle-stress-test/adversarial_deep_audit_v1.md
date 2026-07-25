@@ -343,3 +343,290 @@ expected and is not evidence either way about the bands — same caveat as Tier-
 halt) *does* move a band row, and deliberately: it takes C1 from 86.7% to 48.3%, into its 35-55 band, by
 removing a permanent shock bonus for standing still. That is a defect removal whose direction happens to
 be favourable, not a tuning pass — no constant was touched.
+
+---
+
+## 8. IS 20/20 REACHABLE BY CONSTANTS? (reachability sweep, 2026-07-25)
+
+**Question.** Jordan: *"is there any combination of these constants where we magically somehow get to
+20/20?"* The prior question to any tuning pass: for each failing row, does **any** setting reach its
+band? A row invariant to every toggle is blocked by structure, and no constant-fitting will pass it.
+
+**Tool.** `reachability_sweep.py` — one subprocess per (row, config) so `config.py` re-reads the
+environment cleanly; 33 booleans in both directions + 6 magnitudes at their extremes (85 configs);
+`--stack` greedily hill-climbs the strongest movers together, since 2^33 is not enumerable.
+
+### 8.1 Two defects in the instrument, found before its results were trusted
+
+**(a) Low-n positives are manufactured by noise, and the error is ASYMMETRIC.** The first run used
+n=16 against the gauge's own n=60. Measured on R1, the *identical baseline config* reads **26.7 / OK at
+n=16 and 44.1 / WIN-OUT at n=60**; the sweep accordingly reported 76 of 85 configs putting R1 in band
+when the row is 14 points outside it and none of them do. Sampling noise can only **widen** an observed
+span, so a NEGATIVE verdict ("the whole span missed") is conservative and survives low n, while a
+POSITIVE verdict is exactly what noise fabricates. Negatives may be read at low n; **every positive was
+re-verified at n=60 before being recorded below.** The tool now warns below n=40.
+
+**(b) Ragged band parse.** Row tuples are not uniform — a normal row is 9 fields ending
+`(..., lo, hi, dexp)`, a braced-repel row carries a 10th trailing `'rawA'`. Counting from the end read
+C2's band as `(30, 'high')` instead of `(0, 30)`: wrong for exactly the two rows the cavalry-repel
+question turns on. Now anchored on the `dexp` token with asserts on both row shapes.
+
+### 8.2 Verified results (positives at n=60; negatives at n=16, valid per the asymmetry above)
+
+| row | band | reachable? | how |
+|---|---|---|---|
+| H4 Cannae | 45-62 | yes — **but a FALSE PASS** | stack `PC_FRICTION_CEV=1, PC_ENVELOP_PATH=0, LANCHESTER_ENABLED=0, FACING_REACTION_TICKS=0` → 46.7 OK. It passes the envelopment row **by switching off envelopment pathing**. No single toggle reaches it (span 0.0-37.5). |
+| H5 RefusedFlank | 48-62 | yes — legitimate | stack `PC_FRICTION_CEV=1, PC_FRACTIONAL_POOL=1` → 48.3 OK. Two real gated mechanisms; neither disables the thing under test. The one genuinely interesting hit. |
+| H9 rev-H2 | 38-52 | yes — **band-fitting** | `K_LINEAR=24` → 45.0 OK. K_LINEAR is *already* the constant fitted to superseded engine output (§1.3); doubling it to land a row is the "choose a free construction parameter until it passes" failure named in §4. `PC_STOCHASTIC_ROUT=1` looked like a hit at n=16 (46.7) and is **not** one (52.8 WIN-OUT). |
+| H6 RefusedFlank vs Line | 48-60 | **no** | span 50.0-100.0; greedy stack reaches 50.0 only via `PC_WHEEL=0`, which is the pre-port all-draw state (§5.1) — not a result. |
+| H10 rev-H3 | 28-45 | **no** | span 25.0-100.0. Four apparent hits at n=16 (`PC_FACING_MODEL=1`, `MULTI_SIDE_SHOCK=0.0`, `FACING_REACTION_TICKS=0/1`) — **all four fail at n=60** (56.7, 57.6, 58.3). Zero reachable configs. |
+| R1 Ranged vs Line | 0-30 | **no** | the 76 apparent hits were the n=16 artifact above. |
+| C2 Cav vs braced deep block | 0-30 rawA | **no** | span 43.8-100.0; best stack 37.5. **Not a magnitude problem** — see §8.4. |
+| C4 Cav flank/envelopment | 75-95 | yes — legitimate | `PC_STOCHASTIC_ROUT=1` → 91.5 OK at n=60 (baseline 98.3 WIN-OUT). A real gated mechanism, already proposed for default-ON in §4. `PC_FRICTION_CEV=1` looked like a hit at n=16 and is not one (61.7). |
+| C6 Cav vs braced shallow Line | 0-30 rawA | **no** | span 43.8-100.0; best stack 43.8. |
+| R3 Ranged mirror | 42-58 | **no** | pinned at exactly 50.0 / UNRESOLVED under every config; greedy stack does not move it. Note the win-split 50.0 is *inside* the band — the row fails the DECISIVE check. This is a missing resolution path, not a miscalibrated number, and reporting it as "out of band" would send the next reader to tune a number that is already right. |
+
+### 8.3 Answer
+
+**No.** Of the ten failing rows, at the gauge's own n=60:
+
+- **legitimately reachable — 2:** H5 (`PC_FRICTION_CEV=1 + PC_FRACTIONAL_POOL=1`), C4 (`PC_STOCHASTIC_ROUT=1`).
+- **reachable only illegitimately — 2:** H4 (passes Cannae with envelopment pathing OFF), H9 (`K_LINEAR=24`,
+  doubling the constant already fitted to superseded output).
+- **no reachable configuration at all — 6:** H6, H10, R1, R3, C2, C6.
+
+So the honest constants-only ceiling is **12/20**, and even that assumes the two legitimate hits do not
+conflict with each other or knock out a currently-passing row — untested, and `PC_STOCHASTIC_ROUT=1`
+already demonstrates the risk: it passes C4 and *fails* H9 (52.8, WIN-OUT).
+
+**The most useful thing the sweep found is not the count.** It is that the optimizer's cheapest route
+to a green row is to **deactivate the mechanism the row exists to measure** — H4 passes Cannae with
+envelopment pathing off. Any future tuning effort will rediscover that route, because on a win-share
+gauge two lines colliding and a double envelopment can produce the same number.
+
+**Consequence for the gauge, not for the constants.** `gauge_mb.py:417,421` already computes `a_cas`,
+`b_cas` and mean turns-per-battle, and bands **none** of them. Casualty ratios and duration are the
+quantities the literature actually constrains (loser ~15-30% at the break, winner ~5%, asymmetry
+appearing *after* the rout rather than during the fight); win-share of a hypothetical repeated matchup
+is close to unfalsifiable, and all 20 bands are judgement calls with no literature-derived interval.
+A casualty-banded gauge rejects `PC_ENVELOP_PATH=0` immediately — two lines colliding do not produce
+Cannae's casualty asymmetry whatever the win-share says. **That is the highest-value next step, ahead
+of any further constant work.**
+
+### 8.4 CORRECTION — C2/C6 is a mechanism gap, not a magnitude call
+
+The Tier-2 handoff recorded C2/C6 as *"the latch removed the timing problem; what remains is magnitude —
+`PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2` against `_wall_prep`"*, and queued it for Jordan as a
+magnitude decision. **The sweep falsifies that.** Against C2's 0-30 band:
+
+| lever | values swept | C2 result |
+|---|---|---|
+| `PC_CHARGE_RECOIL` | 0 / 3 / 12 / **24** (4x the default 6) | 100.0 / 93.8 / 87.5 / **87.5** |
+| `SIGMA_PER_D` | 0.1 / 0.4 / 0.8 (4x range) | 93.8 / 93.8 / 93.8 — **completely insensitive** |
+| `PC_BRACE_ENABLED` | off / on | 100.0 / 93.8 |
+
+Quadrupling the recoil coefficient buys **6 points of the ~64 required**, and switching the entire brace
+apparatus off costs **6**. The whole braced-wall mechanism is worth ~6 points on a row that needs ~64, and
+`SIGMA_PER_D` — the conversion rate the recoil is denominated in — does not move it at all. The
+coefficient is not the binding constraint; the mechanism is.
+
+This **retires a Tier-3 magnitude call** and replaces it with a mechanism gap, and it independently
+corroborates the older finding already in `HANDOFF_MB.md`: a frontal deep line cannot repel a charge in
+this engine at any coefficient, because *a repelling formation is a square/box with all-around brace,
+not a deep frontal line*. The all-around brace primitive is the work; the coefficient is not.
+
+---
+
+## 9. THE CASUALTY SCOREBOARD'S FIRST EXPERIMENT (2026-07-25)
+
+Jordan approved the two instruments (§8's consequence) and granted permission to experiment on Tier-3
+from historical precedent, iteratively. This is the first such experiment, and it overturned a default.
+
+### 9.1 `PC_STOCHASTIC_ROUT` — the win-share gauge was penalising the correct change
+
+The flag implements the du Picq 15-30% break band (ED-MB-0031) and shipped **OFF**; its own comment says
+that without it "units grind to ~58% before breaking". Measured across all 20 rows:
+
+| | OFF (shipped) | ON |
+|---|---|---|
+| loser casualties | **61-87%** | **29-41%** (band 15-30) |
+| winner casualties | 7.8-37.8% | **3.3-17.4%** (cap 15) |
+| casualty realism | 0/20 | **2/20** |
+| win-share | 10/20 | **7/20** |
+
+The win-share count drops three rows and the flip is still right. **The reachability sweep had already
+tested this exact flag** (§8.2), found "passes C4, fails H9", and recorded it as a wash — a judgement
+made on the wrong instrument, hours before the right one existed. **Default flipped ON.**
+
+### 9.2 Rout contagion — mechanism ratified, magnitude NOT
+
+`Unit.derive_rout` broke an army only when **every** subunit had routed, so sections broke at 15-30%
+each and then absorbed casualties while their siblings fought on. `ROUT_CASCADE_FRAC` generalises that
+to a fraction of starting strength, per du Picq's contagion. Measured (with the break band on):
+
+| arm | casualty realism | win-share | note |
+|---|---|---|---|
+| no contagion (1.0) | 2/20 | 7/20 | H6 stuck at 79.2% loser |
+| **⅔ of line** (0.5 / 0.34) | **5/20** | 7/20 | H6 fixed: 79.2% → 29.7% |
+| **⅓ of line** (0.30) | **7/20** | 6/20 | every envelopment row in band; H6 now *undershoots* at 14.1% |
+
+**Left at its inert default (1.0).** Two reasons, and neither is indecision: (a) ⅓ buys two casualty
+rows and costs one win-share row and makes H6 break too early — that is a real trade, not a clear win;
+(b) per-cell state (Jordan's 2026-07-25 directive) **redefines what a "section" is**, so any value
+chosen now is fitted to a granularity that is about to change. The mechanism is grounded; the number
+would be `CALIBRATED-DEBT`, and there is no reason to incur it yet.
+
+### 9.3 Two methodological failures in my own experiment, recorded
+
+**(a) `0.34` and `0.5` returned byte-identical results, and it is not robustness.** The gauge armies
+have three subunits, so the broken share can only be 0, ⅓, ⅔ or 1 — both thresholds are first crossed
+at ⅔. I ran the same experiment twice. Presented uninterrogated, "insensitive across a 47% range" would
+have entered the record as evidence of a robust plateau. It is evidence of nothing. **A sweep over a
+continuous parameter must be checked against the DISCRETENESS of what it acts on.**
+
+**(b) The unchanged rows were the informative ones.** H1/H2/H7/H8/H9 are identical to the decimal across
+every contagion arm, because `make_unit` builds them as a SINGLE subunit per side — the broken share is
+0 or 1 and no threshold below 1.0 can fire. The mechanism is inert there by construction, not
+ineffective. That is the sharpest argument yet for the per-cell directive: **an army with one subunit
+has no line to come apart.** At cell granularity every body has sections that can break independently
+and the same contagion applies *within* a subunit. The residual 30-33% on exactly those rows is the gap
+per-cell morale exists to close.
+
+### 9.4 The rout flip ALSO largely fixed the side-asymmetry (unpredicted)
+
+Re-measured at n=60 after the default flip, because the unit suite XPASSed two symmetry rows and this
+audit's own protocol says an XPASS at suite-n is a prompt to re-measure, never evidence of a fix:
+
+| pair | rout OFF | rout ON | |
+|---|---|---|---|
+| H2/H9 | 114.2 (+1.6σ) | **102.8 (+0.3σ)** | was already OK |
+| H3/H10 | 137.7 (**+4.5σ**) | **115.3 (+1.7σ)** | **defect resolved** |
+| H4/H11 | 61.7 (−5.3σ) | **75.0 (−3.8σ)** | improved, still real |
+
+**I expected this to be noise and said so.** The reasoning was that N=40 underpowers H3, which is true
+in general and was the wrong call here — the authoritative n=60 run confirms a genuine improvement. The
+XPASS was a true signal. This is the protocol working as designed: the suite-n test cannot prove a fix,
+but it flagged something worth the expensive measurement, and the expensive measurement paid.
+
+**Why it happens.** The longer a battle runs, the more deployment and positional asymmetries compound.
+Ending at the historical break point (~30% casualties) instead of at annihilation (~84%) truncates that
+compounding. So the side-asymmetry was *substantially* an artifact of battles running far past the point
+where real ones stop — which means it was never the independent "deployment geometry bug" the earlier
+diagnosis assumed, and the fix for it was a lethality/termination fix all along.
+
+**H4/H11 at −3.8σ remains a real, independent defect** and is the surviving symmetry item.
+
+---
+
+## 10. THE CELL AS THE PRIMITIVE FOR MORALE (ED-MB-0042, 2026-07-25)
+
+Jordan's directive: *"the cell needs to be the primitive for morale, discipline, quality, stamina,
+route, health, armour, facing, damage, troops count, etc"*. This section records the first state moved
+— morale — and the flip it earned. Full mechanism notes live in `tests/coverage_matrix.md`; what
+belongs *here*, in an adversarial audit, is the reasoning and the two errors.
+
+### 10.1 The finding that mattered was an asymmetry, not a magnitude
+
+Phases 1+2 measured **byte-identical to phase 1** across all twenty rows. Identical is a far stronger
+signal than disappointing: a smaller-than-hoped number gets absorbed as "it helps a little", whereas
+identical across twenty rows can only mean the code never ran in a way that mattered.
+
+Instrumenting it showed 72 of 144 cells "broken" at *exactly* −1.0. The uniformity was the diagnosis —
+local damage produces a spread, so one repeated value means one uniform write. It was the body-wide
+rout punch. Cells were breaking as a **consequence** of the body routing, strictly after the event
+phase 2 exists to precede.
+
+| | gradual erosion | break-point short-circuit |
+|---|---|---|
+| body | yes | **yes** — du Picq 15–30%, `_stochastic_break` |
+| cell | yes | **none** |
+
+A cell had to be destroyed twice over to break by erosion alone, so the body won that race by
+construction. Tuning any coefficient would have been the wrong move; the missing thing was a *symmetry*.
+
+### 10.2 The flip, and what it cost
+
+Measured against a same-session flag-OFF control at n=60, resolving (multi) mode:
+
+| | win-share bands | casualty/duration realism |
+|---|---|---|
+| OFF | 7/20 | 2/20 |
+| **ON** | **8/20** | **7/20** |
+
+The casualty column is the evidence, and it is a mechanism producing a *shape* rather than a fitted
+number: loser losses fall out of 31–40% into 26–30% (H6 79.2 → 48.9, C7 39.9 → 32.1) — du Picq's claim
+that a body comes apart before it is destroyed, falling out of cells that stop being a formation before
+they stop existing. Costs: single mode 7/20 → 5/20 (both flipped rows sub-1σ band-edge moves at n=60 in
+the mode the gauge documents as non-resolving); C4 91.5 → 96.7 against a 95 ceiling (~0.5σ).
+**Reverse-pair symmetry 3.8σ → 3.4σ — H4/H11 is still ASYMMETRIC and is still the surviving item.**
+
+### 10.3 Error on the record: I reported a worrying number without its control
+
+I flagged an "over-firing" signal — 76–100% single-mode draw rates — from the phase-2b run, and put it
+in the coverage matrix before the multi-mode scoreboard landed. The flag-OFF control then showed those
+same rows at **100% draws with the flag off too**: the pre-existing tick-cap artifact the gauge's own
+docstring documents, present before phase 2b and unmoved by it.
+
+The failure is the same one §8's phantom-positive finding names, pointed the other way. I had internalised
+"a flattering number needs a control" and not the general form: **a number without its control is not a
+measurement, whichever direction it points.** Recording a concern early is good practice; recording it
+as *caused by my change* without a control arm is not.
+
+### 10.4 Unplanned finding: `PC_STOCHASTIC_ROUT` is now inert in the shipped configuration
+
+With cells carrying their own break-points, the body-level flag stops separating: loser casualties
+**35.6%** with it OFF and **36.1%** with it ON. The cells break first — same 15–30% band,
+discipline-skewed — and `CELL_BREAK_ROUT_FRAC` ends the body before the subunit-level draw is consulted.
+
+Note the shape of this: §9.1 flipped that flag ON eight hours earlier on strong evidence, and the very
+next mechanism built one scale down **subsumed it**. That is not a reversal of §9.1 — it was correct on
+the engine that existed — but it is a standing hazard worth naming: *a fix installed at the wrong scale
+looks identical to a fix, until the right-scale mechanism arrives.*
+
+It is **not** removed. It remains load-bearing on the unseeded fallback path, so it is a retirement
+**candidate**, pinned by `test_per_cell_break_subsumes_the_body_level_one` and left for a pass that first
+enumerates that path's consumers.
+
+### 10.5 RETRACTION (same day): §10.2's measurement compared two incomparable arms
+
+**§10.2's flip is withdrawn. Its numbers must not be cited.** The mechanism (§10.1) stands.
+
+`between_turn_recovery` and `reset_morale_between_battles` both write the morale **scalar**, which
+`eff_morale` stops reading the moment cells are seeded. Under `PC_CELL_MORALE` they are **silent
+no-ops** — verified directly: knock a body's cells to 2.0, call both, it is still at 2.0. The gauge's
+multi mode runs multi-turn battles and resets morale between them. So **the ON arm fought with morale
+that never recovered and the OFF arm's did**, and "the loser breaks earlier" is precisely what a body
+that cannot recover also produces. The gain is not attributable to the mechanism.
+
+Reverted: default OFF, `_PINNED_OFF` back to `'0'`, both goldens back to their pre-flip digests. Net
+shipped behaviour change: **zero**.
+
+**This is the audit's own §3 pattern, committed by the auditor.** §3 names the repo's dominant failure
+mode as *machinery that documents itself as working and does not*. §10.4 recorded a subsumption finding
+one section above — and the subsumption reading was itself downstream of the same confound. The
+`erode_morale` silent no-op earlier in this session was the **same defect class**, fixed as a single
+instance with no sweep for the pattern; it recurred within hours and reached a shipped default and a
+golden re-record before the suite caught it.
+
+The transferable finding is about the **unit of repair**. When a defect's cause is *"a representation
+change orphaned its writers"*, the repair is **every writer, enumerated by grep** — not the one that
+happened to fail. A single-site fix on a pattern defect is indistinguishable from a real fix until the
+next writer fires.
+
+**Two genuine bugs the failing suite exposed, both kept:**
+
+- **Born-broken subunits.** `seed_cell_morale()` ran in `Subunit.__post_init__`, but an inheriting
+  subunit's `_unit` back-ref is not set until `Unit.__post_init__`, strictly later — so it seeded every
+  cell at `eff_morale`'s no-parent fallback of **0**: born broken, emitting no combat weight, and unable
+  to recover because once cells exist `eff_morale` reads them and never falls back to the parent scalar.
+  The gauge path passes morale explicitly, which is exactly why the targeted tests and the measurement
+  were green while ten unrelated suite tests were not — **a green targeted test on a changed primitive
+  says nothing about the primitive's other callers.**
+- **A 1-ulp aggregate defeating an identity.** The troop-weighted mean of N equal values is that value
+  mathematically, not in floats (15 cells at 6.0 → `5.999999999999999`). `_morale_sigma` divides by
+  `morale_start`, so a full-morale body reported σ = −1.8e−16, enough to cross a `DAMAGE_BY_DEGREE`
+  boundary and turn a 6.0 exchange into 0.0. **My own t=0 identity test hid it** by asserting with
+  `pytest.approx` — the one assertion form that cannot see an ulp. An identity claim must be asserted
+  with `==`, or it is not testing the identity.
+
+**Blocker for re-flipping: the scalar-write sweep, not another gauge run.**

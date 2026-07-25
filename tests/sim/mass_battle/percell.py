@@ -5,7 +5,7 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
+__all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'distribute_casualties_cellwise', 'sync_col_grid', '_fatigue_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -118,6 +118,11 @@ def _apply_with_spill(targets, dmg):
             take = min(cur, remaining * (w / wtot))
             atom.cell_troops[orig] = cur - take
             applied += take
+            # [ED-MB-0041 phase 1] Local morale erosion rides on the SINGLE owner of casualty
+            # application, so every path that kills men (melee, volley, pursuit, freed-attacker,
+            # cellwise facing-weighted) shakes the cells it killed them in -- without any caller
+            # having to remember to. Inert when cell morale is unseeded.
+            _erode_cell_morale_from_damage(atom, orig, take, cur)
         remaining -= applied
         if applied <= 1e-9:                 # [canonical: epsilon: float residual guard]
             break
@@ -173,6 +178,25 @@ def distribute_casualties(unit, dmg, pairs):
     # exceeding the engaged front's troops while unit.hp took it in full (measured: 4400 of 5000 lost).
     _apply_with_spill([(a, pid, troops) for a, pid, troops in cells], dmg)
     sync_col_grid(unit)                            # refresh emergent column densities from cells
+
+def _erode_cell_morale_from_damage(atom, cid, killed, before):
+    """[ED-MB-0041 phase 1] A cell that is being cut down loses heart LOCALLY.
+
+    Scaled by the fraction of THAT CELL destroyed, not by the absolute count: losing 20 of 100 men beside
+    you is the same shock whether the body is large or small, and an absolute scale would make dense
+    cells look braver purely for being dense. Bounded by the same per-phase cap the aggregate erosion
+    uses, so one savage tick cannot instantly zero a cell that the cohesion pull would otherwise recover.
+    """
+    # getattr, not attribute access: this helper hangs off `_apply_with_spill`, the SINGLE owner of
+    # casualty application, which is deliberately duck-typed — callers pass anything with cell_troops
+    # (including test doubles). Requiring `cell_morale` on every such object would make a morale feature
+    # impose a structural requirement on the damage substrate, which is backwards. CI caught this via
+    # test_hp_cell_ledger's _FakeAtom; the lesson is about the coupling, not the double.
+    if not getattr(atom, 'cell_morale', None) or killed <= 0 or before <= 0:
+        return
+    frac = min(1.0, killed / before)
+    atom.erode_cell_morale(cid, MORALE_PHASE_CAP * frac)
+
 
 def distribute_casualties_cellwise(unit, dmg, cell_dmg):
     """[ED-MB-0040, Jordan directive: "the cell is the primitive ... damage is supposed to be done to

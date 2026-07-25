@@ -120,12 +120,43 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             # When gated on, a subunit whose casualties cross its own drawn break-point routs NOW (drive its
             # morale <=0 -> rout_resolution breaks it this phase). Fires AFTER the §A.4 erosion so a unit
             # already collapsing by canon still routs; this only pulls the break EARLIER, into the band.
+            # [ED-MB-0041 phase 1+2] The per-cell loop, run once per phase alongside the body-wide
+            # morale steps above. ORDER MATTERS and is deliberate:
+            #   1. contagion — a cell that has already broken shakes the cells beside it, so a gap
+            #      spreads from where it opened (du Picq, one level below ROUT_CASCADE_FRAC);
+            #   2. cohesion — the body then pulls its cells back toward its own holistic morale,
+            #      discipline-gated. Running it AFTER contagion is what makes the two compete: a
+            #      disciplined body can hold a gap closed, a ragged one loses the line. Reversing the
+            #      order would let the body paper over a break before the break had spread, and the
+            #      contagion would never do anything.
+            # Both are no-ops when per-cell morale is unseeded, so this is inert by default.
+            #
+            # [phase 1 CORRECTION] cohere_cells shipped with ZERO live call sites -- the modulate-down
+            # half of the loop existed, was tested, and never ran in a battle. The phase-1 gauge
+            # measurement was therefore of aggregate-up ONLY. Wired here.
+            if atom.cell_morale:
+                # [phase 2b] Local break-points FIRST: a cell gives way at its own casualty fraction,
+                # before contagion spreads from it and before cohesion tries to close it. Without this
+                # the only thing that ever broke a cell was the body-wide rout punch, i.e. strictly
+                # after the body had already gone -- measured, see check_cell_breaks.
+                atom.check_cell_breaks()
+                atom.propagate_cell_breaks()
+                atom.cohere_cells()
+                # A subunit whose broken cells hold a decisive share of its men has come apart as a
+                # BODY, even if its aggregate morale is still positive -- the men are present but the
+                # formation is not. Same contagion threshold as the army level, applied one scale down.
+                if not atom.routed and atom.broken_cell_share() >= CELL_BREAK_ROUT_FRAC:
+                    atom.routed = True
             if PC_STOCHASTIC_ROUT and not atom.routed and _stochastic_break(atom, 1.0 - frac):
                 # [Fable-audit A5 fix, 2026-07-24] Materialize OWN morale before the rout punch. Otherwise a
                 # subunit that inherits the shared unit pool (morale=None) writes that pool <=0, and every
                 # sibling — including 0-casualty reserves — reads morale<=0 and routs too, defeating the whole
                 # point of a per-subunit break. Setting atom.morale here makes the punch local.
                 if atom.morale is None:
+                    # [ED-MB-0042 sweep] materialize the scalar ONLY — deliberately NOT set_morale. This
+                    # copies the body's current value down so the punch below is local to this subunit; the
+                    # cells already hold that value, and rewriting them here would be a no-op at best and
+                    # would flatten genuine per-cell divergence at worst.
                     atom.morale = atom.eff_morale
                 # [Fable-audit A7 fix, 2026-07-24] Clamp the erode amount to >=0. When eff_morale is already
                 # <=-1 (reachable via §A.4 -3/phase stacking), eff_morale+1.0 is negative and erode_morale
