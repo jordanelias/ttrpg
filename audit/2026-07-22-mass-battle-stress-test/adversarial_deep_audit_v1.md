@@ -381,13 +381,23 @@ question turns on. Now anchored on the `dexp` token with asserts on both row sha
 | H6 RefusedFlank vs Line | 48-60 | **no** | span 50.0-100.0; greedy stack reaches 50.0 only via `PC_WHEEL=0`, which is the pre-port all-draw state (§5.1) — not a result. |
 | H10 rev-H3 | 28-45 | **no** | span 25.0-100.0. Four apparent hits at n=16 (`PC_FACING_MODEL=1`, `MULTI_SIDE_SHOCK=0.0`, `FACING_REACTION_TICKS=0/1`) — **all four fail at n=60** (56.7, 57.6, 58.3). Zero reachable configs. |
 | R1 Ranged vs Line | 0-30 | **no** | the 76 apparent hits were the n=16 artifact above. |
+| C2 Cav vs braced deep block | 0-30 rawA | **no** | span 43.8-100.0; best stack 37.5. **Not a magnitude problem** — see §8.4. |
+| C4 Cav flank/envelopment | 75-95 | yes — legitimate | `PC_STOCHASTIC_ROUT=1` → 91.5 OK at n=60 (baseline 98.3 WIN-OUT). A real gated mechanism, already proposed for default-ON in §4. `PC_FRICTION_CEV=1` looked like a hit at n=16 and is not one (61.7). |
+| C6 Cav vs braced shallow Line | 0-30 rawA | **no** | span 43.8-100.0; best stack 43.8. |
 | R3 Ranged mirror | 42-58 | **no** | pinned at exactly 50.0 / UNRESOLVED under every config; greedy stack does not move it. Note the win-split 50.0 is *inside* the band — the row fails the DECISIVE check. This is a missing resolution path, not a miscalibrated number, and reporting it as "out of band" would send the next reader to tune a number that is already right. |
 
 ### 8.3 Answer
 
-**No.** Of the ten failing rows, at the gauge's own n: one (H5) is legitimately reachable, two (H4, H9)
-are reachable only by disabling the mechanism under test or refitting an already-fitted constant, and
-four (H6, H10, R1, R3) have no reachable configuration at all. The cavalry rows are swept separately.
+**No.** Of the ten failing rows, at the gauge's own n=60:
+
+- **legitimately reachable — 2:** H5 (`PC_FRICTION_CEV=1 + PC_FRACTIONAL_POOL=1`), C4 (`PC_STOCHASTIC_ROUT=1`).
+- **reachable only illegitimately — 2:** H4 (passes Cannae with envelopment pathing OFF), H9 (`K_LINEAR=24`,
+  doubling the constant already fitted to superseded output).
+- **no reachable configuration at all — 6:** H6, H10, R1, R3, C2, C6.
+
+So the honest constants-only ceiling is **12/20**, and even that assumes the two legitimate hits do not
+conflict with each other or knock out a currently-passing row — untested, and `PC_STOCHASTIC_ROUT=1`
+already demonstrates the risk: it passes C4 and *fails* H9 (52.8, WIN-OUT).
 
 **The most useful thing the sweep found is not the count.** It is that the optimizer's cheapest route
 to a green row is to **deactivate the mechanism the row exists to measure** — H4 passes Cannae with
@@ -402,3 +412,25 @@ is close to unfalsifiable, and all 20 bands are judgement calls with no literatu
 A casualty-banded gauge rejects `PC_ENVELOP_PATH=0` immediately — two lines colliding do not produce
 Cannae's casualty asymmetry whatever the win-share says. **That is the highest-value next step, ahead
 of any further constant work.**
+
+### 8.4 CORRECTION — C2/C6 is a mechanism gap, not a magnitude call
+
+The Tier-2 handoff recorded C2/C6 as *"the latch removed the timing problem; what remains is magnitude —
+`PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2` against `_wall_prep`"*, and queued it for Jordan as a
+magnitude decision. **The sweep falsifies that.** Against C2's 0-30 band:
+
+| lever | values swept | C2 result |
+|---|---|---|
+| `PC_CHARGE_RECOIL` | 0 / 3 / 12 / **24** (4x the default 6) | 100.0 / 93.8 / 87.5 / **87.5** |
+| `SIGMA_PER_D` | 0.1 / 0.4 / 0.8 (4x range) | 93.8 / 93.8 / 93.8 — **completely insensitive** |
+| `PC_BRACE_ENABLED` | off / on | 100.0 / 93.8 |
+
+Quadrupling the recoil coefficient buys **6 points of the ~64 required**, and switching the entire brace
+apparatus off costs **6**. The whole braced-wall mechanism is worth ~6 points on a row that needs ~64, and
+`SIGMA_PER_D` — the conversion rate the recoil is denominated in — does not move it at all. The
+coefficient is not the binding constraint; the mechanism is.
+
+This **retires a Tier-3 magnitude call** and replaces it with a mechanism gap, and it independently
+corroborates the older finding already in `HANDOFF_MB.md`: a frontal deep line cannot repel a charge in
+this engine at any coefficient, because *a repelling formation is a square/box with all-around brace,
+not a deep frontal line*. The all-around brace primitive is the work; the coefficient is not.

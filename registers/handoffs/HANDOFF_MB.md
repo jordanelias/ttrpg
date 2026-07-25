@@ -525,9 +525,23 @@ correction rather than the original claim.
    zero casualties across 60/60 seeds). Direction is historically right — the oblique order is supposed to
    win — but 100% is not. Check whether the ported overhang wheel is too permissive for a wing that is
    deployed wide of the enemy frontage by construction.
-3. **C2/C6 still NOT-REPELLED (95.0 / 96.7 rawA, band 0-30).** The latch removed the *timing* problem;
-   what remains is magnitude — `PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2` against `_wall_prep`. Already on
-   the Tier-3 list for Jordan.
+3. **C2/C6 still NOT-REPELLED — and it is NOT a magnitude problem. [CORRECTED 2026-07-25 by the sweep;
+   my earlier entry here was wrong.]** I recorded this as "the latch removed the timing problem, what
+   remains is magnitude — `PC_CHARGE_RECOIL=6` and `SIGMA_PER_D=0.2`", and queued it for Jordan as a
+   magnitude call. The sweep falsifies that:
+
+   | lever | C2 result | band |
+   |---|---|---|
+   | `PC_CHARGE_RECOIL` 0 / 3 / 12 / **24** (4x default) | 100.0 / 93.8 / 87.5 / **87.5** | 0-30 |
+   | `SIGMA_PER_D` 0.1 / 0.4 / 0.8 | 93.8 / 93.8 / 93.8 — **totally insensitive** | 0-30 |
+   | `PC_BRACE_ENABLED` off / on | 100.0 / 93.8 | 0-30 |
+
+   Quadrupling the recoil buys 6 points of the ~64 needed, and switching the entire brace apparatus OFF
+   costs only 6. So the whole braced-wall mechanism contributes ~6 points to a row that needs ~64 — the
+   coefficient is not the binding constraint, the mechanism is. **This retires a Tier-3 magnitude call
+   and replaces it with a mechanism gap:** a frontal deep line cannot repel a charge in this engine at
+   any coefficient. (Consistent with the older finding already in this file that a repelling formation
+   is a SQUARE/BOX with all-around brace, not a frontal deep line.)
 4. **Tier-3 list** (`adversarial_deep_audit_v1.md` §4) is otherwise untouched and needs Jordan: depth
    support-stack cap, envelopment-as-morale-collapse, graded cavalry charge refusal, the Biddle σ-ceiling,
    the rout band + `PC_STOCHASTIC_ROUT` default, the `YIELD_POOL_MULT` split, and the missing
