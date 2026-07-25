@@ -155,7 +155,14 @@
    },
    "PERC_POINT_FRAC": 0.2,
    "PERC_POISE_K": 0.04,
+   "PERC_QUAL": {
+    "graze": 0.4,
+    "overwhelming": 1.6,
+    "success": 1.0
+   },
    "PERC_STAM_K": 0.4,
+   "PERC_STR_BASE": 0.5,
+   "PERC_STR_K": 0.25,
    "POISE_BREAK_BIND": 0.05,
    "POISE_BREAK_HIT": 0.07,
    "POISE_BREAK_OVERCOMMIT": 0.09,
@@ -165,6 +172,7 @@
    "POISE_RECOVER": 0.2,
    "POISE_SOLID_HIT": 8.0,
    "POLE_CLOSE_K": 0.92,
+   "PURSUIT_FOOT_K": 0.15,
    "PUSH_AVAIL_P": 0.22,
    "PUSH_REOPEN_BONUS": 0.18,
    "REACH_2H_K": 0.4,

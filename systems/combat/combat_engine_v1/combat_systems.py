@@ -607,7 +607,15 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
         # the engine has always modelled: a cut-thrust sword SWINGS (cuts) — reads easy — until it must half-sword-
         # thrust to the gaps vs a harness (medium/heavy), then reads hard. This reproduces the prior legibility exactly.
-        dm = 'puncture' if defender_armor in ('medium','heavy') else 'shear'
+        # [ED-PC-0036] The label is READ FROM the coupling contest itself (core.cut_thrust_arm, its single owner), so
+        # damage and reported mode cannot diverge. This used to be an independent armour rule ('shear' at none/light,
+        # else 'puncture') that contradicted what coupling actually paid — the thrust arm won at EVERY tier, so a
+        # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
+        # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
+        # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
+        _sel_eff_ct, _gap_ct = heads[h][0], heads[h][2]
+        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', _gap_ct, _sel_eff_ct,
+                                 core.thrust_authority(w['head_len']))[1]
     else:
         dm=core.HEAD_MODE.get(h, 'shear')
     sel_eff, _dm0, sel_gap, sel_perc, sel_pc, _eref = heads[h]
@@ -679,8 +687,18 @@ def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     # state-carryover defect class ED-PC-0033 fixed for grip_position, reintroduced one call up. A weapon is gated on
     # the point it would actually present, so the geometry is the OPEN-measure one explicitly: grip 0.0 (full extension,
     # nothing gathered) and room 1.0 (open measure) — path-independent by construction, never a stale read.
-    sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=1.0)
-    cap = adef_cap(longer.w, cfg, head=sel[1], gap=sel[2], grip=0.0, room=1.0)
+    # [ED-PC-0036, adversarial-review correction] The geometry is the engine's HONEST opening geometry, not a
+    # counterfactual. grip=0.0 is right — a fresh engagement opens at full extension, nothing gathered — but the first
+    # revision also pinned room=1.0, which the engine never occupies at this moment: the wrapper's own beat-1 room is
+    # range_utilization(measure_gap) = FLOOR + (1-FLOOR)*min(1, gap/CLOSE_EFF_GAP_REF), i.e. ~0.43-0.66 in every cell
+    # where this gate is live (room=1.0 would need a reach differential >= CLOSE_EFF_GAP_REF, which no matchup has).
+    # That pin was not inert: at guisarme-vs-arming/medium it made select_mode grade the BILL'S CUT (cut_thrust) rather
+    # than the point, dropping the gate 1.0 -> 0.413 and the matchup ~4pp — against the gate's own fiction, which is
+    # whether the closer still respects the POINT. Deriving room from measure_gap keeps full path-independence (it is a
+    # pure function of a local, never of carried state) AND makes the measure_gap parameter genuinely load-bearing.
+    room = range_utilization(longer, measure_gap, cfg)
+    sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=room)
+    cap = adef_cap(longer.w, cfg, head=sel[1], gap=sel[2], grip=0.0, room=room)
     deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - cap)
     base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
     foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
@@ -1008,10 +1026,19 @@ def percussion_stagger(striker, victim, wound, deg, cfg):
         return 0.0, 0.0
     head = getattr(striker, 'sel_head', None) or striker.head
     if head == 'blunt':
-        qf = {'graze': 0.4, 'success': 1.0, 'overwhelming': 1.6}[deg]
+        qf = cfg['PERC_QUAL'][deg]
         grip = getattr(striker, 'grip_position', 0.0)
-        load = ((0.5 + striker.strength/4.0) * cfg['PERC_BLUNT_HEFT']
-                * WP.percussion_authority(striker.w, grip=grip) * cfg['PERC_BLUNT_TRANSMIT'][victim.armor] * qf)
+        # SELECTED-ELEMENT percussion (ED-PC-0036 fix): read the striker's sel_perc — the percussion authority of the
+        # element select_mode actually chose — with the whole-weapon value only as the native fallback, exactly as
+        # core.strike does. This closes a bypass of the sel_* SINGLE-SOURCE contract that core.strike's docstring
+        # declares canonical ("a composite routed to a blunt sub-element is damaged on THAT element's percussion"):
+        # percussion_stagger was landing on the WHOLE-WEAPON value, so a lucerne_hammer's rear fluke and its hammer
+        # face delivered identical stagger. That is the object-confusion bug class (M-02) the architecture exists to
+        # prevent, re-opened by ED-PC-0031 — which post-dates the doctrine it broke.
+        perc = getattr(striker, 'sel_perc', None)
+        perc = perc if perc is not None else WP.percussion_authority(striker.w, grip=grip)
+        load = ((cfg['PERC_STR_BASE'] + cfg['PERC_STR_K']*striker.strength) * cfg['PERC_BLUNT_HEFT']
+                * perc * cfg['PERC_BLUNT_TRANSMIT'][victim.armor] * qf)
     else:
         # a THRUST/CUT delivers its energy as the WOUND (penetration), only a FRACTION as concussion/wind — a stab
         # winds far less than a mace-blow of the same lethality (the energy went into the hole, not the body's inertia).
@@ -1081,6 +1108,29 @@ def stophit_sigma(longer, shorter, measure_gap, cfg):
             + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
             + STOPHIT_RANGE_K*(range_avail-1.0)
             + true_time_edge(longer, shorter, cfg))
+
+def pursuit_sigma(pursuer, withdrawer, fat_p, fat_w, cfg, TR):
+    """The NACHREISEN pursuit net-sigma — the closer striking a reach weapon that is turning out of the bind to break
+    measure (ED-PC-0030's read-lost branch). Modelled on stophit_sigma, the engine's other opportunistic-strike sigma.
+    [ED-PC-0036] This REPLACES a flat cfg['DISENGAGE_PURSUIT_NSIG'] passed straight to core.resolve: that shortcut let
+    the single most violent branch in the closed phase bypass the ENTIRE sigma-assembly — no armour, no wounds, no
+    attribute of the withdrawer at all, so every fighter pair in this branch resolved identically and the pursuer
+    contributed only History (the pool). The mechanism ED-PC-0030 grounded is the attempt/clean/pursued STRUCTURE; the
+    flat resolution was grounded nowhere. Terms, each already canonical elsewhere:
+      • the base anchor — catching a withdrawing opponent is HARD (negative), the one part the old constant had right;
+      • bilateral wound-Ob, on the same sign convention as every other sigma (a wounded target is easier, a wounded
+        striker is worse) — its absence here was a silent inconsistency;
+      • armour-defeat (armor_defeat_sigma) — you cannot punish a withdrawal you cannot pierce. A spear pursuing a
+        plated man reads deeply negative; a poleaxe barely suffers. Exactly 0 unarmoured, so open-measure duels keep
+        the old character;
+      • a FOOTWORK differential — Nachreisen is literally "travelling after": catching the break is a feet contest, so
+        the pursuer's balance/footwork against the withdrawer's is what decides whether the strike lands in the gap.
+    Pure; the wrapper rolls it."""
+    return (cfg['DISENGAGE_PURSUIT_NSIG']
+            + cfg['WOUND_DEF_OB']*withdrawer.wt.wounds - cfg['WOUND_ATK_OB']*pursuer.wt.wounds
+            + armor_defeat_sigma(pursuer, withdrawer, cfg)
+            + cfg['PURSUIT_FOOT_K']*(balance_eff(pursuer, fat_p, cfg)*TR.eff_cw(pursuer, 'balance')
+                                     - balance_eff(withdrawer, fat_w, cfg)*TR.eff_cw(withdrawer, 'balance')))
 
 def close_rate(shorter, ffat_shorter, displ, rt, cfg):
     """Measure-domain closing RATE for the shorter weapon walking in: athletic close-speed (balance x cadence),

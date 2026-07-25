@@ -89,13 +89,16 @@ def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None):
     identical at grip=0 (the default) for every weapon."""
     return WP.heft(w, grip=grip, sel_head=sel_head, sel_pc=sel_pc)
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
-# ED-PC-0035 (audit answer — 'partial' was reported as a dead entry): 'partial' IS a real degree, returned by degree()
-# for 1 <= net < ob. It is unreachable HERE only because damage() early-returns 0 for any deg outside
-# (graze, success, overwhelming) and the WRAPPER maps a partial to an explicit graze/bind instead of a damage call.
-# The entry is therefore RETAINED deliberately: QUAL must stay a COMPLETE mapping over degree()'s output domain, or
-# the first caller that legitimately routes a partial here would silently take the 0 branch. Same reasoning for
-# COVERAGE_GAP['partial'] below (the `coverage` parameter is pinned to 'full' by every current caller — it is the
-# not-yet-wired hit-location hook, not dead weight).
+# ED-PC-0036 ('partial' was reported as a dead entry) — RETAINED, but the first rationale given for keeping it was
+# WRONG and the adversarial review caught it. The claim was that a complete QUAL mapping stops a future partial
+# caller from silently taking the 0 branch. It does not: damage() gates on the LITERAL tuple
+# ('graze','success','overwhelming'), not on QUAL membership, so a partial takes the 0 branch whether or not this
+# entry exists — and removing it could not even raise KeyError (which would have been the louder, safer failure).
+# The honest reason to keep it is narrower: 'partial' IS a real degree from degree() (1 <= net < ob), the wrapper
+# maps it to an explicit graze/bind rather than a damage call, and a quality table that silently omits a member of
+# its own domain is a worse artifact than an unused row. NOTE COVERAGE_GAP['partial'] below is NOT the same thing —
+# that key is the `coverage` (hit-location) level, unrelated to degrees; conflating them was a category error in
+# this comment's first draft. It is retained as the not-yet-wired hit-location hook.
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 # PENETRATION THRESHOLD (ED-PC-0032, rapier plate fall-off): armour resists up to a floor — a blow whose coupling-
@@ -261,6 +264,30 @@ def thrust_authority(head_len):
     1.0 (pommel-pressed, body-weight-backed); long reach-thrust decays toward the floor. head_len in METRES."""
     if head_len is None or head_len<=0: return 1.0
     return max(THRUST_LEVER_FLOOR, min(1.0, THRUST_LEVER_REF/head_len))
+def cut_thrust_arm(mat, coverage='full', gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0):
+    """SINGLE OWNER of the cut-and-thrust versatility contest. Returns `(value, mode)` — the winning arm's coupling and
+    which arm won ('shear' | 'puncture') — so the DAMAGE and the REPORTED MODE can never disagree (ED-PC-0036).
+
+    They used to. `coupling` took max(cut, thrust) internally while `select_mode` labelled the mode from a separate
+    armour rule, and the two contradicted each other in every unarmoured/light cell: the coupling paid the THRUST arm
+    at all four tiers (the legacy blended DELIVERY['cut_thrust']=1.35 could never beat point's 1.45, since shear-resist
+    >= puncture-resist at every tier), so a cut-and-thrust sword was damaged as a thrust and READ as a swing — and
+    legibility, which scores thrust HARD (0.80) vs swing EASY (1.25), graded a mode the fighter never performed. It
+    also meant the "versatile max" the docstring advertises never once selected the edge across 76 weapon x tier cells.
+
+    Two corrections make the contest real: the cut arm is graded on its OWN token (DELIVERY['cut']) rather than the
+    pre-max blended constant, and BOTH arms carry the same `eff` quality scaling their standalone tokens use (this
+    branch previously ignored `eff` outright, discarding the derived edge-quality and thrust-magnitude of all 19
+    cut_thrust weapons). The result is the doctrine this module already claimed: CUT the unarmoured man, half-sword
+    THRUST anything armoured — and a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point
+    even unarmoured, which an armour-keyed label rule could not express. Pure."""
+    cut_arm = DELIVERY['cut']*_transmit('shear',mat,coverage)
+    thr_arm = DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth)
+    if eff is not None:
+        cut_arm *= min(1.0, eff/CUT_AUTH_REF)
+        thr_arm *= min(1.0, eff/THRUST_AUTH_REF)
+    return (cut_arm, 'shear') if cut_arm >= thr_arm else (thr_arm, 'puncture')
+
 def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, eff=None, thrust_auth=1.0):
     """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
     (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
@@ -282,8 +309,23 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     if head=='cut_thrust':
         # VERSATILE: better of the edge (shear — a cut is not pommel-pressed, no lever term) or the half-sword/gap
         # thrust (puncture, whose GAP-PRESS term carries thrust_auth — the short-lever pommel-press that defeats a harness).
-        return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
-                   DELIVERY['point']*_transmit('puncture',mat,coverage,gap_prec=gap_prec,thrust_auth=thrust_auth))
+        # [ED-PC-0036] Both arms now carry the SAME `eff` quality scaling their standalone tokens use. This branch
+        # previously IGNORED `eff` outright — coupling('cut_thrust', ...) returned an identical value whether eff was
+        # 0.1 or 0.9 — so the derived edge-quality and thrust-magnitude of all 19 cut_thrust weapons (sel_eff spans
+        # 0.63-1.14) were silently discarded. That is the "a composite is graded on something other than its own
+        # element" class the sel_* contract exists to prevent, and a live reason near-identical swords read alike. A
+        # weak edge now de-rates the cut arm and a weak point the thrust arm, so the max() is a contest between the
+        # weapon's REAL two capabilities instead of between two hand-set DELIVERY constants.
+        # The cut arm is graded as a CUT (DELIVERY['cut']), not by the legacy BLENDED 'cut_thrust' constant. That 1.35
+        # predates this max() — a single averaged number from when the weapon was modelled as one mode. Once the branch
+        # resolves two arms explicitly, a cut-and-thrust sword's cut IS a cut and has no reason to be weaker than a
+        # dedicated cutter's. Keeping the blend made the comparison unwinnable by construction (1.35 < point's 1.45,
+        # with shear-resist >= puncture-resist at EVERY tier), so the "versatile max" never once selected the edge
+        # across 76 weapon x tier cells — the documented armour-conditional shift was decided by constant ordering
+        # rather than by physics. On its own token the shift is REAL and matches the doctrine stated above: cut the
+        # unarmoured man (1.500 > 1.450), half-sword-thrust anything armoured (light 0.926 < 1.276, more so at
+        # medium/heavy) — because padding and plate resist an edge far more than they resist a point.
+        return cut_thrust_arm(mat, coverage, gap_prec, eff, thrust_auth)[0]
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)

@@ -6,7 +6,7 @@
 covering *all directions and conditionals*; then resolve every finding in priority order, batch by batch, with an
 adversarial audit after each batch.
 **Prose:** `combat_four_dimension_audit_infill.md` (co-filed; method, evidence, per-finding detail, verification).
-**Status: IN PROGRESS** — Batches 1–2 landed; Batches 3–6 pending.
+**Status: IN PROGRESS** — Batches 1–3 landed; Batches 4–6 pending. Each batch is adversarially reviewed after landing; both reviews so far returned **stands, nothing reverted**, and their findings were folded into the next batch rather than deferred.
 
 ## Method (skeleton)
 
@@ -30,11 +30,11 @@ full-file reads + provenance spot-checks against `registers/editorial_ledger_pc.
 | F8 | orphans | 5 zero-caller functions; dead `Combatant.ready`; unreachable `QUAL`/`COVERAGE_GAP` `'partial'` | med | 2 | **DONE** |
 | F9 | orphans | retired imposition machinery still wired (`PREFERRED`/`preferred`/`profile`) | med | 2 | **DONE** |
 | F10 | conflicts | stale prose: poise `EFFECT_FLOOR`, facing-profile sign, "deliberately failing" tests that pass, phantom `disengage_prob`, `represent_p` magnitudes, `affords_halfsword` count, `TRUE_TIME_K` citation, `module_contracts` rows | med | 2 | **DONE** |
-| F11 | fiat+conflicts | `percussion_stagger`: inline second quality ladder + bypasses the `sel_*` single-source contract | med | 3 | pending |
-| F12 | fiat | cut_thrust "versatile max" shear branch is dead (paid as thrust, read as swing) | high | 3 | pending |
-| F13 | fiat | Nachreisen pursuit strike resolves at a flat `−0.3` σ, bypassing the σ-assembly | med-high | 3 | pending |
-| F14 | fiat | `ATTACKER_BIAS=0.12` untagged/unledgered, duplicates the Vor system | high | 3 | pending |
-| F15 | fiat | `UPSET_FLOOR=0.05` post-hoc result inversion (designer rule — tag, do not silently remove) | high | 3 | pending |
+| F11 | fiat+conflicts | `percussion_stagger`: inline second quality ladder + bypasses the `sel_*` single-source contract | med | 3 | **DONE** |
+| F12 | fiat | cut_thrust "versatile max" shear branch is dead (paid as thrust, read as swing) | high | 3 | **DONE** |
+| F13 | fiat | Nachreisen pursuit strike resolves at a flat `−0.3` σ, bypassing the σ-assembly | med-high | 3 | **DONE** |
+| F14 | fiat | `ATTACKER_BIAS=0.12` untagged/unledgered, duplicates the Vor system | high | 3→4 | **TAGGED**; removal moves to batch 4 (it compounds with F16) |
+| F15 | fiat | `UPSET_FLOOR=0.05` post-hoc result inversion (designer rule — tag, do not silently remove) | high | 3 | **DONE** (tagged; retained as Jordan's rule) |
 | F16 | tuning | deterministic first-actor race: a 1.5% tempo edge → 2:1 action monopoly; 20 g mass step swings 57↔42% | **structural** | 4 | pending |
 | F17 | tuning | `closed = gap ≤ 0.3` latch is a cliff (+9pp across 2 cm); reach curve saturates by gap 1.5 | **structural** | 4 | pending |
 | F18 | tuning | off-plate reach over-buff + identity erasure (26 weapons at 94±1; Jordan's ~0.75 target) | high | 4 | pending |
@@ -56,7 +56,7 @@ consumers; PEN_THR light-inertness and the represent-gate RNG-stream inertness h
 |---|---|---|---|
 | 1 | correctness bugs (F1–F4) | ED-PC-0034 | full suite green (686 passed, 1 xfailed) |
 | 2 | dead code + stale prose (F5–F10) | ED-PC-0035 | behaviour-preserving; 686 passed, 1 xfailed; engine-params 202→194 keys |
-| 3 | fiat retirement (F11–F15) | — | pending |
+| 3 | fiat retirement (F11–F15) + batch-1/2 review corrections | ED-PC-0036 | 122 new regression pins; golden regenerated (label field only, 17 cells) |
 | 4 | structural thresholds (F16–F18) | — | pending |
 | 5 | plate damage ↔ adef_cap (F19–F20) | — | pending |
 | 6 | roster + cut grading (F21–F23) | — | pending |

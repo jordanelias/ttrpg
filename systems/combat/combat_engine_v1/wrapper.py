@@ -128,7 +128,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
                     continue
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
                     pool=max(1, core.resolution_pool(shorter.history))
-                    deg,net=core.resolve(pool, cfg['DISENGAGE_PURSUIT_NSIG'], rng)
+                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng)   # ED-PC-0036: was a FLAT cfg['DISENGAGE_PURSUIT_NSIG'], bypassing the whole sigma-assembly (no armour, no wounds, no attribute of the withdrawer — every pair resolved identically). systems.pursuit_sigma owns the formula.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)

@@ -25,7 +25,11 @@ CFG = dict(
   # reach-weapon-loses-the-bind residual. VOLUNTARY (any beat, unlike the created-moment reopen) + read-contested;
   # a failed/read withdrawal is PURSUED (Nachreisen). systems.disengage_attempt_p / systems.disengage_clean_p gate it EMERGENTLY on the bind
   # leverage deficit (a bind-dominant poleaxe never triggers). [SIM-CALIBRATE] magnitudes; the structure is grounded.
-  DISENGAGE_BASE_P=0.5, DISENGAGE_MAX=0.5, DISENGAGE_GAP_REF=3.0, DISENGAGE_LEV_SCALE=0.1, DISENGAGE_PURSUIT_NSIG=-0.3,
+  DISENGAGE_BASE_P=0.5, DISENGAGE_MAX=0.5, DISENGAGE_GAP_REF=3.0, DISENGAGE_LEV_SCALE=0.1, DISENGAGE_PURSUIT_NSIG=-0.3, PURSUIT_FOOT_K=0.15,
+  # DISENGAGE_PURSUIT_NSIG is now the BASE ANCHOR of systems.pursuit_sigma (catching a withdrawing opponent is hard),
+  # not the whole resolution — ED-PC-0036 retired the flat-sigma shortcut that let this branch bypass the sigma-assembly.
+  # PURSUIT_FOOT_K weights the footwork differential that decides the chase (Nachreisen = "travelling after"); scaled to
+  # match FOOT_MEASURE_K, the engine's other footwork-into-sigma term. [SIM-CALIBRATE]
   # conditional tempo (correction 2): fatigue slows cadence; choke/lunge grips trade cadence for control/reach
   TEMPO_FATIGUE_K=0.25, CHOKE_TEMPO_PEN=0.4, LUNGE_TEMPO_PEN=0.6,
   # movement legibility (correction 4): swings/lunges easy to read (lateral, large); thrusts hard (in-line)
@@ -179,11 +183,30 @@ CFG = dict(
   # transmits impulse only where it BITES — its load IS the wound d (a deflected point pings off plate ~0, preserving
   # the gap-specialist's plate close). [SIM-CALIBRATE] magnitudes; the blunt-vs-point transmission split is grounded.
   PERC_STAM_K=0.4, PERC_POISE_K=0.04, PERC_BLUNT_HEFT=2.2, PERC_POINT_FRAC=0.20,
+  # ED-PC-0036: these two were INLINE MAGIC NUMBERS inside systems.percussion_stagger, violating this file's own
+  # header contract ("All tunable coefficients in ONE place") on the path that produces ED-PC-0031's headline result.
+  # PERC_QUAL is the concussive-impulse quality ladder. It is DELIBERATELY NOT core.QUAL: core's ladder scales a
+  # WOUND (0.25/0.5/1.0/1.5) whereas this scales transmitted IMPULSE, and a graze that barely breaks skin still
+  # delivers real percussion (0.4 > core's 0.25) while an overwhelming blow concentrates more of the body's momentum
+  # (1.6 > 1.5). Two ladders for one degree system is a smell, so the divergence is stated rather than left implicit.
+  # PERC_STR_BASE/PERC_STR_K: the striker's mass-behind-the-blow term, = 0.5 + strength/4 (unchanged magnitudes).
+  PERC_QUAL={'graze':0.4,'success':1.0,'overwhelming':1.6}, PERC_STR_BASE=0.5, PERC_STR_K=0.25,   # [SIM-CALIBRATE]
   PERC_BLUNT_TRANSMIT={'none':1.0,'light':0.85,'medium':0.7,'heavy':0.55},
   # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
   # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
   # the aggressor role alternates over a fight. Added to net_sigma.
-  ATTACKER_BIAS=0.12,
+  ATTACKER_BIAS=0.12,   # [FIAT — designer-set, UNGROUNDED; flagged ED-PC-0036, REMOVAL DEFERRED TO THE FIRST-ACTOR FIX]
+  # A flat +0.12σ added to EVERY closed exchange in assemble_net_sigma. It carried no provenance tag and no ED until
+  # now. Two problems, both real: (1) it DUPLICATES the initiative/Vor system — two independently-calibrated
+  # mechanisms for the same first-mover physics, which is precisely the 'every rule lives once' violation the repo
+  # forbids; (2) its own mirror-fairness justification ('the aggressor role alternates') holds only at FIGHT
+  # AGGREGATE — within a burst (BURST_MAX=4) one fighter can hold the aggressor role for up to four consecutive
+  # exchanges, each carrying the full +0.12. The 2026-06-28 combat critique (W-08/W-10) reached the same conclusion
+  # and recommended removal; it was never actioned. DELIBERATELY NOT REMOVED HERE: the four-dimension audit showed
+  # this constant COMPOUNDS with the deterministic first-actor race (a marginally faster weapon is strictly first in
+  # every burst and banks the bias every time), so deleting it in isolation would be tuning against a moving target.
+  # It is retired together with that structural fix, where the interaction can be measured once. See the audit index.
+
   # single-time counter (a tier of the unified counter): UNIVERSAL but skill-gated. SELECTION is tempo-driven (how
   # often a fighter reaches for it); SUCCESS scales with training (history)+reflex — the untrained single-time counter
   # is a desperate-idiot move that mostly fails and is punished (eats the attack undefended, cedes the seized Vor).
@@ -205,10 +228,9 @@ CFG = dict(
   # with the disposition+wariness skew _k shaping the Beta (neutral a=b -> centred ~3.5; aggressive -> toward 5;
   # cautious/wary -> toward 2). Param floor 0.25 = the spread-floor. Replaces the old integer {2,3,4,5} draw.
   COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6, LUNGE_COMMIT=4.0,   # LUNGE_COMMIT: a THRUST committed at/above this depth IS a lunge (the body extends — reach+commitment, low recovery, more readable)
-  # WS-4/WS-5 imposition gate (section C EXPERIMENT, default OFF): a tradition imposes/refuses its PREFERRED node
-  # (German imposes the bind; Italian/English/Spanish refuse it -> a counter/disengage). DECOUPLED from channel
-  # magnitude (fixed rates). Turn on via the workbench to measure vs the keep-bias baseline; it SHIPS only if it
-  # beats that baseline on legibility + vacuum-balance (section C), else it stays off.
+  # (The WS-4/WS-5 'section C EXPERIMENT' blurb that stood here — present-tense instructions to 'turn on via the
+  # workbench' a gate this very block records as DELETED — was removed with it. ED-PC-0036 second pass: a
+  # stale-prose commit that leaves a contradiction sandwiched above its own correction has not finished the job.)
   # ED-PC-0035: IMPOSITION_GATE (and impose_node, and traditions.PREFERRED/preferred) are DELETED — the cleanup
   # ED-PC-0023 explicitly deferred. That ruling (Jordan, 2026-07-23) retired the gate as top-down scripting: it
   # FORCED a tradition's preferred node via a label-keyed coin-flip that OVERRODE the emergent bind/counter
@@ -217,7 +239,17 @@ CFG = dict(
   # weapon's wind affinity + learned binding abilities + disposition), all already live in mode_sigma/bind_sigma.
   # The tradition gates ACCESS to a technique kit; investment + skill drive efficacy.
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
-  UPSET_FLOOR=0.05,
+  UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
+  # The '95% cap': with this probability the DECIDED loser steals the win, so no matchup is ever certain. This is the
+  # one place the engine deliberately OVERRIDES its own emergent outcome — the trace stream emits `engagement_end
+  # felled=X` and then `fight_result winner=X`, with no in-model event corresponding to the reversal. It is a
+  # legitimate videogame design choice and is NOT being removed; it is tagged because it was previously
+  # indistinguishable from ungrounded fiat, and because it has a MEASUREMENT consequence every reader should know:
+  # every win-rate this engine reports (including the ledgered calibration figures) is COMPRESSED toward
+  # [UPSET_FLOOR, 1-UPSET_FLOOR], so an observed 0.95 is a raw ~1.00 and the roster's apparent ceiling at ~0.94-0.95
+  # is partly this clamp rather than pure physics. If the design ever wants upsets to be diegetic instead of a
+  # scoreboard edit, the in-fight home for them is a critical-opening mechanic, not a post-hoc flip — Jordan's call.
+
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —
   # no hook-hardware term (JD-7 retraction: no primitive in the schema separates a pull-hook from a
   # bind-lug — orient_deg interleaves pulls and binds; see contact.py's docstring). GRAB_SHORT_REACH_M
