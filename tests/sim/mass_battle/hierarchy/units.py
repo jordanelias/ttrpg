@@ -381,6 +381,10 @@ class Subunit:
     # Initialized to advance_dir on first use. Updated whenever a cell moves.
     # [canonical: Jordan design — octagon facing = raw movement vector]
     cell_facing_vec: Dict[Tuple[int, int], Tuple[int, int]] = field(default_factory=dict)
+    # [ED-MB-0041 phase 1] Per-cell morale (Jordan: "the cell is the primitive ... a cell should be able
+    # to have worse morale than another cell in same subunit"). EMPTY until seeded, and empty means the
+    # scalar path below is used verbatim -- so an unseeded subunit is byte-exact.
+    cell_morale: Dict[Tuple[int, int], float] = field(default_factory=dict)
     # v13: position snapshot at start of advance_cells, used to revert on
     # discipline-pass collision (cell returns to its formation slot).
     # [canonical: Jordan design 2026-05-12 — discipline-gated formation hold]
@@ -528,6 +532,10 @@ class Subunit:
             self.cell_troops = {pid: _per for pid in _ids}
         self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
+        # [ED-MB-0041 phase 1] Seed per-cell morale from the scalar, so the aggregate is IDENTICAL to the
+        # scalar at t=0 and any divergence between cells is earned in play. Gated -> unseeded -> inert.
+        if PC_CELL_MORALE:
+            self.seed_cell_morale()
         self._cell_target = dict(self.cell_troops)  # [ED-MB-0028] prescribed per-cell density at spawn (close_ranks fill target)
         self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
         self._brace_since_tick = 0 if 'brace' in self.instructions else -1  # [ED-1095] prepared before the battle if deployed already braced
@@ -577,8 +585,63 @@ class Subunit:
         return self.yielding and self.eff_discipline >= D_YIELD and self.unit_type != 'ranged'
     @property
     def eff_morale(self):
+        """[ED-MB-0041 phase 1] AGGREGATE-UP: when per-cell morale is seeded, the subunit's holistic
+        morale is the troop-WEIGHTED mean of its live cells — derived, not stored. Weighted by troops so
+        a nearly-empty shattered cell cannot drag the body down as hard as a full one, and so the
+        aggregate tracks where the men actually are as the formation is stripped.
+
+        Unseeded (the shipped default) falls through to the scalar exactly as before, so this is inert.
+        """
+        if self.cell_morale:
+            tot = 0.0; acc = 0.0
+            for cid, m in self.cell_morale.items():
+                w = self.cell_troops.get(cid, 0.0)
+                if w > 0:
+                    tot += w; acc += m * w
+            if tot > 0:
+                return acc / tot
         if self.morale is not None: return self.morale
         return self._u().morale if self._u() else 0
+
+    def seed_cell_morale(self):
+        """[ED-MB-0041 phase 1] Give every live cell the body's current morale as its starting point.
+
+        Called at construction under PC_CELL_MORALE. Seeding from the scalar (rather than inventing a
+        distribution) means the aggregate is identical to the scalar at t=0: divergence between cells is
+        then EARNED by what happens to them, not injected at birth.
+        """
+        m = self.eff_morale
+        self.cell_morale = {cid: float(m) for cid in self.cell_troops}
+
+    def erode_cell_morale(self, cid, amount):
+        """Local morale loss on one cell. No floor — rout is a <=0 threshold, matching erode_morale."""
+        if not self.cell_morale or amount <= 0:
+            return
+        if cid in self.cell_morale:
+            self.cell_morale[cid] -= amount
+
+    def cohere_cells(self, rate=None):
+        """[ED-MB-0041 phase 1] MODULATE-DOWN: pull each cell toward the body's holistic morale.
+
+        The other half of Jordan's loop. Cells aggregate up into the subunit's score; that score then
+        disciplines the cells — a steady body steadies a shaky corner, a disintegrating one drags a firm
+        corner down. Discipline-gated, because holding when your neighbours are hit is exactly what
+        discipline names (du Picq: men hold because the men beside them hold).
+
+        Applied AFTER local erosion so a cell that was just savaged is pulled back toward its body rather
+        than the body being averaged toward it twice in one tick.
+        """
+        if not self.cell_morale:
+            return
+        agg = self.eff_morale
+        r = CELL_MORALE_PULL if rate is None else rate
+        # discipline scales the pull: a disciplined body closes ranks harder around a wavering cell
+        d = max(0.0, min(1.0, self.eff_discipline / 6.0))   # [canonical: mass_battle_v30.md §B.2 — Discipline 1-6 stat range]
+        r = r * d
+        if r <= 0:
+            return
+        for cid, m in self.cell_morale.items():
+            self.cell_morale[cid] = m + r * (agg - m)
     @property
     def eff_morale_start(self):
         if self.morale_start is not None: return self.morale_start
