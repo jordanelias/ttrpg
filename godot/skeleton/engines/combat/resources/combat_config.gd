@@ -67,7 +67,8 @@ extends Resource
 @export var init_k: float = 0.045             # initiative tempo per Δagi
 @export var init_reading_k: float = 0.03      # initiative per Δreading
 @export var init_history_k: float = 0.02      # initiative per ΔHistory
-@export var attacker_bias: float = 0.12       # small first-mover/Vor edge (mirror stays 50 — role alternates)
+# ED-PC-0037: attacker_bias REMOVED — retired in the oracle (config.py) as untagged fiat duplicating the initiative/Vor
+# system. First-mover advantage now lives only in the Vor, where it is earned.
 @export var read_history_k: float = 0.2       # reading = (2·Cog+Att)/3 + read_history_k·(History−3)
 
 # ── 95% videogame cap ──

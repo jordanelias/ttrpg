@@ -264,6 +264,7 @@
    "HEFT_HEAVY": 3.0,
    "OW_MAX": 2.5,
    "OW_Z": 1.5,
+   "PEN_DEFICIT_K": 6.0,
    "PEN_THR": {
     "heavy": 6.5,
     "light": 0.0,

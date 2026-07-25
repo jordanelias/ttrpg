@@ -57,7 +57,10 @@ func resolve(key: Key) -> void:
 	var reach_pen: float = _reach_sigma(aw, dw, d_armor, cfg)              # defender reach lowers attacker net
 	var adef: float = _armor_defeat_sigma(aw, d_armor, cfg)               # armour-defeat capability
 	var wound_ob: float = cfg.wound_def_ob * d_wounds - cfg.wound_atk_ob * a_wounds   # ED-1041 bilateral
-	var net_sigma: float = atk_sig - reach_pen + adef + wound_ob + cfg.attacker_bias
+	# ED-PC-0037: `+ cfg.attacker_bias` REMOVED to match the oracle. The Python engine retired ATTACKER_BIAS as
+	# untagged fiat duplicating the Vor; leaving it here would make the port contradict its own oracle, which is
+	# exactly the ED-1050 failure ('never let a port correct its oracle in-place').
+	var net_sigma: float = atk_sig - reach_pen + adef + wound_ob
 
 	# ── resolution: pool = max(5, History+6); net = roll + mu-shift boost; canonical degree band. ──
 	var pool: int = maxi(cfg.pool_floor, int(round(atk.stat("history"))) + cfg.pool_base)

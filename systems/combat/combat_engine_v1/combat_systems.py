@@ -272,75 +272,13 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     return (base+sig)*cap
 
 def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
-    """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
-    can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
-    deficit). Blunt = the BETTER of CONCUSSION (broad percussion authority — a mace dents the harness) or PUNCTURE (a
-    concentrated beak/spike that pierces plate — the poleaxe queue); both DERIVED (Phase-3b retires hand-set
-    `percussion`): concussion~percussion_authority, puncture~percussion_authority x strike_concentration (a broad
-    mace face sc~0 -> no puncture; a spike sc high -> pierces). A wooden staff (low authority) does NEITHER. A
-    cut-and-thrust sword takes the better of its cut or a half-sword gap-thrust; a point thrusts to gaps; a pure
-    cutter collapses (ADEF_CUT).
-
-    `head` (the SELECTED mode-head from select_mode) overrides w['head'] when the wielder has committed to a specific
-    mode this exchange: a poleaxe whose select_mode chose 'point' (the spike) is scored on the spike's gap-thrust, not
-    the better-of-blunt max. head=None keeps the native head (the per-head max over the weapon's intrinsic modes) — so
-    every existing caller is byte-identical. percussion_authority now carries the §1 energy-credit (poleaxe 5.83 < mace
-    7.45 — the poleaxe's plate edge is NOT concussion; see select_mode).
-    CIRCUMSTANCE-DEGRADED (I2, D2b): `gap` overrides w['gap'] (None = native fallback — the sel_gap object-
-    confusion fix, M-02); `grip`/`room` thread the SAME mode-split/room-floored Phi as the damage path into the
-    blunt branch's percussion_authority/puncture_pressure, so armour-defeat capability and reach_threat resolve
-    the SAME grip as core.strike (D2b). Byte-identical at grip=0/room=1.0/gap=None for every weapon."""
-    head = head if head is not None else w['head']
-    gap = gap if gap is not None else w['gap']
-    tauth = core.thrust_authority(w['head_len'])   # PC-5: point-to-hand lever authority — scales the gap-THRUST armour-defeat terms (a short/half-sword thrust presses the harness; a reach-thrust at extension cannot), keeping adef consistent with coupling. NOT applied to the blunt-puncture beak (a poleaxe's spike authority is its percussion energy, already in puncture_pressure) nor to the pure-cut collapse.
-    if head=='blunt':
-        return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
-                   cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
-    if head=='point':      return cfg['ADEF_POINT']*gap*tauth
-    if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
-    return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
-
-# ── primitive-emergent USE-MODE selection (the per-exchange technique choice) ───────────────────────────────────
-# grounded_weapon_armour_usemode_model.md §3-4 (tasks wht7pkx1c / w4bekmb5e). There is NO per-weapon mode table:
-# the AFFORDED modes + their effectiveness DERIVE from each weapon's existing geometry primitives, so poleaxe/mace/
-# staff are just bundles of primitives, never a name-keyed list (the L0 primitive-law). The modes are the UNIVERSAL
-# set {thrust, cut, percuss, puncture}; each maps to one of the engine's existing head TOKENS (so the downstream
-# coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
-# head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
-# blunt max(concussion,puncture) from 2 modes to N. Pure.
-SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
-                          #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
-                          #   Still used for each mode's OWN native-head branch below (unchanged from pre-U2).
-MODE_EDGE_MIN = 0.15      # [DESIGN, U2/ED-PC-0008, 2026-07-08] per-primitive cut-affordance floor for the GRADED,
-                          #   head-independent secondary check (a weapon whose native head ISN'T a cut category
-                          #   can still afford an incidental cut if its own geo['cut'] clears this). Consolidation_
-                          #   v1.md §2.3 already assumed this exact value: "sides==0 => ek<=0.1 < MODE_EDGE_MIN
-                          #   ~=0.15" (the roster's own edgeless-consistency invariant, V14). Verified against the
-                          #   full roster post-geometry.cut_factor's floor drop: mace/staff read 0.0, the needle
-                          #   class (stiletto/estoc/rondel, ek<=0.1) reads 0.02-0.05, comfortably below; rapier
-                          #   (ek=0.30) reads 0.30, comfortably above.
-MODE_TIP_MIN = 0.15       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive thrust-affordance floor, the JD-9
-                          #   resolution. Matched to MODE_EDGE_MIN for a clean, symmetric pair. Verified against
-                          #   the full roster post-geometry.thrust_factor's floor drop: mace (0.02) and staff
-                          #   (0.04) read comfortably below; every weapon test_greatsword_katana_sabre_afford_
-                          #   thrust names reads 0.26+ (sabre, the lowest of the three); the heavily-curved-slasher
-                          #   family (shamshir/pulwar/scimitar) correctly collapses toward the floor too (curvature
-                          #   offsets the point off the hand-target line — HEMA: these are cutting-primary blades).
-MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive percussion-affordance floor for the
-                          #   graded secondary blunt check (weapon_physics.percussion_authority's non-blunt branch,
-                          #   the Mordhau/reversed-grip option). Set well below the ~1.4-1.8 range every eligible
-                          #   two-handed sword reads (see reversed_grip_percussion) and well above 0 (one-handed
-                          #   swords and daggers, which the function gates to exactly 0 — no comparable technique
-                          #   is attested for them in the sourced material).
-# ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
-# plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
-# quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
-# throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
-# ablation-gated, not load-bearing, per D4].
-CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over (shares
-                          #   CLOSE_REACH_REF's magnitude — the same "how close is close" reference).
-CLOSE_EFF_FLOOR = 0.5     # [SIM-CALIBRATE] cap on f(measure_gap, range_avail): even the tightest quarters/least
-                          #   room never fully collapses a broad element's affordance.
+    """Armour-defeat CAPABILITY — see core.adef_cap, which now OWNS this rule.
+    [ED-PC-0038] Relocated to core so the DAMAGE path can consult the same capability the sigma path does. They had
+    disagreed: a partisan (adef_cap 0.176, the worst on the board vs plate's 0.72 threshold) was landing 11 damage
+    through a harness while a spear with BETTER capability (0.288) landed 3, because damage keyed on head mass and
+    capability keyed on gap access. Duplicating the formula in core would have broken the repo's own "every rule
+    lives once" invariant, so it moved and this delegates. Signature and results are unchanged."""
+    return core.adef_cap(w, cfg, head=head, gap=gap, grip=grip, room=room)
 
 def close_efficacy(pc, measure_gap, range_avail=1.0, closed=False, head=None):
     """The close-efficacy factor (D5): 1 - (1-pc)*f(measure_gap, range_avail). `pc` is the CANDIDATE element's own
@@ -459,6 +397,41 @@ def _element_mass_x(w, el):
     e = w['elements'][ref]
     return e['mass_kg'], e['x_m']
 
+MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive percussion-affordance floor for the
+                          #   graded secondary blunt check (weapon_physics.percussion_authority's non-blunt branch,
+                          #   the Mordhau/reversed-grip option). Set well below the ~1.4-1.8 range every eligible
+                          #   two-handed sword reads (see reversed_grip_percussion) and well above 0 (one-handed
+                          #   swords and daggers, which the function gates to exactly 0 — no comparable technique
+                          #   is attested for them in the sourced material).
+# ── close-efficacy (I4, D5, 2026-07-03 — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/
+# plan_r1_RATIFIED.md): a broad arc-requiring swing (low per-element point_concentration) collapses in tight
+# quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
+# throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
+# ablation-gated, not load-bearing, per D4].
+CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over (shares
+                          #   CLOSE_REACH_REF's magnitude — the same "how close is close" reference).
+CLOSE_EFF_FLOOR = 0.5     # [SIM-CALIBRATE] cap on f(measure_gap, range_avail): even the tightest quarters/least
+                          #   room never fully collapses a broad element's affordance.
+
+MODE_EDGE_MIN = 0.15      # [DESIGN, U2/ED-PC-0008, 2026-07-08] per-primitive cut-affordance floor for the GRADED,
+                          #   head-independent secondary check (a weapon whose native head ISN'T a cut category
+                          #   can still afford an incidental cut if its own geo['cut'] clears this). Consolidation_
+                          #   v1.md §2.3 already assumed this exact value: "sides==0 => ek<=0.1 < MODE_EDGE_MIN
+                          #   ~=0.15" (the roster's own edgeless-consistency invariant, V14). Verified against the
+                          #   full roster post-geometry.cut_factor's floor drop: mace/staff read 0.0, the needle
+                          #   class (stiletto/estoc/rondel, ek<=0.1) reads 0.02-0.05, comfortably below; rapier
+                          #   (ek=0.30) reads 0.30, comfortably above.
+MODE_TIP_MIN = 0.15       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive thrust-affordance floor, the JD-9
+                          #   resolution. Matched to MODE_EDGE_MIN for a clean, symmetric pair. Verified against
+                          #   the full roster post-geometry.thrust_factor's floor drop: mace (0.02) and staff
+                          #   (0.04) read comfortably below; every weapon test_greatsword_katana_sabre_afford_
+                          #   thrust names reads 0.26+ (sabre, the lowest of the three); the heavily-curved-slasher
+                          #   family (shamshir/pulwar/scimitar) correctly collapses toward the floor too (curvature
+                          #   offsets the point off the hand-target line — HEMA: these are cutting-primary blades).
+SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effectiveness: a mode is afforded iff its
+                          #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
+                          #   Still used for each mode's OWN native-head branch below (unchanged from pre-U2).
+
 def element_afforded(el, w, grip=0.0, room=1.0):
     """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
     Morphology-rearch Phase B3 (2026-07-02): a 'point' token affords iff geo['gap']>SELECT_EPS, same floor as
@@ -560,6 +533,19 @@ def afforded_heads(w, grip=0.0, room=1.0):
         h=w['head']
         heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None, None, None)
     return heads
+
+def selected_arm_magnitudes(c, head, grip=None, room=None):
+    """The ELEMENT-LOCAL (cut, thrust) magnitudes of the currently-selected head — (None, None) for any head with no
+    two-armed contest. [ED-PC-0037.1] core.strike needs these to grade a cut-and-thrust blow on the element actually
+    being swung. It cannot read them from select_mode's return (that tuple's 6-wide shape is depended on by the
+    wrapper, the goldens and a dozen tests) and it cannot import this module (core is imported BY it — a cycle), so
+    the wrapper writes them onto the combatant alongside the other sel_* fields, exactly as it does for sel_gap/
+    sel_perc/sel_pc. Without this, core.strike fell back to the WHOLE-WEAPON bake and re-created the object confusion
+    at the damage path even after select_mode was fixed: a guisarme's bill (element 0.76/0.19) was being damaged as
+    though it carried the weapon's 0.41 thrust. Pure."""
+    h = afforded_heads(c.w, grip=(getattr(c, 'grip_position', 0.0) if grip is None else grip),
+                       room=(getattr(c, 'range_avail', 1.0) if room is None else room)).get(head)
+    return (h[6], h[7]) if h is not None and len(h) > 7 else (None, None)
 
 def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, room=None):
     """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
