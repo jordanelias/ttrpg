@@ -42,11 +42,24 @@ namespace and are folded into Next actions below, which carries the full narrati
   which crossed a `DAMAGE_BY_DEGREE` boundary via `_morale_sigma` and zeroed exchanges.
 
   **Next in this thread, in strict order:**
-  1. **The scalar-write sweep — the blocker.** Every site that assigns `.morale` must route through the
-     cells when they are seeded. Known: `between_turn_recovery` (unit + atom),
-     `reset_morale_between_battles` (unit + atom), the rout write `u.morale = 0.0`,
-     `Unit.erode_morale`, `core/state.py`'s `atom.morale = atom.eff_morale`. Prefer a single owner
-     (a `set_morale`-style writer) over five parallel patches — five patches is how this recurred.
+  1. ~~**The scalar-write sweep — the blocker.**~~ **DONE.** `Subunit.set_morale` / `Unit.set_morale`
+     are the single owners of an absolute write; `erode_morale`/`pull_morale` already owned the
+     relative one. Routed: `between_turn_recovery` (unit + atom), `reset_morale_between_battles`
+     (unit + atom), the rout write `u.morale = 0.0`, `Unit.cascade_morale_hit`. One site is
+     deliberately left bare and annotated (`core/state.py`'s `atom.morale = atom.eff_morale`
+     materialises the scalar so the stochastic-rout punch stays local). Guarded by
+     `tests/valoria/test_morale_write_sweep.py`, whose `_CELL_OWNED` registry is field-parameterized
+     so phases 3/4 inherit it by adding a key.
+
+     ⚠ **RE-FLIP PRE-CONDITION — two harness writers are NOT swept.**
+     `tests/sim/mass_battle/lanchester_signature.py` (~line 126) and
+     `tests/sim/mass_battle/test_persubunit_stress.py` (~line 191) each still hold a bare morale write.
+     They were swept and then **reverted on purpose**: the anti-fabrication gate scans the changeset,
+     so touching either file dragged ~100 pre-existing uncited constants (none introduced by that
+     change) into a blocking gate. Under `PC_CELL_MORALE=OFF` they are inert. **Sweep them before the
+     flag flips** — `lanchester_signature` pins morale high specifically to *disable* rout, so a silent
+     no-op there would let bodies rout mid-signature and measure the Lanchester exponent on truncated
+     battles. Expect to have to cite or ledger those constants as part of that work.
   2. **Re-measure the flag honestly**, then decide the flip. Not before 1.
   3. **Phase 3 — stamina + discipline + quality per cell.** Retires `col_grid`, the third granularity
      between cell and subunit.

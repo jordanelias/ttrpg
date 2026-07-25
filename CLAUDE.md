@@ -43,6 +43,49 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
   lane's pending work, open editorial debt, schema-in-flux flags, and stale audits at start — read
   it; it exists so these stop getting missed (ED-IN-0081).
 
+### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042, 2026-07-25)
+
+These exist because a flag was flipped on a **confounded measurement**, shipped a default, re-recorded
+two byte-exact goldens, and was retracted the same day — *after* the identical defect class had already
+been found and fixed as a one-off hours earlier in the same session. Note what was **not** the gap: §0
+already required an adversarial pass at every gating stage, and one was performed. It attacked the
+result's *statistics* (noise, sigma, band edges) and never its *setup* (are the two arms the same
+experiment?). Restating the principle is therefore useless. **Specificity about what to attack, and an
+artifact proving it happened, is the whole of the fix.**
+
+1. **The hazard is read/write asymmetry, not "change".** When a getter starts computing from a new
+   source (`eff_morale` from cells) while setters still write the old one (`.morale`), every writer
+   silently becomes a no-op. Before measuring anything about such a change, grep the field's
+   **assignments** — not its readers, which are unbounded and mostly harmless — and ship a guard that
+   fails on a *new* bare assignment. `tests/valoria/test_morale_write_sweep.py` is the template; its
+   `_CELL_OWNED` registry is field-parameterized so each newly cell-owned state inherits the guard by
+   adding one key.
+2. **An assertion must be able to observe the failure it excludes.** `pytest.approx` on an *exactness*
+   claim is not a weak test, it is an absent one — a 1-ulp aggregate error crossed a damage-degree
+   boundary while its own identity test passed. A loop that asserts conditionally must assert that it
+   asserted (`assert checked >= N`); that pattern is what surfaced the born-broken-subunit bug.
+3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
+   commit, the specific test that would have shown it wrong and that test's outcome. "Adversarially
+   reviewed" without an artifact is unfalsifiable and was, in this case, false.
+4. **A number without a control is not a measurement — in either direction.** Asymmetric skepticism is
+   a bias, not a defence: this session both *banked* a favourable uncontrolled result and *published*
+   an unfavourable one. Absence of one failure mode ("nothing was tuned to hit a band") is not presence
+   of correctness.
+5. **Sweep pattern defects; fix one-off defects.** The signature of a pattern defect is *the broken code
+   was correct when written and stopped working because something else changed.* Then: one owner for
+   the operation, every site routed through it, and a guard that fails on recurrence — **if you cannot
+   write the guard you have not understood the pattern**, and the guard is what makes grep's blind
+   spots (dynamic access, duck-typed doubles) tolerable rather than disqualifying. Sweep only what the
+   current task is load-bearing on; **file the rest** (widening scope has a real cost — sweeping two
+   out-of-scope harnesses here dragged ~100 pre-existing uncited constants into a blocking gate).
+
+**`pytest tests/valoria` is a SHIPPING gate, not a belief gate**, and behaviour changes include default
+flips and golden re-records. Do not credit it with catching confounds: it caught this one *only*
+because the flip incidentally broke ten unrelated tests. A clean implementation of the same confounded
+measurement would have been green. Equally, **targeted-green is not validation** — the tests you wrote
+for the thing you built encode your model of it, not the system; all ten failures were in modules that
+had never crossed my mind.
+
 ---
 
 ## 1. Read these first (currency)

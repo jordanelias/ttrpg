@@ -2029,7 +2029,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             # Command=0 models a general removed from command (incapacitated, captured if field lost) — never killed.
             # [canonical: designs/provincial/mass_battle_v30.md §A.4/§A.5 — "General incapacitated/captured (Stage 2): Morale −2 (uncapped), Command=0"; ED-898 death→capture reframe]
             if u.command <= 0:
-                u.morale = 0.0
+                u.set_morale(0.0)   # [ED-MB-0042 sweep] must reach the cells, else the rout never lands
                 continue  # rout check below
 
         # Rout check AFTER both erosions applied — per-subunit, then derive the unit rout
@@ -2089,10 +2089,23 @@ def between_turn_recovery(unit):
         return
     for atom in unit.subunits:
         atom.recover_stamina(BETWEEN_TURN_STAMINA_RECOVERY)
+    # [ED-MB-0042 sweep] Deliberately a BARE write, not unit.set_morale. Recovery is a bounded INCREMENT,
+    # not an absolute statement about the body — and once cells own the state this pool is STALE (erosion
+    # goes to the cells and never updates it), so broadcasting it downward would RE-INFLATE damaged cells
+    # to the pool's old value. Caught by probe: a body knocked to 2.0 came back at 6.0 with the recovery
+    # constant set to 0. The pool is kept current here for the unseeded path, which still reads it.
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
     for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
         if atom.morale is not None:
-            atom.morale = min(atom.eff_morale_start, atom.morale + BETWEEN_TURN_MORALE_RECOVERY)
+            # via set_morale, NOT a bare `atom.morale =` — an absolute write must reach the cells or it is
+            # a no-op under PC_CELL_MORALE. Read the CURRENT value through eff_morale for the same reason.
+            # Unseeded, eff_morale IS atom.morale, so this is byte-identical to the previous expression.
+            atom.set_morale(min(atom.eff_morale_start, atom.eff_morale + BETWEEN_TURN_MORALE_RECOVERY))
+        elif atom.cell_morale:
+            # Inheriting AND cellular: the unit pool above cannot reach this body (its state lives in its
+            # cells), so recover the cells directly. pull_morale is already the capped, signed, cell-routed
+            # shift this needs — reusing it keeps one owner for "move a body's morale by a delta".
+            atom.pull_morale(BETWEEN_TURN_MORALE_RECOVERY)
     # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
     # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
     # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
@@ -2115,7 +2128,7 @@ def reset_morale_between_battles(unit):
     None) are covered by the unit-level reset via eff_morale. Called by the campaign layer at the battle
     boundary -- NOT within a single battle: between_turn_recovery handles the within-battle turn boundary,
     this handles the battle-to-battle boundary. A single-subunit unit reduces to the unit-level reset."""
-    unit.morale = unit.morale_start
+    unit.set_morale(unit.morale_start)   # [ED-MB-0042 sweep] reaches inheriting subunits' cells
     unit.routed = False
     unit.broken = False
     # ED-MB-0022: Feigned Retreat is a per-battle tactic; clear its transient flags at the battle
@@ -2124,7 +2137,7 @@ def reset_morale_between_battles(unit):
     unit.overextended = False
     for atom in unit.subunits:
         if atom.morale is not None:
-            atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
+            atom.set_morale(atom.eff_morale_start)  # own Morale -> nominal start [ED-MB-0042 sweep: via set_morale so the cells reset too]
         atom.routed = False
         atom.broken = False
         # [Fable-audit A6 fix, 2026-07-24] Clear the cached stochastic-rout break-point (ED-MB-0031) and

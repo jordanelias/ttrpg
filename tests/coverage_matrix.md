@@ -2,6 +2,41 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0042: morale-write sweep + the measurement discipline it produced (CLAUDE.md §0.1)
+
+**The sweep.** `eff_morale` reads the cells once seeded and never falls back to the scalar, so every
+`.morale =` in the engine was a silent no-op under the flag — which is what confounded the retracted
+measurement. Two owners now: `Subunit.set_morale` / `Unit.set_morale` (absolute), with
+`erode_morale`/`pull_morale` already owning the relative write. Routed: `between_turn_recovery`,
+`reset_morale_between_battles`, the Command=0 rout write, `Unit.cascade_morale_hit`. One site stays
+bare and annotated — `core/state.py` materialises the scalar so the stochastic-rout punch stays local
+to one subunit; rewriting the cells there would flatten genuine divergence.
+
+**A defect in the sweep, found by probing rather than assuming.** Routing `between_turn_recovery`'s
+*unit-level* line through `set_morale` **re-inflated damaged bodies**: recovery is a bounded increment,
+not an absolute statement, and the unit pool is stale once cells own the state. A body knocked to 2.0
+came back at 6.0 with the recovery constant at 0. That line stays bare; inheriting subunits recover via
+`pull_morale`.
+
+**The guard is field-parameterized on purpose.** `test_morale_write_sweep.py`'s `_CELL_OWNED` registry
+means phases 3/4 (stamina, discipline, quality, hp, armour) inherit the same protection by adding a
+key. Re-deriving the guard per field would repeat the exact mistake — fixing an instance instead of the
+pattern — that caused the retraction. `test_the_guard_itself_can_fail` proves each registered pattern
+still flags a planted write, because a guard that cannot fail reports safety it does not provide.
+
+**Deliberately NOT swept, and recorded as a re-flip pre-condition:** the two harness writers in
+`lanchester_signature.py` and `test_persubunit_stress.py`. They were swept, then reverted — the
+anti-fabrication gate scans the changeset, so touching either file dragged ~100 pre-existing uncited
+constants into a blocking gate. Inert while the flag is OFF; **must be swept before it flips**, because
+`lanchester_signature` pins morale high specifically to *disable* rout. This is the cost that CLAUDE.md
+§0.1's "sweep only what the task is load-bearing on, file the rest" exists to respect, and it showed up
+within an hour of the rule being written.
+
+**CLAUDE.md §0.1** records the five checks distilled from the retraction. The load-bearing observation:
+§0 *already* demanded an adversarial pass, and one was performed — on the result's statistics, never on
+its setup. Restating principles does nothing; the fix is naming what to attack and requiring an
+artifact that proves it happened.
+
 ## 2026-07-25 — ED-MB-0042 RETRACTED: the flip was measured against an arm that couldn't recover
 
 **The flip below was made and then withdrawn the same day. Do not cite its numbers.**

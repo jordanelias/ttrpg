@@ -710,6 +710,29 @@ class Subunit:
         if self.discipline_start is not None: return self.discipline_start
         u = self._u()
         return u.discipline_start if u is not None else 5
+    def set_morale(self, value):
+        """[ED-MB-0042 sweep] SINGLE OWNER of an ABSOLUTE morale write on a subunit.
+
+        `erode_morale` (below) already owns the RELATIVE write and routes it across the cells. Absolute
+        writes had no owner, so five call sites assigned `.morale` directly — and every one of them
+        became a silent no-op the moment cells were seeded, because `eff_morale` reads the cells and
+        never falls back to the scalar. That is what confounded the PC_CELL_MORALE measurement: the
+        between-turn recovery and the between-battle reset both stopped working under the flag, so the
+        flag's ON arm fought with morale it could never recover.
+
+        The fix is deliberately a single owner rather than five parallel patches. Five patches is how
+        this recurred in the first place: `erode_morale` was fixed as one instance, the pattern was never
+        swept, and the next writer reintroduced the same defect within hours.
+
+        An absolute set is a body-wide statement ("this body's morale IS now X"), so every cell takes X.
+        Local divergence between cells is earned only through LOCAL damage, never through a body-wide
+        write — the same rule `erode_morale` follows for the relative case.
+        """
+        self.morale = value
+        if self.cell_morale:
+            for cid in self.cell_morale:
+                self.cell_morale[cid] = float(value)
+
     def erode_morale(self, amount):
         # Reduce effective morale (may pass <=0 -> rout, matching the unit `morale -= loss`). Writes to own
         # morale if set, else routes to the inherited Unit -> single-subunit reproduces the old unit erosion.
@@ -2264,16 +2287,38 @@ class Unit:
             self.routed = True
             for a in self.subunits:
                 a.routed = True
+    def set_morale(self, value):
+        """[ED-MB-0042 sweep] SINGLE OWNER of an ABSOLUTE morale write at UNIT scale.
+
+        Writes the unit's own (inherited-default) pool, then pushes the value into every subunit that
+        INHERITS it — because an inheriting subunit's cells hold their own copies, and `eff_morale` reads
+        those cells, so writing only the unit pool leaves the body reporting its old morale forever.
+        Own-morale subunits are deliberately untouched: they do not read this pool, exactly as before.
+
+        Unseeded (the shipped default) this reduces to `unit.morale = value` — the subunit loop finds no
+        cells to write and `Subunit.set_morale` just assigns a scalar those subunits never consult.
+        """
+        self.morale = value
+        for a in self.subunits:
+            if a.morale is None and a.cell_morale:
+                for cid in a.cell_morale:
+                    a.cell_morale[cid] = float(value)
+
     def cascade_morale_hit(self, amount):
         # Unit-wide morale hit (§A.12 inter-unit cascade / contagion / flank erosion): erode the unit's
         # inherited-default morale ONCE (covers every subunit that INHERITS it -> no double-count for a
         # homogeneous unit) AND each subunit that carries its OWN morale, by `amount`. Single-subunit /
         # homogeneous: exactly the old `unit.morale -= amount` (byte-exact). Mixed: own-morale subunits
         # are eroded too, so the cascade is felt per-subunit consistently with the rest of the model.
+        # [ED-MB-0042 sweep] Routed through erode_morale, which already owns the RELATIVE write and
+        # applies it across the cells. The previous bare `a.morale = a.morale - amount` was the third
+        # writer in this same silent-no-op family.
         self.morale -= amount
         for a in self.subunits:
-            if a.morale is not None:
-                a.morale = a.morale - amount
+            if a.morale is None and a.cell_morale:
+                a.erode_morale(amount)       # inheriting: the unit pool it reads is cellular now
+            elif a.morale is not None:
+                a.erode_morale(amount)
 
     def recalc_size(self):
         # v19: effective_size = HP / BLOCK_SIZE (HP = TroopCount).

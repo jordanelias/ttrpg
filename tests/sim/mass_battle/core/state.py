@@ -153,6 +153,10 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 # sibling — including 0-casualty reserves — reads morale<=0 and routs too, defeating the whole
                 # point of a per-subunit break. Setting atom.morale here makes the punch local.
                 if atom.morale is None:
+                    # [ED-MB-0042 sweep] materialize the scalar ONLY — deliberately NOT set_morale. This
+                    # copies the body's current value down so the punch below is local to this subunit; the
+                    # cells already hold that value, and rewriting them here would be a no-op at best and
+                    # would flatten genuine per-cell divergence at worst.
                     atom.morale = atom.eff_morale
                 # [Fable-audit A7 fix, 2026-07-24] Clamp the erode amount to >=0. When eff_morale is already
                 # <=-1 (reachable via §A.4 -3/phase stacking), eff_morale+1.0 is negative and erode_morale
