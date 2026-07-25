@@ -343,3 +343,62 @@ expected and is not evidence either way about the bands — same caveat as Tier-
 halt) *does* move a band row, and deliberately: it takes C1 from 86.7% to 48.3%, into its 35-55 band, by
 removing a permanent shock bonus for standing still. That is a defect removal whose direction happens to
 be favourable, not a tuning pass — no constant was touched.
+
+---
+
+## 8. IS 20/20 REACHABLE BY CONSTANTS? (reachability sweep, 2026-07-25)
+
+**Question.** Jordan: *"is there any combination of these constants where we magically somehow get to
+20/20?"* The prior question to any tuning pass: for each failing row, does **any** setting reach its
+band? A row invariant to every toggle is blocked by structure, and no constant-fitting will pass it.
+
+**Tool.** `reachability_sweep.py` — one subprocess per (row, config) so `config.py` re-reads the
+environment cleanly; 33 booleans in both directions + 6 magnitudes at their extremes (85 configs);
+`--stack` greedily hill-climbs the strongest movers together, since 2^33 is not enumerable.
+
+### 8.1 Two defects in the instrument, found before its results were trusted
+
+**(a) Low-n positives are manufactured by noise, and the error is ASYMMETRIC.** The first run used
+n=16 against the gauge's own n=60. Measured on R1, the *identical baseline config* reads **26.7 / OK at
+n=16 and 44.1 / WIN-OUT at n=60**; the sweep accordingly reported 76 of 85 configs putting R1 in band
+when the row is 14 points outside it and none of them do. Sampling noise can only **widen** an observed
+span, so a NEGATIVE verdict ("the whole span missed") is conservative and survives low n, while a
+POSITIVE verdict is exactly what noise fabricates. Negatives may be read at low n; **every positive was
+re-verified at n=60 before being recorded below.** The tool now warns below n=40.
+
+**(b) Ragged band parse.** Row tuples are not uniform — a normal row is 9 fields ending
+`(..., lo, hi, dexp)`, a braced-repel row carries a 10th trailing `'rawA'`. Counting from the end read
+C2's band as `(30, 'high')` instead of `(0, 30)`: wrong for exactly the two rows the cavalry-repel
+question turns on. Now anchored on the `dexp` token with asserts on both row shapes.
+
+### 8.2 Verified results (positives at n=60; negatives at n=16, valid per the asymmetry above)
+
+| row | band | reachable? | how |
+|---|---|---|---|
+| H4 Cannae | 45-62 | yes — **but a FALSE PASS** | stack `PC_FRICTION_CEV=1, PC_ENVELOP_PATH=0, LANCHESTER_ENABLED=0, FACING_REACTION_TICKS=0` → 46.7 OK. It passes the envelopment row **by switching off envelopment pathing**. No single toggle reaches it (span 0.0-37.5). |
+| H5 RefusedFlank | 48-62 | yes — legitimate | stack `PC_FRICTION_CEV=1, PC_FRACTIONAL_POOL=1` → 48.3 OK. Two real gated mechanisms; neither disables the thing under test. The one genuinely interesting hit. |
+| H9 rev-H2 | 38-52 | yes — **band-fitting** | `K_LINEAR=24` → 45.0 OK. K_LINEAR is *already* the constant fitted to superseded engine output (§1.3); doubling it to land a row is the "choose a free construction parameter until it passes" failure named in §4. `PC_STOCHASTIC_ROUT=1` looked like a hit at n=16 (46.7) and is **not** one (52.8 WIN-OUT). |
+| H6 RefusedFlank vs Line | 48-60 | **no** | span 50.0-100.0; greedy stack reaches 50.0 only via `PC_WHEEL=0`, which is the pre-port all-draw state (§5.1) — not a result. |
+| H10 rev-H3 | 28-45 | **no** | span 25.0-100.0. Four apparent hits at n=16 (`PC_FACING_MODEL=1`, `MULTI_SIDE_SHOCK=0.0`, `FACING_REACTION_TICKS=0/1`) — **all four fail at n=60** (56.7, 57.6, 58.3). Zero reachable configs. |
+| R1 Ranged vs Line | 0-30 | **no** | the 76 apparent hits were the n=16 artifact above. |
+| R3 Ranged mirror | 42-58 | **no** | pinned at exactly 50.0 / UNRESOLVED under every config; greedy stack does not move it. Note the win-split 50.0 is *inside* the band — the row fails the DECISIVE check. This is a missing resolution path, not a miscalibrated number, and reporting it as "out of band" would send the next reader to tune a number that is already right. |
+
+### 8.3 Answer
+
+**No.** Of the ten failing rows, at the gauge's own n: one (H5) is legitimately reachable, two (H4, H9)
+are reachable only by disabling the mechanism under test or refitting an already-fitted constant, and
+four (H6, H10, R1, R3) have no reachable configuration at all. The cavalry rows are swept separately.
+
+**The most useful thing the sweep found is not the count.** It is that the optimizer's cheapest route
+to a green row is to **deactivate the mechanism the row exists to measure** — H4 passes Cannae with
+envelopment pathing off. Any future tuning effort will rediscover that route, because on a win-share
+gauge two lines colliding and a double envelopment can produce the same number.
+
+**Consequence for the gauge, not for the constants.** `gauge_mb.py:417,421` already computes `a_cas`,
+`b_cas` and mean turns-per-battle, and bands **none** of them. Casualty ratios and duration are the
+quantities the literature actually constrains (loser ~15-30% at the break, winner ~5%, asymmetry
+appearing *after* the rout rather than during the fight); win-share of a hypothetical repeated matchup
+is close to unfalsifiable, and all 20 bands are judgement calls with no literature-derived interval.
+A casualty-banded gauge rejects `PC_ENVELOP_PATH=0` immediately — two lines colliding do not produce
+Cannae's casualty asymmetry whatever the win-share says. **That is the highest-value next step, ahead
+of any further constant work.**

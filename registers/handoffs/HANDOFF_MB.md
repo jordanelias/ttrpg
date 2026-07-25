@@ -532,3 +532,42 @@ correction rather than the original claim.
    support-stack cap, envelopment-as-morale-collapse, graded cavalry charge refusal, the Biddle σ-ceiling,
    the rout band + `PC_STOCHASTIC_ROUT` default, the `YIELD_POOL_MULT` split, and the missing
    disengage-and-recharge cycle (new, §7.1).
+
+### 2026-07-25 — reachability sweep: 20/20 is NOT reachable by constants (audit §8)
+
+Jordan asked whether some combination of constants gets the honest gauge to 20/20. Answered
+empirically with `audit/2026-07-22-mass-battle-stress-test/reachability_sweep.py` (85 configs/row,
+greedy stacking). **No.** Of the ten failing rows: **H5** legitimately reachable
+(`PC_FRICTION_CEV=1 + PC_FRACTIONAL_POOL=1` → 48.3 OK); **H4** and **H9** reachable only by disabling
+the mechanism under test (`PC_ENVELOP_PATH=0` passes Cannae) or refitting an already-fitted constant
+(`K_LINEAR=24`); **H6, H10, R1, R3** have no reachable configuration at all. Full table in audit §8.2.
+
+**Two instrument defects were found and fixed before the results were trusted** — both worth knowing:
+- **Low-n positives are noise, asymmetrically.** R1's identical baseline reads 26.7/OK at n=16 and
+  44.1/WIN-OUT at n=60. Noise only WIDENS a span, so negatives survive low n and positives do not.
+  Every positive here was re-verified at n=60; four of H10's and both of R1's evaporated.
+- **Ragged band parse.** Braced-repel rows carry a 10th `'rawA'` field, so counting from the end read
+  C2's band as (30,'high') instead of (0,30) — wrong for exactly the cavalry-repel rows.
+
+### Next actions (MB) — revised priority after the sweep
+
+1. **Band casualties and duration, not just win-share.** `gauge_mb.py:417,421` already computes
+   `a_cas`/`b_cas`/mean turns and bands none of them. This is now the top item: the sweep showed the
+   cheapest route to a green row is to switch off the mechanism the row measures, and a casualty-banded
+   gauge rejects that immediately (two lines colliding do not produce Cannae's casualty asymmetry).
+   All 20 current bands are judgement calls with no literature-derived interval; casualty ratios and
+   duration are what the sources actually constrain.
+2. **Side-symmetry invariant test.** H2/H9, H3/H10, H4/H11 are the same matchup with the armies
+   swapped, on exactly complementary bands, so their sums must be ~100; they are 114.2, 137.7, 61.7.
+   Needs no history — swap the sides, the answer must invert. Cheapest high-information test available
+   and it fails today. (H10 having ZERO reachable configs is the same finding from the other side.)
+3. **Reachability gate in CI.** Assert each named mechanism fires at least once in a canonical
+   scenario. Its absence produced six Tier-2 findings in one pass.
+4. **Give the cell real state — morale first.** Per-cell state today is position/facing/halted/
+   last-speed/troops. There is no per-cell morale, discipline, quality, stamina or rout, so Jordan's
+   directive ("a cell should be able to have worse morale than another cell in same subunit") is not
+   implemented, and of the five modulators named for a cell's damage output only density is per-cell.
+5. **Collapse the column tier into the cell.** Fatigue/stamina/depth-rotation live on `col_grid` — a
+   third granularity that is neither the primitive nor the holistic body (shape divergence).
+6. Mechanism gaps: charge/recoil/re-charge cycle; a resolution path for the ranged mirror (R3); local
+   (per-cell) break rather than whole-subunit rout.
