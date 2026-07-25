@@ -391,6 +391,60 @@ CAV_TESTS = [
 def winner_of(r):
     return r.get('winner','draw')
 
+SINGLE_TURN_CAP = 18          # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
+MULTI_BATTLE_TURN_CAP = 20    # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
+
+# ─── CASUALTY / DURATION REALISM BANDS (ED-MB-0041) ──────────────────────────
+# The win-share bands above ask "how often does A beat B". They cannot distinguish a double
+# envelopment from two lines colliding, because both can produce the same win-share -- which is exactly
+# how the reachability sweep found a configuration that passes the Cannae row with envelopment pathing
+# switched OFF. These bands ask the question the sources actually constrain: what did it COST, and did
+# it resolve at all. `matchup()` already computed every input; nothing here is new instrumentation.
+#
+# PROVENANCE -- deliberately narrow. Each band is either in-repo or a logical consequence of one; none
+# is an invented literature interval.
+#   LOSER_CAS_BAND  the losing side's mean casualties at the decision. 15-30% is the repo's OWN
+#                   rout-onset band (ED-MB-0031, "routs at 15% early / 30% upper"), already used to
+#                   draw each subunit's stochastic break-point. If a body breaks at 15-30% losses, the
+#                   side that broke should be carrying about that when the battle is decided.
+#   WINNER_CAS_MAX  the winner did not break, by definition. So its losses must sit BELOW the floor of
+#                   the same break band. This is not a second estimate -- it is the first one's
+#                   contrapositive, which is why it needs no independent source.
+#   CAPPED_MAX      fraction of seeds that ran to the turn cap without resolving. A structural check,
+#                   not a historical one: a matchup that times out has not been measured. This is the
+#                   check that would have caught H6 reading 0.0/0.0 casualties across 60/60 seeds.
+# DURATION IS DELIBERATELY *NOT* BANDED ABSOLUTELY. An engine "turn" has no defensible mapping to real
+# time, so any interval in turns would be fabricated to look grounded. The cap-hit rate is the honest
+# part of the duration question and is the only part banded.
+LOSER_CAS_BAND = (15.0, 30.0)   # [canonical: ED-MB-0031 stochastic-rout breakpoint band, 15-30% casualties]
+WINNER_CAS_MAX = 15.0           # [canonical: contrapositive of ED-MB-0031 — the winner did not break, so it is below the break floor]
+CAPPED_MAX = 20.0               # [JUSTIFIED: structural, not historical — a matchup that times out on >1 seed in 5 has not been measured]
+
+
+def casualty_verdict(r):
+    """Judge one matchup result against the realism bands. Returns (ok, flag, detail-string).
+
+    A row with no decisive result is UNMEASURED, never a pass: `win_cas`/`lose_cas` are None there,
+    and treating an absent measurement as 0.0 would silently satisfy the winner-cost check.
+    """
+    if r['win_cas'] is None or r['lose_cas'] is None:
+        return False, 'UNMEASURED', 'no decisive result'
+    lo, hi = LOSER_CAS_BAND
+    loser_ok = lo <= r['lose_cas'] <= hi
+    winner_ok = r['win_cas'] < WINNER_CAS_MAX
+    capped_ok = r['capped'] <= CAPPED_MAX
+    if loser_ok and winner_ok and capped_ok:
+        return True, 'OK', ''
+    why = []
+    if not loser_ok:
+        why.append(f'loser {r["lose_cas"]:.0f}% outside {lo:.0f}-{hi:.0f}')
+    if not winner_ok:
+        why.append(f'winner {r["win_cas"]:.0f}% >= {WINNER_CAS_MAX:.0f}')
+    if not capped_ok:
+        why.append(f'capped {r["capped"]:.0f}%')
+    return False, 'UNREAL', '; '.join(why)
+
+
 def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directive 2026-07-01: n 120->60 for runtime; SE~sqrt(0.25/n) rises ~4.6pp->~6.5pp at p=0.5, vs the grounding doc's cited n=120/SE~5pp basis (mass_battle_gauge_grounding.md §1)]
     # sa/sb: a plain shape string (single-subunit, via make_unit) or an army-builder callable
     # (_envelop_army/_refused_army) for the composed Envelopment/Refused-Flank presets that replaced
@@ -399,6 +453,13 @@ def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directi
     # OWN spawn position first) -- 'Line' is a safe placeholder for a callable side.
     a_is_fn = callable(sa); b_is_fn = callable(sb)
     aw=bw=dr=0; turns=[]; a_cas=[]; b_cas=[]
+    # [ED-MB-0041] WINNER/LOSER-CONDITIONED casualties + cap-hit rate. The per-side means below
+    # (a_cas/b_cas) average over ALL seeds regardless of who won, which is the wrong quantity to compare
+    # against history: the sources constrain what the LOSER lost and how much less the WINNER lost, and
+    # in a near-even matchup the per-side means wash that asymmetry out entirely. Collected per decisive
+    # seed and conditioned on the outcome. `capped` counts seeds that ran to the turn cap without
+    # resolving — the structural check that would have caught H6's 0.0/0.0 all-draw instrument break.
+    win_cas=[]; lose_cas=[]; capped=0
     for s in range(n):
         random.seed(s+seed_base)
         ua = sa('A','A',**ka) if a_is_fn else make_unit(sa,3,'A','A',**ka)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
@@ -406,24 +467,39 @@ def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directi
         a0,b0 = ua.hp_max, ub.hp_max
         shape_a = 'Line' if a_is_fn else sa
         shape_b = 'Line' if b_is_fn else sb
+        # [ED-MB-0041] The cap is bound ONCE and reused for both the resolve call and the cap-hit
+        # test below. It was previously written as a literal in each of the two resolve_battle calls,
+        # and the cap-hit check would have needed a third and fourth copy -- at which point a future
+        # change to one would silently stop the "did this battle actually resolve" measurement from
+        # meaning anything, while still reporting a number.
+        cap = SINGLE_TURN_CAP if mode=='single' else MULTI_BATTLE_TURN_CAP
         if mode=='single':
-            r=resolve_battle(ua,ub,kind='single',max_turns=18); turns.append(r.get('turns',18))  # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
+            r=resolve_battle(ua,ub,kind='single',max_turns=cap); turns.append(r.get('turns',cap))
         else:
-            r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=20); turns.append(r.get('battle_turns',20))  # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
+            r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=cap); turns.append(r.get('battle_turns',cap))
         w=winner_of(r)
         if w=='A':aw+=1
         elif w=='B':bw+=1
         else:dr+=1
-        a_cas.append(100*(a0-ua.hp)/a0 if a0 else 0); b_cas.append(100*(b0-ub.hp)/b0 if b0 else 0)
+        _ac = 100*(a0-ua.hp)/a0 if a0 else 0; _bc = 100*(b0-ub.hp)/b0 if b0 else 0
+        a_cas.append(_ac); b_cas.append(_bc)
+        if w=='A': win_cas.append(_ac); lose_cas.append(_bc)
+        elif w=='B': win_cas.append(_bc); lose_cas.append(_ac)
+        if turns[-1] >= cap: capped += 1
     dec = aw+bw
     return dict(a=aw/n*100, b=bw/n*100, d=dr/n*100,
                 decA=(100*aw/dec if dec else 50.0), dec_n=dec,  # [canonical: mass_battle_gauge_grounding.md §1 — even-split fallback when no decisive result]
-                t=statistics.mean(turns), a_cas=statistics.mean(a_cas), b_cas=statistics.mean(b_cas))
+                t=statistics.mean(turns), a_cas=statistics.mean(a_cas), b_cas=statistics.mean(b_cas),
+                # [ED-MB-0041] None (not 0.0) when no decisive result: an absent measurement must not
+                # read as "the winner lost nothing", which would silently PASS the asymmetry check.
+                win_cas=(statistics.mean(win_cas) if win_cas else None),
+                lose_cas=(statistics.mean(lose_cas) if lose_cas else None),
+                capped=capped/n*100)
 
 def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sample n 120->60 for runtime — see matchup()]
     print(f"\n----- MODE: {mode}  (engine: mass_battle package)  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----")
     print(f"  {'id':4} {'matchup':30} {'A%':>5} {'B%':>5} {'D%':>5} {'val':>5} {'band':>7} {'dexp':>4} {'m':>4} verdict")
-    nb=0
+    nb=0; cas_rows=[]
     for t in tests:
         tid,label,sa,sb,ka,kb,lo,hi,dexp,*rest = t
         metric = rest[0] if rest else 'decA'  # [canonical: mass_battle_gauge_grounding.md §1 — decA default; rawA for braced-repel rows]
@@ -441,7 +517,24 @@ def run(mode, tests=TESTS, n=60):  # [Jordan directive 2026-07-01: default sampl
         ok = win_ok and draw_ok
         nb+=ok
         print(f"  {tid:4} {label[:30]:30} {r['a']:5.1f} {r['b']:5.1f} {r['d']:5.1f} {val:5.1f} {lo:>3}-{hi:<3} {dexp:>4} {metric:>4} {flag}")
+        cas_rows.append((tid, label, r))
     print(f"  => pass {nb}/{len(tests)}  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)")
+
+    # [ED-MB-0041] SECOND scoreboard, reported separately and NOT folded into the win-share count --
+    # so `nb` stays comparable with every figure already recorded in the ledger, handoff and PR bodies,
+    # while the harder question is visible beside it rather than buried in a returned dict.
+    print(f"\n  --- casualty/duration realism (loser {LOSER_CAS_BAND[0]:.0f}-{LOSER_CAS_BAND[1]:.0f}%, "
+          f"winner <{WINNER_CAS_MAX:.0f}%, capped <={CAPPED_MAX:.0f}%) ---")
+    print(f"  {'id':4} {'matchup':30} {'win%':>6} {'lose%':>6} {'turns':>6} {'cap%':>5}  verdict")
+    cb = 0
+    for tid, label, r in cas_rows:
+        ok, cflag, why = casualty_verdict(r)
+        cb += ok
+        wc = '  n/a' if r['win_cas'] is None else f"{r['win_cas']:6.1f}"
+        lc = '  n/a' if r['lose_cas'] is None else f"{r['lose_cas']:6.1f}"
+        print(f"  {tid:4} {label[:30]:30} {wc} {lc} {r['t']:6.1f} {r['capped']:5.1f}  "
+              f"{cflag}{(' — ' + why) if why else ''}")
+    print(f"  => casualty-realism pass {cb}/{len(tests)}")
     return nb
 
 if __name__=='__main__':

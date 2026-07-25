@@ -2,6 +2,57 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0041: the two gauge invariants that need no band (Jordan-approved)
+
+The win-share gauge cannot tell a double envelopment from two lines colliding — both can produce the
+same number, which is how the reachability sweep found a config that passes the Cannae row with
+envelopment pathing switched OFF. Two properties close that gap from opposite directions, and neither
+needs a band or a judgement call.
+
+**1. Reverse-pair side symmetry** (`audit/.../reverse_pair_symmetry.py`). `decA(X vs Y) + decA(Y vs X)`
+must be 100: which army occupies the engine's "side A" slot is bookkeeping, not physics. Distinct from
+the pre-existing `symmetry_probe.py`, which tests MIRROR symmetry (identical armies → 50/50) and is
+structurally blind to an interaction asymmetry. Measured at n=60:
+
+| pair | fwd | rev | sum | deviation | sigma | verdict |
+|---|---|---|---|---|---|---|
+| H2/H9 | 49.2 | 65.0 | 114.2 | +14.2 | **+1.6** | OK — *not* a defect |
+| H3/H10 | 61.0 | 76.7 | 137.7 | +37.7 | **+4.5** | ASYMMETRIC |
+| H4/H11 | 6.7 | 55.0 | 61.7 | −38.3 | **−5.3** | ASYMMETRIC |
+
+**This corrects my own earlier reporting.** I had described all three sums (114.2 / 137.7 / 61.7) as
+evidence of a side-dependent mechanism. Reporting the deviation in units of its own standard error
+shows H2/H9 is **+1.6σ — consistent with noise**. The defect is confined to the *envelopment* rows,
+which localises it far more sharply and is consistent with ED-MB-0039's envelopment-stability
+diagnosis. A raw percentage-point threshold would have hidden that distinction entirely.
+
+**2. Casualty/duration realism** — a SECOND scoreboard in `gauge_mb`, reported beside the win-share
+count and deliberately *not* folded into it, so the existing 10/20 figure stays comparable with every
+number already in the ledger, handoff and PR bodies.
+- `matchup()` previously averaged `a_cas`/`b_cas` over **all** seeds regardless of who won — the wrong
+  quantity: the sources constrain what the LOSER lost and how much less the WINNER lost, and a near-even
+  matchup washes that asymmetry out. Now conditioned on the outcome (`win_cas`/`lose_cas`), plus a
+  `capped` rate (seeds that ran to the turn cap without resolving).
+- Bands are in-repo or logical consequences of in-repo values, **not invented literature intervals**:
+  loser 15–30% is the repo's own rout-onset band (ED-MB-0031); winner <15% is that band's
+  *contrapositive* (the winner did not break, so it sits below the break floor); the cap rate is
+  structural, not historical.
+- **Duration is deliberately NOT banded absolutely.** An engine turn has no defensible mapping to real
+  time, so any interval in turns would be fabricated to look grounded. Only the cap-hit rate is banded.
+- `None` (not `0.0`) when nothing resolved — treating an absent measurement as "the winner lost
+  nothing" would turn the engine's most broken rows into its cleanest passes.
+
+**First result, and it is stark.** The H1 *mirror* passes win-share at 50.0 while killing **~85% of the
+loser and ~26% of the winner** against a 15–30% / <15% expectation. Casualty-realism scores **0/20**.
+The win-share gauge has been reporting a green mirror on a battle that annihilates both sides.
+
+Pinned by `tests/valoria/test_gauge_invariants.py` (8 tests). Both invariants are currently RED and
+marked **xfail, not skipped**: the assertion runs every time, does not redden CI for a known-open design
+gap, and flips to XPASS the moment it is fixed. Sample size is documented as a **power** limitation
+rather than glossed — H3/H10, a +4.5σ defect at n=60, XPASSed at n=24, so an XPASS at suite-n is a
+prompt to re-measure at n=60, not evidence of a fix. Also single-sourced the 18/20 turn caps, which
+were duplicated literals about to become four copies.
+
 ## 2026-07-25 — ED-MB-0041 Tier-2: dead machinery wired or deleted + provenance retag
 
 Seven items from the deep adversarial audit's Tier-2 list ("wire or delete, no third option"). Every fix
