@@ -6,7 +6,7 @@
 covering *all directions and conditionals*; then resolve every finding in priority order, batch by batch, with an
 adversarial audit after each batch.
 **Prose:** `combat_four_dimension_audit_infill.md` (co-filed; method, evidence, per-finding detail, verification).
-**Status: IN PROGRESS** — Batch 1 landed; Batches 2–6 pending.
+**Status: IN PROGRESS** — Batches 1–2 landed; Batches 3–6 pending.
 
 ## Method (skeleton)
 
@@ -24,12 +24,12 @@ full-file reads + provenance spot-checks against `registers/editorial_ledger_pc.
 | F2 | conflicts | `overcommit_exposure` "floored at 0" false; negative value suppresses riposte below base | high | 1 | **DONE** |
 | F3 | fiat | `contact.grab_sigma` edge-hazard sign-flips for grab skill > 1 | med | 1 | **DONE** |
 | F4 | — | tradition-lever texture instrument under-powered (n=60, knife-edge) | — | 1 | **DONE** |
-| F5 | orphans | 6 unread CFG keys, leaking into the Godot-facing engine-params JSON | high | 2 | pending |
-| F6 | orphans | `CHOKE_BIND_K` — read lever multiplied by a hardcoded `0.0` at its only call site | high | 2 | pending |
-| F7 | orphans | `close` damage param threaded through ~12 sites, never read | high | 2 | pending |
-| F8 | orphans | 5 zero-caller functions; dead `Combatant.ready`; unreachable `QUAL`/`COVERAGE_GAP` `'partial'` | med | 2 | pending |
-| F9 | orphans | retired imposition machinery still wired (`PREFERRED`/`preferred`/`profile`) | med | 2 | pending |
-| F10 | conflicts | stale prose: poise `EFFECT_FLOOR`, facing-profile sign, "deliberately failing" tests that pass, phantom `disengage_prob`, `represent_p` magnitudes, `affords_halfsword` count, `TRUE_TIME_K` citation, `module_contracts` rows | med | 2 | pending |
+| F5 | orphans | 6 unread CFG keys, leaking into the Godot-facing engine-params JSON | high | 2 | **DONE** |
+| F6 | orphans | `CHOKE_BIND_K` — read lever multiplied by a hardcoded `0.0` at its only call site | high | 2 | **DONE** |
+| F7 | orphans | `close` damage param threaded through ~12 sites, never read | high | 2 | **DONE** |
+| F8 | orphans | 5 zero-caller functions; dead `Combatant.ready`; unreachable `QUAL`/`COVERAGE_GAP` `'partial'` | med | 2 | **DONE** |
+| F9 | orphans | retired imposition machinery still wired (`PREFERRED`/`preferred`/`profile`) | med | 2 | **DONE** |
+| F10 | conflicts | stale prose: poise `EFFECT_FLOOR`, facing-profile sign, "deliberately failing" tests that pass, phantom `disengage_prob`, `represent_p` magnitudes, `affords_halfsword` count, `TRUE_TIME_K` citation, `module_contracts` rows | med | 2 | **DONE** |
 | F11 | fiat+conflicts | `percussion_stagger`: inline second quality ladder + bypasses the `sel_*` single-source contract | med | 3 | pending |
 | F12 | fiat | cut_thrust "versatile max" shear branch is dead (paid as thrust, read as swing) | high | 3 | pending |
 | F13 | fiat | Nachreisen pursuit strike resolves at a flat `−0.3` σ, bypassing the σ-assembly | med-high | 3 | pending |
@@ -55,7 +55,7 @@ consumers; PEN_THR light-inertness and the represent-gate RNG-stream inertness h
 | Batch | Scope | ED | Result |
 |---|---|---|---|
 | 1 | correctness bugs (F1–F4) | ED-PC-0034 | full suite green (686 passed, 1 xfailed) |
-| 2 | dead code + stale prose (F5–F10) | — | pending |
+| 2 | dead code + stale prose (F5–F10) | ED-PC-0035 | behaviour-preserving; 686 passed, 1 xfailed; engine-params 202→194 keys |
 | 3 | fiat retirement (F11–F15) | — | pending |
 | 4 | structural thresholds (F16–F18) | — | pending |
 | 5 | plate damage ↔ adef_cap (F19–F20) | — | pending |

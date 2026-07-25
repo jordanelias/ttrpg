@@ -34,7 +34,13 @@ def test_falsifiable_heft_ordering():
     means revisiting spear's own head/haft mass split (out of JD-1's scope — spear was not one of the flagged
     weapons) or the approach-side lever already identified for the win-rate anomaly, not a per-weapon fudge
     here. The arming<longsword<greatsword sub-ordering (the part U1 actually governs) still holds and is
-    checked separately below. Deliberately left failing, not silently patched."""
+    checked separately below.
+    [RESOLVED 2026-07-23 by ED-PC-0027; docstring corrected 2026-07-25, ED-PC-0035] This test is NO LONGER failing.
+    ED-PC-0027's mode-aware heft (THRUST_POB — a thrust no longer carries the swing moment) fixed the ordering at
+    root, and weapon_physics.py's own HEFT_REF note already records the resolution. Live values: spear 0.666 <
+    arming 0.770 < longsword 1.0 < greatsword 1.604. The "Deliberately left failing, not silently patched" line
+    survived two generations past its own resolution, so anyone triaging accepted-red tests from these docstrings
+    mis-modelled the baseline — which is now ZERO accepted-red (the full suite is green)."""
     h = lambda n: core.heft_resp(WEAPONS[n], CFG)
     assert h('spear') < h('arming') < h('longsword') < h('greatsword')
 

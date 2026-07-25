@@ -5,7 +5,7 @@ Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
 [ED-1085 container de-leak, 2026-07-01] This module previously reached into the FROZEN
 tests/sim/v32-combat-balance/ validation station via a sys.path hack (r1/r8/m1 imports),
 dragging numpy into the engine runtime. The sigma math now comes from sigma_leverage
-(parity-tested against the numpy originals at 1e-9 — sim/tests/test_sigma_leverage_parity.py);
+(parity-tested against the numpy originals at 1e-9 — engine/tests/test_sigma_leverage_parity.py);
 the engine's own combat-state constants live here / in combatant.py. NOTE the RNG contract
 changed with the substrate: `rng` is a stdlib random.Random (rng.gauss), no longer a numpy
 Generator (rng.normal). The continuous engine's distribution is unchanged
@@ -47,7 +47,9 @@ BASE_POOL = 6      # [class-C: armature — History-driven pool base; pool = max
 def resolution_pool(history):
     """Agility-INDEPENDENT resolution pool (ED-901; re-ratified ED-900/904): max(5, History + 6)."""
     return max(POOL_FLOOR, int(round(history)) + BASE_POOL)
-def effective_ob(pool, net_sigma): return SL.eff_ob(DECISIVE_OB, pool, net_sigma)
+# ED-PC-0035: `effective_ob` REMOVED — zero callers anywhere in the package/workbench/tests, and resolve()'s own
+# docstring records that the Ob-shift path it wrapped is DISPLAY-ONLY and distorts the degree bands. Leaving a
+# mis-resolving helper sitting next to the live resolver is a trap for a future caller, not a convenience.
 def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)
 def degree(net, ob):
     """Band a CONTINUOUS net into a degree, with the ER-2 continuity correction applied (params/core.md
@@ -87,6 +89,13 @@ def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None):
     identical at grip=0 (the default) for every weapon."""
     return WP.heft(w, grip=grip, sel_head=sel_head, sel_pc=sel_pc)
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
+# ED-PC-0035 (audit answer — 'partial' was reported as a dead entry): 'partial' IS a real degree, returned by degree()
+# for 1 <= net < ob. It is unreachable HERE only because damage() early-returns 0 for any deg outside
+# (graze, success, overwhelming) and the WRAPPER maps a partial to an explicit graze/bind instead of a damage call.
+# The entry is therefore RETAINED deliberately: QUAL must stay a COMPLETE mapping over degree()'s output domain, or
+# the first caller that legitimately routes a partial here would silently take the 0 branch. Same reasoning for
+# COVERAGE_GAP['partial'] below (the `coverage` parameter is pinned to 'full' by every current caller — it is the
+# not-yet-wired hit-location hook, not dead weight).
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 # PENETRATION THRESHOLD (ED-PC-0032, rapier plate fall-off): armour resists up to a floor — a blow whose coupling-
@@ -281,7 +290,7 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
     return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
-def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0):
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -303,7 +312,7 @@ def damage(deg, heft_units, weapon_head, strength, armor, close, gap=GAP_PREC_RE
         raw *= (raw*raw) / (raw*raw + t*t)                       # soft knee: a sub-defeat blow inflicts little LASTING wound (deflected); a defeating blow (large raw) keeps ~all
     return max(0, int(round(raw)))
 
-def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
+def strike(attacker, defender, deg, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
     DEFENDER, returning the int damage. Single call-site for every blow so the 9-arg positional surface (the
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
@@ -327,4 +336,4 @@ def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     grip=getattr(attacker, 'grip_position', 0.0); sel_pc=getattr(attacker, 'sel_pc', None)
     tauth=thrust_authority(attacker.w.get('head_len'))            # PC-5: point-to-hand lever authority from the SELECTED weapon record (the half-sword swap already gives the short-lever form its own head_len); inert for shear/percussion heads
     return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc), head, attacker.strength,
-                  defender.armor, close, gap, perc, q=q, eff=eff, thrust_auth=tauth)
+                  defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth)

@@ -850,11 +850,11 @@ modules:
     modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set; the slice ports 2)
       - {id: "combat.strike",  resolver: d_sigma,      status: PORTED,  in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
       - {id: "combat.wound",   resolver: state_reader, status: PORTED,  in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
-      - {id: "combat.feint",   resolver: d_sigma,      status: PENDING}
+      - {id: "combat.feint",   resolver: d_sigma,      status: RETIRED}   # ED-PC-0035: NOT pending — the feint was deliberately DISSOLVED into the attack (WS-5, 2026-06-29); FEINT_*/feint_eval are gone. Listing it PENDING invited a re-implementation of a retired design.
       - {id: "combat.bind",    resolver: d_sigma,      status: PENDING}   # winding / Stärke-Schwäche / kuzushi
       - {id: "combat.approach", resolver: d_sigma,     status: PENDING}   # closing / stop-hit / reach re-open
       - {id: "combat.displace", resolver: d_sigma,     status: PENDING}   # displace-and-step-inside
-      - {id: "combat.grapple", resolver: d_sigma,      status: PENDING}   # clinch (the currently-unconsumed `clinch` weapon field)
+      - {id: "combat.grapple", resolver: d_sigma,      status: PARTIAL}   # ED-PC-0035: was PENDING with a note pointing at "the currently-unconsumed `clinch` weapon field" — but that field was DELETED and is actively FORBIDDEN (D9/JD-7; capabilities.py self-tests that `clinch=` is absent from weapons.py), and the contact axis is BUILT and wired (contact.py: grab_sigma + the branching grapple menu, called from the wrapper outcome tail). Residual scope (choke/pin depth) is ED-PC-0007.
       - {id: "combat.halfsword", resolver: state_reader, status: PENDING} # auto-switch to the half-sword form vs plate
       - {id: "combat.initiative", resolver: state_reader, status: PENDING} # Vor/Nach decay/drift/steal/edge
       - {id: "combat.poise",   resolver: state_reader, status: PENDING}   # structure / kuzushi recovery

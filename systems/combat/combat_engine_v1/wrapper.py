@@ -21,7 +21,6 @@ def _init_live(c, cfg):
     c.derive_stats(cfg)                  # the combatant computes its cfg-dependent figures (conc_max); stamina_max/health set at build
     c.stamina=float(c.stamina_max)       # reset live state from the combatant's own held maxima
     c.conc=c.conc_max
-    c.ready=0.0
     c.initiative=0.0
     c.poise=1.0
 
@@ -114,7 +113,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         # point at the measure where ED-PC-0029 makes it dominant (Silver's staff/spear keeps the swordsman at the
         # weapon's length). VOLUNTARY (any closed beat, unlike the reactive created-moment reopen above) and
         # READ-CONTESTED: the closer who reads it stays glued and PURSUES (HEMA Nachreisen — striking the
-        # withdrawing weapon as it turns). EMERGENT gate lives in systems.disengage_prob (fires only when the longer
+        # withdrawing weapon as it turns). EMERGENT gate lives in systems.disengage_attempt_p + systems.disengage_clean_p (fires only when the longer
         # weapon is OUT-LEVERAGED in the bind — a light spear out-bound by a rigid estoc; a bind-dominant poleaxe
         # stays and wins). This is the closed-phase lever for the reach-weapon-loses-the-bind residual: cycling
         # approach<->bind, the long weapon wins on accumulated stop-hits instead of a bind it cannot win.
@@ -132,7 +131,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
                     deg,net=core.resolve(pool, cfg['DISENGAGE_PURSUIT_NSIG'], rng)
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
-                        d=core.strike(shorter, longer, deg, True, cfg, net=net, pool=pool)
+                        d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
                         longer.apply_wound(d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
                         if longer.felled: return longer, closed
                     ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
@@ -163,7 +162,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
                 _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
                       pool=pool, net_sigma=round(nsig,3), net=round(net,2), degree=deg)
                 if deg in ('success','overwhelming'):
-                    d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
+                    d=core.strike(longer, shorter, deg, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
                     shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
@@ -211,7 +210,6 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         # concentration: mental-fatigue protection (fatigue-resistance) — defender's reading/technique (systems.mental_fatigue)
         mental_fat_d=S.mental_fatigue(defender, fat_d, cfg)
         # tradition channel-weights (cognitive-mode biases over the shared substrate; neutral=1.0)
-        ta=aggressor.tradition; td=defender.tradition
         # standing reach advantage (module): defender's reach lowers the attacker's net, falling with armour.
         reach_pen=S.reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR)
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
@@ -267,16 +265,16 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         if deg=='fail':
             riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_FAIL']+overcommit_exposure))
         elif deg=='partial':
-            if mode=='dodge': hit=core.strike(aggressor, defender, 'graze', close, cfg) if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else 0
-            elif mode=='parry': hit=core.strike(aggressor, defender, 'graze', close, cfg) if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else 0
+            if mode=='dodge': hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else 0
+            elif mode=='parry': hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else 0
             else: bind=True
         elif deg=='success':
             if mode=='wind' and rng.random()<cfg['WIND_BIND_P']: bind=True
             elif rng.random()<neutralize: riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_NEUTRALIZE']+overcommit_exposure))
-            else: hit=core.strike(aggressor, defender, 'success', close, cfg)
+            else: hit=core.strike(aggressor, defender, 'success', cfg)
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
-            else: hit=core.strike(aggressor, defender, 'overwhelming', close, cfg, net=net, pool=pool)
+            else: hit=core.strike(aggressor, defender, 'overwhelming', cfg, net=net, pool=pool)
         if counter_attempt:
             # SUCCESS scales with training (history) + reflex; the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later). (systems.counter_success_prob)
@@ -288,9 +286,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
                 defender.initiative=S.clamp_initiative(defender.initiative-steal, cfg)
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
                 bind=False; riposte=False
-                hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', close, cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
-        if cfg.get('IMPOSITION_GATE'):   # WS-4/WS-5 section-C experiment (flag, default off): tradition imposes/refuses its node
-            bind, riposte = S.impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR)
+                hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
         sim=(hit>0 and riposte)
         # CONTACT AXIS (I7b, D8/D9): a unified opening_created flag, set by all three precondition sites below
         # (DISPLACE, deep-commit reopen, bind) — NOT three parallel grab checks. Consumed once, in THIS beat's
@@ -315,7 +311,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
                 if not closed: closed=True; measure_gap=0.0; ready={A:0.0,B:0.0}
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
-                    d=core.strike(aggressor, defender, 'graze', False, cfg)
+                    d=core.strike(aggressor, defender, 'graze', cfg)
                     defender.apply_wound(d)
                     if defender.felled: return defender, closed
                 riposte=True   # defender now inside with initiative
@@ -356,7 +352,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
                 if rng.random() < S.bind_dominance_p(bsig):
                     if rng.random()<cfg['BIND_HIT_P']:
-                        d=core.strike(aggressor, defender, 'success', close, cfg)
+                        d=core.strike(aggressor, defender, 'success', cfg)
                         defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
                         defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
@@ -367,7 +363,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
             if sim:
                 # concentration disruption-resistance: focus lets aggressor still complete despite the blow
                 if rng.random() > S.disrupt_resist_p(aggressor, cfg):
-                    d=core.strike(defender, aggressor, 'graze', close, cfg)
+                    d=core.strike(defender, aggressor, 'graze', cfg)
                     aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(defender, aggressor, d, 'graze', cfg)   # ED-PC-0031: riposte wind + stagger
                     aggressor.stamina-=_sd; aggressor.poise=S.clamp_poise(aggressor.poise-_pb, cfg)

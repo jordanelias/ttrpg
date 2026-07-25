@@ -154,7 +154,9 @@ def test_use_mode_selection_emerges_from_primitives():
         heads = {S.select_mode(C.Combatant('x', weapon=n), ar, False, CFG)[1] for ar in tiers}
         if len(heads) > 1:
             changers.append(n)
-    # poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above.
+    # [ED-PC-0035 correction] This line used to read "poleaxe + lucerne_hammer excluded — see [PHASE-C FLAG]s above",
+    # which contradicted the `expected` list below (it INCLUDES lucerne_hammer) and the newer note further down
+    # (lucerne_hammer JOINED; poleaxe is NO LONGER excluded). The assertion, not the stale comment, is authoritative.
     # [PC-5/ED-PC-0015, 2026-07-22] thrust_authority(head_len) scales the puncture GAP-PRESS term (core._transmit),
     # so select_mode's greedy comparator now weights each candidate point by its point-to-hand lever. TWO grounded
     # shifts in the changer set: +estoc/flamberge/changdao/odachi JOIN (stiff two-handed thrust-blades whose
@@ -259,7 +261,10 @@ def test_heft_percussion_ordering_at_ideal():
     ordering — U1's JD-1 PoB recalibration correctly lowers arming/longsword's heft numerator (moving their
     balance back toward the hand, per the ratified 1H band), which drops both below spear's own untouched
     numerator. Not a new defect — the SAME reach-class over-dominance already tracked in HANDOFF_PC.md
-    ("SPEAR flat-dominance"). Deliberately left failing; see the other test's docstring for the full account."""
+    ("SPEAR flat-dominance").
+    [RESOLVED by ED-PC-0027; docstring corrected 2026-07-25, ED-PC-0035] No longer failing — see the twin in
+    test_combat_heft.py::test_falsifiable_heft_ordering for the full account. Both docstrings claimed "deliberately
+    left failing" long after ED-PC-0027 fixed the ordering."""
     C, core, S, WP, CFG = _mods()
     h = {n: WP.heft(C.WEAPONS[n]) for n in ('spear', 'arming', 'longsword', 'greatsword')}
     assert h['spear'] < h['arming'] < h['longsword'] < h['greatsword'], h
@@ -316,8 +321,8 @@ def test_damage_retention_worst_case_material_lever():
         for STR in (2, 4, 6, 8):
             heft_open = core.heft_resp(w, CFG, grip=0.0, sel_head=cut_head, sel_pc=spc)
             heft_closed = core.heft_resp(w, CFG, grip=grip_star, sel_head=cut_head, sel_pc=spc)
-            dmg_open = core.damage('success', heft_open, cut_head, STR, 'none', False, gap, perc)
-            dmg_closed = core.damage('success', heft_closed, cut_head, STR, 'none', False, gap, perc)
+            dmg_open = core.damage('success', heft_open, cut_head, STR, 'none', gap, perc)
+            dmg_closed = core.damage('success', heft_closed, cut_head, STR, 'none', gap, perc)
             worst = max(worst, dmg_closed / dmg_open if dmg_open else 0.0)
         return worst
 
@@ -849,7 +854,7 @@ def test_reach_class_beats_arming_not_inverted():
     for w in ('spear', 'yari'):
         for armor in ('none', 'light'):
             assert share[(w, armor)] > 0.5, f"{w} vs arming at {armor}: reach INVERTED off-plate ({share[(w, armor)]:.2f})"
-        assert share[(w, 'medium')] > 0.42, f"{w} vs arming at medium: reach ANNIHILATED ({share[(w, 'medium')]:.2f}) — expected a near-even contest (ED-PC-0027)"
+        assert share[(w, 'medium')] > 0.42, f"{w} vs arming at medium: reach ANNIHILATED ({share[(w, 'medium')]:.2f})"   # ED-PC-0035: the message used to say "expected a near-even contest (ED-PC-0027)", which contradicted the ED-PC-0033 re-baseline comment above it (medium is now ~0.90-0.95 dominance, not near-even) — a failure would have printed a diagnosis the file's own newer prose calls wrong. It is a slack ANNIHILATION floor, nothing more.
     # (1b) [RE-BASELINED, U10/ED-PC-0022; TIGHTENED ED-PC-0023 per the adversarial review]. The guisarme (versatile
     #     mid-reach hooked polearm) keeps the STRICT >0.5 guard at none/light — the review confirmed it stays solidly
     #     dominant there (~0.68-0.78 at N>=300), so those tiers never needed loosening (my first re-baseline over-broadly
@@ -866,14 +871,16 @@ def test_reach_class_beats_arming_not_inverted():
     assert share[('poleaxe', 'heavy')] > 0.5, f"poleaxe vs arming at heavy should still defeat plate ({share[('poleaxe','heavy')]:.2f})"
     # (3) at HEAVY, a PURE-POINT reach weapon is correctly brought BELOW dominance (the grounded G4 correction — a long
     #     reach-thrust cannot press a point into a harness gap). [ED-PC-0027] the mode-aware heft correction dropped the
-    #     spear/yari thrust heft (a thrust no longer carries the swing moment), so vs PLATE they are now a near-total
-    #     STALEMATE LOSS (~0.05) — historically correct (a spear cannot defeat full plate; the arming can at least close
+    #     spear/yari thrust heft (a thrust no longer carries the swing moment), so vs PLATE they are a STALEMATE LOSS
+    #     — historically correct (a spear cannot defeat full plate; the arming can at least close
     #     and attempt the gaps). The old 0.10 floor was calibrated to the pre-correction inflated thrust; a genuine
     #     ZEROING bug (the reach lever going fully dead) is already caught by the STRICT >0.5 none/light assertions
     #     above, so here we assert only that plate correctly brings them below dominance.
     #     [ED-PC-0033] the stale-grip fix could have INVERTED this (a freely re-presenting spear field-WON heavy at ~0.97),
     #     but the represent_measure_p gate crowds a pure point off plate (an armoured man who does not fear the point walks
-    #     it down), holding the spear at ~0.08 true (yari ~0.40) — the near-total loss is PRESERVED, now grounded in the
+    #     it down), holding the spear at ~0.08 true (yari ~0.40 — ED-PC-0035: NOT a 'near-total loss'; the older ~0.05 phrasing
+    #     above was never reconciled with yari's real value, so the band is stated honestly here as a stalemate LOSS, i.e.
+    #     clearly below dominance, which is exactly what the assertion checks) — the loss is PRESERVED, now grounded in the
     #     crowding physics rather than an accidental grip artifact.
     for w in ('spear', 'yari'):
         s = share[(w, 'heavy')]

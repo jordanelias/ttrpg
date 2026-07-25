@@ -114,14 +114,14 @@ def close_tempo(c, cfg, fatigue=0.0):
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
 # ---------- stamina ----------
-def stamina_max(c):
-    return c.stamina_max          # the combatant HOSTS its derived figures; thin accessor (back-compat)
+# ED-PC-0035: the `stamina_max(c)` back-compat accessor is REMOVED (zero callers; read c.stamina_max directly —
+# the combatant hosts its own derived figures).
 def act_cost(c, commit, cfg):
     return (cfg['ACT_BASE']+cfg['ACT_WEIGHT']*wield_heft(c,cfg)+cfg['ACT_COMMIT']*commit)*cfg['COST_SCALE']   # DERIVED g-aware heft (Stage 2b)
 
 # ---------- concentration (Focus+Spirit tracker) ----------
-def conc_max(c, cfg):
-    c.derive_stats(cfg); return c.conc_max   # the combatant HOSTS it (3F+2S, ED-902); thin accessor (back-compat)
+# ED-PC-0035: the `conc_max(c,cfg)` back-compat accessor is REMOVED (zero callers; call c.derive_stats(cfg) and read
+# c.conc_max — the combatant hosts it, 3F+2S, ED-902).
 def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
@@ -248,7 +248,7 @@ def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fa
 # agility x one-handedness (light + free hand voids); wind from blade_guard x rigidity(cross_section) x bind-leverage
 # (MoI) x edge-length. So a rapier's parry-1.0 EMERGES from its hand_guard, a poleaxe's wind from its blade-leverage.
 assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-set(GEOMETRY)}"
-def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
+def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
     rd=reading(defender,cfg)-reading(aggressor,cfg)
     rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
@@ -263,7 +263,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     elif mode=='dodge':
         sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill('dodge')
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
-        sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + cfg['CHOKE_BIND_K']*choke + defender.skill('bind')
+        sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + defender.skill('bind')   # ED-PC-0035: the `+ CHOKE_BIND_K*choke` term is GONE — `choke` was hardcoded 0.0 by the only caller, so it was a structural zero (see config.py)
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
     _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
     _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
@@ -700,17 +700,9 @@ def leverage(c, cfg):
     if w['hands']==2: lev += cfg['LEVER_2H']                    # two hands = more control over the lever
     return lev
 
-def impose_node(aggressor, defender, hit, bind, riposte, cfg, rng, TR):
-    """RETIRED FIAT (Jordan ruling 2026-07-23, ED-PC-0023) — a NO-OP, returns the emergent (bind, riposte) unchanged.
-    This once FORCED a tradition's preferred node (German impose-the-bind / Italian-etc refuse-it) via a label-keyed
-    coin-flip (IMPOSE_BIND_BOOST/IMPOSE_REFUSE_P) that OVERRODE the emergent resolution — top-down scripting (§0),
-    the antithesis of "each combatant resolves in a way that feels correct to their style." A tradition's node-
-    preference must EMERGE from the fighter's BUILD, not be imposed by a rule: a fighter binds more because they
-    INVESTED in binding (skill('bind') + a bind-friendly weapon's wind affinity + learned binding abilities +
-    disposition) — all already live in mode_sigma/bind_sigma. Kept as a no-op stub (IMPOSITION_GATE defaults False,
-    so it is never called; the call-site guard stays as the documented off-switch) rather than deleted outright, so
-    the retirement is a single visible ruling; the full call-site removal is a follow-up. Reads no cfg/rng now."""
-    return bind, riposte
+# ED-PC-0035: `impose_node` (the retired imposition-gate no-op stub) and its call-site guard are DELETED — the
+# follow-up ED-PC-0023 explicitly owed. The ruling stands in the ledger; a no-op that still appears in the
+# resolution path only invites someone to 'reconnect' it.
 
 
 # weapons that have a half-sword form, and the form mapping (base <-> shortened)
@@ -723,8 +715,14 @@ def affords_halfsword(w):
     Both are physical/attested facts on the record, so the capability EMERGES rather than being name-whitelisted —
     this de-vestigialises `geo['halfsword']` (was computed by geometry.bake but read nowhere) and retires
     `HALFSWORD_FORM`/`HALFSWORD_BASE` AS BEHAVIOUR GATES (they remain only the base<->form NAME data below). On the
-    un-extended roster the derived set is exactly {longsword, estoc} (byte-identical; only those two carry a
-    grippable element); marking a further attested ricasso grippable=True is the JD-3 roster-expansion decision."""
+    un-extended roster the derived set was exactly {longsword, estoc}; marking a further attested ricasso
+    grippable=True is the JD-3 roster-expansion decision.
+    [ED-PC-0035 correction] That set is STALE: ED-PC-0016 marked greatsword and flamberge grippable too, so the
+    derived set is now {longsword, greatsword, flamberge, estoc} — FOUR weapons. What still limits the auto-SWITCH to
+    two is `HALFSWORD_FORM` (whose two entries the ED-PC-0016 auto-switch decision deliberately HELD), which means
+    that name table is currently doing exactly the behaviour-gating this docstring says it no longer does. Tracked as
+    a live inconsistency, not silently reworded: giving greatsword/odachi real half-sword forms is the Batch-6 roster
+    item (they presently lose EVERY decided plate fight — an arming sword beats a greatsword at plate)."""
     return (any(e.get('grippable') for e in w.get('elements', ()))
             and bool(w.get('geo', {}).get('halfsword', False)))
 
@@ -749,7 +747,11 @@ def halfsword_target(c, closed, opp_armor):
 def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     """Standing measure-domain sigma the DEFENDER's reach imposes on the aggressor (proportional to gap, weighted
     high unarmoured, falling with armour). +ve lowers the attacker's net. I6/D6: a small facing PROFILE term
-    (`[FIAT — C1]`) — a defender presenting more profile (higher facing) is a slightly easier standing target;
+    (`[FIAT — C1]`) — a defender presenting more profile (higher facing) is a slightly HARDER standing target (a narrower
+    presentation, more voiding — matching weapon_physics.facing_pref's own "+ = 1H profile = narrower target" convention).
+    [ED-PC-0035 correction: this line previously said "easier", which INVERTED the implemented direction — `profile` is
+    ADDED to reach_pen and assemble_net_sigma SUBTRACTS reach_pen, so raising the defender's facing lowers the attacker's
+    net. A future "fix" trusting the old prose would have silently flipped a live signed term.];
     exactly 0 at neutral facing (0.0, the pre-I6 default). Pure."""
     gap=er[defender]-er[aggressor]
     foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.eff_cw(defender, 'balance')
@@ -921,7 +923,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
     modes=['parry','dodge','wind']
-    msig={m:mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
+    msig={m:mode_sigma(m,aggressor,defender,commit,read_win,fat_d,cfg) for m in modes}
     mode=max(msig,key=msig.get) if read_win else modes[rng.randrange(3)]   # stdlib uniform int (ED-1085)
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
 

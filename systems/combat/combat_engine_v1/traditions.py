@@ -14,7 +14,7 @@ raw numbers below survive only as `set`/`mode`/provenance metadata, read by noth
 # Each tradition: the named-set it expresses (bridge mapping) + the cognitive-mode label. The old 7-dim channel-weight
 # vector was REMOVED 2026-06-29 (degenerate top-down tuning) and its vestigial numbers deleted 2026-06-29 (read by
 # nothing). Differentiation is bottom-up: the abilities it grants (ability_primitives) + the imposition gate
-# (PREFERRED) + familiarity. `mode` is flavour metadata (the governing-analogue label); not read at resolution.
+# familiarity. `mode` is flavour metadata (the governing-analogue label); not read at resolution.
 TRADITIONS = {
     'german':   dict(set='Bind Fighter',    mode='tactile'),
     'italian':  dict(set='Thrust Duelist',  mode='temporal-spatial'),
@@ -35,15 +35,13 @@ ADJACENT = {                        # pairs that historically exchanged (read ea
     frozenset({'japanese', 'filipino'}),
 }
 
-# Each tradition's PREFERRED node — the part of the state graph it fights to impose (the imposition gate, decoupled
-# from any channel magnitude). 'bind'=German (the crossing); 'counter'=Italian/Japanese/English (refuse the bind);
-# 'measure'=Spanish (the círculo); 'burst'=Chinese; 'flow'=Filipino. Read only when cfg['IMPOSITION_GATE'] is on.
-PREFERRED = {'german': 'bind', 'italian': 'counter', 'spanish': 'measure', 'japanese': 'counter',
-             'english': 'counter', 'chinese': 'burst', 'filipino': 'flow', 'none': None}
-
-
-def preferred(trad):
-    return PREFERRED.get(trad)
+# ED-PC-0035: PREFERRED / preferred() are GONE. They were the IMPOSITION GATE's data — the node a tradition "fights to
+# impose" — and that gate was retired as top-down scripting by Jordan's ED-PC-0023 ruling. They then sat here with ZERO
+# live readers while three comments (this module's header, tradition.py's, ability_primitives.eff_cw's) still described
+# the gate as a live differentiation mechanism, and the config's own note claimed PREFERRED was "read only when
+# IMPOSITION_GATE is on" — false even then, since the retired impose_node read neither. Tradition preference now EMERGES
+# from BUILD (skill('bind') + weapon wind affinity + learned abilities + disposition, all live in mode_sigma/bind_sigma);
+# a future EMERGENT selection-bias must be derived from those, not restored from a label table.
 
 
 def familiarity(reader_trad, opponent_trad):

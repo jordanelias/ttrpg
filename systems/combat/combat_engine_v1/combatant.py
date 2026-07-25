@@ -128,7 +128,9 @@ class Combatant:
         # ---- live state (reset/managed by the wrapper each bout) ----
         self.stamina=0.0
         self.conc=0.0
-        self.ready=0.0
+        # ED-PC-0035: the dead `self.ready` attribute is GONE — it was written here and in wrapper._init_live but READ
+        # nowhere; the live readiness state is the wrapper's LOCAL `ready={A:..,B:..}` dict. Carried state that resets
+        # to no effect is worse than absent state: it reads as though the engine tracks it.
         self.initiative=0.0                  # the Vor/Nach state (signed; +ve = holds initiative). Reset/managed by wrapper.
         self.poise=1.0                   # kuzushi/balance (1.0=balanced, broken downward). Reset/managed by wrapper.
     # weapon vector accessors
