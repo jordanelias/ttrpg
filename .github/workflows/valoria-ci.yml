@@ -540,8 +540,15 @@ jobs:
     needs: syntax-check
     # tests/valoria alone runs ~9m on hosted runners (combat/sim-heavy cases + the two grid-mode
     # byte-exact subprocess batteries), plus pip install + tests/contracts — the old 5-min cap
-    # cancelled the job mid-run. 12 min gives headroom above the observed ~9m23s full-suite time.
-    timeout-minutes: 12
+    # cancelled the job mid-run. 12 min gave headroom above the observed ~9m23s full-suite time.
+    # [RAISED 12 -> 16, ED-PC-0040] That headroom is now spent. This batch added ~2m20s of roster-wide
+    # combat sweeps — the primitive-derived plate-participation guard (~25s), its four mutation cases
+    # (~58s), and the armour-reference drift gate (~54s) — all of which sweep all 54 weapons by design,
+    # because restricting them to a watched subset is the exact blind spot they exist to close. At the
+    # old cap a slow runner would have landed ~11m43s against 12m and cancelled mid-run, which reads as
+    # a mysterious red rather than as "the suite got slower". Sized so the added cost is visible in this
+    # comment rather than discovered by a cancelled job.
+    timeout-minutes: 16
     permissions:
       contents: read
     steps:
