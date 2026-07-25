@@ -450,6 +450,26 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
         run: python3 tools/ci_sim_fabrication_check.py
 
+  claim-provenance-check:
+    # ED-PC-0040. Sibling to sim-fabrication above and aimed at the gap it leaves: that gate asks whether a CONSTANT
+    # in code is cited, this one asks whether a MEASURED CLAIM in a ledger entry names an instrument that can
+    # reproduce it. Three consecutive PC-lane batches shipped confident numbers ("estoc -> 0" for the roster's most
+    # decisive plate weapon; "a tier the fix was never meant to touch" for a tier it moved 23 points) that only an
+    # expensive adversarial review caught, batches later.
+    name: Claim Provenance (measured claims name a re-runnable source)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Every quantitative ledger claim names an instrument that exists
+        run: python3 tools/ci_claim_provenance_check.py
+
   supersession-check:
     name: Supersession Churn Guard (warn)
     runs-on: ubuntu-latest

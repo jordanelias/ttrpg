@@ -35,6 +35,20 @@ def _mods():
     return C, core, S, WP, CFG
 
 
+def _instrument():
+    """The armour-interaction measurement instrument (`workbench/armour_participation.py`, ED-PC-0040).
+
+    Imported rather than re-implemented, per CLAUDE.md §8's every-rule-lives-once invariant. It is the single owner
+    of (a) the armour-defeat CAPABILITY derivation — which must consider every grip a weapon can reach in a fight,
+    not just its base form — and (b) the position-swapped duel harness. A guard that re-derived either would be free
+    to drift from the tool whose output justified the guard's own bands, which is precisely how ED-PC-0039 shipped a
+    participation guard whose comment contradicted its own commit's measurements."""
+    pytest.importorskip("numpy")
+    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    import armour_participation
+    return armour_participation
+
+
 # ── SINGLE-SOURCE ───────────────────────────────────────────────────────────────────────────────
 def test_percussion_authority_single_source():
     """core.p_auth (the duplicate that read the hand-set pob_frac) was deleted and unified onto
@@ -978,14 +992,163 @@ def test_reach_class_beats_arming_not_inverted():
     # runaway to bound. What is still guarded: if the guisarme DOES decide fights, it must not sweep them.
     _g = share[('guisarme', 'heavy')]
     assert _g is None or _g <= 0.97, f"guisarme vs arming at heavy should not sweep plate ({_g!r})"
-    # [RESTORED ED-PC-0039] Tolerating `None` everywhere at plate deleted a LOAD-BEARING guard, and the adversarial
-    # review proved it with two mutations the suite then sailed through: (a) core.strike returning 0 for the guisarme
-    # vs heavy, and (b) every long-lever point returning 0 vs heavy — a whole weapon class silently losing all plate
-    # function — both of which the parent's `0.30 <= share` floor had caught. The property that must survive
-    # capability-gating is not "these weapons win at plate" (they should not) but "PLATE COMBAT IS NOT UNIVERSALLY
-    # MUTE": weapons that genuinely defeat a harness must still settle fights there. Guarded on a defeater, whose
-    # capability clears the tier by construction, so it cannot be satisfied by luck.
+    # [RESTORED ED-PC-0039; SCOPE CORRECTED ED-PC-0040] Tolerating `None` everywhere at plate deleted a LOAD-BEARING
+    # guard: the property that must survive capability-gating is not "these weapons win at plate" (they should not)
+    # but "PLATE COMBAT IS NOT UNIVERSALLY MUTE" — weapons that genuinely defeat a harness must still settle fights
+    # there. This one-weapon floor is kept as a cheap in-loop sentinel on the sample this test already pays for; it is
+    # NOT the real guard. The real guard is roster-wide and primitive-derived —
+    # `test_plate_participation_tracks_armour_defeat_capability` below — because a single-weapon floor is trivially
+    # satisfied while the rest of the defeater class dies (the ED-PC-0039 review killed bec_de_corbin + lucerne_hammer
+    # + goedendag at plate and the whole 806-test suite passed).
+    # [CORRECTION, ED-PC-0040] the ED-PC-0039 comment here claimed the poleaxe's "capability clears the tier by
+    # construction, so it cannot be satisfied by luck". Only the first half is true, and only STATICALLY: its blunt
+    # adef_cap is 1.216 vs the 0.72 heavy threshold, but the cap it REALIZES in a fight depends on the mode it selects
+    # turn by turn (measured mean ~0.60), so "by construction" overstated it. The floor is empirical (measured 0.93-0.94
+    # decided at n=60/600), not structural.
     assert decided[('poleaxe', 'heavy')] > 0.50, (
-        f"the poleaxe DEFEATS plate (adef_cap clears the tier) yet settled only "
+        f"the poleaxe DEFEATS plate (blunt adef_cap 1.22 vs the 0.72 heavy threshold) yet settled only "
         f"{decided[('poleaxe', 'heavy')]:.0%} of its heavy fights — plate has gone mute for weapons that "
         f"should decide there")
+
+
+def test_plate_participation_tracks_armour_defeat_capability(n=40):
+    """[ED-PC-0040] The roster-wide form of the plate-participation guard: across EVERY weapon in the roster,
+    whether it can settle a fight against plate must track its ARMOUR-DEFEAT CAPABILITY, in both directions.
+
+    Membership is DERIVED, never listed: a weapon's capability is `max(adef_cap)` over every mode and over every grip
+    it can actually reach in a fight (i.e. including its `HALFSWORD_FORM` target, which `wrapper` swaps it into when
+    closed vs medium/heavy). That derivation is what makes this a primitive-law guard rather than a name table — a new
+    weapon joins the right side of the partition automatically, and no weapon can be exempted by hand.
+
+    Why the single-weapon floor above is not enough: the ED-PC-0039 adversarial review zeroed bec_de_corbin,
+    lucerne_hammer and goedendag at plate simultaneously — three quarters of the percussive defeater class going
+    silently mute — and the full 806-test suite passed, because the one guard in the corpus watched the poleaxe.
+
+    The measured partition is cleanly separated, which is why loose bounds still bite (n=200, vs an arming sword):
+        capability >= 0.9 (comfortably clears 0.72):  decided 0.59 .. 0.99   (13 weapons)
+        capability in [0.72, 0.9) (marginal):         decided 0.23          (main_gauche)
+        capability <  0.45 (well under):              decided 0.00 .. 0.12  (max = ranseur, KNOWN-OPEN below)
+    Bounds are set ~3+ sigma off the measured values at this test's n, so this is a class-death / covert-killer
+    detector, not a balance assertion. It deliberately does NOT constrain win-share: at plate the arming sword
+    reference can barely mark a harness (its own cap is 0.504), so every weapon that decides at all wins ~0.9-1.0
+    of what it decides. The decided-RATE is the only statistic with physics in it at this tier.
+
+    KNOWN-OPEN (disclosed, not guarded away): the ranseur clears nothing (cap 0.284) yet still settles ~12% of its
+    plate fights, and wins all of them. Capability-gating is a graded threshold multiplier
+    (`PEN_DEFICIT_K`), not a hard gate, so a large enough raw magnitude still gets through — the ranseur is a heavy
+    two-handed lugged spear and has that magnitude. The ceiling below is set to CATCH a regression toward the old
+    ungated behaviour while ACKNOWLEDGING the current residual; tightening it is the fix for that residual, not a
+    change to this test."""
+    C, core, S, WP, CFG = _mods()
+    AP = _instrument()
+
+    thr = CFG['ADEF_THRESHOLD']['heavy']
+    # SINGLE SOURCE (CLAUDE.md §8): the capability derivation is NOT re-implemented here. It lives once, in the
+    # workbench instrument, and both this gate and the human-facing measurement read that one definition — so the
+    # guard cannot silently drift from the tool used to justify its bands. The first draft of this test DID inline
+    # its own copy; that is the duplication class this repo treats as a bug.
+    # n defaults to 40 (roster-wide: 54 weapons x 40 fights — enough for THESE bounds, see the separation table
+    # above). It is a parameter ONLY so the mutation meta-gate below can run the same guard cheaply; a killed weapon
+    # reads exactly 0.00 at any sample size. Do not lower the default to make the suite faster.
+    decided, cap = {}, {}
+    for w in sorted(C.WEAPONS):
+        cap[w] = AP.capability(w, CFG)
+        decided[w], _ = AP._duel(w, 'heavy', n, CFG)
+
+    clears = sorted(w for w in cap if cap[w] >= 0.9)
+    marginal = sorted(w for w in cap if thr <= cap[w] < 0.9)
+    under = sorted(w for w in cap if cap[w] < 0.45)
+    assert len(clears) >= 10 and marginal and len(under) >= 30, (
+        f"the capability partition itself collapsed ({len(clears)} clear / {len(marginal)} marginal / "
+        f"{len(under)} under) — adef_cap or the heavy threshold moved; re-derive the bands before trusting them")
+
+    # (A) FORWARD: a weapon that comfortably defeats a harness must still settle fights inside one.
+    mute = {w: decided[w] for w in clears if decided[w] <= 0.35}
+    assert not mute, (
+        f"plate has gone MUTE for weapons that defeat it — {', '.join(f'{w} (cap {cap[w]:.2f}, decided {decided[w]:.0%})' for w in sorted(mute))}. "
+        f"Every one of these clears the {thr} heavy threshold with margin; if they cannot settle a fight against "
+        f"plate then the damage path has stopped agreeing with the capability path (ED-PC-0038's whole point).")
+    # the class must not thin out either: a majority die-off with two survivors passes (A) per-weapon only if each
+    # survivor is above the floor, so ALSO require the class to be broadly participating.
+    strong = [w for w in clears if decided[w] > 0.50]
+    assert len(strong) >= len(clears) - 2, (
+        f"only {len(strong)} of {len(clears)} plate-defeating weapons settle a majority of their plate fights "
+        f"({', '.join(sorted(set(clears) - set(strong)))} below 50%) — the defeater CLASS is thinning, which a "
+        f"per-weapon floor alone would not catch")
+
+    # (B) MARGINAL: a weapon that only just clears the tier need not dominate, but must not be fully mute either.
+    for w in marginal:
+        assert decided[w] > 0.05, (
+            f"{w} clears the heavy threshold (cap {cap[w]:.2f} >= {thr}) yet settled {decided[w]:.0%} of its plate "
+            f"fights — the marginal band has been gated off entirely")
+
+    # (C) CONVERSE: a weapon that comes nowhere near defeating a harness must not be a covert plate-killer.
+    killers = {w: decided[w] for w in under if decided[w] >= 0.40}
+    assert not killers, (
+        f"covert plate-killer(s): {', '.join(f'{w} (cap {cap[w]:.2f}, decided {decided[w]:.0%})' for w in sorted(killers))} "
+        f"— capability is far below the {thr} threshold yet they settle plate fights freely, so penetration has "
+        f"decoupled from armour-defeat capability again")
+
+
+# ── META-GATE: THE GUARDS MUST THEMSELVES BE MUTATION-TESTED (ED-PC-0040) ─────────────────────────
+# The four-dimension audit's remediation arc half-stood three batches running, and the meta-review found one
+# recurring cause: a guard was written, declared load-bearing, and never attacked. ED-PC-0039's "restored plate
+# participation guard" asserted ONE weapon; the adversarial review killed three OTHER members of the same class at
+# plate and the whole 806-test suite passed. Nothing in the corpus made that discoverable before review.
+#
+# This gate makes it mechanical. It applies a set of DECLARED MUTATIONS to the engine and asserts the guard above
+# FAILS on each one. A blind guard is now a red build, not a review finding — the lesson converted into enforcement
+# rather than into a resolution to be more careful.
+#
+# Adding a mutation here is cheap and is the expected way to raise a guard's proven sensitivity. Removing one, or
+# weakening a guard until a mutation stops being caught, is the thing this file exists to make loud.
+
+def _kill_at(core_mod, weapons, armor='heavy'):
+    """Context-manager-ish patch: `core.strike` returns 0 for these weapons against this armour tier. Models the
+    exact failure mode being guarded — a weapon (or a whole class) silently losing all function at a tier."""
+    orig = core_mod.strike
+    targets = set(weapons)
+
+    def mutated(attacker, defender, deg, cfg, net=None, pool=None):
+        if getattr(defender, 'armor', None) == armor and getattr(attacker, 'weapon', None) in targets:
+            return 0
+        return orig(attacker, defender, deg, cfg, net, pool)
+    core_mod.strike = mutated
+    return orig
+
+
+MUTATIONS = [
+    # (label, weapons zeroed at plate) — each must make the participation guard fail.
+    ("the percussive defeater class, minus the one weapon ED-PC-0039 guarded",
+     ('bec_de_corbin', 'lucerne_hammer', 'goedendag')),
+    ("the puncture defeater class (daggers + the half-sword forms)",
+     ('dagger', 'misericorde', 'rondel', 'stiletto', 'longsword_halfsword', 'estoc_halfsword')),
+    ("a single defeater — the poleaxe, i.e. the only case the ED-PC-0039 guard could see",
+     ('poleaxe',)),
+    ("the two heaviest percussive defeaters",
+     ('mace', 'goedendag')),
+]
+
+
+@pytest.mark.parametrize("label,weapons", [(m[0], m[1]) for m in MUTATIONS])
+def test_plate_participation_guard_is_not_blind(label, weapons):
+    """Every declared mutation MUST be caught by test_plate_participation_tracks_armour_defeat_capability, AND the
+    failure must NAME the weapons that were killed.
+
+    The name check is the point, not a nicety. `pytest.raises(AssertionError)` alone would let this meta-gate pass
+    for the wrong reason — sampling noise tripping some unrelated clause would read as "mutation caught" while the
+    guard was in fact still blind to the mutation. Requiring the mutated weapons in the message makes the
+    attribution exact, which in turn makes it safe to run at a smaller n (a killed weapon reads exactly 0.00
+    decided at any sample size, so detection does not need the full instrument)."""
+    C, core, S, WP, CFG = _mods()
+    orig = _kill_at(core, weapons)
+    try:
+        with pytest.raises(AssertionError) as exc:
+            test_plate_participation_tracks_armour_defeat_capability(n=24)
+        msg = str(exc.value)
+        missed = [w for w in weapons if w not in msg]
+        assert not missed, (
+            f"the guard failed, but not FOR the mutation ({label}): {missed} were zeroed at plate and are not named "
+            f"in the failure. The guard may be blind to them and tripping on something else. Message was: {msg}")
+    finally:
+        core.strike = orig

@@ -6,16 +6,18 @@
 covering *all directions and conditionals*; then resolve every finding in priority order, batch by batch, with an
 adversarial audit after each batch.
 **Prose:** `combat_four_dimension_audit_infill.md` (co-filed; method, evidence, per-finding detail, verification).
-**Status: IN PROGRESS** — Batches 1–5 landed (ED-PC-0034..0039); Batch 6 pending.
+**Status: IN PROGRESS** — Batches 1–5.2 landed (ED-PC-0034..0040); Batch 6 pending.
 
 Every batch is adversarially reviewed after landing, and the record is deliberately unflattering: batches 1 and 2
-returned **stands**, batch 3 **stands with follow-ups**, and batches 4 and 5 both returned **HALF-STANDS** — each
-because a fix of mine introduced a *new* defect on the same code path (batch 4: per-arm quality sourced from the
-whole weapon instead of the winning element; batch 5: a negative sigma-domain penalty fed into a capability deficit,
-annihilating the cutter class). Both were corrected in a follow-up (4.1, and ED-PC-0039). Two reviews also caught me
-**moving a goalpost** — a ceiling raise justified as "sampling noise" over a real +27pp regression — and one caught a
-**fabricated file entry** in a ledger `files` array. That cadence is the only reason those are in the record rather
-than in the engine.
+returned **stands**, batch 3 **stands with follow-ups**, and batches 4, 5 **and 5.1** all returned **HALF-STANDS** —
+each because a fix of mine introduced a *new* defect, or overstated its own reach, on the same code path (batch 4:
+per-arm quality sourced from the whole weapon instead of the winning element; batch 5: a negative sigma-domain penalty
+fed into a capability deficit, annihilating the cutter class; batch 5.1: a "restored" participation guard that watched
+one weapon out of a class of fourteen, plus four factual claims in its own ledger entry and comments that measurement
+contradicts). Each was corrected in a follow-up (4.1, ED-PC-0039, ED-PC-0040). Reviews have also caught me **moving a
+goalpost** — a ceiling raise justified as "sampling noise" over a real +27pp regression — a **fabricated file entry**
+in a ledger `files` array, and an **index that claimed clean reviews it had not had** (this file, corrected by
+ED-PC-0040). That cadence is the only reason those are in the record rather than in the engine.
 
 ## Method (skeleton)
 
@@ -52,6 +54,7 @@ full-file reads + provenance spot-checks against `registers/editorial_ledger_pc.
 | F21 | tuning | flat `ADEF_CUT=−0.90` cutter cliff (a gambeson makes a falchion an 8% weapon) | high | 6 | pending |
 | F22 | tuning | roster gaps: sparr_axe horn, falchion point, greatsword/odachi half-sword; staff can't wound | med-high | 6 | pending |
 | F23 | orphans | ability/`eff_cw` surface hollow: 5 of 8 channels are identity ×1.0 for every legal build | med | 6 | pending |
+| F24 | conflicts | **selection contradicts damage**: `select_mode` picks a head that provably cannot wound — falchion 46/47 plate strikes select `point` for 0 damage every time; podao selects `point` (mean 0.00) over its own `curved_cut` (mean 2.40); every 2H sword flips to `blunt` at mail and lands ~3× less than the arming sword it faces | high | 6 | pending (found by the ED-PC-0039 review follow-through) |
 
 **Cleared (checked, not findings):** no name-keyed weapon/tradition branches in live resolution; imposition gate is a
 verified no-op; provenance spot-checks (ED-1041, ED-901, ED-PC-0002/0009/0022/0023/0027/0029..0033) all passed — **no
@@ -69,10 +72,53 @@ consumers; PEN_THR light-inertness and the represent-gate RNG-stream inertness h
 | 4 | structural thresholds (F16–F18) | ED-PC-0037 | 1H cohort spread compressed ~25–30%; mirrors clean at n=4000. Review: **half-stands** |
 | 4.1 | review corrections | — | element-local sourcing; goalpost + fabricated-provenance corrections |
 | 5 | plate damage ↔ adef_cap (F19–F20) | ED-PC-0038 | `adef_cap` moved to core as single owner. Review: **half-stands** |
-| 5.1 | review corrections | ED-PC-0039 | capability clamped at ≥0 (cutter class restored); K swept; participation guard restored |
-| 6 | roster + cut grading (F21–F23) | — | pending |
+| 5.1 | review corrections | ED-PC-0039 | capability clamped at ≥0; K swept; a one-weapon participation guard added. Review: **half-stands** |
+| 5.2 | 0039 review corrections | ED-PC-0040 | roster-wide participation guard (mutation-verified); 4 false claims retracted; medium round trip + selection/damage disagreement measured |
+| 6 | roster + cut grading (F21–F23, F24) | — | pending |
 
-## Known-open after batch 5.1 (carried, not hidden)
+**Correction to this table (ED-PC-0040).** The 5.1 row previously read "cutter class restored; participation guard
+restored" and this document previously said batches 1–3 all returned *stands*. Both were overclaims, and the ED-PC-0039
+review caught them. The clamp *un-annihilated* the cutter class but did not restore it — it erased all grading *within*
+the class (every pure cutter's capability floors to the same 0, so a bardiche and a shamshir now fail plate identically),
+and it recovered only part of the medium-tier loss. The guard "restored" was one assertion on one weapon; the review
+killed three other plate-defeaters simultaneously and the whole 806-test suite passed.
+
+## Meta-review → enforcement (ED-PC-0040)
+
+Three consecutive half-stands (batches 4, 5, 5.1) share **one cause**, and it is not subtle physics: quantitative
+claims were written into ledger entries and code comments faster than they were measured, and the scripts that would
+have falsified them were ad-hoc and thrown away. Every finding the reviews returned was reachable by a script that
+takes two minutes to run. The measured shape of the problem: **31,000 characters** of ledger prose across
+ED-PC-0034..0040, `config.py` at **74%** comment density, and batch 5.1 shipping **+27/−5 lines of code** wrapped in
+~3,500 characters of claim.
+
+The lessons are therefore converted into gates rather than into resolutions to be more careful. A resolution is what
+failed three times.
+
+| Lesson | Enforcement | Catches |
+|---|---|---|
+| Measurement must be a committed artifact, not scratch | **`workbench/armour_participation.py`** — the four views (`participation`, `strikes`, `tiers`, `--drift`) that produced every number in §5.2, in the repo and re-runnable | the whole class — a claim is now a *query*, not a recollection |
+| A guard must be attacked before it is trusted | **`test_plate_participation_guard_is_not_blind`** — declared mutations that MUST make the participation guard fail, *and* must be named in its failure message | **S1**: a guard watching 1 of 14 while the class dies |
+| Every rule lives once (CLAUDE.md §8) | the CI guard **imports** `capability()`/`_duel()` from the instrument instead of re-deriving them (the first draft inlined a copy — that duplication was itself the bug class) | guard and instrument drifting apart |
+| Collateral tier damage must be visible | **`tests/valoria/data/combat_armour_reference.json`** + `test_combat_armour_reference.py` — full roster × all four tiers, drift gate at 0.15; regeneration is manual and *the diff is the disclosure* | **S3**: a plate fix silently moving mail by 23pp |
+| A measured claim must name a re-runnable source | **`tools/ci_claim_provenance_check.py`** — blocking, CI job `claim-provenance-check` + local hook; a ledger entry stating measured numbers needs `MEASURED-BY: <path>` and the path must exist | **S2/S8**: "estoc → 0" about the roster's most decisive plate weapon |
+
+Verified, not asserted: the drift gate was confirmed to **fire** on a real change (`PEN_DEFICIT_K` 6.0→2.0 → 13 cells
+flagged by name), and all four declared mutations are caught by the participation guard. A gate that has never failed
+is decoration.
+
+**The limits, stated plainly.** The provenance gate checks that a source is *named and present*, not that a number is
+*correct* — the same limit CLAUDE.md §7 records for the anti-fabrication gate; a reviewer still has to run the thing.
+Its cutover is an **ID, not a date** (ED-PC-0040 forward), because every entry in the failing arc carries the same date
+as the entry establishing the rule; the five grandfathered entries are corrected by retraction, not excused. And the
+drift gate is defeated the moment someone regenerates the reference to turn a build green without reading the diff.
+
+**What no gate here fixes:** the treadmill itself. F19 (damage vs capability), F24 (selection vs damage) and S4
+(grading inside the cutter class) are one defect — three separate models of "what does this weapon do to this armour",
+reconciled pairwise by patch. Each batch closes one pair and exposes the next. That is a design call for Jordan, not
+something a validator can enforce.
+
+## Known-open after batch 5.2 (carried, not hidden)
 
 - **F5/F18 — the flagship principle is attenuated, not achieved.** At equal capability, head mass still orders
   penetration (partisan cap 0.176 out-damages spear cap 0.288 at every K). A magnitude *knee* cannot express
@@ -86,3 +132,20 @@ consumers; PEN_THR light-inertness and the represent-gate RNG-stream inertness h
   behavioural fact worth a design decision rather than an inheritance.
 - **`PEN_DEFICIT_K` is exported to a Godot contract whose port has no penetration knee at all** — pre-existing
   parity red, now carrying a second orphan constant.
+- **The ranseur is a surviving covert plate-killer** (ED-PC-0040). Capability 0.284 against a 0.72 threshold, yet it
+  settles ~12% of its plate fights and wins ~100% of what it settles. The knee is a graded threshold multiplier, not a
+  gate, so raw magnitude still buys through — the F19 residual, now named to a specific weapon. `guandao` (cap 0.127,
+  mean 2.76/strike) and `partisan` (cap 0.171, 1.96) are the same class one rung lower.
+- **The clamp erased grading *inside* the cutter class** (ED-PC-0040, from the 0039 review). Every pure cutter's
+  capability floors to 0, so the knee treats a bardiche and a shamshir as failing plate identically. Correct as a
+  *floor*, wrong as a *model*: F21's mass/keenness grading is what has to carry the difference.
+- **Medium tier never round-tripped** (ED-PC-0040, measured — see infill §5.2). Against arming at mail, n=200:
+  odachi 0.67→0.44→**0.26**, naginata 0.82→0.57→0.57, staff 0.21→0.09→0.09, podao 0.61→0.32→0.44,
+  sparr_axe 0.36→0.07→0.22 across pre-0038 → 0038 → 0039. The 0039 clamp recovered part of the axe/podao loss, nothing
+  of staff/naginata, and made the **odachi worse** — the grip/room threading lowered its realized capability. ED-PC-0038
+  said mail was "a tier the fix was never meant to touch"; it touched it, permanently.
+- **F24: mode selection and the damage path disagree** (ED-PC-0040). See the roster table above. This is the same
+  defect class ED-PC-0038 set out to close, one layer up: 0038 reconciled *damage* with *capability*, but *selection*
+  is still keyed on afforded effectiveness with no reference to whether the chosen head can wound the armour in front
+  of it. Batch-6 head item; deliberately NOT patched in ED-PC-0040 (it is a `select_mode` change with golden-parity
+  blast radius, and the last two same-commit "while I'm here" fixes are why batches 4 and 5 both half-stood).

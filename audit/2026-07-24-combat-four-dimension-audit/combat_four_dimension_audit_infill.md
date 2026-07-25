@@ -135,6 +135,121 @@ isolation that established F2-not-a-lever as the cause is recorded above.
 Balance impact is contained: the affected multi-mode cutters at plate are mostly attrition stalemates (katana 3%,
 hook_sword 2%, odachi 3% decided), and guandao/guisarme remain where Batch 5 will address them on the merits.
 
+## 5.2 Batch 5.2 — the ED-PC-0039 review, and what it cost (ED-PC-0040)
+
+The ED-PC-0039 adversarial review was dispatched with an explicit adversarial prior: *"this is the second consecutive
+time a fix by this author on this exact code path introduced a new defect; assume the pattern continues until proven
+otherwise."* It returned **half-stands, again**. Its verified-green list is real — the 806-test claim, the ×10.7 / 1.62
+arithmetic, "defeaters untouched" by the clamp, the F7 argument-threading fix, the genuineness of the post-clamp K
+sweep, and no data loss in the register compression. What follows is only what did **not** survive.
+
+**S1 — the "restored participation guard" watched one weapon out of fourteen.** ED-PC-0039 claimed to have restored a
+load-bearing plate guard. It asserted `decided[('poleaxe','heavy')] > 0.50`. The review killed `bec_de_corbin` +
+`lucerne_hammer` + `goedendag` at plate simultaneously — three-quarters of the percussive defeater class going mute —
+and the **full 806-test suite passed**. A guard on one member of a class does not guard the class.
+
+*Fix (ED-PC-0040):* `test_plate_participation_tracks_armour_defeat_capability`, roster-wide and **primitive-derived**.
+Membership is never listed: a weapon's capability is `max(adef_cap)` over every mode **and every grip it can reach in a
+fight** — including its `HALFSWORD_FORM` target, which the wrapper swaps it into when closed vs medium/heavy. That last
+clause is what makes the derivation honest; without it the estoc (base point cap 0.522) and the longsword (0.613) look
+sub-threshold while being the two most decisive plate weapons on the board, because in a real fight they half-sword to
+1.104 and 1.020. The measured partition is cleanly separated, which is why loose bounds still bite (n=200 vs arming):
+
+| band | derivation | members | decided at plate |
+|---|---|---|---|
+| clears the tier | best-grip cap ≥ 0.9 | 13 (mace, goedendag, poleaxe, estoc(+halfsword), stiletto, lucerne, bec, rondel, longsword(+halfsword), dagger, misericorde) | 0.59 – 0.99 |
+| marginal | 0.72 ≤ cap < 0.9 | 1 (main_gauche, 0.744) | 0.23 |
+| well under | cap < 0.45 | 40 | 0.00 – 0.12 |
+
+Three clauses: **forward** (every comfortable defeater settles > 35% — catches the class going mute), a **class-count**
+clause (at most 2 of the 13 may drop below 50% — catches a partial die-off that a per-weapon floor would let through),
+and the **converse** (nothing far below the threshold may settle ≥ 40% — catches a covert plate-killer). Mutation-verified:
+the bec/lucerne/goedendag kill now fails with all three named in the message.
+
+**S1b — the two mutations ED-PC-0039 cited are, at the decided-rate level, null; and saying otherwise was the error.**
+Measured directly: zeroing the guisarme's plate damage takes its decided-rate 0.00 → 0.00 (it lands 517 nonzero strikes
+in 1572 at plate but never accumulates a decision), and zeroing every long-lever point takes all of spear/yari/ji/
+spetum/dangpa/bear_spear/guisarme 0.00 → 0.00. The *only* weapon either mutation observably moves is the **ranseur**
+(0.12 → 0.00) — and the ranseur's plate participation is itself a defect (below). Building a guard that catches these
+mutations would mean **guarding a defect into permanence**, so ED-PC-0040 does not. The correct statement, which
+ED-PC-0039 should have made, is that capability-gating rendered those particular mutations behaviourally inert.
+
+**S2 — a guard comment asserted something false about its own subject.** ED-PC-0039 justified the poleaxe floor with
+"capability clears the tier *by construction*, so it cannot be satisfied by luck". Only statically true: the poleaxe's
+blunt cap is 1.216 against a 0.72 threshold, but the cap it **realizes** turn-by-turn depends on the mode it selects
+(mean ≈ 0.60), and the same commit's own K-sweep shows the poleaxe is *not* K-invariant (13 → 10 → 7 across K = 0/6/12),
+directly contradicting the "by construction" framing. Comment corrected in place; the floor is empirical, not structural.
+
+**S3 — the medium tier never round-tripped, and ED-PC-0039 made one weapon worse.** ED-PC-0038 called mail "a tier the
+fix was never meant to touch". Measured share vs arming at medium, n=200, at the three commits:
+
+| weapon | 88b86c7 (pre-0038) | 7e4e738 (0038) | HEAD (0039) | net |
+|---|---|---|---|---|
+| odachi | 0.67 | 0.44 | **0.26** | **−41pp** (0039 made it *worse*) |
+| naginata | 0.82 | 0.57 | 0.57 | −25pp (clamp recovered nothing) |
+| podao | 0.61 | 0.32 | 0.44 | −17pp (clamp recovered +12) |
+| sparr_axe | 0.36 | 0.07 | 0.22 | −14pp (clamp recovered +15) |
+| staff | 0.21 | 0.09 | 0.09 | −12pp (clamp recovered nothing) |
+| changdao | 0.87 | 0.82 | 0.79 | −8pp |
+| tachi | 0.37 | 0.36 | 0.31 | −6pp |
+| greatsword / flamberge / katana / sabre / falchion / glaive | — | — | — | flat (≤2pp) |
+
+Two distinct causes, and neither is the one ED-PC-0039 fixed. Staff and naginata were **never in the ADEF_CUT branch**
+at all — they select `blunt` and `cut_thrust`, whose caps are positive (0.149, 0.244), so the clamp could not touch
+them; their loss is ED-PC-0038's deficit knee operating as designed at a tier nobody re-baselined (medium threshold
+0.45 lifts their `t` from 2.5 to 7.0 and 5.6). The odachi's further −18pp is **ED-PC-0039's own grip/room threading**:
+the knee now reads the grip-corrected capability instead of the neutral-grip one, which is *more* correct and lowered
+its per-strike damage 3.67 → 2.77. That is a defensible change with an undisclosed consequence — recorded here rather
+than reverted.
+
+**S5 — the covert plate-killer has a name.** ED-PC-0038's flagship claim was that capability now orders penetration.
+ED-PC-0039 admitted the principle was "attenuated, not achieved" but understated the breadth. Concretely: the
+**ranseur** (cap 0.284 vs a 0.72 threshold) still settles ~12% of its plate fights and **wins 100% of what it settles**;
+`guandao` (cap 0.127) lands mean 2.76 per plate strike and `partisan` (0.171) 1.96 — against a `spear` with better
+capability (0.288) at 0.22. The knee is a graded threshold *multiplier*, so a large enough raw magnitude still buys
+through. This is F19's residual localised to specific weapons, and it is now guarded in the *direction* it must not
+regress (converse clause above) while explicitly not guarded *away*.
+
+**S8 — ED-PC-0038's ledger stated a result that is flatly false.** It recorded "spear/yari/estoc → 0" per landed hit at
+plate. Measured at all three commits, the **estoc is the single most decisive plate weapon on the board**: it settles
+99% of its plate fights, lands nonzero damage on 93% of its strikes, mean 12.84 — because it auto-half-swords to a
+1.104 capability, the highest point capability in the roster. The spear is not 0 either (0.22 nonzero rate, mean 0.22 —
+i.e. it occasionally finds a gap for 1). Only the yari is near-0 (0.19 / 0.19, same shape). Retracted in ED-PC-0040's
+ledger entry; the original entry is left intact because the ledger is append-only.
+
+**S4 — the clamp erased grading inside the class it rescued.** Flooring capability at 0 is right as a *floor* and wrong
+as a *model*: every pure cutter now sits at exactly 0, so the knee cannot distinguish a bardiche from a shamshir. That
+distinction is F21's job (mass/keenness grading of `ADEF_CUT` in the sigma path) and batch 6 must now carry it, because
+0039 removed the only place it was — however wrongly — being expressed.
+
+**S9 — the index overclaimed its own review record.** Commit `257d9a7` said batches 1–3 landed clean and "both reviews
+so far returned stands, nothing reverted"; batches 4 and 5 had both half-stood by then. Corrected in the index, along
+with "cutter class restored" → "un-annihilated, not restored" and "participation guard restored" → one weapon of
+fourteen. `HANDOFF_PC.md` had not been updated since batch 3; updated.
+
+**F24 — the new finding this follow-through surfaced: selection contradicts damage.** Instrumenting `core.strike` by
+selected head at plate (20 fights/weapon, whole roster) shows `select_mode` repeatedly choosing a head that provably
+cannot wound what is in front of it:
+
+| weapon | selected head at plate | strikes | nonzero rate | mean damage |
+|---|---|---|---|---|
+| falchion | `point` | 46 | 0.00 | 0.00 |
+| glaive | `point` | 59 | 0.00 | 0.00 |
+| sabre | `point` | 56 | 0.00 | 0.00 |
+| podao | `point` | 35 | 0.00 | 0.00 |
+| podao | `curved_cut` | 10 | **1.00** | **2.40** |
+| odachi | `blunt` | 68 | 0.01 | 0.01 |
+| arming (reference) | `cut_thrust` | 146 | 0.76 | 1.20 |
+
+The podao row is the clean demonstration: it selects the mode that does nothing 78% of the time, over its own mode that
+works every time. Ten weapons land **literally zero** across the whole sample. And at *medium*, every 2H sword flips to
+`blunt` (odachi 703/703 strikes) for a mean of 2.77 against the arming sword's 8.48 — an ōdachi choosing to pommel-strike
+a man in mail rather than cut him, every single beat. This is the ED-PC-0038 defect class one layer up: 0038 reconciled
+*damage* with *capability*, but *selection* is still keyed on afforded effectiveness with no reference to whether the
+chosen head can defeat the armour it faces. **Deliberately not patched in ED-PC-0040** — it is a `select_mode` change
+with golden-parity blast radius, and bundling it into a review-response commit is precisely the pattern that made
+batches 4, 5 and 5.1 all half-stand.
+
 ## 6. Reported but downgraded on verification
 
 Two auditor claims did not survive hand-checking and are **not** carried as defects. Recorded because a rejected
