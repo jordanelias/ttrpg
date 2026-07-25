@@ -169,3 +169,107 @@ def test_erosion_scales_by_fraction_of_the_cell_not_absolute_count():
 
 def test_default_is_gated_off():
     assert C.PC_CELL_MORALE is False, "phase 1 ships gated OFF until measured on both scoreboards"
+
+
+# ─── phase 2: local break ────────────────────────────────────────────────────
+
+def test_a_broken_cell_stops_fighting_but_its_men_remain():
+    """A local break removes a section from the LINE, not from existence.
+
+    The men are still there to be killed and still count as casualties; they have stopped being a
+    fighting part of the formation. Zeroing their troops instead would make a break indistinguishable
+    from annihilation, which is the confusion this whole phase exists to remove.
+    """
+    from mass_battle.core.exchange import _pair_engaged_troops
+    a = _seeded()
+    cells = list(a.cells())
+    before_troops = sum(a.cell_troops.values())
+    full = _pair_engaged_troops(a, cells)
+
+    a.cell_morale[list(a.cell_morale)[0]] = -1.0
+    broken = _pair_engaged_troops(a, cells)
+
+    assert broken < full, "a broken cell must stop contributing combat weight"
+    assert sum(a.cell_troops.values()) == pytest.approx(before_troops), \
+        "its men must still be present — a break is not a casualty event"
+
+
+def test_contagion_spreads_from_where_the_gap_opened():
+    """Neighbours of a broken cell are shaken; distant cells are not.
+
+    Following the lattice rather than the whole body is what makes the spread follow the formation's
+    shape — a gap in a deep column propagates differently from one in a thin line, with no
+    shape-specific code.
+    """
+    a = _atom(troops=900.0, conc=100.0)
+    a.seed_cell_morale()
+    cids = sorted(a.cell_morale)
+    assert len(cids) >= 4
+    origin = cids[0]
+    a.cell_morale[origin] = -1.0
+    a.propagate_cell_breaks()
+
+    def adjacent(x, y):
+        return max(abs(x[0] - y[0]), abs(x[1] - y[1])) == 1
+
+    near = [c for c in cids if c != origin and adjacent(c, origin)]
+    far = [c for c in cids if c != origin and not adjacent(c, origin)]
+    assert near, "test needs at least one lattice neighbour"
+    assert all(a.cell_morale[c] < 6.0 for c in near), "neighbours of the gap must be shaken"
+    if far:
+        assert all(a.cell_morale[c] == 6.0 for c in far), "distant cells must not be"
+
+
+def test_discipline_decides_whether_a_gap_closes_or_stays_open():
+    """The contest between contagion and cohesion, and the emergent property it produces.
+
+    Nothing in the engine says "disciplined units close gaps". Contagion pushes the cells beside a
+    break downward; cohesion pulls every cell toward the body's own morale at a discipline-gated rate.
+    Run them against each other and the behaviour falls out: a disciplined body recovers the broken
+    cell and the line re-forms; a ragged one cannot and the gap persists.
+
+    Measured over four phases from a single broken cell: discipline 6 -> the cell recovers to ~+3.1 and
+    the broken share returns to 0.00; discipline 1 -> it sits at ~-0.1, still broken, share ~0.11.
+
+    (My first version of this test asserted that cohesion lifts the SHAKEN NEIGHBOURS back up. That was
+    wrong: cohesion pulls toward the mean, and freshly-shaken neighbours sit just ABOVE the mean once a
+    broken cell has dragged it down, so they are pulled slightly further down. The contest that matters
+    is over the BROKEN cell — whether the body can haul it back across zero.)
+    """
+    def _run(disc):
+        a = _atom(troops=900.0, conc=100.0)
+        a.discipline = disc
+        a.seed_cell_morale()
+        origin = sorted(a.cell_morale)[0]
+        a.cell_morale[origin] = -1.0
+        for _ in range(4):
+            a.propagate_cell_breaks()
+            a.cohere_cells()
+        return a, origin
+
+    firm, o_f = _run(6)
+    ragged, o_r = _run(1)
+
+    assert not firm.cell_broken(o_f), "a disciplined body must be able to close the gap"
+    assert firm.broken_cell_share() == pytest.approx(0.0)
+    assert ragged.cell_broken(o_r), "a ragged body must not"
+    assert ragged.broken_cell_share() > 0.0
+
+
+def test_a_body_with_half_its_men_in_broken_cells_is_no_longer_a_formation():
+    a = _seeded()
+    for cid in list(a.cell_morale)[:2]:
+        a.cell_morale[cid] = -1.0
+    assert a.broken_cell_share() >= 0.5
+    assert a.broken_cell_share() == pytest.approx(2 / 3), \
+        "share is troop-weighted over live cells"
+
+
+def test_broken_share_is_troop_weighted_not_cell_counted():
+    """Three men in a shattered corner must not count as much as a hundred in a broken centre."""
+    a = _seeded()
+    cids = list(a.cell_morale)
+    a.cell_troops[cids[0]] = 1.0          # a nearly-empty cell...
+    a.cell_morale[cids[0]] = -1.0         # ...breaks
+    assert a.broken_cell_share() < 0.05, \
+        "a one-man broken cell must barely register against the body's strength"

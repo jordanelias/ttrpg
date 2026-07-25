@@ -1776,6 +1776,61 @@ class Subunit:
             # v13: mark cell as having moved this turn (for cross-side contention)
             self._moved_this_turn.add((orig_r, orig_c))
 
+    def cell_broken(self, cid):
+        """[ED-MB-0041 phase 2] A cell whose morale has collapsed. Local break, not a whole-body rout.
+
+        Rout has always been all-or-nothing at subunit scale, so a body fought as one lump until the
+        whole lump went. Real formations come apart in PLACES — a corner gives, the gap spreads. This is
+        the predicate that makes a place able to give.
+        """
+        return bool(self.cell_morale) and self.cell_morale.get(cid, 1.0) <= 0.0
+
+    def broken_cell_share(self):
+        """Fraction of this subunit's LIVE troops standing in broken cells.
+
+        Weighted by troops, not cell count, for the same reason the morale aggregate is: three men in a
+        shattered corner should not count the same as a hundred in a broken centre.
+        """
+        if not self.cell_morale:
+            return 0.0
+        tot = sum(self.cell_troops.values())
+        if tot <= 0:
+            return 0.0
+        gone = sum(t for cid, t in self.cell_troops.items() if self.cell_broken(cid))
+        return gone / tot
+
+    def propagate_cell_breaks(self):
+        """[ED-MB-0041 phase 2] A broken cell shakes the cells beside it — contagion at cell scale.
+
+        The same du Picq mechanism `ROUT_CASCADE_FRAC` applies between subunits, one level down: men
+        break because the men beside them broke, and a gap in the line spreads outward from where it
+        opened rather than appearing uniformly across the body. Neighbours are lattice-adjacent cells
+        (the 8-neighbourhood of the pattern coordinates), so the spread follows the formation's actual
+        shape — a gap in a deep column propagates differently from one in a thin line, without any
+        shape-specific code.
+
+        Returns the number of cells newly shaken, so a caller can tell whether anything happened.
+        """
+        if not self.cell_morale:
+            return 0
+        broken = [cid for cid in self.cell_morale if self.cell_broken(cid)]
+        if not broken:
+            return 0
+        shaken = 0
+        for (br, bc) in broken:
+            for dr in (-1, 0, 1):
+                for dc in (-1, 0, 1):
+                    if dr == 0 and dc == 0:
+                        continue
+                    nb = (br + dr, bc + dc)
+                    if nb in self.cell_morale and not self.cell_broken(nb):
+                        # scaled by the same per-phase cap the other morale paths use, and by the pull
+                        # rate, so contagion and cohesion are the same order of magnitude: a body can
+                        # hold a gap closed if it is disciplined enough, or lose the line if it is not.
+                        self.cell_morale[nb] -= MORALE_PHASE_CAP * CELL_MORALE_PULL
+                        shaken += 1
+        return shaken
+
     def get_cell_facing(self, orig_r, orig_c):
         """Return the facing vector for a cell. Defaults to advance_dir if never moved."""
         # (d) rout facing: a routed body faces AWAY from the enemy (fleeing) -> rear penalties land.
