@@ -434,3 +434,60 @@ This **retires a Tier-3 magnitude call** and replaces it with a mechanism gap, a
 corroborates the older finding already in `HANDOFF_MB.md`: a frontal deep line cannot repel a charge in
 this engine at any coefficient, because *a repelling formation is a square/box with all-around brace,
 not a deep frontal line*. The all-around brace primitive is the work; the coefficient is not.
+
+---
+
+## 9. THE CASUALTY SCOREBOARD'S FIRST EXPERIMENT (2026-07-25)
+
+Jordan approved the two instruments (§8's consequence) and granted permission to experiment on Tier-3
+from historical precedent, iteratively. This is the first such experiment, and it overturned a default.
+
+### 9.1 `PC_STOCHASTIC_ROUT` — the win-share gauge was penalising the correct change
+
+The flag implements the du Picq 15-30% break band (ED-MB-0031) and shipped **OFF**; its own comment says
+that without it "units grind to ~58% before breaking". Measured across all 20 rows:
+
+| | OFF (shipped) | ON |
+|---|---|---|
+| loser casualties | **61-87%** | **29-41%** (band 15-30) |
+| winner casualties | 7.8-37.8% | **3.3-17.4%** (cap 15) |
+| casualty realism | 0/20 | **2/20** |
+| win-share | 10/20 | **7/20** |
+
+The win-share count drops three rows and the flip is still right. **The reachability sweep had already
+tested this exact flag** (§8.2), found "passes C4, fails H9", and recorded it as a wash — a judgement
+made on the wrong instrument, hours before the right one existed. **Default flipped ON.**
+
+### 9.2 Rout contagion — mechanism ratified, magnitude NOT
+
+`Unit.derive_rout` broke an army only when **every** subunit had routed, so sections broke at 15-30%
+each and then absorbed casualties while their siblings fought on. `ROUT_CASCADE_FRAC` generalises that
+to a fraction of starting strength, per du Picq's contagion. Measured (with the break band on):
+
+| arm | casualty realism | win-share | note |
+|---|---|---|---|
+| no contagion (1.0) | 2/20 | 7/20 | H6 stuck at 79.2% loser |
+| **⅔ of line** (0.5 / 0.34) | **5/20** | 7/20 | H6 fixed: 79.2% → 29.7% |
+| **⅓ of line** (0.30) | **7/20** | 6/20 | every envelopment row in band; H6 now *undershoots* at 14.1% |
+
+**Left at its inert default (1.0).** Two reasons, and neither is indecision: (a) ⅓ buys two casualty
+rows and costs one win-share row and makes H6 break too early — that is a real trade, not a clear win;
+(b) per-cell state (Jordan's 2026-07-25 directive) **redefines what a "section" is**, so any value
+chosen now is fitted to a granularity that is about to change. The mechanism is grounded; the number
+would be `CALIBRATED-DEBT`, and there is no reason to incur it yet.
+
+### 9.3 Two methodological failures in my own experiment, recorded
+
+**(a) `0.34` and `0.5` returned byte-identical results, and it is not robustness.** The gauge armies
+have three subunits, so the broken share can only be 0, ⅓, ⅔ or 1 — both thresholds are first crossed
+at ⅔. I ran the same experiment twice. Presented uninterrogated, "insensitive across a 47% range" would
+have entered the record as evidence of a robust plateau. It is evidence of nothing. **A sweep over a
+continuous parameter must be checked against the DISCRETENESS of what it acts on.**
+
+**(b) The unchanged rows were the informative ones.** H1/H2/H7/H8/H9 are identical to the decimal across
+every contagion arm, because `make_unit` builds them as a SINGLE subunit per side — the broken share is
+0 or 1 and no threshold below 1.0 can fire. The mechanism is inert there by construction, not
+ineffective. That is the sharpest argument yet for the per-cell directive: **an army with one subunit
+has no line to come apart.** At cell granularity every body has sections that can break independently
+and the same contagion applies *within* a subunit. The residual 30-33% on exactly those rows is the gap
+per-cell morale exists to close.

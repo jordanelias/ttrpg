@@ -90,7 +90,20 @@ STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 # casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
 # band + fractional loss fraction), reproducible under the seeded RNG. Gated OFF by default (moves the
 # byte-exact goldens when on — it is NOT inert like the other PC_ flags; the draw is only consumed when on).
-PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '0') == '1')
+# [ED-MB-0041, 2026-07-25] DEFAULT FLIPPED OFF -> ON, on the casualty scoreboard's evidence.
+# This implements the du Picq 15-30% break band (ED-MB-0031); OFF, the engine's own comment notes that
+# "units grind to ~58% before breaking". Measured across all 20 gauge rows:
+#     loser casualties   61-87%  ->  29-41%   (band 15-30)
+#     winner casualties 7.8-38%  ->  3.3-17%  (cap 15)
+#     casualty realism     0/20  ->    2/20
+#     win-share           10/20  ->    7/20
+# The win-share count DROPS BY THREE ROWS and the flip is still correct. That trade is the whole point
+# of the second scoreboard: a win-share gauge cannot tell a double envelopment from two lines colliding
+# (the reachability sweep found a config that passes Cannae with envelopment pathing switched OFF), so
+# it scored "stop annihilating both armies" as a regression. The reachability sweep itself had already
+# tried this flag, found "passes C4, fails H9", and recorded it as a wash -- on the wrong instrument.
+# Reversible in one step (PC_STOCHASTIC_ROUT=0) if the trade is judged wrong.
+PC_STOCHASTIC_ROUT = (_sigma_os.environ.get('PC_STOCHASTIC_ROUT', '1') == '1')
 ROUT_ONSET_FRAC = 0.15  # [canonical: Jordan historical research 2026-07-23 — routs occur as early as 15% losses] casualty fraction where morale-break risk begins
 ROUT_CAP_FRAC   = 0.30  # [canonical: Jordan historical research 2026-07-23 — 30% the upper bound] casualty fraction by which a break is near-certain
 MORALE_PHASE_CAP = 3  # [CALIBRATED-DEBT: per-phase morale-loss bound — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]

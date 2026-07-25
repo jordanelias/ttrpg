@@ -2,6 +2,31 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0041: PC_STOCHASTIC_ROUT default flipped ON; contagion magnitude deliberately held
+
+**Flipped, on the casualty scoreboard's evidence.** Loser 61-87% → 29-41%, winner 7.8-38% → 3.3-17%,
+casualty realism 0/20 → 2/20 — while **win-share drops 10/20 → 7/20**. The count going down and the flip
+still being right is the whole case for the second scoreboard. The reachability sweep had tested this
+same flag hours earlier, found "passes C4, fails H9", and filed it as a wash; that was the wrong
+instrument. Reversible with `PC_STOCHASTIC_ROUT=0`. Both grid goldens re-recorded (the break band
+changes *when* a subunit routs, so the whole downstream casualty trajectory moves).
+
+**`ROUT_CASCADE_FRAC` left inert at 1.0** despite measuring better: ⅔-of-line gives casualty 5/20 (and
+fixes H6's 79.2% outlier → 29.7%), ⅓-of-line gives 7/20 but costs a win-share row and makes H6
+*undershoot* at 14.1%. Held because (a) that is a real trade, not a clear win, and (b) per-cell state
+redefines what a "section" is, so any value chosen now is fitted to a granularity about to change.
+
+**Two methodological failures in my own experiment, recorded rather than quietly fixed:**
+- **`0.34` and `0.5` returned byte-identical results — not robustness.** Three-subunit armies mean the
+  broken share can only be 0, ⅓, ⅔ or 1, so both thresholds first fire at ⅔: I ran one experiment
+  twice. Unexamined, "insensitive across a 47% range" would have entered the record as a robust
+  plateau. A sweep over a continuous parameter must be checked against the DISCRETENESS of its target.
+- **The rows that did not move were the informative ones.** H1/H2/H7/H8/H9 are identical to the decimal
+  across every arm because `make_unit` builds them as a SINGLE subunit per side — broken share is 0 or
+  1, so no threshold below 1.0 can fire. Inert by construction, not ineffective. An army of one subunit
+  has no line to come apart, which is the sharpest argument yet for the per-cell directive: the residual
+  30-33% sits on exactly those rows.
+
 ## 2026-07-25 — ED-MB-0041: the new instrument immediately overturns a default (PC_STOCHASTIC_ROUT)
 
 **The casualty scoreboard's first act was to show that the win-share gauge has been penalising the
