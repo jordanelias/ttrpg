@@ -3,6 +3,12 @@
 upper hand"). Verifies the break-point draw lands in the band, resilience skews it, a subunit routs
 once its casualties cross it, the loser now breaks near the historical band (not ~90%), and it is
 inert/byte-exact when gated off.
+
+[ED-MB-0041, 2026-07-25] The DEFAULT IS NOW ON. It shipped OFF, and the casualty scoreboard measured
+what that cost: the loser reached 61-87% casualties on every gauge row against this band's own 15-30%
+expectation. Turning it on gives 29-41%. The flip drops the win-share count 10/20 -> 7/20 and is still
+correct — see config.py's note at the flag. The on/off toggle below is unchanged and still exercises
+both paths; only the assertion about which way it points has moved.
 """
 import os
 import random
@@ -27,8 +33,18 @@ def _unit(faction, disc=5, mor=6):
                         'starting_position': (sr, 25)}], faction, faction, discipline=disc, morale=mor)
 
 
-def test_default_gated_off():
-    assert C.PC_STOCHASTIC_ROUT is False, "stochastic rout must default OFF (moves goldens when on)"
+def test_default_is_on():
+    """[ED-MB-0041] Ratified ON. This assertion previously read `is False`.
+
+    It was not wrong when written — the flag moved the goldens, so gating it off kept them stable. What
+    changed is the evidence: with the casualty scoreboard in place, OFF measurably means the loser is
+    annihilated (61-87%) against this very band's 15-30% claim. A test that pins a default is pinning a
+    DECISION, so when the decision is re-made on evidence the test moves with it — and says why, rather
+    than being quietly deleted.
+    """
+    assert C.PC_STOCHASTIC_ROUT is True, (
+        "stochastic rout is ratified ON (ED-MB-0041): OFF leaves the loser at 61-87% casualties against "
+        "the 15-30% band this module tests. Reversible via PC_STOCHASTIC_ROUT=0.")
 
 
 def test_band_is_historical():
