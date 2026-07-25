@@ -2,6 +2,51 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-25 — ED-MB-0041: the new instrument immediately overturns a default (PC_STOCHASTIC_ROUT)
+
+**The casualty scoreboard's first act was to show that the win-share gauge has been penalising the
+change that makes the engine historically correct.** `PC_STOCHASTIC_ROUT` implements the du Picq
+15-30% break band (ED-MB-0031) and ships **OFF**; its own code comment says that without it "units
+grind to ~58% before breaking". Measured across all 20 rows:
+
+| | OFF (shipped) | ON |
+|---|---|---|
+| loser casualties | **61-87%** | **29-41%** (band 15-30) |
+| winner casualties | 7.8-37.8% | **3.3-17.4%** (cap 15) |
+| casualty realism | 0/20 | **2/20** |
+| win-share | 10/20 | 7/20 |
+
+One flag moves the loser from ~84% to ~31% — from annihilation to a few points outside the band — and
+the win-share gauge scores it as a **three-row regression**. The reachability sweep had already found
+`PC_STOCHASTIC_ROUT=1` "passes C4 and fails H9" and recorded it as a wash; that judgement was made on
+the wrong instrument.
+
+**Root cause of the residual, traced.** `Unit.derive_rout` breaks the army only when **every** subunit
+has routed (`all(a.routed ...)`), and `run_battle` stops only when a UNIT routs. So sections break at
+15-30% each, and then sit on the field absorbing casualties while their siblings fight on — the loser's
+*total* climbs well past any individual section's break-point. Armies do not do this; they come apart
+once a decisive portion of the line goes and the rest routs by contagion (du Picq: the end of a battle
+is moral, not physical).
+
+**New mechanism, gated inert:** `ROUT_CASCADE_FRAC` generalises `all(...)` to a fraction of a unit's
+*starting* strength held in broken subunits. **Default 1.0 = exactly the old behaviour** (the share can
+only reach 1.0 when no subunit is left unbroken), so goldens and gauge are untouched until the value is
+moved. The magnitude is deliberately **unchosen** — the mechanism is du Picq-grounded, the number is
+not, and picking one before measuring is the failure this whole audit has been about.
+`tests/valoria/test_rout_contagion.py` (9 tests) pins the mechanism and — importantly — the *float
+equality* of the inert default: `>= 1.0` on a computed ratio is exactly the kind of expression that
+silently becomes 0.9999999 and changes when an army breaks.
+
+**Two self-corrections while building it**, both caught by reading rather than by a failing test:
+- My first `_broken_share` docstring said it weights by spawn strength "not the current one, which
+  would shrink the numerator". That overstates: `troop_count` is *itself* a static nominal (it returns
+  `self.troops`), so there was never a live alternative in play. The real reason to prefer
+  `_start_troops` is that it is re-based per BATTLE, so a unit entering its third battle depleted
+  measures collapse against what it started that battle with. Comment and test both corrected to the
+  true property.
+- Two of my own tests failed on harness errors, not engine defects (`troop_count` has no setter;
+  5-7 subunits at 8-column spacing deploy off-field).
+
 ## 2026-07-25 — ED-MB-0041: the two gauge invariants that need no band (Jordan-approved)
 
 The win-share gauge cannot tell a double envelopment from two lines colliding — both can produce the

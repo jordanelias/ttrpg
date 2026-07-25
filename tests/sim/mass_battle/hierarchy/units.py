@@ -2003,6 +2003,25 @@ class Unit:
     def agg_dr(self):         return self._agg('eff_dr')
     def agg_stamina(self):    return self._agg('eff_stamina')
 
+    def _broken_share(self):
+        """[ED-MB-0041] Fraction of this unit's STARTING strength sitting in routed subunits.
+
+        Weighted by `_start_troops` -- the per-BATTLE strength snapshot, re-based at each campaign
+        boundary by reset_morale_between_battles -- so a unit that enters its third battle already
+        depleted measures collapse against the strength it actually started that battle with, not
+        against its original spawn size. `troop_count` is the fallback for a subunit built without the
+        snapshot; note it is itself a static nominal (it returns `self.troops`), NOT a live count, so
+        both terms are strength-at-start and neither shrinks as the body takes casualties. That is the
+        property this needs: the numerator must grow monotonically as sections break, and a live weight
+        would let a collapsing army read as progressively more intact.
+        """
+        tot = sum((getattr(a, '_start_troops', 0) or a.troop_count) for a in self.subunits)
+        if tot <= 0:
+            return 1.0 if self.subunits else 0.0
+        gone = sum((getattr(a, '_start_troops', 0) or a.troop_count)
+                   for a in self.subunits if a.routed)
+        return gone / tot
+
     def derive_rout(self):
         # Unit-level rout DERIVED from subunit state (per-subunit rout, Jordan directive): the unit routs
         # when its general is gone (Command<=0), when every subunit has routed, or when its troop-weighted
@@ -2011,7 +2030,12 @@ class Unit:
         # subunit's morale == unit.morale, so this fires exactly when the old `unit.morale<=0` did (byte-exact).
         if self.routed:
             return
-        if self.command <= 0 or all(a.routed for a in self.subunits) or self.agg_morale() <= 0:
+        # [ED-MB-0041] `all(...)` generalised to a contagion FRACTION of spawn strength -- see
+        # config.ROUT_CASCADE_FRAC for the mechanism and why the magnitude is deliberately unchosen.
+        # At the default 1.0 this is exactly `all(a.routed ...)`: every subunit must be broken, because
+        # the broken share can only reach 1.0 when none are left unbroken. So the generalisation is
+        # inert until the constant is moved, and the byte-exact goldens are untouched.
+        if self.command <= 0 or self._broken_share() >= ROUT_CASCADE_FRAC or self.agg_morale() <= 0:
             self.routed = True
             for a in self.subunits:
                 a.routed = True
