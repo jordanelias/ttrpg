@@ -72,31 +72,40 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
        sword weight, wide blade → cannot play the gap game every other dagger wins with. **A5 — `estoc` has no
        weakness at any tier** (97.3; 96.5/96.0/92.0/95.0; cap 1.104). The ≤18% band is **not traps** — it is the
        concealed tier, and all four rise to 94–97% at plate.
-  - **PLAN EXTENDED + ADVERSARIAL PASS (2026-07-26, second increment).** Proposal grew §12–§16:
-    **§12 carry context promoted from sketch to SPEC** — carriability derives from `head_len + grip_len` (both
-    already stored, no new data, no per-weapon table) and the roster **separates itself** into concealable ≤0.60 m
-    / civilian 0.75–1.20 m / **war ≥1.50 m**, with a 0.30 m EMPTY GAP between the last two. **All 26 weapons in the
-    dominant 91–97% band are ≥1.50 m — the dominant band IS the war band**, so carry context removes D1 from every
-    civilian context without touching a constant. Rapier 1.14 tops the civilian band, estoc 1.57 bottoms the war
-    band — Jordan's example, emergent. Second term is `hands`, and its limit is stated (the katana falsifies
-    "2H ⇒ war"; the threshold belongs to the setting's legal regime, not the weapon record).
-    **§13 off-hand SPEC** — the key find: `core.COVERAGE_GAP = {'full':0.15,'partial':0.5}` is fully plumbed into
-    `core.coupling`→`_transmit` and **no call site ever passes `'partial'`** (ED-PC-0035 F8's dead branch). **The
-    shield's damage hook already exists and is merely unreachable** — A6 becomes "wire a live caller + author
-    records", not "design a subsystem". §14 the A7a increment. §15 an 8-step increment ladder (**I-1..I-4 are
-    independent of the P0 blocker and can start immediately**). §16 the adversarial record.
-  - **⚠ CORRECTION — my own A7d fix sketch was a NO-OP.** The register proposed extending `eff` scaling to
-    native cut tokens "symmetric with cut/point". The form is `min(1.0, eff/CUT_AUTH_REF)` with REF=0.70, and the
-    native-cutter population is **0.71–1.33** — every weapon already clamps to 1.0, so it would have changed
-    NOTHING. Caught during increment planning, before anyone built it; register A7d amended at source. Real fix
-    needs a re-anchored reference (coupled to the incidental-cut path — two references for one fact unless
-    justified) or a non-saturating form. **Do not implement A7d as originally written.**
-  - Other adversarial findings kept: **X2** carry context makes balance depend on a scene-frequency distribution
-    that does not exist and is Jordan's content call (the frame could "prove" anything balanced by choosing the
-    mix) → Q8; **X5** carry context makes A7a MORE urgent, not less (the sabre stops losing to spears and starts
-    losing in the only context it exists for); **X6** the 0.30 m band gap is a property of the CURRENT roster —
-    re-derive the bands, never freeze them as constants. The pass is a SELF-critique, weaker than the
-    four-dimension audit's independent method, and is labelled as such.
+  - **PLAN EXTENDED, 2 ROUNDS + 2 ADVERSARIAL PASSES (proposal §12–§20).** Read the proposal; this is a
+    pointer. §12 carry-context SPEC · §13 off-hand SPEC · §14 A7a increment · §15 an 8-step ladder (**I-1..I-4
+    are independent of the P0 blocker**) · §16/§20 the two passes.
+  - **The four results worth not re-deriving:**
+    1. **Carriability derives from `head_len + grip_len`** — already stored, no new data, no per-weapon table.
+       The roster **separates itself**: concealable ≤0.60 m / civilian 0.75–1.20 m / war ≥1.50 m, with a **0.30 m
+       EMPTY GAP** between the last two. **All 26 weapons in the dominant 91–97% band are ≥1.50 m — the dominant
+       band IS the war band.** Rapier 1.14 tops civilian, estoc 1.57 bottoms war. Second term is `hands`; its
+       limit is that the katana falsifies "2H ⇒ war", so the threshold belongs to the setting's legal regime.
+    2. **`core.COVERAGE_GAP = {'full':0.15,'partial':0.5}` is fully plumbed into `coupling`→`_transmit` and NO
+       call site ever passes `'partial'`** (ED-PC-0035 F8's dead branch). **The shield's damage hook exists and
+       is merely unreachable** — A6 becomes "wire a caller + author records", not "design a subsystem".
+    3. **⚠ MY OWN A7d FIX SKETCH WAS A NO-OP — do not implement as written.** `min(1.0, eff/CUT_AUTH_REF)` with
+       REF=0.70 against a native-cutter population of **0.71–1.33**: every weapon clamps to 1.0, nothing changes.
+       The reference sits *below the entire population it would grade*. Register A7d amended at source. Real fix
+       = re-anchor (coupled to the incidental-cut path — two references for one fact unless justified) or a
+       non-saturating form; either is a **balance** change (buffs keen curved swords, nerfs dull ones).
+    4. **§17 GODOT EXPORT — the gap round 1 missed.** All **226 params (201 cfg + 25 core) are exported**, and
+       every constant the plan touches is among them, so **every increment trips the blocking round-trip gate**.
+       The gate checks JSON-matches-config, NOT that the port implements the constant, and the port covers 1/27
+       modules — so **B13 (PEN_DEFICIT_K exported with no consumer) is the PATTERN, not a one-off.**
+  - **Open/escalated:** **X2** carry context makes balance conditional on a scene-frequency distribution. §19
+    tested whether the 55-arc corpus supplies it — **negative, and do not retry naively**: 24 hits total, and
+    every "court" hit is legal/political (Crown courts, arbitration courts, court-intrigue), not a location.
+    X2 improves from "unresolvable" to **a content deliverable** (tag scenes, then count); until then §12.3's
+    results are conditional on an explicitly declared mix. **X5** carry context makes A7a MORE urgent. **X6** the
+    0.30 m gap is a property of the CURRENT roster — re-derive the bands, never freeze them. **Y5 accepted-not-
+    fixed:** §17's rule is a convention nothing enforces; a real gate diffs the JSON against the port's consumed
+    set (GO lane).
+  - **Y4, kept because the near-miss is the point:** my first export probe read the wrong nesting level and
+    returned "not exported" for all seven constants — a **false negative I nearly wrote into the plan**, and it
+    looked like a clean result. Both passes are **self-critique**, weaker than the four-dimension audit's
+    independent method, and are labelled so. A `fable`-tier independent audit of physics/data/logic was
+    commissioned separately and is NOT folded into these sections.
   - **CI PIN, do not re-trip:** `tests/valoria/test_build_proposals.py::test_all_proposals_docs_surface_by_location`
     pins the proposals-doc count (now **19**). Adding/removing anything in `proposals/` requires bumping it and
     appending a comment line. `tools/valoria_local.py --staged` does NOT run pytest, so local-green ≠ CI-green

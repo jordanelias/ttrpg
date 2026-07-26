@@ -621,7 +621,122 @@ Findings I raised and **rejected on inspection**, recorded so they are not re-ra
 
 ---
 
-## §17 Appendix A — The Final Fantasy Tactics lens
+## §17 The Godot export contract — the gap round 1 missed entirely
+
+Round 1 planned six increments that change `config.py` or `core.py` and **said nothing about what crosses into
+the Godot port.** That is a real omission, because the crossing is a *blocking CI gate*.
+
+### 17.1 Measured
+
+`engine/engine_params/combat_engine_v1.json` exports **226 parameters — 201 `cfg` + 25 `core`** — generated
+from `config.py` via `tools/export_engine_params.py` and round-trip-checked by the blocking
+`engine-params-roundtrip` job. Every constant this plan proposes to touch is in it:
+
+| constant | increment that moves it | exported? |
+|---|---|---|
+| `COVERAGE_GAP` | I-3 (buckler) | **yes** |
+| `CUT_AUTH_REF` / a new native-cut reference | I-5 (A7a) | **yes** |
+| `EXPOSE_SELECT_K` | I-6 (T_vuln bound) | **yes** |
+| `ADEF_CUT`, `MAX_TEMPO_PEN`, `GRAB_SHORT_REACH_M` | adjacent items | **yes** |
+
+**So every increment in §15 trips the round-trip gate.** That is not a problem in itself — regenerating the
+export is one command — but it has a consequence the plan must carry.
+
+### 17.2 The consequence: the export is wholesale, the port is not
+
+The round-trip gate checks that the JSON **matches `config.py`**. It does **not** check that the Godot port
+*implements* the constant. And the port covers **1 of 27 modules** (CLAUDE.md §6, `godot/skeleton/`), so most
+exported constants have no consumer **by construction**.
+
+**B13 (`PEN_DEFICIT_K` exported to a port with no penetration knee) is therefore not a one-off — it is the
+pattern.** Each increment that adds or re-anchors an exported constant silently widens parity debt.
+
+*Scope honesty:* I verified the export contents and the round-trip gate directly. I did **not** enumerate which
+of the 226 the port consumes — that needs a read of `godot/skeleton/` against the JSON, which is a GO-lane job.
+So "most have no consumer" follows from the 1/27 module coverage, not from a per-constant check.
+
+### 17.3 What each increment must therefore state
+
+Three lines, in the increment's own ledger entry:
+
+1. which exported constants it moves or adds;
+2. whether the port has a consumer for them (or "unknown — not enumerated");
+3. whether it widens parity debt, and if so, that the debt is **recorded in the same commit** rather than
+   discovered later.
+
+**Rule proposed:** an increment must not add a *new* exported constant the port cannot consume without
+recording that as parity debt in the same commit. This is the §8-gate-8 disclosure principle applied to the
+port boundary instead of the goldens.
+
+---
+
+## §18 ID allocation — record, do not reserve
+
+The PC lane's `references/id_reservations.yaml` state today is **`PC: next_free = 41`**, so implementation
+would begin at `ED-PC-0041`.
+
+**Corrected by the round-2 pass (Y3): this plan does NOT pre-allocate those IDs.** Reserving IDs for
+increments that may never run is exactly the speculative allocation the reservations file exists to prevent,
+and the file's protocol is *read `next_free`, allocate, bump, co-commit* **at the point of use**. The number
+above is recorded as an observation so an implementer knows where to start, not as a claim on the range.
+
+One ED per **increment**, not per finding. Any entry stating measured numbers needs `MEASURED-BY: <path>`
+pointing at something that exists — blocking since ED-PC-0040.
+
+---
+
+## §19 X2 revisited — is the scene distribution derivable rather than invented?
+
+§12.3 recorded X2: carry context makes balance depend on a **scene-frequency distribution that does not
+exist**, so the frame could "prove" almost any weapon balanced by choosing the mix. Round 1 escalated that to
+Jordan as unresolvable. Round 2 asked whether it is instead *derivable* from content the repo already has.
+
+**Method:** the repo holds 55 generated arcs in `arcs/simulated/`. If arcs implied their scene types, the mix
+could be counted rather than chosen.
+
+**Result — negative, and worth recording so it is not retried naively.** A keyword sweep returns 24 total hits
+across the whole corpus (17 court-ish, 6 battlefield, 1 tavern), which is already too thin to be a
+distribution. **And the sweep is invalid on inspection:** every "court" hit is *legal or political* — "Crown
+courts", "Church arbitration courts", "court-intrigue arc" — not a scene location. In a game whose strategic
+layer is faction politics, that collision is systematic, not incidental.
+
+**Conclusion, revising X2's disposition:**
+
+- The *method* is right: derive the mix from content, do not invent it.
+- The *content* cannot supply it today. Arcs do not carry scene-type tags, and no keyword proxy will
+  substitute for one in this corpus.
+- So X2 is **not a design decision Jordan must make in the abstract** — it is a **content deliverable**
+  (tag scenes, or generate arcs with a scene field), after which the mix is *counted*.
+
+That is a materially better disposition than round 1's "unresolvable, Jordan's call," and it converts an open
+philosophical objection into a tractable work item. It does not remove the dependency — until the tagging
+exists, §12.3's instrument must be run against an **explicit, declared** mix, and every result it produces
+must be reported *as conditional on that mix*.
+
+---
+
+## §20 Round-2 adversarial pass
+
+Attacking §17–§19. Same caveat as §16: **self-critique, weaker than a structurally independent audit.** (A
+`fable`-tier independent audit of the physics, weapon data and logic was commissioned separately and is not
+folded in here.)
+
+| # | finding | disposition |
+|---|---|---|
+| **Y1** | §17 initially claimed the port "has no consumer" for these constants. **I had not checked.** | **Corrected in §17.2** to state what actually follows (1/27 module coverage) and to mark the per-constant enumeration as unverified GO-lane work. An unverified negative is the same defect class as an unverified positive. |
+| **Y2** | §19's keyword evidence was **invalid** — "court" matches Crown/arbitration courts and court-intrigue, i.e. politics, not scene locations, and 24 hits is not a distribution regardless. | **Corrected in §19** before publication; the negative result is now the finding. Caught by asking what the string actually matched instead of trusting the count. |
+| **Y3** | §18 originally pre-allocated `ED-PC-0041+` to increments that may never run — speculative allocation, exactly what the reservations protocol forbids. | **Corrected in §18**: record `next_free`, allocate at point of use. |
+| **Y4** | My own first export probe read the wrong nesting level and reported "not exported" for all seven constants — a **false negative I nearly wrote into the plan**. | Caught and re-run before writing; §17.1's numbers are from the corrected probe (226 = 201 + 25). Recorded because the near-miss is the point: the first probe *looked* like a clean result. |
+| **Y5** | §17's proposed rule ("do not add an unconsumable exported constant without recording debt") is unenforceable — nothing checks it. | **Accepted, not fixed.** It is a convention, and this repo's own meta-review says a convention is what failed three times. A real version is a GO-lane gate diffing the JSON against the port's consumed set; out of PC-lane scope, and named here rather than pretended away. |
+
+**Rejected on inspection** (recorded so they are not re-raised): *"§17 means every increment is blocked on the
+Godot port"* — no; the round-trip gate is satisfied by regenerating the export, and parity debt is disclosed,
+not blocking. *"§19 kills carry context"* — no; it constrains how its results must be reported, which §12.3
+already required.
+
+---
+
+## §21 Appendix A — The Final Fantasy Tactics lens
 
 Jordan asked what an FFT-shaped game would look like on this engine. It is a useful lens because FFT is the
 canonical **build-expressive tactical RPG**, and holding Valoria's measured state against it isolates exactly one
@@ -729,7 +844,7 @@ the ability layer already measured.
 
 ---
 
-## §18 Appendix B — Carry context: the ORIGINAL sketch (now specified in §12)
+## §22 Appendix B — Carry context: the ORIGINAL sketch (now specified in §12)
 
 **Jordan, 2026-07-26:** *"an aspect of resolution is that polearms/larger weapons were typically disallowed in
 any public places during Renaissance. It was acceptable to have a smaller sword like a rapier, but not
@@ -831,7 +946,7 @@ resolving the dominant lever, not a way of skipping that step.
 
 ---
 
-## §19 Provenance
+## §23 Provenance
 
 Built on, and consistent with: `state_graph.py` (`INJECTION_POINTS`, 9 points, tested) · `tradition_decomposition_v1.md` (per-tradition technique → primitive → node → gate, S-tiered) · `ability_armature.md` (§1 principles, §5 source menu, the sparse-tradition rule) · `phase4_5_plan_v1.md` (Phase 4b abilities-as-access, the 7 review lenses, the Primitive / Tradition-is-not-a-weight / Attack–Defence Convergence principles) · `engagement_psychology_recovered.md` (§B1 "biased weights, not a planner") · `combat_throughlines_v1.md` (the two poles; commitment = recovery) · `combat_balancing_methodology.md` (§5 C1, §6 the ablation gate) · Jordan's fiat-audit ruling (`audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`: efficacy from investment, not membership; every build available; no fiat) · ED-PC-0023/0024/0028/0030/0034/0040 · and the measured state in `audit/2026-07-26-combat-balance-customization-state/`.
 
