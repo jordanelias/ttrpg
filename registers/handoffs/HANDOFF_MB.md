@@ -15,6 +15,46 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0045 REMEDIATION PLAN (2026-07-26): all MB surfaces.**
+  `audit/2026-07-26-mass-battle-fable-audit/02_remediation_plan.md`. Scoped to the **13 mass-battle
+  surfaces** (§1): live engine, stale twin, 24 CI tests, goldens, gauge, 4 harnesses, workbench,
+  23 probes, 6 design docs, params, the module contract, 12 registries, research diagrams.
+
+  **Framing (Jordan's correction, verbatim):** *"it may not change the next battle, but it sure as
+  heck should. make identifying what's happening and preventing conflicts etc going forward."*
+  The first draft filed this as hygiene; that was wrong. **Three mechanisms are silently changing
+  battles today** — the un-guarded degree-boundary float compare (a 1-ulp error turns 3 damage into
+  0 at the universal `dr=1`), the bare `MAX_SUB_PHASES` break (engagement groups past the 5th deal
+  zero damage, unlogged), and `check_drift` re-keying 1 of 10 cell maps (morale immortality +
+  phantom breaks the moment cell morale is on). Plus: the campaign resolves battles on the **stale**
+  tree, so none of the last month's work reaches the game.
+
+  **Two goals:** **G1 identify what's happening** — the engine cannot currently explain why a battle
+  ended as it did, which is *why* two default flips were made on confounded measurements and
+  retracted; **G2 prevent conflicts** — one owner per fact, one loudly-failing invariant per owner.
+
+  **PHASES.** **A** trustworthy instrument (HARD GATE — A1 wires the shipped configuration's goldens
+  into CI; they are checked by *nothing* today, so B has no safety net without it). **B** `CellTable`
+  — struct-of-arrays with an owner and a `.check()` invariant, **not** a per-cell object (AoS is
+  slower in a Monte-Carlo oracle and further from the `PackedFloat32Array` layout the port wants);
+  supersedes ED-MB-0043's phase-3/4 ordering, because each of the six remaining directed fields
+  otherwise repeats the ten-map tax. **C** collapse the 7 duplicate owners. **D** conflict-prevention
+  guards (multi-owner scan, config-liveness, citation integrity, flag-pair coverage, golden-drift
+  disclosure). **E** gauge integrity. **F** docs/params/contract/registries. **H** *observability* —
+  per-phase casualty attribution, break decision log, mechanism attribution, invariant reporting,
+  promote the workbench trace. **H is the new one and it has no prior tracking item:** every
+  diagnosis in the last two audits required a bespoke probe, and there are now 23 of them. That cost
+  IS the finding.
+
+  **Critical path: A1 → B1 → B3.** **Cheapest real win: F4** — delete the
+  `scene_outcome.battle_concluded` emit row (= ED-MB-0010, open 13 days), one line, closes five
+  downstream surfaces.
+
+  **Explicitly NOT in scope:** the ~26k LOC of other subsystems (unmeasured — the parallel-dict
+  counts I gathered are NOT evidence of the same defect), the §9 forks, and the absent mechanisms
+  (terrain, pursuit in the measured mode, the general as an entity, surrender, ammunition, weather)
+  which would change battles more than everything in the plan combined — but are design, not repair.
+
 - **ED-MB-0045 (2026-07-26): FABLE-5 SIX-DIMENSION READ-ONLY AUDIT.** Six independent Fable-5
   auditors with read-only tools (structural independence, §10); every promoted finding re-derived by
   the orchestrator. Register: `audit/2026-07-26-mass-battle-fable-audit/01_findings_register.md`.
