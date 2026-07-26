@@ -1,0 +1,8 @@
+[pointer_audit] repo root (working tree): /home/user/ttrpg
+[G_pointer] scanning module_contracts.yaml state/derivations + sim/*.py literals...
+            71 identifier occurrence(s) scanned (reusing tools/ci_quantity_vocabulary_check.py's A17 scanners)
+[G_pointer] resolving each identifier via tools/quantity_registry.py...
+            raw:     29/55 unique matched (52.7%); 42/71 occ (59.2%)
+            KEYED:   12/55 unique point to a real registry KEY (21.8%) — the true pointer rate; the other 17 "matched" are declared-non-pointer (registry-acknowledged, intentionally keyless)
+            refined: 29/54 unique (53.7%) after excluding 1 formula-local intermediate(s)
+[done] audit/2026-07-26-mass-battle-vector-audit/pointer_audit/pointer_register.md

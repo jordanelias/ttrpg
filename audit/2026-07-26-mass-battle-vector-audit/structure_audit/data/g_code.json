@@ -1,0 +1,680 @@
+{
+ "engine": [],
+ "engine.autoload": [],
+ "engine.autoload.dice_engine": [],
+ "engine.autoload.game_state": [
+  "systems.characters.sim.beliefs",
+  "systems.characters.sim.conviction",
+  "systems.factions.sim.treaty",
+  "systems.fieldwork.sim.knots",
+  "systems.settlements.sim.infrastructure",
+  "systems.threadwork.sim.coherence",
+  "systems.threadwork.sim.threadcut",
+  "systems.world.sim.insurgency_pipeline",
+  "systems.world.sim.npe"
+ ],
+ "engine.autoload.npc_ai": [],
+ "engine.autoload.registry": [],
+ "engine.autoload.scene_slate": [],
+ "engine.autoload.season_manager": [],
+ "engine.autoload.sigma_leverage": [
+  "engine.autoload",
+  "engine.autoload.dice_engine"
+ ],
+ "engine.autoload.victory": [
+  "engine.autoload.game_state"
+ ],
+ "engine.cross_scale": [],
+ "engine.cross_scale.articulation": [],
+ "engine.cross_scale.domain_echo": [],
+ "engine.cross_scale.echo_transport": [
+  "engine.autoload.game_state",
+  "engine.cross_scale",
+  "engine.cross_scale.domain_echo",
+  "engine.substrate"
+ ],
+ "engine.cross_scale.handoff_rules": [],
+ "engine.cross_scale.parliamentary_bridge": [
+  "engine.cross_scale",
+  "engine.cross_scale.echo_transport",
+  "systems.social_contest.sim.contest",
+  "systems.social_contest.sim.parliamentary_vote"
+ ],
+ "engine.cross_scale.scene_dispatch": [
+  "engine.autoload",
+  "engine.autoload.scene_slate",
+  "engine.cross_scale",
+  "engine.cross_scale.echo_transport",
+  "engine.cross_scale.zoom_in_out",
+  "systems.combat.sim.combat",
+  "systems.social_contest.sim.contest"
+ ],
+ "engine.cross_scale.zoom_in_out": [],
+ "engine.mc_v18": [
+  "engine.autoload",
+  "engine.autoload.game_state",
+  "engine.autoload.scene_slate",
+  "engine.autoload.victory",
+  "engine.cross_scale",
+  "engine.cross_scale.echo_transport",
+  "engine.cross_scale.parliamentary_bridge",
+  "engine.cross_scale.scene_dispatch",
+  "systems.factions.sim.faction_action",
+  "systems.overview.sim.season"
+ ],
+ "engine.substrate": [
+  "engine.substrate.keys"
+ ],
+ "engine.substrate.keys": [],
+ "systems": [],
+ "systems.characters": [],
+ "systems.characters.sim": [],
+ "systems.characters.sim.beliefs": [
+  "systems.characters.sim.conviction"
+ ],
+ "systems.characters.sim.companion": [],
+ "systems.characters.sim.conviction": [],
+ "systems.combat": [],
+ "systems.combat.combat_engine_v1.ability_primitives": [],
+ "systems.combat.combat_engine_v1.capabilities": [],
+ "systems.combat.combat_engine_v1.combat_systems": [],
+ "systems.combat.combat_engine_v1.combatant": [],
+ "systems.combat.combat_engine_v1.config": [],
+ "systems.combat.combat_engine_v1.contact": [],
+ "systems.combat.combat_engine_v1.core": [
+  "engine.autoload",
+  "engine.autoload.sigma_leverage"
+ ],
+ "systems.combat.combat_engine_v1.geometry": [],
+ "systems.combat.combat_engine_v1.state_graph": [],
+ "systems.combat.combat_engine_v1.tradition": [],
+ "systems.combat.combat_engine_v1.traditions": [],
+ "systems.combat.combat_engine_v1.weapon_physics": [],
+ "systems.combat.combat_engine_v1.weapons": [],
+ "systems.combat.combat_engine_v1.workbench.armour_participation": [],
+ "systems.combat.combat_engine_v1.workbench.balance": [],
+ "systems.combat.combat_engine_v1.workbench.commentary": [],
+ "systems.combat.combat_engine_v1.workbench.narrate": [],
+ "systems.combat.combat_engine_v1.workbench.presets": [],
+ "systems.combat.combat_engine_v1.workbench.probabilities": [],
+ "systems.combat.combat_engine_v1.workbench.server": [],
+ "systems.combat.combat_engine_v1.workbench.trace": [],
+ "systems.combat.combat_engine_v1.wrapper": [],
+ "systems.combat.sim": [],
+ "systems.combat.sim.combat": [
+  "engine.autoload.dice_engine"
+ ],
+ "systems.factions": [],
+ "systems.factions.sim": [],
+ "systems.factions.sim.absolution": [
+  "engine.autoload",
+  "engine.autoload.dice_engine"
+ ],
+ "systems.factions.sim.charter_liberties": [],
+ "systems.factions.sim.council_solmund": [
+  "engine.autoload",
+  "engine.autoload.dice_engine"
+ ],
+ "systems.factions.sim.crown_initiative": [
+  "engine.autoload",
+  "engine.autoload.dice_engine"
+ ],
+ "systems.factions.sim.excommunication": [
+  "engine.autoload.dice_engine",
+  "systems.factions.sim",
+  "systems.factions.sim.tribunal",
+  "systems.overview.sim.ci_track"
+ ],
+ "systems.factions.sim.faction_action": [
+  "engine.autoload.game_state",
+  "systems.factions.sim",
+  "systems.factions.sim.absolution",
+  "systems.factions.sim.council_solmund",
+  "systems.factions.sim.crown_initiative",
+  "systems.factions.sim.excommunication",
+  "systems.factions.sim.parliamentary_action",
+  "systems.mass_battle.sim.massbattle",
+  "systems.settlements.sim.adjacency"
+ ],
+ "systems.factions.sim.hafenmark_equipment": [],
+ "systems.factions.sim.home_sanctuary": [],
+ "systems.factions.sim.infrastructure_reclamation": [],
+ "systems.factions.sim.mass_seizure": [
+  "engine.autoload.dice_engine",
+  "engine.autoload.game_state",
+  "systems.settlements.sim.infrastructure"
+ ],
+ "systems.factions.sim.parliamentary_action": [
+  "engine.autoload.game_state",
+  "systems.social_contest.sim.parliamentary_vote"
+ ],
+ "systems.factions.sim.parliamentary_transfer": [
+  "engine.autoload.dice_engine",
+  "engine.autoload.game_state",
+  "systems.social_contest.sim.parliamentary_vote"
+ ],
+ "systems.factions.sim.treaty": [],
+ "systems.factions.sim.tribunal": [
+  "engine.autoload",
+  "engine.autoload.dice_engine"
+ ],
+ "systems.factions.sim.varfell_mandate_action": [],
+ "systems.factions.sim.varfell_territorial_acquisition": [],
+ "systems.fieldwork": [],
+ "systems.fieldwork.sim": [],
+ "systems.fieldwork.sim.fieldwork": [],
+ "systems.fieldwork.sim.investigation": [],
+ "systems.fieldwork.sim.knots": [
+  "engine.autoload.dice_engine",
+  "systems.characters.sim.conviction",
+  "systems.threadwork.sim.coherence"
+ ],
+ "systems.mass_battle": [],
+ "systems.mass_battle.sim": [],
+ "systems.mass_battle.sim.altonian_reinforcements": [],
+ "systems.mass_battle.sim.massbattle": [
+  "systems.mass_battle.sim.units"
+ ],
+ "systems.mass_battle.sim.tactic_cards": [],
+ "systems.mass_battle.sim.units": [
+  "systems.mass_battle.sim",
+  "systems.mass_battle.sim.massbattle"
+ ],
+ "systems.overview": [],
+ "systems.overview.sim": [],
+ "systems.overview.sim.accounting": [
+  "systems.overview.sim.ci_track",
+  "systems.overview.sim.ms_track",
+  "systems.world.sim.insurgency_pipeline",
+  "systems.world.sim.npe"
+ ],
+ "systems.overview.sim.ci_track": [
+  "engine.autoload.game_state"
+ ],
+ "systems.overview.sim.ip_track": [],
+ "systems.overview.sim.ms_track": [],
+ "systems.overview.sim.rs_track": [],
+ "systems.overview.sim.season": [
+  "engine.autoload.season_manager",
+  "systems.overview.sim.accounting"
+ ],
+ "systems.settlements": [],
+ "systems.settlements.sim": [],
+ "systems.settlements.sim.adjacency": [],
+ "systems.settlements.sim.infrastructure": [],
+ "systems.settlements.sim.ledger": [],
+ "systems.settlements.sim.registry": [
+  "systems.settlements.sim.ledger"
+ ],
+ "systems.settlements.sim.settlement": [
+  "systems.settlements.sim.registry"
+ ],
+ "systems.settlements.sim.temperaments": [],
+ "systems.social_contest": [],
+ "systems.social_contest.sim": [],
+ "systems.social_contest.sim.contest": [
+  "systems.social_contest.sim.contest.appraise",
+  "systems.social_contest.sim.contest.armature",
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.dictionaries",
+  "systems.social_contest.sim.contest.faction",
+  "systems.social_contest.sim.contest.modes",
+  "systems.social_contest.sim.contest.narrative",
+  "systems.social_contest.sim.contest.policy",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver",
+  "systems.social_contest.sim.contest.rhetoric",
+  "systems.social_contest.sim.contest.wrapper",
+  "systems.social_contest.sim.contest_legacy_stub"
+ ],
+ "systems.social_contest.sim.contest._kernel_tests": [
+  "engine.autoload",
+  "engine.autoload.sigma_leverage",
+  "systems.social_contest.sim.contest",
+  "systems.social_contest.sim.contest.appraise",
+  "systems.social_contest.sim.contest.armature",
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.dictionaries",
+  "systems.social_contest.sim.contest.faction",
+  "systems.social_contest.sim.contest.modes",
+  "systems.social_contest.sim.contest.narrative",
+  "systems.social_contest.sim.contest.policy",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver",
+  "systems.social_contest.sim.contest.rhetoric",
+  "systems.social_contest.sim.contest.wrapper"
+ ],
+ "systems.social_contest.sim.contest.agon_harness": [
+  "systems.social_contest.sim.contest.appraise",
+  "systems.social_contest.sim.contest.armature",
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.dictionaries",
+  "systems.social_contest.sim.contest.policy",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver",
+  "systems.social_contest.sim.contest.wrapper"
+ ],
+ "systems.social_contest.sim.contest.appraise": [
+  "systems.social_contest.sim.contest.armature"
+ ],
+ "systems.social_contest.sim.contest.armature": [
+  "engine.autoload.sigma_leverage",
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.dictionaries"
+ ],
+ "systems.social_contest.sim.contest.contract": [],
+ "systems.social_contest.sim.contest.dictionaries": [
+  "systems.social_contest.sim.contest",
+  "systems.social_contest.sim.contest.modes",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver"
+ ],
+ "systems.social_contest.sim.contest.faction": [
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.policy",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver"
+ ],
+ "systems.social_contest.sim.contest.modes": [
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.dictionaries",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver"
+ ],
+ "systems.social_contest.sim.contest.narrative": [
+  "systems.social_contest.sim.contest.contract"
+ ],
+ "systems.social_contest.sim.contest.policy": [
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.primitives"
+ ],
+ "systems.social_contest.sim.contest.primitives": [
+  "engine.autoload.sigma_leverage",
+  "systems.social_contest.sim.contest.contract"
+ ],
+ "systems.social_contest.sim.contest.resolver": [
+  "engine.autoload",
+  "engine.autoload.sigma_leverage",
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.rhetoric"
+ ],
+ "systems.social_contest.sim.contest.rhetoric": [
+  "systems.social_contest.sim.contest.dictionaries",
+  "systems.social_contest.sim.contest.primitives"
+ ],
+ "systems.social_contest.sim.contest.wrapper": [
+  "engine.autoload.sigma_leverage",
+  "systems.social_contest.sim.contest",
+  "systems.social_contest.sim.contest.armature",
+  "systems.social_contest.sim.contest.contract",
+  "systems.social_contest.sim.contest.dictionaries",
+  "systems.social_contest.sim.contest.modes",
+  "systems.social_contest.sim.contest.policy",
+  "systems.social_contest.sim.contest.primitives",
+  "systems.social_contest.sim.contest.resolver",
+  "systems.social_contest.sim.contest.rhetoric"
+ ],
+ "systems.social_contest.sim.contest_legacy_stub": [
+  "engine.autoload.dice_engine",
+  "systems.characters.sim.beliefs"
+ ],
+ "systems.social_contest.sim.parliamentary_stay": [
+  "systems.social_contest.sim.parliamentary_vote"
+ ],
+ "systems.social_contest.sim.parliamentary_vote": [
+  "engine.autoload",
+  "engine.autoload.dice_engine",
+  "engine.autoload.game_state",
+  "systems.social_contest.sim.contest"
+ ],
+ "systems.threadwork": [],
+ "systems.threadwork.sim": [],
+ "systems.threadwork.sim.co_movement": [
+  "systems.overview.sim.ms_track"
+ ],
+ "systems.threadwork.sim.coherence": [],
+ "systems.threadwork.sim.collective": [
+  "engine.autoload.dice_engine",
+  "systems.threadwork.sim.coherence",
+  "systems.threadwork.sim.operations"
+ ],
+ "systems.threadwork.sim.operations": [
+  "engine.autoload.dice_engine",
+  "systems.threadwork.sim.coherence"
+ ],
+ "systems.threadwork.sim.opposing": [
+  "engine.autoload.dice_engine",
+  "systems.fieldwork.sim.knots",
+  "systems.overview.sim.ms_track",
+  "systems.threadwork.sim.coherence",
+  "systems.threadwork.sim.operations"
+ ],
+ "systems.threadwork.sim.rendering": [],
+ "systems.threadwork.sim.threadcut": [],
+ "systems.world": [],
+ "systems.world.sim": [],
+ "systems.world.sim.insurgency_pipeline": [
+  "systems.settlements.sim.adjacency"
+ ],
+ "systems.world.sim.miraculous_event": [],
+ "systems.world.sim.npe": [
+  "engine.autoload.game_state"
+ ],
+ "systems.world.sim.restoration_movement": [],
+ "tests.sim.mass_battle": [],
+ "tests.sim.mass_battle.bat": [
+  "tests.sim.mass_battle.engine",
+  "tests.sim.mass_battle.hierarchy.units"
+ ],
+ "tests.sim.mass_battle.config": [],
+ "tests.sim.mass_battle.core": [],
+ "tests.sim.mass_battle.core.attrition": [
+  "tests.sim.mass_battle.config"
+ ],
+ "tests.sim.mass_battle.core.contact": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.geometry",
+  "tests.sim.mass_battle.hierarchy.units"
+ ],
+ "tests.sim.mass_battle.core.exchange": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.geometry"
+ ],
+ "tests.sim.mass_battle.core.state": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.core.exchange"
+ ],
+ "tests.sim.mass_battle.engine": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.core.attrition",
+  "tests.sim.mass_battle.core.contact",
+  "tests.sim.mass_battle.core.exchange",
+  "tests.sim.mass_battle.core.state",
+  "tests.sim.mass_battle.geometry",
+  "tests.sim.mass_battle.hierarchy.units",
+  "tests.sim.mass_battle.orchestration",
+  "tests.sim.mass_battle.percell",
+  "tests.sim.mass_battle.resolution",
+  "tests.sim.mass_battle.troop_types.registry"
+ ],
+ "tests.sim.mass_battle.equipment": [
+  "tests.sim.mass_battle.equipment.armour",
+  "tests.sim.mass_battle.equipment.weapons"
+ ],
+ "tests.sim.mass_battle.equipment._base": [],
+ "tests.sim.mass_battle.equipment.armour": [
+  "tests.sim.mass_battle.equipment._base"
+ ],
+ "tests.sim.mass_battle.equipment.weapons": [
+  "tests.sim.mass_battle.equipment._base"
+ ],
+ "tests.sim.mass_battle.geometry": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.hierarchy.units"
+ ],
+ "tests.sim.mass_battle.hierarchy": [],
+ "tests.sim.mass_battle.hierarchy.units": [
+  "tests.sim.mass_battle",
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.core.exchange",
+  "tests.sim.mass_battle.geometry",
+  "tests.sim.mass_battle.percell",
+  "tests.sim.mass_battle.perimeter",
+  "tests.sim.mass_battle.resolution",
+  "tests.sim.mass_battle.troop_types.registry"
+ ],
+ "tests.sim.mass_battle.lanchester_signature": [
+  "tests.sim.mass_battle.engine"
+ ],
+ "tests.sim.mass_battle.orchestration": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.core.attrition",
+  "tests.sim.mass_battle.core.contact",
+  "tests.sim.mass_battle.core.exchange",
+  "tests.sim.mass_battle.core.state",
+  "tests.sim.mass_battle.geometry",
+  "tests.sim.mass_battle.hierarchy.units",
+  "tests.sim.mass_battle.percell",
+  "tests.sim.mass_battle.resolution",
+  "tests.sim.mass_battle.troop_types.registry"
+ ],
+ "tests.sim.mass_battle.percell": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.geometry"
+ ],
+ "tests.sim.mass_battle.perimeter": [],
+ "tests.sim.mass_battle.provenance": [],
+ "tests.sim.mass_battle.resolution": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.percell"
+ ],
+ "tests.sim.mass_battle.test_persubunit_stress": [
+  "tests.sim.mass_battle.orchestration"
+ ],
+ "tests.sim.mass_battle.troop_types": [],
+ "tests.sim.mass_battle.troop_types.registry": [
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.equipment"
+ ],
+ "tests.sim.mass_battle.validators": [
+  "tests.sim.mass_battle.engine",
+  "tests.sim.mass_battle.hierarchy.units",
+  "tests.sim.mass_battle.orchestration"
+ ],
+ "tests.sim.mass_battle.workbench.server": [
+  "tests.sim.mass_battle",
+  "tests.sim.mass_battle.config",
+  "tests.sim.mass_battle.engine",
+  "tests.sim.mass_battle.geometry",
+  "tests.sim.mass_battle.hierarchy",
+  "tests.sim.mass_battle.hierarchy.units",
+  "tests.sim.mass_battle.troop_types",
+  "tests.sim.mass_battle.troop_types.registry"
+ ],
+ "tests.sim.mass_battle.workbench.trace": [
+  "tests.sim.mass_battle.engine",
+  "tests.sim.mass_battle.resolution"
+ ],
+ "tools.atomizer": [],
+ "tools.audit_registry": [],
+ "tools.audit_staleness": [],
+ "tools.broken_dependency_checker": [],
+ "tools.build_apparatus_registry": [],
+ "tools.build_audit_registry_backfill": [],
+ "tools.canon_coverage_check": [],
+ "tools.ci_audit_registry_check": [],
+ "tools.ci_claim_provenance_check": [],
+ "tools.ci_co_file_checker": [],
+ "tools.ci_common": [],
+ "tools.ci_editorial_checker": [],
+ "tools.ci_formula_prose_check": [],
+ "tools.ci_generation_consistency": [],
+ "tools.ci_hooks_verifier": [],
+ "tools.ci_module_shape_check": [],
+ "tools.ci_names_check": [],
+ "tools.ci_names_consistency": [],
+ "tools.ci_naming_check": [],
+ "tools.ci_quantity_vocabulary_check": [],
+ "tools.ci_register_size_check": [],
+ "tools.ci_sim_fabrication_check": [],
+ "tools.ci_supersession_check": [],
+ "tools.ci_vetting_check": [],
+ "tools.compliance_check": [],
+ "tools.currency_consistency_check": [],
+ "tools.dashboard_data": [],
+ "tools.definitions_store": [],
+ "tools.descriptor_registry": [],
+ "tools.doc_index_gen": [],
+ "tools.export_engine_params": [],
+ "tools.export_sim_params": [],
+ "tools.freshness_gate": [],
+ "tools.geography.jsx_to_canonical": [],
+ "tools.hook_naming_guard": [],
+ "tools.index_gen": [],
+ "tools.link_values_pointers": [],
+ "tools.mechanics_index_gen": [],
+ "tools.names": [],
+ "tools.observability.build_decisions": [],
+ "tools.observability.build_graph": [],
+ "tools.observability.build_incompleteness": [],
+ "tools.observability.build_lexicon": [],
+ "tools.observability.build_proposals": [],
+ "tools.observability.npc_audit_report_gen": [],
+ "tools.observability.obs_core": [],
+ "tools.patch_propagation_checker": [],
+ "tools.quantity_registry": [],
+ "tools.registry": [],
+ "tools.review_core": [],
+ "tools.session_handoff_reminder": [],
+ "tools.session_open_work": [],
+ "tools.session_status": [],
+ "tools.sim_harness": [],
+ "tools.sim_harness.adapter": [
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters": [
+  "tools.sim_harness.adapters.dice_pool_demo",
+  "tools.sim_harness.adapters.pr119_governance",
+  "tools.sim_harness.adapters.pr119_governance.pr119_ascendancy_system",
+  "tools.sim_harness.adapters.pr119_governance.pr119_bind_the_cells",
+  "tools.sim_harness.adapters.pr119_governance.pr119_clerk_capacity",
+  "tools.sim_harness.adapters.pr119_governance.pr119_event_deck_engine",
+  "tools.sim_harness.adapters.pr119_governance.pr119_guild_ladder",
+  "tools.sim_harness.adapters.pr119_governance.pr119_integrated_campaign",
+  "tools.sim_harness.adapters.pr119_governance.pr119_ledger_family_collision",
+  "tools.sim_harness.adapters.pr119_governance.pr119_pressure_homeostat",
+  "tools.sim_harness.adapters.pr119_governance.pr119_proactive_governance_menus",
+  "tools.sim_harness.adapters.pr119_governance.pr119_promote_ready_fiscal",
+  "tools.sim_harness.adapters.pr119_governance.pr119_promote_ready_oversight",
+  "tools.sim_harness.adapters.pr119_governance.pr119_promote_ready_political",
+  "tools.sim_harness.adapters.pr119_governance.pr119_recognition_accountability",
+  "tools.sim_harness.adapters.pr119_governance.pr119_structural_gaps",
+  "tools.sim_harness.adapters.pr119_governance.pr119_subnational_factions"
+ ],
+ "tools.sim_harness.adapters.dice_pool_demo": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance": [],
+ "tools.sim_harness.adapters.pr119_governance.campaign_stats": [
+  "tools.sim_harness.adapters.pr119_governance.pr119_integrated_campaign"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.death_spiral_log": [
+  "tools.sim_harness.adapters.pr119_governance.pr119_event_deck_engine",
+  "tools.sim_harness.adapters.pr119_governance.pr119_integrated_campaign"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture": [
+  "systems.settlements.sim.registry"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_ascendancy_system": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_bind_the_cells": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_clerk_capacity": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_event_deck_engine": [
+  "systems.settlements.sim",
+  "systems.settlements.sim.registry",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.adapters.pr119_governance.pr119_pressure_homeostat",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_guild_ladder": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_integrated_campaign": [
+  "systems.settlements.sim",
+  "systems.settlements.sim.infrastructure",
+  "systems.settlements.sim.registry",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.adapters.pr119_governance.pr119_pressure_homeostat",
+  "tools.sim_harness.adapters.pr119_governance.pr119_subnational_factions",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_ledger_family_collision": [
+  "systems.settlements.sim",
+  "systems.settlements.sim.ledger",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_pressure_homeostat": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_proactive_governance_menus": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_promote_ready_fiscal": [
+  "systems.settlements.sim",
+  "systems.settlements.sim.ledger",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_promote_ready_oversight": [
+  "systems.settlements.sim",
+  "systems.settlements.sim.registry",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_promote_ready_political": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_recognition_accountability": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_structural_gaps": [
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.adapters.pr119_governance.pr119_subnational_factions": [
+  "systems.settlements.sim",
+  "systems.settlements.sim.infrastructure",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters.pr119_governance.goldenfurt_fixture",
+  "tools.sim_harness.depth"
+ ],
+ "tools.sim_harness.canon_resolver": [],
+ "tools.sim_harness.depth": [],
+ "tools.sim_harness.harness": [
+  "tools.sim_harness",
+  "tools.sim_harness.adapter",
+  "tools.sim_harness.adapters",
+  "tools.sim_harness.canon_resolver",
+  "tools.sim_harness.depth",
+  "tools.sim_harness.trace_logger",
+  "tools.sim_harness.triage"
+ ],
+ "tools.sim_harness.trace_logger": [
+  "tools.sim_harness.triage"
+ ],
+ "tools.sim_harness.triage": [],
+ "tools.tag_normalizer": [],
+ "tools.validate_ed_citations": [],
+ "tools.valoria_local": [],
+ "tools.valoria_rename": [],
+ "tools.vocab_store": [],
+ "tools.wiring_map_check": [],
+ "tools.workplan_status": []
+}

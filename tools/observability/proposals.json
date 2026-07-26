@@ -5,14 +5,14 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 248,
+    "total": 249,
     "needs_jordan": 99,
     "by_kind": {
       "proposal_doc": 19,
       "provisional_status_doc": 6,
       "ledger_actionable": 119,
       "ledger_needs_jordan": 86,
-      "audit_partial": 18
+      "audit_partial": 19
     },
     "by_lane": {
       "FA": {
@@ -28,7 +28,7 @@
         "needs_jordan": 15
       },
       "MB": {
-        "total": 7,
+        "total": 8,
         "needs_jordan": 6
       },
       "PC": {
@@ -1031,7 +1031,7 @@
       ]
     },
     "MB": {
-      "total": 7,
+      "total": 8,
       "needs_jordan": 6,
       "items": [
         {
@@ -1104,6 +1104,18 @@
           "status": "PARTIAL",
           "links": [
             "designs/audit/2026-07-13-multi-agent-audit/mechanic_audit/mass_battle/"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "valoria-vector-audit-2026-07-26:mass_battle:2026-07-26-mass-battle-vector-audit",
+          "title": "[PARTIAL] vector_audit / mass_battle: VALIDATED 2/3; two instrument blind spots found and fixed mid-run (ED-MB-0043)",
+          "lane": "MB",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "audit/2026-07-26-mass-battle-vector-audit"
           ]
         }
       ]
@@ -5140,6 +5152,18 @@
       "status": "PARTIAL",
       "links": [
         "audit/2026-07-21-repo-state-vector-audit"
+      ]
+    },
+    {
+      "kind": "audit_partial",
+      "source": "references/audit_registry.jsonl",
+      "id": "valoria-vector-audit-2026-07-26:mass_battle:2026-07-26-mass-battle-vector-audit",
+      "title": "[PARTIAL] vector_audit / mass_battle: VALIDATED 2/3; two instrument blind spots found and fixed mid-run (ED-MB-0043)",
+      "lane": "MB",
+      "needs_jordan": false,
+      "status": "PARTIAL",
+      "links": [
+        "audit/2026-07-26-mass-battle-vector-audit"
       ]
     }
   ]

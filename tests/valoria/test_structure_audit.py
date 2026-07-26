@@ -225,3 +225,57 @@ def test_cycles_members_are_sorted_regardless_of_insertion_order():
     cr = sa._cycles(sa.tarjan_scc(rev), rev)
     assert cf == [['a', 'b', 'c']]
     assert cf == cr
+
+
+# ── code-root liveness guard (ED-MB-0044) ───────────────────────────────────
+#
+# THE PATTERN THIS GUARDS (CLAUDE.md §0.1 #5): a tool hardcodes a path root; the tree moves
+# underneath it; the tool then scans NOTHING and reports that emptiness as a clean result.
+# `CODE_ROOTS` read ('sim', 'tools') for five days after `sim/` was deleted on 2026-07-21
+# (ED-IN-0071 P4 continuation). G_code covered 88 `tools/` modules and zero simulation code;
+# every G_code finding — cycles, cut-vertices, orphans — was scoped to a corpus that excluded
+# the entire engine, and the register's own prose described 88 as "real code modules".
+#
+# A missing root is unobservable from the outputs (an empty scan and a healthy scan both
+# produce no findings), so it must be asserted on the CONFIGURATION, not the result.
+
+def test_code_roots_all_exist():
+    """Every configured code root must exist on disk. A missing root means G_code is silently
+    under-scanning — the failure mode is an absent finding, which no output assertion can see."""
+    missing = sa.missing_code_roots(_ROOT)
+    assert missing == [], (
+        f"configured code root(s) do not exist: {missing}. G_code is scanning a deleted tree and "
+        "will report emptiness as health. Update CODE_ROOTS/EXTRA_CODE_ROOTS to the live homes."
+    )
+
+
+def test_g_code_covers_simulation_code_not_just_tools():
+    """The observable half of the same guard: the import graph must actually contain simulation
+    modules. This is what a reader of the register believes when it says 'real code modules'."""
+    mods = sa.collect_py_modules(sa.Path(_ROOT))
+    prefixes = {m.split('.')[0] for m in mods}
+    assert 'tools' in prefixes
+    assert 'systems' in prefixes, "no systems/*/sim modules in G_code — per-subsystem sims invisible"
+    assert 'engine' in prefixes, "no engine/ modules in G_code — the engine core is invisible"
+    # The live mass-battle engine sits under tests/ and is reachable only via EXTRA_CODE_ROOTS.
+    assert any(m.startswith('tests.sim.mass_battle') for m in mods), (
+        "the live mass-battle engine (tests/sim/mass_battle/, ~10.5k LOC) is not in G_code"
+    )
+
+
+def test_sys_path_alias_resolves_live_mass_battle_internal_edges():
+    """`tests/sim/mass_battle/` puts `tests/sim` on sys.path and imports itself as top-level
+    `mass_battle.*`. Without sys_path_aliases every internal edge fails to resolve and the
+    package lands in G_code as 28 EDGELESS nodes — reported as orphans. Visible-but-edgeless is
+    strictly worse than unscanned: it reads as a measured emptiness. (Mutation guard: dropping
+    the `aliases` argument from _resolve_internal drives this count to 0.)"""
+    root = sa.Path(_ROOT)
+    mods = sa.collect_py_modules(root)
+    aliases = sa.sys_path_aliases(mods)
+    assert aliases.get('mass_battle.engine') == 'tests.sim.mass_battle.engine'
+    g, _ = sa.build_g_code(root, mods)
+    internal = sum(
+        1 for m in g if m.startswith('tests.sim.mass_battle')
+        for t in g[m] if t.startswith('tests.sim.mass_battle')
+    )
+    assert internal >= 20, f"live mass-battle engine resolved only {internal} internal edges"

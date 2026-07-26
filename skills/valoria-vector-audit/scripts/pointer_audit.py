@@ -310,7 +310,11 @@ def run(root, out, contracts_path=None, sim_root=None):
     (out / 'data').mkdir(parents=True, exist_ok=True)
 
     contracts_path = Path(contracts_path) if contracts_path else root / 'references' / 'module_contracts.yaml'
-    sim_root = Path(sim_root) if sim_root else root / 'sim'
+    # `sim/` was RETIRED 2026-07-21 (ED-IN-0071 P4 continuation). This default pointed at the
+    # deleted tree until 2026-07-26, so the `sim_literals` surface scored 0/0 — an EMPTY scan
+    # reported as a clean one. `systems/` is the live per-subsystem sim home; the scanners walk
+    # it recursively, so `systems/<sub>/sim/*.py` is reached.
+    sim_root = Path(sim_root) if sim_root else root / 'systems'
 
     print('[G_pointer] scanning module_contracts.yaml state/derivations + sim/*.py literals...')
     contracts = yaml.safe_load(contracts_path.read_text(encoding='utf-8')) or {}
