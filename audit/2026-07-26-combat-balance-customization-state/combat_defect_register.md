@@ -79,10 +79,15 @@ Every dedicated cutting sword finishes **below the arming sword's own 49.7**, an
 **The smoking gun is the *light* column.** Light armour is a gambeson — a padded jacket. The scimitar goes
 68.3 → 33.7 against one, and to 3.3 against mail. A padded jacket should not halve a cavalry sabre.
 
-Causes, all already on the books: **F21** (flat `ADEF_CUT = −0.90`) · **ED-PC-0039's clamp**, which floored every
-pure cutter's capability to the same 0 and so erased grading *within* the cutter class (a bardiche and a shamshir
-now fail plate identically) · **ED-PC-0012** (the one-handed sabre-class thrust gap, deferred since 2026-07-08 and
-still open).
+Contributing causes already on the books: **F21** (flat `ADEF_CUT = −0.90`) · **ED-PC-0039's clamp**, which
+floored every pure cutter's capability to the same 0 and so erased grading *within* the cutter class · **ED-PC-0012**
+(the one-handed sabre-class thrust gap, deferred since 2026-07-08 and still open).
+
+> **AMENDED 2026-07-26 — this attribution was incomplete; see A7.** The deeper cause is that **there is no cut
+> grading for the damage path to erase in the first place**: `core.coupling` ignores edge quality entirely for
+> native cutters. F21 as currently specified ("`ADEF_CUT` grading by mass/keenness") targets the *capability/σ*
+> path (`armor_defeat_sigma` / `adef_cap`) and **would not fix the damage path**, which has a different owner.
+> Batch 6's F21 item is therefore under-scoped.
 
 ### A4 — The light→medium cliff · severity HIGH · [tracked, re-confirmed]
 
@@ -123,6 +128,123 @@ Sword-and-buckler is the subject of **MS I.33, the oldest surviving fechtbuch**.
 defining Renaissance civilian pairing. Sword-and-shield is the commonest armed configuration in the period the
 setting draws on. Their absence is the largest single content gap in the roster, and it compounds A2: with no
 off-hand slot there is nowhere to put a buckler even if one existed.
+
+### A7 — The curved-weapon investigation: two independent root causes · severity **HIGH** · [new]
+
+The roster's 12 `curved_cut` weapons split violently — 1H curved swords at 22–39% while 2H curved polearms sit
+at 91–95%. The split is **not** caused by the head token: `curved_cut` and `straight_cut` are identical in
+`core.HEAD_MODE` (both `shear`) and `core.DELIVERY` (both 1.5). Two separate mechanisms are responsible.
+
+#### A7a — Curvature is ALL COST AND NO BENEFIT (the damage path)
+
+`geometry.py` grades a blade both ways, correctly:
+
+| derivation | formula | effect of curvature |
+|---|---|---|
+| `cut_factor(curvature, edge_keenness)` | `keenness × (1 + 0.45·tanh(2·curvature))` | curvature **raises** the cut |
+| `thrust_factor(pc, cross_section, curvature)` | `base × (1 − 0.6·curvature)` | curvature **lowers** the thrust |
+
+**The thrust side is consumed. The cut side is discarded.** `core.coupling` scales the `point` token's DELIVERY by
+its derived magnitude (`eff`, the ED-PC-0012 lineage) and the *incidental* `cut` token's by `CUT_AUTH_REF`
+(ED-PC-0011) — but for native `straight_cut` / `curved_cut` it **ignores `eff` outright**.
+
+**Falsifier, run:** sweep `eff` over a 20× range and read the coupling.
+
+```
+curved_cut   none    eff 0.1/0.5/1.0/1.5/2.0 -> [1.5,    1.5,    1.5,    1.5,    1.5   ]
+curved_cut   medium                          -> [0.4162, 0.4162, 0.4162, 0.4162, 0.4162]
+straight_cut none                            -> [1.5,    1.5,    1.5,    1.5,    1.5   ]
+CONTROL cut  none                            -> [0.2143, 1.0714, 1.5,    1.5,    1.5   ]   <- graded
+CONTROL point none                           -> [0.2788, 1.3942, 1.45,   1.45,   1.45  ]   <- graded
+```
+
+**Constant across the entire sweep, at every tier.** The claim survives.
+
+**Consequence: all 16 native cutters (4 `straight_cut` + 12 `curved_cut`, 31% of the roster) deliver an identical
+cut coupling regardless of edge geometry.** Their computed `cut_factor` spans **0.71–1.33 (1.87×)** and is
+**entirely inert**:
+
+| shamshir | pulwar | scimitar | sabre | guandao | … | greatsword | hook_sword |
+|---|---|---|---|---|---|---|---|
+| 1.33 | 1.24 | 1.22 | 1.18 | 1.17 | … | 0.80 | 0.71 |
+
+So a shamshir — the keenest, most curved edge in the roster — couples exactly like a hook_sword. **A curved blade
+pays the full thrust penalty (shamshir thrust 0.03, pulwar 0.12, scimitar 0.16, versus arming 0.51) and banks
+none of the cut gain it purchased that penalty with.** That is a complete mechanistic explanation of A3.
+
+**This is documented, deliberate scoping, not an accident.** `core.py:209` states it explicitly: the constant
+applies "as native `cut` (dedicated cutters use `straight_cut`/`curved_cut`, which this constant does NOT
+touch)." ED-PC-0011 scoped it that way to avoid a roster-wide re-validation it did not have time for, and
+ED-PC-0012 deferred the symmetric fix on the point side for the same reason. **What appears never to have
+happened is measuring the consequence.**
+
+#### A7b — Mode abandonment: dedicated cutters that never cut (the selection path)
+
+`select_mode`'s comparator is `coupling × close_efficacy / (1 + EXPOSE_SELECT_K · max(0, exposure − 1))`, where
+`exposure` is `_recovery_mode_commitment` — the T_vuln undefended-time model (ED-PC-0027).
+
+Selected head, by armour tier:
+
+| weapon | none | light | medium | heavy |
+|---|---|---|---|---|
+| **katana** | **point** | **point** | **point** | **point** |
+| **guandao** | **point** | **point** | **point** | **point** |
+| **fauchard** | **point** | **point** | **point** | **point** |
+| tachi | curved_cut | **point** | **point** | blunt |
+| glaive | curved_cut | **point** | **point** | **point** |
+| hook_sword | curved_cut | **point** | **point** | **point** |
+| podao | curved_cut | curved_cut | **point** | **point** |
+| nandao | curved_cut | curved_cut | **blunt** | **blunt** |
+| sabre | curved_cut | curved_cut | **point** | **point** |
+| scimitar / shamshir / pulwar | curved_cut | curved_cut | curved_cut | curved_cut |
+
+**The katana never cuts — at any tier, including unarmoured.** Neither does the guandao or the fauchard. Seven of
+twelve curved weapons abandon the cut at one tier or another.
+
+Two different mechanisms drive this, and only one is T_vuln:
+
+- **Knife-edge `close_efficacy` (the katana case).** Raw coupling: cut **1.500** vs point **1.227** — the cut is
+  22% better. But `close_efficacy` discounts the swing to 0.80 and the thrust not at all, giving **1.200 vs
+  1.227**. T_vuln is *not* involved (exposure 0.88 < 1 → discount exactly 1.00). **A 2.2% margin flips the
+  weapon's entire identity**, permanently and at every tier. That is the F16/F17 structural-threshold defect class
+  ED-PC-0037 fixed for the first-actor race and the closed latch, recurring here in mode selection.
+- **T_vuln domination (the polearm case).** Exposure across the native-cutter cohort spans **0.35 → 67.79 (195×)**,
+  entering as a divisor up to **21.04×** (guandao) and 2.49× (glaive). At that magnitude no geometry difference can
+  survive the comparator — T_vuln alone decides the mode.
+
+#### A7c — Why the split looks like "curved vs straight"
+
+It is not. Composing A7a and A7b:
+
+- **The 1H curved swords keep cutting and lose anyway** (shamshir/pulwar/scimitar cut at every tier; sabre until
+  medium) — they are sunk by **A7a**, having bought a thrust penalty for a cut bonus that is never paid.
+- **The 2H curved polearms stop cutting** — **A7b** — but survive because reach carries them (D1/C1). Reach is
+  *hiding* A7b.
+
+**The natural experiment confirms it.** `szabla` and `sabre` are both one-handed sabres of near-identical mass
+(0.95 vs 0.90 kg) and reach (5.79 vs 5.55). The sabre has the **better** cut (1.18 vs 1.12). The szabla is tokened
+`cut_thrust` — a single versatile head that is graded on both arms and never faces the comparator — and the sabre
+is tokened `curved_cut`, ungraded and forced to choose. **szabla 56.1% vs sabre 22.5% — a 33.6pp gap that no
+geometric advantage of the sabre's can express.**
+
+#### A7d — Fix sketch (NOT implemented; blast radius stated)
+
+1. **Grade the native cut path.** Extend `eff` scaling to `straight_cut`/`curved_cut` in `core.coupling`,
+   symmetric with the `cut`/`point` tokens. This is the fix ED-PC-0011 deliberately deferred. **Blast radius:
+   roster-wide — all 16 native cutters, every golden, both reference tables.** It needs its own increment with a
+   full re-validation, exactly as ED-PC-0011 predicted.
+2. **Re-examine `close_efficacy`'s swing discount as a selection input.** A 2.2% margin should not flip a
+   weapon's identity. Either the discount belongs only in the damage path, or selection needs the same
+   soft-threshold treatment ED-PC-0037 gave the closed latch.
+3. **Bound the T_vuln selection discount.** A 195× exposure range feeding a 21× comparator divisor is not a
+   trade-off, it is an override. Cap or compress it as `MAX_TEMPO_PEN` does for tempo.
+4. **Decide whether the roster-wide thrust-lean is wanted at all** — this is the open Jordan question already
+   recorded in `HANDOFF_PC.md` from ED-PC-0027/0028 ("confirm the feel is desired vs giving cut-primary weapons
+   more cut-identity"). **A7b is that question's answer arriving as data: the lean did not stop at "prefer the
+   point," it removed the cut from the katana entirely.**
+
+**Do not apply 1–3 in one commit.** Each moves the goldens, and the last two same-commit "while I'm here" fixes
+are why batches 4 and 5 both half-stood.
 
 ---
 
