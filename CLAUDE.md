@@ -175,8 +175,16 @@ are more "current state" files than there should be; trust them in this strict p
 
 ## 4. Conventions
 
-- **Co-filing.** Many docs are a pair: `*_index.md` (skeleton/structure) + `*_infill.md` (prose).
-  CI-enforced (`tools/ci_co_file_checker.py`) — keep the pair in sync.
+- **Long documents: sequential parts, not index+infill (RULED 2026-07-26, Jordan).** A document that
+  outgrows ~15k tokens splits into **`_part2`, `_part3`, … in reading order**. The old `*_index.md`
+  (skeleton) + `*_infill.md` (prose) pair is **RETIRED as a default** — existing pairs are grandfathered,
+  not a migration target. ⚠️ This bullet previously claimed the pair was "CI-enforced
+  (`tools/ci_co_file_checker.py`)". **That was false:** that checker has no pair rule at all (its four
+  rules are canonical_sources / propagation_map / coverage_matrix / params, and its only mention of
+  `infill` is an *exclusion*), `compliance_check.py` merely skips such files, and
+  `atomization_rules.yaml`'s `force_skeleton_routing_for_design_docs` / `skeleton_threshold_tokens` had
+  **zero readers** anywhere in `tools/`, `.githooks/` or `skills/`. The convention propagated by imitation
+  and the doc asserted an enforcement that did not exist.
 - **Versioning ≠ currency.** Three orthogonal version axes coexist with **no reliable mapping**:
   filename `_v30`, in-file `## Version: vN.N`, and the `v40` generation marker (no file carries `_v40`).
   **A filename or in-file version cannot tell you what is current — only `CURRENT.md` and a head's

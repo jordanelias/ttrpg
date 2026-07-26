@@ -1,8 +1,7 @@
 # Personal Combat — Complete Defect Register
 
 **Status: REGISTER — measured/diagnosed, no fix applied.** Companion to
-`combat_balance_customization_state_index.md` (the balance state) and
-`combat_balance_customization_state_infill.md` (method). Subject: `systems/combat/combat_engine_v1/` at
+`combat_balance_state.md` (the balance state and its method). Subject: `systems/combat/combat_engine_v1/` at
 `248f344`. Date: 2026-07-26.
 
 **MEASURED-BY:** `workbench/balance.py` (matchup N=300, armour matrix N=200/cell) ·
@@ -229,10 +228,23 @@ geometric advantage of the sabre's can express.**
 
 #### A7d — Fix sketch (NOT implemented; blast radius stated)
 
-1. **Grade the native cut path.** Extend `eff` scaling to `straight_cut`/`curved_cut` in `core.coupling`,
-   symmetric with the `cut`/`point` tokens. This is the fix ED-PC-0011 deliberately deferred. **Blast radius:
-   roster-wide — all 16 native cutters, every golden, both reference tables.** It needs its own increment with a
-   full re-validation, exactly as ED-PC-0011 predicted.
+1. **Grade the native cut path.** ~~Extend `eff` scaling to `straight_cut`/`curved_cut` in `core.coupling`,
+   symmetric with the `cut`/`point` tokens.~~
+   > **CORRECTED 2026-07-26 — that sketch was a NO-OP and would have shipped as one.** The existing form is
+   > saturating: `d *= min(1.0, eff / CUT_AUTH_REF)` with `CUT_AUTH_REF = 0.70`, while the native-cutter
+   > `cut_factor` population is **0.71–1.33** (minimum: hook_sword 0.71). **Every native cutter already sits at
+   > or above the reference, so every ratio clamps to 1.0 and nothing changes.** The reference sits *below the
+   > entire population it would be grading*. Grading requires either (A) re-anchoring the native-cut reference
+   > so the spread straddles it (≈1.05) — which is **coupled**, because `CUT_AUTH_REF` also grades the
+   > incidental cut token where 0.70 is anchored on hook_sword per ED-PC-0011, so splitting them needs its own
+   > justification or it becomes two references for one physical fact (§5.1 rule 1 of the proposal) — or (B) a
+   > non-saturating form for the native path, which is a *new functional form*, not the symmetry claimed above.
+   > Caught during increment planning, before anyone built it. Full treatment: proposal §14.
+   **Blast radius either way: roster-wide — all 16 native cutters, every golden, both reference tables**, and
+   it is a *balance* change, not a correctness fix: it buffs the keen curved swords (shamshir 1.33, pulwar 1.24,
+   scimitar 1.22, sabre 1.18 — exactly the A3 collapse cohort) and nerfs the dull ones (hook_sword 0.71,
+   greatsword 0.80). That direction is intended — it makes curvature a trade rather than a tax — but it must be
+   presented as a balance change. It needs its own increment with full re-validation, as ED-PC-0011 predicted.
 2. **Re-examine `close_efficacy`'s swing discount as a selection input.** A 2.2% margin should not flip a
    weapon's identity. Either the discount belongs only in the damage path, or selection needs the same
    soft-threshold treatment ED-PC-0037 gave the closed latch.
@@ -324,7 +336,163 @@ Recording these so they are not re-litigated:
 
 ---
 
-## G. Severity-ordered shortlist
+## G. Independent `fable`-tier audit — F1–F10 (2026-07-26)
+
+Commissioned by Jordan; run **read-only and BLIND** (the auditor was given the target files and this repo's
+evidence discipline, but **not** any finding from §A–§F, so overlap is genuine corroboration). Its own headline:
+**the combat suite — 290 tests — is green with every one of F1–F6 present.** None is visible to current tests.
+
+**Verification status is per-row.** I re-ran the three heaviest claims myself rather than relaying them
+(CLAUDE.md §7: do not take another agent at face value).
+
+| # | finding | severity | verified by me |
+|---|---|---|---|
+| **F1** | **The staff's `percussion_authority` derives to exactly 0**, and every downstream channel zeroes with it. The formula uses **PoB_frac** (CoM offset) as the lever; the staff is centre-gripped at `x_m=0.0`, so authority is 0 **regardless of mass**. Damage @none: staff **3** vs mace **17**; staff-vs-arming @heavy **0 decided / 200 draws**. Contradicts `percussion_stagger`'s own docstring, which cites the staff as the worked example of ED-PC-0031's headline mechanic, and `config.py:82`'s "staff (p_auth ~4)". | outcome-changing | ✅ `perc_auth=0.000`, `punct=0.000`, `adef_cap=0.000`, `stagger=(0.0,0.0)` |
+| **F2** | **All 19 `cut_thrust` weapons are paid the SWING moment on their thrust arm.** `heft` keys the lever on the head *token*, so a `cut_thrust` weapon resolving the **puncture** arm still gets `m_head·PoB_frac`. Ranseur heft **2.515** vs **0.799** under its own thrust model (3.1×); damage @none ranseur **26** vs spear **13**. `weapon_physics.py:632` already concedes the bypass; the ED-PC-0027 fix was never extended. | outcome-changing | not re-run |
+| **F3** | **Plate SHIELDS against the poleaxe.** `config.py:81` says ADEF_POINT was set so "the poleaxe spike adef ≈ its hammer"; PC-5's `thrust_authority` halved the spike *after* that calibration. `select_mode` picks the spike at all four tiers, so at heavy `armor_defeat_sigma = 1.7·(0.601−0.72) = −0.20` where the hammer reads +0.84. Compounding: the greedy comparator never prices the **adef consequence** of the mode choice, so a selection can forfeit ~1σ of exchange control invisibly. | outcome-changing | ✅ hammer **1.216**, spike **0.601**, threshold **0.72** |
+| **F4** | **`reach_threat` and `represent_measure_p` feed the raw, possibly-negative `adef_cap` into a capability deficit** — the class ED-PC-0039 ruled invalid but fixed only in the damage knee. Pure cutters (cap −0.9) @medium: represent gate **0.0089 vs 0.207** clamped — **23×**. | outcome-changing | not re-run |
+| **F5** | **The multiplicative ability channels are SIGN-BLIND: investing makes you worse when behind.** `bind_sigma` computes `(lev_a − lev_d) · eff_cw(a)/eff_cw(d)`, so a >1 factor amplifies a **negative** difference. Same shape in `reach_sigma` with `misura`. **Live for any invested build — the whole ED-PC-0024 surface.** | latent-but-armed | ✅ dagger vs poleaxe bind_sigma **−1.0562 → −1.1904** with `staerke_schwaeche` |
+| **F6** | **hook_sword's authored blunt mode is structurally unreachable** — its crescent element sits at `x=0` and `percussion_element_authority ∝ |x|/Lt` → 0 → never afforded. **Generalises: any guard-mounted striking element is zeroed by this lever form.** | latent | not re-run |
+| **F7** | **`defense_affinities`' band remap floor-pins the roster:** parry cap identical **0.4 for 36/53**; dodge 27 floored + 5 ceilinged; wind 17 + 8. The AGILITY_REF re-anchor was done to stop a clamp erasing ordering; `_band` re-creates it downstream. | outcome-shaping | not re-run |
+| **F8** | `MAX_TEMPO_PEN` clips exactly **38/53** — confirms **B9**; recorded so it is not re-discovered. | outcome-shaping | — (= B9) |
+| **F9** | **Weapon data:** polearm blade `extent_m` internally inconsistent (fauchard 1.803 m at 0.65 kg vs glaive 0.50 m at 0.82 kg — 3–4× in one class, and extent enters MoI as `m·extent²/12`); **13 records have elements protruding past `[0, head_len]`**, the poleaxe top spike reaching **1.12 m vs head_len 0.90**. Mass bookkeeping CLEAN 53/53. | moderate | not re-run |
+| **F10** | **Dead/vestigial**, one of which matters: **`CHOKE_GRIP_MIN` has zero readers yet ships in the Godot-facing JSON** — the dead-key-in-the-typed-contract class ED-PC-0035 *and* ED-PC-0037 each cleaned, **recreated a third time**. Also `HEAVY_BLUNT_THRESHOLD`/`RHO_IRON`/`_A_HAFT` unread; `element_afforded`'s damage-mode string written and never read; `geo['perc_conc']` has no live consumer; `core.adef_cap`'s `cut_thrust` ADEF_CUT arm structurally unreachable; `wrapper.py:134`'s comment contradicts the code on its own line. | cosmetic→moderate | — |
+
+### G.1 What the independent pass changes about §A–§F
+
+- **F1 diagnoses A4's staff cliff** (73.4 → 8.7) completely — A4 described the symptom, F1 gives the cause.
+- **F2 is the mechanism behind A5's ranseur** covert plate-killer (wins ~100% of the 12% it settles).
+- **F6 deepens A1's hook_sword** — not merely mis-modelled as solo, but missing half its authored kit.
+- **F4 sharpens B6's four-channel double-count** into a specific defect at two named sites.
+- **F5 invalidates part of the proposal's own §5 lever registry**, which classified `leverage` and `measure`
+  as Class-C LEGAL. They are sign-broken at their call sites. Corrected there.
+- **A7a survived the blind pass** — the auditor did not find that `core.coupling` ignores `eff` for native cut
+  tokens. Independent non-discovery is not confirmation, but it does mean A7a is not a duplicate.
+
+### G.2 What the audit could NOT reach (its own statement, carried forward)
+
+`wrapper.py` (493 lines) — the fight loop's **mutation ordering, RNG-draw sequencing, and burst/latch state
+machine** were only spot-checked, so **the state/ordering dimension is only partially covered**; defect classes
+like stale `sel_*` carryover and draw-order divergence live there. Also untouched: `combatant.py`,
+`state_graph.py`, `capabilities.py`; external verification of cited sources (Oh et al., Williams RESIST cells,
+Cross & Nathan) — internal consistency only; and a full 51×51×4 dominance sweep (its win-rate probes were
+n=200–400 spot checks, indicative not exhaustive).
+
+---
+
+## H. Structural / code-quality debt — ownership, hard-coding, organisation (2026-07-26)
+
+A different axis from §A–§G, which are all *behavioural*. **MEASURED-BY** an AST scan over the 14 engine
+modules + 10 workbench modules (~3,700 engine LOC). Counts are reproducible, not impressions.
+
+### H.0 The good news first, because it is load-bearing
+
+**Single-ownership ("every rule lives once", CLAUDE.md §8) is HOLDING.** The scan found exactly one function
+name defined in two engine modules — `adef_cap` — and on inspection it is a **documented delegate**, not a
+copy: ED-PC-0038 moved the rule to `core` precisely so the damage and σ paths could not disagree, and
+`combat_systems.adef_cap` forwards with an explanatory docstring. **Zero constants are defined in more than one
+module.** The invariant the repo works hardest to protect is intact.
+
+### H1 — Hard-coded domain vocabulary: **279 literal occurrences across 18 tokens** · severity HIGH
+
+| token | occurrences | | token | occurrences |
+|---|---|---|---|---|
+| `'none'` | 50 | | `'shear'` | 15 |
+| `'point'` | 43 | | `'puncture'` | 13 |
+| `'cut_thrust'` | 33 | | `'heavy'` | 12 |
+| `'blunt'` | 27 | | `'percussion'` | 9 |
+| `'curved_cut'` | 23 | | `'straight_cut'` | 9 |
+
+Three dicts in `core.py` enumerate this vocabulary — `HEAD_MODE`, `DELIVERY`, `TIER2MAT` — but they are
+**lookup tables, not the definition of the token set.** Nothing constrains a literal to be a member.
+
+**Why this is the highest-value item in §H:** a misspelled token is **silent**. `head == 'cut_thust'` is simply
+False; `HEAD_MODE.get(head, 'shear')` returns the default. There is no error, no test failure, no log line —
+the branch just never fires. **This is the same failure shape as F6** (an authored mode that can never be
+selected) and **A7b** (identity decided by token-keyed branches), and it is why those defects were invisible.
+
+**Direction:** one owner for the token set — a frozen registry or enum the three tables and every comparison
+derive from — plus an AST guard that a bare vocabulary literal appears only in that owner. This is the same
+shape as the existing no-weapon-name-in-resolution guard, which already works.
+
+### H2 — Un-named numeric literals: **127 inline, 33 distinct values** · severity MEDIUM-HIGH
+
+`config.py`'s own header contract reads *"All tunable coefficients in ONE place."* Measured against it:
+
+| module | inline literals | | most-repeated value | count |
+|---|---|---|---|---|
+| `combat_systems.py` | 43 | | `4` | 18 |
+| `weapon_physics.py` | 35 | | `0.45` | 11 |
+| `wrapper.py` | 15 | | `0.3` | 8 |
+| `geometry.py` | 13 | | `0.25` / `0.55` | 6 each |
+
+**A literal repeated 11 times across different functions is the strongest available evidence it should be a
+named constant.** ED-PC-0036 already had to fix exactly this class — two inline magic numbers inside
+`percussion_stagger`, *on the path producing ED-PC-0031's headline result* — and the pattern recurred.
+
+**Worst single function: `defense_affinities` with 23 inline literals** — and **F7 reports that same function
+floor-pins 36/53 weapons' parry to an identical 0.4.** Those are the same finding from two directions: the band
+edges are hard-coded, so the ordering the module computes upstream is discarded by numbers nobody can see or
+tune.
+
+### H3 — The engine is procedural; weapons are untyped dicts · severity MEDIUM (root cause of H1)
+
+**Two classes exist in the entire engine** — `WoundTracker` and `Combatant`, both in `combatant.py`. Everything
+else is module-level functions over raw dicts: `w['head']`, `w['mass']`, `w['geometry']['curvature']`.
+
+There is no weapon type, no schema validated at access, and no attribute the reader can trust exists. **H1 is
+downstream of this**: string keys into untyped dicts are what force vocabulary literals everywhere. Note this
+is not obviously wrong — a data-driven roster is a legitimate design, and the repo's primitive principle
+actively wants weapons to be "a dictionary label for an aggregate of primitives." **But a dict with no schema
+and 279 literal accesses is the version of that design with no safety rail.**
+
+### H4 — `combat_systems.py` is a god-module: **76 functions, 944 code lines** · severity MEDIUM
+
+It owns reach, tempo, leverage, footwork, mode selection, σ assembly, initiative, poise, percussion, pursuit
+and disengagement. For comparison the next-largest behavioural module is `weapon_physics.py` at 33 functions.
+This is in tension with the repo's own holonic-container doctrine, and it is why "where does this rule live?"
+is not answerable by module name.
+
+### H5 — Dead code: **1 confirmed** (plus §F10's list) · severity LOW
+
+`combat_systems.can_choke` has **zero callers** anywhere in the package or workbench; the only other mention is
+a `weapon_physics.py:711` comment saying the design is "never a `can_choke` flag." §F10 independently lists
+`CHOKE_GRIP_MIN` (dead yet exported to Godot — third recurrence), `HEAVY_BLUNT_THRESHOLD`, `RHO_IRON`,
+`_A_HAFT`, `element_afforded`'s unread damage-mode string, and `geo['perc_conc']`.
+
+*Scan caveat, stated:* my zero-caller regex produced one **false positive** (`WoundTracker`, whose class-def
+line has no parenthesis). Both hits were checked by hand; only `can_choke` survived. An unverified automated
+count is not a finding.
+
+### H6 — **28 `sys.path.insert` calls** (8 engine + 20 workbench) · severity LOW, partly by design
+
+`combat_engine_v1/` is deliberately a non-package scripts-on-path directory (CLAUDE.md §3, so its internal
+`../../..` reaches survive), so this is a known architectural choice rather than an accident. The cost is
+visible: every workbench tool opens with two path hacks, and the engine cannot be imported from outside
+without them.
+
+### H7 — Comment density varies 4% → 74% · severity LOW
+
+`config.py` 74% · `core.py` 50% · `wrapper.py` 37% … `contact.py` 6% · `geometry.py` 4%. ED-PC-0040 already
+flagged config.py's 74% as a symptom of claim-heavy prose. The floor is the more interesting end: `geometry.py`
+carries the cut/thrust derivations at the centre of A7 with almost no inline explanation.
+
+### H.8 Count summary
+
+| category | distinct issues | measured instances |
+|---|---|---|
+| ownership / "every rule lives once" | **0** | — (1 delegate, verified legitimate) |
+| hard-coding (vocabulary + numerics) | **2** | **406** (279 + 127) |
+| objects / classes / typing | **1** | 2 classes over ~3,700 LOC |
+| organisation / consolidation | **4** | god-module, 28 path hacks, 1 dead fn, density spread |
+| **total** | **7** | **406 hard-coded instances** |
+
+**Priority within §H is H1, and it is not close** — it is the only one whose failure mode is *silent*, and two
+already-confirmed behavioural defects (F6, A7b) have its shape.
+
+---
+
+## I. Severity-ordered shortlist
 
 If only five things are fixed, the register says these five:
 
