@@ -30,96 +30,52 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
   - Carried-open items from ED-PC-0040 were re-confirmed live, not re-discovered: off-plate reach ~0.94,
     ranseur/guandao covert plate-killers, medium-tier round-trip, F21/F22/F23/F24.
 
-- **PLAYER-AGENCY + TRADITION-CURRICULUM PROPOSAL (2026-07-26, no ED — PROPOSED, design-only, HELD FOR JORDAN).**
-  `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md`. Nothing built; no constant
-  changed. Would close **ED-PC-0001** (player-input surface, open since 2026-07-05) + `phase4_5_plan_v1.md`
-  Phase 4b (abilities-as-access, NOT STARTED since 2026-06-29) + **F23**.
-  - **Architecture:** three tiers — T0 build (exists) / **T1 a PLAN of six intents, one decision per engagement**
-    (the cadence `wrapper.fight()`'s own docstring already specifies: "the GAME calls one engagement per turn") /
-    T2 beat, which stays closed. The six intents attach to **six of the nine existing `state_graph.INJECTION_POINTS`**
-    — no new state, no new node. Three points are deliberately NOT player-facing (read is a contest; bind-entry is
-    a consequence; burst continuation is tempo-determined). Governing rules: a plan is a **prior, not a command**
-    (`engagement_psychology` §B1 "biased weights, NOT a planner"); intent is **contested, never imposed**
-    (ED-PC-0023); **both ends of every trade wired in the same commit** (the D3 lesson).
-  - **Sharpest single insertion point found:** `read_contest` currently resolves a LOST read as
-    `modes[rng.randrange(3)]` — a trained fighter surprised by an attack guesses uniformly across parry/dodge/wind.
-    A GUARD prior would weight that draw only on the lost-read branch (a floor on failure, never a ceiling on
-    success; the won-read `max(msig)` branch untouched).
-  - **Lever registry (the "which values may an ability modify" answer):** Class A FORBIDDEN (damage path,
-    `adef_cap`/armour capability, weapon primitives, wound model, `UPSET_FLOOR`, the resolver) · Class B GATED
-    (availability only) · Class C LEGAL — **the 15 live levers, of which 8 are BARE** (`tempo`, `visual`,
-    `tactile`, `precommit`, `balance`, `edge_read`, `choke_control`, `facing_regime`) plus **5 proposed new ones,
-    each an unhooked pure function that already computes the right quantity**: `disengage`→`disengage_clean_p`,
-    `pursuit`→`pursuit_sigma`, `stophit`→`stophit_sigma`, `guard_prior`→`read_contest` lost-read branch,
-    `grapple_control`→`grab_outcome` weights. **Authoring the 8 bare levers is strictly cheaper and safer than
-    adding new ones and should be exhausted first.**
-  - **BLOCKING SEQUENCING CLAIM (§9) — do NOT build the plan layer first.** The ability layer is the controlled
-    experiment that already ran: correct, bounded, wired at 15 sites, measured ~0 aggregate — because the surface
-    under it has one lever worth 90pp. A second modulation layer on the same surface will measure the same way.
-    Order: P0 D1 weapon-identity compression + D2 price armour → P1 D3 disposition shape (Jordan) → P2 author the
-    8 bare levers → P3 plan layer one intent at a time → P4 curricula + 5 new levers → P5 measured pricing.
-  - **Appendix A — the FFT lens (Jordan's question).** Valoria and Final Fantasy Tactics are currently **mirror
-    images**: in FFT the job/ability layer carries build identity and equipment is secondary; here the weapon
-    carries 47pp and the ability layer carries ~0. More of FFT's architecture is already built than expected
-    (job→tradition, JP→levels-of-investment, secondary-job→`known_traditions`, CT/Speed→`ready`/`tempo_pressure`,
-    reaction abilities→the counter node — Hamedo *is* the single-time counter, Blade Grasp *is* `ringen_am_schwert`).
-    Grid→continuous `measure_gap` (canon is zone-based, no grids); "Hit 85%" readout→`workbench/probabilities.py`,
-    **which already exists and nothing consumes** (cheapest FFT-shaped feature available). The one feature worth
-    stealing outright is the **slot architecture** — and `phase4_5_plan` §4b's 7 phase-slots already ARE it,
-    indexed by engagement-phase rather than turn-timing, i.e. the injection-point registry with a budget. Named
-    gaps: multi-combatant (ED-911, design-only), no progression economy at all, and only 8 authored abilities to
-    fill a 7-slot system (a *research* cost under the source-tier rule, not a writing one). Zodiac-compatibility
-    style hidden multipliers are deliberately excluded — that is the fiat ED-PC-0023 retired.
-  - **Appendix B — CARRY CONTEXT (Jordan's direction, 2026-07-26) — SUPERSEDES §9's P0.** *"Polearms/larger
-    weapons were typically disallowed in any public places during Renaissance. It was acceptable to have a smaller
-    sword like a rapier, but not acceptable to carry a spear."* This is a **better answer to D1 than compression**:
-    the 26-weapon 91–97% band mostly should NOT be flattened — a spear *should* beat a rapier in an open fight;
-    the rapier is worth owning because you can carry it into a city and a spear you cannot. It is the **C1
-    principle on a third axis** (armour tier ✓ live · measure ✓ live · **carry legality ✗ absent at every layer**).
-    Balance target changes from "every weapon ~50% vs every other" to **"every weapon is the best AVAILABLE choice
-    in some context"** — measurable as a **context-weighted** field table in `balance.py`, which is a new table,
-    not new physics. Resolves by FRAME what B8 proved is not resolvable by lever (four levers swept; off-plate
-    reach 0.75 unreachable without breaking guisarme@heavy). Also supplies armour's missing cost via **access**
-    rather than an invented fatigue model (caveat recorded: access gates the encounter distribution but does not
-    price the choice *within* a context where armour is legal — some wearer-side cost may still be needed), and
-    explains `cinquedea` (a civilian dress weapon whose physics may be right and whose *context* is missing).
-    **Costs:** a scene-context primitive (CROSS-LANE — settlement law/order, fieldwork scene, strategic layer;
-    not a PC-lane call), a **derived** carriability property (never a per-weapon hand-set table), S1/S2 grounding
-    of the actual statutes (**not yet verified — do not encode a carry table from general impressions**), and the
-    context-weighted table.
-  - **9 open questions are Jordan's** (§11): player cadence · disposition's intended shape · whether armour should
-    cost the wearer · the I6 grab default (byte-identity vs. behaviour change) · Chinese/Filipino under the
-    source-tier rule · whether the guard prior needs threat-memory · whether character-gen economy is in engine
-    scope · **Q8 carry-context taxonomy + where the primitive lives** · **Q9 the off-hand/shield slot**.
-
-- **COMPLETE DEFECT REGISTER (2026-07-26) — `audit/2026-07-26-combat-balance-customization-state/combat_defect_register.md`.**
-  Every known personal-combat defect in one queryable place, each tagged **[tracked]** (re-confirmed live, not
-  re-discovered) or **[new]**. Classes: A weapon-level · B resolution-layer · C build-layer (D1–D8) · D absent
-  subsystems · E instrument/doc · F explicitly-cleared non-defects · G severity shortlist.
-  - **NEW findings worth not re-discovering:**
-    - **A6 — there is NO shield, buckler or targe anywhere in the 51-weapon roster** (verified programmatically).
-      Sword-and-buckler is the subject of MS I.33, the oldest surviving fechtbuch; rapier-and-dagger is the
-      defining Renaissance civilian pairing. **Largest single content gap in the roster.**
-    - **A2 — three weapons are measured in a configuration they were never used in:** `main_gauche` (a left-hand
-      parrying dagger), `paired_short` (its own name), `hook_sword` (a paired system). **The engine has no
-      off-hand slot.** Their duel numbers (8–16%) are a MODELLING gap, not a balance one — note both
-      main_gauche and paired_short read ~92% at plate. **Do not "fix" these by buffing them.**
-    - **A1 — two weapons have NO context anywhere:** `cinquedea` (4.5/5.0/6.5/undecided; cap 0.672) is **the worst
-      weapon in the roster** — dagger-length with sword weight and a wide blade, so low point-concentration means
-      it cannot play the gap game every other dagger-class weapon wins with (rondel 1.032, stiletto 1.092,
-      misericorde 1.008, dagger 1.008). A dagger that cannot dagger. `hook_sword` (cap 0.576) is compounded by A2.
-    - **A5 — `estoc` has no weakness at any tier** (duel 97.3; 96.5/96.0/92.0/95.0; cap 1.104). A C1 failure
-      (*no option globally best*) even though nothing about it is a bug.
-    - **A3 smoking gun:** the *light* column. `scimitar` 68.3 → **33.7 against a gambeson** → 3.3 at mail. A
-      padded jacket should not halve a cavalry sabre.
-    - The ≤18% band is **not** traps — it is the **concealed tier**, and all four (stiletto/misericorde/rondel/
-      dagger) already rise to 94–97% at plate. Two correct contexts, neither visible in a duel table.
-
-- **CI PIN, do not re-trip:** `tests/valoria/test_build_proposals.py::test_all_proposals_docs_surface_by_location`
-  carries a **regression pin on the proposals-doc count** (now `== 19`). Adding or removing anything in
-  `proposals/` requires bumping it **and** appending a comment line. `tools/valoria_local.py --staged` does NOT
-  run pytest, so local-green ≠ CI-green (CLAUDE.md §8) — **run `pytest tests/valoria` after adding a proposals
-  doc**, not before.
+- **PLAYER-AGENCY PROPOSAL + DEFECT REGISTER + VALUE CATALOGUE (2026-07-26, no ED — all design-only/report,
+  HELD FOR JORDAN).** Three durable artifacts; **read them rather than re-deriving** — this entry is a pointer,
+  not a summary (the lane handoff is a continuity index, and it just crossed its 20k size cap once it stopped
+  being one).
+  - `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md` — would close **ED-PC-0001**
+    (player-input surface, open since 2026-07-05) + `phase4_5_plan_v1.md` **Phase 4b** + **F23**. Three tiers
+    (T0 build / **T1 a PLAN of six intents, one per engagement** / T2 beat stays closed); the six intents attach
+    to six of the nine existing `state_graph.INJECTION_POINTS` — no new state. Class A/B/C **lever registry**
+    naming the 15 live levers (**8 bare**) + 5 proposed. **§9 is a BLOCKING sequencing claim: do not build the
+    plan layer before D1/D2 are resolved** — the ability layer is the controlled experiment that already ran
+    (wired at 15 sites, measured ~0 aggregate). Appendix A = the FFT lens. **Appendix B = carry context
+    (Jordan's direction) and it SUPERSEDES §9's own P0.** §11 holds **9 questions that are Jordan's**.
+  - `audit/2026-07-26-combat-balance-customization-state/combat_defect_register.md` — every known PC defect in
+    one place, each tagged `[tracked]` (re-confirmed live) or `[new]`. Classes A weapon / B resolution /
+    C build (D1–D8) / D absent subsystems / E instrument+doc / **F explicitly-cleared non-defects** / G shortlist.
+  - `audit/2026-07-26-combat-balance-customization-state/combat_value_catalogue_GENERATED.md` +
+    **`workbench/catalogue.py`** — the complete value/mechanics catalogue: 51 weapons × 49 derived quantities,
+    the coupling matrix per head × tier, 91 mechanics entries, all 201 tunables. **Generated, never hand-edited**
+    — the mechanics half is each function's own docstring, so it cannot drift from the code. Regenerate with
+    `python workbench/catalogue.py > <path>`. **Query this instead of re-deriving a value.**
+  - **Findings that would otherwise be re-discovered:**
+    1. **A7 — the curved-weapon root cause. `core.coupling` IGNORES edge quality for native cutters.** Falsifier
+       run: sweeping `eff` 0.1→2.0 returns a CONSTANT coupling for `straight_cut`/`curved_cut` at every tier,
+       while the `cut` and `point` controls grade normally. So all **16 native cutters (31% of the roster)**
+       couple identically regardless of geometry, and their `cut_factor` spread of 0.71–1.33 is **inert**.
+       Curvature therefore costs thrust (graded, consumed) and buys cut (ungraded, discarded) — **all cost, no
+       benefit**. Documented deliberate scoping at `core.py:209`, deferred by ED-PC-0011; the consequence appears
+       never to have been measured. **This AMENDS A3 and under-scopes batch 6's F21**, which targets the
+       capability/σ path (`adef_cap`), not the damage path.
+    2. **A7b — the katana never cuts, at any tier including unarmoured**; nor do guandao/fauchard. 7 of 12 curved
+       weapons abandon the cut somewhere. For the katana the cause is NOT T_vuln (exposure 0.88 → discount 1.00)
+       but `close_efficacy`'s swing discount turning a raw 1.500-vs-1.227 cut ADVANTAGE into a 1.200-vs-1.227
+       loss — **a 2.2% margin flips the weapon's identity permanently** (the F16/F17 threshold-cliff class,
+       recurring in mode selection). For polearms T_vuln alone decides (exposure spans 0.35–67.79, divisor to 21×).
+    3. **A6 — there is NO shield, buckler or targe in the 51-weapon roster** (verified programmatically), and no
+       off-hand slot to put one in. **A2** — `main_gauche`, `paired_short`, `hook_sword` are companion/paired
+       weapons measured as solo primaries; a MODELLING gap, not balance (both read ~92% at plate). **Do not buff
+       them.**
+    4. **A1 — `cinquedea` is the worst weapon in the roster** (4.5/5.0/6.5/undecided, cap 0.672): dagger-length,
+       sword weight, wide blade → cannot play the gap game every other dagger wins with. **A5 — `estoc` has no
+       weakness at any tier** (97.3; 96.5/96.0/92.0/95.0; cap 1.104). The ≤18% band is **not traps** — it is the
+       concealed tier, and all four rise to 94–97% at plate.
+  - **CI PIN, do not re-trip:** `tests/valoria/test_build_proposals.py::test_all_proposals_docs_surface_by_location`
+    pins the proposals-doc count (now **19**). Adding/removing anything in `proposals/` requires bumping it and
+    appending a comment line. `tools/valoria_local.py --staged` does NOT run pytest, so local-green ≠ CI-green
+    (CLAUDE.md §8) — **run `pytest tests/valoria` AFTER adding a proposals doc, not before.**
 
 - **FOUR-DIMENSION AUDIT + REMEDIATION (ED-PC-0034..0040) — batches 1–5.2 landed, batch 6 pending.**
   *(This block was missing until 2026-07-25 — the lane handoff had not been updated since batch 3, flagged by the
