@@ -381,7 +381,119 @@ n=200–400 spot checks, indicative not exhaustive).
 
 ---
 
-## H. Severity-ordered shortlist
+## H. Structural / code-quality debt — ownership, hard-coding, organisation (2026-07-26)
+
+A different axis from §A–§G, which are all *behavioural*. **MEASURED-BY** an AST scan over the 14 engine
+modules + 10 workbench modules (~3,700 engine LOC). Counts are reproducible, not impressions.
+
+### H.0 The good news first, because it is load-bearing
+
+**Single-ownership ("every rule lives once", CLAUDE.md §8) is HOLDING.** The scan found exactly one function
+name defined in two engine modules — `adef_cap` — and on inspection it is a **documented delegate**, not a
+copy: ED-PC-0038 moved the rule to `core` precisely so the damage and σ paths could not disagree, and
+`combat_systems.adef_cap` forwards with an explanatory docstring. **Zero constants are defined in more than one
+module.** The invariant the repo works hardest to protect is intact.
+
+### H1 — Hard-coded domain vocabulary: **279 literal occurrences across 18 tokens** · severity HIGH
+
+| token | occurrences | | token | occurrences |
+|---|---|---|---|---|
+| `'none'` | 50 | | `'shear'` | 15 |
+| `'point'` | 43 | | `'puncture'` | 13 |
+| `'cut_thrust'` | 33 | | `'heavy'` | 12 |
+| `'blunt'` | 27 | | `'percussion'` | 9 |
+| `'curved_cut'` | 23 | | `'straight_cut'` | 9 |
+
+Three dicts in `core.py` enumerate this vocabulary — `HEAD_MODE`, `DELIVERY`, `TIER2MAT` — but they are
+**lookup tables, not the definition of the token set.** Nothing constrains a literal to be a member.
+
+**Why this is the highest-value item in §H:** a misspelled token is **silent**. `head == 'cut_thust'` is simply
+False; `HEAD_MODE.get(head, 'shear')` returns the default. There is no error, no test failure, no log line —
+the branch just never fires. **This is the same failure shape as F6** (an authored mode that can never be
+selected) and **A7b** (identity decided by token-keyed branches), and it is why those defects were invisible.
+
+**Direction:** one owner for the token set — a frozen registry or enum the three tables and every comparison
+derive from — plus an AST guard that a bare vocabulary literal appears only in that owner. This is the same
+shape as the existing no-weapon-name-in-resolution guard, which already works.
+
+### H2 — Un-named numeric literals: **127 inline, 33 distinct values** · severity MEDIUM-HIGH
+
+`config.py`'s own header contract reads *"All tunable coefficients in ONE place."* Measured against it:
+
+| module | inline literals | | most-repeated value | count |
+|---|---|---|---|---|
+| `combat_systems.py` | 43 | | `4` | 18 |
+| `weapon_physics.py` | 35 | | `0.45` | 11 |
+| `wrapper.py` | 15 | | `0.3` | 8 |
+| `geometry.py` | 13 | | `0.25` / `0.55` | 6 each |
+
+**A literal repeated 11 times across different functions is the strongest available evidence it should be a
+named constant.** ED-PC-0036 already had to fix exactly this class — two inline magic numbers inside
+`percussion_stagger`, *on the path producing ED-PC-0031's headline result* — and the pattern recurred.
+
+**Worst single function: `defense_affinities` with 23 inline literals** — and **F7 reports that same function
+floor-pins 36/53 weapons' parry to an identical 0.4.** Those are the same finding from two directions: the band
+edges are hard-coded, so the ordering the module computes upstream is discarded by numbers nobody can see or
+tune.
+
+### H3 — The engine is procedural; weapons are untyped dicts · severity MEDIUM (root cause of H1)
+
+**Two classes exist in the entire engine** — `WoundTracker` and `Combatant`, both in `combatant.py`. Everything
+else is module-level functions over raw dicts: `w['head']`, `w['mass']`, `w['geometry']['curvature']`.
+
+There is no weapon type, no schema validated at access, and no attribute the reader can trust exists. **H1 is
+downstream of this**: string keys into untyped dicts are what force vocabulary literals everywhere. Note this
+is not obviously wrong — a data-driven roster is a legitimate design, and the repo's primitive principle
+actively wants weapons to be "a dictionary label for an aggregate of primitives." **But a dict with no schema
+and 279 literal accesses is the version of that design with no safety rail.**
+
+### H4 — `combat_systems.py` is a god-module: **76 functions, 944 code lines** · severity MEDIUM
+
+It owns reach, tempo, leverage, footwork, mode selection, σ assembly, initiative, poise, percussion, pursuit
+and disengagement. For comparison the next-largest behavioural module is `weapon_physics.py` at 33 functions.
+This is in tension with the repo's own holonic-container doctrine, and it is why "where does this rule live?"
+is not answerable by module name.
+
+### H5 — Dead code: **1 confirmed** (plus §F10's list) · severity LOW
+
+`combat_systems.can_choke` has **zero callers** anywhere in the package or workbench; the only other mention is
+a `weapon_physics.py:711` comment saying the design is "never a `can_choke` flag." §F10 independently lists
+`CHOKE_GRIP_MIN` (dead yet exported to Godot — third recurrence), `HEAVY_BLUNT_THRESHOLD`, `RHO_IRON`,
+`_A_HAFT`, `element_afforded`'s unread damage-mode string, and `geo['perc_conc']`.
+
+*Scan caveat, stated:* my zero-caller regex produced one **false positive** (`WoundTracker`, whose class-def
+line has no parenthesis). Both hits were checked by hand; only `can_choke` survived. An unverified automated
+count is not a finding.
+
+### H6 — **28 `sys.path.insert` calls** (8 engine + 20 workbench) · severity LOW, partly by design
+
+`combat_engine_v1/` is deliberately a non-package scripts-on-path directory (CLAUDE.md §3, so its internal
+`../../..` reaches survive), so this is a known architectural choice rather than an accident. The cost is
+visible: every workbench tool opens with two path hacks, and the engine cannot be imported from outside
+without them.
+
+### H7 — Comment density varies 4% → 74% · severity LOW
+
+`config.py` 74% · `core.py` 50% · `wrapper.py` 37% … `contact.py` 6% · `geometry.py` 4%. ED-PC-0040 already
+flagged config.py's 74% as a symptom of claim-heavy prose. The floor is the more interesting end: `geometry.py`
+carries the cut/thrust derivations at the centre of A7 with almost no inline explanation.
+
+### H.8 Count summary
+
+| category | distinct issues | measured instances |
+|---|---|---|
+| ownership / "every rule lives once" | **0** | — (1 delegate, verified legitimate) |
+| hard-coding (vocabulary + numerics) | **2** | **406** (279 + 127) |
+| objects / classes / typing | **1** | 2 classes over ~3,700 LOC |
+| organisation / consolidation | **4** | god-module, 28 path hacks, 1 dead fn, density spread |
+| **total** | **7** | **406 hard-coded instances** |
+
+**Priority within §H is H1, and it is not close** — it is the only one whose failure mode is *silent*, and two
+already-confirmed behavioural defects (F6, A7b) have its shape.
+
+---
+
+## I. Severity-ordered shortlist
 
 If only five things are fixed, the register says these five:
 
