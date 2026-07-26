@@ -18,8 +18,15 @@ defaults:
   # by running atomizer on empty content. See architecture <compliance_subsystem>
   # (V2.5+) for full context.
   auto_fix_on_violation: true
-  force_skeleton_routing_for_design_docs: true
-  skeleton_threshold_tokens: 5000
+  # RULED 2026-07-26 (Jordan): the index/skeleton + infill split is RETIRED as a default.
+  # A long document just breaks into sequential parts at ~15k tokens. Rationale: the split was
+  # enforced by NOTHING -- grep confirms these two keys have zero readers in tools/, .githooks/ or
+  # skills/, ci_co_file_checker.py has no pair rule (its only mention of 'infill' is an EXCLUSION),
+  # and compliance_check.py merely skips such files. It propagated purely by imitation, and cost a
+  # reader two files to follow one argument. Existing pairs are grandfathered, not a migration target.
+  force_skeleton_routing_for_design_docs: false
+  skeleton_threshold_tokens: 15000
+  sequential_chunk_tokens: 15000        # a doc over this splits into `_part2`, `_part3`, ... in reading order
   archive_chunk_max_tokens: 10000
   unknown_file_warn_tokens: 10000
   max_auto_fix_iterations: 3

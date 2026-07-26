@@ -1,8 +1,7 @@
 # Personal Combat — Complete Defect Register
 
 **Status: REGISTER — measured/diagnosed, no fix applied.** Companion to
-`combat_balance_customization_state_index.md` (the balance state) and
-`combat_balance_customization_state_infill.md` (method). Subject: `systems/combat/combat_engine_v1/` at
+`combat_balance_state.md` (the balance state and its method). Subject: `systems/combat/combat_engine_v1/` at
 `248f344`. Date: 2026-07-26.
 
 **MEASURED-BY:** `workbench/balance.py` (matchup N=300, armour matrix N=200/cell) ·
