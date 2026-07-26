@@ -15,6 +15,81 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0045 (2026-07-26): FABLE-5 SIX-DIMENSION READ-ONLY AUDIT.** Six independent Fable-5
+  auditors with read-only tools (structural independence, §10); every promoted finding re-derived by
+  the orchestrator. Register: `audit/2026-07-26-mass-battle-fable-audit/01_findings_register.md`.
+  **Nothing in the engine was modified.**
+
+  **⚠ THREE CORRECTIONS TO THIS HANDOFF, all verified — read before acting on the items below:**
+  1. **ED-MB-0038/0039's side-asymmetry diagnosis names a DEAD CODE PATH.** The text blames "the
+     enveloper's APEX-forward centre (`build_envelopment`, `start_row+APEX*advance_dir`) + wing
+     placement vs the flat command line". `engine.py:414-419` applies `APEX` **only in the `else`
+     branch — when the caller omits the centre's `starting_position`**. Both harnesses pass it
+     explicitly (`gauge_mb.py:257`, `bat.py:70`), so **in H3/H10 and the whole bat.py battery the apex
+     offset never executes.** Do not spend more effort on that hypothesis. The pathing auditor could
+     not find a deterministic bias statically and says so; its two candidates are `min()` over a
+     **set** (`orchestration.py:1744`, value-dependent iteration order) and banker's rounding at
+     exactly `.5` (consistent with the measured start-row *parity* sensitivity). Falsifiers given:
+     canonicalise to `min(sorted(...))` and re-run the mirror; sweep start rows preserving the exact
+     mirror midpoint.
+  2. **ED-MB-0043's "ship R3 without a ruling" was WRONG.** Removing the `hold` early-return does
+     nothing on its own — `STANCE_SPEED_MOD['hold'] = -99` independently zeroes `step`, and all goal
+     resolution sits behind `step > 0`. It is a **two-gate** change. `hold` is load-bearing for
+     `build_envelopment`'s `freeze_wings` (documented as relying on it), `build_refused_flank`, and
+     `STANCE_COMMITMENT`'s defensive-pool treatment. And `_kite_goal` does **not** generalise:
+     `PC_KITE_STANDOFF=5` vs max melee reach 0.3 makes the band `[5, 0.3]` inverted. Lower-blast-radius
+     alternative: change the **R3 scenario** (`stance='balanced'` + `kite`), not `hold` semantics.
+  3. **ED-MB-0041's "armour causes MORE arrow casualties" is REFUTED as current** — measured
+     0.115/0.061/0.035/0.015 at dr 0/1/2/3, strictly monotone decreasing. Retire the claim.
+     Relatedly **ED-MB-0008 drops in priority**: neither contradictory DR table is what the code
+     implements (the armour catalogue is explicitly unwired; the live engine uses a free scalar
+     defaulting to 1 everywhere) — it is a docs contradiction with no current code consequence.
+
+  **SEV-1, all verified by re-execution:**
+  - **The engine's own Lanchester instrument is RED and NOTHING runs it.** `melee p=2.50` against a
+    `≤1.4` linear bar — the scan-grid ceiling, so the true exponent is ≥2.5, *worse than the square law
+    `core/attrition.py` says frontage-capping prevents*; `volley p=0.50` against `≥1.6`. Exits 1. Not
+    in CI, not in pytest. Two of its three PASSes are degenerate (volley passes on `cas_exchange=inf`;
+    the melee 2:1 check demands ≥65% and measures **100%** while dg6 adopts ~70% as the historical
+    target — **two incompatible validation targets for one quantity; one must be repudiated**).
+  - **The 1-ulp degree defect is LIVE at the consumer.** `3 + σ(-1e-16) → Partial → 0 damage` at the
+    universal `dr=1` default, vs `Success → 3`. The historical fix patched one *producer*; three others
+    remain. `compute_degree` has no epsilon guard while the pool floor beside it does.
+  - **`orchestration.py:1431` silently drops engagement groups past `MAX_SUB_PHASES`** — bare `break`,
+    no log, zero damage that tick.
+  - **`check_drift` re-keys `cell_troops` and NONE of the other nine per-cell maps** → post-drift
+    morale immortality + phantom cell breaks. **A re-flip blocker not currently listed below.**
+  - **The shipped default (`FIELD_MOVEMENT=1`) has no automated regression oracle** — CI pins it to 0
+    and the test says the field goldens are "NOT checked here".
+
+  **SEV-2 themes:** the verification apparatus reports green without looking (vacuous-capable octagon
+  assertion; the write-sweep fixture mislabeled so the own-morale flatten branch has zero coverage; a
+  docstring claiming CI coverage of a path CI pins off; `provenance.py` unconsumed with every line
+  number stale; diagonal-only flag coverage with `reform_check`, a canon-required mechanic,
+  permanently dark). And **nothing has one owner** — pool formula ×2 (self-declared "Mirrors EXACTLY",
+  no test), arc systems ×2, stamina ×3, morale dialects ×3, damage laws ×2, ten per-cell maps with no
+  key-set invariant.
+
+  **On "the cell needs to be a class":** semantically yes, but a per-cell **object** is
+  array-of-structs — slower in a Monte-Carlo oracle and further from the `PackedFloat32Array` layout
+  the Godot port wants. What is missing is an **owner and an invariant**: one `CellTable` owning all
+  ten maps, sole writer, enforcing key-set agreement and troop conservation. **This supersedes the
+  ED-MB-0043 plan's ordering — give cell state an owner BEFORE phases 3–4**, or each new field repeats
+  the ritual that produced the retracted flip.
+
+  **Emergence verdict: subunit-emergent, not cell-emergent.** Envelopment is builder-authored, and the
+  repo's own sweep found H4 passes with envelopment pathing OFF. Delete the cell layer and little
+  shipped behaviour changes (phases 1+2 byte-identical across all 20 rows; the whole cell-morale
+  programme moved win-share one row; discipline/quality/stamina/armour are not per-cell at all).
+
+  **Historical:** `triplex acies` is misapplied (a **depth** arrangement cited for a lateral
+  tripartition) and load-bearing — `n_cmd` is the only free parameter landing H3 in band and was chosen
+  *after* measuring the 0/53/95 sweep. Casualty totals are near-band but the causal shape is inverted:
+  `pursuit_damage` is never called in the measured mode, so the engine kills the loser then breaks him;
+  history breaks then kills. **CEV naming is wrong** — Dupuy's CEV is a persistent per-force fitted
+  residual, not an i.i.d. per-battle draw; rename to Clausewitz/Beyerchen friction and expect σ to
+  shrink as real mechanisms land. That strengthens ED-MB-0043's measure-the-primitive-first ordering.
+
 - **ED-MB-0043 (2026-07-26): VECTOR AUDIT — all modules/scripts, all directions. Two observatory
   blind spots found and fixed; three MB findings held for Jordan.** Ran every structural graph the
   apparatus can build (vector L0+L1 VALIDATED 2/3, structure G_code+L2, formula, pointer, generation,
