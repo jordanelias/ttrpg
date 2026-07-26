@@ -392,6 +392,8 @@ The ability layer is the controlled experiment that already ran: a correct, boun
 5. **Q5 — Chinese and Filipino:** leave empty on the source-tier rule, commission the research to anchor them, or accept explicitly-flagged provisional content? The armature's rule says empty; that is a real cost in player-facing variety.
 6. **Q6 — Does the guard prior (I3) need the threat-memory** (`phase4_5_plan` §4a dynamic A) to be interesting, or is a static trained guard enough for a first increment?
 7. **Q7 — Scope of §6.3 measured pricing:** does character generation live in this engine's scope at all, or in a layer above it? ED-PC-0024 put the investment-bounding economy explicitly *out* of engine scope.
+8. **Q8 — Carry context (Appendix B, Jordan's own direction).** Is the scene-context taxonomy right, and where does the primitive live? It is cross-lane (settlement law-and-order, fieldwork scene, strategic layer), so it is not a PC-lane call. **If adopted it revises §9's P0** — see B.5.
+9. **Q9 — The off-hand slot** (defect register A2/A6). There is no shield, buckler or targe in the 51-weapon roster, and no slot to put one in; `main_gauche`, `paired_short` and `hook_sword` are all being measured in a configuration they were never used in. Is this in scope for personal combat, and at what priority?
 
 ---
 
@@ -503,7 +505,109 @@ the ability layer already measured.
 
 ---
 
-## §13 Provenance
+## §13 Appendix B — Carry context: the balance frame that supersedes §9's P0
+
+**Jordan, 2026-07-26:** *"an aspect of resolution is that polearms/larger weapons were typically disallowed in
+any public places during Renaissance. It was acceptable to have a smaller sword like a rapier, but not
+acceptable to carry a spear."*
+
+**This is a better answer to D1 than the one §9 P0 currently gives, and it changes that phase.** §9 P0 says
+"weapon-identity compression" — flatten the 26-weapon 91–97% band. Under this frame, **the band mostly should
+not be flattened.** The spear *should* beat the rapier in an open fight; that is correct physics and correct
+history. The reason a rapier was worth owning is not that it beats a spear — it is that **you could carry a
+rapier into a city, a court, a tavern, or a stairwell, and you could not carry a spear.** The spear wins the
+fight you are never permitted to have.
+
+### B.1 Why this is the C1 principle, not a new one
+
+`combat_balancing_methodology.md` §5 already ratified the shape: *"You do not flatten asymmetric options to
+sameness. Balance the unconditional mean flat and let context flip the conditional advantage — ratified C1: no
+option globally best."* Its named precedent is **duel-vs-battlefield**: the war-hammer isn't duel-balanced, it
+owns the armoured press, *and that is correct*.
+
+Carry context is a **third axis of the same principle**, and a better-grounded one than either existing axis:
+
+| axis | already in the engine? |
+|---|---|
+| armour tier (duel ↔ battlefield) | **yes** — the weapon × armour matrix |
+| measure (approach ↔ bind) | **yes** — phase-dependent reach |
+| **carry legality / social setting** | **no** — nothing represents it at any layer |
+
+### B.2 The reframe, stated precisely
+
+**The balance target changes from "every weapon wins ~50% against every other" to "every weapon is the best
+*available* choice in some context, and the contexts occur often enough to make it worth owning."**
+
+That is measurable and directly implementable: weight the existing matchup matrix by a **scene-context
+distribution**, and require the *context-weighted* field to be level rather than the raw matchup table. That is
+a new `balance.py` table, not new physics — and it is a far better balance target than a flat matrix, because a
+flat matrix is the thing C1 explicitly forbids.
+
+Illustrative contexts (the taxonomy is a design call, §11 Q8):
+
+| context | what is carriable | who wins |
+|---|---|---|
+| **court / salon / indoors** | dress sword, dagger, concealed only | the rapier tier — and the concealed tier if weapons are *forbidden* |
+| **city street** | civilian sidearm; polearms illegal, armour socially impossible | rapier, arming sword, sidesword, main gauche |
+| **road / wilderness** | travel arms — spear and staff become respectable again | the reach tier |
+| **battlefield / siege** | everything, plus harness | the armour-defeat tier; the whole reach band is legitimate here |
+| **judicial duel / tournament** | negotiated, often symmetric by agreement | whoever trained for the agreed weapon |
+
+### B.3 What this fixes that a nerf could not
+
+- **It preserves the physics.** No per-weapon dial, no special case, no "the spear is too good so we reduce it."
+  That is the §0/lens-6/lens-7 discipline the repo enforces everywhere else, and B8 in the defect register
+  already proved the alternative fails: bringing off-plate reach to 0.75 is **not reachable by lever** without
+  breaking `guisarme@heavy`. **Carry context resolves by frame what four levers could not resolve by tuning.**
+- **It gives the bottom of the table its purpose back.** The ≤18% band (stiletto 17.3, misericorde 17.4, rondel
+  12.0, dagger 11.7) is not a set of traps — those are the **concealed tier**, and in a scene where weapons are
+  forbidden they are the *only* weapons. They already have a second context the engine does model: all four rise
+  to 94–97% at plate. Two contexts, both correct, and neither visible in a duel table.
+- **It supplies armour's missing cost (D2/C2) without inventing a fatigue model.** The reason plate is not free
+  is not tempo — it is that **you cannot wear harness to a dinner, into a city, or up a stairwell**, it needs a
+  servant to don, and wearing it is itself an accusation. That is a much better-grounded cost than a mobility
+  penalty, and the engine needs no new physics for it. **Caveat, stated because it is load-bearing:** access
+  gates the *distribution* of encounters but does not price the choice *within* a context where armour is
+  allowed — on a battlefield "wear plate vs not" is still 95.7 / 4.3. So some wearer-side cost is probably still
+  needed; carry context does most of the work, not all of it.
+- **It makes `cinquedea` explicable.** Defect-register A1 calls it the worst weapon in the roster with no
+  context anywhere — 4.5–6.5% at every tier it can act in. But historically the cinquedea *was* a civilian
+  status/dress weapon, not an armour tool. Under carry context it is a weapon for the setting where its rivals
+  are illegal, and its physics can stay exactly as they are. **A1 is the cheapest test of whether this frame is
+  right.**
+
+### B.4 What it would cost to build
+
+1. **A scene-context primitive** — which the engine does not have, and which is *not* PC-lane-local: it touches
+   the settlement/faction layers (law and order state), the fieldwork/scene layer, and the strategic layer.
+   Cross-lane, so an IN-lane or Jordan-level decision, not a PC-lane one.
+2. **A carriability property per weapon** — and this must be **derived, not hand-set per weapon**, or it is the
+   name-keyed table the repo forbids. The honest derivation is over primitives already in the records: overall
+   length, whether it is concealable, whether it is two-handed, whether it reads as a weapon of war. That is a
+   real derivation problem, not a data-entry one.
+3. **Historical grounding at the usual source tiers.** Renaissance and early-modern arms restrictions are well
+   attested in principle — the arms-of-peace vs arms-of-war distinction, city statutes on weapon carry, and
+   Silver's *Paradoxes of Defence* being in large part a polemic **against** the rapier's civilian adoption over
+   the English short sword. But **I have not verified specific statutes**, and under `ability_armature` §5's
+   rule the specific claims need S1/S2 anchoring before any of them is encoded. Do not let me author a carry
+   table from general impressions.
+4. **A context-weighted balance table** in `balance.py` — cheap, and the piece that makes the whole frame
+   *measurable* rather than merely appealing.
+
+### B.5 Revised §9 P0
+
+| was | becomes |
+|---|---|
+| **P0** D1 — weapon-identity *compression* | **P0a** — build the carry-context frame and re-measure the field **context-weighted**. Compress only what is *still* dominant inside its own context. |
+| **P0** D2 — price armour (mechanically) | **P0b** — price armour primarily by **access**, and measure whether a within-context cost is still needed. |
+
+The rest of §9's ordering is unchanged, and the blocking claim is unchanged: **a modulation layer built before
+the dominant lever is resolved will measure as inert.** Carry context is a different — and better — way of
+resolving the dominant lever, not a way of skipping that step.
+
+---
+
+## §14 Provenance
 
 Built on, and consistent with: `state_graph.py` (`INJECTION_POINTS`, 9 points, tested) · `tradition_decomposition_v1.md` (per-tradition technique → primitive → node → gate, S-tiered) · `ability_armature.md` (§1 principles, §5 source menu, the sparse-tradition rule) · `phase4_5_plan_v1.md` (Phase 4b abilities-as-access, the 7 review lenses, the Primitive / Tradition-is-not-a-weight / Attack–Defence Convergence principles) · `engagement_psychology_recovered.md` (§B1 "biased weights, not a planner") · `combat_throughlines_v1.md` (the two poles; commitment = recovery) · `combat_balancing_methodology.md` (§5 C1, §6 the ablation gate) · Jordan's fiat-audit ruling (`audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`: efficacy from investment, not membership; every build available; no fiat) · ED-PC-0023/0024/0028/0030/0034/0040 · and the measured state in `audit/2026-07-26-combat-balance-customization-state/`.
 

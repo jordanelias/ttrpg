@@ -37,8 +37,9 @@ def test_all_proposals_docs_surface_by_location():
     # 16 after pessimist_ners_audit_v1.md and grounded_event_card_deck_v1.md
     # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops);
     # 17 with the 2026-07-21 observatory-holonic-refactor proposal;
-    # 18 with the 2026-07-21 reconciliation-program (consolidates the plan fragments).
-    assert len(props) == 18
+    # 18 with the 2026-07-21 reconciliation-program (consolidates the plan fragments);
+    # 19 with the 2026-07-26 personal-combat player-agency + tradition-curriculum proposal.
+    assert len(props) == 19
 
 
 def test_all_audit_verdicts_present():

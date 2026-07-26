@@ -70,9 +70,56 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     gaps: multi-combatant (ED-911, design-only), no progression economy at all, and only 8 authored abilities to
     fill a 7-slot system (a *research* cost under the source-tier rule, not a writing one). Zodiac-compatibility
     style hidden multipliers are deliberately excluded — that is the fiat ED-PC-0023 retired.
-  - **7 open questions are Jordan's** (§11): player cadence · disposition's intended shape · whether armour should
+  - **Appendix B — CARRY CONTEXT (Jordan's direction, 2026-07-26) — SUPERSEDES §9's P0.** *"Polearms/larger
+    weapons were typically disallowed in any public places during Renaissance. It was acceptable to have a smaller
+    sword like a rapier, but not acceptable to carry a spear."* This is a **better answer to D1 than compression**:
+    the 26-weapon 91–97% band mostly should NOT be flattened — a spear *should* beat a rapier in an open fight;
+    the rapier is worth owning because you can carry it into a city and a spear you cannot. It is the **C1
+    principle on a third axis** (armour tier ✓ live · measure ✓ live · **carry legality ✗ absent at every layer**).
+    Balance target changes from "every weapon ~50% vs every other" to **"every weapon is the best AVAILABLE choice
+    in some context"** — measurable as a **context-weighted** field table in `balance.py`, which is a new table,
+    not new physics. Resolves by FRAME what B8 proved is not resolvable by lever (four levers swept; off-plate
+    reach 0.75 unreachable without breaking guisarme@heavy). Also supplies armour's missing cost via **access**
+    rather than an invented fatigue model (caveat recorded: access gates the encounter distribution but does not
+    price the choice *within* a context where armour is legal — some wearer-side cost may still be needed), and
+    explains `cinquedea` (a civilian dress weapon whose physics may be right and whose *context* is missing).
+    **Costs:** a scene-context primitive (CROSS-LANE — settlement law/order, fieldwork scene, strategic layer;
+    not a PC-lane call), a **derived** carriability property (never a per-weapon hand-set table), S1/S2 grounding
+    of the actual statutes (**not yet verified — do not encode a carry table from general impressions**), and the
+    context-weighted table.
+  - **9 open questions are Jordan's** (§11): player cadence · disposition's intended shape · whether armour should
     cost the wearer · the I6 grab default (byte-identity vs. behaviour change) · Chinese/Filipino under the
-    source-tier rule · whether the guard prior needs threat-memory · whether character-gen economy is in engine scope.
+    source-tier rule · whether the guard prior needs threat-memory · whether character-gen economy is in engine
+    scope · **Q8 carry-context taxonomy + where the primitive lives** · **Q9 the off-hand/shield slot**.
+
+- **COMPLETE DEFECT REGISTER (2026-07-26) — `audit/2026-07-26-combat-balance-customization-state/combat_defect_register.md`.**
+  Every known personal-combat defect in one queryable place, each tagged **[tracked]** (re-confirmed live, not
+  re-discovered) or **[new]**. Classes: A weapon-level · B resolution-layer · C build-layer (D1–D8) · D absent
+  subsystems · E instrument/doc · F explicitly-cleared non-defects · G severity shortlist.
+  - **NEW findings worth not re-discovering:**
+    - **A6 — there is NO shield, buckler or targe anywhere in the 51-weapon roster** (verified programmatically).
+      Sword-and-buckler is the subject of MS I.33, the oldest surviving fechtbuch; rapier-and-dagger is the
+      defining Renaissance civilian pairing. **Largest single content gap in the roster.**
+    - **A2 — three weapons are measured in a configuration they were never used in:** `main_gauche` (a left-hand
+      parrying dagger), `paired_short` (its own name), `hook_sword` (a paired system). **The engine has no
+      off-hand slot.** Their duel numbers (8–16%) are a MODELLING gap, not a balance one — note both
+      main_gauche and paired_short read ~92% at plate. **Do not "fix" these by buffing them.**
+    - **A1 — two weapons have NO context anywhere:** `cinquedea` (4.5/5.0/6.5/undecided; cap 0.672) is **the worst
+      weapon in the roster** — dagger-length with sword weight and a wide blade, so low point-concentration means
+      it cannot play the gap game every other dagger-class weapon wins with (rondel 1.032, stiletto 1.092,
+      misericorde 1.008, dagger 1.008). A dagger that cannot dagger. `hook_sword` (cap 0.576) is compounded by A2.
+    - **A5 — `estoc` has no weakness at any tier** (duel 97.3; 96.5/96.0/92.0/95.0; cap 1.104). A C1 failure
+      (*no option globally best*) even though nothing about it is a bug.
+    - **A3 smoking gun:** the *light* column. `scimitar` 68.3 → **33.7 against a gambeson** → 3.3 at mail. A
+      padded jacket should not halve a cavalry sabre.
+    - The ≤18% band is **not** traps — it is the **concealed tier**, and all four (stiletto/misericorde/rondel/
+      dagger) already rise to 94–97% at plate. Two correct contexts, neither visible in a duel table.
+
+- **CI PIN, do not re-trip:** `tests/valoria/test_build_proposals.py::test_all_proposals_docs_surface_by_location`
+  carries a **regression pin on the proposals-doc count** (now `== 19`). Adding or removing anything in
+  `proposals/` requires bumping it **and** appending a comment line. `tools/valoria_local.py --staged` does NOT
+  run pytest, so local-green ≠ CI-green (CLAUDE.md §8) — **run `pytest tests/valoria` after adding a proposals
+  doc**, not before.
 
 - **FOUR-DIMENSION AUDIT + REMEDIATION (ED-PC-0034..0040) — batches 1–5.2 landed, batch 6 pending.**
   *(This block was missing until 2026-07-25 — the lane handoff had not been updated since batch 3, flagged by the
