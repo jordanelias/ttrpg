@@ -79,7 +79,16 @@ EXCLUDE = (
     'tests/',
     'deprecated/archives/',
     'deprecated/',
-    'designs/audit/',
+    'audit/',                     # the audit-report corpus — historical records that quote the
+                                  # names they critique, plus GENERATED run data (a vector-audit
+                                  # run's data/tokens.json derives its token universe from
+                                  # names_index INCLUDING each entry's `legacy:` field, so it
+                                  # carries deprecated names AS DATA — same rationale as the
+                                  # generated bundles above). Was 'designs/audit/' until
+                                  # 2026-07-26 (ED-MB-0043): designs/ was retired 2026-07-19
+                                  # (ED-IN-0071 P4/P5) and the corpus moved to audit/, so that
+                                  # entry had matched nothing since — the same dead-path class
+                                  # this exclusion now covers.
     'registers/editorial_ledger',
     'CLAUDE.md',                  # documents the naming rule (names the token)
     'tools/ci_naming_check.py',   # this file names the token

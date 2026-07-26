@@ -86,6 +86,7 @@ rest), but each is the same class:
 | `tools/audit_staleness.py:69` | `sim/` in `scope_prefixes` — staleness never triggers on sim changes |
 | `tools/observability/build_decisions.py:57`, `tools/workplan_status.py:71`, `tools/build_apparatus_registry.py:169` | dead `sim` sweep dir / prefix |
 | `tests/sim/mass_battle/test_persubunit_stress.py:17` | inserts `<repo>/sim` on `sys.path` |
+| `tools/ci_naming_check.py` `EXCLUDE` — `'designs/audit/'` | **Found by this PR's own CI.** `designs/` was retired 2026-07-19 and the audit corpus moved to `audit/`, so the entry had matched nothing since — this run's generated `data/tokens.json` (which derives its token universe from `names_index` *including* each entry's `legacy:` field, so it carries `EventImpact` as data) tripped the Names Drift Lint. **FIXED** by repointing to `audit/`, restoring the pre-retirement scope; the hard gate still catches deprecated names in design docs and tools, and old `designs/audit/…` paths still match as a substring. |
 
 ---
 
