@@ -15,6 +15,121 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0045 REMEDIATION PLAN (2026-07-26): all MB surfaces.**
+  `audit/2026-07-26-mass-battle-fable-audit/02_remediation_plan.md`. Scoped to the **13 mass-battle
+  surfaces** (§1): live engine, stale twin, 24 CI tests, goldens, gauge, 4 harnesses, workbench,
+  23 probes, 6 design docs, params, the module contract, 12 registries, research diagrams.
+
+  **Framing (Jordan's correction, verbatim):** *"it may not change the next battle, but it sure as
+  heck should. make identifying what's happening and preventing conflicts etc going forward."*
+  The first draft filed this as hygiene; that was wrong. **Three mechanisms are silently changing
+  battles today** — the un-guarded degree-boundary float compare (a 1-ulp error turns 3 damage into
+  0 at the universal `dr=1`), the bare `MAX_SUB_PHASES` break (engagement groups past the 5th deal
+  zero damage, unlogged), and `check_drift` re-keying 1 of 10 cell maps (morale immortality +
+  phantom breaks the moment cell morale is on). Plus: the campaign resolves battles on the **stale**
+  tree, so none of the last month's work reaches the game.
+
+  **Two goals:** **G1 identify what's happening** — the engine cannot currently explain why a battle
+  ended as it did, which is *why* two default flips were made on confounded measurements and
+  retracted; **G2 prevent conflicts** — one owner per fact, one loudly-failing invariant per owner.
+
+  **PHASES.** **A** trustworthy instrument (HARD GATE — A1 wires the shipped configuration's goldens
+  into CI; they are checked by *nothing* today, so B has no safety net without it). **B** `CellTable`
+  — struct-of-arrays with an owner and a `.check()` invariant, **not** a per-cell object (AoS is
+  slower in a Monte-Carlo oracle and further from the `PackedFloat32Array` layout the port wants);
+  supersedes ED-MB-0043's phase-3/4 ordering, because each of the six remaining directed fields
+  otherwise repeats the ten-map tax. **C** collapse the 7 duplicate owners. **D** conflict-prevention
+  guards (multi-owner scan, config-liveness, citation integrity, flag-pair coverage, golden-drift
+  disclosure). **E** gauge integrity. **F** docs/params/contract/registries. **H** *observability* —
+  per-phase casualty attribution, break decision log, mechanism attribution, invariant reporting,
+  promote the workbench trace. **H is the new one and it has no prior tracking item:** every
+  diagnosis in the last two audits required a bespoke probe, and there are now 23 of them. That cost
+  IS the finding.
+
+  **Critical path: A1 → B1 → B3.** **Cheapest real win: F4** — delete the
+  `scene_outcome.battle_concluded` emit row (= ED-MB-0010, open 13 days), one line, closes five
+  downstream surfaces.
+
+  **Explicitly NOT in scope:** the ~26k LOC of other subsystems (unmeasured — the parallel-dict
+  counts I gathered are NOT evidence of the same defect), the §9 forks, and the absent mechanisms
+  (terrain, pursuit in the measured mode, the general as an entity, surrender, ammunition, weather)
+  which would change battles more than everything in the plan combined — but are design, not repair.
+
+- **ED-MB-0045 (2026-07-26): FABLE-5 SIX-DIMENSION READ-ONLY AUDIT.** Six independent Fable-5
+  auditors with read-only tools (structural independence, §10); every promoted finding re-derived by
+  the orchestrator. Register: `audit/2026-07-26-mass-battle-fable-audit/01_findings_register.md`.
+  **Nothing in the engine was modified.**
+
+  **⚠ THREE CORRECTIONS TO THIS HANDOFF, all verified — read before acting on the items below:**
+  1. **ED-MB-0038/0039's side-asymmetry diagnosis names a DEAD CODE PATH.** The text blames "the
+     enveloper's APEX-forward centre (`build_envelopment`, `start_row+APEX*advance_dir`) + wing
+     placement vs the flat command line". `engine.py:414-419` applies `APEX` **only in the `else`
+     branch — when the caller omits the centre's `starting_position`**. Both harnesses pass it
+     explicitly (`gauge_mb.py:257`, `bat.py:70`), so **in H3/H10 and the whole bat.py battery the apex
+     offset never executes.** Do not spend more effort on that hypothesis. The pathing auditor could
+     not find a deterministic bias statically and says so; its two candidates are `min()` over a
+     **set** (`orchestration.py:1744`, value-dependent iteration order) and banker's rounding at
+     exactly `.5` (consistent with the measured start-row *parity* sensitivity). Falsifiers given:
+     canonicalise to `min(sorted(...))` and re-run the mirror; sweep start rows preserving the exact
+     mirror midpoint.
+  2. **ED-MB-0043's "ship R3 without a ruling" was WRONG.** Removing the `hold` early-return does
+     nothing on its own — `STANCE_SPEED_MOD['hold'] = -99` independently zeroes `step`, and all goal
+     resolution sits behind `step > 0`. It is a **two-gate** change. `hold` is load-bearing for
+     `build_envelopment`'s `freeze_wings` (documented as relying on it), `build_refused_flank`, and
+     `STANCE_COMMITMENT`'s defensive-pool treatment. And `_kite_goal` does **not** generalise:
+     `PC_KITE_STANDOFF=5` vs max melee reach 0.3 makes the band `[5, 0.3]` inverted. Lower-blast-radius
+     alternative: change the **R3 scenario** (`stance='balanced'` + `kite`), not `hold` semantics.
+  3. **ED-MB-0041's "armour causes MORE arrow casualties" is REFUTED as current** — measured
+     0.115/0.061/0.035/0.015 at dr 0/1/2/3, strictly monotone decreasing. Retire the claim.
+     Relatedly **ED-MB-0008 drops in priority**: neither contradictory DR table is what the code
+     implements (the armour catalogue is explicitly unwired; the live engine uses a free scalar
+     defaulting to 1 everywhere) — it is a docs contradiction with no current code consequence.
+
+  **SEV-1, all verified by re-execution:**
+  - **The engine's own Lanchester instrument is RED and NOTHING runs it.** `melee p=2.50` against a
+    `≤1.4` linear bar — the scan-grid ceiling, so the true exponent is ≥2.5, *worse than the square law
+    `core/attrition.py` says frontage-capping prevents*; `volley p=0.50` against `≥1.6`. Exits 1. Not
+    in CI, not in pytest. Two of its three PASSes are degenerate (volley passes on `cas_exchange=inf`;
+    the melee 2:1 check demands ≥65% and measures **100%** while dg6 adopts ~70% as the historical
+    target — **two incompatible validation targets for one quantity; one must be repudiated**).
+  - **The 1-ulp degree defect is LIVE at the consumer.** `3 + σ(-1e-16) → Partial → 0 damage` at the
+    universal `dr=1` default, vs `Success → 3`. The historical fix patched one *producer*; three others
+    remain. `compute_degree` has no epsilon guard while the pool floor beside it does.
+  - **`orchestration.py:1431` silently drops engagement groups past `MAX_SUB_PHASES`** — bare `break`,
+    no log, zero damage that tick.
+  - **`check_drift` re-keys `cell_troops` and NONE of the other nine per-cell maps** → post-drift
+    morale immortality + phantom cell breaks. **A re-flip blocker not currently listed below.**
+  - **The shipped default (`FIELD_MOVEMENT=1`) has no automated regression oracle** — CI pins it to 0
+    and the test says the field goldens are "NOT checked here".
+
+  **SEV-2 themes:** the verification apparatus reports green without looking (vacuous-capable octagon
+  assertion; the write-sweep fixture mislabeled so the own-morale flatten branch has zero coverage; a
+  docstring claiming CI coverage of a path CI pins off; `provenance.py` unconsumed with every line
+  number stale; diagonal-only flag coverage with `reform_check`, a canon-required mechanic,
+  permanently dark). And **nothing has one owner** — pool formula ×2 (self-declared "Mirrors EXACTLY",
+  no test), arc systems ×2, stamina ×3, morale dialects ×3, damage laws ×2, ten per-cell maps with no
+  key-set invariant.
+
+  **On "the cell needs to be a class":** semantically yes, but a per-cell **object** is
+  array-of-structs — slower in a Monte-Carlo oracle and further from the `PackedFloat32Array` layout
+  the Godot port wants. What is missing is an **owner and an invariant**: one `CellTable` owning all
+  ten maps, sole writer, enforcing key-set agreement and troop conservation. **This supersedes the
+  ED-MB-0043 plan's ordering — give cell state an owner BEFORE phases 3–4**, or each new field repeats
+  the ritual that produced the retracted flip.
+
+  **Emergence verdict: subunit-emergent, not cell-emergent.** Envelopment is builder-authored, and the
+  repo's own sweep found H4 passes with envelopment pathing OFF. Delete the cell layer and little
+  shipped behaviour changes (phases 1+2 byte-identical across all 20 rows; the whole cell-morale
+  programme moved win-share one row; discipline/quality/stamina/armour are not per-cell at all).
+
+  **Historical:** `triplex acies` is misapplied (a **depth** arrangement cited for a lateral
+  tripartition) and load-bearing — `n_cmd` is the only free parameter landing H3 in band and was chosen
+  *after* measuring the 0/53/95 sweep. Casualty totals are near-band but the causal shape is inverted:
+  `pursuit_damage` is never called in the measured mode, so the engine kills the loser then breaks him;
+  history breaks then kills. **CEV naming is wrong** — Dupuy's CEV is a persistent per-force fitted
+  residual, not an i.i.d. per-battle draw; rename to Clausewitz/Beyerchen friction and expect σ to
+  shrink as real mechanisms land. That strengthens ED-MB-0043's measure-the-primitive-first ordering.
+
 - **ED-MB-0043 (2026-07-26): VECTOR AUDIT — all modules/scripts, all directions. Two observatory
   blind spots found and fixed; three MB findings held for Jordan.** Ran every structural graph the
   apparatus can build (vector L0+L1 VALIDATED 2/3, structure G_code+L2, formula, pointer, generation,
@@ -163,9 +278,14 @@ namespace and are folded into Next actions below, which carries the full narrati
      unseeded path, so a retirement candidate, not dead code.
   6. **Re-decide `ROUT_CASCADE_FRAC`** (still inert at 1.0) once phase 3 settles what a "section" is.
 
-- **ED-MB-0044 candidate — R3 is a DEFINITIONAL gap, not a balance one.** (Renumbered from the
-  earmarked ED-MB-0043 on 2026-07-26: that id was never allocated in `id_reservations.yaml`, and the
-  vector audit took it per the read-next_free protocol. Nothing else cited the old number.) Ranged-vs-ranged is the only
+- **ED-MB-0044 (2026-07-26, FILED open/needs_jordan) — R3 is a DEFINITIONAL gap, not a balance one.**
+  No longer a candidate: filed as a real ledger entry to end a dangling earmark that caused id churn
+  twice (earmarked 0043 → renumbered 0044 → a reservation comment citing the unfiled id then failed
+  the ED-citation-integrity gate). **⚠ Its proposed fix was UNDER-SCOPED — see ED-MB-0045 §5.2:**
+  bypassing the `hold` early-return does nothing on its own (`STANCE_SPEED_MOD['hold'] = -99`
+  independently zeroes `step`), `hold` is load-bearing for `freeze_wings`/refused-flank/
+  `STANCE_COMMITMENT`, and `_kite_goal`'s band is inverted for melee. Recommended instead: change the
+  R3 **scenario** (`stance='balanced'` + `kite`), not the engine's `hold` semantics. Ranged-vs-ranged is the only
   UNMEASURED gauge row: 100% draws at **0.0% casualties on both sides**, i.e. no engagement at all.
   Spawn distance is 18, `VOLLEY_MAX_RANGE` is 8, and `stance == "hold"` early-returns from *all*
   steering (both `_node_advance` and `advance_cells`), so neither archer body ever closes and
