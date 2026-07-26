@@ -6,6 +6,30 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **BALANCE-STATE + CUSTOMIZATION-SURFACE REPORT (2026-07-26, no ED — report only).**
+  `audit/2026-07-26-combat-balance-customization-state/` (index + infill, co-filed). Measured state at
+  `248f344`; **nothing tuned, no default flipped, no golden re-recorded, no ID allocated.** New instrument
+  **`workbench/build_levers.py`** measures the four build inputs `balance._mk` structurally cannot express —
+  **skills, equipped techniques + investment level, cross-training, asymmetric armour** — plus disposition,
+  familiarity and composite archetypes. Use it rather than re-deriving; `build_levers.py mirror 2000` is the
+  fairness control (9/9 cells straddle 50 across arming/light, longsword/heavy, rapier/none).
+  - **Eight observations awaiting Jordan (D1–D8), several of them design calls not defects:** D1 weapon choice
+    erases build identity (4 distinct archetypes land within 2.2pp — F18 seen at the *build* level); **D2 armour
+    has NO wearer-side cost** (heavy vs none 95.7%; every `.armor` read is target-side, `equipment_health` never
+    passed) ; **D3 disposition is monotone 39.1→59.8**, contradicting `config.py`'s own "BOTH poles cost";
+    D4 focus is −0.7pp/pt against cog +20.4 / history +19.4; **D5 tradition flatness (3.8pp, `none` HIGHEST at
+    52.2) is inertness, not balance** — with the imposition gate retired and channel weights removed, an
+    ability-less tradition differs only by `familiarity()`, and "4 of 5 distinct context leaders" is noise
+    re-rolling at N=120; D6 the technique layer is 8 abilities over 5 of 8 traditions with 5 of 8 `eff_cw`
+    channels identity ×1.0 (F23); D7 no in-fight tactical layer exists (ED-PC-0001 open — every customization
+    choice is exercised *before* the fight); **D8 `balance.py`'s heavy column prints `0.0` for ZERO DECIDED, not
+    a 0% win-rate** — 38 of 53 weapons hit it, and the arming mirror cell prints `0.0` too.
+  - **Stale docs flagged, NOT edited (do not re-discover):** `combat_balancing_methodology.md` §7's baseline is
+    2026-06-28 and every figure has moved; `ability_armature.md` §2c/§7 still lists `seize` as live with
+    `vorschlag`/`sen_no_sen`, both of which no longer exist in `ABILITIES`.
+  - Carried-open items from ED-PC-0040 were re-confirmed live, not re-discovered: off-plate reach ~0.94,
+    ranseur/guandao covert plate-killers, medium-tier round-trip, F21/F22/F23/F24.
+
 - **FOUR-DIMENSION AUDIT + REMEDIATION (ED-PC-0034..0040) — batches 1–5.2 landed, batch 6 pending.**
   *(This block was missing until 2026-07-25 — the lane handoff had not been updated since batch 3, flagged by the
   ED-PC-0039 adversarial review. Note the "prototype ED-PC-0034" mentioned further down in the off-plate-reach item
