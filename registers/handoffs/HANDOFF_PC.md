@@ -30,6 +30,50 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
   - Carried-open items from ED-PC-0040 were re-confirmed live, not re-discovered: off-plate reach ~0.94,
     ranseur/guandao covert plate-killers, medium-tier round-trip, F21/F22/F23/F24.
 
+- **PLAYER-AGENCY + TRADITION-CURRICULUM PROPOSAL (2026-07-26, no ED — PROPOSED, design-only, HELD FOR JORDAN).**
+  `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md`. Nothing built; no constant
+  changed. Would close **ED-PC-0001** (player-input surface, open since 2026-07-05) + `phase4_5_plan_v1.md`
+  Phase 4b (abilities-as-access, NOT STARTED since 2026-06-29) + **F23**.
+  - **Architecture:** three tiers — T0 build (exists) / **T1 a PLAN of six intents, one decision per engagement**
+    (the cadence `wrapper.fight()`'s own docstring already specifies: "the GAME calls one engagement per turn") /
+    T2 beat, which stays closed. The six intents attach to **six of the nine existing `state_graph.INJECTION_POINTS`**
+    — no new state, no new node. Three points are deliberately NOT player-facing (read is a contest; bind-entry is
+    a consequence; burst continuation is tempo-determined). Governing rules: a plan is a **prior, not a command**
+    (`engagement_psychology` §B1 "biased weights, NOT a planner"); intent is **contested, never imposed**
+    (ED-PC-0023); **both ends of every trade wired in the same commit** (the D3 lesson).
+  - **Sharpest single insertion point found:** `read_contest` currently resolves a LOST read as
+    `modes[rng.randrange(3)]` — a trained fighter surprised by an attack guesses uniformly across parry/dodge/wind.
+    A GUARD prior would weight that draw only on the lost-read branch (a floor on failure, never a ceiling on
+    success; the won-read `max(msig)` branch untouched).
+  - **Lever registry (the "which values may an ability modify" answer):** Class A FORBIDDEN (damage path,
+    `adef_cap`/armour capability, weapon primitives, wound model, `UPSET_FLOOR`, the resolver) · Class B GATED
+    (availability only) · Class C LEGAL — **the 15 live levers, of which 8 are BARE** (`tempo`, `visual`,
+    `tactile`, `precommit`, `balance`, `edge_read`, `choke_control`, `facing_regime`) plus **5 proposed new ones,
+    each an unhooked pure function that already computes the right quantity**: `disengage`→`disengage_clean_p`,
+    `pursuit`→`pursuit_sigma`, `stophit`→`stophit_sigma`, `guard_prior`→`read_contest` lost-read branch,
+    `grapple_control`→`grab_outcome` weights. **Authoring the 8 bare levers is strictly cheaper and safer than
+    adding new ones and should be exhausted first.**
+  - **BLOCKING SEQUENCING CLAIM (§9) — do NOT build the plan layer first.** The ability layer is the controlled
+    experiment that already ran: correct, bounded, wired at 15 sites, measured ~0 aggregate — because the surface
+    under it has one lever worth 90pp. A second modulation layer on the same surface will measure the same way.
+    Order: P0 D1 weapon-identity compression + D2 price armour → P1 D3 disposition shape (Jordan) → P2 author the
+    8 bare levers → P3 plan layer one intent at a time → P4 curricula + 5 new levers → P5 measured pricing.
+  - **Appendix A — the FFT lens (Jordan's question).** Valoria and Final Fantasy Tactics are currently **mirror
+    images**: in FFT the job/ability layer carries build identity and equipment is secondary; here the weapon
+    carries 47pp and the ability layer carries ~0. More of FFT's architecture is already built than expected
+    (job→tradition, JP→levels-of-investment, secondary-job→`known_traditions`, CT/Speed→`ready`/`tempo_pressure`,
+    reaction abilities→the counter node — Hamedo *is* the single-time counter, Blade Grasp *is* `ringen_am_schwert`).
+    Grid→continuous `measure_gap` (canon is zone-based, no grids); "Hit 85%" readout→`workbench/probabilities.py`,
+    **which already exists and nothing consumes** (cheapest FFT-shaped feature available). The one feature worth
+    stealing outright is the **slot architecture** — and `phase4_5_plan` §4b's 7 phase-slots already ARE it,
+    indexed by engagement-phase rather than turn-timing, i.e. the injection-point registry with a budget. Named
+    gaps: multi-combatant (ED-911, design-only), no progression economy at all, and only 8 authored abilities to
+    fill a 7-slot system (a *research* cost under the source-tier rule, not a writing one). Zodiac-compatibility
+    style hidden multipliers are deliberately excluded — that is the fiat ED-PC-0023 retired.
+  - **7 open questions are Jordan's** (§11): player cadence · disposition's intended shape · whether armour should
+    cost the wearer · the I6 grab default (byte-identity vs. behaviour change) · Chinese/Filipino under the
+    source-tier rule · whether the guard prior needs threat-memory · whether character-gen economy is in engine scope.
+
 - **FOUR-DIMENSION AUDIT + REMEDIATION (ED-PC-0034..0040) — batches 1–5.2 landed, batch 6 pending.**
   *(This block was missing until 2026-07-25 — the lane handoff had not been updated since batch 3, flagged by the
   ED-PC-0039 adversarial review. Note the "prototype ED-PC-0034" mentioned further down in the off-plate-reach item
