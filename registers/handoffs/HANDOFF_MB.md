@@ -278,9 +278,14 @@ namespace and are folded into Next actions below, which carries the full narrati
      unseeded path, so a retirement candidate, not dead code.
   6. **Re-decide `ROUT_CASCADE_FRAC`** (still inert at 1.0) once phase 3 settles what a "section" is.
 
-- **ED-MB-0044 candidate — R3 is a DEFINITIONAL gap, not a balance one.** (Renumbered from the
-  earmarked ED-MB-0043 on 2026-07-26: that id was never allocated in `id_reservations.yaml`, and the
-  vector audit took it per the read-next_free protocol. Nothing else cited the old number.) Ranged-vs-ranged is the only
+- **ED-MB-0044 (2026-07-26, FILED open/needs_jordan) — R3 is a DEFINITIONAL gap, not a balance one.**
+  No longer a candidate: filed as a real ledger entry to end a dangling earmark that caused id churn
+  twice (earmarked 0043 → renumbered 0044 → a reservation comment citing the unfiled id then failed
+  the ED-citation-integrity gate). **⚠ Its proposed fix was UNDER-SCOPED — see ED-MB-0045 §5.2:**
+  bypassing the `hold` early-return does nothing on its own (`STANCE_SPEED_MOD['hold'] = -99`
+  independently zeroes `step`), `hold` is load-bearing for `freeze_wings`/refused-flank/
+  `STANCE_COMMITMENT`, and `_kite_goal`'s band is inverted for melee. Recommended instead: change the
+  R3 **scenario** (`stance='balanced'` + `kite`), not the engine's `hold` semantics. Ranged-vs-ranged is the only
   UNMEASURED gauge row: 100% draws at **0.0% casualties on both sides**, i.e. no engagement at all.
   Spawn distance is 18, `VOLLEY_MAX_RANGE` is 8, and `stance == "hold"` early-returns from *all*
   steering (both `_node_advance` and `advance_cells`), so neither archer body ever closes and
