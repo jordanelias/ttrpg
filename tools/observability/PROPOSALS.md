@@ -5,13 +5,13 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**249 open work items** · **99 need your decision**.
+**250 open work items** · **100 need your decision**.
 
 Ranked view (human-authored): [`designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md`](designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md) · tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 86, Proposal docs (proposals/) — 19, Provisional / draft design docs — 6
+By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionable (no ruling needed) — 119, Editorial ledger — needs your decision — 87, Proposal docs (proposals/) — 19, Provisional / draft design docs — 6
 
-## MB — Mass battle  (8 items, 6 need decision)
+## MB — Mass battle  (9 items, 7 need decision)
 
 - 🔸 `proposals/mass_battle_fighting_withdrawal_v1.md` — mass battle fighting withdrawal v1  _(BUILT (gated) — the §4 step-1 yield scope shipped in ED-MB-0005 (2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green); the three residuals (emergent auto-entry §2.2, rally exit + pocket exit §2.4) shipped in ED-MB-0024 (2026-07-23; tests/valoria/test_dg2_yield_residuals.py, 10 green) — all GATED OFF (PC_YIELD_EMERGENT / PC_YIELD_RALLY / PC_YIELD_POCKET), byte-exact. HELD for Jordan: the three default-flips, the emergent path's blast-radius measurement pass (§4.3), the deferred erosion-brake, and the D_YIELD/YIELD_POOL_MULT/YIELD_RALLY_MORALE_FRAC/YIELD_POCKET_REACH calibration debt (§5). Live record = registers/handoffs/HANDOFF_MB.md. [## Status: heading added 2026-07-15; updated 2026-07-23, ED-MB-0024])_
 - 🔸 `proposals/multiunit_envelopment_plan.md` — multiunit envelopment plan  _(PROPOSED — LIVE / UN-ADOPTED. Path-B cross-Unit spatial envelopment is a distinct, still-unbuilt mechanism (HANDOFF_MB.md: do not conflate with the Unit-level Envelopment that shipped). Phase-1 never started. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
@@ -19,6 +19,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionab
 - 🔸 `ED-MB-0009` — designs/provincial/mass_battle_v30.md SS A.14 (Cross-System Notes, 'Woven units -- brittleness') ends in an orphaned rule fragment beginning mid-sentence ('must be converted to Mending Stability with inversion (Thread Tension +N -> Mending   _(open)_
 - 🔸 `ED-MB-0010` — The mass_battle module contract in references/module_contracts.yaml (L468) emits a fabricated Key type 'scene_outcome.battle_concluded' labeled 'substrate SS8.5 verbatim', alongside the correct 'scene.battle_concluded' (L469, 'registry-decl  _(open)_
 - 🔸 `ED-MB-0016` — DG-6 over-decisiveness — GROUNDED partial resolution: per-battle combat-effectiveness (CEV) friction. Jordan directive 2026-07-22 ('validate emergent results top-down from historical precedent; extend code as required to resolve standing is  _(open)_
+- 🔸 `ED-MB-0044` — ED-MB-0044  _(open)_
 - `valoria-mechanic-audit-2026-07-13:mass_battle:mass_battle` — [PARTIAL] mechanic_audit / mass_battle: 12 findings (2 P1 contradictory-table/orphaned-rule, 7 P2, 3 P3); no ED IDs allocated by this pass, 2 P1s proposed for lane=MB filing by a later step  _(PARTIAL)_
 - `valoria-vector-audit-2026-07-26:mass_battle:2026-07-26-mass-battle-vector-audit` — [PARTIAL] vector_audit / mass_battle: VALIDATED 2/3; two instrument blind spots found and fixed mid-run (ED-MB-0043)  _(PARTIAL)_
 

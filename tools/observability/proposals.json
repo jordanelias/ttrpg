@@ -5,13 +5,13 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 249,
-    "needs_jordan": 99,
+    "total": 250,
+    "needs_jordan": 100,
     "by_kind": {
       "proposal_doc": 19,
       "provisional_status_doc": 6,
       "ledger_actionable": 119,
-      "ledger_needs_jordan": 86,
+      "ledger_needs_jordan": 87,
       "audit_partial": 19
     },
     "by_lane": {
@@ -28,8 +28,8 @@
         "needs_jordan": 15
       },
       "MB": {
-        "total": 8,
-        "needs_jordan": 6
+        "total": 9,
+        "needs_jordan": 7
       },
       "PC": {
         "total": 5,
@@ -1031,8 +1031,8 @@
       ]
     },
     "MB": {
-      "total": 8,
-      "needs_jordan": 6,
+      "total": 9,
+      "needs_jordan": 7,
       "items": [
         {
           "kind": "proposal_doc",
@@ -1089,6 +1089,16 @@
           "source": "registers/editorial_ledger",
           "id": "ED-MB-0016",
           "title": "DG-6 over-decisiveness — GROUNDED partial resolution: per-battle combat-effectiveness (CEV) friction. Jordan directive 2026-07-22 ('validate emergent results top-down from historical precedent; extend code as required to resolve standing is",
+          "lane": "MB",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-MB-0044",
+          "title": "ED-MB-0044",
           "lane": "MB",
           "needs_jordan": true,
           "status": "open",
@@ -4273,6 +4283,16 @@
       "source": "registers/editorial_ledger",
       "id": "ED-MB-0016",
       "title": "DG-6 over-decisiveness — GROUNDED partial resolution: per-battle combat-effectiveness (CEV) friction. Jordan directive 2026-07-22 ('validate emergent results top-down from historical precedent; extend code as required to resolve standing is",
+      "lane": "MB",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-MB-0044",
+      "title": "ED-MB-0044",
       "lane": "MB",
       "needs_jordan": true,
       "status": "open",
