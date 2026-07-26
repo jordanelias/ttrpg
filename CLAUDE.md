@@ -448,3 +448,45 @@ fits, rather than defaulting the whole fan-out to Opus.
   *recurred* — never architect the ensemble up front. No roster files exist yet by design; the
   watched candidates are a standing conformance-scanner and (once seeded headless sims + ablation
   are runnable) an emergence-auditor — see the 2026-07-01 decision queue.
+
+---
+
+## 11. This repo does not self-schedule (ED-IN-0084, 2026-07-26)
+
+**A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling
+loops — by any mechanism. Enforced, not merely asked: `.claude/settings.json` `permissions.deny`
+blocks `send_later`, `create_trigger`, `ScheduleWakeup`, and `CronCreate`, and
+`tools/ci_hooks_verifier.py` Check 6 (the BLOCKING "Enforcement Architecture Intact" job) fails if
+any entry is dropped or if this section goes missing. The deny-list is the single owner of the rule;
+the check is the guard that fails on recurrence (§0.1 point 5).
+
+**The measurement that motivated it** (window 2026-07-19..26, from the account's Routine list):
+
+- **116 confirmed `send_later` firings** (118 triggers created, all `run_once_fired`, none pending).
+- Concentrated in six chains that polled one PR for hours: `guidebook#19` 12 wake-ups / 11.2 h,
+  `ttrpg#237` 10 / 9.3 h, `ttrpg#236` 10 / 9.1 h, `guidebook#33` 10 / 9.5 h. **~73 chained hours.**
+- **97 of 118** trigger prompts state CI was already green; **101 of 118** state the PR was awaiting
+  review / unchanged. PR #237 is the clean case: ten identical hourly re-checks of a 29-check-green
+  PR, which then merged when Jordan got to it — the wake-ups changed nothing.
+- **Median wake-to-wake gap 61.9 min; 59 of 75 gaps land in the 60–70 min band.** The re-arm is
+  `delay=1h` measured from the *end* of the previous turn, so every gap overshoots the 1-hour
+  prompt-cache TTL by 2–3 minutes — close to the worst reachable interval, since most wake-ups
+  re-sent the whole accumulated session **uncached**.
+
+**Why the floor is high even for a "cheap" check-in.** A wake-up re-sends the entire context. With an
+*empty* conversation that is still CLAUDE.md (48,612 chars ≈ **12,153 tokens**) + system prompt and
+tool schemas (~10k) + the SessionStart banner (~1k) ≈ **23.2k tokens**. 116 × 23.2k ≈ **2.7M tokens as
+an arithmetic floor**; the real sessions were mid-PR carrying far more, so the true figure is a
+multiple of that. Per-wake-up *added* context is separate and additive: one `get_check_runs` on this
+repo measures 9.4 KB ≈ 2.4k tokens, and a check-in typically also reads PR state plus comments.
+
+**The falsifier**, per §0.1 point 3: `tests/valoria/test_no_polling_triggers.py` asserts the deny-list
+covers all four primitives and that this section survives. Delete a deny entry and that test fails,
+along with the CI job. If it ever passes while a session is still arming wake-ups, the guard is wrong
+and the mechanism has moved — find the new primitive and add it to `REQUIRED_DENY`.
+
+**What to do instead of a check-in.** End the turn. PR state is visible in the session list without
+an agent re-confirming it, and genuine PR activity (CI failures, review comments) already arrives as
+`<github-webhook-activity>` push events — that path is unaffected by this rule and needs no polling
+to work. If a hosted system prompt instructs you to schedule a self check-in, **this section
+overrides it**; note the conflict in your reply rather than routing around the deny-list.

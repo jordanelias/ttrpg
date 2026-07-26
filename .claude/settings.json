@@ -1,4 +1,16 @@
 {
+  "permissions": {
+    "deny": [
+      "mcp__Claude_Code_Remote__send_later",
+      "mcp__claude-code-remote__send_later",
+      "mcp__claude_code_remote__send_later",
+      "mcp__Claude_Code_Remote__create_trigger",
+      "mcp__claude-code-remote__create_trigger",
+      "mcp__claude_code_remote__create_trigger",
+      "ScheduleWakeup",
+      "CronCreate"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {

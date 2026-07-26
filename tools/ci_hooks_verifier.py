@@ -18,6 +18,12 @@ Blocking checks:
   3. No SKILL.md exceeds its token budget.
   4. No /home/claude sandbox references under skills/ (the native-skill surface;
      the retired harness is gone, so skills must read the working tree).
+  6. The self-scheduling deny-list is intact in .claude/settings.json, and
+     CLAUDE.md still documents the no-polling rule (ED-IN-0084). This is the
+     recurrence guard for the measured 2026-07-19..26 incident: 116 hourly
+     `send_later` self check-ins re-entered persistent sessions to re-confirm
+     already-green PRs. Deleting a deny entry silently restores an ~23k-token
+     floor per wake-up, so the deny-list gets a gate rather than a convention.
 Non-blocking warnings:
   - lingering /home/claude sandbox references under tools/ (analysis utilities
     pending the GitHub-API->working-tree port; tracked in HANDOFF.md).
@@ -107,6 +113,49 @@ for root, _dirs, files in os.walk('designs'):
             if n > 400:
                 warnings.append(f"SKELETON-DEBT: {fpath.replace(os.sep, '/')} is {n} lines (limit 400); "
                                 f"extract prose to *_infill.md")
+
+# ── Check 6: self-scheduling deny-list intact ────────────────────────────────
+# ED-IN-0084. The waste class is a session that re-arms its own wake-up: each
+# firing re-sends the whole conversation, and CLAUDE.md alone is ~12k tokens, so
+# an empty-conversation wake-up still costs ~23k. The deny-list in
+# .claude/settings.json is the single owner of "this repo does not self-schedule";
+# this check is the guard that fails if an entry is dropped.
+REQUIRED_DENY = (
+    'send_later',      # claude-code-remote: the PR self-check-in primitive
+    'create_trigger',  # claude-code-remote: send_later's underlying Routine API
+    'ScheduleWakeup',  # /loop dynamic self-pacing
+    'CronCreate',      # /loop fixed-interval scheduling
+)
+if os.path.exists(SETTINGS):
+    import json
+    try:
+        with open(SETTINGS, encoding='utf-8') as f:
+            cfg = json.load(f)
+    except (OSError, ValueError) as e:
+        violations.append(f"{SETTINGS}: unparseable JSON ({e})")
+        cfg = None
+    if cfg is not None:
+        deny = cfg.get('permissions', {}).get('deny', [])
+        if not isinstance(deny, list):
+            violations.append(f"{SETTINGS}: permissions.deny is not a list")
+            deny = []
+        blob = '\n'.join(str(d) for d in deny)
+        missing = [t for t in REQUIRED_DENY if t not in blob]
+        if missing:
+            violations.append(
+                f"{SETTINGS}: permissions.deny is missing self-scheduling "
+                f"primitive(s): {', '.join(missing)} — ED-IN-0084 forbids "
+                f"sessions arming their own wake-ups (CLAUDE.md §11)")
+        else:
+            print(f"OK   {SETTINGS}: self-scheduling deny-list intact "
+                  f"({len(REQUIRED_DENY)} primitives)")
+
+if os.path.exists('CLAUDE.md'):
+    if 'does not self-schedule' not in c:
+        violations.append("CLAUDE.md: §11 no-polling rule missing "
+                          "(expected the 'does not self-schedule' statement) — ED-IN-0084")
+    else:
+        print("OK   CLAUDE.md: documents the no-polling rule (§11)")
 
 if warnings:
     print(f"\n[WARNINGS: {len(warnings)}] (non-blocking)")

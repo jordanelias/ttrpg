@@ -8,6 +8,22 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
+  check-ins outright ("I don't even need check in triggers, I can just see what's happening by the
+  colours on a session"). **Measured first:** 116 confirmed `send_later` firings in 2026-07-19..26,
+  ~73 chained hours, six chains of 7–12 hourly wake-ups on one PR; **97/118** trigger prompts state
+  CI was already green. A wake-up re-sends the whole conversation — CLAUDE.md alone is ~12.2k tokens,
+  so an *empty*-conversation wake-up still costs ~23.2k → **~2.7M tokens as an arithmetic floor**, and
+  the 61.9-min median gap overshoots the 1h prompt-cache TTL so most of it was uncached. **Fix:**
+  `.claude/settings.json` `permissions.deny` (single owner) blocks `send_later`, `create_trigger`,
+  `ScheduleWakeup`, `CronCreate` across all three server-name spellings; `ci_hooks_verifier.py`
+  Check 6 is the blocking guard; `tests/valoria/test_no_polling_triggers.py` is the falsifier,
+  **mutation-verified** (each primitive deleted in turn, every deletion caught by both). CLAUDE.md
+  gains **§11**. Also deleted the dormant hourly cron Routine "Coverage-completion loop (guidebook)".
+  *Known limit:* the guard pins artifacts + a roster, not hosted tool calls — a **new** scheduling
+  primitive would pass until added to `REQUIRED_DENY` in both files. *Filed, not swept (out of
+  scope):* `ci_hooks_verifier.py` Check 5 still walks the retired `designs/` tree, so its
+  skeleton-debt warning has been silently dead since PR #191.
 - **✅ SessionStart open-work surfacing DONE (2026-07-22, ED-IN-0081).** Closed the "audits /
   editorial / schema / mechanics keep getting missed at session start" gap. New
   `tools/session_open_work.py` composes a `── open work ──` banner block — active-lane
