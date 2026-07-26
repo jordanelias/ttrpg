@@ -7,28 +7,14 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 ## Pending
 
 - **BALANCE-STATE + CUSTOMIZATION-SURFACE REPORT (2026-07-26, no ED — report only).**
-  `audit/2026-07-26-combat-balance-customization-state/` (index + infill, co-filed). Measured state at
-  `248f344`; **nothing tuned, no default flipped, no golden re-recorded, no ID allocated.** New instrument
-  **`workbench/build_levers.py`** measures the four build inputs `balance._mk` structurally cannot express —
-  **skills, equipped techniques + investment level, cross-training, asymmetric armour** — plus disposition,
-  familiarity and composite archetypes. Use it rather than re-deriving; `build_levers.py mirror 2000` is the
-  fairness control (9/9 cells straddle 50 across arming/light, longsword/heavy, rapier/none).
-  - **Eight observations awaiting Jordan (D1–D8), several of them design calls not defects:** D1 weapon choice
-    erases build identity (4 distinct archetypes land within 2.2pp — F18 seen at the *build* level); **D2 armour
-    has NO wearer-side cost** (heavy vs none 95.7%; every `.armor` read is target-side, `equipment_health` never
-    passed) ; **D3 disposition is monotone 39.1→59.8**, contradicting `config.py`'s own "BOTH poles cost";
-    D4 focus is −0.7pp/pt against cog +20.4 / history +19.4; **D5 tradition flatness (3.8pp, `none` HIGHEST at
-    52.2) is inertness, not balance** — with the imposition gate retired and channel weights removed, an
-    ability-less tradition differs only by `familiarity()`, and "4 of 5 distinct context leaders" is noise
-    re-rolling at N=120; D6 the technique layer is 8 abilities over 5 of 8 traditions with 5 of 8 `eff_cw`
-    channels identity ×1.0 (F23); D7 no in-fight tactical layer exists (ED-PC-0001 open — every customization
-    choice is exercised *before* the fight); **D8 `balance.py`'s heavy column prints `0.0` for ZERO DECIDED, not
-    a 0% win-rate** — 38 of 53 weapons hit it, and the arming mirror cell prints `0.0` too.
-  - **Stale docs flagged, NOT edited (do not re-discover):** `combat_balancing_methodology.md` §7's baseline is
-    2026-06-28 and every figure has moved; `ability_armature.md` §2c/§7 still lists `seize` as live with
-    `vorschlag`/`sen_no_sen`, both of which no longer exist in `ABILITIES`.
-  - Carried-open items from ED-PC-0040 were re-confirmed live, not re-discovered: off-plate reach ~0.94,
-    ranseur/guandao covert plate-killers, medium-tier round-trip, F21/F22/F23/F24.
+  `audit/2026-07-26-combat-balance-customization-state/` (index + infill). Measured state at `248f344`; nothing
+  tuned. Instrument **`workbench/build_levers.py`** measures the four build inputs `balance._mk` structurally
+  cannot express (skills, techniques + investment level, cross-training, asymmetric armour); `mirror 2000` is the
+  fairness control (9/9 straddle 50). **D1–D8 findings are consolidated into the remediation plan below as M13
+  — read that, not this bullet.** Headlines kept because they recur: **D1** four archetypes land within 2.2pp
+  (weapon erases identity); **D2** heavy vs none 95.7% and every `.armor` read is target-side (armour is free);
+  **D3** disposition monotone 39.1→59.8 against config's own "BOTH poles cost"; **D8** `balance.py`'s heavy
+  column prints `0.0` for ZERO DECIDED, which 38/53 weapons hit.
 
 - **PLAYER-AGENCY PROPOSAL + DEFECT REGISTER + VALUE CATALOGUE (2026-07-26, no ED — all design-only/report,
   HELD FOR JORDAN).** Three durable artifacts; **read them rather than re-deriving** — this entry is a pointer,
@@ -72,40 +58,62 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
        sword weight, wide blade → cannot play the gap game every other dagger wins with. **A5 — `estoc` has no
        weakness at any tier** (97.3; 96.5/96.0/92.0/95.0; cap 1.104). The ≤18% band is **not traps** — it is the
        concealed tier, and all four rise to 94–97% at plate.
-  - **PLAN EXTENDED, 2 ROUNDS + 2 ADVERSARIAL PASSES (proposal §12–§20).** Read the proposal; this is a
-    pointer. §12 carry-context SPEC · §13 off-hand SPEC · §14 A7a increment · §15 an 8-step ladder (**I-1..I-4
-    are independent of the P0 blocker**) · §16/§20 the two passes.
-  - **The four results worth not re-deriving:**
-    1. **Carriability derives from `head_len + grip_len`** — already stored, no new data, no per-weapon table.
+  - **PLAN EXTENDED, 2 ROUNDS + 2 SELF-CRITIQUE PASSES (proposal §12–§20).** §12 carry-context SPEC · §13
+    off-hand SPEC · §14 A7a increment · §15 8-step ladder (**I-1..I-4 independent of the P0 blocker**) ·
+    §16/§20 the passes. Four results worth not re-deriving:
+    1. **Carriability derives from `head_len + grip_len`** (already stored; no new data, no per-weapon table).
        The roster **separates itself**: concealable ≤0.60 m / civilian 0.75–1.20 m / war ≥1.50 m, with a **0.30 m
-       EMPTY GAP** between the last two. **All 26 weapons in the dominant 91–97% band are ≥1.50 m — the dominant
-       band IS the war band.** Rapier 1.14 tops civilian, estoc 1.57 bottoms war. Second term is `hands`; its
-       limit is that the katana falsifies "2H ⇒ war", so the threshold belongs to the setting's legal regime.
-    2. **`core.COVERAGE_GAP = {'full':0.15,'partial':0.5}` is fully plumbed into `coupling`→`_transmit` and NO
-       call site ever passes `'partial'`** (ED-PC-0035 F8's dead branch). **The shield's damage hook exists and
-       is merely unreachable** — A6 becomes "wire a caller + author records", not "design a subsystem".
-    3. **⚠ MY OWN A7d FIX SKETCH WAS A NO-OP — do not implement as written.** `min(1.0, eff/CUT_AUTH_REF)` with
-       REF=0.70 against a native-cutter population of **0.71–1.33**: every weapon clamps to 1.0, nothing changes.
-       The reference sits *below the entire population it would grade*. Register A7d amended at source. Real fix
-       = re-anchor (coupled to the incidental-cut path — two references for one fact unless justified) or a
-       non-saturating form; either is a **balance** change (buffs keen curved swords, nerfs dull ones).
-    4. **§17 GODOT EXPORT — the gap round 1 missed.** All **226 params (201 cfg + 25 core) are exported**, and
-       every constant the plan touches is among them, so **every increment trips the blocking round-trip gate**.
-       The gate checks JSON-matches-config, NOT that the port implements the constant, and the port covers 1/27
-       modules — so **B13 (PEN_DEFICIT_K exported with no consumer) is the PATTERN, not a one-off.**
-  - **Open/escalated:** **X2** carry context makes balance conditional on a scene-frequency distribution. §19
-    tested whether the 55-arc corpus supplies it — **negative, and do not retry naively**: 24 hits total, and
-    every "court" hit is legal/political (Crown courts, arbitration courts, court-intrigue), not a location.
-    X2 improves from "unresolvable" to **a content deliverable** (tag scenes, then count); until then §12.3's
-    results are conditional on an explicitly declared mix. **X5** carry context makes A7a MORE urgent. **X6** the
-    0.30 m gap is a property of the CURRENT roster — re-derive the bands, never freeze them. **Y5 accepted-not-
-    fixed:** §17's rule is a convention nothing enforces; a real gate diffs the JSON against the port's consumed
-    set (GO lane).
-  - **Y4, kept because the near-miss is the point:** my first export probe read the wrong nesting level and
-    returned "not exported" for all seven constants — a **false negative I nearly wrote into the plan**, and it
-    looked like a clean result. Both passes are **self-critique**, weaker than the four-dimension audit's
-    independent method, and are labelled so. A `fable`-tier independent audit of physics/data/logic was
-    commissioned separately and is NOT folded into these sections.
+       EMPTY GAP**. **All 26 weapons in the dominant 91–97% band are ≥1.50 m — the dominant band IS the war
+       band.** Rapier 1.14 tops civilian, estoc 1.57 bottoms war. Second term `hands`; the katana falsifies
+       "2H ⇒ war", so the threshold belongs to the setting's legal regime. **X6:** the gap is a property of the
+       CURRENT roster — re-derive the bands, never freeze them.
+    2. **`core.COVERAGE_GAP{'partial':0.5}` is fully plumbed into `coupling`→`_transmit` and NO caller ever
+       passes it** (ED-PC-0035 F8's dead branch) — the shield's damage hook exists and is merely unreachable.
+    3. **⚠ MY OWN A7d SKETCH WAS A NO-OP — do not implement as written.** `min(1.0, eff/CUT_AUTH_REF)` REF=0.70
+       against a native-cutter population of **0.71–1.33**: every weapon clamps to 1.0. Register A7d amended.
+    4. **§17 GODOT EXPORT:** all **226 params (201 cfg + 25 core) are exported**, including every constant the
+       plan touches, so **every increment trips the blocking round-trip gate** — which checks JSON-matches-config,
+       NOT that the port implements it (port covers 1/27 modules). **B13 is the PATTERN, not a one-off.**
+    **Escalated:** **X2** balance becomes conditional on a scene-frequency distribution; §19 tested the 55-arc
+    corpus and it is **negative — do not retry naively** (24 hits, and every "court" is legal/political, not a
+    location). X2 improves to **a content deliverable** (tag scenes, then count). **X5** carry context makes A7a
+    MORE urgent. **Y5 accepted-not-fixed:** §17's rule is a convention nothing enforces.
+  - **INDEPENDENT `fable` AUDIT (F1–F10) + CONSOLIDATED REMEDIATION PLAN (2026-07-26).** Register §G;
+    plan at `audit/2026-07-26-combat-balance-customization-state/combat_remediation_plan.md`. The audit ran
+    **read-only and BLIND** (given the files and the evidence discipline, NOT my §A–§F findings), so overlap is
+    real corroboration. **Its headline: the 290-test combat suite is GREEN with every one of F1–F6 present.**
+    **Three heaviest claims re-verified by me, not relayed:**
+    - **F1 — the staff's `percussion_authority` is EXACTLY 0**, and every downstream channel zeroes: the lever is
+      **CoM offset (PoB_frac)**, and a centre-gripped haft has PoB_frac 0, so authority is 0 *regardless of mass*.
+      Verified `perc_auth=0.000 / punct=0.000 / adef_cap=0.000 / stagger=(0.0,0.0)`. Damage @none staff **3** vs
+      mace **17**; staff-vs-arming @heavy **0 decided / 200 draws**. Contradicts `percussion_stagger`'s own
+      docstring (which cites the staff as ED-PC-0031's worked example) and `config.py:82`. **This diagnoses A4's
+      staff cliff.**
+    - **F3 — PLATE SHIELDS AGAINST THE POLEAXE.** Verified hammer **1.216**, spike **0.601**, threshold **0.72**.
+      PC-5's `thrust_authority` halved the spike *after* ED-1080's "spike ≈ hammer" comment was calibrated, and
+      `select_mode` picks the spike at all four tiers → `armor_defeat_sigma = −0.20` at heavy.
+    - **F5 — THE ABILITY CHANNELS ARE SIGN-BLIND; INVESTMENT BACKFIRES WHEN BEHIND.** Verified dagger-vs-poleaxe
+      `bind_sigma` **−1.0562 → −1.1904** with `staerke_schwaeche`. `(lev_a − lev_d) · eff_cw(a)/eff_cw(d)`
+      amplifies a NEGATIVE difference. Live for every invested build — the whole ED-PC-0024 surface; invisible
+      only because `equipped=[]` by default. **Proposal §5 corrected: `measure` and `leverage` are re-classed
+      C-BROKEN, and a new rule 5 (sign-safety) added — do NOT author content onto them (I-7) until fixed.**
+    - Also: **F2** all 19 `cut_thrust` weapons are paid the SWING moment on their thrust arm (ranseur heft 2.515
+      vs 0.799 — the mechanism behind A5's covert plate-killer); **F4** raw negative cap into deficits (23× at
+      medium) — sharpens B6; **F6** any guard-mounted element is zeroed by `|x|/Lt`, so hook_sword's authored
+      blunt mode can never fire; **F7** parry cap identical 0.4 for **36/53**; **F8** confirms B9's 38/53;
+      **F9** `extent_m` inconsistent within a class + 13 records protrude past `head_len` (poleaxe spike 1.12 m
+      vs head_len 0.90); **F10** `CHOKE_GRIP_MIN` dead yet exported to Godot — **3rd recurrence** of a class
+      ED-PC-0035 and ED-PC-0037 each cleaned.
+    - **A7a SURVIVED the blind pass** (the auditor did not find it) — so it is not a duplicate.
+    - **⚠ LARGEST REMAINING BLIND SPOT:** `wrapper.py`'s mutation ordering, RNG-draw sequencing and burst/latch
+      state machine were only spot-checked. Stale `sel_*` carryover and draw-order divergence would live there
+      and **no batch in the remediation plan covers them.**
+  - **REMEDIATION PLAN — 14 merged items (M1–M14, deduplicated: F1 absorbs A4-staff, F2 absorbs A5-ranseur,
+    F6 deepens A1, F4 absorbs 2 of B6's channels), 8 batches, and an explicit DEFECT vs ⚖DESIGN-CALL split
+    (7 calls are Jordan's, listed).** Recommended start is **R1 — M5 + M4 + M12**: three real defects, no balance
+    intent, and M5 is currently making the investment system punish investment. R2 the zeroes (M1, M9 — same root
+    cause at two scales, still two commits). R3 the calibration break (M3, M2 — where the reference tables start
+    moving). R4+ is ⚖-blocked or golden-heavy.
   - **CI PIN, do not re-trip:** `tests/valoria/test_build_proposals.py::test_all_proposals_docs_surface_by_location`
     pins the proposals-doc count (now **19**). Adding/removing anything in `proposals/` requires bumping it and
     appending a comment line. `tools/valoria_local.py --staged` does NOT run pytest, so local-green ≠ CI-green

@@ -337,7 +337,51 @@ Recording these so they are not re-litigated:
 
 ---
 
-## G. Severity-ordered shortlist
+## G. Independent `fable`-tier audit — F1–F10 (2026-07-26)
+
+Commissioned by Jordan; run **read-only and BLIND** (the auditor was given the target files and this repo's
+evidence discipline, but **not** any finding from §A–§F, so overlap is genuine corroboration). Its own headline:
+**the combat suite — 290 tests — is green with every one of F1–F6 present.** None is visible to current tests.
+
+**Verification status is per-row.** I re-ran the three heaviest claims myself rather than relaying them
+(CLAUDE.md §7: do not take another agent at face value).
+
+| # | finding | severity | verified by me |
+|---|---|---|---|
+| **F1** | **The staff's `percussion_authority` derives to exactly 0**, and every downstream channel zeroes with it. The formula uses **PoB_frac** (CoM offset) as the lever; the staff is centre-gripped at `x_m=0.0`, so authority is 0 **regardless of mass**. Damage @none: staff **3** vs mace **17**; staff-vs-arming @heavy **0 decided / 200 draws**. Contradicts `percussion_stagger`'s own docstring, which cites the staff as the worked example of ED-PC-0031's headline mechanic, and `config.py:82`'s "staff (p_auth ~4)". | outcome-changing | ✅ `perc_auth=0.000`, `punct=0.000`, `adef_cap=0.000`, `stagger=(0.0,0.0)` |
+| **F2** | **All 19 `cut_thrust` weapons are paid the SWING moment on their thrust arm.** `heft` keys the lever on the head *token*, so a `cut_thrust` weapon resolving the **puncture** arm still gets `m_head·PoB_frac`. Ranseur heft **2.515** vs **0.799** under its own thrust model (3.1×); damage @none ranseur **26** vs spear **13**. `weapon_physics.py:632` already concedes the bypass; the ED-PC-0027 fix was never extended. | outcome-changing | not re-run |
+| **F3** | **Plate SHIELDS against the poleaxe.** `config.py:81` says ADEF_POINT was set so "the poleaxe spike adef ≈ its hammer"; PC-5's `thrust_authority` halved the spike *after* that calibration. `select_mode` picks the spike at all four tiers, so at heavy `armor_defeat_sigma = 1.7·(0.601−0.72) = −0.20` where the hammer reads +0.84. Compounding: the greedy comparator never prices the **adef consequence** of the mode choice, so a selection can forfeit ~1σ of exchange control invisibly. | outcome-changing | ✅ hammer **1.216**, spike **0.601**, threshold **0.72** |
+| **F4** | **`reach_threat` and `represent_measure_p` feed the raw, possibly-negative `adef_cap` into a capability deficit** — the class ED-PC-0039 ruled invalid but fixed only in the damage knee. Pure cutters (cap −0.9) @medium: represent gate **0.0089 vs 0.207** clamped — **23×**. | outcome-changing | not re-run |
+| **F5** | **The multiplicative ability channels are SIGN-BLIND: investing makes you worse when behind.** `bind_sigma` computes `(lev_a − lev_d) · eff_cw(a)/eff_cw(d)`, so a >1 factor amplifies a **negative** difference. Same shape in `reach_sigma` with `misura`. **Live for any invested build — the whole ED-PC-0024 surface.** | latent-but-armed | ✅ dagger vs poleaxe bind_sigma **−1.0562 → −1.1904** with `staerke_schwaeche` |
+| **F6** | **hook_sword's authored blunt mode is structurally unreachable** — its crescent element sits at `x=0` and `percussion_element_authority ∝ |x|/Lt` → 0 → never afforded. **Generalises: any guard-mounted striking element is zeroed by this lever form.** | latent | not re-run |
+| **F7** | **`defense_affinities`' band remap floor-pins the roster:** parry cap identical **0.4 for 36/53**; dodge 27 floored + 5 ceilinged; wind 17 + 8. The AGILITY_REF re-anchor was done to stop a clamp erasing ordering; `_band` re-creates it downstream. | outcome-shaping | not re-run |
+| **F8** | `MAX_TEMPO_PEN` clips exactly **38/53** — confirms **B9**; recorded so it is not re-discovered. | outcome-shaping | — (= B9) |
+| **F9** | **Weapon data:** polearm blade `extent_m` internally inconsistent (fauchard 1.803 m at 0.65 kg vs glaive 0.50 m at 0.82 kg — 3–4× in one class, and extent enters MoI as `m·extent²/12`); **13 records have elements protruding past `[0, head_len]`**, the poleaxe top spike reaching **1.12 m vs head_len 0.90**. Mass bookkeeping CLEAN 53/53. | moderate | not re-run |
+| **F10** | **Dead/vestigial**, one of which matters: **`CHOKE_GRIP_MIN` has zero readers yet ships in the Godot-facing JSON** — the dead-key-in-the-typed-contract class ED-PC-0035 *and* ED-PC-0037 each cleaned, **recreated a third time**. Also `HEAVY_BLUNT_THRESHOLD`/`RHO_IRON`/`_A_HAFT` unread; `element_afforded`'s damage-mode string written and never read; `geo['perc_conc']` has no live consumer; `core.adef_cap`'s `cut_thrust` ADEF_CUT arm structurally unreachable; `wrapper.py:134`'s comment contradicts the code on its own line. | cosmetic→moderate | — |
+
+### G.1 What the independent pass changes about §A–§F
+
+- **F1 diagnoses A4's staff cliff** (73.4 → 8.7) completely — A4 described the symptom, F1 gives the cause.
+- **F2 is the mechanism behind A5's ranseur** covert plate-killer (wins ~100% of the 12% it settles).
+- **F6 deepens A1's hook_sword** — not merely mis-modelled as solo, but missing half its authored kit.
+- **F4 sharpens B6's four-channel double-count** into a specific defect at two named sites.
+- **F5 invalidates part of the proposal's own §5 lever registry**, which classified `leverage` and `measure`
+  as Class-C LEGAL. They are sign-broken at their call sites. Corrected there.
+- **A7a survived the blind pass** — the auditor did not find that `core.coupling` ignores `eff` for native cut
+  tokens. Independent non-discovery is not confirmation, but it does mean A7a is not a duplicate.
+
+### G.2 What the audit could NOT reach (its own statement, carried forward)
+
+`wrapper.py` (493 lines) — the fight loop's **mutation ordering, RNG-draw sequencing, and burst/latch state
+machine** were only spot-checked, so **the state/ordering dimension is only partially covered**; defect classes
+like stale `sel_*` carryover and draw-order divergence live there. Also untouched: `combatant.py`,
+`state_graph.py`, `capabilities.py`; external verification of cited sources (Oh et al., Williams RESIST cells,
+Cross & Nathan) — internal consistency only; and a full 51×51×4 dominance sweep (its win-rate probes were
+n=200–400 spot checks, indicative not exhaustive).
+
+---
+
+## H. Severity-ordered shortlist
 
 If only five things are fixed, the register says these five:
 

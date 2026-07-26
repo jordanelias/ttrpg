@@ -222,8 +222,8 @@ This is the registry the question asks for. Every engine value falls in exactly 
 
 | lever | op | consumer site(s) | authored ability |
 |---|---|---|---|
-| `measure` | × | `reach_sigma` meas_w · `init_hold_decay` | misura (IT) |
-| `leverage` | × | `bind_sigma` · `init_steal_factor` · bind kuzushi | staerke_schwaeche (DE), atajo (ES) |
+| `measure` | × | `reach_sigma` meas_w · `init_hold_decay` | misura (IT) — **⚠ SIGN-BROKEN, see below** |
+| `leverage` | × | `bind_sigma` · `init_steal_factor` · bind kuzushi | staerke_schwaeche (DE), atajo (ES) — **⚠ SIGN-BROKEN, see below** |
 | `spine_press` | × | `bind_sigma` spine differential | shinogi (JP) |
 | `counter_select` | × | `counter_select` gate | mezzo_tempo (IT), zwerchhau (DE) |
 | `counter_success` | + | `counter_success_prob` | indes (DE) |
@@ -252,12 +252,30 @@ This is the registry the question asks for. Every engine value falls in exactly 
 
 That is **20 levers total**, of which 7 have authored content today.
 
+> **⚠ CORRECTION (independent `fable` audit, finding F5) — two of the levers this table calls LEGAL are
+> currently SIGN-BROKEN, and the registry above sanctioned them.** `bind_sigma` computes
+> `(leverage(agg) − leverage(def)) · eff_cw(agg,'leverage') / eff_cw(def,'leverage')`, so a factor > 1 amplifies
+> a **negative** difference: **investing in the lever makes its owner worse whenever they are behind on the
+> differential it multiplies.** Measured and independently re-verified: a dagger with `staerke_schwaeche` (×1.2)
+> binding a poleaxe goes **−1.0562 → −1.1904** — training in bind-leverage *worsened* the bind. `reach_sigma`'s
+> `measure` ratio has the identical shape: a `misura` (×1.15) defender suffers **15% more** from enemy reach.
+>
+> This is live for **any invested build** — the whole ED-PC-0024 surface — and default `equipped=[]` is why no
+> test sees it. **Consequence for this proposal: §5.1 needs a fifth rule, and it is now rule 5 below.** Until
+> the call sites are fixed, `measure` and `leverage` must be treated as **Class C-BROKEN**: authoring content
+> onto them (§9 P2, increment I-7) would ship a lever that punishes investment.
+
 ### 5.1 The four rules a lever must satisfy
 
 1. **One lever per physical fact.** A new lever must name its fact and show no existing lever already carries it. *This rule is currently violated:* ED-PC-0040 records that the armour-defeat deficit enters `armor_defeat_sigma`, `reach_threat`, `represent_measure_p` **and** the penetration knee "with no recorded budget — against a repo rule that forbids exactly that." Adding levers before that budget exists compounds it.
 2. **σ-domain or probability-factor only.** A lever multiplies a factor inside a bounded contest or adds to a σ term. It never sets a probability directly, never short-circuits a contest, never post-processes an outcome.
 3. **Bounded by construction.** `ability_factor` already clamps the composed product to [1e-4, 1e3] and caps investment at level 8 — after an unbounded level was measured to overflow the downstream sigmoids and *crash* fight resolution at ~15–22 (ED-PC-0024's adversarial-review fix). Any new lever inherits this, and any lever feeding a sigmoid must be re-checked against it.
 4. **Ablatable in isolation.** Setting the lever's ability to level 0 must be *byte-identical* to it being absent. This already holds and must keep holding.
+5. **Sign-safe on a signed contest.** A multiplicative lever may scale **its owner's own contribution**, or the
+   resulting win-probability — it must **never ratio-multiply a signed difference**, because that inverts the
+   lever's meaning for whichever side is behind (F5). Any new or re-authored multiplicative lever must ship a
+   test that equips it on the *disadvantaged* side and asserts the term does not get worse. This rule exists
+   because two shipped levers already violate it.
 
 ---
 
