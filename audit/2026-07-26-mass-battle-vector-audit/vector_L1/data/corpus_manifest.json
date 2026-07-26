@@ -1,0 +1,1177 @@
+{
+ "design_files": [
+  {
+   "path": "arcs/arc_expansion_v30.md",
+   "chars": 90559
+  },
+  {
+   "path": "arcs/arc_expansion_v30_index.md",
+   "chars": 7459
+  },
+  {
+   "path": "arcs/throughline_resolutions_v30.md",
+   "chars": 32584
+  },
+  {
+   "path": "arcs/throughline_resolutions_v30_index.md",
+   "chars": 7118
+  },
+  {
+   "path": "audit/2026-05-17-v18-integration/integration_plan_v18.md",
+   "chars": 32785
+  },
+  {
+   "path": "canon/00_philosophical_foundations.md",
+   "chars": 63540
+  },
+  {
+   "path": "canon/00_philosophical_foundations_rules.md",
+   "chars": 9678
+  },
+  {
+   "path": "canon/01_foundations_amendment_self_rendering.md",
+   "chars": 14735
+  },
+  {
+   "path": "canon/02_canon_constraints.md",
+   "chars": 16773
+  },
+  {
+   "path": "canon/02_foundations_amendment_leap_mechanism.md",
+   "chars": 14707
+  },
+  {
+   "path": "canon/03_canonical_timeline.md",
+   "chars": 20141
+  },
+  {
+   "path": "engine/mc_v18_walkthrough.md",
+   "chars": 10846
+  },
+  {
+   "path": "engine/params/bg/ci_seizure.md",
+   "chars": 10175
+  },
+  {
+   "path": "engine/params/bg/clocks.md",
+   "chars": 3528
+  },
+  {
+   "path": "engine/params/bg/ed_resolutions.md",
+   "chars": 10401
+  },
+  {
+   "path": "engine/params/bg/geography.md",
+   "chars": 26462
+  },
+  {
+   "path": "engine/params/bg/institutions.md",
+   "chars": 19509
+  },
+  {
+   "path": "engine/params/bg/military.md",
+   "chars": 6207
+  },
+  {
+   "path": "engine/params/bg/ministry.md",
+   "chars": 13950
+  },
+  {
+   "path": "engine/params/bg/phases.md",
+   "chars": 6353
+  },
+  {
+   "path": "engine/params/bg/royal_assassination.md",
+   "chars": 2642
+  },
+  {
+   "path": "engine/params/bg/tensions_deck.md",
+   "chars": 2068
+  },
+  {
+   "path": "engine/params/bg/tracks.md",
+   "chars": 8082
+  },
+  {
+   "path": "engine/params/bg/victory.md",
+   "chars": 12534
+  },
+  {
+   "path": "engine/params/board_game.md",
+   "chars": 11690
+  },
+  {
+   "path": "engine/params/board_game_misc.md",
+   "chars": 1524
+  },
+  {
+   "path": "engine/params/campaign_modes.md",
+   "chars": 4191
+  },
+  {
+   "path": "engine/params/contest.md",
+   "chars": 38408
+  },
+  {
+   "path": "engine/params/contest_extensions.md",
+   "chars": 4400
+  },
+  {
+   "path": "engine/params/core.md",
+   "chars": 19930
+  },
+  {
+   "path": "engine/params/factions.md",
+   "chars": 2816
+  },
+  {
+   "path": "engine/params/factions/npc_stance_triangles.md",
+   "chars": 4231
+  },
+  {
+   "path": "engine/params/factions/riskbreakers_identity.md",
+   "chars": 17247
+  },
+  {
+   "path": "engine/params/factions_personal.md",
+   "chars": 7805
+  },
+  {
+   "path": "engine/params/history/board_game.md",
+   "chars": 6893
+  },
+  {
+   "path": "engine/params/history/campaign_modes.md",
+   "chars": 767
+  },
+  {
+   "path": "engine/params/history/combat.md",
+   "chars": 5432
+  },
+  {
+   "path": "engine/params/history/factions_personal.md",
+   "chars": 899
+  },
+  {
+   "path": "engine/params/history/mass_combat.md",
+   "chars": 4924
+  },
+  {
+   "path": "engine/params/history/threadwork.md",
+   "chars": 1486
+  },
+  {
+   "path": "engine/params/mass_combat.md",
+   "chars": 35323
+  },
+  {
+   "path": "engine/params/southernmost.md",
+   "chars": 5175
+  },
+  {
+   "path": "engine/params/threadwork.md",
+   "chars": 17358
+  },
+  {
+   "path": "engine/params/threadwork_superseded.md",
+   "chars": 44495
+  },
+  {
+   "path": "engine/sim_reference_CONVENTIONS.md",
+   "chars": 3584
+  },
+  {
+   "path": "godot/data_serialization_spec.md",
+   "chars": 5189
+  },
+  {
+   "path": "godot/gm_to_engine_conversion.md",
+   "chars": 4625
+  },
+  {
+   "path": "godot/godot_architecture_specification.md",
+   "chars": 50502
+  },
+  {
+   "path": "godot/godot_conversion_strategy_v1.md",
+   "chars": 43856
+  },
+  {
+   "path": "godot/implementation_sequence.md",
+   "chars": 5412
+  },
+  {
+   "path": "godot/scene_tree_architecture.md",
+   "chars": 5017
+  },
+  {
+   "path": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
+   "chars": 121578
+  },
+  {
+   "path": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
+   "chars": 56349
+  },
+  {
+   "path": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
+   "chars": 30275
+  },
+  {
+   "path": "proposals/2026-07-21-reconciliation-program.md",
+   "chars": 15101
+  },
+  {
+   "path": "proposals/grounded_event_card_deck_v1.md",
+   "chars": 51472
+  },
+  {
+   "path": "proposals/mass_battle_shape_echelon_revamp.md",
+   "chars": 7602
+  },
+  {
+   "path": "proposals/multiunit_envelopment_plan.md",
+   "chars": 13829
+  },
+  {
+   "path": "proposals/pc_formation_system.md",
+   "chars": 30278
+  },
+  {
+   "path": "proposals/weapon_physics_and_concentration_model.md",
+   "chars": 11691
+  },
+  {
+   "path": "references/throughlines_meta.md",
+   "chars": 15505
+  },
+  {
+   "path": "references/throughlines_meta_infill.md",
+   "chars": 55763
+  },
+  {
+   "path": "systems/_architecture/auto_manual_resolution_duality_v1.md",
+   "chars": 9287
+  },
+  {
+   "path": "systems/_architecture/campaign_architecture_v30.md",
+   "chars": 18849
+  },
+  {
+   "path": "systems/_architecture/campaign_architecture_v30_index.md",
+   "chars": 5247
+  },
+  {
+   "path": "systems/_architecture/campaign_modes_v30_infill.md",
+   "chars": 6129
+  },
+  {
+   "path": "systems/_architecture/canonical_registry.md",
+   "chars": 14835
+  },
+  {
+   "path": "systems/_architecture/cogload_moderate_target.md",
+   "chars": 15663
+  },
+  {
+   "path": "systems/_architecture/cogload_moderate_target_index.md",
+   "chars": 4737
+  },
+  {
+   "path": "systems/_architecture/companion_app_design_note.md",
+   "chars": 2604
+  },
+  {
+   "path": "systems/_architecture/complete_systems_reference.md",
+   "chars": 15906
+  },
+  {
+   "path": "systems/_architecture/conflict_architecture_proposal.md",
+   "chars": 20175
+  },
+  {
+   "path": "systems/_architecture/derived_stats_v30.md",
+   "chars": 46375
+  },
+  {
+   "path": "systems/_architecture/derived_stats_v30_index.md",
+   "chars": 4131
+  },
+  {
+   "path": "systems/_architecture/early_game_ignition_analysis.md",
+   "chars": 35702
+  },
+  {
+   "path": "systems/_architecture/generational_transition_v30.md",
+   "chars": 3441
+  },
+  {
+   "path": "systems/_architecture/governance_type_registry_v1.md",
+   "chars": 31368
+  },
+  {
+   "path": "systems/_architecture/holonic_container_doctrine_v1.md",
+   "chars": 9809
+  },
+  {
+   "path": "systems/_architecture/hybrid_gaps_v30.md",
+   "chars": 7099
+  },
+  {
+   "path": "systems/_architecture/hybrid_gaps_v30_infill.md",
+   "chars": 7558
+  },
+  {
+   "path": "systems/_architecture/integration_proposal_v30.md",
+   "chars": 61228
+  },
+  {
+   "path": "systems/_architecture/key_substrate_v30.md",
+   "chars": 29576
+  },
+  {
+   "path": "systems/_architecture/key_type_registry_v30.md",
+   "chars": 41787
+  },
+  {
+   "path": "systems/_architecture/player_agency_v30.md",
+   "chars": 54400
+  },
+  {
+   "path": "systems/_architecture/player_agency_v30_index.md",
+   "chars": 6407
+  },
+  {
+   "path": "systems/_architecture/propagation_spec_v1.md",
+   "chars": 54009
+  },
+  {
+   "path": "systems/_architecture/scale_transitions_v30.md",
+   "chars": 29249
+  },
+  {
+   "path": "systems/_architecture/scale_transitions_v30_index.md",
+   "chars": 5012
+  },
+  {
+   "path": "systems/_architecture/scale_transitions_v30_infill.md",
+   "chars": 4529
+  },
+  {
+   "path": "systems/_architecture/session_a_spec_patches.md",
+   "chars": 8627
+  },
+  {
+   "path": "systems/_architecture/tensions_pair_validation.md",
+   "chars": 15930
+  },
+  {
+   "path": "systems/_architecture/videogame_mode_spec.md",
+   "chars": 16455
+  },
+  {
+   "path": "systems/_architecture/videogame_mode_spec_index.md",
+   "chars": 3524
+  },
+  {
+   "path": "systems/articulation/articulation_layer_v30.md",
+   "chars": 17943
+  },
+  {
+   "path": "systems/characters/character_generation_questionnaire_v30.md",
+   "chars": 8477
+  },
+  {
+   "path": "systems/characters/character_histories_v30.md",
+   "chars": 38977
+  },
+  {
+   "path": "systems/characters/character_histories_v30_index.md",
+   "chars": 5755
+  },
+  {
+   "path": "systems/characters/character_histories_v30_infill.md",
+   "chars": 16263
+  },
+  {
+   "path": "systems/characters/conviction_axis_matrix_v30.md",
+   "chars": 12245
+  },
+  {
+   "path": "systems/characters/conviction_migration_roster_v30.md",
+   "chars": 10428
+  },
+  {
+   "path": "systems/characters/conviction_taxonomy_v30.md",
+   "chars": 16125
+  },
+  {
+   "path": "systems/characters/conviction_track_v1.md",
+   "chars": 9927
+  },
+  {
+   "path": "systems/characters/conviction_track_v1_pp718_vetting.md",
+   "chars": 38287
+  },
+  {
+   "path": "systems/characters/conviction_track_v30.md",
+   "chars": 33466
+  },
+  {
+   "path": "systems/characters/conviction_track_v30_index.md",
+   "chars": 4931
+  },
+  {
+   "path": "systems/characters/conviction_track_v30_infill.md",
+   "chars": 6364
+  },
+  {
+   "path": "systems/combat/combat_c4_draft_v0.md",
+   "chars": 11292
+  },
+  {
+   "path": "systems/combat/combat_design_v1.md",
+   "chars": 31452
+  },
+  {
+   "path": "systems/combat/combat_design_v1_index.md",
+   "chars": 5716
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/README.md",
+   "chars": 1343
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/ability_armature.md",
+   "chars": 14605
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/combat_throughlines_v1.md",
+   "chars": 4489
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/tradition_decomposition_v1.md",
+   "chars": 12697
+  },
+  {
+   "path": "systems/combat/combat_v30.md",
+   "chars": 41516
+  },
+  {
+   "path": "systems/combat/combat_v30_index.md",
+   "chars": 6690
+  },
+  {
+   "path": "systems/combat/combat_v30_infill.md",
+   "chars": 9860
+  },
+  {
+   "path": "systems/factions/baralta_crown_claim_v30.md",
+   "chars": 13673
+  },
+  {
+   "path": "systems/factions/baralta_crown_claim_v30_infill.md",
+   "chars": 4646
+  },
+  {
+   "path": "systems/factions/ci_political_v30.md",
+   "chars": 25816
+  },
+  {
+   "path": "systems/factions/faction_behavior_v30.md",
+   "chars": 28232
+  },
+  {
+   "path": "systems/factions/faction_canon_v30.md",
+   "chars": 51480
+  },
+  {
+   "path": "systems/factions/faction_layer_v30.md",
+   "chars": 57440
+  },
+  {
+   "path": "systems/factions/faction_layer_v30_infill.md",
+   "chars": 13359
+  },
+  {
+   "path": "systems/factions/faction_politics_v30.md",
+   "chars": 166925
+  },
+  {
+   "path": "systems/factions/faction_politics_v30_index.md",
+   "chars": 13214
+  },
+  {
+   "path": "systems/factions/faction_state_authoring_v30.md",
+   "chars": 19452
+  },
+  {
+   "path": "systems/factions/faction_succession_split_v30.md",
+   "chars": 13975
+  },
+  {
+   "path": "systems/factions/faction_succession_split_v30_index.md",
+   "chars": 1773
+  },
+  {
+   "path": "systems/factions/faction_systems_overview_v30.md",
+   "chars": 17033
+  },
+  {
+   "path": "systems/factions/factions_personal_v30.md",
+   "chars": 30056
+  },
+  {
+   "path": "systems/factions/factions_personal_v30_index.md",
+   "chars": 2519
+  },
+  {
+   "path": "systems/factions/factions_personal_v30_infill.md",
+   "chars": 12925
+  },
+  {
+   "path": "systems/factions/fail_forward_pp177.md",
+   "chars": 6738
+  },
+  {
+   "path": "systems/factions/fractional_province_ownership_v30.md",
+   "chars": 10010
+  },
+  {
+   "path": "systems/factions/fractional_province_ownership_v30_index.md",
+   "chars": 1715
+  },
+  {
+   "path": "systems/factions/franchise_v30.md",
+   "chars": 15579
+  },
+  {
+   "path": "systems/factions/parliamentary_transfer_v30.md",
+   "chars": 12323
+  },
+  {
+   "path": "systems/factions/political_dynamics_keys_migration_v30.md",
+   "chars": 28215
+  },
+  {
+   "path": "systems/factions/treaty_expiration_v30.md",
+   "chars": 10358
+  },
+  {
+   "path": "systems/factions/varfell_path_b_v30_infill.md",
+   "chars": 2020
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_bg_v30.md",
+   "chars": 2852
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_bg_v30_infill.md",
+   "chars": 961
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_editorial.md",
+   "chars": 5215
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_exploration.md",
+   "chars": 8741
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_exposure.md",
+   "chars": 4854
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_godot.md",
+   "chars": 11262
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_hybrid_v30.md",
+   "chars": 1627
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_hybrid_v30_infill.md",
+   "chars": 907
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_investigation.md",
+   "chars": 12139
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_rationale.md",
+   "chars": 7358
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_socializing.md",
+   "chars": 10583
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_summary.md",
+   "chars": 1560
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_v30.md",
+   "chars": 79267
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_v30_index.md",
+   "chars": 8944
+  },
+  {
+   "path": "systems/fieldwork/fieldwork_v30_infill.md",
+   "chars": 27708
+  },
+  {
+   "path": "systems/fieldwork/investigation_systems_v30.md",
+   "chars": 37325
+  },
+  {
+   "path": "systems/fieldwork/investigation_systems_v30_index.md",
+   "chars": 4616
+  },
+  {
+   "path": "systems/fieldwork/knots_v30.md",
+   "chars": 24209
+  },
+  {
+   "path": "systems/mass_battle/mass_battle_integration_v30.md",
+   "chars": 30361
+  },
+  {
+   "path": "systems/mass_battle/mass_battle_v30.md",
+   "chars": 77472
+  },
+  {
+   "path": "systems/mass_battle/mass_battle_v30_index.md",
+   "chars": 5678
+  },
+  {
+   "path": "systems/mass_battle/mass_battle_v30_infill.md",
+   "chars": 3159
+  },
+  {
+   "path": "systems/mass_battle/military_layer_v30.md",
+   "chars": 26694
+  },
+  {
+   "path": "systems/npcs/baralta_v30.md",
+   "chars": 3941
+  },
+  {
+   "path": "systems/npcs/character_canon_v30.md",
+   "chars": 32696
+  },
+  {
+   "path": "systems/npcs/companion_specification_v30.md",
+   "chars": 11203
+  },
+  {
+   "path": "systems/npcs/edeyja_npc.md",
+   "chars": 9720
+  },
+  {
+   "path": "systems/npcs/npc_behavior_system_v1.md",
+   "chars": 65510
+  },
+  {
+   "path": "systems/npcs/npc_behavior_system_v1_index.md",
+   "chars": 8565
+  },
+  {
+   "path": "systems/npcs/npc_behavior_v30.md",
+   "chars": 104814
+  },
+  {
+   "path": "systems/npcs/npc_behavior_v30_index.md",
+   "chars": 12877
+  },
+  {
+   "path": "systems/npcs/npc_behavior_v30_infill.md",
+   "chars": 19287
+  },
+  {
+   "path": "systems/npcs/npc_character_analyses_v30.md",
+   "chars": 21231
+  },
+  {
+   "path": "systems/npcs/npc_character_analyses_v30_index.md",
+   "chars": 4787
+  },
+  {
+   "path": "systems/npcs/npc_character_analyses_v30_infill.md",
+   "chars": 45570
+  },
+  {
+   "path": "systems/npcs/npc_foils_v30.md",
+   "chars": 5081
+  },
+  {
+   "path": "systems/npcs/npc_foils_v30_infill.md",
+   "chars": 32389
+  },
+  {
+   "path": "systems/npcs/npc_relational_graph_v30.md",
+   "chars": 59294
+  },
+  {
+   "path": "systems/npcs/npc_roster_v30.md",
+   "chars": 34964
+  },
+  {
+   "path": "systems/npcs/npc_roster_v30_index.md",
+   "chars": 5050
+  },
+  {
+   "path": "systems/npcs/npc_roster_v30_infill.md",
+   "chars": 32797
+  },
+  {
+   "path": "systems/overview/clock_registry_v30.md",
+   "chars": 9381
+  },
+  {
+   "path": "systems/overview/clock_registry_v30_infill.md",
+   "chars": 645
+  },
+  {
+   "path": "systems/overview/ms_budget.md",
+   "chars": 9022
+  },
+  {
+   "path": "systems/overview/peninsular_strain_v30.md",
+   "chars": 50588
+  },
+  {
+   "path": "systems/overview/peninsular_strain_v30_index.md",
+   "chars": 6886
+  },
+  {
+   "path": "systems/overview/wc_survival_spine.md",
+   "chars": 10531
+  },
+  {
+   "path": "systems/settlements/generation_sourcebook_v1.md",
+   "chars": 18178
+  },
+  {
+   "path": "systems/settlements/goldenfurt_slice/README.md",
+   "chars": 8344
+  },
+  {
+   "path": "systems/settlements/goldenfurt_slice/event_deck.md",
+   "chars": 14428
+  },
+  {
+   "path": "systems/settlements/goldenfurt_slice/generation_methodology.md",
+   "chars": 12654
+  },
+  {
+   "path": "systems/settlements/goldenfurt_slice/npc_cast.md",
+   "chars": 13635
+  },
+  {
+   "path": "systems/settlements/goldenfurt_slice/verification_findings.md",
+   "chars": 7206
+  },
+  {
+   "path": "systems/settlements/governance_play_redesign_v1.md",
+   "chars": 35195
+  },
+  {
+   "path": "systems/settlements/lps_wiring_v1.md",
+   "chars": 15888
+  },
+  {
+   "path": "systems/settlements/march_layer_v30.md",
+   "chars": 14736
+  },
+  {
+   "path": "systems/settlements/scale_hierarchy_v1.md",
+   "chars": 13171
+  },
+  {
+   "path": "systems/settlements/settlement_adjacency_v30.md",
+   "chars": 10674
+  },
+  {
+   "path": "systems/settlements/settlement_adjacency_v30_index.md",
+   "chars": 1749
+  },
+  {
+   "path": "systems/settlements/settlement_layer_v30.md",
+   "chars": 107476
+  },
+  {
+   "path": "systems/settlements/settlement_layer_v30_index.md",
+   "chars": 10589
+  },
+  {
+   "path": "systems/settlements/territory_temperaments_v30.md",
+   "chars": 7649
+  },
+  {
+   "path": "systems/settlements/valoria_political_hierarchy_v30.md",
+   "chars": 21378
+  },
+  {
+   "path": "systems/social_contest/social_contest_system_v2.md",
+   "chars": 29455
+  },
+  {
+   "path": "systems/social_contest/social_contest_system_v2_index.md",
+   "chars": 4427
+  },
+  {
+   "path": "systems/social_contest/social_contest_v30.md",
+   "chars": 95725
+  },
+  {
+   "path": "systems/social_contest/social_contest_v30_index.md",
+   "chars": 5899
+  },
+  {
+   "path": "systems/social_contest/social_contest_v30_infill.md",
+   "chars": 6377
+  },
+  {
+   "path": "systems/threadwork/thread_horizontal_integration_spec.md",
+   "chars": 19611
+  },
+  {
+   "path": "systems/threadwork/thread_horizontal_integration_spec_index.md",
+   "chars": 3963
+  },
+  {
+   "path": "systems/threadwork/threadwork_philosophical_reference_v30.md",
+   "chars": 860
+  },
+  {
+   "path": "systems/threadwork/threadwork_philosophical_reference_v30_infill.md",
+   "chars": 12314
+  },
+  {
+   "path": "systems/threadwork/threadwork_v25_historical_index.md",
+   "chars": 8157
+  },
+  {
+   "path": "systems/threadwork/threadwork_v30.md",
+   "chars": 83765
+  },
+  {
+   "path": "systems/threadwork/threadwork_v30_index.md",
+   "chars": 8772
+  },
+  {
+   "path": "systems/threadwork/threadwork_v30_infill.md",
+   "chars": 40583
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_supplement_derived_settlement.md",
+   "chars": 2861
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4.md",
+   "chars": 141952
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_1_index.md",
+   "chars": 13220
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_index.md",
+   "chars": 12657
+  },
+  {
+   "path": "systems/victory/victory_v30.md",
+   "chars": 59248
+  },
+  {
+   "path": "systems/victory/victory_v30_index.md",
+   "chars": 8824
+  },
+  {
+   "path": "systems/victory/victory_v30_infill.md",
+   "chars": 5522
+  },
+  {
+   "path": "systems/world/calamity_radiation_v30.md",
+   "chars": 11886
+  },
+  {
+   "path": "systems/world/calamity_radiation_v30_infill.md",
+   "chars": 4508
+  },
+  {
+   "path": "systems/world/geography_v30.md",
+   "chars": 7660
+  },
+  {
+   "path": "systems/world/geography_v30_infill.md",
+   "chars": 5454
+  },
+  {
+   "path": "systems/world/insurgency_pipeline_v30.md",
+   "chars": 24873
+  },
+  {
+   "path": "systems/world/miraculous_event_v30.md",
+   "chars": 10587
+  },
+  {
+   "path": "systems/world/ms_trajectory_v1.md",
+   "chars": 17053
+  },
+  {
+   "path": "systems/world/narrative_voice_canon_v30.md",
+   "chars": 7226
+  },
+  {
+   "path": "systems/world/solmund_artifacts_v30.md",
+   "chars": 3621
+  },
+  {
+   "path": "systems/world/solmund_philosophy_v30.md",
+   "chars": 4791
+  },
+  {
+   "path": "systems/world/solmund_v30.md",
+   "chars": 8615
+  },
+  {
+   "path": "systems/world/solmund_voice_v30.md",
+   "chars": 17207
+  },
+  {
+   "path": "systems/world/southernmost_v30_infill.md",
+   "chars": 8612
+  },
+  {
+   "path": "systems/world/worldbuilding_v30.md",
+   "chars": 19341
+  },
+  {
+   "path": "systems/world/worldbuilding_v30_index.md",
+   "chars": 5718
+  },
+  {
+   "path": "systems/world/worldbuilding_v30_infill.md",
+   "chars": 6878
+  }
+ ],
+ "discourse_files": [
+  {
+   "path": "canon/README.md",
+   "chars": 1154
+  },
+  {
+   "path": "engine/params/bg/core.md",
+   "chars": 22225
+  },
+  {
+   "path": "engine/params/bg/faction_actions.md",
+   "chars": 14485
+  },
+  {
+   "path": "engine/params/bg/npc_priority_trees.md",
+   "chars": 10081
+  },
+  {
+   "path": "engine/params/bg/parliament.md",
+   "chars": 7115
+  },
+  {
+   "path": "engine/params/bg/stress_patches.md",
+   "chars": 6569
+  },
+  {
+   "path": "engine/params/factions/stats_1_7_scale.md",
+   "chars": 32513
+  },
+  {
+   "path": "engine/params/fieldwork.md",
+   "chars": 14602
+  },
+  {
+   "path": "engine/params/history/core.md",
+   "chars": 1439
+  },
+  {
+   "path": "engine/params/history/southernmost.md",
+   "chars": 1112
+  },
+  {
+   "path": "engine/params/scale_transitions.md",
+   "chars": 7380
+  },
+  {
+   "path": "engine/sigma_leverage_engine_armature.md",
+   "chars": 25274
+  },
+  {
+   "path": "engine/sim_reference_README.md",
+   "chars": 6099
+  },
+  {
+   "path": "godot/README.md",
+   "chars": 2557
+  },
+  {
+   "path": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
+   "chars": 14700
+  },
+  {
+   "path": "proposals/2026-05-16-faction-audit-followup-plan.md",
+   "chars": 19970
+  },
+  {
+   "path": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+   "chars": 74154
+  },
+  {
+   "path": "proposals/2026-07-17-cast-and-culture-expansion.md",
+   "chars": 35843
+  },
+  {
+   "path": "proposals/2026-07-21-observatory-holonic-refactor.md",
+   "chars": 22128
+  },
+  {
+   "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
+   "chars": 21448
+  },
+  {
+   "path": "proposals/pessimist_ners_audit_v1.md",
+   "chars": 71779
+  },
+  {
+   "path": "proposals/repo-reorganization-v1.md",
+   "chars": 45021
+  },
+  {
+   "path": "proposals/stub_infill_plan.md",
+   "chars": 22552
+  },
+  {
+   "path": "systems/_architecture/campaign_modes_v30.md",
+   "chars": 9963
+  },
+  {
+   "path": "systems/_architecture/governance_consolidation_v1.md",
+   "chars": 21968
+  },
+  {
+   "path": "systems/_architecture/governance_ripple_substrate_v1.md",
+   "chars": 44449
+  },
+  {
+   "path": "systems/_architecture/integration_proposal_v30_index.md",
+   "chars": 5889
+  },
+  {
+   "path": "systems/_architecture/key_echo_armature_v1.md",
+   "chars": 36367
+  },
+  {
+   "path": "systems/_architecture/ners_vsg_reconciliation_v1.md",
+   "chars": 25738
+  },
+  {
+   "path": "systems/_architecture/repo_state_armature_v1.md",
+   "chars": 12752
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md",
+   "chars": 7482
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/combat_balancing_methodology.md",
+   "chars": 7722
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/engagement_psychology_recovered.md",
+   "chars": 5164
+  },
+  {
+   "path": "systems/combat/combat_engine_v1/phase4_5_plan_v1.md",
+   "chars": 51783
+  },
+  {
+   "path": "systems/combat/scene_combat_design_v1.md",
+   "chars": 8094
+  },
+  {
+   "path": "systems/factions/ci_political_v30_index.md",
+   "chars": 4099
+  },
+  {
+   "path": "systems/factions/faction_layer_v30_index.md",
+   "chars": 6874
+  },
+  {
+   "path": "systems/mass_battle/military_layer_v30_index.md",
+   "chars": 3976
+  },
+  {
+   "path": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
+   "chars": 12937
+  },
+  {
+   "path": "systems/settlements/settlement_generator_v1.md",
+   "chars": 17683
+  },
+  {
+   "path": "systems/threadwork/threadwork_v25_historical.md",
+   "chars": 96933
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_1.md",
+   "chars": 81112
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_1_max_audit.md",
+   "chars": 101386
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_1_max_audit_index.md",
+   "chars": 4449
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_2_workplan.md",
+   "chars": 35889
+  },
+  {
+   "path": "systems/ui/valoria_ui_ux_v4_2_workplan_index.md",
+   "chars": 2743
+  },
+  {
+   "path": "systems/world/solmund_master_document.md",
+   "chars": 47769
+  },
+  {
+   "path": "systems/world/southernmost_v30.md",
+   "chars": 10038
+  },
+  {
+   "path": "systems/world/worldbuilding_canon_audit_v30.md",
+   "chars": 5086
+  },
+  {
+   "path": "systems/world/worldbuilding_canon_audit_v30_infill.md",
+   "chars": 6095
+  }
+ ],
+ "excluded": [
+  "engine/params/bg/npcs_special.md",
+  "systems/factions/varfell_path_b_v30.md"
+ ],
+ "missing": [],
+ "layer": "L1",
+ "design_count": 239,
+ "discourse_count": 50,
+ "excluded_count": 2,
+ "missing_count": 0,
+ "coverage": {
+  "design_files_scanned": 239,
+  "repo_total_md": 1873,
+  "pct_of_repo_md": 12.8
+ }
+}

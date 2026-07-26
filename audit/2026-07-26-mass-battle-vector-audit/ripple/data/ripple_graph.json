@@ -1,0 +1,1361 @@
+{
+ "edge_count": 135,
+ "edge_types": {
+  "derives": 15,
+  "emits_consumes": 90,
+  "produces": 15,
+  "reads": 15
+ },
+ "edges": [
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::da.antinomian_action",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::da.covert_betrayal",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::da.diplomatic_alliance",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::da.economic_intervention",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::da.public_governance",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::env.disaster",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::env.disaster",
+   "src": "module:scenario_authoring",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::env.peninsular_strain_shock",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::env.population_change",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::env.population_change",
+   "src": "module:settlement_layer",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::mechanical.accounting",
+   "src": "module:engine_clock",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::meta.miraculous_event",
+   "src": "module:miraculous_event",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.battle_concluded",
+   "src": "module:mass_battle",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.contest_resolved",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::scene.dialogue",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.dialogue",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.gift",
+   "src": "module:fieldwork_knots",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::scene.gift",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::scene.insult",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.insult",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.investigation_resolved",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::scene.investigation_resolved",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": true,
+   "provenance": "Key::scene.threat",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::scene.threat",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::state.coup_attempted",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::state.scar_acquired",
+   "src": "module:piety_track",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::state.standing_change",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:faction_state",
+   "notional": false,
+   "provenance": "Key::state.succession",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::da.antinomian_action",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::da.covert_betrayal",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::da.public_governance",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::env.peninsular_strain_shock",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::mechanical.cascade_resolution",
+   "src": "module:faction_state",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::mechanical.mission_shift",
+   "src": "module:faction_state",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::meta.knot_formed",
+   "src": "module:fieldwork_knots",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::meta.knot_ruptured",
+   "src": "module:fieldwork_knots",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::meta.miraculous_event",
+   "src": "module:miraculous_event",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::meta.thread_woven",
+   "src": "module:threadwork",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.battle_concluded",
+   "src": "module:mass_battle",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.contest_resolved",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.dialogue",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.dialogue",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.gift",
+   "src": "module:fieldwork_knots",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.gift",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.insult",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.insult",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.investigation_resolved",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.investigation_resolved",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.threat",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.threat",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.witness",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::state.belief_revised",
+   "src": "module:fieldwork_knots",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::state.coup_attempted",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::state.scar_acquired",
+   "src": "module:piety_track",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::state.standing_change",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::state.standing_change",
+   "src": "module:faction_state",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::state.succession",
+   "src": "module:faction_politics",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": false,
+   "provenance": "Key::scene.thread_operation",
+   "src": "module:threadwork",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_behavior",
+   "notional": true,
+   "provenance": "Key::scene.draft_da",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_memory",
+   "notional": true,
+   "provenance": "Key::scene.gossip",
+   "src": "module:npc_behavior",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_memory",
+   "notional": true,
+   "provenance": "Key::scene.interaction",
+   "src": "module:npc_behavior",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_memory",
+   "notional": true,
+   "provenance": "Key::state.concern_resolved",
+   "src": "module:npc_behavior",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:npc_memory",
+   "notional": true,
+   "provenance": "Key::state.opinion_revised",
+   "src": "module:npc_behavior",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": true,
+   "provenance": "Key::da.antinomian_action",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": true,
+   "provenance": "Key::da.covert_betrayal",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::meta.knot_ruptured",
+   "src": "module:fieldwork_knots",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::meta.thread_woven",
+   "src": "module:threadwork",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::scene.battle_concluded",
+   "src": "module:mass_battle",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": true,
+   "provenance": "Key::scene.dialogue",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::scene.dialogue",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": true,
+   "provenance": "Key::scene.insult",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::scene.insult",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": true,
+   "provenance": "Key::scene.threat",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::scene.threat",
+   "src": "module:social_contest",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": false,
+   "provenance": "Key::scene.witness",
+   "src": "module:npc_behavior",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:piety_track",
+   "notional": true,
+   "provenance": "Key::scene.witness",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:scene_timer",
+   "notional": true,
+   "provenance": "Key::mechanical.scene_entered",
+   "src": "module:game_director",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:scene_timer",
+   "notional": true,
+   "provenance": "Key::mechanical.scene_exited",
+   "src": "module:game_director",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:scene_timer",
+   "notional": true,
+   "provenance": "Key::mechanical.scene_skipped",
+   "src": "module:game_director",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:audit",
+   "notional": true,
+   "provenance": "Key::mechanical.scene_entered",
+   "src": "module:game_director",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:audit",
+   "notional": true,
+   "provenance": "Key::mechanical.scene_exited",
+   "src": "module:game_director",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:audit",
+   "notional": true,
+   "provenance": "Key::mechanical.scene_skipped",
+   "src": "module:game_director",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:social_contest",
+   "notional": false,
+   "provenance": "Key::state.opinion_revised",
+   "src": "module:npc_behavior",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "Key::env.disaster",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": true,
+   "provenance": "Key::env.disaster",
+   "src": "module:scenario_authoring",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "Key::env.peninsular_strain_shock",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:settlement_economy",
+   "notional": true,
+   "provenance": "Key::da.economic_intervention",
+   "src": "module:domain_actions",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:settlement_economy",
+   "notional": true,
+   "provenance": "Key::env.population_change",
+   "src": "module:peninsular_strain",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:settlement_economy",
+   "notional": true,
+   "provenance": "Key::env.population_change",
+   "src": "module:settlement_layer",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "module:personal_combat",
+   "notional": true,
+   "provenance": "Key::scene.combat_strike",
+   "src": "module:scene_slate",
+   "type": "emits_consumes"
+  },
+  {
+   "dst": "quantity:province Accord",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::floor(mean Order across settlements)",
+   "src": "quantity:set.order",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:province Accord",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.order",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Local Economy",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::Prosperity \u00d7 50",
+   "src": "quantity:set.prosperity",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Local Economy",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.prosperity",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Garrison Strength",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::Defense \u00d7 20 + Fort \u00d7 30",
+   "src": "quantity:set.defense",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Garrison Strength",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.defense",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Garrison Strength",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::Defense \u00d7 20 + Fort \u00d7 30",
+   "src": "quantity:terr.fort_level",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Garrison Strength",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:terr.fort_level",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Public Order",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::Order \u00d7 20 (riot events below 0)",
+   "src": "quantity:set.order",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Public Order",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.order",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:faction Mandate (cross-module \u2192 faction_state)",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) \u2014 saturating (Lesson-5 bound)",
+   "src": "quantity:set.legitimacy",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:faction Mandate (cross-module \u2192 faction_state)",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.legitimacy",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:faction Mandate (cross-module \u2192 faction_state)",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) \u2014 saturating (Lesson-5 bound)",
+   "src": "quantity:set.popular_support",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:faction Mandate (cross-module \u2192 faction_state)",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.popular_support",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:faction Mandate (cross-module \u2192 faction_state)",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = \u03a3 W_s\u00b7(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) \u2014 saturating (Lesson-5 bound)",
+   "src": "quantity:W_s",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:faction Mandate (cross-module \u2192 faction_state)",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:W_s",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:set.legitimacy",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::drift \u00b11/settlement/season toward Mandate (damped, mean-reverting; Stage-4 sim bounded 30 seasons)",
+   "src": "quantity:faction Mandate",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:set.legitimacy",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:faction Mandate",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:set.popular_support",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::drift \u00b11/settlement/season toward Mandate (damped, mean-reverting; Stage-4 sim bounded 30 seasons)",
+   "src": "quantity:faction Mandate",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:set.popular_support",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:faction Mandate",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:faction Treasury income (cross-module \u2192 faction_state)",
+   "module": "settlement_layer",
+   "notional": false,
+   "provenance": "formula::\u03a3 Prosperity across settlements \u00d7 10",
+   "src": "quantity:set.prosperity",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:faction Treasury income (cross-module \u2192 faction_state)",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "module:settlement_layer",
+   "type": "produces"
+  },
+  {
+   "dst": "module:settlement_layer",
+   "notional": false,
+   "provenance": "ripple.bridge::settlement_layer derivation",
+   "src": "quantity:set.prosperity",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Health",
+   "module": "personal_combat",
+   "notional": false,
+   "provenance": "formula::round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage",
+   "src": "quantity:attr.body.endurance",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Health",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "module:personal_combat",
+   "type": "produces"
+  },
+  {
+   "dst": "module:personal_combat",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "quantity:attr.body.endurance",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Health",
+   "module": "personal_combat",
+   "notional": false,
+   "provenance": "formula::round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage",
+   "src": "quantity:attr.mind.will",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Health",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "module:personal_combat",
+   "type": "produces"
+  },
+  {
+   "dst": "module:personal_combat",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "quantity:attr.mind.will",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Health",
+   "module": "personal_combat",
+   "notional": false,
+   "provenance": "formula::round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage",
+   "src": "quantity:attr.body.strength",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Health",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "module:personal_combat",
+   "type": "produces"
+  },
+  {
+   "dst": "module:personal_combat",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "quantity:attr.body.strength",
+   "type": "reads"
+  },
+  {
+   "dst": "quantity:Health",
+   "module": "personal_combat",
+   "notional": false,
+   "provenance": "formula::round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage",
+   "src": "quantity:cumulative_damage",
+   "type": "derives"
+  },
+  {
+   "dst": "quantity:Health",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "module:personal_combat",
+   "type": "produces"
+  },
+  {
+   "dst": "module:personal_combat",
+   "notional": false,
+   "provenance": "ripple.bridge::personal_combat derivation",
+   "src": "quantity:cumulative_damage",
+   "type": "reads"
+  }
+ ],
+ "node_count": 46,
+ "nodes": {
+  "module:articulation_layer": {
+   "doc": "systems/articulation/articulation_layer_v30.md",
+   "kind": "module",
+   "name": "articulation_layer",
+   "notional": false,
+   "scales": [
+    "personal",
+    "scene",
+    "provincial"
+   ]
+  },
+  "module:audit": {
+   "doc": null,
+   "kind": "module",
+   "name": "audit",
+   "notional": true,
+   "scales": [
+    "scene"
+   ]
+  },
+  "module:campaign_architecture": {
+   "doc": "systems/_architecture/campaign_architecture_v30.md",
+   "kind": "module",
+   "name": "campaign_architecture",
+   "notional": true,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:ci_political": {
+   "doc": "systems/factions/ci_political_v30.md",
+   "kind": "module",
+   "name": "ci_political",
+   "notional": false,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:clock_registry": {
+   "doc": "systems/overview/clock_registry_v30.md",
+   "kind": "module",
+   "name": "clock_registry",
+   "notional": false,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:domain_actions": {
+   "doc": null,
+   "kind": "module",
+   "name": "domain_actions",
+   "notional": true,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:engine_clock": {
+   "doc": null,
+   "kind": "module",
+   "name": "engine_clock",
+   "notional": true,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:faction_politics": {
+   "doc": "systems/factions/faction_politics_v30.md",
+   "kind": "module",
+   "name": "faction_politics",
+   "notional": false,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:faction_state": {
+   "doc": "systems/factions/faction_behavior_v30.md",
+   "kind": "module",
+   "name": "faction_state",
+   "notional": false,
+   "scales": [
+    "provincial"
+   ]
+  },
+  "module:fieldwork_knots": {
+   "doc": "systems/fieldwork/knots_v30.md",
+   "kind": "module",
+   "name": "fieldwork_knots",
+   "notional": false,
+   "scales": [
+    "personal",
+    "scene"
+   ]
+  },
+  "module:game_director": {
+   "doc": null,
+   "kind": "module",
+   "name": "game_director",
+   "notional": true,
+   "scales": [
+    "scene"
+   ]
+  },
+  "module:mass_battle": {
+   "doc": "systems/mass_battle/mass_battle_v30.md",
+   "kind": "module",
+   "name": "mass_battle",
+   "notional": false,
+   "scales": [
+    "scene"
+   ]
+  },
+  "module:miraculous_event": {
+   "doc": "systems/world/miraculous_event_v30.md",
+   "kind": "module",
+   "name": "miraculous_event",
+   "notional": false,
+   "scales": [
+    "personal",
+    "settlement",
+    "peninsula"
+   ]
+  },
+  "module:npc_behavior": {
+   "doc": "systems/npcs/npc_behavior_v30.md",
+   "kind": "module",
+   "name": "npc_behavior",
+   "notional": false,
+   "scales": [
+    "personal",
+    "scene"
+   ]
+  },
+  "module:npc_memory": {
+   "doc": null,
+   "kind": "module",
+   "name": "npc_memory",
+   "notional": true,
+   "scales": [
+    "personal"
+   ]
+  },
+  "module:peninsular_strain": {
+   "doc": "systems/overview/peninsular_strain_v30.md",
+   "kind": "module",
+   "name": "peninsular_strain",
+   "notional": false,
+   "scales": [
+    "peninsula"
+   ]
+  },
+  "module:personal_combat": {
+   "doc": "systems/combat/combat_engine_v1/",
+   "kind": "module",
+   "name": "personal_combat",
+   "notional": false,
+   "scales": [
+    "personal"
+   ]
+  },
+  "module:piety_track": {
+   "doc": "systems/characters/conviction_track_v1.md",
+   "kind": "module",
+   "name": "piety_track",
+   "notional": false,
+   "scales": [
+    "personal"
+   ]
+  },
+  "module:scenario_authoring": {
+   "doc": null,
+   "kind": "module",
+   "name": "scenario_authoring",
+   "notional": true,
+   "scales": [
+    "peninsula"
+   ]
+  },
+  "module:scene_slate": {
+   "doc": null,
+   "kind": "module",
+   "name": "scene_slate",
+   "notional": true,
+   "scales": [
+    "scene"
+   ]
+  },
+  "module:scene_timer": {
+   "doc": null,
+   "kind": "module",
+   "name": "scene_timer",
+   "notional": true,
+   "scales": [
+    "scene"
+   ]
+  },
+  "module:settlement_economy": {
+   "doc": null,
+   "kind": "module",
+   "name": "settlement_economy",
+   "notional": true,
+   "scales": [
+    "settlement"
+   ]
+  },
+  "module:settlement_layer": {
+   "doc": "systems/settlements/settlement_layer_v30.md",
+   "kind": "module",
+   "name": "settlement_layer",
+   "notional": false,
+   "scales": [
+    "settlement",
+    "territory"
+   ]
+  },
+  "module:social_contest": {
+   "doc": "systems/social_contest/social_contest_v30.md",
+   "kind": "module",
+   "name": "social_contest",
+   "notional": false,
+   "scales": [
+    "scene"
+   ]
+  },
+  "module:territorial_piety": {
+   "doc": "systems/characters/conviction_track_v30.md",
+   "kind": "module",
+   "name": "territorial_piety",
+   "notional": false,
+   "scales": [
+    "territory",
+    "provincial"
+   ]
+  },
+  "module:threadwork": {
+   "doc": "systems/threadwork/threadwork_v30.md",
+   "kind": "module",
+   "name": "threadwork",
+   "notional": false,
+   "scales": [
+    "personal",
+    "thread"
+   ]
+  },
+  "module:victory": {
+   "doc": "systems/victory/victory_v30.md",
+   "kind": "module",
+   "name": "victory",
+   "notional": false,
+   "scales": [
+    "provincial",
+    "peninsula"
+   ]
+  },
+  "quantity:Garrison Strength": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "Garrison Strength",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:Health": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "Health",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:Local Economy": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "Local Economy",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:Public Order": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "Public Order",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:W_s": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "W_s",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:attr.body.endurance": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "attr.body.endurance",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:attr.body.strength": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "attr.body.strength",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:attr.mind.will": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "attr.mind.will",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:cumulative_damage": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "cumulative_damage",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:faction Mandate": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "faction Mandate",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:faction Mandate (cross-module \u2192 faction_state)": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "faction Mandate (cross-module \u2192 faction_state)",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:faction Treasury income (cross-module \u2192 faction_state)": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "faction Treasury income (cross-module \u2192 faction_state)",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:province Accord": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "province Accord",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:set.defense": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "set.defense",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:set.legitimacy": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "set.legitimacy",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:set.order": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "set.order",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:set.popular_support": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "set.popular_support",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:set.prosperity": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "set.prosperity",
+   "notional": false,
+   "scales": []
+  },
+  "quantity:terr.fort_level": {
+   "doc": null,
+   "kind": "quantity",
+   "name": "terr.fort_level",
+   "notional": false,
+   "scales": []
+  }
+ },
+ "schema_version": 1
+}

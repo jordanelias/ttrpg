@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 265,
+    "findings": 264,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_cascade_sink": 15,
@@ -25,21 +25,21 @@
       "register_quarantined": 1,
       "sim_not_implemented": 39,
       "stale_retired_pointer": 15,
-      "status_noncurrent": 25,
+      "status_noncurrent": 24,
       "unregistered_term": 39
     },
     "by_severity": {
       "high": 24,
-      "med": 113,
+      "med": 112,
       "low": 128
     }
   },
   "by_lane": {
     "MB": {
-      "total": 7,
+      "total": 6,
       "prose_marker": 4,
       "sim_not_implemented": 1,
-      "status_noncurrent": 2
+      "status_noncurrent": 1
     },
     "FI": {
       "total": 7,
@@ -1776,8 +1776,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:721",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:721",
+      "id": "tools/observability/build_incompleteness.py:725",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:725",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN",
@@ -1979,15 +1979,6 @@
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/grounded_event_card_deck_v1.md",
       "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
-      "id": "proposals/mass_battle_fighting_withdrawal_v1.md",
-      "title": "proposals/mass_battle_fighting_withdrawal_v1.md",
-      "detail": "doc Status is not current: SUPERSEDED",
-      "path": "proposals/mass_battle_fighting_withdrawal_v1.md",
-      "lane": "MB",
       "severity": "med"
     },
     {

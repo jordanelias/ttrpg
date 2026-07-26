@@ -15,6 +15,50 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **ED-MB-0043 (2026-07-26): VECTOR AUDIT — all modules/scripts, all directions. Two observatory
+  blind spots found and fixed; three MB findings held for Jordan.** Ran every structural graph the
+  apparatus can build (vector L0+L1 VALIDATED 2/3, structure G_code+L2, formula, pointer, generation,
+  ripple up/down/all-layers/impact, workbench, and the authoritative `build_graph.py` engine graph).
+  Register: `audit/2026-07-26-mass-battle-vector-audit/02_weakness_register.md`.
+
+  **The instrument was blind.** `structure_audit`'s `CODE_ROOTS` still read `('sim','tools')` after
+  `sim/` was deleted 2026-07-21 — G_code covered 88 `tools/` modules and **zero simulation code** for
+  five days, and nothing failed, because a dead scan root fails as an *absent finding*. Repaired
+  (88 → 248 modules) and guarded on the CONFIGURATION, since no output assertion can see it. The
+  naive fix would have been worse: the live MB package puts `tests/sim` on `sys.path` and imports
+  itself as top-level `mass_battle.*`, so all 28 modules resolved 0 edges and would have entered the
+  orphan list as false positives — `sys_path_aliases()` took internal edges 0 → 66. Both guards are
+  mutation-verified. `pointer_audit`'s dead sim-root default was repointed too; measured effect NIL,
+  and labelled as such.
+
+  **NEXT, in order:**
+  1. **The empty contract — the port blocker.** `mass_battle` declares `consumes: []` and
+     `state: []`; ripple returns **zero upstream in all four edge layers**. The typed wiring says a
+     battle takes no inputs and persists nothing. This is *why* `formula_audit`/`pointer_audit` return
+     zero MB rows and will keep doing so however often they run. 262 UPPER constants in the live
+     engine; **40 (15%)** appear anywhere in `engine/params/` or the MB docs. **needs_jordan.**
+  2. **The two-disjoint-trees fork.** `tests/sim/mass_battle/` (28 modules, ~10.5k LOC, 66 internal
+     edges) has **zero production importers** and imports **nothing** from `engine/` or `systems/`;
+     the wired `systems/mass_battle/sim/` has one importer (`faction_action.py:349`) and has not moved
+     in 10 MB commits. ED-IN-0074 D5 says "reconcile before porting" — the measurement adds that there
+     is **no shared substrate to reconcile onto**. Which tree is the port oracle, and does the live one
+     leave `tests/`? **needs_jordan.**
+  3. **Delete one line.** `scene_outcome.battle_concluded` is **not a Key** — it is the *family* name
+     of `scene.battle_concluded`, duplicated into `mass_battle.emits`. Four instruments plus the
+     Incompleteness Ledger report it as a real dangling/isolate Key; they agree because they share one
+     blind spot (reading `module_contracts` without the Key Type Registry), which the authoritative
+     graph resolves. Removing the row closes five findings at once. Held for an MB-lane call rather
+     than bundled into a tooling PR.
+  4. Lower priority: `Mass Battle`/`Mass Combat` alias tokens diverge on mu-degree (0 vs 23) and scale
+     class (mechanic vs province) — one is wrong; `pp = 0` (the patch register has **no**
+     case-insensitive match for the subsystem — MB work bypasses it entirely); 3 of 6 MB docs have no
+     `## Status:` line and the `CURRENT.md` head is `WORKING DESIGN`, not `CANONICAL`.
+
+  **Filed OUT of this lane (IN):** the same dead `sim/` root persists in the **A17 CI gate**
+  (`ci_quantity_vocabulary_check --sim-root`), 11 dead `sim_module:` paths in `mechanics_index.yaml`,
+  and four more tools (`audit_staleness`, `build_decisions`, `workplan_status`,
+  `build_apparatus_registry`).
+
 - **ED-MB-0042 (2026-07-25): THE CELL IS THE PRIMITIVE FOR MORALE — built, measured, flipped ON.**
   Jordan's directive ("the cell needs to be the primitive for morale, discipline, quality, stamina,
   route, health, armour, facing, damage, troops count, etc"), executed for the first of those states.
@@ -70,7 +114,9 @@ namespace and are folded into Next actions below, which carries the full narrati
      unseeded path, so a retirement candidate, not dead code.
   6. **Re-decide `ROUT_CASCADE_FRAC`** (still inert at 1.0) once phase 3 settles what a "section" is.
 
-- **ED-MB-0043 candidate — R3 is a DEFINITIONAL gap, not a balance one.** Ranged-vs-ranged is the only
+- **ED-MB-0044 candidate — R3 is a DEFINITIONAL gap, not a balance one.** (Renumbered from the
+  earmarked ED-MB-0043 on 2026-07-26: that id was never allocated in `id_reservations.yaml`, and the
+  vector audit took it per the read-next_free protocol. Nothing else cited the old number.) Ranged-vs-ranged is the only
   UNMEASURED gauge row: 100% draws at **0.0% casualties on both sides**, i.e. no engagement at all.
   Spawn distance is 18, `VOLLEY_MAX_RANGE` is 8, and `stance == "hold"` early-returns from *all*
   steering (both `_node_advance` and `advance_cells`), so neither archer body ever closes and

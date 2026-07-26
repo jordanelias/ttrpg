@@ -1,0 +1,89 @@
+{
+ "articulation_layer": [],
+ "audit": [],
+ "campaign_architecture": [],
+ "ci_political": [],
+ "clock_registry": [],
+ "domain_actions": [
+  "faction_state",
+  "npc_behavior",
+  "piety_track",
+  "settlement_economy"
+ ],
+ "engine_clock": [
+  "faction_state"
+ ],
+ "faction_politics": [
+  "faction_state",
+  "npc_behavior"
+ ],
+ "faction_state": [
+  "faction_state",
+  "npc_behavior"
+ ],
+ "fieldwork_knots": [
+  "faction_state",
+  "npc_behavior",
+  "piety_track"
+ ],
+ "game_director": [
+  "audit",
+  "scene_timer"
+ ],
+ "mass_battle": [
+  "faction_state",
+  "npc_behavior",
+  "piety_track"
+ ],
+ "miraculous_event": [
+  "faction_state",
+  "npc_behavior"
+ ],
+ "npc_behavior": [
+  "npc_behavior",
+  "npc_memory",
+  "piety_track",
+  "social_contest"
+ ],
+ "npc_memory": [],
+ "peninsular_strain": [
+  "faction_state",
+  "npc_behavior",
+  "settlement_economy",
+  "settlement_layer"
+ ],
+ "personal_combat": [
+  "personal_combat"
+ ],
+ "piety_track": [
+  "faction_state",
+  "npc_behavior"
+ ],
+ "scenario_authoring": [
+  "faction_state",
+  "settlement_layer"
+ ],
+ "scene_slate": [
+  "faction_state",
+  "npc_behavior",
+  "personal_combat",
+  "piety_track"
+ ],
+ "scene_timer": [],
+ "settlement_economy": [],
+ "settlement_layer": [
+  "faction_state",
+  "settlement_economy"
+ ],
+ "social_contest": [
+  "faction_state",
+  "npc_behavior",
+  "piety_track"
+ ],
+ "territorial_piety": [],
+ "threadwork": [
+  "npc_behavior",
+  "piety_track"
+ ],
+ "victory": []
+}

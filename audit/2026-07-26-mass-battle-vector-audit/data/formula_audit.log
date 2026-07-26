@@ -1,0 +1,4 @@
+[formula_audit] repo root (working tree): /home/user/ttrpg
+[L1] reading module_contracts.yaml derivations + descriptor_registry.yaml aggregates/derived_from...
+         30 nodes, 25 edges (15 module_contracts, 10 descriptor_registry), 0 exact cycle(s) + 1 paren-normalized, 2 orphan input(s), 0 multi-def output(s), 0 malformed derivation(s)
+[done] audit/2026-07-26-mass-battle-vector-audit/formula_audit/formula_register.md

@@ -161,7 +161,22 @@ def degrees(adj, nodes):
 
 # ──────────────────────────── G_CODE — AST IMPORT GRAPH ──────────────────────
 
-CODE_ROOTS = ('sim', 'tools')
+# Live Python homes. `sim/` was RETIRED 2026-07-21 (ED-IN-0071 P4 continuation, sim/ hollow-out):
+# the engine core moved to `engine/` and every per-subsystem sim to `systems/<sub>/sim/`. This tuple
+# still read ('sim', 'tools') until 2026-07-26, so G_code silently covered 88 `tools/` modules and
+# ZERO simulation code — the code-architecture layer was blind to the entire engine for five days
+# and nothing failed. See EXTRA_CODE_ROOTS for the live-engine-under-tests/ exception, and
+# tests/valoria/test_structure_audit.py::test_code_roots_all_exist for the guard that makes this
+# class of silent-blindness fail loudly on recurrence.
+CODE_ROOTS = ('engine', 'systems', 'tools')
+
+# Live engine code that sits UNDER a SKIP_DIR_PARTS directory and would otherwise be invisible.
+# `tests/sim/mass_battle/` is the actively-developed multi-unit battle engine (~10.5k LOC, last
+# advanced 2026-07-25) despite `tests/sim/README.md` declaring that tree a frozen run-output
+# archive — see engine/sim_reference_README.md's ED-IN-0074 D5 note. Allowlisted EXPLICITLY rather
+# than by dropping 'tests' from SKIP_DIR_PARTS, which would drag in the whole tests/ corpus.
+EXTRA_CODE_ROOTS = ('tests/sim/mass_battle',)
+
 SKIP_DIR_PARTS = {'__pycache__', 'tests', 'test', 'deprecated', 'archives'}
 
 
@@ -179,10 +194,13 @@ def collect_py_modules(root):
     """{dotted_module: relpath} for every internal .py under the code roots
     (skipping caches/tests/deprecated/archives)."""
     mods = {}
-    for base in CODE_ROOTS:
+    for base in CODE_ROOTS + EXTRA_CODE_ROOTS:
+        allow = base in EXTRA_CODE_ROOTS      # allowlisted root: don't re-skip its own path parts
+        base_parts = base.split('/')
         for dirpath, dirnames, filenames in os.walk(root / base):
             rel_dir = os.path.relpath(dirpath, root).replace(os.sep, '/')
-            if any(part in SKIP_DIR_PARTS for part in rel_dir.split('/')):
+            tail = rel_dir.split('/')[len(base_parts):] if allow else rel_dir.split('/')
+            if any(part in SKIP_DIR_PARTS for part in tail):
                 continue
             dirnames[:] = [d for d in dirnames if d not in SKIP_DIR_PARTS]
             for fn in filenames:
@@ -192,16 +210,47 @@ def collect_py_modules(root):
     return mods
 
 
-def _resolve_internal(target, known):
+def missing_code_roots(root):
+    """Configured code roots that do not exist on disk. A non-empty result means G_code is
+    silently under-scanning — the 2026-07-26 `sim/` blindness class. Surfaced in the register
+    and asserted by tests/valoria/test_structure_audit.py."""
+    return [b for b in CODE_ROOTS + EXTRA_CODE_ROOTS if not (Path(root) / b).is_dir()]
+
+
+def sys_path_aliases(modules):
+    """{imported_name: collected_name} for roots that are put on `sys.path` at runtime and are
+    therefore imported under a SHORTER dotted name than their repo path implies.
+
+    `tests/sim/mass_battle/` inserts `tests/sim` on `sys.path` and imports itself as top-level
+    `mass_battle.*`. Without this map its 28 modules collect as `tests.sim.mass_battle.*`, NO
+    internal edge resolves, and the whole package lands in the orphan list as 28 false positives
+    — visible but edgeless is WORSE than unscanned, because it reads as a measured emptiness."""
+    aliases = {}
+    for base in EXTRA_CODE_ROOTS:
+        prefix = base.replace('/', '.')
+        parent = prefix.rsplit('.', 1)[0] if '.' in prefix else ''
+        if not parent:
+            continue
+        for mod in modules:
+            if mod == prefix or mod.startswith(prefix + '.'):
+                aliases[mod[len(parent) + 1:]] = mod
+    return aliases
+
+
+def _resolve_internal(target, known, aliases=None):
     """Map an imported dotted name to the known internal module it (or its nearest
     package prefix) denotes, else None."""
     if target in known:
         return target
+    if aliases and target in aliases:
+        return aliases[target]
     parts = target.split('.')
     while parts:
         cand = '.'.join(parts)
         if cand in known:
             return cand
+        if aliases and cand in aliases:
+            return aliases[cand]
         parts = parts[:-1]
     return None
 
@@ -209,6 +258,7 @@ def _resolve_internal(target, known):
 def build_g_code(root, modules):
     """Directed import graph over internal modules. Edge A -> B iff A imports B."""
     known = set(modules)
+    aliases = sys_path_aliases(modules)
     g = defaultdict(set)
     parse_errors = []
     for mod, rel in modules.items():
@@ -230,7 +280,7 @@ def build_g_code(root, modules):
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    tgt = _resolve_internal(alias.name, known)
+                    tgt = _resolve_internal(alias.name, known, aliases)
                     if tgt and tgt != mod:
                         g[mod].add(tgt)
             elif isinstance(node, ast.ImportFrom):
@@ -244,7 +294,7 @@ def build_g_code(root, modules):
                 # try the module, then module.name for `from pkg import submod`
                 cands = [base] + [f'{base}.{a.name}' for a in node.names if base]
                 for c in cands:
-                    tgt = _resolve_internal(c, known)
+                    tgt = _resolve_internal(c, known, aliases)
                     if tgt and tgt != mod:
                         g[mod].add(tgt)
     return g, parse_errors
@@ -493,6 +543,13 @@ def run(root, out):
              'Provenance: L2 is built on `module_contracts.yaml`, which carries '
              f'{assumption_count} `[ASSUMPTION]` markers and {len(findings["doc_null"])} `doc:null` modules — '
              'findings on those are bucketed as lower-confidence.')
+    L.append('')
+    _missing = missing_code_roots(root)
+    L.append(f'**Code roots scanned:** {", ".join(CODE_ROOTS + EXTRA_CODE_ROOTS)}.')
+    if _missing:
+        L.append(f'> ⚠️ **CONFIGURED CODE ROOT MISSING — G_code IS UNDER-SCANNING:** {", ".join(_missing)}. '
+                 'Every finding below is scoped to the roots that DO exist; absence of a finding in a '
+                 'missing root is not evidence of health.')
     L.append('')
     L.append(f'**Scorecard:** code-modules={len(code_nodes)}, import-edges={sum(len(v) for v in g_code.values())}, '
              f'import-cycles={len(code_cycles)}, code-cut-vertices={len(code_cuts)}, code-orphans={len(code_orphans)}; '
