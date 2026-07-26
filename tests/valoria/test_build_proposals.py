@@ -48,7 +48,7 @@ def test_all_audit_verdicts_present():
     # repo-state vector-audit run (validation FAILED → PARTIAL) was appended.
     reg = _reg()
     audits = [i for i in reg["items"] if i["kind"] == "audit_partial"]
-    assert len(audits) == 18
+    assert len(audits) == 19
 
 
 def test_every_item_lane_tagged():
