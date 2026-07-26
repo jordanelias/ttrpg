@@ -397,7 +397,231 @@ The ability layer is the controlled experiment that already ran: a correct, boun
 
 ---
 
-## §12 Appendix A — The Final Fantasy Tactics lens
+## §12 Carry context — SPECIFICATION (promoted from Appendix B's sketch)
+
+Appendix B recorded Jordan's direction and argued it supersedes §9's P0. This section turns it into something
+buildable. **Everything here is measured against the live roster, not asserted.**
+
+### 12.1 The decisive empirical result
+
+Carriability's dominant term is **overall length = `head_len + grip_len`**, both already stored primitives. No
+new data, no per-weapon table. Measured across the 51-weapon roster it separates into three clean bands:
+
+| band | overall length | members |
+|---|---|---|
+| **concealable** | ≤ 0.60 m | dagger 0.33 · rondel 0.36 · stiletto 0.38 · main_gauche 0.43 · misericorde 0.43 · paired_short 0.57 · cinquedea 0.58 · hook_sword 0.60 |
+| **civilian sidearm** | 0.75 – 1.20 m | mace 0.75 · tsurugi 0.88 · jian 0.94 · arming 0.96 · katana 0.97 · pulwar 0.98 · sabre 0.99 · shamshir 1.00 · falchion 1.03 · szabla 1.05 · tachi 1.06 · scimitar 1.06 · longsword 1.09 · nandao 1.09 · **rapier 1.14** · goedendag 1.20 |
+| **weapon of war** | ≥ 1.50 m | sparr_axe 1.50 · odachi 1.56 · **estoc 1.57** · flamberge/greatsword 1.65 · staff 1.68 · poleaxe/bardiche/bec/lucerne 1.80 · … · guandao/ji 2.40 |
+
+There is a **0.30 m empty gap** between the civilian band (top: goedendag 1.20) and the war band (bottom:
+sparr_axe 1.50). The roster separates itself; the threshold is not hand-placed into a continuum.
+
+**And the result that matters: all 26 weapons in the dominant 91–97% band are ≥ 1.50 m.** Every one. The
+dominant band **is** the war band. Rapier 1.14 sits at the top of the civilian band, estoc 1.57 at the bottom of
+the war band — exactly Jordan's example, falling out of stored primitives.
+
+**Consequence: carry context removes the entire D1 dominance problem from every civilian context without
+touching a single constant.** That is why it supersedes "compression."
+
+### 12.2 Length alone is insufficient — the second term, and its honest limit
+
+Longsword (1.09 m) and rapier (1.14 m) are near-identical in length and socially opposite. The separating
+primitive already stored is **`hands`**: the rapier is 1H, the longsword 2H. So:
+
+```
+carriable(context) = f(overall_length, hands)      # both stored; no new per-weapon data
+concealable        = g(overall_length)             # monotone decreasing
+```
+
+**Stated limit, because it is a real one:** "2H ⇒ weapon of war" is *culture-specific*, not universal. The
+katana (2H, 0.97 m) was carried daily in Edo townscapes as the daishō. So the second term cannot be a global
+rule — it has to be a property of the **setting's** legal regime, which is precisely why §12.4 puts the
+threshold in the scene/settlement layer rather than in the weapon record.
+
+### 12.3 The instrument — what makes this measurable rather than merely appealing
+
+New table in `workbench/balance.py`:
+
+```
+context_weighted_field(context_weights) ->
+    for each context: restrict the roster to what is CARRIABLE there,
+                      measure each weapon vs the FIELD OF WHAT ELSE IS LEGAL THERE
+    then weight the per-context fields by a scene-frequency distribution
+```
+
+**The balance requirement changes shape:** the *context-weighted* field must be level (±2–3pp); the raw matchup
+table stays deliberately spiky, exactly as C1 already demands.
+
+**The crux, stated because it is the frame's real cost:** this requires a **scene-frequency distribution** —
+how often is an encounter a street fight versus a battlefield? That is a **content-design input, and it is
+Jordan's**, not a measurement. The frame therefore trades "balance is a property of the engine" for "balance is
+a joint property of the engine and the campaign's scene mix." That is a defensible trade for a game with a
+strategic layer, but it is a trade, and it must not be smuggled in silently (§11 Q8).
+
+### 12.4 Where the primitive lives — and why this is not a PC-lane call
+
+`scene_context` belongs on the **encounter**, not the fighter, and it reads from the settlement/faction layer's
+law-and-order state (the same street is different in a lawless town). That crosses PC, SE and FA lanes, so the
+primitive's home is an **IN-lane or Jordan-level decision.** The PC lane can build §12.3's instrument against a
+*stubbed* context and gain the measurement immediately, without waiting for the cross-lane primitive — that
+decoupling is the recommended first increment (§15 I-1).
+
+### 12.5 What carry context does NOT fix
+
+- **Within-context dominance.** If the estoc still beats everything else legal on a battlefield, the frame did
+  nothing there. *Partly falsified by the data, in the frame's favour:* against the battlefield-legal cohort the
+  estoc's arc (96.5/96.0/92.0/95.0) is comparable to poleaxe (93.5/95.0/95.5/95.7) and lucerne_hammer
+  (96.0/91.5/95.5/97.3). **The estoc looks globally dominant largely because the duel table pits it against
+  daggers and sabres it would never meet where both are legal.** That is a real finding, and it is the strongest
+  single argument for the frame.
+- **A7a.** The cut path stays ungraded; curved swords stay all-cost-no-benefit *within* the civilian band, where
+  they now actually have to compete. **Carry context makes A7a MORE urgent, not less** — it moves the sabre from
+  "loses to spears" (excusable) to "loses to the arming sword in the only context it exists for" (not).
+- **A2/A6.** The off-hand gap is untouched. Worse: carry context *raises its cost*, because the civilian band is
+  exactly where rapier-and-dagger and sword-and-buckler belong.
+- **D2's within-context half.** Access prices armour across contexts but not inside a battlefield.
+
+---
+
+## §13 The off-hand slot — SPECIFICATION (Q9)
+
+### 13.1 The finding that makes this cheap
+
+`core.coupling` already takes a `coverage` parameter, threaded all the way into `_transmit`, and
+`core.COVERAGE_GAP = {'full': 0.15, 'partial': 0.5}` is defined. **No call site anywhere passes anything but
+`'full'`** — ED-PC-0035's F8 recorded `'partial'` as unreachable dead code.
+
+**So the shield's damage-model hook already exists and is simply not reachable.** A shield does not need new
+physics; it needs the existing `coverage='partial'` path given a live caller. That converts the largest content
+gap in the roster (A6) from "design a subsystem" into "wire a parameter that is already there, and author the
+records."
+
+### 13.2 Minimum viable increment (deliberately not the full system)
+
+An `offhand` field on `Combatant`, defaulting to `None` (byte-identical when unset). Three effects, all on
+**existing** terms — no new mechanism:
+
+| off-hand | effect | existing site |
+|---|---|---|
+| **buckler / shield** | the attacker's `coverage` drops to `'partial'` | `core.coupling(coverage=...)` — already plumbed, currently dead |
+| **parrying dagger** (main_gauche) | adds to the defender's parry affinity | `mode_sigma`'s `parry` branch / `WP.defense_affinities` |
+| **paired weapon** (paired_short, hook_sword) | frees the contact axis without needing an opening | `contact.grab_available`'s `opening_created` gate (a Class-B availability change, §5) |
+
+**Explicitly out of scope for the increment:** a second attack sequence. That doubles the exchange loop and is
+where a paired-weapon system gets expensive; the three effects above are all σ/coverage modulations of one
+sequence.
+
+### 13.3 What it fixes
+
+A2's three false negatives (`main_gauche`, `paired_short`, `hook_sword` are no longer measured in a
+configuration they were never used in) and A6's absence (a buckler and a targe become authorable records). It
+also gives the civilian band its historically-defining configurations — rapier-and-dagger, sword-and-buckler —
+which §12 makes load-bearing.
+
+### 13.4 Cost, stated
+
+Coverage is a **damage-path** change. `'partial'` at 0.5 versus `'full'` at 0.15 is a large multiplier on the
+gap term, so a shield is potentially very strong; it needs its own calibration pass against §8's bands, and it
+moves both reference tables. **This is the one item in this extension that touches Class A territory** (§5:
+the damage path is FORBIDDEN to *abilities*) — legitimately, because it is equipment physics rather than a
+character modulator, but the distinction must be held deliberately, not blurred.
+
+---
+
+## §14 The A7a cut-grading increment — and the defect in my own fix sketch
+
+### 14.1 My register's fix sketch was wrong; here is the correction
+
+`combat_defect_register.md` A7d item 1 proposed: *"Extend `eff` scaling to `straight_cut`/`curved_cut` in
+`core.coupling`, symmetric with the `cut`/`point` tokens."*
+
+**That would be a no-op.** The existing form is saturating:
+
+```
+d *= min(1.0, eff / CUT_AUTH_REF)        CUT_AUTH_REF = 0.70
+```
+
+The native-cutter `cut_factor` range is **0.71 – 1.33** (minimum: hook_sword 0.71). **Every native cutter is
+already at or above the reference, so every ratio would clamp to 1.0 and nothing would change.** The reference
+sits *below the entire population it would be grading*.
+
+Caught while planning the increment, before anyone built it. Recorded rather than quietly corrected, per this
+lane's convention.
+
+### 14.2 What the fix actually requires
+
+Grading needs the reference to **straddle** the population, or a non-saturating form:
+
+- **Option A — re-anchor.** Raise the native-cut reference so the 0.71–1.33 spread straddles it (a roster
+  midpoint ≈ 1.05). **Coupled risk:** `CUT_AUTH_REF` also grades the *incidental* cut token, where 0.70 is
+  anchored on hook_sword as "the weakest attested native cutter" (ED-PC-0011). Re-anchoring one path changes
+  the other unless they are split into two constants — and splitting them needs its own justification, or it
+  is two references for one physical fact (§5.1 rule 1).
+- **Option B — non-saturating form** for the native path (linear in `eff` about a reference), so the whole
+  spread expresses. Cleaner, but it is a *new functional form*, not the symmetry the register claimed.
+
+**Both are re-baselines, not fixes.** Either changes damage for 16 weapons at every tier, moves
+`r3_identity_golden.json` and `combat_armour_reference.json`, and needs the diff as disclosure (§8 gate 8).
+
+### 14.3 Direction of the change, so nobody is surprised
+
+Option A buffs the keen curved swords (shamshir 1.33, pulwar 1.24, scimitar 1.22, sabre 1.18 — the exact A3
+collapse cohort) and nerfs the dull ones (hook_sword 0.71, greatsword 0.80, glaive 0.95). **That is the
+intended direction** — it is what makes curvature a trade rather than a tax — but it is a *balance* change and
+must be presented as one.
+
+---
+
+## §15 The increment ladder
+
+Executable increments, risk-ascending, each with its own acceptance. **P0 from §9 (as revised by B.5) still
+gates everything below I-2.**
+
+| # | increment | depends on | acceptance |
+|---|---|---|---|
+| **I-1** | `balance.py context_weighted_field()` against a **stubbed** context map | nothing | the instrument runs and reproduces today's numbers when every weapon is carriable everywhere (identity check) |
+| **I-2** | Derive `overall_length` / `carriable()` from stored primitives; publish the three bands | I-1 | bands reproduce §12.1 exactly; **no per-weapon table anywhere** (AST-checkable, like the existing no-name-table guard) |
+| **I-3** | Off-hand slot, **buckler only**, via the dead `coverage='partial'` path | nothing | `offhand=None` byte-identical; buckler within §8's bands; both reference tables regenerated with the diff as disclosure |
+| **I-4** | Off-hand: parrying dagger + paired-weapon contact availability | I-3 | A2's three weapons re-measured *in configuration*; their solo numbers explicitly retired as invalid |
+| **I-5** | A7a cut grading (Option A or B — **Jordan picks**) | §14 decision | the 0.71–1.33 spread becomes visible in coupling; A3 cohort re-measured; roster-wide disclosure diff |
+| **I-6** | Bound the T_vuln selection discount + re-examine `close_efficacy` as a *selection* input (A7b) | I-5 | the katana cuts at ≥1 tier; no weapon's mode flips on a <5% comparator margin |
+| **I-7** | Author the 8 bare levers (§5) | nothing | each passes §6.2's texture floor or is cut |
+| **I-8** | Plan layer, one intent at a time (§3 order) | P0, I-7 | per §8, all gates |
+
+**I-1 through I-4 are independent of the P0 blocker** and can start immediately: I-1/I-2 *produce* the
+measurement P0 needs, and I-3/I-4 fix a modelling gap rather than tune balance.
+
+---
+
+## §16 Adversarial pass — findings against this plan
+
+Run against §12–§15 before publishing them. **This is a self-critique, not a structurally independent one**
+(§10 is explicit that a critic who never saw the producer's reasoning is more independent), so it is weaker
+than the four-dimension audit's method and should not be credited as equivalent. Findings that survived:
+
+| # | finding | severity | disposition |
+|---|---|---|---|
+| **X1** | **The register's A7a fix sketch was a no-op** (`min(1, eff/0.70)` against a 0.71–1.33 population). | high | **Corrected in §14.1**, and the register's A7d amended. This is the pass's main catch. |
+| **X2** | §12 makes balance depend on a **scene-frequency distribution that does not exist and is a content-design input**. The frame can therefore "prove" almost any weapon balanced by choosing the mix. | high | **Stated as the frame's cost in §12.3**, escalated to Q8. Not resolvable by me. |
+| **X3** | "2H ⇒ weapon of war" is **culture-specific** (the katana falsifies it). | med | **Stated in §12.2**; pushes the threshold into the setting's legal regime, not the weapon record. |
+| **X4** | §13's coverage change is a **damage-path** edit, and §5 forbids the damage path to abilities. | med | Legitimate (equipment physics ≠ character modulator) but **the distinction is now stated explicitly in §13.4** rather than blurred. |
+| **X5** | Carry context is presented as superseding compression, but it **makes A7a more urgent, not less** — the sabre goes from losing to spears to losing in its own context. | med | **Stated in §12.5.** |
+| **X6** | The 0.30 m gap between bands is real **for this roster**; adding one 1.3 m weapon would fill it, so the clean separation is a property of current content, not a law. | low | Stated here. The bands must be re-derived, never frozen as constants. |
+| **X7** | I asserted "all 26 dominant weapons are ≥1.50 m" — **verified** against both tables, all 26 checked. | — | Survives. |
+
+Findings I raised and **rejected on inspection**, recorded so they are not re-raised:
+
+- *"Carry context is just a content gate, not balance."* Rejected: C1 already defines balance as
+  context-conditional, and armour tier — an accepted axis — is exactly the same kind of gate.
+- *"§13 should include the second attack sequence or it is not really paired weapons."* Rejected: that is where
+  the cost is, and the three σ/coverage effects deliver A2/A6's value without it. Scope discipline.
+- *"I-5 should just be done as part of batch 6's F21."* Rejected: F21 targets the capability/σ path
+  (`adef_cap`), I-5 targets the damage path (`core.coupling`). Different owners; bundling them is the
+  same-commit pattern that half-stood twice.
+
+---
+
+## §17 Appendix A — The Final Fantasy Tactics lens
 
 Jordan asked what an FFT-shaped game would look like on this engine. It is a useful lens because FFT is the
 canonical **build-expressive tactical RPG**, and holding Valoria's measured state against it isolates exactly one
@@ -505,7 +729,7 @@ the ability layer already measured.
 
 ---
 
-## §13 Appendix B — Carry context: the balance frame that supersedes §9's P0
+## §18 Appendix B — Carry context: the ORIGINAL sketch (now specified in §12)
 
 **Jordan, 2026-07-26:** *"an aspect of resolution is that polearms/larger weapons were typically disallowed in
 any public places during Renaissance. It was acceptable to have a smaller sword like a rapier, but not
@@ -607,7 +831,7 @@ resolving the dominant lever, not a way of skipping that step.
 
 ---
 
-## §14 Provenance
+## §19 Provenance
 
 Built on, and consistent with: `state_graph.py` (`INJECTION_POINTS`, 9 points, tested) · `tradition_decomposition_v1.md` (per-tradition technique → primitive → node → gate, S-tiered) · `ability_armature.md` (§1 principles, §5 source menu, the sparse-tradition rule) · `phase4_5_plan_v1.md` (Phase 4b abilities-as-access, the 7 review lenses, the Primitive / Tradition-is-not-a-weight / Attack–Defence Convergence principles) · `engagement_psychology_recovered.md` (§B1 "biased weights, not a planner") · `combat_throughlines_v1.md` (the two poles; commitment = recovery) · `combat_balancing_methodology.md` (§5 C1, §6 the ablation gate) · Jordan's fiat-audit ruling (`audit/2026-07-23-combat-fiat-audit/fiat_audit_v1.md`: efficacy from investment, not membership; every build available; no fiat) · ED-PC-0023/0024/0028/0030/0034/0040 · and the measured state in `audit/2026-07-26-combat-balance-customization-state/`.
 

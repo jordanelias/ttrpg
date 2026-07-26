@@ -229,10 +229,23 @@ geometric advantage of the sabre's can express.**
 
 #### A7d — Fix sketch (NOT implemented; blast radius stated)
 
-1. **Grade the native cut path.** Extend `eff` scaling to `straight_cut`/`curved_cut` in `core.coupling`,
-   symmetric with the `cut`/`point` tokens. This is the fix ED-PC-0011 deliberately deferred. **Blast radius:
-   roster-wide — all 16 native cutters, every golden, both reference tables.** It needs its own increment with a
-   full re-validation, exactly as ED-PC-0011 predicted.
+1. **Grade the native cut path.** ~~Extend `eff` scaling to `straight_cut`/`curved_cut` in `core.coupling`,
+   symmetric with the `cut`/`point` tokens.~~
+   > **CORRECTED 2026-07-26 — that sketch was a NO-OP and would have shipped as one.** The existing form is
+   > saturating: `d *= min(1.0, eff / CUT_AUTH_REF)` with `CUT_AUTH_REF = 0.70`, while the native-cutter
+   > `cut_factor` population is **0.71–1.33** (minimum: hook_sword 0.71). **Every native cutter already sits at
+   > or above the reference, so every ratio clamps to 1.0 and nothing changes.** The reference sits *below the
+   > entire population it would be grading*. Grading requires either (A) re-anchoring the native-cut reference
+   > so the spread straddles it (≈1.05) — which is **coupled**, because `CUT_AUTH_REF` also grades the
+   > incidental cut token where 0.70 is anchored on hook_sword per ED-PC-0011, so splitting them needs its own
+   > justification or it becomes two references for one physical fact (§5.1 rule 1 of the proposal) — or (B) a
+   > non-saturating form for the native path, which is a *new functional form*, not the symmetry claimed above.
+   > Caught during increment planning, before anyone built it. Full treatment: proposal §14.
+   **Blast radius either way: roster-wide — all 16 native cutters, every golden, both reference tables**, and
+   it is a *balance* change, not a correctness fix: it buffs the keen curved swords (shamshir 1.33, pulwar 1.24,
+   scimitar 1.22, sabre 1.18 — exactly the A3 collapse cohort) and nerfs the dull ones (hook_sword 0.71,
+   greatsword 0.80). That direction is intended — it makes curvature a trade rather than a tax — but it must be
+   presented as a balance change. It needs its own increment with full re-validation, as ED-PC-0011 predicted.
 2. **Re-examine `close_efficacy`'s swing discount as a selection input.** A 2.2% margin should not flip a
    weapon's identity. Either the discount belongs only in the damage path, or selection needs the same
    soft-threshold treatment ED-PC-0037 gave the closed latch.
