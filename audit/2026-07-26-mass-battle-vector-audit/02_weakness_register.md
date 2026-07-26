@@ -151,7 +151,13 @@ scene.battle_concluded : family=scene_outcome
 `scene.battle_concluded`, entered a second time into `mass_battle`'s `emits:` list alongside the
 real type. This is the ED-MB-0010 fabricated-emit class, still live and still unrecorded as such.
 
-**Mechanism now identified** — this is the answer the Incompleteness Ledger row is asking for.
+**⚠️ CORRECTED 2026-07-26 (see `04_solutions_plan.md` §0 C1): this is NOT a new finding.** It is
+**ED-MB-0010**, filed 2026-07-13 by the module_adjudicator (P1-A), still open, carrying the same
+diagnosis in the same terms and the same proposed remediation. I read the `needs_jordan` id list
+without reading the bodies and re-derived a 13-day-old finding, presenting the mechanism as newly
+identified. What IS new is narrower: the item has been open long enough that **five downstream
+surfaces now report it as a live defect**, which changes the action from "make a call" to "unblock
+a call already made".
 **Recommendation:** delete the `scene_outcome.battle_concluded` row from `references/module_contracts.yaml`
 `mass_battle.emits`. One-line change; resolves one dangling emit, one Mode-E row, one Mode-H isolate,
 one workbench card, and one ledger row simultaneously — because they are one defect counted five times.
@@ -284,10 +290,10 @@ on one person.
 | F2 | `sys.path` alias — 28 false orphans latent in the fix | **FIXED + guarded** this commit |
 | F3 | `pointer_audit` dead sim root | **FIXED** this commit; measured effect nil, honest zero |
 | F4 | Same dead root in A17 (CI gate), mechanics_index ×11, +4 tools | **FILED** → new `ED-IN` item; out of MB lane scope |
-| F5 | Two disjoint MB code graphs; live tree has 0 production importers, 0 engine imports | **FILED** → extends ED-IN-0074 D5 with measurement; port-blocking |
+| F5 | Two disjoint MB code graphs; live tree has 0 production importers, 0 engine imports | **WEAKENED** by plan §3.3 adversarial pass: "two scales, two models" is defensible; the defect is the UNDECLARED split + a README that asserts the live tree is frozen. Three options posed. |
 | — | massbattle ↔ units import cycle, both cut-vertices | **FILED** under F5 |
-| F–§3 | `scene_outcome.battle_concluded` is a family name, not a Key | **ACTIONABLE, 1 line** — delete the row from `module_contracts.yaml`; held for MB-lane sign-off rather than bundled into a tooling PR |
-| F–§4 | `consumes: []`, `state: []` — contract declares no inputs, no state | **FILED, needs_jordan** — highest-value port blocker; 222/262 constants have no prose surface |
+| F–§3 | `scene_outcome.battle_concluded` is a family name, not a Key | **= ED-MB-0010, open since 2026-07-13** (not a new finding — §3 corrected). Action is to UNBLOCK, not re-decide. Plan A5. |
+| F–§4 | `consumes: []`, `state: []` — contract declares no inputs, no state | **PRIORITY REVERSED** by `04_solutions_plan.md` §3.1: do NOT populate yet. Freezing a `state:` block before the cell-primitive programme lands would document the pre-cell model and gate it in CI. Ship an honest `status`/`gap_notes` instead. |
 | F–§5 | Design / params / engine are three different models; params header cites a never-existent path | **FILED** — 4 open workbench cards, responsiveness 0/4 |
 | F6 | Mass Battle vs Mass Combat: divergent mu-degree and scale class | **FILED** — vocabulary debt, one classification is wrong |
 | F7 | `pp = 0` — MB work bypasses the patch register entirely | **FILED** |

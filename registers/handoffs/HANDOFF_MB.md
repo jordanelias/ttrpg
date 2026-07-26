@@ -31,6 +31,55 @@ namespace and are folded into Next actions below, which carries the full narrati
   mutation-verified. `pointer_audit`'s dead sim-root default was repointed too; measured effect NIL,
   and labelled as such.
 
+  **SOLUTIONS PLAN (2026-07-26): `audit/2026-07-26-mass-battle-vector-audit/04_solutions_plan.md`.**
+  Written under Jordan's steer that *we are still trying to solve mass battle the system, for itself* —
+  so it orders MECHANICS first and plumbing after, which **reverses the audit's own top
+  recommendation**. Two corrections to the audit are recorded in its §0: (a) the
+  `scene_outcome.battle_concluded` finding is **not new** — it is ED-MB-0010, open since 2026-07-13
+  with the same diagnosis and remediation; the action is to unblock, not re-decide. (b) The audit's
+  "populate the contract, it's the top port blocker" priority is **wrong for this goal** — freezing a
+  `state:` block before the cell-primitive programme lands would document the pre-cell model and
+  attach a CI gate to it (plan §3.1; ship an honest `status`/`gap_notes` instead).
+
+  **The plan's central recommendation — test the primitive before adopting the patch.** DG-6's
+  research (ED-MB-0016) correctly names *correlation across combatants* as the only lever that breaks
+  CLT self-averaging (Kress 2024), then implements the simplest form: one shared per-battle
+  LogNormal shock. Disclosed cost: gauge **6/20 → 4/20** — it buys strategic realism by degrading
+  tactical realism. But **a second, mechanistic source of correlation already exists and has never
+  been measured against this problem**: ED-MB-0042's cell morale with 8-neighbourhood break contagion
+  makes casualties arrive in correlated clumps *from a primitive*, at the tactical scale, per Jordan's
+  own "cell is the primitive" directive. `PC_CELL_MORALE` is OFF and its one measurement was
+  confounded. **Named falsifier:** if CV-vs-N still decays as O(1/√N) under the flag ON, the
+  recommendation is wrong and the shared shock is right. That measurement does not exist yet — the
+  plan's central claim is a hypothesis with a stated test, not a finding.
+
+  **CRITICAL PATH — three steps, and everything expensive hangs off the third:**
+  1. **A0 — finish the scalar-write sweep.** NOT hygiene, and not deferrable:
+     `lanchester_signature.py` pins morale high *to disable rout*, so a silent no-op there measures
+     the Lanchester exponent on **truncated** battles — and that exponent is what DG-6's entire
+     root-cause analysis rests on. Deferring A0 doesn't delay the measurement, it **corrupts** it.
+  2. **A2-step2 — re-measure cell morale honestly** (blocked on 1).
+  3. **A1 — re-measure DG-6's CV-vs-N under cell correlation**, then decide `PC_FRICTION_SIGMA`:
+     adopt / lower / drop. Three outcomes, all informative.
+
+  **Ship without a ruling:** A4 (= ED-MB-0044) — R3 ranged closes into band **by ROLE**, reusing
+  `_kite_goal` verbatim. No new mechanism, no new constant; it *removes* a special case. Narrowed by
+  the adversarial pass: must be role-conditioned, since `hold` early-returning is plausibly correct
+  for a deliberate holding order.
+
+  **Parallel, no dependency:** A5 — unblock ED-MB-0008 (two live DR tables ~2× apart: **volley
+  resolution is currently undefined**), ED-MB-0009 (orphaned fragment citing a never-existent
+  `stage5_clocks.md`), ED-MB-0010 (the one-line emit deletion). All three diagnosed 2026-07-13.
+
+  **Deferred ON PURPOSE (plan §3):** contract population (§3.1), typed MB params export (§3.2 — the
+  exporter primitive exists but exports a *canonical oracle*, and ED-MB-0041 found only ~17 of ~92 MB
+  magnitudes survive scrutiny). **§3.3 two-trees fork WEAKENED by the adversarial pass:** "two scales,
+  two models" is a defensible architecture; the real defect is that the split is **undeclared** and
+  `tests/sim/README.md` actively asserts the live tree is frozen run-output. Three options posed
+  (declare / adapter / promote), recommending *declare* if the abstraction is intended — but note
+  that under it, campaign-scale `mc_v18` conclusions are produced by the **stale** model and reflect
+  none of A1–A4.
+
   **NEXT, in order:**
   1. **The empty contract — the port blocker.** `mass_battle` declares `consumes: []` and
      `state: []`; ripple returns **zero upstream in all four edge layers**. The typed wiring says a
