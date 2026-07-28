@@ -28,7 +28,15 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-28 (**IN-lane stamp reconcile — ED-IN-0085**: external-practice corpus investigation
+_Last reconciled: 2026-07-28 (**IN-lane stamp reconcile — ED-IN-0086**: handoff status-tag convention
+(`[OPEN]`/`[PART]`/`[DONE]`) + `tools/handoff_atomize.py`, the single owner of the handoff
+skeleton/infill/archive structure, plus the tag-aware read in `tools/session_open_work.py`. Touches
+`tools/`, `tests/valoria/`, `references/id_reservations.yaml` (IN `next_free` 86→87) and
+`registers/editorial_ledger_in.jsonl` only. **No CURRENT.md head *row* changed** — no subsystem head
+moved, no doc superseded; this stamp clears the `id_reservations.yaml` + `tools/` recency drift the
+commit introduced. The tool is NOT yet run against any lane and NOT CI-wired: rollout is held on one
+Jordan decision (archive-vs-dormant for stale-but-open items). Renumbered from ED-IN-0085 — origin/main PR #246 claimed it and merged first. Detail:
+`registers/editorial_ledger_in.jsonl` + PR #245.) **Prior:** 2026-07-28 (**IN-lane stamp reconcile — ED-IN-0085**: external-practice corpus investigation
 (`proposals/2026-07-28-external-practice-corpus-investigation.md`) + its instrument
 `tools/ci_claude_workflow_paths.py`, which resolves every repo-relative path referenced from `.claude/`
 (51 referenced: 12 live, 35 resolving only through an undeclared `restructure_ledger.md` indirection, 4 dead).
