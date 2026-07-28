@@ -368,6 +368,25 @@ def build() -> dict:
             "invoked_by": ["session (Workflow tool)"],
         })
 
+    # Subagent definitions (.claude/agents/*.md) — ED-IN-0086, same blind spot as the workflows
+    # above one level down. A roster file is apparatus: it decides what a whole class of agents CAN
+    # DO, and the read-only critic's entire value is the tools it does NOT list. An inventory that
+    # cannot see it cannot flag it going stale. `emits` records the granted tools for exactly that
+    # reason — the interesting drift here is a tool list quietly growing.
+    for ag in sorted((REPO / ".claude" / "agents").glob("*.md")) if (REPO / ".claude" / "agents").exists() else []:
+        txt = ag.read_text(encoding="utf-8", errors="replace")
+        name_m = re.search(r"^name:\s*(.+)$", txt, re.M)
+        tools_m = re.search(r"^tools:\s*(.+)$", txt, re.M)
+        agent_name = name_m.group(1).strip() if name_m else ag.stem
+        entries.append({
+            "path": str(ag.relative_to(REPO)), "kind": "claude-agent",
+            "runs": [],
+            "emits": [t.strip() for t in tools_m.group(1).split(",")] if tools_m else ["<inherits ALL tools>"],
+            "writes": [], "role": "orchestration",
+            "invoked_by": sorted({str(wf.relative_to(REPO)) for wf in _claude_workflows()
+                                  if agent_name in wf.read_text(encoding="utf-8", errors="replace")}),
+        })
+
     # counts
     by_kind: dict[str, int] = {}
     by_role: dict[str, int] = {}

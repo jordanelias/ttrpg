@@ -8,6 +8,37 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **✅ WORKFLOW APPARATUS REPAIRED + RUN DISCIPLINE WIRED (2026-07-28, ED-IN-0086).** Executes
+  ED-IN-0085's approved set (P1–P8; Jordan declined P9, ruled P3 **report-only**, and ruled the three
+  `wf_*.js` **repaired** not retired). One root cause behind both halves: `.claude/` is the only part
+  of this repo's machinery nothing in CI ever read.
+  **Path rot:** 51 referenced deps were 12 live / 35 alias-only / 4 dead → now **49 live, 0 aliased,
+  0 dead** (`tools/ci_claude_workflow_paths.py`, exit 0). Beyond path rewriting: absolute
+  `C:/Github/ttrpg` + `C:/Users/Jordan/Downloads` prefixes (10 of those 12 corpus docs live in
+  `audit/2026-06-29-combat-corpus-recovery/`), `systems.py` → `combat_systems.py` ×13, and a
+  **stale standing "finding"** telling every agent the engine imports `/home/claude/*` — resolved by
+  ED-1085 on 2026-07-01, so the audit would have re-reported a fixed defect as current.
+  **Run discipline:** `tools/wf_harness.js` is the single owner, copied verbatim between sentinels
+  (sandbox = no imports). P3 closed `stop_reason` set + round cap + repetition breaker + JSONL trace,
+  report-only. P4 `hCritic()` → `.claude/agents/valoria-critic.md` (`Read, Grep, Glob`) — **first
+  roster promotion** under §10's recurrence rule; critics were previously "read-only" only as a
+  sentence in their own prompt. P7 null-result alarm **paired** with rank-by-independent-rediscovery
+  (already computed every run, discarded at the return). P8 disagreement records with required
+  adjudication + terminal out-of-lane `observation`.
+  **The fable ruling is now enforced, not just transcribed:** `wf_attribute_coherence.js` still ran
+  its six-file-writing Synthesis node on `model:'fable'` → opus `effort:max`, plus a read-only
+  Guardrail phase that writes nothing and rules on the run.
+  **Falsifier:** `tests/valoria/test_wf_harness.py` executes the harness under node — 17 tests,
+  **13/13 mutants killed, zero survivors**. Structural half `tools/ci_wf_harness_check.py`. New
+  blocking CI job *Workflow Apparatus*; both gates in `valoria_local.py`; Stop hook now also runs
+  `review_core.py --check`.
+  *Known limits, filed not swept:* (a) `ci_wf_harness_check.py`'s critic-stage scan reads
+  **single-line** `agent()` options objects — a multi-line options literal would be missed, which is
+  why the behavioural test exists alongside it; (b) `CRITIC_MARKERS` is a word list, so a critic
+  phase under a genuinely new name needs adding deliberately; (c) the harness's `hSameFinding`
+  containment thresholds (≥3 shared content words, ≥0.6 of the smaller set) are calibrated on this
+  repo's finding wording and have **not** been measured against a real multi-lens run — the first
+  live workflow run should check whether they over- or under-group.
 - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
   check-ins outright ("I don't even need check in triggers, I can just see what's happening by the
   colours on a session"). **Measured first:** 116 confirmed `send_later` firings in 2026-07-19..26,

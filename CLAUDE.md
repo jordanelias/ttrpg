@@ -312,8 +312,11 @@ Do not represent the skeleton as a runnable head-start.
 - **Local tier — advisory accelerators** (one-time per clone: `git config core.hooksPath .githooks`):
   `.githooks/pre-commit` runs the SAME validators on staged files via `python tools/valoria_local.py
   --staged`; `.claude/settings.json` wires the edit-time naming nudge (`hook_naming_guard.py`), the
-  SessionStart banner (`session_status.py`), and the Stop handoff reminder
-  (`session_handoff_reminder.py`). Bypass a local block with `git commit --no-verify` — CI still enforces.
+  SessionStart banner (`session_status.py`), and — on Stop — the handoff reminder
+  (`session_handoff_reminder.py`) plus **`review_core.py --check`** (added 2026-07-28, ED-IN-0086:
+  the session close now reports the repo-state verdict against `registers/review_baseline.yaml`,
+  so a ratchet regression surfaces at the end of the session that caused it rather than in CI on
+  someone else's PR). Bypass a local block with `git commit --no-verify` — CI still enforces.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
@@ -384,6 +387,8 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
 | Incremental module-by-module sim build | `valoria-simulator` |
 | "What's the state of the repo?" / exhaustive repo-state review | `python tools/review_core.py --summary` (Repository State Armature, ED-IN-0077; the single verdict-aggregator — one core behind the SessionStart banner + a GitHub job + the artifact) |
+| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). Complements, does not replace, `review_core.py --check`: that one grades repo-wide signals against `registers/review_baseline.yaml`; `/code-review` reads the change itself. |
+| Editing a `.claude/wf_*.js` orchestration script | edit the **owner** `tools/wf_harness.js` for anything in the harness block, then `python tools/ci_wf_harness_check.py --fix`; run `python tools/ci_claude_workflow_paths.py` before committing (every path a `.claude/` file names must resolve — 39 of 51 had rotted by 2026-07-28). |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
 driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
@@ -464,7 +469,12 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
 - **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
   dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
   orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
-  more independent. Make independence structural: critic gets read-only tools.
+  more independent. Make independence structural: critic gets read-only tools. **This is now wired,
+  not merely stated (ED-IN-0086):** pass `hCritic({...})` in a `.claude/wf_*.js` stage and the
+  agent runs as `valoria-critic` (`.claude/agents/valoria-critic.md`, `tools: Read, Grep, Glob` —
+  no Write, no Edit, no Bash). Until 2026-07-28 every "critic" in this repo was declared read-only
+  by a sentence *inside its prompt*, which restricts nothing; `tools/ci_wf_harness_check.py` now
+  fails any critic/verify stage that does not route through `hCritic`.
 - **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
   binding constraint is.
 - **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
@@ -474,9 +484,26 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
   declared I/O only; never special-case an entity/outcome (**scripting drift**); never grow a
   scale-local interface dialect (**shape divergence**).
 - **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
-  *recurred* — never architect the ensemble up front. No roster files exist yet by design; the
-  watched candidates are a standing conformance-scanner and (once seeded headless sims + ablation
-  are runnable) an emergence-auditor — see the 2026-07-01 decision queue.
+  *recurred* — never architect the ensemble up front. **First and so far only promotion:
+  `valoria-critic` (2026-07-28, ED-IN-0086)** — the adversarial-verifier role had independently
+  recurred in all three `wf_*.js` scripts (Verify / Adversarial / Critic phases), which is exactly
+  the recurrence trigger this rule waits for. Still-watched candidates: a standing
+  conformance-scanner and (once seeded headless sims + ablation are runnable) an emergence-auditor
+  — see the 2026-07-01 decision queue.
+- **Run discipline lives in one owner and is copied, not imported (ED-IN-0086).** Workflow scripts
+  run in a sandbox with **no filesystem and no Node API**, so they cannot `import` a shared module.
+  `tools/wf_harness.js` is the single owner of the prelude (termination signals + null-result alarm
+  + rediscovery ranking + disagreement records) and it is copied verbatim between sentinels into
+  each `.claude/wf_*.js`. **Edit the owner, never a copy**, then
+  `python tools/ci_wf_harness_check.py --fix`. Four things the harness gives every workflow:
+  a **closed `stop_reason` set that is report-only** (Jordan ruled 2026-07-28 — a breaker that
+  halts a 40-agent audit on a heuristic costs more than the defect it caught, so every signal
+  records and the run continues); a **null-result alarm** on any lens that returned nothing, which
+  ships *paired with* **rank-by-independent-rediscovery** so the alarm never becomes pressure to
+  manufacture findings; and **disagreement records with required adjudication**, where an
+  out-of-lane record is a terminal `observation` no later ruling can overwrite (observe, don't
+  judge). Behaviour is pinned by `tests/valoria/test_wf_harness.py`, which executes the harness
+  under node — mutation-verified, 13/13 mutants killed.
 
 ---
 

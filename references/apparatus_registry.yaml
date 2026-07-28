@@ -4,25 +4,25 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 109
+  total: 111
   by_kind:
-    tool: 89
+    tool: 90
     skill-script: 10
     hook: 4
     workflow: 3
     claude-workflow: 3
+    claude-agent: 1
   by_role:
     A:writes-artifact: 22
-    B:stdout-or-gate: 43
+    B:stdout-or-gate: 44
     D:import-only-library: 38
     workflow: 3
-    orchestration: 3
-  orphaned: 4
+    orchestration: 4
+  orphaned: 3
   prune_candidates: 0
 prune_candidates: []
 orphaned_no_cli:
 - tools/build_audit_registry_backfill.py
-- tools/ci_claude_workflow_paths.py
 - tools/geography/jsx_to_canonical.py
 - tools/observability/npc_audit_report_gen.py
 entries:
@@ -190,9 +190,10 @@ entries:
   prints_stdout: true
   has_cli: true
   uses_cli_args: true
-  invoked_by: []
+  invoked_by:
+  - ci:valoria-ci.yml
   imported_internally: false
-  orphaned: true
+  orphaned: false
   prune_candidate: false
   role: B:stdout-or-gate
   imports: []
@@ -438,6 +439,23 @@ entries:
   - ci:valoria-ci.yml
   - tool:imported
   imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
+  imports: []
+- path: tools/ci_wf_harness_check.py
+  kind: tool
+  stem: ci_wf_harness_check
+  writes:
+  - dest: <path>
+    format: unknown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:valoria-ci.yml
+  imported_internally: false
   orphaned: false
   prune_candidate: false
   role: B:stdout-or-gate
@@ -929,6 +947,7 @@ entries:
   - ci:audit-refresh.yml
   - ci:dashboard.yml
   - ci:valoria-ci.yml
+  - hook:claude
   - tool:imported
   imported_internally: true
   orphaned: false
@@ -1734,6 +1753,7 @@ entries:
   - tools/canon_coverage_check.py
   - tools/ci_audit_registry_check.py
   - tools/ci_claim_provenance_check.py
+  - tools/ci_claude_workflow_paths.py
   - tools/ci_co_file_checker.py
   - tools/ci_editorial_checker.py
   - tools/ci_formula_prose_check.py
@@ -1748,6 +1768,7 @@ entries:
   - tools/ci_sim_fabrication_check.py
   - tools/ci_supersession_check.py
   - tools/ci_vetting_check.py
+  - tools/ci_wf_harness_check.py
   - tools/compliance_check.py
   - tools/currency_consistency_check.py
   - tools/export_engine_params.py
@@ -1772,6 +1793,7 @@ entries:
   - Trace
   - Critic
   - Synthesis
+  - Guardrail
   emits:
   - attribute-value-coherence
   writes: []
@@ -1803,3 +1825,16 @@ entries:
   role: orchestration
   invoked_by:
   - session (Workflow tool)
+- path: .claude/agents/valoria-critic.md
+  kind: claude-agent
+  runs: []
+  emits:
+  - Read
+  - Grep
+  - Glob
+  writes: []
+  role: orchestration
+  invoked_by:
+  - .claude/wf_attribute_coherence.js
+  - .claude/wf_combat_critique.js
+  - .claude/wf_social_contest_critique.js

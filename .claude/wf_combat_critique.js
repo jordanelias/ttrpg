@@ -10,6 +10,262 @@ export const meta = {
   ],
 }
 
+// ==== VALORIA WF HARNESS v1 — GENERATED FROM tools/wf_harness.js — DO NOT EDIT HERE ====
+// Re-sync after editing the owner:  python tools/ci_wf_harness_check.py --fix
+// Report-only by ruling (Jordan 2026-07-28): every signal records and the run CONTINUES.
+
+// P3 · the closed set. A reason outside it is itself a defect, representable without throwing.
+const H_STOP_REASONS = [
+  'completed',                   // nothing fired
+  'null_result',                 // P7: a lens/critic returned zero findings
+  'critic_starved',              // a stage produced findings that no critic ever saw
+  'disagreement_unadjudicated',  // P8: a dispute reached the return with no ruling
+  'repetition',                  // P3: a round reproduced the previous round's finding set
+  'round_cap',                   // P3: the loop hit its cap
+  'invalid_signal',              // a caller passed a reason outside this set
+]
+// Reported stop_reason = the worst signal seen, ordered by how much it should make a READER
+// distrust the run — not by the severity of any underlying finding.
+const H_STOP_RANK = H_STOP_REASONS
+const H_ROUND_CAP = 3
+
+// P8 · closed vocabularies for a disagreement. Deliberately small; each value is a distinction
+// this repo's critics actually draw (see the uphold/overturn/soften/sharpen funnel).
+const H_DISPUTE_LAYERS = ['evidence', 'interpretation', 'severity', 'scope', 'method']
+const H_ROOT_CAUSES = [
+  'different-sources-read',     // agonist and critic opened different files
+  'stale-canon',               // one side read a superseded head
+  'ambiguous-spec',            // the doc genuinely admits both readings
+  'severity-calibration',      // same facts, different weight
+  'scope-boundary',            // in-lane vs out-of-lane, or in-scope vs out-of-scope
+  'measurement-vs-assertion',  // one side measured, the other asserted
+]
+
+// The cross-lens identity of a finding (P7's rediscovery key, P3's repetition key).
+// Bespoke: two lenses that independently hit one defect cite the SAME FILE and describe it in
+// different words, usually a line or two apart — so the key is (first cited file path, line
+// dropped) + the first content words of the claim. Line numbers are dropped on purpose; keeping
+// them would split one rediscovered defect into N singletons, which is the failure this exists
+// to prevent.
+const H_STOPWORDS = ['the', 'a', 'an', 'is', 'are', 'was', 'were', 'and', 'or', 'but', 'of', 'to',
+  'in', 'on', 'at', 'for', 'with', 'that', 'this', 'it', 'its', 'as', 'by', 'from', 'has', 'have',
+  'not', 'no', 'be', 'been', 'does', 'do', 'never', 'only', 'any']
+
+function hClaimText(f) {
+  if (!f || typeof f !== 'object') return ''
+  return String(f.claim || f.title || f.what || f.summary || '')
+}
+
+function hFirstFile(f) {
+  if (!f || typeof f !== 'object') return ''
+  // social-contest shape: locations[{file, quote}]
+  if (Array.isArray(f.locations) && f.locations.length && f.locations[0] && f.locations[0].file) {
+    return String(f.locations[0].file).split(':')[0].trim()
+  }
+  // combat / attribute shape: `evidence` is free-text "file:line" citations
+  const src = String(f.evidence || f.surface || f.defining_surface || '')
+  const m = src.match(/[A-Za-z0-9_./-]+\.(?:md|py|ya?ml|json|jsonl|gd|js|html)/)
+  return m ? m[0] : ''
+}
+
+function hContentWords(f) {
+  const seen = []
+  for (const w of hClaimText(f).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/)) {
+    if (w.length > 2 && H_STOPWORDS.indexOf(w) < 0 && seen.indexOf(w) < 0) seen.push(w)
+  }
+  return seen
+}
+
+// The EXACT key: same file, same claim wording. Used by the repetition breaker, where the question
+// is "did this stage produce literally the same output again", so exactness is what is wanted.
+function hFindingKey(f) {
+  return (hFirstFile(f) || '?') + '#' + (hContentWords(f).slice(0, 6).join('-') || '?')
+}
+
+// The FUZZY match, used only by rediscovery. Two lenses that independently hit one defect describe
+// it in different words — "dead geo coefficients are never consumed" and "the geo coefficients are
+// dead, never consumed" are one finding. An exact key splits them into singletons and silently
+// zeroes out the entire corroboration signal, which is worse than not computing it: the output
+// still has a `rediscovery` column, it just always reads 1.
+// So: same file, and one claim's content words substantially contained in the other's.
+// Containment, not Jaccard — a thorough lens writes a longer sentence about the same defect, and
+// Jaccard punishes exactly that. The absolute floor stops a two-word claim matching everything.
+function hSameFinding(a, b) {
+  if (hFirstFile(a) !== hFirstFile(b)) return false
+  const wa = hContentWords(a), wb = hContentWords(b)
+  if (!wa.length || !wb.length) return false
+  const shared = wa.filter(w => wb.indexOf(w) >= 0).length
+  const smaller = Math.min(wa.length, wb.length)
+  if (smaller < 3) return shared === smaller && wa.length === wb.length
+  return shared >= 3 && shared / smaller >= 0.6
+}
+
+// P3 · the run recorder. One per workflow; every stage reports through it.
+function hRun(name) {
+  const run = {
+    name: name,
+    rounds: 0,
+    cap: H_ROUND_CAP,
+    signals: [],          // append-only; nothing is ever removed (no-silent-disappearance)
+    trace: [],            // the JSONL run trace, emitted by hSummary()
+    disagreements: [],
+    _lastRoundKeys: null,
+  }
+
+  run.trace_ = function (event, data) {
+    run.trace.push(Object.assign({ seq: run.trace.length, event: event }, data || {}))
+    return run
+  }
+
+  // NEVER throws. An unknown reason is recorded as 'invalid_signal' carrying what was asked for,
+  // because a harness that crashes the run it is policing is worse than the drift it detects.
+  run.signal = function (reason, detail) {
+    const known = H_STOP_REASONS.indexOf(reason) >= 0 && reason !== 'completed'
+    const rec = { reason: known ? reason : 'invalid_signal', detail: String(detail || ''), round: run.rounds }
+    if (!known) rec.requested = String(reason)
+    run.signals.push(rec)
+    run.trace_('signal', rec)
+    log('[harness] ' + rec.reason + ': ' + rec.detail)
+    return run
+  }
+
+  // Round accounting + the repetition breaker. Report-only: past the cap it still returns true
+  // and the caller decides; the SIGNAL is the deliverable, not a forced exit.
+  run.round = function (label, findings) {
+    run.rounds += 1
+    const keys = Array.isArray(findings) ? findings.map(hFindingKey).sort() : null
+    run.trace_('round', { label: String(label || ''), n: run.rounds, findings: keys ? keys.length : 0 })
+    if (run.rounds > run.cap) {
+      run.signal('round_cap', 'round ' + run.rounds + ' exceeds cap ' + run.cap + ' (' + label + ')')
+    }
+    if (keys && run._lastRoundKeys && keys.length && keys.join('|') === run._lastRoundKeys.join('|')) {
+      run.signal('repetition', 'round ' + run.rounds + ' (' + label + ') reproduced the previous round\'s '
+        + keys.length + ' finding(s) with no change — further rounds are unlikely to add anything')
+    }
+    if (keys) run._lastRoundKeys = keys
+    return run
+  }
+
+  // P7a · the null-result alarm. Ships with hRediscover (P7b) and is meaningless without it:
+  // an alarm for "you found nothing" with no way to see WHICH findings were corroborated is
+  // pressure to manufacture findings. Both are called in every script; the checker enforces it.
+  run.lens = function (lensKey, findings) {
+    const n = Array.isArray(findings) ? findings.length : 0
+    run.trace_('lens', { lens: String(lensKey), findings: n })
+    if (n === 0) {
+      run.signal('null_result', 'lens/stage "' + lensKey + '" returned zero findings — either the '
+        + 'surface is genuinely clean, or the agent failed to read it. Check its coverage notes '
+        + 'before crediting the silence.')
+    }
+    return findings || []
+  }
+
+  // A stage produced findings that no critic ever saw. The relay is the method (CLAUDE.md §10);
+  // an unrefuted finding is a draft, not a result.
+  run.critiqued = function (stage, produced, reviewed) {
+    run.trace_('critique-coverage', { stage: String(stage), produced: produced, reviewed: reviewed })
+    if (produced > 0 && reviewed < produced) {
+      run.signal('critic_starved', stage + ': ' + reviewed + '/' + produced + ' finding(s) reached a '
+        + 'critic; ' + (produced - reviewed) + ' returned unrefuted')
+    }
+    return run
+  }
+
+  // P8 · a disagreement record. `adjudication` starts empty ON PURPOSE — hSummary() signals if
+  // it is still empty at the return, which is the no-silent-disappearance rule.
+  run.dispute = function (rec) {
+    const d = {
+      finding_id: String((rec && rec.finding_id) || '?'),
+      layer_disputed: H_DISPUTE_LAYERS.indexOf(rec && rec.layer_disputed) >= 0 ? rec.layer_disputed : 'interpretation',
+      positions: (rec && rec.positions) || [],
+      root_cause: H_ROOT_CAUSES.indexOf(rec && rec.root_cause) >= 0 ? rec.root_cause : 'ambiguous-spec',
+      resolution_model: (rec && rec.resolution_model) || 'adjudicated-by-synthesis',
+      cross_domain: !!(rec && rec.cross_domain),
+      adjudication: '',
+      status: 'open',
+    }
+    // CROSS-DOMAIN OBSERVATION, NOT JUDGMENT: a critic reaching outside its own lens/lane may
+    // report what it saw but may not rule on it. Encoded, not merely asked for — the record
+    // cannot leave this branch in a state that a later ruling would silently overwrite.
+    if (d.cross_domain) {
+      d.status = 'observation'
+      d.resolution_model = 'observation-only (out-of-lens: report, do not rule)'
+    }
+    run.disagreements.push(d)
+    run.trace_('dispute', { finding_id: d.finding_id, layer: d.layer_disputed, root_cause: d.root_cause, cross_domain: d.cross_domain })
+    return d
+  }
+
+  run.adjudicate = function (findingId, ruling, by) {
+    let n = 0
+    for (const d of run.disagreements) {
+      if (d.finding_id !== String(findingId) || d.status === 'observation') continue
+      d.adjudication = String(ruling || '')
+      d.adjudicated_by = String(by || 'synthesis')
+      d.status = d.adjudication ? 'resolved' : 'open'
+      n += d.status === 'resolved' ? 1 : 0
+    }
+    run.trace_('adjudicate', { finding_id: String(findingId), resolved: n })
+    return n
+  }
+
+  run.summary = function () {
+    const unadj = run.disagreements.filter(d => d.status === 'open')
+    if (unadj.length) {
+      run.signal('disagreement_unadjudicated', unadj.length + ' dispute(s) reached the return with no '
+        + 'ruling: ' + unadj.map(d => d.finding_id).join(', '))
+    }
+    let worst = 'completed'
+    for (const s of run.signals) {
+      if (H_STOP_RANK.indexOf(s.reason) > H_STOP_RANK.indexOf(worst)) worst = s.reason
+    }
+    return {
+      run: run.name,
+      stop_reason: worst,
+      degraded: worst !== 'completed',
+      rounds: run.rounds,
+      round_cap: run.cap,
+      signals: run.signals,
+      disagreements: run.disagreements,
+      unadjudicated: unadj.map(d => d.finding_id),
+      trace_jsonl: run.trace.map(t => JSON.stringify(t)).join('\n'),
+    }
+  }
+
+  return run
+}
+
+// P7b · rank by INDEPENDENT REDISCOVERY. Practice 7 (one agent per lens) already produces this
+// signal and every script threw it away. A defect three unrelated lenses hit independently is
+// worth more than one a single lens hit hard, and this is the only cheap corroboration signal a
+// read-only audit has. `lensOf` extracts the lens/cluster key so a lens cannot corroborate itself.
+function hRediscover(findings, lensOf) {
+  const groups = []
+  for (const f of (findings || [])) {
+    if (!f) continue
+    const lens = String((lensOf && lensOf(f)) || f.lens || f.cluster || f.module || '?')
+    let g = null
+    for (const cand of groups) {
+      if (hSameFinding(cand.findings[0], f)) { g = cand; break }
+    }
+    if (!g) { g = { key: hFindingKey(f), lenses: [], findings: [] }; groups.push(g) }
+    if (g.lenses.indexOf(lens) < 0) g.lenses.push(lens)
+    g.findings.push(f)
+  }
+  return groups
+    .map(g => ({ key: g.key, rediscovery: g.lenses.length, lenses: g.lenses, findings: g.findings }))
+    .sort((a, b) => b.rediscovery - a.rediscovery || a.key.localeCompare(b.key))
+}
+
+// P4 · the read-only critic. Independence is STRUCTURAL, not a sentence in a prompt: the
+// agentType below is defined in .claude/agents/valoria-critic.md with a tools list that has no
+// Write/Edit. Passing it is the whole mechanism — a critic stage that omits it can write, and
+// tools/ci_wf_harness_check.py fails the script that does.
+const H_CRITIC = { agentType: 'valoria-critic' }
+function hCritic(opts) { return Object.assign({}, opts || {}, H_CRITIC) }
+// ==== END VALORIA WF HARNESS v1 ====
+
+const run = hRun('combat-system-critique')
 // Paths are REPO-RELATIVE. They used to be absolute Windows paths off one author's machine
 // (`C:/Github/ttrpg/...`, `C:/Users/Jordan/Downloads/...`), which resolve nowhere on CI, in a
 // container, or on any other checkout — every agent in this workflow was reading nothing.
@@ -175,6 +431,13 @@ const moduleResults = round1.slice(0, CLUSTERS.length).filter(Boolean)
 const resolutionResult = round1[CLUSTERS.length] || null
 const reconcileResults = round1.slice(CLUSTERS.length + 1).filter(Boolean)
 
+// P7a · one module cluster returning nothing looks identical, in a total, to a clean module. Route
+// each through the run so an empty cluster raises the alarm and a reader knows to check whether the
+// agent read the file at all. Eleven clusters over one engine: silence from any of them is data.
+for (const m of moduleResults) run.lens(`module:${m.module}`, m.findings || [])
+if (resolutionResult) run.lens('resolution-diagnostic', resolutionResult.findings || [])
+for (const r of reconcileResults) run.lens(`reconcile:${r.corpus}`, r.improvements || [])
+
 const targets = []
 for (const m of moduleResults) {
   for (const f of (m.findings || [])) {
@@ -195,12 +458,49 @@ log(`Adversarial targets: ${targets.length} (${targets.filter(t => t.kind === 'a
 const MAX_TARGETS = 40
 const capped = targets.slice(0, MAX_TARGETS)
 if (targets.length > MAX_TARGETS) log(`NOTE: capped adversarial verification at ${MAX_TARGETS}/${targets.length} targets (additions + P1s prioritized)`)
+// The cap is a real coverage hole, not a footnote: everything past it returns UNREFUTED and would
+// otherwise sit in the output looking exactly like a finding that survived a critic. §0.1 point 5's
+// no-silent-caps rule — the run records it, and stop_reason carries it to the reader.
+run.critiqued('Adversarial', targets.length, capped.length)
 
 phase('Adversarial')
 const verdicts = (await parallel(capped.map((t, i) => () => A(
   `${SHARED}\n\n=== ADVERSARIAL VERIFICATION (target ${i + 1}) ===\nFrom: ${t.ctx}. Target kind: ${t.kind}.\nTARGET (JSON): ${JSON.stringify(t.payload)}\n\nRun to BREAK it, not bless it. Read the cited code yourself.\n- FINDING: is the claim true against HEAD? severity right? could it be a deliberate, safeguarded design choice (intent gate)? stale (already fixed)?\n- ADDITION (corpus improvement): the bar is NERS-Necessary. Does the engine ALREADY deliver this churn another way? Would it be a lever-pile (E/N fail)? Does it preserve mirror-fairness & invariants? Gated on an UNRUN sim? Default to skepticism — most additions should be rejected or deferred unless they CONSOLIDATE or fix a real dead/broken path.\nReturn target_id="${t.id}", real, ners_compliant, a severity adjustment, adversarial reasoning (what survived the attack), and a revised recommendation.`,
-  { schema: VERIFY_SCHEMA, label: `verify:${t.id}`, phase: 'Adversarial' }
+  hCritic({ schema: VERIFY_SCHEMA, label: `verify:${t.id}`, phase: 'Adversarial' })
 )))).filter(Boolean)
+
+// P8 · a verdict of NOT-real, or an addition that fails NERS-Necessary, is the skeptic disagreeing
+// with the producer. The Distill stage already had to reconcile these; it was doing so against an
+// unstructured list, with nothing recording which disputes it silently dropped.
+const byTarget = new Map(capped.map((t) => [t.id, t]))
+for (const v of verdicts) {
+  const t = byTarget.get(v.target_id)
+  if (!t) continue
+  const contested = (t.kind === 'finding' && v.real === false) || (t.kind === 'addition' && v.ners_compliant === false)
+  if (!contested && !v.severity_adjust) continue
+  run.dispute({
+    finding_id: v.target_id,
+    layer_disputed: contested ? (t.kind === 'addition' ? 'method' : 'evidence') : 'severity',
+    root_cause: contested ? (t.kind === 'addition' ? 'scope-boundary' : 'measurement-vs-assertion') : 'severity-calibration',
+    positions: [
+      { by: t.ctx, holds: String((t.payload && (t.payload.claim || t.payload.what)) || '').slice(0, 400) },
+      { by: 'skeptic', holds: String(v.reasoning || '').slice(0, 400), real: v.real, ners_compliant: v.ners_compliant },
+    ],
+    resolution_model: 'adjudicated-by-synthesis',
+  })
+}
+
+// P7b · rank by independent rediscovery across the eleven module clusters + the resolution
+// diagnostic. A defect three unrelated clusters hit while auditing different parts of the engine is
+// a structural problem; one cluster hitting it hard may be one cluster's reading. The fan-out
+// already produced this signal every run and discarded it at the return.
+const allFindings = [].concat(
+  ...moduleResults.map((m) => (m.findings || []).map((f) => Object.assign({ lens: `module:${m.module}` }, f))),
+  ((resolutionResult && resolutionResult.findings) || []).map((f) => Object.assign({ lens: 'resolution' }, f)),
+)
+const ranked = hRediscover(allFindings, (f) => f.lens)
+const corroborated = ranked.filter((g) => g.rediscovery > 1)
+log(`Rediscovery: ${corroborated.length}/${ranked.length} distinct finding(s) surfaced independently by 2+ clusters`)
 
 phase('Distill')
 const compact = {
@@ -208,10 +508,45 @@ const compact = {
   resolution: resolutionResult,
   reconcile: reconcileResults.map(r => ({ corpus: r.corpus, already: r.already_in_engine, improvements: r.improvements, reject: r.reject, creative: r.creative_layer, verdict: r.verdict })),
   verdicts,
+  disagreements: run.disagreements,
+  rediscovery: ranked.map(g => ({ key: g.key, rediscovery: g.rediscovery, lenses: g.lenses })),
 }
+const DISTILL_SCHEMA_ADJ = Object.assign({}, DISTILL_SCHEMA, {
+  required: DISTILL_SCHEMA.required.concat(['adjudications']),
+  properties: Object.assign({}, DISTILL_SCHEMA.properties, {
+    adjudications: {
+      type: 'array',
+      description: 'one entry per disagreement — REQUIRED, and an unruled dispute is a run signal, not a silent drop',
+      items: {
+        type: 'object', additionalProperties: false,
+        required: ['finding_id', 'ruling', 'reasoning'],
+        properties: {
+          finding_id: { type: 'string' },
+          ruling: { type: 'string', enum: ['producer-holds', 'skeptic-holds', 'split', 'unresolved'] },
+          reasoning: { type: 'string' },
+        },
+      },
+    },
+  }),
+})
 const distill = await A(
-  `${SHARED}\n\n=== DISTILLATION SYNTHESIS ===\nYou have all module audits, the resolution diagnostic, corpus reconciliations, and adversarial verdicts (JSON below). Produce a DISTILLATION PROPOSAL in the spirit of the martial-morphology "distilled core": cut the elaborate to the few load-bearing variables.\n\nGovern by NERS and the churn principle. Use the adversarial verdicts to DISCARD findings that did not survive and additions that failed NERS-N.\nProduce: cut (dead-data / inert levers / redundancy to remove — specific, file/lever); consolidate (two-into-one: percussion sources, categorical->continuous heft, redundant difficulty levers); keep_core (the minimal NERS-clean load-bearing core that MUST stay — what actually generates churn); add_only_if (corpus additions worth it ONLY under stated gates — e.g. weapon-physics wiring gated on mirror/tier/no-one-shot sim); sequencing (ordered plan: portability/import fix → dead-data cull → consolidation → gated additions); and a one-paragraph headline.\n\nALL RESULTS (JSON):\n${JSON.stringify(compact)}`,
-  { schema: DISTILL_SCHEMA, label: 'distill', phase: 'Distill', effort: 'high' }
+  `${SHARED}\n\n=== DISTILLATION SYNTHESIS ===\nYou have all module audits, the resolution diagnostic, corpus reconciliations, and adversarial verdicts (JSON below). Produce a DISTILLATION PROPOSAL in the spirit of the martial-morphology "distilled core": cut the elaborate to the few load-bearing variables.\n\nGovern by NERS and the churn principle. Use the adversarial verdicts to DISCARD findings that did not survive and additions that failed NERS-N.\nProduce: cut (dead-data / inert levers / redundancy to remove — specific, file/lever); consolidate (two-into-one: percussion sources, categorical->continuous heft, redundant difficulty levers); keep_core (the minimal NERS-clean load-bearing core that MUST stay — what actually generates churn); add_only_if (corpus additions worth it ONLY under stated gates — e.g. weapon-physics wiring gated on mirror/tier/no-one-shot sim); sequencing (ordered plan: dead-data cull → consolidation → gated additions); and a one-paragraph headline.\n\nADJUDICATION IS REQUIRED, NOT OPTIONAL. \`disagreements\` below is every place a skeptic contradicted a producer. Return one \`adjudications\` entry per disagreement, ruling for one side with your own reading of the cited code. A dispute you cannot settle from the files is ruled "unresolved" WITH the specific check that would settle it — that is a real outcome. A dispute you simply do not mention is the failure this field exists to prevent: it disappears while looking resolved.\n\nWEIGHT BY CORROBORATION. \`rediscovery\` counts how many INDEPENDENT clusters surfaced each finding. Treat a defect three unrelated clusters hit as structural; treat a solitary one as one cluster's reading until you have checked it yourself.\n\nALL RESULTS (JSON):\n${JSON.stringify(compact)}`,
+  { schema: DISTILL_SCHEMA_ADJ, label: 'distill', phase: 'Distill', effort: 'high' }
 )
+for (const a of ((distill && distill.adjudications) || [])) {
+  run.adjudicate(a.finding_id, a.ruling + ': ' + a.reasoning, 'distill')
+}
 
-return { modules: moduleResults, resolution: resolutionResult, reconcile: reconcileResults, adversarial: verdicts, distillation: distill }
+const summary = run.summary()
+if (summary.degraded) log(`[harness] run degraded — stop_reason=${summary.stop_reason}; the results below are complete, read the signals before banking them`)
+
+return {
+  run: summary,
+  modules: moduleResults,
+  resolution: resolutionResult,
+  reconcile: reconcileResults,
+  adversarial: verdicts,
+  rediscovery: ranked.map(g => ({ key: g.key, rediscovery: g.rediscovery, lenses: g.lenses })),
+  corroborated,
+  distillation: distill,
+}

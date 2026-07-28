@@ -42,6 +42,12 @@ def main(argv):
         ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
         ('ci_formula_prose_check.py',    [],          False),  # A18 report-only formula prose-drift (ED-1052 / OPT-AV-5)
         ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
+        # ED-IN-0086: the .claude/wf_*.js run-discipline prelude has one owner (tools/wf_harness.js)
+        # and is COPIED into each script, because workflow scripts run in a sandbox with no imports.
+        # A copied rule rots, so this is the guard. Blocking: an out-of-date copy is not a style
+        # nit — it silently changes what a 40-agent audit does, and `--fix` makes it a one-liner.
+        ('ci_wf_harness_check.py',       [mode_flag], True),   # workflow harness present/current/wired (ED-IN-0086; blocking)
+        ('ci_claude_workflow_paths.py',  [],          True),   # every .claude/ path reference resolves (ED-IN-0085; blocking)
         # ED-PC-0040: freshness was CI-only, so five consecutive local-green commits shipped a stale
         # canonical_sha__ pin (ED-PC-0035 edited references/module_contracts.yaml without refreshing it) and it
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking
