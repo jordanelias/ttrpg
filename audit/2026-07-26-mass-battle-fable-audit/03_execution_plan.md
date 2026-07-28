@@ -405,3 +405,201 @@ python tools/currency_consistency_check.py
 
 **Open MB ledger items this plan covers:** ED-MB-0008 (E3) · 0009 (E2) · 0010 (E1) · 0016 (D1) ·
 0044 (§8). **Not covered:** other lanes' backlog — see their `HANDOFF_<LANE>.md`.
+
+---
+
+# §11 — ADVERSARIAL AMENDMENTS (Fable-5 review, 2026-07-26)
+
+Four Fable-5 critics attacked this plan (ordering/gates · technical design · evidence · orchestration),
+read-only, relay-pattern. **Every amendment below was re-verified by the orchestrator.** Two critics
+were still running when this was written — noted at §11.9.
+
+## 11.0 — ⚠ THE SHIPPED CONFIGURATION'S GOLDEN IS CURRENTLY RED
+
+**MEASURED, clean working tree, `main` @ `46a25ca`:**
+```
+$ cd tests/sim && python3 mass_battle/bat.py --check          # exit 1
+DIGEST cell_field  3a0952b331d6ba1e...
+[BYTE-EXACT FAIL] cell_field: expected a1a97940fed111fa... got 3a0952b331d6ba1e...
+```
+`bat.py` last moved in **#236 (2026-07-25)**. The `cell_field` digest — the shipped configuration
+(`FIELD_MOVEMENT=1`) — **has been failing since then and nobody knew, because nothing runs it.**
+
+S1.5 was not a risk. It is a realised, undetected regression. Three consequences:
+
+1. **A1 is now unambiguously first**, and gains a sub-task: **A1a — re-baseline `cell_field`, with the
+   drift root-caused and the mechanism published.** Do not re-record blind; find what moved it.
+2. **This refutes an amendment the ordering critic proposed** on the basis that "the field goldens
+   already exist and already pass at HEAD (exit 0)". They do not pass. Amendment 11.1 is *rejected*
+   in its original form — recorded because a rejected attack is evidence too.
+3. **New ordering constraint neither the plan nor any critic had:** B1a cannot use "digests unchanged"
+   as its correctness proof until A1a lands. **You cannot prove you changed nothing against a baseline
+   that is already wrong.**
+
+## 11.1 — Critical path was wrong at both ends · **I introduced this regression**
+
+`02_remediation_plan.md` §9 correctly stated `A1 → B1 → B3`, with the DG-6 re-measure *after* Phase B.
+`03`'s §9 silently swapped B1 off the path in favour of `A1 → A5 → D1`, with no rationale anywhere.
+
+**Corrected critical path: `A1a → A1 → B1a → B1b → B1c → D1`.** B1 is the size-L refactor of a 10.5k-LOC
+data model; it is the longest pole and belongs on the path. A5a and A2 run parallel, not in series.
+**`HANDOFF_MB.md` carries the wrong path too and must be corrected in the same commit**, or a fresh
+session inherits it from the banner regardless of this file.
+
+## 11.2 — ⚠ WORST DEFECT: D1 was not gated on the `check_drift` fix
+
+D1's ordering (§5) read: A5 → cell-morale re-measure → CV-vs-N → decide σ. **`B1c` appears nowhere.**
+
+But this plan's own register calls S1.4 a **"re-flip blocker"**, and the confounded-and-retracted
+measurement ran the gauge in **multi mode**, whose roster includes non-Line shapes. Orchestrator-verified
+trigger:
+```
+MIN_DISCIPLINE: Line 1 · Column 3 · Arrowhead 4 · GappedLine 5
+condition: eff_discipline < MIN_DISCIPLINE[shape] AND shape != "Line"
+measured: 20 re-key events / 20 battles (Arrowhead, Column @ discipline 2); 0 for Line-only
+```
+Running the flag ON for a *measurement* is subject to the identical confound as a *flip*. Executed as
+written, D1 would produce a **third** confounded measurement — on the plan's flagship decision, the
+exact failure this plan exists to end.
+
+**Amended D1 order:** 1. A5a → 2. **B1c, or a standalone `check_drift` full re-key fix** (ten maps,
+mutation-verified — this does *not* require the full CellTable, which shortens the path) → 3. honest
+re-measure → 4. CV-vs-N ON → 5. decide σ. **A cheaper unblock exists and must be tried first:** if D1's
+matchups are Line-only, instrument a drift counter and **assert 0 across all D1 battles**. If it holds,
+D1 runs before B1c; if it fires, B1c is a hard gate. Either way the assertion is the artifact.
+
+## 11.3 — ⚠ D1's falsifier was measuring the wrong quantity · **the estimand trap**
+
+`dg6_friction_resolution.md:20-22` measures **"CV of net"** from `roll_pool(N)` — a **roll-level**
+quantity, the CLT self-averaging of N per-soldier dice. Cell-morale contagion operates at the **battle**
+level. It does not change the distribution of a single pool roll.
+
+**So the falsifier as written — "if CV-vs-N still decays as O(1/√N) under `PC_CELL_MORALE=ON`" — would
+fire vacuously and falsely kill the hypothesis, on a measurement that cannot see the effect.**
+
+**Corrected estimand:** CV of **battle outcome margin** and **loser casualty fraction** across seeds, as
+a function of army size N, at fixed matchup. **The OFF arm must first demonstrate that this
+battle-scale quantity also decays ~O(1/√N)** — if it does not, DG-6's framing needs re-deriving before
+any arm runs.
+
+**Four arms, pre-registered before any confirmation run:** (0) both flags off — baseline **and positive
+control**, must reproduce the decay; (1) `PC_CELL_MORALE=1` — the hypothesis; (2) `PC_FRICTION_CEV=1,
+σ=1.1` — **known-cure comparator**, defines what "fixed" looks like; (3) both — interaction /
+double-count check. Arm 1 is judged by which reference curve it resembles, not against an absolute
+threshold. **Arms are independent samples, not paired** — the ON arm consumes extra RNG draws, so equal
+seeds are not matched replicates.
+
+**Pre-registration is the §0.1 #3 artifact:** estimand, arms, N-grid, seed blocks (exploration
+0–99 / confirmation 100–499, confirmation untouched until frozen), decision rule, falsifier — committed
+*before* the confirmation block runs. **No constant may change between blocks; any parameter touch
+reopens pre-registration.**
+
+## 11.4 — A5 must split; its budget was misstated
+
+Agent-measured via the gate's own checker (orchestrator did not re-run it — flagged as agent-MEASURED):
+`lanchester_signature.py` → **6** blocking constants; `test_persubunit_stress.py` → **116**.
+
+Also: `test_persubunit_stress.py:191` fails **loudly** (its assert at `:193` catches it), not silently.
+It therefore gates the eventual default *flip*, not any §5 *measurement*.
+
+- **A5a** — lanchester reroute + ~6 citations. **Gates D1.** Small. Start day 1, parallel to A1.
+- **A5b** — persubunit reroute + the ~116-constant ledger job. **Gates nothing on the critical path.**
+
+The plan's "~100 constants" chained the whole ledger job in front of a measurement needing six — and
+bundling is the *documented cause of the last stall*.
+
+## 11.5 — E1 is not a one-line hour
+
+`ED-MB-0010` carries `needs_jordan: true` and the row is tagged `[OPEN — Jordan]`. Under ED-1094 a merge
+*can* ratify it — but only with the ledger flip co-committed and the ratification called out **loudly**
+in the PR body. Real scope: the YAML row · the `[OPEN — Jordan]` comment · the ED-MB-0010 status flip ·
+the dead alias in `build_graph.py` · regeneration of the five downstream surfaces (they are snapshots,
+so "closes five surfaces" is deferred until regen).
+
+**The "regenerate-never-hand-edit" caveat resolves in the plan's favour: no generator exists.** Hand
+edit is the only path. Keep E1 as the cheapest win; stop calling it one line, and never merge it as
+silent hygiene.
+
+## 11.6 — Two more ordering hazards the plan missed
+
+- **A2 vs B1a are mutually unsequenced.** A2 deliberately re-records all goldens; B1a's only proof is
+  "digests unchanged". Run concurrently, A2's re-record lands mid-B1a and either raises a false alarm or
+  silently absorbs a real B1a behaviour change. **Rule: A2 merges and re-records before B1a's final
+  verification; B1a re-baselines after any golden-moving merge.** Combined with 11.0: **one
+  golden-moving PR in flight globally, ever.**
+- **B3 lets a session wire `reform_check`.** That is canon-required and currently dark; wiring it
+  changes battles, deleting it repudiates canon. **Its only permitted disposition is *file for fork
+  ruling*** — both branches are §7-class.
+
+## 11.7 — Track C: keep it early, but bind it
+
+The tension (instrumentation perturbing the goldens it protects) is real and **already solved in-repo**:
+`workbench/trace.py` documents a gated seam that is "no-op unless ON → byte-exact", and the digest hashes
+only the trial vector, not event streams.
+
+**Binding rule for every C-track PR:** use the existing `start_trace`/`trace_event` seam — gated, **zero
+RNG draws**, no float writes to engine state. Merge guard: all `bat.py --check` digests byte-identical
+with tracing off, mutation-verified by inserting a state-perturbing event and watching a digest move.
+
+**C4 "start early" was wrong:** two of its three surfaces do not exist yet (`CellTable.check()` from
+B1b, the truncation counter from A3). Only the hp-vs-Σcells slice starts now. **C1 correctly sequences
+after A2/A3 and before B1a** — where its conservation check becomes a *second* behaviour-preservation
+instrument during the refactor.
+
+## 11.8 — Orchestration for a max-intensity session
+
+**Global.** Relay, not dialogue — critics are dispatched *after* the producer with the artifact only
+(diff / protocol / measurement table), never the producer's reasoning, and always read-only. Lanes
+return a fixed-format summary (`task · files · guard+mutation-verified Y/N · digests moved Y/N +
+mechanism + magnitude · constants dragged in · falsifier outcome · next action`). **The orchestrator —
+never a lane — writes `HANDOFF_MB.md` and allocates ED-MB ids** (serialise `next_free`; concurrent
+allocation is the exact failure the lane namespace was built against). **Sim runs are Bash in one
+environment, never delegated** — per-agent environment drift between arms is the confound machine.
+
+**Per-task shape.**
+
+| Task | Fan-out | Tiers and lenses |
+|---|---|---|
+| **A1/A1a** | 3 | Haiku: exhaustive env-flag inventory (pins must be exhaustive, not minimal — ED-1089 precedent) · Sonnet: the CI job · **Opus read-only critic**: pin-matrix completeness + demand the mutation artifact. **Orchestrator runs the job twice — if the two runs differ, STOP; that halts B1 too.** |
+| **A2** | 3 + measurement | Haiku: call-graph of every σ producer reaching `compute_degree` · Sonnet: guard + test · **Opus critic**: the real question is **epsilon magnitude vs *designed* fractional nets** — `PC_FRACTIONAL_POOL` and `_morale_sigma` produce legitimately non-integer nets meant to land `Partial`; prove the epsilon cannot promote the smallest designed decrement. Attribution: a temporary degree-flip counter, with `counter = 0 ⇔ digest identical`. |
+| **A5a** | 4 | Sonnet: reroute (**preserve the semantic trap** — the `1e9` pin exists to disable rout; under the flag `set_morale` must propagate it to cells; falsifier = `assert not routed` every tick **plus** `assert checked >= TRAJ_SEEDS`) · Haiku: constant extraction · Sonnet ×1: classify · **Opus citation critic**: resolve every `[canonical: doc §sec]` against the actual doc, fail on a missing section. Non-negotiable — three fabricated MB citations already exist. |
+| **B1a** | producer **SOLO** | Haiku: exhaustive ten-map read/write inventory (also the critic's coverage oracle) · Sonnet: order-sensitivity scan (`.values()` aggregation, `set` iteration, float summation order) · **producer = the main Opus session, not a subagent** · **Opus read-only critic** sees diff + inventory only. **Do not split the ten maps across agents** — that guarantees inconsistent invariant semantics at the seams. **Critical semantic:** `cell_morale` is *empty until seeded*, and the scalar path must stay verbatim — the key-set invariant must accommodate deliberately-unseeded maps or B1a silently changes every unseeded battle. |
+| **C1** | 3 | Haiku: every casualty-mutation site · Sonnet: tag through the trace seam · **Opus verifier**: (a) **conservation** — Σ attributed == total hp delta, mutation-verified by untagging one path; (b) non-perturbation. Conservation is a total check, so a bypassed path cannot hide. |
+| **D1** | see 11.3 | Runs = Bash, one environment. Fits = scripted. **Verdict = Opus applying the pre-registered rule** — pre-registration exists so the verdict is not a judgment call. |
+
+**Fable 5 — strict promotion list, two nodes only.** §10 makes fable an *upgrade trigger*, never a
+default, and over-promotion is the failure mode.
+1. **The D1 protocol referee** — the only node with documented evidence of a cheaper tier failing *this
+   exact node, twice*. Gets the frozen protocol doc alone, read-only, one question: **are the arms the
+   same experiment, and can the estimand observe the effect it claims to test?** §11.3 proves this node
+   is not ceremonial — it is what caught the estimand trap.
+2. **B1a divergence root-cause — conditional only**, if digests move and one full Opus attribution pass
+   fails. Record the failed Opus artifact as the promotion evidence.
+
+Explicit non-promotions: re-running Fable critics over implementation diffs re-audits settled findings;
+B1a *authorship* is engineering, not judgment (the design is already ruled); §7 fork memos are Opus
+synthesis — the judgment in a fork belongs to Jordan, not a bigger model.
+
+**Do not parallelise:** B1a's write · D1's execution · golden re-records (one globally, ever) · ED
+allocation and handoff writes · the small tasks (E1, A3, A4, B1b — dispatch overhead exceeds the task) ·
+critic multiplication (one independent critic per gated artifact).
+
+**Concurrency map.** Wave 0 serial: **A1a → A1**, and E1 anytime. Wave 1 parallel worktrees, one PR
+each: A3 · A4 · A5a · E8/E4 — with **A2 alone in the single golden-moving slot on main**. Wave 2 serial:
+C1 → B1a → B1b → B1c. Wave 3: D1 (background sweeps) with A6 · B3-dispositions alongside.
+
+**Stop conditions.** Field digests differ across two identical local runs · A2's flip-counter leaves an
+unexplained residual · A5 classification needs a *new canonical magnitude* (fabrication territory) ·
+**any** digest movement during B1a (no acceptable delta exists) · any map turns out to carry semantics
+incompatible with a shared key-set (that is design, not refactor) · C1 conservation cannot hold without
+reordering damage application (instrumenting must never restructure the instrumented) · D1 Arm 0 fails
+to reproduce its control, or fingerprints differ beyond the flag under test, or the drift-counter
+assertion fires · **any** urge to tune σ or contagion constants to improve an arm's banding · any task
+that turns out to need a §7 answer.
+
+## 11.9 — Review status
+
+Two of four critics (technical design, evidence/audit-the-audit) were still running when this section
+was written. **§11 is therefore incomplete, not final** — a session picking this up should expect a
+further amendment block, and should treat the technical design of `CellTable` (§3) and the residual
+strength of the S1.1–S1.5 evidence as **not yet adversarially settled**.
