@@ -171,6 +171,38 @@ function hRun(name) {
     return run
   }
 
+  // A CRITIC THAT DIED IS NOT A CRITIC THAT FOUND NOTHING, and the scripts could not tell them
+  // apart. The pipeline pattern is `.then(v => ({...f, verdict: v})).catch(() => null)` followed by
+  // `.filter(Boolean)` — so a critic that errors drops the WHOLE FINDING, and the obvious coverage
+  // check (`produced = survivors.length`) then compares a set to itself and can never fire. The
+  // finding vanishes and the run reports `completed`.
+  //
+  // That hole sits exactly where P4 could open one: switching critics to a tools-restricted
+  // agentType is the change most likely to make a critic stage fail, and the harness would have
+  // hidden it. Wrap the critic call in this instead of a bare .catch so the loss is counted.
+  //   parallel(findings.map(f => () => run.attempt('Verify', agent(...).then(v => ({...f, verdict: v})))))
+  run.attempted = 0
+  run.lost = 0
+  run.attempt = function (stage, promise) {
+    run.attempted += 1
+    return Promise.resolve(promise).then(
+      v => {
+        if (v === null || v === undefined) {
+          run.lost += 1
+          run.signal('critic_starved', stage + ': a critic returned null — the finding it was '
+            + 'checking is dropped from the results, NOT cleared. Check the agentType resolves and '
+            + 'that a tools-restricted critic can still emit structured output.')
+        }
+        return v
+      },
+      err => {
+        run.lost += 1
+        run.signal('critic_starved', stage + ': a critic threw (' + String(err && err.message || err)
+          + ') — the finding it was checking is dropped from the results, NOT cleared.')
+        return null
+      })
+  }
+
   // P8 · a disagreement record. `adjudication` starts empty ON PURPOSE — hSummary() signals if
   // it is still empty at the return, which is the no-silent-disappearance rule.
   run.dispute = function (rec) {
@@ -209,12 +241,22 @@ function hRun(name) {
     return n
   }
 
+  // IDEMPOTENT, AND A COPY. Both properties were missing and both bit immediately.
+  //  · summary() SIGNALS on unadjudicated disputes, and wf_attribute_coherence.js calls it twice —
+  //    once to hand the run to the guardrail stage, once to return it. Every open dispute was
+  //    therefore reported twice, and the guardrail was judging a run whose signal list the final
+  //    return then contradicted. The `_summarised` latch fires the signal once, on the first call.
+  //  · it returned the LIVE arrays. A caller holding an earlier summary saw it mutate underneath
+  //    them, which is the opposite of a snapshot. Now copied.
+  // Neither is cosmetic: a report-only harness whose report changes after you read it is worse
+  // than no report, because it reads as authoritative.
   run.summary = function () {
     const unadj = run.disagreements.filter(d => d.status === 'open')
-    if (unadj.length) {
+    if (unadj.length && !run._summarised) {
       run.signal('disagreement_unadjudicated', unadj.length + ' dispute(s) reached the return with no '
         + 'ruling: ' + unadj.map(d => d.finding_id).join(', '))
     }
+    run._summarised = true
     let worst = 'completed'
     for (const s of run.signals) {
       if (H_STOP_RANK.indexOf(s.reason) > H_STOP_RANK.indexOf(worst)) worst = s.reason
@@ -225,8 +267,8 @@ function hRun(name) {
       degraded: worst !== 'completed',
       rounds: run.rounds,
       round_cap: run.cap,
-      signals: run.signals,
-      disagreements: run.disagreements,
+      signals: run.signals.map(s => Object.assign({}, s)),
+      disagreements: run.disagreements.map(d => Object.assign({}, d)),
       unadjudicated: unadj.map(d => d.finding_id),
       trace_jsonl: run.trace.map(t => JSON.stringify(t)).join('\n'),
     }
@@ -464,10 +506,10 @@ if (targets.length > MAX_TARGETS) log(`NOTE: capped adversarial verification at 
 run.critiqued('Adversarial', targets.length, capped.length)
 
 phase('Adversarial')
-const verdicts = (await parallel(capped.map((t, i) => () => A(
+const verdicts = (await parallel(capped.map((t, i) => () => run.attempt('Adversarial', A(
   `${SHARED}\n\n=== ADVERSARIAL VERIFICATION (target ${i + 1}) ===\nFrom: ${t.ctx}. Target kind: ${t.kind}.\nTARGET (JSON): ${JSON.stringify(t.payload)}\n\nRun to BREAK it, not bless it. Read the cited code yourself.\n- FINDING: is the claim true against HEAD? severity right? could it be a deliberate, safeguarded design choice (intent gate)? stale (already fixed)?\n- ADDITION (corpus improvement): the bar is NERS-Necessary. Does the engine ALREADY deliver this churn another way? Would it be a lever-pile (E/N fail)? Does it preserve mirror-fairness & invariants? Gated on an UNRUN sim? Default to skepticism — most additions should be rejected or deferred unless they CONSOLIDATE or fix a real dead/broken path.\nReturn target_id="${t.id}", real, ners_compliant, a severity adjustment, adversarial reasoning (what survived the attack), and a revised recommendation.`,
   hCritic({ schema: VERIFY_SCHEMA, label: `verify:${t.id}`, phase: 'Adversarial' })
-)))).filter(Boolean)
+))))).filter(Boolean)
 
 // P8 · a verdict of NOT-real, or an addition that fails NERS-Necessary, is the skeptic disagreeing
 // with the producer. The Distill stage already had to reconcile these; it was doing so against an

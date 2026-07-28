@@ -6,6 +6,14 @@ Root `HANDOFF.md` is the index; see it for the global "Next actions" pointer and
 items. `IN` is also the catch-all for genuinely cross-cutting repo-governance work (ID systems,
 CI gates, canon-currency reconciliation) that doesn't belong to any one subsystem lane.
 
+## Executive summary
+
+- Lane state 2026-07-28: 44 live items.
+- Hot: `.claude/` apparatus + run discipline just landed (ED-IN-0087/0088/0089); two of its
+  assumptions are unverified and tagged [PART].
+- Blocked on Jordan: handoff archive-vs-dormant call (ED-IN-0086).
+- Known debt: 28 untagged bullets; same-lane ED collisions unaddressed by design.
+
 ## Pending
 
 - **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
@@ -13,91 +21,27 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   the banner counts as settled.
 
 
-- **[DONE 2026-07-28] ED-IN-0088 — Jordan ruled the four filed items; three shrank under scrutiny.**
-  **Check 5 (skeleton-debt) RETIRED, not repointed.** Repointing it at `systems/` would have been
-  wrong twice: its advice and 400-line threshold encode the index+infill convention §4 retired, AND
-  `compliance_check.py` already owns the rule via `atomization_rules.yaml`'s 15k cap — verified, all
-  8 actionable docs (41,731 tok `faction_politics_v30` → 15,307 tok `integration_proposal_v30`)
-  appear in its 55 size warnings. Reviving a second implementation would have been a fresh §8
-  violation committed while cleaning up after others.
-  **`combat: test_status` → `validated_pc`.** Every `validated_*` value encoded a Monte-Carlo n,
-  assuming the only validation is running it N times. Combat's was engine ratification (ED-900/904)
-  + Godot key-log parity (2026-06-23), so it carried a bare `validated` matching no enum. The lane
-  tag records *who* validated and *by what standard* — deliberately NOT ranked against the
-  `validated_nNNN` family, since ranking two kinds of evidence on one scale is what hid the gap.
-  Index now 0 errors / 0 warnings (was 3 + 39 on revival).
-  **The 7 never-authored targets resolved by DERIVATION.** I had filed them as a lane design call;
-  that framing was wrong. RULED §2a binds one subsystem = one folder = one lane, and each
-  mechanic's `sim_module` already sits in a subsystem package, so the home follows mechanically:
-  FA ×4, MB ×2, WR ×1. Guarded — a sim that moves now drags its doc target with it.
-  **Executive-summary drift guard.** The summary is authored, not generated (deliberately), and so
-  decays undetectably. It now carries two recomputable facts — live-item count, newest date — and
-  `handoff_atomize.summary_drift()` reports divergence, plus a summary that asserts nothing
-  checkable. Report-only; it runs in a tool an author invokes, never a commit gate.
+- **[DONE 2026-07-28] ED-IN-0087 — `.claude/` apparatus repaired + run discipline wired.** 49/49 paths
+  live (was 12/51); `tools/wf_harness.js` owns the prelude; critics read-only via
+  `.claude/agents/valoria-critic.md`; fable off writing stages.
+- **[PART] ED-IN-0087 residual — two unverified assumptions.** Residual: (a) no real workflow run has
+  confirmed a tools-restricted `agentType` can still emit structured output — if it cannot, all six
+  critic stages return null; (b) `hSameFinding`'s thresholds are calibrated on wording, not measured
+  against a live multi-lens run.
+- **[DONE 2026-07-28] ED-IN-0087 — dead-tree apparatus swept.** `mechanics_index_gen` (FATAL for a
+  week) and `ci_quantity_vocabulary_check` (scanning 0 files) both walked the retired `sim/`; one
+  owner `ci_common.sim_reference_roots()`, 108 files now.
+- **[DONE 2026-07-28] ED-IN-0088 — four filed items ruled.** Check 5 RETIRED (compliance_check already
+  owns the rule); `combat: test_status` → `validated_pc`; the 7 unauthored doc targets derived from
+  each mechanic's own `sim_module`; executive-summary drift guard added.
+- **[DONE 2026-07-28] ED-IN-0089 — CURRENT.md stamp scoped to canonical heads.** 24% of stamp trips
+  moved no canonical head (measured, `tools/measure_stamp_false_positives.py`); existence half
+  deliberately unnarrowed.
+- **[OPEN] Same-lane ED collisions are a pattern, not an accident.** 0085→0086→0087 across PR
+  #245/#246/#247 in two days. §3's lane split killed *cross*-lane collision by construction;
+  *same*-lane still rests on discipline, 0-for-2 with two sessions on one lane. Remedy
+  (reserve-on-branch / CI-visible id-claim) is a governance call — observation only.
 
-- **[DONE 2026-07-28] ED-IN-0089 — CURRENT.md's stamp no longer trips on apparatus.** The stamp
-  asks "has a canonical head moved?", which a validator cannot answer — yet 15 of the 77 tracked
-  paths are `tools/`/`tests/`, and the only way to clear a false trip was a reflex date bump that
-  reconciled nothing. **The filed claim was overstated and I corrected it before shipping:** the
-  report said "essentially every infrastructure PR"; measurement says **12 of 51 stamp-tripping
-  commits (24%)** moved no canonical head, with 36 more tripping via a head *too*. Both numbers
-  argue for the same change, which is exactly why the stronger one needed a control.
-  `CANONICAL_HEAD_TREES` scopes the **staleness** half only — the **existence** half still covers
-  `tools/` and `tests/`, because CURRENT.md naming a deleted validator is real drift.
-  Instrument: `tools/measure_stamp_false_positives.py`.
-
-- **[OPEN] ED-IN-0087 residual — same-lane ID collisions are now a pattern, not an accident.**
-  Two in two days between PR #245/#246/#247 (0085→0086→0087). §3's lane split made *cross*-lane
-  collision impossible by construction; *same*-lane concurrency still rests on allocation
-  discipline alone, which is 0-for-2 against two sessions open on one lane. Recorded as an
-  observation — the remedy (reserve-on-branch, or a CI-visible id-claim file) is a governance call.
-
-- **[DONE 2026-07-28] ED-IN-0088 — local gates made non-blocking (friction).** `ci_wf_harness_check`
-  and `ci_claude_workflow_paths` were blocking in `valoria_local.py` for about an hour; that was
-  wrong. Neither guards a canon invariant, both scan the whole `.claude/` tree rather than the
-  changeset, so a half-edited workflow script would block an unrelated commit. Both are report-only
-  locally and **still blocking in CI** — the unbypassable boundary is unchanged. The Stop hook's
-  `review_core.py --check` gained `|| true` for the same reason: it reports the repo-state verdict,
-  it never interrupts.
-
-- **[DONE 2026-07-28] ED-IN-0087 — workflow apparatus repaired + run discipline wired.**
-  Executes ED-IN-0085's approved set (P1–P8; Jordan declined P9, ruled P3 **report-only**, and ruled
-  the three `wf_*.js` **repaired** not retired). One root cause behind both halves: `.claude/` is the
-  only part of this repo's machinery nothing in CI ever read.
-  **Path rot:** 51 referenced deps were 12 live / 35 alias-only / 4 dead → now **49 live, 0 dead**
-  (`tools/ci_claude_workflow_paths.py`, exit 0). Beyond path rewriting: absolute `C:/Github/ttrpg` +
-  `C:/Users/Jordan/Downloads` prefixes (10 of those 12 corpus docs live in
-  `audit/2026-06-29-combat-corpus-recovery/`), `systems.py` → `combat_systems.py` ×13, and a **stale
-  standing "finding"** telling every agent the engine imports `/home/claude/*` — resolved by ED-1085
-  on 2026-07-01, so the audit would have re-reported a fixed defect as current.
-  **Run discipline:** `tools/wf_harness.js` is the single owner, copied verbatim between sentinels
-  (sandbox = no imports). P3 closed `stop_reason` set + round cap + repetition breaker + JSONL trace,
-  report-only. P4 `hCritic()` → `.claude/agents/valoria-critic.md` (`Read, Grep, Glob`) — **first
-  roster promotion** under §10's recurrence rule. P7 null-result alarm **paired** with
-  rank-by-independent-rediscovery. P8 disagreement records with required adjudication + terminal
-  out-of-lane `observation`. **The fable ruling is now enforced, not just transcribed:**
-  `wf_attribute_coherence.js` still ran its six-file-writing Synthesis node on `model:'fable'` → opus
-  `effort:max` plus a read-only Guardrail phase. **Falsifier:** `tests/valoria/test_wf_harness.py`
-  executes the harness under node — 17 tests, **13/13 mutants killed**.
-  *Known limits, filed:* `ci_wf_harness_check.py`'s critic scan reads single-line `agent()` options
-  objects; `CRITIC_MARKERS` is a word list; `hSameFinding`'s containment thresholds are calibrated on
-  this repo's wording but **not yet measured against a live multi-lens run**.
-
-- **[DONE 2026-07-28] ED-IN-0087 — dead-tree apparatus swept.** Surfaced by PR #247's own CI run.
-  `sim/` was retired 2026-07-21 and **two tools still walked it** — and because `os.walk` on a
-  missing directory yields nothing instead of raising, neither made a sound. `mechanics_index_gen.py`
-  keyed its repo-root walk on `canon/` + `sim/`, so it exited 2 with `[FATAL]` every run; its CI job
-  is `continue-on-error`, so a FATAL and a clean pass render identically. Revived, it immediately
-  reported **39 stale pointers + 3 schema errors**. `ci_quantity_vocabulary_check.py` walked `sim/`
-  for stat literals: **that half scanned zero files** while the tool kept printing contract-side
-  findings and looking healthy — 108 `.py` files now, via the new single owner
-  `ci_common.sim_reference_roots()` (globs `systems/*/sim`, so a new subsystem is covered without
-  editing a list). Fixed alongside: 39 retired-tree pointers in `registers/mechanics_index.yaml`, a
-  `scale: peninsula` typo, `godot_home` missing from the validator's key list, and `sim_module: null`
-  erroring when it is a *declaration* of no implementation. Guard:
-  `tests/valoria/test_retired_tree_apparatus.py` — **10/10 mutants killed**, including a positive
-  control proving the revived scanner can find a literal (its zero on the live corpus is a true
-  zero). Three items Jordan then ruled on directly are closed under ED-IN-0088 below.
 - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
   check-ins outright ("I don't even need check in triggers, I can just see what's happening by the
   colours on a session"). **Measured first:** 116 confirmed `send_later` firings in 2026-07-19..26,

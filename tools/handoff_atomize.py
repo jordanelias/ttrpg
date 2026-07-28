@@ -338,7 +338,14 @@ def build(lane: str, cutoff: datetime.date, write: bool) -> list[str]:
         words = len(re.sub(r'<!--.*?-->', '', summary, flags=re.S).split())
         if words > SUMMARY_MAX_WORDS:
             problems.append(f"{lane}: executive summary is {words} words (max {SUMMARY_MAX_WORDS})")
-        problems.extend(summary_drift(lane, summary, live, other_live))
+    # UNCONDITIONAL, and that is the correction. This sat in the `else` above — reachable only once
+    # a lane already had a summary — and NO lane has one yet, so the drift guard was dead on every
+    # real input on the day it shipped. Exactly §0.1 point 2: an assertion that cannot observe the
+    # failure it excludes is not a weak check, it is an absent one. It was caught by finally running
+    # `handoff_atomize --lane IN --check` against real data instead of only against fixtures.
+    # On the placeholder it reports "states no live-item count", which is the right answer: a
+    # summary asserting nothing recomputable cannot drift only because it never said anything.
+    problems.extend(summary_drift(lane, summary, live, other_live))
 
     # ── skeleton ─────────────────────────────────────────────────────────────
     sk = [f"# Handoff — {lane}", "",

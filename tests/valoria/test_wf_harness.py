@@ -342,3 +342,70 @@ def test_every_workflow_embeds_the_owner_byte_for_byte():
             f"editable copy; re-sync with `python tools/ci_wf_harness_check.py --fix`")
         checked += 1
     assert checked == len(scripts)
+
+
+# ───────────────────────────────── defects found by adversarially reviewing this harness
+
+@needs_node
+def test_summary_is_idempotent_and_returns_a_snapshot_not_live_state():
+    """Two defects, both live in shipped code until an adversarial pass ran them.
+
+    summary() SIGNALS on unadjudicated disputes, and wf_attribute_coherence.js calls it twice — once
+    to hand the run to the guardrail stage, once to return. Every open dispute was reported twice,
+    and the guardrail judged a run whose signal list the final return then contradicted. It also
+    returned the LIVE arrays, so the summary handed to the guardrail mutated afterwards. A
+    report-only harness whose report changes after you read it is worse than no report.
+    """
+    s = run_js("""
+        const run = hRun('twice')
+        run.dispute({ finding_id: 'F1', layer_disputed: 'evidence', root_cause: 'stale-canon' })
+        const first = run.summary()
+        const firstCount = first.signals.length
+        const second = run.summary()
+        console.log(JSON.stringify({ firstCount, afterSecond: first.signals.length,
+                                     secondCount: second.signals.length }))
+    """)
+    assert s['secondCount'] == 1, \
+        f"summary() re-signalled on a second call ({s['secondCount']} signals for one dispute)"
+    assert s['afterSecond'] == s['firstCount'] == 1, \
+        "the first summary mutated after it was taken — it aliases live state instead of copying"
+
+
+@needs_node
+def test_a_critic_that_returns_null_or_throws_is_counted_not_silently_dropped():
+    """THE HOLE IN THE NO-SILENT-DISAPPEARANCE MECHANISM, in the script that enforces it.
+
+    The scripts wrap critics as `.then(v => ({...f, verdict: v})).catch(() => null)` then
+    `.filter(Boolean)`, so a critic that errors drops the WHOLE FINDING. The obvious coverage check
+    then compares the survivors to themselves and can never fire: the finding vanishes and the run
+    reports `completed`.
+
+    That hole sits exactly where P4 could open one — switching critics to a tools-restricted
+    agentType is the change most likely to make a critic stage fail, and the harness would have
+    hidden it. run.attempt() counts the loss instead.
+    """
+    s = run_js("""
+        const run = hRun('lossy')
+        await Promise.all([
+          run.attempt('Verify', Promise.resolve({ ok: 1 })),
+          run.attempt('Verify', Promise.resolve(null)),
+          run.attempt('Verify', Promise.reject(new Error('agentType did not resolve'))),
+        ])
+        console.log(JSON.stringify(Object.assign(run.summary(), { attempted: run.attempted, lost: run.lost })))
+    """)
+    assert s['attempted'] == 3 and s['lost'] == 2, f"loss accounting wrong: {s['attempted']}/{s['lost']}"
+    assert s['stop_reason'] == 'critic_starved'
+    assert any('returned null' in x['detail'] for x in s['signals'])
+    assert any('threw' in x['detail'] for x in s['signals'])
+
+
+@needs_node
+def test_attempt_passes_a_good_result_through_untouched():
+    """Both directions: a wrapper that mangled successful results would be worse than the bug."""
+    s = run_js("""
+        const run = hRun('happy')
+        const v = await run.attempt('Verify', Promise.resolve({ verdict: 'sound', n: 7 }))
+        console.log(JSON.stringify({ v, stop: run.summary().stop_reason, lost: run.lost }))
+    """)
+    assert s['v'] == {'verdict': 'sound', 'n': 7}
+    assert s['stop'] == 'completed' and s['lost'] == 0

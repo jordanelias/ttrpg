@@ -66,6 +66,7 @@ CRITIC_MARKERS = ("critic", "verify", "adversarial", "refut", "skeptic")
 # The subset of hRun's API a script may call. Guards against a copy inventing a method the owner
 # does not define — which would fail silently in the sandbox (TypeError inside one agent's stage).
 RUN_METHODS = {"signal", "round", "lens", "critiqued", "dispute", "adjudicate", "summary", "trace_",
+               "attempt", "attempted", "lost",
                "signals", "disagreements", "trace", "rounds", "cap", "name"}
 
 
