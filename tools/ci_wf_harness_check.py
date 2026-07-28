@@ -21,6 +21,11 @@ WHAT IT CHECKS
   3. READ-ONLY CRITICS ARE STRUCTURAL. Every agent() whose label or phase marks it a critic must
      route through hCritic() — which sets the agentType whose definition has no write tools. The
      old mechanism was the string "You are READ-ONLY" inside a prompt, which restricts nothing.
+     VERIFIED 2026-07-28, not assumed: the restriction and a `schema` COMPOSE. A controlled 3-agent
+     probe had the restricted critic report its own tools as [Read, Grep, Glob, StructuredOutput]
+     against an unrestricted control reporting 20+ including Write and Bash — so the schema tool is
+     injected ON TOP of the frontmatter list, and no critic stage returns null for this reason. The
+     write attempt created nothing on disk (checked independently of the agent's own claim).
   4. THE FABLE RULING. Jordan ruled 2026-07-28 that fable is a read-only audit / planner /
      orchestrator / guardrail tier and NOT a synthesis or artifact-authorship tier (CLAUDE.md §10).
      A script that puts model:'fable' on a stage that writes files contradicts ratified canon.

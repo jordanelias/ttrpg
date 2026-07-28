@@ -24,10 +24,13 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 - **[DONE 2026-07-28] ED-IN-0087 — `.claude/` apparatus repaired + run discipline wired.** 49/49 paths
   live (was 12/51); `tools/wf_harness.js` owns the prelude; critics read-only via
   `.claude/agents/valoria-critic.md`; fable off writing stages.
-- **[PART] ED-IN-0087 residual — two unverified assumptions.** Residual: (a) no real workflow run has
-  confirmed a tools-restricted `agentType` can still emit structured output — if it cannot, all six
-  critic stages return null; (b) `hSameFinding`'s thresholds are calibrated on wording, not measured
-  against a live multi-lens run.
+- **[PART] ED-IN-0087 residual — one assumption left (ED-IN-0090).** (a) VERIFIED 2026-07-28 by a controlled
+  3-agent probe: a tools-restricted `agentType` DOES still emit structured output. The restricted
+  critic self-reported `["Read","Grep","Glob","StructuredOutput"]` — the schema tool is injected on
+  top of the frontmatter list — while the unrestricted control reported 20+ tools including Write and
+  Bash. Write block confirmed against the filesystem, not just the agent's word. Residual: (b)
+  `hSameFinding`'s containment thresholds are still calibrated on wording, not measured against a
+  live multi-lens run.
 - **[DONE 2026-07-28] ED-IN-0087 — dead-tree apparatus swept.** `mechanics_index_gen` (FATAL for a
   week) and `ci_quantity_vocabulary_check` (scanning 0 files) both walked the retired `sim/`; one
   owner `ci_common.sim_reference_roots()`, 108 files now.
