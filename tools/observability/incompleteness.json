@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 264,
+    "findings": 265,
     "by_category": {
       "apparatus_orphan": 3,
       "audit_cascade_sink": 15,
@@ -25,12 +25,12 @@
       "register_quarantined": 1,
       "sim_not_implemented": 39,
       "stale_retired_pointer": 15,
-      "status_noncurrent": 24,
+      "status_noncurrent": 25,
       "unregistered_term": 39
     },
     "by_severity": {
       "high": 24,
-      "med": 112,
+      "med": 113,
       "low": 128
     }
   },
@@ -90,7 +90,7 @@
       "sim_not_implemented": 3
     },
     "unassigned": {
-      "total": 44,
+      "total": 45,
       "contract_doc_null": 9,
       "contract_island": 4,
       "contract_missing_entirely": 2,
@@ -98,14 +98,14 @@
       "key_orphan_emit": 1,
       "prose_marker": 8,
       "sim_not_implemented": 4,
-      "status_noncurrent": 15
+      "status_noncurrent": 16
     }
   },
   "prose_marker_rollup": {
-    "gap": 274,
-    "assumption": 246,
-    "stub": 30,
-    "todo": 14
+    "gap": 64,
+    "assumption": 61,
+    "stub": 4,
+    "todo": 8
   },
   "coverage_gaps": [
     "null/empty REQUIRED fields in registries other than module_contracts (id_reservations, descriptor_registry 'IN FLUX' roster, names_index, \u2026) are not yet structurally scanned",
@@ -1969,6 +1969,15 @@
       "title": "proposals/2026-05-25-mechanics-integration-v3_1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/2026-05-25-mechanics-integration-v3_1.md",
+      "lane": "unassigned",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
+      "title": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
       "lane": "unassigned",
       "severity": "med"
     },
