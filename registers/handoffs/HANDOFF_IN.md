@@ -39,6 +39,39 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   containment thresholds (≥3 shared content words, ≥0.6 of the smaller set) are calibrated on this
   repo's finding wording and have **not** been measured against a real multi-lens run — the first
   live workflow run should check whether they over- or under-group.
+- **✅ DEAD-TREE APPARATUS SWEPT (2026-07-28, ED-IN-0086).** Surfaced by PR #247's own CI run.
+  `sim/` was retired 2026-07-21 and **two tools still walked it** — and because `os.walk` on a
+  missing directory yields nothing instead of raising, neither made a sound:
+  · `tools/mechanics_index_gen.py` looked for `canon/` + `sim/` to find the repo root, so it exited
+    2 with `[FATAL]` on every run. Its CI job is `continue-on-error`, so a FATAL and a clean pass
+    render identically. **Revived, it immediately reported 39 stale pointers + 3 schema errors** it
+    had been unable to report for a week.
+  · `tools/ci_quantity_vocabulary_check.py` walked `sim/` for stat literals: **that half scanned
+    zero files** while the tool kept printing contract-side findings and looking healthy — 108 `.py`
+    files now, via the new single owner `ci_common.sim_reference_roots()` (globs `systems/*/sim`, so
+    a new subsystem is covered without editing a list).
+  Fixed alongside: 39 retired-tree pointers in `registers/mechanics_index.yaml` (mechanical, through
+  the sanctioned alias map), a `scale: peninsula` typo, `godot_home` missing from the validator's key
+  list, and `sim_module: null` erroring when it is a *declaration* of no implementation.
+  Guard: `tests/valoria/test_retired_tree_apparatus.py` — 12 tests, **10/10 mutants killed**,
+  including a positive control proving the revived scanner can find a literal (its zero on the live
+  corpus is a true zero: the live call sites use variable keys).
+  **⚠️ NOT MINE TO RULE — two items filed, not swept:**
+  1. `registers/mechanics_index.yaml` `combat: test_status: validated` is outside the enum, whose
+     `validated_*` values all encode a Monte-Carlo sample size. Combat's validation was a
+     ratification plus a Godot port-parity check, not an n-run, so the *vocabulary* is missing a
+     value (`ratified`? `validated_port`?). **PC lane.** It is the last remaining error from that
+     report-only gate.
+  2. `ci_hooks_verifier` Check 5 (skeleton-debt) walks the retired `designs/` tree. It is **not**
+     repointed at `systems/` because CLAUDE.md §4 RETIRED the index+infill pair (Jordan, 2026-07-26)
+     that both its advice ("extract prose to `*_infill.md`") and its threshold (400 lines) encode —
+     repointing as-is would emit **29 warnings recommending a superseded practice**. Interim: the
+     check now *announces itself inert* instead of silently reporting clean. Re-specifying it needs
+     the §4 ruling encoded (sequential `_partN` at ~15k tokens).
+  Seven `canon_authoring_target` rows still carry `designs/…` prefixes for docs **never authored**
+  (`altonian_reinforcements`, `hafenmark_equipment`, `home_sanctuary_t9`, `infrastructure_reclamation`,
+  `restoration_movement`, `treaty`, `varfell_territorial_acquisition`). Where an unwritten doc would
+  land is a subsystem-lane design call, not an IN-lane rewrite — observe, don't judge.
 - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
   check-ins outright ("I don't even need check in triggers, I can just see what's happening by the
   colours on a session"). **Measured first:** 116 confirmed `send_later` firings in 2026-07-19..26,

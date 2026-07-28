@@ -378,6 +378,7 @@ entries:
   prune_candidate: false
   role: B:stdout-or-gate
   imports:
+  - ci_common
   - yaml
 - path: tools/ci_register_size_check.py
   kind: tool

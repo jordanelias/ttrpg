@@ -103,6 +103,22 @@ for base in ('skills', 'tools'):
                                     f"(port to working-tree reads)")
 
 # ── Check 5 (warn): skeleton-debt — design docs over 400 lines ───────────────
+# INERT SINCE PR #191, AND NOW SAYS SO. `designs/` was retired 2026-07-19, so this walk yields
+# nothing — and a report-only check that is DEAD is indistinguishable, in a checks list, from one
+# that is CLEAN. That is the same silent-hole class ED-IN-0086 swept out of mechanics_index_gen and
+# ci_quantity_vocabulary_check, so at minimum the deadness is now visible.
+#
+# It is NOT simply repointed at systems/, because that would need a ruling this lane cannot make:
+# CLAUDE.md §4 RETIRED the index+infill pair as a default (Jordan, 2026-07-26) in favour of
+# sequential `_part2`/`_part3` splits at ~15k tokens, so both this check's ADVICE ("extract prose to
+# *_infill.md") and its THRESHOLD (400 lines) now encode a superseded convention. Repointing as-is
+# would emit 29 warnings recommending a retired practice. Observe, don't judge — filed in
+# registers/handoffs/HANDOFF_IN.md for whoever re-specifies it.
+if not os.path.isdir('designs'):
+    warnings.append("CHECK INERT: skeleton-debt (Check 5) walks the retired designs/ tree and has "
+                    "scanned nothing since PR #191. Re-specifying it needs the §4 ruling encoded "
+                    "(sequential _partN at ~15k tokens, not index+infill at 400 lines) — see "
+                    "registers/handoffs/HANDOFF_IN.md.")
 for root, _dirs, files in os.walk('designs'):
     for fname in files:
         if (fname.endswith('_v30.md') and 'infill' not in fname

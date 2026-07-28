@@ -60,6 +60,12 @@ except ImportError:  # allow `python tools/ci_quantity_vocabulary_check.py` from
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import quantity_registry
 
+try:
+    import ci_common
+except ImportError:  # same repo-root invocation path as quantity_registry above
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ci_common
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 _STAT_DICT_RE = re.compile(r'(stat_deltas|impact_vector)\s*=\s*\{([^{}]*)\}')
@@ -90,10 +96,18 @@ def scan_module_contracts(contracts):
                     yield ('derivations.inputs', name, inp, comp)
 
 
-def scan_sim_literals(sim_root):
+def scan_sim_literals(sim_roots):
     """Yields (surface, file, lineno, raw_name) for every literal string key
-    in a stat_deltas={...} or impact_vector={...} call-site dict."""
-    for dirpath, _dirnames, filenames in os.walk(sim_root):
+    in a stat_deltas={...} or impact_vector={...} call-site dict.
+
+    Takes a LIST of roots. It used to take the single flat `sim/` tree, which was retired
+    2026-07-21 — and since os.walk on a missing directory yields nothing instead of raising, this
+    whole scan returned zero files while the tool kept printing its contract-side findings and
+    looking healthy. Roots now come from ci_common.sim_reference_roots(), the single owner
+    (ED-IN-0086)."""
+    if isinstance(sim_roots, str):
+        sim_roots = [sim_roots]
+    for dirpath, _dirnames, filenames in _walk_all(sim_roots):
         if any(part in ('__pycache__', 'tests') for part in dirpath.replace(os.sep, '/').split('/')):
             continue
         for fn in filenames:
@@ -109,6 +123,11 @@ def scan_sim_literals(sim_root):
                 lineno = text.count('\n', 0, m.start()) + 1
                 for km in _STR_KEY_RE.finditer(body):
                     yield (surface, os.path.relpath(path, REPO_ROOT), lineno, km.group(1))
+
+
+def _walk_all(roots):
+    for r in roots:
+        yield from os.walk(r)
 
 
 def check(contracts, sim_root):
@@ -142,11 +161,14 @@ def check(contracts, sim_root):
 def main(argv):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('--contracts', default=os.path.join(REPO_ROOT, 'references', 'module_contracts.yaml'))
-    ap.add_argument('--sim-root', default=os.path.join(REPO_ROOT, 'sim'))
+    # Default comes from the single owner, not a hardcoded path — see ci_common.sim_reference_roots.
+    ap.add_argument('--sim-root', action='append', default=None,
+                    help='sim reference root to scan (repeatable). Defaults to every live root.')
     a = ap.parse_args(argv)
 
     contracts = yaml.safe_load(open(a.contracts, encoding='utf-8')) or {}
-    resolved, findings = check(contracts, a.sim_root)
+    sim_roots = a.sim_root or ci_common.sim_reference_roots(REPO_ROOT)
+    resolved, findings = check(contracts, sim_roots)
 
     total = resolved + len(findings)
     print(f"== ci_quantity_vocabulary_check (A17): {len(findings)} unresolved / {total} scanned "

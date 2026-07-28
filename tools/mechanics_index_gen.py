@@ -28,7 +28,7 @@ v2 SCOPE (deferred):
 USAGE:
   python3 tools/mechanics_index_gen.py [--repo-root /path/to/ttrpg] [--strict] [--update]
 
-  --repo-root  defaults to current working directory if it contains canon/ and sim/
+  --repo-root  defaults to current working directory if it contains canon/ and references/
   --strict     warnings become errors (exit code 1 on any drift)
   --update     write back the drift_report section into mechanics_index.yaml
 
@@ -86,6 +86,11 @@ OPTIONAL_MECHANIC_KEYS = {
     "v22_features_pending",
     "integration_plan_doc",
     "open_editorial",
+    # Where the mechanic lives in the Godot port. A real field in the register since the port work
+    # began; the validator's key list simply never learned it, so it warned "unknown key" on
+    # legitimate data — invisible for as long as this tool was fataling out on a retired root
+    # marker (see REPO_ROOT_MARKERS).
+    "godot_home",
 }
 
 VALID_SCALES = {
@@ -218,9 +223,15 @@ def validate_mechanic(name: str, entry: dict, gd_constraints: dict) -> list[Vali
     if "canon_sources" in entry and not isinstance(entry["canon_sources"], list):
         errors.append(ValidationError("error", loc, "canon_sources must be a list"))
 
-    # sim_module type
-    if "sim_module" in entry and not isinstance(entry["sim_module"], str):
-        errors.append(ValidationError("error", loc, "sim_module must be a string"))
+    # sim_module type. `null` is a DECLARATION, not a violation: it states "this mechanic has no
+    # code presence anywhere", which is exactly what scenario_authoring records (a contract with no
+    # implementation, ED-IN-0023 / C-INJ-3). Erroring on it pushed authors toward the worse
+    # alternatives — omitting the required key, or inventing a path — so the rule now distinguishes
+    # an explicit absence from a wrong type.
+    if "sim_module" in entry and entry["sim_module"] is not None \
+            and not isinstance(entry["sim_module"], str):
+        errors.append(ValidationError("error", loc, "sim_module must be a string, or null to "
+                                                   "declare that no implementation exists"))
 
     # faction required for non-primitive, non-service scales
     if scale in {"personal", "thread", "provincial", "territory", "peninsular", "world", "cross_scale"}:
@@ -391,11 +402,25 @@ def emit_report(parsed: dict, all_errors: list[ValidationError]) -> str:
 # ── Main ────────────────────────────────────────────────────────────────────
 
 
+# Directories that identify this repo's root. `sim/` used to be one of them and was RETIRED on
+# 2026-07-21 (ED-IN-0071 P4 — the tree hollowed out into engine/ and systems/<subsystem>/sim/), so
+# this walk stopped matching and the tool has returned [FATAL] exit 2 ever since. Nobody noticed
+# because its CI job carries `continue-on-error: true`: a report-only job that is DEAD and a
+# report-only job that is CLEAN look identical in the checks list.
+#
+# That is the §0.1 point-5 signature exactly — correct when written, broken because something else
+# moved — so the fix is the standard shape: markers named once here, and a guard that fails on
+# recurrence (tests/valoria/test_repo_root_markers.py). `canon/` and `references/` are chosen over
+# `engine/`/`systems/` deliberately: both predate the restructure, neither is a rehoming target,
+# and both are load-bearing for what this tool reads.
+REPO_ROOT_MARKERS = ("canon", "references")
+
+
 def find_repo_root(start: Path) -> Path | None:
-    """Walk up looking for canon/ and sim/ siblings."""
+    """Walk up looking for the REPO_ROOT_MARKERS directories as siblings."""
     cur = start.resolve()
     for _ in range(8):
-        if (cur / "canon").is_dir() and (cur / "sim").is_dir():
+        if all((cur / m).is_dir() for m in REPO_ROOT_MARKERS):
             return cur
         if cur.parent == cur:
             return None
@@ -406,7 +431,7 @@ def find_repo_root(start: Path) -> Path | None:
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     p.add_argument("--repo-root", default=None,
-                   help="Path to ttrpg repo root (must contain canon/ and sim/). "
+                   help="Path to ttrpg repo root (must contain canon/ and references/). "
                         "Defaults to walking up from cwd.")
     p.add_argument("--strict", action="store_true",
                    help="Treat warnings as errors (exit 1 on any drift)")
@@ -422,8 +447,8 @@ def main() -> int:
     else:
         repo_root = find_repo_root(Path.cwd())
         if repo_root is None:
-            print("[FATAL] Could not find repo root (no canon/ + sim/ in walk). "
-                  "Use --repo-root.", file=sys.stderr)
+            print("[FATAL] Could not find repo root (no %s in walk). "
+                  "Use --repo-root." % " + ".join(m + "/" for m in REPO_ROOT_MARKERS), file=sys.stderr)
             return 2
 
     # Resolve index path
