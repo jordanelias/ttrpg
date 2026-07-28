@@ -112,6 +112,13 @@ VALID_TEST_STATUS = {
     "validated_n500",
     "validated_n1000",
     "validated_n1000_v12c",
+    # Lane-qualified validation (ED-IN-0088, Jordan 2026-07-28). See the long note beside
+    # `test_status_values` in registers/mechanics_index.yaml: a lane tag records WHO validated a
+    # mechanic and BY WHAT STANDARD, which a Monte-Carlo n cannot. `validated_pc` is the PC lane's
+    # standard — engine ratification plus Godot port-parity — and is deliberately NOT a point on the
+    # validated_nNNN scale. Lane codes are CLAUDE.md §3's (MB PC FI SC FA WR IN GO SE); add a
+    # sibling only when that lane has a standard to point at.
+    "validated_pc",
     "canonical",
     "contested",
     "superseded",

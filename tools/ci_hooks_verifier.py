@@ -102,33 +102,25 @@ for base in ('skills', 'tools'):
                     warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
                                     f"(port to working-tree reads)")
 
-# ── Check 5 (warn): skeleton-debt — design docs over 400 lines ───────────────
-# INERT SINCE PR #191, AND NOW SAYS SO. `designs/` was retired 2026-07-19, so this walk yields
-# nothing — and a report-only check that is DEAD is indistinguishable, in a checks list, from one
-# that is CLEAN. That is the same silent-hole class ED-IN-0087 swept out of mechanics_index_gen and
-# ci_quantity_vocabulary_check, so at minimum the deadness is now visible.
+# ── Check 5: RETIRED 2026-07-28 (ED-IN-0088) — the rule already lives once, elsewhere ─────
+# It walked `designs/`, retired 2026-07-19, so it had scanned nothing since PR #191 and reported
+# clean. The obvious repair was to repoint it at `systems/`. That would have been WRONG twice over:
 #
-# It is NOT simply repointed at systems/, because that would need a ruling this lane cannot make:
-# CLAUDE.md §4 RETIRED the index+infill pair as a default (Jordan, 2026-07-26) in favour of
-# sequential `_part2`/`_part3` splits at ~15k tokens, so both this check's ADVICE ("extract prose to
-# *_infill.md") and its THRESHOLD (400 lines) now encode a superseded convention. Repointing as-is
-# would emit 29 warnings recommending a retired practice. Observe, don't judge — filed in
-# registers/handoffs/HANDOFF_IN.md for whoever re-specifies it.
-if not os.path.isdir('designs'):
-    warnings.append("CHECK INERT: skeleton-debt (Check 5) walks the retired designs/ tree and has "
-                    "scanned nothing since PR #191. Re-specifying it needs the §4 ruling encoded "
-                    "(sequential _partN at ~15k tokens, not index+infill at 400 lines) — see "
-                    "registers/handoffs/HANDOFF_IN.md.")
-for root, _dirs, files in os.walk('designs'):
-    for fname in files:
-        if (fname.endswith('_v30.md') and 'infill' not in fname
-                and 'archive' not in fname and 'skeleton' not in fname):
-            fpath = os.path.join(root, fname)
-            with open(fpath, encoding='utf-8', errors='replace') as f:
-                n = len(f.readlines())
-            if n > 400:
-                warnings.append(f"SKELETON-DEBT: {fpath.replace(os.sep, '/')} is {n} lines (limit 400); "
-                                f"extract prose to *_infill.md")
+#   1. Its rule was superseded. Both its advice ("extract prose to *_infill.md") and its threshold
+#      (400 lines) encode the index+infill convention CLAUDE.md §4 RETIRED on 2026-07-26 in favour
+#      of sequential `_partN` splits at ~15k tokens. Repointing as-is would have emitted 29 warnings
+#      recommending a practice the repo had just abandoned.
+#   2. Its rule is not its own. `tools/compliance_check.py` reads `references/atomization_rules.yaml`
+#      — the single owner of the threshold — applies the live 15,000-token cap, and already reports
+#      every oversized doc under `systems/`. Verified by hand: all 8 actionable docs the correct rule
+#      identifies (41.7k faction_politics_v30 down to 15.3k integration_proposal_v30) appear in
+#      compliance_check's 55 size warnings. Reviving a second implementation would be a fresh §8
+#      violation ("Never re-implement a rule") committed while cleaning up after other ones.
+#
+# So the check is GONE, not repointed and not left inert. `compliance_check --check-only
+# --repo-state .` is the owner and is already a blocking CI job.
+# Falsifier: tests/valoria/test_retired_tree_apparatus.py asserts compliance_check still reports the
+# oversized systems/ docs, so the coverage this deletion relies on cannot vanish unnoticed.
 
 # ── Check 6: self-scheduling deny-list intact ────────────────────────────────
 # ED-IN-0084. The waste class is a session that re-arms its own wake-up: each

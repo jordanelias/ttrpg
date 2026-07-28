@@ -4,12 +4,13 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**111 apparatuses** — claude-agent: 1, claude-workflow: 3, hook: 4, skill-script: 10, tool: 90, workflow: 3 · **3 orphaned**.
+**113 apparatuses** — claude-agent: 1, claude-workflow: 3, hook: 4, skill-script: 10, tool: 92, workflow: 3 · **4 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
 - `tools/build_audit_registry_backfill.py`
 - `tools/geography/jsx_to_canonical.py`
+- `tools/measure_stamp_false_positives.py`
 - `tools/observability/npc_audit_report_gen.py`
 
 ## By output type
@@ -71,8 +72,10 @@
 | `tools/doc_index_gen.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/export_engine_params.py` | `<OUT_PATH>` (unknown) | yes | ci:valoria-ci.yml |
 | `tools/geography/jsx_to_canonical.py` | `<out_path>` (unknown) | yes | — |
+| `tools/handoff_atomize.py` | `<name>` (unknown) | yes | tool:imported |
 | `tools/hook_naming_guard.py` | — | yes | ci:valoria-ci.yml, hook:claude |
 | `tools/index_gen.py` | — | yes | ci:valoria-ci.yml, tool:imported |
+| `tools/measure_stamp_false_positives.py` | — | yes | — |
 | `tools/mechanics_index_gen.py` | `<stream>` (yaml); `<index_path>` (unknown) | yes | ci:valoria-ci.yml |
 | `tools/observability/build_incompleteness.py` | `<pj>` (unknown); `<pjs>` (unknown); `<pmd>` (unknown) | yes | ci:audit-refresh.yml, ci:dashboard.yml, skill:valoria-vector-audit |
 | `tools/patch_propagation_checker.py` | — | yes | ci:valoria-ci.yml |

@@ -46,8 +46,14 @@ def main(argv):
         # and is COPIED into each script, because workflow scripts run in a sandbox with no imports.
         # A copied rule rots, so this is the guard. Blocking: an out-of-date copy is not a style
         # nit — it silently changes what a 40-agent audit does, and `--fix` makes it a one-liner.
-        ('ci_wf_harness_check.py',       [mode_flag], True),   # workflow harness present/current/wired (ED-IN-0087; blocking)
-        ('ci_claude_workflow_paths.py',  [],          True),   # every .claude/ path reference resolves (ED-IN-0085; blocking)
+        # REPORT-ONLY LOCALLY, BLOCKING IN CI (ED-IN-0088). Both were blocking here for about an hour
+        # and that was the wrong call: neither guards a canon invariant, both scan the WHOLE .claude/
+        # tree rather than the changeset, and a half-edited workflow script would therefore block an
+        # unrelated commit. CI is the unbypassable boundary (CLAUDE.md §8) and still fails on either,
+        # so nothing is weakened — what changes is that a local commit is never held hostage by a
+        # file the author is still writing. Same posture as freshness_gate below.
+        ('ci_wf_harness_check.py',       [mode_flag], False),  # workflow harness present/current/wired (ED-IN-0087; report-only here, BLOCKING in CI)
+        ('ci_claude_workflow_paths.py',  [],          False),  # every .claude/ path reference resolves (ED-IN-0085; report-only here, BLOCKING in CI)
         # ED-PC-0040: freshness was CI-only, so five consecutive local-green commits shipped a stale
         # canonical_sha__ pin (ED-PC-0035 edited references/module_contracts.yaml without refreshing it) and it
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking

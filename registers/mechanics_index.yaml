@@ -44,6 +44,21 @@ test_status_values:
   validated_n500: "tested at N >= 500 sample"
   validated_n1000: "tested at N >= 1000 sample"
   canonical: "validated at N >= 1000 + matches canon expectation + GD-compliant"
+  # LANE-QUALIFIED VALIDATION (ED-IN-0088, Jordan ruling 2026-07-28). Every validated_* value above
+  # encodes a MONTE-CARLO SAMPLE SIZE, which silently assumes that the only way to validate a
+  # mechanic is to run it N times. Personal combat is not validated that way and never was: its
+  # engine was ratified (ED-900/904) and its Godot slice was checked for PARITY against the Python
+  # oracle (strike/wound, 2026-06-23). `combat` therefore carried a bare `test_status: validated`
+  # that matched no enum value at all, and the schema validator flagged it as an error every run —
+  # invisible while mechanics_index_gen was fataling out on a retired root marker.
+  #
+  # The fix names the LANE that owns the standard rather than inventing another n-tier, using the
+  # ED-<LANE> codes already canonical in CLAUDE.md §3/§4 (MB PC FI SC FA WR IN GO SE). A lane tag
+  # says WHO validated it and BY WHAT STANDARD, which a sample size cannot: `validated_n1000` and
+  # `validated_pc` are not two points on one scale, they are two different kinds of evidence.
+  # Add a sibling (validated_mb, validated_sc, ...) only when that lane actually has a standard to
+  # point at — an unused vocabulary is the drift this repo keeps paying for.
+  validated_pc: "PC lane (personal combat): engine ratified + Godot port checked for key-log parity against the Python oracle. NOT a Monte-Carlo n — a different kind of evidence, deliberately not ranked against the validated_nNNN family."
   contested: "depends on canon claim flagged as Claude-overreach contamination per Jordan diagnosis 2026-05-17 - awaiting audit"
   superseded: "mechanic STRUCK by GD constraint - preserved as supersession-trail evidence only"
 
@@ -213,7 +228,7 @@ mechanics:
     params: "systems/combat/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
     sim_module: systems/combat/combat_engine_v1/   # canonical engine; systems/combat/sim/combat.py is the DEPRECATED v30 wiring
     godot_home: godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
-    test_status: validated   # combat_engine_v1 ratified; Godot slice (strike/wound) ported + validated 2026-06-23
+    test_status: validated_pc   # combat_engine_v1 ratified (ED-900/904); Godot slice (strike/wound) ported + parity-checked 2026-06-23. RETAGGED from a bare `validated` 2026-07-28 (ED-IN-0088): that value was in no enum and the schema validator errored on it every run. This is lane-qualified evidence, not a sample size — see test_status_values.
     dependencies:
       mechanics: [die_rule_d10, degrees_of_success]
     notes: "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit."
@@ -581,7 +596,7 @@ mechanics:
     faction: Varfell
     canon_sources:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-1"
-    canon_authoring_target: "designs/provincial/varfell_territorial_acquisition_v30.md (Pass 2d, pending; placeholder-named per VARFELL-TERRITORIAL-ACQUISITION-001)"
+    canon_authoring_target: "systems/factions/varfell_territorial_acquisition_v30.md (NOT YET AUTHORED — Pass 2d pending; lane FA. Home derived from its own sim_module systems/factions/sim/varfell_territorial_acquisition.py per RULED §2a: one subsystem = one folder = one ID lane. Placeholder-named per VARFELL-TERRITORIAL-ACQUISITION-001.)"
     sim_module: systems/factions/sim/varfell_territorial_acquisition.py
     test_status: validated_n1000_v12c
     test_results:
@@ -595,7 +610,7 @@ mechanics:
     faction: Hafenmark
     canon_sources:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-3"
-    canon_authoring_target: "designs/provincial/altonian_reinforcements_v30.md (Pass 2e, pending)"
+    canon_authoring_target: "systems/mass_battle/altonian_reinforcements_v30.md (NOT YET AUTHORED — Pass 2e pending; lane MB. Home derived from its own sim_module systems/mass_battle/sim/altonian_reinforcements.py per RULED §2a.)"
     sim_module: systems/mass_battle/sim/altonian_reinforcements.py
     test_status: validated_n1000_v12c
     notes: "v12c version was auto-at-arc-boundary. Pass 2e iteration adds choice-lock (Jordan 2026-05-17): once invoked, Hafenmark Standing-with-other-parliamentaries permanently locked <= +1."
@@ -604,7 +619,7 @@ mechanics:
     scale: provincial
     faction: Hafenmark
     canon_sources: []
-    canon_authoring_target: "designs/provincial/hafenmark_equipment_v30.md (Pass 2e, pending)"
+    canon_authoring_target: "systems/mass_battle/hafenmark_equipment_v30.md (NOT YET AUTHORED — Pass 2e pending; lane MB. Home derived from its own sim_module systems/mass_battle/sim/tactic_cards.py per RULED §2a. Contested: contents flagged as possible Claude-overreach contamination, Jordan 2026-05-17 — author the audit before the doc.)"
     sim_module: systems/mass_battle/sim/tactic_cards.py
     test_status: contested
     notes: "Wagenburg + Bombards tactic cards per Jordan 2026-05-17 (Hussite battle wagons + proto-firearms). Pass 2e canon authoring pending contamination audit. Dependency: tactic_cards module pool may need to be partially struck before adding new cards."
@@ -613,7 +628,7 @@ mechanics:
     scale: provincial
     faction: Church
     canon_sources: []
-    canon_authoring_target: "designs/provincial/infrastructure_reclamation_v30.md (Pass 2f, pending)"
+    canon_authoring_target: "systems/factions/infrastructure_reclamation_v30.md (NOT YET AUTHORED — Pass 2f pending; lane FA. Home derived from its own sim_module systems/factions/sim/infrastructure_reclamation.py per RULED §2a.)"
     sim_module: systems/factions/sim/infrastructure_reclamation.py
     test_status: not_implemented
     notes: "When Church invades territory with existing Church-built infrastructure (Religious Buildings / Templar Stations / Inquisitor Bases), attacker pool +(infra_count + max(0, PT-3)), defender pool -min(3, floor(bonus/2)). Cap +6/-3. Pass 2f canon authoring pending."
@@ -622,7 +637,7 @@ mechanics:
     scale: provincial
     faction: Church
     canon_sources: []
-    canon_authoring_target: "designs/provincial/home_sanctuary_t9_v30.md (Pass 2f, pending)"
+    canon_authoring_target: "systems/factions/home_sanctuary_t9_v30.md (NOT YET AUTHORED — Pass 2f pending; lane FA. Home derived from its own sim_module systems/factions/sim/home_sanctuary.py per RULED §2a — that module was left in place as UNMAPPED during the P4 factions slice, so this row is also the record of where it belongs.)"
     sim_module: systems/factions/sim/home_sanctuary.py
     test_status: not_implemented
     notes: "T9 invasion Ob +4 for first 12 seasons. End conditions: Church PT<3 OR Church L<2.5 OR any faction holds CB vs Church."
@@ -656,7 +671,7 @@ mechanics:
     scale: provincial
     faction: Crown
     canon_sources: []
-    canon_authoring_target: "designs/provincial/treaty_v30.md (Pass 2h, pending - currently no dedicated canon doc)"
+    canon_authoring_target: "systems/factions/treaty_v30.md (NOT YET AUTHORED — Pass 2h pending; lane FA. Home derived from its own sim_module systems/factions/sim/treaty.py per RULED §2a. Adjacent live head systems/factions/treaty_expiration_v30.md covers expiry only, so this is a genuine gap, not a duplicate.)"
     sim_module: systems/factions/sim/treaty.py
     test_status: not_implemented
 
@@ -818,7 +833,7 @@ mechanics:
     canon_sources:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-2"
       - "systems/characters/conviction_track_v30.md#section-5"
-    canon_authoring_target: "designs/provincial/restoration_movement_v30.md (Pass 2d, pending)"
+    canon_authoring_target: "systems/world/restoration_movement_v30.md (NOT YET AUTHORED — Pass 2d pending; lane WR. Home derived from its own sim_module systems/world/sim/restoration_movement.py per RULED §2a; scale is world/emergent, which is why it lands in systems/world/ and not with the faction rows.)"
     sim_module: systems/world/sim/restoration_movement.py
     test_status: validated_n1000_v12c
     gd_applicable: [GD-3]

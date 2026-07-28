@@ -13,6 +13,53 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   the banner counts as settled.
 
 
+- **[DONE 2026-07-28] ED-IN-0088 — Jordan ruled the four filed items; three shrank under scrutiny.**
+  **Check 5 (skeleton-debt) RETIRED, not repointed.** Repointing it at `systems/` would have been
+  wrong twice: its advice and 400-line threshold encode the index+infill convention §4 retired, AND
+  `compliance_check.py` already owns the rule via `atomization_rules.yaml`'s 15k cap — verified, all
+  8 actionable docs (41,731 tok `faction_politics_v30` → 15,307 tok `integration_proposal_v30`)
+  appear in its 55 size warnings. Reviving a second implementation would have been a fresh §8
+  violation committed while cleaning up after others.
+  **`combat: test_status` → `validated_pc`.** Every `validated_*` value encoded a Monte-Carlo n,
+  assuming the only validation is running it N times. Combat's was engine ratification (ED-900/904)
+  + Godot key-log parity (2026-06-23), so it carried a bare `validated` matching no enum. The lane
+  tag records *who* validated and *by what standard* — deliberately NOT ranked against the
+  `validated_nNNN` family, since ranking two kinds of evidence on one scale is what hid the gap.
+  Index now 0 errors / 0 warnings (was 3 + 39 on revival).
+  **The 7 never-authored targets resolved by DERIVATION.** I had filed them as a lane design call;
+  that framing was wrong. RULED §2a binds one subsystem = one folder = one lane, and each
+  mechanic's `sim_module` already sits in a subsystem package, so the home follows mechanically:
+  FA ×4, MB ×2, WR ×1. Guarded — a sim that moves now drags its doc target with it.
+  **Executive-summary drift guard.** The summary is authored, not generated (deliberately), and so
+  decays undetectably. It now carries two recomputable facts — live-item count, newest date — and
+  `handoff_atomize.summary_drift()` reports divergence, plus a summary that asserts nothing
+  checkable. Report-only; it runs in a tool an author invokes, never a commit gate.
+
+- **[DONE 2026-07-28] ED-IN-0089 — CURRENT.md's stamp no longer trips on apparatus.** The stamp
+  asks "has a canonical head moved?", which a validator cannot answer — yet 15 of the 77 tracked
+  paths are `tools/`/`tests/`, and the only way to clear a false trip was a reflex date bump that
+  reconciled nothing. **The filed claim was overstated and I corrected it before shipping:** the
+  report said "essentially every infrastructure PR"; measurement says **12 of 51 stamp-tripping
+  commits (24%)** moved no canonical head, with 36 more tripping via a head *too*. Both numbers
+  argue for the same change, which is exactly why the stronger one needed a control.
+  `CANONICAL_HEAD_TREES` scopes the **staleness** half only — the **existence** half still covers
+  `tools/` and `tests/`, because CURRENT.md naming a deleted validator is real drift.
+  Instrument: `tools/measure_stamp_false_positives.py`.
+
+- **[OPEN] ED-IN-0087 residual — same-lane ID collisions are now a pattern, not an accident.**
+  Two in two days between PR #245/#246/#247 (0085→0086→0087). §3's lane split made *cross*-lane
+  collision impossible by construction; *same*-lane concurrency still rests on allocation
+  discipline alone, which is 0-for-2 against two sessions open on one lane. Recorded as an
+  observation — the remedy (reserve-on-branch, or a CI-visible id-claim file) is a governance call.
+
+- **[DONE 2026-07-28] ED-IN-0088 — local gates made non-blocking (friction).** `ci_wf_harness_check`
+  and `ci_claude_workflow_paths` were blocking in `valoria_local.py` for about an hour; that was
+  wrong. Neither guards a canon invariant, both scan the whole `.claude/` tree rather than the
+  changeset, so a half-edited workflow script would block an unrelated commit. Both are report-only
+  locally and **still blocking in CI** — the unbypassable boundary is unchanged. The Stop hook's
+  `review_core.py --check` gained `|| true` for the same reason: it reports the repo-state verdict,
+  it never interrupts.
+
 - **[DONE 2026-07-28] ED-IN-0087 — workflow apparatus repaired + run discipline wired.**
   Executes ED-IN-0085's approved set (P1–P8; Jordan declined P9, ruled P3 **report-only**, and ruled
   the three `wf_*.js` **repaired** not retired). One root cause behind both halves: `.claude/` is the

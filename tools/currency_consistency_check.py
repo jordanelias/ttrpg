@@ -78,6 +78,30 @@ def _current_md_paths(text):
     return sorted({p for p in paths if '*' not in p and '?' not in p})
 
 
+# Trees that hold CANONICAL HEADS. The stamp answers one question — "has a canonical head moved
+# since CURRENT.md was last reconciled?" — and only these trees can make its answer yes.
+#
+# WHY THIS SPLIT EXISTS (ED-IN-0089). The stamp check used every path CURRENT.md names, which
+# includes 12 `tools/` and 3 `tests/` entries. Those are apparatus: editing a validator or a unit
+# test cannot make a canonical-head index stale, but it tripped the stamp all the same, and the only
+# way to clear it was a reflex date bump that reconciled nothing. MEASURED over the 57 commits since
+# 2026-06-28: 51 would trip the stamp, and 12 of those (24%) touched a tracked `tools/` or `tests/`
+# path and NO canonical head at all. Those 12 are pure false positives — a fifth of the signal.
+# (The honest counter-number: 36 more trip via a canonical head TOO, so this narrows the noise, it
+# does not eliminate the check. Reproduce with tools/measure_stamp_false_positives.py.)
+#
+# THE EXISTENCE CHECK IS DELIBERATELY *NOT* NARROWED. `check_current_paths_exist` still covers every
+# path, `tools/` and `tests/` included: CURRENT.md naming a deleted validator is real drift and
+# exactly the rot this session spent its time on. What changes is only the STALENESS half — the one
+# that was asking a question apparatus cannot answer.
+CANONICAL_HEAD_TREES = ('designs', 'systems', 'engine', 'params', 'references', 'canon', 'sim')
+
+
+def _canonical_head_paths(text):
+    return [p for p in _current_md_paths(text)
+            if p.split('/')[0] in CANONICAL_HEAD_TREES]
+
+
 def _next_day(date_str):
     """YYYY-MM-DD + 1 day (string compare domain)."""
     import datetime
@@ -122,7 +146,7 @@ def check_current_stamp(drift):
     # a same-session commit can land "tomorrow" in UTC. The PR-#50 failure class (days of
     # unreconciled drift) still trips; a TZ-skewed same-day commit does not.
     grace = _next_day(stamp)
-    for path in _current_md_paths(text):
+    for path in _canonical_head_paths(text):   # apparatus cannot stale a canon index — ED-IN-0089
         last = _git_last_commit_date(path.rstrip('/'))
         if last and last > grace:
             drift.append(f"CURRENT.md stamp {stamp} predates head {path} (last commit {last}) — re-reconcile")

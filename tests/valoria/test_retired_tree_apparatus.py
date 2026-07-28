@@ -206,28 +206,12 @@ def test_mechanics_index_gen_accepts_a_declared_absence():
         "a genuinely wrong type is no longer caught — the fix went too far"
 
 
-def test_hooks_verifier_declares_check_5_inert_rather_than_passing_silently():
-    """A report-only check that is DEAD looks exactly like one that is CLEAN.
-
-    ci_hooks_verifier Check 5 walks `designs/`, retired 2026-07-19, so it has scanned nothing since
-    PR #191 and emitted no warnings — which reads as a clean bill of health. It is NOT repointed at
-    systems/ here, because CLAUDE.md §4 retired the index+infill pair that its advice and its
-    400-line threshold both encode; re-specifying it needs a ruling this lane does not own. What it
-    must do meanwhile is SAY it is inert.
-    """
-    src = open(os.path.join(TOOLS, 'ci_hooks_verifier.py'), encoding='utf-8').read()
-    assert "CHECK INERT" in src, (
-        "ci_hooks_verifier no longer announces that Check 5 is inert. Either it was re-specified "
-        "against a live tree (good — delete this test and say so), or the announcement was dropped "
-        "and a dead check is silently reporting clean again.")
-    import subprocess
-    r = subprocess.run([sys.executable, os.path.join(TOOLS, 'ci_hooks_verifier.py')],
-                       cwd=ROOT, capture_output=True, text=True)
-    assert 'CHECK INERT' in (r.stdout + r.stderr), (
-        f"the inert-check warning is in the source but never reaches the output — "
-        f"exit={r.returncode}\n{r.stdout[-1500:]}")
-    assert not os.path.isdir(os.path.join(ROOT, 'designs')), (
-        "designs/ exists again — Check 5 is live, so remove the inert warning and this test.")
+# NOTE. An earlier revision of this module asserted that ci_hooks_verifier ANNOUNCED Check 5 as
+# inert — the interim measure taken while "what should skeleton-debt measure now?" was filed as a
+# ruling this lane did not own. Jordan ruled it, and the answer made the announcement moot: the rule
+# already had an owner in compliance_check, so Check 5 was deleted rather than repointed. The live
+# assertion is test_check_5_is_retired_not_revived_because_the_rule_lives_elsewhere below, which
+# pins the coverage that deletion depends on.
 
 
 @pytest.mark.parametrize('rel', ['registers/mechanics_index.yaml'])
@@ -265,3 +249,136 @@ def test_no_retired_tree_pointers_remain_in_the_mechanics_index(rel):
     assert not real, (
         f"{rel} points at the retired sim/ or designs/ trees: {real}. Resolve through "
         f"references/restructure_ledger.md — `tools/ci_claude_workflow_paths.py` has the resolver.")
+
+
+# ─────────────────────────────── ED-IN-0088/0089: the rulings Jordan made on the filed items
+
+def test_no_authoring_target_points_at_a_retired_tree():
+    """The seven never-authored docs now name a LIVE subsystem home (ED-IN-0088).
+
+    They previously carried `designs/…` prefixes for a tree retired 2026-07-19. That was filed as
+    "not mine to rule" — where an unwritten doc belongs looked like a subsystem-lane design call.
+    Jordan ruled it, and the resolution turned out to be derivable rather than discretionary: RULED
+    §2a binds one subsystem = one folder = one ID lane, so each doc's home follows from its OWN
+    `sim_module`, which already lives in a subsystem package. This asserts that derivation holds —
+    if a mechanic's sim moves, its authoring target must move with it.
+    """
+    import yaml
+    with open(os.path.join(ROOT, 'registers', 'mechanics_index.yaml'), encoding='utf-8') as fh:
+        idx = yaml.safe_load(fh)
+    checked, bad = 0, []
+    for name, e in (idx.get('mechanics') or {}).items():
+        target = e.get('canon_authoring_target')
+        if not isinstance(target, str):
+            continue
+        checked += 1
+        path = target.split(' (')[0].strip()
+        if path.startswith(('designs/', 'sim/')):
+            bad.append(f"{name}: authoring target still in a retired tree — {path}")
+            continue
+        sim = e.get('sim_module')
+        if not (isinstance(sim, str) and sim.startswith('systems/')):
+            continue
+        # systems/<subsystem>/sim/x.py  ->  the doc belongs at systems/<subsystem>/
+        subsystem = '/'.join(sim.split('/')[:2])
+        if not path.startswith(subsystem + '/'):
+            bad.append(f"{name}: doc home {path!r} does not match its sim's subsystem {subsystem!r}")
+    assert checked >= 7, f"only {checked} authoring targets examined — expected at least the 7 ruled on"
+    assert not bad, bad
+
+
+def test_combat_carries_a_lane_qualified_validation_status():
+    """ED-IN-0088. `validated` matched no enum value and errored every run. The replacement names
+    the LANE and its standard rather than adding another Monte-Carlo tier — those are different
+    kinds of evidence, and ranking them on one scale is what made the gap invisible."""
+    import yaml
+    with open(os.path.join(ROOT, 'registers', 'mechanics_index.yaml'), encoding='utf-8') as fh:
+        idx = yaml.safe_load(fh)
+    assert idx['mechanics']['combat']['test_status'] == 'validated_pc'
+    assert 'validated_pc' in idx['test_status_values'], \
+        "the value is used but not DEFINED in test_status_values — a vocabulary nobody can look up"
+    mod = _load('mechanics_index_gen.py')
+    assert 'validated_pc' in mod.VALID_TEST_STATUS
+    assert 'validated' not in mod.VALID_TEST_STATUS, \
+        "the bare `validated` must NOT be legalised — it is the ambiguity the lane tag replaces"
+
+
+def test_check_5_is_retired_not_revived_because_the_rule_lives_elsewhere():
+    """ED-IN-0088. Repointing Check 5 at systems/ would have re-implemented a rule
+    compliance_check already owns (CLAUDE.md §8). This asserts the coverage the deletion relies on:
+    if compliance_check ever stops reporting oversized systems/ docs, the rule has NO owner."""
+    src = open(os.path.join(TOOLS, 'ci_hooks_verifier.py'), encoding='utf-8').read()
+    assert 'skeleton-debt' not in src or 'RETIRED' in src, \
+        "Check 5 appears to be live again — if it was re-specified, say so here and delete this test"
+    import subprocess
+    r = subprocess.run([sys.executable, os.path.join(TOOLS, 'compliance_check.py'),
+                        '--check-only', '--repo-state', '.'],
+                       cwd=ROOT, capture_output=True, text=True)
+    out = r.stdout + r.stderr
+    # The largest actionable doc the correct (§4) rule identifies. If the owner stops seeing it,
+    # nothing in the repo is checking doc size any more.
+    assert 'faction_politics_v30.md' in out and 'size_exceeded' in out, (
+        "compliance_check no longer reports oversized systems/ docs. Check 5 was deleted BECAUSE "
+        "this check owned the rule; with no owner, doc-size hygiene is unenforced.")
+
+
+def test_stamp_staleness_ignores_apparatus_but_existence_still_covers_it():
+    """ED-IN-0089. The stamp asks "has a canonical head moved?", which a validator or a unit test
+    cannot answer — 24% of stamp-tripping commits moved no canonical head at all. Narrowed to the
+    canon trees. The EXISTENCE half is deliberately NOT narrowed, and that is the half that catches
+    CURRENT.md naming a deleted tool, so this asserts both directions."""
+    sys.path.insert(0, TOOLS)
+    import currency_consistency_check as C
+    with open(os.path.join(ROOT, 'CURRENT.md'), encoding='utf-8') as fh:
+        text = fh.read()
+    all_paths, canon = C._current_md_paths(text), C._canonical_head_paths(text)
+    assert canon, "no canonical-head paths — the staleness check would be inert"
+    apparatus = [p for p in all_paths if p not in canon]
+    assert apparatus, "no apparatus paths tracked — this test would pass vacuously"
+    assert all(p.split('/')[0] in ('tools', 'tests') for p in apparatus), \
+        f"something other than tools//tests/ was excluded from staleness: {apparatus}"
+    assert 'tools' not in {p.split('/')[0] for p in canon}, \
+        "tools/ is back in the staleness set — every apparatus commit will demand a stamp bump again"
+    # …and the existence half must still see them.
+    import inspect
+    src = inspect.getsource(C.check_current_paths_exist)
+    assert '_current_md_paths' in src and '_canonical_head_paths' not in src, (
+        "the EXISTENCE check was narrowed too. CURRENT.md naming a deleted tool is real drift and "
+        "must stay caught — only the STALENESS question was apparatus-blind.")
+
+
+def test_a_tools_only_commit_does_not_trip_the_stamp_but_a_canon_head_does():
+    """BEHAVIOURAL, not source-shaped. Asserting the path SETS differ leaves the stamp check free to
+    keep using the wide one — a mutation reverting exactly that survived until this test existed.
+
+    So: pretend every tracked path was committed far in the future, once for apparatus and once for
+    a canonical head, and check which one the stamp actually reacts to.
+    """
+    sys.path.insert(0, TOOLS)
+    import currency_consistency_check as C
+    with open(os.path.join(ROOT, 'CURRENT.md'), encoding='utf-8') as fh:
+        text = fh.read()
+    canon = set(C._canonical_head_paths(text))
+    apparatus = [p for p in C._current_md_paths(text) if p not in canon]
+    real = C._git_last_commit_date
+
+    def only(group):
+        return lambda path: '2099-01-01' if any(
+            path == g.rstrip('/') for g in group) else None
+
+    try:
+        C._git_last_commit_date = only(apparatus)
+        drift = []
+        C.check_current_stamp(drift)
+        assert not drift, (
+            f"a tools//tests/-only change tripped the staleness stamp: {drift}. That is the reflex "
+            f"date-bump treadmill ED-IN-0089 removed — 24% of stamp trips moved no canonical head.")
+
+        C._git_last_commit_date = only(canon)
+        drift = []
+        C.check_current_stamp(drift)
+        assert drift, (
+            "a CANONICAL HEAD moving no longer trips the stamp — the narrowing went too far and the "
+            "check now catches nothing. Both halves of this test matter.")
+    finally:
+        C._git_last_commit_date = real
