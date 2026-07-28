@@ -8,6 +8,10 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **[OPEN] ED-IN-0085 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
+  landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
+  the banner counts as settled.
+
 - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
   check-ins outright ("I don't even need check in triggers, I can just see what's happening by the
   colours on a session"). **Measured first:** 116 confirmed `send_later` firings in 2026-07-19..26,
