@@ -15,6 +15,42 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **▶ START HERE — THE MASS BATTLE PLAN (2026-07-26):**
+  **`audit/2026-07-26-mass-battle-fable-audit/03_execution_plan.md`**
+  Self-contained; a fresh session needs nothing else. Consolidates BOTH audits from that session
+  (ED-MB-0043 vector, ED-MB-0045 Fable-5 six-dimension) plus the four pre-existing open MB items into
+  one ordered plan, with per-task files, verification commands, required guards, and whether each
+  changes battle outcomes.
+
+  **Three governing facts, all verified:** (1) **battles are being distorted right now** — a float
+  compare with no epsilon guard turns 3 damage into 0 at the universal `dr=1`, a bare `break` drops
+  engagement groups past the 5th unlogged, and `check_drift` re-keys 1 of 10 cell maps; (2) **the
+  engine cannot explain a battle** — every diagnosis in both audits needed a bespoke probe, and there
+  are now 23; (3) **the instruments are not watching** — the Lanchester harness is red and unwired
+  (`melee p=2.50` vs a `≤1.4` bar) and the shipped configuration has no regression oracle at all.
+  Fact 3 is *why* two default flips were made on confounded measurements and retracted.
+
+  **Five tracks.** **A** trustworthy instrument (gates everything) · **B** ownership — `CellTable`,
+  ten maps → one owner with a loud invariant · **C** observability, the battle explains itself (new,
+  no prior tracking item) · **D** the system itself — DG-6, cell phases 3–4, envelopment, R3, the
+  inverted casualty shape · **E** canon/params/contract/registries.
+
+  **Critical path: A1 → A5 → D1** (wire the shipped goldens → finish the scalar sweep → re-measure
+  DG-6's CV-vs-N with cell correlation ON). **First merged PR in an hour: E1** — delete the
+  `scene_outcome.battle_concluded` emit row, one line, = ED-MB-0010 open since 2026-07-13, closes five
+  downstream surfaces.
+
+  **D1 is the plan's central bet, stated as a hypothesis with a falsifier:** DG-6's research names
+  correlation as the only lever that breaks CLT self-averaging, then implements the simplest form — a
+  shared per-battle shock costing gauge 6/20 → 4/20. But cell-morale lattice contagion already
+  generates correlation *from a primitive*, and has never been measured against this problem.
+  **Falsifier: if CV-vs-N still decays as O(1/√N) with `PC_CELL_MORALE=ON`, the recommendation is
+  wrong and the shared shock is right.** That measurement does not exist yet.
+
+  **Eight forks are held for Jordan (§7) — do not work around them.** Note §7.8: terrain, pursuit in
+  the measured mode, the general as an entity, surrender, ammunition, weather would change battles
+  more than all of tracks A–E combined, but they are design, not repair.
+
 - **ED-MB-0045 REMEDIATION PLAN (2026-07-26): all MB surfaces.**
   `audit/2026-07-26-mass-battle-fable-audit/02_remediation_plan.md`. Scoped to the **13 mass-battle
   surfaces** (§1): live engine, stale twin, 24 CI tests, goldens, gauge, 4 harnesses, workbench,
