@@ -38,8 +38,9 @@ def test_all_proposals_docs_surface_by_location():
     # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops);
     # 17 with the 2026-07-21 observatory-holonic-refactor proposal;
     # 18 with the 2026-07-21 reconciliation-program (consolidates the plan fragments);
-    # 19 with the 2026-07-26 personal-combat player-agency + tradition-curriculum proposal.
-    assert len(props) == 19
+    # 19 with the 2026-07-26 personal-combat player-agency + tradition-curriculum proposal;
+    # 20 with the 2026-07-28 external-practice-corpus investigation (ED-IN-0085).
+    assert len(props) == 20
 
 
 def test_all_audit_verdicts_present():
