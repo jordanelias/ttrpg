@@ -93,7 +93,7 @@ def active_lane() -> str | None:
         return None
 
 
-# ED-IN-0085 status tag: the single authoritative status marker on a handoff bullet.
+# ED-IN-0086 status tag: the single authoritative status marker on a handoff bullet.
 # Pattern is duplicated from tools/handoff_atomize.py deliberately — this module is imported
 # by the SessionStart hook and must not take a dependency that can break session start.
 _STATUS_TAG = re.compile(r"^[*_\s]*\[(OPEN|PART|DONE)(?:\s+20\d\d-\d\d-\d\d)?\]")
@@ -128,7 +128,7 @@ def _pending_items(lane: str) -> list[str]:
             body = ln[2:].strip()
             if body.startswith("✅") or body.startswith("~~"):
                 continue
-            # ED-IN-0085 status tag wins over prose when present. Prose inference is what made
+            # ED-IN-0086 status tag wins over prose when present. Prose inference is what made
             # five lanes' LIVE items invisible here: an item reading "PARTIALLY RATIFIED" or
             # "ED-FI-0002 (open) — … RULED" matches RESOLVED_SKIP and was dropped from the
             # pending count. An explicit [OPEN|PART|DONE] tag cannot be misread that way.

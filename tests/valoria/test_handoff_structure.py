@@ -1,6 +1,6 @@
 """
 Unit tests for tools/handoff_atomize.py — the handoff skeleton/infill/archive contract
-(ED-IN-0085, Jordan ruling 2026-07-28).
+(ED-IN-0086, Jordan ruling 2026-07-28).
 
 What these pin, and why each one is the falsifier for a specific claim (§0.1 point 3):
 

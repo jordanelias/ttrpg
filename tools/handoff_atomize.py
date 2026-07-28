@@ -2,7 +2,7 @@
 """
 handoff_atomize.py — the single owner of the handoff skeleton/infill/archive structure.
 
-Jordan's 2026-07-28 ruling (ED-IN-0085) set the handoff contract:
+Jordan's 2026-07-28 ruling (ED-IN-0086) set the handoff contract:
 
   • Each HANDOFF_<LANE>.md is a SKELETON: an executive summary (~60 words, bullet-point
     phrasing — prose costs too much) plus ONE LINE per open item. The summary exists so a
@@ -40,7 +40,7 @@ MAX_TOKENS = 10_000          # per infill / archive document (Jordan 2026-07-28)
 STALE_DAYS = 30              # "older than a month"
 SUMMARY_MAX_WORDS = 60
 
-# ── STATUS TAG CONVENTION (ED-IN-0085, Jordan 2026-07-28) ────────────────────────────────
+# ── STATUS TAG CONVENTION (ED-IN-0086, Jordan 2026-07-28) ────────────────────────────────
 # Every handoff bullet opens with ONE tag from a CLOSED three-value vocabulary:
 #
 #     - [OPEN] item …                     work not finished
@@ -73,7 +73,7 @@ RESIDUAL = re.compile(r'STAGED|UNRULED|pending|TODO|residual|follow-up|not yet|b
 DATE = re.compile(r'20\d\d-\d\d-\d\d')
 
 SUMMARY_HEAD = "## Executive summary"
-SUMMARY_TODO = ("<!-- TODO(ED-IN-0085): author a ~60-word executive summary. Bullet-point "
+SUMMARY_TODO = ("<!-- TODO(ED-IN-0086): author a ~60-word executive summary. Bullet-point "
                 "phrasing, not prose. It must answer 'what is this lane's state right now' "
                 "without opening the infill. -->")
 
@@ -150,7 +150,7 @@ def tag_problems(lane: str, bullets: list[str]) -> list[str]:
             out.append(f"{lane}: [PART] item does not name its residual inline: {one_line(b, 60)}…")
     if untagged:
         out.append(f"{lane}: {untagged}/{len(bullets)} bullets carry no [OPEN|PART|DONE] tag "
-                   f"— status inferred from prose (migration debt, ED-IN-0085)")
+                   f"— status inferred from prose (migration debt, ED-IN-0086)")
     return out
 
 
