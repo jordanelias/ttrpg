@@ -5,13 +5,13 @@
   "ranked_view": "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 250,
-    "needs_jordan": 100,
+    "total": 252,
+    "needs_jordan": 102,
     "by_kind": {
-      "proposal_doc": 19,
+      "proposal_doc": 20,
       "provisional_status_doc": 6,
       "ledger_actionable": 119,
-      "ledger_needs_jordan": 87,
+      "ledger_needs_jordan": 88,
       "audit_partial": 19
     },
     "by_lane": {
@@ -24,8 +24,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 35,
-        "needs_jordan": 15
+        "total": 36,
+        "needs_jordan": 16
       },
       "MB": {
         "total": 9,
@@ -48,15 +48,15 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 97,
-        "needs_jordan": 28
+        "total": 98,
+        "needs_jordan": 29
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 97,
-      "needs_jordan": 28,
+      "total": 98,
+      "needs_jordan": 29,
       "items": [
         {
           "kind": "proposal_doc",
@@ -156,6 +156,16 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-07-28-external-practice-corpus-investigation.md",
+          "id": "proposals/2026-07-28-external-practice-corpus-investigation.md",
+          "title": "2026-07-28-external-practice-corpus-investigation",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROPOSED — investigation COMPLETE and ratifiable as a record; every ADOPTION in §7 is HELD FOR JORDAN and is **not** ratified by merging this doc. See §0.3.",
           "links": []
         },
         {
@@ -1585,8 +1595,8 @@
       ]
     },
     "IN": {
-      "total": 35,
-      "needs_jordan": 15,
+      "total": 36,
+      "needs_jordan": 16,
       "items": [
         {
           "kind": "ledger_actionable",
@@ -1865,6 +1875,16 @@
           "title": "Values/formulae unification, first slice (Jordan directive: 'I need all values and formulae'; redirect: 'what happened to the .py stuff and pointers'). The computational values live as ~324 typed module-scope constants in the sim reference ",
           "lane": "IN",
           "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0085",
+          "title": "EXTERNAL PRACTICE CORPUS INVESTIGATION (9 sources: 4 Reddit threads, 2 code.claude.com docs pages, 1 vendor blog, ChristopherKahler/aegis, itsmesherry/claude-audit). Report: proposals/2026-07-28-external-practice-corpus-investigation.md. Sc",
+          "lane": "IN",
+          "needs_jordan": true,
           "status": "open",
           "links": []
         },
@@ -2746,6 +2766,16 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-07-28-external-practice-corpus-investigation.md",
+      "id": "proposals/2026-07-28-external-practice-corpus-investigation.md",
+      "title": "2026-07-28-external-practice-corpus-investigation",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED — investigation COMPLETE and ratifiable as a record; every ADOPTION in §7 is HELD FOR JORDAN and is **not** ratified by merging this doc. See §0.3.",
       "links": []
     },
     {
@@ -4245,6 +4275,16 @@
       "title": "Values/formulae unification, first slice (Jordan directive: 'I need all values and formulae'; redirect: 'what happened to the .py stuff and pointers'). The computational values live as ~324 typed module-scope constants in the sim reference ",
       "lane": "IN",
       "needs_jordan": false,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-IN-0085",
+      "title": "EXTERNAL PRACTICE CORPUS INVESTIGATION (9 sources: 4 Reddit threads, 2 code.claude.com docs pages, 1 vendor blog, ChristopherKahler/aegis, itsmesherry/claude-audit). Report: proposals/2026-07-28-external-practice-corpus-investigation.md. Sc",
+      "lane": "IN",
+      "needs_jordan": true,
       "status": "open",
       "links": []
     },
