@@ -455,7 +455,11 @@ fits, rather than defaulting the whole fan-out to Opus.
 
 **A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling
 loops — by any mechanism. Enforced, not merely asked: `.claude/settings.json` `permissions.deny`
-blocks `send_later`, `create_trigger`, `ScheduleWakeup`, and `CronCreate`, and
+blocks `send_later`, `create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_trigger`,
+`fire_trigger`, and `Skill(loop)` (**widened 2026-07-28, ED-IN-0086** — the last three were found
+still reachable in-session by ED-IN-0085: `update_trigger` re-arms an *existing* Routine without
+needing `create_trigger`, `fire_trigger` invokes one whose prompt can re-arm, and `Skill(loop)` is
+/loop's entry point rather than its already-denied pacing primitives), and
 `tools/ci_hooks_verifier.py` Check 6 (the BLOCKING "Enforcement Architecture Intact" job) fails if
 any entry is dropped or if this section goes missing. The deny-list is the single owner of the rule;
 the check is the guard that fails on recurrence (§0.1 point 5).
@@ -481,7 +485,7 @@ multiple of that. Per-wake-up *added* context is separate and additive: one `get
 repo measures 9.4 KB ≈ 2.4k tokens, and a check-in typically also reads PR state plus comments.
 
 **The falsifier**, per §0.1 point 3: `tests/valoria/test_no_polling_triggers.py` asserts the deny-list
-covers all four primitives and that this section survives. Delete a deny entry and that test fails,
+covers all **seven** primitives and that this section survives. Delete a deny entry and that test fails,
 along with the CI job. If it ever passes while a session is still arming wake-ups, the guard is wrong
 and the mechanism has moved — find the new primitive and add it to `REQUIRED_DENY`.
 

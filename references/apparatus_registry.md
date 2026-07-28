@@ -4,11 +4,12 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**105 apparatuses** — hook: 4, skill-script: 10, tool: 88, workflow: 3 · **3 orphaned**.
+**109 apparatuses** — claude-workflow: 3, hook: 4, skill-script: 10, tool: 89, workflow: 3 · **4 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
 - `tools/build_audit_registry_backfill.py`
+- `tools/ci_claude_workflow_paths.py`
 - `tools/geography/jsx_to_canonical.py`
 - `tools/observability/npc_audit_report_gen.py`
 
@@ -53,6 +54,7 @@
 | `tools/canon_coverage_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/ci_audit_registry_check.py` | — | yes | ci:valoria-ci.yml, skill:valoria-canon-guard, tool:imported |
 | `tools/ci_claim_provenance_check.py` | — | yes | ci:valoria-ci.yml |
+| `tools/ci_claude_workflow_paths.py` | — | yes | — |
 | `tools/ci_generation_consistency.py` | — | yes | ci:valoria-ci.yml, skill:valoria-vector-audit, tool:imported |
 | `tools/ci_module_shape_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/ci_names_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |

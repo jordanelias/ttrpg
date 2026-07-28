@@ -125,6 +125,19 @@ REQUIRED_DENY = (
     'create_trigger',  # claude-code-remote: send_later's underlying Routine API
     'ScheduleWakeup',  # /loop dynamic self-pacing
     'CronCreate',      # /loop fixed-interval scheduling
+    # --- widened 2026-07-28 (ED-IN-0086) ---------------------------------------------
+    # ED-IN-0084 pinned the four primitives that were *known* then, and wrote its own
+    # falsifier as: "if a session ever schedules a wake-up while these pass, find the new
+    # primitive and add it to REQUIRED_DENY." That is exactly what happened — ED-IN-0085
+    # found three live route-arounds still reachable in-session:
+    'update_trigger',  # re-enables / re-crons an EXISTING Routine, so a session that cannot
+                       # create one can still arm a disabled one — create_trigger's twin
+    'fire_trigger',    # fires a Routine on demand; the Routine's own prompt can re-arm, so
+                       # this is a one-hop path back into the chain create_trigger blocks
+    'Skill(loop)',     # the /loop skill runs a prompt on a recurring interval in-session —
+                       # the same polling behaviour, reached through the skill surface rather
+                       # than a scheduling tool. ScheduleWakeup/CronCreate deny /loop's
+                       # pacing primitives; this denies its entry point.
 )
 if os.path.exists(SETTINGS):
     import json

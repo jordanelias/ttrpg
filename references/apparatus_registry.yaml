@@ -4,22 +4,25 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 105
+  total: 109
   by_kind:
-    tool: 88
+    tool: 89
     skill-script: 10
     hook: 4
     workflow: 3
+    claude-workflow: 3
   by_role:
     A:writes-artifact: 22
-    B:stdout-or-gate: 42
+    B:stdout-or-gate: 43
     D:import-only-library: 38
     workflow: 3
-  orphaned: 3
+    orchestration: 3
+  orphaned: 4
   prune_candidates: 0
 prune_candidates: []
 orphaned_no_cli:
 - tools/build_audit_registry_backfill.py
+- tools/ci_claude_workflow_paths.py
 - tools/geography/jsx_to_canonical.py
 - tools/observability/npc_audit_report_gen.py
 entries:
@@ -177,6 +180,19 @@ entries:
   - ci:valoria-ci.yml
   imported_internally: false
   orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
+  imports: []
+- path: tools/ci_claude_workflow_paths.py
+  kind: tool
+  stem: ci_claude_workflow_paths
+  writes: []
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by: []
+  imported_internally: false
+  orphaned: true
   prune_candidate: false
   role: B:stdout-or-gate
   imports: []
@@ -1747,3 +1763,43 @@ entries:
   role: workflow
   invoked_by:
   - github-actions
+- path: .claude/wf_attribute_coherence.js
+  kind: claude-workflow
+  runs:
+  - Sweep
+  - Census
+  - Validate
+  - Trace
+  - Critic
+  - Synthesis
+  emits:
+  - attribute-value-coherence
+  writes: []
+  role: orchestration
+  invoked_by:
+  - session (Workflow tool)
+- path: .claude/wf_combat_critique.js
+  kind: claude-workflow
+  runs:
+  - Module-NERS
+  - Resolution
+  - Reconcile
+  - Adversarial
+  - Distill
+  emits:
+  - combat-system-critique
+  writes: []
+  role: orchestration
+  invoked_by:
+  - session (Workflow tool)
+- path: .claude/wf_social_contest_critique.js
+  kind: claude-workflow
+  runs:
+  - Critique
+  - Verify
+  emits:
+  - social-contest-deliberation-critique
+  writes: []
+  role: orchestration
+  invoked_by:
+  - session (Workflow tool)

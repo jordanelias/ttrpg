@@ -36,8 +36,24 @@ def _skill_dirs() -> list[Path]:
                   if d.is_dir() and (d / "SKILL.md").exists())
 
 def _workflows() -> list[Path]:
+    """CI workflows only — GitHub Actions YAML."""
     wf = REPO / ".github" / "workflows"
     return sorted(wf.glob("*.yml")) if wf.exists() else []
+
+
+def _claude_workflows() -> list[Path]:
+    """Claude Code Workflow scripts in `.claude/` — a DIFFERENT thing from CI workflows.
+
+    ED-IN-0086 (finding: ED-IN-0085). The word "workflow" is overloaded in this repo, and the
+    registry inherited only one meaning: `_workflows()` resolves to `.github/workflows`, so the
+    `.claude/wf_*.js` orchestration scripts — which encode the repo's own audit method — were
+    invisible to the very inventory that exists to flag orphaned apparatus. They are listed here
+    under a distinct `claude-workflow` kind rather than folded into `_workflows()`, because their
+    invoker, artifacts, and failure modes are all different: CI workflows are triggered by
+    github-actions and emit ci-status; these are invoked by hand in a session and emit audit docs.
+    """
+    d = REPO / ".claude"
+    return sorted(d.glob("wf_*.js")) if d.exists() else []
 
 # ------------------------------------------------------------- AST write/read/scan
 _WRITE_DUMP = {"dump", "safe_dump"}          # json.dump / yaml.dump / yaml.safe_dump
@@ -165,8 +181,14 @@ def _text_index() -> str:
     return "\n".join(parts)
 
 def _py_import_index() -> str:
+    # ED-IN-0086 (finding: ED-IN-0085): `sim/` was retired 2026-07-21 and its contents moved to
+    # engine/ (the core) and systems/<subsystem>/sim/ (the per-subsystem sims). This tuple was
+    # never updated, so the orphan detector's import graph silently lost every simulation module —
+    # the same rot class that broke structure_audit's CODE_ROOTS (ED-MB-0043). Roots are the live
+    # trees now; `sim/` is deliberately absent rather than kept "just in case", because a root that
+    # cannot exist is indistinguishable from one that is merely empty.
     parts = []
-    for base in ("tools", "skills", "sim", "tests"):
+    for base in ("tools", "skills", "engine", "systems", "tests"):
         d = REPO / base
         if d.exists():
             for p in d.rglob("*.py"):
@@ -329,6 +351,21 @@ def build() -> dict:
             "path": str(wf.relative_to(REPO)), "kind": "workflow",
             "runs": runs, "emits": emits or ["ci-status"],
             "writes": [], "role": "workflow", "invoked_by": ["github-actions"],
+        })
+
+    # Claude Code Workflow scripts (.claude/wf_*.js) — ED-IN-0086. Distinct kind, distinct
+    # invoker: these are run by hand in a session, not by CI, and their "runs" are the agent
+    # phases they declare rather than the python they shell out to.
+    for wf in _claude_workflows():
+        txt = wf.read_text(encoding="utf-8", errors="replace")
+        phases = re.findall(r"\{\s*title:\s*'([^']+)'", txt)
+        name_m = re.search(r"name:\s*'([^']+)'", txt)
+        entries.append({
+            "path": str(wf.relative_to(REPO)), "kind": "claude-workflow",
+            "runs": phases,
+            "emits": [name_m.group(1)] if name_m else ["audit-artifacts"],
+            "writes": [], "role": "orchestration",
+            "invoked_by": ["session (Workflow tool)"],
         })
 
     # counts

@@ -32,12 +32,28 @@ CLAUDE_MD = os.path.join(ROOT, 'CLAUDE.md')
 # produced all 116 measured firings; `create_trigger` is its underlying Routine API and
 # therefore the obvious route-around; ScheduleWakeup and CronCreate are the /loop pacing
 # and fixed-interval equivalents.
+#
+# WIDENED 2026-07-28 (ED-IN-0086). ED-IN-0084 wrote its own falsifier as: "if it ever passes
+# while a session is still arming wake-ups, the guard is wrong and the mechanism has moved —
+# find the new primitive and add it to REQUIRED_DENY." ED-IN-0085 found three that had moved,
+# all reachable in-session while the original four passed. That is the guard working, not
+# failing: the roster is meant to grow when the surface does.
 REQUIRED_DENY = (
     'send_later',
     'create_trigger',
     'ScheduleWakeup',
     'CronCreate',
+    'update_trigger',  # re-arms an EXISTING Routine — reachable without create_trigger
+    'fire_trigger',    # fires a Routine now; its prompt can re-arm, so it re-enters the chain
+    'Skill(loop)',     # /loop's entry point: a prompt re-run on an interval, in-session
 )
+
+# LIMIT OF THE Skill(loop) ENTRY, stated rather than assumed (CLAUDE.md §0.1 point 3):
+# the MCP entries match a fully-qualified tool name, a format this repo has already seen
+# enforced. `Skill(loop)` uses Claude Code's skill-permission syntax, which this test pins
+# as an ARTIFACT but cannot execute. If the runtime spelling turns out to differ, this test
+# still passes while /loop stays reachable — the same class of blind spot ED-IN-0084 named
+# for the whole roster. Re-verify against a live permission denial before trusting it.
 
 
 def _deny_list():
@@ -67,7 +83,7 @@ def test_mcp_denies_cover_the_server_name_spellings():
     # deny rule matches the tool's fully-qualified name, so one spelling is not enough:
     # a session on a surface that normalizes differently would sail straight past it.
     deny = _deny_list()
-    for tool in ('send_later', 'create_trigger'):
+    for tool in ('send_later', 'create_trigger', 'update_trigger', 'fire_trigger'):
         spellings = {d.split('__')[1] for d in deny
                      if d.startswith('mcp__') and d.endswith(f'__{tool}')}
         assert {'Claude_Code_Remote', 'claude-code-remote', 'claude_code_remote'} <= spellings, (

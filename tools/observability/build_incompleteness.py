@@ -328,7 +328,30 @@ def scan_status_headers():
     return out
 
 
-RETIRED_TREES = ("designs/",)  # designs/ was retired 2026-07-19 (ED-IN-0071 P4/P5)
+# ED-IN-0086 (finding: ED-IN-0085): `sim/` was retired 2026-07-21 (ED-IN-0071 P4 continuation) and
+# was never added here, so half the retired surface went unscanned. This tuple is now the SINGLE
+# OWNER of "which trees are retired" — the scan regex below is built from it rather than hardcoding
+# a tree name, so the next retirement is a one-line change instead of a second missed one.
+RETIRED_TREES = (
+    "designs/",  # retired 2026-07-19 (ED-IN-0071 P4/P5)
+    "sim/",      # retired 2026-07-21 (ED-IN-0071 P4 continuation, sim/ hollow-out)
+)
+
+# `sim/` needs a left boundary that `designs/` did not: `tests/sim/` and `tests/sim_framework/` are
+# live, unrelated trees (CLAUDE.md §3 warns about exactly this confusion), and a bare `sim/` match
+# would report both as stale pointers. The lookbehind anchors the match to a path START.
+#
+# The extension set is widened past the original `.md` for the same reason the tree list was: the
+# retired `designs/` tree was design DOCS, but the retired `sim/` tree was PYTHON. A `sim/` entry
+# under an `\.md`-only pattern could never match anything — coverage that cannot fire reads as
+# coverage while catching nothing, which is the failure mode CLAUDE.md §0.1 point 2 names ("an
+# assertion must be able to observe the failure it excludes"). Verified by construction below:
+# each tree/extension pair is exercised against a known-live example before this ships.
+_RETIRED_EXT = ("md", "py", "yaml", "yml", "json", "jsonl")
+_RETIRED_RE = re.compile(
+    r"(?<![A-Za-z0-9_/.\-])(?:%s)[A-Za-z0-9_./\-]+\.(?:%s)\b"
+    % ("|".join(re.escape(t) for t in RETIRED_TREES), "|".join(_RETIRED_EXT))
+)
 
 
 def scan_retired_tree_pointers():
@@ -337,8 +360,8 @@ def scan_retired_tree_pointers():
     behind the alias, invisible until now. The alias map itself and append-only ledgers legitimately
     carry the old paths, so they are excluded."""
     out = []
-    EXCLUDE = ("restructure_ledger",)  # the alias map: designs/ paths are its KEYS, legitimate
-    rel_re = re.compile(r"designs/[A-Za-z0-9_./\-]+\.md")
+    EXCLUDE = ("restructure_ledger",)  # the alias map: retired paths are its KEYS, legitimate
+    rel_re = _RETIRED_RE
     for sub in ("references", "registers"):
         base = REPO / sub
         if not base.exists():
@@ -354,8 +377,14 @@ def scan_retired_tree_pointers():
             hits = rel_re.findall(text)
             if hits:
                 uniq = sorted(set(hits))
+                # Name the tree(s) actually hit. The message used to hardcode "designs/", which
+                # became wrong the moment RETIRED_TREES grew (ED-IN-0086) — a finding that
+                # misnames its own cause sends the reader to the wrong tree.
+                trees = sorted({t.rstrip('/') for t in RETIRED_TREES
+                                if any(h.startswith(t) for h in uniq)})
                 out.append(finding("stale_retired_pointer", rel, rel,
-                                   f"{len(hits)} reference(s) to the retired designs/ tree "
+                                   f"{len(hits)} reference(s) to the retired "
+                                   f"{'/'.join(trees) or 'designs'}/ tree "
                                    f"(alias-resolved, not live): e.g. {', '.join(uniq[:3])}"
                                    + (f" (+{len(uniq)-3} more)" if len(uniq) > 3 else ""),
                                    path=rel, lane="IN"))
