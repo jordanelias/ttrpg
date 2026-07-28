@@ -603,3 +603,257 @@ Two of four critics (technical design, evidence/audit-the-audit) were still runn
 was written. **§11 is therefore incomplete, not final** — a session picking this up should expect a
 further amendment block, and should treat the technical design of `CellTable` (§3) and the residual
 strength of the S1.1–S1.5 evidence as **not yet adversarially settled**.
+
+---
+
+# §12 — SECOND AMENDMENT BLOCK (technical-design critic)
+
+Completes §11.9's outstanding review. Orchestrator-verified where marked.
+
+## 12.1 — ⚠ MY A2 GUARD IS VACUOUS · **the plan committed the defect it exists to fix**
+
+**MEASURED:**
+```
+ob=1: (ob-1e-16)==ob ? False  → 'Partial'    ← only this one works
+ob=3: (ob-1e-16)==ob ? True   → 'Success'    ← passes on UNFIXED code
+ob=6: (ob-1e-16)==ob ? True   → 'Success'    ← passes on UNFIXED code
+math.nextafter(ob,-inf) → 'Partial' for ob ∈ {1,3,6}   ← a guard that CAN fail
+```
+`ulp(3) ≈ 4.4e-16 > 1e-16`, so `3 - 1e-16` *is* `3`. The guard specified at §2/A2 **cannot observe
+the failure it excludes** — CLAUDE.md §0.1 #2, in a plan whose §2 theme is vacuous assertions.
+
+**Replacement guard:** `compute_degree(math.nextafter(ob, -inf), ob) == "Success"` for `ob ∈ {1,3,6}`,
+**plus** the `_sigma_net_boost(-1e-16, 9)` repro verbatim. Mutation-verify both.
+
+## 12.2 — A2 is under-specified in three further ways
+
+- **Epsilon unstated.** Both operands are floats (`ob = max(1, b_net)` carries its own σ-boost), so the
+  guard must absorb error in *both*. Specify **absolute `1e-9`**: net magnitudes are bounded by pool
+  scale, so accumulated ulp error is ≤ ~1e-13, while a *designed* σ landing within 1e-9 of a threshold
+  is ~1e-9/exchange. A relative or 1e-6 epsilon starts eating real `Partial` outcomes.
+- **Only 1 of 3 boundaries named.** The same noise class attacks `net <= 0` (a mathematically-zero
+  boost computed as +1e-16 escapes `Failure` — biasing *toward* damage) and `net >= 2*ob`. Guarding
+  `Success` alone institutionalises an asymmetric attacker-favouring correction. **All three
+  comparisons in `resolution.py:64-68` get the same treatment.**
+- **A redundant producer fix already exists and must be reconciled.** `units.py:621-631` is an
+  exact-uniform-mean special case whose own comment describes this precise degree-boundary failure.
+  A2 makes it redundant. **State which regime is authoritative and whether that special case stays** —
+  two overlapping exactness regimes with different scopes is how the next confounded measurement
+  happens. Preferred shape: snap `|σ| < 1e-12 → 0` at the `_sigma_net_boost` chokepoint (the
+  semantically-correct statement) **and** epsilon all three consumer boundaries.
+
+## 12.3 — ⚠ B1b's invariant is FALSE BY DESIGN · **fails as written**
+
+`.check()` was specified as "every map's keys == `.ids`; Σtroops == troop_count". Both halves are wrong:
+
+- **Emptiness is the feature.** `cell_morale` / `cell_start_troops` / `cell_breakpoint` are *empty until
+  seeded*, and `eff_morale` branches on `if self.cell_morale:` — **emptiness IS the `PC_CELL_MORALE`
+  gate**. Forcing `keys == ids` turns cell semantics permanently ON. `_speed_accum` is documented
+  "empty and untouched on the default path → byte-exact". `halted_cells` / `merged_cells` are
+  rebuilt per tick and are strict subsets *by semantics*. `cell_facing_vec` / `cell_last_speed` are
+  lazily populated in movement order, and **both their truthiness and their contents are consumed**
+  (`orchestration.py:1773-1774` branches on truthiness then averages the values) — pre-keying flips a
+  live branch and changes a float mean.
+- **`Σtroops == troop_count` is false from the first casualty:** `troop_count` is a spawn constant;
+  casualties go to `cell_troops` only.
+
+**Corrected spec — per-map class, not one rule:** *value maps* → empty XOR `keys == ids`;
+*lazy/set maps* → `keys ⊆ ids`; conservation → `|Σcell_troops − last_conservation_point| ≤ ε`, never
+against `troop_count`. As originally written the check is red on tick 1 of every battle, which makes
+B1b's "corrupt one map and assert it fails" guard **unfalsifiable**.
+
+## 12.4 — The CellTable rationale was measurably backwards · **decision re-opened**
+
+**Agent-MEASURED** (CPython 3.11, 25 cells/subunit, identical access patterns): a dict of `__slots__`
+cell objects (AoS) beat the parallel-dict layout (SoA) on **every** pattern — keyed 2-field read 1.10
+vs 1.29 µs, `items()` iteration 0.80 vs 1.08, 2-field write 1.33 vs 2.22. **AoS is 15–40% faster.**
+The SoA locality intuition is a compiled/numpy fact; a `(r,c)`-tuple-keyed dict of boxed floats has no
+locality, so *k* fields cost *k* hashes under SoA vs one hash + *k* slot reads under AoS. At engine
+scale the delta is ~2–3 s across a multi-minute gauge run **in either direction — it decides nothing.**
+
+The Godot half is also decorative: *neither* layout is a `PackedFloat32Array`; both are tuple-keyed
+hash maps, and the sketched `CellTable` does not change the keying scheme.
+
+**Both stated reasons for rejecting a per-cell class are false.** The design may still be chosen, but
+on the *true* argument — a thin wrapper over the existing dicts is the lowest-float-order-risk
+introduction path — and that variant **enforces nothing** (12.5). State the real trade or re-open.
+
+## 12.5 — "Owns the state" and "behaviour-preserving by construction" cannot both hold
+
+External writers exist in every layer (`percell.py:119`, `orchestration.py:1705` replaces the attribute
+outright, `contact.py:222`, `check_drift`'s wholesale `a.cell_troops = {…}`, `seed_cell_morale`), and
+duck-typed readers assume dict semantics (`getattr(atom,'cell_troops',None) or {}` — a proxy without
+`__bool__` silently changes that branch). **Either** B1a exposes the live dicts through properties, in
+which case the maps themselves escape and `.view(id)` is irrelevant — detection at phase boundaries,
+not prevention — **or** it rewrites ~50 sites, which is exactly where the float-order risk lives.
+In Python you get at most one. The plan claimed both.
+
+## 12.6 — B1c is not "S" — it hides ~4 unmade policy rulings
+
+Drift has **no old→new key bijection** (arbitrary shape → Line, different cell count). `cell_troops`
+has a defined policy. `cell_morale` does not — mean? troop-weighted? *carrying the low-morale corner is
+the feature's entire point.* `cell_breakpoint` is a **drawn random value**: redraw (shifting the
+`_cell_random` stream for every later draw) or inherit (from which dead cell)? Same for `_cell_target`
+and the lazy maps. **At least the morale and breakpoint policies are §7-class design rulings**, sized
+"S" in the plan.
+
+## 12.7 — The verification net has a hole exactly over the bug being fixed
+
+A1's digests run at default `PC_CELL_MORALE=0`, where the three cell-morale maps are **empty**. So
+"behaviour-preserving, verified by A1's digests" verifies float-order for every map *except the three
+whose desync is the headline*, and B1c's battle-visible change has no golden, no gauge row, and no CI
+mode observing it. **A fifth digest mode (`PC_CELL_MORALE=1`, freshly recorded) must exist before B1a
+starts**, or the "if digests move, you changed behaviour" protocol is vacuous over cell state.
+
+## 12.8 — Both field goldens are stale, not just `cell_field`
+
+Agent-MEASURED: `unit_field` also mismatches (`6f594233…` vs committed `d44f211f…`), and pinning
+`PC_STOCHASTIC_ROUT=0` still mismatches — so **≥2 mechanisms** moved the field digests since their last
+recording (2026-07-23/24), while the impulse-momentum change and the `PC_STOCHASTIC_ROUT` flip landed
+2026-07-25 with no field re-record. **A1a is a bisection task, not a re-record.** Also: `bat.py`'s mode
+key reads only `PER_CELL`/`FIELD_MOVEMENT`, so a run missing `PC_NODE_COHESION=0` silently checks a
+node-cohesion battle against the grid golden — **the CI job must pin the full `_PINNED_OFF` vector**,
+not the two toggles A1 names.
+
+## 12.9 — A3 will measure zero and mislead; B2's "or" is illusory; A5 needs a carve-out
+
+- **A3:** the repo's own audit found the cascade never produces >1 group in the pinned grid battery, so
+  "report how often it fires" reads **0** there. Report from gauge multi-unit / field / Cannae
+  workloads. And frequency is the wrong quantity — truncation drops the *deepest-sorted* groups, a
+  systematic bias against deep formations (precisely D6's "too deep to fight"). **Count truncated pairs
+  and their engaged-troop weight.** Note `trace_event` is a no-op unless tracing is on, so the counter
+  must ride the result dict or C4.
+- **B2:** the mirrors have **already diverged** in three flag-gated branches (friction CEV + yield malus
+  in the subunit path; `OVEREXTEND_PENALTY` in the unit path; plus side-effect asymmetry on `broken`).
+  So "the test may reveal drift" is not a possible outcome — it is certain. A defaults-pinned test
+  **passes while certifying a false docstring**. Collapse is the only real option, and it needs a
+  ruling on whether the pursuit pool carries CEV/yield — fork-adjacent, not a refactor.
+- **A5:** `lanchester_signature.py:126` is `ua.morale = ua.morale_start = NO_ROUT_MORALE`. The
+  `morale_start` half is **non-cellular** and must stay a bare write — so it needs a `_CELL_OWNED`
+  whitelist entry, or the sweep gate blocks its own fix.
+
+## 12.10 — Revised verdicts
+
+| Item | Verdict |
+|---|---|
+| A1 | **Fails as written** — both field goldens stale; job red on first run; needs bisect + full toggle-vector pinning |
+| A2 | **Guard vacuous (verified)**; epsilon unstated; 1 of 3 boundaries; reconcile with the `units.py:621-631` producer fix |
+| A3 | Survives, amended — count pairs × troop weight, from workloads where cascades actually occur |
+| A5 | Survives with a `morale_start` carve-out |
+| B1a | **Major amendment** — rationale measurably false; enforcement vs behaviour-preservation contradiction; needs a 5th recorded mode first |
+| B1b | **Fails as written** — invariant false by design for ≥5 maps and after first blood |
+| B1c | Survives as a goal; **size wrong** — hides §7-class rekey policy rulings |
+| B2 | Amendment — drift already certain; the "or" is illusory |
+
+**Most likely to fail in implementation: B1a.** Its success criterion is triply compromised — the
+goldens are already red, they run blind to the cell-morale maps, and it must preserve per-map insertion
+orders that a unified `.ids` cannot represent plus an RNG draw order nothing records. **The predictable
+outcome is a fourth retracted flip: a refactor declared behaviour-preserving because a blind instrument
+did not move.** Do not start B1a until 12.7 and 12.8 are closed.
+
+---
+
+# §13 — THIRD AMENDMENT BLOCK · **§0's governing fact #1 is REFUTED by measurement**
+
+The evidence critic instrumented the engine (pass-through wrappers, proven non-perturbing — grid
+digests reproduced byte-exact with wrappers installed) and ran the full bat battery ×4 modes plus the
+full 20-row × 60-seed gauge. Its measurements overturn the plan's own framing. **Agent-MEASURED at
+scale; the orchestrator verified the drift and golden legs independently.**
+
+## 13.1 — "Battles are being distorted right now" fails on all three legs as stated
+
+| Leg | Claimed | **Measured** |
+|---|---|---|
+| Degree-boundary ulp (S1.2) | "Exchanges are being zeroed" | **209,778** `compute_degree` calls; 137,951 with non-integer nets; **ZERO within 1e-9 of an integer; ZERO degree flips.** `_sigma_net_boost` over ~190k calls is **bimodal** — exactly `0.0` or `≥1e-3`, nothing in between |
+| Sub-phase truncation (S1.3) | "Deep formations lose fights" | **102,260** cascade calls; max depth-group count ever observed **3**, against a bound of **5**; **ZERO truncations, ZERO dropped engagements** |
+| `check_drift` desync (S1.4) | listed among current distorters | Drift **fires 125×/gauge battery** (confirmed, stronger than my own measurement) — but the *morale* consequences stay **latent** behind `PC_CELL_MORALE=0` |
+
+**Corrected fact #1.** Two things *are* distorting or misreporting battles right now, and neither was in
+my list: **(a)** the shipped-mode goldens are already red (§11.0/§12.8), and **(b)** the casualty-realism
+scoreboard reads **2/20** with loser-conditioned means spanning **29.1–79.2%** (H6 = 79.2% at a 100%
+win rate; H4/Cannae decA = 5.0, below its 45–62 band). My §4.2/D5 text quoted a 07-25 scoreboard as if
+current — disclosed in §7 as "the repo's own recorded measurement", then used as live. **D5's premise
+"totals are near-band" is wrong; the current miss is wide.**
+
+**A2 keeps its guard (it is cheap, correct hygiene and §12.1 fixed its vacuity) but LOSES its
+"CHANGES BATTLES" label** — the prediction is now explicit and testable: *A2 moves no digest in any
+mode.* State that prediction in the PR; if a digest does move, something else is wrong.
+**A3 likewise drops off the severity-1 list** — count it, but its measured incidence is zero.
+
+## 13.2 — S1.1's exponent is an artifact, not a measurement · **A6 and fork #2 are mis-scoped**
+
+The harness's "no-rout" premise is broken: `NO_ROUT_MORALE=1e9` does not disable rout, because
+`_stochastic_break` triggers on **casualty fraction**, not morale, and the punch drives any finite pin
+to −1. Measured: **40/40 melee trajectories terminate by rout**; the fit window collapses to 30 ticks;
+the cv objective is **monotone across the entire scan grid with no interior minimum** — so `p=2.50` is
+a **grid-endpoint artifact of an unidentifiable fit on rout-truncated data**, not an attrition-law
+estimate. And `PC_STOCHASTIC_ROUT` defaulted ON on 2026-07-25 — *one day before these audits* — silently
+breaking the instrument.
+
+Volley is worse: **40/40 trajectories, 0.0% casualties on both sides**; `cv = 0` at every `p`, so
+`best_p = 0.5` is just the first grid point. The `inf` exchange ratio comes from a `0/0` guard — **both**
+sides took zero and the big side won **0/100**. Nothing happens in the volley scenario at all (the same
+ranged-hold standoff as ED-MB-0044, which the plan tracks separately without noticing it also zeroes
+this leg).
+
+**Consequence:** "the true exponent is ≥2.5, worse than the square law" is **unsupported** and must be
+struck from the register and from §2/A6. **A6 as written wires an instrument in which three of four
+checks are degenerate and the fourth is unidentifiable — report-only wiring would report artifacts with
+green-looking provenance.** The prior task is **repairing the harness** (make the rout pin actually
+disable rout; make the volley scenario exchange fire) — that is now A6a, and fork #2 cannot be
+adjudicated until it lands.
+
+## 13.3 — ⚠ Fork #5's emergence verdict is REFUTED as written · **highest-leverage overclaim in the corpus**
+
+"Delete the cell layer and little shipped behaviour changes" is an inference drawn from evidence about
+the **cell-morale programme** — a gated-off, once-measured-and-retracted feature — and then promoted
+into a claim about the **entire per-cell substrate**. Against it:
+
+- The register's own §4.1 credits the octagon **damage-received multiplier** as envelopment's dominant
+  effect — and it is computed from **`cell_facing_vec` and per-cell contact arcs**, i.e. from the cell
+  layer. **The verdict contradicts the same document's fidelity section.**
+- `_charge_shock_sigma` returns 0.0 unless `PER_CELL`; fatigue, depth, density and cavalry speed are all
+  `PER_CELL`-gated; **the entire C-battery is skipped at `PER_CELL=0`**, and the `unit`/`cell` digests
+  differ wholesale. `PER_CELL=1` is the shipped default.
+- "Phases 1+2 byte-identical" is true **by construction** — those phases are deliberately inert while
+  unseeded. That is evidence about gating discipline, not about causal weight.
+
+**The defensible claim is "cell-level *morale/rout state* is not yet load-bearing."** The recorded claim
+is about "the cell layer" and is **false for the shipped engine** — and it is queued as a Jordan fork
+that could redirect the architecture *against his own standing directive*, on evidence that cannot
+distinguish "cells don't matter" from "cell-morale isn't wired yet". **Reword fork #5 before it is
+ruled on.** Establishing it properly needs a real ablation matrix (`PER_CELL=0` vs `1`, and separately
+per-cell facing frozen to subunit-uniform, at matched density and granularity, with C3 attribution) —
+which does not exist.
+
+## 13.4 — Live defects nobody claimed
+
+- **Facing loss on drift, in the shipped config.** Three un-re-keyed maps are live at `PC_CELL_MORALE=0`:
+  `cell_facing_vec`, `halted_cells`, `_speed_accum`. After drift, `cell_facing_vec` lookups on new ids
+  fall through to `(advance_dir, 0)` defaults — **silently resetting the drifted body's committed
+  facing**, a real current octagon-input distortion occurring ~125× per gauge battery. Unclaimed by any
+  of the six auditors. **This is the one genuinely-current cell-map distortion, and it is not the one
+  the plan advertised.**
+- **Workbench concurrency (C5 hazard).** `server.py` serves trace requests on a `ThreadingHTTPServer`
+  while `run_traced_battle` seeds the **process-global** RNG and toggles a **module-global** trace
+  buffer — two concurrent requests interleave RNG streams and clear each other's trace mid-battle.
+  C5 proposes promoting exactly this tool to "the standard diagnostic artifact". Fix before promoting.
+  (`from trace import …` also shadows stdlib `trace` process-wide.)
+- **S2.5's "zero enablers anywhere" for `reform_check` is false** — `validators.py` saves, sets and
+  exercises `REFORM_CHECK_ENABLED` across 7 cases. B3's disposition must account for it.
+
+## 13.5 — Net effect on the plan
+
+**Re-ordered by measured severity:**
+
+1. **A1a — repair the red shipped-mode goldens** (bisect #235/#236, re-record with per-mechanism delta). Unchanged as first task; now the *only* member of the old fact #1.
+2. **A6a — repair the Lanchester harness** before wiring or arbitrating it (new; blocks A6 and fork #2).
+3. **Casualty-realism 2/20 and the H4/H6 misses** — promote into the plan; currently absent.
+4. **Facing-loss-on-drift** — the real current cell distortion; fold into B1c's justification.
+5. A2, A3 — keep as hygiene with explicit *no-digest-movement* predictions; **demote from severity 1**.
+6. **Reword fork #5** before it reaches Jordan.
+
+**Standing lesson for the executing session.** Three of my five severity-1 findings were code-true but
+**incidence-false**, and none of the six auditors nor I measured incidence before assigning severity.
+**A defect's existence in source is not evidence of its rate.** Before labelling anything "changes
+battles", instrument and count it — the wrappers used here are proven non-perturbing and cheap.

@@ -35,7 +35,12 @@ namespace and are folded into Next actions below, which carries the full narrati
   no prior tracking item) · **D** the system itself — DG-6, cell phases 3–4, envelopment, R3, the
   inverted casualty shape · **E** canon/params/contract/registries.
 
-  **Critical path: A1 → A5 → D1** (wire the shipped goldens → finish the scalar sweep → re-measure
+  **⚠ CRITICAL PATH CORRECTED (§11.1) to `A1a → A1 → B1a/b/c → D1`** — the earlier `A1 → A5 → D1`
+  was a regression I introduced against `02_remediation_plan.md`'s correct ordering. **AND §11–§13
+  carry an adversarial review that overturns much of the plan's framing: the shipped-mode goldens are
+  ALREADY RED (measured), and three of five severity-1 findings are code-true but INCIDENCE-ZERO
+  (0 degree flips in 209,778 calls; 0 truncations in 102,260). Read §11–§13 before executing anything.**
+  Superseded text: **Critical path: A1 → A5 → D1** (wire the shipped goldens → finish the scalar sweep → re-measure
   DG-6's CV-vs-N with cell correlation ON). **First merged PR in an hour: E1** — delete the
   `scene_outcome.battle_concluded` emit row, one line, = ED-MB-0010 open since 2026-07-13, closes five
   downstream surfaces.
