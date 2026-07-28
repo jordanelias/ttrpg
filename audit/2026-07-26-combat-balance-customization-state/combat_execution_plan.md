@@ -301,3 +301,123 @@ off-hand scope · the roster-wide thrust-lean · typed weapon records.
 machine were only spot-checked by the independent pass. **Stale `sel_*` carryover and draw-order divergence
 would live exactly there, and no batch above covers them.** If a session has budget for one more independent
 read-only audit, that is the target.
+
+---
+
+## §13 Orchestration — for a max-intensity Opus 5 session
+
+The plan above is correct as a linear work order. This section is what raises its **intensity and intelligence**
+without raising its risk. It is written for a session running Opus 5 at maximum effort with a real agent budget.
+
+### 13.1 Tiering, under Jordan's §0.6 ruling
+
+Jordan's 2026-07-28 ruling places **Fable on read-only audit / planner / orchestrator / guardrail — explicitly
+NOT synthesis or authorship** (it supersedes CLAUDE.md §10's fable row). Apply it literally:
+
+| stage | tier | why |
+|---|---|---|
+| the fix itself, reconciliation, judgment calls | **Opus 5 (the session)** | authorship — never delegated to Fable |
+| **adversarial gate on each batch** | **Fable, read-only `agentType`** | "top tier on review, not authorship"; risk-identification and gating |
+| mechanical sweeps (find every call site of a token; transcribe a table) | **Sonnet** | bounded, verifiable |
+| extraction / counting | **Haiku** | deterministic |
+
+**Independence must be structural, not promised.** Proposal P4 records that this repo's critic-independence was
+"a display string; no script restricts critic tooling." Use an agent type whose toolset **excludes Edit/Write**
+(`Plan` qualifies). A critic instructed to be read-only is not a read-only critic.
+
+### 13.2 The guard-first inversion — the single largest intensity multiplier
+
+The plan says each batch "ships a guard." That is not enough, and this repo already knows why: ED-PC-0040's
+verdict was **"a gate that has never failed is decoration."** So invert the order:
+
+1. **Write the guard first.**
+2. **Prove it RED on unmodified `main`.** ← the step that makes the guard real
+3. Implement the fix.
+4. Prove it GREEN.
+5. **Mutation-verify** (§13.3).
+
+Without step 2 you cannot distinguish a guard that works from one that is vacuous, and a vacuous guard is worse
+than none because it licenses the claim. **Every batch in E0–E3 should be executed in this order.**
+
+### 13.3 Mutation-verify every guard
+
+Each guard ships with **declared mutations that must make it fail, and must be named in its failure message.**
+The pattern already exists in-repo: `tests/valoria/test_plate_participation_guard_is_not_blind`. This is what
+caught a guard that watched one weapon out of a class of fourteen while the whole suite passed.
+
+### 13.4 Serialization — measured, and the answer is counter-intuitive
+
+**Worktree parallelism buys almost nothing here.** Measured:
+
+| batch | moves a reference table? | parallel-safe? |
+|---|---|---|
+| **E0** | no — behaviour-preserving | **No.** It touches nearly every module, so it conflicts with everything. Run it **first and alone.** |
+| **E1a** (M5) | **NO — verified** | **Yes.** The only independent batch. |
+| E1b, E2a, E2b, E3a, E3b | **all move `combat_armour_reference.json`** | **No — strictly serial.** |
+
+**The E1a verification** (run it yourself before trusting it): `eff_cw(c,'leverage')` and `eff_cw(c,'measure')`
+return exactly `1.0` for every default build, and **neither `balance.py` nor `armour_participation.py` ever sets
+`equipped`** — so the goldens are all default builds and an E1a rewrite cannot move one.
+
+**Why the others cannot parallelise:** each must regenerate the reference table against its *predecessor's*
+state. Two batches in separate worktrees produce two reference tables, neither of which is correct, and the
+merge silently picks one. **Do not orchestrate parallel write lanes. Orchestrate parallel *verification*
+instead** — many critics against one serialized diff.
+
+### 13.5 ⚠ E1a is invisible to the standard harnesses
+
+Corollary of the above, and a genuine trap: because `balance.py` and `armour_participation.py` never equip
+anything, **they cannot see E1a at all** — before or after. Running them and observing "no change" proves
+nothing.
+
+**E1a's acceptance MUST use `workbench/build_levers.py`**, which is the only instrument that sets `equipped`.
+Specifically `build_levers.py abilities 2000`, compared against the pre-fix run.
+
+### 13.6 The adversarial gate, per batch
+
+Per CLAUDE.md §10, agonist→antagonist is a **relay, not a dialogue**:
+
+1. Producer (the session) implements and states its claim.
+2. Dispatch a **Fable, read-only** critic with **only the diff and the claim** — *not* the reasoning that
+   produced them. A critic that never saw the producer's reasoning is more independent, and for audits that is
+   preferable rather than a limitation.
+3. Reconcile in the orchestrator. **Record disagreements** — the external-practice review found "disagreements
+   are not recorded" to be a standing gap in this repo's method.
+
+### 13.7 N-of-M refutation for any claim that gates a batch
+
+For a claim that decides whether a batch ships — "this is byte-identical", "this guard is not vacuous", "the
+reference diff is intended" — dispatch **3 independent refuters, each prompted to REFUTE, defaulting to
+refuted-if-uncertain.** Ship only if a majority cannot break it. Reserve this for gating claims; using it
+everywhere is waste.
+
+### 13.8 Measurement intensity
+
+| purpose | n |
+|---|---|
+| a number that gates a decision | **≥ 2000** |
+| exploratory / directional | 300–600 |
+| the mirror control, before trusting **any** relative number | **2000**, all three loadouts |
+
+The authoring session's ±4pp floor at n=600 was enough to establish *presence*; it is not enough to establish
+*absence*, and several of these batches will want to claim absence.
+
+### 13.9 Termination discipline
+
+This repo's remediation history is **three consecutive half-stands** (batches 4, 5, 5.1). Therefore:
+
+- **Cap each batch at 3 adversarial rounds.**
+- **If the gate returns a half-stand twice on the same batch, STOP and escalate to Jordan** rather than
+  attempting a third fix. Two failed corrections is the documented signal that the model of the problem is
+  wrong, not the patch.
+- Record a `stopReason` from a closed set — `completed` / `refuted` / `escalated` / `repetition` — **in the
+  batch's summary headline**, not buried.
+
+### 13.10 What NOT to orchestrate
+
+- **Do not fan out E0's sweep.** It is a single AST pass over 24 files; one Sonnet does it, and N agents produce
+  N inconsistent partial rewrites of the same vocabulary.
+- **Do not delegate the fix to Fable.** §0.6 places it on review, not authorship.
+- **Do not run a Workflow for E1a.** One function pair, one guard — orchestration overhead exceeds the work.
+
+---
