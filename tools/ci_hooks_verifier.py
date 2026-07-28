@@ -105,7 +105,7 @@ for base in ('skills', 'tools'):
 # ── Check 5 (warn): skeleton-debt — design docs over 400 lines ───────────────
 # INERT SINCE PR #191, AND NOW SAYS SO. `designs/` was retired 2026-07-19, so this walk yields
 # nothing — and a report-only check that is DEAD is indistinguishable, in a checks list, from one
-# that is CLEAN. That is the same silent-hole class ED-IN-0086 swept out of mechanics_index_gen and
+# that is CLEAN. That is the same silent-hole class ED-IN-0087 swept out of mechanics_index_gen and
 # ci_quantity_vocabulary_check, so at minimum the deadness is now visible.
 #
 # It is NOT simply repointed at systems/, because that would need a ruling this lane cannot make:
@@ -141,7 +141,7 @@ REQUIRED_DENY = (
     'create_trigger',  # claude-code-remote: send_later's underlying Routine API
     'ScheduleWakeup',  # /loop dynamic self-pacing
     'CronCreate',      # /loop fixed-interval scheduling
-    # --- widened 2026-07-28 (ED-IN-0086) ---------------------------------------------
+    # --- widened 2026-07-28 (ED-IN-0087) ---------------------------------------------
     # ED-IN-0084 pinned the four primitives that were *known* then, and wrote its own
     # falsifier as: "if a session ever schedules a wake-up while these pass, find the new
     # primitive and add it to REQUIRED_DENY." That is exactly what happened — ED-IN-0085

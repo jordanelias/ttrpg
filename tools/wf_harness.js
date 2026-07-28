@@ -7,7 +7,7 @@
 // has drifted, and `--fix` re-syncs them. Editing a copy in .claude/ is the thing the checker is
 // built to catch; edit this file.
 //
-// WHAT IT IS FOR (ED-IN-0086, executing P3/P4/P7/P8 of ED-IN-0085's report). The .claude/
+// WHAT IT IS FOR (ED-IN-0087, executing P3/P4/P7/P8 of ED-IN-0085's report). The .claude/
 // workflows were strong at fanning out and at adversarial refutation, and had no mechanism at
 // all for: knowing when to stop (P3), forcing critic independence (P4), noticing that a critic
 // found nothing (P7), or recording a disagreement it then failed to resolve (P8).

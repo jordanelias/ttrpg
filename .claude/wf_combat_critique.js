@@ -269,7 +269,7 @@ const run = hRun('combat-system-critique')
 // Paths are REPO-RELATIVE. They used to be absolute Windows paths off one author's machine
 // (`C:/Github/ttrpg/...`, `C:/Users/Jordan/Downloads/...`), which resolve nowhere on CI, in a
 // container, or on any other checkout — every agent in this workflow was reading nothing.
-// Repaired ED-IN-0086; `tools/ci_claude_workflow_paths.py` is the guard that fails on recurrence.
+// Repaired ED-IN-0087; `tools/ci_claude_workflow_paths.py` is the guard that fails on recurrence.
 const ENG = 'systems/combat/combat_engine_v1'
 const SUBSTRATE = 'tests/sim/v32-combat-balance'
 // The reconcile-phase corpora: recovered off Jordan's Downloads into the tree on 2026-06-29

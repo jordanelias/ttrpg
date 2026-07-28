@@ -1,6 +1,6 @@
 """Guard the retired-tree pointer scanner in tools/observability/build_incompleteness.py.
 
-ED-IN-0086 (finding: ED-IN-0085). Two things needed pinning, and neither was observable before:
+ED-IN-0087 (finding: ED-IN-0085). Two things needed pinning, and neither was observable before:
 
 1. **Coverage that cannot fire.** `RETIRED_TREES` was `("designs/",)` and the scan regex ended in
    a literal `\\.md`. Adding `sim/` to the tuple without widening the extension set would have

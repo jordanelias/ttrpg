@@ -8,70 +8,49 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
-- **✅ WORKFLOW APPARATUS REPAIRED + RUN DISCIPLINE WIRED (2026-07-28, ED-IN-0086).** Executes
-  ED-IN-0085's approved set (P1–P8; Jordan declined P9, ruled P3 **report-only**, and ruled the three
-  `wf_*.js` **repaired** not retired). One root cause behind both halves: `.claude/` is the only part
-  of this repo's machinery nothing in CI ever read.
-  **Path rot:** 51 referenced deps were 12 live / 35 alias-only / 4 dead → now **49 live, 0 aliased,
-  0 dead** (`tools/ci_claude_workflow_paths.py`, exit 0). Beyond path rewriting: absolute
-  `C:/Github/ttrpg` + `C:/Users/Jordan/Downloads` prefixes (10 of those 12 corpus docs live in
-  `audit/2026-06-29-combat-corpus-recovery/`), `systems.py` → `combat_systems.py` ×13, and a
-  **stale standing "finding"** telling every agent the engine imports `/home/claude/*` — resolved by
-  ED-1085 on 2026-07-01, so the audit would have re-reported a fixed defect as current.
+- **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
+  landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
+  the banner counts as settled.
+
+
+- **[DONE 2026-07-28] ED-IN-0087 — workflow apparatus repaired + run discipline wired.**
+  Executes ED-IN-0085's approved set (P1–P8; Jordan declined P9, ruled P3 **report-only**, and ruled
+  the three `wf_*.js` **repaired** not retired). One root cause behind both halves: `.claude/` is the
+  only part of this repo's machinery nothing in CI ever read.
+  **Path rot:** 51 referenced deps were 12 live / 35 alias-only / 4 dead → now **49 live, 0 dead**
+  (`tools/ci_claude_workflow_paths.py`, exit 0). Beyond path rewriting: absolute `C:/Github/ttrpg` +
+  `C:/Users/Jordan/Downloads` prefixes (10 of those 12 corpus docs live in
+  `audit/2026-06-29-combat-corpus-recovery/`), `systems.py` → `combat_systems.py` ×13, and a **stale
+  standing "finding"** telling every agent the engine imports `/home/claude/*` — resolved by ED-1085
+  on 2026-07-01, so the audit would have re-reported a fixed defect as current.
   **Run discipline:** `tools/wf_harness.js` is the single owner, copied verbatim between sentinels
   (sandbox = no imports). P3 closed `stop_reason` set + round cap + repetition breaker + JSONL trace,
   report-only. P4 `hCritic()` → `.claude/agents/valoria-critic.md` (`Read, Grep, Glob`) — **first
-  roster promotion** under §10's recurrence rule; critics were previously "read-only" only as a
-  sentence in their own prompt. P7 null-result alarm **paired** with rank-by-independent-rediscovery
-  (already computed every run, discarded at the return). P8 disagreement records with required
-  adjudication + terminal out-of-lane `observation`.
-  **The fable ruling is now enforced, not just transcribed:** `wf_attribute_coherence.js` still ran
-  its six-file-writing Synthesis node on `model:'fable'` → opus `effort:max`, plus a read-only
-  Guardrail phase that writes nothing and rules on the run.
-  **Falsifier:** `tests/valoria/test_wf_harness.py` executes the harness under node — 17 tests,
-  **13/13 mutants killed, zero survivors**. Structural half `tools/ci_wf_harness_check.py`. New
-  blocking CI job *Workflow Apparatus*; both gates in `valoria_local.py`; Stop hook now also runs
-  `review_core.py --check`.
-  *Known limits, filed not swept:* (a) `ci_wf_harness_check.py`'s critic-stage scan reads
-  **single-line** `agent()` options objects — a multi-line options literal would be missed, which is
-  why the behavioural test exists alongside it; (b) `CRITIC_MARKERS` is a word list, so a critic
-  phase under a genuinely new name needs adding deliberately; (c) the harness's `hSameFinding`
-  containment thresholds (≥3 shared content words, ≥0.6 of the smaller set) are calibrated on this
-  repo's finding wording and have **not** been measured against a real multi-lens run — the first
-  live workflow run should check whether they over- or under-group.
-- **✅ DEAD-TREE APPARATUS SWEPT (2026-07-28, ED-IN-0086).** Surfaced by PR #247's own CI run.
+  roster promotion** under §10's recurrence rule. P7 null-result alarm **paired** with
+  rank-by-independent-rediscovery. P8 disagreement records with required adjudication + terminal
+  out-of-lane `observation`. **The fable ruling is now enforced, not just transcribed:**
+  `wf_attribute_coherence.js` still ran its six-file-writing Synthesis node on `model:'fable'` → opus
+  `effort:max` plus a read-only Guardrail phase. **Falsifier:** `tests/valoria/test_wf_harness.py`
+  executes the harness under node — 17 tests, **13/13 mutants killed**.
+  *Known limits, filed:* `ci_wf_harness_check.py`'s critic scan reads single-line `agent()` options
+  objects; `CRITIC_MARKERS` is a word list; `hSameFinding`'s containment thresholds are calibrated on
+  this repo's wording but **not yet measured against a live multi-lens run**.
+
+- **[DONE 2026-07-28] ED-IN-0087 — dead-tree apparatus swept.** Surfaced by PR #247's own CI run.
   `sim/` was retired 2026-07-21 and **two tools still walked it** — and because `os.walk` on a
-  missing directory yields nothing instead of raising, neither made a sound:
-  · `tools/mechanics_index_gen.py` looked for `canon/` + `sim/` to find the repo root, so it exited
-    2 with `[FATAL]` on every run. Its CI job is `continue-on-error`, so a FATAL and a clean pass
-    render identically. **Revived, it immediately reported 39 stale pointers + 3 schema errors** it
-    had been unable to report for a week.
-  · `tools/ci_quantity_vocabulary_check.py` walked `sim/` for stat literals: **that half scanned
-    zero files** while the tool kept printing contract-side findings and looking healthy — 108 `.py`
-    files now, via the new single owner `ci_common.sim_reference_roots()` (globs `systems/*/sim`, so
-    a new subsystem is covered without editing a list).
-  Fixed alongside: 39 retired-tree pointers in `registers/mechanics_index.yaml` (mechanical, through
-  the sanctioned alias map), a `scale: peninsula` typo, `godot_home` missing from the validator's key
-  list, and `sim_module: null` erroring when it is a *declaration* of no implementation.
-  Guard: `tests/valoria/test_retired_tree_apparatus.py` — 12 tests, **10/10 mutants killed**,
-  including a positive control proving the revived scanner can find a literal (its zero on the live
-  corpus is a true zero: the live call sites use variable keys).
-  **⚠️ NOT MINE TO RULE — two items filed, not swept:**
-  1. `registers/mechanics_index.yaml` `combat: test_status: validated` is outside the enum, whose
-     `validated_*` values all encode a Monte-Carlo sample size. Combat's validation was a
-     ratification plus a Godot port-parity check, not an n-run, so the *vocabulary* is missing a
-     value (`ratified`? `validated_port`?). **PC lane.** It is the last remaining error from that
-     report-only gate.
-  2. `ci_hooks_verifier` Check 5 (skeleton-debt) walks the retired `designs/` tree. It is **not**
-     repointed at `systems/` because CLAUDE.md §4 RETIRED the index+infill pair (Jordan, 2026-07-26)
-     that both its advice ("extract prose to `*_infill.md`") and its threshold (400 lines) encode —
-     repointing as-is would emit **29 warnings recommending a superseded practice**. Interim: the
-     check now *announces itself inert* instead of silently reporting clean. Re-specifying it needs
-     the §4 ruling encoded (sequential `_partN` at ~15k tokens).
-  Seven `canon_authoring_target` rows still carry `designs/…` prefixes for docs **never authored**
-  (`altonian_reinforcements`, `hafenmark_equipment`, `home_sanctuary_t9`, `infrastructure_reclamation`,
-  `restoration_movement`, `treaty`, `varfell_territorial_acquisition`). Where an unwritten doc would
-  land is a subsystem-lane design call, not an IN-lane rewrite — observe, don't judge.
+  missing directory yields nothing instead of raising, neither made a sound. `mechanics_index_gen.py`
+  keyed its repo-root walk on `canon/` + `sim/`, so it exited 2 with `[FATAL]` every run; its CI job
+  is `continue-on-error`, so a FATAL and a clean pass render identically. Revived, it immediately
+  reported **39 stale pointers + 3 schema errors**. `ci_quantity_vocabulary_check.py` walked `sim/`
+  for stat literals: **that half scanned zero files** while the tool kept printing contract-side
+  findings and looking healthy — 108 `.py` files now, via the new single owner
+  `ci_common.sim_reference_roots()` (globs `systems/*/sim`, so a new subsystem is covered without
+  editing a list). Fixed alongside: 39 retired-tree pointers in `registers/mechanics_index.yaml`, a
+  `scale: peninsula` typo, `godot_home` missing from the validator's key list, and `sim_module: null`
+  erroring when it is a *declaration* of no implementation. Guard:
+  `tests/valoria/test_retired_tree_apparatus.py` — **10/10 mutants killed**, including a positive
+  control proving the revived scanner can find a literal (its zero on the live corpus is a true
+  zero). Three items Jordan then ruled on directly are closed under ED-IN-0088 below.
 - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
   check-ins outright ("I don't even need check in triggers, I can just see what's happening by the
   colours on a session"). **Measured first:** 116 confirmed `send_later` firings in 2026-07-19..26,

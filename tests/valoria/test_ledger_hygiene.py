@@ -1,4 +1,4 @@
-"""Ledger-integrity guards added with ED-IN-0086.
+"""Ledger-integrity guards added with ED-IN-0087.
 
 Two separate things, both surfaced while widening the claim-provenance gate to the IN lane.
 
@@ -114,15 +114,45 @@ def _gate():
 
 
 @pytest.mark.parametrize('entry_id,cutover,expected,why', [
-    ('ED-IN-0085', 'ED-IN-0086', True,  'earlier in the same lane is grandfathered'),
-    ('ED-IN-0086', 'ED-IN-0086', False, 'the cutover entry is held to its own rule'),
-    ('ED-IN-0087', 'ED-IN-0086', False, 'later in the same lane is in scope'),
-    ('ED-IN-0100', 'ED-IN-0086', False, 'numeric, not lexical: 0100 > 0086'),
-    ('ED-IN-REMEDIATION-0064', 'ED-IN-0086', True,
+    ('ED-IN-0085', 'ED-IN-0087', True,  'earlier in the same lane is grandfathered'),
+    ('ED-IN-0087', 'ED-IN-0087', False, 'the cutover entry is held to its own rule'),
+    ('ED-IN-0087', 'ED-IN-0087', False, 'later in the same lane is in scope'),
+    ('ED-IN-0100', 'ED-IN-0087', False, 'numeric, not lexical: 0100 > 0086'),
+    ('ED-IN-REMEDIATION-0064', 'ED-IN-0087', True,
      "a different id scheme in the same file — the bug this replaced ('R' > '0')"),
-    ('ED-PC-0041', 'ED-IN-0086', True,  'a different lane is not in this cutover sequence'),
+    ('ED-PC-0041', 'ED-IN-0087', True,  'a different lane is not in this cutover sequence'),
     ('ED-PC-0040', 'ED-PC-0040', False, 'the PC precedent must not shift'),
     ('ED-PC-0039', 'ED-PC-0040', True,  'the PC precedent must not shift'),
 ])
 def test_cutover_compares_lane_and_sequence_not_raw_string(entry_id, cutover, expected, why):
     assert _gate()._is_pre_cutover(entry_id, cutover) is expected, why
+
+
+# ------------------------------------------------------- MEASURED-BY marker parsing
+
+@pytest.mark.parametrize('blob,expected,why', [
+    ('MEASURED-BY: tools/x.py', 'tools/x.py', 'the plain form'),
+    ('… re-run. MEASURED-BY: tools/x.py.', 'tools/x.py',
+     'a marker ENDING A SENTENCE — the trailing period is prose, not part of the filename. This is '
+     'the case that failed ED-IN-0087 with "tools/x.py. does not exist" while the file sat right there.'),
+    ('MEASURED-BY: tools/x.py, and see also', 'tools/x.py', 'comma already excluded'),
+    ('MEASURED-BY: tools/x.py::case_3', 'tools/x.py', 'the ::selector suffix is stripped for existence'),
+    ('MEASURED-BY: tools/x.py::case_3.', 'tools/x.py', 'both at once'),
+])
+def test_measured_by_marker_survives_ordinary_prose_punctuation(blob, expected, why):
+    gate = _gate()
+    found = gate.MARKER.findall(blob)
+    assert found, f'marker not matched at all: {blob!r}'
+    target = found[0].rstrip(gate._TRAILING_PROSE).split('::')[0]
+    assert target == expected, why
+
+
+def test_a_genuinely_missing_instrument_is_still_caught():
+    """The inverse. Stripping trailing punctuation must not soften the actual rule — a named
+    instrument that does not exist is the whole point of the marker."""
+    gate = _gate()
+    target = gate.MARKER.findall('MEASURED-BY: tools/does_not_exist.py.')[0] \
+        .rstrip(gate._TRAILING_PROSE).split('::')[0]
+    assert target == 'tools/does_not_exist.py'
+    assert not os.path.exists(os.path.join(ROOT, target)), \
+        'fixture path unexpectedly exists — this test no longer proves anything'

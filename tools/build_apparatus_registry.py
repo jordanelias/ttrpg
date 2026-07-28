@@ -44,7 +44,7 @@ def _workflows() -> list[Path]:
 def _claude_workflows() -> list[Path]:
     """Claude Code Workflow scripts in `.claude/` — a DIFFERENT thing from CI workflows.
 
-    ED-IN-0086 (finding: ED-IN-0085). The word "workflow" is overloaded in this repo, and the
+    ED-IN-0087 (finding: ED-IN-0085). The word "workflow" is overloaded in this repo, and the
     registry inherited only one meaning: `_workflows()` resolves to `.github/workflows`, so the
     `.claude/wf_*.js` orchestration scripts — which encode the repo's own audit method — were
     invisible to the very inventory that exists to flag orphaned apparatus. They are listed here
@@ -181,7 +181,7 @@ def _text_index() -> str:
     return "\n".join(parts)
 
 def _py_import_index() -> str:
-    # ED-IN-0086 (finding: ED-IN-0085): `sim/` was retired 2026-07-21 and its contents moved to
+    # ED-IN-0087 (finding: ED-IN-0085): `sim/` was retired 2026-07-21 and its contents moved to
     # engine/ (the core) and systems/<subsystem>/sim/ (the per-subsystem sims). This tuple was
     # never updated, so the orphan detector's import graph silently lost every simulation module —
     # the same rot class that broke structure_audit's CODE_ROOTS (ED-MB-0043). Roots are the live
@@ -353,7 +353,7 @@ def build() -> dict:
             "writes": [], "role": "workflow", "invoked_by": ["github-actions"],
         })
 
-    # Claude Code Workflow scripts (.claude/wf_*.js) — ED-IN-0086. Distinct kind, distinct
+    # Claude Code Workflow scripts (.claude/wf_*.js) — ED-IN-0087. Distinct kind, distinct
     # invoker: these are run by hand in a session, not by CI, and their "runs" are the agent
     # phases they declare rather than the python they shell out to.
     for wf in _claude_workflows():
@@ -368,7 +368,7 @@ def build() -> dict:
             "invoked_by": ["session (Workflow tool)"],
         })
 
-    # Subagent definitions (.claude/agents/*.md) — ED-IN-0086, same blind spot as the workflows
+    # Subagent definitions (.claude/agents/*.md) — ED-IN-0087, same blind spot as the workflows
     # above one level down. A roster file is apparatus: it decides what a whole class of agents CAN
     # DO, and the read-only critic's entire value is the tools it does NOT list. An inventory that
     # cannot see it cannot flag it going stale. `emits` records the granted tools for exactly that

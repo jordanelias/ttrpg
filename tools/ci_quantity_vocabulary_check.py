@@ -104,7 +104,7 @@ def scan_sim_literals(sim_roots):
     2026-07-21 — and since os.walk on a missing directory yields nothing instead of raising, this
     whole scan returned zero files while the tool kept printing its contract-side findings and
     looking healthy. Roots now come from ci_common.sim_reference_roots(), the single owner
-    (ED-IN-0086)."""
+    (ED-IN-0087)."""
     if isinstance(sim_roots, str):
         sim_roots = [sim_roots]
     for dirpath, _dirnames, filenames in _walk_all(sim_roots):

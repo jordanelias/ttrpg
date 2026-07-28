@@ -33,7 +33,7 @@ CLAUDE_MD = os.path.join(ROOT, 'CLAUDE.md')
 # therefore the obvious route-around; ScheduleWakeup and CronCreate are the /loop pacing
 # and fixed-interval equivalents.
 #
-# WIDENED 2026-07-28 (ED-IN-0086). ED-IN-0084 wrote its own falsifier as: "if it ever passes
+# WIDENED 2026-07-28 (ED-IN-0087). ED-IN-0084 wrote its own falsifier as: "if it ever passes
 # while a session is still arming wake-ups, the guard is wrong and the mechanism has moved —
 # find the new primitive and add it to REQUIRED_DENY." ED-IN-0085 found three that had moved,
 # all reachable in-session while the original four passed. That is the guard working, not

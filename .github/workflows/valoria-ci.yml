@@ -474,7 +474,7 @@ jobs:
         run: python3 tools/ci_claim_provenance_check.py
 
   workflow-apparatus-check:
-    # ED-IN-0086 (finding: ED-IN-0085). The .claude/ orchestration scripts are apparatus nothing was
+    # ED-IN-0087 (finding: ED-IN-0085). The .claude/ orchestration scripts are apparatus nothing was
     # checking, and they had rotted in two directions at once: 39 of 51 referenced dependencies no
     # longer resolved to a live path (so agents were dispatched to read nothing), and all three
     # scripts shared four structural holes — no termination discipline, critic independence asserted

@@ -47,21 +47,28 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # point at — a rule nobody can satisfy is a rule that gets bypassed.
 LEDGERS = {
     "registers/editorial_ledger_pc.jsonl": "ED-PC-0040",
-    # IN lane added 2026-07-28 (ED-IN-0086), taking this file's own widening instruction at its word:
+    # IN lane added 2026-07-28 (ED-IN-0087), taking this file's own widening instruction at its word:
     # "widen deliberately, lane by lane, once each lane has a measurement instrument to point at."
     # The IN lane now has one — tools/ci_claude_workflow_paths.py, written for ED-IN-0085 precisely
     # because that entry's headline was hand-counted and wrong by an order of magnitude. Same failure
     # this gate was built for, different lane, so the same rule applies.
     #
     # Cutover follows the PC precedent exactly: an ID, not a date, starting at the entry that adopts
-    # the rule. ED-IN-0086 is the first IN entry held to it. ED-IN-0085 is grandfathered in the
+    # the rule. ED-IN-0087 is the first IN entry held to it. ED-IN-0085 is grandfathered in the
     # linter's sense only — it names its instrument in prose, and its wrong numbers were retracted in
     # its own successor rather than left standing.
-    "registers/editorial_ledger_in.jsonl": "ED-IN-0086",
+    "registers/editorial_ledger_in.jsonl": "ED-IN-0087",
 }
 
 # The marker an entry uses to name its instrument.
+#
+# The trailing-punctuation strip is not cosmetic. `[^\s;,)]+` already excludes `;` `,` `)`, but a
+# marker at the END OF A SENTENCE — "…re-run. MEASURED-BY: tools/x.py." — captured the period into
+# the path and failed with "tools/x.py. does not exist", which reads as a missing instrument when
+# the instrument is right there. Caught by this gate firing on ED-IN-0087's own entry. No filename
+# in this tree ends in `.` or `:`, so stripping them can only ever remove prose punctuation.
 MARKER = re.compile(r"MEASURED-BY:\s*([^\s;,)]+)")
+_TRAILING_PROSE = ".:"
 
 # Claim shapes that make an entry "quantitative". Deliberately narrow — these are the shapes the three historical
 # misses actually took (a transition, a per-sample rate, a delta in points, a sample size), not "contains a digit".
@@ -84,7 +91,7 @@ def _is_pre_cutover(entry_id, cutover_id):
     correctly as strings within a lane". That holds for the PC lane, whose ids are uniformly
     ED-PC-NNNN — but it silently breaks on any lane carrying a second id shape. The IN lane does:
     alongside ED-IN-NNNN it holds ED-IN-REMEDIATION-NNNN, and since 'R' (82) > '0' (48), every one
-    of those sorted AFTER the cutover and got dragged into the gate (ED-IN-0086 exposed this while
+    of those sorted AFTER the cutover and got dragged into the gate (ED-IN-0087 exposed this while
     widening the rule to the IN lane).
 
     The fix compares the lane prefix and the sequence number, not the raw string:
@@ -153,7 +160,7 @@ def check(staged_only=False):
                      f"Add `MEASURED-BY: <path>` naming a re-runnable script that reproduces the numbers."))
                 continue
             for ref in found:
-                target = ref.split("::")[0]
+                target = ref.rstrip(_TRAILING_PROSE).split("::")[0]
                 if not os.path.exists(os.path.join(ROOT, target)):
                     violations.append(
                         (ledger, lineno, entry.get("id", "?"),

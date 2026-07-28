@@ -1,6 +1,6 @@
 """Keep tools/model_router.html's tier->model-ID map in sync with CLAUDE.md §10.
 
-ED-IN-0086 (finding: ED-IN-0085). Before this guard, `model_router.html` pinned `sonnet` to
+ED-IN-0087 (finding: ED-IN-0085). Before this guard, `model_router.html` pinned `sonnet` to
 `claude-sonnet-4-20250514` and `opus` to `claude-opus-4-6` — two generations stale — and nothing
 noticed, because **nothing in the tree bound tier aliases to model IDs at all**. §10 described the
 tiers in prose; the only concrete IDs lived in an unversioned HTML tool that no check read.
@@ -49,7 +49,7 @@ def test_claude_md_declares_the_tier_to_id_binding():
     missing = [t for t in ('haiku', 'sonnet', 'opus', 'fable') if t not in ids]
     assert not missing, (
         f"CLAUDE.md §10's tier->model-ID table is missing {missing}. That table is the single owner "
-        f"of the binding (ED-IN-0086); without it every other surface is guessing.")
+        f"of the binding (ED-IN-0087); without it every other surface is guessing.")
 
 
 def test_router_mirrors_the_doc_exactly():

@@ -313,7 +313,7 @@ Do not represent the skeleton as a runnable head-start.
   `.githooks/pre-commit` runs the SAME validators on staged files via `python tools/valoria_local.py
   --staged`; `.claude/settings.json` wires the edit-time naming nudge (`hook_naming_guard.py`), the
   SessionStart banner (`session_status.py`), and — on Stop — the handoff reminder
-  (`session_handoff_reminder.py`) plus **`review_core.py --check`** (added 2026-07-28, ED-IN-0086:
+  (`session_handoff_reminder.py`) plus **`review_core.py --check`** (added 2026-07-28, ED-IN-0087:
   the session close now reports the repo-state verdict against `registers/review_baseline.yaml`,
   so a ratchet regression surfaces at the end of the session that caused it rather than in CI on
   someone else's PR). Bypass a local block with `git commit --no-verify` — CI still enforces.
@@ -414,7 +414,7 @@ Actively tier down; reserve Opus for genuine judgment. (The discipline originate
 orchestrator's routing table — `deprecated/skills/…/model_routing_table.md`, **history only, never
 canonical** per §1/§3; this section is the live owner and does not defer to it.)
 
-**Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0086).** Nothing else in the tree binds
+**Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0087).** Nothing else in the tree binds
 tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrors it.
 
 | Tier | Model ID | Context | In / Out $/MTok | Relative cost | Prompt-cache minimum |
@@ -453,7 +453,7 @@ fits, rather than defaulting the whole fan-out to Opus.
   explicitly per `agent()` call. On `claude-opus-5` thinking is **on by default**, and
   `thinking: disabled` is accepted **only at effort ≤ `high`** (400 at `xhigh`/`max`).
 
-**Three caching facts that bite the fan-out pattern** (verified 2026-07-28, ED-IN-0086 — none of them
+**Three caching facts that bite the fan-out pattern** (verified 2026-07-28, ED-IN-0087 — none of them
 obvious, all of them load-bearing on how `parallel()` stages are written):
 1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once the
    first response *begins streaming*, so N concurrent identical-prefix calls all pay full price. Fire one,
@@ -470,7 +470,7 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
   dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
   orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
   more independent. Make independence structural: critic gets read-only tools. **This is now wired,
-  not merely stated (ED-IN-0086):** pass `hCritic({...})` in a `.claude/wf_*.js` stage and the
+  not merely stated (ED-IN-0087):** pass `hCritic({...})` in a `.claude/wf_*.js` stage and the
   agent runs as `valoria-critic` (`.claude/agents/valoria-critic.md`, `tools: Read, Grep, Glob` —
   no Write, no Edit, no Bash). Until 2026-07-28 every "critic" in this repo was declared read-only
   by a sentence *inside its prompt*, which restricts nothing; `tools/ci_wf_harness_check.py` now
@@ -485,12 +485,12 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
   scale-local interface dialect (**shape divergence**).
 - **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
   *recurred* — never architect the ensemble up front. **First and so far only promotion:
-  `valoria-critic` (2026-07-28, ED-IN-0086)** — the adversarial-verifier role had independently
+  `valoria-critic` (2026-07-28, ED-IN-0087)** — the adversarial-verifier role had independently
   recurred in all three `wf_*.js` scripts (Verify / Adversarial / Critic phases), which is exactly
   the recurrence trigger this rule waits for. Still-watched candidates: a standing
   conformance-scanner and (once seeded headless sims + ablation are runnable) an emergence-auditor
   — see the 2026-07-01 decision queue.
-- **Run discipline lives in one owner and is copied, not imported (ED-IN-0086).** Workflow scripts
+- **Run discipline lives in one owner and is copied, not imported (ED-IN-0087).** Workflow scripts
   run in a sandbox with **no filesystem and no Node API**, so they cannot `import` a shared module.
   `tools/wf_harness.js` is the single owner of the prelude (termination signals + null-result alarm
   + rediscovery ranking + disagreement records) and it is copied verbatim between sentinels into
@@ -512,7 +512,7 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
 **A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling
 loops — by any mechanism. Enforced, not merely asked: `.claude/settings.json` `permissions.deny`
 blocks `send_later`, `create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_trigger`,
-`fire_trigger`, and `Skill(loop)` (**widened 2026-07-28, ED-IN-0086** — the last three were found
+`fire_trigger`, and `Skill(loop)` (**widened 2026-07-28, ED-IN-0087** — the last three were found
 still reachable in-session by ED-IN-0085: `update_trigger` re-arms an *existing* Routine without
 needing `create_trigger`, `fire_trigger` invokes one whose prompt can re-arm, and `Skill(loop)` is
 /loop's entry point rather than its already-denied pacing primitives), and

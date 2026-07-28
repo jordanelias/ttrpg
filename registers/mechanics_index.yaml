@@ -834,7 +834,7 @@ mechanics:
     test_status: not_implemented
 
   scenario_authoring:
-    scale: peninsular   # was 'peninsula' — a typo the mechanics-index gate could not report while it was dead (ED-IN-0086)
+    scale: peninsular   # was 'peninsula' — a typo the mechanics-index gate could not report while it was dead (ED-IN-0087)
     faction: universal
     canon_sources: []   # no home doc exists — doc:null in module_contracts.yaml (C-INJ-3/fork 11); compile = authoring-time (ED-IN-0011)
     sim_module: null    # zero code presence anywhere in sim/ (C-INJ-3); Stage-1 compile build is Stratum C/D

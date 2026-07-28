@@ -1,4 +1,4 @@
-"""Apparatus must not be keyed on a tree that has moved (ED-IN-0086).
+"""Apparatus must not be keyed on a tree that has moved (ED-IN-0087).
 
 WHY. `sim/` was retired 2026-07-21 (ED-IN-0071 P4). Two tools kept walking it, and neither made a
 sound, because `os.walk` on a missing directory yields nothing rather than raising:

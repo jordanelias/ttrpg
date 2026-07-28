@@ -328,7 +328,7 @@ def scan_status_headers():
     return out
 
 
-# ED-IN-0086 (finding: ED-IN-0085): `sim/` was retired 2026-07-21 (ED-IN-0071 P4 continuation) and
+# ED-IN-0087 (finding: ED-IN-0085): `sim/` was retired 2026-07-21 (ED-IN-0071 P4 continuation) and
 # was never added here, so half the retired surface went unscanned. This tuple is now the SINGLE
 # OWNER of "which trees are retired" — the scan regex below is built from it rather than hardcoding
 # a tree name, so the next retirement is a one-line change instead of a second missed one.
@@ -378,7 +378,7 @@ def scan_retired_tree_pointers():
             if hits:
                 uniq = sorted(set(hits))
                 # Name the tree(s) actually hit. The message used to hardcode "designs/", which
-                # became wrong the moment RETIRED_TREES grew (ED-IN-0086) — a finding that
+                # became wrong the moment RETIRED_TREES grew (ED-IN-0087) — a finding that
                 # misnames its own cause sends the reader to the wrong tree.
                 trees = sorted({t.rstrip('/') for t in RETIRED_TREES
                                 if any(h.startswith(t) for h in uniq)})

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Workflow run-discipline gate — the .claude/wf_*.js harness must be present, current, and USED (ED-IN-0086).
+"""Workflow run-discipline gate — the .claude/wf_*.js harness must be present, current, and USED (ED-IN-0087).
 
 WHY THIS EXISTS. ED-IN-0085 measured the .claude/ orchestration scripts against nine external
 practice sources and found the same four holes in all three: no loop-termination discipline of any

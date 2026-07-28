@@ -28,7 +28,7 @@ _REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def sim_reference_roots(repo_root=None):
-    """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0086).
+    """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0087).
 
     `sim/` was RETIRED 2026-07-21 (ED-IN-0071 P4): the core moved to `engine/` and the
     per-subsystem sims to `systems/<subsystem>/sim/`. Two tools still walked the old flat tree, and

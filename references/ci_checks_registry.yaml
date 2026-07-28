@@ -177,7 +177,7 @@ ci_checks:
       itself or demand mass-editing an append-only ledger. Currently scoped to the PC lane; widen lane by lane as each
       gains an instrument to point at. LIMIT, stated plainly: it verifies a source is NAMED and PRESENT, not that the
       number is CORRECT — same class of limit CLAUDE.md §7 records for the anti-fabrication gate. Also runs locally
-      via valoria_local.py --staged (blocking). WIDENED to the IN lane 2026-07-28 (ED-IN-0086, cutover ED-IN-0086),
+      via valoria_local.py --staged (blocking). WIDENED to the IN lane 2026-07-28 (ED-IN-0087, cutover ED-IN-0087),
       taking this entry's own "widen lane by lane" instruction at its word once the IN lane had an instrument
       (tools/ci_claude_workflow_paths.py) to point at.
 
@@ -187,12 +187,12 @@ ci_checks:
     paired_hook: ""
     ci_job: workflow-apparatus-check
     notes: >-
-      ED-IN-0085 (shipped) / ED-IN-0086 (wired into CI). The .claude/ tree was the one part of this repo's machinery
+      ED-IN-0085 (shipped) / ED-IN-0087 (wired into CI). The .claude/ tree was the one part of this repo's machinery
       nothing in CI ever read, and it had rotted: 51 referenced dependencies were 12 live, 35 resolvable only through
       the restructure ledger (an indirection the scripts never declared), and 4 dead outright — so a workflow was
       dispatching agents to read files that no longer exist, silently. Built BECAUSE the finding that motivated it was
       first hand-counted and wrong by an order of magnitude ("44 of 64 broken"): the instrument is the correction, and
-      it is what ED-IN-0086 cites as its MEASURED-BY. Two filters keep it honest — a path a script deliberately names
+      it is what ED-IN-0087 cites as its MEASURED-BY. Two filters keep it honest — a path a script deliberately names
       as nonexistent (as its own finding) is not counted as a dependency, and the sanctioned alias map is followed
       rather than ignored. Also runs locally via valoria_local.py --staged (blocking).
 
@@ -202,7 +202,7 @@ ci_checks:
     paired_hook: ""
     ci_job: workflow-apparatus-check
     notes: >-
-      ED-IN-0086 (finding: ED-IN-0085). All three orchestration scripts shared four holes — no loop-termination
+      ED-IN-0087 (finding: ED-IN-0085). All three orchestration scripts shared four holes — no loop-termination
       discipline, critic independence asserted only as a sentence inside a prompt, no alarm on a critic that found
       nothing, no record of an unresolved disagreement. The fix is a shared prelude, but workflow scripts run in a
       sandbox with NO filesystem and NO Node API, so they cannot import one: tools/wf_harness.js is the single owner

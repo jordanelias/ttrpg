@@ -1,4 +1,4 @@
-"""The workflow run-discipline harness must WORK, not merely be present (ED-IN-0086).
+"""The workflow run-discipline harness must WORK, not merely be present (ED-IN-0087).
 
 `tools/ci_wf_harness_check.py` proves the prelude is embedded, current and called. That is a
 structural check, and structural checks are exactly what §0.1 point 2 warns about: an assertion
