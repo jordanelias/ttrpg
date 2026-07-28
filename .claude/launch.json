@@ -4,7 +4,7 @@
     {
       "name": "combat-workbench",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["designs/scene/combat_engine_v1/workbench/server.py", "8766"],
+      "runtimeArgs": ["systems/combat/combat_engine_v1/workbench/server.py", "8766"],
       "port": 8766
     }
   ]

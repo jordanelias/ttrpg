@@ -74,10 +74,15 @@
 </div>
 
 <script>
+// MIRROR of the tier->ID table in CLAUDE.md §10, which is the single owner (ED-IN-0086).
+// Refreshed 2026-07-28: sonnet was pinned to claude-sonnet-4 and opus to claude-opus-4-6 — two
+// generations stale — because nothing bound these to the roster and nothing checked them. If §10's
+// table changes, change this too; tests/valoria/test_model_router_ids.py fails when they diverge.
 const MODELS = {
-  haiku: 'claude-haiku-4-5-20251001',
-  sonnet: 'claude-sonnet-4-20250514',
-  opus: 'claude-opus-4-6'
+  haiku: 'claude-haiku-4-5',
+  sonnet: 'claude-sonnet-5',
+  opus: 'claude-opus-5',
+  fable: 'claude-fable-5'
 };
 
 const ROUTER_SYSTEM = `You are a task router for the Valoria TTRPG project. Given a task description, output ONLY a JSON object:

@@ -405,16 +405,30 @@ relevant `tools/` validator and `pytest tests/valoria` → commit with the `[sco
 When you fan work out across subagents — the **Agent** tool, or `agent()` calls in a **Workflow** script
 — set the model **per task**. Subagents inherit the session model by default, so an un-annotated fan-out
 on an Opus session runs Opus *everywhere*, which is slow and costly for work that doesn't need it.
-Actively tier down; reserve Opus for genuine judgment. (This revives the retired orchestrator's routing
-discipline — `deprecated/skills/valoria-orchestrator/references/model_routing_table.md` — updated for the
-Claude Code-native `Agent`/`Workflow` tools and Opus 4.8.)
+Actively tier down; reserve Opus for genuine judgment. (The discipline originated in the retired
+orchestrator's routing table — `deprecated/skills/…/model_routing_table.md`, **history only, never
+canonical** per §1/§3; this section is the live owner and does not defer to it.)
+
+**Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0086).** Nothing else in the tree binds
+tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrors it.
+
+| Tier | Model ID | Context | In / Out $/MTok | Relative cost | Prompt-cache minimum |
+|---|---|---|---|---|---|
+| `haiku` | `claude-haiku-4-5` | 200K | 1 / 5 | **1×** | **4,096 tok** |
+| `sonnet` | `claude-sonnet-5` | 1M | 3 / 15 (intro 2 / 10 **through 2026-08-31**) | **2× now, 3× after** | 1,024 tok |
+| `opus` | `claude-opus-5` | 1M | 5 / 25 | **5×** | 512 tok |
+| `fable` | `claude-fable-5` | 1M | 10 / 50 | **10×** | 512 tok |
+
+The cost ladder is what makes "tier down" arithmetic rather than vibes: **delegating to `haiku` instead of
+`opus` pays only if delegation overhead is under ~80% of the task's own token cost** — the calculation the
+`fable-chief-agent` precedent asks for and never supplies.
 
 | Tier | Use for | Repo examples |
 |---|---|---|
 | **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
 | **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
 | **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-14 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
-| **`fable`** | The rare top-of-stack judgment nodes (added 2026-07-01, ED-1086 — availability restored 2026-07-01) | canonical-contract & **propagation-spec authorship** (the aggregate-up/distribute-down + termination artifact — doctrine ED-1083 §4), the emergence audit (seeded-sim + ablation verdicts, once runnable), deepest cross-corpus synthesis. Caveats: subscription metering (~50% weekly cap through 2026-07-07 — verify current terms); **no zero-data-retention** → use `opus` for retention-sensitive content; the safety classifier is irrelevant to game-design content. `fable` is an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. |
+| **`fable`** | **Read-only audit · planner · orchestrator · guardrail. NOT synthesis or artifact authorship** (RULED 2026-07-28, Jordan — supersedes the prior "propagation-spec authorship / deepest cross-corpus synthesis" assignment) | The rule of thumb: **a synthesis artifact is reviewable and cheap to revise; an audit verdict or a guardrail decision is where being wrong is silent.** Spend the top tier where the error doesn't announce itself. So: adversarial read-only audits, planning/decomposition before work starts, the final gate on a run — not the long-output stage that writes the report. Two corpus precedents converge on this independently (ED-IN-0085 §6.4). `fable` remains an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. ⚠️ **Unverified caveats carried over from ED-1086 and never re-checked**: subscription metering, zero-data-retention availability. Re-verify before relying on either; do not treat them as current. |
 
 **Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
 `haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
@@ -428,7 +442,22 @@ fits, rather than defaulting the whole fan-out to Opus.
 - **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
   mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
   `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
-  Opus verifier/synthesizer.**
+  Opus verifier/synthesizer** — with `fable`, when used at all, on the *audit/guardrail* node rather than
+  the synthesis one (the row above).
+- **Effort ladder** (GA, no beta header): `low | medium | high | xhigh | max`, **default `high`**. Set it
+  explicitly per `agent()` call. On `claude-opus-5` thinking is **on by default**, and
+  `thinking: disabled` is accepted **only at effort ≤ `high`** (400 at `xhigh`/`max`).
+
+**Three caching facts that bite the fan-out pattern** (verified 2026-07-28, ED-IN-0086 — none of them
+obvious, all of them load-bearing on how `parallel()` stages are written):
+1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once the
+   first response *begins streaming*, so N concurrent identical-prefix calls all pay full price. Fire one,
+   await its first token, then fan out the rest.
+2. **`haiku`'s cache minimum is 4,096 tokens — 8× `opus`'s, and non-monotonic across the roster.** A
+   shared preamble under that floor **silently never caches** on a Haiku finder stage (no error, just
+   `cache_creation_input_tokens: 0`). "Cheap tier ⇒ cheap fan-out" runs opposite to the price ladder here.
+3. **Switching model mid-conversation invalidates the entire cache** — no escape hatch, caches are
+   model-scoped. Escalate at *phase* boundaries, where the cache turns over anyway, not mid-phase.
 
 **Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
 `systems/_architecture/holonic_container_doctrine_v1.md` for the doctrine side):

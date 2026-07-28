@@ -8,20 +8,20 @@ export const meta = {
 }
 
 const CORPUS = [
-  'VALORIA SOCIAL CONTEST CORPUS (repo-relative, cwd = C:/Github/ttrpg). Read what your lens needs:',
+  'VALORIA SOCIAL CONTEST CORPUS. All paths below are REPO-RELATIVE to the checkout root; resolve them there, not against any absolute machine path. Read what your lens needs:',
   '  PRIMARY (the system under critique):',
-  '  designs/scene/social_contest_v30.md          - main spec, sections 1-12 (setup, exchange, resolution, asymmetric, BG, hybrid, obligations, succession, heresy).',
-  '  designs/scene/social_contest_v30_infill.md   - prose/rationale infill.',
-  '  params/contest.md                            - formulas, tables, patch log.',
-  '  params/contest_extensions.md                 - Resonant Style targeting, Evidence Findings, temporal-axis, etc.',
-  '  sim/personal/contest.py                      - Python sim of the contest pipeline.',
+  '  systems/social_contest/social_contest_v30.md          - main spec, sections 1-12 (setup, exchange, resolution, asymmetric, BG, hybrid, obligations, succession, heresy).',
+  '  systems/social_contest/social_contest_v30_infill.md   - prose/rationale infill.',
+  '  engine/params/contest.md                            - formulas, tables, patch log.',
+  '  engine/params/contest_extensions.md                 - Resonant Style targeting, Evidence Findings, temporal-axis, etc.',
+  '  systems/social_contest/sim/contest/          - Python sim of the contest pipeline, now a PACKAGE — the single-file sim/personal/contest.py older notes cite no longer exists: resolver.py, rhetoric.py, appraise.py, armature.py, modes.py, policy.py, primitives.py, contract.py, faction.py, narrative.py, dictionaries.py, wrapper.py, agon_harness.py.',
   '  ADJACENT (the systems the contest plugs into - GREP THESE before claiming a gap is unfilled):',
-  '  designs/npcs/npc_behavior_v30.md             - Stance Triangle, Conviction, Resonant Style taxonomy (S1.3), Conviction Scars (S3.3/3.4), arcs.',
-  '  designs/personal/conviction_taxonomy_v30.md  - the 13-Conviction / 4-axis matrix (the interpretation primitive).',
-  '  designs/personal/knots_v30.md                - Knot/Disposition (-5..+5) relational substrate.',
-  '  designs/architecture/*                        - key_substrate, scale_transitions, complete_systems_reference (the Key bus, armature dot-product).',
+  '  systems/npcs/npc_behavior_v30.md             - Stance Triangle, Conviction, Resonant Style taxonomy (S1.3), Conviction Scars (S3.3/3.4), arcs.',
+  '  systems/characters/conviction_taxonomy_v30.md  - the 13-Conviction / 4-axis matrix (the interpretation primitive).',
+  '  systems/fieldwork/knots_v30.md                - Knot/Disposition (-5..+5) relational substrate.',
+  '  systems/_architecture/*                        - key_substrate, scale_transitions, complete_systems_reference (the Key bus, armature dot-product).',
   '  references/module_contracts.yaml             - module boundaries, resolver classes.',
-  '  designs/audit/2026-06-28-distillation-coherence/distillation_coherence_report.md - recent engine audit: "two primitives" (sigma resolver + armature dot-product), the contest IS the sigma kernel.',
+  '  audit/2026-06-28-distillation-coherence/distillation_coherence_report.md - recent engine audit: "two primitives" (sigma resolver + armature dot-product), the contest IS the sigma kernel.',
 ].join('\n')
 
 const PHILOSOPHY = [
