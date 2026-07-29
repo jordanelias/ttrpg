@@ -24,6 +24,32 @@ kept getting lost. See `HANDOFF.md` 2026-07-01 entry for the cleanup that fixed 
   graph/map docs) can stay in its dated audit folder rather than being physically relocated here, *if*
   `CURRENT.md` explicitly documents it as a frozen record. Don't invent new frozen exceptions casually —
   the default is: the live head lives here.
-- **Per-audit-session workplans** (a workplan scoped to one dated audit's findings, e.g.
-  `designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md`) are a different thing and stay with
-  their audit session — this directory is for the top-level *master* workplan only.
+- **Per-audit-session workplans** (a plan scoped to one dated audit's findings) stay physically with
+  their audit session **and get a pointer file here.** This supersedes the former rule that this
+  directory was "for the top-level *master* workplan only."
+
+## Every plan is reachable from this directory (RULED 2026-07-29, Jordan)
+
+**Rule:** *any* plan — workplan, session plan, implementation schedule, execution plan, remediation
+plan, roadmap — requires **either direct placement in this directory or a pointer file here.** A plan
+buried in `audit/` that nothing in `workplans/` names is invisible to a resuming session and to the
+agents that scope work from this directory. That is how workplans kept getting lost before, and the
+2026-07-01 cleanup only fixed it for the *master* workplan.
+
+**Pointer file convention:**
+
+- Filename: `POINTER_<date>_<slug>.md`.
+- Required fields: `target:` (repo-relative path to the real plan), `lane:`, `ED:`, `liveness:`,
+  `scope:` (one paragraph).
+- **`liveness:` is explicit, never inferred.** A `## Status:` heading is *not* a liveness signal in
+  either direction — measured 2026-07-29 across all 58 plan-shaped files under `audit/`: only 10
+  carry the canonical heading and 7 of those 10 are dead, while 3 of the 7 live plans carry one
+  reading "PROPOSED". Inference is wrong in both directions.
+- Record known-stale upstream text in the pointer (e.g. a HANDOFF bullet that mislabels the plan's
+  version) so the pointer does not silently inherit it.
+- **Only LIVE plans get pointers.** Pointing agents at a superseded plan is worse than not pointing.
+  As of the 2026-07-29 backfill: 7 live, 14 superseded, 7 complete, 29 historical, 1 unknown.
+
+**Not yet CI-enforced** — held as a docket question rather than adding a gate for a low-frequency
+event (`audit/2026-07-29-centralization-single-owner/01_orchestration_plan_v1.md` §6 row 7). If a
+plan lands pointer-less now that the convention is documented, that answers it.
