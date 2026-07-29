@@ -2,6 +2,41 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0049 plan-v2 A5a: lanchester scalar-write sweep + two guard defects found by mutation
+
+`lanchester_signature.py`'s no-rout pin was a BARE `ua.morale = ua.morale_start = NO_ROUT_MORALE` —
+the silent-no-op class that confounded the retracted `PC_CELL_MORALE` flip. Routed onto
+`Unit.set_morale` (unseeded it reduces exactly to `unit.morale = value`, so byte-identical at the
+shipped default); `morale_start` stays bare and non-cellular. File added to the sweep guard's
+`_ENGINE_FILES`. `test_persubunit_stress.py` deliberately NOT chained in front (A5b, G10).
+
+**Two defects in the guard itself, both found by mutation, neither by reading.**
+(1) The sweep regex is line-anchored and could not see a bare write inside a COMPOUND statement
+(`ua = _mk(...); ua.morale = ...`) — precisely the shape being swept. Adding the file to the scanned
+set without this repair would have produced a guard that passes because it cannot look. Repaired by
+letting the anchor step over leading `…;` statements; `test_the_guard_itself_can_fail` now plants a
+compound line.
+(2) Plan A5a's instruction that `morale_start` "needs a `_CELL_OWNED` whitelist entry or the sweep
+gate blocks its own fix" is **wrong**: the field pattern is name-bounded, so `.morale_start =` never
+matched the `morale` sweep. The entries were written, mutated away, and everything still passed —
+they exempted nothing. Removed rather than kept as harmless: a whitelist line that protects nothing
+advertises a protection that does not exist.
+
+**Citation critic (non-negotiable per the plan; 5 pre-existing flagged constants, none introduced).**
+`sim_mb_06_v9_historical_spec.md` — uniform P4/C4/D5/M6 — resolves EXACTLY against the source text.
+`mass_battle_v30.md §deployment — anchor columns` **DOES NOT RESOLVE**: that doc has no `§deployment`
+section and no anchor-column table. Checked derivability instead — measured Line widths 3/5/5/7 at
+tiers 1-4 give centres 12/12/11/11, so no centring rule yields 11/10/9/8. Re-labelled `[JUSTIFIED:]`.
+The same unresolvable citation is still live at its ORIGIN, `gauge_mb.py:60,64,65,66` — filed, not
+chased.
+
+**Falsifier fired, and it re-derives A6a.** The harness now reports its own precondition beside the
+number: melee **40/40 trajectories routed** despite the `NO_ROUT_MORALE=1e9` pin, fit window
+collapsed to **30 ticks** of a 160-tick budget (per-seed min/median/max 30/35/47); volley 0/40 routed
+but at 0.0% casualties both sides (hence the `inf` exchange ratio). So `melee p=2.50` is a fit on
+rout-truncated data and `volley p=0.50` a fit on a flat line. Orchestrator-derived, replicating what
+had been agent-only (G12). Repair is A6a. Grid golden `unit` verified byte-exact after the sweep.
+
 ## 2026-07-29 — ED-MB-0048 plan-v2 A3: sub-phase truncation counted (weight, not fire-count)
 
 `orchestration.py`'s `MAX_SUB_PHASES` `break` was bare — engagement groups past the 5th deal zero

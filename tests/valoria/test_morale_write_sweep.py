@@ -132,17 +132,29 @@ def test_subunit_absolute_write_reaches_the_cells(unit_and_atom):
 # ── the guard that makes the sweep durable ──────────────────────────────────────────────────────
 
 _ENGINE_FILES = ['orchestration.py', 'core/state.py', 'core/exchange.py', 'hierarchy/units.py',
-                 'percell.py', 'resolution.py']
+                 'percell.py', 'resolution.py',
+                 # [ED-MB-0049 / plan-v2 A5a, 2026-07-29] `lanchester_signature.py` joins the scanned
+                 # set. It is a measurement HARNESS rather than the engine path, but it is the one
+                 # harness that gates a MEASUREMENT this lane depends on: it pins morale high
+                 # specifically to DISABLE rout, so a silent no-op there fits the Lanchester exponent
+                 # on truncated battles — and that exponent is what DG-6's whole root-cause analysis
+                 # rests on. Its bare write is now routed through `Unit.set_morale`.
+                 'lanchester_signature.py']
 
-# DELIBERATELY OUT OF SCOPE, and the reason is a rule rather than an oversight. `lanchester_signature.py`
-# and `test_persubunit_stress.py` are measurement HARNESSES, not the engine path, and each contains one
-# bare morale write. Both were swept in a first pass and then REVERTED: the anti-fabrication gate scans
-# the changeset, so touching either file dragged ~100 pre-existing uncited constants (none of them mine)
-# into a blocking gate. Widening a sweep past what the current task needs has a real cost, and that was
-# it. They are recorded on the re-flip checklist in HANDOFF_MB instead, where they belong — under
-# PC_CELL_MORALE=OFF they are inert, and they must be swept BEFORE the flag flips, because
-# lanchester_signature pins morale high specifically to DISABLE rout: a silent no-op there would let
-# bodies rout mid-signature and measure the Lanchester exponent on truncated battles.
+# STILL OUT OF SCOPE, and the reason is a rule rather than an oversight. `test_persubunit_stress.py`
+# is a measurement harness holding one bare morale write, and it was swept in a first pass and then
+# REVERTED: the anti-fabrication gate scans the changeset, so touching it drags ~116 pre-existing
+# uncited constants (none of them mine) into a blocking gate. Widening a sweep past what the current
+# task needs has a real cost. Unlike `lanchester_signature` it fails LOUDLY (its own assert catches
+# the no-op), so it gates the eventual default FLIP, not any measurement — plan-v2 A5b, explicitly
+# NOT chained in front of A5a (G10). It stays on the re-flip checklist in HANDOFF_MB.
+#
+# A5a's own constant cost, for the record: 5 flagged literals, all PRE-EXISTING, none introduced.
+# Two were repaired by hand rather than by re-labelling — see ED-MB-0049. One citation
+# (`sim_mb_06_v9_historical_spec.md`, uniform P4/C4/D5/M6) resolved EXACTLY against the source text;
+# the other (`mass_battle_v30.md §deployment — anchor columns`) DID NOT RESOLVE AT ALL and was
+# re-labelled `[JUSTIFIED: …]`, which is what those values are. That unresolvable citation is still
+# live at its origin in `gauge_mb.py` — filed, not chased.
 
 # [ED-MB-0042] Field-parameterized ON PURPOSE. Jordan's directive moves stamina, discipline, quality,
 # hp and armour onto the cell in phases 3 and 4, and EACH of them acquires this identical hazard the
@@ -173,6 +185,21 @@ _CELL_OWNED = {
             # subunit. The cells already hold this value; rewriting them would flatten genuine
             # per-cell divergence.
             'atom.morale = atom.eff_morale',
+            # [ED-MB-0049 / A5a, 2026-07-29] NO entry for `morale_start`, and that is deliberate.
+            # Plan v2 A5a instructed: "`morale_start` is non-cellular and must stay a bare write —
+            # it needs a `_CELL_OWNED` whitelist entry or the sweep gate blocks its own fix."
+            # **That instruction is wrong, and mutation-testing is what showed it.** The two
+            # whitelist entries were written, then MUTATED AWAY, and every test still passed: the
+            # field pattern is name-bounded (`\.morale\s*(?:=|-=|\+=)`), so `ua.morale_start = …`
+            # never matched the `morale` sweep in the first place — verified directly, `.morale =`
+            # matches and `.morale_start =` does not, in both plain and compound form. The entries
+            # exempted nothing. They were REMOVED rather than kept as harmless, because a whitelist
+            # line that protects nothing advertises a protection that does not exist — the exact
+            # vacuous-verification class this module was written to end. `morale_start` is out of
+            # this guard's scope BY CONSTRUCTION, not by exemption. If it ever becomes cellular
+            # (there is no `cell_morale_start` today and `eff_morale_start` derives from the
+            # scalar), the right move is a new `_CELL_OWNED['morale_start']` key, which is what the
+            # field-parameterization exists for.
         },
     },
     # phase 3 adds: 'stamina', 'discipline', 'quality'   ← add the key when its cell_<field> is seeded
@@ -181,7 +208,16 @@ _CELL_OWNED = {
 
 
 def _assign_re(field):
-    return re.compile(r'^\s*(?:if [^:]+:\s*)?([A-Za-z_][\w.]*\.' + field + r'\s*(?:=|-=|\+=)[^=].*?)\s*(?:#.*)?$')
+    # [ED-MB-0049 / A5a, 2026-07-29] The `(?:[^;#]*;\s*)*` clause is a MEASURED repair, not a
+    # tidy-up. Mutation-testing the widened scope found that the guard could not see a bare write
+    # inside a COMPOUND statement — `ua = _mk(...); ua.morale = NO_ROUT_MORALE`, which is exactly
+    # the shape the pre-sweep lanchester harness used. The pattern is line-anchored on purpose (a
+    # mid-expression match would fire inside strings and expressions), so the fix is to let the
+    # anchor step over leading `…;` statements rather than to unanchor it. Without this, adding
+    # `lanchester_signature.py` to the scanned set would have produced a guard that passes because
+    # it cannot look. Proved by `test_the_guard_itself_can_fail`, which now plants a compound line.
+    return re.compile(r'^\s*(?:if [^:]+:\s*)?(?:[^;#]*;\s*)*([A-Za-z_][\w.]*\.' + field
+                      + r'\s*(?:=|-=|\+=)[^=].*?)\s*(?:#.*)?$')
 
 
 @pytest.mark.parametrize('field', sorted(_CELL_OWNED))
@@ -223,3 +259,11 @@ def test_the_guard_itself_can_fail():
         assert m, f"the guard for '{field}' would not flag a plain bare assignment"
         assert m.group(1).strip() not in _CELL_OWNED[field]['allowed'], \
             f"'{field}' exempts the very shape it is meant to catch"
+        # [ED-MB-0049 / A5a] The COMPOUND-statement shape, added because the guard genuinely
+        # could not see it until 2026-07-29 — found by mutation-testing, not by reading.
+        compound = f"    atom = build(); atom.{field} = 1.0"
+        mc = _assign_re(field).match(compound)
+        assert mc, (
+            f"the guard for '{field}' cannot see a bare assignment after a `;` — that is how the "
+            f"lanchester harness's write hid from it for a full sweep")
+        assert mc.group(1).strip() not in _CELL_OWNED[field]['allowed']

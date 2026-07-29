@@ -37,8 +37,20 @@ SMALL_TIER          = 2        # exempt literal (2): the smaller force in the 2:
 SEED_BASE           = 2000000  # [canonical: mb_lanchester_design.md §4 — deterministic seed base; class-B]
 N                   = 100      # exempt literal (100): sample size per matchup
 
-# anchor columns for Line at each tier [canonical: mass_battle_v30.md §deployment — gauge ANCHOR_MAP]
-_LINE_ANCHOR = {SMALL_TIER: 10, MIRROR_TIER: 9, BIG_TIER: 8}
+# [JUSTIFIED: deployment anchor columns for Line, copied from tests/sim/gauge_mb.py ANCHOR_MAP
+#  ('Line',2)=10 / ('Line',3)=9 / ('Line',4)=8 — mechanism sourced (a per-tier deployment anchor is
+#  a real engine concept), magnitudes INHERITED from the gauge and not independently derivable]
+# ⚠ ED-MB-0049 (2026-07-29, A5a citation critic): this line previously read
+#   `[canonical: mass_battle_v30.md §deployment — gauge ANCHOR_MAP]`. That citation DOES NOT RESOLVE.
+#   `mass_battle_v30.md` has no `§deployment` section and no anchor-column table; the only "anchor"
+#   hits in it are the Refused-Flank terrain line and settlement anchoring, neither of which is this.
+#   Checked whether the values are derivable instead of cited — they are not: measured widths at the
+#   shipped config are tier 1/2/3/4 = 3/5/5/7 cells, giving centres 12/12/11/11, so no single
+#   centring rule produces 11/10/9/8 (tiers 3-4 sit one column left of it). Re-labelled JUSTIFIED,
+#   which is what they are. The same unresolvable citation is still live at its ORIGIN,
+#   `tests/sim/gauge_mb.py:60,64,65,66` — out of A5a's scope, filed not chased (Jordan's
+#   2026-07-29 directive), see ED-MB-0049.
+_LINE_ANCHOR = {SMALL_TIER: 10, MIRROR_TIER: 9, BIG_TIER: 8}  # [JUSTIFIED: gauge_mb.ANCHOR_MAP ('Line',2/3/4) — inherited, see the note above]
 
 
 def _mk(shape, tier, faction, unit_type='melee', stance='balanced'):
@@ -47,8 +59,12 @@ def _mk(shape, tier, faction, unit_type='melee', stance='balanced'):
     su = Subunit(shape=shape, troop_type='infantry', tier=tier,
                  starting_position=(sr, _LINE_ANCHOR.get(tier, 10)),
                  advance_dir=ad, unit_type=unit_type)
-    # historical infantry baseline [canonical: tests/sim/gauge_mb.py make_unit defaults]
-    p, cmd, disc, mor = 4, 4, 5, 6
+    # [canonical: tests/sim/sim_mb_06_v9_historical_spec.md — "The v9 targets above use uniform
+    #  Power=4, Command=4, Discipline=5, Morale=6 to isolate formation/unit_type effects"]
+    # Verified by hand against that file 2026-07-29 (ED-MB-0049, A5a citation critic): the source
+    # says exactly this, and it is also `gauge_mb.make_unit`'s default signature, so the harness and
+    # the gauge share one baseline rather than two coincidentally-equal ones.
+    p, cmd, disc, mor = 4, 4, 5, 6  # [canonical: tests/sim/sim_mb_06_v9_historical_spec.md §v9 targets — uniform P4/C4/D5/M6]
     return Unit(name=faction, faction=faction, power=p, command=cmd,
                 discipline=disc, discipline_start=disc, morale=mor, morale_start=mor,
                 subunits=[su], dr=1, stance=stance, speed='Standard')
@@ -117,26 +133,70 @@ FIT_P_LO, FIT_P_HI, FIT_P_STEP = 0.5, 2.51, 0.05   # [canonical: mb_lanchester_d
 BIG_CV = 9.0   # [canonical: mb_lanchester_design.md §4 — CV sentinel (no conservation); class-B]
 
 
-def _trajectory(big_tier, small_tier, unit_type, stance):
+def _trajectory(big_tier, small_tier, unit_type, stance, diag=None):
+    """Mean A/B hp trajectories over TRAJ_SEEDS no-rout battles.
+
+    `diag` (a dict) collects the A5a falsifier evidence: how many trajectories routed despite the
+    NO_ROUT_MORALE pin, how many ticks each ran, the fit window that survived, and the non-vacuity
+    counter. It is pure observation — nothing in it feeds the fit.
+    """
     import statistics
+    if diag is None:
+        diag = _new_diag()
     series = []
     for s in range(TRAJ_SEEDS):
         random.seed(s + SEED_BASE)
-        # huge morale disables rout → pure attrition
-        ua = _mk('Line', big_tier, 'A', unit_type, stance); ua.morale = ua.morale_start = NO_ROUT_MORALE
-        ub = _mk('Line', small_tier, 'B', unit_type, stance); ub.morale = ub.morale_start = NO_ROUT_MORALE
+        # [ED-MB-0049 / plan-v2 A5a] The morale pin, swept onto its single owner.
+        #
+        # This was `ua.morale = ua.morale_start = NO_ROUT_MORALE`, a BARE absolute write — the exact
+        # silent-no-op class that confounded the retracted PC_CELL_MORALE measurement (ED-MB-0042):
+        # `eff_morale` reads the cells once seeded and never falls back to the scalar, so under the
+        # flag this pin would set nothing, bodies would rout mid-signature, and the Lanchester
+        # exponent would be fitted on TRUNCATED battles. `Unit.set_morale` is the owner; unseeded
+        # (the shipped default) it reduces exactly to `unit.morale = value`, so this is
+        # behaviour-identical at PC_CELL_MORALE=0 and correct at =1.
+        #
+        # ⚠ CARVE-OUT: `morale_start` stays a BARE write and must. It is non-cellular — there is no
+        # `cell_morale_start`, `eff_morale_start` derives from the subunit/unit scalar, and no owner
+        # exists or should. It is whitelisted in `test_morale_write_sweep._CELL_OWNED['morale']`
+        # rather than exempted by silence. Written on its own line, deliberately: the sweep guard is
+        # a line-anchored regex and could not see it inside the old `x = _mk(...); x.morale = ...`
+        # compound statement — adding this file to the guard's scope without splitting the line
+        # would have produced a guard that passes because it cannot look, not because it is clean.
+        ua = _mk('Line', big_tier, 'A', unit_type, stance)
+        ua.set_morale(NO_ROUT_MORALE)
+        ua.morale_start = NO_ROUT_MORALE
+        ub = _mk('Line', small_tier, 'B', unit_type, stance)
+        ub.set_morale(NO_ROUT_MORALE)
+        ub.morale_start = NO_ROUT_MORALE
         bs = ua.hp_max / ua.size_max
         tr = []
+        routed_here = False
         for _ in range(TRAJ_TICKS):
             run_battle(ua, ub, max_turns=1)
             tr.append((ua.hp, ub.hp))
+            # [ED-MB-0049 / A5a falsifier] The pin's WHOLE PURPOSE is "no rout, pure attrition".
+            # Record whether it held, per trajectory, instead of assuming it. `checked` is the
+            # non-vacuity counter (§0.1 #2): a loop that only asserts conditionally must assert
+            # that it asserted, or an empty loop reads as a pass.
+            diag['checked'] += 1
+            if ua.routed or ub.routed:
+                routed_here = True
             if ua.hp <= TRAJ_FLOOR * bs or ub.hp <= TRAJ_FLOOR * bs or ua.routed or ub.routed:
                 break
+        if routed_here:
+            diag['routed_trajectories'] += 1
+        diag['ticks'].append(len(tr))
         series.append(tr)
     L = min(len(x) for x in series)
     A = [statistics.mean(series[s][t][0] for s in range(TRAJ_SEEDS)) for t in range(L)]
     B = [statistics.mean(series[s][t][1] for s in range(TRAJ_SEEDS)) for t in range(L)]
+    diag['fit_window'] = L
     return A, B
+
+
+def _new_diag():
+    return {'checked': 0, 'routed_trajectories': 0, 'ticks': [], 'fit_window': 0}
 
 
 def _best_exponent(A, B):
@@ -157,12 +217,20 @@ def _best_exponent(A, B):
 def check_law_exponents():
     """Rigorous: melee must conserve the LINEAR difference (p≤1.4), volley the SQUARE
     difference (p≥1.6). Requires the Command-only base (COMMAND_SIGMA on); the Size-based
-    pool contaminates melee to p≈1.7 and FAILS this guard by design."""
-    pm = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'melee', 'balanced'))
-    pv = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'ranged', 'hold'))
+    pool contaminates melee to p≈1.7 and FAILS this guard by design.
+
+    [ED-MB-0049 / A5a] Returns a fourth element: the per-arm PRECONDITION diagnostic. An exponent
+    fitted on trajectories that ROUTED is fitted on truncated data and is not an estimate of
+    anything — so the precondition is reported next to the number, never assumed behind it (G4:
+    verify the instrument before quoting its number).
+    """
+    dm, dv = _new_diag(), _new_diag()
+    pm = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'melee', 'balanced', diag=dm))
+    pv = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'ranged', 'hold', diag=dv))
     ok = pm <= LIN_EXP_MAX and pv >= SQ_EXP_MIN
     return ('LAW EXPONENTS (linear/square)', ok,
-            f"melee p={pm:.2f} (≤{LIN_EXP_MAX} linear) volley p={pv:.2f} (≥{SQ_EXP_MIN} square)")
+            f"melee p={pm:.2f} (≤{LIN_EXP_MAX} linear) volley p={pv:.2f} (≥{SQ_EXP_MIN} square)",
+            {'melee': dm, 'volley': dv})
 
 
 def run():
@@ -170,10 +238,25 @@ def run():
     results = [check_linear(), check_square(), check_no_annihilation(), check_law_exponents()]
     print("=== P-L Lanchester signature tests (PER_CELL=%s) ===" % os.environ.get('PER_CELL'))
     allok = True
-    for name, ok, detail in results:
+    for row in results:
+        name, ok, detail = row[0], row[1], row[2]
         allok = allok and ok
         print(f"  [{'PASS' if ok else 'FAIL'}] {name:26} {detail}")
-    print(f"  => {'ALL PASS' if allok else 'FAILURES PRESENT'} ({sum(1 for _,o,_ in results if o)}/{len(results)})")
+        # [ED-MB-0049 / A5a] The precondition diagnostic, printed BESIDE the number it qualifies.
+        # A rout-truncated fit is not an estimate; quoting the exponent without this line is how
+        # `melee p=2.50` entered the record as an engine property (G4).
+        for arm, d in (row[3] if len(row) > 3 else {}).items():
+            n = TRAJ_SEEDS
+            assert d['checked'] >= n, (
+                f"non-vacuity: the {arm} trajectory loop ran {d['checked']} ticks over {n} seeds — "
+                f"fewer than one tick per seed means the precondition was never actually observed")
+            flag = 'OK' if d['routed_trajectories'] == 0 else 'PRECONDITION VIOLATED'
+            print(f"           {arm:>7} no-rout pin: {flag} — "
+                  f"{d['routed_trajectories']}/{n} trajectories routed, "
+                  f"fit window {d['fit_window']} ticks "
+                  f"(min/median/max per-seed ticks "
+                  f"{min(d['ticks'])}/{statistics.median(d['ticks']):.0f}/{max(d['ticks'])})")
+    print(f"  => {'ALL PASS' if allok else 'FAILURES PRESENT'} ({sum(1 for r in results if r[1])}/{len(results)})")
     return allok
 
 
