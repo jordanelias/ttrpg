@@ -81,7 +81,12 @@ _PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': 
                # retracted the same day (its measurement was confounded; see config.py at the flag).
                # Pinned explicitly rather than left ambient so that when the flip is re-attempted, the
                # pin has to be changed deliberately and the goldens re-recorded with it.
-               'PC_CELL_MORALE': '0'}
+               'PC_CELL_MORALE': '0',
+               # [ED-MB-0045 A1b, 2026-07-29] Determinism pin, per the A1a critic pass. The digests
+               # are empirically hash-order-independent (A1a's bisect ran every process with a fresh
+               # random hash seed and all runs agreed, including reproducing goldens authored on a
+               # different box) — pinned anyway so that can never silently stop being true.
+               'PYTHONHASHSEED': '0'}
 
 
 def _run_bat(per_cell):
