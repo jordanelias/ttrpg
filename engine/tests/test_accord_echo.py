@@ -19,16 +19,45 @@ WAVE-2 REWRITE (orchestrator-adjudicated fix batch, 2026-07-29, OI-03 fixes 1-4)
   3. The write applies in canonical-index space directly to `Settlement.order` (the settlement's
      own native 0-5 scale, settlement_layer_v30.md §1.3) — no MULTS/ACCORD_MAP conversion.
   4. The returned key is `accord_applied` (not `accord_changes`), matching the corrected
-     zoom_in_out.zoom_out contract (immediate application, not queued).
+     zoom_in_out.zoom_out contract (immediate application, not queued) -- SUPERSEDED by the
+     WAVE-3 fix below: it is queued again, genuinely this time, and the dict key name is KEPT
+     anyway (see item 5).
 
-Known-answer rows per scale_transitions_v30.md §5.5 (lines 208-221):
+WAVE-3 QUEUE-PARITY (ED-IN-0091 plan §3 Wave 3 Handoff item 1, 2026-07-29 — closes OI-03 fix 4
+FOR REAL instead of renaming around it, now that `scene.accord_echo` is registered in
+`key_type_registry_v30.md`):
+  5. `_apply_accord_echo` now builds a real `scene.accord_echo` Key and routes the
+     settlement-Order write through `sched.emit(key, apply=...)` (OF-7) — the write lands at
+     `world.echo_scheduler.accounting_boundary()`, not at `emit_scene_echo` call time. Every test
+     below that asserts a settlement.order move now calls `accounting_boundary()` first and
+     additionally asserts the PRE-boundary value is unchanged (the deferred-apply half of the
+     claim, not just the eventual value). RS stays immediate (canon-explicit, :219) — unaffected.
+  6. The queued Key's `causes[]` carries `[caused_by_key_id]` for real when the sibling §5.2
+     domain-echo Key also fired for the same scene (OI-28 LIVE closure, NOW EXECUTED — the §3
+     tests below assert `accord_key.causes`, not just the telemetry field it is derived from).
+  7. The returned dict key stays `accord_applied` (not renamed to `accord_queued`) because
+     `engine/tests/test_pipeline_reach.py::test_direction6b_...` reads that literal name and is a
+     different lane's (`L-consumers`) sole-editor file this wave — see `_apply_accord_echo`'s own
+     docstring for the full reasoning. Only the MEANING of `applied` changed (queued, not written).
+
+WAVE-3 CAUSES[] CLOSURE (2026-07-29, same-day follow-on to WAVE-3 item 6 above): the accord Key's
+`causes[]` field is now genuinely populated at construction (`echo_transport.py`'s `_apply_accord_echo`),
+not left as telemetry-only. `test_accord_leg_receives_the_domain_echo_keys_real_in_log_id` and
+`test_accord_leg_caused_by_key_id_is_none_when_the_domain_echo_leg_does_not_fire` (§3 below) are
+REWRITTEN to assert `accord_key.causes` directly (a log-lookup falsifier via
+`world.echo_scheduler.log.lookup(...)`, not a string-equality check) — the fired case now asserts
+`causes == [domain_echo_key_id]`; the not-fired case keeps asserting `causes == []` (the honesty
+falsifier: no genuine upstream Key exists to cite, so nothing is fabricated).
+
+Known-answer rows per scale_transitions_v30.md §5.5 (lines 208-221) — writes now land at
+`accounting_boundary()`, per WAVE-3 item 5 above:
   - governance, Success -> settlement Order +1 on the named settlement.
   - violence -> RS -1 (immediate, via the rs_track stub) + settlement Order -1 on the named
-    settlement.
+    settlement (deferred).
   - an unmappable (scene_type, degree) / declared-outcome pair -> nothing applied, recorded.
 
-NOT touching engine/tests/test_pipeline_reach.py (Oracle-stage owned) — the manifest-row flip
-this change causes is filed via oracle_requests, not edited here.
+NOT touching engine/tests/test_pipeline_reach.py (a different lane's, `L-consumers`, sole-editor
+file this wave) — any manifest-row implication is filed via oracle_requests, not edited here.
 """
 from engine.autoload import game_state
 from engine.cross_scale import domain_echo, echo_transport
@@ -119,8 +148,16 @@ def test_governance_success_moves_settlement_order_plus_one_on_the_right_settlem
     row = changes[0]
     assert row["applied"] is True and row["target_settlement"] == sid
     assert row["accord_delta"] == 1
+    assert row["key_id"], "W3: a scene.accord_echo Key must have been built and queued"
+    # W3 QUEUE-PARITY: the write is now OF-7 deferred -- untouched until accounting_boundary().
+    assert world.settlements[sid].order == before, (
+        "settlement Order must NOT move before accounting_boundary() -- the write is queued, "
+        f"not applied inline: {before} -> {world.settlements[sid].order}")
+    ran = world.echo_scheduler.accounting_boundary()
+    assert ran >= 1
     assert world.settlements[sid].order == before + 1, (
-        f"settlement Order did not move +1: {before} -> {world.settlements[sid].order}")
+        f"settlement Order did not move +1 at the boundary: {before} -> "
+        f"{world.settlements[sid].order}")
     # Wrong settlement is untouched -- assert-that-asserted the loop actually checked something.
     checked = 0
     for other in other_sids:
@@ -147,11 +184,18 @@ def test_violence_moves_rs_and_settlement_order_on_the_right_settlement():
     assert row["scene_outcome"] == "violence"
     assert row["accord_delta"] == -1 and row["rs_delta"] == -1
     assert row["applied"] is True
-    assert world.settlements[sid].order == before - 1, (
-        f"settlement Order did not move -1: {before} -> {world.settlements[sid].order}")
-    # RS has no live store yet (OI-17 stub) -- the write routes through rs_track's own declared
-    # entry point and self-flags as a typed no-op, not silently dropped.
+    # RS ("Mending Stability") stays IMMEDIATE per canon (scale_transitions_v30.md:219) -- it has
+    # no live store yet (OI-17 stub), so the write routes through rs_track's own declared entry
+    # point and self-flags as a typed no-op, not silently dropped. Unaffected by W3 queue-parity.
     assert stubwire.invocations >= 1, "rs_delta must route through rs_track.apply_rs_delta"
+    # settlement.order is the OTHER half -- W3 QUEUE-PARITY: now OF-7 deferred, unlike RS above.
+    assert world.settlements[sid].order == before, (
+        "settlement Order must NOT move before accounting_boundary(): "
+        f"{before} -> {world.settlements[sid].order}")
+    world.echo_scheduler.accounting_boundary()
+    assert world.settlements[sid].order == before - 1, (
+        f"settlement Order did not move -1 at the boundary: {before} -> "
+        f"{world.settlements[sid].order}")
 
 
 def test_territorial_transfer_sets_settlement_order_to_canonical_two():
@@ -163,6 +207,9 @@ def test_territorial_transfer_sets_settlement_order_to_canonical_two():
                     "degree": "Success", "scene_outcome": "territorial_transfer",
                     "target_settlement": sid}}
     echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
+    # W3 QUEUE-PARITY: the set-to-2 write is now OF-7 deferred, not immediate.
+    assert world.settlements[sid].order == 4, "must not move before accounting_boundary()"
+    world.echo_scheduler.accounting_boundary()
     assert world.settlements[sid].order == 2
 
 
@@ -178,6 +225,7 @@ def test_settlement_order_never_leaves_the_canonical_0_5_index_bound():
                     "degree": "Success", "scene_outcome": "governance",
                     "target_settlement": sid}}
     echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
+    world.echo_scheduler.accounting_boundary()  # W3 QUEUE-PARITY: the write lands here now.
     assert world.settlements[sid].order == settlement_registry.STAT_MAX
 
 
@@ -231,3 +279,74 @@ def test_no_scope_met_suppresses_accord_echo_too():
     out = echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
     assert "accord_applied" not in out
     assert world.settlements[sid].order == before
+
+
+# ── 3. OI-28 LIVE causes[] closure (W3, ED-IN-0091 plan §3 Wave 3) ───────────────────────────
+#
+# `_apply_accord_echo` now builds its own `scene.accord_echo` Key AND populates that Key's
+# `causes[]` field for real: when the §5.2 domain-echo Key fires for a scene AND the §5.5 Accord
+# leg ALSO fires for that SAME scene, the accord Key's `causes` is `[domain_echo_key_id]` --
+# genuinely already in `world.echo_scheduler.log` by construction (keys.py:325's "causes[] only
+# references Keys already in the log" invariant), not merely threaded telemetry. These two tests
+# are the log-lookup falsifier on the actual Key, per CLAUDE.md §0.1 point 3 -- not a string
+# comparison against the return-dict's `caused_by_key_id` (which stays present too, unchanged).
+
+def test_accord_leg_receives_the_domain_echo_keys_real_in_log_id():
+    world = _world_with_scheduler()
+    fid = next(iter(world.factions))
+    sid = _first_settlement_id(world)
+    world.settlements[sid].order = 2
+    ctx = {"echo": {"actor_faction": fid, "target_faction": fid, "most_relevant_stat": "L",
+                    "degree": "Success", "scene_outcome": "governance",
+                    "target_settlement": sid}}
+    out = echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
+    # The §5.2 leg fired too (both legs share the same Sufficient Scope gate + this ctx maps
+    # cleanly to both) -- fixture assumption, asserted rather than silently relied on.
+    assert out.get("other_echoes"), "fixture assumption: the §5.2 domain-echo leg must also fire"
+    domain_echo_key_id = next(iter(world.echo_scheduler.log)).id
+    row = out["accord_applied"][0]
+    assert row["caused_by_key_id"] == domain_echo_key_id
+    # Genuinely in-log, not merely a matching string -- exercises the same lookup path
+    # keys.py's causes[] validator (invariant 3) uses.
+    assert world.echo_scheduler.log.lookup(row["caused_by_key_id"]) is not None
+    # OI-28 LIVE (W3): the accord leg's OWN Key is real, logged, AND its `causes[]` field is
+    # genuinely populated with the domain-echo Key's id -- the falsifier on the KEY itself, not
+    # just the telemetry it was derived from.
+    accord_key = world.echo_scheduler.log.lookup(row["key_id"])
+    assert accord_key.type == "scene.accord_echo"
+    assert accord_key.causes == [domain_echo_key_id]
+    # And the referenced cause really is looked-up-able through the log, exactly the invariant
+    # keys.py:325 enforces at append time -- not a coincidental string match.
+    assert world.echo_scheduler.log.lookup(accord_key.causes[0]) is not None
+
+
+def test_accord_leg_caused_by_key_id_is_none_when_the_domain_echo_leg_does_not_fire():
+    """Honesty check: no genuine upstream Key exists when only the §5.5 leg fires --
+    `caused_by_key_id` must stay None rather than pointing at nothing, or a future Key using it
+    would violate keys.py:325's invariant with a fabricated reference. Isolating this case cleanly:
+    §5.5 'territorial_transfer' fires regardless of degree (compute_accord_echo's own table has no
+    degree gate on that row), while §5.2's amount table maps degree='Partial' to amount=0, i.e.
+    fires=False (`domain_echo.ECHO_AMOUNT_BY_DEGREE['Partial'] == 0`) -- a genuine disagreement
+    between the two legs' firing conditions, not a synthetic stat-name hack."""
+    world = _world_with_scheduler()
+    fid = next(iter(world.factions))
+    sid = _first_settlement_id(world)
+    world.settlements[sid].order = 4  # not 2, so a real move away from the default is visible
+    ctx = {"echo": {"actor_faction": fid, "target_faction": fid, "most_relevant_stat": "L",
+                    "degree": "Partial", "scene_outcome": "territorial_transfer",
+                    "target_settlement": sid}}
+    out = echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
+    assert not out.get("other_echoes"), "fixture assumption: §5.2 must NOT fire on degree=Partial"
+    # W3 QUEUE-PARITY: the §5.5 Accord leg now logs its OWN scene.accord_echo Key (previously it
+    # applied inline with no Key of its own at all) -- exactly one Key in the log (the accord
+    # leg's), and it must NOT cite a cause that was never logged (keys.py:325's invariant,
+    # honoring the "no domain-echo Key fired" fixture assumption above). Kept as the OI-28 LIVE
+    # honesty falsifier: causes[] stays empty when there is genuinely nothing to cite -- populating
+    # it is conditional on a real upstream id existing, never unconditional.
+    assert len(world.echo_scheduler.log) == 1, "the accord leg's own Key should be logged"
+    accord_key = next(iter(world.echo_scheduler.log))
+    assert accord_key.type == "scene.accord_echo"
+    assert accord_key.causes == [], "no genuine upstream Key exists to cite -- causes[] stays empty"
+    assert out["accord_applied"][0]["applied"] is True  # the §5.5 leg genuinely did fire
+    row = out["accord_applied"][0]
+    assert row["caused_by_key_id"] is None

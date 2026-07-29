@@ -13,6 +13,12 @@
 #     kept VISIBLE as dual emits + gap_notes, not resolved silently.
 #   - scales / resolver enums are [ASSUMPTION]-grade pending Jordan ratification;
 #     the assessor warns, never halts, on unknown members.
+#   - OI-40a coordination (2026-07-29): reconciling the 4 unreconciled scale vocabularies
+#     (this field's 7-value enum vs keys.py's runtime 4-enum vs mechanics_index_gen's
+#     9-value "peninsular" spelling) is HELD at the centralization program's §6 fork 1
+#     for Jordan (ED-IN-0103, audit/2026-07-29-centralization-single-owner/
+#     01_orchestration_plan_v1.md §6 row 1). No vocabulary unification lands here or
+#     anywhere else until that fork resolves — this is a coordination pointer, not a change.
 #
 # v2 (2026-06-10) — Stage-1 extraction pass: registry emitting/consuming_systems
 # matrix parsed wholesale (38 typed entries, 29 named systems); 5 of 7 v1 stubs
@@ -80,6 +86,12 @@ modules:
       - {type: "state.scar_acquired", from: [piety_track]}
       - {type: "state.standing_change", from: [faction_politics, faction_state]}
       - {type: "state.succession", from: [faction_politics]}
+      # ── added 2026-07-29 (W3 item 5, per oracle_requests from the consumers lane): registry
+      #    already declares faction_layer a consumer (consuming_systems: [npc_behavior, faction_layer,
+      #    articulation], key_type_registry_v30.md scene.combat_resolved/scene.combat_felled). Declared
+      #    intent; runtime consumption is gated on the combat->faction ripple being built. ──
+      - {type: "scene.combat_resolved", from: [personal_combat]}
+      - {type: "scene.combat_felled", from: [personal_combat]}
     emits:
       - {type: "mechanical.cascade_resolution", terminal: false}
       - {type: "mechanical.mission_shift", terminal: false}
@@ -106,7 +118,7 @@ modules:
   - module: npc_behavior
     aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
-    doc: systems/npcs/npc_behavior_v30.md
+    doc: systems/factions/political_dynamics_keys_migration_v30.md   # C-KEY-2 repoint (2026-07-29): the prior doc: (npc_behavior_v30.md) is Key-silent; this is the module's real Key-sequencing spec ("Doc 12 Procedures — Key-Migration Spec", PP-687) and was already cited under sources: below. npc_behavior_v30.md stays reachable in sources: (behavioral spec, not superseded).
     scales: [personal, scene]
     resolver: deterministic_accounting   # [ASSUMPTION] doc-12 §8 sequencing-within-Accounting + §9 determinism; Conviction-armature reads (substrate §8.2) feed decision derivation §4
     consumes:
@@ -142,14 +154,21 @@ modules:
       - {type: "mechanical.project_advanced", from: [npc_behavior]}
       - {type: "state.project_completed", from: [npc_behavior]}
       - {type: "state.project_failed", from: [npc_behavior]}
+      # ── added 2026-07-29 (W3 item 5, per oracle_requests from the consumers lane): registry
+      #    already declares npc_behavior a consumer (consuming_systems: [npc_behavior, faction_layer,
+      #    articulation], key_type_registry_v30.md scene.combat_resolved/scene.combat_felled). Declared
+      #    intent only — npc_behavior has no runtime (systems/npcs/ has zero .py files); wiring is
+      #    gated on that module being built. ──
+      - {type: "scene.combat_resolved", from: [personal_combat]}
+      - {type: "scene.combat_felled", from: [personal_combat]}
     emits:
       - {type: "scene.witness", terminal: false}
       - {type: "state.concern_resolved", terminal: false}   # Procedure B (doc-12 §3, §7.4)
       - {type: "state.belief_revised", terminal: false}   # Procedure B Resolution (doc-12 §8) — registry attributes this type to fieldwork: attribution conflict [OPEN — Jordan]
-      - {type: "scene.displacement", terminal: false}   # DA Proposal Phase, displacement_neglect_observed (doc-12 §8 verbatim) — NOT in registry, NOT declared in doc-12 §7 (F2 class)
-      - {type: "mechanical.project_advanced", terminal: false}   # Procedure C (doc-12 §8 verbatim) — NOT in registry, NOT in §7 (F2 class)
-      - {type: "state.project_failed", terminal: false}   # Procedure C, stall >= 8 (doc-12 §8 verbatim) — NOT in registry, NOT in §7 (F2 class)
-      - {type: "state.project_completed", terminal: false}   # Procedure C (doc-12 §8 verbatim) — NOT in registry, NOT in §7 (F2 class)
+      - {type: "scene.displacement", terminal: false}   # DA Proposal Phase, displacement_neglect_observed (doc-12 §8 verbatim) — IN registry (ED-935, key_type_registry_v30 §5, 2026-06-14; emitting_systems: [npc_behavior]); NOT one of doc-12 §7's 4 new Class B declarations (those are opinion_revised/interaction/gossip/concern_resolved) — corrected 2026-07-29, was stale "NOT in registry" (F2 class no longer applies; see gap_notes)
+      - {type: "mechanical.project_advanced", terminal: false}   # Procedure C (doc-12 §8 verbatim) — IN registry (ED-935, key_type_registry_v30 §4); doc-12 §4.1 cites it "registry §4 (existing)". Not one of §7's 4 new declarations — corrected 2026-07-29, was stale "NOT in registry" (F2 class no longer applies; see gap_notes)
+      - {type: "state.project_failed", terminal: false}   # Procedure C, stall >= 8 (doc-12 §8 verbatim) — IN registry (ED-935, key_type_registry_v30 §4); doc-12 §4.2 cites it "registry §4 (existing)". Not one of §7's 4 new declarations — corrected 2026-07-29, was stale "NOT in registry" (F2 class no longer applies; see gap_notes)
+      - {type: "state.project_completed", terminal: false}   # Procedure C (doc-12 §8 verbatim) — IN registry (ED-935, key_type_registry_v30 §4); doc-12 §4.3 cites it "registry §4 (existing)". Not one of §7's 4 new declarations — corrected 2026-07-29, was stale "NOT in registry" (F2 class no longer applies; see gap_notes)
       - {type: "state.opinion_revised", terminal: false}   # Procedure D (doc-12 §5, §7.1; per drift threshold)
       - {type: "scene.interaction", terminal: false}   # Procedure E (doc-12 §6.1, §7.2; per ambient pair)
       - {type: "scene.dialogue", terminal: false}   # Procedure E knowledge sharing (doc-12 §8) — registry attributes scene.dialogue to scene_slate + social_contest only: attribution conflict [OPEN — Jordan]
@@ -178,8 +197,11 @@ modules:
       - "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module — political_dynamics_keys_migration_v30 is \"Doc 12 Procedures — Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable."
       - "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 §9). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four — closed by this same commit's consumes[] additions above."
       - "Accounting sequence (doc-12 §8, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate §4.1 single-update rule processes emissions inline"
+      - "OI-24 residue CLOSED 2026-07-29 (W3 item 3 contract-truth sweep): the emits:[] inline comments on the same four types (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) still asserted 'NOT in registry' after the SUPERSEDED note above had already recorded ED-935's registration — a stale comment/gap_note contradiction, not a live gap. Verified in-tree against key_type_registry_v30.md (§4/§5 entries, emitting_systems: [npc_behavior]) that the SUPERSEDED note is the true state; the four emits:[] comments corrected to match."
+      - "C-KEY-2 CLOSED 2026-07-29 (W3 item 3): doc: repointed from the Key-silent systems/npcs/npc_behavior_v30.md to political_dynamics_keys_migration_v30.md, the module's actual Key-sequencing spec (was cited only under sources:, per audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-KEY.md C-KEY-2). npc_behavior_v30.md remains reachable in sources: above — not superseded, just no longer the doc: pointer."
     status: extracted
     sources:
+      - "systems/npcs/npc_behavior_v30.md (behavioral spec — kept reachable here per C-KEY-2 repoint 2026-07-29; see doc: above) [READ: 2026-07-29]"
       - "systems/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
       - "political_dynamics_keys_migration_v30 full incl. §8 sequencing [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -276,6 +298,7 @@ modules:
     gap_notes:
       - "CANONICAL BG-era doc with ZERO Key integration — no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (§1.3b ED-676) and Calamity drift (§1.3) with no Key types [registry §10 candidate / Keys-migration pending]"
       - "name collision with personal piety_track — see piety_track gap_note [OPEN — Jordan]"
+      - "Key types registered (W3, ED-IN-0096): mechanical.theocracy_unification_declared — emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
     status: extracted
     sources:
       - "conviction_track_v30 index §1-§11 [READ: 2026-06-10]"
@@ -525,6 +548,7 @@ modules:
     state:
       - {name: "Turmoil", bucket: clock, writable: true}   # clock_registry: 0-10, peninsular_strain_v30 §4
       - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
+      - {name: "MS (Mending Stability)", bucket: clock, writable: true}   # OI-32a ownership declaration (2026-07-29, W3 item 3): mechanically-determinable GAP-F1 owner. Floor 0 (Rupture) / ceiling 100; baseline decay -1/in-game-year at Year-End Accounting, PP-255 (params/core.md §MS Baseline Decay). Live tick: systems/overview/sim/ms_track.py (apply_ms_baseline_decay / apply_ms_delta, the canonical MS-arithmetic surface), imported by systems/overview/sim/accounting.py at :43 and called (Year-End-cadence-gated) at :117. CORRECTED 2026-07-29 (W3 item 8): the prior version of this comment claimed "accounting.py L36-39 also inlines the same PP-255 decay pending a migration" — that claim is FALSE against the current tree (re-verified directly: accounting.py has no inline decay logic anywhere; :36-39 is drift-probe docstring prose, not code, and the sole decay call fully delegates to ms_track.apply_ms_baseline_decay). The claim was carried over from ms_track.py's own docstring (a stale note predating accounting.py's migration to the delegated call — not corrected there, out of this file's scope; logged per CLAUDE.md §0.1 point 5). No env.ms_delta emit added here — a new emit would itself be a new dangling emit; see gap_notes GAP-F1 residual.
     transitions: []
     loops: []
     gates:
@@ -548,11 +572,15 @@ modules:
         then: "invasion stalls / corridor abandoned"
         "on": "IP (Institutional Pressure)"
         source: "victory_v30 §5.2"
+    gap_notes:
+      - "GAP-F1 residual (2026-07-29, W3 item 3 / OI-32a): MS ownership declared above (mechanically determinable per audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md's 'MS contract owner' item). That remediation item also proposed adding a drafted substrate_state/peninsular entry emitting env.ms_delta pointing at the PP-255 decay — deliberately NOT done here: no consumer for env.ms_delta is declared anywhere in the corpus, so adding the emit would create a NEW dangling emit rather than close one (this wave's header corrections bar that). Recorded as an open residual, not fabricated as a closed item."
     status: extracted
     sources:
       - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
       - "clock_registry_v30 Shared Clocks [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+      - "systems/overview/sim/ms_track.py, systems/overview/sim/accounting.py [READ: 2026-07-29]"
+      - "engine/params/core.md §MS Baseline Decay (PP-255) [READ: 2026-07-29]"
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
@@ -621,6 +649,7 @@ modules:
     accounting_phase: [settlement_accounting]
     gap_notes:
       - "settlement_layer_v30_index.md is STALE — predates LPS-2e §1.8 (no §1.8 row); index pipeline regeneration needed [tooling defect]"
+      - "Key types registered (W3, ED-IN-0096): state.settlement_revolt, mechanical.settlement_captured — emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
     status: extracted
     sources:
       - "settlement_layer_v30 §1.3/§1.8/§4.1 full [READ: 2026-06-10]"
@@ -660,6 +689,7 @@ modules:
     loops: []
     gap_notes:
       - "ZERO Key integration in a CANONICAL doc — no registry entry names ci_political; CI=100 Theocracy Unification Attempt (§2.2) is unkeyed [registry §10 candidate]"
+      - "Key types registered (W3, ED-IN-0096): mechanical.theocracy_unification_declared — emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
     status: extracted
     sources:
       - "ci_political_v30 full [READ: 2026-06-10]"
@@ -679,17 +709,17 @@ modules:
       - id: g_ms0
         when: "MS = 0"
         then: "Post-Calamity Era"
-        reads: ["MS (unowned clock — no module in contracts)"]
+        reads: ["MS (owned by peninsular_strain — OI-32a, 2026-07-29 W3 item 3)"]
         source: "victory_v30 §5.1"
       - id: g_ms5
         when: "MS <= 5 sustained 10 seasons"
         then: "Second Calamity (true terminal)"
-        reads: ["MS (unowned clock)"]
+        reads: ["MS (owned by peninsular_strain — OI-32a, 2026-07-29 W3 item 3)"]
         source: "victory_v30 §5.1"
       - id: g_msrec
         when: "MS restored to 20 within 10 seasons"
         then: "Post-Calamity recovery"
-        reads: ["MS (unowned clock)"]
+        reads: ["MS (owned by peninsular_strain — OI-32a, 2026-07-29 W3 item 3)"]
         source: "victory_v30 §5.1"
       - id: g_diss
         when: "all factions dissolved"
@@ -700,6 +730,8 @@ modules:
       - "world-state era transitions (§5: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED — no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry §10 candidate]"
       - "doc status: \"DESIGN — pending Varfell Path B user decision (ED-311)\" — not CANONICAL"
       - "victory_v30_index.md STALE: §5.1 indexed as \"RS=0\" but doc reads \"MS=0\" [index pipeline defect, same class as settlement]"
+      - "g_ms0/g_ms5/g_msrec 'MS (unowned clock)' annotations CORRECTED 2026-07-29 (OI-32a, W3 item 3): MS is now declared owned by peninsular_strain's state: block (GAP-F1 ownership declaration) — these three gates' reads: now point at the new owner instead of asserting no module owns it."
+      - "Key types registered (W3, ED-IN-0096): mechanical.era_transition, mechanical.second_calamity — emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
     status: extracted
     sources:
       - "victory_v30 §5 full + header [READ: 2026-06-10]"
@@ -736,15 +768,23 @@ modules:
       - {type: "state.coup_attempted", terminal: false}
       - {type: "state.standing_change", terminal: false}
       - {type: "state.succession", terminal: false}
-    state: []
+    state:
+      # ── added 2026-07-29 (W3 item 3, OI-24 contract-truth sweep): top-level state items,
+      #    read directly off faction_politics_v30.md's own definitions. Contract truth only —
+      #    no sim build (OI-20's sim half is DEFERRED → FA lane, §3.5). ──
+      - {name: "Standing", bucket: track, writable: true}   # §1.0 Ladder Architecture: 8-position per-faction rank ladder, 0 (pre-initiation) to 7 (senior-most short of Leadership); one ladder per faction (Crown §1.1, Hafenmark §1.2, Varfell §1.3, Church §1.4) + sub-office ladders (§2.1-§2.7). Bidirectional: demotion (§1.0a, ED-776) drops 1 rank by default, 2-3 for severe institutional-violation triggers — track, not clock (parallels Prosperity/Defense/Order §1.3 pattern elsewhere in this file). Emits state.standing_change.
+      - {name: "Coup posture", bucket: track, writable: true}   # §1.1d/§2.1 (Löwenritter Grand Master row): "Coup Counter mechanisms (original factions_ttrpg_v30 §8.9)"; classification per §10.1 ED-POL-09 ("types can combine — a Palace Coup can trigger a Constitutional Crisis response; specific mechanics deferred to faction_layer_v30 update"). This doc does not itself specify the counter's numeric mechanics (deferred, per ED-POL-09, to a faction_layer_v30 update) — declared here as the state item behind state.coup_attempted, not as a ratified formula. NOTE: engine/params/factions_personal.md records the Löwenritter-specific instance of this mechanic as STRUCK/superseded by "Graduated Autonomy" (ED-781/ED-589); faction_politics_v30.md itself has not been migrated off "Coup Counter" terminology — contract reflects the doc as written, migration is a separate (unstarted) editorial item, not fabricated here.
+      - {name: "Succession status", bucket: track, writable: true}   # §1.0 intro: Leadership is reached "via the succession mechanisms in Part 2 of the original register (SUC-01-03, LIN-01-04)"; per-faction Standing 6/7 rows are explicitly succession-eligible/succession-prepared states (Crown §1.1 Std 6-7, Hafenmark §1.2 Std 6-7, Varfell §1.3 Std 7, Church §1.4 Std 5); §6 specifies the three Baralta Crown Claim succession-contest outcomes (Outcome A/B/C). Emits state.succession.
     transitions: []
     loops: []
     gap_notes:
       - "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) — boundary vs faction_state unestablished [OPEN — Jordan]; home doc [GAP]"
       - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to systems/factions/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
+      - "state: [] CLOSED 2026-07-29 (W3 item 3, OI-24/OI-20 contract half): declared the 3 top-level state items (Standing, Coup posture, Succession status) directly off faction_politics_v30.md §1.0/§1.0a/§1.1-1.4/§6/§10.1. This is a contract-truth declaration, not a sim build — OI-20's sim half stays DEFERRED to the FA lane (§3.5 of the orchestration plan)."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+      - "systems/factions/faction_politics_v30.md §1.0, §1.0a, §1.1-§1.4, §6, §10.1 [READ: 2026-07-29]"
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
@@ -863,7 +903,7 @@ modules:
       - "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi×2, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, systems/combat/sim/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty)."
       - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ (was: registry §7 had contest/battle/investigation only)."
       - "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3)."
-      - "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them — the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat→faction/NPC ripple)."
+      - "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them — the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat→faction/NPC ripple). CLOSED 2026-07-29 (W3 item 5): npc_behavior + faction_state consumes:[] now declare both types (declared intent; runtime gated on those modules being built — npc_behavior has zero .py files). articulation's consumer edge is Wave 3 item 1's territory (L-consumers lane), not this file."
     status: extracted
     sources:
       - "systems/combat/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]"

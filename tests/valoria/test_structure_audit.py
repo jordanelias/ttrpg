@@ -123,12 +123,16 @@ def test_l2_massbattle_fabricated_emit_stays_deleted(l2):
     assert 'mass_battle' in l2['meta']
 
 
-def test_l2_reproduces_personal_combat_dead_emits(l2):
+def test_l2_personal_combat_dead_emits_now_consumed(l2):
     # PR #131 §2.3 / module_adjudicator A4: scene.combat_felled / scene.combat_resolved
-    # are declared personal_combat emits with zero wired consumers.
+    # were declared personal_combat emits with zero wired consumers.
+    # CLOSED 2026-07-29 (W3 item 5, OI-22a/OI-24): npc_behavior + faction_state consumes:[]
+    # now declare both types (module_contracts.yaml, per the registry's pre-existing
+    # consuming_systems: [npc_behavior, faction_layer, articulation] declaration for both
+    # types) — declared intent, runtime gated on those modules being built. No longer dangling.
     dangling = {(d['emitter'], d['type']) for d in l2['findings']['dangling_emit']}
-    assert ('personal_combat', 'scene.combat_felled') in dangling
-    assert ('personal_combat', 'scene.combat_resolved') in dangling
+    assert ('personal_combat', 'scene.combat_felled') not in dangling
+    assert ('personal_combat', 'scene.combat_resolved') not in dangling
 
 
 def test_l2_flags_engine_clock_doc_null(l2):

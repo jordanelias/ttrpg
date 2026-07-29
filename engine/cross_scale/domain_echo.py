@@ -161,11 +161,19 @@ def compute_accord_echo(scene_outcome: str, degree: str, world=None) -> AccordEc
         )
 
     if scene_outcome == 'violence':
+        # CORRECTED 2026-07-29 (W3 item 8): fires_at was "immediate", inconsistent with every
+        # sibling row above ("accounting_step_4c") and with echo_transport._apply_accord_echo's
+        # own docstring, which is explicit that ONLY this row's RS component is canon-immediate
+        # (scale_transitions_v30.md:219) while the Accord component queues to Accounting Step 4c
+        # like every other row (:221's caption covers "ALL FOUR rows, including violence's"). This
+        # field describes the Accord leg (the one both this dataclass and every caller reads —
+        # verified: no consumer branches on fires_at's value, only this producer names it), so it
+        # is corrected to match its siblings rather than describing the RS sub-component instead.
         return AccordEchoResult(
             fires=True, target_territory=None,
             accord_delta=-1, rs_delta=-1,
-            fires_at="immediate",
-            notes=["§5.5 violence: RS -1 immediate; Accord -1 in territory"],
+            fires_at="accounting_step_4c",
+            notes=["§5.5 violence: RS -1 immediate; Accord -1 in territory (queued to Accounting Step 4c)"],
         )
 
     return AccordEchoResult(

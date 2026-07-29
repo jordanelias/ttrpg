@@ -343,7 +343,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: systems/_architecture/key_type_registry_v30.md
-    canonical_sha__systems___architecture__key_type_registry_v30_md: "e63cf185eb924b0494eb3fca0018570dcce41a07"
+    canonical_sha__systems___architecture__key_type_registry_v30_md: "897cff539839bf949521ca4d40139c7f470e6211"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
@@ -375,7 +375,7 @@ systems:
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
     design_doc: systems/articulation/articulation_layer_v30.md
-    canonical_sha__systems__articulation__articulation_layer_v30_md: "e38d1a92586784e6c50026fc4e9a422637e7a6e2"
+    canonical_sha__systems__articulation__articulation_layer_v30_md: "3912d60fa32eca5f1956f7dcf7df4ac721ad430d"
     status: canonical
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
   conviction_axis_matrix:
@@ -542,7 +542,7 @@ systems:
     canonical_sha__systems__npcs__npc_behavior_v30_infill_md: "a0741a60b71889a53f64f28875c5f4efa5536611"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "dd1a3b42f8a625d8322bc227f1dc0b55ac7cf58d"
+    canonical_sha__references__module_contracts_yaml: "d52fb08a034dac126d54e4cd0a415ad0583a55f0"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

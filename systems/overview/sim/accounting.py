@@ -24,17 +24,72 @@ and NPC ecology run through their pipeline modules.
      runs at season end before victory check.
  Both modules were verified individually at T0-10 / T0-11 but never invoked
  from the season loop.]
+
+[2026-07-29 — W3 Handoff item 2, ED-IN-0091 plan §3 Wave 3: run_accounting gained a REPORT-ONLY
+ province-Accord DRIFT PROBE (see `_probe_province_accord_drift` below). Two write paths for
+ "provincial Accord" coexist uncoordinated in the live tree: `registry.province_accord` (§1.3
+ floor(mean settlement Order), READ-ONLY aggregate) and `Territory.accord` (game_state.py's own
+ continuous field, written DIRECTLY by parliamentary_transfer.py:210 and mass_seizure.py:295,
+ bypassing settlement Order entirely). The W2 re-critic finding flagged this as a genuine
+ divergence risk; reconciling the two write models into one is the SE lane's own L/PS workstream
+ (OI-37, "single highest-priority open item" per HANDOFF_SE.md) — NOT this program's to resolve.
+ The probe therefore only MEASURES and RECORDS the divergence as additive campaign telemetry
+ (mirrors `engine.substrate.stubwire`'s `stub_hits` pattern); it never writes either value.]
 """
 from __future__ import annotations
 
+from engine.autoload.game_state import canonical_accord
 from systems.overview.sim.ci_track import apply_seasonal_ci
 from systems.overview.sim.ms_track import apply_ms_baseline_decay, SEASONS_PER_YEAR
+from systems.settlements.sim import registry as settlement_registry
 from systems.world.sim.insurgency_pipeline import (
     check_insurgency_triggers,
     check_insurgency_promotion,
     get_insurgencies,
 )
 from systems.world.sim.npe import simulate_npc_actions
+
+
+def _probe_province_accord_drift(world) -> None:
+    """W3 Handoff item 2 (ED-IN-0091 plan §3 Wave 3, 2026-07-29) — REPORT-ONLY.
+
+    Compares, per province, `registry.province_accord` (the §1.3 floor(mean settlement Order)
+    aggregate, canonical-index 0-4 [`math.floor` of an average over 0-5 members clamps the same
+    range `canonical_accord` below produces]) against the live `Territory.accord` field
+    (game_state.py's own continuous 0.5-7.0 representation), converted to ITS OWN canonical-index
+    0-4 via `game_state.canonical_accord` for a like-for-like comparison — never mixing the two
+    raw scales directly (the same "MULTS-scaled continuous value vs. canonical-index" defect class
+    `echo_transport._apply_accord_echo`'s Unit note warns about).
+
+    NEVER WRITES either value. `Territory.accord` is written directly by
+    `parliamentary_transfer.py:210` and `mass_seizure.py:295` (province-scale actions, bypassing
+    settlement Order entirely); `Settlement.order` is written by settlement-scale mechanics
+    including this wave's own queued `scene.accord_echo` Key
+    (`echo_transport._apply_accord_echo`). Two uncoordinated write models for "provincial Accord"
+    is exactly the divergence risk the W2 re-critic finding flagged; reconciling them into one
+    model is the SE lane's own L/PS workstream (OI-37, `HANDOFF_SE.md`'s "single highest-priority
+    open item in this entire thread") — this probe only measures and records, per module docstring.
+
+    Additive telemetry ONLY, mirroring `engine.substrate.stubwire`'s `stub_hits` pattern:
+    `world.accord_drift_probe_hits` is a per-campaign counter (not a World dataclass field — set
+    dynamically, same as `stubwire.invocations`'s campaign-delta convention, so this stage does
+    not need to touch `engine/autoload/game_state.py`'s dataclass, a different lane's file this
+    wave), left absent/zero when no province has both a settlement AND a Territory to compare, or
+    when nothing diverges."""
+    settlements = getattr(world, "settlements", None)
+    territories = getattr(world, "territories", None)
+    if not settlements or not territories:
+        return
+    hits = getattr(world, "accord_drift_probe_hits", 0)
+    for tid, territory in territories.items():
+        if not settlement_registry.province_members(tid, world):
+            continue  # no settlements in this province — nothing to diverge from
+        live_settlement_accord = settlement_registry.province_accord(tid, world)
+        live_territory_accord = canonical_accord(territory.accord)
+        if live_settlement_accord != live_territory_accord:
+            hits += 1
+    if hits:
+        world.accord_drift_probe_hits = hits
 
 
 def run_accounting(world):
@@ -46,6 +101,7 @@ def run_accounting(world):
       3. Insurgency triggers (GD-3 a-b: emergence) — every season
       4. Insurgency promotions (GD-3 c-e: insurgency→faction) — every season
       5. NPC ecology (territory-level stance drift) — every season
+      6. Province-Accord drift PROBE (report-only, W3 Handoff item 2) — every season
 
     Track arithmetic routes through dedicated modules; no inline duplication.
     Seasonal resets (faction flags, arc boundaries) handled by
@@ -80,3 +136,7 @@ def run_accounting(world):
     # Side-effect: world.npcs state mutated. Actions list discarded here.
     # [canonical: systems/fieldwork/investigation_systems_v30.md SYSTEM 1 §Persistence]
     simulate_npc_actions(world)
+
+    # W3 Handoff item 2 (ED-IN-0091 plan §3 Wave 3) — report-only; see the function's own
+    # docstring above. Runs last: purely observational, never gates or reorders the steps above.
+    _probe_province_accord_drift(world)
