@@ -685,6 +685,26 @@ mechanics:
     test_status: validated_n1000_v12c
     notes: "90-95%/arc lapse per v12c balance. Crown nerf primary effect."
 
+  franchise:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "systems/factions/franchise_v30.md"
+    canon_authoring_target: "systems/factions/franchise_v30.md"
+    sim_module: none    # no code presence anywhere in systems/factions/sim/ (verified 2026-07-29, OI-57)
+    test_status: not_implemented
+    notes: "Per-territory parliamentary weight (0-5) deriving national Influence from held territories' Franchise sum, weighted by caste-system territorial expression. Doc status DRAFT — awaiting Jordan review (2026-07-29 sweep: currency-layer orphan fix, OI-57; entry indexes the doc as-is, does not ratify it)."
+
+  faction_succession_split:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "systems/factions/faction_succession_split_v30.md"
+    canon_authoring_target: "systems/factions/faction_succession_split_v30.md (PP-666 2026-04-19)"
+    sim_module: none    # no code presence anywhere in systems/factions/sim/ (verified 2026-07-29, OI-57)
+    test_status: not_implemented
+    notes: "Generalized Faction Succession Split & Emergence Trajectories — supersedes Baralta-specific succession as a special case of the generalized Succession Contest; extends faction_layer_v30 §1.5, settlement_layer_v30 §6.2/§6.3. Doc status CANONICAL (2026-07-29 sweep: currency-layer orphan fix, OI-57)."
+
   faction_action_dispatch:
     scale: provincial
     faction: universal

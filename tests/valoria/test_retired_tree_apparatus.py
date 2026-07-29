@@ -59,6 +59,24 @@ def test_the_retired_flat_tree_is_not_among_them():
     assert 'engine' in roots, "the sim-reference CORE (engine/) is missing from the root list"
 
 
+def test_sim_reference_prefixes_restates_the_same_roots_as_relative_prefixes():
+    """The sibling added for OI-53a (2026-07-29): callers that filter changed-file lists
+    or build a git-pathspec/`str.startswith()` scope tuple need repo-relative prefix
+    strings, not the absolute filesystem paths `sim_reference_roots()` returns for
+    `os.walk`. Asserts it is a RESTATEMENT of the same owner's roots, not a second,
+    independently-derived list (CLAUDE.md §8)."""
+    roots = {os.path.relpath(r, ROOT).replace(os.sep, '/') for r in ci_common.sim_reference_roots(ROOT)}
+    prefixes = ci_common.sim_reference_prefixes(ROOT)
+    assert isinstance(prefixes, tuple), "sim_reference_prefixes() should return a tuple " \
+        "(these sites splice it directly into an existing tuple with `+`)"
+    assert {p.rstrip('/') for p in prefixes} == roots, (
+        f"sim_reference_prefixes() diverges from sim_reference_roots(): "
+        f"{sorted(prefixes)} vs roots {sorted(roots)}")
+    assert all(p.endswith('/') for p in prefixes), \
+        f"every prefix must end in '/' (these are matched with str.startswith()): {prefixes}"
+    assert 'engine/' in prefixes and 'sim/' not in prefixes and 'designs/' not in prefixes
+
+
 def test_roots_cover_every_subsystem_sim_package():
     """The glob is the point: a NEW subsystem's sim must be picked up without editing a list.
 
@@ -157,6 +175,139 @@ def test_quantity_vocabulary_check_takes_its_DEFAULT_roots_from_the_owner():
     assert set(roots) == expected, (
         f"default roots diverge from ci_common.sim_reference_roots(), the single owner: "
         f"got {sorted(roots)}, owner says {sorted(expected)}")
+
+
+# ─────────────────────── OI-53a (2026-07-29): the four re-verified remaining sites,
+# ─────────────────────── plus build_apparatus_registry.py's already-fixed g_code scan.
+#
+# Same defect class as the two sites above, same owner discipline: each of these carried a
+# bare 'designs/'/'sim/' (or a joined 'designs'+'audit' path) that resolved to nothing once
+# those trees were retired — silently under-scoping rather than raising. Behavioral
+# assertions on the loaded module's actual data/return value, not a source-text regex: these
+# five sites are Python code (scope tuples, a directory constant, a function's return value),
+# not the one hand-maintained YAML doc the regex test above targets, so asserting on what the
+# code actually resolves to is the stronger guard (a comment can say anything; a resolved
+# value cannot).
+
+def test_audit_staleness_scope_prefixes_exclude_retired_roots():
+    """`tools/audit_staleness.py:69` (site 1). Three FAMILIES entries carried a bare
+    'designs/' and/or 'sim/' scope_prefixes element — both retired trees that resolve to
+    nothing in `git log -- <pathspec>`, so the family silently under-scoped rather than
+    raising. `sim/`'s live successor is restated through the single owner,
+    ci_common.sim_reference_prefixes()."""
+    mod = _load('audit_staleness.py')
+    checked = 0
+    for fam in mod.FAMILIES:
+        checked += 1
+        for prefix in fam['scope_prefixes']:
+            assert not prefix.startswith('designs'), (
+                f"{fam['name']!r} scope_prefixes still carries the retired designs/ "
+                f"root: {prefix!r}")
+            assert prefix not in ('sim/', 'sim'), (
+                f"{fam['name']!r} scope_prefixes still carries the retired sim/ root: {prefix!r}")
+    assert checked >= 7, f"only {checked} families examined — expected all 7"
+    decisions = next(f for f in mod.FAMILIES if f['name'] == 'decisions-digest')
+    assert 'engine/' in decisions['scope_prefixes'], (
+        "decisions-digest lost engine/ coverage when sim/ was dropped — "
+        "ci_common.sim_reference_prefixes() should have restored it")
+
+
+def test_audit_staleness_decisions_digest_actually_sees_engine_drift():
+    """COVERAGE, not just a path-list check (mirrors test_the_roots_actually_cover_python_files
+    above): decisions-digest's scope must genuinely count corpus churn, not merely list a
+    prefix that matches nothing. Positive control for the family whose scope changed shape."""
+    mod = _load('audit_staleness.py')
+    decisions = next(f for f in mod.FAMILIES if f['name'] == 'decisions-digest')
+    # `_family_status` shells out to git with RELATIVE pathspecs, so it must run from ROOT (same
+    # cwd-anchoring fix as test_ci_audit_registry_check_scans_the_live_audit_dir below).
+    _prev = os.getcwd()
+    os.chdir(ROOT)
+    try:
+        st = mod._family_status(decisions)
+    finally:
+        os.chdir(_prev)
+    assert st is not None, "decisions-digest family could not be computed at all"
+    # `>= 0`, not `> 0`. The drift count is TIME-VARYING: it goes to zero the moment the digest is
+    # refreshed with no subsequent corpus change, which would turn this guard red for a reason
+    # that is not a defect. What is actually being falsified is that the scope RESOLVES — a
+    # prefix matching nothing returns None above, which is the failure mode this test was written
+    # for (§0.1 #2: assert the thing you can actually observe failing).
+    assert st['drift'] >= 0, (
+        "decisions-digest drift is uncomputable — the scope may be resolving to nothing again")
+
+
+def test_build_decisions_sweep_dirs_excludes_retired_roots_and_keeps_live_coverage():
+    """`tools/observability/build_decisions.py:57` (site 2). SWEEP_DIRS carried bare
+    'designs', 'sim', 'params' — three RETIRED top-level dirs. Zero-delta removal (verified
+    2026-07-29): 'systems' already covers designs/'s successor content and 'engine' already
+    covers sim/'s and params/'s — sweeping the corpus with vs without the three dead entries
+    scans the identical file set."""
+    mod = _load('observability/build_decisions.py')
+    for dead in ('designs', 'sim', 'params'):
+        assert dead not in mod.SWEEP_DIRS, f"SWEEP_DIRS still carries the retired {dead!r} root"
+    for live in ('systems', 'engine'):
+        assert live in mod.SWEEP_DIRS, f"SWEEP_DIRS lost its {live!r} entry — real coverage loss"
+
+
+def test_workplan_status_relevant_prefixes_exclude_retired_roots():
+    """`tools/workplan_status.py:71` (site 3). RELEVANT_PREFIXES carried 'designs/' and
+    'sim/'; sim/'s live successor (engine/ + systems/*/sim/) is restored through
+    ci_common.sim_reference_prefixes() — a real coverage ADD, since 'systems/' alone never
+    covered engine/ (verified 2026-07-29: staleness()'s relevant-file count moved 48 -> 70)."""
+    mod = _load('workplan_status.py')
+    for prefix in mod.RELEVANT_PREFIXES:
+        assert not prefix.startswith('designs'), \
+            f"RELEVANT_PREFIXES still carries the retired designs/ root: {prefix!r}"
+        assert prefix not in ('sim/', 'sim'), \
+            f"RELEVANT_PREFIXES still carries the retired sim/ root: {prefix!r}"
+    assert 'engine/' in mod.RELEVANT_PREFIXES, \
+        "RELEVANT_PREFIXES lost engine/ coverage when sim/ was dropped"
+
+
+def test_ci_audit_registry_check_scans_the_live_audit_dir():
+    """`tools/ci_audit_registry_check.py:23` (site 4, critic addition F14). AUDIT_DIR
+    pointed at designs/audit/, which does not exist — os.path.isdir() silently returned
+    False every run, so the check always printed [AUDIT REGISTRY OK] no matter what the
+    live audit/ corpus actually contained. COVERAGE, not just a path check: assert the
+    scan actually finds dated audit folders."""
+    mod = _load('ci_audit_registry_check.py')
+    assert mod.AUDIT_DIR == 'audit', f"AUDIT_DIR points at a non-live location: {mod.AUDIT_DIR!r}"
+    # Anchor on ROOT like every other test in this file. AUDIT_DIR is a RELATIVE constant, so
+    # `os.path.isdir(mod.AUDIT_DIR)` and the entry scan below both resolve against the CWD —
+    # green from the repo root, red from anywhere else, for a reason unrelated to the defect
+    # this guard exists to catch. Verified: `cd / && pytest <this file>` was 2 failed / 21 passed.
+    assert os.path.isdir(os.path.join(ROOT, mod.AUDIT_DIR)), f"{mod.AUDIT_DIR!r} does not exist"
+    _prev = os.getcwd()
+    os.chdir(ROOT)
+    try:
+        entries = mod._audit_dir_entries()
+    finally:
+        os.chdir(_prev)
+    assert len(entries) > 5, (
+        f"_audit_dir_entries() found only {len(entries)} dated audit folder(s) — the live "
+        f"audit/ corpus has far more; the scan may be pointed at the wrong root again")
+
+
+def test_build_apparatus_registry_gcode_scan_has_no_dead_root_reference():
+    """Companion fix, same session (OI-52a/OI-53a joint): `_gcode_imported_modules()` used
+    to glob a dead `designs/audit/` prefix and silently return `set()` forever — the exact
+    'looks like a working orphan signal, scans zero files' shape this whole test module
+    guards against. It is now a documented, EXPLICIT no-op (no single stable live
+    g_code.json home exists to glob instead — every structure_audit run writes to a
+    caller-chosen `--output-dir`; see the function's own docstring). This guards against a
+    regression that resurrects a `designs/` or bare `sim/` glob instead of the deliberate,
+    documented no-op."""
+    mod = _load('build_apparatus_registry.py')
+    import inspect
+    src = inspect.getsource(mod._gcode_imported_modules)
+    assert '"designs"' not in src and "'designs'" not in src, (
+        "_gcode_imported_modules references the retired designs/ tree again")
+    assert 'REPO / "sim"' not in src and "REPO / 'sim'" not in src, (
+        "_gcode_imported_modules references the retired sim/ tree again")
+    assert mod._gcode_imported_modules() == set(), (
+        "_gcode_imported_modules() no longer returns the documented explicit no-op — if a "
+        "live g_code.json home was established and this was deliberately wired to it, "
+        "update this assertion and its docstring together, don't just let it drift")
 
 
 def test_mechanics_index_gen_knows_godot_home_is_a_real_field():

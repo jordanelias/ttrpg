@@ -11,7 +11,8 @@ Status: [CANONICAL — Phase 1 implementation 2026-05-17]
  systems/factions/faction_canon_v30.md / faction_behavior_v30.md.]
 
 Dependencies:
-  - none — root primitive
+  - engine.substrate.canon_buckets (canonical_accord re-export only — a no-deps leaf; this
+    module remains otherwise a root primitive, everything else here is late-imported, OI-52a)
 
 Entry points:
   - create_world(seed: int | None = None) -> World
@@ -23,6 +24,13 @@ from __future__ import annotations
 import copy
 import random
 from dataclasses import dataclass, field
+
+# canonical_accord relocated to engine/substrate/canon_buckets.py (OI-52a, ED-IN-0097, 2026-07-29
+# — see that module's docstring for the full cycle-break rationale). Re-exported here so every
+# existing `from engine.autoload.game_state import canonical_accord` / `game_state.canonical_accord`
+# call site keeps working unchanged — engine/substrate/ has no internal dependents, so this import
+# does not reintroduce the cycle it was moved to break.
+from engine.substrate.canon_buckets import canonical_accord  # noqa: F401 (re-export)
 
 
 # Canonical starting state (mc_v17.py L62-82, sourced from mc_v15.py)
@@ -57,6 +65,10 @@ PT_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 6.5, 5: 7.0}
 # (CI_YIELD_BY_PT, Seizure Ob, Ecology weights) MUST bucket through these
 # helpers, not via int(t.pt) which drifts (pt=7.0 → int=7 is no canon bucket).
 # [canonical: game_state PT_MAP/ACCORD_MAP — the inverse is forced by these tables.]
+# canonical_accord moved to engine/substrate/canon_buckets.py and is imported/re-exported near
+# the top of this file (OI-52a, ED-IN-0097, 2026-07-29 — cycle break with systems.world.sim.npe).
+# canonical_pt stays here: nothing on that cycle's boundary imports it, so moving it was out of
+# scope — logged as a residual shape-hygiene split, not chased (CLAUDE.md §0.1 point 5).
 
 def canonical_pt(continuous_pt: float) -> int:
     """Map continuous PT (range 0.5-7.0 per PT_MAP) → canonical integer 0-5.
@@ -70,14 +82,6 @@ def canonical_pt(continuous_pt: float) -> int:
     return 5
 
 
-def canonical_accord(continuous_accord: float) -> int:
-    """Map continuous Accord (range 0.5-7.0 per ACCORD_MAP) → canonical integer 0-4.
-    ACCORD_MAP: 1.0, 2.5, 4.0, 5.5, 7.0. Midpoints: 1.75, 3.25, 4.75, 6.25."""
-    if continuous_accord < 1.75: return 0
-    if continuous_accord < 3.25: return 1
-    if continuous_accord < 4.75: return 2
-    if continuous_accord < 6.25: return 3
-    return 4
 STARTING_ACCORD = {'T1': 3, 'T2': 3, 'T3': 3, 'T4': 2, 'T5': 2, 'T6': 2,
                    'T7': 2, 'T8': 3, 'T9': 4, 'T10': 2, 'T11': 2, 'T12': 2,
                    'T13': 1, 'T14': 3, 'T15': 0, 'T17': 2}
@@ -243,11 +247,13 @@ def create_world(seed: int | None = None) -> World:
     # OI-07 (ED-IN-0091 plan §3 Wave 2 item 4) — populate world.settlements at world-gen from
     # the canonical geography source (systems/settlements/valoria_geography_v30.yaml, the
     # PP-726-rebuilt geography YAML — see registry.populate_from_geography's own docstring for
-    # the full field-mapping citation). Late-import: game_state.py is a root primitive (module
-    # docstring "Dependencies: none") and must not statically depend on a downstream sim module
-    # — same discipline npe.py already applies in reverse (its late `from
-    # engine.autoload.game_state import canonical_accord`, flagged for the OI-52 import-cycle
-    # item). Deterministic — no RNG draw, so this cannot move any RNG-derived campaign golden.
+    # the full field-mapping citation). Late-import: game_state.py stays a root primitive for
+    # everything except the engine.substrate.canon_buckets re-export (a no-deps leaf, see the
+    # module docstring) and must not statically depend on a downstream sim module. npe.py used to
+    # apply the same discipline in reverse for its game_state.canonical_accord import — that edge
+    # is now gone (OI-52a, ED-IN-0097, 2026-07-29: canonical_accord moved to
+    # engine.substrate.canon_buckets, which both modules import at top level without a cycle).
+    # Deterministic — no RNG draw, so this cannot move any RNG-derived campaign golden.
     from systems.settlements.sim.registry import populate_from_geography
     populate_from_geography(world)
     return world

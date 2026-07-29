@@ -32,6 +32,7 @@ from engine.substrate import stubwire
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _SA_SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'structure_audit.py')
 _RC_SCRIPT = os.path.join(_ROOT, 'tools', 'review_core.py')
+_CI_COMMON_SCRIPT = os.path.join(_ROOT, 'tools', 'ci_common.py')
 
 
 def _load(name, path):
@@ -104,7 +105,14 @@ def _write_synthetic_repo(tmp_path: Path, with_stubwire: bool) -> Path:
     `structure_audit.collect_py_modules` walks it exactly as it would the live tree),
     `references/module_contracts.yaml` (so `structure_audit.main()`'s repo-root sanity check
     passes), and a copy of the REAL structure_audit.py script at its real relative path (so
-    `review_core`'s `stubs.count` row — which shells out to that relative path — finds it)."""
+    `review_core`'s `stubs.count` row — which shells out to that relative path — finds it).
+    Also stages a copy of tools/ci_common.py at its real relative path (OI-54, ED-IN-0097, W4):
+    structure_audit.py imports it at module level (the single-owner has_main_guard adoption) via
+    the same sys.path-relative-to-`__file__` idiom the real tree uses, so a subprocess run from
+    THIS synthetic root needs the real tools/ci_common.py reachable the same way — otherwise the
+    subprocess crashes at import time with ModuleNotFoundError before it can even parse
+    --stub-count/--contracts-join, which would silently break every review_core signal that
+    shells out to this script, not just the ones this fixture is actually testing."""
     (tmp_path / 'references').mkdir(parents=True)
     (tmp_path / 'references' / 'module_contracts.yaml').write_text('modules: []\n', encoding='utf-8')
 
@@ -121,6 +129,10 @@ def _write_synthetic_repo(tmp_path: Path, with_stubwire: bool) -> Path:
     sa_dst = tmp_path / 'skills' / 'valoria-vector-audit' / 'scripts' / 'structure_audit.py'
     sa_dst.parent.mkdir(parents=True)
     sa_dst.write_text(Path(_SA_SCRIPT).read_text(encoding='utf-8'), encoding='utf-8')
+
+    ci_common_dst = tmp_path / 'tools' / 'ci_common.py'
+    ci_common_dst.parent.mkdir(parents=True, exist_ok=True)
+    ci_common_dst.write_text(Path(_CI_COMMON_SCRIPT).read_text(encoding='utf-8'), encoding='utf-8')
     return tmp_path
 
 

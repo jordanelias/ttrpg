@@ -15,7 +15,9 @@ Implements §Territory Social Ecology weights + §NPC Genome 5-axis structure
  persisted by caller; tests/Godot save-loads are out of scope here.]
 
 Dependencies:
-  - sim/autoload/game_state
+  - engine/substrate/canon_buckets (canonical_accord — a no-deps leaf; see that module's
+    docstring, OI-52a/ED-IN-0097 2026-07-29: this WAS `sim/autoload/game_state`, lazily, and
+    was the entire import-cycle edge structure_audit flagged between this module and game_state)
 
 Entry points:
   - generate_npc(faction: str | None, role: str | None, world: GameState) -> NPC
@@ -38,6 +40,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Optional
+
+from engine.substrate.canon_buckets import canonical_accord
 
 
 # §Two-Tier Generation thresholds
@@ -180,8 +184,8 @@ def _ecology_weights(world, territory_id: str) -> dict:
     # Map Territory.accord (continuous 0.5-7.0 via ACCORD_MAP) → canonical
     # integer 0-4 via canonical_accord. Direct int() drifts: t.accord=5.5
     # (canon Accord 3) → int=5 → falsely triggers ACCORD_HIGH=4.
-    # [BUG FIX 2026-05-19 — see game_state.canonical_accord helper.]
-    from engine.autoload.game_state import canonical_accord
+    # [BUG FIX 2026-05-19 — see engine.substrate.canon_buckets.canonical_accord, moved from
+    #  game_state.canonical_accord 2026-07-29, OI-52a — top-level import above.]
     accord_int = canonical_accord(t.accord)
 
     weights = {

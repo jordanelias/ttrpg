@@ -41,6 +41,15 @@ from engine.cross_scale import scene_dispatch
 
 DEFAULT_PARAMS = {
     'CAMPAIGN_SEASONS': 50,
+    # VICTORY_THRESHOLD: 11 is a DEAD param copy — the live gate is
+    # engine/autoload/victory.py's own VICTORY_THRESHOLD = 15 (Jordan 2026-06-19, J-22), which
+    # this dict does not feed. It is deliberately kept, not deleted: it is the exact subject of
+    # the F7 tripwire, engine/tests/test_f7_smoke_oracle.py::test_f7_victory_threshold_is_a_dead_param
+    # (C-EMERGE-8 / C-FA-9), which asserts sweeping this value (11 -> 999 -> 1) moves NO outcome
+    # — i.e. that it is still unwired. Deleting this entry does not fix anything; it silently
+    # kills the tripwire's ability to trip if the param is ever accidentally wired live.
+    # Verified 2026-07-29 (Wave 4 mechanical sweep, OI-32a): still unread anywhere in
+    # engine/cross_scale/, systems/overview/sim/season.py, or engine/autoload/victory.py.
     'VICTORY_THRESHOLD': 11,
 }
 

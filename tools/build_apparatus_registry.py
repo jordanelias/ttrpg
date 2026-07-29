@@ -17,10 +17,23 @@ Output: references/apparatus_registry.yaml (machine) + references/apparatus_regi
 Run:    python3 tools/build_apparatus_registry.py
 """
 from __future__ import annotations
-import ast, json, re, sys
+import argparse, ast, json, re, sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+
+# Single-owner __main__-guard predicate (OI-52a, ED-IN-0097, 2026-07-29-code-shape-open-items
+# plan §3 Wave 4 item 2). Was a local regex over raw source text (`re.search(r'if\s+__name__...`)
+# that only matched the conventional operand order and, being text- not AST-based, false-positived
+# on a comment or string literal merely containing the guard text — see
+# tests/valoria/test_ci_common.py for the planted-regression case. `structure_audit.py`
+# (skills/valoria-vector-audit/scripts/) adopts the same owner this wave (join lane); both consumers
+# now resolve to the one function in tools/ci_common.py, never a second definition.
+try:
+    import ci_common
+except ImportError:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import ci_common
 
 # ------------------------------------------------------------------ enumeration
 def _iter_tool_scripts() -> list[Path]:
@@ -113,7 +126,7 @@ def analyze_py(path: Path) -> dict:
     consts = _const_strings(tree)
     writes: list[dict] = []
     prints = False
-    has_main = bool(re.search(r'if\s+__name__\s*==\s*["\']__main__["\']', src))
+    has_main = ci_common.has_main_guard(tree)
     imports: set[str] = set()
 
     for node in ast.walk(tree):
@@ -228,21 +241,24 @@ def _gcode_imported_modules() -> set[str]:
     structure-audit g_code.json (edge #2: derive orphans mechanically, don't
     hand-maintain). g_code maps module -> its deps, so the union of all values is
     'imported by someone'. Top-level imports only — combined with a full-text grep
-    (which catches lazy imports) and the invoker scan (workflows/hooks/skills)."""
-    hits = sorted((REPO / "designs" / "audit").rglob("structure/data/g_code.json"))
-    if not hits:
-        hits = sorted((REPO / "designs" / "audit").rglob("g_code.json"))
-    if not hits:
-        return set()
-    try:
-        graph = json.loads(hits[-1].read_text(encoding="utf-8"))
-    except Exception:
-        return set()
-    imported: set[str] = set()
-    for deps in graph.values():
-        if isinstance(deps, list):
-            imported.update(deps)
-    return imported
+    (which catches lazy imports) and the invoker scan (workflows/hooks/skills).
+
+    EXPLICIT NO-OP (OI-52a / OI-53a, ED-IN-0097, 2026-07-29-code-shape-open-items plan §3 Wave 4
+    item 2): this used to glob `designs/audit/**/g_code.json`, but `designs/` was RETIRED
+    2026-07-19 (ED-IN-0071 P4/P5, CLAUDE.md §3 — "Do not recreate designs/") and is gone from the
+    working tree, so the glob was SILENTLY empty on every run — a live instance of the §0.1 point-5
+    read/write-asymmetry hazard (correct when written, dead once the tree moved, and nothing
+    flagged it). There is no live, stable replacement path to glob: `structure_audit.py --output-dir`
+    takes a CALLER-CHOSEN directory every invocation (a dated `audit/<session>/structure/` folder,
+    or an ad-hoc scratch dir — see skills/valoria-vector-audit/SKILL.md's own invocation example and
+    `audit/2026-07-14-gameplay-subsystem-observatory/00_workplan.md`), never one fixed location this
+    generator could rely on. Rather than glob a second dead prefix, this is now an EXPLICIT no-op:
+    the g_code-derived signal contributes nothing, and `imported_internally` in `build()` below
+    falls back to the full-text-grep `tool:imported` signal (`_py_import_index()` /
+    `invoked_by()`), which is unaffected by this and already covers lazy imports the AST-only
+    g_code graph would miss anyway. If a stable live g_code.json home is ever established, wire
+    this to it then — do not resurrect a `designs/` or `sim/` glob."""
+    return set()
 
 def _module_name(rel: str) -> str:
     return rel[:-3].replace("/", ".") if rel.endswith(".py") else rel.replace("/", ".")
@@ -294,7 +310,8 @@ def build() -> dict:
         # prune candidate = orphaned AND no CLI surface AND writes NOTHING (pure
         # function whose only __main__ is a self-test). A writer/generator is never
         # dead code — at most "unwired" (handled in Stage 2, e.g. build_graph.py);
-        # a one-time ledger writer (build_audit_registry_backfill.py) still writes.
+        # a one-time ledger writer (deprecated/tools/build_audit_registry_backfill.py,
+        # retired 2026-07-29 ED-IN-0097/OI-15) still writes.
         prune = (orphaned and not info["uses_cli"]
                  and role != "A:writes-artifact" and not info["writes"])
         entries.append({
@@ -485,10 +502,31 @@ def render_md(reg: dict) -> str:
         L.append("")
     return "\n".join(L) + "\n"
 
-def main() -> int:
+def main(argv=None) -> int:
+    # ED-IN-0097 (W4): this generator used to have NO argument parsing at all — main() ran and
+    # OVERWROTE both generated artifacts on ANY invocation, including `--help`. The W4 adjudicator
+    # tripped exactly that while merely inspecting the tool, regenerating both files and having to
+    # `git checkout` them back. That is a live hazard for a repo whose convention is that
+    # `references/apparatus_registry.{yaml,md}` has a SINGLE writer at a scheduled wave (IN, W5) —
+    # an incidental read must not be able to forge a write.
+    ap = argparse.ArgumentParser(
+        description="Build the apparatus registry (references/apparatus_registry.{yaml,md}). "
+                    "NOTE: writing is the default action; use --dry-run to inspect safely.")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="compute and print the counts WITHOUT writing either artifact")
+    args = ap.parse_args(argv)
+
     reg = build()
     yaml_path = REPO / "references" / "apparatus_registry.yaml"
     md_path = REPO / "references" / "apparatus_registry.md"
+    if args.dry_run:
+        c = reg["counts"]
+        print("Apparatus registry (DRY RUN — nothing written):")
+        print(f"  total={c['total']}  by_kind={c['by_kind']}")
+        print(f"  orphaned(no importer/invoker)={c['orphaned']}  prune_candidates={c['prune_candidates']}")
+        print(f"  prune_candidates: {reg['prune_candidates']}")
+        print(f"  would write -> {yaml_path}  /  {md_path}")
+        return 0
     try:
         import yaml
         yaml_path.write_text(

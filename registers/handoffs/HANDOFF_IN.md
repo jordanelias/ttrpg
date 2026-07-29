@@ -140,6 +140,80 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   W4 PR, then W5 capstone (per plan §3 Wave 5: observatory regen — IN is sole regenerator —
   diff `04_execution_ledger.md` against `02_disposition_map.md`, release unused reserved IDs
   with a documented walk-back, CURRENT.md stamp LAST).
+- **[LANDED] ED-IN-0097 — W4 landed, bookkeeping AFTER the critic (2026-07-29).** `04_execution_ledger.md`
+  gained a Wave 4 section (rows OI-52a, OI-53a, OI-54, OI-15, OI-16, OI-51, OI-57, OI-32a, plus the
+  vocab.a17 baseline-lowering decision item), full detail in `registers/editorial_ledger_in.jsonl`'s
+  ED-IN-0097 entry. Headline outcomes: the game_state/npe import cycle broken (4→3, `engine/substrate/
+  canon_buckets.py` extracted, mutation-checked); the `__main__`-guard duplication single-owned in
+  `tools/ci_common.py::has_main_guard` (closes the W0b-routed row); OI-53a's 4 stale `designs/`/`sim/`
+  root sites fixed via `ci_common.sim_reference_prefixes()` + `build_apparatus_registry.py`'s dead
+  glob turned into an explicit no-op (closes the other W0b-routed row); OI-54's `module_contracts.yaml`
+  ↔ `mechanics_index.yaml` ↔ code join landed as `structure_audit.py --contracts-join` + a new
+  report-only `review_core.py` check (27/27 resolved, 0 unresolvable, no `review_baseline.yaml` row
+  added — that file is frozen/CODEOWNERS-gated this run); OI-15 retired 4 confirmed-orphan tools to
+  `deprecated/tools/` (ED-1082 precedent — greps recorded in `deprecated/tools/README.md`), apparatus
+  regen deferred to W5; **OI-16 is HELD, NOT EXECUTED — the sweep retired the `tools/registry.py`
+  facade and the W4 GATE REVERSED it** (the concurrent `audit/2026-07-29-centralization-single-owner/`
+  program, ED-IN-0103/PR #262, holds a BINDING §0.1 row-1 interlock on exactly that file: its W1.3
+  *makes the facade real*, and it predicted this outcome verbatim — the grep-then-move precedent finds
+  zero consumers *precisely because its W1 has not run*, so zero-consumers is evidence OF the race, not
+  FOR retirement. Its declared executable form, a `[CSO]` blocking row in `04_execution_ledger.md`, was
+  never written — 0 hits — so nothing stopped the sweep. Both files restored byte-identical to HEAD,
+  both `deprecated/tools/` copies deleted, retire-or-wire routed to CSO W1.3); the companion
+  pointer-artifact ask stays recorded NOT-TO-BE-BUILT (already served by CURRENT.md/PROPOSALS.md/
+  DECISIONS.md); OI-51 re-verified entirely stale, no-op; OI-57 indexed 2 orphan mechanics
+  (`franchise`, `faction_succession_split`) in `mechanics_index.yaml`, re-verified the "insurgency"
+  claim stale, closed the ED-1054 navigation-surface loop (3/4 sub-items closed-or-moot, narrative-md
+  relocation still open with a corrected target), courtesy-flagged the FA-owned `CURRENT.md` rows
+  without editing them; OI-32a's dead `VICTORY_THRESHOLD` tripwire re-verified and annotated in place.
+  **DECISION ITEM FOR JORDAN, not self-ratified:** `vocab.a17` measures 21 live rows against
+  `registers/review_baseline.yaml`'s pinned ceiling of 29 — an 8-row banked shrink from this wave's
+  cleanup. `review_baseline.yaml` is frozen/STOP-listed this run, so the lower ceiling is NOT banked;
+  needs its own ED + Jordan's CODEOWNERS-review sign-off before any future PR tightens the ratchet.
+  Full suites green (`python3 -m pytest tests/valoria/test_ci_common.py tests/valoria/
+  test_structure_audit.py tests/valoria/test_stubwire.py tests/valoria/test_retired_tree_apparatus.py
+  tests/valoria/test_import_cycle_game_state_npe.py engine/tests/test_pipeline_reach.py -q` → 92
+  passed, 5 xfailed, re-run at bookkeeping time); `registers/editorial_ledger_in.jsonl` was over its
+  50,000-token cap after the ED-IN-0097 entry (51,583) — archived 5 uncited-elsewhere resolved/
+  superseded entries (ED-IN-0058, ED-IN-0063, ED-IN-REMEDIATION-0063, ED-IN-0012, ED-IN-0013) to
+  `registers/editorial_ledger_in_archive.jsonl` per the established procedure (0 citation-integrity
+  violations after, re-verified via `tools/validate_ed_citations.py`); now 48,216/50,000. NO golden
+  moved — re-verified against the STOP-list (`systems/combat/**`, `wrapper.py`, `faction_action.py:349`,
+  `references/id_reservations.yaml`, `registers/review_baseline.yaml`,
+  `engine/tests/test_pipeline_reach.py` all untouched by this bookkeeping pass). **NEXT ACTION —
+  WAVE 5 CAPSTONE** (per plan §3 Wave 5): observatory regen (IN is sole regenerator, run
+  `build_apparatus_registry.py` fresh against the post-W4 tree), diff `04_execution_ledger.md` against
+  `02_disposition_map.md`, release unused reserved IN IDs with a documented walk-back, file the
+  vocab.a17 baseline-lowering decision item for Jordan explicitly (do not fold into W5's own commit
+  silently), CURRENT.md stamp LAST.
+- **[LANDED] ED-IN-0097 W4 ORCHESTRATOR GATE BATCH (2026-07-29) — read this before W5.** The
+  Adjudicate stage returned `open-defects` and the read-only critic returned 18 verdicts + 5 items the
+  adjudicator missed; the run's own `stop_reason` was `disagreement_unadjudicated` (8 disputes), which
+  is by design — the harness is report-only and the script assigns disputes to the orchestrator. Full
+  rows in `04_execution_ledger.md`'s "Wave 4 — orchestrator gate batch" section. **Two BLOCKING CI
+  gates were red and are now green:** (1) the OI-54 join pushed `module_contracts.yaml` over its 18,000
+  cap — fixed by raising the cap to 24,000, NOT by pruning, because the added bulk *is* the join's
+  disclosure content (⚠ **ratifiable on merge, ED-1094 — called out in the PR body**); (2) the sweep's
+  retirements made the workflow script's own prompt text cite 6 dead paths — fixed with 4
+  `restructure_ledger.md` pointer rows plus the OI-16 reversal. `validate_ed_citations` was already
+  green (the adjudicator measured it before Bookkeeping filed the entry). **Filed, deliberately not
+  fixed:** `on_exceed: "warn_only"` is a NO-OP — `compliance_check.py:179` grades `warn_only` (and any
+  unrecognised token) as a blocking error, mis-grading **12** declaring files; routed to CSO, whose
+  declared scope is size-cap single-sourcing. Had it worked, the cap raise would not have been needed.
+  Also routed to CSO: the 6th dead root, `validate_ed_citations.py:108`'s `designs/` prefix, per CSO
+  §0.1 row 8. **Corrected:** a cross-program ID incursion (`ci_common.py:56` cited `ED-IN-0104`, inside
+  CSO's reserved `0103–0111`); a vacuous assertion, replaced and **mutation-verified** by planting a
+  local re-copy; two cwd-dependent guards (`cd / && pytest` was 2 failed/21 passed → 23 passed); a
+  `== ['mass_battle']` pin that would have forced the MB session to edit an IN-owned test to ship
+  in-lane work; a dead test-node-id this wave itself shipped in `mc_v18.py:47`; 3 stale prose pointers;
+  and `build_apparatus_registry.py`'s missing argparse, which let ANY invocation (`--help` included)
+  overwrite a single-writer generated table — the adjudicator tripped exactly that mid-audit.
+  **HARNESS DEFECT FILED (`tools/wf_harness.js`, ED-IN-0087's own residual):** all 8 disputes
+  serialised with `finding_id: "?"` and `positions: []` — the script calls
+  `run.dispute({layer, target, detail, severity})` but the record keys on `finding_id`/`positions`, so
+  no adjudication can bind to a dispute. This was the first live multi-lens run since the harness
+  landed, which is precisely the check ED-IN-0087 asked for. Edit the OWNER, never a copy, then
+  `python tools/ci_wf_harness_check.py --fix`.
 - **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07-29,
   in-session).** ALL resolvers of any type must support (i) fractional dice pools (integer part
   rolls d10s, remainder contributes its EV — the ED-MB-0032 pattern), (ii) fractional Ob
@@ -614,16 +688,22 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
     prose). A prior attempt (PR #37) asserting a Combat Pool formula as authoritative was
     REVERTED — that's the trap to avoid: type only what's genuinely settled, or mirror the
     live oracle mechanically. Also tracked at `decision_queue.md` items 17 and 24.
-  - **ED-1054 — navigation surface, partially done, narrowed 2026-07-02 (ED-IN-0002).**
-    Retired-session-file relocation to `deprecated/` is DONE (via ED-1084). Still open: (a)
-    relocate the ~850KB of narrative markdown mislabeled as tests
-    (`tests/emergent_arc_skeleton_test_2026-04-17_batch*.md`,
-    `tests/sim_framework/session_audit_2026-04-19.md`) to `designs/audit/` or `deprecated/archives/`;
-    (b) regenerate `sim/README.md` (self-flags stale rather than being rewritten accurate),
-    `sim/CONVENTIONS.md` (still `[PROVISIONAL — Pass 2l armature scaffold 2026-05-17]`), and
-    `tools/README.md` (missing `currency_consistency_check.py`, `ci_module_shape_check.py`,
-    `export_engine_params.py`, `validate_ed_citations.py`). Also tracked at `decision_queue.md`
-    item 25.
+  - **ED-1054 — navigation surface, partially done, narrowed 2026-07-02 (ED-IN-0002); re-verified
+    2026-07-29 (Wave 4 mechanical sweep, OI-57).** Retired-session-file relocation to
+    `deprecated/` is DONE (via ED-1084). Re-checked against the current working tree: (a) the
+    ~850KB of narrative markdown mislabeled as tests (`tests/emergent_arc_skeleton_test_2026-04-17_batch*.md`,
+    `tests/sim_framework/session_audit_2026-04-19.md`) is **still unrelocated, and its cited
+    target is now stale** — `designs/audit/` no longer exists (retired to `audit/` per
+    CLAUDE.md §1/§3, ED-IN-0071 P4/P5); the live target would be `audit/` or
+    `deprecated/archives/`. This half stays genuinely OPEN, target corrected. (b) The other two
+    targets are MOOT, not done: `sim/README.md`/`sim/CONVENTIONS.md` no longer exist — `sim/`
+    was retired wholesale 2026-07-21 (CLAUDE.md §3's `sim/` row), superseded by
+    `engine/sim_reference_README.md`/`engine/sim_reference_CONVENTIONS.md`, so there is nothing
+    left to regenerate under the old paths. `tools/README.md`'s four previously-missing entries
+    (`currency_consistency_check.py`, `ci_module_shape_check.py`, `export_engine_params.py`,
+    `validate_ed_citations.py`) are now all PRESENT (verified by grep 2026-07-29) — that sub-item
+    is CLOSED. Net: ED-1054 is 3/4 closed-or-moot; only the narrative-md relocation (a) remains,
+    with a corrected target. Also tracked at `decision_queue.md` item 25.
   - **ED-1053 RESOLVED 2026-06-30** (see Decisions below).
 
 ## Decisions

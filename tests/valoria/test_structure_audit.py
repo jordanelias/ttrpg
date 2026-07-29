@@ -75,6 +75,98 @@ def test_l2_contract_without_code_is_informational_name_gap():
     assert sa.l2_contract_without_code(l2, code) == ['faction_state']
 
 
+# ── OI-54 (ED-IN-0097, 2026-07-29-code-shape-open-items plan §3 Wave 4 item 4): the
+# JOIN-VERIFIED contract↔code correspondence check, superseding l2_contract_without_code()
+# as run()'s primary correspondence signal. Falsifier per the wave's own item 4: a fictional
+# contract entry with a bogus sim_module: must be reported unresolvable — a fixture, not a
+# claim about the live corpus (which could drift). The live corpus is separately re-checked
+# by test_module_contracts_sim_module_join_is_exact below (§0.1 #2: assert it asserted).
+
+def _l2_meta(entries):
+    """{name: {'sim_module': v}} — the minimal build_l2()-shaped meta dict l2_contract_code_join
+    actually reads (it only touches the 'sim_module' key)."""
+    return {name: {'sim_module': sm} for name, sm in entries.items()}
+
+
+def test_join_reports_bogus_sim_module_as_unresolvable():
+    # THE falsifier: a fictional contract entry naming a file that does not exist anywhere in
+    # G_code must land in 'unresolvable', never silently pass as 'joined'.
+    meta = _l2_meta({
+        'faction_state': 'engine/autoload/game_state.py',   # real file
+        'totally_fictional_module': 'systems/nowhere/does_not_exist.py',   # bogus
+    })
+    modules = {'engine.autoload.game_state': 'engine/autoload/game_state.py',
+               'systems.factions.sim.faction_action': 'systems/factions/sim/faction_action.py'}
+    join = sa.l2_contract_code_join(meta, modules)
+    assert join['unresolvable'] == ['totally_fictional_module']
+    assert join['joined'] == ['faction_state']
+
+
+def test_join_resolves_directory_prefix_and_exact_file():
+    meta = _l2_meta({
+        'personal_combat': 'systems/combat/combat_engine_v1/',   # directory, trailing slash
+        'victory': 'engine/autoload/victory.py',                 # exact file
+        'mass_battle': None,                                     # undeclared (no field at all)
+        'ci_political': 'none',                                  # explicit disclosed absence
+    })
+    modules = {
+        'systems.combat.combat_engine_v1.wrapper': 'systems/combat/combat_engine_v1/wrapper.py',
+        'engine.autoload.victory': 'engine/autoload/victory.py',
+    }
+    join = sa.l2_contract_code_join(meta, modules)
+    assert join['joined'] == ['personal_combat', 'victory']
+    assert join['none'] == ['ci_political']
+    assert join['undeclared'] == ['mass_battle']
+    assert join['unresolvable'] == []
+
+
+def test_join_directory_without_trailing_slash_still_resolves():
+    # a directory path given without the trailing slash (easy to typo in hand-authored YAML)
+    # must not be misread as a bogus exact-file match.
+    meta = _l2_meta({'social_contest': 'systems/social_contest/sim/contest'})
+    modules = {'systems.social_contest.sim.contest.wrapper':
+               'systems/social_contest/sim/contest/wrapper.py'}
+    join = sa.l2_contract_code_join(meta, modules)
+    assert join['joined'] == ['social_contest']
+
+
+def test_join_accounts_for_every_module_exactly_once():
+    # §0.1 #2: the loop asserts it asserted — every module lands in exactly one bucket, no
+    # module silently disappears or double-counts.
+    meta = _l2_meta({'a': 'x/y.py', 'b': 'none', 'c': None, 'd': 'nowhere/bogus.py'})
+    modules = {'x.y': 'x/y.py'}
+    join = sa.l2_contract_code_join(meta, modules)
+    all_named = join['joined'] + join['none'] + join['unresolvable'] + join['undeclared']
+    assert sorted(all_named) == ['a', 'b', 'c', 'd']
+    checked = sum(len(v) for v in join.values())
+    assert checked == 4, 'every fixture module must be accounted for exactly once'
+
+
+def test_module_contracts_sim_module_join_is_exact():
+    """Live-corpus check (companion to the bogus-fixture falsifier above): every one of the
+    27 references/module_contracts.yaml modules is accounted for in exactly one join bucket,
+    and — the one currently-known, DELIBERATE exception (mass_battle, MB-owned rows per the
+    2026-07-29-code-shape-open-items plan's shared-file single-writer table) aside — the
+    unresolvable bucket is empty. A regression here (a NEW unresolvable or undeclared module)
+    is a real defect, not a fixture artifact."""
+    root = sa.Path(_ROOT)
+    modules = sa.collect_py_modules(root)
+    g_l2, meta, edges_meta, findings, assumption_count = sa.build_l2(root)
+    join = sa.l2_contract_code_join(meta, modules)
+    checked = len(join['joined']) + len(join['none']) + len(join['unresolvable']) + len(join['undeclared'])
+    assert checked == len(meta) == 27, f'expected all 27 module_contracts.yaml rows accounted, got {checked}'
+    assert join['unresolvable'] == [], f"unresolvable (fictional/stale sim_module:) rows: {join['unresolvable']}"
+    # SUBSET, not equality, and deliberately so. `mass_battle` is undeclared because the row is
+    # MB-lane-owned and this (IN-owned) wave may not edit it — but module_contracts.yaml:552
+    # explicitly invites the MB session to add its `sim_module:`, and mechanics_index already
+    # carries the path. An `== ['mass_battle']` pin would go RED the moment MB lands its own row,
+    # forcing MB to edit an IN-owned test file to ship in-lane work — a foreseeable cross-lane
+    # break, which is the failure this phrasing exists to avoid. What must hold is the invariant:
+    # nothing OUTSIDE the known MB exception may be undeclared.
+    assert set(join['undeclared']) <= {'mass_battle'}, (
+        f"only the MB-owned mass_battle row may be undeclared, got: {join['undeclared']}")
+
+
 def test_articulation_point_on_path():
     # a - b - c : b is the cut vertex
     adj = {'a': ['b'], 'b': ['c'], 'c': []}
@@ -297,22 +389,42 @@ def test_sys_path_alias_resolves_live_mass_battle_internal_edges():
 # code_orphans previously excluded only `.__main__` suffixes and leading-`_` private
 # names, so a real CLI tool with zero internal importers (any `tools/ci_*.py` invoked
 # only from a workflow YAML or a git hook) read as an orphan. Detection is a single
-# AST predicate (`has_main_guard`) plus a single split function
-# (`split_orphans_and_cli_entries`) — both known-answer-tested here over a synthetic
-# tree, per §0.1's "conditional assertions assert they asserted" discipline: each of
-# (a)-(d) below is a positive, direct assertion, not a loop that could silently match
-# zero rows.
+# AST predicate plus a single split function (`split_orphans_and_cli_entries`) — both
+# known-answer-tested here over a synthetic tree, per §0.1's "conditional assertions
+# assert they asserted" discipline: each of (a)-(d) below is a positive, direct
+# assertion, not a loop that could silently match zero rows.
+#
+# The AST predicate itself moved to `tools/ci_common.has_main_guard` (OI-52a/OI-54,
+# ED-IN-0097, 2026-07-29-code-shape-open-items plan §3 Wave 4) — single-owner, adopted
+# here via the sys.path idiom (module-level `sa.ci_common`, same pattern as
+# tools/build_apparatus_registry.py and tests/valoria/test_retired_tree_apparatus.py).
+# `tests/valoria/test_ci_common.py` carries the exhaustive known-answer suite
+# (conventional/reversed/comment-false-positive/string-false-positive/non-dunder); this
+# test now asserts ONLY that structure_audit genuinely delegates to that one owner
+# (mutation check: perturb ci_common.has_main_guard and BOTH this test and
+# test_ci_common.py's fail — no second, silently-divergent copy).
 
 def test_has_main_guard_detects_conventional_and_reversed_forms():
     import ast
+    # IDENTITY + absence-of-copy, not `is not None`: a module-level function is never None, so the
+    # old assertion was vacuous (§0.1 #2 — an assertion must be able to observe the failure it
+    # excludes) and would have passed even if structure_audit re-copied a local predicate
+    # alongside the import. NB structure_audit imports plain `ci_common` via the sys.path idiom
+    # (structure_audit.py:51-57), NOT `tools.ci_common` — importing the latter here would build a
+    # SECOND module object and fail this assertion spuriously.
+    import ci_common as ci_common_owner
+    assert sa.ci_common.has_main_guard is ci_common_owner.has_main_guard
+    # ...and structure_audit carries no module-level copy of its own — the failure "imported the
+    # owner AND kept a local predicate" is what makes the identity check above insufficient alone.
+    assert not hasattr(sa, 'has_main_guard'), 'structure_audit re-copied the predicate locally'
     guarded = ast.parse("if __name__ == '__main__':\n    pass\n")
-    assert sa.has_main_guard(guarded) is True
+    assert sa.ci_common.has_main_guard(guarded) is True
     reversed_guarded = ast.parse("if '__main__' == __name__:\n    pass\n")
-    assert sa.has_main_guard(reversed_guarded) is True
+    assert sa.ci_common.has_main_guard(reversed_guarded) is True
     unguarded = ast.parse("X = 1\nif X == 2:\n    pass\n")
-    assert sa.has_main_guard(unguarded) is False
+    assert sa.ci_common.has_main_guard(unguarded) is False
     empty = ast.parse("")
-    assert sa.has_main_guard(empty) is False
+    assert sa.ci_common.has_main_guard(empty) is False
 
 
 def test_collect_cli_entry_modules_over_synthetic_tree(tmp_path):

@@ -54,7 +54,13 @@ def _redact_forbidden_names(text: str) -> str:
                       text, flags=re.IGNORECASE)
     return text
 
-SWEEP_DIRS = ["designs", "systems", "canon", "params", "references", "sim", "engine", "godot"]
+# `designs`, `sim`, `params` DROPPED (OI-53a, 2026-07-29) — all three top-level dirs are
+# RETIRED and `base.exists()` in the sweep loop below already silently `continue`d past
+# them, so this is a zero-delta removal, not a coverage change: `designs/`'s successor
+# content lives under `systems/` (already present), and `sim/`'s + `params/`'s live
+# successors (`engine/substrate|autoload|cross_scale|mc_v18.py` and `engine/params/`
+# respectively) are both already fully covered by the existing `engine` entry.
+SWEEP_DIRS = ["systems", "canon", "references", "engine", "godot"]
 
 # ---------------------------------------------------------------------------------------
 # Path -> ED-<LANE> lane inference (audit-ecosystem Phase 4 — no ED allocated for this
