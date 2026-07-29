@@ -2,6 +2,48 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0050 plan-v2 A6a/A6b: the attrition-law instrument repaired, wired report-only
+
+**The harness did not measure what it claimed, for three independent reasons — one of them not in
+the plan.** (1) The `NO_ROUT_MORALE=1e9` pin is a MORALE pin, but `core.state._stochastic_break`
+keys on the CASUALTY FRACTION and never reads morale (`return loss_frac >= bp`). That mechanism
+landed 2026-07-23 and defaulted ON 2026-07-25 — one day before the audits. (2) The volley scenario
+never fired: `stance='hold'` early-returns from all steering, spawn separation is 19 rows and
+`VOLLEY_MAX_RANGE` is 8 — measured **0 melee engagements AND 0.00 volley loss** over 10 battles, so
+`check_square`'s `inf` was a 0/0 guard. (3) **NEW, found here:** `TRAJ_FLOOR=0.25` stopped the
+trajectory at hp≤25, but `Unit.recalc_size` routs outright at `size==0`, i.e. hp<`BLOCK_SIZE`=100 —
+the floor was **unreachable** and every trajectory ended in annihilation-rout (measured: side B
+routed at ticks 36/35/36 with hp 97.3/97.1/98.9, agg_morale 1e9, troop_total 400 vs a floor of 80).
+
+**Repairs.** `_rout_disabled()` turns `PC_STOCHASTIC_ROUT` off for the trajectory window only (the
+other three checks are statements about shipped behaviour and keep rout on — `check_no_annihilation`
+is literally "the battle ends by rout"). Volley scenario → `balanced` + the existing `kite`
+band-seeking primitive, reused verbatim per plan D4 (change the SCENARIO, not `hold` semantics).
+Scenario choice MEASURED, not assumed: hold = 0 engagements/0 loss; balanced = 69 melee engagements
+(contaminated); balanced+kite = **0 melee engagements**, volley loss 49.97/243.53 — pure volley.
+Floor re-derived from `BLOCK_SIZE`. Clean-stop vs rout ordering fixed so a floor termination is not
+mis-scored as a precondition violation.
+
+**Result — the first defensible exponents this repo has.** Preconditions clean (0/40 routed, both
+arms). `_best_exponent` now returns identifiability, and the verdict REFUSES a fit whose argmin sits
+on a grid endpoint: `melee p=3.20 cv=0.00245 [identifiable]`, `volley p=2.00 cv=0.00327
+[identifiable]`. The old `p=2.50` was literally `FIT_P_HI=2.51` — the melee cv objective is monotone
+to that ceiling (0.2075→0.0318), exactly as A6a said; widening the grid to 6.01 reveals the real
+interior minimum at 3.20. **Volley confirms the square law exactly. Melee is p≈3.2 against a ≤1.4
+linear bar — super-square, an ENGINE finding, and an independent re-derivation of ED-MB-0007's
+p≈3.2 on clean untruncated data.** `check_square` now measures a real ratio (19.4, cas 1.84/35.77)
+and reports a no-exchange result as a FAILED PRECONDITION rather than as `inf`.
+
+**Citation critic:** the entire conserved-quantity block carried `[canonical: mb_lanchester_design.md
+§4 …]`. §4 is a five-item prose validation plan — no trajectory protocol, no tick budget, no morale
+pin, no fit grid, no exponent bars; "1.4" and "1.6" do not appear in it. Re-labelled `[JUSTIFIED:]`.
+
+**A6b:** CI job `lanchester-signature`, REPORT-ONLY (`|| true`) and registered in
+`ci_checks_registry.yaml`. Report-only because the repaired instrument legitimately fails and the
+failure awaits fork #2 (two incompatible 2:1 targets) — making it blocking now would either wedge
+`main` or force the bar to be tuned to whatever the engine does, which is how a validation target
+becomes a rubber stamp. Grid golden `unit` byte-exact; no engine `.py` touched.
+
 ## 2026-07-29 — ED-MB-0049 plan-v2 A5a: lanchester scalar-write sweep + two guard defects found by mutation
 
 `lanchester_signature.py`'s no-rout pin was a BARE `ua.morale = ua.morale_start = NO_ROUT_MORALE` —
@@ -430,56 +472,14 @@ silently becomes 0.9999999 and changes when an army breaks.
 - Two of my own tests failed on harness errors, not engine defects (`troop_count` has no setter;
   5-7 subunits at 8-column spacing deploy off-field).
 
-## 2026-07-25 — ED-MB-0041: the two gauge invariants that need no band (Jordan-approved)
+## 2026-07-25 — ED-MB-0041: the two gauge invariants that need no band (archived — condensed)
 
-The win-share gauge cannot tell a double envelopment from two lines colliding — both can produce the
-same number, which is how the reachability sweep found a config that passes the Cannae row with
-envelopment pathing switched OFF. Two properties close that gap from opposite directions, and neither
-needs a band or a judgement call.
-
-**1. Reverse-pair side symmetry** (`audit/.../reverse_pair_symmetry.py`). `decA(X vs Y) + decA(Y vs X)`
-must be 100: which army occupies the engine's "side A" slot is bookkeeping, not physics. Distinct from
-the pre-existing `symmetry_probe.py`, which tests MIRROR symmetry (identical armies → 50/50) and is
-structurally blind to an interaction asymmetry. Measured at n=60:
-
-| pair | fwd | rev | sum | deviation | sigma | verdict |
-|---|---|---|---|---|---|---|
-| H2/H9 | 49.2 | 65.0 | 114.2 | +14.2 | **+1.6** | OK — *not* a defect |
-| H3/H10 | 61.0 | 76.7 | 137.7 | +37.7 | **+4.5** | ASYMMETRIC |
-| H4/H11 | 6.7 | 55.0 | 61.7 | −38.3 | **−5.3** | ASYMMETRIC |
-
-**This corrects my own earlier reporting.** I had described all three sums (114.2 / 137.7 / 61.7) as
-evidence of a side-dependent mechanism. Reporting the deviation in units of its own standard error
-shows H2/H9 is **+1.6σ — consistent with noise**. The defect is confined to the *envelopment* rows,
-which localises it far more sharply and is consistent with ED-MB-0039's envelopment-stability
-diagnosis. A raw percentage-point threshold would have hidden that distinction entirely.
-
-**2. Casualty/duration realism** — a SECOND scoreboard in `gauge_mb`, reported beside the win-share
-count and deliberately *not* folded into it, so the existing 10/20 figure stays comparable with every
-number already in the ledger, handoff and PR bodies.
-- `matchup()` previously averaged `a_cas`/`b_cas` over **all** seeds regardless of who won — the wrong
-  quantity: the sources constrain what the LOSER lost and how much less the WINNER lost, and a near-even
-  matchup washes that asymmetry out. Now conditioned on the outcome (`win_cas`/`lose_cas`), plus a
-  `capped` rate (seeds that ran to the turn cap without resolving).
-- Bands are in-repo or logical consequences of in-repo values, **not invented literature intervals**:
-  loser 15–30% is the repo's own rout-onset band (ED-MB-0031); winner <15% is that band's
-  *contrapositive* (the winner did not break, so it sits below the break floor); the cap rate is
-  structural, not historical.
-- **Duration is deliberately NOT banded absolutely.** An engine turn has no defensible mapping to real
-  time, so any interval in turns would be fabricated to look grounded. Only the cap-hit rate is banded.
-- `None` (not `0.0`) when nothing resolved — treating an absent measurement as "the winner lost
-  nothing" would turn the engine's most broken rows into its cleanest passes.
-
-**First result, and it is stark.** The H1 *mirror* passes win-share at 50.0 while killing **~85% of the
-loser and ~26% of the winner** against a 15–30% / <15% expectation. Casualty-realism scores **0/20**.
-The win-share gauge has been reporting a green mirror on a battle that annihilates both sides.
-
-Pinned by `tests/valoria/test_gauge_invariants.py` (8 tests). Both invariants are currently RED and
-marked **xfail, not skipped**: the assertion runs every time, does not redden CI for a known-open design
-gap, and flips to XPASS the moment it is fixed. Sample size is documented as a **power** limitation
-rather than glossed — H3/H10, a +4.5σ defect at n=60, XPASSed at n=24, so an XPASS at suite-n is a
-prompt to re-measure at n=60, not evidence of a fix. Also single-sourced the 18/20 turn caps, which
-were duplicated literals about to become four copies.
+Two Jordan-approved gauge invariants that assert a RELATION rather than a historical band, so they
+need no calibration: mirror symmetry (a matchup against itself must be ~50/50) and monotonicity in
+force ratio. Both wired into the honest gauge; disclosed H3-vs-H10 slot asymmetry (61.0 vs 76.7,
+summing to ~138 rather than ~100) surfaced by this pass and NOT diagnosed there.
+**Full detail: `tests/coverage_matrix_archive.md`** (moved 2026-07-29 under the register size cap,
+ED-MB-0050 — nothing dropped, only relocated).
 
 ## 2026-07-25 — ED-MB-0041 Tier-2: dead machinery wired or deleted + provenance retag (archived — condensed)
 

@@ -77,6 +77,13 @@ ci_checks:
     ci_job: field-goldens
     notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests."
 
+  - path: tests/sim/mass_battle/lanchester_signature.py
+    level: 5
+    role: "Attrition-law signature instrument (linear melee / square volley, conserved-quantity exponent fit) — REPORT-ONLY (ED-MB-0050 A6a/A6b)."
+    paired_hook: ""    # deliberately CI-only: the sweeps + trajectories run several minutes
+    ci_job: lanchester-signature
+    notes: "REPORT-ONLY on purpose: the repaired instrument legitimately FAILS (melee fits p~3.20 against a <=1.4 linear bar), which is an engine finding held for plan-v2 fork #2 (two incompatible 2:1 targets), not a regression to gate on. Flips to blocking when that fork is ruled. Before A6a it was neither wired nor correct: its no-rout pin did not disable rout (PC_STOCHASTIC_ROUT keys on casualty fraction), its volley scenario never fired, and its exponent was the scan-grid ceiling."
+
   - path: tools/broken_dependency_checker.py
     level: 5
     role: "References to nonexistent files in propagation_map / canonical_sources."

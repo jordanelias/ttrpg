@@ -704,6 +704,36 @@ jobs:
       # went wrong.
       - run: python3 tools/ci_field_golden_check.py
 
+  lanchester-signature:
+    name: Lanchester Signature (REPORT-ONLY — never fails the build)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      # [ED-MB-0050 A6b, 2026-07-29] The engine's own attrition-law instrument, wired at last.
+      # It has existed since 2026-06 and NOTHING ran it — not CI, not pytest — which is how it
+      # sat red and unnoticed while its `melee p=2.50` was quoted as an engine property in two
+      # audits and a handoff.
+      #
+      # REPORT-ONLY BY DESIGN, and this is not timidity. A6a repaired the instrument and the
+      # repaired instrument legitimately FAILS: melee fits p≈3.20 against a ≤1.4 linear bar. That
+      # is an ENGINE finding awaiting a design decision (plan-v2 fork #2 — two incompatible 2:1
+      # validation targets, ≥65% vs ~70%, one of which must be repudiated), not a regression to
+      # gate on. Making it blocking now would either wedge `main` or force the bar to be tuned to
+      # whatever the engine currently does, which is how a validation target becomes a
+      # rubber stamp. It flips to blocking when fork #2 is ruled.
+      #
+      # `|| true` is deliberate and is the whole of "report-only"; the log carries the numbers.
+      - run: |
+          cd tests/sim
+          PYTHONPATH=. python3 -m mass_battle.lanchester_signature || true
+
   audit-registry-check:
     name: Audit Registry Freshness (report-only)
     runs-on: ubuntu-latest
