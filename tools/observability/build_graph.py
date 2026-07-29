@@ -69,9 +69,10 @@ BROADCAST_SENTINELS = {"all", "all subscribing systems"}
 DROP_SENTINELS = {"legacy-aware consumers only"}
 # F2-class key-name drift: an emit string whose family-prefixed name differs from the
 # canonical registry subtype name. Reconciled for ripple continuity; alert recorded.
-KEY_ALIASES = {
-    "scene_outcome.battle_concluded": "scene.battle_concluded",
-}
+# (Empty since 2026-07-29: the one known drift, scene_outcome.battle_concluded, was
+# deleted at its source in module_contracts.yaml — ED-MB-0010. Mechanism kept for the
+# next drift.)
+KEY_ALIASES = {}
 FULLSTREAM = "*"  # a `consumes: {type: "*"}` means "subscribes to the entire Key stream"
 
 

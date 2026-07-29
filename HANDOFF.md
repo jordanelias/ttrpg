@@ -46,6 +46,11 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
+- **Code-shape open-items program is live (ED-IN-0091/ED-IN-0092, 2026-07-29).**
+  `references/id_reservations.yaml` is frozen (all seven lanes' blocks reserved — IN/MB/PC/WR/FA/SE/SC) until the W5 capstone; the
+  MB and PC sessions are launchable from their reserved blocks; the §5 docket awaits Jordan at
+  `audit/2026-07-29-code-shape-open-items/05_jordan_docket_v1.md`.
+
 _(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
 verified live max, allocated ED 1081–1087 to the month-overview consolidation from
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate

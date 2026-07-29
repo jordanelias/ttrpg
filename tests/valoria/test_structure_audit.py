@@ -109,11 +109,18 @@ def l2():
             'assumption_count': assumption_count}
 
 
-def test_l2_reproduces_massbattle_fabricated_emit(l2):
-    # PR #131 ED-MB-0010: mass_battle emits scene_outcome.battle_concluded with no
-    # consumer (canon writes scene.battle_concluded). Must surface as a dangling emit.
+def test_l2_massbattle_fabricated_emit_stays_deleted(l2):
+    # ED-MB-0010 RESOLVED 2026-07-29 (plan-v2 E1): scene_outcome.battle_concluded was the
+    # FAMILY name of scene.battle_concluded fabricated into mass_battle.emits, deleted at
+    # the source. This test used the defect as its known answer; it is now the recurrence
+    # guard — if the family-name emit ever reappears, it surfaces as a dangling emit again
+    # and this fails. (Mutation-verified: re-adding the module_contracts row flips this red.)
     dangling = {(d['emitter'], d['type']) for d in l2['findings']['dangling_emit']}
-    assert ('mass_battle', 'scene_outcome.battle_concluded') in dangling
+    assert ('mass_battle', 'scene_outcome.battle_concluded') not in dangling
+    # Setup guard (G6 — the absence above must be observable): mass_battle itself must still
+    # be parsed into the graph, or the 'not in' passes vacuously because the whole module
+    # vanished (e.g. a YAML fat-finger in the deleting edit).
+    assert 'mass_battle' in l2['meta']
 
 
 def test_l2_reproduces_personal_combat_dead_emits(l2):
@@ -279,3 +286,146 @@ def test_sys_path_alias_resolves_live_mass_battle_internal_edges():
         for t in g[m] if t.startswith('tests.sim.mass_battle')
     )
     assert internal >= 20, f"live mass-battle engine resolved only {internal} internal edges"
+
+
+# ── CLI entry-point detection (OI-55 open half, ED-IN-0092) ─────────────────
+#
+# code_orphans previously excluded only `.__main__` suffixes and leading-`_` private
+# names, so a real CLI tool with zero internal importers (any `tools/ci_*.py` invoked
+# only from a workflow YAML or a git hook) read as an orphan. Detection is a single
+# AST predicate (`has_main_guard`) plus a single split function
+# (`split_orphans_and_cli_entries`) — both known-answer-tested here over a synthetic
+# tree, per §0.1's "conditional assertions assert they asserted" discipline: each of
+# (a)-(d) below is a positive, direct assertion, not a loop that could silently match
+# zero rows.
+
+def test_has_main_guard_detects_conventional_and_reversed_forms():
+    import ast
+    guarded = ast.parse("if __name__ == '__main__':\n    pass\n")
+    assert sa.has_main_guard(guarded) is True
+    reversed_guarded = ast.parse("if '__main__' == __name__:\n    pass\n")
+    assert sa.has_main_guard(reversed_guarded) is True
+    unguarded = ast.parse("X = 1\nif X == 2:\n    pass\n")
+    assert sa.has_main_guard(unguarded) is False
+    empty = ast.parse("")
+    assert sa.has_main_guard(empty) is False
+
+
+def test_collect_cli_entry_modules_over_synthetic_tree(tmp_path):
+    # (a)/(c)/(d) fixture: a plain orphan, a real CLI entry (guard + zero importers),
+    # and a guarded-but-imported module — built as one synthetic tree so the split
+    # logic is exercised the same way run() exercises it.
+    root, modules = _write_pkg(tmp_path, {
+        'pkg/__init__.py': '',
+        # (a) a fake orphan: no importers, no guard.
+        'pkg/dead_mod.py': 'X = 1\n',
+        # (b) a fake import cycle: two modules import each other.
+        'pkg/cyc_a.py': 'import pkg.cyc_b\n',
+        'pkg/cyc_b.py': 'import pkg.cyc_a\n',
+        # (c) a real CLI entry: __main__ guard, zero importers.
+        'pkg/cli_tool.py': "def main():\n    pass\n\nif __name__ == '__main__':\n    main()\n",
+        # (d) a __main__-guarded module that IS imported elsewhere — never an orphan
+        # candidate at all, so it must land in neither list.
+        'pkg/cli_used.py': "if __name__ == '__main__':\n    pass\n",
+        'pkg/user_of_cli_used.py': 'import pkg.cli_used\n',
+    })
+    g, errs = sa.build_g_code(root, modules)
+    assert errs == []
+    code_nodes = list(modules)
+    deg = sa.degrees(g, code_nodes)
+    main_guard_modules = sa.collect_cli_entry_modules(root, modules)
+    code_orphans, cli_entries = sa.split_orphans_and_cli_entries(code_nodes, deg, main_guard_modules)
+
+    # (a) the fake orphan MUST be reported.
+    assert 'pkg.dead_mod' in code_orphans
+
+    # (b) the fake import cycle MUST be reported.
+    cycles = sa._cycles(sa.tarjan_scc(g), g)
+    assert ['pkg.cyc_a', 'pkg.cyc_b'] in cycles
+
+    # (c) the guarded, zero-importer module MUST appear in cli_entries and MUST NOT
+    # appear in code_orphans.
+    assert 'pkg.cli_tool' in cli_entries
+    assert 'pkg.cli_tool' not in code_orphans
+
+    # (d) the guarded-but-imported module was never an orphan candidate (it has an
+    # importer), so it must appear in NEITHER list — asserted both ways, not inferred.
+    assert 'pkg.cli_used' not in cli_entries
+    assert 'pkg.cli_used' not in code_orphans
+    # and its importer is unaffected — sanity check the fixture wiring itself.
+    assert 'pkg.cli_used' in g['pkg.user_of_cli_used']
+
+
+def test_split_orphans_and_cli_entries_pure_logic():
+    # Direct unit test of the split predicate against synthetic degree data, isolated
+    # from AST parsing — covers the same (a)/(c)/(d) shape with hand-built degrees so
+    # the split logic itself (not the guard-detection) is pinned independently.
+    code_nodes = ['orphan', 'cli_entry', 'guarded_but_imported', 'imported_normal', 'private_mod._helper']
+    code_deg = {
+        'orphan': {'in': 0, 'out': 0},
+        'cli_entry': {'in': 0, 'out': 0},
+        'guarded_but_imported': {'in': 1, 'out': 0},
+        'imported_normal': {'in': 1, 'out': 0},
+        'private_mod._helper': {'in': 0, 'out': 0},
+    }
+    main_guard_modules = {'cli_entry', 'guarded_but_imported'}
+    code_orphans, cli_entries = sa.split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules)
+
+    assert 'orphan' in code_orphans
+    assert 'cli_entry' in cli_entries
+    assert 'cli_entry' not in code_orphans
+    assert 'guarded_but_imported' not in cli_entries
+    assert 'guarded_but_imported' not in code_orphans
+    # private-name exclusion (pre-existing rule) is preserved through the split.
+    assert 'private_mod._helper' not in code_orphans
+    assert 'private_mod._helper' not in cli_entries
+
+
+def test_run_surfaces_cli_entries_field_in_metrics_json(tmp_path):
+    # Both lists must be VISIBLE in the report output, never silent (task requirement).
+    # Run the real audit against the live repo and check the JSON shape directly —
+    # asserting on the artifact the register/JSON actually ships, not a reimplementation.
+    from pathlib import Path
+    findings = sa.run(Path(_ROOT), tmp_path)
+    assert findings is not None  # run() returned (didn't raise); sanity on the call itself
+    import json
+    metrics = json.loads((tmp_path / 'data' / 'structure_metrics.json').read_text(encoding='utf-8'))
+    assert 'cli_entries' in metrics['code']
+    assert isinstance(metrics['code']['cli_entries'], list)
+    assert len(metrics['code']['cli_entries']) > 0, (
+        "expected at least one real CLI entry point in the live tree (e.g. tools/ci_*.py) — "
+        "an empty list here would mean detection silently found nothing"
+    )
+    # no overlap between the two lists in the live tree.
+    assert not (set(metrics['code']['orphans']) & set(metrics['code']['cli_entries']))
+    register_text = (tmp_path / 'structure_register.md').read_text(encoding='utf-8')
+    assert 'CLI entry points' in register_text
+
+
+def test_orphan_cli_split_conservation():
+    # Pins CONSERVATION on the real-tree run this file already exercises (Critic F8):
+    # every zero-in-degree, non-private code candidate must land in exactly one of
+    # code_orphans / cli_entries — never both (already asserted above), never neither.
+    # The candidate set below is derived with the IDENTICAL predicate
+    # split_orphans_and_cli_entries applies internally, fed the same code_nodes/code_deg/
+    # main_guard_modules run() passes it — so this fails if the split ever becomes
+    # non-exhaustive (a candidate silently dropped by both lists).
+    from pathlib import Path
+    root = Path(_ROOT)
+    modules = sa.collect_py_modules(root)
+    g_code, _parse_errors = sa.build_g_code(root, modules)
+    code_nodes = list(modules)
+    code_deg = sa.degrees(g_code, code_nodes)
+    main_guard_modules = sa.collect_cli_entry_modules(root, modules)
+
+    candidates = {n for n in code_nodes
+                  if code_deg[n]['in'] == 0
+                  and not n.endswith('.__main__')
+                  and not n.split('.')[-1].startswith('_')}
+
+    code_orphans, cli_entries = sa.split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules)
+    orphans_set, cli_set = set(code_orphans), set(cli_entries)
+
+    assert orphans_set.isdisjoint(cli_set)
+    assert orphans_set | cli_set == candidates
+    assert len(code_orphans) + len(cli_entries) == len(candidates)
