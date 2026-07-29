@@ -15,8 +15,10 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
-- **PLAN v2 EXECUTION UNDERWAY (2026-07-29, MB session).** Wave 0: ED-MB-0046..0055 block
-  pre-allocated (PR #255); premise re-verified at HEAD `81948c1` — grid modes green ×2 locally
+- **PLAN v2 EXECUTION UNDERWAY (2026-07-29, MB session).** Wave 0: ED block **0046–0060 drawn
+  from IN's Wave-0 pre-allocation (PR #256)** — the MB session's own parallel block PR (#255)
+  was closed per its declared race-handling the moment #256 landed first; `id_reservations.yaml`
+  is now frozen for the run. Premise re-verified at HEAD `81948c1` — grid modes green ×2 locally
   (reference digests reproduce on this box), both field modes deterministically red ×2 (identical
   wrong digests both runs; no non-determinism) — **A1a proceeds**. E1 executed in this PR
   (`scene_outcome.battle_concluded` emit row deleted; ED-MB-0010 resolved by merge-ratification,
