@@ -6,7 +6,34 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **E0 BATCH EXECUTED + I4 DELIVERED (2026-07-29, ED-PC-0041..0044) — PR #259 OPEN, AWAITING MERGE.**
+- **▶ RESUME HERE (2026-07-29 session close). E0/E1a/E1b/I4 MERGED (PRs #259, #269); E2a on a NEW PR
+  awaiting review; E2b/E3a/E3b NOT STARTED.** EDs 0041–0047 filed; **draw 0048+ from the reserved
+  block 0041–0055 (`id_reservations.yaml` is FROZEN for the 3-session run — do not edit it).**
+  Live suite baseline **1105 passed / 21 skipped / 3 xfailed / 3 xpassed**.
+  - **E2a (ED-PC-0047) needs an adversarial re-read before E2b builds on it.** Its Opus producer
+    died before reporting; the work was verified independently (suite + artifact inspection) but it
+    is the ONLY batch in this arc that did not get a critic relay. **E2b consumes E2a's
+    `weapon_physics.strike_point_lever` — validate that form first** (R-11.4 requires both scales to
+    ship ONE lever; E2b must not re-introduce the `|x|/Lt` form).
+  - **⚖ TWO CALIBRATION RESIDUES FOR JORDAN, disclosed not tuned (ED-PC-0047):** the repaired staff
+    reads 5.629 vs core.py's recorded "~4" intent (unreachable at PERC_EXP=0.30 while mace pins at
+    PERC_CAP — the arithmetic is in the docstring), and mace/poleaxe/goedendag now all compress to
+    an identical 8.000 against the cap (an ordering computed then discarded — the M8/F8 saturation
+    class). Both are the deferred Phase-C `PERC_SCALE`/`PERC_EXP` re-fit.
+  - **⚖ THREE HIGH WRAPPER DEFECTS from I4, open, each needs its own batch:** F-1 half-sword form
+    carries across engagement boundaries (turn-1 0/120 vs turns-2+ 398/398; no test sees it) · F-2
+    every fatal blow bypasses the damage-bearing `outcome` emit (199 fellings, 0 preceded by it) ·
+    F-3 the `sim` flag is provably always False (dead `disrupt_resist_p`). Priority vs E2b/E3a/E3b
+    is Jordan's call.
+  - **Open sign-safety residue (ED-PC-0045):** `init_hold_decay` multiplies the SIGNED initiative
+    state by an `eff_cw('measure')` factor — `misura` keeps a deficit alive longer. The E1a guard is
+    lever-keyed so it cannot see second consumers of a covered lever.
+  - **TIERING — read before spawning anything (this session's costly mistake):** ~16 critic/refuter
+    subagents inherited the session model and ran on **Fable at 10×** because no `model:` was set.
+    §10 is explicit that Fable is *an upgrade trigger, never a default*. **Set `model:` on EVERY
+    dispatch** — Sonnet for bounded/mechanical checks, Opus for gating verdicts.
+
+- **E0 BATCH EXECUTED + I4 DELIVERED (2026-07-29, ED-PC-0041..0044) — PRs #259/#269 MERGED.**
   Six gated commits (each: Opus producer → independent suite run → read-only valoria-critic pass):
   CI enforcement restored (18 combat test modules were silently skipping in the shipping gate — 837/93
   CI vs 972/21 local, proven from live CI logs), vocabulary ownership (`vocabulary.py` owner, 2 guards
