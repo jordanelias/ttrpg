@@ -46,6 +46,12 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
+- **⚠ COORDINATION (2026-07-29, three-session concurrency): ED-MB-0046..0055 is pre-allocated to
+  the MB plan-v2 execution session** (`references/id_reservations.yaml` MB line; Jordan ruling).
+  The IN program's Wave-0 pre-allocation commit (`audit/2026-07-29-code-shape-open-items/`
+  `01_orchestration_plan_v1.md` Wave 0 §3) must allocate **PC and IN blocks only — skip MB**.
+  Per plan-v2 §12 I5, nobody read-and-bumps `next_free` mid-run.
+
 _(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
 verified live max, allocated ED 1081–1087 to the month-overview consolidation from
 block D, and pre-provisioned disjoint Round-3 block E (ED 1100–1149 / PP 830–849). Allocate
