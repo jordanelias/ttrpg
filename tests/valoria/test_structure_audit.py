@@ -109,11 +109,18 @@ def l2():
             'assumption_count': assumption_count}
 
 
-def test_l2_reproduces_massbattle_fabricated_emit(l2):
-    # PR #131 ED-MB-0010: mass_battle emits scene_outcome.battle_concluded with no
-    # consumer (canon writes scene.battle_concluded). Must surface as a dangling emit.
+def test_l2_massbattle_fabricated_emit_stays_deleted(l2):
+    # ED-MB-0010 RESOLVED 2026-07-29 (plan-v2 E1): scene_outcome.battle_concluded was the
+    # FAMILY name of scene.battle_concluded fabricated into mass_battle.emits, deleted at
+    # the source. This test used the defect as its known answer; it is now the recurrence
+    # guard — if the family-name emit ever reappears, it surfaces as a dangling emit again
+    # and this fails. (Mutation-verified: re-adding the module_contracts row flips this red.)
     dangling = {(d['emitter'], d['type']) for d in l2['findings']['dangling_emit']}
-    assert ('mass_battle', 'scene_outcome.battle_concluded') in dangling
+    assert ('mass_battle', 'scene_outcome.battle_concluded') not in dangling
+    # Setup guard (G6 — the absence above must be observable): mass_battle itself must still
+    # be parsed into the graph, or the 'not in' passes vacuously because the whole module
+    # vanished (e.g. a YAML fat-finger in the deleting edit).
+    assert 'mass_battle' in l2['meta']
 
 
 def test_l2_reproduces_personal_combat_dead_emits(l2):

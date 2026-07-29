@@ -15,6 +15,15 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **PLAN v2 EXECUTION UNDERWAY (2026-07-29, MB session).** Wave 0: ED-MB-0046..0055 block
+  pre-allocated (PR #255); premise re-verified at HEAD `81948c1` — grid modes green ×2 locally
+  (reference digests reproduce on this box), both field modes deterministically red ×2 (identical
+  wrong digests both runs; no non-determinism) — **A1a proceeds**. E1 executed in this PR
+  (`scene_outcome.battle_concluded` emit row deleted; ED-MB-0010 resolved by merge-ratification,
+  ED-1094; artifact regeneration deferred to IN Wave 5 per §12 I5). A1a bisect frame established:
+  base `4b80ad5` (PR #232, last all-four-mode re-record), candidates `47f9cac` (#233) →
+  `5f1afc7` (#234) → `fbc93b0` (#235, impulse momentum + unconditional path fixes, re-recorded
+  grid only) → `584c683` (#236, PC_STOCHASTIC_ROUT default flip, re-recorded grid only).
 - **▶ START HERE — THE MASS BATTLE PLAN, v2 (2026-07-26):**
   **v2 exists because v1 was substantially wrong.** Four Fable-5 critics attacked it and instrumented
   measurement refuted its headline: **three of five severity-1 findings are code-true but
