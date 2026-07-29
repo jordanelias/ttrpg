@@ -15,6 +15,18 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **A1a EXECUTED (2026-07-29, MB session — this PR).** Both field goldens bisected and
+  re-recorded after 5 days red. Per-mechanism delta (base `4b80ad5` = #232's all-four recording;
+  full matrix in the PR): **exactly two movers** — (1) PR #235 `fbc93b0`'s unconditional code
+  changes (impulse momentum + Tier-0/1/2 fixes) moved `unit_field` `d44f211f…→27aa9ee0…` and
+  `cell_field` `a1a97940…→3a5807fb…` at fixed `PC_STOCHASTIC_ROUT=0`; (2) PR #236 `584c683`'s
+  `PC_STOCHASTIC_ROUT` default flip 0→1 moved them to the new goldens (`6f594233…`/`3a0952b3…`)
+  as a **pure config effect** — #236's code alone is byte-identical at rout=0, verifying its
+  set_morale-sweep claim on the field path. #233/#234 verified byte-exact on both field modes.
+  No third mechanism: `584c683`@rout=1 reproduces HEAD's observed digests exactly. Recorded on
+  Linux/Python 3.11.15 (grid modes reproduce reference digests on this box; reference-env
+  confirmation = A1b's first CI run). **Next: A1b** (CI job, full pin vector from the 47-flag
+  inventory; `.github/workflows/` is Jordan-CODEOWNERS). Then the Wave-3 parallel batch.
 - **▶ START HERE — THE MASS BATTLE PLAN, v2 (2026-07-26):**
   **v2 exists because v1 was substantially wrong.** Four Fable-5 critics attacked it and instrumented
   measurement refuted its headline: **three of five severity-1 findings are code-true but

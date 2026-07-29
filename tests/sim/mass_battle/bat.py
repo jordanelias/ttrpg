@@ -319,7 +319,15 @@ EXPECTED = {
     # test_mass_battle_byte_exact.py pins FIELD_MOVEMENT=0 and passes).
     # [2026-07-22, ED-MB-0017 — deployment geometry + cavalry/envelop-march speed re-baseline]
     # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
-    'unit_field': 'd44f211f02905551153147f1562fbad449a8db871b5339600cc445bfc70aa240',
+    # [2026-07-29, plan-v2 A1a (ED-MB-0045)] re-recorded after 5 days RED, bisected per-mechanism
+    # (base 4b80ad5 = the #232 all-four-mode recording; full matrix in PR #258): exactly TWO movers.
+    # (1) PR #235 fbc93b0 (impulse momentum + unconditional Tier-0/1/2 fixes): d44f211f… -> 27aa9ee0…
+    # at fixed PC_STOCHASTIC_ROUT=0. (2) PR #236 584c683's PC_STOCHASTIC_ROUT default flip 0->1:
+    # 27aa9ee0… -> this value — a pure CONFIG effect (#236's code alone is byte-identical at rout=0,
+    # verifying its set_morale-sweep claim on the field path). #233/#234 verified byte-exact on BOTH
+    # field modes (previously only ever checked on grid 'unit'). Those PRs re-recorded grid only and
+    # left these stale — the gap A1b's CI job closes.
+    'unit_field': '6f5942339d4bbb446b48c6da04bcd8704b9009786b4c8f85847296121dce40ad',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -367,7 +375,11 @@ EXPECTED = {
     # [2026-07-22, ED-MB-0017 — deployment geometry + cavalry/envelop-march speed re-baseline]
     # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
     # [2026-07-24, ED-MB-0036] re-recorded (perimeter wheel + MORALE_EROSION_DAMP/SUBUNIT_ROUT_FLOOR wirings).
-    'cell_field': 'a1a97940fed111fa489ab641cfef781eb603a59e015b21208dbd25700baadf24',
+    # [2026-07-29, plan-v2 A1a (ED-MB-0045) — see the 'unit_field' note above] re-recorded, same
+    # two-mechanism bisect: (1) PR #235 code: a1a97940… -> 3a5807fb… at rout=0; (2) PR #236's
+    # PC_STOCHASTIC_ROUT flip: 3a5807fb… -> this value. No third mechanism — 584c683 @ rout=1
+    # reproduces this digest exactly, and HEAD adds no MB engine change since.
+    'cell_field': '3a0952b331d6ba1e24fa21a2b72eda781141c36649ba0adc045b2cf5c2561304',
 }
 
 
