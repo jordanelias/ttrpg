@@ -9,10 +9,17 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 - **2026-07-26 COMBAT ARC — report, register, catalogue, proposal, independent audit, remediation plan (no ED;
   all report/design-only, HELD FOR JORDAN).** Consolidated to a pointer because appending full summaries pushed
   this file past its 20k cap four times; the detail is durable in the artifacts.
-  - **Artifacts.** `audit/2026-07-26-combat-balance-customization-state/` — `..._index.md`/`..._infill.md` (the
-    measured balance state), **`combat_defect_register.md`** (§A–§I: every defect, each tagged `[tracked]` vs
-    `[new]`, incl. §G the independent audit and §H the structural scan), **`combat_remediation_plan.md`
-    (PLAN OF RECORD — M1–M18, batches R0–R9)**, `combat_value_catalogue_GENERATED.md`. Proposal:
+  - **▶ START HERE (merged 2026-07-29, PR #249): `combat_execution_plan.md`** — the WORK ORDER for a fresh
+    session. Batches **E0–E3 need no decision from Jordan and are fully specified**; E4+ list their ⚖ blockers.
+    Carries §2 the traps this arc actually hit, §13 orchestration, §13.2a the **red-state ledger** (the
+    pre-measured failing pin for all 11 guards, incl. the one that is tautologically green and must be
+    mutation-verified instead), and §14 the Fable review record (11 findings, 5 would have caused a wrong result).
+  - **Artifacts.** `audit/2026-07-26-combat-balance-customization-state/` — **`combat_balance_state.md`** (the
+    measured balance state; the former `_index`/`_infill` pair was merged into it when CLAUDE.md §4 retired that
+    convention on 2026-07-26 — **the old filenames no longer exist**), **`combat_defect_register.md`** (§A–§I:
+    every defect, each tagged `[tracked]` vs `[new]`, incl. §G the independent audit and §H the structural
+    scan), **`combat_remediation_plan.md` (PLAN OF RECORD — M1–M18, batches R0–R9)**,
+    `combat_value_catalogue_GENERATED.md`. Proposal:
     `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md` (§1–§20).
     New instruments, all re-runnable: **`workbench/build_levers.py`** (the 4 build inputs `balance._mk` cannot
     express; `mirror 2000` is the fairness control), **`workbench/catalogue.py`** (51 weapons × 49 quantities +
