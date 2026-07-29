@@ -470,8 +470,7 @@ modules:
     resolver: dice_pool
     consumes: []
     emits:
-      - {type: "scene_outcome.battle_concluded", terminal: false}   # substrate §8.5 verbatim; registry §7 type_id is scene.battle_concluded — cross-doc naming-form drift [OPEN — Jordan]
-      - {type: "scene.battle_concluded", terminal: false}   # registry-declared form
+      - {type: "scene.battle_concluded", terminal: false}   # registry-declared form (the spurious scene_outcome.battle_concluded family-name duplicate was removed 2026-07-29, ED-MB-0010 — it was never a Key)
     state: []
     transitions:
       - {via: "scale_transitions §3.6 Thread → Mass"}
