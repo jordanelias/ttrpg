@@ -28,8 +28,14 @@ as corrected by PR #250/G12); **PC** →
 batches E0–E3 + §13 orchestration). Every MB/PC-lane row below is therefore **indexed here but
 executed there** — marked **→ MB plan ⟨track⟩** / **→ PC plan ⟨batch⟩**. Items this program
 identified that were NOT already in those plans have been physically appended to them as
-**MB plan §12** and **PC plan §15** (this PR) — no routed item exists only as a pointer. The
-orchestration plan (`01_…`) touches no MB- or PC-owned *code* file.
+**MB plan §12** and **PC plan §15** (this PR) — no routed item exists only as a pointer. **And for
+every row that routes to neither dedicated plan, `02_disposition_map.md` gives the same guarantee:
+one named owner per row and per split half, seeded at plan time** (added 2026-07-29 after the
+adversarial pass found seven rows and eleven row-halves owned by nobody — `03_adversarial_review_2026-07-29.md`
+F1). The orchestration plan (`01_…`) touches no MB- or PC-owned *code* file; **the zero-collision
+claim is scoped to code** — the shared registry/generated files (`review_baseline.yaml`,
+`id_reservations.yaml`, `module_contracts.yaml`, the observability artifacts, `CURRENT.md`, the lane
+handoffs) each get a single writer under `01_…`'s lane-partition block (critic F4/F5/F6/F12/F13).
 
 **Class codes** (dispositions, not rulings):
 - **M** — mechanical; agent-executable now, no design decision.
@@ -43,6 +49,14 @@ downstream work doesn't chase them: (1) `mc_v18`'s silent `except Exception: pas
 apparent importers are docstring mentions only — the **import-orphan claim stands**; (3) the
 dispatch combat branch now exists but routes to the DEPRECATED `systems.combat.sim.combat`, not
 `combat_engine_v1` — the canonical resolver still has zero path from the loop (see OI-01).
+
+**Critic-pass corrections (2026-07-29, marked `[corrected 2026-07-29 critic pass]` in the rows).**
+A second, structurally independent read-only pass (`03_adversarial_review_2026-07-29.md`) overturned
+two more claims and added one site: **OI-53** was partly stale — `ci_quantity_vocabulary_check` is
+already single-owned *and already guarded*, so the row is re-scoped to the four genuinely-remaining
+sites (F7/F14); and **`test_persubunit_stress.py:17` is not a retired-root reference at all** —
+it inserts a live path twice (F8). Both corrections are written into OI-53 in place. The class split
+under *Counts* was corrected in the same pass (F1b).
 
 ---
 
@@ -62,7 +76,7 @@ dispatch combat branch now exists but routes to the DEPRECATED `systems.combat.s
 | OI-10 | 8 placeholder-named FA/MB sim modules are import-orphans AND unresolved `placeholder_names.yaml` rows (`varfell_mandate_action`, `varfell_territorial_acquisition`, `altonian_reinforcements`, `infrastructure_reclamation`, `home_sanctuary`, `hafenmark_equipment`, `charter_liberties`, `tactic_cards` + `mass_seizure`) | structure_audit · DECISIONS P2 naming | `systems/factions/sim/*`, `systems/mass_battle/sim/*`, `registers/placeholder_names.yaml` | B (stub-wire) + J (names) |
 | OI-11 | Two disjoint mass-battle code graphs: `tests/sim/mass_battle/` (28 modules, ~10.5k LOC, all current development) has zero production importers and imports nothing from `engine/`/`systems/`; the campaign resolves battles on the stale wired tree (`systems/mass_battle/sim/` via `faction_action.py:349`). Fork (declare / adapter / promote) is Jordan's | ED-MB-0043/0045 · 07-17 D5 | both trees | **J → MB plan §7 fork 1** |
 | OI-12 | Other genuine import-orphans (verify-before-wiring per the tool's own caveat): `systems.characters.sim.companion`, `systems.overview.sim.{ip_track,rs_track}` (both also stubs), `systems.threadwork.sim.{co_movement,collective,opposing,rendering}`, `systems.world.sim.{miraculous_event,restoration_movement}`, `systems.settlements.sim.{settlement,temperaments}`, `systems.social_contest.sim.parliamentary_stay`, `engine.autoload.registry` | structure_audit 07-26 (142-row list, CLI/`__init__` noise excluded) | as named | B |
-| OI-13 | Dead PC-engine code: 6 vestigial functions (`core.effective_ob`, `combat_systems.{can_choke,stamina_max,conc_max}`, `ability_primitives.kit`, `traditions.profile`) + dead `Combatant.ready` field; 2 separation reasons (`beat_exhaustion`, `collapse`) never fire; `seize`/`vorschlag`/`sen_no_sen` labeled "live" but consumer cut 2026-06-05; M9 unreachable authored elements | 07-23 wiring §1.3/§2.1/§3.2 · PR #249 M12/M9 | `systems/combat/combat_engine_v1/*` | **→ PC plan E0 (M12) / E2 (M9)** |
+| OI-13 | Dead PC-engine code: vestigial functions per the 07-23 wiring audit — `core.effective_ob`, `combat_systems.{stamina_max,conc_max}`, `ability_primitives.kit`, `traditions.profile` (**`can_choke` struck [corrected 2026-07-29]: PC plan §14 R-2 refuted it — called from `test_combat_units_refactor.py:118`, golden-pinned, no generator**) + dead `Combatant.ready` field; 2 separation reasons (`beat_exhaustion`, `collapse`) never fire; `seize`/`vorschlag`/`sen_no_sen` labeled "live" but consumer cut 2026-06-05; M9 unreachable authored elements | 07-23 wiring §1.3/§2.1/§3.2 · PR #249 M12/M9 | `systems/combat/combat_engine_v1/*` | **→ PC plan E0 (M12) / E2 (M9)** |
 | OI-14 | Dead MB-tree code: `provenance.py` 0 importers with stale `loc` fields cited as canon; `reform_check` canon-required (PP-241) yet permanently dark; `_find_contacts_field`, `PC_FACING_MODEL` family, `COMMAND_SIGMA_ENABLED` dark; armour catalogue explicitly unwired (ED-MB-0008, docs-only per E3) | ED-MB-0045 S2.4/S2.5 · C6 | `tests/sim/mass_battle/*` | **→ MB plan B3/E3** |
 | OI-15 | Orphaned tools: `build_audit_registry_backfill.py`, `geography/jsx_to_canonical.py`, `measure_stamp_false_positives.py`, `observability/npc_audit_report_gen.py` (`orphaned_no_cli`); plus a registry-generator inconsistency (`sim_harness/harness.py` has `invoked_by: []` but `orphaned: false`) | apparatus_registry | `tools/*` | M |
 | OI-16 | `tools/registry.py` facade has zero production consumers; `references/head_pointers.yaml` + `docs/REPO_MAP.md` (converged highest-leverage pointer artifacts) do not exist | 07-14 unification §5/§6 | `tools/registry.py` | B |
@@ -127,7 +141,7 @@ dispatch combat branch now exists but routes to the DEPRECATED `systems.combat.s
 | ID | Item | Evidence | Paths | Class |
 |---|---|---|---|---|
 | OI-52 | Import cycles (4): `engine.autoload.game_state ↔ systems.world.sim.npe` (IN); 6-module `social_contest.sim.contest.*` cycle (documented intentional-during-rebuild — leave); `systems.mass_battle.sim.massbattle ↔ .units` + 5-module `tests.sim.mass_battle.*` cycle (**→ MB session**; both massbattle members are cut-vertices). FA→MB cross-lane lazy import (`faction_action` → `massbattle`) is the declared seam — untouched here | structure_audit 07-26 | as named | M/B (IN) · **→ MB plan** (MB cycles) |
-| OI-53 | Dead retired-`sim/` roots persist in live tooling (F4 class, FILED not fixed): `ci_quantity_vocabulary_check.py:145` `--sim-root` default (a CI gate running blind — sim surface contributes nothing to vocab.a17), 11 dead `sim_module:` paths in `registers/mechanics_index.yaml`, `audit_staleness.py:69`, `build_decisions.py:57`, `workplan_status.py:71`, `build_apparatus_registry.py:169`, `test_persubunit_stress.py:17` sys.path | ED-MB-0043 F4 | as named | **M** (high priority) |
+| OI-53 | Dead retired-`sim/` roots in live tooling (F4 class) — **[corrected 2026-07-29 critic pass]**, the row as filed was partly stale and a wave executing it verbatim would have re-implemented a landed fix. **ALREADY FIXED, do not redo:** `ci_quantity_vocabulary_check` routes through `ci_common.sim_reference_roots()` (ED-IN-0087) **and already has a recurrence guard** (`tests/valoria/test_retired_tree_apparatus.py`); `build_apparatus_registry` fixed; the 11 `mechanics_index` `sim_module:` paths verified live. **GENUINELY REMAINING (4):** `audit_staleness.py:69`, `tools/observability/build_decisions.py:57`, `workplan_status.py:71`, **+ `ci_audit_registry_check.py:23`** (still scans the retired `designs/audit/` — the critic's own addition, F14). **NOT a member:** `test_persubunit_stress.py:17` resolves to `<repo>/tests/sim`, which is **live** — lines 17-19 insert the same live path twice, so it is a redundant duplicate `sys.path` insert with zero behavioral stakes, not a retired-root reference (F8; disposition now MB plan §12 I3) | ED-MB-0043 F4 · critic F7/F8/F14 | as named | **M** (route fixes through the existing owner; extend the existing guard) |
 | OI-54 | Contract↔code correspondence is a disclosed black hole: name-matching joins only 6/27 contract modules to the 248 code modules; a fictional contract entry would pass as canon-grade wiring. Needs the `sim_module:` join + a verification signal | A5/C10 · ED-IN-0056 · GAP-I4 | `module_contracts.yaml` × G_code | B |
 | OI-55 | Orphan-detector integrity: `__init__` relative-import misresolution inflates the orphan list (P0.1 HIGH instrument fix before triage); CLI entry-point noise unlabeled; `vector_audit.py` analytical core has no known-answer coverage beyond one total-pin | 07-14 obs P0.1 · unification §8 | `skills/valoria-vector-audit/scripts/*` | B |
 | OI-56 | No pipeline-reach oracle exists: nothing asserts the campaign loop reaches (or consciously stubs) every scene direction, scale rung, and delivery direction — the Priority-1 acceptance instrument is itself a gap | this register (synthesis) | `engine/tests/` (new) | B |
@@ -143,13 +157,20 @@ dispatch combat branch now exists but routes to the DEPRECATED `systems.combat.s
   merged; each row cites all corroborating sources). Highest-corroboration items (4–6 independent
   rediscoveries): OI-21 (fabricated emit), OI-01 (combat unreached), OI-05 (generate_npc),
   OI-22 (combat dangling emits), OI-28 (causes[] zero), OI-54 (contract↔code black hole).
-- **Class split:** ~14 M (mechanical), ~30 B (build, design exists), ~12 J (ruling-gated, listed
-  loudly in the plan's §5 docket), ~5 D (deliberately deferred — do not touch). Of these,
-  **7 rows route wholly or partly to the MB session** (OI-11/14/21/23/40/47/52) and **5 to the
-  PC session** (OI-13/26/44/45/46) — see the lane partition note above.
+- **Class split:** ~14 M (mechanical), ~30 B (build, design exists), ~5 D (deliberately deferred —
+  do not touch), and — **corrected 2026-07-29 (critic F1b; the earlier "~12 J" undercounted and the
+  §5 docket had omitted five of them)** — **20 rows carry a J component**: 6 wholly J-classed
+  (OI-11/21/29/33/35/49), 12 mixed B/J or M/J (OI-06/10/18/22/27/30/31/32/41/43/48/59), 2 D/J
+  (OI-42/50). Two route to MB forks (OI-11, OI-21); the other eighteen all appear in the plan's §5
+  docket, now 14 rows. Of the whole register, **8 rows route wholly or partly to the MB session**
+  (OI-11/14/21/23/40/47/52/53) and **5 to the PC session** (OI-13/26/44/45/46) — see the lane
+  partition note above, and `02_disposition_map.md` for the per-row owner.
 - **The two structural centers of gravity:** (1) the campaign loop reaches a fraction of the built
   game — orphans are concentrated at the *seams* (dispatch, echo, handoff, articulation), not in
   the subsystem interiors; (2) single-owner violations concentrate in the two combat engines and
   the contest dual-formula, all three carrying an unresolved canon fork.
 
-*Companion: `01_orchestration_plan_v1.md` — the wave/agent plan over these rows.*
+*Companions: `01_orchestration_plan_v1.md` — the wave/agent plan over these rows ·
+`02_disposition_map.md` — the authoritative row→owner table (every row, every split half) ·
+`03_adversarial_review_2026-07-29.md` — the 17-finding adversarial review that corrected OI-53,
+added F14's fourth retired-root site, and forced the disposition map into existence.*

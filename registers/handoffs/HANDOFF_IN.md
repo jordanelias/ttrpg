@@ -20,10 +20,14 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   `audit/2026-07-29-code-shape-open-items/`: `00_open_items_register.md` (~60 rows, classed
   M/B/J/D, orchestrator-spot-checked) + `01_orchestration_plan_v1.md` (PROPOSED; merge ratifies
   per ED-1094 except its §5 held-back docket). Execution = 6 waves, each its own Workflow run +
-  PR: W0 preflight (Jordan docket + orphan-detector integrity) → W1 P1 spine (stubwire primitive,
-  dispatch closure, `test_pipeline_reach` oracle) → W2 orphan closure → W3 Keys/contract truth →
-  W4 centralization → W5 capstone re-measure (`02_execution_ledger.md` = the one status surface;
-  the register/plan stay immutable snapshots). **Lane partition:** ALL MB elements route to the
+  PR: W0 preflight (Jordan docket + orphan-detector integrity + cross-session ED pre-allocation) →
+  W1 P1 spine (stubwire primitive, dispatch closure, `test_pipeline_reach` oracle) → W2 orphan
+  closure → W3 Keys/contract truth → W4 centralization → W5 capstone re-measure
+  (`04_execution_ledger.md` = the one status surface; the register/plan/disposition map stay
+  immutable snapshots). Adversarially reviewed 2026-07-29 (Fable read-only critic, 17 findings —
+  coverage holes, golden-family ownership, shared-file conventions, 2 stale claims overturned); all
+  reconciled same-day: `02_disposition_map.md` + `03_adversarial_review_2026-07-29.md`.
+  **Lane partition:** ALL MB elements route to the
   dedicated MB session (`audit/2026-07-26-mass-battle-fable-audit/03_execution_plan.md` v2) and
   ALL PC elements to the dedicated PC session
   (`audit/2026-07-26-combat-balance-customization-state/combat_execution_plan.md`, PR #249);

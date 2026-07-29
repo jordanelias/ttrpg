@@ -500,10 +500,13 @@ promotes every failure into §1. **If you find v2 wrong, add a guardrail — tha
 
 ## §12 — INBOUND: items routed from the code-shape open-items program (ED-IN-0091, 2026-07-29)
 
+*(landed via PR #252 — the IN program's PR; if you are reading a `main` checkout that lacks this
+section, that PR has not merged yet — do not start the inbound items before it does.)*
+
 Jordan's 2026-07-29 lane-partition directive dedicates ALL MB-lane work to this session. The
 cross-cutting code-shape program (`audit/2026-07-29-code-shape-open-items/`, ED-IN-0091) therefore
 routes its MB elements HERE instead of executing them. Most were already yours (E1, E6, A2, B1–B3,
-E4/E5/E8, the §7 forks — its register rows OI-11/14/21/23/40/47 simply point at those tracks). The
+E4/E5/E8, the §7 forks — its register rows OI-11/14/21/23/40/47/52 simply point at those tracks). The
 following are **additive** — identified by that program and not explicitly covered by §3–§8 above:
 
 - **I1 — `altonian_reinforcements.py` stubwire conversion.** `systems/mass_battle/sim/
@@ -513,21 +516,79 @@ following are **additive** — identified by that program and not explicitly cov
   `review_core` ratchet). Once it lands, convert this one file to `stubwire.stub_resolve(...)`
   exactly like the other ~19 (uniform recipe in that plan §2.1); it is MB-owned, so the
   conversion is yours, not theirs. Until then it stays a raise — do not hand-roll a variant flag.
+  **Suggested slot: with the first E-track editorial batch** — it needs no golden slot and is
+  independent of A/B/D and of fork #1. (Slot added 2026-07-29: the IN plan's "zero unconditional
+  `NotImplementedError` in live trees" exit criterion carries this one file as its single named
+  exception, cited in its reach-oracle xfail manifest, so an unscheduled item here was silently
+  gating another session's acceptance.) **Their Wave 1 seeds the `stubs.count` baseline in
+  `registers/review_baseline.yaml` at the full expected converted set INCLUDING this file**, so your
+  conversion moves that count in the improving direction only and trips nothing — do not edit that
+  file yourself; it is IN-written and CODEOWNERS-gated to Jordan.
 - **I2 — MB import cycles (ED-MB-0043 F5).** `systems.mass_battle.sim.massbattle ↔ .units`
   (both members are also code cut-vertices) and the 5-module `tests.sim.mass_battle.{core.exchange,
   geometry, hierarchy.units, percell, resolution}` cycle. Structural, not behavioral — break only
   where a seam is genuinely one-directional; byte-identical goldens required (fits the §8
   per-commit protocol; the `massbattle ↔ units` break is independent of fork #1).
-- **I3 — retired-`sim/` root in the MB tree (ED-MB-0043 F4 residue).**
-  `tests/sim/mass_battle/test_persubunit_stress.py:17` still inserts the deleted `<repo>/sim` on
-  `sys.path`. The IN program sweeps every OTHER F4 site (tools/registries) and ships a
-  recurrence guard; this one file is MB-owned and is yours.
+- **I3 — `test_persubunit_stress.py`'s duplicate `sys.path` insert. [corrected 2026-07-29 critic
+  pass]** The item as first written claimed
+  `tests/sim/mass_battle/test_persubunit_stress.py:17` still inserts the deleted `<repo>/sim`.
+  **That premise is FALSE.** The expression resolves to `<repo>/tests/sim`, which is **live**, and
+  lines 17-19 insert that same live path twice. It is **not** a retired-root reference and not a
+  member of the ED-MB-0043 F4 class. **Disposition: optionally remove the redundant duplicate
+  insert — zero behavioral stakes.** (The IN program still sweeps the genuine F4 sites in tools and
+  registries and extends the *existing* recurrence guard,
+  `tests/valoria/test_retired_tree_apparatus.py`; nothing there needs anything from you.)
 - **I4 — token/scale-class reconciliation (ED-MB-0043 F6/F7 tail).** `Mass Battle` vs
   `Mass Combat` carry different scale classifications (mechanic vs province) and MB work has
   zero patch-register coverage; E4/E5/E8 fix the doc statuses, params header, and record — this
   adds the token-class + `patch_register` `affects:` reconciliation as the same hygiene pass.
+- **I5 — coordination terms for three concurrent sessions (added 2026-07-29 by the IN program's
+  adversarial pass; each is a shared-file convention, not a task).** The zero-collision claim was
+  true of *code* and false of the shared registry and generated files. Five terms:
+  - **Golden families — G11 scoped, not overruled.** Goldens partition into three families with one
+    owner each: **MB** (`tests/sim/mass_battle` digests, `bat.py` batteries) — yours; **PC**
+    (`combat_armour_reference.json` and siblings); **IN** (`engine/tests/` campaign goldens — the F7
+    smoke oracle and the new pipeline-reach oracle). **G11 now reads: one golden-moving PR in flight
+    PER FAMILY**, so A2 still holds the single MB golden-moving slot exactly as §9/§10 specify, and
+    the other two sessions no longer serialize against it. A change that would cross families needs
+    a coordination note in root `HANDOFF.md` **before** the PR opens. **Inside the MB family, §10's
+    G11 text remains authoritative** — nothing about A2's discipline changes.
+  - **`references/id_reservations.yaml` — do not touch it mid-run.** The IN program's Wave 0
+    pre-allocates all three sessions' ED blocks in ONE commit before the concurrency starts,
+    including a small MB block recorded in that file's comment per its own ALLOCATION PROTOCOL. Draw
+    your `ED-MB-NNNN` ids from that block; do not read-and-bump `next_free` while two other sessions
+    are live (that is the documented same-lane collision class, on the one file with no
+    merge-friendly structure).
+  - **E1's artifact regeneration is deferred to the IN session.** E1 (§8) says "regenerate the
+    observability artifacts". **Scope that to sources only**: edit the `module_contracts.yaml` row
+    and delete the dead alias in `build_graph.py`, and let **IN's Wave 5 observatory pass regenerate
+    `graph.json` / incompleteness / the PROPOSALS family** — IN is the sole regenerator, because two
+    sessions regenerating the same artifacts produce a merge that silently picks one. **Nothing else
+    about E1 changes**: it is still the ED-1094 merge-ratification, still carries the ledger flip and
+    the `[OPEN — Jordan]` removal, and still states in its PR body that merge = the ruling. (IN's
+    Wave 3 exit was correspondingly relaxed to `≤2` dangling emits while your E1 row has not merged —
+    it excludes that row from its denominator rather than waiting on you.)
+  - **`references/module_contracts.yaml` row ownership.** You own rows `:465-486` (the `mass_battle`
+    entry) and E1's deletion; **IN owns the rest**. The hunks are distant and git-mergeable; each
+    session's PR touches only its own rows.
+  - **E4 and `CURRENT.md`.** E4 edits **only MB's own subsystem rows / `## Status:` lines**, and says
+    so in its PR body. IN's Wave-5 `CURRENT.md` stamp reconcile runs last among the merges it can
+    see and touches only the stamp plus IN-owned rows — `currency.stamps` has baseline 0, so
+    undeclared drift regresses the ratchet regardless of who caused it.
+- **Duplication logging (Jordan directive, 2026-07-29, all three sessions).** A rule/value/name
+  found defined in more than one place, out of the current task's scope: **log, don't chase** —
+  file an `ED-MB-NNNN` citing every site + the proposed single owner, keep moving (CLAUDE.md
+  §0.1 #5). The editorial ledger is the duplication log; no new register. (Your §3–§4 tracks
+  already own the KNOWN MB duplications — this covers new discoveries only.)
 - **Seam declaration (coordination, no action):** the IN program will not touch
   `systems/mass_battle/`, `tests/sim/mass_battle/`, the `mass_battle` contract rows, or
   `faction_action.py:349` (the FA→MB call site). Its pipeline-reach oracle treats MB battle
   resolution as live-as-wired (the stale-twin question stays fork #1, yours). If any IN wave
   needs an MB surface changed, it files the item here rather than editing.
+  **Fork-1 re-entry protocol (added 2026-07-29).** A **"promote"** ruling on §7 fork 1 does not land
+  cleanly across the seam: the IN reach oracle's MB battle-resolution rows are pinned against the
+  currently-wired tree and would become false, and `faction_action.py:349` is an **FA**-lane file
+  owned by neither this session nor IN. So a "promote" ruling **spawns an FA-lane wiring item** — the
+  seam moves on FA's schedule, not inside this plan — and **IN's reach-oracle MB rows flip to
+  stub-flag the moment the ruling lands and stay there until that FA item re-pins them.** Neither
+  session silently "just moves the call site" as part of executing the ruling.
