@@ -495,3 +495,39 @@ fires · **any** urge to tune σ or contagion constants to improve an arm's band
 Plan v1 and the three adversarial amendment blocks that dismantled it are in this file's git history
 (`46a25ca`, `7ef96ea`, `7b20011`). v2 folds every surviving correction into the tasks themselves and
 promotes every failure into §1. **If you find v2 wrong, add a guardrail — that is what §1 is for.**
+
+---
+
+## §12 — INBOUND: items routed from the code-shape open-items program (ED-IN-0091, 2026-07-29)
+
+Jordan's 2026-07-29 lane-partition directive dedicates ALL MB-lane work to this session. The
+cross-cutting code-shape program (`audit/2026-07-29-code-shape-open-items/`, ED-IN-0091) therefore
+routes its MB elements HERE instead of executing them. Most were already yours (E1, E6, A2, B1–B3,
+E4/E5/E8, the §7 forks — its register rows OI-11/14/21/23/40/47 simply point at those tracks). The
+following are **additive** — identified by that program and not explicitly covered by §3–§8 above:
+
+- **I1 — `altonian_reinforcements.py` stubwire conversion.** `systems/mass_battle/sim/
+  altonian_reinforcements.py` is a "Pass 2l armature stub" (unconditional `NotImplementedError`).
+  The IN program's Wave 1 ships `engine/substrate/stubwire.py` — the single owner of
+  "explicitly-flagged not-built" (typed no-op `StubResult` + audit-visible import + telemetry +
+  `review_core` ratchet). Once it lands, convert this one file to `stubwire.stub_resolve(...)`
+  exactly like the other ~19 (uniform recipe in that plan §2.1); it is MB-owned, so the
+  conversion is yours, not theirs. Until then it stays a raise — do not hand-roll a variant flag.
+- **I2 — MB import cycles (ED-MB-0043 F5).** `systems.mass_battle.sim.massbattle ↔ .units`
+  (both members are also code cut-vertices) and the 5-module `tests.sim.mass_battle.{core.exchange,
+  geometry, hierarchy.units, percell, resolution}` cycle. Structural, not behavioral — break only
+  where a seam is genuinely one-directional; byte-identical goldens required (fits the §8
+  per-commit protocol; the `massbattle ↔ units` break is independent of fork #1).
+- **I3 — retired-`sim/` root in the MB tree (ED-MB-0043 F4 residue).**
+  `tests/sim/mass_battle/test_persubunit_stress.py:17` still inserts the deleted `<repo>/sim` on
+  `sys.path`. The IN program sweeps every OTHER F4 site (tools/registries) and ships a
+  recurrence guard; this one file is MB-owned and is yours.
+- **I4 — token/scale-class reconciliation (ED-MB-0043 F6/F7 tail).** `Mass Battle` vs
+  `Mass Combat` carry different scale classifications (mechanic vs province) and MB work has
+  zero patch-register coverage; E4/E5/E8 fix the doc statuses, params header, and record — this
+  adds the token-class + `patch_register` `affects:` reconciliation as the same hygiene pass.
+- **Seam declaration (coordination, no action):** the IN program will not touch
+  `systems/mass_battle/`, `tests/sim/mass_battle/`, the `mass_battle` contract rows, or
+  `faction_action.py:349` (the FA→MB call site). Its pipeline-reach oracle treats MB battle
+  resolution as live-as-wired (the stale-twin question stays fork #1, yours). If any IN wave
+  needs an MB surface changed, it files the item here rather than editing.

@@ -613,3 +613,49 @@ This repo's remediation history is **three consecutive half-stands** (batches 4,
 - **Do not run a Workflow for E1a.** One function pair, one guard — orchestration overhead exceeds the work.
 
 ---
+
+---
+
+## §15 — INBOUND: items routed from the code-shape open-items program (ED-IN-0091, 2026-07-29)
+
+Jordan's 2026-07-29 lane-partition directive dedicates ALL PC-lane work to this session. The
+cross-cutting code-shape program (`audit/2026-07-29-code-shape-open-items/`, ED-IN-0091) therefore
+routes its PC elements HERE instead of executing them. Each slots into an existing batch as a
+rider — none is a new ⚖. Sources: the 2026-07-23 combat-engine wiring audit
+(`audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md`) + that program's register
+(rows OI-13/26/44/45/46).
+
+- **I1 — rider on E0/M15 (vocabulary ownership): the two named single-owner splits.**
+  (a) Pool formula duplicated with real divergence: `combatant.pool = max(5, history+6)` (no
+  rounding) vs `core.resolution_pool = max(5, int(round(history))+6)` — latent only while
+  History is integer-default. One owner; the other site calls it; guard = a fractional-History
+  probe asserting both agree (red on main under History 3.4). (b) The ≈8.0 percussion-authority
+  anchor triplicated — `core.PERC_AUTH_REF` / `weapon_physics.PERC_CAP` / `config.ADEF_PERC_REF` —
+  with nothing enforcing equality (a Phase-C re-fit desyncs them silently), plus `damage()`'s
+  blunt branch re-hardcoding `3.0*(perc/8.0)` and an int-`8`/float-`8.0` default mismatch. One
+  CFG owner + an equality assertion. Both are exactly M15's defect class; landing them inside
+  the M15 pass avoids sweeping the same files twice. Byte-identical at defaults — goldens must
+  not move.
+- **I2 — rider on E0/M12 (dead surface): the wiring audit's specific dead list.** 6 vestigial
+  functions (`core.effective_ob`, `combat_systems.{can_choke, stamina_max, conc_max}`,
+  `ability_primitives.kit`, `traditions.profile`) + dead `Combatant.ready` field; the 2
+  never-firing separation reasons (`beat_exhaustion`, `collapse` — the engine's own self-test
+  flags them); and `seize`/`vorschlag`/`sen_no_sen` labeled "live" in `ability_armature.md:47`
+  while their consumer was cut 2026-06-05 ("do nothing when equipped" — fix the label or re-wire,
+  the mislabel is the defect; re-wiring is ⚖-adjacent, escalate per §11 if it changes balance).
+- **I3 — shape hygiene, same files:** `sel_*` positional tuples manually unpacked at
+  `combat_systems.py:448,542,579` — re-growing the positional fragility `core.strike` was
+  refactored to a keyword chokepoint to eliminate; and `point_concentration` read via two
+  parallel paths (`w['geometry'][…]` vs baked `geo[…]`). Mechanical, byte-identical.
+- **I4 — rider on the §12 wrapper audit: the `_emit()` → Key mapping (C-KEY-3, 2026-07-07).**
+  `wrapper.py`/`state_graph.py`'s internal `_emit()` trace vocabulary (~15–25 kinds) is mapped
+  nowhere to the 4 canonical `scene.combat_*` registry types. When the §12 wrapper pass runs,
+  produce the mapping table (emit-kind → type_id or explicitly-internal) as one of its
+  deliverables — the IN program's dispatch bridge consumes the wrapper and will wire the
+  registry-side consumers, so the mapping is the contract between the two sessions.
+- **Seam declaration (coordination, no action):** the IN program's Wave-1 dispatch bridge
+  (`engine/cross_scale/scene_dispatch.py` → your `wrapper.py` public resolve API) is IN-side
+  only; it pins the wrapper's current observable behavior with a characterization test and
+  files any wrapper-side need here rather than editing under `systems/combat/`. Keep the
+  wrapper's public API stable within a batch, or flag the break in the batch summary so the
+  bridge's characterization pin is re-recorded deliberately, not discovered red.
