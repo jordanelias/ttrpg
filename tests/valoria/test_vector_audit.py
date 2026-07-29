@@ -11,6 +11,7 @@ reuse of the real `names` reader.
 """
 import importlib.util
 import os
+import re
 import pytest
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -568,3 +569,416 @@ def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     assert d['notional_total'] >= len(d['notional'])         # sample ≤ true total, total disclosed
     assert d['cascade_sinks_total'] >= len(d['cascade_sinks'])
     assert 'cascade_truncated_calls' in d                    # the false-sink caveat is carried
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OI-55 / ED-IN-0092 (G12 correction): the register claimed vector_audit's
+# "analytical core has no known-answer coverage beyond one total-pin". That
+# claim was already stale for banner_classify/diagnostics/build_g_key/etc
+# (see the tests above), but a genuine set of pure analytical functions had
+# ZERO direct known-answer coverage — exercised only as plumbing inside other
+# tests (if at all), never verified against a hand-computed expected output.
+# Every test below was hand-traced against the function's source before being run once. Not all
+# are the same guarantee, though: _median / _percentile_10_cut / _top_quintile / validate P1 /
+# validate P3 / vocabulary_debt are concept-derivable (expected value comes from the spec, not the
+# code) — true known-answer tests where a wrong implementation would fail. _source_rank's default,
+# _pattern_for's boundary case, and _humanize_system's lookup table are source-traced (hand-computed
+# FROM the function's current source) — regression guards against future drift, not proof of
+# current correctness.
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Already-covered map (function → pre-existing test), assembled so this claim is auditable
+# in-tree rather than asserted from memory:
+#   same_class                              -> test_same_class_groups_and_separates
+#   banner_classify                         -> the 6 banner/status tests (test_status_declaration_
+#                                               is_design_even_with_audit_word, test_provisional_
+#                                               status_is_design, test_struck_and_deprecated_are_
+#                                               excluded, test_deprecated_is_path_anchored_not_
+#                                               content_matched, test_workplan_and_audit_keywords_
+#                                               are_discourse_absent_status, test_audit_folder_path_
+#                                               is_discourse_but_dev_spec_is_design)
+#   diagnostics C/D totals + determinism    -> test_diagnostics_records_true_notional_total_not_
+#                                               just_shown_slice, test_cascade_mode_d_is_
+#                                               deterministic_across_neighbor_order
+#   validate p2                             -> test_p2_v4_gated_presence_and_not_measurable_sentinel
+#   derive_tokens/consolidate_tokens        -> test_name_coreference_unifies_one_entity_but_not_a_
+#     (real-corpus)                            family, test_token_universe_is_expansive_across_
+#                                               entity_classes
+#   CLASSES/SEED_TOKENS sourcing            -> test_token_classes_sourced_from_names_index_byte_
+#                                               identical
+#   names reuse                             -> test_vector_audit_reuses_the_real_names_reader
+#   extract_corpus L0/L1                    -> test_corpus_layer_L1_extends_L0_corpus_breadth
+#   build_g_key                             -> test_key_graph_matches_an_independent_rederivation_
+#                                               from_contracts (the contracts rederivation test)
+#   build_g_throughline                     -> test_throughline_graph_extended_by_second_registry_
+#                                               source
+#   discover_unregistered_candidates        -> test_discover_unregistered_candidates_surfaces_
+#                                               missing_registrations
+# ═══════════════════════════════════════════════════════════════════════════
+
+def test_median_known_answer():
+    # xs=sorted; odd->middle element, even->mean of the two middle, empty->0.0 (not an exception)
+    assert va._median([]) == 0.0
+    assert va._median([3, 1, 2]) == 2                # odd: middle of [1,2,3]
+    assert va._median([4, 1, 3, 2]) == 2.5            # even: mean of [2,3]
+    assert va._median([7]) == 7
+
+
+def test_percentile_10_cut_known_answer():
+    # xs=sorted; index = max(0, int(0.10*n) - 1). n=10 -> int(1.0)-1=0 -> xs[0].
+    # n=20 -> int(2.0)-1=1 -> xs[1]. n<10 -> int(...) truncates to 0 -> max(0,-1)=0 -> xs[0].
+    assert va._percentile_10_cut([]) == 0
+    assert va._percentile_10_cut(list(range(1, 11))) == 1     # n=10: xs[0]
+    assert va._percentile_10_cut([5, 3, 1, 4, 2]) == 1        # n=5:  xs[0]
+    assert va._percentile_10_cut(list(range(1, 21))) == 2     # n=20: xs[1] (the int() truncation edge)
+    assert va._percentile_10_cut([1, 2, 3]) == 1
+
+
+def test_top_quintile_known_answer():
+    # k = max(1, len//5); cut = the k-th largest value; membership requires d>=cut AND d>0
+    # (the d>0 guard is the case a naive "top 20%" reading would miss on an all-zero graph).
+    deg10 = {c: 11 - i for i, c in enumerate('abcdefghij')}   # a=11..j=2, i.e. 10 distinct values
+    assert va._top_quintile(deg10) == {'a', 'b'}              # k=2, cut=vals[1]=10 -> a(11),b(10)
+    assert va._top_quintile({}) == set()
+    assert va._top_quintile({'x': 5, 'y': 5, 'z': 1}) == {'x', 'y'}   # tie at the cut both included
+    assert va._top_quintile({'a': 0, 'b': 0}) == set()        # all-zero: d>0 guard excludes everyone
+
+
+def test_add_edge_known_answer():
+    g = {}
+    va._add_edge(g, 'A', 'B')
+    assert g == {'A': {'B': 1}, 'B': {'A': 1}}          # symmetric, weight 1 on first insert
+    va._add_edge(g, 'A', 'B')
+    assert g == {'A': {'B': 2}, 'B': {'A': 2}}          # weight increments on repeat, both sides
+    va._add_edge(g, 'A', 'A')
+    assert g == {'A': {'B': 2}, 'B': {'A': 2}}          # self-loop is a no-op (a==b guard)
+
+
+def test_neighbors_union_and_degrees_known_answer():
+    graph = {'A': {'B': 1, 'C': 1}, 'D': {'A': 1}}
+    assert va.neighbors_union(graph, 'A') == {'B', 'C', 'D'}   # out {B,C} union in {D} (D->A)
+    assert va.neighbors_union(graph, 'B') == {'A'}             # no out-edges; in-edge from A
+    assert va.neighbors_union(graph, 'Z') == set()             # absent node: empty union
+    g2 = {'A': {'B': 1, 'C': 1}, 'C': {'A': 1}}
+    assert va._degrees(g2, ['A', 'B', 'C', 'D']) == {'A': 2, 'B': 1, 'C': 1, 'D': 0}
+
+
+def test_to_paragraphs_strips_comments_code_and_filters_short_blocks():
+    para1 = 'A' * 60          # > 50 chars: kept
+    para2 = 'B' * 10          # <= 50 chars: dropped
+    para3 = 'C' * 55          # > 50 chars: kept
+    content = (f'<!-- hidden comment text -->\n{para1}\n\n{para2}\n\n'
+               f'```\nZZZ code block ZZZ\n```\n\n{para3}\n')
+    result = va.to_paragraphs(content)
+    assert result == [para1, para3]      # comment vanishes, code block vanishes, short block dropped
+
+
+def test_compiled_falls_back_to_escaped_literal_on_invalid_regex():
+    out = va._compiled(['abc', '('])     # '(' is an invalid regex (unbalanced group)
+    assert len(out) == 2
+    assert out[0].search('xxabcxx')                 # 'abc' compiled normally, matches as a regex
+    assert out[1].search('a(b')                      # '(' fell back to re.escape -> matches the literal char
+    assert not out[1].search('abc')                  # ...and does NOT match unrelated text
+
+
+def test_count_in_sums_matches_across_patterns():
+    comp = [re.compile(r'\bfoo\b'), re.compile(r'\bbar\b')]
+    assert va._count_in('foo bar foo baz bar bar', comp) == 5   # 2 foo + 3 bar
+
+
+def test_norm_name_known_answer():
+    assert va._norm_name('Duchess Inge Baralta') == 'duchess inge baralta'
+    assert va._norm_name('Restoration-Movement!!') == 'restoration movement'   # punctuation -> space, stripped
+    assert va._norm_name(None) == ''
+    assert va._norm_name('  MiXed_CASE_123  ') == 'mixed case 123'
+
+
+def test_to_native_converts_container_types():
+    out = va.to_native({'a': [1, 2, (3, 4)], 'b': {'c'}})
+    assert out == {'a': [1, 2, [3, 4]], 'b': ['c']}     # tuple->list recursively; single-elem set->list
+    assert isinstance(out['a'][2], list) and not isinstance(out['a'][2], tuple)
+
+
+def test_strip_display_known_answer():
+    # (bare label, abbreviation|None); markdown bold stripped; only an UPPERCASE-led trailing
+    # parenthetical yields an abbreviation, but ANY trailing parenthetical is stripped from the label.
+    assert va._strip_display('**Restoration Movement** (RM)') == ('Restoration Movement', 'RM')
+    assert va._strip_display('**Solmund**') == ('Solmund', None)
+    assert va._strip_display('Some Term (lowercase)') == ('Some Term', None)   # lowercase paren: no abbr
+    assert va._strip_display(None) == ('', None)
+
+
+def test_pattern_for_known_answer():
+    # empty label -> []; short (<=6 chars) single word -> word-boundary anchored;
+    # a space OR length>6 -> plain phrase (no \b); an abbr always gets its own \b-anchored pattern.
+    assert va._pattern_for('') == []
+    pats_short = va._pattern_for('Faith')          # 5 chars, no space -> word-boundary
+    assert re.fullmatch(pats_short[0], 'Faith') and not re.search(pats_short[0], 'Faithful')
+    pats_phrase = va._pattern_for('Restoration Movement')   # has a space -> plain phrase, no \b required
+    assert re.search(pats_phrase[0], 'the Restoration Movement grows')
+    pats_long = va._pattern_for('Longerword')      # 10 chars, no space, > 6 -> plain (no \b)
+    assert len(pats_long) == 1 and re.search(pats_long[0], 'xLongerwordx')
+    pats_boundary6 = va._pattern_for('Faithy')      # exactly 6 chars -> still word-boundary
+    assert not re.search(pats_boundary6[0], 'Faithyz')
+    pats_with_abbr = va._pattern_for('MS', 'Mending')
+    assert len(pats_with_abbr) == 2
+    assert re.fullmatch(pats_with_abbr[0], 'MS') and re.fullmatch(pats_with_abbr[1], 'Mending')
+
+
+def test_humanize_system_known_answer():
+    assert va._humanize_system('mass_battle_npc') == 'Mass Battle'   # trailing _npc stripped
+    assert va._humanize_system('ci_political') == 'CI Political'     # 'Ci' restored to acronym 'CI'
+    assert va._humanize_system('ui_ux_spec') == 'UI UX Spec'         # two acronyms in one label
+    assert va._humanize_system('threadwork') == 'Threadwork'         # no acronym, plain title-case
+
+
+def test_source_rank_known_answer():
+    assert va._source_rank('derived:proper_noun') == 0
+    assert va._source_rank('seed') == 1
+    assert va._source_rank('derived:names_index') == 2
+    assert va._source_rank('derived:canonical_sources') == 3
+    assert va._source_rank('unknown_source') == 4     # unmapped source: the documented default
+    assert va._source_rank(None) == 4
+
+
+def test_passes_context_known_answer():
+    assert va._passes_context('anything at all', []) is True          # no context requirement: always passes
+    ctx = [re.compile(r'\bChurch\b')]
+    assert va._passes_context('The Church is powerful', ctx) is True
+    assert va._passes_context('The Crown is powerful', ctx) is False
+    ctx2 = [re.compile(r'\bFoo\b'), re.compile(r'\bBar\b')]
+    assert va._passes_context('contains Bar only', ctx2) is True       # ANY pattern matching passes
+
+
+def test_consolidate_tokens_substring_signal_merges_unique_container_not_shared_surname():
+    """Signal 2 (proper-noun substring, NAME scales only): a short form contained in exactly ONE
+    longer name merges (Baralta -> Duchess Inge Baralta); a short form contained in MULTIPLE longer
+    names is a shared dynasty surname and must NOT merge anyone (Almqvist stays standalone, the two
+    royals stay separate). Non-name-scale tokens (Combat / Mass Combat) never trigger this signal."""
+    token_defs = {
+        'Baralta':               {'patterns': ['Baralta'], 'scale': 'npc',
+                                  'source': 'derived:canonical_sources'},
+        'Duchess Inge Baralta':  {'patterns': ['Duchess Inge Baralta'], 'scale': 'npc',
+                                  'source': 'derived:proper_noun'},
+        'King Almud Almqvist':   {'patterns': ['Almud'], 'scale': 'npc', 'source': 'seed'},
+        'Prince Torben Almqvist': {'patterns': ['Torben'], 'scale': 'npc', 'source': 'seed'},
+        'Almqvist':              {'patterns': ['Almqvist'], 'scale': 'npc', 'source': 'seed'},
+        'Combat':                {'patterns': ['Combat'], 'scale': 'mechanic', 'source': 'seed'},
+        'Mass Combat':           {'patterns': ['Mass Combat'], 'scale': 'mechanic', 'source': 'seed'},
+    }
+    res = va.consolidate_tokens(token_defs, {})   # empty coref: purely signal-2 driven
+    assert sorted(res) == ['Almqvist', 'Combat', 'Duchess Inge Baralta', 'King Almud Almqvist',
+                           'Mass Combat', 'Prince Torben Almqvist']
+    # the unique-container merge: 'Baralta' folds into the longer registry-canonical form
+    merged = res['Duchess Inge Baralta']
+    assert merged['patterns'] == ['Baralta']                          # HEAD pattern = the shared surname
+    assert sorted(merged['aliases_merged']) == ['Baralta', 'Duchess Inge Baralta']
+    assert merged['source'] == 'derived:proper_noun'                  # winner = lowest _source_rank member
+    assert 'Baralta' not in res                                       # absorbed into the merged label
+    # the shared-dynasty-surname guard: 'Almqvist' merges with NOBODY (2 containers -> ambiguous)
+    assert res['Almqvist'] == token_defs['Almqvist']
+    assert 'aliases_merged' not in res['Almqvist']
+    assert res['King Almud Almqvist'] == token_defs['King Almud Almqvist']
+    assert res['Prince Torben Almqvist'] == token_defs['Prince Torben Almqvist']
+    # non-name-scale substring relation (Combat ⊂ Mass Combat) never triggers signal 2
+    assert res['Combat'] == token_defs['Combat']
+    assert res['Mass Combat'] == token_defs['Mass Combat']
+
+
+def test_consolidate_tokens_registry_alias_signal_merges_across_scale():
+    """Signal 1 (registry-alias coreference) is authoritative for ANY scale — unlike signal 2, it is
+    not restricted to name-like scales. Two 'mechanic'-scale surface forms merge here purely because
+    `coref` declares them the same entity, which signal 2 alone would never do for this scale."""
+    token_defs = {
+        'Piety':       {'patterns': ['Piety'], 'scale': 'mechanic', 'source': 'seed'},
+        'Piety Track': {'patterns': ['Piety Track'], 'scale': 'mechanic', 'source': 'derived:names_index'},
+    }
+    coref = {'piety': 'Piety Track', 'piety track': 'Piety Track'}
+    res = va.consolidate_tokens(token_defs, coref)
+    assert list(res) == ['Piety Track']                 # merged; labelled by the registry canonical
+    assert 'Piety' not in res
+    merged = res['Piety Track']
+    assert sorted(merged['aliases_merged']) == ['Piety', 'Piety Track']
+    assert merged['source'] == 'seed'                   # 'Piety' wins on _source_rank (1 < 2)
+    # HEAD pattern resolved to the shared word-boundary substring ('Piety' is a whole word inside
+    # 'Piety Track'), so the merged pattern matches the short form and the full phrase alike.
+    assert any(re.fullmatch(p, 'Piety') for p in merged['patterns'])
+    assert any(re.search(p, 'the Piety Track advances') for p in merged['patterns'])
+
+
+def test_curate_tokens_paragraph_count_primary_doc_and_context_gate():
+    """curate_tokens counts, per token, how many corpus PARAGRAPHS (>50 chars, per to_paragraphs)
+    match its patterns AND pass its disambiguation context; primary_doc is the doc with the most
+    hits. A context requirement that is never satisfied must zero the token out entirely."""
+    para1 = ('Combat resolution uses a dice pool mechanic that determines success degree for a '
+             'check.')
+    para2 = ('Combat also interacts with the Momentum economy across every scene transition in '
+             'play.')
+    para_faith = ('Faith is one of the seven personal Conviction axes tracked for narrative '
+                  'purposes here.')
+    para3 = ('A single mention of Combat appears in this short reference paragraph for the b doc '
+             'test.')
+    design = {'a.md': para1 + '\n\n' + para2 + '\n\n' + para_faith, 'b.md': para3}
+    token_defs = {
+        'Combat': {'patterns': [r'\bCombat\b'], 'context': [],
+                  'scale': 'personal', 'status': 'canonical', 'source': 'seed'},
+        'Faith':  {'patterns': [r'\bFaith\b'], 'context': [r'\bChurch\b'],
+                  'scale': 'conviction', 'status': 'canonical', 'source': 'seed'},
+    }
+    tokens, _ = va.curate_tokens(design, token_defs)
+    assert tokens['Combat']['paragraph_count'] == 3     # 2 hits in a.md + 1 in b.md
+    assert tokens['Combat']['primary_doc'] == 'a.md'    # a.md has more hits (2) than b.md (1)
+    assert tokens['Faith']['paragraph_count'] == 0      # the one 'Faith' mention has no 'Church' nearby
+    assert tokens['Faith']['primary_doc'] is None
+
+
+def test_build_g_cite_threshold_context_gate_and_self_exclusion():
+    """build_g_cite: a token is a citation SOURCE only via its primary_doc; an edge forms only when
+    the target's mention count in that doc is >= thresh (default 2, boundary-tested at exactly 2 and
+    3); a target with an unsatisfied disambiguation context is excluded even above threshold; a token
+    is never wired to itself; and a token with no primary_doc can never be a source."""
+    tokens = {
+        'A': {'primary_doc': 'doc1.md', '_ctx': [], '_compiled': [re.compile(r'\bA\b')]},
+        'B': {'primary_doc': None, '_ctx': [], '_compiled': [re.compile(r'\bB\b')]},
+        'C': {'primary_doc': None, '_ctx': [], '_compiled': [re.compile(r'\bC\b')]},
+        'D': {'primary_doc': None, '_ctx': [re.compile(r'\bXyz\b')], '_compiled': [re.compile(r'\bD\b')]},
+        'E': {'primary_doc': None, '_ctx': [], '_compiled': [re.compile(r'\bE\b')]},
+    }
+    design = {'doc1.md': ('B B B mentioned. C mentioned once. A is here too. D D D D D also '
+                          'appears. E E occurs exactly twice.')}
+    g = va.build_g_cite(tokens, design)
+    assert g == {'A': {'B': 3, 'E': 2}}    # B: 3>=2 kept; C: 1<2 dropped; D: context-gated out despite
+                                            # 5 mentions; E: exactly-2 boundary kept; A excluded from its
+                                            # own edges (self-exclusion); B/C/D/E never become sources
+    g3 = va.build_g_cite(tokens, design, thresh=3)
+    assert g3 == {'A': {'B': 3}}           # raising thresh to 3 drops E's exactly-2 count
+
+
+def test_throughline_orphans_known_answer():
+    """Mode F: a throughline is an 'orphan' when <=2 corpus paragraphs jointly mention >=2 of its
+    listed systems. An all-placeholder ('—'/'-') row is skipped outright (nothing to substantiate by
+    design); a single-system row can structurally never reach the >=2-systems-in-one-paragraph bar,
+    so it is always an orphan at substantiating=0; a row whose systems co-occur in >2 paragraphs is
+    well-substantiated and must NOT appear."""
+    para1 = ('Combat and Threadwork share the resolution pipeline in this first substantiating '
+             'paragraph okay yes.')
+    para2 = ('Combat interacts with Threadwork again through Momentum flow in this second '
+             'substantiating para here.')
+    para3 = ('This third paragraph also connects Combat mechanics with Threadwork resolution steps '
+             'in detail now.')
+    para4 = ('Combat teams up with Fieldwork investigation only once in this single substantiating '
+             'paragraph today.')
+    para5 = ('This paragraph only mentions Combat by itself without the other system referenced '
+             'anywhere at all today.')
+    design = {'doc.md': '\n\n'.join([para1, para2, para3, para4, para5])}
+    rows = [
+        ('T-CT', '', '', ['Combat', 'Threadwork']),      # co-occurs in 3 paragraphs -> NOT an orphan
+        ('T-CF', '', '', ['Combat', 'Fieldwork']),        # co-occurs in 1 paragraph  -> orphan, subst=1
+        ('T-PLACEHOLDER', '', '', ['—', '-']),             # all placeholders -> skipped entirely
+        ('T-SINGLE', '', '', ['Combat']),                  # 1 system -> structurally always subst=0
+    ]
+    out = va.throughline_orphans(rows, design)
+    assert out == [
+        {'throughline': 'T-CF', 'systems': ['Combat', 'Fieldwork'], 'substantiating': 1},
+        {'throughline': 'T-SINGLE', 'systems': ['Combat'], 'substantiating': 0},
+    ]
+
+
+def test_vocabulary_debt_known_answer():
+    design = {
+        'a.md': 'Game Master appears twice: Game Master.',
+        'b.md': 'no mention here',
+        'c.md': 'Coup Counter once.',
+        'd.md': 'Coup Counter shows up here too.',
+        'e.md': 'Coup Counter shows up a third time here.',
+        'f.md': 'Coup Counter and Coup Counter and Coup Counter show up here four times overall.',
+    }
+    out = va.vocabulary_debt(design, ['Game Master', 'Coup Counter', 'Cultural Reformation'])
+    assert [r['term'] for r in out] == ['Coup Counter', 'Game Master']   # sorted by -total (6 > 2)
+    coup = out[0]
+    assert coup['total'] == 6 and coup['docs'] == 4          # 1+1+1+3 across 4 docs
+    assert coup['concentration'] == [('f.md', 3), ('c.md', 1), ('d.md', 1)]   # top-3 by count, ties
+                                                                              # keep first-seen order
+    gm = out[1]
+    assert gm == {'term': 'Game Master', 'total': 2, 'docs': 1, 'concentration': [('a.md', 2)]}
+    assert 'Cultural Reformation' not in {r['term'] for r in out}   # zero occurrences: not surfaced
+
+
+def test_validate_p1_foundation_periphery_known_answer():
+    """P1: PASS iff the foundation tokens' MEAN cite-degree (and MEAN tl-degree) exceeds the
+    MEDIAN over ALL tokens. Hand-computed both directions of the inequality."""
+    tokens = {n: {} for n in ['Self-Rendering', 'Leap', 'A', 'B', 'C']}
+    deg_cite_pass = {'Self-Rendering': 10, 'Leap': 8, 'A': 1, 'B': 2, 'C': 1}
+    deg_tl_pass = {'Self-Rendering': 5, 'Leap': 5, 'A': 0, 'B': 1, 'C': 0}
+    v = va.validate(tokens, deg_cite_pass, deg_tl_pass, {})
+    # foundation mean cite = (10+8)/2=9.0 > overall median of [10,8,1,2,1]=2 ; tl mean=5.0 > median 1
+    assert v['p1'] == {'pass': True, 'foundation_cite_mean': 9.0, 'overall_cite_median': 2,
+                       'foundation_tl_mean': 5.0, 'overall_tl_median': 1}
+
+    deg_cite_fail = {'Self-Rendering': 1, 'Leap': 1, 'A': 5, 'B': 5, 'C': 5}
+    deg_tl_fail = {'Self-Rendering': 1, 'Leap': 1, 'A': 5, 'B': 5, 'C': 5}
+    v2 = va.validate(tokens, deg_cite_fail, deg_tl_fail, {})
+    # foundation mean=1.0, overall median=5 -> 1.0 > 5 is False
+    assert v2['p1'] == {'pass': False, 'foundation_cite_mean': 1.0, 'overall_cite_median': 5,
+                        'foundation_tl_mean': 1.0, 'overall_tl_median': 5}
+
+
+def test_validate_p3_citation_density_known_answer():
+    """P3: PASS iff mean cite-degree (directed edge count / token count) >= 6.0. Boundary-tested at
+    exactly 30/5=6.0 (pass, the floor is inclusive) and 29/5=5.8 (fail)."""
+    tokens5 = {n: {} for n in ['t1', 't2', 't3', 't4', 't5']}
+    g_pass = {'t1': {f'x{i}': 1 for i in range(30)}}
+    v = va.validate(tokens5, {}, {}, g_pass)
+    assert v['p3'] == {'pass': True, 'n_cite_edges': 30, 'n_tokens': 5,
+                       'mean_cite_degree': 6.0, 'floor': 6.0}
+    g_fail = {'t1': {f'x{i}': 1 for i in range(29)}}
+    v2 = va.validate(tokens5, {}, {}, g_fail)
+    assert v2['p3'] == {'pass': False, 'n_cite_edges': 29, 'n_tokens': 5,
+                        'mean_cite_degree': 5.8, 'floor': 6.0}
+
+
+def test_diagnostics_mode_a_hubs_and_mode_e_sparse_known_answer():
+    """Mode A (multi-graph hubs): top-quintile in >=3 of the structural graphs. Mode E (sparse
+    context): bottom-decile in BOTH paragraph_count and cite-degree. Built from a 5-token graph
+    where exactly one token ('Hub') qualifies for A and exactly two ('P4','P5') qualify for E,
+    independently hand-verified against _top_quintile / _percentile_10_cut's own known answers."""
+    names = ['Hub', 'P2', 'P3', 'P4', 'P5']
+    graphs = {'cite': {'Hub': {'P2': 3, 'P3': 3, 'P4': 3, 'P5': 3}},   # Hub cite-deg 4, others 1
+             'throughline': {'Hub': {'P2': 1, 'P3': 1}},              # Hub tl-deg 2, P2/P3 1, P4/P5 0
+             'mu': {'Hub': {'P2': 1}},                                # Hub/P2 tie at mu-deg 1
+             'pp': {}}                                                # all pp-deg 0
+    degs = {k: va._degrees(graphs[k], names) for k in graphs}
+    tokens = {
+        'Hub': {'paragraph_count': 50, 'status': 'canonical'},
+        'P2': {'paragraph_count': 1, 'status': 'canonical'},
+        'P3': {'paragraph_count': 1, 'status': 'canonical'},
+        'P4': {'paragraph_count': 0, 'status': 'canonical'},
+        'P5': {'paragraph_count': 0, 'status': 'canonical'},
+    }
+    diag = va.diagnostics(tokens, graphs, degs)
+    # A: Hub is top-quintile in cite (4 vs 1s), throughline (2 vs 1/0), and mu (tied at 1 with P2,
+    # but pp is all-zero so pp's tq is empty) -> in_graphs=3, qualifies; nobody else reaches 3.
+    assert diag['A_multigraph_hubs'] == [
+        {'token': 'Hub', 'in_graphs': 3, 'cite': 4, 'throughline': 2, 'mu': 1, 'pp': 0}]
+    # E: pcut=_percentile_10_cut([50,1,1,0,0])=0, dcut=_percentile_10_cut([4,1,1,1,1])=1.
+    # P4/P5 have paragraphs=0<=0 and cite_deg=1<=1 -> both flagged; Hub/P2/P3 fail one of the two.
+    assert diag['E_sparse_context'] == [
+        {'token': 'P4', 'paragraphs': 0, 'cite_deg': 1, 'status': 'canonical'},
+        {'token': 'P5', 'paragraphs': 0, 'cite_deg': 1, 'status': 'canonical'},
+    ]
+
+
+def test_keytype_token_known_answer():
+    """_keytype_token maps a contract Key-TYPE string to the 'Key: <type>' token that names it, by
+    full-matching the token's own patterns — restricted to names starting with 'Key:' so a same-text
+    non-Key token can never steal the mapping, and an invalid regex pattern is skipped, not fatal."""
+    tokens = {
+        'Key: mechanical.scene_exited': {
+            'patterns': [re.escape('mechanical.scene_exited'), r'\bScene Exited\b']},
+        'NotAKey': {'patterns': ['mechanical.scene_exited']},   # same text, wrong name prefix
+    }
+    assert va._keytype_token('mechanical.scene_exited', tokens) == 'Key: mechanical.scene_exited'
+    assert va._keytype_token('unknown.type', tokens) is None
+    # an invalid regex in an earlier pattern is caught and skipped, not raised
+    tokens2 = {'Key: bad.type': {'patterns': ['(unbalanced', re.escape('bad.type')]}}
+    assert va._keytype_token('bad.type', tokens2) == 'Key: bad.type'

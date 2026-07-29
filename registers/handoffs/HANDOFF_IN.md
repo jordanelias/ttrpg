@@ -33,8 +33,14 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   (`audit/2026-07-26-combat-balance-customization-state/combat_execution_plan.md`, PR #249);
   this program touches no MB- or PC-owned *code* file; seams `faction_action.py:349` and
   `combat_engine_v1/wrapper.py` public API, both byte-untouched here. Routed items not already
-  in those plans were **appended to them** in the same PR (MB plan §12, PC plan §15). Next
-  action: Jordan reviews/merges the PR; W0/W1 can start immediately after merge.
+  in those plans were **appended to them** in the same PR (MB plan §12, PC plan §15).
+  **W0 preflight status (2026-07-29):** W0a merged as PR #256 (7-lane ED pre-allocation across
+  the three concurrent sessions; `references/id_reservations.yaml` frozen for the run — IN
+  0092-0111, MB 0046-0060, PC 0041-0055, plus WR/FA/SE/SC mini-blocks). W0b landed (this PR, ED-IN-0092): the §5 Jordan
+  docket authored and HELD FOR JORDAN at `05_jordan_docket_v1.md`; OI-55 (orphan-detector
+  integrity) re-scoped and fixed against the live tree; `04_execution_ledger.md` created as the
+  program's one status surface (00-03 stay immutable snapshots). Next action: **Wave 1**
+  (stubwire primitive + dispatch closure + `test_pipeline_reach` oracle) after this PR merges.
 - **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
   landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
   the banner counts as settled.
