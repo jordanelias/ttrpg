@@ -17,9 +17,12 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 - **A1a EXECUTED (2026-07-29, MB session — this PR).** Both field goldens bisected and
   re-recorded after 5 days red. Per-mechanism delta (base `4b80ad5` = #232's all-four recording;
-  full matrix in the PR): **exactly two movers** — (1) PR #235 `fbc93b0`'s unconditional code
-  changes (impulse momentum + Tier-0/1/2 fixes) moved `unit_field` `d44f211f…→27aa9ee0…` and
-  `cell_field` `a1a97940…→3a5807fb…` at fixed `PC_STOCHASTIC_ROUT=0`; (2) PR #236 `584c683`'s
+  full matrix in the PR): **exactly two movers** — (1) PR #235 `fbc93b0`'s change set moved
+  `unit_field` `d44f211f…→27aa9ee0…` and `cell_field` `a1a97940…→3a5807fb…` at fixed
+  `PC_STOCHASTIC_ROUT=0` (⚠ commit-level attribution: NOT decomposed to one mechanism on the
+  field arm — `PC_WHEEL`'s node-path port is an unmeasured second candidate beside impulse
+  momentum; the grid inertness arguments are `PC_NODE_COHESION=0`-conditioned, per the Opus
+  critic pass); (2) PR #236 `584c683`'s
   `PC_STOCHASTIC_ROUT` default flip 0→1 moved them to the new goldens (`6f594233…`/`3a0952b3…`)
   as a **pure config effect** — #236's code alone is byte-identical at rout=0, verifying its
   set_morale-sweep claim on the field path. #233/#234 verified byte-exact on both field modes.
