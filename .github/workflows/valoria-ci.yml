@@ -514,9 +514,15 @@ jobs:
     # schedule, execution plan, remediation plan, roadmap — is reachable from workplans/, by direct
     # placement or a pointer file. A convention with no guard is the CLAUDE.md §0.1 point-5
     # anti-pattern: it propagates by imitation and rots silently. This program exists because of that
-    # exact failure at larger scale (references/registry/README.md was cited as authoritative from
-    # five places and had never existed), so shipping an unguarded pointer set inside the program's
-    # own deliverable was not defensible.
+    # exact failure at larger scale — references/registry/README.md does not exist and never has, yet
+    # was cited as authoritative from five places — so shipping an unguarded pointer set inside the
+    # program's own deliverable was not defensible.
+    #
+    # (That citation is a declared-absent FINDING, not a dependency: it carries an absence marker on
+    # its own line so ci_claude_workflow_paths.py's is_dependency() filter excludes it. The first
+    # draft of this comment split the path and the words "never existed" across two lines, so the
+    # filter never saw them together and this job's own comment failed that gate — the phantom-path
+    # guard catching the phantom-path program's CI job. Keep marker and path on one line.)
     #
     # Guards the DETERMINISTIC half: required fields, a lane from the 9-lane roster, no duplicate
     # targets, and every `target:` resolving on disk. It deliberately does NOT check "every live plan
