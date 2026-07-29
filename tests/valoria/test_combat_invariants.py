@@ -821,6 +821,7 @@ def test_facing_void_ablation_moves_close_rate_and_reach_sigma():
     assert live_rs != ablated_rs
 
 
+@pytest.mark.slow
 def test_reach_class_beats_arming_not_inverted():
     """Reach vs a uniform arming-sword baseline — the GROUNDED, armour-CONDITIONAL ladder.
     [ORIGINAL, I8] guarded that reach (spear/yari/guisarme/poleaxe) never INVERTS into a loss at any armour tier
@@ -1011,6 +1012,7 @@ def test_reach_class_beats_arming_not_inverted():
         f"should decide there")
 
 
+@pytest.mark.slow
 def test_plate_participation_tracks_armour_defeat_capability(n=40):
     """[ED-PC-0040] The roster-wide form of the plate-participation guard: across EVERY weapon in the roster,
     whether it can settle a fight against plate must track its ARMOUR-DEFEAT CAPABILITY, in both directions.
@@ -1130,6 +1132,7 @@ MUTATIONS = [
 ]
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("label,weapons", [(m[0], m[1]) for m in MUTATIONS])
 def test_plate_participation_guard_is_not_blind(label, weapons):
     """Every declared mutation MUST be caught by test_plate_participation_tracks_armour_defeat_capability, AND the

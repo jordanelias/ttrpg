@@ -66,6 +66,7 @@ def _row(rid):
                           "here as the negative control. XPASS is a prompt to re-measure at n=60, "
                           "not evidence of a fix.",
                    strict=False)
+@pytest.mark.slow
 @pytest.mark.parametrize('rid', ['H2', 'H3', 'H4'])
 def test_reverse_pair_symmetry(rid):
     """Swapping which army is 'side A' must invert the result, not change it."""

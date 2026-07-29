@@ -37,6 +37,7 @@ from mass_battle.equipment import loadout_for  # noqa: E402
 from mass_battle.engine import build_unit  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
 from mass_battle.config import FOV_HALF_DEG, VOLLEY_MAX_RANGE  # noqa: E402
+import pytest
 
 
 @pytest.fixture
@@ -104,6 +105,7 @@ def _charge_vs_brace(def_type, n=16):
     return tot / n
 
 
+@pytest.mark.slow
 def test_pike_reach_advantage_vs_cavalry(field_path):
     """The reach advantage EMERGES: a pike wall (reach 0.3 >= cavalry lance 0.2) repels the charge and
     retains materially more troops than a levy line (reach 0.1 < 0.2, charge lands). Spear/heavy_infantry

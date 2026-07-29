@@ -88,6 +88,7 @@ _DEFEATS_PLATE = {'dagger', 'poleaxe', 'longsword', 'mace'}
 _STALEMATE_CLASS = {'spear', 'arming'}
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("weapon", ['dagger', 'spear', 'poleaxe', 'longsword', 'mace', 'arming'])
 def test_heavy_mirror_fair_and_decisive(weapon):
     """HEAVY-armour mirror — role-symmetry ALWAYS; decisiveness CONDITIONED on armour-defeat capability.

@@ -11,6 +11,7 @@ reuse of the real `names` reader.
 """
 import importlib.util
 import os
+import pytest
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'vector_audit.py')
@@ -354,6 +355,7 @@ def test_discover_unregistered_candidates_surfaces_missing_registrations():
     assert cands == sorted(cands, key=lambda r: (-r['docs'], -r['total'], r['term']))
 
 
+@pytest.mark.slow
 def test_throughline_graph_extended_by_second_registry_source():
     """Directions-audit #3: the throughline graph draws from TWO registries now — the meta table
     (parse_throughlines) + throughlines_complete.md's `### T-NN:` block `Systems:` lines
@@ -392,6 +394,7 @@ def test_throughline_graph_extended_by_second_registry_source():
     assert edges(va.build_g_throughline(meta, tokens, extra_rows=None)) == e_base
 
 
+@pytest.mark.slow
 def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates():
     """Direction #5 (answers 'why not key propagation too'): build_g_key reads module_contracts.yaml's
     emit→consume flow — the engine's actual IN→resolver→OUT wiring — as a 5th structural graph. It
@@ -432,6 +435,7 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 1  # emitted-once, not un-emitted
 
 
+@pytest.mark.slow
 def test_key_graph_matches_an_independent_rederivation_from_contracts():
     """§8 DRIFT GUARD (fix #7, rewritten after an adversarial pass). The first cut only subset-checked
     the 40 system↔system edges against build_graph's graph.json — it EXCLUDED the 128 keytype↔system
@@ -528,6 +532,7 @@ def test_every_emitted_ledger_category_has_an_explicit_severity():
     assert not unmapped, f"categories emitted but missing from SEVERITY (silently default med): {sorted(unmapped)}"
 
 
+@pytest.mark.slow
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     """SURFACE-NEVER-CULL (SKILL.md doctrine): the structural-findings feed must EMIT every Mode-B
     and Mode-H finding — lower-confidence ones (hub×hub pairs, Key-token isolates) are RETAINED with
