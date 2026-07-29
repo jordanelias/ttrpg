@@ -53,6 +53,20 @@ namespace and are folded into Next actions below, which carries the full narrati
   (dead code path in these harnesses; verified `engine.py:414-419` + both harness call sites).
   ⚠ The frozen `id_reservations.yaml` MB comment still carries the armour claim verbatim — correct
   at the next unfreeze (logged in the ledger correction).
+- **A4-SWEEP EXECUTED (2026-07-29, MB session — this PR).** The test-commensurability repairs
+  (Jordan's vet-all-tests directive + plan A4): A4a counted (floor 6 of measured 9, reorder-robust);
+  A4b's fixture genuinely on the own-morale path via `build_army` (was two copies of the inheriting
+  branch); S6 pattern fixed with ONE owner — `tests/valoria/_conservation.py` — routing all four I1
+  sites, the routed/broken skip REMOVED (structurally safe: `run_battle` breaks on rout,
+  `orchestration.py:1695`; critic-verified) with a PER_CELL precondition in the owner (the one real
+  false-red path); S12 counters added (measured floors); S7's inverted docstrings corrected
+  (stochastic rout is the ONLY shipped break-point, not a retirement candidate). Producer's G1
+  correction banked: the rout-skip was one tuning change from vacuous, NOT currently vacuous
+  (Line-vs-Line routs 0/120 at shipped defaults). **NEW: ED-MB-0046 filed** — `between_turn_recovery`
+  flattens per-cell morale on the own-morale path (`orchestration.py:2098-2103`; inert at shipped
+  defaults, a LIVE CONFOUND for D1 arm 1; fix gated behind §4a's fifth digest). Minor unledgered
+  residues in the PR body: hp-clamp/spill edge (recorded in `_conservation.py`), octagon reaction
+  test floor candidate.
 - **▶ START HERE — THE MASS BATTLE PLAN, v2 (2026-07-26):**
   **v2 exists because v1 was substantially wrong.** Four Fable-5 critics attacked it and instrumented
   measurement refuted its headline: **three of five severity-1 findings are code-true but

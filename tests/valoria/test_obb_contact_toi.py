@@ -19,7 +19,7 @@ This file is the R1 probe the plan (spatial_model_v2_plan.md §1 R1, Stage C) de
   (c) a closing head-on pair AND a cavalry charge both REACH contact (no permanent stall) and the
       battle resolves (casualties exchanged);
   (d) the FIELD_MOVEMENT=0 grid path never touches the OBB code (guarded by poisoning the primitive);
-  (e) troop conservation (I1: Sum cell_troops == hp per live unit) holds across a short battle.
+  (e) troop conservation (I1: Sum cell_troops == hp per unit) holds across a short battle.
 
 Deterministic + seeded. Process-global movement toggles are saved/restored in finally (the same
 discipline test_mass_battle_maneuvers.py documents) so node/grid state never leaks between tests.
@@ -39,6 +39,8 @@ import mass_battle.geometry as _geo  # noqa: E402
 from mass_battle.geometry import cellbox_from, obb_overlap  # noqa: E402
 from mass_battle.engine import build_unit  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
+
+from ._conservation import assert_troop_conservation  # noqa: E402
 
 
 # ─── helpers ─────────────────────────────────────────────────────────────────
@@ -114,10 +116,6 @@ class _CommitProbe:
     def __exit__(self, *exc):
         _orch.resolve_toi_and_commit = self._real
         return False
-
-
-def _unit_troops(unit):
-    return sum(sum(su.cell_troops.values()) for su in unit.subunits)
 
 
 # ─── (a) head-on contact fires at OBB touch ─────────────────────────────────
@@ -207,18 +205,20 @@ def test_grid_path_never_calls_obb(grid_path, monkeypatch):
 # ─── (e) conservation (I1) over a short field battle ────────────────────────
 
 def test_conservation_over_short_battle(field_path):
-    """I1: Sum cell_troops == hp for every non-routed/broken unit, at battle end (the geometry swap
-    touches no troop bookkeeping, so this must hold with only float slop)."""
+    """I1: Sum cell_troops == hp for BOTH units at battle end (the geometry swap touches no troop
+    bookkeeping, so this must hold with only float slop).
+
+    [ED-MB-0045 S6] Routed through the single owner `_conservation.assert_troop_conservation`; the
+    old open-coded loop skipped routed/broken units without counting the skip, so it could assert
+    nothing and still pass.
+    """
     import random
     random.seed(2026)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
     _orch.run_battle(a, b, max_turns=18)
-    for unit in (a, b):
-        if unit.routed or unit.broken:
-            continue
-        assert math.isclose(_unit_troops(unit), unit.hp, rel_tol=1e-6, abs_tol=1e-3), \
-            f"{unit.name}: Sum cell_troops={_unit_troops(unit)} != hp={unit.hp}"
+    checked = assert_troop_conservation(a, b, context='obb seed=2026')
+    assert checked >= 2, f"conservation checked {checked} units, expected both"
 
 
 # ─── determinism (I2) ────────────────────────────────────────────────────────
