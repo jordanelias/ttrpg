@@ -868,10 +868,16 @@ def test_reach_corrected_anchors_stay_above_l0():
 
 def test_jd9_grip_target_converges_no_oscillation():
     """JD-9 (capstone finding M1): grip_target's drive term is fixed to grip=0.0, so it no longer depends on its
-    own prior output — verified NON-OSCILLATING (in fact single-step) and matching the plan's own converged g*
-    table exactly for every gathering pole."""
+    own prior output — verified NON-OSCILLATING (in fact single-step).
+
+    [ED-PC-0053, 2026-07-29] The g* TABLE was re-baselined when close_unwieldiness stopped being a fiat gate
+    (`max(0, reach_base - CLOSE_REACH_REF)`, whose threshold implied 1.18 m of forward extent) and became the derived
+    overhang past the body's close measure. grip_target's drive reads close_unwieldiness, so every gathering pole's
+    converged g* rises. **The PROPERTY this test exists for — g1 == g2, single-step convergence, no oscillation — is
+    unchanged and still asserted below; only the absolute table moved.** Prior values: spear 0.865, yari 1.0,
+    glaive 0.467, guisarme 0.396, bardiche 0.627."""
     C, core, S, WP, CFG = _mods()
-    targets = {'spear': 0.865, 'yari': 1.0, 'glaive': 0.467, 'guisarme': 0.396, 'bardiche': 0.627}
+    targets = {'spear': 0.896, 'yari': 1.0, 'glaive': 0.708, 'guisarme': 0.6747, 'bardiche': 0.8152}
     for n, target in targets.items():
         c = C.Combatant('x', weapon=n)
         g1 = S.grip_target(c, True, CFG)

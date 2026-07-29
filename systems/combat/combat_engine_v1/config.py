@@ -171,7 +171,16 @@ CFG = dict(
   # class ED-PC-0035 and ED-PC-0037 each cleaned. weapon_physics.GRIP_SHORT=0.30 m superseded it in practice (its
   # own comment says 'calibrated to the old CHOKE_GRIP_MIN'). Now guarded, not just fixed:
   # tests/valoria/test_combat_invariants.py::test_no_dead_exported_engine_params fails on any future recurrence.
-  CLOSE_REACH_REF=6.5, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
+  # CLOSE_ENGAGE_M [ED-PC-0053]: the BODY-scale distance, in honest metres, at which a fight is CLOSED — chest-to-
+  # chest out to about a forearm. Replaces CLOSE_REACH_REF=6.5, which was a FIAT GATE: it sat on reach_base's scale
+  # (which INCLUDES L0=4.0, the fighter's own arm), so its implied threshold was 1.18 m of weapon forward extent
+  # before a weapon was unwieldy in the close AT ALL — roughly 3x any physical reading of "the close", and a CLIFF
+  # (exactly 0 below, linear above). Every one-handed sword in the roster therefore paid 0.0000, which is why reach
+  # had four benefit channels and no cost. This constant is a property of BODIES, not weapons, which is the whole
+  # difference between a derivation and a gate. [SIM-CALIBRATE on the value; the SHAPE is grounded.]
+  # CLOSE_REACH_REF RETIRED here 2026-07-29 (ED-PC-0053) — its only reader was close_unwieldiness's gate, now derived.
+  # Left in place it would be a dead exported key, which is exactly the ED-PC-0042/E0 defect class.
+  CLOSE_ENGAGE_M=0.45, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
   # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
   RECOVERY_TEMPO_K=0.15,

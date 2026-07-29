@@ -58,11 +58,21 @@ def reach_base(c, cfg, grip=None):
     combatant's LIVE `c.grip_position`; an explicit override is used ONLY by grip_target's own drive input
     (JD-9 — see close_unwieldiness/grip_target) to break the grip<->reach feedback loop D3 would otherwise close.
     At grip=0 this is byte-identical to the pre-I3 return for every weapon (geom_slide(w,0)==0 always)."""
-    w=c.w
+    return cfg['L0'] + cfg['REACH_GEOM_SCALE']*forward_extent(c, cfg, grip) + c.w.get('reach_adj',0.0)
+
+
+def forward_extent(c, cfg, grip=None):
+    """SINGLE OWNER of the weapon's forward extent in METRES — how far its business end sits ahead of the working
+    hand: the blade/shaft forward of the lead hand, MINUS the floored geometric slide at the current grip (gathering
+    in shortens it), PLUS a 2H rear-hand setback. Carries the whole "shaft length + hand position on shaft" fact.
+    Extracted 2026-07-29 (ED-PC-0053) because `close_unwieldiness` now needs the same quantity, and the engine's own
+    invariant is that a rule lives ONCE (CLAUDE.md §8). reach_base scales it into reach-points and adds the body
+    offset L0; close_unwieldiness compares it against the body's close measure. They cannot disagree about how far
+    forward a weapon reaches, because there is only one derivation. Pure."""
+    w = c.w
     g = getattr(c, 'grip_position', 0.0) if grip is None else grip
     geom_slide = WP.at_circumstance(w, g, 1.0)['geom_slide']
-    geom = (w['head_len'] - geom_slide) + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
-    return cfg['L0'] + cfg['REACH_GEOM_SCALE']*geom + w.get('reach_adj',0.0)
+    return (w['head_len'] - geom_slide) + cfg['REACH_2H_K']*w['grip_len']*(w['hands']==2)
 
 # ---------- wielding heft (DERIVED, g-aware — the COST of swinging; replaces the binary wt class) ----------
 def wield_heft(c, cfg):
@@ -237,11 +247,35 @@ def recoverability_factor(c, cfg):
     lunge_mult = 1 + cfg['EXPOSE_LUNGE_K'] * ld * (w.get('mass', 1.0) / cfg['LUNGE_REF_MASS']) ** cfg['MOMENT_MASS_EXP']
     return max(cfg['RECOVER_FLOOR'], C_mode * ctrl_credit * lunge_mult)
 def close_unwieldiness(c, cfg, grip=None):
-    """How poorly a weapon serves IN THE CLOSE — DERIVED from its reach (a long weapon's business end is past the
-    fight at grappling distance and slow to bring back to bear). 0 for a short/handy weapon. No closes_poorly flag:
-    pure morphology (reach = length + head + hands). `grip` forwards to reach_base (I3, D3, JD-9) — None (default)
-    reads the combatant's LIVE grip_position; grip_target passes an explicit 0.0 for its OWN drive input (below)."""
-    return max(0.0, reach_base(c,cfg,grip=grip) - cfg['CLOSE_REACH_REF'])
+    """How poorly a weapon serves IN THE CLOSE: the OVERHANG, in metres, of its business end past the distance at
+    which a fight is closed. 0 for a weapon shorter than that measure (a dagger is at home in the close).
+    [ED-PC-0053, 2026-07-29 — Jordan: "you can't do a full thrust or swing one foot away holding a rapier"]
+    THIS WAS A FIAT GATE UNTIL 2026-07-29, despite this docstring already claiming "pure morphology". It read
+    `max(0, reach_base(c) - CLOSE_REACH_REF)` with CLOSE_REACH_REF=6.5 — but reach_base is
+    `L0 + REACH_GEOM_SCALE*forward_extent + reach_adj` and **L0=4.0 is the fighter's own arm**, so the threshold
+    implied `(6.5-4.0)/2.1167 = 1.18 m of weapon forward extent` before a weapon was unwieldy in the close AT ALL.
+    A close/grapple happens around 0.45 m, so the gate was ~3x too permissive and, being a threshold, produced a
+    CLIFF: **every one-handed sword in the roster paid exactly 0.0000** (dagger 0.21 m, arming 0.72, rapier 0.96,
+    longsword 0.94 — all free; only estoc/spear/guandao crossed it). Since reach has FOUR benefit channels
+    (measure, approach stop-hit, true-time edge, arrest impulse) and this was its only cost, **length was a free
+    attribute for anything sword-length** — measured as the shared root cause of the rapier's civilian dominance
+    (79% vs a 47% field; -25 pp of it ablates to reach) and the tracked off-plate spear dominance.
+    NOW DERIVED, continuous from zero, in honest metres: `max(0, forward_extent(grip) - CLOSE_ENGAGE_M)`.
+    `CLOSE_ENGAGE_M` is a property of BODIES, not of weapons — that is the whole difference between a derivation and
+    a gate. `forward_extent` is the single owner shared with reach_base, and is grip-aware, so gathering in genuinely
+    reduces the cost ("hand position on shaft").
+    ⚠ MASS / POINT-OF-BALANCE / HEAD-WEIGHT ARE DELIBERATELY ABSENT, though they are equally real inputs to "how
+    unwieldy is this": they are ALREADY charged, with a compressed power law, by `wield_heft`
+    ((I_g/REC_I_REF)**WIELD_HEFT_EXP, "the tempo/stamina/strength COST of bringing a weapon to bear"), and the same
+    grip-adjusted I_g is read again by `agility`, `recoverability_factor` and `_recovery_mode_commitment`. A factor
+    here would be the FIFTH charge on one fact (§2.3's double-count rule), and it was measured unusable raw anyway:
+    I_g spans ~1000x across the roster, so a linear inertia multiplier reads guandao 48.9 against its 2.10.
+    MAGNITUDE: the metre-valued form lands the polearms near their old reach-unit values (spear 1.344 vs 1.297,
+    guandao 1.725 vs 2.104), so POLE_CLOSE_K and CHOKE_DRIVE_REF need no re-anchoring — which is what keeps the
+    guisarme@heavy floor (the failure that reverted the prior attempt at this) out of danger. The real change is that
+    swords move 0 -> 0.27..0.51. `grip` forwards to forward_extent (I3, D3, JD-9); grip_target passes an explicit
+    0.0 for its OWN drive input. Pure."""
+    return max(0.0, forward_extent(c, cfg, grip) - cfg['CLOSE_ENGAGE_M'])
 def can_choke(c, cfg):
     """Can the fighter gather in (regrip toward the centre)? DERIVED from the grippable length — a long shaft/grip
     yes, a short hilt or a block-headed club no. Thin bool over WP.grip_choke_max (the continuous primitive)."""
@@ -450,8 +484,13 @@ MODE_PERC_MIN = 0.5       # [DESIGN, U2/ED-PC-0009, 2026-07-08] per-primitive pe
 # quarters; a point-selected thrust barely degrades (half-swording is the norm in the close). [SIM-CALIBRATE
 # throughout — the brief flags the absence of a treatise passage for cut-arc truncation; ships small and
 # ablation-gated, not load-bearing, per D4].
-CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over (shares
-                          #   CLOSE_REACH_REF's magnitude — the same "how close is close" reference).
+CLOSE_EFF_GAP_REF = 6.5   # [SIM-CALIBRATE] the measure_gap scale the close-quarters ramp saturates over. NOTE this
+                          #   used to be justified as "shares CLOSE_REACH_REF's magnitude — the same 'how close is
+                          #   close' reference". That justification is RETIRED with CLOSE_REACH_REF itself
+                          #   (ED-PC-0053): the shared value was a coincidence of two different scales, not a shared
+                          #   fact — this one is a measure_gap scale, that one was a reach_base threshold including
+                          #   the body offset L0. This constant is now unanchored and stands on its own calibration;
+                          #   it is a candidate for the same fiat-to-derived treatment.
 CLOSE_EFF_FLOOR = 0.5     # [SIM-CALIBRATE] cap on f(measure_gap, range_avail): even the tightest quarters/least
                           #   room never fully collapses a broad element's affordance.
 

@@ -18,9 +18,17 @@ def test_closing_pole_gathers_in():
     # A BUTT-gripped reach pole (spear: head_len >> grip_len) is unwieldy in the close, so it GATHERS IN —
     # grip_target rises above 0 (it regrips up the haft toward balance). Phase-3 Stage-2: CONTINUOUS grip-position.
     assert S.grip_target(Combatant('x', weapon='spear'), True, CFG) > 0.0
-    # A CENTRE-gripped pole (staff: head_len == grip_len) is ALREADY close-capable (derived reach < CLOSE_REACH_REF),
-    # so close_unwieldiness == 0 -> it does NOT need to gather (grip_target 0).
-    assert S.grip_target(Combatant('x', weapon='staff'), True, CFG) == 0.0
+    # [ED-PC-0053, 2026-07-29] THE STAFF ASSERTION IS RETIRED, and how it failed is the clearest single argument for
+    # the change that retired it. It read `== 0.0`, justified as "derived reach < CLOSE_REACH_REF, so
+    # close_unwieldiness == 0". But the staff's forward extent is 1.176 m and that fiat threshold sat at 1.18 m — so
+    # a **4 mm** margin was deciding whether a two-metre quarterstaff gathers its grip in a press AT ALL. With the
+    # gate replaced by the derived overhang past the body's close measure, the staff gathers (g* 0.484), which is
+    # also the physically right answer: 1.18 m of shaft forward of the hand is awkward at grappling measure however
+    # the staff is gripped. What the test now pins is the ORDERING that actually carries meaning — a butt-gripped
+    # spear is more compromised in the close than a centre-gripped staff.
+    staff = S.grip_target(Combatant('x', weapon='staff'), True, CFG)
+    spear = S.grip_target(Combatant('x', weapon='spear'), True, CFG)
+    assert 0.0 < staff < spear, (staff, spear)
 
 
 def test_open_or_non_pole_does_not_gather():
