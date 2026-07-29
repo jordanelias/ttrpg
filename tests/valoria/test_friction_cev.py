@@ -27,6 +27,7 @@ import mass_battle.hierarchy.units as _hu  # noqa: E402
 import mass_battle.orchestration as _orch  # noqa: E402
 from mass_battle.engine import build_unit, build_army  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
+import pytest
 
 
 @pytest.fixture
@@ -125,6 +126,7 @@ def test_lognormal_positive_zero_mean_log(friction):
 
 # ─── the core property: scale-invariant outcome variance ─────────────────────
 
+@pytest.mark.slow
 def test_variance_does_not_collapse_at_scale(friction):
     """THE fix, tested at scale. Without friction, a 2:1 matchup's win-rate collapses to ~certainty
     (~100%) as troop count grows — the 1/sqrt(N) attrition self-averaging that IS the DG-6 over-

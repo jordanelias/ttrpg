@@ -111,11 +111,13 @@ def _in_reference_env():
     return os.environ.get('GITHUB_ACTIONS') == 'true' and platform.system() == 'Linux'
 
 
+@pytest.mark.slow
 def test_byte_exact_unit_mode():
     r = _run_bat(per_cell=False)
     assert '[BYTE-EXACT OK]' in r.stdout, f"unit-mode digest drifted:\n{r.stdout}\n{r.stderr}"
 
 
+@pytest.mark.slow
 def test_byte_exact_cell_mode():
     r = _run_bat(per_cell=True)
     if '[BYTE-EXACT OK]' in r.stdout:

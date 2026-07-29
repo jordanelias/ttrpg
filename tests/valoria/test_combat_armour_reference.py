@@ -41,6 +41,7 @@ def _instrument():
     return armour_participation
 
 
+@pytest.mark.slow
 def test_armour_interaction_matches_the_committed_reference():
     AP = _instrument()
     if not os.path.exists(AP.REFERENCE_PATH):

@@ -9,6 +9,7 @@ the doc-resolver's distinct declared-vs-missing states.
 """
 import importlib.util
 import os
+import pytest
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'workbench.py')
@@ -59,6 +60,7 @@ def test_vignette_domain_actions_is_one_sided_notional():
     assert len(rows) >= 6
 
 
+@pytest.mark.slow
 def test_weave_all_corpus_map():
     """The --all corpus mode weaves every module and surfaces the STRUCTURAL reconciliation map:
     node state, doc status, and the built-but-unspecced set (the reliable, precise signal)."""
