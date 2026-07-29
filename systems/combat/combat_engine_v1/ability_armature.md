@@ -50,7 +50,7 @@ Live levers are wired at their engine sites *now*; pending levers are registered
 
 | Lever | Category | Op | Status |
 |---|---|---|---|
-| `seize` | initiative / seizing | `+` (bounded ~+8pp by tanh cap) | **live** |
+| `seize` | initiative / seizing | `+` (bounded ~+8pp by tanh cap) | **INERT — lever DEAD** (ED-PC-0042) |
 | `counter_success` | exchange / countering | `+` | **live** |
 | `counter_select` | exchange / countering | `*` | **live** |
 | `anti_overcommit` | exchange / tempo (discipline) | `+` | **live** |
@@ -105,7 +105,7 @@ Each tradition's documented techniques, sorted into the §2 categories, from whi
 ### German — Kunst des Fechtens / Liechtenauer  ·  **S1/S2** (Anglo 2000; Forgeng eds.; the glosses)
 | Category | Technique | Lever | Built? |
 |---|---|---|---|
-| Seizing | **Vorschlag** (the first strike that takes the Vor) | `seize` | ✅ `vorschlag` |
+| Seizing | **Vorschlag** (the first strike that takes the Vor) | `seize` | ⚠️ `vorschlag` registered but **INERT** — `seize` has no consumer |
 | Countering / reading | **Indes / Fühlen** (the simultaneous moment; feeling the bind) | `counter_success` (+`tactile`) | ✅ `indes` |
 | Binding / striking | **Stärke-Schwäche / Winden** (strong-weak of the blade; winding) | `leverage` | registered `staerke_schwaeche` (pending) |
 | Striking / countering | **Meisterhäue** (master-cuts: Zornhau, Krumphau, Zwerchhau, Schielhau, Scheitelhau — break guards / counter in one tempo) | `counter_success` or a strike lever | candidate |
@@ -130,7 +130,7 @@ Each tradition's documented techniques, sorted into the §2 categories, from whi
 ### Japanese — koryū (san-dai genryū)  ·  **S2** (budō-gaku / J-STAGE)
 | Category | Technique | Lever | Built? |
 |---|---|---|---|
-| Seizing / countering | **Sen** — *sen-sen-no-sen* (pre-emptive), *sen-no-sen* (simultaneous seize), *go-no-sen* (response counter) | `seize` / `counter_*` | ✅ `sen_no_sen` (seize); *go-no-sen* a counter candidate |
+| Seizing / countering | **Sen** — *sen-sen-no-sen* (pre-emptive), *sen-no-sen* (simultaneous seize), *go-no-sen* (response counter) | `seize` / `counter_*` | ⚠️ `sen_no_sen` registered but **INERT** — `seize` has no consumer; *go-no-sen* a counter candidate |
 | Measure | **Maai** (combative distance) | `measure` | candidate |
 | Reading | **Suki / metsuke** (the opening; the gaze) | `visual` | candidate |
 | Separation | **Zanshin** (continued awareness / follow-through) | separation | candidate |
@@ -166,7 +166,14 @@ Polish szabla, Hungarian sabre, Ottoman matrak, Thai krabi-krabong, Sikh gatka, 
 
 ## 7. Current state (scaffolded / live)
 
-- **Live levers:** `seize` (Vorschlag, Sen-no-sen), `counter_success` (Indes), `counter_select` (Mezzo-tempo), `anti_overcommit` (True Times). Each shows a positive, bounded edge; values provisional.
+- **Live levers:** `counter_success` (Indes), `counter_select` (Mezzo-tempo), `anti_overcommit` (True Times). Each shows a positive, bounded edge; values provisional.
+- **DEAD lever (equipping the ability does nothing):** `seize` — and with it `vorschlag` and `sen_no_sen`. Its
+  pre-contact-seizure consumer (`seizure_score` + `initiative_seize`) was CUT 2026-06-05 (Jordan, verified inert;
+  see `combat_systems.py`'s note at the former site and `ability_primitives.py`'s module docstring). Retire-or-
+  reroute is scene-combat WS-4. **LABEL FIX ONLY (ED-PC-0042):** four rows in this document still read `live`/✅
+  for `seize` while §2c's own 2026-06-28 STATUS CORRECTION, ten lines above them, said the opposite — a document
+  contradicting itself on which abilities do anything. Re-wiring is a balance change (⚖-adjacent) and is NOT done
+  here; only the labels are corrected to match the code.
 - **Registered but inert (channel-wiring pending):** `staerke_schwaeche`, `misura`, `atajo` — go live with the `eff_cw` sweep across the ~21 channel-weight sites.
 - **Not yet built (concrete-mechanics queue):** the `reopen`/`disengage` lever (cavazione/durchwechseln, Nachreisen) and the body-void counter variant.
 - **Balance:** to be re-sourced from Agility (§3) — code change queued.

@@ -26,6 +26,13 @@ TRACE_KINDS = {
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
 SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaustion'}
+# [ED-PC-0042 — MEASURED, do not re-litigate] The (e) sweep below flags 'collapse' and 'beat_exhaustion' as
+# never-fired, and the 2026-07-26 defect register carried them as dead branches on that basis. They are NOT dead:
+# over 5,184 fights spanning 12 weapons x end in {1,2,6} x armour in {none,heavy} they fire 164 and 1,135 times
+# respectively. The flag is a FALSE POSITIVE of this sweep's build coverage — its 4 matchups all use DEFAULT
+# fighters, who reach clean_defence/burst_ceiling long before stamina <= -4 or the beat budget runs out. The
+# honest fix is to widen the sweep's builds (FILED, not done here: it lengthens a self-test this commit does not
+# otherwise touch), NOT to delete two reachable guards on the strength of an under-powered probe.
 
 STATES = {
     # ---- outer loop (fight) ----

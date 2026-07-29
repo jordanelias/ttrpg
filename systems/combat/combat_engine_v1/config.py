@@ -158,7 +158,12 @@ CFG = dict(
   # Grip/stance DERIVED from morphology: a closing fighter GATHERS (grip_position 0->1) in proportion to how unwieldy
   # the weapon is in the close, bounded by WP.grip_choke_max (a rapier's short hilt cannot gather; a pole regrips up
   # the haft). 'choke'/'normal'/'lunge' strings are RETIRED -> continuous grip_position + lunge_depth on the Combatant.
-  CLOSE_REACH_REF=6.5, CHOKE_GRIP_MIN=1.0, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
+  # CHOKE_GRIP_MIN REMOVED (ED-PC-0042): zero readers anywhere in engine/workbench/tests, yet the AUTO-collecting
+  # exporter kept shipping it into the Godot-facing typed contract — the THIRD recurrence of the dead-exported-key
+  # class ED-PC-0035 and ED-PC-0037 each cleaned. weapon_physics.GRIP_SHORT=0.30 m superseded it in practice (its
+  # own comment says 'calibrated to the old CHOKE_GRIP_MIN'). Now guarded, not just fixed:
+  # tests/valoria/test_combat_invariants.py::test_no_dead_exported_engine_params fails on any future recurrence.
+  CLOSE_REACH_REF=6.5, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
   # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
   RECOVERY_TEMPO_K=0.15,

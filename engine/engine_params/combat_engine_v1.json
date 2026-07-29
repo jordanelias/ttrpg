@@ -40,7 +40,6 @@
    "BURST_MAX": 4,
    "CHOKE_ACCURACY_K": 0.03,
    "CHOKE_DRIVE_REF": 1.5,
-   "CHOKE_GRIP_MIN": 1.0,
    "CHOKE_RC_REF": 0.9,
    "CHOKE_TEMPO_PEN": 0.4,
    "CLOSE_GAP_REF": 0.3,

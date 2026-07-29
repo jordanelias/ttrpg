@@ -3,6 +3,7 @@ beat and passes Combatant objects to every subsystem. Initialization is the only
 cure for the role-inversion bug class: no subsystem and no resolution step ever indexes raw 'A'/'B'."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 import core, combat_systems as S, tradition as TR, contact as CT
+import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
 from config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
@@ -294,7 +295,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         # INDES STEAL — systems computes the steal AMOUNT + the counter selection; the wrapper APPLIES the mutation.
         counter_attempt=False
         if read_win and commit>=4:
-            steal=S.indes_steal_amount(defender, mode=='wind', commit, read_d, read_a, cfg, TR)
+            steal=S.indes_steal_amount(defender, mode==V.DEF_WIND, commit, read_d, read_a, cfg, TR)
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
@@ -312,15 +313,15 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         hit=0; riposte=False; bind=False
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
         # which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill).
-        neutralize=cfg['NEUTRALIZE_PARRY'] if mode=='parry' else (cfg['NEUTRALIZE_DODGE'] if mode=='dodge' else cfg['NEUTRALIZE_WIND'])
+        neutralize=cfg['NEUTRALIZE_PARRY'] if mode==V.DEF_PARRY else (cfg['NEUTRALIZE_DODGE'] if mode==V.DEF_DODGE else cfg['NEUTRALIZE_WIND'])
         if deg=='fail':
             riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_FAIL']+overcommit_exposure))
         elif deg=='partial':
-            if mode=='dodge': hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else 0
-            elif mode=='parry': hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else 0
+            if mode==V.DEF_DODGE: hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else 0
+            elif mode==V.DEF_PARRY: hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else 0
             else: bind=True
         elif deg=='success':
-            if mode=='wind' and rng.random()<cfg['WIND_BIND_P']: bind=True
+            if mode==V.DEF_WIND and rng.random()<cfg['WIND_BIND_P']: bind=True
             elif rng.random()<neutralize: riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_NEUTRALIZE']+overcommit_exposure))
             else: hit=core.strike(aggressor, defender, 'success', cfg)
         else:
@@ -356,7 +357,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
         slip_inside = (S.reach_base(defender,cfg) < S.reach_base(aggressor,cfg)
                        and S.reflex(defender,cfg) >= S.reflex(aggressor,cfg))
         agg_head = getattr(aggressor,'sel_head',None) or aggressor.w['head']   # I4/D5: the SELECTED head, native fallback only when unset
-        if (agg_head=='point' and commit>=4 and not hit and read_win and (beat_aside or slip_inside)):
+        if (agg_head==V.HEAD_POINT and commit>=4 and not hit and read_win and (beat_aside or slip_inside)):
             if rng.random() < cfg['DISPLACE_P']:
                 opening_created=True   # CONTACT AXIS precondition site 1: the point set aside / the defender inside
                 if not closed: closed=True; measure_gap=0.0; ready=_carry(ready,cfg)

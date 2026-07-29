@@ -4,7 +4,8 @@ unit-testing and makes the coupling explicit (the fix for the recurring inversio
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import tanh, sqrt, exp   # logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade
 import core
-import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math at module scope)
+import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's tables are keyed by it
+import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math + the zero-import `vocabulary` leaf at module scope)
 import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
 
@@ -255,20 +256,20 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
     ftw=balance_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
     cap=WP.defense_affinities(defender.w)[mode]   # DERIVED from geometry+dynamics (retired the hand GATE table)
-    if mode=='parry':
-        sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill('parry')
+    if mode==V.DEF_PARRY:
+        sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill(V.DEF_PARRY)
         # "don't parry with your hands!": an unguarded weapon's parry exposes the hand -> penalised; a guarded one
         # parries confidently. Scales the parry around a neutral simple-cross guard.
         sig += cfg['PARRY_GUARD_K']*(defender.w['hand_guard']-cfg['GUARD_NEUTRAL'])
-    elif mode=='dodge':
-        sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill('dodge')
+    elif mode==V.DEF_DODGE:
+        sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill(V.DEF_DODGE)
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
         sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + defender.skill('bind')   # ED-PC-0035: the `+ CHOKE_BIND_K*choke` term is GONE — `choke` was hardcoded 0.0 by the only caller, so it was a structural zero (see config.py)
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
     _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
     _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
-    if mode=='parry': sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
-    if mode=='dodge': sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
+    if mode==V.DEF_PARRY: sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
+    if mode==V.DEF_DODGE: sig+=0.10*_deep-0.10*_shallow   # deep commit easier to void; a shallow feint harder to read for the dodge
     return (base+sig)*cap
 
 def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
@@ -293,7 +294,7 @@ def close_efficacy(pc, measure_gap, range_avail=1.0, closed=False, head=None):
     inert until the fight is genuinely in the close AND a real measure is threaded; f rises toward CLOSE_EFF_FLOOR
     as measure_gap shrinks toward 0 OR range_avail shrinks toward 0 (whichever is more constraining — either
     being crowded-in or having no swing room degrades a broad arc). Pure."""
-    if head == 'point':
+    if head == V.HEAD_POINT:
         return 1.0
     if not closed or measure_gap is None:
         return 1.0
@@ -464,18 +465,18 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     geo=el['geo']; head=el['head']
     gap=geo['gap']; pc=geo['point_concentration']
     heads={}
-    if head=='cut_thrust':                                            # versatile blade: keep atomic (internal max)
+    if head==V.HEAD_CUT_THRUST:                                       # versatile blade: keep atomic (internal max)
         # [ED-PC-0037.1] carry the ELEMENT's OWN cut/thrust alongside the blended max. The blend is retained at
         # index 0 because sel_eff's downstream contract expects it; indices 5/6 are the per-arm truth, so the
         # versatility contest can be scored on the element that is actually being swung rather than on the
         # whole-weapon bake (a guisarme's BILL is cut 0.76 / thrust 0.19; the weapon scalar says 0.64 / 0.41,
         # which credits a hook with a point it does not have — the M-02 object confusion this docstring forbids).
-        heads['cut_thrust']=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc, geo['cut'], geo['thrust'])
-    elif head in ('straight_cut','curved_cut','cut'):                # pure cutter
-        if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], 'shear', gap, None, pc)
-    elif head=='point':                                              # a real point (element-tokened, not inferred)
-        if geo['gap']>SELECT_EPS: heads['point']=(geo['gap'], 'puncture', gap, None, pc)
-    elif head=='blunt':                                              # striking head
+        heads[V.HEAD_CUT_THRUST]=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc, geo['cut'], geo['thrust'])
+    elif head in V.PURE_CUT_HEADS:                                   # pure cutter
+        if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], V.MODE_SHEAR, gap, None, pc)
+    elif head==V.HEAD_POINT:                                         # a real point (element-tokened, not inferred)
+        if geo['gap']>SELECT_EPS: heads[V.HEAD_POINT]=(geo['gap'], V.MODE_PUNCTURE, gap, None, pc)
+    elif head==V.HEAD_BLUNT:                                         # striking head
         ref = el.get('element_ref')
         em, ex = _element_mass_x(w, el) if ref is not None else (0.0, 0.0)
         if em > 1e-9:                                                 # a real located mass element (D0 element_ref)
@@ -484,7 +485,7 @@ def element_afforded(el, w, grip=0.0, room=1.0):
             pa=WP.percussion_authority(w, grip=grip, room=room)       # (e.g. goedendag's club-body element carries
                                                                         # its striking mass on the haft record, not
                                                                         # itself) — whole-weapon fallback, unchanged
-        if pa>SELECT_EPS: heads['blunt']=(pa, 'percussion', gap, pa, pc)
+        if pa>SELECT_EPS: heads[V.HEAD_BLUNT]=(pa, V.MODE_PERCUSSION, gap, pa, pc)
 
     # ── graded secondary affordances (U2/ED-PC-0011, 2026-07-08) ──
     # Both checks were tried earlier this session and reverted pending fixes now landed:
@@ -501,14 +502,14 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     #     result, not a regression: test_thrust_protection_grip_invariant's premise (spear-class weapons always
     #     select 'point') was narrowed to the two weapons that still hold (spear, yari — genuinely point-only
     #     geometry) rather than silently preserved by suppressing bear_spear's own authored edge.
-    if head != 'blunt':
+    if head != V.HEAD_BLUNT:
         pa_secondary = WP.percussion_authority(w, grip=grip, room=room, sel_head=head, sel_pc=pc)
         if pa_secondary>MODE_PERC_MIN:
-            heads.setdefault('blunt', (pa_secondary, 'percussion', gap, pa_secondary, pc))
-    if head not in ('cut_thrust', 'straight_cut', 'curved_cut', 'cut') and geo['cut']>MODE_EDGE_MIN:
-        heads.setdefault('cut', (geo['cut'], 'shear', gap, None, pc))
-    if head not in ('cut_thrust', 'point') and geo['thrust']>MODE_TIP_MIN:
-        heads.setdefault('point', (geo['thrust'], 'puncture', gap, None, pc))
+            heads.setdefault(V.HEAD_BLUNT, (pa_secondary, V.MODE_PERCUSSION, gap, pa_secondary, pc))
+    if head not in V.CUT_FAMILY_HEADS and geo['cut']>MODE_EDGE_MIN:
+        heads.setdefault(V.HEAD_CUT, (geo['cut'], V.MODE_SHEAR, gap, None, pc))
+    if head not in V.THRUST_FAMILY_HEADS and geo['thrust']>MODE_TIP_MIN:
+        heads.setdefault(V.HEAD_POINT, (geo['thrust'], V.MODE_PUNCTURE, gap, None, pc))
     return heads
 
 def afforded_heads(w, grip=0.0, room=1.0):
@@ -531,7 +532,7 @@ def afforded_heads(w, grip=0.0, room=1.0):
                 heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'),ct_cut,ct_thr)
     if not heads:                                                    # degenerate fallback: never strip all modes
         h=w['head']
-        heads[h]=(0.0, core.HEAD_MODE.get(h, 'shear'), w['gap'], None, w['geometry']['point_concentration'], None, None, None)
+        heads[h]=(0.0, core.HEAD_MODE.get(h, V.MODE_SHEAR), w['gap'], None, w['geometry']['point_concentration'], None, None, None)
     return heads
 
 def selected_arm_magnitudes(c, head, grip=None, room=None):
@@ -599,7 +600,7 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
                   eff_thrust=(heads[hd][7] if len(heads[hd])>7 else None))
               * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
               / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
-    if h=='cut_thrust':
+    if h==V.HEAD_CUT_THRUST:
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
         # the engine has always modelled: a cut-thrust sword SWINGS (cuts) — reads easy — until it must half-sword-
@@ -615,7 +616,7 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h][2],
                                  _ct_cut, _ct_thr, core.thrust_authority(w['head_len']))[1]
     else:
-        dm=core.HEAD_MODE.get(h, 'shear')
+        dm=core.HEAD_MODE.get(h, V.MODE_SHEAR)
     sel_eff, _dm0, sel_gap, sel_perc, sel_pc = heads[h][:5]   # [ED-PC-0037.1] the cut_thrust entry is now 7 wide (per-arm magnitudes at 5/6); slice so every head unpacks uniformly
     return dm, h, sel_gap, sel_perc, sel_pc, sel_eff
 
@@ -670,7 +671,7 @@ def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     armour, not stats, dominates the gate (0 for a stat mirror). Reuses adef_cap (single owner of armour-defeat) on the
     PRESENTING mode this derives itself (below). REPRESENT_DECAY_K / REPRESENT_FOOT_K [SIM-CALIBRATE]. Pure."""
     aw = cfg['ADEF_W'][shorter.armor]
-    if aw <= cfg['ADEF_W']['light']:
+    if aw <= cfg['ADEF_W'][V.TIER_LIGHT]:
         return 1.0   # CROWDING IS A HARD-ARMOUR PHENOMENON: soft gambeson (and bare) still respects a thrust, so a reach
                      # weapon is never crowded off measure through it (reach survives at none/light — the light-tier reach
                      # dominance the invariants require). Only mail/plate let a closer fearlessly crowd the point. Returning
@@ -751,7 +752,7 @@ def halfsword_target(c, closed, opp_armor):
     records remain data). Weapons that do not afford the half-sword (or lack a form record) are unchanged."""
     base = HALFSWORD_BASE.get(c.weapon, c.weapon)
     form = HALFSWORD_FORM.get(base)
-    want_half = closed and opp_armor in ('medium','heavy') and affords_halfsword(WEAPONS[base])
+    want_half = closed and opp_armor in V.RIGID_TIERS and affords_halfsword(WEAPONS[base])
     return form if (want_half and form) else base
 
 # ============================================================================
@@ -777,7 +778,7 @@ def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     profile = FACING_PROFILE_K*(getattr(defender,'facing',0.0) - getattr(aggressor,'facing',0.0))
     return cfg['REACH_W'][defender.armor]*reach_edge + profile
 
-def legibility(aggressor, commit, cfg, opp_armor='none'):
+def legibility(aggressor, commit, cfg, opp_armor=V.TIER_NONE):
     """Read-legibility multiplier on the DEFENDER's visual read: a THRUST (in-line) is hard to read; a SWING/CUT
     (lateral arc) and a percussive BLUNT blow are easy; deeper commit/lunge = more readable. Legibility follows the
     MODE the wielder ACTUALLY fights in this exchange — the SELECTED damage-mode (sel_dmg, written by the wrapper from
@@ -787,15 +788,15 @@ def legibility(aggressor, commit, cfg, opp_armor='none'):
     (a cut_thrust sword's sel_dmg is 'shear' unarmoured -> swing, 'puncture' vs plate -> thrust, matching coupling). Pure."""
     dm=getattr(aggressor,'sel_dmg',None)
     if dm is not None:
-        legib = cfg['LEGIB_THRUST'] if dm=='puncture' else cfg['LEGIB_SWING']   # thrust hard; cut/percuss easy
+        legib = cfg['LEGIB_THRUST'] if dm==V.MODE_PUNCTURE else cfg['LEGIB_SWING']   # thrust hard; cut/percuss easy
     else:
         ah=aggressor.w['head']
-        if ah=='point':                       legib=cfg['LEGIB_THRUST']      # always a thrust
-        elif ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']   # pure cutters always swing
-        elif ah=='blunt':                     legib=cfg['LEGIB_SWING']       # percussive arc, easy to read
-        elif ah=='cut_thrust':
+        if ah==V.HEAD_POINT:                  legib=cfg['LEGIB_THRUST']      # always a thrust
+        elif ah in (V.HEAD_STRAIGHT_CUT, V.HEAD_CURVED_CUT): legib=cfg['LEGIB_SWING']   # pure cutters always swing
+        elif ah==V.HEAD_BLUNT:                legib=cfg['LEGIB_SWING']       # percussive arc, easy to read
+        elif ah==V.HEAD_CUT_THRUST:
             # shifts to a controlled gap-thrust vs plate (hard to read), otherwise cuts (easy) — matches coupling's mode-shift
-            legib=cfg['LEGIB_THRUST'] if opp_armor in ('medium','heavy') else cfg['LEGIB_SWING']
+            legib=cfg['LEGIB_THRUST'] if opp_armor in V.RIGID_TIERS else cfg['LEGIB_SWING']
         else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     legib += cfg['LEGIB_LUNGE']*getattr(aggressor,'lunge_depth',0.0)   # an extended/lunged body is more readable — CONTINUOUS in lunge_depth (no lunge string)
@@ -819,7 +820,7 @@ def approach_displace(shorter, longer, cfg):
     runs select_mode during the approach too), native fallback only when unset."""
     lever_edge = leverage(shorter,cfg) - leverage(longer,cfg)
     longer_head = getattr(longer,'sel_head',None) or longer.w['head']
-    if longer_head!='point' or lever_edge<=0: return 0.0
+    if longer_head!=V.HEAD_POINT or lever_edge<=0: return 0.0
     rd=(reading(shorter,cfg)-reading(longer,cfg))
     return min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
 
@@ -831,7 +832,7 @@ def reopen_prob(longer, shorter, base_gap, fat_longer, push_avail, cfg, TR):
     deny_read = reading(shorter,cfg)*TR.eff_cw(shorter, 'visual')
     read_edge = core.logistic((id_read-deny_read)/2.0)
     foot = balance_eff(longer,fat_longer,cfg)/3
-    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/cfg['REACH_W']['none']
+    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/cfg['REACH_W'][V.TIER_NONE]
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
     return min(cfg['REOPEN_MAX'], p)
 
@@ -852,7 +853,7 @@ def disengage_attempt_p(longer, shorter, base_gap, fat_longer, cfg):
     distance. Keyed on ADEF_W[closer]. Pure (the call site ANDs reach_threat too)."""
     bind_deficit = core.logistic((leverage(shorter, cfg) - leverage(longer, cfg)) / cfg['DISENGAGE_LEV_SCALE'])
     foot = balance_eff(longer, fat_longer, cfg)/3
-    fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W']['heavy'])
+    fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W'][V.TIER_HEAVY])
     p = cfg['DISENGAGE_BASE_P'] * bind_deficit * foot * fade * min(1.0, base_gap/cfg['DISENGAGE_GAP_REF'])
     return min(cfg['DISENGAGE_MAX'], p)
 
@@ -948,7 +949,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     read_a=reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
-    modes=['parry','dodge','wind']
+    modes=list(V.DEFENCE_MODES)   # ORDERED: modes[rng.randrange(3)] below makes the sequence part of the RNG contract
     msig={m:mode_sigma(m,aggressor,defender,commit,read_win,fat_d,cfg) for m in modes}
     mode=max(msig,key=msig.get) if read_win else modes[rng.randrange(3)]   # stdlib uniform int (ED-1085)
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
@@ -1033,7 +1034,7 @@ def percussion_stagger(striker, victim, wound, deg, cfg):
     if deg not in ('graze', 'success', 'overwhelming'):
         return 0.0, 0.0
     head = getattr(striker, 'sel_head', None) or striker.head
-    if head == 'blunt':
+    if head == V.HEAD_BLUNT:
         qf = cfg['PERC_QUAL'][deg]
         grip = getattr(striker, 'grip_position', 0.0)
         # SELECTED-ELEMENT percussion (ED-PC-0036 fix): read the striker's sel_perc — the percussion authority of the
@@ -1055,7 +1056,7 @@ def percussion_stagger(striker, victim, wound, deg, cfg):
         # its impulse THROUGH the plate), so the point-wind FADES with the victim's armour (same ADEF doctrine) — this
         # keeps a plate STALEMATE a stalemate (two swords that can't defeat each other's plate don't wind each other
         # to a decision) and stops a weak plate-poke from over-draining a gap-specialist's wind at range.
-        fade = max(0.0, 1.0 - cfg['ADEF_W'][victim.armor]/cfg['ADEF_W']['heavy'])
+        fade = max(0.0, 1.0 - cfg['ADEF_W'][victim.armor]/cfg['ADEF_W'][V.TIER_HEAVY])
         load = cfg['PERC_POINT_FRAC'] * float(max(0, wound)) * fade
     return cfg['PERC_STAM_K']*load, cfg['PERC_POISE_K']*load
 
@@ -1100,7 +1101,7 @@ def true_time_edge(longer, shorter, cfg):
     so the gap passes through tanh(·/TRUE_TIME_REF) and TRUE_TIME_K is the MAX sigma. A LINEAR form let a huge gap
     (spear 7.8 vs dagger 4.4 → 3.4) run to a degenerate ~60σ that shut the closer out entirely (the dagger never
     reached Contact); the tanh keeps the common 0.5–2 m gaps well-differentiated while bounding the tail. Pure."""
-    fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W']['heavy'])
+    fade = max(0.0, 1.0 - cfg['ADEF_W'][shorter.armor]/cfg['ADEF_W'][V.TIER_HEAVY])
     gap = max(0.0, reach_base(longer, cfg) - reach_base(shorter, cfg))
     return cfg['TRUE_TIME_K'] * fade * tanh(gap / TRUE_TIME_REF)
 

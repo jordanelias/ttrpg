@@ -14,6 +14,7 @@ de-leak land unnoticed (Gate-1 audit):
 All static or tiny-seeded; deterministic.
 """
 import ast
+import collections
 import os
 import re
 import sys
@@ -44,6 +45,16 @@ def _instrument():
     sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
     import armour_participation
     return armour_participation
+
+
+def _structure_scan():
+    """The structural-debt instrument (`workbench/structure_scan.py`, ED-PC-0042) — imported, never
+    re-implemented, for the same reason `_instrument()` is. Its [H] section owns the dead-exported-param
+    derivation (which export keys have no live engine reader); a guard carrying its own second copy would
+    be free to grade the engine by a rule the tool no longer applies."""
+    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    import structure_scan
+    return structure_scan
 
 
 # ── SINGLE-SOURCE ───────────────────────────────────────────────────────────────────────────────
@@ -123,6 +134,106 @@ def test_no_weapon_name_literal_in_resolution():
         if hit:
             offenders[mod] = hit
     assert not offenders, f"weapon-name literal(s) in resolution code (primitive-law break): {offenders}"
+
+
+# ── VOCABULARY OWNERSHIP ─────────────────────────────────────────────────────────────────────────
+# The sibling of the weapon-name guard above, and the same mechanism. That one forbids a per-ENTITY
+# table in resolution code; this one forbids the domain ALPHABET being re-spelled per module. Both are
+# AST-based and both allow docstrings/comments (prose may name a token freely).
+VOCAB_OWNERS = ('vocabulary.py', 'core.py')
+VOCAB_CONSUMERS = ('combat_systems.py', 'weapon_physics.py', 'capabilities.py', 'wrapper.py', 'contact.py')
+
+
+def test_vocabulary_owner_tables_agree():
+    """`vocabulary.py` declares the token alphabet; `core.py` owns the TABLES keyed by it. Pin that they
+    agree — a token added to one and forgotten in the other is exactly how a lookup starts silently
+    KeyError-ing (or worse, silently taking a `.get(..., default)` branch).
+
+    `core.py` re-asserts this at import time, so the failure is loud in every consumer too; this test is
+    the artifact that proves the assertion exists and can observe a divergence (§0.1 point 3)."""
+    C, core, S, WP, CFG = _mods()
+    import vocabulary as V
+    assert set(core.HEAD_MODE) == V.HEADS, "HEAD_MODE's key set drifted from the declared HEADS alphabet"
+    assert set(core.HEAD_MODE.values()) <= V.DAMAGE_MODES, "HEAD_MODE maps a head to a non-token damage mode"
+    assert set(core.TIER2MAT) == V.ARMOUR_TIERS, "TIER2MAT's key set drifted from the declared ARMOUR_TIERS"
+    assert set(core.TIER2MAT.values()) <= V.MATERIALS, "TIER2MAT maps a tier to a non-token material"
+    assert set(core.RESIST) == V.MATERIALS and set(core.PEN_THR) == V.ARMOUR_TIERS
+    assert set(core.GAP_EXPOSURE) == V.MATERIALS
+    for mat, row in core.RESIST.items():
+        assert set(row) == V.DAMAGE_MODES, f"RESIST[{mat!r}] does not cover the damage-mode alphabet"
+    # DELIVERY is a STRICT SUBSET, never keyset-derived: ED-PC-0037 deleted its dead 'cut_thrust' entry
+    # (the pre-max blended 1.35) from the Godot-facing contract. Deriving DELIVERY's keys from HEADS would
+    # resurrect it and reverse a ledgered cleanup, so the relation is asserted as `<`, deliberately.
+    assert set(core.DELIVERY) < V.HEADS, "DELIVERY is no longer a strict subset of HEADS"
+    assert V.HEAD_CUT_THRUST not in core.DELIVERY, "the ED-PC-0037 dead 'cut_thrust' DELIVERY entry is back"
+
+
+def test_no_bare_vocabulary_literal_in_consumers():
+    """A guarded vocabulary token may be SPELLED only in its owner (`vocabulary.py`) and in the module that
+    defines the tables keyed by it (`core.py`). Every consumer must reach it by name.
+
+    The failure this excludes is not cosmetic. The alphabet was re-spelled 86 times across the five consumer
+    modules, in five namespaces that share strings ('none' is an armour tier, a harness material AND a hilt
+    type), so a rename or an added token was a manual sweep with no gate — and the two-namespace collisions
+    made grep an unreliable one. The token list comes from the owner's own `GUARDED_TOKENS`, so adding a
+    token there extends this guard automatically rather than requiring a second edit here.
+
+    Workbench is deliberately NOT in scope (it is measurement tooling, not resolution), and neither is
+    `weapons.py` — its tokens are DATA (a weapon record's authored `head`/`mode_elements`), not comparisons."""
+    import vocabulary as V
+    offenders = {}
+    for mod in VOCAB_CONSUMERS:
+        hits = collections.Counter(s for s in _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
+                                   if s in V.GUARDED_TOKENS)
+        if hits:
+            offenders[mod] = dict(sorted(hits.items()))
+    total = sum(sum(h.values()) for h in offenders.values())
+    assert not offenders, (
+        f"{total} bare vocabulary literal(s) in {len(offenders)} consumer module(s); the alphabet is owned by "
+        f"{VOCAB_OWNERS[0]} and may only be spelled there or in {VOCAB_OWNERS[1]}: {offenders}")
+
+
+def test_vocabulary_guard_scope_is_the_whole_resolution_surface():
+    """The guard above is only as good as its file list. Pin that every engine module which RESOLVES is
+    either an owner or in scope — so a new resolution module cannot be added outside the guard silently.
+    `weapons.py`/`combatant.py`/`geometry.py`/`traditions.py`/`tradition.py`/`ability_primitives.py`/
+    `state_graph.py`/`config.py` are DATA or registry modules and are listed here as the explicit,
+    reviewable exemption rather than left as an unstated gap."""
+    NON_RESOLUTION = {'weapons.py', 'combatant.py', 'geometry.py', 'traditions.py', 'tradition.py',
+                      'ability_primitives.py', 'state_graph.py', 'config.py'}
+    on_disk = {f for f in os.listdir(ENGINE) if f.endswith('.py')}
+    unaccounted = on_disk - set(VOCAB_OWNERS) - set(VOCAB_CONSUMERS) - NON_RESOLUTION
+    assert not unaccounted, (
+        f"engine module(s) accounted for by neither the vocabulary guard nor its declared data-module "
+        f"exemption: {sorted(unaccounted)} — add to VOCAB_CONSUMERS or to NON_RESOLUTION deliberately")
+
+
+# ── NO DEAD PARAM IN THE TYPED GODOT CONTRACT ────────────────────────────────────────────────────
+def test_no_dead_exported_engine_params():
+    """Every param in `engine/engine_params/combat_engine_v1.json` must have a live read-site in the engine.
+
+    THIS IS THE THIRD RECURRENCE of one defect class, which is why it gets a guard instead of another
+    one-off deletion (§0.1 point 5 — the signature of a pattern defect is that the code was correct when
+    written and stopped working when something else changed). ED-PC-0035 removed REACH_ADV_K /
+    RESIDUAL_REACH_FRAC / DAMAGE_SCALE / CAP_END after they lost their readers; ED-PC-0037 removed the dead
+    DELIVERY['cut_thrust'] entry; the 2026-07-26 register then found `CHOKE_GRIP_MIN` still shipping. The
+    exporter AUTO-collects (deliberately — a new constant cannot be silently left unexported), so nothing
+    downstream notices when a key's last reader disappears, and the Godot port hand-transcribes a number the
+    oracle no longer resolves on (the ED-1050 failure class).
+
+    The read-site derivation is imported from `workbench/structure_scan.py`, the instrument that measured
+    the defect, not re-implemented here."""
+    ss = _structure_scan()
+    counts = {s: len(v) for s, v in ss.exported_keys().items()}
+    # The guard must be able to OBSERVE the failure it excludes: if the export were empty or the sections
+    # renamed, `dead == []` would be vacuously true. Pin that a real, populated contract was scanned.
+    assert counts['cfg'] > 150 and counts['core'] > 20, (
+        f"the export scan collapsed — it graded {counts}, so an empty `dead` list would prove nothing")
+    dead = ss.dead_exported_keys()
+    assert dead == [], (
+        f"{len(dead)} param(s) ship into the typed Godot contract with zero live engine reader: {dead}. "
+        f"Either wire them or delete them from config.py/core.py and re-run "
+        f"`python tools/export_engine_params.py`.")
 
 
 # ── EMERGENT USE-MODE SELECTION ───────────────────────────────────────────────────────────────────

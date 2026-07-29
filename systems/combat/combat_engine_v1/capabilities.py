@@ -13,6 +13,8 @@ state-graph node it gates, so the table reads as "which technique each weapon ca
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
+import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so own-sourcing the head/mode
+                         # tokens here does NOT breach this module's no-systems/core-at-module-scope discipline.
 from combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
 from config import CFG   # pure data (GRAB_SHORT_REACH_M); no cycle risk
 
@@ -25,7 +27,7 @@ def _affords_point(w):
     genuine point, and systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the
     situational gap game) — so the static-head-only check under-reports this capability for it."""
     import combat_systems as S
-    return 'point' in S.afforded_heads(w)
+    return V.HEAD_POINT in S.afforded_heads(w)
 
 
 # Each capability: the state-graph node it gates, a pure predicate over (name, weapon-dict), and the human
@@ -38,12 +40,12 @@ CAPABILITIES = {
     },
     'gap_thrust': {
         'node': 'closed.coupling / armour-defeat (core.coupling puncture path)',
-        'pred': lambda name, w: w['head'] in ('point', 'cut_thrust') or _affords_point(w),
+        'pred': lambda name, w: w['head'] in V.THRUST_FAMILY_HEADS or _affords_point(w),
         'needs': "a thrusting point (point head, or a cut-and-thrust blade that can half-sword to one), or a blunt weapon whose beak/spike affords a real point (e.g. the poleaxe)",
     },
     'percussive_blow': {
         'node': 'closed.coupling / armour-defeat (blunt percussion mode)',
-        'pred': lambda name, w: w['head'] == 'blunt',
+        'pred': lambda name, w: w['head'] == V.HEAD_BLUNT,
         'needs': "a blunt striking head — an edge or point delivers no percussion mode",
     },
     'open_contact': {
@@ -107,7 +109,7 @@ if __name__ == '__main__':
     a_ok = True
     for n in names:
         c = Combatant('x', weapon=n)
-        switches = S.halfsword_target(c, True, 'heavy') != n
+        switches = S.halfsword_target(c, True, V.TIER_HEAVY) != n
         if switches != allowed('halfsword', n):
             a_ok = False; print(f"    MISMATCH halfsword {n}: engine={switches} pred={allowed('halfsword', n)}")
     checks.append(a_ok); print(f"(a) halfsword pred == halfsword_target switch: {'OK' if a_ok else 'FAIL'}")
@@ -117,7 +119,7 @@ if __name__ == '__main__':
     b_ok = True
     for n in names:
         head = WEAPONS[n]['head']
-        puncture_capable = (core.HEAD_MODE.get(head) == 'puncture') or head == 'cut_thrust' or 'point' in S.afforded_heads(WEAPONS[n])  # cut_thrust = max(shear,puncture)
+        puncture_capable = (core.HEAD_MODE.get(head) == V.MODE_PUNCTURE) or head == V.HEAD_CUT_THRUST or V.HEAD_POINT in S.afforded_heads(WEAPONS[n])  # cut_thrust = max(shear,puncture)
         if puncture_capable != allowed('gap_thrust', n):
             b_ok = False; print(f"    MISMATCH gap_thrust {n}: engine={puncture_capable} pred={allowed('gap_thrust', n)}")
     checks.append(b_ok); print(f"(b) gap_thrust pred == coupling puncture path: {'OK' if b_ok else 'FAIL'}")
@@ -128,7 +130,7 @@ if __name__ == '__main__':
     c_ok = True
     for n in names:
         head = WEAPONS[n]['head']
-        percussion_mode = (core.HEAD_MODE.get(head) == 'percussion')
+        percussion_mode = (core.HEAD_MODE.get(head) == V.MODE_PERCUSSION)
         if percussion_mode != allowed('percussive_blow', n):
             c_ok = False; print(f"    MISMATCH percussive_blow {n}: engine={percussion_mode} pred={allowed('percussive_blow', n)}")
     checks.append(c_ok); print(f"(c) percussive_blow pred == coupling percussion mode: {'OK' if c_ok else 'FAIL'}")

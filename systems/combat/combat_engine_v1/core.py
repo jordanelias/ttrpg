@@ -17,6 +17,9 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 from math import tanh, exp
 from engine.autoload import sigma_leverage as SL
+import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and
+                         # capabilities (neither of which may import core) own-source the same tokens.
+                         # This module owns the TABLES keyed by it; the asserts below pin the two together.
 
 # ---------- logistic (single source, ED-PC-0025) ----------
 # The 1/(1+e^-x) squash was open-coded FIVE ways across the resolver (combat_systems.bind_dominance_p /
@@ -36,8 +39,8 @@ def logistic(x):
     return 1.0 / (1.0 + exp(-x))
 import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
                               # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
-                              # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math
-                              # at module scope (cycle-free), so this import is safe.
+                              # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math + the
+                              # zero-import `vocabulary` leaf at module scope (cycle-free), so this import is safe.
 
 DECISIVE_OB = 3    # [canonical: combat_v30 §5 degree band centre (decisive sub-action Ob); relocated verbatim from the frozen r8 harness, ED-1085]
 TN = SL.TN_STANDARD
@@ -146,6 +149,24 @@ COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_mo
 # value is set at ~the poleaxe hammer->spike flip (systems.select_mode) so the reach-ladder truth holds; the
 # orchestrator tunes the final magnitudes. GROUNDING (direction): Williams (puncture succeeds at gaps/weak-points).
 GAP_EXPOSURE={'none':1.0,'cloth':0.97,'mail':0.95,'plate':0.90}     # [SIM-CALIBRATE] thrust-accessible gap fraction / material (reach-ladder). BROKEN-LOGIC FIX (ED-PC-0023): the old {cloth:0.85, mail:0.90, plate:0.90} CONTRADICTED this block's own grounding prose above — "mail exposes MORE (open weave/edges)" than plate (was mail==plate) and "cloth/none are mostly accessible" (cloth was the LOWEST, below both armours). Corrected to the monotone none>cloth>mail>plate the prose states: mail 0.95 now exposes more than plate 0.90 (LIVE — the gap term binds for mail); cloth 0.97 matches "mostly accessible" (mostly inert — the through-material floor t=0.88 dominates for soft cloth). The plate=0.90 anchor (the poleaxe hammer->spike flip) is UNCHANGED — the heavy-armour gap game is preserved exactly.
+# ── VOCABULARY OWNERSHIP (ED-PC-0042) — the tables above are keyed by vocabulary.py's alphabet ──────────────
+# Import-time, so a token added to the alphabet and forgotten in a table (or vice versa) fails LOUDLY here
+# rather than silently at a `.get(head, default)` that quietly takes the fallback branch. These are DERIVATION
+# checks, not re-definitions: the tables stay hand-written (each cell carries its own sourcing comment).
+assert set(HEAD_MODE) == V.HEADS, f"HEAD_MODE keys != HEADS: {set(HEAD_MODE) ^ V.HEADS}"
+assert set(HEAD_MODE.values()) <= V.DAMAGE_MODES, "HEAD_MODE maps a head to an undeclared damage mode"
+assert set(TIER2MAT) == V.ARMOUR_TIERS, f"TIER2MAT keys != ARMOUR_TIERS: {set(TIER2MAT) ^ V.ARMOUR_TIERS}"
+assert set(TIER2MAT.values()) <= V.MATERIALS, "TIER2MAT maps a tier to an undeclared material"
+assert set(RESIST) == V.MATERIALS and all(set(r) == V.DAMAGE_MODES for r in RESIST.values()), \
+    "the RESIST matrix no longer covers materials x damage-modes exactly"
+assert set(PEN_THR) == V.ARMOUR_TIERS and set(GAP_EXPOSURE) == V.MATERIALS, \
+    "PEN_THR must cover the armour tiers and GAP_EXPOSURE the materials, exactly"
+# DELIVERY is a STRICT SUBSET and must NOT be keyset-derived from HEADS: ED-PC-0037 deleted its 'cut_thrust'
+# entry (the pre-max blended 1.35, dead once cut_thrust_arm resolved the two arms on their own tokens) from
+# the Godot-facing contract. Deriving these keys would resurrect it and reverse a ledgered cleanup.
+assert set(DELIVERY) < V.HEADS and V.HEAD_CUT_THRUST not in DELIVERY, \
+    "DELIVERY must stay a strict subset of HEADS with no 'cut_thrust' entry (ED-PC-0037)"
+
 GAP_PREC_REF=0.65                                                   # neutral gap_precision default for the puncture path (a mid-roster point) — the LIVE combat path always THREADS the weapon's real w['gap'] (systems.select_mode / core.strike), so this default only guards a hypothetical unthreaded caller.
 # FIX-1b [FIAT — no melee-speed behind-plate data exists; ballistic BABT is the wrong regime, per Phase-3 grounding]:
 # percussion transmitted through RIGID armour (mail/plate) scales with the blow's percussion AUTHORITY — a steel
