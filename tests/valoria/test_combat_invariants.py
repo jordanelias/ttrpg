@@ -99,6 +99,151 @@ def test_percussion_authority_single_source():
             f"@{armor}: core.strike is insensitive to sel_perc, so the equality above pins nothing")
 
 
+# ── RESOLUTION-POOL SINGLE-SOURCE (ED-PC-0042 rider I1a) ─────────────────────────────────────────
+# Sibling of the percussion guard above and the same failure class, one generation earlier. The pool
+# rule USED to live twice: `Combatant.__init__` cached `self.pool=max(5, history+6)` (combatant.py:118,
+# no rounding) beside the owner `core.resolution_pool = max(5, int(round(history))+6)`. They agree on
+# every integer History and disagree the moment one is fractional — History 3.4 gives 9.4 vs 9, History
+# 3.6 gives 9.6 vs 10. The duplicate was deleted in a174d4a (ED-PC-0023, 2026-07-23) because it had zero
+# readers, so the divergence never reached a resolved fight; NOTHING was left behind that fails if it
+# comes back. These guards are that missing recurrence gate (CLAUDE.md §0.1 point 5: one owner, every
+# site routed through it, and a guard that fails on recurrence).
+#
+# Modules scanned = the resolution surface, plus combatant.py, which is where the duplicate actually lived
+# and is the host every resolver reads its character figures from.
+_POOL_SCAN_MODULES = ('core.py', 'combatant.py', 'combat_systems.py', 'wrapper.py', 'contact.py',
+                      'weapon_physics.py', 'geometry.py', 'ability_primitives.py', 'traditions.py')
+_POOL_OWNER = ('core.py', 'resolution_pool')   # (module, function) allowed to spell the arithmetic out
+
+
+def _enclosing_function_names(tree):
+    """{id(node): name of the innermost enclosing def, or None} — lets a scan exempt the OWNER function
+    by name instead of by line number, which would rot on the next edit above it."""
+    out = {id(tree): None}
+
+    def walk(node, fname):
+        for child in ast.iter_child_nodes(node):
+            inner = child.name if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) else fname
+            out[id(child)] = inner
+            walk(child, inner)
+
+    walk(tree, None)
+    return out
+
+
+def _refs_history(node):
+    """True if the subtree reads a History value under either spelling the engine uses (`history` as a
+    bare parameter in core, `<combatant>.history` everywhere else)."""
+    return any((isinstance(n, ast.Name) and n.id == 'history')
+               or (isinstance(n, ast.Attribute) and n.attr == 'history')
+               for n in ast.walk(node))
+
+
+def _routes_through_owner(node):
+    """True if the subtree reaches core.resolution_pool at all — called, or referenced as a callable
+    (workbench/catalogue.py passes it by reference). A site that reaches the owner is not a second copy."""
+    for n in ast.walk(node):
+        if isinstance(n, ast.Name) and n.id == 'resolution_pool':
+            return True
+        if isinstance(n, ast.Attribute) and n.attr == 'resolution_pool':
+            return True
+    return False
+
+
+def test_resolution_pool_single_source():
+    """No live engine site may derive a pool from History except core.resolution_pool.
+
+    THREE independent scans, because a recurrence can copy the rule three ways. Scans (b) and (c) exist
+    because mutation testing killed a two-scan draft of this guard, not because they were foreseen:
+      (a) HARDCODED — a clamp call (`max(...)`/`min(...)`) whose operands read History and which does
+          not reach the owner. The exact shape of the deleted `max(5, history+6)`.
+      (b) BORROWED-CONSTANT — any read of POOL_FLOOR/BASE_POOL outside the owner. `c.history +
+          core.BASE_POOL` passes scan (a) clean (no clamp) while still living twice.
+      (c) BARE-LITERAL — `c.history + 6` with a separate if/ternary floor. Passes (a) AND (b).
+
+    Legitimate callers are unaffected: wrapper.py's three `max(1, core.resolution_pool(x.history))`
+    sites reach the owner, and the other History readers in combat_systems.py (reading/bind/initiative/
+    counter) are different rules that happen to take History as an input — they subtract the 3-centre or
+    add a skill() call, so none of them trip a clamp, a pool constant, or an integer offset.
+
+    KNOWN BLIND SPOT, stated rather than papered over (§0.1 point 5): this is a static scan over a fixed
+    module list. A copy in workbench/ tooling, in the Godot port, spelled through one-hop indirection
+    (a local alias of the offset), or otherwise shaped past these three scans is NOT caught — and no
+    behavioural backstop exists for that case either: nothing in the suite resolves a fight with
+    fractional History, so a divergent copy consumed by the wrapper would run unexercised (adversarial
+    review of this guard, 2026-07-29). The scans cover every spelling that has actually occurred plus
+    the constant-borrowing and bare-offset forms; anything beyond that is this guard's honest limit."""
+    hardcoded, borrowed, offset = [], [], []
+    for mod in _POOL_SCAN_MODULES:
+        path = os.path.join(ENGINE, mod)
+        tree = ast.parse(open(path, encoding='utf-8').read())
+        enclosing = _enclosing_function_names(tree)
+        for n in ast.walk(tree):
+            owner_site = (mod, enclosing.get(id(n))) == _POOL_OWNER
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in ('max', 'min') \
+                    and _refs_history(n) and not _routes_through_owner(n) and not owner_site:
+                hardcoded.append(f"{mod}:{n.lineno}")
+            # BOTH spellings: a bare `BASE_POOL` (inside core.py) and a qualified `core.BASE_POOL`
+            # (from any other module). Matching only the bare Name let a `c.history + core.BASE_POOL`
+            # copy pass this scan clean — found by mutation, not by reading.
+            const = n.id if isinstance(n, ast.Name) else (n.attr if isinstance(n, ast.Attribute) else None)
+            if const in ('POOL_FLOOR', 'BASE_POOL') and isinstance(n.ctx, ast.Load) and not owner_site:
+                borrowed.append(f"{mod}:{n.lineno} ({const})")
+            # (c) BARE-LITERAL. `c.history + 6` then an if/ternary floor evades both scans above — no
+            # clamp CALL and no named constant. History is currently OFFSET by a bare int literal exactly
+            # nowhere in the engine (its other readers subtract the 3-centre or add a skill() call), so
+            # this shape is unambiguous rather than noisy. Also found by mutation, not by reading.
+            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add) and not owner_site \
+                    and not _routes_through_owner(n) \
+                    and ((_refs_history(n.left) and isinstance(n.right, ast.Constant)
+                          and isinstance(n.right.value, int))
+                         or (_refs_history(n.right) and isinstance(n.left, ast.Constant)
+                             and isinstance(n.left.value, int))):
+                offset.append(f"{mod}:{n.lineno}")
+
+    assert not hardcoded, (
+        "the resolution-pool rule lives twice again — History is clamped into a pool outside "
+        f"core.resolution_pool at {hardcoded}. Call core.resolution_pool(history); do not re-spell "
+        "max(5, history+6) (it drops the int(round(...)) and diverges on fractional History).")
+    assert not borrowed, (
+        f"POOL_FLOOR/BASE_POOL read outside core.resolution_pool at {borrowed} — the pool constants are "
+        "the owner's private armature; a second assembly of them is a second copy of the rule.")
+    assert not offset, (
+        f"History offset by a bare integer literal outside core.resolution_pool at {offset} — that is the "
+        "pool base being re-spelled. Call core.resolution_pool(history).")
+
+
+def test_resolution_pool_rounds_fractional_history():
+    """The owner ROUNDS History to an integer die count; the deleted duplicate did not. This is the
+    assertion that can observe the historical failure (§0.1 point 2) rather than merely coexisting with
+    it: on the pre-a174d4a tree `Combatant(history=3.4).pool` was 9.4 while core.resolution_pool(3.4)
+    was 9, and 3.6 gave 9.6 vs 10 — a fractional pool AND a rounding disagreement, both caught below.
+
+    Integer History (the default, and every build the engine ships) is byte-identical either way, which
+    is exactly why this went unnoticed: the probe must be fractional or it pins nothing."""
+    C, core, S, WP, CFG = _mods()
+    assert core.resolution_pool(3.4) == 9, "3.4 must round DOWN to History 3 -> pool 9 (the duplicate gave 9.4)"
+    assert core.resolution_pool(3.6) == 10, "3.6 must round UP to History 4 -> pool 10 (the duplicate gave 9.6)"
+    assert core.resolution_pool(3) == 9 and core.resolution_pool(4) == 10, "integer History must be unchanged"
+    for h in (3.4, 3.5, 3.6, -2.5):
+        assert isinstance(core.resolution_pool(h), int), (
+            f"resolution_pool({h}) returned a non-integer die count — the int(round(...)) has been dropped, "
+            "which is precisely how the deleted duplicate diverged")
+    assert core.resolution_pool(-5) == 5, "the POOL_FLOOR clamp must still hold below it"
+
+
+def test_combatant_hosts_no_cached_pool():
+    """`Combatant.pool` stays gone (deleted ED-PC-0023). A cached copy on the host is not merely a second
+    spelling of the arithmetic — it is the read/write-asymmetry hazard of §0.1 point 1: it is computed
+    once at __init__ and would silently go stale against any later write to `.history`, whether or not it
+    was computed by the owner. Consumers call core.resolution_pool(c.history) at the point of use."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('A', history=3)
+    assert not hasattr(c, 'pool'), (
+        "Combatant.pool resurrected — the resolution-pool rule is hosted on the combatant again; "
+        "call core.resolution_pool(c.history) at the point of use instead")
+
+
 # ── NO WEAPON-NAME TABLE IN RESOLUTION ────────────────────────────────────────────────────────────
 def _string_literals_excluding_docstrings(path):
     """All string-constant literals in a module EXCEPT module/function/class docstrings. Comments are not in the AST,
