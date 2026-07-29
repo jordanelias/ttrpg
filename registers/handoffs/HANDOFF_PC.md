@@ -6,7 +6,45 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **▶ RESUME HERE (2026-07-29, second session). E0–E3 ARE COMPLETE.** E0/E1a/E1b/I4 merged (PRs #259,
+- **▶ JORDAN RULED THE CARRY-CONTEXT FORK AND GROUNDED THE CURVATURE MODEL (2026-07-29, live). READ
+  `audit/2026-07-26-combat-balance-customization-state/curvature_and_bind_model_v1.md` FIRST** — his
+  six-part direction is recorded verbatim there with every measurement taken against it. Summary:
+  - **⚖5 / M14 / Q8 / D2 (carry context) is RULED and adoptable** — battlefield: all; settlement public/
+    religious/parliamentary: none-or-light armour + 1H non-blunt only; soldier/troop exempt. Derives
+    entirely from stored primitives (`head_len+grip_len`, `hands`, `head`), threshold in the roster's own
+    0.30 m empty gap. **Diverges from proposal §12 by exactly one weapon (the mace — Jordan bars blunt);
+    his ruling governs.**
+  - **⚠ §12.1's CENTRAL CLAIM IS FALSIFIED.** Carry context does NOT remove the dominance problem; it
+    RELOCATES it. Civilian field spread **66.8pp is LARGER than the battlefield's 52.1pp**; sidearms-only
+    45.1pp. Do not build on §12's promise.
+  - **Legality delivers "pikes fare poorly in duels" by EXCLUSION only, not performance** — with war
+    weapons present under civilian armour the spread is **78pp** (guandao 88%). Jordan accepts legality
+    for now. **The performance half now routes to a future GRID TACTICAL LAYER (FFT-shaped, per-attack
+    mini-resolutions) — on a grid reach is POSITIONAL (range in tiles), so DO NOT commission the
+    closed-phase LEVERAGE/DAMAGE rework the older handoff scoped; the grid may subsume it.**
+  - **A7a channel 1 DONE (ED-PC-0051)** — native edge quality finally consumed; the register's own
+    proposed fix was re-confirmed a NO-OP. Keen cutters gained (scimitar +6.1pp … sabre +2.3pp), spread
+    45.1→40.6pp. **⚖ TWO ITEMS FOR JORDAN:** the greatsword/hook_sword flip to point at `none` (a
+    consequence of the katana anchor), and the anchor choice itself.
+  - **▶ NEXT BATCH IS CHANNEL 5, the bind mass-moment (spec §5) — the strongest lead on the rapier.**
+    The rapier is an 80.8% outlier, 26pp clear, and **cut grading provably cannot reach it (it is a
+    POINT weapon)**. Measured: **the bind has NO mass/momentum/inertia term at all** — only
+    `leverage()`= grip_len−K·head_len, pure geometry. And it must key on the MOMENT, not weight: the
+    rapier is the *heavier* weapon (1.37 kg vs scimitar 0.95) but its `static_moment` is 0.1231 vs the
+    scimitar's **0.2199 (1.8×)**. Its bind edge currently comes from its swept hilt (`catch` +0.197)
+    with no mass-moment counterweight. Clean additive primitive, own ablatable term, do NOT multiply
+    into `leverage()`.
+  - **Channels 3–4 (curved thrust) — the defect is DATA, not formula.**
+    **corr(curvature, point_concentration) = −0.729 across 42 bladed weapons**: the tip data was
+    authored largely AS a function of blade curvature, and `thrust_factor` then applies a curvature
+    penalty AGAIN — a double-count of the class the R3 ruling forbids. **shamshir pc 0.08 is below
+    sparr_axe's 0.10, an axe.** Template for the correction exists in-roster: **szabla, curv 0.30 /
+    pc 0.60.** ⚠ Interacts with ED-PC-0050's binary shear-OR-puncture arm split — do not extend that
+    split further until resolved.
+  - **Channel 2 (curve → faster recovery, doesn't stick) has NO consumer anywhere** — `curvature`'s only
+    runtime reader is `arrest_impulse`, where it is a *cost*. New mechanic, last in sequence.
+
+- **▶ E0–E3 ARE COMPLETE (2026-07-29, second session).** E0/E1a/E1b/I4 merged (PRs #259,
   #269), E2a merged (PR #270), and **E2b/E3a/E3b landed this session as ED-PC-0048/0049/0050** — the
   whole no-⚖ span of `combat_execution_plan.md` is done. EDs 0041–0050 filed; **draw 0051+ from the
   reserved block 0041–0055 (`id_reservations.yaml` is FROZEN for the run — do not edit it).**
