@@ -291,7 +291,7 @@ def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
 import os as _reform_os
 # G-8 reform flag kept in-engine (not config.py) to avoid the sim_fabrication ledger drift on
 # config's pre-existing constants; default OFF preserves the calibrated byte-exact baseline.
-REFORM_CHECK_ENABLED = _reform_os.environ.get('REFORM_CHECK_ENABLED', '0') == '1'
+REFORM_CHECK_ENABLED = _reform_os.environ.get('REFORM_CHECK_ENABLED', '1') == '1'
 
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     # [canonical: mass_battle_v30.md §A.5; PP-241 — Reform Phase Discipline restoration:]

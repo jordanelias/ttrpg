@@ -36,7 +36,7 @@ FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "1") == "1")
 # FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch never emits floats), so
 # run_battle enforces FIELD_MOVEMENT ⇒ PC_NODE_COHESION at setup (see run_battle). Toggles live here (not
 # config.py) so the whole-file fabrication scan does not surface config's pre-existing uncited constants.
-FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "0") == "1")  # default OFF -> byte-exact contact path
+FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "1") == "1")  # default OFF -> byte-exact contact path
 CONTACT_REACH = float(_hu_os.environ.get("CONTACT_REACH", "0.0"))  # 0.0 => ON contact predicate == OFF adjacency (exempt value)
 COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_WIDTH). At 1.0, round(int)==int -> OFF byte-exact.
 
@@ -47,7 +47,7 @@ COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_
 # ungrounded placeholders (calibrated debt), not ratified. Placed here (not config.py) so the whole-file
 # fabrication scan does not surface config's pre-existing uncited constants; exported in __all__ so
 # orchestration's star-import of units sees them (avoids the config __all__ omission that would NameError).
-PC_FACING_MODEL = (_hu_os.environ.get('PC_FACING_MODEL', '0') == '1')   # master gate; OFF -> today's raw-vector facing
+PC_FACING_MODEL = (_hu_os.environ.get('PC_FACING_MODEL', '1') == '1')   # master gate; OFF -> today's raw-vector facing
 PC_FACING_ATTENTION = (_hu_os.environ.get('PC_FACING_ATTENTION', '1') == '1')  # (a) engaged cell faces its ENGAGED target; no-op unless PC_FACING_MODEL
 PC_FACING_SLEW_BASE = float(_hu_os.environ.get('PC_FACING_SLEW_BASE', '60'))  # [CALIBRATED-DEBT, Stage-5: ungrounded placeholder pivot rate deg/tick; NOT ratified — do not enable]
 PC_FACING_FOV_GATE = (_hu_os.environ.get('PC_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
@@ -2243,8 +2243,10 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
     # "two unit squares that must never interpenetrate". That rule was only ever applied to
     # CROSS-SIDE pairs, so a cell of one subunit walked straight through a cell of another on its
     # own side. Measured before this pass, over 140 historical-scale snapshots / 79,226 cell
-    # placements: 9,970 co-located within a subunit, 3,705 ACROSS subunits of the same side, 39
-    # across opposing sides — a 17.31% overlap rate.
+    # placements, as DEEP body-box interpenetration (obb_overlap AND penetration depth >= 0.1):
+    # 43,068 within a subunit, 13,477 ACROSS subunits of the same side, 875 across opposing sides.
+    # (An earlier draft of this comment quoted "a 17.31% overlap rate" from a ROUNDED-SQUARE metric
+    # that ED-MB-0060 retracts in the very commit that introduced this block. Do not reintroduce it.)
     #
     # Jordan's framing (2026-07-29) is the design here: "we are using a field system so there
     # shouldn't even be any assignment issues so long as cell boundaries are respected." So this is

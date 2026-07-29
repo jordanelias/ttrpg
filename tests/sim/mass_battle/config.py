@@ -105,7 +105,7 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # pinned OFF (the test pins it explicitly ON, as it does PC_OCTAGON_DMG) so the change-detector keeps
 # tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
 # quietly ending their coverage of what the engine actually does.
-PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '0') == '1'   # RETRACTED to OFF 2026-07-25 -- see above
+PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '1') == '1'   # RETRACTED to OFF 2026-07-25 -- see above
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
 # what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),
@@ -122,7 +122,7 @@ MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [
 #  VALUE is a calibration (needs_jordan) so this ships GATED OFF (byte-exact). When ON, a mounted type's
 #  cells hold fewer troops -> the SAME troop count deploys over MORE cells (wider frontage) -> the combat
 #  density factor (attrition `min(tpc,CELL_CAP)`) drops naturally via the higher ncells, no attrition edit.
-PC_TROOP_DENSITY_CAP = (_sigma_os.environ.get('PC_TROOP_DENSITY_CAP', '0') == '1')
+PC_TROOP_DENSITY_CAP = (_sigma_os.environ.get('PC_TROOP_DENSITY_CAP', '1') == '1')
 TROOP_TYPE_DENSITY_CAP = {   # mounted: ~half infantry density (a horse+rider occupies ~2x a man's ground). GROUNDED default, needs_jordan on the value.  # [canonical: P-DEC-3 mechanism; value calibration pending]
     'cavalry': 100, 'knights_templar': 100, 'mounted_archers': 100,
 }
@@ -234,7 +234,7 @@ OCTAGON_LOCAL_REACH = float(_sigma_os.environ.get('OCTAGON_LOCAL_REACH', '2.0'))
 #  Failing (2) -> the pursuer is OVEREXTENDED: it re-engages next turn at a bounded pool penalty
 #  (the feigning unit turns and re-engages the disorganised pursuer with advantage). GATED OFF by
 #  default so the multi-unit RNG stream is unchanged unless explicitly enabled (flip needs_jordan).
-PC_FEIGNED_RETREAT = (_sigma_os.environ.get('PC_FEIGNED_RETREAT', '0') == '1')
+PC_FEIGNED_RETREAT = (_sigma_os.environ.get('PC_FEIGNED_RETREAT', '1') == '1')
 FEIGNED_RECOGNIZE_OB = int(_sigma_os.environ.get('FEIGNED_RECOGNIZE_OB', '2'))  # [canonical: mass_battle_v30.md §A.12 Clarification — Command Ob 2 to recognise the feint]
 FEIGNED_RETREAT_OB = int(_sigma_os.environ.get('FEIGNED_RETREAT_OB', '1'))      # [canonical: PP-256 / mass_combat.md §PP-256 — pursuing-side Discipline check Ob 1]
 OVEREXTEND_PENALTY = int(_sigma_os.environ.get('OVEREXTEND_PENALTY', '2'))      # [canonical: mass_battle_v30.md §B.4 tactic card — "Overextended (−2D)"]
@@ -245,7 +245,7 @@ OVEREXTEND_PENALTY = int(_sigma_os.environ.get('OVEREXTEND_PENALTY', '2'))      
 # window) — already this path's behaviour. Modeled at battle-turn granularity: a reserve unit sits out
 # battle-turn 1 and its pairing activates from RESERVE_COMMIT_TURN onward. GATED OFF (byte-exact; the
 # reserve instruction stays inert, all pairs active from turn 1). Flip needs_jordan.
-PC_RESERVE_COMMIT = (_sigma_os.environ.get('PC_RESERVE_COMMIT', '0') == '1')
+PC_RESERVE_COMMIT = (_sigma_os.environ.get('PC_RESERVE_COMMIT', '1') == '1')
 RESERVE_COMMIT_TURN = int(_sigma_os.environ.get('RESERVE_COMMIT_TURN', '2'))    # [canonical: mass_battle_v30.md §A.6 P3-02 / PP-MB-04 — commit at Phase 3 of the NEXT (2nd) battle-turn]
 # [ED-MB-0024 — DG-2 residuals: emergent auto-entry (§2.2), rally exit + pocket exit (§2.4) of the
 # fighting-withdrawal mechanic (proposals/mass_battle_fighting_withdrawal_v1.md). The state + COMMANDED
@@ -254,17 +254,17 @@ RESERVE_COMMIT_TURN = int(_sigma_os.environ.get('RESERVE_COMMIT_TURN', '2'))    
 # disciplined subunit toward the rout cliff, it ENTERS yielding (gives ground in good order) instead of
 # only eroding. Highest blast radius (touches rout dynamics in every scenario) -> ships OFF by default
 # per the design doc §4.3. Sets the state only; the erosion-brake calibration stays deferred (needs_jordan).
-PC_YIELD_EMERGENT = (_sigma_os.environ.get('PC_YIELD_EMERGENT', '0') == '1')
+PC_YIELD_EMERGENT = (_sigma_os.environ.get('PC_YIELD_EMERGENT', '1') == '1')
 # RALLY exit: at a battle-turn boundary (the lull), a yielding subunit whose morale has recovered above
 # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure relieved,
 # reformed"). Gated OFF -> inert.
-PC_YIELD_RALLY = (_sigma_os.environ.get('PC_YIELD_RALLY', '0') == '1')
+PC_YIELD_RALLY = (_sigma_os.environ.get('PC_YIELD_RALLY', '1') == '1')
 YIELD_RALLY_MORALE_FRAC = float(_sigma_os.environ.get('YIELD_RALLY_MORALE_FRAC', '0.75'))  # [CALIBRATED-DEBT — rally when morale recovered to 3/4 of start; not independently derived, flagged per §5]
 # POCKET exit: while yielding, if rearward movement is structurally blocked (map edge in the flee
 # direction, or an enemy has gotten behind into the retreat path), yielding converts to a HOLD with the
 # combat malus REMOVED — Cannae's kill condition (pinned with nowhere to give ground, annihilated in
 # place) emerging from the standoff substrate. Gated OFF -> `pocketed` never set -> malus path unchanged.
-PC_YIELD_POCKET = (_sigma_os.environ.get('PC_YIELD_POCKET', '0') == '1')
+PC_YIELD_POCKET = (_sigma_os.environ.get('PC_YIELD_POCKET', '1') == '1')
 YIELD_POCKET_REACH = float(_sigma_os.environ.get('YIELD_POCKET_REACH', '3.0'))  # [CALIBRATED-DEBT — an enemy within 3 cells in the retreat direction counts as 'gotten behind'; not independently derived, flagged per §5]
 # [CALIBRATED-DEBT: -99 is a structural sentinel (effectively-zero speed for 'hold') — no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
@@ -277,7 +277,7 @@ STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
 # as a delta-sigma net term (uniform-impact), exactly like the octagon/puncture advantages and the
 # mass_battle_v30 §A Offensive/Defensive tactic-card +1D/+2D convention it is anchored to — NOT a raw
 # damage multiplier. Gated OFF by default (byte-exact); balanced commitment 0 -> inert even when on.
-PC_INTENT_RESOLUTION = (_sigma_os.environ.get('PC_INTENT_RESOLUTION', '0') == '1')
+PC_INTENT_RESOLUTION = (_sigma_os.environ.get('PC_INTENT_RESOLUTION', '1') == '1')
 STANCE_COMMITMENT = {"aggressive": 1, "balanced": 0, "hold": -1, "retreat": -1}  # signed offence/defence commitment per stance
 # [class-B, CALIBRATED to the §A tactic-card ASYMMETRY: "Disciplined Defence +1D Defence" but "Standard
 # Advance: no additional effect" — the doctrine favours the defender, so DEFENSE outweighs raw OFFENSE.
@@ -293,7 +293,7 @@ INTENT_DEFENSE_D = 1.0  # die-equivalents a full DEFENSIVE commitment blunts the
 # the fractional remainder contributes its EXPECTED net (PER_DIE_NET_EV per full die) so the pool is used
 # at full fractional precision, and the σ-boost reads the fractional pool too. Gated OFF (moves goldens
 # when on — the floored roll is the byte-exact grid oracle).
-PC_FRACTIONAL_POOL = (_sigma_os.environ.get('PC_FRACTIONAL_POOL', '0') == '1')
+PC_FRACTIONAL_POOL = (_sigma_os.environ.get('PC_FRACTIONAL_POOL', '1') == '1')
 PER_DIE_NET_EV = 0.4  # [canonical: params/core.md — face rule 1=-1, 2-6=0, 7-9=+1, 10=+2 -> net EV = (-1+3+2)/10] expected net successes per full TN-7 die
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
                      "Partial": lambda p: 1,        "Failure": lambda p: 0}
@@ -315,7 +315,7 @@ MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF rep
 # table; Rowland "The Stress of Battle"; Sabin "Lost Battles" (2007). See audit/2026-07-22-mass-battle-
 # stress-test/dg6_friction_resolution.md. Default OFF pending A/B + default-flip ratification (mirrors
 # the PER_CELL/FIELD_MOVEMENT field-default precedent; the byte-exact grid oracle pins it OFF).
-PC_FRICTION_CEV = _sigma_os.environ.get('PC_FRICTION_CEV', '0') == '1'
+PC_FRICTION_CEV = _sigma_os.environ.get('PC_FRICTION_CEV', '1') == '1'
 # per-side log-SD; CALIBRATED against the Dupuy DLEDB win-rate curve (see dg6_friction_resolution.md),
 # not fitted to the gauge. [canonical: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md — Dupuy-DLEDB-calibrated combat-friction log-SD]
 PC_FRICTION_SIGMA = float(_sigma_os.environ.get('PC_FRICTION_SIGMA', '1.1'))
@@ -334,9 +334,10 @@ PER_CELL = _sigma_os.environ.get('PER_CELL', '1') == '1'   # per-column density/
 # "we are using a field system so there shouldn't even be any assignment issues so long as cell
 # boundaries are respected." resolve_toi_and_commit's own docstring already states the invariant --
 # "two unit squares that must never interpenetrate" -- but applied it only to CROSS-SIDE pairs, so
-# cells of two subunits on the SAME side walked through each other. Measured overlap before this:
-# 17.31% of all cell placements (9,970 intra-subunit, 3,705 inter-subunit, 39 cross-side over 140
-# historical-scale snapshots). Reuses the existing swept-SAT solve; no new mechanism, no new
+# cells of two subunits on the SAME side walked through each other. Measured DEEP interpenetration
+# before this (obb_overlap AND depth >= 0.1, over 140 historical-scale snapshots / 79,226 cell
+# placements): 13,477 inter-subunit, 875 cross-side. (An earlier draft quoted a "17.31%" rounded-
+# square rate; ED-MB-0060 retracts it — do not reintroduce.) Reuses the swept-SAT solve; no new
 # magnitude, no RNG. Default ON per the directive: this is a built model being switched on, not a
 # new one being introduced.
 PC_CELL_EXCLUSION = (_sigma_os.environ.get('PC_CELL_EXCLUSION', '1') == '1')
@@ -349,8 +350,8 @@ PC_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = PC_STAMIN
 PC_FRONTAGE_BLEND  = 0.0    # Incr4 contact-fraction: 0=pure width (more cols=more men), 1=pure frontage (depth-neutral)
 PC_FRONTAGE_REF    = 7.0    # reference frontage (columns) for the width term normalization  # [canonical: tests/coverage_matrix_archive.md §"PER_CELL Increment 4" — depth-aware contact-fraction width-term normalization; CALIBRATED, not independently historically cited]
 PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density  # [CALIBRATED-DEBT: rear-rank refill trigger — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
-PC_CLOSE_RANKS     = (_sigma_os.environ.get('PC_CLOSE_RANKS', '0') == '1')  # [ED-MB-0028, Jordan directive 2026-07-23: "as cells lose troops, unengaged troops from other cells fill them in to keep engaged cells at prescribed density; coverage shrinks as minimums aren't met — the internal-subunit version of rotating troops"] cell-level closing-ranks lifecycle. Default OFF (byte-exact).
-PC_CELL_DAMAGE     = (_sigma_os.environ.get('PC_CELL_DAMAGE', '0') == '1')  # [ED-MB-0040, Jordan directive 2026-07-24: "the cell is the primitive", "each cell has its own octagon facing", "each cell has its own capacity to receive and issue damage", "flank/rear damage is supposed to be cellular", "damage is supposed to be done to cells"] CELL-PRIMITIVE damage: a pair's casualties are allocated to the defender's CONTACT CELLS in proportion to (cell troops x THAT CELL's own octagon facing multiplier), instead of being smeared uniformly-by-density across every engaged cell after the per-cell arcs were averaged into one subunit scalar. Same pair total (the scalar becomes the troop-weighted mean of the same per-cell mults) -> the change is WHERE the casualties land: a flanked/rear cell dies faster than its front-facing sibling in the same subunit, so an enveloped formation is stripped shell-inward instead of thinning uniformly. Default OFF (byte-exact).
+PC_CLOSE_RANKS     = (_sigma_os.environ.get('PC_CLOSE_RANKS', '1') == '1')  # [ED-MB-0028, Jordan directive 2026-07-23: "as cells lose troops, unengaged troops from other cells fill them in to keep engaged cells at prescribed density; coverage shrinks as minimums aren't met — the internal-subunit version of rotating troops"] cell-level closing-ranks lifecycle. Default OFF (byte-exact).
+PC_CELL_DAMAGE     = (_sigma_os.environ.get('PC_CELL_DAMAGE', '1') == '1')  # [ED-MB-0040, Jordan directive 2026-07-24: "the cell is the primitive", "each cell has its own octagon facing", "each cell has its own capacity to receive and issue damage", "flank/rear damage is supposed to be cellular", "damage is supposed to be done to cells"] CELL-PRIMITIVE damage: a pair's casualties are allocated to the defender's CONTACT CELLS in proportion to (cell troops x THAT CELL's own octagon facing multiplier), instead of being smeared uniformly-by-density across every engaged cell after the per-cell arcs were averaged into one subunit scalar. Same pair total (the scalar becomes the troop-weighted mean of the same per-cell mults) -> the change is WHERE the casualties land: a flanked/rear cell dies faster than its front-facing sibling in the same subunit, so an enveloped formation is stripped shell-inward instead of thinning uniformly. Default OFF (byte-exact).
 PC_CHARGE_SIGMA    = 0.55   # MAX defender moral-shock delta-sigma on a charge impact (du Picq: cavalry's  # [canonical: designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md §5 (PART 5 — CONSTANTS)]
                             # weapon is the MORAL impulse, not physical collision). This is a CAP reached only
 PC_SHOCK_FRONT       = 0.15  # GREEN (faced) charge: mostly absorbed by the formation (square holds frontally)  # [canonical: designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md §5]
