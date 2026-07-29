@@ -2,6 +2,42 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0052 plan-v2 §5 C1: per-phase casualty attribution, with conservation as the gate
+
+Every hp loss is now tagged with SOURCE and TICK through the existing `start_trace`/`trace_event`
+seam. Four sites, the complete set (grepped `\.hp =` across engine + hierarchy + percell): the
+per-turn melee and volley application in `run_battle`, `pursuit_damage`, and
+`freed_attacker_damage`. The fifth `.hp =` is `hp = hp_max` at construction, not damage.
+
+**Conservation is the gate, and it holds EXACTLY** — 20 seeds × 2 sides, `Σ attributed == before −
+after` with zero drift, asserted as equality rather than `approx` (an exactness claim tested with a
+tolerance is not a weak test, it is an absent one). Two subtleties are encoded rather than assumed:
+loss is attributed from the **clamped** movement, not nominal damage (they differ on the killing
+blow, so a nominal-damage conservation claim fails on every annihilation); and the melee/volley
+split is proportional to nominal share of that clamped total, so the parts sum to the whole.
+
+**Instrumenting never restructures the instrumented.** Attribution brackets each existing assignment
+(before/after); the arithmetic and ordering are byte-identical. A single apply-and-tag owner would be
+tidier and would also change float ordering — the exact class of "harmless" change this lane keeps
+being burned by.
+
+**⚠ THE MERGE GUARD'S FIRST MUTATION WAS VACUOUS, AND RUNNING IT IS WHAT SHOWED THAT.** Planting
+`random.random()` *inside* `attribute_hp_loss` moved NO digest — because with tracing off the
+function is never called at all on the `bat.py` path (the main site is gated by `tracing_on()`, and
+pursuit/freed-attacker fire only in `run_multi_unit_battle`, which the battery does not use). So the
+mutation proved nothing, and had it been reported as "mutation-verified" it would have been false.
+Re-planted at the seam's own call site, unconditional and hot: digest moved
+`241f04e5… → bb5acf02…`. **Both results together are the guard** — one shows the instrumentation is
+structurally unreachable when off, the other shows the digest is genuinely sensitive at that point,
+so byte-exactness there is evidence and not vacuity.
+
+All four goldens byte-exact with tracing off. Guards:
+`tests/valoria/test_casualty_attribution.py` (5) — conservation across 20 seeds with an
+`assert checked >= 20` non-vacuity counter; source/tick well-formedness; a ranged matchup asserting
+`volley` rows actually appear (non-vacuity for the SPLIT, not just the total — a conservation test
+alone passes happily if every loss is filed under one label); inertness with tracing off; and an
+in-suite mutation that untags the melee path and asserts conservation then FAILS.
+
 ## 2026-07-29 — ED-MB-0051 plan-v2 A2: degree-boundary epsilon — the prediction FAILED, and the prediction was the thing that was wrong
 
 **A2 predicted "this moves no digest in any of the four modes" and made digest movement a STOP
@@ -277,45 +313,13 @@ load-bearing on the unseeded fallback path, so it is a retirement **candidate**,
 `test_loser_breaks_near_historical_band` now pins `PC_CELL_MORALE=OFF` — it measures the body-level
 mechanism, and inheriting the live default made its control arm already-broken and the test a no-op.
 
-## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry
+## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry (archived — condensed)
 
-**Phases 1+2 measured byte-identical to phase 1** — every one of 20 rows to the decimal, 1/20 casualty
-and 8/20 win-share. Not a small effect: *zero*. Byte-identical is a far stronger signal than
-disappointing, because a smaller-than-hoped number would have been absorbed as "phase 2 helps a little",
-whereas identical across twenty rows can only mean the code never ran in a way that mattered.
-
-**Instrumented: 72 of 144 cells "broken" at EXACTLY −1.0.** The uniformity was the diagnosis — local
-damage produces a spread, so one repeated value means a single uniform write. It was the body-wide
-stochastic-rout punch (`erode_morale(max(eff_morale + 1.0, 0))`, designed to land at −1.0), which phase
-1 routes across all cells. **Cells were breaking as a CONSEQUENCE of the body routing**, strictly after
-the event phase 2 exists to precede: `propagate_cell_breaks` only ever saw already-dead bodies, the
-formation-break check is guarded by `not atom.routed`, and a routed subunit's emission is already zero.
-
-**The cause was an asymmetry, not a magnitude** — which is why tuning would have been the wrong move:
-
-| | gradual erosion | break-point short-circuit |
-|---|---|---|
-| body | yes | **yes** — `_stochastic_break`, du Picq 15–30% |
-| cell | yes | **none** |
-
-At `MORALE_PHASE_CAP=3` against a 6.0 pool a cell had to be **destroyed twice over** to break by erosion
-alone, so the body always won that race by construction.
-
-**Fix (`check_cell_breaks`)**: each cell draws its own break-point in the same historical band, skewed
-by discipline, and breaks when its own casualty fraction crosses it — the body's mechanism at the
-cell's scale, not a coefficient nudge. Morale values are now a genuine spread (−4.85, −2.79, −1.12,
-−0.89, −0.47, +0.13 …) rather than every cell at −1.0.
-
-**⚠ Early measurement shows OVER-FIRING**: single-mode draw rates of 76–100%. Bodies may now break so
-early that nothing resolves. Recorded before the multi-mode scoreboard lands, so the concern is on the
-record independent of how the final number reads. Flag remains OFF.
-
-> **That concern was WRONG, and the error is instructive.** The flag-OFF control run (below) shows
-> H3/H5/H6/H10/R3 at **100% draws in single mode with the flag off too** — the pre-existing tick-cap
-> artifact the gauge's own docstring documents, present before phase 2b and unmoved by it. I read
-> single-mode rows from a run that had no control beside it and attributed a standing artifact to my
-> own change. The rule this cost me: **a number without its control is not a measurement**, and that
-> applies to a worrying number exactly as much as to a flattering one.
+Phase 2 could not fire: bodies had erosion AND a break-point, cells had erosion only, so a cell had
+to be destroyed twice over to break and the body always won that race by construction. An
+asymmetry, not a magnitude. Cells given their own du Picq break-point; `check_cell_breaks` runs
+before contagion and cohesion. **Full detail: `tests/coverage_matrix_archive_part2.md`** (moved
+2026-07-29 under the register size cap, ED-MB-0052 — nothing dropped, only relocated).
 
 ## 2026-07-25 — ED-MB-0041 phase 2: local break, cell-scale contagion, and the half of phase 1 never wired (archived — condensed)
 

@@ -1704,6 +1704,41 @@ def _draw_friction_cev(unit):
         unit._friction_cev = 1.0
 
 
+# ─── [ED-MB-0052 / plan-v2 §5 C1] PER-PHASE CASUALTY ATTRIBUTION ─────────────
+# Every hp loss is tagged with WHERE it came from and WHEN. This is load-bearing, not decoration:
+# it is the only way to measure §0's inverted causal shape — the engine kills the loser and THEN
+# breaks him, where history breaks him and then kills him — and the only way to check that a change
+# advertised as a no-op (A2's sigma snap, B1c's re-key) really is one, per source rather than in
+# aggregate. Before this, every such question needed a bespoke probe, and there were 23 of them.
+#
+# BINDING RULES for anything on this seam, and each one is checked rather than promised:
+#   * ZERO RNG draws and NO float writes to engine state. This function reads two numbers the caller
+#     already has and appends a dict. It cannot perturb what it observes.
+#   * `trace_event` is a no-op when tracing is off, so with tracing off the engine is byte-identical
+#     — verified against all four goldens, and mutation-verified by planting a state-perturbing
+#     event and watching a digest move.
+#   * INSTRUMENTING MUST NEVER RESTRUCTURE THE INSTRUMENTED. The damage sites keep their existing
+#     arithmetic and ordering exactly; attribution is observed AROUND each assignment (before/after),
+#     never by routing the assignment through a new owner. That is a deliberate limit: a single
+#     apply-and-tag owner would be tidier and would also change float ordering, which is precisely
+#     the class of "harmless" change this lane keeps getting burned by.
+#
+# `delta` is the ACTUAL hp movement including the `max(0, …)` clamp, not the nominal damage — the
+# two differ on the killing blow, and conservation must be stated in the quantity that actually
+# moved or it fails on every battle that ends in annihilation.
+def attribute_hp_loss(unit, before, after, source, t=None, phase=None):
+    """Record one attributed hp loss. Pure observation; no-op when tracing is off."""
+    if not tracing_on():
+        return
+    delta = before - after
+    if delta == 0:
+        return
+    trace_event('casualty', unit=getattr(unit, 'name', '?'),
+                faction=getattr(unit, 'faction', '?'),
+                source=source, t=t, phase=phase,
+                before=before, after=after, delta=delta)
+
+
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
     v16: max_turns=18 = one battle turn's engagement cap (3 phases).
@@ -2020,8 +2055,27 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # before unit_b's damage is applied.
         # [canonical: params/mass_combat.md PP-233 — "Damage is simultaneous.
         #  Both sides deal and receive damage before Size is recalculated."]
+        # [ED-MB-0052 / C1] Attribution brackets the EXISTING assignment; the arithmetic below is
+        # byte-identical to what it replaced. Melee and volley are separated by computing each
+        # side's split from the same terms the assignment uses — no second derivation of either.
+        _a_before, _b_before = unit_a.hp, unit_b.hp
+        _vol_a = volley_dmg_a * volley_hp_scale(unit_a)
+        _vol_b = volley_dmg_b * volley_hp_scale(unit_b)
         unit_a.hp = max(0, unit_a.hp - result["dmg_a"] - volley_dmg_a * volley_hp_scale(unit_a))
         unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * volley_hp_scale(unit_b))
+        if tracing_on():
+            # Split the clamped total across its two sources in proportion to their nominal share,
+            # so the parts always sum to the whole even on a killing blow (where the clamp bites).
+            for _u, _before, _after, _melee, _vol in (
+                    (unit_a, _a_before, unit_a.hp, result["dmg_a"], _vol_a),
+                    (unit_b, _b_before, unit_b.hp, result["dmg_b"], _vol_b)):
+                _nominal = _melee + _vol
+                _actual = _before - _after
+                _share = (_actual / _nominal) if _nominal > 0 else 0.0
+                attribute_hp_loss(_u, _before, _before - _melee * _share, 'melee', t=t,
+                                  phase=current_phase)
+                attribute_hp_loss(_u, _before, _before - _vol * _share, 'volley', t=t,
+                                  phase=current_phase)
         if PER_CELL:
             # Increment 2: mirror the same total casualties onto the per-column grid (keeps sum==hp).
             # E: ORDERED volley fire concentrates its portion on the target subunit (apply_to_subunit); the
@@ -2563,7 +2617,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             # Pursuit damage
             dmg = pursuit_damage(pursuer, routing)
             if dmg > 0:
+                _pursuit_before = routing.hp                       # [ED-MB-0052 / C1]
                 routing.hp = max(0, routing.hp - dmg)
+                attribute_hp_loss(routing, _pursuit_before, routing.hp, 'pursuit')
                 # [ED-MB-0041] Pursuit damage previously mutated hp ONLY, never the cells — so the two
                 # ledgers diverged permanently. They feed DIFFERENT mechanics (hp -> _lanchester_strength,
                 # recalc_size, the single-subunit cohesion fast path; cells -> pair_pool_contribution,
@@ -2625,7 +2681,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 dmg = freed_attacker_damage(freed_unit, target)
                 if dmg > 0:
                     # [canonical: params/mass_combat.md PP-233 — simultaneous damage]
+                    _freed_before = target.hp                      # [ED-MB-0052 / C1]
                     target.hp = max(0, target.hp - dmg)
+                    attribute_hp_loss(target, _freed_before, target.hp, 'freed_attacker')
                     # [ED-MB-0041] same hp-only divergence as the pursuit path above — mirror the loss
                     # onto the cells so sum(cell_troops) tracks hp.
                     distribute_casualties(target, dmg, [])

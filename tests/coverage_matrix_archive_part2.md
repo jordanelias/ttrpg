@@ -355,3 +355,47 @@ test now asserts that, with the wrong first version recorded in its docstring.
 
 `test_cell_morale.py` now 16 tests. Not yet measured on the gauge — phases 1+2 will be measured together,
 since phase 1's number was taken with half the mechanism dead.
+
+
+<!-- Relocated verbatim from tests/coverage_matrix.md 2026-07-29 (ED-MB-0052) to keep the
+     active matrix under its 15,000-token register cap. Content unchanged. -->
+
+## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry
+
+**Phases 1+2 measured byte-identical to phase 1** — every one of 20 rows to the decimal, 1/20 casualty
+and 8/20 win-share. Not a small effect: *zero*. Byte-identical is a far stronger signal than
+disappointing, because a smaller-than-hoped number would have been absorbed as "phase 2 helps a little",
+whereas identical across twenty rows can only mean the code never ran in a way that mattered.
+
+**Instrumented: 72 of 144 cells "broken" at EXACTLY −1.0.** The uniformity was the diagnosis — local
+damage produces a spread, so one repeated value means a single uniform write. It was the body-wide
+stochastic-rout punch (`erode_morale(max(eff_morale + 1.0, 0))`, designed to land at −1.0), which phase
+1 routes across all cells. **Cells were breaking as a CONSEQUENCE of the body routing**, strictly after
+the event phase 2 exists to precede: `propagate_cell_breaks` only ever saw already-dead bodies, the
+formation-break check is guarded by `not atom.routed`, and a routed subunit's emission is already zero.
+
+**The cause was an asymmetry, not a magnitude** — which is why tuning would have been the wrong move:
+
+| | gradual erosion | break-point short-circuit |
+|---|---|---|
+| body | yes | **yes** — `_stochastic_break`, du Picq 15–30% |
+| cell | yes | **none** |
+
+At `MORALE_PHASE_CAP=3` against a 6.0 pool a cell had to be **destroyed twice over** to break by erosion
+alone, so the body always won that race by construction.
+
+**Fix (`check_cell_breaks`)**: each cell draws its own break-point in the same historical band, skewed
+by discipline, and breaks when its own casualty fraction crosses it — the body's mechanism at the
+cell's scale, not a coefficient nudge. Morale values are now a genuine spread (−4.85, −2.79, −1.12,
+−0.89, −0.47, +0.13 …) rather than every cell at −1.0.
+
+**⚠ Early measurement shows OVER-FIRING**: single-mode draw rates of 76–100%. Bodies may now break so
+early that nothing resolves. Recorded before the multi-mode scoreboard lands, so the concern is on the
+record independent of how the final number reads. Flag remains OFF.
+
+> **That concern was WRONG, and the error is instructive.** The flag-OFF control run (below) shows
+> H3/H5/H6/H10/R3 at **100% draws in single mode with the flag off too** — the pre-existing tick-cap
+> artifact the gauge's own docstring documents, present before phase 2b and unmoved by it. I read
+> single-mode rows from a run that had no control beside it and attributed a standing artifact to my
+> own change. The rule this cost me: **a number without its control is not a measurement**, and that
+> applies to a worrying number exactly as much as to a flattering one.
