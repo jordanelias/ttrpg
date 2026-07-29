@@ -64,11 +64,20 @@ from engine.mc_v18 import run_batch, run_campaign  # noqa: E402
 # contest (ED-SC-0006 #96, when Stability Crisis fires, now additionally emitting a play-out echo
 # via scene_dispatch.py). The pre-spine byte-exact oracle is retained under ECHO_TRANSPORT=0 in
 # test_echo_transport.py. Deterministic; verified stable across repeat runs.
+# REPINNED 2026-07-29 (ED-FA-0036 / OI-04, ED-IN-0091 plan §3 Wave 2, item H golden re-record):
+# parliamentary_transfer.propose_transfer gained its first caller this wave
+# (parliamentary_bridge._run_transfer_motion, every season, canon-gated at 1/arc/faction) —
+# consumes extra world.rng whenever Crown's territories drop under 6. Isolated via pristine
+# `git archive HEAD` vs. the fixed tree (see test_f7_smoke_oracle.py's matching note for the
+# full control-isolation rationale — same method applied here). OLD values, preserved:
+#   GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+#   GOLDEN_WINNERS   = {'Varfell': 1, 'Crown': 1}
+#   GOLDEN_BATTLES_MEAN  = 30.5
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
-GOLDEN_WINNERS = {'Varfell': 1, 'Crown': 1}
-GOLDEN_BATTLES_MEAN = 30.5
+GOLDEN_WIN_SHARE = {'Crown': 100.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 0.0}
+GOLDEN_WINNERS = {'Crown': 2}
+GOLDEN_BATTLES_MEAN = 33.5
 
 
 def test_mc_v18_batch_is_deterministic():

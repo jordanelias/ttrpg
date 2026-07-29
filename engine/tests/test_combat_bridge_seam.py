@@ -173,7 +173,7 @@ def test_no_params_equals_explicit_flag_off():
     "byte identical to [true, pre-bridge] no params" property this test cannot demonstrate.)
     The TRUE OFF-parity instruments — the ones that actually pin PRE-bridge behaviour and would
     catch OFF-path drift — are the pre-existing pinned goldens that run in the same gate:
-    `test_f7_smoke_oracle.py` (`GOLDEN_SCENES_RESOLVED=383` etc.), `test_mc_v18_regression.py`,
+    `test_f7_smoke_oracle.py` (`GOLDEN_SCENES_RESOLVED=463` etc.), `test_mc_v18_regression.py`,
     and `test_echo_transport.py`."""
     assert os.environ.get('DISPATCH_COMBAT_BRIDGE') is None, (
         "DISPATCH_COMBAT_BRIDGE must not be set in the test environment for this probe to be valid")

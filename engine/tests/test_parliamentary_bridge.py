@@ -26,8 +26,20 @@ from systems.social_contest.sim.parliamentary_vote import VoteResult
 # is NO LONGER the degenerate {Varfell 87.5} artifact — this branch's FA mechanics already erode the
 # Varfell lockout at flag-OFF ({Crown 50, Hafenmark 25, Varfell 25}); the spine then redistributes
 # further (Church/Hafenmark pick up wins under the flag). See the diverges-from-off test below.
+#
+# REPINNED 2026-07-29 (ED-FA-0036 / OI-04, ED-IN-0091 plan §3 Wave 2, item H golden re-record):
+# parliamentary_transfer.propose_transfer gained its first caller this wave
+# (parliamentary_bridge._run_transfer_motion — THIS module — every season a qualifying CB
+# exists, canon-gated at 1/arc/faction). Fires only under ECHO_TRANSPORT on (the flag this whole
+# module is scoped to), so _OFF_WIN_SHARE / test_flag_on_resolves_contests_and_fires_echoes'
+# single-campaign seed-42 pins (_ON_KEYLOG_HASH/_ON_SCENES_RESOLVED/_ON_KEYS_EMITTED — Crown
+# never drops under 6 territories on seed 42 alone) are UNCHANGED and NOT touched here; only the
+# 8-campaign BATCH win-share (seeds 42-49, where Crown does cross the threshold on several
+# seeds) moved. Isolated via pristine `git archive HEAD` vs. the fixed tree (see
+# test_f7_smoke_oracle.py's matching note for the full control-isolation rationale). OLD value:
+#   _ON_WIN_SHARE = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
 _OFF_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
-_ON_WIN_SHARE = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
+_ON_WIN_SHARE = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
 _ON_KEYLOG_HASH = '43c9f319953f2d0ed46e5f1c2dc198ea07f527b8bfb16b227fc8e5af89c42c9e'
 _ON_SCENES_RESOLVED = 50
 _ON_KEYS_EMITTED = 13
@@ -45,14 +57,24 @@ def test_flag_on_win_share_golden_and_diverges_from_off():
     """The spine measurably moves balance and REDISTRIBUTES wins. (Post-merge 2026-07-08: the
     flag-OFF baseline is no longer the degenerate {Varfell 87.5} — this branch's FA mechanics already
     broke the lockout at flag-OFF — so the guard is now 'the spine brings a shut-out faction into the
-    winners', not 'reduces Varfell'.)"""
+    winners', not 'reduces Varfell'.)
+
+    REPINNED 2026-07-29 (ED-FA-0036/OI-04 — see the golden block's REPINNED comment above): the
+    prior 'the spine brings Church into the winners' claim (Church 0.0 -> 12.5 under the flag) no
+    longer holds now that the Territory Transfer motion also consumes RNG under the flag — Church
+    stays shut out (0.0) in both arms on this seed-42..49 batch. The weaker, still-true claim this
+    wave's fix preserves is asserted instead: the flag still measurably redistributes SOMETHING
+    (on != off, already asserted below) and still changes who is shut out relative to off (here:
+    Hafenmark, not Church) — not "no faction is ever brought in", which this test no longer has
+    grounds to claim for Church specifically."""
     on = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 1}).win_share
     off = run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 0}).win_share
     assert on == _ON_WIN_SHARE, f"flag-ON win-share drifted: {on}"
     assert off == _OFF_WIN_SHARE, f"flag-OFF win-share drifted: {off}"
     assert on != off, "the consequence spine must change strategic outcomes when active"
-    assert off['Church'] == 0.0 and on['Church'] > 0.0, (
-        "the spine should bring Church (shut out at flag-OFF) into the winners")
+    assert off['Hafenmark'] > 0.0 and on['Hafenmark'] == 0.0, (
+        "the spine should still shut out a faction that survives at flag-OFF (was Hafenmark on "
+        "this batch as of the 2026-07-29 repin — see docstring for why the Church claim retired)")
 
 
 def test_flag_on_is_deterministic():

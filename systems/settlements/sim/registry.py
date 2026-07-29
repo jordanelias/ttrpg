@@ -26,11 +26,20 @@ Entry points:
 from __future__ import annotations
 
 import math
+import os
 from dataclasses import dataclass, field
+
+import yaml
 
 from systems.settlements.sim.ledger import (
     LedgerTag, ledger_add, ledger_get, ledger_has, ledger_sweep,
 )
+
+# OI-07 (ED-IN-0091 plan §3 Wave 2 item 4) — the canonical geography source. "PP-726-rebuilt
+# geography YAML" per references/id_reservations.yaml's ED-SE-0048 note ("PP-726-rebuilt
+# geography YAML (37/55)" — 37 settlements, 55 provinces+settlements combined); authority line
+# in the file itself: "AUTHORITY: ED-779 / PP-707 (canonical workplan) / PP-709 (reconciliation)".
+_GEOGRAPHY_YAML = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'valoria_geography_v30.yaml')
 
 # §1.2 legal settlement types (+ Village, per the PP-726 §2.1 registry; see audit H3)
 LEGAL_TYPES = {
@@ -97,6 +106,57 @@ class Settlement:
     def tags(self, kind: str) -> list:
         return ledger_get(self.ledger, kind)
 
+    # ── serialization (OI-07, mirrors NPC.to_dict/from_dict in systems/world/sim/npe.py —
+    #    engine.autoload.game_state.serialize_world/restore_world dispatch through these
+    #    per the established `hasattr(v, 'to_dict')` registry pattern) ──
+    def to_dict(self) -> dict:
+        return {
+            'sid': self.sid, 'name': self.name, 'stype': self.stype,
+            'province_id': self.province_id, 'owner_faction': self.owner_faction,
+            'governor_id': self.governor_id,
+            'prosperity': self.prosperity, 'defense': self.defense, 'order': self.order,
+            'fort_level': self.fort_level, 'garrison': self.garrison,
+            'legitimacy': self.legitimacy, 'popular_support': self.popular_support,
+            'facility_tier': self.facility_tier, 'suspicion': self.suspicion,
+            'pressure': self.pressure,
+            'active_directive': self.active_directive,
+            'religious_building': self.religious_building,
+            'church_attention': self.church_attention,
+            'governor_emergence': self.governor_emergence,
+            'subnational': dict(self.subnational),
+            'npc_ids': list(self.npc_ids),
+            'ledger': [{'kind': t.kind, 'key': t.key, 'value': t.value,
+                        'created_season': t.created_season, 'ttl': t.ttl}
+                       for t in self.ledger],
+            'open_needs': [list(n) for n in self.open_needs],
+            'deck_state': dict(self.deck_state),
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Settlement":
+        return cls(
+            sid=d['sid'], name=d['name'], stype=d['stype'],
+            province_id=d['province_id'], owner_faction=d.get('owner_faction'),
+            governor_id=d.get('governor_id'),
+            prosperity=d.get('prosperity', 0), defense=d.get('defense', 0),
+            order=d.get('order', 0),
+            fort_level=d.get('fort_level', 0), garrison=d.get('garrison', False),
+            legitimacy=d.get('legitimacy', 0), popular_support=d.get('popular_support', 0),
+            facility_tier=d.get('facility_tier', 0), suspicion=d.get('suspicion', 0),
+            pressure=d.get('pressure', 4.0),
+            active_directive=d.get('active_directive'),
+            religious_building=d.get('religious_building', 'None'),
+            church_attention=d.get('church_attention', 0),
+            governor_emergence=d.get('governor_emergence', 0),
+            subnational=dict(d.get('subnational', {})),
+            npc_ids=list(d.get('npc_ids', [])),
+            ledger=[LedgerTag(kind=t['kind'], key=t['key'], value=t.get('value', 1.0),
+                               created_season=t.get('created_season', 0), ttl=t.get('ttl'))
+                    for t in d.get('ledger', [])],
+            open_needs=[list(n) for n in d.get('open_needs', [])],
+            deck_state=dict(d.get('deck_state', {})),
+        )
+
 
 # ── store router (cf. infrastructure._infra_store) ──
 _settlement_store: dict = {}
@@ -150,3 +210,57 @@ def succeed_governor(sid: str, new_governor: str | None, world=None, season: int
 def reset_registry(world=None):
     """Test helper."""
     settlement_store(world).clear()
+
+
+def populate_from_geography(world, path: str | None = None) -> int:
+    """OI-07 (ED-IN-0091 plan §3 Wave 2 item 4) — register every settlement from the canonical
+    geography source at world-gen. Deterministic: no RNG draw, so this cannot move any
+    RNG-derived campaign golden (win_share / battles_mean / scenes_resolved all read
+    `world.rng`, never touched here) — only `serialize_world`'s output dict gains a new key.
+
+    Source: `systems/settlements/valoria_geography_v30.yaml` — the PP-726-rebuilt geography
+    file (see `_GEOGRAPHY_YAML`'s module-level citation above; 37 settlements at the time of
+    this wave). Field mapping, cited per field:
+      - `type` -> Settlement.stype, validated against LEGAL_TYPES (a stray geography-file type
+        raises rather than silently registering an illegal settlement type — no fabrication).
+      - `stats: [a, b, c]` -> (prosperity, defense, order), in that order, per
+        settlement_layer_v30.md §1.3's derived-value table (`| Prosperity | ... |`,
+        `| Defense | ... |`, `| Order | ... |`, listed in exactly that row order — the only
+        place the doc names a Settlement stat *order*).
+      - `territory` -> Settlement.province_id (the geography file's own key name for the same
+        referent Settlement.province_id names).
+      - `controller` -> Settlement.owner_faction (one entry, S-037/Schoenland, controller
+        "Schoenland" — an independent city-state per the geography file's own description, not
+        one of the four parliamentary factions in game_state.STARTING_STATS; registered as-is,
+        not coerced to a parliamentary faction — no fabrication).
+    Every other Settlement field (governor_id, legitimacy, popular_support, facility_tier, ...)
+    is left at its dataclass default: the geography file carries no per-settlement value for
+    any of them, and PP-726 does not specify starting values for governance-economy fields
+    that a later system (charter assignment, governor appointment) is what populates.
+
+    Returns the settlement count registered — the falsifier compares this against the source
+    file's own entry count (not a hardcoded literal), so it self-updates if the geography file
+    ever grows.
+    """
+    if path is None:
+        path = _GEOGRAPHY_YAML
+    with open(path, 'r', encoding='utf-8') as f:
+        data = yaml.safe_load(f)
+    entries = data.get('settlements', {})
+    count = 0
+    for sid in sorted(entries.keys()):
+        e = entries[sid]
+        stype = e['type']
+        if stype not in LEGAL_TYPES:
+            raise ValueError(
+                f"geography settlement {sid!r} has illegal type {stype!r} "
+                f"(not in registry.LEGAL_TYPES) — refusing to register a non-canonical type")
+        prosperity, defense, order = e['stats']  # §1.3 order — raises if not exactly 3
+        s = Settlement(
+            sid=sid, name=e['name'], stype=stype,
+            province_id=e['territory'], owner_faction=e.get('controller'),
+            prosperity=prosperity, defense=defense, order=order,
+        )
+        register_settlement(s, world=world)
+        count += 1
+    return count

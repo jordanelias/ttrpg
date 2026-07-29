@@ -81,7 +81,19 @@ from engine.mc_v18 import run_campaign, _dispatch_combat_bridge_on  # noqa: E402
 # XFAIL_MANIFEST — the live P1 burn-down list (plan §2.3). One row per still-unwired direction.
 # `strict` rows use a live-introspected condition (see module docstring "DESIGN CHOICE"); `always`
 # rows are unconditionally xfail this wave because their closure is explicitly scheduled for a
-# LATER wave (Wave 2/3), not this one, per the plan's own wave assignment.
+# LATER wave (Wave 2/3), not this one, per the plan's own wave assignment. `honest-deferral` rows
+# are a THIRD kind added by the Oracle stage this wave (2026-07-29): unlike `wave2`/`wave3`, these
+# are not scheduled to close in any future wave — canon itself specifies no world-gen/season-tick
+# trigger for the mechanism, so the deferral is the considered, permanent-until-canon-changes
+# disposition, not a to-do. They stay xfail (never flip to strict) for exactly that reason.
+#
+# WAVE 2 BURN-DOWN (2026-07-29, ED-IN-0095): four rows retired this wave, each confirmed XPASS
+# (strict) by running its test directly against the tree, not by inspection — accord-echo-leg
+# (OI-03), vertical-up-handoff (OI-06), territory-transfer-resolver (OI-04), world-settlements
+# (OI-07). Their tests are now unconditional strict assertions (see each test's own docstring for
+# the resolving citation) and their manifest rows are removed per this list's own "one row per
+# still-unwired direction" contract. world-npcs/world-knots stay xfail but reclassified
+# `honest-deferral` (see rows below) — Wave 2 landed a considered disposition, not a wire-up.
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 XFAIL_MANIFEST = [
     {"id": "combat-bridge-on", "oi": "OI-01", "kind": "strict-condition",
@@ -90,36 +102,42 @@ XFAIL_MANIFEST = [
                "flip is a separately scheduled IN action after PC's E0-E3 merge, never a side "
                "effect of this wave. Run with env DISPATCH_COMBAT_BRIDGE=1 to exercise the strict "
                "assertion for real."},
-    {"id": "accord-echo-leg", "oi": "OI-03", "kind": "wave2",
-     "area": "Key direction 2b: bottom-up, Accord leg",
-     "reason": "domain_echo.compute_accord_echo has zero callers anywhere in engine/cross_scale — "
-               "wiring it beside compute_domain_echo is Wave 2 item 1, not this wave."},
-    {"id": "vertical-up-handoff", "oi": "OI-06", "kind": "wave2",
-     "area": "Key direction 3: vertical-up",
-     "reason": "handoff_rules.py is an import-orphan (its only 'importers' are docstring "
-               "mentions, re-verified 2026-07-29) — wiring it as the vertical-up dispatcher "
-               "inside dispatch is Wave 2 item 5."},
-    {"id": "territory-transfer-resolver", "oi": "OI-04", "kind": "wave2",
-     "area": "Key direction 4: top-down, territory transfer",
-     "reason": "parliamentary_transfer.propose_transfer has zero callers (re-verified 2026-07-29) "
-               "— wiring it via the parliamentary bridge is Wave 2 item 2."},
     {"id": "diagonal-causes", "oi": "OI-28", "kind": "wave3",
      "area": "Key direction 6: diagonal (causes[])",
      "reason": "causes[] has zero executable instances corpus-wide (re-verified 2026-07-29: no "
                "'causes=[' with any content in engine/ or systems/ outside tests) — populating "
                "it at existing emitters is Wave 3 item 5."},
-    {"id": "world-npcs", "oi": "OI-05", "kind": "wave2",
+    {"id": "world-npcs", "oi": "OI-05", "kind": "honest-deferral",
      "area": "world chain: world.npcs",
-     "reason": "generate_npc has zero call sites; world.npcs stays permanently empty this wave — "
-               "Wave 2 item 3 wires npc generation at world-gen + season tick."},
-    {"id": "world-knots", "oi": "OI-07", "kind": "wave2",
+     "reason": "RECLASSIFIED Wave 2 (was 'generate_npc has zero call sites', framed as an "
+               "oversight): re-verified against investigation_systems_v30.md SYSTEM 1 this wave "
+               "— Two-Tier Generation's Tier-1 seed is scene-specification-driven only ('Scene "
+               "specification declares density and composition'); no canon head names a "
+               "world-gen initial count or a season-tick generation trigger (NPE-02's proposed "
+               "persistence cap is an unresolved Open Question, not a ratified number). The "
+               "honest move is to generate none automatically rather than fabricate a count "
+               "(CLAUDE.md §5/§7) — world.npcs is a PERMANENT deferral until canon specifies a "
+               "trigger, not a to-do for a later wave. The drift half (simulate_npc_actions) was "
+               "already wired every season pre-wave via accounting.py:78-82 and is unaffected. "
+               "The deferral is recorded live via engine.mc_v18._faction_actions_callback's "
+               "stubwire.stub_resolve('generate_npc(world-gen|season-tick)', ...) call, firing "
+               "once per season — see engine/tests/test_world_population.py's "
+               "test_generate_npc_has_no_automatic_call_site_this_wave /"
+               "test_npc_and_knot_deferral_stubs_fire_every_season for the falsifiers."},
+    {"id": "world-knots", "oi": "OI-07", "kind": "honest-deferral",
      "area": "world chain: world.knots",
-     "reason": "world.knots has the same never-populated shape as world.npcs — Wave 2 item 4 "
-               "wires population via registry.py."},
-    {"id": "world-settlements", "oi": "OI-07", "kind": "wave2",
-     "area": "world chain: world.settlements",
-     "reason": "game_state.serialize_world has no 'settlements' key at all (re-verified "
-               "2026-07-29) — same Wave 2 item 4 as world.knots."},
+     "reason": "RECLASSIFIED Wave 2 (was 'same never-populated shape as world.npcs', framed as "
+               "an oversight): re-verified against knots_v30.md §3.1 this wave — form_knot's "
+               "Prerequisites (Disposition +5 with target NPC, PC Bonds >= 5, PC's current Knot "
+               "count < floor(Bonds/2) + 1) are personal-scale actor fields (Disposition, Bonds) "
+               "that do not exist anywhere on the aggregate strategic World; no world-gen or "
+               "season-tick formation rule exists in canon to cite. world.knots is a PERMANENT "
+               "deferral until canon specifies a formation rule, not a to-do for a later wave. "
+               "The deferral is recorded live via engine.mc_v18._faction_actions_callback's "
+               "stubwire.stub_resolve('form_knot(world-gen|season-tick)', ...) call, firing once "
+               "per season — see engine/tests/test_world_population.py's "
+               "test_knots_stay_unpopulated_honest_deferral /"
+               "test_npc_and_knot_deferral_stubs_fire_every_season for the falsifiers."},
     {"id": "altonian-reinforcements-handoff", "oi": "OI-10 / OI-17", "kind": "accepted-handoff",
      "area": "unconditional NotImplementedError exemption",
      "reason": "systems/mass_battle/sim/altonian_reinforcements.py is the ONE accepted "
@@ -183,8 +201,19 @@ def _probe(module_path: str, func_name: str, args: tuple, kwargs: dict | None = 
 def _source_scan(pattern: str, module_paths: list[str]):
     """Grep-equivalent over a curated set of LIVE modules (not the whole tree — a targeted,
     checked>=N scan matching the register's own grep-verified evidence method). Returns
-    (checked_file_count, matches: list[(module_path, match_text)])."""
-    rx = re.compile(pattern)
+    (checked_file_count, matches: list[(module_path, match_text)]).
+
+    BUGFIX (Wave 2, Oracle stage, flagged by the L-handoff lane): `re.compile(pattern)` without
+    `re.MULTILINE` made any `^`-anchored pattern only ever match offset 0 of the WHOLE
+    `inspect.getsource(mod)` string, i.e. only if the anchored text were the file's literal first
+    line — impossible for an import statement in every candidate module here (a module docstring
+    always precedes it). Verified directly before this fix: `test_direction3_vertical_up_handoff_
+    dispatcher_is_wired`'s `^\\s*(?:from ...|import ...)` pattern returned zero matches against
+    scene_dispatch.py's real source even though the import statement is genuinely present;
+    the SAME scan with `re.MULTILINE` added found it. `re.MULTILINE` is safe for every other
+    caller of this function in this module — none of the other patterns use `^`/`$` anchors, so
+    adding the flag changes nothing for them."""
+    rx = re.compile(pattern, re.MULTILINE)
     matches = []
     checked = 0
     for mp in module_paths:
@@ -304,25 +333,63 @@ def test_direction2a_bottom_up_domain_echo_core_fires():
     assert k.targets and k.targets[0].stat_deltas, "the logged Key carries no populated targets[]"
 
 
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("accord-echo-leg"))
-def test_direction2b_bottom_up_accord_echo_leg_is_wired():
+def test_direction2b_bottom_up_accord_echo_leg_is_wired_but_dormant():
     """directional_coverage_v1.md #2 — the Accord leg. compute_accord_echo must have >=1 caller
-    among the live cross-scale emitter modules; today it has zero (grep-verified 2026-07-29)."""
+    among the live cross-scale emitter modules (caller-exists), AND no live emitter module may
+    declare `echo['scene_outcome']` yet (dormancy) — WIRED but DORMANT, not resolved.
+
+    WAVE-2 REWRITE (orchestrator-adjudicated fix batch, 2026-07-29, OI-03 fix 1 fallout): the
+    prior version of this test was RESOLVED/XPASS(strict) on a bare source-scan for "a caller
+    exists" alone. That framing went stale the moment OI-03 fix 1 deleted
+    `echo_transport._ACCORD_OUTCOME_BY_SCENE_TYPE`'s `{"combat": "violence"}` fallback (see that
+    module's WAVE-2 CORRECTION comment): classification now requires an explicit caller-declared
+    `echo['scene_outcome']`, and no live emitter module supplies one, so the leg went from
+    "reachable via a combat scene" back to organically DORMANT. Reporting caller-exists alone as
+    "wired" would silently overstate reachability again — the critic's 'missing' finding this
+    row repairs. Both halves are asserted here, honestly, rather than re-adding an XFAIL_MANIFEST
+    row for functionality that DOES exist (a manifest row is for still-UNWIRED functionality;
+    this is wired-but-not-organically-triggered, a different, established shape — see
+    echo_transport.py module docstring's own "INERT-in-the-live-loop" framing for the sibling
+    §5.2 leg)."""
     # domain_echo.py itself is EXCLUDED here — it's the definer (both the `def` line and its own
     # module docstring's "Entry points" list mention the name, neither is a call site); this test
     # asks whether anything ELSE calls it, so it scans the other emitter modules only.
     caller_modules = [m for m in _KEY_DELIVERY_EMITTER_MODULES if m != "engine.cross_scale.domain_echo"]
+
+    # Half 1 — caller exists: compute_accord_echo has a real call site among the live emitters.
     _checked, matches = _source_scan(r"compute_accord_echo\(", caller_modules)
     assert matches, "compute_accord_echo has zero callers among the live emitter modules"
 
+    # Half 2 — dormancy: no live PRODUCER module (the two modules that build a `ctx['echo']`
+    # block for echo_transport to consume — scene_dispatch.py's emergency_council/combat
+    # branches, parliamentary_bridge.py's vote ctx) DECLARES echo['scene_outcome'] as an INPUT
+    # (a dict-literal assignment, `"scene_outcome": ...`, inside the `echo = {...}` block they
+    # build). echo_transport.py itself is deliberately EXCLUDED from this half — its own
+    # `_apply_accord_echo` builds a RETURN/telemetry dict containing a `"scene_outcome": ...`
+    # entry (recording the classification result), which is a consumer-side bookkeeping write,
+    # not a producer declaring the input; including it here would be a false positive. If a
+    # producer module ever declares the input key, the leg has become organically reachable and
+    # this test (and echo_transport.py's DORMANT framing) must be updated together, not left
+    # silently stale the way the caller-exists-only version of this test was.
+    producer_modules = ["engine.cross_scale.scene_dispatch", "engine.cross_scale.parliamentary_bridge"]
+    _checked2, outcome_declarations = _source_scan(r"[\"']scene_outcome[\"']\s*:", producer_modules)
+    assert not outcome_declarations, (
+        "a live producer module now declares echo['scene_outcome'] — the accord-echo leg is no "
+        "longer dormant; update this test's framing (and echo_transport.py's module docstring) "
+        f"to reflect organic reachability instead of caller-exists-but-dormant: {outcome_declarations}")
 
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("vertical-up-handoff"))
+
 def test_direction3_vertical_up_handoff_dispatcher_is_wired():
     """directional_coverage_v1.md #3 — DOCTRINE-ONLY. handoff_rules.py must be imported by at
     least one live cross-scale/autoload module (not a docstring mention) for the curated 8-rule
-    dispatcher to be anything but bypassed. Today it is an import-orphan (grep-verified
-    2026-07-29: engine/cross_scale/__init__.py and two OTHER modules' docstrings mention it by
-    name in prose, but nothing actually imports it)."""
+    dispatcher to be anything but bypassed.
+
+    RESOLVED (Wave 2 item 5, OI-06, XFAIL_MANIFEST row 'vertical-up-handoff' retired 2026-07-29):
+    the L-handoff lane added a genuine `from engine.cross_scale import handoff_rules` import to
+    scene_dispatch.py. Getting this row to XPASS also surfaced and fixed a real bug in THIS
+    file's own `_source_scan` (see its docstring) — the `^`-anchored pattern below could never
+    have matched without the `re.MULTILINE` fix, regardless of how thoroughly the import was
+    wired. STRICT now (no xfail): the row is removed from XFAIL_MANIFEST."""
     checked, matches = _source_scan(
         r"^\s*(?:from engine\.cross_scale import handoff_rules\b|"
         r"import engine\.cross_scale\.handoff_rules\b)",
@@ -348,11 +415,16 @@ def test_direction4_topdown_targeting_mechanism_fires():
     assert k.targets and k.targets[0].actor_id, "targeting mechanism did not populate targets[]"
 
 
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("territory-transfer-resolver"))
 def test_direction4b_territory_transfer_resolver_is_called():
     """OI-04 residual on top of direction 4's core bar: parliamentary_transfer.propose_transfer
-    must have >=1 caller. Today it has zero (grep-verified 2026-07-29) — the one-way territory
-    ratchet OI-04 describes."""
+    must have >=1 caller.
+
+    RESOLVED (Wave 2 item 2, OI-04, XFAIL_MANIFEST row 'territory-transfer-resolver' retired
+    2026-07-29): the L-transfer lane added `_derive_transfer`/`_run_transfer_motion` to
+    engine/cross_scale/parliamentary_bridge.py, wired into `run_parliamentary_scene`;
+    `_run_transfer_motion` calls `parliamentary_transfer.propose_transfer` at
+    parliamentary_bridge.py:160 — closing the one-way territory ratchet OI-04 describes. STRICT
+    now (no xfail): the row is removed from XFAIL_MANIFEST."""
     _checked, matches = _source_scan(r"propose_transfer\(", _KEY_DELIVERY_EMITTER_MODULES)
     assert matches, "parliamentary_transfer.propose_transfer still has zero callers"
 
@@ -424,7 +496,9 @@ def test_all_seven_key_delivery_directions_have_a_dedicated_check():
 
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════
-# §1 acceptance — "world chains populated" (OI-05/OI-07) — xfail until Wave 2
+# §1 acceptance — "world chains populated" (OI-05/OI-07). world-settlements resolved Wave 2
+# (below); world-npcs/world-knots are Wave-2-RECLASSIFIED to `honest-deferral` — permanently
+# xfail, not "until a later wave" (see XFAIL_MANIFEST's per-row reason for the canon citation).
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 
 @pytest.mark.xfail(strict=True, reason=_manifest_reason("world-npcs"))
@@ -440,11 +514,205 @@ def test_world_knots_populated_after_a_seeded_campaign():
     assert knots, "world.knots stayed empty (OI-07)"
 
 
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("world-settlements"))
 def test_world_settlements_populated_after_a_seeded_campaign():
+    """RESOLVED (Wave 2 item 4, OI-07, XFAIL_MANIFEST row 'world-settlements' retired
+    2026-07-29): systems/settlements/sim/registry.py gained `populate_from_geography`, called at
+    world-gen and serialized via game_state.serialize_world/restore_world — confirmed XPASS(strict)
+    by running this test directly. This row stays a REACH probe (truthiness only, matching this
+    file's own convention for direction/world-chain rows); the thorough falsifier (exact count
+    vs. the geography source, serialization round-trip, RNG-purity) lives in
+    engine/tests/test_world_population.py, not duplicated here. STRICT now (no xfail)."""
     r = run_campaign(seed=42)
     settlements = r.final_state.get("settlements", {})
     assert settlements, "world.settlements stayed empty or unserialized entirely (OI-07)"
+
+
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+# §1 acceptance — articulation minimal bus subscriber (OI-08, plan §3 Wave 2 item 6). New this
+# wave: no XFAIL_MANIFEST row (the subscriber is LIVE, not deferred) — same pattern as directions
+# 1/2a/4/5 above (a dedicated strict reach test, no manifest bookkeeping needed for an already-
+# wired direction).
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+
+def test_articulation_subscriber_is_wired_and_stub_flags_fire():
+    """OI-08: TickScheduler.subscribe (engine/substrate/keys.py:447) had ZERO callers anywhere in
+    the corpus before this wave. engine.cross_scale.articulation.subscribe_all is now that first
+    caller, AND it is reachable from the real production path: engine/mc_v18.py's
+    `if _echo_transport_on(effective_params):` block calls `_articulation.subscribe_all(
+    world.echo_scheduler)` immediately after `world.echo_scheduler = echo_transport.make_scheduler(
+    ...)` (verified live at that call site) — the same attach pattern `_world_with_scheduler` above
+    mirrors, which is what this probe uses (run_campaign's own CampaignResult does not expose
+    `world` after returning, only telemetry fields, so a full-campaign probe cannot inspect
+    `world.echo_scheduler.subscriptions` directly).
+
+    Unit-level coverage of subscribe_all's own contract (exact 10 type_ids, per-type stub firing,
+    non-idempotency) already lives in tests/valoria/test_articulation_subscriber.py — this row
+    asserts REACH only (>= 9 subscribed types per the task's own floor, plus one live stub-flag
+    firing visible through the same scheduler object mc_v18 constructs), not re-deriving that
+    file's thorough per-type sweep."""
+    from engine.cross_scale import articulation
+    from engine.substrate import stubwire
+
+    world = _world_with_scheduler(seed=21)
+    count = articulation.subscribe_all(world.echo_scheduler)
+    assert count >= 9, f"expected >=9 §3.1 trigger types subscribed (OI-08 floor), got {count}"
+
+    # stub-flag invocations visible: the callback registered for a subscribed type_id must fire a
+    # typed stubwire no-op when invoked — mirroring how TickScheduler.emit would call it, without
+    # needing a fully registry-valid Key (the callback body ignores its `key` argument by
+    # contract — engine/cross_scale/articulation.py's `_on_key` closure only reads `type_id`).
+    type_id = next(iter(world.echo_scheduler.subscriptions))
+    callback = world.echo_scheduler.subscriptions[type_id][0]
+    stubwire.reset_invocations()
+    before = stubwire.invocations
+    result = callback(None, world.echo_scheduler)
+    assert stubwire.invocations == before + 1, "subscribed callback did not fire a stub-wire flag"
+    assert result.stub is True and result.module == "engine.cross_scale.articulation"
+
+
+def test_articulation_subscriber_is_wired_in_a_real_production_campaign_construction():
+    """WAVE-2 REACH-GUARD REPAIR (critic 'missing', ED-IN-0091 plan §3 Wave 2 item 8): the test
+    above asserts subscribe_all's own contract via `_world_with_scheduler` — a HAND-BUILT world +
+    scheduler this file constructs itself, not the production `engine.mc_v18.run_campaign`
+    construction path. Its docstring CLAIMED production reach ("verified live at that call
+    site") but never actually exercised `run_campaign`'s own `if _echo_transport_on(...)` block —
+    a future edit that deleted `_articulation.subscribe_all(world.echo_scheduler)` from
+    `run_campaign` would leave that test green (it never calls `run_campaign` at all). This test
+    closes that gap: it patches `articulation.subscribe_all` itself (not the scheduler) and runs
+    a REAL `run_campaign(..., params={'ECHO_TRANSPORT': 1})` construction, so it fails if the
+    production hook is ever dropped, edited to call a different function, or never invoked."""
+    from unittest import mock
+
+    from engine.cross_scale import articulation
+
+    with mock.patch.object(articulation, "subscribe_all", wraps=articulation.subscribe_all) as spy:
+        run_campaign(seed=21, max_seasons=1, params={"ECHO_TRANSPORT": 1})
+
+    assert spy.call_count >= 1, (
+        "engine.mc_v18.run_campaign's ECHO_TRANSPORT-on construction path did not call "
+        "articulation.subscribe_all at all — the PRODUCTION hook (not the hand-built helper the "
+        "test above uses) must wire the subscriber")
+    (scheduler_arg,), _kwargs = spy.call_args
+    assert scheduler_arg.subscriptions, (
+        "articulation.subscribe_all was called by run_campaign but registered zero subscriptions "
+        "on the real scheduler it was given")
+
+
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+# §1 acceptance — OI-12 orphan census pointer (plan §3 Wave 2 item 7). Per the Oracle stage's own
+# instruction, a manifest row PER still-orphan module is overkill for a 14-module census; this is
+# the single pointer row citing the census's actual home
+# (audit/2026-07-29-code-shape-open-items/04_execution_ledger.md), matching direction7b's own
+# "declared deferral" pattern above rather than re-deriving the census here.
+# ═════════════════════════════════════════════════════════════════════════════════════════════
+
+_OI12_ALREADY_STUB_WIRED = (
+    "engine/autoload/npc_ai.py",
+    "systems/characters/sim/companion.py",
+    "systems/overview/sim/rs_track.py",
+    "systems/overview/sim/ip_track.py",
+    "systems/threadwork/sim/rendering.py",
+    "systems/world/sim/miraculous_event.py",
+    "systems/world/sim/restoration_movement.py",
+)
+_OI12_VERIFIED_ORPHAN_NO_CALLSITE = (
+    "systems/threadwork/sim/co_movement.py",
+    "systems/threadwork/sim/collective.py",
+    "systems/threadwork/sim/opposing.py",
+    "systems/settlements/sim/settlement.py",
+    "systems/settlements/sim/temperaments.py",
+    "systems/social_contest/sim/parliamentary_stay.py",
+    "engine/autoload/registry.py",
+)
+
+
+def _load_structure_audit():
+    """Load skills/valoria-vector-audit/scripts/structure_audit.py the SAME way
+    tests/valoria/test_structure_audit.py does (importlib.util, since scripts/ is not a
+    package) -- reused here rather than re-implemented, per CLAUDE.md §8."""
+    import importlib.util
+    script = os.path.join(_REPO_ROOT, "skills", "valoria-vector-audit", "scripts", "structure_audit.py")
+    spec = importlib.util.spec_from_file_location("structure_audit", script)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_oi12_census_is_recorded_in_the_execution_ledger():
+    """The census itself (documentation only, no code edits per the L-artic lane's own note) lives
+    in 04_execution_ledger.md, not here — this asserts the full 14-module list this wave's census
+    covers is genuinely present there, so a future edit that silently drops a module from the
+    ledger's record trips here rather than the census quietly rotting out of sync with this
+    pointer. Does not re-verify each module's live import-orphan status (that is
+    `test_oi12_census_matches_the_real_structure_audit_classification` below, split out so a
+    doc-presence failure and a live-classification-drift failure report distinctly)."""
+    doc_path = os.path.join(_REPO_ROOT, "audit", "2026-07-29-code-shape-open-items",
+                             "04_execution_ledger.md")
+    assert os.path.isfile(doc_path), "04_execution_ledger.md (OI-12 census's home) is missing"
+    text = open(doc_path, encoding="utf-8").read()
+    assert "OI-12 census" in text, "OI-12 census is no longer recorded in the execution ledger"
+
+    missing = [mod_path for mod_path in _OI12_ALREADY_STUB_WIRED + _OI12_VERIFIED_ORPHAN_NO_CALLSITE
+               if mod_path not in text]
+    assert not missing, (
+        "module(s) dropped from the OI-12 census record in 04_execution_ledger.md:\n"
+        + "\n".join(missing)
+    )
+
+
+def test_oi12_census_matches_the_real_structure_audit_classification():
+    """WAVE-2 REPAIR (critic 'missing', CLAUDE.md §0.1 point 2): the prior version of this
+    module's checks used `checked = 0; for mod_path in <fixed literal tuple>: checked += 1; ...;
+    assert checked == len(<the same tuple>)` — the SAME decorative-counter class this file's own
+    module docstring corrects elsewhere (CORRECTION 2): `checked` increments unconditionally,
+    once per entry of a fixed-length literal, with no skip path, so the count could not fail
+    short of editing the tuple literals themselves; it asserted nothing a reader could not
+    already see from the tuple lengths.
+
+    This test re-derives the REAL orphan / stub_wired sets from structure_audit's own graph
+    functions (the identical functions `tests/valoria/test_structure_audit.py`'s
+    `test_orphan_cli_split_conservation` calls over the real repo tree — reused, not
+    re-implemented) and compares the two pinned census tuples against them: a module pinned
+    `_OI12_ALREADY_STUB_WIRED` must still be `stub_wired`; a module pinned
+    `_OI12_VERIFIED_ORPHAN_NO_CALLSITE` must still be a `code_orphan`. This is genuinely
+    falsifiable — if a census module's live classification drifts (a caller lands, or a stubwire
+    import is removed), this fails and names exactly which module and which direction, rather
+    than passing regardless."""
+    sa = _load_structure_audit()
+    root = sa.Path(_REPO_ROOT)
+    modules = sa.collect_py_modules(root)
+    g_code, _parse_errors = sa.build_g_code(root, modules)
+    code_nodes = list(modules)
+    code_deg = sa.degrees(g_code, code_nodes)
+    main_guard_modules = sa.collect_cli_entry_modules(root, modules)
+    code_orphans, _cli_entries = sa.split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules)
+    orphan_set = set(code_orphans)
+    stub_wired_set = set(sa.stub_wired_modules(g_code))
+
+    checked = 0
+    mismatches = []
+    for mod_path in _OI12_ALREADY_STUB_WIRED:
+        checked += 1
+        dotted = sa._module_name(mod_path)
+        if dotted not in stub_wired_set:
+            mismatches.append(
+                f"{mod_path} ({dotted}): pinned already-stub-wired but structure_audit no "
+                f"longer classifies it stub_wired")
+    for mod_path in _OI12_VERIFIED_ORPHAN_NO_CALLSITE:
+        checked += 1
+        dotted = sa._module_name(mod_path)
+        if dotted not in orphan_set:
+            mismatches.append(
+                f"{mod_path} ({dotted}): pinned verified-orphan-no-callsite but structure_audit "
+                f"no longer classifies it an import orphan (a caller landed) — update the OI-12 "
+                f"census row, not this test")
+    # assert-that-asserted (CLAUDE.md §0.1 point 2): the mismatch collection above is the real
+    # conditional check per module; this confirms every pinned module was actually looked up
+    # against the live classification, not skipped.
+    assert checked == len(_OI12_ALREADY_STUB_WIRED) + len(_OI12_VERIFIED_ORPHAN_NO_CALLSITE)
+    assert not mismatches, (
+        "OI-12 census drifted from the real structure_audit classification:\n" + "\n".join(mismatches)
+    )
 
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════

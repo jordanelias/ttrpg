@@ -145,6 +145,54 @@ def _faction_actions_callback(world):
         _sched.accounting_boundary()
         _sched.next_tick()
 
+    # OI-05/OI-07 (ED-IN-0091 plan §3 Wave 2 items 3-4) — the Accounting-adjacent point: this is
+    # the last thing that runs in the season's action_callback before season.run_season's Step 3
+    # (systems/overview/sim/season.py) hands off to accounting.run_accounting.
+    #
+    # OI-05 half already reachable, no change needed here: accounting.run_accounting already
+    # calls systems.world.sim.npe.simulate_npc_actions every season (systems/overview/sim/
+    # accounting.py:78-82, wired 2026-05-20 — "NPE — territory-level NPC stance drift", citing
+    # investigation_systems_v30.md SYSTEM 1 §Persistence: "at season end, NPCs with shared
+    # worldview and adjacent Stance positions make a Volatility check"). That call was already
+    # here before this wave; verified live via accounting.py's own import + call site, not
+    # re-implemented.
+    #
+    # generate_npc itself gets NO auto-call here (re-verified against investigation_systems_v30.md
+    # SYSTEM 1 this wave, correcting the plan's assumption that "the season path IS specified"
+    # for generation, not just drift): §Two-Tier Generation's Tier-1 archetype seed is driven
+    # entirely by "Scene specification declares density and composition" — a per-SCENE trigger,
+    # not a world-gen or season-tick count. No canon head names an initial world-gen population
+    # nor a season-tick generation count (NPE-02's "cap at 3 persistent minor NPCs... Propose:"
+    # is an unresolved Open Question, not a ratified number — not usable as a cited constant).
+    # Per the no-fabrication rule (CLAUDE.md §5/§7, this wave's own instruction), the honest move
+    # is to generate none automatically rather than invent a count or a trigger. Recorded via
+    # stubwire (not silent) so the gap is greppable/counted, same discipline as the knots stub
+    # immediately below.
+    stubwire.stub_resolve(
+        'engine.mc_v18', 'generate_npc(world-gen|season-tick)',
+        reason="OI-05: investigation_systems_v30.md SYSTEM 1 Two-Tier Generation is scene-"
+               "specification-driven only (\"Scene specification declares density and "
+               "composition\") — no world-gen initial count and no season-tick generation "
+               "trigger exist in canon to cite; NPE-02's proposed persistence-cap number is an "
+               "unresolved Open Question. Honest deferral, not fabrication (CLAUDE.md §5/§7). "
+               "simulate_npc_actions (the drift half) is already wired every season via "
+               "accounting.run_accounting — see the comment above this call.")
+
+    # OI-07 (world.knots half) — form_knot gets NO auto-call either, for the same no-fabrication
+    # reason, re-verified against systems/fieldwork/knots_v30.md §3.1 this wave: Prerequisites
+    # ("Disposition +5 with target NPC", "PC Bonds >= 5", "PC's current Knot count < "
+    # "floor(Bonds/2) + 1") are personal-scale actor fields (Disposition, Bonds) that do not
+    # exist anywhere on the aggregate strategic World — the same "context-derivation gap" the
+    # scene_dispatch.py module docstring already names for combat/contest actor derivation, not
+    # a new one. No world-gen or season-tick formation rule exists in canon to cite. Honest
+    # deferral beats invented knots (this wave's own instruction).
+    stubwire.stub_resolve(
+        'engine.mc_v18', 'form_knot(world-gen|season-tick)',
+        reason="OI-07: knots_v30.md §3.1 Prerequisites require personal-scale actor fields "
+               "(Disposition, Bonds, TS) absent from the aggregate strategic World — no "
+               "world-gen or season-tick formation rule exists in canon to cite. Honest "
+               "deferral, not fabrication (CLAUDE.md §5/§7); world.knots stays empty this wave.")
+
 
 def run_campaign(seed: int | None = None, max_seasons: int = 50,
                  params: dict | None = None) -> CampaignResult:
@@ -185,6 +233,14 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         )
         world.key_log = world.echo_scheduler.log
         world._echo_key_seq = 0
+        # OI-08 (ED-IN-0091 plan §3 Wave 2 item 6) — articulation lane hook, implemented verbatim
+        # per that lane's oracle_requests: subscribe_all is the ONLY production TickScheduler(...)
+        # construction site's paired subscriber wiring (the seam lane itself does not own
+        # mc_v18.py this wave — WORLD lane does). Registers the §3.1 trigger-table type_ids on
+        # this campaign's scheduler; each fired trigger routes to a typed stubwire no-op (the
+        # render layer stays ED-IN-0073's docket, unbuilt).
+        from engine.cross_scale import articulation as _articulation
+        _articulation.subscribe_all(world.echo_scheduler)
 
     for _ in range(max_s):
         if world.winner:

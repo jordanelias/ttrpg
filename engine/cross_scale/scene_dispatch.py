@@ -64,7 +64,7 @@ from __future__ import annotations
 import random
 
 from engine.autoload import scene_slate
-from engine.cross_scale import zoom_in_out
+from engine.cross_scale import handoff_rules, zoom_in_out
 from engine.substrate import stubwire
 
 
@@ -136,6 +136,77 @@ def _emergency_council_parties(fid, world):
     if f is None:
         return None
     return (max(1, round(f.L)), max(1, round(7.0 - f.Sta)))
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# OI-06 (ED-IN-0091 plan §3 Wave 2 item 5): vertical-up dispatcher VALIDITY layer over
+# handoff_rules.py's curated 8 §3 rules (scale_transitions_v30.md §3). Validity only — this
+# does not execute handoff procedure/mechanics; handoff_rules.py's own module docstring
+# already assigns that to receiver modules ("This module is a rule registry + dispatcher.
+# It does NOT execute downstream mechanics").
+# ─────────────────────────────────────────────────────────────────────────
+
+# Scale pair per scene_type, derived ONLY from `st` — a field _resolve_slot already carries,
+# nothing invented. Every scene_type that reaches the call site below (see _resolve_slot:
+# fieldwork/investigation/the total-mapping stub all `return` earlier, above) has already
+# resolved a Scene-scale outcome bound for Faction scale — exactly §3.4 "Scene → Faction
+# (Domain Echo)". §3.4's own priority order (scale_transitions_v30.md §3.4) names "Combat
+# victory" alongside contest/investigation/thread conditions, so Scene scope covers combat,
+# not contest alone — handoff_rules.py's inline "# Contest / fieldwork scenes" comment on
+# SCALE_SCENE is illustrative, not exhaustive, per that citation.
+_HANDOFF_SCALE_PAIR_BY_SCENE_TYPE = {
+    "combat": (handoff_rules.SCALE_SCENE, handoff_rules.SCALE_FACTION),
+    "contest": (handoff_rules.SCALE_SCENE, handoff_rules.SCALE_FACTION),
+}
+
+
+def _handoff_validity_check_pair(from_scale, to_scale, payload, world):
+    """Core OI-06 validity wrapper over handoff_rules.apply_handoff for one derived scale
+    pair. Returns None when the pair is a currently-valid §3 rule — dispatch proceeds
+    exactly as before this wave (OI-06 is behavior-neutral by construction, plan §3 Wave 2
+    item 5 term 5). Returns a stubwire.StubResult, VISIBLY, otherwise — reusing the OI-02
+    fallback pattern in this same file (see the total-mapping fallback in _resolve_slot)
+    rather than trusting handoff_rules.apply_handoff's own silent
+    HandoffResult(valid=False) dict (handoff_rules.py:226-232, "No §3 rule defined"), which
+    was never surfaced to any caller before this wave (import-orphan, OI-06's own finding).
+    """
+    # §3.3 Personal → Scene (Contest) is a canon-EMPTY heading held on an open fork
+    # (ED-IN-0049, ED-IN-0091 plan §5 fork 11) — scale_transitions_v30.md:51 has no body
+    # text under that heading. handoff_rules.py's own (Personal, Scene) branch pre-empts
+    # that fork with placeholder procedure text ("Open Contest scene per
+    # social_contest_v30"); this validity layer does not trust that content — if a dispatch
+    # path ever hits it, the honest answer is a stub-flag citing the fork, not new content.
+    # Nothing in _HANDOFF_SCALE_PAIR_BY_SCENE_TYPE derives (Personal, Scene) today (only
+    # (Scene, Faction) is reachable — see that dict), so this guard does not change any
+    # currently-reachable dispatch behavior; it is unconditional so a future scene_type
+    # addition cannot silently inherit the fork-holder's content instead of being flagged.
+    if (from_scale, to_scale) == (handoff_rules.SCALE_PERSONAL, handoff_rules.SCALE_SCENE):
+        return stubwire.stub_resolve(
+            'engine.cross_scale.scene_dispatch', f'handoff={from_scale}->{to_scale}',
+            reason="§3.3 Personal -> Scene (Contest) is a canon-EMPTY heading held on the "
+                   "ED-IN-0049 fork (ED-IN-0091 plan §5 fork 11) — not executed as content")
+    result = handoff_rules.apply_handoff(from_scale, to_scale, payload, world)
+    if not result.valid:
+        reason = result.notes[0] if result.notes else (
+            f"no §3 rule defined for {from_scale} -> {to_scale}")
+        return stubwire.stub_resolve(
+            'engine.cross_scale.scene_dispatch', f'handoff={from_scale}->{to_scale}',
+            reason=reason)
+    return None
+
+
+def _handoff_validity_check(st, ctx, world):
+    """scene_type -> scale-pair lookup (fields dispatch already has — see
+    _HANDOFF_SCALE_PAIR_BY_SCENE_TYPE), then delegates to _handoff_validity_check_pair.
+    Returns None when `st` has no derivable scale pair — a different fact from an INVALID
+    pair (§3.9 Fieldwork's per-pair table is not enumerated by handoff_rules.py itself, by
+    that module's own note, and fieldwork/investigation never reach this call site anyway,
+    being OI-02 stub-wired earlier in _resolve_slot) — or when the pair is currently valid.
+    """
+    pair = _HANDOFF_SCALE_PAIR_BY_SCENE_TYPE.get(st)
+    if pair is None:
+        return None
+    return _handoff_validity_check_pair(pair[0], pair[1], ctx, world)
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -301,6 +372,17 @@ def _resolve_slot(slot, world, rng):
     except Exception as e:
         out["reason"] = f"resolver raised: {e!r}"
         return out
+    # OI-06 (ED-IN-0091 plan §3 Wave 2 item 5): vertical-up handoff validity layer, alongside
+    # the zoom_in_out calls per the plan's own siting instruction — this IS the scale-
+    # transition point (Scene resolved, about to hand its outcome up toward Faction scale via
+    # the echo/zoom_out step immediately below). valid=True (today's only reachable case,
+    # §3.4) changes nothing here; a stub-flag is recorded on `out` for visibility only, never
+    # gates or reroutes dispatch.
+    handoff_stub = _handoff_validity_check(st, ctx, world)
+    if handoff_stub is not None:
+        out["handoff_stub"] = handoff_stub.stub
+        out["handoff_reason"] = handoff_stub.reason
+
     # Outcome->echo transport (ED-IN-0028, flag-gated by world.echo_scheduler presence).
     # With NO scheduler attached (ECHO_TRANSPORT off) this is byte-identical to the historical
     # zoom_out({}) no-echo path. With one attached AND ctx carrying an `echo` block, the

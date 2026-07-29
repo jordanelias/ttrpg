@@ -30,6 +30,19 @@ TransferResult — matching the sibling faction-action convention (crown_initiat
  proposer(Side A) vs holder(Side B), others abstain; side_a_allies/side_b_allies override. Genre neutral default.]
 [FLAG: mode-specific adjustments (Punishment no-L+1/Standing-1; Appeasement +2 Accord; Consensual no holder
  L+1 on Failure) are canon-PROVISIONAL (PARL-MODE-DRIFT-001), implemented as written in §1.2/§2.]
+
+OI-04 Wave-2 canon gate (ED-IN-0091 plan §3 Wave 2, orchestrator-adjudicated fix batch, 2026-07-29):
+§1.1 specifies BOTH a Frequency ("1 per arc per faction", :27) and a Cost ("Action slot + CB
+consumption (whether transfer succeeds or fails)", :31) that were previously unenforced -- every
+season attempted a transfer with no per-arc limit. `Faction.parl_transfer_used_this_arc`
+(game_state.py, mirrors `council_used_this_arc`'s existing per-arc-flag shape + reset_arc() hook)
+now gates `propose_transfer` at the declaration stage per §1.1's Frequency clause; the flag is set
+at the same point CB is consumed (§1.1's Cost clause: an ATTEMPT pays whether it succeeds or
+fails). `arc` is unambiguous in this corpus -- `engine/autoload/season_manager.py`'s
+`SEASONS_PER_ARC = 4` + `World.arc`, no mapping ambiguity to record. `parliamentary_bridge.py`'s
+`_derive_transfer` was updated in the same change to skip an already-arc-gated initiator, so a
+gated-out season is byte-identical to a no-qualifying-CB season (both return None with zero side
+effects, zero extra `world.rng` draws).
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -131,6 +144,18 @@ def propose_transfer(initiator, target_territory, mode, world, *,
         res.status = "blocked"
         res.notes.append(f"§1.3 last-territory protection: holder '{holder}' has only {len(world.factions[holder].territories)} territory; blocked.")
         return res
+    # §1.1 Frequency (parliamentary_transfer_v30.md:27, "Frequency: 1 per arc per faction") —
+    # OI-04 Wave-2 canon gate. Checked at the declaration stage, same as the blocks above and
+    # BEFORE any CB is consumed or roll made, so a gated-out attempt costs nothing (mirrors
+    # Faction.council_used_this_arc's own per-arc-flag shape/reset hook, game_state.py). A
+    # gated-out season is therefore byte-identical to a no-qualifying-CB season — both return
+    # here with zero side effects.
+    if fac.parl_transfer_used_this_arc:
+        res.status = "blocked"
+        res.notes.append(
+            f"§1.1 Frequency: '{initiator}' already attempted Parliamentary Transfer this arc "
+            f"(arc {world.arc}); at most 1 attempt per arc per faction.")
+        return res
 
     # §1.1/§3 CB prerequisite, mode-filtered (§2).
     available = _available_cb(initiator, holder, world)
@@ -141,6 +166,11 @@ def propose_transfer(initiator, target_territory, mode, world, *,
         return res
     cb_used = qualifying[0]
     res.cb_used = cb_used
+    # §1.1 Cost ("Action slot + CB consumption (whether transfer succeeds or fails)") — the arc's
+    # allowance is spent HERE, at the point the attempt is genuinely committed (CB qualifies),
+    # not deferred until a Success/Failure/Partial degree is known — mirrors CB consumption
+    # itself below, which also fires unconditionally of the eventual roll outcome.
+    fac.parl_transfer_used_this_arc = True
 
     # §4 step 2-4 — §10 vote contest -> pool modifier. Bloc default proposer(A) vs holder(B) (FLAG: PROVISIONAL).
     motion = Motion(f"parl_transfer_{target_territory}", primary_genre="Memory")
@@ -178,6 +208,21 @@ def propose_transfer(initiator, target_territory, mode, world, *,
         accord_level = PARL_TRANSFER_ACCORD_APPEASEMENT if mode == "appeasement" else PARL_TRANSFER_ACCORD
         if terr is not None:
             terr.accord = ACCORD_MAP[accord_level]
+            # [bugfix, OI-04 2026-07-29]: this effect updated Faction.territories but left
+            # Territory.owner stale, unlike its sibling territory-transfer sites
+            # (systems/factions/sim/mass_seizure.py:292, systems/factions/sim/faction_action.py:366,
+            # both `t.owner = <new faction name>`) — Territory.owner is the field
+            # engine/autoload/victory.py:66 and engine/mc_v18.py:212 read for territory-count
+            # scoring, so a Success/Overwhelming transfer was invisible to victory conditions until
+            # this line. Load-bearing on THIS task (a "regain" that victory scoring can't see isn't
+            # a regain), not a separate out-of-scope duplication — fixed here, not logged-and-deferred.
+            # DUPLICATION LOGGED, NOT CHASED (Wave-2 fix-batch item C, CLAUDE.md §0.1 point 5): this
+            # is the THIRD `t.owner = <faction>` owner-assign site in the corpus (the other two —
+            # faction_action.py:366, mass_seizure.py:292 — are both seam/lane-frozen for this wave,
+            # not editable here). No single-owner consolidation is done in this pass; see
+            # audit/2026-07-29-code-shape-open-items/04_execution_ledger.md's Wave-2 row for this
+            # exact citation, filed rather than silently left unrecorded.
+            terr.owner = initiator
         res.status = "transferred"
         res.effects.append(f"territory '{target_territory}' transferred {holder}->{initiator}; Accord set {accord_level}.")
         if deg == Degree.OVERWHELMING:
