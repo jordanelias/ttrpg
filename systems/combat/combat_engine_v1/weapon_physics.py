@@ -60,7 +60,17 @@ _A_GRIP = math.pi * (D_GRIP / 2) ** 2
 # ── percussion authority (recovered percussion_authority.py) ──
 PERC_SCALE = 9.5
 PERC_EXP = 0.30
-PERC_CAP = 8.0
+PERC_CAP = 8.0          # the "steel-hammer reference" ceiling = the top of the canonical 0-8 percussion-authority
+                        # scale (recovered percussion_authority.py:61). SINGLE OWNER of that anchor (ED-PC-0042
+                        # rider I1b): it was spelled four times as independent literals — here, core.PERC_AUTH_REF,
+                        # core.damage()'s blunt `perc/8.0` + its `perc=8` default, and config.CFG['ADEF_PERC_REF'] —
+                        # with nothing enforcing agreement. This one is the PRIMITIVE (the clamp that CREATES the
+                        # scale); the others are DENOMINATORS normalising an authority value against the scale top,
+                        # so they must move WITH it. The two core sites now bind from here; the CFG seed cannot
+                        # (config.py is a zero-import leaf and CFG is per-run overridable — see the note there) and
+                        # is held equal by tests/valoria/test_combat_invariants.py::test_percussion_anchor_has_one_owner.
+                        # THE PHASE-C RE-FIT (PERC_SCALE/PERC_EXP, deferred — see percussion_authority's docstring)
+                        # IS THE EVENT THIS OWNERSHIP EXISTS FOR: change the scale here, once.
 # HEAVY_BLUNT_THRESHOLD (6.0) REMOVED (ED-PC-0042): it keyed the retired blunt_heavy/blunt_light ARMOUR-ROW split
 # (audit/2026-06-29-combat-corpus-recovery/percussion_authority.py:84). Armour-defeat is continuous now —
 # core.adef_cap scales percussion_authority against ADEF_PERC_REF — so there is no row to select.

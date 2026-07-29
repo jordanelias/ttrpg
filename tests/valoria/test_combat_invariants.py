@@ -15,6 +15,7 @@ All static or tiny-seeded; deterministic.
 """
 import ast
 import collections
+import inspect
 import os
 import re
 import sys
@@ -242,6 +243,160 @@ def test_combatant_hosts_no_cached_pool():
     assert not hasattr(c, 'pool'), (
         "Combatant.pool resurrected — the resolution-pool rule is hosted on the combatant again; "
         "call core.resolution_pool(c.history) at the point of use instead")
+
+
+# ── PERCUSSION-AUTHORITY ANCHOR SINGLE-OWNER (ED-PC-0042 rider I1b) ──────────────────────────────
+# The "steel-hammer reference" — the top of the 0-8 percussion-authority scale — was spelled FOUR
+# times as an independent literal, with nothing enforcing agreement (2026-07-23 wiring audit, MED;
+# audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md line 231, carried as OI-45):
+#
+#   weapon_physics.PERC_CAP = 8.0     the CLAMP that creates the scale        <- the physical fact
+#   core.PERC_AUTH_REF      = 8.0     _transmit's full-transmission denominator
+#   core.damage()           perc/8.0  the blunt-heft continuity denominator (and its `perc=8` default)
+#   config.CFG['ADEF_PERC_REF'] = 8.0 adef_cap's blunt armour-defeat denominator
+#
+# Only the first is a primitive. The other three are DENOMINATORS THAT NORMALISE AN AUTHORITY VALUE
+# AGAINST THE TOP OF THAT SCALE, so if the scale top ever moves — exactly what the deferred Phase-C
+# PERC_SCALE/PERC_EXP re-fit does (weapon_physics.percussion_authority's docstring) — a ratio that
+# does not move with it silently stops being a ratio of the scale. Nothing failed if one moved alone.
+#
+# OWNERSHIP AS SHIPPED (and the honest limit of it):
+#   · weapon_physics.PERC_CAP is the OWNER.
+#   · core.PERC_AUTH_REF is BOUND from it (`= WP.PERC_CAP`), over core's pre-existing `import
+#     weapon_physics as WP` — no new dependency edge. damage()'s two 8s route through PERC_AUTH_REF.
+#   · config.CFG['ADEF_PERC_REF'] is NOT bound, deliberately. config.py is a zero-import seeds leaf
+#     and importing weapon_physics into it would invert the layering (data <- behaviour); more
+#     decisively, CFG is per-run OVERRIDABLE (workbench/presets.py deep-copies and overlays it; tests
+#     write `dict(CFG, K=...)`), so an import-time binding would be a FALSE single-ownership that any
+#     overlay silently breaks. It stays a literal and this guard is what holds it equal — the minimum
+#     honest fix where the import graph and the override contract both block true single-ownership.
+#
+# KNOWN BLIND SPOT, stated rather than papered over: the value guard below reads the DEFAULT CFG. A
+# scratch overlay that sets ADEF_PERC_REF alone is not caught (nor should it be — that is what a
+# scratch overlay is for), but neither is one that ships. Scoping is BY NAME, never by the value 8:
+# config.POISE_SOLID_HIT is an unrelated 8.0 four lines from POISE_FLOOR, and a value-keyed scan would
+# have collided with it — the same defect class CLAUDE.md §7 records in ci_sim_fabrication_check.
+# A second gap (adversarial review, 2026-07-29): the divisor scan covers only damage() and the
+# assignment scan only core.py/weapon_physics.py — a NEW module (or a different core function)
+# re-spelling 8.0 as the scale top is not caught. Vacuous today (engine-wide, every other 8.0 is a
+# comment or a different quantity); this guard covers the four sites that exist, not all futures.
+_PERC_ANCHOR_OWNER = ('weapon_physics.py', 'PERC_CAP')
+
+
+def _module_assignments(path):
+    """{target name: RHS ast node} for every module-level `NAME = <expr>` in a file (last wins)."""
+    tree = ast.parse(open(path, encoding='utf-8').read())
+    out = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    out[t.id] = node.value
+    return out
+
+
+def test_percussion_anchor_has_one_owner():
+    """The scale top is spelled as a bare literal EXACTLY ONCE, in the module that clamps to it.
+
+    Identity (`is`), not equality, for the core-side binding: a re-hardcoded `PERC_AUTH_REF = 8.0`
+    is value-equal and therefore invisible to `==`, but is a distinct float object, so `is` catches
+    the recurrence at the moment it is written rather than at the Phase-C re-fit that desyncs it.
+    (Paired with the AST check, which does not depend on CPython's float-identity behaviour.)"""
+    C, core, S, WP, CFG = _mods()
+
+    assert core.PERC_AUTH_REF is WP.PERC_CAP, (
+        f"core.PERC_AUTH_REF ({core.PERC_AUTH_REF!r}) is no longer BOUND from the owner "
+        f"weapon_physics.PERC_CAP ({WP.PERC_CAP!r}) — the anchor is spelled twice again")
+    assert CFG['ADEF_PERC_REF'] == WP.PERC_CAP, (
+        f"config.CFG['ADEF_PERC_REF'] ({CFG['ADEF_PERC_REF']!r}) has drifted from the percussion-scale "
+        f"top weapon_physics.PERC_CAP ({WP.PERC_CAP!r}). adef_cap's blunt branch divides a "
+        f"percussion_authority (which is CLAMPED at PERC_CAP) by this seed, so the two must move "
+        f"together or the armour-defeat term stops being a fraction of full authority")
+
+    # AST: only the owner may write the number down.
+    eng = os.path.abspath(ENGINE)
+    core_assigns = _module_assignments(os.path.join(eng, 'core.py'))
+    wp_assigns = _module_assignments(os.path.join(eng, 'weapon_physics.py'))
+
+    owner_rhs = wp_assigns['PERC_CAP']
+    assert isinstance(owner_rhs, ast.Constant) and isinstance(owner_rhs.value, float), (
+        "weapon_physics.PERC_CAP is the OWNER and must stay a plain float literal — if it has become "
+        "derived from something else, that something else is the new owner and this guard must move")
+
+    ref_rhs = core_assigns['PERC_AUTH_REF']
+    assert not isinstance(ref_rhs, ast.Constant), (
+        "core.PERC_AUTH_REF is a bare literal again — bind it from the owner "
+        "(`PERC_AUTH_REF = WP.PERC_CAP`), which core already imports")
+    assert any(isinstance(n, ast.Attribute) and n.attr == 'PERC_CAP' for n in ast.walk(ref_rhs)), (
+        "core.PERC_AUTH_REF no longer reaches weapon_physics.PERC_CAP")
+
+
+def test_damage_blunt_heft_routes_through_the_percussion_anchor():
+    """core.damage() must not re-spell the scale top — neither as its `perc` default nor as a divisor.
+
+    `perc=8` (an INT, while every sibling default — _transmit's and coupling's — is the float
+    PERC_AUTH_REF) was the tell that this default was written independently rather than derived.
+    Both spellings are byte-identical arithmetic today; the point is that they are two more sites a
+    Phase-C re-fit has to find by hand."""
+    C, core, S, WP, CFG = _mods()
+
+    sig = inspect.signature(core.damage)
+    perc_default = sig.parameters['perc'].default
+    assert perc_default is WP.PERC_CAP, (
+        f"core.damage()'s `perc` default is {perc_default!r} ({type(perc_default).__name__}), not the "
+        f"owned anchor weapon_physics.PERC_CAP ({WP.PERC_CAP!r})")
+
+    tree = ast.parse(open(os.path.join(os.path.abspath(ENGINE), 'core.py'), encoding='utf-8').read())
+    fn = next(n for n in ast.walk(tree)
+              if isinstance(n, ast.FunctionDef) and n.name == 'damage')
+    bare = [n.lineno for n in ast.walk(fn)
+            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Div)
+            and isinstance(n.right, ast.Constant)
+            and isinstance(n.right.value, (int, float)) and not isinstance(n.right.value, bool)
+            and n.right.value == WP.PERC_CAP]
+    assert not bare, (
+        f"core.damage() divides by a bare {WP.PERC_CAP!r} at core.py line(s) {bare} — that is the "
+        f"percussion-scale top written down a fourth time; divide by PERC_AUTH_REF instead")
+
+
+def test_damage_blunt_heft_branch_is_live_and_defaults_to_full_authority():
+    """The equality the two guards above protect is not vacuous: the BLUNT HEFT BRANCH ITSELF moves
+    with `perc`, and the default resolves as full authority.
+
+    §0.1 point 2 — an assertion must be able to observe the failure it excludes. A first draft of this
+    test simply varied `perc` and asserted damage fell. That is TRUE FOR THE WRONG REASON and pinned
+    nothing about `heft`: `perc` reaches damage() by TWO paths, the heft branch and coupling()'s
+    percussion transmit, so the naive version stayed green when the heft branch was mutated to a
+    perc-free constant (mutation 6 of this rider's run — it survived, and this test is the rewrite).
+
+    The isolation window: at armour 'none' the transmit term clamps to 1.0 for every perc at or above
+    PERC_AUTH_REF_SOFT, so coupling is IDENTICAL across [SOFT, CAP] and the ONLY remaining channel is
+    heft. The clamp is asserted rather than assumed — if the transmit structure ever changes so that
+    coupling starts moving inside this window, this test says so instead of quietly going vacuous."""
+    C, core, S, WP, CFG = _mods()
+    lo, hi = core.PERC_AUTH_REF_SOFT, WP.PERC_CAP
+    assert lo < hi, "the isolation window is empty — PERC_AUTH_REF_SOFT is no longer below the scale top"
+    assert core.coupling('blunt', 'none', perc=lo) == core.coupling('blunt', 'none', perc=hi), (
+        "coupling is no longer flat across [PERC_AUTH_REF_SOFT, PERC_CAP] at armour 'none', so this "
+        "test can no longer isolate the heft branch — re-derive the window before trusting it")
+
+    checked = 0
+    for deg in ('graze', 'success', 'overwhelming'):
+        full = core.damage(deg, 1.0, 'blunt', 3, 'none', perc=hi)
+        assert core.damage(deg, 1.0, 'blunt', 3, 'none') == full, (
+            f"@{deg}: damage()'s default perc no longer resolves as full authority")
+        assert core.damage(deg, 1.0, 'blunt', 3, 'none', perc=lo) < full, (
+            f"@{deg}: lowering perc inside the flat-coupling window did not reduce blunt damage — "
+            f"the blunt HEFT branch is inert, so routing its denominator through the anchor pins nothing")
+        checked += 1
+
+    # The default must also agree with the anchor everywhere else, across the full armour ladder.
+    for armor in ('none', 'light', 'medium', 'heavy'):
+        for deg in ('graze', 'success', 'overwhelming'):
+            assert core.damage(deg, 1.0, 'blunt', 3, armor) == core.damage(deg, 1.0, 'blunt', 3, armor, perc=hi), (
+                f"@{deg}/{armor}: damage()'s default perc diverges from the owned anchor")
+            checked += 1
+    assert checked >= 15, f"only {checked} observations — the guard is under-exercised"
 
 
 # ── NO WEAPON-NAME TABLE IN RESOLUTION ────────────────────────────────────────────────────────────

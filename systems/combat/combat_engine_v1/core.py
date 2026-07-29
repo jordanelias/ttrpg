@@ -203,7 +203,13 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # pre-U2 unscaled behaviour there, verified directly across all four), while the Mordhau candidates (1.4-1.8,
 # a 4.7-point gap below bec_de_corbin with zero overlap) still score 0.22-0.28 — correctly discounted, losing
 # to a weapon's own cut/thrust at low armour and only competitive vs rigid armour it cannot otherwise defeat.
-PERC_AUTH_REF=8.0; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
+# SINGLE-OWNER BINDING (ED-PC-0042 rider I1b): PERC_AUTH_REF is the TOP OF THE PERCUSSION-AUTHORITY SCALE, which is
+# owned by the module that clamps to it — WP.PERC_CAP (weapon_physics.py). It used to be an independent `8.0` literal
+# here, agreeing with the owner by coincidence and by nothing else; the deferred Phase-C PERC_SCALE/PERC_EXP re-fit
+# would have desynced them silently. Bound over core's pre-existing `import weapon_physics as WP` (line 40) — no new
+# dependency edge, and byte-identical (same float, 8.0). PERC_AUTH_REF_SOFT is NOT bound: it is a DIFFERENT anchor
+# (bec_de_corbin's 6.51 live authority, the weakest dedicated hammer — see the U2 block above), not the scale top.
+PERC_AUTH_REF=WP.PERC_CAP; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
 def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0):
     t=1.0-RESIST[mat][mode]
     if mode=='puncture':                                           # SITUATIONAL GAP GAME: a thrust takes through-
@@ -401,7 +407,7 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
 # head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
-def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -414,7 +420,14 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     stays the separate, already-deferred weight-class quantity (plan #9, WP.heft() — cut/thrust magnitude-driven
     heft is future work, not this fix's scope)."""
     if deg not in ('graze','success','overwhelming'): return 0
-    heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
+    heft = 3.0*(perc/PERC_AUTH_REF) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
+    # ED-PC-0042 rider I1b: the denominator was a bare `8.0` — the percussion-scale top written down a fourth time,
+    # invisible to any Phase-C re-fit; it now routes through the owned anchor (byte-identical, same float). The
+    # NUMERATOR 3.0 is deliberately UNTOUCHED and is a SEPARATE concern: it is the blunt branch's damage-scale
+    # magnitude, numerically equal to HEFT_HEAVY (core.py:85) but not established as the same constant — whether
+    # "blunt heft at full authority" IS the heavy cut/thrust class, or merely coincides with it, is an unresolved
+    # design question, and absorbing it here on the strength of `3.0 == 3.0` would be exactly the value-collision
+    # reasoning CLAUDE.md §7 warns about. Filed, not fixed.
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
     raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority
