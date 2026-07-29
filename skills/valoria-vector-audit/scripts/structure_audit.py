@@ -300,6 +300,79 @@ def build_g_code(root, modules):
     return g, parse_errors
 
 
+# ──────────────────────────── CLI ENTRY-POINT DETECTION ──────────────────────
+#
+# OI-55 open half (ED-IN-0092): code_orphans (below) previously excluded only
+# `.__main__` suffixes and leading-`_` private names, so a genuine CLI tool with
+# zero internal importers — every `tools/ci_*.py` invoked only from a workflow
+# YAML or a git hook, never from another Python module — read as dead code. A
+# `python foo.py` entry point is a real, intentional zero-importer by design; it
+# is a different thing from an accidentally-orphaned module, and conflating them
+# makes the orphan list too noisy to trust (exactly the "visible but wrong bucket"
+# failure mode CLAUDE.md §0.1 warns against). Detection lives ONCE here — a single
+# AST predicate plus a single split function — and both the CLI list and the
+# (now narrower) orphan list are surfaced in the same report/JSON, never silently.
+
+def has_main_guard(tree):
+    """True iff `tree` contains an `if __name__ == '__main__':` (or the reversed
+    `if '__main__' == __name__:`) guard anywhere in the module body. That guard is
+    the conventional, unambiguous signal that a module is meant to be run as a
+    script — a real CLI entry point, not an accidental import-graph dead end."""
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.If):
+            continue
+        test = node.test
+        if not (isinstance(test, ast.Compare) and len(test.ops) == 1
+                and isinstance(test.ops[0], ast.Eq) and len(test.comparators) == 1):
+            continue
+        left, right = test.left, test.comparators[0]
+
+        def _is_dunder_name(n):
+            return isinstance(n, ast.Name) and n.id == '__name__'
+
+        def _is_main_const(n):
+            return isinstance(n, ast.Constant) and n.value == '__main__'
+
+        if (_is_dunder_name(left) and _is_main_const(right)) or \
+           (_is_dunder_name(right) and _is_main_const(left)):
+            return True
+    return False
+
+
+def collect_cli_entry_modules(root, modules):
+    """{module_name, ...} — every module whose AST contains a `__main__` guard.
+    Parses each module independently of `build_g_code`'s import-focused AST pass
+    (a second, cheap parse over the same files) so this detection stays a single,
+    self-contained predicate and never touches the already-verified relative-import
+    resolution fix in `build_g_code`."""
+    entries = set()
+    for mod, rel in modules.items():
+        try:
+            tree = ast.parse((root / rel).read_text(encoding='utf-8', errors='replace'), filename=rel)
+        except SyntaxError:
+            continue
+        if has_main_guard(tree):
+            entries.add(mod)
+    return entries
+
+
+def split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules):
+    """The single owner of the orphan/CLI-entry split, so `run()`'s JSON + register
+    output and any test exercise identical logic. A node is an orphan CANDIDATE iff
+    it has zero internal importers and isn't a `.__main__` shim or a private
+    (`_`-prefixed) name — unchanged from the pre-existing rule. Among candidates:
+    a `__main__`-guarded module is a `cli_entries` member (a real, intentional
+    entry point), never a `code_orphans` member. A guarded module that DOES have
+    importers is neither — it was never an orphan candidate to begin with."""
+    candidates = [n for n in code_nodes
+                  if code_deg[n]['in'] == 0
+                  and not n.endswith('.__main__')
+                  and not n.split('.')[-1].startswith('_')]
+    cli_entries = sorted(n for n in candidates if n in main_guard_modules)
+    code_orphans = sorted(n for n in candidates if n not in main_guard_modules)
+    return code_orphans, cli_entries
+
+
 # ──────────────────────────── L2 — MODULE WIRING GRAPH ───────────────────────
 
 def _as_list(v):
@@ -482,13 +555,12 @@ def run(root, out):
     #                                                   cut-vertex/hub tiebreak, now applied to cycles)
     code_cuts = articulation_points(g_code)
     code_deg = degrees(g_code, code_nodes)
-    code_orphans = sorted(n for n in code_nodes
-                          if code_deg[n]['in'] == 0
-                          and not n.endswith('.__main__')
-                          and not n.split('.')[-1].startswith('_'))
+    main_guard_modules = collect_cli_entry_modules(root, modules)
+    code_orphans, cli_entries = split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules)
     print(f'         {len(code_nodes)} modules, '
           f'{sum(len(v) for v in g_code.values())} import edges, '
-          f'{len(code_cycles)} cycle(s), {len(code_cuts)} cut-vertex(es)')
+          f'{len(code_cycles)} cycle(s), {len(code_cuts)} cut-vertex(es), '
+          f'{len(cli_entries)} cli-entry(ies)')
 
     print('[L2] building module_contracts wiring graph...')
     g_l2, meta, edges_meta, findings, assumption_count = build_l2(root)
@@ -517,7 +589,7 @@ def run(root, out):
     dump('structure_metrics.json', {
         'code': {'nodes': len(code_nodes), 'edges': sum(len(v) for v in g_code.values()),
                  'cycles': code_cycles, 'cut_vertices': sorted(code_cuts),
-                 'orphans': code_orphans, 'parse_errors': parse_errors},
+                 'orphans': code_orphans, 'cli_entries': cli_entries, 'parse_errors': parse_errors},
         'l2': {'nodes': len(l2_nodes),
                'edges_raw': len(edges_meta),        # raw emit->consume edges (parallels kept)
                'edges_simple': l2_simple_edges,     # deduplicated graph the metrics below run on
@@ -552,7 +624,8 @@ def run(root, out):
                  'missing root is not evidence of health.')
     L.append('')
     L.append(f'**Scorecard:** code-modules={len(code_nodes)}, import-edges={sum(len(v) for v in g_code.values())}, '
-             f'import-cycles={len(code_cycles)}, code-cut-vertices={len(code_cuts)}, code-orphans={len(code_orphans)}; '
+             f'import-cycles={len(code_cycles)}, code-cut-vertices={len(code_cuts)}, code-orphans={len(code_orphans)}, '
+             f'cli-entries={len(cli_entries)}; '
              f'l2-modules={len(l2_nodes)}, wiring-edges={len(edges_meta)} raw ({l2_simple_edges} simple/deduped — '
              f'the cycle/cut-vertex/locality metrics run on the simple graph), l2-cycles={len(l2_cycles)}, '
              f'l2-contract↔code-correspondence=UNVERIFIED({len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} name-map), '
@@ -631,6 +704,12 @@ def run(root, out):
     L.append('')
     section('Import orphans — internal module nothing imports (dead-ish; verify before removal)',
             code_orphans, lambda n: f"`{n}`")
+    section('CLI entry points — modules with an `if __name__ == \'__main__\':` guard and zero '
+            'importers: runnable as scripts, NOT verified as invoked (a module whose only '
+            '`__main__` is a self-test still lands here) — excluded from Import orphans above '
+            '(OI-55/ED-IN-0092); cross-check `references/apparatus_registry.md`\'s Invoked-by '
+            'column before trusting any row',
+            cli_entries, lambda n: f"`{n}`")
     section('Code import hubs (highest total degree — change-impact)', top_code_hubs,
             lambda n: f"`{n}` (in {code_deg[n]['in']}, out {code_deg[n]['out']})")
     section('L2 wiring hubs (highest total degree)', top_l2_hubs,

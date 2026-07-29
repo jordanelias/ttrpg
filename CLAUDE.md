@@ -330,7 +330,8 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   before moving. `skills/prose-writer/scripts/consistency_check.py` (the pre-`ci_naming_check.py`
   naming-gate matcher, GitHub-API-only) retired the same way, to
   `deprecated/skills/prose-writer/scripts/`. `tools/canon_coverage_check.py` is a **different**
-  case — GitHub-API-based and unwired (`ci_job: ""` in `references/ci_checks_registry.yaml`) but
+  case — GitHub-API-based and unwired (`ci_job: ""` in `references/ci_checks_registry.yaml`)
+  (corrected 2026-07-29 — now wired: ci_job canon-coverage-check, valoria-ci.yml) but
   explicitly awaiting Jordan's inclusion decision, not confirmed-dead legacy; left in place.
   (`compliance_check` is
   half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
