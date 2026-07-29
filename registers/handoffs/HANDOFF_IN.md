@@ -21,25 +21,14 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   the banner counts as settled.
 
 
-- **[DONE 2026-07-28] ED-IN-0087 — `.claude/` apparatus repaired + run discipline wired.** 49/49 paths
-  live (was 12/51); `tools/wf_harness.js` owns the prelude; critics read-only via
-  `.claude/agents/valoria-critic.md`; fable off writing stages.
-- **[PART] ED-IN-0087 residual — one assumption left (ED-IN-0090).** (a) VERIFIED 2026-07-28 by a controlled
-  3-agent probe: a tools-restricted `agentType` DOES still emit structured output. The restricted
-  critic self-reported `["Read","Grep","Glob","StructuredOutput"]` — the schema tool is injected on
-  top of the frontmatter list — while the unrestricted control reported 20+ tools including Write and
-  Bash. Write block confirmed against the filesystem, not just the agent's word. Residual: (b)
-  `hSameFinding`'s containment thresholds are still calibrated on wording, not measured against a
-  live multi-lens run.
-- **[DONE 2026-07-28] ED-IN-0087 — dead-tree apparatus swept.** `mechanics_index_gen` (FATAL for a
-  week) and `ci_quantity_vocabulary_check` (scanning 0 files) both walked the retired `sim/`; one
-  owner `ci_common.sim_reference_roots()`, 108 files now.
-- **[DONE 2026-07-28] ED-IN-0088 — four filed items ruled.** Check 5 RETIRED (compliance_check already
-  owns the rule); `combat: test_status` → `validated_pc`; the 7 unauthored doc targets derived from
-  each mechanic's own `sim_module`; executive-summary drift guard added.
-- **[DONE 2026-07-28] ED-IN-0089 — CURRENT.md stamp scoped to canonical heads.** 24% of stamp trips
-  moved no canonical head (measured, `tools/measure_stamp_false_positives.py`); existence half
-  deliberately unnarrowed.
+- **[DONE 2026-07-28] ED-IN-0087/0088/0089/0090 — `.claude/` apparatus + run discipline.** Paths
+  49/49 live (was 12/51); `tools/wf_harness.js` owns the prelude; critics structurally read-only
+  (composition verified by probe, ED-IN-0090); retired-`sim/` scanners revived behind
+  `ci_common.sim_reference_roots()`; Check 5 retired to `compliance_check`; `combat` →
+  `validated_pc`; CURRENT.md stamp scoped to canonical heads. Detail in the ledger entries.
+- **[PART] ED-IN-0087 residual — one assumption left.** Residual: `hSameFinding`'s containment
+  thresholds (≥3 shared words, ≥0.6 of the smaller set) are calibrated on wording, not measured
+  against a live multi-lens run — the first real workflow run should check for over/under-grouping.
 - **[OPEN] Same-lane ED collisions are a pattern, not an accident.** 0085→0086→0087 across PR
   #245/#246/#247 in two days. §3's lane split killed *cross*-lane collision by construction;
   *same*-lane still rests on discipline, 0-for-2 with two sessions on one lane. Remedy
