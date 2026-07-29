@@ -15,6 +15,46 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **▶ SESSION 2026-07-29b (PR #271, ED-MB-0047..0051) — E4+I4, A3, A5a, A6a→A6b, A2 EXECUTED.**
+  Five commits, five guards (all mutation-verified: 3/3, 3/3, 3 mutants, identifiability, 5/5).
+  **The headline: the attrition-law instrument now measures what it claims, and it says melee fits
+  `p=3.20` (cv 0.00245, identifiable) against a ≤1.4 linear bar** — super-square, an ENGINE finding,
+  and an independent re-derivation of ED-MB-0007's historical p≈3.2 on clean untruncated data. The
+  `melee p=2.50` two audits quoted was literally `FIT_P_HI=2.51`. Volley confirms the square law
+  exactly (`p=2.00`). Three reasons the harness was broken, **one not in the plan**: the morale pin
+  cannot disable a *casualty-fraction* break-point; the volley scenario fired nothing (0 engagements,
+  0.00 loss — the `inf` was a 0/0 guard); and `TRAJ_FLOOR` sat BELOW the engine's own annihilation
+  threshold, so it was unreachable and every trajectory ended in annihilation-rout.
+  **A2's no-movement prediction FAILED — and the prediction was the wrong thing.** Decomposed before
+  re-recording: the degree epsilon is the sole mover, the sigma snap is behaviour-neutral. Flip
+  census: unit 0/17,312 · **cell 38/31,958 (0.119%)** · unit_field 0/18,152 · **cell_field 14/20,412
+  (0.069%)**, every flip `Partial → Success` at 1–4 ulp from a *continuous* `ob`. **S1.2 is NOT
+  incidence-zero** — the audit's "0 in 209,778" and its N=3,120 replication were both `PER_CELL=0`.
+  The two per-cell goldens were re-recorded deliberately (`cell` dc3d3414…→f58a9cb4…, `cell_field`
+  3a0952b3…→13bd02dd…); both `PER_CELL=0` goldens byte-exact throughout.
+  **A fourth and fifth unresolvable citation found by hand:** `mass_battle_v30.md §deployment —
+  anchor columns` (no such section; values not derivable either — measured centres 12/12/11/11 admit
+  no rule giving 11/10/9/8), still live at its origin in `gauge_mb.py:60,64-66`; and the ENTIRE
+  conserved-quantity block's `mb_lanchester_design.md §4` tags (that section names no protocol, no
+  grid, no bars — "1.4"/"1.6" do not occur in it). Both re-labelled `[JUSTIFIED:]` in the files this
+  session touched; the `gauge_mb.py` origin is filed, not chased.
+  **⚠ NEEDS JORDAN, called out in the PR body rather than buried:** (1) **fork #2 is now UNBLOCKED**
+  — A6a landing was its stated precondition; (2) the `p=3.20` result itself; (3) `.github/workflows/`
+  edited (report-only `lanchester-signature` job) — CODEOWNERS; (4) the F7 convention question
+  (should engine-mechanics changes allocate `PP-NNN`? — filing retroactive PPs to move a graph metric
+  would be fabrication, so it went to the docket, not the register).
+  **PROCESS FINDING worth carrying:** the first A2 mutation run was corrupted by stale `__pycache__`
+  (CPython invalidates by `(mtime, size)`, so a same-size edit inside one mtime second is served from
+  cache) — it silently mis-scored 2 of 5 mutants. **Run mutation matrices under `python -B` with
+  caches cleared.** The A2 and I4 matrices were re-run that way.
+  **NEXT, in order — the chain is unchanged and C1 is the head:**
+  **C1** (per-phase casualty attribution; also the second behaviour-preservation instrument) →
+  **§4a** (record the 5th digest mode at `PC_CELL_MORALE=1`; mode-key extension MANDATORY — `bat.py`'s
+  key reads only `PER_CELL`/`FIELD_MOVEMENT`, so a 5th golden without it would silently check the
+  wrong baseline) → **rekey_cells** (the cheap standalone fix for the live `cell_facing_vec` loss;
+  ~30 lines, no B1a risk) → **B1a/B1b** → **D1** with its pre-registration and Fable referee.
+  A5b, E5/E6/E7, D2–D6 and the §7 forks are untouched.
+
 - **A1b EXECUTED (2026-07-29, MB session — this PR).** The shipped configuration's regression
   oracle now exists: CI job `field-goldens` runs `bat.py --check` in both `FIELD_MOVEMENT=1`
   modes via `tools/ci_field_golden_check.py` — the **single owner** of the full digest-relevant
