@@ -121,6 +121,25 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   the tree — logged (G12), not fabricated. Stopped per the seam-stop list (unchanged):
   `systems/combat/**`, `combat_engine_v1/wrapper.py`, `faction_action.py`,
   `references/id_reservations.yaml`, `registers/review_baseline.yaml`.
+  **W3 merged as PR #267 (31/31 CI green). NEXT ACTION — WAVE 4, FRESH SESSION (Jordan pause
+  directive, 2026-07-29):** the launch-ready workflow is committed at
+  `.claude/wf_wave4_central.js` (harness-injected, path-checked); its header comment carries the
+  full G12-preflight corrections and is the authority where it conflicts with the plan —
+  headline: OI-51 is ENTIRELY STALE (everything executed pre-program at f60b74d; record, don't
+  execute), the four OI-53a dead-root sites + `build_apparatus_registry.py:232/:234` are
+  confirmed live-broken, `has_main_guard` lands in `tools/ci_common.py` as the single owner,
+  OI-54's join leverages `mechanics_index.yaml`'s existing 88 `sim_module:` rows, and vocab.a17
+  sits at 21 vs baseline 29 — **8 rows of banked shrink held as a Jordan baseline-lowering
+  decision item, never silently absorbed**. The fresh session: establish currency (banner +
+  this file + `04_execution_ledger.md` + the two plans — `audit/2026-07-29-code-shape-open-items/
+  01_orchestration_plan_v1.md` and the approved execution strategy's operating mode: autonomous
+  commit/PR/self-merge on CI green; adversarial pass before every gate; critics via hCritic;
+  log all Jordan items, never self-ratify them), then `Workflow({scriptPath:
+  ".claude/wf_wave4_central.js"})`, gate per the established template (adjudicate disputes →
+  fix batch → re-critic → full suites, NO golden may move, review_baseline untouched), ship the
+  W4 PR, then W5 capstone (per plan §3 Wave 5: observatory regen — IN is sole regenerator —
+  diff `04_execution_ledger.md` against `02_disposition_map.md`, release unused reserved IDs
+  with a documented walk-back, CURRENT.md stamp LAST).
 - **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07-29,
   in-session).** ALL resolvers of any type must support (i) fractional dice pools (integer part
   rolls d10s, remainder contributes its EV — the ED-MB-0032 pattern), (ii) fractional Ob
