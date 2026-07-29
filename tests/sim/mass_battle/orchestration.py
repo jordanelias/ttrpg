@@ -1411,7 +1411,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # Sort by attacker depth; group into sub-phases by proximity (1-row buckets)
     sorted_pairs = sorted(pairs, key=_cascade_depth_key)
     if not sorted_pairs:
-        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0, "cell_dmg_a": {}, "cell_dmg_b": {}}
+        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0, "cell_dmg_a": {}, "cell_dmg_b": {},
+                "truncated_groups": 0, "truncated_pairs": 0, "truncated_troops": 0.0,
+                "n_groups": 0}
 
     groups = []
     cur_group = [sorted_pairs[0]]
@@ -1427,8 +1429,48 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     groups.append(cur_group)
 
     total_engagements = 0
+    # [ED-MB-0048 / plan-v2 A3] The `break` below used to be bare: engagement groups past
+    # MAX_SUB_PHASES deal zero damage that tick and NOTHING recorded it. Measured incidence is
+    # zero on the pinned grid battery (which is exactly why A3's severity dropped from 1), but a
+    # silent drop must never STAY silent — the point is that if this ever starts firing, it is
+    # visible without a bespoke probe.
+    #
+    # What is counted, and why it is not a fire-count: truncation drops the DEEPEST-sorted groups
+    # (`sorted_pairs` is ordered by `_cascade_depth_key`, tip first), so its bias is systematic
+    # against deep formations — D6's "too deep to fight". A count of ticks-that-truncated cannot
+    # express that; engaged-troop WEIGHT can. Weight is taken from `_pair_engaged_troops`, the
+    # existing single owner of "troops actually in contact plus depth-weighted support", once per
+    # side of each dropped pair — no second definition of engagement magnitude is introduced here.
+    #
+    # Zero RNG draws, zero writes to engine state: `_pair_engaged_troops` reads `cell_troops` /
+    # `cell_broken` and returns a float. The counters ride the result dict (`trace_event` is a
+    # no-op unless tracing is on, so a trace-only counter would be invisible in every measured
+    # workload). Adding dict keys cannot move a golden: `bat.py:trial_vector` reads named fields
+    # (winner/turns/hp/morale/discipline/routed) and never iterates the result.
+    #
+    # MAX_SUB_PHASES itself is NOT touched — it is CALIBRATED-DEBT (config.py:136) and changing it
+    # would move goldens with no measurement behind the move.
+    #
+    # `n_groups` is the CONTROL (§0.1 #4): "0 truncations" is not a measurement on its own — a
+    # zero could mean the bound is generous or that the workload never cascades at all. Carrying
+    # the observed group count against the bound of MAX_SUB_PHASES turns it into a headroom
+    # reading, which is the number that actually tells you whether the risk is live.
+    truncated_groups = 0
+    truncated_pairs = 0
+    truncated_troops = 0.0
+    n_groups = len(groups)
     for sub_idx, group in enumerate(groups):
         if sub_idx >= MAX_SUB_PHASES:
+            for _dropped in groups[sub_idx:]:
+                truncated_groups += 1
+                for _p in _dropped:
+                    # Same already-resolved filter the live path applies, so a pair that a
+                    # previous sub-phase already resolved is not double-counted as "dropped".
+                    if (id(_p["atom_a"]), id(_p["atom_b"])) in resolved_keys:
+                        continue
+                    truncated_pairs += 1
+                    truncated_troops += (_pair_engaged_troops(_p["atom_a"], _p["a_cells"])
+                                         + _pair_engaged_troops(_p["atom_b"], _p["b_cells"]))
             break
         active = [p for p in group
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
@@ -1451,7 +1493,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
             # actually reads.
 
     return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements,
-            "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b}
+            "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b,
+            "truncated_groups": truncated_groups, "truncated_pairs": truncated_pairs,
+            "truncated_troops": truncated_troops, "n_groups": n_groups}
 
 # ─── VOLLEY (Phase 2 — ranged fire at distance) ──────────────────────────────
 # [canonical: mass_battle_v30.md §A.7 Phase 2 — Volley fires before Manoeuvre.
@@ -1689,6 +1733,12 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     _draw_friction_cev(unit_b)
     turns = 0
     current_phase = 0
+    # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see
+    # resolve_engagements_cascading. Zero on every shipped workload measured so far — the
+    # value of carrying them is that a non-zero is now READABLE rather than needing a probe.
+    trunc_groups = trunc_pairs = 0
+    trunc_troops = 0.0
+    max_groups = 0
     for t in range(1, max_turns + 1):
         turns = t
         trace_event('tick', t=t)
@@ -1887,6 +1937,13 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         result = (resolve_engagements_cascading(unit_a, unit_b, pairs, t=t)
                   if CASCADING_ENABLED
                   else resolve_engagements(unit_a, unit_b, pairs, t=t))
+        # [ED-MB-0048 / A3] Accumulate the truncation counters. `.get` because the keys exist
+        # only on the cascading path — truncation is a property of sub-phase grouping and cannot
+        # occur when CASCADING_ENABLED is off, so their absence there is correct, not a gap.
+        trunc_groups += result.get("truncated_groups", 0)
+        trunc_pairs += result.get("truncated_pairs", 0)
+        trunc_troops += result.get("truncated_troops", 0.0)
+        max_groups = max(max_groups, result.get("n_groups", 0))
         sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
@@ -2063,7 +2120,12 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             "a_stamina": unit_a.agg_stamina(), "b_stamina": unit_b.agg_stamina(),
             "a_hp_pct": round(unit_a.hp / unit_a.hp_max * 100, 1) if unit_a.hp_max else 0,
             "b_hp_pct": round(unit_b.hp / unit_b.hp_max * 100, 1) if unit_b.hp_max else 0,
-            "a_morale": unit_a.morale, "b_morale": unit_b.morale}
+            "a_morale": unit_a.morale, "b_morale": unit_b.morale,
+            # [ED-MB-0048 / A3] sub-phase truncation, battle-scoped. Not in trial_vector, so it
+            # cannot move a golden; readable by any harness that wants to know whether the
+            # MAX_SUB_PHASES bound bit during a run.
+            "truncated_groups": trunc_groups, "truncated_pairs": trunc_pairs,
+            "truncated_troops": trunc_troops, "max_groups": max_groups}
 
 # ─── MULTI-TURN BATTLE ORCHESTRATOR (D-1, D-9) ─────────────────────────────
 # Models a multi-turn battle: each turn = one 3-phase engagement (run_battle).

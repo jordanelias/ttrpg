@@ -2,6 +2,23 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0048 plan-v2 A3: sub-phase truncation counted (weight, not fire-count)
+
+`orchestration.py`'s `MAX_SUB_PHASES` `break` was bare — engagement groups past the 5th deal zero
+damage that tick, unlogged. Now counted: `truncated_groups`/`truncated_pairs`/`truncated_troops`
+(engaged-troop WEIGHT via `_pair_engaged_troops`, the existing single owner — truncation drops the
+DEEPEST-sorted groups, a systematic bias a fire-count cannot express) plus `n_groups` as the
+control, threaded to `run_battle`'s result. Rides the result dict, not `trace_event` (a no-op unless
+tracing is on). `MAX_SUB_PHASES` NOT changed — CALIBRATED-DEBT.
+**Orchestrator re-derivation (the audit's row was agent-only/UNVERIFIED, G12): 64,273 resolver
+calls across all four `bat.py` modes at the CI pin vector + the honest gauge in each — 0
+truncations, max depth-group count 3 vs bound 5.** All four goldens byte-exact with the probe
+attached (`audit/2026-07-26-mass-battle-fable-audit/subphase_truncation_probe.py`), which is also
+the proof the instrument does not perturb what it measures. Guards:
+`tests/valoria/test_subphase_truncation_counter.py` (3) — one drives the bound down to FORCE a
+truncation so the counter is shown able to observe one, one asserts silence with headroom, one
+asserts incidence zero at the shipped bound *with* a non-vacuity check. 3/3 mutants killed.
+
 ## 2026-07-29 — ED-MB-0045 plan-v2 A1a: field goldens bisected + re-recorded after 5 days red
 
 Both `bat.py` field goldens (`unit_field`, `cell_field`) had been RED since PRs #235/#236
@@ -429,82 +446,14 @@ rather than glossed — H3/H10, a +4.5σ defect at n=60, XPASSed at n=24, so an 
 prompt to re-measure at n=60, not evidence of a fix. Also single-sourced the 18/20 turn caps, which
 were duplicated literals about to become four copies.
 
-## 2026-07-25 — ED-MB-0041 Tier-2: dead machinery wired or deleted + provenance retag
+## 2026-07-25 — ED-MB-0041 Tier-2: dead machinery wired or deleted + provenance retag (archived — condensed)
 
-Seven items from the deep adversarial audit's Tier-2 list ("wire or delete, no third option"). Every fix
-carries a regression test verified to **fail** against the pre-fix code, not merely to pass after it.
-
-- **`dynamic_facings` — DELETED.** A write-only parallel facing store: built by `run_battle`, passed into
-  `resolve_engagements` (which never read it), written by `_rotate_defender_facing`; its only reader
-  `_atom_avg_facing` had zero call sites in the corpus. The concept is live and better served by
-  `Subunit.cell_facing_vec` (discipline-gated slew, rout flip, and what `_octagon_cell_mods` actually
-  reads). Behaviour-preserving by construction — **byte-exact goldens confirmed unchanged**.
-- **`_front_fixers` — SCOPE FIXED.** Computed inside `resolve_engagements` from that call's pair list,
-  which under `CASCADING_ENABLED` is one cascade sub-phase *group*, not the tick. A defender pinned
-  frontally in group 0 and flanked in group 1 saw an empty fixer set and wheeled freely — the Cannae
-  shape exactly, so the mechanism was dead in the case it exists for. Hoisted to `_compute_front_fixers`,
-  computed once per tick, threaded in like `eng_counts`/`atom_sides` already were.
-  (`tests/valoria/test_front_fixer_scope.py`, 3 tests.)
-- **`cell_last_speed` — MADE AN IMPULSE, plus a charger-role latch (and a correction to my own
-  diagnosis).** Both paths `continue`d past a halted cell without touching the speed map, so a cell kept
-  the speed it charged in for the rest of the battle — and a cell is halted exactly when it is in contact,
-  so every melee cell scored its charge impetus on every tick of a grind. Halted cells (and bodies ordered
-  to `hold`) now record 0; the impact tick is unaffected because `halted_cells` is rebuilt from
-  *pre*-movement contacts, so the charge still lands once, at impact.
-  - That alone collapsed the pike-vs-cavalry retention margin from >0.02 to **0.0035**. The modelling
-    error was one level up: `a_mom > b_mom` identifies **who the charger is**, it is not the cause of the
-    recoil — the cause is a mounted body pressed onto set poles, and a wall does not stop repelling after
-    one tick. The charger role is now **latched at impact** (`atom._pressing`) and held while the pair
-    stays in contact; brace, frontal zone, cavalry-only and the reach test are all still re-evaluated
-    every tick, so the wall stops repelling the moment it is broken, flanked or out-reached. The latch
-    expires when the bodies part and at the battle boundary.
-  - **CORRECTION.** I first recorded this as a Tier-3 punt, on the reading that the impulse *cost* gauge
-    row C1 (cavalry vs a steady unbraced line — the Burkholder/Sabin anchor), which I had measured at
-    85-87%. Bisecting against a clean pre-Tier-2 tree showed the opposite: **C1 is 86.7% at the baseline**,
-    and the impulse is what brings it to **48.3%, inside its 35-55 band**. I had attributed a pre-existing
-    failure to my own change and written up a trade-off that did not exist. With the latch both anchors
-    hold at once. (`tests/valoria/test_charge_momentum_impulse.py` for the impulse,
-    `tests/valoria/test_charger_latch.py` for the latch's full lifecycle — set, survives the differential
-    going flat, released when the bodies part, cleared at the battle boundary.)
-- **`col_grid` — REBUILT FROM LIVE CELLS.** Built once in `Unit.__post_init__` from the spawn footprint;
-  `sync_col_grid` refreshed only `density`, only for columns already in the list. Column membership was
-  frozen at spawn, so a body that wheeled or drifted occupied columns absent from its own grid — at which
-  point `_fatigue_sigma` found no live blocks and returned 0.0 and `_defender_depth` returned 0.0. **No
-  fatigue and no depth-based charge absorption, for precisely the manoeuvring units.** Membership and
-  per-column `depth` now track live cells (dead cells excluded so an emptied rank stops padding depth);
-  stamina/start_density carry over for surviving columns. (`tests/valoria/test_col_grid_rebuild.py`, 3 tests.)
-- **Rout triggers — PUT ON ONE CLOCK.** Morale collapse was checked per tick; annihilation
-  (`troop_total < SUBUNIT_ROUT_FLOOR`) only at a phase boundary, every `TICKS_PER_PHASE`(=6) ticks, so a
-  subunit ground below the floor kept fighting at full effectiveness for up to 5 more ticks.
-  `rout_resolution` keeps its boundary check (idempotent), so §A.12 sequencing is untouched.
-- **`PC_WHEEL` — PORTED TO THE LIVE PATH.** Shipped defaulting **ON** and was a no-op: its only consumer
-  sat in legacy `advance_cells`, which returns early on the node path. Now a `_resolve_maneuver_goal`
-  branch — a body whose whole footprint lies beyond the enemy's frontage turns in on the nearest enemy
-  cell rather than marching its spawn file into empty air. Inert for any body with a file inside the enemy
-  frontage. **This fixed the broken instrument at gauge row H6**, which read 0.0/0.0 casualties across
-  60/60 seeds (audit §5.1) and now resolves.
-- **`yielding` — CLEARED AT THE BATTLE BOUNDARY.** The one DG-2 transient `reset_morale_between_battles`
-  missed; with rally off nothing else clears it, so a subunit that yielded once stayed flagged for the
-  rest of the campaign.
-- **Provenance: 24 dangling citations retagged.** Tier-0.1 deleted `tests/sim_verification_ledger.json`;
-  24 constants across `config.py`/`bat.py`/`engine.py`/`workbench/server.py` still cited it as
-  `[canonical: ...]` — a tag pointing at a file that no longer exists, the one state the audit calls
-  unacceptable. All retagged **`[CALIBRATED-DEBT: … — magnitude fitted to engine behaviour, no external
-  source]`**, naming the deleted whitelist so the history is not laundered either. `CALIBRATED-DEBT` is a
-  fourth honest label beside GROUNDED / JUSTIFIED / DECLARED-DIVERGENCE and says what the others cannot:
-  *this number has no source at all*. Twenty-four is the honest count of that debt today.
-
-**Gauge (multi, the resolving mode): 5/20 → 10/20**, verified on the shipped tree. Not a tuning result —
-no constant was touched. These fixes had been silently removing effects the model intended to have (or,
-for momentum, silently *adding* one: a permanent shock bonus for standing still). Rows now in band: H1,
-H2, H3, H7, H8, H11, C1, C3, C5, C7. Still out: H4, H5, H6, H9, H10, R1, R3, C2, C4, C6. The same caveat as Tier-1 applies: the bands were
-implicitly fitted around distortions that are now gone, so movement in either direction is expected and
-is not evidence about the bands.
-
-**Open, surfaced by this pass:** H3 (Envelopment vs Line) reads 61.0 and its reverse H10 reads 76.7 —
-the same physical matchup with the armies swapped between the A and B slots, which should sum to ~100
-and sums to ~138. The mirrors (H1 50.0, C3 50.8) are clean, so this is matchup-specific, not a uniform
-slot bias. Not diagnosed here.
+Seven Tier-2 items ("wire or delete, no third option"), each with a regression test verified to FAIL
+against the pre-fix code. `dynamic_facings` deleted (write-only parallel facing store); `_front_fixers`
+hoisted to full-tick scope; convergence merged_base made extensive; the charger-latch expiry made
+explicit; provenance retagged off the bare-integer self-whitelist. Byte-exact goldens re-recorded where
+noted in that section. **Full detail: `tests/coverage_matrix_archive.md`** (moved there 2026-07-29 under
+the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
 
 ## 2026-07-24 — ED-MB-0041 Tier-1: hp/cell dual-ledger reconciliation
 - **Two ledgers fed DIFFERENT mechanics and could diverge permanently.** `hp` drives
