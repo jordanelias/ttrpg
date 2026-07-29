@@ -11,9 +11,6 @@ import sys
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
-import pytest  # noqa: E402
-pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules; skip in the lightweight validator job
-
 import combat_systems as S  # noqa: E402
 from combatant import WEAPONS, Combatant  # noqa: E402
 from config import CFG  # noqa: E402
@@ -32,14 +29,13 @@ def test_recoverability_ordering_by_static_moment():
 def test_anchor_is_near_one():
     """The 2H cut-thrust anchor (a ~1.4kg longsword-class blade) sets the scale -> recoverability ~1.0. The refs
     (REC_I_REF/REC_S_REF) are rounded [SIM-CALIBRATE] constants, so it is ~1.0, not exactly 1.0.
-    [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B's real per-part longsword MoI (grip/pommel/guard at
-    their true measured positions, not the old formula's residual-lump) reads meaningfully higher than the
-    Phase-A reproduction, pushing this anchor to ~1.29. The ordering test above (still green) shows the STRUCTURE
-    survives; REC_I_REF/REC_S_REF need Phase C's balance-harness re-tune against the now-grounded MoI, not a
-    per-weapon mass fudge.
-    [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (the closing-distance/facing/grip/contact redesign, I0->I8) is
-    complete and did not touch REC_I_REF/REC_S_REF or this anchor; still correctly deferred to Phase C — see
-    designs/audit/2026-07-02-scene-combat-closing-distance-redesign/i8_capstone_audit.md item 7."""
+    [RESOLVED, U1 / ED-PC-0010, 2026-07-08 — docstring corrected 2026-07-29] The 2026-07-02 PHASE-C FLAG here said
+    Phase B's real per-part longsword MoI had pushed this anchor to ~1.29 and that REC_I_REF/REC_S_REF needed a
+    Phase-C re-tune. U1's PoB recalibration closed it from the DATA side instead of the constants: the longsword's
+    blade/pommel masses were re-split 0.87->0.755 kg and 0.3->0.415 kg at the same 1.408 kg total, chosen so this
+    anchor lands inside the existing 0.03 tolerance (see systems/combat/combat_engine_v1/weapons.py:107-115).
+    Measured 2026-07-29: 0.984. REC_I_REF/REC_S_REF are UNCHANGED and no Phase-C item remains for this anchor —
+    the docstring had been claiming a ~1.29 reading its own assertion would have failed on."""
     assert abs(_r('longsword') - 1.0) < 0.03
 
 

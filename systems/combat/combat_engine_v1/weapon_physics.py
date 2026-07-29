@@ -33,6 +33,10 @@ fit in the re-baseline (REARCHITECTURE_v1 Phase 3), not asserted.
 """
 import math
 
+import vocabulary as V   # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
+                         # module -- which CANNOT import core (core imports IT, core.py:37) -- still reaches the
+                         # same head/mode/hilt tokens core's tables are keyed by, with no cycle.
+
 # ── composite-mass constants (sourced; recovered weapon_physics_calibration_2026-06-22) ──
 # UNIT_M DELETED (U0 units honesty, ED-PC-0002, 2026-07-05 — consolidation_v1.md §4): head_len/grip_len/
 # the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are now all HONEST METRES
@@ -40,20 +44,36 @@ import math
 # per-length-unit gain rescaled by /0.30). Proven byte-identical against tests/valoria/
 # r3_identity_golden.json (built pre-edit) at 1e-9.
 RHO_WOOD = 700.0        # kg/m^3 ash/oak
-RHO_IRON = 7860.0       # kg/m^3
+# RHO_IRON (7860.0) REMOVED (ED-PC-0042): unread since the mass model moved to per-part authored `mass_kg`
+# records — no derivation back-solves an iron volume any more. The sourced figure survives in the recovery
+# corpus (audit/2026-06-29-combat-corpus-recovery/) if a future density model needs it.
 D_HAFT = 0.040          # m haft diameter (staff back-solve)
 D_GRIP = 0.030          # m sword grip
 RHO_SWORD_GRIP = 900.0  # kg/m^3 wood scales + thin tang
-GUARD = {'compound': 0.30, 'simple': 0.12, 'none': 0.0}   # hilt mass at the cross (kg)
+GUARD = {V.HILT_COMPOUND: 0.30, V.HILT_SIMPLE: 0.12, V.HILT_NONE: 0.0}   # hilt mass at the cross (kg)
 C_HEAD = {'bladed': 0.45, 'hafted_tip': 0.97, 'hafted_block': 0.88}  # head-mass centroid frac of head_len
-_A_HAFT = math.pi * (D_HAFT / 2) ** 2
+# _A_HAFT REMOVED (ED-PC-0042): the haft cross-section it fed (m_shaft = min(_A_HAFT*Lt*RHO_WOOD, m)) belongs to
+# the retired whole-weapon back-solve; D_HAFT is retained because the recovery corpus documents it as the staff
+# back-solve primitive. _A_GRIP below is LIVE.
 _A_GRIP = math.pi * (D_GRIP / 2) ** 2
 
 # ── percussion authority (recovered percussion_authority.py) ──
 PERC_SCALE = 9.5
 PERC_EXP = 0.30
-PERC_CAP = 8.0
-HEAVY_BLUNT_THRESHOLD = 6.0
+PERC_CAP = 8.0          # the "steel-hammer reference" ceiling = the top of the canonical 0-8 percussion-authority
+                        # scale (recovered percussion_authority.py:61). SINGLE OWNER of that anchor (ED-PC-0042
+                        # rider I1b): it was spelled four times as independent literals — here, core.PERC_AUTH_REF,
+                        # core.damage()'s blunt `perc/8.0` + its `perc=8` default, and config.CFG['ADEF_PERC_REF'] —
+                        # with nothing enforcing agreement. This one is the PRIMITIVE (the clamp that CREATES the
+                        # scale); the others are DENOMINATORS normalising an authority value against the scale top,
+                        # so they must move WITH it. The two core sites now bind from here; the CFG seed cannot
+                        # (config.py is a zero-import leaf and CFG is per-run overridable — see the note there) and
+                        # is held equal by tests/valoria/test_combat_invariants.py::test_percussion_anchor_has_one_owner.
+                        # THE PHASE-C RE-FIT (PERC_SCALE/PERC_EXP, deferred — see percussion_authority's docstring)
+                        # IS THE EVENT THIS OWNERSHIP EXISTS FOR: change the scale here, once.
+# HEAVY_BLUNT_THRESHOLD (6.0) REMOVED (ED-PC-0042): it keyed the retired blunt_heavy/blunt_light ARMOUR-ROW split
+# (audit/2026-06-29-combat-corpus-recovery/percussion_authority.py:84). Armour-defeat is continuous now —
+# core.adef_cap scales percussion_authority against ADEF_PERC_REF — so there is no row to select.
 
 # ── concussion energy-credit (2H grip + arc/haft-length) — GROUNDED biomechanics ──
 # designs/audit/2026-06-30-combat-grounding/grounded_weapon_armour_usemode_model.md §1 (task wpwi3b9qf,
@@ -183,7 +203,7 @@ def derive(w):
     if cls == 'bladed':
         m_grip = _A_GRIP * Lg * RHO_SWORD_GRIP
         m_pom = w.get('pommel_kg', 0.0)
-        m_g = GUARD.get(w.get('hilt', 'none'), 0.0)
+        m_g = GUARD.get(w.get('hilt', V.HILT_NONE), 0.0)
         head_mass = m - m_grip - m_pom - m_g
         fparts.append((m_grip, -Lg / 2, 0.0))
         fparts.append((m_pom, -Lg, 0.0))
@@ -248,11 +268,11 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
     fixed-pc table: guandao (curved_cut, pc=0.30, g=1.0) -> 0.650 exact; bardiche (straight_cut, pc=0.18, g=0.627)
     -> 0.743 exact. At grip=0, rho(0)==1.0 always, so Phi_swing==1.0 and the blend collapses to 1.0 for EVERY
     head — the byte-identical default. Pure."""
-    if sel_head == 'point':
+    if sel_head == V.HEAD_POINT:
         return 1.0   # D2 gate: an axial point thrust's TRANSMISSION is grip-invariant — a rigid shaft carries axial compression from the hands to the point independent of WHERE on the shaft it is gripped (`[ASSERTED — rigid-body transmission only]`). NARROWED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): the prior tag `[ASSERTED — rigid-body first principles]` OVERCLAIMED — the force is human-GENERATED (choking up shortens the rear body-lever available to drive the thrust), which is a real grip-dependent cost. That cost is not zero; it is booked ELSEWHERE as a CONTROL/authority cost — systems.choke_counterbalance -> CHOKE_ACCURACY_K (the legibility/control channel) and thrust_authority(head_len) (the gap-press lever) — NOT as a phi_grip force term. So this 1.0 is the transmission invariant, not a claim of zero total cost.
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
-    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']
+    pc = sel_pc if sel_pc is not None else w['geo']['point_concentration']   # whole-weapon fallback off the BAKED surface (geometry.bake passes the raw primitives through so `geo` is the single read path — ED-PC-0042/I3)
     return pc * 1.0 + (1.0 - pc) * phi_swing
 
 def phi_room_percussion(room):
@@ -348,11 +368,11 @@ def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     non-blunt branch's own reversed_grip_percussion (U2/ED-PC-0009) is NOT byte-identical to the pre-U2 hard-
     zero — that is the intended, deliberate behaviour change this increment makes."""
     head = sel_head if sel_head is not None else w['head']
-    if head != 'blunt':
+    if head != V.HEAD_BLUNT:
         return reversed_grip_percussion(w, grip=grip, room=room)
     pob = derive(w)['PoB_frac']
     base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, w['mass'])) * pob * energy_credit(w)) ** PERC_EXP)
-    return base * phi_grip(w, grip, 'blunt', sel_pc) * phi_room_percussion(room)
+    return base * phi_grip(w, grip, V.HEAD_BLUNT, sel_pc) * phi_room_percussion(room)
 
 
 def puncture_pressure(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
@@ -377,18 +397,18 @@ def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
     if Lt <= 1e-9:
         return 0.0
     base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, elem_mass)) * (abs(elem_x) / Lt) * energy_credit(w)) ** PERC_EXP)
-    return base * phi_grip(w, grip, 'blunt', None) * phi_room_percussion(room)
+    return base * phi_grip(w, grip, V.HEAD_BLUNT, None) * phi_room_percussion(room)
 
 
 def armour_defeat_mode(w):
     """Route the armour-defeat path by head shape (the physics the live single blunt row flattens)."""
     head = w['head']
-    if head == 'blunt':
+    if head == V.HEAD_BLUNT:
         sc = w.get('geo', {}).get('perc_conc', 0.0)
-        return 'puncture' if sc >= 0.75 else 'concussion'
-    if head in ('point', 'cut_thrust'):
-        return 'gap-thrust'
-    return 'cut'
+        return V.ADEF_MODE_PUNCTURE if sc >= 0.75 else V.ADEF_MODE_CONCUSSION
+    if head in V.THRUST_FAMILY_HEADS:
+        return V.ADEF_MODE_GAP_THRUST
+    return V.ADEF_MODE_CUT
 
 
 # ════════════════════ STAGE 3 — dynamics: agility, authority, reach, defence affinities ════════════════════
@@ -463,7 +483,7 @@ def defense_affinities(w):
 # dedicated hardware (a cross-guard, a tsuba); its mass is already counted once via `elements` (mass_kg=0 here).
 GUARD_HAND_SCALE = 0.25  # [SIM-CALIBRATE] metres — proximity half-life-ish decay for hand-guard relevance; a guard at
                           #   this distance from the working hand counts ~37% toward hand_guard, negligibly beyond ~3x it.
-HILT_CATCH_MULT = {'compound': 3.0, 'simple': 1.0, 'none': 1.0}  # [SIM-CALIBRATE] a compound hilt (basket/swept/
+HILT_CATCH_MULT = {V.HILT_COMPOUND: 3.0, V.HILT_SIMPLE: 1.0, V.HILT_NONE: 1.0}  # [SIM-CALIBRATE] a compound hilt (basket/swept/
                           #   rings) covers far more than its own bar-length extent suggests; a plain cross or a
                           #   hafted weapon's incidental catch-hardware does not get this multiplier.
 GUARD_HAND_K = 3.0       # [SIM-CALIBRATE] fit against the pre-Phase-B4 authored hand_guard ladder (rough — Phase C
@@ -484,14 +504,14 @@ def hand_guard(w):
     """Own-hand protection, DERIVED: a saturating function of guard hardware AT the working hand (proximity-
     weighted), scaled by hilt complexity (a swept/basket hilt covers the hand far more than a plain cross of the
     same bar length). In [0,1). A bare haft (spear, staff, mace — no guards) -> 0. Pure."""
-    hm = HILT_CATCH_MULT.get(w.get('hilt', 'none'), 1.0)
+    hm = HILT_CATCH_MULT.get(w.get('hilt', V.HILT_NONE), 1.0)
     return math.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
 
 def blade_guard(w):
     """Bind-catch capability, DERIVED: a saturating function of ALL located catching surfaces (guards AND
     dual-role catching elements — hooks/prongs/tines/lugs), position-independent (a bind can land anywhere along
     a long polearm's reach, not just at the hand), scaled by hilt complexity. In [0,1). Pure."""
-    hm = HILT_CATCH_MULT.get(w.get('hilt', 'none'), 1.0)
+    hm = HILT_CATCH_MULT.get(w.get('hilt', V.HILT_NONE), 1.0)
     return math.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
 
 
@@ -656,7 +676,7 @@ def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     # MODE-SPLIT (ED-PC-0027): a SWING's impact is the forward-balance moment (m_head*PoB_frac); a THRUST's is axial,
     # PoB-DECOUPLED (m_head*THRUST_POB) — see THRUST_POB. phi_grip already grip-splits (point->1.0); this splits the
     # BASE lever too, so a forward-balanced light-headed weapon (spear) no longer over-credits its thrust.
-    lever = THRUST_POB if head == 'point' else max(0.0, d['PoB_frac'])
+    lever = THRUST_POB if head == V.HEAD_POINT else max(0.0, d['PoB_frac'])
     base = (d['m_head'] * lever) / HEFT_REF
     return base * phi_grip(w, grip, head, sel_pc)
 
@@ -783,5 +803,5 @@ if __name__ == '__main__':
     for n, w in WEAPONS.items():
         a = defense_affinities(w)
         print(f"  {n:10} {agility(w):5.2f} {percussion_authority(w):5.2f} "
-              f"{armour_defeat_mode(w):>10}   {a['parry']:.2f}/{a['dodge']:.2f}/{a['wind']:.2f} "
+              f"{armour_defeat_mode(w):>10}   {a[V.DEF_PARRY]:.2f}/{a[V.DEF_DODGE]:.2f}/{a[V.DEF_WIND]:.2f} "
               f"{heft(w):6.2f} {handling(w):6.2f}")

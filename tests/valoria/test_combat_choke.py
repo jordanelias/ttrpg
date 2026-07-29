@@ -15,11 +15,8 @@ half-sword exemption.
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-pytest.importorskip("numpy")
 
 import weapon_physics as WP  # noqa: E402
 import combat_systems as S  # noqa: E402

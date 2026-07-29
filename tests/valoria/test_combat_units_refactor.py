@@ -18,8 +18,6 @@ import math
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
@@ -29,7 +27,6 @@ GRIPS = (0.0, 0.25, 0.5, 0.75, 1.0)
 
 
 def _mods():
-    pytest.importorskip("numpy")
     import combatant as C
     import combat_systems as S
     import weapon_physics as WP

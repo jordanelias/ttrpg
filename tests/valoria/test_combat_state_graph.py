@@ -8,8 +8,6 @@ graph properties plus one small live smoke that the trace actually visits the co
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
@@ -53,8 +51,11 @@ def test_terminals_have_no_outgoing_edges():
 
 def test_live_trace_visits_core_states():
     """A small live sweep: the engine's trace must visit the core path states (proves the graph is live, not
-    just well-formed). Kept tiny + seeded for CI speed/determinism."""
-    pytest.importorskip("numpy")  # this smoke runs a live fight (-> r8 -> numpy); skip where numpy is absent (the 7 static graph tests above still run)
+    just well-formed). Kept tiny + seeded for CI speed/determinism.
+
+    This smoke runs a live fight, so it imports `workbench/trace.py` — the ONLY numpy-dependent module the combat
+    suite reaches (the engine kernel itself is numpy-free since ED-1085). numpy is a declared CI dependency; if it
+    is absent this must fail LOUDLY rather than skip, or the smoke silently stops guarding anything."""
     from combatant import Combatant
     from trace import run_traced_fight
     fired = set()
@@ -117,7 +118,6 @@ def test_contact_node_live_trace_fires():
     a short-reach weapon DOES close, which it still does against a non-reach opponent; arming-vs-dagger keeps the
     test's intent (the dagger is the short-reach closer and reaches Contact). Reachability of the node from all three
     precondition sites is separately guarded by test_contact_reachable_from_all_three_precondition_sites."""
-    pytest.importorskip("numpy")
     from combatant import Combatant
     from trace import run_traced_fight
     fired = set()

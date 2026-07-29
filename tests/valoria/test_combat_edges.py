@@ -14,7 +14,6 @@ import pytest
 
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-pytest.importorskip("numpy")
 
 import weapon_physics as WP  # noqa: E402
 import combat_systems as S  # noqa: E402
@@ -103,7 +102,15 @@ def test_authored_data_conforms_invariants():
     geometry.edge_keenness; a MULTI-element composite's per-element ek lives in its mode_elements (a blended
     top-level ek would give a false answer — the edges_data_v1.md conflicts table documents each composite spike's
     own ≤0.1 mode-ek), so the ek check is applied only where the top-level value IS the element's. Invariant (2)
-    needs no ek and is checked for every weapon."""
+    needs no ek and is checked for every weapon.
+
+    [2026-07-29 vetting] Every assertion in this loop is guarded by a `continue` or an `if`, so the whole test is
+    green on an empty roster, on a roster where no element authors an `edges` block, and on one where neither
+    conditional invariant ever fires. It has been non-vacuous only indirectly, because weapons.py's bake asserts
+    elsewhere — an accident of another module, not a property of this test. The counted floors below close that
+    (§0.1 point 2). Measured 2026-07-29: 68 elements carry an `edges` block (7 do not), invariant (1) fires on 4
+    of them and invariant (2) on 9."""
+    checked = ek_fired = fef_fired = 0
     for n, w in WEAPONS.items():
         if 'base' in w:
             continue
@@ -113,13 +120,19 @@ def test_authored_data_conforms_invariants():
             ed = e.get('edges')
             if ed is None:
                 continue
+            checked += 1
             sides = ed.get('sides')
             fef = ed.get('false_edge_frac', 0.0)
             assert sides in (0, 1, 2), (n, ed)
             if sides == 0 and single:
+                ek_fired += 1
                 assert ek <= 0.1 + 1e-9, f"{n}: sides==0 but edge_keenness {ek} > 0.1"
             if fef > 0:
+                fef_fired += 1
                 assert sides == 1, f"{n}: false_edge_frac {fef} > 0 but sides {sides} != 1"
+    assert checked >= 68, f"only {checked} elements carry an authored edges block (was 68) — the conformance sweep is narrowing"
+    assert ek_fired >= 4, f"invariant (1) (sides==0 => ek<=0.1) fired on {ek_fired} elements (was 4) — it is going vacuous"
+    assert fef_fired >= 9, f"invariant (2) (false_edge_frac>0 => sides==1) fired on {fef_fired} elements (was 9) — it is going vacuous"
 
 
 def test_grounded_ordering_of_known_blades():

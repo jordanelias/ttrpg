@@ -12,11 +12,8 @@ longer spurious-switch, (4) the ED's flagged voulge edge-gate residual.
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-pytest.importorskip("numpy")
 
 import core  # noqa: E402
 import combat_systems as S  # noqa: E402

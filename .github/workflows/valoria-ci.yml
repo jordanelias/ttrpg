@@ -627,6 +627,21 @@ jobs:
     # old cap a slow runner would have landed ~11m43s against 12m and cancelled mid-run, which reads as
     # a mysterious red rather than as "the suite got slower". Sized so the added cost is visible in this
     # comment rather than discovered by a cancelled job.
+    #
+    # [CORRECTED 2026-07-29] The ED-PC-0040 paragraph above was WRONG about this job, and the error is the
+    # reason numpy is now installed below. Those roster-wide sweeps never cost this job ~2m20s, because they
+    # never RAN here: 18 of the 20 tests/valoria/test_combat_*.py modules carried a
+    # `pytest.importorskip("numpy")` guard (13 at module level, 5 inside import helpers/test functions)
+    # and numpy was not in the install line, so nearly the whole combat surface skipped silently
+    # (only test_combat_balance_guard.py and test_combat_audit_pins.py, which have no guard, always ran). main @81948c1 reported 837 passed / 93 skipped in ~3m48s against 972 passed /
+    # 21 skipped locally with numpy present. The guard was also unnecessary: the engine import chain has
+    # been numpy-free since ED-1085, and only workbench/trace.py actually needs it — reached by exactly three
+    # live-fight tests (two in test_combat_state_graph.py, one in test_combat_tradition_levers.py).
+    # Every one of those importorskips is now deleted, so an absent numpy fails LOUDLY instead of green-
+    # skipping the suite that guards the combat resolver. Expect wall time to grow from ~3m48s toward the
+    # ~9-11m the paragraph above already predicted — measured 6m10s locally with numpy present, so a hosted
+    # runner should land inside the existing 16-min cap with headroom. The cap is UNCHANGED; the growth is
+    # the sweeps finally being paid for, not new work.
     timeout-minutes: 16
     permissions:
       contents: read
@@ -636,7 +651,9 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install test deps
-        run: pip install pyyaml pytest
+        # numpy is REQUIRED, not optional: without it the combat suite used to importorskip itself into
+        # silence (see the [CORRECTED 2026-07-29] note above). Do not drop it to speed the job up.
+        run: pip install pyyaml pytest numpy
       - run: python -m pytest tests/valoria -q
       # tests/contracts (the contract_adjudicator's own suite) was orphaned from CI
       # until 2026-07-07 (unaddressed-areas audit, ED-IN-0017) — run it here too.

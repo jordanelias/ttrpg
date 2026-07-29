@@ -10,9 +10,6 @@ import sys
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
-import pytest  # noqa: E402
-pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules; skip in the lightweight validator job
-
 import capabilities as C  # noqa: E402
 import combat_systems as S  # noqa: E402
 import core  # noqa: E402

@@ -17,6 +17,9 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)          # resolve the sim.* shared-service layer (autoload)
 from math import tanh, exp
 from engine.autoload import sigma_leverage as SL
+import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and
+                         # capabilities (neither of which may import core) own-source the same tokens.
+                         # This module owns the TABLES keyed by it; the asserts below pin the two together.
 
 # ---------- logistic (single source, ED-PC-0025) ----------
 # The 1/(1+e^-x) squash was open-coded FIVE ways across the resolver (combat_systems.bind_dominance_p /
@@ -36,8 +39,8 @@ def logistic(x):
     return 1.0 / (1.0 + exp(-x))
 import weapon_physics as WP   # Phase-3 consolidation: percussion authority lives ONCE in WP (the credited derived value);
                               # core.strike reads WP.percussion_authority (the sigma path systems.adef_cap already does),
-                              # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math
-                              # at module scope (cycle-free), so this import is safe.
+                              # retiring the duplicate core.p_auth that read the hand-set pob_frac. WP imports only math + the
+                              # zero-import `vocabulary` leaf at module scope (cycle-free), so this import is safe.
 
 DECISIVE_OB = 3    # [canonical: combat_v30 §5 degree band centre (decisive sub-action Ob); relocated verbatim from the frozen r8 harness, ED-1085]
 TN = SL.TN_STANDARD
@@ -146,6 +149,24 @@ COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_mo
 # value is set at ~the poleaxe hammer->spike flip (systems.select_mode) so the reach-ladder truth holds; the
 # orchestrator tunes the final magnitudes. GROUNDING (direction): Williams (puncture succeeds at gaps/weak-points).
 GAP_EXPOSURE={'none':1.0,'cloth':0.97,'mail':0.95,'plate':0.90}     # [SIM-CALIBRATE] thrust-accessible gap fraction / material (reach-ladder). BROKEN-LOGIC FIX (ED-PC-0023): the old {cloth:0.85, mail:0.90, plate:0.90} CONTRADICTED this block's own grounding prose above — "mail exposes MORE (open weave/edges)" than plate (was mail==plate) and "cloth/none are mostly accessible" (cloth was the LOWEST, below both armours). Corrected to the monotone none>cloth>mail>plate the prose states: mail 0.95 now exposes more than plate 0.90 (LIVE — the gap term binds for mail); cloth 0.97 matches "mostly accessible" (mostly inert — the through-material floor t=0.88 dominates for soft cloth). The plate=0.90 anchor (the poleaxe hammer->spike flip) is UNCHANGED — the heavy-armour gap game is preserved exactly.
+# ── VOCABULARY OWNERSHIP (ED-PC-0042) — the tables above are keyed by vocabulary.py's alphabet ──────────────
+# Import-time, so a token added to the alphabet and forgotten in a table (or vice versa) fails LOUDLY here
+# rather than silently at a `.get(head, default)` that quietly takes the fallback branch. These are DERIVATION
+# checks, not re-definitions: the tables stay hand-written (each cell carries its own sourcing comment).
+assert set(HEAD_MODE) == V.HEADS, f"HEAD_MODE keys != HEADS: {set(HEAD_MODE) ^ V.HEADS}"
+assert set(HEAD_MODE.values()) <= V.DAMAGE_MODES, "HEAD_MODE maps a head to an undeclared damage mode"
+assert set(TIER2MAT) == V.ARMOUR_TIERS, f"TIER2MAT keys != ARMOUR_TIERS: {set(TIER2MAT) ^ V.ARMOUR_TIERS}"
+assert set(TIER2MAT.values()) <= V.MATERIALS, "TIER2MAT maps a tier to an undeclared material"
+assert set(RESIST) == V.MATERIALS and all(set(r) == V.DAMAGE_MODES for r in RESIST.values()), \
+    "the RESIST matrix no longer covers materials x damage-modes exactly"
+assert set(PEN_THR) == V.ARMOUR_TIERS and set(GAP_EXPOSURE) == V.MATERIALS, \
+    "PEN_THR must cover the armour tiers and GAP_EXPOSURE the materials, exactly"
+# DELIVERY is a STRICT SUBSET and must NOT be keyset-derived from HEADS: ED-PC-0037 deleted its 'cut_thrust'
+# entry (the pre-max blended 1.35, dead once cut_thrust_arm resolved the two arms on their own tokens) from
+# the Godot-facing contract. Deriving these keys would resurrect it and reverse a ledgered cleanup.
+assert set(DELIVERY) < V.HEADS and V.HEAD_CUT_THRUST not in DELIVERY, \
+    "DELIVERY must stay a strict subset of HEADS with no 'cut_thrust' entry (ED-PC-0037)"
+
 GAP_PREC_REF=0.65                                                   # neutral gap_precision default for the puncture path (a mid-roster point) — the LIVE combat path always THREADS the weapon's real w['gap'] (systems.select_mode / core.strike), so this default only guards a hypothetical unthreaded caller.
 # FIX-1b [FIAT — no melee-speed behind-plate data exists; ballistic BABT is the wrong regime, per Phase-3 grounding]:
 # percussion transmitted through RIGID armour (mail/plate) scales with the blow's percussion AUTHORITY — a steel
@@ -182,7 +203,13 @@ GAP_PREC_REF=0.65                                                   # neutral ga
 # pre-U2 unscaled behaviour there, verified directly across all four), while the Mordhau candidates (1.4-1.8,
 # a 4.7-point gap below bec_de_corbin with zero overlap) still score 0.22-0.28 — correctly discounted, losing
 # to a weapon's own cut/thrust at low armour and only competitive vs rigid armour it cannot otherwise defeat.
-PERC_AUTH_REF=8.0; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
+# SINGLE-OWNER BINDING (ED-PC-0042 rider I1b): PERC_AUTH_REF is the TOP OF THE PERCUSSION-AUTHORITY SCALE, which is
+# owned by the module that clamps to it — WP.PERC_CAP (weapon_physics.py). It used to be an independent `8.0` literal
+# here, agreeing with the owner by coincidence and by nothing else; the deferred Phase-C PERC_SCALE/PERC_EXP re-fit
+# would have desynced them silently. Bound over core's pre-existing `import weapon_physics as WP` (line 40) — no new
+# dependency edge, and byte-identical (same float, 8.0). PERC_AUTH_REF_SOFT is NOT bound: it is a DIFFERENT anchor
+# (bec_de_corbin's 6.51 live authority, the weakest dedicated hammer — see the U2 block above), not the scale top.
+PERC_AUTH_REF=WP.PERC_CAP; PERC_AUTH_REF_SOFT=6.5; PERC_TRANSMIT_FLOOR=0.35
 def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, thrust_auth=1.0):
     t=1.0-RESIST[mat][mode]
     if mode=='puncture':                                           # SITUATIONAL GAP GAME: a thrust takes through-
@@ -380,7 +407,7 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
 # coupling/adef/legibility machinery is unchanged) and one DAMAGE mode. The wielder greedily SELECTS the afforded
 # head whose resulting damage-coupling vs THIS armour is highest — generalizing the existing cut_thrust max() and the
 # blunt max(concussion,puncture) from 2 modes to N. Pure.
-def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=8, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
+def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc=PERC_AUTH_REF, q=None, eff=None, thrust_auth=1.0, eff_cut=None, eff_thrust=None, weapon_geo=None, cfg_adef=None, grip=0.0, room=1.0):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
     parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
@@ -393,7 +420,14 @@ def damage(deg, heft_units, weapon_head, strength, armor, gap=GAP_PREC_REF, perc
     stays the separate, already-deferred weight-class quantity (plan #9, WP.heft() — cut/thrust magnitude-driven
     heft is future work, not this fix's scope)."""
     if deg not in ('graze','success','overwhelming'): return 0
-    heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
+    heft = 3.0*(perc/PERC_AUTH_REF) if weapon_head=='blunt' else HEFT_HEAVY*heft_units   # blunt heft is percussion-authority-continuous; cut/thrust/point heft_units is WP.heft() (Phase B6), normalised to 1.0 at the longsword anchor -> HEFT_HEAVY*1.0 reproduces the old heavy-class magnitude there
+    # ED-PC-0042 rider I1b: the denominator was a bare `8.0` — the percussion-scale top written down a fourth time,
+    # invisible to any Phase-C re-fit; it now routes through the owned anchor (byte-identical, same float). The
+    # NUMERATOR 3.0 is deliberately UNTOUCHED and is a SEPARATE concern: it is the blunt branch's damage-scale
+    # magnitude, numerically equal to HEFT_HEAVY (core.py:85) but not established as the same constant — whether
+    # "blunt heft at full authority" IS the heavy cut/thrust class, or merely coincides with it, is an unresolved
+    # design question, and absorbing it here on the strength of `3.0 == 3.0` would be exactly the value-collision
+    # reasoning CLAUDE.md §7 warns about. Filed, not fixed.
     qf = q if q is not None else QUAL[deg]
     impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
     raw = impact * coupling(weapon_head, armor, perc=perc, gap_prec=gap, eff=eff, thrust_auth=thrust_auth, eff_cut=eff_cut, eff_thrust=eff_thrust) * qf * DMG_SCALE   # FIX-1b: perc scales blunt transmit vs rigid armour; gap: the situational gap game (thrust seeks the reach-ladder gaps); eff: the 'cut' token's own edge-quality scaling; thrust_auth (PC-5): the point-to-hand lever authority

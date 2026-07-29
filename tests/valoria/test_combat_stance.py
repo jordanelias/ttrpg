@@ -9,9 +9,6 @@ import sys
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
 
-import pytest  # noqa: E402
-pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules; skip in the lightweight validator job
-
 import combat_systems as S  # noqa: E402
 from combatant import Combatant  # noqa: E402
 from config import CFG  # noqa: E402
@@ -32,12 +29,12 @@ def test_open_or_non_pole_does_not_gather():
 
 
 def test_lunge_quality_is_weapon_derived_continuous():
-    # [PHASE-C FLAG, 2026-07-02] morphology-rearch Phase B's real rapier pommel/guard/grip positions shift
-    # PoB_frac slightly (hand-balance term), so q('rapier') now reads 0.963, just under the 1.0 cap — a Phase-C
-    # re-tune item (MOMENT_MASS_EXP / the cap floor), not a regression; the ordering below is unaffected.
-    # [RE-ANNOTATED, 2026-07-03, I8 capstone] R2 (I0->I8) is complete and did not touch MOMENT_MASS_EXP or the
-    # cap floor; still correctly deferred to Phase C — see the closing-distance-redesign folder's
-    # i8_capstone_audit.md item 7.
+    # [RESOLVED, U1 / ED-PC-0010, 2026-07-08 — comment corrected 2026-07-29] The 2026-07-02 PHASE-C FLAG here
+    # recorded that Phase B's real rapier pommel/guard/grip positions had pushed q('rapier') down to 0.963, just
+    # under the 1.0 cap, pending a Phase-C MOMENT_MASS_EXP / cap-floor re-tune. U1's PoB recalibration closed that:
+    # q('rapier') reads EXACTLY 1.0 again (measured 2026-07-29), which is what the assertion below has always
+    # required — so the comment had been contradicting its own passing test for three weeks. No Phase-C item
+    # remains for the rapier lunge cap.
     q = lambda w: S.lunge_quality(Combatant('x', weapon=w), CFG)
     assert q('rapier') == 1.0                        # light, hand-balanced, one-handed, point-concentrated: lunges freely (capped)
     assert q('greatsword') < 0.25                    # heavy forward cutter: a poor lunge (LOW via mass+balance, not a hard-0 head gate)

@@ -55,5 +55,7 @@ def familiarity(reader_trad, opponent_trad):
     return FAMILIARITY_DEFAULT
 
 
-def profile(trad):
-    return TRADITIONS.get(trad, TRADITIONS['none'])
+# `profile(trad)` REMOVED (ED-PC-0042): a bare TRADITIONS.get() wrapper with zero call sites in engine,
+# workbench or tests — verified by AST (definition + facade re-export only) as well as by grep. Every live
+# consumer reads the TRADITIONS dict directly or goes through familiarity(); a lookup helper that nothing
+# looks up is a trap for a future caller who assumes it does more than `.get`.

@@ -362,7 +362,7 @@ from `references/atomization_rules.yaml`. The `sim/` reference now has a determi
 full float literals. Residual: ~12 stale `canonical_sha__` pins surfaced by the now-local freshness
 gate (refresh with `python3 tools/freshness_gate.py --update`); freshness stays report-only until then.
 
-Run the unit tests locally: `pip install pyyaml pytest && python -m pytest tests/valoria -q`.
+Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest tests/valoria -q`.
 
 ---
 

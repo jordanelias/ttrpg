@@ -45,13 +45,17 @@ def test_represent_measure_p_is_path_independent(weapon, armor):
     0.000 -> 0.274, guisarme 0.092 -> 0.236, hook_sword 0.000 -> 0.425) for the identical matchup.
 
     The gate must therefore be a pure function of (weapon, opponent armour, opening gap, stats) alone. This pins that:
-    corrupting EVERY circumstance field the wrapper writes must not move it by one ulp."""
+    corrupting EVERY circumstance field the wrapper writes must not move it by one ulp.
+
+    [2026-07-29 vetting] "not by one ulp" was asserted with `pytest.approx(abs=1e-12)`, which is a 1e-12 BAND, not an
+    exactness claim — a real path-dependence smaller than the band would have passed silently. Verified byte-equal
+    across all 26 cells and tightened to `==`, so the assertion now observes the failure its own docstring names."""
     a = Combatant('A', weapon=weapon, armor=armor)
     b = Combatant('B', weapon='arming', armor=armor)
     before = S.represent_measure_p(a, b, CFG, TR, measure_gap=1.67)
     _corrupt(a, armor)
     after = S.represent_measure_p(a, b, CFG, TR, measure_gap=1.67)
-    assert before == pytest.approx(after, abs=1e-12), (
+    assert before == after, (
         f"{weapon}@{armor}: represent_measure_p is path-dependent ({before:.4f} -> {after:.4f} after a prior "
         f"engagement's closed-phase state) — the ED-PC-0033/0034 state-carryover bug class has returned")
 
@@ -94,14 +98,18 @@ def test_grab_hazard_never_rewards_a_trained_grappler():
     """ED-PC-0034 (F3). Skills are documented uncapped ("positive = trained bonus"), so `(1 - skill('grab'))` went
     NEGATIVE past 1.0 and flipped the term's sign: seizing an opponent's LIVE double edge bare-handed then IMPROVED
     the grab, scaling with how sharp the grabbed blade is. A trained grappler may become immune to the hazard; they
-    must never be rewarded by it. Pinned as monotone-non-decreasing in skill, then flat."""
+    must never be rewarded by it. Pinned as monotone-non-decreasing in skill, then flat.
+
+    [2026-07-29 vetting] The clamp leg used `pytest.approx(abs=1e-12)` for what is a hard CLAMP — a genuine slow leak
+    past skill 1 under that band would have passed. A clamp is exact by construction (the same value is returned, not
+    recomputed); verified byte-equal at skill 1.5/3.0/10.0 and tightened to `==`."""
     a, b = Combatant('A', weapon='dagger'), Combatant('B', weapon='flamberge')  # live-edge opponent
     vals = []
     for sk in (0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 3.0, 10.0):
         a.skills = {'grab': sk}
         vals.append(CT.grab_sigma(a, b, CFG))
     assert all(y >= x - 1e-12 for x, y in zip(vals, vals[1:])), f"grab_sigma not monotone in grab skill: {vals}"
-    assert vals[-1] == pytest.approx(vals[4], abs=1e-12), "the hazard must CLAMP at skill 1, not keep paying out"
+    assert vals[5:] == [vals[4]] * 3, f"the hazard must CLAMP at skill 1, not keep paying out: {vals}"
 
 
 @pytest.mark.parametrize('lever,weapons', [
@@ -166,6 +174,29 @@ def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
                                        core.thrust_authority(c.w['head_len']))
     assert dm == mode, (f"{weapon}@{armor}: select_mode reports {dm!r} but coupling pays the {mode!r} arm — "
                         f"the damage path and the read contest disagree about what the fighter did")
+
+
+def test_cut_thrust_label_gate_is_not_vacuous():
+    """[2026-07-29 vetting] Companion floor for the gate above (§0.1 point 2: a suite that asserts conditionally must
+    assert that it asserted). That gate `pytest.skip`s every (weapon, tier) cell where select_mode does NOT report
+    the versatile head, and nothing bounded how many cells survive the skip. The vacuity class it cannot see is
+    therefore: a re-grading that stops select_mode ever REPORTING 'cut_thrust' turns all 76 parametrisations green-
+    by-skipping, and the label/arm agreement it exists to pin stops being checked at all — while the suite reports
+    success. Because the gate is parametrised one-cell-per-invocation, the count has to live in its own sweep.
+
+    Measured 2026-07-29: 55 of 76 cells (19 cut_thrust weapons x 4 tiers) select the versatile head and are really
+    asserted; 21 skip. The floor is the measured value, so a drop is a signal rather than a silent narrowing."""
+    ct = [n for n, r in WEAPONS.items() if r.get('head') == 'cut_thrust']
+    checked = 0
+    for weapon in ct:
+        for armor in ('none', 'light', 'medium', 'heavy'):
+            c = Combatant('X', weapon=weapon)
+            _dm, head, _gap, _perc, _pc, _eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
+            if head == 'cut_thrust':
+                checked += 1
+    assert checked >= 55, (
+        f"only {checked} of {len(ct) * 4} cut_thrust cells still select the versatile head (was 55) — "
+        f"test_cut_thrust_label_matches_the_arm_actually_paid is skipping its way to a vacuous green")
 
 
 def test_cut_thrust_versatility_is_not_decided_by_constant_ordering():

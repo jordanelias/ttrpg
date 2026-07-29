@@ -14,6 +14,8 @@ de-leak land unnoticed (Gate-1 audit):
 All static or tiny-seeded; deterministic.
 """
 import ast
+import collections
+import inspect
 import os
 import re
 import sys
@@ -22,11 +24,9 @@ import pytest
 
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-sys.path.insert(0, os.path.join(ENGINE, 'tests', 'sim', 'v32-combat-balance'))
 
 
 def _mods():
-    pytest.importorskip("numpy")
     import combatant as C
     import core
     import combat_systems as S
@@ -43,27 +43,360 @@ def _instrument():
     not just its base form — and (b) the position-swapped duel harness. A guard that re-derived either would be free
     to drift from the tool whose output justified the guard's own bands, which is precisely how ED-PC-0039 shipped a
     participation guard whose comment contradicted its own commit's measurements."""
-    pytest.importorskip("numpy")
     sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
     import armour_participation
     return armour_participation
+
+
+def _structure_scan():
+    """The structural-debt instrument (`workbench/structure_scan.py`, ED-PC-0042) — imported, never
+    re-implemented, for the same reason `_instrument()` is. Its [H] section owns the dead-exported-param
+    derivation (which export keys have no live engine reader); a guard carrying its own second copy would
+    be free to grade the engine by a rule the tool no longer applies."""
+    sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
+    import structure_scan
+    return structure_scan
 
 
 # ── SINGLE-SOURCE ───────────────────────────────────────────────────────────────────────────────
 def test_percussion_authority_single_source():
     """core.p_auth (the duplicate that read the hand-set pob_frac) was deleted and unified onto
     weapon_physics.percussion_authority — the invariant whose ABSENCE let the incomplete de-leak land. Guard: it stays
-    gone, and both the damage path (core.strike) and the sigma path (systems.adef_cap) read the SAME WP authority."""
+    gone, and both the damage path (core.strike) and the sigma path (systems.adef_cap) read the SAME WP authority.
+
+    [2026-07-29 vetting] The two path assertions below used to pin nothing. One was `abs(ADEF_BLUNT*pa/REF) > 0`,
+    which is `pa > 0` (already asserted) in different algebraic dress; the other was a `>=` against ONE ARM of a
+    `max()`, which holds by construction of max() regardless of what the sigma path actually derives. Both now pin
+    EQUALITY against the WP value, and the damage-path equality carries a perturbed CONTROL proving it can observe
+    a divergence rather than being insensitive to percussion altogether (§0.1 point 2/4)."""
     C, core, S, WP, CFG = _mods()
     assert not hasattr(core, 'p_auth'), "core.p_auth resurrected — percussion authority is double-derived again"
-    # the sigma path (adef_cap blunt branch) is defined in terms of WP.percussion_authority; confirm a mace's
-    # blunt armour-defeat capability tracks the WP value (not a private re-derivation).
     mace = C.WEAPONS['mace']
     pa = WP.percussion_authority(mace)
     assert pa > 0
-    # adef_cap blunt = max(ADEF_BLUNT*pa/REF, ADEF_POINT*puncture/REF); the concussion term must equal the WP source
-    assert abs(CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF'])) > 0
-    assert S.adef_cap(mace, CFG, 'blunt') >= CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF']) - 1e-9
+
+    # SIGMA PATH. core.adef_cap's blunt branch is max(ADEF_BLUNT*pa/REF, ADEF_POINT*puncture/REF). A mace is the
+    # weapon whose concussion arm dominates that max, so the result must equal the WP-derived term EXACTLY; any
+    # private re-derivation that drifts by so much as an ulp breaks this, where the old `>=` could not.
+    blunt_term = CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF'])
+    assert S.adef_cap(mace, CFG, 'blunt') == blunt_term, (
+        f"adef_cap's blunt branch ({S.adef_cap(mace, CFG, 'blunt')!r}) is no longer the WP authority term "
+        f"({blunt_term!r}) — the sigma path has re-derived percussion privately")
+    assert S.adef_cap(mace, CFG, 'blunt') == core.adef_cap(mace, CFG, head='blunt'), \
+        "systems.adef_cap stopped delegating to core.adef_cap — the armour-defeat rule lives twice again"
+
+    # DAMAGE PATH. core.strike's percussion default is `sel_perc if not None else WP.percussion_authority(w)`. Pin
+    # that the fallback IS the WP value: an attacker with no selected element must be damaged identically to one
+    # whose sel_perc is set explicitly to the WP authority, across every armour tier.
+    def _dmg(sel_perc, armor):
+        a = C.Combatant('A', weapon='mace'); d = C.Combatant('D', weapon='arming', armor=armor)
+        a.sel_perc = sel_perc
+        return core.strike(a, d, 'success', CFG)
+    for armor in ('none', 'light', 'medium', 'heavy'):
+        assert _dmg(None, armor) == _dmg(pa, armor), (
+            f"@{armor}: core.strike's percussion fallback is not WP.percussion_authority — the damage path and the "
+            f"sigma path no longer read the same authority")
+        assert _dmg(None, armor) != _dmg(pa * 0.25, armor), (
+            f"@{armor}: core.strike is insensitive to sel_perc, so the equality above pins nothing")
+
+
+# ── RESOLUTION-POOL SINGLE-SOURCE (ED-PC-0042 rider I1a) ─────────────────────────────────────────
+# Sibling of the percussion guard above and the same failure class, one generation earlier. The pool
+# rule USED to live twice: `Combatant.__init__` cached `self.pool=max(5, history+6)` (combatant.py:118,
+# no rounding) beside the owner `core.resolution_pool = max(5, int(round(history))+6)`. They agree on
+# every integer History and disagree the moment one is fractional — History 3.4 gives 9.4 vs 9, History
+# 3.6 gives 9.6 vs 10. The duplicate was deleted in a174d4a (ED-PC-0023, 2026-07-23) because it had zero
+# readers, so the divergence never reached a resolved fight; NOTHING was left behind that fails if it
+# comes back. These guards are that missing recurrence gate (CLAUDE.md §0.1 point 5: one owner, every
+# site routed through it, and a guard that fails on recurrence).
+#
+# Modules scanned = the resolution surface, plus combatant.py, which is where the duplicate actually lived
+# and is the host every resolver reads its character figures from.
+_POOL_SCAN_MODULES = ('core.py', 'combatant.py', 'combat_systems.py', 'wrapper.py', 'contact.py',
+                      'weapon_physics.py', 'geometry.py', 'ability_primitives.py', 'traditions.py')
+_POOL_OWNER = ('core.py', 'resolution_pool')   # (module, function) allowed to spell the arithmetic out
+
+
+def _enclosing_function_names(tree):
+    """{id(node): name of the innermost enclosing def, or None} — lets a scan exempt the OWNER function
+    by name instead of by line number, which would rot on the next edit above it."""
+    out = {id(tree): None}
+
+    def walk(node, fname):
+        for child in ast.iter_child_nodes(node):
+            inner = child.name if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) else fname
+            out[id(child)] = inner
+            walk(child, inner)
+
+    walk(tree, None)
+    return out
+
+
+def _refs_history(node):
+    """True if the subtree reads a History value under either spelling the engine uses (`history` as a
+    bare parameter in core, `<combatant>.history` everywhere else)."""
+    return any((isinstance(n, ast.Name) and n.id == 'history')
+               or (isinstance(n, ast.Attribute) and n.attr == 'history')
+               for n in ast.walk(node))
+
+
+def _routes_through_owner(node):
+    """True if the subtree reaches core.resolution_pool at all — called, or referenced as a callable
+    (workbench/catalogue.py passes it by reference). A site that reaches the owner is not a second copy."""
+    for n in ast.walk(node):
+        if isinstance(n, ast.Name) and n.id == 'resolution_pool':
+            return True
+        if isinstance(n, ast.Attribute) and n.attr == 'resolution_pool':
+            return True
+    return False
+
+
+def test_resolution_pool_single_source():
+    """No live engine site may derive a pool from History except core.resolution_pool.
+
+    THREE independent scans, because a recurrence can copy the rule three ways. Scans (b) and (c) exist
+    because mutation testing killed a two-scan draft of this guard, not because they were foreseen:
+      (a) HARDCODED — a clamp call (`max(...)`/`min(...)`) whose operands read History and which does
+          not reach the owner. The exact shape of the deleted `max(5, history+6)`.
+      (b) BORROWED-CONSTANT — any read of POOL_FLOOR/BASE_POOL outside the owner. `c.history +
+          core.BASE_POOL` passes scan (a) clean (no clamp) while still living twice.
+      (c) BARE-LITERAL — `c.history + 6` with a separate if/ternary floor. Passes (a) AND (b).
+
+    Legitimate callers are unaffected: wrapper.py's three `max(1, core.resolution_pool(x.history))`
+    sites reach the owner, and the other History readers in combat_systems.py (reading/bind/initiative/
+    counter) are different rules that happen to take History as an input — they subtract the 3-centre or
+    add a skill() call, so none of them trip a clamp, a pool constant, or an integer offset.
+
+    KNOWN BLIND SPOT, stated rather than papered over (§0.1 point 5): this is a static scan over a fixed
+    module list. A copy in workbench/ tooling, in the Godot port, spelled through one-hop indirection
+    (a local alias of the offset), or otherwise shaped past these three scans is NOT caught — and no
+    behavioural backstop exists for that case either: nothing in the suite resolves a fight with
+    fractional History, so a divergent copy consumed by the wrapper would run unexercised (adversarial
+    review of this guard, 2026-07-29). The scans cover every spelling that has actually occurred plus
+    the constant-borrowing and bare-offset forms; anything beyond that is this guard's honest limit."""
+    hardcoded, borrowed, offset = [], [], []
+    for mod in _POOL_SCAN_MODULES:
+        path = os.path.join(ENGINE, mod)
+        tree = ast.parse(open(path, encoding='utf-8').read())
+        enclosing = _enclosing_function_names(tree)
+        for n in ast.walk(tree):
+            owner_site = (mod, enclosing.get(id(n))) == _POOL_OWNER
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in ('max', 'min') \
+                    and _refs_history(n) and not _routes_through_owner(n) and not owner_site:
+                hardcoded.append(f"{mod}:{n.lineno}")
+            # BOTH spellings: a bare `BASE_POOL` (inside core.py) and a qualified `core.BASE_POOL`
+            # (from any other module). Matching only the bare Name let a `c.history + core.BASE_POOL`
+            # copy pass this scan clean — found by mutation, not by reading.
+            const = n.id if isinstance(n, ast.Name) else (n.attr if isinstance(n, ast.Attribute) else None)
+            if const in ('POOL_FLOOR', 'BASE_POOL') and isinstance(n.ctx, ast.Load) and not owner_site:
+                borrowed.append(f"{mod}:{n.lineno} ({const})")
+            # (c) BARE-LITERAL. `c.history + 6` then an if/ternary floor evades both scans above — no
+            # clamp CALL and no named constant. History is currently OFFSET by a bare int literal exactly
+            # nowhere in the engine (its other readers subtract the 3-centre or add a skill() call), so
+            # this shape is unambiguous rather than noisy. Also found by mutation, not by reading.
+            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add) and not owner_site \
+                    and not _routes_through_owner(n) \
+                    and ((_refs_history(n.left) and isinstance(n.right, ast.Constant)
+                          and isinstance(n.right.value, int))
+                         or (_refs_history(n.right) and isinstance(n.left, ast.Constant)
+                             and isinstance(n.left.value, int))):
+                offset.append(f"{mod}:{n.lineno}")
+
+    assert not hardcoded, (
+        "the resolution-pool rule lives twice again — History is clamped into a pool outside "
+        f"core.resolution_pool at {hardcoded}. Call core.resolution_pool(history); do not re-spell "
+        "max(5, history+6) (it drops the int(round(...)) and diverges on fractional History).")
+    assert not borrowed, (
+        f"POOL_FLOOR/BASE_POOL read outside core.resolution_pool at {borrowed} — the pool constants are "
+        "the owner's private armature; a second assembly of them is a second copy of the rule.")
+    assert not offset, (
+        f"History offset by a bare integer literal outside core.resolution_pool at {offset} — that is the "
+        "pool base being re-spelled. Call core.resolution_pool(history).")
+
+
+def test_resolution_pool_rounds_fractional_history():
+    """The owner ROUNDS History to an integer die count; the deleted duplicate did not. This is the
+    assertion that can observe the historical failure (§0.1 point 2) rather than merely coexisting with
+    it: on the pre-a174d4a tree `Combatant(history=3.4).pool` was 9.4 while core.resolution_pool(3.4)
+    was 9, and 3.6 gave 9.6 vs 10 — a fractional pool AND a rounding disagreement, both caught below.
+
+    Integer History (the default, and every build the engine ships) is byte-identical either way, which
+    is exactly why this went unnoticed: the probe must be fractional or it pins nothing."""
+    C, core, S, WP, CFG = _mods()
+    assert core.resolution_pool(3.4) == 9, "3.4 must round DOWN to History 3 -> pool 9 (the duplicate gave 9.4)"
+    assert core.resolution_pool(3.6) == 10, "3.6 must round UP to History 4 -> pool 10 (the duplicate gave 9.6)"
+    assert core.resolution_pool(3) == 9 and core.resolution_pool(4) == 10, "integer History must be unchanged"
+    for h in (3.4, 3.5, 3.6, -2.5):
+        assert isinstance(core.resolution_pool(h), int), (
+            f"resolution_pool({h}) returned a non-integer die count — the int(round(...)) has been dropped, "
+            "which is precisely how the deleted duplicate diverged")
+    assert core.resolution_pool(-5) == 5, "the POOL_FLOOR clamp must still hold below it"
+
+
+def test_combatant_hosts_no_cached_pool():
+    """`Combatant.pool` stays gone (deleted ED-PC-0023). A cached copy on the host is not merely a second
+    spelling of the arithmetic — it is the read/write-asymmetry hazard of §0.1 point 1: it is computed
+    once at __init__ and would silently go stale against any later write to `.history`, whether or not it
+    was computed by the owner. Consumers call core.resolution_pool(c.history) at the point of use."""
+    C, core, S, WP, CFG = _mods()
+    c = C.Combatant('A', history=3)
+    assert not hasattr(c, 'pool'), (
+        "Combatant.pool resurrected — the resolution-pool rule is hosted on the combatant again; "
+        "call core.resolution_pool(c.history) at the point of use instead")
+
+
+# ── PERCUSSION-AUTHORITY ANCHOR SINGLE-OWNER (ED-PC-0042 rider I1b) ──────────────────────────────
+# The "steel-hammer reference" — the top of the 0-8 percussion-authority scale — was spelled FOUR
+# times as an independent literal, with nothing enforcing agreement (2026-07-23 wiring audit, MED;
+# audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md line 231, carried as OI-45):
+#
+#   weapon_physics.PERC_CAP = 8.0     the CLAMP that creates the scale        <- the physical fact
+#   core.PERC_AUTH_REF      = 8.0     _transmit's full-transmission denominator
+#   core.damage()           perc/8.0  the blunt-heft continuity denominator (and its `perc=8` default)
+#   config.CFG['ADEF_PERC_REF'] = 8.0 adef_cap's blunt armour-defeat denominator
+#
+# Only the first is a primitive. The other three are DENOMINATORS THAT NORMALISE AN AUTHORITY VALUE
+# AGAINST THE TOP OF THAT SCALE, so if the scale top ever moves — exactly what the deferred Phase-C
+# PERC_SCALE/PERC_EXP re-fit does (weapon_physics.percussion_authority's docstring) — a ratio that
+# does not move with it silently stops being a ratio of the scale. Nothing failed if one moved alone.
+#
+# OWNERSHIP AS SHIPPED (and the honest limit of it):
+#   · weapon_physics.PERC_CAP is the OWNER.
+#   · core.PERC_AUTH_REF is BOUND from it (`= WP.PERC_CAP`), over core's pre-existing `import
+#     weapon_physics as WP` — no new dependency edge. damage()'s two 8s route through PERC_AUTH_REF.
+#   · config.CFG['ADEF_PERC_REF'] is NOT bound, deliberately. config.py is a zero-import seeds leaf
+#     and importing weapon_physics into it would invert the layering (data <- behaviour); more
+#     decisively, CFG is per-run OVERRIDABLE (workbench/presets.py deep-copies and overlays it; tests
+#     write `dict(CFG, K=...)`), so an import-time binding would be a FALSE single-ownership that any
+#     overlay silently breaks. It stays a literal and this guard is what holds it equal — the minimum
+#     honest fix where the import graph and the override contract both block true single-ownership.
+#
+# KNOWN BLIND SPOT, stated rather than papered over: the value guard below reads the DEFAULT CFG. A
+# scratch overlay that sets ADEF_PERC_REF alone is not caught (nor should it be — that is what a
+# scratch overlay is for), but neither is one that ships. Scoping is BY NAME, never by the value 8:
+# config.POISE_SOLID_HIT is an unrelated 8.0 four lines from POISE_FLOOR, and a value-keyed scan would
+# have collided with it — the same defect class CLAUDE.md §7 records in ci_sim_fabrication_check.
+# A second gap (adversarial review, 2026-07-29): the divisor scan covers only damage() and the
+# assignment scan only core.py/weapon_physics.py — a NEW module (or a different core function)
+# re-spelling 8.0 as the scale top is not caught. Vacuous today (engine-wide, every other 8.0 is a
+# comment or a different quantity); this guard covers the four sites that exist, not all futures.
+_PERC_ANCHOR_OWNER = ('weapon_physics.py', 'PERC_CAP')
+
+
+def _module_assignments(path):
+    """{target name: RHS ast node} for every module-level `NAME = <expr>` in a file (last wins)."""
+    tree = ast.parse(open(path, encoding='utf-8').read())
+    out = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    out[t.id] = node.value
+    return out
+
+
+def test_percussion_anchor_has_one_owner():
+    """The scale top is spelled as a bare literal EXACTLY ONCE, in the module that clamps to it.
+
+    Identity (`is`), not equality, for the core-side binding: a re-hardcoded `PERC_AUTH_REF = 8.0`
+    is value-equal and therefore invisible to `==`, but is a distinct float object, so `is` catches
+    the recurrence at the moment it is written rather than at the Phase-C re-fit that desyncs it.
+    (Paired with the AST check, which does not depend on CPython's float-identity behaviour.)"""
+    C, core, S, WP, CFG = _mods()
+
+    assert core.PERC_AUTH_REF is WP.PERC_CAP, (
+        f"core.PERC_AUTH_REF ({core.PERC_AUTH_REF!r}) is no longer BOUND from the owner "
+        f"weapon_physics.PERC_CAP ({WP.PERC_CAP!r}) — the anchor is spelled twice again")
+    assert CFG['ADEF_PERC_REF'] == WP.PERC_CAP, (
+        f"config.CFG['ADEF_PERC_REF'] ({CFG['ADEF_PERC_REF']!r}) has drifted from the percussion-scale "
+        f"top weapon_physics.PERC_CAP ({WP.PERC_CAP!r}). adef_cap's blunt branch divides a "
+        f"percussion_authority (which is CLAMPED at PERC_CAP) by this seed, so the two must move "
+        f"together or the armour-defeat term stops being a fraction of full authority")
+
+    # AST: only the owner may write the number down.
+    eng = os.path.abspath(ENGINE)
+    core_assigns = _module_assignments(os.path.join(eng, 'core.py'))
+    wp_assigns = _module_assignments(os.path.join(eng, 'weapon_physics.py'))
+
+    owner_rhs = wp_assigns['PERC_CAP']
+    assert isinstance(owner_rhs, ast.Constant) and isinstance(owner_rhs.value, float), (
+        "weapon_physics.PERC_CAP is the OWNER and must stay a plain float literal — if it has become "
+        "derived from something else, that something else is the new owner and this guard must move")
+
+    ref_rhs = core_assigns['PERC_AUTH_REF']
+    assert not isinstance(ref_rhs, ast.Constant), (
+        "core.PERC_AUTH_REF is a bare literal again — bind it from the owner "
+        "(`PERC_AUTH_REF = WP.PERC_CAP`), which core already imports")
+    assert any(isinstance(n, ast.Attribute) and n.attr == 'PERC_CAP' for n in ast.walk(ref_rhs)), (
+        "core.PERC_AUTH_REF no longer reaches weapon_physics.PERC_CAP")
+
+
+def test_damage_blunt_heft_routes_through_the_percussion_anchor():
+    """core.damage() must not re-spell the scale top — neither as its `perc` default nor as a divisor.
+
+    `perc=8` (an INT, while every sibling default — _transmit's and coupling's — is the float
+    PERC_AUTH_REF) was the tell that this default was written independently rather than derived.
+    Both spellings are byte-identical arithmetic today; the point is that they are two more sites a
+    Phase-C re-fit has to find by hand."""
+    C, core, S, WP, CFG = _mods()
+
+    sig = inspect.signature(core.damage)
+    perc_default = sig.parameters['perc'].default
+    assert perc_default is WP.PERC_CAP, (
+        f"core.damage()'s `perc` default is {perc_default!r} ({type(perc_default).__name__}), not the "
+        f"owned anchor weapon_physics.PERC_CAP ({WP.PERC_CAP!r})")
+
+    tree = ast.parse(open(os.path.join(os.path.abspath(ENGINE), 'core.py'), encoding='utf-8').read())
+    fn = next(n for n in ast.walk(tree)
+              if isinstance(n, ast.FunctionDef) and n.name == 'damage')
+    bare = [n.lineno for n in ast.walk(fn)
+            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Div)
+            and isinstance(n.right, ast.Constant)
+            and isinstance(n.right.value, (int, float)) and not isinstance(n.right.value, bool)
+            and n.right.value == WP.PERC_CAP]
+    assert not bare, (
+        f"core.damage() divides by a bare {WP.PERC_CAP!r} at core.py line(s) {bare} — that is the "
+        f"percussion-scale top written down a fourth time; divide by PERC_AUTH_REF instead")
+
+
+def test_damage_blunt_heft_branch_is_live_and_defaults_to_full_authority():
+    """The equality the two guards above protect is not vacuous: the BLUNT HEFT BRANCH ITSELF moves
+    with `perc`, and the default resolves as full authority.
+
+    §0.1 point 2 — an assertion must be able to observe the failure it excludes. A first draft of this
+    test simply varied `perc` and asserted damage fell. That is TRUE FOR THE WRONG REASON and pinned
+    nothing about `heft`: `perc` reaches damage() by TWO paths, the heft branch and coupling()'s
+    percussion transmit, so the naive version stayed green when the heft branch was mutated to a
+    perc-free constant (mutation 6 of this rider's run — it survived, and this test is the rewrite).
+
+    The isolation window: at armour 'none' the transmit term clamps to 1.0 for every perc at or above
+    PERC_AUTH_REF_SOFT, so coupling is IDENTICAL across [SOFT, CAP] and the ONLY remaining channel is
+    heft. The clamp is asserted rather than assumed — if the transmit structure ever changes so that
+    coupling starts moving inside this window, this test says so instead of quietly going vacuous."""
+    C, core, S, WP, CFG = _mods()
+    lo, hi = core.PERC_AUTH_REF_SOFT, WP.PERC_CAP
+    assert lo < hi, "the isolation window is empty — PERC_AUTH_REF_SOFT is no longer below the scale top"
+    assert core.coupling('blunt', 'none', perc=lo) == core.coupling('blunt', 'none', perc=hi), (
+        "coupling is no longer flat across [PERC_AUTH_REF_SOFT, PERC_CAP] at armour 'none', so this "
+        "test can no longer isolate the heft branch — re-derive the window before trusting it")
+
+    checked = 0
+    for deg in ('graze', 'success', 'overwhelming'):
+        full = core.damage(deg, 1.0, 'blunt', 3, 'none', perc=hi)
+        assert core.damage(deg, 1.0, 'blunt', 3, 'none') == full, (
+            f"@{deg}: damage()'s default perc no longer resolves as full authority")
+        assert core.damage(deg, 1.0, 'blunt', 3, 'none', perc=lo) < full, (
+            f"@{deg}: lowering perc inside the flat-coupling window did not reduce blunt damage — "
+            f"the blunt HEFT branch is inert, so routing its denominator through the anchor pins nothing")
+        checked += 1
+
+    # The default must also agree with the anchor everywhere else, across the full armour ladder.
+    for armor in ('none', 'light', 'medium', 'heavy'):
+        for deg in ('graze', 'success', 'overwhelming'):
+            assert core.damage(deg, 1.0, 'blunt', 3, armor) == core.damage(deg, 1.0, 'blunt', 3, armor, perc=hi), (
+                f"@{deg}/{armor}: damage()'s default perc diverges from the owned anchor")
+            checked += 1
+    assert checked >= 15, f"only {checked} observations — the guard is under-exercised"
 
 
 # ── NO WEAPON-NAME TABLE IN RESOLUTION ────────────────────────────────────────────────────────────
@@ -85,16 +418,122 @@ def _string_literals_excluding_docstrings(path):
 def test_no_weapon_name_literal_in_resolution():
     """poleaxe/mace/staff are bundles of primitives; the L0 primitive-law forbids a weapon-NAME conditional / per-weapon
     table in resolution. Scan the resolution modules for any weapon-name string LITERAL in live code (docstrings +
-    comments allowed). A regression that hard-codes `if weapon=='poleaxe'` trips this."""
+    comments allowed). A regression that hard-codes `if weapon=='poleaxe'` trips this.
+
+    [2026-07-29 vetting] The scan covered four modules while the primitive-law it enforces applies to the whole
+    resolution surface. Extended to the four derivation modules that also resolve per-weapon behaviour —
+    weapon_physics.py, geometry.py, ability_primitives.py, traditions.py — all verified clean at extension time,
+    so the widening is a guard against future drift, not a retroactive amnesty."""
     C, core, S, WP, CFG = _mods()
     names = {n for n in C.WEAPONS if 'base' not in C.WEAPONS[n]}  # weapon names (exclude auto-switch forms)
     offenders = {}
-    for mod in ('core.py', 'combat_systems.py', 'wrapper.py', 'contact.py'):   # I7b: contact.py joins the scanned resolution modules
+    for mod in ('core.py', 'combat_systems.py', 'wrapper.py', 'contact.py',   # I7b: contact.py joins the scanned resolution modules
+                'weapon_physics.py', 'geometry.py', 'ability_primitives.py', 'traditions.py'):
         lits = _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
         hit = sorted({s for s in lits if s in names})
         if hit:
             offenders[mod] = hit
     assert not offenders, f"weapon-name literal(s) in resolution code (primitive-law break): {offenders}"
+
+
+# ── VOCABULARY OWNERSHIP ─────────────────────────────────────────────────────────────────────────
+# The sibling of the weapon-name guard above, and the same mechanism. That one forbids a per-ENTITY
+# table in resolution code; this one forbids the domain ALPHABET being re-spelled per module. Both are
+# AST-based and both allow docstrings/comments (prose may name a token freely).
+VOCAB_OWNERS = ('vocabulary.py', 'core.py')
+VOCAB_CONSUMERS = ('combat_systems.py', 'weapon_physics.py', 'capabilities.py', 'wrapper.py', 'contact.py')
+
+
+def test_vocabulary_owner_tables_agree():
+    """`vocabulary.py` declares the token alphabet; `core.py` owns the TABLES keyed by it. Pin that they
+    agree — a token added to one and forgotten in the other is exactly how a lookup starts silently
+    KeyError-ing (or worse, silently taking a `.get(..., default)` branch).
+
+    `core.py` re-asserts this at import time, so the failure is loud in every consumer too; this test is
+    the artifact that proves the assertion exists and can observe a divergence (§0.1 point 3)."""
+    C, core, S, WP, CFG = _mods()
+    import vocabulary as V
+    assert set(core.HEAD_MODE) == V.HEADS, "HEAD_MODE's key set drifted from the declared HEADS alphabet"
+    assert set(core.HEAD_MODE.values()) <= V.DAMAGE_MODES, "HEAD_MODE maps a head to a non-token damage mode"
+    assert set(core.TIER2MAT) == V.ARMOUR_TIERS, "TIER2MAT's key set drifted from the declared ARMOUR_TIERS"
+    assert set(core.TIER2MAT.values()) <= V.MATERIALS, "TIER2MAT maps a tier to a non-token material"
+    assert set(core.RESIST) == V.MATERIALS and set(core.PEN_THR) == V.ARMOUR_TIERS
+    assert set(core.GAP_EXPOSURE) == V.MATERIALS
+    for mat, row in core.RESIST.items():
+        assert set(row) == V.DAMAGE_MODES, f"RESIST[{mat!r}] does not cover the damage-mode alphabet"
+    # DELIVERY is a STRICT SUBSET, never keyset-derived: ED-PC-0037 deleted its dead 'cut_thrust' entry
+    # (the pre-max blended 1.35) from the Godot-facing contract. Deriving DELIVERY's keys from HEADS would
+    # resurrect it and reverse a ledgered cleanup, so the relation is asserted as `<`, deliberately.
+    assert set(core.DELIVERY) < V.HEADS, "DELIVERY is no longer a strict subset of HEADS"
+    assert V.HEAD_CUT_THRUST not in core.DELIVERY, "the ED-PC-0037 dead 'cut_thrust' DELIVERY entry is back"
+
+
+def test_no_bare_vocabulary_literal_in_consumers():
+    """A guarded vocabulary token may be SPELLED only in its owner (`vocabulary.py`) and in the module that
+    defines the tables keyed by it (`core.py`). Every consumer must reach it by name.
+
+    The failure this excludes is not cosmetic. The alphabet was re-spelled 86 times across the five consumer
+    modules, in five namespaces that share strings ('none' is an armour tier, a harness material AND a hilt
+    type), so a rename or an added token was a manual sweep with no gate — and the two-namespace collisions
+    made grep an unreliable one. The token list comes from the owner's own `GUARDED_TOKENS`, so adding a
+    token there extends this guard automatically rather than requiring a second edit here.
+
+    Workbench is deliberately NOT in scope (it is measurement tooling, not resolution), and neither is
+    `weapons.py` — its tokens are DATA (a weapon record's authored `head`/`mode_elements`), not comparisons."""
+    import vocabulary as V
+    offenders = {}
+    for mod in VOCAB_CONSUMERS:
+        hits = collections.Counter(s for s in _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
+                                   if s in V.GUARDED_TOKENS)
+        if hits:
+            offenders[mod] = dict(sorted(hits.items()))
+    total = sum(sum(h.values()) for h in offenders.values())
+    assert not offenders, (
+        f"{total} bare vocabulary literal(s) in {len(offenders)} consumer module(s); the alphabet is owned by "
+        f"{VOCAB_OWNERS[0]} and may only be spelled there or in {VOCAB_OWNERS[1]}: {offenders}")
+
+
+def test_vocabulary_guard_scope_is_the_whole_resolution_surface():
+    """The guard above is only as good as its file list. Pin that every engine module which RESOLVES is
+    either an owner or in scope — so a new resolution module cannot be added outside the guard silently.
+    `weapons.py`/`combatant.py`/`geometry.py`/`traditions.py`/`tradition.py`/`ability_primitives.py`/
+    `state_graph.py`/`config.py` are DATA or registry modules and are listed here as the explicit,
+    reviewable exemption rather than left as an unstated gap."""
+    NON_RESOLUTION = {'weapons.py', 'combatant.py', 'geometry.py', 'traditions.py', 'tradition.py',
+                      'ability_primitives.py', 'state_graph.py', 'config.py'}
+    on_disk = {f for f in os.listdir(ENGINE) if f.endswith('.py')}
+    unaccounted = on_disk - set(VOCAB_OWNERS) - set(VOCAB_CONSUMERS) - NON_RESOLUTION
+    assert not unaccounted, (
+        f"engine module(s) accounted for by neither the vocabulary guard nor its declared data-module "
+        f"exemption: {sorted(unaccounted)} — add to VOCAB_CONSUMERS or to NON_RESOLUTION deliberately")
+
+
+# ── NO DEAD PARAM IN THE TYPED GODOT CONTRACT ────────────────────────────────────────────────────
+def test_no_dead_exported_engine_params():
+    """Every param in `engine/engine_params/combat_engine_v1.json` must have a live read-site in the engine.
+
+    THIS IS THE THIRD RECURRENCE of one defect class, which is why it gets a guard instead of another
+    one-off deletion (§0.1 point 5 — the signature of a pattern defect is that the code was correct when
+    written and stopped working when something else changed). ED-PC-0035 removed REACH_ADV_K /
+    RESIDUAL_REACH_FRAC / DAMAGE_SCALE / CAP_END after they lost their readers; ED-PC-0037 removed the dead
+    DELIVERY['cut_thrust'] entry; the 2026-07-26 register then found `CHOKE_GRIP_MIN` still shipping. The
+    exporter AUTO-collects (deliberately — a new constant cannot be silently left unexported), so nothing
+    downstream notices when a key's last reader disappears, and the Godot port hand-transcribes a number the
+    oracle no longer resolves on (the ED-1050 failure class).
+
+    The read-site derivation is imported from `workbench/structure_scan.py`, the instrument that measured
+    the defect, not re-implemented here."""
+    ss = _structure_scan()
+    counts = {s: len(v) for s, v in ss.exported_keys().items()}
+    # The guard must be able to OBSERVE the failure it excludes: if the export were empty or the sections
+    # renamed, `dead == []` would be vacuously true. Pin that a real, populated contract was scanned.
+    assert counts['cfg'] > 150 and counts['core'] > 20, (
+        f"the export scan collapsed — it graded {counts}, so an empty `dead` list would prove nothing")
+    dead = ss.dead_exported_keys()
+    assert dead == [], (
+        f"{len(dead)} param(s) ship into the typed Godot contract with zero live engine reader: {dead}. "
+        f"Either wire them or delete them from config.py/core.py and re-run "
+        f"`python tools/export_engine_params.py`.")
 
 
 # ── EMERGENT USE-MODE SELECTION ───────────────────────────────────────────────────────────────────
