@@ -176,6 +176,24 @@ CFG = dict(
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
   RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
+  # BIND_MOMENT_K [channel 5, ED-PC-0052, 2026-07-29 — Jordan-grounded]: displacement resistance in the bind. Where
+  # weapons CONNECT (parry/block/bind/wind), the side whose weapon carries more moment about the working hand is
+  # harder to shove off the line. Until this constant existed the bind had NO mass/momentum/inertia term at all — its
+  # only physical lever was systems.leverage(), which is pure GEOMETRY (grip_len - LEVER_HEAD_K*head_len), so two
+  # swords of similar grip geometry and 2.14x different moment bound identically. Keyed on at_grip's S_g, NOT on mass:
+  # the rapier is the HEAVIER weapon (1.37 kg vs the scimitar's 0.95) yet has the lower moment (0.1231 vs 0.2199),
+  # because its mass sits in hilt and pommel — so a mass-keyed term would move the wrong way. Applied as a LOG-RATIO
+  # (see systems.bind_sigma) which is scale-free, antisymmetric, and compresses the polearm tail. An additive
+  # log-odds shift, matching ED-PC-0045's ruling on how a bind lever must compose with logistic(bind_sigma).
+  # [SIM-CALIBRATE] — swept against the civilian sidearm field; own ablatable term, 0.0 restores the pre-fix bind.
+  # PARRY_MOMENT_K / WIND_MOMENT_K [channel 5, ED-PC-0052]: the SAME displacement-resistance fact
+  # (systems.contact_moment_edge, single owner) applied to the other two places weapons CONNECT. Jordan named
+  # "parrying and blocking" FIRST, and the parry is the high-throughput contact: bind_sigma is evaluated ~1.2x per
+  # fight, mode_sigma's parry branch on essentially every defended exchange, which is why a bind-only version of this
+  # term was measured aggregate-INERT. Separate gains rather than one shared constant, exactly as the guard fact
+  # already carries BIND_GUARD_K 0.55 / PARRY_GUARD_K 0.45 / WIND_GUARD_K 0.40. All [SIM-CALIBRATE]; 0.0 ablates.
+  PARRY_MOMENT_K=0.30, WIND_MOMENT_K=0.30,
+  BIND_MOMENT_K=0.30,
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156, BIND_SPINE_K=0.03,   # BIND_SPINE_K [U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022]: single-edge spine-press bearing surface (weapon_physics.spine differential), modulated by ability_factor 'spine_press' (German Winden). The strongest of the six levers per the U9 adversarial pass (robustly directional) — a small baseline here, decisive with the ability.
   # morphology-rearch Phase B5: a wavy/flame-ground edge (weapon_physics.edge_vibration, 0 for a plain edge)
   # degrades the OPPONENT's tactile read in the bind and boosts the wielder's own initiative-steal there.

@@ -296,11 +296,17 @@ def mode_sigma(mode, aggressor, defender, commit, read_win, fat_d, cfg):
         # "don't parry with your hands!": an unguarded weapon's parry exposes the hand -> penalised; a guarded one
         # parries confidently. Scales the parry around a neutral simple-cross guard.
         sig += cfg['PARRY_GUARD_K']*(defender.w['hand_guard']-cfg['GUARD_NEUTRAL'])
+        # [channel 5 / ED-PC-0052] DISPLACEMENT RESISTANCE. A parry is a weapon-to-weapon collision: a blade with more
+        # moment about the hand is harder to beat aside, a hand-balanced one is cheap to displace. Same single-owner
+        # fact as the bind (contact_moment_edge), its OWN gain — mirroring how the guard fact already carries three
+        # gains (BIND_GUARD_K 0.55 / PARRY_GUARD_K 0.45 / WIND_GUARD_K 0.40) rather than one shared constant.
+        sig += cfg['PARRY_MOMENT_K']*contact_moment_edge(defender, aggressor)
     elif mode==V.DEF_DODGE:
         sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill(V.DEF_DODGE)
     else:               # wind (in the bind): fore/thumb-rings "enhance winding"
         sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + defender.skill('bind')   # ED-PC-0035: the `+ CHOKE_BIND_K*choke` term is GONE — `choke` was hardcoded 0.0 by the only caller, so it was a structural zero (see config.py)
         sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
+        sig += cfg['WIND_MOMENT_K']*contact_moment_edge(defender, aggressor)   # [channel 5] winding is in the bind — weapon on weapon, so the same moment fact applies (own gain)
     _deep=max(0.0,min(1.0,commit-3.0))     # CONTINUOUS commit response: 0 at <=3, ramps to 1 at >=4 (no integer cliff)
     _shallow=max(0.0,min(1.0,3.0-commit))  # 0 at >=3, ramps to 1 at <=2
     if mode==V.DEF_PARRY: sig-=0.25*_deep      # a deep commit is easier to parry (committed line); a shallow probe harder to catch
@@ -943,6 +949,44 @@ def disengage_clean_p(longer, shorter, cfg, TR):
     each through their visual channel. Pure (returns a probability in (0,1))."""
     return core.logistic((reading(longer,cfg)*TR.eff_cw(longer,'visual') - reading(shorter,cfg)*TR.eff_cw(shorter,'visual'))/2.0)
 
+def contact_moment_edge(a, b):
+    """DISPLACEMENT RESISTANCE in the bind — the log-ratio of the two sides' grip-moments. SINGLE OWNER of the
+    mass-in-the-bind question (ED-PC-0052, channel 5; Jordan-grounded 2026-07-29: "the lighter the weapon is, the
+    easier it is to move away due to momentum... a heavier weapon would have an advantage in those weapon-to-weapon
+    collision/reorienting scenarios").
+
+    Until this function existed the bind had NO mass, momentum or inertia term anywhere: `bind_sigma` was
+    lev + catch + tac + strq + spine + wound, and the only physical lever among those, `leverage()`, is pure
+    GEOMETRY. Two swords of similar grip geometry and 2.14x different moment bound identically — and among the ten
+    one-handed civilian swords the two measures very nearly INVERT (falchion, worst lever arm at -0.0576, carries the
+    HIGHEST moment at 0.2415; tsurugi, better lever arm at +0.0110, the lowest at 0.1130). A heavy chopping falchion
+    shoving a light tsurugi off the bind is the effect that was missing, and the lever-arm primitive ranked it
+    backwards.
+
+    READS at_grip(w, grip_position)['S_g'], the GRIP-ADJUSTED static moment — NOT `mass`, and NOT
+    derive()['static_moment']:
+      · not mass, because the naive variable points the WRONG WAY. The rapier is the heavier weapon (1.37 kg vs the
+        scimitar's 0.95, the shamshir's 0.77) yet the cheaper to displace, because its mass sits in hilt and pommel.
+        What resists being shoved aside is the moment about the hand, not the weight in it.
+      · grip-adjusted, so choking up a polearm REDUCES its advantage (a spear's moment halves, 1.3873 -> 0.6937) —
+        a real interaction with the closed-measure grip model, pinned by its own guard.
+
+    LOG-RATIO, not a linear differential: scale-free (immune to the unit of moment), exactly antisymmetric (swapping
+    the sides negates it, so it cannot produce the ED-PC-0045 sign pathology), an additive log-odds shift into
+    bind_dominance_p = logistic(bind_sigma) as that ruling requires, and it compresses the polearm tail — a spear
+    against a dagger is a 136x raw moment ratio that a linear form would turn into an unbounded sigma; the log reads
+    ~4.9 before the [SIM-CALIBRATE] K.
+
+    NO DOUBLE-COUNT with the speed cost: a heavier-at-the-contact weapon is also SLOWER to initiate a rebind or wind,
+    and the engine already prices that through `agility` (MoI^-AGILITY_EXP) feeding tempo and defense_affinities. This
+    term prices only the displacement-resistance half, which had no owner. Pure."""
+    sa = WP.at_grip(a.w, getattr(a, 'grip_position', 0.0))['S_g']
+    sb = WP.at_grip(b.w, getattr(b, 'grip_position', 0.0))['S_g']
+    if sa <= 1e-12 or sb <= 1e-12:      # a synthetic/degenerate record — no moment edge either way
+        return 0.0
+    return log(sa/sb)
+
+
 def bind_sigma(aggressor, defender, cfg, TR):
     """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
@@ -961,7 +1005,8 @@ def bind_sigma(aggressor, defender, cfg, TR):
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w)*TR.eff_cw(aggressor,'spine_press') - WP.spine(defender.w)*TR.eff_cw(defender,'spine_press'))   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press) — a separate physical fact from the lever-arm in `lev`, kept its own ablatable primitive (not multiplied into leverage — §2.3). Each side is AMPLIFIED by its own 'spine_press' ability (Japanese SHINOGI — the ability wired here; factor 1.0 default), so a bind specialist makes the spine decisive. [comment corrected 2026-07-23 ED-PC-0026: was "German Winden", a stale ref to the retired winden ability — winden is a DOUBLE-edged longsword technique, physically inert on this single-edge-only lever, which is why it was retagged to shinogi.] 0 for a double-edged/edgeless weapon.
     wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
-    return lev + catch + tac + strq + spine + wound
+    moment = cfg['BIND_MOMENT_K']*contact_moment_edge(aggressor, defender)   # channel 5 / ED-PC-0052: DISPLACEMENT RESISTANCE — the mass-moment half of the bind, absent until 2026-07-29 (see bind_moment_edge). A separate physical fact from `lev`'s lever ARM, so it is its own ablatable term and is NOT multiplied into leverage() (consolidation_v1 §2.3).
+    return lev + catch + tac + strq + spine + wound + moment
 
 # ---------- initiative substrate (three-phase Vor / Nach / Indes ~ sen; culture-neutral) ----------
 # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert): seizure_score + initiative_seize removed. The

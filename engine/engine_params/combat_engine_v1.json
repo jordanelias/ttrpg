@@ -32,6 +32,7 @@
    "BASE_TEMPO": 2.0,
    "BIND_GUARD_K": 0.55,
    "BIND_HIT_P": 0.4,
+   "BIND_MOMENT_K": 0.3,
    "BIND_SPINE_K": 0.03,
    "BIND_STR_K": 0.0156,
    "BIND_TACTILE_K": 0.04,
@@ -145,6 +146,7 @@
    "OOB": 2,
    "PARRY_GUARD_K": 0.45,
    "PARRY_K": 0.9,
+   "PARRY_MOMENT_K": 0.3,
    "PARTIAL_DODGE_GRAZE": 0.4,
    "PARTIAL_PARRY_GRAZE": 0.3,
    "PERC_BLUNT_HEFT": 2.2,
@@ -226,6 +228,7 @@
    "WIND_BIND_P": 0.55,
    "WIND_GUARD_K": 0.4,
    "WIND_K": 0.9,
+   "WIND_MOMENT_K": 0.3,
    "WOUND_ATK_OB": 0.15,
    "WOUND_DEF_OB": 0.25
   },
