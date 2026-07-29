@@ -950,8 +950,14 @@ def curate_tokens(design, token_defs):
 def build_g_cite(tokens, design, thresh=2):
     """Directed weighted citation graph. G_cite[A][B] = mentions of token B inside
     token A's primary doc, kept when >= thresh (§3.7). Tokens without a primary doc
-    cannot be citation *sources* (§4) but are reached as targets."""
+    cannot be citation *sources* (§4) but are reached as targets.
+
+    The per-pair work (B's context check + `_count_in`) depends only on
+    (A's primary_doc, B) — never on A itself — since many tokens share a primary_doc,
+    it's memoized on that key. `None` marks "B's context excludes this doc" (pure
+    memo, not just the count) so repeats skip both the context check and the count."""
     g = {}
+    pair_cache = {}  # (doc, b) -> None (context-excluded) or int count
     for a, ma in tokens.items():
         doc = ma['primary_doc']
         if not doc or doc not in design:
@@ -961,11 +967,17 @@ def build_g_cite(tokens, design, thresh=2):
         for b, mb in tokens.items():
             if b == a:
                 continue
-            # honor B's disambiguation context at doc granularity
-            if mb['_ctx'] and not any(rx.search(text) for rx in mb['_ctx']):
-                continue
-            c = _count_in(text, mb['_compiled'])
-            if c >= thresh:
+            key = (doc, b)
+            if key in pair_cache:
+                c = pair_cache[key]
+            else:
+                # honor B's disambiguation context at doc granularity
+                if mb['_ctx'] and not any(rx.search(text) for rx in mb['_ctx']):
+                    c = None
+                else:
+                    c = _count_in(text, mb['_compiled'])
+                pair_cache[key] = c
+            if c is not None and c >= thresh:
                 edges[b] = c
         if edges:
             g[a] = edges
@@ -1423,20 +1435,46 @@ def diagnostics(tokens, graphs, degs):
     adj = {a: sorted(g_cite.get(a, {})) for a in names}
     _trunc = [0]  # M2: count reaches() calls that hit the traversal cap — a capped 'False' may be a
                   # FALSE 'does-not-return' (=> false cascade-sink). SURFACE it, never hide it.
+    # `reaches` is a pure function of (start, target) given the fixed `adj` above (~19x call
+    # redundancy measured: ~996,745 calls over ~52,470 unique pairs), so memoize on that key.
+    # `_trunc` must still increment on a cache HIT that replays a tripped call — caching the
+    # (result, tripped) pair and re-incrementing on hit keeps `cascade_truncated_calls` identical
+    # to the unmemoized replay, not just the miss-only count.
+    _reach_cache = {}
     def reaches(start, target):
+        key = (start, target)
+        cached = _reach_cache.get(key)
+        if cached is not None:
+            result, tripped = cached
+            if tripped:
+                _trunc[0] += 1
+            return result
         stack, seen2 = [start], {start}
         steps = 0
+        found = False
         while stack and steps < 5000:
             steps += 1
             cur = stack.pop()
+            hit = False
             for nx in adj.get(cur, ()):
                 if nx == target:
-                    return True
+                    found = True
+                    hit = True
+                    break
                 if nx not in seen2 and len(seen2) < 200:
                     seen2.add(nx); stack.append(nx)
-        if steps >= 5000 or len(seen2) >= 200:
-            _trunc[0] += 1   # cap tripped: this False is unreliable
-        return False
+            if hit:
+                break
+        tripped = False
+        if found:
+            result = True
+        else:
+            if steps >= 5000 or len(seen2) >= 200:
+                tripped = True
+                _trunc[0] += 1
+            result = False
+        _reach_cache[key] = (result, tripped)
+        return result
     for a in names:
         for b in adj.get(a, ()):
             for c in adj.get(b, ()):
