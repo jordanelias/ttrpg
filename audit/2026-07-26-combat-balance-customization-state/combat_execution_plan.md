@@ -102,6 +102,10 @@ flips). E1–E3 and especially E4/E5 all edit token-keyed branches; doing this f
   no-weapon-name-in-resolution scan, which already works.
 - **CI guard:** every exported CFG key has ≥1 live reader. This is what stops the fourth recurrence.
 
+**Both must be observed RED on unmodified `main` before the fix** — pins in **§13.2a** (279 literals / 18
+tokens; `CHOKE_GRIP_MIN` the single dead exported key of 201). A behaviour-preserving batch has *no* behavioural
+acceptance, so the red state of its two guards is the **only** evidence the batch did anything.
+
 ### Acceptance — CORRECTED (review R-6)
 
 **⚠ `structure_scan.py` cannot print the stated acceptance today.** Its `[D]` section counts *all* vocabulary
@@ -334,6 +338,10 @@ class E0 makes safe** — it is a token-keyed branch.
 complementary pin `heft(w, shear-resolving) ≈ native swing heft`. The one-sided form is red on main (ranseur
 2.5151 vs 0.7992 ✓) but **passes a wrong fix that pays the thrust lever on both arms.**
 
+**⚠ The complementary pin CANNOT be proved red on main** — `heft` has no arm parameter yet, so both sides are
+the same call (2.5151 == 2.5151, tautologically green). It is the only guard in E0–E3 in that position.
+**Mutation-verify it instead**, against the declared mutation *"pay `THRUST_POB` on both arms"* — see §13.2a.
+
 **Disclose, do not discover:** `core.cut_thrust_arm` picks the arm on **coupling alone**. Once impact differs by
 arm, the chosen arm is no longer the max-damage arm for some weapons — a fresh instance of the B1/F24
 "selection contradicts damage" class, introduced by a correctness batch and interacting with ⚖7/E5. Ranseur
@@ -486,6 +494,42 @@ verdict was **"a gate that has never failed is decoration."** So invert the orde
 
 Without step 2 you cannot distinguish a guard that works from one that is vacuous, and a vacuous guard is worse
 than none because it licenses the claim. **Every batch in E0–E3 should be executed in this order.**
+
+### 13.2a Red-state ledger — every guard's failing form, pre-measured
+
+**Stating the principle is not enough** (CLAUDE.md §0.1: restating a principle that was already followed is
+useless; the artifact is the fix). So here is the pin for every guard in E0–E3, **re-measured against `main` on
+2026-07-29** — falsifiers: `python workbench/structure_scan.py`, direct `weapon_physics` / `combat_systems`
+calls, and `engine/engine_params/combat_engine_v1.json`. A session that writes a guard and does **not** observe
+the listed red value has written a different guard than the one specified.
+
+| batch | guard | red-on-main pin | re-verified |
+|---|---|---|---|
+| **E0** | bare vocabulary literal only in the owner module | **279 occurrences across 18 tokens** (`'none'` 50, `'point'` 43, `'cut_thrust'` 33, `'blunt'` 27, `'curved_cut'` 23 …) | ✅ |
+| **E0** | every exported CFG key has ≥1 live reader | **`CHOKE_GRIP_MIN`** — present in `sections.cfg` of the 226-param export, and its only two other mentions are comments reading *"the old CHOKE_GRIP_MIN"*. Exactly **one** offender of 201. | ✅ |
+| **E1a** | multiplicative lever must not worsen its disadvantaged owner | dagger+`staerke_schwaeche` (tradition `german`) vs poleaxe: **−1.0562 → −1.1904** | ✅ |
+| **E1b** | `reach_threat` clamps capability | `bardiche` @medium **0.5275** → must become **0.843** | ✅ |
+| **E1b** | `represent_measure_p` clamps capability | `bardiche` @medium **0.0089** → must become **0.207** (23×) | ✅ |
+| **E2a** | no blunt-native weapon derives 0 percussion authority | **staff 0.0000** against mace 8.0000 / goedendag 8.0000 / poleaxe 7.4843 / lucerne 6.5392 / bec 6.3629 | ✅ |
+| **E2a** | staff stagger inside a band, not merely non-zero | staff stagger **(0.0, 0.0)** vs config's own "staff p_auth ~4" | ✅ |
+| **E2b** | every authored `mode_element`'s head **token** is reachable | `hook_sword` crescent unreachable — `afforded_heads` = `{curved_cut, point}` | ✅ |
+| **E3a** | spike ≈ hammer (the ED-1080 contract) | spike **0.6013** vs hammer **1.2162**, `ADEF_THRESHOLD['heavy']` 0.72 | ✅ |
+| **E3b** | thrust-resolving heft uses the thrust lever | ranseur **2.5151** (swing) vs **0.7992** (`sel_head='point'`) | ✅ |
+| **E3b** | **complementary:** shear-resolving heft keeps the swing lever | **⚠ NONE — cannot be red.** See below. | ✅ (confirmed unfalsifiable) |
+
+**⚠ E3b's complementary pin is the one guard in E0–E3 that cannot be proved red, and it must not be shipped as
+if it could.** `heft(w, grip, sel_head, sel_pc)` takes a **head token** and has **no arm parameter at all** —
+the branch is `THRUST_POB if head == 'point' else max(0, PoB_frac)`. On unmodified `main` both sides of the
+complementary comparison are therefore *literally the same call*: ranseur reads **2.5151 == 2.5151**. It is
+**tautologically green**, and it stays green until E3b's own fix introduces the arm split — the exact
+"a gate that has never failed is decoration" shape ED-PC-0040 named.
+
+**It is a regression pin, not a defect pin, so it takes the §13.3 route instead:** ship it with a **declared
+mutation** — *implement the arm split but pay `THRUST_POB` on both arms* — and prove the pin goes red under
+that mutation (ranseur's shear arm would read 0.7992 instead of 2.5151) **while the primary pin stays green**.
+That mutation is precisely the wrong fix review R-8 identified, so it is not hypothetical; it is the failure
+the complementary pin exists to catch. **A complementary pin shipped without that mutation run is decoration
+and should be rejected at the batch's own adversarial gate.**
 
 ### 13.3 Mutation-verify every guard
 
