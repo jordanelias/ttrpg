@@ -625,6 +625,22 @@ class Subunit:
                 # of 0, which is enough to cross a DAMAGE_BY_DEGREE boundary and turn a 6.0 exchange into
                 # a 0.0 one. That is how the octagon micro-tests failed. This is not a tolerance fudge —
                 # it returns the arithmetically correct answer where the float mean cannot.
+                #
+                # [ED-MB-0051 / plan-v2 A2, 2026-07-29] RECONCILIATION with the consumer-side guard.
+                # `resolution.compute_degree` now also carries an absolute epsilon, and
+                # `_sigma_net_boost` snaps arithmetic dust to exactly 0. Two overlapping exactness
+                # regimes is how the next confound gets built, so state which is authoritative:
+                #   * THIS is an EXACTNESS fix and it STAYS. Where the correct answer is derivable
+                #     (a uniform body's weighted mean IS its cells' value), the producer must return
+                #     it exactly. A tolerance downstream cannot recover information the producer
+                #     threw away, and this one also feeds callers that never touch compute_degree.
+                #   * The consumer guard is a TOLERANCE, and it is NOT redundant with this. It
+                #     protects the degree boundaries against accumulated ulp from ANY producer —
+                #     including the NON-uniform branch below, which has no exact answer to return.
+                #     Measured 2026-07-29: with this fix already in place, the boundary guard still
+                #     flips 38 verdicts in the `cell` battery and 14 in `cell_field`, every one of
+                #     them `net` 1-4 ulp below a continuous `ob` it equals mathematically.
+                # Exactness where exactness is derivable; tolerance only where it is not.
                 first = live[0]
                 if all(m == first for m in live):
                     return first

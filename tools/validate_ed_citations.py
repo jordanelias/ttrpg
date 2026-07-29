@@ -115,7 +115,15 @@ ARCHIVE_GLOBS = ('deprecated/archives/editorial/', 'deprecated/archives/editoria
 # chunks, per the register-size cap in tools/ci_register_size_check.py — mirrors the
 # patch_register_active.yaml / patch_register_archive.yaml co-location convention, not the
 # older ARCHIVE_GLOBS directories which predate the 2026-05-28 JSONL migration).
-ARCHIVE_JSONL_PATHS = ('registers/editorial_ledger_archive.jsonl',)
+# [ED-MB-0051, 2026-07-29] Per-LANE archive siblings are derived from LANE_CODES rather than
+# listed, so a lane that overflows its 50k cap keeps its archived ids inside the ED universe
+# automatically. This also closes a pre-existing gap found while writing it: the IN lane already
+# had registers/editorial_ledger_in_archive.jsonl (size-registered in ci_register_size_check) and
+# it was NOT in this tuple, so every id archived out of the IN ledger was invisible to the
+# citation-integrity gate. Deriving covers both by construction; enumerating covered neither.
+ARCHIVE_JSONL_PATHS = ('registers/editorial_ledger_archive.jsonl',) + tuple(
+    f'registers/editorial_ledger_{lane.lower()}_archive.jsonl' for lane in LANE_CODES
+)
 
 
 # ── Pure core (network-free; unit-tested) ─────────────────────────────────────

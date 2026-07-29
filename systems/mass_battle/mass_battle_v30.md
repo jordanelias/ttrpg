@@ -293,7 +293,7 @@ Sling: effective Power −2D; ammo modifier per unit table above.
 
 ---
 
-### A.5 COMMAND RATING
+### A.5 COMMAND
 
 **Command = clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7)** *(ED-899: Charisma primary, Cognition secondary — engine CMD_CHA_WEIGHT=2 / CMD_COG_WEIGHT=1, leading canon; supersedes the equal-weight ⌈(Cha+Cog) ÷ 2⌉ form)*
 

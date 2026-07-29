@@ -2,6 +2,55 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0051 plan-v2 A2: degree-boundary epsilon — the prediction FAILED, and the prediction was the thing that was wrong
+
+**A2 predicted "this moves no digest in any of the four modes" and made digest movement a STOP
+CONDITION. Two digests moved. Investigated, not re-recorded on sight.**
+
+Decomposition (each arm run alone): the **degree-epsilon arm alone reproduces the new digest
+exactly**; the **sigma-zero-snap arm alone reproduces the OLD digest exactly** — the chokepoint snap
+is behaviour-neutral, the boundary guard is the sole mover.
+
+Flip census, whole battery, guarded-vs-unguarded verdict compared per `compute_degree` call:
+
+| mode | calls | flips | transitions | flip distance |
+|---|---|---|---|---|
+| `unit` | 17,312 | **0** (0.000%) | — | — |
+| `cell` | 31,958 | **38** (0.119%) | all `Partial → Success` | 2.22e-16 … 8.88e-16 |
+| `unit_field` | 18,152 | **0** (0.000%) | — | — |
+| `cell_field` | 20,412 | **14** (0.069%) | all `Partial → Success` | 2.22e-16 … 4.44e-16 |
+
+Every flip is `net` **1–4 ulp** below a *continuous* `ob` that it equals mathematically — five to six
+orders TIGHTER than the 1e-9 epsilon, so the epsilon's width is not load-bearing (any value in
+[8.9e-16, 1e-9] gives the same result). One direction only: the guard never demotes.
+
+**Why the prediction failed, and it is a G1 failure inside the correction to G1.** The audit's
+"0 flips in 209,778 calls", and the orchestrator's own N=3,120 replication of it, were **both taken
+at `PER_CELL=0`** — the one configuration where the incidence really is zero. **S1.2 is NOT
+incidence-zero:** in the shipped per-cell modes the 1-ulp defect erases an entire exchange in ~0.1%
+of degree calls. A2 is therefore **a live correctness fix, not hygiene**, and the two `PER_CELL=1`
+goldens were re-recorded deliberately, with this delta published (rule 4) in the single MB
+golden-moving slot.
+
+Controls: both moved modes reproduced their new digest on **two consecutive runs** (2/2); `cell`
+reproduced it again with `PYTHONHASHSEED` unset (hash-order independent); both `PER_CELL=0` modes
+byte-exact throughout. **Reconciliation** (plan A2's explicit requirement): `units.py`'s exact
+uniform-aggregate fix is an EXACTNESS regime and stays authoritative where the answer is derivable;
+`compute_degree`'s epsilon is a TOLERANCE for the non-uniform branch, which has no exact answer —
+and it is measurably not redundant with it (the 52 flips above occur *with* that fix in place).
+Stated in-file at both sites.
+
+Guards: `tests/valoria/test_degree_boundary_epsilon.py` (13), **5/5 mutants killed** — revert the
+guard; guard only `Success`; drop the Overwhelming second conjunct; remove the sigma snap; widen the
+epsilon 1000×. Every boundary case uses `math.nextafter`, because plan v1's proposed
+`compute_degree(ob - 1e-16, ob)` **passes on unfixed code** (`3 - 1e-16 == 3` in float64) — that
+vacuity is itself pinned by a test so nobody re-derives it.
+
+⚠ **Process finding:** the first A2 mutation run was CORRUPTED by stale `__pycache__`. CPython
+invalidates by `(mtime, size)`, so a same-size edit inside one mtime second is served from cache —
+it silently mis-scored 2 of 5 mutants. Both the A2 and I4 matrices were re-run under `python -B`
+with caches cleared; the numbers above are from the clean run.
+
 ## 2026-07-29 — ED-MB-0050 plan-v2 A6a/A6b: the attrition-law instrument repaired, wired report-only
 
 **The harness did not measure what it claimed, for three independent reasons — one of them not in
@@ -268,45 +317,14 @@ record independent of how the final number reads. Flag remains OFF.
 > own change. The rule this cost me: **a number without its control is not a measurement**, and that
 > applies to a worrying number exactly as much as to a flattering one.
 
-## 2026-07-25 — ED-MB-0041 phase 2: local break, cell-scale contagion, and the half of phase 1 I never wired
+## 2026-07-25 — ED-MB-0041 phase 2: local break, cell-scale contagion, and the half of phase 1 never wired (archived — condensed)
 
-**First, a correction to phase 1.** `cohere_cells` shipped with **zero live call sites**. The
-modulate-down half of the loop existed, was tested, and never ran in a battle — so the phase-1 gauge
-measurement was of **aggregate-up only**. Same dead-machinery pattern this audit exists to find, built
-into my own work while documenting the pattern. Now wired.
-
-**Phase 2 mechanisms, all gated behind `PC_CELL_MORALE` (OFF):**
-- **Local break** (`cell_broken`) — a cell whose morale reaches 0 stops FIGHTING. Implemented in
-  `_pair_engaged_troops`, the single place per-cell troops become emitted combat weight, so no other
-  emission path needs to know. `cell_troops` is untouched: the men are still there to be killed and
-  still count as casualties. They have stopped being a fighting part of the line, which is what a local
-  break *is* — zeroing them would make a break indistinguishable from annihilation.
-- **Cell-scale contagion** (`propagate_cell_breaks`) — a broken cell shakes its lattice neighbours, so a
-  gap spreads outward from where it opened. Neighbours are the 8-neighbourhood of pattern coordinates,
-  so the spread follows the formation's actual shape with no shape-specific code.
-- **Formation break** — a subunit whose broken cells hold `CELL_BREAK_ROUT_FRAC` of its live men has
-  come apart as a body even with positive aggregate morale. Same shape as `ROUT_CASCADE_FRAC` one scale
-  down; same deliberately **unchosen** magnitude.
-- **Order matters**: contagion runs *before* cohesion each phase. Reversed, the body would paper over a
-  break before it spread and contagion would never do anything.
-
-**The emergent property — nothing says "disciplined units close gaps".** Contagion pushes down, cohesion
-pulls toward the body's morale at a discipline-gated rate, and the behaviour falls out of the contest.
-Measured over four phases from one broken cell:
-
-| discipline | broken cell | outcome |
-|---|---|---|
-| 6 | **+3.08** | gap **closed**, broken share 0.00 |
-| 1 | **−0.13** | still broken, share 0.11 |
-
-**A test of mine asserted the wrong thing, and being wrong found the mechanism.** I expected cohesion to
-lift the *shaken neighbours*. It doesn't — cohesion pulls toward the mean, and freshly-shaken neighbours
-sit just *above* a mean the broken cell has dragged down, so they are pulled slightly further down. The
-contest that matters is over the **broken** cell: whether the body can haul it back across zero. The
-test now asserts that, with the wrong first version recorded in its docstring.
-
-`test_cell_morale.py` now 16 tests. Not yet measured on the gauge — phases 1+2 will be measured together,
-since phase 1's number was taken with half the mechanism dead.
+Cells got their OWN du Picq break-point (phase 2 was unreachable without it — bodies had erosion
+AND a break-point, cells had erosion only, so a cell had to be destroyed twice over to break).
+8-neighbourhood break contagion; `cohere_cells` wired (it had shipped with ZERO live call sites, so
+the phase-1 measurement was of aggregate-up only). **Full detail:
+`tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29 under the register size cap,
+ED-MB-0051 — nothing dropped, only relocated).
 
 ## 2026-07-25 — ED-MB-0041 phase 1 MEASURED: modest, as predicted; flag stays OFF
 

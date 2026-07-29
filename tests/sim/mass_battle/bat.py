@@ -245,7 +245,31 @@ EXPECTED = {
     # port is gated on the node path (PC_NODE_COHESION=0 here).
     # [2026-07-25, ED-MB-0041 — see the 'unit' note above] re-recorded (stochastic-rout default ON).
     # [2026-07-25, ED-MB-0042 — see the 'unit' note above] flip retracted; reverted.
-    'cell': 'dc3d3414d815d7b42a086afefe6464ab5c44defa00babdca7b529eacaed5b233',
+    # [2026-07-29, ED-MB-0051 / plan-v2 A2 — RE-RECORDED, and the plan's own prediction was WRONG.]
+    # A2 predicted "this moves no digest in any of the four modes". It moved the two PER_CELL=1
+    # modes and neither PER_CELL=0 mode. Decomposed before re-recording (the movement is a declared
+    # STOP CONDITION, so this was investigated, not re-recorded on sight):
+    #   * degree-epsilon arm ALONE reproduces the new digest exactly;
+    #   * sigma-zero-snap arm ALONE reproduces the OLD digest exactly (behaviour-neutral).
+    #   So the epsilon on `compute_degree` is the sole mover.
+    # Flip census, all four modes, whole battery, guarded-vs-unguarded verdict compared per call:
+    #   unit        17,312 calls    0 flips (0.000%)
+    #   cell        31,958 calls   38 flips (0.119%)   ALL Partial -> Success
+    #   unit_field  18,152 calls    0 flips (0.000%)
+    #   cell_field  20,412 calls   14 flips (0.069%)   ALL Partial -> Success
+    # Every flip is `net` 1-4 ulp below a CONTINUOUS `ob` that it equals mathematically (measured
+    # distance 2.22e-16 .. 8.88e-16 — five to six orders TIGHTER than the 1e-9 epsilon, so the
+    # epsilon's width is not load-bearing: any value in [8.9e-16, 1e-9] gives this same result).
+    # One direction only: the guard never demotes.
+    # WHY THE PREDICTION FAILED: the audit's "0 flips in 209,778 calls", and the orchestrator's own
+    # N=3,120 replication of it, were BOTH taken at PER_CELL=0 — the one configuration where the
+    # incidence really is zero. Generalising that to the engine is the exact G1 failure the plan
+    # exists to prevent, committed inside the correction to G1. S1.2 is NOT incidence-zero: in the
+    # shipped per-cell modes the 1-ulp defect erases an exchange in ~0.1% of degree calls.
+    # Controls: both moved modes reproduced their new digest on two consecutive runs (2/2), and
+    # `cell` reproduced it again with PYTHONHASHSEED unset (fresh hash seed => hash-order
+    # independent). Recorded on Linux/Python 3.11.15.
+    'cell': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -385,7 +409,10 @@ EXPECTED = {
     # PC_STOCHASTIC_ROUT flip: 3a5807fb… -> this value. Account closed by TWO instruments:
     # 584c683 @ rout=1 reproduces this digest exactly (measured), and
     # `git diff 584c683..cd7f0d0 -- tests/sim/mass_battle/` is EMPTY (source diff, verified).
-    'cell_field': '3a0952b331d6ba1e24fa21a2b72eda781141c36649ba0adc045b2cf5c2561304',
+    # [2026-07-29, ED-MB-0051 / A2 — RE-RECORDED; see the full delta at the 'cell' entry above.]
+    # This mode: 20,412 degree calls, 14 flips (0.069%), all Partial -> Success at 2.22e-16 ..
+    # 4.44e-16 from a continuous `ob`. Two consecutive runs agreed.
+    'cell_field': '13bd02dd58d2cf1913df20681d8e8d6e242eced1e16312c41a206a9d4a6a592d',
 }
 
 

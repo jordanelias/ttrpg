@@ -19,7 +19,7 @@
 ### A.3 BATTLE SCALE
 ### A.4 UNIT STAT BLOCK (all 1–7)
 Personal combat ranged DR (for reference): LP 0/2/3/5 — HP 0/1/2/3 — LBl 0/1/2/3 — HBl 0/0/1/2. See references/params_combat.md.
-### A.5 COMMAND RATING
+### A.5 COMMAND
 ### A.6 FORMATION TYPES
 ### A.7 BATTLE TURN STRUCTURE
 ## Revised 2026-04-02 — ED-050 resolved (Option D): offensive Thread own phase between Manoeuvre and Engagement.

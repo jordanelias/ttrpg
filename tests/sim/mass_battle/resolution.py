@@ -61,10 +61,35 @@ def roll_pool_fractional(pool, tn=7):  # [canonical: params/core.md §TN Values 
         net += roll_pool(1, tn)
     return net
 
+# [ED-MB-0051 / plan-v2 A2] Absolute epsilon for the degree boundaries.
+#
+# THE DEFECT. `net` is continuous (fractional pools, the sigma mu-shift), so a value that is
+# MATHEMATICALLY on a boundary can arrive one ulp to the wrong side of it — and every boundary here
+# is a hard step in `DAMAGE_BY_DEGREE`. The documented repro: `3 + _sigma_net_boost(-1e-16, 9)`
+# evaluates to just under 3 and returned "Partial" -> 0 damage at the universal `dr=1`, where the
+# intended answer is "Success" -> 3. A 1-ulp error erasing an entire exchange.
+#
+# ALL THREE COMPARISONS ARE GUARDED, not just `Success`. Guarding one would institutionalise an
+# asymmetric, attacker-favouring correction: `net <= 0` lets a mathematically-ZERO net escape
+# `Failure` whenever its ulp error happens to be positive, while an equally-zero net with negative
+# error is correctly failed. Fixing only the boundary that was noticed is how a rounding repair
+# becomes a balance change.
+#
+# WHY ABSOLUTE, AND WHY 1e-9. Measured over the four shipped batteries, |net| is bounded by pool
+# scale (single digits to low tens), so accumulated float error across the pool sum + softcap +
+# sqrt chain is ~1e-13 at worst — four orders below this epsilon. In the other direction, the
+# epsilon can only alter a verdict for a `net` within 1e-9 of a boundary; for such a net the
+# INTENDED degree IS the boundary value, because no designed quantity in this engine resolves at
+# 1e-9 (the smallest designed sigma decrement is a morale step, ~1e-1 through `_morale_sigma`).
+# So the epsilon cannot promote a designed decrement: it can only recover a boundary the arithmetic
+# lost. A relative epsilon would scale with `ob` and re-introduce the asymmetry at ob=0.
+_DEGREE_EPS = 1e-9   # [JUSTIFIED: ulp-recovery tolerance, 4 orders above measured accumulated error and 8 below the smallest designed sigma decrement; not a mechanical magnitude]
+
+
 def compute_degree(net, ob):
-    if net <= 0:                    return "Failure"
-    if net >= 2 * ob and net >= 3:  return "Overwhelming"
-    if net >= ob:                   return "Success"
+    if net <= _DEGREE_EPS:                                        return "Failure"
+    if net >= 2 * ob - _DEGREE_EPS and net >= 3 - _DEGREE_EPS:    return "Overwhelming"
+    if net >= ob - _DEGREE_EPS:                                   return "Success"
     return "Partial"
 
 def _morale_sigma(u, atom=None):
@@ -156,6 +181,18 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None, t=None):
 
 def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec.md §3.1 saturating]
     return m * math.tanh(x / m)
+# [ED-MB-0051 / plan-v2 A2] Snap a numerically-zero sigma to exactly zero at the CHOKEPOINT.
+# This is the semantically correct statement — "no modifier applies" — made once, where every
+# producer's value passes through, rather than patched into each producer in turn. It covers the
+# three cited producers at a stroke and any future one for free. The threshold is three orders
+# TIGHTER than `_DEGREE_EPS`: this snap is for values that are zero and merely rendered as dust by
+# float arithmetic, not for absorbing a small real modifier. Deliberately distinct constants — one
+# tolerance doing two jobs is how the next confound gets built.
+_SIGMA_ZERO_SNAP = 1e-12   # [JUSTIFIED: "this value is arithmetically zero" threshold; sized well below any designed sigma and below _DEGREE_EPS so the two never interact]
+
+
 def _sigma_net_boost(net_sigma, pool, tn=7):  # [canonical: params/core.md continuous engine; modifier_system_spec §2.1] mu-shift
     _SIG = {6: 0.806, 7: 0.800, 8: 0.781}     # [canonical: params/core.md EV table] sigma per die at TN
-    return _sigma_softcap(net_sigma) * _SIG.get(tn, 0.800) * math.sqrt(max(1, pool))
+    if abs(net_sigma) < _SIGMA_ZERO_SNAP:
+        return 0.0
+    return _sigma_softcap(net_sigma) * _SIG.get(tn, 0.800) * math.sqrt(max(1, pool))  # [canonical: params/core.md EV table — sigma per die at TN, default TN 7 = 0.800]

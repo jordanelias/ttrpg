@@ -225,7 +225,7 @@ Per mass_battle_v30 §B.5. When PC faction leader is present in the contested te
 | Unit Type (token) | → Power, Weapon, Armour per §1.2 table |
 | Unit Size (tracked on token) | → Size (direct) |
 | Unit Discipline (tracked on token) | → Discipline (direct) |
-| Faction Military stat | → Command rating for NPC generals |
+| Faction Military stat | → Command for NPC generals |
 | Commander bonus = floor(Military/2) | → informational; TTRPG uses full Command |
 
 Units from BG with Size tracked: use that Size directly. Do not use the B.2 TTRPG Size default — that is for newly minted units without tracked Size.
