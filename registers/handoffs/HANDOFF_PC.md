@@ -6,6 +6,20 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **E0 BATCH EXECUTED + I4 DELIVERED (2026-07-29, ED-PC-0041..0044) — PR #259 OPEN, AWAITING MERGE.**
+  Six gated commits (each: Opus producer → independent suite run → read-only valoria-critic pass):
+  CI enforcement restored (18 combat test modules were silently skipping in the shipping gate — 837/93
+  CI vs 972/21 local, proven from live CI logs), vocabulary ownership (`vocabulary.py` owner, 2 guards
+  red-first, dead surface deleted, export 201→200), riders I1a/I1b/I3 (I1a's briefed defect was STALE —
+  fixed by ED-PC-0023; recurrence guards delivered), and I4's `wrapper_emit_key_map.md` (15 emit kinds
+  classified for IN's Wave 3 + 8 registry findings). Suite 972→999, byte-identical throughout, goldens
+  untouched. **⚠ I4 audit found 3 HIGH wrapper defects, reported NOT fixed (each needs its own batch):
+  F-1 half-sword form carries across engagement boundaries (the §12-predicted ED-PC-0033 class, no test
+  sees it) · F-2 fatal blows bypass the damage-bearing outcome emit · F-3 the `sim` flag is provably
+  always False (dead disrupt_resist_p).** Next: after PR #259 merges, restart the branch and run
+  E1a→E3b per `combat_execution_plan.md` (EDs 0045+ from the reserved block); slot F-1/F-2/F-3 by
+  Jordan's priority call. Register corrections relayed to IN in the PR body (OI-13/44/45/46).
+
 - **2026-07-26 COMBAT ARC — report, register, catalogue, proposal, independent audit, remediation plan (no ED;
   all report/design-only, HELD FOR JORDAN).** Consolidated to a pointer because appending full summaries pushed
   this file past its 20k cap four times; the detail is durable in the artifacts.
