@@ -33,6 +33,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.substrate import stubwire
+
 
 # §4.5 Treaty Expiration parameters
 # [canonical: faction_balance_convergence_v12c §4.5 — "At each arc boundary,
@@ -104,11 +106,16 @@ def propose_treaty(parties: list, terms: dict, world=None) -> TreatyResult:
     point raises. Use register_treaty for scaffolding/test insertion and
     Senator Outward (crown_initiative) for the canonical Crown path.
     """
-    raise NotImplementedError(
-        "systems/factions/sim/treaty.py:propose_treaty — no canonized generic "
-        "formation path. Canon formation is Senator Outward (treaty_expiration_v30 "
-        "§2, resolved in crown_initiative). Use register_treaty for test insertion."
-    )
+    # OI-19 (ED-IN-0091 plan §3 Wave 1): converted the raising branch to the single-owner
+    # stub-wire primitive (engine/substrate/stubwire.py) — a typed no-op instead of a crash,
+    # visible to structure_audit/review_core. Live branches (register_treaty, crown_initiative)
+    # are untouched.
+    return stubwire.stub_resolve(
+        'systems.factions.sim.treaty',
+        'propose_treaty(parties: list, terms: dict, world=None) -> TreatyResult',
+        reason="propose_treaty — no canonized generic formation path. Canon formation is "
+               "Senator Outward (treaty_expiration_v30 §2, resolved in crown_initiative). Use "
+               "register_treaty for test insertion. OI-19, ED-IN-0091 plan §3 Wave 1.")
 
 
 def process_treaty_expirations(world, lapse_rate: float = TREATY_LAPSE_RATE_DEFAULT) -> list[ExpirationResult]:

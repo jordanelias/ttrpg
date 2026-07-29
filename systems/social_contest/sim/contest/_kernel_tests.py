@@ -6,6 +6,7 @@ from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Le
                         Resonance, Readiness, DefeatCatalogue)
 from .resolver import (ContestState, ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, Venue)
 from engine.autoload.sigma_leverage import degree
+from engine.substrate.stubwire import StubResult
 from .modes import ContestedMode, DyadicMode
 from .policy import (logos_spammer as LOG, demagogue as DEM, courtier as COU,
                     build_then_close as BTC, exploiter as EXP, overreacher as OV, staller as ST)
@@ -416,8 +417,12 @@ print("== validation + scaffolds ==")
 def bad(v): return Move("garbage")
 try: M_disp.play(4,4,bad,LOG); ck("validation raises", False)
 except ValueError: ck("validation raises", True)
-try: DyadicMode().play(); ck("scaffold raises", False)
-except NotImplementedError: ck("scaffold raises", True)
+# ED-IN-0093 Wave 1 (OI-18a): scaffold changed contract raise->StubResult (self-flagging no-op,
+# not a crash) — this guard now pins the NEW contract, same intent (a caller must not silently
+# get away with treating the scaffold as built).
+_dm_result = DyadicMode().play()
+ck("scaffold returns a self-flagging StubResult (stubwire; OI-18a)",
+   isinstance(_dm_result, StubResult) and _dm_result.stub is True)
 
 # == DE-SATURATION + RES-FLOOR + BALLOTTA (balancing pass 2026-06-05) ==
 print("== de-saturation bar + resonance floor + ballotta ==")
@@ -628,9 +633,12 @@ ck("resolve_contest(game='agon') resolves to a Persuasion-Track band", _res[0] i
 ck("resolve_contest returns ((band,reason), bout)", isinstance(_res, tuple) and hasattr(_bt, "state"))
 ck("GAMES table: agon WIRED; consensus/negotiation/inquiry STUB",
    GM["agon"]["status"]=="WIRED" and all(GM[g]["status"]=="STUB" for g in ("consensus","negotiation","inquiry")))
+# ED-IN-0093 Wave 1 (OI-18a): STUB games changed contract raise->StubResult (self-flagging
+# no-op) — pins the NEW contract, same intent (a caller must see "not built", not silence).
 for _g in ("consensus","negotiation","inquiry"):
-    try: RC(_bc, game=_g); ck(f"resolve_contest(game={_g!r}) is a stub (raises)", False)
-    except NotImplementedError: ck(f"resolve_contest(game={_g!r}) is a stub (raises)", True)
+    _rc_result = RC(_bc, game=_g)
+    ck(f"resolve_contest(game={_g!r}) is a stub (returns StubResult)",
+       isinstance(_rc_result, StubResult) and _rc_result.stub is True)
 # adapter coerces heterogeneous side specs (Contestant / int / dict-with-evidence)
 _bd = BC({"faculty":5,"standing_start":6}, 3, venue="grand_contest")
 ck("build_contest adapts int + dict side specs", _bd.side_a.faculty == 5 and _bd.side_b.faculty == 3)
@@ -1005,9 +1013,12 @@ ck("Stage2: panel_win_condition carries the ratified weighted_by_standing aggreg
 ck("Stage2: PANEL_CLOSURE records ED-137 CLOSED + the ratified weighted-by-standing aggregation",
    _PCL["ed"] == "ED-137" and "CLOSED" in _PCL["status"]
    and "aggregation_ratified" in _PCL and "weighted" in _PCL["aggregation_ratified"].lower())
-ck("Stage2: the ratified weighted_by_standing aggregation is IMPLEMENTED (does not raise); unanimity_required still raises",
+# ED-IN-0093 Wave 1 (OI-19): unanimity_required changed contract raise->StubResult.
+ck("Stage2: the ratified weighted_by_standing aggregation is IMPLEMENTED; unanimity_required "
+   "is a stub (returns a self-flagging StubResult, stubwire; OI-19)",
    isinstance(_pwc(aggregation="weighted_by_standing"), _VAC)
-   and _raises(lambda: _pwc(aggregation="unanimity_required"), NotImplementedError))
+   and isinstance(_pwc(aggregation="unanimity_required"), StubResult)
+   and _pwc(aggregation="unanimity_required").stub is True)
 # End-to-end: a Panel adjudicator routes the contest to VoteAtClose (ED-137 realized), and its
 # verdict is a per-member ballot outcome (A/B/draw), NOT a Persuasion-Track band.
 _pc = BC(4, 4, venue="formal_contest", adjudicator="panel")

@@ -46,10 +46,13 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
-- **Code-shape open-items program is live (ED-IN-0091/ED-IN-0092, 2026-07-29).**
+- **Code-shape open-items program is live (ED-IN-0091/ED-IN-0092/ED-IN-0093, 2026-07-29).**
   `references/id_reservations.yaml` is frozen (all seven lanes' blocks reserved — IN/MB/PC/WR/FA/SE/SC) until the W5 capstone; the
   MB and PC sessions are launchable from their reserved blocks; the §5 docket awaits Jordan at
-  `audit/2026-07-29-code-shape-open-items/05_jordan_docket_v1.md`.
+  `audit/2026-07-29-code-shape-open-items/05_jordan_docket_v1.md`. **Wave 1 landed
+  (ED-IN-0093):** stubwire primitive, dispatch closure (combat bridge flag-OFF, field
+  investigation), `test_pipeline_reach` acceptance oracle; next is Wave 2 (orphan closure
+  seams). Detail in `registers/handoffs/HANDOFF_IN.md`.
 
 _(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
 verified live max, allocated ED 1081–1087 to the month-overview consolidation from

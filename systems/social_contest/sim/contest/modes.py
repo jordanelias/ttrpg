@@ -12,6 +12,8 @@ are identical across them; only the imposed conditions differ.
 
 Genuinely different sub-systems (dyadic counsel, negotiation, ceremonial) remain scaffolds.
 """
+from engine.substrate import stubwire
+
 from .contract import Adjudicator, Panel
 from .resolver import (Contestant, Venue, run, ThresholdRace, TallyAtClose, ProofBar,
                        GraceThreshold, VoteAtClose, PersuasionTrack)
@@ -323,15 +325,38 @@ CROSS_CULTURAL_VENUES = {          # placeholder keys; Valorian names are Jordan
 }
 
 
+# OI-18a (ED-IN-0091 plan §3 Wave 1, SELF-FLAG ONLY): these three `.play` scaffolds converted
+# from an unconditional `raise NotImplementedError` to the single-owner stub-wire primitive
+# (engine/substrate/stubwire.py) so invocation is visible to structure_audit/review_core instead
+# of crashing silently-uncounted. Build stays gated on the SC P0 docket (ED-SC-0003..0005, plan §5
+# fork 14) — nothing built here.
 class DyadicMode:
     """SCAFFOLD. Steer one listener; success invisible; win = the listener adopts the course. To build."""
-    def play(self, *a, **k): raise NotImplementedError("dyadic counsel is a separate sub-system — scaffold only")
+    def play(self, *a, **k):
+        return stubwire.stub_resolve(
+            'systems.social_contest.sim.contest.modes.DyadicMode',
+            'play(*a, **k) -> contest result',
+            reason='dyadic counsel is a separate sub-system — scaffold only; OI-18a, '
+                   'ED-IN-0091 plan §3 Wave 1; build gated on SC P0 docket ED-SC-0003..0005, '
+                   'plan §5 fork 14.')
 class NegotiationMode:
     """SCAFFOLD. Typed envoy latitude, escalating instruments; win = agreement in the overlap. To build."""
-    def play(self, *a, **k): raise NotImplementedError("negotiation is a separate sub-system — scaffold only")
+    def play(self, *a, **k):
+        return stubwire.stub_resolve(
+            'systems.social_contest.sim.contest.modes.NegotiationMode',
+            'play(*a, **k) -> contest result',
+            reason='negotiation is a separate sub-system — scaffold only; OI-18a, '
+                   'ED-IN-0091 plan §3 Wave 1; build gated on SC P0 docket ED-SC-0003..0005, '
+                   'plan §5 fork 14.')
 class CeremonialMode:
     """SCAFFOLD. Nothing at issue (the corpus's point); builds/spends standing; win = acclamation. To build."""
-    def play(self, *a, **k): raise NotImplementedError("ceremonial is a separate sub-system — scaffold only")
+    def play(self, *a, **k):
+        return stubwire.stub_resolve(
+            'systems.social_contest.sim.contest.modes.CeremonialMode',
+            'play(*a, **k) -> contest result',
+            reason='ceremonial is a separate sub-system — scaffold only; OI-18a, '
+                   'ED-IN-0091 plan §3 Wave 1; build gated on SC P0 docket ED-SC-0003..0005, '
+                   'plan §5 fork 14.')
 
 
 # ═════════════════════════════════════════════════════════════════════════════

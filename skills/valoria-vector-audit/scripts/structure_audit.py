@@ -179,6 +179,11 @@ EXTRA_CODE_ROOTS = ('tests/sim/mass_battle',)
 
 SKIP_DIR_PARTS = {'__pycache__', 'tests', 'test', 'deprecated', 'archives'}
 
+# The single owner of "explicitly-flagged not-built" (P1 primitive, ED-IN-0091 plan §2.1):
+# engine/substrate/stubwire.py. A module is `stub_wired` iff it imports this — one dotted name,
+# checked below.
+STUBWIRE_MODULE = 'engine.substrate.stubwire'
+
 
 def _module_name(rel_path):
     """systems/factions/sim/faction_action.py -> systems.factions.sim.faction_action;
@@ -373,6 +378,16 @@ def split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules):
     return code_orphans, cli_entries
 
 
+def stub_wired_modules(g_code):
+    """`stub_wired` node attribute (P1 primitive §2.1, ED-IN-0091): every module that imports
+    `engine.substrate.stubwire`, per the SAME AST import pass `build_g_code` already ran — no
+    second parser (CLAUDE.md §0 "compose on top of it", §8 "every rule lives once"). `g_code` is
+    the resolved internal import graph {module: {imported internal modules}}; a module is
+    stub-wired iff STUBWIRE_MODULE is one of its resolved edges. Self-import is impossible here
+    (build_g_code already excludes `tgt == mod`), so stubwire.py itself never lists itself."""
+    return sorted(m for m, targets in g_code.items() if STUBWIRE_MODULE in targets)
+
+
 # ──────────────────────────── L2 — MODULE WIRING GRAPH ───────────────────────
 
 def _as_list(v):
@@ -557,10 +572,11 @@ def run(root, out):
     code_deg = degrees(g_code, code_nodes)
     main_guard_modules = collect_cli_entry_modules(root, modules)
     code_orphans, cli_entries = split_orphans_and_cli_entries(code_nodes, code_deg, main_guard_modules)
+    stub_wired = stub_wired_modules(g_code)
     print(f'         {len(code_nodes)} modules, '
           f'{sum(len(v) for v in g_code.values())} import edges, '
           f'{len(code_cycles)} cycle(s), {len(code_cuts)} cut-vertex(es), '
-          f'{len(cli_entries)} cli-entry(ies)')
+          f'{len(cli_entries)} cli-entry(ies), {len(stub_wired)} stub-wired')
 
     print('[L2] building module_contracts wiring graph...')
     g_l2, meta, edges_meta, findings, assumption_count = build_l2(root)
@@ -589,7 +605,8 @@ def run(root, out):
     dump('structure_metrics.json', {
         'code': {'nodes': len(code_nodes), 'edges': sum(len(v) for v in g_code.values()),
                  'cycles': code_cycles, 'cut_vertices': sorted(code_cuts),
-                 'orphans': code_orphans, 'cli_entries': cli_entries, 'parse_errors': parse_errors},
+                 'orphans': code_orphans, 'cli_entries': cli_entries,
+                 'stub_wired': stub_wired, 'parse_errors': parse_errors},
         'l2': {'nodes': len(l2_nodes),
                'edges_raw': len(edges_meta),        # raw emit->consume edges (parallels kept)
                'edges_simple': l2_simple_edges,     # deduplicated graph the metrics below run on
@@ -625,7 +642,7 @@ def run(root, out):
     L.append('')
     L.append(f'**Scorecard:** code-modules={len(code_nodes)}, import-edges={sum(len(v) for v in g_code.values())}, '
              f'import-cycles={len(code_cycles)}, code-cut-vertices={len(code_cuts)}, code-orphans={len(code_orphans)}, '
-             f'cli-entries={len(cli_entries)}; '
+             f'cli-entries={len(cli_entries)}, stub-wired={len(stub_wired)}; '
              f'l2-modules={len(l2_nodes)}, wiring-edges={len(edges_meta)} raw ({l2_simple_edges} simple/deduped — '
              f'the cycle/cut-vertex/locality metrics run on the simple graph), l2-cycles={len(l2_cycles)}, '
              f'l2-contract↔code-correspondence=UNVERIFIED({len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} name-map), '
@@ -710,6 +727,10 @@ def run(root, out):
             '(OI-55/ED-IN-0092); cross-check `references/apparatus_registry.md`\'s Invoked-by '
             'column before trusting any row',
             cli_entries, lambda n: f"`{n}`")
+    section(f'Stub-wired — modules that import `{STUBWIRE_MODULE}` (P1 primitive §2.1, '
+            'ED-IN-0091: an explicitly-flagged not-built call site, never a silent raise or a '
+            'fabricated value)',
+            stub_wired, lambda n: f"`{n}`")
     section('Code import hubs (highest total degree — change-impact)', top_code_hubs,
             lambda n: f"`{n}` (in {code_deg[n]['in']}, out {code_deg[n]['out']})")
     section('L2 wiring hubs (highest total degree)', top_l2_hubs,
@@ -737,15 +758,41 @@ def run(root, out):
     return findings
 
 
+def run_stub_count(root):
+    """Lightweight `--stub-count` mode (tools/review_core.py's `stubs.count` signal, ED-IN-0091
+    plan §2.1): runs only the G_code import pass + `stub_wired_modules` — no L2 build, no
+    `--output-dir`, no files written — and prints a count `review_core`'s `count_re` can parse.
+    Same single-owner rule as the full `run()`: no second AST pass, no second registry. Exit code
+    follows the existing report-only convention (`ci_quantity_vocabulary_check.py` et al.): 0 when
+    the count is 0, 1 otherwise, so review_core's ratchet reads a fresh count only on 'fail'."""
+    modules = collect_py_modules(root)
+    g_code, _parse_errors = build_g_code(root, modules)
+    stub_wired = stub_wired_modules(g_code)
+    print(f'== structure_audit --stub-count: {len(stub_wired)} stub-wired module(s) '
+          f'(engine.substrate.stubwire, ED-IN-0091 plan §2.1) — report-only ==')
+    for m in stub_wired:
+        print(f'  STUB-WIRED {m}')
+    if not stub_wired:
+        print('  (nothing to report — zero modules import engine.substrate.stubwire yet)')
+    return 1 if stub_wired else 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument('--repo-root', default='.', help='repo root (working tree)')
-    ap.add_argument('--output-dir', required=True, help='audit output folder')
+    ap.add_argument('--output-dir', help='audit output folder (required unless --stub-count)')
+    ap.add_argument('--stub-count', action='store_true',
+                    help='print the stub_wired module count only (tools/review_core.py '
+                         "'stubs.count' signal) and exit — skips the full run() output")
     a = ap.parse_args()
     root = Path(a.repo_root)
     if not (root / 'references' / 'module_contracts.yaml').exists():
         sys.exit(f"not a Valoria repo root (no references/module_contracts.yaml): {root}")
+    if a.stub_count:
+        sys.exit(run_stub_count(root))
     print(f'[structure_audit] repo root (working tree): {root.resolve()}')
+    if not a.output_dir:
+        sys.exit('--output-dir is required unless --stub-count is passed')
     run(root, a.output_dir)
 
 

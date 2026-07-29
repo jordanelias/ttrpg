@@ -39,8 +39,33 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   0092-0111, MB 0046-0060, PC 0041-0055, plus WR/FA/SE/SC mini-blocks). W0b landed (this PR, ED-IN-0092): the §5 Jordan
   docket authored and HELD FOR JORDAN at `05_jordan_docket_v1.md`; OI-55 (orphan-detector
   integrity) re-scoped and fixed against the live tree; `04_execution_ledger.md` created as the
-  program's one status surface (00-03 stay immutable snapshots). Next action: **Wave 1**
-  (stubwire primitive + dispatch closure + `test_pipeline_reach` oracle) after this PR merges.
+  program's one status surface (00-03 stay immutable snapshots).
+  **Wave 1 landed (ED-IN-0093, this PR):** `engine/substrate/stubwire.py` (single owner of
+  "explicitly-flagged not-built" — typed no-op, invocations counter, structure_audit
+  `stub_wired` attribute, `review_core` `stubs.count` ratchet); 16 OI-17 armature-stub modules
+  converted to `stubwire` (factions ×6, fieldwork ×2/OI-02, overview ×2, world ×2, characters
+  ×1, threadwork ×1, `articulation.py`, `npc_ai.py`) — two exclusions recorded not converted:
+  MB-owned `altonian_reinforcements.py` (routed to MB plan §12 I1) and the contest GAMES router
+  (OI-18a, self-flag-only scope); OI-19 partial branches self-flagged, `resolver.py:51`
+  deliberately excluded as recorded-benign; OI-01's combat dispatch bridge
+  (`engine/cross_scale/combat_bridge.py`, IN-side only) wired behind `DISPATCH_COMBAT_BRIDGE`,
+  **default OFF** — the ON-flip is deliberately not scheduled this wave, only after PC batches
+  E0–E3 merge; `engine/tests/test_pipeline_reach.py` (OI-56) is the new P1 acceptance oracle.
+  **POST-INTEGRATION CAVEAT (Wave-1 fix batch, ED-IN-0093, same PR cycle):** the "29 passed / 8
+  xfailed" and "`stubs.count` seeded at 24" figures above were measured BEFORE the orchestrator-
+  adjudicated fix batch landed (contest-kernel guard rewrite, combat-bridge lazy imports, Key OUT
+  closure, test restructuring — `04_execution_ledger.md`'s fix-batch rows) and do not reflect the
+  final tree: `engine/tests/test_pipeline_reach.py` now collects 21 tests (13 passed, 8 xfailed —
+  re-run 2026-07-29 post-fix-batch; the file's test-FUNCTION count did not change in the fix
+  batch, only counter bodies, so this file's own re-run is the number to trust, not the "29"
+  figure above); `registers/review_baseline.yaml` `stubs.count` baseline is **25**, not 24 (the
+  fix batch's kernel-guard update added a `stubwire` import to `_kernel_tests.py`, moving that
+  file into the `stub_wired` predicate set — see the YAML's own updated comment and
+  `04_execution_ledger.md`'s corresponding row). Do not cite "24" or "29" from this paragraph as
+  current without re-running the measurement.
+  Next action: **Wave 2** (orphan closure
+  seams — accord echo, parliamentary transfer, `generate_npc` golden re-record, world chains,
+  `handoff_rules`, articulation subscriber).
 - **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
   landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
   the banner counts as settled.

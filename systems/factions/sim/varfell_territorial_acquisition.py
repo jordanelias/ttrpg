@@ -26,8 +26,23 @@ Entry points:
 """
 from __future__ import annotations
 
+from engine.substrate import stubwire
+
 # [PROVISIONAL — Pass 2l armature stub; placeholder-name path per Pass 2 follow-up Option A]
+#
+# OI-17 (ED-IN-0091 plan §2.2/§3 Wave 1): converted from an unconditional
+# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,
+# plan §2.1) — a typed no-op instead of a crash, visible to structure_audit's `stub_wired`
+# attribute and review_core's `stubs.count` ratchet by construction (greppable import, no second
+# registry). `io_contract` below cites this module's own docstring "Entry points" declaration.
+# Design gate: identity wrapping (cultural framing) pending Jordan contamination audit
+# (registers/placeholder_names.yaml VARFELL-TERRITORIAL-ACQUISITION-001).
 
 
 def attempt_territorial_acquisition(target_territory: str, world: GameState):
-    raise NotImplementedError("systems/factions/sim/varfell_territorial_acquisition.py — Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)")
+    return stubwire.stub_resolve(
+        'systems.factions.sim.varfell_territorial_acquisition',
+        'attempt_territorial_acquisition(target_territory: str, world: GameState) -> AcquisitionResult',
+        reason='Pass 2l armature stub, placeholder-name path per Pass 2 follow-up Option A; '
+               'design-gated on Jordan contamination audit for identity wrapping '
+               '(VARFELL-TERRITORIAL-ACQUISITION-001); OI-17, ED-IN-0091 plan §2.2')

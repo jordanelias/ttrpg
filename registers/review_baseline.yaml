@@ -41,3 +41,25 @@ signals:
   value_links.export:
     baseline: 0        # value_pointer_links.json matches a fresh build (ED-IN-0079); regen on drift
     target: 0
+  stubs.count:
+    # Wave-1 bookkeeping seed (ED-IN-0093, per 01_orchestration_plan_v1.md §3 Wave 1
+    # pre-declared protocol; supersedes the Spine-stage placeholder 0 + TODO).
+    # Arithmetic (RE-MEASURED post-fix-batch, 2026-07-29 — supersedes this row's own prior
+    # 23+1=24 seed, which was banked BEFORE the fix batch's kernel-guard update (item A) added a
+    # `from engine.substrate.stubwire import StubResult` import to
+    # systems/social_contest/sim/contest/_kernel_tests.py, which moved that file INTO the
+    # stub_wired set): measured stub_wired module count on the final Wave-1 tree = 24 (via
+    # `python3 skills/valoria-vector-audit/scripts/structure_audit.py --stub-count`, 2026-07-29)
+    # + 1 for the MB-owned systems/mass_battle/sim/altonian_reinforcements.py (not yet
+    # converted — critic F4: seed at the FULL expected set so MB's later conversion moves the
+    # count toward, never past, the ceiling) = 25.
+    # SEMANTICS (not a converted-stub census): the predicate is "imports
+    # engine.substrate.stubwire" — this counts every importer of that module, including
+    # telemetry CONSUMERS (engine.mc_v18, which reads stubwire.invocations for CampaignResult
+    # telemetry, never calls stub_resolve itself) and test files that import StubResult purely
+    # to assert on it (this fix batch's own _kernel_tests.py). It is therefore a CEILING on
+    # stub-adjacent modules, not an exact count of converted call sites. A call-site predicate
+    # (counting stub_resolve invocations, not stubwire importers) would be exact but is deferred
+    # — see 04_execution_ledger.md's predicate-refinement row (W5 candidate).
+    baseline: 25
+    target: 25
