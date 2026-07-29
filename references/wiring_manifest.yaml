@@ -5,7 +5,7 @@
 # name / adapter name), NOT a file path, so it survives restructures like ED-IN-0071.
 #
 # Validated + queried by tools/wiring_map_check.py:
-#   python3 tools/wiring_map_check.py --check       # gate: every tag resolves; 27/27 + 7/7 coverage
+#   python3 tools/wiring_map_check.py --check       # gate: every tag resolves; 27/27 + 8/8 coverage
 #   python3 tools/wiring_map_check.py --work-list    # the Godot port work-list, ranked
 #   python3 tools/wiring_map_check.py --summary      # build-state / godot-status counts
 #
@@ -14,7 +14,7 @@
 # 6 lanes + a 4-vector coverage diff) — revise as the port advances.
 # =====================================================================================
 version: 1
-as_of: "2026-07-18"
+as_of: "2026-07-29"
 
 # ── vocabularies (the tool validates that every value below is one of these) ──
 build_states: [live, gated, deferred, unwired, stub, design]
@@ -34,7 +34,7 @@ godot_states: [gd-ported, typed-exported, python-oracle, no-oracle, retire]
 # ── registries the tags resolve against (checked live by the tool) ──
 registries:
   module: references/module_contracts.yaml          # the 27 module: tags
-  adapter: engine/cross_scale/                       # the 7 adapter: tags
+  adapter: engine/cross_scale/                       # the 8 adapter: tags
   key: systems/_architecture/key_type_registry_v30.md
   quantity: [references/descriptor_registry.yaml, designs/provincial/clock_registry_v30.md]
 
@@ -77,10 +77,11 @@ modules:
   settlement_economy: {tier: module, scale: settlement, resolver: deterministic_accounting, build: design, godot: retire,      port_rank: 9, parity: "n/a", note: "phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer."}
   campaign_architecture: {tier: module, scale: provincial, resolver: none,               build: design,   godot: retire,        port_rank: 9, parity: "n/a", note: "reclassified: a consolidation doc, not a runtime module."}
 
-# ═══════════════════════════ ADAPTERS (7 — the KeyBus / GameDirector seam) ═══════════════════════════
+# ═══════════════════════════ ADAPTERS (8 — the KeyBus / GameDirector seam) ═══════════════════════════
 # Cross-scale bridges; conversion units too (godot_conversion_strategy_v1 §I.3 cross-cutting).
 adapters:
   scene_dispatch:      {tier: adapter, build: deferred, godot: python-oracle, port_rank: 2, parity: "key-log", note: "down-scale seam; only 1 of 8 triggers fires."}
+  combat_bridge:       {tier: adapter, build: gated,    godot: python-oracle, port_rank: 2, parity: "key-log", note: "IN-side combat dispatch bridge (ED-IN-0093, OI-01): faction aggregates -> Combatant pair -> wrapper.fight, behind DISPATCH_COMBAT_BRIDGE (default OFF); seam = wrapper.fight + Combatant ctor, PC-owned, consumed as-is."}
   parliamentary_bridge: {tier: adapter, build: gated,   godot: python-oracle, port_rank: 2, parity: "key-log", note: "runs every season (echo on); emits 13-65 keys/campaign — the ONLY live Key producer."}
   echo_transport:      {tier: adapter, build: gated,    godot: python-oracle, port_rank: 2, parity: "key-log", note: "the paired apply-closure — the only live Key CONSUMER (writes Faction.L/I)."}
   domain_echo:         {tier: adapter, build: gated,    godot: python-oracle, port_rank: 2, parity: "key-log", note: "compute_domain_echo/accord/thread."}

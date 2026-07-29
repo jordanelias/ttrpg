@@ -24,8 +24,23 @@ Entry points:
 """
 from __future__ import annotations
 
+from engine.substrate import stubwire
+
 # [PROVISIONAL — Pass 2l armature stub; placeholder-name path per Pass 2 follow-up Option A]
+#
+# OI-17 (ED-IN-0091 plan §2.2/§3 Wave 1): converted from an unconditional
+# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,
+# plan §2.1) — a typed no-op instead of a crash, visible to structure_audit's `stub_wired`
+# attribute and review_core's `stubs.count` ratchet by construction (greppable import, no second
+# registry). `io_contract` below cites this module's own docstring "Entry points" declaration.
+# Design gate: both canonical NAME and MECHANISM redesign pending Jordan-led contamination audit
+# for Varfell (registers/placeholder_names.yaml VARFELL-MANDATE-ACTION-001).
 
 
 def attempt_mandate_action(world: GameState):
-    raise NotImplementedError("systems/factions/sim/varfell_mandate_action.py — Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)")
+    return stubwire.stub_resolve(
+        'systems.factions.sim.varfell_mandate_action',
+        'attempt_mandate_action(world: GameState) -> MandateResult',
+        reason='Pass 2l armature stub, placeholder-name path per Pass 2 follow-up Option A; '
+               'design-gated on Jordan-led contamination audit for Varfell '
+               '(VARFELL-MANDATE-ACTION-001); OI-17, ED-IN-0091 plan §2.2')

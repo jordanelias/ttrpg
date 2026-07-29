@@ -45,6 +45,7 @@ from typing import Optional, Tuple
 from . import modes as _modes
 from .resolver import VoteAtClose as _VoteAtClose
 from .primitives import Appeal   # ED-1061: Guilds venue-derived boost maps the adjudicator's dominant appeal
+from engine.substrate import stubwire
 
 
 # ══════════════════════════════════════════════════════════════════════════════════════════
@@ -704,13 +705,21 @@ def panel_win_condition(jurors=None, aggregation=PANEL_AGGREGATION):
        for both the count AND the per-juror weights). sharpness/noise are left at VoteAtClose's own cited
        [SEED] defaults (not re-specified here). `aggregation` selects the rule (PANEL_AGGREGATION);
        'weighted_by_standing' (ratified) and 'simple_majority' are implemented; 'unanimity_required'
-       raises (the sketched alternative Jordan did not select). RESOLVES NOTHING here — it returns the
+       returns a self-flagging StubResult (stubwire, ED-IN-0093) pending the SC P0 docket (the
+       sketched alternative Jordan did not select). RESOLVES NOTHING here — it returns the
        WinCondition the venue would carry."""
     if aggregation not in ("weighted_by_standing", "simple_majority"):
-        raise NotImplementedError(
-            f"Panel aggregation {aggregation!r} is not implemented; the ratified rule is "
-            f"'weighted_by_standing' (Gate B, ED-1057), and 'simple_majority' is the recorded "
-            f"alternative. 'unanimity_required' was sketched but not selected. See PANEL_CLOSURE.")
+        # OI-19 (ED-IN-0091 plan §3 Wave 1): converted the raising branch to the single-owner
+        # stub-wire primitive (engine/substrate/stubwire.py) — a typed no-op instead of a crash,
+        # visible to structure_audit/review_core. The two ratified/recorded branches above are
+        # untouched.
+        return stubwire.stub_resolve(
+            'systems.social_contest.sim.contest.dictionaries',
+            "panel_win_condition(jurors=None, aggregation=...) -> WinCondition",
+            reason=f"Panel aggregation {aggregation!r} is not implemented; the ratified rule is "
+                   f"'weighted_by_standing' (Gate B, ED-1057), and 'simple_majority' is the "
+                   f"recorded alternative. 'unanimity_required' was sketched but not selected. "
+                   f"See PANEL_CLOSURE. OI-19, ED-IN-0091 plan §3 Wave 1.")
     n = PANEL_DEFAULT_JURORS if jurors is None else jurors
     # sharpness/noise left at VoteAtClose's own cited [SEED] defaults; aggregation is the ratified rule.
     return _VoteAtClose(jurors=n, aggregation=aggregation)

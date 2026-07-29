@@ -33,6 +33,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 
 from engine.autoload import game_state, victory, scene_slate
+from engine.substrate import stubwire
 from systems.factions.sim.faction_action import faction_take_action
 from systems.overview.sim.season import run_season
 from engine.cross_scale import scene_dispatch
@@ -57,6 +58,20 @@ def _echo_transport_on(effective_params: dict) -> bool:
     return os.environ.get('ECHO_TRANSPORT', '1') == '1'
 
 
+def _dispatch_combat_bridge_on(effective_params: dict) -> bool:
+    """DISPATCH_COMBAT_BRIDGE flag (ED-IN-0091, plan §2.2, OI-01) — **default OFF**, mirroring
+    `_echo_transport_on`'s params-override-then-env-var resolution (ED-IN-0028) as the plan's §2.2
+    "find the existing flag pattern... and mirror it; single owner" instruction directs. With the
+    flag off `world.dispatch_combat_bridge` is False and scene_dispatch's combat branch takes the
+    UNCHANGED historical path (the deprecated `systems.combat.sim.combat.resolve_combat_round`
+    call stays in place — byte-identical to pre-bridge behaviour, per the plan's "ship-flag-off"
+    term). The flip to ON is a deliberate, separately-scheduled IN action after PC's E0-E3 batches
+    merge (plan §0/§2.2), never a side effect of this wave."""
+    if 'DISPATCH_COMBAT_BRIDGE' in effective_params:
+        return bool(effective_params['DISPATCH_COMBAT_BRIDGE'])
+    return os.environ.get('DISPATCH_COMBAT_BRIDGE', '0') == '1'
+
+
 @dataclass
 class CampaignResult:
     winner: str | None
@@ -66,6 +81,10 @@ class CampaignResult:
     scenes_resolved: int = 0        # F7 telemetry (ED-IN-0021): personal-scale scenes actually resolved
     insurgencies_formed: int = 0    # F7 telemetry: len(world.insurgencies)
     npcs_generated: int = 0         # F7 telemetry: world.npc_counter (generate_npc call-count proxy)
+    stub_hits: int = 0              # F7-pattern telemetry (ED-IN-0091, plan §2.1): per-campaign delta of
+                                     # engine.substrate.stubwire.invocations — 0 while no live call site is
+                                     # stub-wired yet (Wave 1 stage 4 converts the OI-17 class); additive-only,
+                                     # never a fabricated value (§0.1 / §7 no-fabrication).
     key_log_hash: str = ""          # ED-IN-0028: sha256 of the campaign's canonical KeyLog ("" when ECHO_TRANSPORT off)
     keys_emitted: int = 0           # ED-IN-0028: len(world.key_log) — 0 while scenes defer (SC bridge pending)
     final_state: dict = field(default_factory=dict)
@@ -133,6 +152,12 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
     if seed is None:
         seed = int(time.time()) & 0xFFFFFFFF
 
+    # F7-pattern telemetry (ED-IN-0091, plan §2.1): snapshot the module-cumulative stubwire
+    # counter before the campaign runs so stub_hits below is THIS campaign's delta, not the
+    # process-lifetime total (the counter is intentionally process-cumulative — see
+    # engine/substrate/stubwire.py's docstring — so a delta is how a single campaign reads it).
+    _stub_start = stubwire.invocations
+
     world = game_state.create_world(seed=seed)
     victory.reset()
     scene_slate.clear()
@@ -141,6 +166,12 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
     if params:
         effective_params.update(params)
     max_s = effective_params.get('CAMPAIGN_SEASONS', max_seasons)
+
+    # ED-IN-0091 plan §2.2 (OI-01) — decide the DISPATCH_COMBAT_BRIDGE flag ONCE per campaign and
+    # stash it on `world`, exactly as ECHO_TRANSPORT's decision is stashed via `world.echo_scheduler`
+    # presence below: scene_dispatch reads the world attribute rather than re-deriving the flag
+    # itself (single owner — CLAUDE.md §8), and every call in the season loop sees the same value.
+    world.dispatch_combat_bridge = _dispatch_combat_bridge_on(effective_params)
 
     # ED-IN-0028 — attach the executable Key substrate to the world when ECHO_TRANSPORT is on.
     # Its presence is the flag the scene phase reads; absence => byte-exact legacy path.
@@ -195,6 +226,7 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         scenes_resolved=world.scenes_resolved,
         insurgencies_formed=len(world.insurgencies),
         npcs_generated=world.npc_counter,
+        stub_hits=stubwire.invocations - _stub_start,
         key_log_hash=_kl.content_hash() if _kl is not None else "",
         keys_emitted=len(_kl) if _kl is not None else 0,
         final_state=game_state.serialize_world(world),

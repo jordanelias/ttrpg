@@ -20,6 +20,8 @@ traces to params/contest.md + social_contest_v30.md §2/§3.
 """
 from __future__ import annotations
 
+from engine.substrate import stubwire
+
 from .contract import A, B, Adjudicator, Panel
 from .primitives import Stasis, Standing, Face, Dossier, EvidenceItem, TRACKERS, RETIRED_TRACKERS
 from .resolver import (Bout, Contestant, Venue, run, PersuasionTrack, TallyAtClose,
@@ -197,10 +199,19 @@ def _resolve_agon(contest, *, policy_a, policy_b, record=False):
 
 
 def _stub(game):
+    # OI-18a (ED-IN-0091 plan §3 Wave 1, SELF-FLAG ONLY): converted from an unconditional
+    # `raise NotImplementedError` to the single-owner stub-wire primitive
+    # (engine/substrate/stubwire.py) so invocation of a not-yet-built GAMES route is visible to
+    # structure_audit/review_core instead of crashing silently-uncounted. The actual game builds
+    # stay gated on the SC P0 docket (ED-SC-0003..0005, plan §5 fork 14) — nothing built here.
     def _f(contest, **kw):
-        raise NotImplementedError(
-            f"resolve_contest: game={game!r} is a registered STUB (Stage 1c) — not yet wired. "
-            f"Only game='agon' resolves this stage (see DECISIONS.md Stage-1 entry criteria).")
+        return stubwire.stub_resolve(
+            'systems.social_contest.sim.contest.wrapper',
+            f"resolve_contest(contest, game={game!r}, ...) -> contest result",
+            reason=f"resolve_contest: game={game!r} is a registered STUB (Stage 1c) — not yet "
+                   f"wired. Only game='agon' resolves this stage (DECISIONS.md Stage-1 entry "
+                   f"criteria); OI-18a, ED-IN-0091 plan §3 Wave 1; build gated on SC P0 docket "
+                   f"ED-SC-0003..0005, plan §5 fork 14.")
     return _f
 
 GAMES = {
@@ -219,8 +230,14 @@ def resolve_contest(contest, *, game="agon", policy_a=logos_spammer, policy_b=lo
                     record=False):
     """Game-type ROUTER (the wrapper's routing duty). Dispatches to GAMES[game]['resolve']; it computes
        no outcome itself. game='agon' resolves the canonical Persuasion-Track contest; the other three
-       games are STUBs (raise NotImplementedError) pending later stages. `policy_a`/`policy_b` name a
-       key of modes/policy.POLICIES or are policy callables. Returns ((winner_band, reason), bout)."""
+       games are STUBs — they return a self-flagging StubResult (stubwire, ED-IN-0093) pending the
+       SC P0 docket, not a crash. `policy_a`/`policy_b` name a
+       key of modes/policy.POLICIES or are policy callables. TWO RETURN SHAPES, not one (doc-drift
+       fix, re-critic round 2, item 7): game='agon' returns ((winner_band, reason), bout) as
+       documented above; every STUB game ('consensus', 'negotiation', 'inquiry') returns a bare
+       `stubwire.StubResult` instead — NOT wrapped in the ((., .), bout) tuple shape. Callers that
+       unconditionally unpack this return as a 2-tuple will break on a stub game; check
+       `isinstance(result, StubResult)` first if `game` may be a stub row."""
     if game not in GAMES:
         raise ValueError(f"resolve_contest: unknown game {game!r}; valid: {sorted(GAMES)}")
     pa = POLICIES[policy_a] if isinstance(policy_a, str) else policy_a

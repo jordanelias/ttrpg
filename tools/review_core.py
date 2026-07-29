@@ -62,6 +62,15 @@ CHECKS = [
     {"id": "value_links.export", "argv": ["tools/link_values_pointers.py", "--check"], "tier": "report_only", "lane": "IN"},
     {"id": "audit.staleness",   "argv": ["tools/audit_staleness.py"],             "tier": "info",        "lane": "IN"},
     {"id": "workplan.state",    "argv": ["tools/workplan_status.py"],             "tier": "info",        "lane": "IN"},
+    # stubs.count — the P1 stubwire ratchet (ED-IN-0091, plan §2.1). Runs structure_audit's
+    # lightweight --stub-count mode (composes on the existing G_code AST pass; no second parser,
+    # no --output-dir write). Seeded at baseline 25 (measured post-fix-batch stub_wired count 24 +
+    # 1 for the MB-owned, not-yet-converted altonian_reinforcements.py per critic F4 — a CEILING
+    # on stub-adjacent modules, not an exact converted-call-site census; see
+    # registers/review_baseline.yaml's own stubs.count comment for the full arithmetic + the
+    # predicate's semantics).
+    {"id": "stubs.count",       "argv": ["skills/valoria-vector-audit/scripts/structure_audit.py", "--stub-count"],
+     "tier": "report_only", "lane": "IN", "count_re": r"(\d+) stub-wired"},
 ]
 
 _GRADE_ORDER = {"GREEN": 0, "AMBER": 1, "RED": 2}

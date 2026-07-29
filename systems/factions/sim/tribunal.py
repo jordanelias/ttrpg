@@ -16,13 +16,15 @@ Dependencies:
 Entry points:
   - run_excommunication_tribunal(accused, church, world, rng, formal_grounds) -> TribunalResult
   - run_tribunal(accused, accusers, proceeding_type, world, rng) -> TribunalResult
-        [NotImplementedError — generic §7 Asymmetric Proceeding; canonical Phase 5]
+        [self-flagged via engine.substrate.stubwire.stub_resolve — generic §7 Asymmetric
+         Proceeding; canonical Phase 5; OI-19, ED-IN-0091. Returns a StubResult, does not raise.]
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from engine.autoload import dice_engine
+from engine.substrate import stubwire
 from engine.autoload.dice_engine import Degree
 
 
@@ -146,8 +148,15 @@ def run_tribunal(accused, accusers, proceeding_type: str, world=None, rng=None):
     """
     # GD-3: status-flag enforcement at boundary lives at parliamentary_vote.py;
     # this generic path is not yet wired.
-    raise NotImplementedError(
-        "sim/personal/tribunal.py — run_tribunal generic §7 dispatch not implemented; "
-        "use run_excommunication_tribunal for §7.1 specifically. "
-        "Canonical Phase 5 personal-scale Contest engine pending."
-    )
+    #
+    # OI-19 (ED-IN-0091 plan §3 Wave 1): converted the raising branch to the single-owner
+    # stub-wire primitive (engine/substrate/stubwire.py) — a typed no-op instead of a crash,
+    # visible to structure_audit/review_core. Live branches (run_excommunication_tribunal, §7.1)
+    # are untouched.
+    return stubwire.stub_resolve(
+        'systems.factions.sim.tribunal',
+        'run_tribunal(accused, accusers, proceeding_type: str, world=None, rng=None) -> TribunalResult',
+        reason="run_tribunal generic §7 Asymmetric Proceeding dispatch not implemented; covers "
+               "§7.2 Succession Contest and §7.3 Heresy Investigation Lifecycle, canonical Phase 5 "
+               "personal-scale work; use run_excommunication_tribunal for §7.1 specifically. "
+               "OI-19, ED-IN-0091 plan §3 Wave 1.")

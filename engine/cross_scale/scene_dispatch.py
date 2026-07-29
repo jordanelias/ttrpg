@@ -26,8 +26,17 @@ DELIBERATE BOUNDARIES (not fabricated):
     Crisis's "emergency council" contest, now derives its two sides from the
     SAME faction's own cited aggregate stats via _emergency_council_parties —
     see that function's docstring for the citation + the [SEED] flag on the
-    specific mapping. combat, and any future contest trigger that is not
-    emergency_council, still defer (no bridge exists for those actor shapes).
+    specific mapping. Any future contest trigger that is not emergency_council
+    still defers (no bridge exists for those actor shapes).
+    FURTHER PARTIAL CLOSURE (OI-01, ED-IN-0091 plan §2.2, 2026-07-29): combat now has a bridge
+    too — engine/cross_scale/combat_bridge.py derives its two sides from TWO factions' own
+    aggregate Mil stat (mirroring the same discipline, a different field — see that module's
+    docstring), gated behind DISPATCH_COMBAT_BRIDGE (default OFF; §0's "ship-flag-off" term).
+    With the flag off (today's default) this branch is unchanged from the historical deprecated
+    call and still defers on the same "no personal combat actors" gap as before. No live trigger
+    yet queues a combat scene either way (verified 2026-07-29: no queue_scene("combat", ...)
+    call site exists in the tree) — the bridge closes the RESOLUTION half of the gap, not the
+    TRIGGER half.
   - OUTCOME->ECHO MAPPING GAP: resolved-scene outcomes are passed to zoom_out,
     but the resolver-result -> accord/faction-stat echo mapping is
     resolver/canon-specific and is left empty (flagged) rather than fabricated.
@@ -37,9 +46,15 @@ DELIBERATE BOUNDARIES (not fabricated):
     ruling): the emergency_council contest now sets a `ctx['echo']` block
     (Mandate channel, degree-keyed off the ballot verdict) so echo_transport
     (ED-IN-0028) can fire when ECHO_TRANSPORT is on. Still side-effect-free by
-    DEFAULT (the flag stays off); still empty for combat and any other contest
-    stakes kind. The Projection-genre bonus-token channel remains unmapped —
-    see the inline note at the emergency_council echo block.
+    DEFAULT (the flag stays off); still empty for any other contest stakes kind.
+    FURTHER PARTIAL CLOSURE (Key OUT closure, ED-IN-0093 Wave 1, 2026-07-29): the combat ON
+    branch (DISPATCH_COMBAT_BRIDGE on) now ALSO sets a `ctx['echo']` block (Mil channel,
+    attacker/defender degree-keyed off the bridge's winner mapping — see that branch's inline
+    comment), mirroring this same emergency_council shape, so echo_transport's pre-existing
+    "combat" -> "scene.combat_resolved" mapping becomes reachable once BOTH flags are on. With
+    DISPATCH_COMBAT_BRIDGE off (today's default) this stays empty, same as before. The
+    Projection-genre bonus-token channel remains unmapped — see the inline note at the
+    emergency_council echo block.
   - Only field-evaluable canonical triggers fire (Stability Crisis via
     Faction.Sta). The other 7 §4.3.2 triggers need world-state schema not
     present on the aggregate World; they are reported as deferred, not faked.
@@ -50,6 +65,7 @@ import random
 
 from engine.autoload import scene_slate
 from engine.cross_scale import zoom_in_out
+from engine.substrate import stubwire
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -135,14 +151,58 @@ def _resolve_slot(slot, world, rng):
            "scene_ob_modifier": zi.scene_ob_modifier}
     try:
         if st == "combat":
-            parts = ctx.get("participants")
-            if not parts or len(parts) < 2:
-                out["reason"] = "context-derivation gap: no personal combat actors in aggregate world-state"
-                return out
-            import systems.combat.sim.combat as combat
-            rr = combat.resolve_combat_round(parts, scene=ctx.get("scene"), rng=rng)
-            out["resolved"] = True
-            out["result"] = getattr(rr, "__dict__", str(rr))
+            # OI-01 (ED-IN-0091 plan §2.2): DISPATCH_COMBAT_BRIDGE, default OFF, decided ONCE per
+            # campaign and stashed on `world` by mc_v18.run_campaign (mirrors ECHO_TRANSPORT's
+            # world.echo_scheduler-presence pattern, ED-IN-0028). With the flag OFF this branch is
+            # BYTE-IDENTICAL to the pre-bridge historical path — the deprecated
+            # systems.combat.sim.combat.resolve_combat_round call stays in place unchanged; retiring
+            # it happens at the ON flip, a separately-scheduled IN action after PC's E0-E3 merge
+            # (plan §0/§2.2), never a side effect of this wave.
+            if getattr(world, "dispatch_combat_bridge", False):
+                from engine.cross_scale import combat_bridge
+                parts = combat_bridge.derive_parties(ctx, world)
+                if parts is None:
+                    out["reason"] = "context-derivation gap: no personal combat parties from faction aggregates (ctx['factions'])"
+                    return out
+                combat_result = combat_bridge.resolve(parts[0], parts[1], rng)
+                out["result"] = combat_result
+                fid_a, fid_b = ctx.get("factions")
+                out["resolved"] = True
+                # Key OUT closure (adjudicator defect 2, ED-IN-0093 Wave 1, re-critic round 2
+                # D1+D2+D3): mirror the emergency_council contest precedent's ctx['echo'] shape
+                # verbatim (~L262-264: actor_faction == target_faction == the SAME faction id,
+                # a degenerate self-echo) so echo_transport's existing "combat" ->
+                # "scene.combat_resolved" mapping (KEY_TYPE_BY_SCENE) becomes reachable once
+                # ECHO_TRANSPORT is also attached. This is NOT a ruled cross-faction attribution
+                # model — combat has an attacker AND a defender (unlike the contest branch's
+                # single faction debating itself), so who is credited/debited on a win, and
+                # whether/how the loser is debited, magnitudes, etc. are all open design
+                # questions. Rather than inventing an attacker/defender split (fabrication, no
+                # precedent, no citation), this reuses the ONLY precedent that exists — the
+                # contest branch's degenerate self-echo shape — verbatim, keyed off the bridge's
+                # own `result` int (-1/0/1; not label equality, which is redundant with `result`
+                # and easy to typo against the wrong field). The real attribution model is a
+                # named precondition of the DISPATCH_COMBAT_BRIDGE ON-flip (see
+                # audit/2026-07-29-code-shape-open-items/04_execution_ledger.md's flip-blocker
+                # row). 'Mil' is the one Faction stat combat_bridge's module docstring names as
+                # combat-relevant (unlike 'L'/'Sta', already claimed by the contest branch).
+                if combat_result["result"] == 1:
+                    winner_fid, echo_degree = fid_a, "Success"
+                elif combat_result["result"] == -1:
+                    winner_fid, echo_degree = fid_b, "Success"
+                else:
+                    winner_fid, echo_degree = fid_a, "Partial"
+                ctx["echo"] = {"actor_faction": winner_fid, "target_faction": winner_fid,
+                              "most_relevant_stat": "Mil", "degree": echo_degree}
+            else:
+                parts = ctx.get("participants")
+                if not parts or len(parts) < 2:
+                    out["reason"] = "context-derivation gap: no personal combat actors in aggregate world-state"
+                    return out
+                import systems.combat.sim.combat as combat
+                rr = combat.resolve_combat_round(parts, scene=ctx.get("scene"), rng=rng)
+                out["resolved"] = True
+                out["result"] = getattr(rr, "__dict__", str(rr))
         elif st == "contest":
             parts = ctx.get("parties")
             stakes = ctx.get("stakes") or {}
@@ -210,8 +270,33 @@ def _resolve_slot(slot, world, rng):
                 fid = ctx.get("faction")
                 ctx["echo"] = {"actor_faction": fid, "target_faction": fid,
                               "most_relevant_stat": "L", "degree": echo_degree}
+        elif st in ("fieldwork", "investigation"):
+            # OI-02 (ED-IN-0091 plan §2.2/§3 Wave 1 stage 3): design-gated on ED-916 ("Zero
+            # continuous-engine validation at fieldwork parameters") — routes to the stub-wired
+            # resolver rather than raising or silently deferring. The stub's own args are inert
+            # (stubwire.stub_resolve ignores them by construction — no-fabrication contract);
+            # ctx/world are threaded through so a future real resolver drop-in needs no call-site
+            # change here.
+            from systems.fieldwork.sim import fieldwork as _fieldwork_mod
+            from systems.fieldwork.sim import investigation as _investigation_mod
+            if st == "fieldwork":
+                stub = _fieldwork_mod.run_fieldwork_scene(ctx.get("scene"))
+            else:
+                stub = _investigation_mod.resolve_npe_response(ctx.get("npc_id"), ctx.get("prompt"), world)
+            out["reason"] = stub.reason
+            out["stub"] = stub.stub
+            return out
         else:
-            out["reason"] = f"resolver for scene_type={st!r} not live (stub or unmapped)"
+            # OI-02 total-mapping fallback (ED-IN-0091 plan §2.2): every scene_type is either a
+            # canonical resolver (above) or an explicitly-flagged stub-wire call — never a silent
+            # "not live" string (the prior behaviour here, deleted). Visible via stubwire's
+            # greppable import + structure_audit's stub_wired attribute + review_core's
+            # stubs.count ratchet (plan §2.1), not a bespoke string this call site alone can drift.
+            stub = stubwire.stub_resolve(
+                'engine.cross_scale.scene_dispatch', f'scene_type={st!r}',
+                reason=f"no canonical resolver mapped for scene_type={st!r} — OI-02 total-mapping fallback")
+            out["reason"] = stub.reason
+            out["stub"] = stub.stub
             return out
     except Exception as e:
         out["reason"] = f"resolver raised: {e!r}"
