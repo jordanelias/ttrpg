@@ -613,3 +613,95 @@ This repo's remediation history is **three consecutive half-stands** (batches 4,
 - **Do not run a Workflow for E1a.** One function pair, one guard — orchestration overhead exceeds the work.
 
 ---
+
+---
+
+## §15 — INBOUND: items routed from the code-shape open-items program (ED-IN-0091, 2026-07-29)
+
+*(landed via PR #252 — the IN program's PR; if you are reading a `main` checkout that lacks this
+section, that PR has not merged yet — do not start the inbound items before it does.)*
+
+Jordan's 2026-07-29 lane-partition directive dedicates ALL PC-lane work to this session. The
+cross-cutting code-shape program (`audit/2026-07-29-code-shape-open-items/`, ED-IN-0091) therefore
+routes its PC elements HERE instead of executing them. **None is a new ⚖.** I1–I3 slot into
+existing batches as riders; **I4 is a scheduled batch of its own** (serial, after E3 — promoted from
+a conditional rider on 2026-07-29, see below); **I5 is coordination convention, not work.**
+Sources: the 2026-07-23 combat-engine wiring audit
+(`audit/2026-07-23-combat-engine-wiring-audit/wiring_audit_v1.md`) + that program's register
+(rows OI-13/26/44/45/46).
+
+- **I1 — rider on E0/M15 (vocabulary ownership): the two named single-owner splits.**
+  (a) Pool formula duplicated with real divergence: `combatant.pool = max(5, history+6)` (no
+  rounding) vs `core.resolution_pool = max(5, int(round(history))+6)` — latent only while
+  History is integer-default. One owner; the other site calls it; guard = a fractional-History
+  probe asserting both agree (red on main under History 3.4). (b) The ≈8.0 percussion-authority
+  anchor triplicated — `core.PERC_AUTH_REF` / `weapon_physics.PERC_CAP` / `config.ADEF_PERC_REF` —
+  with nothing enforcing equality (a Phase-C re-fit desyncs them silently), plus `damage()`'s
+  blunt branch re-hardcoding `3.0*(perc/8.0)` and an int-`8`/float-`8.0` default mismatch. One
+  CFG owner + an equality assertion. Both are exactly M15's defect class; landing them inside
+  the M15 pass avoids sweeping the same files twice. Byte-identical at defaults — goldens must
+  not move.
+- **I2 — rider on E0/M12 (dead surface): the wiring audit's specific dead list.** 6 vestigial
+  functions — per the 2026-07-23 wiring audit, MINUS `can_choke`, which your own §14 R-2 already
+  refuted (called at `test_combat_units_refactor.py:118`, pinned in `r3_identity_golden.json`, no
+  generator — §2's warning stands, do not delete): so `core.effective_ob`, `combat_systems.{stamina_max, conc_max}`,
+  `ability_primitives.kit`, `traditions.profile`) + dead `Combatant.ready` field; the 2
+  never-firing separation reasons (`beat_exhaustion`, `collapse` — the engine's own self-test
+  flags them); and `seize`/`vorschlag`/`sen_no_sen` labeled "live" in `ability_armature.md:47`
+  while their consumer was cut 2026-06-05 ("do nothing when equipped" — fix the label or re-wire,
+  the mislabel is the defect; re-wiring is ⚖-adjacent, escalate per §11 if it changes balance).
+- **I3 — shape hygiene, same files:** `sel_*` positional tuples manually unpacked at
+  `combat_systems.py:448,542,579` — re-growing the positional fragility `core.strike` was
+  refactored to a keyword chokepoint to eliminate; and `point_concentration` read via two
+  parallel paths (`w['geometry'][…]` vs baked `geo[…]`). Mechanical, byte-identical.
+- **I4 — the `_emit()` → Key mapping (C-KEY-3, 2026-07-07). SCHEDULED, not conditional.**
+  `wrapper.py`/`state_graph.py`'s internal `_emit()` trace vocabulary (~15–25 kinds) is mapped
+  nowhere to the 4 canonical `scene.combat_*` registry types. **I4 is a scheduled inbound batch:**
+  run the §12 wrapper read-only audit **and produce the `_emit()`→Key mapping table as its
+  deliverable**, in **serial position after E3**, before any E4+ ⚖ work. §12's "if a session has
+  budget for one more independent read-only audit" framing is **superseded for this item** by the
+  2026-07-29 routing directive — §12's blind-spot description stands, but the audit is no longer
+  optional, because the IN session's registry-side wiring consumes this table and a conditional
+  deliverable cannot gate a scheduled one. (Promoted 2026-07-29 by the IN program's adversarial
+  pass, finding F11.)
+  **Home for the table:** the PC audit folder — `audit/2026-07-26-combat-balance-customization-state/`,
+  e.g. `wrapper_emit_key_map.md`. Rows: emit-kind → `type_id`, or explicitly marked internal-only.
+  **Any edit to `systems/_architecture/key_type_registry_v30.md` stays IN-owned** (their Wave 3) and
+  *consumes* your table — do not write into the registry doc yourself (F16).
+- **I5 — coordination terms for three concurrent sessions (added 2026-07-29 by the same
+  adversarial pass; shared-file conventions, not tasks).**
+  - **Golden families — one owner each.** **PC owns `combat_armour_reference.json` and its sibling
+    reference tables**; MB owns its digests and `bat.py` batteries; **IN owns the `engine/tests/`
+    campaign goldens** (F7 smoke oracle, pipeline-reach). The MB plan's global "one golden-moving PR"
+    rule (G11) is scoped **per family**, so §13.4's strict E1b→E3b serialization inside the PC family
+    is unaffected and no longer serializes against the other two sessions. A change crossing families
+    needs a coordination note in root `HANDOFF.md` before the PR opens.
+  - **`references/id_reservations.yaml` — do not touch it mid-run.** The IN program's Wave 0
+    pre-allocates all three sessions' ED blocks in ONE commit before the concurrency starts,
+    including a small PC block recorded in that file's comment per its own ALLOCATION PROTOCOL. Draw
+    `ED-PC-NNNN` ids from that block rather than read-and-bumping `next_free` while two other
+    sessions are live.
+  - **`registers/review_baseline.yaml` is IN-written** among the three, and CODEOWNERS-gated to
+    Jordan. If a PC batch would move a signal it tracks, flag it in the batch summary rather than
+    editing the file.
+- **Duplication logging (Jordan directive, 2026-07-29, all three sessions).** A rule/value/name
+  found defined in more than one place, out of the current batch's scope: **log, don't chase** —
+  file an `ED-PC-NNNN` citing every site + the proposed single owner, keep moving (CLAUDE.md
+  §0.1 #5). The editorial ledger is the duplication log; no new register. (E0/M15 + I1 already
+  own the KNOWN PC duplications — this covers new discoveries only.)
+- **Seam declaration (coordination, no action):** the IN program's Wave-1 dispatch bridge
+  (`engine/cross_scale/scene_dispatch.py` → your `wrapper.py` public resolve API) is IN-side
+  only; it files any wrapper-side need here rather than editing under `systems/combat/`. Two terms
+  added 2026-07-29 (adversarial finding F2) make the goldens interaction explicit, because E1b/E2a/
+  E2b/E3a/E3b change roster-wide damage **on purpose** and the bridge would otherwise carry those
+  changes into IN-owned campaign goldens with nobody designated to re-record them:
+  - **Their characterization pin is SHAPE/CONTRACT-LEVEL ONLY** — result schema, determinism under a
+    fixed seed, and the presence of the fields the bridge consumes. **It pins no outcome and no
+    balance value**, so a PC rebalance must not turn it red; if one does, their test is wrong, not
+    your batch. What you still owe: keep the wrapper's public API stable within a batch, or flag the
+    break in the batch summary so the pin is re-recorded deliberately rather than discovered red.
+  - **`engine/tests` campaign goldens (F7 + pipeline-reach) join PC's blast-radius disclosure ONLY
+    once the bridge flag is ON.** The bridge ships behind `DISPATCH_COMBAT_BRIDGE`, default **OFF**,
+    with byte-identical goldens proven in the OFF state; **while it is OFF there is no interaction
+    at all**, and §3a's blast-radius table needs no PC-side change. The flip to ON happens **after
+    E0–E3 have merged** and **is IN's to execute**, as one deliberate re-record citing both plans.
