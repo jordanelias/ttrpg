@@ -90,6 +90,7 @@ def test_front_takes_no_arc_penalty(mb):
     The multiplier uses the LOCAL attacker centroid, so a wide line's wing cell is NOT mis-read as
     flanked by the enemy centre. Front casualties must never exceed the flank/rear casualties."""
     orch, contact, C = mb
+    checked = 0
     for seed in range(12):
         front, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed)
         rear, _ = _dmg_b(orch, contact, def_adv=+1, seed=seed)
@@ -98,8 +99,17 @@ def test_front_takes_no_arc_penalty(mb):
         # EXCEED rear/2 -> caught here. (A braced front can parry to 0 while rear>0, so this is an upper
         # bound, not equality; the exact 2.0x ratio is pinned by test_rear_is_exactly_double_front.)
         if rear > 0:
+            checked += 1
             assert front <= rear / 2.0 + 1e-9, (
                 f"seed {seed}: front {front} must not exceed rear/2 ({rear/2.0}) -- wing cells must stay GREEN")
+    # [ED-MB-0045 A4a] The bound above is CONDITIONAL on rear>0, so without this the loop could observe
+    # nothing and still pass. Measured 2026-07-29 at shipped defaults: 9 of the 12 seeds produce rear>0
+    # (deterministic — every _dmg_b call re-seeds). Floor set at 6, not the exact 9, so a benign
+    # RNG-stream reorder is not a false red while "the branch barely/never fired" is still caught —
+    # the same robustness policy as test_feigned_retreat.py's floor (critic-pass consistency fix).
+    assert checked >= 6, (
+        f"only {checked} of 12 seeds produced a non-zero rear exchange (measured 9) -- the wing-cell "
+        f"bound is not being observed, so this test proves nothing")
 
 
 def test_rear_penalty_persists_across_reaction_window(mb):

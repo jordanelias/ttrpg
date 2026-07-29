@@ -54,6 +54,12 @@ def main(argv):
         # file the author is still writing. Same posture as freshness_gate below.
         ('ci_wf_harness_check.py',       [mode_flag], False),  # workflow harness present/current/wired (ED-IN-0087; report-only here, BLOCKING in CI)
         ('ci_claude_workflow_paths.py',  [],          False),  # every .claude/ path reference resolves (ED-IN-0085; report-only here, BLOCKING in CI)
+        # ED-IN-0103: the workplans pointer convention (Jordan, 2026-07-29 — every plan is reachable
+        # from workplans/). Guards the DETERMINISTIC half only: fields present, lane real, no duplicate
+        # targets, every target resolves on disk. It deliberately does NOT check "every live plan has a
+        # pointer" — liveness was measured un-inferable, so a guessing guard would be wrong in both
+        # directions. Report-only on the names-drift graduation lane while the convention beds in.
+        ('ci_workplan_pointer_check.py', [],          False),  # workplans pointer integrity (ED-IN-0103; report-only)
         # ED-PC-0040: freshness was CI-only, so five consecutive local-green commits shipped a stale
         # canonical_sha__ pin (ED-PC-0035 edited references/module_contracts.yaml without refreshing it) and it
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking

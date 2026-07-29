@@ -119,10 +119,17 @@ def test_loser_breaks_near_historical_band():
     """With the gate ON the loser breaks far earlier than the ~90% grind — into/near the 15-30% band.
 
     Pinned to PC_CELL_MORALE=OFF, and that pin is the point: this test measures the BODY-LEVEL
-    break-point, and per-cell morale (default ON since 2026-07-25) supplies its own break-point one
-    scale down. Inheriting the live default would leave the OFF arm already broken by the cells and
-    make this read as a no-op — see test_per_cell_break_subsumes_the_body_level_one, which asserts
-    exactly that and is the reason for the pin rather than a separate curiosity.
+    break-point, and per-cell morale supplies its own break-point one scale down. Were per-cell
+    morale on, the OFF arm would already be broken by the cells and this would read as a no-op — see
+    test_per_cell_break_subsumes_the_body_level_one, which asserts exactly that and is the reason for
+    the pin rather than a separate curiosity.
+
+    [ED-MB-0045 S7, corrected 2026-07-29] This docstring used to describe per-cell morale as "default
+    ON since 2026-07-25". **That is false.** The flip was RETRACTED the same day it landed (the
+    confounded measurement that produced CLAUDE.md §0.1), and `config.py:100` reads
+    `PC_CELL_MORALE = environ.get('PC_CELL_MORALE', '0') == '1'   # RETRACTED to OFF 2026-07-25`.
+    The pin here therefore matches the shipped default rather than departing from it — which changes
+    nothing about the pin's correctness, but the reason given for it was wrong.
     """
     off = _mean_loser_casualties(False, cells=False)
     on = _mean_loser_casualties(True, cells=False)
@@ -139,10 +146,20 @@ def test_per_cell_break_subsumes_the_body_level_one():
     the same 15-30% band, discipline-skewed) and CELL_BREAK_ROUT_FRAC ends the body before the
     subunit-level draw is ever consulted.
 
-    This is recorded rather than quietly acted on. It means PC_STOCHASTIC_ROUT is now inert in the
-    SHIPPED configuration while remaining load-bearing on the unseeded fallback path above, so it is a
-    retirement CANDIDATE, not dead code — deleting it today would silently remove the only break-point
-    a subunit built outside `__post_init__`'s seeding has.
+    This is recorded rather than quietly acted on. Read it for exactly what it measures: a CONDITIONAL
+    about the arm this test pins ON, `PC_CELL_MORALE=1`.
+
+    [ED-MB-0045 S7, corrected 2026-07-29] This paragraph used to conclude that PC_STOCHASTIC_ROUT "is
+    now inert in the SHIPPED configuration ... so it is a retirement CANDIDATE". **That is false, and
+    inverted.** It inherited the same mistaken premise as the docstring above — that per-cell morale
+    ships ON. It does not (`config.py:100`, default `'0'`, RETRACTED 2026-07-25). In the SHIPPED
+    configuration `atom.cell_morale` is empty, so the entire per-cell break block at
+    `core/state.py:137-149` (`check_cell_breaks` / `propagate_cell_breaks` / `cohere_cells` /
+    `CELL_BREAK_ROUT_FRAC`) is skipped, and `PC_STOCHASTIC_ROUT` at `core/state.py:150` — itself
+    defaulted ON (`config.py:167`) — is the ONLY early break-point the engine ships. Far from being a
+    retirement candidate, it is the single mechanism keeping shipped battles out of the ~90% grind;
+    the subsumption measured below is what WOULD happen if the cell flag were flipped back on, which
+    is why it is worth pinning, not evidence that the body-level flag is dead.
     """
     off = _mean_loser_casualties(False, cells=True)
     on = _mean_loser_casualties(True, cells=True)

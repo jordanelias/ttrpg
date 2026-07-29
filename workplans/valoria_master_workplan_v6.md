@@ -190,9 +190,17 @@ retire-docstrings recommendation), phase4_5 (4a game-theoretic · 4b abilities-a
 one legible fight — the U-series' front half, not phase4_5.
 
 ### MB — mass battle
-Status: `registers/handoffs/HANDOFF_MB.md` (+ the 06-30 bottom-up workplan,
-`designs/audit/2026-06-30-mass-battle-bottomup/05_redesign_workplan.md` — the governing
-plan; do NOT resume `references/mass_battle_redesign_workplan_v1.md`, banner-superseded).
+Status: `registers/handoffs/HANDOFF_MB.md`. **▶ The governing MB plan is now
+`audit/2026-07-26-mass-battle-fable-audit/03_execution_plan.md` (ED-MB-0045 plan v2, as
+corrected by PR #250)** — see `workplans/POINTER_2026-07-26_mass_battle_execution.md`.
+_(Corrected 2026-07-29, ED-IN-0103, by adversarial review: this row previously named the
+06-30 bottom-up workplan "the governing plan" at `designs/audit/2026-06-30-mass-battle-bottomup/05_redesign_workplan.md`
+— a path that resolves nowhere. `designs/` retired 2026-07-19, and the
+`designs/audit/ → audit/` dir-prefix alias yields `audit/2026-06-30-mass-battle-bottomup/`,
+which does not exist; the real directory is `audit/2026-06-30-massbattle-bottomup/`, unhyphenated,
+with no restructure-ledger row for the difference. The row was also stale on substance —
+`HANDOFF_MB.md`'s current Next-Actions never cite it. Do NOT resume
+`references/mass_battle_redesign_workplan_v1.md`, banner-superseded.)_
 **DG-1 RULED and CLOSED** (2026-07-05, ED-MB-0003): symmetric-at-parity infantry +
 majority (2/3) infantry-pin/cavalry-wing composition for C4/C7, per Polybius/Livy order of
 battle — conditional on the bottom-up-emergent-primitives approach. This closes the

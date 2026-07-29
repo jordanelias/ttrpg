@@ -15,6 +15,58 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **A1a EXECUTED (2026-07-29, MB session — this PR).** Both field goldens bisected and
+  re-recorded after 5 days red. Per-mechanism delta (base `4b80ad5` = #232's all-four recording;
+  full matrix in the PR): **exactly two movers** — (1) PR #235 `fbc93b0`'s change set moved
+  `unit_field` `d44f211f…→27aa9ee0…` and `cell_field` `a1a97940…→3a5807fb…` at fixed
+  `PC_STOCHASTIC_ROUT=0` (⚠ commit-level attribution: NOT decomposed to one mechanism on the
+  field arm — `PC_WHEEL`'s node-path port is an unmeasured second candidate beside impulse
+  momentum; the grid inertness arguments are `PC_NODE_COHESION=0`-conditioned, per the Opus
+  critic pass); (2) PR #236 `584c683`'s
+  `PC_STOCHASTIC_ROUT` default flip 0→1 moved them to the new goldens (`6f594233…`/`3a0952b3…`)
+  as a **pure config effect** — #236's code alone is byte-identical at rout=0, verifying its
+  set_morale-sweep claim on the field path. #233/#234 verified byte-exact on both field modes.
+  No third mechanism: `584c683`@rout=1 reproduces HEAD's observed digests exactly. Recorded on
+  Linux/Python 3.11.15 (grid modes reproduce reference digests on this box; reference-env
+  confirmation = A1b's first CI run). **Next: A1b** (CI job, full pin vector from the 47-flag
+  inventory; `.github/workflows/` is Jordan-CODEOWNERS). Then the Wave-3 parallel batch.
+- **PLAN v2 EXECUTION UNDERWAY (2026-07-29, MB session).** Wave 0: ED block **0046–0060 drawn
+  from IN's Wave-0 pre-allocation (PR #256)** — the MB session's own parallel block PR (#255)
+  was closed per its declared race-handling the moment #256 landed first; `id_reservations.yaml`
+  is now frozen for the run. Premise re-verified at HEAD `81948c1` — grid modes green ×2 locally
+  (reference digests reproduce on this box), both field modes deterministically red ×2 (identical
+  wrong digests both runs; no non-determinism) — **A1a proceeds**. E1 executed in this PR
+  (`scene_outcome.battle_concluded` emit row deleted; ED-MB-0010 resolved by merge-ratification,
+  ED-1094; artifact regeneration deferred to IN Wave 5 per §12 I5). A1a bisect frame established:
+  base `4b80ad5` (PR #232, last all-four-mode re-record), candidates `47f9cac` (#233) →
+  `5f1afc7` (#234) → `fbc93b0` (#235, impulse momentum + unconditional path fixes, re-recorded
+  grid only) → `584c683` (#236, PC_STOCHASTIC_ROUT default flip, re-recorded grid only).
+- **E8 EXECUTED (2026-07-29, MB session — this PR): the record corrected.** Three refuted claims
+  retired, with per-claim scope discipline (a critic pass caught and fixed a timeline overreach —
+  the A6a rout-pin defect applies only to post-2026-07-25 runs; ED-MB-0006/0007's p≈2.50/p≈3.2
+  predate the mechanism and rate as leads under their own caveats): (1) ED-MB-0041's
+  armour-inversion claim — ledger `correction` field, figures tagged agent-reported per G12,
+  direction independently backed by `test_volley_armour_direction.py`; (2) the current-harness
+  `p=2.50` / "true exponent ≥2.5" reading — STRUCK in the SEV-1 bullet, the findings register, the
+  ledger (ED-MB-0041 + ED-MB-0015), and bracketed at the ED-MB-0006/0007/0013 historical mentions;
+  (3) the ED-MB-0038 APEX-forward interaction hypothesis — bracket-superseded at the NEXT item
+  (dead code path in these harnesses; verified `engine.py:414-419` + both harness call sites).
+  ⚠ The frozen `id_reservations.yaml` MB comment still carries the armour claim verbatim — correct
+  at the next unfreeze (logged in the ledger correction).
+- **A4-SWEEP EXECUTED (2026-07-29, MB session — this PR).** The test-commensurability repairs
+  (Jordan's vet-all-tests directive + plan A4): A4a counted (floor 6 of measured 9, reorder-robust);
+  A4b's fixture genuinely on the own-morale path via `build_army` (was two copies of the inheriting
+  branch); S6 pattern fixed with ONE owner — `tests/valoria/_conservation.py` — routing all four I1
+  sites, the routed/broken skip REMOVED (structurally safe: `run_battle` breaks on rout,
+  `orchestration.py:1695`; critic-verified) with a PER_CELL precondition in the owner (the one real
+  false-red path); S12 counters added (measured floors); S7's inverted docstrings corrected
+  (stochastic rout is the ONLY shipped break-point, not a retirement candidate). Producer's G1
+  correction banked: the rout-skip was one tuning change from vacuous, NOT currently vacuous
+  (Line-vs-Line routs 0/120 at shipped defaults). **NEW: ED-MB-0046 filed** — `between_turn_recovery`
+  flattens per-cell morale on the own-morale path (`orchestration.py:2098-2103`; inert at shipped
+  defaults, a LIVE CONFOUND for D1 arm 1; fix gated behind §4a's fifth digest). Minor unledgered
+  residues in the PR body: hp-clamp/spill edge (recorded in `_conservation.py`), octagon reaction
+  test floor candidate.
 - **▶ START HERE — THE MASS BATTLE PLAN, v2 (2026-07-26):**
   **v2 exists because v1 was substantially wrong.** Four Fable-5 critics attacked it and instrumented
   measurement refuted its headline: **three of five severity-1 findings are code-true but
@@ -142,7 +194,19 @@ namespace and are folded into Next actions below, which carries the full narrati
   - **The engine's own Lanchester instrument is RED and NOTHING runs it.** `melee p=2.50` against a
     `≤1.4` linear bar — the scan-grid ceiling, so the true exponent is ≥2.5, *worse than the square law
     `core/attrition.py` says frontage-capping prevents*; `volley p=0.50` against `≥1.6`. Exits 1. Not
-    in CI, not in pytest. Two of its three PASSes are degenerate (volley passes on `cas_exchange=inf`;
+    in CI, not in pytest. **[STRUCK 2026-07-29, plan-v2 E8/A6a (G4):** the "true exponent ≥2.5,
+    worse than the square law" inference is UNSUPPORTED — `p=2.50` is a grid-endpoint artifact of an
+    unidentifiable fit on rout-truncated data (per plan-v2 A6a's diagnosis, agent-measured, G12: the
+    `NO_ROUT_MORALE` pin does not disable `_stochastic_break` — verified against `core/state.py:34-48`,
+    which keys on casualty fraction, never morale — with the reported 40/40 routed trajectories and
+    monotone cv objective not yet orchestrator-replicated). **Scope of the strike: post-2026-07-25
+    measurements only** — the rout mechanism landed 2026-07-23 (ED-MB-0031) and defaulted ON
+    2026-07-25, so earlier-era exponents (ED-MB-0006's p≈2.50, ED-MB-0007's p≈3.2) are NOT
+    invalidated by this defect; they carry their own era's caveats (wrong-PER_CELL setting; fit
+    identifiability never verified) and rate as leads, not measurements. No current-harness exponent
+    is derivable until A6a repairs the pin and the volley scenario. The harness being
+    red-and-unwired stands; the NUMBER does not. The "NOT in CI" clause becomes stale when A1b
+    (PR #261, in Jordan's CODEOWNERS review) merges its blocking field-goldens job.**] Two of its three PASSes are degenerate (volley passes on `cas_exchange=inf`;
     the melee 2:1 check demands ≥65% and measures **100%** while dg6 adopts ~70% as the historical
     target — **two incompatible validation targets for one quantity; one must be repudiated**).
   - **The 1-ulp degree defect is LIVE at the consumer.** `3 + σ(-1e-16) → Partial → 0 damage` at the
@@ -381,7 +445,12 @@ namespace and are folded into Next actions below, which carries the full narrati
      artifact (construction doesn't consume `random`). Composed MIRRORS show only a modest intrinsic side-A
      bias (~53-58% @ n=40, near noise) — so the 51pp swing is an **INTERACTION**, not a pure side bias:
      the enveloper's APEX-forward centre (`build_envelopment`, `start_row+APEX*advance_dir`) + wing placement
-     vs the flat command-line flips favorability by closing direction. `side_face_probe.py` shows the granular
+     vs the flat command-line flips favorability by closing direction **[APEX HALF SUPERSEDED
+     2026-07-29, E8/D3 — see correction 1 above: `engine.py:414-419` applies APEX only when the
+     caller omits `starting_position`, and both harnesses pass it, so the apex offset NEVER EXECUTES
+     in these batteries. Live candidates are `min()` over a set (`orchestration.py:1744`) and
+     banker's rounding at exactly .5; do not spend further effort on the APEX hypothesis]**.
+     `side_face_probe.py` shows the granular
      defender is struck **F-only** both sides (the win is frontage/overlap + rout-cascade, NOT flank-arc —
      the defender refaces). Needs a tick-by-tick geometry trace of the enveloper-as-B closing; do NOT hack
      blind. This is a genuine engine deployment bug, not a gauge calibration knob.
@@ -486,7 +555,8 @@ namespace and are folded into Next actions below, which carries the full narrati
   12-seed field battery — axis-aligned symmetric meetings byte-identical; shift only on offset/asymmetric
   meetings (Line4-vs-Line2 wide-attacker overkill capped to the narrow defender's meeting width, A_win
   12→10/12, def hp .452→.487). Lanchester melee exponent unchanged (p=2.50 before/after — pre-existing
-  DG-6 artifact, frontage-independent). **Field goldens NOT re-recorded (Stage F, per plan §7).** Next
+  DG-6 artifact, frontage-independent **[the p=2.50 magnitude itself was later shown to be a harness
+  artifact — E8/A6a 2026-07-29; the unchanged-before/after comparison stands]**). **Field goldens NOT re-recorded (Stage F, per plan §7).** Next
   in this v2 sequence: **Stage E** (weapon-class reach 0.1/0.2/0.3 + author the `pike` troop type, P-DEC-1;
   P-DEC-3 cavalry density cap), then **Stage F** (full verification + digest re-record + historical
   revalidation), then **Stage G** (retire the integer `systems/mass_battle/sim` engine, route
@@ -702,7 +772,9 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   undetected, unrelated to this change) and a separate apparent "2:1 army loses 97% of the time"
   reading that a quick trace suggests may be test-methodology noise (single 18-tick `run_battle`
   call rarely resolves decisively at this ratio), not independently confirmed. The new model measures
-  p≈2.50, tested extensively (sqrt-numbers variant, 8-point scale sweep) without finding a scale that
+  p≈2.50 **[exponent numbers from this harness rate as LEADS, not measurements — fit identifiability
+  was never verified in this era, and the current harness is broken differently (A6a); E8
+  2026-07-29]**, tested extensively (sqrt-numbers variant, 8-point scale sweep) without finding a scale that
   reaches ≤1.4 — plateaus at p≈1.65-1.7, confirmed NOT a Lanchester double-count (disabling
   `LANCHESTER_ENABLED` doesn't change the exponent at all) — the amplification is internal to how
   larger absolute pools reduce variance and make `compute_degree`'s discrete tier assignment
@@ -727,7 +799,10 @@ what's landed since, in order — full detail lives in root `HANDOFF.md`'s mass-
   that reverses H3/H10 outright when patched; and **D1**, the super-linear resolution architecture
   ED-MB-0006 already flagged, now measured at melee exponent **p≈3.2 under the live PER_CELL=1
   path** — worse than ED-MB-0006's disclosed p≈2.50, which turns out to have been measured under
-  the WRONG `PER_CELL` setting by `lanchester_signature.py`'s own hardcoded default. **These two are
+  the WRONG `PER_CELL` setting by `lanchester_signature.py`'s own hardcoded default. **[E8
+  2026-07-29: this p≈3.2 PREDATES the stochastic-rout mechanism (ED-MB-0031, 2026-07-23), so A6a's
+  rout-pin defect does NOT apply to it — but its fit identifiability was never verified either;
+  rate it a lead. No exponent is derivable from the current harness until A6a lands.]** **These two are
   multiplicative, not competing, and neither alone lands a row in-band — this investigation is
   diagnostic, not curative**, disclosed as a first-class finding. **Granularity directive verdict:**
   the per-cell quality/type axis (veteran-front/levy-rear) is confirmed byte-inert for all 20 rows

@@ -430,10 +430,11 @@ def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates()
     degs = {k: va._degrees(graphs[k], names) for k in graphs}
     iso = {r['token'] for r in va.diagnostics(tokens, graphs, degs)['H_isolates']}
     assert 'Key: mechanical.scene_exited' not in iso   # resolved by the key graph, not filtered
-    # scene_outcome.battle_concluded IS emitted by mass_battle (module_contracts.yaml:473) but
-    # consumed by NOTHING — an orphan/dangling emit (deg 1, not 0). Stays isolated, surfaced honestly.
-    assert 'Key: scene_outcome.battle_concluded' in iso
-    assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 1  # emitted-once, not un-emitted
+    # scene_outcome.battle_concluded was DELETED from mass_battle.emits 2026-07-29 (ED-MB-0010,
+    # plan-v2 E1): it was the family name of scene.battle_concluded, never a Key. Recurrence
+    # guard — if the fabricated emit reappears in module_contracts, its key-degree goes back to
+    # ≥1 and this fails. (Mutation-verified: re-adding the row flips this red.)
+    assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 0
 
 
 @pytest.mark.slow

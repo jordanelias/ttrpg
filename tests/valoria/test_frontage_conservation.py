@@ -40,6 +40,8 @@ from mass_battle.core.attrition import _lanchester_strength  # noqa: E402
 from mass_battle.engine import build_unit  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
 
+from ._conservation import assert_troop_conservation  # noqa: E402
+
 
 # ─── fixtures ────────────────────────────────────────────────────────────────
 
@@ -53,10 +55,6 @@ def field_path():
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
             m.PC_NODE_COHESION = nc
-
-
-def _unit_troops(unit):
-    return sum(sum(su.cell_troops.values()) for su in unit.subunits)
 
 
 def _row(c, cols, heading):
@@ -187,19 +185,22 @@ def test_field_pairs_carry_continuous_frontage(field_path):
 
 @pytest.mark.parametrize("seed", [1, 7, 42, 101, 2026])
 def test_conservation_under_continuous_frontage(field_path, seed):
-    """I1 (the hardest Stage D check): Sum cell_troops == hp for every non-routed/broken unit at battle
-    end, under the continuous-frontage partition. Frontage scales HOW MUCH damage; distribute_casualties
-    still conserves it -- this proves the continuous term did not break the conservation invariant."""
+    """I1 (the hardest Stage D check): Sum cell_troops == hp for BOTH units at battle end, under the
+    continuous-frontage partition. Frontage scales HOW MUCH damage; distribute_casualties still
+    conserves it -- this proves the continuous term did not break the conservation invariant.
+
+    [ED-MB-0045 S6] Was an open-coded loop that `continue`d past routed/broken units WITHOUT counting
+    the skip, so it could check nothing and still pass. Now routed through the single owner
+    `_conservation.assert_troop_conservation`, which checks every unit (the skip was unnecessary --
+    see that module for the measurement) and returns the count so vacuity is asserted away.
+    """
     import random
     random.seed(seed)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
     _orch.run_battle(a, b, max_turns=18)
-    for unit in (a, b):
-        if unit.routed or unit.broken:
-            continue
-        assert math.isclose(_unit_troops(unit), unit.hp, rel_tol=1e-6, abs_tol=1e-3), \
-            f"seed={seed} {unit.name}: Sum cell_troops={_unit_troops(unit)} != hp={unit.hp}"
+    checked = assert_troop_conservation(a, b, context=f"seed={seed}")
+    assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
 
 
 def test_determinism_same_seed(field_path):

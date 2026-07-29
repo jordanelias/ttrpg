@@ -32,6 +32,16 @@ a LINEAR edge (via overlap/envelopment), **never square**." Measured, melee fits
 ceiling of the scan grid** (`FIT_P_HI=2.51`, `lanchester_signature.py:116`), so the true exponent is
 ≥2.5: *worse than the square law the code says it prevents.* Volley fits p=0.50 against a ≥1.6 bar.
 
+> **[CORRECTION 2026-07-29, plan-v2 E8/A6a (G4):** the exponent inference above is STRUCK from the
+> record. The harness does not measure what it claims: its `NO_ROUT_MORALE=1e9` pin does not disable
+> rout (`_stochastic_break` triggers on casualty fraction — verified at `core/state.py:34-48`; the
+> reported 40/40 routed trajectories, collapsed fit window, and grid-monotone cv objective are
+> agent-measured per G12, orchestrator-unreplicated) — `p=2.50` is a grid endpoint, not an estimate.
+> Scope: this defect applies to post-2026-07-25 runs (the rout default flip); earlier-era exponents
+> carry their own caveats and rate as leads. The finding that the harness is red and unwired STANDS;
+> the number and the "worse than the square law" inference do not. See plan v2 §3 A6a for the
+> repair task.**]
+
 **Nothing executes this harness.** Grep over `.github/workflows/`, `tests/valoria/`, `engine/tests/`
 returns only a comment in `test_morale_write_sweep.py:119-127` explaining why the file is out of scope
 for a *different* check. It exits non-zero and has for at least a week.

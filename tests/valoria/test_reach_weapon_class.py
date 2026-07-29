@@ -37,7 +37,8 @@ from mass_battle.equipment import loadout_for  # noqa: E402
 from mass_battle.engine import build_unit  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
 from mass_battle.config import FOV_HALF_DEG, VOLLEY_MAX_RANGE  # noqa: E402
-import pytest
+
+from ._conservation import assert_troop_conservation  # noqa: E402
 
 
 @pytest.fixture
@@ -50,10 +51,6 @@ def field_path():
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
             m.PC_NODE_COHESION = nc
-
-
-def _unit_troops(unit):
-    return sum(sum(su.cell_troops.values()) for su in unit.subunits)
 
 
 # ─── the P-DEC-1 reach map ────────────────────────────────────────────────────
@@ -167,18 +164,22 @@ def test_ranged_volley_range_reach_independent():
 
 @pytest.mark.parametrize("seed", [3, 19, 44])
 def test_conservation_with_pike(field_path, seed):
-    """I1: Sum cell_troops == hp for every non-routed/broken unit at battle end, in a battle that
-    actually fields the new pike type."""
+    """I1: Sum cell_troops == hp for BOTH units at battle end, in a battle that actually fields the
+    new pike type.
+
+    [ED-MB-0045 S6] Routed through the single owner `_conservation.assert_troop_conservation`; the
+    old open-coded loop skipped routed/broken units without counting the skip. Of the four sites this
+    is the only matchup that DOES rout at shipped defaults (measured 2026-07-29: 8 routed/broken units
+    across a 60-seed sweep, vs 0 of 120 for the Line-vs-Line matchup the other three use), so the skip
+    was live here rather than merely theoretical -- and conservation held for all 8.
+    """
     import random
     random.seed(seed)
     a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
     b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
     _orch.run_battle(a, b, max_turns=18)
-    for unit in (a, b):
-        if unit.routed or unit.broken:
-            continue
-        assert math.isclose(_unit_troops(unit), unit.hp, rel_tol=1e-6, abs_tol=1e-3), \
-            f"seed={seed} {unit.name}: {_unit_troops(unit)} != {unit.hp}"
+    checked = assert_troop_conservation(a, b, context=f"seed={seed}")
+    assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
 
 
 def test_determinism_with_pike(field_path):
