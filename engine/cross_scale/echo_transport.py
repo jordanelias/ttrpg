@@ -267,7 +267,7 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
                                    settlement.order + ar.accord_delta))
 
     if ar.rs_delta:
-        # RS ("Rendering Stability") has no live write path yet — systems.overview.sim.rs_track
+        # RS ("Mending Stability") has no live write path yet — systems.overview.sim.rs_track
         # is a Pass 2l armature stub (OI-17). Route through its own declared entry point (the
         # single-owner call site, CLAUDE.md §8) rather than reaching into World directly; it
         # self-flags as a typed no-op via stubwire until RS is built.
