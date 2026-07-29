@@ -7,12 +7,311 @@ export const meta = {
     { title: 'Validate', detail: 'spot-check 10 random census rows against cited file:line', model: 'haiku' },
     { title: 'Trace', detail: 'per-cluster all-directions branching pipeline trace + dossier', model: 'sonnet' },
     { title: 'Critic', detail: 'read-only adversarial critic per dossier (agonist->antagonist relay)', model: 'sonnet' },
-    { title: 'Synthesis', detail: 'verdict report + docket + armature extension + finding_status', model: 'fable (opus max fallback)' },
+    { title: 'Synthesis', detail: 'verdict report + docket + armature extension + finding_status', model: 'opus (effort max)' },
+    { title: 'Guardrail', detail: 'read-only conformance ruling over the run summary — writes nothing', model: 'opus' },
   ],
 }
 
+// ==== VALORIA WF HARNESS v1 — GENERATED FROM tools/wf_harness.js — DO NOT EDIT HERE ====
+// Re-sync after editing the owner:  python tools/ci_wf_harness_check.py --fix
+// Report-only by ruling (Jordan 2026-07-28): every signal records and the run CONTINUES.
+
+// P3 · the closed set. A reason outside it is itself a defect, representable without throwing.
+const H_STOP_REASONS = [
+  'completed',                   // nothing fired
+  'null_result',                 // P7: a lens/critic returned zero findings
+  'critic_starved',              // a stage produced findings that no critic ever saw
+  'disagreement_unadjudicated',  // P8: a dispute reached the return with no ruling
+  'repetition',                  // P3: a round reproduced the previous round's finding set
+  'round_cap',                   // P3: the loop hit its cap
+  'invalid_signal',              // a caller passed a reason outside this set
+]
+// Reported stop_reason = the worst signal seen, ordered by how much it should make a READER
+// distrust the run — not by the severity of any underlying finding.
+const H_STOP_RANK = H_STOP_REASONS
+const H_ROUND_CAP = 3
+
+// P8 · closed vocabularies for a disagreement. Deliberately small; each value is a distinction
+// this repo's critics actually draw (see the uphold/overturn/soften/sharpen funnel).
+const H_DISPUTE_LAYERS = ['evidence', 'interpretation', 'severity', 'scope', 'method']
+const H_ROOT_CAUSES = [
+  'different-sources-read',     // agonist and critic opened different files
+  'stale-canon',               // one side read a superseded head
+  'ambiguous-spec',            // the doc genuinely admits both readings
+  'severity-calibration',      // same facts, different weight
+  'scope-boundary',            // in-lane vs out-of-lane, or in-scope vs out-of-scope
+  'measurement-vs-assertion',  // one side measured, the other asserted
+]
+
+// The cross-lens identity of a finding (P7's rediscovery key, P3's repetition key).
+// Bespoke: two lenses that independently hit one defect cite the SAME FILE and describe it in
+// different words, usually a line or two apart — so the key is (first cited file path, line
+// dropped) + the first content words of the claim. Line numbers are dropped on purpose; keeping
+// them would split one rediscovered defect into N singletons, which is the failure this exists
+// to prevent.
+const H_STOPWORDS = ['the', 'a', 'an', 'is', 'are', 'was', 'were', 'and', 'or', 'but', 'of', 'to',
+  'in', 'on', 'at', 'for', 'with', 'that', 'this', 'it', 'its', 'as', 'by', 'from', 'has', 'have',
+  'not', 'no', 'be', 'been', 'does', 'do', 'never', 'only', 'any']
+
+function hClaimText(f) {
+  if (!f || typeof f !== 'object') return ''
+  return String(f.claim || f.title || f.what || f.summary || '')
+}
+
+function hFirstFile(f) {
+  if (!f || typeof f !== 'object') return ''
+  // social-contest shape: locations[{file, quote}]
+  if (Array.isArray(f.locations) && f.locations.length && f.locations[0] && f.locations[0].file) {
+    return String(f.locations[0].file).split(':')[0].trim()
+  }
+  // combat / attribute shape: `evidence` is free-text "file:line" citations
+  const src = String(f.evidence || f.surface || f.defining_surface || '')
+  const m = src.match(/[A-Za-z0-9_./-]+\.(?:md|py|ya?ml|json|jsonl|gd|js|html)/)
+  return m ? m[0] : ''
+}
+
+function hContentWords(f) {
+  const seen = []
+  for (const w of hClaimText(f).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/)) {
+    if (w.length > 2 && H_STOPWORDS.indexOf(w) < 0 && seen.indexOf(w) < 0) seen.push(w)
+  }
+  return seen
+}
+
+// The EXACT key: same file, same claim wording. Used by the repetition breaker, where the question
+// is "did this stage produce literally the same output again", so exactness is what is wanted.
+function hFindingKey(f) {
+  return (hFirstFile(f) || '?') + '#' + (hContentWords(f).slice(0, 6).join('-') || '?')
+}
+
+// The FUZZY match, used only by rediscovery. Two lenses that independently hit one defect describe
+// it in different words — "dead geo coefficients are never consumed" and "the geo coefficients are
+// dead, never consumed" are one finding. An exact key splits them into singletons and silently
+// zeroes out the entire corroboration signal, which is worse than not computing it: the output
+// still has a `rediscovery` column, it just always reads 1.
+// So: same file, and one claim's content words substantially contained in the other's.
+// Containment, not Jaccard — a thorough lens writes a longer sentence about the same defect, and
+// Jaccard punishes exactly that. The absolute floor stops a two-word claim matching everything.
+function hSameFinding(a, b) {
+  if (hFirstFile(a) !== hFirstFile(b)) return false
+  const wa = hContentWords(a), wb = hContentWords(b)
+  if (!wa.length || !wb.length) return false
+  const shared = wa.filter(w => wb.indexOf(w) >= 0).length
+  const smaller = Math.min(wa.length, wb.length)
+  if (smaller < 3) return shared === smaller && wa.length === wb.length
+  return shared >= 3 && shared / smaller >= 0.6
+}
+
+// P3 · the run recorder. One per workflow; every stage reports through it.
+function hRun(name) {
+  const run = {
+    name: name,
+    rounds: 0,
+    cap: H_ROUND_CAP,
+    signals: [],          // append-only; nothing is ever removed (no-silent-disappearance)
+    trace: [],            // the JSONL run trace, emitted by hSummary()
+    disagreements: [],
+    _lastRoundKeys: null,
+  }
+
+  run.trace_ = function (event, data) {
+    run.trace.push(Object.assign({ seq: run.trace.length, event: event }, data || {}))
+    return run
+  }
+
+  // NEVER throws. An unknown reason is recorded as 'invalid_signal' carrying what was asked for,
+  // because a harness that crashes the run it is policing is worse than the drift it detects.
+  run.signal = function (reason, detail) {
+    const known = H_STOP_REASONS.indexOf(reason) >= 0 && reason !== 'completed'
+    const rec = { reason: known ? reason : 'invalid_signal', detail: String(detail || ''), round: run.rounds }
+    if (!known) rec.requested = String(reason)
+    run.signals.push(rec)
+    run.trace_('signal', rec)
+    log('[harness] ' + rec.reason + ': ' + rec.detail)
+    return run
+  }
+
+  // Round accounting + the repetition breaker. Report-only: past the cap it still returns true
+  // and the caller decides; the SIGNAL is the deliverable, not a forced exit.
+  run.round = function (label, findings) {
+    run.rounds += 1
+    const keys = Array.isArray(findings) ? findings.map(hFindingKey).sort() : null
+    run.trace_('round', { label: String(label || ''), n: run.rounds, findings: keys ? keys.length : 0 })
+    if (run.rounds > run.cap) {
+      run.signal('round_cap', 'round ' + run.rounds + ' exceeds cap ' + run.cap + ' (' + label + ')')
+    }
+    if (keys && run._lastRoundKeys && keys.length && keys.join('|') === run._lastRoundKeys.join('|')) {
+      run.signal('repetition', 'round ' + run.rounds + ' (' + label + ') reproduced the previous round\'s '
+        + keys.length + ' finding(s) with no change — further rounds are unlikely to add anything')
+    }
+    if (keys) run._lastRoundKeys = keys
+    return run
+  }
+
+  // P7a · the null-result alarm. Ships with hRediscover (P7b) and is meaningless without it:
+  // an alarm for "you found nothing" with no way to see WHICH findings were corroborated is
+  // pressure to manufacture findings. Both are called in every script; the checker enforces it.
+  run.lens = function (lensKey, findings) {
+    const n = Array.isArray(findings) ? findings.length : 0
+    run.trace_('lens', { lens: String(lensKey), findings: n })
+    if (n === 0) {
+      run.signal('null_result', 'lens/stage "' + lensKey + '" returned zero findings — either the '
+        + 'surface is genuinely clean, or the agent failed to read it. Check its coverage notes '
+        + 'before crediting the silence.')
+    }
+    return findings || []
+  }
+
+  // A stage produced findings that no critic ever saw. The relay is the method (CLAUDE.md §10);
+  // an unrefuted finding is a draft, not a result.
+  run.critiqued = function (stage, produced, reviewed) {
+    run.trace_('critique-coverage', { stage: String(stage), produced: produced, reviewed: reviewed })
+    if (produced > 0 && reviewed < produced) {
+      run.signal('critic_starved', stage + ': ' + reviewed + '/' + produced + ' finding(s) reached a '
+        + 'critic; ' + (produced - reviewed) + ' returned unrefuted')
+    }
+    return run
+  }
+
+  // A CRITIC THAT DIED IS NOT A CRITIC THAT FOUND NOTHING, and the scripts could not tell them
+  // apart. The pipeline pattern is `.then(v => ({...f, verdict: v})).catch(() => null)` followed by
+  // `.filter(Boolean)` — so a critic that errors drops the WHOLE FINDING, and the obvious coverage
+  // check (`produced = survivors.length`) then compares a set to itself and can never fire. The
+  // finding vanishes and the run reports `completed`.
+  //
+  // That hole sits exactly where P4 could open one: switching critics to a tools-restricted
+  // agentType is the change most likely to make a critic stage fail, and the harness would have
+  // hidden it. Wrap the critic call in this instead of a bare .catch so the loss is counted.
+  //   parallel(findings.map(f => () => run.attempt('Verify', agent(...).then(v => ({...f, verdict: v})))))
+  run.attempted = 0
+  run.lost = 0
+  run.attempt = function (stage, promise) {
+    run.attempted += 1
+    return Promise.resolve(promise).then(
+      v => {
+        if (v === null || v === undefined) {
+          run.lost += 1
+          run.signal('critic_starved', stage + ': a critic returned null — the finding it was '
+            + 'checking is dropped from the results, NOT cleared. Check the agentType resolves and '
+            + 'that a tools-restricted critic can still emit structured output.')
+        }
+        return v
+      },
+      err => {
+        run.lost += 1
+        run.signal('critic_starved', stage + ': a critic threw (' + String(err && err.message || err)
+          + ') — the finding it was checking is dropped from the results, NOT cleared.')
+        return null
+      })
+  }
+
+  // P8 · a disagreement record. `adjudication` starts empty ON PURPOSE — hSummary() signals if
+  // it is still empty at the return, which is the no-silent-disappearance rule.
+  run.dispute = function (rec) {
+    const d = {
+      finding_id: String((rec && rec.finding_id) || '?'),
+      layer_disputed: H_DISPUTE_LAYERS.indexOf(rec && rec.layer_disputed) >= 0 ? rec.layer_disputed : 'interpretation',
+      positions: (rec && rec.positions) || [],
+      root_cause: H_ROOT_CAUSES.indexOf(rec && rec.root_cause) >= 0 ? rec.root_cause : 'ambiguous-spec',
+      resolution_model: (rec && rec.resolution_model) || 'adjudicated-by-synthesis',
+      cross_domain: !!(rec && rec.cross_domain),
+      adjudication: '',
+      status: 'open',
+    }
+    // CROSS-DOMAIN OBSERVATION, NOT JUDGMENT: a critic reaching outside its own lens/lane may
+    // report what it saw but may not rule on it. Encoded, not merely asked for — the record
+    // cannot leave this branch in a state that a later ruling would silently overwrite.
+    if (d.cross_domain) {
+      d.status = 'observation'
+      d.resolution_model = 'observation-only (out-of-lens: report, do not rule)'
+    }
+    run.disagreements.push(d)
+    run.trace_('dispute', { finding_id: d.finding_id, layer: d.layer_disputed, root_cause: d.root_cause, cross_domain: d.cross_domain })
+    return d
+  }
+
+  run.adjudicate = function (findingId, ruling, by) {
+    let n = 0
+    for (const d of run.disagreements) {
+      if (d.finding_id !== String(findingId) || d.status === 'observation') continue
+      d.adjudication = String(ruling || '')
+      d.adjudicated_by = String(by || 'synthesis')
+      d.status = d.adjudication ? 'resolved' : 'open'
+      n += d.status === 'resolved' ? 1 : 0
+    }
+    run.trace_('adjudicate', { finding_id: String(findingId), resolved: n })
+    return n
+  }
+
+  // IDEMPOTENT, AND A COPY. Both properties were missing and both bit immediately.
+  //  · summary() SIGNALS on unadjudicated disputes, and wf_attribute_coherence.js calls it twice —
+  //    once to hand the run to the guardrail stage, once to return it. Every open dispute was
+  //    therefore reported twice, and the guardrail was judging a run whose signal list the final
+  //    return then contradicted. The `_summarised` latch fires the signal once, on the first call.
+  //  · it returned the LIVE arrays. A caller holding an earlier summary saw it mutate underneath
+  //    them, which is the opposite of a snapshot. Now copied.
+  // Neither is cosmetic: a report-only harness whose report changes after you read it is worse
+  // than no report, because it reads as authoritative.
+  run.summary = function () {
+    const unadj = run.disagreements.filter(d => d.status === 'open')
+    if (unadj.length && !run._summarised) {
+      run.signal('disagreement_unadjudicated', unadj.length + ' dispute(s) reached the return with no '
+        + 'ruling: ' + unadj.map(d => d.finding_id).join(', '))
+    }
+    run._summarised = true
+    let worst = 'completed'
+    for (const s of run.signals) {
+      if (H_STOP_RANK.indexOf(s.reason) > H_STOP_RANK.indexOf(worst)) worst = s.reason
+    }
+    return {
+      run: run.name,
+      stop_reason: worst,
+      degraded: worst !== 'completed',
+      rounds: run.rounds,
+      round_cap: run.cap,
+      signals: run.signals.map(s => Object.assign({}, s)),
+      disagreements: run.disagreements.map(d => Object.assign({}, d)),
+      unadjudicated: unadj.map(d => d.finding_id),
+      trace_jsonl: run.trace.map(t => JSON.stringify(t)).join('\n'),
+    }
+  }
+
+  return run
+}
+
+// P7b · rank by INDEPENDENT REDISCOVERY. Practice 7 (one agent per lens) already produces this
+// signal and every script threw it away. A defect three unrelated lenses hit independently is
+// worth more than one a single lens hit hard, and this is the only cheap corroboration signal a
+// read-only audit has. `lensOf` extracts the lens/cluster key so a lens cannot corroborate itself.
+function hRediscover(findings, lensOf) {
+  const groups = []
+  for (const f of (findings || [])) {
+    if (!f) continue
+    const lens = String((lensOf && lensOf(f)) || f.lens || f.cluster || f.module || '?')
+    let g = null
+    for (const cand of groups) {
+      if (hSameFinding(cand.findings[0], f)) { g = cand; break }
+    }
+    if (!g) { g = { key: hFindingKey(f), lenses: [], findings: [] }; groups.push(g) }
+    if (g.lenses.indexOf(lens) < 0) g.lenses.push(lens)
+    g.findings.push(f)
+  }
+  return groups
+    .map(g => ({ key: g.key, rediscovery: g.lenses.length, lenses: g.lenses, findings: g.findings }))
+    .sort((a, b) => b.rediscovery - a.rediscovery || a.key.localeCompare(b.key))
+}
+
+// P4 · the read-only critic. Independence is STRUCTURAL, not a sentence in a prompt: the
+// agentType below is defined in .claude/agents/valoria-critic.md with a tools list that has no
+// Write/Edit. Passing it is the whole mechanism — a critic stage that omits it can write, and
+// tools/ci_wf_harness_check.py fails the script that does.
+const H_CRITIC = { agentType: 'valoria-critic' }
+function hCritic(opts) { return Object.assign({}, opts || {}, H_CRITIC) }
+// ==== END VALORIA WF HARNESS v1 ====
+
+const run = hRun('attribute-value-coherence')
 const ROOT = '/home/user/ttrpg'
-const AUD = `${ROOT}/designs/audit/2026-07-08-attribute-value-coherence-audit`
+const AUD = `${ROOT}/audit/2026-07-08-attribute-value-coherence-audit`
 
 const SHARED = `
 You are one agent in the ATTRIBUTE/VALUE COHERENCE AUDIT of the Valoria design repo at ${ROOT}
@@ -25,7 +324,7 @@ explosion of attributes and derived scores across all our different systems and 
 in silos."
 
 ARMATURE FRAMING (binding): this audit is the QUANTITY-LAYER extension of the Key & Echo Armature
-(designs/architecture/key_echo_armature_v1.md, RATIFIED ED-IN-0018 — Jordan's mandate: "a
+(systems/_architecture/key_echo_armature_v1.md, RATIFIED ED-IN-0018 — Jordan's mandate: "a
 harness/armature that properly shapes the subsystems so they fit into the systems together
 properly"). The armature unified the Key/seam layer; this audit covers the quantities those seams
 read and write — the stats named in Key payloads (stat_deltas, impact_vector,
@@ -51,19 +350,19 @@ VERIFIED BASELINE FACTS (confirm, extend, find MORE — do not merely restate):
   stale PP-247 header comment — while params/core.md:161 (live table), module_contracts.yaml:810 and
   combat_config.gd agree on canonical max(5, History+6) (ED-901/900/904).
 - values_master.yaml is QUARANTINED-STALE (ED-1084); generator tools/extract_values.py is dead;
-  8 entries leak from params/threadwork_superseded.md; its 5 conflicts: blocks are live-vs-superseded
+  8 entries leak from engine/params/threadwork_superseded.md; its 5 conflicts: blocks are live-vs-superseded
   mixing artifacts.
-- params/board_game.md and params/factions.md are BROKEN auto-generated indexes (links to
+- engine/params/board_game.md and engine/params/factions.md are BROKEN auto-generated indexes (links to
   nonexistent references/params_bg_*.md / params_factions_*.md; real content in params/bg/*.md and
-  params/factions/* + params/factions_personal.md).
-- params/mass_combat.md header carries superseded (PP-233 pool) and superseding (ED-899 2xCommand)
+  engine/params/factions/* + engine/params/factions_personal.md).
+- engine/params/mass_combat.md header carries superseded (PP-233 pool) and superseding (ED-899 2xCommand)
   formulas side by side.
 - tests/registry/test_descriptor_registry.py is DEAD: imports a module moved to deprecated/, and
   defines no test_* function so pytest collects zero tests — the registry has NO running validator.
 - The one typed export is engine/engine_params/combat_engine_v1.json (from config.py via
   tools/export_engine_params.py --check, blocking CI). No tool parses params/*.md prose — prose
   formula drift has NO automated detector.
-- Mandate = round(0.5*Legitimacy + 0.5*Popular_Support) (params/factions_personal.md), also derived
+- Mandate = round(0.5*Legitimacy + 0.5*Popular_Support) (engine/params/factions_personal.md), also derived
   size-weighted in module_contracts faction_state — check for divergence.
 
 KNOWN-TRACKED OPEN ITEMS (cite, do NOT re-litigate; the value-add is the cross-silo interlock view):
@@ -206,7 +505,7 @@ const CRITIC_SCHEMA = {
 
 const SYNTH_SCHEMA = {
   type: 'object', additionalProperties: false,
-  required: ['headline', 'files_written', 'confirmed_p1', 'confirmed_p2', 'confirmed_p3', 'docket_items'],
+  required: ['headline', 'files_written', 'confirmed_p1', 'confirmed_p2', 'confirmed_p3', 'docket_items', 'adjudications'],
   properties: {
     headline: { type: 'string' },
     files_written: { type: 'array', items: { type: 'string' } },
@@ -214,26 +513,40 @@ const SYNTH_SCHEMA = {
     confirmed_p2: { type: 'number' },
     confirmed_p3: { type: 'number' },
     docket_items: { type: 'number' },
+    // P8: required, so a dispute cannot vanish between the critic funnel and the report. An
+    // out-of-lane record (status "observation") is NOT ruled on — it is carried, not adjudicated.
+    adjudications: {
+      type: 'array',
+      items: {
+        type: 'object', additionalProperties: false,
+        required: ['finding_id', 'ruling', 'reasoning'],
+        properties: {
+          finding_id: { type: 'string' },
+          ruling: { type: 'string', enum: ['dossier-holds', 'critic-holds', 'split', 'unresolved'] },
+          reasoning: { type: 'string' },
+        },
+      },
+    },
   },
 }
 
 const FAMILIES = [
   { key: 'REG', model: 'haiku', title: 'Registries', focus: `references/descriptor_registry.yaml (FULL — every section incl. by_reference, deprecated, not_descriptors), references/names_index.yaml (enforcement tiers for attr./agg./fac./set. keys), references/values_master.yaml (header banner + schema + BOTH Combat Pool entries + the 5 conflicts: blocks + which source files it indexes), references/glossary.md (its self-declared naming authority + attribute roster — the ED-IN-0008 conflict side), registers/mechanics_index.yaml (quantity-bearing entries).` },
-  { key: 'PARAMS', model: 'sonnet', title: 'Params prose', focus: `Every file in params/ incl. params/bg/*.md and params/factions/* and params/factions_personal.md and params/threadwork_superseded.md. Extract every derived-score/pool/track/clock/stat table row with its formula EXACTLY as written + PP/ED tags. Verify the broken indexes (board_game.md, factions.md link targets). Capture internal header-vs-body drift (core.md:4 vs :161; mass_combat.md header). Note which params file each not_descriptors quantity actually lives in.` },
-  { key: 'DESIGN', model: 'sonnet', title: 'Design heads', focus: `Resolve heads via CURRENT.md first. Sweep for quantity definitions/consumption: the derived-stats doc (find it — 'derived_stats §14' is cited by descriptor_registry as authoritative for Stat-x-3 multipliers), designs/scene/social_contest_v30.md (+contest pools, Composure), designs/scene/combat_v30.md vs designs/scene/combat_engine_v1/ (two combat surfaces), designs/provincial/mass_battle_v30.md (unit stats), faction_*.md heads, designs/territory/settlement_layer_v30.md §1.8, designs/threadwork/threadwork_v30.md (TS/TPS/Coherence), designs/npcs/npc_behavior_v30.md (tracks, Resonant Style), conviction_track_v30 if present, designs/scene/fieldwork_v30.md.` },
-  { key: 'CONTRACT', model: 'haiku', title: 'Contracts + armature', focus: `references/module_contracts.yaml — EVERY state:/derivations:/gates: entry naming a quantity (name, bucket, writable, formula) across all 27 modules. designs/architecture/key_echo_armature_v1.md §1 (payload obligations: stat_deltas/impact_vector/targets[]), §2 tables (which faction/settlement stats echoes move), §3 registry deltas. designs/architecture/key_type_registry_v30.md required_payload_fields that name stats. designs/architecture/key_substrate_v30.md stat-bearing fields.` },
-  { key: 'SIM', model: 'haiku', title: 'Sim + engine code', focus: `sim/substrate/keys.py (Key fields, stat_deltas validation — what vocabulary does it accept?), sim/autoload/sigma_leverage.py + game_state.py + dice_engine.py (constants + provenance tags), designs/scene/combat_engine_v1/config.py (ALL CFG coefficients with their [SIM-CALIBRATE]/[FIAT]/[ASSERTED]/ED tags) + combatant.py (derived-stat formulas in code), tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r8_parity_harness}.py (canonical constants), sim/personal/ + sim/peninsular/ + sim/provincial/ quantity constants (grep for stat names + = numbers with tags).` },
+  { key: 'PARAMS', model: 'sonnet', title: 'Params prose', focus: `Every file in params/ incl. params/bg/*.md and engine/params/factions/* and engine/params/factions_personal.md and engine/params/threadwork_superseded.md. Extract every derived-score/pool/track/clock/stat table row with its formula EXACTLY as written + PP/ED tags. Verify the broken indexes (board_game.md, factions.md link targets). Capture internal header-vs-body drift (core.md:4 vs :161; mass_combat.md header). Note which params file each not_descriptors quantity actually lives in.` },
+  { key: 'DESIGN', model: 'sonnet', title: 'Design heads', focus: `Resolve heads via CURRENT.md first. Sweep for quantity definitions/consumption: the derived-stats doc (find it — 'derived_stats §14' is cited by descriptor_registry as authoritative for Stat-x-3 multipliers), systems/social_contest/social_contest_v30.md (+contest pools, Composure), systems/combat/combat_v30.md vs systems/combat/combat_engine_v1/ (two combat surfaces), systems/mass_battle/mass_battle_v30.md (unit stats), faction_*.md heads, systems/settlements/settlement_layer_v30.md §1.8, systems/threadwork/threadwork_v30.md (TS/TPS/Coherence), systems/npcs/npc_behavior_v30.md (tracks, Resonant Style), conviction_track_v30 if present, systems/fieldwork/fieldwork_v30.md.` },
+  { key: 'CONTRACT', model: 'haiku', title: 'Contracts + armature', focus: `references/module_contracts.yaml — EVERY state:/derivations:/gates: entry naming a quantity (name, bucket, writable, formula) across all 27 modules. systems/_architecture/key_echo_armature_v1.md §1 (payload obligations: stat_deltas/impact_vector/targets[]), §2 tables (which faction/settlement stats echoes move), §3 registry deltas. systems/_architecture/key_type_registry_v30.md required_payload_fields that name stats. systems/_architecture/key_substrate_v30.md stat-bearing fields.` },
+  { key: 'SIM', model: 'haiku', title: 'Sim + engine code', focus: `engine/substrate/keys.py (Key fields, stat_deltas validation — what vocabulary does it accept?), engine/autoload/sigma_leverage.py + game_state.py + dice_engine.py (constants + provenance tags), systems/combat/combat_engine_v1/config.py (ALL CFG coefficients with their [SIM-CALIBRATE]/[FIAT]/[ASSERTED]/ED tags) + combatant.py (derived-stat formulas in code), tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r8_parity_harness}.py (canonical constants), and the per-subsystem sims — systems/characters/sim/ + systems/social_contest/sim/ + systems/fieldwork/sim/ + systems/overview/sim/ + systems/factions/sim/ + systems/mass_battle/sim/ — for quantity constants (grep for stat names + = numbers with tags). NOTE the flat sim/personal/ and sim/provincial/ trees named by older notes no longer exist; they were split across those subsystem packages and the whole sim/ tree was retired 2026-07-21.` },
   { key: 'GODOT', model: 'haiku', title: 'Godot port + typed export', focus: `godot/skeleton/engines/combat/resources/{combat_config.gd,weapon_resource.gd} (every exported field + its cited canon), any .tres files naming stats, engine/engine_params/combat_engine_v1.json (the typed export — every key), tools/export_engine_params.py (what it covers and does NOT cover). Flag every value that exists in the port but has no prose head, and vice versa.` },
   { key: 'INDEX', model: 'haiku', title: 'Secondary indices + validators', focus: `references/mechanical_terms_index.md, references/numeric_bounds_report.yaml, references/propagation_map.md, references/silo_overlap_matrix.yaml, references/name_collision_database.yaml, references/collision_registry.yaml — which quantities each indexes and where they disagree with each other. tests/registry/test_descriptor_registry.py (confirm dead: import path + zero pytest collection). tools/ci_names_check.py / ci_names_consistency.py / ci_naming_check.py (what tier actually enforces what).` },
 ]
 
 const CLUSTERS = [
   { key: 'C1', title: 'Personal attributes, aliases & aggregates', focus: `The 9-attribute roster + every legacy alias (Vitality, Dexterity, Cognition/Reasoning, Spirit, Perception, Influence/Presence, Sincerity/Affability) + agg.* placeholders. Trace every surface still using a LEGACY name live (not as alias documentation). The 7-vs-9 glossary conflict (ED-IN-0008 decision surface). Where does Spirit still act as a standalone attribute in formulas (Stamina 3*End+2*Spirit, Concentration, threadwork (Spirit x 2)) vs its fold into Will? Is any aggregate consumed anywhere despite placeholder status?` },
-  { key: 'C2', title: 'Derived values', focus: `Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate. For each: every formula occurrence across params prose, module_contracts derivations, engine code, Godot port — do they agree? Composure has at least two forms (Charisma+6 in params/contest.md vs Charisma x 3 legacy multiplier per descriptor_registry note). Mandate has two derivations (0.5L+0.5PS vs size-weighted). Health has a monster formula in module_contracts:810ff — matched where?` },
+  { key: 'C2', title: 'Derived values', focus: `Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate. For each: every formula occurrence across params prose, module_contracts derivations, engine code, Godot port — do they agree? Composure has at least two forms (Charisma+6 in engine/params/contest.md vs Charisma x 3 legacy multiplier per descriptor_registry note). Mandate has two derivations (0.5L+0.5PS vs size-weighted). Health has a monster formula in module_contracts:810ff — matched where?` },
   { key: 'C3', title: 'Pools', focus: `Combat, Argue, Thread, Fieldwork, Knot, MassCombat, FactionDomain pools. Combat Pool triple-carriage is the FLAGSHIP (fully documented in SHARED — extend to: which of the 7 pools have the same disease?). Thread pool (Spirit x 2)+History+TPS vs fieldwork (Primary x 2)+History vs combat max(5,History+6) — three construction idioms; is divergence ruled (fieldwork.md says its x2 is 'fieldwork-native') or drift? MassCombat pool PP-233 vs ED-899. Contest/Argue pool (ED-SC-0004 P0 fork — decision surface only). Knot pool definition site?` },
   { key: 'C4', title: 'Tracks & clocks', focus: `Tracks: Piety, Disposition, Renown, Standing, Persuasion (+ knots gauge -5..+5 ED-912). Clocks: Evidence, CI, MS, IP. Ranges/caps/thresholds across surfaces: CI milestones 40/55/65/80/100 vs 75 (armature §5.11 — carried as data, cite only), Disposition/Knot ±5 (ED-912), IP milestones. Which tracks are registered nowhere but consumed by Key payloads or gates (module_contracts gates like Bonds >= 5 — is Bonds a track here and an attribute in C1? name collision!).` },
   { key: 'C5', title: 'Faction & settlement stats + Mandate seam', focus: `Faction: Influence, Wealth, Military, Intel, Stability (1-7) + Treasury (x100). Settlement: Legitimacy, Popular Support, Prosperity, Defense, Order (+Accord? scale_transitions §5.5 — is Accord a stat, a delta, or neither?). These are what Domain Echo stat_deltas actually MOVE (armature §2.1) — for each stat: is the name the substrate/Key payloads would carry canonical + collision-free (the C-FA-3 'PS' collision precedent)? Prosperity x 50 = Local Economy etc. derivations consistent? Where do BG-mode (params/bg/) stats diverge from faction_stats registry?` },
-  { key: 'C6', title: 'Code constants & the export pipeline', focus: `prose -> config.py oracle -> combat_engine_v1.json -> combat_config.gd chain: for each coefficient, is provenance intact and value identical end-to-end? config.py [FIAT]/[ASSERTED]/[SIM-CALIBRATE] tags — how many constants have NO canon backing (that is fine per Class-C, but count them + flag any that params prose ALSO states differently). sigma constants (PER_DIE, LEVEL_SIGMA, M_MAX, SIGMA_N_COEFF) across m1_dice_sigma_core.py / sigma_leverage.py / engine — verbatim? The dead DAMAGE_SCALE=4.0 precedent — more like it? What quantities does sim/substrate/keys.py validate stat_deltas against (anything? nothing = key-binding-gap).` },
+  { key: 'C6', title: 'Code constants & the export pipeline', focus: `prose -> config.py oracle -> combat_engine_v1.json -> combat_config.gd chain: for each coefficient, is provenance intact and value identical end-to-end? config.py [FIAT]/[ASSERTED]/[SIM-CALIBRATE] tags — how many constants have NO canon backing (that is fine per Class-C, but count them + flag any that params prose ALSO states differently). sigma constants (PER_DIE, LEVEL_SIGMA, M_MAX, SIGMA_N_COEFF) across m1_dice_sigma_core.py / sigma_leverage.py / engine — verbatim? The dead DAMAGE_SCALE=4.0 precedent — more like it? What quantities does engine/substrate/keys.py validate stat_deltas against (anything? nothing = key-binding-gap).` },
   { key: 'C7', title: 'Cross-index consistency, enforcement tiers & check backlogs', focus: `The 6 secondary indices vs descriptor_registry vs glossary: for a sample of 10 quantities, how many indices carry each and how many disagree? Enforcement audit: everything at warn, registry test dead, values_master quarantined, no prose-drift detector — measure the would-be backlog of the two PROPOSED checks: A17 stat-vocabulary closure (every stat named in module_contracts state:/derivations:/gates: + substrate stat_deltas resolves to a registry key or explicit not_descriptors row — count violations) and A18 formula single-source (every derived-value formula has exactly ONE defining surface, others cite it — count multi-definition quantities). These backlog counts are the audit's headline numbers.` },
 ]
 
@@ -253,6 +566,11 @@ const finders = await parallel(FAMILIES.map(f => () => agent(
   { schema: FINDER_SCHEMA, label: `find:${f.key}`, phase: 'Sweep', model: f.model }
 )))
 const finderResults = finders.filter(Boolean)
+// P7a · a finder family that swept a surface and found nothing is either a clean surface or an
+// agent that never opened it, and those are indistinguishable in the totals below. Route each
+// through the run so the second case raises an alarm the reader can take to the coverage notes.
+for (const f of finderResults) run.lens(`find:${f.family}`, f.findings || [])
+run.critiqued('Sweep', FAMILIES.length, finderResults.length)
 log(`Sweep complete: ${finderResults.length}/${FAMILIES.length} families, ${finderResults.reduce((n, r) => n + r.items.length, 0)} inventory items, ${finderResults.reduce((n, r) => n + r.findings.length, 0)} early findings`)
 
 phase('Census')
@@ -265,7 +583,7 @@ log(`Census: ${census.rows.length} rows (${census.rows.filter(r => r.status !== 
 phase('Validate')
 const validation = await A(
   `${SHARED}\n\n=== CENSUS SPOT-CHECK ===\nRead ${AUD}/02_census/quantity_census.yaml. Pick 10 rows spread across clusters and statuses (deterministic pick: sort rows by canonical_name, take every Nth so you cover 10). For each, open the cited defining_surface and one cited formula surface and verify the census row states them accurately (formula verbatim, line number correct within +/-3, status defensible). verdict fail on ANY inaccuracy, with the correction in note. READ-ONLY — write nothing.`,
-  { schema: VALIDATE_SCHEMA, label: 'census-validate', phase: 'Validate', model: 'haiku' }
+  hCritic({ schema: VALIDATE_SCHEMA, label: 'census-validate', phase: 'Validate', model: 'haiku' })
 )
 log(`Census spot-check: ${validation.pass_count} pass / ${validation.fail_count} fail`)
 
@@ -274,16 +592,66 @@ phase('Trace')
 const clusterResults = await pipeline(
   CLUSTERS,
   (c) => A(
-    `${SHARED}\n\n=== CLUSTER DOSSIER: ${c.key} — ${c.title} (agonist) ===\nYour census rows (JSON below) are the starting map — verify against disk, then TRACE ALL DIRECTIONS for each quantity: definition -> params prose -> design heads -> module_contracts state/derivations -> Key payload bindings (armature §1-§3, key_type_registry required_payload_fields, sim/substrate/keys.py) -> sim/engine code -> typed export -> Godot port. Branch on every discovered edge; follow consumers you find mid-trace.\nFOCUS: ${c.focus}\n\nProduce findings (severity/kind/calibration per SHARED), unification_options (Jordan-rulable, each with a recommended default + what open ED/queue item it feeds), and registry_delta_candidates (quantities that should gain descriptor_registry keys — armature §3 analog).\nTHEN write ${AUD}/01_workings/dossier_${c.key}.md (your ONLY permitted write): title + one-paragraph headline, the trace narrative per quantity (with file:line), findings table, unification options table. Set dossier_written to that path.\nBe adversarial with the census: if a row is wrong, say so (that is also a finding against the census).\n\nCENSUS ROWS FOR THIS CLUSTER (plus cross-cluster rows you may need):\n${JSON.stringify(census.rows.filter(r => r.cluster === c.key))}\n\nCENSUS TOTALS FOR CONTEXT: ${census.rows.length} rows; validation spot-check ${validation.pass_count}p/${validation.fail_count}f.`,
+    `${SHARED}\n\n=== CLUSTER DOSSIER: ${c.key} — ${c.title} (agonist) ===\nYour census rows (JSON below) are the starting map — verify against disk, then TRACE ALL DIRECTIONS for each quantity: definition -> params prose -> design heads -> module_contracts state/derivations -> Key payload bindings (armature §1-§3, key_type_registry required_payload_fields, engine/substrate/keys.py) -> sim/engine code -> typed export -> Godot port. Branch on every discovered edge; follow consumers you find mid-trace.\nFOCUS: ${c.focus}\n\nProduce findings (severity/kind/calibration per SHARED), unification_options (Jordan-rulable, each with a recommended default + what open ED/queue item it feeds), and registry_delta_candidates (quantities that should gain descriptor_registry keys — armature §3 analog).\nTHEN write ${AUD}/01_workings/dossier_${c.key}.md (your ONLY permitted write): title + one-paragraph headline, the trace narrative per quantity (with file:line), findings table, unification options table. Set dossier_written to that path.\nBe adversarial with the census: if a row is wrong, say so (that is also a finding against the census).\n\nCENSUS ROWS FOR THIS CLUSTER (plus cross-cluster rows you may need):\n${JSON.stringify(census.rows.filter(r => r.cluster === c.key))}\n\nCENSUS TOTALS FOR CONTEXT: ${census.rows.length} rows; validation spot-check ${validation.pass_count}p/${validation.fail_count}f.`,
     { schema: DOSSIER_SCHEMA, label: `dossier:${c.key}`, phase: 'Trace', model: 'sonnet' }
   ),
-  (dossier, c) => dossier && A(
+  (dossier, c) => dossier && run.attempt('Critic', A(
     `${SHARED}\n\n=== ADVERSARIAL CRITIC: ${c.key} — ${c.title} (antagonist relay — you never saw the agonist's reasoning, only its output) ===\nYou are READ-ONLY. Do not create or modify ANY file.\nThe dossier output (JSON) is below. Attack it:\n1. Per finding: re-verify against disk. uphold / overturn (claim false or stale) / soften (severity inflated, or actually KNOWN-TRACKED — name the ED) / sharpen (worse than claimed — escalate).\n2. Per unification_option: is the recommended default actually neutral bookkeeping, or does it smuggle a design call that must stay an open fork? Does it violate lane scoping (SC/SE/PC-owned)?\n3. Conformance: did the dossier invent criteria beyond the armature/holonic/registry discipline? Rule a fork? Use build-state as verdict evidence (cardinal rule)?\n4. missed: hunt for at least the OBVIOUS defect class the dossier under-covered (read 2-3 of its cited surfaces yourself and one it did NOT cite).\nDefault to skepticism — an audit finding that survives you should be bankable.\n\nDOSSIER (JSON):\n${JSON.stringify(dossier)}`,
-    { schema: CRITIC_SCHEMA, label: `critic:${c.key}`, phase: 'Critic', model: 'sonnet' }
-  ).then(critic => ({ cluster: c.key, title: c.title, dossier, critic }))
+    hCritic({ schema: CRITIC_SCHEMA, label: `critic:${c.key}`, phase: 'Critic', model: 'sonnet' })
+  )).then(critic => ({ cluster: c.key, title: c.title, dossier, critic }))
 )
 const clusters = clusterResults.filter(Boolean).filter(r => r.dossier)
 log(`Clusters complete: ${clusters.length}/7 dossiers, ${clusters.filter(r => r.critic).length} critic passes`)
+run.critiqued('Trace', clusters.length, clusters.filter(r => r.critic).length)
+
+// P8 · the uphold/overturn/soften/sharpen funnel IS a disagreement record — it just had no shape,
+// so the Synthesis stage was free to fold a dispute in silently, or to drop it. Anything other than
+// `uphold` is now a record the synthesis MUST rule on. A critic's `missed` finding is not a dispute:
+// nobody contradicted it, so it enters as an ordinary finding.
+const LAYER_BY_CRITIC = { overturn: 'evidence', soften: 'severity', sharpen: 'severity' }
+const ROOT_BY_CRITIC = { overturn: 'measurement-vs-assertion', soften: 'severity-calibration', sharpen: 'severity-calibration' }
+for (const r of clusters) {
+  for (const v of ((r.critic && r.critic.verdicts) || [])) {
+    if (v.verdict === 'uphold') continue
+    const src = ((r.dossier && r.dossier.findings) || []).find(f => f.id === v.target_id || `${r.cluster}:${f.id}` === v.target_id)
+    run.dispute({
+      finding_id: `${r.cluster}:${v.target_id}`,
+      layer_disputed: LAYER_BY_CRITIC[v.verdict] || 'interpretation',
+      root_cause: ROOT_BY_CRITIC[v.verdict] || 'ambiguous-spec',
+      positions: [
+        { by: `dossier:${r.cluster}`, holds: String((src && src.claim) || '').slice(0, 400), severity: src && src.severity },
+        { by: `critic:${r.cluster}`, holds: String(v.reason || '').slice(0, 400), verdict: v.verdict },
+      ],
+      resolution_model: 'adjudicated-by-synthesis',
+    })
+  }
+  // Lane scoping is the repo's own cross-domain boundary (CLAUDE.md §4): an IN-lane critic noting a
+  // conformance problem that belongs to SC/SE/PC may REPORT it and may not rule on it. The harness
+  // marks it `observation`, which is a terminal state no later adjudication can overwrite.
+  const note = String((r.critic && r.critic.conformance_note) || '')
+  if (/lane|SC-|SE-|PC-|MB-|FA-|out of scope/i.test(note)) {
+    run.dispute({
+      finding_id: `${r.cluster}:conformance`,
+      layer_disputed: 'scope',
+      root_cause: 'scope-boundary',
+      positions: [{ by: `critic:${r.cluster}`, holds: note.slice(0, 600) }],
+      cross_domain: true,
+    })
+  }
+}
+
+// P7b · rank by independent rediscovery across the seven clusters. These clusters trace the same
+// quantities through different surfaces — prose, contracts, Key payloads, code, the typed export —
+// so a defect that shows up in three of those traces is a pipeline-wide problem, not a local one.
+// That is precisely the distinction this audit exists to draw, and it was being computed and thrown
+// away every run.
+const allFindings = [].concat(
+  ...clusters.map(r => ((r.dossier && r.dossier.findings) || []).map(f => Object.assign({ lens: r.cluster }, f))),
+  ...clusters.map(r => ((r.critic && r.critic.missed) || []).map(f => Object.assign({ lens: `critic:${r.cluster}` }, f))),
+)
+const ranked = hRediscover(allFindings, f => f.lens)
+const corroborated = ranked.filter(g => g.rediscovery > 1)
+log(`Rediscovery: ${corroborated.length}/${ranked.length} distinct finding(s) surfaced independently by 2+ clusters`)
 
 phase('Synthesis')
 const synthPrompt = `${SHARED}
@@ -308,7 +676,7 @@ inside ${AUD}/):
    broken board_game/factions indexes, dead registry test), and the shaping-wave slot. Mark
    lane-owned items "feeds <LANE>, not ruled here" (armature §5.8/5.9 precedent).
 3. ${AUD}/proposed_quantity_armature_extension.md — PROPOSED companion to
-   designs/architecture/key_echo_armature_v1.md (quantity layer). Status: PROPOSED, held back from
+   systems/_architecture/key_echo_armature_v1.md (quantity layer). Status: PROPOSED, held back from
    merge-ratification (ED-1094). Mirror the armature's anatomy: §1 the quantity-contract row (bind
    the census row format as the per-quantity analog of the seam-contract row) · §2 registry deltas
    (armature §3 analog): the registry_delta_candidates consolidated, each with key, KIND, aliases,
@@ -323,7 +691,7 @@ inside ${AUD}/):
    critic funnel (uphold/overturn/soften/sharpen/missed counts per cluster), census stats
    (rows/statuses/spot-check), coverage notes from finders (including anything skipped).
 5. ${AUD}/README.md — reading order + headline, modeled on
-   designs/audit/2026-07-08-pessimist-action-audit/README.md (status line: ED-IN-0029 · Lane IN ·
+   audit/2026-07-08-pessimist-action-audit/README.md (status line: ED-IN-0029 · Lane IN ·
    READ-ONLY · PROPOSED, docket UNRULED). State loudly: nothing ratifies on merge; the docket and
    the extension are held back (ED-1094).
 6. For each cluster, write ${AUD}/01_workings/critic_<CK>.md from the critic JSON (verdicts table +
@@ -331,28 +699,99 @@ inside ${AUD}/):
 
 Severity discipline: keep P1 for "an engine/Godot consumer would ingest a wrong or ambiguous value".
 Every claim in every file carries its file:line. Every docket option has a recommended default.
-Return the summary JSON (headline, files_written, confirmed counts, docket_items).
+
+ADJUDICATION IS REQUIRED, NOT OPTIONAL. DISAGREEMENTS below is every place a critic contradicted a
+dossier, with what is disputed and why. Return one \`adjudications\` entry per record, ruling for one
+side from your OWN reading of the cited surface — "the critic said so" is not a ruling. A record you
+cannot settle from the files is ruled "unresolved" WITH the specific check that would settle it;
+that is a real outcome and it belongs in finding_status.md. A record you simply do not mention is
+the failure this field exists to prevent: it disappears while looking resolved.
+Records with status "observation" are OUT-OF-LANE and are NOT yours to rule on. Carry them into
+finding_status.md verbatim as observations routed to the owning lane. Do not adjudicate them.
+
+WEIGHT BY CORROBORATION. REDISCOVERY below counts how many INDEPENDENT clusters surfaced each
+finding while tracing different surfaces of the same pipeline. Treat a defect three clusters hit as
+structural and lead the report with it; treat a solitary one as one cluster's reading until you have
+checked the surface yourself. Say which is which — a reader cannot tell corroborated from singular
+in a flat findings table, and that difference is most of the audit's value.
+
+Return the summary JSON (headline, files_written, confirmed counts, docket_items, adjudications).
 
 CENSUS: ${JSON.stringify({ rows: census.rows, merge_notes: census.merge_notes, validation })}
 
 CLUSTER RESULTS (dossier + critic per cluster):
-${JSON.stringify(clusters)}`
+${JSON.stringify(clusters)}
 
-let synth = null
-for (let i = 0; i < 2 && !synth; i++) {
-  synth = await agent(synthPrompt, { schema: SYNTH_SCHEMA, label: 'synthesis-fable', phase: 'Synthesis', model: 'fable', effort: 'max' })
-  if (!synth) log(`fable synthesis attempt ${i + 1} returned null`)
+DISAGREEMENTS (JSON): ${JSON.stringify(run.disagreements)}
+
+REDISCOVERY (JSON): ${JSON.stringify(ranked.map(g => ({ key: g.key, rediscovery: g.rediscovery, lenses: g.lenses })))}`
+
+// This node was `model: 'fable'` with an opus fallback. Jordan ruled 2026-07-28 that fable is a
+// READ-ONLY audit / planner / orchestrator / guardrail tier and NOT a synthesis or artifact-
+// authorship tier (CLAUDE.md §10) — and this node writes six files, so it is the clearest possible
+// case of what the ruling excludes. Opus at max effort was already the declared fallback; it is now
+// simply the node, and the two-attempt fable dance and its opus retry collapse into A()'s existing
+// retry. tools/ci_wf_harness_check.py fails any workflow that puts fable back on a writing stage.
+const synth = await A(synthPrompt, { schema: SYNTH_SCHEMA, label: 'synthesis', phase: 'Synthesis', model: 'opus', effort: 'max' })
+for (const a of ((synth && synth.adjudications) || [])) {
+  run.adjudicate(a.finding_id, `${a.ruling}: ${a.reasoning}`, 'synthesis')
 }
-if (!synth) {
-  log('fable unavailable — falling back to opus effort:max (planned fallback)')
-  synth = await A(synthPrompt, { schema: SYNTH_SCHEMA, label: 'synthesis-opus-fallback', phase: 'Synthesis', model: 'opus', effort: 'max' })
-}
+
+// The guardrail slot IS where fable belongs under the ruling: read-only, writes nothing, rules on
+// the run rather than authoring it. It stays on opus here for the same reason as the social-contest
+// adjudicator — §10 makes fable an upgrade trigger, never a default, and nothing yet shows opus
+// failing this node. Promote it only on evidence, and record the evidence when you do.
+phase('Guardrail')
+const guardrail = await A(
+  [
+    'RUN GUARDRAIL. You are read-only and you write nothing. You are not re-auditing the subject —',
+    'you are judging whether THIS RUN produced a bankable result, and your output goes to a human',
+    'deciding how much to trust it.',
+    '',
+    'RUN SUMMARY (JSON):', JSON.stringify(run.summary()),
+    '',
+    'SYNTHESIS RETURN (JSON):', JSON.stringify(synth),
+    '',
+    'Rule on four things, each in one or two sentences with the evidence you used:',
+    ' 1. COVERAGE. Did every finder family and cluster actually run, and does any null_result signal',
+    '    line up with a coverage note that explains it? An unexplained silence is a hole, not a clean surface.',
+    ' 2. ADJUDICATION. Is every non-observation disagreement ruled on? Name any that are not.',
+    ' 3. CORROBORATION. Does the report lead with findings multiple clusters hit independently, or',
+    '    with whichever finding was written most confidently?',
+    ' 4. THE CAPS. Was anything truncated, sampled or skipped without being declared? (§0.1 point 5:',
+    '    a silent cap reads as full coverage.)',
+    'Then give an overall verdict: bankable / bankable-with-caveats / not-bankable, and say what a',
+    'reader should re-check first.',
+  ].join('\n'),
+  hCritic({
+    label: 'guardrail:run', phase: 'Guardrail', model: 'opus', effort: 'high',
+    schema: {
+      type: 'object', additionalProperties: false,
+      required: ['coverage', 'adjudication', 'corroboration', 'undeclared_caps', 'verdict', 'recheck_first'],
+      properties: {
+        coverage: { type: 'string' },
+        adjudication: { type: 'string' },
+        corroboration: { type: 'string' },
+        undeclared_caps: { type: 'string' },
+        verdict: { type: 'string', enum: ['bankable', 'bankable-with-caveats', 'not-bankable'] },
+        recheck_first: { type: 'string' },
+      },
+    },
+  }),
+)
+
+const summary = run.summary()
+if (summary.degraded) log(`[harness] run degraded — stop_reason=${summary.stop_reason}; the results below are complete, read the signals before banking them`)
 
 return {
+  run: summary,
+  guardrail,
   headline: synth && synth.headline,
   files_written: synth && synth.files_written,
   confirmed: synth && { P1: synth.confirmed_p1, P2: synth.confirmed_p2, P3: synth.confirmed_p3 },
   docket_items: synth && synth.docket_items,
+  rediscovery: ranked.map(g => ({ key: g.key, rediscovery: g.rediscovery, lenses: g.lenses })),
+  corroborated,
   census_rows: census.rows.length,
   census_validation: { pass: validation.pass_count, fail: validation.fail_count },
   finder_families: finderResults.length,

@@ -312,8 +312,11 @@ Do not represent the skeleton as a runnable head-start.
 - **Local tier — advisory accelerators** (one-time per clone: `git config core.hooksPath .githooks`):
   `.githooks/pre-commit` runs the SAME validators on staged files via `python tools/valoria_local.py
   --staged`; `.claude/settings.json` wires the edit-time naming nudge (`hook_naming_guard.py`), the
-  SessionStart banner (`session_status.py`), and the Stop handoff reminder
-  (`session_handoff_reminder.py`). Bypass a local block with `git commit --no-verify` — CI still enforces.
+  SessionStart banner (`session_status.py`), and — on Stop — the handoff reminder
+  (`session_handoff_reminder.py`) plus **`review_core.py --check`** (added 2026-07-28, ED-IN-0087:
+  the session close now reports the repo-state verdict against `registers/review_baseline.yaml`,
+  so a ratchet regression surfaces at the end of the session that caused it rather than in CI on
+  someone else's PR). Bypass a local block with `git commit --no-verify` — CI still enforces.
 
 **Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
 re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
@@ -384,6 +387,8 @@ Claude Code discovers skills by name + description; invoke the one that fits. Sk
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
 | Incremental module-by-module sim build | `valoria-simulator` |
 | "What's the state of the repo?" / exhaustive repo-state review | `python tools/review_core.py --summary` (Repository State Armature, ED-IN-0077; the single verdict-aggregator — one core behind the SessionStart banner + a GitHub job + the artifact) |
+| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). Complements, does not replace, `review_core.py --check`: that one grades repo-wide signals against `registers/review_baseline.yaml`; `/code-review` reads the change itself. |
+| Editing a `.claude/wf_*.js` orchestration script | edit the **owner** `tools/wf_harness.js` for anything in the harness block, then `python tools/ci_wf_harness_check.py --fix`; run `python tools/ci_claude_workflow_paths.py` before committing (every path a `.claude/` file names must resolve — 39 of 51 had rotted by 2026-07-28). |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
 driver; superseded by the Claude Code-native model). `valoria-combat-simulator` is also **retired**
@@ -405,16 +410,30 @@ relevant `tools/` validator and `pytest tests/valoria` → commit with the `[sco
 When you fan work out across subagents — the **Agent** tool, or `agent()` calls in a **Workflow** script
 — set the model **per task**. Subagents inherit the session model by default, so an un-annotated fan-out
 on an Opus session runs Opus *everywhere*, which is slow and costly for work that doesn't need it.
-Actively tier down; reserve Opus for genuine judgment. (This revives the retired orchestrator's routing
-discipline — `deprecated/skills/valoria-orchestrator/references/model_routing_table.md` — updated for the
-Claude Code-native `Agent`/`Workflow` tools and Opus 4.8.)
+Actively tier down; reserve Opus for genuine judgment. (The discipline originated in the retired
+orchestrator's routing table — `deprecated/skills/…/model_routing_table.md`, **history only, never
+canonical** per §1/§3; this section is the live owner and does not defer to it.)
+
+**Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0087).** Nothing else in the tree binds
+tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrors it.
+
+| Tier | Model ID | Context | In / Out $/MTok | Relative cost | Prompt-cache minimum |
+|---|---|---|---|---|---|
+| `haiku` | `claude-haiku-4-5` | 200K | 1 / 5 | **1×** | **4,096 tok** |
+| `sonnet` | `claude-sonnet-5` | 1M | 3 / 15 (intro 2 / 10 **through 2026-08-31**) | **2× now, 3× after** | 1,024 tok |
+| `opus` | `claude-opus-5` | 1M | 5 / 25 | **5×** | 512 tok |
+| `fable` | `claude-fable-5` | 1M | 10 / 50 | **10×** | 512 tok |
+
+The cost ladder is what makes "tier down" arithmetic rather than vibes: **delegating to `haiku` instead of
+`opus` pays only if delegation overhead is under ~80% of the task's own token cost** — the calculation the
+`fable-chief-agent` precedent asks for and never supplies.
 
 | Tier | Use for | Repo examples |
 |---|---|---|
 | **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
 | **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
 | **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-14 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
-| **`fable`** | The rare top-of-stack judgment nodes (added 2026-07-01, ED-1086 — availability restored 2026-07-01) | canonical-contract & **propagation-spec authorship** (the aggregate-up/distribute-down + termination artifact — doctrine ED-1083 §4), the emergence audit (seeded-sim + ablation verdicts, once runnable), deepest cross-corpus synthesis. Caveats: subscription metering (~50% weekly cap through 2026-07-07 — verify current terms); **no zero-data-retention** → use `opus` for retention-sensitive content; the safety classifier is irrelevant to game-design content. `fable` is an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. |
+| **`fable`** | **Read-only audit · planner · orchestrator · guardrail. NOT synthesis or artifact authorship** (RULED 2026-07-28, Jordan — supersedes the prior "propagation-spec authorship / deepest cross-corpus synthesis" assignment) | The rule of thumb: **a synthesis artifact is reviewable and cheap to revise; an audit verdict or a guardrail decision is where being wrong is silent.** Spend the top tier where the error doesn't announce itself. So: adversarial read-only audits, planning/decomposition before work starts, the final gate on a run — not the long-output stage that writes the report. Two corpus precedents converge on this independently (ED-IN-0085 §6.4). `fable` remains an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. ⚠️ **Unverified caveats carried over from ED-1086 and never re-checked**: subscription metering, zero-data-retention availability. Re-verify before relying on either; do not treat them as current. |
 
 **Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
 `haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
@@ -428,14 +447,34 @@ fits, rather than defaulting the whole fan-out to Opus.
 - **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
   mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
   `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
-  Opus verifier/synthesizer.**
+  Opus verifier/synthesizer** — with `fable`, when used at all, on the *audit/guardrail* node rather than
+  the synthesis one (the row above).
+- **Effort ladder** (GA, no beta header): `low | medium | high | xhigh | max`, **default `high`**. Set it
+  explicitly per `agent()` call. On `claude-opus-5` thinking is **on by default**, and
+  `thinking: disabled` is accepted **only at effort ≤ `high`** (400 at `xhigh`/`max`).
+
+**Three caching facts that bite the fan-out pattern** (verified 2026-07-28, ED-IN-0087 — none of them
+obvious, all of them load-bearing on how `parallel()` stages are written):
+1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once the
+   first response *begins streaming*, so N concurrent identical-prefix calls all pay full price. Fire one,
+   await its first token, then fan out the rest.
+2. **`haiku`'s cache minimum is 4,096 tokens — 8× `opus`'s, and non-monotonic across the roster.** A
+   shared preamble under that floor **silently never caches** on a Haiku finder stage (no error, just
+   `cache_creation_input_tokens: 0`). "Cheap tier ⇒ cheap fan-out" runs opposite to the price ladder here.
+3. **Switching model mid-conversation invalidates the entire cache** — no escape hatch, caches are
+   model-scoped. Escalate at *phase* boundaries, where the cache turns over anyway, not mid-phase.
 
 **Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
 `systems/_architecture/holonic_container_doctrine_v1.md` for the doctrine side):
 - **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
   dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
   orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
-  more independent. Make independence structural: critic gets read-only tools.
+  more independent. Make independence structural: critic gets read-only tools. **This is now wired,
+  not merely stated (ED-IN-0087):** pass `hCritic({...})` in a `.claude/wf_*.js` stage and the
+  agent runs as `valoria-critic` (`.claude/agents/valoria-critic.md`, `tools: Read, Grep, Glob` —
+  no Write, no Edit, no Bash). Until 2026-07-28 every "critic" in this repo was declared read-only
+  by a sentence *inside its prompt*, which restricts nothing; `tools/ci_wf_harness_check.py` now
+  fails any critic/verify stage that does not route through `hCritic`.
 - **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
   binding constraint is.
 - **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
@@ -445,9 +484,26 @@ fits, rather than defaulting the whole fan-out to Opus.
   declared I/O only; never special-case an entity/outcome (**scripting drift**); never grow a
   scale-local interface dialect (**shape divergence**).
 - **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
-  *recurred* — never architect the ensemble up front. No roster files exist yet by design; the
-  watched candidates are a standing conformance-scanner and (once seeded headless sims + ablation
-  are runnable) an emergence-auditor — see the 2026-07-01 decision queue.
+  *recurred* — never architect the ensemble up front. **First and so far only promotion:
+  `valoria-critic` (2026-07-28, ED-IN-0087)** — the adversarial-verifier role had independently
+  recurred in all three `wf_*.js` scripts (Verify / Adversarial / Critic phases), which is exactly
+  the recurrence trigger this rule waits for. Still-watched candidates: a standing
+  conformance-scanner and (once seeded headless sims + ablation are runnable) an emergence-auditor
+  — see the 2026-07-01 decision queue.
+- **Run discipline lives in one owner and is copied, not imported (ED-IN-0087).** Workflow scripts
+  run in a sandbox with **no filesystem and no Node API**, so they cannot `import` a shared module.
+  `tools/wf_harness.js` is the single owner of the prelude (termination signals + null-result alarm
+  + rediscovery ranking + disagreement records) and it is copied verbatim between sentinels into
+  each `.claude/wf_*.js`. **Edit the owner, never a copy**, then
+  `python tools/ci_wf_harness_check.py --fix`. Four things the harness gives every workflow:
+  a **closed `stop_reason` set that is report-only** (Jordan ruled 2026-07-28 — a breaker that
+  halts a 40-agent audit on a heuristic costs more than the defect it caught, so every signal
+  records and the run continues); a **null-result alarm** on any lens that returned nothing, which
+  ships *paired with* **rank-by-independent-rediscovery** so the alarm never becomes pressure to
+  manufacture findings; and **disagreement records with required adjudication**, where an
+  out-of-lane record is a terminal `observation` no later ruling can overwrite (observe, don't
+  judge). Behaviour is pinned by `tests/valoria/test_wf_harness.py`, which executes the harness
+  under node — mutation-verified, 13/13 mutants killed.
 
 ---
 
@@ -455,7 +511,11 @@ fits, rather than defaulting the whole fan-out to Opus.
 
 **A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling
 loops — by any mechanism. Enforced, not merely asked: `.claude/settings.json` `permissions.deny`
-blocks `send_later`, `create_trigger`, `ScheduleWakeup`, and `CronCreate`, and
+blocks `send_later`, `create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_trigger`,
+`fire_trigger`, and `Skill(loop)` (**widened 2026-07-28, ED-IN-0087** — the last three were found
+still reachable in-session by ED-IN-0085: `update_trigger` re-arms an *existing* Routine without
+needing `create_trigger`, `fire_trigger` invokes one whose prompt can re-arm, and `Skill(loop)` is
+/loop's entry point rather than its already-denied pacing primitives), and
 `tools/ci_hooks_verifier.py` Check 6 (the BLOCKING "Enforcement Architecture Intact" job) fails if
 any entry is dropped or if this section goes missing. The deny-list is the single owner of the rule;
 the check is the guard that fails on recurrence (§0.1 point 5).
@@ -481,7 +541,7 @@ multiple of that. Per-wake-up *added* context is separate and additive: one `get
 repo measures 9.4 KB ≈ 2.4k tokens, and a check-in typically also reads PR state plus comments.
 
 **The falsifier**, per §0.1 point 3: `tests/valoria/test_no_polling_triggers.py` asserts the deny-list
-covers all four primitives and that this section survives. Delete a deny entry and that test fails,
+covers all **seven** primitives and that this section survives. Delete a deny entry and that test fails,
 along with the CI job. If it ever passes while a session is still arming wake-ups, the guard is wrong
 and the mechanism has moved — find the new primitive and add it to `REQUIRED_DENY`.
 

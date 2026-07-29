@@ -17,11 +17,35 @@ Modes:
 
 All functions are pure wrappers over `git`; no network, no PAT, no cache.
 """
+import glob
 import os
 import subprocess
 
 # git's well-known empty-tree object — diff against this == "everything is new".
 EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
+
+_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def sim_reference_roots(repo_root=None):
+    """Every directory the 1:1 Python sim reference now lives under. ONE OWNER (ED-IN-0087).
+
+    `sim/` was RETIRED 2026-07-21 (ED-IN-0071 P4): the core moved to `engine/` and the
+    per-subsystem sims to `systems/<subsystem>/sim/`. Two tools still walked the old flat tree, and
+    because `os.walk` on a missing directory yields nothing rather than raising, both went SILENTLY
+    HALF-DEAD — `ci_quantity_vocabulary_check` kept reporting its contract-side findings and looked
+    like a working gate while its entire code-side scan returned zero files.
+
+    That is the §0.1 point-5 pattern-defect signature (correct when written; broken because
+    something else moved), so the answer is the standard shape: one owner for the question, every
+    site routed through it, and a guard that fails on recurrence
+    (tests/valoria/test_sim_reference_roots.py). The glob is deliberate — a NEW subsystem gains its
+    sim automatically, which is the property the hardcoded list never had.
+    """
+    root = repo_root or _REPO
+    roots = [os.path.join(root, 'engine')]
+    roots += sorted(glob.glob(os.path.join(root, 'systems', '*', 'sim')))
+    return [p for p in roots if os.path.isdir(p)]
 
 
 def _git(args):

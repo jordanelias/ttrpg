@@ -132,6 +132,49 @@ def classify(bullet: str, cutoff: datetime.date) -> tuple[str, bool]:
     return ('stale' if seen is not None and seen < cutoff else 'live'), False
 
 
+# ── EXECUTIVE-SUMMARY DRIFT (ED-IN-0088) ─────────────────────────────────────────────────
+# The summary is authored, not generated — deliberately, because a generated one is a table of
+# contents and the ruling wanted a human judgement. But an authored summary DECAYS UNDETECTABLY:
+# items close, new ones land, and the paragraph a reader trusts most quietly stops describing the
+# file underneath it. Nothing could tell, because nothing in it was checkable.
+#
+# So the summary carries two FACTS that can be recomputed from the file — the live-item count and
+# the newest item's date — and this reports when either diverges. That keeps the judgement human
+# while making the decay observable, which is the whole trick: a claim nobody can check is not a
+# summary, it is a memory.
+#
+# Report-only, and stated as such. This runs inside a tool an author invokes, not a commit gate;
+# a stale count is a nudge to re-read a paragraph, never a reason to block work.
+SUMMARY_COUNT = re.compile(r'(\d+)\s+(?:live|open)\b', re.I)
+SUMMARY_DATE = re.compile(r'\b(20\d\d-\d\d-\d\d)\b')
+
+
+def summary_drift(lane, summary, live, other_live):
+    """Facts asserted in the executive summary vs the file it summarises."""
+    out = []
+    body = re.sub(r'<!--.*?-->', '', summary, flags=re.S)
+    bullets = list(live) + [b for bl in other_live.values() for b in bl]
+
+    claimed = SUMMARY_COUNT.search(body)
+    if not claimed:
+        out.append(f"{lane}: executive summary states no live-item count — add one (e.g. "
+                   f"\"{len(bullets)} live\"), or it cannot be checked against the file and will "
+                   f"decay silently")
+    elif int(claimed.group(1)) != len(bullets):
+        out.append(f"{lane}: executive summary says {claimed.group(1)} live item(s); the file has "
+                   f"{len(bullets)} — the summary has drifted from what it summarises")
+
+    newest = max((d for b in bullets for d in SUMMARY_DATE.findall(b)), default=None)
+    stated = SUMMARY_DATE.findall(body)
+    if newest and not stated:
+        out.append(f"{lane}: executive summary carries no date; the newest item is {newest} — "
+                   f"a reader cannot tell how current the summary is")
+    elif newest and max(stated) < newest:
+        out.append(f"{lane}: executive summary's newest date is {max(stated)} but the file carries "
+                   f"an item dated {newest} — the summary predates its own contents")
+    return out
+
+
 def tag_problems(lane: str, bullets: list[str]) -> list[str]:
     """Consistency checks on the tag itself. A tag that can lie without anything noticing is
     no better than the prose it replaced, so: DONE must not sit on top of unfinished residue,
@@ -295,6 +338,14 @@ def build(lane: str, cutoff: datetime.date, write: bool) -> list[str]:
         words = len(re.sub(r'<!--.*?-->', '', summary, flags=re.S).split())
         if words > SUMMARY_MAX_WORDS:
             problems.append(f"{lane}: executive summary is {words} words (max {SUMMARY_MAX_WORDS})")
+    # UNCONDITIONAL, and that is the correction. This sat in the `else` above — reachable only once
+    # a lane already had a summary — and NO lane has one yet, so the drift guard was dead on every
+    # real input on the day it shipped. Exactly §0.1 point 2: an assertion that cannot observe the
+    # failure it excludes is not a weak check, it is an absent one. It was caught by finally running
+    # `handoff_atomize --lane IN --check` against real data instead of only against fixtures.
+    # On the placeholder it reports "states no live-item count", which is the right answer: a
+    # summary asserting nothing recomputable cannot drift only because it never said anything.
+    problems.extend(summary_drift(lane, summary, live, other_live))
 
     # ── skeleton ─────────────────────────────────────────────────────────────
     sk = [f"# Handoff — {lane}", "",

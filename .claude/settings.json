@@ -8,7 +8,14 @@
       "mcp__claude-code-remote__create_trigger",
       "mcp__claude_code_remote__create_trigger",
       "ScheduleWakeup",
-      "CronCreate"
+      "CronCreate",
+      "mcp__Claude_Code_Remote__update_trigger",
+      "mcp__claude-code-remote__update_trigger",
+      "mcp__claude_code_remote__update_trigger",
+      "mcp__Claude_Code_Remote__fire_trigger",
+      "mcp__claude-code-remote__fire_trigger",
+      "mcp__claude_code_remote__fire_trigger",
+      "Skill(loop)"
     ]
   },
   "hooks": {
@@ -16,21 +23,34 @@
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "python tools/hook_naming_guard.py" }
+          {
+            "type": "command",
+            "command": "python tools/hook_naming_guard.py"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "python tools/session_status.py" }
+          {
+            "type": "command",
+            "command": "python tools/session_status.py"
+          }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "python tools/session_handoff_reminder.py" }
+          {
+            "type": "command",
+            "command": "python tools/session_handoff_reminder.py"
+          },
+          {
+            "type": "command",
+            "command": "python tools/review_core.py --check || true"
+          }
         ]
       }
     ]

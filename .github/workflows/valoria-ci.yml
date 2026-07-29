@@ -60,7 +60,10 @@ jobs:
             tools/index_gen.py \
             tools/quantity_registry.py \
             tools/ci_quantity_vocabulary_check.py \
-            tools/wiring_map_check.py
+            tools/wiring_map_check.py \
+            tools/ci_claim_provenance_check.py \
+            tools/ci_claude_workflow_paths.py \
+            tools/ci_wf_harness_check.py
           echo "All tools: syntax OK"
 
   # ── REGISTER + ARCHITECTURE GATES ───────────────────────────────────────────
@@ -469,6 +472,41 @@ jobs:
           python-version: '3.11'
       - name: Every quantitative ledger claim names an instrument that exists
         run: python3 tools/ci_claim_provenance_check.py
+
+  workflow-apparatus-check:
+    # ED-IN-0087 (finding: ED-IN-0085). The .claude/ orchestration scripts are apparatus nothing was
+    # checking, and they had rotted in two directions at once: 39 of 51 referenced dependencies no
+    # longer resolved to a live path (so agents were dispatched to read nothing), and all three
+    # scripts shared four structural holes — no termination discipline, critic independence asserted
+    # only as a sentence inside a prompt, no alarm on a critic that found nothing, and no record of a
+    # disagreement the run then failed to resolve.
+    #
+    # Two gates, one job, because they fail for the same reason: the .claude/ tree is the one part of
+    # this repo's machinery that nothing in CI ever read.
+    #   · ci_claude_workflow_paths.py — every path a .claude/ file names resolves (live, or via the
+    #     restructure ledger). Written because ED-IN-0085's own headline was hand-counted and wrong
+    #     by an order of magnitude; the instrument is the correction.
+    #   · ci_wf_harness_check.py — the run-discipline prelude has ONE owner (tools/wf_harness.js) and
+    #     is copied verbatim into each script, since workflow scripts run in a sandbox with no
+    #     imports. This fails if a copy drifts, if a script stops calling the harness, if a critic
+    #     stage is not structurally read-only, or if model:'fable' returns to a writing stage against
+    #     the 2026-07-28 ruling. The BEHAVIOURAL half — that the breaker fires, that signal() never
+    #     throws — is tests/valoria/test_wf_harness.py, in the pytest job.
+    name: Workflow Apparatus (.claude/ paths resolve + run-discipline harness wired)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Every .claude/ path reference resolves
+        run: python3 tools/ci_claude_workflow_paths.py
+      - name: Run-discipline harness present, current, and wired
+        run: python3 tools/ci_wf_harness_check.py
 
   supersession-check:
     name: Supersession Churn Guard (warn)

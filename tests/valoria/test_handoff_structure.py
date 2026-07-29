@@ -102,3 +102,40 @@ def test_archive_index_lists_every_item_exactly_once():
 def test_tokens_counts_characters_not_bytes():
     # A byte count overstates unicode-heavy files, and every cap in this repo is chars//4.
     assert H.tokens("✅" * 4) == 1
+
+
+# ── executive-summary drift (ED-IN-0088) ─────────────────────────────────────────────
+
+def test_summary_drift_catches_a_stale_count_and_a_stale_date():
+    """The summary is AUTHORED, not generated — deliberately. The cost of that choice is that it
+    decays undetectably: items close, new ones land, and the paragraph a reader trusts most quietly
+    stops describing the file under it. So it carries two recomputable facts and this reports when
+    either diverges — human judgement kept, decay made observable."""
+    live = ["- [OPEN] a thing 2026-07-28", "- [OPEN] another thing"]
+    stale = H.summary_drift('XX', 'Lane holds 3 live items as of 2026-07-01.', live, {})
+    assert any('says 3 live item(s); the file has 2' in p for p in stale)
+    assert any('predates its own contents' in p for p in stale)
+
+
+def test_summary_drift_is_silent_when_the_summary_is_accurate():
+    """Both directions: a guard that always fires is noise, and noise is what gets ignored."""
+    live = ["- [OPEN] a thing 2026-07-28", "- [OPEN] another thing"]
+    assert H.summary_drift('XX', 'Lane holds 2 live items as of 2026-07-28.', live, {}) == []
+
+
+def test_summary_with_no_checkable_fact_is_reported_as_uncheckable():
+    """A summary asserting nothing recomputable cannot drift — because it never said anything. That
+    is the failure mode this guard exists for, so silence would be the wrong answer."""
+    problems = H.summary_drift('XX', 'Lane is in reasonable shape.', ["- [OPEN] a thing"], {})
+    assert any('states no live-item count' in p for p in problems)
+
+
+def test_the_drift_guard_is_actually_WIRED_into_the_atomizer():
+    """Guards the wiring, not just the function. A checker nobody calls is dead data — the exact
+    defect class this session spent its time removing, and a mutation deleting the call site
+    survived every assertion above until this test existed."""
+    import inspect
+    src = inspect.getsource(H)
+    assert 'problems.extend(summary_drift(' in src, (
+        "summary_drift() is defined but never called — the executive summary can drift silently "
+        "again, which is the whole thing it was added to prevent.")

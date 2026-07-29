@@ -102,17 +102,25 @@ for base in ('skills', 'tools'):
                     warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
                                     f"(port to working-tree reads)")
 
-# ── Check 5 (warn): skeleton-debt — design docs over 400 lines ───────────────
-for root, _dirs, files in os.walk('designs'):
-    for fname in files:
-        if (fname.endswith('_v30.md') and 'infill' not in fname
-                and 'archive' not in fname and 'skeleton' not in fname):
-            fpath = os.path.join(root, fname)
-            with open(fpath, encoding='utf-8', errors='replace') as f:
-                n = len(f.readlines())
-            if n > 400:
-                warnings.append(f"SKELETON-DEBT: {fpath.replace(os.sep, '/')} is {n} lines (limit 400); "
-                                f"extract prose to *_infill.md")
+# ── Check 5: RETIRED 2026-07-28 (ED-IN-0088) — the rule already lives once, elsewhere ─────
+# It walked `designs/`, retired 2026-07-19, so it had scanned nothing since PR #191 and reported
+# clean. The obvious repair was to repoint it at `systems/`. That would have been WRONG twice over:
+#
+#   1. Its rule was superseded. Both its advice ("extract prose to *_infill.md") and its threshold
+#      (400 lines) encode the index+infill convention CLAUDE.md §4 RETIRED on 2026-07-26 in favour
+#      of sequential `_partN` splits at ~15k tokens. Repointing as-is would have emitted 29 warnings
+#      recommending a practice the repo had just abandoned.
+#   2. Its rule is not its own. `tools/compliance_check.py` reads `references/atomization_rules.yaml`
+#      — the single owner of the threshold — applies the live 15,000-token cap, and already reports
+#      every oversized doc under `systems/`. Verified by hand: all 8 actionable docs the correct rule
+#      identifies (41.7k faction_politics_v30 down to 15.3k integration_proposal_v30) appear in
+#      compliance_check's 55 size warnings. Reviving a second implementation would be a fresh §8
+#      violation ("Never re-implement a rule") committed while cleaning up after other ones.
+#
+# So the check is GONE, not repointed and not left inert. `compliance_check --check-only
+# --repo-state .` is the owner and is already a blocking CI job.
+# Falsifier: tests/valoria/test_retired_tree_apparatus.py asserts compliance_check still reports the
+# oversized systems/ docs, so the coverage this deletion relies on cannot vanish unnoticed.
 
 # ── Check 6: self-scheduling deny-list intact ────────────────────────────────
 # ED-IN-0084. The waste class is a session that re-arms its own wake-up: each
@@ -125,6 +133,19 @@ REQUIRED_DENY = (
     'create_trigger',  # claude-code-remote: send_later's underlying Routine API
     'ScheduleWakeup',  # /loop dynamic self-pacing
     'CronCreate',      # /loop fixed-interval scheduling
+    # --- widened 2026-07-28 (ED-IN-0087) ---------------------------------------------
+    # ED-IN-0084 pinned the four primitives that were *known* then, and wrote its own
+    # falsifier as: "if a session ever schedules a wake-up while these pass, find the new
+    # primitive and add it to REQUIRED_DENY." That is exactly what happened — ED-IN-0085
+    # found three live route-arounds still reachable in-session:
+    'update_trigger',  # re-enables / re-crons an EXISTING Routine, so a session that cannot
+                       # create one can still arm a disabled one — create_trigger's twin
+    'fire_trigger',    # fires a Routine on demand; the Routine's own prompt can re-arm, so
+                       # this is a one-hop path back into the chain create_trigger blocks
+    'Skill(loop)',     # the /loop skill runs a prompt on a recurring interval in-session —
+                       # the same polling behaviour, reached through the skill surface rather
+                       # than a scheduling tool. ScheduleWakeup/CronCreate deny /loop's
+                       # pacing primitives; this denies its entry point.
 )
 if os.path.exists(SETTINGS):
     import json

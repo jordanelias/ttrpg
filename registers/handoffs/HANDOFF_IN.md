@@ -6,11 +6,33 @@ Root `HANDOFF.md` is the index; see it for the global "Next actions" pointer and
 items. `IN` is also the catch-all for genuinely cross-cutting repo-governance work (ID systems,
 CI gates, canon-currency reconciliation) that doesn't belong to any one subsystem lane.
 
+## Executive summary
+
+- Lane state 2026-07-28: 44 live items.
+- Hot: `.claude/` apparatus + run discipline just landed (ED-IN-0087/0088/0089); two of its
+  assumptions are unverified and tagged [PART].
+- Blocked on Jordan: handoff archive-vs-dormant call (ED-IN-0086).
+- Known debt: 28 untagged bullets; same-lane ED collisions unaddressed by design.
+
 ## Pending
 
 - **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
   landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
   the banner counts as settled.
+
+
+- **[DONE 2026-07-28] ED-IN-0087/0088/0089/0090 — `.claude/` apparatus + run discipline.** Paths
+  49/49 live (was 12/51); `tools/wf_harness.js` owns the prelude; critics structurally read-only
+  (composition verified by probe, ED-IN-0090); retired-`sim/` scanners revived behind
+  `ci_common.sim_reference_roots()`; Check 5 retired to `compliance_check`; `combat` →
+  `validated_pc`; CURRENT.md stamp scoped to canonical heads. Detail in the ledger entries.
+- **[PART] ED-IN-0087 residual — one assumption left.** Residual: `hSameFinding`'s containment
+  thresholds (≥3 shared words, ≥0.6 of the smaller set) are calibrated on wording, not measured
+  against a live multi-lens run — the first real workflow run should check for over/under-grouping.
+- **[OPEN] Same-lane ED collisions are a pattern, not an accident.** 0085→0086→0087 across PR
+  #245/#246/#247 in two days. §3's lane split killed *cross*-lane collision by construction;
+  *same*-lane still rests on discipline, 0-for-2 with two sessions on one lane. Remedy
+  (reserve-on-branch / CI-visible id-claim) is a governance call — observation only.
 
 - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR
   check-ins outright ("I don't even need check in triggers, I can just see what's happening by the

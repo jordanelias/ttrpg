@@ -3,9 +3,9 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 265,
+    "findings": 270,
     "by_category": {
-      "apparatus_orphan": 3,
+      "apparatus_orphan": 4,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
@@ -24,14 +24,14 @@
       "register_phantom_source": 1,
       "register_quarantined": 1,
       "sim_not_implemented": 39,
-      "stale_retired_pointer": 15,
-      "status_noncurrent": 25,
+      "stale_retired_pointer": 18,
+      "status_noncurrent": 26,
       "unregistered_term": 39
     },
     "by_severity": {
       "high": 24,
-      "med": 113,
-      "low": 128
+      "med": 117,
+      "low": 129
     }
   },
   "by_lane": {
@@ -66,8 +66,8 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 162,
-      "apparatus_orphan": 3,
+      "total": 166,
+      "apparatus_orphan": 4,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
@@ -80,7 +80,7 @@
       "register_phantom_source": 1,
       "register_quarantined": 1,
       "sim_not_implemented": 7,
-      "stale_retired_pointer": 15,
+      "stale_retired_pointer": 18,
       "status_noncurrent": 2,
       "unregistered_term": 39
     },
@@ -90,7 +90,7 @@
       "sim_not_implemented": 3
     },
     "unassigned": {
-      "total": 45,
+      "total": 46,
       "contract_doc_null": 9,
       "contract_island": 4,
       "contract_missing_entirely": 2,
@@ -98,7 +98,7 @@
       "key_orphan_emit": 1,
       "prose_marker": 8,
       "sim_not_implemented": 4,
-      "status_noncurrent": 16
+      "status_noncurrent": 17
     }
   },
   "prose_marker_rollup": {
@@ -124,6 +124,15 @@
       "title": "tools/build_audit_registry_backfill.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
       "path": "tools/build_audit_registry_backfill.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "apparatus_orphan",
+      "id": "tools/ci_claude_workflow_paths.py",
+      "title": "tools/ci_claude_workflow_paths.py",
+      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
+      "path": "tools/ci_claude_workflow_paths.py",
       "lane": "IN",
       "severity": "low"
     },
@@ -1776,8 +1785,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:725",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:725",
+      "id": "tools/observability/build_incompleteness.py:754",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:754",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN",
@@ -1803,9 +1812,18 @@
     },
     {
       "category": "stale_retired_pointer",
+      "id": "references/atomization_rules.yaml",
+      "title": "references/atomization_rules.yaml",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml",
+      "path": "references/atomization_rules.yaml",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "stale_retired_pointer",
       "id": "references/canonical_sources_provenance.md",
       "title": "references/canonical_sources_provenance.md",
-      "detail": "20 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/conflict_architecture_proposal.md, designs/audit/2026-05-17-v18-integration/integration_plan_v18.md, designs/factions/faction_systems_overview_v30.md (+16 more)",
+      "detail": "21 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/conflict_architecture_proposal.md, designs/audit/2026-05-17-v18-integration/integration_plan_v18.md, designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json (+17 more)",
       "path": "references/canonical_sources_provenance.md",
       "lane": "IN",
       "severity": "med"
@@ -1839,6 +1857,15 @@
     },
     {
       "category": "stale_retired_pointer",
+      "id": "references/descriptor_registry.yaml",
+      "title": "references/descriptor_registry.yaml",
+      "detail": "1 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/substrate/keys.py",
+      "path": "references/descriptor_registry.yaml",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "stale_retired_pointer",
       "id": "references/glossary.md",
       "title": "references/glossary.md",
       "detail": "5 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md, designs/provincial/peninsular_strain_v30.md (+1 more)",
@@ -1850,7 +1877,7 @@
       "category": "stale_retired_pointer",
       "id": "references/id_reservations.yaml",
       "title": "references/id_reservations.yaml",
-      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md",
+      "detail": "2 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md, sim/tests/test_f7_smoke_oracle.py",
       "path": "references/id_reservations.yaml",
       "lane": "IN",
       "severity": "med"
@@ -1904,7 +1931,7 @@
       "category": "stale_retired_pointer",
       "id": "registers/mechanics_index.yaml",
       "title": "registers/mechanics_index.yaml",
-      "detail": "27 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md, designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md, designs/provincial/altonian_reinforcements_v30.md (+11 more)",
+      "detail": "47 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md, designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md, designs/provincial/altonian_reinforcements_v30.md (+23 more)",
       "path": "registers/mechanics_index.yaml",
       "lane": "IN",
       "severity": "med"
@@ -1920,9 +1947,18 @@
     },
     {
       "category": "stale_retired_pointer",
+      "id": "registers/placeholder_names.yaml",
+      "title": "registers/placeholder_names.yaml",
+      "detail": "2 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/autoload/npc_ai.py, sim/provincial/home_sanctuary.py",
+      "path": "registers/placeholder_names.yaml",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "stale_retired_pointer",
       "id": "registers/supersession_register.yaml",
       "title": "registers/supersession_register.yaml",
-      "detail": "20 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-04-30-architecture-session/00_index.md, designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md, designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md (+11 more)",
+      "detail": "23 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-04-30-architecture-session/00_index.md, designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md, designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md (+14 more)",
       "path": "registers/supersession_register.yaml",
       "lane": "IN",
       "severity": "med"
@@ -1978,6 +2014,15 @@
       "title": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
+      "lane": "unassigned",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/2026-07-28-external-practice-corpus-investigation.md",
+      "title": "proposals/2026-07-28-external-practice-corpus-investigation.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/2026-07-28-external-practice-corpus-investigation.md",
       "lane": "unassigned",
       "severity": "med"
     },
