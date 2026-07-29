@@ -219,7 +219,17 @@ represent gate **0.0089 vs 0.207** clamped — **23×**.
 
 **Note:** `armor_defeat_sigma` legitimately keeps the raw signed cap. Do not "fix" that one.
 
-**Guard:** assert the deficit consumers agree on a clamped input.
+**Guard — with a concrete RED-ON-MAIN pin (review R-11.3).** "Assert the consumers agree" is an
+implementation-consistency check with no stated failing form, so it could ship green on broken code. Pin the
+numbers instead, using a pure cutter against mail (`bardiche`, raw `adef_cap` **−0.9000**):
+
+| quantity | on main (broken) | must become |
+|---|---|---|
+| `reach_threat(bardiche, medium)` | **0.5275** | the `max(0, cap)` prediction (**0.843**) |
+| `represent_measure_p(bardiche, medium)` | **0.0089** | the `max(0, cap)` prediction (**0.207**, a 23× move) |
+
+Both are red on main today — verified. Assert against the clamped-cap prediction, not against a hard-coded
+constant, so the guard survives a legitimate recalibration of the surrounding terms.
 
 **Blast radius:** moves cutter-polearms vs mail/plate. **Reference tables will move** — regenerate with
 `armour_participation.py --update` and **commit the diff as the disclosure**.
@@ -242,8 +252,15 @@ vs mace **17**; staff-vs-arming @heavy **0 decided / 200 draws**.
 ED-PC-0031's headline mechanic, and `config.py`'s "staff (p_auth ~4)" comment. **Fix the code and the two
 comments; do not fix the comments alone.**
 
-**Direction:** a tip-lever term for centre-balanced hafts — the per-element `|x|/Lt` form already exists in
-`percussion_element_authority`.
+**Direction — and E2a/E2b MUST AGREE ON ONE FORM (review R-11.4).** E2a needs a tip-lever term for
+centre-balanced hafts. **Do not copy `percussion_element_authority`'s `|x|/Lt` verbatim — that is the very form
+E2b declares defective**, because it returns 0 for any element at `x = 0`. Copying it would propagate the bug
+from the element scale to the weapon scale.
+
+**Both batches want the same underlying quantity: a STRIKE-POINT lever** — the distance from the hand to where
+the weapon actually strikes — not a CoM offset (E2a's current bug) and not a bare `|x|` about the haft origin
+(E2b's current bug). **Design the shared form once, in E2a, and have E2b consume it.** If the two batches ship
+different lever forms, one of them is wrong.
 
 **Guard — SCOPED (adversarial review R-1; the original was unimplementable):** **no BLUNT-NATIVE weapon derives
 0 percussion authority.** The original read "no roster weapon with mass > 0", which goes red on **37 of 51
@@ -262,8 +279,14 @@ non-zero.
 selected: `afforded_heads(hook_sword)` = `{curved_cut, point}` only. **Generalises to any guard-mounted
 striking element** — a hand-guard punch has an arm's lever, not zero.
 
-**Guard:** every **authored** `mode_element` is reachable by `afforded_heads` in at least one legal
-configuration. This is the guard that would have caught it originally.
+**Guard — PER-TOKEN, not per-element (review R-11.1):** every authored `mode_element`'s **head token** must
+appear in `afforded_heads` for at least one legal configuration.
+
+**It must NOT be written per-element.** `afforded_heads` returns a token→best-element map, so when a weapon
+carries two elements sharing a token only one wins the union — correctly. **Four weapons do this:**
+`poleaxe` (blunt + point + point), `bec_de_corbin` (blunt + point + point), `lucerne_hammer` (blunt + blunt +
+point), `kama_yari` (point + curved_cut + curved_cut). A per-element guard flags all four as broken; a
+per-token guard flags **only hook_sword**, which is the actual defect.
 
 ---
 
@@ -413,7 +436,7 @@ source, rather than appended.
 | **R-8** | E3b's guard is one-sided (passes a wrong fix paying the thrust lever on both arms), and the fix creates a **new selection-vs-damage disagreement** (B1/F24 class) that the plan did not disclose. | **Fixed** — complementary pin added; the consequence is now a disclosed expectation |
 | **R-9** | The E0-first justification over-claims — E1a/E1b contain **no token-keyed edits**. True constraint is E0 before E3b/E4/E5. Also: the **serialization constraint was never stated**, and **E2-before-E3 is load-bearing** (E2a moves the hammer E3a targets). | **Fixed** — §3a |
 | **R-10** | The verified/carried distinction eroded: E1b/E2b/E3b numbers presented as flat fact without the "carried at auditor's confidence" marker. **All three happen to be true** — the reviewer re-ran them — but the framing was not honest to its sources. | **Accepted.** F2/F4/F6 are now independently verified; the plan no longer needs the marker, but the lapse is recorded |
-| **R-11** | Four specification defects: E2b guard ambiguity (per-token vs per-element), the staff-stagger pin gameable by an epsilon, M4's guard has no stated red-on-main form, and E2a directs copying the very lever form E2b declares defective. | **Partially fixed** — the stagger band is in; the other three are noted here for the executing session to resolve at implementation |
+| **R-11** | Four specification defects: E2b guard ambiguity (per-token vs per-element), the staff-stagger pin gameable by an epsilon, M4's guard has no stated red-on-main form, and E2a directs copying the very lever form E2b declares defective. | **ALL FOUR FIXED.** E2b guard is now per-**token**, with the four duplicate-token weapons (poleaxe, bec_de_corbin, lucerne_hammer, kama_yari) named as the reason a per-element form would be wrong — verified. Stagger pinned to a band. M4's guard carries a concrete red-on-main pin (bardiche vs medium: `reach_threat` **0.5275**, `represent_measure_p` **0.0089**, both verified) asserted against the clamped-cap prediction rather than a constant. E2a/E2b are now required to share **one strike-point lever form**, with an explicit warning not to copy the defective `\|x\|/Lt`. |
 
 **Found SOUND and not to be re-litigated:** every headline number in E1–E3 reproduces exactly on live code
 (bind_sigma −1.0562→−1.1904; staff 0.0/0.0/0.0 and stagger (0,0); hook_sword affordance and its uniqueness in
