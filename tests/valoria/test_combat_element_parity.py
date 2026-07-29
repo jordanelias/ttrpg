@@ -1,11 +1,21 @@
 """Element-model PARITY HARNESS — the Phase-A gate of the morphology re-architecture.
 
-Locks the pre-rearchitecture derived statistics of every weapon so the located-part refactor cannot silently
-drift them. The fixture (golden_element_parity.json) was generated at commit e725cc62 from values proven
-byte-identical (1e-9) to the PRE-keystone engine (single-C_HEAD-lump derive): the keystone rewrote derive()
-to a positional sum over located parts with a synthesized single reproduction element per weapon, and this
-harness is the proof it stays identical while the Phase-A plumbing (bake extension, element-union
-afforded_heads, sel_element threading) lands.
+Locks the derived statistics of every weapon so a refactor cannot silently drift them. The fixture
+(golden_element_parity.json) was ORIGINALLY generated at commit e725cc62 from values proven byte-identical
+(1e-9) to the PRE-keystone engine (single-C_HEAD-lump derive): the keystone rewrote derive() to a positional
+sum over located parts with a synthesized single reproduction element per weapon, and this harness was the
+proof it stayed identical while the Phase-A plumbing (bake extension, element-union afforded_heads,
+sel_element threading) landed.
+
+PROVENANCE, CURRENT (the line above was stale by two deliberate re-baselines): the fixture was last
+regenerated at base commit 8ab21b3 for **E2a / M1 / ED-PC-0047 (2026-07-29)** — percussion_authority's lever
+moved from the whole-weapon CoM offset (`PoB_frac`, which a rear counterweight could cancel to exactly zero)
+to `weapon_physics.strike_point_lever`. That moved `perc_auth` on the four blunt-native weapons whose forward
+moment differs from their centre of balance (staff 0.0→5.6290, poleaxe 7.4843→8.0, bec_de_corbin
+6.3629→7.4872, lucerne_hammer 6.5392→7.5897) and, as a DISCLOSED consequence, the staff's `afforded['blunt']`
+effectiveness (0.0→5.6290) and the numeric `sel_perc`/`sel_eff` fields of its `select_mode` row at all four
+tiers. The affordance TOKEN SETS and every `select_mode` (damage_mode, head) PAIR are unchanged for the whole
+roster — no weapon changed which mode it selects.
 
 Covers, per weapon: the derive() mass family (PoB_m/PoB_frac/m_head/MoI/static_moment/length_m), the
 downstream dynamics (agility, percussion_authority), the baked gap, the afforded_heads token->(eff, dmg_mode)

@@ -1110,7 +1110,15 @@ def percussion_stagger(striker, victim, wound, deg, cfg):
     POINT/edge transmits impulse only where it BITES — its load IS the wound (a deflected point pings off plate → ~0,
     so a gap-specialist can still close a non-piercing reach weapon at plate). This is why a STAFF (m_head≈0, wound
     ≈0) is still effective — its concussive impulse winds and staggers without drawing blood. Returns (stamina_drain,
-    poise_break), both ≥ 0. Pure (the wrapper applies them to the victim's stamina/poise)."""
+    poise_break), both ≥ 0. Pure (the wrapper applies them to the victim's stamina/poise).
+    ⚠ [ED-PC-0047 / E2a, 2026-07-29] The staff sentence above was FALSE FOR A YEAR of engine time and this docstring
+    was the only place that said otherwise: `weapon_physics.percussion_authority` used the whole-weapon centre-of-
+    balance offset as its lever, so a centre-gripped haft derived EXACTLY 0.0 authority and this function returned
+    (0.0, 0.0) for the staff — the worked example of ED-PC-0031's headline mechanic delivered no wind and no stagger
+    at all. Fixed at the lever (`weapon_physics.strike_point_lever`); the staff now derives 5.6290 and staggers at
+    ~70% of a mace's. The claim above is now measured, not asserted:
+    tests/valoria/test_combat_strike_point_lever.py::test_staff_stagger_is_a_real_fraction_of_the_maces pins it
+    THROUGH this function with a constructed wound, so it cannot silently revert to a docstring again."""
     if deg not in ('graze', 'success', 'overwhelming'):
         return 0.0, 0.0
     head = getattr(striker, 'sel_head', None) or striker.head
