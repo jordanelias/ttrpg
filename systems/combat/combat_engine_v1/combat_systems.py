@@ -692,6 +692,12 @@ def armor_defeat_sigma(aggressor, defender, cfg):
     if a==0.0: return 0.0
     cap=adef_cap(aggressor.w, cfg, getattr(aggressor,'sel_head',None), gap=getattr(aggressor,'sel_gap',None),
                  grip=getattr(aggressor,'grip_position',0.0), room=getattr(aggressor,'range_avail',1.0))
+    # [ED-PC-0046] THIS SITE DELIBERATELY KEEPS THE RAW, SIGNED cap — do not "consistency-fix" it to match the
+    # max(0, cap) clamp in reach_threat/represent_measure_p (or core.damage's knee, ED-PC-0039). Those three take a
+    # capability DEFICIT, where a negative cap is a category error: ADEF_CUT = -0.9 is a sigma-domain CONTROL
+    # PENALTY, not a capability magnitude. THIS function IS the sigma domain — it is the term ADEF_CUT was
+    # calibrated for, and it is signed on both sides by design (capability above threshold = control, below =
+    # the armour shields). Clamping here would delete the cutter's control penalty entirely.
     return a*(cap - cfg['ADEF_THRESHOLD'][defender.armor])
 
 def reach_threat(longer, defender, cfg):
@@ -706,7 +712,15 @@ def reach_threat(longer, defender, cfg):
     if aw==0.0: return 1.0
     cap=adef_cap(longer.w, cfg, head=getattr(longer,'sel_head',None), gap=getattr(longer,'sel_gap',None),
                  grip=getattr(longer,'grip_position',0.0), room=getattr(longer,'range_avail',1.0))
-    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - cap)
+    # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0046] — the same fix core.damage's penetration knee
+    # already carries (ED-PC-0039), which was applied there ONLY and left the two sigma-path deficits unclamped.
+    # adef_cap returns a NEGATIVE number for a pure cutter (ADEF_CUT = -0.9), and that -0.9 is a sigma-domain CONTROL
+    # PENALTY calibrated for armor_defeat_sigma's +/- scale, NOT a capability magnitude. Read raw it tripled the
+    # bardiche's medium deficit (0.45 -> 1.35) and decayed its reach threat 0.843 -> 0.5275 — the reach-ladder was
+    # punishing a cutter twice for the same fact, once as ADEF_CUT in armor_defeat_sigma and again here. "Cannot
+    # defeat the harness" is a floor at ZERO capability, not an unbounded negative one; the grading of HOW badly a
+    # cut fails against a harness is ADEF_CUT's job in the sigma path, not this decay's.
+    deficit=max(0.0, cfg['ADEF_THRESHOLD'][defender.armor] - max(0.0, cap))
     return max(cfg['REACH_THREAT_FLOOR'], 1.0 - cfg['REACH_DECAY_K']*aw*deficit)
 
 def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
@@ -759,7 +773,12 @@ def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     room = range_utilization(longer, measure_gap, cfg)
     sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=room)
     cap = adef_cap(longer.w, cfg, head=sel.head, gap=sel.gap, grip=0.0, room=room)
-    deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - cap)
+    # CLAMP THE CAPABILITY AT 0 BEFORE TAKING THE DEFICIT [ED-PC-0046] — same rule, same reason as reach_threat above
+    # and core.damage's knee (ED-PC-0039): a raw negative adef_cap is ADEF_CUT's sigma-domain control penalty, not a
+    # capability magnitude. Unclamped, the STEEPER exp() response here amplified the error far harder than the linear
+    # reach decay does: bardiche vs arming at medium read 0.0089 — a pure cutter crowded off measure 99.1% of
+    # engagements — against 0.207 clamped, a 23x move on the gate.
+    deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - max(0.0, cap))
     base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
     foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
     return max(0.0, min(1.0, base*foot))
