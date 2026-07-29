@@ -174,7 +174,7 @@
     "gap": 0.82,
     "length_m": 1.7999999999999998,
     "m_head": 1.218,
-    "perc_auth": 6.36290385020776,
+    "perc_auth": 7.487242374098886,
     "select_mode": {
       "heavy": [
         "puncture",
@@ -1392,7 +1392,7 @@
     "gap": 0.78,
     "length_m": 1.8,
     "m_head": 1.344,
-    "perc_auth": 6.539155172397454,
+    "perc_auth": 7.589749246189488,
     "select_mode": {
       "heavy": [
         "percussion",
@@ -1926,7 +1926,7 @@
     "gap": 0.78,
     "length_m": 1.8,
     "m_head": 1.1800000000000002,
-    "perc_auth": 7.48428269296238,
+    "perc_auth": 8.0,
     "select_mode": {
       "heavy": [
         "puncture",
@@ -2495,7 +2495,7 @@
     "PoB_m": 0.0,
     "afforded": {
       "blunt": [
-        0.0,
+        5.6289765229155035,
         "percussion"
       ]
     },
@@ -2503,39 +2503,39 @@
     "gap": 0.19,
     "length_m": 1.68,
     "m_head": 0.0,
-    "perc_auth": 0.0,
+    "perc_auth": 5.6289765229155035,
     "select_mode": {
       "heavy": [
         "percussion",
         "blunt",
         0.19,
-        null,
+        5.6289765229155035,
         0.05,
-        0.0
+        5.6289765229155035
       ],
       "light": [
         "percussion",
         "blunt",
         0.19,
-        null,
+        5.6289765229155035,
         0.05,
-        0.0
+        5.6289765229155035
       ],
       "medium": [
         "percussion",
         "blunt",
         0.19,
-        null,
+        5.6289765229155035,
         0.05,
-        0.0
+        5.6289765229155035
       ],
       "none": [
         "percussion",
         "blunt",
         0.19,
-        null,
+        5.6289765229155035,
         0.05,
-        0.0
+        5.6289765229155035
       ]
     },
     "static_moment": 0.0

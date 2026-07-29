@@ -170,7 +170,13 @@ assert set(DELIVERY) < V.HEADS and V.HEAD_CUT_THRUST not in DELIVERY, \
 GAP_PREC_REF=0.65                                                   # neutral gap_precision default for the puncture path (a mid-roster point) — the LIVE combat path always THREADS the weapon's real w['gap'] (systems.select_mode / core.strike), so this default only guards a hypothetical unthreaded caller.
 # FIX-1b [FIAT — no melee-speed behind-plate data exists; ballistic BABT is the wrong regime, per Phase-3 grounding]:
 # percussion transmitted through RIGID armour (mail/plate) scales with the blow's percussion AUTHORITY — a steel
-# hammer (p_auth 8) overwhelms the armour's impact-spread; a wooden staff (p_auth ~4) is largely absorbed. The TRANSMIT
+# hammer (p_auth 8) overwhelms the armour's impact-spread; a wooden staff (p_auth 5.63 — MEASURED, ED-PC-0047/E2a;
+# this comment read "~4" from 2026-07-08 until 2026-07-29, an INTENT never reconciled against the code, which in
+# fact derived 0.0 for the staff because percussion_authority's lever was a CoM offset a centre grip cancels) is
+# absorbed proportionately more. NOTE the ~4 intent is NOT reachable while the mace is pinned at PERC_CAP: at
+# PERC_EXP=0.30 an authority ratio of 0.5 demands an INPUT ratio of 0.5^(1/0.30)=0.099, which no honest mass/lever
+# form yields between a 1.478 kg 2H staff and a 1.2 kg mace. Closing that gap is the deferred Phase-C
+# PERC_SCALE/PERC_EXP re-fit, not a lever question. The TRANSMIT
 # term is LINEAR in (perc/PERC_AUTH_REF) (E=1.0, momentum-like). It COMPOUNDS with the pre-existing blunt heft
 # (3·perc/8 in damage()), so the net blunt-vs-rigid damage scales ~perc² in authority — force and through-armour
 # transmission are distinct physics, both authority-dependent (intended). Soft cloth absorbs by deformation

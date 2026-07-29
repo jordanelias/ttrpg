@@ -1,5 +1,5 @@
 {
- "_comment": "REGENERATED identity-sweep fixture (U2 partial, JD-4/JD-9/ED-PC-0009, 2026-07-08): weapon_physics.percussion_authority's non-blunt self-gate now routes to reversed_grip_percussion (the grounded Mordhau option) instead of a hard 0.0 -- moves percussion_authority/puncture_pressure for every hands==2 bladed weapon (0.0 unchanged for hands==1/hafted weapons). geometry.cut_factor/thrust_factor's floor-drop fixes are NOT independently visible in this fixture (nothing here reads geo['cut']/geo['thrust'] directly; element_afforded's cut_thrust branch now reads geo['thrust'] instead of geo['gap'] internally, but that's a systems.py-level effect this fixture doesn't cover). Lengths in METRES. Compared at 1e-9 by test_combat_units_refactor.py.",
+ "_comment": "REGENERATED identity-sweep fixture (E2a -- M1/F1, ED-PC-0047, 2026-07-29): weapon_physics.percussion_authority's lever moved from the whole-weapon CoM offset derive()['PoB_frac'] to the SHARED STRIKE-POINT LEVER weapon_physics.strike_point_lever(w, m_strike, x_strike) against delivered_strike()'s forward (delivered) mass -- a rear counterweight no longer SUBTRACTS percussive authority, which had zeroed the centre-gripped staff outright (perc_auth/puncture/adef_cap/stagger all 0.0). Moves percussion_authority + puncture_pressure for the FOUR blunt-native weapons whose forward moment differs from their centre of balance: staff 0.0 -> 5.6290, poleaxe 7.4843 -> 8.0000 (PERC_CAP), bec_de_corbin 6.3629 -> 7.4872, lucerne_hammer 6.5392 -> 7.5897. mace and goedendag are UNCHANGED (both already clamped at PERC_CAP=8.0 -- the clamp held their ledgered anchors). Every non-blunt-native weapon is byte-identical: the Mordhau path (reversed_grip_percussion -> percussion_element_authority) is untouched by this batch and is E2b's concern. NO other field in this fixture moved. Regenerated against base commit 8ab21b3 with a generator whose CONTROL ARM (same generator, pre-change engine) reproduces the previous fixture BYTE-FOR-BYTE -- this fixture has no committed generator, so that control is what makes the hand-reproduction falsifiable rather than merely plausible. Lengths in METRES. Compared at 1e-9 by test_combat_units_refactor.py.",
  "weapons": {
   "arming": {
    "agility": 0.35541108323217724,
@@ -785,77 +785,77 @@
     {
      "grip": 0.0,
      "room": 1.0,
-     "v": 6.36290385020776
+     "v": 7.487242374098886
     },
     {
      "grip": 0.0,
      "room": 0.7,
-     "v": 5.408468272676596
+     "v": 6.364156017984053
     },
     {
      "grip": 0.0,
      "room": 0.4,
-     "v": 4.454032695145432
+     "v": 5.24106966186922
     },
     {
      "grip": 0.25,
      "room": 1.0,
-     "v": 6.251553032829125
+     "v": 7.356215632552156
     },
     {
      "grip": 0.25,
      "room": 0.7,
-     "v": 5.313820077904756
+     "v": 6.252783287669333
     },
     {
      "grip": 0.25,
      "room": 0.4,
-     "v": 4.376087122980387
+     "v": 5.149350942786509
     },
     {
      "grip": 0.5,
      "room": 1.0,
-     "v": 6.140202215450489
+     "v": 7.225188891005425
     },
     {
      "grip": 0.5,
      "room": 0.7,
-     "v": 5.2191718831329155
+     "v": 6.141410557354611
     },
     {
      "grip": 0.5,
      "room": 0.4,
-     "v": 4.298141550815342
+     "v": 5.057632223703798
     },
     {
      "grip": 0.75,
      "room": 1.0,
-     "v": 6.028851398071853
+     "v": 7.094162149458695
     },
     {
      "grip": 0.75,
      "room": 0.7,
-     "v": 5.124523688361075
+     "v": 6.030037827039891
     },
     {
      "grip": 0.75,
      "room": 0.4,
-     "v": 4.220195978650297
+     "v": 4.965913504621086
     },
     {
      "grip": 1.0,
      "room": 1.0,
-     "v": 5.917500580693217
+     "v": 6.963135407911964
     },
     {
      "grip": 1.0,
      "room": 0.7,
-     "v": 5.029875493589234
+     "v": 5.918665096725169
     },
     {
      "grip": 1.0,
      "room": 0.4,
-     "v": 4.1422504064852514
+     "v": 4.874194785538375
     }
    ],
    "phi_grip_native": [
@@ -873,11 +873,11 @@
     1.0
    ],
    "puncture_pressure": [
-    5.0903230801662085,
-    5.0012424262633,
-    4.912161772360392,
-    4.823081118457483,
-    4.7340004645545735
+    5.9897938992791095,
+    5.884972506041725,
+    5.78015111280434,
+    5.675329719566957,
+    5.570508326329572
    ],
    "systems": {
     "0.0": {
@@ -5845,77 +5845,77 @@
     {
      "grip": 0.0,
      "room": 1.0,
-     "v": 6.539155172397454
+     "v": 7.589749246189488
     },
     {
      "grip": 0.0,
      "room": 0.7,
-     "v": 5.558281896537835
+     "v": 6.451286859261065
     },
     {
      "grip": 0.0,
      "room": 0.4,
-     "v": 4.577408620678217
+     "v": 5.312824472332641
     },
     {
      "grip": 0.25,
      "room": 1.0,
-     "v": 6.375676293087517
+     "v": 7.40000551503475
     },
     {
      "grip": 0.25,
      "room": 0.7,
-     "v": 5.41932484912439
+     "v": 6.290004687779537
     },
     {
      "grip": 0.25,
      "room": 0.4,
-     "v": 4.462973405161262
+     "v": 5.180003860524325
     },
     {
      "grip": 0.5,
      "room": 1.0,
-     "v": 6.212197413777581
+     "v": 7.210261783880013
     },
     {
      "grip": 0.5,
      "room": 0.7,
-     "v": 5.280367801710944
+     "v": 6.128722516298011
     },
     {
      "grip": 0.5,
      "room": 0.4,
-     "v": 4.348538189644306
+     "v": 5.047183248716009
     },
     {
      "grip": 0.75,
      "room": 1.0,
-     "v": 6.048718534467645
+     "v": 7.020518052725277
     },
     {
      "grip": 0.75,
      "room": 0.7,
-     "v": 5.141410754297499
+     "v": 5.9674403448164846
     },
     {
      "grip": 0.75,
      "room": 0.4,
-     "v": 4.234102974127351
+     "v": 4.914362636907693
     },
     {
      "grip": 1.0,
      "room": 1.0,
-     "v": 5.885239655157709
+     "v": 6.830774321570539
     },
     {
      "grip": 1.0,
      "room": 0.7,
-     "v": 5.002453706884053
+     "v": 5.806158173334958
     },
     {
      "grip": 1.0,
      "room": 0.4,
-     "v": 4.119667758610396
+     "v": 4.781542025099377
     }
    ],
    "phi_grip_native": [
@@ -5933,11 +5933,11 @@
     1.0
    ],
    "puncture_pressure": [
-    4.0542762068864215,
-    3.9529193017142608,
-    3.8515623965421,
-    3.75020549136994,
-    3.6488485861977793
+    4.705644532637482,
+    4.588003419321545,
+    4.470362306005608,
+    4.352721192689671,
+    4.235080079373734
    ],
    "systems": {
     "0.0": {
@@ -8145,77 +8145,77 @@
     {
      "grip": 0.0,
      "room": 1.0,
-     "v": 7.48428269296238
+     "v": 8.0
     },
     {
      "grip": 0.0,
      "room": 0.7,
-     "v": 6.361640289018023
+     "v": 6.8
     },
     {
      "grip": 0.0,
      "room": 0.4,
-     "v": 5.238997885073666
+     "v": 5.6
     },
     {
      "grip": 0.25,
      "room": 1.0,
-     "v": 7.278464918905915
+     "v": 7.78
     },
     {
      "grip": 0.25,
      "room": 0.7,
-     "v": 6.186695181070028
+     "v": 6.613
     },
     {
      "grip": 0.25,
      "room": 0.4,
-     "v": 5.094925443234141
+     "v": 5.446
     },
     {
      "grip": 0.5,
      "room": 1.0,
-     "v": 7.07264714484945
+     "v": 7.5600000000000005
     },
     {
      "grip": 0.5,
      "room": 0.7,
-     "v": 6.011750073122032
+     "v": 6.426
     },
     {
      "grip": 0.5,
      "room": 0.4,
-     "v": 4.950853001394615
+     "v": 5.292
     },
     {
      "grip": 0.75,
      "room": 1.0,
-     "v": 6.866829370792984
+     "v": 7.34
     },
     {
      "grip": 0.75,
      "room": 0.7,
-     "v": 5.836804965174037
+     "v": 6.239
     },
     {
      "grip": 0.75,
      "room": 0.4,
-     "v": 4.806780559555088
+     "v": 5.138
     },
     {
      "grip": 1.0,
      "room": 1.0,
-     "v": 6.661011596736518
+     "v": 7.12
     },
     {
      "grip": 1.0,
      "room": 0.7,
-     "v": 5.66185985722604
+     "v": 6.052
     },
     {
      "grip": 1.0,
      "room": 0.4,
-     "v": 4.662708117715562
+     "v": 4.984
     }
    ],
    "phi_grip_native": [
@@ -8233,11 +8233,11 @@
     1.0
    ],
    "puncture_pressure": [
-    6.361640289018023,
-    6.186695181070028,
-    6.011750073122032,
-    5.836804965174037,
-    5.66185985722604
+    6.8,
+    6.613,
+    6.426,
+    6.239,
+    6.052
    ],
    "systems": {
     "0.0": {
@@ -10675,77 +10675,77 @@
     {
      "grip": 0.0,
      "room": 1.0,
-     "v": 0.0
+     "v": 5.6289765229155035
     },
     {
      "grip": 0.0,
      "room": 0.7,
-     "v": 0.0
+     "v": 4.7846300444781775
     },
     {
      "grip": 0.0,
      "room": 0.4,
-     "v": 0.0
+     "v": 3.9402835660408524
     },
     {
      "grip": 0.25,
      "room": 1.0,
-     "v": 0.0
+     "v": 5.6289765229155035
     },
     {
      "grip": 0.25,
      "room": 0.7,
-     "v": 0.0
+     "v": 4.7846300444781775
     },
     {
      "grip": 0.25,
      "room": 0.4,
-     "v": 0.0
+     "v": 3.9402835660408524
     },
     {
      "grip": 0.5,
      "room": 1.0,
-     "v": 0.0
+     "v": 5.6289765229155035
     },
     {
      "grip": 0.5,
      "room": 0.7,
-     "v": 0.0
+     "v": 4.7846300444781775
     },
     {
      "grip": 0.5,
      "room": 0.4,
-     "v": 0.0
+     "v": 3.9402835660408524
     },
     {
      "grip": 0.75,
      "room": 1.0,
-     "v": 0.0
+     "v": 5.6289765229155035
     },
     {
      "grip": 0.75,
      "room": 0.7,
-     "v": 0.0
+     "v": 4.7846300444781775
     },
     {
      "grip": 0.75,
      "room": 0.4,
-     "v": 0.0
+     "v": 3.9402835660408524
     },
     {
      "grip": 1.0,
      "room": 1.0,
-     "v": 0.0
+     "v": 5.6289765229155035
     },
     {
      "grip": 1.0,
      "room": 0.7,
-     "v": 0.0
+     "v": 4.7846300444781775
     },
     {
      "grip": 1.0,
      "room": 0.4,
-     "v": 0.0
+     "v": 3.9402835660408524
     }
    ],
    "phi_grip_native": [
@@ -10763,11 +10763,11 @@
     1.0
    ],
    "puncture_pressure": [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0
+    0.8443464784373255,
+    0.8443464784373255,
+    0.8443464784373255,
+    0.8443464784373255,
+    0.8443464784373255
    ],
    "systems": {
     "0.0": {
