@@ -2,6 +2,7 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
+from collections import namedtuple   # ED-PC-0042 (I3): the sel_* bundle's two record shapes — HeadOption / ModeSelection, defined below
 from math import tanh, sqrt, exp   # logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade
 import core
 import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's tables are keyed by it
@@ -170,7 +171,7 @@ def _recovery_mode_commitment(w, g, cfg, sel_pc=None, room=1.0):
     a = WP.at_grip(w, g)
     I_g, S_g = max(1e-9, a['I_g']), a['S_g']
     I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
-    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']   # SELECTED-mode thrust-ness (fallback: whole-weapon)
+    pc = sel_pc if sel_pc is not None else w['geo']['point_concentration']   # SELECTED-mode thrust-ness (fallback: whole-weapon, read off the BAKED surface — see geometry.bake's raw passthrough)
     close = 1.0 + cfg['EXPOSE_CLOSE_K'] * (1.0 - max(0.0, min(1.0, room)))         # tighter room -> a swing is caught mid-arc; thrust invariant
     C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref) * close
     C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
@@ -190,7 +191,7 @@ def recoverability_factor(c, cfg):
     I_ref = cfg['REC_I_REF']
     two = 1.0 if w['hands'] == 2 else 0.0
     sel_pc = getattr(c, 'sel_pc', None)                                        # SELECTED-mode thrust-ness (ED-PC-0027: T_vuln is mode-aware)
-    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']   # fallback: whole-weapon (single-mode weapons: sel_pc==whole-weapon pc, byte-identical)
+    pc = sel_pc if sel_pc is not None else w['geo']['point_concentration']   # fallback: whole-weapon (single-mode weapons: sel_pc==whole-weapon pc, byte-identical)
     room = getattr(c, 'range_avail', 1.0)                                      # tight measure amplifies a SWING's window (a thrust is measure-invariant)
     C_mode = _recovery_mode_commitment(w, g, cfg, sel_pc=sel_pc, room=room)
     # (C) 1H/2H CONTROL via the force-couple, MoI-aware (anchor-normalized: the reference gives credit 1.0)
@@ -235,7 +236,7 @@ def lunge_quality(c, cfg):
     CONTINUOUS point_concentration weight (a blunt/cut head -> ~0, never an exact-0 category). Hand-balance is the
     DERIVED forward static moment (no hand-set pob_frac). Propensity in [0,1]; the wrapper rolls against it. Pure."""
     w=c.w
-    pc      = w['geometry']['point_concentration']                                          # CONTINUOUS thrust-ness (was the head-name gate)
+    pc      = w['geo']['point_concentration']                                               # CONTINUOUS thrust-ness (was the head-name gate)
     light   = (cfg['LUNGE_REF_MASS']/max(0.2,w.get('mass',1.0)))**cfg['MOMENT_MASS_EXP']    # NON-LINEAR lightness
     handbal = max(0.0, 1.0 - WP.derive(w)['PoB_frac'])                                       # DERIVED hand-balance (forward-balanced = poor lunge recovery)
     onehand = cfg['LUNGE_1H_BONUS'] if w['hands']==1 else cfg['LUNGE_2H_FACTOR']            # the classical lunge is one-handed
@@ -433,6 +434,27 @@ SELECT_EPS = 0.05         # [DESIGN] affordance floor on a derived per-mode effe
                           #   derived effectiveness exceeds this (so a vanishing mode is not even a candidate). Small.
                           #   Still used for each mode's OWN native-head branch below (unchanged from pre-U2).
 
+# ── THE MODE-SELECTION RECORDS — ONE canonical field order each (ED-PC-0042 / I3) ────────────────────────────────
+# The `sel_*` bundle used to be a BARE POSITIONAL TUPLE that widened three times as the model grew (element_afforded
+# emitted 5 fields, or 7 for cut_thrust; afforded_heads normalised to 8; select_mode returned 6 in a DIFFERENT order),
+# so every consumer carried its own index arithmetic plus width guards (`heads[hd][6] if len(heads[hd])>6 else None`)
+# and ED-PC-0037.1 had to APPEND the per-arm magnitudes AFTER `element_ref` rather than beside the other magnitudes,
+# because inserting a field would have silently transposed every reader. That is precisely the positional fragility
+# `core.strike` was made a KEYWORD chokepoint to eliminate ("the 9-arg positional surface — the transposition-bug
+# class — exists in exactly one place"), re-grown one field at a time. Naming the fields restores that idiom on the
+# selection side: the order is declared HERE, once, and read by NAME everywhere downstream.
+#
+# `namedtuple`, deliberately, not a dataclass/dict: a HeadOption IS a tuple, so indexing, slicing, iteration, `len`,
+# `list(...)`, `==` against a plain tuple and JSON array-encoding are all unchanged — golden_element_parity.json's
+# `select_mode` rows (compared as `list(...) == <json list>`), the `[:2]`/`[1]`/`[:6]` callers in tests, and
+# workbench/catalogue.py's `isinstance(r, tuple)` branch keep working byte-for-byte.
+#
+# ⚠ THE TWO ORDERS DIFFER, and that asymmetry is exactly why they are named. HeadOption leads with `eff`, ModeSelection
+# leads with `dm`; `element_ref`/`eff_cut`/`eff_thrust` exist only on HeadOption. ModeSelection's order is PINNED by
+# golden_element_parity.json and by ~15 six-way unpacks in tests — do not reorder it; add to the END if it must grow.
+HeadOption = namedtuple('HeadOption', 'eff dm gap perc pc element_ref eff_cut eff_thrust',
+                        defaults=(None, None, None))   # element_ref: filled by afforded_heads (the element's identity, not the element's own knowledge); eff_cut/eff_thrust: the ELEMENT-LOCAL per-arm magnitudes, cut_thrust only (ED-PC-0037.1)
+
 def element_afforded(el, w, grip=0.0, room=1.0):
     """The afforded head TOKENS of ONE striking element — the per-element scope of the whole-weapon branch logic.
     Morphology-rearch Phase B3 (2026-07-02): a 'point' token affords iff geo['gap']>SELECT_EPS, same floor as
@@ -450,7 +472,9 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     OWN mass+position, not the same whole-weapon value). Both `perc` and the blunt token's `eff` are grip/room-
     degraded (the SAME mode-split Phi as D2's heft, JD-4); every other token's `eff`/`gap` stay the STATIC
     per-element primitives (gap/cut do not degrade with grip in R1 — only the swing-moment-bearing quantities
-    do). `element_ref` is carried separately by the caller (afforded_heads), not in this tuple.
+    do). SHAPE (ED-PC-0042/I3): every token maps to a `HeadOption` record (defined above this function) — the
+    same eight named fields for every branch, so no consumer has to know a per-branch width. `element_ref` is left
+    None here (the element does not know its own index) and filled by the caller, afforded_heads.
     GRADED, HEAD-INDEPENDENT SECONDARY AFFORDANCES (U2/ED-PC-0008/0009, 2026-07-08): the native-head branch
     below is UNCHANGED (same tokens, same thresholds, same DELIVERY-multiplier identity — cut_thrust's atomic
     combo now compares cut against geo['thrust'] instead of geo['gap'], the JD-9 "wire geo['thrust']" fix,
@@ -466,16 +490,17 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     gap=geo['gap']; pc=geo['point_concentration']
     heads={}
     if head==V.HEAD_CUT_THRUST:                                       # versatile blade: keep atomic (internal max)
-        # [ED-PC-0037.1] carry the ELEMENT's OWN cut/thrust alongside the blended max. The blend is retained at
-        # index 0 because sel_eff's downstream contract expects it; indices 5/6 are the per-arm truth, so the
+        # [ED-PC-0037.1] carry the ELEMENT's OWN cut/thrust alongside the blended max. The blend stays in `eff`
+        # because sel_eff's downstream contract expects it; `eff_cut`/`eff_thrust` are the per-arm truth, so the
         # versatility contest can be scored on the element that is actually being swung rather than on the
         # whole-weapon bake (a guisarme's BILL is cut 0.76 / thrust 0.19; the weapon scalar says 0.64 / 0.41,
         # which credits a hook with a point it does not have — the M-02 object confusion this docstring forbids).
-        heads[V.HEAD_CUT_THRUST]=(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc, geo['cut'], geo['thrust'])
+        heads[V.HEAD_CUT_THRUST]=HeadOption(max(geo['cut'], geo['thrust']), 'shear_or_puncture', gap, None, pc,
+                                            eff_cut=geo['cut'], eff_thrust=geo['thrust'])
     elif head in V.PURE_CUT_HEADS:                                   # pure cutter
-        if geo['cut']>SELECT_EPS: heads[head]=(geo['cut'], V.MODE_SHEAR, gap, None, pc)
+        if geo['cut']>SELECT_EPS: heads[head]=HeadOption(geo['cut'], V.MODE_SHEAR, gap, None, pc)
     elif head==V.HEAD_POINT:                                         # a real point (element-tokened, not inferred)
-        if geo['gap']>SELECT_EPS: heads[V.HEAD_POINT]=(geo['gap'], V.MODE_PUNCTURE, gap, None, pc)
+        if geo['gap']>SELECT_EPS: heads[V.HEAD_POINT]=HeadOption(geo['gap'], V.MODE_PUNCTURE, gap, None, pc)
     elif head==V.HEAD_BLUNT:                                         # striking head
         ref = el.get('element_ref')
         em, ex = _element_mass_x(w, el) if ref is not None else (0.0, 0.0)
@@ -485,7 +510,7 @@ def element_afforded(el, w, grip=0.0, room=1.0):
             pa=WP.percussion_authority(w, grip=grip, room=room)       # (e.g. goedendag's club-body element carries
                                                                         # its striking mass on the haft record, not
                                                                         # itself) — whole-weapon fallback, unchanged
-        if pa>SELECT_EPS: heads[V.HEAD_BLUNT]=(pa, V.MODE_PERCUSSION, gap, pa, pc)
+        if pa>SELECT_EPS: heads[V.HEAD_BLUNT]=HeadOption(pa, V.MODE_PERCUSSION, gap, pa, pc)
 
     # ── graded secondary affordances (U2/ED-PC-0011, 2026-07-08) ──
     # Both checks were tried earlier this session and reverted pending fixes now landed:
@@ -505,11 +530,11 @@ def element_afforded(el, w, grip=0.0, room=1.0):
     if head != V.HEAD_BLUNT:
         pa_secondary = WP.percussion_authority(w, grip=grip, room=room, sel_head=head, sel_pc=pc)
         if pa_secondary>MODE_PERC_MIN:
-            heads.setdefault(V.HEAD_BLUNT, (pa_secondary, V.MODE_PERCUSSION, gap, pa_secondary, pc))
+            heads.setdefault(V.HEAD_BLUNT, HeadOption(pa_secondary, V.MODE_PERCUSSION, gap, pa_secondary, pc))
     if head not in V.CUT_FAMILY_HEADS and geo['cut']>MODE_EDGE_MIN:
-        heads.setdefault(V.HEAD_CUT, (geo['cut'], V.MODE_SHEAR, gap, None, pc))
+        heads.setdefault(V.HEAD_CUT, HeadOption(geo['cut'], V.MODE_SHEAR, gap, None, pc))
     if head not in V.THRUST_FAMILY_HEADS and geo['thrust']>MODE_TIP_MIN:
-        heads.setdefault(V.HEAD_POINT, (geo['thrust'], V.MODE_PUNCTURE, gap, None, pc))
+        heads.setdefault(V.HEAD_POINT, HeadOption(geo['thrust'], V.MODE_PUNCTURE, gap, None, pc))
     return heads
 
 def afforded_heads(w, grip=0.0, room=1.0):
@@ -517,22 +542,20 @@ def afforded_heads(w, grip=0.0, room=1.0):
     afforded tokens (best effectiveness per token). Element-union structure so a multi-element head (bec de
     corbin, lucerne_hammer, ji, goedendag, guisarme, kama_yari, voulge, poleaxe) affords each of its elements'
     modes; a single-mode weapon's synthesized one-element list reproduces its prior whole-weapon behaviour
-    unchanged. Each token maps to (derived effectiveness, damage_mode, gap, perc, point_concentration,
-    element_ref) — WIDENED I2/D2b (R-7 + capstone M2): the winning element's own gap/perc/pc + its identity, so
-    select_mode can emit them (sel_gap/sel_perc/sel_pc). No per-weapon list, no name/kind branching (the L0
-    primitive-law). Pure."""
+    unchanged. Each token maps to a `HeadOption` record (eff, dm, gap, perc, pc, element_ref, eff_cut, eff_thrust
+    — defined above element_afforded, ED-PC-0042/I3) — WIDENED I2/D2b (R-7 + capstone M2): the winning element's own
+    gap/perc/pc + its identity, so select_mode can emit them (sel_gap/sel_perc/sel_pc); ED-PC-0037.1 added the
+    element-local per-arm magnitudes. No per-weapon list, no name/kind branching (the L0 primitive-law). Pure."""
     heads={}
     for el in _mode_elements(w):
-        for tok,vals in element_afforded(el, w, grip=grip, room=room).items():
-            eff,dm,gap,perc,pc = vals[:5]
-            # [ED-PC-0037.1] indices 6/7 carry the ELEMENT's own cut/thrust magnitudes (None for heads that have no
-            # two-armed contest). element_ref stays at 5 — the per-arm pair is appended AFTER it, not over it.
-            ct_cut, ct_thr = (vals[5], vals[6]) if len(vals)>6 else (None, None)
-            if tok not in heads or eff>heads[tok][0]:
-                heads[tok]=(eff,dm,gap,perc,pc,el.get('element_ref'),ct_cut,ct_thr)
+        for tok,opt in element_afforded(el, w, grip=grip, room=room).items():
+            # the element knows its own magnitudes; only the CALLER knows which element it was, so element_ref is the
+            # one field filled here (`_replace`, not a re-spelled tuple — nothing can transpose in a keyword copy).
+            if tok not in heads or opt.eff>heads[tok].eff:
+                heads[tok]=opt._replace(element_ref=el.get('element_ref'))
     if not heads:                                                    # degenerate fallback: never strip all modes
         h=w['head']
-        heads[h]=(0.0, core.HEAD_MODE.get(h, V.MODE_SHEAR), w['gap'], None, w['geometry']['point_concentration'], None, None, None)
+        heads[h]=HeadOption(0.0, core.HEAD_MODE.get(h, V.MODE_SHEAR), w['gap'], None, w['geo']['point_concentration'])
     return heads
 
 def selected_arm_magnitudes(c, head, grip=None, room=None):
@@ -546,7 +569,13 @@ def selected_arm_magnitudes(c, head, grip=None, room=None):
     though it carried the weapon's 0.41 thrust. Pure."""
     h = afforded_heads(c.w, grip=(getattr(c, 'grip_position', 0.0) if grip is None else grip),
                        room=(getattr(c, 'range_avail', 1.0) if room is None else room)).get(head)
-    return (h[6], h[7]) if h is not None and len(h) > 7 else (None, None)
+    return (h.eff_cut, h.eff_thrust) if h is not None else (None, None)
+
+# select_mode's OUTBOUND record — the six fields the wrapper writes onto the combatant as sel_dmg/sel_head/sel_gap/
+# sel_perc/sel_pc/sel_eff, in that order. PINNED (see HeadOption's note): golden_element_parity.json stores these rows
+# and ~15 tests unpack them six-wide. Field names match the combatant's sel_* fields minus the prefix, so the wrapper's
+# assignment is readable as a pairing rather than a positional coincidence.
+ModeSelection = namedtuple('ModeSelection', 'dm head gap perc pc eff')
 
 def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, room=None):
     """PURE per-exchange use-mode selection. Derives the afforded head tokens from c.w's primitives (afforded_heads),
@@ -568,8 +597,9 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
     circumstance. `eff_head` is the head TOKEN routed downstream (core.strike/adef_cap/legibility), damage_mode
     the resolved 'percussion'/'shear'/'puncture'. `sel_eff` is the winning element's own derived cut/thrust
     magnitude — read by core.strike (as sel_eff) to scale core.coupling's 'cut' token DELIVERY (see CUT_AUTH_REF);
-    inert for every other head. The wrapper writes all six onto the combatant at BOTH call sites (mutation stays
-    wrapper-owned).
+    inert for every other head. The six are returned as the named `ModeSelection` record (defined just above —
+    ED-PC-0042/I3; it IS a tuple, so every existing positional caller is unchanged). The wrapper writes all six onto
+    the combatant at BOTH call sites (mutation stays wrapper-owned).
     CLOSE-EFFICACY (I4, D5): `measure_gap` (None default — behaviour-preserving for every caller that hasn't wired
     a real measure) now genuinely reaches the comparator via close_efficacy, weighted by each CANDIDATE's own
     point_concentration — a broad arc-requiring swing collapses in tight quarters; a point-selected thrust barely
@@ -594,12 +624,11 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # dueling staple), thrust-capable weapons prefer the point EMERGENTLY (the poleaxe spikes at every tier), while
         # a pure cutter with no real point keeps cutting. A mode with exposure<=1 (a clean thrust) is undiscounted.
         h=max(heads, key=lambda hd: core.coupling(hd, defender_armor,
-                  perc=heads[hd][3] if heads[hd][3] is not None else core.PERC_AUTH_REF, gap_prec=heads[hd][2],
-                  eff=heads[hd][0], thrust_auth=core.thrust_authority(w['head_len']),
-                  eff_cut=(heads[hd][6] if len(heads[hd])>6 else None),
-                  eff_thrust=(heads[hd][7] if len(heads[hd])>7 else None))
-              * close_efficacy(heads[hd][4], measure_gap, room, closed, head=hd)
-              / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd][4], room=room) - 1.0)))
+                  perc=heads[hd].perc if heads[hd].perc is not None else core.PERC_AUTH_REF, gap_prec=heads[hd].gap,
+                  eff=heads[hd].eff, thrust_auth=core.thrust_authority(w['head_len']),
+                  eff_cut=heads[hd].eff_cut, eff_thrust=heads[hd].eff_thrust)
+              * close_efficacy(heads[hd].pc, measure_gap, room, closed, head=hd)
+              / (1.0 + cfg['EXPOSE_SELECT_K'] * max(0.0, _recovery_mode_commitment(w, grip, cfg, sel_pc=heads[hd].pc, room=room) - 1.0)))
     if h==V.HEAD_CUT_THRUST:
         # atomic versatile head: the damage coupling already takes max(cut, half-sword gap-thrust) internally, so the
         # head token is unchanged. The REPORTED mode (legibility only) follows the documented armour-conditional shift
@@ -611,14 +640,12 @@ def select_mode(c, defender_armor, closed, cfg, measure_gap=None, grip=None, roo
         # cut-and-thrust sword was damaged as a thrust and READ as a swing, with legibility (thrust HARD 0.80, swing
         # EASY 1.25) scoring a mode the fighter never performed. Deriving it also captures cases no armour rule can
         # express: a poor-edged weapon (spetum, eff 0.63 < CUT_AUTH_REF) correctly prefers its point even unarmoured.
-        _ct_cut = heads[h][6] if len(heads[h])>6 else None
-        _ct_thr = heads[h][7] if len(heads[h])>7 else None
-        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h][2],
-                                 _ct_cut, _ct_thr, core.thrust_authority(w['head_len']))[1]
+        dm = core.cut_thrust_arm(core.TIER2MAT[defender_armor], 'full', heads[h].gap,
+                                 heads[h].eff_cut, heads[h].eff_thrust, core.thrust_authority(w['head_len']))[1]
     else:
         dm=core.HEAD_MODE.get(h, V.MODE_SHEAR)
-    sel_eff, _dm0, sel_gap, sel_perc, sel_pc = heads[h][:5]   # [ED-PC-0037.1] the cut_thrust entry is now 7 wide (per-arm magnitudes at 5/6); slice so every head unpacks uniformly
-    return dm, h, sel_gap, sel_perc, sel_pc, sel_eff
+    sel = heads[h]   # the WINNING option's own record; the transposition below is deliberate and lives in exactly one place
+    return ModeSelection(dm=dm, head=h, gap=sel.gap, perc=sel.perc, pc=sel.pc, eff=sel.eff)
 
 def armor_defeat_sigma(aggressor, defender, cfg):
     """In armour, the weapon that CAN defeat the armour controls the exchange. Net-sigma adjustment for the aggressor
@@ -697,7 +724,7 @@ def represent_measure_p(longer, shorter, cfg, TR, measure_gap=None):
     # pure function of a local, never of carried state) AND makes the measure_gap parameter genuinely load-bearing.
     room = range_utilization(longer, measure_gap, cfg)
     sel = select_mode(longer, shorter.armor, False, cfg, measure_gap=measure_gap, grip=0.0, room=room)
-    cap = adef_cap(longer.w, cfg, head=sel[1], gap=sel[2], grip=0.0, room=room)
+    cap = adef_cap(longer.w, cfg, head=sel.head, gap=sel.gap, grip=0.0, room=room)
     deficit = max(0.0, cfg['ADEF_THRESHOLD'][shorter.armor] - cap)
     base = exp(-cfg['REPRESENT_DECAY_K'] * aw * deficit)
     foot = 1.0 + cfg['REPRESENT_FOOT_K']*(longer.agi - shorter.agi)   # footwork differential; 0 for a stat mirror
@@ -809,7 +836,7 @@ def legibility(aggressor, commit, cfg, opp_armor=V.TIER_NONE):
     # default) — the greatsword's "needs swing room" cramped-quarters cure routes through here + the commit-
     # window above, never a heft multiply (C4).
     range_avail=getattr(aggressor,'range_avail',1.0)
-    pc_sel=getattr(aggressor,'sel_pc',None); pc_sel=pc_sel if pc_sel is not None else aggressor.w['geometry']['point_concentration']
+    pc_sel=getattr(aggressor,'sel_pc',None); pc_sel=pc_sel if pc_sel is not None else aggressor.w['geo']['point_concentration']
     legib += LEGIB_SWING_ROOM_K*(1.0-range_avail)*(1.0-pc_sel)
     return legib
 

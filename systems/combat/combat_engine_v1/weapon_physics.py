@@ -272,7 +272,7 @@ def phi_grip(w, grip, sel_head, sel_pc=None):
         return 1.0   # D2 gate: an axial point thrust's TRANSMISSION is grip-invariant — a rigid shaft carries axial compression from the hands to the point independent of WHERE on the shaft it is gripped (`[ASSERTED — rigid-body transmission only]`). NARROWED 2026-07-23 (ED-PC-0026, adversarial HEMA critic): the prior tag `[ASSERTED — rigid-body first principles]` OVERCLAIMED — the force is human-GENERATED (choking up shortens the rear body-lever available to drive the thrust), which is a real grip-dependent cost. That cost is not zero; it is booked ELSEWHERE as a CONTROL/authority cost — systems.choke_counterbalance -> CHOKE_ACCURACY_K (the legibility/control channel) and thrust_authority(head_len) (the gap-press lever) — NOT as a phi_grip force term. So this 1.0 is the transmission invariant, not a claim of zero total cost.
     rho = grip_swing_ratio(w, grip)
     phi_swing = SWING_FLOOR + (1.0 - SWING_FLOOR) * rho
-    pc = sel_pc if sel_pc is not None else w['geometry']['point_concentration']
+    pc = sel_pc if sel_pc is not None else w['geo']['point_concentration']   # whole-weapon fallback off the BAKED surface (geometry.bake passes the raw primitives through so `geo` is the single read path — ED-PC-0042/I3)
     return pc * 1.0 + (1.0 - pc) * phi_swing
 
 def phi_room_percussion(room):
