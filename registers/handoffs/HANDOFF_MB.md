@@ -15,7 +15,19 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
-- **▶ START HERE — THE MASS BATTLE PLAN (2026-07-26):**
+- **▶ START HERE — THE MASS BATTLE PLAN, v2 (2026-07-26):**
+  **v2 exists because v1 was substantially wrong.** Four Fable-5 critics attacked it and instrumented
+  measurement refuted its headline: **three of five severity-1 findings are code-true but
+  INCIDENCE-ZERO** (0 degree flips in 209,778 calls; 0 truncations in 102,260; the cell desync latent
+  behind an off flag). What IS wrong: **both shipped-mode goldens are RED** (stale since #235/#236,
+  undetected across both audits) and **casualty realism is 2/20** with loser means 29.1–79.2%.
+  v2 folds every correction into the tasks and promotes all eleven failures into **§1 GUARDRAILS** —
+  including one of my own guards that could not fail, and a `CellTable` rationale that benchmarking
+  showed backwards. **Critical path: A1a → A1b → §4a → B1a → B1c → D1.** First PR: **A1a** (the
+  goldens are red now). **⚠ Fork #5 is REWORDED** — the v1 wording generalised a gated-off feature to
+  the whole substrate and must not go to Jordan as written.
+  _(superseded v1 pointer follows)_
+- **THE MASS BATTLE PLAN v1 (superseded):**
   **`audit/2026-07-26-mass-battle-fable-audit/03_execution_plan.md`**
   Self-contained; a fresh session needs nothing else. Consolidates BOTH audits from that session
   (ED-MB-0043 vector, ED-MB-0045 Fable-5 six-dimension) plus the four pre-existing open MB items into
