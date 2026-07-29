@@ -26,14 +26,25 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     proposed fix was re-confirmed a NO-OP. Keen cutters gained (scimitar +6.1pp … sabre +2.3pp), spread
     45.1→40.6pp. **⚖ TWO ITEMS FOR JORDAN:** the greatsword/hook_sword flip to point at `none` (a
     consequence of the katana anchor), and the anchor choice itself.
-  - **▶ NEXT BATCH IS CHANNEL 5, the bind mass-moment (spec §5) — the strongest lead on the rapier.**
-    The rapier is an 80.8% outlier, 26pp clear, and **cut grading provably cannot reach it (it is a
-    POINT weapon)**. Measured: **the bind has NO mass/momentum/inertia term at all** — only
-    `leverage()`= grip_len−K·head_len, pure geometry. And it must key on the MOMENT, not weight: the
-    rapier is the *heavier* weapon (1.37 kg vs scimitar 0.95) but its `static_moment` is 0.1231 vs the
-    scimitar's **0.2199 (1.8×)**. Its bind edge currently comes from its swept hilt (`catch` +0.197)
-    with no mass-moment counterweight. Clean additive primitive, own ablatable term, do NOT multiply
-    into `leverage()`.
+  - **Channel 5 DONE (ED-PC-0052) — and its FAILURE is the most useful result of the session.**
+    `contact_moment_edge` now supplies displacement resistance to all three weapon-contact sites
+    (bind + parry + wind), keyed on the grip-adjusted moment `S_g` rather than mass (the rapier is the
+    *heavier* weapon, so mass moves the wrong way). Correct physics, mutation-verified, ablatable.
+    **It does NOT fix the rapier: K swept 0/0.20/0.40/0.60 gives 75.6/76.2/75.9/75.3% — flat.**
+    Per-event texture moves a lot (122 of 212 armour cells) while aggregate ordering does not — the
+    ED-PC-0022 texture-vs-aggregate lesson again.
+  - **▶▶ THE RAPIER'S ACTUAL DRIVER, and it changes the whole plan: `corr(overall length, civilian
+    win%) = +0.850` (+0.742 excluding the rapier itself).** The civilian duel field is ordered by
+    **REACH**, not by contact mechanics, edge quality, or the hilt. The rapier is simply the longest
+    civilian weapon at 1.14 m. **This UNIFIES the civilian-field problem with the already-tracked
+    off-plate reach dominance — ONE root cause at two scales, not two problems.** Reach is proven not
+    reachable by lever (four swept; every fix broke `guisarme@heavy`), and Jordan has routed it to the
+    future GRID layer where reach becomes positional range.
+    **CONSEQUENCE FOR SEQUENCING: no further contact-side or cut-side lever can fix the civilian field.
+    Do not spend another batch trying.** A7a (ED-PC-0051) and channel 5 (ED-PC-0052) were both aimed at
+    the wrong pathway — they were each real, independently-worth-fixing defects, and neither moved the
+    field. The remaining curvature channels (2–4) should be judged on physical correctness, NOT on any
+    expectation that they will level the duel.
   - **Channels 3–4 (curved thrust) — the defect is DATA, not formula.**
     **corr(curvature, point_concentration) = −0.729 across 42 bladed weapons**: the tip data was
     authored largely AS a function of blade curvature, and `thrust_factor` then applies a curvature
