@@ -2,25 +2,30 @@
 """
 ci_audit_registry_check.py — report-only freshness gate for references/audit_registry.jsonl.
 
-Warns (never blocks — audit cadence is irregular/manual, unlike code) when a
-designs/audit/ entry newer than the registry's latest known date has no
-corresponding record: a skill ran an audit but the append-on-completion step
-(CLAUDE.md-style skill retrofit, see the 8 SKILL.md files' "Dashboard registry
-logging" sections) silently didn't happen — a script bug, an edited skill that
-dropped the step, or a manual run outside the skill.
+Warns (never blocks — audit cadence is irregular/manual, unlike code) when an
+audit/ entry newer than the registry's latest known date has no corresponding
+record: a skill ran an audit but the append-on-completion step (CLAUDE.md-style
+skill retrofit, see the 8 SKILL.md files' "Dashboard registry logging" sections)
+silently didn't happen — a script bug, an edited skill that dropped the step,
+or a manual run outside the skill.
 
 Deliberately bounded to entries newer than the registry's current max date, not
-the whole designs/audit/ history — the one-time backfill (tools/build_audit_
+the whole audit/ history — the one-time backfill (tools/build_audit_
 registry_backfill.py) already covers history at whatever precision it could;
 this check is the ongoing "did anything recent slip through" signal, mirroring
 workplan_status.py's staleness() discipline for the workplan board.
+
+AUDIT_DIR points at the LIVE `audit/` corpus (moved from `designs/audit/`
+2026-07-18/19, ED-IN-0071 P4/P5 continuation; repointed here 2026-07-29, OI-53a
+critic addition F14 — the stale `designs/audit/` path resolved to nothing, so
+this check had been silently reporting "OK" with zero files ever scanned).
 """
 import json
 import os
 import re
 import sys
 
-AUDIT_DIR = os.path.join('designs', 'audit')
+AUDIT_DIR = 'audit'
 REGISTRY = os.path.join('references', 'audit_registry.jsonl')
 DATE_RE = re.compile(r'^(\d{4}-\d{2}-\d{2})-')
 
@@ -63,7 +68,9 @@ def main():
 
     if not max_registered_date:
         print("[AUDIT REGISTRY INFO] registry is empty or missing — run "
-              "tools/build_audit_registry_backfill.py, then this check will have a baseline.")
+              "deprecated/tools/build_audit_registry_backfill.py, then this check will have "
+              "a baseline. (Retired 2026-07-29, ED-IN-0097/OI-15: zero invokers. It is a "
+              "one-time backfill writer, still runnable from its retired home.)")
         return 0
 
     unregistered = [
@@ -72,11 +79,11 @@ def main():
     ]
 
     if not unregistered:
-        print(f"[AUDIT REGISTRY OK] no designs/audit/ entries newer than the registry's "
+        print(f"[AUDIT REGISTRY OK] no {AUDIT_DIR}/ entries newer than the registry's "
               f"latest date ({max_registered_date}) are missing a record.")
         return 0
 
-    print(f"[AUDIT REGISTRY WARN] {len(unregistered)} designs/audit/ entr{'y' if len(unregistered) == 1 else 'ies'} "
+    print(f"[AUDIT REGISTRY WARN] {len(unregistered)} {AUDIT_DIR}/ entr{'y' if len(unregistered) == 1 else 'ies'} "
           f"newer than the registry's latest date ({max_registered_date}) have no matching record "
           f"(non-blocking — verify the owning skill's registry-append step actually ran):")
     for date, folder in unregistered:

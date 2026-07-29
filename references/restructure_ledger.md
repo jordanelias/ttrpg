@@ -1123,3 +1123,22 @@
 | `sim/mc_v18_walkthrough.md` | `engine/mc_v18_walkthrough.md` |
 | `sim/README.md` | `engine/sim_reference_README.md` |
 | `sim/CONVENTIONS.md` | `engine/sim_reference_CONVENTIONS.md` |
+
+## 2026-07-29 — OI-15 orphaned-tool retirements → deprecated/tools/ (ED-IN-0097, W4)
+
+Four tools with re-verified zero invokers (ED-1082 grep-then-move precedent: every workflow, hook
+and skill grepped for each filename before the move; greps recorded in `deprecated/tools/README.md`).
+Pointer rows exist so prose/agent citations to the old paths keep resolving via CLAUDE.md §3's alias
+map — `tools/ci_claude_workflow_paths.py` treats `.claude/` aliases as non-fatal (comments are prose,
+not executed commands), which is the sanctioned route for a retired-but-cited path.
+
+`tools/registry.py` was **NOT** retired this wave and has no row here — see `04_execution_ledger.md`'s
+W4 rows: the retirement was reversed under the `audit/2026-07-29-centralization-single-owner/`
+interlock §0.1 row 1, which claims that file as its W1.3 subject.
+
+| Old Path | New Path |
+|----------|----------|
+| `tools/build_audit_registry_backfill.py` | `deprecated/tools/build_audit_registry_backfill.py` |
+| `tools/geography/jsx_to_canonical.py` | `deprecated/tools/jsx_to_canonical.py` |
+| `tools/measure_stamp_false_positives.py` | `deprecated/tools/measure_stamp_false_positives.py` |
+| `tools/observability/npc_audit_report_gen.py` | `deprecated/tools/npc_audit_report_gen.py` |

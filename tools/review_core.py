@@ -71,6 +71,22 @@ CHECKS = [
     # predicate's semantics).
     {"id": "stubs.count",       "argv": ["skills/valoria-vector-audit/scripts/structure_audit.py", "--stub-count"],
      "tier": "report_only", "lane": "IN", "count_re": r"(\d+) stub-wired"},
+    # contracts.join — OI-54 (ED-IN-0097, 2026-07-29-code-shape-open-items plan §3 Wave 4 item 4):
+    # runs structure_audit's lightweight --contracts-join mode (composes on the existing
+    # build_l2()/l2_contract_code_join() pass; no second contract parse, no --output-dir write).
+    # count_re captures the UNRESOLVABLE count only (a fictional/stale sim_module: claim) — the
+    # signal this whole join exists to catch. Currently 0 live (27/27 module_contracts.yaml rows
+    # accounted, 0 unresolvable — see tests/valoria/test_structure_audit.py's
+    # test_module_contracts_sim_module_join_is_exact). NO registers/review_baseline.yaml entry:
+    # review_baseline.yaml is CODEOWNERS-gated/frozen this wave (no pre-declared edit protocol,
+    # per the plan's shared-file single-writer table). A missing baseline row is SAFE to ship
+    # here because _apply_ratchet only grades regression on a `fail` verdict, and this signal
+    # currently passes (unresolvable=0) — so the absent-baseline "ceiling defaults to 0" behavior
+    # matches the signal's own natural floor (zero accepted debt) rather than manufacturing a
+    # false regression on a clean tree. If a future PR ever needs to bank real unresolvable debt,
+    # that baseline row is Jordan's addition, not this wave's.
+    {"id": "contracts.join",    "argv": ["skills/valoria-vector-audit/scripts/structure_audit.py", "--contracts-join"],
+     "tier": "report_only", "lane": "IN", "count_re": r"(\d+) unresolvable"},
 ]
 
 _GRADE_ORDER = {"GREEN": 0, "AMBER": 1, "RED": 2}

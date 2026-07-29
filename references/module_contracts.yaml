@@ -60,6 +60,14 @@ modules:
     aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "faction_layer"   # Key Type Registry vocabulary
     doc: systems/factions/faction_behavior_v30.md
+    sim_module: engine/autoload/game_state.py   # OI-54 (ED-IN-0097, W4): the `Faction` dataclass
+      # (L/Sta/W/I/Mil "faction stats 1-7", `.adjust()` mutator) is the real code home for this
+      # contract's state: block. NOT mechanics_index-precedented under this name (mechanics_index
+      # has no `faction_state`-keyed entry) — verified directly by grep. Residual, logged not
+      # papered per §0.1 #5: the RESOLVER half (cascade_resolution/mission_shift accounting logic
+      # the contract describes) has no dedicated implementation anywhere in the tree — grep for
+      # both Key-type strings across systems/+engine/ returns only engine/cross_scale/articulation.py
+      # (a consumer constant, not resolver logic). State joins; behavior does not yet exist.
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
     consumes:
@@ -119,6 +127,18 @@ modules:
     aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
     doc: systems/factions/political_dynamics_keys_migration_v30.md   # C-KEY-2 repoint (2026-07-29): the prior doc: (npc_behavior_v30.md) is Key-silent; this is the module's real Key-sequencing spec ("Doc 12 Procedures — Key-Migration Spec", PP-687) and was already cited under sources: below. npc_behavior_v30.md stays reachable in sources: (behavioral spec, not superseded).
+    sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — systems/npcs/ has ZERO .py files
+      # (matches this entry's own consumes: comment above, "npc_behavior has no runtime"). Doc is
+      # real (not doc:null) but there is no code home yet; the NPC family lane is unresolved (§5
+      # row 9 / OI-59).
+      # NEAR-MISS DISCLOSED (W4 gate, adj finding 8 / critic Q-8 — the mechanics_index cross-check
+      # this row's first draft skipped): mechanics_index.yaml:192-196 carries
+      # `npc_ai_service -> engine/autoload/npc_ai.py`, whose own docstring declares entry points
+      # `select_action` / `evaluate_priority_stack` — i.e. exactly this contract's stated role.
+      # Still `none`, deliberately: that module was converted to `stubwire` in W1 (ED-IN-0093,
+      # OI-17 armature-stub batch), so it is an explicitly-flagged not-built shell, not an
+      # implementation of this contract. Declaring it would make the join report a code home that
+      # answers no Key. Recorded rather than silently omitted; revisit when the NPC lane resolves.
     scales: [personal, scene]
     resolver: deterministic_accounting   # [ASSUMPTION] doc-12 §8 sequencing-within-Accounting + §9 determinism; Conviction-armature reads (substrate §8.2) feed decision derivation §4
     consumes:
@@ -210,6 +230,8 @@ modules:
   - module: npc_memory
     registry_system: "npc_memory"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
+      # (find/grep for npc_memory* across the tree returns nothing).
     scales: [personal]
     resolver: state_reader   # [ASSUMPTION] Memory store written from Keys; queried by Procedures (doc-12 §2.3 bridge)
     consumes:
@@ -232,6 +254,11 @@ modules:
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
     doc: systems/characters/conviction_track_v1.md
+    sim_module: systems/characters/sim/conviction.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `certainty_track`/`conviction_scar` entries (same file); content
+      # verified directly (apply_conviction_scar, per-Conviction Scar thresholds — §2 of this
+      # module's own doc). This is the PERSONAL piety_track, not territorial_piety below (3-way
+      # name collision noted in gap_notes) — do not conflate the two sim_module: values.
     scales: [personal]
     resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
     consumes:
@@ -271,6 +298,13 @@ modules:
 
   - module: territorial_piety
     doc: systems/characters/conviction_track_v30.md
+    sim_module: systems/overview/sim/ci_track.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `ci_track` entry — implements the CI (Church Influence) half of
+      # this module's state: block (PP-412 5-step seasonal calc; content verified). The CV
+      # (per-territory Piety) half is NOT in this file: it lives as `Territory.pt` +
+      # `.adjust_pt()` in engine/autoload/game_state.py (verified directly) — a genuine
+      # two-file split with no single owner, disclosed here rather than picking one file and
+      # hiding the other (§0.1 #4/#5). Territorial, not personal — see piety_track above.
     scales: [territory, provincial]
     resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
     consumes: []
@@ -307,6 +341,12 @@ modules:
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
     doc: systems/threadwork/threadwork_v30.md
+    sim_module: systems/threadwork/sim/operations.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `thread_leap`/`thread_weaving`/`thread_pulling`/`thread_locking`/
+      # `thread_dissolution`/`thread_mending` entries (all this file — the operation-roll
+      # resolver this contract's `resolver: dice_pool` names). Coherence/Fatigue state and the
+      # co_movement/collective/opposing/rendering/threadcut siblings are separate mechanics_index
+      # entries under systems/threadwork/sim/ — not this module's own state:, not cited here.
     scales: [personal, thread]
     resolver: dice_pool   # Leap Roll + operation rolls (threadwork_v30 Part Two)
     consumes: []
@@ -334,6 +374,13 @@ modules:
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
     doc: systems/fieldwork/knots_v30.md
+    sim_module: systems/fieldwork/sim/knots.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `knots` entry directly (module alias is literally "Knots"); this
+      # module's gap_notes already flag it as needing a rebuild (C-TW-12) — real code, imperfect
+      # fidelity, still a genuine G_code join. The Evidence/Disposition Track rows of this
+      # contract's state: are implemented in the SIBLING systems/fieldwork/sim/fieldwork.py
+      # (mechanics_index `disposition_track`/`evidence_track`), not in knots.py — disclosed, not
+      # papered over; knots.py is picked as primary because the module/alias name matches it.
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     consumes:
@@ -381,6 +428,14 @@ modules:
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary
     doc: null
+    sim_module: engine/autoload/scene_slate.py   # OI-54 (ED-IN-0097, W4) — DISCREPANCY vs the W4
+      # preflight, recorded per §0.1 #4 ("a number/claim without a control is not a measurement"):
+      # the preflight listed this module among "9 doc:null/no-sim modules"; it is doc:null, but
+      # it is NOT no-sim — engine/autoload/scene_slate.py is real, scanned code, and
+      # mechanics_index.yaml's `scene_slate_service` entry already cites it (cross-checked, not
+      # papered). The preflight's "no-sim" characterization of THIS module does not hold; the
+      # other 8 (npc_memory/game_director/scene_timer/audit/domain_actions/settlement_economy/
+      # engine_clock/scenario_authoring) were independently re-verified below and do hold.
     scales: [scene]
     resolver: manifest   # deterministic 7-priority slate generation [verification RU-5: manifest-generator, not state_reader] (settlement_layer §4.1; player_agency §4.2)
     consumes: []
@@ -407,6 +462,17 @@ modules:
   - module: game_director
     registry_system: "game_director"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
+      # grep for mechanical.scene_entered/scene_exited/scene_skipped across systems/+engine/ finds
+      # NO emitter anywhere. engine/autoload/season_manager.py implements a season-loop
+      # (advance_season/check_arc_boundary) but is not a zoom-stack orchestrator and emits none of
+      # this module's declared Keys — a partial behavioral analog, not this contract's code home.
+      # SECOND NEAR-MISS DISCLOSED (W4 gate, adj finding 8 / critic Q-8): engine/cross_scale/
+      # scene_dispatch.py is the closer analog for the "zoom-stack orchestrator" half of this
+      # contract's resolver: manifest — it routes scene entry/exit across scales. Still `none`:
+      # it is NOT in mechanics_index.yaml at all (grep: zero hits, so there is no indexed
+      # precedent to cite) and it emits none of this module's `mechanical.scene_*` Keys either.
+      # Both analogs named so the `none` is a measured absence, not an unexamined one.
     scales: [scene]
     resolver: manifest   # season-loop + zoom-stack orchestrator [verification RU-5: orchestrator, not state_reader]
     consumes: []
@@ -426,6 +492,8 @@ modules:
   - module: scene_timer
     registry_system: "scene_timer"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
+      # (find for scene_timer* across the tree returns nothing).
     scales: [scene]
     resolver: state_reader   # OBSERVABILITY/tooling: wall-clock sidecar OUTSIDE the Key log, advances no game clock [verification RU-5 — not a runtime gameplay resolver]
     consumes:
@@ -445,6 +513,9 @@ modules:
   - module: audit
     registry_system: "audit"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
+      # this is the observability/QA-tooling "audit" module (see resolver comment), distinct from
+      # the tools/ audit apparatus outside the gameplay runtime; no runtime consumer code found.
     scales: [scene]
     resolver: state_reader   # OBSERVABILITY/tooling consumer [verification RU-5: QA/telemetry, not a runtime gameplay system]
     consumes:
@@ -464,6 +535,9 @@ modules:
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
     doc: systems/social_contest/social_contest_v30.md
+    sim_module: systems/social_contest/sim/contest/   # OI-54 (ED-IN-0097, W4): directory path —
+      # matches mechanics_index.yaml's `social_contest` entry verbatim (the live contest kernel
+      # package, contest_rebuild Stages 0-3 landed per that entry's own note).
     scales: [scene]
     resolver: dice_pool
     consumes:
@@ -489,6 +563,13 @@ modules:
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: systems/mass_battle/mass_battle_v30.md
+    # sim_module: DELIBERATELY NOT ADDED HERE (OI-54, ED-IN-0097, W4): this module's rows are
+    # MB-owned per the plan's shared-file single-writer table ("module_contracts.yaml: MB owns
+    # rows [mass_battle] and its E1 deletion; IN owns the rest") — the join lane does not touch
+    # MB's rows even to add a field. The join-verified checker (structure_audit.py) therefore
+    # reports this module as `undeclared` (not `unresolvable` — the field is legitimately absent,
+    # not wrong) until the MB session adds it. LEAD for MB: mechanics_index.yaml already carries
+    # `mass_battle -> systems/mass_battle/sim/massbattle.py`.
     scales: [scene]
     resolver: dice_pool
     consumes: []
@@ -510,6 +591,21 @@ modules:
     aliases: ["Domain Echo"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "da_framework"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
+      # grep for every da.* Key-type string literal (antinomian_action/covert_betrayal/
+      # diplomatic_alliance/economic_intervention/public_governance) across systems/+engine/ finds
+      # ZERO emitter code (only engine/cross_scale/articulation.py's consumer constant list). The
+      # accounting_sequence's "select_proposal()/execute_proposed_domain_actions()" prose (below,
+      # DA_proposal phase) names no function that exists in systems/factions/sim/faction_action.py
+      # (checked directly) — descriptive doc-12 prose, not a code pointer.
+      # NEAR-MISS DISCLOSED (W4 gate, adj finding 8 / critic Q-8 — the mechanics_index cross-check
+      # this row's first draft skipped): this entry's OWN `aliases: ["Domain Echo"]` above matches
+      # mechanics_index.yaml:899-903's `domain_echo -> engine/cross_scale/domain_echo.py`, a real
+      # scene->faction stat-propagation module. Still `none`, deliberately: domain_echo.py
+      # TRANSPORTS the echo (it is the cross-scale carrier wired under ECHO_TRANSPORT, ED-IN-0028)
+      # and emits none of the five `da.*` Key types this contract declares — the alias is a naming
+      # collision between "Domain Echo (§5 transport)" and "domain actions (the DA framework)",
+      # not a shared code home. Recorded rather than silently omitted.
     scales: [provincial]
     resolver: d_sigma   # [ASSUMPTION] Domain Action resolver = deterministic+stochastic d+sigma (ED-874)
     consumes: []
@@ -537,6 +633,15 @@ modules:
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
     doc: systems/overview/peninsular_strain_v30.md
+    sim_module: systems/overview/sim/   # OI-54 (ED-IN-0097, W4): DIRECTORY — this module's
+      # state: block splits across several files with no single owner: MS is
+      # systems/overview/sim/ms_track.py (this module's own state: comment already names it as
+      # "the canonical MS-arithmetic surface", cross-checked with mechanics_index.yaml's `ms_track`
+      # entry), IP is systems/overview/sim/ip_track.py (mechanics_index `ip_track`). Turmoil has
+      # NO tracker file anywhere (verified: grep for a Turmoil writer finds none) — this is the
+      # open §5 row 7 fork (Turmoil writer unruled), not papered over by pointing at a directory.
+      # A directory join is honest disclosure of the split, not a claim that every file in it
+      # implements this contract.
     scales: [peninsula]
     resolver: deterministic_accounting   # [ASSUMPTION]
     consumes: []
@@ -585,6 +690,13 @@ modules:
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
     doc: systems/settlements/settlement_layer_v30.md
+    sim_module: systems/settlements/sim/settlement.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `settlement_state` entry verbatim; content verified directly
+      # (Prosperity/Order/derived Local-Economy computation, §1.3). Legitimacy/Popular Support
+      # (this contract's §1.8 LPS-2e state row) are a SEPARATE file,
+      # systems/settlements/sim/registry.py's `Settlement.legitimacy`/`.popular_support` fields
+      # (verified directly, marked PRE-LPS-1/PORT-BLOCKING there) — disclosed split, not folded
+      # silently into settlement.py.
     scales: [settlement, territory]
     resolver: deterministic_accounting
     consumes:
@@ -658,6 +770,9 @@ modules:
   - module: settlement_economy
     registry_system: "settlement_economy"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
+      # (no settlement_economy*.py anywhere) and consistent with this entry's own gap_notes
+      # ("RECOMMEND RETIRE ... phantom module (no doc/state/logic)").
     scales: [settlement]
     resolver: deterministic_accounting   # [ASSUMPTION]
     consumes:
@@ -677,6 +792,12 @@ modules:
 
   - module: ci_political
     doc: systems/factions/ci_political_v30.md
+    sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — no dedicated code found (grep for
+      # political_pool/card_hand/ci_political across systems/+engine/ finds only a docstring
+      # listing in systems/factions/__init__.py, not implementation). Matches this entry's own
+      # gap_notes ("ZERO Key integration in a CANONICAL doc"). Not the same file as
+      # territorial_piety's ci_track.py (CI GENERATION lives there per clock_registry's ownership
+      # split; ci_political reads CI for political effects §3-§5, which is unbuilt).
     scales: [provincial]
     resolver: deterministic_accounting   # stat economy §4 + card system §5; CI bonus dice feed dice_pool contexts §3.2-§3.4
     consumes: []
@@ -697,6 +818,9 @@ modules:
 
   - module: victory
     doc: systems/victory/victory_v30.md
+    sim_module: engine/autoload/victory.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `victory_check_service` AND `peninsular_sovereignty` entries (both
+      # cite this same file) — cross-checked, no discrepancy.
     scales: [provincial, peninsula]
     resolver: state_reader   # reads aggregated clocks/state at Accounting; era transitions are deterministic
     consumes: []
@@ -739,6 +863,11 @@ modules:
   - module: engine_clock
     registry_system: "engine_clock"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified —
+      # grep for mechanical.season_change / mechanical.accounting Key-type strings across
+      # systems/+engine/ finds no emitter. engine/autoload/season_manager.py advances the season
+      # counter but does not emit either declared Key type — the temporal-spine gap CLAUDE.md §6
+      # names (doc: stays null pending ED-1051, §5 row 3 of this program's Jordan docket).
     scales: [provincial]
     resolver: clock_advance
     consumes: []
@@ -760,6 +889,10 @@ modules:
   - module: faction_politics
     registry_system: "faction_politics"   # Key Type Registry vocabulary
     doc: systems/factions/faction_politics_v30.md   # [verification ED-IN-0016: doc:null was stale — CANONICAL, PP-660, 1115 lines; confirmed by key_type_registry_v30.md:502,506,525,546,723 and references/restructure_ledger.md:165]
+    sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — no dedicated code found (a
+      # Standing/coup_attempted/succession grep across systems/+engine/ turns up only unrelated
+      # substring hits). Matches this entry's own state: comment above ("contract-truth
+      # declaration, not a sim build — OI-20's sim half stays DEFERRED to the FA lane, §3.5").
     scales: [provincial]
     resolver: deterministic_accounting   # [ASSUMPTION]
     consumes: []
@@ -789,6 +922,8 @@ modules:
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
     doc: systems/world/miraculous_event_v30.md   # [verification P6: doc:null was stale — the doc exists; resolve its CANONICAL-vs-PROVISIONAL header]
+    sim_module: systems/world/sim/miraculous_event.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `miraculous_event` entry verbatim.
     scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
     resolver: state_reader   # [ASSUMPTION] gated emitter: fires on high-Ob Mending near T15
     consumes: []
@@ -806,6 +941,10 @@ modules:
   - module: scenario_authoring
     registry_system: "scenario_authoring"   # Key Type Registry vocabulary
     doc: null
+    sim_module: none   # OI-54 (ED-IN-0097, W4): doc:null/no-sim per the W4 preflight; re-verified
+      # (no scenario_authoring*.py anywhere; tools/mechanics_index_gen.py's one hit is the
+      # generator script mentioning the module name in a comment, not runtime code). Matches this
+      # entry's own gap_notes ("Execution unbuilt — no Stage-1 compile tooling").
     scales: [peninsula]
     resolver: manifest   # [ASSUMPTION] authoring-time event injection
     consumes: []
@@ -824,6 +963,10 @@ modules:
   - module: articulation_layer
     registry_system: "articulation"   # Key Type Registry vocabulary
     doc: systems/articulation/articulation_layer_v30.md
+    sim_module: engine/cross_scale/articulation.py   # OI-54 (ED-IN-0097, W4): matches
+      # mechanics_index.yaml's `articulation_layer` entry verbatim. A doc-bearing module whose
+      # code home is differently-named/located (not under systems/*/sim) — a legitimate explicit
+      # path, per the W4 preflight's own note.
     scales: [personal, scene, provincial]
     resolver: deterministic_accounting   # significance-function accounting + embedded armature read [verification RU-4: the armature dot-product is the SUBSTRATE interpretation primitive (key_substrate §2.5/§4.1), NOT a system resolver] (substrate §8.2, §8.7)
     consumes:
@@ -841,6 +984,10 @@ modules:
 
   - module: clock_registry
     doc: systems/overview/clock_registry_v30.md
+    sim_module: none   # OI-54 (ED-IN-0097, W4): by design, per this module's own resolver comment
+      # ("catalog of clocks/tracks; owns no state, resolves nothing") and gap_notes ("pure
+      # manifest — every listed clock is owned by its source system"). Re-verified: no
+      # clock_registry*.py anywhere. Not a gap — a module that is intentionally code-free.
     scales: [provincial]
     resolver: manifest   # catalog of clocks/tracks; owns no state, resolves nothing
     consumes: []
@@ -857,6 +1004,10 @@ modules:
   - module: personal_combat
     registry_system: "personal_combat"   # Key Type Registry vocabulary
     doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
+    sim_module: systems/combat/combat_engine_v1/   # OI-54 (ED-IN-0097, W4): directory — matches
+      # mechanics_index.yaml's `combat` entry verbatim (same doc:/sim_module: path, as expected
+      # for the canonical engine). NOTE: this is a module_contracts.yaml edit only — no file
+      # under systems/combat/** (the STOP-list path) is touched by adding this pointer.
     godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: engine/engine_params/combat_engine_v1.json   # GENERATED from config.py + core.py (tools/export_engine_params.py, schema v2 — OPT-AV-17 added the core-constants section); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]
@@ -913,6 +1064,11 @@ modules:
 
   - module: campaign_architecture
     doc: systems/_architecture/campaign_architecture_v30.md
+    sim_module: none   # OI-54 (ED-IN-0097, W4): status: stub below — RECLASSIFIED 2026-06-10 as a
+      # cross-cutting consolidation doc, not a runtime module (this entry's own gap_notes); its
+      # contents distribute across victory/threadwork/settlement_layer/peninsular_strain, each
+      # already sim_module:-joined above. Retire-candidate per §5 row 9 of this program's Jordan
+      # docket (unruled) — recorded, not acted on here.
     scales: [provincial]
     gap_notes:
       - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"

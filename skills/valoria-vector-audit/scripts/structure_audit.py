@@ -42,6 +42,20 @@ try:
 except Exception:  # pragma: no cover
     sys.exit("structure_audit requires PyYAML")
 
+# Single-owner __main__-guard predicate (OI-52a, ED-IN-0097, 2026-07-29-code-shape-open-items
+# plan §3 Wave 4 item 2 — adopted here by the join lane per the cycle lane's coordination note).
+# Was a local AST predicate duplicating tools/ci_common.py's (same both-operand-order logic,
+# two independent definitions of one rule — the exact class CLAUDE.md §8 exists to prevent).
+# tools/build_apparatus_registry.py already consumes the single owner; this is the second and
+# last consumer. Same sys.path idiom as tests/valoria/test_retired_tree_apparatus.py.
+_TOOLS_DIR = str(Path(__file__).resolve().parents[3] / 'tools')
+try:
+    import ci_common
+except ImportError:
+    if _TOOLS_DIR not in sys.path:
+        sys.path.insert(0, _TOOLS_DIR)
+    import ci_common
+
 
 # ──────────────────────────── GRAPH ALGORITHMS (stdlib) ──────────────────────
 
@@ -318,45 +332,19 @@ def build_g_code(root, modules):
 # AST predicate plus a single split function — and both the CLI list and the
 # (now narrower) orphan list are surfaced in the same report/JSON, never silently.
 
-def has_main_guard(tree):
-    """True iff `tree` contains an `if __name__ == '__main__':` (or the reversed
-    `if '__main__' == __name__:`) guard anywhere in the module body. That guard is
-    the conventional, unambiguous signal that a module is meant to be run as a
-    script — a real CLI entry point, not an accidental import-graph dead end."""
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.If):
-            continue
-        test = node.test
-        if not (isinstance(test, ast.Compare) and len(test.ops) == 1
-                and isinstance(test.ops[0], ast.Eq) and len(test.comparators) == 1):
-            continue
-        left, right = test.left, test.comparators[0]
-
-        def _is_dunder_name(n):
-            return isinstance(n, ast.Name) and n.id == '__name__'
-
-        def _is_main_const(n):
-            return isinstance(n, ast.Constant) and n.value == '__main__'
-
-        if (_is_dunder_name(left) and _is_main_const(right)) or \
-           (_is_dunder_name(right) and _is_main_const(left)):
-            return True
-    return False
-
-
 def collect_cli_entry_modules(root, modules):
-    """{module_name, ...} — every module whose AST contains a `__main__` guard.
-    Parses each module independently of `build_g_code`'s import-focused AST pass
-    (a second, cheap parse over the same files) so this detection stays a single,
-    self-contained predicate and never touches the already-verified relative-import
-    resolution fix in `build_g_code`."""
+    """{module_name, ...} — every module whose AST contains a `__main__` guard, per
+    `ci_common.has_main_guard()` — the single owner (OI-52a/OI-54, ED-IN-0097). Parses each module
+    independently of `build_g_code`'s import-focused AST pass (a second, cheap parse over the same
+    files) so this detection stays self-contained and never touches the already-verified
+    relative-import resolution fix in `build_g_code`."""
     entries = set()
     for mod, rel in modules.items():
         try:
             tree = ast.parse((root / rel).read_text(encoding='utf-8', errors='replace'), filename=rel)
         except SyntaxError:
             continue
-        if has_main_guard(tree):
+        if ci_common.has_main_guard(tree):
             entries.add(mod)
     return entries
 
@@ -439,6 +427,11 @@ def build_l2(root):
             # optional prose display-names for this module (how OTHER docs refer to it) — lets the
             # Workbench match a module counterpart precisely instead of only humanizing its id.
             'aliases': [a for a in (m.get('aliases') or []) if isinstance(a, str)],
+            # OI-54 (ED-IN-0097): the module's own declared code home — a repo-relative file/dir
+            # path, the literal string 'none' (with a reason comment in the YAML), or absent
+            # (None) if the contract predates this field. Raw value only; l2_contract_code_join()
+            # does the resolution against G_code.
+            'sim_module': m.get('sim_module'),
         }
         for e in (m.get('emits') or []):
             if isinstance(e, dict) and e.get('type'):
@@ -533,6 +526,58 @@ def l2_contract_without_code(l2_nodes, code_nodes):
     return sorted(m for m in l2_nodes if m and m not in code_segments)
 
 
+def l2_contract_code_join(meta, modules):
+    """JOIN-VERIFIED contract↔code correspondence (OI-54, ED-IN-0097, 2026-07-29-code-shape-open-
+    items plan §3 Wave 4 item 4). Supersedes `l2_contract_without_code()`'s plain-name heuristic as
+    `run()`'s primary correspondence signal — that function's disclosure text (kept, unmodified, for
+    its own pinned test) already explains WHY a name match cannot do this job; this is the real join
+    it named as the closing move: read each contract's own declared `sim_module:` field
+    (`references/module_contracts.yaml`) and resolve it against the SAME file set
+    `collect_py_modules()` already parsed for G_code — no second file-existence scan, no second
+    owner of "does this path exist" (§8).
+
+    `meta`    — {module_name: {..., 'sim_module': <str | 'none' | None>}} from `build_l2()`.
+    `modules` — {dotted_module: relpath} from `collect_py_modules()`; `relpath` is what a
+                `sim_module:` file path is checked against, and a `sim_module:` DIRECTORY path
+                (combat_engine_v1/, contest/, ...) is checked as a prefix of at least one relpath —
+                the same convention `combat`/`social_contest` already use in
+                `registers/mechanics_index.yaml`.
+
+    Four buckets, every L2 module in exactly one:
+      - 'joined'        the declared path resolves to a real file or a real directory (>=1 scanned
+                         code file under it) — genuine G_code correspondence.
+      - 'none'           the contract explicitly declares no code exists (`sim_module: none`) — a
+                         disclosed absence, not a gap in this join.
+      - 'unresolvable'  the declared path matches NEITHER a file nor a directory prefix in the
+                         scanned set — the FICTIONAL-CONTRACT case this whole join exists to catch
+                         (a contract could otherwise claim wiring to code that was never verified to
+                         exist). This is the one bucket that should always be empty in a clean tree.
+      - 'undeclared'    the contract carries no `sim_module:` key at all — reported separately so a
+                         future contract that forgets the field is visible, never silently folded
+                         into 'unresolvable' (which would conflate "never declared" with "declared
+                         and wrong")."""
+    relpaths = set(modules.values())
+
+    def _resolves(path):
+        if path in relpaths:
+            return True
+        d = path if path.endswith('/') else path + '/'
+        return any(rp.startswith(d) for rp in relpaths)
+
+    joined, none, unresolvable, undeclared = [], [], [], []
+    for name in sorted(meta):
+        sm = meta[name].get('sim_module')
+        if sm is None:
+            undeclared.append(name)
+        elif sm == 'none':
+            none.append(name)
+        elif isinstance(sm, str) and _resolves(sm):
+            joined.append(name)
+        else:
+            unresolvable.append(name)
+    return {'joined': joined, 'none': none, 'unresolvable': unresolvable, 'undeclared': undeclared}
+
+
 # ──────────────────────────── OUTPUT ─────────────────────────────────────────
 
 def _cycles(scc, adj):
@@ -587,6 +632,11 @@ def run(root, out):
     l2_cuts = articulation_points(g_l2)
     locality = cross_scale_locality(g_l2, meta)
     l2_without_code = l2_contract_without_code(l2_nodes, code_nodes)
+    l2_join = l2_contract_code_join(meta, modules)   # OI-54: the real join (l2_without_code kept
+    #        above only for its own pinned test + disclosure text; run() no longer keys off it)
+    assert (len(l2_join['joined']) + len(l2_join['none']) + len(l2_join['unresolvable'])
+            + len(l2_join['undeclared'])) == len(l2_nodes), \
+        'OI-54 join must account for every L2 module exactly once (§0.1 #2: assert it asserted)'
     # capstone #4 (ED-IN-0056): `edges_meta` is the RAW emit->consume edge list (parallel
     # edges kept); the cycle/cut-vertex/locality metrics all run on `g_l2`, the DEDUPLICATED
     # simple graph. Report BOTH so the scorecard never juxtaposes a raw multi-edge count with
@@ -612,8 +662,14 @@ def run(root, out):
                'edges_simple': l2_simple_edges,     # deduplicated graph the metrics below run on
                'cycles': l2_cycles,
                'cut_vertices': sorted(l2_cuts), 'locality': locality,
-               'contract_code_correspondence_verified': False,   # capstone #7: no reliable name join
-               'contract_code_name_unmatched': l2_without_code,   # informational, NOT a fabrication list
+               # OI-54 (ED-IN-0097): JOIN-VERIFIED against sim_module:, superseding the old
+               # capstone #7 "no reliable name join" disclosure. True now that every contract
+               # carries a sim_module: field resolved against G_code — see l2_join below.
+               'contract_code_correspondence_verified': True,
+               'contract_code_join': l2_join,   # {'joined', 'none', 'unresolvable', 'undeclared'}
+               'contract_code_name_unmatched': l2_without_code,   # kept: the retired heuristic's
+               #        own output, informational only (its function's docstring explains why a
+               #        plain-name match cannot do this job — now demonstrated, not just asserted)
                'assumption_markers': assumption_count},
         'findings': findings,
     })
@@ -645,7 +701,9 @@ def run(root, out):
              f'cli-entries={len(cli_entries)}, stub-wired={len(stub_wired)}; '
              f'l2-modules={len(l2_nodes)}, wiring-edges={len(edges_meta)} raw ({l2_simple_edges} simple/deduped — '
              f'the cycle/cut-vertex/locality metrics run on the simple graph), l2-cycles={len(l2_cycles)}, '
-             f'l2-contract↔code-correspondence=UNVERIFIED({len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} name-map), '
+             f'l2-contract↔code-correspondence=JOINED({len(l2_join["joined"])} joined, '
+             f'{len(l2_join["none"])} none, {len(l2_join["unresolvable"])} unresolvable, '
+             f'{len(l2_join["undeclared"])} undeclared / {len(l2_nodes)}), '
              f'phantom-producers={len(real_phantoms)}(+{len(notional_phantoms)} notional), '
              f'dangling-emits={len(real_dangling)}, cross-scale-fraction={locality["cross_fraction"]}.')
     L.append('')
@@ -706,19 +764,30 @@ def run(root, out):
                       f"{'notional' if meta[n]['notional'] else 'canon'})")
     section('doc:null modules — registered contract, no home design doc (unimplementable spec)',
             sorted(findings['doc_null']), lambda n: f"`{n}`")
-    L.append('## Contract↔code correspondence — a DISCLOSED BLACK-HOLE (capstone #7, ED-IN-0056)')
+    L.append('## Contract↔code correspondence — JOIN-VERIFIED (OI-54, ED-IN-0097, was capstone #7\'s '
+             'DISCLOSED BLACK-HOLE, ED-IN-0056)')
     L.append('')
-    L.append(f'Nothing in the observatory joins L2\'s {len(l2_nodes)} `module_contracts.yaml` modules to '
-             f'G_code\'s {len(code_nodes)} real code modules, so a fictional / unimplemented contract '
-             f'entry would surface as canon-grade wiring unchallenged. This gap is **named, not measured**: '
-             f'the contract→code mapping is NOT name-based (a plain name match finds only '
-             f'{len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} — the code uses `massbattle` for the '
-             f'`mass_battle` contract, folds `faction_state` into `faction_action.py`, etc.), so any '
-             f'name-heuristic cross-check would cry wolf at ~{round(100*len(l2_without_code)/max(1,len(l2_nodes)))}% '
-             f'and is deliberately NOT shipped as a finding. Closing this honestly needs the '
-             f'`registers/mechanics_index.yaml` `sim_module:` join (a contract↔mechanic↔file map) — a deferred '
-             f'WS task. Until then: **contract↔code correspondence is UNVERIFIED by this layer.**')
+    L.append(f'Every one of L2\'s {len(l2_nodes)} `module_contracts.yaml` modules now carries an explicit '
+             f'`sim_module:` field, resolved here against G_code\'s {len(code_nodes)} real code modules — '
+             f'a file path checked for an exact relpath match, a directory path checked as a prefix of '
+             f'>=1 scanned file (the `combat`/`social_contest` convention `mechanics_index.yaml` already '
+             f'used), and the literal `none` accepted as a disclosed absence. A plain NAME match — kept '
+             f'below as `l2_contract_without_code()`, unmodified, for its own pinned test — still finds '
+             f'only {len(l2_nodes) - len(l2_without_code)}/{len(l2_nodes)} (the code uses `massbattle` for '
+             f'the `mass_battle` contract, folds `faction_state`\'s state into `game_state.py`, etc.); the '
+             f'join below is what actually closes the gap that heuristic could only disclose. Result: '
+             f'**{len(l2_join["joined"])} joined, {len(l2_join["none"])} explicitly none, '
+             f'{len(l2_join["unresolvable"])} unresolvable, {len(l2_join["undeclared"])} undeclared** — '
+             f'`unresolvable` is the fictional-contract case this join exists to catch and should read 0 '
+             f'on a clean tree; `undeclared` should always read 0 now that all 27 modules carry the field '
+             f'(a nonzero value here is itself a regression, not a pre-existing gap).')
     L.append('')
+    section('L2 contract↔code UNRESOLVABLE — sim_module: names neither a real file nor a real '
+            'directory prefix in G_code (canon-grade: a fictional or stale code-home claim)',
+            l2_join['unresolvable'], lambda n: f"`{n}` -> `{meta[n].get('sim_module')}`")
+    section('L2 contract↔code UNDECLARED — no sim_module: field at all (regression watch: should '
+            'be empty now that all 27 module_contracts.yaml entries carry the field)',
+            l2_join['undeclared'], lambda n: f"`{n}`")
     section('Import orphans — internal module nothing imports (dead-ish; verify before removal)',
             code_orphans, lambda n: f"`{n}`")
     section('CLI entry points — modules with an `if __name__ == \'__main__\':` guard and zero '
@@ -777,22 +846,56 @@ def run_stub_count(root):
     return 1 if stub_wired else 0
 
 
+def run_contracts_join(root):
+    """Lightweight `--contracts-join` mode (tools/review_core.py's `contracts.join` signal,
+    OI-54, ED-IN-0097, 2026-07-29-code-shape-open-items plan §3 Wave 4 item 4): runs only the
+    G_code pass + `build_l2()` + `l2_contract_code_join()` — no `--output-dir`, no files written
+    — and prints a count `review_core`'s `count_re` can parse. Same single-owner rule as the full
+    `run()`: no second AST pass, no second contract parse. Mirrors `run_stub_count()`'s exit-code
+    convention: 0 when unresolvable count is 0, 1 otherwise, so review_core's ratchet reads a
+    fresh count only on 'fail'. Deliberately keys ONLY on `unresolvable` (a fictional/stale
+    sim_module: claim) — `undeclared` (a contract that has not yet added the field, e.g. the
+    MB-owned mass_battle row) is a disclosed, tracked state, not itself a regression signal."""
+    modules = collect_py_modules(root)
+    _g_code, _parse_errors = build_g_code(root, modules)
+    _g_l2, meta, _edges_meta, _findings, _assumption_count = build_l2(root)
+    join = l2_contract_code_join(meta, modules)
+    unresolvable = join['unresolvable']
+    print(f'== structure_audit --contracts-join: {len(join["joined"])} joined, {len(join["none"])} none, '
+          f'{len(unresolvable)} unresolvable, {len(join["undeclared"])} undeclared '
+          f'(of {len(meta)} module_contracts.yaml modules) — report-only ==')
+    for m in unresolvable:
+        print(f'  UNRESOLVABLE {m} -> {meta[m].get("sim_module")!r}')
+    if join['undeclared']:
+        print(f'  (undeclared, not counted as regression: {", ".join(join["undeclared"])})')
+    if not unresolvable:
+        print('  (nothing to report — every declared sim_module: resolves to a real G_code node)')
+    return 1 if unresolvable else 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument('--repo-root', default='.', help='repo root (working tree)')
-    ap.add_argument('--output-dir', help='audit output folder (required unless --stub-count)')
+    ap.add_argument('--output-dir', help='audit output folder (required unless --stub-count / '
+                                          '--contracts-join)')
     ap.add_argument('--stub-count', action='store_true',
                     help='print the stub_wired module count only (tools/review_core.py '
                          "'stubs.count' signal) and exit — skips the full run() output")
+    ap.add_argument('--contracts-join', action='store_true',
+                    help='print the contract<->code join unresolvable count only '
+                         "(tools/review_core.py 'contracts.join' signal, OI-54) and exit — "
+                         'skips the full run() output')
     a = ap.parse_args()
     root = Path(a.repo_root)
     if not (root / 'references' / 'module_contracts.yaml').exists():
         sys.exit(f"not a Valoria repo root (no references/module_contracts.yaml): {root}")
     if a.stub_count:
         sys.exit(run_stub_count(root))
+    if a.contracts_join:
+        sys.exit(run_contracts_join(root))
     print(f'[structure_audit] repo root (working tree): {root.resolve()}')
     if not a.output_dir:
-        sys.exit('--output-dir is required unless --stub-count is passed')
+        sys.exit('--output-dir is required unless --stub-count or --contracts-join is passed')
     run(root, a.output_dir)
 
 

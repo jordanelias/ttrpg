@@ -20,6 +20,12 @@ import os
 import subprocess
 import sys
 
+try:
+    import ci_common
+except ImportError:  # allow `python tools/workplan_status.py` from repo root
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ci_common
+
 BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
 
 GLYPH = {
@@ -68,7 +74,17 @@ def _next_ready(board):
     return 'no ungated increment — rule a T0 decision'
 
 
-RELEVANT_PREFIXES = ('designs/', 'systems/', 'registers/handoffs/', 'canon/', 'sim/')
+# `designs/` and `sim/` DROPPED (OI-53a, 2026-07-29) — both RETIRED, so
+# `p.startswith(RELEVANT_PREFIXES)` below could never match either (a silent
+# coverage gap, not a harmless no-op — §0.1 point 5). `sim/`'s live successor
+# (`engine/` + `systems/<sub>/sim/`, the latter already redundant with `systems/`)
+# is restated via the single owner, ci_common.sim_reference_prefixes() — this is a
+# real coverage ADD, not a no-op: `engine/` was never separately represented here
+# before (`systems/` doesn't cover it), so a change under `engine/` now counts as
+# workplan-relevant where it silently didn't before.
+RELEVANT_PREFIXES = (
+    ('systems/', 'registers/handoffs/', 'canon/') + ci_common.sim_reference_prefixes()
+)
 
 
 def staleness():

@@ -58,9 +58,30 @@ and this root file remains the one stable SessionStart entry point.
   ED-SE-0049), articulation minimal subscriber (OI-08), OI-12 census. `generate_npc`/world.knots
   (OI-05/OI-07 half, ED-WR-0009) landed as a PERMANENT honest deferral, not a wire-up — no canon
   trigger to cite, so **no golden was re-recorded** this wave (corrects the plan's expectation).
-  **Next = Wave 3** (Keys & contract truth). The fractional-resolution triad (fractional pools,
-  fractional Ob, fractional interpolated degrees) was RULED by Jordan in-session (ED-IN-0094) and
-  routed across PC/MB/SC/IN. Detail in `registers/handoffs/HANDOFF_IN.md`.
+  The fractional-resolution triad (fractional pools, fractional Ob, fractional interpolated
+  degrees) was RULED by Jordan in-session (ED-IN-0094) and routed across PC/MB/SC/IN. **Wave 3
+  landed (ED-IN-0096, merged PR #267):** Keys/contract-truth sweep — accord-echo trigger closure,
+  contract-truth corrections (npc_behavior/faction_politics/MS ownership), Category-B scalar
+  registration, dangling-emit census correction. **Wave 4 landed (ED-IN-0097):** mechanical
+  sweep/single-owner consolidation — game_state/npe import cycle broken 4→3
+  (`engine/substrate/canon_buckets.py`); `__main__`-guard duplication single-owned in
+  `tools/ci_common.py::has_main_guard`; the 4 stale `designs/`/`sim/`-root sites fixed via
+  `ci_common.sim_reference_prefixes()`; `module_contracts.yaml`↔`mechanics_index.yaml`↔code join
+  (OI-54, 27/27 resolved) landed as a new report-only `review_core.py` check; **4** confirmed-orphan
+  tools retired to `deprecated/tools/` (OI-15, ED-1082 precedent); 2 orphan mechanics
+  indexed (OI-57: `franchise`, `faction_succession_split`); the OI-32a dead-param tripwire
+  re-verified/annotated. **OI-16 is HELD, not executed** — the sweep retired `tools/registry.py` and
+  the W4 gate reversed it: the concurrent centralization-single-owner program (ED-IN-0103, PR #262)
+  holds a BINDING interlock on that exact file, and its zero-consumer state is evidence of the race
+  rather than grounds for retirement. Routed to that program's W1.3. **The W4 gate also found two
+  BLOCKING CI gates red and fixed both** (the join overflowed `module_contracts.yaml`'s size cap —
+  raised 18k→24k rather than pruning disclosure content, ⚠ **ratifiable on merge**; and the sweep's
+  own retirements left 6 dead paths in the workflow script, aliased through
+  `restructure_ledger.md`). **DECISION ITEM FOR JORDAN, not self-ratified:** `vocab.a17` measures 21
+  vs `review_baseline.yaml`'s pinned 29 — an 8-row banked shrink held out, not banked (that file is
+  frozen/CODEOWNERS-gated this run; needs its own ED + sign-off). No golden moved. **Next = Wave 5
+  capstone** (observatory regen, disposition-map diff, reserved-ID release, `CURRENT.md` stamp
+  last). Detail in `registers/handoffs/HANDOFF_IN.md`.
 
 _(Reserved-ID state healthy as of 2026-07-01: **LB-21 executed** — `id_reservations.yaml` v3
 verified live max, allocated ED 1081–1087 to the month-overview consolidation from

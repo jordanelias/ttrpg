@@ -36,6 +36,12 @@ import os
 import subprocess
 import sys
 
+try:
+    import ci_common
+except ImportError:  # allow `python tools/audit_staleness.py` from repo root
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ci_common
+
 # --- Audit-family scope table -----------------------------------------------------------
 # One entry per family. `artifact_paths`: committed file(s)/dir(s) whose most recent git
 # touch stands in for "this audit was last really refreshed". `scope_prefixes`: pathspecs
@@ -65,15 +71,21 @@ FAMILIES = [
         "name": "decisions-digest",
         "artifact_paths": ["tools/observability/decisions.json"],
         # per build_decisions.py's own header: "corpus sweep (designs/ canon/ engine/params/
-        # references/ sim/) for explicit markers".
-        "scope_prefixes": ("designs/", "systems/", "canon/", "engine/params/", "references/", "sim/"),
+        # references/ sim/) for explicit markers" — `designs/` and `sim/` are RETIRED
+        # (OI-53a, 2026-07-29): both resolved to nothing in every `git log -- <pathspec>`
+        # call, a silent zero-drift blind spot, not a harmless no-op (§0.1 point 5). `sim/`'s
+        # live successor is restated via the single owner (`engine/` + `systems/<sub>/sim/`,
+        # the latter already redundant with the `systems/` entry below); `engine/params/`
+        # is dropped too — it is a strict subset of the now-included `engine/`.
+        "scope_prefixes": ("systems/", "canon/", "references/") + ci_common.sim_reference_prefixes(),
     },
     {
         "name": "proposals-register",
         "artifact_paths": ["tools/observability/proposals.json"],
         # per build_proposals.py's sources: the editorial ledgers, audit registry,
-        # proposals/ + Status-tagged design docs, and workplan §5.
-        "scope_prefixes": ("designs/", "systems/", "canon/", "references/audit_registry.jsonl",
+        # proposals/ + Status-tagged design docs, and workplan §5. `designs/` DROPPED
+        # (OI-53a, 2026-07-29) — retired, resolved to nothing; zero-delta removal.
+        "scope_prefixes": ("systems/", "canon/", "references/audit_registry.jsonl",
                            "workplans/"),
     },
     {
@@ -108,13 +120,15 @@ FAMILIES = [
     {
         "name": "mechanics-index",
         "artifact_paths": ["registers/mechanics_index.yaml"],
-        # Broad designs/ scope (no cheaply-determinable mechanics-relevant subset).
+        # Broad systems/ scope (no cheaply-determinable mechanics-relevant subset).
+        # `designs/` DROPPED (OI-53a, 2026-07-29) — retired, resolved to nothing;
+        # zero-delta removal.
         # Lower priority than the other families: since Phase 2 (commit 806aa63),
         # tools/mechanics_index_gen.py --strict runs in CI on every push and continuously
         # validates this file's *internal schema validity*. That is a different concern
         # from what this module tracks — whether the audit's *content* has fallen behind
         # corpus changes — and CI covers the former continuously, this covers the latter.
-        "scope_prefixes": ("designs/", "systems/",),
+        "scope_prefixes": ("systems/",),
     },
 ]
 

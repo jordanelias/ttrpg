@@ -88,7 +88,8 @@ def _current_md_paths(text):
 # 2026-06-28: 51 would trip the stamp, and 12 of those (24%) touched a tracked `tools/` or `tests/`
 # path and NO canonical head at all. Those 12 are pure false positives — a fifth of the signal.
 # (The honest counter-number: 36 more trip via a canonical head TOO, so this narrows the noise, it
-# does not eliminate the check. Reproduce with tools/measure_stamp_false_positives.py.)
+# does not eliminate the check. Reproduce with deprecated/tools/measure_stamp_false_positives.py,
+# retired 2026-07-29 ED-IN-0097/OI-15 — zero invokers, still runnable from its retired home.)
 #
 # THE EXISTENCE CHECK IS DELIBERATELY *NOT* NARROWED. `check_current_paths_exist` still covers every
 # path, `tools/` and `tests/` included: CURRENT.md naming a deleted validator is real drift and

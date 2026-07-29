@@ -41,6 +41,11 @@ COVERAGE_MATRIX_LIMIT = yaml_max_tokens("tests/coverage_matrix.md") or 10_000
 # above the policy file's 15_000 — two gates, one file, two limits. Read the cap from
 # the policy so they cannot diverge again. (Live register is ~5k tokens, well under both.)
 PATCH_REGISTER_LIMIT = yaml_max_tokens("registers/patch_register_active.yaml") or 15_000
+# Third instance of the SAME defect this file already fixed twice above (ED-IN-0097, W4):
+# module_contracts.yaml's cap was hardcoded 18_000 here while the policy file declared its own
+# — two gates, one file, two limits. The W4 OI-54 join raised the policy cap to 24_000 and this
+# hardcoded copy kept failing, which is exactly how the drift announces itself. Single-sourced.
+MODULE_CONTRACTS_LIMIT = yaml_max_tokens("references/module_contracts.yaml") or 18_000
 
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
@@ -68,7 +73,8 @@ THRESHOLDS = {
     # Growth caps with headroom over current size; values_master is known-stale (do not grow it).
     "references/values_master.yaml":         40_000,  # quarantined stale snapshot (ED-IN-0029) — cap so it can't grow
     "references/id_reservations.yaml":       15_000,  # the ID-allocation source of truth
-    "references/module_contracts.yaml":      18_000,  # the 27-module I/O spine
+    # Single-sourced from references/atomization_rules.yaml (MODULE_CONTRACTS_LIMIT) — see above.
+    "references/module_contracts.yaml":      MODULE_CONTRACTS_LIMIT,  # the 27-module I/O spine
     "references/definitions/definitions.yaml": 8_000,  # generated unified definitions store (ED-IN-0077)
     # ── Archives (soft limits — warn when approaching split threshold) ──────
     # These are large by design; alert when year-split is needed
