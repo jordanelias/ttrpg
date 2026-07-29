@@ -857,12 +857,12 @@
         0.57
       ],
       "none": [
-        "shear",
-        "straight_cut",
+        "puncture",
+        "point",
         0.61,
         null,
         0.62,
-        0.8
+        0.57
       ]
     },
     "static_moment": 0.4947749999999999
@@ -1026,12 +1026,12 @@
         4.132353210707195
       ],
       "none": [
-        "shear",
-        "curved_cut",
+        "puncture",
+        "point",
         0.48,
         null,
         0.55,
-        0.71
+        0.4
       ]
     },
     "static_moment": 0.0645

@@ -262,6 +262,31 @@ def _transmit(mode, mat, coverage, perc=PERC_AUTH_REF, gap_prec=GAP_PREC_REF, th
 # sourced puncture>>shear-vs-cloth asymmetry doing that — a real, already-grounded, pre-existing mechanism, not
 # a DELIVERY-ordering bug).
 CUT_AUTH_REF=0.70
+# CUT_REF_NATIVE [A7a channel 1 / M6, ED-PC-0051, 2026-07-29]: the reference NATIVE cutting edge, anchored on the
+# KATANA, whose derived cut_factor is exactly 1.00 — a canonical attested single-edged cutter. Follows this module's
+# own precedent of anchoring a reference on a named weapon (CUT_AUTH_REF <- hook_sword, the weakest dedicated cutter;
+# THRUST_AUTH_REF <- bear_spear; PERC_AUTH_REF_SOFT <- the weakest attested hammer).
+# WHY A SECOND REFERENCE RATHER THAN RE-ANCHORING CUT_AUTH_REF: the two populations do not overlap and must not share
+# a scale. The bare 'cut' TOKEN is an INCIDENTAL edge on a weapon whose native head is a point or a blunt (core.py's
+# own comment above: it "is NEVER a weapon's own native head"), and its eff runs 0.02-0.50 — genuinely below 0.70, so
+# min(1.0, eff/CUT_AUTH_REF) grades it correctly and is left alone. The NATIVE cut heads run 0.710 (hook_sword) to
+# 1.330 (shamshir), entirely ABOVE 0.70, so that same expression is identically 1.000 for all 16 of them: 31% of the
+# roster coupled identically regardless of its edge. The defect register's proposed fix WAS that expression, and it is
+# provably a no-op against this population.
+CUT_REF_NATIVE=1.00
+# CUT_EDGE_GATE_MODE [Jordan ruling, 2026-07-29]: "cutters need to be excellent in contexts where they can CUT ie
+# unarmoured and light armour". A SUPERIOR edge therefore pays off in proportion to how much the target yields to an
+# edge — which is already owned by _transmit('shear', mat), normalised to its unarmoured value (none 1.000 /
+# cloth 0.618 / mail 0.277 / plate 0.193). No new constant: the gate IS the existing resist table.
+# The asymmetry is deliberate and guarded (test_a_poor_edge_is_poor_everywhere): a keen edge's BENEFIT is gated on the
+# target yielding, but a poor edge's PENALTY is not. A badly-edged weapon does not become a good cutter against an
+# unarmoured man. Note this means the benefit carries a SECOND material dependence on top of the _transmit factor the
+# return already applies — that is intended (the benefit concentrates where an edge can work), not an oversight.
+def _shear_yield(mat):
+    """How much this material yields to an EDGE, normalised so unarmoured == 1.0. Reads the owned resist table; adds
+    no constant of its own. Pure."""
+    base = _transmit('shear', 'none', 'full')
+    return (_transmit('shear', mat, 'full') / base) if base > 0 else 0.0
 # THRUST_LEVER_REF / _FLOOR [PC-5 / ED-PC-0015, 2026-07-22]: thrust AUTHORITY — the capacity to drive a point home
 # behind body-weight and a pommel-press — is a PRIMITIVE derived from the point-to-controlling-hand lever (head_len,
 # METRES). A SHORT lever (a rondel dagger, head_len 0.21; a half-sworded longsword, head_len 0.42) can be pressed home
@@ -376,6 +401,16 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     d=DELIVERY.get(head,1.5)
     if head=='cut' and eff is not None:
         d*=min(1.0, eff/CUT_AUTH_REF)
+    elif head in (V.HEAD_STRAIGHT_CUT, V.HEAD_CURVED_CUT) and eff is not None:
+        # [A7a channel 1 / M6, ED-PC-0051] NATIVE edge quality, finally consumed. `eff` here is
+        # geometry.cut_factor = edge_keenness * (1 + 0.45*tanh(2*curvature)) — so Jordan's "the curve extends the
+        # amount of cutting edge with which to do damage" is ALREADY in this number; the geometry layer computed it
+        # and this function discarded it. Nothing new is invented here, a derived value is stopped from being thrown
+        # away. Non-saturating (see CUT_REF_NATIVE): a superior edge is a BENEFIT, not merely a smaller penalty —
+        # which is why re-anchoring the old min(1.0, ...) form could not have fixed this, since a cap can only ever
+        # penalise a population that is already losing.
+        rel = eff/CUT_REF_NATIVE
+        d *= (1.0 + (rel-1.0)*_shear_yield(mat)) if rel >= 1.0 else rel
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
     return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)

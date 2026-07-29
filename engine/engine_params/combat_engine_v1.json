@@ -236,6 +236,7 @@
     "partial": 0.5
    },
    "CUT_AUTH_REF": 0.7,
+   "CUT_REF_NATIVE": 1.0,
    "DECISIVE_OB": 3,
    "DELIVERY": {
     "blunt": 1.6,
