@@ -2,6 +2,10 @@
 
 **Verified against:** `main` @ `4029870` · **Lane:** MB · **Supersedes:** plan v1 (same path, git history)
 
+> **STATUS: correct as far as verified, with unverified rows marked.** Anything not yet re-derived by
+> the orchestrator is labelled in place (G12) — this document does not present a lead as a fact, and it
+> is not "provisional" as a whole. Where it is uncertain, it says exactly where.
+>
 > **v2 exists because v1 was substantially wrong.** Four Fable-5 critics attacked it; three of its five
 > severity-1 findings turned out to be **code-true but incidence-zero**, its headline framing was
 > refuted by instrumented measurement, and one of its own guards could not fail. Every one of those
@@ -29,15 +33,19 @@ the adversarial review that produced §1.
 
 ### What is actually wrong right now — corrected
 
-v1 claimed "battles are being distorted right now" by three mechanisms. **Instrumented measurement
-refuted all three.** The wrappers used were proven non-perturbing (grid digests reproduced byte-exact
-with them installed):
+v1 claimed "battles are being distorted right now" by three mechanisms. Instrumented measurement
+contradicts all three. **⚠ Provenance is marked per row — see G12. Large-N figures are AGENT-reported
+and were not re-derived by the orchestrator; the direction of two was independently replicated at
+smaller N.**
 
-| v1 claim | Measured |
-|---|---|
-| Degree-boundary ulp zeroing exchanges | **209,778** `compute_degree` calls · **0** within 1e-9 of a boundary · **0** flips. `_sigma_net_boost` is bimodal: exactly `0.0` or `≥1e-3` |
-| Sub-phase truncation dropping engagements | **102,260** cascade calls · max depth-group count **3** vs a bound of **5** · **0** truncations |
-| Cell-map desync distorting battles | Drift fires **125×/gauge battery** — but the *morale* consequences are **latent** behind `PC_CELL_MORALE=0` |
+| v1 claim | Figure | Provenance |
+|---|---|---|
+| Degree-boundary ulp zeroing exchanges | 209,778 calls · 0 within 1e-9 · **0 flips** | agent-reported. **Orchestrator-replicated at N=3,120 across Line/Column/Arrowhead: 0 near-boundary, 0 flips.** Direction confirmed; the large-N count is not |
+| Sub-phase truncation dropping engagements | 102,260 calls · max group 3 vs bound 5 · **0 truncations** | **agent-reported only.** Orchestrator saw 720 resolver calls in a 40-seed run but did not hook the in-function group count. **UNVERIFIED — treat as a lead** |
+| Cell-map desync distorting battles | Drift 125×/gauge battery; morale consequences latent behind `PC_CELL_MORALE=0` | agent-reported. **Orchestrator independently measured 20 re-key events / 20 battles** (Arrowhead+Column @ disc 2; 0 for Line-only) and confirmed the trigger condition. Confirmed |
+
+**Before acting on any of these, re-derive the one you are relying on.** The truncation row in
+particular still gates A3's severity and has not been checked by anyone but the agent that produced it.
 
 **The two things genuinely wrong right now, neither of which v1 listed:**
 
@@ -80,6 +88,7 @@ current cell-map distortion.
 | **G9** | **Architecture rationales need measurement, not intuition.** | v1 rejected a per-cell class because array-of-structs is "slower in a Monte-Carlo oracle" and "further from `PackedFloat32Array`". Benchmarked: **AoS is 15–40% faster** in CPython, and *neither* layout is a packed array. Both reasons false. **Guards: B1.** |
 | **G10** | **Do not chain a large ledger job in front of a small measurement.** | v1 bundled ~116 constants of citation work in front of a measurement needing ~6. Bundling is the *documented cause of the last stall*. **Guards: A5.** |
 | **G11** | **One golden-moving PR in flight, globally, ever.** | Two concurrent golden-movers make both deltas unattributable — §0.1 #4 by construction. **Guards: A1a, A2, B1a.** |
+| **G12** | **A subagent's measurement is a lead until the orchestrator re-derives it. Mark provenance per claim; never let agent output become settled fact by being restated.** | **This plan did it.** v2's §0 announced "Instrumented measurement refuted all three" over numbers the orchestrator never re-ran — the same promotion-by-restatement that G1 and G4 exist to stop, committed in the very section that corrects them. Caught by Jordan asking why he had merged an admittedly-contested plan. **Guards: §0, and every figure in this document.** |
 
 ---
 
