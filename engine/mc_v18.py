@@ -85,6 +85,12 @@ class CampaignResult:
                                      # engine.substrate.stubwire.invocations — 0 while no live call site is
                                      # stub-wired yet (Wave 1 stage 4 converts the OI-17 class); additive-only,
                                      # never a fabricated value (§0.1 / §7 no-fabrication).
+    accord_drift_probe_hits: int = 0  # W3 Handoff item 2 telemetry (ED-IN-0091 plan §3 Wave 3):
+                                     # systems.overview.sim.accounting's REPORT-ONLY province-Accord
+                                     # drift probe — count of (season, province) divergences between
+                                     # registry.province_accord and Territory.accord this campaign.
+                                     # 0 when nothing diverges; never writes either compared value
+                                     # (OI-37/SE routes the actual write-model reconciliation).
     key_log_hash: str = ""          # ED-IN-0028: sha256 of the campaign's canonical KeyLog ("" when ECHO_TRANSPORT off)
     keys_emitted: int = 0           # ED-IN-0028: len(world.key_log) — 0 while scenes defer (SC bridge pending)
     final_state: dict = field(default_factory=dict)
@@ -283,6 +289,10 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         insurgencies_formed=len(world.insurgencies),
         npcs_generated=world.npc_counter,
         stub_hits=stubwire.invocations - _stub_start,
+        # W3 Handoff item 2: `world` is fresh per campaign (created above), so this is already
+        # the campaign's own total — no before/after delta needed (unlike stub_hits, which reads
+        # a process-lifetime-cumulative module counter shared across a batch's campaigns).
+        accord_drift_probe_hits=getattr(world, "accord_drift_probe_hits", 0),
         key_log_hash=_kl.content_hash() if _kl is not None else "",
         keys_emitted=len(_kl) if _kl is not None else 0,
         final_state=game_state.serialize_world(world),

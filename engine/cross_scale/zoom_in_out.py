@@ -102,12 +102,20 @@ def zoom_out(scene_outcomes: dict, world=None) -> ZoomOutResult:
     scene_outcomes accepts:
       - 'accord_applied': list of dicts (WAVE-2 rename, OI-03 fix 4, ED-IN-0091 plan §3 Wave 2,
         2026-07-29 — was 'accord_changes'/documented as "queued as Domain Echoes per §5.5"; that
-        was a contract collision — `engine.cross_scale.echo_transport._apply_accord_echo` writes
-        the settlement Order change IMMEDIATELY at scene-resolution time, not at Accounting Step
-        4c, because genuine OF-7 queue-parity would require registering a new Key type this
-        lane's scope doesn't own (see that function's own timing note). Renamed so the KEY
-        stops asserting a queued-but-unapplied write that already happened; recorded here as
-        already-applied telemetry, never re-applied or re-queued.
+        was a contract collision at the time — `engine.cross_scale.echo_transport
+        ._apply_accord_echo` wrote the settlement Order change IMMEDIATELY at scene-resolution
+        time, not at Accounting Step 4c, because genuine OF-7 queue-parity would have required
+        registering a new Key type a different lane owned that wave. RESOLVED FOR REAL (not just
+        renamed around) in W3 Handoff item 1, ED-IN-0091 plan §3 Wave 3, 2026-07-29:
+        `scene.accord_echo` is now registered (`key_type_registry_v30.md`) and
+        `_apply_accord_echo` routes the settlement-Order write through `sched.emit(key,
+        apply=...)`, landing at `accounting_boundary()` exactly like 'other_echoes' below. The
+        dict KEY stays 'accord_applied' rather than being renamed to 'accord_queued' — a
+        different lane's file, `engine/tests/test_pipeline_reach.py`, reads this literal key name
+        this wave (see `_apply_accord_echo`'s own docstring for the full reasoning) — but each
+        row's 'applied' boolean now means "a settlement resolved and a Key was queued for
+        Accounting", and the settlement-Order write itself is genuinely deferred, not
+        already-applied.
       - 'pc_incapacitated': bool (Stage 1 applies immediately per ED-159)
       - 'contested_figure_wounded': bool (ED-167: +0.15 Ob to commander, ED-PC-0006)
       - 'other_echoes': list of dicts (faction stat changes per §5, genuinely QUEUED — deferred
@@ -117,12 +125,11 @@ def zoom_out(scene_outcomes: dict, world=None) -> ZoomOutResult:
     notes = []
     domain_echoes = []
 
-    # §5.5 Accord changes: ALREADY APPLIED (immediately, at scene-resolution time — see
-    # 'accord_applied' docstring note above). Recorded here as already-applied telemetry, not
-    # queued to Accounting — 'fires_at' reflects that honestly instead of claiming a future
-    # boundary this write does not wait for.
+    # §5.5 Accord changes: QUEUED (W3 Handoff item 1, 2026-07-29 — see 'accord_applied'
+    # docstring note above for the fix that made this genuine rather than renamed-around).
+    # 'fires_at' now matches 'other_echoes' below: both land at accounting_boundary().
     for ac in scene_outcomes.get('accord_applied', []):
-        domain_echoes.append({'type': 'accord', 'detail': ac, 'fires_at': 'already_applied'})
+        domain_echoes.append({'type': 'accord', 'detail': ac, 'fires_at': 'accounting'})
 
     # §5 other faction-stat changes also queue
     for oe in scene_outcomes.get('other_echoes', []):

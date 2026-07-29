@@ -461,6 +461,145 @@ emitting_systems: [npc_behavior]
 consuming_systems: [npc_behavior, articulation]
 ```
 
+### mechanical.settlement_captured
+
+```yaml
+description: Undefended settlement (Defense 0, no garrison) auto-captured on hostile military entry — no roll (settlement_layer_v30 §5.2).
+required_payload_fields:
+  - settlement_id
+  - territory_id
+  - capturing_faction_id
+  - prior_controlling_faction_id
+optional_payload_fields: []
+default_scale_signature: [settlement, territory]
+default_permanence: indelible
+default_time_horizon: near
+emitting_systems: [settlement_layer]
+consuming_systems: []
+notes:
+  - "ED-IN-0014 (OI-25, 2026-07-29 W3 item 7): settlement_layer had zero Key integration. Name/family
+     match the PROPOSED candidate already filed at key_echo_armature_v1.md §3 (EP-4, C-MBSE-9) — reused
+     rather than reinvented."
+  - "DECLARE-ONLY this wave: the g_def0 gate (module_contracts.yaml settlement_layer) has no evaluator
+     in the live loop — settlement.py derives Order/Prosperity/Defense but never checks Defense==0 with
+     a hostile-entry condition, and no other module calls it. No sched.emit wired; the emit fires when
+     that evaluation is built (per this wave's own scoping instruction: runtime-less/unreached gates get
+     registration only, not a live emit call)."
+  - "consuming_systems intentionally EMPTY (corrected 2026-07-29, adj DEFECT 1, ED-IN-0096):
+     articulation (the live chronicle subscriber) was named here, but the type_id was never actually in
+     engine/cross_scale/articulation.py's _TRIGGER_TYPE_IDS and never will be absent a real emit site to
+     subscribe to — declaring it created a false consumer with no corresponding subscription anywhere.
+     The real consumer is decided at settlement_layer's g_def0 evaluator build (the DECLARE-ONLY note
+     above); held with that docket, not guessed at here. See module_contracts.yaml's settlement_layer
+     gap_notes for the pointer (W3 item 3, ED-IN-0096)."
+```
+
+### mechanical.era_transition
+
+```yaml
+description: World-state era boundary crossed — MS=0 Post-Calamity Era entry (victory_v30 §5.1), MS restored to 20 within 10 seasons Post-Calamity Recovery (§5.1), IP=100 Phased Occupation Era entry incl. the 3-phase escalation (§5.2), all factions dissolved Anarchy Era entry (§5.3). The MS<=5-sustained-10-seasons Second Calamity is registered SEPARATELY (mechanical.second_calamity, below) — victory_v30 §5.1/§5.3 both call it out by name as "the only true campaign terminal", a distinction this registry preserves rather than folding into the general transition type.
+required_payload_fields:
+  - to_era                    # post_calamity | post_calamity_recovery | phased_occupation | anarchy
+  - trigger_stat               # MS | IP | faction_dissolution
+optional_payload_fields:
+  - occupation_phase           # int 1-3, phased_occupation only (§5.2 corridors)
+default_scale_signature: [peninsula]
+default_permanence: indelible
+default_time_horizon: far
+emitting_systems: [victory]
+consuming_systems: []
+notes:
+  - "ED-IN-0014 (OI-25, 2026-07-29 W3 item 7): victory's era/occupation transitions had zero Key
+     integration (module_contracts.yaml gap_note, victory :727). Family/naming follow the PROPOSED
+     candidate at key_echo_armature_v1.md §3 (EP-5, C-MBSE-13) for the g_ms0/g_msrec/g_diss + IP=100
+     cluster; that candidate table notes IP=100 is itself gateless in module_contracts (C-MBSE-13) —
+     recorded here, not gated by this wave."
+  - "DECLARE-ONLY: systems/victory/ has no sim/ subfolder — zero runtime of any kind (doc-only home,
+     resolver: state_reader per its own contract entry). Registration + this contract declaration
+     (routed via oracle_requests) is the full deliverable per this wave's scoping instruction for
+     runtime-less emitters; the emit fires when victory's module is built."
+  - "G12 note (not acted on, contracts-lane territory): module_contracts.yaml :728 gap_note reads
+     'doc status: DESIGN — pending Varfell Path B user decision (ED-311) — not CANONICAL', but
+     victory_v30.md itself lists ED-311 CLOSED (PP-667, :761) and its own header Status is CANONICAL for
+     every section outside the explicitly-superseded §0.1/§3.1-3.6/§4/§8 list — §5 is not in that list.
+     Logged per CLAUDE.md §0.1 point 5 (log, don't chase); not corrected here — module_contracts.yaml is
+     the contracts lane's file this wave."
+  - "consuming_systems intentionally EMPTY (corrected 2026-07-29, adj DEFECT 1, ED-IN-0096):
+     articulation was named here, but has no live subscription for this type and no live emit site
+     exists to subscribe to — declaring it created a false consumer for a type nothing ever fires.
+     The real consumer is decided when victory's module is built (the DECLARE-ONLY note above); held
+     with that docket, not guessed at here. See module_contracts.yaml's victory gap_notes for the
+     pointer (W3 item 3, ED-IN-0096)."
+```
+
+### mechanical.second_calamity
+
+```yaml
+description: MS <= 5 sustained for 10 seasons during the Post-Calamity Era — "the only true campaign terminal" (victory_v30 §5.1, restated §5.3). Kept distinct from mechanical.era_transition because every other era boundary is recoverable (§5.1's own Recovery clause, §5.3's quorum-restoration clause) while this one is not.
+required_payload_fields:
+  - seasons_sustained_at_or_below_5   # int, >= 10 at fire time
+optional_payload_fields: []
+default_scale_signature: [peninsula]
+default_permanence: indelible
+default_time_horizon: far
+emitting_systems: [victory]
+consuming_systems: []
+notes:
+  - "ED-IN-0014 (OI-25, 2026-07-29 W3 item 7). Matches key_echo_armature_v1.md §3's separately-listed
+     candidate 'mechanical.second_calamity' (EP-5) — 'the game's only true terminal deserves its own
+     type', per that table's own rationale."
+  - "DECLARE-ONLY — same zero-runtime disposition as mechanical.era_transition above."
+  - "consuming_systems intentionally EMPTY (corrected 2026-07-29, adj DEFECT 1, ED-IN-0096):
+     articulation was named here, but has no live subscription for this type and no live emit site
+     exists to subscribe to — declaring it created a false consumer for a type nothing ever fires.
+     The real consumer is decided when victory's module is built (the DECLARE-ONLY note above); held
+     with that docket, not guessed at here. See module_contracts.yaml's victory gap_notes for the
+     pointer (W3 item 3, ED-IN-0096)."
+```
+
+### mechanical.theocracy_unification_declared
+
+```yaml
+description: CI reaches 100 — Church publicly declares Papal Sovereignty and triggers the one-shot Mass Seizure on every territory with Church buildings (ci_political_v30 §2.2). The SAME threshold is independently gated by territorial_piety's g_ci100 entry (module_contracts.yaml :288-292), which cites this identical section as its source — one event, registered once, closing both silent emitters named in ED-IN-0014 rather than duplicating a type per module.
+required_payload_fields:
+  - ci_value                   # int, = 100 at fire time
+  - mass_seizure_targets       # [territory_ids] with Church buildings
+optional_payload_fields:
+  - outcome                    # active | failed_counterattack | failed_mandate_floor (§2.2: fails if
+                                #   Church loses 3 territories to counterattack in one Year-End, or
+                                #   Church Mandate <= 3 — "No second attempt")
+default_scale_signature: [territory, peninsula]
+default_permanence: indelible
+default_time_horizon: far
+emitting_systems: [ci_political, territorial_piety]
+consuming_systems: []
+notes:
+  - "ED-IN-0014 (OI-25, 2026-07-29 W3 item 7): ci_political has ZERO Key integration in a CANONICAL doc
+     (its own contract gap-note, :689); territorial_piety's g_ci100 gate is the same GAP-E1/GAP-E2
+     zero-Key-INERT finding from the 2026-07-14 gameplay-subsystem-observatory audit
+     (subsystem_nexus_artifact.html: 'GAP-E1 zero-Key INERT — key the Church card-game' /
+     'GAP-E2 zero-Key INERT'). Name/family follow the PROPOSED candidate at key_echo_armature_v1.md §3
+     ('mechanical.theocracy_unification_declared', EP-5)."
+  - "DECLARE-ONLY: neither ci_political nor territorial_piety has any Python runtime (both doc-only
+     homes; the retired tests/sim/v17-integration/m2_ci_political_revision*.py pair predates the
+     current sim tree and is not a live module) — registration + contract declaration is the full
+     deliverable per this wave's scoping instruction for runtime-less emitters."
+  - "DUAL-EMITTER SINGLE-OWNER NOTE (2026-07-29, ED-IN-0096): ci_political §2.2 and territorial_piety's
+     g_ci100 gate both cite the identical CI=100 threshold as their own trigger for this SAME event —
+     one type covering both (per this entry's own header), not one per module. Which module's build
+     actually calls sched.emit() for it — ci_political's Theocracy Unification Attempt resolver, or
+     territorial_piety's g_ci100 gate handler, or a shared helper both call — is UNDECIDED and
+     deliberately NOT guessed at here (both are doc-only, zero runtime, per the DECLARE-ONLY note
+     above); the residual is named, not fabricated. Whichever module builds first inherits the emit
+     site; the other becomes its caller or is superseded, decided at that build."
+  - "consuming_systems intentionally EMPTY (corrected 2026-07-29, adj DEFECT 1, ED-IN-0096):
+     articulation was named here, but has no live subscription for this type and no live emit site
+     exists to subscribe to — declaring it created a false consumer for a type nothing ever fires.
+     The real consumer is decided at whichever module's build resolves the dual-emitter question above;
+     held with that docket, not guessed at here. See module_contracts.yaml's ci_political AND
+     territorial_piety gap_notes for the pointer (W3 item 3, ED-IN-0096)."
+```
+
 ---
 
 ## §5 Family: state_transition
@@ -582,6 +721,39 @@ default_permanence: persistent
 default_time_horizon: near
 emitting_systems: [npc_behavior]
 consuming_systems: [npc_behavior, articulation]
+```
+
+### state.settlement_revolt
+
+```yaml
+description: Settlement Order reaches 0 — local revolt; governor expelled unless a garrison is present (settlement_layer_v30 §4.3 Settlement Events table, "Order 0" row; also §1.3 "Order 0 = local revolt").
+required_payload_fields:
+  - settlement_id
+  - territory_id
+  - governor_expelled          # bool — false only if a garrison is present (§4.3)
+optional_payload_fields:
+  - controlling_faction_id
+default_scale_signature: [settlement, territory]
+default_permanence: indelible
+default_time_horizon: near
+emitting_systems: [settlement_layer]
+consuming_systems: []
+notes:
+  - "ED-IN-0014 (OI-25, 2026-07-29 W3 item 7). Name/family match the PROPOSED candidate already filed
+     at key_echo_armature_v1.md §3 (EP-4, C-MBSE-9) — reused rather than reinvented."
+  - "DECLARE-ONLY this wave: the g_ord0 gate's only live trace is
+     engine/cross_scale/zoom_in_out.py::check_mandatory_triggers, which returns the 'Settlement Revolt'
+     trigger SCHEMA (name/priority/condition text) but explicitly defers the world-state evaluation
+     ('Order 0' condition check) to an unbuilt consumer — its own docstring: 'Actual world-state
+     evaluation ... is consumer-side'. No module evaluates Order==0 anywhere in the live tree. Per this
+     wave's own scoping instruction (wire the actual sched.emit only if the gate is reachable in the
+     live loop), this is declare-only: registration now, emit call when the evaluator is built."
+  - "consuming_systems intentionally EMPTY (corrected 2026-07-29, adj DEFECT 1, ED-IN-0096):
+     articulation was named here, but has no live subscription for this type and no live emit site
+     exists to subscribe to — declaring it created a false consumer for a type nothing ever fires.
+     The real consumer is decided at settlement_layer's g_ord0 evaluator build (the DECLARE-ONLY note
+     above); held with that docket, not guessed at here. See module_contracts.yaml's settlement_layer
+     gap_notes for the pointer (W3 item 3, ED-IN-0096)."
 ```
 
 ---
@@ -793,6 +965,45 @@ emitting_systems: [personal_combat]
 consuming_systems: [npc_behavior, faction_layer, articulation]
 ```
 <!-- [STUB: provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->
+
+### scene.accord_echo
+
+```yaml
+description: §5.5 Accord Domain Echo — a resolved scene's downstream settlement-Order consequence (scale_transitions_v30.md §5.5, degree-keyed governance/destabilisation/territorial_transfer/violence rows), applied to Settlement.order at the settlement where the scene occurred (AUD-SET-02, :215) and queued to Accounting Step 4c per §5.5's own caption (:221). Distinct from scene.contest_resolved/scene.combat_resolved (the SAME scene resolution's §5.2 Domain Echo Key, a disjoint faction-stat consequence) — one resolved scene may emit both, and this Key's causes[] cites that Key's id when it also fired (OI-28).
+required_payload_fields:
+  - scene_outcome              # governance | destabilisation | territorial_transfer | violence (§5.5 vocabulary)
+  - target_settlement          # settlement_id the write applies to
+optional_payload_fields:
+  - accord_delta                # int, canonical-index Settlement.order delta (§5.5 table; 0 for territorial_transfer, which sets rather than deltas)
+default_scale_signature: [settlement]
+default_permanence: persistent
+default_time_horizon: near
+emitting_systems: [echo_transport]
+consuming_systems: [articulation]
+notes:
+  - "ED-IN-0091 plan §3 Wave 3 Handoff item 1 (W2 handoff, closing OI-03 fix 4's timing/contract
+     collision, 2026-07-29): echo_transport._apply_accord_echo's own docstring named this exact
+     registration as the missing piece for genuine OF-7 queue-parity with the sibling §5.2
+     domain-echo leg. Family/placement: filed alongside scene.combat_resolved/scene.contest_resolved
+     (§7 scene_outcome) rather than a new family, since it is the same scene resolution's second,
+     disjoint-state consequence (Settlement.order/RS vs. Faction stat), not a new event class."
+  - "LIVE this wave, not declare-only: echo_transport._apply_accord_echo now builds this Key and
+     routes the settlement-Order write through sched.emit(key, apply=...) — the write lands at
+     accounting_boundary(), exactly like the §5.2 leg. The leg itself stays DORMANT in any seeded
+     campaign (no live producer declares echo['scene_outcome'] — re-verified 2026-07-29), so no
+     pinned golden can move; the wiring is real, only unreached."
+  - "rs_delta (§5.5's violence-row RS component) is deliberately NOT a payload field here: canon
+     (scale_transitions_v30.md:219, contrasted with :221) keeps RS immediate, not queued to
+     Accounting like the Accord component — it stays a direct rs_track.apply_rs_delta call outside
+     this Key, unaffected by this registration."
+  - "consuming_systems names articulation per the same declared-consumer rule as the OI-25 entries
+     above; subscription wiring is CLOSED same wave (2026-07-29, fix round 1): articulation.py's
+     _TRIGGER_TYPE_IDS gained this type as its 13th entry, articulation_layer_v30.md §3.1 gained
+     row #13 (OI-03/W3), and tests/valoria/test_articulation_subscriber.py exercises it end-to-end
+     through a real TickScheduler. Not a dangling emit and not merely declared-not-yet-subscribed —
+     the leg stays organically DORMANT in any seeded campaign (see the note above), which is a
+     reachability fact about the emit side, not a gap on the subscription side."
+```
 
 ---
 
@@ -1037,14 +1248,14 @@ articulation_significance: stakes_weight 1-2 per affect magnitude
 |---|---|---|
 | scene_event | 10 | Adds Class B scene.interaction, scene.gossip per PP-687 Phase B Stage 1 |
 | da_outcome | 5 |  |
-| mechanical_event | 8 | Adds Class B mechanical.scene_entered/exited/skipped per Phase 5a session 3.5 telemetry substrate |
-| state_transition | 8 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1 |
+| mechanical_event | 12 | Adds Class B mechanical.scene_entered/exited/skipped per Phase 5a session 3.5 telemetry substrate; +4 ED-IN-0014 (OI-25, 2026-07-29 W3): mechanical.settlement_captured, mechanical.era_transition, mechanical.second_calamity, mechanical.theocracy_unification_declared — all DECLARE-ONLY, zero live emit calls |
+| state_transition | 9 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1; +1 ED-IN-0014 (OI-25, 2026-07-29 W3): state.settlement_revolt — DECLARE-ONLY |
 | environmental | 4 |  |
-| scene_outcome | 7 | +3 F3 combat subtypes physically present under §7 but previously uncounted: scene.combat_strike, scene.combat_hit, scene.combat_felled. Reconciled 2026-07-07 (ED-IN-0022) |
+| scene_outcome | 8 | +3 F3 combat subtypes physically present under §7 but previously uncounted: scene.combat_strike, scene.combat_hit, scene.combat_felled. Reconciled 2026-07-07 (ED-IN-0022); +1 ED-IN-0091 plan §3 Wave 3 Handoff item 1 (2026-07-29): scene.accord_echo — LIVE (queued via sched.emit, not declare-only), leg stays dormant pending a caller-declared scene_outcome |
 | system_meta | 7 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, meta.legacy_event, + the retroactively-registered meta.cascade_cluster_event) | meta.legacy_event counted + meta.cascade_cluster_event added (C-KEY-8). ED-IN-0022 |
-| **Total** | **49** | reconciled to the physical `###` type-headers (ED-IN-0022, 2026-07-07): was 44; 48 after counting the 3 combat subtypes + legacy_event, then 49 with the newly registered meta.cascade_cluster_event (C-KEY-8, this same ED) |
+| **Total** | **55** | reconciled to the physical `###` type-headers (was 49 per ED-IN-0022, 2026-07-07); +5 ED-IN-0014 (OI-25, 2026-07-29 W3 item 7 — the code-shape open-items program's silent-emitter registration: settlement_layer's revolt/auto-capture gates, victory's era/occupation/terminal transitions, and the shared ci_political/territorial_piety CI=100 Theocracy Unification event, one type covering both). All 5 are DECLARE-ONLY (registered here; zero live `sched.emit` call sites this wave — see each entry's notes). +1 more, same day (ED-IN-0091 plan §3 Wave 3 Handoff item 1): scene.accord_echo, LIVE (a real sched.emit call site exists, in echo_transport._apply_accord_echo) but organically dormant |
 
-Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound. ED-935 (J-2 register-all) adds 7 further types — scene.thread_operation, scene.draft_da, scene.displacement, mechanical.project_advanced, state.project_completed, state.project_failed, scene.combat_resolved — Total -> 44. (§9 family counts are logical groupings; some Class-B types are physically filed under §8 system_meta. The pre-existing declared-vs-parsed header drift, master item 11 / A9, is RECONCILED 2026-07-07 (ED-IN-0022): scene_outcome +3 (combat subtypes scene.combat_strike/hit/felled) and system_meta +1 (meta.legacy_event) bring the logical subtotals to 48; registering meta.cascade_cluster_event (below, C-KEY-8) then adds the 49th type, so both the declared total and the physical `###` count are 49.)
+Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound. ED-935 (J-2 register-all) adds 7 further types — scene.thread_operation, scene.draft_da, scene.displacement, mechanical.project_advanced, state.project_completed, state.project_failed, scene.combat_resolved — Total -> 44. (§9 family counts are logical groupings; some Class-B types are physically filed under §8 system_meta. The pre-existing declared-vs-parsed header drift, master item 11 / A9, is RECONCILED 2026-07-07 (ED-IN-0022): scene_outcome +3 (combat subtypes scene.combat_strike/hit/felled) and system_meta +1 (meta.legacy_event) bring the logical subtotals to 48; registering meta.cascade_cluster_event (below, C-KEY-8) then adds the 49th type, so both the declared total and the physical `###` count are 49. ED-IN-0014/OI-25 (2026-07-29) then adds the 5 declare-only types above, bringing both counts to 54; the same day, ED-IN-0091 plan §3 Wave 3 Handoff item 1 registers scene.accord_echo, bringing both counts to 55.)
 
 ---
 
@@ -1073,9 +1284,11 @@ ED-IN-0026, `key_echo_armature_v1.md` §5.16):** step 2 above gains a mandatory 
 / GENERIC / UNRENDERED / DELIBERATE-SILENT verdict, citing the deciding armature/audit finding).
 This closes the gap the armature's C-KEY sweep found — types entering the registry with no
 recorded answer to "how does the player ever see this?" A15 (`skills/valoria-module-adjudicator`)
-enforces it report-only against the existing 48-type roster first; it flips to blocking new
-entries once `rendering_dispositions.yaml` exists and the backlog is at zero (§4 of the armature,
-standard warn→block discipline).
+enforces it report-only against the existing 55-type roster (§9's current total, re-verified
+2026-07-29 — was 48 at the time this section was written, since grown by ED-IN-0022/ED-IN-0014/
+ED-IN-0091 registrations) first; it flips to blocking new entries once
+`rendering_dispositions.yaml` exists and the backlog is at zero (§4 of the armature, standard
+warn→block discipline).
 
 ---
 

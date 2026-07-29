@@ -102,11 +102,36 @@ XFAIL_MANIFEST = [
                "flip is a separately scheduled IN action after PC's E0-E3 merge, never a side "
                "effect of this wave. Run with env DISPATCH_COMBAT_BRIDGE=1 to exercise the strict "
                "assertion for real."},
-    {"id": "diagonal-causes", "oi": "OI-28", "kind": "wave3",
+    {"id": "diagonal-causes", "oi": "OI-28", "kind": "strict-condition",
      "area": "Key direction 6: diagonal (causes[])",
-     "reason": "causes[] has zero executable instances corpus-wide (re-verified 2026-07-29: no "
-               "'causes=[' with any content in engine/ or systems/ outside tests) — populating "
-               "it at existing emitters is Wave 3 item 5."},
+     "reason": "HONESTY CORRECTION (2026-07-29, same-day W3 follow-on — the prior version of this "
+               "reason described the causes[]-populating path as not-yet-existing; that went stale "
+               "the moment it landed, in this same file's own wave, and was left uncorrected): "
+               "echo_transport._apply_accord_echo now builds a real scene.accord_echo Key (OI-03 "
+               "registered the type; a real sched.emit call site exists) AND genuinely populates "
+               "its causes[] field with the sibling §5.2 domain-echo Key's id when that leg also "
+               "fired for the SAME scene resolution — the ONE executable, non-decorative causes[] "
+               "instance corpus-wide, unit-falsified directly against the real KeyLog by "
+               "engine/tests/test_accord_echo.py's two §3 tests (log-lookup, not string-equality). "
+               "This row STAYS xfail anyway, for a genuinely different reason than before: the path "
+               "is executable but DORMANT — no live producer module declares "
+               "echo['scene_outcome'] (scene_dispatch.py / parliamentary_bridge.py, re-verified "
+               "2026-07-29; same scan test_direction2b uses), so classify_scene_outcome always "
+               "returns None in any real campaign and _apply_accord_echo's Key-with-causes[] "
+               "branch never runs outside a test that hand-supplies the input. The xfail condition "
+               "below is now LIVE-INTROSPECTED (mirrors combat-bridge-on's own pattern) rather than "
+               "a hardcoded always-red: it re-checks that same dormancy scan, so the MARKER "
+               "self-lifts the moment a producer supplies the input — but that is not the same "
+               "claim as 'no manual burn-down step needed' (re-critic HIGH correction, 2026-07-29): "
+               "the test BODY below deliberately omits scene_outcome from its ctx (real dormancy, "
+               "not a stand-in), so once the marker lifts the test goes HARD RED, not green — a "
+               "deliberate loud alarm demanding the body be rewritten to thread the landed "
+               "producer's real input, not a self-resolving row. See test_accord_echo.py's "
+               "test_accord_leg_receives_the_domain_echo_"
+               "keys_real_in_log_id / test_accord_leg_caused_by_key_id_is_none_when_the_domain_"
+               "echo_leg_does_not_fire for the unit-level falsifiers (both green today), and "
+               "test_direction6b_accord_echo_leg_receives_a_genuine_in_log_causal_id below for the "
+               "companion reach-level check."},
     {"id": "world-npcs", "oi": "OI-05", "kind": "honest-deferral",
      "area": "world chain: world.npcs",
      "reason": "RECLASSIFIED Wave 2 (was 'generate_npc has zero call sites', framed as an "
@@ -443,14 +468,81 @@ def test_direction5_down_diagonal_shares_direction4s_mechanism():
     assert k.targets and k.targets[0].actor_id
 
 
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("diagonal-causes"))
+def _scene_outcome_declared_by_a_live_producer() -> bool:
+    """Shared dormancy check, kept IDENTICAL to test_direction2b_bottom_up_accord_echo_leg_is_
+    wired_but_dormant's own scan so the two dormancy claims (that test's Half 2, and this
+    function's use as the diagonal-causes xfail condition) can never silently diverge. True once
+    ANY live producer module declares echo['scene_outcome'] as an input -- at which point the
+    accord-echo leg (and this direction's causes[] path with it) becomes organically reachable."""
+    producer_modules = ["engine.cross_scale.scene_dispatch", "engine.cross_scale.parliamentary_bridge"]
+    _checked, matches = _source_scan(r"[\"']scene_outcome[\"']\s*:", producer_modules)
+    return bool(matches)
+
+
+@pytest.mark.xfail(not _scene_outcome_declared_by_a_live_producer(), strict=True,
+                    reason=_manifest_reason("diagonal-causes"))
 def test_direction6_diagonal_causes_has_an_instance():
-    """directional_coverage_v1.md #6 — UNREACHED, the headline directional gap (OI-28): causes[]
-    must be populated with actual content at >=1 live emit site. Today it is zero corpus-wide
-    (re-verified 2026-07-29 via source scan of the same emitter-module set used above — no
-    'causes=[' with any non-empty content anywhere in engine/ or systems/ outside tests)."""
-    _checked, matches = _source_scan(r"causes\s*=\s*\[[^\]]+\]", _KEY_DELIVERY_EMITTER_MODULES)
-    assert matches, "causes[] is still populated nowhere among the live emitter modules"
+    """directional_coverage_v1.md #6 — the headline directional gap (OI-28), CORRECTED FRAMING
+    (2026-07-29): the prior version of this test did a raw source-text scan for any non-empty
+    `causes=[...]` literal, which is EXACTLY the shape that would silently XPASS the moment
+    `_apply_accord_echo` started writing `causes=[caused_by_key_id] if caused_by_key_id else []`
+    into its own source (a real, load-bearing line, not decorative) -- passing on TEXT PRESENCE
+    while the path stays organically unreached in every real campaign. This is now a CAMPAIGN-
+    SHAPED runtime probe instead: drive `emit_scene_echo` with the exact ctx shape a live producer
+    would supply MINUS `scene_outcome` (the genuinely-missing input, per the dormancy scan the
+    xfail condition above shares with test_direction2b) and assert the real KeyLog contains >=1
+    Key with a non-empty `causes[]`. Today this is honestly red (dormant: no scene.accord_echo Key
+    is even built without a declared scene_outcome, so nothing in the log ever carries a populated
+    causes[]) -- xfail, with a LIVE-INTROSPECTED marker (the dormancy scan above) that self-lifts
+    the moment a producer supplies scene_outcome. CORRECTION (re-critic HIGH, 2026-07-29): that is
+    NOT the same as "no manual burn-down step needed" -- the ctx built above deliberately omits
+    scene_outcome (real dormancy, not a placeholder), so when the marker lifts this test goes HARD
+    RED, not green: the body must be rewritten to thread the landed producer's actual input before
+    it can pass. The marker lifting is a deliberate loud alarm demanding that rewrite, not a
+    self-resolving row. See engine/tests/test_accord_echo.py's own §3 tests for the unit-level
+    falsifier that the
+    MECHANISM itself (given the input) genuinely populates causes[] -- that suite hand-supplies
+    scene_outcome deliberately, to test the mechanism in isolation from the dormancy question this
+    test tracks."""
+    world = _world_with_scheduler(seed=42)
+    fid = next(iter(world.factions))
+    sid = next(iter(getattr(world, "settlements", {})), None)
+    assert sid is not None, "fixture needs >=1 settlement"
+    ctx = {"echo": {"actor_faction": fid, "target_faction": fid, "most_relevant_stat": "L",
+                    "degree": "Success", "target_settlement": sid}}  # no scene_outcome -- real dormancy
+    echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
+    causal_keys = [k for k in world.key_log if k.causes]
+    assert causal_keys, "no Key in the real KeyLog carries a populated causes[] (OI-28 diagonal direction unreached)"
+
+
+def test_direction6b_accord_echo_leg_receives_a_genuine_in_log_causal_id():
+    """OI-28 LIVE half (W3 item 3), the honestly-scoped claim: NOT 'a Key's causes[] is
+    populated' (that is test_direction6 above, still xfail — no accord Key exists yet to carry
+    one, see the manifest row) but 'the one live candidate site threads a REAL, already-in-log
+    Key id to the place that WILL populate causes[] the moment that Key exists' — a seeded run
+    with echo flags ON, asserting >=1 (assert checked >= 1, CLAUDE.md §0.1 point 2). This is a
+    genuine, runtime, non-decorative check: it does not just import-scan for a string, it drives
+    echo_transport.emit_scene_echo for real and looks the returned id up in the real KeyLog."""
+    world = _world_with_scheduler(seed=42)
+    fid = next(iter(world.factions))
+    sid = next(iter(getattr(world, "settlements", {})), None)
+    assert sid is not None, "fixture needs >=1 settlement"
+    world.settlements[sid].order = 2
+    ctx = {"echo": {"actor_faction": fid, "target_faction": fid, "most_relevant_stat": "L",
+                    "degree": "Success", "scene_outcome": "governance",
+                    "target_settlement": sid}}
+    out = echo_transport.emit_scene_echo("contest", {"winner": "A"}, ctx, world)
+    checked = 0
+    accord_rows = out.get("accord_applied") or []
+    assert accord_rows, "fixture assumption: the §5.5 Accord leg must fire for this ctx"
+    for row in accord_rows:
+        cause_id = row.get("caused_by_key_id")
+        assert cause_id is not None, "fixture assumption: the §5.2 leg must also fire for this ctx"
+        # The keys.py:325 invariant itself, exercised directly: lookup() raises KeyError if the
+        # id is not genuinely in the log — this is not a string-equality check.
+        assert world.echo_scheduler.log.lookup(cause_id) is not None
+        checked += 1
+    assert checked >= 1  # assert-that-asserted (CLAUDE.md §0.1 point 2)
 
 
 def test_direction7a_temporal_cadence_fires():
@@ -596,6 +688,52 @@ def test_articulation_subscriber_is_wired_in_a_real_production_campaign_construc
     assert scheduler_arg.subscriptions, (
         "articulation.subscribe_all was called by run_campaign but registered zero subscriptions "
         "on the real scheduler it was given")
+
+
+@pytest.mark.xfail(not _dispatch_combat_bridge_on({}), strict=True,
+                    reason=_manifest_reason("combat-bridge-on"))
+def test_combat_pair_key_reaches_articulation_subscriber_under_flag_on():
+    """W3 item 7 (critic SHARPEN HIGH) — the campaign-consumption falsifier for the combat pair:
+    under DISPATCH_COMBAT_BRIDGE ON (+ the echo scheduler attached, ECHO_TRANSPORT default ON),
+    a combat scene's Key genuinely reaches the articulation subscriber through the REAL dispatch
+    pipeline (`scene_dispatch._resolve_slot` -> `echo_transport.emit_scene_echo` ->
+    `TickScheduler.emit` -> the subscribed callback) — not just that `_TRIGGER_TYPE_IDS` lists
+    `scene.combat_resolved`/`scene.combat_felled` (tests/valoria/test_articulation_subscriber.py's
+    `test_combat_pair_reaches_the_articulation_subscriber` is the isolated unit proof of THAT) but
+    that a real combat scene dispatch actually delivers one. xfail while DISPATCH_COMBAT_BRIDGE is
+    OFF (today's default) — mirrors `test_combat_resolves_via_canonical_bridge_under_flag_on`'s own
+    gate exactly (same manifest row, same flag); run with env DISPATCH_COMBAT_BRIDGE=1 to exercise
+    the strict assertion for real.
+
+    SEED (re-critic MED, 2026-07-29): `04_execution_ledger.md:105` claimed the strict assertion
+    was "verified manually with the flag on" without pinning which seed or recording how to
+    reproduce it. Re-verified here with a 30-seed sweep (seed=0..29, each seed re-run through this
+    exact body: `DISPATCH_COMBAT_BRIDGE=1 python3 -m pytest
+    engine/tests/test_pipeline_reach.py::test_combat_pair_key_reaches_articulation_subscriber_under_flag_on
+    -q`) — DRAW-INSENSITIVE: all 30 seeds pass identically (resolved=True, exactly one
+    scene.combat_resolved Key logged, stubwire fires), so seed choice here is a stability
+    convention, not a cherry-pick. Pinned to seed=0 (the first seed of the sweep, previously an
+    unremarked seed=7)."""
+    from engine.cross_scale import articulation
+
+    world = _world_with_scheduler(seed=0)
+    world.dispatch_combat_bridge = _dispatch_combat_bridge_on({})
+    articulation.subscribe_all(world.echo_scheduler)
+    stubwire.reset_invocations()
+    before = stubwire.invocations
+
+    slot = scene_slate.SceneSlot(scene_type="combat",
+                                  context={"factions": ("Crown", "Church")}, priority=0)
+    res = scene_dispatch._resolve_slot(slot, world, world.rng)
+    assert res.get("resolved") is True, f"combat did not resolve via the canonical bridge: {res}"
+
+    combat_resolved_keys = [k for k in world.echo_scheduler.log if k.type == "scene.combat_resolved"]
+    assert combat_resolved_keys, (
+        "no scene.combat_resolved Key was emitted by the real dispatch pipeline "
+        f"(dispatch result: {res})")
+    assert stubwire.invocations > before, (
+        "a scene.combat_resolved Key was logged but articulation's subscribed callback never fired "
+        "(TickScheduler.emit did not reach the subscriber)")
 
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════

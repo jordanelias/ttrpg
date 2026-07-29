@@ -131,7 +131,12 @@ def load(descriptor_path=None, names_index_path=None):
         if isinstance(e, dict):
             _add(e.get('name'), e.get('key'))
 
-    for section in ('faction_stats', 'practitioner_stats', 'territory_stats', 'settlement_stats'):
+    # category_b_scalars added 2026-07-29 (W3/ED-IN-0096, OI-30a): the Category-B scalar
+    # registrations (Wounds/Turmoil/Accord/Poise/Initiative/season counter/...) live in their
+    # own section; without this line the registrations were invisible to every a17 consumer —
+    # the registry-side twin of the declared-consumer-isn't-real defect the W3 relay caught.
+    for section in ('faction_stats', 'practitioner_stats', 'territory_stats', 'settlement_stats',
+                    'category_b_scalars'):
         for e in (descriptor.get(section, {}) or {}).get('entries', []) or []:
             if not isinstance(e, dict):
                 continue

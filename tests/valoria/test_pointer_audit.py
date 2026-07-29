@@ -217,15 +217,17 @@ def test_real_corpus_scorecard_matches_a17_totals(real_occurrences):
 
 
 def test_real_corpus_has_a_known_unresolved_identifier(real_occurrences):
-    # personal_combat's `state[].name` includes "Wounds" — not a registered descriptor
-    # / names_index entry as of this writing. This is real, expected pointer-debt
-    # (A17's own docstring calls this class of finding "a real, expected backlog
-    # item, not a bug in this checker") — must surface as unresolved.
+    # CANARY REPOINTED (W3 gate, ED-IN-0096): "Wounds" was this test's known-unresolved
+    # example until the Category-B registration (descriptor_registry category_b_scalars)
+    # plus quantity_registry's section fix made it RESOLVE — the registration's whole
+    # point. "cumulative_damage" (personal_combat, computed/internal, deliberately
+    # unregistered) is the honest replacement canary from the remaining a17 backlog —
+    # the detector must still surface the unresolved class.
     g = pa.build_g_pointer(real_occurrences)
-    assert 'Wounds' in g
+    assert 'cumulative_damage' in g
     matching = [o for o in real_occurrences
-                if o['identifier'] == 'Wounds' and o['location'] == 'personal_combat']
-    assert matching, "expected an unresolved 'Wounds' occurrence from personal_combat state"
+                if o['identifier'] == 'cumulative_damage' and o['location'] == 'personal_combat']
+    assert matching, "expected an unresolved 'cumulative_damage' occurrence from personal_combat"
     assert all(not o['resolved'] for o in matching)
 
 

@@ -36,6 +36,13 @@ SCOPE OF THIS SLICE (IN-lane; direction ruled, downstream deferred to owning lan
     branches, parliamentary_bridge.py's vote ctx — none do, re-verified 2026-07-29), so this leg
     is WIRED (a real caller of `compute_accord_echo` exists) but DORMANT (organically
     unreachable) in any seeded campaign until a future SC/PC-lane bridge declares one.
+  - W3 Handoff item 1 (ED-IN-0091 plan §3 Wave 3, 2026-07-29): `scene.accord_echo` is now
+    registered in `key_type_registry_v30.md`, so `_apply_accord_echo`'s settlement-Order write
+    routes through `sched.emit(key, apply=...)` (OF-7 deferred-apply) instead of applying
+    inline — genuine queue-parity with the §5.2 leg above, closing OI-03 fix 4's contract
+    collision with `zoom_in_out.zoom_out` rather than the prior wave's rename-around-it fix.
+    Still DORMANT in any seeded campaign (no live producer declares `echo['scene_outcome']`),
+    so no pinned golden moves.
 
 Guardrails (holonic doctrine ED-1083 §2): implement the local rule only; declared I/O
 only; never special-case an entity/outcome; never grow a scale-local dialect.
@@ -179,13 +186,57 @@ def _derive_degree(scene_type: str, result) -> str:
     return "Partial"
 
 
-def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, world) -> dict:
+def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, world, sched,
+                       *, caused_by_key_id: Optional[str] = None) -> dict:
     """Apply an already-computed, already-`fires`-gated §5.5 AccordEchoResult -- the OI-03
     bottom-up settlement Accord WRITE (`engine/cross_scale/domain_echo.py`'s
     `compute_accord_echo`, previously zero callers).
 
-    WAVE-2 RETARGET (OI-03 fix 2, AUD-SET-02, 2026-07-29): this leg now targets the SETTLEMENT
-    where the scene occurred, never the province/Territory directly --
+    W3 QUEUE-PARITY (Handoff item 1, ED-IN-0091 plan §3 Wave 3, 2026-07-29 -- closes OI-03 fix 4
+    FOR REAL instead of renaming around it): `scene.accord_echo` is now registered in
+    `key_type_registry_v30.md` (this wave's Handoff item 1), so the settlement-Order write no
+    longer applies inline -- it now builds a real `scene.accord_echo` Key and routes the write
+    through `sched.emit(key, apply=...)`, the SAME OF-7 deferred-apply mechanism the sibling §5.2
+    domain-echo leg (`emit_scene_echo`, below) already uses. The write lands at
+    `accounting_boundary()`, not at scene-resolution time. This matches scale_transitions_v30.md's
+    own §5.5 caption (:221, "Accord Domain Echoes fire at Accounting Step 4c") for ALL FOUR rows,
+    including violence's -- only that row's RS component is canon-explicit-immediate (:219, "RS -1
+    immediate. Accord -1 in that territory." -- the sentence break is deliberate: RS is immediate,
+    Accord is not), so the RS write below is UNCHANGED, still a direct, immediate
+    `rs_track.apply_rs_delta` call outside this Key.
+
+    Return-shape note: the returned dict KEEPS the `'accord_applied'` key name (not renamed to
+    e.g. `'accord_queued'`, even though the write it describes is now queued, not applied) --
+    `engine/tests/test_pipeline_reach.py::test_direction6b_accord_echo_leg_receives_a_genuine_in_
+    log_causal_id` reads `out.get("accord_applied")` directly, and that file is this wave's
+    L-consumers lane's sole-editor scope (file-ownership map), not this stage's to edit. Renaming
+    the dict key would silently break a currently-passing assertion in a file this stage may not
+    touch -- a worse outcome than keeping a now-slightly-imprecise name with an honest docstring.
+    What DOES change is the meaning of each row's `'applied'` boolean: `True` now means "a
+    settlement resolved and a `scene.accord_echo` Key was built and queued for
+    `accounting_boundary()`", not "already written to `Settlement.order`" -- documented here
+    rather than silently reinterpreted. A new, additive `'key_id'` field carries the queued Key's
+    id (nothing pre-existing can depend on a field that did not exist before).
+
+    W3 THREADING, NOW GENUINELY POPULATED (OI-28 LIVE half, 2026-07-29 -- the W3
+    consumers+causes lane built the `caused_by_key_id` plumbing; this same-wave follow-on closes
+    the last step, now that this file and `test_pipeline_reach.py` are BOTH this stage's to edit):
+    `caused_by_key_id` is the id of the §5.2 domain-echo Key `emit_scene_echo` (below) already
+    appended to the log THIS SAME CALL, when it fired for the SAME scene resolution -- `None` when
+    the §5.2 leg did not fire (no genuine upstream Key exists to cite; never fabricated). The new
+    Key's `causes` field is now set to `[caused_by_key_id]` when that id is genuinely present,
+    `[]` otherwise -- keys.py:325's invariant ("causes[] only references Keys already in the log")
+    is satisfiable by construction here: `emit_scene_echo` appends the domain-echo Key via
+    `sched.emit` BEFORE calling this function (verified ordering, unchanged), so the referenced id
+    is always already in `sched.log` by the time this Key is built. This is the ONE genuine,
+    non-decorative live `causes[]` instance corpus-wide (the diagonal Key-direction #6 the
+    `test_pipeline_reach.py` acceptance oracle tracks) -- see that file's own manifest-row
+    correction (dormancy still applies: no live producer declares `echo['scene_outcome']` yet, so
+    this path fires zero times in any seeded campaign, but the code that WOULD populate it is now
+    live, not merely threaded telemetry).
+
+    WAVE-2 RETARGET (OI-03 fix 2, AUD-SET-02, 2026-07-29, unchanged this wave): this leg targets
+    the SETTLEMENT where the scene occurred, never the province/Territory directly --
     scale_transitions_v30.md:215 ("Settlement targeting (AUD-SET-02): Accord changes from
     personal scenes target the settlement where the scene occurred, not the province directly.
     Province Accord recalculates at Accounting: floor(mean(settlement Order))."), matching
@@ -195,9 +246,11 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
     (systems/settlements/sim/registry.py's `province_accord`, `floor(mean(order))`) -- this
     function never writes Territory.accord, and never recomputes the province aggregate itself
     (that stays registry.province_accord's job, called wherever a caller needs a province-level
-    read, per CLAUDE.md §8 "every rule lives once").
+    read, per CLAUDE.md §8 "every rule lives once"). See also this wave's Handoff item 2
+    (`systems/overview/sim/accounting.py`'s new report-only province-Accord drift PROBE, which
+    reads the same `registry.province_accord` without writing either value).
 
-    Settlement targeting: `echo_ctx['target_settlement']` is a NEW optional echo-block field
+    Settlement targeting: `echo_ctx['target_settlement']` is an optional echo-block field
     (replaces the prior `target_territory`, which targeted the wrong scale per AUD-SET-02),
     added alongside the module's already-declared optional `target_faction`/`degree`/
     `scope_met` fields (this module's SCOPE-OF-THIS-SLICE docstring note). The SC/PC-lane
@@ -219,62 +272,77 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
     a DIFFERENT field this leg no longer touches; mixing the two scales in one function is
     exactly the "MULTS-scaled continuous value in the same function as a canonical-index step"
     defect this fix removes. Clamped to `settlement_registry.STAT_MIN`/`STAT_MAX` (0-5), the
-    same bound `Settlement.order` observes everywhere else (registry.py, settlement.py).
-
-    Timing / contract collision (OI-03 fix 4): §5.5 nominally queues every Accord Domain Echo to
-    Accounting Step 4c (scale_transitions_v30.md:221) through the SAME OF-7 deferred-apply Key
-    mechanism `compute_domain_echo` above already uses (`sched.emit(key, apply=_apply)`), and
-    zoom_in_out.zoom_out's own docstring documents `accord_changes`/`accord_applied` as queued.
-    Achieving genuine queue-parity here would require registering a NEW `scene.accord_echo` Key
-    type in `key_type_registry_v30.md` -- that registry's sole-editor scope belongs to
-    01_orchestration_plan_v1.md §3 Wave 3 item 2, not this lane -- or inventing an ad hoc
-    non-Key deferred-effects queue on the scheduler, which would grow a scale-local dialect
-    (ED-1083 guardrail: "never grow a scale-local interface dialect"). Neither is available in
-    this wave's scope, so this leg instead APPLIES IMMEDIATELY at scene-resolution time and is
-    returned under the key `'accord_applied'` (renamed from `'accord_changes'`) so its NAME
-    stops asserting a queued-but-not-yet-applied write that already happened --
-    `zoom_in_out.zoom_out`'s docstring is corrected in the same change to read `'accord_applied'`
-    and describe it as already-applied, not queued, closing the collision honestly rather than
-    silently. Flagged to oracle_requests (register the Key type, Wave 3) to convert this to a
-    genuine OF-7 deferred write later.
+    same bound `Settlement.order` observes everywhere else (registry.py, settlement.py). The
+    deferred `_apply` closure below re-resolves the settlement from `world.settlements` by id at
+    apply time (mirrors `emit_scene_echo`'s own `_apply` closure for the §5.2 leg, which
+    re-resolves the faction by id rather than closing over a captured object reference).
     """
     sid = echo_ctx.get("target_settlement")
     settlements = getattr(world, "settlements", None) or {}
     settlement = settlements.get(sid) if sid else None
     detail = {"scene_outcome": scene_outcome, "target_settlement": sid,
               "accord_delta": ar.accord_delta, "rs_delta": ar.rs_delta,
-              "notes": list(ar.notes)}
+              "notes": list(ar.notes),
+              "caused_by_key_id": caused_by_key_id}  # W3 OI-28 threading, see docstring above.
     if settlement is None:
         detail["applied"] = False
         detail["reason"] = ("no resolvable target_settlement in echo block; §5.5 Accord Echo "
                              "computed, not applied")
         return {"accord_applied": [detail]}
 
-    if scene_outcome == "territorial_transfer":
-        # [canonical: §5.5 -- "Transferred territory Accord set to 2"] -- 2 is already the
-        # canonical-index value (see docstring's Unit note); clamped through the same STAT_MIN/
-        # STAT_MAX bound as every other settlement.order write (registry.py), not through
-        # ACCORD_MAP (Territory.accord's continuous scale -- a different field, untouched here).
-        settlement.order = max(settlement_registry.STAT_MIN,
-                               min(settlement_registry.STAT_MAX, 2))
-    elif ar.accord_delta:
-        # ar.accord_delta is ALREADY canonical-index (+-1, §5.5's own table) -- settlement.order
-        # is natively that same index scale (settlement_layer_v30.md §1.3), so it is added
-        # directly, with no MULTS conversion (see docstring's Unit note for why mixing the two
-        # scales in this function was the defect being fixed).
-        settlement.order = max(settlement_registry.STAT_MIN,
-                               min(settlement_registry.STAT_MAX,
-                                   settlement.order + ar.accord_delta))
+    # W3 Handoff item 1: build the scene.accord_echo Key and queue the settlement-Order write via
+    # OF-7 (accounting_boundary()) -- see the docstring's "W3 QUEUE-PARITY" section above.
+    seq = getattr(world, "_echo_key_seq", 0)
+    world._echo_key_seq = seq + 1
+    season = int(getattr(world, "season", 0))
+    key = Key(
+        id=f"scene.accord_echo.s{season}.n{seq}",
+        type="scene.accord_echo",
+        emitted_at=EmittedAt(season_index=season),
+        # causes[] population (OI-28 LIVE, W3): [caused_by_key_id] when the sibling §5.2 leg fired
+        # for this SAME scene (genuinely already in-log by construction -- see the docstring's "W3
+        # THREADING" section), [] when it did not (no genuine upstream Key exists to cite --
+        # never fabricated, per the honesty test in engine/tests/test_accord_echo.py).
+        causes=[caused_by_key_id] if caused_by_key_id else [],
+        scale_signature=["settlement"],
+        targets=[Target(actor_id=sid, role="subject",
+                        stat_deltas=({"order": ar.accord_delta} if ar.accord_delta else {}))],
+        payload={"scene_outcome": scene_outcome, "target_settlement": sid,
+                 "accord_delta": ar.accord_delta},
+    )
+
+    def _apply(_k, _world=world, _sid=sid, _outcome=scene_outcome, _delta=ar.accord_delta):
+        settlements_now = getattr(_world, "settlements", None) or {}
+        s = settlements_now.get(_sid)
+        if s is None:
+            return
+        if _outcome == "territorial_transfer":
+            # [canonical: §5.5 -- "Transferred territory Accord set to 2"] -- 2 is already the
+            # canonical-index value (see docstring's Unit note); clamped through the same
+            # STAT_MIN/STAT_MAX bound as every other settlement.order write (registry.py), not
+            # through ACCORD_MAP (Territory.accord's continuous scale -- untouched here).
+            s.order = max(settlement_registry.STAT_MIN, min(settlement_registry.STAT_MAX, 2))
+        elif _delta:
+            # _delta is ALREADY canonical-index (+-1, §5.5's own table) -- settlement.order is
+            # natively that same index scale (settlement_layer_v30.md §1.3), so it is added
+            # directly, with no MULTS conversion (see docstring's Unit note).
+            s.order = max(settlement_registry.STAT_MIN,
+                          min(settlement_registry.STAT_MAX, s.order + _delta))
+
+    sched.emit(key, apply=_apply)  # OF-7: settlement-Order write lands at accounting_boundary()
+    detail["applied"] = True
+    detail["key_id"] = key.id
 
     if ar.rs_delta:
         # RS ("Mending Stability") has no live write path yet — systems.overview.sim.rs_track
         # is a Pass 2l armature stub (OI-17). Route through its own declared entry point (the
         # single-owner call site, CLAUDE.md §8) rather than reaching into World directly; it
-        # self-flags as a typed no-op via stubwire until RS is built.
+        # self-flags as a typed no-op via stubwire until RS is built. Stays IMMEDIATE per canon
+        # (:219) -- see the docstring's "W3 QUEUE-PARITY" section for why this is unaffected by
+        # the settlement-Order queueing above.
         from systems.overview.sim import rs_track
         rs_track.apply_rs_delta(ar.rs_delta, source=f"accord_echo:{scene_type}", world=world)
 
-    detail["applied"] = True
     return {"accord_applied": [detail]}
 
 
@@ -284,15 +352,18 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
 
     Fires ONLY when `world.echo_scheduler` is attached AND `ctx` carries an explicit `echo`
     block. Returns a `scene_outcomes` dict for zoom_out — `{}` when nothing fires, which is
-    the byte-exact fallback (identical to the historical `zoom_out({})`). The §5.2 Domain Echo
-    substrate `apply` is deferred to the accounting boundary (unchanged); the §5.5 Accord Echo
-    write applies immediately under the `'accord_applied'` key (see `_apply_accord_echo`'s
-    timing/contract-collision note — WAVE-2 rename from `'accord_changes'`, which falsely
-    implied it was queued) — there is no double-apply between the two, they write disjoint
-    state (Faction stat vs. Settlement Order/RS). The Accord Echo leg is additionally gated on
-    an explicit caller-declared `echo['scene_outcome']` (WAVE-2, OI-03 fix 1 — see
-    `classify_scene_outcome`'s docstring); no live producer sets that key today, so this leg is
-    wired but organically dormant.
+    the byte-exact fallback (identical to the historical `zoom_out({})`). Both legs now defer to
+    the accounting boundary via OF-7 (`sched.emit(key, apply=...)`): the §5.2 Domain Echo
+    substrate `apply` (unchanged), and — as of W3 Handoff item 1, 2026-07-29 — the §5.5 Accord
+    Echo settlement-Order write, returned under the `'accord_applied'` key (see
+    `_apply_accord_echo`'s "W3 QUEUE-PARITY" docstring section for why that key name is KEPT
+    despite the write no longer being immediate). The RS component of the Accord Echo leg (§5.5
+    violence row only) stays a direct, immediate `rs_track.apply_rs_delta` call — canon (:219)
+    makes RS immediate and Accord queued, a genuine asymmetry, not an inconsistency. There is no
+    double-apply between the two legs — they write disjoint state (Faction stat vs. Settlement
+    Order/RS). The Accord Echo leg is additionally gated on an explicit caller-declared
+    `echo['scene_outcome']` (WAVE-2, OI-03 fix 1 — see `classify_scene_outcome`'s docstring); no
+    live producer sets that key today, so this leg is wired but organically dormant.
     """
     sched = getattr(world, "echo_scheduler", None)
     echo_ctx = ctx.get("echo")
@@ -312,6 +383,17 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
         "most_relevant_stat": stat,
     }
     out = {}
+
+    # W3 (OI-28 LIVE half): captures the §5.2 domain-echo Key's id, when one fires, so the §5.5
+    # Accord leg below can cite it as `caused_by_key_id` -- the SAME scene resolution's two
+    # consequences, genuinely ordered (this Key is appended to the log via sched.emit() several
+    # lines below, BEFORE the Accord leg runs). CORRECTED (item 7, small/LOW, re-critic pass):
+    # this now IS a genuinely populated Key `causes[]` field, not merely telemetry -- see
+    # `_apply_accord_echo` at :306 (`causes=[caused_by_key_id] if caused_by_key_id else []`), the
+    # one executable, non-decorative `causes[]` instance corpus-wide (still organically DORMANT in
+    # any real campaign, since the Accord leg itself never fires without a caller-declared
+    # `scene_outcome` -- see the leg's own docstring for that separate reachability fact).
+    _domain_echo_key_id = None
 
     er = domain_echo.compute_domain_echo(degree, scope_met, source_scene, world)
     if er.fires and er.affected_faction is not None and er.affected_stat is not None and er.delta != 0:
@@ -343,6 +425,7 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
                 f.adjust(_stat, _delta * MULTS[_stat])
 
         sched.emit(key, apply=_apply)  # OF-7: Key logs LIVE now; _apply lands at accounting_boundary()
+        _domain_echo_key_id = key.id  # W3: now genuinely in-log (keys.py:325) — safe to cite below.
         out["other_echoes"] = [{"faction": er.affected_faction,
                                 "stat": er.affected_stat, "delta": er.delta}]
 
@@ -355,6 +438,7 @@ def emit_scene_echo(scene_type: str, result, ctx: dict, world) -> dict:
         if scene_outcome is not None:
             ar = domain_echo.compute_accord_echo(scene_outcome, degree, world)
             if ar.fires:
-                out.update(_apply_accord_echo(scene_type, scene_outcome, ar, echo_ctx, world))
+                out.update(_apply_accord_echo(scene_type, scene_outcome, ar, echo_ctx, world,
+                                              sched, caused_by_key_id=_domain_echo_key_id))
 
     return out

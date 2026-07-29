@@ -74,7 +74,7 @@ Player query "what happened in [territory] last year" → engine returns:
 
 A cut scene is a short (5–15 second) engine-rendered moment showing a non-protagonist event in evocative detail. Triggered by thresholds on Key emissions; not authored.
 
-### §3.1 Trigger ruleset (10 triggers — 8 initial per D10, +#9 cascade clustering added 2026-05-01, +#10 belief_revised added 2026-05-02 per Stage 10 §4.1 finding)
+### §3.1 Trigger ruleset (13 triggers — 8 initial per D10, +#9 cascade clustering added 2026-05-01, +#10 belief_revised added 2026-05-02 per Stage 10 §4.1 finding, +#11/#12 combat pair added 2026-07-29 per ED-IN-0004, +#13 scene.accord_echo added 2026-07-29 per OI-03/W3)
 
 A Key fires a Tier 2 cut scene if it matches **any** of:
 
@@ -90,6 +90,34 @@ A Key fires a Tier 2 cut scene if it matches **any** of:
 | 8 | `env.peninsular_strain_shock` with `severity in [severe, crisis]` | Peninsula-scale narrative beat |
 | 9 | `meta.cascade_cluster_event` (cluster forms or dissolves; sustained ≥ 4 seasons) | Cross-faction ideological alignment / opposition |
 | 10 | `state.belief_revised` for any tracked NPC (Bonded, named in roster) | Singular protagonist-internal belief inflection (Stage 10 articulation sim §4.1: sig=7 mid-tier, otherwise routed only via K/B/I bumps) |
+| 11 | `scene.combat_resolved` (Class B per §6.4, ED-935) | Personal / skirmish combat concluded — decisive outcome (attacker/defender win, draw, rout, withdrawal); mirrors `scene.battle_concluded`'s existing Tier 2 default at personal/skirmish scale |
+| 12 | `scene.combat_felled` | A combatant incapacitated by Health depletion (ED-1041 wound model) — witnessable, ripples to factions and NPC memory |
+| 13 | `scene.accord_echo` (Class B per §6.6, OI-03) | §5.5 Accord Domain Echo — a resolved scene's settlement-Order consequence (governance/destabilisation/territorial_transfer/violence), queued via OF-7 to Accounting Step 4c; distinct from the same scene's §5.2 Domain Echo (row 11/12's `scene.combat_resolved` family), which is a disjoint faction-stat consequence |
+
+**Trigger 13 (added 2026-07-29 per OI-03/W3 execution, ED-IN-0091 plan §3 Wave 3 Handoff item 1):**
+`key_type_registry_v30.md:969-1006`'s (re-derived round 2, fix-round-2 — was :943-977) `scene.accord_echo` entry declares `articulation` a `consuming_systems`
+member (added the same wave `_apply_accord_echo` started building a real `scene.accord_echo` Key —
+see that entry's own notes). This ruleset never listed the type — the same class of gap the
+Triggers-11/12 note above corrected for the combat pair, and closed here the same way: a table row plus
+the extension of `engine/cross_scale/articulation.py`'s `subscribe_all` to the full 13-type_id roster in
+the same change. `scene.accord_echo` is LIVE-but-organically-dormant (a real `sched.emit` call site
+exists in `echo_transport._apply_accord_echo`, but no live producer declares `echo['scene_outcome']`
+yet — see that function's own docstring), so this trigger fires zero times in any seeded campaign today;
+the row exists so it fires the moment a producer supplies the missing input, per the same "declared
+consumer, not a dangling emit" discipline the combat pair rows follow.
+
+**Triggers 11/12 (added 2026-07-29 per ED-IN-0004 execution, W3 item 1, ED-IN-0091 plan §3 Wave 3):**
+`key_type_registry_v30.md:899-915/953-966` (re-derived round 2, fix-round-2 — this row originally cited
+the first-generation stale range `:727-742/781-794`, itself never corrected here even after the sibling
+`engine/cross_scale/articulation.py` comment was re-derived to `:873-889/:927-940` and then again to
+the settled-tree values above — the drift this round's own task item 3 exists to close) declares
+`articulation` a `consuming_systems` member of both
+`scene.combat_resolved` and `scene.combat_felled` (alongside `npc_behavior`/`faction_layer`, which have
+no runtime — §5 fork 9), but this ruleset never listed either type — ED-IN-0004's own diagnosis of the
+class of gap (§6.4's "already triggers Tier 2 by an unstated rule" claim was never backed by an actual
+table row; corrected here rather than repeated). These two rows close that gap for the one consuming
+system with runtime (`engine/cross_scale/articulation.py`'s `subscribe_all`, extended to 13 type_ids in
+the same change) — this executes the already-filed ED, not new canon.
 
 **Trigger 9 specification (added 2026-05-01 per Stage 8b sim verification):**
 
@@ -296,6 +324,14 @@ Per PP-687 key_type_registry_v30.md §8. Articulation layer consumes; emits Tier
 Per PP-687 `key_type_registry_v30.md` §7. Articulation layer consumes; emits Tier 2 cut scene by default (high-significance per §3.5 — a decisive combat outcome). `scene.battle_concluded` (existing) already triggers Tier 2; `scene.combat_resolved` mirrors it at personal / skirmish scale.
 
 <!-- [ASSUMPTION: Tier-2 default for combat_resolved authored under the 2026-06-14 consumer-design grant (ED-936); mirrors §6.3. Jordan-vetoable.] -->
+
+### §6.5 scene.combat_felled (already in registry per key_type_registry_v30.md §7 — trigger row added ED-IN-0004)
+
+Confirmed in registry (`emitting_systems: [personal_combat]`, `consuming_systems: [npc_behavior, faction_layer, articulation]`); no new type declaration needed. Articulation layer is the consumer with runtime — §3.1 trigger #12 (added 2026-07-29) is the missing piece this executes, matching the §6.4 precedent above for its sibling combat-pair type.
+
+### §6.6 scene.accord_echo (already in registry per key_type_registry_v30.md §7 — trigger row added OI-03/W3)
+
+Confirmed in registry (`emitting_systems: [echo_transport]`, `consuming_systems: [articulation]`); no new type declaration needed. Articulation layer is the consumer with runtime — §3.1 trigger #13 (added 2026-07-29) is the missing piece this executes, the same precedent as §6.4/§6.5 above. The type is LIVE (a real `sched.emit` call site exists) but organically dormant — see the trigger #13 note in §3.1 for why.
 
 ---
 

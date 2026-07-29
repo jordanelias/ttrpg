@@ -15,9 +15,16 @@
 #
 # KIND: attribute_scalar | attribute_aggregate | faction_stat | settlement_stat |
 #       practitioner_stat | territory_stat | conviction_weight | ethical_axis |
-#       conviction_axis_map | orientation_scalar | contest_style | temperament_type | template
+#       conviction_axis_map | orientation_scalar | contest_style | temperament_type | template |
+#       personal_track
 #   practitioner_stat and territory_stat added 2026-07-08 (ED-IN-0029 docket, OPT-AV-3, D2/D3):
 #   these two KINDs existed informally in audit census rows before this registry recognized them.
+#   personal_track added 2026-07-29 (W3 item 4, OI-30a, 07-14 unification §3 / ED-IN-0059) to
+#   cover the Category-B scalar batch below (Wounds/Turmoil/Accord/Poise/Initiative/season
+#   counter) -- ONE kind for the whole batch, not one per scalar; these six span three different
+#   `bucket:` values in module_contracts.yaml (track/clock/derived_value) and are not a single
+#   mechanical family, so `personal_track` here names the REGISTRATION BATCH, not a shared runtime
+#   shape -- see that section's own comment for the per-entry pointer + bucket citation.
 # Entries that ALREADY have a canonical source doc are REGISTERED BY REFERENCE (source:) rather
 # than re-transcribed here -- the source doc stays authoritative (re-transcription = drift).
 
@@ -109,6 +116,41 @@ settlement_stats:
     - {key: set.defense,         name: Defense,          scale: "0-5"}
     - {key: set.order,           name: Order,            scale: "0-5"}
     - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "systems/settlements/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
+
+# ============================================================================
+# CATEGORY-B SCALARS (07-14 unification §3 / ED-IN-0059 list). Registered 2026-07-29 (W3 item 4,
+# OI-30a). These are POINTER REGISTRATIONS ONLY -- they name each scalar and cite its canonical
+# home (a `state:` row in references/module_contracts.yaml, itself pointing at the defining
+# design doc), they do NOT define a formula, scale, or Godot resource binding here. Per the
+# roster-IN-FLUX warning (CLAUDE.md §5, derived-stat schema IN FLUX): do not bind Godot resource
+# fields to these keys yet -- resolve the live value through the cited contract row / design doc,
+# never by re-deriving it from this entry. C2 (npc beliefs/concerns/projects, §5 fork 11) is
+# OUT OF SCOPE for this section -- stays J, untouched by this registration pass.
+# ============================================================================
+category_b_scalars:
+  entries:
+    - {key: pc.wounds, kind: personal_track, name: Wounds, scope: actor,
+       source: "references/module_contracts.yaml personal_combat state: :870 (bucket: track, writable: true) -- systems/combat/combat_engine_v1/ (ED-1041 bilateral-Ob wounds)"}
+    - {key: pc.poise, kind: personal_track, name: Poise, scope: actor,
+       source: "references/module_contracts.yaml personal_combat state: :873 (bucket: track, writable: true) -- systems/combat/combat_engine_v1/ (kuzushi/structure, full port pending -- combat.poise module PENDING)"}
+    - {key: pc.initiative, kind: personal_track, name: Initiative, scope: actor,
+       source: "references/module_contracts.yaml personal_combat state: :872 (bucket: track, writable: true) -- systems/combat/combat_engine_v1/ (Vor/Nach, full port pending -- combat.initiative module PENDING)"}
+    - {key: prov.turmoil, kind: personal_track, name: Turmoil, scope: territory,
+       source: "references/module_contracts.yaml peninsular_strain state: :548 (bucket: clock, writable: true) -- systems/overview/peninsular_strain_v30.md §4, scale 0-10 (clock_registry)"}
+    - {key: set.accord, kind: personal_track, name: "province Accord", scope: settlement,
+       source: "references/module_contracts.yaml settlement_layer state: :598 (bucket: derived_value, writable: false) -- systems/settlements/settlement_layer_v30.md §1.3 (floor(mean Order across settlements)); [CORRECTION] the lane prompt's '§5.5' citation does not resolve in the source doc (no §5.5 heading exists) -- §1.3 is the actual Accord-derivation section, confirmed in-tree."}
+    - {key: fac.coup_posture, kind: personal_track, name: "Coup posture", scope: faction,
+       source: "references/module_contracts.yaml faction_politics state: :776 (bucket: track, writable: true) -- systems/factions/faction_politics_v30.md §1.1d/§2.1 Coup Counter (numeric mechanics deferred per §10.1 ED-POL-09; declared W3/ED-IN-0096 with the state row it names)"}
+    - {key: fac.succession_status, kind: personal_track, name: "Succession status", scope: faction,
+       source: "references/module_contracts.yaml faction_politics state: :777 (bucket: track, writable: true) -- systems/factions/faction_politics_v30.md §1.0 SUC-01-03/LIN-01-04 + §6 Baralta outcomes (declared W3/ED-IN-0096 with the state row it names)"}
+    - {key: clock.season_counter, kind: personal_track, name: "season counter", scope: environment,
+       source: "references/module_contracts.yaml engine_clock state: :745 (bucket: clock, writable: true, [ASSUMPTION]) -- doc: is null (home doc unresolved, ED-1051 open). FORK-3 GATE: engine_clock is fork-3-gated (ED-1051, sole T0) -- this registration is a pointer only and does NOT assert the module is live or that its consumer set is closed; re-check fork 3's resolution before treating this entry as more than a name+pointer."}
+  note: >
+    Registrations, not schema bindings (see section header). Bucket values (track / clock /
+    derived_value) are transcribed from the cited module_contracts.yaml row for orientation only
+    -- module_contracts.yaml remains the authoritative bucket source; if the two ever disagree,
+    module_contracts.yaml wins and this entry is stale (re-sync on discovery, same convention as
+    the Coherence 3-way-disagreement note below).
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).

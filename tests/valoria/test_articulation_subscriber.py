@@ -1,27 +1,42 @@
 """Falsifier tests for engine/cross_scale/articulation.py's `subscribe_all` (OI-08, ED-IN-0091
-plan `audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md` §3 Wave 2 item 6).
+plan `audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md` §3 Wave 2 item 6;
+extended to 12 type_ids by OI-22a, plan §3 Wave 3 item 1, then to 13 by OI-03, plan §3 Wave 3
+item 1 (scene.accord_echo)).
 
 `TickScheduler.subscribe` (engine/substrate/keys.py:447) had ZERO callers anywhere in the corpus
 before this. `subscribe_all` is the first — it registers a per-invocation stub-wire callback for
-every §3.1 trigger type_id (systems/articulation/articulation_layer_v30.md §3.1, lines 77-92) and
+every §3.1 trigger type_id (systems/articulation/articulation_layer_v30.md §3.1: the original
+10-row table at lines 77-92, rows #11/#12 added Wave 3 ED-IN-0004, row #13 added Wave 3 OI-03) and
 renders nothing (the render layer stays ED-IN-0073's docket).
 
-Two claims, each with an assert-that-asserted loop (CLAUDE.md §0.1 point 2 — a loop that asserts
+Three claims, each with an assert-that-asserted loop (CLAUDE.md §0.1 point 2 — a loop that asserts
 conditionally must assert that it asserted):
-  1. `subscribe_all` registers >= 9 of the §3.1 roster's type_ids on the scheduler (the task
-     floor). This suite additionally pins the exact count at 10 and documents why: the register's
+  1. The roster `articulation._TRIGGER_TYPE_IDS` matches the design doc's §3.1 table FOR REAL (W3
+     item 6, critic HIGH repair): `test_trigger_roster_matches_articulation_layer_v30_section_3_1`
+     below now genuinely PARSES the table out of `articulation_layer_v30.md` (each row's `Trigger
+     condition` cell opens with the type_id in backticks) instead of comparing against a second,
+     independently-hardcoded `expected` set — a doc edit that adds/removes/renames a row now
+     actually fails this test instead of both copies silently drifting together.
+  2. `subscribe_all` registers >= 9 of the §3.1 roster's type_ids on the scheduler (the task
+     floor). This suite additionally pins the exact count at 13 and documents why: the register's
      claim that `meta.cascade_cluster_event` is unregistered (OI-27b, §5 fork 11) is STALE against
      the working tree — ED-IN-0022 (2026-07-07, C-KEY-8) already registered it in
-     key_type_registry_v30.md. `test_all_ten_type_ids_are_registry_valid` is the falsifier for
-     that correction: if the registry ever drops the type, this test fails loudly instead of the
-     correction silently rotting.
-  2. An emitted Key of a subscribed type increments `stubwire.invocations`, end-to-end through a
-     real `TickScheduler` (not a mock of the callback) — for every one of the 10 type_ids, each
+     key_type_registry_v30.md. `test_all_thirteen_type_ids_are_registry_valid` is the falsifier for
+     that correction: if the registry ever drops a type, this test fails loudly instead of the
+     correction silently rotting. Wave 3 added `scene.combat_resolved`/`scene.combat_felled` (OI-22a
+     — the combat-pair dangling-emit closure for articulation, the one declared `consuming_systems`
+     member of that pair with runtime) and `scene.accord_echo` (OI-03 — the §5.5 Accord Echo leg's
+     equivalent closure).
+  3. An emitted Key of a subscribed type increments `stubwire.invocations`, end-to-end through a
+     real `TickScheduler` (not a mock of the callback) — for every one of the 13 type_ids, each
      with a registry-valid payload built from key_type_registry_v30.md's own
      required_payload_fields, so the test also incidentally proves every payload this module's
      docstring claims is emittable actually validates.
 """
 from __future__ import annotations
+
+import os
+import re
 
 import pytest
 
@@ -37,6 +52,32 @@ from engine.substrate.keys import (
 )
 
 REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
+ARTICULATION_DOC_PATH = "systems/articulation/articulation_layer_v30.md"
+_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
+def _parse_section_3_1_trigger_type_ids() -> set[str]:
+    """Parse the §3.1 table's type_ids directly out of the design doc (W3 item 6, critic HIGH —
+    doc<->code drift falsifier). Every §3.1 table row's `Trigger condition` cell opens with the
+    type_id in backticks (`` `family.name` `` — verified against all 13 rows 2026-07-29); this
+    extracts that token per row, order-independent. CORRECTED (item 7, small/LOW, re-critic pass):
+    the actual window is NOT "to the §3.2 boundary" -- there is no `---` rule between §3.1's own
+    header and §4's (the next `\n---` after §3.1's start lands at the §3/§4 boundary, past
+    §3.2-§3.5). The window genuinely spans §3.1 through §3.5, to the §4 rule. That is safe rather
+    than a latent over-capture: §3.2 (Significance function), §3.3 (Accumulated narrative weight),
+    §3.4 (Cut scene rendering), and §3.5 (Belief/Inspiration/Knot engagement) contain no numbered
+    pipe-table rows opening with a backtick-delimited `family.name` token (verified by direct
+    read, 2026-07-29) -- the regex below has nothing to spuriously match in that extra span, so
+    the wider window is inert, not a bug. §6's Class-B-extension prose (which DOES also mention
+    these type_ids in backticks, in a different shape) still sits safely past the real §4 rule and
+    can never leak in and mask a real drift."""
+    doc_path = os.path.join(_REPO_ROOT, ARTICULATION_DOC_PATH)
+    text = open(doc_path, encoding="utf-8").read()
+    start = text.index("### §3.1 Trigger ruleset")
+    end = text.index("\n---", start)
+    section = text[start:end]
+    rx = re.compile(r"^\|\s*\d+\s*\|\s*`([a-z_]+\.[a-z_]+)`", re.MULTILINE)
+    return set(rx.findall(section))
 
 # The §3.1 roster (articulation_layer_v30.md lines 77-92), same order as
 # articulation._TRIGGER_TYPE_IDS. Each entry supplies a registry-valid payload built from that
@@ -112,6 +153,30 @@ _PAYLOADS = {
         },
         scale_signature=["personal"],
     ),
+    # W3 additions (OI-22a, ED-IN-0004): §3.1 rows #11/#12. Required payload fields per
+    # key_type_registry_v30.md:899-915 (scene.combat_resolved) / :953-966 (scene.combat_felled)
+    # (re-derived round 2, fix-round-2 — was :873-889/:927-940, itself already stale by the time
+    # it landed; see articulation.py's ROUND 2 stale-citation correction comment).
+    "scene.combat_resolved": dict(
+        payload={
+            "scene_id": "combat_1", "outcome": "attacker_win",
+            "participants": ["npc_a", "npc_b"],
+        },
+        scale_signature=["personal"],
+    ),
+    "scene.combat_felled": dict(
+        payload={"actor_id": "npc_b"},
+        scale_signature=["personal"],
+    ),
+    # W3 addition (OI-03): §3.1 row #13. Required payload fields per
+    # key_type_registry_v30.md:969-1006 (scene.accord_echo) (re-derived round 2 — was :943-977).
+    "scene.accord_echo": dict(
+        payload={
+            "scene_outcome": "governance", "target_settlement": "settlement_a",
+            "accord_delta": 1,
+        },
+        scale_signature=["settlement"],
+    ),
 }
 
 
@@ -139,20 +204,20 @@ def _key(kid, type_id, season=0):
 # -- claim 1: the roster is registered ----------------------------------------------------------
 
 def test_trigger_roster_matches_articulation_layer_v30_section_3_1():
-    # Pin the exact roster against the design doc's own 10 type_ids (order-independent), so a
-    # future doc edit that adds/removes a trigger row is caught here rather than silently
-    # diverging from the module's hardcoded tuple.
-    expected = {
-        "state.scar_acquired", "state.coup_attempted", "state.succession",
-        "mechanical.mission_shift", "da.covert_betrayal", "meta.knot_formed",
-        "meta.knot_ruptured", "env.peninsular_strain_shock",
-        "meta.cascade_cluster_event", "state.belief_revised",
-    }
-    assert set(articulation._TRIGGER_TYPE_IDS) == expected
-    assert len(articulation._TRIGGER_TYPE_IDS) == 10
+    # W3 item 6 (critic HIGH): genuinely PARSE the §3.1 table out of the doc instead of comparing
+    # against a second, independently-hardcoded set — a doc edit that adds/removes/renames a row
+    # now actually fails this test, both directions (doc has something code doesn't, and vice
+    # versa), instead of two copies silently drifting together.
+    doc_type_ids = _parse_section_3_1_trigger_type_ids()
+    assert doc_type_ids, "§3.1 table parse returned zero type_ids — parser or doc structure broke"
+    assert set(articulation._TRIGGER_TYPE_IDS) == doc_type_ids, (
+        f"articulation._TRIGGER_TYPE_IDS drifted from articulation_layer_v30.md §3.1: "
+        f"code-only={set(articulation._TRIGGER_TYPE_IDS) - doc_type_ids}, "
+        f"doc-only={doc_type_ids - set(articulation._TRIGGER_TYPE_IDS)}")
+    assert len(articulation._TRIGGER_TYPE_IDS) == 13
 
 
-def test_all_ten_type_ids_are_registry_valid(registry):
+def test_all_thirteen_type_ids_are_registry_valid(registry):
     # The G12 correction's falsifier: if meta.cascade_cluster_event (or any other §3.1 type_id)
     # is ever dropped from key_type_registry_v30.md, this fails loudly instead of subscribe_all
     # silently registering a type the runtime substrate would reject on first emission.
@@ -160,14 +225,14 @@ def test_all_ten_type_ids_are_registry_valid(registry):
     for type_id in articulation._TRIGGER_TYPE_IDS:
         assert type_id in registry.types, type_id
         checked += 1
-    assert checked == 10  # assert-that-asserted (CLAUDE.md §0.1 point 2)
+    assert checked == 13  # assert-that-asserted (CLAUDE.md §0.1 point 2)
 
 
 def test_subscribe_all_registers_at_least_nine(registry):
     s = _sched(registry)
     count = articulation.subscribe_all(s)
     assert count >= 9  # the task's own floor
-    assert count == 10  # this module's actual, corrected roster (see class docstring)
+    assert count == 13  # this module's actual, corrected roster (see class docstring)
 
 
 def test_subscribe_all_registers_one_callback_per_type_id(registry):
@@ -178,7 +243,7 @@ def test_subscribe_all_registers_one_callback_per_type_id(registry):
         assert type_id in s.subscriptions, type_id
         assert len(s.subscriptions[type_id]) == 1, type_id
         checked += 1
-    assert checked == 10
+    assert checked == 13
 
 
 def test_subscribe_all_touches_no_other_type(registry):
@@ -201,11 +266,11 @@ def test_emitted_key_increments_stubwire_counter_for_every_trigger_type(registry
         s.emit(_key(f"k{i}", type_id))
         assert stubwire.invocations == 1, type_id  # exactly one callback fired, once
         checked += 1
-    assert checked == 10  # assert-that-asserted
+    assert checked == 13  # assert-that-asserted
 
 
 def test_unsubscribed_type_does_not_fire_the_stub(registry):
-    # scene.dialogue is registered in key_type_registry_v30.md but is NOT one of §3.1's 10
+    # scene.dialogue is registered in key_type_registry_v30.md but is NOT one of §3.1's 13
     # triggers — subscribe_all must not have opted articulation into it.
     s = _sched(registry)
     articulation.subscribe_all(s)
@@ -246,3 +311,25 @@ def test_subscribe_all_called_twice_double_registers_and_double_fires(registry):
     stubwire.reset_invocations()
     s.emit(_key("k_double", "state.scar_acquired"))
     assert stubwire.invocations == 2
+
+
+# -- OI-22a (W3): the combat-pair dangling-emit closure, isolated ------------------------------
+
+def test_combat_pair_reaches_the_articulation_subscriber(registry):
+    """OI-22a falsifier: `scene.combat_resolved`/`scene.combat_felled` are the two dangling
+    combat-pair emits (key_type_registry_v30.md:899-915/953-966, re-derived round 2 — was
+    :873-889/:927-940 — declares articulation a consuming_systems member of both). This is the
+    direct, isolated proof that articulation's
+    subscription actually receives each — not just that it's present in `_TRIGGER_TYPE_IDS`
+    (test_trigger_roster_matches... already checks that) but that a REAL emitted Key of each
+    type reaches a REAL callback through a REAL TickScheduler, exactly the "≥1 consumed
+    scene.combat_resolved" claim the wave's exit criterion names."""
+    s = _sched(registry)
+    articulation.subscribe_all(s)
+    checked = 0
+    for i, type_id in enumerate(("scene.combat_resolved", "scene.combat_felled")):
+        stubwire.reset_invocations()
+        s.emit(_key(f"kcombat{i}", type_id))
+        assert stubwire.invocations == 1, type_id
+        checked += 1
+    assert checked == 2  # assert-that-asserted

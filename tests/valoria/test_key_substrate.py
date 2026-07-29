@@ -65,6 +65,43 @@ def test_registry_required_fields_scene_dialogue(registry):
     assert names == ["exchange_count", "initiator_id", "topic"]
 
 
+def test_registry_loads_oi25_silent_emitter_registrations(registry):
+    # ED-IN-0014 (OI-25, 2026-07-29 W3 item 7): the five silent emitters — settlement_layer's
+    # revolt/auto-capture gates, victory's era/occupation/terminal transitions, and the shared
+    # ci_political/territorial_piety CI=100 event — registered here as DECLARE-ONLY types (no
+    # live sched.emit call site this wave). This is the falsifier for the registration half of
+    # OI-25: parse coverage for every type_id this wave added.
+    #
+    # CORRECTED 2026-07-29 (W3 item 2, adj DEFECT 1): the "CONSUMER RULE" this test originally
+    # enforced — every declare-only type must name articulation as consuming_systems — was itself
+    # the defect. articulation never subscribes to any of these five (its _TRIGGER_TYPE_IDS is
+    # scoped to the §3.1 ruleset only, ED-IN-0004/OI-03 territory, none of which are these five),
+    # so declaring it created a false consumer for a type nothing ever fires. consuming_systems is
+    # now EMPTY for all five — the real consumer is held with each emitting module's own build
+    # docket (see key_type_registry_v30.md's per-entry notes) rather than guessed at here.
+    expected = {
+        "state.settlement_revolt": ["settlement_id", "territory_id", "governor_expelled"],
+        "mechanical.settlement_captured": [
+            "settlement_id", "territory_id", "capturing_faction_id", "prior_controlling_faction_id",
+        ],
+        "mechanical.era_transition": ["to_era", "trigger_stat"],
+        "mechanical.second_calamity": ["seasons_sustained_at_or_below_5"],
+        "mechanical.theocracy_unification_declared": ["ci_value", "mass_seizure_targets"],
+    }
+    checked = 0
+    for tid, field_names in expected.items():
+        entry = registry.require(tid)
+        names = [str(f).split("#", 1)[0].strip() for f in entry["required_payload_fields"]]
+        assert names == field_names, tid
+        # HELD-DISPOSITION RULE (corrected, ED-IN-0096): a declare-only type with no live emit
+        # site declares NO consumer either — the census must never carry a declared-emit +
+        # false-consumer row. Consumer is decided at the emitting module's own build.
+        assert entry["consuming_systems"] == [], tid
+        assert entry["emitting_systems"], tid
+        checked += 1
+    assert checked == len(expected)
+
+
 def test_unknown_type_rejected(registry):
     log = KeyLog(registry)
     with pytest.raises(KeyValidationError, match="not registered"):

@@ -86,11 +86,40 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   67 passed/4 xfailed on the targeted run); `test_pipeline_reach.py` XFAIL_MANIFEST burned down 4
   rows to strict, world-npcs/world-knots reclassified `honest-deferral`. EDs allocated from the
   W0a-reserved blocks (id_reservations.yaml left frozen, no bump): ED-IN-0095, ED-FA-0036,
-  ED-WR-0009, ED-SE-0049 — full entries in the respective lane ledgers. **Next = Wave 3** (Keys &
-  contract truth: `scene.combat_resolved`/`_felled` consumers, contract-truth sweep, OI-30
-  descriptor registration, `causes[]`/`targets[]` population + `private_observers` clearing,
-  OI-25 silent-emitter keying). Stopped this wave (unchanged, per the seam-stop list):
-  `systems/combat/**`, `combat_engine_v1/wrapper.py`, `faction_action.py:349`,
+  ED-WR-0009, ED-SE-0049 — full entries in the respective lane ledgers.
+  **Wave 3 landed (ED-IN-0096, orchestrator-adjudicated fix batch, 2026-07-29):** OI-22a combat-pair
+  dangling-emit closure (articulation now genuinely subscribes to `scene.combat_resolved`/
+  `scene.combat_felled`; `npc_behavior`/`faction_state` `consumes:[]` declare both, runtime-gated);
+  a 13th §3.1 trigger row + subscription for `scene.accord_echo` (OI-03), closing that leg's
+  articulation edge the same way; OI-28 LIVE half — the accord Key's `causes[]` is now genuinely
+  populated (`causes=[caused_by_key_id]`), executable but organically DORMANT (no live producer
+  declares `echo['scene_outcome']`) — unit-falsified via log-lookup, and
+  `test_pipeline_reach.py`'s diagonal-causes row rewritten to a live-introspected xfail (was a raw
+  source-scan that would have silently XPASSed). **adj DEFECT 1 fixed:** the five OI-25 declare-only
+  types lose their false `consuming_systems:[articulation]` — now `[]` with an explicit
+  held-disposition note per entry (consumer decided at the emitting module's own build); the four
+  emitting modules' `module_contracts.yaml` gap_notes each gained a pointer line (NOT a literal
+  `emits:` contract entry — deliberately not executed as pending oracle_requests, per adjudicator
+  instruction). OI-24 contract-truth sweep (npc_behavior `doc:` repoint/C-KEY-2, 4 stale
+  `emits:[]` comments corrected, `faction_politics` `state:[]` populated), OI-32a (MS ownership
+  declared on `peninsular_strain`), OI-30a (6 Category-B scalars registered under a new
+  `personal_track` KIND) were already landed pre-bookkeeping and re-verified here. OI-40a stays
+  HELD at ED-IN-0103 §6 fork 1 (Jordan's); `mechanical.season_change` identified as a 4th pre-wave
+  dangling type, HELD at §6 fork 3 (OI-43a/ED-1051) — a loud deviation the plan's dangling-emit
+  exit criterion did not separately enumerate. Census arithmetic corrected: pre-wave dangling was
+  4 types/5 pairs, post-wave 2 types/3 pairs. Two small corrections: `module_contracts.yaml`'s MS
+  row comment's false "accounting.py inlines the decay" claim fixed (no inline decay exists);
+  `domain_echo.py`'s violence-row `fires_at` corrected to match its siblings. **Bookkeeping repair
+  (critic MISSING — the lane wrote nothing until this pass):** all rows appended to
+  `04_execution_ledger.md`'s new "Wave 3 — bookkeeping repair" section, closing the W2→W3
+  province-Accord-aggregation routed row (line 76: measurement DONE report-only, write-model
+  routed to SE/OI-37). **ED-WR-0010 NOT allocated** — OI-31b (`private_observers` clearing at the
+  causes[]/targets[] sites) is Wave 3 item 5's own scope; re-checked against the diff, no WR-owned
+  doc work landed this wave, so OI-31b stays NOT EXECUTED (recorded, not silently dropped). OI-26
+  (PC's `_emit()` trace vocabulary mapping) stays outstanding, PC-owned (PC plan §15 I4, post-E3).
+  `references/rendering_dispositions.yaml` (a cited §10 precondition) does not exist anywhere in
+  the tree — logged (G12), not fabricated. Stopped per the seam-stop list (unchanged):
+  `systems/combat/**`, `combat_engine_v1/wrapper.py`, `faction_action.py`,
   `references/id_reservations.yaml`, `registers/review_baseline.yaml`.
 - **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07-29,
   in-session).** ALL resolvers of any type must support (i) fractional dice pools (integer part
