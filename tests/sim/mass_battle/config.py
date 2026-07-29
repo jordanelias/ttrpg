@@ -13,7 +13,15 @@ __all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_R
 # [JUSTIFIED: magnitude inherited from the prior baseline; the underlying scale is admitted band-fitting
 #  (orchestration.py header v12 note #4: "moved R1 from 69% to 35%, into 30-50% band") — Tier-3 debt.]
 VOLLEY_LETHALITY_SCALE = 3  # [JUSTIFIED: == the value the prior per-target formula produced at the gauge baseline (disc 5 / cmd 4 / dr 1), so the armour inversion is removed without re-tuning ranged lethality; the underlying scale is admitted band-fitting (ED-MB-0041 Tier-3 debt)]
-BATTLEFIELD_SIZE = 50  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
+BATTLEFIELD_SIZE = 51  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
+# [ED-MB-0055, Jordan directive 2026-07-29] 50 -> 51. An ODD field has a true centre column and a
+# true centre row, so a mirror matchup is exactly symmetric instead of half-cell biased, and the
+# deployment budget divides cleanly: 5 free rows behind B + 13 (B) + 15 approach + 13 (A) + 5
+# behind A = 51. The 5-row margins are the tactical pull-back room a formation needs to have
+# anywhere to go but forward; the 15-row approach is what makes an approach phase visible at all
+# (at the shipped spawn rows the true FRONT-FACE gap was 5, so bodies were in contact within a
+# couple of ticks). ⚠ This moves every golden — every absolute position shifts and the
+# edge-cornering clamp moves with the boundary.
 UNIT_GRID_SIZE = 30  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — "engine rescaled; config.py is leading canon" for battlefield geometry]
 BUFFER_CELLS = 10
 SIDE_A_START_ROW = 34  # step-2 rescale to fit 10k (50-grid)  # [canonical: designs/provincial/mass_battle_v30.md §A.3b — SIDE_A_START_ROW=34/SIDE_B_START_ROW=15 named explicitly in the rescale note]

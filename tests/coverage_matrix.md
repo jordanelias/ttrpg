@@ -2,6 +2,35 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0055/0056/0057: 51x51 field, cell co-location measured, dead-primitive census
+
+**Field 50 -> 51 (Jordan directive).** Odd, so a mirror matchup has a true centre column instead of
+a half-cell bias, and the row budget divides exactly: 5 behind B + 13 (B) + 15 approach + 13 (A) +
+5 behind A = 51. **All five goldens BYTE-EXACT** — the battery never approaches the boundary, so the
+edge-cornering clamp never fires and the change is inert on every scored row. Two tests hardcoded
+the old size (centring against 25 = 50/2, off-board bound 49 = 50−1) and now derive both from
+`BATTLEFIELD_SIZE`; the hardcodes were a second owner for a fact `config.py` already holds.
+
+**Measured correction to the spawn geometry:** a formation extends DOWNWARD in row index from
+`starting_position` for BOTH sides, so the shipped rows (A=34, B=15) look 19 apart but B's own depth
+eats 14 — the true **front-face gap was 5**, which is why bodies were in contact within a couple of
+ticks and no approach phase was ever visible.
+
+**Cell co-location (ED-MB-0056), 140 snapshots / 79,226 placements:** 9,970 same-subunit · **3,705
+different-subunit** · 39 opposing-side · **17.31% overlap rate**. Root cause of the formation
+shearing in the renders, and it makes the contact surface ill-defined — if cells may overlap, the
+boundary between them is not a boundary.
+
+**Dead-primitive census (ED-MB-0057):** new `tools/dead_primitive_census.py` works BELOW module
+granularity, where the existing instruments cannot see. **118 dead primitives repo-wide** (73
+functions + 45 constants of 2,164). The tool's first draft produced **96 false positives** (it
+subtracted the definition file, killing every `self._foo()` call) and was repaired before any number
+was quoted. MB relevancy analysed in
+`audit/2026-07-29-scenario-visualization/00_findings.md` §5.1 — `resolve_internal_collisions`
+(highest: built for exactly the co-location defect, never invoked since 2026-05-29) and
+`_reach_throttle` (high: would make per-type reach matter in the approach) are the two that matter,
+and both are spatial-integrity mechanics switched off for the same stated reason.
+
 ## 2026-07-29 — ED-MB-0054 plan-v2 B1c: rekey_cells — SIX stale maps per drift, not the three the audit named
 
 `check_drift` re-keyed `cell_troops` (+ node position state) and nothing else. **Measured over the
@@ -336,39 +365,11 @@ work, independent of the flip):
 `between_turn_recovery` (unit + atom), `reset_morale_between_battles` (unit + atom), the rout write
 `u.morale = 0.0`, `Unit.erode_morale`, and `core/state.py`'s `atom.morale = atom.eff_morale`.
 
-## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): PC_CELL_MORALE flipped ON; per-cell breaks subsume the body-level one
+## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): PC_CELL_MORALE flipped ON (archived — condensed)
 
-Measured against a **same-session flag-OFF control** at the gauge's own n=60, in the resolving (multi)
-mode, on both scoreboards:
-
-| | win-share bands | casualty/duration realism |
-|---|---|---|
-| OFF | 7/20 | 2/20 |
-| **ON** | **8/20** | **7/20** |
-
-**The casualty column is the evidence, and it is a mechanism producing a shape rather than a fitted
-number.** Loser losses fall out of the 31–40% range into 26–30%: H6's loser goes 79.2% → 48.9%, C7's
-39.9% → 32.1%. That is du Picq's claim — a body comes apart before it is destroyed — falling out of
-cells that stop being a formation earlier than they stop existing. Nothing was tuned to hit a band.
-
-**Costs, stated not buried.** `single` mode drops 7/20 → 5/20, but both flipped rows (H2 51.4→46.2,
-H9 47.5→52.8) are sub-1σ moves across a band edge at n=60 (SE ≈ 6.5pp) in the mode the gauge documents
-as non-resolving — not evidence. C4 goes 91.5 → 96.7 against a 95 ceiling (≈0.5σ). Reverse-pair
-symmetry improves 3.8σ → 3.4σ; **H4/H11 stays ASYMMETRIC and stays open.**
-
-**Goldens re-recorded, not pinned off.** `unit` and `cell` both move; `_PINNED_OFF` gains
-`PC_CELL_MORALE: '1'`. Pinning it off would have kept the digests stable while quietly ending their
-coverage of the shipped engine — this flag is not a path selector like `FIELD_MOVEMENT`, it changes the
-state model on the path `cell` mode exercises. Same treatment as `PC_OCTAGON_DMG`.
-
-**Unplanned finding: `PC_STOCHASTIC_ROUT` is now inert in the shipped configuration.** With cells
-carrying their own break-points, the loser reaches **35.6%** casualties with body-level stochastic rout
-OFF and **36.1%** with it ON — no separation. The cells break first (same 15–30% band, discipline-
-skewed) and `CELL_BREAK_ROUT_FRAC` ends the body before the subunit-level draw is consulted. Recorded
-and pinned by `test_per_cell_break_subsumes_the_body_level_one` rather than acted on: the flag is still
-load-bearing on the unseeded fallback path, so it is a retirement **candidate**, not dead code.
-`test_loser_breaks_near_historical_band` now pins `PC_CELL_MORALE=OFF` — it measures the body-level
-mechanism, and inheriting the live default made its control arm already-broken and the test a no-op.
+The same-day flip, retracted hours later — its ON/OFF arms were not comparable (scalar morale
+writes the cell aggregate shadows). Do not cite its numbers. **Full detail:
+`tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29, ED-MB-0057).
 
 ## 2026-07-25 — ED-MB-0041 phase 2b: local break was UNREACHABLE; the missing symmetry (archived — condensed)
 
