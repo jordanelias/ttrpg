@@ -968,6 +968,85 @@ class Subunit:
         self._node_pos = dict(pos)
         self._node_prev_pos = dict(pos)
 
+    def rekey_cells(self, new_ids):
+        """[ED-MB-0054 / plan-v2 B1c] Re-key the GRID-path per-cell containers after a shape change.
+
+        The grid-path analogue of `_rekey_node_state`, and deliberately built to mirror its already-
+        ratified policy rather than to invent a new one: *the sub-unit re-organizes in place, it does
+        not teleport back to spawn, and a formation reorganizing does not reset which way it is
+        looking.* Before this, `check_drift` re-keyed `cell_troops` and (on the node path)
+        `_node_pos` — and nothing else.
+
+        MEASURED, not assumed (bat.py `cell` battery, 10 drift events): SIX maps were non-empty at
+        drift and left holding dead ids in all ten — `cell_offsets`, `cell_offsets_c`,
+        `halted_cells`, `cell_last_speed`, `cell_facing_vec`, `_cell_target`. That is three more
+        than the audit named, and the two it did not name are the worse pair:
+
+          * `cell_offsets` / `cell_offsets_c` are ACCUMULATED DISPLACEMENT from the spawn lattice.
+            A missing entry does not degrade gracefully — `.get(pid, 0)` puts the cell back at its
+            SPAWN row. So a body that drifts mid-advance snaps backwards, which is strictly worse
+            than the facing loss the audit did name;
+          * `cell_facing_vec` falls through to `(advance_dir, 0)`, silently discarding a committed
+            facing — the audit's finding, confirmed here.
+
+        PER-MAP POLICY, each derivable rather than a judgement call:
+          * displacement (`cell_offsets`, `cell_offsets_c`) — every new id inherits the body's MEAN
+            accumulated offset. That is what "re-forms around the current live anchor" means when
+            the anchor is expressed as an offset per cell; the body's centroid does not move.
+          * `cell_facing_vec` — every new id inherits the body's mean committed facing, normalized.
+            Explicitly NOT the `advance_dir` default: preserving facing is the node path's stated
+            rule and there is no reason for the grid path to differ.
+          * `_cell_target` (the close-ranks fill prescription) — redistributed over the new ids
+            exactly as `cell_troops` is, because it IS a prescribed density and the prescription
+            follows the shape.
+          * transient per-tick state (`halted_cells`, `merged_cells`, `cell_last_speed`,
+            `_speed_accum`) — CLEARED. A body that has just re-formed is not still holding a halt,
+            a merge, or a velocity accumulator belonging to a formation it no longer has. Clearing
+            is the conservative choice and the only one that cannot carry a dead id forward.
+
+        ⚠ DELIBERATELY NOT TOUCHED: `cell_morale`, `cell_start_troops`, `cell_breakpoint`. Drift has
+        no old→new key bijection (arbitrary shape → Line, different cell count), and per plan-v2 B1c
+        at least two of these are §6-class RULINGS, not derivations: `cell_morale` (mean?
+        troop-weighted? carrying the low-morale corner is the feature's whole point) and
+        `cell_breakpoint` (a DRAWN value — redraw and shift the `_cell_random` stream, or inherit
+        from which dead cell?). They are empty at the shipped `PC_CELL_MORALE=0`, so leaving them is
+        inert today; deciding them here would be exactly the kind of quiet design call this lane
+        keeps having to retract.
+        """
+        new_ids = list(new_ids)
+        if not new_ids:
+            self.cell_offsets = {}; self.cell_offsets_c = {}; self.cell_facing_vec = {}
+            self.cell_last_speed = {}; self._speed_accum = {}; self._cell_target = {}
+            self.halted_cells = set(); self.merged_cells = set()
+            return
+
+        def _mean(d, default=0.0):
+            vals = [v for v in d.values()]
+            return (sum(vals) / len(vals)) if vals else default
+
+        mean_off_r = _mean(self.cell_offsets)
+        mean_off_c = _mean(self.cell_offsets_c)
+        self.cell_offsets = {pid: mean_off_r for pid in new_ids}
+        self.cell_offsets_c = {pid: mean_off_c for pid in new_ids}
+
+        if self.cell_facing_vec:
+            fr = sum(v[0] for v in self.cell_facing_vec.values()) / len(self.cell_facing_vec)
+            fc = sum(v[1] for v in self.cell_facing_vec.values()) / len(self.cell_facing_vec)
+            mag = (fr * fr + fc * fc) ** 0.5
+            # [canonical: epsilon: float magnitude guard] — same guard the facing code already uses
+            facing = (fr / mag, fc / mag) if mag > 1e-9 else (float(self.advance_dir), 0.0)
+            self.cell_facing_vec = {pid: facing for pid in new_ids}
+
+        if self._cell_target:
+            tot = sum(self._cell_target.values())
+            per = tot / len(new_ids)
+            self._cell_target = {pid: per for pid in new_ids}
+
+        self.cell_last_speed = {}
+        self._speed_accum = {}
+        self.halted_cells = set()
+        self.merged_cells = set()
+
     def _rekey_node_state(self, new_ids):
         """Mid-battle re-key of node state to a new pattern id set (movement audit finding 1.5,
         ED-1096) -- called by check_drift right after a shape change, mirroring the existing
@@ -2407,6 +2486,11 @@ class Unit:
                 # battlefield corner or collapse onto the anchor. Only reachable/relevant when node
                 # state exists at all (PC_NODE_COHESION); the legacy grid path has no _node_pos and
                 # is untouched (byte-exact-off preserved by construction, not by a toggle check).
+                # [ED-MB-0054 / B1c] The grid-path containers, which ED-1032's re-key never
+                # covered and ED-1096's node-path fix did not reach. Measured: six maps left
+                # holding dead ids on every drift event. Runs on BOTH paths — the node path's
+                # position state is separately handled below, but facing/halt/target live on both.
+                a.rekey_cells(new_ids)
                 if PC_NODE_COHESION and hasattr(a, '_node_pos'):
                     a._rekey_node_state(new_ids)
 

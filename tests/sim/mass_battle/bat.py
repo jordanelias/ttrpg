@@ -412,7 +412,22 @@ EXPECTED = {
     # [2026-07-29, ED-MB-0051 / A2 — RE-RECORDED; see the full delta at the 'cell' entry above.]
     # This mode: 20,412 degree calls, 14 flips (0.069%), all Partial -> Success at 2.22e-16 ..
     # 4.44e-16 from a continuous `ob`. Two consecutive runs agreed.
-    'cell_field': '13bd02dd58d2cf1913df20681d8e8d6e242eced1e16312c41a206a9d4a6a592d',
+    # [2026-07-29, ED-MB-0054 / B1c rekey_cells — RE-RECORDED. Delta decomposed before recording.]
+    # check_drift re-keyed cell_troops (+ node position state) and NOTHING else. Measured over the
+    # `cell` battery: 10 drift events, and SIX maps left holding dead ids in all ten —
+    # cell_offsets, cell_offsets_c, halted_cells, cell_last_speed, cell_facing_vec, _cell_target.
+    # Three more than the audit named, and the pair it missed is the worse one: cell_offsets is
+    # ACCUMULATED DISPLACEMENT, so a missing entry does not degrade gracefully — `.get(pid, 0)`
+    # snaps the drifted body back to its SPAWN row mid-advance.
+    # ARM DECOMPOSITION (each run alone, cell_field):
+    #   facing correction ONLY        -> 2a9214eb… (this value)  <- THE SOLE MOVER
+    #   everything EXCEPT facing      -> 13bd02dd… (unchanged)
+    # So displacement/target/transient-clear corrections are real but outcome-inert on this
+    # battery; the facing preservation is what moves an outcome.
+    # SCOPE OF MOVEMENT: only cell_field. unit / cell / unit_field / cell_cm all byte-exact —
+    # on the grid path the corrections fire (10/10 events, mean offset 8.96 vs the 0 fall-through,
+    # facing (-0.998,0.067) vs the (-1,0) default) but never reach a trial_vector field.
+    'cell_field': '2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT

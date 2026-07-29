@@ -2,6 +2,26 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0054 plan-v2 B1c: rekey_cells — SIX stale maps per drift, not the three the audit named
+
+`check_drift` re-keyed `cell_troops` (+ node position state) and nothing else. **Measured over the
+`cell` battery: 10 drift events, six maps left holding dead ids in ALL TEN** — `cell_offsets`,
+`cell_offsets_c`, `halted_cells`, `cell_last_speed`, `cell_facing_vec`, `_cell_target`. Three more
+than the audit listed, and the missed pair is the worse one: `cell_offsets` is **accumulated
+displacement**, so `.get(pid, 0)` snaps a drifted body back to its **spawn row** mid-advance.
+
+`Subunit.rekey_cells` is the grid-path analogue of `_rekey_node_state`, mirroring that method's
+already-ratified policy rather than inventing one. Displacement → mean offset (centroid preserved);
+facing → mean committed facing, **not** the `advance_dir` default; `_cell_target` → redistributed
+like `cell_troops`; transient state (halt/merge/speed) → cleared. `cell_morale`,
+`cell_start_troops`, `cell_breakpoint` **deliberately untouched** — §6-class rulings, not
+derivations, and empty at the shipped flag setting.
+
+**Golden delta, decomposed BEFORE recording: only `cell_field` moved** (`13bd02dd…` → `2a9214eb…`).
+Arms: facing-only → the new digest; everything-except-facing → the OLD digest. **Facing preservation
+is the sole mover.** On the grid path the corrections fire 10/10 (mean offset 8.96 vs the 0
+fall-through, facing (−0.998, 0.067) vs the (−1, 0) default) but never reach a `trial_vector` field.
+
 ## 2026-07-29 — ED-MB-0053 plan-v2 §4a: the fifth digest mode, and the mode-key extension that had to precede it
 
 **The verification net had a hole over exactly the state B1a is about to refactor.** All four
@@ -382,42 +402,11 @@ aggregate that crossed a DAMAGE_BY_DEGREE boundary via _morale_sigma. Both kept;
 of the retracted flip. **Full detail: `tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29
 under the register size cap, ED-MB-0053 — nothing dropped, only relocated).
 
-## 2026-07-25 — ED-MB-0041 phase 1: the cell is the primitive for MORALE
+## 2026-07-25 — ED-MB-0041 phase 1: the cell is the primitive for MORALE (archived — condensed)
 
-Jordan's directive ("the cell needs to be the primitive for morale, discipline, quality, stamina,
-route, health, armour, facing, damage, troops count") and its earlier statement of the mechanism:
-*"cells get modulated by subunit holistic scoring, but the cells themselves are what aggregate into
-those scorings in the first place, so a cell should be able to have worse morale than another cell in
-same subunit."* **That last sentence was literally unrepresentable** — the cell was the primitive for
-geometry only (position, facing, contact, casualty placement); every piece of STATE was a subunit
-scalar, so a rear cell being cut down and a front cell holding shared one number.
-
-**Two-way loop, not a broadcast:**
-- **AGGREGATE UP** — `eff_morale` is now the troop-**weighted** mean of live cells, derived rather than
-  stored. Weighted so a nearly-empty shattered cell cannot drag the body as hard as a full one; a flat
-  mean would let a cell holding three men count as much as one holding a hundred, and a body would read
-  as broken while nearly all its strength was still steady.
-- **MODULATE DOWN** — `cohere_cells` pulls each cell toward the body's holistic value, **signed** (a
-  steady body steadies a shaky corner; a disintegrating one drags a firm corner down) and
-  discipline-gated, because holding when your neighbours are hit is what discipline names.
-
-**Erosion rides on `_apply_with_spill`**, the single owner of casualty application, so *every* path that
-kills men — melee, volley, pursuit, freed-attacker, cellwise facing-weighted — shakes the cells it
-killed them in, with no caller needing to remember. Scaled by the FRACTION of the cell destroyed, not
-the absolute count: losing 20 of 100 beside you is the same shock at any body size, and an absolute
-scale would make dense cells look braver purely for being dense.
-
-Demonstrated: concentrate damage on one cell of three and it holds **4.51 morale while its siblings
-hold 5.94** — Jordan's test case, earned in play rather than injected.
-
-`tests/valoria/test_cell_morale.py` (11 tests) pins the directive itself, both directions of the loop,
-the troop-weighting, the discipline gate, the fraction-not-count erosion shape, and one invariant worth
-calling out: **cohesion CONSERVES the aggregate** (`new_m = m + r(agg−m)` ⇒ weighted mean is unchanged).
-If that ever fails, cohesion has become a free morale source and a body could steady itself forever.
-
-Gated `PC_CELL_MORALE`, **default OFF** — verified inert: byte-exact goldens, stochastic-rout and
-rout-contagion suites all green unchanged. Not yet measured on the gauge; that is the next step, and the
-flag stays off until it is.
+Cells carry morale; the subunit's morale is the troop-weighted mean of its live cells (derived, not
+stored); the aggregate pulls its own cells back at a discipline-gated rate. **Full detail:
+`tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29, ED-MB-0054).
 
 ## 2026-07-25 — ED-MB-0041: PC_STOCHASTIC_ROUT default flipped ON; contagion magnitude deliberately held
 

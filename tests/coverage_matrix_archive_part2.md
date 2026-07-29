@@ -462,3 +462,43 @@ is phase 2 (local break), and it is where the payoff should appear.
 measurement and a corrected one. Its first job was catching the silent no-op (a swing far larger than
 predicted); its second is refusing to over-read a neutral result now that the direction is mildly
 favourable. A prediction that only fires against bad news is not a control.
+
+
+<!-- Relocated verbatim 2026-07-29 (ED-MB-0054). -->
+
+## 2026-07-25 — ED-MB-0041 phase 1: the cell is the primitive for MORALE
+
+Jordan's directive ("the cell needs to be the primitive for morale, discipline, quality, stamina,
+route, health, armour, facing, damage, troops count") and its earlier statement of the mechanism:
+*"cells get modulated by subunit holistic scoring, but the cells themselves are what aggregate into
+those scorings in the first place, so a cell should be able to have worse morale than another cell in
+same subunit."* **That last sentence was literally unrepresentable** — the cell was the primitive for
+geometry only (position, facing, contact, casualty placement); every piece of STATE was a subunit
+scalar, so a rear cell being cut down and a front cell holding shared one number.
+
+**Two-way loop, not a broadcast:**
+- **AGGREGATE UP** — `eff_morale` is now the troop-**weighted** mean of live cells, derived rather than
+  stored. Weighted so a nearly-empty shattered cell cannot drag the body as hard as a full one; a flat
+  mean would let a cell holding three men count as much as one holding a hundred, and a body would read
+  as broken while nearly all its strength was still steady.
+- **MODULATE DOWN** — `cohere_cells` pulls each cell toward the body's holistic value, **signed** (a
+  steady body steadies a shaky corner; a disintegrating one drags a firm corner down) and
+  discipline-gated, because holding when your neighbours are hit is what discipline names.
+
+**Erosion rides on `_apply_with_spill`**, the single owner of casualty application, so *every* path that
+kills men — melee, volley, pursuit, freed-attacker, cellwise facing-weighted — shakes the cells it
+killed them in, with no caller needing to remember. Scaled by the FRACTION of the cell destroyed, not
+the absolute count: losing 20 of 100 beside you is the same shock at any body size, and an absolute
+scale would make dense cells look braver purely for being dense.
+
+Demonstrated: concentrate damage on one cell of three and it holds **4.51 morale while its siblings
+hold 5.94** — Jordan's test case, earned in play rather than injected.
+
+`tests/valoria/test_cell_morale.py` (11 tests) pins the directive itself, both directions of the loop,
+the troop-weighting, the discipline gate, the fraction-not-count erosion shape, and one invariant worth
+calling out: **cohesion CONSERVES the aggregate** (`new_m = m + r(agg−m)` ⇒ weighted mean is unchanged).
+If that ever fails, cohesion has become a free morale source and a body could steady itself forever.
+
+Gated `PC_CELL_MORALE`, **default OFF** — verified inert: byte-exact goldens, stochastic-rout and
+rout-contagion suites all green unchanged. Not yet measured on the gauge; that is the next step, and the
+flag stays off until it is.
