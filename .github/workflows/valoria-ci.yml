@@ -34,6 +34,7 @@ jobs:
         run: |
           python -m py_compile \
             tools/ci_common.py \
+            tools/ci_field_golden_check.py \
             tools/ci_register_size_check.py \
             tools/ci_co_file_checker.py \
             tools/ci_editorial_checker.py \
@@ -679,6 +680,30 @@ jobs:
       # sim/tests/ to engine/tests/ in the sim/ hollow-out (ED-IN-0071 P4 cont.). ~20s.
       - run: python -m pytest engine/tests -q
 
+  field-goldens:
+    name: Field Goldens Byte-Exact (shipped configuration)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      # [ED-MB-0045 A1b, 2026-07-29] The shipped configuration's regression oracle.
+      # test_mass_battle_byte_exact.py (in unit-tests above) covers only the two
+      # FIELD_MOVEMENT=0 grid modes; before this job existed the two field goldens
+      # sat RED for 5 days undetected (#235/#236 re-recorded grid only — bisected
+      # and re-recorded in A1a, PR #260). Own job, not inside the unit-tests
+      # budget: the two field batteries take ~4-8 min combined. The FULL
+      # digest-relevant toggle vector is pinned inside the tool (single owner:
+      # tools/ci_field_golden_check.py FIELD_PINS; drift-guarded by
+      # tests/valoria/test_field_golden_pins.py) — minimal pinning is how ED-1089
+      # went wrong.
+      - run: python3 tools/ci_field_golden_check.py
+
   audit-registry-check:
     name: Audit Registry Freshness (report-only)
     runs-on: ubuntu-latest
@@ -814,6 +839,7 @@ jobs:
       - vetting-check
       - unit-tests
       - sim-regression
+      - field-goldens
       - integrity
       - compliance-check
       - ed-citations

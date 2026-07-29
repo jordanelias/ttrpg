@@ -15,7 +15,21 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
-- **A1a EXECUTED (2026-07-29, MB session — this PR).** Both field goldens bisected and
+- **A1b EXECUTED (2026-07-29, MB session — this PR).** The shipped configuration's regression
+  oracle now exists: CI job `field-goldens` runs `bat.py --check` in both `FIELD_MOVEMENT=1`
+  modes via `tools/ci_field_golden_check.py` — the **single owner** of the full digest-relevant
+  pin vector (52 pins from the A1b inventory: `_PINNED_OFF` carry-over + Groups A/B/C; env-name
+  keyed, note `SIGMA_HEAD` not `SIGMA_HEAD_ENABLED`). Drift guard:
+  `tests/valoria/test_field_golden_pins.py` (pins ≡ source `environ.get` defaults,
+  mutation-verified; a default flip without a deliberate pin+golden update fails it loudly).
+  `PYTHONHASHSEED='0'` added to `_PINNED_OFF` too (A1a critic residual; digests shown
+  hash-order-independent empirically, pinned anyway). Registered in `ci_checks_registry.yaml`
+  (blocking cross-check c). **⚠ Jordan CODEOWNERS review required** (`.github/workflows/` edit).
+  Mutation artifact + the `PC_WHEEL=0` probe result (the A1a critic's open decomposition
+  question) in the PR body. **Next: Wave-3 parallel batch** (A4-sweep, E8, E4+I4 once A1a's
+  merge gate is open — it is, #260 merged; A3/A5a/A6a once this job is green on main; A2 last,
+  alone in the golden slot).
+- **A1a EXECUTED (2026-07-29, merged as #260).** Both field goldens bisected and
   re-recorded after 5 days red. Per-mechanism delta (base `4b80ad5` = #232's all-four recording;
   full matrix in the PR): **exactly two movers** — (1) PR #235 `fbc93b0`'s change set moved
   `unit_field` `d44f211f…→27aa9ee0…` and `cell_field` `a1a97940…→3a5807fb…` at fixed
