@@ -100,17 +100,29 @@ def zoom_out(scene_outcomes: dict, world=None) -> ZoomOutResult:
     """Translate scene outcomes back into BG layer per §4.2.
 
     scene_outcomes accepts:
-      - 'accord_changes': list of dicts (queued as Domain Echoes per §5.5)
+      - 'accord_applied': list of dicts (WAVE-2 rename, OI-03 fix 4, ED-IN-0091 plan §3 Wave 2,
+        2026-07-29 — was 'accord_changes'/documented as "queued as Domain Echoes per §5.5"; that
+        was a contract collision — `engine.cross_scale.echo_transport._apply_accord_echo` writes
+        the settlement Order change IMMEDIATELY at scene-resolution time, not at Accounting Step
+        4c, because genuine OF-7 queue-parity would require registering a new Key type this
+        lane's scope doesn't own (see that function's own timing note). Renamed so the KEY
+        stops asserting a queued-but-unapplied write that already happened; recorded here as
+        already-applied telemetry, never re-applied or re-queued.
       - 'pc_incapacitated': bool (Stage 1 applies immediately per ED-159)
       - 'contested_figure_wounded': bool (ED-167: +0.15 Ob to commander, ED-PC-0006)
-      - 'other_echoes': list of dicts (faction stat changes per §5)
+      - 'other_echoes': list of dicts (faction stat changes per §5, genuinely QUEUED — deferred
+        via the OF-7 Key substrate, `echo_transport.emit_scene_echo`'s `sched.emit(key,
+        apply=...)`, landing at `accounting_boundary()`)
     """
     notes = []
     domain_echoes = []
 
-    # §5.5 Accord changes queue to Accounting
-    for ac in scene_outcomes.get('accord_changes', []):
-        domain_echoes.append({'type': 'accord', 'detail': ac, 'fires_at': 'accounting_step_4c'})
+    # §5.5 Accord changes: ALREADY APPLIED (immediately, at scene-resolution time — see
+    # 'accord_applied' docstring note above). Recorded here as already-applied telemetry, not
+    # queued to Accounting — 'fires_at' reflects that honestly instead of claiming a future
+    # boundary this write does not wait for.
+    for ac in scene_outcomes.get('accord_applied', []):
+        domain_echoes.append({'type': 'accord', 'detail': ac, 'fires_at': 'already_applied'})
 
     # §5 other faction-stat changes also queue
     for oe in scene_outcomes.get('other_echoes', []):

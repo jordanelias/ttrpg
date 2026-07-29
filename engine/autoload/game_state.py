@@ -111,6 +111,11 @@ class Faction:
     # NEW Phase 5/9 faction-unique action flags
     excommunicated: bool = False
     council_used_this_arc: bool = False
+    # OI-04 Wave-2 canon gate (parliamentary_transfer_v30.md §1.1, ":27" — "Frequency: 1 per arc
+    # per faction"): mirrors council_used_this_arc's own per-arc-flag shape exactly (same field,
+    # same reset hook) — one faction may attempt Parliamentary Transfer at most once per arc,
+    # regardless of outcome.
+    parl_transfer_used_this_arc: bool = False
 
     def adjust(self, stat: str, granular_delta: float,
                floor: float = 0.5, ceiling: float = 7.0):
@@ -126,6 +131,7 @@ class Faction:
     def reset_arc(self):
         """Called by season_manager on arc boundary (new_arc=True)."""
         self.council_used_this_arc = False
+        self.parl_transfer_used_this_arc = False  # OI-04 Wave-2 canon gate (§1.1 Frequency)
 
 
 @dataclass
@@ -222,7 +228,7 @@ def create_world(seed: int | None = None) -> World:
         )
         territories[tid] = t
 
-    return World(
+    world = World(
         factions=factions,
         territories=territories,
         # IP (Institutional Pressure) added per audit ED-IN-0074 D2 — it was absent from the
@@ -234,15 +240,28 @@ def create_world(seed: int | None = None) -> World:
         clocks={'CI': 30.0, 'MS': 60.0, 'IP': 20.0, 'PI': 0.0, 'Strain': 0.0, 'Turmoil': 0.0},
         rng=rng,
     )
+    # OI-07 (ED-IN-0091 plan §3 Wave 2 item 4) — populate world.settlements at world-gen from
+    # the canonical geography source (systems/settlements/valoria_geography_v30.yaml, the
+    # PP-726-rebuilt geography YAML — see registry.populate_from_geography's own docstring for
+    # the full field-mapping citation). Late-import: game_state.py is a root primitive (module
+    # docstring "Dependencies: none") and must not statically depend on a downstream sim module
+    # — same discipline npe.py already applies in reverse (its late `from
+    # engine.autoload.game_state import canonical_accord`, flagged for the OI-52 import-cycle
+    # item). Deterministic — no RNG draw, so this cannot move any RNG-derived campaign golden.
+    from systems.settlements.sim.registry import populate_from_geography
+    populate_from_geography(world)
+    return world
 
 
 def serialize_world(world: World) -> dict:
     """Snapshot world state for save/restore.
 
     Includes the 14 registries from schema migrations #1 (94dac72e) and
-    #2 (d2941cde). Each owning dataclass exposes .to_dict() — see modules:
+    #2 (d2941cde), plus schema migration #3's `settlements` registry (OI-07,
+    ED-IN-0091 plan §3 Wave 2 item 4 — previously declared on World but never
+    serialized). Each owning dataclass exposes .to_dict() — see modules:
     coherence, insurgency_pipeline, npe, treaty, conviction, beliefs,
-    knots, infrastructure, threadcut.
+    knots, infrastructure, threadcut, registry (settlements).
     """
     return {
         'season': world.season, 'arc': world.arc, 'winner': world.winner,
@@ -253,7 +272,8 @@ def serialize_world(world: World) -> dict:
                  'territories': list(f.territories), 'parliamentary': f.parliamentary,
                  'standing': f.standing,
                  'excommunicated': f.excommunicated,
-                 'council_used_this_arc': f.council_used_this_arc}
+                 'council_used_this_arc': f.council_used_this_arc,
+                 'parl_transfer_used_this_arc': f.parl_transfer_used_this_arc}
             for fn, f in world.factions.items()
         },
         'territories': {
@@ -297,6 +317,9 @@ def serialize_world(world: World) -> dict:
             'remaining': [list(c) for c in world.comovement_deck.get('remaining', [])],
             'discard': [list(c) for c in world.comovement_deck.get('discard', [])],
         },
+        # ─── Schema migration #3 registry (OI-07) ─────────────────────────
+        'settlements': {sid: (s.to_dict() if hasattr(s, 'to_dict') else s)
+                        for sid, s in world.settlements.items()},
     }
 
 
@@ -304,9 +327,10 @@ def restore_world(snapshot: dict) -> World:
     """Restore world state from snapshot.
 
     Reconstructs all 14 World registries via late-imports on the owning
-    modules' .from_dict() classmethods. Snapshots produced by an older
-    schema version (pre-migration #1 or pre-#2) are tolerated: missing
-    registry keys default to empty dicts.
+    modules' .from_dict() classmethods, plus migration #3's `settlements`
+    registry (OI-07). Snapshots produced by an older schema version
+    (pre-migration #1, #2, or #3) are tolerated: missing registry keys
+    default to empty dicts.
     """
     w = World()
     w.season = snapshot['season']
@@ -321,6 +345,7 @@ def restore_world(snapshot: dict) -> World:
         f.territories = list(fd['territories'])  # [hash-seed fix 2026-05-20] was set(...)
         f.excommunicated = fd.get('excommunicated', False)
         f.council_used_this_arc = fd.get('council_used_this_arc', False)
+        f.parl_transfer_used_this_arc = fd.get('parl_transfer_used_this_arc', False)
         w.factions[fn] = f
     for tid, td in snapshot['territories'].items():
         t = Territory(tid=tid, owner=td['owner'], accord=td['accord'], pt=td['pt'],
@@ -380,5 +405,10 @@ def restore_world(snapshot: dict) -> World:
             'remaining': [tuple(c) for c in snapshot['comovement_deck'].get('remaining', [])],
             'discard': [tuple(c) for c in snapshot['comovement_deck'].get('discard', [])],
         }
+
+    # ─── Schema migration #3 registry (OI-07) ─────────────────────────────
+    if 'settlements' in snapshot:
+        from systems.settlements.sim.registry import Settlement
+        w.settlements = {k: Settlement.from_dict(v) for k, v in snapshot['settlements'].items()}
 
     return w

@@ -63,9 +63,52 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   file into the `stub_wired` predicate set — see the YAML's own updated comment and
   `04_execution_ledger.md`'s corresponding row). Do not cite "24" or "29" from this paragraph as
   current without re-running the measurement.
-  Next action: **Wave 2** (orphan closure
-  seams — accord echo, parliamentary transfer, `generate_npc` golden re-record, world chains,
-  `handoff_rules`, articulation subscriber).
+  **W1 merged as PR #265; Wave 2 landed (ED-IN-0095, this PR)**: OI-03 accord-echo leg (spec
+  corrected to `scale_transitions_v30.md` §5.5 "Accord Domain Echo" — the plan's "LPS-2e" citation
+  was stale), OI-04 `parliamentary_transfer.propose_transfer` wired via `parliamentary_bridge.py`
+  against the existing `crown_constitutional_restoration` CB path (ED-FA-0036), OI-06
+  `handoff_rules` vertical-up dispatcher wired into `scene_dispatch.py`, OI-07 settlements half
+  wired (`registry.py` gained `populate_from_geography`, world-gen + serialize/restore round-trip,
+  ED-SE-0049), OI-08 articulation minimal bus subscriber (`subscribe_all`, ≥9 §3.1 trigger types,
+  stub-flagged renders), OI-12 census (7/14 already stub-wired incl. a correction that
+  `rs_track.apply_rs_delta` IS called from `echo_transport.py:275` despite its own body being
+  a stub; 7/14 confirmed verified-orphan with no specified call site: `co_movement.py`,
+  `collective.py`, `opposing.py`, `settlement.py`, `temperaments.py`, `parliamentary_stay.py`,
+  `registry.py` — no code touched, W5 census input). **OI-05 (`generate_npc`) and the
+  `world.knots` half of OI-07 did NOT get wired** (ED-WR-0009): re-verified against
+  `investigation_systems_v30.md` SYSTEM 1 and `knots_v30.md` §3.1, neither specifies a
+  world-gen/season-tick trigger to cite, so the disposition is a PERMANENT honest deferral via
+  `stubwire`, not a wire-up — `test_f7_smoke_oracle.py`'s `npcs_generated == 0` pin correctly did
+  NOT move, so **no golden was re-recorded** (the plan's "golden re-record, named loudly"
+  expectation for OI-05 is corrected here, not executed as written). New falsifiers:
+  `engine/tests/{test_accord_echo,test_parliamentary_transfer_bridge,test_world_population}.py`,
+  `tests/valoria/{test_articulation_subscriber,test_handoff_dispatch_validity}.py` (all green,
+  67 passed/4 xfailed on the targeted run); `test_pipeline_reach.py` XFAIL_MANIFEST burned down 4
+  rows to strict, world-npcs/world-knots reclassified `honest-deferral`. EDs allocated from the
+  W0a-reserved blocks (id_reservations.yaml left frozen, no bump): ED-IN-0095, ED-FA-0036,
+  ED-WR-0009, ED-SE-0049 — full entries in the respective lane ledgers. **Next = Wave 3** (Keys &
+  contract truth: `scene.combat_resolved`/`_felled` consumers, contract-truth sweep, OI-30
+  descriptor registration, `causes[]`/`targets[]` population + `private_observers` clearing,
+  OI-25 silent-emitter keying). Stopped this wave (unchanged, per the seam-stop list):
+  `systems/combat/**`, `combat_engine_v1/wrapper.py`, `faction_action.py:349`,
+  `references/id_reservations.yaml`, `registers/review_baseline.yaml`.
+- **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07-29,
+  in-session).** ALL resolvers of any type must support (i) fractional dice pools (integer part
+  rolls d10s, remainder contributes its EV — the ED-MB-0032 pattern), (ii) fractional Ob
+  (ED-PC-0005/0006 precedent — never `-1D`, always fractional Ob, `+0.15` Ob per wound), (iii)
+  fractional interpolated degrees of success/failure (continuous interpolation between degree
+  thresholds instead of snapping to discrete bands — kills the §0.1 boundary-crossing defect
+  class; aligns with the d+σ continuous model). Routing: PC half → PC session
+  (`combat_engine_v1` is already σ-continuous — verify there); MB half → MB session
+  (`PC_FRACTIONAL_POOL` exists, gated; ungating is theirs); SC kernel half → gated on §5 fork 6
+  (ED-SC-0004), whose ruling now carries a fractional-capability rider (`05_jordan_docket_v1.md`
+  Fork 6); IN half → single-owner fractional-capable roll primitive in the dice core + census of
+  integer-baking sites in IN-owned resolvers (`round()`/`int()`/`max(1,..)` pool floors,
+  degree-band snapping), each with a declared golden impact, scheduled as its own wave-adjacent
+  PR. Known integer-baked sites at intake: `contest_legacy_stub.py:128-129` (`max(1, pool)`);
+  `_emergency_council_parties` round() faculties (`scene_dispatch.py:104-122`);
+  `combat_bridge.py` history-derivation `round()`. Parent: ED-IN-0091. Next: the IN census PR
+  (dice-core primitive + integer-baking census).
 - **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
   landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
   the banner counts as settled.

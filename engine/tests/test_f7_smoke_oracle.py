@@ -61,10 +61,28 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # echo (ED-SC-0006/0007 #96 + this branch). Still small-n (NOT balance signal) — a guard against silent
 # drift, not a target. The pre-spine byte-exact oracle is retained under ECHO_TRANSPORT=0 in
 # test_echo_transport.py. (deterministic; reproduced stable across repeat runs.)
-GOLDEN_WIN_SHARE = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
-GOLDEN_WINNERS = {'Crown': 3, 'Church': 1, 'Hafenmark': 1, 'Varfell': 3}
-GOLDEN_BATTLES_MEAN = 30.2
-GOLDEN_SCENES_RESOLVED = 383  # was 0 pre-spine — the §10 vote (+ occasional emergency council) resolves each season
+#
+# REPINNED 2026-07-29 (ED-FA-0036 / OI-04, ED-IN-0091 plan §3 Wave 2, item H golden re-record —
+# orchestrator-adjudicated fix batch): `systems.factions.sim.parliamentary_transfer.propose_transfer`
+# gained its first caller this wave (`engine.cross_scale.parliamentary_bridge._run_transfer_motion`,
+# every season, independent of the §10 vote above) — a faction whose territories drop under 6 now
+# attempts a CB-gated Territory Transfer (canon-gated at 1/arc/faction, §1.1), consuming extra
+# `world.rng` draws whenever Crown qualifies. Isolated via a pristine `git archive HEAD` vs. this
+# fixed-tree comparison (git HEAD predates this wave's session entirely, so the comparison covers
+# both landing the motion AND this wave's frequency-gate refinement as ONE OI-04-attributed move,
+# per the adjudicator's control-isolation instruction — not split into two separate re-records).
+# OLD (pre-OI-04, pre-transfer-motion) values, preserved for the before/after record:
+#   GOLDEN_WIN_SHARE  = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
+#   GOLDEN_WINNERS    = {'Crown': 3, 'Church': 1, 'Hafenmark': 1, 'Varfell': 3}
+#   GOLDEN_BATTLES_MEAN    = 30.2
+#   GOLDEN_SCENES_RESOLVED = 383
+GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a
+# key (Church/Hafenmark win 0/8 now, so they are simply absent, not present at 0 — matching how
+# the OLD golden's all-four-present shape happened to reflect all four winning at least once).
+GOLDEN_WINNERS = {'Crown': 5, 'Varfell': 3}
+GOLDEN_BATTLES_MEAN = 35.5
+GOLDEN_SCENES_RESOLVED = 463  # was 383 pre-OI-04 (see REPINNED 2026-07-29 note above) — was 0 pre-spine
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -128,18 +146,30 @@ def test_f7_scenes_live_insurgency_and_npe_still_islands():
 
 
 def test_f7_hafenmark_elimination_lockout():
-    """Hafenmark wins 1/8 on seed-42 (REPINNED 2026-07-08 for the two-session merge).
+    """Hafenmark wins 0/8 on seed-42 (REPINNED 2026-07-29, ED-FA-0036/OI-04 — see the golden
+    block's REPINNED comment above).
 
-    The one-way 0-territory lockout MECHANISM is intact — no comeback path was added (ED-FA-0005
-    remains open; parliamentary_transfer is still never called). Hafenmark's win here is a
-    TRAJECTORY shift, not a comeback: the merged behaviour (the per-season §10 vote from
-    parliamentary_bridge + the FA-lane action-mix/Muster/conquest-fork/Parliamentary fallback +
-    the play-out echo) changed which factions survive to the 50-season horizon on these seeds, so
-    Hafenmark simply avoids elimination in 1 of the 8 and wins on territory. Pinned as the new
-    golden; a move here again means the merged RNG shifted — investigate before regenerating."""
+    CORRECTED CLAIM (the prior docstring's premise went stale, not just its number):
+    `parliamentary_transfer.propose_transfer` is NO LONGER "never called" — OI-04 wired it into
+    `parliamentary_bridge._run_transfer_motion`, attempted every season a qualifying CB exists.
+    But the ONLY auto-populated CB is `crown_constitutional_restoration` (Crown < 6 territories,
+    parliamentary_transfer.py §3) — this is CROWN's OWN restoration path, not a mechanism that
+    targets a 0-territory faction for rescue. ED-FA-0005 (a dedicated comeback path FOR an
+    eliminated faction) is therefore STILL open; the one-way 0-territory lockout MECHANISM
+    itself (0-territory factions never act again) is untouched by this wave. Verified directly
+    (2026-07-29, monkey-patched `propose_transfer` across the seed-42..49 batch): Crown's
+    restoration motion fires 0-10 times per campaign depending on seed, and its [SEED]
+    largest-non-Crown-holder targeting (parliamentary_bridge._derive_transfer) sometimes selects
+    Hafenmark as the target holder (e.g. seed 49: `('Crown', 'T10', 'Hafenmark', 'transferred')`)
+    — Crown reclaiming territory FROM Hafenmark, working against Hafenmark's trajectory rather
+    than for it, on top of the general RNG-stream shift from every attempt (success or failure)
+    consuming `world.rng`. Hafenmark's 0/8 here is therefore still a TRAJECTORY artifact of the
+    (now further-)shifted RNG, not evidence one way or the other about ED-FA-0005. Pinned as the
+    new golden; a move here again means the RNG shifted further — investigate before
+    regenerating."""
     campaigns = _campaigns42()
     hafenmark_wins = sum(1 for r in campaigns if r.winner == 'Hafenmark')
-    assert hafenmark_wins == 1, f"Hafenmark won {hafenmark_wins} != 1 — merged trajectory moved (or an ED-FA-0005 comeback path landed); investigate before regenerating"
+    assert hafenmark_wins == 0, f"Hafenmark won {hafenmark_wins} != 0 — trajectory moved (or an ED-FA-0005 comeback path landed); investigate before regenerating"
 
 
 def test_f7_victory_threshold_is_a_dead_param():

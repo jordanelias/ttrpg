@@ -20,6 +20,19 @@ Dependencies:
 Entry points:
   - generate_npc(faction: str | None, role: str | None, world: GameState) -> NPC
   - simulate_npc_actions(world: GameState) -> list[NPCAction]
+
+[OI-05, ED-IN-0091 plan §3 Wave 2 item 3 — 2026-07-29 disposition, re-verified against this file's
+ own canon head] `simulate_npc_actions` (the §Persistence drift half) is wired into the season
+ loop every season via `systems.overview.sim.accounting.run_accounting` (accounting.py:78-82,
+ wired 2026-05-20 — predates this wave). `generate_npc` itself gets NO automatic call site at
+ world-gen or season-tick: §Two-Tier Generation above is scene-specification-driven only ("Scene
+ specification declares density and composition") — no world-gen initial count and no
+ season-tick generation trigger are specified anywhere in this doc's canon head to cite (NPE-02's
+ "cap at 3 persistent minor NPCs... Propose:" is an unresolved Open Question, not a ratified
+ number). Per CLAUDE.md §5/§7 no-fabrication, the honest disposition is to generate none
+ automatically rather than invent a count or trigger — recorded via a `stubwire.stub_resolve`
+ call in `engine.mc_v18._faction_actions_callback` (greppable, not silent) rather than here,
+ since this module has no season-loop entry point of its own to place it at.
 """
 from __future__ import annotations
 
