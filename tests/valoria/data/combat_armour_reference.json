@@ -1,6 +1,6 @@
 {
  "_": "Reference armour-interaction table (ED-PC-0040). Regenerate ONLY with `python workbench/armour_participation.py --update`, and treat the resulting diff as the required disclosure of what a change moved. Cells are [decided_rate, share_of_decided|null] vs the arming sword, position-swapped, deterministically seeded.",
- "generated_at_sha": "f03357d8f585fd514b6656d2524d698e4a456440",
+ "generated_at_sha": "63b185262e14d92a3fd2de60aacc334f2cbb3b4e",
  "n": 40,
  "reference_weapon": "arming",
  "table": {
@@ -60,12 +60,12 @@
   },
   "bec_de_corbin": {
    "heavy": [
-    0.925,
-    0.972972972972973
+    1.0,
+    0.975
    ],
    "light": [
     1.0,
-    0.95
+    0.975
    ],
    "medium": [
     1.0,
@@ -258,16 +258,16 @@
   },
   "goedendag": {
    "heavy": [
-    0.625,
+    0.95,
     1.0
    ],
    "light": [
     1.0,
-    0.8
+    0.85
    ],
    "medium": [
     1.0,
-    0.825
+    0.875
    ],
    "none": [
     1.0,
@@ -456,16 +456,16 @@
   },
   "lucerne_hammer": {
    "heavy": [
-    0.875,
-    0.9142857142857143
-   ],
-   "light": [
     1.0,
     0.95
    ],
+   "light": [
+    1.0,
+    0.9
+   ],
    "medium": [
     1.0,
-    0.875
+    0.925
    ],
    "none": [
     1.0,
@@ -636,16 +636,16 @@
   },
   "poleaxe": {
    "heavy": [
-    0.875,
-    0.8571428571428571
+    1.0,
+    0.95
    ],
    "light": [
     1.0,
-    0.875
+    0.95
    ],
    "medium": [
     1.0,
-    0.875
+    1.0
    ],
    "none": [
     1.0,

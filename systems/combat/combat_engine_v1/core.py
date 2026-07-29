@@ -401,7 +401,32 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     if head=='blunt':
         return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
                    cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
-    if head=='point':      return cfg['ADEF_POINT']*gap*tauth
+    if head=='point':
+        if w['head']=='blunt':
+            # [ED-PC-0049, E3a] THE BLUNT-COMPOSITE SPIKE. `tauth` is a point-to-hand LEVER de-rating: a reach-thrust
+            # delivered at full extension cannot press a harness the way a short/half-sword thrust can. That grounding
+            # does not describe a two-handed percussive blow driving a concentrated spike, and the line-400 comment
+            # above already says so — "NOT applied to the blunt-puncture beak (a poleaxe's spike authority is its
+            # percussion energy, already in puncture_pressure)". That exemption only ever reached the NATIVE-blunt
+            # branch; it never reached the branch where select_mode has committed the weapon to its spike, which is
+            # exactly when the spike is the thing being scored. So PC-5 silently halved the poleaxe's spike AFTER
+            # ED-1080's "set so the poleaxe spike adef ~= its hammer" calibration was written against it: 0.6013 vs
+            # ADEF_THRESHOLD['heavy'] 0.72, i.e. armor_defeat_sigma -0.20 — plate SHIELDED against a poleaxe, on the
+            # mode select_mode itself picks. Two corrections, both of them the same principle: the spike is not
+            # lever-de-rated, and it keeps access to the percussion-driven puncture path the blunt branch computes on
+            # the line above (a beak defeats plate by the energy behind it, not by gap precision alone).
+            # SCOPED to native-blunt: a spear/rapier/yari reach-thrust is still de-rated, which is what PC-5 is for.
+            # MEASURED SCOPE — all four blunt-composites, at every tier where select_mode commits them to the spike
+            # (adef_cap before -> after): poleaxe none/light/medium/heavy 0.6013 -> 1.0200; bec_de_corbin
+            # none/light/medium 0.6127 -> 0.9600 (it takes its hammer at heavy); lucerne_hammer none/light
+            # 0.5899 -> 0.9240; goedendag none/light 0.4818 -> 0.8760 (both take the hammer from medium up).
+            # NOTE this list was WRONG in the first draft of this comment, which claimed lucerne_hammer and
+            # goedendag were unreached because only medium/heavy had been checked — they both select the spike
+            # unarmoured and at light. The armour-reference diff (11 of 212 cells, all four weapons) is what
+            # caught it.
+            return max(cfg['ADEF_POINT']*gap,
+                       cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
+        return cfg['ADEF_POINT']*gap*tauth
     if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
     return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
 
