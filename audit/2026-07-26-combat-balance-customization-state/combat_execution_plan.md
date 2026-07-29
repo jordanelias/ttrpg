@@ -88,23 +88,72 @@ flips). E1–E3 and especially E4/E5 all edit token-keyed branches; doing this f
   existing dicts' keys from them, so the tables cannot disagree with the set.
 - **Consumers:** every `== 'point'` / `in ('cut_thrust', ...)` comparison across `combat_systems.py`,
   `weapon_physics.py`, `core.py`, `contact.py`, `capabilities.py`, `wrapper.py`.
-- **Dead surface (M12):** `combat_systems.can_choke` (zero callers), `config.CHOKE_GRIP_MIN` (zero readers, yet
-  **exported to Godot** — third recurrence of a class ED-PC-0035 and ED-PC-0037 each cleaned),
+- **Dead surface (M12) — CORRECTED (review R-2):** `config.CHOKE_GRIP_MIN` (the **only** dead CFG key of 201,
+  yet **exported to Godot** — third recurrence of a class ED-PC-0035 and ED-PC-0037 each cleaned),
   `weapon_physics.HEAVY_BLUNT_THRESHOLD`, `RHO_IRON`, `_A_HAFT`.
+  **⚠ `combat_systems.can_choke` was on this list and MUST NOT BE DELETED.** It is called at
+  `tests/valoria/test_combat_units_refactor.py:118` and pinned per-weapon in `r3_identity_golden.json` — the
+  fixture with **no generator**. Deleting it breaks a 1e-9 identity golden inside a batch sold as
+  behaviour-preserving. The claim came from `structure_scan.py`, whose caller sweep did not search `tests/`;
+  **the scanner is fixed and the corrected count is ZERO zero-caller functions.**
 
 ### Guards to ship (the point of the batch)
 - **AST guard:** a bare vocabulary literal appears **only** in the owner module. Model it on the existing
   no-weapon-name-in-resolution scan, which already works.
 - **CI guard:** every exported CFG key has ≥1 live reader. This is what stops the fourth recurrence.
 
-### Acceptance
+### Acceptance — CORRECTED (review R-6)
+
+**⚠ `structure_scan.py` cannot print the stated acceptance today.** Its `[D]` section counts *all* vocabulary
+literals across 14 engine + 11 workbench modules with **no owner concept**, and it has **no dead-exported-keys
+check at all**. Extending the scanner is **unstated work inside E0** — budget it, or the acceptance is
+unmeasurable. Note also that the count cannot reach 0 unless the sweep rewrites the 11 workbench tools too,
+which contradicts §3's own six-module consumer list. **Decide the scope explicitly.**
+
+**⚠ Do NOT mechanically derive the three dicts' keys from one set (R-6b).** `DELIVERY` **deliberately** lacks
+`'cut_thrust'` — ED-PC-0037 deleted that dead entry from the Godot contract. Keyset-equality **resurrects it**,
+reversing a ledgered cleanup and re-widening the export. `TIER2MAT`'s keys are armour tiers, not heads: they are
+**different vocabularies** and must stay separate sets.
+
+**⚠ `workbench/armour_participation.py:67` calls `adef_cap(..., 'edge')`** — a token in no set, falling through
+to `ADEF_CUT`. The AST guard will flag it, and "fixing" it changes the participation capability convention that
+**E1b and E3a acceptance depend on**. Leave it, and whitelist it explicitly with a comment.
+
 ```bash
-python workbench/structure_scan.py     # vocabulary literals outside owner -> 0 ; dead exported keys -> 0
-python -m pytest tests/valoria -q      # unchanged from baseline
+python workbench/structure_scan.py     # after extending it: literals outside owner -> 0 ; dead exported keys -> 0
+python -m pytest tests/valoria -q      # unchanged from baseline (894 at 047b428)
 python tools/export_engine_params.py --check
 ```
 **Godot export:** the JSON **shrinks** (dead keys removed). That is a disclosure, not a parity risk — say so in
 the commit.
+
+---
+
+## §3a Ordering and blast radius — corrections from the adversarial review
+
+**Serialization (review R-9, and §1–§12 never stated it).** `E1b, E2a, E2b, E3a, E3b` **all regenerate the
+single `tests/valoria/data/combat_armour_reference.json`** and are therefore **strictly serial** — each diff
+must be taken on its predecessor's baseline. `E0` conflicts with everything (24+ files). **`E1a` is the only
+independent batch.**
+
+**E2 before E3 is load-bearing, not incidental (R-9).** A non-gated tip-lever term in E2a moves
+`bec_de_corbin` (PoB 0.122), `lucerne_hammer` (0.133) and potentially the poleaxe hammer (0.206) — so E3a's
+"spike ≈ hammer" target **shifts under E2a**. Do not reorder them.
+
+**The E0-first justification was over-claimed (R-9).** §3 says "E1–E3 all edit token-keyed branches." False for
+half: `E1a` (`bind_sigma`/`reach_sigma`) and `E1b` (`reach_threat`/`represent_measure_p`) contain **no
+token-keyed edits** — pure arithmetic and a clamp. The genuine beneficiaries are **E3b, E4, E5**. E0 remains a
+sensible first batch, but **no shared-baseline conflict forces it**: if E0 stalls, **E1a can land
+independently**, and the remediation plan's own §8 says "if only one batch runs, run R1."
+
+**Golden blast radius is larger than §5 states (review R-3).** Three committed fixtures pin
+`percussion_authority` **directly** — `r3_identity_golden.json` (1e-9, plus `puncture_pressure`),
+`golden_heft_percussion_snapshot.json` (1e-6), and `golden_element_parity.json` (1e-9, and it also pins the
+`afforded_heads` token map **and `select_mode` across all four tiers**). **E2a breaks all three at minimum on
+the staff rows; E2b breaks element-parity's affordance/selection pins**, and if the lever-form change touches
+`percussion_element_authority` generally it moves every 2H sword's Mordhau value as well. **`r3_identity_golden.json`
+has no generator and must be hand-reproduced.** Budget E2 accordingly — it is the most expensive batch in E0–E3,
+not E4.
 
 ---
 
@@ -123,11 +172,26 @@ whenever they are behind on the differential it multiplies.** Verified: a dagger
 binding a poleaxe goes **−1.0562 → −1.1904**. Live for every invested build; invisible only because
 `equipped=[]` by default.
 
-**Direction:** scale **each side's own contribution**, or the resulting win-probability — never ratio-multiply
-a signed difference. (Proposal §5.1 rule 5 states the contract.)
+**Direction — NARROWED (review R-4).** The original offered two options; **"scale each side's own
+contribution" is NOT safe here and fails this batch's own guard.** `leverage()` is signed and **14 of 51
+weapons are negative** (rapier −0.0792, bear_spear −0.0611, falchion −0.0576, szabla −0.0436, stiletto −0.0330,
+voulge −0.0317, …), so scaling a negative own-contribution by a factor > 1 makes the invested owner *worse* —
+the exact defect being fixed. For the plan's canonical pair (dagger + `staerke_schwaeche` vs poleaxe) own-side
+scaling gives −0.6734 against a −0.6708 base: **red on the guard.**
+
+**Use the win-probability form** (modulate the resulting probability/magnitude, which is positive by
+construction), **or** state explicitly how negative own-contributions are handled. Do **not** reach for
+"clamp `leverage` at 0 inside `bind_sigma`" as an escape — it changes default-build behaviour and destroys the
+batch's byte-identity safety argument. (Proposal §5.1 rule 5 states the contract.)
 
 **Guard — parameterised, so new levers inherit it:** for every multiplicative lever, equip it on the
 **disadvantaged** side and assert the term does not worsen.
+
+**⚠ The guard is VACUOUS unless the tradition-access gate is respected (review R-7).** An equipped technique
+outside the fighter's known kit is inert (`ability_primitives._invested`, ED-PC-0028). Verified: `misura` on a
+default-tradition fighter moves `reach_sigma` **not at all** — so the guard would pass on today's broken code.
+Set the tradition: `misura`→`italian`, `staerke_schwaeche`→`german`, `atajo`→`spanish`. With
+`tradition='italian'` the breakage appears (−1.025 → −1.1787).
 
 **Reproduce before and after:**
 ```python
@@ -181,7 +245,13 @@ comments; do not fix the comments alone.**
 **Direction:** a tip-lever term for centre-balanced hafts — the per-element `|x|/Lt` form already exists in
 `percussion_element_authority`.
 
-**Guard:** **no roster weapon with mass > 0 derives 0 percussion authority**; pin the staff's stagger non-zero.
+**Guard — SCOPED (adversarial review R-1; the original was unimplementable):** **no BLUNT-NATIVE weapon derives
+0 percussion authority.** The original read "no roster weapon with mass > 0", which goes red on **37 of 51
+weapons, 36 of them correct by design** — `reversed_grip_percussion` returns 0.0 for every 1H weapon and every
+hafted non-blunt head, with historical grounding in its own docstring. Scoped to blunt-native, **only the staff
+fails** (mace 8.0, poleaxe 7.484, bec 6.363, lucerne 6.539, goedendag 8.0, staff **0.0**). Also pin the staff's
+stagger against a **band** (config's own "staff p_auth ~4"), not merely non-zero — an epsilon would satisfy
+non-zero.
 
 **Blast radius: roster-wide damage.** Both reference tables move. This is the largest change in E0–E3.
 
@@ -209,8 +279,20 @@ hammer **1.216**, spike **0.601**, `ADEF_THRESHOLD['heavy']` **0.72**. PC-5's `t
 `armor_defeat_sigma = 1.7 · (0.601 − 0.72) = −0.20` — **plate shields against the poleaxe**, on the mode
 `select_mode` picks at all four tiers.
 
-**Guard:** `adef_cap(poleaxe, spike) ≥ ADEF_THRESHOLD['heavy']` — ED-1080's intent made **mechanical instead of
-a prose claim**, which is why it silently broke.
+**Direction — ADDED (review R-5: this batch shipped without one).** Two candidates differ by an order of
+magnitude in blast radius, and the plan must not leave the choice to a zero-context session:
+- **Re-anchoring `ADEF_POINT` 1.2 → ≥1.44** clears the guard (0.7217) but raises `armor_defeat_sigma` for
+  **every selected-point weapon at every armoured tier** — a de facto roster-wide balance change inside a batch
+  labelled "no ⚖", and a config change tripping the Godot export gate. **This is ⚖ territory; escalate rather
+  than take it.**
+- **Exempting the blunt-composite spike from `tauth`** is the surgical option, but needs a native-blunt +
+  selected-point branch that also reaches bec_de_corbin / lucerne_hammer / goedendag spikes. **Prefer this, and
+  state the three collateral weapons in the commit.**
+
+**Guard — STRENGTHENED (review R-5):** pin **spike ≈ hammer** (the actual ED-1080 contract; hammer measures
+1.2162), not merely `≥ ADEF_THRESHOLD['heavy']` = 0.72. The weak form passes a fix that clears the threshold
+while still contradicting the calibration it claims to restore. Making it mechanical instead of a prose claim
+is why it silently broke.
 
 **Sub-item, do NOT bundle:** the greedy comparator in `select_mode` never prices the adef consequence of its
 choice, so a selection can forfeit ~1σ of exchange control invisibly. **That is E5/M7's, not E3's.**
@@ -225,7 +307,15 @@ still gets the **swing** moment. Ranseur: **2.515 vs 0.799** (3.1×); damage @no
 **Direction:** split on the **resolved arm** (`sel_dmg == 'puncture'`), not the token. **This is exactly the
 class E0 makes safe** — it is a token-keyed branch.
 
-**Guard:** `heft(w, thrust-resolving) ≈ heft(w, 'point')` across all 19 `cut_thrust` weapons.
+**Guard — needs BOTH sides (review R-8):** `heft(w, thrust-resolving) ≈ heft(w, 'point')` **and** the
+complementary pin `heft(w, shear-resolving) ≈ native swing heft`. The one-sided form is red on main (ranseur
+2.5151 vs 0.7992 ✓) but **passes a wrong fix that pays the thrust lever on both arms.**
+
+**Disclose, do not discover:** `core.cut_thrust_arm` picks the arm on **coupling alone**. Once impact differs by
+arm, the chosen arm is no longer the max-damage arm for some weapons — a fresh instance of the B1/F24
+"selection contradicts damage" class, introduced by a correctness batch and interacting with ⚖7/E5. Ranseur
+resolves `puncture` even at `none`, so this is live at every tier. **State it in the commit as an expected
+consequence.**
 
 **Blast radius:** damage for 19 weapons. Reference tables move.
 
@@ -301,6 +391,41 @@ off-hand scope · the roster-wide thrust-lean · typed weapon records.
 machine were only spot-checked by the independent pass. **Stale `sel_*` carryover and draw-order divergence
 would live exactly there, and no batch above covers them.** If a session has budget for one more independent
 read-only audit, that is the target.
+
+---
+
+## §14 Adversarial review record (Fable, read-only, 2026-07-28)
+
+An independent `fable`-tier reviewer with a **write-excluded toolset** scored §1–§12 against live code. It was
+told to treat every claim as motivated, because the plan was written by an agent reviewing its own session's
+work. **Eleven findings; five would have caused a wrong result.** All corrections are folded in above, at
+source, rather than appended.
+
+| # | finding | disposition |
+|---|---|---|
+| **R-1** | E2a's guard ("no weapon with mass > 0 derives 0 authority") goes red on **37 of 51 weapons, 36 correct by design** — `reversed_grip_percussion` returns 0 for every 1H and hafted non-blunt head. Unimplementable; invites roster-wide over-reach. | **Fixed** — scoped to blunt-native (only the staff fails). ✅ re-verified by me |
+| **R-2** | `can_choke` is **not dead** — called at `test_combat_units_refactor.py:118`, pinned in `r3_identity_golden.json` (**no generator**). Deleting it breaks a 1e-9 golden inside a "behaviour-preserving" batch. **Second false positive from the same scope bug.** | **Fixed** — removed from the dead list; **`structure_scan.py`'s sweep now includes `tests/`**; corrected count is **0** zero-caller functions; register §H5 corrected at source. ✅ re-verified |
+| **R-3** | Golden blast radius understated: **three** fixtures pin `percussion_authority` directly, and element-parity also pins `afforded_heads` **and `select_mode` at all four tiers**. The hand-reproduce cost lands in **E2a, not E4**. | **Fixed** — §3a states it; E2 re-labelled the most expensive batch in E0–E3 |
+| **R-4** | E1a's own direction backfires: `leverage()` is signed and **14 of 51 weapons are negative**, so "scale each side's own contribution" makes an invested owner worse — **red on this batch's own guard**. | **Fixed** — direction narrowed to the win-probability form; the clamp escape is explicitly forbidden. ✅ re-verified |
+| **R-5** | E3a shipped **no direction**, and the two candidates differ by an order of magnitude; the guard (`≥0.72`) is far weaker than the contract it claims to mechanize (**spike ≈ hammer**, 1.2162). | **Fixed** — direction added, `ADEF_POINT` re-anchor marked ⚖, guard strengthened to spike ≈ hammer |
+| **R-6** | E0's acceptance is **not measurable by the named instrument** (no owner concept, no dead-key check); mechanical keyset-derivation would **resurrect `DELIVERY['cut_thrust']`**, reversing ED-PC-0037; `adef_cap(...,'edge')` will trip the new guard. | **Fixed** — all three stated in E0's acceptance with explicit instructions |
+| **R-7** | E1a's guard is **vacuous unless the tradition gate is set** — `misura` on a default-tradition fighter moves nothing, so the guard would pass on broken code. | **Fixed** — tradition mapping added to the guard spec |
+| **R-8** | E3b's guard is one-sided (passes a wrong fix paying the thrust lever on both arms), and the fix creates a **new selection-vs-damage disagreement** (B1/F24 class) that the plan did not disclose. | **Fixed** — complementary pin added; the consequence is now a disclosed expectation |
+| **R-9** | The E0-first justification over-claims — E1a/E1b contain **no token-keyed edits**. True constraint is E0 before E3b/E4/E5. Also: the **serialization constraint was never stated**, and **E2-before-E3 is load-bearing** (E2a moves the hammer E3a targets). | **Fixed** — §3a |
+| **R-10** | The verified/carried distinction eroded: E1b/E2b/E3b numbers presented as flat fact without the "carried at auditor's confidence" marker. **All three happen to be true** — the reviewer re-ran them — but the framing was not honest to its sources. | **Accepted.** F2/F4/F6 are now independently verified; the plan no longer needs the marker, but the lapse is recorded |
+| **R-11** | Four specification defects: E2b guard ambiguity (per-token vs per-element), the staff-stagger pin gameable by an epsilon, M4's guard has no stated red-on-main form, and E2a directs copying the very lever form E2b declares defective. | **Partially fixed** — the stagger band is in; the other three are noted here for the executing session to resolve at implementation |
+
+**Found SOUND and not to be re-litigated:** every headline number in E1–E3 reproduces exactly on live code
+(bind_sigma −1.0562→−1.1904; staff 0.0/0.0/0.0 and stagger (0,0); hook_sword affordance and its uniqueness in
+the roster; poleaxe 1.2162/0.6013/0.72 with the spike selected at all four tiers; ranseur 2.5151/0.7992;
+represent gate 23.3×). Also sound: E1b's "do not fix `armor_defeat_sigma`" note; E0's factual base (279
+literals, `CHOKE_GRIP_MIN` the only dead CFG key, the 226-param nesting); every §2 trap; E1a's byte-identity
+argument; §12's blind-spot claim; and the §7 A7d NO-OP note — **the reviewer hunted for further no-ops among
+all E0–E3 directions and found only R-4's conditional backfire.**
+
+**Not reached:** §13 (it post-dates the review — two of its gaps, serialization and E1a's instrument, duplicate
+R-9 and R-7, which is corroboration); the simulation-sweep numbers (38/53, F7/F8 band counts); the Godot port's
+actual consumption of `CHOKE_GRIP_MIN`; and `wrapper.py`'s ordering/RNG audit, which §12 already flags.
 
 ---
 

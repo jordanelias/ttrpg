@@ -453,16 +453,24 @@ and disengagement. For comparison the next-largest behavioural module is `weapon
 This is in tension with the repo's own holonic-container doctrine, and it is why "where does this rule live?"
 is not answerable by module name.
 
-### H5 — Dead code: **1 confirmed** (plus §F10's list) · severity LOW
+### H5 — Dead code: **0 confirmed functions**, 4 confirmed constants · severity LOW
 
-`combat_systems.can_choke` has **zero callers** anywhere in the package or workbench; the only other mention is
-a `weapon_physics.py:711` comment saying the design is "never a `can_choke` flag." §F10 independently lists
-`CHOKE_GRIP_MIN` (dead yet exported to Godot — third recurrence), `HEAVY_BLUNT_THRESHOLD`, `RHO_IRON`,
-`_A_HAFT`, `element_afforded`'s unread damage-mode string, and `geo['perc_conc']`.
+> **CORRECTED 2026-07-28 by the adversarial review (R-2).** This section originally claimed
+> `combat_systems.can_choke` had **zero callers**. **That was false.** It is called at
+> `tests/valoria/test_combat_units_refactor.py:118` and pinned per-weapon in `r3_identity_golden.json` — the
+> fixture that has **no generator and must be hand-reproduced**. Deleting it would have broken a 1e-9 identity
+> golden inside a batch sold as behaviour-preserving.
+>
+> **Root cause: `structure_scan.py`'s caller sweep searched only the engine package + workbench, never
+> `tests/`.** That is the **second** false positive from the same scope bug — `WoundTracker` was the first, and
+> I caught that one by hand and recorded it as a caveat **without fixing the underlying scope**. Recording a
+> symptom is not fixing a defect. **The scanner is fixed** (`tests/` now in the sweep) and re-run: with the
+> corrected scope there are **zero** zero-caller functions.
 
-*Scan caveat, stated:* my zero-caller regex produced one **false positive** (`WoundTracker`, whose class-def
-line has no parenthesis). Both hits were checked by hand; only `can_choke` survived. An unverified automated
-count is not a finding.
+Still genuinely dead (verified against engine + workbench + tests): `config.CHOKE_GRIP_MIN` — **the only dead
+CFG key of 201**, and it **ships in the Godot-facing JSON**, the third recurrence of a class ED-PC-0035 and
+ED-PC-0037 each cleaned — plus `weapon_physics.HEAVY_BLUNT_THRESHOLD`, `RHO_IRON`, `_A_HAFT`. §F10's other
+items (the unread damage-mode string, `geo['perc_conc']`, the unreachable `ADEF_CUT` arm) stand.
 
 ### H6 — **28 `sys.path.insert` calls** (8 engine + 20 workbench) · severity LOW, partly by design
 
@@ -484,7 +492,7 @@ carries the cut/thrust derivations at the centre of A7 with almost no inline exp
 | ownership / "every rule lives once" | **0** | — (1 delegate, verified legitimate) |
 | hard-coding (vocabulary + numerics) | **2** | **406** (279 + 127) |
 | objects / classes / typing | **1** | 2 classes over ~3,700 LOC |
-| organisation / consolidation | **4** | god-module, 28 path hacks, 1 dead fn, density spread |
+| organisation / consolidation | **4** | god-module, 28 path hacks, **0 dead fns (was 1 — false positive, R-2)**, density spread |
 | **total** | **7** | **406 hard-coded instances** |
 
 **Priority within §H is H1, and it is not close** — it is the only one whose failure mode is *silent*, and two

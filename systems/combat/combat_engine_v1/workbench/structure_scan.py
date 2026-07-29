@@ -43,7 +43,23 @@ dup_defs = {k: v for k, v in defs.items() if len(set(v)) > 1}
 dup_consts = {k: v for k, v in consts.items() if len(set(v)) > 1}
 
 # ── B. zero-caller top-level functions (engine modules; search whole package incl. workbench)
-allsrc = "\n".join(srcs.values())
+# SCOPE FIX (adversarial review R-2, 2026-07-28): the caller sweep originally searched only the engine
+# package + workbench. It therefore MISSED tests/, and shipped a FALSE "zero callers" claim for
+# combat_systems.can_choke -- which is called at tests/valoria/test_combat_units_refactor.py:118 and pinned
+# per-weapon in r3_identity_golden.json. That was the SECOND false positive from this scope bug (WoundTracker
+# was the first, caught by hand). A caller-analysis that cannot see the test suite is not a caller analysis.
+REPO = os.path.abspath(os.path.join(ENG, '..', '..', '..'))
+_TESTSRC = []
+for _root, _dirs, _files in os.walk(os.path.join(REPO, 'tests')):
+    if '__pycache__' in _root:
+        continue
+    for _f in _files:
+        if _f.endswith('.py'):
+            try:
+                _TESTSRC.append(open(os.path.join(_root, _f), encoding='utf-8').read())
+            except Exception:
+                pass
+allsrc = "\n".join(list(srcs.values()) + _TESTSRC)
 zero_callers = []
 for fname, mods in defs.items():
     if fname.startswith('_'):
