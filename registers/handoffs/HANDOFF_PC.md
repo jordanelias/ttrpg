@@ -6,15 +6,49 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **▶ RESUME HERE (2026-07-29 session close). E0/E1a/E1b/I4 MERGED (PRs #259, #269); E2a on a NEW PR
-  awaiting review; E2b/E3a/E3b NOT STARTED.** EDs 0041–0047 filed; **draw 0048+ from the reserved
-  block 0041–0055 (`id_reservations.yaml` is FROZEN for the 3-session run — do not edit it).**
-  Live suite baseline **1105 passed / 21 skipped / 3 xfailed / 3 xpassed**.
-  - **E2a (ED-PC-0047) needs an adversarial re-read before E2b builds on it.** Its Opus producer
-    died before reporting; the work was verified independently (suite + artifact inspection) but it
-    is the ONLY batch in this arc that did not get a critic relay. **E2b consumes E2a's
-    `weapon_physics.strike_point_lever` — validate that form first** (R-11.4 requires both scales to
-    ship ONE lever; E2b must not re-introduce the `|x|/Lt` form).
+- **▶ RESUME HERE (2026-07-29, second session). E0–E3 ARE COMPLETE.** E0/E1a/E1b/I4 merged (PRs #259,
+  #269), E2a merged (PR #270), and **E2b/E3a/E3b landed this session as ED-PC-0048/0049/0050** — the
+  whole no-⚖ span of `combat_execution_plan.md` is done. EDs 0041–0050 filed; **draw 0051+ from the
+  reserved block 0041–0055 (`id_reservations.yaml` is FROZEN for the run — do not edit it).**
+  Live suite baseline **1142 passed / 21 skipped / 3 xfailed / 3 xpassed**.
+  **NEXT: E4+ are all ⚖-blocked (plan §7) — nothing further is startable without Jordan.** The
+  unblocked work is the three I4 wrapper defects (F-1/F-2/F-3, below) and the largest blind spot
+  (`wrapper.py`, §12 of the plan). Both need Jordan's priority call.
+  - **E2a's adversarial re-read is DONE (it was the one batch in the arc with no critic relay), and
+    it found a real defect — in E2a's PRESCRIPTION for E2b, not in E2a's own code.** E2a's docstring,
+    plan §5 and the E2a commit all specified `strike_point_lever(w, elem_mass, elem_x)` for the
+    element scale. That signature double-counts mass (the function divides its mass argument by the
+    weapon's total, so mass enters at power 1.5) and was measured to drop percussion **19–37% on all
+    53 weapons** — a roster-wide balance change inside a batch declared "no balance intent". It was
+    measured before being consumed and **not taken**; the correct call passes the delivered mass so
+    the lever reduces to the geometric `(h+|x|)/(h+Lt)`. `test_element_lever_does_not_double_count_mass`
+    pins it so the prescription cannot be re-followed. **Do not "restore" the prescribed form.**
+    Also corrected: E2a's claim that its lever is a *strict* generalisation of `PoB_frac` is false
+    (it takes `|x|`, so the 3 weapons whose balance sits behind the hand map to the positive lever);
+    harmless, since all three are non-blunt and never reach that line, but the prose was wrong.
+  - **⚖ E3a's residual parity is Jordan's (ED-PC-0049, needs_jordan).** The blunt-composite spike is
+    no longer de-rated by the reach-thrust lever, so poleaxe adef 0.6013 → 1.0200 and its plate sigma
+    −0.20 → +0.51 — plate no longer shields against a poleaxe. But that is **78% of its own hammer's
+    1.3000, not the parity `ADEF_POINT`'s comment claims**. Closing the last 22% needs
+    `ADEF_POINT ≥ ~1.53`, which lifts `armor_defeat_sigma` for every selected-point weapon at every
+    armoured tier and trips the export gate — the plan flags it escalate-rather-than-take, and it was
+    not taken. Note the hammer reference is itself inflated by E2a's saturation residue (poleaxe pins
+    at `PERC_CAP`: 1.3000 where it read 1.2162), against which the spike already sits at 84%.
+  - **⚖ E3b's two-direction split is Jordan's (ED-PC-0050, needs_jordan).** Heft now follows the
+    resolved arm. Forward-balanced polearms' thrusts fall hard (voulge 5.21→1.72, partisan 4.17→1.70,
+    ranseur 2.52→0.80) while hand-balanced swords' thrusts **rise** (arming 0.77→1.07, longsword
+    1.00→1.26) because their `PoB_frac` sits below `THRUST_POB=0.16`. That is the constant's own
+    definition, not a tuning choice — but whether the rise is the intended feel is a design call.
+  - **NEW WORK-LIST HANDED TO E5/M7 (ED-PC-0050):** `core.cut_thrust_arm` picks the arm on **coupling
+    alone**, so now that impact differs by arm the chosen arm is no longer the max-damage arm for
+    some weapons — a fresh instance of the B1/F24 "selection contradicts damage" class, live at every
+    tier. Deliberately NOT fixed (bundling it would repeat the batch-4/5 half-stands); the affected
+    population is pinned by `test_selection_contradicts_damage_is_disclosed_not_silent` so it cannot
+    widen unnoticed before E5 picks it up.
+  - **The PC ledger hit its 50k cap and now has an archive** (`registers/editorial_ledger_pc_archive.jsonl`,
+    PC is the second lane after IN). 28 settled entries moved; open/deferred/needs_jordan stayed live.
+    Archived-ED citations resolve through `validate_ed_citations`' archive glob — verified by hiding
+    the file (28 violations) and restoring it (0), not assumed from the size-checker's comment.
   - **⚖ TWO CALIBRATION RESIDUES FOR JORDAN, disclosed not tuned (ED-PC-0047):** the repaired staff
     reads 5.629 vs core.py's recorded "~4" intent (unreachable at PERC_EXP=0.30 while mace pins at
     PERC_CAP — the arithmetic is in the docstring), and mace/poleaxe/goedendag now all compress to
