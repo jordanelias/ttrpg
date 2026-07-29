@@ -196,6 +196,31 @@ ci_checks:
       as nonexistent (as its own finding) is not counted as a dependency, and the sanctioned alias map is followed
       rather than ignored. Also runs locally via valoria_local.py --staged (blocking).
 
+  - path: tools/ci_workplan_pointer_check.py
+    level: 5
+    role: >-
+      Report-only workplans-pointer gate (ED-IN-0103) — every workplans/POINTER_*.md carries the
+      five required fields, names a lane from the 9-lane roster, claims no duplicate target, and,
+      the load-bearing check, resolves its target on disk.
+    paired_hook: ""
+    ci_job: workplan-pointer-check
+    notes: >-
+      ED-IN-0103. Jordan ruled 2026-07-29 that every plan is reachable from workplans/ by direct
+      placement or a pointer file. A convention with no guard is the CLAUDE.md 0.1 point-5
+      anti-pattern, and this program exists because of that exact failure at larger scale
+      (references/registry/README.md was cited as authoritative from five places and had never
+      existed), so shipping an unguarded pointer set inside the program's own deliverable was not
+      defensible. LIMIT, stated plainly, it does NOT check that every live plan HAS a pointer. The
+      2026-07-29 triage MEASURED liveness to be un-inferable — a Status heading is a signal in
+      neither direction (10 of 58 plan-shaped files carry one, 7 of those 10 are dead, and 3 of
+      the live plans carry one) — so a guessing guard would be wrong in both directions, flagging
+      live plans as missing and passing dead ones. That half stays a Jordan docket question. The
+      triage itself got a live plan wrong on the first pass (full_implementation_plan_v1.md,
+      corrected by adversarial review), which is the argument for the guard and for deferring the
+      half that cannot be written honestly. Report-only (continue-on-error), names-drift
+      graduation lane, also runs locally via valoria_local.py (report-only). Mutation-verified,
+      planting a dead target turns it red.
+
   - path: tools/ci_wf_harness_check.py
     level: 5
     role: "Blocking workflow run-discipline gate: the .claude/wf_*.js run-discipline prelude is byte-identical to its owner tools/wf_harness.js, is actually CALLED, routes every critic stage through a structurally read-only agentType, and keeps model:'fable' off artifact-writing stages."

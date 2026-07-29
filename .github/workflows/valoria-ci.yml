@@ -63,7 +63,8 @@ jobs:
             tools/wiring_map_check.py \
             tools/ci_claim_provenance_check.py \
             tools/ci_claude_workflow_paths.py \
-            tools/ci_wf_harness_check.py
+            tools/ci_wf_harness_check.py \
+            tools/ci_workplan_pointer_check.py
           echo "All tools: syntax OK"
 
   # ── REGISTER + ARCHITECTURE GATES ───────────────────────────────────────────
@@ -507,6 +508,46 @@ jobs:
         run: python3 tools/ci_claude_workflow_paths.py
       - name: Run-discipline harness present, current, and wired
         run: python3 tools/ci_wf_harness_check.py
+
+  workplan-pointer-check:
+    # ED-IN-0103. Jordan ruled 2026-07-29 that every plan — workplan, session plan, implementation
+    # schedule, execution plan, remediation plan, roadmap — is reachable from workplans/, by direct
+    # placement or a pointer file. A convention with no guard is the CLAUDE.md §0.1 point-5
+    # anti-pattern: it propagates by imitation and rots silently. This program exists because of that
+    # exact failure at larger scale — references/registry/README.md does not exist and never has, yet
+    # was cited as authoritative from five places — so shipping an unguarded pointer set inside the
+    # program's own deliverable was not defensible.
+    #
+    # (That citation is a declared-absent FINDING, not a dependency: it carries an absence marker on
+    # its own line so ci_claude_workflow_paths.py's is_dependency() filter excludes it. The first
+    # draft of this comment split the path and the words "never existed" across two lines, so the
+    # filter never saw them together and this job's own comment failed that gate — the phantom-path
+    # guard catching the phantom-path program's CI job. Keep marker and path on one line.)
+    #
+    # Guards the DETERMINISTIC half: required fields, a lane from the 9-lane roster, no duplicate
+    # targets, and every `target:` resolving on disk. It deliberately does NOT check "every live plan
+    # has a pointer" — the 2026-07-29 triage MEASURED liveness to be un-inferable (a `## Status:`
+    # heading is not a signal in either direction: only 10 of 58 plan-shaped files carry one, 7 of
+    # those 10 are dead, and 3 of the live plans carry one), so a guessing guard would be wrong in
+    # both directions. That half stays a Jordan docket question, per §0.1 point 5: ship the guard you
+    # can write, and name the half you did not.
+    #
+    # Report-only on the names-drift graduation lane while the convention beds in; flip to --strict
+    # once it has held for a few PRs.
+    name: Workplans Pointer Integrity (report-only)
+    runs-on: ubuntu-latest
+    needs: syntax-check
+    timeout-minutes: 5
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Every workplans/ pointer is well-formed and its target resolves
+        run: python3 tools/ci_workplan_pointer_check.py
 
   supersession-check:
     name: Supersession Churn Guard (warn)
