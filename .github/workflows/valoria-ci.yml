@@ -260,7 +260,7 @@ jobs:
         run: |
           python3 skills/valoria-module-adjudicator/scripts/contract_adjudicator.py \
             --contracts references/module_contracts.yaml \
-            --registry  designs/architecture/key_type_registry_v30.md \
+            --registry  systems/_architecture/key_type_registry_v30.md \
             --sources   references/canonical_sources.yaml
 
   quantity-vocabulary-check:

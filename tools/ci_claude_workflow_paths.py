@@ -27,6 +27,7 @@ Usage:
 """
 from __future__ import annotations
 
+import glob
 import json
 import os
 import re
@@ -37,6 +38,28 @@ ROOT = os.path.dirname(HERE)
 LEDGER = os.path.join(ROOT, "references", "restructure_ledger.md")
 SCAN_DIR = os.path.join(ROOT, ".claude")
 
+# WIDENED (2026-07-29). The `.claude/` scan above exists because the `designs/`/`sim/` retirements
+# silently broke path references. The IDENTICAL hazard in `.github/workflows/*.yml` was unguarded,
+# and it bit: `contract-conformance` passed `--registry designs/architecture/key_type_registry_v30.md`
+# from the 2026-07-19 `designs/` retirement until 2026-07-29 — ~10 days of `FileNotFoundError`,
+# masked by the step's `continue-on-error: true`, reporting green while scanning nothing.
+#
+# ALIAS POLICY — the load-bearing difference, and the reason a naive widening would have been
+# DECORATION. A `.claude/` prompt is read by an AGENT, which can consult
+# `references/restructure_ledger.md` and find the moved file: ALIASED is degraded, not dead. A
+# workflow `run:` line is executed by a SHELL, and `open()` does not consult the ledger: for an
+# executed command ALIASED is FATAL. Verified — the alias map DOES resolve the dead path above to
+# `systems/_architecture/key_type_registry_v30.md`, so classifying it ALIASED would have passed the
+# gate on the exact defect it was written to catch.
+#
+# Comments inside a workflow are prose, not commands, so they keep the agent-readable alias policy
+# (a citation to a retired path is legitimate — CLAUDE.md §3's alias map is the sanctioned route).
+SCAN_TARGETS = (
+    # (dir relative to ROOT, file extensions, alias_is_fatal_for_executed_lines)
+    (".claude", (".js", ".json", ".mjs"), False),
+    (os.path.join(".github", "workflows"), (".yml", ".yaml"), True),
+)
+
 # Top-level trees a repo-relative path can start with. `designs/` and `sim/` are retired and are
 # included deliberately — a reference to them is the failure this tool looks for.
 TREES = (
@@ -44,7 +67,10 @@ TREES = (
     "registers", "canon", "audit", "arcs", "godot", "tools", "skills", "proposals",
     "workplans", "deprecated",
 )
-PATH_RE = re.compile(r"\b(?:%s)/[A-Za-z0-9_./-]+" % "|".join(TREES))
+# `*` is inside the class so a GLOB is captured whole. Workflow `paths:` trigger filters are
+# legitimately globs (`registers/editorial_ledger*.jsonl`); truncating at the `*` yields a
+# path that never exists and reports a false DEAD. Globs resolve via glob.glob, not os.path.exists.
+PATH_RE = re.compile(r"\b(?:%s)/[A-Za-z0-9_.*/-]+" % "|".join(TREES))
 
 # A prompt is prose as well as code, so two classes of match are NOT dependencies:
 #
@@ -117,41 +143,80 @@ def resolve(path: str, exact: dict[str, str], prefix: list[tuple[str, str]]) -> 
     return None
 
 
+def resolve_glob(pattern: str, prefix: list[tuple[str, str]]) -> str | None:
+    """Alias-resolve a GLOB pattern. `resolve()` cannot be reused: it tests os.path.exists, which is
+    always False for a pattern. Rewrite through the dir-prefix rows and re-glob instead."""
+    for old, new in prefix:  # already sorted longest-first
+        if pattern.startswith(old):
+            candidate = new + pattern[len(old):]
+            if glob.glob(os.path.join(ROOT, candidate)):
+                return candidate
+    return None
+
+
 def scan() -> dict:
     exact, prefix = load_alias_map()
     results: dict[str, dict[str, list]] = {}
 
-    if not os.path.isdir(SCAN_DIR):
-        return {"files": {}, "totals": {"live": 0, "aliased": 0, "dead": 0}}
-
-    for name in sorted(os.listdir(SCAN_DIR)):
-        # settings.json holds tool-permission names, not paths — skip to avoid false positives.
-        if name == "settings.json" or not name.endswith((".js", ".json", ".mjs")):
+    for scan_rel, exts, alias_fatal in SCAN_TARGETS:
+        scan_dir = os.path.join(ROOT, scan_rel)
+        if not os.path.isdir(scan_dir):
             continue
-        full = os.path.join(SCAN_DIR, name)
-        if not os.path.isfile(full):
-            continue
-        with open(full, encoding="utf-8", errors="replace") as fh:
-            text = fh.read()
 
-        # Keep each match's line so prose and declared-absent findings can be filtered out.
-        candidates: dict[str, str] = {}
-        for line in text.split("\n"):
-            for raw in PATH_RE.findall(line):
-                candidates.setdefault(raw.rstrip(".,;:)"), line)
+        for name in sorted(os.listdir(scan_dir)):
+            # settings.json holds tool-permission names, not paths — skip to avoid false positives.
+            if name == "settings.json" or not name.endswith(exts):
+                continue
+            full = os.path.join(scan_dir, name)
+            if not os.path.isfile(full):
+                continue
+            with open(full, encoding="utf-8", errors="replace") as fh:
+                text = fh.read()
 
-        live, aliased, dead = [], [], []
-        for ref, line in sorted(candidates.items()):
-            if not is_dependency(ref, line):
-                continue
-            if os.path.exists(os.path.join(ROOT, ref)):
-                live.append(ref)
-                continue
-            target = resolve(ref, exact, prefix)
-            (aliased.append({"ref": ref, "resolves_to": target}) if target else dead.append(ref))
-        results[os.path.join(".claude", name)] = {
-            "live": live, "aliased": aliased, "dead": dead,
-        }
+            # Keep each match's line so prose and declared-absent findings can be filtered out.
+            # `executed` distinguishes a shell command from a comment: only the former is bound by
+            # the fatal-alias policy, because only the former is run by a shell that cannot follow
+            # the restructure ledger.
+            candidates: dict[str, tuple[str, bool]] = {}
+            for line in text.split("\n"):
+                executed = not line.lstrip().startswith("#")
+                for raw in PATH_RE.findall(line):
+                    candidates.setdefault(raw.rstrip(".,;:)"), (line, executed))
+
+            live, aliased, dead = [], [], []
+            for ref, (line, executed) in sorted(candidates.items()):
+                if not is_dependency(ref, line):
+                    continue
+                if "*" in ref:
+                    # A glob is live when it matches at least one file on disk. It gets the same
+                    # alias treatment as a plain path — `params/*.md` must resolve through the
+                    # `params/ -> engine/params/` row (ED-IN-0071 P3) rather than read as dead.
+                    if glob.glob(os.path.join(ROOT, ref)):
+                        live.append(ref)
+                        continue
+                    target = resolve_glob(ref, prefix)
+                    if not target:
+                        dead.append(f"{ref} (glob matches nothing)")
+                    elif alias_fatal and executed:
+                        dead.append(
+                            f"{ref} (alias-only -> {target}; a shell cannot follow the ledger)")
+                    else:
+                        aliased.append({"ref": ref, "resolves_to": target})
+                    continue
+                if os.path.exists(os.path.join(ROOT, ref)):
+                    live.append(ref)
+                    continue
+                target = resolve(ref, exact, prefix)
+                if not target:
+                    dead.append(ref)
+                elif alias_fatal and executed:
+                    # An alias a shell cannot follow is a break, not an indirection.
+                    dead.append(f"{ref} (alias-only -> {target}; a shell cannot follow the ledger)")
+                else:
+                    aliased.append({"ref": ref, "resolves_to": target})
+            results[os.path.join(scan_rel, name)] = {
+                "live": live, "aliased": aliased, "dead": dead,
+            }
 
     totals = {
         "live": sum(len(v["live"]) for v in results.values()),
@@ -167,7 +232,7 @@ def main(argv: list[str]) -> int:
         print(json.dumps(report, indent=2, sort_keys=True))
         return 1 if report["totals"]["dead"] else 0
 
-    print("Claude Code apparatus — path resolution (.claude/)")
+    print("Apparatus path resolution (.claude/ + .github/workflows/)")
     print("=" * 68)
     for path, res in report["files"].items():
         n = len(res["live"]) + len(res["aliased"]) + len(res["dead"])
