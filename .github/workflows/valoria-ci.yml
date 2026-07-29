@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m py_compile \
             tools/ci_common.py \
-            tools/ci_field_golden_check.py \
+            tools/ci_golden_modes_check.py \
             tools/ci_register_size_check.py \
             tools/ci_co_file_checker.py \
             tools/ci_editorial_checker.py \
@@ -681,7 +681,7 @@ jobs:
       - run: python -m pytest engine/tests -q
 
   field-goldens:
-    name: Field Goldens Byte-Exact (shipped configuration)
+    name: Golden Modes Byte-Exact (shipped field configuration + the §4a cell-morale mode)
     runs-on: ubuntu-latest
     needs: syntax-check
     timeout-minutes: 12
@@ -699,10 +699,10 @@ jobs:
       # and re-recorded in A1a, PR #260). Own job, not inside the unit-tests
       # budget: the two field batteries take ~4-8 min combined. The FULL
       # digest-relevant toggle vector is pinned inside the tool (single owner:
-      # tools/ci_field_golden_check.py FIELD_PINS; drift-guarded by
+      # tools/ci_golden_modes_check.py FIELD_PINS; drift-guarded by
       # tests/valoria/test_field_golden_pins.py) — minimal pinning is how ED-1089
       # went wrong.
-      - run: python3 tools/ci_field_golden_check.py
+      - run: python3 tools/ci_golden_modes_check.py
 
   lanchester-signature:
     name: Lanchester Signature (REPORT-ONLY — never fails the build)

@@ -78,9 +78,25 @@ FIELD_PINS = {
     'PC_INTENT_RESOLUTION': '0', 'PC_CLOSE_RANKS': '0', 'PC_TROOP_DENSITY_CAP': '0',
 }
 
+# [ED-MB-0053 / plan-v2 §4a, 2026-07-29] Renamed from ci_field_golden_check.py: this tool is the
+# single owner of "run bat.py --check in a pinned configuration, outside the tests/valoria budget",
+# and that is no longer only about the FIELD modes. The fifth digest mode is a GRID mode, so keeping
+# the field-only name would either have misfiled it or spawned a second owner for the same job.
+#
+# Why the fifth mode lives here rather than in pytest: it is a full ~4-minute battery, and the
+# unit-tests job already measures ~9-11m43s against a 16-minute cap. Adding it there buys a
+# mysterious mid-run cancellation, not coverage. What stays in pytest is the cheap half — that
+# bat._mode_key is INJECTIVE over the toggle cube, which is the trap this mode actually walked into.
 MODES = {
     'unit_field': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '0'},
     'cell_field': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '1'},
+    # The §4a fifth mode. The other four all run at PC_CELL_MORALE=0, where the three cell-morale
+    # maps are EMPTY — so they pin float-order over every per-cell map EXCEPT the three whose
+    # desync motivates the ownership work, and "if a digest moves, you changed behaviour" was
+    # vacuous over exactly the state B1a is about to refactor. This overrides FIELD_PINS'
+    # PC_CELL_MORALE='0' deliberately; the mode-key assertion below is what makes that safe.
+    'cell_cm': {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'PER_CELL': '1',
+                'PC_CELL_MORALE': '1'},
 }
 
 

@@ -2,6 +2,43 @@
 
 Archived entries in tests/coverage_matrix_archive.md
 
+## 2026-07-29 — ED-MB-0053 plan-v2 §4a: the fifth digest mode, and the mode-key extension that had to precede it
+
+**The verification net had a hole over exactly the state B1a is about to refactor.** All four
+digests run at `PC_CELL_MORALE=0`, where `cell_morale` / `cell_start_troops` / `cell_breakpoint` are
+EMPTY — so they pin float-order over every per-cell map *except* the three whose desync motivates
+the ownership work, and "if a digest moves, you changed behaviour" was vacuous over cell state.
+§4a makes a fifth golden a hard gate on starting B1a; this closes it.
+
+**The key extension was mandatory, not tidy-up.** `bat.py`'s mode key read only `PER_CELL` and
+`FIELD_MOVEMENT`, so a run at `PC_CELL_MORALE=1` returned `'cell'` and checked itself against the
+flag-OFF golden — a different configuration. That is precisely the ED-1089 shape the
+`FIELD_MOVEMENT` clause was added to close, one flag later; recording a fifth mode without
+extending the key would have rebuilt the same trap. Extracted as `bat._mode_key(per_cell,
+field_movement, cell_morale)` so it can be tested in microseconds instead of by running a battery.
+
+`cell_cm` = **`b42343dbd508d1e9…`**. **CONTROL (§0.1 #4):** it DIFFERS from the `cell` golden
+(`f58a9cb4…`), so the mode genuinely exercises seeded cell morale rather than silently reproducing
+the flag-off battery — had they matched, the fifth golden would have been ceremony. Deterministic
+2/2. Recorded on Linux/Python 3.11.15.
+
+**Placement, corrected mid-task.** The first draft put the fifth mode's `--check` in
+`tests/valoria`. That is three more full batteries (~7 min locally, more hosted) inside a job
+already measured at ~9–11m43s against a **16-minute cap** — buying a mysterious mid-run
+cancellation, not coverage. Moved to the dedicated golden job, and
+`tools/ci_field_golden_check.py` → **`tools/ci_golden_modes_check.py`**: it was already the single
+owner of "run `bat.py --check` in a pinned configuration outside the unit-test budget", and the
+fifth mode is a GRID mode, so the field-only name would have misfiled it or spawned a second owner.
+Every reference repointed (workflow, `ci_checks_registry.yaml`, the pin-drift test). All three modes
+green.
+
+Guards: `test_mode_key_discriminates_every_digest_toggle` asserts the key is **injective over the
+eight-configuration toggle cube** (a one-example check would pass with any two toggles conflated)
+and that every recorded `EXPECTED` key is one `_mode_key` can actually emit — mutation-verified by
+deleting the `_cm` clause. `test_mode_selectors_cover_every_out_of_budget_golden_mode` extended to
+an exact-set assertion over the three modes, each selector cross-checked against what its name
+claims, plus: `cell_cm` is the ONLY mode permitted to override the `PC_CELL_MORALE` pin.
+
 ## 2026-07-29 — ED-MB-0052 plan-v2 §5 C1: per-phase casualty attribution, with conservation as the gate
 
 Every hp loss is now tagged with SOURCE and TICK through the existing `start_trace`/`trace_event`
@@ -330,62 +367,20 @@ the phase-1 measurement was of aggregate-up only). **Full detail:
 `tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29 under the register size cap,
 ED-MB-0051 — nothing dropped, only relocated).
 
-## 2026-07-25 — ED-MB-0041 phase 1 MEASURED: modest, as predicted; flag stays OFF
+## 2026-07-25 — ED-MB-0041 phase 1 MEASURED: modest, as predicted; flag stays OFF (archived — condensed)
 
-Measured on corrected code (the first run measured the silent-no-op configuration and was discarded).
+The phase-1 cell-morale measurement moved the gauge modestly and the flag stayed OFF. Superseded in
+substance by the same-day RETRACTION above (its arms were confounded by scalar morale writes the
+cell aggregate shadows) — do not cite its numbers. **Full detail:
+`tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29, ED-MB-0053).
 
-| | rout ON baseline | + `PC_CELL_MORALE=1` |
-|---|---|---|
-| casualty realism | 2/20 | **1/20** |
-| win-share | 7/20 | **8/20** |
-| loser casualties | 29-41% | 29.8-45.4% |
-| **H6 specifically** | **79.2%** | **45.4%** |
+## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring (archived — condensed)
 
-**The 2/20 → 1/20 is NOT a regression.** One row crossed a sharp edge: R1 moved 29.9% → 30.2% against a
-30.0% ceiling. Calling that "phase 1 lost a row" would be the band-edge artifact already flagged when it
-ran the other way, and the caveat has to apply symmetrically or it is just advocacy.
-
-**The real movement is H6, 79.2% → 45.4%** — the row no rout-contagion threshold could touch, because
-H6's stubbornness is not at subunit granularity. Per-cell morale reaches it. Win-share also gained a row.
-
-**Verdict: roughly neutral, one structural gain, flag STAYS OFF.** The reason is the one stated *before*
-the measurement: **nothing consumes per-cell morale as a break condition yet.** Rout still evaluates the
-whole-body aggregate — now better-informed, since it is derived from where damage actually landed, but
-still whole-body. The map is populated and correct; nothing reads it to decide a SECTION has gone. That
-is phase 2 (local break), and it is where the payoff should appear.
-
-**The prediction is the point.** It was recorded before the first run and held across a discarded
-measurement and a corrected one. Its first job was catching the silent no-op (a swing far larger than
-predicted); its second is refusing to over-read a neutral result now that the direction is mildly
-favourable. A prediction that only fires against bad news is not a control.
-
-## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring
-
-**1. A silent no-op I introduced — the exact pattern this audit exists to find.** With cell morale
-seeded, `eff_morale` reads the CELL MAP and ignores the scalar; but `erode_morale`/`pull_morale` WRITE
-the scalar. So enabling per-cell morale silently disabled: the canonical §A.4 casualty/exhaustion
-erosion, the DG-4 sibling-coupling pull, and the stochastic-rout punch that drives morale ≤0 to force a
-break — meaning **`PC_STOCHASTIC_ROUT`, ratified an hour earlier, stopped working whenever
-`PC_CELL_MORALE` was on.** Measured: `erode_morale(4.0)` left the aggregate at 6.0 while writing 2.0 to
-a field nobody read. Fixed by routing body-wide morale uniformly across cells: the aggregate is the
-weighted mean, so subtracting `amount` from every cell lowers it by exactly `amount`. Scalar and
-cellular models stay numerically identical for body-wide effects; cells diverge only through LOCAL
-damage, which is the point.
-
-**What caught it was a prediction made before looking.** I stated that phase 1 should move the gauge
-*modestly* and that a large swing would be a warning sign rather than a win. H3 swinging ~66 → 40
-tripped that immediately. Without the prediction there was a ready-made explanation — "per-cell break
-makes bodies come apart earlier" — and a broken configuration would have been banked as a success.
-
-**2. A coupling fault.** `_erode_cell_morale_from_damage` hangs off `_apply_with_spill`, the single
-owner of casualty application, which is deliberately duck-typed. Reading `atom.cell_morale` directly
-made a MORALE feature impose a structural requirement on the DAMAGE substrate. `getattr` now; the fault
-was the coupling, not the test double that exposed it.
-
-**Process note, recorded because it caused a bad push.** I ran `valoria_local --staged | tail -2 && git
-commit`. The pipe means the chain sees `tail`'s exit status, not the gate's — so a FAILING co-file gate
-was masked and the commit proceeded. Gate output must not be piped when its exit code is what gates the
-next command.
+Born-broken subunits (seed_cell_morale ran in Subunit.__post_init__ before the _unit back-ref was
+set, so an inheriting subunit seeded every cell at eff_morale's no-parent 0) and the 1-ulp uniform
+aggregate that crossed a DAMAGE_BY_DEGREE boundary via _morale_sigma. Both kept; both independent
+of the retracted flip. **Full detail: `tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29
+under the register size cap, ED-MB-0053 — nothing dropped, only relocated).
 
 ## 2026-07-25 — ED-MB-0041 phase 1: the cell is the primitive for MORALE
 

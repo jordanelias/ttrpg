@@ -413,7 +413,49 @@ EXPECTED = {
     # This mode: 20,412 degree calls, 14 flips (0.069%), all Partial -> Success at 2.22e-16 ..
     # 4.44e-16 from a continuous `ob`. Two consecutive runs agreed.
     'cell_field': '13bd02dd58d2cf1913df20681d8e8d6e242eced1e16312c41a206a9d4a6a592d',
+    # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
+    # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
+    # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
+    # the three whose desync motivates the ownership work. Without this entry, "if a digest moves,
+    # you changed behaviour" is VACUOUS over exactly the state B1a is about to refactor — which is
+    # why §4a makes this a hard gate on starting B1a rather than a nice-to-have.
+    # CONTROL (§0.1 #4 — a number without one is not a measurement): this digest DIFFERS from the
+    # 'cell' entry above (b42343db… vs f58a9cb4…), so the mode genuinely exercises seeded cell
+    # morale rather than silently reproducing the flag-off battery. Had they matched, the fifth
+    # golden would have been ceremony.
+    # DETERMINISM: two consecutive runs agreed (2/2). Recorded on Linux/Python 3.11.15.
+    # ⚠ Recording this REQUIRED extending the mode key (see compute() above): at PC_CELL_MORALE=1
+    # the old key returned 'cell', so this run would have checked itself against the flag-OFF
+    # golden — the ED-1089 shape, one flag later.
+    'cell_cm': 'b42343dbd508d1e939625d9b3b80744dd1005cbc831505355d4de46540013d2b',
 }
+
+
+def _cfg_mod():
+    import mass_battle.config as _cfg
+    return _cfg
+
+
+def _mode_key(per_cell, field_movement, cell_morale):
+    """The EXPECTED-table key for one toggle configuration. Extracted so it can be tested in
+    microseconds instead of by running a 4-minute battery.
+
+    [ED-MB-0053 / plan-v2 §4a, 2026-07-29] PC_CELL_MORALE joined this key, and it had to before a
+    fifth golden could be recorded at all. The key previously read only PER_CELL and
+    FIELD_MOVEMENT, so a run at PC_CELL_MORALE=1 returned 'cell' and checked itself against the
+    flag-OFF golden — a DIFFERENT configuration. That is precisely the ED-1089 shape the
+    FIELD_MOVEMENT clause was added to close, one flag later; recording a fifth mode without
+    extending the key would have rebuilt the same trap.
+
+    Callers must pass the modules' RESOLVED toggles, never a second independently-defaulted
+    os.environ.get — see compute()'s note on how that drifted once already.
+    """
+    mode = 'cell' if per_cell else 'unit'
+    if field_movement:
+        mode += '_field'
+    if cell_morale:
+        mode += '_cm'
+    return mode
 
 
 def compute():
@@ -432,8 +474,23 @@ def compute():
     # comparing against the WRONG EXPECTED entry. Same failure shape the FIELD_MOVEMENT mode-key
     # fix above already guards against -- fixed the same way, by reading the module's own resolved
     # toggle instead of re-deriving it.
-    base = 'cell' if _u.PER_CELL else 'unit'
-    mode = base + '_field' if _u.FIELD_MOVEMENT else base
+    mode = _mode_key(_u.PER_CELL, _u.FIELD_MOVEMENT, _cfg_mod().PC_CELL_MORALE)
+    # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] PC_CELL_MORALE JOINS THE MODE KEY, and it had to before
+    # a fifth golden could be recorded at all.
+    #
+    # Until now this key read only PER_CELL and FIELD_MOVEMENT. A run at PC_CELL_MORALE=1 therefore
+    # computed mode='cell' and checked itself against the PC_CELL_MORALE=0 golden — a DIFFERENT
+    # configuration — and would have reported a mismatch as a regression, or worse, silently matched
+    # if the two ever coincided. That is exactly the ED-1089 shape the FIELD_MOVEMENT clause above
+    # was added to close, one flag later; recording a fifth mode without extending the key would
+    # have rebuilt the same trap.
+    #
+    # WHY A FIFTH MODE EXISTS: all four existing digests run at PC_CELL_MORALE=0, where the three
+    # cell-morale maps are EMPTY. They verify float-order over every per-cell map EXCEPT the three
+    # whose desync motivates the ownership work — so "if a digest moves, you changed behaviour" is
+    # vacuous over precisely the state B1a is about to refactor. Read from the module's own resolved
+    # toggle, never a second os.environ.get, for the reason the block above records.
+
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:
         # sa/sb: a plain shape string (single-subunit, via make_unit/ANCHOR_MAP) or an army-builder

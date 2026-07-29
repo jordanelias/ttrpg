@@ -399,3 +399,66 @@ record independent of how the final number reads. Flag remains OFF.
 > single-mode rows from a run that had no control beside it and attributed a standing artifact to my
 > own change. The rule this cost me: **a number without its control is not a measurement**, and that
 > applies to a worrying number exactly as much as to a flattering one.
+
+
+<!-- Relocated verbatim from tests/coverage_matrix.md 2026-07-29 (ED-MB-0053). -->
+
+## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring
+
+**1. A silent no-op I introduced — the exact pattern this audit exists to find.** With cell morale
+seeded, `eff_morale` reads the CELL MAP and ignores the scalar; but `erode_morale`/`pull_morale` WRITE
+the scalar. So enabling per-cell morale silently disabled: the canonical §A.4 casualty/exhaustion
+erosion, the DG-4 sibling-coupling pull, and the stochastic-rout punch that drives morale ≤0 to force a
+break — meaning **`PC_STOCHASTIC_ROUT`, ratified an hour earlier, stopped working whenever
+`PC_CELL_MORALE` was on.** Measured: `erode_morale(4.0)` left the aggregate at 6.0 while writing 2.0 to
+a field nobody read. Fixed by routing body-wide morale uniformly across cells: the aggregate is the
+weighted mean, so subtracting `amount` from every cell lowers it by exactly `amount`. Scalar and
+cellular models stay numerically identical for body-wide effects; cells diverge only through LOCAL
+damage, which is the point.
+
+**What caught it was a prediction made before looking.** I stated that phase 1 should move the gauge
+*modestly* and that a large swing would be a warning sign rather than a win. H3 swinging ~66 → 40
+tripped that immediately. Without the prediction there was a ready-made explanation — "per-cell break
+makes bodies come apart earlier" — and a broken configuration would have been banked as a success.
+
+**2. A coupling fault.** `_erode_cell_morale_from_damage` hangs off `_apply_with_spill`, the single
+owner of casualty application, which is deliberately duck-typed. Reading `atom.cell_morale` directly
+made a MORALE feature impose a structural requirement on the DAMAGE substrate. `getattr` now; the fault
+was the coupling, not the test double that exposed it.
+
+**Process note, recorded because it caused a bad push.** I ran `valoria_local --staged | tail -2 && git
+commit`. The pipe means the chain sees `tail`'s exit status, not the gate's — so a FAILING co-file gate
+was masked and the commit proceeded. Gate output must not be piped when its exit code is what gates the
+next command.
+
+
+<!-- Relocated verbatim from tests/coverage_matrix.md 2026-07-29 (ED-MB-0053). -->
+
+## 2026-07-25 — ED-MB-0041 phase 1 MEASURED: modest, as predicted; flag stays OFF
+
+Measured on corrected code (the first run measured the silent-no-op configuration and was discarded).
+
+| | rout ON baseline | + `PC_CELL_MORALE=1` |
+|---|---|---|
+| casualty realism | 2/20 | **1/20** |
+| win-share | 7/20 | **8/20** |
+| loser casualties | 29-41% | 29.8-45.4% |
+| **H6 specifically** | **79.2%** | **45.4%** |
+
+**The 2/20 → 1/20 is NOT a regression.** One row crossed a sharp edge: R1 moved 29.9% → 30.2% against a
+30.0% ceiling. Calling that "phase 1 lost a row" would be the band-edge artifact already flagged when it
+ran the other way, and the caveat has to apply symmetrically or it is just advocacy.
+
+**The real movement is H6, 79.2% → 45.4%** — the row no rout-contagion threshold could touch, because
+H6's stubbornness is not at subunit granularity. Per-cell morale reaches it. Win-share also gained a row.
+
+**Verdict: roughly neutral, one structural gain, flag STAYS OFF.** The reason is the one stated *before*
+the measurement: **nothing consumes per-cell morale as a break condition yet.** Rout still evaluates the
+whole-body aggregate — now better-informed, since it is derived from where damage actually landed, but
+still whole-body. The map is populated and correct; nothing reads it to decide a SECTION has gone. That
+is phase 2 (local break), and it is where the payoff should appear.
+
+**The prediction is the point.** It was recorded before the first run and held across a discarded
+measurement and a corrected one. Its first job was catching the silent no-op (a swing far larger than
+predicted); its second is refusing to over-read a neutral result now that the direction is mildly
+favourable. A prediction that only fires against bad news is not a control.

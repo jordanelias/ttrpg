@@ -70,9 +70,9 @@ ci_checks:
     ci_job: editorial-check
     notes: ""
 
-  - path: tools/ci_field_golden_check.py
+  - path: tools/ci_golden_modes_check.py
     level: 5
-    role: "Field-golden byte-exact gate (unit_field/cell_field, FIELD_MOVEMENT=1) with the FULL digest-relevant toggle vector pinned — the shipped configuration's regression oracle (ED-MB-0045 A1b)."
+    role: "Golden-mode byte-exact gate (unit_field/cell_field + the §4a cell_cm mode) with the FULL digest-relevant toggle vector pinned — the shipped configuration's regression oracle (ED-MB-0045 A1b)."
     paired_hook: ""    # deliberately CI-only: the two field batteries take ~4-8 min, far over local-hook budget
     ci_job: field-goldens
     notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests."

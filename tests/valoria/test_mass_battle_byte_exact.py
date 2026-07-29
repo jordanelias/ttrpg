@@ -52,6 +52,7 @@ fixed here, since a real fix touches the canonical 'cell' golden digest -- Jorda
 import os
 import platform
 import subprocess
+import sys
 
 import pytest
 
@@ -89,7 +90,7 @@ _PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': 
                'PYTHONHASHSEED': '0'}
 
 
-def _run_bat(per_cell):
+def _run_bat(per_cell, cell_morale=False):
     """Run bat.py --check for one PER_CELL mode, toggles pinned OFF (see _PINNED_OFF), in a subprocess.
 
     Deliberately invokes 'python3' on PATH, NOT sys.executable — under some pytest install layouts
@@ -99,6 +100,9 @@ def _run_bat(per_cell):
     env = dict(os.environ)
     env.update(_PINNED_OFF)
     env['PER_CELL'] = '1' if per_cell else '0'
+    # [ED-MB-0053 / §4a] _PINNED_OFF pins PC_CELL_MORALE=0; the fifth mode overrides it deliberately.
+    if cell_morale:
+        env['PC_CELL_MORALE'] = '1'
     # compute() genuinely takes tens of seconds to ~2 minutes (10 matchups x 24 seeds x up to 20
     # battle-turns of real engine work; 'cell' mode's finer per-subunit granularity runs longest) --
     # this is NOT startup/spawn overhead, it is the battery itself. 300s gives real headroom above the
@@ -136,3 +140,36 @@ def test_byte_exact_cell_mode():
         "cell-mode digest doesn't match the golden value on this platform/Python version -- a known, "
         "narrow, pre-existing engine non-portability (not a regression), only verified byte-exact on "
         f"the reference CI environment (see module docstring). Got:\n{r.stdout}\n{r.stderr}")
+
+
+# ── [ED-MB-0053 / plan v2 §4a] THE FIFTH DIGEST MODE — key guard only, by design ────────────────
+#
+# The fifth mode's actual `--check` runs in the DEDICATED golden job (tools/ci_golden_modes_check.py,
+# CI job `golden-modes`), not here. Reason, stated because the first draft got it wrong: running it
+# in this suite meant three more full batteries (~7 min locally, more on a hosted runner) inside a
+# job already measured at ~9-11m43s against a 16-minute cap. That is how a suite acquires a
+# mysterious cancellation instead of a finding. What belongs HERE is the part that is cheap and
+# catches the actual trap: that the mode KEY discriminates the flag.
+
+def test_mode_key_discriminates_every_digest_toggle():
+    """The key must separate all three digest-selecting toggles, or a run checks the wrong golden.
+
+    Until 2026-07-29 the key read only PER_CELL and FIELD_MOVEMENT, so a PC_CELL_MORALE=1 run
+    reported 'cell' and compared itself against the flag-OFF golden — the ED-1089 shape, one flag
+    later. This asserts the key is INJECTIVE over the toggle cube: eight configurations, eight
+    distinct names. A weaker test (checking one example) would pass with any two toggles conflated.
+
+    MUTATION: drop the `_cm` clause in bat._mode_key and this fails on the collision.
+    """
+    sys.path.insert(0, os.path.join(REPO_ROOT, 'tests', 'sim'))
+    import mass_battle.bat as bat
+    cube = {(pc, fm, cm): bat._mode_key(pc, fm, cm)
+            for pc in (0, 1) for fm in (0, 1) for cm in (0, 1)}
+    assert len(set(cube.values())) == 8, f"mode key is not injective over the toggles: {cube}"
+    assert cube[(1, 0, 1)] == 'cell_cm'
+    assert cube[(1, 0, 0)] == 'cell'
+    # every recorded golden must be a key this function can actually produce
+    for recorded in bat.EXPECTED:
+        assert recorded in cube.values(), (
+            f"EXPECTED holds {recorded!r}, which _mode_key can never emit — the table and the key "
+            f"have drifted apart")
