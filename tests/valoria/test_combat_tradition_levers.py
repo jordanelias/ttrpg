@@ -23,7 +23,6 @@ import pytest
 
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-pytest.importorskip("numpy")
 
 import random  # noqa: E402
 import ability_primitives as ABIL  # noqa: E402

@@ -20,11 +20,8 @@ import json
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-sys.path.insert(0, os.path.join(ENGINE, '..', '..', '..', 'tests', 'sim', 'v32-combat-balance'))
 
 GOLDEN = os.path.join(os.path.dirname(__file__), 'golden_element_parity.json')
 TOL = 1e-9
@@ -33,7 +30,6 @@ TIERS = ('none', 'light', 'medium', 'heavy')
 
 
 def _mods():
-    pytest.importorskip("numpy")
     import combatant as C
     import combat_systems as S
     import weapon_physics as WP

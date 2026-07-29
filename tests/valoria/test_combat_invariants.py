@@ -22,11 +22,9 @@ import pytest
 
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-sys.path.insert(0, os.path.join(ENGINE, 'tests', 'sim', 'v32-combat-balance'))
 
 
 def _mods():
-    pytest.importorskip("numpy")
     import combatant as C
     import core
     import combat_systems as S
@@ -43,7 +41,6 @@ def _instrument():
     not just its base form — and (b) the position-swapped duel harness. A guard that re-derived either would be free
     to drift from the tool whose output justified the guard's own bands, which is precisely how ED-PC-0039 shipped a
     participation guard whose comment contradicted its own commit's measurements."""
-    pytest.importorskip("numpy")
     sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
     import armour_participation
     return armour_participation
@@ -53,17 +50,42 @@ def _instrument():
 def test_percussion_authority_single_source():
     """core.p_auth (the duplicate that read the hand-set pob_frac) was deleted and unified onto
     weapon_physics.percussion_authority — the invariant whose ABSENCE let the incomplete de-leak land. Guard: it stays
-    gone, and both the damage path (core.strike) and the sigma path (systems.adef_cap) read the SAME WP authority."""
+    gone, and both the damage path (core.strike) and the sigma path (systems.adef_cap) read the SAME WP authority.
+
+    [2026-07-29 vetting] The two path assertions below used to pin nothing. One was `abs(ADEF_BLUNT*pa/REF) > 0`,
+    which is `pa > 0` (already asserted) in different algebraic dress; the other was a `>=` against ONE ARM of a
+    `max()`, which holds by construction of max() regardless of what the sigma path actually derives. Both now pin
+    EQUALITY against the WP value, and the damage-path equality carries a perturbed CONTROL proving it can observe
+    a divergence rather than being insensitive to percussion altogether (§0.1 point 2/4)."""
     C, core, S, WP, CFG = _mods()
     assert not hasattr(core, 'p_auth'), "core.p_auth resurrected — percussion authority is double-derived again"
-    # the sigma path (adef_cap blunt branch) is defined in terms of WP.percussion_authority; confirm a mace's
-    # blunt armour-defeat capability tracks the WP value (not a private re-derivation).
     mace = C.WEAPONS['mace']
     pa = WP.percussion_authority(mace)
     assert pa > 0
-    # adef_cap blunt = max(ADEF_BLUNT*pa/REF, ADEF_POINT*puncture/REF); the concussion term must equal the WP source
-    assert abs(CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF'])) > 0
-    assert S.adef_cap(mace, CFG, 'blunt') >= CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF']) - 1e-9
+
+    # SIGMA PATH. core.adef_cap's blunt branch is max(ADEF_BLUNT*pa/REF, ADEF_POINT*puncture/REF). A mace is the
+    # weapon whose concussion arm dominates that max, so the result must equal the WP-derived term EXACTLY; any
+    # private re-derivation that drifts by so much as an ulp breaks this, where the old `>=` could not.
+    blunt_term = CFG['ADEF_BLUNT'] * (pa / CFG['ADEF_PERC_REF'])
+    assert S.adef_cap(mace, CFG, 'blunt') == blunt_term, (
+        f"adef_cap's blunt branch ({S.adef_cap(mace, CFG, 'blunt')!r}) is no longer the WP authority term "
+        f"({blunt_term!r}) — the sigma path has re-derived percussion privately")
+    assert S.adef_cap(mace, CFG, 'blunt') == core.adef_cap(mace, CFG, head='blunt'), \
+        "systems.adef_cap stopped delegating to core.adef_cap — the armour-defeat rule lives twice again"
+
+    # DAMAGE PATH. core.strike's percussion default is `sel_perc if not None else WP.percussion_authority(w)`. Pin
+    # that the fallback IS the WP value: an attacker with no selected element must be damaged identically to one
+    # whose sel_perc is set explicitly to the WP authority, across every armour tier.
+    def _dmg(sel_perc, armor):
+        a = C.Combatant('A', weapon='mace'); d = C.Combatant('D', weapon='arming', armor=armor)
+        a.sel_perc = sel_perc
+        return core.strike(a, d, 'success', CFG)
+    for armor in ('none', 'light', 'medium', 'heavy'):
+        assert _dmg(None, armor) == _dmg(pa, armor), (
+            f"@{armor}: core.strike's percussion fallback is not WP.percussion_authority — the damage path and the "
+            f"sigma path no longer read the same authority")
+        assert _dmg(None, armor) != _dmg(pa * 0.25, armor), (
+            f"@{armor}: core.strike is insensitive to sel_perc, so the equality above pins nothing")
 
 
 # ── NO WEAPON-NAME TABLE IN RESOLUTION ────────────────────────────────────────────────────────────
@@ -85,11 +107,17 @@ def _string_literals_excluding_docstrings(path):
 def test_no_weapon_name_literal_in_resolution():
     """poleaxe/mace/staff are bundles of primitives; the L0 primitive-law forbids a weapon-NAME conditional / per-weapon
     table in resolution. Scan the resolution modules for any weapon-name string LITERAL in live code (docstrings +
-    comments allowed). A regression that hard-codes `if weapon=='poleaxe'` trips this."""
+    comments allowed). A regression that hard-codes `if weapon=='poleaxe'` trips this.
+
+    [2026-07-29 vetting] The scan covered four modules while the primitive-law it enforces applies to the whole
+    resolution surface. Extended to the four derivation modules that also resolve per-weapon behaviour —
+    weapon_physics.py, geometry.py, ability_primitives.py, traditions.py — all verified clean at extension time,
+    so the widening is a guard against future drift, not a retroactive amnesty."""
     C, core, S, WP, CFG = _mods()
     names = {n for n in C.WEAPONS if 'base' not in C.WEAPONS[n]}  # weapon names (exclude auto-switch forms)
     offenders = {}
-    for mod in ('core.py', 'combat_systems.py', 'wrapper.py', 'contact.py'):   # I7b: contact.py joins the scanned resolution modules
+    for mod in ('core.py', 'combat_systems.py', 'wrapper.py', 'contact.py',   # I7b: contact.py joins the scanned resolution modules
+                'weapon_physics.py', 'geometry.py', 'ability_primitives.py', 'traditions.py'):
         lits = _string_literals_excluding_docstrings(os.path.join(ENGINE, mod))
         hit = sorted({s for s in lits if s in names})
         if hit:

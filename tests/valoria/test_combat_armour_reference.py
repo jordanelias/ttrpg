@@ -35,7 +35,6 @@ TOLERANCE = 0.15
 
 
 def _instrument():
-    pytest.importorskip("numpy")
     sys.path.insert(0, os.path.join(ENGINE, 'workbench'))
     import armour_participation
     return armour_participation

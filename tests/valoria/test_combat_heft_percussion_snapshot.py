@@ -16,12 +16,8 @@ import json
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-
-pytest.importorskip("numpy")  # engine import chain needs numpy + the sim modules
 
 import core  # noqa: E402
 import weapon_physics as WP  # noqa: E402

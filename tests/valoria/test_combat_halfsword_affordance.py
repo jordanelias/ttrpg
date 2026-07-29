@@ -9,11 +9,8 @@ whitelist. These tests pin: (1) the byte-identical-at-parity acceptance (derived
 import os
 import sys
 
-import pytest
-
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
 sys.path.insert(0, ENGINE)
-pytest.importorskip("numpy")
 
 import combat_systems as S  # noqa: E402
 from combatant import WEAPONS, Combatant, HALFSWORD_FORM, HALFSWORD_BASE  # noqa: E402
