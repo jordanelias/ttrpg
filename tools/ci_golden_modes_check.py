@@ -76,6 +76,12 @@ FIELD_PINS = {
     # via the PER_CELL lifecycle; PC_TROOP_DENSITY_CAP via the cavalry rows.)
     'PC_FRICTION_CEV': '0', 'PC_FRICTION_SIGMA': '1.1', 'PC_FRACTIONAL_POOL': '0',
     'PC_INTENT_RESOLUTION': '0', 'PC_CLOSE_RANKS': '0', 'PC_TROOP_DENSITY_CAP': '0',
+    # [ED-MB-0059, 2026-07-29] Same-side cell exclusion. Default ON, and STRONGLY digest-moving on
+    # the two field modes (it is a no-op on the grid modes — the pass lives inside
+    # resolve_toi_and_commit, which only runs under FIELD_MOVEMENT). Pinned at its shipped default
+    # for the same reason every Group C entry is: an ambient flip must produce a named red here,
+    # not a mystery digest mismatch.
+    'PC_CELL_EXCLUSION': '1',
 }
 
 # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] Renamed from ci_field_golden_check.py: this tool is the

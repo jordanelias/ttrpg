@@ -19,283 +19,283 @@
   "scenarios": {
     "C1": {
       "end_state": {
-        "a_hp_pct": 57.3,
+        "a_hp_pct": 36.6,
         "a_routed": true,
         "a_subunits": 4,
-        "a_troops": 1145.5,
-        "b_hp_pct": 99.1,
+        "a_troops": 731.1,
+        "b_hp_pct": 99.5,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9907.4
+        "b_troops": 9952.0
       },
       "label": "Cavalry vs steady unbraced line",
-      "sha256": "2536a762efc5e2816bd547723ffb4b6f0d39dad1d26b6f4fb6f53a4dc034420b"
+      "sha256": "444309327c1bed998750772f181961635c0e46bb4047125635e7ba7f927695f6"
     },
     "C2": {
       "end_state": {
-        "a_hp_pct": 51.4,
+        "a_hp_pct": 47.2,
         "a_routed": true,
         "a_subunits": 4,
-        "a_troops": 1027.1,
-        "b_hp_pct": 99.7,
+        "a_troops": 944.0,
+        "b_hp_pct": 99.8,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9972.1
+        "b_troops": 9985.0
       },
       "label": "Courtrai: cavalry vs BRACED deep block",
-      "sha256": "3d9d486cf27e235ccbb013476645c3b3ed947cc1862c494d9f4903ce145d4770"
+      "sha256": "4123647903b8188d23e33364ae78c5b59b88e01ea4e45893e778118aeb0b9df4"
     },
     "C3": {
       "end_state": {
-        "a_hp_pct": 92.5,
+        "a_hp_pct": 91.2,
         "a_routed": false,
         "a_subunits": 4,
-        "a_troops": 1849.6,
-        "b_hp_pct": 93.5,
+        "a_troops": 1825.0,
+        "b_hp_pct": 94.4,
         "b_routed": false,
         "b_subunits": 4,
-        "b_troops": 1869.5
+        "b_troops": 1888.3
       },
       "label": "Cavalry vs cavalry (mirror control)",
-      "sha256": "1ce4eb9ffa57b47c35136247fb490bc5391a17f9cc1258317a06b900f55f9f67"
+      "sha256": "4b27982c77fa901e39ac7c49c21b4f381e9b3e997f316b4f35c1759e842a976b"
     },
     "C4": {
       "end_state": {
-        "a_hp_pct": 98.7,
+        "a_hp_pct": 97.9,
         "a_routed": false,
         "a_subunits": 5,
-        "a_troops": 9869.8,
-        "b_hp_pct": 86.4,
+        "a_troops": 9787.8,
+        "b_hp_pct": 83.5,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 8642.3
+        "b_troops": 8345.4
       },
       "label": "Cannae cavalry: envelopment vs line",
-      "sha256": "b3b0ef0feb3a383eaf3f431aa13eaf3e9b985b2b95a89b4eca3547706cf5e1fd"
+      "sha256": "6d0d044f1f80ab01d64509d69b1f527fce954764963fda4e9377bcf21dde9455"
     },
     "C5": {
       "end_state": {
-        "a_hp_pct": 63.5,
+        "a_hp_pct": 52.1,
         "a_routed": true,
         "a_subunits": 4,
-        "a_troops": 1269.2,
-        "b_hp_pct": 98.6,
+        "a_troops": 1041.3,
+        "b_hp_pct": 98.5,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9858.9
+        "b_troops": 9848.1
       },
       "label": "Cavalry vs SHAKEN line",
-      "sha256": "2536a762efc5e2816bd547723ffb4b6f0d39dad1d26b6f4fb6f53a4dc034420b"
+      "sha256": "39b44cf10fbd18130b8f7ea0818125696783660d185b3e25219ebf46e35b1764"
     },
     "C6": {
       "end_state": {
-        "a_hp_pct": 2.9,
+        "a_hp_pct": 20.1,
         "a_routed": true,
         "a_subunits": 4,
-        "a_troops": 57.7,
-        "b_hp_pct": 100.0,
+        "a_troops": 402.6,
+        "b_hp_pct": 99.9,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 10000.0
+        "b_troops": 9988.6
       },
       "label": "Cavalry vs BRACED-shallow line",
-      "sha256": "49820061cd1f7fd0525ed39fb2dec88e4078ec2b46dbcbb3c38ae923a6a9548f"
+      "sha256": "a5bccb7f0eefe8ebd855f86395f8307604068776e93f24476ab13fd449098780"
     },
     "C7": {
       "end_state": {
-        "a_hp_pct": 99.3,
+        "a_hp_pct": 100.0,
         "a_routed": false,
         "a_subunits": 5,
-        "a_troops": 9925.9,
-        "b_hp_pct": 81.9,
+        "a_troops": 10000.0,
+        "b_hp_pct": 93.0,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 8192.1
+        "b_troops": 9300.5
       },
       "label": "Cavalry envelopment vs holding line",
-      "sha256": "ed28d0717990c70623e820c461755fffd70838cc74372099c6d4ed184c092afa"
+      "sha256": "b8fa6264255f38c5b434cc2a13f211fe907af02b83dd081c3765aeaa18dbf722"
     },
     "H1": {
       "end_state": {
-        "a_hp_pct": 92.9,
+        "a_hp_pct": 93.7,
         "a_routed": false,
         "a_subunits": 6,
-        "a_troops": 9287.5,
-        "b_hp_pct": 92.0,
+        "a_troops": 9372.9,
+        "b_hp_pct": 94.2,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9201.3
+        "b_troops": 9416.9
       },
       "label": "Line vs Line (mirror) \u2014 parity control",
-      "sha256": "cbf5749d5d2169918868ba8c473838904760c799255c2f77ada1fade56f813ac"
+      "sha256": "f862ac8fbed1d7f800bec73a6eead65392158aed3904701aed05159bf0b551ea"
     },
     "H10": {
       "end_state": {
-        "a_hp_pct": 94.9,
+        "a_hp_pct": 97.3,
         "a_routed": false,
         "a_subunits": 8,
-        "a_troops": 9494.4,
-        "b_hp_pct": 80.2,
+        "a_troops": 9733.0,
+        "b_hp_pct": 94.7,
         "b_routed": false,
         "b_subunits": 7,
-        "b_troops": 4665.6
+        "b_troops": 5508.1
       },
       "label": "Roman mass vs Carthaginian crescent (rev H3)",
-      "sha256": "9725b2afba0299aef938a3fc505a631ff90922266271dcf27136e053dc125dcc"
+      "sha256": "a115c841169e2594881c823af0eeac184080968b775e5d149562606cfa129a76"
     },
     "H11": {
+      "end_state": {
+        "a_hp_pct": 97.9,
+        "a_routed": false,
+        "a_subunits": 5,
+        "a_troops": 9792.9,
+        "b_hp_pct": 86.7,
+        "b_routed": false,
+        "b_subunits": 7,
+        "b_troops": 5042.9
+      },
+      "label": "Wedge vs crescent (rev H4)",
+      "sha256": "18faa46c67613bec6fba3d845edee9a092d474622a11d7a423ff3f5f49b70f60"
+    },
+    "H2": {
+      "end_state": {
+        "a_hp_pct": 95.3,
+        "a_routed": false,
+        "a_subunits": 5,
+        "a_troops": 9531.3,
+        "b_hp_pct": 93.8,
+        "b_routed": false,
+        "b_subunits": 6,
+        "b_troops": 9377.3
+      },
+      "label": "Wedge vs Line",
+      "sha256": "dfa7dc86e9aa215bc36f409ed4e45d5a7534b571657153a6daba24acd07afaed"
+    },
+    "H3": {
+      "end_state": {
+        "a_hp_pct": 93.7,
+        "a_routed": false,
+        "a_subunits": 7,
+        "a_troops": 5446.8,
+        "b_hp_pct": 97.9,
+        "b_routed": false,
+        "b_subunits": 8,
+        "b_troops": 9793.7
+      },
+      "label": "Cannae: Carthaginian crescent vs Roman mass",
+      "sha256": "791cc63a52d789c682b878575d6c6ade7f83ad748194f695443e9afecd594a06"
+    },
+    "H4": {
+      "end_state": {
+        "a_hp_pct": 85.7,
+        "a_routed": false,
+        "a_subunits": 7,
+        "a_troops": 4982.5,
+        "b_hp_pct": 98.6,
+        "b_routed": false,
+        "b_subunits": 5,
+        "b_troops": 9863.5
+      },
+      "label": "Cannae: crescent vs Roman wedge",
+      "sha256": "76464f83cc8469ece8b0b737884deb0e71ffbd61b9b7e9ea990ab173eee647a9"
+    },
+    "H5": {
       "end_state": {
         "a_hp_pct": 98.7,
         "a_routed": false,
         "a_subunits": 5,
-        "a_troops": 9868.4,
-        "b_hp_pct": 68.5,
+        "a_troops": 6581.5,
+        "b_hp_pct": 96.1,
         "b_routed": false,
         "b_subunits": 7,
-        "b_troops": 3984.9
-      },
-      "label": "Wedge vs crescent (rev H4)",
-      "sha256": "9fc66035eba13735cb8e4d91422304e7691326f7b1e2d72978d3163b4036f028"
-    },
-    "H2": {
-      "end_state": {
-        "a_hp_pct": 94.7,
-        "a_routed": false,
-        "a_subunits": 5,
-        "a_troops": 9469.0,
-        "b_hp_pct": 92.3,
-        "b_routed": false,
-        "b_subunits": 6,
-        "b_troops": 9226.2
-      },
-      "label": "Wedge vs Line",
-      "sha256": "2727e64851b1432d782562882271c83671ac6ffc9b3fdd5abb3994cf243e4d49"
-    },
-    "H3": {
-      "end_state": {
-        "a_hp_pct": 84.8,
-        "a_routed": false,
-        "a_subunits": 7,
-        "a_troops": 4929.7,
-        "b_hp_pct": 93.0,
-        "b_routed": false,
-        "b_subunits": 8,
-        "b_troops": 9295.3
-      },
-      "label": "Cannae: Carthaginian crescent vs Roman mass",
-      "sha256": "8833c6a9001fcebc2555504d5494b5c34537be6c2f33974553797d272f2f90ae"
-    },
-    "H4": {
-      "end_state": {
-        "a_hp_pct": 68.9,
-        "a_routed": false,
-        "a_subunits": 7,
-        "a_troops": 4006.1,
-        "b_hp_pct": 98.8,
-        "b_routed": false,
-        "b_subunits": 5,
-        "b_troops": 9875.2
-      },
-      "label": "Cannae: crescent vs Roman wedge",
-      "sha256": "046cc0d9c65d5a794fca14ac1357f6ddde4463308e3c88d4a411df292c0c59cd"
-    },
-    "H5": {
-      "end_state": {
-        "a_hp_pct": 95.2,
-        "a_routed": false,
-        "a_subunits": 5,
-        "a_troops": 6345.0,
-        "b_hp_pct": 91.2,
-        "b_routed": false,
-        "b_subunits": 7,
-        "b_troops": 5304.0
+        "b_troops": 5586.9
       },
       "label": "Leuctra oblique vs Cannae crescent",
-      "sha256": "36cfbce6e6e00e0976e32c123d501b3b34cbfe4aecd03ae1e44e26690daa074d"
+      "sha256": "530c0da980159541df980f03f70a4d93b5b1d024861dec55905362d58f0d914f"
     },
     "H6": {
       "end_state": {
-        "a_hp_pct": 91.7,
+        "a_hp_pct": 98.3,
         "a_routed": false,
         "a_subunits": 5,
-        "a_troops": 6113.3,
-        "b_hp_pct": 97.2,
+        "a_troops": 6551.5,
+        "b_hp_pct": 99.2,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9715.2
+        "b_troops": 9915.6
       },
       "label": "Leuctra: Theban oblique vs Spartan line",
-      "sha256": "5e20ea361060cd450dca2072c90ae8974c217f5f95cf955ce18621692116c352"
+      "sha256": "58ffd3d1c3143c452a8a08fd191761b61d32bea4432d2c90a889a2f0f63f01ac"
     },
     "H7": {
       "end_state": {
-        "a_hp_pct": 93.1,
+        "a_hp_pct": 95.7,
         "a_routed": false,
         "a_subunits": 6,
-        "a_troops": 7912.4,
-        "b_hp_pct": 93.0,
+        "a_troops": 8134.5,
+        "b_hp_pct": 96.5,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9304.5
+        "b_troops": 9653.5
       },
       "label": "Zama: Roman quincunx vs Carthaginian line",
-      "sha256": "8cee6e9f0c11bf268a11d1520c07c9b88ee6670bbb4df68da1bad3d44edd1923"
+      "sha256": "3cfdd10f14f9ef2d6ec4a3d5c904a3083712963175d7dd5728e2d81c6910b9bd"
     },
     "H8": {
       "end_state": {
-        "a_hp_pct": 92.3,
+        "a_hp_pct": 94.5,
         "a_routed": false,
         "a_subunits": 6,
-        "a_troops": 7845.9,
-        "b_hp_pct": 94.9,
+        "a_troops": 8029.6,
+        "b_hp_pct": 97.7,
         "b_routed": false,
         "b_subunits": 5,
-        "b_troops": 9488.8
+        "b_troops": 9768.0
       },
       "label": "Quincunx vs wedge",
-      "sha256": "2f42166f36a109ebb69682a72bc88cd49e0c02a250e49983cd99bfea7c9c9b28"
+      "sha256": "865c4e4a7678e083a59aedc5a02577ea31344642e2505a1a50c0c27349c1d195"
     },
     "H9": {
       "end_state": {
-        "a_hp_pct": 91.3,
+        "a_hp_pct": 92.6,
         "a_routed": false,
         "a_subunits": 6,
-        "a_troops": 9133.6,
-        "b_hp_pct": 95.5,
+        "a_troops": 9259.8,
+        "b_hp_pct": 96.0,
         "b_routed": false,
         "b_subunits": 5,
-        "b_troops": 9548.9
+        "b_troops": 9599.9
       },
       "label": "Line vs wedge (rev H2)",
-      "sha256": "4530942884fae69abb1a3d20f612c29f807231a6ed8a1edde22dc7da0704a224"
+      "sha256": "238aad0c63033e7394d3b7aeac7386522a2b03a3d52076ebe16680089d35b7a1"
     },
     "R1": {
       "end_state": {
-        "a_hp_pct": 74.2,
+        "a_hp_pct": 84.4,
         "a_routed": false,
         "a_subunits": 5,
-        "a_troops": 2474.3,
-        "b_hp_pct": 96.7,
+        "a_troops": 2812.2,
+        "b_hp_pct": 97.0,
         "b_routed": false,
         "b_subunits": 6,
-        "b_troops": 9673.9
+        "b_troops": 9701.3
       },
       "label": "Agincourt: English archers vs French battles",
-      "sha256": "c85ba396ef91dab2d3218842d27d42c45d989051b4a55b067b9c05a59e335aff"
+      "sha256": "91f59bba4eb0feedcafa19aa8ff7bab7c58c90c6bc1d0b2a9bea75e27f588472"
     },
     "R3": {
       "end_state": {
-        "a_hp_pct": 91.3,
+        "a_hp_pct": 92.2,
         "a_routed": false,
         "a_subunits": 5,
-        "a_troops": 3044.5,
-        "b_hp_pct": 91.6,
+        "a_troops": 3074.0,
+        "b_hp_pct": 93.5,
         "b_routed": false,
         "b_subunits": 5,
-        "b_troops": 3054.1
+        "b_troops": 3118.0
       },
       "label": "Archers vs archers (mirror)",
-      "sha256": "5f0478bdf976b5f1144901c2d25a80c08516827e12bf30500cb6cda95c2297ed"
+      "sha256": "52d1174c67c5059321c55d356351dbac815775e8f3d600020b00fab95d7e0e97"
     }
   },
   "seed": 1000000,

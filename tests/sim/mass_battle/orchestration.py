@@ -2212,15 +2212,30 @@ def between_turn_recovery(unit):
     # constant set to 0. The pool is kept current here for the unseeded path, which still reads it.
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
     for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
-        if atom.morale is not None:
-            # via set_morale, NOT a bare `atom.morale =` — an absolute write must reach the cells or it is
-            # a no-op under PC_CELL_MORALE. Read the CURRENT value through eff_morale for the same reason.
-            # Unseeded, eff_morale IS atom.morale, so this is byte-identical to the previous expression.
-            atom.set_morale(min(atom.eff_morale_start, atom.eff_morale + BETWEEN_TURN_MORALE_RECOVERY))
-        elif atom.cell_morale:
-            # Inheriting AND cellular: the unit pool above cannot reach this body (its state lives in its
-            # cells), so recover the cells directly. pull_morale is already the capped, signed, cell-routed
-            # shift this needs — reusing it keeps one owner for "move a body's morale by a delta".
+        # [ED-MB-0058, resolving ED-MB-0046] ONE owner, both ownership kinds. This used to branch:
+        # own-morale subunits went through `set_morale`, inheriting-but-cellular ones through
+        # `pull_morale`. That split was the confound.
+        #
+        # `set_morale` is the ABSOLUTE writer: it is a body-wide statement, so it sets EVERY cell to
+        # one value. Recovery is not a body-wide statement — it is a bounded INCREMENT — so routing
+        # it through the absolute owner FLATTENED all per-cell morale divergence to the mean at
+        # every turn boundary. Measured on the own-morale path: cells {1.0, 2.0, 6.0} (eff 5.64)
+        # became {5.64, 5.64, 5.64} after one call. Every `build_army` body — i.e. every gauge and
+        # multi-subunit army — is on that path, so under `PC_CELL_MORALE` the feature's entire point
+        # (a low-morale corner that persists and spreads) was erased once per turn. That is a LIVE
+        # CONFOUND for any cell-morale measurement, and it is the reason the flag could not be
+        # honestly re-measured, let alone flipped.
+        #
+        # `pull_morale` is the RELATIVE owner and already does exactly what is needed: it caps
+        # against `eff_morale_start`, derives ONE shift from the aggregate, and applies that same
+        # shift to every cell — so the body recovers by the right amount and the divergence between
+        # its cells survives. Unseeded it reduces to `min(eff_morale_start, eff_morale + R)` written
+        # to the scalar, which is byte-identical to the expression it replaces.
+        #
+        # The `or atom.cell_morale` keeps an inheriting-but-cellular body in scope, and a body that
+        # is NEITHER stays out of it — the unit-pool line above is that body's recovery, and calling
+        # `pull_morale` for it would write the unit pool once per subunit and compound the increment.
+        if atom.morale is not None or atom.cell_morale:
             atom.pull_morale(BETWEEN_TURN_MORALE_RECOVERY)
     # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
     # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above

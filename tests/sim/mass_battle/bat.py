@@ -356,7 +356,17 @@ EXPECTED = {
     # #233/#234 verified byte-exact on both field modes at rout=0; completeness at rout=1 is
     # carried by the endpoint equality below. Those PRs re-recorded grid only and left these
     # stale — the gap A1b's CI job closes.
-    'unit_field': '6f5942339d4bbb446b48c6da04bcd8704b9009786b4c8f85847296121dce40ad',
+    # ─── [ED-MB-0059, 2026-07-29] RE-RECORDED: same-side cell exclusion (PC_CELL_EXCLUSION=1) ────
+    # was 6f5942339d4bbb446b48c6da04bcd8704b9009786b4c8f85847296121dce40ad
+    # ATTRIBUTION CONTROL (§0.1 #4, and the falsifier §0.1 #3 asks for). Re-running this exact
+    # battery with PC_CELL_EXCLUSION=0 reproduces the PREVIOUS golden byte-for-byte —
+    # 6f594233… on unit_field and 2a9214eb… on cell_field. So 100% of both field deltas is
+    # attributable to the exclusion pass and NOTHING else in this changeset; in particular the
+    # ED-MB-0058 between-turn-recovery confound fix is provably inert here (it moves 'cell_cm'
+    # alone, which is its whole intended scope). The two GRID modes are byte-identical with the
+    # flag ON, as they must be — the pass lives inside resolve_toi_and_commit, which only runs
+    # under FIELD_MOVEMENT.
+    'unit_field': '0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -427,7 +437,10 @@ EXPECTED = {
     # SCOPE OF MOVEMENT: only cell_field. unit / cell / unit_field / cell_cm all byte-exact —
     # on the grid path the corrections fire (10/10 events, mean offset 8.96 vs the 0 fall-through,
     # facing (-0.998,0.067) vs the (-1,0) default) but never reach a trial_vector field.
-    'cell_field': '2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b',
+    # [ED-MB-0059, 2026-07-29] RE-RECORDED with the same attribution control as unit_field above
+    # (was 2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b; reproduced exactly at
+    # PC_CELL_EXCLUSION=0).
+    'cell_field': 'da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -442,7 +455,15 @@ EXPECTED = {
     # ⚠ Recording this REQUIRED extending the mode key (see compute() above): at PC_CELL_MORALE=1
     # the old key returned 'cell', so this run would have checked itself against the flag-OFF
     # golden — the ED-1089 shape, one flag later.
-    'cell_cm': 'b42343dbd508d1e939625d9b3b80744dd1005cbc831505355d4de46540013d2b',
+    # [ED-MB-0058, 2026-07-29] RE-RECORDED once, and this mode ALONE moved — which is the point.
+    # was b42343dbd508d1e939625d9b3b80744dd1005cbc831505355d4de46540013d2b
+    # between_turn_recovery routed own-morale subunits through set_morale, the ABSOLUTE writer that
+    # flattens every cell to the unit mean; per-cell morale divergence was therefore erased once per
+    # turn, which is why PC_CELL_MORALE looked inert. Now routed through pull_morale (relative), so
+    # divergence survives the recovery step. CONTROL: the other four modes are byte-identical, as
+    # they must be — at PC_CELL_MORALE=0 the cell-morale maps are empty and the two writers agree.
+    # A fix that moved any of them would have been touching something it did not claim to.
+    'cell_cm': 'd11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9',
 }
 
 

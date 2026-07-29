@@ -2239,6 +2239,74 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
             # it still acted as a fixed obstacle for the other, still-moving side via this same pair solve.
             if not a_halted and s < ea.best_t: ea.best_t = s
             if not b_halted and s < eb.best_t: eb.best_t = s
+    # ─── [ED-MB-0059] SAME-SIDE EXCLUSION — the invariant this function's own docstring states ──
+    # "two unit squares that must never interpenetrate". That rule was only ever applied to
+    # CROSS-SIDE pairs, so a cell of one subunit walked straight through a cell of another on its
+    # own side. Measured before this pass, over 140 historical-scale snapshots / 79,226 cell
+    # placements: 9,970 co-located within a subunit, 3,705 ACROSS subunits of the same side, 39
+    # across opposing sides — a 17.31% overlap rate.
+    #
+    # Jordan's framing (2026-07-29) is the design here: "we are using a field system so there
+    # shouldn't even be any assignment issues so long as cell boundaries are respected." So this is
+    # NOT a new mechanism and NOT the grid-era `resolve_internal_collisions` discipline roll — it is
+    # the SAME swept-SAT body-box solve the cross-side loop above already runs, applied to the pairs
+    # it was never applied to. No new constant, no RNG, no third definition of "these two bodies
+    # touch": `_pair_toi_scale` (circular pre-reject, keeps this tractable) then
+    # `_pair_toi_box_scale` (exact body-box TOI), exactly as above.
+    #
+    # Symmetric and order-independent: each unordered pair is solved once, and each cell keeps the
+    # MOST restrictive cap across every pair it is party to — the same monotone rule the cross-side
+    # pass uses, so a cell's final position does not depend on the order pairs were visited.
+    #
+    # ⚠ s > 0 IS LOAD-BEARING, AND IT IS THE WHOLE DIFFERENCE BETWEEN THIS PASS WORKING AND
+    # DEADLOCKING THE ENGINE. A cross-side pair that is ALREADY in contact when the tick opens is
+    # rare and is caught upstream by halted_cells (see _pair_toi_scale's "defensive floor" note), so
+    # the cross-side loop above can afford to accept s == 0.0. Same-side pairs invert that completely:
+    # a formation is a LATTICE at spacing 1.0 and the bodies are unit squares (0.5 + 0.5 half-widths),
+    # so every adjacent cell in every formation is touching BY CONSTRUCTION, permanently, and no cell
+    # is ever halted against its own neighbour. Accepting s == 0.0 here therefore caps essentially the
+    # whole army to zero motion on essentially every tick.
+    #
+    # MEASURED, on the cell_field battery at 2 seeds (the falsifier for this claim, §0.1 point 3):
+    # turning the pass on added 1,213,199 body-box solves, of which 568,785 — 46.9% — returned
+    # exactly 0.0, against a 9.84% zero rate on the cross-side pairs. Downstream, halted cells FELL
+    # 20,356 -> 3,300 and resolve_toi_and_commit calls ROSE 1,482 -> 11,934: frozen formations never
+    # close, never make contact, never halt, and every battle runs to the 20-turn cap. That 8.05x
+    # tick inflation — not pair-solve cost — is the entire 8.2x runtime regression first seen on
+    # unit_field (47s -> 386s), which is why the swept-AABB broad phase written to "fix the cost"
+    # bought nothing (386s -> 370s): it correctly culled pairs in a loop whose ITERATION COUNT was
+    # the actual defect. The broad phase is therefore removed as well — it was an optimisation for a
+    # problem that did not exist, and all-pairs over one side is the simpler owner.
+    #
+    # The rule is not a tolerance and introduces no constant: capping at s == 0.0 cannot UN-overlap a
+    # pre-existing overlap — it freezes the pair exactly where it already sits, for zero corrective
+    # benefit and total motion cost. The invariant this pass enforces is "no pair may BECOME
+    # interpenetrating during this tick", i.e. a disjoint -> overlapping transition, which is exactly
+    # s > 0. Pairs that begin the tick in contact are the formation lattice and are left alone.
+    if PC_CELL_EXCLUSION:
+        _R_body_same = math.hypot(CELL_RADIUS, CELL_RADIUS)
+        for entries in (cells_a, cells_b):
+            _n = len(entries)
+            for _i in range(_n):
+                ea = entries[_i]
+                a_halted = ea.cid in ea.atom.halted_cells
+                for _j in range(_i + 1, _n):
+                    eb = entries[_j]
+                    b_halted = eb.cid in eb.atom.halted_cells
+                    if a_halted and b_halted:
+                        continue
+                    start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
+                    start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
+                    if _pair_toi_scale(start_a, start_b, proposed_a, proposed_b,
+                                       1.0, 1.0, 2.0 * _R_body_same) is None:
+                        continue
+                    s = _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, 1.0, 1.0,
+                                            ea.facing, 0.0, eb.facing, 0.0)
+                    if s is None or s <= 0.0:
+                        continue
+                    if not a_halted and s < ea.best_t: ea.best_t = s
+                    if not b_halted and s < eb.best_t: eb.best_t = s
+
     for entries in (cells_a, cells_b):
         for e in entries:
             if not e.movable or e.cid in e.atom.halted_cells:

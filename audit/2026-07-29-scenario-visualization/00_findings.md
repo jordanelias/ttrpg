@@ -69,26 +69,85 @@ Cannae dynamic in outline, and the tier-3 battery could not produce it at all.
    Leuctra broke the Spartan right and killed a king. This is the D5 casualty-realism finding seen
    from the geometry side, and it is *worse* at scale, not better.
 
-## §4 — Cell co-location, measured (ED-MB-0056)
+## §4 — Cell co-location, measured (ED-MB-0056) — and two retracted numbers
 
 Jordan: *"cells are co-locating … the surface of battle between units is the boundary between their
 cells — if we accept co-location, everything becomes a disaster codewise."*
 
-Measured over 140 snapshots (20 scenarios × 7 ticks), **79,226 cell placements**:
+Standing probe: `measure_colocation.py` (added 2026-07-29 — it was run ad-hoc first, which is how
+the first two numbers below went out unchecked).
 
-| class | count | what it means |
-|---|---|---|
-| same subunit | **9,970** | a body's own cells stacked on one square |
-| **different subunit, same side** | **3,705** | two of my own formations interpenetrating |
-| **opposing sides** | **39** | two armies occupying one square |
-| **overlap rate** | **17.31%** of all placements | |
+### §4.0 — ⚠ RETRACTIONS. Both earlier figures for this section were wrong, in opposite directions.
 
-Worst snapshots are the envelopment rows (H3/H10 t=8: 103 inter-subunit overlaps; C4; H7/H8).
+**Retracted #1 — "17.31% overlap rate".** That was *rounded-square co-location*: cell positions
+`int(round(...))`-ed onto a lattice and counted as collisions when they shared a square. The field
+path is CONTINUOUS; two bodies 0.6 apart round into a collision that never happened. It over-counts.
 
-**This is the root cause of the shearing in §3.** It also makes the contact surface ill-defined:
-if cells may overlap, "the boundary between their cells" is not a boundary, and every downstream
-quantity computed from contact geometry (frontage, octagon arc, engaged troops) is computed against
-a shape that has no exterior.
+**Retracted #2 — "17.31% → 0.35% with exclusion ON".** This is the worse one. That measurement was
+taken on an arm where the exclusion pass had **deadlocked the engine** (§4.2): cells were not
+overlapping because they were not *moving*. It is the §0.1 confound — an uncontrolled measurement
+banked because it was favourable — and it is exactly the failure mode §0.1 was written after. The
+adversarial pass performed on it attacked the number and never the setup.
+
+The honest metric is **body-box interpenetration** via `geometry.obb_overlap` (the engine's existing
+single owner of "these two bodies overlap"), **thresholded by penetration depth**. Depth matters
+because the lattice pitch is 1.0 and the bodies are 1.0 × 1.0, so neighbours sit *exactly on* the
+touch boundary by construction and any sub-millimetre jitter flips the predicate. Measured at t=4:
+of 16,847 overlapping same-subunit pairs the **median depth is 0.0029** lattice units and 88.5% are
+under 0.1. A raw overlap boolean over-states the defect by roughly an order of magnitude.
+
+### §4.1 — What the exclusion pass actually buys (deep overlap, depth ≥ 0.1)
+
+140 snapshots (20 scenarios × 7 ticks), **79,226 cell placements**:
+
+| class | EXCL=0 | EXCL=1 | change |
+|---|---|---|---|
+| same subunit | 43,068 | 44,531 | +3.4% |
+| **different subunit, same side** | **13,477** | **6,932** | **−48.6%** |
+| **opposing sides** | **875** | **224** | **−74.4%** |
+
+On the class Jordan named — *cells between subunits mixing* — the pass halves it, and it cuts
+cross-side interpenetration by three-quarters. It does **not** reach zero, for two identified
+reasons: (a) the rule deliberately skips pairs already overlapping at tick start, because capping
+them at s=0 freezes without separating, so an overlap once formed is never undone — nothing in the
+engine separates overlapped bodies (`resolve_internal_collisions`, §5.1, is the only thing ever
+built for it and is intra-subunit + grid-era); and (b) the whole solve is gated on
+`toi_deferred = FIELD_MOVEMENT and enemy_cells_float`, so **formations with no enemy supplied
+interpenetrate freely** — same-side exclusion inherits a cross-side precondition it has no reason to.
+
+Spawn geometry is clean: at t=0, same-subunit 0, cross-side 0, inter-subunit 40. The overlap is
+created in the first ~4 ticks, not inherited from deployment.
+
+### §4.2 — The defect the pass shipped with, and its cost
+
+The first form accepted a time-of-impact of `s == 0.0`, copying the cross-side loop. Safe there —
+armies start apart, pre-existing contact is caught by `halted_cells`. Inverted for same-side pairs:
+the formation lattice is *permanently tangent*, and no cell is ever halted against its own
+neighbour. Measured (cell_field, 2 seeds): **568,785 of 1,213,199 same-side solves — 46.9% —
+returned exactly 0.0**, against 9.84% cross-side. Halted cells fell 20,356 → 3,300; resolve calls
+rose 1,482 → 11,934. Frozen formations never close, never contact, never halt, so every battle ran
+to the turn cap.
+
+That **8.05× tick inflation was the entire "8.2× slowdown"** (47s → 386s on unit_field) the pass was
+blamed for — and it is why a swept-AABB broad phase written to fix the *cost* bought nothing
+(386s → 370s): it culled pairs correctly inside a loop whose iteration count was the real defect.
+The broad phase was removed with the fix. Runtime is now **1.41× baseline**. Guard:
+`tests/valoria/test_cell_exclusion_no_deadlock.py`, mutation-verified (dropping the `s <= 0.0` skip
+freezes the fixture dead — 0 cells moved between tick 1 and tick 6).
+
+### §4.3 — The cost, measured with a control
+
+The pass suppresses contact, and therefore casualties. Mean end-state HP across all 20 rows at t=24:
+**0.8684 (OFF) → 0.8939 (ON)** — total attrition falls **19%**, on a casualty model §3 already flags
+as far too low. H3 moved 84.8%/93.0% → 93.7%/97.9% hp; H5 91.7%/97.2% → 98.7%/96.1%. This is a real
+trade-off, not a free win: geometric integrity is bought with engagement. It is shipped ON per the
+standing "gate models ON" directive, with the cost recorded here rather than discovered later.
+
+**Machine-vision read of the re-render (H5, Leuctra, the clearest case):** the massed blocks now
+hold as **distinct parallel rectangles with visible gaps between them through t=24**, tilting
+obliquely — which is the correct Leuctra behaviour. §3's "the Spartan line disintegrates into
+diagonal streaks by t=16" is substantially fixed. H3 (Cannae) still shows the Roman mass fragmenting
+into ribbons by t=8, so the shearing defect is reduced, not eliminated.
 
 ## §5 — Dead-primitive census (ED-MB-0057)
 
