@@ -63,9 +63,26 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   file into the `stub_wired` predicate set — see the YAML's own updated comment and
   `04_execution_ledger.md`'s corresponding row). Do not cite "24" or "29" from this paragraph as
   current without re-running the measurement.
-  Next action: **Wave 2** (orphan closure
+  **W1 merged as PR #265; Wave 2 now in progress** (orphan closure
   seams — accord echo, parliamentary transfer, `generate_npc` golden re-record, world chains,
   `handoff_rules`, articulation subscriber).
+- **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07-29,
+  in-session).** ALL resolvers of any type must support (i) fractional dice pools (integer part
+  rolls d10s, remainder contributes its EV — the ED-MB-0032 pattern), (ii) fractional Ob
+  (ED-PC-0005/0006 precedent — never `-1D`, always fractional Ob, `+0.15` Ob per wound), (iii)
+  fractional interpolated degrees of success/failure (continuous interpolation between degree
+  thresholds instead of snapping to discrete bands — kills the §0.1 boundary-crossing defect
+  class; aligns with the d+σ continuous model). Routing: PC half → PC session
+  (`combat_engine_v1` is already σ-continuous — verify there); MB half → MB session
+  (`PC_FRACTIONAL_POOL` exists, gated; ungating is theirs); SC kernel half → gated on §5 fork 6
+  (ED-SC-0004), whose ruling now carries a fractional-capability rider (`05_jordan_docket_v1.md`
+  Fork 6); IN half → single-owner fractional-capable roll primitive in the dice core + census of
+  integer-baking sites in IN-owned resolvers (`round()`/`int()`/`max(1,..)` pool floors,
+  degree-band snapping), each with a declared golden impact, scheduled as its own wave-adjacent
+  PR. Known integer-baked sites at intake: `contest_legacy_stub.py:128-129` (`max(1, pool)`);
+  `_emergency_council_parties` round() faculties (`scene_dispatch.py:104-122`);
+  `combat_bridge.py` history-derivation `round()`. Parent: ED-IN-0091. Next: the IN census PR
+  (dice-core primitive + integer-baking census).
 - **[OPEN] ED-IN-0086 — handoff skeleton+infill+archive contract.** `tools/handoff_atomize.py`
   landed; not CI-wired, not yet run on a lane. Held on 2 Jordan calls. 5 lanes carry live items
   the banner counts as settled.

@@ -2,6 +2,9 @@
 
 ## Status: DOCKET — HELD FOR JORDAN (ED-1094 exception: NOTHING here ratifies on merge) — ED-IN-0092, 2026-07-29
 
+**Header note:** this is docket v1 plus one post-merge rider (ED-IN-0094, Fork 6); nothing else
+in this document has changed.
+
 > **⚠️ LOUD BANNER — READ BEFORE MERGING THE PR THAT CARRIES THIS FILE.**
 > **Nothing in this document ratifies on merge.** CLAUDE.md §2's ED-1094 rule — "merging a PR
 > ratifies its PROPOSED contents by default" — is **explicitly suspended for every row below**, which
@@ -164,6 +167,10 @@ The two diverge **9.5–28.9 pp** (`00_…` OI-48, from 07-07 U-3/U-8 — inheri
 ED-SC-0004 states plainly: **"no stated default."** The ruling gates calibration (P4), the
 rolling-engine re-verdict (ED-IN-0013), and any Godot export. **ED-SC-0011** (the personal-party
 bridge) is class **B** and lands either way — it is `DEFERRED → SC`, not part of this fork.
+
+RIDER (ED-IN-0094, RULED 2026-07-29): whichever formula is chosen must support fractional pools,
+fractional Ob, and fractional interpolated degrees — the legacy stub's max(1, integer pool) floor
+and any discrete band mapping must be adapted regardless of which option wins.
 
 ### Fork 7 — Turmoil writer and the L-restoration promise
 
