@@ -401,20 +401,31 @@ def strike_point_lever(w, m_strike, x_strike):
 
     Read it as: **the fraction of the weapon's MAXIMUM swing moment that this strike delivers** — the maximum
     being the whole weapon's mass presented at its own tip, which is why `lambda(m_total, Lt) == 1.0` exactly.
-    It is a STRICT GENERALISATION of the lever it replaces: `lambda(m_total, PoB_m)` at a zero hand-floor IS
-    `derive()['PoB_frac']`. The change is not a new quantity — it is the SAME quantity re-pointed from "the whole
-    mass at the centre of balance" to "the delivered mass at the strike point".
+    It GENERALISES the lever it replaces: `lambda(m_total, PoB_m)` at a zero hand-floor IS `derive()['PoB_frac']`
+    for every weapon whose balance point sits at or ahead of the hand. The change is not a new quantity — it is the
+    SAME quantity re-pointed from "the whole mass at the centre of balance" to "the delivered mass at the strike
+    point".
+    [ED-PC-0048 CORRECTION] E2a's docstring called that a STRICT generalisation. It is not: `lambda` takes `|x|`,
+    so the three roster weapons whose PoB sits BEHIND the hand (estoc_halfsword -0.309, longsword_halfsword -0.223,
+    cinquedea -0.031) map to the POSITIVE lever rather than the negative `PoB_frac`. No behaviour depends on it —
+    all three are non-blunt heads, so they route to `reversed_grip_percussion` and never reach this line — but the
+    claim as written was false, and "verify the claim, not the prose" is why it was checked (CLAUDE.md §0.1 point 3).
 
     TWO defects die here, at two scales, and they are the same defect (a lever that can be exactly 0):
       · E2a (M1): PoB_frac is a CoM offset, so a rear counterweight cancels it — staff 0.0. Fixed by measuring
         the moment of the DELIVERED mass (`delivered_strike`), which no counterweight can cancel.
-      · E2b (M9): `percussion_element_authority`'s `|x| / Lt` zeroes any element mounted at x=0 (hook_sword's
-        authored crescent is unreachable). Fixed by STRIKE_HAND_LEVER: a blow landed at the hand still swings
-        on the hand/hilt's own lever. **E2b MUST route `percussion_element_authority` through THIS function**
-        — `sqrt(elem_mass) * strike_point_lever(w, elem_mass, elem_x)` — rather than re-deriving a lever of its
-        own. That is E2b's commit (one concern per batch); this function is written to be consumed as-is, and
+      · E2b (M9, DONE — ED-PC-0048): `percussion_element_authority`'s `|x| / Lt` zeroed any element mounted at
+        x=0 (hook_sword's authored crescent was unreachable). Fixed by STRIKE_HAND_LEVER: a blow landed at the
+        hand still swings on the hand/hilt's own lever. It routes through THIS function, as
+        `sqrt(elem_mass) * strike_point_lever(w, delivered_strike(w)[2], elem_x)`.
+        ⚠ **NOTE THE FIRST ARGUMENT.** E2a originally prescribed `strike_point_lever(w, elem_mass, elem_x)` here.
+        That is WRONG and E2b measured it before consuming it: this function divides its mass argument by the
+        weapon's total, so passing `elem_mass` puts mass in at power 1.5 — dropping percussion 19-37% on all 53
+        weapons. The element's own mass belongs in `sqrt()`; the lever is geometric, which is exactly what this
+        function returns when handed the delivered mass. `test_combat_element_reachability.py::
+        test_element_lever_does_not_double_count_mass` pins it so the prescription cannot be re-followed.
         `tests/valoria/test_combat_strike_point_lever.py::test_strike_point_lever_is_nonzero_at_the_hand` pins
-        the property E2b needs so the two batches cannot ship two different lever forms (review R-11.4).
+        the hand-floor property E2b consumes, so the two scales cannot ship two different lever forms (R-11.4).
       · NOT `|x| / Lt` and NOT `PoB_frac`. If a third lever form ever appears in this module, one of them is wrong.
 
     Symmetric in the sign of x (a rear-facing fluke swings on |x| like any other located element). Monotone
@@ -487,11 +498,6 @@ def puncture_pressure(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
     return percussion_authority(w, grip=grip, room=room, sel_head=sel_head, sel_pc=sel_pc) * sc
 
 
-# ⚠ [ED-PC-0047 / E2b, PENDING] The `abs(elem_x)/Lt` lever below is the SECOND face of the M1 defect: it returns
-# 0 for any element mounted at x=0, so hook_sword's authored crescent can never be selected (M9/F6). The repair is
-# NOT a new form — route this line through `strike_point_lever(w, elem_mass, elem_x)`, the single owner E2a already
-# consumes (see its docstring). Deliberately NOT done here: E2a and E2b are one concern each, and E2b owns the
-# affordance/selection golden re-record that change forces. Do not invent a third lever form to close it.
 def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
     """Per-element application of the percussion_authority FORM (I2, D2b — capstone finding M4 correction: this is
     a per-element percussion_authority variant, NOT `at_circumstance`, which returns {I_g,S_g,d_g,u,...} and
@@ -501,11 +507,47 @@ def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
     weapon is gripped, not of one striking element). Distinguishes multi-blunt composites (lucerne_hammer's
     hammer face vs its rear 3-4 tine fluke) that, pre-I2, both read the SAME whole-weapon percussion_authority(w).
     Degraded by the SAME grip/room Phi as the whole-weapon percussion_authority (D2/D2b) — a property of the grip/
-    room circumstance, not of which element is striking. Pure."""
-    Lt = derive(w)['length_m']
-    if Lt <= 1e-9:
-        return 0.0
-    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, elem_mass)) * (abs(elem_x) / Lt) * energy_credit(w)) ** PERC_EXP)
+    room circumstance, not of which element is striking. Pure.
+    [ED-PC-0048, E2b] The lever was `abs(elem_x) / Lt` — the element's offset from the working hand as a fraction of
+    the weapon's length — until 2026-07-29. That is the SECOND FACE of the M1/F1 defect E2a repaired one scale up: a
+    lever that can be EXACTLY ZERO. Any element mounted AT the hand derived 0 authority regardless of its mass, so
+    the affordance gate never emitted its token, so it could never be selected. hook_sword's authored crescent
+    (`mode_elements[1]`, 0.140 kg at x = +0.000 m — "a genuine strike alternative", JD-5) was dead data:
+    `afforded_heads(hook_sword)` returned {curved_cut, point}. It GENERALISES beyond that one weapon — any
+    guard-mounted striking element has an arm's lever, not zero.
+    Now routed through `strike_point_lever`, the single owner E2a shipped, so the weapon and element scales cannot
+    carry two different lever forms (review R-11.4).
+    ⚠ **CALLED WITH THE DELIVERED MASS, NOT `elem_mass` — and the distinction is load-bearing.** E2a's own docstring
+    prescribed `sqrt(elem_mass) * strike_point_lever(w, elem_mass, elem_x)` for this line. That signature
+    DOUBLE-COUNTS the striking mass: `strike_point_lever`'s first argument is a mass it divides by the weapon's
+    total, so mass would enter at power 1.5 and be normalised by the whole weapon. Measured across the roster, that
+    drops percussion 19-37% on EVERY one of the 53 weapons (odachi -37.1%, mace -31.6%, poleaxe's hammer element
+    7.613 -> 4.885) — a roster-wide balance change inside a batch with no balance intent. The element's own mass
+    belongs in `sqrt()`, where it has always been; the LEVER is geometric. Passing `delivered_strike(w)[2]` makes
+    `strike_point_lever` reduce exactly to `(STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)` — the same single
+    owner, the same form, no third lever, and no mass term where none belongs.
+    MEASURED CONSEQUENCE, disclosed not tuned: the hand-floor is the fix, so authority rises slightly everywhere it
+    was already non-zero. LIVE movers, exhaustively — 3 located blunt elements (poleaxe hammer 7.613->7.769 +2.1%,
+    bec_de_corbin beak 6.510->6.776 +4.1%, lucerne fluke/hammer +3.7/+4.8%) and the 9 two-handed blades that reach
+    `reversed_grip_percussion` (longsword +8.8%, nandao +8.0%, greatsword +6.1%, katana +6.1%, tachi +6.0%,
+    flamberge +5.2%, estoc/odachi +5.1%, changdao +2.6%). No other weapon's percussion moves: the Mordhau path is
+    gated to hands==2 bladed weapons, so the short-gripped 1H weapons where a 0.12 m floor would be proportionally
+    largest never reach this line at all. hook_sword's crescent goes 0.0 -> 4.132 and its blunt token becomes
+    reachable — the batch's target.
+    SELECTION CONSEQUENCE — exactly two weapons, four (damage_mode, head) pairs, both moving the way the repair
+    intends: `hook_sword` now selects its crescent (percussion/blunt) at light/medium/heavy instead of a point it
+    barely has, keeping its native curved_cut unarmoured; and `bec_de_corbin` @heavy flips puncture/point ->
+    percussion/blunt, rejoining its poleaxe-family sibling lucerne_hammer, which already struck blunt at medium and
+    heavy. A crow's-beak warhammer meeting plate should swing the hammer, not thrust.
+    ⚠ MAGNITUDE RESIDUE, disclosed not tuned (same class E2a disclosed for the staff): a 0.140 kg hand-mounted
+    crescent reading 4.132 on a 0-8 scale where a 1.2 kg mace reads 8.0 is the PERC_EXP=0.30 low-mass compression —
+    the deferred Phase-C PERC_SCALE/PERC_EXP re-fit, not a lever question. This batch fixes the structural defect (a
+    lever that can be exactly zero) and leaves the calibration where the ledger already tracks it. hook_sword is
+    additionally measured in a configuration it was never used in (no off-hand slot — plan §9 defers that to E6).
+    See tests/valoria/test_combat_element_reachability.py."""
+    m_total = delivered_strike(w)[2]
+    lever = strike_point_lever(w, m_total, elem_x)     # == (STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)
+    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, elem_mass)) * lever * energy_credit(w)) ** PERC_EXP)
     return base * phi_grip(w, grip, V.HEAD_BLUNT, None) * phi_room_percussion(room)
 
 

@@ -1,6 +1,6 @@
 {
  "_": "Reference armour-interaction table (ED-PC-0040). Regenerate ONLY with `python workbench/armour_participation.py --update`, and treat the resulting diff as the required disclosure of what a change moved. Cells are [decided_rate, share_of_decided|null] vs the arming sword, position-swapped, deterministically seeded.",
- "generated_at_sha": "8ab21b381d03fda03d5d85e322c24a4d9ff0756c",
+ "generated_at_sha": "f03357d8f585fd514b6656d2524d698e4a456440",
  "n": 40,
  "reference_weapon": "arming",
  "table": {
@@ -87,7 +87,7 @@
    ],
    "medium": [
     0.95,
-    0.7894736842105263
+    0.8421052631578947
    ],
    "none": [
     1.0,
@@ -554,8 +554,8 @@
     0.5
    ],
    "medium": [
-    0.625,
-    0.08
+    0.75,
+    0.06666666666666667
    ],
    "none": [
     1.0,
@@ -572,8 +572,8 @@
     0.9
    ],
    "medium": [
-    0.475,
-    0.5263157894736842
+    0.725,
+    0.3448275862068966
    ],
    "none": [
     1.0,
@@ -896,8 +896,8 @@
     0.5128205128205128
    ],
    "medium": [
-    0.7,
-    0.21428571428571427
+    0.775,
+    0.25806451612903225
    ],
    "none": [
     1.0,
