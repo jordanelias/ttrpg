@@ -7,6 +7,14 @@
 
 # VALORIA — Military Layer: Unit Bridge & CI Revision
 ## v1.0 — Faction-layer unit representation → mass battle; CI competitive formula
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+<!-- ED-MB-0047 (2026-07-29, E4/F9): this doc's status lived ONLY in the HTML comment above
+     (`<!-- Status: CANONICAL — approved 2026-04-17 -->`), which `obs_core.STATUS_RE` cannot
+     see — it matches a line START of 0-3 `#` then `Status:`, and an HTML-comment prefix is
+     neither. So the doc read as no_status to every instrument while carrying an approval.
+     Promoted verbatim to a real `## Status:` line; the comment above is left as provenance.
+     Nothing was ratified here — the 2026-04-17 approval is the one already recorded. -->
+
 
 ---
 

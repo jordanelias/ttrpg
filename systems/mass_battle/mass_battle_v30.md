@@ -5,10 +5,19 @@
 # VALORIA — MASS BATTLE SYSTEM v4
 ## Version: v4.8 — PP-240,241,245,249,250,256 applied;
 ##  PP-232 (renames: Strength→Size, CP→Power, Cohesion→Discipline, CR→Command) + PP-233 (core formula) propagated.
-## Status: WORKING DESIGN — no appendix sections. Read straight through.
+## Structure: no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+<!-- ED-MB-0047 (2026-07-29, E4/F10): this head carried TWO `## Status:` lines — a stale
+     pre-approval "WORKING DESIGN — no appendix sections" above the 2026-04-17 CANONICAL
+     approval. `obs_core.first_status()` (the single owner of status parsing) returns the
+     FIRST match, so every instrument reported this doc — the Mass battle head named by
+     CURRENT.md and pointed at by module_contracts `doc:` — as WORKING DESIGN while its own
+     companion (mass_battle_integration_v30.md) cited it as "CANONICAL, approved 2026-04-17".
+     The upper line is a STRUCTURE note wearing a Status label; demoted to `## Structure:`.
+     No status was flipped: the CANONICAL approval line is unchanged and now simply parses. -->
+
 ## v4.10 addendum (2026-06-17): per-sub-unit rout / Morale / Discipline (ED-1019) + troop-type stat presets (ED-1018), refined with per-sub-unit broken-scope (ED-1020), per-sub-unit Discipline-from-own-loss (ED-1022), continuous Morale (ED-1024), campaign-boundary Morale reset (ED-1025), per-sub-unit formation Discipline (ED-1026), and the destruction / cascade-denominator / recovery closeout (ED-1027) — all canonised from the validated engine. See §A.4 (Per-sub-unit rout), §A.12 (Cascade scope), §A.13 (between-battle reset). Provisional canon, Jordan-vetoable; byte-exact for single-sub-unit / homogeneous units.
 
 ---
