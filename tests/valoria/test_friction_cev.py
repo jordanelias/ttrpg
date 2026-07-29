@@ -27,7 +27,8 @@ import mass_battle.hierarchy.units as _hu  # noqa: E402
 import mass_battle.orchestration as _orch  # noqa: E402
 from mass_battle.engine import build_unit, build_army  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
-import pytest
+
+from ._conservation import assert_troop_conservation  # noqa: E402
 
 
 @pytest.fixture
@@ -57,10 +58,6 @@ def friction(field_path):
             if hasattr(m, 'PC_FRICTION_CEV'):
                 m.PC_FRICTION_CEV = cev
                 m.PC_FRICTION_SIGMA = sig
-
-
-def _unit_troops(u):
-    return sum(sum(s.cell_troops.values()) for s in u.subunits)
 
 
 def _ratio_winrate(ratio, base, n, seed0=9000):
@@ -166,15 +163,19 @@ def test_friction_reduces_decisiveness(friction):
 # ─── I1 / I2 with friction on ────────────────────────────────────────────────
 
 def test_conservation_with_friction(friction):
+    """I1 with the CEV multiplier live: friction scales the pool, not the casualty bookkeeping.
+
+    [ED-MB-0045 S6] Routed through the single owner `_conservation.assert_troop_conservation`; the
+    old open-coded loop skipped routed/broken units without counting the skip, so it could assert
+    nothing and still pass.
+    """
     import random
     random.seed(2026)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
     _orch.run_battle(a, b, max_turns=18)
-    for u in (a, b):
-        if u.routed or u.broken:
-            continue
-        assert math.isclose(_unit_troops(u), u.hp, rel_tol=1e-6, abs_tol=1e-3)
+    checked = assert_troop_conservation(a, b, context='friction seed=2026')
+    assert checked >= 2, f"conservation checked {checked} units, expected both"
 
 
 def test_determinism_with_friction(friction):

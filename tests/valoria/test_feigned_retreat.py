@@ -72,18 +72,31 @@ def test_recognize_rate_rises_with_command():
 
 
 def test_resolve_marks_overextended_only_when_deceived_and_failing():
-    """resolve_feigned_retreat: recognised -> not overextended; deceived + failed Discipline -> overextended."""
+    """resolve_feigned_retreat: recognised -> not overextended; deceived + failed Discipline -> overextended.
+
+    [ED-MB-0045 S12] The recognised-branch assertion is CONDITIONAL and had no counter, so a change
+    that stopped `resolve_feigned_retreat` ever reporting `recognized` would have emptied it silently
+    while the test stayed green (§0.1 #2) -- the sibling assertion below, `n_over > 0`, already does
+    this correctly. Measured 2026-07-29 at seed 3: the branch is taken 1560 of 2000 iterations
+    (Command 8 vs Ob 2). The floor is set at half the trials rather than the exact 1560 so a benign
+    RNG-stream reorder is not a false red, while "the branch never fired" is still caught decisively.
+    """
     _, O = _reload(on=True)
     # A recognised feint never overextends (high Command recognises, so overextended stays False).
     random.seed(3)
     ever_over_when_recognized = False
+    n_recognized = 0
     for _ in range(2000):
         p = _Stub(discipline=1, command=8)
         r = O.resolve_feigned_retreat(p, _Stub(feigned=True))
         if r and r['recognized']:
+            n_recognized += 1
             assert not p.overextended and not r['overextended']
         if p.overextended and r['recognized']:
             ever_over_when_recognized = True
+    assert n_recognized >= 1000, (
+        f"only {n_recognized}/2000 pursuers recognised the feint (measured 1560) -- the "
+        f"recognised-never-overextends assertion above is not being exercised")
     assert not ever_over_when_recognized, "a recognised feint must never overextend the pursuer"
     # Over many low-Disc low-Command pursuers, SOME overextend (deceived + failed the check).
     random.seed(4)

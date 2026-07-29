@@ -30,14 +30,27 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 import mass_battle.orchestration as O  # noqa: E402
-from mass_battle.engine import build_unit  # noqa: E402
+from mass_battle.engine import build_army  # noqa: E402
 
 
 def _own_morale_unit():
-    """build_unit passes morale explicitly -> the subunit carries its OWN morale."""
-    u = build_unit('Line', 3, 'A', 'A', 20)
-    u.subunits[0].seed_cell_morale()
-    return u, u.subunits[0]
+    """A subunit carrying its OWN morale (`Subunit.morale is not None`), the gauge-body path.
+
+    [ED-MB-0045 A4b, corrected 2026-07-29] This used to call `build_unit`, on the stated belief that
+    "build_unit passes morale explicitly -> the subunit carries its OWN morale". **It does not.**
+    `engine.build_unit` (engine.py:204-210) passes `morale=` to the **Unit** and constructs its
+    `Subunit(...)` with no morale at all, so `su.morale` measured `None` — i.e. BOTH fixture params
+    were exercising the *inheriting* branch and the own-morale branch had zero coverage here, while
+    `build_army` (engine.py:344-347, `if kw.get('morale') is None: kw['morale'] = morale`, the DG-4
+    per-subunit-morale ruling) puts every gauge body on it. Mirroring `build_army` is therefore not a
+    contrivance: it is how every real multi-subunit army in this engine is built.
+    """
+    u = build_army([{'shape': 'Line', 'tier': 3}], 'A', 'A', anchor_col=20)
+    su = u.subunits[0]
+    assert su.morale is not None, \
+        "fixture precondition: the 'own' param must exercise Subunit.morale is not None, not inheritance"
+    su.seed_cell_morale()
+    return u, su
 
 
 def _inheriting_unit():
@@ -46,14 +59,19 @@ def _inheriting_unit():
                    starting_position=(25, 12), advance_dir=-1)
     u = O.Unit(name='B', faction='B', power=4, command=4, discipline=5, discipline_start=5,
                morale=6, morale_start=6, subunits=[su], dr=1)
+    assert su.morale is None, \
+        "fixture precondition: the 'inheriting' param must exercise Subunit.morale is None"
     su.seed_cell_morale()
     return u, su
 
 
 @pytest.fixture(params=['own', 'inheriting'])
 def unit_and_atom(request):
-    """Both ownership kinds. The original defect hid in the inheriting one, and a fixture that only
-    built `build_unit` bodies would have missed it — which is exactly what happened."""
+    """Both ownership kinds — and each param now asserts WHICH branch it is on, because until
+    2026-07-29 neither did and the 'own' param was silently a second copy of the inheriting one (see
+    `_own_morale_unit`). The original defect hid in the inheriting branch, and a fixture that only
+    built inheriting bodies would have missed it — which is exactly what happened, twice: once in the
+    defect, and once in the fixture written to prevent it."""
     return _own_morale_unit() if request.param == 'own' else _inheriting_unit()
 
 

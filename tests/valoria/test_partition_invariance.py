@@ -53,12 +53,22 @@ def test_convergence_factor_is_unity_under_live_pool_model(n):
 
 
 def test_convergence_is_not_one_over_n():
-    """Explicitly pin the regression signature: the factor must never equal 1/N."""
+    """Explicitly pin the regression signature: the factor must never equal 1/N.
+
+    [ED-MB-0045 S12] The loop below is over `a_scale.values()`, so an EMPTY `a_scale` passed it
+    vacuously — the exact shape §0.1 #2 names, and its sibling
+    `test_convergence_factor_is_unity_under_live_pool_model` already guards it with `assert a_scale`.
+    Pinned here on the measured reality instead of mere non-emptiness: `_convergence_scale` returns
+    exactly one entry per converging body, measured len(a_scale) == 3 for n == 3 (2026-07-29).
+    """
     n = 3
     atk = _army(n, faction='A')
     dfn = _army(1, faction='B')
     pairs = _pairs_converging(atk, dfn.subunits[0])
     a_scale, _ = _convergence_scale(atk, dfn, pairs)
+    assert len(a_scale) == n, (
+        f"expected one convergence entry per converging body ({n}), got {len(a_scale)} -- with an "
+        f"empty a_scale the 1/N regression check below asserts nothing")
     for factor in a_scale.values():
         assert abs(factor - (1.0 / n)) > 1e-6, (
             "convergence factor collapsed to 1/N — the merged_base mean-vs-sum bug is back")
