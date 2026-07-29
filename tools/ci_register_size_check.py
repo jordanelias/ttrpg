@@ -107,6 +107,11 @@ THRESHOLDS = {
     # ED universe by tools/validate_ed_citations.py (globs editorial_ledger_*_archive.jsonl),
     # so archived-ED citations keep resolving. Large cap like the flat editorial archive.
     "registers/editorial_ledger_in_archive.jsonl": 150_000,
+    # PC was the SECOND lane to reach its 50k cap (ED-PC-0050, 2026-07-29), during the E0-E3
+    # combat-correctness arc. Same convention as the IN archive above: settled entries
+    # (status resolved/ratified, needs_jordan not True) move here; anything open, deferred,
+    # or still awaiting Jordan stays in the live lane ledger.
+    "registers/editorial_ledger_pc_archive.jsonl": 150_000,
     # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
     # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
     # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,

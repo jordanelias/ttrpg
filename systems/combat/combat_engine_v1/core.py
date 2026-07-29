@@ -83,14 +83,17 @@ def resolve(pool, net_sigma, rng):
 #   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(coverage) — material/mode physics.
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
 HEFT_HEAVY=3.0                                                      # heavy-class cut/thrust heft scale (unchanged — the multiplier below anchors on the SAME 2H cut-thrust reference WP.heft() normalises to 1.0)
-def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None):
+def heft_resp(w, cfg, grip=0.0, sel_head=None, sel_pc=None, sel_arm=None):
     """Continuous weapon heft response (heft-units) — morphology-rearch Phase B6: DERIVED from weapon_physics.heft()
     (striking mass × forward-balance, normalised so the longsword anchor reads 1.0), replacing the binary
     wt{light,heavy} class outright. No more HEFT_MODE toggle — there is no fiat category left to reproduce in
     'binary' mode. `cfg` is kept for call-site compatibility (unused; the derivation is pure).
     CIRCUMSTANCE-DEGRADED (I2, D2): threads grip/sel_head/sel_pc into WP.heft's mode-split Phi_grip — byte-
-    identical at grip=0 (the default) for every weapon."""
-    return WP.heft(w, grip=grip, sel_head=sel_head, sel_pc=sel_pc)
+    identical at grip=0 (the default) for every weapon.
+    [ED-PC-0050, E3b] `sel_arm` ('shear' | 'puncture' | None) threads the RESOLVED arm of a cut_thrust weapon, so a
+    composite that resolves a thrust is paid the axial thrust lever rather than the swing moment. None (every
+    pre-existing caller) keeps the token-keyed behaviour, byte-identical."""
+    return WP.heft(w, grip=grip, sel_head=sel_head, sel_pc=sel_pc, sel_arm=sel_arm)
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
 # ED-PC-0036 ('partial' was reported as a dead entry) — RETAINED, but the first rationale given for keeping it was
 # WRONG and the adversarial review caught it. The claim was that a complete QUAL mapping stops a future partial
@@ -521,7 +524,17 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
     # confusion the sel_* contract exists to prevent, and it survived one batch here after select_mode was fixed.
     _geo = attacker.w.get('geo', {})
     _ec = getattr(attacker, 'sel_eff_cut', None);  _et = getattr(attacker, 'sel_eff_thrust', None)
-    return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc), head, attacker.strength,
+    # [ED-PC-0050, E3b] Resolve the cut_thrust ARM before pricing heft, through cut_thrust_arm — the SINGLE OWNER of
+    # the versatility contest (ED-PC-0036), never a second copy of the comparison. A composite that resolves the
+    # puncture arm must be paid the axial thrust lever, not the swing moment. Inert (None) for every other head, so
+    # the heft call is byte-identical outside the cut_thrust roster.
+    _arm = None
+    if head == V.HEAD_CUT_THRUST:
+        _arm = cut_thrust_arm(TIER2MAT[defender.armor], 'full', gap,
+                              eff_cut=(_ec if _ec is not None else _geo.get('cut')),
+                              eff_thrust=(_et if _et is not None else _geo.get('thrust')),
+                              thrust_auth=tauth)[1]
+    return damage(deg, heft_resp(attacker.w, cfg, grip=grip, sel_head=head, sel_pc=sel_pc, sel_arm=_arm), head, attacker.strength,
                   defender.armor, gap, perc, q=q, eff=eff, thrust_auth=tauth,
                   eff_cut=(_ec if _ec is not None else _geo.get('cut')),
                   eff_thrust=(_et if _et is not None else _geo.get('thrust')),

@@ -806,7 +806,7 @@ THRUST_POB = 0.16   # [SIM-CALIBRATE] the PoB-DECOUPLED effective lever for a TH
 # the approach (systems.arrest_impulse), not a raw-heft penalty. THRUST_POB (the PoB-decoupled thrust lever,
 # ED-PC-0027) stays; it is the correct, already-merged thrust-heft model.
 
-def heft(w, grip=0.0, sel_head=None, sel_pc=None):
+def heft(w, grip=0.0, sel_head=None, sel_pc=None, sel_arm=None):
     """Impact heft — the weapon's striking mass × how forward-balanced it is (a heavy, forward-loaded head hits
     harder than a light, hand-balanced one), normalised so the 2H cut-thrust anchor (longsword) reads 1.0. PoB_frac
     is floored at 0 before use: a HAND-ON-BLADE grip (longsword_halfsword/estoc_halfsword) has its centre of mass
@@ -827,7 +827,20 @@ def heft(w, grip=0.0, sel_head=None, sel_pc=None):
     # MODE-SPLIT (ED-PC-0027): a SWING's impact is the forward-balance moment (m_head*PoB_frac); a THRUST's is axial,
     # PoB-DECOUPLED (m_head*THRUST_POB) — see THRUST_POB. phi_grip already grip-splits (point->1.0); this splits the
     # BASE lever too, so a forward-balanced light-headed weapon (spear) no longer over-credits its thrust.
-    lever = THRUST_POB if head == V.HEAD_POINT else max(0.0, d['PoB_frac'])
+    # [ED-PC-0050, E3b] SPLIT ON THE RESOLVED ARM, NOT THE TOKEN. `cut_thrust` is ONE token whose arm is resolved
+    # separately, in core.cut_thrust_arm — so a cut_thrust weapon that resolves the PUNCTURE arm was still paid the
+    # SWING moment (ranseur 2.5151 as a swing vs 0.7992 as a thrust, 3.1x; damage @none ranseur 26 vs spear 13).
+    # ED-PC-0027 decoupled the thrust lever from the PoB for exactly this reason; the fix was simply never extended
+    # from the `point` token to the composite that resolves a thrust, and the comment above this function already
+    # conceded the bypass. `sel_arm` is 'shear' | 'puncture' | None; None keeps the token-keyed behaviour and is
+    # byte-identical for every caller that does not pass it (pinned by test_arm_defaults_are_byte_identical).
+    # Arm tokens come from vocabulary (V.MODE_PUNCTURE / V.MODE_SHEAR) — the alphabet has one owner (E0/ED-PC-0042).
+    if sel_arm == V.MODE_PUNCTURE:
+        lever = THRUST_POB
+    elif sel_arm == V.MODE_SHEAR:
+        lever = max(0.0, d['PoB_frac'])
+    else:
+        lever = THRUST_POB if head == V.HEAD_POINT else max(0.0, d['PoB_frac'])
     base = (d['m_head'] * lever) / HEFT_REF
     return base * phi_grip(w, grip, head, sel_pc)
 
