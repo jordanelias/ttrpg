@@ -1,6 +1,6 @@
 {
  "_": "Reference armour-interaction table (ED-PC-0040). Regenerate ONLY with `python workbench/armour_participation.py --update`, and treat the resulting diff as the required disclosure of what a change moved. Cells are [decided_rate, share_of_decided|null] vs the arming sword, position-swapped, deterministically seeded.",
- "generated_at_sha": "257d9a7dfece270b569796aeb9996ce73fd50c3d",
+ "generated_at_sha": "87856ea02e0d89a7f1deff63b664891cb2a6203a",
  "n": 40,
  "reference_weapon": "arming",
  "table": {
@@ -24,16 +24,16 @@
   },
   "bardiche": {
    "heavy": [
-    0.0,
-    null
+    0.025,
+    1.0
    ],
    "light": [
     1.0,
-    0.925
+    0.975
    ],
    "medium": [
-    0.9,
-    0.5
+    1.0,
+    0.875
    ],
    "none": [
     1.0,
@@ -194,7 +194,7 @@
     0.3684210526315789
    ],
    "medium": [
-    0.7,
+    0.625,
     0.0
    ],
    "none": [
@@ -245,7 +245,7 @@
    ],
    "light": [
     1.0,
-    0.95
+    0.925
    ],
    "medium": [
     0.975,
@@ -550,8 +550,8 @@
     null
    ],
    "light": [
-    0.975,
-    0.48717948717948717
+    1.0,
+    0.5
    ],
    "medium": [
     0.625,
@@ -623,11 +623,11 @@
    ],
    "light": [
     1.0,
-    1.0
+    0.925
    ],
    "medium": [
-    0.875,
-    0.5142857142857142
+    0.975,
+    0.9230769230769231
    ],
    "none": [
     1.0,
@@ -748,8 +748,8 @@
     null
    ],
    "light": [
-    0.95,
-    0.3157894736842105
+    0.925,
+    0.3783783783783784
    ],
    "medium": [
     0.625,
@@ -767,7 +767,7 @@
    ],
    "light": [
     0.85,
-    0.20588235294117646
+    0.23529411764705882
    ],
    "medium": [
     0.425,
@@ -785,11 +785,11 @@
    ],
    "light": [
     1.0,
-    0.925
+    0.95
    ],
    "medium": [
-    0.825,
-    0.30303030303030304
+    0.95,
+    0.7105263157894737
    ],
    "none": [
     1.0,
