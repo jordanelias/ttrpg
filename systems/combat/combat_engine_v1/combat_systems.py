@@ -3,12 +3,46 @@ NO subsystem touches raw A/B — they receive Combatant objects in role. This is
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from collections import namedtuple   # ED-PC-0042 (I3): the sel_* bundle's two record shapes — HeadOption / ModeSelection, defined below
-from math import tanh, sqrt, exp   # logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade
+from math import tanh, sqrt, exp, log   # logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade; log by lever_log_edge (ED-PC-0045)
 import core
 import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's tables are keyed by it
 import weapon_physics as WP   # Phase-3b: derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math + the zero-import `vocabulary` leaf at module scope)
 import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
 from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
+
+# ---------- ability-lever composition (SINGLE OWNER — M5/F5, ED-PC-0045) ----------
+def lever_log_edge(own_factor, opponent_factor):
+    """The SIGN-SAFE way to compose two opposed multiplicative ability factors into a sigma term.
+
+    THE DEFECT THIS REPLACES (M5/F5): the two contested-channel sites used to multiply a SIGNED
+    physical differential by the RATIO `eff_cw(own)/eff_cw(opp)` — and a factor > 1 AMPLIFIES a
+    negative difference, so investing in a technique made its owner WORSE exactly when they were
+    behind on the differential it multiplied. `leverage()` is signed (14 of the 53-entry WEAPONS
+    roster are negative, measured 2026-07-29; the plan's "14 of 51" counts balance.py's roster, which
+    excludes the two half-sword forms — same 14 weapons either way) and
+    the measure `gap` is signed by construction, so this was live, not a corner case.
+
+    THE FORM: modulate the WIN PROBABILITY, which is positive by construction, rather than the signed
+    differential. In log-odds space that is a pure ADDITIVE shift, `log(own) - log(opp)`, so the
+    owner's odds are multiplied by `own/opp` REGARDLESS of the sign of the physical differential —
+    exactly the contract in the customization proposal's §5.1 rule 5. For the bind this is exact:
+    `bind_dominance_p(s) = core.logistic(s)`, so a level-1 Stärke-Schwäche (1.20) multiplies the
+    owner's odds of dominating the bind by exactly 1.20. In the measure channel the same shift rides
+    the monotone sigma->outcome map (the resolver shifts a roll, not a log-odds), so it raises the
+    owner's win probability monotonically without being literally an odds multiplier there.
+
+    Strictly increasing in `own_factor`, strictly decreasing in `opponent_factor`, on every input —
+    that monotonicity IS the sign-safety property, and `tests/valoria/test_combat_lever_sign_safety.py`
+    asserts it for every '*'-op ability in `ability_primitives.ABILITIES`, equipping each on the
+    DISADVANTAGED side. Exactly 0.0 (not approximately) when both factors are 1.0, which is every
+    default build — that is what makes E1a byte-identical at defaults rather than merely close.
+    Both arguments come from `ability_factor`, which clamps to [ABIL_FACTOR_FLOOR, ABIL_FACTOR_CEIL],
+    so `log` is always finite and never sees 0. Pure.
+
+    NOT the alternatives, both rejected with measurements (plan §4 E1a / review R-4): scaling each
+    side's OWN signed contribution recreates the defect on the 14 negative-leverage weapons, and
+    clamping `leverage` at 0 inside `bind_sigma` would change DEFAULT-build behaviour."""
+    return log(own_factor) - log(opponent_factor)
 
 # ---------- reach (continuous, derived) ----------
 def reach_base(c, cfg, grip=None):
@@ -800,8 +834,8 @@ def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     gap=er[defender]-er[aggressor]
     foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.eff_cw(defender, 'balance')
                                      - balance_eff(aggressor,fat_a,cfg)*TR.eff_cw(aggressor, 'balance'))
-    meas_w = TR.eff_cw(defender, 'measure')/TR.eff_cw(aggressor, 'measure')
-    reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
+    meas_edge = lever_log_edge(TR.eff_cw(defender, 'measure'), TR.eff_cw(aggressor, 'measure'))   # M5/F5 ED-PC-0045: was `*= eff_cw(def)/eff_cw(agg)`, which AMPLIFIED a negative gap — a defender who invested in Misura while OUT-REACHED got a WORSE measure sigma (-1.374648 -> -1.5808452 at level 1). Now an ADDITIVE log-odds shift on the measure contest: monotone in each side's own factor whatever the sign of the gap. Kept INSIDE the REACH_W armour weighting, exactly like the differential it accompanies, so the measure channel's ability surface fades with armour as the channel itself does.
+    reach_edge=(gap*cfg['REACH_FRAC']+foot_meas) + meas_edge
     profile = FACING_PROFILE_K*(getattr(defender,'facing',0.0) - getattr(aggressor,'facing',0.0))
     return cfg['REACH_W'][defender.armor]*reach_edge + profile
 
@@ -898,7 +932,7 @@ def bind_sigma(aggressor, defender, cfg, TR):
     Strength minor. +ve favours the aggressor winning the bind. Pure."""
     lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*cfg['BIND_TECH_K'] \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
-          * (TR.eff_cw(aggressor, 'leverage')/TR.eff_cw(defender, 'leverage'))
+          + lever_log_edge(TR.eff_cw(aggressor, 'leverage'), TR.eff_cw(defender, 'leverage'))   # M5/F5 ED-PC-0045: was `* eff_cw(agg)/eff_cw(def)`, which AMPLIFIED a negative lever-arm differential — a dagger specialist in Stärke-Schwäche bound a poleaxe WORSE than an untrained twin (-1.05624 -> -1.19040). Now an ADDITIVE log-odds shift: since bind_dominance_p is logistic(bind_sigma), this multiplies the owner's ODDS of dominating the bind by exactly its ability factor, whatever the sign of the physical differential — and unlike the old ratio it is not inert when the two lever-arms are EQUAL (every mirror matchup), where a trained binder should still win.
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
     agg_read = reading(aggressor,cfg)*TR.eff_cw(aggressor, 'tactile')*TR.familiarity(aggressor.tradition,defender.tradition) \
                * (1 - cfg['BIND_VIBRATION_K']*WP.edge_vibration(defender.w))   # the DEFENDER's wavy edge disrupts the aggressor's read
