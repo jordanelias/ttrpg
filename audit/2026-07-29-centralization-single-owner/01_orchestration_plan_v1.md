@@ -9,9 +9,12 @@ plans-in-workplans directive — every plan gets direct placement or a pointer).
 **Provenance.** Authored from four read-only reconnaissance lanes over the working tree, planned by a
 Fable-tier planner, then attacked by **two structurally independent read-only critics**
 (`valoria-critic`, no write tools by construction) on disjoint lenses — one fact-checking every number
-against HEAD, one attacking directive coverage and cross-program collision. **34 findings; 10 P1.**
-Every one is reconciled below or recorded in `02_adversarial_review_2026-07-29.md`. Numbers in this
-plan are post-critic; the pre-critic draft's counts were wrong in six places and are corrected here.
+against HEAD, one attacking directive coverage and cross-program collision. A **third pass** then
+attacked the *committed* artifacts — including the review record's own claims about what it had
+fixed — and found that one of them was false (§2.4). **Three passes, six critics, 65 findings, 20 P1.**
+Every one is reconciled below or recorded in `02_adversarial_review_2026-07-29.md`. Numbers here are
+post-third-pass; the earlier drafts' counts were wrong in **eleven** places, each corrected in place
+with the correction stated rather than silently applied.
 
 ---
 
@@ -30,12 +33,13 @@ honest.
 
 | # | Interlock | Term |
 |---|---|---|
-| 1 | **`tools/registry.py` retirement race** (critic B-F13) | ED-IN-0091 W4 item 5 offers "give the facade a consumer **or retire it**." If retirement executes first, this program's W1.3 and §1 predicate 2 lose their subject, and the ED-1082 grep-then-move precedent would find no consumers *precisely because W1 has not run*. **This is a hard interlock, not a convention:** W0 files the routing row AND adds a stop-condition to ED-IN-0091 §4 — "a wave that would retire `tools/registry.py` STOPS and files the item." Its §4 stop-condition mechanism already exists and is binding; this uses it. |
+| 1 | **`tools/registry.py` retirement race** (critic B-F13) | ED-IN-0091 W4 item 5 offers "give the facade a consumer **or retire it**." If retirement executes first, this program's W1.3 and §1 predicate 2 lose their subject, and the ED-1082 grep-then-move precedent would find no consumers *precisely because W1 has not run*. **Corrected (critic C-F3):** the v1 text said W0 would add a stop-condition to ED-IN-0091 §4 — but §4 lives inside a file that program declares an **immutable snapshot**, which is this plan's own §0 reason (1) for not appending waves to it. Editing it would contradict the reason we are a separate program. **The executable form:** the interlock is expressed entirely in `04_execution_ledger.md` (the declared, writable status surface) as a `[CSO]` **blocking row** that ED-IN-0091's W4 must read before its item 5, and this plan is cited from that row. Honest label: this is **protocol on a shared writable surface**, which is stronger than prose but weaker than a gate. Making it a true gate needs Jordan to carve an amendment exception — §6 row 9. |
 | 2 | **OI-40 scale reconciliation** | ED-IN-0091 W3 item 3 owns the IN-half. This program's W4 scale-binding *consumes* that outcome (or §6 row 1's ruling); it never re-derives it. |
 | 3 | **`structure_audit.py` file-level overlap** (critic B-F9) | ED-IN-0091 W4 item 5 consolidates the `__main__`-guard predicate in the same file this program's W2.3/W2.4 edit. Logical scopes are disjoint; the *file* is not. Routing row names the file and states **ED-IN-0091 W4 merges first**; this program rebases. |
 | 4 | **ED-IN-0073 character-decision remediation** (critic B-F6) | Its Phase 1 relocates `systems/characters/` → `systems/character/{generation,conviction,beliefs}/`, repoints 5 `descriptor_registry` entries + `module_contracts` `piety_track` `doc:`, and indexes into `values_master.yaml`. **A lane table cannot be authored against paths about to move.** W0 establishes its state: if dormant, cite that; if live, **W4's lane-table seeding waits on its Phase 1 or excludes `systems/characters/**` with a stated reason**. `values_master.yaml` gets a named single writer either way. Silence is not a disposition. |
 | 5 | **`04_execution_ledger.md` two writers** (critic B-F7) | ED-IN-0091's shared-file single-writer table does not cover the ledger, because at authoring time it had one writer. This program adds the second. **Term: every row this program appends carries the `[CSO]` prefix in column 1, appended at end-of-table only.** W5 capstones diff both prefixes. |
 | 6 | **ID partition** (critic B-F8) | 19 IN IDs (`0093–0111`) remain for **two** concurrent programs against a **frozen** reservations file — the exact unpartitioned-block collision class the lane namespace exists to prevent. **Term: ED-IN-0091 keeps `0093–0102`; this program takes `0103–0111`.** Recorded as a `[CSO]` ledger row at W0. Costs one line; makes collision impossible by construction. |
+| 8 | **The three silently-dead gates** (§2.0; critic C-F9/C-F10) | `ci_formula_prose_check.py:87-89`, `canon_coverage_check.py:67` and the BLOCKING `validate_ed_citations.py:91,108,278` are dead-root instances in neither program's W4-item-3 list. Routing row names all three, assigns the **repoints + guards** to this program's W1/W2, and leaves ED-IN-0091's four enumerated sites with it. Without this row the §2.5 claim "added to both programs' scope" is filed by nothing. |
 | 7 | **Reservation text is knowingly stale** (critic A-F9) | `id_reservations.yaml:225` scopes the block "for the ED-IN-0091 code-shape run." The file is frozen, so it is not amended. W0's ledger row is the record of the second consumer; the reservation comment is reconciled at ED-IN-0091's W5 capstone when the freeze lifts. |
 
 **`registers/review_baseline.yaml`** — IN is sole writer among live sessions. This program's seedings
@@ -69,29 +73,45 @@ dropped the **formula** half of the directive entirely (critic B-F1).
 |---|---|---|
 | 1 | **One parser per ownership-layer YAML.** `names_index.yaml`, `descriptor_registry.yaml`, `module_contracts.yaml` each `safe_load`-parsed by exactly one module; every other consumer imports the loader. Today: `ci_names_consistency.py:45` re-parses descriptor_registry; `quantity_registry.py:66` re-parses names_index; **19–21** files parse module_contracts (count rule: parse-sites, not mentions), **plus `wiring_map_check.py:45` which parses it by REGEX** and needs a `module_ids()` accessor, not a `safe_load` swap (critic A-F5) | `tests/valoria/test_sole_reader.py` (new) |
 | 2 | **`tools/registry.py` is a real owner.** Both `ci_quantity_vocabulary_check.py` and `ci_formula_prose_check.py` resolve through the facade — **both, not either** (critic B-F14); verdicts byte-identical on the current corpus | `test_registry.py` + corpus verdict-parity capture. **NOT `apparatus_registry.orphaned`** — that flag already reads `false` because the detector counts the module's own unit test as an invoker (critic A-F7); fixing that classification is W2.6 |
-| 3 | **No phantom authority.** Zero DEAD path references in `tools/**` and `skills/**/scripts/**` **source** — docstrings *and executed path constants*, carrying `ci_claude_workflow_paths.py`'s two-policy split: ALIASED is tolerable in prose, **FATAL in an executed expression** (critic B-F10). Scope covers **3 in-scope sites** for the `references/registry/*` class; append-only ledger + frozen-audit citations are explicitly excluded from repointing (critic A-F6) | widened `build_incompleteness.scan_retired_tree_pointers`; review_core `paths.dead` |
+| 3 | **No phantom authority.** Zero DEAD path references in `tools/**` and `skills/**/scripts/**` **source** — docstrings *and executed path constants*, carrying `ci_claude_workflow_paths.py`'s two-policy split: ALIASED is tolerable in prose, **FATAL in an executed expression** (critic B-F10). Scope covers **3 in-scope sites** for the `references/registry/*` class; append-only ledger + frozen-audit citations are explicitly excluded from repointing (critic A-F6) | **TWO instruments, split (critic C-F4)** — `build_incompleteness.scan_retired_tree_pointers` (scope widened) owns **retired-tree** pointers, and its `RETIRED_TREES = ("designs/","sim/")` regex *structurally cannot* match a never-existed path like `references/registry/README.md`; the nonexistent-path class is owned by the LIVE/ALIASED/DEAD resolver `ci_claude_workflow_paths.py:17-22` already declares. The v1 draft named only the first and would have shipped a falsifier its own instrument could not observe. Both feed review_core `paths.dead` |
 | 4 | **Rework debt is machine-visible and ratcheted.** Every "built wrong / wrong lane / second owner" block carries `[REWORK ED-…]`; `build_decisions` ingests it; `review_core --check` counts it | `tests/valoria/test_rework_flag.py`; signal `rework.count` |
 | 5 | **Duplication is detected by instrument.** Two signals: same-name-divergent-value module constants, and normalized-AST-identical function bodies — over a **declared corpus scope** (§2.3) | `test_structure_audit.py::test_dup_known_answer`; signal `dup.count` |
 | 6 | **Every governed path has exactly one lane row.** `references/lane_ownership.yaml` covers all live roots; `build_decisions.LANE_PATH_PREFIXES` imports it, killing **44 dead prefixes — 41 `designs/` and 3 `sim/`** (critic A-F4; the `sim/` roots are a *second* retired tree, not a `designs/` variant — critic B-F12) | `tools/ci_lane_scale_check.py` known-answer tests; signals `lane.unmapped`, `lane.misplaced` |
-| 7 | **Size-cap thresholds live once.** All 26 `ci_register_size_check.py` limits resolve from `atomization_rules.yaml` | `tests/valoria/test_size_limits_single_sourced.py`, generalizing `test_coverage_matrix_threshold.py` from one entry to the pattern |
+| 7 | **Size-cap thresholds live once** — scoped to the **13 non-`.jsonl` paths**. ⚠️ `atomization_rules.yaml:113-115` states outright that "size caps for all ledger files live in `tools/ci_register_size_check.py`'s THRESHOLDS, **not here**" — a deliberate single-owner assignment in the *opposite* direction covering the 13 `.jsonl` paths. The v1 predicate would have silently reversed a documented ruling (critic C-F8); reversing it is now §6 row 10, not an implementation detail | `tests/valoria/test_size_limits_single_sourced.py`, generalizing `test_coverage_matrix_threshold.py` from one entry to the pattern |
 | 8 | **Formula single-ownership is actually measured.** `ci_formula_prose_check.py` scans a **non-zero** census; every registered quantity has one `defining_surface`; every other carrier cites or textually matches it | the checker itself, with a guard asserting `rows > 0`; signal `formula.drift` |
 
 ---
 
 ## §2 · Primitives — ruthlessly preferring extension over new owners
 
-### 2.0 Formula ownership — the buried-lede repair (NEW, was absent pre-critic)
-**`tools/ci_formula_prose_check.py` is silently dead at HEAD.** `DEFAULT_CENSUS` (lines 86–88) points
-into the retired `designs/` tree; the census actually lives at
-`audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml`. `load_census`
-(line 191) returns `[]` on a missing path **without raising**, so the tool prints
-`0 census-drift + 0 live-drift findings across 0 formula-bearing quantities` and exits 0 —
-**measured, reproduced.** It has reported all-clear while scanning nothing since the 2026-07-19
-retirement. This is the §0.1-point-2 defect class exactly: an assertion that cannot observe the
-failure it excludes. **Fix:** one-line repoint + a guard case asserting `stats['rows'] > 0`, so the
-tool fails loudly rather than passing vacuously. **Then** the A18 findings become real work — and
-until W1 runs, *nobody knows how much formula drift exists*, which is why §1 predicate 8's first
-measurement is a W1 deliverable and not a plan-time number.
+### 2.0 The silently-dead-gate class — THREE instances, one blocking (expanded post-critic)
+
+The buried lede is not one dead tool. It is a **pattern defect** in the §0.1-point-5 sense: each of
+these was correct when written and stopped working because `designs/` was retired on 2026-07-19.
+All three pass CI today while scanning nothing.
+
+| # | Gate | Tier | Evidence | Signature |
+|---|---|---|---|---|
+| 1 | `tools/ci_formula_prose_check.py` | report-only, **the only formula-ownership instrument** | `DEFAULT_CENSUS` (`:87-89`) points into retired `designs/`; the census lives at `audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml`; `load_census` (`:191-193`) returns `[]` on a missing path **without raising** | prints `0 census-drift + 0 live-drift findings across 0 formula-bearing quantities`, exits 0 |
+| 2 | `tools/canon_coverage_check.py` | report-only, CI job `canon-coverage-check` | `DESIGNS_DIR` (`:67`) = `<repo>/designs`, which does not exist | prints `Unregistered with header: 0 / Registered without header: 0 / CLEAN — no drift detected` — where `references/ci_checks_registry.yaml` records its last real measurement as **1 unregistered-with-header + 28 registered-no-header (2026-07-11)**. The drift was not fixed; the scanner went blind |
+| 3 | `tools/validate_ed_citations.py` | **BLOCKING** (`valoria-ci.yml`, in `ci-summary`'s `needs`) | `_walk_repo_files()` (`:278`) walks `('canon','designs','params','references','archives','deprecated')` — `designs/`, `params/`, `archives/` do not exist — and **never walks `systems/` or `engine/`** despite `SCAN_PREFIXES` (`:108`) declaring both. `WORKING_PREFIXES` (`:91`) is the dead `('designs/audit/', 'workplans/')` | the ED-citation gate effectively covers `canon/` + `references/` + `deprecated/` only |
+
+**Precision, stated exactly** (critic C-F11): #1 is **dead by default**, not unconditionally — a
+`--census` override exists at `:446`, but **no live invocation passes it**: CI runs
+`python3 tools/ci_formula_prose_check.py --report` (`valoria-ci.yml:316`) and `valoria_local.py:43`
+passes an empty arg list. `tests/valoria/test_ci_formula_prose_check.py:201-203` invokes `main()`
+against the live tree and asserts only `== 0` — a green test over a zero-row scan, which is the
+§0.1-point-2 failure reproduced inside the test suite.
+
+**Fix, per §0.1 point 5 — one owner, every site routed through it, and a guard that fails on
+recurrence.** The repoints are one-liners; the guards are the deliverable: `assert stats['rows'] > 0`
+for #1, an equivalent non-empty-corpus assertion for #2, and `assert scanned_docs_under('systems/') > 0`
+for #3. **Do not fix these three as one-offs** — that is precisely what produced them. The
+detection-side sweep is §2.5.
+
+**Sizing is unknown at plan time and stays unknown.** Because #1 and #2 have been blind, nobody knows
+how much formula drift or canon-coverage drift exists. §1 predicate 8's first real measurement is a
+W1 deliverable, not a plan-time number (§9 risk 4).
 
 ### 2.1 WS1 step 1.5 — ADOPTED as extension of existing owners; NO new module
 Not the end-state flip (held, §6 row 3). (i) Route **both** vocabulary checkers through
@@ -125,6 +145,27 @@ excluded from `dup.count` and named in the detector's own output as excluded-wit
 silently dropped — CLAUDE.md §8's no-silent-caps rule). Live scope is `engine/**`,
 `systems/**` (minus the two carve-outs), `tools/**`, `skills/**`.
 
+⚠️ **The detector is designed NOT to report its own motivating example — say so, don't discover it
+later (critic C-F5).** Corrected census: **26 definitions — 23 in `sim_mb_06_v*`, 25 under
+`tests/sim/**`, exactly 1 in live scope** (`systems/mass_battle/sim/massbattle.py:640`); **25 are
+mutually AST-identical**, `tests/sim/sim_mass_battle_SIM-MB-05.py:45` diverges (typed signature +
+docstring, which survive `ast.dump`). So under filter 1 only one definition is in scope, and one
+definition is not a duplicate. Under filter 2 the body is **four** top-level statements (three `if`s
++ a `return`), **below the ≥5 floor**. `dup.count` contribution from `compute_degree` is therefore
+**zero, by design.** The cluster is a **hand-routed §6 row 5 item**, not a detector output — which
+also means §9 risk 1's stop-rule must be calibrated against the detector's own expected yield, not
+against this cluster.
+**"Statement" is defined as top-level statements in the function body** (not recursive), and the ≥5
+floor is a **plan-time assumption, not a measurement** — W2 stage 3 must justify it against a
+measured false-positive rate before the signal is seeded.
+
+⚠️ **Plan-time estimates, to be re-derived in W0 (critic C-F15).** The following ship without a
+committed instrument and are explicitly NOT results: "45/102 value collisions", "`3.0` recurs 24×",
+"19–21 module_contracts parse-sites" (a **range is an admission the count was never nailed down** and
+must become a number with a stated counting rule before it enters an acceptance predicate), and the
+58-file triage totals. W0 stage 1 lands the counting script that prints each; until then they are
+leads. `03_plan_liveness_triage.md` is the triage's committed manifest.
+
 Signals: (1) same-NAME module-level ALLCAPS constants with divergent values (allowlist `SCHEMA_VERSION`
 + test seeds — verified genuine false positives, 3 unrelated schemas); (2) `ast.dump` hash equality,
 names normalized, docstrings stripped, ≥5-statement floor. **Same-value grouping is NOT emitted**
@@ -135,9 +176,24 @@ whose dominant mode is "same concept, independently re-derived."
 count reconciled against W0's re-derived census.
 
 ### 2.4 `tools/contracts_store.py` — ADOPTED, one new small module
-The heaviest re-parse concentration, with `from:`-normalization inlined twice
-(`structure_audit.py:378`, `build_graph.py:334-336` — line cites corrected per critic A-F8; the
-"exactly twice in production" claim was attacked repo-wide and **holds**). Migration deliberately
+The heaviest re-parse concentration, with `from:`-normalization inlined **at least four times**:
+
+| site | form |
+|---|---|
+| `skills/valoria-vector-audit/scripts/structure_audit.py:378` | `_as_list()` helper |
+| `tools/observability/build_graph.py:334-336` | inline `isinstance` branch |
+| `tools/dashboard_data.py:918-924` | `_froms()` — its own comment names the identical hazard verbatim |
+| `skills/valoria-vector-audit/scripts/workbench.py:120-121` | inline ternary |
+| `skills/valoria-module-adjudicator/scripts/contract_flowchart.py:263-264` | **a divergent partial that is a LIVE BUG** — `",".join(frm or ["?"])` special-cases only the literal `"engine"`, so any other bare-string `from:` is joined character-wise (`faction_state` → `f,a,c,t,i,o,n,_,s,t,a,t,e`) |
+
+⚠️ **Correction of record (critic C-F1).** The v1 draft claimed two sites and its review record
+asserted the "exactly twice in production" figure had been "attacked repo-wide and **holds**." That
+was **false** — one grep refutes it. An assertion that a claim survived adversarial attack, when it
+did not, is the §0.1-point-3 failure this program was written to prevent, committed inside the
+program's own review record. It is struck from `02_…md` and recorded here rather than quietly edited.
+The `contract_flowchart.py` bug is a genuine find that the wrong count was hiding.
+
+Migration deliberately
 partial: W3 migrates the two inline sites, the top CI consumers, and **`wiring_map_check.py:45`'s
 regex reader via a `module_ids()` accessor**; the long tail gets `[REWORK]` flags, not a 21-file
 big-bang. **Falsifier:** old-vs-new normalization identity over the live file + per-migration mutation
@@ -162,7 +218,10 @@ imports at `registry.py:145,149`).
 Re-measurement found **≥5 divergences**, not one: `propagation_map` 15k vs 10k *and a contradictory
 second policy block at 5k* (the loader returns on first hit, so it would silently bind 10000 and never
 see 5000); `arc_register` 20k vs 5k; `values_master` 40k vs 50k; `patch_register_index` 20k vs 6k;
-`names_index` 8k vs generic 10k. **12 of 26 checker paths have no policy entry at all.** So this stage
+`names_index` 8k vs generic 10k. **18 of 26 checker paths return `None` from `yaml_max_tokens`** — of which **13 are `.jsonl` with no
+policy coverage of any kind** (there is no `**/*.jsonl` catch-all). *(The v1 draft said "12 of 26",
+which is not reproducible under any counting rule — critic C-F7. Counting rule now stated: an entry
+"resolves" iff `yaml_max_tokens` returns non-`None`; 8 of 26 do.)* So this stage
 carries ≥5 threshold rulings, one duplicate-key repair, and 12 new policy rows — **sonnet/high with an
 opus adjudication**, not the sonnet/low "template PR" the draft assumed. §6 row 6 is widened
 accordingly.
@@ -241,7 +300,19 @@ correct for `HANDOFF_MB.md`; it is wrong for the INBOUND sections that exist to 
 | 5 | Apply `[REWORK]` flags to **the detector's `lane.misplaced` output** — `assert flagged == detector_misplaced` | 1 | sonnet, low |
 | 6 | Critic relay | 2 | valoria-critic (opus) ×2 |
 
-### Wave 5 — Capstone — 7 agents
+### Wave 5 — Capstone — 8 agents
+| # | Stage | Agents | Tier |
+|---|---|---|---|
+| 1 | Seed the six baselines (enumerated by name below) | 1 | sonnet, high |
+| 2 | Re-run every detector; diff every §1 predicate | 1 | sonnet, high |
+| 3 | Append `[CSO]` rows to `04_execution_ledger.md` | 1 | sonnet, low |
+| 4 | Disposition-map diff — every row matched, every miss recorded AS a miss | 1 | **opus** |
+| 5 | Top-level read-only adversarial audit | 1 | **fable** |
+| 6 | 2× refuter critics over capstone claims (majority kill) | 2 | valoria-critic (opus) |
+| 7 | `HANDOFF_IN.md` + root `HANDOFF.md` | 1 | sonnet, low |
+
+*(v1 gave W5 no stage table, so its "7 agents" was unreconcilable — critic C-F14.)*
+
 Seed the baselines **enumerated by name, not by count** — `rework.count`, `dup.count`, `paths.dead`,
 `formula.drift`, `lane.unmapped`, `lane.misplaced` (six; the draft said "four" while naming five —
 critic B-F11); re-run every detector; diff every §1 predicate; append `[CSO]` ledger rows; opus
@@ -285,7 +356,7 @@ be right about.
 Each row carries `provenance:` naming which partial owner produced it. Two sources disagreeing → a
 **conflict row** to opus adjudication; matched by none → `unassigned` **with the question written
 down**. Nothing is guessed. Encoded-not-resolved: `systems/overview/` (CLAUDE.md "no lane" vs
-`build_decisions.py:230` `SE`).
+`build_decisions.py:230` maps `systems/overview/sim/` → `SE`; `systems/overview/` itself has no row).
 
 **Flagging without moving.** A confirmed misplacement gets `[REWORK ED-…]` at the file head naming the
 correct home and owning lane. **The move is that lane's later work, never this program's.** The §5
@@ -317,6 +388,8 @@ fork (ED-IN-0091 §5 fork 1 — Jordan's).
 | 6 | **Size-cap divergences (≥5) + one contradictory duplicate policy key** | Per-row: keep the checker's value and record it in the policy with a reason, **except** the `propagation_map` duplicate block, which is a bug to delete either way | predicate 7 |
 | 7 | **Workplans-pointer enforcement.** Premise corrected: **all 7 live plans are currently pointer-less**; W0 backfills them | Backfill now; **no new CI gate yet** — revisit if a plan lands pointer-less after the convention is documented | nothing |
 | 8 | **The §0.2 tiering conflict** — does the 2026-07-28 Fable ruling stand, or does this directive relax it? | §10's ruling governs unless Jordan says otherwise | Fable's role in future programs |
+| 9 | **May a companion program amend ED-IN-0091's immutable §4 stop-conditions?** Interlock 1 needs a real gate; the only binding mechanism lives inside a file declared immutable | Keep it as protocol on `04_execution_ledger.md` (weaker, but consistent with that program's governance). Carve an explicit amendment exception only if the `registry.py` race is judged worth it | whether interlock 1 is a gate or a protocol |
+| 10 | **Ledger size-cap ownership reversal.** `atomization_rules.yaml:113-115` deliberately assigns the 13 `.jsonl` caps to `ci_register_size_check.py`'s THRESHOLDS, "not here". Predicate 7 would reverse that | **Keep the existing ruling** — scope predicate 7 to the 13 non-`.jsonl` paths and leave ledger caps where their owner put them. Reverse only if Jordan wants one policy file for all 26 | predicate 7's scope |
 
 ---
 
@@ -325,16 +398,27 @@ fork (ED-IN-0091 §5 fork 1 — Jordan's).
 **Rule as given:** *any* plan — workplan, session plan, implementation schedule — requires direct
 placement in `workplans/` or a pointer file there.
 
-**Current state, measured:** `workplans/` holds exactly three files (`README.md`,
-`valoria_master_workplan_v6.md`, `workplan_v6_progress.yaml`). **Zero pointer files exist.** An
-independent triage of **58** plan-shaped files under `audit/` classified **7 LIVE** / 14 superseded /
-7 complete / 29 historical / 1 unknown. **All 7 live plans are pointer-less.**
+**State at HEAD — LANDED, not pending.** *(The v1 text said "zero pointer files exist" and scheduled
+their creation at W0. It was stale at its own commit: the pointers were created in the same commit
+that shipped it — critic C-F2.)* `workplans/` now holds **9 `POINTER_*.md` files**, a rewritten
+`README.md` carrying the convention, and **`tools/ci_workplan_pointer_check.py`**, its guard.
 
-**W0 stage 3 creates 7 pointer files** — one per live plan — and **rewrites `workplans/README.md`**,
-whose current text rules the *opposite* convention ("per-audit-session workplans … stay with their
-audit session — this directory is for the top-level *master* workplan only"). Shipping the rule
-without its documentation would leave a live contradiction and the next session would read every
-pointer as misplaced (critic B-F5).
+The backfill came from an independent triage of **58** plan-shaped files under `audit/`:
+**7 LIVE** / 14 superseded / 7 complete / 29 historical / 1 unknown — **corrected by the third
+adversarial pass to 8 LIVE**, because `audit/2026-07-22-mass-battle-stress-test/full_implementation_plan_v1.md`
+was misclassified SUPERSEDED (critic D-F3). It is `Status: PROPOSED` under a `HANDOFF_MB.md:763`
+section headed "**(IN PROGRESS)**" carrying Jordan's "nothing is golden" directive; grepping the
+07-26 plan for its Phase-1 items (B1/B2/B3/B5, geometry, col_grid, octagon) returns none of them.
+**A triage that buries a live plan is the exact failure the convention exists to prevent**, and it
+happened on the first attempt — which is the argument for the guard, not against the convention.
+The 9th pointer is this program's own plan.
+
+**The guard, and the half it deliberately omits (critic D-F7).** `ci_workplan_pointer_check.py`
+checks what is deterministic: five required fields, a lane from the roster, no duplicate targets,
+and every `target:` resolving on disk. Mutation-verified — planting a dead target turns it red. It
+does **not** check "every live plan has a pointer": that needs a liveness oracle, and liveness was
+measured un-inferable, so a guessing guard would be wrong in both directions. That half is §6 row 7.
+Per §0.1 point 5: ship the guard you can write; name the half you did not.
 
 **Pointer files carry an explicit `liveness:` field, not an inferred one.** The triage established
 that a `## Status:` heading is **not** a liveness signal in either direction: only 10 of 58 files

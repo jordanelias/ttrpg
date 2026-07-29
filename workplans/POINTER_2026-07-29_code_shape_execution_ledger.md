@@ -6,5 +6,5 @@
 **scope:** `OI/item · wave · PR · ED · falsifier artifact · outcome`. The register, plan and
 disposition map are immutable snapshots — **corrections land here, not as edits to those files.**
 
-**Two writers as of 2026-07-29:** the centralization program (ED-IN-0103) also appends here, with a
+**Will become two writers** at the centralization program's W0 (ED-IN-0103) — not yet in effect. That program appends here with a
 `[CSO]` prefix in column 1, appended at end-of-table only.

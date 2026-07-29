@@ -40,7 +40,7 @@ claims before accepting them. All are reconciled into `01_orchestration_plan_v1.
 | 46 dead lane prefixes | **44** — 41 `designs/` + **3 `sim/`**, a second retired tree the predicate did not name |
 | ~26 files parse `module_contracts.yaml` | **19–21** parse-sites (38 files merely *mention* it) — **plus `wiring_map_check.py:45`, which parses by REGEX** and needs a `module_ids()` accessor, not a `safe_load` swap |
 | 5 live `references/registry/*` citations | **3 in-scope** + 1 handoff mention; the rest are append-only ledger and frozen-audit rows that **must not be repointed** |
-| `structure_audit.py:379` / `build_graph.py:335` | `:378` / `:334-336` (the "inlined exactly twice in production" claim was attacked repo-wide and **holds**) |
+| `structure_audit.py:379` / `build_graph.py:335` | `:378` / `:334-336`. ⚠️ ~~"inlined exactly twice in production — attacked repo-wide and **holds**"~~ **STRUCK 2026-07-29 by the third pass (critic C-F1): the claim was FALSE.** Four sites exist — add `tools/dashboard_data.py:918-924` (whose own comment names the identical hazard verbatim) and `skills/valoria-vector-audit/scripts/workbench.py:120-121` — plus a divergent partial at `skills/valoria-module-adjudicator/scripts/contract_flowchart.py:263-264` that is a **live bug**. Asserting that a claim survived adversarial attack when it did not is the §0.1-point-3 failure this program exists to prevent, committed inside this very record. Left visible and struck rather than edited away. |
 
 ## Claims attacked that survived
 
