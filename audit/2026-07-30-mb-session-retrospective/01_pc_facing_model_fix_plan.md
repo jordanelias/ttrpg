@@ -206,3 +206,69 @@ Each verified in source by an agent that never saw the producer's reasoning.
 | **A7** | **F2's real mechanism, and it is not the octagon.** The test's premise (*"same dice, same contact cells, only the arc differs"*) is structurally false: the arms differ in `advance_dir`, which flips orig-frame support depth, so the front-facing defender's contacted rank has a full support stack and the rear-facing one has **zero**. That changes the defender's pool → the b-roll's dice consumption → the attacker's coupled degree; and `Partial → 1` with `eff_dr = 1` gives `max(0, 1−1) = ` **exactly 0.0**. The arc multiplier is bounded `[1.0, 2.0]` and *cannot* produce 0. **`PC_FRACTIONAL_POOL` is the concrete candidate that re-landed seed 5's RNG stream — bisect it first.** |
 | **A8** | **A third facing owner:** `engaged_frontage` uses subunit-level `_node_facing`/`advance_dir`, ignoring per-cell committed facing (`core/contact.py:334-335`). Low severity, but it is a fourth entry for P3's collapse. |
 | **A9** | `PC_REACH_FACING_GATE` and `_effective_reach` are **dead code** (zero call sites, retired at `units.py:2219-2220`) and are not named in B3's wire-or-delete list, which covers only `_reach_throttle`. |
+
+---
+
+## §7 — RECONCILED PLAN (my P-items × the `fable` skeleton plan's R-items)
+
+The skeleton plan supersedes §3's numbering. §3 is kept as the *diagnosis*; §7 is the work.
+
+| R | item | absorbs | before re-base? | Jordan? |
+|---|---|---|---|---|
+| **R0** | Circular body / exclusion (`CellDisc`) | P1 | **rides with re-base** | scope: field-only |
+| **R1** | One owner for heading (S7) | P3 | rides with re-base | — |
+| **R2** | Tick ordering — slew in its own phase, before propose | **P1b** | rides with re-base | — |
+| **R3** | Octagon arc partition as an owned primitive | ~~P2~~ | **yes, independent** | — |
+| **R4** | Reach as a radius | — | rides with re-base | reach arc span |
+| **R5a** | Perimeter derivation | S2 | **yes, independent** | — |
+| **R5b** | Perimeter *conditioning* of cells (S4) | — | after re-base | S4/S7 lateral motion |
+| **R6** | Face-to-face engagement + corner disadvantage (S5) | P2's real content | after re-base | emergent split; `FACING_REACTION_TICKS` |
+| **R7** | Re-derivation register (measured-on-the-square) | — | attached to R0/R4/R6 | — |
+| **R8** | Separation of pre-existing overlap (F10) | — | after re-base | build or defer |
+
+### Three things the skeleton plan established that §3 had wrong or missing
+
+1. **`perimeter.py` already exists** — hull faces, outward normals, target points, sharp-tip
+   detection, `approach_alignment` — wired into `_envelop_goal` only. R5a *composes on it*; it must
+   not be re-implemented (§8). S2 is under-wired, not absent.
+2. **R2 is required even though R0 makes exclusion ordering-proof.** A circular body means rotation
+   cannot change occupancy — but the *engagement/arc* surface stays heading-dependent, so without
+   the reorder contact can still fire (or fail to) on a heading the solve never saw.
+3. **The minimum viable slice is NOT the smallest diff.** R2 alone would green both
+   `test_obb_contact_toi` failures (headings are identity in those two fixtures) — and it is
+   **rejected**: it ships the retired substrate, leaves F11 intact, and is a **G13-shaped win**, a
+   metric the wrong system can pass. The ruled slice is **R0-core + probe port**.
+
+### The probe must be ported, and this is not optional
+
+`_CommitProbe` (`test_obb_contact_toi.py:89-118`) measures **square** `obb_overlap`. On circular
+bodies, cells committed at tangency (dist = 1.0) will *always* register rotated-square overlap — so
+the old instrument reports failure on a correct engine. **The instrument cannot measure the new
+substrate.** Port it to the engine's own predicate (strict disc overlap, G18), and note the bonus:
+penetration depth on circles is exactly `2r − dist`, which retires the `_depth` bias class (F15)
+permanently rather than patching it.
+
+### R7 — what must be re-derived, not ported (§0.1 point 4)
+
+Everything fitted on the square substrate: the `2.6` broad-phase cap (`contact.py:321`, derived from
+the √2/2 half-diagonal → re-derive as `2·(0.5 + max reach)`); `R_body = hypot(0.5, 0.5)`; the gauge
+bands in `bat.py`; ED-MB-0059's retracted headline; **the Lanchester frontage calibration** — a disc
+projects width `2r = 1.0` at *every* orientation where the box projected 1.0–1.414, so rotated-
+engagement frontage shrinks and the Stage-D gauge must be re-run; the F12 packing baselines; and
+`PC_FACING_SLEW_BASE = 60`, which is unratified (A1) and now **doubly** load-bearing because heading
+is also travel (S7).
+
+### Consolidated Jordan-ruling register
+
+1. Grid-path scope — recommend **field-only** (the grid oracle never enters
+   `resolve_toi_and_commit`, which is field-gated); confirm.
+2. Reach arc span — FRONT only (±45°) proposed; does SIDE get none?
+3. **S4 × S7 tension:** may a cell translate laterally for perimeter infill *without* turning, and at
+   what rate? Heading is the forward normal, but conditioning implies non-forward correction motion.
+4. Corner disadvantage — confirm it is an **emergent pool/frontage split**, with no named multiplier.
+5. `PC_FACING_SLEW_BASE = 60` ratification; and whether `FACING_REACTION_TICKS` retires in favour of
+   the physical slew (two owners of one latency, A3).
+6. **A4 canon conflict:** `mass_battle_v30.md:155` says 135° sightline + 15-cell perception range;
+   the code has 210° and **no distance limit at all**. Which owner wins?
+7. R8 separation impulse — build or defer.
+8. Standing: the golden mode matrix; `CONTACT_REACH`'s magnitude; ED-MB-0059 headline re-measure.

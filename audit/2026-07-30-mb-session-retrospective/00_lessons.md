@@ -391,10 +391,25 @@ Three consequences for the code, each checkable:
 and they move accordingly.** Cells hold relative distance within their network; they collapse/infill
 toward points of engagement rather than opening voids.
 
-**Gap analysis against the tree.** `_node_rel` is centroid-anchored (S3 ✓). But S1, S2 and S4's
-"conditioning" are not implemented: there is no subunit-perimeter object anywhere, cells relax
-INDIVIDUALLY toward rotated slots rather than being conditioned as a body, and the octagon's
-orientation convention needs verification against S1. F11's finding — that a 1.0-pitch lattice of
+**Gap analysis against the tree — CORRECTED TWICE, both times by an independent agent.**
+
+⚠ **Correction 1: "there is no subunit-perimeter object anywhere" was FALSE.**
+`tests/sim/mass_battle/perimeter.py` exists (Jordan-ruled 2026-07-23, 8KB) and already provides
+convex-hull `perimeter_faces` with outward normals, `target_points` with sharp-tip detection,
+`nearest_target` and `approach_alignment`. It is **wired into `_envelop_goal` only** (ED-MB-0035,
+`units.py:1175-1201`) — used to pick an envelopment approach face, never as the *surface of battle*
+and never as the cell-conditioning boundary. So S2's substrate is largely **built and under-wired**,
+not missing. That is the third instance this session of the same pattern (`resolve_internal_collisions`,
+`_reach_throttle`, now perimeter's fuller use), and it is why G21 and the dead-primitive census exist.
+
+⚠ **Correction 2: the octagon arcs are ALREADY vertex-forward** — see `01_pc_facing_model_fix_plan.md`
+§3 P2 (retracted). `geometry.py:165-185` zones GREEN <45°, YELLOW 45–90°, RED ≥90°, exactly S6's
+allocation. There is no arc rotation to fix; what is missing is the face-engagement *mechanic*.
+
+**What genuinely is not implemented:** S4's conditioning (cells relax INDIVIDUALLY toward rotated
+slots, `units.py:1623-1625`, rather than tiling a perimeter), S5's face-to-face engagement
+(`_octagon_cell_mods` resolves against a centroid *bearing*, not faces), and S6's circular body.
+`_node_rel` is centroid-anchored, so S3 ✓. F11's finding — that a 1.0-pitch lattice of
 1.0×1.0 boxes self-interpenetrates at depth `1 − cos θ` whenever the facing is off the lattice axis —
 is very likely an artefact of *not having* S2: with a perimeter that owns the frontage, cell
 placement is a tiling problem inside a known boundary rather than an emergent consequence of
