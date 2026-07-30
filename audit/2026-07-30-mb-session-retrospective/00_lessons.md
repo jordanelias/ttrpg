@@ -343,9 +343,19 @@ the off-axis interpenetration: it appears exactly when the facing is off the lat
 vanishes at 0°/90°, which is the `1 − cos θ` signature F11 measured.
 
 Under the spec the numbers close cleanly: pitch 1.0 with an r=0.5 circle makes adjacent cells
-**exactly tangent at every orientation**, and any square retained for tiling or arc bookkeeping has
-side `r√2 = 0.7071` and can never protrude past the exclusion circle. The binding constraint becomes
-the circle at all orientations, which is precisely what makes the invariant hold under rotation.
+**exactly tangent at every orientation**. The binding constraint becomes the circle at all
+orientations, which is precisely what makes the invariant hold under rotation.
+
+**And the inscribed shape is the OCTAGON, not a square** (Jordan: *"moreso than a square, we want the
+octagon"*) — the square was only ever the legacy grid artefact and carries no meaning in a continuous
+field. A regular octagon inscribed in the r=0.5 circle has circumradius **0.5** (vertices touching
+the circle), apothem `0.5·cos 22.5° =` **0.46194**, and **90.0%** of the circle's area.
+
+**This closes S1 against S6 exactly, and that consistency is the tell that the spec is right:** the
+forward **vertex** sits precisely *on* the exclusion circle, so when two cells are tangent — centres
+at pitch 1.0 — their forward vertices meet at exactly the contact point. *"The point is what touches
+the subunit facing line"* (S1) and *"the circle is the exclusion boundary"* (S6) turn out to be the
+**same statement**, not two constraints needing reconciliation. The contact surface **is** the vertex.
 
 ⚠ The alternative repair — keep side 1.0 and grow the exclusion circle to the circumscribed
 r=0.7071 — is **rejected by this spec** and would also space every formation 41% further apart,
