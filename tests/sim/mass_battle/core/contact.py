@@ -158,10 +158,22 @@ def resolve_cross_side_contention(unit_a, unit_b):
     """
     import mass_battle.hierarchy.units as _u
     if _u.FIELD_MOVEMENT:
-        # [Stage A] Co-location is now geometrically impossible on the field path: _node_advance halts
-        # every cell at standoff() before it can ever reach an enemy cell's true position, so there is
-        # nothing left for this function to resolve. Kept (not deleted) as a documented no-op; the OFF/
-        # grid path below is untouched and still does the full speed-priority resolution.
+        # ⚠ [ED-MB-0061, 2026-07-30] THIS CLAIM IS FALSE AND IS RETAINED ONLY AS A WARNING.
+        # It used to read: "Co-location is now geometrically impossible on the field path:
+        # _node_advance halts every cell at standoff() before it can ever reach an enemy cell's true
+        # position, so there is nothing left for this function to resolve."
+        #
+        # REFUTED BY MEASUREMENT: 875 DEEP cross-side body interpenetrations (obb_overlap with
+        # penetration depth >= 0.1) over 140 historical-scale snapshots, and independently by
+        # tests/valoria/test_obb_contact_toi.py's two failures under PC_FACING_MODEL=1
+        # ("opposing cell BODIES interpenetrated after a commit"). The stated mechanism does not hold
+        # because the TOI certificate is issued for a heading that _commit_cell_position then
+        # REWRITES (see hierarchy/units.py's resolve_toi_and_commit and the ED-MB-0061 fix plan R2).
+        #
+        # The function stays a no-op on the field path — that part is unchanged and correct, since
+        # cross-side resolution belongs to the TOI solve. But nothing here may be relied on as a
+        # guarantee that co-location cannot occur. The OFF/grid path below is untouched and still
+        # does the full speed-priority resolution.
         return 0
 
     def collect(unit):
