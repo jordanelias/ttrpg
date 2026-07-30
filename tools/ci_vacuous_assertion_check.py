@@ -187,6 +187,24 @@ def scan_file(path: str) -> tuple[list[dict], list[dict]]:
                 provable.append({**base, 'rule': 'V5', 'why': 'a literal compared with itself'})
                 continue
 
+            # V6 — `0 * anything == 0`: an arithmetic identity, not a claim about the system.
+            #
+            # Added on FIELD EVIDENCE, not speculation: the PC lane independently hit this exact
+            # shape (`assert 0.0 * edge == 0.0`) and recorded it as "a property of floating-point
+            # multiplication, not of the engine ... third instance of this defect class in this
+            # arc". Two lanes reaching the same defect class in one week is the §0.1 #5 signature.
+            # Caveat stated rather than hidden: it is vacuous for FINITE operands — `0.0 * nan`
+            # and `0.0 * inf` are nan, so a test deliberately probing non-finite values is a real
+            # claim. That case is vanishingly rare next to the zero-gain idiom, and this tier is
+            # report-only, so a human reads it either way.
+            if isinstance(op, ast.Eq) and isinstance(left, ast.BinOp) and isinstance(left.op, ast.Mult) \
+                    and _const_num(right) == 0:
+                if _const_num(left.left) == 0 or _const_num(left.right) == 0:
+                    provable.append({**base, 'rule': 'V6',
+                                     'why': 'zero times anything equals zero — an arithmetic '
+                                            'identity, not a property of the system under test'})
+                    continue
+
             # V3 / S2 — `is not None`
             if isinstance(op, ast.IsNot) and isinstance(right, ast.Constant) and right.value is None:
                 dotted = _dotted(left)

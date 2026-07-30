@@ -55,6 +55,36 @@ def test_catches_the_drift_count_shape(tmp_path):
     assert [f['rule'] for f in suspicious] == ['S1'], suspicious
 
 
+def test_catches_the_pc_lanes_zero_gain_shape(tmp_path):
+    """`assert 0.0 * edge == 0.0` — added on FIELD EVIDENCE from another lane, not speculation.
+
+    The PC lane independently hit this exact assertion and recorded it as "a property of
+    floating-point multiplication, not of the engine ... third instance of this defect class in
+    this arc" (PR #275). Two lanes reaching one defect class in a week is the §0.1 #5 signature,
+    so the detector covers it.
+    """
+    provable, _ = _scan('''
+        def test_x():
+            assert 0.0 * edge == 0.0
+    ''', tmp_path)
+    assert [f['rule'] for f in provable] == ['V6'], provable
+    assert 'arithmetic identity' in provable[0]['why']
+
+
+@pytest.mark.parametrize('line', [
+    'assert 2.0 * edge == 0.0',    # a REAL claim: edge must be zero
+    'assert 0.0 * edge == 1.0',    # false, not vacuous
+    'assert gain * edge == 0.0',   # real claim — neither operand is a literal zero
+])
+def test_v6_does_not_overreach(line, tmp_path):
+    """The zero must be a LITERAL operand and the comparand zero, or it is a genuine claim."""
+    provable, _ = _scan(f'''
+        def test_x():
+            {line}
+    ''', tmp_path)
+    assert provable == [], (line, provable)
+
+
 @pytest.mark.parametrize('line,rule', [
     ('assert True', 'V1'),
     ('assert 1', 'V1'),
