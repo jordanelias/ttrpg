@@ -247,6 +247,32 @@ Consequences the tree does not currently implement:
   the subunit owns a perimeter and conditions its cells to fill it, a formation cannot go porous
   without the perimeter itself deforming, which is observable and controllable.
 
+**S5 — THE POINT-FORWARD OCTAGON IS THE DISADVANTAGE MECHANIC. This is why S1 matters.**
+Diagram 3: a friendly subunit (blue cells in a black perimeter) meeting an enemy line (purple), every
+cell carrying its two forward faces. Jordan: *"you can see the corner is stuck facing between the two
+purple so it's at the greatest disadvantage of the cells, and then you see the facing of supporting
+cells."*
+
+The mechanism, stated precisely:
+
+- Engagement is **face-to-face** between octagon faces, not centre-to-centre.
+- Because the octagon leads with a **vertex**, a cell at the perimeter's **corner** points its vertex
+  into the *gap between two enemy cells* — so it is engaged on **both** of its forward faces at once,
+  by a different enemy on each. It splits its frontage two ways and is at **maximum disadvantage**.
+- A cell whose forward **face** meets an enemy face squarely is at parity — one face, one opponent.
+- Cells behind the contact contribute as **supporting** cells, and their facing is what determines
+  whether they support.
+
+**This is the payoff of S1, and it is emergent rather than scripted:** point-forward geometry makes
+*salients and corners* automatically take a 2:1 face disadvantage, so perimeter SHAPE (S2) drives
+local outcome without any rule that says "corners are weak". Concavity, convexity, the cost of a
+protruding flank and the value of a refused one all fall out of the same primitive. A face-forward
+octagon cannot produce this: a flat leading face meets one opponent and the corner penalty vanishes.
+
+⚠ **Audit consequence.** "Is the octagon point-forward or face-forward?" is therefore not cosmetic
+and not merely an arc-indexing question — it decides whether the engine has this mechanic at all.
+Any `PC_FACING_MODEL` fix must be checked against S5, not just against the arc multipliers.
+
 **S3 — Cell relational positioning is CENTROID-BASED to the other cells in the subunit.**
 
 **S4 — Movement is vector-based on a continuous field; the SUBUNIT conditions its cells' alignment

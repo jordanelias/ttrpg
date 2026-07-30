@@ -28,7 +28,15 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-28 (**IN-lane stamp reconcile — ED-IN-0086**: handoff status-tag convention
+_Last reconciled: 2026-07-30 (**MB-lane stamp reconcile — ED-MB-0061**: session retrospective
+(`audit/2026-07-30-mb-session-retrospective/00_lessons.md`) — nine new guardrails G13–G21, Track F's
+defect register, the `PC_FACING_MODEL` bisect, Jordan's authoritative geometry spec, and the Phase-0
+re-ordering of both MB workplans. Touches that audit doc, `references/id_reservations.yaml` (MB
+`next_free` 61→62), `registers/editorial_ledger_mb.jsonl` and `registers/handoffs/HANDOFF_MB.md`
+only. **No CURRENT.md head *row* changed** — no subsystem head moved, no doc superseded; this stamp
+clears the `id_reservations.yaml` recency drift the commit introduced. ⚠ **`main` is CI-red (16
+failures) as of `94bb902`** — see ED-MB-0061 before resuming MB work. **Prior:** 2026-07-28
+(**IN-lane stamp reconcile — ED-IN-0086**: handoff status-tag convention
 (`[OPEN]`/`[PART]`/`[DONE]`) + `tools/handoff_atomize.py`, the single owner of the handoff
 skeleton/infill/archive structure, plus the tag-aware read in `tools/session_open_work.py`. Touches
 `tools/`, `tests/valoria/`, `references/id_reservations.yaml` (IN `next_free` 86→87) and
