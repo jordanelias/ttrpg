@@ -32,7 +32,7 @@ useless (CLAUDE.md §0.1's own opening); specificity about *what to attack* is t
 | **G17** | **A falsification is only as good as its operationalisation. Write down the quantity the hypothesis predicts BEFORE measuring, then check the measured quantity is that one.** | The hypothesis "same-subunit overlap is an artefact of per-cell rotation" was recorded as FALSIFIED because 100% of overlapping pairs had identical facing. The relevant rotation is box-vs-**separation direction**, not box-vs-box. The measured depth distribution is quantitatively *consistent* with the hypothesis it was used to reject. A hypothesis wrongly filed as dead is worse than one left open. **Guards: D1, D3, every falsifier §0.1 #3 demands.** |
 | **G18** | **Measure with the engine's own predicate. Inventing a distance or threshold to decide "engaged"/"overlapping" creates a second owner of that rule, and it will disagree.** | Engagement was measured by **centroid-to-cell distance** while the engine decides contact on **oriented faces and normals** (`core/contact.find_contacts`, `obb_front_reach_overlap`). A 50-cell body's centroid sits ~5 units behind its own front face, so every reported gap was inflated. Separately `measure_colocation._depth` projects onto only the FIRST body's frame — wrong for differently-faced pairs, and can return negative for a pair `obb_overlap` just certified. Violates §8's "every rule lives once". **Guards: C-track observability, D5, D6.** |
 | **G19** | **The critic runs before the claim leaves the session, not after someone asks. A result reported without an independent read is provisional by construction.** | Both critic passes this session were run only when Jordan asked, and **both overturned committed claims**. §10 already specifies the agonist→antagonist relay and `.claude/agents/valoria-critic.md` is wired read-only with CI enforcement — the apparatus existed and was bypassed. Of the four defects that escaped into a claim or a commit, **all four** were measurement-setup errors: the class a producer structurally cannot audit in itself. **Guards: every task that reports a number.** |
-| **G20** | **A test asserting a flag defaults OFF protects the oracle, not the engine. Every gated-off mechanic needs a parallel ON-mode behavioural test, or the gate is a permanent blind spot.** | Flipping 15 flags ON surfaced **nine engine defects in one commit** — rear damage `0.0` instead of 2× front, opposing bodies interpenetrating, intent-resolution inverted, `PC_FRICTION_CEV` handing one side a systematic win, and more. None was reachable by any test or audit while the flags were off. Worse, the suite contained **seven tests asserting "this flag must default OFF"**, which *institutionalised* the blindness: they made the unmeasured state the protected state. **Guards: D2, B3, and the whole flag surface.** |
+| **G20** | **A test asserting a flag defaults OFF protects the oracle, not the engine. Every gated-off mechanic needs a parallel ON-mode behavioural test, or the gate is a permanent blind spot.** | Flipping 15 flags ON surfaced, in one commit, **two confirmed mechanism defects, an invalid test, a systematic side asymmetry, and four threshold-marginal outcomes** (§3.1b — the first count of "nine defects" was over-claimed and is corrected there). None of it was reachable by any test or audit while the flags were off, which is the point: the gate did not merely hide defects, it hid the engine's *fragility*. Worse, the suite contained **seven tests asserting "this flag must default OFF"**, which *institutionalised* the blindness: they made the unmeasured state the protected state. **Guards: D2, B3, and the whole flag surface.** |
 | **G21** | **A standing directive is a default, not a one-time instruction. On discovering a new instance of a class already ruled on, APPLY the ruling — do not re-report it as a finding.** | Jordan ruled "all options/modules must be turned on" on 2026-07-02 (ED-MB-0001) and restated it repeatedly across this session. The session kept *reporting* flags as OFF (`PC_CLOSE_RANKS`, `PC_FRONTAGE_BLEND`, the §5.1 census) instead of turning them on, until told in capitals. Re-surfacing a settled decision as a question is a form of not doing the work. **Guards: every task that inspects a gate.** |
 
 ---
@@ -56,7 +56,7 @@ construction" geometry, the retraction's completeness (G15), and the `_depth` me
 −48.6% / −74.4% headline (G18).
 
 **Consequence for canon:** ED-MB-0059's *mechanism* stands; its *headline percentages* do not. They
-must be re-measured with a true SAT depth over both bodies' axes before being cited again.
+must be re-measured before being cited again. ⚠ The fix first proposed here — "a true SAT depth over both bodies' axes" — is itself superseded by Jordan's S6 ruling: on a circular body penetration is exactly `2r − dist`, isotropic and frame-free, which retires the whole bias class rather than correcting it. `measure_colocation._depth` now computes that.
 
 ---
 
@@ -108,6 +108,45 @@ causes nor worsens them. ED-MB-0059's default-ON disposition stands on this axis
 
 ⚠ **Still unresolved for the whole 16:** each remaining failure needs its own single-flag bisect
 before being called class (a). The classification is now proven for F3/F4 only.
+
+### 3.1b — ALL FAILURES BISECTED (2026-07-30). Track F's "8 real engine defects" is CORRECTED DOWN.
+
+Each behavioural failure was re-run with every one of the 15 flags individually returned to OFF:
+
+| failure | restored by |
+|---|---|
+| `conditional_withdraw_fires_when_enemy_closes` | **5 unrelated flags, each individually** (CELL_MORALE, CLOSE_RANKS, FRICTION_CEV, INTENT_RESOLUTION, YIELD_RALLY) |
+| `own_strength_fires_when_attrited` | `PC_FRICTION_CEV` |
+| `holder_survives_better_with_intent` | `PC_FRICTION_CEV` |
+| `rear_is_exactly_double_front` (F2) | **`PC_FRACTIONAL_POOL`** |
+| `rally_keeps_pressured_yielding_subunit` | `PC_CELL_MORALE` |
+| `per_cell_break_subsumes_the_body_level_one` | **no single flag** — multi-flag interaction |
+| `close_ranks::inert_when_off` | `PC_CLOSE_RANKS` (definitional) |
+| `obb_contact_toi` ×2 (F3/F4) | `PC_FACING_MODEL` |
+
+**What this corrects.** I reported "nine defects from one flag flip" as nine *mechanisms*. That was
+over-claimed. The honest classification:
+
+- **Confirmed mechanism, real defect (2):** F3/F4 — `PC_FACING_MODEL`, with the causal chain verified
+  in source (the commit rewrites the heading the TOI certified).
+- **Confirmed mechanism, but a TEST-PREMISE defect (1):** F2. The audit traced it fully — the test's
+  premise *"same dice, same contact cells, only the arc differs"* is structurally false, because the
+  two arms differ in `advance_dir`, which flips orig-frame support depth, changing the defender's pool
+  and hence dice consumption, and `Partial → 1` with `eff_dr = 1` yields exactly `0.0`. The arc
+  multiplier is bounded [1.0, 2.0] and **cannot** produce 0. `PC_FRACTIONAL_POOL` merely re-landed the
+  stream. **The engine is not wrong here; the test is.**
+- **Independently real (1):** F1 — `PC_FRICTION_CEV`'s side asymmetry, measured on aggregate hp across
+  20 rows (0.9910 / 0.8634, 13 rows at exactly 1.0000), not on one seeded assertion.
+- **MARGINAL-THRESHOLD failures (4):** the rest. When five unrelated mechanics each individually flip a
+  binary outcome, the system is sitting on a cliff edge — the enemy closes to *almost* 5, the break
+  point lands *almost* where the body-level one does. That is diagnostic and worth knowing, but it is
+  **not evidence of five broken mechanisms**, and reporting it as such would repeat the error §0.1
+  point 4 warns about in the other direction.
+
+⚠ **The marginal class is not "not a defect".** An engine whose qualitative outcomes flip on any small
+perturbation is fragile, and D1/D5's over-decisiveness work is the right home for it. But the claim
+"turning the flags on surfaced nine engine defects" must be restated as: **it surfaced two confirmed
+mechanism defects, one invalid test, one systematic asymmetry, and four threshold-marginal outcomes.**
 
 ### 3.2 — Spatial-integrity residuals (extend Track B)
 

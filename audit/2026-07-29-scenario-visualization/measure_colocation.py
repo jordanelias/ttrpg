@@ -56,6 +56,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
 import render_scenarios as R            # noqa: E402  (owns scenarios()/snapshot(); never re-derived)
 import mass_battle.hierarchy.units as U  # noqa: E402
 from mass_battle.geometry import cellbox_from, obb_overlap  # noqa: E402
+from mass_battle.hierarchy.units import CELL_RADIUS  # noqa: E402  (single owner of the body radius)
 
 TICKS = tuple(int(t) for t in os.environ.get('COLOC_TICKS', '0,4,8,12,16,20,24').split(','))
 MIN_DEPTH = float(os.environ.get('COLOC_MIN_DEPTH', '0.1'))
@@ -79,11 +80,29 @@ def _bodies(unit, side):
     return out
 
 
-def _depth(pa, axes_a, pb):
-    """SAT penetration depth in lattice units: min over the box frame's two axes of
-    (1.0 - |delta . axis|). 0 => tangent (the lattice's own resting state); 1.0 => fully co-located."""
+def _depth(pa, axes_a, pb, axes_b=None):
+    """Penetration depth in lattice units. 0 => tangent; 2r => fully co-located.
+
+    ⚠ [ED-MB-0061, 2026-07-30] THE PREVIOUS FORM WAS BIASED AND ITS NUMBERS ARE RETRACTED. It read
+    `min over axes_a of (1.0 - |delta . axis|)` — two independent errors for pairs whose facings
+    differ, both caught by a read-only fable critic:
+      1. it used B's half-extent as 0.5 on A's axes, but a rotated unit square's support radius on a
+         FOREIGN axis is 0.5*(|cos t| + |sin t|), up to 0.7071 — under-stating the term by up to
+         0.207, so `_depth` could return NEGATIVE for a pair `obb_overlap` had just certified as
+         overlapping, silently dropping it from the DEEP count;
+      2. it omitted B's own two axes, so it was not a min over the full SAT axis set and could
+         over-state in the other direction.
+    It was exact only for aligned/anti-aligned facings. ED-MB-0059's -48.6%/-74.4% headline was
+    computed with it across differently-faced pairs and MUST BE RE-MEASURED before being cited.
+
+    NOW MEASURED ON THE CIRCULAR BODY, per Jordan's 2026-07-30 ruling (S6): the exclusion volume is
+    the r=0.5 circle, so penetration is exactly `2r - dist` — isotropic, rotation-invariant, one term,
+    no axes and no frame to get wrong. This does not merely fix the bias, it retires the entire class:
+    there is no foreign-axis support radius to mis-compute because a circle has the same extent in
+    every direction. `axes_a`/`axes_b` are accepted and ignored, kept so call sites need not change.
+    """
     dr = pa[0] - pb[0]; dc = pa[1] - pb[1]
-    return min(1.0 - abs(dr * ax[0] + dc * ax[1]) for ax in axes_a)
+    return 2.0 * CELL_RADIUS - math.hypot(dr, dc)
 
 
 def _classify(si, gi, sj, gj):
