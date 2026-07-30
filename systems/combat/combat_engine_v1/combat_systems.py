@@ -1034,6 +1034,15 @@ def contact_moment_edge(a, b):
     return log(sa/sb)
 
 
+def wound_impairment(defender, aggressor, cfg):
+    """SINGLE OWNER of the wound-impairment differential (ED-1041): wounds impair BOTH sides, defence ~1.6x harder
+    than offence. Extracted 2026-07-29 — this expression was written FOUR times across bind_sigma, the defence
+    assembly, reach_sigma and pursuit_sigma, each with different local names for the two sides (defender/aggressor,
+    shorter/longer, withdrawer/pursuer), so a change to the wound model had to be found in four places. Argument
+    order is (impaired_defender_side, impaired_aggressor_side) — the side being DEFENDED carries WOUND_DEF_OB. Pure."""
+    return cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds
+
+
 def bind_sigma(aggressor, defender, cfg, TR):
     """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
@@ -1051,7 +1060,7 @@ def bind_sigma(aggressor, defender, cfg, TR):
     tac = (agg_read - def_read)*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     spine = cfg['BIND_SPINE_K']*(WP.spine(aggressor.w)*TR.eff_cw(aggressor,'spine_press') - WP.spine(defender.w)*TR.eff_cw(defender,'spine_press'))   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: a single-edge rigid SPINE presses/binds the opposing blade (hand-high spine-press) — a separate physical fact from the lever-arm in `lev`, kept its own ablatable primitive (not multiplied into leverage — §2.3). Each side is AMPLIFIED by its own 'spine_press' ability (Japanese SHINOGI — the ability wired here; factor 1.0 default), so a bind specialist makes the spine decisive. [comment corrected 2026-07-23 ED-PC-0026: was "German Winden", a stale ref to the retired winden ability — winden is a DOUBLE-edged longsword technique, physically inert on this single-edge-only lever, which is why it was retagged to shinogi.] 0 for a double-edged/edgeless weapon.
-    wound = cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
+    wound = wound_impairment(defender, aggressor, cfg)   # ED-1041: wounds impair the bind too (defence ~1.6x), bind-aggressor/defender roles fixed through the loop
     moment = cfg['BIND_MOMENT_K']*contact_moment_edge(aggressor, defender)   # channel 5 / ED-PC-0052: DISPLACEMENT RESISTANCE — the mass-moment half of the bind, absent until 2026-07-29 (see bind_moment_edge). A separate physical fact from `lev`'s lever ARM, so it is its own ablatable term and is NOT multiplied into leverage() (consolidation_v1 §2.3).
     return lev + catch + tac + strq + spine + wound + moment
 
@@ -1091,7 +1100,7 @@ def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, def
     # mirrors hold at 0.50 and matchups move <=0.01, apart from katana/mace which were the biggest beneficiaries of
     # banking the bias behind a tempo edge. First-mover advantage now lives ONLY in the Vor, where it is earned.
     return (atk_sig - dsig - reach_pen + adef + init_edge
-            + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds)
+            + wound_impairment(defender, aggressor, cfg))
 
 def commit_depth(aggressor, defender, cfg, rng, TR):
     """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
@@ -1294,7 +1303,7 @@ def stophit_sigma(longer, shorter, measure_gap, cfg):
     Exactly 0 at range_avail=1.0 (the I1/I5 default). Pure."""
     range_avail=getattr(longer,'range_avail',1.0)
     return (cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
-            + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
+            + wound_impairment(shorter, longer, cfg)
             + STOPHIT_RANGE_K*(range_avail-1.0)
             + true_time_edge(longer, shorter, cfg))
 
@@ -1350,7 +1359,7 @@ def pursuit_sigma(pursuer, withdrawer, fat_p, fat_w, cfg, TR):
         the pursuer's balance/footwork against the withdrawer's is what decides whether the strike lands in the gap.
     Pure; the wrapper rolls it."""
     return (cfg['DISENGAGE_PURSUIT_NSIG']
-            + cfg['WOUND_DEF_OB']*withdrawer.wt.wounds - cfg['WOUND_ATK_OB']*pursuer.wt.wounds
+            + wound_impairment(withdrawer, pursuer, cfg)
             + armor_defeat_sigma(pursuer, withdrawer, cfg)
             + cfg['PURSUIT_FOOT_K']*(balance_eff(pursuer, fat_p, cfg)*TR.eff_cw(pursuer, 'balance')
                                      - balance_eff(withdrawer, fat_w, cfg)*TR.eff_cw(withdrawer, 'balance')))

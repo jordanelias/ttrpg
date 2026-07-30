@@ -414,6 +414,14 @@ def coupling(head, armor, coverage='full', perc=PERC_AUTH_REF, gap_prec=GAP_PREC
     elif head=='point' and eff is not None:
         d*=min(1.0, eff/THRUST_AUTH_REF)          # PC-4/ED-PC-0012: scale a POINT token by its own derived thrust magnitude — a weak incidental point on a slasher is not a dedicated thruster; native pointers (eff>=bear_spear 0.53) clamp to 1.0, unaffected
     return d*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage,perc,gap_prec,thrust_auth=thrust_auth)
+def _puncture_adef(w, cfg, grip, room):
+    """SINGLE OWNER of the percussion-driven puncture armour-defeat term: a concentrated beak/spike defeats a harness
+    by the ENERGY behind it, scored against ADEF_PERC_REF. Extracted 2026-07-29 — the expression was written twice in
+    adef_cap (the native-blunt max() and, from ED-PC-0049, the blunt-composite selected-spike branch), which is a §8
+    'every rule lives once' violation introduced by that batch and caught by its own duplication sweep. Pure."""
+    return cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF'])
+
+
 def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     """The aggressor head's RAW armour-defeat CAPABILITY (head-based, armour-tier-independent): the best mode its head
     can deliver vs a harness. Consumed by armor_defeat_sigma (vs the per-tier threshold) AND reach_threat (the FIX-1
@@ -438,7 +446,7 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
     tauth = thrust_authority(w['head_len'])   # PC-5: point-to-hand lever authority — scales the gap-THRUST armour-defeat terms (a short/half-sword thrust presses the harness; a reach-thrust at extension cannot), keeping adef consistent with coupling. NOT applied to the blunt-puncture beak (a poleaxe's spike authority is its percussion energy, already in puncture_pressure) nor to the pure-cut collapse.
     if head=='blunt':
         return max(cfg['ADEF_BLUNT']*(WP.percussion_authority(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']),
-                   cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
+                   _puncture_adef(w, cfg, grip, room))
     if head=='point':
         if w['head']=='blunt':
             # [ED-PC-0049, E3a] THE BLUNT-COMPOSITE SPIKE. `tauth` is a point-to-hand LEVER de-rating: a reach-thrust
@@ -462,8 +470,7 @@ def adef_cap(w, cfg, head=None, gap=None, grip=0.0, room=1.0):
             # goedendag were unreached because only medium/heavy had been checked — they both select the spike
             # unarmoured and at light. The armour-reference diff (11 of 212 cells, all four weapons) is what
             # caught it.
-            return max(cfg['ADEF_POINT']*gap,
-                       cfg['ADEF_POINT']*(WP.puncture_pressure(w, grip=grip, room=room)/cfg['ADEF_PERC_REF']))
+            return max(cfg['ADEF_POINT']*gap, _puncture_adef(w, cfg, grip, room))
         return cfg['ADEF_POINT']*gap*tauth
     if head=='cut_thrust': return max(cfg['ADEF_CUT'], cfg['ADEF_POINT']*gap*tauth)   # cut OR half-sword gap-thrust (the thrust term pressed home by the short lever)
     return cfg['ADEF_CUT']                                                            # straight/curved pure cut collapses
