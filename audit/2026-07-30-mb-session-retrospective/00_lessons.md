@@ -273,6 +273,53 @@ octagon cannot produce this: a flat leading face meets one opponent and the corn
 and not merely an arc-indexing question — it decides whether the engine has this mechanic at all.
 Any `PC_FACING_MODEL` fix must be checked against S5, not just against the arc multipliers.
 
+**S6 — THE BODY IS A CIRCLE; THE OCTAGON IS AN ARC PARTITION. Conflating them is the root cause.**
+Diagram 4 (Jordan): the octagon drawn inside the legacy grid square, with *"the cell should be a
+circle not a square"*, and the arc semantics — **green = the two FRONT faces flanking the forward
+vertex, yellow = the two SIDE faces, red = the four REAR faces, roughly based on field of vision."*
+(Colour is not consistent across the four diagrams and is not semantic — the geometry is.)
+
+Regular octagon, vertex-forward, each face 45°:
+
+| arc | faces | angular span from the forward vertex |
+|---|---|---|
+| **FRONT** (green) | 2 | 0° … ±45° |
+| **SIDE** (yellow) | 2 | ±45° … ±90° |
+| **REAR** (red) | 4 | beyond ±90° — a full 180° |
+
+**The defect this exposes, and it is architectural.** `geometry.py:365-372` records the
+circle→box substitution in its own words: *"a body-only CellBox (w=d=1.0, reach_front=0) has the
+same footprint **diameter** as the legacy circle model."* Same diameter **on the axes** — but a unit
+square's diagonal is 1.414, so its circumscribed radius is 0.707, not 0.5, and a square is
+**ROTATION-VARIANT where a circle is not.** One oriented box is currently serving three jobs at once:
+exclusion volume, facing/arc carrier, and reach envelope. So **changing a cell's facing changes its
+collision volume.**
+
+That single conflation explains two of the session's hardest findings mechanistically:
+
+1. **F3/F4 (bodies interpenetrate under `PC_FACING_MODEL`).** The flag slews facings; the oriented
+   box rotates; two previously-disjoint bodies overlap *without either one moving*. Worse, the
+   swept-SAT solve explicitly assumes axes are constant over a tick (*"over one tick the box axes and
+   corner-offsets are CONSTANT — Euclidean motion translates only the centre"*), which a slewing
+   facing violates outright, voiding the certificate. **With a circular body, facing has zero effect
+   on collision and this failure cannot occur.** This is consistent with the bisect: `PC_FACING_MODEL`
+   alone causes F3/F4.
+2. **F11 (a lattice self-interpenetrates off-axis at depth `1 − cos θ`).** Precisely the square-vs-
+   circle artefact. Circles of r=0.5 at pitch 1.0 are tangent at *every* rotation; squares at pitch
+   1.0 interpenetrate whenever the facing is off the lattice axis.
+
+**The separation of concerns S6 requires:**
+
+| concern | shape | rotation behaviour |
+|---|---|---|
+| **body / exclusion** | circle, r = 0.5 | **invariant** — facing cannot move it |
+| **facing / damage / FOV** | octagon arc partition, vertex-forward | orientation IS its content |
+| **engagement / reach** | forward envelope beyond the body | orientation matters, collision does not |
+
+This is §8's "every rule lives once" applied to geometry: three different questions, three owners.
+The current code answers all three with one `CellBox`, which is why turning the facing model on
+breaks the collision invariant.
+
 **S3 — Cell relational positioning is CENTROID-BASED to the other cells in the subunit.**
 
 **S4 — Movement is vector-based on a continuous field; the SUBUNIT conditions its cells' alignment
