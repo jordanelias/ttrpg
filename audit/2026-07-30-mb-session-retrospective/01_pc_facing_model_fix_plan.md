@@ -272,3 +272,111 @@ is also travel (S7).
    the code has 210° and **no distance limit at all**. Which owner wins?
 7. R8 separation impulse — build or defer.
 8. Standing: the golden mode matrix; `CONTACT_REACH`'s magnitude; ED-MB-0059 headline re-measure.
+
+---
+
+## §8 — ADVERSARIAL REVIEW of "green apex octagon snapping in circle" (2026-07-30)
+
+Read-only `fable` critic, structurally independent. **Verdict: P1's engineering core survives; the
+geometric closure argument sold with it does not — and three of the spec's own claims are
+geometrically unimplementable under S6 as written.** Those last are a conflict *inside* the spec and
+need a Jordan ruling, not a patch.
+
+### BREAKS
+
+**D1 — "The contact surface IS the vertex" is OVERTURNED, and worse than I flagged.**
+I had already conceded it holds only head-on. The critic sharpened it twice:
+- The most common tangent pair in the game is **rank-mates marching abreast**, which touch at each
+  other's **±90° SIDE vertex** — nowhere near the forward vertex.
+- **The claimed contact point is, by the engine's own convention, not a contact at all.**
+  `_sat_separated` counts exact touch as *separated* (`geometry.py:453-464`), `_pair_toi_scale`
+  treats `distance == target` as no violation (`units.py:156-165`), and contact fires on the **reach
+  envelope before bodies touch** (`units.py:2212-2214`). At reach 0, tangency is precisely the
+  zero-casualty standoff deadlock ED-MB-0012 documents. **The vertex never carries a contact event.**
+
+The claim was load-bearing as "the tell that the spec is right". With it gone, S1/S2/S5 revert to
+**unreconciled constraints requiring design decisions**, which the "same statement" rhetoric hid.
+
+**D2 — Face-to-face octagon engagement is IMPOSSIBLE at exclusion-legal range. OVERTURNED.**
+Flush face-to-face contact of two octagons inscribed in r=0.5 circles needs centre distance
+`2·apothem = 0.92388 < 1.0` — **the exclusion circles would have to interpenetrate.** Generic
+vertex-touch at tangency needs the bearing ≡ 0 mod 45°, measure zero. **Under circle exclusion the
+octagons can never touch.** So S5 is implementable only as bearing-sector bookkeeping — which is
+exactly what `octagon_angle` already does — or on reach-extended faces, which nothing specifies.
+**R6's "build the octagon as a real object" would build a polygon with no contact events to resolve.**
+(Attack 3's annulus worry does *not* land: sectors partition 360°, so there is no dead zone. But that
+is also the proof the physical polygon adds nothing over the arc partition.)
+
+**D3 — The corner cell is at ZERO disadvantage under the spec's own multiplier table. OVERTURNED.**
+Geometry favours the proposal first: a corner cell tangent to two enemies of a pitch-1.0 line sits at
+`h = √3/2`, bearings exactly **±30°** — one on each front face. That sector statement survives. The
+payoff does not:
+1. **S6 assigns both front faces one class.** FRONT is 0…±45°, live as `ANGLE_DEF_MOD` GREEN = 0,
+   multiplier **1.0** (`config.py:199-210`). Both attackers read GREEN. That is **parity — the
+   equal-best arc any engaged cell can show.** A cell showing flank (1.5×) or rear (2.0×) is strictly
+   worse off. "Maximum disadvantage" has no expression in the multiplier system the same spec defines.
+2. **The engine already litigated this exact configuration and ruled it a FALSE POSITIVE.** ED-MB-0018's
+   balance-critic fix rebuilt multi-side shock because the arc-blind count fired on *"TWO attackers
+   both in the FRONT arc (**a concentric frontal pinch, not an encirclement → false +50%**)"*
+   (`orchestration.py:743-752`). **Apex-into-gap is that configuration.** Implementing S5 as claimed
+   partially reverses a critic-driven fix.
+
+And the emergence claim is **backwards**: to get the disadvantage you must build face assignment, a
+per-face frontage split, and a split-face penalty — none of which exist. The rule *attaches to*
+geometry (good design); it does not *fall out of* it.
+
+**D4 — S1 and S5 are mutually exclusive as stated.** "Apex on the leading edge" pins a cell's heading
+exactly perpendicular to that edge. S5's corner cell faces the **gap bisector**, off both normals —
+and `_slew_facing` rotates every engaged cell off-normal anyway. **The moment any cell turns, its apex
+leaves the facing line; only the circle stays on it.** S1 as a standing invariant holds only at parade
+rest. One reading reconciles them — the perimeter as a **Minkowski envelope** of the body circles,
+whose rounded corner is an arc of the corner cell's own circle, on which every apex position lies for
+a fan of headings — but that is specified nowhere.
+
+### NEW DEFECT NEITHER PLAN SAW
+
+**D6 — The circle LEGALIZES identity-map bin collisions that the square forbade.**
+`_oriented_abs_map` file-bins live cells to `(round(r), round(c/COL_WIDTH))` with **FIRST-wins
+`setdefault`** (`geometry.py:259-265`). Two points in one bin can be ~1.27 apart — **legal for tangent
+r=0.5 circles**, but *overlapping* (hence excluded) for axis-aligned unit squares. So the box model
+structurally suppressed this case. On a collision the dropped cell **vanishes from the identity map**
+→ `_octagon_cell_mods` falls back to nominal axis-aligned facing (`orchestration.py:1057-1059`) and
+contact identities merge (`core/contact.py:324-325`). Worse: S4's "collapse/infill" under circular
+exclusion relaxes toward **hex packing** (row pitch 0.866), which row/col binning cannot represent at
+all. **R0 "gates everything" but no item covers the identity substrate.** This is where the circle
+proposal actually leaks.
+
+### WHAT SURVIVED
+
+- **The S6/P1 separation of concerns, and its causal story, verified in source.** The swept-SAT
+  precondition is genuinely violated by the post-certificate slew. A rotation-invariant exclusion body
+  kills the exclusion half of that class outright. The `_pair_toi_scale` quadratic to be promoted is
+  real, exact, and currently only a pre-reject.
+- **The arithmetic**: apothem 0.46194, area 90.0%, circumradius 0.5; and the rejection of the
+  r=0.7071 alternative (41% spacing blow-up) is correct.
+- **Attack 4 fails in the proposal's favour.** Arc assignment is *already* fully continuous — an
+  `acos` with 45°/90° thresholds, `_slew_facing` rotating by arbitrary radians, `cell_facing_vec`
+  holding raw floats. Nothing assumes quantised arcs. **"Snapping" is a misnomer for free rotation and
+  is harmless.** The only quantisation residue is the axis-aligned *fallback* facing on identity-map
+  misses — which is exactly what D6 inflames.
+- **P1's G16 guard design** (rotation-only must not change overlap; mutant = restore the box).
+- **D7 — the porosity attack does NOT land; the circle is exonerated.** Nothing in the engine reads
+  physical body area: F12's metric was pitch-normalised packing + NND, frontage is a projected-width
+  union where a tangent circle rank projects the same 1.0/cell, and contact counts cells. F12's
+  porosity was clumping *below* pitch (NND 0.68) — which circular exclusion makes **impossible**. The
+  circle *strengthens* the anti-porosity invariant.
+- **D9 — constants are conservative supersets, not silently falsified.** `R_body` and the 2.6 bound
+  stay valid (perf-only; their derivation comments go stale). But `OCTAGON_LOCAL_REACH = 2.0`'s
+  "verified front→1.00×, rear→2.00× exactly" lapses until re-taken, since halt geometry changes the
+  within-radius attacker set.
+
+### Consequence for §7
+
+- **R6 must not be built as specified.** Either S5 becomes a bearing-sector rule with an explicit
+  front-face split (a canon change to front-arc semantics, partially reversing ED-MB-0018), or it is
+  withdrawn. **Jordan's call.**
+- **R3's face-index addition is unnecessary for engagement** (D2) — keep the arc partition, drop the
+  polygon.
+- **New R0b: the identity substrate** (D6) — must land with R0 or the circle introduces a fresh defect.
+- **P1b must also cover the `yield_active` branch**, which writes an instantaneous un-slewed facing
+  *regardless* of `PC_FACING_MODEL` (`units.py:1669-1671`). The plan named only the slew path.

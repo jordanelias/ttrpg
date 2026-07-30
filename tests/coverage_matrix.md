@@ -736,3 +736,15 @@ the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
 **Jordan's rulings (AskUserQuestion, 2026-07-08):** the partition-invariance question left open by
 ED-MB-0003 = **"genuine defect — fix it"** (not the historically-correct-mechanism reading); DG-2
 (fighting-withdrawal/yield) = **"build it now"**; RC-5 triage = **start now, in parallel**.
+
+## 2026-07-30 — mass_battle: two false canonical citations removed (ED-MB-0061)
+
+**Comment-only; zero behaviour change.** Grid digest re-verified `unit 241f04e5…` (unchanged).
+
+- `geometry.py` `octagon_angle` — two citations removed that do not resolve (`§A.3b` is BATTLEFIELD
+  GEOMETRY, banner-superseded; `§octagon` does not exist — the head doc has **zero** occurrences of
+  "octagon"). CLAUDE.md §7's leaky-anti-fabrication pattern, on the facing model's own boundary
+  constants. Re-pointed at ED-MB-0018. Found by a `fable` audit, re-derived by hand before removal.
+- `core/contact.py` — *"Co-location is now geometrically impossible on the field path"* is **false**,
+  now retained only as a warning. Refuted by 875 deep cross-side interpenetrations and by
+  `test_obb_contact_toi`'s two failures.
