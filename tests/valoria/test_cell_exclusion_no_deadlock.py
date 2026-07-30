@@ -33,6 +33,7 @@ MUTATION-VERIFIED at introduction: dropping `or s <= 0.0` from the same-side fil
 hierarchy/units.resolve_toi_and_commit fails test_rigid_translation_unaffected_by_exclusion (the
 formation stops dead: displacement 0.0 against the flag-off arm's full step).
 """
+import math
 import os
 import sys
 
@@ -141,3 +142,86 @@ def test_exclusion_flag_is_pinned_in_the_golden_gate():
     assert mod.FIELD_PINS.get('PC_CELL_EXCLUSION') == '1', (
         "PC_CELL_EXCLUSION must be pinned in tools/ci_golden_modes_check.py FIELD_PINS — it moves "
         "unit_field and cell_field.")
+
+
+# ─── [ED-MB-0061] POSITIVE-BEHAVIOUR GUARD — the one the original pair could not provide ─────────
+#
+# A read-only critic showed the two guards above are one edit from vacuous. They kill the planted
+# `s <= 0.0` mutant only by ACCIDENT of this fixture's 8.1-degree bearing, which makes adjacent pairs
+# pre-overlapping; the pass's POSITIVE behaviour is never observed. Two mutants survive them:
+#   (a) delete the entire `if PC_CELL_EXCLUSION:` block in resolve_toi_and_commit
+#   (b) weaken the filter to `if s is None or s <= 0.5: continue`
+# because the free-space fixture never produces an `s` in (0, 1] at all.
+#
+# G16 requires a guard that fails on DELETION of the feature, not merely on perturbation of one line.
+# This one constructs the case the pass exists for: two SAME-SIDE cells on a collision course, with
+# proposals that would interpenetrate. With the pass ON they must be capped short; with it OFF they
+# must actually overlap. Both mutants above flip the ON arm to the OFF arm's outcome.
+
+def _head_on_same_side(exclusion, start_gap=4.0, step=2.0):
+    """Two same-side cells proposed straight at each other. Returns their post-commit separation.
+
+    Proposals are set directly rather than driven through _node_advance: the point is to exercise
+    resolve_toi_and_commit's same-side pass on a pair that genuinely closes, which ordinary formation
+    movement does not produce (cells hold relational slots and never charge each other)."""
+    saved = _hu.PC_CELL_EXCLUSION
+    _hu.PC_CELL_EXCLUSION = exclusion
+    try:
+        import random
+        random.seed(20260730)
+        ua = _mk('A', 'A', 9)
+        atom = ua.subunits[0]
+        ids = [(o_r, o_c) for o_r, o_c, _a, _b in _hu._oriented(atom)]
+        a_id, b_id = ids[0], ids[-1]
+        # place the pair 4 apart on the same row and propose each 2.0 toward the other -> they would
+        # end 0.0 apart (fully co-located) if nothing caps them.
+        row = 20.0
+        atom._node_pos[a_id] = (row, 10.0)
+        atom._node_pos[b_id] = (row, 10.0 + start_gap)
+        atom.cell_facing_vec[a_id] = (0.0, 1.0)
+        atom.cell_facing_vec[b_id] = (0.0, -1.0)
+        atom.halted_cells = set()
+        atom._node_pending_proposal = {
+            a_id: (row, 10.0, row, 10.0 + step),
+            b_id: (row, 10.0 + start_gap, row, 10.0 + start_gap - step)}
+        atom._node_pending_target_centroid = (row, 10.0 + start_gap / 2.0)
+        atom._node_pending_discipline = 5
+        _hu.resolve_toi_and_commit(ua.subunits, [])
+        pa, pb = atom._node_pos[a_id], atom._node_pos[b_id]
+        return math.hypot(pa[0] - pb[0], pa[1] - pb[1])
+    finally:
+        _hu.PC_CELL_EXCLUSION = saved
+
+
+def test_exclusion_actually_caps_a_closing_same_side_pair(field_path):
+    """THE POSITIVE GUARD. Deleting the gated block, or weakening its filter, makes ON behave as OFF."""
+    off = _head_on_same_side(False)
+    on = _head_on_same_side(True)
+    assert off == pytest.approx(0.0, abs=1e-9), (
+        f"fixture is not exercising the pass — with exclusion OFF the pair should end co-located, "
+        f"got separation {off}. If this fires, the proposal setup stopped closing and the ON "
+        f"assertion below has become vacuous (§0.1 point 2).")
+    assert on > off + 0.5, (
+        f"the same-side exclusion pass did not cap a closing pair: separation {on} with the pass ON "
+        f"vs {off} with it OFF. Either the `if PC_CELL_EXCLUSION:` block is gone, or its filter no "
+        f"longer admits the s in (0,1] that this pair produces.")
+
+
+def test_exclusion_caps_a_pair_that_touches_EARLY_in_the_tick(field_path):
+    """Kills the `s <= 0.5` mutant, which the 4.0-gap fixture above cannot.
+
+    That pair's bodies first touch at s = 0.75 (they close 4.0 -> 0.0 and touch at separation 1.0),
+    so a filter weakened to `s <= 0.5` still caps them and the mutant survives. This pair starts 1.5
+    apart and closes 1.0 each, so first touch is at **s = 0.25** — inside the weakened filter's skip
+    window. Under the mutant it is skipped and the bodies interpenetrate.
+
+    The two cases together bracket the filter: one above 0.5, one below. A filter admitting only
+    s > 0 passes both; any raised threshold fails this one."""
+    off = _head_on_same_side(False, start_gap=1.5, step=1.0)
+    on = _head_on_same_side(True, start_gap=1.5, step=1.0)
+    assert off == pytest.approx(0.5, abs=1e-9), (
+        f"fixture drifted — with the pass OFF this pair should end 0.5 apart (crossed through), "
+        f"got {off}; the ON assertion below would then be measuring the wrong thing")
+    assert on == pytest.approx(1.0, abs=1e-6), (
+        f"the pass must halt this pair exactly at body touch (separation 1.0), got {on}. A filter "
+        f"threshold above s = 0.25 skips this pair entirely and lets the bodies interpenetrate.")

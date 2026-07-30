@@ -88,28 +88,55 @@ a magnitude is genuinely needed and *then* becomes a Jordan number.
 
 ---
 
-## P-4 — The v30 sightline conflict
+## P-4 — Sightline and the arc partition · **RULED by Jordan, 2026-07-30**
 
-**Problem.** `mass_battle_v30.md:155` specifies a **135° forward sightline with a 15-cell perception
-range**. The code implements **210°** visible (`REAR_BLIND_DEG=150`, `FOV_HALF_DEG=105`) and **no
-perception-distance limit at all**.
+> *"135 degree viewing angle. Split yellow arc into two equal segments: yellow is 1.25x penalty and
+> orange is 1.5x penalty. The 135 viewing angle is an arc that should be snapping from vertex of
+> orange/yellow to vertex of orange/yellow"*
 
-**Recommendation: the CODE's arc wins; the DOC's range limit wins.** They are two separate quantities
-and the honest answer differs for each.
-- **Arc:** 210° visible is consistent with the octagon partition Jordan ruled (REAR = 180°, so visible
-  = 180°… ⚠ *these disagree*: 210° visible implies a 150° rear blind arc, while S6's REAR arc is 180°).
-  **This is a genuine third conflict and I flag it rather than paper over it** — S6, the code, and v30
-  give three different rear boundaries (180° / 150° / 225°). **Recommend adopting S6's 180°**, since
-  it is the most recent ruling and is the one the arc partition is built from; the other two then
-  become supersession notes.
-- **Range:** the doc's 15-cell perception limit is a real mechanic the code simply lacks. An unbounded
-  sightline means a cell reacts to a threat 50 cells away, which is why `assign_targets`' 'nearest'
-  fires unconditionally (A2). Recommend implementing the limit.
+**This resolves the three-way conflict AND collapses two constants into one boundary.** The proposal
+above recommended S6's 180° rear and implementing v30's range limit; the ruling supersedes the arc
+half of that — **v30's 135° wins outright** — and adds a split the proposal did not anticipate.
 
-**Falsifier:** with a 15-cell limit, a reserve subunit at the far edge must not acquire a target. Today
-it does — measurable directly (H6's A3/A4 had `target=Y` at face-gap 11.8).
+### The ruled partition (per side, measured from the forward vertex)
 
----
+| arc | span | width | damage-received |
+|---|---|---|---|
+| **GREEN** front | 0° … 45° | 45° | **1.0×** |
+| **YELLOW** | 45° … 67.5° | 22.5° | **1.25×** |
+| **ORANGE** | 67.5° … 90° | 22.5° | **1.5×** |
+| **RED** rear | 90° … 180° | 90° | **2.0×** |
+
+The old single YELLOW (45–90°, flat 1.5×) splits into two equal 22.5° segments, so flank damage now
+*grades* from 1.25× to 1.5× as an attacker works round toward the rear, instead of stepping.
+Ten sectors total (2 + 2 + 2 + 4), a 22.5°-resolution partition rather than eight uniform 45° faces.
+
+### Why the ruling closes P-4 rather than just answering it
+
+**The 135° viewing arc is ±67.5°, and 67.5° is exactly the yellow/orange vertex.** So the sightline
+boundary *is* an arc boundary — it does not need its own constant, and it cannot drift out of sync
+with the partition. That is the ruling's own phrasing ("snapping from vertex of orange/yellow to
+vertex of orange/yellow") and it is a structural property, not a coincidence: FOV and damage arc are
+one partition read two ways.
+
+### What this supersedes in the tree
+
+| constant | now | ruled |
+|---|---|---|
+| `FOV_HALF_DEG` | 105 (⇒ 210° visible) | **67.5** (⇒ 135° visible) |
+| `REAR_BLIND_DEG` | 150 | **225** |
+| `ANGLE_DEF_MOD` / `OCTAGON_DMG_MULT` | GREEN 1.0 / YELLOW 1.5 / RED 2.0 | **GREEN 1.0 / YELLOW 1.25 / ORANGE 1.5 / RED 2.0** |
+| `octagon_angle` thresholds | 45, 90 | **45, 67.5, 90** |
+
+⚠ **This is a behaviour change, not hygiene.** It narrows perception by 75° and re-prices the inner
+flank band downward (1.5 → 1.25). It moves goldens and must ride with the re-base. The v30 **15-cell
+perception range** remains unimplemented and is still recommended (proposal above) — the ruling
+settles the *angle*, not the *distance*.
+
+**Falsifier:** a cell with an attacker at 60° must report YELLOW at 1.25×, at 75° ORANGE at 1.5×, and
+at 70° must still SEE it (inside 67.5°? no — 70 > 67.5, so it must NOT see it). That last case is the
+sharp one: the perception boundary and the yellow/orange boundary must be the *same* number, so a
+test that moves one without the other fails.
 
 ## P-5 — D4: apex-on-leading-edge vs facing-the-bisector
 
