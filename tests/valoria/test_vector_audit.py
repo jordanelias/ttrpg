@@ -983,3 +983,75 @@ def test_keytype_token_known_answer():
     # an invalid regex in an earlier pattern is caught and skipped, not raised
     tokens2 = {'Key: bad.type': {'patterns': ['(unbalanced', re.escape('bad.type')]}}
     assert va._keytype_token('bad.type', tokens2) == 'Key: bad.type'
+
+
+# ── ED-MB-0047 (I4 / ED-MB-0043 F6): alias-spanning seed tokens have ONE owner ──
+
+def _derived_token_universe():
+    from pathlib import Path
+    return va.derive_tokens(Path(_ROOT))
+
+
+def test_seed_alias_names_are_not_minted_as_separate_tokens():
+    """A seed token that declares `alias_names` OWNS those names — no derivation may mint a
+    second token for one.
+
+    The defect class (ED-MB-0043 F6, measured): the curated core matched six surface forms
+    spanning TWO names, and each name was independently derived — 'Mass Battle' from
+    module_contracts' `mass_battle` module (scale 'mechanic'), 'Mass Combat' from
+    canonical_sources' `mass_combat` system key (scale 'system'). `add()` dedupes on the exact
+    normalized NAME, which cannot see an alias, so one subsystem occupied two graph nodes at
+    two scales and its citations split between them (the audit's Μ-degree 0 vs 23).
+
+    This guard is parameterized over the seed table, not over mass battle: any seed entry that
+    later declares `alias_names` inherits it by adding the key. Mutation: delete the
+    `alias_names` pre-seeding loop in `derive_tokens` and this fails on 'Mass Combat'.
+    """
+    tokens = _derived_token_universe()
+    norm = lambda s: re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).strip()
+    live = {norm(n) for n in tokens}
+    claimed = [(name, alias)
+               for name, meta in va.SEED_TOKENS.items()
+               for alias in (meta.get('alias_names') or [])]
+    assert claimed, "no seed token declares alias_names — this guard would be vacuous"
+    for name, alias in claimed:
+        assert norm(alias) != norm(name), f"{name}: alias_names must not repeat the token's own name"
+        assert norm(alias) not in live, (
+            f"seed token {name!r} claims alias {alias!r}, but {alias!r} was ALSO minted as its "
+            f"own token — the alias-spanning duplicate-owner class (ED-MB-0043 F6)")
+
+
+def test_mass_battle_token_has_one_owner_at_the_provincial_scale():
+    """The mass-battle subsystem is ONE token, at the scale its own registry records.
+
+    Two independent assertions, because the F6 finding had two halves:
+      (1) ONE owner — exactly one token matches the `mass_battle` identifier;
+      (2) the RIGHT scale — 'province', agreeing with registers/mechanics_index.yaml
+          (`mass_battle: scale: provincial`). 'mechanic' is not a member of this ontology at
+          all: it is the flat default `derive_tokens` stamps on EVERY module_contracts module,
+          so it carried no classification information about mass battle specifically.
+
+    Mutation: re-key the seed entry to 'Mass Combat' and (1) fails with two owners; drop
+    `'scale': 'province'` to the module-derived default and (2) fails.
+    """
+    import yaml
+    tokens = _derived_token_universe()
+    owners = [name for name, meta in tokens.items()
+              if any(re.search(p, 'mass_battle') for p in meta.get('patterns', [])
+                     if _compiles(p))]
+    assert owners == ['Mass Battle'], f"expected one owner named 'Mass Battle', got {owners}"
+    assert tokens['Mass Battle']['scale'] == 'province'
+
+    mi = yaml.safe_load(open(os.path.join(_ROOT, 'registers', 'mechanics_index.yaml'),
+                             encoding='utf-8'))
+    recorded = (mi.get('mechanics') or mi).get('mass_battle', {}).get('scale')
+    assert recorded == 'provincial', f"mechanics_index moved: {recorded!r}"
+    assert tokens['Mass Battle']['scale'] == recorded.replace('provincial', 'province')
+
+
+def _compiles(pattern):
+    try:
+        re.compile(pattern)
+        return True
+    except re.error:
+        return False

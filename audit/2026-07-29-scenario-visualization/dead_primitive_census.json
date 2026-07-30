@@ -1,0 +1,844 @@
+{
+  "counts": {
+    "dead_constants": 45,
+    "dead_functions": 73,
+    "definitions_scanned": 2164
+  },
+  "dead_constants": [
+    {
+      "defined": [
+        "engine/cross_scale/domain_echo.py:47"
+      ],
+      "name": "ACCORD_ECHO_PER_TERRITORY_CAP",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/contest/appraise.py:71"
+      ],
+      "name": "APPRAISE_OVERWHELMING",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/beliefs.py:46"
+      ],
+      "name": "BELIEF_MOMENTUM_PER_CONTEST_CAP",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:81"
+      ],
+      "name": "BREADTH_OB",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:53"
+      ],
+      "name": "CI_GAIN_TEMPLAR",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/knots.py:100"
+      ],
+      "name": "COHERENCE_BAND_STRAIN_PACING",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/equipment/weapons.py:25"
+      ],
+      "name": "DAMAGE_TYPES",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:71"
+      ],
+      "name": "DEPTH_TS_MINIMUM",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:90"
+      ],
+      "name": "DISTANCE_OB",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/excommunication.py:37"
+      ],
+      "name": "EXCOMM_OUTCOME_SUCCESS_TARGET_L_DELTA",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/parliamentary_vote.py:75"
+      ],
+      "name": "GENRES",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/combat/combat_engine_v1/vocabulary.py:78"
+      ],
+      "name": "HILT_TYPES",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/insurgency_pipeline.py:47"
+      ],
+      "name": "INSURGENCY_PROMOTE_SUSTAINED_SEASONS",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/opposing.py:58"
+      ],
+      "name": "KNOT_COMPOSURE_FR_WINNER",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/opposing.py:59"
+      ],
+      "name": "KNOT_DISSOLUTION_WOUND",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/combat/combat_engine_v1/weapon_physics.py:115"
+      ],
+      "name": "K_GRIP_REACH",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:66"
+      ],
+      "name": "LOYALTY_MAX",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:65"
+      ],
+      "name": "LOYALTY_MIN",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:74"
+      ],
+      "name": "ORDER_DECAY_CATHEDRAL_BONUS",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:73"
+      ],
+      "name": "ORDER_GAIN_CATHEDRAL_INSTALL",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:71"
+      ],
+      "name": "ORDER_GAIN_CHAPEL_PER_SEASON",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:72"
+      ],
+      "name": "ORDER_GAIN_CHURCH_INSTALL",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:52"
+      ],
+      "name": "PIETY_HIGH",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:53"
+      ],
+      "name": "PIETY_LOW",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/cross_scale/domain_echo.py:43"
+      ],
+      "name": "PP_329_ECHO_PER_SCENE_PER_FACTION",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:48"
+      ],
+      "name": "PT_GAIN_CATHEDRAL",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:49"
+      ],
+      "name": "PT_GAIN_CATHEDRAL_ADJACENT",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:46"
+      ],
+      "name": "PT_GAIN_CHAPEL",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/infrastructure.py:47"
+      ],
+      "name": "PT_GAIN_CHURCH",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/equipment/weapons.py:27"
+      ],
+      "name": "REACHES",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/threadcut.py:47"
+      ],
+      "name": "RENDERING_STRAIN_PER_BEYOND_SCENE",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/combat/combat_engine_v1/vocabulary.py:64"
+      ],
+      "name": "RIGID_MATERIALS",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/knots.py:96"
+      ],
+      "name": "RUPTURE_WOUND_DISSOLUTION",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/conviction.py:59"
+      ],
+      "name": "SCAR_SEASON_CAP_THREAD",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/mass_battle/sim/massbattle.py:358"
+      ],
+      "name": "SHAPE_DEF_MOD",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/provenance.py:29"
+      ],
+      "name": "TERMINAL_OK_FOR_VALUE",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:49"
+      ],
+      "name": "TN_POP_BINDING",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/treaty.py:46"
+      ],
+      "name": "TREATY_CONSENT_RATE_DEFAULT",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/tribunal.py:51"
+      ],
+      "name": "TRIBUNAL_EXCHANGE_COUNT_MAX",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/tribunal.py:50"
+      ],
+      "name": "TRIBUNAL_EXCHANGE_COUNT_MIN",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/tribunal.py:37"
+      ],
+      "name": "TRIBUNAL_PERSUASION_TRACK_START",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/cross_scale/handoff_rules.py:57"
+      ],
+      "name": "TS_SKIRMISH_MIN",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/equipment/weapons.py:26"
+      ],
+      "name": "WEIGHT_CLASSES",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/cross_scale/zoom_in_out.py:44"
+      ],
+      "name": "WORLD_STATE_TRIGGER_PRIORITY",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/geometry.py:78"
+      ],
+      "name": "_SHAPE_BUILD",
+      "referenced_in": []
+    }
+  ],
+  "dead_functions": [
+    {
+      "defined": [
+        "tests/sim/mass_battle/core/contact.py:265"
+      ],
+      "name": "_cell_radius",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/contest/dictionaries.py:607"
+      ],
+      "name": "_crosscheck_proceedings",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/contest/dictionaries.py:237"
+      ],
+      "name": "_doubt_marker_branches_specified",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/orchestration.py:1023"
+      ],
+      "name": "_octagon_dmg_mod",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/contest/_kernel_tests.py:801"
+      ],
+      "name": "_raises",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/hierarchy/units.py:129"
+      ],
+      "name": "_reach_throttle",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/beliefs.py:121"
+      ],
+      "name": "add_belief",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/fieldwork.py:46"
+      ],
+      "name": "advance_disposition",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/fieldwork.py:54"
+      ],
+      "name": "advance_evidence",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/hierarchy/units.py:2346"
+      ],
+      "name": "agg_dr",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/hierarchy/units.py:2343"
+      ],
+      "name": "agg_power",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/co_movement.py:130"
+      ],
+      "name": "apply_comovement_effects",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/investigation.py:46"
+      ],
+      "name": "apply_response_matrix",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/temperaments.py:142"
+      ],
+      "name": "apply_strain_shock",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/collective.py:66"
+      ],
+      "name": "attempt_collective_operation",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:307"
+      ],
+      "name": "attempt_dissolution",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:290"
+      ],
+      "name": "attempt_locking",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/mass_seizure.py:161"
+      ],
+      "name": "attempt_mass_seizure_declaration",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:270"
+      ],
+      "name": "attempt_past_pulling",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/operations.py:261"
+      ],
+      "name": "attempt_pulling",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/registry.py:53"
+      ],
+      "name": "by_sim_module",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/contest/faction.py:30"
+      ],
+      "name": "case",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/season_manager.py:46"
+      ],
+      "name": "check_arc_boundary",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/rendering.py:37"
+      ],
+      "name": "check_calamity_threshold",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/coherence.py:161"
+      ],
+      "name": "check_coherence_zero_transition",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/conviction.py:231"
+      ],
+      "name": "check_conviction_threshold",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/overview/sim/ip_track.py:37"
+      ],
+      "name": "check_phased_occupation_threshold",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/restoration_movement.py:38"
+      ],
+      "name": "check_rm_emergence_trigger",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/home_sanctuary.py:37"
+      ],
+      "name": "check_sanctuary_active",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/cross_scale/domain_echo.py:186"
+      ],
+      "name": "compute_thread_echo",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/provenance.py:180"
+      ],
+      "name": "debt_rows",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/workbench/server.py:139",
+        "systems/combat/combat_engine_v1/workbench/server.py:105"
+      ],
+      "name": "do_GET",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/workbench/server.py:151",
+        "systems/combat/combat_engine_v1/workbench/server.py:113"
+      ],
+      "name": "do_POST",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/co_movement.py:87"
+      ],
+      "name": "draw_comovement_card",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/investigation.py:38"
+      ],
+      "name": "evaluate_dialogue_lattice",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/npc_ai.py:41"
+      ],
+      "name": "evaluate_priority_stack",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/cross_scale/articulation.py:53"
+      ],
+      "name": "generate_chronicle_entry",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:211"
+      ],
+      "name": "generate_npc",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/beliefs.py:237"
+      ],
+      "name": "get_active_beliefs",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/knots.py:376"
+      ],
+      "name": "get_active_knots",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/treaty.py:157"
+      ],
+      "name": "get_active_treaties",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/temperaments.py:163"
+      ],
+      "name": "get_faction_aggregate",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/fieldwork/sim/knots.py:372"
+      ],
+      "name": "get_knot",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/registry.py:98"
+      ],
+      "name": "get_mechanic",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:371"
+      ],
+      "name": "get_npcs_in_territory",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/conviction.py:264",
+        "systems/threadwork/sim/coherence.py:186"
+      ],
+      "name": "get_state",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/contest/dictionaries.py:473"
+      ],
+      "name": "guilds_boost_for",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/parliamentary_stay.py:54"
+      ],
+      "name": "invoke_stay",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/mass_seizure.py:300"
+      ],
+      "name": "is_available",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/registry.py:60"
+      ],
+      "name": "load_index",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/combat/combat_engine_v1/workbench/presets.py:82"
+      ],
+      "name": "load_scratch",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/workbench/server.py:128",
+        "systems/combat/combat_engine_v1/workbench/server.py:94"
+      ],
+      "name": "log_message",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/threadcut.py:92"
+      ],
+      "name": "mark_threadcut",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/registry.py:111"
+      ],
+      "name": "mechanics_by_faction",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/autoload/registry.py:105"
+      ],
+      "name": "mechanics_by_scale",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/threadcut.py:105"
+      ],
+      "name": "perception_band",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/treaty.py:121"
+      ],
+      "name": "process_treaty_expirations",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/combat/combat_engine_v1/workbench/probabilities.py:49"
+      ],
+      "name": "read_win_p",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/treaty.py:145"
+      ],
+      "name": "register_treaty",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "engine/cross_scale/articulation.py:35"
+      ],
+      "name": "render_protagonist_lens",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/beliefs.py:243",
+        "systems/characters/sim/conviction.py:268",
+        "systems/threadwork/sim/coherence.py:193"
+      ],
+      "name": "reset_all",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/co_movement.py:155"
+      ],
+      "name": "reset_deck",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/temperaments.py:168"
+      ],
+      "name": "reset_drift",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/insurgency_pipeline.py:263"
+      ],
+      "name": "reset_for_world",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/world/sim/npe.py:376"
+      ],
+      "name": "reset_npcs",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/threadcut.py:198"
+      ],
+      "name": "reset_threadcut",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "tests/sim/mass_battle/hierarchy/units.py:2061",
+        "systems/mass_battle/sim/units.py:255"
+      ],
+      "name": "resolve_internal_collisions",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/factions/sim/mass_seizure.py:222"
+      ],
+      "name": "resolve_mass_seizure",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/opposing.py:96"
+      ],
+      "name": "resolve_opposing_operations",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/social_contest/sim/parliamentary_stay.py:101"
+      ],
+      "name": "resolve_stay_lift",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/threadwork/sim/threadcut.py:114"
+      ],
+      "name": "resolve_threadcut_interaction",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/characters/sim/beliefs.py:140"
+      ],
+      "name": "revise_belief",
+      "referenced_in": []
+    },
+    {
+      "defined": [
+        "systems/settlements/sim/temperaments.py:105"
+      ],
+      "name": "temperament_modifiers",
+      "referenced_in": []
+    }
+  ]
+}

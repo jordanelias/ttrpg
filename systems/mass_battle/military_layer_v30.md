@@ -7,6 +7,14 @@
 
 # VALORIA — Military Layer: Unit Bridge & CI Revision
 ## v1.0 — Faction-layer unit representation → mass battle; CI competitive formula
+## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+<!-- ED-MB-0047 (2026-07-29, E4/F9): this doc's status lived ONLY in the HTML comment above
+     (`<!-- Status: CANONICAL — approved 2026-04-17 -->`), which `obs_core.STATUS_RE` cannot
+     see — it matches a line START of 0-3 `#` then `Status:`, and an HTML-comment prefix is
+     neither. So the doc read as no_status to every instrument while carrying an approval.
+     Promoted verbatim to a real `## Status:` line; the comment above is left as provenance.
+     Nothing was ratified here — the 2026-04-17 approval is the one already recorded. -->
+
 
 ---
 
@@ -217,7 +225,7 @@ Per mass_battle_v30 §B.5. When PC faction leader is present in the contested te
 | Unit Type (token) | → Power, Weapon, Armour per §1.2 table |
 | Unit Size (tracked on token) | → Size (direct) |
 | Unit Discipline (tracked on token) | → Discipline (direct) |
-| Faction Military stat | → Command rating for NPC generals |
+| Faction Military stat | → Command for NPC generals |
 | Commander bonus = floor(Military/2) | → informational; TTRPG uses full Command |
 
 Units from BG with Size tracked: use that Size directly. Do not use the B.2 TTRPG Size default — that is for newly minted units without tracked Size.

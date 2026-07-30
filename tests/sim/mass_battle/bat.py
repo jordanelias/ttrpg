@@ -245,7 +245,31 @@ EXPECTED = {
     # port is gated on the node path (PC_NODE_COHESION=0 here).
     # [2026-07-25, ED-MB-0041 — see the 'unit' note above] re-recorded (stochastic-rout default ON).
     # [2026-07-25, ED-MB-0042 — see the 'unit' note above] flip retracted; reverted.
-    'cell': 'dc3d3414d815d7b42a086afefe6464ab5c44defa00babdca7b529eacaed5b233',
+    # [2026-07-29, ED-MB-0051 / plan-v2 A2 — RE-RECORDED, and the plan's own prediction was WRONG.]
+    # A2 predicted "this moves no digest in any of the four modes". It moved the two PER_CELL=1
+    # modes and neither PER_CELL=0 mode. Decomposed before re-recording (the movement is a declared
+    # STOP CONDITION, so this was investigated, not re-recorded on sight):
+    #   * degree-epsilon arm ALONE reproduces the new digest exactly;
+    #   * sigma-zero-snap arm ALONE reproduces the OLD digest exactly (behaviour-neutral).
+    #   So the epsilon on `compute_degree` is the sole mover.
+    # Flip census, all four modes, whole battery, guarded-vs-unguarded verdict compared per call:
+    #   unit        17,312 calls    0 flips (0.000%)
+    #   cell        31,958 calls   38 flips (0.119%)   ALL Partial -> Success
+    #   unit_field  18,152 calls    0 flips (0.000%)
+    #   cell_field  20,412 calls   14 flips (0.069%)   ALL Partial -> Success
+    # Every flip is `net` 1-4 ulp below a CONTINUOUS `ob` that it equals mathematically (measured
+    # distance 2.22e-16 .. 8.88e-16 — five to six orders TIGHTER than the 1e-9 epsilon, so the
+    # epsilon's width is not load-bearing: any value in [8.9e-16, 1e-9] gives this same result).
+    # One direction only: the guard never demotes.
+    # WHY THE PREDICTION FAILED: the audit's "0 flips in 209,778 calls", and the orchestrator's own
+    # N=3,120 replication of it, were BOTH taken at PER_CELL=0 — the one configuration where the
+    # incidence really is zero. Generalising that to the engine is the exact G1 failure the plan
+    # exists to prevent, committed inside the correction to G1. S1.2 is NOT incidence-zero: in the
+    # shipped per-cell modes the 1-ulp defect erases an exchange in ~0.1% of degree calls.
+    # Controls: both moved modes reproduced their new digest on two consecutive runs (2/2), and
+    # `cell` reproduced it again with PYTHONHASHSEED unset (fresh hash seed => hash-order
+    # independent). Recorded on Linux/Python 3.11.15.
+    'cell': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -332,7 +356,17 @@ EXPECTED = {
     # #233/#234 verified byte-exact on both field modes at rout=0; completeness at rout=1 is
     # carried by the endpoint equality below. Those PRs re-recorded grid only and left these
     # stale — the gap A1b's CI job closes.
-    'unit_field': '6f5942339d4bbb446b48c6da04bcd8704b9009786b4c8f85847296121dce40ad',
+    # ─── [ED-MB-0059, 2026-07-29] RE-RECORDED: same-side cell exclusion (PC_CELL_EXCLUSION=1) ────
+    # was 6f5942339d4bbb446b48c6da04bcd8704b9009786b4c8f85847296121dce40ad
+    # ATTRIBUTION CONTROL (§0.1 #4, and the falsifier §0.1 #3 asks for). Re-running this exact
+    # battery with PC_CELL_EXCLUSION=0 reproduces the PREVIOUS golden byte-for-byte —
+    # 6f594233… on unit_field and 2a9214eb… on cell_field. So 100% of both field deltas is
+    # attributable to the exclusion pass and NOTHING else in this changeset; in particular the
+    # ED-MB-0058 between-turn-recovery confound fix is provably inert here (it moves 'cell_cm'
+    # alone, which is its whole intended scope). The two GRID modes are byte-identical with the
+    # flag ON, as they must be — the pass lives inside resolve_toi_and_commit, which only runs
+    # under FIELD_MOVEMENT.
+    'unit_field': '0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -385,8 +419,79 @@ EXPECTED = {
     # PC_STOCHASTIC_ROUT flip: 3a5807fb… -> this value. Account closed by TWO instruments:
     # 584c683 @ rout=1 reproduces this digest exactly (measured), and
     # `git diff 584c683..cd7f0d0 -- tests/sim/mass_battle/` is EMPTY (source diff, verified).
-    'cell_field': '3a0952b331d6ba1e24fa21a2b72eda781141c36649ba0adc045b2cf5c2561304',
+    # [2026-07-29, ED-MB-0051 / A2 — RE-RECORDED; see the full delta at the 'cell' entry above.]
+    # This mode: 20,412 degree calls, 14 flips (0.069%), all Partial -> Success at 2.22e-16 ..
+    # 4.44e-16 from a continuous `ob`. Two consecutive runs agreed.
+    # [2026-07-29, ED-MB-0054 / B1c rekey_cells — RE-RECORDED. Delta decomposed before recording.]
+    # check_drift re-keyed cell_troops (+ node position state) and NOTHING else. Measured over the
+    # `cell` battery: 10 drift events, and SIX maps left holding dead ids in all ten —
+    # cell_offsets, cell_offsets_c, halted_cells, cell_last_speed, cell_facing_vec, _cell_target.
+    # Three more than the audit named, and the pair it missed is the worse one: cell_offsets is
+    # ACCUMULATED DISPLACEMENT, so a missing entry does not degrade gracefully — `.get(pid, 0)`
+    # snaps the drifted body back to its SPAWN row mid-advance.
+    # ARM DECOMPOSITION (each run alone, cell_field):
+    #   facing correction ONLY        -> 2a9214eb… (this value)  <- THE SOLE MOVER
+    #   everything EXCEPT facing      -> 13bd02dd… (unchanged)
+    # So displacement/target/transient-clear corrections are real but outcome-inert on this
+    # battery; the facing preservation is what moves an outcome.
+    # SCOPE OF MOVEMENT: only cell_field. unit / cell / unit_field / cell_cm all byte-exact —
+    # on the grid path the corrections fire (10/10 events, mean offset 8.96 vs the 0 fall-through,
+    # facing (-0.998,0.067) vs the (-1,0) default) but never reach a trial_vector field.
+    # [ED-MB-0059, 2026-07-29] RE-RECORDED with the same attribution control as unit_field above
+    # (was 2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b; reproduced exactly at
+    # PC_CELL_EXCLUSION=0).
+    'cell_field': 'da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8',
+    # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
+    # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
+    # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
+    # the three whose desync motivates the ownership work. Without this entry, "if a digest moves,
+    # you changed behaviour" is VACUOUS over exactly the state B1a is about to refactor — which is
+    # why §4a makes this a hard gate on starting B1a rather than a nice-to-have.
+    # CONTROL (§0.1 #4 — a number without one is not a measurement): this digest DIFFERS from the
+    # 'cell' entry above (b42343db… vs f58a9cb4…), so the mode genuinely exercises seeded cell
+    # morale rather than silently reproducing the flag-off battery. Had they matched, the fifth
+    # golden would have been ceremony.
+    # DETERMINISM: two consecutive runs agreed (2/2). Recorded on Linux/Python 3.11.15.
+    # ⚠ Recording this REQUIRED extending the mode key (see compute() above): at PC_CELL_MORALE=1
+    # the old key returned 'cell', so this run would have checked itself against the flag-OFF
+    # golden — the ED-1089 shape, one flag later.
+    # [ED-MB-0058, 2026-07-29] RE-RECORDED once, and this mode ALONE moved — which is the point.
+    # was b42343dbd508d1e939625d9b3b80744dd1005cbc831505355d4de46540013d2b
+    # between_turn_recovery routed own-morale subunits through set_morale, the ABSOLUTE writer that
+    # flattens every cell to the unit mean; per-cell morale divergence was therefore erased once per
+    # turn, which is why PC_CELL_MORALE looked inert. Now routed through pull_morale (relative), so
+    # divergence survives the recovery step. CONTROL: the other four modes are byte-identical, as
+    # they must be — at PC_CELL_MORALE=0 the cell-morale maps are empty and the two writers agree.
+    # A fix that moved any of them would have been touching something it did not claim to.
+    'cell_cm': 'd11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9',
 }
+
+
+def _cfg_mod():
+    import mass_battle.config as _cfg
+    return _cfg
+
+
+def _mode_key(per_cell, field_movement, cell_morale):
+    """The EXPECTED-table key for one toggle configuration. Extracted so it can be tested in
+    microseconds instead of by running a 4-minute battery.
+
+    [ED-MB-0053 / plan-v2 §4a, 2026-07-29] PC_CELL_MORALE joined this key, and it had to before a
+    fifth golden could be recorded at all. The key previously read only PER_CELL and
+    FIELD_MOVEMENT, so a run at PC_CELL_MORALE=1 returned 'cell' and checked itself against the
+    flag-OFF golden — a DIFFERENT configuration. That is precisely the ED-1089 shape the
+    FIELD_MOVEMENT clause was added to close, one flag later; recording a fifth mode without
+    extending the key would have rebuilt the same trap.
+
+    Callers must pass the modules' RESOLVED toggles, never a second independently-defaulted
+    os.environ.get — see compute()'s note on how that drifted once already.
+    """
+    mode = 'cell' if per_cell else 'unit'
+    if field_movement:
+        mode += '_field'
+    if cell_morale:
+        mode += '_cm'
+    return mode
 
 
 def compute():
@@ -405,8 +510,23 @@ def compute():
     # comparing against the WRONG EXPECTED entry. Same failure shape the FIELD_MOVEMENT mode-key
     # fix above already guards against -- fixed the same way, by reading the module's own resolved
     # toggle instead of re-deriving it.
-    base = 'cell' if _u.PER_CELL else 'unit'
-    mode = base + '_field' if _u.FIELD_MOVEMENT else base
+    mode = _mode_key(_u.PER_CELL, _u.FIELD_MOVEMENT, _cfg_mod().PC_CELL_MORALE)
+    # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] PC_CELL_MORALE JOINS THE MODE KEY, and it had to before
+    # a fifth golden could be recorded at all.
+    #
+    # Until now this key read only PER_CELL and FIELD_MOVEMENT. A run at PC_CELL_MORALE=1 therefore
+    # computed mode='cell' and checked itself against the PC_CELL_MORALE=0 golden — a DIFFERENT
+    # configuration — and would have reported a mismatch as a regression, or worse, silently matched
+    # if the two ever coincided. That is exactly the ED-1089 shape the FIELD_MOVEMENT clause above
+    # was added to close, one flag later; recording a fifth mode without extending the key would
+    # have rebuilt the same trap.
+    #
+    # WHY A FIFTH MODE EXISTS: all four existing digests run at PC_CELL_MORALE=0, where the three
+    # cell-morale maps are EMPTY. They verify float-order over every per-cell map EXCEPT the three
+    # whose desync motivates the ownership work — so "if a digest moves, you changed behaviour" is
+    # vacuous over precisely the state B1a is about to refactor. Read from the module's own resolved
+    # toggle, never a second os.environ.get, for the reason the block above records.
+
     h = hashlib.new('sha256')
     for label, sa, sb, ka, kb in BATTERY:
         # sa/sb: a plain shape string (single-subunit, via make_unit/ANCHOR_MAP) or an army-builder

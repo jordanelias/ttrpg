@@ -15,6 +15,85 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **▶ SESSION 2026-07-29c (ED-MB-0058/0059/0060) — SPATIAL INTEGRITY + the PC_CELL_MORALE confound.**
+  Three landings, and one of them is a retraction of this session's own earlier numbers.
+  - **ED-MB-0058 — PC_CELL_MORALE was never inert; it was shadowed.** `between_turn_recovery` routed
+    own-morale subunits through `set_morale`, the ABSOLUTE writer, which flattens every cell to the
+    unit mean — so per-cell divergence was erased once per turn, every turn. Now `pull_morale`.
+    This closes ED-MB-0042's named blocker. `cell_cm` golden b42343db → d11cb4fb; the other four
+    modes byte-identical, which is the control that proves the fix stayed in its own scope.
+  - **ED-MB-0059 — same-side cell exclusion, `PC_CELL_EXCLUSION` default ON.** Deep inter-subunit
+    overlap **−48.6%**, cross-side **−74.4%**. It first shipped accepting `s == 0.0` and **deadlocked
+    the engine** — the formation lattice is permanently tangent (pitch 1.0, bodies 1.0×1.0), so 46.9%
+    of same-side solves capped their cell to zero motion; halted cells fell 20,356→3,300 and tick
+    count rose 8.05×. That tick inflation *was* the "8.2× slowdown", which is why a broad phase built
+    to fix the cost bought nothing. Fixed with `s > 0`; runtime now 1.41× baseline; broad phase
+    removed. Goldens unit_field 6f594233 → 0194efcc, cell_field 2a9214eb → da6d685e, with an
+    attribution control (flag OFF reproduces both old goldens byte-for-byte).
+  - **ED-MB-0060 — RETRACTION.** Both previously-reported co-location figures were wrong. "17.31%"
+    was rounded-square, not body-box. "17.31% → 0.35%" was measured **on the deadlocked arm** — cells
+    weren't overlapping because they weren't moving. Textbook §0.1 confound, banked because it was
+    favourable. `measure_colocation.py` is now a tracked probe reporting depth-thresholded
+    `obb_overlap`.
+  - **Cost, measured with a control:** the pass suppresses contact. Mean end-state hp over all 20
+    historical rows 0.8684 → 0.8939 — total attrition **−19%**, on a casualty model already far too
+    low. Shipped ON per the standing "gate models ON" directive, cost recorded not buried.
+
+  **Open, in priority order, all newly specific:**
+  1. **The solve is enemy-gated.** `toi_deferred = FIELD_MOVEMENT and enemy_cells_float` — so
+     same-side exclusion inherits a cross-side precondition it has no reason to, and formations with
+     no enemy supplied interpenetrate freely. Ungating is a small change with a broad blast radius
+     (golden re-record); it is the highest-value next move on this axis.
+  2. **Nothing separates already-overlapped bodies.** The `s > 0` rule prevents new interpenetration
+     but by construction never undoes existing overlap. `resolve_internal_collisions` (ED-MB-0057,
+     still dead) is the only primitive ever built for that and is intra-subunit + grid-era; an
+     inter-subunit sibling does not exist.
+  3. **Same-subunit deep overlap is unmoved** (43,068 → 44,531). Formations still shear — H3's Roman
+     mass fragments into ribbons by t=8 — though H5's massed blocks now hold as distinct rectangles
+     through t=24, which is a real visible gain over the pre-fix render.
+  4. Attrition at historical scale remains far too low; the exclusion pass makes it 19% lower. Feeds
+     D1 directly.
+
+- **▶ SESSION 2026-07-29b (PR #271, ED-MB-0047..0051) — E4+I4, A3, A5a, A6a→A6b, A2 EXECUTED.**
+  Five commits, five guards (all mutation-verified: 3/3, 3/3, 3 mutants, identifiability, 5/5).
+  **The headline: the attrition-law instrument now measures what it claims, and it says melee fits
+  `p=3.20` (cv 0.00245, identifiable) against a ≤1.4 linear bar** — super-square, an ENGINE finding,
+  and an independent re-derivation of ED-MB-0007's historical p≈3.2 on clean untruncated data. The
+  `melee p=2.50` two audits quoted was literally `FIT_P_HI=2.51`. Volley confirms the square law
+  exactly (`p=2.00`). Three reasons the harness was broken, **one not in the plan**: the morale pin
+  cannot disable a *casualty-fraction* break-point; the volley scenario fired nothing (0 engagements,
+  0.00 loss — the `inf` was a 0/0 guard); and `TRAJ_FLOOR` sat BELOW the engine's own annihilation
+  threshold, so it was unreachable and every trajectory ended in annihilation-rout.
+  **A2's no-movement prediction FAILED — and the prediction was the wrong thing.** Decomposed before
+  re-recording: the degree epsilon is the sole mover, the sigma snap is behaviour-neutral. Flip
+  census: unit 0/17,312 · **cell 38/31,958 (0.119%)** · unit_field 0/18,152 · **cell_field 14/20,412
+  (0.069%)**, every flip `Partial → Success` at 1–4 ulp from a *continuous* `ob`. **S1.2 is NOT
+  incidence-zero** — the audit's "0 in 209,778" and its N=3,120 replication were both `PER_CELL=0`.
+  The two per-cell goldens were re-recorded deliberately (`cell` dc3d3414…→f58a9cb4…, `cell_field`
+  3a0952b3…→13bd02dd…); both `PER_CELL=0` goldens byte-exact throughout.
+  **A fourth and fifth unresolvable citation found by hand:** `mass_battle_v30.md §deployment —
+  anchor columns` (no such section; values not derivable either — measured centres 12/12/11/11 admit
+  no rule giving 11/10/9/8), still live at its origin in `gauge_mb.py:60,64-66`; and the ENTIRE
+  conserved-quantity block's `mb_lanchester_design.md §4` tags (that section names no protocol, no
+  grid, no bars — "1.4"/"1.6" do not occur in it). Both re-labelled `[JUSTIFIED:]` in the files this
+  session touched; the `gauge_mb.py` origin is filed, not chased.
+  **⚠ NEEDS JORDAN, called out in the PR body rather than buried:** (1) **fork #2 is now UNBLOCKED**
+  — A6a landing was its stated precondition; (2) the `p=3.20` result itself; (3) `.github/workflows/`
+  edited (report-only `lanchester-signature` job) — CODEOWNERS; (4) the F7 convention question
+  (should engine-mechanics changes allocate `PP-NNN`? — filing retroactive PPs to move a graph metric
+  would be fabrication, so it went to the docket, not the register).
+  **PROCESS FINDING worth carrying:** the first A2 mutation run was corrupted by stale `__pycache__`
+  (CPython invalidates by `(mtime, size)`, so a same-size edit inside one mtime second is served from
+  cache) — it silently mis-scored 2 of 5 mutants. **Run mutation matrices under `python -B` with
+  caches cleared.** The A2 and I4 matrices were re-run that way.
+  **NEXT, in order — the chain is unchanged and C1 is the head:**
+  **C1** (per-phase casualty attribution; also the second behaviour-preservation instrument) →
+  **§4a** (record the 5th digest mode at `PC_CELL_MORALE=1`; mode-key extension MANDATORY — `bat.py`'s
+  key reads only `PER_CELL`/`FIELD_MOVEMENT`, so a 5th golden without it would silently check the
+  wrong baseline) → **rekey_cells** (the cheap standalone fix for the live `cell_facing_vec` loss;
+  ~30 lines, no B1a risk) → **B1a/B1b** → **D1** with its pre-registration and Fable referee.
+  A5b, E5/E6/E7, D2–D6 and the §7 forks are untouched.
+
 - **A1b EXECUTED (2026-07-29, MB session — this PR).** The shipped configuration's regression
   oracle now exists: CI job `field-goldens` runs `bat.py --check` in both `FIELD_MOVEMENT=1`
   modes via `tools/ci_field_golden_check.py` — the **single owner** of the full digest-relevant

@@ -291,7 +291,7 @@ def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
 import os as _reform_os
 # G-8 reform flag kept in-engine (not config.py) to avoid the sim_fabrication ledger drift on
 # config's pre-existing constants; default OFF preserves the calibrated byte-exact baseline.
-REFORM_CHECK_ENABLED = _reform_os.environ.get('REFORM_CHECK_ENABLED', '0') == '1'
+REFORM_CHECK_ENABLED = _reform_os.environ.get('REFORM_CHECK_ENABLED', '1') == '1'
 
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     # [canonical: mass_battle_v30.md §A.5; PP-241 — Reform Phase Discipline restoration:]
@@ -1411,7 +1411,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # Sort by attacker depth; group into sub-phases by proximity (1-row buckets)
     sorted_pairs = sorted(pairs, key=_cascade_depth_key)
     if not sorted_pairs:
-        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0, "cell_dmg_a": {}, "cell_dmg_b": {}}
+        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0, "cell_dmg_a": {}, "cell_dmg_b": {},
+                "truncated_groups": 0, "truncated_pairs": 0, "truncated_troops": 0.0,
+                "n_groups": 0}
 
     groups = []
     cur_group = [sorted_pairs[0]]
@@ -1427,8 +1429,48 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     groups.append(cur_group)
 
     total_engagements = 0
+    # [ED-MB-0048 / plan-v2 A3] The `break` below used to be bare: engagement groups past
+    # MAX_SUB_PHASES deal zero damage that tick and NOTHING recorded it. Measured incidence is
+    # zero on the pinned grid battery (which is exactly why A3's severity dropped from 1), but a
+    # silent drop must never STAY silent — the point is that if this ever starts firing, it is
+    # visible without a bespoke probe.
+    #
+    # What is counted, and why it is not a fire-count: truncation drops the DEEPEST-sorted groups
+    # (`sorted_pairs` is ordered by `_cascade_depth_key`, tip first), so its bias is systematic
+    # against deep formations — D6's "too deep to fight". A count of ticks-that-truncated cannot
+    # express that; engaged-troop WEIGHT can. Weight is taken from `_pair_engaged_troops`, the
+    # existing single owner of "troops actually in contact plus depth-weighted support", once per
+    # side of each dropped pair — no second definition of engagement magnitude is introduced here.
+    #
+    # Zero RNG draws, zero writes to engine state: `_pair_engaged_troops` reads `cell_troops` /
+    # `cell_broken` and returns a float. The counters ride the result dict (`trace_event` is a
+    # no-op unless tracing is on, so a trace-only counter would be invisible in every measured
+    # workload). Adding dict keys cannot move a golden: `bat.py:trial_vector` reads named fields
+    # (winner/turns/hp/morale/discipline/routed) and never iterates the result.
+    #
+    # MAX_SUB_PHASES itself is NOT touched — it is CALIBRATED-DEBT (config.py:136) and changing it
+    # would move goldens with no measurement behind the move.
+    #
+    # `n_groups` is the CONTROL (§0.1 #4): "0 truncations" is not a measurement on its own — a
+    # zero could mean the bound is generous or that the workload never cascades at all. Carrying
+    # the observed group count against the bound of MAX_SUB_PHASES turns it into a headroom
+    # reading, which is the number that actually tells you whether the risk is live.
+    truncated_groups = 0
+    truncated_pairs = 0
+    truncated_troops = 0.0
+    n_groups = len(groups)
     for sub_idx, group in enumerate(groups):
         if sub_idx >= MAX_SUB_PHASES:
+            for _dropped in groups[sub_idx:]:
+                truncated_groups += 1
+                for _p in _dropped:
+                    # Same already-resolved filter the live path applies, so a pair that a
+                    # previous sub-phase already resolved is not double-counted as "dropped".
+                    if (id(_p["atom_a"]), id(_p["atom_b"])) in resolved_keys:
+                        continue
+                    truncated_pairs += 1
+                    truncated_troops += (_pair_engaged_troops(_p["atom_a"], _p["a_cells"])
+                                         + _pair_engaged_troops(_p["atom_b"], _p["b_cells"]))
             break
         active = [p for p in group
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
@@ -1451,7 +1493,9 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
             # actually reads.
 
     return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements,
-            "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b}
+            "cell_dmg_a": total_cell_a, "cell_dmg_b": total_cell_b,
+            "truncated_groups": truncated_groups, "truncated_pairs": truncated_pairs,
+            "truncated_troops": truncated_troops, "n_groups": n_groups}
 
 # ─── VOLLEY (Phase 2 — ranged fire at distance) ──────────────────────────────
 # [canonical: mass_battle_v30.md §A.7 Phase 2 — Volley fires before Manoeuvre.
@@ -1660,6 +1704,41 @@ def _draw_friction_cev(unit):
         unit._friction_cev = 1.0
 
 
+# ─── [ED-MB-0052 / plan-v2 §5 C1] PER-PHASE CASUALTY ATTRIBUTION ─────────────
+# Every hp loss is tagged with WHERE it came from and WHEN. This is load-bearing, not decoration:
+# it is the only way to measure §0's inverted causal shape — the engine kills the loser and THEN
+# breaks him, where history breaks him and then kills him — and the only way to check that a change
+# advertised as a no-op (A2's sigma snap, B1c's re-key) really is one, per source rather than in
+# aggregate. Before this, every such question needed a bespoke probe, and there were 23 of them.
+#
+# BINDING RULES for anything on this seam, and each one is checked rather than promised:
+#   * ZERO RNG draws and NO float writes to engine state. This function reads two numbers the caller
+#     already has and appends a dict. It cannot perturb what it observes.
+#   * `trace_event` is a no-op when tracing is off, so with tracing off the engine is byte-identical
+#     — verified against all four goldens, and mutation-verified by planting a state-perturbing
+#     event and watching a digest move.
+#   * INSTRUMENTING MUST NEVER RESTRUCTURE THE INSTRUMENTED. The damage sites keep their existing
+#     arithmetic and ordering exactly; attribution is observed AROUND each assignment (before/after),
+#     never by routing the assignment through a new owner. That is a deliberate limit: a single
+#     apply-and-tag owner would be tidier and would also change float ordering, which is precisely
+#     the class of "harmless" change this lane keeps getting burned by.
+#
+# `delta` is the ACTUAL hp movement including the `max(0, …)` clamp, not the nominal damage — the
+# two differ on the killing blow, and conservation must be stated in the quantity that actually
+# moved or it fails on every battle that ends in annihilation.
+def attribute_hp_loss(unit, before, after, source, t=None, phase=None):
+    """Record one attributed hp loss. Pure observation; no-op when tracing is off."""
+    if not tracing_on():
+        return
+    delta = before - after
+    if delta == 0:
+        return
+    trace_event('casualty', unit=getattr(unit, 'name', '?'),
+                faction=getattr(unit, 'faction', '?'),
+                source=source, t=t, phase=phase,
+                before=before, after=after, delta=delta)
+
+
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
     """Run one engagement turn (up to 3 phases = 18 ticks).
     v16: max_turns=18 = one battle turn's engagement cap (3 phases).
@@ -1689,6 +1768,12 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     _draw_friction_cev(unit_b)
     turns = 0
     current_phase = 0
+    # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see
+    # resolve_engagements_cascading. Zero on every shipped workload measured so far — the
+    # value of carrying them is that a non-zero is now READABLE rather than needing a probe.
+    trunc_groups = trunc_pairs = 0
+    trunc_troops = 0.0
+    max_groups = 0
     for t in range(1, max_turns + 1):
         turns = t
         trace_event('tick', t=t)
@@ -1887,6 +1972,13 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         result = (resolve_engagements_cascading(unit_a, unit_b, pairs, t=t)
                   if CASCADING_ENABLED
                   else resolve_engagements(unit_a, unit_b, pairs, t=t))
+        # [ED-MB-0048 / A3] Accumulate the truncation counters. `.get` because the keys exist
+        # only on the cascading path — truncation is a property of sub-phase grouping and cannot
+        # occur when CASCADING_ENABLED is off, so their absence there is correct, not a gap.
+        trunc_groups += result.get("truncated_groups", 0)
+        trunc_pairs += result.get("truncated_pairs", 0)
+        trunc_troops += result.get("truncated_troops", 0.0)
+        max_groups = max(max_groups, result.get("n_groups", 0))
         sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
@@ -1963,8 +2055,27 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # before unit_b's damage is applied.
         # [canonical: params/mass_combat.md PP-233 — "Damage is simultaneous.
         #  Both sides deal and receive damage before Size is recalculated."]
+        # [ED-MB-0052 / C1] Attribution brackets the EXISTING assignment; the arithmetic below is
+        # byte-identical to what it replaced. Melee and volley are separated by computing each
+        # side's split from the same terms the assignment uses — no second derivation of either.
+        _a_before, _b_before = unit_a.hp, unit_b.hp
+        _vol_a = volley_dmg_a * volley_hp_scale(unit_a)
+        _vol_b = volley_dmg_b * volley_hp_scale(unit_b)
         unit_a.hp = max(0, unit_a.hp - result["dmg_a"] - volley_dmg_a * volley_hp_scale(unit_a))
         unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * volley_hp_scale(unit_b))
+        if tracing_on():
+            # Split the clamped total across its two sources in proportion to their nominal share,
+            # so the parts always sum to the whole even on a killing blow (where the clamp bites).
+            for _u, _before, _after, _melee, _vol in (
+                    (unit_a, _a_before, unit_a.hp, result["dmg_a"], _vol_a),
+                    (unit_b, _b_before, unit_b.hp, result["dmg_b"], _vol_b)):
+                _nominal = _melee + _vol
+                _actual = _before - _after
+                _share = (_actual / _nominal) if _nominal > 0 else 0.0
+                attribute_hp_loss(_u, _before, _before - _melee * _share, 'melee', t=t,
+                                  phase=current_phase)
+                attribute_hp_loss(_u, _before, _before - _vol * _share, 'volley', t=t,
+                                  phase=current_phase)
         if PER_CELL:
             # Increment 2: mirror the same total casualties onto the per-column grid (keeps sum==hp).
             # E: ORDERED volley fire concentrates its portion on the target subunit (apply_to_subunit); the
@@ -2063,7 +2174,12 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             "a_stamina": unit_a.agg_stamina(), "b_stamina": unit_b.agg_stamina(),
             "a_hp_pct": round(unit_a.hp / unit_a.hp_max * 100, 1) if unit_a.hp_max else 0,
             "b_hp_pct": round(unit_b.hp / unit_b.hp_max * 100, 1) if unit_b.hp_max else 0,
-            "a_morale": unit_a.morale, "b_morale": unit_b.morale}
+            "a_morale": unit_a.morale, "b_morale": unit_b.morale,
+            # [ED-MB-0048 / A3] sub-phase truncation, battle-scoped. Not in trial_vector, so it
+            # cannot move a golden; readable by any harness that wants to know whether the
+            # MAX_SUB_PHASES bound bit during a run.
+            "truncated_groups": trunc_groups, "truncated_pairs": trunc_pairs,
+            "truncated_troops": trunc_troops, "max_groups": max_groups}
 
 # ─── MULTI-TURN BATTLE ORCHESTRATOR (D-1, D-9) ─────────────────────────────
 # Models a multi-turn battle: each turn = one 3-phase engagement (run_battle).
@@ -2096,15 +2212,30 @@ def between_turn_recovery(unit):
     # constant set to 0. The pool is kept current here for the unseeded path, which still reads it.
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
     for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
-        if atom.morale is not None:
-            # via set_morale, NOT a bare `atom.morale =` — an absolute write must reach the cells or it is
-            # a no-op under PC_CELL_MORALE. Read the CURRENT value through eff_morale for the same reason.
-            # Unseeded, eff_morale IS atom.morale, so this is byte-identical to the previous expression.
-            atom.set_morale(min(atom.eff_morale_start, atom.eff_morale + BETWEEN_TURN_MORALE_RECOVERY))
-        elif atom.cell_morale:
-            # Inheriting AND cellular: the unit pool above cannot reach this body (its state lives in its
-            # cells), so recover the cells directly. pull_morale is already the capped, signed, cell-routed
-            # shift this needs — reusing it keeps one owner for "move a body's morale by a delta".
+        # [ED-MB-0058, resolving ED-MB-0046] ONE owner, both ownership kinds. This used to branch:
+        # own-morale subunits went through `set_morale`, inheriting-but-cellular ones through
+        # `pull_morale`. That split was the confound.
+        #
+        # `set_morale` is the ABSOLUTE writer: it is a body-wide statement, so it sets EVERY cell to
+        # one value. Recovery is not a body-wide statement — it is a bounded INCREMENT — so routing
+        # it through the absolute owner FLATTENED all per-cell morale divergence to the mean at
+        # every turn boundary. Measured on the own-morale path: cells {1.0, 2.0, 6.0} (eff 5.64)
+        # became {5.64, 5.64, 5.64} after one call. Every `build_army` body — i.e. every gauge and
+        # multi-subunit army — is on that path, so under `PC_CELL_MORALE` the feature's entire point
+        # (a low-morale corner that persists and spreads) was erased once per turn. That is a LIVE
+        # CONFOUND for any cell-morale measurement, and it is the reason the flag could not be
+        # honestly re-measured, let alone flipped.
+        #
+        # `pull_morale` is the RELATIVE owner and already does exactly what is needed: it caps
+        # against `eff_morale_start`, derives ONE shift from the aggregate, and applies that same
+        # shift to every cell — so the body recovers by the right amount and the divergence between
+        # its cells survives. Unseeded it reduces to `min(eff_morale_start, eff_morale + R)` written
+        # to the scalar, which is byte-identical to the expression it replaces.
+        #
+        # The `or atom.cell_morale` keeps an inheriting-but-cellular body in scope, and a body that
+        # is NEITHER stays out of it — the unit-pool line above is that body's recovery, and calling
+        # `pull_morale` for it would write the unit pool once per subunit and compound the increment.
+        if atom.morale is not None or atom.cell_morale:
             atom.pull_morale(BETWEEN_TURN_MORALE_RECOVERY)
     # [ED-MB-0024, DG-2 §2.4 RALLY exit] The between-turn boundary IS the lull (units have disengaged for
     # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
@@ -2501,7 +2632,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             # Pursuit damage
             dmg = pursuit_damage(pursuer, routing)
             if dmg > 0:
+                _pursuit_before = routing.hp                       # [ED-MB-0052 / C1]
                 routing.hp = max(0, routing.hp - dmg)
+                attribute_hp_loss(routing, _pursuit_before, routing.hp, 'pursuit')
                 # [ED-MB-0041] Pursuit damage previously mutated hp ONLY, never the cells — so the two
                 # ledgers diverged permanently. They feed DIFFERENT mechanics (hp -> _lanchester_strength,
                 # recalc_size, the single-subunit cohesion fast path; cells -> pair_pool_contribution,
@@ -2563,7 +2696,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 dmg = freed_attacker_damage(freed_unit, target)
                 if dmg > 0:
                     # [canonical: params/mass_combat.md PP-233 — simultaneous damage]
+                    _freed_before = target.hp                      # [ED-MB-0052 / C1]
                     target.hp = max(0, target.hp - dmg)
+                    attribute_hp_loss(target, _freed_before, target.hp, 'freed_attacker')
                     # [ED-MB-0041] same hp-only divergence as the pursuit path above — mirror the loss
                     # onto the cells so sum(cell_troops) tracks hp.
                     distribute_casualties(target, dmg, [])

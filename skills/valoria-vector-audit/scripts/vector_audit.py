@@ -189,8 +189,25 @@ SEED_TOKENS = {
                              'scale': 'province', 'status': 'provisional', 'source': 'seed'},
     'CI Political':         {'patterns': ['CI Political', 'ci_political', 'tc_political'],
                              'scale': 'province', 'status': 'canonical', 'source': 'seed'},
-    'Mass Combat':          {'patterns': ['Mass Combat', 'Mass Battle', 'mass-combat',
+    # ED-MB-0047 (2026-07-29, I4 / ED-MB-0043 F6): keyed 'Mass Battle', NOT 'Mass Combat'.
+    # The seed key was 'Mass Combat' while `derive_tokens` ALSO minted a 'Mass Battle' token
+    # from module_contracts' `mass_battle` module — at scale 'mechanic', with a pattern list
+    # ({'Mass\ Battle', 'mass_battle'}) that is a strict SUBSET of this one. Two tokens, one
+    # subsystem, two scales, overlapping patterns: hits split between them, which is what
+    # produced the audit's divergent Μ-degree (0 vs 23) and scale class (mechanic vs
+    # province). `add()` dedupes on the normalized name, and seeds are pre-seeded into
+    # `seen`, so keying this entry at the repo's canonical subsystem name (CLAUDE.md,
+    # systems/mass_battle/, module `mass_battle`, the ED-MB lane) absorbs the derived
+    # duplicate and leaves ONE owner. 'Mass Combat' survives as a PATTERN (legacy surface
+    # form: engine/params/mass_combat.md, canonical_sources key `mass_combat`, the
+    # module_contracts alias), so no prose match is lost. Scale stays 'province', which is
+    # what registers/mechanics_index.yaml records (`mass_battle: scale: provincial`);
+    # 'mechanic' was never a member of this ontology — it is the flat default that the
+    # module_contracts derivation stamps on EVERY module. Guarded by
+    # tests/valoria/test_vector_audit.py::test_mass_battle_token_has_one_owner.
+    'Mass Battle':          {'patterns': ['Mass Combat', 'Mass Battle', 'mass-combat',
                                           'mass-battle', 'mass_combat', 'mass_battle'],
+                             'alias_names': ['Mass Combat'],
                              'scale': 'province', 'status': 'canonical', 'source': 'seed'},
     'Military Layer':       {'patterns': ['Military Layer', 'military_layer'],
                              'scale': 'province', 'status': 'canonical', 'source': 'seed'},
@@ -729,6 +746,18 @@ def derive_tokens(root, record_drops=None):
         m.setdefault('source', 'seed')
     norm = lambda s: re.sub(r'[^a-z0-9]+', ' ', (s or '').lower()).strip()
     seen = {norm(n) for n in tokens}
+    # ED-MB-0047 (I4 / ED-MB-0043 F6): a seed token that explicitly claims ALIAS SURFACE FORMS
+    # owns those names too. Dedupe-by-exact-name alone cannot resolve an ALIAS-SPANNING token:
+    # the core's entry matches six surface forms across two names, and each name is minted
+    # independently by a derivation ('Mass Battle' from module_contracts, 'Mass Combat' from
+    # canonical_sources `systems:`), so the subsystem's citations split across two nodes at two
+    # different scales — the divergence F6 recorded and nothing reconciled. Alias names are
+    # DECLARATIVE (`alias_names`), never inferred from `patterns`: those are regexes
+    # (r'\bLeap\b'), not names, and inferring names from them would be the fragile version of
+    # this fix. Seed-only and additive — a seed entry without `alias_names` is unaffected.
+    for _seed_meta in tokens.values():
+        for _alias in (_seed_meta.get('alias_names') or []):
+            seen.add(norm(_alias))
 
     def add(name, patterns, scale, source):
         # SURFACE, never silently cull (the tool's purpose is to expose what's missing).
