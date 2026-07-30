@@ -217,7 +217,15 @@ def _recovery_mode_commitment(w, g, cfg, sel_pc=None, room=1.0):
     I_ref, S_ref = cfg['REC_I_REF'], cfg['REC_S_REF']
     pc = sel_pc if sel_pc is not None else w['geo']['point_concentration']   # SELECTED-mode thrust-ness (fallback: whole-weapon, read off the BAKED surface — see geometry.bake's raw passthrough)
     close = 1.0 + cfg['EXPOSE_CLOSE_K'] * (1.0 - max(0.0, min(1.0, room)))         # tighter room -> a swing is caught mid-arc; thrust invariant
-    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref) * close
+    # [channel 2 / ED-PC-0054] CURVATURE -> cheaper swing arrest. A curved edge slices out of the target instead of
+    # wedging in it, so the arrest costs less: Jordan's "faster recovery because the weapon isn't getting stuck" and
+    # "greater manoeuvreability than a purely straight edge" — ONE fact here, since recovery IS how soon you can act
+    # or redirect again. SWING-ONLY: C_thrust below is untouched, because a thrust retracts along its own line and has
+    # nothing to unstick. Bounded in [1-K, 1] by construction (curvature is dimensionless, [0,1]).
+    # [ASSERTED — first-principles], matching recoverability_factor's own tag: the draw-cut advantage is attested, the
+    # extraction mechanism is reasoned. See config's CURVE_RECOVERY_K for the pc-confound caveat.
+    curve_ease = 1.0 - cfg['CURVE_RECOVERY_K'] * w['geo']['curvature']
+    C_swing  = sqrt(I_g / I_ref) * (cfg['REC_S_FLOOR'] + (1 - cfg['REC_S_FLOOR']) * S_g / S_ref) * close * curve_ease
     C_thrust = cfg['REC_THRUST_BASE'] + cfg['EXPOSE_MOMENT_K'] * (S_g / S_ref - 1)
     return pc * C_thrust + (1 - pc) * C_swing
 

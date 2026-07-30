@@ -180,6 +180,17 @@ CFG = dict(
   # difference between a derivation and a gate. [SIM-CALIBRATE on the value; the SHAPE is grounded.]
   # CLOSE_REACH_REF RETIRED here 2026-07-29 (ED-PC-0053) — its only reader was close_unwieldiness's gate, now derived.
   # Left in place it would be a dead exported key, which is exactly the ED-PC-0042/E0 defect class.
+  # CURVE_RECOVERY_K [channel 2, ED-PC-0054, 2026-07-29 — Jordan-grounded]: a curved blade does not WEDGE the way a
+  # straight one can, so its swing arrests/extracts more cheaply — "faster recovery because the weapon isn't getting
+  # stuck" and "greater manoeuvreability compared to a contemporary that is a purely straight edge", which are ONE
+  # fact in this engine (recovery IS how soon you can act or redirect again). Discounts the C_swing branch of
+  # systems._recovery_mode_commitment ONLY: a thrust retracts along its own line and has nothing to unstick.
+  # SAFE BY CONSTRUCTION because `curvature` is dimensionless and bounded [0,1], so (1 - K*cv) is bounded in [1-K, 1]
+  # — unlike this session's two earlier scaling terms, whose inputs were unbounded (S_g carries units; I_g spans
+  # ~1000x). ⚠ ITS EFFECTIVE SIZE IS AMPLIFIED BY THE pc-CONFOUND: point_concentration anti-correlates with curvature
+  # at -0.729, so curved weapons are already weighted into the swing branch where this applies ((1-pc) = 0.70..0.92
+  # for the curved family). RE-MEASURE THIS TERM when channels 3-4 fix that tip data. [SIM-CALIBRATE; 0.0 ablates.]
+  CURVE_RECOVERY_K=0.15,
   CLOSE_ENGAGE_M=0.45, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
   # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
