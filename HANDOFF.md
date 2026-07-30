@@ -46,6 +46,25 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
+- **⚠ CROSS-LANE BLOCKER (2026-07-30): the PC lane has exhausted its reserved ID block and
+  `references/id_reservations.yaml` is frozen.** All 15 of `ED-PC-0041..0055` are allocated (0041–0047
+  earlier, 0048–0055 in the 2026-07-29/30 combat-correctness arc), `next_free` reads 56, and the file
+  carries "FILE FROZEN for the three-session run: no session bumps any next_free until the W5 capstone
+  releases unused IDs with a documented walk-back." **PC work needing a ledger entry is therefore
+  blocked**, and two pieces of completed PC work (the ED-1094 ratification flip for PR #273, and W8d's
+  draw-stream audit) have been recorded in `registers/handoffs/HANDOFF_PC.md` with **no ED** as a result.
+  Resolution is an IN-lane call: release IDs early, grant PC a second block, or accept handoff-only
+  records for the remainder of the run. Whichever is chosen, the reservation comment should say so —
+  right now the freeze and the exhaustion are documented in two different files and neither mentions the
+  other.
+  - **Filed alongside it, same shape (IN lane):** all THREE active lane handoffs now exceed the
+    20,000-token compliance threshold — `HANDOFF_MB.md` 24,074, `HANDOFF_PC.md` 24,227,
+    `HANDOFF_IN.md` 25,516. It is a `[WARN]`, not a blocking error, so nothing forces the split; three
+    lanes crossing it independently makes it a pattern rather than three accidents, and the fix is the
+    same archive convention the per-lane *ledgers* already use (`HANDOFF_<LANE>_archive.md`, settled
+    entries only). Not swept here — out of scope for a PC guard batch, and widening scope has a real
+    cost (CLAUDE.md §0.1 #5).
+
 - **Code-shape open-items program is live (ED-IN-0091/ED-IN-0092/ED-IN-0093/ED-IN-0094/ED-IN-0095, 2026-07-29).**
   `references/id_reservations.yaml` is frozen (all seven lanes' blocks reserved — IN/MB/PC/WR/FA/SE/SC) until the W5 capstone; the
   MB and PC sessions are launchable from their reserved blocks; the §5 docket awaits Jordan at

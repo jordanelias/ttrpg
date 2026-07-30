@@ -6,6 +6,52 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **▶▶ W8d DONE (2026-07-30) — the measuring instrument is now audited, and it does not support the
+  inference the plan's other packages were going to make of it.** New:
+  `tests/valoria/_draw_stream.py` (single owner of the RNG draw-stream instrument, following the
+  `_conservation.py` precedent) + `tests/valoria/test_combat_draw_stream.py` (11 guards, 8 mutants run,
+  7 killed, 1 equivalent, 1 deliberate survivor). **No engine change — `wrapper.fight` already takes
+  `rng` as a parameter, so this is test-side only and no golden can move.**
+  - **THE HEADLINE: shifting the draw count by ONE flips 40.2% of seeded outcomes** (161/400,
+    longsword vs rapier). **Seeds are not experimental control across a code change that moves the
+    stream**, so every paired-seed claim in the plan needs the stream pinned on both arms.
+  - **Same seed ≠ same experiment across contexts.** One seed, longsword vs arming: **57 underlying
+    draws at `armour='none'`, 168 at `'heavy'`** (2.95×). `wrapper.py:93` documents the mechanism in
+    its own comment; the consequence was never drawn.
+  - **A parity latch inside the stdlib.** `random.Random.gauss` caches its second Box–Muller variate, so
+    k calls consume `2*ceil(k/2)` underlying draws — 2 on odd, 0 on even. `core.resolve` reaches `gauss`
+    on the *same object* the engine draws `random()` from, so one added resolution shifts the bare-
+    `random()` sub-stream by 0 or 2 **depending on parity**. No constant offset realigns two streams.
+    Pinned as an environment guard: a CPython change here would move every combat golden silently.
+  - **Inventory: 34 `rng.*` calls across 33 lines** (`wrapper.py:327` carries two). Pinned STATICALLY
+    (AST) because 3 sites are unreached by a 256-fight sweep, so a dynamic pin would miss a new draw on
+    a cold branch. The unreached three: `capabilities.py:154` (a `__main__` self-test probe, genuinely
+    off-path), `wrapper.py:235` (`randrange` — the exact-tie tiebreak, needs float equality of two
+    accumulated readiness values), `wrapper.py:419` (the disrupt-resist draw). **Reported, not deleted**
+    — `state_graph.py` already records (ED-PC-0042) that this same sweep produced two false dead-branch
+    verdicts.
+  - **⚠ TWO NEW DEFECTS found while building, both verified:**
+    1. **`PARRY_MOMENT_K` and `WIND_MOMENT_K` had ZERO test coverage anywhere.** ED-PC-0052 shipped
+       three gains and guarded one. Now covered by an *exactly-once* guard (perturb
+       `contact_moment_edge` by a known delta, require the sigma to move by exactly `K × delta ×
+       attenuation`) — which is also a **double-charge detector** and killed MUT-7.
+    2. **The three gains' nominal parity is not effective parity.** All three are 0.30, and ED-PC-0052
+       presents that as considered parity — but `bind_sigma` returns unattenuated while `mode_sigma`
+       returns `(base+sig)*cap`. Measured: bind moves **0.300**, parry and wind **0.120** each
+       (tsurugi's parry/wind affinity is exactly 0.40). The effective parry gain is weapon-dependent —
+       rapier 0.70 vs tsurugi 0.40, a **1.75× spread in one declared constant**. Whether a mass fact
+       should be affinity-attenuated is a design question → **routed to W8c**, not changed here.
+  - **⚠ A guard of my own was decoration and was rewritten.** The first form of the moment guard
+    asserted `0.0 * edge == 0.0` — a property of floating-point multiplication, not of the engine. Third
+    instance of this defect class in this arc; caught by the adversarial pass, not by the suite passing.
+  - **Consequence for the plan: W8a's owed texture measurement for ED-PC-0052/0054 must be re-taken with
+    the stream pinned.** Their aggregate-inert results were measured on this unaudited instrument. This
+    does **not** show them wrong — it shows they are unvalidated, which is the W8d scope.
+  - **⚠ NO ED ALLOCATED — the PC lane is ID-BLOCKED.** Reserved block `0041–0055` is exhausted (all 15
+    used) and `references/id_reservations.yaml` is FROZEN for the three-session run (`next_free: 56`,
+    "no session bumps any next_free until the W5 capstone"). Further PC work that needs a ledger entry
+    needs either an ID release or a new reservation — **this is now a blocker, not a formality.**
+
 - **▶ RATIFICATION STATE after PR #273 merged (2026-07-30, `3005096`) — read before resuming.** ED-1094's
   ratify-on-merge default was applied *selectively*, because that PR declared its exceptions loudly:
   - **RATIFIED:** `combat_completion_plan_v4.md` (v4.1) as the PC lane's **plan-of-record** — its method,

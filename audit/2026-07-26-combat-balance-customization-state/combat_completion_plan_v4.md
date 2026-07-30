@@ -293,14 +293,32 @@ before them gets churned by all three. Split accordingly:
 - **W8c — NEW.** The `weapon_tempo` double-charge of `I_g` (§1.1). Audit whether `wield_heft`'s penalty
   and the `TEMPO_RECOVER_K·tanh(_recovery_mode_commitment)` term are pricing the same physical fact.
   · *Falsifier:* if they are independent, ablating one must leave the other's roster ordering intact.
-- **W8d — NEW, and it gates §3.6 for every package above.** `wrapper.py` (496 lines) is the
-  engagement loop: ~30 sequential `rng.random()` draws, **stream-order-dependent short-circuits**
-  (line 93 documents one explicitly — "represent_p==1.0 draws NO rng"), and latched state (`closed`,
-  `bind`, `ready`). **Consequence: any new lever that draws RNG reshuffles the stream for everything
-  downstream, so a `K=0` ablation is a different experiment, not a control.** Every paired-seed
-  measurement in this plan depends on an instrument nobody has audited. · *Acceptance:* a guard that
-  asserts an ablated run is **stream-identical** (same draw count and order) to the pre-change engine,
-  plus a documented ordering/latch map of the loop. **Do this before W1's ablation, not after.**
+- **W8d — ✅ EXECUTED 2026-07-30.** `tests/valoria/_draw_stream.py` (single owner of the instrument) +
+  `tests/valoria/test_combat_draw_stream.py` (11 guards; 8 mutants run, 7 killed, 1 equivalent, 1
+  deliberate survivor). No engine change — `wrapper.fight` already takes `rng` as a parameter.
+  **Verdict: the concern was correct and larger than stated.** Measured at `8535cea`:
+  - **Shifting the draw count by ONE flips 40.2% of seeded outcomes** (161/400). Seeds are not
+    experimental control across a stream-moving change.
+  - **57 underlying draws at `armour='none'` vs 168 at `'heavy'`** for one seed — same seed, 2.95× the
+    stream, so seed parity across contexts is not a control either.
+  - **`random.Random.gauss` carries a parity latch** (caches the second Box–Muller variate): k calls
+    consume `2*ceil(k/2)` draws, and `core.resolve` reaches `gauss` on the same object the engine draws
+    `random()` from. One added resolution shifts the bare-`random()` sub-stream by 0 **or** 2 depending
+    on parity — **non-uniform, so no constant offset realigns two streams.**
+  - **34 `rng.*` calls / 33 lines**, pinned STATICALLY (AST) since 3 sites are unreached by a 256-fight
+    sweep. The unreached three are reported, not deleted (ED-PC-0042's false-dead-branch precedent).
+  - *Acceptance met, with the criterion corrected:* v4.1 asked for "stream-identical to the pre-change
+    engine", which no in-process test can produce — the pre-change engine is a different commit. What
+    ships instead is the reusable mechanism that makes the criterion checkable **going forward**
+    (`RecordingRandom(...).trace` pinned before a change, asserted after) plus a static inventory guard
+    that reds on any new draw site. **Future ablation claims must use it.**
+  - **Two new defects, routed:** `PARRY_MOMENT_K`/`WIND_MOMENT_K` had **zero coverage anywhere** (now
+    guarded); and the three moment gains' **nominal parity is not effective parity** — bind moves 0.300,
+    parry/wind 0.120, because `mode_sigma` returns `(base+sig)*cap` while `bind_sigma` does not, making
+    the effective gain weapon-dependent (rapier 0.70 vs tsurugi 0.40 affinity). → **W8c**.
+  - **Consequence for W8a:** the owed texture measurement for ED-PC-0052/0054 must be re-taken with the
+    stream pinned. Their aggregate-inert results were measured on this unaudited instrument — that makes
+    them *unvalidated*, not wrong.
 
 ---
 
