@@ -147,6 +147,60 @@ def _match_rule(path: str, rules: dict) -> dict | None:
 
 # ── Check functions ──────────────────────────────────────────────────────────
 
+# ── on_exceed severity vocabulary — the SINGLE owner (ED-IN-0098, 2026-07-30) ───────────────
+#
+# WHY THIS EXISTS. The severity used to be computed inline as
+#     severity = 'warn' if on_exceed.startswith('flag') else 'error'
+# which silently graded EVERY token outside the `flag*` family as a blocking error — including
+# `warn_only`, which references/atomization_rules.yaml declares on 12 files and whose whole
+# purpose is to NOT block, and `chunk_by_quarter`, which is a split strategy rather than a
+# severity at all. Neither had ever worked. It surfaced in W4 (ED-IN-0097) when a legitimate
+# growth in module_contracts.yaml tripped a blocking gate that its own policy entry had already
+# declared non-blocking; that wave raised the cap to route around it and filed this defect
+# instead of fixing it, because the vocabulary sits adjacent to another program's scope.
+#
+# The fix is a CLOSED vocabulary. An unrecognised token is now a LOUD error naming itself,
+# rather than a silent demotion to 'error' that is indistinguishable from a deliberate block.
+# That is the §0.1 #5 shape: one owner, every site through it, and a guard that fails on
+# recurrence (tests/valoria/test_compliance_on_exceed_vocabulary.py).
+ON_EXCEED_BLOCKING = frozenset({
+    'error',          # explicit: exceeding this cap is a hard failure
+    'block_commit',   # explicit: block the commit (auto-fixable path)
+})
+ON_EXCEED_ADVISORY = frozenset({
+    'warn_only',              # declared on 12 files; report but never block
+    'flag_for_split',         # the flag* family: surface for a human/atomizer decision
+    'flag_unknown_pattern',
+    'flag_for_next_session',
+    'flag_for_manual_archive',
+    'chunk_by_quarter',       # a SPLIT STRATEGY, not a severity — advisory, never blocking
+})
+# 'skip' is handled before severity is computed (it produces no violation at all).
+ON_EXCEED_KNOWN = ON_EXCEED_BLOCKING | ON_EXCEED_ADVISORY | frozenset({'skip'})
+
+
+class UnknownOnExceedToken(ValueError):
+    """Raised when atomization_rules.yaml declares an on_exceed value nothing implements."""
+
+
+def _on_exceed_severity(on_exceed: str, path: str) -> str:
+    """Map an `on_exceed` token to 'warn' | 'error'. Unknown tokens fail LOUDLY.
+
+    A typo previously became a blocking error indistinguishable from an intentional one, which
+    is how `warn_only` went unimplemented for weeks across 12 files.
+    """
+    if on_exceed in ON_EXCEED_BLOCKING:
+        return 'error'
+    if on_exceed in ON_EXCEED_ADVISORY:
+        return 'warn'
+    raise UnknownOnExceedToken(
+        f"references/atomization_rules.yaml declares on_exceed: {on_exceed!r} for {path!r}, but "
+        f"tools/compliance_check.py implements no such token. Known: "
+        f"{sorted(ON_EXCEED_KNOWN)}. Add it to ON_EXCEED_BLOCKING or ON_EXCEED_ADVISORY (with a "
+        f"reason) rather than letting it default — an unimplemented token silently graded as a "
+        f"blocking error is the ED-IN-0098 defect this exception exists to prevent.")
+
+
 def _check_size(path: str, content: str, rule: dict) -> Violation | None:
     """Check file size against max_tokens."""
     max_tokens = rule.get('max_tokens')
@@ -176,7 +230,7 @@ def _check_size(path: str, content: str, rule: dict) -> Violation | None:
         fix_action = 'atomizer.archive_by_status'
         auto_fixable = True
 
-    severity = 'warn' if on_exceed.startswith('flag') else 'error'
+    severity = _on_exceed_severity(on_exceed, path)
 
     return Violation(
         path=path, rule=rule, kind='size_exceeded',
@@ -672,10 +726,14 @@ if __name__ == "__main__":
                 max_tokens = rule.get('max_tokens')
                 if max_tokens and len(content) // 4 > max_tokens:
                     on_exceed = rule.get('on_exceed', 'error')
-                    if on_exceed in ('flag_unknown_pattern', 'flag_for_split', 'flag_for_next_session'):
-                        severity = 'warn'
-                    else:
-                        severity = 'error'
+                    # ED-IN-0098: this CI-mode path carried its OWN copy of the severity rule and
+                    # had DIVERGED from _check_size above — it never honoured 'skip', so an
+                    # explicitly-exempted file over its cap graded as a blocking error here while
+                    # the same file was exempt on the other path. Both now route through the single
+                    # owner, _on_exceed_severity, and 'skip' is honoured identically.
+                    if on_exceed == 'skip':
+                        continue
+                    severity = _on_exceed_severity(on_exceed, rel_path)
                     violations.append(Violation(
                         path=rel_path, rule=rule, kind='size_exceeded',
                         current_tokens=len(content) // 4, threshold=max_tokens,
