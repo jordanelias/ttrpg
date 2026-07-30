@@ -75,6 +75,21 @@ Do **not** take the alternative repair (keep a 1.0-wide shape, grow the circle t
 spaces every formation 41% further apart and invalidates frontage, density, contact and every band
 fitted on them.
 
+**Why keep the circle at all** (Jordan, 2026-07-30): *"we may not even need the circle tbh, but it
+computes easy for collisions and attack reach radii, and since we're in a field, the octagon can snap
+to any degree… circle is good because we have field coordinate movement and orientation and angle of
+facing."* Three jobs, each one a reason:
+
+1. **Collision is a scalar comparison.** Circle-vs-circle overlap is `dist < 2r`; the swept case is
+   the quadratic `_pair_toi_scale` **already implements** and currently wastes as a mere pre-reject.
+   No SAT, no axes, no corner sets, no constant-heading precondition to violate.
+2. **Reach is a radius.** An attack envelope measured from the body is naturally polar, so reach
+   composes with the body as `r + reach` rather than as a second oriented box.
+3. **It decouples orientation from occupancy — which is the whole point.** On a continuous field the
+   octagon must snap to *any* angle, not to 8 or 45° steps. A rotation-invariant body is exactly what
+   lets facing be continuous and free without occupancy changing underneath it. The circle is not a
+   simplification of the octagon; it is the **carrier** that makes the octagon's freedom safe.
+
 **Immediate simplification this buys:** with a circular body the entire swept-SAT machinery for
 *exclusion* collapses to the circular quadratic that `_pair_toi_scale` already implements and which
 is currently used only as a pre-reject. Body-vs-body TOI becomes exact, cheap, and rotation-proof;
@@ -85,25 +100,59 @@ matters. **The retired code path is the one causing the defect.**
 translation, must never change its overlap relationship with any neighbour. Mutation: restore the
 oriented box as the exclusion volume → guard fails.
 
-### P2 — Vertex-forward orientation · needs P1
+### P1b — Re-certify the heading, or slew BEFORE the solve · **the actual proximate cause**
 
-`CellBox.heading` is currently the box's **depth axis**, with faces built perpendicular to it —
-**face-forward**. S1/S7 require the heading to be the **vertex normal**, with the two front faces at
-±45°. Arc allocation (S6, regular octagon, 45°/face):
+⚠ **A read-only `fable` audit sharpened P1 into something more specific, and it is the real defect.**
+The problem is not only that the box is rotation-variant — it is that **the commit rewrites the
+heading the solve just certified.** Verified chain, in tick order:
 
-| arc | faces | span |
-|---|---|---|
-| FRONT | 2 | 0° … ±45° |
-| SIDE | 2 | ±45° … ±90° |
-| REAR | 4 | beyond ±90° (180° total) |
+1. `_flat` captures each cell's facing as the one committed at the end of the **previous** tick
+   (`units.py:2185`).
+2. The swept-SAT solve is exact **for that heading held constant**, and commits each cell at its
+   *first-touch* fraction — where "touching" counts as separated by strict SAT.
+3. `_commit_cell_position` then writes a **new** `cell_facing_vec[cid]` via `_slew_facing` — up to
+   `60°·disc_mult` of rotation — **after** the certificate was issued (`units.py:1672-1676`,
+   called from the resolver at `:2318-2319`).
+4. A unit square's support half-extent along the contact normal grows from 0.5 to ≤ `√2/2` under
+   rotation — ~0.207 per box, ~0.41 for a facing pair. **Bodies committed at exact touch under the
+   certified headings strictly interpenetrate under the committed headings.** The test probe measures
+   exactly this: it reads the *post-commit* `cell_facing_vec`.
+5. Next tick, an already-overlapping cross-side pair solves to `s = 0.0`, which the cross-side loop
+   accepts as a freeze — it never *un*-overlaps.
 
-**Guard:** a cell facing an enemy squarely reports FRONT; rotating it 67.5° reports SIDE; 180°
-reports REAR. Under a face-forward octagon these land in the wrong sectors — that is the mutation.
+**Why OFF passes:** with the model off, commit writes `cell_facing_vec[cid] = _node_facing`, which
+moves only via the body wheel — identity in a head-on clash and a straight charge, so certified and
+committed headings coincide. **The defect class therefore survives `PC_FACING_MODEL=0` in any
+wheeling engagement**; the flag widened an existing order-of-operations hole from "wheel-only,
+quiescent in the tested geometries" to "every engaged cell, every tick."
 
-**Check against S5, not just the multipliers:** the payoff of vertex-forward is that a cell at a
-perimeter **corner** points its vertex into the gap between two enemies and is engaged on **both**
-front faces at once — maximum disadvantage — while a squarely-met cell fights one opponent on one
-face. If the implementation does not produce that, it has the geometry without the mechanic.
+**The invariant to restore: the heading the TOI certifies is the heading the tick ends with.** Either
+slew before propose/solve, or re-certify after rotation. P1's circular body makes this *robust* —
+rotation cannot change a circle's extent, so the ordering stops mattering for exclusion — but the
+ordering must still be fixed for the reach/engagement envelope, which stays orientation-dependent.
+
+**Guard:** a cell that only *rotates*, with zero translation, must not change its overlap
+relationship with any neighbour — and, separately, no pair may be strictly interpenetrating after a
+commit. Mutation: restore the post-solve slew → guard fails.
+
+### P2 — ~~Vertex-forward orientation~~ · **RETRACTED: the arcs are ALREADY point-forward**
+
+⚠ **My P2 was wrong and the audit overturned it.** I assumed the octagon was built face-forward.
+It is not: `geometry.py:165-185` zones the arcs at **GREEN < 45°, YELLOW 45–90°, RED ≥ 90°**, which
+is exactly S6's vertex-forward allocation (2 front faces spanning ±45°, 2 side faces to ±90°, 4 rear
+faces over the remaining 180°). A face-forward octagon would place the boundaries at 22.5° / 67.5° /
+112.5°. **There is no half-sector displacement to fix**, and "rear lands where nothing lands" is
+geometrically impossible — RED is a closed 180° half-plane.
+
+**What is actually missing is S5's mechanic, not the arc convention.** The octagon exists *only* as
+three angular zones; there is no octagonal geometric object, bodies are squares, and
+`_octagon_cell_mods` resolves against a local attacker **centroid bearing**, not face-to-face. So the
+corner-disadvantage payoff — a perimeter corner cell splitting its frontage across two enemies — has
+no substrate to exist in. **P2 becomes: build the octagon as a real object and resolve engagement
+face-to-face**, which depends on P1 and on S2's subunit perimeter.
+
+This is G17 landing on me a second time: I had a mechanism that explained the symptom, and it was
+wrong because I never checked the arc boundaries in source before proposing to rotate them.
 
 ### P3 — One owner for heading · needs P2
 
@@ -139,3 +188,21 @@ explains rear-damage-zero" — is **already dead**: F2 survives `PC_FACING_MODEL
 2. **Does the circle replace the box for exclusion everywhere, or only on the field path?** The grid
    path is the frozen byte-exact oracle; making it circular moves it too.
 3. **`CONTACT_REACH`** remains a magnitude with no ledger-backed value (F18).
+
+---
+
+## §6 — Further findings from the read-only `fable` audit (2026-07-30), not in §3
+
+Each verified in source by an agent that never saw the producer's reasoning.
+
+| # | finding |
+|---|---|
+| **A1** | **`PC_FACING_SLEW_BASE = 60` is an explicitly UNRATIFIED magnitude that the flip made live.** Its own inline tag still reads *"NOT ratified — do not enable"* (`units.py:52`) and `provenance.py:159-164` still records *"F2 ships DEFAULT-OFF and NOT enabled"* — a provenance record the flip rendered false. A magnitude nobody ratified is now governing every engaged cell's rotation. |
+| **A2** | **FOV-gated TARGETING is documented but does not exist.** `units.py:53` says the blind arc *"GATES reaction/targeting"*; the only consumer is the pin check. `assign_targets`' 'nearest' sets `target_atom` unconditionally, and the ATTENTION slew consults neither `PC_FACING_FOV_GATE` nor `FOV_HALF_DEG`. **So a cell physically turns to face a rear attacker the octagon model says it cannot perceive** — the blind-arc invariant is defeated for any non-halted cell. |
+| **A3** | **Two competing latency models own "cells cannot turn instantly":** `FACING_REACTION_TICKS` (2 ticks, ED-MB-0018) holds the *penalty*, while `_slew_facing` (60°/tick·disc) rotates the *state*. With the model ON both run concurrently on different clocks. §8: one rule, one owner. |
+| **A4** | **Canon conflict on the sightline.** `mass_battle_v30.md:155` specifies a **135° forward arc with a 15-cell perception range**; the code implements a **210°** visible arc (`REAR_BLIND_DEG=150`, `FOV_HALF_DEG=105`) and **no perception-distance limit anywhere**. Two canon owners disagree and the head doc loses silently. |
+| **A5** | **Two FALSE canonical citations on the audited lines.** `geometry.py:183-184` cite *"mass_battle_v30.md §A.3b — 45deg octagon GREEN boundary"* and *"§octagon"* — sections that do not exist, in a head doc containing **zero** occurrences of "octagon". This is CLAUDE.md §7's leaky-anti-fabrication-gate pattern sitting on the exact lines this mechanic reads. |
+| **A6** | **A prior measurement is falsified and still stands.** `HANDOFF_MB.md:698-699` records a 2026-07-22 stress result *"S4: PC_FACING_MODEL … SAFE when activated"*. The flip disproves it; that probe evidently never ran the OBB interpenetration invariant. Needs an explicit supersession note. |
+| **A7** | **F2's real mechanism, and it is not the octagon.** The test's premise (*"same dice, same contact cells, only the arc differs"*) is structurally false: the arms differ in `advance_dir`, which flips orig-frame support depth, so the front-facing defender's contacted rank has a full support stack and the rear-facing one has **zero**. That changes the defender's pool → the b-roll's dice consumption → the attacker's coupled degree; and `Partial → 1` with `eff_dr = 1` gives `max(0, 1−1) = ` **exactly 0.0**. The arc multiplier is bounded `[1.0, 2.0]` and *cannot* produce 0. **`PC_FRACTIONAL_POOL` is the concrete candidate that re-landed seed 5's RNG stream — bisect it first.** |
+| **A8** | **A third facing owner:** `engaged_frontage` uses subunit-level `_node_facing`/`advance_dir`, ignoring per-cell committed facing (`core/contact.py:334-335`). Low severity, but it is a fourth entry for P3's collapse. |
+| **A9** | `PC_REACH_FACING_GATE` and `_effective_reach` are **dead code** (zero call sites, retired at `units.py:2219-2220`) and are not named in B3's wire-or-delete list, which covers only `_reach_throttle`. |
