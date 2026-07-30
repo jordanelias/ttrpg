@@ -43,15 +43,29 @@ def _front_hit(su, casualties):
 
 
 def test_default_gated_off():
-    assert HU.PC_CLOSE_RANKS is False, "close-ranks must default OFF (byte-exact)"
+    assert HU.PC_CLOSE_RANKS is True, (
+        "close-ranks must default ON — Jordan ruled 2026-07-29 that every built mechanic defaults "
+        "ON (ED-MB-0061). The prior assertion pinned the OPPOSITE policy and is superseded; per G20 "
+        "a test asserting a flag defaults OFF protects the oracle, not the engine.")
 
 
 def test_inert_when_off():
-    su = _deep_subunit()
-    _front_hit(su, 250)
-    snapshot = dict(su.cell_troops)
-    su.close_ranks()  # flag off -> no-op
-    assert su.cell_troops == snapshot
+    """Still a valid behavioural claim — but it must FORCE the flag off, not assume the default.
+
+    [ED-MB-0061] This used to rely on PC_CLOSE_RANKS defaulting OFF. That default is now ON, so the
+    test was asserting inertness of an ACTIVE mechanism and failed. The inertness content is worth
+    keeping (an OFF flag must be a true no-op, which is what makes the flag safe to pin in the grid
+    oracle), so the flag is now pinned off explicitly for the duration of the test."""
+    saved = HU.PC_CLOSE_RANKS
+    HU.PC_CLOSE_RANKS = False
+    try:
+        su = _deep_subunit()
+        _front_hit(su, 250)
+        snapshot = dict(su.cell_troops)
+        su.close_ranks()  # explicitly off -> no-op
+        assert su.cell_troops == snapshot
+    finally:
+        HU.PC_CLOSE_RANKS = saved
 
 
 def test_conservation(close_ranks_on):

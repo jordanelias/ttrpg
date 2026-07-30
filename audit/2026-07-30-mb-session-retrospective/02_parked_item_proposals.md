@@ -268,3 +268,159 @@ the recommendation there is that the split needs none.
 
 **Two genuine numbers remain** (P-8's lateral cap, P-9's slew rate) and one conditional (P-3). Every
 other parked item resolves to a structural argument or an existing source.
+
+---
+
+## §A — ADVERSARIAL REVIEW of these proposals (2026-07-30, read-only `fable`)
+
+**Five recommendations took real damage; two survive clean; P-4's ruled content stands but my gloss on
+it was geometrically wrong.** Corrections folded in below rather than argued with. The summary table
+above is superseded by the one at the end of this section.
+
+### A1 — P-3 OVERTURNED, and not for the reason I asked about
+
+I asked whether a frontage split nets to parity. **It does not** — resolution is opposed
+(`a_deg = compute_degree(a_net, max(1, b_net))`, `orchestration.py:1304-1305`), so a halved per-pair
+pool both lowers damage dealt and raises damage taken. Parity was the wrong worry. P-3 breaks three
+other ways:
+
+1. **The owner I cited does not exist at the ruled granularity.** Exchanges are **atom-vs-atom** pairs
+   (`orchestration.py:776-831`); `_pair_engaged_troops` splits one ATOM's score across pairs. D3-R2's
+   geometry — a corner CELL engaged by two enemy CELLS **of one enemy subunit** — is a *single pair*,
+   carrying no multiplicity signal at all.
+2. **Where two enemy ATOMS do engage one cell, the existing mechanism does the OPPOSITE.** The
+   documented residual: *"a single cell simultaneously adjacent to TWO enemy atoms contributes its full
+   troop share to BOTH pairs"* (`core/exchange.py:159-163`). In exactly the corner geometry the
+   doubly-engaged cell fights at **full weight twice** — a bonus. "Each gets ~half" is false against
+   the source I cited for it.
+3. **Unsurfaced collision with a Jordan-ratified ruling.** Intensive/partition-invariant resolution is
+   ratified (`orchestration.py:815-829`) and pinned by `test_partition_invariance.py:37-52`. A
+   defender penalty keyed on engaged-body count makes 2-atoms-on-1 **strictly better for the
+   attackers** than 1-merged-on-1 — partition variance through the defender's door — and **the pinned
+   test will not catch it**, because it asserts only the attacker-side factor. This would have landed
+   silently.
+4. **My falsifier certifies the null.** 1-v-2 vs 1-v-1 confounds multiplicity with outnumbering: even
+   an engine with no split gives the 1-v-2 cell two opposed damage streams. The capable control is
+   **split-vs-merged at equal total troops** (2×T vs 1×2T) — the partition-invariance comparison this
+   lane already owns.
+
+**Revised P-3: the multiplicity penalty needs a mechanism that does not exist, and its first design
+constraint is not to break partition invariance.** It is a genuine open design item, not a
+"derive-the-shape" exercise. P-12 inherits this and also contradicts its own §9 source, which said the
+magnitude *is* a Jordan number.
+
+### A2 — P-9's derivation OVERTURNED; the provenance fix survives
+
+`ω = v/r` is a **category error**: `_slew_facing` is rotation-in-place, and its live use is the
+ATTENTION slew on **engaged, mostly halted** cells (v = 0). Under `v/r` a stationary cell can never
+re-face — abolishing the mechanic exactly where D3-R2 needs it (*"the vertex will be oriented at
+midpoint between opponents"* requires a halted cell to rotate). And **no per-cell pivot radius exists
+in the engine**: `v` is available (`cell_last_speed`), `r` is not.
+
+**My falsifier has no referent.** It compares against "the reform/wheel timings canon already asserts";
+v30's Phase 7 "Reform" (`:504-506`) is a discipline/morale recovery step with no rotation timing, and
+`PC_WHEEL` carries no deg/tick canon. So it was unfalsifiable as written. (Residual: two unread
+"wheel" lines at v30:652/654 — if a timing hides there this softens to "uncited".)
+**Surviving half: fix the false provenance record now, regardless of the ruling.**
+
+### A3 — P-11 SOFTENED to "build, but none of it is free"
+
+Every "nearly free" adjective was wrong:
+- **Order-dependent.** The current solve is a commutative per-cell min-cap, a stated design property
+  (`units.py:2259-2261`). A pairwise positional impulse is not, unless accumulated Jacobi-style — which
+  my one-line spec did not say.
+- **Does not converge in a dense lattice.** Interior neighbours sit at exact tangency, so any push δ
+  creates new overlap ≈ δ with the next neighbour: a displacement **wave**, not a local fix.
+- **The `s > 0` lesson recurs.** A separator triggered on `dist < 2r` sits on the same knife edge that
+  produced the deadlock; avoiding per-tick micro-impulses needs a depth threshold — **a constant**,
+  contradicting "no constant".
+- **At `dist → 0` the centre line is undefined**, so "needs no RNG" fails precisely for the co-located
+  pairs that motivated it.
+- **Placement unspecified, and both options are bad**: post-commit writes positions no TOI certified;
+  pre-solve becomes a proposal the cap can cancel.
+- **My falsifier is blind to the real risk** — it tests the isolated pair, and the G13 control tests
+  *freezing* while the failure mode here is oscillation. A jittering formation passes it.
+
+### A4 — P-1: recommendation (b) survives, but my rationale was DANGEROUS
+
+I wrote that "(a) is the same configuration with less honest labels". **That is false, and if it
+persuaded anyone to pick (a) it would re-open ED-1089.** The mode key's job is run-vs-golden
+discrimination, and this lane's own method *mandates flag-OFF control runs* — HARD RULE 4's attribution
+control and every single-flag bisect in §3.1b. Under (a) a `CM=0` control run keys **identically** to
+the `CM=1` golden and silently checks against the wrong configuration. Only (b) is safe.
+Also: "(b) reverses ED-MB-0053" **overstates** — (b) keeps the key extension, which is the load-bearing
+half, and retires only the fifth mode's separate-config role.
+**And my falsifier cannot fail:** the re-base flips ~15 digest-relevant pins at once, so `unit_cm` will
+differ from the retired `unit` golden regardless. The capable falsifier is `unit_cm` vs the **same
+configuration with CM=0 alone**, at the new pin vector.
+
+### A5 — P-4: the ruled numbers check out; my "structural, cannot drift" gloss is WRONG
+
+Arithmetic verified (135/2 = 67.5; sectors sum to 360; REAR_BLIND 225 consistent with the existing
+`FOV_HALF_DEG = 180 − REAR_BLIND_DEG/2` derivation). But:
+
+**A vertex-forward octagon has vertices at multiples of 45°, so 67.5° is the side-face MIDPOINT, not a
+vertex.** A vertex at ±67.5° exists only *because the split creates one*. So the boundary is **created
+by the ruling, not pre-existing structure** — Jordan's phrase "vertex of orange/yellow" describes the
+*new* partition correctly, but my claim that the coincidence proves the spec right is unfounded. It was
+the same "consistency tell" error as D1, made a second time.
+
+Worse, the anti-drift property holds **only if single-owned**, and **my own supersession table ships
+67.5 in two constants** (`FOV_HALF_DEG` *and* the `octagon_angle` thresholds) — the exact two-owner
+drift I claimed was structurally impossible. **Single-source it.**
+
+Also outstanding: no supersession notes for S6's "8 sectors, 45°" or §10's "same 8 sectors" (a G15
+sweep failure, again); `config.py:386`'s anatomical ~190–210° citation becomes **false** under 135°;
+and the summary table above still answers P-4 with "S6's 180° rear", contradicting the ruled body in
+the same file.
+
+### A6 — P-10 under-scoped three ways
+
+`FACING_REACTION_TICKS` is live on **both** paths and pinned digest-relevant in all four modes, while
+`_slew_facing` runs only on the field commit path — so engine-wide retirement leaves the **grid oracle
+with no turn latency at all**, and field-only retirement creates a path dialect. My proposal scoped
+neither. Worse, **the clock currently carries the FOV gate** (`can_react`): blind attackers are never
+faced, so the penalty persists — that *is* the surprise-rear mechanic. Retiring the clock before
+FOV-gating the slew lets a cell turn toward an attacker the ruled 135° arc says it cannot see, and
+**under P-4's ruling that hole widens from RED to the whole ORANGE band**. My falsifier passes while
+that invariant is lost.
+
+### A7 — P-2, P-5, P-8: recommendations survive, falsifiers do not
+
+- **P-2:** my mechanism claim is wrong — `reach_for` enters via the **standoff** contact path, which
+  takes *priority* over `FIELD_CONTACT` (`core/contact.py:248-253, 303`). And the only `CONTACT_REACH`
+  read binds a local `_reach` that is **never consumed** (`core/contact.py:365`), so my grep falsifier
+  would demand a ledger-backed value for a dead variable — G17's wrong-quantity shape. "Live read"
+  must mean *consumed*.
+- **P-5:** my falsifier is **wrong-signed**. The Minkowski envelope is the centres-hull **outward
+  offset** by 0.5; I wrote "inset", which measures an inward surface and condemns both hypotheses
+  indiscriminately.
+- **P-8:** my falsifier is **vacuous by construction** — it can only falsify the rival strict-S7
+  reading, never my recommendation. And the recommendation re-opens the two-owner heading problem R1
+  exists to close, without saying which owner carries the correction vector.
+
+### A8 — F20's bearing on P-4
+
+P-4's surviving 15-cell range recommendation **has no named predicate**, and with four disagreeing
+proximity owners an implementation can satisfy the falsifier on one while the limit binds another. And
+my cited evidence is wrong: H6's A3/A4 at face-gap **11.8** is *inside* 15 cells, so those subunits
+would acquire a target under the fix too — the example does not demonstrate the behaviour the fix
+changes.
+
+### Revised verdict
+
+| # | standing after attack |
+|---|---|
+| **P-6, P-7** | **survive clean** (P-7 verified structurally) |
+| **P-4** | ruled content stands; my gloss overturned; single-owner + G15 sweep required |
+| **P-1** | (b) survives; my (a)≡(b) rationale is FALSE and must not be relied on; falsifier replaced |
+| **P-2, P-5** | recommendation survives; falsifier replaced |
+| **P-8** | open fork; falsifier vacuous; owner question unanswered |
+| **P-10** | direction right, scope and FOV precondition missing |
+| **P-11** | build, but order-dependence, convergence, threshold-constant and placement are all open |
+| **P-3, P-12** | **OVERTURNED** — no mechanism exists at cell granularity, the existing residual is the opposite, and it collides with ratified partition invariance |
+| **P-9** | derivation OVERTURNED; unfalsifiable as written; provenance fix survives and is urgent |
+
+**Nine of twelve falsifiers could not fail as written.** That is the single most useful thing this
+review produced, and it is a G19 result: I wrote twelve falsifiers in one pass without an independent
+read, and most of them certified their own conclusions.
