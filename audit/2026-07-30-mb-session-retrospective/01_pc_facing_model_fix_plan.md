@@ -380,3 +380,61 @@ proposal actually leaks.
 - **New R0b: the identity substrate** (D6) — must land with R0 or the circle introduces a fresh defect.
 - **P1b must also cover the `yield_active` branch**, which writes an instantaneous un-slewed facing
   *regardless* of `PC_FACING_MODEL` (`units.py:1669-1671`). The plan named only the slew path.
+
+---
+
+## §9 — JORDAN'S RULING ON D3 (2026-07-30) — the critic's arcs were right, its conclusion was wrong
+
+> *"first, there should be a disadvantage when having to attack/defend against multiple cells.
+> second, the vertex will be oriented at midpoint between opponents if opponent adjacent success and
+> there will be yellow exposed, which means the unit will take more damage"*
+
+The critic's geometry stands: a corner cell tangent to two enemies of a pitch-1.0 line sits at
+`h = √3/2` with bearings **±30°, both GREEN**. Its *conclusion* — "therefore zero disadvantage" —
+does not, because it looked for the whole mechanic inside the arc multiplier. The disadvantage has
+**two independent sources**, and neither is a "corner rule":
+
+### D3-R1 — Multiplicity is its own penalty, independent of arc
+
+Defending against (or attacking) **two bodies at once** is worse than one, whatever arcs they occupy.
+This is a per-cell property of *how many* opponents engage it, not of *where* they stand. The corner
+cell's ±30° pair are both GREEN and both real — it is fighting two.
+
+⚠ **This must be distinguished from ED-MB-0018's multi-side shock, or it re-lands the bug that fix
+removed.** That fix deleted a **+50% encirclement shock** that mis-fired on two FRONT attackers —
+*"a concentric frontal pinch, not an encirclement."* The two quantities are different:
+
+| quantity | keyed on | corner cell |
+|---|---|---|
+| **encirclement shock** (ED-MB-0018, exists) | attacked across multiple **ARCS** | does **not** fire — both attackers are GREEN ✓ |
+| **multiplicity penalty** (D3-R1, ruled here, does not exist) | attacked by multiple **BODIES** | **fires** — two opponents |
+
+ED-MB-0018 is *not* reversed: its subject is arc spread; this is body count. Implementing D3-R1 must
+key on the engaged-body count and must leave the shock's arc test untouched.
+
+### D3-R2 — The corner's real exposure is YELLOW, and it is emergent from the perimeter
+
+*"the vertex will be oriented at midpoint between opponents… and there will be yellow exposed."*
+Facing the bisector of two opponents is the best available compromise and still leaves the cell's
+**side arcs uncovered** — and a **perimeter corner is precisely the position with no friendly
+neighbour occupying one of those sides.** An interior cell's YELLOW faces its own rank-mates and can
+never be reached; a corner cell's YELLOW is open ground an enemy can occupy. Once one does, it
+attacks at the **1.5× flank multiplier that already exists**.
+
+**This is the emergence the spec claimed, relocated to where it actually lives.** It needs no
+"corners are weak" rule and no new multiplier: the perimeter (S2) determines which arcs are *exposed*,
+attacker bearings determine which are *occupied*, and `ANGLE_DEF_MOD` prices them. Salients get worse
+outcomes than flat line because they present more exposed arc per cell — a pure consequence of shape,
+which is what S5 was reaching for.
+
+### Consequence for §8 and §7
+
+- **D3 is answered, not conceded.** The critic's "parity, therefore no mechanic" is refuted: it
+  measured a two-GREEN snapshot and never asked what happens next, which is that YELLOW is open.
+- **D2 still stands** — none of this requires octagons to physically touch. Both D3-R1 (body count)
+  and D3-R2 (bearing → arc) are **bearing-sector bookkeeping** on the existing partition. R6 remains
+  *"do not build the polygon"*, but its behavioural content is now specified and buildable.
+- **R6 is unblocked with a changed shape:** (a) a multiplicity penalty keyed on engaged-body count,
+  distinct from the arc-keyed shock; (b) exposed-arc determination from the perimeter (R5a). Both
+  land after the re-base, both need guards that fail on deletion, and (a) needs a magnitude — which
+  is a **Jordan number**, not one to invent (§7).
