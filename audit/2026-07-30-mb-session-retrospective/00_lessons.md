@@ -148,6 +148,60 @@ perturbation is fragile, and D1/D5's over-decisiveness work is the right home fo
 "turning the flags on surfaced nine engine defects" must be restated as: **it surfaced two confirmed
 mechanism defects, one invalid test, one systematic asymmetry, and four threshold-marginal outcomes.**
 
+### 3.1c — F20: PROXIMITY HAS FOUR OWNERS, AND THE ORDER TRIGGER USES THE WRONG ONE
+
+**Jordan, 2026-07-30, on the five-flags-restore signature: *"sounds like consolidation candidate."***
+That read is correct and beats the "threshold cliff" explanation §3.1b first offered. Chased down:
+
+**`enemy_range` measures `sub.centroid()` to the nearest enemy CELL** (`core/contact.py:35-39`) —
+while its own docstring one screen up says *"within D of the nearest enemy cell"* (`:22`). It is
+centroid-to-cell, not cell-to-cell, so the trigger is a function of **formation SHAPE**, not proximity.
+
+- A ~5-deep subunit's centroid sits ~2.5 behind its front rank, so `enemy_range:5` really fires at a
+  front-face gap of ~2.5 — **and the offset varies with formation depth**, so the same written order
+  means different things for a line and a column.
+- Worse, the offset **changes mid-battle as the formation deforms**. Every one of the five flags that
+  individually restores the test moves the centroid without moving the front rank: `PC_CELL_MORALE`
+  (routing cells leave), `PC_CLOSE_RANKS` (packing), `PC_FRICTION_CEV` (pacing), `PC_INTENT_RESOLUTION`
+  (advance behaviour), `PC_YIELD_RALLY` (withdrawal).
+
+**Measured discriminator (RNG draws over a fixed 12-turn battle at one seed):**
+
+| arm | draws |
+|---|---|
+| all-ON | 665 |
+| `PC_CELL_MORALE=0` | 193 |
+| `PC_CLOSE_RANKS=0` | 439 |
+| `PC_FRICTION_CEV=0` | 756 |
+| `PC_INTENT_RESOLUTION=0` | **665 — identical** |
+| `PC_YIELD_RALLY=0` | **665 — identical** |
+
+Two flags change the outcome while consuming the **exact same draws from the same seed**, so
+stream-shift cannot be the whole story — they change *where the bodies are*, which is what the
+trigger actually reads.
+
+**The consolidation candidate, stated as a §8 violation.** "How far away is the enemy" currently has
+**four owners that disagree**:
+
+| owner | measures |
+|---|---|
+| `check_orders` / `enemy_range` | my **centroid** → nearest enemy cell |
+| `check_orders` / `ally_at` | centroid → centroid |
+| `find_contacts` / `obb_front_reach_overlap` | oriented **face + reach** envelope |
+| `_octagon_cell_mods` | local attacker **centroid bearing** |
+
+(and `engaged_frontage` adds a projected-interval union). This is the same error class as G18, which
+I committed myself earlier this session when I measured engagement by centroid distance — so it is a
+*recurring* defect, which is exactly what §0.1 point 5 says to sweep rather than fix one-off.
+
+**Disposition: one proximity owner, face-based, with the triggers reading it.** Under the circle
+substrate that owner is trivial — `dist(centres) − 2r` between the nearest cell pair — and it is the
+same quantity R0 already needs for exclusion. `enemy_range` then means what it says.
+
+⚠ **This re-classifies at least one of §3.1b's four "threshold-marginal" failures as a real defect**
+— not in the flagged mechanics, but in the trigger. The remaining three need the same treatment
+before being called marginal.
+
 ### 3.2 — Spatial-integrity residuals (extend Track B)
 
 - **F9** — the collision solve is **enemy-gated**: `toi_deferred = FIELD_MOVEMENT and
