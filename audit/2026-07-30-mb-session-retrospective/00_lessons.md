@@ -351,6 +351,30 @@ the circle at all orientations, which is precisely what makes the invariant hold
 r=0.7071 — is **rejected by this spec** and would also space every formation 41% further apart,
 changing frontage, density, contact and every band fitted on top of them.
 
+**S7 — FACING AND MOVEMENT ARE ONE VECTOR, ANCHORED AT THE FORWARD VERTEX (Jordan, 2026-07-30).**
+*"vertex of the two green is the forward direction of the troop cell and that normal is the direction
+it moves going forward."*
+
+So the cell's heading is the **vertex normal** — the ray from the cell centre through the vertex
+where the two front faces meet — and **that same vector is its direction of travel**. Facing is not a
+separate quantity that happens to correlate with movement; they are the same degree of freedom.
+
+Three consequences for the code, each checkable:
+
+1. **`CellBox.heading` is currently the box's DEPTH AXIS**, and `_cellbox_corners` builds faces
+   perpendicular to it — i.e. **face-forward**. Under S1/S7 the heading must be a **vertex** normal,
+   with the two front faces at ±45° around it. This is the concrete form of the S1 discrepancy, and
+   it is now also a *movement* discrepancy, not only an arc-assignment one.
+2. **Redundant owners of one quantity.** `_node_facing`, `_node_facing0`, `cell_facing_vec`,
+   `advance_dir` and the per-tick movement vector are separate pieces of state for what S7 says is a
+   single vector. Any two of them can disagree — and `rekey_cells`/`check_drift` (ED-MB-0054) already
+   found six per-cell maps going stale, which is the same failure shape one tier down. §8: one rule,
+   one owner.
+3. **`_slew_facing` turns the heading, and under S7 that necessarily re-aims movement.** Combined with
+   S6, this is exactly why turning `PC_FACING_MODEL` on was so destructive: it activated a slew that
+   simultaneously re-aimed travel *and* — because the body box is rotation-variant — re-shaped the
+   collision volume, mid-tick, under a solver that assumes constant axes.
+
 **S3 — Cell relational positioning is CENTROID-BASED to the other cells in the subunit.**
 
 **S4 — Movement is vector-based on a continuous field; the SUBUNIT conditions its cells' alignment
