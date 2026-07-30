@@ -438,3 +438,46 @@ which is what S5 was reaching for.
   distinct from the arc-keyed shock; (b) exposed-arc determination from the perimeter (R5a). Both
   land after the re-base, both need guards that fail on deletion, and (a) needs a magnitude — which
   is a **Jordan number**, not one to invent (§7).
+
+---
+
+## §10 — JORDAN'S RULING ON D2 (2026-07-30) — the octagon is the circle's boundary, partitioned
+
+> *"facing octagon exists though unless you're converting a circle into discrete segments with
+> corresponding arcs. I guess that works just as well"*
+
+**It does work, and it is strictly better — it is the fix for D2.** The distinction is chords vs arcs:
+
+| model | "faces" are | where they sit | touch at tangency? |
+|---|---|---|---|
+| octagon **inscribed** in the circle | **chords** | strictly *inside* the circle (apothem 0.46194 < 0.5) | **never** — needs centre distance 0.92388 < 1.0, i.e. interpenetration (D2) |
+| circle **partitioned** into 8 arcs | **arcs of the boundary** | *on* the circle, radius 0.5 | **always** — the tangency point lies on an arc of each cell |
+
+An inscribed polygon's faces are chords, and chords are recessed from the boundary everywhere except
+at the vertices — which is exactly why D2 found that two inscribed octagons can never make face
+contact at exclusion-legal range. **Partitioning the circle's boundary into eight 45° arcs keeps every
+"face" on the exclusion surface itself.** At tangency the contact point is on both circles, so its
+bearing from each centre lands in a well-defined arc of each. Face resolution becomes exact precisely
+where the polygon model failed.
+
+Everything else in the spec is preserved unchanged:
+
+- **Same 8 sectors, same 45°, same vertex-forward orientation.** The forward "vertex" is now the
+  boundary point *between* the two front arcs — still the heading, still the direction of travel (S7).
+- **Rotation-variant, as it must be** — the partition turns with the cell (S6).
+- **S5/D3-R2 become fully implementable:** the contact bearing determines the engaged arc, and a
+  perimeter corner's exposed YELLOW arcs are open ground an enemy can occupy at 1.5×.
+- **It is what the engine already implements.** `octagon_angle` maps a bearing to GREEN/YELLOW/RED by
+  angle from the heading (`geometry.py:165-185`) — a boundary partition, not a polygon. **The existing
+  code was right and the polygon was my addition.**
+
+### Net effect on the plan
+
+- **D2 is resolved, not merely bounded.** No polygon is built; no contact-event gap exists.
+- **R3 shrinks to consolidation** — own the partition, add `face_index` for eight-way granularity if
+  D3-R2 needs it. No geometric object, no new shape code.
+- **R6's blocker is gone.** Its content is D3-R1 (multiplicity, body-count-keyed) + D3-R2 (exposed-arc
+  from the perimeter), both bearing-sector bookkeeping.
+- **The three-geometry table in §3 P1 is amended:** the middle row is not "octagon polygon" but
+  **"the circle's boundary partitioned into 8 arcs"** — so there are really *two* shapes, the circle
+  and its arc partition, plus a reach radius. Fewer moving parts than I proposed.
