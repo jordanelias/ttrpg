@@ -6,7 +6,30 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **▶▶ READ FIRST (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/session_retrospective_and_plan_v3.md`**
+- **▶▶ THE LIVE PLAN (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/combat_completion_plan_v4.md`
+  — v4.1, PROPOSED.** Research-led (HEMA/treatise-grounded per Jordan's 2026-07-30 authorization),
+  iteratively tuned, and revised after a read-only Fable 5 adversarial pass whose findings were
+  **verified against the working tree** rather than accepted (§7 records all 11, including one the
+  critic got wrong). It supersedes the **sequencing** of `combat_execution_plan.md` §7,
+  `combat_remediation_plan.md` §8, and v3 §5 below; their content stands.
+  - **Order: W0 → W7a → W1 → W8d → W4/N4 → W2 → W6 → W5 → [W3 when scoped] → W7b → W8a/b/c.**
+  - **Two ⚖ items came BACK to Jordan** after the adversarial pass: **⚖1b** the katana anchor for
+    `CUT_REF_NATIVE` (ED-PC-0051 ships `needs_jordan: true` and v4 had silently ratified it), and
+    **⚖6** off-hand scope (a budget question, not a researchable one). W3 is blocked on ⚖6.
+  - **Retracted in v4.1:** v4 proposed deriving `CLOSE_ENGAGE_M` from `L0`. `L0`=4.0 is a
+    **1.89 m reach-point fit anchor**, not an arm, and `Combatant` has no anthropometry — that
+    derivation would have re-committed the ED-PC-0053 fiat gate one layer up. `config.py:176`'s
+    "the fighter's own arm" comment is quantitatively false and is fixed as part of W0.
+  - **Two new defects found while verifying:** **W8c** — `weapon_tempo` charges `I_g` **twice in one
+    function** (`wield_heft` at `combat_systems.py:101` + the `TEMPO_RECOVER_K·tanh(...)` term at
+    line 110). **W8d** — `wrapper.py`'s RNG stream is order-dependent, so a `K=0` ablation is a
+    different experiment, not a control; **every paired-seed measurement in the plan rests on an
+    unaudited instrument.** W8d is scheduled before the first ablation.
+  - **Plate participation re-measured: 36/53** zero-decided at heavy (`8a054d0`), via
+    `workbench/armour_participation.py`. The corpus's 38 is stale; v4's 35 was wrong; it was 34 at
+    session start and **no weapon gained the ability to decide** during the session.
+
+- **▶ Background (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/session_retrospective_and_plan_v3.md`**
   — lessons, an adversarial pass on the session's own work, 9 newly-flagged items (N1–N9), and a
   **REORDERED work list that supersedes `combat_execution_plan.md` §7 and `combat_remediation_plan.md`
   §8's sequencing.** The headline that reorders everything: **three correct, absent mechanisms
