@@ -313,12 +313,43 @@ That single conflation explains two of the session's hardest findings mechanisti
 | concern | shape | rotation behaviour |
 |---|---|---|
 | **body / exclusion** | circle, r = 0.5 | **invariant** — facing cannot move it |
-| **facing / damage / FOV** | octagon arc partition, vertex-forward | orientation IS its content |
+| **facing / damage / FOV** | octagon arc partition, vertex-forward | **variant, and always has been — that is the point** |
 | **engagement / reach** | forward envelope beyond the body | orientation matters, collision does not |
+
+**Rotation-variance is not the defect; its LOCATION is (Jordan, 2026-07-30: "the octagon has always
+been rotation-variant").** The octagon *must* be rotation-variant — an arc partition whose sectors
+did not turn with the cell would carry no facing information at all, and S5's corner-disadvantage
+mechanic is precisely a rotation-variant effect. The defect is that rotation-variance **leaked out of
+the arc partition and into the exclusion volume**, because one `CellBox` carries both. Turning a cell
+is supposed to change *who it fights and how well*; it is not supposed to change *what space it
+occupies*. Separate the two shapes and each gets the behaviour it should have — the circle rigid
+under rotation, the octagon turning freely on top of it.
 
 This is §8's "every rule lives once" applied to geometry: three different questions, three owners.
 The current code answers all three with one `CellBox`, which is why turning the facing model on
 breaks the collision invariant.
+
+**S6a — THE SQUARE FITS WITHIN THE CIRCLE, NOT THE CIRCLE WITHIN THE SQUARE (Jordan, 2026-07-30).**
+The containment is currently inverted, and the inversion is measurable:
+
+| | body radius on-axis | body radius on the diagonal | rotation-variant? |
+|---|---|---|---|
+| **now** — circle inscribed in a 1.0 square | 0.5 | **0.7071** | yes |
+| **spec** — square inscribed in an r=0.5 circle | 0.5 | **0.5** | **no** |
+
+The square's corners currently exceed the intended body radius by **0.2071** — over-claiming the
+body's extent by **41% in the diagonal directions**, and only there. That directional overhang *is*
+the off-axis interpenetration: it appears exactly when the facing is off the lattice axis and
+vanishes at 0°/90°, which is the `1 − cos θ` signature F11 measured.
+
+Under the spec the numbers close cleanly: pitch 1.0 with an r=0.5 circle makes adjacent cells
+**exactly tangent at every orientation**, and any square retained for tiling or arc bookkeeping has
+side `r√2 = 0.7071` and can never protrude past the exclusion circle. The binding constraint becomes
+the circle at all orientations, which is precisely what makes the invariant hold under rotation.
+
+⚠ The alternative repair — keep side 1.0 and grow the exclusion circle to the circumscribed
+r=0.7071 — is **rejected by this spec** and would also space every formation 41% further apart,
+changing frontage, density, contact and every band fitted on top of them.
 
 **S3 — Cell relational positioning is CENTROID-BASED to the other cells in the subunit.**
 
