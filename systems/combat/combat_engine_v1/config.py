@@ -171,11 +171,49 @@ CFG = dict(
   # class ED-PC-0035 and ED-PC-0037 each cleaned. weapon_physics.GRIP_SHORT=0.30 m superseded it in practice (its
   # own comment says 'calibrated to the old CHOKE_GRIP_MIN'). Now guarded, not just fixed:
   # tests/valoria/test_combat_invariants.py::test_no_dead_exported_engine_params fails on any future recurrence.
-  CLOSE_REACH_REF=6.5, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
+  # CLOSE_ENGAGE_M [ED-PC-0053]: the BODY-scale distance, in honest metres, at which a fight is CLOSED — chest-to-
+  # chest out to about a forearm. Replaces CLOSE_REACH_REF=6.5, which was a FIAT GATE: it sat on reach_base's scale
+  # (which INCLUDES L0=4.0, the fighter's own arm), so its implied threshold was 1.18 m of weapon forward extent
+  # before a weapon was unwieldy in the close AT ALL — roughly 3x any physical reading of "the close", and a CLIFF
+  # (exactly 0 below, linear above). Every one-handed sword in the roster therefore paid 0.0000, which is why reach
+  # had four benefit channels and no cost. This constant is a property of BODIES, not weapons, which is the whole
+  # difference between a derivation and a gate. [SIM-CALIBRATE on the value; the SHAPE is grounded.]
+  # CLOSE_REACH_REF RETIRED here 2026-07-29 (ED-PC-0053) — its only reader was close_unwieldiness's gate, now derived.
+  # Left in place it would be a dead exported key, which is exactly the ED-PC-0042/E0 defect class.
+  # CURVE_RECOVERY_K [channel 2, ED-PC-0054, 2026-07-29 — Jordan-grounded]: a curved blade does not WEDGE the way a
+  # straight one can, so its swing arrests/extracts more cheaply — "faster recovery because the weapon isn't getting
+  # stuck" and "greater manoeuvreability compared to a contemporary that is a purely straight edge", which are ONE
+  # fact in this engine (recovery IS how soon you can act or redirect again). Discounts the C_swing branch of
+  # systems._recovery_mode_commitment ONLY: a thrust retracts along its own line and has nothing to unstick.
+  # SAFE BY CONSTRUCTION because `curvature` is dimensionless and bounded [0,1], so (1 - K*cv) is bounded in [1-K, 1]
+  # — unlike this session's two earlier scaling terms, whose inputs were unbounded (S_g carries units; I_g spans
+  # ~1000x). ⚠ ITS EFFECTIVE SIZE IS AMPLIFIED BY THE pc-CONFOUND: point_concentration anti-correlates with curvature
+  # at -0.729, so curved weapons are already weighted into the swing branch where this applies ((1-pc) = 0.70..0.92
+  # for the curved family). RE-MEASURE THIS TERM when channels 3-4 fix that tip data. [SIM-CALIBRATE; 0.0 ablates.]
+  CURVE_RECOVERY_K=0.15,
+  CLOSE_ENGAGE_M=0.45, POLE_CLOSE_K=0.92, LUNGE_1H_BONUS=1.15, LUNGE_2H_FACTOR=0.7,
   # TEMPO is coupled to COMMITMENT+RECOVERY: a deep, hard-to-recover commit leaves you slower to re-ready for the
   # next action (extra readiness debt = K * (commit-2) * recoverability_factor). A feint costs no tempo.
   RECOVERY_TEMPO_K=0.15,
   # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
+  # BIND_MOMENT_K [channel 5, ED-PC-0052, 2026-07-29 — Jordan-grounded]: displacement resistance in the bind. Where
+  # weapons CONNECT (parry/block/bind/wind), the side whose weapon carries more moment about the working hand is
+  # harder to shove off the line. Until this constant existed the bind had NO mass/momentum/inertia term at all — its
+  # only physical lever was systems.leverage(), which is pure GEOMETRY (grip_len - LEVER_HEAD_K*head_len), so two
+  # swords of similar grip geometry and 2.14x different moment bound identically. Keyed on at_grip's S_g, NOT on mass:
+  # the rapier is the HEAVIER weapon (1.37 kg vs the scimitar's 0.95) yet has the lower moment (0.1231 vs 0.2199),
+  # because its mass sits in hilt and pommel — so a mass-keyed term would move the wrong way. Applied as a LOG-RATIO
+  # (see systems.bind_sigma) which is scale-free, antisymmetric, and compresses the polearm tail. An additive
+  # log-odds shift, matching ED-PC-0045's ruling on how a bind lever must compose with logistic(bind_sigma).
+  # [SIM-CALIBRATE] — swept against the civilian sidearm field; own ablatable term, 0.0 restores the pre-fix bind.
+  # PARRY_MOMENT_K / WIND_MOMENT_K [channel 5, ED-PC-0052]: the SAME displacement-resistance fact
+  # (systems.contact_moment_edge, single owner) applied to the other two places weapons CONNECT. Jordan named
+  # "parrying and blocking" FIRST, and the parry is the high-throughput contact: bind_sigma is evaluated ~1.2x per
+  # fight, mode_sigma's parry branch on essentially every defended exchange, which is why a bind-only version of this
+  # term was measured aggregate-INERT. Separate gains rather than one shared constant, exactly as the guard fact
+  # already carries BIND_GUARD_K 0.55 / PARRY_GUARD_K 0.45 / WIND_GUARD_K 0.40. All [SIM-CALIBRATE]; 0.0 ablates.
+  PARRY_MOMENT_K=0.30, WIND_MOMENT_K=0.30,
+  BIND_MOMENT_K=0.30,
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156, BIND_SPINE_K=0.03,   # BIND_SPINE_K [U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022]: single-edge spine-press bearing surface (weapon_physics.spine differential), modulated by ability_factor 'spine_press' (German Winden). The strongest of the six levers per the U9 adversarial pass (robustly directional) — a small baseline here, decisive with the ability.
   # morphology-rearch Phase B5: a wavy/flame-ground edge (weapon_physics.edge_vibration, 0 for a plain edge)
   # degrades the OPPONENT's tactile read in the bind and boosts the wielder's own initiative-steal there.

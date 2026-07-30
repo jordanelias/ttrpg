@@ -7,15 +7,24 @@ sum over located parts with a synthesized single reproduction element per weapon
 proof it stayed identical while the Phase-A plumbing (bake extension, element-union afforded_heads,
 sel_element threading) landed.
 
-PROVENANCE, CURRENT (the line above was stale by two deliberate re-baselines): the fixture was last
-regenerated at base commit 8ab21b3 for **E2a / M1 / ED-PC-0047 (2026-07-29)** — percussion_authority's lever
-moved from the whole-weapon CoM offset (`PoB_frac`, which a rear counterweight could cancel to exactly zero)
-to `weapon_physics.strike_point_lever`. That moved `perc_auth` on the four blunt-native weapons whose forward
-moment differs from their centre of balance (staff 0.0→5.6290, poleaxe 7.4843→8.0, bec_de_corbin
-6.3629→7.4872, lucerne_hammer 6.5392→7.5897) and, as a DISCLOSED consequence, the staff's `afforded['blunt']`
-effectiveness (0.0→5.6290) and the numeric `sel_perc`/`sel_eff` fields of its `select_mode` row at all four
-tiers. The affordance TOKEN SETS and every `select_mode` (damage_mode, head) PAIR are unchanged for the whole
-roster — no weapon changed which mode it selects.
+PROVENANCE, CURRENT: the fixture was last regenerated at base commit f03357d for **E2b / M9 / ED-PC-0048
+(2026-07-29)** — `percussion_element_authority`'s lever moved from `abs(elem_x)/Lt` (exactly 0 for any element
+mounted AT the working hand) to the same `weapon_physics.strike_point_lever` E2a shipped, called with the
+DELIVERED mass so it reduces to the geometric `(STRIKE_HAND_LEVER + |x|)/(STRIKE_HAND_LEVER + Lt)`. Moved:
+`afforded['blunt']` effectiveness on the 3 located-blunt-element weapons (poleaxe 7.6131→7.7689, bec_de_corbin
+6.5099→6.7760, lucerne_hammer 7.0549→7.3124) and the 9 two-handed blades reaching `reversed_grip_percussion`
+(longsword +8.8% … changdao +2.6%), all upward, all from the hand-floor that IS the repair.
+**Unlike E2a, this batch DOES move affordance token sets and selection**, deliberately and minimally:
+`hook_sword` gains the `blunt` token its record has always authored (the defect — the crescent was dead data),
+and exactly two weapons change a `select_mode` (damage_mode, head) pair — `hook_sword` at light/medium/heavy
+(→ percussion/blunt, keeping native curved_cut unarmoured) and `bec_de_corbin` at heavy (puncture/point →
+percussion/blunt, rejoining its sibling lucerne_hammer, which already struck blunt at medium and heavy).
+
+PRIOR: regenerated at base commit 8ab21b3 for **E2a / M1 / ED-PC-0047** — percussion_authority's lever moved
+from the whole-weapon CoM offset (`PoB_frac`, which a rear counterweight could cancel to exactly zero) to
+`weapon_physics.strike_point_lever`, moving `perc_auth` on the four blunt-native weapons whose forward moment
+differs from their centre of balance (staff 0.0→5.6290, poleaxe 7.4843→8.0, bec_de_corbin 6.3629→7.4872,
+lucerne_hammer 6.5392→7.5897); no weapon changed which mode it selects in that batch.
 
 Covers, per weapon: the derive() mass family (PoB_m/PoB_frac/m_head/MoI/static_moment/length_m), the
 downstream dynamics (agility, percussion_authority), the baked gap, the afforded_heads token->(eff, dmg_mode)

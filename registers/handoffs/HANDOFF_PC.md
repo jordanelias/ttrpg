@@ -6,15 +6,162 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
-- **▶ RESUME HERE (2026-07-29 session close). E0/E1a/E1b/I4 MERGED (PRs #259, #269); E2a on a NEW PR
-  awaiting review; E2b/E3a/E3b NOT STARTED.** EDs 0041–0047 filed; **draw 0048+ from the reserved
-  block 0041–0055 (`id_reservations.yaml` is FROZEN for the 3-session run — do not edit it).**
-  Live suite baseline **1105 passed / 21 skipped / 3 xfailed / 3 xpassed**.
-  - **E2a (ED-PC-0047) needs an adversarial re-read before E2b builds on it.** Its Opus producer
-    died before reporting; the work was verified independently (suite + artifact inspection) but it
-    is the ONLY batch in this arc that did not get a critic relay. **E2b consumes E2a's
-    `weapon_physics.strike_point_lever` — validate that form first** (R-11.4 requires both scales to
-    ship ONE lever; E2b must not re-introduce the `|x|/Lt` form).
+- **▶▶ THE LIVE PLAN (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/combat_completion_plan_v4.md`
+  — v4.1, PROPOSED.** Research-led (HEMA/treatise-grounded per Jordan's 2026-07-30 authorization),
+  iteratively tuned, and revised after a read-only Fable 5 adversarial pass whose findings were
+  **verified against the working tree** rather than accepted (§7 records all 11, including one the
+  critic got wrong). It supersedes the **sequencing** of `combat_execution_plan.md` §7,
+  `combat_remediation_plan.md` §8, and v3 §5 below; their content stands.
+  - **Order: W0 → W7a → W1 → W8d → W4/N4 → W2 → W6 → W5 → [W3 when scoped] → W7b → W8a/b/c.**
+  - **Two ⚖ items came BACK to Jordan** after the adversarial pass: **⚖1b** the katana anchor for
+    `CUT_REF_NATIVE` (ED-PC-0051 ships `needs_jordan: true` and v4 had silently ratified it), and
+    **⚖6** off-hand scope (a budget question, not a researchable one). W3 is blocked on ⚖6.
+  - **Retracted in v4.1:** v4 proposed deriving `CLOSE_ENGAGE_M` from `L0`. `L0`=4.0 is a
+    **1.89 m reach-point fit anchor**, not an arm, and `Combatant` has no anthropometry — that
+    derivation would have re-committed the ED-PC-0053 fiat gate one layer up. `config.py:176`'s
+    "the fighter's own arm" comment is quantitatively false and is fixed as part of W0.
+  - **Two new defects found while verifying:** **W8c** — `weapon_tempo` charges `I_g` **twice in one
+    function** (`wield_heft` at `combat_systems.py:101` + the `TEMPO_RECOVER_K·tanh(...)` term at
+    line 110). **W8d** — `wrapper.py`'s RNG stream is order-dependent, so a `K=0` ablation is a
+    different experiment, not a control; **every paired-seed measurement in the plan rests on an
+    unaudited instrument.** W8d is scheduled before the first ablation.
+  - **Plate participation re-measured: 36/53** zero-decided at heavy (`8a054d0`), via
+    `workbench/armour_participation.py`. The corpus's 38 is stale; v4's 35 was wrong; it was 34 at
+    session start and **no weapon gained the ability to decide** during the session.
+
+- **▶ Background (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/session_retrospective_and_plan_v3.md`**
+  — lessons, an adversarial pass on the session's own work, 9 newly-flagged items (N1–N9), and a
+  **REORDERED work list that supersedes `combat_execution_plan.md` §7 and `combat_remediation_plan.md`
+  §8's sequencing.** The headline that reorders everything: **three correct, absent mechanisms
+  (ED-PC-0051/0052/0054) each moved the field by NOTHING; one fiat-gate removal (ED-PC-0053) moved it
+  immediately.** Both original plans would send the next session to E4 (more benefit-side grading),
+  which is the shape proven not to work. **Next work is (1) Jordan rules `CLOSE_ENGAGE_M`, (2) the owed
+  texture measurement, (3) E6/M10 off-hand — the rapier's real counterweight, with the shield hook
+  already plumbed and callerless.**
+  - **⚠ SELF-FLAGGED, the session's worst finding: `CLOSE_ENGAGE_M=0.45` is the BEST of four swept
+    values on both rapier win-rate and field spread** (0.30→83.5%/41.1pp · **0.45→75.5%/35.1pp** ·
+    0.60→79.8%/41.7pp · 0.75→80.8%/38.5pp), and the response is NON-MONOTONE. It was chosen on physical
+    grounds before measuring and never swept — but the artifact cannot prove that, and the value is
+    therefore **not safely defensible as "just physical."** Jordan's call.
+  - **⚠ Corrected: every field number reported mid-session was one batch stale.** TRUE current state
+    (post-0054/0055): **rapier 71.8%, spread 30.7pp, sd 8.2pp** — not the 73.5/32.5/8.3 reported.
+  - **⚠ Owed: the texture measurement that justified shipping ED-PC-0052 and ED-PC-0054.** Both are
+    aggregate-inert and both cite U10's texture-not-winrate ruling; neither ran it.
+
+- **▶ JORDAN RULED THE CARRY-CONTEXT FORK AND GROUNDED THE CURVATURE MODEL (2026-07-29, live). READ
+  `audit/2026-07-26-combat-balance-customization-state/curvature_and_bind_model_v1.md` FIRST** — his
+  six-part direction is recorded verbatim there with every measurement taken against it. Summary:
+  - **⚖5 / M14 / Q8 / D2 (carry context) is RULED and adoptable** — battlefield: all; settlement public/
+    religious/parliamentary: none-or-light armour + 1H non-blunt only; soldier/troop exempt. Derives
+    entirely from stored primitives (`head_len+grip_len`, `hands`, `head`), threshold in the roster's own
+    0.30 m empty gap. **Diverges from proposal §12 by exactly one weapon (the mace — Jordan bars blunt);
+    his ruling governs.**
+  - **⚠ §12.1's CENTRAL CLAIM IS FALSIFIED.** Carry context does NOT remove the dominance problem; it
+    RELOCATES it. Civilian field spread **66.8pp is LARGER than the battlefield's 52.1pp**; sidearms-only
+    45.1pp. Do not build on §12's promise.
+  - **Legality delivers "pikes fare poorly in duels" by EXCLUSION only, not performance** — with war
+    weapons present under civilian armour the spread is **78pp** (guandao 88%). Jordan accepts legality
+    for now. **The performance half now routes to a future GRID TACTICAL LAYER (FFT-shaped, per-attack
+    mini-resolutions) — on a grid reach is POSITIONAL (range in tiles), so DO NOT commission the
+    closed-phase LEVERAGE/DAMAGE rework the older handoff scoped; the grid may subsume it.**
+  - **A7a channel 1 DONE (ED-PC-0051)** — native edge quality finally consumed; the register's own
+    proposed fix was re-confirmed a NO-OP. Keen cutters gained (scimitar +6.1pp … sabre +2.3pp), spread
+    45.1→40.6pp. **⚖ TWO ITEMS FOR JORDAN:** the greatsword/hook_sword flip to point at `none` (a
+    consequence of the katana anchor), and the anchor choice itself.
+  - **Channel 5 DONE (ED-PC-0052) — and its FAILURE is the most useful result of the session.**
+    `contact_moment_edge` now supplies displacement resistance to all three weapon-contact sites
+    (bind + parry + wind), keyed on the grip-adjusted moment `S_g` rather than mass (the rapier is the
+    *heavier* weapon, so mass moves the wrong way). Correct physics, mutation-verified, ablatable.
+    **It does NOT fix the rapier: K swept 0/0.20/0.40/0.60 gives 75.6/76.2/75.9/75.3% — flat.**
+    Per-event texture moves a lot (122 of 212 armour cells) while aggregate ordering does not — the
+    ED-PC-0022 texture-vs-aggregate lesson again.
+  - **▶▶ THE RAPIER'S ACTUAL DRIVER, and it changes the whole plan: `corr(overall length, civilian
+    win%) = +0.850` (+0.742 excluding the rapier itself).** The civilian duel field is ordered by
+    **REACH**, not by contact mechanics, edge quality, or the hilt. The rapier is simply the longest
+    civilian weapon at 1.14 m. **This UNIFIES the civilian-field problem with the already-tracked
+    off-plate reach dominance — ONE root cause at two scales, not two problems.** Reach is proven not
+    reachable by lever (four swept; every fix broke `guisarme@heavy`), and Jordan has routed it to the
+    future GRID layer where reach becomes positional range.
+    **CONSEQUENCE FOR SEQUENCING: no further contact-side or cut-side lever can fix the civilian field.
+    Do not spend another batch trying.** A7a (ED-PC-0051) and channel 5 (ED-PC-0052) were both aimed at
+    the wrong pathway — they were each real, independently-worth-fixing defects, and neither moved the
+    field. The remaining curvature channels (2–4) should be judged on physical correctness, NOT on any
+    expectation that they will level the duel.
+  - **Channels 3–4 (curved thrust) — the defect is DATA, not formula.**
+    **corr(curvature, point_concentration) = −0.729 across 42 bladed weapons**: the tip data was
+    authored largely AS a function of blade curvature, and `thrust_factor` then applies a curvature
+    penalty AGAIN — a double-count of the class the R3 ruling forbids. **shamshir pc 0.08 is below
+    sparr_axe's 0.10, an axe.** Template for the correction exists in-roster: **szabla, curv 0.30 /
+    pc 0.60.** ⚠ Interacts with ED-PC-0050's binary shear-OR-puncture arm split — do not extend that
+    split further until resolved.
+  - **Channel 2 DONE (ED-PC-0054) — and its PRE-REGISTERED PREDICTION FAILED, which is the headline.**
+    `_recovery_mode_commitment`'s C_swing branch is discounted by `(1 − CURVE_RECOVERY_K·curvature)`;
+    swing-only, bounded [1−K,1] by construction. Throughput was checked FIRST this time (recovery feeds
+    tempo debt on every committed attack). **Predicted curved cutters +1..+3pp; measured
+    corr(curvature, delta) = −0.003, mean |delta| 2.6pp against a ~4pp floor — aggregate-INERT, like
+    channel 5.** Shipped because the physics was absent, is per-event live, and U10/ED-PC-0022 already
+    ruled TEXTURE (not aggregate winrate) is the right instrument for a situational lever. **The texture
+    measurement is NOT done and is the honest gap.** ⚠ Its effective size rides on the pc-confound
+    (−0.729), so **re-measure it when channels 3–4 fix the tip data.**
+  - **▶ ADVERSARIAL SWEEP DONE (ED-PC-0055) — engine is CLEAN on dead code.** AST call-graph over
+    engine+workbench+tests: zero unreferenced functions, zero CFG keys with no reader, zero
+    test-only tunables. Two duplications fixed byte-identically (`_puncture_adef` — a §8 violation
+    ED-PC-0049 introduced two batches earlier; `wound_impairment` — the ED-1041 rule written FOUR
+    times under different local names). ⚠ **The sweep's FIRST detector was wrong** and called 8 live
+    functions dead by ignoring intra-module calls — hand-verified before reporting, nothing acted on.
+    **Confirmed dead physics, Jordan's call not a defect: `core.COVERAGE_GAP['partial']=0.5` is plumbed
+    into `_transmit` with no caller ever passing `coverage='partial'`** — the shield/off-hand hook
+    (⚖6), independently reproducing ED-PC-0035's F8.
+  - **⚠ THE SESSION'S STANDING LESSON, three batches deep: a correct absent mechanism is not a balance
+    fix.** A7a (cut grading), channel 5 (contact moment) and channel 2 (curve recovery) were each a
+    real missing physical fact, each correctly built and mutation-verified, and **none moved the
+    field.** The only change that moved the rapier was ED-PC-0053, which removed a *fiat gate* and gave
+    an existing dominant quantity a *cost*. **Look for missing COSTS on dominant quantities, not
+    missing benefits on weak ones.**
+
+- **▶ E0–E3 ARE COMPLETE (2026-07-29, second session).** E0/E1a/E1b/I4 merged (PRs #259,
+  #269), E2a merged (PR #270), and **E2b/E3a/E3b landed this session as ED-PC-0048/0049/0050** — the
+  whole no-⚖ span of `combat_execution_plan.md` is done. EDs 0041–0050 filed; **draw 0051+ from the
+  reserved block 0041–0055 (`id_reservations.yaml` is FROZEN for the run — do not edit it).**
+  Live suite baseline **1142 passed / 21 skipped / 3 xfailed / 3 xpassed**.
+  **NEXT: E4+ are all ⚖-blocked (plan §7) — nothing further is startable without Jordan.** The
+  unblocked work is the three I4 wrapper defects (F-1/F-2/F-3, below) and the largest blind spot
+  (`wrapper.py`, §12 of the plan). Both need Jordan's priority call.
+  - **E2a's adversarial re-read is DONE (it was the one batch in the arc with no critic relay), and
+    it found a real defect — in E2a's PRESCRIPTION for E2b, not in E2a's own code.** E2a's docstring,
+    plan §5 and the E2a commit all specified `strike_point_lever(w, elem_mass, elem_x)` for the
+    element scale. That signature double-counts mass (the function divides its mass argument by the
+    weapon's total, so mass enters at power 1.5) and was measured to drop percussion **19–37% on all
+    53 weapons** — a roster-wide balance change inside a batch declared "no balance intent". It was
+    measured before being consumed and **not taken**; the correct call passes the delivered mass so
+    the lever reduces to the geometric `(h+|x|)/(h+Lt)`. `test_element_lever_does_not_double_count_mass`
+    pins it so the prescription cannot be re-followed. **Do not "restore" the prescribed form.**
+    Also corrected: E2a's claim that its lever is a *strict* generalisation of `PoB_frac` is false
+    (it takes `|x|`, so the 3 weapons whose balance sits behind the hand map to the positive lever);
+    harmless, since all three are non-blunt and never reach that line, but the prose was wrong.
+  - **⚖ E3a's residual parity is Jordan's (ED-PC-0049, needs_jordan).** The blunt-composite spike is
+    no longer de-rated by the reach-thrust lever, so poleaxe adef 0.6013 → 1.0200 and its plate sigma
+    −0.20 → +0.51 — plate no longer shields against a poleaxe. But that is **78% of its own hammer's
+    1.3000, not the parity `ADEF_POINT`'s comment claims**. Closing the last 22% needs
+    `ADEF_POINT ≥ ~1.53`, which lifts `armor_defeat_sigma` for every selected-point weapon at every
+    armoured tier and trips the export gate — the plan flags it escalate-rather-than-take, and it was
+    not taken. Note the hammer reference is itself inflated by E2a's saturation residue (poleaxe pins
+    at `PERC_CAP`: 1.3000 where it read 1.2162), against which the spike already sits at 84%.
+  - **⚖ E3b's two-direction split is Jordan's (ED-PC-0050, needs_jordan).** Heft now follows the
+    resolved arm. Forward-balanced polearms' thrusts fall hard (voulge 5.21→1.72, partisan 4.17→1.70,
+    ranseur 2.52→0.80) while hand-balanced swords' thrusts **rise** (arming 0.77→1.07, longsword
+    1.00→1.26) because their `PoB_frac` sits below `THRUST_POB=0.16`. That is the constant's own
+    definition, not a tuning choice — but whether the rise is the intended feel is a design call.
+  - **NEW WORK-LIST HANDED TO E5/M7 (ED-PC-0050):** `core.cut_thrust_arm` picks the arm on **coupling
+    alone**, so now that impact differs by arm the chosen arm is no longer the max-damage arm for
+    some weapons — a fresh instance of the B1/F24 "selection contradicts damage" class, live at every
+    tier. Deliberately NOT fixed (bundling it would repeat the batch-4/5 half-stands); the affected
+    population is pinned by `test_selection_contradicts_damage_is_disclosed_not_silent` so it cannot
+    widen unnoticed before E5 picks it up.
+  - **The PC ledger hit its 50k cap and now has an archive** (`registers/editorial_ledger_pc_archive.jsonl`,
+    PC is the second lane after IN). 28 settled entries moved; open/deferred/needs_jordan stayed live.
+    Archived-ED citations resolve through `validate_ed_citations`' archive glob — verified by hiding
+    the file (28 violations) and restoring it (0), not assumed from the size-checker's comment.
   - **⚖ TWO CALIBRATION RESIDUES FOR JORDAN, disclosed not tuned (ED-PC-0047):** the repaired staff
     reads 5.629 vs core.py's recorded "~4" intent (unreachable at PERC_EXP=0.30 while mace pins at
     PERC_CAP — the arithmetic is in the docstring), and mace/poleaxe/goedendag now all compress to
