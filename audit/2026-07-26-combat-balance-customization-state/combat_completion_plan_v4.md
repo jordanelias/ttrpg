@@ -1,6 +1,18 @@
 # Personal combat — completion plan v4.1 (research-led, iteratively tuned)
 
-## Status: PROPOSED (2026-07-30). Supersedes the SEQUENCING of `combat_execution_plan.md` §7, `combat_remediation_plan.md` §8, and `session_retrospective_and_plan_v3.md` §5. Their *content* stands.
+## Status: RATIFIED plan-of-record (PR #273 merged 2026-07-30, `3005096`; ED-1094 ratify-on-merge). Supersedes the SEQUENCING of `combat_execution_plan.md` §7, `combat_remediation_plan.md` §8, and `session_retrospective_and_plan_v3.md` §5. Their *content* stands.
+
+> **What the merge did and did not ratify.** Ratified: the **method** (§1 architecture rules, §3
+> testing protocol), the **re-classification** in §0, and the **ordering** in §5 — these are now the
+> plan-of-record for the PC lane. **NOT ratified, by this plan's own construction:**
+> - **⚖1b** (the katana `CUT_REF_NATIVE` anchor) and **⚖6** (off-hand scope) — §0 returns both to
+>   Jordan, so merging the plan ratifies *that they are his*, not an answer to either. **W3 stays
+>   blocked.**
+> - **Every acceptance criterion below**, which §0 declares Jordan-vetoable before its package starts.
+>   That declaration is the point of §0's opening rule; a merge cannot ratify it away.
+> - **The seven `needs_jordan: true` ledger entries** (ED-PC-0049..0055) — PR #273's body enumerated
+>   five held-back calls under "Merging does **not** ratify these," and each entry was re-verified at
+>   its true state after the merge. None were flipped.
 
 Written under two Jordan rulings of 2026-07-30:
 

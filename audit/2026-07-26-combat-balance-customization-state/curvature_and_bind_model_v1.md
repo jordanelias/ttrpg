@@ -2,6 +2,14 @@
 
 ## Status: PROPOSED (Jordan-grounded 2026-07-29; channel 1 EXECUTED as ED-PC-0051, channels 2–5 NOT BUILT)
 
+> **This doc stays PROPOSED after PR #273's merge, deliberately — do not read "merged" as "ratified"
+> here.** ED-1094's default is ratify-on-merge; the exception was declared loudly in that PR's body
+> ("lands `PROPOSED` **by design** — its channels 2–5 are unbuilt specification, not shipped
+> behaviour") and is restated at the doc head so a later reader cannot infer ratification from the
+> merge alone. Channel 1 is shipped and its own status is recorded inline. **§4's curved-thrust tip
+> values are a design call and were the fifth held-back item in that PR** — they are now scheduled as
+> W4 in `combat_completion_plan_v4.md`.
+
 Captures Jordan's live design direction of 2026-07-29 on cutting weapons, together with the
 measurements taken against it the same session. Written because the direction arrived in conversation
 and this repo's recurring failure is a ruling that never reaches disk (CLAUDE.md §1/§2).

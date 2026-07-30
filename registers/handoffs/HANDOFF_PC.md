@@ -6,8 +6,26 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **▶ RATIFICATION STATE after PR #273 merged (2026-07-30, `3005096`) — read before resuming.** ED-1094's
+  ratify-on-merge default was applied *selectively*, because that PR declared its exceptions loudly:
+  - **RATIFIED:** `combat_completion_plan_v4.md` (v4.1) as the PC lane's **plan-of-record** — its method,
+    §0 re-classification and §5 ordering. `session_retrospective_and_plan_v3.md` as **findings**; its §5
+    sequencing is superseded by v4.1.
+  - **STILL PROPOSED, deliberately:** `curvature_and_bind_model_v1.md` — channels 2–5 are unbuilt
+    specification, declared PROPOSED-by-design in the PR body. The note is now at the doc head so nobody
+    later infers ratification from the merge.
+  - **NOTHING in the ledger was flipped.** All eight entries (ED-PC-0048..0055) were re-verified
+    post-merge and are already at their true state; the seven `needs_jordan: true` each name a real
+    held-back call (0049 spike/hammer parity · 0050 the two-direction split · 0051 the katana anchor ·
+    0052 and 0054 whether to keep K=0 · 0053 `CLOSE_ENGAGE_M`'s value · 0055 the confirmed dead physics).
+    PR #273's body enumerated five of these under "Merging does **not** ratify these."
+  - **⚖1b and ⚖6 are OPEN and are Jordan's** — merging v4.1 ratified *that they are his*, not an answer.
+  - **No new ED allocated** for this flip: the PC reserved block 0041–0055 is exhausted and
+    `references/id_reservations.yaml` is frozen. Recorded here instead, per ED-1094 (the flip belongs to
+    the merge, not to a new item).
+
 - **▶▶ THE LIVE PLAN (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/combat_completion_plan_v4.md`
-  — v4.1, PROPOSED.** Research-led (HEMA/treatise-grounded per Jordan's 2026-07-30 authorization),
+  — v4.1, RATIFIED plan-of-record.** Research-led (HEMA/treatise-grounded per Jordan's 2026-07-30 authorization),
   iteratively tuned, and revised after a read-only Fable 5 adversarial pass whose findings were
   **verified against the working tree** rather than accepted (§7 records all 11, including one the
   critic got wrong). It supersedes the **sequencing** of `combat_execution_plan.md` §7,
