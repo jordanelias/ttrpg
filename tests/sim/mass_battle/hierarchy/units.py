@@ -36,7 +36,7 @@ FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "1") == "1")
 # FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch never emits floats), so
 # run_battle enforces FIELD_MOVEMENT ⇒ PC_NODE_COHESION at setup (see run_battle). Toggles live here (not
 # config.py) so the whole-file fabrication scan does not surface config's pre-existing uncited constants.
-FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "0") == "1")  # default OFF -> byte-exact contact path
+FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "1") == "1")  # default OFF -> byte-exact contact path
 CONTACT_REACH = float(_hu_os.environ.get("CONTACT_REACH", "0.0"))  # 0.0 => ON contact predicate == OFF adjacency (exempt value)
 COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_WIDTH). At 1.0, round(int)==int -> OFF byte-exact.
 
@@ -47,7 +47,7 @@ COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_
 # ungrounded placeholders (calibrated debt), not ratified. Placed here (not config.py) so the whole-file
 # fabrication scan does not surface config's pre-existing uncited constants; exported in __all__ so
 # orchestration's star-import of units sees them (avoids the config __all__ omission that would NameError).
-PC_FACING_MODEL = (_hu_os.environ.get('PC_FACING_MODEL', '0') == '1')   # master gate; OFF -> today's raw-vector facing
+PC_FACING_MODEL = (_hu_os.environ.get('PC_FACING_MODEL', '1') == '1')   # master gate; OFF -> today's raw-vector facing
 PC_FACING_ATTENTION = (_hu_os.environ.get('PC_FACING_ATTENTION', '1') == '1')  # (a) engaged cell faces its ENGAGED target; no-op unless PC_FACING_MODEL
 PC_FACING_SLEW_BASE = float(_hu_os.environ.get('PC_FACING_SLEW_BASE', '60'))  # [CALIBRATED-DEBT, Stage-5: ungrounded placeholder pivot rate deg/tick; NOT ratified — do not enable]
 PC_FACING_FOV_GATE = (_hu_os.environ.get('PC_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
@@ -625,6 +625,22 @@ class Subunit:
                 # of 0, which is enough to cross a DAMAGE_BY_DEGREE boundary and turn a 6.0 exchange into
                 # a 0.0 one. That is how the octagon micro-tests failed. This is not a tolerance fudge —
                 # it returns the arithmetically correct answer where the float mean cannot.
+                #
+                # [ED-MB-0051 / plan-v2 A2, 2026-07-29] RECONCILIATION with the consumer-side guard.
+                # `resolution.compute_degree` now also carries an absolute epsilon, and
+                # `_sigma_net_boost` snaps arithmetic dust to exactly 0. Two overlapping exactness
+                # regimes is how the next confound gets built, so state which is authoritative:
+                #   * THIS is an EXACTNESS fix and it STAYS. Where the correct answer is derivable
+                #     (a uniform body's weighted mean IS its cells' value), the producer must return
+                #     it exactly. A tolerance downstream cannot recover information the producer
+                #     threw away, and this one also feeds callers that never touch compute_degree.
+                #   * The consumer guard is a TOLERANCE, and it is NOT redundant with this. It
+                #     protects the degree boundaries against accumulated ulp from ANY producer —
+                #     including the NON-uniform branch below, which has no exact answer to return.
+                #     Measured 2026-07-29: with this fix already in place, the boundary guard still
+                #     flips 38 verdicts in the `cell` battery and 14 in `cell_field`, every one of
+                #     them `net` 1-4 ulp below a continuous `ob` it equals mathematically.
+                # Exactness where exactness is derivable; tolerance only where it is not.
                 first = live[0]
                 if all(m == first for m in live):
                     return first
@@ -951,6 +967,85 @@ class Subunit:
         self._node_rel = {cid: (p[0] - ar, p[1] - ac) for cid, p in pos.items()}
         self._node_pos = dict(pos)
         self._node_prev_pos = dict(pos)
+
+    def rekey_cells(self, new_ids):
+        """[ED-MB-0054 / plan-v2 B1c] Re-key the GRID-path per-cell containers after a shape change.
+
+        The grid-path analogue of `_rekey_node_state`, and deliberately built to mirror its already-
+        ratified policy rather than to invent a new one: *the sub-unit re-organizes in place, it does
+        not teleport back to spawn, and a formation reorganizing does not reset which way it is
+        looking.* Before this, `check_drift` re-keyed `cell_troops` and (on the node path)
+        `_node_pos` — and nothing else.
+
+        MEASURED, not assumed (bat.py `cell` battery, 10 drift events): SIX maps were non-empty at
+        drift and left holding dead ids in all ten — `cell_offsets`, `cell_offsets_c`,
+        `halted_cells`, `cell_last_speed`, `cell_facing_vec`, `_cell_target`. That is three more
+        than the audit named, and the two it did not name are the worse pair:
+
+          * `cell_offsets` / `cell_offsets_c` are ACCUMULATED DISPLACEMENT from the spawn lattice.
+            A missing entry does not degrade gracefully — `.get(pid, 0)` puts the cell back at its
+            SPAWN row. So a body that drifts mid-advance snaps backwards, which is strictly worse
+            than the facing loss the audit did name;
+          * `cell_facing_vec` falls through to `(advance_dir, 0)`, silently discarding a committed
+            facing — the audit's finding, confirmed here.
+
+        PER-MAP POLICY, each derivable rather than a judgement call:
+          * displacement (`cell_offsets`, `cell_offsets_c`) — every new id inherits the body's MEAN
+            accumulated offset. That is what "re-forms around the current live anchor" means when
+            the anchor is expressed as an offset per cell; the body's centroid does not move.
+          * `cell_facing_vec` — every new id inherits the body's mean committed facing, normalized.
+            Explicitly NOT the `advance_dir` default: preserving facing is the node path's stated
+            rule and there is no reason for the grid path to differ.
+          * `_cell_target` (the close-ranks fill prescription) — redistributed over the new ids
+            exactly as `cell_troops` is, because it IS a prescribed density and the prescription
+            follows the shape.
+          * transient per-tick state (`halted_cells`, `merged_cells`, `cell_last_speed`,
+            `_speed_accum`) — CLEARED. A body that has just re-formed is not still holding a halt,
+            a merge, or a velocity accumulator belonging to a formation it no longer has. Clearing
+            is the conservative choice and the only one that cannot carry a dead id forward.
+
+        ⚠ DELIBERATELY NOT TOUCHED: `cell_morale`, `cell_start_troops`, `cell_breakpoint`. Drift has
+        no old→new key bijection (arbitrary shape → Line, different cell count), and per plan-v2 B1c
+        at least two of these are §6-class RULINGS, not derivations: `cell_morale` (mean?
+        troop-weighted? carrying the low-morale corner is the feature's whole point) and
+        `cell_breakpoint` (a DRAWN value — redraw and shift the `_cell_random` stream, or inherit
+        from which dead cell?). They are empty at the shipped `PC_CELL_MORALE=0`, so leaving them is
+        inert today; deciding them here would be exactly the kind of quiet design call this lane
+        keeps having to retract.
+        """
+        new_ids = list(new_ids)
+        if not new_ids:
+            self.cell_offsets = {}; self.cell_offsets_c = {}; self.cell_facing_vec = {}
+            self.cell_last_speed = {}; self._speed_accum = {}; self._cell_target = {}
+            self.halted_cells = set(); self.merged_cells = set()
+            return
+
+        def _mean(d, default=0.0):
+            vals = [v for v in d.values()]
+            return (sum(vals) / len(vals)) if vals else default
+
+        mean_off_r = _mean(self.cell_offsets)
+        mean_off_c = _mean(self.cell_offsets_c)
+        self.cell_offsets = {pid: mean_off_r for pid in new_ids}
+        self.cell_offsets_c = {pid: mean_off_c for pid in new_ids}
+
+        if self.cell_facing_vec:
+            fr = sum(v[0] for v in self.cell_facing_vec.values()) / len(self.cell_facing_vec)
+            fc = sum(v[1] for v in self.cell_facing_vec.values()) / len(self.cell_facing_vec)
+            mag = (fr * fr + fc * fc) ** 0.5
+            # [canonical: epsilon: float magnitude guard] — same guard the facing code already uses
+            facing = (fr / mag, fc / mag) if mag > 1e-9 else (float(self.advance_dir), 0.0)
+            self.cell_facing_vec = {pid: facing for pid in new_ids}
+
+        if self._cell_target:
+            tot = sum(self._cell_target.values())
+            per = tot / len(new_ids)
+            self._cell_target = {pid: per for pid in new_ids}
+
+        self.cell_last_speed = {}
+        self._speed_accum = {}
+        self.halted_cells = set()
+        self.merged_cells = set()
 
     def _rekey_node_state(self, new_ids):
         """Mid-battle re-key of node state to a new pattern id set (movement audit finding 1.5,
@@ -2144,6 +2239,76 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
             # it still acted as a fixed obstacle for the other, still-moving side via this same pair solve.
             if not a_halted and s < ea.best_t: ea.best_t = s
             if not b_halted and s < eb.best_t: eb.best_t = s
+    # ─── [ED-MB-0059] SAME-SIDE EXCLUSION — the invariant this function's own docstring states ──
+    # "two unit squares that must never interpenetrate". That rule was only ever applied to
+    # CROSS-SIDE pairs, so a cell of one subunit walked straight through a cell of another on its
+    # own side. Measured before this pass, over 140 historical-scale snapshots / 79,226 cell
+    # placements, as DEEP body-box interpenetration (obb_overlap AND penetration depth >= 0.1):
+    # 43,068 within a subunit, 13,477 ACROSS subunits of the same side, 875 across opposing sides.
+    # (An earlier draft of this comment quoted "a 17.31% overlap rate" from a ROUNDED-SQUARE metric
+    # that ED-MB-0060 retracts in the very commit that introduced this block. Do not reintroduce it.)
+    #
+    # Jordan's framing (2026-07-29) is the design here: "we are using a field system so there
+    # shouldn't even be any assignment issues so long as cell boundaries are respected." So this is
+    # NOT a new mechanism and NOT the grid-era `resolve_internal_collisions` discipline roll — it is
+    # the SAME swept-SAT body-box solve the cross-side loop above already runs, applied to the pairs
+    # it was never applied to. No new constant, no RNG, no third definition of "these two bodies
+    # touch": `_pair_toi_scale` (circular pre-reject, keeps this tractable) then
+    # `_pair_toi_box_scale` (exact body-box TOI), exactly as above.
+    #
+    # Symmetric and order-independent: each unordered pair is solved once, and each cell keeps the
+    # MOST restrictive cap across every pair it is party to — the same monotone rule the cross-side
+    # pass uses, so a cell's final position does not depend on the order pairs were visited.
+    #
+    # ⚠ s > 0 IS LOAD-BEARING, AND IT IS THE WHOLE DIFFERENCE BETWEEN THIS PASS WORKING AND
+    # DEADLOCKING THE ENGINE. A cross-side pair that is ALREADY in contact when the tick opens is
+    # rare and is caught upstream by halted_cells (see _pair_toi_scale's "defensive floor" note), so
+    # the cross-side loop above can afford to accept s == 0.0. Same-side pairs invert that completely:
+    # a formation is a LATTICE at spacing 1.0 and the bodies are unit squares (0.5 + 0.5 half-widths),
+    # so every adjacent cell in every formation is touching BY CONSTRUCTION, permanently, and no cell
+    # is ever halted against its own neighbour. Accepting s == 0.0 here therefore caps essentially the
+    # whole army to zero motion on essentially every tick.
+    #
+    # MEASURED, on the cell_field battery at 2 seeds (the falsifier for this claim, §0.1 point 3):
+    # turning the pass on added 1,213,199 body-box solves, of which 568,785 — 46.9% — returned
+    # exactly 0.0, against a 9.84% zero rate on the cross-side pairs. Downstream, halted cells FELL
+    # 20,356 -> 3,300 and resolve_toi_and_commit calls ROSE 1,482 -> 11,934: frozen formations never
+    # close, never make contact, never halt, and every battle runs to the 20-turn cap. That 8.05x
+    # tick inflation — not pair-solve cost — is the entire 8.2x runtime regression first seen on
+    # unit_field (47s -> 386s), which is why the swept-AABB broad phase written to "fix the cost"
+    # bought nothing (386s -> 370s): it correctly culled pairs in a loop whose ITERATION COUNT was
+    # the actual defect. The broad phase is therefore removed as well — it was an optimisation for a
+    # problem that did not exist, and all-pairs over one side is the simpler owner.
+    #
+    # The rule is not a tolerance and introduces no constant: capping at s == 0.0 cannot UN-overlap a
+    # pre-existing overlap — it freezes the pair exactly where it already sits, for zero corrective
+    # benefit and total motion cost. The invariant this pass enforces is "no pair may BECOME
+    # interpenetrating during this tick", i.e. a disjoint -> overlapping transition, which is exactly
+    # s > 0. Pairs that begin the tick in contact are the formation lattice and are left alone.
+    if PC_CELL_EXCLUSION:
+        _R_body_same = math.hypot(CELL_RADIUS, CELL_RADIUS)
+        for entries in (cells_a, cells_b):
+            _n = len(entries)
+            for _i in range(_n):
+                ea = entries[_i]
+                a_halted = ea.cid in ea.atom.halted_cells
+                for _j in range(_i + 1, _n):
+                    eb = entries[_j]
+                    b_halted = eb.cid in eb.atom.halted_cells
+                    if a_halted and b_halted:
+                        continue
+                    start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
+                    start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
+                    if _pair_toi_scale(start_a, start_b, proposed_a, proposed_b,
+                                       1.0, 1.0, 2.0 * _R_body_same) is None:
+                        continue
+                    s = _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, 1.0, 1.0,
+                                            ea.facing, 0.0, eb.facing, 0.0)
+                    if s is None or s <= 0.0:
+                        continue
+                    if not a_halted and s < ea.best_t: ea.best_t = s
+                    if not b_halted and s < eb.best_t: eb.best_t = s
+
     for entries in (cells_a, cells_b):
         for e in entries:
             if not e.movable or e.cid in e.atom.halted_cells:
@@ -2391,6 +2556,11 @@ class Unit:
                 # battlefield corner or collapse onto the anchor. Only reachable/relevant when node
                 # state exists at all (PC_NODE_COHESION); the legacy grid path has no _node_pos and
                 # is untouched (byte-exact-off preserved by construction, not by a toggle check).
+                # [ED-MB-0054 / B1c] The grid-path containers, which ED-1032's re-key never
+                # covered and ED-1096's node-path fix did not reach. Measured: six maps left
+                # holding dead ids on every drift event. Runs on BOTH paths — the node path's
+                # position state is separately handled below, but facing/halt/target live on both.
+                a.rekey_cells(new_ids)
                 if PC_NODE_COHESION and hasattr(a, '_node_pos'):
                     a._rekey_node_state(new_ids)
 

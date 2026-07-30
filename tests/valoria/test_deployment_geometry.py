@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 import pytest  # noqa: E402
 
 import mass_battle.orchestration as _orch  # noqa: E402
+from mass_battle.config import BATTLEFIELD_SIZE  # noqa: E402
 from mass_battle.engine import build_unit, build_army, build_envelopment, build_refused_flank  # noqa: E402
 from mass_battle import validators as _val  # noqa: E402
 
@@ -67,7 +68,11 @@ def test_line_no_overlap_and_centered(field_path, n, troops):
     ok, bad = _no_lateral_overlap(spans)
     assert ok, f"subunits overlap at n={n}: {bad}"
     block_center = sum((c0 + c1) / 2 for c0, c1, _, _ in spans) / len(spans)
-    assert abs(block_center - 25) <= 2.0, f"line not centred on anchor 25: center={block_center:.1f}"
+    # [ED-MB-0055] Derived from BATTLEFIELD_SIZE, not hardcoded 25. The field went 50 -> 51
+    # (Jordan directive) and this assertion silently encoded the old width's midpoint.
+    _mid = BATTLEFIELD_SIZE / 2
+    assert abs(block_center - _mid) <= 2.5, \
+        f"line not centred on the field midpoint {_mid}: center={block_center:.1f}"
 
 
 # ─── P-2: envelopment — symmetric wings, opposite sides, no overlap ──────────
@@ -144,7 +149,9 @@ def test_large_dense_army_never_crashes_offboard(field_path, n, troops):
     u = build_army([{'shape': 'Line', 'troops': troops, 'concentration': 50} for _ in range(n)],
                    'A', 'A')
     cells = [(r, c) for s in u.subunits for (r, c) in s.cells_float()]
-    assert all(0 <= r <= 49 and 0 <= c <= 49 for (r, c) in cells), "a cell landed off-board"
+    # [ED-MB-0055] Bound derived from BATTLEFIELD_SIZE rather than a hardcoded 49.
+    _hi = BATTLEFIELD_SIZE - 1
+    assert all(0 <= r <= _hi and 0 <= c <= _hi for (r, c) in cells), "a cell landed off-board"
 
 
 @pytest.mark.parametrize("nwings", [1, 3])

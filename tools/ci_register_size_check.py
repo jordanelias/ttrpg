@@ -107,6 +107,8 @@ THRESHOLDS = {
     # ED universe by tools/validate_ed_citations.py (globs editorial_ledger_*_archive.jsonl),
     # so archived-ED citations keep resolving. Large cap like the flat editorial archive.
     "registers/editorial_ledger_in_archive.jsonl": 150_000,
+    # [ED-MB-0051, 2026-07-29] MB lane archive — same 150k overflow ceiling as the IN sibling.
+    "registers/editorial_ledger_mb_archive.jsonl": 150_000,
     # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
     # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
     # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,

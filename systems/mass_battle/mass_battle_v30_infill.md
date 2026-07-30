@@ -4,10 +4,14 @@
 # VALORIA — MASS BATTLE SYSTEM v4
 ## Version: v4.8 — PP-240,241,245,249,250,256 applied;
 ##  PP-232 (renames: Strength→Size, CP→Power, Cohesion→Discipline, CR→Command) + PP-233 (core formula) propagated.
-## Status: WORKING DESIGN — no appendix sections. Read straight through.
+## Structure: no appendix sections. Read straight through.
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+<!-- ED-MB-0047 (2026-07-29, E4/F10): mirrors the skeleton's double-`## Status:` repair —
+     see mass_battle_v30.md's note. Status unchanged; the stale pre-approval WORKING DESIGN
+     line was a structure note and is demoted to `## Structure:`. -->
+
 ## PART A: TTRPG MASS BATTLE
 ### A.1 OVERVIEW
 **[PROVISIONAL ED-316] Weight-of-numbers (PP-570):** When a unit's current Size > 2 × the opposing general's Command (the formation is simply too large to be directed against), at Phase 6 Step 2 the opposing unit must pass a Morale check (Ob 1, deterministic). Failure: −1 Morale (the mass is demoralising regardless of casualties). Does not stack with other Morale reductions. [PROVISIONAL — confirm trigger threshold and whether this applies at BG or TTRPG scale only]
@@ -15,7 +19,7 @@
 ### A.3 BATTLE SCALE
 ### A.4 UNIT STAT BLOCK (all 1–7)
 Personal combat ranged DR (for reference): LP 0/2/3/5 — HP 0/1/2/3 — LBl 0/1/2/3 — HBl 0/0/1/2. See references/params_combat.md.
-### A.5 COMMAND RATING
+### A.5 COMMAND
 ### A.6 FORMATION TYPES
 ### A.7 BATTLE TURN STRUCTURE
 ## Revised 2026-04-02 — ED-050 resolved (Option D): offensive Thread own phase between Manoeuvre and Engagement.

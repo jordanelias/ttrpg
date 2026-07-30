@@ -1,6 +1,6 @@
 """Drift guard for the field-golden CI gate's pin vector (plan-v2 A1b, §0.1 #5).
 
-tools/ci_field_golden_check.py is the single owner of the field-mode pin list.
+tools/ci_golden_modes_check.py is the single owner of the golden-mode pin list.
 Its values are the goldens' recorded values — which today equal the source-level
 `environ.get` defaults. The hazard this guards: someone flips a default in
 config.py (a golden-moving change) without deliberately updating the pin list
@@ -27,7 +27,7 @@ _MB = os.path.join(_ROOT, 'tests', 'sim', 'mass_battle')
 import importlib.util
 
 _spec = importlib.util.spec_from_file_location(
-    'ci_field_golden_check', os.path.join(_ROOT, 'tools', 'ci_field_golden_check.py'))
+    'ci_golden_modes_check', os.path.join(_ROOT, 'tools', 'ci_golden_modes_check.py'))
 _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)
 
@@ -92,7 +92,7 @@ def test_pins_match_source_defaults():
             continue
         assert name in defaults, (
             f"pin {name} has no environ.get default in tests/sim/mass_battle — "
-            f"renamed or retired? Update tools/ci_field_golden_check.py deliberately.")
+            f"renamed or retired? Update tools/ci_golden_modes_check.py deliberately.")
         if defaults[name] != pinned:
             mismatches.append(f"{name}: pinned {pinned!r} vs source default {defaults[name]!r}")
         checked += 1
@@ -129,12 +129,27 @@ def test_no_unclassified_env_reads():
         assert found, f"_KNOWN_INERT member {n} no longer appears anywhere in the engine (rot)"
 
 
-def test_mode_selectors_cover_both_field_modes():
-    assert set(MODES) == {'unit_field', 'cell_field'}
+def test_mode_selectors_cover_every_out_of_budget_golden_mode():
+    """[ED-MB-0053 / §4a] Extended from the two field modes to the three this tool now owns.
+
+    Deliberately an EXACT-SET assertion rather than a superset: this tool is the single owner of
+    "golden modes checked outside the tests/valoria budget", so a mode appearing or vanishing must
+    be a deliberate edit, not silent drift. Each selector is also checked against what its mode NAME
+    claims, because a selector disagreeing with its key is the ED-1089 shape — a run checked against
+    the wrong golden.
+    """
+    assert set(MODES) == {'unit_field', 'cell_field', 'cell_cm'}
     for mode, sel in MODES.items():
-        assert sel['FIELD_MOVEMENT'] == '1' and sel['PC_NODE_COHESION'] == '1', mode
-    assert MODES['unit_field']['PER_CELL'] == '0'
-    assert MODES['cell_field']['PER_CELL'] == '1'
+        want_field = '1' if mode.endswith('_field') else '0'
+        assert sel['FIELD_MOVEMENT'] == want_field, mode
+        assert sel['PC_NODE_COHESION'] == want_field, mode
+        assert sel['PER_CELL'] == ('1' if mode.startswith('cell') else '0'), mode
+    # the §4a mode is the ONLY one that overrides the PC_CELL_MORALE pin, and it must
+    assert MODES['cell_cm']['PC_CELL_MORALE'] == '1'
+    for mode in ('unit_field', 'cell_field'):
+        assert 'PC_CELL_MORALE' not in MODES[mode], (
+            f"{mode} must inherit the FIELD_PINS PC_CELL_MORALE='0'; overriding it here would "
+            f"silently re-target its golden")
 
 
 def test_every_pin_is_read():
