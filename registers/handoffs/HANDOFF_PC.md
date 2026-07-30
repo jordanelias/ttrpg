@@ -52,8 +52,30 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
     sparr_axe's 0.10, an axe.** Template for the correction exists in-roster: **szabla, curv 0.30 /
     pc 0.60.** ⚠ Interacts with ED-PC-0050's binary shear-OR-puncture arm split — do not extend that
     split further until resolved.
-  - **Channel 2 (curve → faster recovery, doesn't stick) has NO consumer anywhere** — `curvature`'s only
-    runtime reader is `arrest_impulse`, where it is a *cost*. New mechanic, last in sequence.
+  - **Channel 2 DONE (ED-PC-0054) — and its PRE-REGISTERED PREDICTION FAILED, which is the headline.**
+    `_recovery_mode_commitment`'s C_swing branch is discounted by `(1 − CURVE_RECOVERY_K·curvature)`;
+    swing-only, bounded [1−K,1] by construction. Throughput was checked FIRST this time (recovery feeds
+    tempo debt on every committed attack). **Predicted curved cutters +1..+3pp; measured
+    corr(curvature, delta) = −0.003, mean |delta| 2.6pp against a ~4pp floor — aggregate-INERT, like
+    channel 5.** Shipped because the physics was absent, is per-event live, and U10/ED-PC-0022 already
+    ruled TEXTURE (not aggregate winrate) is the right instrument for a situational lever. **The texture
+    measurement is NOT done and is the honest gap.** ⚠ Its effective size rides on the pc-confound
+    (−0.729), so **re-measure it when channels 3–4 fix the tip data.**
+  - **▶ ADVERSARIAL SWEEP DONE (ED-PC-0055) — engine is CLEAN on dead code.** AST call-graph over
+    engine+workbench+tests: zero unreferenced functions, zero CFG keys with no reader, zero
+    test-only tunables. Two duplications fixed byte-identically (`_puncture_adef` — a §8 violation
+    ED-PC-0049 introduced two batches earlier; `wound_impairment` — the ED-1041 rule written FOUR
+    times under different local names). ⚠ **The sweep's FIRST detector was wrong** and called 8 live
+    functions dead by ignoring intra-module calls — hand-verified before reporting, nothing acted on.
+    **Confirmed dead physics, Jordan's call not a defect: `core.COVERAGE_GAP['partial']=0.5` is plumbed
+    into `_transmit` with no caller ever passing `coverage='partial'`** — the shield/off-hand hook
+    (⚖6), independently reproducing ED-PC-0035's F8.
+  - **⚠ THE SESSION'S STANDING LESSON, three batches deep: a correct absent mechanism is not a balance
+    fix.** A7a (cut grading), channel 5 (contact moment) and channel 2 (curve recovery) were each a
+    real missing physical fact, each correctly built and mutation-verified, and **none moved the
+    field.** The only change that moved the rapier was ED-PC-0053, which removed a *fiat gate* and gave
+    an existing dominant quantity a *cost*. **Look for missing COSTS on dominant quantities, not
+    missing benefits on weak ones.**
 
 - **▶ E0–E3 ARE COMPLETE (2026-07-29, second session).** E0/E1a/E1b/I4 merged (PRs #259,
   #269), E2a merged (PR #270), and **E2b/E3a/E3b landed this session as ED-PC-0048/0049/0050** — the
