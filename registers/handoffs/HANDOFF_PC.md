@@ -6,6 +6,25 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 
 ## Pending
 
+- **▶▶ READ FIRST (2026-07-30): `audit/2026-07-26-combat-balance-customization-state/session_retrospective_and_plan_v3.md`**
+  — lessons, an adversarial pass on the session's own work, 9 newly-flagged items (N1–N9), and a
+  **REORDERED work list that supersedes `combat_execution_plan.md` §7 and `combat_remediation_plan.md`
+  §8's sequencing.** The headline that reorders everything: **three correct, absent mechanisms
+  (ED-PC-0051/0052/0054) each moved the field by NOTHING; one fiat-gate removal (ED-PC-0053) moved it
+  immediately.** Both original plans would send the next session to E4 (more benefit-side grading),
+  which is the shape proven not to work. **Next work is (1) Jordan rules `CLOSE_ENGAGE_M`, (2) the owed
+  texture measurement, (3) E6/M10 off-hand — the rapier's real counterweight, with the shield hook
+  already plumbed and callerless.**
+  - **⚠ SELF-FLAGGED, the session's worst finding: `CLOSE_ENGAGE_M=0.45` is the BEST of four swept
+    values on both rapier win-rate and field spread** (0.30→83.5%/41.1pp · **0.45→75.5%/35.1pp** ·
+    0.60→79.8%/41.7pp · 0.75→80.8%/38.5pp), and the response is NON-MONOTONE. It was chosen on physical
+    grounds before measuring and never swept — but the artifact cannot prove that, and the value is
+    therefore **not safely defensible as "just physical."** Jordan's call.
+  - **⚠ Corrected: every field number reported mid-session was one batch stale.** TRUE current state
+    (post-0054/0055): **rapier 71.8%, spread 30.7pp, sd 8.2pp** — not the 73.5/32.5/8.3 reported.
+  - **⚠ Owed: the texture measurement that justified shipping ED-PC-0052 and ED-PC-0054.** Both are
+    aggregate-inert and both cite U10's texture-not-winrate ruling; neither ran it.
+
 - **▶ JORDAN RULED THE CARRY-CONTEXT FORK AND GROUNDED THE CURVATURE MODEL (2026-07-29, live). READ
   `audit/2026-07-26-combat-balance-customization-state/curvature_and_bind_model_v1.md` FIRST** — his
   six-part direction is recorded verbatim there with every measurement taken against it. Summary:
