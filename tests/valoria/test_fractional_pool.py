@@ -21,7 +21,9 @@ import mass_battle.resolution as R  # noqa: E402
 
 
 def test_default_gated_off():
-    assert C.PC_FRACTIONAL_POOL is False, "fractional pool must default OFF (moves goldens when on)"
+    assert C.PC_FRACTIONAL_POOL is True, (
+        "fractional pool must default ON (Jordan, 2026-07-29; ED-MB-0061). It does move goldens — "
+        "that is why the re-base is a planned event, not a reason to keep the mechanic dark. G20.")
 
 
 def test_per_die_ev_is_tn7_expectation():

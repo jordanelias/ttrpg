@@ -23,7 +23,9 @@ from mass_battle.engine import build_army, resolve_battle, SIDE_A_START_ROW, SID
 
 
 def test_default_gated_off():
-    assert C.PC_INTENT_RESOLUTION is False, "intent-resolution must default OFF (byte-exact)"
+    assert C.PC_INTENT_RESOLUTION is True, (
+        "intent-resolution must default ON (Jordan, 2026-07-29; ED-MB-0061). Byte-exactness is the "
+        "oracle's concern and is handled by the re-base, not by leaving the mechanic off. G20.")
 
 
 def test_stance_commitment_signs():

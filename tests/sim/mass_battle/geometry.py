@@ -180,8 +180,24 @@ def octagon_angle(attacker_pos, defender_pos, defender_facing_vec):
     angle_deg = math.degrees(math.acos(cos_a))
     # [canonical: Jordan design — octagon: GREEN<45deg, YELLOW 45-90deg, RED>=90deg]
     # 45.0 = half of GREEN 90deg face; 90.0 = boundary of rear hemisphere
-    if angle_deg < 45.0:   return "GREEN",  angle_deg  # [canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN boundary]
-    if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: designs/provincial/mass_battle_v30.md §octagon]
+    # [ED-MB-0061, 2026-07-30] TWO FALSE CITATIONS REMOVED from the three lines below. They read
+    # "[canonical: mass_battle_v30.md §A.3b — 45deg octagon GREEN boundary]" and
+    # "[canonical: designs/provincial/mass_battle_v30.md §octagon]". Neither resolves:
+    # mass_battle_v30.md contains ZERO occurrences of "octagon", §A.3b is BATTLEFIELD GEOMETRY (grid
+    # dimensions, itself banner-flagged as superseded by config.py), and `designs/` is retired.
+    # This is CLAUDE.md §7's leaky-anti-fabrication-gate pattern — a fabricated citation passing the
+    # gate — sitting on the boundary constants of the facing model. Found by a read-only fable audit
+    # and re-derived by hand before removal (G12).
+    #
+    # The REAL provenance is the Jordan design line above plus ED-MB-0018 (config.py's
+    # OCTAGON_DMG_MULT block, Jordan 2026-07-22: front 1.0x / flank 1.5x / rear 2.0x damage-received).
+    # These boundaries are vertex-forward by construction: two 45deg front faces meeting at the
+    # forward VERTEX together span +/-45 (GREEN), the next face each side spans 45-90 (YELLOW), and
+    # the four rear faces span 90-180 both ways (RED). A face-forward octagon would put the
+    # boundaries at 22.5/67.5/112.5 — so the convention here already matches Jordan's 2026-07-30
+    # geometry spec S1/S6, and needs no rotation.
+    if angle_deg < 45.0:   return "GREEN",  angle_deg  # [canonical: ED-MB-0018 — octagon arc partition, vertex-forward]
+    if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: ED-MB-0018 — octagon arc partition, vertex-forward]
     return "RED", angle_deg
 
 

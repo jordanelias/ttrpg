@@ -83,10 +83,27 @@ def _ratio_winrate(ratio, base, n, seed0=9000):
 def test_default_off_is_inert(field_path):
     """PC_FRICTION_CEV defaults OFF: _draw_friction_cev sets the factor to exactly 1.0 (no pool change),
     so the mechanism is byte-exact / behaviourless until explicitly enabled."""
-    assert _cfg.PC_FRICTION_CEV is False, "friction must default OFF (grid-oracle / byte-exact safety)"
-    a = build_unit('Line', 3, 'A', 'A', 9)
-    _orch._draw_friction_cev(a)
-    assert a._friction_cev == 1.0
+    # [ED-MB-0061] The default is now ON (Jordan, 2026-07-29). The INERTNESS claim below is still
+    # worth holding — an OFF flag must be a true no-op, which is what makes the flag safe to pin in
+    # the grid oracle — so the flag is pinned off explicitly rather than assumed from the default.
+    assert _cfg.PC_FRICTION_CEV is True, (
+        "PC_FRICTION_CEV must default ON (ED-MB-0061). ⚠ Turning it on is also what exposed F1: it "
+        "confers a large SYSTEMATIC one-sided advantage (mean end-state hp A 0.9910 / B 0.8634 over "
+        "the 20 historical rows, 13 of 20 at exactly 1.0000; with it alone off, A 0.8625 / B 0.9390). "
+        "That is an open engine defect, not a reason to re-gate the mechanic.")
+    # ⚠ Pin it on ORCHESTRATION, not on config. `_draw_friction_cev` reads its own module global,
+    # populated by `from mass_battle.config import *` at import time — so every star-importing module
+    # holds its own COPY of the flag and setting `_cfg.PC_FRICTION_CEV` reaches none of them. Caught by
+    # this test failing with 5.717 != 1.0 after the config-side pin. It is the F20/§8 multiple-owners
+    # problem in miniature, at the flag layer rather than the quantity layer.
+    saved = _orch.PC_FRICTION_CEV
+    _orch.PC_FRICTION_CEV = False
+    try:
+        a = build_unit('Line', 3, 'A', 'A', 9)
+        _orch._draw_friction_cev(a)
+        assert a._friction_cev == 1.0
+    finally:
+        _orch.PC_FRICTION_CEV = saved
 
 
 # ─── drawn ONCE per battle, not per turn ─────────────────────────────────────

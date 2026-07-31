@@ -206,7 +206,25 @@ def test_default_is_gated_off():
     site that assigns `.morale` has to route through the cells first (see HANDOFF_MB). Only then is a
     measurement of this flag a measurement of this flag.
     """
-    assert C.PC_CELL_MORALE is False, "flip retracted 2026-07-25 — confounded measurement, see config.py"
+    # [ED-MB-0061, 2026-07-30] The default is now ON, by Jordan's ruling that every built mechanic
+    # defaults ON. This assertion is inverted rather than deleted so the docstring above — which is the
+    # record of WHY the 2026-07-25 flip was retracted — stays attached to a live test.
+    #
+    # ⚠ THE PRECONDITION THIS DOCSTRING NAMES WAS ONLY PARTLY MET WHEN THE FLIP HAPPENED, and saying so
+    # is the point of keeping the text. ED-MB-0058 fixed `between_turn_recovery` (the absolute writer
+    # that flattened every cell to the unit mean), which was the mechanism the retraction blamed. But a
+    # read-only audit found `test_persubunit_stress.py:191`'s bare `u.morale = 0` still unswept at flip
+    # time — HANDOFF_MB had explicitly said "sweep them before the flag flips". That site is swept in
+    # this same commit, so the sweep is now complete; it was not complete when the flag went ON.
+    #
+    # The OTHER half of the retraction's blocker — "re-measure the flag honestly, THEN decide the flip"
+    # — is still NOT done. The flip arrived inside a blanket flags-ON commit with no measurement of its
+    # own. That is a deliberate consequence of the ruling (the ruling decides the default; measurement
+    # decides the balance), but it must not be mistaken for the measurement having been taken.
+    assert C.PC_CELL_MORALE is True, (
+        "PC_CELL_MORALE must default ON (Jordan, 2026-07-29; ED-MB-0061). The 2026-07-25 retraction "
+        "recorded above concerned a CONFOUNDED MEASUREMENT, not the flag's correctness — and its named "
+        "mechanism is fixed (ED-MB-0058). The honest re-measurement remains outstanding.")
 
 
 # ─── phase 2: local break ────────────────────────────────────────────────────

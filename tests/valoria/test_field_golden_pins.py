@@ -49,14 +49,23 @@ _KNOWN_INERT = {
     'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT',
     # needs an explicit order/target the battery never issues:
     'PC_VOLLEY_TARGETING',
-    # needs yielding=True — no 'yield' order, PC_YIELD_EMERGENT off:
+    # [MEASURED-INERT 2026-07-30, ED-MB-0061] needs yielding=True, which the battery never orders.
+    # ⚠ The previous rationale was CIRCULAR — "no 'yield' order, PC_YIELD_EMERGENT off" — i.e. the flag
+    # was inert because the flag was off. Jordan's flags-ON ruling turned it ON and the rationale went
+    # false while the classification was inherited unchanged. Re-established by MEASUREMENT instead:
+    # cell_field at 6 seeds is digest-IDENTICAL with these five ON vs OFF
+    # (71fdb844b8c8007f2d27a24f40572fa6393eff8d73c72aa58edb98f91c9ac949 both arms), so they cannot move
+    # a bat.py digest at the shipped defaults. Note this is a claim about the BATTERY only — PC_YIELD_RALLY
+    # is demonstrably NOT behaviourless in general (test_dg2_yield_residuals fails at the new defaults).
     'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC',
     'PC_YIELD_POCKET', 'YIELD_POCKET_REACH', 'D_YIELD', 'YIELD_POOL_MULT',
     # no-ops while PC_FACING_MODEL is pinned '0':
     'PC_FACING_ATTENTION', 'PC_FACING_SLEW_BASE', 'PC_FACING_FOV_GATE', 'PC_FACING_ROUT',
-    # needs the flag AND an overextended state the battery never produces:
+    # [MEASURED-INERT 2026-07-30, ED-MB-0061] needs an overextended state the battery never produces;
+    # same measurement as the yield family above (digest-identical ON vs OFF). Previously circular.
     'PC_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY',
-    # self-gated OFF, no reserve-commit scenario in the battery:
+    # [MEASURED-INERT 2026-07-30, ED-MB-0061] no reserve-commit scenario in the battery. The old
+    # reason began "self-gated OFF", which was circular; same measurement as above.
     'PC_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN',
     # dead behind PC_CELL_MORALE (pinned '0'):
     'CELL_BREAK_ROUT_FRAC', 'CELL_MORALE_PULL',
@@ -83,6 +92,52 @@ def _source_defaults():
     return out
 
 
+# [ED-MB-0061, 2026-07-30] THE ONE LEGITIMATE PIN/DEFAULT DIVERGENCE, AND WHY IT IS DECLARED RATHER
+# THAN FIXED. FIELD_PINS' values are "the GOLDENS' recorded values", which normally equal the source
+# defaults because a default flip and a re-record ship together. Jordan's flags-ON ruling broke that
+# coupling ON PURPOSE and in one direction only: every default flipped at once, while the goldens
+# still record the pre-flip configuration, because re-basing the oracle BEFORE fixing the defects the
+# flip exposed would bake nine of them into the definition of correct (00_lessons.md §4.2).
+#
+# So the pins must keep certifying what the goldens actually are, and the honest guard is not
+# "pins == defaults" but "every divergence is DECLARED and the list is exactly the transition set".
+# Adding a 16th flag fails; silently resolving one without updating both sides fails.
+#
+# ⚠ THIS SET MUST BE EMPTY AFTER THE RE-BASE. It is transition debt with a defined end, not a
+# permanent exemption — that is the whole difference between this and simply deleting the guard.
+# Only the TEN of the fifteen that are actually PINNED can diverge from a pin. The other five
+# (PC_FEIGNED_RETREAT, PC_RESERVE_COMMIT, PC_YIELD_EMERGENT/POCKET/RALLY) live in _KNOWN_INERT, and
+# that is its own problem — see test_known_inert_reasons_are_not_self_referential below.
+_PENDING_REBASE = {
+    'PC_CELL_DAMAGE', 'PC_CELL_MORALE', 'PC_CLOSE_RANKS', 'PC_FRACTIONAL_POOL', 'PC_FRICTION_CEV',
+    'PC_INTENT_RESOLUTION', 'PC_TROOP_DENSITY_CAP', 'FIELD_CONTACT', 'PC_FACING_MODEL',
+    'REFORM_CHECK_ENABLED',
+}
+
+
+def test_pending_rebase_set_is_exactly_the_transition():
+    """The declared divergence must match reality in BOTH directions.
+
+    Every name in _PENDING_REBASE must genuinely diverge (pin != source default) — otherwise it is a
+    stale exemption hiding a pin nobody re-checked — and every actual divergence must be declared.
+    This is what keeps the exemption from becoming a place to park drift."""
+    defaults = _source_defaults()
+    actually_diverging = {n for n, pinned in FIELD_PINS.items()
+                          if n not in _NON_SOURCE_PINS and n in defaults and defaults[n] != pinned}
+    stale = _PENDING_REBASE - actually_diverging
+    undeclared = actually_diverging - _PENDING_REBASE
+    assert not stale, (
+        f"declared as pending-rebase but no longer diverging — resolve the pin AND remove it from "
+        f"_PENDING_REBASE, or the exemption outlives the transition: {sorted(stale)}")
+    assert not undeclared, (
+        f"pin/default divergence that is NOT declared — a default was flipped without deciding the "
+        f"golden question: {sorted(undeclared)}")
+    assert len(_PENDING_REBASE) == 10, (
+        "Jordan's 2026-07-29 ruling flipped 15 flags, but only these TEN are pinned and can therefore "
+        "diverge from a pin. A different size means the transition changed shape and the re-base scope "
+        "needs re-deciding, not silent editing.")
+
+
 def test_pins_match_source_defaults():
     defaults = _source_defaults()
     checked = 0
@@ -90,6 +145,8 @@ def test_pins_match_source_defaults():
     for name, pinned in FIELD_PINS.items():
         if name in _NON_SOURCE_PINS:
             continue
+        if name in _PENDING_REBASE:
+            continue   # [ED-MB-0061] declared divergence; see the block above and its own guard
         assert name in defaults, (
             f"pin {name} has no environ.get default in tests/sim/mass_battle — "
             f"renamed or retired? Update tools/ci_golden_modes_check.py deliberately.")
@@ -99,7 +156,8 @@ def test_pins_match_source_defaults():
     assert not mismatches, (
         "pin/default drift — a default flip is a golden-moving change and must "
         "update the pin list + re-record deliberately:\n  " + "\n  ".join(mismatches))
-    expected = len(FIELD_PINS) - len(set(FIELD_PINS) & _NON_SOURCE_PINS)
+    expected = (len(FIELD_PINS) - len(set(FIELD_PINS) & _NON_SOURCE_PINS)
+                - len(set(FIELD_PINS) & _PENDING_REBASE))   # [ED-MB-0061] declared divergences skipped
     assert checked == expected, f"pin sweep collapsed — {checked} checked vs {expected} expected"
 
 
@@ -171,3 +229,50 @@ def test_grid_pin_dict_consistency():
     # they live in MODES here, not FIELD_PINS) — anything else must match.
     assert not diffs, f"grid vs field pin dicts disagree on shared flags: {diffs}"
     assert len(shared) >= 5, f"expected ≥5 shared pins, got {sorted(shared)}"
+
+
+def test_known_inert_reasons_are_not_self_referential():
+    """[ED-MB-0061] A flag may not be its own inertness rationale, and five of them were.
+
+    `_KNOWN_INERT` justified the yield/retreat/reserve family with reasons like "needs yielding=True —
+    no 'yield' order, PC_YIELD_EMERGENT off" and "self-gated OFF". Those are CIRCULAR: the flag is
+    inert because the flag is off. Jordan's flags-ON ruling turned all five ON, every rationale went
+    false, and the classification was inherited unchanged — which is how a stale exemption survives a
+    policy change invisibly.
+
+    RESOLVED BY MEASUREMENT, not by assertion: cell_field at 6 seeds is digest-identical with the five
+    ON vs OFF, so they genuinely cannot move a bat.py digest at the shipped defaults. (That is a claim
+    about the BATTERY only; PC_YIELD_RALLY is not behaviourless in general — test_dg2_yield_residuals
+    fails at the new defaults.)
+
+    This guard now holds the thing that can actually rot: the MEASURED-INERT marker. A flag defaulting
+    ON may sit in _KNOWN_INERT only while a measurement is recorded beside it. Delete the marker, or
+    add a sixth ON-by-default flag on a hand-waved reason, and this fails."""
+    src = open(os.path.abspath(__file__), encoding='utf-8').read()
+    defaults = _source_defaults()
+    # Scope: the flags whose inertness reason was WRITTEN ASSUMING THEY WERE OFF and which Jordan's
+    # 2026-07-29 ruling then turned ON. Flags that were always ON (COMMAND_SIGMA_ENABLED,
+    # CMD_COG_WEIGHT, PC_VOLLEY_TARGETING) are deliberately OUT of scope: their reasons cite ANOTHER
+    # pinned flag or absent battery data, never their own state, so they were never circular and the
+    # flip did not invalidate them. An earlier draft of this guard demanded provenance from them too
+    # and was over-broad — a guard that fires on correct code teaches people to silence guards.
+    _FLIPPED_BY_THE_RULING = {'PC_FEIGNED_RETREAT', 'PC_RESERVE_COMMIT',
+                              'PC_YIELD_EMERGENT', 'PC_YIELD_POCKET', 'PC_YIELD_RALLY'}
+    on_and_inert = {n for n in _KNOWN_INERT & _FLIPPED_BY_THE_RULING if defaults.get(n) == '1'}
+    assert on_and_inert, (
+        "scope collapsed — none of the ruling-flipped flags is both ON and claimed inert, so this "
+        "guard is now vacuous (§0.1 point 2). Re-derive the scope set against _KNOWN_INERT.")
+    # every ON-by-default flag claimed inert must be covered by a MEASURED-INERT block
+    marker = 'MEASURED-INERT'
+    assert marker in src, "the MEASURED-INERT provenance for the ON-by-default inert flags is gone"
+    unmarked = []
+    for n in sorted(on_and_inert):
+        i = src.index(f"'{n}'")
+        # the nearest preceding comment block must carry the marker
+        if marker not in src[max(0, i - 1400):i]:
+            unmarked.append(n)
+    assert not unmarked, (
+        f"flags default ON and are claimed battery-inert with no MEASURED-INERT provenance above them: "
+        f"{unmarked}. An inertness reason may not be the flag's own OFF-ness (that is circular, and it "
+        f"is what let this classification survive the flags-ON ruling unexamined). Measure digest "
+        f"motion ON vs OFF and record it, or pin the flag.")

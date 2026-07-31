@@ -15,6 +15,23 @@ namespace and are folded into Next actions below, which carries the full narrati
 
 ## Next actions
 
+- **⛔ `main` IS CI-RED (16 failures) as of `94bb902`. READ ED-MB-0061 BEFORE ANY MB WORK.**
+  The flags-ON ruling (every mechanic defaults ON) landed with PR #271 and moved every golden while
+  the pin vector in `tools/ci_golden_modes_check.py` still certifies the OLD configuration. **No lane
+  can currently distinguish a new regression from the known 16.** Full accounting + the corrected
+  plan: `audit/2026-07-30-mb-session-retrospective/00_lessons.md` (nine new guardrails G13–G21,
+  Track F, the authoritative geometry spec, and a new Phase 0 that re-orders both workplans).
+  - **Do NOT re-base the goldens first.** Doing so bakes nine defects into the definition of correct.
+    Order is: bisect each failure → fix F1–F8 → Jordan rules the golden **mode matrix** →
+    re-base once as the single global golden-moving PR → G11 resumes → existing B1a/D1 path.
+  - **Proven so far:** F3/F4 (body interpenetration) are caused by **`PC_FACING_MODEL` alone**;
+    `PC_CELL_EXCLUSION` is exonerated by bisect. **F2 (rear damage 0.0) is NOT `PC_FACING_MODEL`** —
+    it survives that flag being off, cause unknown. Every other failure still needs its own bisect
+    before being called "pre-existing".
+  - **Jordan's geometry spec (§4.5) is unimplemented:** the octagon is POINT-forward (a vertex, not a
+    face, touches the subunit facing line) and **the subunit has a PERIMETER that is the surface of
+    battle**. No perimeter object exists in the tree.
+
 - **▶ SESSION 2026-07-29c (ED-MB-0058/0059/0060) — SPATIAL INTEGRITY + the PC_CELL_MORALE confound.**
   Three landings, and one of them is a retraction of this session's own earlier numbers.
   - **ED-MB-0058 — PC_CELL_MORALE was never inert; it was shadowed.** `between_turn_recovery` routed
