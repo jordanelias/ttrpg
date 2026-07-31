@@ -181,6 +181,27 @@ def collect(baseline=None):
 
     health = _measure_health(baseline)
 
+    # ── G13 ACTIVITY CONTROL (ED-MB-0061 G13, added 2026-07-31) ──────────────────
+    # "If doing nothing scores well on your metric, the metric cannot validate a
+    # change. Every improvement number ships with an ACTIVITY control."
+    #
+    # As first shipped, this ratchet had exactly that defect: a session that did
+    # NOTHING added no files, filed no EDs, and scored a clean `HELD`. The degenerate
+    # solution won. `HELD` therefore cannot mean "healthy" on its own — it has to be
+    # read against whether the program actually moved.
+    #
+    # The control is the health number, which is why it lives in the same file. A
+    # `HELD` verdict with zero junctures closed is reported as HELD_INACTIVE: scope
+    # did not grow, and neither did anything else. It is NOT a --check failure (an
+    # infrastructure PR legitimately closes no juncture), but it must never render as
+    # the same word as "held while shipping".
+    if not regressions and not unknown:
+        verdict = 'HELD' if (health.get('closed') or 0) > 0 else 'HELD_INACTIVE'
+    elif regressions:
+        verdict = 'REGRESSED'
+    else:
+        verdict = 'UNKNOWN'
+
     return {
         'available': True,
         'program': baseline.get('program'),
@@ -188,7 +209,11 @@ def collect(baseline=None):
         'signals': out,
         'regressions': regressions,
         'unknown': unknown,
-        'verdict': 'REGRESSED' if regressions else ('UNKNOWN' if unknown else 'HELD'),
+        'verdict': verdict,
+        'activity': {
+            'moved': (health.get('closed') or 0) > 0,
+            'control': 'G13 — scope held is only meaningful against whether the program moved',
+        },
         'health': health,
     }
 
@@ -253,6 +278,11 @@ def _fmt_summary(result):
     lines.append(f"  HEALTH — M1 junctures closed: {closed}/{h.get('total')}")
     lines.append('')
     lines.append(f"  verdict: {result['verdict']}")
+    if result['verdict'] == 'HELD_INACTIVE':
+        lines.append('')
+        lines.append('  G13: scope did not grow — and neither did the program. "Held" by')
+        lines.append('  inactivity is what a session that did nothing also scores, so this')
+        lines.append('  verdict is not evidence that anything worked.')
     if result['regressions']:
         lines.append('')
         lines.append('  A regression means scope grew. Either retire the growth, or raise the')

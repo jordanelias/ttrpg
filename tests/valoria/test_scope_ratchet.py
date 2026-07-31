@@ -54,7 +54,8 @@ def test_collect_grades_every_signal_and_counts_regressions():
         # ok must be a real verdict or an explicit unknown — never absent.
         assert 'ok' in s and s['ok'] in (True, False, None)
         assert s['evidence'], f"{s['signal']} reports no evidence for its measurement"
-    assert result['verdict'] in ('HELD', 'REGRESSED', 'UNKNOWN')
+    # HELD_INACTIVE is the G13 activity-control verdict (scope held, program did not move).
+    assert result['verdict'] in ('HELD', 'HELD_INACTIVE', 'REGRESSED', 'UNKNOWN')
 
 
 def test_regression_is_detected_and_fails_check(tmp_path):
@@ -123,3 +124,57 @@ def test_cli_check_exit_codes():
     # real scope growth landed unseeded, which is exactly what the gate is for.
     assert ok.returncode in (0, 1)
     assert 'verdict:' in ok.stdout
+
+
+def test_doing_nothing_does_not_score_as_success(monkeypatch):
+    """G13 activity control — the degenerate solution must not win.
+
+    ED-MB-0061's G13: "If doing nothing scores well on your metric, the metric cannot
+    validate a change." As first shipped this ratchet had exactly that defect — a
+    session that added no files and filed no EDs scored a clean `HELD`, identical to a
+    session that shipped a milestone.
+
+    This asserts the two cases render DIFFERENTLY, which is the whole content of the
+    control. It is written so it can observe its own failure: both branches are
+    constructed and compared, so collapsing the verdicts back into one word fails here.
+    """
+    live = sr.collect()
+    baseline = {
+        'program': 'test', 'seeded': '2026-01-01',
+        'signals': {s['signal']: {'baseline': s['value'], 'target': 0}
+                    for s in live['signals'] if s['value'] is not None},
+        'health': {'m1_junctures_closed': {'total': 7}},
+    }
+    assert baseline['signals'], 'no measurable signals — the pins below would be vacuous'
+
+    def _health(closed):
+        return lambda _b: {'closed': closed, 'total': 7, 'ok': closed > 0, 'evidence': 'stub'}
+
+    monkeypatch.setattr(sr, '_measure_health', _health(0))
+    inactive = sr.collect(baseline)
+    monkeypatch.setattr(sr, '_measure_health', _health(3))
+    active = sr.collect(baseline)
+
+    # Neither is a regression — scope held in both. The difference is activity alone.
+    assert inactive['regressions'] == 0 and active['regressions'] == 0
+    assert inactive['verdict'] == 'HELD_INACTIVE', inactive['verdict']
+    assert active['verdict'] == 'HELD', active['verdict']
+    assert inactive['verdict'] != active['verdict'], (
+        'doing nothing and shipping a juncture render identically — G13 control is absent'
+    )
+    assert inactive['activity']['moved'] is False
+    assert active['activity']['moved'] is True
+
+
+def test_inactivity_is_reported_but_never_fails_the_gate():
+    """HELD_INACTIVE must not exit non-zero.
+
+    An infrastructure PR legitimately closes no juncture. A control that BLOCKED on
+    inactivity would make the ratchet unusable on exactly the work that maintains it,
+    and it would get bypassed — which is worse than not having it. The control's job is
+    to stop `HELD` reading as proof of health, not to gate.
+    """
+    rc = sr.main(['--summary'])
+    assert rc == 0
+    rc_check = sr.main(['--check'])
+    assert rc_check == 0, 'inactivity must not fail --check; only a REGRESSION may'
