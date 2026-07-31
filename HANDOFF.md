@@ -46,17 +46,23 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
-- **⚠ CROSS-LANE BLOCKER (2026-07-30): the PC lane has exhausted its reserved ID block and
-  `references/id_reservations.yaml` is frozen.** All 15 of `ED-PC-0041..0055` are allocated (0041–0047
-  earlier, 0048–0055 in the 2026-07-29/30 combat-correctness arc), `next_free` reads 56, and the file
-  carries "FILE FROZEN for the three-session run: no session bumps any next_free until the W5 capstone
-  releases unused IDs with a documented walk-back." **PC work needing a ledger entry is therefore
-  blocked**, and two pieces of completed PC work (the ED-1094 ratification flip for PR #273, and W8d's
-  draw-stream audit) have been recorded in `registers/handoffs/HANDOFF_PC.md` with **no ED** as a result.
-  Resolution is an IN-lane call: release IDs early, grant PC a second block, or accept handoff-only
-  records for the remainder of the run. Whichever is chosen, the reservation comment should say so —
-  right now the freeze and the exhaustion are documented in two different files and neither mentions the
-  other.
+- **✅ RESOLVED 2026-07-30 by PR #276 (ED-IN-0098) — the ID freeze is LIFTED. PC is no longer blocked.**
+  ~~⚠ CROSS-LANE BLOCKER: the PC lane has exhausted its reserved ID block and
+  `references/id_reservations.yaml` is frozen.~~ The blocker was real when filed: all 15 of
+  `ED-PC-0041..0055` were allocated, `next_free` read 56, and the file carried "FILE FROZEN for the
+  three-session run". It asked IN to pick one of three resolutions — **the first was taken: IDs were
+  released early.** `next_free` bumping is normal again for every lane, so **PC allocates 56 → 57 as
+  usual**; the two pieces of PC work recorded in `registers/handoffs/HANDOFF_PC.md` with **no ED** (the
+  ED-1094 flip for PR #273, and W8d's draw-stream audit) can now be given one retroactively if PC wants.
+  13 ids were returned to the pool (SC 21→17, FA 40→37, WR 13→10, SE 53→50). **IN alone keeps a
+  deliberate hold** at `next_free: 112` — its block is sub-partitioned and
+  `audit/2026-07-29-centralization-single-owner/` holds `0103–0111`, so a walk-back there would hand out
+  a live reservation. MB and PC released nothing because both had consumed their blocks to the exact top,
+  which is the same finding this blocker entry reported from the other side: **the reservations were
+  undersized — size the next pre-allocation from observed burn rate, not a guess.** The entry's closing
+  complaint is also settled: `id_reservations.yaml` now states the release, the exception and the reason
+  in the file itself, and `tests/valoria/test_id_reservations_walkback.py` asserts
+  `next_free > max_allocated` for all 9 lanes so no future release can silently re-issue a live id.
   - **Filed alongside it, same shape (IN lane):** all THREE active lane handoffs now exceed the
     20,000-token compliance threshold — `HANDOFF_MB.md` 24,074, `HANDOFF_PC.md` 24,227,
     `HANDOFF_IN.md` 25,516. It is a `[WARN]`, not a blocking error, so nothing forces the split; three
@@ -66,7 +72,8 @@ and this root file remains the one stable SessionStart entry point.
     cost (CLAUDE.md §0.1 #5).
 
 - **Code-shape open-items program is live (ED-IN-0091/ED-IN-0092/ED-IN-0093/ED-IN-0094/ED-IN-0095, 2026-07-29).**
-  `references/id_reservations.yaml` is frozen (all seven lanes' blocks reserved — IN/MB/PC/WR/FA/SE/SC) until the W5 capstone; the
+  `references/id_reservations.yaml` was frozen for the run (all seven lanes' blocks reserved —
+  IN/MB/PC/WR/FA/SE/SC); **that freeze was LIFTED 2026-07-30 by PR #276 (ED-IN-0098) — allocate normally**; the
   MB and PC sessions are launchable from their reserved blocks; the §5 docket awaits Jordan at
   `audit/2026-07-29-code-shape-open-items/05_jordan_docket_v1.md` (Fork 6 now carries an
   ED-IN-0094 fractional-capability rider). **Wave 1 merged as PR #265
