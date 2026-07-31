@@ -1,5 +1,40 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-07-31 — M1 program scaffolding RATIFIED (ED-IN-0112); residuals filed (ED-IN-0113)
+
+**Landed and wired (PR #277).** Scope ratchet (`tools/scope_ratchet.py` + `registers/scope_baseline.yaml`,
+CODEOWNERS-gated), season acceptance gate (`tools/m1_acceptance.py`), dashboard program panel
+(`build_program`/`renderProgram`), `valoria_local.py --ci` (all 31 CI validators in one command, list
+derived from the workflow via `ci_gate_coverage.jobs()`), and the shipping-gate parallelisation.
+
+**Numbers, measured not projected.** `unit-tests` 387s -> 180.7s in CI (2.15x; 3.02x locally),
+failure/pass/skip counts byte-identical both sides. Whole-run wall clock ~428s -> ~220s.
+
+**The scaffolding is now EFFECTIVE, which it was not when first built.** An adversarial critic
+(valoria-critic, read-only) found the ratchet had no executing caller except its own tests. It is a
+report-only row in `valoria_local`'s table (pre-commit AND CI) and registered in
+`ci_checks_registry.yaml`. **No new CI job was added** — the repo has 34 and that is the problem this
+instrument measures.
+
+**What the critic cost, and why it was worth dispatching.** 13 findings, 4 of 9 claims refuted, 8
+fixed. Two were landmines: a zero-headroom ratchet asserted inside the BLOCKING pytest suite (the next
+ED anyone filed would have broken the build for an unrelated author), and a split-ledger guard whose
+glob never matched the largest ledger while four ids were split in it. G19 — dispatch the critic
+*before* the claim leaves the session — is the lesson, and it landed on this session specifically.
+
+**What stopped a worse mistake.** The planned `unit-tests` split by `-m "not sim"` is FORBIDDEN:
+`pytest.ini`'s ONE RULE calls a `-m` filter there a shipping-gate coverage cut and
+`test_pytest_marker_discipline.py` fails on it. Reading the rule before building is why this shipped
+parallelisation instead of a coverage cut wearing a speedup's label.
+
+**OPEN — ED-IN-0113, needs Jordan.** The decision-policy precedence fork (134-ruling precedent mine
+attached: mechanical canon demonstrably subordinate to measured grounding; the metaphysical-canon tier
+is UNESTABLISHED and deliberately not invented), plus five unfixed critic findings.
+
+**Cross-lane note.** `main` remains CI-red on the documented F-series (ED-MB-0061 §3.1b, 10 on CI).
+Nothing in this program touches it, and the golden re-base that clears it is gated on Jordan's
+golden-mode-matrix ruling.
+
 Lane-scoped continuity for the `IN` (infrastructure/cross-cutting) lane, per the
 `ED-<LANE>-NNNN` namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention.
 Root `HANDOFF.md` is the index; see it for the global "Next actions" pointer and cross-lane

@@ -43,8 +43,23 @@ JOB_RE = re.compile(r'^  ([a-z0-9][a-z0-9-]*):\n(.*?)(?=^  [a-z0-9][a-z0-9-]*:\n
 PYTEST_TARGET_RE = re.compile(r'pytest\s+((?:[\w./-]+\s*)+)')
 
 
+# A validator invocation inside a job's `run:` block. Captures the tool and its args so a
+# consumer can re-run EXACTLY what CI runs. Args stop at the line end or a shell operator,
+# because a swallowed `&&` would turn one command into a mis-parsed two.
+TOOL_CMD_RE = re.compile(
+    r'python3?\s+(?:-\w+\s+)*(tools/[\w/]+\.py)([^\n|&;>]*)'
+)
+
+
 def jobs() -> list[dict]:
-    """Parse job id, display name, blocking-ness and pytest roots out of the CI workflow."""
+    """Parse job id, display name, blocking-ness, pytest roots and tool commands.
+
+    SINGLE OWNER OF WORKFLOW PARSING (ED-IN-0112). This is the only function in the tree
+    that reads `.github/workflows/valoria-ci.yml` structurally. `valoria_local.py --ci`
+    consumes `tool_commands` from here rather than carrying its own copy of "what CI
+    runs" — a second list would be a second owner of the same rule and would drift the
+    moment a job was added, which is the exact §8 violation this repo keeps finding.
+    """
     if not os.path.exists(WORKFLOW):
         return []
     text = open(WORKFLOW, encoding='utf-8', errors='replace').read()
@@ -60,11 +75,41 @@ def jobs() -> list[dict]:
                     continue
                 if os.path.isdir(os.path.join(ROOT, tok)) or os.path.isfile(os.path.join(ROOT, tok)):
                     roots.add(tok)
+
+        # The syntax-check job COMPILES every tool (py_compile) rather than running any.
+        # Treating those as invocations would make `--ci` "run" 33 tools it never runs —
+        # the compile-vs-execute confusion that makes a naive duplication count wrong.
+        compiles_only = 'py_compile' in body
+        cmds = []
+        if not compiles_only:
+            # COMMENT LINES ARE NOT INVOCATIONS. Found the hard way: valoria-ci.yml:813 is a
+            # prose comment reading "bulk refresh: python3 tools/freshness_gate.py --update)."
+            # Matching it would have made `--ci` run freshness_gate WITH --update — a flag that
+            # REWRITES the canonical_sha pins. A read-only gate that silently mutates state is
+            # strictly worse than no gate, so this filter is load-bearing, not cosmetic.
+            runnable = '\n'.join(
+                ln for ln in body.splitlines() if not ln.lstrip().startswith('#')
+            )
+            seen = set()
+            for cm in TOOL_CMD_RE.finditer(runnable):
+                script, args = cm.group(1), cm.group(2).strip()
+                if not os.path.isfile(os.path.join(ROOT, script)):
+                    continue
+                # Strip a trailing shell line-continuation; keep real flags.
+                argv = [a for a in args.split() if a != '\\']
+                dedup = (script, tuple(argv))
+                if dedup in seen:
+                    continue
+                seen.add(dedup)
+                cmds.append({'script': script, 'args': argv})
+
         out.append({
             'id': jid,
             'name': nm.group(1).strip() if nm else jid,
             'blocking': 'continue-on-error' not in body,
             'pytest_roots': sorted(roots),
+            'tool_commands': cmds,
+            'compiles_only': compiles_only,
         })
     return out
 

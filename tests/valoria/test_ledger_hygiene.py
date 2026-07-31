@@ -156,3 +156,132 @@ def test_a_genuinely_missing_instrument_is_still_caught():
     assert target == 'tools/does_not_exist.py'
     assert not os.path.exists(os.path.join(ROOT, target)), \
         'fixture path unexpectedly exists — this test no longer proves anything'
+
+
+# ---------------------------------------------------------------------------
+# 3. An ED's rows must not be SPLIT between a live lane ledger and its archive.
+#    (ED-IN-0112, 2026-07-31 — found by CI, not by reading.)
+# ---------------------------------------------------------------------------
+
+REGISTERS_DIR = os.path.join(ROOT, 'registers')
+
+# Ids that legitimately appear in BOTH a live ledger and its archive. Currently EMPTY, and that
+# is a result rather than an omission.
+#
+# ED-IN-0012/0013 were listed here for exactly one commit. They are the documented 2026-07-05
+# DOUBLE-ALLOCATION (PR #83's SC-audit batch vs PR #81/#82's edge-playability items — two
+# different items issued one id), and they were genuinely split across live/archive at the time.
+# Resolving the origin/main merge by WHOLE-ID placement moved both of their rows into the
+# archive together, which ended the split without touching history: no row was edited, deleted,
+# or relabelled, so CLAUDE.md §3's no-retrofit rule is intact. The exemption then went stale and
+# `test_the_split_grandfather_list_is_still_load_bearing` said so on the next run — which is the
+# entire reason that second test exists.
+#
+# If this set ever grows again: a NEW overlap is the archive-split bug this guard exists for.
+# Adding an entry to silence it converts the guard into a record of its own defeats. The correct
+# response is to place the id's rows in one file, not to exempt it.
+_PRECUTOVER_DUP = (
+    'pre-cutover flat id, byte-identical row in BOTH files (same date, same status), so the '
+    'effective status is unambiguous from either — a duplicated row, not a split status. '
+    'CLAUDE.md §3 freezes pre-cutover entries ("no retrofit") and both files are append-only, '
+    'so the correct action is to record it, not to edit history.'
+)
+SPLIT_GRANDFATHERED = {
+    'ED-129': _PRECUTOVER_DUP,
+    'ED-131': _PRECUTOVER_DUP,
+    'ED-200': _PRECUTOVER_DUP,
+    'ED-295': _PRECUTOVER_DUP,
+}
+
+
+def _lane_ledger_pairs():
+    """(live, archive) paths for every ledger that has both.
+
+    GLOB CORRECTED 2026-07-31 (ED-IN-0112, adversarial pass). The first version globbed
+    `editorial_ledger_*.jsonl` — which REQUIRES the underscore and therefore never matched
+    `registers/editorial_ledger.jsonl`, the flat pre-cutover ledger and the largest live one.
+    Its archive matched the glob but was then discarded by the `_archive` skip, so the flat
+    pair was checked by neither test. The guard reported green over four ids that are split
+    across that pair today. A guard whose population excludes the biggest member is not a
+    weaker guard, it is a different one.
+    """
+    pairs = []
+    candidates = set(glob.glob(os.path.join(REGISTERS_DIR, 'editorial_ledger*.jsonl')))
+    for live in sorted(candidates):
+        if live.endswith('_archive.jsonl'):
+            continue
+        archive = live[:-len('.jsonl')] + '_archive.jsonl'
+        if os.path.exists(archive):
+            pairs.append((live, archive))
+    return pairs
+
+
+def _ids(path):
+    out = set()
+    for line in open(path, encoding='utf-8', errors='replace'):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if entry.get('id'):
+            out.add(entry['id'])
+    return out
+
+
+def test_no_ed_has_rows_split_between_a_live_ledger_and_its_archive():
+    """Archive whole IDs, never individual rows.
+
+    THE INCIDENT (ED-IN-0112). The IN ledger crossed its 50k size cap, so an archive
+    pass moved the six oldest TERMINAL ROWS out. ED-IN-0016 had two rows — `open`
+    (2026-07-05) and `resolved` (2026-07-08). Only the resolved row moved. Because the
+    ledger is APPEND-ONLY, an id's effective status is its LATEST row, so removing the
+    resolved one silently reverted ED-IN-0016 to `open` in the live file. That turned
+    `module_contracts.yaml`'s citation of it into "a canonical surface citing an open ED
+    as basis", and ED-Citation-Integrity went red on CI.
+
+    Nothing local caught it: the size check passed, and `validate_ed_citations` had been
+    run BEFORE the archive move. The row-level operation looked correct in isolation and
+    was wrong only in relation to rows it left behind — the same read/write-asymmetry
+    shape as §0.1 #1.
+
+    The guard is the invariant, not the incident: an id lives entirely in the live file
+    or entirely in the archive. Splitting is always a bug, whatever the reason.
+    """
+    pairs = _lane_ledger_pairs()
+    assert pairs, 'no live/archive lane-ledger pairs found — this guard would be vacuous'
+
+    checked = 0
+    for live, archive in pairs:
+        overlap = (_ids(live) & _ids(archive)) - set(SPLIT_GRANDFATHERED)
+        assert not overlap, (
+            f'{os.path.basename(live)} and its archive both contain {sorted(overlap)}. '
+            f"An ED's rows must move together: because the ledger is append-only, a split "
+            f"leaves the id's effective status set by whichever rows stayed behind."
+        )
+        checked += 1
+    assert checked == len(pairs), f'expected to check {len(pairs)} pairs, checked {checked}'
+
+
+def test_the_split_grandfather_list_is_still_load_bearing():
+    """Every grandfathered id must STILL be split, or the exemption is stale.
+
+    Without this, the exemption set is write-only: an id that stopped overlapping would sit
+    here forever, quietly widening the hole for a future genuine split of the same id.
+    """
+    live_arch = {}
+    for live, archive in _lane_ledger_pairs():
+        live_arch.setdefault('live', set()).update(_ids(live))
+        live_arch.setdefault('arch', set()).update(_ids(archive))
+    actually_split = live_arch.get('live', set()) & live_arch.get('arch', set())
+
+    stale = set(SPLIT_GRANDFATHERED) - actually_split
+    assert not stale, (
+        f'{sorted(stale)} are grandfathered as split but are no longer split — remove them '
+        f'from SPLIT_GRANDFATHERED so the guard covers them again.'
+    )
+    # An EMPTY set is the healthy state and must stay legal: the exemption exists to be spent.
+    # (An earlier version asserted the set was non-empty, which would have made "we fixed the
+    # last split" a test failure — a guard that punishes its own success.)

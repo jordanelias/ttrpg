@@ -317,6 +317,13 @@ ci_checks:
     ci_job: ed-citations
     notes: "Blocking as of 2026-06-29 (backlog reconciled 292 -> 0, designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md)."
 
+  - path: tools/scope_ratchet.py
+    level: 4
+    role: "SCOPE ratchet — five measured ceilings (open EDs, needs_jordan, audit corpus, tracked files, unratified proposals) plus the G13 activity control that stops a do-nothing session scoring as HELD. Companion to review_core/review_baseline, which ratchets TECHNICAL debt and is structurally blind to scope growth because every signal it grades is a quality signal."
+    paired_hook: ""    # no valoria_hooks function; it rides tools/valoria_local.py's check table
+    ci_job: generation-consistency-check
+    notes: "REPORT-ONLY by design (ED-IN-0112). Rides valoria_local rather than taking its own CI job — the repo has 34 jobs and adding a 35th to report one number would be the defect this instrument exists to measure. Promotion to blocking is a Jordan call with a loud ED-1094 call-out, never a quiet flag change: an adversarial pass found an earlier version asserting its --check inside the BLOCKING pytest suite at zero headroom, which would have broken the build for the next author to file an ED."
+
 # ── Level 3-4 (in-session hooks, mostly pre_commit_gate) ─────────────────────
 # These fire in-session via valoria_hooks.py before commit. CI mirrors
 # (Level 5) should run equivalent post-push.

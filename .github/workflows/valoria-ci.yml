@@ -654,8 +654,29 @@ jobs:
       - name: Install test deps
         # numpy is REQUIRED, not optional: without it the combat suite used to importorskip itself into
         # silence (see the [CORRECTED 2026-07-29] note above). Do not drop it to speed the job up.
-        run: pip install pyyaml pytest numpy
-      - run: python -m pytest tests/valoria -q
+        run: pip install pyyaml pytest numpy pytest-xdist
+      # PARALLELISED, NOT FILTERED (ED-IN-0112, 2026-07-31).
+      #
+      # This job was 387s of a 428s run — 90% of CI's wall clock. The obvious fix, adding
+      # `-m "not sim"` so an infrastructure PR skips the mass-battle suite, is FORBIDDEN:
+      # pytest.ini's "ONE RULE" says a -m filter here is "a SHIPPING-GATE COVERAGE CUT, not
+      # an optimisation ... Jordan's call, made loudly, never a side effect of a speed
+      # change", and tests/valoria/test_pytest_marker_discipline.py fails on it.
+      #
+      # `-n auto` is a categorically different thing, and the distinction is the point: it
+      # changes WHERE tests run, never WHICH. The collection is identical, so the gate is
+      # untouched and the discipline guard's -m check is satisfied by construction.
+      #
+      # MEASURED on one machine, full suite, not projected:
+      #     serial     416.97s  ->  9 failed, 1282 passed, 22 skipped
+      #     -n auto    138.15s  ->  9 failed, 1282 passed, 22 skipped
+      # 3.02x, with failure AND pass AND skip counts identical — the control that separates
+      # "faster" from "ran less". (The 9-vs-CI's-10 delta is the documented local skip of
+      # test_byte_exact_cell_mode, ED-MB-0061 §3.1b, not a difference this change caused.)
+      #
+      # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
+      # collection. Do not select a subset of it.
+      - run: python -m pytest tests/valoria -q -n auto
       # tests/contracts (the contract_adjudicator's own suite) was orphaned from CI
       # until 2026-07-07 (unaddressed-areas audit, ED-IN-0017) — run it here too.
       - run: python -m pytest tests/contracts -q

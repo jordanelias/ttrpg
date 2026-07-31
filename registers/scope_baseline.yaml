@@ -1,0 +1,122 @@
+# scope_baseline.yaml — the SCOPE ratchet for the M1 program (ED-IN-0112).
+#
+# Companion to registers/review_baseline.yaml, which ratchets TECHNICAL debt. This file
+# ratchets SCOPE. Same mechanism, different target, and the target is the point: the
+# diagnosed failure of this project is not defect density, it is that the apparatus
+# generates work faster than it retires it. review_baseline could not see that, because
+# every signal it grades is a quality signal and scope growth is not a quality regression.
+#
+# SEMANTICS (identical to review_baseline): `baseline` is an ACCEPTED CEILING measured at
+# seeding. tools/scope_ratchet.py --check fails when a signal EXCEEDS its baseline. Debt can
+# only shrink; each shrink is a one-line edit in the PR that earns it. A row that reaches
+# `target` is fully closed.
+#
+# RAISING A BASELINE requires an explicit ED and a loud call-out per ED-1094 — the same
+# governance review_baseline.yaml carries. A raised scope ceiling is the project deciding to
+# grow, which is a design commitment, not housekeeping.
+#
+# WHY THESE FIVE. Each is a measured proxy for one way scope leaks:
+#   ed.open            — work opened but not closed
+#   ed.needs_jordan    — work that cannot close without the one bottleneck resource
+#   audit.files        — the corpus that grows when "comprehensive review" is the directive
+#   tracked.files      — total surface area under maintenance
+#   proposals.open     — designs authored but never ratified or killed
+#
+# All five were measured on the working tree at seeding (2026-07-31), not estimated.
+schema_version: 1
+seeded: "2026-07-31"
+seeded_by: "ED-IN-0112"
+program: "M1 — one playable season"
+
+# The ratchet is ACTIVE only while the M1 program runs. When M1 ships, re-seed against the
+# post-M1 tree rather than carrying these ceilings forward as though nothing happened.
+active_until: "M1 junctures closed == 7"
+
+# ⚠️ KNOWN METRIC FLAW — FILED, NOT FIXED (ED-IN-0112, found by the ratchet catching its own
+# introducing commit). `ed.open` and `ed.needs_jordan` conflate WORK OPENED with WORK NOT CLOSED.
+# Filing an ED therefore always regresses them, which punishes exactly the behaviour the ledger
+# exists to encourage, and a gate that fires on every legitimate PR is a gate that gets ignored —
+# a usability failure, not merely a cosmetic one.
+#
+# The better metric is almost certainly AGE-WEIGHTED: "open items older than N days", which
+# punishes staleness (the actual disease) instead of filing (the cure). Deliberately NOT changed
+# in this commit: the flaw is real but not load-bearing on M1, and widening scope to redesign the
+# metric while introducing it is precisely the failure this whole program exists to stop
+# (CLAUDE.md §0.1 #5 — sweep what the task is load-bearing on; file the rest).
+#
+# Until then: a PR that files an ED raises these two ceilings by its own count via --allow-raise,
+# and that raise is not a governance event worth a separate ED. A raise in audit.files,
+# tracked.files, or proposals.open IS.
+# SEEDING IS A ONE-TIME EVENT, AND THIS IS IT. The seeding commit (ED-IN-0112) raised
+# tracked.files by 5 — its own instruments (scope_ratchet.py, m1_acceptance.py,
+# scope_baseline.yaml, test_scope_ratchet.py, the POINTER). That raise is legitimate exactly
+# once, because a ceiling must include the ruler. EVERY LATER COMMIT PAYS: new surface is
+# funded by retiring dead surface, not by re-seeding.
+#
+# ARITHMETIC RECONCILED (adversarial pass flagged 3103 + 5 = 3108, not 3109). The sixth file
+# is not this program's: merging origin/main brought in
+# `audit/2026-07-30-audit-family-critique/00_critique.md` (ED-IN-0099). Verified with
+# `git diff --name-status 3f41a32..HEAD | grep '^A'` -> exactly 6 additions, five of them the
+# instruments named above. So 3103 + 5 (ours) + 1 (main's) = 3109, and audit.files 1264 -> 1265
+# is that same file. No unearned headroom; the ceiling includes one file this program did not
+# author and could not have refused.
+#
+# The falsifier for that claim is `seeded:` above. If a future session raises tracked.files or
+# audit.files and calls it seeding, `seeded` will still read 2026-07-31 and the git log will show
+# the raise landing months later. A second "seeding" is a governance failure, not a measurement.
+signals:
+  ed.open:
+    baseline: 213  # measured 2026-07-31 across registers/editorial_ledger*.jsonl (non-archive)
+    target: 100
+    note: >-
+      Total open editorial items. Expected to fall sharply once the decision policy lands
+      and the derivation engine drains the derivable majority (83 of 85 needs_jordan items
+      carry a source pointer; only 10 carry a proposed answer).
+
+  ed.needs_jordan:
+    # 87 -> 94 on 2026-07-31: a CORRECTED MEASUREMENT, not scope growth. The first seeding
+    # used a bare `needs_jordan` boolean read; the signal now delegates to obs_core (the
+    # ED-IN-0068 single owner), whose normalization adds the free-text rescue for
+    # pre-cutover rows predating the field. Same tree, same day, +7 — the earlier ceiling
+    # was simply undercounting. Left unfixed, the dashboard would have published two
+    # different "needs Jordan" figures from two cards on one page.
+    baseline: 94  # measured 2026-07-31 via obs_core.read_ledger_entries
+    target: 15
+    note: >-
+      The bottleneck signal. Target 15 is the measured share of the queue that is genuine
+      authorial taste (~1 in 6 by sampling); the rest are canon-, research-, consistency-,
+      or arithmetic-derivable and should never have required a ruling.
+
+  audit.files:
+    baseline: 1265  # measured 2026-07-31 (git ls-files audit | wc -l)
+    target: 1264
+    note: >-
+      NOT a shrink target — audits are history and deleting them destroys provenance. This
+      ceiling exists to stop the corpus GROWING during M1. A new audit is permitted only if
+      it gates an M1 juncture, and it must be paid for by consolidating an equal count.
+
+  tracked.files:
+    baseline: 3109  # measured 2026-07-31 (git ls-files | wc -l)
+    target: 3103
+    note: >-
+      Total surface under maintenance. Flat is the goal, not shrinkage: the season loop will
+      add engine files, so landing loop work requires retiring dead weight to stay under.
+      That trade is the mechanism, not a side effect.
+
+  proposals.open:
+    baseline: 20  # measured 2026-07-31 (proposals/*.md)
+    target: 5
+    note: >-
+      Unratified designs. Each is either ratified, killed, or explicitly deferred with a
+      stated reason. "Still thinking about it" after four months is a decision that was made
+      by default; this row makes it visible.
+
+# The single health number for the whole program. Not a ratchet row (it must GROW), tracked
+# here so one file answers "is this working?".
+health:
+  m1_junctures_closed:
+    measured: 0         # 2026-07-31: 0 done, 4 in_progress, 1 blocked, 2 not_started
+    total: 7
+    note: >-
+      The program falsifier. If this is still 0 at week 6, the plan failed, and the cause is
+      visible in the rows above: if audit.files or tracked.files grew, scope leaked.

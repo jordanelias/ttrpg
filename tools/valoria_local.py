@@ -20,7 +20,86 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
+def run_ci_validators(argv=None):
+    """--ci: run EVERY validator CI runs, in one process, and report a table.
+
+    WHY (ED-IN-0112). The workflow spends ~28 separate GitHub jobs to run validators that
+    each take about two seconds. Every one of those jobs pays a full runner setup —
+    checkout + setup-python + pip — so the wall clock is dominated by boot cost, not by
+    checking. Collapsing them into one job pays setup once.
+
+    THE PROPERTY THIS MUST NOT LOSE. valoria-ci.yml's header states the current design's
+    rationale: "every gate is its own job that depends only on syntax-check, so a hiccup
+    in one gate can never silently skip another." That is a real guarantee and it is
+    preserved here by construction: this runner NEVER fails fast. Every validator runs,
+    every result is recorded, and the exit code is decided at the end. A collapsed job
+    that stopped at the first failure WOULD lose the property — this one does not.
+
+    THE LIST IS NOT MAINTAINED HERE. It is derived from the workflow itself via
+    ci_gate_coverage.jobs(), the single owner of workflow parsing. A hand-copied list
+    would be a second owner of "what CI runs" and would drift the moment a job changed —
+    the §8 violation this repo keeps rediscovering.
+    """
+    sys.path.insert(0, HERE)
+    import ci_gate_coverage  # single owner of workflow parsing
+
+    jobs = [j for j in ci_gate_coverage.jobs() if j['tool_commands']]
+    if not jobs:
+        print("[valoria --ci] no validator jobs parsed from the workflow — refusing to "
+              "report success on an empty run", file=sys.stderr)
+        return 2
+
+    child_env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
+    results = []
+    for job in jobs:
+        for cmd in job['tool_commands']:
+            path = os.path.join(os.path.dirname(HERE), cmd['script'])
+            if not os.path.exists(path):
+                results.append((job, cmd, None))
+                continue
+            print(f"\n--- {job['id']}: {cmd['script']} {' '.join(cmd['args'])} ---", flush=True)
+            r = subprocess.run([sys.executable, path] + cmd['args'],
+                               env=child_env, cwd=os.path.dirname(HERE))
+            results.append((job, cmd, r.returncode))
+
+    print("\n" + "=" * 72)
+    print(f"  {'job':30s} {'validator':34s} result")
+    print("  " + "-" * 30 + " " + "-" * 34 + " ------")
+    failed_blocking, failed_reportonly, missing = [], [], []
+    for job, cmd, rc in results:
+        tool = cmd['script'].replace('tools/', '')
+        if rc is None:
+            state, missing = 'MISSING', missing + [tool]
+        elif rc == 0:
+            state = 'pass'
+        elif job['blocking']:
+            state, failed_blocking = 'FAIL', failed_blocking + [f"{job['id']}:{tool}"]
+        else:
+            state, failed_reportonly = 'fail(report-only)', failed_reportonly + [tool]
+        print(f"  {job['id']:30s} {tool:34s} {state}")
+
+    print("=" * 72)
+    print(f"  {len(results)} validator invocation(s) across {len(jobs)} job(s); "
+          f"{len(failed_blocking)} blocking failure(s)")
+    if missing:
+        # A missing tool is NOT a pass. Reported separately so it can never be read as one.
+        print(f"  MISSING (not run, not passed): {', '.join(missing)}")
+    if failed_reportonly:
+        print(f"  report-only failures (do not gate): {', '.join(failed_reportonly)}")
+    if failed_blocking:
+        print(f"\n[valoria --ci] FAILED: {', '.join(failed_blocking)}")
+        return 1
+    if missing:
+        print("\n[valoria --ci] INCOMPLETE — a declared validator was absent.")
+        return 1
+    print("\n[valoria --ci] all CI validators passed.")
+    return 0
+
+
 def main(argv):
+    if '--ci' in argv:
+        return run_ci_validators(argv)
+
     mode_flag = '--local' if '--local' in argv else '--staged'
 
     # (script, extra_args, blocking)
@@ -65,6 +144,18 @@ def main(argv):
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking
         # boundary — but local-green now at least SEES it. Refresh with `python3 tools/freshness_gate.py --update`.
         ('freshness_gate.py',            [],          False),  # report-only canonical-SHA staleness (blocking in CI's integrity job)
+        # ED-IN-0112: the SCOPE ratchet. Wired HERE rather than as a new CI job, deliberately —
+        # this repo's problem is too many jobs, not too few, and valoria_local already runs both
+        # locally (pre-commit) and in CI (generation-consistency-check), so one line buys both
+        # surfaces at zero job cost.
+        #
+        # REPORT-ONLY, AND THAT IS LOAD-BEARING. An adversarial pass found the first version of
+        # this scaffolding asserting the ratchet's --check inside the BLOCKING pytest suite, at
+        # zero headroom: the next PR to file an ED would have broken the build for an unrelated
+        # author. Scope growth is a signal for the author to see and answer, never a reason to
+        # refuse someone else's commit. If it ever becomes blocking, that is Jordan's call with
+        # a loud ED-1094 call-out, not a quiet flag change.
+        ('scope_ratchet.py',             ['--check'], False),  # scope ceilings + G13 activity control (ED-IN-0112)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the
