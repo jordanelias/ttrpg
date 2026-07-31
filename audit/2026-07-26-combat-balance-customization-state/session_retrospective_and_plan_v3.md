@@ -1,6 +1,6 @@
 # PC session retrospective + plan v3 — lessons, adversarial pass, revised work order
 
-## Status: PROPOSED (2026-07-30; supersedes-in-part `combat_execution_plan.md` §7 and `combat_remediation_plan.md` §8's sequencing)
+## Status: RATIFIED as findings (PR #273 merged 2026-07-30, `3005096`; ED-1094). Its **sequencing (§5) is SUPERSEDED** by `combat_completion_plan_v4.md` v4.1 — read that for the live work order; read this for the lessons and the adversarial pass that produced them.
 
 Covers the 2026-07-29/30 PC session that landed **ED-PC-0048..0055** (E2b, E3a, E3b, A7a channel 1,
 contact moment, close-unwieldiness derivation, curvature recovery, dead-code sweep). Written because
