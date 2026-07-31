@@ -349,6 +349,10 @@
   </section>
 
   <!-- ═══ Work & Decisions ═══ -->
+  <section class="card" data-section="work" id="program-card">
+    <h2>M1 program — are we shipping?</h2>
+    <div id="program-body" class="empty-state">loading…</div>
+  </section>
   <section class="card" data-section="work" id="decisions-card">
     <h2>Needs your decision</h2>
     <div id="decisions-body" class="empty-state">loading…</div>
@@ -610,6 +614,67 @@ function renderDrift(d) {
     <ul class="plain">${rows}</ul>
     ${handoffList}
     <div class="decision-source" style="margin-top:10px;">${esc(dr.note)}</div>`;
+}
+
+// ED-IN-0112 — the program panel. Deliberately the FIRST card: every other card
+// describes the repository's state, this one answers whether the goal is moving.
+function renderProgram(d) {
+  const el = document.getElementById('program-body');
+  const p = d.program;
+  if (!p || p.available === false) {
+    el.innerHTML = '<div class="unavailable">data unavailable</div>';
+    return;
+  }
+  let html = '';
+
+  // Health number first and largest — it is the program's single falsifier.
+  const h = p.health || {};
+  const closed = (h.closed === null || h.closed === undefined) ? '?' : h.closed;
+  const stalled = (h.closed === 0);
+  html += `<div class="milestone-head"><strong style="font-size:1.35em;${stalled ? 'color:var(--warning);' : ''}">`
+        + `${esc(String(closed))}/${esc(String(h.total ?? '?'))}</strong> — ${esc(h.label || 'M1 junctures closed')}`
+        + (stalled ? ' <span class="decision-source">(nothing closed yet)</span>' : '') + `</div>`;
+
+  // Scope ratchet — the stopping rule.
+  const s = p.scope || {};
+  if (s.available === false) {
+    html += `<div class="decision-source" style="color:var(--warning);">scope ratchet unavailable: ${esc(s.error || '')}</div>`;
+  } else if (s.signals) {
+    const bad = s.verdict === 'REGRESSED';
+    html += `<div class="milestone-head" style="margin-top:10px;">Scope ratchet — <span style="${bad ? 'color:var(--warning);' : ''}">${esc(s.verdict)}</span></div>`;
+    for (const sig of s.signals) {
+      const over = sig.ok === false;
+      const state = sig.ok === null ? 'unknown'
+                  : over ? `over by ${sig.delta}`
+                  : `${sig.value} / ${sig.baseline}`;
+      html += `<div class="juncture-row"><span>`
+            + `<span class="juncture-glyph">${over ? '⊘' : '■'}</span> `
+            + `<span class="juncture-title">${esc(sig.signal)}</span> `
+            + `<span class="decision-source" style="${over ? 'color:var(--warning);' : ''}">${esc(state)}</span>`
+            + ` <span class="decision-source">→ target ${esc(String(sig.target))}</span>`
+            + `</span></div>`;
+    }
+  }
+
+  // Acceptance gate — what "fully simulatable" means, as rows.
+  const a = p.acceptance || {};
+  if (a.available === false) {
+    html += `<div class="decision-source" style="color:var(--warning);">acceptance gate unavailable: ${esc(a.error || '')}</div>`;
+  } else if (a.rows) {
+    html += `<div class="milestone-head" style="margin-top:10px;">Season acceptance gate — ${esc(a.verdict || '')}</div>`;
+    for (const r of a.rows) {
+      const g = r.state === 'measured' ? (r.passes ? '■' : '⊘')
+              : r.state === 'partial' ? '◐' : '▢';
+      html += `<div class="juncture-row"><span>`
+            + `<span class="juncture-glyph">${g}</span> `
+            + `<span class="juncture-title">${esc(r.label)}</span>`
+            + `</span></div>`;
+      if (r.detail) html += `<div class="juncture-next">▸ ${esc(r.detail)}</div>`;
+      else if (r.unblocked_by) html += `<div class="juncture-next">▸ needs: ${esc(r.unblocked_by)}</div>`;
+    }
+  }
+
+  el.innerHTML = html;
 }
 
 function renderWorkplan(d) {
@@ -1033,6 +1098,7 @@ async function load() {
     const res = await fetch('data.json', { cache: 'no-store' });
     const d = await res.json();
     renderGeneratedMeta(d);
+    renderProgram(d);
     renderDecisions(d);
     renderReviewState(d);
     renderDrift(d);

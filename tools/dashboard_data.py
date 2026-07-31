@@ -1175,9 +1175,50 @@ def build_values():
     }
 
 
+def build_program():
+    """The M1 program panel — scope ratchet + acceptance gate + the one health number.
+
+    ED-IN-0112. This is the ONLY dashboard section that answers "is the program
+    working?" rather than "what is the state of the corpus?". Every other card
+    describes the repository; this one describes progress against a goal, which is
+    the signal that was missing while M1 sat at 0/7 for months without any surface
+    saying so.
+
+    Both sub-tools are single-owner and imported, never re-implemented (CLAUDE.md §8):
+    scope_ratchet.collect() owns the ceilings, m1_acceptance.collect() owns the gate.
+    This function composes them and adds nothing of its own — if a number here
+    disagrees with the CLI, the CLI is right and this is a bug.
+    """
+    import importlib
+
+    out = {"available": True}
+    for key, module_name in (("scope", "scope_ratchet"), ("acceptance", "m1_acceptance")):
+        try:
+            mod = importlib.import_module(module_name)
+            out[key] = mod.collect()
+        except Exception as exc:
+            # A broken sub-tool must read as UNKNOWN on the dashboard, never as a pass.
+            out[key] = {"available": False,
+                        "error": f"{type(exc).__name__}: {str(exc)[:160]}"}
+
+    scope = out.get("scope") or {}
+    health = (scope.get("health") or {}) if scope.get("available") else {}
+    out["health"] = {
+        "closed": health.get("closed"),
+        "total": health.get("total"),
+        "label": "M1 junctures closed",
+    }
+    out["verdict"] = {
+        "scope": scope.get("verdict") if scope.get("available") else "UNKNOWN",
+        "acceptance": (out.get("acceptance") or {}).get("verdict", "UNKNOWN"),
+    }
+    return out
+
+
 def build_all():
     return {
         "generated_at": _generated_at(),
+        "program": _safe('program', build_program),
         "review_state": _safe('review_state', build_review_state),
         "browse": _safe('browse', build_browse),
         "definitions": _safe('definitions', build_definitions),

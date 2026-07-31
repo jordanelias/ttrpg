@@ -71,6 +71,28 @@ def _max_allocated():
     return out
 
 
+def _allocated_ids(lane):
+    """Every ED number actually present for `lane`, live AND archive.
+
+    Same sources and same archive rationale as `_max_allocated`; this returns the whole
+    set rather than its maximum, so a hole in the middle of a lane's range is visible.
+    """
+    found = set()
+    for path in glob.glob(os.path.join(ROOT, 'registers', 'editorial_ledger_*.jsonl')):
+        for line in open(path, encoding='utf-8', errors='replace'):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            m = re.match(r'ED-([A-Z]{2})-(\d+)$', str(entry.get('id', '')))
+            if m and m.group(1) == lane:
+                found.add(int(m.group(2)))
+    return found
+
+
 def test_reservations_file_is_parseable_and_covers_every_lane():
     nf = _next_free()
     missing = [lane for lane in LANES if lane not in nf]
@@ -106,11 +128,34 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     assert checked == len(released) == 4, f'expected 4 walked-back lanes, checked {checked}'
 
 
+def _unallocated_below_next_free(lane):
+    """Ids strictly below `next_free` that no ledger entry claims — the real hole.
+
+    MEASURE CORRECTED 2026-07-31 (ED-IN-0112). The original form asserted
+    `next_free - max_allocated > 1`, which is only equivalent to "a hole exists" while
+    every allocation sits BELOW the held block. The allocation protocol requires the
+    opposite — read `next_free`, allocate THERE, bump — so the first legitimate IN
+    allocation after this guard landed (ED-IN-0112 at 112, bumping to 113) drove
+    `next_free - max_allocated` to 1 and tripped the guard, while the hole it exists to
+    document (0098-0102 unreleased, 0103-0111 held by CSO) was entirely untouched.
+
+    A guard that fails on the operation it was written to protect is measuring the wrong
+    quantity. Counting unallocated ids below the pointer is invariant to allocations at
+    the top, so it tracks the hole itself rather than a proxy that the protocol destroys.
+    """
+    nf = _next_free()[lane]
+    allocated = _allocated_ids(lane)
+    if not allocated:
+        return []
+    return [n for n in range(min(allocated), nf) if n not in allocated]
+
+
 def test_in_lane_gap_is_documented_not_accidental():
-    """IN's pointer is 9 past its max-allocated. That must be explained IN THE FILE, not just here."""
-    nf, mx = _next_free(), _max_allocated()
-    assert nf['IN'] - mx['IN'] > 1, 'IN no longer carries a gap — drop this test and the DELIBERATE_GAPS row'
+    """IN carries unallocated ids below its pointer. That must be explained IN THE FILE."""
+    hole = _unallocated_below_next_free('IN')
+    assert hole, ('IN no longer carries a hole below next_free — every id is allocated, so the '
+                  'deliberate-gap exception is spent. Drop this test and the DELIBERATE_GAPS row.')
     text = open(RESERVATIONS, encoding='utf-8', errors='replace').read()
     assert '0103-0111' in text, (
-        "IN's next_free is deliberately ahead of max-allocated because CSO holds 0103-0111, but "
-        "the file no longer says so — an undocumented gap is indistinguishable from an error.")
+        "IN's next_free is deliberately ahead of its unallocated ids because CSO holds 0103-0111, "
+        "but the file no longer says so — an undocumented gap is indistinguishable from an error.")
