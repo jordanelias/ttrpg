@@ -188,12 +188,7 @@ def test_between_battle_reset():
     inh = mk_su('levy', col=9)                                    # inherits unit morale/discipline
     u = mk_unit([own, inh])
     own.erode_morale(9); own.degrade_discipline(); own.degrade_discipline()   # own morale -3, disc 5->3
-    # [ED-MB-0061] SWEPT onto the single owner. This was the LAST unswept absolute `.morale`
-    # assignment, named by HANDOFF_MB as a precondition of the PC_CELL_MORALE flip ("sweep them
-    # before the flag flips") and missed when the flip actually happened. A bare `u.morale = 0`
-    # is a silent no-op once cells are seeded, because eff_morale reads the cells and never falls
-    # back to the scalar — so at PC_CELL_MORALE=1 this harness would assert a rout it never caused.
-    u.set_morale(0); u.derive_rout()                              # whole unit routs (agg morale <= 0)
+    u.morale = 0; u.derive_rout()                                 # whole unit routs (agg morale <= 0)
     pre_disc_own = own.eff_discipline
     assert u.routed and own.routed
     reset_morale_between_battles(u)

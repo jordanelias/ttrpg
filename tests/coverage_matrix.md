@@ -700,10 +700,26 @@ ED-MB-0003 = **"genuine defect — fix it"** (not the historically-correct-mecha
   now retained only as a warning. Refuted by 875 deep cross-side interpenetrations and by
   `test_obb_contact_toi`'s two failures.
 
-## 2026-07-30 — mass_battle: the last unswept absolute-morale write (ED-MB-0061)
+## 2026-07-30 — mass_battle: the last unswept absolute-morale write, FILED not fixed (ED-MB-0061)
 
-`test_persubunit_stress.py:191`'s bare `u.morale = 0` routed onto `Unit.set_morale`. HANDOFF_MB named
-this site as a precondition of the `PC_CELL_MORALE` flip — *"sweep them before the flag flips"* — and
-it was missed when the flip happened. A bare assignment is a silent no-op once cells are seeded
-(`eff_morale` reads the cells and never falls back to the scalar), so at `PC_CELL_MORALE=1` the
-harness would have asserted a rout it never caused. Harness-only; no engine path, no golden motion.
+`test_persubunit_stress.py:191`'s bare `u.morale = 0` is the last unswept absolute-morale write.
+HANDOFF_MB named it as a precondition of the `PC_CELL_MORALE` flip — *"sweep them before the flag
+flips"* — and it was missed when the flip happened. A bare assignment is a silent no-op once cells
+are seeded (`eff_morale` reads the cells and never falls back to the scalar), so at
+`PC_CELL_MORALE=1` this harness asserts a rout it never caused. **S13 is therefore vacuous at the
+shipped defaults.**
+
+⚠ **The one-line sweep was made, then REVERTED, and the reason is the point.** Touching that file at
+all pulls **98 pre-existing uncited constants** (`tier=1`, `col=8`, `command=4`, …) into the blocking
+Sim Anti-Fabrication gate, because the gate scans whole changed sim files. That is CLAUDE.md §0.1
+point 5's documented trap almost verbatim — *"widening scope has a real cost — sweeping two
+out-of-scope harnesses here dragged ~100 pre-existing uncited constants into a blocking gate"* — same
+file class, same order of magnitude. A comment-only fix does not help either: **any** edit to the
+file triggers the same scan.
+
+The two ways to keep the fix were both worse than the fix: cite 98 constants I did not author (which
+is fabrication wearing a citation), or add a co-located `sim_verification_ledger.json` — which, since
+this file sits in `tests/sim/mass_battle/`, the LIVE ENGINE directory, would exempt the entire
+engine tree's constants from the gate. So the fix is filed rather than forced, per §0.1 point 5's own
+instruction to sweep only what the task is load-bearing on. Scope: harness-only; no engine path, no
+golden motion, and the engine-side half of this defect class was already closed by ED-MB-0058.
