@@ -642,7 +642,17 @@ def test_use_mode_selection_emerges_from_primitives():
     # quality sourced from the weapon instead of the winning element) rather than a real behaviour change. With
     # element-local sourcing the guisarme resolves cut_thrust unarmoured -> point against every armour tier, i.e.
     # it changes head with armour, exactly as it did before.
-    expected = ['greatsword', 'glaive', 'guisarme', 'lucerne_hammer', 'goedendag', 'katana', 'tachi', 'odachi', 'changdao', 'nandao', 'flamberge', 'estoc', 'hook_sword']
+    # [E2b/ED-PC-0048, 2026-07-29] bec_de_corbin JOINS the changer set, and it is an emergent restoration rather
+    # than a new special case. percussion_element_authority's lever no longer zeroes an element mounted at the
+    # working hand (M9/F6), so the hand-floor lifts its beak/hammer element 6.5099 -> 6.7760 — enough that at
+    # HEAVY it now selects percussion/blunt instead of puncture/point. That is its own poleaxe-family sibling
+    # lucerne_hammer's long-standing behaviour (blunt at medium AND heavy), and it is the gap-game direction the
+    # design wants: a crow's-beak warhammer meeting plate swings the hammer rather than thrusting. Verified by
+    # direct select_mode sweep this pass — bec_de_corbin reads point/point/point/blunt across none..heavy.
+    # hook_sword was ALREADY a changer (via its secondary point, U2/ED-PC-0011); E2b changes WHICH mode it
+    # changes to, not whether it changes — its authored crescent is now reachable, so light/medium/heavy read
+    # percussion/blunt while `none` keeps its native curved_cut. See test_combat_element_reachability.py.
+    expected = ['greatsword', 'glaive', 'guisarme', 'bec_de_corbin', 'lucerne_hammer', 'goedendag', 'katana', 'tachi', 'odachi', 'changdao', 'nandao', 'flamberge', 'estoc', 'hook_sword']
     assert changers == expected, f"expected {expected} to change selected head with armour; got {changers}"
 
 
@@ -858,10 +868,16 @@ def test_reach_corrected_anchors_stay_above_l0():
 
 def test_jd9_grip_target_converges_no_oscillation():
     """JD-9 (capstone finding M1): grip_target's drive term is fixed to grip=0.0, so it no longer depends on its
-    own prior output — verified NON-OSCILLATING (in fact single-step) and matching the plan's own converged g*
-    table exactly for every gathering pole."""
+    own prior output — verified NON-OSCILLATING (in fact single-step).
+
+    [ED-PC-0053, 2026-07-29] The g* TABLE was re-baselined when close_unwieldiness stopped being a fiat gate
+    (`max(0, reach_base - CLOSE_REACH_REF)`, whose threshold implied 1.18 m of forward extent) and became the derived
+    overhang past the body's close measure. grip_target's drive reads close_unwieldiness, so every gathering pole's
+    converged g* rises. **The PROPERTY this test exists for — g1 == g2, single-step convergence, no oscillation — is
+    unchanged and still asserted below; only the absolute table moved.** Prior values: spear 0.865, yari 1.0,
+    glaive 0.467, guisarme 0.396, bardiche 0.627."""
     C, core, S, WP, CFG = _mods()
-    targets = {'spear': 0.865, 'yari': 1.0, 'glaive': 0.467, 'guisarme': 0.396, 'bardiche': 0.627}
+    targets = {'spear': 0.896, 'yari': 1.0, 'glaive': 0.708, 'guisarme': 0.6747, 'bardiche': 0.8152}
     for n, target in targets.items():
         c = C.Combatant('x', weapon=n)
         g1 = S.grip_target(c, True, CFG)

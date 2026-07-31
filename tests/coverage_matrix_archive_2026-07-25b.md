@@ -171,4 +171,61 @@ stochastic-rout breakpoint and the fractional pool).
 - Tests: `tests/valoria/test_feigned_retreat.py` (6) — Disc-rate band + monotonicity, recognise rises with
   Command, overextend only when deceived+failed, non-feigning no-op, gate-OFF inert, pool-penalty ON vs OFF.
 
+---
 
+<!-- [ED-MB-0061, 2026-07-30] Relocated VERBATIM from tests/coverage_matrix.md to keep that
+     register under its 15,000-token cap. Nothing condensed, nothing dropped. -->
+
+## 2026-07-29 — ED-MB-0045 plan-v2 A1a: field goldens bisected + re-recorded after 5 days red
+
+Both `bat.py` field goldens (`unit_field`, `cell_field`) had been RED since PRs #235/#236
+(2026-07-24/25) re-recorded only the grid modes — undetected because nothing runs the field
+`--check` (the gap A1b's CI job closes). Bisected in a worktree across `4b80ad5..584c683`, pins
+fixed (the `_PINNED_OFF` vector with the two field toggles inverted, `PC_STOCHASTIC_ROUT` explicit
+per axis): **two movers, commit-level** — (1) #235 `fbc93b0`'s change set at fixed rout=0
+(`unit_field` `d44f211f…→27aa9ee0…`, `cell_field` `a1a97940…→3a5807fb…`; NOT decomposed to a single
+mechanism on the field arm — `PC_WHEEL`'s node-path port is an unmeasured second candidate beside
+impulse momentum); (2) #236 `584c683`'s `PC_STOCHASTIC_ROUT` default flip 0→1 as a **pure config
+effect** (#236's code alone byte-identical at rout=0 — the identity its `set_morale` sweep predicts
+at `PC_CELL_MORALE=0`). #233/#234 verified byte-exact on both field modes at rout=0. Closure by two
+instruments: `584c683`@rout=1 reproduces HEAD's digests exactly, and
+`git diff 584c683..cd7f0d0 -- tests/sim/mass_battle/` is empty. Controls: base@rout=0 reproduced
+BOTH prior goldens byte-exactly (positive control for environment + pin vector); all four modes
+`--check` green ×2 consecutively post-re-record (8/8); `PYTHONHASHSEED` unset ⇒ every process drew
+a fresh hash seed and digests still agreed (hash-order independence, empirical). Recorded on
+Linux/Python 3.11.15; reference-env confirmation = A1b's first CI run. Opus critic pass applied
+(commit-level attribution honesty; source-diff closure). No engine `.py` touched; no constant
+tuned; goldens moved = the disclosed re-record itself.
+
+**The sweep.** `eff_morale` reads the cells once seeded and never falls back to the scalar, so every
+`.morale =` in the engine was a silent no-op under the flag — which is what confounded the retracted
+measurement. Two owners now: `Subunit.set_morale` / `Unit.set_morale` (absolute), with
+`erode_morale`/`pull_morale` already owning the relative write. Routed: `between_turn_recovery`,
+`reset_morale_between_battles`, the Command=0 rout write, `Unit.cascade_morale_hit`. One site stays
+bare and annotated — `core/state.py` materialises the scalar so the stochastic-rout punch stays local
+to one subunit; rewriting the cells there would flatten genuine divergence.
+
+**A defect in the sweep, found by probing rather than assuming.** Routing `between_turn_recovery`'s
+*unit-level* line through `set_morale` **re-inflated damaged bodies**: recovery is a bounded increment,
+not an absolute statement, and the unit pool is stale once cells own the state. A body knocked to 2.0
+came back at 6.0 with the recovery constant at 0. That line stays bare; inheriting subunits recover via
+`pull_morale`.
+
+**The guard is field-parameterized on purpose.** `test_morale_write_sweep.py`'s `_CELL_OWNED` registry
+means phases 3/4 (stamina, discipline, quality, hp, armour) inherit the same protection by adding a
+key. Re-deriving the guard per field would repeat the exact mistake — fixing an instance instead of the
+pattern — that caused the retraction. `test_the_guard_itself_can_fail` proves each registered pattern
+still flags a planted write, because a guard that cannot fail reports safety it does not provide.
+
+**Deliberately NOT swept, and recorded as a re-flip pre-condition:** the two harness writers in
+`lanchester_signature.py` and `test_persubunit_stress.py`. They were swept, then reverted — the
+anti-fabrication gate scans the changeset, so touching either file dragged ~100 pre-existing uncited
+constants into a blocking gate. Inert while the flag is OFF; **must be swept before it flips**, because
+`lanchester_signature` pins morale high specifically to *disable* rout. This is the cost that CLAUDE.md
+§0.1's "sweep only what the task is load-bearing on, file the rest" exists to respect, and it showed up
+within an hour of the rule being written.
+
+**CLAUDE.md §0.1** records the five checks distilled from the retraction. The load-bearing observation:
+§0 *already* demanded an adversarial pass, and one was performed — on the result's statistics, never on
+its setup. Restating principles does nothing; the fix is naming what to attack and requiring an
+artifact that proves it happened.
