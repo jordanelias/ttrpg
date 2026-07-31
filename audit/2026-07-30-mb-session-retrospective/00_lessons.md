@@ -124,6 +124,9 @@ Each behavioural failure was re-run with every one of the 15 flags individually 
 | `close_ranks::inert_when_off` | `PC_CLOSE_RANKS` (definitional) |
 | `obb_contact_toi` ×2 (F3/F4) | `PC_FACING_MODEL` |
 
+
+⚠ **COUNT CONVENTION (ED-MB-0061, corrected 2026-07-31).** Failure counts quoted in these documents as **16** and **9** are LOCAL runs. **CI reports 17 and 10.** The constant +1 is `test_mass_battle_byte_exact::test_byte_exact_cell_mode`, which SKIPS locally on a documented pre-existing non-portability (*"doesn't match the golden value on this platform/Python version … only verified byte-exact on the reference CI environment"*) and RUNS on CI. It is the same golden-staleness class as `unit_mode` and is equally blocked on the P-1 re-base. Both numbers are correct for their environment; quoting the local one as if it were CI's was my error. **The merge of `origin/main` added ZERO failures** — PC's ~52 new tests all pass, which the CI delta being exactly this long-standing skip confirms.
+
 **What this corrects.** I reported "nine defects from one flag flip" as nine *mechanisms*. That was
 over-claimed. The honest classification:
 
