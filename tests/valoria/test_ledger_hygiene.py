@@ -165,18 +165,22 @@ def test_a_genuinely_missing_instrument_is_still_caught():
 
 REGISTERS_DIR = os.path.join(ROOT, 'registers')
 
-# Ids that legitimately appear in BOTH a live ledger and its archive, because they are not
-# one item's rows split — they are TWO DIFFERENT ITEMS that were issued the same id, and one
-# of them was archived. Documented in references/id_reservations.yaml: "ED-IN-0012..0013
-# DOUBLE-ALLOCATED 2026-07-05 by PR #83 (SC-audit batch) AND by PR #81/#82 (edge-playability
-# §7 items 1-2)". CLAUDE.md §3 freezes history rather than laundering it, so these stay.
+# Ids that legitimately appear in BOTH a live ledger and its archive. Currently EMPTY, and that
+# is a result rather than an omission.
 #
-# This set must not grow. A NEW overlap is the archive-split bug this guard exists for; adding
-# an entry here to silence it would convert the guard into a record of its own defeats.
-SPLIT_GRANDFATHERED = {
-    'ED-IN-0012': 'double-allocated 2026-07-05 (PR #83 vs PR #81/#82) — two items, one id',
-    'ED-IN-0013': 'double-allocated 2026-07-05 (PR #83 vs PR #81/#82) — two items, one id',
-}
+# ED-IN-0012/0013 were listed here for exactly one commit. They are the documented 2026-07-05
+# DOUBLE-ALLOCATION (PR #83's SC-audit batch vs PR #81/#82's edge-playability items — two
+# different items issued one id), and they were genuinely split across live/archive at the time.
+# Resolving the origin/main merge by WHOLE-ID placement moved both of their rows into the
+# archive together, which ended the split without touching history: no row was edited, deleted,
+# or relabelled, so CLAUDE.md §3's no-retrofit rule is intact. The exemption then went stale and
+# `test_the_split_grandfather_list_is_still_load_bearing` said so on the next run — which is the
+# entire reason that second test exists.
+#
+# If this set ever grows again: a NEW overlap is the archive-split bug this guard exists for.
+# Adding an entry to silence it converts the guard into a record of its own defeats. The correct
+# response is to place the id's rows in one file, not to exempt it.
+SPLIT_GRANDFATHERED = {}
 
 
 def _lane_ledger_pairs():
@@ -257,4 +261,6 @@ def test_the_split_grandfather_list_is_still_load_bearing():
         f'{sorted(stale)} are grandfathered as split but are no longer split — remove them '
         f'from SPLIT_GRANDFATHERED so the guard covers them again.'
     )
-    assert SPLIT_GRANDFATHERED, 'empty grandfather set — drop it and simplify the guard'
+    # An EMPTY set is the healthy state and must stay legal: the exemption exists to be spent.
+    # (An earlier version asserted the set was non-empty, which would have made "we fixed the
+    # last split" a test failure — a guard that punishes its own success.)

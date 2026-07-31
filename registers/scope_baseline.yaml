@@ -58,7 +58,7 @@ active_until: "M1 junctures closed == 7"
 # the raise landing months later. A second "seeding" is a governance failure, not a measurement.
 signals:
   ed.open:
-    baseline: 216  # measured 2026-07-31 across registers/editorial_ledger*.jsonl (non-archive)
+    baseline: 213  # measured 2026-07-31 across registers/editorial_ledger*.jsonl (non-archive)
     target: 100
     note: >-
       Total open editorial items. Expected to fall sharply once the decision policy lands
@@ -74,7 +74,7 @@ signals:
       or arithmetic-derivable and should never have required a ruling.
 
   audit.files:
-    baseline: 1264  # measured 2026-07-31 (git ls-files audit | wc -l)
+    baseline: 1265  # measured 2026-07-31 (git ls-files audit | wc -l)
     target: 1264
     note: >-
       NOT a shrink target — audits are history and deleting them destroys provenance. This
@@ -82,7 +82,7 @@ signals:
       it gates an M1 juncture, and it must be paid for by consolidating an equal count.
 
   tracked.files:
-    baseline: 3108  # measured 2026-07-31 (git ls-files | wc -l)
+    baseline: 3109  # measured 2026-07-31 (git ls-files | wc -l)
     target: 3103
     note: >-
       Total surface under maintenance. Flat is the goal, not shrinkage: the season loop will
