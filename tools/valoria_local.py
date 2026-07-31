@@ -144,6 +144,18 @@ def main(argv):
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking
         # boundary — but local-green now at least SEES it. Refresh with `python3 tools/freshness_gate.py --update`.
         ('freshness_gate.py',            [],          False),  # report-only canonical-SHA staleness (blocking in CI's integrity job)
+        # ED-IN-0112: the SCOPE ratchet. Wired HERE rather than as a new CI job, deliberately —
+        # this repo's problem is too many jobs, not too few, and valoria_local already runs both
+        # locally (pre-commit) and in CI (generation-consistency-check), so one line buys both
+        # surfaces at zero job cost.
+        #
+        # REPORT-ONLY, AND THAT IS LOAD-BEARING. An adversarial pass found the first version of
+        # this scaffolding asserting the ratchet's --check inside the BLOCKING pytest suite, at
+        # zero headroom: the next PR to file an ED would have broken the build for an unrelated
+        # author. Scope growth is a signal for the author to see and answer, never a reason to
+        # refuse someone else's commit. If it ever becomes blocking, that is Jordan's call with
+        # a loud ED-1094 call-out, not a quiet flag change.
+        ('scope_ratchet.py',             ['--check'], False),  # scope ceilings + G13 activity control (ED-IN-0112)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

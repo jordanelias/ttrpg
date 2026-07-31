@@ -31,11 +31,24 @@ fact as a *program* signal: every existing card describes the state of the corpu
 defines "fully simulatable season" as five falsifiable rows so the phrase cannot expand without
 someone noticing.
 
-## Held for Jordan (nothing here ratifies on merge)
+## Ratified 2026-07-31 (PR #277)
 
-Per CLAUDE.md §2's ED-1094 exception, one item in the parent proposal is **held back loudly**: the
-**decision policy** (precedence order among canon / historical precedent / physical factuality,
-the operational test for "emergent", and the deliberate-fantasy exception clause). It is the one
-artifact only Jordan can author, agents can only draft it for correction, and **merging this
-pointer does not adopt any precedence order.** The scaffolding in this PR is deliberately inert
-with respect to that decision — it measures and reports; it rules nothing.
+**RATIFIED on merge** per ED-1094: the scope ratchet + its raise guard + the G13 activity control,
+the season acceptance gate, the dashboard program panel, `valoria_local.py --ci`, and the `-n auto`
+shipping-gate parallelisation (387s -> 180.7s in CI, 2.15x, collection byte-identical).
+
+**Wired, not merely built.** An adversarial critic found the ratchet had no executing caller except
+the test suite — an inert instrument. It is now a **report-only** row in `tools/valoria_local.py`'s
+check table (which runs pre-commit *and* in CI's `generation-consistency-check`) and is registered in
+`references/ci_checks_registry.yaml`. Deliberately **not** a new CI job: the repo has 34, and adding
+a 35th to report one number would be the defect the instrument exists to measure.
+
+## Still held for Jordan — carried forward as ED-IN-0113
+
+The **decision policy** never ratified and does not ratify here: the precedence order among canon /
+historical precedent / physical factuality, the operational test for "emergent", and the
+deliberate-fantasy exception clause. A **134-ruling precedent mine** is attached to ED-IN-0113 and
+shows **mechanical** canon is demonstrably subordinate to measured, physically-grounded engine
+behaviour (ED-899 / ED-900 / ED-901 / ED-PC-0005) — but whether **metaphysical** canon shares that
+tier is **unestablished**, and inventing it would be the fabrication `NO DEFAULT` forbids. Five
+unfixed adversarial findings ride the same entry.
