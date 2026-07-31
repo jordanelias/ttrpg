@@ -115,7 +115,7 @@ def test_seed_refuses_to_raise_a_ceiling_without_allow_raise(tmp_path):
     assert not refused2
 
 
-def test_cli_check_exits_nonzero_on_a_regression_and_zero_without_one():
+def test_cli_check_exits_nonzero_on_a_regression_and_zero_without_one(tmp_path):
     """--check's exit code must track the verdict. A gate that always exits 0 is decor.
 
     REWRITTEN 2026-07-31 after an adversarial pass (ED-IN-0112). The first version
@@ -135,19 +135,19 @@ def test_cli_check_exits_nonzero_on_a_regression_and_zero_without_one():
     measurable = {s['signal']: s['value'] for s in live['signals'] if s['value'] is not None}
     assert measurable, 'no measurable signals — the pins below would be vacuous'
 
+    # tmp_path, NOT a file written into tests/valoria/. A test that drops scratch files into
+    # the collection directory is not parallel-safe (pytest-xdist workers share a cwd) and can
+    # be COLLECTED as a fixture file by a later run. Worker-isolated by construction here.
     def _run(baseline_map, tmpname):
-        path = os.path.join(REPO_ROOT, 'tests', 'valoria', tmpname)
+        path = tmp_path / tmpname
         with open(path, 'w', encoding='utf-8') as fh:
             fh.write('signals:\n')
             for name, spec in baseline_map.items():
                 fh.write(f"  {name}:\n    baseline: {spec}\n    target: 0\n")
-        try:
-            return subprocess.run(
-                [sys.executable, os.path.join(TOOLS, 'scope_ratchet.py'),
-                 '--check', '--baseline', path],
-                cwd=REPO_ROOT, capture_output=True, text=True)
-        finally:
-            os.remove(path)
+        return subprocess.run(
+            [sys.executable, os.path.join(TOOLS, 'scope_ratchet.py'),
+             '--check', '--baseline', str(path)],
+            cwd=REPO_ROOT, capture_output=True, text=True)
 
     held = _run({k: v for k, v in measurable.items()}, '_tmp_held.yaml')
     assert held.returncode == 0, f'no regression must exit 0; got {held.returncode}'
@@ -200,7 +200,7 @@ def test_doing_nothing_does_not_score_as_success(monkeypatch):
     assert active['activity']['moved'] is True
 
 
-def test_inactivity_is_reported_but_never_fails_the_gate():
+def test_inactivity_is_reported_but_never_fails_the_gate(tmp_path):
     """HELD_INACTIVE must not exit non-zero.
 
     An infrastructure PR legitimately closes no juncture. A control that BLOCKED on
@@ -212,19 +212,16 @@ def test_inactivity_is_reported_but_never_fails_the_gate():
     # test_cli_check_exits_nonzero_on_a_regression_and_zero_without_one for why running
     # this against live ceilings inside a BLOCKING suite was a landmine.
     live = sr.collect()
-    path = os.path.join(REPO_ROOT, 'tests', 'valoria', '_tmp_inactive.yaml')
+    path = tmp_path / '_tmp_inactive.yaml'
     with open(path, 'w', encoding='utf-8') as fh:
         fh.write('signals:\n')
-        for s in live['signals']:
-            if s['value'] is not None:
-                fh.write(f"  {s['signal']}:\n    baseline: {s['value']}\n    target: 0\n")
-    try:
-        assert sr.main(['--summary', '--baseline', path]) == 0
-        assert sr.main(['--check', '--baseline', path]) == 0, (
-            'inactivity must not fail --check; only a REGRESSION may'
-        )
-    finally:
-        os.remove(path)
+        for sig in live['signals']:
+            if sig['value'] is not None:
+                fh.write(f"  {sig['signal']}:\n    baseline: {sig['value']}\n    target: 0\n")
+    assert sr.main(['--summary', '--baseline', str(path)]) == 0
+    assert sr.main(['--check', '--baseline', str(path)]) == 0, (
+        'inactivity must not fail --check; only a REGRESSION may'
+    )
 
 
 def test_the_measured_signal_set_cannot_silently_shrink(): 
