@@ -156,3 +156,105 @@ def test_a_genuinely_missing_instrument_is_still_caught():
     assert target == 'tools/does_not_exist.py'
     assert not os.path.exists(os.path.join(ROOT, target)), \
         'fixture path unexpectedly exists — this test no longer proves anything'
+
+
+# ---------------------------------------------------------------------------
+# 3. An ED's rows must not be SPLIT between a live lane ledger and its archive.
+#    (ED-IN-0112, 2026-07-31 — found by CI, not by reading.)
+# ---------------------------------------------------------------------------
+
+REGISTERS_DIR = os.path.join(ROOT, 'registers')
+
+# Ids that legitimately appear in BOTH a live ledger and its archive, because they are not
+# one item's rows split — they are TWO DIFFERENT ITEMS that were issued the same id, and one
+# of them was archived. Documented in references/id_reservations.yaml: "ED-IN-0012..0013
+# DOUBLE-ALLOCATED 2026-07-05 by PR #83 (SC-audit batch) AND by PR #81/#82 (edge-playability
+# §7 items 1-2)". CLAUDE.md §3 freezes history rather than laundering it, so these stay.
+#
+# This set must not grow. A NEW overlap is the archive-split bug this guard exists for; adding
+# an entry here to silence it would convert the guard into a record of its own defeats.
+SPLIT_GRANDFATHERED = {
+    'ED-IN-0012': 'double-allocated 2026-07-05 (PR #83 vs PR #81/#82) — two items, one id',
+    'ED-IN-0013': 'double-allocated 2026-07-05 (PR #83 vs PR #81/#82) — two items, one id',
+}
+
+
+def _lane_ledger_pairs():
+    """(live, archive) paths for every lane that has both."""
+    pairs = []
+    for live in sorted(glob.glob(os.path.join(REGISTERS_DIR, 'editorial_ledger_*.jsonl'))):
+        if live.endswith('_archive.jsonl'):
+            continue
+        archive = live[:-len('.jsonl')] + '_archive.jsonl'
+        if os.path.exists(archive):
+            pairs.append((live, archive))
+    return pairs
+
+
+def _ids(path):
+    out = set()
+    for line in open(path, encoding='utf-8', errors='replace'):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if entry.get('id'):
+            out.add(entry['id'])
+    return out
+
+
+def test_no_ed_has_rows_split_between_a_live_ledger_and_its_archive():
+    """Archive whole IDs, never individual rows.
+
+    THE INCIDENT (ED-IN-0112). The IN ledger crossed its 50k size cap, so an archive
+    pass moved the six oldest TERMINAL ROWS out. ED-IN-0016 had two rows — `open`
+    (2026-07-05) and `resolved` (2026-07-08). Only the resolved row moved. Because the
+    ledger is APPEND-ONLY, an id's effective status is its LATEST row, so removing the
+    resolved one silently reverted ED-IN-0016 to `open` in the live file. That turned
+    `module_contracts.yaml`'s citation of it into "a canonical surface citing an open ED
+    as basis", and ED-Citation-Integrity went red on CI.
+
+    Nothing local caught it: the size check passed, and `validate_ed_citations` had been
+    run BEFORE the archive move. The row-level operation looked correct in isolation and
+    was wrong only in relation to rows it left behind — the same read/write-asymmetry
+    shape as §0.1 #1.
+
+    The guard is the invariant, not the incident: an id lives entirely in the live file
+    or entirely in the archive. Splitting is always a bug, whatever the reason.
+    """
+    pairs = _lane_ledger_pairs()
+    assert pairs, 'no live/archive lane-ledger pairs found — this guard would be vacuous'
+
+    checked = 0
+    for live, archive in pairs:
+        overlap = (_ids(live) & _ids(archive)) - set(SPLIT_GRANDFATHERED)
+        assert not overlap, (
+            f'{os.path.basename(live)} and its archive both contain {sorted(overlap)}. '
+            f"An ED's rows must move together: because the ledger is append-only, a split "
+            f"leaves the id's effective status set by whichever rows stayed behind."
+        )
+        checked += 1
+    assert checked == len(pairs), f'expected to check {len(pairs)} pairs, checked {checked}'
+
+
+def test_the_split_grandfather_list_is_still_load_bearing():
+    """Every grandfathered id must STILL be split, or the exemption is stale.
+
+    Without this, the exemption set is write-only: an id that stopped overlapping would sit
+    here forever, quietly widening the hole for a future genuine split of the same id.
+    """
+    live_arch = {}
+    for live, archive in _lane_ledger_pairs():
+        live_arch.setdefault('live', set()).update(_ids(live))
+        live_arch.setdefault('arch', set()).update(_ids(archive))
+    actually_split = live_arch.get('live', set()) & live_arch.get('arch', set())
+
+    stale = set(SPLIT_GRANDFATHERED) - actually_split
+    assert not stale, (
+        f'{sorted(stale)} are grandfathered as split but are no longer split — remove them '
+        f'from SPLIT_GRANDFATHERED so the guard covers them again.'
+    )
+    assert SPLIT_GRANDFATHERED, 'empty grandfather set — drop it and simplify the guard'
