@@ -7,5 +7,11 @@
 
 /references/definitions/          @jordanelias
 /registers/review_baseline.yaml   @jordanelias
+# ED-IN-0112: the SCOPE ratchet's ceilings, same reason as review_baseline above — a debt
+# ceiling is a design commitment. Added after an adversarial pass found the file CLAIMED
+# "the same governance review_baseline.yaml carries" while having no CODEOWNERS row at all,
+# i.e. governance-by-comment. A raise is meant to be a decision, so it needs a reviewer, not
+# a sentence.
+/registers/scope_baseline.yaml    @jordanelias
 /.github/workflows/               @jordanelias
 /.github/CODEOWNERS               @jordanelias

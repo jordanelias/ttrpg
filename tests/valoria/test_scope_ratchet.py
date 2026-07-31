@@ -115,15 +115,49 @@ def test_seed_refuses_to_raise_a_ceiling_without_allow_raise(tmp_path):
     assert not refused2
 
 
-def test_cli_check_exit_codes():
-    """--check must exit non-zero on regression. A gate that always exits 0 is decor."""
-    env = dict(os.environ)
-    ok = subprocess.run([sys.executable, os.path.join(TOOLS, 'scope_ratchet.py'), '--check'],
-                        cwd=REPO_ROOT, capture_output=True, text=True, env=env)
-    # Against the live baseline the tree should be held; if this ever fails it means
-    # real scope growth landed unseeded, which is exactly what the gate is for.
-    assert ok.returncode in (0, 1)
-    assert 'verdict:' in ok.stdout
+def test_cli_check_exits_nonzero_on_a_regression_and_zero_without_one():
+    """--check's exit code must track the verdict. A gate that always exits 0 is decor.
+
+    REWRITTEN 2026-07-31 after an adversarial pass (ED-IN-0112). The first version
+    asserted `returncode in (0, 1)`, which ADMITS the failure its own docstring
+    excludes — a `--check` hardcoded to `return 0` passed it. That is the
+    §0.1 #2 pattern: not a weak assertion, an absent one.
+
+    It is also deliberately run against CONSTRUCTED baselines, never the live tree.
+    The live-tree version was a landmine: `pytest tests/valoria` is a BLOCKING CI gate,
+    the ceilings sit at zero headroom by construction, and CLAUDE.md §2 expects
+    substantively every PR to append a ledger row — so the next ED filed by anyone
+    would have driven ed.open past its ceiling and turned a scope signal into a broken
+    build for an unrelated author. A report-only instrument must never be able to fail
+    the blocking suite.
+    """
+    live = sr.collect()
+    measurable = {s['signal']: s['value'] for s in live['signals'] if s['value'] is not None}
+    assert measurable, 'no measurable signals — the pins below would be vacuous'
+
+    def _run(baseline_map, tmpname):
+        path = os.path.join(REPO_ROOT, 'tests', 'valoria', tmpname)
+        with open(path, 'w', encoding='utf-8') as fh:
+            fh.write('signals:\n')
+            for name, spec in baseline_map.items():
+                fh.write(f"  {name}:\n    baseline: {spec}\n    target: 0\n")
+        try:
+            return subprocess.run(
+                [sys.executable, os.path.join(TOOLS, 'scope_ratchet.py'),
+                 '--check', '--baseline', path],
+                cwd=REPO_ROOT, capture_output=True, text=True)
+        finally:
+            os.remove(path)
+
+    held = _run({k: v for k, v in measurable.items()}, '_tmp_held.yaml')
+    assert held.returncode == 0, f'no regression must exit 0; got {held.returncode}'
+    assert 'verdict:' in held.stdout
+
+    regressed = _run({k: v - 1 for k, v in measurable.items()}, '_tmp_regressed.yaml')
+    assert regressed.returncode == 1, (
+        f'a regression MUST exit 1; got {regressed.returncode}. An always-zero exit is decor.'
+    )
+    assert 'REGRESSED' in regressed.stdout
 
 
 def test_doing_nothing_does_not_score_as_success(monkeypatch):
@@ -174,7 +208,61 @@ def test_inactivity_is_reported_but_never_fails_the_gate():
     and it would get bypassed — which is worse than not having it. The control's job is
     to stop `HELD` reading as proof of health, not to gate.
     """
-    rc = sr.main(['--summary'])
-    assert rc == 0
-    rc_check = sr.main(['--check'])
-    assert rc_check == 0, 'inactivity must not fail --check; only a REGRESSION may'
+    # Constructed baseline, never the live tree — see
+    # test_cli_check_exits_nonzero_on_a_regression_and_zero_without_one for why running
+    # this against live ceilings inside a BLOCKING suite was a landmine.
+    live = sr.collect()
+    path = os.path.join(REPO_ROOT, 'tests', 'valoria', '_tmp_inactive.yaml')
+    with open(path, 'w', encoding='utf-8') as fh:
+        fh.write('signals:\n')
+        for s in live['signals']:
+            if s['value'] is not None:
+                fh.write(f"  {s['signal']}:\n    baseline: {s['value']}\n    target: 0\n")
+    try:
+        assert sr.main(['--summary', '--baseline', path]) == 0
+        assert sr.main(['--check', '--baseline', path]) == 0, (
+            'inactivity must not fail --check; only a REGRESSION may'
+        )
+    finally:
+        os.remove(path)
+
+
+def test_the_measured_signal_set_cannot_silently_shrink(): 
+    """G16 — deleting a whole signal must fail, not merely perturbing one.
+
+    Found by an adversarial pass (ED-IN-0112). The set-equality pin above compares
+    MEASURERS against the baseline file, so deleting a signal from BOTH still passed:
+    the ratchet could be reduced to one signal — including dropping `tracked.files`,
+    which the pointer calls "the mechanism, not a side effect" — with a fully green
+    suite. Nothing pinned WHICH leaks are measured, only that the two lists agreed
+    with each other.
+
+    This names them. Adding a signal is free; removing one is a deliberate edit here.
+    """
+    required = {'ed.open', 'ed.needs_jordan', 'audit.files', 'tracked.files', 'proposals.open'}
+    missing = required - set(sr.MEASURERS)
+    assert not missing, (
+        f'signal(s) {sorted(missing)} were removed from MEASURERS. Each is a distinct way '
+        f'scope leaks (work opened / bottlenecked / audit corpus / total surface / '
+        f'unratified designs); dropping one silently narrows what the ratchet can see.'
+    )
+
+
+def test_unmeasurable_input_is_unknown_never_a_pass(monkeypatch):
+    """A signal that cannot be measured must grade UNKNOWN, not 0.
+
+    The module docstring promises "an unmeasurable signal must not read as a pass".
+    It did not hold: an empty ledger glob, an absent proposals/ and a `git ls-files`
+    over a missing pathspec all returned 0, and 0 <= ceiling graded as `held`. Deleting
+    registers/, proposals/ and audit/ outright scored a clean HELD.
+    """
+    monkeypatch.setattr(sr, '_ledger_rows', lambda: [])
+    value, evidence = sr.measure_ed_open()
+    assert value is None, 'an unreadable ledger must be UNKNOWN, not 0'
+    assert 'UNKNOWN' in evidence
+
+    result = sr.collect({'signals': {'ed.open': {'baseline': 999, 'target': 0}}})
+    row = result['signals'][0]
+    assert row['ok'] is None, 'UNKNOWN must not grade as ok=True'
+    assert result['verdict'] == 'UNKNOWN'
+    assert result['regressions'] == 0

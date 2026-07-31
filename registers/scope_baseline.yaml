@@ -53,6 +53,14 @@ active_until: "M1 junctures closed == 7"
 # once, because a ceiling must include the ruler. EVERY LATER COMMIT PAYS: new surface is
 # funded by retiring dead surface, not by re-seeding.
 #
+# ARITHMETIC RECONCILED (adversarial pass flagged 3103 + 5 = 3108, not 3109). The sixth file
+# is not this program's: merging origin/main brought in
+# `audit/2026-07-30-audit-family-critique/00_critique.md` (ED-IN-0099). Verified with
+# `git diff --name-status 3f41a32..HEAD | grep '^A'` -> exactly 6 additions, five of them the
+# instruments named above. So 3103 + 5 (ours) + 1 (main's) = 3109, and audit.files 1264 -> 1265
+# is that same file. No unearned headroom; the ceiling includes one file this program did not
+# author and could not have refused.
+#
 # The falsifier for that claim is `seeded:` above. If a future session raises tracked.files or
 # audit.files and calls it seeding, `seeded` will still read 2026-07-31 and the git log will show
 # the raise landing months later. A second "seeding" is a governance failure, not a measurement.
@@ -66,7 +74,13 @@ signals:
       carry a source pointer; only 10 carry a proposed answer).
 
   ed.needs_jordan:
-    baseline: 87  # measured 2026-07-31
+    # 87 -> 94 on 2026-07-31: a CORRECTED MEASUREMENT, not scope growth. The first seeding
+    # used a bare `needs_jordan` boolean read; the signal now delegates to obs_core (the
+    # ED-IN-0068 single owner), whose normalization adds the free-text rescue for
+    # pre-cutover rows predating the field. Same tree, same day, +7 — the earlier ceiling
+    # was simply undercounting. Left unfixed, the dashboard would have published two
+    # different "needs Jordan" figures from two cards on one page.
+    baseline: 94  # measured 2026-07-31 via obs_core.read_ledger_entries
     target: 15
     note: >-
       The bottleneck signal. Target 15 is the measured share of the queue that is genuine

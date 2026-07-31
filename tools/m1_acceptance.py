@@ -114,6 +114,7 @@ def row_key_log_closure():
                         f'unexpected shape: {type(modules).__name__}')
 
     emitted, terminal, consumed = set(), set(), set()
+    wildcard_consumers = 0
     for spec in modules:
         if not isinstance(spec, dict):
             continue
@@ -124,21 +125,48 @@ def row_key_log_closure():
                     terminal.add(str(e['type']))
         for c in spec.get('consumes') or []:
             if isinstance(c, dict) and c.get('type'):
-                consumed.add(str(c['type']))
+                t = str(c['type'])
+                # `- {type: "*", from: engine}` is a QUANTIFIER, not a key name. Two modules
+                # declare it, one commented "universal reader of the full Key stream
+                # (substrate §8.7)". The first version of this row put the literal "*" into
+                # the consumed set and never expanded it, which is the term-vs-concept error:
+                # it reported 2 orphans while the contract says every emit has a consumer.
+                if t == '*':
+                    wildcard_consumers += 1
+                    continue
+                consumed.add(t)
 
-    orphans = sorted(emitted - consumed - terminal)
+    strict = sorted(emitted - consumed - terminal)          # ignoring wildcards
+    effective = [] if wildcard_consumers else strict         # honouring them
+
+    # BOTH READINGS ARE REPORTED, because neither alone is honest. Honouring the wildcard
+    # makes the row vacuous (always 0 while any universal reader exists); ignoring it
+    # overstates. `value` is the STRICT count — the one that names something a human can
+    # act on — and the detail says plainly that a universal reader exists.
     return {
         'row': 'key_log_closure',
         'label': 'Every emitted key has a consumer or declared terminal',
         'state': 'partial',
-        'value': len(orphans),
+        'value': len(strict),
+        'value_effective': len(effective),
         # Never True from static analysis alone: a contract-declared consumer that never
-        # fires at runtime is a dead seam this pass cannot see. Only a season KeyLog can.
+        # fires at runtime is a dead seam this pass cannot see. Only a season KeyLog can —
+        # and a wildcard consumer is exactly the case where "declared" says least about
+        # "fires", which is the argument for measuring this over a real KeyLog.
         'passes': None,
-        'unblocked_by': 'a season KeyLog (static pass cannot see a declared-but-never-fired consumer)',
-        'detail': (f"{len(emitted)} emitted · {len(terminal)} declared terminal · "
-                   f"{len(orphans)} orphaned"
-                   + (f" — e.g. {', '.join(orphans[:3])}" if orphans else '')),
+        'unblocked_by': 'a season KeyLog (a declared — especially wildcard — consumer may never fire)',
+        'detail': (
+            f"{len(emitted)} emitted · {len(terminal)} declared terminal · "
+            f"{len(strict)} unconsumed by name"
+            + (f" ({', '.join(strict[:3])})" if strict else '')
+            + (f"; {wildcard_consumers} module(s) declare a `*` universal-reader consume, "
+               f"under which the static orphan count is {len(effective)}"
+               if wildcard_consumers else '')
+        ),
+        'note_terminal_unused': (
+            'no emit in the corpus sets terminal: true, so the "or declared terminal" '
+            'branch has never been exercised' if not terminal else ''
+        ),
     }
 
 

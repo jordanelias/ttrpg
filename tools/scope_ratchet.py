@@ -56,7 +56,14 @@ def _repo(path=''):
 
 
 def _git_ls_files(subdir=None):
-    """Tracked-file count. Uses git so untracked scratch files never inflate a ceiling."""
+    """Tracked-file count. Uses git so untracked scratch files never inflate a ceiling.
+
+    An EMPTY result is UNKNOWN, not zero: `git ls-files <missing-pathspec>` exits 0 with
+    no output, so deleting `audit/` outright would otherwise have graded 0 <= 1265 as a
+    clean pass. Only a non-empty listing is a measurement.
+    """
+    if subdir and not os.path.isdir(os.path.join(REPO_ROOT, subdir)):
+        return None, f"{subdir}/ missing (UNKNOWN, not 0)"
     cmd = ['git', 'ls-files']
     if subdir:
         cmd.append(subdir)
@@ -64,40 +71,57 @@ def _git_ls_files(subdir=None):
     if out.returncode != 0:
         return None, f"git ls-files failed: {out.stderr.strip()[:120]}"
     lines = [ln for ln in out.stdout.splitlines() if ln.strip()]
+    if not lines:
+        return None, f"{' '.join(cmd)} returned nothing (UNKNOWN, not 0)"
     return len(lines), ' '.join(cmd)
 
 
 def _ledger_rows():
-    """Every non-archive ledger row, across the flat file and all lane files."""
-    rows = []
-    for path in sorted(glob.glob(_repo(LEDGER_GLOB))):
-        if 'archive' in os.path.basename(path):
-            continue
-        with open(path, encoding='utf-8', errors='replace') as fh:
-            for line in fh:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    rows.append(json.loads(line))
-                except json.JSONDecodeError:
-                    # A malformed row is a real defect, but it belongs to the ledger's
-                    # own validator (ci_editorial_checker), not to the scope ratchet.
-                    # Skipping keeps this tool from failing for someone else's reason.
-                    continue
-    return rows
+    """Every non-archive ledger row — delegated to obs_core, the single owner.
+
+    DELEGATED 2026-07-31 (ED-IN-0112, adversarial pass). This function previously
+    re-implemented obs_core's read concept-for-concept: same glob, same archive skip,
+    same tolerant JSON parse. CLAUDE.md §8 names `tools/observability/obs_core.py` the
+    single owner of "editorial-ledger read" (ED-IN-0068), so that was a second owner.
+
+    THE DIVERGENCE WAS NOT COSMETIC. obs_core computes needs_jordan as
+    `bool(e["needs_jordan"]) or text_needs_jordan(description)` — a free-text rescue for
+    pre-cutover flat rows that predate the boolean field (`id_reservations.yaml:224`
+    records this moving a register count 79 -> 97). The bare `r.get('needs_jordan')` used
+    here counted strictly fewer, so the dashboard would have published TWO different
+    "needs Jordan" numbers from two cards on one page — exactly the outcome
+    single-ownership exists to prevent.
+    """
+    sys.path.insert(0, os.path.join(HERE, 'observability'))
+    from obs_core import read_ledger_entries  # single owner (ED-IN-0068)
+    return read_ledger_entries()
+
+
+def _no_rows_evidence():
+    """A zero-row read is UNMEASURABLE, not zero.
+
+    An empty ledger set means the registers are missing or unreadable, which must never
+    grade as `0 <= ceiling` -> pass. Returning None routes it to the `ok=None` UNKNOWN
+    path the module docstring promises.
+    """
+    return None, 'no ledger rows readable — registers/ missing or unparseable (UNKNOWN, not 0)'
 
 
 def measure_ed_open():
     rows = _ledger_rows()
+    if not rows:
+        return _no_rows_evidence()
     n = sum(1 for r in rows if r.get('status') == 'open')
-    return n, f"{LEDGER_GLOB} (non-archive), status == open"
+    return n, 'obs_core.read_ledger_entries (non-archive), status == open'
 
 
 def measure_ed_needs_jordan():
     rows = _ledger_rows()
+    if not rows:
+        return _no_rows_evidence()
+    # obs_core has already normalized needs_jordan, INCLUDING the free-text rescue.
     n = sum(1 for r in rows if r.get('status') == 'open' and r.get('needs_jordan'))
-    return n, f"{LEDGER_GLOB} (non-archive), status == open AND needs_jordan"
+    return n, 'obs_core.read_ledger_entries (non-archive), status == open AND needs_jordan'
 
 
 def measure_audit_files():
@@ -109,6 +133,9 @@ def measure_tracked_files():
 
 
 def measure_proposals_open():
+    if not os.path.isdir(_repo('proposals')):
+        # Absent directory is UNKNOWN, not zero — see _no_rows_evidence.
+        return None, 'proposals/ missing (UNKNOWN, not 0)'
     paths = [
         p for p in glob.glob(_repo(PROPOSALS_GLOB))
         if os.path.basename(p).lower() != 'readme.md'
@@ -339,7 +366,13 @@ def seed(path=None, allow_raise=False):
             except ValueError:
                 old_val = None
 
-            is_raise = (new is not None and old_val is not None and new > old_val)
+            # FAILS CLOSED, NOT OPEN (adversarial pass, ED-IN-0112). The first version
+            # computed `is_raise` only when old_val parsed, so a ceiling written as a
+            # float, a quoted string or `~` made is_raise False and the new value was
+            # written WITHOUT --allow-raise — the guard silently absent on exactly the
+            # malformed input most likely to hide a mistake. An unparseable ceiling is
+            # now treated as a raise: refused unless the flag is explicit.
+            is_raise = (new is not None and (old_val is None or new > old_val))
             if new is not None and (not is_raise or allow_raise):
                 comment = line.split('#', 1)[1].rstrip() if '#' in line else ''
                 out.append(f"{indent}baseline: {new}" + (f"  #{comment}" if comment else '') + "\n")

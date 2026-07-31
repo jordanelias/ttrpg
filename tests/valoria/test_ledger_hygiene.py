@@ -180,13 +180,34 @@ REGISTERS_DIR = os.path.join(ROOT, 'registers')
 # If this set ever grows again: a NEW overlap is the archive-split bug this guard exists for.
 # Adding an entry to silence it converts the guard into a record of its own defeats. The correct
 # response is to place the id's rows in one file, not to exempt it.
-SPLIT_GRANDFATHERED = {}
+_PRECUTOVER_DUP = (
+    'pre-cutover flat id, byte-identical row in BOTH files (same date, same status), so the '
+    'effective status is unambiguous from either — a duplicated row, not a split status. '
+    'CLAUDE.md §3 freezes pre-cutover entries ("no retrofit") and both files are append-only, '
+    'so the correct action is to record it, not to edit history.'
+)
+SPLIT_GRANDFATHERED = {
+    'ED-129': _PRECUTOVER_DUP,
+    'ED-131': _PRECUTOVER_DUP,
+    'ED-200': _PRECUTOVER_DUP,
+    'ED-295': _PRECUTOVER_DUP,
+}
 
 
 def _lane_ledger_pairs():
-    """(live, archive) paths for every lane that has both."""
+    """(live, archive) paths for every ledger that has both.
+
+    GLOB CORRECTED 2026-07-31 (ED-IN-0112, adversarial pass). The first version globbed
+    `editorial_ledger_*.jsonl` — which REQUIRES the underscore and therefore never matched
+    `registers/editorial_ledger.jsonl`, the flat pre-cutover ledger and the largest live one.
+    Its archive matched the glob but was then discarded by the `_archive` skip, so the flat
+    pair was checked by neither test. The guard reported green over four ids that are split
+    across that pair today. A guard whose population excludes the biggest member is not a
+    weaker guard, it is a different one.
+    """
     pairs = []
-    for live in sorted(glob.glob(os.path.join(REGISTERS_DIR, 'editorial_ledger_*.jsonl'))):
+    candidates = set(glob.glob(os.path.join(REGISTERS_DIR, 'editorial_ledger*.jsonl')))
+    for live in sorted(candidates):
         if live.endswith('_archive.jsonl'):
             continue
         archive = live[:-len('.jsonl')] + '_archive.jsonl'
