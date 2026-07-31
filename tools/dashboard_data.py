@@ -1206,6 +1206,12 @@ def build_program():
     out["health"] = {
         "closed": health.get("closed"),
         "total": health.get("total"),
+        # in_progress/blocked carried through so the panel can distinguish a stalled
+        # program from one with work in flight (ED-IN-0113 finding 3). Dropping them
+        # here made the card render four active junctures identically to zero.
+        "in_progress": health.get("in_progress"),
+        "blocked": health.get("blocked"),
+        "expired": health.get("expired"),
         "label": "M1 junctures closed",
     }
     out["verdict"] = {

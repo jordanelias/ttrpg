@@ -263,3 +263,134 @@ def test_unmeasurable_input_is_unknown_never_a_pass(monkeypatch):
     assert row['ok'] is None, 'UNKNOWN must not grade as ok=True'
     assert result['verdict'] == 'UNKNOWN'
     assert result['regressions'] == 0
+
+
+# ---------------------------------------------------------------------------
+# m1_acceptance + dashboard build_program (ED-IN-0113 finding 6: both shipped
+# with ZERO assertions anywhere in tests/).
+#
+# Housed HERE rather than in a new file on purpose. They are the same program's
+# artifacts, and a new file would raise tracked.files — the ceiling this very
+# module enforces. Paying a scope cost to test a scope instrument would be a poor
+# trade and a slightly absurd one.
+# ---------------------------------------------------------------------------
+
+import importlib  # noqa: E402
+
+m1 = importlib.import_module('m1_acceptance')
+
+
+def test_acceptance_gate_never_reports_readiness_it_did_not_measure():
+    """The ED-MB-0042 lesson, applied to the gate itself.
+
+    Four of five rows depend on a headless season run that does not exist. A gate
+    that guessed them would be the confounded measurement rebuilt as infrastructure.
+    Every unmeasured row must carry value=None AND name what unblocks it — an
+    honest blocker is actionable, a silent zero is not.
+    """
+    result = m1.collect()
+    assert result['rows'], 'no rows — the gate would vacuously report'
+    for row in result['rows']:
+        assert row['state'] in ('measured', 'partial', 'blocked'), row
+        if row['state'] == 'blocked':
+            assert row['value'] is None, f"{row['row']} guessed a value while blocked"
+            assert row['passes'] is None, f"{row['row']} claims a verdict while blocked"
+            assert row['unblocked_by'], f"{row['row']} is blocked but names no unblocker"
+    assert result['verdict'] in ('MET', 'NOT MET', 'NOT YET MEASURABLE')
+
+
+def test_key_closure_reports_both_wildcard_readings():
+    """`- {type: "*"}` is a quantifier, not a key name.
+
+    Two modules declare a universal-reader consume. Treating "*" as a literal key
+    name overstates the orphan count; honouring it makes the row vacuously zero.
+    Neither reading alone is honest, so BOTH ship — and the detail must say a
+    wildcard exists rather than presenting one number as exact.
+    """
+    row = m1.row_key_log_closure()
+    assert row['state'] == 'partial'
+    assert row['passes'] is None, 'static analysis can never PASS this row on its own'
+    assert 'value_effective' in row, 'the wildcard-honouring reading is missing'
+    assert row['value'] >= row['value_effective'], (
+        'the strict count must be >= the wildcard-honouring count'
+    )
+    assert 'universal-reader' in row['detail'] or row['value'] == row['value_effective'], (
+        'a wildcard consumer exists but the detail does not disclose it'
+    )
+
+
+def test_check_only_fails_on_a_measured_failure_never_on_a_blocked_row():
+    """A blocked row must not gate. Losing an input must not make the gate greener."""
+    result = m1.collect()
+    blocked = [r for r in result['rows'] if r['state'] == 'blocked']
+    assert blocked, 'no blocked rows — this pin would be vacuous'
+    assert result['failed'] == sum(
+        1 for r in result['rows'] if r['state'] == 'measured' and r['passes'] is False
+    ), 'failed count must derive from MEASURED rows alone'
+
+
+def test_dashboard_program_panel_composes_and_never_renders_a_break_as_a_pass():
+    """build_program adds no arithmetic, and a broken sub-tool reads UNKNOWN.
+
+    If a number here disagreed with the CLI the dashboard would be lying quietly,
+    which is worse than an empty card. Pass-through is the contract.
+    """
+    sys.path.insert(0, os.path.join(TOOLS, 'observability'))
+    dd = importlib.import_module('dashboard_data')
+    panel = dd.build_program()
+    assert panel['available'] is True
+    # Pass-through, not recomputation: the panel's health must equal the tool's.
+    assert panel['health']['closed'] == sr.collect()['health']['closed']
+    assert panel['verdict']['scope'] == sr.collect()['verdict']
+    for key in ('scope', 'acceptance'):
+        sub = panel[key]
+        assert sub.get('available') is not False or 'error' in sub, (
+            f'{key} failed but reported no error — a break must never read as a pass'
+        )
+
+
+def test_partial_movement_is_not_inactivity(monkeypatch):
+    """ED-IN-0113 finding 3: junctures in flight must not read as a dead program.
+
+    Counting only `done` made a session that advanced four junctures score the same
+    HELD_INACTIVE as one that did nothing — G13's own blindness, one tier in.
+    Constructs all three states and requires they differ.
+    """
+    live = sr.collect()
+    base = {'signals': {s['signal']: {'baseline': s['value'], 'target': 0}
+                        for s in live['signals'] if s['value'] is not None}}
+    assert base['signals'], 'no measurable signals — this pin would be vacuous'
+
+    def health(closed, in_progress, total=7):
+        return lambda _b: {'closed': closed, 'total': total, 'in_progress': in_progress,
+                           'blocked': 0, 'ok': closed > 0,
+                           'expired': total > 0 and closed == total, 'evidence': 'stub'}
+
+    monkeypatch.setattr(sr, '_measure_health', health(0, 0))
+    assert sr.collect(base)['verdict'] == 'HELD_INACTIVE'
+
+    monkeypatch.setattr(sr, '_measure_health', health(0, 4))
+    moved = sr.collect(base)
+    assert moved['verdict'] == 'HELD', 'work in flight must not read as inactivity'
+    assert moved['activity']['moved'] is True
+    assert moved['activity']['in_progress'] == 4
+
+
+def test_the_ratchet_declares_itself_expired_when_its_program_completes(monkeypatch):
+    """ED-IN-0113 finding 5: `active_until` had no reader, so it was prose.
+
+    Ceilings seeded for M1 keep grading after M1 ships unless something notices.
+    An expired-but-still-enforcing ratchet measures the wrong program silently.
+    """
+    live = sr.collect()
+    base = {'signals': {s['signal']: {'baseline': s['value'], 'target': 0}
+                        for s in live['signals'] if s['value'] is not None},
+            'active_until': 'M1 junctures closed == 7'}
+    monkeypatch.setattr(sr, '_measure_health', lambda _b: {
+        'closed': 7, 'total': 7, 'in_progress': 0, 'blocked': 0, 'ok': True,
+        'expired': True, 'active_until': 'M1 junctures closed == 7', 'evidence': 'stub'})
+    result = sr.collect(base)
+    assert result['verdict'] == 'EXPIRED', (
+        'a completed program must not keep grading against its own seeding ceilings'
+    )
+    assert result['regressions'] == 0, 'expiry is a re-seed signal, not a regression'
