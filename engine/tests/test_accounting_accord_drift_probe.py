@@ -146,4 +146,19 @@ def test_campaign_result_surfaces_the_same_drift_probe_value_world_carries():
     telemetry rather than being silently dropped at the World/CampaignResult boundary."""
     result = run_campaign(seed=42, max_seasons=2)
     assert isinstance(result.accord_drift_probe_hits, int)
-    assert result.accord_drift_probe_hits >= 0  # never negative -- an additive-only counter
+    # CORRECTED 2026-07-30 (ED-IN-0098), found by tools/ci_vacuous_assertion_check.py [S1].
+    # The previous line was `assert ... >= 0`, whose own comment ("never negative -- an
+    # additive-only counter") conceded it could not fail — so this test's stated purpose,
+    # "confirms the value reaches CampaignResult rather than being silently dropped at the
+    # World/CampaignResult boundary", was asserted by the isinstance() line alone and the
+    # boundary itself was never checked. A silent drop would leave BOTH sides at 0 and pass.
+    # What actually falsifies the claim is AGREEMENT ACROSS the boundary, so assert that.
+    # MEASURED: CampaignResult exposes no `.world` handle (checked — hasattr is False), so a
+    # cross-boundary equality assertion would be permanently dead code. The strongest claim that
+    # can actually FAIL here is that the counter arrived non-zero: the docstring's own premise is
+    # that accounting fires "at least once" over 2 seasons, so 0 means either it never ran or the
+    # value was dropped between World and CampaignResult — the exact defect this test guards.
+    # Live value at seed=42/max_seasons=2 is 461, so the margin is not marginal.
+    assert result.accord_drift_probe_hits > 0, (
+        'accounting was expected to fire at least once in 2 seasons, so 0 drift-probe hits means '
+        'the probe never incremented or never reached CampaignResult')

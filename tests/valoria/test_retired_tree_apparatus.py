@@ -227,13 +227,38 @@ def test_audit_staleness_decisions_digest_actually_sees_engine_drift():
     finally:
         os.chdir(_prev)
     assert st is not None, "decisions-digest family could not be computed at all"
-    # `>= 0`, not `> 0`. The drift count is TIME-VARYING: it goes to zero the moment the digest is
-    # refreshed with no subsequent corpus change, which would turn this guard red for a reason
-    # that is not a defect. What is actually being falsified is that the scope RESOLVES — a
-    # prefix matching nothing returns None above, which is the failure mode this test was written
-    # for (§0.1 #2: assert the thing you can actually observe failing).
-    assert st['drift'] >= 0, (
-        "decisions-digest drift is uncomputable — the scope may be resolving to nothing again")
+    # CORRECTED 2026-07-30 (ED-IN-0098). The first version of this line asserted `st['drift'] >= 0`
+    # and claimed in its own comment to be the real falsifier. It was neither: `drift` is an
+    # integer file COUNT, so `>= 0` can never fail — a vacuous assertion, shipped in the very wave
+    # that replaced a different vacuous assertion two files over, citing §0.1 #2. Sloppy in a way
+    # a comment cannot repair.
+    #
+    # What this test actually needs to falsify is "the scope resolves to real files" — the
+    # retired-root defect made `scope_prefixes` match NOTHING, so drift was permanently 0 and the
+    # family was silently inert. So assert the scope itself, against the git index: every prefix
+    # is checked, and the union must be non-empty. That is time-INVARIANT (unlike a drift count,
+    # which legitimately hits 0 right after a refresh) and it fails on exactly the defect.
+    import subprocess
+    decisions_scope = decisions['scope_prefixes']
+    assert decisions_scope, 'decisions-digest declares no scope_prefixes at all'
+    total, per_prefix = 0, {}
+    for prefix in decisions_scope:
+        out = subprocess.run(['git', 'ls-files', '--', prefix], cwd=ROOT,
+                             capture_output=True, text=True)
+        n = len([ln for ln in out.stdout.splitlines() if ln.strip()])
+        per_prefix[prefix] = n
+        total += n
+    assert total > 0, (
+        f'decisions-digest scope matches ZERO tracked files — the scope is resolving to nothing '
+        f'again (the retired-root defect). Per-prefix counts: {per_prefix}')
+    # Counted assertion (§0.1 #2): prove the loop ran over every declared prefix.
+    assert len(per_prefix) == len(decisions_scope), (
+        f'checked {len(per_prefix)} of {len(decisions_scope)} declared prefixes')
+    # And name the dead ones individually rather than letting a live prefix mask them.
+    dead = [p for p, n in per_prefix.items() if n == 0]
+    assert not dead, (
+        f'decisions-digest scope carries prefix(es) matching zero tracked files: {dead} — a live '
+        f'sibling is masking them in the union, which is how the retired-root blind spot survived')
 
 
 def test_build_decisions_sweep_dirs_excludes_retired_roots_and_keeps_live_coverage():

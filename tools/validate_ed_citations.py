@@ -144,6 +144,15 @@ def _is_resolved(status) -> bool:
         return False
     s = str(status).strip().lower()
     return (s.startswith('resolved') or s.startswith('ratif')   # ratified / ratified-...
+            # 'landed' added 2026-07-30 (ED-IN-0098). It was already in live use by ED-IN-0095/0096
+            # and was NOT accepted here, so the first citation of a `landed` ED from a scanned
+            # prefix turned a blocking gate red for a bookkeeping-vocabulary reason rather than a
+            # citation-integrity one. That happened during W4 (ED-IN-0097) and was patched by
+            # editing the ENTRY's status instead of this vocabulary — the wrong end, because it left
+            # the trap armed for 0095/0096 and any future entry using the same word. 'landed' means
+            # the work shipped: terminal and decided, exactly what this function's own docstring
+            # says it accepts. Fixed at the vocabulary end now.
+            or s == 'landed'
             or s in ('struck', 'applied', 'superseded', 'closed', 'confirmed', 'deprecated'))
 
 
