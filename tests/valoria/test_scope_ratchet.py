@@ -440,3 +440,23 @@ def test_an_undated_open_item_counts_as_stale(monkeypatch):
                         lambda: [{'status': 'open', 'needs_jordan': False, 'date': None}])
     value, _ = sr.measure_ed_stale()
     assert value == 1, 'an undated open item must count as stale, not fresh'
+
+
+def test_ci_shards_partition_the_validator_set_exactly():
+    """--ci --shard must partition, never sample.
+
+    A shard scheme that dropped a validator would make each shard green while the union
+    silently stopped covering the gate — the silently-dead-gate class the collapse was
+    rejected for. Asserts every job appears in exactly one shard, for several n.
+    """
+    sys.path.insert(0, TOOLS)
+    import ci_gate_coverage as gc
+    jobs = [j['id'] for j in gc.jobs() if j['tool_commands']]
+    assert jobs, 'no validator jobs parsed — this pin would be vacuous'
+
+    for n in (2, 3, 4):
+        shards = [[j for k, j in enumerate(jobs) if k % n == i] for i in range(n)]
+        flat = [j for s in shards for j in s]
+        assert sorted(flat) == sorted(jobs), f'{n}-way shard is not a partition'
+        assert len(flat) == len(set(flat)), f'{n}-way shard double-counts a job'
+        assert all(s for s in shards), f'{n}-way shard produced an empty shard'

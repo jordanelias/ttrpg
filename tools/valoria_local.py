@@ -49,6 +49,53 @@ def run_ci_validators(argv=None):
               "report success on an empty run", file=sys.stderr)
         return 2
 
+    # SHARDING (--shard i/n) — for LOCAL pre-push verification, deliberately NOT for
+    # collapsing the CI workflow. That collapse was attempted and abandoned on a real
+    # design conflict, recorded here so nobody re-attempts it without seeing the trap:
+    #
+    #   `--ci` derives its work-list FROM the workflow's job bodies (ci_gate_coverage's
+    #   TOOL_CMD_RE scans each job for `python tools/X.py`). Replacing the ~27 validator
+    #   jobs with a few shard jobs that call THIS function deletes the very lines the
+    #   function reads. Measured: a collapsed workflow yields exactly ONE parsed command —
+    #   valoria_local itself. The 27 validators become invisible, and a tool that reports
+    #   "all CI validators passed" over an empty set is the silently-dead-gate class
+    #   (ED-IN-0103 §2.0) built on purpose.
+    #
+    #   The escape — move the validator list into a data file — trades a property worth
+    #   more than the saving: today the list CANNOT drift, because it is the workflow. A
+    #   hand-maintained roster is a second owner of "what CI runs" and would go stale on
+    #   the next job added. ~27 runner setups is not worth that.
+    #
+    # So the collapse is REJECTED on evidence, not deferred. Sharding survives because it
+    # is genuinely useful locally: `--ci --shard 1/3` verifies a third of the gate in about
+    # a minute instead of running all 31 invocations sequentially.
+    #
+    # The split is round-robin over the workflow's own job order, which is stable because
+    # ci_gate_coverage parses the file top-to-bottom. Deterministic, so a failure is always
+    # reproducible with the same shard argument.
+    shard_arg = None
+    for i, a in enumerate(argv or []):
+        if a == '--shard' and i + 1 < len(argv):
+            shard_arg = argv[i + 1]
+        elif a.startswith('--shard='):
+            shard_arg = a.split('=', 1)[1]
+    if shard_arg:
+        try:
+            idx, total = (int(x) for x in shard_arg.split('/'))
+        except ValueError:
+            print(f"[valoria --ci] bad --shard {shard_arg!r}; expected i/n", file=sys.stderr)
+            return 2
+        if not (1 <= idx <= total):
+            print(f"[valoria --ci] --shard {idx}/{total} out of range", file=sys.stderr)
+            return 2
+        jobs = [j for k, j in enumerate(jobs) if k % total == (idx - 1)]
+        print(f"[valoria --ci] shard {idx}/{total}: {len(jobs)} job(s)")
+        if not jobs:
+            # An empty shard means the split is wrong, not that everything passed.
+            print(f"[valoria --ci] shard {idx}/{total} is EMPTY — refusing to report success "
+                  f"on an empty run", file=sys.stderr)
+            return 2
+
     child_env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
     results = []
     for job in jobs:
