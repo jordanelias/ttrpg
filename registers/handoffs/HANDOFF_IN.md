@@ -57,28 +57,44 @@ both §0.1 point 2 inside my own tests.**
   is order-dependent (passes deterministic, fails randomized);
   `tests/sim/mass_battle/test_persubunit_stress.py` has 1 failing case;
   `tests/sim/territory_registry/test_registry_ledger.py` fails collection.
-- **MB-lane — one F-series test takes a rare, non-reproducible excursion. CORRECTED once already,
-  read the correction.** `test_stochastic_rout::test_per_cell_break_subsumes_the_body_level_one`
-  measured `off 55.5 / on 40.8`, delta **14.711105983695994**, on `main`, on `e585aa5`, on
-  `9482eb9`, and in every local configuration tried (alone, module siblings, `-n auto`, `-n 2`,
-  `-n 4`) — byte-identical each time. On `873a5c0` alone it measured `off 69.5 / on 41.0`, delta
-  **28.536271554655265**. Both commits either side of it were docs-only, and the value returned to
-  the canonical figure on the very next run.
-  **The first framing was wrong and is withdrawn.** I filed this as "environment-dependent" after
-  seeing one deviation, and the next run refuted it: an environment difference would be stable per
-  environment, and this is not — it is a rare excursion in a nominally seeded simulation
-  (`random.seed(3_000_000 + s)` per sample). Publishing an unfavourable uncontrolled result is the
-  same §0.1 point-4 error as banking a favourable one, and it took exactly one more data point to
-  expose it.
-  **What is actually established:** the measurement is byte-stable across 3 CI runs, 5 local
-  configurations and 2 machines, and excursed once. The verdict never changes — both deltas exceed
-  the 10.0 threshold, and the test fails identically on `main` — so nothing here is caused by this
-  PR and nothing blocks it.
-  **Why MB should still care:** a seeded simulation that occasionally returns a different mean has a
-  nondeterminism source no one has located, and the failure is intermittent rather than
-  environmental, which is the harder kind to find. Do not chase environment pinning on the strength
-  of the withdrawn framing. The cheap next step is to re-run this single test in a loop and count
-  excursions before arguing the golden re-base from any single magnitude.
+- **MB-lane — `test_per_cell_break_subsumes_the_body_level_one` is BIMODAL on CI. Two byte-exact
+  states, and this note was revised twice before the data supported it.** Observed deltas, all
+  byte-identical within their mode:
+
+  | commit | delta | mode |
+  |---|---|---|
+  | `main` @ base | `14.711105983695994` | A |
+  | `e585aa5` | `14.711105983695994` | A |
+  | `873a5c0` (docs-only) | `28.536271554655265` | B |
+  | `9482eb9` (docs-only) | `14.711105983695994` | A |
+  | `d960f80` (docs-only) | `28.536271554655265` | B |
+
+  **Two byte-exact values means two DETERMINISTIC paths**, selected by something that varies between
+  CI runs and is constant locally — not noise, and not a stochastic spread. Docs-only commits sit
+  either side of every transition, so no code change is involved.
+
+  **Ruled out by measurement, not by argument** (each of these was a live hypothesis, and each is
+  dead): *environment-dependence* — refuted the moment mode A returned on the next run; *hash-order*
+  — `PYTHONHASHSEED` 0–7, no effect; *worker count* — `-n auto`, `-n 2`, `-n 4`; *suite context* —
+  3 full-suite `-n auto` repeats; *test isolation* — alone and with module siblings. **11 local runs
+  across every configuration tried produced mode A every time.** Mode B has never been reproduced
+  outside GitHub's runners.
+
+  **Two framings were published and withdrawn before this one:** "environment-dependent" (killed by
+  the 4th data point) and "rare non-reproducible excursion" (killed by the 5th, which was
+  byte-identical to the 3rd). Both were filed on too little data. The §0.1 point-4 lesson is the
+  one that keeps applying: a number without a control is not a measurement in EITHER direction, and
+  a cautious-sounding claim is not exempt.
+
+  **Verdict is unaffected in both modes** — 14.7 and 28.5 both exceed the 10.0 threshold, and the
+  test fails identically on `main`. Nothing here is caused by or blocks PR #284.
+
+  **Handed to MB with a concrete next step:** the target is whatever differs between two
+  deterministic paths on a GitHub runner but not locally. `--dist load` assigns tests to workers
+  dynamically, so worker COMPOSITION is the leading remaining candidate — but proving it needs a run
+  on the reference environment with `-p no:cacheprovider --dist loadfile` and the per-worker test
+  manifest dumped, which is an MB-owned experiment on MB-owned code. Do not argue a golden re-base
+  from a single magnitude until the mode is pinned.
 - **Known blind spot worth closing:** `valoria_local --ci` computes a different changeset than CI's
   `GITHUB_BASE_REF` mode, so **local-green is not CI-green** for changeset-scoped validators. That
   gap is what let the sixth defect reach CI. Reproduce CI locally with
