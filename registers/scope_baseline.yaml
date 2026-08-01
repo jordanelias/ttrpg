@@ -103,7 +103,13 @@ signals:
     # resolve without a ruling. If the policy works, ed.needs_jordan_stale falls 21 -> ~3 and this
     # row's cost is repaid many times over in the signal it exists to reduce. If it does not, this
     # is one file of dead weight and should be retired rather than kept out of politeness.
-    baseline: 3110  # measured 2026-07-31 (git ls-files | wc -l)
+    # 3110 -> 3111 (ED-MB-0062): tests/coverage_matrix_archive_2026-08-01.md. ARCHIVING adds a
+    # file even though it shrinks a capped one — the live matrix went 14,655 -> 12,987 of its
+    # 15,000-token cap, from 2.3% headroom to 13%. Raised with the reason rather than absorbed,
+    # because "the ratchet counts files, and archiving is how this repo stays under its register
+    # caps" is a real tension worth seeing rather than a bug to route around: a +1 here buys
+    # ~1,770 tokens of room in a file that was one entry from breaching a BLOCKING gate.
+    baseline: 3111  # measured 2026-08-01 (git ls-files | wc -l)
     target: 3103
     note: >-
       Total surface under maintenance. Flat is the goal, not shrinkage: the season loop will
