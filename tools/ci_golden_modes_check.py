@@ -94,14 +94,14 @@ FIELD_PINS = {
 # mysterious mid-run cancellation, not coverage. What stays in pytest is the cheap half — that
 # bat._mode_key is INJECTIVE over the toggle cube, which is the trap this mode actually walked into.
 MODES = {
-    'unit_field': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '0'},
-    'cell_field': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '1'},
+    'unit_field_mor0': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '0'},
+    'cell_field_mor0': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '1'},
     # The §4a fifth mode. The other four all run at PC_CELL_MORALE=0, where the three cell-morale
     # maps are EMPTY — so they pin float-order over every per-cell map EXCEPT the three whose
     # desync motivates the ownership work, and "if a digest moves, you changed behaviour" was
     # vacuous over exactly the state B1a is about to refactor. This overrides FIELD_PINS'
     # PC_CELL_MORALE='0' deliberately; the mode-key assertion below is what makes that safe.
-    'cell_cm': {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'PER_CELL': '1',
+    'cell_grid_mor1': {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'PER_CELL': '1',
                 'PC_CELL_MORALE': '1'},
 }
 

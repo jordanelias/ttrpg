@@ -213,7 +213,7 @@ EXPECTED = {
     # ee0fdec4.../a7b01a0d..., then the flip was RETRACTED the same day (confounded measurement — see
     # config.py at the flag), so these revert to their pre-flip values. Recorded here because the next
     # attempt will move them again and should be able to see that this is the second, not the first.
-    'unit': '241f04e5b2a4e3d626024816872d7903f9a43507abd205cedc8a6c030d2f7794',
+    'unit_grid_mor0': '241f04e5b2a4e3d626024816872d7903f9a43507abd205cedc8a6c030d2f7794',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -269,7 +269,7 @@ EXPECTED = {
     # Controls: both moved modes reproduced their new digest on two consecutive runs (2/2), and
     # `cell` reproduced it again with PYTHONHASHSEED unset (fresh hash seed => hash-order
     # independent). Recorded on Linux/Python 3.11.15.
-    'cell': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
+    'cell_grid_mor0': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -366,7 +366,7 @@ EXPECTED = {
     # alone, which is its whole intended scope). The two GRID modes are byte-identical with the
     # flag ON, as they must be — the pass lives inside resolve_toi_and_commit, which only runs
     # under FIELD_MOVEMENT.
-    'unit_field': '0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c',
+    'unit_field_mor0': '0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -440,7 +440,7 @@ EXPECTED = {
     # [ED-MB-0059, 2026-07-29] RE-RECORDED with the same attribution control as unit_field above
     # (was 2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b; reproduced exactly at
     # PC_CELL_EXCLUSION=0).
-    'cell_field': 'da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8',
+    'cell_field_mor0': 'da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -463,7 +463,7 @@ EXPECTED = {
     # divergence survives the recovery step. CONTROL: the other four modes are byte-identical, as
     # they must be — at PC_CELL_MORALE=0 the cell-morale maps are empty and the two writers agree.
     # A fix that moved any of them would have been touching something it did not claim to.
-    'cell_cm': 'd11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9',
+    'cell_grid_mor1': 'd11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9',
 }
 
 
@@ -486,12 +486,38 @@ def _mode_key(per_cell, field_movement, cell_morale):
     Callers must pass the modules' RESOLVED toggles, never a second independently-defaulted
     os.environ.get — see compute()'s note on how that drifted once already.
     """
-    mode = 'cell' if per_cell else 'unit'
-    if field_movement:
-        mode += '_field'
-    if cell_morale:
-        mode += '_cm'
-    return mode
+    # [ED-MB-0062, 2026-08-01 — Jordan's ruling on the golden-mode-matrix collision:
+    # "if they are distinctly different items, then rename by distinction accordingly with
+    # cells reserved for mass battle".]
+    #
+    # THE DEFECT WAS SUFFIX-ON-TRUE, and it is worth naming precisely because the function
+    # was already injective — all 8 cube points mapped to 8 distinct strings, so no test
+    # could see the problem. The key was RELATIVE, not ambiguous: a suffix appeared only
+    # when a flag was ON, so absence encoded "OFF" *relative to whatever the default was at
+    # recording time*. `cell` did not mean "cell-morale off"; it meant "cell-morale not
+    # mentioned". Flip PC_CELL_MORALE's default to 1 — which the flags-ON directive requires
+    # — and every recorded key silently changes meaning: the plain grid run starts keying
+    # `cell_cm` and checks itself against the fifth mode's golden, while `cell`, `unit`,
+    # `unit_field` and `cell_field` become unreachable strings no run can ever emit.
+    #
+    # THE TWO "CELL"S ARE DIFFERENT ITEMS, which is why renaming by distinction is the right
+    # branch rather than consolidation:
+    #   per_cell     — the mass-battle GEOMETRY primitive (resolution granularity). Per the
+    #                  ruling, "cell" is reserved for this.
+    #   cell_morale  — per-cell MORALE, a state-ownership flag that merely happens to also
+    #                  operate on cells. It gets `mor`, so nothing reads as a second cell axis.
+    #
+    # EVERY AXIS IS NOW PRESENT WITH ITS VALUE. An absolute key cannot be re-pointed by a
+    # default flip: at PC_CELL_MORALE=1 a run keys `*_mor1` and simply has no golden yet,
+    # which reports honestly as missing instead of matching the wrong one. That is what makes
+    # the all-flags-ON re-base RECORDABLE — this rename unblocks it rather than waiting on it.
+    #
+    # NO DIGEST CHANGES HERE. This renames lookup KEYS only; every recorded value is carried
+    # across byte-for-byte. It is not a golden re-record and G11 does not apply.
+    geometry = 'cell' if per_cell else 'unit'          # mass-battle cell (reserved, per ruling)
+    movement = 'field' if field_movement else 'grid'
+    morale = 'mor1' if cell_morale else 'mor0'         # cell-MORALE, distinct from cell-GEOMETRY
+    return f'{geometry}_{movement}_{morale}'
 
 
 def compute():

@@ -73,6 +73,13 @@ def read_ledger_entries(repo: Path | None = None) -> list[dict]:
                 "id": e.get("id", "?"),
                 "lane": lane,
                 "status": e.get("status"),
+                # `date` carried since ED-IN-0114. Without it no consumer can tell a
+                # freshly-filed item from one that has rotted for two months, which made
+                # every open-count metric punish FILING (the cure) instead of STALENESS
+                # (the disease). Normalised to the YYYY-MM-DD prefix; entries whose date
+                # is absent or unparseable keep None so a consumer must decide explicitly
+                # rather than silently treating unknown age as zero.
+                "date": (str(e["date"])[:10] if e.get("date") else None),
                 # flat pre-cutover entries predate the needs_jordan FIELD — fall back
                 # to a pending-Jordan text scan so they aren't miscounted actionable.
                 "needs_jordan": bool(e.get("needs_jordan")) or text_needs_jordan(desc),

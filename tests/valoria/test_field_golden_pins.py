@@ -196,15 +196,23 @@ def test_mode_selectors_cover_every_out_of_budget_golden_mode():
     claims, because a selector disagreeing with its key is the ED-1089 shape — a run checked against
     the wrong golden.
     """
-    assert set(MODES) == {'unit_field', 'cell_field', 'cell_cm'}
+    assert set(MODES) == {'unit_field_mor0', 'cell_field_mor0', 'cell_grid_mor1'}
+    # ED-MB-0062: keys are now absolute — <geometry>_<movement>_<morale>, every axis present
+    # with its value — so the selector check reads the axis out of the key rather than guessing
+    # from a suffix that only appeared when a flag was on.
     for mode, sel in MODES.items():
-        want_field = '1' if mode.endswith('_field') else '0'
+        geometry, movement, morale = mode.split('_')
+        want_field = '1' if movement == 'field' else '0'
         assert sel['FIELD_MOVEMENT'] == want_field, mode
         assert sel['PC_NODE_COHESION'] == want_field, mode
-        assert sel['PER_CELL'] == ('1' if mode.startswith('cell') else '0'), mode
+        assert sel['PER_CELL'] == ('1' if geometry == 'cell' else '0'), mode
+        # A mode naming mor1 must actually pin the flag on, and vice versa — a key that
+        # disagrees with its own selector is the ED-1089 shape this file exists to catch.
+        if morale == 'mor1':
+            assert sel.get('PC_CELL_MORALE') == '1', mode
     # the §4a mode is the ONLY one that overrides the PC_CELL_MORALE pin, and it must
-    assert MODES['cell_cm']['PC_CELL_MORALE'] == '1'
-    for mode in ('unit_field', 'cell_field'):
+    assert MODES['cell_grid_mor1']['PC_CELL_MORALE'] == '1'
+    for mode in ('unit_field_mor0', 'cell_field_mor0'):
         assert 'PC_CELL_MORALE' not in MODES[mode], (
             f"{mode} must inherit the FIELD_PINS PC_CELL_MORALE='0'; overriding it here would "
             f"silently re-target its golden")

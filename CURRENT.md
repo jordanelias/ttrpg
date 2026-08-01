@@ -28,7 +28,7 @@ full-campaign run; explicit no-data flags for mass_battle/social_contest/threadw
 settlement_territory, since none exists) and a Registers card (editorial-ledger open/needs_jordan
 counts by lane, active patch-register counts).
 
-_Last reconciled: 2026-07-30 (**MB-lane stamp reconcile — ED-MB-0061**: session retrospective
+_Last reconciled: 2026-08-01 (**IN-lane stamp reconcile — ED-IN-0112/0113/0114**: the M1 program scaffolding merged (scope ratchet + season acceptance gate + dashboard program panel, PRs #277/#279), the shipping gate parallelised 387s→181s without cutting it, the ratchet's ledger signals age-weighted (a raw open-count punished FILING rather than rot), and the decision-policy draft added at `systems/_architecture/decision_policy_v1.md`. Touches `systems/_architecture/`, `references/id_reservations.yaml` (IN next_free 112→115), `registers/scope_baseline.yaml`, `tools/`, and `.github/workflows/valoria-ci.yml`.) Prior reconcile: 2026-07-30 (**MB-lane stamp reconcile — ED-MB-0061**: session retrospective
 (`audit/2026-07-30-mb-session-retrospective/00_lessons.md`) — nine new guardrails G13–G21, Track F's
 defect register, the `PC_FACING_MODEL` bisect, Jordan's authoritative geometry spec, and the Phase-0
 re-ordering of both MB workplans. Touches that audit doc, `references/id_reservations.yaml` (MB
@@ -167,6 +167,7 @@ the head of its lineage; predecessors are archived._
 | **Board game** | `engine/params/board_game.md` + `engine/params/bg/*` governing tables |
 | **Dice / resolution** | `engine/params/core.md` + Decision-E continuous/quasi-binomial + d+σ resolver (canonized 2026-05-15) |
 | **Repository state armature** | `systems/_architecture/repo_state_armature_v1.md` (RATIFIED charter + Phase 0/1, ED-IN-0077) — the single review engine `tools/review_core.py` (verdict aggregator) + `registers/review_baseline.yaml` (count-aware ratchet). Two faces built: SessionStart banner + the GitHub Pages **Repository state** card (`dashboard/` via `dashboard_data.build_review_state`); the `review-state` CI job is Phase 4. Phases 3 & 5 (vocab fold / attribute-roster on OPT-AV-1) held back under ED-IN-0029 |
+| **Decision policy** | `systems/_architecture/decision_policy_v1.md` — **DRAFT FOR RULING, does NOT ratify on merge** (ED-1094 exception, ED-IN-0113 §A, 2026-07-31). The precedence order Valoria decides by, drafted from a 134-ruling precedent mine so Jordan corrects rather than authors. §2 is EVIDENCED: mechanical canon is subordinate to measured, physically-grounded engine behaviour (ED-899 set-aside, ED-900 supersession with lore retained, ED-901 strike, ED-PC-0005 overriding an AUTHORITATIVE doc — four instances, no counter-instance). §3 carries **NO DEFAULT** and is the row that unblocks the rest: whether METAPHYSICAL canon shares that subordinate tier is unestablished (30 entries touch it, 9 carry override language, none read). §4 proposes the U9 ablation gate as the operational definition of "emergent". Exists because the queue is evidence-rich and answer-poor — 83 of 85 sampled `needs_jordan` items carry a source pointer, only 10 carry a proposed answer |
 
 ## Naming / versioning note
 
