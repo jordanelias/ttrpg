@@ -57,6 +57,22 @@ both §0.1 point 2 inside my own tests.**
   is order-dependent (passes deterministic, fails randomized);
   `tests/sim/mass_battle/test_persubunit_stress.py` has 1 failing case;
   `tests/sim/territory_registry/test_registry_ledger.py` fails collection.
+- **MB-lane — F-series magnitudes are ENVIRONMENT-DEPENDENT, and that is new information.**
+  `test_stochastic_rout::test_per_cell_break_subsumes_the_body_level_one` reported `off 55.5 vs on
+  40.8` (delta 14.7) on `main` and on this PR's commit `e585aa5`, then `off 69.5 vs on 41.0` (delta
+  **28.5**) on `873a5c0` — a docs-only commit, which cannot move a simulation. The verdict is
+  unchanged either way (both exceed the 10.0 threshold) and the test fails identically on `main`,
+  so nothing here is caused by this PR. **What was ruled OUT, by measurement rather than argument:**
+  the obvious hypothesis was xdist worker-distribution changing shared-state leakage, since this PR
+  added ~30 tests. It does not hold — against the identical tree, the test reports 55.5/40.8 in
+  EVERY local configuration tried: alone, with its module siblings, `-n auto`, `-n 2`, and `-n 4`.
+  The seeds are per-sample (`random.seed(3_000_000 + s)`), so the run is nominally deterministic.
+  The remaining variable is the execution environment, which is the same class as the non-portability
+  `test_mass_battle_byte_exact` already documents for the cell-mode digest ("only verified byte-exact
+  on the reference CI environment"). **Why it matters to MB:** any F-series magnitude quoted in a
+  report is environment-specific, so two sessions can measure the same engine and disagree by 2x
+  without either being wrong — exactly the confounded-measurement class §0.1 exists for. Worth a
+  pinned environment or a seeded fixture before the golden re-base is argued from these numbers.
 - **Known blind spot worth closing:** `valoria_local --ci` computes a different changeset than CI's
   `GITHUB_BASE_REF` mode, so **local-green is not CI-green** for changeset-scoped validators. That
   gap is what let the sixth defect reach CI. Reproduce CI locally with
