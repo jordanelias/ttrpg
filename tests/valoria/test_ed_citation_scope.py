@@ -127,8 +127,40 @@ def test_deferral_covers_open_as_basis_only_and_never_a_broken_reference(ved):
     inline and therefore passed while the real one was mutated to defer NONEXISTENT as well —
     mutation-checked, which is the only reason that was noticed.
     """
-    assert ved.BURN_DOWN_PREFIXES, "the deferral set is empty; this test would be vacuous"
-    inside = ved.BURN_DOWN_PREFIXES[0] + 'x.md'
-    assert ved.is_deferred({'kind': 'OPEN_AS_BASIS', 'path': inside}) is True
-    assert ved.is_deferred({'kind': 'NONEXISTENT', 'path': inside}) is False
-    assert ved.is_deferred({'kind': 'OPEN_AS_BASIS', 'path': 'canon/x.md'}) is False
+    assert ved.BURN_DOWN_ALLOW, "the deferral set is empty; this test would be vacuous"
+    path, ed = sorted(ved.BURN_DOWN_ALLOW)[0]
+    assert ved.is_deferred({'kind': 'OPEN_AS_BASIS', 'path': path, 'id': ed}) is True
+    # same allowed pair, but a BROKEN reference rather than an undecided one
+    assert ved.is_deferred({'kind': 'NONEXISTENT', 'path': path, 'id': ed}) is False
+    assert ved.is_deferred({'kind': 'OPEN_AS_BASIS', 'path': 'canon/x.md', 'id': ed}) is False
+
+
+# ────────────────────────────────── the ratchet is keyed by IDENTITY, not by spare capacity
+
+def test_deferral_is_granted_to_named_findings_not_to_a_region_with_headroom(ved):
+    """ADVERSARIAL REVIEW FINDING. A count-only ceiling was launderable: fix one of the 10 existing
+    findings, add a brand-new open-ED-as-basis claim anywhere under systems/, count stays 10, gate
+    green, and its own test green too. `git mv`ing a doc from canon/ into systems/ laundered the
+    same way. Nothing pinned WHICH findings were deferred."""
+    # a real deferred pair is deferred
+    known = sorted(ved.BURN_DOWN_ALLOW)[0]
+    assert ved.is_deferred({'kind': 'OPEN_AS_BASIS', 'path': known[0], 'id': known[1]}) is True
+    # the SAME file citing a DIFFERENT open ED is new debt, and must not inherit the deferral
+    assert ved.is_deferred({'kind': 'OPEN_AS_BASIS', 'path': known[0], 'id': 'ED-IN-0999'}) is False
+    # a different file under the same prefix likewise
+    assert ved.is_deferred(
+        {'kind': 'OPEN_AS_BASIS', 'path': 'systems/brand/new_doc.md', 'id': known[1]}) is False
+
+
+def test_every_allowed_pair_is_still_a_real_finding(ved):
+    """Stops the allow-list outliving its findings. A stale entry is latent permission for debt
+    that a later edit could reintroduce under an id nobody is still watching."""
+    status = ved.load_ed_universe(warn=False)
+    docs = {p: ved._read(p) for p in ved.select_docs()}
+    docs = {p: c for p, c in docs.items() if c is not None}
+    live = {(v['path'], v['id']) for v in ved.audit_citations(docs, status, checked_prefixes=('ED',))
+            if v['kind'] == 'OPEN_AS_BASIS'}
+    stale = sorted(ved.BURN_DOWN_ALLOW - live)
+    assert not stale, (
+        f'{len(stale)} BURN_DOWN_ALLOW entr(y/ies) no longer correspond to a live finding: {stale}. '
+        f'The debt was paid — remove the entry (and lower BURN_DOWN_MAX) in the same commit.')

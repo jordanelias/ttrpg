@@ -171,3 +171,42 @@ def test_fix_reports_no_phantom_violations_when_the_resynced_block_changes_lengt
 
     assert mod.check(fix=True) == 0, "--fix reported violations it then could not reproduce"
     assert mod.check() == 0, "the re-synced file does not pass a plain check"
+
+
+def test_a_quoted_key_is_not_invisible(sandbox):
+    """ADVERSARIAL REVIEW FINDING — a false PASS in the guard's own failure mode.
+
+    A quote character is consumed by the scanner's string branch before the key branch can see it,
+    so `{ finding_id: x, 'layer': 'evidence' }` parsed to ['finding_id'] alone: the unknown key
+    vanished, finding_id was present, and the call PASSED — while at run time `'layer'` is unread
+    and layer_disputed silently defaults. Reachable by ordinary JSON habit.
+    """
+    mod, dst = sandbox
+    src = dst.read_text(encoding='utf-8')
+    dst.write_text(src.replace(
+        "run.dispute(hVerdictDispute(v, 'critic:w4', v.target))",
+        "run.dispute({ finding_id: v.target, 'layer': 'evidence' })"), encoding='utf-8')
+    assert mod.check() == 1, 'a quoted unknown key passed the gate'
+
+
+def test_quoted_and_bare_keys_are_both_collected():
+    mod = _load()
+    src = "run.dispute({ finding_id: 'a', 'layer_disputed': 'evidence' })"
+    assert _keys_of(mod, src) == [['finding_id', 'layer_disputed']]
+
+
+def test_a_comment_inside_the_owners_dispute_body_cannot_widen_the_contract(tmp_path, monkeypatch):
+    """LATENT WIDENING CHANNEL. The legal key set is regex-derived from the owner's run.dispute
+    body; without stripping comments first, `// rec.layer was retired` would make `layer` — the
+    exact key that shipped broken — legal repo-wide, with no test failing."""
+    mod = _load()
+    fake = tmp_path / 'wf_harness.js'
+    fake.write_text(
+        "run.dispute = function (rec) {\n"
+        "  // rec.layer was retired in v0\n"
+        "  const d = { finding_id: String(rec && rec.finding_id) }\n"
+        "}\n", encoding='utf-8')
+    monkeypatch.setattr(mod, 'OWNER', str(fake))
+    legal, _ = mod._dispute_contract()
+    assert 'layer' not in legal, 'a comment inside the owner widened the legal key set'
+    assert 'finding_id' in legal

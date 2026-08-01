@@ -282,13 +282,39 @@ def check_ci_registry_coverage(all_files):
         # A registry that records intent rather than fact is worse than none: it is read as
         # evidence of coverage. ED-IN-0118.
         if ci_job and ci_job in job_ids and path:
-            invoked = {c['script'] for j in _gate_jobs() if j['id'] == ci_job
-                       for c in (j.get('tool_commands') or [])}
-            if invoked and path not in invoked:
-                violations.append(
-                    f"ci_checks_registry.yaml: {path} declares ci_job {ci_job!r}, but that job "
-                    f"never invokes it — the row claims CI coverage the workflow does not provide"
-                )
+            parsed = _gate_jobs()
+            if not parsed:
+                # NEVER SILENT. If workflow parsing is unavailable this sub-check cannot run, and a
+                # blocking gate whose sub-check evaporates without a word is the "clean over
+                # nothing" class this file exists to detect. Recorded once, as check (d) does.
+                if "ci_job invocation join SKIPPED" not in " ".join(errors):
+                    errors.append(
+                        "ci_job invocation join SKIPPED: tools/ci_gate_coverage.py could not be "
+                        "imported, so registry rows claiming CI coverage were NOT verified against "
+                        "the workflow. Fix the import rather than trusting this run's green."
+                    )
+            else:
+                job = next((j for j in parsed if j['id'] == ci_job), None)
+                invoked = {c['script'] for c in (job.get('tool_commands') or [])} if job else set()
+                if job and job.get('compiles_only'):
+                    # COMPILING A TOOL IS NOT RUNNING IT. This is the precise laundering path the
+                    # emptiness guard below left open: scope_ratchet's row claimed coverage via
+                    # valoria_local, which CI only ever py_compile's, so pointing the row at
+                    # `syntax-check` would have satisfied a check that merely required the job to
+                    # exist. Narrow on purpose — an earlier, broader version of this branch ("no
+                    # tools/ script and no pytest root") false-positived on `lanchester-signature`,
+                    # which legitimately invokes its script as a MODULE (`python3 -m
+                    # mass_battle.lanchester_signature`) and so parses to no tool_commands at all.
+                    violations.append(
+                        f"ci_checks_registry.yaml: {path} declares ci_job {ci_job!r}, which only "
+                        f"COMPILES sources (py_compile) — compiling a tool is not running it, so "
+                        f"the row claims coverage that job does not provide"
+                    )
+                elif invoked and path not in invoked:
+                    violations.append(
+                        f"ci_checks_registry.yaml: {path} declares ci_job {ci_job!r}, but that job "
+                        f"never invokes it — the row claims CI coverage the workflow does not provide"
+                    )
         if ci_job and ci_job not in job_ids:
             violations.append(
                 f"ci_checks_registry.yaml: ci_job {ci_job!r} (path={path}) is not a job id "

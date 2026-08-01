@@ -183,6 +183,15 @@ def _object_keys(inner):
             i += m.end()
             continue
         i += 1
+
+    # QUOTED KEYS, collected separately because the scanner above cannot see them: a quote is
+    # consumed by the string branch before the key branch is reached, so `{ finding_id: x,
+    # 'layer': 'evidence' }` parsed to ['finding_id'] — the unknown key vanished and the call
+    # PASSED. That is a false pass in the guard's own failure mode (an unread key silently taking
+    # its default), reachable by ordinary JSON habit. Found by adversarial review, not by testing.
+    for m in re.finditer(r"""(?:^|,)\s*(['"])([A-Za-z_][A-Za-z0-9_]*)\1\s*:""", inner):
+        if m.group(2) not in keys:
+            keys.append(m.group(2))
     return keys
 
 
@@ -199,7 +208,12 @@ def _dispute_contract():
                          "the dispute-shape guard cannot derive its contract and would pass "
                          "vacuously. Repair the owner, or retire this check deliberately.")
     body, _ = _balanced(text, m.end() - 1)
-    legal = set(re.findall(r"\brec\s*(?:&&\s*rec\s*)?\.\s*([A-Za-z_][A-Za-z0-9_]*)", body))
+    # Comments stripped FIRST. Otherwise a comment inside run.dispute's body mentioning a retired
+    # key (`// rec.layer was retired`) would make that key legal repo-wide — silently widening the
+    # contract, with no test failing. Prose about a field is not a read of it; the same rule the
+    # call-site scanner applies. Latent today, one line to close.
+    legal = set(re.findall(r"\brec\s*(?:&&\s*rec\s*)?\.\s*([A-Za-z_][A-Za-z0-9_]*)",
+                           _blank_line_comments(body)))
     if not legal:
         raise SystemExit("[wf-harness ✗] derived an EMPTY dispute key set from the owner — this "
                          "gate would accept anything. Fix the derivation before trusting it.")

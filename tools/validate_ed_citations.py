@@ -123,8 +123,22 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # provenance prose. Narrowing that heuristic would be a semantics change to a blocking gate, made
 # to lower a number I produced, so it is filed for a ruling rather than taken here (§0.1 point 4:
 # asymmetric skepticism is a bias, not a defence).
+#
+# KEYED BY IDENTITY, NOT BY COUNT — a count alone was launderable. Adversarial review found it:
+# with a ceiling of 10 and 10 findings, one changeset could FIX an existing finding and ADD a
+# brand-new open-ED-as-basis claim, keep the count at 10, and pass both the gate and its own test.
+# `git mv`ing a doc from canon/ (blocking) into systems/ laundered the same way. Nothing pinned
+# WHICH findings were deferred. Now nothing but these five exact (path, id) pairs is ever
+# deferred; anything else is a build failure wherever it appears.
 BURN_DOWN_PREFIXES = ('systems/', 'engine/params/')
-BURN_DOWN_MAX = 10  # measured 2026-08-01; lower it when the count drops (a test forces this)
+BURN_DOWN_ALLOW = frozenset({
+    ('systems/_architecture/decision_policy_v1.md', 'ED-IN-0113'),
+    ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0014'),
+    ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0091'),
+    ('systems/articulation/articulation_layer_v30.md', 'ED-IN-0004'),
+    ('systems/articulation/articulation_layer_v30.md', 'ED-IN-0091'),
+})
+BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a test pins it both ways
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 ARCHIVE_GLOBS = ('deprecated/archives/editorial/', 'deprecated/archives/editorials/', 'deprecated/canon/')
@@ -358,9 +372,12 @@ def is_deferred(v):
     the code (§0.1 point 2). Importable now, and the test calls this.
 
     A NONEXISTENT id is NEVER deferred: it is a broken reference, not an undecided one, and it
-    fails wherever it appears.
+    fails wherever it appears. Neither is anything outside BURN_DOWN_ALLOW — deferral is granted to
+    five named pre-existing findings, not to a region of the tree with a spare-capacity budget.
     """
-    return v['kind'] == 'OPEN_AS_BASIS' and v['path'].startswith(BURN_DOWN_PREFIXES)
+    return (v['kind'] == 'OPEN_AS_BASIS'
+            and v['path'].startswith(BURN_DOWN_PREFIXES)
+            and (v['path'], v['id']) in BURN_DOWN_ALLOW)
 
 
 def _walk_archive_files():

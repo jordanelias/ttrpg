@@ -110,9 +110,22 @@ def is_sim_file(path: str) -> bool:
     ONE OWNER of this question (OI-53a, ED-IN-0097) — and never from a basename heuristic.
     `tests/valoria/test_sim_fabrication_scope.py` fails if the oracle ever drops out again.
 
+    SCOPE IS THE UNION OF TWO RULES, not a replacement of one by the other. An earlier draft of
+    this fix REPLACED the basename rule with the prefix rule, and thereby dropped 14 sim-named
+    scripts under `audit/**` out of a blocking gate — while this very docstring claimed "removing
+    coverage is not this fix's job". Adversarial review caught the contradiction; measured 14 -> 0
+    before the union below was restored. Widening a gate is not licence to quietly narrow it
+    elsewhere, and the narrowing riding along inside a *repair* is exactly why it was invisible.
+
     NOTE `tests/sim/` is kept, but it is NOT the sim reference (CLAUDE.md §3 disambiguates the
-    three similarly-named trees); it is a frozen tree that was already gated, and removing
-    coverage is not this fix's job.
+    three similarly-named trees); it is a frozen tree that was already gated.
+
+    KNOWN GAP, recorded not fixed: `systems/combat/combat_engine_v1/` is a canonical Python oracle
+    (CLAUDE.md §6, ED-1050 — the typed Godot export is generated from its `config.py`) and is NOT
+    in scope: it is not under `systems/combat/sim/`, and `ci_common.sim_reference_roots()` does not
+    list it. The old basename proxy missed it too, so this is not a regression. Closing it means a
+    PC-lane call about their own oracle plus an edit to ci_common's root list — not something to
+    take unilaterally inside an IN-lane repair. Filed in ED-IN-0119.
     """
     if not path.endswith('.py'):
         return False
@@ -125,12 +138,20 @@ def is_sim_file(path: str) -> bool:
         return False
     if norm.startswith('tests/sim/'):
         return True
-    # The live oracle, from the single owner. `engine/tests/` is the oracle's own regression
-    # suite rather than reference code, and gating a test's fixture constants would demand
-    # ledger citations for arbitrary seeds — excluded deliberately, not by oversight.
+    # The oracle's own regression suite is not reference code; gating a test's fixture constants
+    # would demand ledger citations for arbitrary seeds. Deliberate, not oversight.
     if norm.startswith('engine/tests/'):
         return False
-    return norm.startswith(ci_common.sim_reference_prefixes())
+    # Rule 1 — the live oracle, from the single owner. This is what the basename proxy stopped
+    # matching when sim/ was retired, and the whole reason this predicate needed repair.
+    if norm.startswith(ci_common.sim_reference_prefixes()):
+        return True
+    # Rule 2 — the ORIGINAL basename heuristic, preserved. It is what keeps the throwaway
+    # audit-session sims (audit/**/sims/*.py, sim_*.py) inside the gate. Dropping it was a silent
+    # narrowing; keeping it costs nothing, since anything it over-matches under tools/ or
+    # deprecated/ has already returned False above.
+    basename = norm.rsplit('/', 1)[-1].lower()
+    return 'sim' in basename or 'simulation' in basename
 
 
 # Build the pattern without a literal triple-quote in source, so this checker masks its OWN
