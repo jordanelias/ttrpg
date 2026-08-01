@@ -66,6 +66,21 @@ flag-OFF golden — a different configuration. That is precisely the ED-1089 sha
 extending the key would have rebuilt the same trap. Extracted as `bat._mode_key(per_cell,
 field_movement, cell_morale)` so it can be tested in microseconds instead of by running a battery.
 
+**[ED-MB-0062, 2026-08-01] MODE KEYS ARE NOW ABSOLUTE — Jordan's rename-by-distinction ruling.**
+The scheme above was still *relative*: a suffix appeared only when a flag was ON, so absence encoded
+"OFF" **relative to the default at recording time**. `cell` never meant "cell-morale off", it meant
+"cell-morale not mentioned" — so flipping `PC_CELL_MORALE`'s default (which ED-MB-0001's flags-ON
+directive requires) re-points the plain grid run onto the fifth mode's golden and orphans four
+recorded keys. Note the key was **already injective**, so the injectivity pin could not see this.
+Keys now name every axis with its value: `unit`→`unit_grid_mor0`, `cell`→`cell_grid_mor0`,
+`unit_field`→`unit_field_mor0`, `cell_field`→`cell_field_mor0`, `cell_cm`→`cell_grid_mor1`
+(`cell` reserved for the mass-battle GEOMETRY primitive; `mor` for the distinct morale flag).
+**No digest changed** — lookup keys only, values carried byte-for-byte, so this is not a re-record
+and G11 does not apply. Control: `cell_field_mor0` still matches its golden under the new key, which
+a mis-mapped migration would have broken. The three ON configurations (`unit_grid_mor1`,
+`unit_field_mor1`, `cell_field_mor1`) now report MISSING honestly — **this is what makes the
+all-flags-ON re-base recordable**, and it is the ED-MB-0061 §5 blocker cleared.
+
 `cell_cm` = **`b42343dbd508d1e9…`**. **CONTROL (§0.1 #4):** it DIFFERS from the `cell` golden
 (`f58a9cb4…`), so the mode genuinely exercises seeded cell morale rather than silently reproducing
 the flag-off battery — had they matched, the fifth golden would have been ceremony. Deterministic
