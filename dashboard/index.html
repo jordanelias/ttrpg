@@ -630,18 +630,42 @@ function renderProgram(d) {
   // Health number first and largest — it is the program's single falsifier.
   const h = p.health || {};
   const closed = (h.closed === null || h.closed === undefined) ? '?' : h.closed;
-  const stalled = (h.closed === 0);
+  // Partial movement is movement (ED-IN-0113 finding 3): four in-progress junctures
+  // are not the same thing as a dead program, and colouring them identically said so.
+  const inProg = h.in_progress || 0;
+  const stalled = (h.closed === 0 && inProg === 0);
   html += `<div class="milestone-head"><strong style="font-size:1.35em;${stalled ? 'color:var(--warning);' : ''}">`
         + `${esc(String(closed))}/${esc(String(h.total ?? '?'))}</strong> — ${esc(h.label || 'M1 junctures closed')}`
-        + (stalled ? ' <span class="decision-source">(nothing closed yet)</span>' : '') + `</div>`;
+        + (inProg ? ` <span class="decision-source">· ${esc(String(inProg))} in progress</span>` : '')
+        + (stalled ? ' <span class="decision-source">(nothing closed, nothing in flight)</span>' : '')
+        + `</div>`;
 
   // Scope ratchet — the stopping rule.
   const s = p.scope || {};
   if (s.available === false) {
     html += `<div class="decision-source" style="color:var(--warning);">scope ratchet unavailable: ${esc(s.error || '')}</div>`;
   } else if (s.signals) {
-    const bad = s.verdict === 'REGRESSED';
-    html += `<div class="milestone-head" style="margin-top:10px;">Scope ratchet — <span style="${bad ? 'color:var(--warning);' : ''}">${esc(s.verdict)}</span></div>`;
+    // ED-IN-0113 finding 1: HELD_INACTIVE rendered IDENTICALLY to HELD, so the G13
+    // activity control was a display string the dashboard then discarded. Three
+    // distinct states now render three distinct ways — a control nobody can see is
+    // not a control.
+    const VERDICT_STYLE = {
+      REGRESSED:     'color:var(--warning);font-weight:600;',
+      EXPIRED:       'color:var(--warning);font-weight:600;',
+      HELD_INACTIVE: 'opacity:0.7;font-style:italic;',
+      UNKNOWN:       'opacity:0.7;',
+    };
+    const VERDICT_NOTE = {
+      HELD_INACTIVE: ' — scope held, but nothing moved; a session that did nothing scores this too',
+      EXPIRED:       ' — the program these ceilings were seeded for is complete; re-seed',
+      UNKNOWN:       ' — a signal could not be measured; this is not a pass',
+    };
+    const vstyle = VERDICT_STYLE[s.verdict] || '';
+    const vnote = VERDICT_NOTE[s.verdict] || '';
+    html += `<div class="milestone-head" style="margin-top:10px;">Scope ratchet — `
+          + `<span style="${vstyle}">${esc(s.verdict)}</span>`
+          + (vnote ? `<span class="decision-source">${esc(vnote)}</span>` : '')
+          + `</div>`;
     for (const sig of s.signals) {
       const over = sig.ok === false;
       const state = sig.ok === null ? 'unknown'

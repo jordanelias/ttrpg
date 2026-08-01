@@ -222,8 +222,15 @@ def collect(baseline=None):
     # did not grow, and neither did anything else. It is NOT a --check failure (an
     # infrastructure PR legitimately closes no juncture), but it must never render as
     # the same word as "held while shipping".
-    if not regressions and not unknown:
-        verdict = 'HELD' if (health.get('closed') or 0) > 0 else 'HELD_INACTIVE'
+    # Movement = a juncture closed OR one in flight. See _measure_health's note: counting
+    # only `done` made four in-progress junctures read as inactivity.
+    moved = ((health.get('closed') or 0) > 0) or ((health.get('in_progress') or 0) > 0)
+    if health.get('expired'):
+        # The program the ceilings were seeded for has finished. Continuing to grade
+        # against them silently measures the wrong program.
+        verdict = 'EXPIRED'
+    elif not regressions and not unknown:
+        verdict = 'HELD' if moved else 'HELD_INACTIVE'
     elif regressions:
         verdict = 'REGRESSED'
     else:
@@ -238,7 +245,9 @@ def collect(baseline=None):
         'unknown': unknown,
         'verdict': verdict,
         'activity': {
-            'moved': (health.get('closed') or 0) > 0,
+            'moved': moved,
+            'closed': health.get('closed'),
+            'in_progress': health.get('in_progress'),
             'control': 'G13 — scope held is only meaningful against whether the program moved',
         },
         'health': health,
@@ -266,10 +275,28 @@ def _measure_health(baseline):
             'evidence': f"could not read workplan board: {type(exc).__name__}",
         }
 
+    # PARTIAL MOVEMENT IS MOVEMENT (ED-IN-0113 finding 3). Counting only `done`
+    # made a session that advanced four junctures indistinguishable from one that
+    # did nothing — the same blindness G13 exists to remove, one tier in. `closed`
+    # remains the falsifier (a program ships junctures, not activity), but the
+    # activity control now reads BOTH, so real progress stops rendering as inertia.
+    in_progress = sum(1 for j in junctures if j.get('state') == 'in_progress')
+    blocked = sum(1 for j in junctures if j.get('state') == 'blocked')
+
+    # active_until, given a reader (ED-IN-0113 finding 5). It was prose: the stated
+    # deactivation condition was enforced by nothing, so an expired ratchet would have
+    # kept grading a program that had finished — a live failure mode, not a theoretical
+    # one, since the ceilings are M1-scoped by their own header.
+    expired = (measured_total > 0 and closed == measured_total)
+
     return {
         'closed': closed,
         'total': measured_total,
+        'in_progress': in_progress,
+        'blocked': blocked,
         'ok': closed > 0,
+        'expired': expired,
+        'active_until': str(baseline.get('active_until') or ''),
         'evidence': 'workplans/workplan_v6_progress.yaml milestones.M1.junctures state == done',
         'note': (spec.get('note') or '').strip(),
     }
@@ -302,9 +329,17 @@ def _fmt_summary(result):
     h = result['health']
     lines.append('')
     closed = '?' if h.get('closed') is None else h['closed']
-    lines.append(f"  HEALTH — M1 junctures closed: {closed}/{h.get('total')}")
+    prog = h.get('in_progress')
+    extra = f" · {prog} in progress" if prog else ''
+    lines.append(f"  HEALTH — M1 junctures closed: {closed}/{h.get('total')}{extra}")
     lines.append('')
     lines.append(f"  verdict: {result['verdict']}")
+    if result['verdict'] == 'EXPIRED':
+        lines.append('')
+        lines.append(f"  The program these ceilings were seeded for is COMPLETE "
+                     f"({h.get('closed')}/{h.get('total')}). `active_until: "
+                     f"{h.get('active_until')}` is satisfied — re-seed against the post-M1")
+        lines.append('  tree rather than carrying M1 ceilings forward as though nothing happened.')
     if result['verdict'] == 'HELD_INACTIVE':
         lines.append('')
         lines.append('  G13: scope did not grow — and neither did the program. "Held" by')
