@@ -23,6 +23,22 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file_
 _IGNORE_DIRS = {'.git'}
 
 
+def _gate_jobs():
+    """Parsed CI jobs, from the SINGLE OWNER of workflow parsing (tools/ci_gate_coverage.py).
+
+    Re-parsing the YAML here would be a second owner of "what CI runs" and would drift the
+    moment a job changed shape — the §8 violation this file exists to detect. Degrades to []
+    rather than raising: this checker is a BLOCKING gate, and a gate that crashes on an
+    unrelated import failure is worse than one that reports a little less.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import ci_gate_coverage
+        return ci_gate_coverage.jobs()
+    except Exception:
+        return []
+
+
 def get_all_repo_files():
     """Return the set of all repo-relative file paths in the working tree."""
     files = set()
@@ -258,6 +274,21 @@ def check_ci_registry_coverage(all_files):
         if path and path not in all_files:
             violations.append(f"ci_checks_registry.yaml: path does not exist on disk: {path}")
         ci_job = e['ci_job']
+        # (b2) THE JOB MUST ACTUALLY INVOKE THE TOOL, not merely exist. Checking only that the
+        # job id is real let `scope_ratchet.py` carry `ci_job: validators-report` for the whole
+        # period in which NO workflow invoked it — its notes said it "rides valoria_local", and
+        # nothing runs valoria_local in CI either (only py_compile), so ED-IN-0112's design lost
+        # its CI half in the 2026-08-01 job collapse with the registry still asserting otherwise.
+        # A registry that records intent rather than fact is worse than none: it is read as
+        # evidence of coverage. ED-IN-0118.
+        if ci_job and ci_job in job_ids and path:
+            invoked = {c['script'] for j in _gate_jobs() if j['id'] == ci_job
+                       for c in (j.get('tool_commands') or [])}
+            if invoked and path not in invoked:
+                violations.append(
+                    f"ci_checks_registry.yaml: {path} declares ci_job {ci_job!r}, but that job "
+                    f"never invokes it — the row claims CI coverage the workflow does not provide"
+                )
         if ci_job and ci_job not in job_ids:
             violations.append(
                 f"ci_checks_registry.yaml: ci_job {ci_job!r} (path={path}) is not a job id "

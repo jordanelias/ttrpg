@@ -76,20 +76,30 @@ def jobs() -> list[dict]:
                 if os.path.isdir(os.path.join(ROOT, tok)) or os.path.isfile(os.path.join(ROOT, tok)):
                     roots.add(tok)
 
+        # COMMENT LINES ARE NOT INVOCATIONS. Found the hard way: valoria-ci.yml:813 is a
+        # prose comment reading "bulk refresh: python3 tools/freshness_gate.py --update)."
+        # Matching it would have made `--ci` run freshness_gate WITH --update — a flag that
+        # REWRITES the canonical_sha pins. A read-only gate that silently mutates state is
+        # strictly worse than no gate, so this filter is load-bearing, not cosmetic.
+        runnable = '\n'.join(
+            ln for ln in body.splitlines() if not ln.lstrip().startswith('#')
+        )
+
         # The syntax-check job COMPILES every tool (py_compile) rather than running any.
         # Treating those as invocations would make `--ci` "run" 33 tools it never runs —
         # the compile-vs-execute confusion that makes a naive duplication count wrong.
-        compiles_only = 'py_compile' in body
+        #
+        # COMPUTED FROM `runnable`, NOT `body` — it read the raw text until 2026-08-01, so a job
+        # whose COMMENT merely mentioned py_compile was classified compiles-only and had its
+        # entire command list discarded. Adding three validators to validators-report with a
+        # comment explaining that valoria_local is only py_compile'd took that job from 10
+        # parsed commands to 0, silently: `--ci` would have stopped running ten validators and
+        # reported success, and the workflow itself was unchanged in any way that mattered.
+        # Exactly the "prose about a call read as a call" mistake the filter above already
+        # corrects for commands; the two must be derived from the same text or they disagree.
+        compiles_only = 'py_compile' in runnable
         cmds = []
         if not compiles_only:
-            # COMMENT LINES ARE NOT INVOCATIONS. Found the hard way: valoria-ci.yml:813 is a
-            # prose comment reading "bulk refresh: python3 tools/freshness_gate.py --update)."
-            # Matching it would have made `--ci` run freshness_gate WITH --update — a flag that
-            # REWRITES the canonical_sha pins. A read-only gate that silently mutates state is
-            # strictly worse than no gate, so this filter is load-bearing, not cosmetic.
-            runnable = '\n'.join(
-                ln for ln in body.splitlines() if not ln.lstrip().startswith('#')
-            )
             seen = set()
             for cm in TOOL_CMD_RE.finditer(runnable):
                 script, args = cm.group(1), cm.group(2).strip()
