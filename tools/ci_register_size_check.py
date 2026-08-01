@@ -128,8 +128,26 @@ THRESHOLDS = {
     "registers/patch_register_index.md":         20_000,
 }
 
+# ── Early warning (ED-MB-0063 residual, 2026-08-01) ───────────────────────────
+# THE PATTERN THIS EXISTS FOR. Registers approach their caps SILENTLY: output was
+# binary OK/FAIL, so a file at 99% of its cap printed the same "OK" as one at 10%.
+# The first signal was therefore a BLOCKING failure on whichever PR happened to add
+# the next entry — structurally, someone other than whoever grew the file.
+#
+# Measured 2026-08-01, all three found in one session and all three already over 95%:
+#   registers/editorial_ledger_mb.jsonl   49,260 / 50,000   98.5%   (740 tokens left)
+#   registers/editorial_ledger_in.jsonl   47,602 / 50,000   95.2%
+#   tests/coverage_matrix.md              14,655 / 15,000   97.7%
+#
+# WARN is REPORT-ONLY and must stay that way. A blocking warn is just a lower cap,
+# which re-creates the same cliff a few thousand tokens earlier; the point is to move
+# the cost onto the session doing the growing, not to add a second wall.
+WARN_FRACTION = 0.85
+
+
 def main():
     violations = []
+    warnings = []
     checked = 0
 
     for path, threshold in sorted(THRESHOLDS.items()):
@@ -149,10 +167,23 @@ def main():
         if tokens > threshold:
             violations.append((path, tokens, threshold))
             print(f"FAIL {path}: {tokens:,} tokens (limit {threshold:,})")
+        elif tokens >= threshold * WARN_FRACTION:
+            warnings.append((path, tokens, threshold))
+            print(f"WARN {path}: {tokens:,} / {threshold:,} tokens "
+                  f"({tokens / threshold:.0%} of cap — archive settled entries soon)")
         else:
             print(f"OK   {path}: {tokens:,} / {threshold:,} tokens")
 
     print(f"\nChecked {checked} files.")
+    if warnings:
+        print(f"\n[APPROACHING CAP: {len(warnings)} file(s) at or above "
+              f"{WARN_FRACTION:.0%}] — report-only, this does not fail the gate.")
+        for path, tokens, limit in warnings:
+            print(f"  {path}: {tokens:,} / {limit:,} ({limit - tokens:,} tokens of headroom)")
+        print("    Action: archive WHOLE settled ids to the _archive file — never individual")
+        print("    rows. The ledgers are append-only, so an id's effective status is its LAST")
+        print("    row; moving only the resolved row silently reverts it (ED-IN-0112 incident,")
+        print("    pinned by tests/valoria/test_ledger_hygiene.py).")
     if violations:
         print(f"\n[REGISTER SIZE VIOLATIONS: {len(violations)}]")
         for path, tokens, limit in violations:

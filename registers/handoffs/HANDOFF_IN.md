@@ -989,6 +989,30 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **⚠ `references/id_reservations.yaml` is at 14,263 / 15,000 tokens — 737 of headroom, on the file
+  EVERY lane must edit to allocate an ED (2026-08-01, ED-MB-0063 residual).** Roughly two
+  allocations from a BLOCKING `register-size-check` failure that would stop every lane at once.
+  Surfaced by the new approaching-cap WARN in `ci_register_size_check.py`, which found it on its
+  first run; nothing was reporting it before.
+  - **The cost is concentrated, not diffuse.** Line 226 is a single comment of **10,738 chars
+    (~2,685 tokens — 18% of the whole file's cap)** recording the provenance of the ED-IN-0064
+    DUP-KEY repair, a defect that is already neutralized. Lines 225/236/195/197 add ~3.1k, 3.1k,
+    2.5k and 2.5k chars of lane-comment prose. Line 111 (the MB lane) is 4,126 chars.
+  - **DO NOT simply delete line 226.** Checked before recommending it: the `ED-IN-0064` ledger entry
+    is about the **governance research corpus**, an entirely different item — the dup-key repair's
+    prose exists ONLY in that comment. Cutting it destroys provenance rather than relocating it.
+    It needs a home first (a companion archive doc, or a purpose-filed ledger entry), then the cut.
+  - **The MB lane line (111) is the easy one and is already sanctioned.** Jordan ruled the PC lane
+    to "SKELETON ONLY … ONE SHORT LINE per ED. Prose lives in `registers/editorial_ledger_pc.jsonl`"
+    (2026-07-24, CLAUDE.md §4). MB never got that treatment and its prose *is* already duplicated
+    in `editorial_ledger_mb.jsonl`, so condensing it is a pure de-duplication with an existing
+    ruling behind it.
+  - **Deliberately NOT executed in the session that found it** (§0.1 #5 — sweep only what the task
+    is load-bearing on, and file the rest): this is a 2,685-token provenance relocation on the
+    highest-contention file in the repo, done at the end of a long session, with the concurrent-
+    allocation collision history that created the lane namespace in the first place. It wants its
+    own scoped PR, not a tail-end sweep.
+
 - **WS0 Structural Observatory + WS1 registry reader (2026-07-13/14, ED-IN-0057..0063)** — the five
   Tier-0 audit scripts (`skills/valoria-vector-audit/scripts/{vector,structure,pointer,formula,gen}_audit.py`)
   and the read-only facade `tools/registry.py` (+ `references/registry/README.md` &

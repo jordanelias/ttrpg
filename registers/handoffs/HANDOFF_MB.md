@@ -25,9 +25,47 @@ namespace and are folded into Next actions below, which carries the full narrati
     Order is: bisect each failure → fix F1–F8 → Jordan rules the golden **mode matrix** →
     re-base once as the single global golden-moving PR → G11 resumes → existing B1a/D1 path.
   - **Proven so far:** F3/F4 (body interpenetration) are caused by **`PC_FACING_MODEL` alone**;
-    `PC_CELL_EXCLUSION` is exonerated by bisect. **F2 (rear damage 0.0) is NOT `PC_FACING_MODEL`** —
-    it survives that flag being off, cause unknown. Every other failure still needs its own bisect
+    `PC_CELL_EXCLUSION` is exonerated by bisect. Every other failure still needs its own bisect
     before being called "pre-existing".
+  - **✅ F2 CLOSED 2026-08-01 (ED-MB-0063) — it was a CONFOUNDED TEST, not an engine regression,
+    and the flag bisect that "explains" it is wrong.** A full single-flag sweep fingers
+    `PC_FRACTIONAL_POOL` as the only flag whose OFF state restores the pass. **That is a mask, not a
+    cause.** The real chain, measured: the two arms flipped the defender's `advance_dir`, which
+    orients the whole *subunit*, so they contacted **different cells of B** — rank `(0,*)` vs
+    `(2,*)` in the original frame — moving B's own pool 3.6 → 1.333 **via support depth**
+    (`core/exchange.py::_pair_engaged_troops` credits deeper cells at `SUPPORT_WEIGHTS`; rank 0 has
+    two ranks behind it, rank 2 has none: `(5+5·1.0+5·0.7)/15 = 0.9` vs `5/15 = 1/3`, exactly 3.6 vs
+    1.333 at base pool 4). `compute_degree` is **relative**, so B's smaller pool rolling better
+    (net 2 vs 1) downgraded A's *identical* net of 1.0 from `Success` to `Partial`; `Partial`
+    (damage 1) − the universal `dr=1` = **0.0**. Flooring just happens to keep B under A at that
+    seed. Fixed by holding the body fixed and rotating only `cell_facing_vec`. **No golden
+    re-recorded.** This **implements** `audit/2026-07-30-mb-session-retrospective/00_lessons.md`'s
+    existing classification of F2 as a test-premise defect — it does not discover it.
+  - **⚠ THREE CORRECTIONS from the independent critic pass, kept because the errors instruct
+    (full detail in the ED-MB-0063 correction row):** the first write-up blamed "different cells
+    carry different troops" — **false**, `distribution` is uniform; it recorded support-stack loss as
+    *refuted* by measuring `support_engage_frac`, which is **never called** here (`POOL_VARIANT ==
+    "C-ii"` guards it out) — so the right concept was discarded on the wrong function; and it claimed
+    "mutation-verified 3/3" when `OCTAGON_DMG_MULT["YELLOW"]` has **no readers at all** (flank is
+    interpolated), so that mutant kills nothing. Real score **2/3**. All three passed my own
+    adversarial pass and were caught only by a structurally independent reader.
+  - **The falsifier that replaced them:** `test_arc_ratio_is_invariant_to_the_fractional_pool_flag`
+    parametrizes `PC_FRACTIONAL_POOL` over both settings — the property that was *false* before, and
+    the flag-dependence that **defined** F2. Reintroducing the confound fails `[1]` and passes `[0]`,
+    reproducing F2's exact signature. "7 of 12 seeds" was near-vacuous by comparison: with the body
+    fixed, both arms share one RNG stream and the ratio is arithmetically forced.
+  - **Recorded, NOT fixed (all pre-existing):** `test_rear_penalty_persists_across_reaction_window`
+    **does not traverse the window it names** — the reaction counter is consecutive-tick in a
+    per-subunit map and each call builds a fresh `Subunit`, so `_cnt` never exceeds 1 against
+    `FACING_REACTION_TICKS = 2`; an engine that *did* wheel would still pass. Fix by ticking a
+    persistent subunit (the template is `test_visible_flank_refuses_after_delay`, same file).
+    `test_front_takes_no_arc_penalty` still uses the confounded pairing, justified by an
+    uncontrolled structural claim. And the new isolation is **scenario-dependent**: it holds only
+    while this fixture has no brace, no momentum differential, one subunit per side.
+  - **⚠ Bisect discipline, learned here:** a single-flag bisect answers "what changes this result",
+    which is **not** "what causes it". F1/F3–F8 bisect results should each be re-checked against the
+    mechanism before being written down as causes — F3/F4's `PC_FACING_MODEL` attribution above has
+    not had that second step.
   - **Jordan's geometry spec (§4.5) is unimplemented:** the octagon is POINT-forward (a vertex, not a
     face, touches the subunit facing line) and **the subunit has a PERIMETER that is the surface of
     battle**. No perimeter object exists in the tree.

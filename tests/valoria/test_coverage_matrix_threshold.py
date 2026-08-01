@@ -70,3 +70,70 @@ def test_missing_file_returns_none():
 
 def test_unknown_match_returns_none():
     assert rc.yaml_max_tokens('tests/does_not_exist.md', RULES) is None
+
+
+# ── The approaching-cap warning (ED-MB-0063 residual) ─────────────────────────
+#
+# WHY THE WARNING EXISTS. Output was binary OK/FAIL, so a register at 99% of its cap
+# printed the same "OK" as one at 10%. Three files were found above 95% in a single
+# session (MB ledger 98.5% — 740 tokens left; IN ledger 95.2%; coverage matrix 97.7%),
+# none of which had announced itself. The first signal would have been a BLOCKING
+# failure on whichever PR added the next entry, which is structurally not the PR that
+# grew the file.
+#
+# BOTH PROPERTIES ARE PINNED BELOW, and the pair is the point (§0.1 #2 — an assertion
+# must be able to observe the failure it excludes):
+#   - the warn band FIRES, so the feature is not inert; and
+#   - the warn band does NOT fail the gate, so it has not silently become a lower cap.
+# A test of only the first would pass just as happily if WARN_FRACTION were wired into
+# `violations`, which is precisely the regression worth catching.
+
+def test_warn_fraction_is_below_the_cap_and_leaves_real_headroom():
+    assert 0.0 < rc.WARN_FRACTION < 1.0, 'a warn at or above the cap can never fire before FAIL'
+    # 0.85 of a 50,000-token ledger is 7,500 tokens of notice — several sessions' work.
+    # Much above ~0.95 and the warning arrives too late to act on without an emergency pass.
+    assert rc.WARN_FRACTION <= 0.95, (
+        f'WARN_FRACTION {rc.WARN_FRACTION} leaves too little notice to be actionable')
+
+
+def _run(tmp_path, monkeypatch, tokens, threshold):
+    """Run main() over ONE synthetic file of a known size; return (exit_code, stdout)."""
+    import io
+    import contextlib
+    p = tmp_path / 'synthetic_register.md'
+    p.write_text('x' * (tokens * 4), encoding='utf-8')   # main() computes len//4
+    monkeypatch.setattr(rc, 'THRESHOLDS', {str(p): threshold})
+    buf = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf):
+            rc.main()
+        code = 0
+    except SystemExit as e:
+        code = e.code
+    return code, buf.getvalue()
+
+
+def test_a_register_inside_the_warn_band_warns_but_does_not_fail(tmp_path, monkeypatch):
+    """REPORT-ONLY. 90% of cap: the warning must appear AND the gate must still pass."""
+    code, out = _run(tmp_path, monkeypatch, tokens=9_000, threshold=10_000)
+    assert 'WARN' in out, 'a register at 90% of its cap produced no warning'
+    assert 'APPROACHING CAP' in out
+    assert code == 0, (
+        'the approaching-cap warning FAILED the gate — it has become a second, lower cap, '
+        'which re-creates the same cliff a few thousand tokens earlier')
+
+
+def test_a_register_below_the_band_is_silent(tmp_path, monkeypatch):
+    """The other direction: the warning must not fire on a file with real headroom,
+    or it degrades to noise and gets ignored — the failure mode it was built to fix."""
+    code, out = _run(tmp_path, monkeypatch, tokens=1_000, threshold=10_000)
+    assert 'WARN' not in out and 'APPROACHING CAP' not in out
+    assert 'OK' in out
+    assert code == 0
+
+
+def test_over_cap_still_fails(tmp_path, monkeypatch):
+    """The warn band must not have swallowed the BLOCKING behaviour it sits beneath."""
+    code, out = _run(tmp_path, monkeypatch, tokens=11_000, threshold=10_000)
+    assert 'FAIL' in out and 'REGISTER SIZE VIOLATIONS' in out
+    assert code == 1, 'an over-cap register no longer fails the gate'
