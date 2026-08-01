@@ -558,3 +558,184 @@ def test_a_tools_only_commit_does_not_trip_the_stamp_but_a_canon_head_does():
             "check now catches nothing. Both halves of this test matter.")
     finally:
         C._git_last_commit_date = real
+
+
+# ── Check 4 sandbox-reference detection (ci_hooks_verifier, fixed 2026-08-01) ──
+
+def _load_live_sandbox_ref():
+    """Extract `_live_sandbox_ref` WITHOUT executing the verifier's module body.
+
+    ci_hooks_verifier.py is a script: it runs every check at import and ends in sys.exit().
+    Importing it here would run the whole gate inside the unit suite and then kill the
+    process. Lifting the one function out with `ast` tests the real shipped source — not a
+    copy that could drift — while leaving the script's execution model alone.
+    """
+    import ast
+    import textwrap
+    src = open(os.path.join(ROOT, 'tools', 'ci_hooks_verifier.py'),
+               encoding='utf-8', errors='replace').read()
+    tree = ast.parse(src)
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name == '_live_sandbox_ref':
+            ns = {}
+            exec(compile(ast.Module(body=[node], type_ignores=[]), '<extract>', 'exec'), ns)
+            return ns['_live_sandbox_ref']
+    raise AssertionError('_live_sandbox_ref not found in tools/ci_hooks_verifier.py — '
+                         'Check 4 was refactored; update this guard with it')
+
+
+SANDBOX = '/home/claude'
+
+# Each row is a REAL false positive this check produced before 2026-08-01. Substring matching
+# made it 4/4 false, so the warning was permanently on — and a signal that is always red is a
+# signal nobody reads. That is how the ONE true finding (tools/compliance_check.py, which really
+# does `sys.path.insert(0, '/home/claude')`) sat unnoticed among four that were noise.
+NOT_A_DEPENDENCY = {
+    'comment describing the check':      f'# lingering {SANDBOX} sandbox references\nx = 1\n',
+    'comment recording a past fix':      f'# was dead (hardcoded {SANDBOX} github_ops). Now local.\nx = 1\n',
+    'prose declaring it is NOT used':    f'"""No GitHub API, no PAT, no {SANDBOX}, no network."""\nx = 1\n',
+    'a filter that EXCLUDES the path':   f'y = [w for w in ws if not w["dest"].startswith("{SANDBOX}")]\n',
+    'a `not in` comparison':             f'if "{SANDBOX}" not in dest:\n    pass\n',
+    'negated .endswith classification':  f'if not d.endswith("{SANDBOX}"):\n    pass\n',
+    'a FUNCTION docstring':              f'def f():\n    """used {SANDBOX} historically"""\n    return 1\n',
+    'a CLASS docstring':                 f'class C:\n    """{SANDBOX} was the old home"""\n    x = 1\n',
+}
+
+# The four rows below were FALSE NEGATIVES in the first version of the fix, which matched on raw
+# line text: it dropped any hit whose line contained `'not '` or began with a quote. A false
+# negative here is strictly worse than the false positives being removed — noise is ignorable, a
+# live sandbox dependency reported clean is not. Found by adversarially probing the fix rather
+# than by re-reading it, which is the only reason they were caught before merge.
+IS_A_DEPENDENCY = {
+    'sys.path manipulation': f'import sys\nsys.path.insert(0, "{SANDBOX}")\n',
+    'reading a sandbox file': f'tok = open("{SANDBOX}/.valoria_pat").read()\n',
+    'a module-level path template': f'CACHE = "{SANDBOX}/.compliance_cache_{{repo}}.json"\n',
+    'live code on a line containing the word "not"':
+        f'CACHE = "{SANDBOX}/x.json"  # note: not portable\n',
+    'live code on a line containing "NOTE"':
+        f'PATH = "{SANDBOX}/a"   # NOTE this is live\n',
+    'a multi-line string whose continuation line starts with a quote':
+        f'MSG = (\n    "prefix "\n    "{SANDBOX}/tail"\n)\n',
+    'a dependency inside a function that HAS a docstring':
+        f'def f():\n    """doc"""\n    return open("{SANDBOX}/p")\n',
+    # NEGATION ALONE IS NOT EXCLUSION (critic finding N4). An earlier version dropped every
+    # string under any `not`, so these two -- which negate a FILESYSTEM ACCESS to the path,
+    # the strongest possible dependency on it -- were reported clean.
+    'a negated os.path.exists on the path':
+        f'if not os.path.exists("{SANDBOX}/cache"):\n    raise SystemExit(1)\n',
+    'a negated os.path.isdir in a loop guard':
+        f'while not os.path.isdir("{SANDBOX}/x"):\n    pass\n',
+}
+
+
+def test_prose_and_exclusions_are_not_reported_as_dependencies():
+    """The four false positives must all be silent."""
+    fn = _load_live_sandbox_ref()
+    checked = 0
+    for label, src in NOT_A_DEPENDENCY.items():
+        assert not fn(src, 'x.py', 'tools/x.py'), (
+            f'false positive restored — {label!r} is not a sandbox dependency; a file cannot '
+            f'break outside the sandbox because of a comment or an exclusion filter')
+        checked += 1
+    assert checked == len(NOT_A_DEPENDENCY) == 8, f'expected 8 cases, checked {checked}'
+
+
+def test_real_sandbox_dependencies_are_still_caught():
+    """The other direction, and the one that matters.
+
+    A fix that silenced the noise by silencing the check would pass the test above and be
+    worthless. These are the shapes actually present in tools/compliance_check.py, which is a
+    genuine half-alive orchestrator-era dependency and must keep reporting.
+    """
+    fn = _load_live_sandbox_ref()
+    checked = 0
+    for label, src in IS_A_DEPENDENCY.items():
+        assert fn(src, 'x.py', 'tools/x.py'), (
+            f'{label!r} is a LIVE sandbox dependency and would break outside the retired '
+            f'harness, but the check no longer reports it — the fix has gone too far')
+        checked += 1
+    assert checked == len(IS_A_DEPENDENCY) == 9, f'expected 9 cases, checked {checked}'
+
+
+def test_markdown_is_still_checked_because_skills_are_prose(monkeypatch=None):
+    """The BLOCKING half of Check 4 is about skills/, whose surface is SKILL.md.
+
+    An earlier version of this fix returned False for every `.md` on the reasoning that
+    markdown "has no executable surface". For a skill the prose IS the instruction: a SKILL.md
+    telling an agent to read /home/claude/... is precisely the violation the blocking rule
+    names. `skills/` happens to be clean today, so nothing broke — the GUARD would have been
+    silently gone, which is this whole module's subject matter.
+    """
+    fn = _load_live_sandbox_ref()
+    assert fn(f'Read the corpus from {SANDBOX}/repo before answering.\n',
+              'SKILL.md', 'skills/x/SKILL.md'), (
+        'markdown is no longer inspected, so the BLOCKING skills/ rule cannot fire at all')
+
+
+def test_unparseable_python_fails_closed():
+    """An unparseable file is not evidence of cleanliness."""
+    fn = _load_live_sandbox_ref()
+    assert fn(f'def broken(:\n  "{SANDBOX}"\n', 'x.py', 'tools/x.py'), (
+        'a file that will not tokenize was treated as clean — absence of evidence read as '
+        'evidence of absence, which is the defect this whole check class keeps hitting')
+
+
+def test_the_verifier_does_not_report_itself():
+    """It contains the literal in its own warning TEXT; that is unfixable by editing it."""
+    fn = _load_live_sandbox_ref()
+    real = open(os.path.join(ROOT, 'tools', 'ci_hooks_verifier.py'),
+                encoding='utf-8', errors='replace').read()
+    assert SANDBOX in real, 'precondition gone: the verifier no longer quotes the path at all'
+    assert not fn(real, 'ci_hooks_verifier.py', 'tools/ci_hooks_verifier.py')
+    # ...but the exemption must be path-scoped, not a blanket escape for any verifier-ish file.
+    assert fn(f'import sys\nsys.path.insert(0, "{SANDBOX}")\n',
+              'ci_hooks_verifier.py', 'tools/other_tool.py'), (
+        'the self-exemption generalised beyond its own path — any tool could now hide behind it')
+
+
+# ── Path-rot guard for hand-maintained path tables (2026-08-01) ───────────────
+
+def _tracked_files():
+    import subprocess
+    return set(subprocess.run(['git', 'ls-files'], cwd=ROOT,
+                              capture_output=True, text=True).stdout.splitlines())
+
+
+def test_lane_path_prefixes_all_match_something():
+    """Every row of build_decisions.LANE_PATH_PREFIXES must match a tracked file.
+
+    MEASURED 2026-08-01: 60 of 136 rows matched nothing. 35 named `designs/audit/…`, a tree
+    retired 2026-07-19; the rest named `designs/…` and `sim/…` paths moved by the same
+    restructure. Lane attribution in DECISIONS.md had been silently degrading for weeks,
+    because `infer_lane` returns None when nothing matches — an honest return that is
+    indistinguishable from "this file has no lane".
+
+    THE POINT IS NOT THE 60 ROWS, IT IS THE SHAPE. A hand-maintained table of paths rots
+    every time the tree moves, and nothing tells you. This guard makes the rot loud on the
+    PR that causes it, which is the only moment anyone can cheaply fix it.
+
+    ⚠ THIS TABLE SHOULD NOT EXIST AT THIS SIZE (filed, not fixed here — see HANDOFF_IN.md).
+    CLAUDE.md §3's RULED §2a says "one subsystem = one folder = one ID lane". That makes
+    lane DERIVABLE from `systems/<subsystem>/` — roughly nine rows — instead of enumerated
+    across 133. The enumeration is a single-owner violation (§8) as well as a rot surface.
+    Repairing the rows is not the same as fixing the design, and this comment exists so the
+    repair is not mistaken for the fix.
+    """
+    import ast
+    import re
+    src = open(os.path.join(ROOT, 'tools', 'observability', 'build_decisions.py'),
+               encoding='utf-8', errors='replace').read()
+    m = re.search(r'LANE_PATH_PREFIXES: list\[tuple\[str, str\]\] = (\[.*?\n\])', src, re.S)
+    assert m, 'LANE_PATH_PREFIXES not found — the table was renamed; update this guard with it'
+    rows = ast.literal_eval(m.group(1))
+    assert len(rows) > 50, f'table shrank to {len(rows)} rows — if it was replaced by a ' \
+                           f'derivation, delete this guard rather than weakening it'
+    tracked = _tracked_files()
+    assert tracked, 'git ls-files returned nothing — the guard would be vacuous'
+    dead = [p for p, _lane in rows if not any(f.startswith(p) for f in tracked)]
+    assert not dead, (
+        f'{len(dead)} LANE_PATH_PREFIXES row(s) match no tracked file, so they contribute '
+        f'nothing and the lane they claim to assign is silently unassigned:\n  ' +
+        '\n  '.join(dead) +
+        '\n\nIf the path moved, remap it via references/restructure_ledger.md. If the content '
+        'was deleted, delete the row.')

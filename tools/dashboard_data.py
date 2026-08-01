@@ -317,22 +317,38 @@ MORPHOLOGY_REARCH_CUTOFF = '2026-07-02'  # designs/audit/2026-07-02-morphology-r
                                           # this is stale and needs regeneration.
 
 
+def _audit_date(path):
+    """The YYYY-MM-DD prefix of the audit FOLDER holding `path`.
+
+    Derived from the parent directory name, not a positional split index. The previous form
+    used `p.split(os.sep)[2][:10]`, which was correct only while the corpus lived at
+    `designs/audit/<date>/<file>` (index 2 = the date). Under the live `audit/<date>/<file>`
+    layout index 2 is the FILENAME, so a naive repoint would have produced a garbage sort key
+    and a garbage `as_of` — and `as_of` feeds the `stale` verdict below, so it would have been
+    wrong rather than merely ugly.
+    """
+    return os.path.basename(os.path.dirname(path))[:10]
+
+
 def _latest_weapon_rebalance_file():
-    candidates = sorted(glob.glob(os.path.join('designs', 'audit', '*', 'weapon_rebalance_data.json')))
+    # `designs/audit/` retired 2026-07-19 (ED-IN-0071 P4/P5); the corpus is at top-level `audit/`.
+    # This glob had matched nothing since, so build_balance_personal_combat() returned
+    # {"available": False} and the dashboard card silently went dark while the data file sat at
+    # audit/2026-05-29-combat-armature/weapon_rebalance_data.json the whole time.
+    candidates = sorted(glob.glob(os.path.join('audit', '*', 'weapon_rebalance_data.json')))
     if not candidates:
         return None
-    # designs/audit/YYYY-MM-DD-slug/weapon_rebalance_data.json — sort by the folder's date prefix
-    candidates.sort(key=lambda p: p.split(os.sep)[2][:10])
+    candidates.sort(key=_audit_date)
     return candidates[-1]
 
 
 def build_balance_personal_combat():
     path = _latest_weapon_rebalance_file()
     if not path:
-        return {"available": False, "reason": "no weapon_rebalance_data.json found under designs/audit/"}
+        return {"available": False, "reason": "no weapon_rebalance_data.json found under audit/"}
     with open(path, encoding='utf-8') as f:
         raw = json.load(f)
-    as_of = path.split(os.sep)[2][:10]
+    as_of = _audit_date(path)
     field = (raw.get('weapon_audit') or {}).get('field') or {}
     top_sorted = sorted(field.items(), key=lambda kv: kv[1], reverse=True)
     return {
@@ -342,7 +358,7 @@ def build_balance_personal_combat():
         "stale": as_of < MORPHOLOGY_REARCH_CUTOFF,
         "stale_reason": (
             f"predates the {MORPHOLOGY_REARCH_CUTOFF} 40-weapon morphology expansion "
-            "(designs/audit/2026-07-02-morphology-rearch-phase0/) — no regenerated matrix "
+            "(audit/2026-07-02-morphology-rearch-phase0/) — no regenerated matrix "
             "exists since; treat as historical, not current balance"
         ) if as_of < MORPHOLOGY_REARCH_CUTOFF else None,
         "field_win_rate_pct": dict(top_sorted),
@@ -659,7 +675,9 @@ def build_proposals():
     # 9 of them invisible here. Both this card and build_proposals.py call the same core,
     # so they agree without one reading the other's committed output.
     rows = []
-    for path in glob.glob('designs/**/*.md', recursive=True) + glob.glob('systems/**/*.md', recursive=True):
+    # `designs/` retired 2026-07-19 (ED-IN-0071 P4/P5); its half of this union had returned
+    # empty ever since. Dropped rather than left as a no-op that reads like coverage.
+    for path in glob.glob('systems/**/*.md', recursive=True):
         if '/deprecated/' in path or '/archives/' in path or '/archive/' in path:
             continue
         try:
@@ -693,7 +711,8 @@ def build_proposals():
 # ── repository shape (mermaid) ───────────────────────────────────────────────
 
 def build_repo_shape():
-    subdirs = sorted(os.path.basename(d) for d in glob.glob('designs/*') + glob.glob('systems/*') if os.path.isdir(d))
+    # `designs/*` dropped with the tree it named (retired 2026-07-19) — it contributed nothing.
+    subdirs = sorted(os.path.basename(d) for d in glob.glob('systems/*') if os.path.isdir(d))
     lines = [
         'graph TD',
         '  CANON["canon/ — philosophy P-01..P-14 · ledgers · mechanics index"]',

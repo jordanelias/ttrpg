@@ -78,6 +78,109 @@ for skill_md in sorted(glob.glob('skills/*/SKILL.md')):
         print(f"OK   size {skill_md}: {tokens:,}/{DEFAULT_SKILL_LIMIT:,} tokens")
 
 # ── Check 4: lingering /home/claude sandbox references ───────────────────────
+# SUBSTRING MATCHING MADE THIS CHECK 4/4 FALSE (fixed 2026-08-01). It flagged any file
+# CONTAINING the literal path, so it fired on:
+#   - ci_hooks_verifier.py — ITSELF, on its own comments describing this very check
+#   - freshness_gate.py    — a comment recording that it USED to use the path and no longer does
+#   - ci_sim_fabrication_check.py — the line "No GitHub API, no PAT, no /home/claude, no network",
+#                            i.e. flagged for explicitly declaring it does not use it
+#   - build_apparatus_registry.py — `not w["dest"].startswith("/home/claude")`, a filter that
+#                            EXCLUDES the path
+# Zero were live dependencies, and the warning had therefore been permanently on. A signal that is
+# always red is a signal nobody reads — the same defect as the binary register-size check fixed the
+# same day, and the same shape as retired Check 5, which scanned a deleted directory and reported
+# clean for months.
+#
+# The check now asks the question it always meant: WOULD THIS FILE BREAK OUTSIDE THE SANDBOX?
+# Comments and docstrings cannot break, so they are stripped before matching. A reference that
+# appears only inside a negated guard is an exclusion, not a dependency, and is also not a break.
+def _live_sandbox_ref(txt, fn, rel):
+    """True only if `/home/claude` survives as EXECUTABLE, non-negated code.
+
+    STRUCTURE, NOT LINE TEXT. The first version of this fix matched on the raw source line:
+    it dropped a hit when the line started with a quote (assumed docstring) or contained
+    `'not '` (assumed exclusion filter). An adversarial pass found both to be FALSE
+    NEGATIVES, which is strictly worse than the false positives being fixed — a false
+    positive is noise, a false negative is a live sandbox dependency reported clean:
+
+      CACHE = "/home/claude/x.json"   # note: not portable    -> dropped by the 'not ' rule
+      MSG = (\n    "prefix "\n    "/home/claude/tail"\n)      -> continuation line starts
+                                                                 with a quote, read as a docstring
+
+    Both are decidable from the AST and neither is decidable from the line. Comments do not
+    appear in the AST at all, so they need no rule. A docstring is structurally the first
+    statement of a module/def/class. An exclusion is structurally a string under a `not`
+    (or a `NotIn` comparison), not a string on a line containing the letters n-o-t.
+
+    Fails CLOSED on unparseable Python: an unparseable file is not evidence of cleanliness.
+    """
+    if '/home/claude' not in txt:
+        return False
+    if fn.endswith('.md'):
+        # MARKDOWN KEEPS THE OLD SUBSTRING RULE, and that is deliberate. An earlier version of
+        # this fix returned False for every `.md` on the reasoning that markdown "has no
+        # executable surface". That silently gutted the BLOCKING half of the check: the rule at
+        # the top of this file is "no /home/claude under skills/", and a skill's primary surface
+        # IS its SKILL.md — prose that instructs an agent to read a retired sandbox path is
+        # exactly the violation, and it is the instruction that executes. skills/ happens to be
+        # clean today, so nothing broke; the GUARD would have been gone.
+        return True
+    if rel == 'tools/ci_hooks_verifier.py':
+        # This file necessarily contains the literal it searches for — in the WARNING TEXT it
+        # prints. A checker that reports itself for quoting its own error message is a false
+        # positive by construction, not a dependency; it cannot be fixed by editing the file,
+        # only by not asking. Scoped to this exact path so the exemption cannot silently
+        # generalise to another tool.
+        return False
+    import ast
+    try:
+        tree = ast.parse(txt)
+    except (SyntaxError, ValueError):
+        return True   # fail CLOSED
+
+    docstrings = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            body = getattr(node, 'body', None)
+            if body and isinstance(body[0], ast.Expr) and \
+                    isinstance(body[0].value, ast.Constant) and isinstance(body[0].value.value, str):
+                docstrings.add(id(body[0].value))
+
+    # NEGATION ALONE IS NOT EXCLUSION. An earlier version dropped every string under any `not`,
+    # which reported these LIVE dependencies clean:
+    #     if not os.path.exists('/home/claude/cache'): sys.exit(1)
+    #     while not os.path.isdir('/home/claude/x'): ...
+    # Both negate a FILESYSTEM ACCESS to the path — the strongest possible dependency on it.
+    # An exclusion negates a CLASSIFICATION of some other value: `not dest.startswith(PATH)` or
+    # `PATH not in dest` ask "is that thing under the sandbox", and work fine with the sandbox
+    # absent. So the test is what the negation wraps, not that a negation exists.
+    _CLASSIFIERS = {'startswith', 'endswith'}
+    excluded = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Compare) and any(isinstance(o, ast.NotIn) for o in node.ops):
+            for sub in ast.walk(node):
+                if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                    excluded.add(id(sub))
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not):
+            for call in ast.walk(node):
+                if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) \
+                        and call.func.attr in _CLASSIFIERS:
+                    for sub in ast.walk(call):
+                        if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                            excluded.add(id(sub))
+    negated = excluded
+
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Constant) and isinstance(node.value, str)):
+            continue
+        if '/home/claude' not in node.value:
+            continue
+        if id(node) in docstrings or id(node) in negated:
+            continue
+        return True
+    return False
+
+
 # skills/ are the native-skill surface and must be clean → BLOCKING.
 # tools/ analysis utilities (and this verifier's own message strings) still
 # mention the retired sandbox pending the GitHub-API→working-tree port → WARN.
@@ -93,14 +196,15 @@ for base in ('skills', 'tools'):
                     txt = f.read()
             except OSError:
                 continue
-            if '/home/claude' in txt:
-                rel = p.replace(os.sep, '/')
-                if base == 'skills':
-                    violations.append(f"SANDBOX REF: {rel} references /home/claude — "
-                                      f"skills must read the working tree (retired harness)")
-                else:
-                    warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
-                                    f"(port to working-tree reads)")
+            rel = p.replace(os.sep, '/')
+            if not _live_sandbox_ref(txt, fn, rel):
+                continue
+            if base == 'skills':
+                violations.append(f"SANDBOX REF: {rel} references /home/claude — "
+                                  f"skills must read the working tree (retired harness)")
+            else:
+                warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
+                                f"(port to working-tree reads)")
 
 # ── Check 5: RETIRED 2026-07-28 (ED-IN-0088) — the rule already lives once, elsewhere ─────
 # It walked `designs/`, retired 2026-07-19, so it had scanned nothing since PR #191 and reported

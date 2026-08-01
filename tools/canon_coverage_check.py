@@ -64,7 +64,7 @@ import yaml
 
 
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DESIGNS_DIR = os.path.join(_REPO_ROOT, 'designs')
+SYSTEMS_DIR = os.path.join(_REPO_ROOT, 'systems')
 CANONICAL_SOURCES_PATH = os.path.join(_REPO_ROOT, 'references', 'canonical_sources.yaml')
 STATUS_MARKER = 'Status: CANONICAL'
 
@@ -92,12 +92,16 @@ def registered_paths(canonical_sources_yaml_text: str) -> set[str]:
 
 # ── Walking declared-canonical headers ───────────────────────────────────────
 
-def declared_canonical_files(designs_dir: str | None = None) -> set[str]:
+def declared_canonical_files(systems_dir: str | None = None) -> set[str]:
     """
-    Set of designs/ files (repo-relative paths, forward-slash) whose content
+    Set of systems/ files (repo-relative paths, forward-slash) whose content
     contains the literal "Status: CANONICAL".
 
-    Pure working-tree walk (os.walk under designs/) — no network. Matches the
+    REPOINTED 2026-08-01 from `designs/`, retired 2026-07-19. Until then this walked a
+    directory that did not exist, so it returned the empty set and the whole check reported
+    clean over nothing while the registry held 130 paths — for 13 days, under `--strict`.
+
+    Pure working-tree walk (os.walk under systems/) — no network. Matches the
     same literal-string convention the prior GitHub code-search query used
     ("Status: CANONICAL" as a phrase, anywhere in the file). Extension set
     (.md/.yaml/.svg) matches registered_paths' — a couple of real canonical
@@ -108,12 +112,12 @@ def declared_canonical_files(designs_dir: str | None = None) -> set[str]:
     audit subtree is the natural home for the diagnostic snapshots produced by
     this tool, and including them would create a self-referential false positive.
     """
-    root = designs_dir or DESIGNS_DIR
+    root = systems_dir or SYSTEMS_DIR
     files: set[str] = set()
     for dirpath, dirnames, filenames in os.walk(root):
         relroot = os.path.relpath(dirpath, _REPO_ROOT).replace(os.sep, '/')
-        if relroot == 'designs/audit' or relroot.startswith('designs/audit/'):
-            dirnames[:] = []  # don't descend into designs/audit/
+        if relroot == 'audit' or relroot.startswith('audit/'):   # dead under systems/, kept harmless
+            dirnames[:] = []  # audit corpus is top-level now; unreachable from systems/
             continue
         for fn in filenames:
             # Match registered_paths' extension set (line 83) exactly — the registry
@@ -162,15 +166,15 @@ def run_check(
 
     unregistered_with_header = sorted(declared - registered)
     registered_no_header = sorted(
-        p for p in (registered - declared) if p.startswith('designs/')
+        p for p in (registered - declared) if p.startswith('systems/')
     )
 
     return {
         'totals': {
             'declared_canonical': len(declared),
             'registered_paths_total': len(registered),
-            'registered_paths_designs_only': len(
-                [p for p in registered if p.startswith('designs/')]
+            'registered_paths_systems_only': len(
+                [p for p in registered if p.startswith('systems/')]
             ),
             'unregistered_with_header': len(unregistered_with_header),
             'registered_no_header': len(registered_no_header),
@@ -192,12 +196,12 @@ def _format_text(report: dict) -> str:
     t = report['totals']
     lines = [
         '== Canonical-index coverage check ==',
-        f"  Files declaring Status: CANONICAL (designs/): {t['declared_canonical']}",
+        f"  Files declaring Status: CANONICAL (systems/): {t['declared_canonical']}",
         f"  Paths registered in canonical_sources.yaml:  {t['registered_paths_total']} "
-        f"(designs/-only: {t['registered_paths_designs_only']})",
+        f"(systems/-only: {t['registered_paths_systems_only']})",
         '',
         f"  Unregistered with header: {t['unregistered_with_header']}",
-        f"  Registered without header (designs/): {t['registered_no_header']}",
+        f"  Registered without header (systems/): {t['registered_no_header']}",
     ]
     if report['unregistered_with_header']:
         lines.append('')

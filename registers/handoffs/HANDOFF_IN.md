@@ -989,6 +989,31 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **⚠ `build_decisions.LANE_PATH_PREFIXES` should be a DERIVATION, not a 133-row table
+  (2026-08-01, found by the gate crawl; rot repaired, design NOT fixed).**
+  Measured: **60 of 136 rows matched no tracked file** — 35 named `designs/audit/…` (retired
+  2026-07-19) and the rest `designs/…`/`sim/…` paths moved by the same restructure. Lane
+  attribution had been silently degrading for weeks, because `infer_lane`
+  (`build_decisions.py:264`, re-exported as the single owner at `obs_core.py:35`) returns `None`
+  when nothing matches, and an honest `None` is indistinguishable from "this file genuinely has
+  no lane" — `None` is *deliberately* also the correct answer for cross-lane files, so rot and
+  correct abstention cannot be told apart by construction. **Blast radius is wider than
+  `DECISIONS.md`:** `build_proposals.py`, `build_incompleteness.py` (where `None` becomes the
+  literal `"unassigned"`), `build_graph.py` and `session_open_work.py` all consume it. Repaired to 0 dead rows and pinned by
+  `test_lane_path_prefixes_all_match_something` (mutation-verified).
+  - **The repair is not the fix.** CLAUDE.md §3's RULED §2a already states *one subsystem = one
+    folder = one ID lane*. That makes lane **derivable** from `systems/<subsystem>/` — about nine
+    rows — instead of enumerated across 133. Hand-enumerating what a rule derives is a §8
+    single-owner violation, and it is why the table rots on every tree move.
+  - **It also enumerates individual audit directories**, which is the same defect one level worse:
+    wiring in a general tool that names one specific dated audit folder. Those rows exist because
+    an audit's lane was not otherwise recoverable; under §2a it is, from the subsystem the audit
+    concerns.
+  - **Watch the collision when doing this:** `references/lane_assignments.yaml` is the OLD A/B/C
+    write-concurrency lanes, and its own header warns it is "a DIFFERENT, OLDER concept" from the
+    9-lane `ED-<LANE>` namespace. `build_decisions.py` reads that file AND hand-maintains the
+    9-lane table. Whoever consolidates must not merge the two concepts.
+
 - **⚠ `references/id_reservations.yaml` is at 14,263 / 15,000 tokens — 737 of headroom, on the file
   EVERY lane must edit to allocate an ED (2026-08-01, ED-MB-0063 residual).** Roughly two
   allocations from a BLOCKING `register-size-check` failure that would stop every lane at once.

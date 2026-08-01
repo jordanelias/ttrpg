@@ -19,9 +19,17 @@ EXPECTED_ROOTS = {'tests/valoria', 'tests/contracts', 'engine/tests'}
 
 def test_workflow_parses_into_jobs():
     jobs = g.jobs()
-    assert len(jobs) > 20, f'only parsed {len(jobs)} jobs — the workflow format may have changed'
+    # Floor lowered 20 -> 8 on 2026-08-01: the 25 fast validator jobs collapsed into two, so the
+    # workflow legitimately holds ~11 jobs. The assertion's PURPOSE is unchanged — catch "the YAML
+    # shape changed and we now parse nothing" — and 8 still does that. It is deliberately not
+    # pinned to the exact count: job composition is expected to change, whereas the COMMAND set is
+    # the invariant that matters, and that is pinned exactly by EXPECTED_COMMANDS below.
+    assert len(jobs) > 8, f'only parsed {len(jobs)} jobs — the workflow format may have changed'
     ids = {j['id'] for j in jobs}
-    for required in ('unit-tests', 'sim-regression', 'compliance-check', 'ed-citations'):
+    # `ed-citations` collapsed into `validators` on 2026-08-01. Its COMMAND is still pinned
+    # exactly by EXPECTED_COMMANDS below — the job that HOSTS a validator is not the invariant,
+    # the fact that CI still runs it is.
+    for required in ('unit-tests', 'sim-regression', 'compliance-check', 'validators'):
         assert required in ids, f'known CI job {required!r} not parsed'
 
 
@@ -46,8 +54,10 @@ def test_continue_on_error_jobs_are_classified_non_blocking():
     jobs = g.jobs()
     advisory = [j['id'] for j in jobs if not j['blocking']]
     assert advisory, 'no advisory jobs detected — continue-on-error parsing is broken'
-    # currency-consistency is continue-on-error in the workflow (CLAUDE.md §8 report-only tier).
-    assert 'currency-consistency' in advisory
+    # `currency-consistency` was its own continue-on-error job until the 2026-08-01 collapse;
+    # it is now one of ten commands inside `validators-report`, which carries the key at JOB
+    # level. Property unchanged — a report-only surface must not read as an unbypassable gate.
+    assert 'validators-report' in advisory
 
 
 def test_every_discovered_root_actually_exists_on_disk():
@@ -68,3 +78,104 @@ def test_base_distance_reports_an_integer_or_none():
 
 def test_tool_is_report_only():
     assert g.main(['--base', 'HEAD']) == 0
+
+
+# ── Command preservation across the 2026-08-01 job collapse ──────────────────
+#
+# 25 validator jobs were merged into two (`validators` blocking, `validators-report`
+# non-blocking) because 29 of 31 validator nodes did 5.17s of compute in total while
+# paying 25 runner boots. The ENTIRE safety argument for that is this: `valoria_local
+# --ci` derives what it runs from `jobs()`, which regex-scans each job BODY, so as long
+# as every `python3 tools/<name>.py` line survives verbatim, the work-list still IS the
+# workflow and cannot drift. A roster in a data file would have broken exactly that,
+# which is why it was rejected.
+#
+# So the collapse is only safe while the command SET is unchanged. This pins it.
+# MEASURED before and after the collapse: 31 distinct (script, args), 0 lost, 0 gained.
+EXPECTED_COMMANDS = {
+    ('tools/broken_dependency_checker.py', ''),
+    ('tools/canon_coverage_check.py', '--strict --json'),
+    ('tools/ci_audit_registry_check.py', ''),
+    ('tools/ci_claim_provenance_check.py', ''),
+    ('tools/ci_claude_workflow_paths.py', ''),
+    ('tools/ci_co_file_checker.py', ''),
+    ('tools/ci_editorial_checker.py', ''),
+    ('tools/ci_formula_prose_check.py', '--report'),
+    ('tools/ci_generation_consistency.py', ''),
+    ('tools/ci_golden_modes_check.py', ''),
+    ('tools/ci_hooks_verifier.py', ''),
+    ('tools/ci_module_shape_check.py', ''),
+    ('tools/ci_names_check.py', ''),
+    ('tools/ci_names_consistency.py', ''),
+    ('tools/ci_naming_check.py', ''),
+    ('tools/ci_quantity_vocabulary_check.py', ''),
+    ('tools/ci_register_size_check.py', ''),
+    ('tools/ci_sim_fabrication_check.py', ''),
+    ('tools/ci_supersession_check.py', ''),
+    ('tools/ci_vetting_check.py', ''),
+    ('tools/ci_wf_harness_check.py', ''),
+    ('tools/ci_workplan_pointer_check.py', ''),
+    ('tools/compliance_check.py', '--check-only --repo-state .'),
+    ('tools/currency_consistency_check.py', ''),
+    ('tools/export_engine_params.py', '--check'),
+    ('tools/freshness_gate.py', ''),
+    ('tools/mechanics_index_gen.py', '--strict'),
+    ('tools/patch_propagation_checker.py', ''),
+    ('tools/review_core.py', '--check'),
+    ('tools/validate_ed_citations.py', ''),
+    ('tools/wiring_map_check.py', '--check'),
+}
+
+
+def _live_commands():
+    return {(c['script'], ' '.join(c['args'])) for j in g.jobs() for c in j['tool_commands']}
+
+
+def test_no_validator_was_dropped_by_the_collapse():
+    """A validator silently vanishing from CI is the whole risk of merging jobs."""
+    live = _live_commands()
+    assert live, 'jobs() returned no tool commands at all — the parser or workflow is broken'
+    missing = sorted(EXPECTED_COMMANDS - live)
+    assert not missing, (
+        f'{len(missing)} CI validator invocation(s) disappeared from the workflow:\n  ' +
+        '\n  '.join(f'{s} {a}'.strip() for s, a in missing) +
+        '\n\nIf a validator was deliberately retired, remove it from EXPECTED_COMMANDS in the '
+        'SAME commit and say why. Silence here means CI stopped running it.')
+
+
+def test_no_phantom_command_was_introduced():
+    """The other direction, and it caught a real bug during the collapse.
+
+    Writing the report-only step as `echo "::group::python3 tools/X.py"; python3 tools/X.py`
+    made the parser capture the CLOSING QUOTE into the args, yielding 10 phantom commands like
+    `python3 tools/ci_names_check.py "`. `--ci` would then have tried to execute them. Caught
+    by diffing the command set before/after rather than by reading the YAML.
+    """
+    extra = sorted(_live_commands() - EXPECTED_COMMANDS)
+    assert not extra, (
+        f'{len(extra)} unexpected CI command(s):\n  ' +
+        '\n  '.join(f'{s} {a!r}'.strip() for s, a in extra) +
+        '\n\nA new validator is fine — add it here. An entry with a stray quote or shell '
+        'fragment in its args means the workflow line is not parseable as written.')
+
+
+def test_the_two_collapsed_jobs_keep_their_blocking_tiers_apart():
+    """Mixing tiers in one job would silently downgrade every blocking validator.
+
+    `jobs()` computes `blocking` as `'continue-on-error' not in body` over the WHOLE job
+    body. Put report-only validators (which carry that key) in the same job as blocking
+    ones and the entire job reads non-blocking, so `valoria_local --ci` reclassifies real
+    failures as report-only and exits 0 — the silently-dead-gate class the collapse was
+    designed to avoid. Two jobs is not a style choice; it is the mechanism.
+    """
+    by_id = {j['id']: j for j in g.jobs()}
+    for jid, want in (('validators', True), ('validators-report', False)):
+        assert jid in by_id, f'{jid} job is gone — the collapse was undone or renamed'
+        assert by_id[jid]['blocking'] is want, (
+            f'{jid}.blocking is {by_id[jid]["blocking"]}, expected {want}. If a '
+            f'continue-on-error step was added to the blocking job, every validator in it '
+            f'just stopped gating.')
+        assert by_id[jid]['tool_commands'], f'{jid} runs no validators at all'
+    assert by_id['validators']['compiles_only'] is False, (
+        'the blocking validator job now contains py_compile, which makes jobs() return ZERO '
+        'commands for it — --ci would run nothing and report success over an empty set')
