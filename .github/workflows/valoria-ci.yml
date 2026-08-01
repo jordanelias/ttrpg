@@ -75,14 +75,15 @@ jobs:
   # (checkout + setup-python + pip, ~10-30s). The wall clock was runner setup, not
   # work. Collapsed to two jobs -> 23 fewer boots.
   #
-  # EVERY `python3 tools/X.py` LINE IS PRESERVED VERBATIM, and that is the whole
+  # EVERY validator invocation line IS PRESERVED VERBATIM, and that is the whole
   # safety argument. `tools/valoria_local.py --ci` derives what it runs from
   # `ci_gate_coverage.jobs()`, which regex-scans each job BODY (not each step) for
   # tool invocations. Verified empirically before this change: a single job with N
-  # such lines in one `run:` block parses to exactly N commands. So the work-list
+  # validator lines in one `run:` block parses to exactly N commands. So the work-list
   # still IS the workflow and cannot drift -- the property that made `--ci`
   # trustworthy survives the collapse. A roster in a data file would NOT have.
-  # tests/valoria/test_ci_collapse_preserves_commands.py pins the full set.
+  # tests/valoria/test_gate_coverage.py pins the full command set (EXPECTED_COMMANDS)
+  # and that the two jobs keep their blocking tiers apart.
   #
   # NO FAIL-FAST. Each validator runs even if an earlier one failed, and the job
   # exits non-zero at the end if any did. Fail-fast would report one failure per
@@ -159,7 +160,7 @@ jobs:
       - name: Every report-only validator (never fails the build)
         run: |
           # `w` runs a validator and NEVER propagates its status. The command must appear
-          # as a bare `python3 tools/X.py` token so ci_gate_coverage parses it cleanly —
+          # as a bare invocation token so ci_gate_coverage parses it cleanly —
           # wrapping it inside an echo string made the parser capture the closing quote
           # and invent a phantom arg, which `--ci` would then have tried to execute.
           w() { echo "::group::$*"; "$@" || echo "::warning::non-zero (report-only): $*"; echo "::endgroup::"; }
