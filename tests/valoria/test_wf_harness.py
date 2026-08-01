@@ -409,3 +409,57 @@ def test_attempt_passes_a_good_result_through_untouched():
     """)
     assert s['v'] == {'verdict': 'sound', 'n': 7}
     assert s['stop'] == 'completed' and s['lost'] == 0
+
+
+# ──────────────────────────────────────────── P8b · the dispute record's KEYS, not just its methods
+
+@needs_node
+def test_the_shipped_wrong_shape_really_did_erase_the_whole_record():
+    """THE DEFECT, reproduced. Without this the fix below is a claim, not a measurement.
+
+    Five wave scripts shipped `run.dispute({layer, target, detail, severity})`. Not one of those is
+    a key run.dispute() reads. This asserts what that actually cost: every field defaulted, and
+    because run.adjudicate() binds on finding_id, a ruling aimed at the real target bound NOTHING.
+    """
+    s = run_js("""
+        const run = hRun('old-shape')
+        run.dispute({ layer: 'evidence', target: 'OI-16', detail: 'facade retired', severity: 'high' })
+        const bound = run.adjudicate('OI-16', 'reversed: CSO W1.3 owns it', 'orchestrator')
+        console.log(JSON.stringify({ bound, d: run.summary().disagreements[0] }))
+    """)
+    assert s['bound'] == 0, "a ruling bound to the old shape — then the defect was never real"
+    assert s['d']['finding_id'] == '?'
+    assert s['d']['positions'] == []
+    assert s['d']['layer_disputed'] == 'interpretation', "'evidence' was passed and did not survive"
+
+
+@needs_node
+def test_hVerdictDispute_keeps_the_identity_a_ruling_binds_on():
+    """The fix, measured against the same failure the test above observes."""
+    s = run_js("""
+        const run = hRun('new-shape')
+        const v = { target: 'OI-16', verdict: 'overturn', severity: 'high', evidence: 'facade retired' }
+        run.dispute(hVerdictDispute(v, 'critic:w4', 'the sweep found zero consumers'))
+        const bound = run.adjudicate('OI-16', 'reversed: CSO W1.3 owns it', 'orchestrator')
+        console.log(JSON.stringify({ bound, d: run.summary().disagreements[0] }))
+    """)
+    assert s['bound'] == 1, "the ruling still does not bind — the fix does not work"
+    assert s['d']['finding_id'] == 'OI-16'
+    assert s['d']['layer_disputed'] == 'evidence' and s['d']['root_cause'] == 'measurement-vs-assertion'
+    assert s['d']['status'] == 'resolved'
+    # the critic's actual words reach the record; under the old shape they were dropped entirely
+    assert any('facade retired' in p.get('holds', '') for p in s['d']['positions'])
+    assert any(p.get('severity') == 'high' for p in s['d']['positions'])
+
+
+@needs_node
+def test_hVerdictDispute_degrades_to_legal_vocabulary_on_an_unknown_verdict():
+    """The maps must not be able to inject a value outside the closed sets run.dispute() polices."""
+    s = run_js("""
+        const run = hRun('unknown-verdict')
+        run.dispute(hVerdictDispute({ target: 'X', verdict: 'nonsense' }, 'critic:x', ''))
+        console.log(JSON.stringify(run.summary().disagreements[0]))
+    """)
+    assert s['layer_disputed'] in ('evidence', 'interpretation', 'severity', 'scope', 'method')
+    assert s['root_cause'] == 'ambiguous-spec'
+    assert s['finding_id'] == 'X'

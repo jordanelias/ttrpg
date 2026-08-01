@@ -121,6 +121,142 @@ def _insert_at(text):
     return 0
 
 
+def _balanced(text, start):
+    """Return (inner, end) for the {...} / [...] / (...) beginning at `start`, string-aware.
+
+    Hand-rolled rather than regex because these are nested object literals containing strings that
+    contain braces. A regex that "works" on the current tree and breaks on the next nested literal
+    is the drift this whole file exists to prevent.
+    """
+    pairs = {"{": "}", "[": "]", "(": ")"}
+    if start >= len(text) or text[start] not in pairs:
+        return None, start
+    stack, i, quote, esc = [], start, None, False
+    while i < len(text):
+        c = text[i]
+        if quote:
+            if esc:
+                esc = False
+            elif c == "\\":
+                esc = True
+            elif c == quote:
+                quote = None
+        elif c in "'\"`":
+            quote = c
+        elif c in pairs:
+            stack.append(pairs[c])
+        elif stack and c == stack[-1]:
+            stack.pop()
+            if not stack:
+                return text[start + 1:i], i + 1
+        i += 1
+    return None, start
+
+
+def _object_keys(inner):
+    """Top-level keys of a JS object-literal body — nested objects/arrays/strings skipped."""
+    keys, i, quote, esc, depth = [], 0, None, False, 0
+    at_key = True
+    while i < len(inner):
+        c = inner[i]
+        if quote:
+            if esc:
+                esc = False
+            elif c == "\\":
+                esc = True
+            elif c == quote:
+                quote = None
+        elif c in "'\"`":
+            quote = c
+        elif c in "{[(":
+            depth += 1
+        elif c in "}])":
+            depth -= 1
+        elif depth == 0 and c == ",":
+            at_key = True
+        elif depth == 0 and at_key and (c.isalpha() or c == "_"):
+            m = re.match(r"[A-Za-z_][A-Za-z0-9_]*", inner[i:])
+            after = inner[i + m.end():].lstrip()
+            if after.startswith(":"):
+                keys.append(m.group(0))
+            at_key = False
+            i += m.end()
+            continue
+        i += 1
+    return keys
+
+
+def _dispute_contract():
+    """The keys run.dispute() actually reads, derived from the OWNER — never hardcoded here.
+
+    Hardcoding them would re-create the very failure this guard closes: two copies of one rule,
+    drifting apart silently. Returns (legal_keys, required_keys).
+    """
+    text = _read(OWNER)
+    m = re.search(r"run\.dispute\s*=\s*function\s*\([^)]*\)\s*\{", text)
+    if not m:
+        raise SystemExit("[wf-harness ✗] tools/wf_harness.js no longer defines run.dispute — "
+                         "the dispute-shape guard cannot derive its contract and would pass "
+                         "vacuously. Repair the owner, or retire this check deliberately.")
+    body, _ = _balanced(text, m.end() - 1)
+    legal = set(re.findall(r"\brec\s*(?:&&\s*rec\s*)?\.\s*([A-Za-z_][A-Za-z0-9_]*)", body))
+    if not legal:
+        raise SystemExit("[wf-harness ✗] derived an EMPTY dispute key set from the owner — this "
+                         "gate would accept anything. Fix the derivation before trusting it.")
+    # finding_id is the one field whose absence is unrecoverable: run.adjudicate() binds on it, so a
+    # record without it can never receive a ruling and is guaranteed to reach the return unresolved.
+    return legal, {"finding_id"} & legal
+
+
+def _blank_line_comments(text):
+    """Replace `//` comment bodies with spaces, preserving every byte offset and line break.
+
+    Prose ABOUT a call is not a call. The harness's own commentary quotes `run.dispute({...})` to
+    explain the rule, and scanning it as code made this gate flag the documentation of the defect
+    it was written to catch. Same reasoning as the fable check's `//` skip, done positionally so
+    reported line numbers stay true. Block comments are not stripped — these scripts do not use
+    them, and pretending to handle a case untested against the tree is how gates rot.
+    """
+    out, i, quote, esc = list(text), 0, None, False
+    while i < len(text):
+        c = text[i]
+        if quote:
+            if esc:
+                esc = False
+            elif c == "\\":
+                esc = True
+            elif c == quote:
+                quote = None
+        elif c in "'\"`":
+            quote = c
+        elif c == "/" and i + 1 < len(text) and text[i + 1] == "/":
+            while i < len(text) and text[i] != "\n":
+                out[i] = " "
+                i += 1
+            continue
+        i += 1
+    return "".join(out)
+
+
+def _dispute_calls(text):
+    """Yield (line_no, keys) for each run.dispute({...}) written as a literal.
+
+    A call whose argument is NOT a literal — run.dispute(hVerdictDispute(v, ...)) — is skipped on
+    purpose: the owner built that record, so there is nothing here to drift.
+    """
+    text = _blank_line_comments(text)
+    for m in re.finditer(r"\brun\.dispute\s*\(", text):
+        i = m.end()
+        while i < len(text) and text[i] in " \t\r\n":
+            i += 1
+        if i >= len(text) or text[i] != "{":
+            continue
+        inner, _ = _balanced(text, i)
+        if inner is None:
+            continue
+        yield text[:m.start()].count("\n") + 1, _object_keys(inner)
+
+
 def _agent_calls(text):
     """Yield (line_no, call_text) for each agent(...) options object.
 
@@ -145,6 +281,7 @@ def check(fix=False, staged_only=False):
         return 1
 
     staged = _staged_paths() if staged_only else None
+    dispute_legal, dispute_required = _dispute_contract()
     violations, fixed = [], []
 
     if not os.path.exists(CRITIC_AGENT):
@@ -195,6 +332,12 @@ def check(fix=False, staged_only=False):
                     with open(path, "w", encoding="utf-8") as fh:
                         fh.write(text)
                     fixed.append(f"{rel}: harness re-synced from owner")
+                    # RECOMPUTE. The insert branch above does this; this one did not, and a re-synced
+                    # block of a DIFFERENT length leaves `j` pointing into the middle of the new
+                    # block. Every check below then reads a half-blanked harness as if it were the
+                    # script's own code — phantom violations at wrong line numbers, on the one run
+                    # (`--fix`) a caller is least likely to re-verify. Caught by growing the owner.
+                    i, j = text.find(BEGIN), text.find(END)
                 else:
                     violations.append((rel, text[:i].count("\n") + 1,
                                        "harness block has DRIFTED from tools/wf_harness.js. The owner is "
@@ -231,6 +374,27 @@ def check(fix=False, staged_only=False):
                 violations.append((rel, body[:m.start()].count("\n") + 1,
                                    f"calls run.{m.group(1)}(), which tools/wf_harness.js does not define — "
                                    f"it would throw inside a stage at run time"))
+
+        # 2b. DISPUTE RECORD SHAPE. Method names were guarded; argument KEYS were not, which is
+        # exactly how five scripts shipped run.dispute({layer,target,detail,severity}) — four keys
+        # the owner never reads, so every field took its default and finding_id became '?'. It ran
+        # live before anyone noticed, because a wrong key is not a syntax error and the record still
+        # serialises. tests/valoria/test_wf_harness.py could not have caught it: it exercises the
+        # harness with correct keys, so it verifies the contract while every caller violated it.
+        for lineno, keys in _dispute_calls(body):
+            unknown = [k for k in keys if k not in dispute_legal]
+            if unknown:
+                violations.append((rel, lineno,
+                                   f"run.dispute() is passed key(s) {sorted(unknown)}, which "
+                                   f"tools/wf_harness.js does not read. Legal keys: "
+                                   f"{sorted(dispute_legal)}. An unread key is not an error at run "
+                                   f"time — the field silently takes its default and the dispute "
+                                   f"records nothing. Use hVerdictDispute(v, '<critic-label>', ...)."))
+            for missing in sorted(dispute_required - set(keys)):
+                violations.append((rel, lineno,
+                                   f"run.dispute() omits `{missing}`. run.adjudicate() binds on it, "
+                                   f"so this record can never receive a ruling and is guaranteed to "
+                                   f"reach the return unadjudicated."))
 
         # 3. critic stages must be structurally read-only
         for lineno, opts in _agent_calls(body):
