@@ -42,6 +42,7 @@ CLI:
 """
 import json
 import os
+import glob
 import re
 import subprocess
 import sys
@@ -122,14 +123,38 @@ LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
 
 
 def _ledger_lane_max():
-    """{'MB': 3, 'SC': 1, ...} — max per-lane numeric suffix seen in the live ledger.
-    A flat 'ED-NNNN' id never matches (no letters after the dash), so this is naturally
-    disjoint from _ledger_max_ed() and requires no coordination with it."""
-    text = _read('registers/editorial_ledger.jsonl') or ''
+    """{'MB': 3, 'SC': 1, ...} — max per-lane numeric suffix seen across ALL ledger files.
+
+    THIS RETURNED `{}` AND THE CHECK IT FEEDS COULD NEVER FIRE. It read only the flat
+    `registers/editorial_ledger.jsonl`, which contains ZERO lane-tagged ids — every `ED-<LANE>-NNNN`
+    entry lives in `registers/editorial_ledger_<lane>.jsonl` by the 2026-07-08 lane split
+    (CLAUDE.md §3). So `check_lane_id_ceilings` hit its `if not lane_max: return` guard on every run
+    and silently checked nothing, while its docstring explained the no-op as "no lane-tagged IDs
+    exist yet". They exist; the reader was looking in the one file they are never written to.
+
+    Measured at repair (2026-08-01): before, 0 lanes checked; after, 8 lanes checked and 0 new
+    findings — every `next_free` is exactly `max + 1`. The gate agreed by luck, which is the whole
+    hazard: a blind check and a passing check are indistinguishable from the outside, and this one
+    guards ID allocation across nine concurrent lanes.
+
+    Archives are INCLUDED on purpose: an archived `ED-IN-0058` still consumed that id, so excluding
+    them would under-report the maximum and re-open the collision this check exists to prevent.
+
+    NOT migrated to `obs_core.read_ledger_entries` here. CLAUDE.md §8 defers that specific migration
+    as blocking-gate risk needing its own expected-delta test; this is the scoped repair of the read
+    path, and the owner migration remains the filed item.
+    """
+    # Globbed against REPO_ROOT, not the CWD. A relative glob here would find nothing when the
+    # tool is run from anywhere but the repo root and silently restore the exact blindness this
+    # docstring describes — a cwd-dependent guard, the class an earlier gate batch already had to
+    # correct in this repo (`cd / && pytest` turning 2 failures into 23 passes).
     out = {}
-    for lane, num in re.findall(r'"id":\s*"ED-([A-Z]{2})-(\d+)"', text):
-        if lane in LANE_CODES:
-            out[lane] = max(out.get(lane, 0), int(num))
+    for abs_path in sorted(glob.glob(os.path.join(REPO_ROOT, 'registers', 'editorial_ledger*.jsonl'))):
+        path = os.path.relpath(abs_path, REPO_ROOT)
+        text = _read(path) or ''
+        for lane, num in re.findall(r'"id":\s*"ED-([A-Z]{2})-(\d+)"', text):
+            if lane in LANE_CODES:
+                out[lane] = max(out.get(lane, 0), int(num))
     return out
 
 
