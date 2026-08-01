@@ -616,7 +616,14 @@ CONV2: ${JSON.stringify(conv2)}
 ADJUDICATOR: ${JSON.stringify(adj)}`,
     hCritic({ schema: CRITIC_SCHEMA, label: 'critic:w1', phase: 'Critic', model: 'opus', effort: 'high' })))
 
-run.critiqued(['spine:stubwire', 'build:reach-oracle', 'build:dispatch-closure', 'convert:factions-overview', 'convert:world-contest-partials'])
+// ARITY, not just the method name. The owner's signature is
+// `run.critiqued(stage, produced, reviewed)`; this call passed a single ARRAY, so
+// `produced` was undefined, `undefined > 0` was false, and the critic-starvation signal
+// could never fire from here. Same copy-paste lineage as the dispute defect eight lines
+// below, and it survived that fix because the gate checked names and not shapes.
+const CRITIQUED_STAGES = ['spine:stubwire', 'build:reach-oracle', 'build:dispatch-closure', 'convert:factions-overview', 'convert:world-contest-partials']
+run.critiqued('Critic', CRITIQUED_STAGES.length,
+  (critic && critic.verdicts) ? CRITIQUED_STAGES.length : 0)
 run.lens('critic:w1', critic && critic.verdicts ? critic.verdicts : [])
 
 const overturns = (critic && critic.verdicts ? critic.verdicts : []).filter(v => v.verdict !== 'uphold')

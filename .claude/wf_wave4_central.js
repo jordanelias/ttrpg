@@ -625,7 +625,14 @@ Finding nothing is a real verdict.
 PRODUCER OUTPUT: ${JSON.stringify({ cycleL, rootsL, joinL, sweepL, adj })}`,
     hCritic({ schema: CRITIC_SCHEMA, label: 'critic:w4', phase: 'Critic', model: 'opus', effort: 'high' })))
 
-run.critiqued(['build:cycle+dedup', 'build:dead-roots', 'build:contract-join', 'sweep:mechanical'])
+// ARITY, not just the method name. The owner's signature is
+// `run.critiqued(stage, produced, reviewed)`; this call passed a single ARRAY, so
+// `produced` was undefined, `undefined > 0` was false, and the critic-starvation signal
+// could never fire from here. Same copy-paste lineage as the dispute defect eight lines
+// below, and it survived that fix because the gate checked names and not shapes.
+const CRITIQUED_STAGES = ['build:cycle+dedup', 'build:dead-roots', 'build:contract-join', 'sweep:mechanical']
+run.critiqued('Critic', CRITIQUED_STAGES.length,
+  (critic && critic.verdicts) ? CRITIQUED_STAGES.length : 0)
 run.lens('critic:w4', critic && critic.verdicts ? critic.verdicts : [])
 
 const overturns = (critic && critic.verdicts ? critic.verdicts : []).filter(v => v.verdict !== 'uphold')

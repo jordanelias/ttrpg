@@ -158,3 +158,49 @@ def test_the_exclusion_did_not_swallow_real_reference_code():
     assert mod.is_sim_file('systems/mass_battle/sim/massbattle.py') is True
     assert mod.is_sim_file('audit/2026-04-30-architecture-session/sims/pp686_sim.py') is True
     assert mod.is_sim_file('tests/sim/mass_battle/bat.py') is True
+
+
+# ───────────────────────── removals invalidate citations, and added-lines alone cannot see that
+
+def test_removed_lines_are_parsed_from_the_diff(monkeypatch):
+    """Drives get_removed_lines with a SYNTHETIC diff, so the parse is exercised rather than merely
+    called.
+
+    Mutation-checked: an earlier version only asserted the function existed and that no header
+    leaked, and it stayed green with the parse branch deleted outright — the function could have
+    returned {} forever. An assertion that cannot observe the failure it excludes is the exact
+    vacuity this branch exists to remove, and I wrote one.
+    """
+    import ci_common
+    diff = (
+        'diff --git a/sim.py b/sim.py\n'
+        '--- a/sim.py\n'
+        '+++ b/sim.py\n'
+        '@@ -3,2 +3,1 @@\n'
+        '-# [canonical: engine/params/core.md 2]\n'
+        '-OLD = 1\n'
+        '+KEPT = 2\n'
+    )
+    monkeypatch.setattr(ci_common, '_git', lambda *a, **k: diff)
+    out = ci_common.get_removed_lines('local')
+    assert out.get('sim.py') == ['# [canonical: engine/params/core.md 2]', 'OLD = 1'], out
+    # the `--- a/sim.py` header must never be mistaken for removed CONTENT
+    assert not any(ln.endswith('a/sim.py') for ln in out['sim.py'])
+    # and an added line must not appear here — that is get_added_lines' job
+    assert 'KEPT = 2' not in out['sim.py']
+
+
+def test_deleting_a_citation_puts_the_file_back_under_a_full_scan():
+    """THE FALSE PASS THIS FIX CLOSES.
+
+    Deleting `# [canonical: ...]` above a constant leaves it genuinely uncited while producing a
+    diff with NO added lines — so added-line scoping classified every violation as 'carried' and
+    the run reported OK. Under the whole-file scan it replaced, that commit was red.
+
+    Asserted through the module's own pattern and predicate rather than a fixture copy, so a change
+    to either is caught here.
+    """
+    mod = _load()
+    assert mod._CANONICAL_COMMENT_PATTERN.search('# [canonical: engine/params/core.md §2]')
+    assert mod._CANONICAL_COMMENT_PATTERN.search('  # [GROUNDED: measured 2026-05-01]')
+    assert not mod._CANONICAL_COMMENT_PATTERN.search('# an ordinary comment')

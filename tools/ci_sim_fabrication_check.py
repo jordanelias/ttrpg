@@ -142,12 +142,17 @@ def is_sim_file(path: str) -> bool:
     # `assert len(files) > 50` — and demanding a ledger citation for them is incoherent: there is
     # no canon entry for "50 is a sane floor for this assertion".
     #
-    # DECLARED NARROWING, not a silent one (the mistake this file already made once today). Three
-    # files under tests/valoria/ match the basename rule below and were therefore in scope before
-    # this change: test_ci_sim_fabrication_check.py, test_export_sim_params.py, and
-    # test_sim_fabrication_scope.py. All three are tests OF the tooling, and the last is this
-    # gate's own guard — which CI caught it flagging, since a bare 50 in an assertion is exactly
-    # the shape it hunts. `engine/tests/` was already excluded on identical reasoning.
+    # DECLARED NARROWING, not a silent one (the mistake this file already made once today).
+    # CORRECTED 2026-08-01 after re-measuring against origin/main rather than the working tree:
+    # exactly TWO files lose coverage relative to main — `test_ci_sim_fabrication_check.py` and
+    # `test_export_sim_params.py`, both tests OF this tooling. An earlier version of this comment
+    # said "three", counting `test_sim_fabrication_scope.py`, which is NEW in this change and
+    # therefore never had coverage to lose. The exclusion is unchanged and still correct; the
+    # justification was overstated by one, which is the kind of small false claim a comment is
+    # read as fact. `engine/tests/` was already excluded on identical reasoning.
+    #
+    # Verified exhaustively, not by inspection: applying main's predicate and this one to all 3,117
+    # tracked files gives 169 -> 268, with those 2 the complete lost set and 102 gained.
     if norm.startswith(('engine/tests/', 'tests/valoria/', 'tests/contracts/')):
         return False
     # Rule 1 — the live oracle, from the single owner. This is what the basename proxy stopped
@@ -442,8 +447,10 @@ def main(argv) -> int:
     Compute the changeset via ci_common, filter to sim .py files present on disk,
     load each file's repo-relative ledger values, compute genuine_violations, and
     print a per-file report. Exit 1 if any uncited constants are found on ADDED lines
-    (ERROR / blocking), else print OK and exit 0. `--full` scans whole files instead —
-    for a deliberate burn-down sweep, never for gating.
+    (ERROR / blocking), else print OK and exit 0. `--full` scans whole files instead.
+    LIMIT, stated because the docstring used to oversell it: --full widens LINE scope only.
+    File selection is still the changeset, so it cannot sweep the 2,283-constant tests/sim
+    backlog this file cites — that needs a full-tree pass this tool does not offer.
     """
     mode = 'ci'
     if '--staged' in argv:
@@ -461,7 +468,20 @@ def main(argv) -> int:
     # their pre-existing uncited constants purely because the rename lands them in the
     # changeset. A rename that ALSO edits content keeps added lines, so it stays scanned.
     added = ci_common.get_added_lines(mode)
-    sim_paths = sorted(p for p in changed if is_sim_file(p) and p in added)
+    # REMOVALS MATTER TOO. Added-line scoping alone let a changeset invalidate a citation without
+    # tripping the gate: delete a `# [canonical: ...]` line above a constant and the diff has no
+    # `+` lines at all, so every violation became "carried" and the run reported OK over a value
+    # that is now genuinely uncited. Under the whole-file scan this branch replaced, that commit
+    # was red. Displacing a citation (inserting a new constant BETWEEN the comment and the constant
+    # it cited) has the same effect. So: if a changeset removes a provenance line from a sim file,
+    # that file goes back to a full scan — the narrow, targeted restoration of the old behaviour
+    # exactly where the new behaviour is unsound. Found by adversarial review of this very fix.
+    removed = ci_common.get_removed_lines(mode)
+    citation_removed = {
+        p for p, lines in removed.items()
+        if any(_CANONICAL_COMMENT_PATTERN.search(ln) for ln in lines)
+    }
+    sim_paths = sorted(p for p in changed if is_sim_file(p) and (p in added or p in citation_removed))
     if not sim_paths:
         print("[SIM-FABRICATION OK] no changed sim .py files — nothing to check.")
         return 0
@@ -478,7 +498,7 @@ def main(argv) -> int:
         ledger_pairs = load_ledger_pairs(path)
         ledger_values = load_ledger_values(path)
         genuine = genuine_violations_by_pair(content, ledger_pairs, ledger_values)
-        if not full:
+        if not full and path not in citation_removed:
             genuine, pre_existing = added_only(genuine, added.get(path, []))
             carried += len(pre_existing)
         if genuine:

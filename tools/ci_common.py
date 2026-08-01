@@ -147,6 +147,33 @@ def get_added_lines(mode='ci'):
     return result
 
 
+def get_removed_lines(mode='ci'):
+    """Map {path: [removed_line, ...]} containing only the DELETED ('-') lines of the diff.
+
+    The mirror of get_added_lines, and it exists because added lines alone cannot answer "did this
+    changeset invalidate something?". Deleting a `# [canonical: ...]` citation leaves the constant
+    it justified uncited without touching that constant's line — so an added-lines-only gate sees a
+    diff with no `+` lines at all and reports clean over a newly-fabricated value
+    (ci_sim_fabrication_check, ED-IN-0119). A guard that only looks at what arrived cannot see what
+    left.
+    """
+    out = _git(['diff', '--unified=0', '--no-color'] + _diff_args(mode))
+    result = {}
+    current = None
+    for line in out.splitlines():
+        if line.startswith('--- '):
+            continue  # the a/ header; the b/ header below establishes the path
+        if line.startswith('+++ '):
+            target = line[4:].strip()
+            current = None if target == '/dev/null' else (
+                target[2:] if target.startswith('b/') else target)
+            if current is not None:
+                result.setdefault(current, [])
+        elif line.startswith('-') and current is not None:
+            result[current].append(line[1:])
+    return result
+
+
 def read_text(path):
     """Read a working-tree file as UTF-8; return None if missing or undecodable."""
     try:

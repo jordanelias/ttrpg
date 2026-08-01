@@ -42,6 +42,43 @@ a latent contract-widening channel; and — caught by CI, not review — the res
 flagging this fix's own guard file. **11 mutants planted, 11 killed; two survived their first round,
 both §0.1 point 2 inside my own tests.**
 
+### Third adversarial pass (ED-IN-0120) — four MORE false passes, in the fixes above
+
+Requested explicitly after the branch was declared done twice. Self-attack plus a read-only critic
+that never saw the reasoning. **Four of the six were false passes in gates this branch had just
+repaired**, which is the part worth remembering: the first two passes each concluded the work was
+sound, and each was wrong.
+
+1. **Deleting a citation passed.** Added-line scoping let a changeset remove a
+   `# [canonical: ...]` line and report OK over the now-uncited constant — the diff has no `+`
+   lines, so everything became "carried". Under the whole-file scan it replaced, that commit was
+   red. My claim "added-lines scoping is not a weakening" was FALSE for this class.
+   `ci_common.get_removed_lines()` closes it.
+2. **`run.critiqued` had the identical defect, eight lines from the one I fixed.** Called with a
+   single array in all five wave scripts, so `produced` was `undefined` and the starvation signal
+   could never fire. The dispute fix closed one *instance* of a pattern, not the pattern; arity is
+   now derived from the owner for every `run.*` method.
+3. **A row could claim any pytest-only job** (`unit-tests`), laundering exactly as `syntax-check`
+   did before the compiles-only branch closed that one — one job over from the defect the join was
+   built for.
+4. **The quoted-key fix re-opened its own hole one typo wide** — `'layer-disputed':` matched
+   neither branch and vanished. Also: spread passed unanalysed, and a unicode key *crashed* a
+   blocking validator.
+5. **The join shipped with no test at all.** A mutation sweep deleted the entire branch with
+   everything green. The same sweep then caught two more untested branches of mine.
+6. **Third recurrence of one bug:** a new scanner read prose about a call as a call. Fixed for
+   `_dispute_calls`, then `compiles_only`, then reappeared. Comments are now blanked **once**,
+   where `body` is derived.
+
+**Corrected claim:** my declared narrowing said three files lost coverage; against `origin/main` it
+is **two** — the third is a file this branch created. Re-measured across all 3,117 tracked files:
+169 → 268, those two the complete lost set.
+
+**15 mutants, 15 killed** — two survived the first sweep, both mine, both previously tested only ad
+hoc. **The lesson is not that the work is now clean.** Three passes found defects in the same code;
+the honest prior is that a fourth would find more, and the value came from attacking rather than
+from re-reading.
+
 ### NEXT ACTIONS
 
 - **Awaiting Jordan, not self-ratified:** `OPEN_AS_BASIS` over-fires on provenance prose. The 10
@@ -89,12 +126,26 @@ both §0.1 point 2 inside my own tests.**
   **Verdict is unaffected in both modes** — 14.7 and 28.5 both exceed the 10.0 threshold, and the
   test fails identically on `main`. Nothing here is caused by or blocks PR #284.
 
-  **Handed to MB with a concrete next step:** the target is whatever differs between two
-  deterministic paths on a GitHub runner but not locally. `--dist load` assigns tests to workers
-  dynamically, so worker COMPOSITION is the leading remaining candidate — but proving it needs a run
-  on the reference environment with `-p no:cacheprovider --dist loadfile` and the per-worker test
-  manifest dumped, which is an MB-owned experiment on MB-owned code. Do not argue a golden re-base
-  from a single magnitude until the mode is pinned.
+  **MECHANISM LOCATED — the instrument cannot tell the two apart (adversarial re-audit, 2026-08-01).**
+  `_mean_loser_casualties` (`tests/valoria/test_stochastic_rout.py:92`) appends to `loser` ONLY when
+  the battle has a decisive winner, then returns `statistics.mean(loser)`. A draw is silently
+  skipped, so **the mean is taken over a variable-length list and nothing records its length**. That
+  is CLAUDE.md §0.1 point 2 verbatim — "a loop that asserts conditionally must assert that it
+  asserted" — in MB's own measurement instrument.
+
+  **Proven:** the list is conditionally appended and unguarded; locally both arms average **16/16**
+  samples (`PC_STOCHASTIC_ROUT=False` → 10 A-wins / 6 B-wins, `True` → 12/4), so an
+  `assert len(loser) == n` would pass today and costs nothing to add.
+  **NOT proven, and deliberately not claimed:** that mode B is caused by a lower sample count. That
+  needs the reference environment, which I do not have. Two overclaims were already made and
+  withdrawn on this anomaly; this one stops at what was measured.
+  **Why it is still the right next step:** whatever drives mode B, this instrument cannot
+  distinguish "the engine changed" from "fewer battles were decisive" — a 55.5 → 69.5 shift is
+  exactly what dropping several low-casualty decisive samples would produce. Adding the count
+  assertion discriminates between those two on the very next CI run, for one line, and turns an
+  unfalsifiable anomaly into a measurement. Do that before arguing a golden re-base from either
+  magnitude.
+
 - **Known blind spot worth closing:** `valoria_local --ci` computes a different changeset than CI's
   `GITHUB_BASE_REF` mode, so **local-green is not CI-green** for changeset-scoped validators. That
   gap is what let the sixth defect reach CI. Reproduce CI locally with

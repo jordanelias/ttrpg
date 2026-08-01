@@ -154,28 +154,68 @@ def _balanced(text, start):
 
 
 def _object_keys(inner):
-    """Top-level keys of a JS object-literal body — nested objects/arrays/strings skipped."""
-    keys, i, quote, esc, depth = [], 0, None, False, 0
-    at_key = True
-    while i < len(inner):
-        c = inner[i]
-        if quote:
+    """Top-level keys of a JS object-literal body — nested objects/arrays/strings skipped.
+
+    ONE DEPTH-AWARE PASS. Quoted keys were first collected by a separate regex sweep over the whole
+    body, which had no notion of depth and therefore leaked nested keys: `positions: [{ 'layer': 1 }]`
+    reported `layer` as a top-level key and failed a legal call. Depth is the whole job of this
+    function, so the quoted-key case has to live inside the same scan, not beside it.
+
+    Three forms are recorded as deliberately-unrepresentable keys rather than skipped, because each
+    was a FALSE PASS found by adversarial review:
+      `<spread>`         — `{ ...rec, finding_id: x }`: what `rec` carries is undecidable statically.
+      `<non-ascii-key>`  — a unicode identifier, which used to raise AttributeError and kill the run.
+      a quoted key body  — collected verbatim (`[^'"]+`, not an identifier pattern) so that
+                           `'layer-disputed':` and `'$layer':` are seen and rejected, instead of
+                           matching no branch at all and vanishing.
+    """
+    keys, i, depth, at_key = [], 0, 0, True
+
+    def _skip_string(j):
+        q, j, esc = inner[j], j + 1, False
+        while j < len(inner):
+            c = inner[j]
             if esc:
                 esc = False
             elif c == "\\":
                 esc = True
-            elif c == quote:
-                quote = None
-        elif c in "'\"`":
-            quote = c
-        elif c in "{[(":
+            elif c == q:
+                return j + 1
+            j += 1
+        return j
+
+    while i < len(inner):
+        c = inner[i]
+        if c in "'\"`":
+            if depth == 0 and at_key:
+                j = _skip_string(i)
+                body = inner[i + 1:j - 1]
+                after = inner[j:].lstrip()
+                if after.startswith(":"):
+                    keys.append(body)
+                at_key = False
+                i = j
+                continue
+            i = _skip_string(i)
+            continue
+        if c in "{[(":
             depth += 1
         elif c in "}])":
             depth -= 1
         elif depth == 0 and c == ",":
             at_key = True
+        elif depth == 0 and inner.startswith("...", i):
+            keys.append("<spread>")
+            at_key = False
+            i += 3
+            continue
         elif depth == 0 and at_key and (c.isalpha() or c == "_"):
             m = re.match(r"[A-Za-z_][A-Za-z0-9_]*", inner[i:])
+            if m is None:
+                keys.append("<non-ascii-key>")
+                at_key = False
+                i += 1
+                continue
             after = inner[i + m.end():].lstrip()
             if after.startswith(":"):
                 keys.append(m.group(0))
@@ -183,15 +223,6 @@ def _object_keys(inner):
             i += m.end()
             continue
         i += 1
-
-    # QUOTED KEYS, collected separately because the scanner above cannot see them: a quote is
-    # consumed by the string branch before the key branch is reached, so `{ finding_id: x,
-    # 'layer': 'evidence' }` parsed to ['finding_id'] — the unknown key vanished and the call
-    # PASSED. That is a false pass in the guard's own failure mode (an unread key silently taking
-    # its default), reachable by ordinary JSON habit. Found by adversarial review, not by testing.
-    for m in re.finditer(r"""(?:^|,)\s*(['"])([A-Za-z_][A-Za-z0-9_]*)\1\s*:""", inner):
-        if m.group(2) not in keys:
-            keys.append(m.group(2))
     return keys
 
 
@@ -220,6 +251,60 @@ def _dispute_contract():
     # finding_id is the one field whose absence is unrecoverable: run.adjudicate() binds on it, so a
     # record without it can never receive a ruling and is guaranteed to reach the return unresolved.
     return legal, {"finding_id"} & legal
+
+
+def _run_arities():
+    """{method: required_positional_count} for `run.X = function (...)`, DERIVED from the owner.
+
+    THE DISPUTE LESSON, GENERALISED. That defect was "the gate checks method NAMES, never argument
+    shapes". Fixing it for `run.dispute` alone left the identical defect live eight lines away:
+    `run.critiqued(stage, produced, reviewed)` was called with a single ARRAY in all five wave
+    scripts, so `produced` was undefined, `undefined > 0` was false, and the critic-starvation
+    signal could not fire. A fix that closes one instance of a pattern and not the pattern is the
+    §0.1 point-5 failure in miniature, so arity is now checked for every run.* method the owner
+    defines — parsed from the owner, never listed here.
+
+    Parameters with defaults or a trailing rest are not counted as required; the owner uses neither
+    today, and the parse records what it sees rather than assuming.
+    """
+    text = _read(OWNER)
+    out = {}
+    for m in re.finditer(r"run\.([A-Za-z_][A-Za-z0-9_]*)\s*=\s*function\s*\(([^)]*)\)", text):
+        params = [p.strip() for p in m.group(2).split(",") if p.strip()]
+        if any(p.startswith("...") or "=" in p for p in params):
+            continue
+        out[m.group(1)] = len(params)
+    return out
+
+
+def _run_calls(text, method):
+    """Yield (line_no, arg_count) for each `run.<method>(...)` literal call."""
+    for m in re.finditer(r"\brun\." + re.escape(method) + r"\s*\(", text):
+        inner, _ = _balanced(text, m.end() - 1)
+        if inner is None:
+            continue
+        depth, n, seen, quote = 0, 1, False, None
+        i = 0
+        while i < len(inner):
+            c = inner[i]
+            if quote:
+                if c == "\\":
+                    i += 2
+                    continue
+                if c == quote:
+                    quote = None
+            elif c in "'\"`":
+                quote = c
+            elif c in "{[(":
+                depth += 1
+            elif c in "}])":
+                depth -= 1
+            elif c == "," and depth == 0:
+                n += 1
+            if not c.isspace():
+                seen = True
+            i += 1
+        yield text[:m.start()].count("\n") + 1, (n if seen else 0)
 
 
 def _blank_line_comments(text):
@@ -257,8 +342,15 @@ def _dispute_calls(text):
 
     A call whose argument is NOT a literal — run.dispute(hVerdictDispute(v, ...)) — is skipped on
     purpose: the owner built that record, so there is nothing here to drift.
+
+    KNOWN LIMIT, measured rather than assumed. A COMPUTED key (`{ [k]: v }`) is invisible to
+    _object_keys and therefore passes: its name is not decidable until run time, so no static check
+    can classify it. Probed 2026-08-01 against ten adversarial literals; computed keys are the only
+    form that yields a false PASS. Shorthand (`{finding_id}`), spread (`{...rec}`) and a regex
+    literal containing a brace all yield an EMPTY key list, which fails the required-finding_id
+    check — over-strict, and the message will misattribute the cause, but the safe direction. No
+    call site in .claude/wf_*.js uses any of these forms; verified by reading all eight.
     """
-    text = _blank_line_comments(text)
     for m in re.finditer(r"\brun\.dispute\s*\(", text):
         i = m.end()
         while i < len(text) and text[i] in " \t\r\n":
@@ -296,6 +388,7 @@ def check(fix=False, staged_only=False):
 
     staged = _staged_paths() if staged_only else None
     dispute_legal, dispute_required = _dispute_contract()
+    run_arities = _run_arities()
     violations, fixed = [], []
 
     if not os.path.exists(CRITIC_AGENT):
@@ -364,6 +457,14 @@ def check(fix=False, staged_only=False):
         # is worse than no checker, since the first thing a reader does is open the cited line.
         harness = text[i:j + len(END)]
         body = text[:i] + ("\n" * harness.count("\n")) + text[j + len(END):]
+        # COMMENTS BLANKED ONCE, HERE, FOR EVERY SCANNER BELOW. This bug has now appeared three
+        # times: the dispute scanner read the harness's own prose about run.dispute() as a call;
+        # ci_gate_coverage computed compiles_only from un-stripped text; and the new arity scanner
+        # read a comment explaining the dispute fix as a zero-argument run.dispute(). Each was
+        # fixed locally, which is why it kept coming back. Prose about a call is not a call, and
+        # the place to establish that is once, before any scanner runs — not inside each one.
+        # Offsets and line numbers are preserved (spaces, not deletion), so citations stay true.
+        body_nc = _blank_line_comments(body)
 
         # 1b. PLACEMENT. `const` does not hoist: a harness below its first call site throws
         # ReferenceError on the first stage, which in the sandbox surfaces as one agent dying
@@ -395,7 +496,7 @@ def check(fix=False, staged_only=False):
         # live before anyone noticed, because a wrong key is not a syntax error and the record still
         # serialises. tests/valoria/test_wf_harness.py could not have caught it: it exercises the
         # harness with correct keys, so it verifies the contract while every caller violated it.
-        for lineno, keys in _dispute_calls(body):
+        for lineno, keys in _dispute_calls(body_nc):
             unknown = [k for k in keys if k not in dispute_legal]
             if unknown:
                 violations.append((rel, lineno,
@@ -409,6 +510,19 @@ def check(fix=False, staged_only=False):
                                    f"run.dispute() omits `{missing}`. run.adjudicate() binds on it, "
                                    f"so this record can never receive a ruling and is guaranteed to "
                                    f"reach the return unadjudicated."))
+
+        # 2c. ARITY, for every run.* method the owner defines. See _run_arities: fixing the dispute
+        # shape without generalising left the same defect live on run.critiqued in all five wave
+        # scripts. A JS call with too few arguments is not an error — the missing parameter is
+        # `undefined`, the guard's comparison quietly goes false, and the signal never fires.
+        for meth, want in sorted(run_arities.items()):
+            for lineno, got in _run_calls(body_nc, meth):
+                if got < want:
+                    violations.append((rel, lineno,
+                                       f"run.{meth}() called with {got} argument(s); "
+                                       f"tools/wf_harness.js declares {want}. The missing "
+                                       f"parameter(s) are `undefined` at run time, which does not "
+                                       f"throw — it silently disables whatever they control."))
 
         # 3. critic stages must be structurally read-only
         for lineno, opts in _agent_calls(body):

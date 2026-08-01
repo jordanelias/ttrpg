@@ -13,6 +13,7 @@ So every test here PLANTS a defect and asserts the gate reports it. A gate that 
 observed to fail is indistinguishable from one that cannot.
 """
 import importlib.util
+import re
 import os
 import shutil
 
@@ -210,3 +211,73 @@ def test_a_comment_inside_the_owners_dispute_body_cannot_widen_the_contract(tmp_
     legal, _ = mod._dispute_contract()
     assert 'layer' not in legal, 'a comment inside the owner widened the legal key set'
     assert 'finding_id' in legal
+
+
+# ─────────────────────────── ARITY: the dispute lesson generalised to every run.* method
+
+def test_arities_are_derived_from_the_owner_and_include_critiqued():
+    """Hardcoding them would be the second copy of a rule, which is the bug being closed."""
+    mod = _load()
+    ar = mod._run_arities()
+    assert ar.get('critiqued') == 3, "run.critiqued's declared arity is not 3"
+    assert ar.get('dispute') == 1 and ar.get('adjudicate') == 3
+    assert ar.get('summary') == 0
+
+
+def test_the_single_array_critiqued_call_that_shipped_is_rejected(sandbox):
+    """THE DEFECT, eight lines from the one this file was created for.
+
+    `run.critiqued(stage, produced, reviewed)` was called with one ARRAY in all five wave scripts.
+    `produced` was `undefined`, `undefined > 0` is false, so the critic-starvation signal could
+    never fire from that path — and the original gate passed it, because it checked method NAMES
+    and never argument shapes.
+    """
+    mod, dst = sandbox
+    src = dst.read_text(encoding='utf-8')
+    planted = re.sub(r"run\.critiqued\('Critic',[^)]*\)",
+                     "run.critiqued(['a', 'b'])", src, count=1)
+    assert planted != src, 'the donor no longer contains a critiqued call to plant over'
+    dst.write_text(planted, encoding='utf-8')
+    assert mod.check() == 1, 'a single-array run.critiqued() passed the gate'
+
+
+def test_a_correct_three_arg_critiqued_is_accepted(sandbox):
+    """Both directions — the live donor already uses the correct form."""
+    mod, _ = sandbox
+    assert mod.check() == 0
+
+
+def test_prose_about_a_call_is_not_counted_as_a_call(sandbox):
+    """THIRD RECURRENCE of one bug, now fixed once for every scanner rather than per-scanner.
+
+    The arity scanner read the harness's own comment — which quotes `run.dispute()` while
+    explaining the fix — as a zero-argument call. The dispute scanner had already been fixed for
+    exactly this, and ci_gate_coverage for its cousin. Comments are now blanked once, where `body`
+    is derived, so a fourth scanner cannot reintroduce it.
+    """
+    mod, dst = sandbox
+    src = dst.read_text(encoding='utf-8')
+    dst.write_text(src + "\n// counter-example: run.critiqued() and run.dispute() take arguments\n",
+                   encoding='utf-8')
+    assert mod.check() == 0
+
+
+def test_a_spread_record_is_rejected_as_unanalysable(sandbox):
+    """`run.dispute({ ...hand, finding_id: id })` passed every branch while `hand` could carry any
+    dead key at all — statically undecidable, so the honest answer is to reject the form rather
+    than report a check that did not happen. Mutation-checked: without the `<spread>` branch this
+    module stayed green, because the case was only ever probed ad hoc and never committed."""
+    mod, dst = sandbox
+    src = dst.read_text(encoding='utf-8')
+    dst.write_text(src.replace(
+        "run.dispute(hVerdictDispute(v, 'critic:w4', v.target))",
+        "run.dispute({ ...handRolled, finding_id: v.target })"), encoding='utf-8')
+    assert mod.check() == 1, 'a spread record passed the gate unanalysed'
+
+
+def test_a_non_ascii_key_is_rejected_rather_than_crashing_the_gate():
+    """A unicode identifier is `isalpha()` but not `[A-Za-z_]`, so the scanner matched None and
+    `m.end()` raised AttributeError — an unhandled crash inside a BLOCKING validator."""
+    mod = _load()
+    keys = _keys_of(mod, "run.dispute({ ключ: 1, finding_id: a })")
+    assert keys and '<non-ascii-key>' in keys[0]

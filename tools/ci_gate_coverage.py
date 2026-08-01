@@ -120,6 +120,12 @@ def jobs() -> list[dict]:
             'pytest_roots': sorted(roots),
             'tool_commands': cmds,
             'compiles_only': compiles_only,
+            # The job's runnable text (comments stripped). Exposed so a caller can ask "does this
+            # job reference X at all?" for invocations TOOL_CMD_RE cannot parse — notably
+            # `python3 -m pkg.module`, which lanchester-signature uses. Without it, "no parsed
+            # commands" is indistinguishable from "covers nothing", and every pytest-only job
+            # becomes a silent safe harbor for a false coverage claim (ED-IN-0119).
+            'runnable': runnable,
         })
     return out
 

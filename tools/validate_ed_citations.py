@@ -38,7 +38,8 @@ USAGE (reads the local working tree — no PAT, no network):
     python3 tools/validate_ed_citations.py --info              # also print INFO open-refs
 
 The pure core (audit_citations / build_status_map / _is_resolved) is import-testable
-with no network — see tests/hooks/test_ed_citation_integrity.py.
+with no network — see tests/valoria/test_ed_citation_integrity.py (moved there from
+tests/hooks/ on 2026-08-01, ED-IN-0119: it was live and passing and nothing ran it).
 """
 import os, re, sys, json, argparse
 

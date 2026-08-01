@@ -296,7 +296,21 @@ def check_ci_registry_coverage(all_files):
             else:
                 job = next((j for j in parsed if j['id'] == ci_job), None)
                 invoked = {c['script'] for c in (job.get('tool_commands') or [])} if job else set()
-                if job and job.get('compiles_only'):
+                if job is None:
+                    # TWO PARSERS, TWO GRAMMARS. `job_ids` above accepts `[a-zA-Z][\w-]*` while
+                    # ci_gate_coverage's JOB_RE accepts only `[a-z0-9][a-z0-9-]*` — so a job named
+                    # with an underscore or a capital (`my_job`, `Unit_Tests`) is a real job id here
+                    # and invisible there. Without this branch the row would skip BOTH checks below
+                    # and pass in silence, which is precisely the defect this join was added to
+                    # close, reproduced inside the fix. Latent today (every job name is
+                    # lowercase-hyphen) and reported rather than fatal, because the divergence is
+                    # the parsers' fault and not the registry's.
+                    errors.append(
+                        f"ci_job invocation join SKIPPED for {path}: job {ci_job!r} exists in the "
+                        f"workflow but tools/ci_gate_coverage.py did not parse it (its JOB_RE takes "
+                        f"only lowercase/digit/hyphen names). Coverage for this row is UNVERIFIED."
+                    )
+                elif job.get('compiles_only'):
                     # COMPILING A TOOL IS NOT RUNNING IT. This is the precise laundering path the
                     # emptiness guard below left open: scope_ratchet's row claimed coverage via
                     # valoria_local, which CI only ever py_compile's, so pointing the row at
@@ -314,6 +328,20 @@ def check_ci_registry_coverage(all_files):
                     violations.append(
                         f"ci_checks_registry.yaml: {path} declares ci_job {ci_job!r}, but that job "
                         f"never invokes it — the row claims CI coverage the workflow does not provide"
+                    )
+                elif not invoked and os.path.splitext(os.path.basename(path))[0] \
+                        not in (job.get('runnable') or ''):
+                    # THE SAFE HARBOR. A job with no PARSED tools/ command used to pass any row
+                    # unchallenged — so `ci_job: unit-tests` (pytest only) laundered a false claim
+                    # exactly as `ci_job: syntax-check` did before the compiles-only branch closed
+                    # that one. But "no parsed commands" is not "covers nothing":
+                    # lanchester-signature runs its script as a MODULE (`python3 -m
+                    # mass_battle.lanchester_signature`), which TOOL_CMD_RE cannot see. The stem
+                    # test separates them — it appears in that job's text and not in unit-tests'.
+                    violations.append(
+                        f"ci_checks_registry.yaml: {path} declares ci_job {ci_job!r}, and that job "
+                        f"neither invokes it nor mentions it anywhere — the row claims coverage no "
+                        f"command in that job provides"
                     )
         if ci_job and ci_job not in job_ids:
             violations.append(

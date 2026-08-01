@@ -678,7 +678,14 @@ PRODUCER OUTPUT:
 ${JSON.stringify({ echoL, transferL, handoffL, articL, censusL, worldL, oracleL, adj })}`,
     hCritic({ schema: CRITIC_SCHEMA, label: 'critic:w2', phase: 'Critic', model: 'opus', effort: 'high' })))
 
-run.critiqued(['seam:accord-echo', 'seam:territory-transfer', 'seam:vertical-handoff', 'seam:articulation-subscriber', 'seam:oi12-census', 'world:population+goldens', 'oracle:manifest-flips'])
+// ARITY, not just the method name. The owner's signature is
+// `run.critiqued(stage, produced, reviewed)`; this call passed a single ARRAY, so
+// `produced` was undefined, `undefined > 0` was false, and the critic-starvation signal
+// could never fire from here. Same copy-paste lineage as the dispute defect eight lines
+// below, and it survived that fix because the gate checked names and not shapes.
+const CRITIQUED_STAGES = ['seam:accord-echo', 'seam:territory-transfer', 'seam:vertical-handoff', 'seam:articulation-subscriber', 'seam:oi12-census', 'world:population+goldens', 'oracle:manifest-flips']
+run.critiqued('Critic', CRITIQUED_STAGES.length,
+  (critic && critic.verdicts) ? CRITIQUED_STAGES.length : 0)
 run.lens('critic:w2', critic && critic.verdicts ? critic.verdicts : [])
 
 const overturns = (critic && critic.verdicts ? critic.verdicts : []).filter(v => v.verdict !== 'uphold')
