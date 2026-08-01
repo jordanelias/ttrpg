@@ -20,19 +20,20 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'sim'))
 
+import contextlib  # noqa: E402
 import importlib  # noqa: E402
 import random  # noqa: E402
 
 import pytest  # noqa: E402
 
 
-def _reload_mb(monkeypatch, **overrides):
-    """Reload the mass_battle modules under an explicit flag set."""
-    env = {'PER_CELL': '1', 'PC_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
+_MB_ENV = {'PER_CELL': '1', 'PC_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
            'PC_OCTAGON_DMG': '1', 'PC_FRACTIONAL_POOL': '1'}
-    env.update(overrides)
-    for k, v in env.items():
-        monkeypatch.setenv(k, v)
+
+
+def _load_mb(**overrides):
+    """Reload the mass_battle modules under an explicit flag set, honouring os.environ as it
+    stands. Callers own the env; this only rebuilds the modules from it."""
     import mass_battle.config as C
     importlib.reload(C)
     import mass_battle.hierarchy.units as U
@@ -43,31 +44,64 @@ def _reload_mb(monkeypatch, **overrides):
     import mass_battle.core.contact as contact
     importlib.reload(contact)
     return orch, contact, C
+
+
+@contextlib.contextmanager
+def _mb_modules(**overrides):
+    """Load the mass_battle modules under a flag set AND PUT THEM BACK afterwards.
+
+    [ED-MB-0063] THE LEAK THIS CLOSES. The old fixture reloaded `mass_battle.config` under its own
+    env and set `units.FIELD_MOVEMENT = False`, with **no teardown**. `monkeypatch` restores the
+    environment VARIABLES, but a reloaded module keeps the values it was built from — so every test
+    that ran after this module in the same worker inherited this module's flags and a disabled
+    FIELD_MOVEMENT. That is a write with no matching restore: §0.1 #1's read/write asymmetry, in
+    test scaffolding rather than engine code.
+
+    IT IS OBSERVABLE, which is why it is worth fixing rather than noting. Measured on `main`, with
+    nothing changed: `pytest tests/valoria/test_stochastic_rout.py` alone fails
+    `test_per_cell_break_subsumes_the_body_level_one`, while
+    `pytest tests/valoria/test_octagon_damage.py tests/valoria/test_stochastic_rout.py` fails
+    `test_loser_breaks_near_historical_band` instead — the same two files, a different verdict,
+    decided by nothing but order. Under `-n auto` the distribution across workers varies run to
+    run, which is why that pair contributes an unstable 0-2 failures to the suite total on an
+    unchanged tree (measured 9, then 8, on two `main` runs of the identical command).
+
+    This does NOT claim to fix the flaky pair — those tests have their own coupling through
+    `S.PC_STOCHASTIC_ROUT` / `U.PC_CELL_MORALE`, and this module is only one of several leaking
+    into them. It removes THIS module from the set of contributors, which is the part I own.
+    """
+    saved_env = {k: os.environ.get(k) for k in {**_MB_ENV, **overrides}}
+    os.environ.update(_MB_ENV)
+    os.environ.update({k: str(v) for k, v in overrides.items()})
+    try:
+        yield _load_mb()
+    finally:
+        for k, v in saved_env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+        # Rebuild from the RESTORED environment so the next test sees ambient state, not ours.
+        _load_mb()
+        import mass_battle.hierarchy.units as U
+        importlib.reload(U)   # last word: undo the FIELD_MOVEMENT override too
 
 
 @pytest.fixture
-def mb(monkeypatch):
+def mb():
     """Fresh mass_battle modules with the octagon-damage model ON and the per-cell facing path enabled.
     Discrete lattice contact (FIELD_MOVEMENT off) -> deterministic geometry for the isolation asserts.
 
-    [ED-MB-0063 critic finding D] PC_FRACTIONAL_POOL is now pinned EXPLICITLY rather than inherited
-    from the ambient default. It is the flag that flipped this module's verdict before the isolation
-    fix, so leaving it ambient was the one gap in a fixture that already pins four others -- the same
+    [ED-MB-0063 critic finding D] PC_FRACTIONAL_POOL is pinned EXPLICITLY rather than inherited from
+    the ambient default. It is the flag that flipped this module's verdict before the isolation fix,
+    so leaving it ambient was the one gap in a fixture that already pinned four others -- the same
     reason test_mass_battle_byte_exact.py pins PC_OCTAGON_DMG per mode instead of trusting the default.
+
+    [ED-MB-0063] Now teardown-safe: see `_mb_modules` for the module-state leak this closes and the
+    measurement showing it changed another module's verdict.
     """
-    for k, v in (('PER_CELL', '1'), ('PC_REFUSE', '1'), ('LANCHESTER_ENABLED', '1'),
-                 ('PC_OCTAGON_DMG', '1'), ('PC_FRACTIONAL_POOL', '1')):
-        monkeypatch.setenv(k, v)
-    import mass_battle.config as C
-    importlib.reload(C)
-    import mass_battle.hierarchy.units as U
-    importlib.reload(U)
-    U.FIELD_MOVEMENT = False
-    import mass_battle.orchestration as orch
-    importlib.reload(orch)
-    import mass_battle.core.contact as contact
-    importlib.reload(contact)
-    return orch, contact, C
+    with _mb_modules() as mods:
+        yield mods
 
 
 BROW, BCOL = 25, 12
@@ -176,7 +210,7 @@ def test_rear_is_exactly_double_front(mb):
 
 
 @pytest.mark.parametrize('fractional', ['0', '1'])
-def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(monkeypatch, fractional):
+def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(fractional):
     """THE REAL FALSIFIER FOR THE ED-MB-0063 ISOLATION (critic finding D).
 
     "7 of 12 seeds gave exactly 2.0x" is weak evidence and was over-sold as strong. Once the body
@@ -192,7 +226,11 @@ def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(monkeypatch, fractio
     starts to matter again, and this test goes red on one parameter and not the other. That is a
     failure mode "7 of 12" cannot see at all.
     """
-    orch, contact, _ = _reload_mb(monkeypatch, PC_FRACTIONAL_POOL=fractional)
+    with _mb_modules(PC_FRACTIONAL_POOL=fractional) as (orch, contact, _):
+        _assert_arc_ratio_invariant(orch, contact, fractional)
+
+
+def _assert_arc_ratio_invariant(orch, contact, fractional):
     checked = 0
     for seed in range(12):
         front, rear = _arc_pair(orch, contact, seed)
