@@ -159,3 +159,64 @@ def test_in_lane_gap_is_documented_not_accidental():
     assert '0103-0111' in text, (
         "IN's next_free is deliberately ahead of its unallocated ids because CSO holds 0103-0111, "
         "but the file no longer says so — an undocumented gap is indistinguishable from an error.")
+
+
+# ── State/history separation (ED-MB-0063 follow-on, 2026-08-01) ───────────────
+
+HISTORY = os.path.join(ROOT, 'references', 'id_reservations_history.md')
+
+# A lane row plus a one-line summary and pointer fits comfortably; the narratives that were
+# moved out ran 2,461-10,734 chars. 600 is well clear of legitimate rows (longest today: 1,579,
+# in the header prose, which is why the cap below applies to LANE ROWS, not every line) and far
+# under anything that counts as a migrated narrative.
+MAX_LANE_ROW_CHARS = 600
+
+
+def test_narrative_does_not_creep_back_into_the_state_file():
+    """id_reservations.yaml is STATE. Long-form history belongs in the companion.
+
+    THE PATTERN THIS GUARDS (§0.1 #5 — a pattern fix without a guard is not understood).
+    This file is read on EVERY ED allocation by EVERY lane, and it is size-capped by a BLOCKING
+    CI gate. It had accreted ~9,000 tokens of trailing `#` narrative and reached 14,263 of its
+    15,000-token cap — about two allocations from failing the whole repo's allocation path.
+    Nothing reported it until the approaching-cap WARN was added, because the cap check was
+    binary OK/FAIL.
+
+    Unbounded append-only history inside a hot, capped, machine-read state file WILL hit the cap
+    again; the only question is when. So the fix is not "we trimmed it once", it is this: a lane
+    row may carry a short summary and a pointer, and nothing more.
+
+    Scoped to LANE ROWS (`XX: { ... }`) rather than every line on purpose — the file header
+    legitimately carries multi-line prose about the allocation protocol, and a blanket
+    line-length cap would either fail on that or be set so high it never fires.
+    """
+    offenders = []
+    for i, line in enumerate(open(RESERVATIONS, encoding='utf-8', errors='replace'), 1):
+        line = line.rstrip('\n')
+        if not re.match(r'\s*[A-Z]{1,2}:\s*\{', line):
+            continue
+        if len(line) > MAX_LANE_ROW_CHARS:
+            offenders.append((i, len(line), line[:90]))
+    assert not offenders, (
+        'lane row(s) in id_reservations.yaml exceed '
+        f'{MAX_LANE_ROW_CHARS} chars — narrative is creeping back into the state file:\n' +
+        '\n'.join(f'  line {i}: {n} chars — {t}...' for i, n, t in offenders) +
+        '\n\nPut the narrative in references/id_reservations_history.md (or the lane ledger) and '
+        'leave a one-line summary plus a pointer.')
+
+
+def test_the_history_companion_exists_and_is_referenced():
+    """The pointer must resolve, or the split silently becomes a deletion.
+
+    Both directions are asserted deliberately. A test that only checked the companion EXISTS
+    would pass just as happily if the YAML stopped pointing at it, which is how a moved
+    narrative becomes unreachable history nobody knows to look for.
+    """
+    assert os.path.exists(HISTORY), (
+        'references/id_reservations_history.md is missing — the YAML points at it for every '
+        'lane narrative, so deleting it destroys provenance that exists nowhere else '
+        '(checked: the ED-IN-0064 ledger entry is about a DIFFERENT item).')
+    yaml_text = open(RESERVATIONS, encoding='utf-8', errors='replace').read()
+    assert 'id_reservations_history.md' in yaml_text, (
+        'id_reservations.yaml no longer points at its history companion — a reader hitting a '
+        'one-line summary has no way to find the detail it summarises.')

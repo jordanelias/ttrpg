@@ -109,7 +109,19 @@ signals:
     # because "the ratchet counts files, and archiving is how this repo stays under its register
     # caps" is a real tension worth seeing rather than a bug to route around: a +1 here buys
     # ~1,770 tokens of room in a file that was one entry from breaching a BLOCKING gate.
-    baseline: 3111  # measured 2026-08-01 (git ls-files | wc -l)
+    # 3111 -> 3112 (ED-MB-0063 follow-on): references/id_reservations_history.md. The state/history
+    # split for `references/id_reservations.yaml`, which sat at 14,263 of its 15,000-token BLOCKING
+    # cap — about two ED allocations from failing the allocation path for EVERY lane at once. The
+    # YAML is now 6,280 (58% headroom).
+    #
+    # This raise is the clearest case yet for the "archiving costs a file" tension this row keeps
+    # hitting, and it is worth stating rather than absorbing: ONE new file buys ~8,000 tokens of
+    # headroom on the single most contended file in the repo. The alternative was deleting the
+    # narrative, which was checked and rejected — the ED-IN-0064 LEDGER entry is about the
+    # governance research corpus, a different item entirely, so the duplicate-key incident
+    # write-up existed ONLY in that YAML comment. Deleting would have destroyed provenance;
+    # moving preserves it (verified: 11/11 narratives byte-identical, 0 ids lost).
+    baseline: 3112  # measured 2026-08-01 (git ls-files | wc -l)
     target: 3103
     note: >-
       Total surface under maintenance. Flat is the goal, not shrinkage: the season loop will
