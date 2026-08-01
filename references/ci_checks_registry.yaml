@@ -110,7 +110,7 @@ ci_checks:
     role: "Bidirectional Status:CANONICAL ↔ canonical_sources.yaml verification."
     paired_hook: ""
     ci_job: canon-coverage-check
-    notes: "Added 2026-05-10. Ported off the GitHub code-search API onto a working-tree os.walk (ED-IN-0032, doctrine fix). Wired into CI report-only 2026-07-11 (Jordan's ruling, Phase 2 item 9). Current drift (2026-07-11): 1 unregistered-with-header, 28 registered-no-header."
+    notes: "Added 2026-05-10. Ported off the GitHub code-search API onto a working-tree os.walk (ED-IN-0032, doctrine fix). Wired into CI report-only 2026-07-11 (Jordan's ruling, Phase 2 item 9). RE-MEASURED 2026-08-01: 4 unregistered-with-header, 27 registered-no-header. The prior figures (1/28, 2026-07-11) were the LAST READING BEFORE THE INSTRUMENT BROKE -- its scan root was designs/, retired 2026-07-19, so it reported 0/0/0 for 13 days while this note looked like current state. Repointed at systems/."
 
   - path: tools/ci_audit_registry_check.py
     level: 5

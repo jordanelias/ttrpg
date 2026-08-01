@@ -596,6 +596,7 @@ NOT_A_DEPENDENCY = {
     'prose declaring it is NOT used':    f'"""No GitHub API, no PAT, no {SANDBOX}, no network."""\nx = 1\n',
     'a filter that EXCLUDES the path':   f'y = [w for w in ws if not w["dest"].startswith("{SANDBOX}")]\n',
     'a `not in` comparison':             f'if "{SANDBOX}" not in dest:\n    pass\n',
+    'negated .endswith classification':  f'if not d.endswith("{SANDBOX}"):\n    pass\n',
     'a FUNCTION docstring':              f'def f():\n    """used {SANDBOX} historically"""\n    return 1\n',
     'a CLASS docstring':                 f'class C:\n    """{SANDBOX} was the old home"""\n    x = 1\n',
 }
@@ -617,6 +618,13 @@ IS_A_DEPENDENCY = {
         f'MSG = (\n    "prefix "\n    "{SANDBOX}/tail"\n)\n',
     'a dependency inside a function that HAS a docstring':
         f'def f():\n    """doc"""\n    return open("{SANDBOX}/p")\n',
+    # NEGATION ALONE IS NOT EXCLUSION (critic finding N4). An earlier version dropped every
+    # string under any `not`, so these two -- which negate a FILESYSTEM ACCESS to the path,
+    # the strongest possible dependency on it -- were reported clean.
+    'a negated os.path.exists on the path':
+        f'if not os.path.exists("{SANDBOX}/cache"):\n    raise SystemExit(1)\n',
+    'a negated os.path.isdir in a loop guard':
+        f'while not os.path.isdir("{SANDBOX}/x"):\n    pass\n',
 }
 
 
@@ -629,7 +637,7 @@ def test_prose_and_exclusions_are_not_reported_as_dependencies():
             f'false positive restored — {label!r} is not a sandbox dependency; a file cannot '
             f'break outside the sandbox because of a comment or an exclusion filter')
         checked += 1
-    assert checked == len(NOT_A_DEPENDENCY) == 7, f'expected 7 cases, checked {checked}'
+    assert checked == len(NOT_A_DEPENDENCY) == 8, f'expected 8 cases, checked {checked}'
 
 
 def test_real_sandbox_dependencies_are_still_caught():
@@ -646,7 +654,22 @@ def test_real_sandbox_dependencies_are_still_caught():
             f'{label!r} is a LIVE sandbox dependency and would break outside the retired '
             f'harness, but the check no longer reports it — the fix has gone too far')
         checked += 1
-    assert checked == len(IS_A_DEPENDENCY) == 7, f'expected 7 cases, checked {checked}'
+    assert checked == len(IS_A_DEPENDENCY) == 9, f'expected 9 cases, checked {checked}'
+
+
+def test_markdown_is_still_checked_because_skills_are_prose(monkeypatch=None):
+    """The BLOCKING half of Check 4 is about skills/, whose surface is SKILL.md.
+
+    An earlier version of this fix returned False for every `.md` on the reasoning that
+    markdown "has no executable surface". For a skill the prose IS the instruction: a SKILL.md
+    telling an agent to read /home/claude/... is precisely the violation the blocking rule
+    names. `skills/` happens to be clean today, so nothing broke — the GUARD would have been
+    silently gone, which is this whole module's subject matter.
+    """
+    fn = _load_live_sandbox_ref()
+    assert fn(f'Read the corpus from {SANDBOX}/repo before answering.\n',
+              'SKILL.md', 'skills/x/SKILL.md'), (
+        'markdown is no longer inspected, so the BLOCKING skills/ rule cannot fire at all')
 
 
 def test_unparseable_python_fails_closed():
@@ -684,7 +707,7 @@ def test_lane_path_prefixes_all_match_something():
     MEASURED 2026-08-01: 60 of 136 rows matched nothing. 35 named `designs/audit/…`, a tree
     retired 2026-07-19; the rest named `designs/…` and `sim/…` paths moved by the same
     restructure. Lane attribution in DECISIONS.md had been silently degrading for weeks,
-    because `_lane_for` returns None when nothing matches — an honest return that is
+    because `infer_lane` returns None when nothing matches — an honest return that is
     indistinguishable from "this file has no lane".
 
     THE POINT IS NOT THE 60 ROWS, IT IS THE SHAPE. A hand-maintained table of paths rots

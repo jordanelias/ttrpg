@@ -993,9 +993,13 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   (2026-08-01, found by the gate crawl; rot repaired, design NOT fixed).**
   Measured: **60 of 136 rows matched no tracked file** — 35 named `designs/audit/…` (retired
   2026-07-19) and the rest `designs/…`/`sim/…` paths moved by the same restructure. Lane
-  attribution in `DECISIONS.md` had been silently degrading for weeks, because `_lane_for`
-  returns `None` when nothing matches and an honest `None` is indistinguishable from "this file
-  genuinely has no lane". Repaired to 0 dead rows and pinned by
+  attribution had been silently degrading for weeks, because `infer_lane`
+  (`build_decisions.py:264`, re-exported as the single owner at `obs_core.py:35`) returns `None`
+  when nothing matches, and an honest `None` is indistinguishable from "this file genuinely has
+  no lane" — `None` is *deliberately* also the correct answer for cross-lane files, so rot and
+  correct abstention cannot be told apart by construction. **Blast radius is wider than
+  `DECISIONS.md`:** `build_proposals.py`, `build_incompleteness.py` (where `None` becomes the
+  literal `"unassigned"`), `build_graph.py` and `session_open_work.py` all consume it. Repaired to 0 dead rows and pinned by
   `test_lane_path_prefixes_all_match_something` (mutation-verified).
   - **The repair is not the fix.** CLAUDE.md §3's RULED §2a already states *one subsystem = one
     folder = one ID lane*. That makes lane **derivable** from `systems/<subsystem>/` — about nine

@@ -117,7 +117,14 @@ def _live_sandbox_ref(txt, fn, rel):
     if '/home/claude' not in txt:
         return False
     if fn.endswith('.md'):
-        return False
+        # MARKDOWN KEEPS THE OLD SUBSTRING RULE, and that is deliberate. An earlier version of
+        # this fix returned False for every `.md` on the reasoning that markdown "has no
+        # executable surface". That silently gutted the BLOCKING half of the check: the rule at
+        # the top of this file is "no /home/claude under skills/", and a skill's primary surface
+        # IS its SKILL.md — prose that instructs an agent to read a retired sandbox path is
+        # exactly the violation, and it is the instruction that executes. skills/ happens to be
+        # clean today, so nothing broke; the GUARD would have been gone.
+        return True
     if rel == 'tools/ci_hooks_verifier.py':
         # This file necessarily contains the literal it searches for — in the WARNING TEXT it
         # prints. A checker that reports itself for quoting its own error message is a false
@@ -139,14 +146,29 @@ def _live_sandbox_ref(txt, fn, rel):
                     isinstance(body[0].value, ast.Constant) and isinstance(body[0].value.value, str):
                 docstrings.add(id(body[0].value))
 
-    negated = set()
+    # NEGATION ALONE IS NOT EXCLUSION. An earlier version dropped every string under any `not`,
+    # which reported these LIVE dependencies clean:
+    #     if not os.path.exists('/home/claude/cache'): sys.exit(1)
+    #     while not os.path.isdir('/home/claude/x'): ...
+    # Both negate a FILESYSTEM ACCESS to the path — the strongest possible dependency on it.
+    # An exclusion negates a CLASSIFICATION of some other value: `not dest.startswith(PATH)` or
+    # `PATH not in dest` ask "is that thing under the sandbox", and work fine with the sandbox
+    # absent. So the test is what the negation wraps, not that a negation exists.
+    _CLASSIFIERS = {'startswith', 'endswith'}
+    excluded = set()
     for node in ast.walk(tree):
-        is_not = (isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not)) or \
-                 (isinstance(node, ast.Compare) and any(isinstance(o, ast.NotIn) for o in node.ops))
-        if is_not:
+        if isinstance(node, ast.Compare) and any(isinstance(o, ast.NotIn) for o in node.ops):
             for sub in ast.walk(node):
                 if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
-                    negated.add(id(sub))
+                    excluded.add(id(sub))
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not):
+            for call in ast.walk(node):
+                if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) \
+                        and call.func.attr in _CLASSIFIERS:
+                    for sub in ast.walk(call):
+                        if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                            excluded.add(id(sub))
+    negated = excluded
 
     for node in ast.walk(tree):
         if not (isinstance(node, ast.Constant) and isinstance(node.value, str)):
