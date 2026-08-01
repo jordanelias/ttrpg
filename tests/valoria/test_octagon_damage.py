@@ -67,6 +67,44 @@ def _dmg_b(orch, contact, def_adv, seed, t=5, def_face=None):
     return orch.resolve_engagements(ua, ub, pairs, t=t)['dmg_b'], subB
 
 
+# ─── ED-MB-0063: the arc-ratio isolation ──────────────────────────────────────
+# A is deployed at (BROW-3, BCOL), i.e. at the LOWER row, so a defender facing the
+# attacker points row-negative. These rotate ONLY the cell facing vectors.
+FACE_TOWARD_A = (-1.0, 0.0)   # GREEN — B fronts the attacker
+FACE_AWAY_A = (1.0, 0.0)      # RED   — B's back to the attacker, blind arc
+
+
+def _arc_pair(orch, contact, seed, t=5):
+    """Matched GREEN/RED damage with the DEFENDER'S BODY HELD FIXED — vary only the arc.
+
+    THE CONFOUND THIS REPLACES (ED-MB-0063, F2 of the Track-F series). These tests used to
+    flip `def_adv` between -1 and +1 and describe the two arms as "same dice, same contact
+    cells, only the facing arc differs". **That description was false, and the falsity was
+    load-bearing.** `advance_dir` orients the whole SUBUNIT, so flipping it changes which of
+    B's cells the attacker touches: measured in the original frame, the front arm contacts
+    B's rank `(0,*)` and the rear arm contacts rank `(2,*)`. Different cells carry different
+    troops, so B's own combat pool moved 3.6 -> 1.333 between the arms — and `compute_degree`
+    is RELATIVE, so a smaller pool that happens to roll well outranks a larger one. At seed 5
+    that flipped A's identical net of 1.0 from `Success` to `Partial`, and `Partial` (damage 1)
+    minus the universal `dr=1` is **0.0** — a rear strike doing less than a frontal one.
+
+    So the reported failure was never the engine mis-applying the arc. The two arms were not
+    the same experiment: CLAUDE.md §0.1 #4, attacked at the level of the ratio's statistics and
+    never at the level of its setup.
+
+    `PC_FRACTIONAL_POOL=0` makes the old form pass, which is why a flag bisect fingers it — but
+    it is a MASK, not a cause. Flooring sends 3.6 -> 3 and 1.333 -> 1, which at this seed happens
+    to keep B's net under A's. The confound is untouched; only its visibility changes. Recording
+    that flag as F2's cause would have shipped a wrong diagnosis that reproduced on demand.
+
+    Holding the body fixed at `def_adv=-1` and rotating only `cell_facing_vec` makes the arc the
+    single variable. Measured across the 12 seeds: 7 exact 2.0x, 0 violations, at shipped defaults.
+    """
+    green, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed, t=t, def_face=FACE_TOWARD_A)
+    red, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed, t=t, def_face=FACE_AWAY_A)
+    return green, red
+
+
 def test_rear_is_exactly_double_front(mb):
     """(1) A pure rear strike doubles the defender's casualties vs the identical frontal strike --
     the octagon arc multiplier is EXACTLY 2.0x per seed (front faces attacker, rear turns its back;
@@ -74,14 +112,15 @@ def test_rear_is_exactly_double_front(mb):
     orch, contact, C = mb
     checked = 0
     for seed in range(12):
-        front, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed)   # B faces the attacker  -> GREEN 1.0x
-        rear, _ = _dmg_b(orch, contact, def_adv=+1, seed=seed)    # B's back to it, same cells -> RED 2.0x
+        front, rear = _arc_pair(orch, contact, seed)   # body fixed; only the arc varies
         if front > 0:
             assert rear == pytest.approx(2.0 * front), f"seed {seed}: rear {rear} != 2x front {front}"
             checked += 1
         else:
             # a braced front can parry to zero; the rear then still takes the shock-stripped hit
             assert rear >= front
+    # Measured 7 at shipped defaults (ED-MB-0063). Floor at 3 rather than 7 so a benign RNG-stream
+    # reorder is not a false red, while "the ratio was never actually observed" is still caught.
     assert checked >= 3, "expected several seeds with a non-zero frontal exchange to pin the 2.0x ratio"
 
 
@@ -122,9 +161,9 @@ def test_rear_penalty_persists_across_reaction_window(mb):
     horizon = C.FACING_REACTION_TICKS + 3
     checked = 0
     for t in range(1, horizon + 1):
-        # matched front vs rear at the SAME tick and seed: identical dice/contact, only the facing differs.
-        front, _ = _dmg_b(orch, contact, def_adv=-1, seed=3, t=t)
-        rear, _ = _dmg_b(orch, contact, def_adv=+1, seed=3, t=t)
+        # Matched GREEN/RED at the SAME tick and seed. Routed through _arc_pair (ED-MB-0063): the
+        # old `def_adv=±1` form claimed "identical dice/contact" and was not — see that docstring.
+        front, rear = _arc_pair(orch, contact, seed=3, t=t)
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
                 f"t={t}: rear {rear} should stay 2x front {front} -- a blind-arc rear strike never refuses")
