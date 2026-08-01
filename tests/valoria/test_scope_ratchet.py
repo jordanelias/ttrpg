@@ -236,7 +236,8 @@ def test_the_measured_signal_set_cannot_silently_shrink():
 
     This names them. Adding a signal is free; removing one is a deliberate edit here.
     """
-    required = {'ed.open', 'ed.needs_jordan', 'audit.files', 'tracked.files', 'proposals.open'}
+    required = {'ed.stale', 'ed.needs_jordan_stale', 'audit.files', 'tracked.files',
+                'proposals.open'}
     missing = required - set(sr.MEASURERS)
     assert not missing, (
         f'signal(s) {sorted(missing)} were removed from MEASURERS. Each is a distinct way '
@@ -254,11 +255,11 @@ def test_unmeasurable_input_is_unknown_never_a_pass(monkeypatch):
     registers/, proposals/ and audit/ outright scored a clean HELD.
     """
     monkeypatch.setattr(sr, '_ledger_rows', lambda: [])
-    value, evidence = sr.measure_ed_open()
+    value, evidence = sr.measure_ed_stale()
     assert value is None, 'an unreadable ledger must be UNKNOWN, not 0'
     assert 'UNKNOWN' in evidence
 
-    result = sr.collect({'signals': {'ed.open': {'baseline': 999, 'target': 0}}})
+    result = sr.collect({'signals': {'ed.stale': {'baseline': 999, 'target': 0}}})
     row = result['signals'][0]
     assert row['ok'] is None, 'UNKNOWN must not grade as ok=True'
     assert result['verdict'] == 'UNKNOWN'
@@ -394,3 +395,48 @@ def test_the_ratchet_declares_itself_expired_when_its_program_completes(monkeypa
         'a completed program must not keep grading against its own seeding ceilings'
     )
     assert result['regressions'] == 0, 'expiry is a re-seed signal, not a regression'
+
+
+def test_filing_a_fresh_item_does_not_regress_the_ratchet(monkeypatch):
+    """ED-IN-0114: the metric must punish ROT, not FILING.
+
+    The original `ed.open` counted every open item, so appending a ledger row — which
+    CLAUDE.md §2 expects of substantively every PR — regressed the ceiling by one. A
+    gate that fires on the correct action gets ignored, and its own baseline file
+    predicted that while shipping it anyway.
+
+    Constructs both cases and requires they differ: adding a brand-new item changes
+    nothing; letting one rot past the threshold changes the count.
+    """
+    monkeypatch.setenv('SCOPE_RATCHET_TODAY', '2026-07-31')
+    old = {'status': 'open', 'needs_jordan': True, 'date': '2026-01-01'}
+    fresh = {'status': 'open', 'needs_jordan': True, 'date': '2026-07-30'}
+
+    monkeypatch.setattr(sr, '_ledger_rows', lambda: [old])
+    before, _ = sr.measure_ed_stale()
+
+    # Filing a fresh ED on top must NOT move the stale count.
+    monkeypatch.setattr(sr, '_ledger_rows', lambda: [old, fresh])
+    after_filing, _ = sr.measure_ed_stale()
+    assert after_filing == before, (
+        f'filing a fresh item moved the stale count {before} -> {after_filing}; '
+        f'the metric is punishing the cure again'
+    )
+
+    # But a second ROTTED item must.
+    monkeypatch.setattr(sr, '_ledger_rows', lambda: [old, dict(old)])
+    after_rot, _ = sr.measure_ed_stale()
+    assert after_rot == before + 1, 'a second stale item must raise the stale count'
+
+
+def test_an_undated_open_item_counts_as_stale(monkeypatch):
+    """Unknown age must not read as fresh.
+
+    Four rows carry no parseable date. Treating unknown age as zero is the same
+    'absence of evidence reads as a pass' defect this module rejects elsewhere.
+    """
+    monkeypatch.setenv('SCOPE_RATCHET_TODAY', '2026-07-31')
+    monkeypatch.setattr(sr, '_ledger_rows',
+                        lambda: [{'status': 'open', 'needs_jordan': False, 'date': None}])
+    value, _ = sr.measure_ed_stale()
+    assert value == 1, 'an undated open item must count as stale, not fresh'

@@ -13,9 +13,12 @@ doubles. That is exactly what happened here, and nothing saw it.
 MEASUREMENT DISCIPLINE (CLAUDE.md §0.1). Every signal is measured from the working
 tree, never estimated and never read from a cache:
 
-  ed.open / ed.needs_jordan  — parsed from registers/editorial_ledger*.jsonl
-                               (archives excluded; an archived item is closed by
-                               definition and counting it would understate the drain)
+  ed.stale / ed.needs_jordan_stale
+                             — via obs_core (the ED-IN-0068 single owner), non-archive,
+                               status == open AND older than STALE_DAYS. AGE-WEIGHTED on
+                               purpose: a raw open-count punishes FILING, which CLAUDE.md
+                               §2 expects of substantively every PR, instead of the rot it
+                               meant to catch (ED-IN-0114).
   audit.files                — git ls-files audit/
   tracked.files              — git ls-files
   proposals.open             — proposals/*.md, excluding README
@@ -107,21 +110,78 @@ def _no_rows_evidence():
     return None, 'no ledger rows readable — registers/ missing or unparseable (UNKNOWN, not 0)'
 
 
-def measure_ed_open():
+# AGE THRESHOLD. An item younger than this is work in flight; older than it, work that
+# rotted. 30 days is a deliberate round number, not a fitted one — see _is_stale.
+STALE_DAYS = 30
+
+
+def _today():
+    """Reference date for staleness.
+
+    Read from SCOPE_RATCHET_TODAY when set, so tests can pin a date without patching
+    the clock globally. Otherwise the real date — this is a staleness measure, and a
+    frozen clock would make it silently stop ageing.
+    """
+    import datetime
+    override = os.environ.get('SCOPE_RATCHET_TODAY')
+    if override:
+        try:
+            return datetime.date.fromisoformat(override)
+        except ValueError:
+            pass
+    return datetime.date.today()
+
+
+def _is_stale(row, today=None):
+    """True when an open item has sat longer than STALE_DAYS.
+
+    UNDATED COUNTS AS STALE, deliberately. An entry with no parseable date cannot be
+    SHOWN to be fresh, and the alternative — treating unknown age as zero — is the
+    same "absence of evidence reads as a pass" defect this module already fixed for
+    unmeasurable signals. Four such rows exist today; counting them surfaces the
+    data-quality gap instead of hiding it.
+    """
+    import datetime
+    today = today or _today()
+    raw = row.get('date')
+    if not raw:
+        return True
+    try:
+        return (today - datetime.date.fromisoformat(str(raw)[:10])).days > STALE_DAYS
+    except (ValueError, TypeError):
+        return True
+
+
+def measure_ed_stale():
+    """Open items older than STALE_DAYS.
+
+    REPLACED the raw `ed.open` census (ED-IN-0114). That metric conflated work OPENED
+    with work NOT CLOSED, so filing an ED — the behaviour CLAUDE.md §2 expects of
+    substantively every PR — always regressed it. A gate that fires on the correct
+    action is a gate that gets ignored, and its own baseline file said so while
+    shipping it anyway. Staleness is the actual disease; a freshly-filed item adds
+    nothing to this number, and one left to rot adds one.
+    """
     rows = _ledger_rows()
     if not rows:
         return _no_rows_evidence()
-    n = sum(1 for r in rows if r.get('status') == 'open')
-    return n, 'obs_core.read_ledger_entries (non-archive), status == open'
+    today = _today()
+    n = sum(1 for r in rows if r.get('status') == 'open' and _is_stale(r, today))
+    return n, (f'obs_core.read_ledger_entries (non-archive), status == open '
+               f'AND older than {STALE_DAYS}d (undated counts as stale)')
 
 
-def measure_ed_needs_jordan():
+def measure_ed_needs_jordan_stale():
+    """The bottleneck signal, age-weighted for the same reason as ed.stale."""
     rows = _ledger_rows()
     if not rows:
         return _no_rows_evidence()
+    today = _today()
     # obs_core has already normalized needs_jordan, INCLUDING the free-text rescue.
-    n = sum(1 for r in rows if r.get('status') == 'open' and r.get('needs_jordan'))
-    return n, 'obs_core.read_ledger_entries (non-archive), status == open AND needs_jordan'
+    n = sum(1 for r in rows
+            if r.get('status') == 'open' and r.get('needs_jordan') and _is_stale(r, today))
+    return n, (f'obs_core.read_ledger_entries (non-archive), open AND needs_jordan '
+               f'AND older than {STALE_DAYS}d')
 
 
 def measure_audit_files():
@@ -144,8 +204,8 @@ def measure_proposals_open():
 
 
 MEASURERS = {
-    'ed.open': measure_ed_open,
-    'ed.needs_jordan': measure_ed_needs_jordan,
+    'ed.stale': measure_ed_stale,
+    'ed.needs_jordan_stale': measure_ed_needs_jordan_stale,
     'audit.files': measure_audit_files,
     'tracked.files': measure_tracked_files,
     'proposals.open': measure_proposals_open,
