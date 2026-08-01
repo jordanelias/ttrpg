@@ -63,7 +63,7 @@ active_until: "M1 junctures closed == 7"
 # the raise landing months later. A second "seeding" is a governance failure, not a measurement.
 signals:
   ed.stale:
-    baseline: 76   # measured 2026-07-31 via obs_core; 61 aged 31-60d, 11 aged >60d, 4 undated
+    baseline: 76  # measured 2026-07-31 via obs_core; 61 aged 31-60d, 11 aged >60d, 4 undated
     target: 20
     note: >-
       Open items older than 30 days. NOT a raw census — 213 items are open, and most of those
@@ -80,7 +80,7 @@ signals:
     # pre-cutover rows predating the field. Same tree, same day, +7 — the earlier ceiling
     # was simply undercounting. Left unfixed, the dashboard would have published two
     # different "needs Jordan" figures from two cards on one page.
-    baseline: 21   # measured 2026-07-31 via obs_core (of 94 open needs_jordan, 21 are stale)
+    baseline: 21  # measured 2026-07-31 via obs_core (of 94 open needs_jordan, 21 are stale)
     target: 3
     note: >-
       The bottleneck signal, age-weighted. 94 items await a ruling; 21 have awaited one for
@@ -97,7 +97,13 @@ signals:
       it gates an M1 juncture, and it must be paid for by consolidating an equal count.
 
   tracked.files:
-    baseline: 3109  # measured 2026-07-31 (git ls-files | wc -l)
+    # 3109 -> 3110 (ED-IN-0113 §A): systems/_architecture/decision_policy_v1.md. Raised with a
+    # stated reason rather than absorbed, per this file's own rule. The trade is deliberate and
+    # net-negative on scope: one file is added so that ~18 of the 21 stale needs_jordan items can
+    # resolve without a ruling. If the policy works, ed.needs_jordan_stale falls 21 -> ~3 and this
+    # row's cost is repaid many times over in the signal it exists to reduce. If it does not, this
+    # is one file of dead weight and should be retired rather than kept out of politeness.
+    baseline: 3110  # measured 2026-07-31 (git ls-files | wc -l)
     target: 3103
     note: >-
       Total surface under maintenance. Flat is the goal, not shrinkage: the season loop will
