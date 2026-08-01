@@ -1,5 +1,73 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-08-01 — Four gates that could not see what they guard (ED-IN-0115..0119, PR #284)
+
+**The pattern, four times over.** Each gate was correct when written and stopped working because
+something else moved — the `sim/` (2026-07-21) and `designs/` (2026-07-19) retirements, and the
+2026-08-01 job collapse. §0.1 point 5, and none of them announced itself.
+
+| Gate | Claimed | Measured |
+|---|---|---|
+| `ci_sim_fabrication_check` (blocking) | guards the port's oracle (§7) | **0 of 117** oracle files matched |
+| `validate_ed_citations` (blocking) | scans canonical surfaces | **45** of **293** files in its own mandate |
+| `run.dispute()` in 5 of 8 `wf_*.js` | an adjudicable disagreement | every dispute keyed `'?'` |
+| `scope_ratchet` registry row | `ci_job: validators-report` | nothing in CI invoked it |
+
+**Measuring the fix before shipping it is what found the expensive halves.** Repairing
+`is_sim_file` alone would have dragged **642** pre-existing uncited constants into a blocking gate
+and walled off MB and PC; the same measurement showed the whole-file scan was never viable in its
+original scope either (**2,283** in `tests/sim`). Deriving the citation walker from `SCAN_PREFIXES`
+starved that function's *other* caller — ED universe **1167 → 1107**, 110 valid citations turned
+`NONEXISTENT` — caught against a `git stash` control, not by reading the diff.
+
+**Three defects were found by tripping them, not by looking for them:** the `--fix` offset bug
+(surfaced by growing the harness owner), the `compiles_only` comment bug (my own comment took
+`validators-report` from 10 parsed commands to 0 — `--ci` would have stopped running ten validators
+and reported success), and my unallocated `ED-IN-0118`, caught by the citation gate I'd just fixed.
+
+**Also closed: ED-IN-0045 item 1**, filed 2026-07-12. `tests/hooks/` held 12 files no CI job ran; 10
+failed at collection (retired `valoria_hooks`/`github_ops`, `/home/claude` paths), zero could ever
+have passed. Retired with greps recorded. **27 tests now run in CI that never ran**, including
+`test_ed_citation_integrity.py` — 26 tests for `validate_ed_citations.py`'s pure core, which that
+tool's own docstring points at. `references/scope_vocabulary.md` advertised a **drift guard that did
+not exist**, and real drift had accumulated behind the claim (12 commit scopes in CLAUDE.md §2 vs 11
+in the doc — `design`). Replacement written first, shown to fail on the live drift, then the doc fixed.
+
+**The adversarial relay earned its cost (§10).** A read-only critic that never saw my reasoning
+found **six** defects in my own repairs, all re-verified by execution before acting: a FALSE PASS on
+quoted keys; a **silent narrowing** that dropped 14 audit-session sims while the docstring said
+"removing coverage is not this fix's job"; a launderable count-keyed ratchet (now keyed by five
+exact `(path, id)` pairs); a join that went silent on import failure and skipped compiles-only jobs;
+a latent contract-widening channel; and — caught by CI, not review — the restored basename rule
+flagging this fix's own guard file. **11 mutants planted, 11 killed; two survived their first round,
+both §0.1 point 2 inside my own tests.**
+
+### NEXT ACTIONS
+
+- **Awaiting Jordan, not self-ratified:** `OPEN_AS_BASIS` over-fires on provenance prose. The 10
+  deferred findings are mostly changelog parentheticals plus one `DRAFT FOR RULING` status line
+  citing its own open ED by design. Narrowing a blocking gate's semantics to lower a number I
+  produced is the §0.1 point-4 bias, so the heuristic is untouched and ratcheted instead.
+- **Not burned down, now visible:** 2,925 pre-existing uncited constants (642 oracle + 2,283
+  `tests/sim`). `ci_sim_fabrication_check --full` lists them.
+- **PC-lane, recorded not taken:** `systems/combat/combat_engine_v1/` is a canonical oracle outside
+  the fabrication gate, and `test_sim_fabrication_scope.py` is circular w.r.t. it (expectation
+  derived from the same owner). Closing it needs a PC call plus a `ci_common` root-list edit.
+- **MB-lane, surfaced not chased:** `test_obb_primitive::test_cellbox_from_helper_matches_constructor`
+  is order-dependent (passes deterministic, fails randomized);
+  `tests/sim/mass_battle/test_persubunit_stress.py` has 1 failing case;
+  `tests/sim/territory_registry/test_registry_ledger.py` fails collection.
+- **Known blind spot worth closing:** `valoria_local --ci` computes a different changeset than CI's
+  `GITHUB_BASE_REF` mode, so **local-green is not CI-green** for changeset-scoped validators. That
+  gap is what let the sixth defect reach CI. Reproduce CI locally with
+  `GITHUB_BASE_REF=main GITHUB_EVENT_NAME=pull_request`.
+- **Audit staleness needs NO action** (checked, not assumed): `audit-refresh` cron is weekly Mondays
+  06:00 UTC, last successful run 2026-07-27, next due 2026-08-03. The banner warnings are normal
+  inter-refresh drift; ED-IN-0099 already measured the feed near-stationary and proposes inverting
+  the metric.
+- **This file is 27k tokens, over the 20k `[WARN]`** — as are `HANDOFF_MB` and `HANDOFF_PC`. The
+  archive convention the per-lane *ledgers* already use is the fix; still unapplied.
+
 ## 2026-07-31 — M1 program scaffolding RATIFIED (ED-IN-0112); residuals filed (ED-IN-0113)
 
 **Landed and wired (PR #277).** Scope ratchet (`tools/scope_ratchet.py` + `registers/scope_baseline.yaml`,
