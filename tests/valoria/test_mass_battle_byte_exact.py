@@ -166,8 +166,15 @@ def test_mode_key_discriminates_every_digest_toggle():
     cube = {(pc, fm, cm): bat._mode_key(pc, fm, cm)
             for pc in (0, 1) for fm in (0, 1) for cm in (0, 1)}
     assert len(set(cube.values())) == 8, f"mode key is not injective over the toggles: {cube}"
-    assert cube[(1, 0, 1)] == 'cell_cm'
-    assert cube[(1, 0, 0)] == 'cell'
+    assert cube[(1, 0, 1)] == 'cell_grid_mor1'
+    assert cube[(1, 0, 0)] == 'cell_grid_mor0'
+    # ED-MB-0062: every axis must appear WITH ITS VALUE. Injectivity alone was already true
+    # of the old suffix-on-true scheme and did not stop `cell` silently re-pointing when a
+    # default flips — absence encoded "off" only relative to the default at recording time.
+    for (pc, fm, cm), key in cube.items():
+        assert key.startswith('cell_' if pc else 'unit_'), key
+        assert ('_field_' if fm else '_grid_') in key, key
+        assert key.endswith('_mor1' if cm else '_mor0'), key
     # every recorded golden must be a key this function can actually produce
     for recorded in bat.EXPECTED:
         assert recorded in cube.values(), (
