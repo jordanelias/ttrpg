@@ -595,12 +595,28 @@ NOT_A_DEPENDENCY = {
     'comment recording a past fix':      f'# was dead (hardcoded {SANDBOX} github_ops). Now local.\nx = 1\n',
     'prose declaring it is NOT used':    f'"""No GitHub API, no PAT, no {SANDBOX}, no network."""\nx = 1\n',
     'a filter that EXCLUDES the path':   f'y = [w for w in ws if not w["dest"].startswith("{SANDBOX}")]\n',
+    'a `not in` comparison':             f'if "{SANDBOX}" not in dest:\n    pass\n',
+    'a FUNCTION docstring':              f'def f():\n    """used {SANDBOX} historically"""\n    return 1\n',
+    'a CLASS docstring':                 f'class C:\n    """{SANDBOX} was the old home"""\n    x = 1\n',
 }
 
+# The four rows below were FALSE NEGATIVES in the first version of the fix, which matched on raw
+# line text: it dropped any hit whose line contained `'not '` or began with a quote. A false
+# negative here is strictly worse than the false positives being removed — noise is ignorable, a
+# live sandbox dependency reported clean is not. Found by adversarially probing the fix rather
+# than by re-reading it, which is the only reason they were caught before merge.
 IS_A_DEPENDENCY = {
     'sys.path manipulation': f'import sys\nsys.path.insert(0, "{SANDBOX}")\n',
     'reading a sandbox file': f'tok = open("{SANDBOX}/.valoria_pat").read()\n',
     'a module-level path template': f'CACHE = "{SANDBOX}/.compliance_cache_{{repo}}.json"\n',
+    'live code on a line containing the word "not"':
+        f'CACHE = "{SANDBOX}/x.json"  # note: not portable\n',
+    'live code on a line containing "NOTE"':
+        f'PATH = "{SANDBOX}/a"   # NOTE this is live\n',
+    'a multi-line string whose continuation line starts with a quote':
+        f'MSG = (\n    "prefix "\n    "{SANDBOX}/tail"\n)\n',
+    'a dependency inside a function that HAS a docstring':
+        f'def f():\n    """doc"""\n    return open("{SANDBOX}/p")\n',
 }
 
 
@@ -613,7 +629,7 @@ def test_prose_and_exclusions_are_not_reported_as_dependencies():
             f'false positive restored — {label!r} is not a sandbox dependency; a file cannot '
             f'break outside the sandbox because of a comment or an exclusion filter')
         checked += 1
-    assert checked == len(NOT_A_DEPENDENCY) == 4, f'expected 4 cases, checked {checked}'
+    assert checked == len(NOT_A_DEPENDENCY) == 7, f'expected 7 cases, checked {checked}'
 
 
 def test_real_sandbox_dependencies_are_still_caught():
@@ -630,7 +646,7 @@ def test_real_sandbox_dependencies_are_still_caught():
             f'{label!r} is a LIVE sandbox dependency and would break outside the retired '
             f'harness, but the check no longer reports it — the fix has gone too far')
         checked += 1
-    assert checked == len(IS_A_DEPENDENCY) == 3, f'expected 3 cases, checked {checked}'
+    assert checked == len(IS_A_DEPENDENCY) == 7, f'expected 7 cases, checked {checked}'
 
 
 def test_unparseable_python_fails_closed():

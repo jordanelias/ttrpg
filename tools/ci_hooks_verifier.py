@@ -97,11 +97,22 @@ for skill_md in sorted(glob.glob('skills/*/SKILL.md')):
 def _live_sandbox_ref(txt, fn, rel):
     """True only if `/home/claude` survives as EXECUTABLE, non-negated code.
 
-    Markdown has no executable surface, so a `.md` mention is prose by construction.
-    For Python, `tokenize` drops COMMENT tokens; docstrings are STRING tokens that stand
-    alone as a statement, so they are dropped by requiring the string be part of a larger
-    expression. Falls back to the old substring behaviour if the file will not tokenize —
-    failing CLOSED, because an unparseable file is not evidence of cleanliness.
+    STRUCTURE, NOT LINE TEXT. The first version of this fix matched on the raw source line:
+    it dropped a hit when the line started with a quote (assumed docstring) or contained
+    `'not '` (assumed exclusion filter). An adversarial pass found both to be FALSE
+    NEGATIVES, which is strictly worse than the false positives being fixed — a false
+    positive is noise, a false negative is a live sandbox dependency reported clean:
+
+      CACHE = "/home/claude/x.json"   # note: not portable    -> dropped by the 'not ' rule
+      MSG = (\n    "prefix "\n    "/home/claude/tail"\n)      -> continuation line starts
+                                                                 with a quote, read as a docstring
+
+    Both are decidable from the AST and neither is decidable from the line. Comments do not
+    appear in the AST at all, so they need no rule. A docstring is structurally the first
+    statement of a module/def/class. An exclusion is structurally a string under a `not`
+    (or a `NotIn` comparison), not a string on a line containing the letters n-o-t.
+
+    Fails CLOSED on unparseable Python: an unparseable file is not evidence of cleanliness.
     """
     if '/home/claude' not in txt:
         return False
@@ -114,26 +125,38 @@ def _live_sandbox_ref(txt, fn, rel):
         # only by not asking. Scoped to this exact path so the exemption cannot silently
         # generalise to another tool.
         return False
-    import io
-    import tokenize
+    import ast
     try:
-        live = []
-        for tok in tokenize.generate_tokens(io.StringIO(txt).readline):
-            if tok.type == tokenize.COMMENT:
-                continue
-            if '/home/claude' not in tok.string:
-                continue
-            if tok.type == tokenize.STRING:
-                # a docstring is a string that is the whole logical line
-                if tok.line.strip().startswith(('"', "'", 'f"', "f'", 'r"', "r'")):
-                    continue
-                # an exclusion filter is a dependency on NOT being there
-                if 'not ' in tok.line:
-                    continue
-            live.append(tok.line.strip())
-        return bool(live)
-    except (tokenize.TokenError, IndentationError, SyntaxError):
-        return True   # unparseable → fail closed, keep the old behaviour
+        tree = ast.parse(txt)
+    except (SyntaxError, ValueError):
+        return True   # fail CLOSED
+
+    docstrings = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            body = getattr(node, 'body', None)
+            if body and isinstance(body[0], ast.Expr) and \
+                    isinstance(body[0].value, ast.Constant) and isinstance(body[0].value.value, str):
+                docstrings.add(id(body[0].value))
+
+    negated = set()
+    for node in ast.walk(tree):
+        is_not = (isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not)) or \
+                 (isinstance(node, ast.Compare) and any(isinstance(o, ast.NotIn) for o in node.ops))
+        if is_not:
+            for sub in ast.walk(node):
+                if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                    negated.add(id(sub))
+
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Constant) and isinstance(node.value, str)):
+            continue
+        if '/home/claude' not in node.value:
+            continue
+        if id(node) in docstrings or id(node) in negated:
+            continue
+        return True
+    return False
 
 
 # skills/ are the native-skill surface and must be clean → BLOCKING.
