@@ -78,6 +78,64 @@ for skill_md in sorted(glob.glob('skills/*/SKILL.md')):
         print(f"OK   size {skill_md}: {tokens:,}/{DEFAULT_SKILL_LIMIT:,} tokens")
 
 # ── Check 4: lingering /home/claude sandbox references ───────────────────────
+# SUBSTRING MATCHING MADE THIS CHECK 4/4 FALSE (fixed 2026-08-01). It flagged any file
+# CONTAINING the literal path, so it fired on:
+#   - ci_hooks_verifier.py — ITSELF, on its own comments describing this very check
+#   - freshness_gate.py    — a comment recording that it USED to use the path and no longer does
+#   - ci_sim_fabrication_check.py — the line "No GitHub API, no PAT, no /home/claude, no network",
+#                            i.e. flagged for explicitly declaring it does not use it
+#   - build_apparatus_registry.py — `not w["dest"].startswith("/home/claude")`, a filter that
+#                            EXCLUDES the path
+# Zero were live dependencies, and the warning had therefore been permanently on. A signal that is
+# always red is a signal nobody reads — the same defect as the binary register-size check fixed the
+# same day, and the same shape as retired Check 5, which scanned a deleted directory and reported
+# clean for months.
+#
+# The check now asks the question it always meant: WOULD THIS FILE BREAK OUTSIDE THE SANDBOX?
+# Comments and docstrings cannot break, so they are stripped before matching. A reference that
+# appears only inside a negated guard is an exclusion, not a dependency, and is also not a break.
+def _live_sandbox_ref(txt, fn, rel):
+    """True only if `/home/claude` survives as EXECUTABLE, non-negated code.
+
+    Markdown has no executable surface, so a `.md` mention is prose by construction.
+    For Python, `tokenize` drops COMMENT tokens; docstrings are STRING tokens that stand
+    alone as a statement, so they are dropped by requiring the string be part of a larger
+    expression. Falls back to the old substring behaviour if the file will not tokenize —
+    failing CLOSED, because an unparseable file is not evidence of cleanliness.
+    """
+    if '/home/claude' not in txt:
+        return False
+    if fn.endswith('.md'):
+        return False
+    if rel == 'tools/ci_hooks_verifier.py':
+        # This file necessarily contains the literal it searches for — in the WARNING TEXT it
+        # prints. A checker that reports itself for quoting its own error message is a false
+        # positive by construction, not a dependency; it cannot be fixed by editing the file,
+        # only by not asking. Scoped to this exact path so the exemption cannot silently
+        # generalise to another tool.
+        return False
+    import io
+    import tokenize
+    try:
+        live = []
+        for tok in tokenize.generate_tokens(io.StringIO(txt).readline):
+            if tok.type == tokenize.COMMENT:
+                continue
+            if '/home/claude' not in tok.string:
+                continue
+            if tok.type == tokenize.STRING:
+                # a docstring is a string that is the whole logical line
+                if tok.line.strip().startswith(('"', "'", 'f"', "f'", 'r"', "r'")):
+                    continue
+                # an exclusion filter is a dependency on NOT being there
+                if 'not ' in tok.line:
+                    continue
+            live.append(tok.line.strip())
+        return bool(live)
+    except (tokenize.TokenError, IndentationError, SyntaxError):
+        return True   # unparseable → fail closed, keep the old behaviour
+
+
 # skills/ are the native-skill surface and must be clean → BLOCKING.
 # tools/ analysis utilities (and this verifier's own message strings) still
 # mention the retired sandbox pending the GitHub-API→working-tree port → WARN.
@@ -93,14 +151,15 @@ for base in ('skills', 'tools'):
                     txt = f.read()
             except OSError:
                 continue
-            if '/home/claude' in txt:
-                rel = p.replace(os.sep, '/')
-                if base == 'skills':
-                    violations.append(f"SANDBOX REF: {rel} references /home/claude — "
-                                      f"skills must read the working tree (retired harness)")
-                else:
-                    warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
-                                    f"(port to working-tree reads)")
+            rel = p.replace(os.sep, '/')
+            if not _live_sandbox_ref(txt, fn, rel):
+                continue
+            if base == 'skills':
+                violations.append(f"SANDBOX REF: {rel} references /home/claude — "
+                                  f"skills must read the working tree (retired harness)")
+            else:
+                warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
+                                f"(port to working-tree reads)")
 
 # ── Check 5: RETIRED 2026-07-28 (ED-IN-0088) — the rule already lives once, elsewhere ─────
 # It walked `designs/`, retired 2026-07-19, so it had scanned nothing since PR #191 and reported

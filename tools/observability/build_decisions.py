@@ -103,18 +103,17 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/mass_battle/sim/units.py", "MB"),
     ("systems/mass_battle/sim/tactic_cards.py", "MB"),
     ("systems/mass_battle/sim/altonian_reinforcements.py", "MB"),
-    ("designs/audit/2026-06-30-massbattle-bottomup/", "MB"),
-    ("designs/audit/2026-06-01-massbattle-stub-wiring/", "MB"),
-    ("designs/audit/2026-05-29-massbattle-sim-foundation/", "MB"),
-    ("designs/audit/2026-05-15-mb-comparative-audit/", "MB"),
-    ("designs/audit/2026-06-23-mb-fidelity-critique/", "MB"),
+    ("audit/2026-06-30-massbattle-bottomup/", "MB"),
+    ("audit/2026-06-01-massbattle-stub-wiring/", "MB"),
+    ("audit/2026-05-29-massbattle-sim-foundation/", "MB"),
+    ("audit/2026-05-15-mb-comparative-audit/", "MB"),
+    ("audit/2026-06-23-mb-fidelity-critique/", "MB"),
 
     # --- PC: personal combat ---
     ("systems/combat/combat_v30", "PC"),
     ("systems/combat/combat_design_v1", "PC"),
     ("systems/combat/combat_c4_draft_v0.md", "PC"),
     ("systems/combat/combat_engine_v1/", "PC"),
-    ("systems/combat/scene_combat_v1/", "PC"),
     # derived_stats_v30 deliberately NOT mapped: it explicitly scopes itself
     # "across personal, unit, settlement, and faction scales" and CLAUDE.md
     # Section 5 flags the derived-stat schema as cross-system "IN FLUX" -- a
@@ -122,22 +121,21 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     # spans-multiple-lanes -> null policy (caught in adversarial review of
     # Phase 4 / ED-IN-0032's audit-ecosystem plan).
     ("systems/combat/sim/combat.py", "PC"),
-    ("designs/audit/2026-06-09-personal-combat-comprehensive/", "PC"),
-    ("designs/audit/2026-06-13-combat-bottomup/", "PC"),
-    ("designs/audit/2026-06-16-combat-reconciliation/", "PC"),
-    ("designs/audit/2026-06-17-combat-decision-docket/", "PC"),
-    ("designs/audit/2026-06-19-personal-combat-loose-ends/", "PC"),
-    ("designs/audit/2026-06-22-combat-analysis/", "PC"),
-    ("designs/audit/2026-06-28-combat-critique/", "PC"),
-    ("designs/audit/2026-06-28-combat-critique-recovered.json", "PC"),
-    ("designs/audit/2026-06-29-combat-corpus-recovery/", "PC"),
-    ("designs/audit/2026-06-30-combat-grounding/", "PC"),
-    ("designs/audit/2026-06-30-scene-combat-gate1-audit/", "PC"),
-    ("designs/audit/2026-07-04-weapon-morphology-granularity/", "PC"),
-    ("designs/audit/2026-06-02-combat-engine/", "PC"),
-    ("designs/audit/2026-05-28-combat-reframe/", "PC"),
-    ("designs/audit/2026-05-29-combat-armature/", "PC"),
-    ("designs/audit/2026-05-31-percell-combat/", "PC"),
+    ("audit/2026-06-09-personal-combat-comprehensive/", "PC"),
+    ("audit/2026-06-13-combat-bottomup/", "PC"),
+    ("audit/2026-06-16-combat-reconciliation/", "PC"),
+    ("audit/2026-06-17-combat-decision-docket/", "PC"),
+    ("audit/2026-06-19-personal-combat-loose-ends/", "PC"),
+    ("audit/2026-06-22-combat-analysis/", "PC"),
+    ("audit/2026-06-28-combat-critique/", "PC"),
+    ("audit/2026-06-28-combat-critique-recovered.json", "PC"),
+    ("audit/2026-06-29-combat-corpus-recovery/", "PC"),
+    ("audit/2026-06-30-combat-grounding/", "PC"),
+    ("audit/2026-07-04-weapon-morphology-granularity/", "PC"),
+    ("audit/2026-06-02-combat-engine/", "PC"),
+    ("audit/2026-05-28-combat-reframe/", "PC"),
+    ("audit/2026-05-29-combat-armature/", "PC"),
+    ("audit/2026-05-31-percell-combat/", "PC"),
 
     # --- SC: social contest ---
     ("systems/social_contest/social_contest_v30", "SC"),
@@ -146,25 +144,25 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/social_contest/sim/contest_legacy_stub.py", "SC"),
     ("engine/params/contest.md", "SC"),
     ("engine/params/contest_extensions.md", "SC"),
-    ("designs/audit/2026-06-01-contest-redesign/", "SC"),
-    ("designs/audit/2026-06-03-contest-groundup/", "SC"),
-    ("designs/audit/2026-06-30-contest-stage0-reconciliation/", "SC"),
-    ("designs/audit/2026-06-30-contest-fractional-ob-probe/", "SC"),
-    ("designs/audit/2026-06-30-contest-gate-1c-packet/", "SC"),
-    ("designs/audit/2026-07-01-contest-gate-a-packet/", "SC"),
-    ("designs/audit/2026-07-01-contest-gate-b-packet/", "SC"),
-    ("designs/audit/2026-07-01-contest-player-interaction/", "SC"),
-    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-2_SC", "SC"),
+    ("audit/2026-06-01-contest-redesign/", "SC"),
+    ("audit/2026-06-03-contest-groundup/", "SC"),
+    ("audit/2026-06-30-contest-stage0-reconciliation/", "SC"),
+    ("audit/2026-06-30-contest-fractional-ob-probe/", "SC"),
+    ("audit/2026-06-30-contest-gate-1c-packet/", "SC"),
+    ("audit/2026-07-01-contest-gate-a-packet/", "SC"),
+    ("audit/2026-07-01-contest-gate-b-packet/", "SC"),
+    ("audit/2026-07-01-contest-player-interaction/", "SC"),
+    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-2_SC", "SC"),
 
     # --- FI: field investigation ---
-    ("designs/scene/fieldwork", "FI"),
+    ("systems/fieldwork/fieldwork", "FI"),
     ("systems/fieldwork/investigation_systems_v30", "FI"),
     ("systems/fieldwork/knots_v30.md", "FI"),   # module_contracts.yaml: fieldwork_knots -> this doc
     ("systems/fieldwork/sim/fieldwork.py", "FI"),
     ("systems/fieldwork/sim/investigation.py", "FI"),
     ("systems/fieldwork/sim/knots.py", "FI"),
     ("engine/params/fieldwork.md", "FI"),
-    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
+    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
 
     # --- FA: faction actions ---
     ("systems/factions/faction_", "FA"),
@@ -178,8 +176,8 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/factions/political_dynamics_keys_migration_v30.md", "FA"),
     ("systems/factions/treaty_expiration_v30.md", "FA"),
     ("systems/factions/varfell_path_b_v30", "FA"),
-    ("designs/audit/2026-04-28-political-dynamics-session/", "FA"),
-    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-1_FA", "FA"),
+    ("audit/2026-04-28-political-dynamics-session/", "FA"),
+    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-1_FA", "FA"),
     ("systems/factions/sim/faction_action.py", "FA"),
     ("systems/factions/sim/parliamentary_action.py", "FA"),
     ("systems/factions/sim/parliamentary_transfer.py", "FA"),
@@ -210,13 +208,13 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     # --- WR: world ---
     ("systems/world/", "WR"),
     ("systems/threadwork/", "WR"),
-    ("designs/scene/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
+    ("systems/world/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
     ("engine/params/threadwork.md", "WR"),
     ("engine/params/threadwork_superseded.md", "WR"),
     ("engine/params/southernmost.md", "WR"),
     ("systems/world/sim/", "WR"),
     ("systems/threadwork/sim/", "WR"),
-    ("designs/audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
+    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
 
     # --- GO: godot ---
     ("godot/", "GO"),
@@ -231,26 +229,25 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/settlements/valoria_political_hierarchy_v30.md", "SE"),
     ("systems/settlements/valoria_geography_v30.yaml", "SE"),
     ("systems/settlements/goldenfurt_slice/", "SE"),
-    ("designs/provincial/peninsular_strain_v30", "SE"),
+    ("systems/overview/peninsular_strain_v30", "SE"),
     ("systems/settlements/sim/", "SE"),
     ("systems/overview/sim/", "SE"),
     ("engine/params/bg/geography.md", "SE"),
-    ("designs/audit/2026-06-22-territory-settlement-audit/", "SE"),
 
     # --- IN: infrastructure / cross-cutting ---
     ("canon/", "IN"),
     ("tools/", "IN"),
     ("engine/", "IN"),
-    ("designs/architecture/", "IN"),
-    ("designs/articulation/", "IN"),
+    ("systems/_architecture/", "IN"),
+    ("systems/articulation/", "IN"),
     ("workplans/", "IN"),
-    ("designs/provincial/clock_registry_v30", "IN"),   # timer/scheduling registry, engine_clock-adjacent
+    ("systems/overview/clock_registry_v30", "IN"),   # timer/scheduling registry, engine_clock-adjacent
     ("references/id_reservations.yaml", "IN"),
     ("references/ci_checks_registry.yaml", "IN"),
     ("references/lane_assignments.yaml", "IN"),
-    ("sim/substrate/", "IN"),
-    ("sim/autoload/", "IN"),
-    ("sim/cross_scale/", "IN"),
+    ("engine/substrate/", "IN"),
+    ("engine/autoload/", "IN"),
+    ("engine/cross_scale/", "IN"),
 ]
 # Longest-prefix-wins: sort once, most specific first.
 _LANE_PREFIXES_SORTED = sorted(LANE_PATH_PREFIXES, key=lambda kv: -len(kv[0]))

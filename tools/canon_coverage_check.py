@@ -64,7 +64,7 @@ import yaml
 
 
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DESIGNS_DIR = os.path.join(_REPO_ROOT, 'designs')
+DESIGNS_DIR = os.path.join(_REPO_ROOT, 'systems')
 CANONICAL_SOURCES_PATH = os.path.join(_REPO_ROOT, 'references', 'canonical_sources.yaml')
 STATUS_MARKER = 'Status: CANONICAL'
 
@@ -112,7 +112,7 @@ def declared_canonical_files(designs_dir: str | None = None) -> set[str]:
     files: set[str] = set()
     for dirpath, dirnames, filenames in os.walk(root):
         relroot = os.path.relpath(dirpath, _REPO_ROOT).replace(os.sep, '/')
-        if relroot == 'designs/audit' or relroot.startswith('designs/audit/'):
+        if relroot == 'systems/audit' or relroot.startswith('systems/audit/'):
             dirnames[:] = []  # don't descend into designs/audit/
             continue
         for fn in filenames:
@@ -162,7 +162,7 @@ def run_check(
 
     unregistered_with_header = sorted(declared - registered)
     registered_no_header = sorted(
-        p for p in (registered - declared) if p.startswith('designs/')
+        p for p in (registered - declared) if p.startswith('systems/')
     )
 
     return {
@@ -170,7 +170,7 @@ def run_check(
             'declared_canonical': len(declared),
             'registered_paths_total': len(registered),
             'registered_paths_designs_only': len(
-                [p for p in registered if p.startswith('designs/')]
+                [p for p in registered if p.startswith('systems/')]
             ),
             'unregistered_with_header': len(unregistered_with_header),
             'registered_no_header': len(registered_no_header),
