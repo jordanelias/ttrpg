@@ -128,3 +128,33 @@ def test_full_scan_still_sees_more_than_the_gated_view():
     genuine = mod.genuine_violations_by_pair(content, {}, set())
     kept, _ = mod.added_only(genuine, ["NEW = 123456"])
     assert len(genuine) > len(kept)
+
+
+# ───────────────────────────────────────── pytest suites are excluded, and that is DECLARED
+
+@pytest.mark.parametrize('path', [
+    'tests/valoria/test_sim_fabrication_scope.py',   # this file — it has a bare `50` in an assert
+    'tests/valoria/test_ci_sim_fabrication_check.py',
+    'tests/valoria/test_export_sim_params.py',
+    'engine/tests/test_pipeline_reach.py',
+])
+def test_pytest_suites_are_out_of_scope(path):
+    """A test's thresholds and seeds are not mechanical canon; there is no ledger entry for
+    "50 is a sane floor for this assertion".
+
+    CI caught this gate flagging THIS FILE's own `assert len(files) > 50` after the basename rule
+    was restored — three files under tests/valoria/ match "sim" in their basename. The narrowing is
+    recorded rather than slipped in: all three were in scope before, and all three are tests OF the
+    tooling. It did not reproduce locally because `valoria_local --ci` computes a different
+    changeset than CI does, which is its own known blind spot.
+    """
+    assert _load().is_sim_file(path) is False
+
+
+def test_the_exclusion_did_not_swallow_real_reference_code():
+    """The other direction — the exclusion is by root, and must not reach the oracle or the
+    throwaway audit sims that the basename rule exists to keep."""
+    mod = _load()
+    assert mod.is_sim_file('systems/mass_battle/sim/massbattle.py') is True
+    assert mod.is_sim_file('audit/2026-04-30-architecture-session/sims/pp686_sim.py') is True
+    assert mod.is_sim_file('tests/sim/mass_battle/bat.py') is True

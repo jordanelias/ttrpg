@@ -138,9 +138,17 @@ def is_sim_file(path: str) -> bool:
         return False
     if norm.startswith('tests/sim/'):
         return True
-    # The oracle's own regression suite is not reference code; gating a test's fixture constants
-    # would demand ledger citations for arbitrary seeds. Deliberate, not oversight.
-    if norm.startswith('engine/tests/'):
+    # PYTEST SUITES ARE NOT REFERENCE CODE. A test's fixture constants are thresholds and seeds —
+    # `assert len(files) > 50` — and demanding a ledger citation for them is incoherent: there is
+    # no canon entry for "50 is a sane floor for this assertion".
+    #
+    # DECLARED NARROWING, not a silent one (the mistake this file already made once today). Three
+    # files under tests/valoria/ match the basename rule below and were therefore in scope before
+    # this change: test_ci_sim_fabrication_check.py, test_export_sim_params.py, and
+    # test_sim_fabrication_scope.py. All three are tests OF the tooling, and the last is this
+    # gate's own guard — which CI caught it flagging, since a bare 50 in an assertion is exactly
+    # the shape it hunts. `engine/tests/` was already excluded on identical reasoning.
+    if norm.startswith(('engine/tests/', 'tests/valoria/', 'tests/contracts/')):
         return False
     # Rule 1 — the live oracle, from the single owner. This is what the basename proxy stopped
     # matching when sim/ was retired, and the whole reason this predicate needed repair.
