@@ -1,5 +1,70 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-08-02 — The repointed-path pattern, guarded (ED-IN-0122, PR #284) + a planning failure worth recording
+
+**Landed.** A seventh gate reporting clean over nothing: `ci_formula_prose_check.DEFAULT_CENSUS`
+still named `designs/`, retired 2026-07-19, so it printed "_No formula prose-drift found in scope._"
+for 14 days. Repointed → **88 census rows, 49 formula-bearing, 14 CENSUS_DRIFT**. `load_census()`
+now returns `(rows, problem)`: its three failure modes were indistinguishable downstream from a
+genuinely empty census, and the report rendered all four identically. Also repointed
+`dashboard_data.HANDOFFS_DIR` → `registers/handoffs/` (blind 17 days; measured against the blind
+value as a control: files **1 → 11**, `build_needs_decision()` items **2 → 7** — five decision
+markers across FA/IN/PC/SC absent from the published dashboard), plus two dead paths stamped into
+generated artifacts.
+
+**The deliverable is the guard, not the repoints.** `canon_coverage_check` had been repointed for
+the identical defect on 2026-08-01 with no guard written; two repoints and no guard is the pattern
+going unlearned (§0.1 point 5). `tests/valoria/test_tool_input_paths_resolve.py` AST-scans every
+module-level path constant in `tools/` (69 cases, 1 documented output exemption). AST not grep is
+load-bearing: comments/docstrings are not in the parsed statement tree, so the many legitimate
+`designs/` prose citations that CLAUDE.md §3 routes through the alias map are excluded **by
+construction**. Mutation-verified **9/9**, and two mutants survived the first draft — a
+`/`-separator filter excluded single-segment constants (i.e. missed the very
+`canon_coverage_check` defect it is named after), and a value-based head-gate cannot see a
+constant repointed to a typo. The guard then found the `dashboard_data` defect itself.
+
+**INDEPENDENT REDISCOVERY — this was already filed.**
+`audit/2026-07-29-centralization-single-owner/01_orchestration_plan_v1.md` §1 row 8 already
+specifies exactly this: *"`ci_formula_prose_check.py` scans a **non-zero** census … with a guard
+asserting `rows > 0`."* I found and fixed it without reading that row. Two independent
+rediscoveries rank the finding as real; it also means the CSO program's §1 row 8 is now partly
+satisfied and should be updated rather than re-executed.
+
+**The planning failure, recorded because it is the reusable lesson.** I authored a consolidation
+plan (v1), had it attacked, rewrote it (v2), had it attacked again — and **both versions'
+worst defect was the same one level up: re-deriving an architecture and then a program that
+already exist, better-attacked than mine.** Verified by execution after the second critique:
+
+| I proposed | Reality |
+|---|---|
+| "wire `definitions_store --check` into CI, one line, not currently wired" | **Wired four ways incl. blocking.** `review_core.py:59` registry row `definitions.parity`, graded against `review_baseline.yaml`, run by `review_core --check` in `compliance-check`, which `ci-summary` requires. Live signal: `verdict pass, returncode 0, baseline 0, regressed false`. Would have built a **second owner of one rule** (§8) |
+| "promote `LANE_PATH_PREFIXES` to `obs_core`" | `obs_core.py:35` **already re-exports it**; four generators consume it |
+| "generate `lane_assignments.yaml` from the 9-lane table" | **Prohibited merge** — A/B/C write-lanes are a different concept (`lane_assignments.yaml:17-23`) |
+| "extend the ED-IN-0122 guard to registry globs" | `test_retired_tree_apparatus.py:704` **already does it**; and a YAML glob has no AST, so the extension is structurally impossible in that host |
+| "the JSON export's zero weapons is a *documented* scope guard" | **My own overcorrection**, taken from a prior critic at face value. The guard is against parsing *prose*; `weapons.py` is typed Python and would be *included*. The exclusion is just `derive()` hardcoding `config` + `core` |
+
+**Standing conclusion for the next IN session: do not author another consolidation plan.**
+`ED-IN-0103` (`audit/2026-07-29-centralization-single-owner/`, PROPOSED, three passes / six critics
+/ 65 findings) already covers this ground, including `references/lane_ownership.yaml` as the single
+lane owner (§1 row 6, file still absent) and the census guard above. Execute *that*.
+
+**Settled by execution, for whoever picks up the weapons work:** `json.dumps(WEAPONS)` **succeeds**
+post-bake, so extending `export_engine_params.py` to the weapons table is feasible (a critic flagged
+it as possibly blocked by import-time mutation; it is not). Counts: **53 entries = 51 canonical + 2
+`base=` half-sword variants** (`longsword_halfsword`, `estoc_halfsword`), matching CLAUDE.md §9's
+51-weapon harness; **2 of them have a hand-made `.tres`**, so **49 canonical weapons have no
+generated artifact**. This is PC/GO-owned — filed, not swept.
+
+**Filed, not fixed (currency defect in a RATIFIED substrate doc):**
+`systems/_architecture/repo_state_armature_v1.md:4` says "Phases 3 & 5 **HELD BACK**", but §5 line
+112 says "**P3 — vocab fold (COMPLETE, ED-IN-0078** … Jordan-authorized 2026-07-20)", and
+`tools/vocab_store.py` + 4 `# GENERATED by tools/vocab_store.py` register views exist on disk. The
+Status line appears stale. Not an IN drive-by — it is a ratified-doc status flip.
+
+**Also filed:** `ci_claim_provenance_check` reads `description` + `provenance` only, so the field
+literally named `measured_by` is invisible to it (it failed my own ED-IN-0122 entry for this).
+Widening the blob would re-scope every lane's entries and needs its own expected-delta measurement.
+
 ## 2026-08-01 — Four gates that could not see what they guard (ED-IN-0115..0119, PR #284)
 
 **The pattern, four times over.** Each gate was correct when written and stopped working because
