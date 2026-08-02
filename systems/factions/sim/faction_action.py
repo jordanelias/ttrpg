@@ -376,9 +376,16 @@ def _emit_battle_concluded(world, attacker, defender, territory_id, battle) -> N
             payload={
                 'battle_id': f'{season}.{seq}.{territory_id}',
                 'victor': (getattr(attacker, 'name', None) if wins else defender_name),
+                # Raw complements, deliberately NOT rounded. The first version wrote
+                # `round(1.0 - a_pct, 6)` and ci_sim_fabrication_check correctly flagged the 6 as an
+                # uncited constant in sim code. There is no canon for a rounding precision, so
+                # adding a `# [canonical: ...]` comment would have been a FALSE citation to silence
+                # a true finding — the fix is to remove the constant, not to justify it. Rounding
+                # was cosmetic anyway: this payload is log-only telemetry and the KeyLog already
+                # serialises deterministically, so the seeded key_log_hash is unaffected.
                 'casualties_per_side': {
-                    'attacker': round(1.0 - a_pct, 6),
-                    'defender': round(1.0 - b_pct, 6),
+                    'attacker': 1.0 - a_pct,
+                    'defender': 1.0 - b_pct,
                 },
                 'territorial_outcome': 'transfer' if wins else 'hold',
                 'degree': battle.get('degree'),
