@@ -37,7 +37,7 @@ if str(HERE) not in sys.path:
 import obs_core as core  # noqa: E402
 
 # the current human-authored ranked queue + tiered register (LINKED, not parsed)
-RANKED_QUEUE = "designs/audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md"
+RANKED_QUEUE = "audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md"
 WORKPLAN_TIERS = "workplans/valoria_master_workplan_v6.md"  # §5 T0/T1/T2
 
 # audit-registry subsystem -> ED lane
@@ -90,7 +90,9 @@ def collect() -> list[dict]:
         })
 
     # 1 + 2. design docs: proposals/ BY LOCATION; else by unratified Status line
-    for path in sorted(list((REPO / "designs").rglob("*.md")) + list((REPO / "systems").rglob("*.md")) + list((REPO / "proposals").rglob("*.md"))):
+    # `designs/` was RETIRED 2026-07-19 and must not be recreated (CLAUDE.md §3); its rglob was
+    # dead weight that would silently resurrect a scan of a forbidden tree if one ever reappeared.
+    for path in sorted(list((REPO / "systems").rglob("*.md")) + list((REPO / "proposals").rglob("*.md"))):
         rel = str(path.relative_to(REPO))
         if any(seg in rel for seg in ("/deprecated/", "/archives/", "/archive/")):
             continue

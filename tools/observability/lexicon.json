@@ -10,10 +10,10 @@
       "registers/placeholder_names.yaml",
       "references/descriptor_registry.yaml",
       "references/glossary.md",
-      "designs/architecture/scale_transitions_v30.md"
+      "systems/_architecture/scale_transitions_v30.md"
     ],
     "stats": {
-      "terms": 393,
+      "terms": 399,
       "abbreviations": 35,
       "collisions": 4,
       "deprecated": 20,
@@ -21,7 +21,7 @@
       "placeholders": 8,
       "handshakes": 9,
       "with_definition": 133,
-      "linked_to_graph": 10
+      "linked_to_graph": 14
     }
   },
   "terms": [
@@ -1628,6 +1628,23 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "Coup posture",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
       ]
     },
     {
@@ -3457,8 +3474,8 @@
     },
     {
       "canonical": "Initiative",
-      "type": "",
-      "category": "",
+      "type": "personal_track",
+      "category": "personal_track",
       "silo": "silo_5 \u00b7 Combat (personal + mass)",
       "abbreviations": [],
       "aliases": [],
@@ -3469,7 +3486,8 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "references/name_collision_database.yaml"
+        "references/name_collision_database.yaml",
+        "references/descriptor_registry.yaml"
       ],
       "links": [
         {
@@ -4928,6 +4946,29 @@
       ]
     },
     {
+      "canonical": "Poise",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Poise"
+        }
+      ]
+    },
+    {
       "canonical": "Political Pool",
       "type": "",
       "category": "",
@@ -5149,6 +5190,29 @@
       "collision_note": "",
       "sources": [
         "references/descriptor_registry.yaml"
+      ]
+    },
+    {
+      "canonical": "province Accord",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "settlement_layer::province Accord"
+        }
       ]
     },
     {
@@ -5566,6 +5630,29 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "season counter",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "engine_clock::season counter"
+        }
       ]
     },
     {
@@ -6158,6 +6245,23 @@
       ]
     },
     {
+      "canonical": "Succession status",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ]
+    },
+    {
       "canonical": "Supply Level",
       "type": "",
       "category": "",
@@ -6735,8 +6839,8 @@
     },
     {
       "canonical": "Turmoil",
-      "type": "",
-      "category": "",
+      "type": "personal_track",
+      "category": "personal_track",
       "silo": "silo_12 \u00b7 Clocks",
       "abbreviations": [],
       "aliases": [],
@@ -6747,7 +6851,8 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "references/name_collision_database.yaml"
+        "references/name_collision_database.yaml",
+        "references/descriptor_registry.yaml"
       ],
       "links": [
         {
@@ -7235,6 +7340,29 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "Wounds",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Wounds"
+        }
       ]
     },
     {
@@ -8100,7 +8228,7 @@
       "from": "Personal",
       "to": "Thread",
       "gist": "Leap triggers. Contact duration starts on the round Leap succeeds. Thread pool and operations become available. Return to Personal scale on Contact end or voluntary withdrawal.",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.1"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.1"
     },
     {
       "id": "\u00a73.2",
@@ -8108,7 +8236,7 @@
       "from": "Personal",
       "to": "Faction",
       "gist": "GM recognises faction scope. Personal Ob resolves first, then Domain Action Ob. Same roll \u2014 the personal action produces the faction consequence through Domain Echo (\u00a75).",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.2"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.2"
     },
     {
       "id": "\u00a73.3",
@@ -8116,7 +8244,7 @@
       "from": "Personal",
       "to": "Scene",
       "gist": "Scene events meeting Sufficient Scope (\u00a77) produce Domain Echo per \u00a75. Multi-condition scenes (multiple Sufficient Scope conditions met simultaneously) follow \u00a73.2 Multi-condition tie-break: highest-priority condition wins. Priority order: Thread operation \u2192 Combat victory \u2192 Settlement governance \u2192 ",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.3"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.3"
     },
     {
       "id": "\u00a73.4",
@@ -8124,7 +8252,7 @@
       "from": "Scene",
       "to": "Faction",
       "gist": "Scene events meeting Sufficient Scope (\u00a77) produce Domain Echo per \u00a75. Multi-condition scenes (multiple Sufficient Scope conditions met simultaneously) follow \u00a73.2 Multi-condition tie-break: highest-priority condition wins. Priority order: Thread operation \u2192 Combat victory \u2192 Settlement governance \u2192 ",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.4"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.4"
     },
     {
       "id": "\u00a73.5",
@@ -8132,7 +8260,7 @@
       "from": "Thread",
       "to": "Faction",
       "gist": "Thread operation targeting faction-level configuration resolves as Domain Action. Thread pool used, appropriate Ob applied. No extra roll \u2014 the Thread operation IS the faction action.",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.5"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.5"
     },
     {
       "id": "\u00a73.6",
@@ -8140,7 +8268,7 @@
       "from": "Thread",
       "to": "Mass",
       "gist": "Thread operations during mass battle resolve per mass_battle \u00a7A.10. Substrate cost differential by scale: Skirmish/Company (TS \u2265 30, Coherence cost 0/op), Battle/Campaign (TS \u2265 50, Coherence cost \u22121/op), War (TS \u2265 70, Coherence cost \u22122/op). Practitioner positioning per mass_battle \u00a7A.7 PP-101: rear/",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.6"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.6"
     },
     {
       "id": "\u00a73.7",
@@ -8148,7 +8276,7 @@
       "from": "Mass",
       "to": "Personal",
       "gist": "Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange per battle turn. General's Command Rating suspended while in personal combat (PP-232). Maximum 5 exchanges before forced disengage or incapacitation. One mass combat turn = one personal combat exchange. (PP-111)",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.7"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.7"
     },
     {
       "id": "\u00a73.8",
@@ -8156,7 +8284,7 @@
       "from": "Scene",
       "to": "Mass",
       "gist": "Social/investigation win modifiers apply to the next mass battle turn only:",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.8"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.8"
     },
     {
       "id": "\u00a73.9",
@@ -8164,7 +8292,7 @@
       "from": "Fieldwork",
       "to": "All Systems",
       "gist": "",
-      "source": "designs/architecture/scale_transitions_v30.md \u00a73.9"
+      "source": "systems/_architecture/scale_transitions_v30.md \u00a73.9"
     }
   ],
   "name_index": {
@@ -9753,6 +9881,24 @@
     ],
     "facilitytier_s": [
       "Facility Tier"
+    ],
+    "wounds": [
+      "Wounds"
+    ],
+    "poise": [
+      "Poise"
+    ],
+    "province accord": [
+      "province Accord"
+    ],
+    "coup posture": [
+      "Coup posture"
+    ],
+    "succession status": [
+      "Succession status"
+    ],
+    "season counter": [
+      "season counter"
     ],
     "13 convictions": [
       "13 Convictions"

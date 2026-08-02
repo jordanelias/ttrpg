@@ -40,7 +40,14 @@ if HERE not in sys.path:
 
 DEFAULT_OUT = os.path.join('dashboard', 'data.json')
 HANDOFF_ROOT = 'HANDOFF.md'
-HANDOFFS_DIR = 'handoffs'
+# Repointed 2026-08-02 (ED-IN-0122). The lane handoffs moved to `registers/handoffs/` on
+# 2026-07-16 (ED-IN-0071 P0b) and this constant did not, so `os.path.isdir('handoffs')` was False,
+# the listdir loop never ran, and `_handoff_files()` returned root HANDOFF.md alone for 17 days.
+# MEASURED against the blind value as a control (not asserted): handoff files 1 -> 11, and
+# build_needs_decision()'s items 2 -> 7 — five decision markers across the FA/IN/PC/SC lanes were
+# absent from the published dashboard. Found by tests/valoria/test_tool_input_paths_resolve.py,
+# which is also the falsifier: flipping this constant back fails that test (mutant M6).
+HANDOFFS_DIR = os.path.join('registers', 'handoffs')
 GITHUB_REPO_DEFAULT = 'jordanelias/ttrpg'
 
 DECISION_MARKER_RE = re.compile(r'JORDAN RULING NEEDED|needs_jordan\s*[:=]\s*true', re.I)

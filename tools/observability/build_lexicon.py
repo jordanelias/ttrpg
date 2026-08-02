@@ -256,7 +256,8 @@ def main():
 
     # ---- handshakes: scale_transitions_v30.md §3 handoffs + §5 Domain Echo ----
     st = REPO / "systems" / "_architecture" / "scale_transitions_v30.md"
-    s_st = "designs/architecture/scale_transitions_v30.md"
+    s_st = "systems/_architecture/scale_transitions_v30.md"  # provenance label; the READ above
+    # already used the live path, so only the citation stamped into the generated lexicon was dead.
     if st.exists():
         lines = st.read_text(encoding="utf-8").splitlines()
         h_re = re.compile(r"^###\s+§(3\.\d+)\s+(.+)")

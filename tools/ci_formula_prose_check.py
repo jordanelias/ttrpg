@@ -84,8 +84,14 @@ except Exception:
     def _split_bundled(name):
         return [name]
 
+# Repointed designs/ -> audit/ on 2026-08-02 (ED-IN-0122). The census moved with the whole
+# designs/audit/ corpus on 2026-07-19 (ED-IN-0071 P4/P5, PR #191) and this constant did not, so
+# load_census() opened nothing, returned [], and the tool printed "_No formula prose-drift found
+# in scope._" over an unscanned census for 14 days. Pointed at the live path it scans 88 rows and
+# finds 14 CENSUS_DRIFT. Second instance of the same defect in two days (canon_coverage_check,
+# 2026-08-01, 13 days blind) -- see tests/valoria/test_tool_input_paths_resolve.py for the guard.
 DEFAULT_CENSUS = os.path.join(
-    'designs', 'audit', '2026-07-08-attribute-value-coherence-audit',
+    'audit', '2026-07-08-attribute-value-coherence-audit',
     '02_census', 'quantity_census.yaml')
 
 # Kinds excluded from violations while the roster (OPT-AV-1) is OPEN.
@@ -189,14 +195,28 @@ def _looks_like_formula(cell):
 # ─────────────────────────── census loading ───────────────────────────
 
 def load_census(path):
-    if yaml is None or not os.path.exists(path):
-        return []
+    """Return (rows, problem). `problem` is None on a successful load, else a human string.
+
+    It returns the failure rather than swallowing it because the three ways this used to yield
+    `[]` -- no pyyaml, missing file, unparseable file -- are INDISTINGUISHABLE downstream from a
+    census that genuinely records no rows, and the report rendered all four identically as
+    "_No formula prose-drift found in scope._". That is how a repointed-away census went unnoticed
+    for 14 days. A tool that cannot load its input is not measuring zero drift; it is not
+    measuring (CLAUDE.md 0.1 point 4 -- a number without a control is not a measurement).
+    """
+    if yaml is None:
+        return [], 'pyyaml is not installed -- the census cannot be read'
+    if not os.path.exists(path):
+        return [], f'census not found at {path}'
     try:
         with open(path, encoding='utf-8') as f:
             data = yaml.safe_load(f) or {}
-    except Exception:
-        return []
-    return data.get('rows', []) or []
+    except Exception as exc:
+        return [], f'census at {path} did not parse: {exc}'
+    rows = data.get('rows', []) or []
+    if not rows:
+        return [], f'census at {path} loaded but carries no `rows:`'
+    return rows, None
 
 
 # A "path:linespec" token, e.g. "params/core.md:161" out of
@@ -390,7 +410,12 @@ def build_report(findings, stats):
              'rows excluded while the roster is open. See tool docstring for trust caveats.')
     L.append('')
     if not findings:
-        L.append('_No formula prose-drift found in scope._')
+        # "found nothing" and "could not look" must never render identically -- that equivalence is
+        # the whole reason this tool ran blind for 14 days.
+        L.append(f'**⚠ CANNOT MEASURE — {stats["census_problem"]}.** The report below is empty '
+                 f'because nothing was scanned, NOT because nothing drifted.'
+                 if stats.get('census_problem')
+                 else '_No formula prose-drift found in scope._')
         return '\n'.join(L) + '\n'
     by_q = {}
     for f in findings:
@@ -410,8 +435,13 @@ def build_report(findings, stats):
 
 
 def run(root, output_dir=None, census_path=None, live_scan=False, report_stdout=False):
-    census = load_census(census_path or os.path.join(root, DEFAULT_CENSUS))
+    census, problem = load_census(census_path or os.path.join(root, DEFAULT_CENSUS))
+    if problem:
+        # Loud on stderr and non-zero-exit-worthy in spirit; the CI job's `w` wrapper swallows
+        # status, so the enforcement that actually fails is the unit guard, not this line.
+        print(f'[A18] CANNOT MEASURE: {problem}', file=sys.stderr)
     findings, stats = scan(root, census, live_scan=live_scan)
+    stats['census_problem'] = problem
     findings.sort(key=lambda f: (f['quantity'], f['type'], f['drift_surface']))  # deterministic order
     report = build_report(findings, stats)
     if output_dir:
