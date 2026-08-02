@@ -1,7 +1,58 @@
 # Valoria Fork — Plan of Record v1
 
-## Status: PROPOSED — fork charter (ED-IN-0122, 2026-08-02). Jordan-vetoable throughout.
-## Class: A — substrate/architecture. Merge ratifies W0–W2 per ED-1094; W3–W5 carry loud held-back rulings (§7).
+## Status: ⚠️ **SUPERSEDED-PENDING-REWRITE — DO NOT EXECUTE.** PROPOSED charter, 2026-08-02, failed
+## an independent read-only critic pass the same day (16 CONFIRMED-WRONG findings against 19
+## survivals). It is kept in the tree as the record of what was measured and what was got wrong;
+## a rewrite (r3) must replace it before any wave starts. **The ED cited below is a collision** —
+## `ED-IN-0122` was already allocated and resolved for unrelated work; `id_reservations.yaml` reads
+## `next_free: 123`, so the rewrite allocates **ED-IN-0123**. §0.1 of this file's own §9 rule
+## applies to itself: a Class-A charter opening on an ID collision is the failure the lane scheme
+## exists to prevent.
+##
+## WHAT SURVIVED (verified against disk by an independent reader): every recomputed graph number —
+## 56 key types, 164 implied edges, 11 multi-P×multi-C types, 14/5/8 authority, 16 sibling imports,
+## 253 helpers, 21 duplicated names, 12 `.tres`, 8 `.gd`, 7 canon files; §4.2's sequencing diagnosis;
+## §8.3's `parliamentary_bridge` target; the `vector_audit` markdown-only and `godot/skeleton`
+## non-compilable characterizations; §7.4's failure count; §2's authoring-vs-runtime reasoning.
+##
+## WHAT BROKE — the four that make it non-executable:
+##   1. **`references/wiring_manifest.yaml` is never cited and already holds half of this plan** —
+##      the per-subsystem manifest §3 proposes building, the §1 "finding that reorders everything"
+##      (banked 2026-07-29), a **character-layer foundation gap**, and `save_replay_premise:
+##      status: violated` — *the live strategic loop mutates World directly with no Key trace, so
+##      the Key log cannot reconstruct strategic state.* That is a harder falsification of W0's
+##      `key_log_hash` gate than this document's own 38%-coverage caveat, and §8 omits it.
+##   2. **W0's falsifier cannot observe the failures it excludes.** It is import-scoped; the real
+##      escapes are PATH LITERALS — `engine/tests/` reaches into `skills/` (DIES), `audit/`
+##      (STAYS), `registers/`, and a retired `designs/` path whose load sits inside a bare
+##      `except`, so a parity class **silently skips today**. §9 of this file records that exact
+##      lesson; §6 then wrote the import-scoped gate anyway.
+##   3. **`tests/sim/mass_battle` — 28 modules, 11,269 LOC, last advanced 2026-07-31 — is
+##      unclassified** by §5. Mislabelled a frozen archive; `wiring_manifest.yaml` says "reconcile
+##      before porting"; held for Jordan under ED-MB-0043.
+##   4. **"14 homeless modules" is inflated to 8.** Six of the fourteen name a `doc:` in the
+##      adjacent field — `mass_battle`'s row states outright that `sim_module` is empty by
+##      LANE-OWNERSHIP discipline, not absence. Genuinely homeless: 8, exactly the `authority:
+##      none` set. The wrapper-granularity decision in §3 rests on the inflated figure.
+##
+## Further confirmed and not yet folded: `orchestrator.resolve()` converts a statically visible edge
+## into one W2's own AST falsifier cannot see (F6); the orchestrator as specified inverts CLAUDE.md's
+## stated `acyclic — autoload is a leaf` invariant (F10); §4.3(a) grows a second interface dialect
+## against the CANONICAL holonic doctrine with no supersession (F11); §4.1 proposes hand-authoring
+## into a file whose header says NEVER hand-edit — the arrays are already a generated view, and the
+## two-representation defect is upstream in the registry/contracts pair (F12); W2's surface is ~38
+## statements, not 16 (F5); `review_core` is a dispatcher over tooling §5 deletes (F16).
+##
+## STRATEGIC FINDING THAT SURVIVES AND REORDERS THE WORK (§2.5, from an end-to-end pipeline trace):
+## two extraction pipelines already produce **554 typed values** (`combat_engine_v1.json` 230 +
+## `sim_params.json` 324), and **zero pipelines deliver a value to anything that runs** — every
+## terminus is a test, a dashboard, or self-verification. `engine/params/*.md` has **zero readers**
+## in `engine/` or `systems/`. So W3 is aimed wrong: the work is not converting prose, it is
+## INVERTING the two existing extractions and building the missing consumer half (the cook step).
+## **The repo is producer-heavy and consumer-empty; the fork's critical path is delivery.**
+##
+## Class: A — substrate/architecture. **The merge-ratifies-W0–W2 clause below is WITHDRAWN** while
+## this document is superseded: F8/F9/F11 show it would ratify past held gates.
 ## Provenance: authored by an Opus-5 session from a Fable-5 read-only audit, over a day of execution-verified
 ## measurement. Every number carries the command that produced it. Corrections to earlier drafts are stated
 ## in place, not silently applied.
