@@ -1,301 +1,287 @@
-# Valoria Fork — Plan of Record v1
+# Valoria Fork — Plan of Record
 
-## Status: ⚠️ **SUPERSEDED-PENDING-REWRITE — DO NOT EXECUTE.** PROPOSED charter, 2026-08-02, failed
-## an independent read-only critic pass the same day (16 CONFIRMED-WRONG findings against 19
-## survivals). It is kept in the tree as the record of what was measured and what was got wrong;
-## a rewrite (r3) must replace it before any wave starts. **The ED cited below is a collision** —
-## `ED-IN-0122` was already allocated and resolved for unrelated work; `id_reservations.yaml` reads
-## `next_free: 123`, so the rewrite allocates **ED-IN-0123**. §0.1 of this file's own §9 rule
-## applies to itself: a Class-A charter opening on an ID collision is the failure the lane scheme
-## exists to prevent.
-##
-## WHAT SURVIVED (verified against disk by an independent reader): every recomputed graph number —
-## 56 key types, 164 implied edges, 11 multi-P×multi-C types, 14/5/8 authority, 16 sibling imports,
-## 253 helpers, 21 duplicated names, 12 `.tres`, 8 `.gd`, 7 canon files; §4.2's sequencing diagnosis;
-## §8.3's `parliamentary_bridge` target; the `vector_audit` markdown-only and `godot/skeleton`
-## non-compilable characterizations; §7.4's failure count; §2's authoring-vs-runtime reasoning.
-##
-## WHAT BROKE — the four that make it non-executable:
-##   1. **`references/wiring_manifest.yaml` is never cited and already holds half of this plan** —
-##      the per-subsystem manifest §3 proposes building, the §1 "finding that reorders everything"
-##      (banked 2026-07-29), a **character-layer foundation gap**, and `save_replay_premise:
-##      status: violated` — *the live strategic loop mutates World directly with no Key trace, so
-##      the Key log cannot reconstruct strategic state.* That is a harder falsification of W0's
-##      `key_log_hash` gate than this document's own 38%-coverage caveat, and §8 omits it.
-##   2. **W0's falsifier cannot observe the failures it excludes.** It is import-scoped; the real
-##      escapes are PATH LITERALS — `engine/tests/` reaches into `skills/` (DIES), `audit/`
-##      (STAYS), `registers/`, and a retired `designs/` path whose load sits inside a bare
-##      `except`, so a parity class **silently skips today**. §9 of this file records that exact
-##      lesson; §6 then wrote the import-scoped gate anyway.
-##   3. **`tests/sim/mass_battle` — 28 modules, 11,269 LOC, last advanced 2026-07-31 — is
-##      unclassified** by §5. Mislabelled a frozen archive; `wiring_manifest.yaml` says "reconcile
-##      before porting"; held for Jordan under ED-MB-0043.
-##   4. **"14 homeless modules" is inflated to 8.** Six of the fourteen name a `doc:` in the
-##      adjacent field — `mass_battle`'s row states outright that `sim_module` is empty by
-##      LANE-OWNERSHIP discipline, not absence. Genuinely homeless: 8, exactly the `authority:
-##      none` set. The wrapper-granularity decision in §3 rests on the inflated figure.
-##
-## Further confirmed and not yet folded: `orchestrator.resolve()` converts a statically visible edge
-## into one W2's own AST falsifier cannot see (F6); the orchestrator as specified inverts CLAUDE.md's
-## stated `acyclic — autoload is a leaf` invariant (F10); §4.3(a) grows a second interface dialect
-## against the CANONICAL holonic doctrine with no supersession (F11); §4.1 proposes hand-authoring
-## into a file whose header says NEVER hand-edit — the arrays are already a generated view, and the
-## two-representation defect is upstream in the registry/contracts pair (F12); W2's surface is ~38
-## statements, not 16 (F5); `review_core` is a dispatcher over tooling §5 deletes (F16).
-##
-## STRATEGIC FINDING THAT SURVIVES AND REORDERS THE WORK (§2.5, from an end-to-end pipeline trace):
-## two extraction pipelines already produce **554 typed values** (`combat_engine_v1.json` 230 +
-## `sim_params.json` 324), and **zero pipelines deliver a value to anything that runs** — every
-## terminus is a test, a dashboard, or self-verification. `engine/params/*.md` has **zero readers**
-## in `engine/` or `systems/`. So W3 is aimed wrong: the work is not converting prose, it is
-## INVERTING the two existing extractions and building the missing consumer half (the cook step).
-## **The repo is producer-heavy and consumer-empty; the fork's critical path is delivery.**
-##
-## Class: A — substrate/architecture. **The merge-ratifies-W0–W2 clause below is WITHDRAWN** while
-## this document is superseded: F8/F9/F11 show it would ratify past held gates.
-## Provenance: authored by an Opus-5 session from a Fable-5 read-only audit, over a day of execution-verified
-## measurement. Every number carries the command that produced it. Corrections to earlier drafts are stated
-## in place, not silently applied.
+## Status: PROPOSED (ED-IN-0123, 2026-08-02). Jordan-vetoable throughout.
+## Class: A — substrate/architecture. **Nothing here ratifies on merge.** §7 holds every decision that
+## needs one, including four already held by registers this plan does not own.
+## Supersedes: the v1 draft of the same day, which failed an independent critic pass (16
+## CONFIRMED-WRONG). §9 records what it got wrong and why, because the failure mode is instructive
+## and recurs. The corrected numbers are carried; the architecture is rebuilt.
 
 ---
 
-## 0. The decision this plan serves
+## 0. The thesis
 
-Jordan's ruling, 2026-08-02, restated:
+**The Godot port already has a detailed, dependency-ordered strategy. The Python side does not.**
 
-1. The repository is a **Python/prose project that sets up a game made in Godot**.
-2. All code is structured so it is **readily portable to Godot**.
-3. Game primitives / derivatives / scores are **centralized**.
-4. Architecture: **core engines/resolvers · an orchestrator whose Keys manage I/O · centralized data ·
-   modular subsystems · data among subsystems and between them and the orchestrator managed by Keys**.
-5. **Python-first**: the engine/systems become 100% runnable in Python, *then* the port to Godot happens,
-   where UI and graphics get solved.
-6. Python Monte Carlo is a **modelling tool**, not the oracle.
-7. **Code/tables are always authoritative over prose. Prose is canon only where no code pair exists.**
-8. Data lives in tables/graphs. JSON for canon; SQLite permitted for **derived** query layers only.
+`godot/godot_conversion_strategy_v1.md` specifies Gate-0's five blocking preconditions, a spine
+(kernel · KeyStore v2 · seeded RNG service · statechart · generated loaders), a six-step per-module
+port ritual, a ten-item frictions register and an eight-item Jordan register. It is more complete
+than anything this plan could add, and v1's central error was re-deriving it badly.
 
-This plan does not re-litigate any of the above.
+But Gate-0 **presupposes a Python side that is ready to be ported from**, and G0.5 states the
+condition explicitly: *a module ports only from canonical/ratified sources… and halts on any value
+untraceable to a cited source.* Measured against `references/wiring_manifest.yaml`:
 
----
-
-## 1. Where the repository actually is (measured, not asserted)
-
-| | measured | command |
+| | modules | |
 |---|---|---|
-| Enforcement code | 55,737 LOC (tools 23,770 · tests 24,922 · skills 7,045) | `wc -l` over each tree |
-| Simulation | 29,267 LOC | `wc -l` |
-| **Godot** | **539 LOC · 8 files · NO `project.godot` · no GDScript loads any data file** | `find . -name "*.gd"`, `find . -name project.godot` |
-| Markdown | 423,257 lines / 1,769 files | `find`+`wc` |
-| — canon that never converts | **1,055 lines / 7 files** | classified by tree |
-| — research/design (the conversion backlog) | **72,105 / 280** | " |
-| — process/audit (not game material) | **339,462 / 1,435 — 80%** | " |
-| Campaign | `run_campaign(seed=42)` runs: Crown, 50 seasons, 29 `battle_count` | executed |
-| Stubs | `stub_hits: 100` = **two** functions × 50 seasons, both honestly deferred | stubwire spy |
-| Key types declared | 56 | `key_graph.json` |
-| Key types **emitted** | **2** (`scene.contest_resolved` 13 · `scene.battle_concluded` 62) | `TickScheduler.emit` spy |
-| Module authority | 14 code · 5 prose · **8 none** | `key_graph.json` |
-| Modules with no subsystem home | **14 of 27** — incl. `engine_clock`, the temporal spine | " |
+| **execute today** (`live` + `gated`) | **3 of 27** | mass_battle, victory, social_contest |
+| reached but resolve nothing (`deferred`) | 10 | |
+| real code the loop never calls (`unwired`) | 2 | personal_combat, threadwork |
+| raise `NotImplementedError` (`stub`) | 3 | |
+| specified in a doc, zero code (`design`) | 9 | |
+| **nothing to port from** (`godot: no-oracle`) | **14 of 27** | |
 
-**The finding that reorders everything.** A seed-42 campaign under `coverage --source=systems,engine`
-executes **38% of statements**, leaves **37 files at 0%**, and produces **zero rows for
-`combat_engine_v1`** — the most complete subsystem in the repo is not exercised by the campaign at all.
+**Three of twenty-seven modules run.** Jordan's principle 5 — *"100% runnable in Python, then
+port"* — is therefore not a variation on the conversion strategy. It is **the missing Stage 0 that
+the strategy's own Gate-0 assumes and nobody has planned.**
 
-> `python3 -m coverage run --source=systems,engine covrun.py && python3 -m coverage report`
-> → `TOTAL 7883 stmts, 4851 missed, 38%`
+> **Reconciling with the tool.** `wiring_map_check.py --summary` reports over **modules AND adapters
+> together — 35 units**: `deferred:11 · design:9 · gated:6 · stub:4 · unwired:3 · live:2`, and
+> `python-oracle:17`. The table above is **modules only (27)**, because modules are the conversion
+> units — one module contract = one conversion unit = one parity target (strategy §IV.3). Both are
+> correct; they count different populations. Adapters contribute the other 8: `gated:5 · deferred:1 ·
+> unwired:1 · stub:1`. Combined, **8 of 35 units execute.** Stated because a reader who runs the tool
+> would otherwise think this plan's headline number is wrong.
 
-The `key_log_hash` golden — the thing a fork would naturally use to prove a clean move — certifies
-roughly one third of the portable surface and none of personal combat. **Any plan whose first gate is
-that hash is verifying a third of what it claims.**
+That is this document's only real contribution. Everything else here is assembly.
 
 ---
 
-## 2. What external practice settles
+## 1. What already exists (read before building anything)
 
-**Authoring format ≠ runtime format, with a cook step between them.** The canonical content-pipeline
-shape is *author → export → validate → import → cook → package → deploy*; design-time components
-transform the authored form, runtime loads a compact serialized one, and **validation lives in the cook
-step**. ([MonoGame](https://docs.monogame.net/articles/getting_to_know/whatis/content_pipeline/CP_Architecture.html))
+v1 proposed building four things that exist. They are the fork's foundation, not its backlog.
 
-This resolves the format argument. JSON authored → `.tres` cooked is not a compromise, it is the standard
-shape — and the round-trip gate is not overhead, it *is* the cook step's validation stage. **The generator
-and the gate are one artifact, not two.**
+| Asset | What it already is |
+|---|---|
+| **`references/wiring_manifest.yaml`** | The per-subsystem manifest, as DATA, anchored on stable tags so it survives restructures. 27 modules + 8 adapters, each with `build` / `godot` / `port_rank` / `parity` / note. Validated by `tools/wiring_map_check.py --check`; `--work-list` emits the ranked port order. **This is the work-list. Do not author another.** |
+| **`references/module_contracts.yaml`** | The canonical container contract — uniform **Key IN → resolver → OUT**, schema-2, 27 modules. Per the holonic doctrine (CANONICAL, ratified 2026-07-02) this *is* the wrapper shape; guardrail 2 forbids growing a second dialect. |
+| **`references/key_graph.json`** | The merged key graph (built this session): 56 types, producers/consumers reconciled across the registry and the contracts, zero genuine conflicts, guarded by 12 tests. |
+| **Two live extraction pipelines** | `combat_engine_v1.json` (230 scalars, blocking round-trip gate, green) and `sim_params.json` (324 constants across 13 modules, `--check` clean). **554 typed values already extracted.** |
 
-**SQLite belongs in the build cache, not in canon.** O3DE ships `assetdb.sqlite` inside the Asset Cache,
-maintained by the Asset Processor, queried with parameter binding; studios query the database *about*
-assets rather than inspecting files. ([O3DE](https://docs.o3de.org/docs/user-guide/assets/asset-processor/asset-database/))
-It is a derived build artifact — not source, not shipped. That is exactly the boundary principle 8 draws,
-and it is a mainstream engine's practice rather than a novel position.
-
-**Adopt the relational discipline, not the database, as the conditioner.** Entities get primary keys;
-relationships are explicit rows, not embedded arrays; a composite key means a join table. Applied to this
-repo it immediately finds a real defect — see §4.1.
+**The golden path is already named** (`wiring_manifest.yaml:42-45`): `personal_combat` is the only
+unit with Python oracle + typed export + GDScript port. *"The template every other port copies."*
 
 ---
 
-## 3. Architecture, resolved
+## 2. What Jordan's principles actually change
+
+Six of the eight principles are already the repo's direction. Two change something:
+
+**Principle 6 — Monte Carlo is a modelling tool, not the oracle.** This *resolves* conversion-strategy
+Jordan register item #2 ("Python corpus role"), which has been carried unruled from the Workplan-R2
+docket. It should be recorded as closing that item, not restated as new. Structurally it means
+`mc_v18` (337 LOC — seeds, batches, `CampaignResult` analytics) is a **client** of the engine, and
+`workbench/` (2,031 LOC) stays Python permanently.
+
+**Principle 7 — code/tables outrank prose; prose is canon only without a code pair.** Now computable
+and computed: **14 modules code-authoritative, 5 prose-authoritative, 8 with no authority at all.**
+The 8 are the genuinely homeless set, and they are exactly the `godot: no-oracle` blockers.
+
+### 2.1 The pipeline finding that reorders the data work
+
+An end-to-end trace of every pipeline in the repo:
+
+- `engine/params/*.md` — 43 files, 1,891 table lines — has **zero readers** in `engine/` or
+  `systems/`. It is consumed only by drift-checkers in `tools/`.
+- Two extraction pipelines produce **554 typed values**.
+- **No pipeline delivers a value to anything that runs.** Every terminus is a test, a dashboard, or
+  self-verification. `combat_engine_v1.json` is read by one test, one scan tool, and its own producer.
+
+So "centralize values into tables" is **not a prose-conversion project**. The prose is already
+vestigial; the code holds its constants inline; two tools already extract them. The work is to
+**invert the extractions** (table becomes source, Python constant becomes generated view) and to
+**build the consumer half** — the cook step, which external practice puts at the centre of any
+content pipeline and which this repo has never had.
+
+**The repo is producer-heavy and consumer-empty.**
+
+---
+
+## 3. Stage 0 — Python-side readiness (the missing stage)
+
+The metric is the manifest's own `build` ladder. A module climbs:
 
 ```
-             ┌────────────────────────────────────────┐
-             │  ORCHESTRATOR   engine/orchestrator/   │
-             │  owns: KeyBus · module registry ·      │
-             │        resolver registry · state store │
-             │        engine_clock (temporal spine)   │
-             │  exposes: step() / run_season()        │
-             └───────┬───────────────────────┬────────┘
-                     │ Keys (deferred)       │ resolve() (synchronous)
-        ┌────────────┴──────┐         ┌──────┴──────────┐
-        │  SUBSYSTEM  ×14   │  Keys   │  SUBSYSTEM      │
-        │  manifest + wrapper◄────────►  manifest+wrapper│
-        │  internals private│         │                 │
-        └────────┬──────────┘         └─────────────────┘
-                 │ reads
-        ┌────────┴──────────────────────────────────────┐
-        │  CENTRALIZED DATA   data/**.json (authored)   │
-        │  → cooked → .tres / typed accessors           │
-        └───────────────────────────────────────────────┘
-
-  modelling/   mc_v18 + workbench — CONSUMERS of the engine, never its oracle
+design  →  stub  →  deferred  →  unwired  →  gated  →  live
+(no code)  (raises) (resolves    (real code, (runs on a  (runs every
+                     nothing)     no caller)  condition)   season)
 ```
 
-**The orchestrator vs `mc_v18`.** The orchestrator owns the KeyBus, the registries, the state store and
-the clock, and exposes `step()`/`run_season()`. It has **no concept of seeds, batches, winners or
-metrics**. `mc_v18` (337 LOC) is exactly that residue and moves to `modelling/` — which is principle 6
-made structural rather than declared.
+**Stage 0's exit condition:** every module the fork intends to port reaches `live` or `gated`, and
+`wiring_map_check --summary` reports it. That is a measurable, already-instrumented target — not a
+new gate, an existing one used as a goal.
 
-**Wrapper granularity: per-subsystem (14), not per-module (27).** Each subsystem ships a manifest naming
-the contract-modules it owns, the keys it emits/consumes, and its registered resolvers. Building 27
-wrappers would enshrine a roster where **8 have no authority at all and 14 have no home**. CLAUDE.md §2a
-already rules 1:1 subsystem↔folder↔Godot-module; per-subsystem wrappers are its executable form.
+Ordering follows `port_rank`, which the manifest already assigns:
 
----
+- **rank 0-1** — `personal_combat` (unwired; the golden path, and *the combat branch is dead code in
+  the campaign*), `mass_battle`, `social_contest`, `victory`. **This is where Stage 0 starts.**
+- **rank 2-3** — threadwork, territorial_piety, faction_state, faction_politics, piety_track,
+  settlement_layer, clock_registry + five adapters.
+- **rank 8** — the 14 `no-oracle` modules. **These need canon authored before code**, and per
+  principle 7 their prose is authoritative *only until* code lands. `engine_clock` is the sole
+  remaining T0 blocker (ED-1051) and gates the season/accounting cadence.
+- **rank 9** — `settlement_economy` and `campaign_architecture` are marked `retire`. **The live
+  roster is 25, not 27.**
 
-## 4. The four modelling decisions
+### 3.1 The three foundation gaps, which outrank every module
 
-### 4.1 The `edges` relation **replaces** the arrays
+`wiring_manifest.yaml:93-102` records these and v1 omitted all three:
 
-`key_graph.json` currently stores `producers[]` and `consumers[]` on a *type* row. That flattening
-silently asserts a full cross-product: **164 implied edges from 56 types**, with 11 types having both >1
-producer and >1 consumer — `scene.dialogue` alone asserts 3×4 = **12 edges nobody authored**.
+1. **`godot_spine`** — `BaseEngine` / `EngineModule` / `KeyBus` / `Resolver` / `GameState` are
+   referenced by the skeleton with `class_name` defined **nowhere**. Gate-0. The skeleton is
+   non-compilable, which is why it must be regenerated, not ported.
+2. **`character_layer`** — no `Character`/`Actor` dataclass exists in `World`; 9- vs 10-attribute
+   rival rosters, neither wired. **Every personal-scale port needs this first**, which puts it ahead
+   of `personal_combat` despite that being rank 0.
+3. **`save_replay_premise: violated`** — *the live strategic loop mutates `World` directly
+   (`Faction.L`, `Territory.owner`) with no Key trace, so the Key log cannot reconstruct strategic
+   state.* Save/replay/parity hold only for the echo-keyed slice.
 
-```json
-{"type": "scene.dialogue", "producer": "social_contest", "consumer": "npcs",
- "provenance": "code|prose|both", "cite": "ED-XX-NNNN", "status": "live|declared|assumed"}
-```
-
-Composite primary key `(type, producer, consumer)`. The per-type arrays become **generated views** —
-derivable in one groupby, never hand-edited. Two representations of one truth is the single-owner
-violation this repo is organised against; the migration forces someone to author or drop each of the 164,
-which is the point.
-
-### 4.2 The KeyLog owns the sequence counter
-
-`Key.id` is composite (`type.s{season}.n{seq}`) and uniqueness *is* enforced —
-`KeyLog._validate` raises on collision. But the counters are per-emitter attributes on `world`
-(`_echo_key_seq`, `_battle_key_seq`): collision-freedom holds by naming accident, not by construction.
-
-Move `seq` assignment into `KeyLog.append`, one counter per `(type, season)`. Emitters stop passing it.
-This **changes the seed-42 hash**, so per §0.1 it ships with a paired-arm test proving old and new streams
-are identical *except* seq assignment, and re-records the golden in the same commit.
-
-### 4.3 The 16 cross-subsystem imports — three patterns, none survives as a bare import
-
-- **(a) Synchronous resolver invocation** (`faction_action`→`massbattle`, cross_scale→contest/fieldwork).
-  Stays a **call** — the caller needs the answer now, and Keys are deferred to the accounting boundary.
-  Forcing it through the bus would be scripting the bus. It routes through
-  `orchestrator.resolve("mass_battle", …)`, which removes the import edge and *is* Godot's singleton shape.
-- **(b) Type imports for snapshot/restore** (`game_state`'s lazy `CoherenceState`, `NPC`, `Knot`…).
-  Inverted: each subsystem **registers its serializable types** at startup.
-- **(c) Central-state reads** (`accounting`→settlement/world tracks). That state is centralized data
-  (principle 3); it moves under the orchestrator's store and is read from there, not from a sibling.
-
-Keys stay reserved for the deferred notifications they already model correctly.
-
-### 4.4 Homeless modules
-
-`engine_clock` is **substrate, not a subsystem** — it belongs to the orchestrator, since it is the spine
-`step()` runs on. `domain_actions` → `factions` (open as ED-FA-0002; **needs Jordan**). The remaining 12
-are assigned to manifests in W4.
+Gap 3 is load-bearing and its consequences run further than the register states. The conversion
+strategy's Stage 1 specifies **`save = serialize-the-log`**, and Stage 2 step 3 makes **Key-log
+equality the master parity check**. Both rest on a premise the repo has already recorded as
+violated. Independent corroboration from this session: a seeded campaign under `coverage` executes
+**38% of statements**, leaves 37 files at 0%, and produces **zero rows for `combat_engine_v1`** —
+which is the same fact the manifest states in words. **Closing gap 3 is the highest-value Python-side
+work there is**, because parity, save/load and replay are one mechanism used three times.
 
 ---
 
-## 5. Migrates · stays · dies
+## 4. Architecture — what the fork may and may not decide
 
-**MIGRATES** (~33k LOC + ~73k lines of conversion-input prose)
-`engine/substrate` · `engine/autoload` (refactored) · `engine/cross_scale` → orchestrator ·
-`engine/tests` (the parity suite — part of W0's gate) · all `systems/*/sim` · `combat_engine_v1`
-(**7,849 LOC total**, of which workbench 2,031 stays Python forever as a modelling tool) ·
-`combat_engine_v1.json` + `export_engine_params.py` — **the template for all W3 data** ·
-`key_graph.json` → the edges relation · `module_contracts.yaml` → subsystem manifests ·
-the 7 canon files (1,055 lines) · the 280-file design backlog **as conversion inputs** ·
-the behavioural subset of the 1,585 collected tests, ported to **direct imports**.
+**The container shape is already frozen and is not this plan's to change.** The holonic doctrine
+(CANONICAL) fixes `Key IN → resolver → OUT` and its guardrail 2 forbids any scale growing its own
+interface members. v1 proposed an `orchestrator.resolve()` channel; that is a second dialect, and it
+is withdrawn.
 
-Minimal tooling: `structure_audit`'s AST import-graph core (it is W2's falsifier) · `review_core` ·
-`ci_naming_check` · the fabrication gate **rebuilt full-tree** — its changeset-scoping was this
-session's proven blind spot.
+**Downward delivery cannot be designed here.** The doctrine calls the propagation spec *"the
+highest-value unauthored canon in the repo"* and names non-termination (up-event → down-event →
+up-event) as the scariest runtime risk. It is conversion-strategy Jordan item #1 (ED-1006). **Any
+orchestrator that dispatches downward into subsystems is designing that ruling by implication.** So:
 
-**STAYS** (source repo, frozen provenance archive)
-`registers/` · `audit/` · `arcs/` · `workplans/` · `dashboard/` · the observability apparatus.
-The fork cites back by `repo@SHA + PP/ED`.
+> **The fork does not build a downward-dispatching orchestrator until ED-1006 is ruled.** Until then
+> the interim rule (strategy §IV.2) applies and every downward edge is flagged.
 
-**DIES**
-339k lines of process/audit markdown — it audits a prose regime the fork abolishes ·
-~11k LOC of audit tooling in current form, `vector_audit` foremost (**markdown-only by construction** —
-`rglob('*.md')`) · `skills/` (re-grow on recurrence, per the existing roster rule) ·
-**`godot/skeleton`** — 539 LOC extending a `KeyBus` that exists nowhere; **regenerate from working
-Python at W5, do not port the sketch**.
+What the fork *may* do without a ruling:
+
+- **Keep the upward direction**, which is established: subsystems emit Keys; `KeyLog` validates and
+  logs; `apply` closures land at the accounting boundary. That mechanism works and has two live
+  emitters.
+- **Close gap 3** by routing the strategic loop's direct `World` mutations through Key emission with
+  paired `apply` — which is not new architecture, it is the *existing* `echo_transport` pattern
+  extended to the writes that currently bypass it.
+- **Own sequencing in the log.** `KeyLog` already maintains `_season_counters`; the per-emitter
+  counters on `world` (`_echo_key_seq`, `_battle_key_seq`) are collision-free by naming accident.
+  Compose on the existing counter rather than adding a second keying.
+
+### 4.1 The edges relation — a generator fix, not a new file
+
+`key_graph.json`'s `producers[]`/`consumers[]` arrays assert a full cross-product: **164 implied
+edges from 56 types**, 11 types with both >1 producer and >1 consumer, `scene.dialogue` alone
+asserting 3×4 = 12 edges nobody authored.
+
+v1 proposed hand-authoring an `edges` relation. **That file's header says NEVER hand-edit**, and the
+arrays are already a generated view — every row carries `registry_producers` / `contract_producers` /
+`producer_status` precisely to reconcile the two authored sources. The two-representation problem is
+**upstream**, in the registry-markdown / contracts-YAML pair. So: emit `edges` from
+`build_key_graph.py` as a *third derived view* keyed `(type, producer, consumer)`, and fix
+provenance in the generator's inputs. No new hand-maintained surface.
 
 ---
 
-## 6. Waves
+## 5. What the fork carries
 
-| | Content | Lane | Jordan | Falsifier |
-|---|---|---|---|---|
-| **W0** | Fork bootstrap: pure move of `engine/` + `systems/` + parity tests, everything packaged | IN | no | seed-42 `key_log_hash` byte-identical **AND** `pytest engine/tests` green **AND** zero imports escaping the copied set. **The hash alone is insufficient — it covers 38%** |
-| **W1** | KeyBus class · log-owned seq (§4.2) · edges relation (§4.1) · `battle_count` → `battles_resolved` + `attacker_victories` | IN | no | paired-arm test: streams identical modulo seq · every edge participant ∈ module roster · edge count < 164 and equals the authored count · seed-42 reports 62 battles |
-| **W2** | Orchestrator inversion: registration, resolver registry, `engine/`→`systems/` imports removed | IN | ruling: `engine_clock` = orchestrator substrate | AST check asserts **zero** `systems.*` imports under `engine/` and zero sibling imports under `systems/` outside registration |
-| **W3** | Data centralization: prose params → typed JSON → cooked views, round-trip CI (the cook step of §2) | per-lane | **yes** — value collisions like the triple Combat Pool definition need a ruling each | round-trip CI red on any hand-edit of a generated view · full-tree uncited-constant gate green |
-| **W4** | Module homes + authority closure: 14 homeless assigned, 8 authority-none authored or explicitly DEFERRED | per-lane | **yes** — canon authorship | 0 modules `authority: none` without a DEFERRED tag · 0 unresolved prose referents · 0 homeless |
-| **W5** | Godot gate: `project.godot`, Godot 4.6 headless in CI, KeyBus.gd, JSON ingestion, combat parity | GO | **yes** — the strategy doc is PROPOSED; ratify first | a CI job running `godot --headless` on a seeded Python↔GDScript parity check. **Unknowable until then — no Godot binary exists in the current environment; make no Godot-side claim before this job is green** |
+**CARRIES** — `engine/` (substrate · autoload · cross_scale) · all `systems/*/sim` ·
+`combat_engine_v1` (7,849 LOC incl. workbench) · `engine/tests` · the four assets of §1 ·
+`export_engine_params.py` + `export_sim_params.py` (the two working pipelines) ·
+`wiring_map_check.py` · the 7 canon files · the 280-file design corpus **as conversion input**.
+
+**LEAVES** (source repo, frozen provenance) — `registers/` · `audit/` · `arcs/` · `workplans/` ·
+`dashboard/` · the observability apparatus. Cite back by `repo@SHA + PP/ED`.
+
+**UNRESOLVED, and it must be resolved before W0** — **`tests/sim/mass_battle`: 28 modules, 11,269
+LOC, last advanced 2026-07-31.** The manifest calls it *"a RICHER unwired engine… (mislabeled a
+frozen archive) — reconcile before porting"*; `CURRENT.md` holds the two-disjoint-code-trees fork for
+Jordan under ED-MB-0043. A fork that copies `systems/mass_battle/sim` and leaves this behind may be
+abandoning the better engine. **§7 item 5.**
+
+**Self-containment is not yet true.** Measured: zero import escapes from `engine/`/`systems/`, but
+**path-literal escapes exist** — `engine/tests/` reaches `skills/` (leaving), `audit/` (leaving),
+`registers/`, and a retired `designs/` path whose load sits inside a bare `except`, so a parity class
+**silently skips today**. W0's falsifier must scan path literals, not imports; v1's did not, and the
+lesson was recorded in v1's own §9 before being violated in its §6.
 
 ---
 
-## 7. Held for Jordan (loud — nothing here ratifies on merge)
+## 6. Sequencing
 
-1. **`domain_actions` home** (ED-FA-0002) — blocks W4 and one edge family.
-2. **Value collisions surfaced by W3**, Combat Pool's three definitions first.
-3. **The Godot conversion strategy** is PROPOSED with unexecuted Gate-0 preconditions. W5 does not start
-   until it is ratified.
-4. **Fork point.** 8–9 MB Track-F tests fail at HEAD. Fork from the last green ancestor, **or** carry them
-   as `xfail` with an ED citation — so the fork's suite starts green *and honest*. Never silently red.
+| | Content | Exit condition (falsifier) | Jordan |
+|---|---|---|---|
+| **W0** | Repoint the four path-literal escapes; un-skip the silently-skipping parity class; make `combat_engine_v1` a package so it is importable and measurable | A path-literal scan (not an import scan) shows zero escapes; the previously-skipping parity test runs and passes or fails honestly; `coverage` reports non-zero rows for `combat_engine_v1` | no |
+| **W1** | Close `save_replay_premise` — route direct `World` mutation through Key emission + `apply`, extending `echo_transport`'s existing pattern | A seeded campaign's Key log reconstructs `Faction.L` and `Territory.owner` from initial conditions; `wiring_manifest`'s `save_replay_premise` flips from `violated` | no — it restores a stated premise |
+| **W2** | Author the `character_layer`: one `Character`/`Actor` dataclass in `World`; resolve the 9-vs-10 attribute roster | Personal-scale modules can hold state; roster is single-valued | **yes** — OPT-AV-1 |
+| **W3** | Stage 0 rank 0-1: `personal_combat` → `live` (the combat branch is dead code today), then `mass_battle`, `social_contest`, `victory` | `wiring_map_check --summary` shows those four at `live`/`gated`; each has key-log parity per its `parity` field | no |
+| **W4** | Invert the two extraction pipelines: table becomes source, Python constant becomes generated view; add the `citation` column (**0 of 324 `sim_params` records carry provenance**) | Round-trip CI red on a hand-edit of a generated view; every value traces to a `PP`/`ED` | per-value collisions: **yes** |
+| **W5** | Build the cook step: JSON → `.tres` for the golden path | A generated `.tres` for all 51 canonical weapons (2 exist, hand-made) | no |
+| **W6** | Stage 0 rank 2-3; then the 14 `no-oracle` modules, `engine_clock` first (ED-1051, the sole T0 blocker) | `authority: none` count reaches 0 or DEFERRED-with-citation | **yes** — canon authorship |
+| **W7** | Godot Gate-0 (G0.1–G0.5) and the strategy's Stage 1 spine | The strategy's own gates. **No Godot claim is verifiable until `project.godot` and a Godot binary run in CI — neither exists** | **yes** — ratify the strategy first |
+
+W0–W1 are the whole near-term critical path. They need no ruling and they make everything after them
+measurable.
+
+---
+
+## 7. Held for Jordan
+
+1. **ED-1006 — downward Key delivery.** Blocks any downward-dispatching orchestrator. Named the
+   highest-value unauthored canon; non-termination is the runtime risk.
+2. **OPT-AV-1 — the attribute roster.** Blocks `character_layer`, and through it every personal-scale
+   module.
+3. **ED-1051 — `engine_clock`.** `doc: null` temporal spine; the sole remaining T0 blocker.
+4. **ED-FA-0002 — `domain_actions` home.**
+5. **ED-MB-0043 — the two-disjoint-mass-battle-trees fork.** Must resolve before W0 copies one.
+6. **Fork point.** The MB Track-F set is **non-deterministic**: two markdown-only commits produced
+   9 and 10 failures respectively on identical code. **There may be no green ancestor to fork from**,
+   so the honest option is to carry them as `xfail` with an ED citation.
+7. **The conversion strategy's own eight open items** — carried by reference, not restated. Principle
+   6 appears to close item #2; that should be recorded there.
 
 ---
 
 ## 8. Where this plan is most likely wrong
 
-1. **The seed-42 golden is a weak fidelity oracle — measured, not suspected.** 38% coverage, 37 files at
-   0%, `combat_engine_v1` in zero rows. *Settling measurement:* a multi-seed coverage sweep to find the
-   reachable ceiling; anything still at 0% needs its own golden before its move counts as verified.
-2. **"Audit tooling dies" may discard the ratchet that kept this repo honest.** `review_core` +
-   `scope_ratchet` cost ~800 LOC; the failures they prevent are silent ones. *Settling measurement:* count
-   fork-applicable signals in `review_baseline.yaml` — if more than 3 survive the prose purge, carry the core.
-3. **Per-subsystem wrappers may mismatch Godot's node model** for synchronous cross-scale flows like
-   `parliamentary_bridge`, which spans three subsystems. Unknowable without Godot; make it the *first*
-   thing W5's parity harness tests.
-4. **The prose-authority flip could orphan the 5 prose-authoritative modules** if their prose encodes
-   intent the code never implemented. *Settling measurement:* per-module, diff prose-declared
-   emits/consumes against code before W3 converts them — the same join that found the 55-declared /
-   2-emitted gap.
+1. **Stage 0 may be larger than the fork.** Getting 25 modules to `live` is most of building the
+   game. If so, the fork should carry a *subset* — the rank 0-3 spine — and leave the rest.
+   *Settling measurement:* size W3 against the four rank 0-1 modules, then extrapolate from actuals.
+2. **Closing `save_replay_premise` may be architecture, not plumbing.** If the strategic loop's
+   writes cannot be expressed as Key `apply` closures without redesigning `World`, W1 is a much
+   bigger wave. *Settling measurement:* attempt one — `Territory.owner` in `faction_action`, where a
+   Key already fires alongside the write.
+3. **The 5 prose-authoritative modules may encode intent the code never implemented.** *Settling
+   measurement:* per-module, diff prose-declared `emits`/`consumes` against code — the same join
+   that found the 55-declared / 2-emitted gap.
+4. **`wiring_manifest.yaml` is dated `as_of: 2026-07-29` and is analysis-derived.** This plan leans
+   on it heavily. *Settling measurement:* re-run `wiring_map_check --summary` and spot-check three
+   `build` verdicts against execution before committing to the ladder.
 
 ---
 
-## 9. Method note, carried forward deliberately
+## 9. Why v1 failed, recorded because the failure recurs
 
-Every significant error in the session that produced this plan was a **false absence derived from a
-proxy**: "not wired" (it was wired four ways), "no such guard" (it existed), "zero schema files",
-mutation coverage reported as 0 → 3 → 8 as the scan widened, lane coverage 5 → 30 when derivation moved
-from imports to path literals, prose counted as code three times. A green local validator run checked
-**nothing**, because the gates are changeset-scoped and the tree was clean.
+v1's measurements were sound — every graph number recomputed exactly by an independent reader. Its
+architecture and scoping were not, and both defects had the same shape:
 
-The rule this plan is written under, and which its execution should inherit: **count by execution, never
-by phrasing; and treat every "X does not exist" as unverified until a positive control — a search for
-something known to exist, by the same method — has been run.**
+- It proposed building a per-subsystem manifest **that already existed** in `wiring_manifest.yaml`,
+  along with the headline finding, the character-layer gap, and the violated save/replay premise.
+- It reported **"14 homeless modules"** by reading `subsystem: null`. Six of those rows name a `doc:`
+  in the adjacent field, and `mass_battle`'s row states outright that its `sim_module` is empty by
+  **lane-ownership discipline, not absence**. The real number is 8. A decision — wrapper granularity
+  — rested on a figure inflated 1.75× by not looking one field over.
+
+Both are **false absence derived from a proxy**. v1's own §9 warned against exactly that, by name.
+Writing the warning did not prevent committing the error twice inside the document containing it.
+
+The operative rule, stated as a procedure rather than a principle because the principle demonstrably
+does not transfer: **before asserting that something does not exist, run a positive control — search
+for something you know exists, by the same method — and only then report the absence.** A rule that
+is stated but not executed is a rule that will be broken by the person who stated it.
