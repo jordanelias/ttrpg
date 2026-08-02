@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 270,
+    "findings": 263,
     "by_category": {
       "apparatus_orphan": 4,
       "audit_cascade_sink": 15,
@@ -13,7 +13,7 @@
       "audit_notional": 1,
       "audit_sparse": 16,
       "audit_vocab_debt": 3,
-      "code_marker": 3,
+      "code_marker": 12,
       "contract_doc_null": 9,
       "contract_island": 5,
       "contract_missing_entirely": 2,
@@ -21,17 +21,15 @@
       "integrity_unverified_pin": 1,
       "key_orphan_emit": 1,
       "prose_marker": 32,
-      "register_phantom_source": 1,
-      "register_quarantined": 1,
-      "sim_not_implemented": 39,
-      "stale_retired_pointer": 18,
-      "status_noncurrent": 26,
-      "unregistered_term": 39
+      "sim_not_implemented": 23,
+      "stale_retired_pointer": 17,
+      "status_noncurrent": 28,
+      "unregistered_term": 40
     },
     "by_severity": {
-      "high": 24,
-      "med": 117,
-      "low": 129
+      "high": 22,
+      "med": 102,
+      "low": 139
     }
   },
   "by_lane": {
@@ -42,31 +40,31 @@
       "status_noncurrent": 1
     },
     "FI": {
-      "total": 7,
-      "prose_marker": 1,
-      "sim_not_implemented": 6
+      "total": 4,
+      "prose_marker": 2,
+      "sim_not_implemented": 2
     },
     "SC": {
-      "total": 10,
-      "code_marker": 2,
-      "sim_not_implemented": 7,
+      "total": 7,
+      "code_marker": 3,
+      "sim_not_implemented": 3,
       "status_noncurrent": 1
     },
     "FA": {
       "total": 21,
-      "code_marker": 1,
+      "code_marker": 2,
       "contract_island": 1,
       "prose_marker": 11,
-      "sim_not_implemented": 6,
+      "sim_not_implemented": 5,
       "status_noncurrent": 2
     },
     "WR": {
-      "total": 8,
-      "sim_not_implemented": 5,
+      "total": 6,
+      "sim_not_implemented": 3,
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 166,
+      "total": 180,
       "apparatus_orphan": 4,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
@@ -75,35 +73,36 @@
       "audit_notional": 1,
       "audit_sparse": 16,
       "audit_vocab_debt": 3,
+      "code_marker": 6,
+      "contract_island": 2,
+      "contract_no_resolver": 1,
       "integrity_unverified_pin": 1,
-      "prose_marker": 5,
-      "register_phantom_source": 1,
-      "register_quarantined": 1,
-      "sim_not_implemented": 7,
-      "stale_retired_pointer": 18,
-      "status_noncurrent": 2,
-      "unregistered_term": 39
+      "prose_marker": 8,
+      "sim_not_implemented": 5,
+      "stale_retired_pointer": 17,
+      "status_noncurrent": 8,
+      "unregistered_term": 40
     },
     "SE": {
-      "total": 6,
+      "total": 5,
       "prose_marker": 3,
-      "sim_not_implemented": 3
+      "sim_not_implemented": 2
     },
     "unassigned": {
-      "total": 46,
+      "total": 34,
+      "code_marker": 1,
       "contract_doc_null": 9,
-      "contract_island": 4,
+      "contract_island": 2,
       "contract_missing_entirely": 2,
-      "contract_no_resolver": 1,
       "key_orphan_emit": 1,
-      "prose_marker": 8,
-      "sim_not_implemented": 4,
-      "status_noncurrent": 17
+      "prose_marker": 4,
+      "sim_not_implemented": 2,
+      "status_noncurrent": 13
     }
   },
   "prose_marker_rollup": {
     "gap": 64,
-    "assumption": 61,
+    "assumption": 62,
     "stub": 4,
     "todo": 8
   },
@@ -129,19 +128,19 @@
     },
     {
       "category": "apparatus_orphan",
-      "id": "tools/ci_claude_workflow_paths.py",
-      "title": "tools/ci_claude_workflow_paths.py",
+      "id": "tools/geography/jsx_to_canonical.py",
+      "title": "tools/geography/jsx_to_canonical.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/ci_claude_workflow_paths.py",
+      "path": "tools/geography/jsx_to_canonical.py",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "apparatus_orphan",
-      "id": "tools/geography/jsx_to_canonical.py",
-      "title": "tools/geography/jsx_to_canonical.py",
+      "id": "tools/measure_stamp_false_positives.py",
+      "title": "tools/measure_stamp_false_positives.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/geography/jsx_to_canonical.py",
+      "path": "tools/measure_stamp_false_positives.py",
       "lane": "IN",
       "severity": "low"
     },
@@ -948,6 +947,51 @@
     },
     {
       "category": "code_marker",
+      "id": "engine/cross_scale/articulation.py:31",
+      "title": "STUB @ engine/cross_scale/articulation.py:31",
+      "detail": "# stub-wire calls and stops there. The minimal bus subscriber is Wave 2 item 6 (OI-08); the render",
+      "path": "engine/cross_scale/articulation.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/cross_scale/scene_dispatch.py:365",
+      "title": "STUB @ engine/cross_scale/scene_dispatch.py:365",
+      "detail": "# stubs.count ratchet (plan \u00a72.1), not a bespoke string this call site alone can drift.",
+      "path": "engine/cross_scale/scene_dispatch.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/mc_v18.py:184",
+      "title": "STUB @ engine/mc_v18.py:184",
+      "detail": "# stubwire (not silent) so the gap is greppable/counted, same discipline as the knots stub",
+      "path": "engine/mc_v18.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/mc_v18.py:95",
+      "title": "STUB @ engine/mc_v18.py:95",
+      "detail": "# stub-wired yet (Wave 1 stage 4 converts the OI-17 class); additive-only,",
+      "path": "engine/mc_v18.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/tests/test_pipeline_reach.py:652",
+      "title": "STUB @ engine/tests/test_pipeline_reach.py:652 [in tests]",
+      "detail": "# stub-flag invocations visible: the callback registered for a subscribed type_id must fire a",
+      "path": "engine/tests/test_pipeline_reach.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
       "id": "systems/factions/sim/parliamentary_action.py:162",
       "title": "TODO @ systems/factions/sim/parliamentary_action.py:162",
       "detail": "# TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
@@ -957,8 +1001,35 @@
     },
     {
       "category": "code_marker",
-      "id": "systems/social_contest/sim/contest/modes.py:148",
-      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:148",
+      "id": "systems/factions/sim/treaty.py:110",
+      "title": "STUB @ systems/factions/sim/treaty.py:110",
+      "detail": "# stub-wire primitive (engine/substrate/stubwire.py) \u2014 a typed no-op instead of a crash,",
+      "path": "systems/factions/sim/treaty.py",
+      "lane": "FA",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/factions/sim/tribunal.py:153",
+      "title": "STUB @ systems/factions/sim/tribunal.py:153",
+      "detail": "# stub-wire primitive (engine/substrate/stubwire.py) \u2014 a typed no-op instead of a crash,",
+      "path": "systems/factions/sim/tribunal.py",
+      "lane": "unassigned",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/social_contest/sim/contest/dictionaries.py:713",
+      "title": "STUB @ systems/social_contest/sim/contest/dictionaries.py:713",
+      "detail": "# stub-wire primitive (engine/substrate/stubwire.py) \u2014 a typed no-op instead of a crash,",
+      "path": "systems/social_contest/sim/contest/dictionaries.py",
+      "lane": "SC",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/social_contest/sim/contest/modes.py:150",
+      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:150",
       "detail": "INSTITUTIONAL_MODES = {            # placeholder keys (mechanism, not world); Jordan assigns Valorian names",
       "path": "systems/social_contest/sim/contest/modes.py",
       "lane": "SC",
@@ -966,11 +1037,20 @@
     },
     {
       "category": "code_marker",
-      "id": "systems/social_contest/sim/contest/modes.py:316",
-      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:316",
+      "id": "systems/social_contest/sim/contest/modes.py:318",
+      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:318",
       "detail": "CROSS_CULTURAL_VENUES = {          # placeholder keys; Valorian names are Jordan's to assign",
       "path": "systems/social_contest/sim/contest/modes.py",
       "lane": "SC",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "tools/review_core.py:65",
+      "title": "STUB @ tools/review_core.py:65",
+      "detail": "# stubs.count \u2014 the P1 stubwire ratchet (ED-IN-0091, plan \u00a72.1). Runs structure_audit's",
+      "path": "tools/review_core.py",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1060,7 +1140,7 @@
       "title": "campaign_architecture",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -1078,7 +1158,7 @@
       "title": "clock_registry",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/overview/clock_registry_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -1123,7 +1203,7 @@
       "title": "campaign_architecture",
       "detail": "module declares no resolver",
       "path": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "high"
     },
     {
@@ -1276,7 +1356,7 @@
       "title": "systems/_architecture/derived_stats_v30.md",
       "detail": "prose gap markers: TODO\u00d72",
       "path": "systems/_architecture/derived_stats_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1285,7 +1365,7 @@
       "title": "systems/_architecture/player_agency_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/_architecture/player_agency_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1294,7 +1374,7 @@
       "title": "systems/_architecture/player_agency_v30_index.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "systems/_architecture/player_agency_v30_index.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1357,7 +1437,7 @@
       "title": "systems/fieldwork/fieldwork_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/fieldwork/fieldwork_v30.md",
-      "lane": "unassigned",
+      "lane": "FI",
       "severity": "low"
     },
     {
@@ -1433,208 +1513,109 @@
       "severity": "low"
     },
     {
-      "category": "register_phantom_source",
-      "id": "values_master::engine/params/combat.md",
-      "title": "69 entries index a NON-EXISTENT source: engine/params/combat.md",
-      "detail": "values_master.yaml has 69 entries whose source file engine/params/combat.md does not exist on disk \u2014 phantom index rows (CLAUDE.md \u00a75)",
-      "path": "references/values_master.yaml",
-      "lane": "IN",
-      "severity": "high"
-    },
-    {
-      "category": "register_quarantined",
-      "id": "references/values_master.yaml",
-      "title": "values_master.yaml",
-      "detail": "quarantined-stale (CLAUDE.md \u00a77): free-text formulas, indexes a nonexistent combat.md, pulls from a superseded threadwork doc \u2014 do not lift as canonical",
-      "path": "references/values_master.yaml",
-      "lane": "IN",
-      "severity": "high"
-    },
-    {
       "category": "sim_not_implemented",
-      "id": "engine/autoload/npc_ai.py:23",
-      "title": "NotImplementedError @ engine/autoload/npc_ai.py:23",
-      "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
+      "id": "engine/autoload/npc_ai.py:24",
+      "title": "NotImplementedError @ engine/autoload/npc_ai.py:24",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "engine/autoload/npc_ai.py",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/autoload/npc_ai.py:27",
-      "title": "NotImplementedError @ engine/autoload/npc_ai.py:27",
-      "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
-      "path": "engine/autoload/npc_ai.py",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "engine/cross_scale/articulation.py:24",
-      "title": "NotImplementedError @ engine/cross_scale/articulation.py:24",
-      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
+      "id": "engine/cross_scale/articulation.py:25",
+      "title": "NotImplementedError @ engine/cross_scale/articulation.py:25",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "engine/cross_scale/articulation.py",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/cross_scale/articulation.py:28",
-      "title": "NotImplementedError @ engine/cross_scale/articulation.py:28",
-      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
-      "path": "engine/cross_scale/articulation.py",
+      "id": "engine/tests/test_pipeline_reach.py:171",
+      "title": "NotImplementedError @ engine/tests/test_pipeline_reach.py:171 [in tests]",
+      "detail": "\"session's schedule). This module MUST still raise NotImplementedError; if it \"",
+      "path": "engine/tests/test_pipeline_reach.py",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/cross_scale/articulation.py:32",
-      "title": "NotImplementedError @ engine/cross_scale/articulation.py:32",
-      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
-      "path": "engine/cross_scale/articulation.py",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/characters/sim/companion.py:21",
-      "title": "NotImplementedError @ systems/characters/sim/companion.py:21",
-      "detail": "raise NotImplementedError(\"sim/personal/companion.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/characters/sim/companion.py:22",
+      "title": "NotImplementedError @ systems/characters/sim/companion.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/characters/sim/companion.py",
       "lane": "unassigned",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/charter_liberties.py:20",
-      "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:20",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/charter_liberties.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/factions/sim/charter_liberties.py:21",
+      "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:21",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/charter_liberties.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/hafenmark_equipment.py:22",
-      "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:22",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/hafenmark_equipment.py \u2014 content pending contamination audit\")",
+      "id": "systems/factions/sim/hafenmark_equipment.py:23",
+      "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:23",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/hafenmark_equipment.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/home_sanctuary.py:21",
-      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:21",
-      "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/factions/sim/home_sanctuary.py:22",
+      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/home_sanctuary.py",
       "lane": "unassigned",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/home_sanctuary.py:25",
-      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:25",
-      "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/factions/sim/home_sanctuary.py",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/factions/sim/infrastructure_reclamation.py:21",
-      "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:21",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/infrastructure_reclamation.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/factions/sim/infrastructure_reclamation.py:22",
+      "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/infrastructure_reclamation.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/treaty.py:107",
-      "title": "NotImplementedError @ systems/factions/sim/treaty.py:107",
-      "detail": "raise NotImplementedError(",
-      "path": "systems/factions/sim/treaty.py",
-      "lane": "FA",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/factions/sim/tribunal.py:149",
-      "title": "NotImplementedError @ systems/factions/sim/tribunal.py:149",
-      "detail": "raise NotImplementedError(",
-      "path": "systems/factions/sim/tribunal.py",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/factions/sim/varfell_mandate_action.py:31",
-      "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:31",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_mandate_action.py \u2014 Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)\")",
+      "id": "systems/factions/sim/varfell_mandate_action.py:32",
+      "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:32",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/varfell_mandate_action.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/varfell_territorial_acquisition.py:33",
-      "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:33",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_territorial_acquisition.py \u2014 Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)",
+      "id": "systems/factions/sim/varfell_territorial_acquisition.py:34",
+      "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:34",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/varfell_territorial_acquisition.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/fieldwork.py:25",
-      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:25",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/fieldwork/sim/fieldwork.py:27",
+      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:27",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/fieldwork/sim/fieldwork.py",
       "lane": "FI",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/fieldwork.py:29",
-      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:29",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/fieldwork.py:33",
-      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:33",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/investigation.py:23",
-      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:23",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/investigation.py:27",
-      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:27",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/investigation.py:31",
-      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:31",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/fieldwork/sim/investigation.py:25",
+      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:25",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/fieldwork/sim/investigation.py",
       "lane": "FI",
       "severity": "med"
@@ -1650,63 +1631,27 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/overview/sim/ip_track.py:22",
-      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:22",
-      "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/overview/sim/ip_track.py:23",
+      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:23",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/overview/sim/ip_track.py",
       "lane": "SE",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/overview/sim/ip_track.py:26",
-      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:26",
-      "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/overview/sim/ip_track.py",
-      "lane": "SE",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/overview/sim/rs_track.py:21",
-      "title": "NotImplementedError @ systems/overview/sim/rs_track.py:21",
-      "detail": "raise NotImplementedError(\"sim/peninsular/rs_track.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/overview/sim/rs_track.py:22",
+      "title": "NotImplementedError @ systems/overview/sim/rs_track.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/overview/sim/rs_track.py",
       "lane": "SE",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/dictionaries.py:710",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/dictionaries.py:710",
-      "detail": "raise NotImplementedError(",
-      "path": "systems/social_contest/sim/contest/dictionaries.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/modes.py:328",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:328",
-      "detail": "def play(self, *a, **k): raise NotImplementedError(\"dyadic counsel is a separate sub-system \u2014 scaffold only\")",
-      "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/modes.py:331",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:331",
-      "detail": "def play(self, *a, **k): raise NotImplementedError(\"negotiation is a separate sub-system \u2014 scaffold only\")",
-      "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/modes.py:334",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:334",
-      "detail": "def play(self, *a, **k): raise NotImplementedError(\"ceremonial is a separate sub-system \u2014 scaffold only\")",
+      "id": "systems/social_contest/sim/contest/modes.py:329",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:329",
+      "detail": "# from an unconditional `raise NotImplementedError` to the single-owner stub-wire primitive",
       "path": "systems/social_contest/sim/contest/modes.py",
       "lane": "SC",
       "severity": "med"
@@ -1722,63 +1667,36 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/wrapper.py:201",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:201",
-      "detail": "raise NotImplementedError(",
+      "id": "systems/social_contest/sim/contest/wrapper.py:203",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:203",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive",
       "path": "systems/social_contest/sim/contest/wrapper.py",
       "lane": "SC",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/wrapper.py:222",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:222",
-      "detail": "games are STUBs (raise NotImplementedError) pending later stages. `policy_a`/`policy_b` name a",
-      "path": "systems/social_contest/sim/contest/wrapper.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/threadwork/sim/rendering.py:22",
-      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:22",
-      "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/threadwork/sim/rendering.py:23",
+      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:23",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/threadwork/sim/rendering.py",
       "lane": "WR",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/threadwork/sim/rendering.py:26",
-      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:26",
-      "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/threadwork/sim/rendering.py",
-      "lane": "WR",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/world/sim/miraculous_event.py:21",
-      "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:21",
-      "detail": "raise NotImplementedError(\"systems/world/sim/miraculous_event.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/world/sim/miraculous_event.py:22",
+      "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/world/sim/miraculous_event.py",
       "lane": "WR",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/world/sim/restoration_movement.py:23",
-      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:23",
-      "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/world/sim/restoration_movement.py",
-      "lane": "WR",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/world/sim/restoration_movement.py:27",
-      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:27",
-      "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/world/sim/restoration_movement.py:24",
+      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:24",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/world/sim/restoration_movement.py",
       "lane": "WR",
       "severity": "med"
@@ -1848,15 +1766,6 @@
     },
     {
       "category": "stale_retired_pointer",
-      "id": "references/collation_report_summary.yaml",
-      "title": "references/collation_report_summary.yaml",
-      "detail": "594 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/campaign_architecture_v30.md, designs/architecture/campaign_modes_v30.md, designs/architecture/campaign_modes_v30_infill.md (+83 more)",
-      "path": "references/collation_report_summary.yaml",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "stale_retired_pointer",
       "id": "references/descriptor_registry.yaml",
       "title": "references/descriptor_registry.yaml",
       "detail": "1 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/substrate/keys.py",
@@ -1877,8 +1786,17 @@
       "category": "stale_retired_pointer",
       "id": "references/id_reservations.yaml",
       "title": "references/id_reservations.yaml",
-      "detail": "2 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md, sim/tests/test_f7_smoke_oracle.py",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md",
       "path": "references/id_reservations.yaml",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/id_reservations_history.md",
+      "title": "references/id_reservations_history.md",
+      "detail": "1 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/tests/test_f7_smoke_oracle.py",
+      "path": "references/id_reservations_history.md",
       "lane": "IN",
       "severity": "med"
     },
@@ -1897,15 +1815,6 @@
       "title": "references/npc_registry.yaml",
       "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/faction_canon_v30.md",
       "path": "references/npc_registry.yaml",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "stale_retired_pointer",
-      "id": "references/numeric_bounds_report.yaml",
-      "title": "references/numeric_bounds_report.yaml",
-      "detail": "139 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/architecture/campaign_modes_v30.md, designs/architecture/canonical_registry.md, designs/architecture/complete_systems_reference.md (+52 more)",
-      "path": "references/numeric_bounds_report.yaml",
       "lane": "IN",
       "severity": "med"
     },
@@ -1931,7 +1840,7 @@
       "category": "stale_retired_pointer",
       "id": "registers/mechanics_index.yaml",
       "title": "registers/mechanics_index.yaml",
-      "detail": "47 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md, designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md, designs/provincial/altonian_reinforcements_v30.md (+23 more)",
+      "detail": "1 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/personal/contest.py",
       "path": "registers/mechanics_index.yaml",
       "lane": "IN",
       "severity": "med"
@@ -2086,7 +1995,7 @@
       "title": "systems/_architecture/canonical_registry.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/_architecture/canonical_registry.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2095,7 +2004,16 @@
       "title": "systems/_architecture/complete_systems_reference.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/_architecture/complete_systems_reference.md",
-      "lane": "unassigned",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/decision_policy_v1.md",
+      "title": "systems/_architecture/decision_policy_v1.md",
+      "detail": "doc Status is not current: DRAFT",
+      "path": "systems/_architecture/decision_policy_v1.md",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2104,7 +2022,7 @@
       "title": "systems/_architecture/governance_ripple_substrate_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/_architecture/governance_ripple_substrate_v1.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2113,7 +2031,16 @@
       "title": "systems/_architecture/governance_type_registry_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/_architecture/governance_type_registry_v1.md",
-      "lane": "unassigned",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/repo_state_armature_v1.md",
+      "title": "systems/_architecture/repo_state_armature_v1.md",
+      "detail": "doc Status is not current: STALE",
+      "path": "systems/_architecture/repo_state_armature_v1.md",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2227,8 +2154,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Church Mandate",
-      "title": "\u201cChurch Mandate\u201d \u2014 in 22 docs, unregistered",
-      "detail": "appears in 22 design docs (61 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md",
+      "title": "\u201cChurch Mandate\u201d \u2014 in 23 docs, unregistered",
+      "detail": "appears in 23 design docs (62 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2254,8 +2181,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Combat Pool",
-      "title": "\u201cCombat Pool\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (34 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, engine/params/core.md",
+      "title": "\u201cCombat Pool\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, engine/params/core.md",
       "path": "systems/combat/combat_design_v1.md",
       "lane": "IN",
       "severity": "low"
@@ -2326,8 +2253,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Ein Sof",
-      "title": "\u201cEin Sof\u201d \u2014 in 19 docs, unregistered",
-      "detail": "appears in 19 design docs (76 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/threadwork/threadwork_v30_infill.md",
+      "title": "\u201cEin Sof\u201d \u2014 in 20 docs, unregistered",
+      "detail": "appears in 20 design docs (78 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/threadwork/threadwork_v30_infill.md",
       "path": "canon/00_philosophical_foundations.md",
       "lane": "IN",
       "severity": "low"
@@ -2380,8 +2307,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Mass Seizure",
-      "title": "\u201cMass Seizure\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (41 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, engine/params/bg/ci_seizure.md",
+      "title": "\u201cMass Seizure\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (42 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, engine/params/bg/ci_seizure.md",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2527,6 +2454,15 @@
       "title": "\u201cTorben Loyalty\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/early_game_ignition_analysis.md, systems/npcs/npc_behavior_v30.md",
       "path": "arcs/arc_expansion_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Varfell Path",
+      "title": "\u201cVarfell Path\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/victory.md, engine/params/bg/geography.md, engine/params/bg/ed_resolutions.md",
+      "path": "engine/params/bg/victory.md",
       "lane": "IN",
       "severity": "low"
     },

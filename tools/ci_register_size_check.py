@@ -70,8 +70,7 @@ THRESHOLDS = {
     "references/propagation_map.md":         15_000,
     "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)
     # ── Previously-uncapped large registers (added 2026-07-20, ED-IN-0077 data-mgmt review) ──
-    # Growth caps with headroom over current size; values_master is known-stale (do not grow it).
-    "references/values_master.yaml":         40_000,  # quarantined stale snapshot (ED-IN-0029) — cap so it can't grow
+    # Growth caps with headroom over current size.
     "references/id_reservations.yaml":       15_000,  # the ID-allocation source of truth
     # Single-sourced from references/atomization_rules.yaml (MODULE_CONTRACTS_LIMIT) — see above.
     "references/module_contracts.yaml":      MODULE_CONTRACTS_LIMIT,  # the 27-module I/O spine

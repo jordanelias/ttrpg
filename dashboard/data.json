@@ -1,7 +1,7 @@
 {
   "generated_at": {
-    "timestamp_utc": "2026-08-02T03:04:36+00:00",
-    "commit_sha": "ab1c19b"
+    "timestamp_utc": "2026-08-02T18:21:46+00:00",
+    "commit_sha": "1eba983"
   },
   "program": {
     "available": true,
@@ -46,10 +46,10 @@
         {
           "signal": "tracked.files",
           "ok": false,
-          "value": 3120,
+          "value": 3122,
           "baseline": 3112,
           "target": 3103,
-          "delta": 8,
+          "delta": 10,
           "at_target": false,
           "evidence": "git ls-files",
           "note": "Total surface under maintenance. Flat is the goal, not shrinkage: the season loop will add engine files, so landing loop work requires retiring dead weight to stay under. That trade is the mechanism, not a side effect."
@@ -170,7 +170,7 @@
       "errors": 0,
       "signal_count": 11
     },
-    "head_sha": "ab1c19b6ea891429dc38e5dfa0490fa944cf7276",
+    "head_sha": "1eba983b2f7fea86f6c9d80c94c6b643d8b0178c",
     "signals": [
       {
         "id": "currency.stamps",
@@ -290,7 +290,7 @@
         "source": "tools/workplan_status.py",
         "detail": [
           "workplan: M1 0/7 junctures done (4 in progress, 1 blocked) · next: M1 Strategic decision: author the domain_actions home (ED-FA-0002) + ratification-flip ... · T0 open: 1",
-          "⚠ 77 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+          "⚠ 78 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
         ]
       },
       {
@@ -8543,7 +8543,7 @@
       "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16",
       "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
     ],
-    "staleness_warning": "⚠ 77 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
+    "staleness_warning": "⚠ 78 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use"
   },
   "audits": {
     "available": true,
@@ -8841,6 +8841,34 @@
     "available": true,
     "commits": [
       {
+        "sha": "1eba983b2f",
+        "date": "2026-08-02",
+        "author": "Claude",
+        "subject": "[fix] The provenance gate could not read the field named measured_by (ED-IN-0122)",
+        "scope": "fix"
+      },
+      {
+        "sha": "3231d8d060",
+        "date": "2026-08-02",
+        "author": "Claude",
+        "subject": "[infrastructure] Record ED-IN-0122 + the planning failure in the IN handoff",
+        "scope": "infrastructure"
+      },
+      {
+        "sha": "d11e370bc0",
+        "date": "2026-08-02",
+        "author": "Claude",
+        "subject": "[fix] Name the instrument in ED-IN-0122's description, where the gate reads (ED-IN-0122)",
+        "scope": "fix"
+      },
+      {
+        "sha": "e82e59db93",
+        "date": "2026-08-02",
+        "author": "Claude",
+        "subject": "[fix] Guard the repointed-path pattern after two one-off fixes and no guard (ED-IN-0122)",
+        "scope": "fix"
+      },
+      {
         "sha": "ab1c19b6ea",
         "date": "2026-08-01",
         "author": "Claude",
@@ -9091,34 +9119,6 @@
         "author": "jordanelias",
         "subject": "[simulation] A1a: bisect + re-record the two red field goldens, per-mechanism delta published (ED-MB-0045) (#260)",
         "scope": "simulation"
-      },
-      {
-        "sha": "cd7f0d0bc6",
-        "date": "2026-07-28",
-        "author": "jordanelias",
-        "subject": "[editorial] E1: delete the scene_outcome.battle_concluded emit row (ED-MB-0010, merge = ratification) (#257)",
-        "scope": "editorial"
-      },
-      {
-        "sha": "9c89030197",
-        "date": "2026-07-28",
-        "author": "jordanelias",
-        "subject": "[infrastructure] W0b: Jordan docket + OI-55 detector integrity + execution ledger (ED-IN-0092) (#258)",
-        "scope": "infrastructure"
-      },
-      {
-        "sha": "47d33a5d90",
-        "date": "2026-07-28",
-        "author": "jordanelias",
-        "subject": "[infrastructure] W0a: pre-allocate all three sessions' ED blocks; freeze id_reservations.yaml for the run (ED-IN-0091) (#256)",
-        "scope": "infrastructure"
-      },
-      {
-        "sha": "81948c1f22",
-        "date": "2026-07-28",
-        "author": "jordanelias",
-        "subject": "[infrastructure] pytest slow marker: an 82s inner loop, with a guard that the shipping gate never shrinks (#254)",
-        "scope": "infrastructure"
       }
     ]
   },
@@ -9146,7 +9146,7 @@
       },
       {
         "source": "registers/handoffs/HANDOFF_IN.md",
-        "line": 921,
+        "line": 986,
         "text": "sim↔port parity tooling) filed as `ED-IN-0042`, `needs_jordan: true` — see"
       },
       {
@@ -9176,7 +9176,7 @@
         "category": "workplan",
         "ref": "as_of 470aa09 (2026-07-16)",
         "stale": true,
-        "detail": "⚠ 77 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
+        "detail": "⚠ 78 workplan-relevant file(s) changed since the board's last refresh (as_of 470aa09) — the navigator skill refreshes it on use",
         "refresh": "valoria-workplan-navigator (refresh-on-use) · tools/workplan_status.py --check"
       },
       {
@@ -9184,7 +9184,7 @@
         "category": "audit-family",
         "ref": "base d5fee21 (2026-07-24)",
         "stale": true,
-        "detail": "218 in-scope file(s) changed since last refresh",
+        "detail": "219 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -9192,15 +9192,15 @@
         "category": "audit-family",
         "ref": "base 80918f6 (2026-07-31)",
         "stale": true,
-        "detail": "5 in-scope file(s) changed since last refresh",
+        "detail": "6 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: proposals-register",
         "category": "audit-family",
-        "ref": "base ba9f35c (2026-07-28)",
+        "ref": "base e82e59d (2026-08-02)",
         "stale": true,
-        "detail": "56 in-scope file(s) changed since last refresh",
+        "detail": "1 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -9208,15 +9208,15 @@
         "category": "audit-family",
         "ref": "base 915b8da (2026-07-28)",
         "stale": true,
-        "detail": "43 in-scope file(s) changed since last refresh",
+        "detail": "52 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
         "surface": "Audit family: graph-lexicon",
         "category": "audit-family",
-        "ref": "base d5fee21 (2026-07-24)",
+        "ref": "base e82e59d (2026-08-02)",
         "stale": true,
-        "detail": "17 in-scope file(s) changed since last refresh",
+        "detail": "1 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -9232,7 +9232,7 @@
         "category": "audit-family",
         "ref": "base f03357d (2026-07-29)",
         "stale": true,
-        "detail": "10 in-scope file(s) changed since last refresh",
+        "detail": "11 in-scope file(s) changed since last refresh",
         "refresh": "the family's owning regenerator · tools/audit_staleness.py --full"
       },
       {
@@ -9277,8 +9277,8 @@
       },
       {
         "surface": "HANDOFF_IN.md",
-        "last_updated": "2026-08-01",
-        "days_ago": 1
+        "last_updated": "2026-08-02",
+        "days_ago": 0
       },
       {
         "surface": "HANDOFF_MB.md",
@@ -10613,12 +10613,12 @@
   },
   "incompleteness": {
     "available": true,
-    "total": 270,
-    "category_count": 22,
+    "total": 263,
+    "category_count": 20,
     "by_severity": {
-      "high": 24,
-      "med": 117,
-      "low": 129
+      "high": 22,
+      "med": 102,
+      "low": 139
     },
     "categories": [
       {
@@ -10652,24 +10652,6 @@
         "severity": "high"
       },
       {
-        "category": "register_phantom_source",
-        "label": "Register citing a nonexistent source",
-        "count": 1,
-        "severity": "high"
-      },
-      {
-        "category": "register_quarantined",
-        "label": "Quarantined-stale register",
-        "count": 1,
-        "severity": "high"
-      },
-      {
-        "category": "sim_not_implemented",
-        "label": "Sim function raising NotImplementedError",
-        "count": 39,
-        "severity": "med"
-      },
-      {
         "category": "audit_implied_missing",
         "label": "Wired/grouped but never cited together",
         "count": 28,
@@ -10678,13 +10660,19 @@
       {
         "category": "status_noncurrent",
         "label": "Doc with a non-current Status line",
-        "count": 26,
+        "count": 28,
+        "severity": "med"
+      },
+      {
+        "category": "sim_not_implemented",
+        "label": "Sim function raising NotImplementedError",
+        "count": 23,
         "severity": "med"
       },
       {
         "category": "stale_retired_pointer",
         "label": "Pointer into a retired tree",
-        "count": 18,
+        "count": 17,
         "severity": "med"
       },
       {
@@ -10702,7 +10690,7 @@
       {
         "category": "unregistered_term",
         "label": "Frequent term in no register",
-        "count": 39,
+        "count": 40,
         "severity": "low"
       },
       {
@@ -10730,6 +10718,12 @@
         "severity": "low"
       },
       {
+        "category": "code_marker",
+        "label": "TODO / FIXME / STUB in code",
+        "count": 12,
+        "severity": "low"
+      },
+      {
         "category": "apparatus_orphan",
         "label": "Tool nothing invokes",
         "count": 4,
@@ -10742,12 +10736,6 @@
         "severity": "low"
       },
       {
-        "category": "code_marker",
-        "label": "TODO / FIXME / STUB in code",
-        "count": 3,
-        "severity": "low"
-      },
-      {
         "category": "audit_notional",
         "label": "Cited but content-empty (Mode C)",
         "count": 1,
@@ -10755,14 +10743,14 @@
       }
     ],
     "by_lane": {
-      "IN": 166,
-      "unassigned": 46,
+      "IN": 180,
+      "unassigned": 34,
       "FA": 21,
-      "SC": 10,
-      "WR": 8,
-      "FI": 7,
+      "SC": 7,
       "MB": 6,
-      "SE": 6
+      "WR": 6,
+      "SE": 5,
+      "FI": 4
     },
     "highlights": [
       {
@@ -10884,7 +10872,7 @@
           {
             "title": "campaign_architecture",
             "path": "systems/_architecture/campaign_architecture_v30.md",
-            "lane": "unassigned"
+            "lane": "IN"
           }
         ]
       },
@@ -10899,35 +10887,11 @@
             "lane": "unassigned"
           }
         ]
-      },
-      {
-        "category": "register_phantom_source",
-        "label": "Register citing a nonexistent source",
-        "count": 1,
-        "items": [
-          {
-            "title": "69 entries index a NON-EXISTENT source: engine/params/combat.md",
-            "path": "references/values_master.yaml",
-            "lane": "IN"
-          }
-        ]
-      },
-      {
-        "category": "register_quarantined",
-        "label": "Quarantined-stale register",
-        "count": 1,
-        "items": [
-          {
-            "title": "values_master.yaml",
-            "path": "references/values_master.yaml",
-            "lane": "IN"
-          }
-        ]
       }
     ],
     "prose_rollup": {
       "gap": 64,
-      "assumption": 61,
+      "assumption": 62,
       "stub": 4,
       "todo": 8
     },
