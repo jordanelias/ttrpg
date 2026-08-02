@@ -91,6 +91,36 @@ NON_REFERENTS = {'...', 'all', 'all subscribing systems', 'legacy-aware consumer
 
 KEY_RE = re.compile(r'^([a-z_]+)\.([a-z_]+)$')
 
+# Modules whose code demonstrably exists in the tree while their contract row deliberately does NOT
+# declare `sim_module`. This is not an error to fix here: `mass_battle`'s row is MB-lane-owned under
+# the ED-IN-0097 W4 single-writer table ("MB owns rows [mass_battle]; IN owns the rest"), and the
+# row itself says so in a comment. Recording the fact without editing another lane's row is the
+# whole point of the exception list — a cross-lane edit would be a worse defect than the gap.
+CODE_EXISTS_UNDECLARED = {
+    'mass_battle': 'systems/mass_battle/sim/  (row MB-owned, OI-54/ED-IN-0097 W4 — IN must not fill it)',
+}
+
+
+def authority_of(has_doc: bool, has_code: bool) -> str:
+    """Jordan's precedence rule (2026-08-02), made computable.
+
+        "code/tables/etc are always authoritative over prose; prose is canon/authoritative
+         only if there is no code pair (eg metaphysics has no code pair)"
+
+    So authority is a function of PAIRING, not of content:
+      * code present  -> 'code'   (the prose, if any, is rationale — it records WHY, not WHAT)
+      * doc only      -> 'prose'  (canon UNTIL implemented; authority transfers when code lands)
+      * neither       -> 'none'   (a declared module that is nothing — no authority to cite)
+
+    The 'prose' case is explicitly temporary. That is the subtle part of the rule and the reason
+    this is derived rather than stored: a doc describing an unbuilt system IS canon, and the moment
+    the system is built the doc silently stops being canon. Nothing can be hand-annotated with an
+    authority that expires on someone else's commit.
+    """
+    if has_code:
+        return 'code'
+    return 'prose' if has_doc else 'none'
+
 
 def _canon(name: str):
     """(canonical_id, kind) where kind ∈ resolved | unresolved | non_referent."""
@@ -135,14 +165,26 @@ def load_contracts():
         name = r.get('module')
         if not name:
             continue
-        sm = str(r.get('sim_module') or '')
+        sm = str(r.get('sim_module') or '').strip()
+        if sm.lower() in ('none', 'null'):
+            sm = ''
         m = re.match(r'systems[/.]([a-z_]+)', sm)
+        doc = r.get('doc')
+        has_doc = bool(doc) and str(doc).lower() not in ('none', 'null')
+        # Declared code must RESOLVE to count. A declared-but-missing path is not a code pair; it
+        # is a claim, and treating a claim as authority is the defect class this repo keeps hitting.
+        has_code = bool(sm) and os.path.exists(os.path.join(ROOT, sm.rstrip('/')))
+        undeclared = CODE_EXISTS_UNDECLARED.get(name)
+        if undeclared:
+            has_code = True
         modules[name] = {
             'sim_module': sm or None,
             # nullable ON PURPOSE — 14 of 27 have no home, and several are open design decisions.
             'subsystem': m.group(1) if m else ('engine' if sm.startswith('engine') else None),
-            'doc': r.get('doc'),
+            'doc': doc if has_doc else None,
             'status': r.get('status'),
+            'authority': authority_of(has_doc, has_code),
+            'code_undeclared_note': undeclared,
         }
         for field, sink in (('emits', em), ('consumes', co)):
             for x in (r.get(field) or []):
@@ -246,6 +288,8 @@ def summarize(g):
     c['no_consumer'] = sum(1 for v in ks.values() if not v['consumers'])
     c['malformed'] = sum(1 for v in ks.values() if not v['well_formed'])
     c['modules_without_home'] = sum(1 for m in g['modules'].values() if not m['subsystem'])
+    for m in g['modules'].values():
+        c[f"authority:{m['authority']}"] = c.get(f"authority:{m['authority']}", 0) + 1
     return c
 
 
@@ -261,6 +305,9 @@ def main():
           f"({s['modules_without_home']} without a subsystem home)")
     for k in sorted(s):
         if k.startswith(('producer_status', 'consumer_status')):
+            print(f"   {k}: {s[k]}")
+    for k in sorted(s):
+        if k.startswith('authority:'):
             print(f"   {k}: {s[k]}")
     print(f"   keys with NO producer: {s['no_producer']} · NO consumer: {s['no_consumer']} "
           f"· malformed name: {s['malformed']}")

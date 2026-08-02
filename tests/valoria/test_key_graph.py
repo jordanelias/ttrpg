@@ -62,6 +62,17 @@ KNOWN_UNRESOLVED = {'all', 'all subscribing systems', 'echo_transport',
                     'legacy-aware consumers only', 'player_input', 'substrate (auto)'}
 
 
+# Modules with NEITHER a design doc NOR code — declared names that are nothing. Under Jordan's
+# 2026-08-02 precedence rule ("code/tables are always authoritative over prose; prose is canon only
+# where there is no code pair") these have NO authority to cite in either direction: there is no
+# code to be authoritative and no prose to fall back to. Shrink-only; a NEW one fails the build.
+# `engine_clock` is the temporal spine and `domain_actions` is an open ED (ED-FA-0002).
+KNOWN_NO_AUTHORITY = {
+    'audit', 'domain_actions', 'engine_clock', 'game_director', 'npc_memory',
+    'scenario_authoring', 'scene_timer', 'settlement_economy',
+}
+
+
 @pytest.fixture(scope='module')
 def graph():
     if not os.path.exists(GRAPH):
@@ -159,3 +170,41 @@ def test_graph_is_current(graph):
     assert committed == mod.build(), (
         'references/key_graph.json differs from a fresh build — regenerate with '
         '`python3 tools/build_key_graph.py` and commit.')
+
+
+def test_every_module_has_a_valid_authority(graph):
+    """Jordan's precedence rule must classify every module into exactly one of three states."""
+    bad = {m: v.get('authority') for m, v in graph['modules'].items()
+           if v.get('authority') not in ('code', 'prose', 'none')}
+    assert not bad, f'module(s) with an invalid authority value: {bad}'
+
+
+def test_no_new_authorityless_modules(graph):
+    """A declared module with neither code nor a doc cannot be cited as authority for anything.
+
+    This is the direct consequence of the precedence rule: 'code beats prose, prose is canon only
+    where no code pair exists' has no third branch. A module with neither is a name in a registry —
+    and 8 of 27 currently are, including `engine_clock`, the temporal spine. Shrink-only, so the
+    number is driven down deliberately instead of quietly growing.
+    """
+    none = {m for m, v in graph['modules'].items() if v.get('authority') == 'none'}
+    new = none - KNOWN_NO_AUTHORITY
+    assert not new, (
+        f'module(s) declared with neither code nor a doc: {sorted(new)}.\n'
+        f'Give it a doc (prose becomes canon until code lands) or code (which then takes '
+        f'authority), or remove the row. A module that is only a name cannot be cited.')
+    stale = KNOWN_NO_AUTHORITY - none
+    assert not stale, f'KNOWN_NO_AUTHORITY lists resolved module(s) {sorted(stale)} — remove them'
+
+
+def test_code_beats_prose_wherever_both_exist(graph):
+    """Wherever a module has code, its authority is 'code' regardless of how much prose it has.
+
+    The falsifier for the rule itself: if a doc-bearing module with code ever reported 'prose',
+    the derivation would have inverted the precedence.
+    """
+    for name, m in graph['modules'].items():
+        has_code = bool(m.get('sim_module')) or bool(m.get('code_undeclared_note'))
+        if has_code:
+            assert m['authority'] == 'code', (
+                f'{name} has code but authority={m["authority"]!r} — precedence inverted')

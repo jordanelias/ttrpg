@@ -2556,162 +2556,216 @@
  },
  "modules": {
   "articulation_layer": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/articulation/articulation_layer_v30.md",
    "sim_module": "engine/cross_scale/articulation.py",
    "status": "extracted",
    "subsystem": "engine"
   },
   "audit": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "campaign_architecture": {
+   "authority": "prose",
+   "code_undeclared_note": null,
    "doc": "systems/_architecture/campaign_architecture_v30.md",
-   "sim_module": "none",
+   "sim_module": null,
    "status": "stub",
    "subsystem": null
   },
   "ci_political": {
+   "authority": "prose",
+   "code_undeclared_note": null,
    "doc": "systems/factions/ci_political_v30.md",
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "clock_registry": {
+   "authority": "prose",
+   "code_undeclared_note": null,
    "doc": "systems/overview/clock_registry_v30.md",
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "domain_actions": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "engine_clock": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "faction_politics": {
+   "authority": "prose",
+   "code_undeclared_note": null,
    "doc": "systems/factions/faction_politics_v30.md",
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "faction_state": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/factions/faction_behavior_v30.md",
    "sim_module": "engine/autoload/game_state.py",
    "status": "extracted",
    "subsystem": "engine"
   },
   "fieldwork_knots": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/fieldwork/knots_v30.md",
    "sim_module": "systems/fieldwork/sim/knots.py",
    "status": "extracted",
    "subsystem": "fieldwork"
   },
   "game_director": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "mass_battle": {
+   "authority": "code",
+   "code_undeclared_note": "systems/mass_battle/sim/  (row MB-owned, OI-54/ED-IN-0097 W4 \u2014 IN must not fill it)",
    "doc": "systems/mass_battle/mass_battle_v30.md",
    "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "miraculous_event": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/world/miraculous_event_v30.md",
    "sim_module": "systems/world/sim/miraculous_event.py",
    "status": "extracted",
    "subsystem": "world"
   },
   "npc_behavior": {
+   "authority": "prose",
+   "code_undeclared_note": null,
    "doc": "systems/factions/political_dynamics_keys_migration_v30.md",
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "npc_memory": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "peninsular_strain": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/overview/peninsular_strain_v30.md",
    "sim_module": "systems/overview/sim/",
    "status": "extracted",
    "subsystem": "overview"
   },
   "personal_combat": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/combat/combat_engine_v1/",
    "sim_module": "systems/combat/combat_engine_v1/",
    "status": "extracted",
    "subsystem": "combat"
   },
   "piety_track": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/characters/conviction_track_v1.md",
    "sim_module": "systems/characters/sim/conviction.py",
    "status": "extracted",
    "subsystem": "characters"
   },
   "scenario_authoring": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "scene_slate": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": null,
    "sim_module": "engine/autoload/scene_slate.py",
    "status": "extracted",
    "subsystem": "engine"
   },
   "scene_timer": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "settlement_economy": {
+   "authority": "none",
+   "code_undeclared_note": null,
    "doc": null,
-   "sim_module": "none",
+   "sim_module": null,
    "status": "extracted",
    "subsystem": null
   },
   "settlement_layer": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/settlements/settlement_layer_v30.md",
    "sim_module": "systems/settlements/sim/settlement.py",
    "status": "extracted",
    "subsystem": "settlements"
   },
   "social_contest": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/social_contest/social_contest_v30.md",
    "sim_module": "systems/social_contest/sim/contest/",
    "status": "extracted",
    "subsystem": "social_contest"
   },
   "territorial_piety": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/characters/conviction_track_v30.md",
    "sim_module": "systems/overview/sim/ci_track.py",
    "status": "extracted",
    "subsystem": "overview"
   },
   "threadwork": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/threadwork/threadwork_v30.md",
    "sim_module": "systems/threadwork/sim/operations.py",
    "status": "extracted",
    "subsystem": "threadwork"
   },
   "victory": {
+   "authority": "code",
+   "code_undeclared_note": null,
    "doc": "systems/victory/victory_v30.md",
    "sim_module": "engine/autoload/victory.py",
    "status": "extracted",
