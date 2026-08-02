@@ -1,7 +1,7 @@
 <!-- Architecture spec. Substrate tier (RULED underscore-prefix, not editorial-governed content). -->
 # Repository State Armature — v1
 
-## Status: RATIFIED — charter + Phases 0–2 plan-of-record (ED-IN-0077, PR #193 merged 2026-07-20). Phase 0/1 EXECUTED; the artifact face (Pages "Repository state" card) added 2026-07-20. **Phases 3 & 5 HELD BACK** pending Jordan rulings tracked under ED-IN-0029 (the ED-IN-0029 frozen-keep overturn; the OPT-AV-1 attribute roster). Phase 4 (freshness absorption + CI job) staged.
+## Status: RATIFIED — charter + Phases 0–2 plan-of-record (ED-IN-0077, PR #193 merged 2026-07-20). Phase 0/1 EXECUTED; the artifact face (Pages "Repository state" card) added 2026-07-20. **Phase 3 COMPLETE** (ED-IN-0078, Jordan-authorized 2026-07-20 — see §5 P3; `tools/vocab_store.py` + the 4 `# GENERATED` vocab register views are live on disk). **Phase 5 HELD BACK** pending the OPT-AV-1 attribute roster ruling. Phase 4 (freshness absorption + CI job) staged. ⚠️ *This line read "Phases 3 & 5 HELD BACK" until 2026-08-02 (ED-IN-0122) — stale against its own §5, which had recorded P3 as COMPLETE since 2026-07-20. Corrected as currency reconciliation, not a new ratification: the authorization it cites is already in the body.*
 ## Class: A — substrate/infrastructure architecture. Merge of the Phase-1 PR ratifies Phases 0–2 (ED-1094 merge-ratifies-by-default); Phases 3–5 carry their own loudly-held-back EDs.
 ## Provenance: designed by a producer→critic→informed-design relay — an initial plan (Opus adversarial review, verdict NEEDS-REDESIGN) then a Fable-5 max-effort redesign built around the critique. Seeded by this session's world-state primitive survey (`audit/other/2026-07-19-module-io-state-survey.md`).
 
