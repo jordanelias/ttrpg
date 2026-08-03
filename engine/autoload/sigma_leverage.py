@@ -4,7 +4,7 @@ sim/autoload/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice
 Canon source: modifier_system_spec.md (the implementation-pass rewrite)
 Params source: params/core.md, modifier_system_spec.md
 Game Design constraints applicable: none — σ-space resolution math (GD-1..3 govern game-layer mechanics, not dice math)
-Rationale:    D0-2 (designs/audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md)
+Rationale:    D0-2 (audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md)
 Status:       [CANONICAL — Stage 1a port 2026-06-30]
 
 Purpose
@@ -36,7 +36,7 @@ Functions NOT ported from m1_dice_sigma_core:
   • roll_net — delegates to dice_engine.roll_pool (integer net)
   • roll_net_continuous — delegates to dice_engine.continuous_engine_sample
 
-Functions added (contest surface, designs/audit/2026-06-03-contest-groundup/engine.py):
+Functions added (contest surface, audit/2026-06-03-contest-groundup/engine.py):
   • sigma_N (alias: contest engine names it sigma_N not sigma_n)
   • eff_sigma (alias for soft_cap, with contest naming)
   • effective_ob (display-only Ob shift, per contest engine's signature)
@@ -92,7 +92,7 @@ LEVEL_SIGMA: dict[str, float] = {
 M_MAX = 1.5             # soft-cap ceiling, sigma-units   # [canonical: modifier_system_spec.md §3.1 Saturating function]
 SIGMA_N_COEFF = 0.8     # sigma_N = 0.8 * sqrt(Pool)      # [canonical: modifier_system_spec.md §2.1 The transform]
 
-# Contest engine surface constants (designs/audit/2026-06-03-contest-groundup/engine.py)
+# Contest engine surface constants (audit/2026-06-03-contest-groundup/engine.py)
 OB_MIN = 1              # [canonical: params/core.md §Obstacle Scale]
 
 # Contest-surface per-die stats (params/core.md §Expected Value): TN7 μ/σ per die.
@@ -101,7 +101,7 @@ MU_PER_DIE = 0.40       # [canonical: params/core.md §Expected Value (per die),
 SD_PER_DIE = 0.80       # [canonical: params/core.md §Expected Value (per die), TN7]
 # De-saturation bar (contest diagnostic Lesson 2, groundup engine.py): live degree-3 bar
 # = pool mean + OVERWHELM_SIGMA·σ, holding the Overwhelming rate ~uniform across pool sizes.
-OVERWHELM_SIGMA = 0.85  # [canonical: designs/audit/2026-06-03-contest-groundup/engine.py §degree]
+OVERWHELM_SIGMA = 0.85  # [canonical: audit/2026-06-03-contest-groundup/engine.py §degree]
 
 
 # ---------------------------------------------------------------------------
@@ -120,7 +120,7 @@ def sigma_n(pool: float) -> float:
 def sigma_N(pool: float) -> float:
     """Contest-surface alias for sigma_n.
 
-    designs/audit/2026-06-03-contest-groundup/engine.py names this sigma_N;
+    audit/2026-06-03-contest-groundup/engine.py names this sigma_N;
     combat surface uses sigma_n. Identical computation.
     """
     return sigma_n(pool)
@@ -139,7 +139,7 @@ def soft_cap(net_sigma: float) -> float:
 def eff_sigma(net_sigma: float) -> float:
     """Contest-surface alias for soft_cap.
 
-    designs/audit/2026-06-03-contest-groundup/engine.py names this eff_sigma;
+    audit/2026-06-03-contest-groundup/engine.py names this eff_sigma;
     combat surface uses soft_cap. Identical computation.
     """
     return soft_cap(net_sigma)
@@ -168,7 +168,7 @@ def eff_ob(base_ob: float, pool: float, net_sigma: float) -> float:
 def effective_ob(base_ob: float, net_dsigma: float, pool: float) -> float:
     """Contest-surface signature for eff_ob.
 
-    designs/audit/2026-06-03-contest-groundup/engine.py calls
+    audit/2026-06-03-contest-groundup/engine.py calls
     effective_ob(base_ob, net_dsigma, pool) — argument order differs from the
     combat eff_ob(base_ob, pool, net_sigma). This wrapper normalises the call.
     """
@@ -198,7 +198,7 @@ def net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool
 def level(name: str) -> float:
     """σ-value for a named modifier level (minor/moderate/strong/major) — contest surface.
 
-    Ported from designs/audit/2026-06-03-contest-groundup/engine.py:21
+    Ported from audit/2026-06-03-contest-groundup/engine.py:21
     (`def level(name): return LEVEL[name]`); that engine's LEVEL dict is this module's
     LEVEL_SIGMA (byte-identical: minor 0.25 / moderate 0.50 / strong 0.75 / major 1.00).
     Single-sources LEVEL_SIGMA so combat (levels_to_net_sigma) and contest
@@ -293,13 +293,13 @@ def degree(net: float, ob: float, pool: float | None = None) -> int:
     Lesson 2). These are contest-specific reception semantics, so the pool-aware
     integer degree lives here on the contest surface rather than overwriting the
     combat enum degree. Ported verbatim from
-    designs/audit/2026-06-03-contest-groundup/engine.py §degree; the 151 groundup
+    audit/2026-06-03-contest-groundup/engine.py §degree; the 151 groundup
     tests are the behavior-preserving guard. TN7-only (D0-3): contest is unaffected
     by the TN6/8 boost divergence.
 
     With `pool` given (live reception): Overwhelming requires clearing a σ-scaled
     bar. Pool-less calls keep the legacy 2·ob bar (unit tests only).
-    [canonical: designs/audit/2026-06-03-contest-groundup/engine.py §degree]
+    [canonical: audit/2026-06-03-contest-groundup/engine.py §degree]
     """
     if net <= 0:                       return 0
     if net < ob:                       return 1
