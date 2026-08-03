@@ -760,7 +760,11 @@ _OI12_VERIFIED_ORPHAN_NO_CALLSITE = (
     "systems/settlements/sim/settlement.py",
     "systems/settlements/sim/temperaments.py",
     "systems/social_contest/sim/parliamentary_stay.py",
-    "engine/autoload/registry.py",
+    # engine/autoload/registry.py was in this list until 2026-08-03. It was not just
+    # callsite-less: its load_index() read registers/mechanics_index.yaml, a path the
+    # fork leaves behind, from inside the engine's own autoload hub. Deleted rather
+    # than re-homed -- 120 LOC, zero callers, and the only runtime escape out of
+    # engine/ into the register tree.
 )
 
 

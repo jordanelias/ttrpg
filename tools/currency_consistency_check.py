@@ -205,11 +205,16 @@ def check_current_stamp(drift):
     # moment a commit landed more than one day after the stamp. A check whose verdict depends on
     # checkout depth is not measuring the tree; it is measuring the CI config. Detect and say so
     # rather than emit a page of false drift — the honest report is "cannot measure" (§0.1 point 4).
+    # The notice goes to STDERR, not into `drift`. Putting it in the drift list was my first
+    # version and it was wrong in a specific way: "cannot measure" and "measured, and it drifted"
+    # are different verdicts, and every caller of run_checks() reads len(drift) as the second.
+    # That turned the guard into a false positive in the unit-tests job (depth-1), which asserts a
+    # tools-only change trips nothing. The job that GRADES this check (compliance-check, via
+    # review_core) sets `fetch-depth: 0`, so the check still runs everywhere its verdict is used.
     if _history_is_unusable():
-        drift.append(
-            "CURRENT.md stamp check SKIPPED: this checkout has a single commit (depth-1), so "
-            "per-path commit dates are all HEAD's date and every canonical head would falsely "
-            "read as touched today. Run this job with `fetch-depth: 0` to restore the check.")
+        print("[currency] CURRENT.md stamp check not run: this checkout has a single commit "
+              "(depth-1), so per-path commit dates are all HEAD's date. Use `fetch-depth: 0`.",
+              file=sys.stderr)
         return
     for path in _canonical_head_paths(text):   # apparatus cannot stale a canon index — ED-IN-0089
         last = _git_last_commit_date(path.rstrip('/'))
