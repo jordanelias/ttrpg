@@ -158,6 +158,31 @@ def _ledger_lane_max():
     return out
 
 
+def _history_is_unusable():
+    """True only when the checkout has ONE commit, so per-path dates are meaningless.
+
+    THE DISCRIMINATOR IS COMMIT COUNT, NOT SHALLOWNESS — and getting that wrong is instructive.
+    My first version asked `git rev-parse --is-shallow-repository`, which is `true` for ANY
+    depth-limited clone. Measured on this very container: shallow=true, **76 commits**, and
+    `git log -1 -- systems/world/` correctly returns 2026-07-29 against a HEAD of 2026-08-03 —
+    history plainly usable. That guard would have disabled a working check on every developer
+    machine that clones with `--depth 50`, trading a false-positive gate for a silently absent one,
+    which is the worse trade (§0.1: a check that cannot fail is not a check).
+
+    At depth 1 there is exactly one commit, so `git log -1 --format=%cs -- <path>` returns that
+    commit's date for EVERY path and every canonical head falsely reads as touched today. That is
+    the only case where the dates carry no information, and it is exactly what it detects.
+    """
+    out = subprocess.run(['git', 'rev-list', '--count', 'HEAD'],
+                         cwd=REPO_ROOT, capture_output=True, text=True)
+    if out.returncode != 0:
+        return False              # no git at all: let the check run and fail loudly if it must
+    try:
+        return int(out.stdout.strip()) <= 1
+    except ValueError:
+        return False
+
+
 def check_current_stamp(drift):
     text = _read('CURRENT.md')
     if text is None:
@@ -172,6 +197,20 @@ def check_current_stamp(drift):
     # a same-session commit can land "tomorrow" in UTC. The PR-#50 failure class (days of
     # unreconciled drift) still trips; a TZ-skewed same-day commit does not.
     grace = _next_day(stamp)
+    # SHALLOW-CLONE GUARD (ED-IN-0123, 2026-08-03). Under `actions/checkout` WITHOUT `fetch-depth: 0`
+    # the repository has exactly ONE commit, so `git log -1 --format=%cs -- <path>` returns that
+    # commit's date for EVERY path — every canonical head then looks touched today and this check
+    # reports drift on all of them at once. MEASURED: this fired as `currency.stamps: fail` in the
+    # compliance-check job (which sets no fetch-depth) while passing locally on full history, the
+    # moment a commit landed more than one day after the stamp. A check whose verdict depends on
+    # checkout depth is not measuring the tree; it is measuring the CI config. Detect and say so
+    # rather than emit a page of false drift — the honest report is "cannot measure" (§0.1 point 4).
+    if _history_is_unusable():
+        drift.append(
+            "CURRENT.md stamp check SKIPPED: this checkout has a single commit (depth-1), so "
+            "per-path commit dates are all HEAD's date and every canonical head would falsely "
+            "read as touched today. Run this job with `fetch-depth: 0` to restore the check.")
+        return
     for path in _canonical_head_paths(text):   # apparatus cannot stale a canon index — ED-IN-0089
         last = _git_last_commit_date(path.rstrip('/'))
         if last and last > grace:

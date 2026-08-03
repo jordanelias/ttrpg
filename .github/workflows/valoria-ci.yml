@@ -366,6 +366,16 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 is REQUIRED, not an optimisation (ED-IN-0123, 2026-08-03). This job runs
+          # `review_core.py --check`, whose `currency.stamps` signal shells out to
+          # currency_consistency_check, which compares CURRENT.md's reconcile stamp against
+          # `git log -1 --format=%cs -- <each canonical head>`. At the default depth-1 there is
+          # exactly ONE commit, so every path returns HEAD's date and EVERY canonical head falsely
+          # reads as touched today. MEASURED: the signal went RED here while passing on full history,
+          # the moment a commit landed more than one day after the stamp. `validators` and
+          # `validators-report` already set this; this job was the outlier.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
