@@ -199,7 +199,7 @@
       "kind": "scalar",
       "module": "engine.autoload",
       "file": "engine/autoload/sigma_leverage.py",
-      "note": "[canonical: designs/audit/2026-06-03-contest-groundup/engine.py §degree]"
+      "note": "[canonical: audit/2026-06-03-contest-groundup/engine.py §degree]"
     },
     {
       "key": "engine.autoload.SD_PER_DIE",
