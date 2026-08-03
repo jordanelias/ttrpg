@@ -281,7 +281,7 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 | | Content | Exit condition (falsifier) | Jordan |
 |---|---|---|---|
 | **W0** | Repoint the path-literal escapes; un-skip the silently-skipping parity class | A path-literal scan (not an import scan) shows zero escapes; the previously-skipping parity test runs and passes or fails honestly | no |
-| **W1** | Close `save_replay_premise` — route direct `World` mutation through Key emission + `apply`, extending `echo_transport`'s existing pattern | A seeded campaign's Key log reconstructs `Faction.L` and `Territory.owner` from initial conditions; `wiring_manifest`'s `save_replay_premise` flips from `violated` | no — it restores a stated premise |
+| **W1** | ~~Close `save_replay_premise`~~ **DONE 2026-08-03 to `partial`** — the premise was less broken than recorded; one untraced ownership write (`parliamentary_transfer`) now emits `da.public_governance`. Residue: `mass_seizure` unexercised by the measured seed; `Faction.L` evidence thin (clamp saturation) | Reconstruction is **8/8** on `Territory.owner` at horizons 3/6/12/24, falsifier `tests/valoria/test_public_governance_transfer_key.py`. NOT flipped past `partial` — see §6.2 | no — it restored a stated premise |
 | **W2** | Author the `character_layer`: one `Character`/`Actor` dataclass in `World`; resolve the 9-vs-10 attribute roster | Personal-scale modules can hold state; roster is single-valued | **yes** — OPT-AV-1 |
 | **W3** | Stage 0 rank 0-1: `personal_combat` → `live` (the combat branch is dead code today), then `mass_battle`, `social_contest`, `victory` | `wiring_map_check --summary` shows those four at `live`/`gated`; each has key-log parity per its `parity` field | no |
 | **W4** | Invert the two extraction pipelines: table becomes source, Python constant becomes generated view; add the `citation` column (**0 of 324 `sim_params` records carry provenance**) | Round-trip CI red on a hand-edit of a generated view; every value traces to a `PP`/`ED` | per-value collisions: **yes** |
@@ -325,6 +325,40 @@ already W3's subject. Attributing it to packaging would have bought a 20-module 
 rewrite of a working scripts-on-path tree, changing nothing the falsifier measures. CLAUDE.md
 §3 records the non-package shape as deliberate (the `import systems` collision it resolved).
 **The zero-rows observation belongs to W3 and is deleted from W0.**
+
+### 6.2 W1 as executed (2026-08-03) — the premise was mismeasured, not just unmet
+
+The manifest's note said the strategic loop mutates `Faction.L` and `Territory.owner` **with no Key
+trace**. Building the falsifier *before* the fix — replay the log onto a t0 snapshot, compare —
+showed that to be too pessimistic in a way that mattered for scoping: `Faction.L` already
+reconstructs from `Target.stat_deltas`, territorial conquest already reconstructs from
+`scene.battle_concluded`, and **7 of 8** ownership changes rebuilt. W1 was one site, not a sweep.
+
+**Finding the site required abandoning the grep.** An AST scan for attribute assignments reported
+3 non-test `Territory.owner` writes and **zero** non-test `Faction.L` writes — a false absence, and
+a confident one. `Faction.adjust()` writes via `setattr(self, stat, val)`, so the single owner that
+**31 call sites** route through is invisible to that scan. Instrumenting `Territory.__setattr__`
+across a seeded campaign attributed every write in one pass: `faction_action` 8,
+`parliamentary_transfer` 1, `mass_seizure` 0.
+
+**Three confounds in my own instrument, all of which flattered the result**, recorded because the
+next reconstruction claim will meet them again:
+1. `Faction.L` scored 4/4 rebuilt — but 3 of 4 factions sat **exactly on a clamp** (0.5 floor / 7.0
+   ceiling), and a clamped rebuild agrees with a clamped actual whether or not the deltas are
+   right. Only 1 comparison was ever informative. **Any L claim must report the off-boundary count.**
+2. The first territory pass *counted* keys carrying transfer evidence without *applying* them, so
+   "11/16 unreconstructable" measured my replay, not the log.
+3. The season sweep varied nothing: `run_campaign(max_seasons=N)` is shadowed by
+   `effective_params['CAMPAIGN_SEASONS']`, so four horizons ran identically. A control that
+   controls nothing reads exactly like a control that does.
+
+**Why it stops at `partial`.** `mass_seizure.py:292` is the third owner-write site and did not fire
+on the measured seed — untested, not proven clean. And the replay rule (*`da.public_governance` +
+`outcome: success` + `target_territory_id` ⇒ that territory is now `faction_id`'s*) is an
+**interpretation the key-type registry does not declare**. It is sound for all three live emitters
+today, but a dedicated `da.territorial_transfer` type would state it rather than imply it. **That is
+a canon addition and therefore §7's, not this plan's** — the emitter deliberately uses only fields
+already in the registered entry so that nothing here mints canon by implication.
 
 ---
 
