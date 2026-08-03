@@ -103,22 +103,17 @@
    "declared_lane": null,
    "documented": true,
    "guards": "The second live Key emitter \u2014 `scene.battle_concluded` (ED-IN-0122).",
-   "helper_loc": 25,
+   "helper_loc": 9,
    "helpers": [
     {
-     "loc": 25,
-     "name": "campaign"
+     "loc": 9,
+     "name": "seeded_battle_campaign"
     }
    ],
-   "lane_derived": true,
-   "lanes": [
-    "IN"
-   ],
-   "loc": 115,
-   "modules_under_test": [
-    "engine",
-    "engine.substrate"
-   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 101,
+   "modules_under_test": [],
    "mutation_claimed": false,
    "mutation_count": null,
    "test_count": 4,
@@ -163,8 +158,9 @@
    "lanes": [
     "IN"
    ],
-   "loc": 95,
+   "loc": 98,
    "modules_under_test": [
+    "references",
     "tools",
     "tools/observability"
    ],
@@ -174,7 +170,7 @@
    "tests": {
     "test_all_audit_verdicts_present": {
      "assertionless": false,
-     "assertions": 1,
+     "assertions": 2,
      "summary": null
     },
     "test_all_proposals_docs_surface_by_location": {
@@ -7365,6 +7361,61 @@
     }
    }
   },
+  "test_public_governance_transfer_key.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The third live Key emitter \u2014 `da.public_governance` on a Parliamentary Transfer (ED-IN-0123).",
+   "helper_loc": 27,
+   "helpers": [
+    {
+     "loc": 23,
+     "name": "_rebuild_owners"
+    },
+    {
+     "loc": 4,
+     "name": "seeded_transfer_campaign"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN"
+   ],
+   "loc": 162,
+   "modules_under_test": [
+    "engine",
+    "engine/tests/test_parliamentary_bridge.py",
+    "systems.factions.sim.parliamentary_transfer"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_emission_is_log_only": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "The Key carries no `apply=`, so it must not move any state."
+    },
+    "test_territory_ownership_reconstructs_from_the_key_log": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE FALSIFIER for save_replay_premise on the Territory.owner half."
+    },
+    "test_the_pinned_golden_seed_cannot_see_this_path": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "RECORDS A BLIND SPOT rather than asserting a behaviour."
+    },
+    "test_the_transfer_emitter_actually_fired": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Anti-vacuity for the test above: if no da.public_governance key exists, the"
+    }
+   }
+  },
   "test_pytest_marker_discipline.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -9068,6 +9119,10 @@
     {
      "name": "KNOWN_ASSERTIONLESS",
      "size": null
+    },
+    {
+     "name": "KNOWN_DUPLICATED_HELPERS",
+     "size": null
     }
    ],
    "cites_measurement": false,
@@ -9083,14 +9138,14 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 102,
+   "loc": 127,
    "modules_under_test": [
     "references",
     "tools"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 5,
+   "test_count": 6,
    "tests": {
     "test_every_file_explains_what_it_guards": {
      "assertionless": false,
@@ -9106,6 +9161,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_no_new_duplicated_helpers": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Reusable code buried in tests is code that gets missed for import."
     },
     "test_register_is_not_vacuous": {
      "assertionless": false,
@@ -10112,7 +10172,7 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 1,
+   "FA": 2,
    "FI": 1,
    "IN": 27,
    "MB": 2,
@@ -10237,16 +10297,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 133,
-  "files_citing_a_measurement": 13,
+  "files": 134,
+  "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
   "files_naming_a_module": 94,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 30,
-  "helper_defs": 253,
-  "helper_loc": 2235,
-  "ratchet_baselines": 7,
-  "tests": 1191,
+  "helper_defs": 255,
+  "helper_loc": 2246,
+  "ratchet_baselines": 8,
+  "tests": 1196,
   "undocumented_files": 0
  }
 }

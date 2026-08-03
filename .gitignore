@@ -20,3 +20,4 @@ tools/observability/review_state_data.js
 
 # Agent-isolation worktrees (transient harness machinery, never repo content)
 .claude/worktrees/
+.coverage

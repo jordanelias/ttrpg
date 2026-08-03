@@ -98,5 +98,23 @@ foundation_gaps:
     godot: no-oracle
     note: "No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every personal-scale port needs this first."
   save_replay_premise:
-    status: violated
-    note: "Strategy premise 'save = initial conditions + Key log'. But the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key trace, so the Key log cannot reconstruct strategic state. Save/replay/parity holds only for the echo-keyed slice today."
+    status: partial
+    measured: "2026-08-03, seeded campaign, ED-IN-0123"
+    note: >-
+      Strategy premise 'save = initial conditions + Key log'. Was recorded `violated` on the claim
+      that the strategic loop mutates World directly (Faction.L, Territory.owner) with NO Key trace.
+      Measured by replaying the log onto a t0 snapshot, that is now too pessimistic and the residue
+      is specific. Territory.owner: 8/8 ownership changes reconstruct at every horizon tested
+      (3/6/12/24 seasons) -- conquest via scene.battle_concluded (victor + territorial_outcome),
+      political transfer via da.public_governance (faction_id + target_territory_id), the latter
+      added 2026-08-03 and previously the ONLY untraced ownership write. Faction.L: reconstructs
+      from Target.stat_deltas, but the evidence is THIN -- values saturate to the 0.5/7.0 clamps
+      within a few seasons, and a clamped rebuild agrees with a clamped actual regardless of whether
+      the deltas are right, so only 1 of 4 factions was ever an informative comparison.
+      NOT closed, for two reasons worth keeping: (1) systems/factions/sim/mass_seizure.py:292 is the
+      third owner-write site and it did NOT fire on the measured seed -- untested, not proven clean;
+      (2) the replay rule 'da.public_governance + outcome success + target_territory_id means that
+      territory is now owned by faction_id' is an INTERPRETATION -- the key type registry does not
+      declare it. Sound for every emitter that exists today (three live emitters total), but a
+      dedicated da.territorial_transfer type would state it. Jordan call; see the fork plan section 7.
+      Falsifier: tests/valoria/test_public_governance_transfer_key.py.

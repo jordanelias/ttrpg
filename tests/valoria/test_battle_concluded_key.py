@@ -34,46 +34,32 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 pytest.importorskip('yaml')
+
+from . import _campaign  # noqa: E402  the single owner of the seeded-campaign runner (CLAUDE.md §8)
 SEED = 42
 
 
 @pytest.fixture(scope='module')
-def campaign():
-    """Run one seeded campaign under STRICT key validation, counting emissions by type.
+def seeded_battle_campaign():
+    """One seeded campaign under STRICT key validation, with emissions counted by type.
 
-    `VALORIA_STRICT_KEYS` matters: the emitter swallows exceptions so telemetry can never break a
-    turn, and a swallowed exception is exactly where a broken payload would hide. Under the flag a
-    `KeyValidationError` propagates, so a green run here is evidence the payload really validates
-    against the registry — not evidence that nothing was checked.
+    The runner (tests/valoria/_campaign.py) owns the VALORIA_STRICT_KEYS handling and the
+    create_world spy; both were duplicated here and in test_public_governance_transfer_key.py
+    until the duplicated-helper ratchet caught the second copy.
     """
-    from engine.substrate import keys as ks
-    seen = collections.Counter()
-    real = ks.TickScheduler.emit
-
-    def spy(self, key, apply=None):
-        seen[key.type] += 1
-        return real(self, key, apply)
-
-    ks.TickScheduler.emit = spy
-    os.environ['VALORIA_STRICT_KEYS'] = '1'
-    try:
-        from engine import mc_v18
-        result = mc_v18.run_campaign(seed=SEED)
-    finally:
-        ks.TickScheduler.emit = real
-        os.environ.pop('VALORIA_STRICT_KEYS', None)
+    result, _world, seen = _campaign.run(SEED)
     return result, seen
 
 
-def test_the_key_is_actually_emitted(campaign):
+def test_the_key_is_actually_emitted(seeded_battle_campaign):
     """The load-bearing assertion: real traffic, not a declaration."""
-    _result, seen = campaign
+    _result, seen = seeded_battle_campaign
     assert seen['scene.battle_concluded'] > 0, (
         'scene.battle_concluded was never emitted — the substrate is back to one live type. '
         'Either the emit site was removed or no battle occurred on this seed.')
 
 
-def test_payload_validates_under_strict_mode(campaign):
+def test_payload_validates_under_strict_mode(seeded_battle_campaign):
     """If the payload were malformed the fixture would have raised, not reached here.
 
     Stated explicitly because a test that merely *runs* a campaign and passes proves nothing about
@@ -81,24 +67,24 @@ def test_payload_validates_under_strict_mode(campaign):
     something (CLAUDE.md §0.1 point 2 — an assertion must be able to observe the failure it
     excludes).
     """
-    result, _seen = campaign
+    result, _seen = seeded_battle_campaign
     assert result.keys_emitted > 0
 
 
-def test_emission_is_additive_and_changes_no_outcome(campaign):
+def test_emission_is_additive_and_changes_no_outcome(seeded_battle_campaign):
     """Byte-exact safety: the campaign lands where it landed before the emitter existed.
 
     Baseline captured on seed 42 immediately BEFORE the emit site was added: winner Crown, 50
     seasons, battle_count 29. `emit()` is called with no `apply=`, so there is no write path at
     all — this asserts the property the design relies on rather than trusting the argument.
     """
-    result, _seen = campaign
+    result, _seen = seeded_battle_campaign
     assert result.winner == 'Crown'
     assert result.season == 50
     assert result.battle_count == 29
 
 
-def test_battle_count_undercounts_battles(campaign):
+def test_battle_count_undercounts_battles(seeded_battle_campaign):
     """Pins the telemetry defect this emission exposed, so it cannot be silently 'fixed' either way.
 
     `world.battle_count += 1` lives inside `if battle['attacker_wins']:`, so it is a victory count
@@ -106,7 +92,7 @@ def test_battle_count_undercounts_battles(campaign):
     converge and this test fails — which is the correct prompt to rename the field or update this
     expectation deliberately, rather than letting a metric quietly change meaning.
     """
-    result, seen = campaign
+    result, seen = seeded_battle_campaign
     battles = seen['scene.battle_concluded']
     assert battles > result.battle_count, (
         f'battles emitted ({battles}) should exceed battle_count ({result.battle_count}) — '
