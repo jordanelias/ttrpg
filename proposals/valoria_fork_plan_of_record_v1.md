@@ -280,7 +280,7 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 
 | | Content | Exit condition (falsifier) | Jordan |
 |---|---|---|---|
-| **W0** | Repoint the four path-literal escapes; un-skip the silently-skipping parity class; make `combat_engine_v1` a package so it is importable and measurable | A path-literal scan (not an import scan) shows zero escapes; the previously-skipping parity test runs and passes or fails honestly; `coverage` reports non-zero rows for `combat_engine_v1` | no |
+| **W0** | Repoint the path-literal escapes; un-skip the silently-skipping parity class | A path-literal scan (not an import scan) shows zero escapes; the previously-skipping parity test runs and passes or fails honestly | no |
 | **W1** | Close `save_replay_premise` — route direct `World` mutation through Key emission + `apply`, extending `echo_transport`'s existing pattern | A seeded campaign's Key log reconstructs `Faction.L` and `Territory.owner` from initial conditions; `wiring_manifest`'s `save_replay_premise` flips from `violated` | no — it restores a stated premise |
 | **W2** | Author the `character_layer`: one `Character`/`Actor` dataclass in `World`; resolve the 9-vs-10 attribute roster | Personal-scale modules can hold state; roster is single-valued | **yes** — OPT-AV-1 |
 | **W3** | Stage 0 rank 0-1: `personal_combat` → `live` (the combat branch is dead code today), then `mass_battle`, `social_contest`, `victory` | `wiring_map_check --summary` shows those four at `live`/`gated`; each has key-log parity per its `parity` field | no |
@@ -291,6 +291,40 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 
 W0–W1 are the whole near-term critical path. They need no ruling and they make everything after them
 measurable.
+
+### 6.1 W0 as executed (2026-08-03) — including one item measurement struck
+
+**Escapes: 10, not four.** The scan found ten distinct `(file, literal)` escapes out of
+`engine/`+`systems/`, and the composition mattered more than the count: exactly **one was
+runtime** — `engine/autoload/registry.py`, whose `load_index()` read
+`registers/mechanics_index.yaml` from inside the engine's own autoload hub. Copy `engine/`
+into a fresh repo and that file is broken on arrival. It had **zero callers** and the repo's
+own structure audit had already classified it `VERIFIED_ORPHAN_NO_CALLSITE`, so it was
+deleted rather than re-homed. Down to **6**, all test/workbench, none runtime.
+
+**The parity class was two silent-skip channels, not one.** The known one was the bare
+`except` on a retired `designs/audit/` path (184 cases dark for 15 days). The second was
+structurally identical and unrecorded: every combat-surface comparison sat behind
+`if not _numpy_available: pytest.skip(...)`, so a numpy-less environment tested nothing and
+said so only as a skip. Both are gone. The fix is the same inversion §2.1 prescribes for
+params — `tools/gen_sigma_parity_goldens.py` runs in the source repo where the oracles live
+and emits a 1,758-row table; the test reads the table; `engine/` reaches nowhere.
+**761 → 1,926 executing assertions, zero skips, no numpy dependency.**
+
+**`combat_engine_v1` packaging: STRUCK.** The row required making it a package "so it is
+importable and measurable", with `coverage` rows as the falsifier. Both halves are false.
+Measured 2026-08-03: `import core, combat_systems, combatant, config` off `sys.path`
+succeeds today, and `coverage run --source=systems/combat/combat_engine_v1` over two of its
+own test modules reports **17 files at 75%** — `combat_systems.py` 98%, `core.py` 99%,
+`wrapper.py` 93%, with only `capabilities.py` and `state_graph.py` at 0%.
+
+The plan inferred an importability defect from §3.1's true observation that a *seeded
+campaign* under coverage yields zero rows for `combat_engine_v1`. That is a **wiring** fact —
+`personal_combat` is `build: unwired`, so the campaign never reaches combat — and it is
+already W3's subject. Attributing it to packaging would have bought a 20-module import
+rewrite of a working scripts-on-path tree, changing nothing the falsifier measures. CLAUDE.md
+§3 records the non-package shape as deliberate (the `import systems` collision it resolved).
+**The zero-rows observation belongs to W3 and is deleted from W0.**
 
 ---
 
