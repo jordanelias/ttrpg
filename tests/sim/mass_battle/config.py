@@ -105,13 +105,7 @@ CELL_CAP = 200              # max troops/cell that fight; beyond this, troops ov
 # pinned OFF (the test pins it explicitly ON, as it does PC_OCTAGON_DMG) so the change-detector keeps
 # tracking the SHIPPED configuration -- pinning it off would have kept the goldens meaningful while
 # quietly ending their coverage of what the engine actually does.
-PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '1') == '1'
-# ^ SHIPS ON. The trailing comment here read "RETRACTED to OFF 2026-07-25" while the default
-# was '1'; git settles it: 584c683a (2026-07-25) set '0' and the comment was true, then
-# 94bb9022 (2026-07-29, PR #271) flipped it to '1' under the flags-ON directive (ED-MB-0001,
-# G21) and left the comment behind. The paragraph above still describes the RETRACTION, not
-# the shipped state -- read it as history. Corrected 2026-08-03, ED-IN-0123; comment only,
-# no behaviour change, so the byte-exact digests are untouched by construction.
+PC_CELL_MORALE = _sigma_os.environ.get('PC_CELL_MORALE', '1') == '1'   # RETRACTED to OFF 2026-07-25 -- see above
 # [ED-MB-0041 phase 2] Share of a subunit's LIVE troops standing in broken cells at which the body is
 # no longer a formation. The men are still present -- they have stopped being a fighting line, which is
 # what a local break is. Same shape as ROUT_CASCADE_FRAC one scale down (army:sections :: subunit:cells),
