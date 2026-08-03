@@ -5544,12 +5544,8 @@
    "declared_lane": null,
    "documented": true,
    "guards": "OI-52a cycle-gone regression (ED-IN-0097,",
-   "helper_loc": 13,
+   "helper_loc": 8,
    "helpers": [
-    {
-     "loc": 5,
-     "name": "_load_structure_audit"
-    },
     {
      "loc": 8,
      "name": "_real_cycles"
@@ -5557,7 +5553,7 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 90,
+   "loc": 86,
    "modules_under_test": [
     "engine.autoload.game_state",
     "systems.mass_battle.sim.massbattle",
@@ -7052,6 +7048,54 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "(2) A seen flank threat (in FOV, not pinned) is refused once the cell has had FACING_REACTION_TICKS"
+    }
+   }
+  },
+  "test_oi12_orphan_census.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "OI-12 orphan-census pointer \u2014 repo bookkeeping, relocated out of the engine suite (ED-IN-0123).",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN",
+    "SE",
+    "WR"
+   ],
+   "loc": 138,
+   "modules_under_test": [
+    "engine/autoload/npc_ai.py",
+    "systems/characters/sim/companion.py",
+    "systems/overview/sim/ip_track.py",
+    "systems/overview/sim/rs_track.py",
+    "systems/settlements/sim/settlement.py",
+    "systems/settlements/sim/temperaments.py",
+    "systems/social_contest/sim/parliamentary_stay.py",
+    "systems/threadwork/sim/co_movement.py",
+    "systems/threadwork/sim/collective.py",
+    "systems/threadwork/sim/opposing.py",
+    "systems/threadwork/sim/rendering.py",
+    "systems/world/sim/miraculous_event.py",
+    "systems/world/sim/restoration_movement.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 2,
+   "tests": {
+    "test_oi12_census_is_recorded_in_the_execution_ledger": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The census itself (documentation only, no code edits per the L-artic lane's own note) lives"
+    },
+    "test_oi12_census_matches_the_real_structure_audit_classification": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "WAVE-2 REPAIR (critic 'missing', CLAUDE.md \u00a70.1 point 2): the prior version of this"
     }
    }
   },
@@ -8724,10 +8768,10 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Regression + unit tests for the Structural Observatory's architecture layers",
-   "helper_loc": 25,
+   "helper_loc": 22,
    "helpers": [
     {
-     "loc": 5,
+     "loc": 2,
      "name": "_load"
     },
     {
@@ -10172,14 +10216,14 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 2,
+   "FA": 3,
    "FI": 1,
-   "IN": 27,
+   "IN": 28,
    "MB": 2,
    "PC": 6,
    "SC": 3,
-   "SE": 1,
-   "WR": 1
+   "SE": 2,
+   "WR": 2
   },
   "duplicated_helper_names": 21,
   "duplicated_helpers": {
@@ -10297,16 +10341,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 134,
+  "files": 135,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 94,
+  "files_naming_a_module": 95,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 30,
-  "helper_defs": 255,
-  "helper_loc": 2246,
+  "files_with_a_lane": 31,
+  "helper_defs": 254,
+  "helper_loc": 2238,
   "ratchet_baselines": 8,
-  "tests": 1196,
+  "tests": 1198,
   "undocumented_files": 0
  }
 }

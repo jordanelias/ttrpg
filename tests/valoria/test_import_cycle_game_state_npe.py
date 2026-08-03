@@ -26,20 +26,16 @@ Two other cycle families are OUT OF SCOPE and must NOT move:
 """
 import importlib.util
 import os
+from . import _structure_audit  # noqa: E402  the single owner of the loader
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'structure_audit.py')
 
 
-def _load_structure_audit():
-    spec = importlib.util.spec_from_file_location('structure_audit', _SCRIPT)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
 
 
 def _real_cycles():
-    sa = _load_structure_audit()
+    sa = _structure_audit.load()
     root = sa.Path(_ROOT)
     modules = sa.collect_py_modules(root)
     g_code, parse_errors = sa.build_g_code(root, modules)
