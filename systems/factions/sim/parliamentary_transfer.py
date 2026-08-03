@@ -126,9 +126,13 @@ def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg
       * Legitimacy IS traced -- `echo_transport` carries `Target.stat_deltas`.
       * THIS site was the only untraced ownership write. Attributed by instrumenting
         `Territory.__setattr__` over a 12-season seeded campaign: 8 owner changes from
-        `faction_action`, 1 from here, 0 from `mass_seizure` (which did not fire -- untested,
-        not proven clean). Reconstruction scored 7/8 before this, and the miss was always
-        this one political transfer.
+        `faction_action`, 1 from here, 0 from `mass_seizure`.
+      * `mass_seizure` was recorded as "did not fire -- untested, not proven clean". RE-MEASURED
+        2026-08-03 and it is stronger than that: UNREACHABLE. Zero production callers (every
+        mention of it in engine/+systems/ is a comment), and no owner write in 40 seeded
+        campaigns. Its gate is not the obstacle -- CI >= 60 is met in 20/20 seeds and CI = 100,
+        the FORCED declaration point where P(declare)=1, is reached in 8/20. FA lane; see
+        wiring_manifest's save_replay_premise note.
 
     ENCODING, and its one honest gap. `da.public_governance` is an EXISTING registered type
     ("Visible administrative or sovereign-role action", consumed by `faction_layer`) and every

@@ -70,9 +70,13 @@ def _assert_close(got, want, label: str, tol: float = TOL):
     )
 
 
-# The port's argument order differs from the oracles' for two functions; the table stores
-# the ORACLE's order, so the adapters live here, named, rather than being silently baked
-# into the generated data.
+# The table stores the ORACLE's positional order. VERIFIED 2026-08-03 by comparing
+# inspect.signature across all nine functions: oracle, generator and port agree positionally on
+# every one -- so these two branches are keyword-passing conveniences, NOT reorderings. An earlier
+# version of this comment claimed "the port's argument order differs for two functions", which was
+# false. It mattered enough to check: a symmetric mis-mapping (wrong in BOTH the generator and
+# here) would produce a self-consistent table, pass all 1,758 rows, and still die to every mutant,
+# because mutating the port breaks agreement regardless of whether the mapping is right.
 def _call(fn: str, args: list):
     if fn == "net_boost":
         ns, pool, tn, capped = args

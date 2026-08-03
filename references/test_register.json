@@ -4312,6 +4312,56 @@
     }
    }
   },
+  "test_faction_l_reconstruction.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Faction.L does NOT reconstruct from the Key log \u2014 the open half of save_replay_premise.",
+   "helper_loc": 17,
+   "helpers": [
+    {
+     "loc": 9,
+     "name": "_rebuild_L"
+    },
+    {
+     "loc": 8,
+     "name": "run"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 136,
+   "modules_under_test": [
+    "engine",
+    "engine.autoload",
+    "engine/cross_scale",
+    "systems"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 3,
+   "tests": {
+    "test_faction_L_reconstructs_from_the_key_log": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_only_one_call_site_emits_stat_deltas": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Pins the MECHANISM, so a future reader does not have to re-derive it."
+    },
+    "test_the_sample_is_informative": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "ANTI-VACUITY, and the whole reason the first measurement was wrong."
+    }
+   }
+  },
   "test_feigned_retreat.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10218,7 +10268,7 @@
   "by_lane": {
    "FA": 3,
    "FI": 1,
-   "IN": 28,
+   "IN": 29,
    "MB": 2,
    "PC": 6,
    "SC": 3,
@@ -10341,16 +10391,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 135,
+  "files": 136,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 95,
+  "files_naming_a_module": 96,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 31,
-  "helper_defs": 254,
-  "helper_loc": 2238,
+  "files_with_a_lane": 32,
+  "helper_defs": 256,
+  "helper_loc": 2255,
   "ratchet_baselines": 8,
-  "tests": 1198,
+  "tests": 1201,
   "undocumented_files": 0
  }
 }

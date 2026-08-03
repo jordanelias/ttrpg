@@ -285,7 +285,7 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 | **W2** | Author the `character_layer`: one `Character`/`Actor` dataclass in `World`; resolve the 9-vs-10 attribute roster | Personal-scale modules can hold state; roster is single-valued | **yes** — OPT-AV-1 |
 | **W3** | Stage 0 rank 0-1: `personal_combat` → `live` (the combat branch is dead code today), then `mass_battle`, `social_contest`, `victory` | `wiring_map_check --summary` shows those four at `live`/`gated`; each has key-log parity per its `parity` field | no |
 | **W4** | Invert the two extraction pipelines: table becomes source, Python constant becomes generated view; add the `citation` column (**0 of 324 `sim_params` records carry provenance**) | Round-trip CI red on a hand-edit of a generated view; every value traces to a `PP`/`ED` | per-value collisions: **yes** |
-| **W5** | Build the cook step: JSON → `.tres` for the golden path | A generated `.tres` for all 51 canonical weapons (2 exist, hand-made) | no |
+| **W5** | ~~Build the cook step: JSON → `.tres`~~ **BLOCKED, measured 2026-08-03 — see §6.3.** There is no weapon JSON to cook from, and the `.tres` schema encodes a model the oracle retired | Unblocking needs (a) a typed weapon export and (b) the GDScript weapon resource re-derived from the current oracle | **yes** — (b) is a port change under ED-1050 discipline |
 | **W6** | Stage 0 rank 2-3; then the 14 `no-oracle` modules, `engine_clock` first (ED-1051, the sole T0 blocker) | `authority: none` count reaches 0 or DEFERRED-with-citation | **yes** — canon authorship |
 | **W7** | Godot Gate-0 (G0.1–G0.5) and the strategy's Stage 1 spine | The strategy's own gates. **No Godot claim is verifiable until `project.godot` and a Godot binary run in CI — neither exists** | **yes** — ratify the strategy first |
 
@@ -325,6 +325,42 @@ already W3's subject. Attributing it to packaging would have bought a 20-module 
 rewrite of a working scripts-on-path tree, changing nothing the falsifier measures. CLAUDE.md
 §3 records the non-package shape as deliberate (the `import systems` collision it resolved).
 **The zero-rows observation belongs to W3 and is deleted from W0.**
+
+### 6.3 W5 is blocked, and the two reasons are independent (measured 2026-08-03)
+
+W5 reads "cook the typed JSON into `.tres` for the golden path", with the falsifier "a generated
+`.tres` for all 51 canonical weapons (2 exist, hand-made)". Both halves of the pipeline are absent.
+
+**1. There is no weapon data in the typed export.** `engine/engine_params/combat_engine_v1.json`
+declares `source: config.py + core.py` and contains exactly two sections — `cfg` (204 constants) and
+`core` (26). Zero weapons. The roster lives in `combatant.py` as `WEAPONS`, **53 entries** (not 51),
+carrying rich per-part geometry: `elements[]`, `guards[]`, `haft`, `pommel`, `geo`, `_derived`. The
+exclusion is deliberate, not an oversight — the export was scoped to the Class-C tuning constants.
+
+**2. The `.tres` schema encodes a model the oracle retired.** Of its 15 fields:
+
+| | |
+|---|---|
+| map directly to `WEAPONS` | 11 (incl. `reach_adj`, present on 27/53 — optional, not absent) |
+| computed | 1 — `pob_frac` = `_derived['PoB_frac']` |
+| **retired in Python, still LIVE in GDScript** | 2 — `reach`, `weight` |
+| dead in both | 2 — `spd`, `handling` (zero reads in any `.gd`) |
+
+`config.py:7` records *"Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' +
+HEAD_REACH + the reach_adj triple-duty)"*, and `combat_systems.wield_heft` is *"DERIVED, g-aware …
+replaces the binary wt class"*. **0 of 53 weapons carry `reach`, `wt`, `weight`, `spd` or
+`handling`.** Yet `strike_module.gd:110` still computes `4.0 + 2.0 * float(w.reach == "long") + …`
+and `combat_config.gd:84` still branches on `weapon.weight == "heavy"`.
+
+So generating 53 `.tres` in the current schema would require **inventing** `reach` and `weight` for
+every weapon — fabricating values, and fabricating them into a superseded model. That is the ED-1050
+defect ("never let a port correct its oracle in-place") reproduced 53 times instead of once. The
+correct order is oracle-first: export the weapon roster, re-derive the GDScript resource from it,
+then cook. Step two is a port change and therefore §7's, not this plan's.
+
+**Note the shape.** This is the fourth wave whose stated premise did not survive measurement (W0
+packaging, W3 wiring, W4 provenance, now W5). Every one was written from a true observation with one
+inference too far, and every one was cheap to check and expensive to have acted on.
 
 ### 6.2 W1 as executed (2026-08-03) — the premise was mismeasured, not just unmet
 
