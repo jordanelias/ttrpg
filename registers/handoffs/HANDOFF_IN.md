@@ -1,5 +1,55 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN-0124)
+
+**This section is now the fork plan's execution log.** The proposal had become a *third* current-state
+surface, disagreeing with `wiring_manifest.yaml` and this file about `Faction.L` on the same day. The
+rewrite moves the rolling diary here and leaves the proposal holding decisions, pointers and holds.
+If you are resuming fork work, read `proposals/valoria_fork_plan_of_record_v1.md` §7 for the sequence
+and this section for state.
+
+**Method.** Two structurally independent Fable-5 agents, `Read/Grep/Glob` only — no Write, no Edit, no
+Bash — per §10's "make independence structural, not declared". One critic (steelman → logic → process →
+34-row fidelity table), one architectural reasoner. Nine corrections landed, each re-verified against
+the tree by the orchestrator before being applied.
+
+**The nine.** (1) The `3 of 27` headline was contradicted by the same session's own
+`audit/2026-08-03-session-oddities.md` G2 — four `deferred` modules observed *executing* — which the
+draft cited two sections later for a different fact; thesis rebuilt on four label-independent trace
+facts, with G7's bound stated (`by_contract` attributes only 5 of 27, so a zero is never "dead").
+(2) `sim_params` publishes `cited 84 / uncited 240`, not the claimed zero provenance — the plan
+contradicted itself between its W4 and E5 rows. (3) `WEAPONS` is at `weapons.py:74`. (4) Key-graph
+arithmetic 46→**47** / 10→**9** (`meta.legacy_event` double-counted). (5) `Faction.L` "already
+reconstructs" retracted to match the manifest and HEAD `6f5ada6`. (6) The ED-MB-0043 canon ruling is
+**unregistered** — filed as a governance repair, not silently fixed. (7) `no_code_declared` measures
+contract-pointer absence, not code absence; its members include two whole engines. (8) **`tools/build_fork.py`
+already exists** and the plan wrote prose around it; running it is now step 1. (9) `autoload is a leaf`
+is false — `game_state.py` imports downward into `systems.*` at function-local sites.
+
+**What changed structurally, beyond the corrections.** Falsifier census: the draft had 2 genuine
+falsifiers across ~13 exit conditions and **both were in already-executed waves** — the unexecuted
+future carried the unfalsifiable ones. All eight rows in the new §7 name a test that can fail. Stage 0's
+exit condition is now two-part (classification **and** the module's `parity` target passing), because
+the old one was satisfiable by editing the YAML. The value-inversion guard is two-layer
+(import-time immutability + an AST tripwire on new bare constants) since the morale template's shape
+does not transfer. The held list shrank from seven-plus to eight real decisions by converting three
+reversible engineering calls out of it. ED-1006's scope narrowed to downward *Key* delivery only, with
+`keys.py:16-32` as evidence that the propagation spec's termination guards were ratified 2026-07-07.
+
+**Next actions.**
+- **Step 1 is `python3 tools/build_fork.py --out <dir> --verify-only`.** Do not re-derive the fork's
+  carry/leave in prose again — read the tool. Treat its carry list as possibly stale w.r.t. ED-MB-0043
+  (§11 item 4) and read it against §6.3 before trusting it.
+- **Governance repair, blocking the ED-MB-0043 claim:** either file the MB-ledger entry naming the PR
+  and flip `CURRENT.md`, or the "canon tree ruled" claim reverts to *held*. Right now the ruling exists
+  only inside a PROPOSED proposal, and a session following `CURRENT.md ≻ proposal` will correctly
+  conclude the fork is still open.
+- **Before any `Faction.adjust` sweep:** route ONE site and diff the seeded winner + key composition.
+  Emission means deferred `apply` at the accounting boundary (OF-7) while the current writes are
+  immediate and mid-phase — that is a behaviour change, not plumbing, until measured otherwise.
+- **The eight C-items in §9 each need their own ED with `needs_jordan: true`** so they reach the
+  SessionStart Jordan docket. A held item that is not on a register is not held; it is forgotten.
+
 ## 2026-08-02 — The repointed-path pattern, guarded (ED-IN-0122, PR #284) + a planning failure worth recording
 
 **Landed.** A seventh gate reporting clean over nothing: `ci_formula_prose_check.DEFAULT_CENSUS`
