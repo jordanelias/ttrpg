@@ -65,7 +65,7 @@ unanswered question (J1), and resolving it retires them without any of them bein
 
 | # | Oddity | Measured |
 |---|---|---|
-| E1 | **`build_fork.py` is a ONE-WAY build** (`rmtree` first). Re-running clobbers fork-side commits. Fine while the fork is a pure derivative; wrong the moment it diverges — which is the point of forking. | The open decision: does `main` keep moving? If yes, a GitHub fork with shared history is close to forced |
+| E1 | ~~**`build_fork.py` is a ONE-WAY build**~~ — **DISSOLVED by J1's ruling.** The objection was contingent on the source repo continuing to move. It does not. A one-way build is now a correct mechanism | Superseded 2026-08-03 |
 | E2 | **The fork carries BOTH mass-battle trees**, deliberately. Canon at `systems/mass_battle/canon/`. Blocked on `degree` — **see section H for the exact shapes**, which correct this row's earlier summary | Picking one silently would design that ruling by implication |
 | E3 | **225 `.md` against 206 `.py`** even after `LEAVE` was enforced. The remainder is subsystem design documentation, carried on purpose — but the fork is **process-prose-free, not prose-free**, and that distinction should not be blurred | `find` over the assembled tree — **but see E5** |
 | E4 | **Only 58 of 206 carried files are reachable from `engine.mc_v18`.** The other 148 are tests, oracles, canon-awaiting-wiring and unwired subsystems — the backlog, not detritus | `FORK_MANIFEST.json` — **but see E5** |
@@ -160,8 +160,8 @@ depends on the answer.
 
 | # | Question | What would answer it | Blocked on |
 |---|---|---|---|
-| **J1** | **Does `main` keep moving after the fork?** | A ruling. If yes, `build_fork.py`'s one-way `rmtree` assembly (E1) is the wrong mechanism and a shared-history GitHub fork is close to forced; if no, the assembler is correct and simpler | **Jordan.** Everything in E depends on this |
-| **J2** | **Which mass-battle engine does the fork wire to the campaign?** | The degree ruling in H. Until `degree` has a canon definition, the canon engine cannot be called by the existing caller without inventing the rule | **Jordan** (design ruling), not measurement |
+| ~~J1~~ | **RULED 2026-08-03 (Jordan): `main` does NOT keep moving after the fork.** So E1 dissolves — a one-way build cannot clobber fork-side commits if nothing lands on the source afterwards. **Second-order consequence Jordan raised: the operation can be INVERTED** — keep this repo as the go-forward one and evacuate the unwanted material out of it, rather than extracting the wanted material into a new one. See §M | RESOLVED |
+| ~~J2~~ | **RULED 2026-08-03 (Jordan): use the mass battle from `tests/` — the canon engine, `tests/sim/mass_battle/`** (28 modules, 11,269 LOC, 98 commits/90d, all 12 `PC_*` flag files). The 5-module `systems/mass_battle/sim/` tree the campaign currently imports is retired, not kept alongside. ⚠️ **This settles WHICH engine; it does not dissolve §H.** `degree` still has no canon definition — three of the caller's four fields map mechanically, `degree` must be **authored**. Choosing the engine did not author the rule (J3 is now on the critical path) | RESOLVED — engine chosen; `degree` still open |
 | J3 | **Is `degree`'s `0.50` threshold canon or an artifact?** | Grep the `PP-NNN`/`ED-NNN` that established it. I did not do this — I read the code, not the ledger | Measurement. ~20 min |
 | J4 | **Should `tests/sim/mass_battle/` be moved out of `tests/`?** | It is the canon engine misfiled under a test directory, which is *why* A3 fires on every edit to it. Moving it is a large rename touching goldens and CI paths | Ruling + a careful rename. This is the single highest-leverage cleanup for the MB lane |
 | J5 | **Is the manifest wrong about the four executing `deferred` modules (G2), or is the trace attributing them too generously?** | Read the four call sites. Presence is hard evidence *that the file ran*; it is weaker evidence that the *contract's module* ran, since a file can host more than one concern | Measurement. ~1 h |
@@ -175,6 +175,46 @@ depends on the answer.
 | J13 | **This branch trips the scope ratchet — raise the ceiling or retire the growth?** `tracked.files` +32 over ceiling, `audit.files` +1, `proposals.open` +1. The growth is real and deliberate (the fork assembler, the execution-map and trace tools, this record), not accidental. The ratchet is **report-only** — local gates pass — so nothing is blocked, but its own instruction is "retire the growth, or raise the ceiling with an explicit ED and a loud call-out (ED-1094)". **This row is that call-out.** I did not raise the ceiling myself: doing so silently is exactly what the ratchet exists to prevent | A ruling at merge time. `python tools/valoria_local.py --staged` reprints it | **Jordan**, at merge |
 
 ---
+
+## M. Extract or evacuate — the inversion Jordan raised (2026-08-03, open)
+
+J1's ruling froze `main`, which retires the objection to the current mechanism **and** opens a
+different question: the fork can be built in either direction.
+
+- **EXTRACT** (what `build_fork.py` does today): copy the wanted material into a new empty tree.
+  Proven to work — it assembles and runs a seeded campaign with the source repo off `sys.path`.
+- **EVACUATE** (the inversion): keep *this* repo as the go-forward one and delete the unwanted
+  material out of it. The archive is then just this repo's history at a tag.
+
+**Recommendation: evacuate, using the extractor's existing `CARRY` list as the keep-set.** The
+decision function does not change — `build_fork.py` already computes CARRY behind a mutation-verified
+contract-coverage guard. Only the direction changes: instead of copying CARRY into a new tree,
+`git rm` everything that is not in CARRY. Same default-deny semantics, opposite operation.
+
+| | Extract | Evacuate |
+|---|---|---|
+| **History of the code you KEEP** | lost — `git log engine/mc_v18.py` starts at the fork commit | **preserved**, including `git log --follow` through the `tests/sim/mass_battle` → `systems/mass_battle` re-home, which becomes a `git mv` |
+| **CI, hooks, branch protection, PR history** | rebuilt from scratch | survive untouched |
+| **Reviewability of what left** | a `LEAVE` list plus a manifest that **is not in the repo** (E5) | one commit; `git show` *is* the exhaustive list |
+| **Reversibility** | re-absorbing a missed file is a hand-copy | `git revert` |
+| **Matches the stated first principle** | building | **pruning** — "cut, trim, distil; only build if we can't do it repeatably otherwise" |
+
+**The one real argument for extracting, stated fairly.** The integrity gates — `validate_ed_citations`,
+`broken_dependency_checker`, the `restructure_ledger` alias map, `canonical_sources` pins — are
+calibrated against the *whole* corpus. Deleting most of the prose turns them red en masse. Extraction
+sidesteps this by simply not carrying them. **This is outweighed, not dismissed:** the same work is
+required either way (a gate that guards a deleted registry must itself go), and under evacuation it
+appears as *"tool and its registry deleted in the same commit"*, which is auditable, versus *"quietly
+not carried"*, which is the invisible-omission failure mode this entire record exists to fight.
+
+**Verification is identical under both** and no weaker for evacuation: `pytest tests/valoria` plus a
+seeded campaign must still run after the deletion commit.
+
+**No second repository is required.** With `main` frozen, a tag (`pre-fork-2026-08-03`) preserves
+everything. Create an archive repo only if the old tree needs to be browsable *as a working tree*
+without checking out the tag — a convenience, not a requirement.
+
+**Not executed.** A mass deletion is not a thing to run at session close off an "I am open to it".
 
 ## K. Deliberately not done, and why
 
