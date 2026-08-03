@@ -259,6 +259,12 @@ provenance in the generator's inputs. No new hand-maintained surface.
 `export_engine_params.py` + `export_sim_params.py` (the two working pipelines) ·
 `wiring_map_check.py` · the 7 canon files · the 280-file design corpus **as conversion input**.
 
+> **CORRECTION 2026-08-03 (ED-MB-0043 resolved).** `tests/sim/mass_battle/` is **CANON** and must be
+> CARRIED, despite living under `tests/`. The live campaign runs the *other*, staler tree
+> (`systems/mass_battle/sim`, 5 modules vs 28). Carrying `systems/*/sim` wholesale and leaving
+> `tests/` wholesale would take the stale engine and abandon the developed one. Directory is not
+> authority here — the canon mass battle is misfiled, and the fork is the moment to re-home it.
+
 **LEAVES** (source repo, frozen provenance) — `registers/` · `audit/` · `arcs/` · `workplans/` ·
 `dashboard/` · the observability apparatus. Cite back by `repo@SHA + PP/ED`.
 
@@ -406,7 +412,7 @@ already in the registered entry so that nothing here mints canon by implication.
    module.
 3. **ED-1051 — `engine_clock`.** `doc: null` temporal spine; the sole remaining T0 blocker.
 4. **ED-FA-0002 — `domain_actions` home.**
-5. **ED-MB-0043 — the two-disjoint-mass-battle-trees fork.** Must resolve before W0 copies one.
+5. ~~**ED-MB-0043 — the two-disjoint-mass-battle-trees fork.**~~ **RESOLVED 2026-08-03 by Jordan: the canon tree is `tests/sim/mass_battle/`** (commit/PR #274). Measured consequence, and it corrects §5: the LIVE campaign imports `systems.mass_battle.sim.massbattle` (faction_action.py:431), the 5-module 2,375-LOC tree with zero `PC_*` flags. Canon is the 28-module 11,269-LOC tree under `tests/`, which the campaign never calls. **The carry list said carry `systems/*/sim` and leave `tests/` — that would have carried the stale engine and left canon behind.** Every MB result (Track F, the bisects, geometry S1–S4, the 9 red tests) is measured on the tree the game does not execute.
 6. **Fork point — CORRECTED, and it needs less from you than v1 claimed.** I reported the MB
    Track-F set as *non-deterministic* because CI showed 9 then 10 failures across commits that
    touched only markdown. **That was wrong, and the MB lane had already documented why.**
