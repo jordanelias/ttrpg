@@ -13,7 +13,7 @@
       "designs/architecture/scale_transitions_v30.md"
     ],
     "stats": {
-      "terms": 393,
+      "terms": 399,
       "abbreviations": 35,
       "collisions": 4,
       "deprecated": 20,
@@ -21,7 +21,7 @@
       "placeholders": 8,
       "handshakes": 9,
       "with_definition": 133,
-      "linked_to_graph": 10
+      "linked_to_graph": 17
     }
   },
   "terms": [
@@ -1628,6 +1628,29 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "Coup posture",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "faction_politics::Coup posture"
+        }
       ]
     },
     {
@@ -3457,8 +3480,8 @@
     },
     {
       "canonical": "Initiative",
-      "type": "",
-      "category": "",
+      "type": "personal_track",
+      "category": "personal_track",
       "silo": "silo_5 \u00b7 Combat (personal + mass)",
       "abbreviations": [],
       "aliases": [],
@@ -3469,7 +3492,8 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "references/name_collision_database.yaml"
+        "references/name_collision_database.yaml",
+        "references/descriptor_registry.yaml"
       ],
       "links": [
         {
@@ -4928,6 +4952,29 @@
       ]
     },
     {
+      "canonical": "Poise",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Poise"
+        }
+      ]
+    },
+    {
       "canonical": "Political Pool",
       "type": "",
       "category": "",
@@ -5149,6 +5196,29 @@
       "collision_note": "",
       "sources": [
         "references/descriptor_registry.yaml"
+      ]
+    },
+    {
+      "canonical": "province Accord",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "settlement_layer::province Accord"
+        }
       ]
     },
     {
@@ -5566,6 +5636,29 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "season counter",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "engine_clock::season counter"
+        }
       ]
     },
     {
@@ -6065,6 +6158,12 @@
         "references/alias_registry.yaml",
         "references/name_collision_database.yaml",
         "references/glossary.md"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "faction_politics::Standing"
+        }
       ]
     },
     {
@@ -6155,6 +6254,29 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "Succession status",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "faction_politics::Succession status"
+        }
       ]
     },
     {
@@ -6735,8 +6857,8 @@
     },
     {
       "canonical": "Turmoil",
-      "type": "",
-      "category": "",
+      "type": "personal_track",
+      "category": "personal_track",
       "silo": "silo_12 \u00b7 Clocks",
       "abbreviations": [],
       "aliases": [],
@@ -6747,7 +6869,8 @@
       "replacement": "",
       "collision_note": "",
       "sources": [
-        "references/name_collision_database.yaml"
+        "references/name_collision_database.yaml",
+        "references/descriptor_registry.yaml"
       ],
       "links": [
         {
@@ -7235,6 +7358,29 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ]
+    },
+    {
+      "canonical": "Wounds",
+      "type": "personal_track",
+      "category": "personal_track",
+      "silo": "",
+      "abbreviations": [],
+      "aliases": [],
+      "legacy": [],
+      "definition": "",
+      "range": "",
+      "status": "canonical",
+      "replacement": "",
+      "collision_note": "",
+      "sources": [
+        "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Wounds"
+        }
       ]
     },
     {
@@ -9753,6 +9899,24 @@
     ],
     "facilitytier_s": [
       "Facility Tier"
+    ],
+    "wounds": [
+      "Wounds"
+    ],
+    "poise": [
+      "Poise"
+    ],
+    "province accord": [
+      "province Accord"
+    ],
+    "coup posture": [
+      "Coup posture"
+    ],
+    "succession status": [
+      "Succession status"
+    ],
+    "season counter": [
+      "season counter"
     ],
     "13 convictions": [
       "13 Convictions"

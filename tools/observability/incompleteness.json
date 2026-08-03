@@ -3,17 +3,17 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 270,
+    "findings": 260,
     "by_category": {
-      "apparatus_orphan": 4,
+      "apparatus_orphan": 1,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
-      "audit_isolate": 9,
+      "audit_isolate": 7,
       "audit_notional": 1,
-      "audit_sparse": 16,
+      "audit_sparse": 15,
       "audit_vocab_debt": 3,
-      "code_marker": 3,
+      "code_marker": 12,
       "contract_doc_null": 9,
       "contract_island": 5,
       "contract_missing_entirely": 2,
@@ -23,15 +23,15 @@
       "prose_marker": 32,
       "register_phantom_source": 1,
       "register_quarantined": 1,
-      "sim_not_implemented": 39,
-      "stale_retired_pointer": 18,
-      "status_noncurrent": 26,
-      "unregistered_term": 39
+      "sim_not_implemented": 23,
+      "stale_retired_pointer": 19,
+      "status_noncurrent": 27,
+      "unregistered_term": 40
     },
     "by_severity": {
-      "high": 24,
-      "med": 117,
-      "low": 129
+      "high": 22,
+      "med": 103,
+      "low": 135
     }
   },
   "by_lane": {
@@ -42,68 +42,71 @@
       "status_noncurrent": 1
     },
     "FI": {
-      "total": 7,
-      "prose_marker": 1,
-      "sim_not_implemented": 6
+      "total": 4,
+      "prose_marker": 2,
+      "sim_not_implemented": 2
     },
     "SC": {
-      "total": 10,
-      "code_marker": 2,
-      "sim_not_implemented": 7,
+      "total": 7,
+      "code_marker": 3,
+      "sim_not_implemented": 3,
       "status_noncurrent": 1
     },
     "FA": {
       "total": 21,
-      "code_marker": 1,
+      "code_marker": 2,
       "contract_island": 1,
       "prose_marker": 11,
-      "sim_not_implemented": 6,
+      "sim_not_implemented": 5,
       "status_noncurrent": 2
     },
     "WR": {
-      "total": 8,
-      "sim_not_implemented": 5,
+      "total": 6,
+      "sim_not_implemented": 3,
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 166,
-      "apparatus_orphan": 4,
+      "total": 177,
+      "apparatus_orphan": 1,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
-      "audit_isolate": 9,
+      "audit_isolate": 7,
       "audit_notional": 1,
-      "audit_sparse": 16,
+      "audit_sparse": 15,
       "audit_vocab_debt": 3,
+      "code_marker": 6,
+      "contract_island": 2,
+      "contract_no_resolver": 1,
       "integrity_unverified_pin": 1,
-      "prose_marker": 5,
+      "prose_marker": 8,
       "register_phantom_source": 1,
       "register_quarantined": 1,
-      "sim_not_implemented": 7,
-      "stale_retired_pointer": 18,
-      "status_noncurrent": 2,
-      "unregistered_term": 39
+      "sim_not_implemented": 5,
+      "stale_retired_pointer": 19,
+      "status_noncurrent": 7,
+      "unregistered_term": 40
     },
     "SE": {
-      "total": 6,
+      "total": 5,
       "prose_marker": 3,
-      "sim_not_implemented": 3
+      "sim_not_implemented": 2
     },
     "unassigned": {
-      "total": 46,
+      "total": 34,
+      "code_marker": 1,
       "contract_doc_null": 9,
-      "contract_island": 4,
+      "contract_island": 2,
       "contract_missing_entirely": 2,
-      "contract_no_resolver": 1,
       "key_orphan_emit": 1,
-      "prose_marker": 8,
-      "sim_not_implemented": 4,
-      "status_noncurrent": 17
+      "prose_marker": 4,
+      "sim_not_implemented": 2,
+      "status_noncurrent": 13
     }
   },
   "prose_marker_rollup": {
     "gap": 64,
-    "assumption": 61,
+    "assumption": 62,
     "stub": 4,
     "todo": 8
   },
@@ -120,45 +123,18 @@
   "findings": [
     {
       "category": "apparatus_orphan",
-      "id": "tools/build_audit_registry_backfill.py",
-      "title": "tools/build_audit_registry_backfill.py",
+      "id": "tools/dead_primitive_census.py",
+      "title": "tools/dead_primitive_census.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/build_audit_registry_backfill.py",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "apparatus_orphan",
-      "id": "tools/ci_claude_workflow_paths.py",
-      "title": "tools/ci_claude_workflow_paths.py",
-      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/ci_claude_workflow_paths.py",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "apparatus_orphan",
-      "id": "tools/geography/jsx_to_canonical.py",
-      "title": "tools/geography/jsx_to_canonical.py",
-      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/geography/jsx_to_canonical.py",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "apparatus_orphan",
-      "id": "tools/observability/npc_audit_report_gen.py",
-      "title": "tools/observability/npc_audit_report_gen.py",
-      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/observability/npc_audit_report_gen.py",
+      "path": "tools/dead_primitive_census.py",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_cascade_sink",
       "id": "sink::Altonia",
-      "title": "Altonia \u2014 cascade sink (576 chains)",
-      "detail": "\u201cAltonia\u201d is reached by 576 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Altonia \u2014 cascade sink (624 chains)",
+      "detail": "\u201cAltonia\u201d is reached by 624 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "canon/03_canonical_timeline.md",
       "lane": "IN",
       "severity": "low"
@@ -166,8 +142,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Audit",
-      "title": "Audit \u2014 cascade sink (792 chains)",
-      "detail": "\u201cAudit\u201d is reached by 792 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Audit \u2014 cascade sink (796 chains)",
+      "detail": "\u201cAudit\u201d is reached by 796 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "audit/2026-05-17-v18-integration/integration_plan_v18.md",
       "lane": "IN",
       "severity": "low"
@@ -175,8 +151,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Church",
-      "title": "Church \u2014 cascade sink (597 chains)",
-      "detail": "\u201cChurch\u201d is reached by 597 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Church \u2014 cascade sink (697 chains)",
+      "detail": "\u201cChurch\u201d is reached by 697 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_politics_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -184,8 +160,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Conviction",
-      "title": "Conviction \u2014 cascade sink (639 chains)",
-      "detail": "\u201cConviction\u201d is reached by 639 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Conviction \u2014 cascade sink (662 chains)",
+      "detail": "\u201cConviction\u201d is reached by 662 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/npcs/npc_behavior_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -193,17 +169,26 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Disposition",
-      "title": "Disposition \u2014 cascade sink (609 chains)",
-      "detail": "\u201cDisposition\u201d is reached by 609 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Disposition \u2014 cascade sink (645 chains)",
+      "detail": "\u201cDisposition\u201d is reached by 645 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_cascade_sink",
+      "id": "sink::Factions",
+      "title": "Factions \u2014 cascade sink (629 chains)",
+      "detail": "\u201cFactions\u201d is reached by 629 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/faction_politics_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_cascade_sink",
       "id": "sink::Key: mechanical.accounting",
-      "title": "Key: mechanical.accounting \u2014 cascade sink (682 chains)",
-      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 682 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Key: mechanical.accounting \u2014 cascade sink (808 chains)",
+      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 808 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -211,8 +196,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Knot",
-      "title": "Knot \u2014 cascade sink (663 chains)",
-      "detail": "\u201cKnot\u201d is reached by 663 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Knot \u2014 cascade sink (697 chains)",
+      "detail": "\u201cKnot\u201d is reached by 697 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/knots_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -220,17 +205,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Mass Battle",
-      "title": "Mass Battle \u2014 cascade sink (612 chains)",
-      "detail": "\u201cMass Battle\u201d is reached by 612 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/mass_battle/mass_battle_integration_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_cascade_sink",
-      "id": "sink::Mass Combat",
-      "title": "Mass Combat \u2014 cascade sink (612 chains)",
-      "detail": "\u201cMass Combat\u201d is reached by 612 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Mass Battle \u2014 cascade sink (618 chains)",
+      "detail": "\u201cMass Battle\u201d is reached by 618 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_integration_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -238,8 +214,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::NPC Behavior",
-      "title": "NPC Behavior \u2014 cascade sink (581 chains)",
-      "detail": "\u201cNPC Behavior\u201d is reached by 581 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "NPC Behavior \u2014 cascade sink (660 chains)",
+      "detail": "\u201cNPC Behavior\u201d is reached by 660 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/npcs/character_canon_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -247,8 +223,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Restoration Movement",
-      "title": "Restoration Movement \u2014 cascade sink (601 chains)",
-      "detail": "\u201cRestoration Movement\u201d is reached by 601 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Restoration Movement \u2014 cascade sink (652 chains)",
+      "detail": "\u201cRestoration Movement\u201d is reached by 652 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -256,8 +232,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Social Contest",
-      "title": "Social Contest \u2014 cascade sink (592 chains)",
-      "detail": "\u201cSocial Contest\u201d is reached by 592 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Social Contest \u2014 cascade sink (627 chains)",
+      "detail": "\u201cSocial Contest\u201d is reached by 627 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -265,8 +241,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Stability",
-      "title": "Stability \u2014 cascade sink (579 chains)",
-      "detail": "\u201cStability\u201d is reached by 579 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Stability \u2014 cascade sink (652 chains)",
+      "detail": "\u201cStability\u201d is reached by 652 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -274,8 +250,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Territories",
-      "title": "Territories \u2014 cascade sink (747 chains)",
-      "detail": "\u201cTerritories\u201d is reached by 747 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Territories \u2014 cascade sink (811 chains)",
+      "detail": "\u201cTerritories\u201d is reached by 811 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -283,8 +259,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Threadwork",
-      "title": "Threadwork \u2014 cascade sink (676 chains)",
-      "detail": "\u201cThreadwork\u201d is reached by 676 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Threadwork \u2014 cascade sink (698 chains)",
+      "detail": "\u201cThreadwork\u201d is reached by 698 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 55,302 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -570,9 +546,9 @@
     },
     {
       "category": "audit_implied_missing",
-      "id": "impl::Faction Layer||Mass Combat",
-      "title": "Faction Layer \u22ef Mass Combat \u2014 implied but never cited",
-      "detail": "\u201cFaction Layer\u201d and \u201cMass Combat\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "id": "impl::Faction Layer||Mass Battle",
+      "title": "Faction Layer \u22ef Mass Battle \u2014 implied but never cited",
+      "detail": "\u201cFaction Layer\u201d and \u201cMass Battle\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_canon_v30.md",
       "lane": "IN",
       "severity": "med"
@@ -714,28 +690,10 @@
     },
     {
       "category": "audit_isolate",
-      "id": "iso::Key: scene_outcome.battle_concluded",
-      "title": "Key: scene_outcome.battle_concluded \u2014 no design-prose home",
-      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has max degree 1 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "references/module_contracts.yaml",
-      "lane": "IN",
-      "severity": "high"
-    },
-    {
-      "category": "audit_isolate",
       "id": "iso::NPC Relational Graph",
       "title": "NPC Relational Graph \u2014 no design-prose home",
       "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
-      "lane": "IN",
-      "severity": "high"
-    },
-    {
-      "category": "audit_isolate",
-      "id": "iso::Territorial Piety",
-      "title": "Territorial Piety \u2014 no design-prose home",
-      "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "references/module_contracts.yaml",
       "lane": "IN",
       "severity": "high"
     },
@@ -769,8 +727,8 @@
     {
       "category": "audit_notional",
       "id": "notional::rollup",
-      "title": "14662 notional citations \u2014 cited but content-empty",
-      "detail": "14662 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: Aldric Tormann\u2192Crown (w183); CI Political\u2192Crown (w183); Cardinal Arnlod Olafsson\u2192Crown (w183); Cardinal Osten Jarnstal\u2192Crown (w183); Church\u2192Crown (w183). The feed carries a top-100 sample (not all 14662); the full ranked list is reproducible by re-running the deterministic audit (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "14599 notional citations \u2014 cited but content-empty",
+      "detail": "14599 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: Aldric Tormann\u2192Crown (w183); CI Political\u2192Crown (w183); Cardinal Arnlod Olafsson\u2192Crown (w183); Cardinal Osten Jarnstal\u2192Crown (w183); Church\u2192Crown (w183). The feed carries a top-100 sample (not all 14599); the full ranked list is reproducible by re-running the deterministic audit (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -831,6 +789,15 @@
     },
     {
       "category": "audit_sparse",
+      "id": "sparse::Holonic Container Doctrine",
+      "title": "Holonic Container Doctrine \u2014 thinly developed",
+      "detail": "\u201cHolonic Container Doctrine\u201d is in the bottom decile of BOTH prose volume (2 paragraphs) and citation degree (20) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/_architecture/propagation_spec_v1.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
       "id": "sparse::Key: mechanical.scene_exited",
       "title": "Key: mechanical.scene_exited \u2014 thinly developed",
       "detail": "\u201cKey: mechanical.scene_exited\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
@@ -843,15 +810,6 @@
       "id": "sparse::Key: mechanical.scene_skipped",
       "title": "Key: mechanical.scene_skipped \u2014 thinly developed",
       "detail": "\u201cKey: mechanical.scene_skipped\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_sparse",
-      "id": "sparse::Key: scene_outcome.battle_concluded",
-      "title": "Key: scene_outcome.battle_concluded \u2014 thinly developed",
-      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -879,15 +837,6 @@
       "id": "sparse::Scene Timer",
       "title": "Scene Timer \u2014 thinly developed",
       "detail": "\u201cScene Timer\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (6) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_sparse",
-      "id": "sparse::Territorial Piety",
-      "title": "Territorial Piety \u2014 thinly developed",
-      "detail": "\u201cTerritorial Piety\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -948,6 +897,51 @@
     },
     {
       "category": "code_marker",
+      "id": "engine/cross_scale/articulation.py:31",
+      "title": "STUB @ engine/cross_scale/articulation.py:31",
+      "detail": "# stub-wire calls and stops there. The minimal bus subscriber is Wave 2 item 6 (OI-08); the render",
+      "path": "engine/cross_scale/articulation.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/cross_scale/scene_dispatch.py:365",
+      "title": "STUB @ engine/cross_scale/scene_dispatch.py:365",
+      "detail": "# stubs.count ratchet (plan \u00a72.1), not a bespoke string this call site alone can drift.",
+      "path": "engine/cross_scale/scene_dispatch.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/mc_v18.py:184",
+      "title": "STUB @ engine/mc_v18.py:184",
+      "detail": "# stubwire (not silent) so the gap is greppable/counted, same discipline as the knots stub",
+      "path": "engine/mc_v18.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/mc_v18.py:95",
+      "title": "STUB @ engine/mc_v18.py:95",
+      "detail": "# stub-wired yet (Wave 1 stage 4 converts the OI-17 class); additive-only,",
+      "path": "engine/mc_v18.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "engine/tests/test_pipeline_reach.py:652",
+      "title": "STUB @ engine/tests/test_pipeline_reach.py:652 [in tests]",
+      "detail": "# stub-flag invocations visible: the callback registered for a subscribed type_id must fire a",
+      "path": "engine/tests/test_pipeline_reach.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
       "id": "systems/factions/sim/parliamentary_action.py:162",
       "title": "TODO @ systems/factions/sim/parliamentary_action.py:162",
       "detail": "# TODO(future extension, out of ED-SC-0007 scope): the other four Parliamentary Sanction tiers",
@@ -957,8 +951,35 @@
     },
     {
       "category": "code_marker",
-      "id": "systems/social_contest/sim/contest/modes.py:148",
-      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:148",
+      "id": "systems/factions/sim/treaty.py:110",
+      "title": "STUB @ systems/factions/sim/treaty.py:110",
+      "detail": "# stub-wire primitive (engine/substrate/stubwire.py) \u2014 a typed no-op instead of a crash,",
+      "path": "systems/factions/sim/treaty.py",
+      "lane": "FA",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/factions/sim/tribunal.py:153",
+      "title": "STUB @ systems/factions/sim/tribunal.py:153",
+      "detail": "# stub-wire primitive (engine/substrate/stubwire.py) \u2014 a typed no-op instead of a crash,",
+      "path": "systems/factions/sim/tribunal.py",
+      "lane": "unassigned",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/social_contest/sim/contest/dictionaries.py:713",
+      "title": "STUB @ systems/social_contest/sim/contest/dictionaries.py:713",
+      "detail": "# stub-wire primitive (engine/substrate/stubwire.py) \u2014 a typed no-op instead of a crash,",
+      "path": "systems/social_contest/sim/contest/dictionaries.py",
+      "lane": "SC",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "systems/social_contest/sim/contest/modes.py:150",
+      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:150",
       "detail": "INSTITUTIONAL_MODES = {            # placeholder keys (mechanism, not world); Jordan assigns Valorian names",
       "path": "systems/social_contest/sim/contest/modes.py",
       "lane": "SC",
@@ -966,11 +987,20 @@
     },
     {
       "category": "code_marker",
-      "id": "systems/social_contest/sim/contest/modes.py:316",
-      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:316",
+      "id": "systems/social_contest/sim/contest/modes.py:318",
+      "title": "PLACEHOLDER @ systems/social_contest/sim/contest/modes.py:318",
       "detail": "CROSS_CULTURAL_VENUES = {          # placeholder keys; Valorian names are Jordan's to assign",
       "path": "systems/social_contest/sim/contest/modes.py",
       "lane": "SC",
+      "severity": "low"
+    },
+    {
+      "category": "code_marker",
+      "id": "tools/review_core.py:65",
+      "title": "STUB @ tools/review_core.py:65",
+      "detail": "# stubs.count \u2014 the P1 stubwire ratchet (ED-IN-0091, plan \u00a72.1). Runs structure_audit's",
+      "path": "tools/review_core.py",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1060,7 +1090,7 @@
       "title": "campaign_architecture",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -1078,7 +1108,7 @@
       "title": "clock_registry",
       "detail": "module declares NO emits AND NO consumes \u2014 an untraceable island in the graph",
       "path": "systems/overview/clock_registry_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -1123,7 +1153,7 @@
       "title": "campaign_architecture",
       "detail": "module declares no resolver",
       "path": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "high"
     },
     {
@@ -1276,7 +1306,7 @@
       "title": "systems/_architecture/derived_stats_v30.md",
       "detail": "prose gap markers: TODO\u00d72",
       "path": "systems/_architecture/derived_stats_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1285,7 +1315,7 @@
       "title": "systems/_architecture/player_agency_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/_architecture/player_agency_v30.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1294,7 +1324,7 @@
       "title": "systems/_architecture/player_agency_v30_index.md",
       "detail": "prose gap markers: TBD\u00d72",
       "path": "systems/_architecture/player_agency_v30_index.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "low"
     },
     {
@@ -1357,7 +1387,7 @@
       "title": "systems/fieldwork/fieldwork_v30.md",
       "detail": "prose gap markers: TBD\u00d71",
       "path": "systems/fieldwork/fieldwork_v30.md",
-      "lane": "unassigned",
+      "lane": "FI",
       "severity": "low"
     },
     {
@@ -1452,189 +1482,108 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/autoload/npc_ai.py:23",
-      "title": "NotImplementedError @ engine/autoload/npc_ai.py:23",
-      "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
+      "id": "engine/autoload/npc_ai.py:24",
+      "title": "NotImplementedError @ engine/autoload/npc_ai.py:24",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "engine/autoload/npc_ai.py",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/autoload/npc_ai.py:27",
-      "title": "NotImplementedError @ engine/autoload/npc_ai.py:27",
-      "detail": "raise NotImplementedError(\"sim/autoload/npc_ai.py \u2014 Pass 2l armature stub\")",
-      "path": "engine/autoload/npc_ai.py",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "engine/cross_scale/articulation.py:24",
-      "title": "NotImplementedError @ engine/cross_scale/articulation.py:24",
-      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
+      "id": "engine/cross_scale/articulation.py:25",
+      "title": "NotImplementedError @ engine/cross_scale/articulation.py:25",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "engine/cross_scale/articulation.py",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/cross_scale/articulation.py:28",
-      "title": "NotImplementedError @ engine/cross_scale/articulation.py:28",
-      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
-      "path": "engine/cross_scale/articulation.py",
+      "id": "engine/tests/test_pipeline_reach.py:171",
+      "title": "NotImplementedError @ engine/tests/test_pipeline_reach.py:171 [in tests]",
+      "detail": "\"session's schedule). This module MUST still raise NotImplementedError; if it \"",
+      "path": "engine/tests/test_pipeline_reach.py",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "engine/cross_scale/articulation.py:32",
-      "title": "NotImplementedError @ engine/cross_scale/articulation.py:32",
-      "detail": "raise NotImplementedError(\"sim/cross_scale/articulation.py \u2014 Pass 2l armature stub\")",
-      "path": "engine/cross_scale/articulation.py",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/characters/sim/companion.py:21",
-      "title": "NotImplementedError @ systems/characters/sim/companion.py:21",
-      "detail": "raise NotImplementedError(\"sim/personal/companion.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/characters/sim/companion.py:22",
+      "title": "NotImplementedError @ systems/characters/sim/companion.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/characters/sim/companion.py",
       "lane": "unassigned",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/charter_liberties.py:20",
-      "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:20",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/charter_liberties.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/factions/sim/charter_liberties.py:21",
+      "title": "NotImplementedError @ systems/factions/sim/charter_liberties.py:21",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/charter_liberties.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/hafenmark_equipment.py:22",
-      "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:22",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/hafenmark_equipment.py \u2014 content pending contamination audit\")",
+      "id": "systems/factions/sim/hafenmark_equipment.py:23",
+      "title": "NotImplementedError @ systems/factions/sim/hafenmark_equipment.py:23",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/hafenmark_equipment.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/home_sanctuary.py:21",
-      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:21",
-      "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/factions/sim/home_sanctuary.py:22",
+      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/home_sanctuary.py",
       "lane": "unassigned",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/home_sanctuary.py:25",
-      "title": "NotImplementedError @ systems/factions/sim/home_sanctuary.py:25",
-      "detail": "raise NotImplementedError(\"sim/provincial/home_sanctuary.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/factions/sim/home_sanctuary.py",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/factions/sim/infrastructure_reclamation.py:21",
-      "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:21",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/infrastructure_reclamation.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/factions/sim/infrastructure_reclamation.py:22",
+      "title": "NotImplementedError @ systems/factions/sim/infrastructure_reclamation.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/infrastructure_reclamation.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/treaty.py:107",
-      "title": "NotImplementedError @ systems/factions/sim/treaty.py:107",
-      "detail": "raise NotImplementedError(",
-      "path": "systems/factions/sim/treaty.py",
-      "lane": "FA",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/factions/sim/tribunal.py:149",
-      "title": "NotImplementedError @ systems/factions/sim/tribunal.py:149",
-      "detail": "raise NotImplementedError(",
-      "path": "systems/factions/sim/tribunal.py",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/factions/sim/varfell_mandate_action.py:31",
-      "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:31",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_mandate_action.py \u2014 Pass 2l armature stub (placeholder per VARFELL-MANDATE-ACTION-001)\")",
+      "id": "systems/factions/sim/varfell_mandate_action.py:32",
+      "title": "NotImplementedError @ systems/factions/sim/varfell_mandate_action.py:32",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/varfell_mandate_action.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/factions/sim/varfell_territorial_acquisition.py:33",
-      "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:33",
-      "detail": "raise NotImplementedError(\"systems/factions/sim/varfell_territorial_acquisition.py \u2014 Pass 2l armature stub (placeholder per VARFELL-TERRITORIAL-ACQUISITION-001)",
+      "id": "systems/factions/sim/varfell_territorial_acquisition.py:34",
+      "title": "NotImplementedError @ systems/factions/sim/varfell_territorial_acquisition.py:34",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/factions/sim/varfell_territorial_acquisition.py",
       "lane": "FA",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/fieldwork.py:25",
-      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:25",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/fieldwork/sim/fieldwork.py:27",
+      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:27",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/fieldwork/sim/fieldwork.py",
       "lane": "FI",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/fieldwork.py:29",
-      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:29",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/fieldwork.py:33",
-      "title": "NotImplementedError @ systems/fieldwork/sim/fieldwork.py:33",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/fieldwork.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/fieldwork.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/investigation.py:23",
-      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:23",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/investigation.py:27",
-      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:27",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/fieldwork/sim/investigation.py",
-      "lane": "FI",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/fieldwork/sim/investigation.py:31",
-      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:31",
-      "detail": "raise NotImplementedError(\"systems/fieldwork/sim/investigation.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/fieldwork/sim/investigation.py:25",
+      "title": "NotImplementedError @ systems/fieldwork/sim/investigation.py:25",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/fieldwork/sim/investigation.py",
       "lane": "FI",
       "severity": "med"
@@ -1650,63 +1599,27 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/overview/sim/ip_track.py:22",
-      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:22",
-      "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/overview/sim/ip_track.py:23",
+      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:23",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/overview/sim/ip_track.py",
       "lane": "SE",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/overview/sim/ip_track.py:26",
-      "title": "NotImplementedError @ systems/overview/sim/ip_track.py:26",
-      "detail": "raise NotImplementedError(\"sim/peninsular/ip_track.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/overview/sim/ip_track.py",
-      "lane": "SE",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/overview/sim/rs_track.py:21",
-      "title": "NotImplementedError @ systems/overview/sim/rs_track.py:21",
-      "detail": "raise NotImplementedError(\"sim/peninsular/rs_track.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/overview/sim/rs_track.py:22",
+      "title": "NotImplementedError @ systems/overview/sim/rs_track.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/overview/sim/rs_track.py",
       "lane": "SE",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/dictionaries.py:710",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/dictionaries.py:710",
-      "detail": "raise NotImplementedError(",
-      "path": "systems/social_contest/sim/contest/dictionaries.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/modes.py:328",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:328",
-      "detail": "def play(self, *a, **k): raise NotImplementedError(\"dyadic counsel is a separate sub-system \u2014 scaffold only\")",
-      "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/modes.py:331",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:331",
-      "detail": "def play(self, *a, **k): raise NotImplementedError(\"negotiation is a separate sub-system \u2014 scaffold only\")",
-      "path": "systems/social_contest/sim/contest/modes.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/modes.py:334",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:334",
-      "detail": "def play(self, *a, **k): raise NotImplementedError(\"ceremonial is a separate sub-system \u2014 scaffold only\")",
+      "id": "systems/social_contest/sim/contest/modes.py:329",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/modes.py:329",
+      "detail": "# from an unconditional `raise NotImplementedError` to the single-owner stub-wire primitive",
       "path": "systems/social_contest/sim/contest/modes.py",
       "lane": "SC",
       "severity": "med"
@@ -1722,63 +1635,36 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/wrapper.py:201",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:201",
-      "detail": "raise NotImplementedError(",
+      "id": "systems/social_contest/sim/contest/wrapper.py:203",
+      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:203",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive",
       "path": "systems/social_contest/sim/contest/wrapper.py",
       "lane": "SC",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/social_contest/sim/contest/wrapper.py:222",
-      "title": "NotImplementedError @ systems/social_contest/sim/contest/wrapper.py:222",
-      "detail": "games are STUBs (raise NotImplementedError) pending later stages. `policy_a`/`policy_b` name a",
-      "path": "systems/social_contest/sim/contest/wrapper.py",
-      "lane": "SC",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/threadwork/sim/rendering.py:22",
-      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:22",
-      "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/threadwork/sim/rendering.py:23",
+      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:23",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/threadwork/sim/rendering.py",
       "lane": "WR",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/threadwork/sim/rendering.py:26",
-      "title": "NotImplementedError @ systems/threadwork/sim/rendering.py:26",
-      "detail": "raise NotImplementedError(\"systems/threadwork/sim/rendering.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/threadwork/sim/rendering.py",
-      "lane": "WR",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/world/sim/miraculous_event.py:21",
-      "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:21",
-      "detail": "raise NotImplementedError(\"systems/world/sim/miraculous_event.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/world/sim/miraculous_event.py:22",
+      "title": "NotImplementedError @ systems/world/sim/miraculous_event.py:22",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/world/sim/miraculous_event.py",
       "lane": "WR",
       "severity": "med"
     },
     {
       "category": "sim_not_implemented",
-      "id": "systems/world/sim/restoration_movement.py:23",
-      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:23",
-      "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
-      "path": "systems/world/sim/restoration_movement.py",
-      "lane": "WR",
-      "severity": "med"
-    },
-    {
-      "category": "sim_not_implemented",
-      "id": "systems/world/sim/restoration_movement.py:27",
-      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:27",
-      "detail": "raise NotImplementedError(\"systems/world/sim/restoration_movement.py \u2014 Pass 2l armature stub\")",
+      "id": "systems/world/sim/restoration_movement.py:24",
+      "title": "NotImplementedError @ systems/world/sim/restoration_movement.py:24",
+      "detail": "# `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,",
       "path": "systems/world/sim/restoration_movement.py",
       "lane": "WR",
       "severity": "med"
@@ -1877,8 +1763,17 @@
       "category": "stale_retired_pointer",
       "id": "references/id_reservations.yaml",
       "title": "references/id_reservations.yaml",
-      "detail": "2 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md, sim/tests/test_f7_smoke_oracle.py",
+      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md",
       "path": "references/id_reservations.yaml",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "stale_retired_pointer",
+      "id": "references/id_reservations_history.md",
+      "title": "references/id_reservations_history.md",
+      "detail": "1 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/tests/test_f7_smoke_oracle.py",
+      "path": "references/id_reservations_history.md",
       "lane": "IN",
       "severity": "med"
     },
@@ -1931,7 +1826,7 @@
       "category": "stale_retired_pointer",
       "id": "registers/mechanics_index.yaml",
       "title": "registers/mechanics_index.yaml",
-      "detail": "47 reference(s) to the retired designs/sim/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md, designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md, designs/provincial/altonian_reinforcements_v30.md (+23 more)",
+      "detail": "1 reference(s) to the retired sim/ tree (alias-resolved, not live): e.g. sim/personal/contest.py",
       "path": "registers/mechanics_index.yaml",
       "lane": "IN",
       "severity": "med"
@@ -2086,7 +1981,7 @@
       "title": "systems/_architecture/canonical_registry.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/_architecture/canonical_registry.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2095,7 +1990,16 @@
       "title": "systems/_architecture/complete_systems_reference.md",
       "detail": "doc Status is not current: SUPERSEDED",
       "path": "systems/_architecture/complete_systems_reference.md",
-      "lane": "unassigned",
+      "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/_architecture/decision_policy_v1.md",
+      "title": "systems/_architecture/decision_policy_v1.md",
+      "detail": "doc Status is not current: DRAFT",
+      "path": "systems/_architecture/decision_policy_v1.md",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2104,7 +2008,7 @@
       "title": "systems/_architecture/governance_ripple_substrate_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/_architecture/governance_ripple_substrate_v1.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2113,7 +2017,7 @@
       "title": "systems/_architecture/governance_type_registry_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "systems/_architecture/governance_type_registry_v1.md",
-      "lane": "unassigned",
+      "lane": "IN",
       "severity": "med"
     },
     {
@@ -2227,8 +2131,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Church Mandate",
-      "title": "\u201cChurch Mandate\u201d \u2014 in 22 docs, unregistered",
-      "detail": "appears in 22 design docs (61 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md",
+      "title": "\u201cChurch Mandate\u201d \u2014 in 23 docs, unregistered",
+      "detail": "appears in 23 design docs (62 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2254,8 +2158,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Combat Pool",
-      "title": "\u201cCombat Pool\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (34 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, engine/params/core.md",
+      "title": "\u201cCombat Pool\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, engine/params/core.md",
       "path": "systems/combat/combat_design_v1.md",
       "lane": "IN",
       "severity": "low"
@@ -2326,8 +2230,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Ein Sof",
-      "title": "\u201cEin Sof\u201d \u2014 in 19 docs, unregistered",
-      "detail": "appears in 19 design docs (76 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/threadwork/threadwork_v30_infill.md",
+      "title": "\u201cEin Sof\u201d \u2014 in 20 docs, unregistered",
+      "detail": "appears in 20 design docs (78 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/threadwork/threadwork_v30_infill.md",
       "path": "canon/00_philosophical_foundations.md",
       "lane": "IN",
       "severity": "low"
@@ -2380,8 +2284,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Mass Seizure",
-      "title": "\u201cMass Seizure\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (41 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, engine/params/bg/ci_seizure.md",
+      "title": "\u201cMass Seizure\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (42 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, engine/params/bg/ci_seizure.md",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2527,6 +2431,15 @@
       "title": "\u201cTorben Loyalty\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/early_game_ignition_analysis.md, systems/npcs/npc_behavior_v30.md",
       "path": "arcs/arc_expansion_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Varfell Path",
+      "title": "\u201cVarfell Path\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/victory.md, engine/params/bg/geography.md, engine/params/bg/ed_resolutions.md",
+      "path": "engine/params/bg/victory.md",
       "lane": "IN",
       "severity": "low"
     },

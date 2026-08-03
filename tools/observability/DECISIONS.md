@@ -58,12 +58,12 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
 
 ### Ratifications (13)
 
+- End spec. PROVISIONAL pending ratification.**  
+  ↳ `systems/articulation/articulation_layer_v30.md:399` +3 more
 - <!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->  
   ↳ `systems/_architecture/key_type_registry_v30.md:148` +3 more
-- End spec. PROVISIONAL pending ratification.**  
-  ↳ `systems/_architecture/key_substrate_v30.md:627` +3 more
 - Status: PROVISIONAL — pending ratification.  
-  ↳ `systems/npcs/character_canon_v30.md:6` +1 more
+  ↳ `systems/factions/faction_canon_v30.md:7` +1 more
 
 ### Naming & collisions (20)
 
@@ -77,6 +77,8 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `systems/social_contest/social_contest_v30_infill.md:48`
 - §9.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.]  
   ↳ `systems/social_contest/social_contest_v30.md:579`
+- name collision noted in gap_notes) — do not conflate the two sim_module: values.  
+  ↳ `references/module_contracts.yaml:261`
 - VALORIA — Name Collision Database  
   ↳ `references/name_collision_database.yaml:1`
 - PT: {term: "Piety Track", silo: 9, status: recorded}  # COLLISION: "Piety Territory (PT)" derived_stats + "Parliamentary Transfer (PT)" faction; ruling pending  
@@ -87,32 +89,30 @@ _Inferred from file path via the `LANE_PATH_PREFIXES` table in this script — i
   ↳ `references/name_collision_database.yaml:59`
 - IP: {term: "Institutional Pressure", silo: 12, status: recorded}  # COLLISION: "Imperial Pressure (IP)" in derived_stats_v30; ruling pending  
   ↳ `references/name_collision_database.yaml:67`
-- name collision noted in gap_notes) — do not conflate the two sim_module: values.  
-  ↳ `references/module_contracts.yaml:261`
 - ruling pending'  
   ↳ `references/definitions/vocab_source.yaml:1108`
 - _…and more in this category — see `decisions.json`._
 
 ### Ratifications (13)
 
-- End roster. PROVISIONAL pending ratification.**  
-  ↳ `systems/characters/conviction_migration_roster_v30.md:295`
-- Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.  
-  ↳ `systems/mass_battle/mass_battle_integration_v30.md:301`
+- <!-- STATUS: PROVISIONAL — pending Jordan ratification. Source files remain canonical until ratification commits. -->  
+  ↳ `systems/factions/faction_canon_v30.md:2`
+- <!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions §7 bullet 5 + §5 Domain Echo. Jordan-vetoable.] -->  
+  ↳ `systems/factions/faction_behavior_v30.md:437`
 - <!-- STATUS: PROVISIONAL — pending Jordan ratification. PART A (Framework) complete; PART B (NPC sheets) pending Q1 scope decision. -->  
   ↳ `systems/npcs/character_canon_v30.md:2`
 - End spec. PROVISIONAL pending ratification. B1.2/B1.3/B1.4/B2 are deferred follow-up PPs.**  
   ↳ `systems/npcs/npc_relational_graph_v30.md:681`
+- End roster. PROVISIONAL pending ratification.**  
+  ↳ `systems/characters/conviction_migration_roster_v30.md:295`
+- Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.  
+  ↳ `systems/mass_battle/mass_battle_integration_v30.md:301`
 - "status": "OPEN DECISION FOR JORDAN (Gate B 2026-07-01; provisional pending Jordan ratification)",  
   ↳ `systems/social_contest/sim/contest/dictionaries.py:203`
-- <!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions §7 bullet 5 + §5 Domain Echo. Jordan-vetoable.] -->  
-  ↳ `systems/factions/faction_behavior_v30.md:437`
-- <!-- STATUS: PROVISIONAL — pending Jordan ratification. Source files remain canonical until ratification commits. -->  
-  ↳ `systems/factions/faction_canon_v30.md:2`
-- added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'  
-  ↳ `references/canonical_sources.yaml:308`
 - scales / resolver enums are [ASSUMPTION]-grade pending Jordan ratification;  
   ↳ `references/module_contracts.yaml:14`
+- added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'  
+  ↳ `references/canonical_sources.yaml:308`
 - End of v1. Status PROPOSED; every recommendation above is Jordan-vetoable; the [OPEN] register (Part VIII) is the veto surface.*  
   ↳ `godot/godot_conversion_strategy_v1.md:230`
 
