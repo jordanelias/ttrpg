@@ -250,6 +250,17 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          # FULL HISTORY REQUIRED (ED-IN-0123, 2026-08-03). Not a convenience.
+          # tests/valoria/test_retired_tree_apparatus.py exercises
+          # currency_consistency_check.check_current_stamp in BOTH directions: an
+          # apparatus-only change must not trip the stamp, and a canonical head moving
+          # must. It stubs the date source, so it needs no real dates -- but the check's
+          # depth guard reads the actual commit count, and under the default depth-1
+          # checkout that guard short-circuits before the path-selection logic runs.
+          # The result is a check that is INERT in this job while reporting green, which
+          # is the failure mode the second half of that test exists to catch. It caught it.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
