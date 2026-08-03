@@ -504,6 +504,42 @@ tracks that run in parallel, each anchored to a phase of the spine.
 | **E4** | `loop.s3` | **The one contested scalar** — `CI (Church Influence)` claimed by `ci_political` and `territorial_piety`. Single-owner it | `execution_map.json`'s contested count reaches 0 |
 | **E5** | — | **The 240 uncited constants** (84/324 cited, 8 assumption-grade). Per-value canon lookups; paced, not bulk-run | `citation_coverage.uncited` falls, with every value traced |
 
+**I1 ATTEMPTED 2026-08-03, and it is canon-blocked at the same gate.** I took I1 ("get `main`
+green") and traced one failure to the bottom rather than assuming the bisect table.
+
+`test_conditional_orders::test_own_strength_fires_when_attrited` asserts an `own_strength:0.9`
+order fires after attrition. **It fails because the subunit never takes a single casualty** —
+ratio 1.0000 across 40 battle turns. The order logic is correct; the trigger's condition is never
+met. Characterised across 60 identical 1200v1200 Line battles:
+
+| | |
+|---|---|
+| ended in **1 turn** | **60 / 60** |
+| winner took **zero** losses | **42 / 60** (median 0.0000) |
+| loser's losses | median **45.3%** |
+
+**Two corrections to the bisect's causal story, both from measurement.** The retrospective
+attributes this test to `PC_FRICTION_CEV`, and toggling that flag does flip *this seed*. But across
+40 seeds the flag produces no one-sided advantage at all — A zeroed 20, B zeroed 19. The toggle
+works by shifting the RNG stream, not by removing a bias. And `b_pool: 0` in the turn log is **not**
+a unit unable to fight: `orchestration.py` reads `a_pool = 0 if a_dead else …` where
+`a_dead = routed or broken`, so it is the *result* of routing. I nearly reported that backwards.
+
+So the failing tests are TRUE POSITIVES about a real state — battles resolve as instant one-sided
+routs under the ruled flags-ON configuration — and fixing them means answering **is a one-turn rout
+with an untouched winner correct?** That is canon. The retrospective's own Phase 0 orders it
+exactly this way (*bisect → fix F1–F8 → Jordan rules the golden mode matrix → re-base*) and warns
+that **"re-basing before fixing F1–F8 would bake nine defects into the definition of correct."** So
+re-pinning the thresholds to current behaviour is specifically forbidden, and it is the only way to
+make these green without a ruling. **I1 moves to Track C as C7.**
+
+One thing I1 *did* produce, because it is a demonstrable error rather than a judgement: `config.py`
+shipped `PC_CELL_MORALE` default `'1'` under a trailing comment reading *"RETRACTED to OFF
+2026-07-25"*. Git settles it — `584c683a` set `'0'` and the comment was true; `94bb9022` (PR #271,
+2026-07-29) flipped it to `'1'` under the flags-ON directive and left the comment. Meanwhile
+`test_stochastic_rout`'s docstring, corrected the *same day*, asserts `default '0'`. Comment
+corrected; byte-exact digest verified unchanged (`ccdf7d09…` before and after).
+
 **Track C — CANON (blocked on Jordan).** Each is a *decision*, not a task; none can be inferred
 without designing your ruling by implication.
 
