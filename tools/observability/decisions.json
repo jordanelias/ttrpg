@@ -18,27 +18,27 @@
       "3": 138
     },
     "by_lane": {
-      "IN": 18,
       "unassigned": 132,
+      "IN": 18,
       "FA": 26,
       "SC": 6,
       "GO": 19,
       "MB": 11,
+      "FI": 1,
       "SE": 3,
       "PC": 1,
-      "WR": 8,
-      "FI": 1
+      "WR": 8
     },
     "by_lane_priority": {
-      "IN": {
-        "1": 2,
-        "2": 1,
-        "3": 15
-      },
       "unassigned": {
         "1": 44,
         "2": 20,
         "3": 68
+      },
+      "IN": {
+        "1": 2,
+        "2": 1,
+        "3": 15
       },
       "FA": {
         "1": 3,
@@ -60,6 +60,11 @@
         "2": 0,
         "3": 10
       },
+      "FI": {
+        "1": 0,
+        "2": 0,
+        "3": 1
+      },
       "SE": {
         "1": 0,
         "2": 0,
@@ -74,11 +79,6 @@
         "1": 0,
         "2": 0,
         "3": 8
-      },
-      "FI": {
-        "1": 0,
-        "2": 0,
-        "3": 1
       }
     },
     "hotspots": [
@@ -147,6 +147,21 @@
   },
   "decisions": [
     {
+      "text": "End spec. PROVISIONAL pending ratification.**",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/articulation/articulation_layer_v30.md:399",
+        "systems/_architecture/key_substrate_v30.md:627",
+        "systems/factions/faction_behavior_v30.md:548",
+        "systems/characters/conviction_taxonomy_v30.md:337"
+      ],
+      "systems": [],
+      "count": 4,
+      "lane": null
+    },
+    {
       "text": "<!-- [STUB: payload inferred, not canon-specified \u2014 provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->",
       "category": "ratification",
       "priority": 1,
@@ -162,28 +177,13 @@
       "lane": "IN"
     },
     {
-      "text": "End spec. PROVISIONAL pending ratification.**",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "systems/_architecture/key_substrate_v30.md:627",
-        "systems/characters/conviction_taxonomy_v30.md:337",
-        "systems/articulation/articulation_layer_v30.md:399",
-        "systems/factions/faction_behavior_v30.md:548"
-      ],
-      "systems": [],
-      "count": 4,
-      "lane": null
-    },
-    {
       "text": "Status: PROVISIONAL \u2014 pending ratification.",
       "category": "ratification",
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "systems/npcs/character_canon_v30.md:6",
-        "systems/factions/faction_canon_v30.md:7"
+        "systems/factions/faction_canon_v30.md:7",
+        "systems/npcs/character_canon_v30.md:6"
       ],
       "systems": [],
       "count": 2,
@@ -250,6 +250,18 @@
       "lane": "SC"
     },
     {
+      "text": "name collision noted in gap_notes) \u2014 do not conflate the two sim_module: values.",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "references/module_contracts.yaml:261"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "VALORIA \u2014 Name Collision Database",
       "category": "naming",
       "priority": 1,
@@ -304,18 +316,6 @@
       "label": "Ruling pending",
       "locations": [
         "references/name_collision_database.yaml:67"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "name collision noted in gap_notes) \u2014 do not conflate the two sim_module: values.",
-      "category": "naming",
-      "priority": 1,
-      "label": "Naming collision",
-      "locations": [
-        "references/module_contracts.yaml:261"
       ],
       "systems": [],
       "count": 1,
@@ -430,28 +430,28 @@
       "lane": null
     },
     {
-      "text": "End roster. PROVISIONAL pending ratification.**",
+      "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. Source files remain canonical until ratification commits. -->",
       "category": "ratification",
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "systems/characters/conviction_migration_roster_v30.md:295"
+        "systems/factions/faction_canon_v30.md:2"
       ],
       "systems": [],
       "count": 1,
-      "lane": null
+      "lane": "FA"
     },
     {
-      "text": "Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.",
+      "text": "<!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions \u00a77 bullet 5 + \u00a75 Domain Echo. Jordan-vetoable.] -->",
       "category": "ratification",
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "systems/mass_battle/mass_battle_integration_v30.md:301"
+        "systems/factions/faction_behavior_v30.md:437"
       ],
       "systems": [],
       "count": 1,
-      "lane": "MB"
+      "lane": "FA"
     },
     {
       "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. PART A (Framework) complete; PART B (NPC sheets) pending Q1 scope decision. -->",
@@ -478,6 +478,30 @@
       "lane": null
     },
     {
+      "text": "End roster. PROVISIONAL pending ratification.**",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/characters/conviction_migration_roster_v30.md:295"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Fix per Pass 2n.** Either canonize (add to params/mass_combat.md with patch number) or remove. Default: canonize with explicit derivation note pending Jordan ratification.",
+      "category": "ratification",
+      "priority": 1,
+      "label": "Awaiting ratification",
+      "locations": [
+        "systems/mass_battle/mass_battle_integration_v30.md:301"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
       "text": "\"status\": \"OPEN DECISION FOR JORDAN (Gate B 2026-07-01; provisional pending Jordan ratification)\",",
       "category": "ratification",
       "priority": 1,
@@ -490,28 +514,16 @@
       "lane": "SC"
     },
     {
-      "text": "<!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions \u00a77 bullet 5 + \u00a75 Domain Echo. Jordan-vetoable.] -->",
+      "text": "scales / resolver enums are [ASSUMPTION]-grade pending Jordan ratification;",
       "category": "ratification",
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "systems/factions/faction_behavior_v30.md:437"
+        "references/module_contracts.yaml:14"
       ],
       "systems": [],
       "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "<!-- STATUS: PROVISIONAL \u2014 pending Jordan ratification. Source files remain canonical until ratification commits. -->",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:2"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
+      "lane": null
     },
     {
       "text": "added: '2026-06-09 D-3 voice-home consolidation \u2014 extracted verbatim from articulation_layer \u00a74.2 (omniscient chronicle voice); home pending Jordan ratification'",
@@ -520,18 +532,6 @@
       "label": "Awaiting ratification",
       "locations": [
         "references/canonical_sources.yaml:308"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "scales / resolver enums are [ASSUMPTION]-grade pending Jordan ratification;",
-      "category": "ratification",
-      "priority": 1,
-      "label": "Awaiting ratification",
-      "locations": [
-        "references/module_contracts.yaml:14"
       ],
       "systems": [],
       "count": 1,
@@ -730,18 +730,6 @@
       "lane": "IN"
     },
     {
-      "text": "throughout; the Part-VIII `[OPEN \u2014 Jordan]` register is the veto surface). Details below.",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "godot/README.md:11"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "GO"
-    },
-    {
       "text": "So the strategy is:** (Part I\u2013III) one consolidated picture of what exists on all three legs; (Part IV) the target all-directions hierarchy with the conversion unit fixed as the **module contract**; (Part V) the Python\u2192Godot dictionary including the determinism/parity protocol; (Part VI) gated sequencing; (Part VII\u2013\u2026",
       "category": "ruling",
       "priority": 1,
@@ -808,6 +796,18 @@
       "label": "Open ruling (awaiting Jordan)",
       "locations": [
         "godot/godot_conversion_strategy_v1.md:208"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "GO"
+    },
+    {
+      "text": "throughout; the Part-VIII `[OPEN \u2014 Jordan]` register is the veto surface). Details below.",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "godot/README.md:11"
       ],
       "systems": [],
       "count": 1,
@@ -1517,52 +1517,16 @@
       "lane": "IN"
     },
     {
-      "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
+      "text": "[ASSUMPTION: knot registry stored at module level \u2014 basis: World has no",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/settlements/sim/settlement.py:13"
+        "systems/fieldwork/sim/knots.py:27"
       ],
       "systems": [],
       "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: infrastructure stored per-territory on world rather than",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/settlements/sim/infrastructure.py:15"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: temperament data stored as module-level constants \u2014 basis:",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/settlements/sim/temperaments.py:12"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SE"
-    },
-    {
-      "text": "[ASSUMPTION: actor object is duck-typed \u2014 basis: World has no character",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/combat/sim/combat.py:24"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "PC"
+      "lane": "FI"
     },
     {
       "text": "| **Canonical container contract** (one shape, every scale) | `references/module_contracts.yaml` \u2014 27 modules, uniform **Key IN \u2192 resolver \u2192 OUT** shape (schema-2); design-side enforcement via `valoria-module-adjudicator` (checks A1\u2013A12) | Shape exists and is uniform. Gaps: 10/27 `doc: null`, 11/27 `[ASSUMPTION]` re\u2026",
@@ -1601,136 +1565,100 @@
       "lane": "IN"
     },
     {
-      "text": "[ASSUMPTION: Belief storage at module level \u2014 basis: World has no actor",
+      "text": "[ASSUMPTION: temperament data stored as module-level constants \u2014 basis:",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/characters/sim/beliefs.py:21"
+        "systems/settlements/sim/temperaments.py:12"
       ],
       "systems": [],
       "count": 1,
-      "lane": null
+      "lane": "SE"
     },
     {
-      "text": "[ASSUMPTION: per-actor conviction state stored at module level \u2014 basis:",
+      "text": "[ASSUMPTION: infrastructure stored per-territory on world rather than",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/characters/sim/conviction.py:17"
+        "systems/settlements/sim/infrastructure.py:15"
       ],
       "systems": [],
       "count": 1,
-      "lane": null
+      "lane": "SE"
     },
     {
-      "text": "[ASSUMPTION: cycle resolution \u2014 beliefs.revise_belief calls into",
+      "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/characters/sim/conviction.py:22"
+        "systems/settlements/sim/settlement.py:13"
       ],
       "systems": [],
       "count": 1,
-      "lane": null
+      "lane": "SE"
     },
     {
-      "text": "[ASSUMPTION: insurgency registry on World \u2014 basis: insurgencies are",
+      "text": "[ASSUMPTION: actor object is duck-typed \u2014 basis: World has no character",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/world/sim/insurgency_pipeline.py:13"
+        "systems/combat/sim/combat.py:24"
       ],
       "systems": [],
       "count": 1,
-      "lane": "WR"
+      "lane": "PC"
     },
     {
-      "text": "[ASSUMPTION: NPC registry stored at module level keyed by territory \u2014",
+      "text": "[ASSUMPTION: declaration_used flag stored on World \u2014 basis: one-shot",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/world/sim/npe.py:10"
+        "systems/factions/sim/mass_seizure.py:20"
       ],
       "systems": [],
       "count": 1,
-      "lane": "WR"
+      "lane": "FA"
     },
     {
-      "text": "| SPEED-1 | Canonical Speed tier table (Cavalry / Heavy Inf / others). v22 has [ASSUMPTION] inferred from L429. | sim_audit Other observations + HANDOFF_v22 \u00a7SPEED-1 | Step 1 acceptable as-is; ratify before step 10 |",
+      "text": "[ASSUMPTION: pool roll uses Church.L as Influence proxy \u2014 basis: World",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/mass_battle/mass_battle_integration_v30.md:416"
+        "systems/factions/sim/mass_seizure.py:26"
       ],
       "systems": [],
       "count": 1,
-      "lane": "MB"
+      "lane": "FA"
     },
     {
-      "text": "[ASSUMPTION: stamina constants are tuning parameters \u2014 basis: no canonical",
+      "text": "[ASSUMPTION: game_state uses faction.I (Investments-renamed-Influence",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/mass_battle/sim/massbattle.py:152"
+        "systems/factions/sim/mass_seizure.py:110"
       ],
       "systems": [],
       "count": 1,
-      "lane": "MB"
+      "lane": "FA"
     },
     {
-      "text": "[ASSUMPTION: drain per contact cell is a tuning parameter]",
+      "text": "[ASSUMPTION: game_state models NO Casus Belli ledger (verified \u2014 no casus_belli field). CB is read from an",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/mass_battle/sim/massbattle.py:160"
+        "systems/factions/sim/parliamentary_transfer.py:22"
       ],
       "systems": [],
       "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: threshold 1.0 eff_size maps to \"Size lost > 1\" in original]",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/mass_battle/sim/massbattle.py:189"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: between-turn recovery constants are tuning parameters \u2014",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/mass_battle/sim/massbattle.py:1327"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
-    },
-    {
-      "text": "[ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/mass_battle/sim/units.py:351"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "MB"
+      "lane": "FA"
     },
     {
       "text": "The prose-writer skill (`skills/prose-writer/SKILL.md`) treats three axes as independent. Per-NPC sheets in Part B show authored values for all three (or `[ASSUMPTION: default]` where unauthored).",
@@ -1793,6 +1721,138 @@
       "lane": null
     },
     {
+      "text": "[ASSUMPTION: NPC registry stored at module level keyed by territory \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/world/sim/npe.py:10"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: insurgency registry on World \u2014 basis: insurgencies are",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/world/sim/insurgency_pipeline.py:13"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "[ASSUMPTION: per-actor conviction state stored at module level \u2014 basis:",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/characters/sim/conviction.py:17"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "[ASSUMPTION: cycle resolution \u2014 beliefs.revise_belief calls into",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/characters/sim/conviction.py:22"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "[ASSUMPTION: Belief storage at module level \u2014 basis: World has no actor",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/characters/sim/beliefs.py:21"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| SPEED-1 | Canonical Speed tier table (Cavalry / Heavy Inf / others). v22 has [ASSUMPTION] inferred from L429. | sim_audit Other observations + HANDOFF_v22 \u00a7SPEED-1 | Step 1 acceptable as-is; ratify before step 10 |",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/mass_battle_integration_v30.md:416"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/units.py:351"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: stamina constants are tuning parameters \u2014 basis: no canonical",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:152"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: drain per contact cell is a tuning parameter]",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:160"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: threshold 1.0 eff_size maps to \"Size lost > 1\" in original]",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:189"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
+      "text": "[ASSUMPTION: between-turn recovery constants are tuning parameters \u2014",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/mass_battle/sim/massbattle.py:1327"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "MB"
+    },
+    {
       "text": "[ASSUMPTION: world has no tribunal-filing registry or suspension field (verified \u2014 tribunal.py",
       "category": "assumption",
       "priority": 3,
@@ -1815,6 +1875,18 @@
       "systems": [],
       "count": 1,
       "lane": "FA"
+    },
+    {
+      "text": "[ASSUMPTION: actor is duck-typed \u2014 basis: World has no contestant character",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "systems/social_contest/sim/contest_legacy_stub.py:23"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "SC"
     },
     {
       "text": "(Upgrades the prior hedged [ASSUMPTION] note, which predated ED-FA-0004's ruling.)]",
@@ -1865,84 +1937,12 @@
       "lane": "FA"
     },
     {
-      "text": "[ASSUMPTION: actor is duck-typed \u2014 basis: World has no contestant character",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/social_contest/sim/contest_legacy_stub.py:23"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "SC"
-    },
-    {
-      "text": "[ASSUMPTION: declaration_used flag stored on World \u2014 basis: one-shot",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/factions/sim/mass_seizure.py:20"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: pool roll uses Church.L as Influence proxy \u2014 basis: World",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/factions/sim/mass_seizure.py:26"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: game_state uses faction.I (Investments-renamed-Influence",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/factions/sim/mass_seizure.py:110"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "[ASSUMPTION: game_state models NO Casus Belli ledger (verified \u2014 no casus_belli field). CB is read from an",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/factions/sim/parliamentary_transfer.py:22"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
       "text": "[ASSUMPTION: Cognition attribute optional on actor object \u2014 basis: canon",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
         "systems/threadwork/sim/collective.py:12"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "WR"
-    },
-    {
-      "text": "[ASSUMPTION: practitioner stats sourced from caller \u2014 basis: actor parameter",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "systems/threadwork/sim/operations.py:15"
       ],
       "systems": [],
       "count": 1,
@@ -1997,16 +1997,16 @@
       "lane": "WR"
     },
     {
-      "text": "[ASSUMPTION: knot registry stored at module level \u2014 basis: World has no",
+      "text": "[ASSUMPTION: practitioner stats sourced from caller \u2014 basis: actor parameter",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "systems/fieldwork/sim/knots.py:27"
+        "systems/threadwork/sim/operations.py:15"
       ],
       "systems": [],
       "count": 1,
-      "lane": "FI"
+      "lane": "WR"
     },
     {
       "text": "cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 \u00a73 \u2014 Southernmost template not yet defined]",
@@ -2063,30 +2063,6 @@
       "label": "Flagged assumption (verify)",
       "locations": [
         "references/npc_registry.yaml:1027"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "faction_state:     {tier: module, scale: provincial, resolver: deterministic_accounting, build: deferred, godot: python-oracle, port_rank: 2, parity: \"key-log\", note: \"the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION].\"}",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "references/wiring_manifest.yaml:57"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "{key: attr.mind.acuity, name: Acuity, aliases: [Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Acuity -- Jordan veto",
-      "category": "assumption",
-      "priority": 3,
-      "label": "Flagged assumption (verify)",
-      "locations": [
-        "references/descriptor_registry.yaml:48"
       ],
       "systems": [],
       "count": 1,
@@ -2201,16 +2177,28 @@
       "lane": null
     },
     {
-      "text": "ledger (parliamentary_transfer.py's own [ASSUMPTION] banner) \u2014 confirms this derivation reads",
+      "text": "faction_state:     {tier: module, scale: provincial, resolver: deterministic_accounting, build: deferred, godot: python-oracle, port_rank: 2, parity: \"key-log\", note: \"the in-13 hub; action code (conquest/muster/govern/uniques) is live, resolver [ASSUMPTION].\"}",
       "category": "assumption",
       "priority": 3,
       "label": "Flagged assumption (verify)",
       "locations": [
-        "engine/tests/test_parliamentary_transfer_bridge.py:59"
+        "references/wiring_manifest.yaml:57"
       ],
       "systems": [],
       "count": 1,
-      "lane": "IN"
+      "lane": null
+    },
+    {
+      "text": "{key: attr.mind.acuity, name: Acuity, aliases: [Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Acuity -- Jordan veto",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "references/descriptor_registry.yaml:48"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
     },
     {
       "text": "\"\"\"Duck-typed actor per operations.py's [ASSUMPTION] contract.\"\"\"",
@@ -2219,6 +2207,18 @@
       "label": "Flagged assumption (verify)",
       "locations": [
         "engine/tests/test_thread_mending_ed871.py:30"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "IN"
+    },
+    {
+      "text": "ledger (parliamentary_transfer.py's own [ASSUMPTION] banner) \u2014 confirms this derivation reads",
+      "category": "assumption",
+      "priority": 3,
+      "label": "Flagged assumption (verify)",
+      "locations": [
+        "engine/tests/test_parliamentary_transfer_bridge.py:59"
       ],
       "systems": [],
       "count": 1,
@@ -2247,6 +2247,198 @@
       "systems": [],
       "count": 1,
       "lane": "GO"
+    },
+    {
+      "text": "Does not author missing substrate-postures (Crown / Church / Varfell / Guilds \u2014 all four are flagged `[GAP \u2014 Phase B]`).",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:42"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "Substrate-Posture   \u2014 T-15 series where authored; [GAP \u2014 Phase B] for unauthored",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:67"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "Doctrine Notes      \u2014 published \u00a71.5 material where present; [GAP] otherwise",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:72"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "| **D4** | Substrate-Posture gaps for Crown / Church / Varfell / Guilds | Mark `[GAP \u2014 Phase B authoring]`. Do not invent. Three factions (Hafenmark / Restoration / L\u00f6wenritter) have authored T-15 postures; rest pending per ED-717. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:361"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "| **D5** | Inspirations field \u2014 lift scattered Venice/Florence/Lohengramm/Talleyrand prose into structured `inspiration` field | Two facets per faction: `historical_parallel` (period-realistic anchor) + `in_character_aspiration` (in-fiction aim). Where no parallel is documented, mark `[GAP]`. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:362"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal \u2014 Crown treats Thread / rendering as Church's domain while quietly recognizing it is real but inactionable through sovereign tools. Almud's `Truth 3 (Questioning\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:431"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Likely structural shape: rendering-reinforcement posture (T-08 candidate per cross-references). Church's framework actively suppresses Thread perception (perceptual prophylaxis at `Foundations \u00a79.1`) \u2014 Faith Conviction interprets Thread phenomena as illusion-or-heresy. Theolog\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:595"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "`[GAP]` \u2014 no published \u00a71.5 Church doctrine note in `faction_layer_v30`. The \u00a73 ecclesiastical material lives in `factions_personal \u00a78.3` and is captured above. Author at Phase B if differentiation from generic ecclesiastical role is needed.",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/faction_canon_v30.md:653"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/factions/sim/faction_action.py:354"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "FA"
+    },
+    {
+      "text": "Marks every Tier-3 NPC with explicit `[GAP \u2014 Phase B authoring]` for missing dimensions; does not invent.",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:38"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Does not invent texture for empty-body sections (Vaynard Arc A/B, Cardinal Klapp/Olafsson/Jarnstal/Ehrenwall character_analyses entries, ~40% of foil pairings). Surfaces what exists; flags `[GAP]` for the rest.",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:43"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "Empty-body arcs are flagged `[GAP]`.** Vaynard Arc A and Arc B in `npc_behavior \u00a75.2` have empty bodies (header only). Sheets surface the empty headers; do not invent content.",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:343"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "When `articulation_layer \u00a73.1` Tier 2 cut scenes fire on Inner Circle NPCs (e.g., Torvi Heljason as Baralta's legal advisor at a Knot rupture trigger), the prose-writer has only one anchored dimension to draw from. Per Decision Log \u00a711 D3: Part B sheets for Tier-3 NPCs carry `[GAP \u2014 Phase B authoring]` per missing f\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:364"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| (implicit) Physical signature | NEAR-ABSENT | Pulled where authored (Edeyja Thread injury). [GAP] for the rest. |",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:392"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **D3** | Tier-3 NPCs (Inner Circles / Cardinal Officers / Jarl Council) carry only Conviction + MS + Truth + 1-line note. Below prose-writer minimum. | Mark `[GAP \u2014 Phase B authoring]` per missing field per NPC. **Do not invent.** Recommend texture-floor extension: \u22651 Belief + \u22651 Goal + \u22651 Inspiration per Tier-3 N\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:428"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "| **D4** | Empty-body sections (Vaynard Arc A and Arc B in `npc_behavior \u00a75.2`; ~5 character_analyses entries title-only; ~40% of foil pairings; redirect-stub sections in `npc_behavior \u00a71.2 / \u00a73.3 / \u00a73.4` pointing to stale `conviction_track_v1`) | Surface what exists; flag `[GAP]` for empty bodies. **Do not fabricat\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/npcs/character_canon_v30.md:429"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
     },
     {
       "text": "[GAP: CI pacing needs simulation with actual faction AI behavior to validate 20-season estimate. Flag for SIM-DEBT.]",
@@ -2379,198 +2571,6 @@
       "systems": [],
       "count": 1,
       "lane": "MB"
-    },
-    {
-      "text": "Marks every Tier-3 NPC with explicit `[GAP \u2014 Phase B authoring]` for missing dimensions; does not invent.",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:38"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "Does not invent texture for empty-body sections (Vaynard Arc A/B, Cardinal Klapp/Olafsson/Jarnstal/Ehrenwall character_analyses entries, ~40% of foil pairings). Surfaces what exists; flags `[GAP]` for the rest.",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:43"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "Empty-body arcs are flagged `[GAP]`.** Vaynard Arc A and Arc B in `npc_behavior \u00a75.2` have empty bodies (header only). Sheets surface the empty headers; do not invent content.",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:343"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "When `articulation_layer \u00a73.1` Tier 2 cut scenes fire on Inner Circle NPCs (e.g., Torvi Heljason as Baralta's legal advisor at a Knot rupture trigger), the prose-writer has only one anchored dimension to draw from. Per Decision Log \u00a711 D3: Part B sheets for Tier-3 NPCs carry `[GAP \u2014 Phase B authoring]` per missing f\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:364"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "| (implicit) Physical signature | NEAR-ABSENT | Pulled where authored (Edeyja Thread injury). [GAP] for the rest. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:392"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "| **D3** | Tier-3 NPCs (Inner Circles / Cardinal Officers / Jarl Council) carry only Conviction + MS + Truth + 1-line note. Below prose-writer minimum. | Mark `[GAP \u2014 Phase B authoring]` per missing field per NPC. **Do not invent.** Recommend texture-floor extension: \u22651 Belief + \u22651 Goal + \u22651 Inspiration per Tier-3 N\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:428"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "| **D4** | Empty-body sections (Vaynard Arc A and Arc B in `npc_behavior \u00a75.2`; ~5 character_analyses entries title-only; ~40% of foil pairings; redirect-stub sections in `npc_behavior \u00a71.2 / \u00a73.3 / \u00a73.4` pointing to stale `conviction_track_v1`) | Surface what exists; flag `[GAP]` for empty bodies. **Do not fabricat\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/npcs/character_canon_v30.md:429"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "Does not author missing substrate-postures (Crown / Church / Varfell / Guilds \u2014 all four are flagged `[GAP \u2014 Phase B]`).",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:42"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "Substrate-Posture   \u2014 T-15 series where authored; [GAP \u2014 Phase B] for unauthored",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:67"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "Doctrine Notes      \u2014 published \u00a71.5 material where present; [GAP] otherwise",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:72"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "| **D4** | Substrate-Posture gaps for Crown / Church / Varfell / Guilds | Mark `[GAP \u2014 Phase B authoring]`. Do not invent. Three factions (Hafenmark / Restoration / L\u00f6wenritter) have authored T-15 postures; rest pending per ED-717. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:361"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "| **D5** | Inspirations field \u2014 lift scattered Venice/Florence/Lohengramm/Talleyrand prose into structured `inspiration` field | Two facets per faction: `historical_parallel` (period-realistic anchor) + `in_character_aspiration` (in-fiction aim). Where no parallel is documented, mark `[GAP]`. |",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:362"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Crown's substrate-posture is not yet documented. Likely structural shape: substrate-disengaged-or-sovereignty-focal \u2014 Crown treats Thread / rendering as Church's domain while quietly recognizing it is real but inactionable through sovereign tools. Almud's `Truth 3 (Questioning\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:431"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "`[GAP \u2014 Phase B authoring per ED-717]`. Likely structural shape: rendering-reinforcement posture (T-08 candidate per cross-references). Church's framework actively suppresses Thread perception (perceptual prophylaxis at `Foundations \u00a79.1`) \u2014 Faith Conviction interprets Thread phenomena as illusion-or-heresy. Theolog\u2026",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:595"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "`[GAP]` \u2014 no published \u00a71.5 Church doctrine note in `faction_layer_v30`. The \u00a73 ecclesiastical material lives in `factions_personal \u00a78.3` and is captured above. Author at Phase B if differentiation from generic ecclesiastical role is needed.",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/faction_canon_v30.md:653"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
-    },
-    {
-      "text": "terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "systems/factions/sim/faction_action.py:354"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
     },
     {
       "text": "age: null  # [GAP: no age in canon]",

@@ -151,7 +151,7 @@
     },
     {
       "a": "Faction Layer",
-      "b": "Mass Combat",
+      "b": "Mass Battle",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_canon_v30.md",
       "b_doc": "systems/mass_battle/mass_battle_integration_v30.md",
@@ -204,7 +204,7 @@
       "filter_reason": null
     },
     {
-      "a": "Mass Combat",
+      "a": "Mass Battle",
       "b": "Settlement Layer",
       "meta_links": 2,
       "a_doc": "systems/mass_battle/mass_battle_integration_v30.md",
@@ -213,7 +213,7 @@
       "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     },
     {
-      "a": "Mass Combat",
+      "a": "Mass Battle",
       "b": "Victory",
       "meta_links": 2,
       "a_doc": "systems/mass_battle/mass_battle_integration_v30.md",
@@ -350,28 +350,10 @@
       "filter_reason": null
     },
     {
-      "token": "Key: scene_outcome.battle_concluded",
-      "status": "canonical",
-      "doc": null,
-      "registry": "references/module_contracts.yaml",
-      "max_deg": 1,
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
       "token": "NPC Relational Graph",
       "status": "canonical",
       "doc": null,
       "registry": "references/canonical_sources.yaml",
-      "max_deg": 0,
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "token": "Territorial Piety",
-      "status": "canonical",
-      "doc": null,
-      "registry": "references/module_contracts.yaml",
       "max_deg": 0,
       "filtered": false,
       "filter_reason": null
@@ -1106,86 +1088,86 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     }
   ],
-  "notional_total": 14662,
+  "notional_total": 14599,
   "cascade_sinks": [
     {
-      "terminal": "Audit",
-      "chains": 792,
-      "doc": "audit/2026-05-17-v18-integration/integration_plan_v18.md"
-    },
-    {
       "terminal": "Territories",
-      "chains": 747,
+      "chains": 811,
       "doc": "systems/victory/victory_v30.md"
     },
     {
       "terminal": "Key: mechanical.accounting",
-      "chains": 682,
+      "chains": 808,
       "doc": "systems/factions/faction_layer_v30.md"
     },
     {
+      "terminal": "Audit",
+      "chains": 796,
+      "doc": "audit/2026-05-17-v18-integration/integration_plan_v18.md"
+    },
+    {
       "terminal": "Threadwork",
-      "chains": 676,
+      "chains": 698,
       "doc": "systems/threadwork/threadwork_v30.md"
     },
     {
+      "terminal": "Church",
+      "chains": 697,
+      "doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "terminal": "Knot",
-      "chains": 663,
+      "chains": 697,
       "doc": "systems/fieldwork/knots_v30.md"
     },
     {
       "terminal": "Conviction",
-      "chains": 639,
+      "chains": 662,
       "doc": "systems/npcs/npc_behavior_v30.md"
     },
     {
-      "terminal": "Mass Battle",
-      "chains": 612,
-      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
-    },
-    {
-      "terminal": "Mass Combat",
-      "chains": 612,
-      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
-    },
-    {
-      "terminal": "Disposition",
-      "chains": 609,
-      "doc": "systems/fieldwork/fieldwork_v30.md"
+      "terminal": "NPC Behavior",
+      "chains": 660,
+      "doc": "systems/npcs/character_canon_v30.md"
     },
     {
       "terminal": "Restoration Movement",
-      "chains": 601,
+      "chains": 652,
       "doc": "systems/victory/victory_v30.md"
     },
     {
-      "terminal": "Church",
-      "chains": 597,
+      "terminal": "Stability",
+      "chains": 652,
+      "doc": "systems/factions/faction_layer_v30.md"
+    },
+    {
+      "terminal": "Disposition",
+      "chains": 645,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Factions",
+      "chains": 629,
       "doc": "systems/factions/faction_politics_v30.md"
     },
     {
       "terminal": "Social Contest",
-      "chains": 592,
+      "chains": 627,
       "doc": "systems/fieldwork/fieldwork_v30.md"
     },
     {
-      "terminal": "NPC Behavior",
-      "chains": 581,
-      "doc": "systems/npcs/character_canon_v30.md"
-    },
-    {
-      "terminal": "Stability",
-      "chains": 579,
-      "doc": "systems/factions/faction_layer_v30.md"
-    },
-    {
       "terminal": "Altonia",
-      "chains": 576,
+      "chains": 624,
       "doc": "canon/03_canonical_timeline.md"
+    },
+    {
+      "terminal": "Mass Battle",
+      "chains": 618,
+      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
     }
   ],
   "cascade_sinks_total": 234,
-  "cascade_truncated_calls": 51459,
+  "cascade_truncated_calls": 55302,
   "sparse_context": [
     {
       "token": "Active Inquisition",
@@ -1230,13 +1212,6 @@
       "doc": null
     },
     {
-      "token": "Key: scene_outcome.battle_concluded",
-      "paragraphs": 0,
-      "cite_deg": 0,
-      "status": "canonical",
-      "doc": null
-    },
-    {
       "token": "NPC Relational Graph",
       "paragraphs": 0,
       "cite_deg": 0,
@@ -1247,13 +1222,6 @@
       "token": "Scene Timer",
       "paragraphs": 0,
       "cite_deg": 6,
-      "status": "canonical",
-      "doc": null
-    },
-    {
-      "token": "Territorial Piety",
-      "paragraphs": 0,
-      "cite_deg": 0,
       "status": "canonical",
       "doc": null
     },
@@ -1298,6 +1266,13 @@
       "cite_deg": 12,
       "status": "canonical",
       "doc": "systems/world/solmund_voice_v30.md"
+    },
+    {
+      "token": "Holonic Container Doctrine",
+      "paragraphs": 2,
+      "cite_deg": 20,
+      "status": "canonical",
+      "doc": "systems/_architecture/propagation_spec_v1.md"
     }
   ],
   "throughline_orphans": [],

@@ -56,12 +56,6 @@
     ],
     "naming_alerts": [
       {
-        "kind": "key",
-        "original": "scene_outcome.battle_concluded",
-        "resolved": "scene.battle_concluded",
-        "note": "F2 family-prefix drift"
-      },
-      {
         "kind": "system",
         "original": "conviction_track",
         "resolved": "piety_track",
@@ -105,6 +99,12 @@
       },
       {
         "kind": "system",
+        "original": "echo_transport",
+        "resolved": "echo_transport",
+        "note": "registry-only (no contract)"
+      },
+      {
+        "kind": "system",
         "original": "player_input",
         "resolved": "player_input",
         "note": "registry-only (no contract)"
@@ -119,16 +119,21 @@
       "mechanical.season_change"
     ],
     "stats": {
-      "systems": 29,
-      "keys": 49,
+      "systems": 30,
+      "keys": 55,
       "key_families": 7,
-      "scalars": 34,
+      "scalars": 38,
       "scales": 9,
-      "edges": 201,
-      "keys_with_emitter": 49,
-      "keys_with_consumer": 46,
+      "edges": 208,
+      "keys_with_emitter": 55,
+      "keys_with_consumer": 47,
       "orphan_emits": [
-        "meta.legacy_event"
+        "mechanical.era_transition",
+        "mechanical.second_calamity",
+        "mechanical.settlement_captured",
+        "mechanical.theocracy_unification_declared",
+        "meta.legacy_event",
+        "state.settlement_revolt"
       ],
       "unemitted_consumes": [],
       "naming_alerts": 9
@@ -141,7 +146,7 @@
       "registry_only": false,
       "registry_system": "articulation",
       "doc": "systems/articulation/articulation_layer_v30.md",
-      "lane": null,
+      "lane": "IN",
       "resolver": "deterministic_accounting",
       "scales": [
         "personal",
@@ -160,7 +165,7 @@
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       ],
       "gd_constraints": [],
-      "sim_module": "sim/cross_scale/articulation.py",
+      "sim_module": "engine/cross_scale/articulation.py",
       "test_status": "not_implemented",
       "emits": [],
       "consumes": [],
@@ -223,7 +228,7 @@
       "registry_only": false,
       "registry_system": "campaign_architecture",
       "doc": "systems/_architecture/campaign_architecture_v30.md",
-      "lane": null,
+      "lane": "IN",
       "resolver": "",
       "scales": [
         "provincial"
@@ -262,7 +267,8 @@
       "transitions": [],
       "loops": [],
       "gap_notes": [
-        "ZERO Key integration in a CANONICAL doc \u2014 no registry entry names ci_political; CI=100 Theocracy Unification Attempt (\u00a72.2) is unkeyed [registry \u00a710 candidate]"
+        "ZERO Key integration in a CANONICAL doc \u2014 no registry entry names ci_political; CI=100 Theocracy Unification Attempt (\u00a72.2) is unkeyed [registry \u00a710 candidate]",
+        "Key types registered (W3, ED-IN-0096): mechanical.theocracy_unification_declared \u2014 emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
       ],
       "sources": [
         "ci_political_v30 full [READ: 2026-06-10]",
@@ -302,7 +308,7 @@
       "registry_only": false,
       "registry_system": "clock_registry",
       "doc": "systems/overview/clock_registry_v30.md",
-      "lane": null,
+      "lane": "IN",
       "resolver": "manifest",
       "scales": [
         "provincial"
@@ -382,6 +388,31 @@
           "terminal": false
         }
       ],
+      "consumes": [],
+      "state": [],
+      "gates": [],
+      "derivations": []
+    },
+    {
+      "id": "echo_transport",
+      "full_stream": false,
+      "registry_only": true,
+      "registry_system": "echo_transport",
+      "doc": null,
+      "resolver": "",
+      "scales": [],
+      "status": "registry-only",
+      "accounting_phase": [],
+      "transitions": [],
+      "loops": [],
+      "gap_notes": [
+        "referenced in routing but has no module contract"
+      ],
+      "sources": [],
+      "gd_constraints": [],
+      "sim_module": "",
+      "test_status": "",
+      "emits": [],
       "consumes": [],
       "state": [],
       "gates": [],
@@ -481,10 +512,12 @@
       "loops": [],
       "gap_notes": [
         "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]",
-        "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale \u2014 doc: field flipped to systems/factions/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
+        "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale \u2014 doc: field flipped to systems/factions/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open.",
+        "state: [] CLOSED 2026-07-29 (W3 item 3, OI-24/OI-20 contract half): declared the 3 top-level state items (Standing, Coup posture, Succession status) directly off faction_politics_v30.md \u00a71.0/\u00a71.0a/\u00a71.1-1.4/\u00a76/\u00a710.1. This is a contract-truth declaration, not a sim build \u2014 OI-20's sim half stays DEFERRED to the FA lane (\u00a73.5 of the orchestration plan)."
       ],
       "sources": [
-        "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+        "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]",
+        "systems/factions/faction_politics_v30.md \u00a71.0, \u00a71.0a, \u00a71.1-\u00a71.4, \u00a76, \u00a710.1 [READ: 2026-07-29]"
       ],
       "gd_constraints": [],
       "sim_module": "",
@@ -508,7 +541,26 @@
         }
       ],
       "consumes": [],
-      "state": [],
+      "state": [
+        {
+          "name": "Standing",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "faction_politics::Standing"
+        },
+        {
+          "name": "Coup posture",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "faction_politics::Coup posture"
+        },
+        {
+          "name": "Succession status",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "faction_politics::Succession status"
+        }
+      ],
       "gates": [],
       "derivations": []
     },
@@ -708,6 +760,18 @@
           "type": "state.succession",
           "from": [
             "faction_politics"
+          ]
+        },
+        {
+          "type": "scene.combat_resolved",
+          "from": [
+            "personal_combat"
+          ]
+        },
+        {
+          "type": "scene.combat_felled",
+          "from": [
+            "personal_combat"
           ]
         }
       ],
@@ -912,10 +976,6 @@
         {
           "type": "scene.battle_concluded",
           "terminal": false
-        },
-        {
-          "type": "scene.battle_concluded",
-          "terminal": false
         }
       ],
       "consumes": [],
@@ -965,8 +1025,8 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "npc_behavior (+ Procedures B/D/E)",
-      "doc": "systems/npcs/npc_behavior_v30.md",
-      "lane": null,
+      "doc": "systems/factions/political_dynamics_keys_migration_v30.md",
+      "lane": "FA",
       "resolver": "deterministic_accounting",
       "scales": [
         "personal",
@@ -988,9 +1048,12 @@
       "gap_notes": [
         "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module \u2014 political_dynamics_keys_migration_v30 is \"Doc 12 Procedures \u2014 Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable.",
         "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 \u00a79). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four \u2014 closed by this same commit's consumes[] additions above.",
-        "Accounting sequence (doc-12 \u00a78, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate \u00a74.1 single-update rule processes emissions inline"
+        "Accounting sequence (doc-12 \u00a78, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate \u00a74.1 single-update rule processes emissions inline",
+        "OI-24 residue CLOSED 2026-07-29 (W3 item 3 contract-truth sweep): the emits:[] inline comments on the same four types (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) still asserted 'NOT in registry' after the SUPERSEDED note above had already recorded ED-935's registration \u2014 a stale comment/gap_note contradiction, not a live gap. Verified in-tree against key_type_registry_v30.md (\u00a74/\u00a75 entries, emitting_systems: [npc_behavior]) that the SUPERSEDED note is the true state; the four emits:[] comments corrected to match.",
+        "C-KEY-2 CLOSED 2026-07-29 (W3 item 3): doc: repointed from the Key-silent systems/npcs/npc_behavior_v30.md to political_dynamics_keys_migration_v30.md, the module's actual Key-sequencing spec (was cited only under sources:, per audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-KEY.md C-KEY-2). npc_behavior_v30.md remains reachable in sources: above \u2014 not superseded, just no longer the doc: pointer."
       ],
       "sources": [
+        "systems/npcs/npc_behavior_v30.md (behavioral spec \u2014 kept reachable here per C-KEY-2 repoint 2026-07-29; see doc: above) [READ: 2026-07-29]",
         "systems/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]",
         "political_dynamics_keys_migration_v30 full incl. \u00a78 sequencing [READ: 2026-06-10]",
         "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]",
@@ -1226,6 +1289,18 @@
           "from": [
             "npc_behavior"
           ]
+        },
+        {
+          "type": "scene.combat_resolved",
+          "from": [
+            "personal_combat"
+          ]
+        },
+        {
+          "type": "scene.combat_felled",
+          "from": [
+            "personal_combat"
+          ]
         }
       ],
       "state": [
@@ -1340,7 +1415,7 @@
       "registry_only": false,
       "registry_system": "peninsular_strain",
       "doc": "systems/overview/peninsular_strain_v30.md",
-      "lane": null,
+      "lane": "SE",
       "resolver": "deterministic_accounting",
       "scales": [
         "peninsula"
@@ -1349,11 +1424,15 @@
       "accounting_phase": [],
       "transitions": [],
       "loops": [],
-      "gap_notes": [],
+      "gap_notes": [
+        "GAP-F1 residual (2026-07-29, W3 item 3 / OI-32a): MS ownership declared above (mechanically determinable per audit/2026-07-14-gameplay-subsystem-observatory/remediation_plan_v1.md's 'MS contract owner' item). That remediation item also proposed adding a drafted substrate_state/peninsular entry emitting env.ms_delta pointing at the PP-255 decay \u2014 deliberately NOT done here: no consumer for env.ms_delta is declared anywhere in the corpus, so adding the emit would create a NEW dangling emit rather than close one (this wave's header corrections bar that). Recorded as an open residual, not fabricated as a closed item."
+      ],
       "sources": [
         "key_substrate_v30 \u00a78.6 [READ: 2026-06-10]",
         "clock_registry_v30 Shared Clocks [READ: 2026-06-10]",
-        "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+        "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]",
+        "systems/overview/sim/ms_track.py, systems/overview/sim/accounting.py [READ: 2026-07-29]",
+        "engine/params/core.md \u00a7MS Baseline Decay (PP-255) [READ: 2026-07-29]"
       ],
       "gd_constraints": [],
       "sim_module": "",
@@ -1389,6 +1468,12 @@
           "bucket": "clock",
           "writable": true,
           "scalar_id": "peninsular_strain::IP (Institutional Pressure)"
+        },
+        {
+          "name": "MS (Mending Stability)",
+          "bucket": "clock",
+          "writable": true,
+          "scalar_id": "peninsular_strain::MS (Mending Stability)"
         }
       ],
       "gates": [
@@ -1451,7 +1536,7 @@
         "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi\u00d72, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, systems/combat/sim/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty).",
         "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types \u2014 scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in godot/skeleton/data/key_types/ (was: registry \u00a77 had contest/battle/investigation only).",
         "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3).",
-        "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them \u2014 the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat\u2192faction/NPC ripple)."
+        "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them \u2014 the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat\u2192faction/NPC ripple). CLOSED 2026-07-29 (W3 item 5): npc_behavior + faction_state consumes:[] now declare both types (declared intent; runtime gated on those modules being built \u2014 npc_behavior has zero .py files). articulation's consumer edge is Wave 3 item 1's territory (L-consumers lane), not this file."
       ],
       "sources": [
         "systems/combat/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]",
@@ -1911,7 +1996,8 @@
         }
       ],
       "gap_notes": [
-        "settlement_layer_v30_index.md is STALE \u2014 predates LPS-2e \u00a71.8 (no \u00a71.8 row); index pipeline regeneration needed [tooling defect]"
+        "settlement_layer_v30_index.md is STALE \u2014 predates LPS-2e \u00a71.8 (no \u00a71.8 row); index pipeline regeneration needed [tooling defect]",
+        "Key types registered (W3, ED-IN-0096): state.settlement_revolt, mechanical.settlement_captured \u2014 emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
       ],
       "sources": [
         "settlement_layer_v30 \u00a71.3/\u00a71.8/\u00a74.1 full [READ: 2026-06-10]",
@@ -2139,7 +2225,8 @@
       "loops": [],
       "gap_notes": [
         "CANONICAL BG-era doc with ZERO Key integration \u2014 no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (\u00a71.3b ED-676) and Calamity drift (\u00a71.3) with no Key types [registry \u00a710 candidate / Keys-migration pending]",
-        "name collision with personal piety_track \u2014 see piety_track gap_note [OPEN \u2014 Jordan]"
+        "name collision with personal piety_track \u2014 see piety_track gap_note [OPEN \u2014 Jordan]",
+        "Key types registered (W3, ED-IN-0096): mechanical.theocracy_unification_declared \u2014 emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
       ],
       "sources": [
         "conviction_track_v30 index \u00a71-\u00a711 [READ: 2026-06-10]",
@@ -2261,7 +2348,9 @@
       "gap_notes": [
         "world-state era transitions (\u00a75: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED \u2014 no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry \u00a710 candidate]",
         "doc status: \"DESIGN \u2014 pending Varfell Path B user decision (ED-311)\" \u2014 not CANONICAL",
-        "victory_v30_index.md STALE: \u00a75.1 indexed as \"RS=0\" but doc reads \"MS=0\" [index pipeline defect, same class as settlement]"
+        "victory_v30_index.md STALE: \u00a75.1 indexed as \"RS=0\" but doc reads \"MS=0\" [index pipeline defect, same class as settlement]",
+        "g_ms0/g_ms5/g_msrec 'MS (unowned clock)' annotations CORRECTED 2026-07-29 (OI-32a, W3 item 3): MS is now declared owned by peninsular_strain's state: block (GAP-F1 ownership declaration) \u2014 these three gates' reads: now point at the new owner instead of asserting no module owns it.",
+        "Key types registered (W3, ED-IN-0096): mechanical.era_transition, mechanical.second_calamity \u2014 emits: declaration lands with the module's build so the census never carries a declared-emit-no-consumer row; see key_type_registry entries for held consumer dispositions."
       ],
       "sources": [
         "victory_v30 \u00a75 full + header [READ: 2026-06-10]"
@@ -2285,7 +2374,7 @@
           "when": "MS = 0",
           "then": "Post-Calamity Era",
           "reads": [
-            "MS (unowned clock \u2014 no module in contracts)"
+            "MS (owned by peninsular_strain \u2014 OI-32a, 2026-07-29 W3 item 3)"
           ],
           "source": "victory_v30 \u00a75.1"
         },
@@ -2294,7 +2383,7 @@
           "when": "MS <= 5 sustained 10 seasons",
           "then": "Second Calamity (true terminal)",
           "reads": [
-            "MS (unowned clock)"
+            "MS (owned by peninsular_strain \u2014 OI-32a, 2026-07-29 W3 item 3)"
           ],
           "source": "victory_v30 \u00a75.1"
         },
@@ -2303,7 +2392,7 @@
           "when": "MS restored to 20 within 10 seasons",
           "then": "Post-Calamity recovery",
           "reads": [
-            "MS (unowned clock)"
+            "MS (owned by peninsular_strain \u2014 OI-32a, 2026-07-29 W3 item 3)"
           ],
           "source": "victory_v30 \u00a75.1"
         },
@@ -2543,6 +2632,22 @@
       ]
     },
     {
+      "id": "mechanical.era_transition",
+      "family": "mechanical_event",
+      "description": "World-state era boundary crossed \u2014 MS=0 Post-Calamity Era entry (victory_v30 \u00a75.1), MS restored to 20 within 10 seasons Post-Calamity Recovery (\u00a75.1), IP=100 Phased Occupation Era entry incl. the 3-phase escalation (\u00a75.2), all factions dissolved Anarchy Era entry (\u00a75.3). The MS<=5-sustained-10-seasons Second Calamity is registered SEPARATELY (mechanical.second_calamity, below) \u2014 victory_v30 \u00a75.1/\u00a75.3 both call it out by name as \"the only true campaign terminal\", a distinction this registry preserves rather than folding into the general transition type.",
+      "scale_signature": [
+        "peninsula"
+      ],
+      "permanence": "indelible",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "victory"
+      ],
+      "consumers": []
+    },
+    {
       "id": "mechanical.mission_shift",
       "family": "mechanical_event",
       "description": "Faction Mission redefined (per PP-686 \u00a73.1).",
@@ -2664,6 +2769,57 @@
       "consumers": []
     },
     {
+      "id": "mechanical.second_calamity",
+      "family": "mechanical_event",
+      "description": "MS <= 5 sustained for 10 seasons during the Post-Calamity Era \u2014 \"the only true campaign terminal\" (victory_v30 \u00a75.1, restated \u00a75.3). Kept distinct from mechanical.era_transition because every other era boundary is recoverable (\u00a75.1's own Recovery clause, \u00a75.3's quorum-restoration clause) while this one is not.",
+      "scale_signature": [
+        "peninsula"
+      ],
+      "permanence": "indelible",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "victory"
+      ],
+      "consumers": []
+    },
+    {
+      "id": "mechanical.settlement_captured",
+      "family": "mechanical_event",
+      "description": "Undefended settlement (Defense 0, no garrison) auto-captured on hostile military entry \u2014 no roll (settlement_layer_v30 \u00a75.2).",
+      "scale_signature": [
+        "settlement",
+        "territory"
+      ],
+      "permanence": "indelible",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "settlement_layer"
+      ],
+      "consumers": []
+    },
+    {
+      "id": "mechanical.theocracy_unification_declared",
+      "family": "mechanical_event",
+      "description": "CI reaches 100 \u2014 Church publicly declares Papal Sovereignty and triggers the one-shot Mass Seizure on every territory with Church buildings (ci_political_v30 \u00a72.2). The SAME threshold is independently gated by territorial_piety's g_ci100 entry (module_contracts.yaml :288-292), which cites this identical section as its source \u2014 one event, registered once, closing both silent emitters named in ED-IN-0014 rather than duplicating a type per module.",
+      "scale_signature": [
+        "territory",
+        "peninsula"
+      ],
+      "permanence": "indelible",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "ci_political",
+        "territorial_piety"
+      ],
+      "consumers": []
+    },
+    {
       "id": "meta.cascade_cluster_event",
       "family": "system_meta",
       "description": "Cross-faction cascade cluster forms or dissolves (sustained \u2265 4 seasons of |cosine similarity| > 0.40 between two factions' cascade_fidelity_history). A CANONICAL articulation trigger (articulation_layer_v30 \u00a73.1",
@@ -2776,6 +2932,24 @@
         "articulation_layer",
         "npc_behavior",
         "piety_track"
+      ]
+    },
+    {
+      "id": "scene.accord_echo",
+      "family": "scene_outcome",
+      "description": "\u00a75.5 Accord Domain Echo \u2014 a resolved scene's downstream settlement-Order consequence (scale_transitions_v30.md \u00a75.5, degree-keyed governance/destabilisation/territorial_transfer/violence rows), applied to Settlement.order at the settlement where the scene occurred (AUD-SET-02, :215) and queued to Accounting Step 4c per \u00a75.5's own caption (:221). Distinct from scene.contest_resolved/scene.combat_resolved (the SAME scene resolution's \u00a75.2 Domain Echo Key, a disjoint faction-stat consequence) \u2014 one resolved scene may emit both, and this Key's causes[] cites that Key's id when it also fired (OI-28).",
+      "scale_signature": [
+        "settlement"
+      ],
+      "permanence": "persistent",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "echo_transport"
+      ],
+      "consumers": [
+        "articulation_layer"
       ]
     },
     {
@@ -3259,6 +3433,23 @@
       ]
     },
     {
+      "id": "state.settlement_revolt",
+      "family": "state_transition",
+      "description": "Settlement Order reaches 0 \u2014 local revolt; governor expelled unless a garrison is present (settlement_layer_v30 \u00a74.3 Settlement Events table, \"Order 0\" row; also \u00a71.3 \"Order 0 = local revolt\").",
+      "scale_signature": [
+        "settlement",
+        "territory"
+      ],
+      "permanence": "indelible",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "settlement_layer"
+      ],
+      "consumers": []
+    },
+    {
       "id": "state.standing_change",
       "family": "state_transition",
       "description": "NPC Standing rank shifts (promotion, demotion).",
@@ -3346,6 +3537,36 @@
       "name": "season counter",
       "owner": "engine_clock",
       "bucket": "clock",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "faction_politics::Coup posture",
+      "name": "Coup posture",
+      "owner": "faction_politics",
+      "bucket": "track",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "faction_politics::Standing",
+      "name": "Standing",
+      "owner": "faction_politics",
+      "bucket": "track",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "faction_politics::Succession status",
+      "name": "Succession status",
+      "owner": "faction_politics",
+      "bucket": "track",
       "writable": true,
       "derived_by": [],
       "gated_by": [],
@@ -3555,6 +3776,16 @@
           "target": "IP (Institutional Pressure)"
         }
       ],
+      "read_by": []
+    },
+    {
+      "id": "peninsular_strain::MS (Mending Stability)",
+      "name": "MS (Mending Stability)",
+      "owner": "peninsular_strain",
+      "bucket": "clock",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
       "read_by": []
     },
     {
@@ -3955,6 +4186,16 @@
       "kind": "consumes"
     },
     {
+      "src": "scene.combat_resolved",
+      "dst": "faction_state",
+      "kind": "consumes"
+    },
+    {
+      "src": "scene.combat_felled",
+      "dst": "faction_state",
+      "kind": "consumes"
+    },
+    {
       "src": "faction_state",
       "dst": "faction_state::Mandate",
       "kind": "owns"
@@ -4177,6 +4418,16 @@
     },
     {
       "src": "state.project_failed",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "scene.combat_resolved",
+      "dst": "npc_behavior",
+      "kind": "consumes"
+    },
+    {
+      "src": "scene.combat_felled",
       "dst": "npc_behavior",
       "kind": "consumes"
     },
@@ -4543,12 +4794,6 @@
       "terminal": false
     },
     {
-      "src": "mass_battle",
-      "dst": "scene.battle_concluded",
-      "kind": "emits",
-      "terminal": false
-    },
-    {
       "src": "domain_actions",
       "dst": "scene.draft_da",
       "kind": "emits",
@@ -4616,6 +4861,11 @@
     {
       "src": "peninsular_strain",
       "dst": "peninsular_strain::IP (Institutional Pressure)",
+      "kind": "owns"
+    },
+    {
+      "src": "peninsular_strain",
+      "dst": "peninsular_strain::MS (Mending Stability)",
       "kind": "owns"
     },
     {
@@ -4794,19 +5044,19 @@
     },
     {
       "src": "victory",
-      "dst": "quantity::MS (unowned clock \u2014 no module in contracts)",
+      "dst": "quantity::MS (owned by peninsular_strain \u2014 OI-32a, 2026-07-29 W3 item 3)",
       "kind": "reads",
       "gate": "g_ms0"
     },
     {
       "src": "victory",
-      "dst": "quantity::MS (unowned clock)",
+      "dst": "quantity::MS (owned by peninsular_strain \u2014 OI-32a, 2026-07-29 W3 item 3)",
       "kind": "reads",
       "gate": "g_ms5"
     },
     {
       "src": "victory",
-      "dst": "quantity::MS (unowned clock)",
+      "dst": "quantity::MS (owned by peninsular_strain \u2014 OI-32a, 2026-07-29 W3 item 3)",
       "kind": "reads",
       "gate": "g_msrec"
     },
@@ -4856,6 +5106,21 @@
       "dst": "state.succession",
       "kind": "emits",
       "terminal": false
+    },
+    {
+      "src": "faction_politics",
+      "dst": "faction_politics::Standing",
+      "kind": "owns"
+    },
+    {
+      "src": "faction_politics",
+      "dst": "faction_politics::Coup posture",
+      "kind": "owns"
+    },
+    {
+      "src": "faction_politics",
+      "dst": "faction_politics::Succession status",
+      "kind": "owns"
     },
     {
       "src": "miraculous_event",
