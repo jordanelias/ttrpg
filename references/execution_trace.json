@@ -21,7 +21,8 @@
   },
   "loop.s3": {
    "faction_state": 362,
-   "territorial_piety": 228
+   "territorial_piety": 228,
+   "peninsular_strain": 30
   },
   "loop.victory": {
    "victory": 384
@@ -46,7 +47,8 @@
   },
   "loop.s3": {
    "faction_state": 362,
-   "territorial_piety": 228
+   "territorial_piety": 228,
+   "peninsular_strain": 30
   },
   "loop.victory": {
    "victory": 384
@@ -79,8 +81,7 @@
   "loop.s3": {
    "settlements": 1908,
    "engine/substrate": 180,
-   "world": 108,
-   "overview": 30
+   "world": 108
   }
  },
  "unmapped_files": {
@@ -117,9 +118,7 @@
    "systems/settlements/sim/registry.py": 1908,
    "engine/substrate/canon_buckets.py": 180,
    "systems/world/sim/insurgency_pipeline.py": 84,
-   "systems/overview/sim/accounting.py": 24,
-   "systems/world/sim/npe.py": 24,
-   "systems/overview/sim/ms_track.py": 6
+   "systems/world/sim/npe.py": 24
   }
  }
 }

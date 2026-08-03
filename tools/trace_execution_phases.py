@@ -69,8 +69,21 @@ def _unit_index():
     idx = {}
     for c in contracts.get('modules') or []:
         code = c.get('sim_module')
-        if isinstance(code, str) and code.endswith('.py'):
-            idx[os.path.join(REPO, code)] = c['module']
+        if not isinstance(code, str) or code.strip().lower() in ('none', 'null', 'n/a', ''):
+            continue
+        abs_path = os.path.join(REPO, code)
+        if code.endswith('.py'):
+            idx[abs_path] = c['module']
+        elif os.path.isdir(abs_path):
+            # DIRECTORY POINTER. Three contracts name a package rather than a file
+            # (personal_combat, social_contest, peninsular_strain -- 37 .py files). Indexing only
+            # `.py` pointers left their execution attributed by path guess instead of by contract,
+            # which is why social_contest showed up as an unmapped directory in the first trace.
+            for dirpath, dirnames, filenames in os.walk(abs_path):
+                dirnames[:] = [d for d in dirnames if d != '__pycache__']
+                for fn in filenames:
+                    if fn.endswith('.py'):
+                        idx.setdefault(os.path.join(dirpath, fn), c['module'])
     return idx
 
 

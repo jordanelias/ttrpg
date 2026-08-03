@@ -310,13 +310,13 @@
    "modules_attribution": "authored-unverified",
    "measured_by_contract": {
     "faction_state": 362,
-    "territorial_piety": 228
+    "territorial_piety": 228,
+    "peninsular_strain": 30
    },
    "measured_by_subsystem": {
     "settlements": 1908,
     "engine/substrate": 180,
-    "world": 108,
-    "overview": 30
+    "world": 108
    },
    "measured_calls": 2816,
    "modules_executing": [],

@@ -153,6 +153,13 @@ def _code_path(name, contract, manifest_row):
     # between a rot report and a work-list.
     if isinstance(declared, str) and declared.strip().lower() in ('none', 'null', 'n/a', ''):
         declared = None
+    # A pointer may be a DIRECTORY, not a file -- peninsular_strain -> systems/overview/sim/,
+    # personal_combat -> systems/combat/combat_engine_v1/, social_contest ->
+    # systems/social_contest/sim/contest/, 37 .py files between them. THIS function has always
+    # accepted both; the `.endswith('.py')` restriction was in the TRACER's unit index and in a
+    # throwaway diagnostic, where it reported all three as "no pointer" and nearly became a
+    # 17-item work-list that did not exist. Both granularities are legitimate: a subsystem whose
+    # implementation is a package cannot name one file.
     if declared:
         return declared
     if manifest_row.get('tier') == 'adapter':
