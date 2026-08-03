@@ -47,9 +47,9 @@ Every node below is annotated `RUNS` or `does not run`. Nodes that do not run ar
     - **`loop.s2.boundary`** ACTION->ACCOUNTING boundary — deferred applies land
       <sub>`engine/mc_v18.py` → `_sched.accounting_boundary()`</sub>
       <sub>OF-7. Keys emitted during the scene phase were logged LIVE; their `apply` closures execute HERE. Then `next_tick()` resets the per-tick emission counter. This is the orchestration contract: emission is immediate, effect is deferred to a named boundary.</sub>
-  - **`loop.s3`** Step 3 — run_accounting  — modules: `territorial_piety` *(does not run)*, `settlement_layer` *(does not run)*, `npc_behavior` *(does not run)*
+  - **`loop.s3`** Step 3 — run_accounting  — modules: `territorial_piety` *(does not run)*, `npc_behavior` *(does not run)*, `faction_state` *(does not run)*
     <sub>`systems/overview/sim/season.py` → `run_accounting(world)`</sub>
-    <sub>CI seasonal calc (PP-412 5-step) + MS baseline decay (PP-255, year-end cadence). Also calls `simulate_npc_actions` every season.</sub>
+    <sub>SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An earlier version of this note said 'CI calc + MS decay + NPC' and attributed `settlement_layer`, which run_accounting never calls -- written from the docstring, not the code. In order: (1) apply_seasonal_ci every season [PP-412]; (2) apply_ms_baseline_decay, gated by the CALLER on season % SEASONS_PER_YEAR == 0 [PP-255] -- the callee does not check cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions [NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last.</sub>
   - **`loop.victory`** Victory check (GD-1)  — modules: `victory`
     <sub>`engine/mc_v18.py` → `results = victory.check_all_factions(world)`</sub>
     <sub>Sets `world.winner`, which breaks the loop on the NEXT iteration.</sub>

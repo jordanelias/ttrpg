@@ -54,6 +54,7 @@
    "anchor": "world = game_state.create_world(seed=seed)",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "Deterministic from `seed`. Builds factions, territories, clocks. Godot: this is the save/load entry point \u2014 strategy Stage 1 specifies save = initial conditions + Key log."
   },
@@ -67,6 +68,7 @@
    "modules": [
     "victory"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [
     "victory"
    ],
@@ -80,6 +82,7 @@
    "anchor": "scene_slate.clear()",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "Module-level queue; NOT per-world state."
   },
@@ -91,6 +94,7 @@
    "anchor": "world.dispatch_combat_bridge = _dispatch_combat_bridge_on(effective_params)",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "DISPATCH_COMBAT_BRIDGE decided ONCE and stashed on `world` (single owner)."
   },
@@ -102,6 +106,7 @@
    "anchor": "world.echo_scheduler = echo_transport.make_scheduler(",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "THE ORCHESTRATOR. TickScheduler + KeyLog. Its PRESENCE is the ECHO_TRANSPORT flag \u2014 absence means the byte-exact legacy path. `world.key_log` is the log."
   },
@@ -115,6 +120,7 @@
    "modules": [
     "articulation"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "The only production TickScheduler subscriber wiring."
   },
@@ -126,6 +132,7 @@
    "anchor": "for _ in range(max_s):",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "Breaks on `world.winner`."
   },
@@ -139,6 +146,7 @@
    "modules": [
     "engine_clock"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "Season counter, arc boundary, per-arc + per-season faction flag resets. The temporal spine `engine_clock` is `doc: null` \u2014 ED-1051, the sole remaining T0 blocker."
   },
@@ -150,6 +158,7 @@
    "anchor": "action_callback(world)",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "The injection point. mc_v18 passes `_faction_actions_callback`; **Godot passes its own to drive UI scene flow** (season.py's own docstring). This is the seam the port hangs on."
   },
@@ -164,6 +173,7 @@
     "faction_state",
     "faction_politics"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort."
   },
@@ -180,6 +190,7 @@
     "fieldwork_knots",
     "threadwork"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [
     "social_contest"
    ],
@@ -195,6 +206,7 @@
    "modules": [
     "social_contest"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [
     "social_contest"
    ],
@@ -208,6 +220,7 @@
    "anchor": "_sched.accounting_boundary()",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "OF-7. Keys emitted during the scene phase were logged LIVE; their `apply` closures execute HERE. Then `next_tick()` resets the per-tick emission counter. This is the orchestration contract: emission is immediate, effect is deferred to a named boundary."
   },
@@ -220,11 +233,12 @@
    "anchor_present": true,
    "modules": [
     "territorial_piety",
-    "settlement_layer",
-    "npc_behavior"
+    "npc_behavior",
+    "faction_state"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
-   "note": "CI seasonal calc (PP-412 5-step) + MS baseline decay (PP-255, year-end cadence). Also calls `simulate_npc_actions` every season."
+   "note": "SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An earlier version of this note said 'CI calc + MS decay + NPC' and attributed `settlement_layer`, which run_accounting never calls -- written from the docstring, not the code. In order: (1) apply_seasonal_ci every season [PP-412]; (2) apply_ms_baseline_decay, gated by the CALLER on season % SEASONS_PER_YEAR == 0 [PP-255] -- the callee does not check cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions [NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last."
   },
   {
    "id": "loop.victory",
@@ -236,6 +250,7 @@
    "modules": [
     "victory"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [
     "victory"
    ],
@@ -249,6 +264,7 @@
    "anchor": "if not world.winner:",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": ""
   },
@@ -262,6 +278,7 @@
    "modules": [
     "victory"
    ],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [
     "victory"
    ],
@@ -275,6 +292,7 @@
    "anchor": "return CampaignResult(",
    "anchor_present": true,
    "modules": [],
+   "modules_attribution": "authored-unverified",
    "modules_executing": [],
    "note": "Carries `key_log_hash` + `keys_emitted` \u2014 the parity surface the Godot port compares against (strategy Stage 2: Key-log equality is the master parity check)."
   }

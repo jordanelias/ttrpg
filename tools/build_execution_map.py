@@ -36,6 +36,7 @@ Usage:
 """
 from __future__ import annotations
 
+import ast
 import json
 import os
 import sys
@@ -110,9 +111,15 @@ SPINE = [
      "contract: emission is immediate, effect is deferred to a named boundary."),
     ("loop.s3", "loop", "Step 3 — run_accounting",
      "systems/overview/sim/season.py", "run_accounting(world)",
-     ["territorial_piety", "settlement_layer", "npc_behavior"],
-     "CI seasonal calc (PP-412 5-step) + MS baseline decay (PP-255, year-end cadence). Also "
-     "calls `simulate_npc_actions` every season."),
+     ["territorial_piety", "npc_behavior", "faction_state"],
+     "SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An "
+     "earlier version of this note said 'CI calc + MS decay + NPC' and attributed "
+     "`settlement_layer`, which run_accounting never calls -- written from the docstring, not the "
+     "code. In order: (1) apply_seasonal_ci every season [PP-412]; (2) apply_ms_baseline_decay, "
+     "gated by the CALLER on season % SEASONS_PER_YEAR == 0 [PP-255] -- the callee does not check "
+     "cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a "
+     "SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions "
+     "[NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last."),
     ("loop.victory", "loop", "Victory check (GD-1)",
      "engine/mc_v18.py", "results = victory.check_all_factions(world)", ["victory"],
      "Sets `world.winner`, which breaks the loop on the NEXT iteration."),
@@ -278,7 +285,23 @@ def build():
             "id": pid, "parent": parent, "title": title,
             "source": source, "anchor": anchor,
             "anchor_present": _anchor_present(source, anchor),
+            # AUTHORED, NOT DERIVED -- and labelled that way because two attempts to derive it
+            # both failed and shipping either would have looked authoritative:
+            #   * per-FILE transitive imports: every mc_v18-sourced phase (boot, the loop,
+            #     termination) returned the same seven units. A file's closure wearing a phase's
+            #     name.
+            #   * per-FUNCTION local imports: returned `articulation_layer` for those same
+            #     phases and NOTHING for the rest, because this codebase splits cross-subsystem
+            #     calls between module-level and function-local imports while phase boundaries do
+            #     not align with function boundaries.
+            # Static attribution is not reliably derivable here. The correct instrument is a
+            # DYNAMIC one -- trace a seeded campaign and record which module code executes
+            # between phase markers -- and until that exists these stay marked unverified rather
+            # than dressed up. The verified parts of this map are the source anchors (checked),
+            # `executes` (derived from the manifest and re-derived in test), the code/doc paths
+            # (existence-checked) and the key + owned-state joins (read from the registries).
             "modules": modules,
+            "modules_attribution": "authored-unverified",
             "modules_executing": [m for m in modules if module_rows.get(m, {}).get('executes')],
             "note": note,
         })
