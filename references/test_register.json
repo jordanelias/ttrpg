@@ -4271,6 +4271,58 @@
     }
    }
   },
+  "test_execution_map.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The execution map must describe the code, not a memory of it (ED-IN-0123).",
+   "helper_loc": 3,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "emap"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 100,
+   "modules_under_test": [
+    "references",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_declared_code_paths_resolve": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A file map whose paths do not exist reads as coverage. `sim_module: none` is normalised to"
+    },
+    "test_every_spine_anchor_still_exists_in_its_source": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE LOAD-BEARING CHECK. Each phase names a file and a literal snippet; both must hold."
+    },
+    "test_execution_claims_match_the_manifest": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "`executes` must be derived, never asserted. Re-derives it from the manifest and compares."
+    },
+    "test_map_is_current": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Regenerating must be a no-op. Catches a hand-edit of the generated files."
+    },
+    "test_the_spine_is_not_vacuous": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "A map with no phases, or whose anchors all trivially match, proves nothing."
+    }
+   }
+  },
   "test_export_sim_params.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -4309,6 +4361,56 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "Committed export == fresh extract. If this fails: run `python tools/export_sim_params.py --build`."
+    }
+   }
+  },
+  "test_faction_l_reconstruction.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Faction.L does NOT reconstruct from the Key log \u2014 the open half of save_replay_premise.",
+   "helper_loc": 17,
+   "helpers": [
+    {
+     "loc": 9,
+     "name": "_rebuild_L"
+    },
+    {
+     "loc": 8,
+     "name": "run"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 136,
+   "modules_under_test": [
+    "engine",
+    "engine.autoload",
+    "engine/cross_scale",
+    "systems"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 3,
+   "tests": {
+    "test_faction_L_reconstructs_from_the_key_log": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_only_one_call_site_emits_stat_deltas": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Pins the MECHANISM, so a future reader does not have to re-derive it."
+    },
+    "test_the_sample_is_informative": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "ANTI-VACUITY, and the whole reason the first measurement was wrong."
     }
    }
   },
@@ -10218,7 +10320,7 @@
   "by_lane": {
    "FA": 3,
    "FI": 1,
-   "IN": 28,
+   "IN": 29,
    "MB": 2,
    "PC": 6,
    "SC": 3,
@@ -10341,16 +10443,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 135,
+  "files": 137,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 95,
+  "files_naming_a_module": 97,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 31,
-  "helper_defs": 254,
-  "helper_loc": 2238,
+  "files_with_a_lane": 32,
+  "helper_defs": 257,
+  "helper_loc": 2258,
   "ratchet_baselines": 8,
-  "tests": 1198,
+  "tests": 1206,
   "undocumented_files": 0
  }
 }

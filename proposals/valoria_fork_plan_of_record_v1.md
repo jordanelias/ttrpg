@@ -259,6 +259,12 @@ provenance in the generator's inputs. No new hand-maintained surface.
 `export_engine_params.py` + `export_sim_params.py` (the two working pipelines) ·
 `wiring_map_check.py` · the 7 canon files · the 280-file design corpus **as conversion input**.
 
+> **CORRECTION 2026-08-03 (ED-MB-0043 resolved).** `tests/sim/mass_battle/` is **CANON** and must be
+> CARRIED, despite living under `tests/`. The live campaign runs the *other*, staler tree
+> (`systems/mass_battle/sim`, 5 modules vs 28). Carrying `systems/*/sim` wholesale and leaving
+> `tests/` wholesale would take the stale engine and abandon the developed one. Directory is not
+> authority here — the canon mass battle is misfiled, and the fork is the moment to re-home it.
+
 **LEAVES** (source repo, frozen provenance) — `registers/` · `audit/` · `arcs/` · `workplans/` ·
 `dashboard/` · the observability apparatus. Cite back by `repo@SHA + PP/ED`.
 
@@ -276,6 +282,89 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 
 ---
 
+## 5.5 The spine — `references/EXECUTION_MAP.md` (2026-08-03)
+
+**The plan's waves were a list. They now hang off a spine.** `tools/build_execution_map.py` emits
+the boot → season-loop → termination order joined against `module_contracts` (Key IN → resolver →
+OUT, owned state), `wiring_manifest` (build / godot / rank / parity) and `key_graph`
+(producers / consumers). Read it before the wave table below; the waves are *positions on it*.
+
+```
+boot ─ create_world(seed)          deterministic; the save/load entry point
+     ├ victory.reset · scene_slate.clear
+     ├ flags            DISPATCH_COMBAT_BRIDGE decided ONCE, stashed on world
+     ├ substrate        TickScheduler + KeyLog  ← THE ORCHESTRATOR. Presence = ECHO_TRANSPORT
+     └ subscribe        articulation → the only production subscriber wiring
+loop ─ while not winner, max_s times
+     ├ s1  advance_season          engine_clock is doc:null — ED-1051, the T0 blocker
+     ├ s2  action_callback         ← THE PORT SEAM. Godot passes its own to drive UI scene flow
+     │   ├ faction actions         per parliamentary faction holding territory
+     │   ├ scene phase             MEASURED: 29 slots/campaign, ALL contest. No combat trigger
+     │   ├ parliamentary vote      flag-gated on the scheduler
+     │   └ ACTION→ACCOUNTING       deferred `apply` closures land HERE (OF-7), then next_tick()
+     ├ s3  run_accounting          SIX steps: CI · MS(year-end, caller-gated) · insurgency
+     │                             emergence · promotion(over a snapshot) · NPE · drift probe
+     └ victory check (GD-1)        sets winner; the loop breaks on the NEXT iteration
+term ─ fallback winner by territory count → CampaignResult{key_log_hash, keys_emitted}
+                                            ← the Godot parity surface (strategy Stage 2)
+```
+
+**What the map measures, and what it does not.** Verified: the source anchors (re-checked against
+the files by `tests/valoria/test_execution_map.py`), `executes` (derived from the manifest and
+re-derived independently in test), the code/doc paths (21 declared, all resolve; **14 units have no
+code yet**), and the key + owned-state joins. **Not** verified, and labelled
+`modules_attribution: "authored-unverified"`: the per-phase module lists. Two derivations were
+built and both discarded — per-file transitive imports gave every `mc_v18`-sourced phase the same
+seven units; per-function local imports gave almost nothing, because this codebase splits
+cross-subsystem calls between module-level and function-local imports while phase boundaries do not
+align with function boundaries. **The correct instrument is dynamic** — trace a seeded campaign and
+record which module code runs between phase markers. That is W-A below.
+
+### 5.6 E1 executed — attribution is now measured, and the first conclusion was wrong
+
+`tools/trace_execution_phases.py` wraps the seven phase-boundary functions (each verified to
+resolve before use), profiles a seeded campaign with `sys.setprofile`, and attributes every call to
+a phase. Two attribution channels, kept separate so a guess is never read as a join: `by_contract`
+(exact, via `module_contracts.sim_module`, **no collisions**) and `by_subsystem_path` (coarser, by
+directory, covering the **17 of 27 contracts that declare no code file at all** — `mass_battle`'s is
+literally `null`, which is why the campaign's hottest path lands there).
+
+**It contradicted most of my authored per-phase lists**, which is what it was built to test:
+
+| phase | authored | measured |
+|---|---|---|
+| `loop.s2.scenes` | social_contest, personal_combat, fieldwork_knots, threadwork | **none of the four** — 12 `scene_slate` + 72 `engine/cross_scale` |
+| `loop.s3` | territorial_piety, settlement_layer, npc_behavior | faction_state 362, territorial_piety 228, settlements 1,908 — **`npc_behavior` never ran** |
+| `loop.s2.factions` | faction_state, faction_politics | faction_state 63 — **`faction_politics` never ran** |
+
+**AND THEN THE STEELMAN CORRECTED ME.** The measurement's headline was *mass_battle = 98.72% of all
+calls*, and I was one step from letting that reorder the fork's priorities. Normalised by game
+EVENT it says the opposite:
+
+| | calls | events | calls/event |
+|---|---|---|---|
+| mass battle | 481,653 | 8 battles recorded | **~60,000** |
+| scene phase | 84 | 12 scenes resolved | **~7** |
+
+A tick-level physics simulation always dominates a call profile against a dice-pool resolver. That
+is a fact about **resolution granularity**, not about what matters. So the number is kept — it
+identifies the port's performance-critical path, which is genuinely what Godot needs — and the
+interpretation is fixed in both tools' docstrings and in `reality_check.measured_calls_caveat`.
+**It does not reorder anything.** `personal_combat` stays rank 0.
+
+The residual fork finding is real and separate: the campaign's most expensive path by three orders
+of magnitude runs on the mass-battle tree that is **not canon** (§5, ED-MB-0043).
+
+**Three numbers from the map that should drive sequencing:**
+
+| | |
+|---|---|
+| units that execute | **8 of 35** |
+| key types with both a producer and a consumer | **46 of 56** (2 have no producer, 8 no consumer) |
+| owned scalars with two claimants | **1** — `CI (Church Influence)`: `ci_political` + `territorial_piety` |
+
+---
+
 ## 6. Sequencing
 
 | | Content | Exit condition (falsifier) | Jordan |
@@ -285,7 +374,7 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 | **W2** | Author the `character_layer`: one `Character`/`Actor` dataclass in `World`; resolve the 9-vs-10 attribute roster | Personal-scale modules can hold state; roster is single-valued | **yes** — OPT-AV-1 |
 | **W3** | Stage 0 rank 0-1: `personal_combat` → `live` (the combat branch is dead code today), then `mass_battle`, `social_contest`, `victory` | `wiring_map_check --summary` shows those four at `live`/`gated`; each has key-log parity per its `parity` field | no |
 | **W4** | Invert the two extraction pipelines: table becomes source, Python constant becomes generated view; add the `citation` column (**0 of 324 `sim_params` records carry provenance**) | Round-trip CI red on a hand-edit of a generated view; every value traces to a `PP`/`ED` | per-value collisions: **yes** |
-| **W5** | Build the cook step: JSON → `.tres` for the golden path | A generated `.tres` for all 51 canonical weapons (2 exist, hand-made) | no |
+| **W5** | ~~Build the cook step: JSON → `.tres`~~ **BLOCKED, measured 2026-08-03 — see §6.3.** There is no weapon JSON to cook from, and the `.tres` schema encodes a model the oracle retired | Unblocking needs (a) a typed weapon export and (b) the GDScript weapon resource re-derived from the current oracle | **yes** — (b) is a port change under ED-1050 discipline |
 | **W6** | Stage 0 rank 2-3; then the 14 `no-oracle` modules, `engine_clock` first (ED-1051, the sole T0 blocker) | `authority: none` count reaches 0 or DEFERRED-with-citation | **yes** — canon authorship |
 | **W7** | Godot Gate-0 (G0.1–G0.5) and the strategy's Stage 1 spine | The strategy's own gates. **No Godot claim is verifiable until `project.godot` and a Godot binary run in CI — neither exists** | **yes** — ratify the strategy first |
 
@@ -326,6 +415,42 @@ rewrite of a working scripts-on-path tree, changing nothing the falsifier measur
 §3 records the non-package shape as deliberate (the `import systems` collision it resolved).
 **The zero-rows observation belongs to W3 and is deleted from W0.**
 
+### 6.3 W5 is blocked, and the two reasons are independent (measured 2026-08-03)
+
+W5 reads "cook the typed JSON into `.tres` for the golden path", with the falsifier "a generated
+`.tres` for all 51 canonical weapons (2 exist, hand-made)". Both halves of the pipeline are absent.
+
+**1. There is no weapon data in the typed export.** `engine/engine_params/combat_engine_v1.json`
+declares `source: config.py + core.py` and contains exactly two sections — `cfg` (204 constants) and
+`core` (26). Zero weapons. The roster lives in `combatant.py` as `WEAPONS`, **53 entries** (not 51),
+carrying rich per-part geometry: `elements[]`, `guards[]`, `haft`, `pommel`, `geo`, `_derived`. The
+exclusion is deliberate, not an oversight — the export was scoped to the Class-C tuning constants.
+
+**2. The `.tres` schema encodes a model the oracle retired.** Of its 15 fields:
+
+| | |
+|---|---|
+| map directly to `WEAPONS` | 11 (incl. `reach_adj`, present on 27/53 — optional, not absent) |
+| computed | 1 — `pob_frac` = `_derived['PoB_frac']` |
+| **retired in Python, still LIVE in GDScript** | 2 — `reach`, `weight` |
+| dead in both | 2 — `spd`, `handling` (zero reads in any `.gd`) |
+
+`config.py:7` records *"Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' +
+HEAD_REACH + the reach_adj triple-duty)"*, and `combat_systems.wield_heft` is *"DERIVED, g-aware …
+replaces the binary wt class"*. **0 of 53 weapons carry `reach`, `wt`, `weight`, `spd` or
+`handling`.** Yet `strike_module.gd:110` still computes `4.0 + 2.0 * float(w.reach == "long") + …`
+and `combat_config.gd:84` still branches on `weapon.weight == "heavy"`.
+
+So generating 53 `.tres` in the current schema would require **inventing** `reach` and `weight` for
+every weapon — fabricating values, and fabricating them into a superseded model. That is the ED-1050
+defect ("never let a port correct its oracle in-place") reproduced 53 times instead of once. The
+correct order is oracle-first: export the weapon roster, re-derive the GDScript resource from it,
+then cook. Step two is a port change and therefore §7's, not this plan's.
+
+**Note the shape.** This is the fourth wave whose stated premise did not survive measurement (W0
+packaging, W3 wiring, W4 provenance, now W5). Every one was written from a true observation with one
+inference too far, and every one was cheap to check and expensive to have acted on.
+
 ### 6.2 W1 as executed (2026-08-03) — the premise was mismeasured, not just unmet
 
 The manifest's note said the strategic loop mutates `Faction.L` and `Territory.owner` **with no Key
@@ -362,6 +487,84 @@ already in the registered entry so that nothing here mints canon by implication.
 
 ---
 
+### 6.4 Re-sequenced against the spine (2026-08-03) — three tracks, not one list
+
+The original W0–W7 was a single ordered list. Measurement has since struck one item (W0 packaging),
+blocked two on canon (W3, W5) and shown one premise mismeasured (W1). What remains does not
+serialise, because **the blocked items are blocked on YOU, not on each other** — so it is three
+tracks that run in parallel, each anchored to a phase of the spine.
+
+**Track E — ENGINE (unblocked, mine).** Everything here is measurable against the spine today.
+
+| | position on the spine | work | exit condition |
+|---|---|---|---|
+| **E1** | all phases | **Dynamic phase attribution.** Trace a seeded campaign, record which module code executes between phase markers. Replaces `authored-unverified` with measurement | every phase's module list is derived; the two failed static attempts are recorded in `build_execution_map.py` so this is not re-tried statically |
+| **E2** | `loop.s2` → `s3` | **`Faction.L` reconstruction.** 30 of `Faction.adjust()`'s 31 call sites emit no Key. Route stat mutation through emission | `test_faction_l_reconstruction`'s strict xfail turns XPASS |
+| **E3** | `boot.substrate`, `loop.s2.boundary` | **The 10 dead key types** — 2 with no producer, 8 with no consumer | each is wired, or DEFERRED with a citation |
+| **E4** | `loop.s3` | **The one contested scalar** — `CI (Church Influence)` claimed by `ci_political` and `territorial_piety`. Single-owner it | `execution_map.json`'s contested count reaches 0 |
+| **E5** | — | **The 240 uncited constants** (84/324 cited, 8 assumption-grade). Per-value canon lookups; paced, not bulk-run | `citation_coverage.uncited` falls, with every value traced |
+
+**I1 ATTEMPTED 2026-08-03, and it is canon-blocked at the same gate.** I took I1 ("get `main`
+green") and traced one failure to the bottom rather than assuming the bisect table.
+
+`test_conditional_orders::test_own_strength_fires_when_attrited` asserts an `own_strength:0.9`
+order fires after attrition. **It fails because the subunit never takes a single casualty** —
+ratio 1.0000 across 40 battle turns. The order logic is correct; the trigger's condition is never
+met. Characterised across 60 identical 1200v1200 Line battles:
+
+| | |
+|---|---|
+| ended in **1 turn** | **60 / 60** |
+| winner took **zero** losses | **42 / 60** (median 0.0000) |
+| loser's losses | median **45.3%** |
+
+**Two corrections to the bisect's causal story, both from measurement.** The retrospective
+attributes this test to `PC_FRICTION_CEV`, and toggling that flag does flip *this seed*. But across
+40 seeds the flag produces no one-sided advantage at all — A zeroed 20, B zeroed 19. The toggle
+works by shifting the RNG stream, not by removing a bias. And `b_pool: 0` in the turn log is **not**
+a unit unable to fight: `orchestration.py` reads `a_pool = 0 if a_dead else …` where
+`a_dead = routed or broken`, so it is the *result* of routing. I nearly reported that backwards.
+
+So the failing tests are TRUE POSITIVES about a real state — battles resolve as instant one-sided
+routs under the ruled flags-ON configuration — and fixing them means answering **is a one-turn rout
+with an untouched winner correct?** That is canon. The retrospective's own Phase 0 orders it
+exactly this way (*bisect → fix F1–F8 → Jordan rules the golden mode matrix → re-base*) and warns
+that **"re-basing before fixing F1–F8 would bake nine defects into the definition of correct."** So
+re-pinning the thresholds to current behaviour is specifically forbidden, and it is the only way to
+make these green without a ruling. **I1 moves to Track C as C7.**
+
+One thing I1 *did* produce, because it is a demonstrable error rather than a judgement: `config.py`
+shipped `PC_CELL_MORALE` default `'1'` under a trailing comment reading *"RETRACTED to OFF
+2026-07-25"*. Git settles it — `584c683a` set `'0'` and the comment was true; `94bb9022` (PR #271,
+2026-07-29) flipped it to `'1'` under the flags-ON directive and left the comment. Meanwhile
+`test_stochastic_rout`'s docstring, corrected the *same day*, asserts `default '0'`. Comment
+corrected; byte-exact digest verified unchanged (`ccdf7d09…` before and after).
+
+**Track C — CANON (blocked on Jordan).** Each is a *decision*, not a task; none can be inferred
+without designing your ruling by implication.
+
+| | position | the question |
+|---|---|---|
+| **C1** | `loop.s2.scenes` | **What triggers a personal combat?** Nothing queues a combat scene — `evaluate_triggers` can only emit `contest`. This is why `personal_combat` (rank 0, the golden path, 75% covered) never runs |
+| **C2** | `loop.s2.factions` | **The mass-battle rewire.** Canon is `tests/sim/mass_battle` (28 modules); the campaign calls the 5-module tree. Canon returns `{winner, turns, phases}`; the caller needs `{attacker_wins, degree, *_size_pct}`. **`degree` is the blocker** — canon has no four-band degree, and it drives the territorial outcome. Needs the mapping ruled, plus a faction→unit roster |
+| **C3** | `loop.s1` | **`engine_clock`** — `doc: null` temporal spine, ED-1051, the sole T0 blocker |
+| **C4** | all personal-scale | **The attribute roster** — OPT-AV-1; blocks `character_layer` |
+| **C5** | `loop.s2.boundary` | **ED-1006 downward delivery** — blocks any downward-dispatching orchestrator |
+| **C6** | — | **`da.territorial_transfer`** — or ratify that `da.public_governance` + `target_territory_id` means an ownership change. Today that rule is an interpretation the registry does not declare |
+
+**Track I — INFRASTRUCTURE (unblocked, and I would do I1 first of everything).**
+
+| | work | why it outranks engine work |
+|---|---|---|
+| **I1** | **Get `main` green.** 9 MB-lane failures, each bisected to a named flag under ED-MB-0061 | While `main` is red, CI carries **no signal** — a real regression and the background are indistinguishable. Every PR's aggregate is red; this session burned four wake-ups re-confirming the same nine |
+| **I2** | **Make required checks specific, not aggregate.** `All Gates Green` counts *cancelled* jobs as failures, so it trips on any push that supersedes a running build | It generates notifications that generate work, with no defect behind them |
+| **I3** | **The 14 units with no code** — the map's `no_code_declared` set. Each is a canon-authoring job (Track C) or a retire | It is the fork's real backlog, and it is now a generated list rather than a judgement |
+
+**Ordering rule.** I1 → then Track E in parallel with whatever of Track C you rule. Nothing in E
+depends on C except by position; nothing in C depends on E at all.
+
+---
+
 ## 7. Held for Jordan
 
 1. **ED-1006 — downward Key delivery.** Blocks any downward-dispatching orchestrator. Named the
@@ -370,7 +573,7 @@ already in the registered entry so that nothing here mints canon by implication.
    module.
 3. **ED-1051 — `engine_clock`.** `doc: null` temporal spine; the sole remaining T0 blocker.
 4. **ED-FA-0002 — `domain_actions` home.**
-5. **ED-MB-0043 — the two-disjoint-mass-battle-trees fork.** Must resolve before W0 copies one.
+5. ~~**ED-MB-0043 — the two-disjoint-mass-battle-trees fork.**~~ **RESOLVED 2026-08-03 by Jordan: the canon tree is `tests/sim/mass_battle/`** (commit/PR #274). Measured consequence, and it corrects §5: the LIVE campaign imports `systems.mass_battle.sim.massbattle` (faction_action.py:431), the 5-module 2,375-LOC tree with zero `PC_*` flags. Canon is the 28-module 11,269-LOC tree under `tests/`, which the campaign never calls. **The carry list said carry `systems/*/sim` and leave `tests/` — that would have carried the stale engine and left canon behind.** Every MB result (Track F, the bisects, geometry S1–S4, the 9 red tests) is measured on the tree the game does not execute.
 6. **Fork point — CORRECTED, and it needs less from you than v1 claimed.** I reported the MB
    Track-F set as *non-deterministic* because CI showed 9 then 10 failures across commits that
    touched only markdown. **That was wrong, and the MB lane had already documented why.**

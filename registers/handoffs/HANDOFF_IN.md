@@ -1211,6 +1211,72 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **THE FORK IS BUILT AND RUNS (2026-08-03, ED-IN-0123, PR #286). Start here.**
+  `python3 tools/build_fork.py --out <dir>` assembles it and **runs a seeded campaign inside it
+  with the source repo off `sys.path`** — self-containment is a subprocess exit code, not a claim.
+  Current: **206 .py · 225 .md · zero path escapes · every contract unit carried · RUNS**
+  (`{"winner":"Crown","keys":6,"hash":"c2da4723","battles":1}`).
+  - **Structure comes from the module graph, not a hand-drawn line.** `runtime` = the transitive
+    closure from `engine.mc_v18`: **58 of 206 files**. The rest is `subsystem_unwired` 69,
+    `canon_unwired` 28, `oracle` 25, `test` 15, `workbench` 11 — written to `FORK_MANIFEST.json`.
+  - **The unwired 69 are the backlog**, joined to contracts so they read as one: `personal_combat`
+    15 (`build=unwired`), `social_contest` 14 (`gated`), `threadwork` 1, `miraculous_event` 1
+    (`stub`). 36 have **no contract pointer** — that gap is mechanical to close.
+  - **Two guards, both mutation-verified.** Contract coverage (drop `systems/` from CARRY → 27
+    contracted/stub units reported left behind) and the escape scan.
+  - **It deliberately does NOT decide the mass-battle tree.** Both are carried; canon lives at
+    `systems/mass_battle/canon/`. Blocked on `degree` — **exact shapes in
+    `audit/2026-08-03-session-oddities.md` §H**, which corrects the summary written here first: the
+    `{winner,turns,phases}` return is the `kind='single'` path, but the caller uses `kind='multi'`,
+    which returns `{winner, battle_turns, log, a_loss_final, b_loss_final}`. Three of the caller's
+    four fields map mechanically; **`degree` does not exist in canon at all** — the live engine
+    synthesises it from a hardcoded ladder with an uncited `0.50`. Porting means *authoring* that
+    rule, which is a design ruling, not an adapter.
+
+- **⚠ READ `audit/2026-08-03-session-oddities.md` BEFORE RESUMING.** Extended 2026-08-03 into the
+  session-independent record of what is actually known: sections A–H and P are **measured** (each
+  carries the command that produced it), **section J is 13 open questions** — each with what would
+  answer it and whether it is blocked on Jordan or on measurement — and K records what was left
+  undone on purpose. Three things there that change how you'd plan:
+  - **§G — the three registries disagree.** `module_contracts` (keys + code pointer),
+    `wiring_manifest` (build state) and a real execution trace do not describe the same 27 modules.
+    Four modules marked `deferred` are **observed executing**, including `faction_state` at 498
+    calls, whose pointer is the boot spine. Only **2 of 27** are `live`. `victory` is one of the
+    two, runs 384 calls, and declares **zero keys in and zero out**.
+  - **§E5 corrects three of my own rows.** E3/E4/B4 cite `FORK_MANIFEST.json`, which
+    `build_fork.py` writes *into its output tree*. The fork was never committed, so those counts
+    have **no artifact in this repo** and fail this record's own standard. **J12 is the 5-minute
+    fix** and is the cheapest open item on the list.
+  - **§J9 is the most promising unexplored thread in the MB lane.** If the rout fires too early
+    (D1, which Jordan ruled a real defect), that alone would explain several of the nine red tests
+    — `conditional_orders`, `dg2_yield_residuals`, `stochastic_rout` all need the battle to last
+    long enough for a trigger to fire. Nobody has checked whether one fix greens all nine (J8).
+
+- **UNRESOLVED, and it decides the fork's mechanics: does `main` keep moving after the fork?**
+  `build_fork.py` is a one-way build (`rmtree` first), so re-running it CLOBBERS fork-side commits.
+  Fine while the fork is a pure derivative; wrong the moment it diverges — which is the point.
+  If `main` keeps receiving MB/PC/SC work, a **GitHub fork with shared history** is close to forced
+  (merges keep working). `git subtree split` handles one prefix; this carry list has **11 roots and
+  2 relocations**, so history-preserving extraction needs `git-filter-repo` (not installed) and
+  then charges path-rewriting on every future merge. **Jordan's call, not a session's.**
+
+- **I1 (get `main` green) is CANON-BLOCKED, measured not assumed.** 60/60 identical 1200v1200
+  battles end in ONE turn; the winner takes ZERO losses in 42/60. That is why
+  `own_strength_fires_when_attrited` cannot fire — the subunit never reaches 90%. Jordan ruled
+  2026-08-03 that this is **not** correct behaviour, so F1 is a real engine defect — but fixing it
+  is MB-lane engine work, and the retrospective's Phase 0 forbids re-pinning thresholds first
+  ("re-basing before fixing F1–F8 would bake nine defects into the definition of correct").
+  Two corrections to the bisect's causal story are recorded in the plan §6.4: the flag toggle works
+  by shifting the RNG stream (across 40 seeds: A zeroed 20, B zeroed 19 — no side bias), and
+  `b_pool: 0` is the RESULT of routing, not the cause.
+
+- **Filed, not acted on:** `tests/sim/mass_battle/config.py` ships `PC_CELL_MORALE` default `'1'`
+  under a comment reading "RETRACTED to OFF 2026-07-25". Git settles it — `584c683a` set `'0'`,
+  `94bb9022` (PR #271) flipped it to `'1'` and left the comment. **Do not fix it from an IN-lane
+  PR**: touching anything under `tests/sim/` trips `ci_co_file_checker` rule 3, which demands a
+  `coverage_matrix.md` update for a comment edit. That gate fires on the CANON engine's own source
+  because the engine is misfiled under `tests/` — re-homing it is fork assembly, not a gate fix.
+
 - **W0/W1 of the fork plan are DONE (2026-08-03, ED-IN-0123). W2 is Jordan's, so the next
   unblocked engineering is the W1 residue + W3.** State, measured not asserted:
   - **Path-literal escapes out of `engine/`+`systems/`: 10 → 6, and 0 runtime.** The one runtime

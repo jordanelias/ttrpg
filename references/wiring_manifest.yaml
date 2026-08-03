@@ -48,7 +48,7 @@ golden_path:
 # One module contract = one conversion unit = one parity target (godot_conversion_strategy_v1 §IV.3).
 modules:
   personal_combat:   {tier: module, scale: personal,   resolver: d_sigma,               build: unwired,  godot: gd-ported,     port_rank: 0, parity: "key-log + typed-export round-trip", note: "built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path — BUT the mc_v18 loop never routes here, so end-to-end parity is unvalidated. BLOCKER IDENTIFIED 2026-08-03 (ED-IN-0123), and it is NOT the DISPATCH_COMBAT_BRIDGE flag: flipping that flag ON for a full seeded campaign changes nothing at all — same 157 keys, same key-type composition, same winner, identical Faction.L and Territory.owner. Measured cause: a whole campaign dispatches 29 scene slots and ALL 29 are `contest`. queue_triggered_scenes is the only production caller of scene_slate.queue_scene, and evaluate_triggers can only ever emit scene_type=contest (Stability Crisis -> emergency_council). No trigger anywhere produces a combat scene — combat_bridge.py:37 and scene_dispatch.py:37 both already state this in prose. So wiring personal_combat to live requires AUTHORING THE TRIGGER that says when a personal fight occurs in a campaign, which is canon, not a flag flip or a wiring fix. Jordan call."}
-  mass_battle:       {tier: module, scale: scene,      resolver: dice_pool,             build: live,     godot: python-oracle, port_rank: 1, parity: "key-log", note: "ratified engine; fires ~30-45 battles/campaign via conquest. A RICHER unwired engine sits at tests/sim/mass_battle (mislabeled a frozen archive) — reconcile before porting."}
+  mass_battle:       {tier: module, scale: scene,      resolver: dice_pool,             build: live,     godot: python-oracle, port_rank: 1, parity: "key-log", note: "ED-MB-0043 RESOLVED 2026-08-03 by Jordan (commit/PR #274 indicates the canon tree). THE TWO TREES ARE NOT TWO VERSIONS OF ONE ENGINE -- they are a LIVE-BUT-STALE engine and a DEVELOPED-BUT-UNWIRED one, and the fork was about to carry the wrong one. CANON = tests/sim/mass_battle/ (28 modules, 11,269 LOC, last touched 2026-07-31, carries the PC_* flags in 12 files, and is what CI byte-exact goldens run via bat.py). LIVE = systems/mass_battle/sim/massbattle.py (5 modules, 2,375 LOC, last touched 2026-07-21, ZERO PC_* flags) -- verified by resolving the import: faction_action.py:431 does `from systems.mass_battle.sim.massbattle import resolve_mass_battle`, so the ~30-45 battles/campaign run on the SMALL tree. CONSEQUENCE: every MB-lane result -- Track F, the flag bisects, the geometry spec S1-S4, the 9 red CI tests -- is measured on a tree the campaign never executes. FORK IMPACT: plan of record section 5 says carry systems/*/sim and LEAVE tests/, which would carry the stale engine and abandon canon. Section 5 corrected."}
   social_contest:    {tier: module, scale: scene,      resolver: dice_pool,             build: gated,    godot: python-oracle, port_rank: 1, parity: "key-log", note: "Agon kernel built (1 of 4 games); reached live only via emergency_council."}
   victory:           {tier: module, scale: provincial, resolver: state_reader,          build: live,     godot: python-oracle, port_rank: 1, parity: "state read", note: "GD-1; small + fully live. Easy first strategic port."}
   threadwork:        {tier: module, scale: personal,   resolver: dice_pool,             build: unwired,  godot: python-oracle, port_rank: 2, parity: "key-log", note: "13 operations built, zero live callers; rendering is a stub."}
@@ -99,22 +99,34 @@ foundation_gaps:
     note: "No Character/Actor dataclass in World; 9- vs 10-attribute rival rosters, neither wired. Every personal-scale port needs this first."
   save_replay_premise:
     status: partial
-    measured: "2026-08-03, seeded campaign, ED-IN-0123"
+    measured: "2026-08-03, seeded campaigns, ED-IN-0123 (SELF-CORRECTED same day)"
     note: >-
-      Strategy premise 'save = initial conditions + Key log'. Was recorded `violated` on the claim
-      that the strategic loop mutates World directly (Faction.L, Territory.owner) with NO Key trace.
-      Measured by replaying the log onto a t0 snapshot, that is now too pessimistic and the residue
-      is specific. Territory.owner: 8/8 ownership changes reconstruct at every horizon tested
-      (3/6/12/24 seasons) -- conquest via scene.battle_concluded (victor + territorial_outcome),
-      political transfer via da.public_governance (faction_id + target_territory_id), the latter
-      added 2026-08-03 and previously the ONLY untraced ownership write. Faction.L: reconstructs
-      from Target.stat_deltas, but the evidence is THIN -- values saturate to the 0.5/7.0 clamps
-      within a few seasons, and a clamped rebuild agrees with a clamped actual regardless of whether
-      the deltas are right, so only 1 of 4 factions was ever an informative comparison.
-      NOT closed, for two reasons worth keeping: (1) systems/factions/sim/mass_seizure.py:292 is the
-      third owner-write site and it did NOT fire on the measured seed -- untested, not proven clean;
-      (2) the replay rule 'da.public_governance + outcome success + target_territory_id means that
-      territory is now owned by faction_id' is an INTERPRETATION -- the key type registry does not
-      declare it. Sound for every emitter that exists today (three live emitters total), but a
-      dedicated da.territorial_transfer type would state it. Jordan call; see the fork plan section 7.
-      Falsifier: tests/valoria/test_public_governance_transfer_key.py.
+      Strategy premise 'save = initial conditions + Key log'. The two halves have DIFFERENT answers
+      and an earlier note on this line got the second one wrong -- recorded here because the way it
+      was wrong is the reusable part.
+      TERRITORY.OWNER: RECONSTRUCTS. 8/8 ownership changes rebuild from the log at every horizon
+      tested (3/6/12/24 seasons) -- conquest via scene.battle_concluded (victor +
+      territorial_outcome), political transfer via da.public_governance (faction_id +
+      target_territory_id), the latter added 2026-08-03 and previously the only untraced ownership
+      write. Falsifier: tests/valoria/test_public_governance_transfer_key.py.
+      FACTION.L: DOES NOT RECONSTRUCT. The first pass scored it 4/4 and called the evidence merely
+      "thin". It was not thin, it was ABSENT: 3 of 4 factions sat exactly on the 0.5/7.0 clamps,
+      where a clamped rebuild agrees with a clamped actual whether or not the deltas are right.
+      Re-measured on horizons short enough that values have not saturated, so 3-4 factions per run
+      are genuine comparisons: 0/3 rebuilt (seed 20260803, 5 and 6 seasons), 0/4 (seed 7, 8
+      seasons), best case 3/4 (seed 42, 3 seasons). MECHANISM: Faction.adjust() is the single owner
+      of faction-stat mutation and has 31 non-test call sites across 9 files; exactly ONE of them
+      (engine/cross_scale/echo_transport.py) emits a Key carrying Target.stat_deltas. The other 30
+      mutate L/Sta/W/Mil with no Key at all. So the ORIGINAL "no Key trace" wording was correct for
+      this half and the correction over-claimed. Falsifier:
+      tests/valoria/test_faction_l_reconstruction.py (xfail, strict).
+      THIRD OWNER-WRITE SITE, now measured rather than assumed: systems/factions/sim/mass_seizure.py
+      is not merely unexercised, it is UNREACHABLE -- zero production callers (every mention in
+      engine/+systems/ is a comment), and it wrote no owner in 40 seeded campaigns. Its gate is not
+      the problem: CI >= 60 is met in 20/20 seeds and CI = 100, the FORCED declaration point where
+      P(declare)=1, is reached in 8/20. A ratified mechanic (victory_v30 section 3.2, supersession
+      250715f) whose trigger condition is routinely satisfied and which never runs. FA lane.
+      STILL AN INTERPRETATION: 'da.public_governance + outcome success + target_territory_id means
+      that territory is now owned by faction_id' is not declared by the key type registry. Sound for
+      all three live emitters today; a dedicated da.territorial_transfer type would state it rather
+      than imply it. Jordan call; see the fork plan section 7.
