@@ -29,28 +29,31 @@ def test_all_proposals_docs_surface_by_location():
         if f.endswith(".md")
     }
     assert props == on_disk, f"missing: {on_disk - props}"
-    # Regression pin on the location-scan count; bump when a proposals doc
-    # is added/removed. 12 since #171 relocated the two 2026-07-17
-    # world-factions-npcs narrative docs (assessment + companion) into proposals/;
-    # 13 with the 2026-07-17 cast-and-culture-expansion companion alongside them;
-    # 14 with the 2026-07-18 precedent-to-mechanism design brief;
-    # 16 after pessimist_ners_audit_v1.md and grounded_event_card_deck_v1.md
-    # were renamed into proposals/ (2026-07-18, via GitHub UI rename ops);
-    # 17 with the 2026-07-21 observatory-holonic-refactor proposal;
-    # 18 with the 2026-07-21 reconciliation-program (consolidates the plan fragments);
-    # 19 with the 2026-07-26 personal-combat player-agency + tradition-curriculum proposal;
-    # 20 with the 2026-07-28 external-practice-corpus investigation (ED-IN-0085).
-    assert len(props) == 20
+    assert on_disk, "proposals/ is empty — the scan proves nothing"
 
 
 def test_all_audit_verdicts_present():
-    # id is shared across subsystem rows; the register must not collapse them.
-    # Regression pin on the audit_partial count; bump when a PARTIAL/MIXED audit
-    # run is logged to references/audit_registry.jsonl. 18 since the 2026-07-21
-    # repo-state vector-audit run (validation FAILED → PARTIAL) was appended.
+    # id is shared across subsystem rows of one audit run; the register must not
+    # collapse them. Counted from the source rather than pinned to a literal: a
+    # hardcoded total fires on every appended audit run (authorship) and stays
+    # green if a genuine collapse and a new run cancel out.
+    import json
     reg = _reg()
     audits = [i for i in reg["items"] if i["kind"] == "audit_partial"]
-    assert len(audits) == 19
+    expected = 0
+    with open(os.path.join(REPO, "references", "audit_registry.jsonl")) as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if r.get("verdict") in ("PARTIAL", "OPEN"):
+                expected += 1
+    assert expected, "no PARTIAL/OPEN rows — the check proves nothing"
+    assert len(audits) == expected
 
 
 def test_every_item_lane_tagged():

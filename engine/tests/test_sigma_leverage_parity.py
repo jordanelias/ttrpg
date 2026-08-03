@@ -469,22 +469,22 @@ class TestRollNetContinuous:
 # local engine.py — the "third σ-kernel" hazard).
 # ---------------------------------------------------------------------------
 
-_GROUNDUP_DIR = os.path.join(_REPO_ROOT, 'designs', 'audit', '2026-06-03-contest-groundup')
-_groundup_engine = None
-try:
-    # Load the ground-up reference engine.py BY EXPLICIT PATH under a unique module
-    # name. A bare `import engine` here now collides with the top-level `engine/`
-    # package (ED-IN-0071 P3 Phase A — the executable-model primary), which is
-    # cached in sys.modules once any `engine.mc_v18`/`engine.substrate` import runs,
-    # so `import engine` would return that package (no `degree`/`level`) instead of
-    # this audit-folder file. Self-contained (imports only math/random).
-    import importlib.util as _ilu
-    _spec = _ilu.spec_from_file_location(
-        "_groundup_engine_ref", os.path.join(_GROUNDUP_DIR, "engine.py"))
-    _groundup_engine = _ilu.module_from_spec(_spec)
-    _spec.loader.exec_module(_groundup_engine)
-except (ImportError, FileNotFoundError, AttributeError):
-    _groundup_engine = None
+# Load the ground-up reference engine.py BY EXPLICIT PATH under a unique module
+# name. A bare `import engine` here collides with the top-level `engine/` package
+# (ED-IN-0071 P3 Phase A — the executable-model primary), which is cached in
+# sys.modules once any `engine.mc_v18`/`engine.substrate` import runs, so
+# `import engine` would return that package (no `degree`/`level`) instead of this
+# audit-folder file. Self-contained (imports only math/random).
+# NOT guarded by try/except: from 2026-07-19 (designs/ retirement) until 2026-08-03
+# this pointed at the pre-move `designs/audit/…` path and the bare except silently
+# set _groundup_engine = None, so every parity case below skipped. A missing
+# reference must fail loudly — it is the parity target, not an optional extra.
+_GROUNDUP_DIR = os.path.join(_REPO_ROOT, 'audit', '2026-06-03-contest-groundup')
+import importlib.util as _ilu
+_spec = _ilu.spec_from_file_location(
+    "_groundup_engine_ref", os.path.join(_GROUNDUP_DIR, "engine.py"))
+_groundup_engine = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_groundup_engine)
 
 
 class TestLevelAccessor:
@@ -496,8 +496,6 @@ class TestLevelAccessor:
 
     @pytest.mark.parametrize("name", ["minor", "moderate", "strong", "major"])
     def test_level_vs_groundup(self, name):
-        if _groundup_engine is None:
-            pytest.skip("groundup engine.py not importable")
         _assert_close(SL.level(name), _groundup_engine.level(name), f"level({name})")
 
 
@@ -526,8 +524,6 @@ class TestPoolAwareDegree:
     @pytest.mark.parametrize("ob", [1.0, 2.0, 3.0])
     @pytest.mark.parametrize("pool", [None, 2, 5, 9, 16, 25])
     def test_degree_vs_groundup(self, net, ob, pool):
-        if _groundup_engine is None:
-            pytest.skip("groundup engine.py not importable")
         assert SL.degree(net, ob, pool) == _groundup_engine.degree(net, ob, pool), (
             f"degree(net={net}, ob={ob}, pool={pool})"
         )
