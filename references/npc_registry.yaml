@@ -477,7 +477,7 @@ characters:
   - id: NPC-034
     first_name: Gustav
     last_name: Linder
-    faction: Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)
+    faction: "Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)"
     role: Archbishop's Representative / Father
     status: canonical  # verified per faction_canon_v30 (ED-634 naming pending)
     title: Father

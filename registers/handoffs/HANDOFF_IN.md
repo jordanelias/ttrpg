@@ -1,5 +1,227 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-08-02 — The repointed-path pattern, guarded (ED-IN-0122, PR #284) + a planning failure worth recording
+
+**Landed.** A seventh gate reporting clean over nothing: `ci_formula_prose_check.DEFAULT_CENSUS`
+still named `designs/`, retired 2026-07-19, so it printed "_No formula prose-drift found in scope._"
+for 14 days. Repointed → **88 census rows, 49 formula-bearing, 14 CENSUS_DRIFT**. `load_census()`
+now returns `(rows, problem)`: its three failure modes were indistinguishable downstream from a
+genuinely empty census, and the report rendered all four identically. Also repointed
+`dashboard_data.HANDOFFS_DIR` → `registers/handoffs/` (blind 17 days; measured against the blind
+value as a control: files **1 → 11**, `build_needs_decision()` items **2 → 7** — five decision
+markers across FA/IN/PC/SC absent from the published dashboard), plus two dead paths stamped into
+generated artifacts.
+
+**The deliverable is the guard, not the repoints.** `canon_coverage_check` had been repointed for
+the identical defect on 2026-08-01 with no guard written; two repoints and no guard is the pattern
+going unlearned (§0.1 point 5). `tests/valoria/test_tool_input_paths_resolve.py` AST-scans every
+module-level path constant in `tools/` (69 cases, 1 documented output exemption). AST not grep is
+load-bearing: comments/docstrings are not in the parsed statement tree, so the many legitimate
+`designs/` prose citations that CLAUDE.md §3 routes through the alias map are excluded **by
+construction**. Mutation-verified **9/9**, and two mutants survived the first draft — a
+`/`-separator filter excluded single-segment constants (i.e. missed the very
+`canon_coverage_check` defect it is named after), and a value-based head-gate cannot see a
+constant repointed to a typo. The guard then found the `dashboard_data` defect itself.
+
+**INDEPENDENT REDISCOVERY — this was already filed.**
+`audit/2026-07-29-centralization-single-owner/01_orchestration_plan_v1.md` §1 row 8 already
+specifies exactly this: *"`ci_formula_prose_check.py` scans a **non-zero** census … with a guard
+asserting `rows > 0`."* I found and fixed it without reading that row. Two independent
+rediscoveries rank the finding as real; it also means the CSO program's §1 row 8 is now partly
+satisfied and should be updated rather than re-executed.
+
+**The planning failure, recorded because it is the reusable lesson.** I authored a consolidation
+plan (v1), had it attacked, rewrote it (v2), had it attacked again — and **both versions'
+worst defect was the same one level up: re-deriving an architecture and then a program that
+already exist, better-attacked than mine.** Verified by execution after the second critique:
+
+| I proposed | Reality |
+|---|---|
+| "wire `definitions_store --check` into CI, one line, not currently wired" | **Wired four ways incl. blocking.** `review_core.py:59` registry row `definitions.parity`, graded against `review_baseline.yaml`, run by `review_core --check` in `compliance-check`, which `ci-summary` requires. Live signal: `verdict pass, returncode 0, baseline 0, regressed false`. Would have built a **second owner of one rule** (§8) |
+| "promote `LANE_PATH_PREFIXES` to `obs_core`" | `obs_core.py:35` **already re-exports it**; four generators consume it |
+| "generate `lane_assignments.yaml` from the 9-lane table" | **Prohibited merge** — A/B/C write-lanes are a different concept (`lane_assignments.yaml:17-23`) |
+| "extend the ED-IN-0122 guard to registry globs" | `test_retired_tree_apparatus.py:704` **already does it**; and a YAML glob has no AST, so the extension is structurally impossible in that host |
+| "the JSON export's zero weapons is a *documented* scope guard" | **My own overcorrection**, taken from a prior critic at face value. The guard is against parsing *prose*; `weapons.py` is typed Python and would be *included*. The exclusion is just `derive()` hardcoding `config` + `core` |
+
+**Standing conclusion for the next IN session: do not author another consolidation plan.**
+`ED-IN-0103` (`audit/2026-07-29-centralization-single-owner/`, PROPOSED, three passes / six critics
+/ 65 findings) already covers this ground, including `references/lane_ownership.yaml` as the single
+lane owner (§1 row 6, file still absent) and the census guard above. Execute *that*.
+
+**Settled by execution, for whoever picks up the weapons work:** `json.dumps(WEAPONS)` **succeeds**
+post-bake, so extending `export_engine_params.py` to the weapons table is feasible (a critic flagged
+it as possibly blocked by import-time mutation; it is not). Counts: **53 entries = 51 canonical + 2
+`base=` half-sword variants** (`longsword_halfsword`, `estoc_halfsword`), matching CLAUDE.md §9's
+51-weapon harness; **2 of them have a hand-made `.tres`**, so **49 canonical weapons have no
+generated artifact**. This is PC/GO-owned — filed, not swept.
+
+**Filed, not fixed (currency defect in a RATIFIED substrate doc):**
+`systems/_architecture/repo_state_armature_v1.md:4` says "Phases 3 & 5 **HELD BACK**", but §5 line
+112 says "**P3 — vocab fold (COMPLETE, ED-IN-0078** … Jordan-authorized 2026-07-20)", and
+`tools/vocab_store.py` + 4 `# GENERATED by tools/vocab_store.py` register views exist on disk. The
+Status line appears stale. Not an IN drive-by — it is a ratified-doc status flip.
+
+**Also filed:** `ci_claim_provenance_check` reads `description` + `provenance` only, so the field
+literally named `measured_by` is invisible to it (it failed my own ED-IN-0122 entry for this).
+Widening the blob would re-scope every lane's entries and needs its own expected-delta measurement.
+
+## 2026-08-01 — Four gates that could not see what they guard (ED-IN-0115..0119, PR #284)
+
+**The pattern, four times over.** Each gate was correct when written and stopped working because
+something else moved — the `sim/` (2026-07-21) and `designs/` (2026-07-19) retirements, and the
+2026-08-01 job collapse. §0.1 point 5, and none of them announced itself.
+
+| Gate | Claimed | Measured |
+|---|---|---|
+| `ci_sim_fabrication_check` (blocking) | guards the port's oracle (§7) | **0 of 117** oracle files matched |
+| `validate_ed_citations` (blocking) | scans canonical surfaces | **45** of **293** files in its own mandate |
+| `run.dispute()` in 5 of 8 `wf_*.js` | an adjudicable disagreement | every dispute keyed `'?'` |
+| `scope_ratchet` registry row | `ci_job: validators-report` | nothing in CI invoked it |
+
+**Measuring the fix before shipping it is what found the expensive halves.** Repairing
+`is_sim_file` alone would have dragged **642** pre-existing uncited constants into a blocking gate
+and walled off MB and PC; the same measurement showed the whole-file scan was never viable in its
+original scope either (**2,283** in `tests/sim`). Deriving the citation walker from `SCAN_PREFIXES`
+starved that function's *other* caller — ED universe **1167 → 1107**, 110 valid citations turned
+`NONEXISTENT` — caught against a `git stash` control, not by reading the diff.
+
+**Three defects were found by tripping them, not by looking for them:** the `--fix` offset bug
+(surfaced by growing the harness owner), the `compiles_only` comment bug (my own comment took
+`validators-report` from 10 parsed commands to 0 — `--ci` would have stopped running ten validators
+and reported success), and my unallocated `ED-IN-0118`, caught by the citation gate I'd just fixed.
+
+**Also closed: ED-IN-0045 item 1**, filed 2026-07-12. `tests/hooks/` held 12 files no CI job ran; 10
+failed at collection (retired `valoria_hooks`/`github_ops`, `/home/claude` paths), zero could ever
+have passed. Retired with greps recorded. **27 tests now run in CI that never ran**, including
+`test_ed_citation_integrity.py` — 26 tests for `validate_ed_citations.py`'s pure core, which that
+tool's own docstring points at. `references/scope_vocabulary.md` advertised a **drift guard that did
+not exist**, and real drift had accumulated behind the claim (12 commit scopes in CLAUDE.md §2 vs 11
+in the doc — `design`). Replacement written first, shown to fail on the live drift, then the doc fixed.
+
+**The adversarial relay earned its cost (§10).** A read-only critic that never saw my reasoning
+found **six** defects in my own repairs, all re-verified by execution before acting: a FALSE PASS on
+quoted keys; a **silent narrowing** that dropped 14 audit-session sims while the docstring said
+"removing coverage is not this fix's job"; a launderable count-keyed ratchet (now keyed by five
+exact `(path, id)` pairs); a join that went silent on import failure and skipped compiles-only jobs;
+a latent contract-widening channel; and — caught by CI, not review — the restored basename rule
+flagging this fix's own guard file. **11 mutants planted, 11 killed; two survived their first round,
+both §0.1 point 2 inside my own tests.**
+
+### Third adversarial pass (ED-IN-0120) — four MORE false passes, in the fixes above
+
+Requested explicitly after the branch was declared done twice. Self-attack plus a read-only critic
+that never saw the reasoning. **Four of the six were false passes in gates this branch had just
+repaired**, which is the part worth remembering: the first two passes each concluded the work was
+sound, and each was wrong.
+
+1. **Deleting a citation passed.** Added-line scoping let a changeset remove a
+   `# [canonical: ...]` line and report OK over the now-uncited constant — the diff has no `+`
+   lines, so everything became "carried". Under the whole-file scan it replaced, that commit was
+   red. My claim "added-lines scoping is not a weakening" was FALSE for this class.
+   `ci_common.get_removed_lines()` closes it.
+2. **`run.critiqued` had the identical defect, eight lines from the one I fixed.** Called with a
+   single array in all five wave scripts, so `produced` was `undefined` and the starvation signal
+   could never fire. The dispute fix closed one *instance* of a pattern, not the pattern; arity is
+   now derived from the owner for every `run.*` method.
+3. **A row could claim any pytest-only job** (`unit-tests`), laundering exactly as `syntax-check`
+   did before the compiles-only branch closed that one — one job over from the defect the join was
+   built for.
+4. **The quoted-key fix re-opened its own hole one typo wide** — `'layer-disputed':` matched
+   neither branch and vanished. Also: spread passed unanalysed, and a unicode key *crashed* a
+   blocking validator.
+5. **The join shipped with no test at all.** A mutation sweep deleted the entire branch with
+   everything green. The same sweep then caught two more untested branches of mine.
+6. **Third recurrence of one bug:** a new scanner read prose about a call as a call. Fixed for
+   `_dispute_calls`, then `compiles_only`, then reappeared. Comments are now blanked **once**,
+   where `body` is derived.
+
+**Corrected claim:** my declared narrowing said three files lost coverage; against `origin/main` it
+is **two** — the third is a file this branch created. Re-measured across all 3,117 tracked files:
+169 → 268, those two the complete lost set.
+
+**15 mutants, 15 killed** — two survived the first sweep, both mine, both previously tested only ad
+hoc. **The lesson is not that the work is now clean.** Three passes found defects in the same code;
+the honest prior is that a fourth would find more, and the value came from attacking rather than
+from re-reading.
+
+### NEXT ACTIONS
+
+- **Awaiting Jordan, not self-ratified:** `OPEN_AS_BASIS` over-fires on provenance prose. The 10
+  deferred findings are mostly changelog parentheticals plus one `DRAFT FOR RULING` status line
+  citing its own open ED by design. Narrowing a blocking gate's semantics to lower a number I
+  produced is the §0.1 point-4 bias, so the heuristic is untouched and ratcheted instead.
+- **Not burned down, now visible:** 2,925 pre-existing uncited constants (642 oracle + 2,283
+  `tests/sim`). `ci_sim_fabrication_check --full` lists them.
+- **PC-lane, recorded not taken:** `systems/combat/combat_engine_v1/` is a canonical oracle outside
+  the fabrication gate, and `test_sim_fabrication_scope.py` is circular w.r.t. it (expectation
+  derived from the same owner). Closing it needs a PC call plus a `ci_common` root-list edit.
+- **MB-lane, surfaced not chased:** `test_obb_primitive::test_cellbox_from_helper_matches_constructor`
+  is order-dependent (passes deterministic, fails randomized);
+  `tests/sim/mass_battle/test_persubunit_stress.py` has 1 failing case;
+  `tests/sim/territory_registry/test_registry_ledger.py` fails collection.
+- **MB-lane — `test_per_cell_break_subsumes_the_body_level_one` is BIMODAL on CI. Two byte-exact
+  states, and this note was revised twice before the data supported it.** Observed deltas, all
+  byte-identical within their mode:
+
+  | commit | delta | mode |
+  |---|---|---|
+  | `main` @ base | `14.711105983695994` | A |
+  | `e585aa5` | `14.711105983695994` | A |
+  | `873a5c0` (docs-only) | `28.536271554655265` | B |
+  | `9482eb9` (docs-only) | `14.711105983695994` | A |
+  | `d960f80` (docs-only) | `28.536271554655265` | B |
+
+  **Two byte-exact values means two DETERMINISTIC paths**, selected by something that varies between
+  CI runs and is constant locally — not noise, and not a stochastic spread. Docs-only commits sit
+  either side of every transition, so no code change is involved.
+
+  **Ruled out by measurement, not by argument** (each of these was a live hypothesis, and each is
+  dead): *environment-dependence* — refuted the moment mode A returned on the next run; *hash-order*
+  — `PYTHONHASHSEED` 0–7, no effect; *worker count* — `-n auto`, `-n 2`, `-n 4`; *suite context* —
+  3 full-suite `-n auto` repeats; *test isolation* — alone and with module siblings. **11 local runs
+  across every configuration tried produced mode A every time.** Mode B has never been reproduced
+  outside GitHub's runners.
+
+  **Two framings were published and withdrawn before this one:** "environment-dependent" (killed by
+  the 4th data point) and "rare non-reproducible excursion" (killed by the 5th, which was
+  byte-identical to the 3rd). Both were filed on too little data. The §0.1 point-4 lesson is the
+  one that keeps applying: a number without a control is not a measurement in EITHER direction, and
+  a cautious-sounding claim is not exempt.
+
+  **Verdict is unaffected in both modes** — 14.7 and 28.5 both exceed the 10.0 threshold, and the
+  test fails identically on `main`. Nothing here is caused by or blocks PR #284.
+
+  **MECHANISM LOCATED — the instrument cannot tell the two apart (adversarial re-audit, 2026-08-01).**
+  `_mean_loser_casualties` (`tests/valoria/test_stochastic_rout.py:92`) appends to `loser` ONLY when
+  the battle has a decisive winner, then returns `statistics.mean(loser)`. A draw is silently
+  skipped, so **the mean is taken over a variable-length list and nothing records its length**. That
+  is CLAUDE.md §0.1 point 2 verbatim — "a loop that asserts conditionally must assert that it
+  asserted" — in MB's own measurement instrument.
+
+  **Proven:** the list is conditionally appended and unguarded; locally both arms average **16/16**
+  samples (`PC_STOCHASTIC_ROUT=False` → 10 A-wins / 6 B-wins, `True` → 12/4), so an
+  `assert len(loser) == n` would pass today and costs nothing to add.
+  **NOT proven, and deliberately not claimed:** that mode B is caused by a lower sample count. That
+  needs the reference environment, which I do not have. Two overclaims were already made and
+  withdrawn on this anomaly; this one stops at what was measured.
+  **Why it is still the right next step:** whatever drives mode B, this instrument cannot
+  distinguish "the engine changed" from "fewer battles were decisive" — a 55.5 → 69.5 shift is
+  exactly what dropping several low-casualty decisive samples would produce. Adding the count
+  assertion discriminates between those two on the very next CI run, for one line, and turns an
+  unfalsifiable anomaly into a measurement. Do that before arguing a golden re-base from either
+  magnitude.
+
+- **Known blind spot worth closing:** `valoria_local --ci` computes a different changeset than CI's
+  `GITHUB_BASE_REF` mode, so **local-green is not CI-green** for changeset-scoped validators. That
+  gap is what let the sixth defect reach CI. Reproduce CI locally with
+  `GITHUB_BASE_REF=main GITHUB_EVENT_NAME=pull_request`.
+- **Audit staleness needs NO action** (checked, not assumed): `audit-refresh` cron is weekly Mondays
+  06:00 UTC, last successful run 2026-07-27, next due 2026-08-03. The banner warnings are normal
+  inter-refresh drift; ED-IN-0099 already measured the feed near-stationary and proposes inverting
+  the metric.
+- **This file is 27k tokens, over the 20k `[WARN]`** — as are `HANDOFF_MB` and `HANDOFF_PC`. The
+  archive convention the per-lane *ledgers* already use is the fix; still unapplied.
+
 ## 2026-07-31 — M1 program scaffolding RATIFIED (ED-IN-0112); residuals filed (ED-IN-0113)
 
 **Landed and wired (PR #277).** Scope ratchet (`tools/scope_ratchet.py` + `registers/scope_baseline.yaml`,
@@ -988,6 +1210,35 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   `lane_assignments.yaml` and a rename would need to update all three.
 
 ## Next actions
+
+- **W0/W1 of the fork plan are DONE (2026-08-03, ED-IN-0123). W2 is Jordan's, so the next
+  unblocked engineering is the W1 residue + W3.** State, measured not asserted:
+  - **Path-literal escapes out of `engine/`+`systems/`: 10 → 6, and 0 runtime.** The one runtime
+    escape was `engine/autoload/registry.py` (read `registers/mechanics_index.yaml` from inside
+    the autoload hub, zero callers) — deleted. The remaining 6 are `test_pipeline_reach.py`
+    (reaches `skills/`, `audit/` — it tests repo bookkeeping and belongs in `tests/valoria`, not
+    the engine suite) and 4 in `combat_engine_v1/workbench/`. **That is the next W0 cleanup.**
+  - **The parity oracles are now a committed table** (`engine/tests/goldens/sigma_leverage_parity.json`,
+    1,758 rows, generated by `tools/gen_sigma_parity_goldens.py`). 761 → 1,926 executing
+    assertions, zero skips, numpy dependency gone.
+  - **`save_replay_premise` is `partial`, not closed**, and the two open items are named in the
+    manifest: `mass_seizure.py:292` never fired on the measured seed (untested, not proven
+    clean — **find a seed that exercises it**), and `Faction.L`'s evidence is thin because values
+    saturate to the 0.5/7.0 clamps, leaving 1 of 4 factions informative. **A clamped rebuild
+    agrees with a clamped actual regardless of the deltas** — any future L-reconstruction claim
+    must report off-boundary count or it is not a measurement.
+  - **W0's `combat_engine_v1` packaging item was STRUCK, not done.** Measured: flat `sys.path`
+    import works and coverage reports 17 files at 75%. The plan had inferred an importability
+    defect from a campaign-scoped zero-rows observation, which is a WIRING fact belonging to W3.
+  - **Two traps for the next session, both of which cost me a wrong answer here.** (1) An AST scan
+    for attribute assignments cannot see `Faction.adjust()`, which writes via
+    `setattr(self, stat, val)` — 31 call sites route through it and the grep found zero. (2)
+    `run_campaign(max_seasons=N)` is shadowed by `effective_params['CAMPAIGN_SEASONS']`, so a
+    season sweep passing `max_seasons` varies nothing; pass it in `params`.
+  - **A green suite is not evidence unless you check it reaches the path.**
+    `test_parliamentary_bridge` pins the Key log on seed 42, and seed 42 fires the new emitter
+    zero times — recorded as `test_the_pinned_golden_seed_cannot_see_this_path` so it stops
+    reading as coverage.
 
 - **⚠ `build_decisions.LANE_PATH_PREFIXES` should be a DERIVATION, not a 133-row table
   (2026-08-01, found by the gate crawl; rot repaired, design NOT fixed).**

@@ -16,11 +16,11 @@ _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 _SCRIPT = os.path.join(_ROOT, 'skills', 'valoria-vector-audit', 'scripts', 'structure_audit.py')
 
 
+from . import _structure_audit  # the single owner of the loader
+
+
 def _load():
-    spec = importlib.util.spec_from_file_location('structure_audit', _SCRIPT)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    return _structure_audit.load()
 
 
 sa = _load()

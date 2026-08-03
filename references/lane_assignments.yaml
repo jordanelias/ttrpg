@@ -84,7 +84,10 @@ lanes:
     owns:
       - "deprecated/skills/valoria-orchestrator/scripts/**"   # retired harness — moved to deprecated/ (LB-22)
       - "references/**"                 # EXCEPT the shared_files below (canonical_sources / canonical_freshness)
-      - "tests/hooks/**"
+      # - "tests/hooks/**"   # tree emptied 2026-08-01 (ED-IN-0119): 11 dead modules
+      #                      # retired to deprecated/tests/hooks/, 2 live ones moved
+      #                      # to tests/valoria/. Kept as a comment, not deleted, so
+      #                      # the lane's history stays legible.
       - "tests/index/**"
       - "session_logs/**"
       - "tools/**"

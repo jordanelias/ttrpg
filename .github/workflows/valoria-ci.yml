@@ -174,6 +174,16 @@ jobs:
           w python3 tools/ci_module_shape_check.py
           w python3 tools/ci_workplan_pointer_check.py
           w python3 tools/wiring_map_check.py --check
+          # Added 2026-08-01 (ED-IN-0118). All three existed and NOTHING RAN THEM.
+          # scope_ratchet's registry row claimed `ci_job: validators-report` and its notes said
+          # it "rides valoria_local" -- but no workflow invokes valoria_local at all (only
+          # py_compile on it), so ED-IN-0112's design silently lost its CI half in the 2026-08-01
+          # job collapse. It reports REGRESSED today, which is exactly why it belongs HERE and not
+          # in the blocking job. The other two ship with their own pytest suites and had zero
+          # invokers and zero registry rows -- a detector nobody runs is the defect it detects.
+          w python3 tools/scope_ratchet.py --check
+          w python3 tools/ci_vacuous_assertion_check.py
+          w python3 tools/ci_program_claim_check.py
           exit 0
 
   contract-conformance:
@@ -240,6 +250,17 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          # FULL HISTORY REQUIRED (ED-IN-0123, 2026-08-03). Not a convenience.
+          # tests/valoria/test_retired_tree_apparatus.py exercises
+          # currency_consistency_check.check_current_stamp in BOTH directions: an
+          # apparatus-only change must not trip the stamp, and a canonical head moving
+          # must. It stubs the date source, so it needs no real dates -- but the check's
+          # depth guard reads the actual commit count, and under the default depth-1
+          # checkout that guard short-circuits before the path-selection logic runs.
+          # The result is a check that is INERT in this job while reporting green, which
+          # is the failure mode the second half of that test exists to catch. It caught it.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -356,6 +377,16 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 is REQUIRED, not an optimisation (ED-IN-0123, 2026-08-03). This job runs
+          # `review_core.py --check`, whose `currency.stamps` signal shells out to
+          # currency_consistency_check, which compares CURRENT.md's reconcile stamp against
+          # `git log -1 --format=%cs -- <each canonical head>`. At the default depth-1 there is
+          # exactly ONE commit, so every path returns HEAD's date and EVERY canonical head falsely
+          # reads as touched today. MEASURED: the signal went RED here while passing on full history,
+          # the moment a commit landed more than one day after the stamp. `validators` and
+          # `validators-report` already set this; this job was the outlier.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'

@@ -191,8 +191,15 @@ def tier_table(n=200, weapons=None, cfg=CFG):
 # intended, regenerate with `--update`, and the regenerated diff is reviewable evidence of exactly what moved. What
 # is no longer possible is moving a tier nobody was looking at and not knowing.
 REFERENCE_N = 40
-REFERENCE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..',
-                              'tests', 'valoria', 'data', 'combat_armour_reference.json')
+# Lives NEXT TO ITS PRODUCER, not in the test tree (moved 2026-08-03, ED-IN-0123). It used to sit
+# at tests/valoria/data/, which made this module -- engine-side code -- reach four levels up into
+# tests/ for its own output. That is the dependency pointing the wrong way: a test may reach into
+# the code it gates, code must not reach into tests. It was also one of the last path-literal
+# escapes out of systems/, and the fork carries systems/ while leaving tests/ (plan of record §5).
+# tests/valoria/test_combat_armour_reference.py reads it through THIS constant, so the move is
+# single-sourced -- there is no second path literal to keep in step.
+REFERENCE_PATH = os.path.join(os.path.dirname(__file__), 'data',
+                              'combat_armour_reference.json')
 
 
 def reference_table(n=REFERENCE_N, cfg=CFG):

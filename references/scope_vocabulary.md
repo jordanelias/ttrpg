@@ -1,6 +1,7 @@
 # Scope Vocabulary — canonical source of truth
 **Status:** unified-vocabulary established (D6, partial — single source + drift guard done; the ~10 reduction is proposed, not executed) · documented 2026-05-31 (Lane B, roadmap 5.8 / resolved-decision D6)
-**Drift guard:** `tests/hooks/test_scope_vocabulary.py` (asserts the three live sets match this doc; fails on any divergence)
+**Drift guard:** `tests/valoria/test_scope_vocabulary.py` — asserts the commit-scope row below matches `CLAUDE.md` §2, and fails on divergence.
+> ⚠ **Corrected 2026-08-01 (ED-IN-0119).** This line previously named `tests/hooks/test_scope_vocabulary.py`. That test imported `valoria_hooks`/`github_ops` — retired modules — and `sys.path.insert(0, '/home/claude')`; it could not import, and no CI job or hook ran it. **The advertised enforcement did not exist, and real drift accumulated behind it:** `design` was added to the live commit vocabulary and this doc still said 11. The old test is retired to `deprecated/tests/hooks/`. Only the COMMIT axis is guarded now — see the note under the table.
 
 ## The problem (D6)
 Three constructs each carry a scope/type vocabulary, and they are **disjoint** — the same conceptual domain may be present in one and absent from another, with no single place defining the vocabulary. That drift is the defect D6 targets ("UNIFY"). This doc is the single place; the test enforces it.
@@ -8,9 +9,11 @@ Three constructs each carry a scope/type vocabulary, and they are **disjoint** �
 ## The three live constructs (verified 2026-05-31)
 | Construct | Source (as of 2026-05-31) | Consumers | Members |
 |---|---|---|---|
-| **Commit scopes** | `valoria_hooks.COMMIT_FORMAT` regex (L73); `COMMIT_SCOPES` auto-derived from it (L74) | `commit_message_gate` (L703) | editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix (**11**) |
+| **Commit scopes** | **`CLAUDE.md` §2** (the live authority; `valoria_hooks.COMMIT_FORMAT` is retired) | every commit message; `tests/valoria/test_scope_vocabulary.py` | editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design (**12**) |
 | **Session scopes** | `github_ops.SESSION_SCOPES` (L936) | `start_session_log` (L957), `assert_bootstrap` (hooks L133) | infrastructure, godot, editorial, design, simulation, audit, general (**7**) |
 | **Task types** | `valoria_hooks.TASK_REQUIRED_FILES` keys (L84) | `task_gate` (L427), github_ops L1397 / L1037 | simulation, audit, canon_check, editorial, patch, compilation, propose_mechanic, design_proposal, design, infrastructure (**10**) |
+
+> **Source status, 2026-08-01 (ED-IN-0119).** Only the COMMIT axis is live. `github_ops.SESSION_SCOPES` and `valoria_hooks.TASK_REQUIRED_FILES` were retired with the orchestrator, so the session-scope and task-type rows are **historical record**, not live vocabularies, and are deliberately NOT guarded — a guard over a vocabulary nothing consumes is the dead-gate defect this correction exists to remove.
 
 ## Why they differ — three axes, not one list
 - **Session scope** = *what kind of work this session is* (broad work domains).
@@ -40,6 +43,6 @@ The reduction **removes currently-valid scopes**, which breaks any lane using a 
 Until settled, the live 17-member union stands and the three constructs are unchanged.
 
 ## Migration discipline (when executed)
-1. Change the vocabulary in one place; update `test_scope_vocabulary.py`'s `EXPECTED_*` + this doc in the **same** commit (the test fails otherwise — that is the single-source enforcement working).
+1. Change the vocabulary in one place; update `CLAUDE.md` §2 + this doc in the **same** commit (the test fails otherwise — that is the single-source enforcement working).
 2. Sequence the `COMMIT_FORMAT` change to a window with **no other active lanes** (shared commit gate).
-3. Re-run `python3 -m pytest tests/hooks -q`.
+3. Re-run `python3 -m pytest tests/valoria/test_scope_vocabulary.py -q`.

@@ -108,10 +108,13 @@ EXPECTED_COMMANDS = {
     ('tools/ci_names_check.py', ''),
     ('tools/ci_names_consistency.py', ''),
     ('tools/ci_naming_check.py', ''),
+    ('tools/ci_program_claim_check.py', ''),        # wired 2026-08-01 (ED-IN-0118)
     ('tools/ci_quantity_vocabulary_check.py', ''),
     ('tools/ci_register_size_check.py', ''),
     ('tools/ci_sim_fabrication_check.py', ''),
     ('tools/ci_supersession_check.py', ''),
+    ('tools/ci_vacuous_assertion_check.py', ''),    # wired 2026-08-01 (ED-IN-0118)
+    ('tools/scope_ratchet.py', '--check'),          # wired 2026-08-01 (ED-IN-0118)
     ('tools/ci_vetting_check.py', ''),
     ('tools/ci_wf_harness_check.py', ''),
     ('tools/ci_workplan_pointer_check.py', ''),
@@ -179,3 +182,58 @@ def test_the_two_collapsed_jobs_keep_their_blocking_tiers_apart():
     assert by_id['validators']['compiles_only'] is False, (
         'the blocking validator job now contains py_compile, which makes jobs() return ZERO '
         'commands for it — --ci would run nothing and report success over an empty set')
+
+
+# ───────────────────────────────────────── the parser must not read PROSE as configuration
+
+def test_a_comment_mentioning_py_compile_does_not_zero_a_jobs_command_list(tmp_path, monkeypatch):
+    """REGRESSION (ED-IN-0118). `compiles_only` was computed from the RAW job body, so a job whose
+    COMMENT merely mentioned py_compile was classified compile-only and had its ENTIRE command list
+    discarded.
+
+    It was not hypothetical: adding three validators to validators-report, with a comment
+    explaining that valoria_local is only py_compile'd, took that job from 10 parsed commands to 0.
+    `valoria_local --ci` would then have silently stopped running ten validators and reported
+    success. The command matcher already stripped comments for exactly this reason; the two
+    derivations have to read the same text or they disagree.
+    """
+    wf = tmp_path / 'valoria-ci.yml'
+    wf.write_text(
+        "on:\n  push:\n\njobs:\n"
+        "  demo:\n"
+        "    steps:\n"
+        "      - run: |\n"
+        "          # note: valoria_local is only reached via py_compile, never executed\n"
+        "          python3 tools/ci_naming_check.py\n",
+        encoding='utf-8')
+    monkeypatch.setattr(g, 'WORKFLOW', str(wf))
+    demo = [j for j in g.jobs() if j['id'] == 'demo']
+    assert demo, 'the fixture job did not parse'
+    assert demo[0]['compiles_only'] is False, \
+        'a comment mentioning py_compile classified the job as compile-only'
+    assert [c['script'] for c in demo[0]['tool_commands']] == ['tools/ci_naming_check.py']
+
+
+def test_a_real_py_compile_job_is_still_classified_compile_only(tmp_path, monkeypatch):
+    """The other direction — the fix must not disable the classification it repairs."""
+    wf = tmp_path / 'valoria-ci.yml'
+    wf.write_text(
+        "on:\n  push:\n\njobs:\n"
+        "  syntax:\n"
+        "    steps:\n"
+        "      - run: |\n"
+        "          python3 -m py_compile tools/ci_naming_check.py\n",
+        encoding='utf-8')
+    monkeypatch.setattr(g, 'WORKFLOW', str(wf))
+    syn = [j for j in g.jobs() if j['id'] == 'syntax']
+    assert syn and syn[0]['compiles_only'] is True
+    assert syn[0]['tool_commands'] == []
+
+
+def test_the_live_validators_report_job_still_carries_its_commands():
+    """Pins the live tree against the failure above, not just a fixture."""
+    rep = [j for j in g.jobs() if j['id'] == 'validators-report']
+    assert rep, 'validators-report did not parse'
+    assert len(rep[0]['tool_commands']) >= 13, (
+        f"validators-report parsed only {len(rep[0]['tool_commands'])} command(s) — its report-only "
+        f"validators have stopped being discovered by --ci")

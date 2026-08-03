@@ -317,6 +317,20 @@ ci_checks:
     ci_job: validators
     notes: "Blocking as of 2026-06-29 (backlog reconciled 292 -> 0, designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md)."
 
+  - path: tools/ci_vacuous_assertion_check.py
+    level: 4
+    role: "VACUOUS-ASSERTION detector — scans tests/valoria + engine/tests for assertions that cannot observe the failure they exclude: loops that may assert zero times with no `assert checked >= N`, pytest.approx on an exactness claim, try/except: pass. CLAUDE.md §0.1 point 2 names this the repo's known past failure mode."
+    paired_hook: ""
+    ci_job: validators-report
+    notes: "Wired 2026-08-01 (ED-IN-0118). It shipped with its own pytest suite and NO invoker and NO registry row — a detector nobody runs is the defect it detects, and its own test file says so: 'a switched-off guard is worse than none because the repo still believes it is covered.' Report-only: 18 suspicious findings today, 0 provably vacuous."
+
+  - path: tools/ci_program_claim_check.py
+    level: 4
+    role: "PROGRAM-CLAIM checker — verifies that LIVE workplan pointers declaring paths still name files that exist, so a program's own status surface cannot cite a tree that moved."
+    paired_hook: ""
+    ci_job: validators-report
+    notes: "Wired 2026-08-01 (ED-IN-0118). Same profile as ci_vacuous_assertion_check: tests present, zero invokers, absent from the registry that calls itself the single source of truth for what tools/ scripts exist. Changeset-scoped, so it is a no-op on a clean tree and does real work on a PR."
+
   - path: tools/scope_ratchet.py
     level: 4
     role: "SCOPE ratchet — five measured ceilings (open EDs, needs_jordan, audit corpus, tracked files, unratified proposals) plus the G13 activity control that stops a do-nothing session scoring as HELD. Companion to review_core/review_baseline, which ratchets TECHNICAL debt and is structurally blind to scope growth because every signal it grades is a quality signal."

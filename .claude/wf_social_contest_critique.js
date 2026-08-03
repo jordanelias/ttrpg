@@ -296,6 +296,51 @@ function hRediscover(findings, lensOf) {
     .sort((a, b) => b.rediscovery - a.rediscovery || a.key.localeCompare(b.key))
 }
 
+// P8b · build a dispute record FROM a critic verdict, instead of by hand.
+//
+// WHY THIS EXISTS, and it is not a convenience. Five wave scripts hand-rolled the record as
+// `{ layer, target, detail, severity }`. Not one of those four keys is a key run.dispute() reads,
+// so every field silently took its default: finding_id became '?', layer_disputed 'interpretation',
+// root_cause 'ambiguous-spec', positions []. The record carried ZERO information from its call
+// site, and because run.adjudicate() binds on finding_id, no ruling could ever attach to one. That
+// shipped and ran live (the W4 run: 8 disputes, all keyed '?'). The three critique scripts wrote it
+// correctly, so this was a copy-paste lineage defect — wave0 got it wrong and waves 1-4 inherited.
+//
+// A record that is error-prone to build by hand gets built by the owner. The correct call is now
+// the SHORT one. Hand-rolled records stay legal (the critique scripts have richer positions), so
+// the guard that fails on recurrence is static and lives in tools/ci_wf_harness_check.py: it
+// derives the legal key set from THIS FILE and rejects a literal run.dispute({...}) that uses a
+// key the owner never reads, or that omits finding_id.
+//
+// The verdict enum below is the uphold/overturn/soften/sharpen funnel every critic stage in this
+// repo already emits; the two maps are lifted verbatim from wf_attribute_coherence.js, which had
+// them right. `uphold` is not a dispute and callers are expected to filter it out; if one arrives
+// anyway it maps to the same conservative defaults as an unrecognised verdict.
+const H_LAYER_BY_VERDICT = { overturn: 'evidence', soften: 'severity', sharpen: 'severity' }
+const H_ROOT_BY_VERDICT = {
+  overturn: 'measurement-vs-assertion',
+  soften: 'severity-calibration',
+  sharpen: 'severity-calibration',
+}
+function hVerdictDispute(v, criticLabel, producerHolds) {
+  const verdict = v && v.verdict
+  return {
+    finding_id: String((v && (v.target || v.target_id)) || ''),
+    layer_disputed: H_LAYER_BY_VERDICT[verdict] || 'interpretation',
+    root_cause: H_ROOT_BY_VERDICT[verdict] || 'ambiguous-spec',
+    positions: [
+      { by: 'producer', holds: String(producerHolds || '').slice(0, 400) },
+      {
+        by: String(criticLabel || 'critic'),
+        holds: String((v && v.evidence) || '').slice(0, 400),
+        verdict: String(verdict || ''),
+        severity: String((v && v.severity) || ''),
+      },
+    ],
+    resolution_model: 'adjudicated-by-synthesis',
+  }
+}
+
 // P4 · the read-only critic. Independence is STRUCTURAL, not a sentence in a prompt: the
 // agentType below is defined in .claude/agents/valoria-critic.md with a tools list that has no
 // Write/Edit. Passing it is the whole mechanism — a critic stage that omits it can write, and

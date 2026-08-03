@@ -66,16 +66,32 @@ def zero_caller_functions():
     """Top-level engine functions with no call site in package + workbench + tests. Text-matched, so treat
     it as a CANDIDATE list: it over-reports (a name mentioned in prose as `foo(` counts as a hit) and cannot
     see dynamic dispatch. Verify each candidate by hand before deleting anything."""
+    # TEST ROOTS ARE DISCOVERED, NOT HARDCODED (2026-08-03, ED-IN-0123). This walked
+    # `REPO/tests` unconditionally. Two problems: it was a path-literal escape out of
+    # `systems/` into a tree the fork LEAVES behind (plan of record §5), and if that tree is
+    # absent `os.walk` yields nothing silently -- so every engine function would read as
+    # zero-caller and the report would be confidently wrong rather than empty. Now the roots
+    # that exist are used and their absence is stated by the caller-visible count below.
+    test_roots = [os.path.join(REPO, 'tests'),
+                  os.path.join(REPO, 'engine', 'tests')]
+    test_roots = [r for r in test_roots if os.path.isdir(r)]
     testsrc = []
-    for root, _dirs, files in os.walk(os.path.join(REPO, 'tests')):
-        if '__pycache__' in root:
-            continue
-        for f in files:
-            if f.endswith('.py'):
-                try:
-                    testsrc.append(open(os.path.join(root, f), encoding='utf-8').read())
-                except Exception:
-                    pass
+    for test_root in test_roots:
+        for root, _dirs, files in os.walk(test_root):
+            if '__pycache__' in root:
+                continue
+            for f in files:
+                if f.endswith('.py'):
+                    try:
+                        testsrc.append(open(os.path.join(root, f), encoding='utf-8').read())
+                    except Exception:
+                        pass
+    if not testsrc:
+        # Loud, because the alternative is a dead-code report that lists everything.
+        raise RuntimeError(
+            "zero_caller_functions(): no test sources found under any of "
+            f"{test_roots or '(no test root exists)'} -- every engine function would falsely "
+            "read as having no caller. Point test_roots at this checkout's test tree.")
     allsrc = "\n".join(list(srcs.values()) + testsrc)
     out = []
     for fname, mods in defs.items():

@@ -40,15 +40,55 @@ from systems.social_contest.sim.parliamentary_vote import VoteResult
 #   _ON_WIN_SHARE = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
 _OFF_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
 _ON_WIN_SHARE = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
-_ON_KEYLOG_HASH = '43c9f319953f2d0ed46e5f1c2dc198ea07f527b8bfb16b227fc8e5af89c42c9e'
+# ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
+# `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
+# The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
+# hash. That is the INTENDED effect of adding an emitter, not drift — but CLAUDE.md §0.1 is explicit
+# that a golden re-record IS a behaviour change and must be deliberate rather than silent, so the
+# before/after is recorded here instead of the constants quietly moving.
+#
+#   keys_emitted   13 -> 75   (13 scene.contest_resolved unchanged, + 62 scene.battle_concluded)
+#   key_log_hash   43c9f319953f2d0e... -> 2fd2c2dc1eb7996f...
+#   scenes_resolved  50 -> 50 (UNCHANGED — the control that shows scene resolution is untouched)
+#
+# DETERMINISM RE-VERIFIED before re-recording: two consecutive seed-42 runs produce an identical
+# hash and count. A golden is only worth pinning if it is stable, and re-recording an unstable one
+# would convert a real determinism failure into a permanently moving target.
+#
+# NOTE FOR THE NEXT PERSON WHO ADDS AN EMITTER: this pin is a GLOBAL key count, so it moves whenever
+# any subsystem starts emitting — even though this module is about the parliamentary bridge. The
+# per-type assertion in the test below exists so that a future mismatch says WHICH type changed
+# rather than just reporting two different integers.
+_ON_KEYLOG_HASH = '2fd2c2dc1eb7996f738f7dedec185633999d72ebf4304b5289000b9b630174c1'
 _ON_SCENES_RESOLVED = 50
-_ON_KEYS_EMITTED = 13
+_ON_KEYS_EMITTED = 75
+# The composition behind that total — the diagnostic half of the pin.
+_ON_KEYS_BY_TYPE = {'scene.contest_resolved': 13, 'scene.battle_concluded': 62}
 
 
 def test_flag_on_resolves_contests_and_fires_echoes():
     """The named-zero-assertions FLIP: scenes resolve (>0) and Keys emit (>0), deterministically."""
-    r = run_campaign(seed=42, params={'ECHO_TRANSPORT': 1})
+    from collections import Counter
+    from engine.substrate import keys as _ks
+    seen = Counter()
+    _real = _ks.TickScheduler.emit
+
+    def _spy(self, key, apply=None):
+        seen[key.type] += 1
+        return _real(self, key, apply)
+
+    _ks.TickScheduler.emit = _spy
+    try:
+        r = run_campaign(seed=42, params={'ECHO_TRANSPORT': 1})
+    finally:
+        _ks.TickScheduler.emit = _real
     assert r.scenes_resolved == _ON_SCENES_RESOLVED and r.scenes_resolved > 0
+    # Per-type FIRST: when a new emitter lands, this says exactly which type moved, instead of
+    # leaving the next person to diff two bare integers (which is what happened here).
+    assert dict(seen) == _ON_KEYS_BY_TYPE, (
+        f'key emission composition changed: {dict(seen)} != {_ON_KEYS_BY_TYPE}. '
+        f'If a new emitter was added deliberately, re-record BOTH this map and _ON_KEYLOG_HASH, '
+        f'and say why in the block above them.')
     assert r.keys_emitted == _ON_KEYS_EMITTED and r.keys_emitted > 0
     assert r.key_log_hash == _ON_KEYLOG_HASH, f"KeyLog hash drifted: {r.key_log_hash}"
 

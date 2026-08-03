@@ -21,6 +21,7 @@ CLI:
 from __future__ import annotations
 import argparse
 import ast
+import re
 import json
 import sys
 from pathlib import Path
@@ -121,6 +122,67 @@ def _iter_py_files():
             yield p
 
 
+_CITE_RE = re.compile(
+    r"\[canonical:\s*([^\]]+)\]"          # [canonical: <source>]  — the dominant form
+    r"|\b(PP-\d+)\b"                        # a patch id
+    r"|\b(ED-(?:[A-Z]{2}-)?\d+)\b"          # flat ED-NNNN or lane-tagged ED-XX-NNNN (CLAUDE.md §4)
+    r"|\b(J-\d+)\b"                         # a Jordan ruling id, e.g. "(Jordan 2026-06-19, J-22)"
+)
+
+# A bracketed reference that names a SECTION is a source: "[part10 §3.3]", "[social_contest §7.1]",
+# "[params/core.md §TN Values — standard TN 7]", "[§1.2 — Transferred territory Accord = 1]".
+_BRACKET_SECTION_RE = re.compile(r"\[([^\]]*§[^\]]*)\]")
+
+# ...unless the bracket is a MARKER rather than a reference. The corpus uses bracketed tags for
+# assumptions, flags and seeds, and several of those also quote a section while explicitly saying
+# the value is NOT derived from it -- e.g. "[M6_ASSUMPTION_ONE: faction_canon §8.2 specifies +1
+# Stab effect, M6 declares ...]". Counting those as provenance would inflate coverage with exactly
+# the values that most need a real citation.
+# NOTE the trailing [A-Z0-9_]* rather than \b: the corpus writes "M6_ASSUMPTION_ONE",
+# "M7_ASSUMPTION_SIX", and a word boundary cannot fire between "ASSUMPTION" and "_ONE" because
+# "_" is a word character. The first version had \b and silently admitted every one of those as a
+# citation -- found by spot-checking the output, not by the coverage number, which went UP and
+# therefore looked like success.
+_MARKER_PREFIX = re.compile(
+    r"^\s*(?:[A-Z0-9_]*ASSUMPTION[A-Z0-9_]*|FLAG|SEED|TODO|GAP|NOTE|PROVISIONAL)\b", re.I)
+
+# A bare "§5.1" with no document is NOT recorded as a citation: it names a section of an
+# unidentified doc, so it cannot be resolved and would overstate coverage.
+def _citation(note: str):
+    """Extract the provenance marker from a trailing comment, or None.
+
+    Returns the FIRST match only. A comment citing several sources is real (a value derived from
+    two params docs), but a list-valued field would make the drift gate compare orderings, and no
+    consumer needs more than "is this value backed, and by what". The full text stays in `note`.
+    """
+    if not note:
+        return None
+    m = _CITE_RE.search(note)
+    if m:
+        return next(g for g in m.groups() if g).strip()
+    b = _BRACKET_SECTION_RE.search(note)
+    if b and not _MARKER_PREFIX.match(b.group(1)):
+        return b.group(1).strip()
+    return None
+
+
+_ASSUMPTION_WORD = re.compile(r"ASSUMPTION|PROVISIONAL|\bSEED\b|\bFLAG\b|\bTODO\b", re.I)
+
+
+def _citation_grade(citation):
+    """"cited" must not imply "settled".
+
+    Four constants (BASE_W_CONQUEST/GOVERN/MUSTER/UNIQUE) are tagged
+    `[canonical: M7_ASSUMPTION_SIX … ED-FA-0012 prior]` — the repo's own citation form, whose
+    CONTENT declares an assumption backed by a prior. Counting them as cited is correct (the author
+    used the convention); letting them read as settled canon is not. So the grade is a separate
+    field rather than a filter: coverage stays honest in both directions.
+    """
+    if not citation:
+        return None
+    return "assumption" if _ASSUMPTION_WORD.search(citation) else "source"
+
+
 def build() -> dict:
     records = []
     for p in _iter_py_files():
@@ -148,16 +210,34 @@ def build() -> dict:
                 "kind": _kind(val),
                 "module": module,
                 "file": rel,   # line number deliberately NOT stored — it churns on unrelated edits;
-                "note": _comment(src_lines, node.lineno),  # provenance travels in file + note (cite)
+                "note": _comment(src_lines, node.lineno),
+                # PROVENANCE AS A TYPED FIELD, not prose (ED-IN-0123). It used to live only inside
+                # `note`, the raw trailing comment, so "which values are backed by canon?" was a
+                # regex over free text rather than a query. MEASURED at the time: 68 of 324 records
+                # carried a [canonical: …]/PP-/ED- marker in `note` and 0 had a typed field — so
+                # the fork plan's "0 of 324 carry provenance" was true of the FIELD and wrong about
+                # the corpus; the work is promoting 68 out of prose, not authoring 324 from scratch.
+                # Parsed here rather than by every consumer: one owner, and `citation: null` is now
+                # a queryable gap instead of an absence someone has to notice.
+                "citation": _citation(_comment(src_lines, node.lineno)),
+                "citation_grade": _citation_grade(_citation(_comment(src_lines, node.lineno))),
             })
     records.sort(key=lambda r: (r["file"], r["name"]))
     from collections import Counter
     by_module = Counter(r["module"] for r in records)
+    # The provenance gap as a NUMBER IN THE ARTIFACT, not something a reader has to compute.
+    # An uncited computational constant is the exact class ci_sim_fabrication_check exists for and
+    # that CLAUDE.md §7 warns is leaky, so the count belongs where anyone opening the file sees it.
+    cited = sum(1 for r in records if r["citation"])
+    assumption_grade = sum(1 for r in records if r["citation_grade"] == "assumption")
     return {
         "_generated": "GENERATED by tools/export_sim_params.py — the typed computational constants "
                       "read (AST literal) from the sim reference code. No value is invented. "
                       "Regenerate with --build; drift-gated by --check.",
-        "schema_version": 1,
+        "schema_version": 2,
+        "citation_coverage": {"cited": cited, "total": len(records),
+                              "uncited": len(records) - cited,
+                              "of_which_assumption_grade": assumption_grade},
         "count": len(records),
         "by_module": dict(by_module),
         "params": records,

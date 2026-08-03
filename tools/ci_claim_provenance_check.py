@@ -147,7 +147,16 @@ def check(staged_only=False):
         for lineno, entry in _load(ledger):
             if _is_pre_cutover(str(entry.get("id", "")), cutover_id):
                 continue
-            blob = " ".join(str(entry.get(k, "")) for k in ("description", "provenance"))
+            # `measured_by` added 2026-08-02 (ED-IN-0122). The gate that demands an instrument
+            # could not see the field literally named for the instrument — it failed ED-IN-0122's
+            # own entry, whose MEASURED-BY marker sat in `measured_by`, and the "fix" was to move
+            # the marker into `description`. That treated the symptom: a provenance field the
+            # provenance gate cannot read is a silent-pass trap in the other direction too, since
+            # an entry whose numbers live in `measured_by` was never even scanned for claims.
+            # MEASURED before widening (the expected-delta test this needed): scope 23 -> 25
+            # entries, violations 0 -> 0, NEW violations 0. No backlog imported.
+            blob = " ".join(str(entry.get(k, ""))
+                            for k in ("description", "provenance", "measured_by"))
             claims = [why for pat, why in CLAIM_PATTERNS if pat.search(blob)]
             if not claims:
                 continue

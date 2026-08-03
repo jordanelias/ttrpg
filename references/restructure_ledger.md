@@ -1142,3 +1142,6 @@ interlock §0.1 row 1, which claims that file as its W1.3 subject.
 | `tools/geography/jsx_to_canonical.py` | `deprecated/tools/jsx_to_canonical.py` |
 | `tools/measure_stamp_false_positives.py` | `deprecated/tools/measure_stamp_false_positives.py` |
 | `tools/observability/npc_audit_report_gen.py` | `deprecated/tools/npc_audit_report_gen.py` |
+| `references/numeric_bounds_report.yaml` | `deprecated/references/numeric_bounds_report.yaml` |
+| `references/collation_report_summary.yaml` | `deprecated/references/collation_report_summary.yaml` |
+| `references/values_master.yaml` | `deprecated/references/values_master.yaml` |

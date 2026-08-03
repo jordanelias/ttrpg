@@ -38,7 +38,8 @@ USAGE (reads the local working tree — no PAT, no network):
     python3 tools/validate_ed_citations.py --info              # also print INFO open-refs
 
 The pure core (audit_citations / build_status_map / _is_resolved) is import-testable
-with no network — see tests/hooks/test_ed_citation_integrity.py.
+with no network — see tests/valoria/test_ed_citation_integrity.py (moved there from
+tests/hooks/ on 2026-08-01, ED-IN-0119: it was live and passing and nothing ran it).
 """
 import os, re, sys, json, argparse
 
@@ -107,6 +108,38 @@ PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
 SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'engine/params/', 'references/')
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
+
+# ── Burn-down tier (2026-08-01, ED-IN-0117) ───────────────────────────────────────────────────
+# Repairing _walk_repo_files() took this gate from 45 files to 293 and surfaced 10 pre-existing
+# OPEN_AS_BASIS findings in trees that were in the declared mandate but unreachable. Those 10 are
+# NOT this fix's debt to pay, and turning a blocking gate red on them would punish the repair.
+#
+# They are reported LOUDLY and separately, and they are RATCHETED: the count may fall, never rise.
+# A new open-ED-as-basis in these trees fails the build like any other. This is deliberately not a
+# suppression list — a list you can add to is how "report-only until burned down" becomes forever.
+#
+# Inspected, not waved through: the 10 are concentrated in 3 files and are mostly CHANGELOG
+# parentheticals ("+#11/#12 combat pair added 2026-07-29 per ED-IN-0004") and one DRAFT-FOR-RULING
+# status line citing its own open ED by design — i.e. the OPEN_AS_BASIS heuristic over-fires on
+# provenance prose. Narrowing that heuristic would be a semantics change to a blocking gate, made
+# to lower a number I produced, so it is filed for a ruling rather than taken here (§0.1 point 4:
+# asymmetric skepticism is a bias, not a defence).
+#
+# KEYED BY IDENTITY, NOT BY COUNT — a count alone was launderable. Adversarial review found it:
+# with a ceiling of 10 and 10 findings, one changeset could FIX an existing finding and ADD a
+# brand-new open-ED-as-basis claim, keep the count at 10, and pass both the gate and its own test.
+# `git mv`ing a doc from canon/ (blocking) into systems/ laundered the same way. Nothing pinned
+# WHICH findings were deferred. Now nothing but these five exact (path, id) pairs is ever
+# deferred; anything else is a build failure wherever it appears.
+BURN_DOWN_PREFIXES = ('systems/', 'engine/params/')
+BURN_DOWN_ALLOW = frozenset({
+    ('systems/_architecture/decision_policy_v1.md', 'ED-IN-0113'),
+    ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0014'),
+    ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0091'),
+    ('systems/articulation/articulation_layer_v30.md', 'ED-IN-0004'),
+    ('systems/articulation/articulation_layer_v30.md', 'ED-IN-0091'),
+})
+BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a test pins it both ways
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 ARCHIVE_GLOBS = ('deprecated/archives/editorial/', 'deprecated/archives/editorials/', 'deprecated/canon/')
@@ -291,14 +324,72 @@ def _salvage_entries(raw: str) -> list:
 
 
 def _walk_repo_files():
+    """Walk exactly the trees SCAN_PREFIXES declares — one source of truth, not two.
+
+    THIS FUNCTION SILENTLY SHRANK THIS GATE TO 15% OF ITS DECLARED SCOPE. It walked a hardcoded
+    `('canon', 'designs', 'params', 'references', 'archives', 'deprecated')`. Three of those six
+    no longer exist: `designs/` retired 2026-07-19, `params/` moved to `engine/params/`
+    2026-07-16, `archives/` merged into `deprecated/archives/` 2026-07-16. Meanwhile `systems/`
+    and `engine/params/` were correctly added to SCAN_PREFIXES — but SCAN_PREFIXES only FILTERS
+    what this function yields, so the 205 subsystem design docs and 43 engine/params docs were
+    never produced in the first place. Measured 2026-08-01: 45 files scanned, 293 in mandate. A
+    blocking CI gate believed it covered the canonical corpus and covered canon/ + references/.
+
+    Two lists, one updated and one not — CLAUDE.md §0.1 point 5 exactly. The fix is to delete the
+    second list rather than repair it: the walk roots ARE the scan prefixes. `deprecated/` was
+    also being walked purely to be discarded by SKIP_PREFIXES a moment later.
+
+    `tests/valoria/test_ed_citation_scope.py` fails if the scanned set collapses again.
+
+    SPLIT FROM THE ARCHIVE WALK, and that split is the point. One walker served two unrelated
+    questions — "which docs do I audit?" and "where do I load the ED universe from?" — which
+    happened to work only because the old hardcoded list was a superset of both. Deriving this
+    one from SCAN_PREFIXES immediately starved the other: the universe fell 1167 -> 1107 and 110
+    valid citations became NONEXISTENT, because `deprecated/archives/editorials/` left the walk.
+    Caught by measuring against a pre-change control rather than reading the diff. Archive
+    loading now walks ARCHIVE_GLOBS itself (see _walk_archive_files).
+    """
+    return _walk(SCAN_PREFIXES)
+
+
+def _walk(prefixes):
     out = []
-    for base in ('canon', 'designs', 'params', 'references', 'archives', 'deprecated'):
+    for prefix in prefixes:
+        base = prefix.rstrip('/')
         if not os.path.isdir(base):
-            continue
+            continue  # a retired tree is not an error; it just yields nothing
         for root, _dirs, files in os.walk(base):
             for fn in files:
                 out.append(os.path.join(root, fn).replace('\\', '/'))
     return out
+
+
+def is_deferred(v):
+    """Is this finding pre-existing debt in a burn-down tree, rather than a build-failing error?
+
+    MODULE-LEVEL ON PURPOSE. This started as a closure inside main(), and the test for it had to
+    re-implement the rule inline — so the test passed while the real predicate was mutated to defer
+    NONEXISTENT as well. An assertion against your own copy of the logic is not an assertion about
+    the code (§0.1 point 2). Importable now, and the test calls this.
+
+    A NONEXISTENT id is NEVER deferred: it is a broken reference, not an undecided one, and it
+    fails wherever it appears. Neither is anything outside BURN_DOWN_ALLOW — deferral is granted to
+    five named pre-existing findings, not to a region of the tree with a spare-capacity budget.
+    """
+    return (v['kind'] == 'OPEN_AS_BASIS'
+            and v['path'].startswith(BURN_DOWN_PREFIXES)
+            and (v['path'], v['id']) in BURN_DOWN_ALLOW)
+
+
+def _walk_archive_files():
+    """Where the ED universe is loaded from — ARCHIVE_GLOBS, its own declared constant.
+
+    Deliberately NOT SCAN_PREFIXES: the audit scope is canonical surfaces, while the universe
+    must include retired/archived ledgers precisely because a citation to an archived ED is
+    legitimate (ED-IN-0075 established that). The two sets are near-disjoint, and sharing a
+    walker between them silently coupled the gate's verdicts to the gate's scope.
+    """
+    return _walk(ARCHIVE_GLOBS)
 
 
 def load_ed_universe(warn=True) -> dict:
@@ -316,7 +407,7 @@ def load_ed_universe(warn=True) -> dict:
     import yaml
     archive_entries = []
     dropped = []
-    for ap in _walk_repo_files():
+    for ap in _walk_archive_files():
         if (any(ap.startswith(g) for g in ARCHIVE_GLOBS)
                 and 'editorial_ledger' in ap and ap.endswith(('.yaml', '.yml'))):
             raw = _read(ap)
@@ -409,19 +500,30 @@ def main():
     print(f'Scanning {len(docs)} doc(s) for ED citations...\n')
 
     viols = audit_citations(docs, status_map, checked_prefixes=('ED',))
-    errors = [v for v in viols if v['kind'] in ('NONEXISTENT', 'OPEN_AS_BASIS')]
+    all_errors = [v for v in viols if v['kind'] in ('NONEXISTENT', 'OPEN_AS_BASIS')]
     infos = [v for v in viols if v['kind'] == 'OPEN_INFO']
+
+    burn = [v for v in all_errors if is_deferred(v)]
+    errors = [v for v in all_errors if not is_deferred(v)]
 
     for v in sorted(errors, key=lambda x: (x['kind'], x['path'], x['line'])):
         extra = f" (status={v.get('status')})" if 'status' in v else ''
         print(f"[{v['kind']}] {v['path']}:{v['line']} cites {v['id']}{extra}")
         print(f"    …{v['ctx']}…")
+    for v in sorted(burn, key=lambda x: (x['path'], x['line'])):
+        print(f"[BURN-DOWN] {v['path']}:{v['line']} cites {v['id']} (status={v.get('status')})")
     if args.info:
         for v in infos:
             print(f"[OPEN_INFO] {v['path']}:{v['line']} references {v['id']} (status={v.get('status')})")
 
-    print(f"\n{len(errors)} citation-integrity violation(s); {len(infos)} open-reference info.")
-    sys.exit(1 if errors else 0)
+    over = len(burn) > BURN_DOWN_MAX
+    if burn:
+        print(f"\n[BURN-DOWN] {len(burn)} pre-existing open-ED-as-basis finding(s) in "
+              f"{', '.join(BURN_DOWN_PREFIXES)} (ceiling {BURN_DOWN_MAX}, ED-IN-0117). "
+              f"{'CEILING EXCEEDED — this changeset adds new debt.' if over else 'Not gating.'}")
+    print(f"\n{len(errors)} citation-integrity violation(s); {len(burn)} deferred; "
+          f"{len(infos)} open-reference info.")
+    sys.exit(1 if errors or over else 0)
 
 
 if __name__ == '__main__':

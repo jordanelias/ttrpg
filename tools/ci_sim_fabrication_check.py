@@ -95,11 +95,37 @@ _LEDGER_FILENAME = 'sim_verification_ledger.json'
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def is_sim_file(path: str) -> bool:
-    """A file is a sim file if it's under tests/sim/ or its name contains 'sim'.
+    """Is `path` part of the 1:1 Python reference this gate is supposed to guard?
 
-    Ported from valoria_hooks._is_sim_file. Must end with .py; path is checked
-    with forward-slash semantics, and the basename is matched case-insensitively
-    for 'sim' / 'simulation'.
+    THIS PREDICATE MATCHED ZERO OF THE LIVE ORACLE. Measured 2026-08-01: 0 of 117 .py files
+    under `engine/**` and `systems/*/sim/**`. The rule was written when the oracle lived in
+    `sim/`, where "basename contains 'sim'" was a serviceable proxy — every path had `sim/` in
+    it. `sim/` was retired 2026-07-21 and its contents distributed to `engine/` and
+    `systems/<subsystem>/sim/`, where no BASENAME contains "sim" (`massbattle.py`,
+    `mc_v18.py`, `resolver.py`). The proxy silently became a predicate for nothing, and the
+    gate printed "[SIM-FABRICATION OK] no changed sim .py files" over the entire oracle.
+
+    That is the §0.1 point-5 signature exactly: correct when written, broken by a move
+    elsewhere. So the roots now come from `ci_common.sim_reference_prefixes()` — the declared
+    ONE OWNER of this question (OI-53a, ED-IN-0097) — and never from a basename heuristic.
+    `tests/valoria/test_sim_fabrication_scope.py` fails if the oracle ever drops out again.
+
+    SCOPE IS THE UNION OF TWO RULES, not a replacement of one by the other. An earlier draft of
+    this fix REPLACED the basename rule with the prefix rule, and thereby dropped 14 sim-named
+    scripts under `audit/**` out of a blocking gate — while this very docstring claimed "removing
+    coverage is not this fix's job". Adversarial review caught the contradiction; measured 14 -> 0
+    before the union below was restored. Widening a gate is not licence to quietly narrow it
+    elsewhere, and the narrowing riding along inside a *repair* is exactly why it was invisible.
+
+    NOTE `tests/sim/` is kept, but it is NOT the sim reference (CLAUDE.md §3 disambiguates the
+    three similarly-named trees); it is a frozen tree that was already gated.
+
+    KNOWN GAP, recorded not fixed: `systems/combat/combat_engine_v1/` is a canonical Python oracle
+    (CLAUDE.md §6, ED-1050 — the typed Godot export is generated from its `config.py`) and is NOT
+    in scope: it is not under `systems/combat/sim/`, and `ci_common.sim_reference_roots()` does not
+    list it. The old basename proxy missed it too, so this is not a regression. Closing it means a
+    PC-lane call about their own oracle plus an edit to ci_common's root list — not something to
+    take unilaterally inside an IN-lane repair. Filed in ED-IN-0119.
     """
     if not path.endswith('.py'):
         return False
@@ -112,10 +138,33 @@ def is_sim_file(path: str) -> bool:
         return False
     if norm.startswith('tests/sim/'):
         return True
-    basename = norm.rsplit('/', 1)[-1].lower()
-    if 'sim' in basename or 'simulation' in basename:
+    # PYTEST SUITES ARE NOT REFERENCE CODE. A test's fixture constants are thresholds and seeds —
+    # `assert len(files) > 50` — and demanding a ledger citation for them is incoherent: there is
+    # no canon entry for "50 is a sane floor for this assertion".
+    #
+    # DECLARED NARROWING, not a silent one (the mistake this file already made once today).
+    # CORRECTED 2026-08-01 after re-measuring against origin/main rather than the working tree:
+    # exactly TWO files lose coverage relative to main — `test_ci_sim_fabrication_check.py` and
+    # `test_export_sim_params.py`, both tests OF this tooling. An earlier version of this comment
+    # said "three", counting `test_sim_fabrication_scope.py`, which is NEW in this change and
+    # therefore never had coverage to lose. The exclusion is unchanged and still correct; the
+    # justification was overstated by one, which is the kind of small false claim a comment is
+    # read as fact. `engine/tests/` was already excluded on identical reasoning.
+    #
+    # Verified exhaustively, not by inspection: applying main's predicate and this one to all 3,117
+    # tracked files gives 169 -> 268, with those 2 the complete lost set and 102 gained.
+    if norm.startswith(('engine/tests/', 'tests/valoria/', 'tests/contracts/')):
+        return False
+    # Rule 1 — the live oracle, from the single owner. This is what the basename proxy stopped
+    # matching when sim/ was retired, and the whole reason this predicate needed repair.
+    if norm.startswith(ci_common.sim_reference_prefixes()):
         return True
-    return False
+    # Rule 2 — the ORIGINAL basename heuristic, preserved. It is what keeps the throwaway
+    # audit-session sims (audit/**/sims/*.py, sim_*.py) inside the gate. Dropping it was a silent
+    # narrowing; keeping it costs nothing, since anything it over-matches under tools/ or
+    # deprecated/ has already returned False above.
+    basename = norm.rsplit('/', 1)[-1].lower()
+    return 'sim' in basename or 'simulation' in basename
 
 
 # Build the pattern without a literal triple-quote in source, so this checker masks its OWN
@@ -365,18 +414,50 @@ def load_ledger_pairs(sim_path: str) -> dict:
     return dict(pairs)
 
 
+def added_only(genuine, added_lines):
+    """Keep the violations that sit on a line THIS CHANGESET ADDED.
+
+    WHY THE WHOLE-FILE SCAN HAD TO GO. It was written when this gate's entire scope was
+    `tests/sim/`, and it was never viable even there: measured 2026-08-01, tests/sim carries
+    2,283 uncited constants across 88 files, so any changeset touching one of them met a
+    blocking gate with hundreds of violations. That is not a guard, it is a wall — and on the
+    live oracle side (642 across 47 files, newly reachable now that is_sim_file() is repaired)
+    it would have walled off the two most active lanes at once. Exactly the cost CLAUDE.md
+    §0.1 point 5 warns about: the ED-IN-0097 cap raise dragged ~100 pre-existing uncited
+    constants into a blocking gate the same way.
+
+    Added-lines scoping is not a weakening; it is what the gate already SAYS it does — "this
+    gate catches NEWLY-fabricated constants" (the pure-rename exemption's own reasoning, which
+    reaches this conclusion and then does not apply it). Pre-existing debt is reported, never
+    silently dropped: main() prints the suppressed count every run.
+
+    Matching is on stripped line TEXT because get_added_lines() yields text, not numbers. A
+    line whose text also occurs unchanged elsewhere in the file is flagged at both places —
+    over-reporting, which is the safe direction for a gate whose failure mode is silence.
+    """
+    if not added_lines:
+        return [], list(genuine)
+    wanted = {ln.strip() for ln in added_lines if ln.strip()}
+    keep = [g for g in genuine if g[1].strip() in wanted]
+    return keep, [g for g in genuine if g[1].strip() not in wanted]
+
+
 def main(argv) -> int:
     """
     Compute the changeset via ci_common, filter to sim .py files present on disk,
     load each file's repo-relative ledger values, compute genuine_violations, and
-    print a per-file report. Exit 1 if any uncited constants are found (ERROR /
-    blocking, matching the original), else print OK and exit 0.
+    print a per-file report. Exit 1 if any uncited constants are found on ADDED lines
+    (ERROR / blocking), else print OK and exit 0. `--full` scans whole files instead.
+    LIMIT, stated because the docstring used to oversell it: --full widens LINE scope only.
+    File selection is still the changeset, so it cannot sweep the 2,283-constant tests/sim
+    backlog this file cites — that needs a full-tree pass this tool does not offer.
     """
     mode = 'ci'
     if '--staged' in argv:
         mode = 'staged'
     elif '--local' in argv:
         mode = 'local'
+    full = '--full' in argv
 
     changed = ci_common.get_changed_files(mode)
     # Pure-rename exemption (mirrors ci_co_file_checker / ci_editorial_checker): a file
@@ -387,13 +468,27 @@ def main(argv) -> int:
     # their pre-existing uncited constants purely because the rename lands them in the
     # changeset. A rename that ALSO edits content keeps added lines, so it stays scanned.
     added = ci_common.get_added_lines(mode)
-    sim_paths = sorted(p for p in changed if is_sim_file(p) and p in added)
+    # REMOVALS MATTER TOO. Added-line scoping alone let a changeset invalidate a citation without
+    # tripping the gate: delete a `# [canonical: ...]` line above a constant and the diff has no
+    # `+` lines at all, so every violation became "carried" and the run reported OK over a value
+    # that is now genuinely uncited. Under the whole-file scan this branch replaced, that commit
+    # was red. Displacing a citation (inserting a new constant BETWEEN the comment and the constant
+    # it cited) has the same effect. So: if a changeset removes a provenance line from a sim file,
+    # that file goes back to a full scan — the narrow, targeted restoration of the old behaviour
+    # exactly where the new behaviour is unsound. Found by adversarial review of this very fix.
+    removed = ci_common.get_removed_lines(mode)
+    citation_removed = {
+        p for p, lines in removed.items()
+        if any(_CANONICAL_COMMENT_PATTERN.search(ln) for ln in lines)
+    }
+    sim_paths = sorted(p for p in changed if is_sim_file(p) and (p in added or p in citation_removed))
     if not sim_paths:
         print("[SIM-FABRICATION OK] no changed sim .py files — nothing to check.")
         return 0
 
     problems = []          # list of (path, genuine_violations)
     scanned = 0
+    carried = 0            # pre-existing, on lines this changeset did not add
     for path in sim_paths:
         content = ci_common.read_text(path)
         if content is None:
@@ -403,8 +498,18 @@ def main(argv) -> int:
         ledger_pairs = load_ledger_pairs(path)
         ledger_values = load_ledger_values(path)
         genuine = genuine_violations_by_pair(content, ledger_pairs, ledger_values)
+        if not full and path not in citation_removed:
+            genuine, pre_existing = added_only(genuine, added.get(path, []))
+            carried += len(pre_existing)
         if genuine:
             problems.append((path, genuine))
+
+    # ALWAYS printed, pass or fail. A gate that silently declines to report known debt is the
+    # "clean over nothing" failure this repo keeps rediscovering; this makes the debt a number
+    # on every run instead of a discovery every few months.
+    if carried:
+        print(f"[SIM-FABRICATION] {carried} pre-existing uncited constant(s) in the touched "
+              f"file(s) are NOT gated (only added lines are). `--full` lists them.")
 
     if not problems:
         print(f"[SIM-FABRICATION OK] {scanned} sim file(s) scanned, all constants cited.")

@@ -45,6 +45,8 @@ gated-out season is byte-identical to a no-qualifying-CB season (both return Non
 effects, zero extra `world.rng` draws).
 """
 from __future__ import annotations
+
+import os
 from dataclasses import dataclass, field
 
 from engine.autoload.dice_engine import roll_pool, Degree
@@ -109,6 +111,68 @@ def _available_cb(initiator, holder, world):
     if isinstance(ledger, dict):
         sources.extend(ledger.get((initiator, holder), []))
     return sources
+
+
+def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg) -> None:
+    """Emit `da.public_governance` when a Parliamentary Transfer moves a territory.
+
+    WHY THIS EXISTS. `wiring_manifest.yaml`'s `save_replay_premise` is recorded `violated`:
+    "the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key
+    trace, so the Key log cannot reconstruct strategic state." MEASURED 2026-08-03 against a
+    seeded campaign, that note is now mostly out of date and the residue is precise:
+
+      * Conquest transfers ARE traced -- `faction_action._emit_battle_concluded` carries
+        `territorial_outcome` + `victor`, and a replay rebuilds them.
+      * Legitimacy IS traced -- `echo_transport` carries `Target.stat_deltas`.
+      * THIS site was the only untraced ownership write. Attributed by instrumenting
+        `Territory.__setattr__` over a 12-season seeded campaign: 8 owner changes from
+        `faction_action`, 1 from here, 0 from `mass_seizure` (which did not fire -- untested,
+        not proven clean). Reconstruction scored 7/8 before this, and the miss was always
+        this one political transfer.
+
+    ENCODING, and its one honest gap. `da.public_governance` is an EXISTING registered type
+    ("Visible administrative or sovereign-role action", consumed by `faction_layer`) and every
+    field used here is already in its registry entry -- `faction_id` / `mission_alignment` /
+    `outcome` required, `target_territory_id` optional. No new type and no unregistered payload
+    field is invented, because a Key type is canon and this is not the place to mint one.
+    What the registry does NOT state is the replay rule a reconstructor needs: *public_governance
+    with a target_territory_id and outcome success means that territory is now owned by
+    faction_id.* That inference is sound for every emitter that exists today (there are two live
+    emitters in the whole substrate) but it is an interpretation, not a declared semantic.
+    Flagged for Jordan rather than settled here -- the alternative is a dedicated
+    `da.territorial_transfer` type, which is a canon addition.
+
+    Safety mirrors `_emit_battle_concluded` exactly: no `apply=`, so the Key is log-only and
+    cannot move a seeded golden; no-ops without a scheduler; wrapped so telemetry can never
+    take down a campaign turn, re-raising only under the explicit opt-in flag.
+    """
+    sched = getattr(world, 'echo_scheduler', None)
+    if sched is None:
+        return
+    try:
+        from engine.substrate.keys import EmittedAt, Key, Target
+
+        seq = getattr(world, '_parl_key_seq', 0)
+        world._parl_key_seq = seq + 1
+        season = int(getattr(world, 'season', 0))
+        key = Key(
+            id=f'da.public_governance.s{season}.n{seq}',
+            type='da.public_governance',
+            emitted_at=EmittedAt(season_index=season),
+            causes=[],
+            scale_signature=['territory'],
+            targets=[Target(actor_id=str(territory_id), role='subject')],
+            payload={
+                'faction_id': initiator,
+                'mission_alignment': 'none',
+                'outcome': 'success',
+                'target_territory_id': str(territory_id),
+            },
+        )
+        sched.emit(key)   # NO apply= -- log-only, byte-exact goldens cannot move
+    except Exception:
+        if os.environ.get('VALORIA_STRICT_KEYS'):
+            raise
 
 
 def propose_transfer(initiator, target_territory, mode, world, *,
@@ -223,6 +287,7 @@ def propose_transfer(initiator, target_territory, mode, world, *,
             # audit/2026-07-29-code-shape-open-items/04_execution_ledger.md's Wave-2 row for this
             # exact citation, filed rather than silently left unrecorded.
             terr.owner = initiator
+            _emit_public_governance_transfer(world, initiator, holder, target_territory, deg)
         res.status = "transferred"
         res.effects.append(f"territory '{target_territory}' transferred {holder}->{initiator}; Accord set {accord_level}.")
         if deg == Degree.OVERWHELMING:

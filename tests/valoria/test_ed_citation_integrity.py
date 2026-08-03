@@ -4,11 +4,15 @@ Hermetic tests for the ED citation-integrity validator (tools/validate_ed_citati
 Prevents recurrence of the 2026-05-31 P1 resolver incident (ED-883): a canon doc
 asserting CANONICAL/ratified status via ED ids that are either nonexistent (ED-874,
 ED-885) or OPEN and cited as a basis (ED-865). Network-free — exercises the pure core.
-Convention matches tests/hooks/test_correctness_gates.py + test_scope_vocabulary.py.
+Convention note: the two files this once cited were retired to deprecated/tests/hooks/
+on 2026-08-01 (they imported valoria_hooks/github_ops and could not collect).
 """
 import sys, os
 HERE = os.path.dirname(os.path.abspath(__file__))
-for _p in (os.path.join(HERE, '..', '..', 'tools'), '/home/claude'):
+# `/home/claude` was the retired orchestrator's tool directory. It was harmless while this
+# file sat in tests/hooks/ and nothing ran it; carrying it into the live CI suite without
+# looking would be importing dead machinery's residue into a running gate (ED-IN-0119).
+for _p in (os.path.join(HERE, '..', '..', 'tools'),):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 import validate_ed_citations as vec   # noqa: E402
