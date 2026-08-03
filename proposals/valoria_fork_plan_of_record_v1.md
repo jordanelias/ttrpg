@@ -320,6 +320,41 @@ cross-subsystem calls between module-level and function-local imports while phas
 align with function boundaries. **The correct instrument is dynamic** — trace a seeded campaign and
 record which module code runs between phase markers. That is W-A below.
 
+### 5.6 E1 executed — attribution is now measured, and the first conclusion was wrong
+
+`tools/trace_execution_phases.py` wraps the seven phase-boundary functions (each verified to
+resolve before use), profiles a seeded campaign with `sys.setprofile`, and attributes every call to
+a phase. Two attribution channels, kept separate so a guess is never read as a join: `by_contract`
+(exact, via `module_contracts.sim_module`, **no collisions**) and `by_subsystem_path` (coarser, by
+directory, covering the **17 of 27 contracts that declare no code file at all** — `mass_battle`'s is
+literally `null`, which is why the campaign's hottest path lands there).
+
+**It contradicted most of my authored per-phase lists**, which is what it was built to test:
+
+| phase | authored | measured |
+|---|---|---|
+| `loop.s2.scenes` | social_contest, personal_combat, fieldwork_knots, threadwork | **none of the four** — 12 `scene_slate` + 72 `engine/cross_scale` |
+| `loop.s3` | territorial_piety, settlement_layer, npc_behavior | faction_state 362, territorial_piety 228, settlements 1,908 — **`npc_behavior` never ran** |
+| `loop.s2.factions` | faction_state, faction_politics | faction_state 63 — **`faction_politics` never ran** |
+
+**AND THEN THE STEELMAN CORRECTED ME.** The measurement's headline was *mass_battle = 98.72% of all
+calls*, and I was one step from letting that reorder the fork's priorities. Normalised by game
+EVENT it says the opposite:
+
+| | calls | events | calls/event |
+|---|---|---|---|
+| mass battle | 481,653 | 8 battles recorded | **~60,000** |
+| scene phase | 84 | 12 scenes resolved | **~7** |
+
+A tick-level physics simulation always dominates a call profile against a dice-pool resolver. That
+is a fact about **resolution granularity**, not about what matters. So the number is kept — it
+identifies the port's performance-critical path, which is genuinely what Godot needs — and the
+interpretation is fixed in both tools' docstrings and in `reality_check.measured_calls_caveat`.
+**It does not reorder anything.** `personal_combat` stays rank 0.
+
+The residual fork finding is real and separate: the campaign's most expensive path by three orders
+of magnitude runs on the mass-battle tree that is **not canon** (§5, ED-MB-0043).
+
 **Three numbers from the map that should drive sequencing:**
 
 | | |

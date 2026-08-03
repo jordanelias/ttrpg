@@ -43,6 +43,9 @@
    "scene_timer",
    "settlement_economy"
   ],
+  "trace_seed": 20260803,
+  "trace_seasons": 12,
+  "measured_calls_caveat": "Call counts measure COMPUTATIONAL DEPTH, not game significance. mass_battle is 98.72% of calls but that is ~60,000 calls for each of 8 recorded battles, against ~7 calls for each of 12 resolved scenes. A tick-level physics sim always dominates a call profile against a dice-pool resolver. Use this to find the port's performance-critical path, never to rank design priority.",
   "note": "`executes` is build state in {live, gated}. A boot-to-termination map of a game where most modules do not run would otherwise read as a picture of intent. The un-run nodes are kept \u2014 for a fork they ARE the work-list."
  },
  "phases": [
@@ -55,6 +58,13 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "faction_state": 6
+   },
+   "measured_by_subsystem": {
+    "settlements": 75
+   },
+   "measured_calls": 81,
    "modules_executing": [],
    "note": "Deterministic from `seed`. Builds factions, territories, clocks. Godot: this is the save/load entry point \u2014 strategy Stage 1 specifies save = initial conditions + Key log."
   },
@@ -69,6 +79,9 @@
     "victory"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [
     "victory"
    ],
@@ -83,6 +96,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "Module-level queue; NOT per-world state."
   },
@@ -95,6 +111,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "DISPATCH_COMBAT_BRIDGE decided ONCE and stashed on `world` (single owner)."
   },
@@ -107,6 +126,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "THE ORCHESTRATOR. TickScheduler + KeyLog. Its PRESENCE is the ECHO_TRANSPORT flag \u2014 absence means the byte-exact legacy path. `world.key_log` is the log."
   },
@@ -121,6 +143,9 @@
     "articulation"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "The only production TickScheduler subscriber wiring."
   },
@@ -133,6 +158,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "Breaks on `world.winner`."
   },
@@ -147,6 +175,13 @@
     "engine_clock"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "faction_state": 60
+   },
+   "measured_by_subsystem": {
+    "engine/autoload": 12
+   },
+   "measured_calls": 72,
    "modules_executing": [],
    "note": "Season counter, arc boundary, per-arc + per-season faction flag resets. The temporal spine `engine_clock` is `doc: null` \u2014 ED-1051, the sole remaining T0 blocker."
   },
@@ -159,6 +194,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "The injection point. mc_v18 passes `_faction_actions_callback`; **Godot passes its own to drive UI scene flow** (season.py's own docstring). This is the seam the port hangs on."
   },
@@ -174,6 +212,18 @@
     "faction_politics"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "faction_state": 63,
+    "territorial_piety": 1
+   },
+   "measured_by_subsystem": {
+    "mass_battle": 481653,
+    "factions": 1215,
+    "engine/autoload": 244,
+    "engine/substrate": 135,
+    "social_contest": 84
+   },
+   "measured_calls": 483395,
    "modules_executing": [],
    "note": "GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort."
   },
@@ -191,6 +241,13 @@
     "threadwork"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "scene_slate": 12
+   },
+   "measured_by_subsystem": {
+    "engine/cross_scale": 72
+   },
+   "measured_calls": 84,
    "modules_executing": [
     "social_contest"
    ],
@@ -207,6 +264,17 @@
     "social_contest"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "faction_state": 7
+   },
+   "measured_by_subsystem": {
+    "engine/autoload": 382,
+    "engine/cross_scale": 251,
+    "social_contest": 192,
+    "factions": 131,
+    "engine/substrate": 81
+   },
+   "measured_calls": 1044,
    "modules_executing": [
     "social_contest"
    ],
@@ -221,6 +289,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "OF-7. Keys emitted during the scene phase were logged LIVE; their `apply` closures execute HERE. Then `next_tick()` resets the per-tick emission counter. This is the orchestration contract: emission is immediate, effect is deferred to a named boundary."
   },
@@ -237,6 +308,17 @@
     "faction_state"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "faction_state": 362,
+    "territorial_piety": 228
+   },
+   "measured_by_subsystem": {
+    "settlements": 1908,
+    "engine/substrate": 180,
+    "world": 108,
+    "overview": 30
+   },
+   "measured_calls": 2816,
    "modules_executing": [],
    "note": "SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An earlier version of this note said 'CI calc + MS decay + NPC' and attributed `settlement_layer`, which run_accounting never calls -- written from the docstring, not the code. In order: (1) apply_seasonal_ci every season [PP-412]; (2) apply_ms_baseline_decay, gated by the CALLER on season % SEASONS_PER_YEAR == 0 [PP-255] -- the callee does not check cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions [NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last."
   },
@@ -251,6 +333,11 @@
     "victory"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {
+    "victory": 384
+   },
+   "measured_by_subsystem": {},
+   "measured_calls": 384,
    "modules_executing": [
     "victory"
    ],
@@ -265,6 +352,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": ""
   },
@@ -279,6 +369,9 @@
     "victory"
    ],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [
     "victory"
    ],
@@ -293,6 +386,9 @@
    "anchor_present": true,
    "modules": [],
    "modules_attribution": "authored-unverified",
+   "measured_by_contract": {},
+   "measured_by_subsystem": {},
+   "measured_calls": 0,
    "modules_executing": [],
    "note": "Carries `key_log_hash` + `keys_emitted` \u2014 the parity surface the Godot port compares against (strategy Stage 2: Key-log equality is the master parity check)."
   }

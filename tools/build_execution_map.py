@@ -194,6 +194,7 @@ def build():
     manifest = _load_yaml('references/wiring_manifest.yaml')
     contracts = _load_yaml('references/module_contracts.yaml')
     keygraph = _load_json('references/key_graph.json')
+    trace = _load_json('references/execution_trace.json')
 
     mods = manifest.get('modules') or {}
     adapters = manifest.get('adapters') or {}
@@ -302,6 +303,15 @@ def build():
             # (existence-checked) and the key + owned-state joins (read from the registries).
             "modules": modules,
             "modules_attribution": "authored-unverified",
+            # MEASURED, from tools/trace_execution_phases.py: which code actually ran in this
+            # phase of one seeded campaign, and how many calls. `by_contract` is exact (a
+            # module_contracts sim_module join, no collisions); `by_subsystem` is by directory
+            # and coarser, and covers the 17 contracts that declare no code file at all.
+            # ABSENCE HERE MEANS "not observed at this seed", NOT "dead". Presence is evidence.
+            "measured_by_contract": (trace.get('by_contract') or {}).get(pid, {}),
+            "measured_by_subsystem": (trace.get('by_subsystem_path') or {}).get(pid, {}),
+            "measured_calls": (sum((trace.get('by_contract') or {}).get(pid, {}).values())
+                               + sum((trace.get('by_subsystem_path') or {}).get(pid, {}).values())),
             "modules_executing": [m for m in modules if module_rows.get(m, {}).get('executes')],
             "note": note,
         })
@@ -331,6 +341,14 @@ def build():
             "doc_paths_missing": sorted(n for n, r in module_rows.items()
                                         if r['doc'] and r['doc_exists'] is False),
             "no_code_declared": sorted(n for n, r in module_rows.items() if not r['code']),
+            "trace_seed": trace.get('seed'),
+            "trace_seasons": trace.get('seasons'),
+            "measured_calls_caveat": (
+                "Call counts measure COMPUTATIONAL DEPTH, not game significance. mass_battle is "
+                "98.72% of calls but that is ~60,000 calls for each of 8 recorded battles, against "
+                "~7 calls for each of 12 resolved scenes. A tick-level physics sim always dominates "
+                "a call profile against a dice-pool resolver. Use this to find the port's "
+                "performance-critical path, never to rank design priority."),
             "note": ("`executes` is build state in {live, gated}. A boot-to-termination map of a "
                      "game where most modules do not run would otherwise read as a picture of "
                      "intent. The un-run nodes are kept — for a fork they ARE the work-list."),
@@ -342,6 +360,7 @@ def build():
 
 
 def render_md(d):
+    total_calls = sum(p.get('measured_calls', 0) for p in d['phases']) or 1
     L = []
     A = L.append
     A("# Valoria — Execution Map (boot → termination)\n")
@@ -365,6 +384,12 @@ def render_md(d):
         warn = "" if p['anchor_present'] else "  ⚠ **ANCHOR MISSING — map is stale**"
         A(f"{pad}- **`{p['id']}`** {p['title']}{tag}{warn}")
         A(f"{pad}  <sub>`{p['source']}` → `{p['anchor']}`</sub>")
+        if p.get('measured_calls'):
+            top = list(p['measured_by_contract'].items()) + list(p['measured_by_subsystem'].items())
+            top.sort(key=lambda kv: -kv[1])
+            share = 100.0 * p['measured_calls'] / max(1, total_calls)
+            A(f"{pad}  <sub>**MEASURED {p['measured_calls']:,} calls ({share:.2f}% of campaign)** — "
+              + ", ".join(f"`{k}` {v:,}" for k, v in top[:5]) + "</sub>")
         if p['note']:
             A(f"{pad}  <sub>{p['note']}</sub>")
 

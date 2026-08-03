@@ -11,6 +11,7 @@ Every node below is annotated `RUNS` or `does not run`. Nodes that do not run ar
 
 - **`boot`** Boot — construct the world
   <sub>`engine/mc_v18.py` → `world = game_state.create_world(seed=seed)`</sub>
+  <sub>**MEASURED 81 calls (0.02% of campaign)** — `settlements` 75, `faction_state` 6</sub>
   <sub>Deterministic from `seed`. Builds factions, territories, clocks. Godot: this is the save/load entry point — strategy Stage 1 specifies save = initial conditions + Key log.</sub>
   - **`boot.victory_reset`** Reset victory state  — modules: `victory`
     <sub>`engine/mc_v18.py` → `victory.reset()`</sub>
@@ -31,27 +32,33 @@ Every node below is annotated `RUNS` or `does not run`. Nodes that do not run ar
   <sub>Breaks on `world.winner`.</sub>
   - **`loop.s1`** Step 1 — advance_season  — modules: `engine_clock` *(does not run)*
     <sub>`systems/overview/sim/season.py` → `sr = advance_season(world)`</sub>
+    <sub>**MEASURED 72 calls (0.01% of campaign)** — `faction_state` 60, `engine/autoload` 12</sub>
     <sub>Season counter, arc boundary, per-arc + per-season faction flag resets. The temporal spine `engine_clock` is `doc: null` — ED-1051, the sole remaining T0 blocker.</sub>
   - **`loop.s2`** Step 2 — action_callback
     <sub>`systems/overview/sim/season.py` → `action_callback(world)`</sub>
     <sub>The injection point. mc_v18 passes `_faction_actions_callback`; **Godot passes its own to drive UI scene flow** (season.py's own docstring). This is the seam the port hangs on.</sub>
     - **`loop.s2.factions`** Faction actions, per parliamentary faction holding territory  — modules: `faction_state` *(does not run)*, `faction_politics` *(does not run)*
       <sub>`engine/mc_v18.py` → `faction_take_action(faction, world, world.rng)`</sub>
+      <sub>**MEASURED 483,395 calls (99.08% of campaign)** — `mass_battle` 481,653, `factions` 1,215, `engine/autoload` 244, `engine/substrate` 135, `social_contest` 84</sub>
       <sub>GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort.</sub>
     - **`loop.s2.scenes`** Scene phase — the personal-scale seam  — modules: `social_contest`, `personal_combat` *(does not run)*, `fieldwork_knots` *(does not run)*, `threadwork` *(does not run)*
       <sub>`engine/cross_scale/scene_dispatch.py` → `def run_scene_phase`</sub>
+      <sub>**MEASURED 84 calls (0.02% of campaign)** — `engine/cross_scale` 72, `scene_slate` 12</sub>
       <sub>MEASURED 2026-08-03: a whole campaign dispatches 29 slots and ALL 29 are `contest`. `queue_triggered_scenes` is the only production caller of `queue_scene`, and `evaluate_triggers` can only emit scene_type=contest. No trigger produces combat.</sub>
     - **`loop.s2.parliament`** Parliamentary vote (flag-gated on the scheduler)  — modules: `social_contest`
       <sub>`engine/mc_v18.py` → `parliamentary_bridge.run_parliamentary_scene(world, world.rng)`</sub>
+      <sub>**MEASURED 1,044 calls (0.21% of campaign)** — `engine/autoload` 382, `engine/cross_scale` 251, `social_contest` 192, `factions` 131, `engine/substrate` 81</sub>
       <sub>Resolves on aggregate state; composes a winner Domain Echo.</sub>
     - **`loop.s2.boundary`** ACTION->ACCOUNTING boundary — deferred applies land
       <sub>`engine/mc_v18.py` → `_sched.accounting_boundary()`</sub>
       <sub>OF-7. Keys emitted during the scene phase were logged LIVE; their `apply` closures execute HERE. Then `next_tick()` resets the per-tick emission counter. This is the orchestration contract: emission is immediate, effect is deferred to a named boundary.</sub>
   - **`loop.s3`** Step 3 — run_accounting  — modules: `territorial_piety` *(does not run)*, `npc_behavior` *(does not run)*, `faction_state` *(does not run)*
     <sub>`systems/overview/sim/season.py` → `run_accounting(world)`</sub>
+    <sub>**MEASURED 2,816 calls (0.58% of campaign)** — `settlements` 1,908, `faction_state` 362, `territorial_piety` 228, `engine/substrate` 180, `world` 108</sub>
     <sub>SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An earlier version of this note said 'CI calc + MS decay + NPC' and attributed `settlement_layer`, which run_accounting never calls -- written from the docstring, not the code. In order: (1) apply_seasonal_ci every season [PP-412]; (2) apply_ms_baseline_decay, gated by the CALLER on season % SEASONS_PER_YEAR == 0 [PP-255] -- the callee does not check cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions [NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last.</sub>
   - **`loop.victory`** Victory check (GD-1)  — modules: `victory`
     <sub>`engine/mc_v18.py` → `results = victory.check_all_factions(world)`</sub>
+    <sub>**MEASURED 384 calls (0.08% of campaign)** — `victory` 384</sub>
     <sub>Sets `world.winner`, which breaks the loop on the NEXT iteration.</sub>
 - **`term`** Termination
   <sub>`engine/mc_v18.py` → `if not world.winner:`</sub>
