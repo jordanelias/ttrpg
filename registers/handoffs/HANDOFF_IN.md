@@ -1225,8 +1225,32 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   - **Two guards, both mutation-verified.** Contract coverage (drop `systems/` from CARRY → 27
     contracted/stub units reported left behind) and the escape scan.
   - **It deliberately does NOT decide the mass-battle tree.** Both are carried; canon lives at
-    `systems/mass_battle/canon/`. Blocked on `degree` — canon returns `{winner,turns,phases}`,
-    the caller needs `{attacker_wins,degree,*_size_pct}`, and `degree` has no canon mapping.
+    `systems/mass_battle/canon/`. Blocked on `degree` — **exact shapes in
+    `audit/2026-08-03-session-oddities.md` §H**, which corrects the summary written here first: the
+    `{winner,turns,phases}` return is the `kind='single'` path, but the caller uses `kind='multi'`,
+    which returns `{winner, battle_turns, log, a_loss_final, b_loss_final}`. Three of the caller's
+    four fields map mechanically; **`degree` does not exist in canon at all** — the live engine
+    synthesises it from a hardcoded ladder with an uncited `0.50`. Porting means *authoring* that
+    rule, which is a design ruling, not an adapter.
+
+- **⚠ READ `audit/2026-08-03-session-oddities.md` BEFORE RESUMING.** Extended 2026-08-03 into the
+  session-independent record of what is actually known: sections A–H and P are **measured** (each
+  carries the command that produced it), **section J is 13 open questions** — each with what would
+  answer it and whether it is blocked on Jordan or on measurement — and K records what was left
+  undone on purpose. Three things there that change how you'd plan:
+  - **§G — the three registries disagree.** `module_contracts` (keys + code pointer),
+    `wiring_manifest` (build state) and a real execution trace do not describe the same 27 modules.
+    Four modules marked `deferred` are **observed executing**, including `faction_state` at 498
+    calls, whose pointer is the boot spine. Only **2 of 27** are `live`. `victory` is one of the
+    two, runs 384 calls, and declares **zero keys in and zero out**.
+  - **§E5 corrects three of my own rows.** E3/E4/B4 cite `FORK_MANIFEST.json`, which
+    `build_fork.py` writes *into its output tree*. The fork was never committed, so those counts
+    have **no artifact in this repo** and fail this record's own standard. **J12 is the 5-minute
+    fix** and is the cheapest open item on the list.
+  - **§J9 is the most promising unexplored thread in the MB lane.** If the rout fires too early
+    (D1, which Jordan ruled a real defect), that alone would explain several of the nine red tests
+    — `conditional_orders`, `dg2_yield_residuals`, `stochastic_rout` all need the battle to last
+    long enough for a trigger to fire. Nobody has checked whether one fix greens all nine (J8).
 
 - **UNRESOLVED, and it decides the fork's mechanics: does `main` keep moving after the fork?**
   `build_fork.py` is a one-way build (`rmtree` first), so re-running it CLOBBERS fork-side commits.
