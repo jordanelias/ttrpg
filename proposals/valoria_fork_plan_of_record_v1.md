@@ -1,640 +1,488 @@
 # Valoria Fork — Plan of Record
 
-## Status: PROPOSED (ED-IN-0123, 2026-08-02). Jordan-vetoable throughout.
-## Class: A — substrate/architecture. **Nothing here ratifies on merge.** §7 holds every decision that
-## needs one, including four already held by registers this plan does not own.
-## Supersedes: the v1 draft of the same day, which failed an independent critic pass (16
-## CONFIRMED-WRONG). §9 records what it got wrong and why, because the failure mode is instructive
-## and recurs. The corrected numbers are carried; the architecture is rebuilt.
+## Status: PROPOSED (ED-IN-0124, 2026-08-03). Jordan-vetoable throughout.
+## Class: A — substrate/architecture. **Nothing here ratifies on merge**, and §10 states the forcing
+## mechanism that keeps that from becoming an indefinite hold (the ED-1094 failure this document was
+## reproducing).
+## Version: v3 — executable rewrite. Supersedes the 2026-08-02 draft (16 CONFIRMED-WRONG on an
+## independent critic pass) and the 2026-08-03 amended draft, which accreted a rolling execution diary
+## and carried nine defects of its own. §12 records both, because the failure mode recurs.
 
 ---
 
-## 0. Reading order for a new session (do this before anything else)
+## 0. What this rewrite changed, and why you should trust it more than its predecessor
 
-This plan is a conclusion. Without its inputs a new session will re-derive them badly — which is
-exactly what its own v1 did, twice, and what §9 is about. **~19k words total; budget one read.**
+Two independent read-only Fable-5 passes ran against the working tree — one adversarial critic
+(steelman → logic → process → 34-row fidelity table), one architectural reasoner. Neither could write.
+Between them they found the previous draft's numbers largely sound and its **structure** unsound. The
+corrections, each verified against files before being applied here:
 
-| # | Read | Words | What you get wrong without it |
+| # | The draft said | The tree says | Where |
 |---|---|---|---|
-| 1 | `CLAUDE.md` §0–§1, §5, §8 | 7.4k | The currency protocol, the measurement discipline, and that every rule lives once |
-| 2 | **`references/wiring_manifest.yaml`** | 1.4k | **The single most important file.** Build state + Godot state + port rank + parity target for all 27 modules and 8 adapters, plus the three foundation gaps. Skipping it is how v1 proposed rebuilding it |
-| 3 | `systems/_architecture/holonic_container_doctrine_v1.md` §1–§2 | 1.3k | That the container shape is CANONICAL and frozen (`Key IN → resolver → OUT`), and that a second interface dialect is a named, forbidden failure mode |
-| 4 | `godot/godot_conversion_strategy_v1.md` Parts V–VIII | 5.7k | Gate-0's five preconditions, the Stage-1 spine, the per-module ritual, and the 8 open Jordan items. **Do not write a port plan without this** |
-| 5 | `audit/2026-07-30-mb-session-retrospective/00_lessons.md` | — | Guardrails G13–G21 and why `main` is CI-red. §3.1b bisects every failure to a named flag |
-| 6 | This document | 2.7k | The Python-side Stage 0 the strategy assumes |
+| 1 | "3 of 27 modules execute" as the headline | Four *more* modules marked `deferred` are **observed executing** — `faction_state` 498 calls, `territorial_piety` 229, `peninsular_strain` 30, `scene_slate` 12 | `audit/2026-08-03-session-oddities.md` G2 |
+| 2 | W4: "0 of 324 `sim_params` records carry provenance" | `citation_coverage` = **cited 84 · uncited 240 · assumption-grade 8** — the field exists and is populated | `engine/engine_params/sim_params.json` |
+| 3 | `WEAPONS` lives in `combatant.py` | It is at **`weapons.py:74`** | verified |
+| 4 | "46 of 56 key types have both a producer and a consumer; 10 dead" | **47 and 9** — `meta.legacy_event` is in both the no-producer and no-consumer sets and was double-counted | `tests/valoria/test_key_graph.py:45,51-56` |
+| 5 | §6.2 "`Faction.L` already reconstructs" | **It does not.** The manifest note and HEAD commit `6f5ada6` both retract this | `wiring_manifest.yaml:112-122` |
+| 6 | ED-MB-0043 "**RESOLVED** 2026-08-03 by Jordan (PR #274)" | The ledger entry is dated **2026-07-26**, `needs_jordan: true`, with the two-trees fork open in `follow_on`. **Zero** register hits for the ruling. `CURRENT.md` still lists it held | `registers/editorial_ledger_mb.jsonl:6` |
+| 7 | I3: "the 14 units with no code" | `no_code_declared` measures **contract-pointer absence**, not code absence. Its members include `mass_battle` (28 + 5 modules of engine) and `faction_politics` | `references/execution_map.json:30-45` |
+| 8 | W0 built a fork-readiness scan from scratch | **`tools/build_fork.py` already exists** (21 KB) — carry/leave as data, runtime-closure classification, and a seeded campaign run with the source repo scrubbed from `sys.path`. The plan never cited it | `tools/build_fork.py` |
+| 9 | "autoload is a leaf" (inherited from CLAUDE.md §3) | `engine/autoload/game_state.py` imports **downward** into `systems.*` at function-local sites (`:257`, `:365`, …); acyclic only by import-time laziness | verified |
 
-**Then orient by execution, not by reading** — every one of these works today:
+**Items 1–7 are corrections to claims. Item 8 is a whole tool the plan duplicated in prose. Item 9 is
+an architecture fact that changes what the Godot autoload becomes.** The pattern is unchanged from §12:
+every one was a true observation carried one inference too far, and every one was cheap to check.
+
+**The structural change.** The previous draft had become a *third* current-state surface, disagreeing
+with `wiring_manifest.yaml` and `HANDOFF_IN.md` about `Faction.L` on the same day. A proposal holds
+**decisions, pointers and holds**. The rolling execution log moves to `registers/handoffs/HANDOFF_IN.md`,
+which already duplicated most of it.
+
+---
+
+## 1. Reading order (~11k words; budget one read)
+
+| # | Read | What you get wrong without it |
+|---|---|---|
+| 1 | `CLAUDE.md` §0, §0.1, §5, §8 | The currency protocol, the five measurement checks, and that every rule lives once |
+| 2 | **`references/wiring_manifest.yaml`** | Build/godot/port_rank/parity for 27 modules + 8 adapters. **Read it with §3's caveat** — it is analysis-derived and wrong about at least four modules |
+| 3 | `systems/_architecture/holonic_container_doctrine_v1.md` §1–§2 | That `Key IN → resolver → OUT` is CANONICAL and frozen, and a second interface dialect is a named forbidden failure |
+| 4 | `godot/godot_conversion_strategy_v1.md` Parts V–VIII | Gate-0's five preconditions, the Stage-1 spine, the per-module ritual. **Do not write a port plan without this** |
+| 5 | `tools/build_fork.py` | That the fork's assembly is already implemented as a tool. Read the code, not a description of it |
+| 6 | This document | The Python-side Stage 0 the strategy assumes |
+
+`audit/2026-07-30-mb-session-retrospective/00_lessons.md` (guardrails G13–G21, and why `main` is
+CI-red) is **required for anyone touching the MB lane** and optional otherwise. The previous draft
+listed it as mandatory while also banning the corpus it lives in; that contradiction is resolved here
+in favour of scoping it.
+
+**Orient by execution.** Every one of these works today:
 
 ```bash
 python3 tools/wiring_map_check.py --check      # 27/27 modules · 8/8 adapters · tags resolve
-python3 tools/wiring_map_check.py --summary    # the build-state ladder — Stage 0's metric
-python3 tools/wiring_map_check.py --work-list   # the ranked port order. THE work-list
-python3 tools/review_core.py --check            # repo-state verdict vs review_baseline.yaml
-python3 tools/export_engine_params.py --check   # combat oracle → JSON round-trip (blocking)
-python3 tools/export_sim_params.py --check      # 324 extracted constants, drift gate
+python3 tools/wiring_map_check.py --work-list  # the ranked port order. THE work-list
+python3 tools/build_fork.py --out /tmp/fork --verify-only   # fork assembly + self-containment
+python3 tools/review_core.py --check           # repo-state verdict vs review_baseline.yaml
+python3 tools/export_engine_params.py --check  # combat oracle → JSON round-trip (blocking)
+python3 tools/export_sim_params.py --check     # 324 constants, drift gate
 ```
 
-**Do NOT read**, and this is load-bearing rather than advice: the 339,462 lines of process/audit
-markdown (80% of the corpus). It audits a prose regime principle 7 supersedes. `engine/params/*.md`
-in particular has **zero readers** in `engine/` or `systems/` — reading it to learn "the values" will
-teach you a layer nothing executes.
+**Do NOT read** the ~339k lines of process/audit markdown. `engine/params/*.md` in particular — 43
+files — has **zero readers** in `engine/` or `systems/` (positive control: the same grep in `tools/`
+returns 20+ files, so the method finds what exists). Reading it to learn "the values" teaches a layer
+nothing executes.
 
-**The one procedure that matters.** Before asserting anything does not exist, run a positive control:
+**The one procedure that matters.** Before asserting something does not exist, run a positive control:
 search for something you *know* exists, by the same method, and confirm the method finds it. Every
-significant error in this plan's history was a false absence derived from a proxy — see §9.
+significant error in this plan's history was a false absence derived from a proxy. Both Fable passes
+caught themselves with it this session — a first `engine/params` count of 14 (top-level glob; the
+recursive glob finds 43) and a first `WEAPONS` grep in the wrong file.
 
 ---
 
-## 0.1 The thesis
+## 2. The thesis, rebuilt on trace facts
 
-**The Godot port already has a detailed, dependency-ordered strategy. The Python side does not.**
+**The Godot port has a detailed, dependency-ordered strategy. The Python side does not.**
 
-`godot/godot_conversion_strategy_v1.md` specifies Gate-0's five blocking preconditions, a spine
-(kernel · KeyStore v2 · seeded RNG service · statechart · generated loaders), a six-step per-module
-port ritual, a ten-item frictions register and an eight-item Jordan register. It is more complete
-than anything this plan could add, and v1's central error was re-deriving it badly.
+Gate-0's precondition G0.5 — *a module ports only from canonical/ratified sources, and halts on any
+value untraceable to a cited source* — presupposes a Python side ready to be ported from. Nobody has
+planned the stage that makes that true. Jordan's principle 5 (*"100% runnable in Python, then port"*)
+names it. **That is Stage 0, and it is this document's only real contribution.** Everything else is
+assembly over primitives that already exist.
 
-But Gate-0 **presupposes a Python side that is ready to be ported from**, and G0.5 states the
-condition explicitly: *a module ports only from canonical/ratified sources… and halts on any value
-untraceable to a cited source.* Measured against `references/wiring_manifest.yaml`:
+The previous draft argued this from the manifest's `build` labels. Those labels are contested (§3), so
+the argument is rebuilt on facts that survive any classification dispute — all four measured, none
+label-dependent:
 
-| | modules | |
+1. **A seeded campaign dispatches 29 scene slots. All 29 are `contest`. Zero combat.** Nothing in the
+   engine can queue a personal combat, so `personal_combat` — port rank 0, the golden path, 75%
+   covered, with a GDScript port — is unreachable from the loop.
+2. **554 typed values are extracted and essentially none reach anything that runs.** Every terminus is
+   a test, a dashboard, or the producer itself. The repo is producer-heavy and consumer-empty.
+3. **The campaign's hottest path by three orders of magnitude runs on a tree that is not canon** —
+   `systems/mass_battle/sim` (5 modules), while the 28-module `tests/sim/mass_battle` is canon.
+4. **14 of 27 modules are `godot: no-oracle`** — there is nothing to port from — and 2 are marked
+   `retire`, so **the live roster is 25, not 27**. This count is a direct field read, not a verdict.
+
+> **Reconciling with the tool.** `wiring_map_check --summary` reports over modules AND adapters
+> together — 35 units: `deferred:11 · design:9 · gated:6 · stub:4 · unwired:3 · live:2`. Modules alone
+> are 27 because modules are the conversion units (one contract = one unit = one parity target).
+> Adapters contribute the other 8. Both are correct; they count different populations.
+
+---
+
+## 3. The manifest is the work-list and it is wrong in known places
+
+This section exists because the previous draft leaned on `wiring_manifest.yaml` for its headline while
+the *same session's* own oddities register contradicted it — and the draft cited that register for a
+different fact two sections later.
+
+- **G2: four modules classified `deferred` are observed executing** (`faction_state` 498 calls,
+  `territorial_piety` 229, `peninsular_strain` 30, `scene_slate` 12). Presence is hard evidence;
+  the manifest is wrong about these four, not the trace.
+- **G7 bounds how far that generalises:** the `by_contract` trace channel can attribute only **5 of 27**
+  modules, because most contracts declare no code file. **Every zero is "not attributable at this
+  seed", never "dead."** G2's positives stand; no negative may be inferred from the same instrument.
+- The manifest is dated `as_of: 2026-07-29` and is analysis-derived. `--check` validates that tags
+  *resolve* and vocabulary is legal — **not that verdicts are true.**
+
+**Consequence for Stage 0's metric.** The `build` states are *not* a monotone ladder. `personal_combat`
+is `unwired` yet real, 75%-covered and gd-ported; several `deferred` modules run and resolve nothing;
+nothing forces `stub` before `gated`; a module can be `live` while resolving nothing. And "every module
+reaches `live` or `gated`, and `--summary` reports it" **is satisfiable by editing the YAML.**
+
+> **Stage 0's exit condition is therefore two-part and the second part is not optional:** a module is
+> promoted only when (a) `--summary` reports it `live`/`gated` **and** (b) **its `parity` target passes**
+> — key-log parity, typed-export round-trip, state read, or data, per the field the manifest already
+> assigns. Part (b) is what makes the metric resistant to G13's null-system failure ("if doing nothing
+> scores well on your metric, the metric cannot validate a change").
+
+**Repair task (unblocked, mechanical):** re-derive the four contested `build` verdicts from the trace
+and correct the manifest, with `tests/valoria/test_execution_map.py` extended to fail when a module
+observed executing is classified `design`/`stub`. That guard is the §0.1-point-5 requirement — one
+owner for the classification, and a check that fails on recurrence.
+
+---
+
+## 4. Code-first: where the authority boundary sits
+
+"Code-first" is not one regime here. Applying one uniformly is why the previous draft proposed
+inverting the combat oracle — which would destroy the design record interleaved with it.
+
+**`config.py` is not a table; it is a table interleaved with its own justification** — retirement
+history, unit-rescale derivations, and `[SIM-CALIBRATE]` grades sit inline with the constants.
+Inverting it either destroys that commentary or forces it into a parallel prose doc that will drift.
+
+| Artifact | Role | Why |
 |---|---|---|
-| **execute today** (`live` + `gated`) | **3 of 27** | mass_battle, victory, social_contest |
-| reached but resolve nothing (`deferred`) | 10 | |
-| real code the loop never calls (`unwired`) | 2 | personal_combat, threadwork |
-| raise `NotImplementedError` (`stub`) | 3 | |
-| specified in a doc, zero code (`design`) | 9 | |
-| **nothing to port from** (`godot: no-oracle`) | **14 of 27** | |
+| `config.py` + `core.py` (combat oracle), all `systems/*/sim`, `engine/` | **SOURCE (code)** | The oracle carries its own design record. ED-1050 already ratifies this direction: oracle-first, the port regenerates |
+| `data/key_types.json`, `data/weapons.json` (post-inversion), `module_contracts.yaml`, `wiring_manifest.yaml` | **SOURCE (data)** | Content and registries, no commentary entanglement |
+| `combat_engine_v1.json`, `sim_params.json`, `key_graph.json`, `EXECUTION_MAP.*`, every `.tres`, every generated Python view | **GENERATED** | Each carries a `_generated` header; the convention already exists in both exporters |
+| Subsystem design `.md`, doctrine, the regenerated param tables | **DOCUMENTATION / conversion input** | Authoritative *only* where no code pair exists (principle 7) |
 
-**Three of twenty-seven modules run.** Jordan's principle 5 — *"100% runnable in Python, then
-port"* — is therefore not a variation on the conversion strategy. It is **the missing Stage 0 that
-the strategy's own Gate-0 assumes and nobody has planned.**
+**Prose is not deleted.** 14 modules are `no-oracle`; for them the prose is the only spec that exists.
+It is demoted from runtime authority, not from the repo.
 
-> **Reconciling with the tool.** `wiring_map_check.py --summary` reports over **modules AND adapters
-> together — 35 units**: `deferred:11 · design:9 · gated:6 · stub:4 · unwired:3 · live:2`, and
-> `python-oracle:17`. The table above is **modules only (27)**, because modules are the conversion
-> units — one module contract = one conversion unit = one parity target (strategy §IV.3). Both are
-> correct; they count different populations. Adapters contribute the other 8: `gated:5 · deferred:1 ·
-> unwired:1 · stub:1`. Combined, **8 of 35 units execute.** Stated because a reader who runs the tool
-> would otherwise think this plan's headline number is wrong.
+### 4.1 The inversion target the plan never named
 
-That is this document's only real contribution. Everything else here is assembly.
+`engine/substrate/keys.py:179` is a **loader/validator over a markdown file**, and its docstring says
+so: *"The registry markdown is the single source of truth (CLAUDE.md §8 'every rule lives once'); this
+class parses it at load time rather than duplicating the 44-type roster in code."* The repo already
+treats one prose file as runtime data — parsed by regex, at load, in Python. Meanwhile
+`godot/skeleton/data/key_types/*.tres` (4 files) is a **hand-made shadow** of the same roster.
 
----
-
-## 1. What already exists (read before building anything)
-
-v1 proposed building four things that exist. They are the fork's foundation, not its backlog.
-
-| Asset | What it already is |
-|---|---|
-| **`references/wiring_manifest.yaml`** | The per-subsystem manifest, as DATA, anchored on stable tags so it survives restructures. 27 modules + 8 adapters, each with `build` / `godot` / `port_rank` / `parity` / note. Validated by `tools/wiring_map_check.py --check`; `--work-list` emits the ranked port order. **This is the work-list. Do not author another.** |
-| **`references/module_contracts.yaml`** | The canonical container contract — uniform **Key IN → resolver → OUT**, schema-2, 27 modules. Per the holonic doctrine (CANONICAL, ratified 2026-07-02) this *is* the wrapper shape; guardrail 2 forbids growing a second dialect. |
-| **`references/key_graph.json`** | The merged key graph (built this session): 56 types, producers/consumers reconciled across the registry and the contracts, zero genuine conflicts, guarded by 12 tests. |
-| **Two live extraction pipelines** | `combat_engine_v1.json` (230 scalars, blocking round-trip gate, green) and `sim_params.json` (324 constants across 13 modules, `--check` clean). **554 typed values already extracted.** |
-
-**The golden path is already named** (`wiring_manifest.yaml:42-45`): `personal_combat` is the only
-unit with Python oracle + typed export + GDScript port. *"The template every other port copies."*
+Godot cannot sanely replicate a markdown parser. This is the clearest inversion in the tree and it is
+first in the sequence: `key_type_registry_v30.md` → `data/key_types.json` (SOURCE) → Python
+`TypeRegistry` loads JSON · `.tres` cooked from JSON · the markdown table regenerated as documentation.
+Semantics do not change; `keys.py`'s existing parser already defines the schema.
 
 ---
 
-## 2. What Jordan's principles actually change
+## 5. The centralized-value layer — mechanism, guard, gate
 
-Six of the eight principles are already the repo's direction. Two change something:
+**Source format: JSON.** Both live pipelines already emit JSON with `schema_version`, sorted keys and
+byte-exact `--check` gates; Godot parses JSON natively with no plugin surface; YAML adds a runtime
+dependency the fork does not have and canonical byte-stable YAML is harder than
+`json.dumps(sort_keys=True)`. **`.tres` is a cooked target, never the authority** — Godot Resources are
+the right runtime representation and the wrong source representation, because the Python sim cannot
+read them without inverting the oracle direction.
 
-**Principle 6 — Monte Carlo is a modelling tool, not the oracle.** This *resolves* conversion-strategy
-Jordan register item #2 ("Python corpus role"), which has been carried unruled from the Workplan-R2
-docket. It should be recorded as closing that item, not restated as new. Structurally it means
-`mc_v18` (337 LOC — seeds, batches, `CampaignResult` analytics) is a **client** of the engine, and
-`workbench/` (2,031 LOC) stays Python permanently.
+**Provenance as a ratchet, not a per-edit gate.** `export_sim_params.py` already promotes a trailing
+comment into a typed `citation` + `citation_grade` and publishes `citation_coverage`. Keep it. CI fails
+only when `uncited` **increases** or an existing citation is deleted. Changing a cited value's number
+is an ordinary commit — the PP/ED it cites is where the change is justified. Only a *new uncited* value
+trips the gate. Current baseline: **cited 84 · uncited 240 · assumption-grade 8 · total 324.**
 
-**Principle 7 — code/tables outrank prose; prose is canon only without a code pair.** Now computable
-and computed: **14 modules code-authoritative, 5 prose-authoritative, 8 with no authority at all.**
-The 8 are the genuinely homeless set, and they are exactly the `godot: no-oracle` blockers.
+### 5.1 The guard — and why the morale template does not transfer
 
-### 2.1 The pipeline finding that reorders the data work
+CLAUDE.md §0.1 point 1 is precisely on point: when a getter starts reading a new source while setters
+still write the old one, **every writer silently becomes a no-op.** The inversion creates exactly that
+hazard. The previous draft's falsifier ("round-trip CI red on a hand-edit of a generated view") guards
+edits of *extracted* values and does nothing about the **new bare constant** added straight to Python
+that never enters the table. That is half a guard.
 
-An end-to-end trace of every pipeline in the repo:
+`tests/valoria/test_morale_write_sweep.py` is named as the template, and its *shape* does not transfer:
+morale's hazard is runtime writers, so it sweeps assignments by regex. Inverted constants have **no
+legitimate runtime writers at all**. Two layers instead:
 
-- `engine/params/*.md` — 43 files, 1,891 table lines — has **zero readers** in `engine/` or
-  `systems/`. It is consumed only by drift-checkers in `tools/`.
-- Two extraction pipelines produce **554 typed values**.
-- **No pipeline delivers a value to anything that runs.** Every terminus is a test, a dashboard, or
-  self-verification. `combat_engine_v1.json` is read by one test, one scan tool, and its own producer.
+1. **Import-time immutability.** The generated view exposes `types.MappingProxyType` (dict tables) or a
+   frozen dataclass (records). A runtime write then raises `TypeError` **loudly** rather than
+   succeeding-and-doing-nothing — the exact inversion of the morale defect. `config.CFG` is a plain
+   mutable dict today. Legitimate runtime variation keeps its one existing owner, the `effective_params`
+   overlay in `mc_v18`, which composes *on top of* the frozen base and never mutates it.
+2. **An AST tripwire against new bare source constants**, reusing `export_sim_params.build()`'s existing
+   module-scope `ast.Assign` walker. For every *governed* file — a per-module allowlist,
+   field-parameterized exactly like `_CELL_OWNED`, so inverting a new module means adding one key — any
+   module-scope numeric literal assignment whose name is not in the generated-view manifest **fails**
+   with *"this value belongs in `data/<module>.json`."*
 
-So "centralize values into tables" is **not a prose-conversion project**. The prose is already
-vestigial; the code holds its constants inline; two tools already extract them. The work is to
-**invert the extractions** (table becomes source, Python constant becomes generated view) and to
-**build the consumer half** — the cook step, which external practice puts at the centre of any
-content pipeline and which this repo has never had.
+What **does** transfer from the morale template, and must be copied verbatim: an `allowed` set with a
+stated reason per exemption, and a **`test_the_guard_itself_can_fail`** positive control that plants a
+synthetic bare constant in a parsed string and asserts the walker flags it. A guard that cannot fail
+advertises a protection that does not exist.
 
-**The repo is producer-heavy and consumer-empty.**
+### 5.2 The gate and its falsifier
 
----
+One command, `tools/cook.py --check`, three checks per inverted table: (i) source → regenerate Python
+view → byte-equal to committed; (ii) regenerate `.tres` → byte-equal to committed; (iii) schema-validate
+source (types, ranges, `schema_version`, citation ratchet).
 
-## 3. Stage 0 — Python-side readiness (the missing stage)
-
-The metric is the manifest's own `build` ladder. A module climbs:
-
-```
-design  →  stub  →  deferred  →  unwired  →  gated  →  live
-(no code)  (raises) (resolves    (real code, (runs on a  (runs every
-                     nothing)     no caller)  condition)   season)
-```
-
-**Stage 0's exit condition:** every module the fork intends to port reaches `live` or `gated`, and
-`wiring_map_check --summary` reports it. That is a measurable, already-instrumented target — not a
-new gate, an existing one used as a goal.
-
-Ordering follows `port_rank`, which the manifest already assigns:
-
-- **rank 0-1** — `personal_combat` (unwired; the golden path, and *the combat branch is dead code in
-  the campaign*), `mass_battle`, `social_contest`, `victory`. **This is where Stage 0 starts.**
-- **rank 2-3** — threadwork, territorial_piety, faction_state, faction_politics, piety_track,
-  settlement_layer, clock_registry + five adapters.
-- **rank 8** — the 14 `no-oracle` modules. **These need canon authored before code**, and per
-  principle 7 their prose is authoritative *only until* code lands. `engine_clock` is the sole
-  remaining T0 blocker (ED-1051) and gates the season/accounting cadence.
-- **rank 9** — `settlement_economy` and `campaign_architecture` are marked `retire`. **The live
-  roster is 25, not 27.**
-
-### 3.0 What Stage 0 should expect, imported from the lanes that already did it
-
-MB and PC have both advanced since `wiring_manifest.yaml`'s `as_of: 2026-07-29`, and their
-experience is directly predictive of Stage 0's climb.
-
-**`gated` → `live` will surface defects, and that is the point.** Guardrail **G20** (ED-MB-0061):
-*"A test asserting a flag defaults OFF protects the ORACLE, not the engine."* Flipping 15 flags ON
-in one commit surfaced **nine engine defects**, and the suite had contained **seven tests asserting
-those flags must default OFF** — institutionalising the blind spot by making the unmeasured state
-the protected state. The manifest's `gated` build state is literally *"runs only under a condition
-(flag / eligibility / trigger)"*, so **every `gated` → `live` promotion in Stage 0 is a small
-replay of that commit.** Expect defects; budget for them; do not read them as regressions.
-
-**And do not let the metric bless a null system.** Guardrail **G13**: *"If doing nothing scores well
-on your metric, the metric cannot validate a change."* An exclusion pass was reported as
-"17.31% → 0.35% overlap" — the 0.35% arm had **deadlocked the engine**; cells were not overlapping
-because they were not moving. Stage 0's metric is the build-state ladder, and a module can climb to
-`live` while resolving nothing. **The ladder must be read alongside its `parity` field**, which the
-manifest already assigns per module (key-log / typed-export round-trip / state read / data).
-
-**PC has been shipping correctness batches, not scaffolding.** `ED-PC-0045..0052` across four PRs
-added roughly **1,000 lines of new combat tests** — cut grading, close unwieldiness, curve recovery,
-element reachability, spike ADEF, thrust arm heft, lever sign safety. `personal_combat` remains
-`build: unwired` (the campaign never routes to it) while its *internal* correctness surface has
-grown substantially. That combination — a well-tested engine the loop never calls — is precisely
-what W3 exists to fix, and it means W3 is a **wiring** task, not a correctness task.
-
-### 3.1 The three foundation gaps, which outrank every module
-
-`wiring_manifest.yaml:93-102` records these and v1 omitted all three:
-
-1. **`godot_spine`** — `BaseEngine` / `EngineModule` / `KeyBus` / `Resolver` / `GameState` are
-   referenced by the skeleton with `class_name` defined **nowhere**. Gate-0. The skeleton is
-   non-compilable, which is why it must be regenerated, not ported.
-2. **`character_layer`** — no `Character`/`Actor` dataclass exists in `World`; 9- vs 10-attribute
-   rival rosters, neither wired. **Every personal-scale port needs this first**, which puts it ahead
-   of `personal_combat` despite that being rank 0.
-3. **`save_replay_premise: violated`** — *the live strategic loop mutates `World` directly
-   (`Faction.L`, `Territory.owner`) with no Key trace, so the Key log cannot reconstruct strategic
-   state.* Save/replay/parity hold only for the echo-keyed slice.
-
-Gap 3 is load-bearing and its consequences run further than the register states. The conversion
-strategy's Stage 1 specifies **`save = serialize-the-log`**, and Stage 2 step 3 makes **Key-log
-equality the master parity check**. Both rest on a premise the repo has already recorded as
-violated. Independent corroboration from this session: a seeded campaign under `coverage` executes
-**38% of statements**, leaves 37 files at 0%, and produces **zero rows for `combat_engine_v1`** —
-which is the same fact the manifest states in words. **Closing gap 3 is the highest-value Python-side
-work there is**, because parity, save/load and replay are one mechanism used three times.
+**Falsifier** (§0.1 point 3): a test that copies the committed generated view, mutates exactly one
+value, and asserts the checker exits 1 — and symmetrically mutates one *source* value and asserts drift
+is reported against the stale view. `export_engine_params.py --check` is the working precedent and is
+missing exactly this: CI being green does not prove the check *can* go red.
 
 ---
 
-## 4. Architecture — what the fork may and may not decide
+## 6. Architecture — what may be built without a ruling
 
-**The container shape is already frozen and is not this plan's to change.** The holonic doctrine
-(CANONICAL) fixes `Key IN → resolver → OUT` and its guardrail 2 forbids any scale growing its own
-interface members. v1 proposed an `orchestrator.resolve()` channel; that is a second dialect, and it
-is withdrawn.
+**The container shape is frozen and is not this plan's to change.** The holonic doctrine fixes
+`Key IN → resolver → OUT`; guardrail 2 forbids a second interface dialect. The v1 draft's
+`orchestrator.resolve()` channel stays withdrawn.
 
-**Downward delivery cannot be designed here.** The doctrine calls the propagation spec *"the
-highest-value unauthored canon in the repo"* and names non-termination (up-event → down-event →
-up-event) as the scariest runtime risk. It is conversion-strategy Jordan item #1 (ED-1006). **Any
-orchestrator that dispatches downward into subsystems is designing that ruling by implication.** So:
+### 6.1 The dependency direction, corrected
 
-> **The fork does not build a downward-dispatching orchestrator until ED-1006 is ruled.** Until then
-> the interim rule (strategy §IV.2) applies and every downward edge is flagged.
+The claim "subsystems depend upward on `engine/`; autoload is a leaf" is three-quarters true.
+`engine/substrate` is a pure leaf. But **`engine/autoload/game_state.py` imports downward into
+`systems.*`** at function-local sites (`:257`, `:365`, …) and its dataclass fields are annotated with
+subsystem state types (`CoherenceState`, `TreatyRecord`, `InsurgencyRecord`, …). It is acyclic only
+because the imports are lazy.
 
-What the fork *may* do without a ruling:
+The real architecture is four layers — **substrate → autoload services → subsystems → orchestrator**
+(`cross_scale` + `mc_v18`) — with the orchestrator legitimately on top. That survives the fork *except*
+`game_state`: `World` knowing every subsystem's state type is exactly the coupling that, ported
+naively, makes the Godot `GameState` autoload preload every subsystem Resource. **Reversible fix, no
+ruling required:** invert to registration — each subsystem registers its state slice with `World` at
+boot. That also serves save/load. Falsifier: the seeded `key_log_hash` is byte-identical across the
+refactor.
 
-- **Keep the upward direction**, which is established: subsystems emit Keys; `KeyLog` validates and
-  logs; `apply` closures land at the accounting boundary. That mechanism works and has two live
-  emitters.
-- **Close gap 3** by routing the strategic loop's direct `World` mutations through Key emission with
-  paired `apply` — which is not new architecture, it is the *existing* `echo_transport` pattern
-  extended to the writes that currently bypass it.
-- **Own sequencing in the log.** `KeyLog` already maintains `_season_counters`; the per-emitter
-  counters on `world` (`_echo_key_seq`, `_battle_key_seq`) are collision-free by naming accident.
-  Compose on the existing counter rather than adding a second keying.
+### 6.2 What is genuinely gated is narrower than the doctrine's text
 
-### 4.1 The edges relation — a generator fix, not a new file
+The doctrine (2026-07-02) calls the propagation spec "the highest-value unauthored canon." **It is no
+longer wholly unauthored:** `engine/substrate/keys.py:16-32` cites `propagation_spec_v1.md` with
+*ratified* termination guards — cascade-depth cap + emissions-per-tick cap (Theorem B), B1
+no-synchronous-re-entry, and OF-7 deferred-apply at the accounting boundary, all RATIFIED 2026-07-07
+under ED-IN-0026.
 
-`key_graph.json`'s `producers[]`/`consumers[]` arrays assert a full cross-product: **164 implied
-edges from 56 types**, 11 types with both >1 producer and >1 consumer, `scene.dialogue` alone
-asserting 3×4 = 12 edges nobody authored.
+So the gate is **downward *Key* delivery only (ED-1006)**. Downward *function-call* orchestration
+already exists canonically — `mc_v18` → systems, and the `action_callback` port seam. The plan must not
+widen ED-1006 into a general prohibition on top-down control flow; that would block work no ruling
+covers.
 
-v1 proposed hand-authoring an `edges` relation. **That file's header says NEVER hand-edit**, and the
-arrays are already a generated view — every row carries `registry_producers` / `contract_producers` /
-`producer_status` precisely to reconcile the two authored sources. The two-representation problem is
-**upstream**, in the registry-markdown / contracts-YAML pair. So: emit `edges` from
-`build_key_graph.py` as a *third derived view* keyed `(type, producer, consumer)`, and fix
-provenance in the generator's inputs. No new hand-maintained surface.
+**Buildable now, no ruling:** the upward Key spine over `Faction.adjust`'s call sites; the `World`
+state-registration inversion; a `Character` dataclass whose attributes are a **dict keyed by
+`descriptor_registry.yaml`** (the 9-vs-10 roster is canon; the dataclass is reversible if the roster is
+data rather than fields); the mass-battle canon adapter.
 
----
+### 6.3 The two mass-battle trees
 
-## 5. What the fork carries
+`tests/sim/mass_battle/` (28 modules) has **zero** imports of `engine`/`systems` — fully self-contained
+— so re-homing is import-clean, and `build_fork.py` already re-homes it as `systems/mass_battle/canon/`
+while carrying the live 5-module tree beside it. That is the structural resolution's first half.
 
-**CARRIES** — `engine/` (substrate · autoload · cross_scale) · all `systems/*/sim` ·
-`combat_engine_v1` (7,849 LOC incl. workbench) · `engine/tests` · the four assets of §1 ·
-`export_engine_params.py` + `export_sim_params.py` (the two working pipelines) ·
-`wiring_map_check.py` · the 7 canon files · the 280-file design corpus **as conversion input**.
+Second half: an adapter in `faction_action`'s shape, mapping canon's `{winner, turns, phases}` to the
+caller's `{attacker_wins, degree, *_size_pct}`. **`degree` is the blocker** — canon has no four-band
+degree and it drives the territorial outcome. Build the adapter **now**, with `degree_map` as a
+**required argument with no default**. That is this repo's own established pattern for unruled canon:
+`keys.py:27-30` makes the OF-CAP termination caps required constructor args precisely so *"no fabricated
+constant enters the repo."* Engineering proceeds; the canon slot stays loudly empty.
 
-> **CORRECTION 2026-08-03 (ED-MB-0043 resolved).** `tests/sim/mass_battle/` is **CANON** and must be
-> CARRIED, despite living under `tests/`. The live campaign runs the *other*, staler tree
-> (`systems/mass_battle/sim`, 5 modules vs 28). Carrying `systems/*/sim` wholesale and leaving
-> `tests/` wholesale would take the stale engine and abandon the developed one. Directory is not
-> authority here — the canon mass battle is misfiled, and the fork is the moment to re-home it.
-
-**LEAVES** (source repo, frozen provenance) — `registers/` · `audit/` · `arcs/` · `workplans/` ·
-`dashboard/` · the observability apparatus. Cite back by `repo@SHA + PP/ED`.
-
-**UNRESOLVED, and it must be resolved before W0** — **`tests/sim/mass_battle`: 28 modules, 11,269
-LOC, last advanced 2026-07-31.** The manifest calls it *"a RICHER unwired engine… (mislabeled a
-frozen archive) — reconcile before porting"*; `CURRENT.md` holds the two-disjoint-code-trees fork for
-Jordan under ED-MB-0043. A fork that copies `systems/mass_battle/sim` and leaves this behind may be
-abandoning the better engine. **§7 item 5.**
-
-**Self-containment is not yet true.** Measured: zero import escapes from `engine/`/`systems/`, but
-**path-literal escapes exist** — `engine/tests/` reaches `skills/` (leaving), `audit/` (leaving),
-`registers/`, and a retired `designs/` path whose load sits inside a bare `except`, so a parity class
-**silently skips today**. W0's falsifier must scan path literals, not imports; v1's did not, and the
-lesson was recorded in v1's own §9 before being violated in its §6.
+Migration falsifiers: (i) the canon tree's byte-exact goldens stay green across the re-home (a pure path
+move on a self-contained tree); (ii) with the swap flag OFF, seeded `key_log_hash` and `keys_emitted`
+are byte-identical to pre-migration; (iii) with it ON under a candidate map, an A/B seeded-campaign
+distribution **report** — not a gate — until Jordan rules.
 
 ---
 
-## 5.5 The spine — `references/EXECUTION_MAP.md` (2026-08-03)
+## 7. The sequence
 
-**The plan's waves were a list. They now hang off a spine.** `tools/build_execution_map.py` emits
-the boot → season-loop → termination order joined against `module_contracts` (Key IN → resolver →
-OUT, owned state), `wiring_manifest` (build / godot / rank / parity) and `key_graph`
-(producers / consumers). Read it before the wave table below; the waves are *positions on it*.
+**First move: run `tools/build_fork.py` to completion and make its checks the fork's CI job zero.**
 
-```
-boot ─ create_world(seed)          deterministic; the save/load entry point
-     ├ victory.reset · scene_slate.clear
-     ├ flags            DISPATCH_COMBAT_BRIDGE decided ONCE, stashed on world
-     ├ substrate        TickScheduler + KeyLog  ← THE ORCHESTRATOR. Presence = ECHO_TRANSPORT
-     └ subscribe        articulation → the only production subscriber wiring
-loop ─ while not winner, max_s times
-     ├ s1  advance_season          engine_clock is doc:null — ED-1051, the T0 blocker
-     ├ s2  action_callback         ← THE PORT SEAM. Godot passes its own to drive UI scene flow
-     │   ├ faction actions         per parliamentary faction holding territory
-     │   ├ scene phase             MEASURED: 29 slots/campaign, ALL contest. No combat trigger
-     │   ├ parliamentary vote      flag-gated on the scheduler
-     │   └ ACTION→ACCOUNTING       deferred `apply` closures land HERE (OF-7), then next_tick()
-     ├ s3  run_accounting          SIX steps: CI · MS(year-end, caller-gated) · insurgency
-     │                             emergence · promotion(over a snapshot) · NPE · drift probe
-     └ victory check (GD-1)        sets winner; the loop breaks on the NEXT iteration
-term ─ fallback winner by territory count → CampaignResult{key_log_hash, keys_emitted}
-                                            ← the Godot parity surface (strategy Stage 2)
-```
+The tool exists, encodes carry/leave as data, classifies every file by runtime-closure relation, and
+proves self-containment by running a seeded campaign with the source repo scrubbed from `sys.path`. It
+is defended against the two obvious alternatives: *close `Faction.L` first* loses, because any pre-fork
+measurement must be re-verified against the assembled tree anyway — doing it inside the fork binds its
+falsifier to the tree that ships; *invert the params first* loses, because the inversion's round-trip
+gates need a CI home and the fork's CI is that home. It is also the cheapest move, and it converts "the
+fork is self-contained" from a claim into a test result — which is the whole lesson of §12.
 
-**What the map measures, and what it does not.** Verified: the source anchors (re-checked against
-the files by `tests/valoria/test_execution_map.py`), `executes` (derived from the manifest and
-re-derived independently in test), the code/doc paths (21 declared, all resolve; **14 units have no
-code yet**), and the key + owned-state joins. **Not** verified, and labelled
-`modules_attribution: "authored-unverified"`: the per-phase module lists. Two derivations were
-built and both discarded — per-file transitive imports gave every `mc_v18`-sourced phase the same
-seven units; per-function local imports gave almost nothing, because this codebase splits
-cross-subsystem calls between module-level and function-local imports while phase boundaries do not
-align with function boundaries. **The correct instrument is dynamic** — trace a seeded campaign and
-record which module code runs between phase markers. That is W-A below.
-
-### 5.6 E1 executed — attribution is now measured, and the first conclusion was wrong
-
-`tools/trace_execution_phases.py` wraps the seven phase-boundary functions (each verified to
-resolve before use), profiles a seeded campaign with `sys.setprofile`, and attributes every call to
-a phase. Two attribution channels, kept separate so a guess is never read as a join: `by_contract`
-(exact, via `module_contracts.sim_module`, **no collisions**) and `by_subsystem_path` (coarser, by
-directory, covering the **17 of 27 contracts that declare no code file at all** — `mass_battle`'s is
-literally `null`, which is why the campaign's hottest path lands there).
-
-**It contradicted most of my authored per-phase lists**, which is what it was built to test:
-
-| phase | authored | measured |
-|---|---|---|
-| `loop.s2.scenes` | social_contest, personal_combat, fieldwork_knots, threadwork | **none of the four** — 12 `scene_slate` + 72 `engine/cross_scale` |
-| `loop.s3` | territorial_piety, settlement_layer, npc_behavior | faction_state 362, territorial_piety 228, settlements 1,908 — **`npc_behavior` never ran** |
-| `loop.s2.factions` | faction_state, faction_politics | faction_state 63 — **`faction_politics` never ran** |
-
-**AND THEN THE STEELMAN CORRECTED ME.** The measurement's headline was *mass_battle = 98.72% of all
-calls*, and I was one step from letting that reorder the fork's priorities. Normalised by game
-EVENT it says the opposite:
-
-| | calls | events | calls/event |
+| # | Work | Exit condition (falsifier) | Gated? |
 |---|---|---|---|
-| mass battle | 481,653 | 8 battles recorded | **~60,000** |
-| scene phase | 84 | 12 scenes resolved | **~7** |
+| **1** | Fork assembly + CI job zero. Carry the 9 attributed MB failures as `xfail(strict, reason="ED-MB-0061")` | `build_fork.py --verify-only` green: escape scan clean, contract coverage reported, seeded campaign runs standalone. Aggregate CI green with zero non-xfail reds | no |
+| **2** | Invert `key_type_registry_v30.md` → `data/key_types.json`; `TypeRegistry` and the `.tres` both load it | `cook.py --check` byte-exact both ways; the mutate-one-value test exits 1 (§5.2); the 4 hand-made `.tres` are regenerated and byte-compared | no |
+| **3** | Export `WEAPONS` (`weapons.py:74`) to typed JSON; regenerate the GDScript weapon resource from it | 53 weapons exported; the generated `.gd` schema contains no `reach`/`weight`/`spd`/`handling` | **confirmation only** |
+| **4** | Route `Faction.adjust`'s keyless call sites through Key emission; `World` state-registration inversion | `test_faction_l_reconstruction`'s strict xfail turns XPASS; `key_log_hash` byte-identical across the `World` refactor | no |
+| **5** | MB canon adapter, `degree_map` required-no-default; `Character` dataclass with roster-as-data | Canon goldens green post-re-home; flag-OFF `key_log_hash` byte-identical | no (contents are C2/C4) |
+| **6** | `sim_params` inversion, **per module**, ratchet-gated | `uncited` never increases; the AST tripwire fails on a planted bare constant (§5.1) | per-value collisions only |
+| **7** | Repair the four contested `build` verdicts; extend `test_execution_map.py` to fail on observed-executing-but-classified-dead | The extended test fails against today's manifest, passes after correction | no |
+| **8** | Canon queue, prepared with reversible stubs | §9 | **yes** |
 
-A tick-level physics simulation always dominates a call profile against a dice-pool resolver. That
-is a fact about **resolution granularity**, not about what matters. So the number is kept — it
-identifies the port's performance-critical path, which is genuinely what Godot needs — and the
-interpretation is fixed in both tools' docstrings and in `reality_check.measured_calls_caveat`.
-**It does not reorder anything.** `personal_combat` stays rank 0.
+**Item 3 is not a design ruling.** The previous draft queued the weapon cook behind Jordan. Exporting
+the oracle and regenerating the port from it *is* ED-1050 compliance — the rule is "never let a port
+correct its oracle in-place", and this is the compliant direction. It needs confirmation that the
+retired-field removal is wanted, not a design decision. What the draft got right and must stay right:
+**cooking `.tres` in the current schema would fabricate `reach` and `weight` for 53 weapons into a model
+the oracle retired** — `config.py:7` records reach as derived from geometry, `0 of 53` weapons carry the
+categorical fields, and yet `strike_module.gd:110` still computes on `w.reach == "long"` and
+`combat_config.gd:84` still branches on `weapon.weight == "heavy"`. Oracle first, then cook.
 
-The residual fork finding is real and separate: the campaign's most expensive path by three orders
-of magnitude runs on the mass-battle tree that is **not canon** (§5, ED-MB-0043).
+### 7.1 Getting `main` green belongs at step 1, by attribution, not by fixing
 
-**Three numbers from the map that should drive sequencing:**
+The counter-position — *a red baseline with a fully bisected, attributed failure set carries more signal
+than the plan credits* — is **correct about the failures and wrong about the channel.** The bisect
+(ED-MB-0061: every failure restored by returning one named flag to OFF) is real signal and must be
+preserved. But a red **aggregate** has zero marginal signal: a new regression is indistinguishable from
+background.
 
-| | |
-|---|---|
-| units that execute | **8 of 35** |
-| key types with both a producer and a consumer | **46 of 56** (2 have no producer, 8 no consumer) |
-| owned scalars with two claimants | **1** — `CI (Church Influence)`: `ci_political` + `territorial_piety` |
+`xfail(strict)` is the synthesis. Green aggregate restores marginal signal; `strict` means the moment a
+ruling or a fix changes behaviour, XPASS fires and the record surfaces. This is explicitly **not**
+re-pinning goldens to current behaviour, which the MB retrospective forbids in terms: *"re-basing before
+fixing F1–F8 would bake nine defects into the definition of correct."*
 
----
+The underlying question is canon and is filed as **C7**: the failing tests are TRUE POSITIVES about a
+real state — 60/60 battles ended in one turn, 42/60 with the winner taking zero losses. *Is a one-turn
+rout with an untouched winner correct?* Only Jordan can answer that.
 
-## 6. Sequencing
+### 7.2 Track independence — the previous draft's claim was false in two places
 
-| | Content | Exit condition (falsifier) | Jordan |
-|---|---|---|---|
-| **W0** | Repoint the path-literal escapes; un-skip the silently-skipping parity class | A path-literal scan (not an import scan) shows zero escapes; the previously-skipping parity test runs and passes or fails honestly | no |
-| **W1** | ~~Close `save_replay_premise`~~ **DONE 2026-08-03 to `partial`** — the premise was less broken than recorded; one untraced ownership write (`parliamentary_transfer`) now emits `da.public_governance`. Residue: `mass_seizure` unexercised by the measured seed; `Faction.L` evidence thin (clamp saturation) | Reconstruction is **8/8** on `Territory.owner` at horizons 3/6/12/24, falsifier `tests/valoria/test_public_governance_transfer_key.py`. NOT flipped past `partial` — see §6.2 | no — it restored a stated premise |
-| **W2** | Author the `character_layer`: one `Character`/`Actor` dataclass in `World`; resolve the 9-vs-10 attribute roster | Personal-scale modules can hold state; roster is single-valued | **yes** — OPT-AV-1 |
-| **W3** | Stage 0 rank 0-1: `personal_combat` → `live` (the combat branch is dead code today), then `mass_battle`, `social_contest`, `victory` | `wiring_map_check --summary` shows those four at `live`/`gated`; each has key-log parity per its `parity` field | no |
-| **W4** | Invert the two extraction pipelines: table becomes source, Python constant becomes generated view; add the `citation` column (**0 of 324 `sim_params` records carry provenance**) | Round-trip CI red on a hand-edit of a generated view; every value traces to a `PP`/`ED` | per-value collisions: **yes** |
-| **W5** | ~~Build the cook step: JSON → `.tres`~~ **BLOCKED, measured 2026-08-03 — see §6.3.** There is no weapon JSON to cook from, and the `.tres` schema encodes a model the oracle retired | Unblocking needs (a) a typed weapon export and (b) the GDScript weapon resource re-derived from the current oracle | **yes** — (b) is a port change under ED-1050 discipline |
-| **W6** | Stage 0 rank 2-3; then the 14 `no-oracle` modules, `engine_clock` first (ED-1051, the sole T0 blocker) | `authority: none` count reaches 0 or DEFERRED-with-citation | **yes** — canon authorship |
-| **W7** | Godot Gate-0 (G0.1–G0.5) and the strategy's Stage 1 spine | The strategy's own gates. **No Godot claim is verifiable until `project.godot` and a Godot binary run in CI — neither exists** | **yes** — ratify the strategy first |
+It claimed "nothing in E depends on C except by position." Two counterexamples, both confirmed:
 
-W0–W1 are the whole near-term critical path. They need no ruling and they make everything after them
-measurable.
+- **The 8 consumer-less key types.** `tests/valoria/test_key_graph.py:58-62` states that mapping
+  unresolved consumers *"is a design decision, and guessing one is exactly the fabrication this repo's
+  no-fabrication rule forbids."* Choosing a consumer **is canon**, and delivering a key downward into
+  one touches ED-1006. Only the *defer* half is unblocked.
+- **The contested `CI` scalar.** Both claimants — `ci_political` and `territorial_piety` — hold
+  **CANONICAL** docs. Single-ownering it adjudicates between two canonical docs: a canon decision
+  wearing engine clothes. It moves to §9.
 
-### 6.1 W0 as executed (2026-08-03) — including one item measurement struck
-
-**Escapes: 10, not four.** The scan found ten distinct `(file, literal)` escapes out of
-`engine/`+`systems/`, and the composition mattered more than the count: exactly **one was
-runtime** — `engine/autoload/registry.py`, whose `load_index()` read
-`registers/mechanics_index.yaml` from inside the engine's own autoload hub. Copy `engine/`
-into a fresh repo and that file is broken on arrival. It had **zero callers** and the repo's
-own structure audit had already classified it `VERIFIED_ORPHAN_NO_CALLSITE`, so it was
-deleted rather than re-homed. Down to **6**, all test/workbench, none runtime.
-
-**The parity class was two silent-skip channels, not one.** The known one was the bare
-`except` on a retired `designs/audit/` path (184 cases dark for 15 days). The second was
-structurally identical and unrecorded: every combat-surface comparison sat behind
-`if not _numpy_available: pytest.skip(...)`, so a numpy-less environment tested nothing and
-said so only as a skip. Both are gone. The fix is the same inversion §2.1 prescribes for
-params — `tools/gen_sigma_parity_goldens.py` runs in the source repo where the oracles live
-and emits a 1,758-row table; the test reads the table; `engine/` reaches nowhere.
-**761 → 1,926 executing assertions, zero skips, no numpy dependency.**
-
-**`combat_engine_v1` packaging: STRUCK.** The row required making it a package "so it is
-importable and measurable", with `coverage` rows as the falsifier. Both halves are false.
-Measured 2026-08-03: `import core, combat_systems, combatant, config` off `sys.path`
-succeeds today, and `coverage run --source=systems/combat/combat_engine_v1` over two of its
-own test modules reports **17 files at 75%** — `combat_systems.py` 98%, `core.py` 99%,
-`wrapper.py` 93%, with only `capabilities.py` and `state_graph.py` at 0%.
-
-The plan inferred an importability defect from §3.1's true observation that a *seeded
-campaign* under coverage yields zero rows for `combat_engine_v1`. That is a **wiring** fact —
-`personal_combat` is `build: unwired`, so the campaign never reaches combat — and it is
-already W3's subject. Attributing it to packaging would have bought a 20-module import
-rewrite of a working scripts-on-path tree, changing nothing the falsifier measures. CLAUDE.md
-§3 records the non-package shape as deliberate (the `import systems` collision it resolved).
-**The zero-rows observation belongs to W3 and is deleted from W0.**
-
-### 6.3 W5 is blocked, and the two reasons are independent (measured 2026-08-03)
-
-W5 reads "cook the typed JSON into `.tres` for the golden path", with the falsifier "a generated
-`.tres` for all 51 canonical weapons (2 exist, hand-made)". Both halves of the pipeline are absent.
-
-**1. There is no weapon data in the typed export.** `engine/engine_params/combat_engine_v1.json`
-declares `source: config.py + core.py` and contains exactly two sections — `cfg` (204 constants) and
-`core` (26). Zero weapons. The roster lives in `combatant.py` as `WEAPONS`, **53 entries** (not 51),
-carrying rich per-part geometry: `elements[]`, `guards[]`, `haft`, `pommel`, `geo`, `_derived`. The
-exclusion is deliberate, not an oversight — the export was scoped to the Class-C tuning constants.
-
-**2. The `.tres` schema encodes a model the oracle retired.** Of its 15 fields:
-
-| | |
-|---|---|
-| map directly to `WEAPONS` | 11 (incl. `reach_adj`, present on 27/53 — optional, not absent) |
-| computed | 1 — `pob_frac` = `_derived['PoB_frac']` |
-| **retired in Python, still LIVE in GDScript** | 2 — `reach`, `weight` |
-| dead in both | 2 — `spd`, `handling` (zero reads in any `.gd`) |
-
-`config.py:7` records *"Phase-3b: reach DERIVED from geometry (retires categorical reach=='long' +
-HEAD_REACH + the reach_adj triple-duty)"*, and `combat_systems.wield_heft` is *"DERIVED, g-aware …
-replaces the binary wt class"*. **0 of 53 weapons carry `reach`, `wt`, `weight`, `spd` or
-`handling`.** Yet `strike_module.gd:110` still computes `4.0 + 2.0 * float(w.reach == "long") + …`
-and `combat_config.gd:84` still branches on `weapon.weight == "heavy"`.
-
-So generating 53 `.tres` in the current schema would require **inventing** `reach` and `weight` for
-every weapon — fabricating values, and fabricating them into a superseded model. That is the ED-1050
-defect ("never let a port correct its oracle in-place") reproduced 53 times instead of once. The
-correct order is oracle-first: export the weapon roster, re-derive the GDScript resource from it,
-then cook. Step two is a port change and therefore §7's, not this plan's.
-
-**Note the shape.** This is the fourth wave whose stated premise did not survive measurement (W0
-packaging, W3 wiring, W4 provenance, now W5). Every one was written from a true observation with one
-inference too far, and every one was cheap to check and expensive to have acted on.
-
-### 6.2 W1 as executed (2026-08-03) — the premise was mismeasured, not just unmet
-
-The manifest's note said the strategic loop mutates `Faction.L` and `Territory.owner` **with no Key
-trace**. Building the falsifier *before* the fix — replay the log onto a t0 snapshot, compare —
-showed that to be too pessimistic in a way that mattered for scoping: `Faction.L` already
-reconstructs from `Target.stat_deltas`, territorial conquest already reconstructs from
-`scene.battle_concluded`, and **7 of 8** ownership changes rebuilt. W1 was one site, not a sweep.
-
-**Finding the site required abandoning the grep.** An AST scan for attribute assignments reported
-3 non-test `Territory.owner` writes and **zero** non-test `Faction.L` writes — a false absence, and
-a confident one. `Faction.adjust()` writes via `setattr(self, stat, val)`, so the single owner that
-**31 call sites** route through is invisible to that scan. Instrumenting `Territory.__setattr__`
-across a seeded campaign attributed every write in one pass: `faction_action` 8,
-`parliamentary_transfer` 1, `mass_seizure` 0.
-
-**Three confounds in my own instrument, all of which flattered the result**, recorded because the
-next reconstruction claim will meet them again:
-1. `Faction.L` scored 4/4 rebuilt — but 3 of 4 factions sat **exactly on a clamp** (0.5 floor / 7.0
-   ceiling), and a clamped rebuild agrees with a clamped actual whether or not the deltas are
-   right. Only 1 comparison was ever informative. **Any L claim must report the off-boundary count.**
-2. The first territory pass *counted* keys carrying transfer evidence without *applying* them, so
-   "11/16 unreconstructable" measured my replay, not the log.
-3. The season sweep varied nothing: `run_campaign(max_seasons=N)` is shadowed by
-   `effective_params['CAMPAIGN_SEASONS']`, so four horizons ran identically. A control that
-   controls nothing reads exactly like a control that does.
-
-**Why it stops at `partial`.** `mass_seizure.py:292` is the third owner-write site and did not fire
-on the measured seed — untested, not proven clean. And the replay rule (*`da.public_governance` +
-`outcome: success` + `target_territory_id` ⇒ that territory is now `faction_id`'s*) is an
-**interpretation the key-type registry does not declare**. It is sound for all three live emitters
-today, but a dedicated `da.territorial_transfer` type would state it rather than imply it. **That is
-a canon addition and therefore §7's, not this plan's** — the emitter deliberately uses only fields
-already in the registered entry so that nothing here mints canon by implication.
+**And one unmeasured premise remains, flagged rather than acted on.** Step 4 assumes routing
+`Faction.adjust`'s sites through emission is behaviour-preserving plumbing. It may not be: Key emission
+means deferred `apply` closures landing at the accounting boundary (OF-7), while the current writes are
+immediate and mid-phase. Converting immediate writes to boundary-applied closures changes *when* state
+is visible within a season, which changes trajectories, which churns goldens. **Settling measurement,
+and it is required before the sweep:** route ONE site, diff the seeded winner and key composition. This
+is the same one-site-first discipline that corrected the previous W1, applied to the work that
+succeeded it.
 
 ---
 
-### 6.4 Re-sequenced against the spine (2026-08-03) — three tracks, not one list
+## 8. Falsifier census — the honest accounting
 
-The original W0–W7 was a single ordered list. Measurement has since struck one item (W0 packaging),
-blocked two on canon (W3, W5) and shown one premise mismeasured (W1). What remains does not
-serialise, because **the blocked items are blocked on YOU, not on each other** — so it is three
-tracks that run in parallel, each anchored to a phase of the spine.
+CLAUDE.md §0.1 point 3 requires every result claim to ship the test that would have shown it wrong. The
+previous draft carried ~13 exit conditions of which **2 were genuine falsifiers, and both were in waves
+already executed** — the unexecuted future carried the unfalsifiable ones. Backwards.
 
-**Track E — ENGINE (unblocked, mine).** Everything here is measurable against the spine today.
-
-| | position on the spine | work | exit condition |
-|---|---|---|---|
-| **E1** | all phases | **Dynamic phase attribution.** Trace a seeded campaign, record which module code executes between phase markers. Replaces `authored-unverified` with measurement | every phase's module list is derived; the two failed static attempts are recorded in `build_execution_map.py` so this is not re-tried statically |
-| **E2** | `loop.s2` → `s3` | **`Faction.L` reconstruction.** 30 of `Faction.adjust()`'s 31 call sites emit no Key. Route stat mutation through emission | `test_faction_l_reconstruction`'s strict xfail turns XPASS |
-| **E3** | `boot.substrate`, `loop.s2.boundary` | **The 10 dead key types** — 2 with no producer, 8 with no consumer | each is wired, or DEFERRED with a citation |
-| **E4** | `loop.s3` | **The one contested scalar** — `CI (Church Influence)` claimed by `ci_political` and `territorial_piety`. Single-owner it | `execution_map.json`'s contested count reaches 0 |
-| **E5** | — | **The 240 uncited constants** (84/324 cited, 8 assumption-grade). Per-value canon lookups; paced, not bulk-run | `citation_coverage.uncited` falls, with every value traced |
-
-**I1 ATTEMPTED 2026-08-03, and it is canon-blocked at the same gate.** I took I1 ("get `main`
-green") and traced one failure to the bottom rather than assuming the bisect table.
-
-`test_conditional_orders::test_own_strength_fires_when_attrited` asserts an `own_strength:0.9`
-order fires after attrition. **It fails because the subunit never takes a single casualty** —
-ratio 1.0000 across 40 battle turns. The order logic is correct; the trigger's condition is never
-met. Characterised across 60 identical 1200v1200 Line battles:
-
-| | |
-|---|---|
-| ended in **1 turn** | **60 / 60** |
-| winner took **zero** losses | **42 / 60** (median 0.0000) |
-| loser's losses | median **45.3%** |
-
-**Two corrections to the bisect's causal story, both from measurement.** The retrospective
-attributes this test to `PC_FRICTION_CEV`, and toggling that flag does flip *this seed*. But across
-40 seeds the flag produces no one-sided advantage at all — A zeroed 20, B zeroed 19. The toggle
-works by shifting the RNG stream, not by removing a bias. And `b_pool: 0` in the turn log is **not**
-a unit unable to fight: `orchestration.py` reads `a_pool = 0 if a_dead else …` where
-`a_dead = routed or broken`, so it is the *result* of routing. I nearly reported that backwards.
-
-So the failing tests are TRUE POSITIVES about a real state — battles resolve as instant one-sided
-routs under the ruled flags-ON configuration — and fixing them means answering **is a one-turn rout
-with an untouched winner correct?** That is canon. The retrospective's own Phase 0 orders it
-exactly this way (*bisect → fix F1–F8 → Jordan rules the golden mode matrix → re-base*) and warns
-that **"re-basing before fixing F1–F8 would bake nine defects into the definition of correct."** So
-re-pinning the thresholds to current behaviour is specifically forbidden, and it is the only way to
-make these green without a ruling. **I1 moves to Track C as C7.**
-
-One thing I1 *did* produce, because it is a demonstrable error rather than a judgement: `config.py`
-shipped `PC_CELL_MORALE` default `'1'` under a trailing comment reading *"RETRACTED to OFF
-2026-07-25"*. Git settles it — `584c683a` set `'0'` and the comment was true; `94bb9022` (PR #271,
-2026-07-29) flipped it to `'1'` under the flags-ON directive and left the comment. Meanwhile
-`test_stochastic_rout`'s docstring, corrected the *same day*, asserts `default '0'`. Comment
-corrected; byte-exact digest verified unchanged (`ccdf7d09…` before and after).
-
-**Track C — CANON (blocked on Jordan).** Each is a *decision*, not a task; none can be inferred
-without designing your ruling by implication.
-
-| | position | the question |
+| Class | Previous draft | This plan |
 |---|---|---|
-| **C1** | `loop.s2.scenes` | **What triggers a personal combat?** Nothing queues a combat scene — `evaluate_triggers` can only emit `contest`. This is why `personal_combat` (rank 0, the golden path, 75% covered) never runs |
-| **C2** | `loop.s2.factions` | **The mass-battle rewire.** Canon is `tests/sim/mass_battle` (28 modules); the campaign calls the 5-module tree. Canon returns `{winner, turns, phases}`; the caller needs `{attacker_wins, degree, *_size_pct}`. **`degree` is the blocker** — canon has no four-band degree, and it drives the territorial outcome. Needs the mapping ruled, plus a faction→unit roster |
-| **C3** | `loop.s1` | **`engine_clock`** — `doc: null` temporal spine, ED-1051, the sole T0 blocker |
-| **C4** | all personal-scale | **The attribute roster** — OPT-AV-1; blocks `character_layer` |
-| **C5** | `loop.s2.boundary` | **ED-1006 downward delivery** — blocks any downward-dispatching orchestrator |
-| **C6** | — | **`da.territorial_transfer`** — or ratify that `da.public_governance` + `target_territory_id` means an ownership change. Today that rule is an interpretation the registry does not declare |
+| Named test that can fail | 2 | 8 of 8 rows in §7 |
+| Instrumented but defective | 3 | 0 |
+| Restatement / escape-hatched | 5 | 0 |
 
-**Track I — INFRASTRUCTURE (unblocked, and I would do I1 first of everything).**
+The three patterns removed, and what replaced them:
 
-| | work | why it outranks engine work |
-|---|---|---|
-| **I1** | **Get `main` green.** 9 MB-lane failures, each bisected to a named flag under ED-MB-0061 | While `main` is red, CI carries **no signal** — a real regression and the background are indistinguishable. Every PR's aggregate is red; this session burned four wake-ups re-confirming the same nine |
-| **I2** | **Make required checks specific, not aggregate.** `All Gates Green` counts *cancelled* jobs as failures, so it trips on any push that supersedes a running build | It generates notifications that generate work, with no defect behind them |
-| **I3** | **The 14 units with no code** — the map's `no_code_declared` set. Each is a canon-authoring job (Track C) or a retire | It is the fork's real backlog, and it is now a generated list rather than a judgement |
+- **"…or DEFERRED with a citation"** — any failure converts into a deferral, so nothing can fail.
+  Replaced: deferral is now a *recorded decision with a named owner*, not an exit condition.
+- **"uncited falls"** — a direction, not a target. Replaced by a **ratchet** (`uncited` may not
+  increase), which a test can fail on a single commit.
+- **"`--summary` shows those modules `live`"** — satisfiable by editing YAML. Replaced by the two-part
+  condition in §3: classification **and** the module's own `parity` target passing.
 
-**Ordering rule.** I1 → then Track E in parallel with whatever of Track C you rule. Nothing in E
-depends on C except by position; nothing in C depends on E at all.
-
----
-
-## 7. Held for Jordan
-
-1. **ED-1006 — downward Key delivery.** Blocks any downward-dispatching orchestrator. Named the
-   highest-value unauthored canon; non-termination is the runtime risk.
-2. **OPT-AV-1 — the attribute roster.** Blocks `character_layer`, and through it every personal-scale
-   module.
-3. **ED-1051 — `engine_clock`.** `doc: null` temporal spine; the sole remaining T0 blocker.
-4. **ED-FA-0002 — `domain_actions` home.**
-5. ~~**ED-MB-0043 — the two-disjoint-mass-battle-trees fork.**~~ **RESOLVED 2026-08-03 by Jordan: the canon tree is `tests/sim/mass_battle/`** (commit/PR #274). Measured consequence, and it corrects §5: the LIVE campaign imports `systems.mass_battle.sim.massbattle` (faction_action.py:431), the 5-module 2,375-LOC tree with zero `PC_*` flags. Canon is the 28-module 11,269-LOC tree under `tests/`, which the campaign never calls. **The carry list said carry `systems/*/sim` and leave `tests/` — that would have carried the stale engine and left canon behind.** Every MB result (Track F, the bisects, geometry S1–S4, the 9 red tests) is measured on the tree the game does not execute.
-6. **Fork point — CORRECTED, and it needs less from you than v1 claimed.** I reported the MB
-   Track-F set as *non-deterministic* because CI showed 9 then 10 failures across commits that
-   touched only markdown. **That was wrong, and the MB lane had already documented why.**
-   `ED-MB-0061` (corrected 2026-07-31) states the count convention outright: *"Failure counts quoted
-   as 16 and 9 are LOCAL runs. CI reports 17 and 10. The constant +1 is
-   `test_mass_battle_byte_exact::test_byte_exact_cell_mode`, which SKIPS locally on a documented
-   pre-existing non-portability and RUNS on CI."* And §3.1b, **"ALL FAILURES BISECTED (2026-07-30)"**,
-   restores each failure by returning one named flag to OFF — `PC_FRICTION_CEV`,
-   `PC_FRACTIONAL_POOL`, `PC_CELL_MORALE`, `PC_FACING_MODEL`, `PC_CLOSE_RANKS`, with exactly one
-   (`per_cell_break_subsumes_the_body_level_one`) a genuine multi-flag interaction.
-   So the red is **accounted, bisected, and attributed** — not a mystery and not flakiness. The fork
-   carries the set as `xfail` citing ED-MB-0061, and the only thing needed from Jordan is
-   confirmation that the flags-ON ruling stands.
-7. **The conversion strategy's own eight open items** — carried by reference, not restated. Principle
-   6 appears to close item #2; that should be recorded there.
+One defect inherited and fixed: the previous E4 named *"`execution_map.json`'s contested count"* as its
+falsifier. **No `contested` field exists in that JSON** — the count is computed into the generated
+Markdown by `build_execution_map.py`. A falsifier pointing at a field that does not exist is not a
+falsifier.
 
 ---
 
-## 8. Where this plan is most likely wrong
+## 9. Held for Jordan — decisions only
 
-1. **Stage 0 may be larger than the fork.** Getting 25 modules to `live` is most of building the
-   game. If so, the fork should carry a *subset* — the rank 0-3 spine — and leave the rest.
-   *Settling measurement:* size W3 against the four rank 0-1 modules, then extrapolate from actuals.
-2. **Closing `save_replay_premise` may be architecture, not plumbing.** If the strategic loop's
-   writes cannot be expressed as Key `apply` closures without redesigning `World`, W1 is a much
-   bigger wave. *Settling measurement:* attempt one — `Territory.owner` in `faction_action`, where a
-   Key already fires alongside the write.
-3. **The 5 prose-authoritative modules may encode intent the code never implemented.** *Settling
-   measurement:* per-module, diff prose-declared `emits`/`consumes` against code — the same join
-   that found the 55-declared / 2-emitted gap.
-4. **`wiring_manifest.yaml` is dated `as_of: 2026-07-29` and is analysis-derived.** This plan leans
-   on it heavily. PARTLY SETTLED: `wiring_map_check --check` passes (27/27 · 8/8 · all tags resolve)
-   and the commit log since that date was reviewed — MB landed ED-MB-0045..0061 and PC landed
-   ED-PC-0041..0052, neither of which moves a `build` verdict (PC's work is internal correctness;
-   `personal_combat` is still `unwired`). *Remaining measurement:* spot-check three `build` verdicts
-   against execution before committing to the ladder — `--check` validates that tags RESOLVE, not
-   that the verdicts are still true.
+The previous list ran to seven-plus items, three of which were reversible engineering calls in canon
+clothing. **An over-long held list is itself a failure mode: it converts reversible decisions into
+blocking ones.** Removed from the list and built instead, each with an explicit empty slot: the
+`Character` dataclass (roster-as-data), the weapon export (ED-1050-compliant direction), and the CI
+infrastructure fixes.
 
-5. **Stage 0's metric can be gamed by a null system** — G13's failure mode, imported at §3.0. A
-   module can reach `live` while resolving nothing, which is what `deferred` already means. The
-   ladder is only safe read together with each module's `parity` field. *Settling measurement:* for
-   the first module promoted, assert its parity target passes, not merely that it executes.
+| # | Decision | Blocks | Prepared how |
+|---|---|---|---|
+| **C1** | **What triggers a personal combat?** Nothing queues a combat scene; `evaluate_triggers` emits only `contest`. This is why rank-0 `personal_combat` never runs | The golden path, and with it the port template | Trigger hook exists and is unreachable; wiring is one call once the condition is ruled |
+| **C2** | **The mass-battle `degree` mapping.** Canon has no four-band degree; it drives the territorial outcome | The canon-tree swap | Adapter built, `degree_map` a required arg with no default (§6.3) |
+| **C3** | **`engine_clock`** — `doc: null` temporal spine, ED-1051, the sole remaining T0 blocker | The season/accounting cadence | — |
+| **C4** | **The attribute roster** — 9 vs 10 (OPT-AV-1) | The roster's *contents* only | `Character` built with attributes as a `descriptor_registry`-keyed dict |
+| **C5** | **ED-1006 — downward Key delivery** | Any downward-*Key*-dispatching orchestrator. **Not** downward function calls (§6.2) | Upward spine built; every downward edge flagged per strategy §IV.2 |
+| **C6** | **`da.territorial_transfer`**, or ratify that `da.public_governance` + `target_territory_id` means an ownership change. Today that rule is an interpretation the registry does not declare | Replay correctness beyond the three live emitters | Emitter uses only registered fields, so nothing mints canon by implication |
+| **C7** | **Is a one-turn rout with an untouched winner correct?** (§7.1) | The 9 red MB tests; the golden-mode matrix | Carried as `xfail(strict)`, citing ED-MB-0061 |
+| **C8** | **The contested `CI` scalar** — `ci_political` vs `territorial_piety`, both CANONICAL docs | Single-writer discipline for the one contested scalar in the tree | Both writers instrumented; neither removed |
+
+**The forcing mechanism (this is the ED-1094 repair).** "Nothing ratifies on merge" without a
+forcing step is how ED-1083's doctrine sat PROPOSED in `main` indefinitely — the exact failure ED-1094
+was written to close. So: **each C-item above is filed as its own ED entry with `needs_jordan: true`,
+and appears on the SessionStart banner's Jordan docket until ruled.** A held item that is not on a
+register is not held; it is forgotten. See §10.
 
 ---
 
-## 9. Why v1 failed, recorded because the failure recurs
+## 10. Governance repairs this rewrite requires
 
-v1's measurements were sound — every graph number recomputed exactly by an independent reader. Its
-architecture and scoping were not, and both defects had the same shape:
+Two defects where the previous draft became the *only* record of something the registers should hold.
+Both are listed as required work, not silently fixed here, because one of them is a claim about a
+ruling I cannot verify.
 
-- It proposed building a per-subsystem manifest **that already existed** in `wiring_manifest.yaml`,
-  along with the headline finding, the character-layer gap, and the violated save/replay premise.
-- It reported **"14 homeless modules"** by reading `subsystem: null`. Six of those rows name a `doc:`
-  in the adjacent field, and `mass_battle`'s row states outright that its `sim_module` is empty by
-  **lane-ownership discipline, not absence**. The real number is 8. A decision — wrapper granularity
-  — rested on a figure inflated 1.75× by not looking one field over.
+1. **The ED-MB-0043 canon-tree ruling is unregistered.** The draft stated it *RESOLVED 2026-08-03 by
+   Jordan (PR #274), canon is `tests/sim/mass_battle/`*. The ledger entry is dated **2026-07-26**,
+   `status: resolved` for the *vector audit*, with the two-trees fork open in its `follow_on` and
+   `needs_jordan: true`. There are **zero** register hits for the ruling, and `CURRENT.md` still lists
+   the fork as held. A session following the repo's own priority order (CURRENT.md ≻ a PROPOSED
+   proposal) will correctly conclude the fork is still open. **Required: either file the MB-ledger
+   entry naming the PR and flip `CURRENT.md`, or the claim reverts to "held."** This document now says
+   *reported ruled, UNREGISTERED* — §6.3 is written so that it holds either way.
+2. **ED-IN-0123's ledger entry asserts two claims this document retracts** — "four PATH-LITERAL
+   escapes" (it was ten) and "the MB Track-F failure set is NON-DETERMINISTIC" (it is not; the constant
+   +1 is a documented local-vs-CI skip). Append-only is correct, but with no follow-up entry an auditor
+   reading by ED gets the retracted claims as current. **ED-IN-0124 files those corrections.**
 
-Both are **false absence derived from a proxy**. v1's own §9 warned against exactly that, by name.
-Writing the warning did not prevent committing the error twice inside the document containing it.
+---
 
-The operative rule, stated as a procedure rather than a principle because the principle demonstrably
-does not transfer: **before asserting that something does not exist, run a positive control — search
-for something you know exists, by the same method — and only then report the absence.** A rule that
-is stated but not executed is a rule that will be broken by the person who stated it.
+## 11. Where this plan is most likely wrong
+
+1. **Stage 0 may be larger than the fork.** Getting 25 modules to `live` is most of building the game.
+   *Settling measurement:* size step 4 against the rank 0-1 modules, then extrapolate from actuals —
+   and extrapolate from **corrected** denominators (§3), not the manifest's.
+2. **Step 4 may be architecture, not plumbing** (§7.2). *Settling measurement:* the one-site trial,
+   before the sweep.
+3. **The 5 prose-authoritative modules may encode intent the code never implemented.**
+   *Settling measurement:* per module, diff prose-declared `emits`/`consumes` against code.
+4. **`build_fork.py`'s carry/leave list may be stale**, since it predates the ED-MB-0043 question. It is
+   now load-bearing as step 1. *Settling measurement:* `--verify-only` on a clean checkout, and read its
+   carry list against §6.3 before trusting it.
+5. **The inversion may be slower than hand-transcription for the first two tables**, which is the honest
+   case against §5. *Settling measurement:* time `key_types` end-to-end; if the cook step costs more
+   than the drift it prevents on one table, stop at one and re-argue.
+
+---
+
+## 12. Why the previous drafts failed — recorded because it recurs
+
+Two drafts, one failure mode, now instanced **nine more times** by an independent pass (§0).
+
+- **v1 (2026-08-02)** proposed building a per-subsystem manifest **that already existed**, along with
+  the headline finding, the character-layer gap and the violated save/replay premise. It reported "14
+  homeless modules" by reading `subsystem: null` — six of those rows name a `doc:` **one field over**.
+  The real number was 8; a decision rested on a figure inflated 1.75×.
+- **v2 (2026-08-03)** fixed those, then wrote a prose plan around a fork-assembly tool it never
+  discovered (`build_fork.py`), mislabelled `no_code_declared` as "no code" for units holding two whole
+  engines, and reported a `citation` field as absent while the JSON published `cited: 84`.
+
+**Every instance is a false absence derived from a proxy** — reading a field name instead of the field,
+a label instead of the trace, a summary instead of the tool. v1's own §9 warned against exactly that,
+by name, and the document containing the warning committed the error twice; v2 inherited the warning
+and committed it four more times.
+
+The operative rule, stated as a procedure because the principle demonstrably does not transfer:
+
+> **Before asserting that something does not exist, run a positive control — search for something you
+> know exists, by the same method — and only then report the absence.**
+
+A rule that is stated but not executed is a rule that will be broken by the person who stated it. The
+structural answer, and the reason §7 leads with running a tool rather than reading a manifest: **prefer
+an instrument over an assertion at every step where one exists.** Every error above was cheap to check
+and expensive to have acted on.
