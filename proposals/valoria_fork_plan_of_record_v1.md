@@ -282,6 +282,54 @@ lesson was recorded in v1's own §9 before being violated in its §6.
 
 ---
 
+## 5.5 The spine — `references/EXECUTION_MAP.md` (2026-08-03)
+
+**The plan's waves were a list. They now hang off a spine.** `tools/build_execution_map.py` emits
+the boot → season-loop → termination order joined against `module_contracts` (Key IN → resolver →
+OUT, owned state), `wiring_manifest` (build / godot / rank / parity) and `key_graph`
+(producers / consumers). Read it before the wave table below; the waves are *positions on it*.
+
+```
+boot ─ create_world(seed)          deterministic; the save/load entry point
+     ├ victory.reset · scene_slate.clear
+     ├ flags            DISPATCH_COMBAT_BRIDGE decided ONCE, stashed on world
+     ├ substrate        TickScheduler + KeyLog  ← THE ORCHESTRATOR. Presence = ECHO_TRANSPORT
+     └ subscribe        articulation → the only production subscriber wiring
+loop ─ while not winner, max_s times
+     ├ s1  advance_season          engine_clock is doc:null — ED-1051, the T0 blocker
+     ├ s2  action_callback         ← THE PORT SEAM. Godot passes its own to drive UI scene flow
+     │   ├ faction actions         per parliamentary faction holding territory
+     │   ├ scene phase             MEASURED: 29 slots/campaign, ALL contest. No combat trigger
+     │   ├ parliamentary vote      flag-gated on the scheduler
+     │   └ ACTION→ACCOUNTING       deferred `apply` closures land HERE (OF-7), then next_tick()
+     ├ s3  run_accounting          SIX steps: CI · MS(year-end, caller-gated) · insurgency
+     │                             emergence · promotion(over a snapshot) · NPE · drift probe
+     └ victory check (GD-1)        sets winner; the loop breaks on the NEXT iteration
+term ─ fallback winner by territory count → CampaignResult{key_log_hash, keys_emitted}
+                                            ← the Godot parity surface (strategy Stage 2)
+```
+
+**What the map measures, and what it does not.** Verified: the source anchors (re-checked against
+the files by `tests/valoria/test_execution_map.py`), `executes` (derived from the manifest and
+re-derived independently in test), the code/doc paths (21 declared, all resolve; **14 units have no
+code yet**), and the key + owned-state joins. **Not** verified, and labelled
+`modules_attribution: "authored-unverified"`: the per-phase module lists. Two derivations were
+built and both discarded — per-file transitive imports gave every `mc_v18`-sourced phase the same
+seven units; per-function local imports gave almost nothing, because this codebase splits
+cross-subsystem calls between module-level and function-local imports while phase boundaries do not
+align with function boundaries. **The correct instrument is dynamic** — trace a seeded campaign and
+record which module code runs between phase markers. That is W-A below.
+
+**Three numbers from the map that should drive sequencing:**
+
+| | |
+|---|---|
+| units that execute | **8 of 35** |
+| key types with both a producer and a consumer | **46 of 56** (2 have no producer, 8 no consumer) |
+| owned scalars with two claimants | **1** — `CI (Church Influence)`: `ci_political` + `territorial_piety` |
+
+---
+
 ## 6. Sequencing
 
 | | Content | Exit condition (falsifier) | Jordan |
@@ -401,6 +449,48 @@ on the measured seed — untested, not proven clean. And the replay rule (*`da.p
 today, but a dedicated `da.territorial_transfer` type would state it rather than imply it. **That is
 a canon addition and therefore §7's, not this plan's** — the emitter deliberately uses only fields
 already in the registered entry so that nothing here mints canon by implication.
+
+---
+
+### 6.4 Re-sequenced against the spine (2026-08-03) — three tracks, not one list
+
+The original W0–W7 was a single ordered list. Measurement has since struck one item (W0 packaging),
+blocked two on canon (W3, W5) and shown one premise mismeasured (W1). What remains does not
+serialise, because **the blocked items are blocked on YOU, not on each other** — so it is three
+tracks that run in parallel, each anchored to a phase of the spine.
+
+**Track E — ENGINE (unblocked, mine).** Everything here is measurable against the spine today.
+
+| | position on the spine | work | exit condition |
+|---|---|---|---|
+| **E1** | all phases | **Dynamic phase attribution.** Trace a seeded campaign, record which module code executes between phase markers. Replaces `authored-unverified` with measurement | every phase's module list is derived; the two failed static attempts are recorded in `build_execution_map.py` so this is not re-tried statically |
+| **E2** | `loop.s2` → `s3` | **`Faction.L` reconstruction.** 30 of `Faction.adjust()`'s 31 call sites emit no Key. Route stat mutation through emission | `test_faction_l_reconstruction`'s strict xfail turns XPASS |
+| **E3** | `boot.substrate`, `loop.s2.boundary` | **The 10 dead key types** — 2 with no producer, 8 with no consumer | each is wired, or DEFERRED with a citation |
+| **E4** | `loop.s3` | **The one contested scalar** — `CI (Church Influence)` claimed by `ci_political` and `territorial_piety`. Single-owner it | `execution_map.json`'s contested count reaches 0 |
+| **E5** | — | **The 240 uncited constants** (84/324 cited, 8 assumption-grade). Per-value canon lookups; paced, not bulk-run | `citation_coverage.uncited` falls, with every value traced |
+
+**Track C — CANON (blocked on Jordan).** Each is a *decision*, not a task; none can be inferred
+without designing your ruling by implication.
+
+| | position | the question |
+|---|---|---|
+| **C1** | `loop.s2.scenes` | **What triggers a personal combat?** Nothing queues a combat scene — `evaluate_triggers` can only emit `contest`. This is why `personal_combat` (rank 0, the golden path, 75% covered) never runs |
+| **C2** | `loop.s2.factions` | **The mass-battle rewire.** Canon is `tests/sim/mass_battle` (28 modules); the campaign calls the 5-module tree. Canon returns `{winner, turns, phases}`; the caller needs `{attacker_wins, degree, *_size_pct}`. **`degree` is the blocker** — canon has no four-band degree, and it drives the territorial outcome. Needs the mapping ruled, plus a faction→unit roster |
+| **C3** | `loop.s1` | **`engine_clock`** — `doc: null` temporal spine, ED-1051, the sole T0 blocker |
+| **C4** | all personal-scale | **The attribute roster** — OPT-AV-1; blocks `character_layer` |
+| **C5** | `loop.s2.boundary` | **ED-1006 downward delivery** — blocks any downward-dispatching orchestrator |
+| **C6** | — | **`da.territorial_transfer`** — or ratify that `da.public_governance` + `target_territory_id` means an ownership change. Today that rule is an interpretation the registry does not declare |
+
+**Track I — INFRASTRUCTURE (unblocked, and I would do I1 first of everything).**
+
+| | work | why it outranks engine work |
+|---|---|---|
+| **I1** | **Get `main` green.** 9 MB-lane failures, each bisected to a named flag under ED-MB-0061 | While `main` is red, CI carries **no signal** — a real regression and the background are indistinguishable. Every PR's aggregate is red; this session burned four wake-ups re-confirming the same nine |
+| **I2** | **Make required checks specific, not aggregate.** `All Gates Green` counts *cancelled* jobs as failures, so it trips on any push that supersedes a running build | It generates notifications that generate work, with no defect behind them |
+| **I3** | **The 14 units with no code** — the map's `no_code_declared` set. Each is a canon-authoring job (Track C) or a retire | It is the fork's real backlog, and it is now a generated list rather than a judgement |
+
+**Ordering rule.** I1 → then Track E in parallel with whatever of Track C you rule. Nothing in E
+depends on C except by position; nothing in C depends on E at all.
 
 ---
 
