@@ -9,7 +9,43 @@
 
 ---
 
-## 0. The thesis
+## 0. Reading order for a new session (do this before anything else)
+
+This plan is a conclusion. Without its inputs a new session will re-derive them badly — which is
+exactly what its own v1 did, twice, and what §9 is about. **~19k words total; budget one read.**
+
+| # | Read | Words | What you get wrong without it |
+|---|---|---|---|
+| 1 | `CLAUDE.md` §0–§1, §5, §8 | 7.4k | The currency protocol, the measurement discipline, and that every rule lives once |
+| 2 | **`references/wiring_manifest.yaml`** | 1.4k | **The single most important file.** Build state + Godot state + port rank + parity target for all 27 modules and 8 adapters, plus the three foundation gaps. Skipping it is how v1 proposed rebuilding it |
+| 3 | `systems/_architecture/holonic_container_doctrine_v1.md` §1–§2 | 1.3k | That the container shape is CANONICAL and frozen (`Key IN → resolver → OUT`), and that a second interface dialect is a named, forbidden failure mode |
+| 4 | `godot/godot_conversion_strategy_v1.md` Parts V–VIII | 5.7k | Gate-0's five preconditions, the Stage-1 spine, the per-module ritual, and the 8 open Jordan items. **Do not write a port plan without this** |
+| 5 | `audit/2026-07-30-mb-session-retrospective/00_lessons.md` | — | Guardrails G13–G21 and why `main` is CI-red. §3.1b bisects every failure to a named flag |
+| 6 | This document | 2.7k | The Python-side Stage 0 the strategy assumes |
+
+**Then orient by execution, not by reading** — every one of these works today:
+
+```bash
+python3 tools/wiring_map_check.py --check      # 27/27 modules · 8/8 adapters · tags resolve
+python3 tools/wiring_map_check.py --summary    # the build-state ladder — Stage 0's metric
+python3 tools/wiring_map_check.py --work-list   # the ranked port order. THE work-list
+python3 tools/review_core.py --check            # repo-state verdict vs review_baseline.yaml
+python3 tools/export_engine_params.py --check   # combat oracle → JSON round-trip (blocking)
+python3 tools/export_sim_params.py --check      # 324 extracted constants, drift gate
+```
+
+**Do NOT read**, and this is load-bearing rather than advice: the 339,462 lines of process/audit
+markdown (80% of the corpus). It audits a prose regime principle 7 supersedes. `engine/params/*.md`
+in particular has **zero readers** in `engine/` or `systems/` — reading it to learn "the values" will
+teach you a layer nothing executes.
+
+**The one procedure that matters.** Before asserting anything does not exist, run a positive control:
+search for something you *know* exists, by the same method, and confirm the method finds it. Every
+significant error in this plan's history was a false absence derived from a proxy — see §9.
+
+---
+
+## 0.1 The thesis
 
 **The Godot port already has a detailed, dependency-ordered strategy. The Python side does not.**
 
@@ -122,6 +158,33 @@ Ordering follows `port_rank`, which the manifest already assigns:
   remaining T0 blocker (ED-1051) and gates the season/accounting cadence.
 - **rank 9** — `settlement_economy` and `campaign_architecture` are marked `retire`. **The live
   roster is 25, not 27.**
+
+### 3.0 What Stage 0 should expect, imported from the lanes that already did it
+
+MB and PC have both advanced since `wiring_manifest.yaml`'s `as_of: 2026-07-29`, and their
+experience is directly predictive of Stage 0's climb.
+
+**`gated` → `live` will surface defects, and that is the point.** Guardrail **G20** (ED-MB-0061):
+*"A test asserting a flag defaults OFF protects the ORACLE, not the engine."* Flipping 15 flags ON
+in one commit surfaced **nine engine defects**, and the suite had contained **seven tests asserting
+those flags must default OFF** — institutionalising the blind spot by making the unmeasured state
+the protected state. The manifest's `gated` build state is literally *"runs only under a condition
+(flag / eligibility / trigger)"*, so **every `gated` → `live` promotion in Stage 0 is a small
+replay of that commit.** Expect defects; budget for them; do not read them as regressions.
+
+**And do not let the metric bless a null system.** Guardrail **G13**: *"If doing nothing scores well
+on your metric, the metric cannot validate a change."* An exclusion pass was reported as
+"17.31% → 0.35% overlap" — the 0.35% arm had **deadlocked the engine**; cells were not overlapping
+because they were not moving. Stage 0's metric is the build-state ladder, and a module can climb to
+`live` while resolving nothing. **The ladder must be read alongside its `parity` field**, which the
+manifest already assigns per module (key-log / typed-export round-trip / state read / data).
+
+**PC has been shipping correctness batches, not scaffolding.** `ED-PC-0045..0052` across four PRs
+added roughly **1,000 lines of new combat tests** — cut grading, close unwieldiness, curve recovery,
+element reachability, spike ADEF, thrust arm heft, lever sign safety. `personal_combat` remains
+`build: unwired` (the campaign never routes to it) while its *internal* correctness surface has
+grown substantially. That combination — a well-tested engine the loop never calls — is precisely
+what W3 exists to fix, and it means W3 is a **wiring** task, not a correctness task.
 
 ### 3.1 The three foundation gaps, which outrank every module
 
@@ -240,9 +303,19 @@ measurable.
 3. **ED-1051 — `engine_clock`.** `doc: null` temporal spine; the sole remaining T0 blocker.
 4. **ED-FA-0002 — `domain_actions` home.**
 5. **ED-MB-0043 — the two-disjoint-mass-battle-trees fork.** Must resolve before W0 copies one.
-6. **Fork point.** The MB Track-F set is **non-deterministic**: two markdown-only commits produced
-   9 and 10 failures respectively on identical code. **There may be no green ancestor to fork from**,
-   so the honest option is to carry them as `xfail` with an ED citation.
+6. **Fork point — CORRECTED, and it needs less from you than v1 claimed.** I reported the MB
+   Track-F set as *non-deterministic* because CI showed 9 then 10 failures across commits that
+   touched only markdown. **That was wrong, and the MB lane had already documented why.**
+   `ED-MB-0061` (corrected 2026-07-31) states the count convention outright: *"Failure counts quoted
+   as 16 and 9 are LOCAL runs. CI reports 17 and 10. The constant +1 is
+   `test_mass_battle_byte_exact::test_byte_exact_cell_mode`, which SKIPS locally on a documented
+   pre-existing non-portability and RUNS on CI."* And §3.1b, **"ALL FAILURES BISECTED (2026-07-30)"**,
+   restores each failure by returning one named flag to OFF — `PC_FRICTION_CEV`,
+   `PC_FRACTIONAL_POOL`, `PC_CELL_MORALE`, `PC_FACING_MODEL`, `PC_CLOSE_RANKS`, with exactly one
+   (`per_cell_break_subsumes_the_body_level_one`) a genuine multi-flag interaction.
+   So the red is **accounted, bisected, and attributed** — not a mystery and not flakiness. The fork
+   carries the set as `xfail` citing ED-MB-0061, and the only thing needed from Jordan is
+   confirmation that the flags-ON ruling stands.
 7. **The conversion strategy's own eight open items** — carried by reference, not restated. Principle
    6 appears to close item #2; that should be recorded there.
 
@@ -261,8 +334,17 @@ measurable.
    measurement:* per-module, diff prose-declared `emits`/`consumes` against code — the same join
    that found the 55-declared / 2-emitted gap.
 4. **`wiring_manifest.yaml` is dated `as_of: 2026-07-29` and is analysis-derived.** This plan leans
-   on it heavily. *Settling measurement:* re-run `wiring_map_check --summary` and spot-check three
-   `build` verdicts against execution before committing to the ladder.
+   on it heavily. PARTLY SETTLED: `wiring_map_check --check` passes (27/27 · 8/8 · all tags resolve)
+   and the commit log since that date was reviewed — MB landed ED-MB-0045..0061 and PC landed
+   ED-PC-0041..0052, neither of which moves a `build` verdict (PC's work is internal correctness;
+   `personal_combat` is still `unwired`). *Remaining measurement:* spot-check three `build` verdicts
+   against execution before committing to the ladder — `--check` validates that tags RESOLVE, not
+   that the verdicts are still true.
+
+5. **Stage 0's metric can be gamed by a null system** — G13's failure mode, imported at §3.0. A
+   module can reach `live` while resolving nothing, which is what `deferred` already means. The
+   ladder is only safe read together with each module's `parity` field. *Settling measurement:* for
+   the first module promoted, assert its parity target passes, not merely that it executes.
 
 ---
 
