@@ -100,8 +100,21 @@ def assemble(out: str) -> list[str]:
             raise SystemExit(f"carry source missing: {src}")
         os.makedirs(os.path.dirname(d), exist_ok=True)
         if os.path.isdir(s):
-            shutil.copytree(s, d, ignore=shutil.ignore_patterns(
-                '__pycache__', '*.pyc', '.pytest_cache'))
+            # LEAVE IS SUBTRACTED HERE, not merely documented. It used to be consulted only by the
+            # escape scan, so `engine/params/` sat in LEAVE with its reason -- 43 prose tables with
+            # ZERO readers in engine/ or systems/ -- and shipped anyway, because CARRY takes
+            # `engine/` wholesale. A LEAVE list that does not subtract is a comment.
+            def _prune(dirpath, names):
+                out_names = set(shutil.ignore_patterns(
+                    '__pycache__', '*.pyc', '.pytest_cache')(dirpath, names))
+                for n in names:
+                    rel = os.path.relpath(os.path.join(dirpath, n), os.path.join(REPO, src))
+                    full = os.path.normpath(os.path.join(dst, rel))
+                    if any(full == L.rstrip('/') or full.startswith(L.rstrip('/') + os.sep)
+                           for L in (x.strip('/') for x, _ in LEAVE)):
+                        out_names.add(n)
+                return out_names
+            shutil.copytree(s, d, ignore=_prune)
         else:
             shutil.copy2(s, d)
         carried.append(dst)
