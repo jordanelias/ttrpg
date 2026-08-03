@@ -179,6 +179,37 @@ def escapes(out: str) -> list[tuple[str, int, str]]:
     return found
 
 
+def contract_coverage() -> list[str]:
+    """RULE (Jordan, 2026-08-03): anything that needs a contract, or is a stub for something,
+    gets forked over.
+
+    Enforced at build time rather than trusted. Every unit in module_contracts must have its
+    declared `doc` and `sim_module` inside the carry set. It passes today only because
+    `systems/` and `engine/` are carried WHOLESALE -- which is exactly why it is a guard: the
+    tempting next move is a "minimal fork" of just the 58 runtime files, and that would silently
+    drop 14 units that have a contract but no code yet, plus all three `build: stub` units. A
+    contract with no code is the fork's backlog; dropping it loses the backlog, not dead weight.
+    """
+    if yaml is None:
+        return ["pyyaml missing — cannot verify contract coverage"]
+    roots = [dst for _src, dst, _why in CARRY]
+
+    def inside(path):
+        if not isinstance(path, str) or path.strip().lower() in ('none', 'null', 'n/a', ''):
+            return True                      # nothing declared is nothing to carry
+        q = path.strip().rstrip('/')
+        return any(q == r or q.startswith(r.rstrip('/') + '/') for r in roots)
+
+    with open(os.path.join(REPO, 'references', 'module_contracts.yaml'), encoding='utf-8') as fh:
+        contracts = yaml.safe_load(fh) or {}
+    bad = []
+    for c in contracts.get('modules') or []:
+        for field in ('doc', 'sim_module'):
+            if not inside(c.get(field)):
+                bad.append(f"{c['module']}.{field} = {c.get(field)!r} is outside the carry set")
+    return bad
+
+
 def classify(out: str) -> dict:
     """Every carried .py file, classified by its relation to the EXECUTABLE.
 
@@ -283,6 +314,14 @@ def main(argv=None):
         print(f"[FORK] assembled {len(carried)} carry roots -> {out}")
         print(f"[FORK] {n_py} .py files")
 
+    gaps = contract_coverage()
+    if gaps:
+        print(f"[FORK] {len(gaps)} contracted/stub unit(s) would be LEFT BEHIND:")
+        for g in gaps:
+            print(f"        {g}")
+    else:
+        print("[FORK] every contract unit's doc + code is inside the carry set")
+
     esc = escapes(out)
     if esc:
         print(f"[FORK] {len(esc)} path literal(s) reach a tree the fork does not carry:")
@@ -362,7 +401,7 @@ def main(argv=None):
     else:
         print("[FORK] DOES NOT RUN STANDALONE:")
         print((proc.stderr or proc.stdout).strip()[-2500:])
-    return 0 if proc.returncode == 0 and not esc else 1
+    return 0 if (proc.returncode == 0 and not esc and not gaps) else 1
 
 
 if __name__ == '__main__':
