@@ -98,6 +98,39 @@ RELOCATE = [
     (lambda p: p.startswith('research/diagrams/mass_battle_formations/') and p.endswith('.py'),
      'systems/mass_battle/workbench/', 'R-REL-MBDIAG',
      'MB formation-diagram generators -- the same instrument class, filed under research/'),
+    # THE PARITY ORACLE -- the LAST executable dependency the kept tree has on audit/.
+    # tools/gen_sigma_parity_goldens.py:95 loads it to regenerate the committed golden that
+    # engine/tests/test_sigma_leverage_parity.py asserts on. Its docstring said it "cannot move"
+    # because sibling files in that directory `from engine import ...` -- but those siblings are
+    # one-off session code that EVACUATES, so the constraint dissolves: there is nothing left to
+    # break. engine/reference/ is the pre-designed home (build_fork.py:70 already maps the OTHER
+    # parity oracle, tests/sim/v32-combat-balance, to exactly that destination), so this puts both
+    # frozen reference implementations in one place beside the code they validate.
+    # EXECUTION NOTE: the move requires updating gen_sigma_parity_goldens.py's load path in the
+    # same commit, then regenerating the golden and confirming it is byte-identical.
+    (lambda p: p == 'audit/2026-06-03-contest-groundup/engine.py',
+     'engine/reference/contest-groundup/', 'R-REL-ORACLE',
+     'frozen parity oracle -- the last executable dependency of kept code on audit/'),
+    # THE ED UNIVERSE. tools/validate_ed_citations.py -- a BLOCKING CI gate -- builds its set of
+    # valid ED ids from registers/ PLUS three directories under deprecated/ (its ARCHIVE_GLOBS at
+    # :145): deprecated/archives/editorial/, .../editorials/, and deprecated/canon/. 26 files,
+    # roughly ED-001..ED-1200.
+    # R-DEPRECATED would evacuate all of them, and the gate's OWN docstring (:347-350) records what
+    # that costs: losing ONE of those dirs shrank the universe 1167 -> 1107 and turned 110 VALID
+    # citations into NONEXISTENT. NONEXISTENT is never deferred (:377-381), so the evacuation commit
+    # would turn a blocking gate red -- and the tempting field fix (suppress NONEXISTENT) would
+    # destroy the repo's only anti-fabrication citation check. The semantic being protected is
+    # ED-IN-0075's: an archived ED is LEGITIMATE, not missing. A partial universe cannot tell a
+    # typo from a fabrication from a correctly-archived id.
+    # So they relocate rather than evacuate -- and this IS Jordan's "start fresh for registers":
+    # frozen archive beside the active register, new work on a clean surface, provenance intact.
+    # EXECUTION NOTE: add 'registers/archive/' to ARCHIVE_GLOBS in the same commit, and re-run the
+    # gate to confirm the universe size is unchanged.
+    (lambda p: (p.startswith(('deprecated/archives/editorial/', 'deprecated/archives/editorials/',
+                              'deprecated/canon/'))
+                and ('ledger' in os.path.basename(p) or 'editorial' in os.path.basename(p))),
+     'registers/archive/', 'R-REL-EDUNIVERSE',
+     'ED archive read by the BLOCKING citation gate -- evacuating it turns CI red on day one'),
 ]
 
 
@@ -132,9 +165,6 @@ RULES = [
     # provenance that must stay put, and the whole point of that generator is to INVERT the coupling
     # (oracle stays, test reads a table) rather than move the oracle around.
     # CAUGHT BY: the join-split reader scan below, after a literal-substring scan missed it entirely.
-    (lambda p: p.startswith('audit/2026-06-03-contest-groundup/') and p.endswith('.py'), 'keep',
-     'R-PARITY-GROUNDUP',
-     'the ground-up contest oracle regenerating a committed golden a kept CI test asserts on'),
     (lambda p: p.startswith('tests/valoria/'), 'keep', 'R-SHIPGATE',
      'the shipping gate (CLAUDE.md 0.1) and the home of the fork plan\'s own falsifiers'),
     (lambda p: p == 'tests/coverage_matrix.md', 'keep', 'R-COVMATRIX',

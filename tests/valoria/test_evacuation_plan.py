@@ -152,9 +152,11 @@ def test_relocations_land_in_a_subsystem(part):
     """Jordan: "visualization tool for mb should be moved to mb and wiring should be to systems"."""
     moves = part['moves']
     assert moves, 'expected at least the MB visualisation instruments to relocate'
+    OK = ('systems/', 'engine/', 'registers/')
     for src, dest in moves.items():
-        assert dest.startswith('systems/'), f'{src} relocates outside systems/: {dest}'
-        assert not dest.startswith('audit/')
+        assert dest.startswith(OK), f'{src} relocates to no proper home: {dest}'
+        # the whole point is leaving the evacuating trees
+        assert not dest.startswith(('audit/', 'deprecated/', 'research/'))
 
 
 def test_no_contracted_unit_is_evacuated(part):
@@ -219,5 +221,24 @@ def test_the_parity_oracle_is_not_evacuated():
     committed generated table with no source.
     """
     verdict, rule_id, _ = ep.classify('audit/2026-06-03-contest-groundup/engine.py')
-    assert verdict == 'keep', f'the ground-up parity oracle must be kept, got {verdict}'
-    assert rule_id == 'R-PARITY-GROUNDUP'
+    assert verdict == 'relocate', f'the ground-up parity oracle must survive, got {verdict}'
+    dest, _, _ = ep.relocation('audit/2026-06-03-contest-groundup/engine.py')
+    assert dest.startswith('engine/reference/'), (
+        f'the oracle belongs with the code it validates, not in audit/: {dest}')
+
+
+def test_the_ed_universe_survives_evacuation(part):
+    """The blocking citation gate reads its ED universe from three deprecated/ dirs.
+
+    Evacuating them turns `validate_ed_citations` red on the evacuation commit — its own docstring
+    records losing ONE such dir turning 110 valid citations into NONEXISTENT. They must survive.
+    """
+    evac = set(part['buckets']['evacuate'])
+    import fnmatch
+    stranded = [p for p in evac
+                if p.startswith(('deprecated/archives/editorial/',
+                                 'deprecated/archives/editorials/', 'deprecated/canon/'))
+                and ('ledger' in os.path.basename(p) or 'editorial' in os.path.basename(p))]
+    assert stranded == [], (
+        f'{len(stranded)} ED-archive file(s) in the evacuate set would break the blocking '
+        f'citation gate, e.g. {stranded[:3]}')

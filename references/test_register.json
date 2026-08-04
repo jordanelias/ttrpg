@@ -4342,12 +4342,15 @@
     "IN",
     "MB"
    ],
-   "loc": 224,
+   "loc": 245,
    "modules_under_test": [
     "engine.py",
+    "engine/",
     "engine/mc_v18.py",
     "engine/params/core.md",
+    "engine/reference/",
     "engine/substrate/keys.py",
+    "registers/",
     "systems/",
     "systems/mass_battle/mass_battle_v30.md",
     "systems/mass_battle/sim/massbattle.py",
@@ -4356,7 +4359,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 14,
+   "test_count": 15,
    "tests": {
     "test_audit_cutoff_boundary": {
      "assertionless": false,
@@ -4407,6 +4410,11 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "The concrete miss: gen_sigma_parity_goldens.py builds its oracle path from segments."
+    },
+    "test_the_ed_universe_survives_evacuation": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The blocking citation gate reads its ED universe from three deprecated/ dirs."
     },
     "test_the_parity_oracle_is_not_evacuated": {
      "assertionless": false,
@@ -10611,7 +10619,7 @@
   "helper_defs": 258,
   "helper_loc": 2260,
   "ratchet_baselines": 8,
-  "tests": 1226,
+  "tests": 1227,
   "undocumented_files": 0
  }
 }
