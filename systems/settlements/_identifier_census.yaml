@@ -15,8 +15,8 @@ docs:
 - systems/settlements/territory_temperaments_v30.md
 - systems/settlements/valoria_political_hierarchy_v30.md
 counts:
-  UNRESOLVED: 105
-  BUILT: 14
+  BUILT: 15
+  UNRESOLVED: 80
 identifiers:
   actor_id:
     identifier: actor_id
@@ -92,16 +92,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  campaign_architecture_v1:
-    identifier: campaign_architecture_v1
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    - systems/settlements/settlement_layer_v30_index.md
-    purpose: §1.5 Church Settlement Infrastructure — Four Independent Axes (campaign_architecture_v1 Part 1)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   campaign_salt:
     identifier: campaign_salt
     docs:
@@ -129,16 +119,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  character_canon:
-    identifier: character_canon
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    - systems/settlements/valoria_political_hierarchy_v30.md
-    purpose: References to old S-IDs in non-substrate documents (character_canon Part B per-NPC sheets, migration_roster, npc_roster, editorial_ledger historical entries, propagation_map historical entries) are migrated lazily as those documents are next touched.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   charter_age_seasons:
     identifier: charter_age_seasons
     docs:
@@ -157,15 +137,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  clock_registry:
-    identifier: clock_registry
-    docs:
-    - systems/settlements/generation_sourcebook_v1.md
-    purpose: '[§1.3 TERRITORY / PROVINCE stack (proposed here, grounded)] # | Territory paradigm | Samples | Canon source :: **R5** | **Piety (PT) + Church penetration** | Piety Track 0–5 per territory (0=RM pole / 5=orthodoxy); RM gated PT≤2; Spiritual Weight gates CI flow | `clock_registry §PT`; `ci_political_v30 §1`'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   clocks_v30:
     identifier: clocks_v30
     docs:
@@ -190,25 +161,6 @@ identifiers:
     docs:
     - systems/settlements/lps_wiring_v1.md
     purpose: '[§6 · Consumer rewire (make the live values actually read)] consumer | today (bypasses settlement grain) | wire to :: Governance-cascade "does it stick" | undefined | `control_state(s)` / slip (§3.2)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  derived_stats:
-    identifier: derived_stats
-    docs:
-    - systems/settlements/lps_wiring_v1.md
-    - systems/settlements/settlement_layer_v30.md
-    purpose: Treasury** — `derived_stats §8.1` gives `faction income = Σ settlement Prosperity × M`, **ungated by L/PS**.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  derived_stats_v1:
-    identifier: derived_stats_v1
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    purpose: '[§4.3 Settlement Events] Condition | Event :: Mine type + Prosperity 3+ | Resource surplus. Province Treasury +50/season at Accounting (economic contribution, derived_stats_v1).'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -254,8 +206,9 @@ identifiers:
     docs:
     - systems/settlements/scale_hierarchy_v1.md
     purpose: is **no longer blocked by B12** (resolved, item 2 above) but **remains blocked on `engine_clock`**
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_proactive_governance_menus.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   engine_v4:
@@ -287,25 +240,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  faction_behavior:
-    identifier: faction_behavior
-    docs:
-    - systems/settlements/territory_temperaments_v30.md
-    purpose: '[§5 Open Items] Item | Resolution :: RM / Löwenritter aggregate when they operate within other factions'' territories | Per faction_behavior §3.4.1 — they read effective temperament from territories they operate within; no separate authoring needed'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/settlements/generation_sourcebook_v1.md
-    - systems/settlements/settlement_layer_v30.md
-    purpose: '[§5 Consolidated blocker / gap register (the hard truth)] ID | Blocker | Blocks | Source :: **B1** | ~~Faction count 4–8 unreconciled~~ **RESOLVED 2026-07-13 (ED-IN-0047, ED-FA-0001 closed)**: starting count = **4** (Valorsmark, Hafenmark, Varfell, Church of Solmund), matching `valoria_political_hierarchy_v30.md`''s existing 3-duchy + Church-special-entity structure. Emergent factions beyond the 4 '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   faction_mandate:
     identifier: faction_mandate
     docs:
@@ -324,33 +258,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  faction_state_authoring:
-    identifier: faction_state_authoring
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    purpose: This **supersedes the faction-level L/PS canonized in PP-686 v2** (`faction_behavior_v30 §2/§3.4/§3.5/§4`, `faction_state_authoring_v30 §8`, `faction_canon_v30 §3.4/§5`, `params/factions/stats_1_7_scale.md` "7-stat" header) — those put L/PS at the wrong level.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  faction_systems_overview:
-    identifier: faction_systems_overview
-    docs:
-    - systems/settlements/generation_sourcebook_v1.md
-    purpose: content** (filename/content mismatch) · **`faction_systems_overview` stale Legitimacy** (faction-level vs
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  factions_ttrpg_v30:
-    identifier: factions_ttrpg_v30
-    docs:
-    - systems/settlements/generation_sourcebook_v1.md
-    purpose: '[§1.2 FACTION stack (proposed here, grounded)] # | Faction paradigm | Samples | Canon source :: **F3** | **Stat block** | Mandate (derived from held-settlement L/PS) · Influence · Wealth · Military · Intel · Stability (1–7; Stab 0–7) + starting values | `faction_canon_v30 §5.1` (LPS-2e); `factions_ttrpg_v30 §8.1`'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   follow_on:
     identifier: follow_on
     docs:
@@ -382,34 +289,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  generation_sourcebook:
-    identifier: generation_sourcebook
-    docs:
-    - systems/settlements/lps_wiring_v1.md
-    purpose: '**Init / conquest (Entry Terms, §5.3 SE-5).** World-gen seeds L/PS from generation (`generation_sourcebook`'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  governance_consolidation:
-    identifier: governance_consolidation
-    docs:
-    - systems/settlements/lps_wiring_v1.md
-    - systems/settlements/settlement_generator_v1.md
-    purpose: '`governance_consolidation_v1`).'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  governance_play_redesign:
-    identifier: governance_play_redesign
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    purpose: The row is retained here as the current baseline until `governance_play_redesign_v1` supersedes §3.2; the NPC governor priority tree (ED-SETT-06) keeps Administer as its lowest-priority hold until then.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   has_subnational:
     identifier: has_subnational
     docs:
@@ -419,16 +298,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  historical_precedents_analysis:
-    identifier: historical_precedents_analysis
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    - systems/settlements/settlement_layer_v30_index.md
-    purpose: '[§4.3 Settlement Events] Condition | Event :: RM takes control of settlement | **Governance Transition scene** (historical_precedents_analysis §4.3). Player (or Vossen if NPC) chooses: **Disestablishment** (remove existing governance infrastructure; −1 Order for 2 seasons, then Accord growth +0.5/season; PT −1 immediate); **Accommodation** (maintain existing infrastructure under RM oversight; no p'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   improvement_avenues_2026:
     identifier: improvement_avenues_2026
     docs:
@@ -511,15 +380,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  march_layer:
-    identifier: march_layer
-    docs:
-    - systems/settlements/settlement_adjacency_v30.md
-    purpose: <!-- Strategic movement (march budget, A* pathfinding, vision/recon, route blocking) migrated to march_layer_v30 (Phase 3 closure ED-780, commit 65b918a2).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   migration_roster:
     identifier: migration_roster
     docs:
@@ -558,34 +418,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/settlements/governance_play_redesign_v1.md
-    purpose: NPC priority trees (npc_behavior §8.2)** — the Provincial-Authority Directive generator and NPC trajectory both read from these.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  npc_relational_graph:
-    identifier: npc_relational_graph
-    docs:
-    - systems/settlements/valoria_political_hierarchy_v30.md
-    purpose: Old S-IDs in non-substrate documents (character_canon Part B per-NPC sheets, migration_roster, npc_roster, editorial_ledger historical entries, propagation_map historical entries) are migrated lazily as those documents are next touched; PP-726 only updates the substrate-canonical files (settlement_l…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  npc_roster:
-    identifier: npc_roster
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    - systems/settlements/valoria_political_hierarchy_v30.md
-    purpose: References to old S-IDs in non-substrate documents (character_canon Part B per-NPC sheets, migration_roster, npc_roster, editorial_ledger historical entries, propagation_map historical entries) are migrated lazily as those documents are next touched.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   owner_faction:
     identifier: owner_faction
     docs:
@@ -605,16 +437,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  peninsular_strain:
-    identifier: peninsular_strain
-    docs:
-    - systems/settlements/generation_sourcebook_v1.md
-    - systems/settlements/settlement_layer_v30.md
-    purpose: '[§1.3 TERRITORY / PROVINCE stack (proposed here, grounded)] # | Territory paradigm | Samples | Canon source :: **R9** | **Political value / Franchise / Accord** | PV + unification bonus; Franchise 0–5 (parliamentary weight, caste-suppressed in south); Accord=floor(mean settlement Order) | `franchise_v30`; `political_hierarchy §2.4`; `peninsular_strain §2`'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   peninsular_strain_shock:
     identifier: peninsular_strain_shock
     docs:
@@ -625,15 +447,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  peninsular_strain_v1:
-    identifier: peninsular_strain_v1
-    docs:
-    - systems/settlements/settlement_layer_v30.md
-    purpose: '[PART 10: PROPAGATION MAP] File | Change Required :: designs/board_game/peninsular_strain_v1.md | §2 Accord derivation changed to settlement Order average. §2.3/2.4 Accord change rules now target settlement Order.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   political_hierarchy:
     identifier: political_hierarchy
     docs:
@@ -868,15 +681,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  scale_hierarchy:
-    identifier: scale_hierarchy
-    docs:
-    - systems/settlements/lps_wiring_v1.md
-    purpose: '"single highest-priority open item in the whole governance/generation thread" (`scale_hierarchy_v1 §4`; E5 in'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   scenario_authoring:
     identifier: scenario_authoring
     docs:
@@ -891,17 +695,6 @@ identifiers:
     docs:
     - systems/settlements/march_layer_v30.md
     purpose: effective_vision = base_vision × terrain_factor × weather_factor × season_factor
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  settlement_adjacency:
-    identifier: settlement_adjacency
-    docs:
-    - systems/settlements/settlement_adjacency_v30.md
-    - systems/settlements/settlement_layer_v30.md
-    - systems/settlements/valoria_political_hierarchy_v30.md
-    purpose: '<!-- Settlement-level adjacency graph (PP-723, this commit) authored at valoria_geography_v30.yaml :: settlement_adjacency: (49 edges across 36 settlements).'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -926,19 +719,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  settlement_layer:
-    identifier: settlement_layer
-    docs:
-    - systems/settlements/lps_wiring_v1.md
-    - systems/settlements/march_layer_v30.md
-    - systems/settlements/settlement_adjacency_v30.md
-    - systems/settlements/settlement_layer_v30.md
-    - systems/settlements/valoria_political_hierarchy_v30.md
-    purpose: the LPS-2e aggregation (`settlement_layer_v30 §1.8`, ruled 2026-05-30), the **consent-gate** (`scale_hierarchy_v1
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   sim_npc_as_player:
     identifier: sim_npc_as_player
     docs:
@@ -1111,15 +891,6 @@ identifiers:
     docs:
     - systems/settlements/generation_sourcebook_v1.md
     purpose: 'From the canonical framework (`throughlines_meta.md` + infill; `throughline_specifications_2026-04-17.md`):'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_geography:
-    identifier: valoria_geography
-    docs:
-    - systems/settlements/valoria_political_hierarchy_v30.md
-    purpose: '<!-- COMPANIONS: designs/territory/settlement_layer_v30.md (per-settlement registry, governance, types — refactored at PP-726 §2.1 to reference settlements proper rather than mixed districts/sub-features); designs/territory/valoria_geography_v30.yaml :: settlement_adjacency: (the 56-edge canonical m…'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

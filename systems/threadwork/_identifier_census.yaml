@@ -12,7 +12,7 @@ docs:
 - systems/threadwork/threadwork_v30_index.md
 - systems/threadwork/threadwork_v30_infill.md
 counts:
-  UNRESOLVED: 17
+  UNRESOLVED: 4
 identifiers:
   arc_expansion_v1:
     identifier: arc_expansion_v1
@@ -23,99 +23,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  batch_d_designs:
-    identifier: batch_d_designs
-    docs:
-    - systems/threadwork/threadwork_v25_historical.md
-    - systems/threadwork/threadwork_v30_infill.md
-    purpose: '(Cross-reference: Community Weaving constraint defined in batch_d_designs.md §G-049.)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  calamity_radiation:
-    identifier: calamity_radiation
-    docs:
-    - systems/threadwork/threadwork_v25_historical.md
-    - systems/threadwork/threadwork_v30_infill.md
-    purpose: The full RS-band × node-distance matrix is defined in `designs/setting/calamity_radiation.md`.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  campaign_architecture_v1:
-    identifier: campaign_architecture_v1
-    docs:
-    - systems/threadwork/threadwork_v30.md
-    - systems/threadwork/threadwork_v30_index.md
-    purpose: '[STRUCK — campaign_architecture_v1 §3.1]** The ×3 MS multiplier is replaced by a flat additive model:'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  character_histories:
-    identifier: character_histories
-    docs:
-    - systems/threadwork/threadwork_v30.md
-    purpose: 'Character creation (Formation 2F: Practitioner Mentorship):** Per character_histories §Formation, characters whose 2F slot is "Practitioner Mentorship" begin with Approach Training as a starting skill.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  conviction_track:
-    identifier: conviction_track
-    docs:
-    - systems/threadwork/thread_horizontal_integration_spec.md
-    purpose: '[PROPAGATION MAP] ED | Target Document | Section | Action :: ED-676 | designs/conviction_track/conviction_track_v30.md | After §1.3 | Insert §1.4'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  historical_precedents_analysis:
-    identifier: historical_precedents_analysis
-    docs:
-    - systems/threadwork/threadwork_v30.md
-    purpose: Hidden Thread-site bonus (historical_precedents_analysis §4.3):** RM governance cells at settlements containing Thread-active sites (former Threadweaving locations, Proximity ≤ 2) receive +0.5 Accord/season, unlabeled in UI.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   investigation_systems_proposal_2026:
     identifier: investigation_systems_proposal_2026
     docs:
     - systems/threadwork/thread_horizontal_integration_spec.md
     purpose: '[PROPAGATION MAP] ED | Target Document | Section | Action :: ED-680 | designs/systems/investigation_systems_proposal_2026-04-15.md | §Case Board | Insert Thread Layer'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  mass_battle_v3:
-    identifier: mass_battle_v3
-    docs:
-    - systems/threadwork/threadwork_v25_historical.md
-    - systems/threadwork/threadwork_v30.md
-    purpose: '§A.10 of mass_battle_v3.md: Thread operations in mass battle (Hybrid / TTRPG mass combat)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  params_core:
-    identifier: params_core
-    docs:
-    - systems/threadwork/thread_horizontal_integration_spec.md
-    purpose: '[EDITORIAL RESOLUTIONS (all 7 open questions)] # | Question | Resolution | Rationale :: 7 | Integration approach | **Hybrid.** Cross-system fires in this document. In-place patches to target documents for mechanical specifications. | Follows existing pattern: Truth Track in params_core, TC trigger in params_threadwork, Domain Echo in scale_transitions. New fire paths specified here; inserted into '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_threadwork:
-    identifier: params_threadwork
-    docs:
-    - systems/threadwork/thread_horizontal_integration_spec.md
-    - systems/threadwork/threadwork_v25_historical.md
-    - systems/threadwork/threadwork_v30.md
-    - systems/threadwork/threadwork_v30_infill.md
-    purpose: '[EDITORIAL RESOLUTIONS (all 7 open questions)] # | Question | Resolution | Rationale :: 7 | Integration approach | **Hybrid.** Cross-system fires in this document. In-place patches to target documents for mechanical specifications. | Follows existing pattern: Truth Track in params_core, TC trigger in params_threadwork, Domain Echo in scale_transitions. New fire paths specified here; inserted into '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -127,48 +39,6 @@ identifiers:
     - systems/threadwork/threadwork_v25_historical_index.md
     - systems/threadwork/threadwork_v30_index.md
     purpose: Usage:** `g.read_sections('designs/threadwork/thread_horizontal_integration_spec.md', [indices])` to load specific sections.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  resolution_plan:
-    identifier: resolution_plan
-    docs:
-    - systems/threadwork/threadwork_v30.md
-    purpose: Physical fold lands with the per-op cost-table work (resolution_plan C-TW-3/4/10/11, Stratum B); the recency table below is retained as the parameter reference until then.]
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  thread_constitutive_integration_analysis_v2:
-    identifier: thread_constitutive_integration_analysis_v2
-    docs:
-    - systems/threadwork/thread_horizontal_integration_spec.md
-    - systems/threadwork/thread_horizontal_integration_spec_index.md
-    purpose: 'Resolves: All open questions from thread_constitutive_integration_analysis_v2.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  threadwork_philosophical_reference:
-    identifier: threadwork_philosophical_reference
-    docs:
-    - systems/threadwork/threadwork_philosophical_reference_v30.md
-    - systems/threadwork/threadwork_v25_historical.md
-    - systems/threadwork/threadwork_v30_infill.md
-    purpose: '<!-- Infill: threadwork_philosophical_reference_v30_infill.md -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  threadwork_redesign_v25:
-    identifier: threadwork_redesign_v25
-    docs:
-    - systems/threadwork/threadwork_philosophical_reference_v30.md
-    - systems/threadwork/threadwork_philosophical_reference_v30_infill.md
-    - systems/threadwork/threadwork_v25_historical_index.md
-    - systems/threadwork/threadwork_v30.md
-    purpose: 'Extracted from: designs/ttrpg/threadwork_redesign_v25.md Part 1'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

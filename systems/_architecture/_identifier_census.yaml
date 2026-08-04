@@ -43,8 +43,8 @@ docs:
 - systems/_architecture/videogame_mode_spec.md
 - systems/_architecture/videogame_mode_spec_index.md
 counts:
-  BUILT: 143
-  UNRESOLVED: 419
+  BUILT: 161
+  UNRESOLVED: 357
 identifiers:
   abstract_resolve:
     identifier: abstract_resolve
@@ -94,8 +94,10 @@ identifiers:
     docs:
     - systems/_architecture/propagation_spec_v1.md
     purpose: 'accounting_phase: [season_tick, accounting_boundary]'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/build_execution_map.py
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   accounting_seed_keys:
@@ -112,8 +114,9 @@ identifiers:
     docs:
     - systems/_architecture/key_echo_armature_v1.md
     purpose: '[§1 · The seam-contract row (the format every crossing must satisfy)] Field | Obligation | Checker (§4) :: `timing` | The accounting phase binding (accounting_sequence spine) + deferred-apply discipline (AU-3.2/OF-7 — **assumes OF-7; provisional/reversible, docket §5.3**): echo Keys log LIVE at scene end, settlement effects land at ACCOUNTING_BOUNDARY. | A12 + substrate'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   action_type:
@@ -290,8 +293,9 @@ identifiers:
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: parity test** in `tests/valoria/` asserts `quantity_registry.load()` + `names.all_legacy(block)`
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/names.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   altonian_passes:
@@ -435,15 +439,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  axis_matrix_v30:
-    identifier: axis_matrix_v30
-    docs:
-    - systems/_architecture/key_substrate_v30.md
-    purpose: Companion docs:** `designs/architecture/key_type_registry_v30.md` (Key type registry); `designs/personal/conviction_axis_matrix_v30.md` (axis vectorization).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   axis_name:
     identifier: axis_name
     docs:
@@ -534,23 +529,14 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  board_game_v30:
-    identifier: board_game_v30
-    docs:
-    - systems/_architecture/player_agency_v30.md
-    - systems/_architecture/player_agency_v30_index.md
-    purpose: 'Affects: character creation (params_core), season structure (board_game_v30), fieldwork (fieldwork_v30), scale transitions (scale_transitions_v30), NPC behavior (npc_behavior_v30)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   build_review_state:
     identifier: build_review_state
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: '`build_review_state()` → `review_core.collect()` — **BUILT**), and a GitHub `review-state` CI job'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/dashboard_data.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   by_actor:
@@ -585,24 +571,6 @@ identifiers:
     docs:
     - systems/_architecture/key_substrate_v30.md
     purpose: 'by_time_window: # season_index bucket → list of key_refs'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  campaign_architecture:
-    identifier: campaign_architecture
-    docs:
-    - systems/_architecture/campaign_architecture_v30.md
-    purpose: Loyalty Track interaction:** Elske Loyalty Track effects (campaign_architecture §5.2 Diplomatic Repulsion, §6.2 Path D Crown-Warden integration) operate independently of Löwenritter Autonomy stages.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  campaign_architecture_v1:
-    identifier: campaign_architecture_v1
-    docs:
-    - systems/_architecture/player_agency_v30.md
-    purpose: 'Resolution States (campaign_architecture_v1 §7.3):** When a Conviction resolves, it enters one of four states:'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -799,22 +767,14 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  character_histories:
-    identifier: character_histories
-    docs:
-    - systems/_architecture/derived_stats_v30.md
-    purpose: '[5.3 Inspiration (motivation resource — propagated 2026-04-25)] Mechanic | Scale | Function | Persistence :: **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete §10.2 — TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   check_ci_registry_coverage:
     identifier: check_ci_registry_coverage
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: '`broken_dependency_checker.check_ci_registry_coverage()` green); `.github/PULL_REQUEST_TEMPLATE.md`'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/broken_dependency_checker.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   check_mandatory_triggers:
@@ -855,16 +815,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  ci_political:
-    identifier: ci_political
-    docs:
-    - systems/_architecture/key_echo_armature_v1.md
-    - systems/_architecture/key_type_registry_v30.md
-    purpose: '[§3 · Registry deltas (via the §10 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter · transition site | finding_basis :: `mechanical.ci_milestone_crossed` | mechanical_event | ci_political §2.1 thresholds (40/55/65/80/100 — **the 75-vs-80 discrepancy is docket item §5.11**) | EP-5, C-MBSE-11/12'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   ci_value:
     identifier: ci_value
     docs:
@@ -879,15 +829,6 @@ identifiers:
     docs:
     - systems/_architecture/propagation_spec_v1.md
     purpose: 'resolver: clock_advance'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  clock_registry:
-    identifier: clock_registry
-    docs:
-    - systems/_architecture/campaign_architecture_v30.md
-    purpose: The Löwenritter Graduated Autonomy track (Loyal → Restless → Autonomous → Split, replacing the binary Coup Counter per worldbuilding §3 + clock_registry §3) governs Crown-Löwenritter relationship within Valoria.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -919,16 +860,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  cogload_reduction_strategies:
-    identifier: cogload_reduction_strategies
-    docs:
-    - systems/_architecture/cogload_moderate_target.md
-    - systems/_architecture/cogload_moderate_target_index.md
-    purpose: 'Builds on: designs/cogload_reduction_strategies.md (Moderate-Heavy package)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   coherence_cost:
     identifier: coherence_cost
     docs:
@@ -1007,15 +938,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  companion_specification:
-    identifier: companion_specification
-    docs:
-    - systems/_architecture/derived_stats_v30.md
-    purpose: 'Cross-reference: fieldwork_v30 §5.1, params_core §Bonds (PP-632/PP-684), companion_specification §2.1.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   completion_effect:
     identifier: completion_effect
     docs:
@@ -1151,6 +1073,7 @@ identifiers:
     - systems/_architecture/propagation_spec_v1.md
     purpose: 'emitting_systems / consuming_systems: [...] # same discipline as key_type_registry_v30.md'
     built_in:
+    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -1181,8 +1104,9 @@ identifiers:
     docs:
     - systems/_architecture/repository_keep_set_v1.md
     purpose: '**The keep-set guard.** `contract_coverage()` — which takes no argument and reads the *source* repo —'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/build_fork.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   control_change:
@@ -1203,41 +1127,14 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  conversion_ledger:
-    identifier: conversion_ledger
-    docs:
-    - systems/_architecture/videogame_mode_spec.md
-    purpose: For Godot extraction (Phase 1+ in conversion_ledger.md), read this document alongside the source design doc.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  conviction_axis_matrix:
-    identifier: CONVICTION_AXIS_MATRIX
-    docs:
-    - systems/_architecture/key_substrate_v30.md
-    purpose: npc.personal_convictions[c] × CONVICTION_AXIS_MATRIX[c][axis]
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  conviction_track:
-    identifier: conviction_track
-    docs:
-    - systems/_architecture/key_substrate_v30.md
-    - systems/_architecture/key_type_registry_v30.md
-    purpose: Co-files updated:** doc 08, doc 12 (procedures rewritten to consume Keys), `designs/personal/conviction_track_v1.md`, scene/social_contest/mass_battle docs (per Phase B migration), `references/glossary.md`, `references/alias_registry.yaml`, `canon/supersession_register.yaml`, `references/canonical_s…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   count_re:
     identifier: count_re
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: Each tool's `count_re` (in
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/review_core.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   counterparty_faction:
@@ -1336,8 +1233,10 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'emitting_systems: [da_framework]'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/build_key_graph.py
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   da_outcome:
@@ -1516,25 +1415,6 @@ identifiers:
     docs:
     - systems/_architecture/governance_type_registry_v1.md
     purpose: 'derived_flags: [...] # threshold Key type_ids this Field fires when crossed (the'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  derived_stats:
-    identifier: derived_stats
-    docs:
-    - systems/_architecture/derived_stats_v30.md
-    - systems/_architecture/governance_ripple_substrate_v1.md
-    purpose: 'Status: PROPOSAL — supersedes prior derived_stats_v30.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  derived_stats_v1:
-    identifier: derived_stats_v1
-    docs:
-    - systems/_architecture/player_agency_v30.md
-    purpose: Governance Responsibility (derived_stats_v1 §8.3):** Players at Standing ≥ 3 who hold governance positions risk Renown from governance failures.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1801,8 +1681,9 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: Wall-clock excluded from payload (see scene_entered notes); SceneTimer sidecar computes elapsed_ms by joining records.
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/review_core.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   elective_high:
@@ -1853,6 +1734,7 @@ identifiers:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'emitting_systems / consuming_systems: [...] # same discipline as key_type_registry_v30.md'
     built_in:
+    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -1875,8 +1757,9 @@ identifiers:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     - systems/_architecture/propagation_spec_v1.md
     purpose: '[1. The cross-map: spec concept → existing Valoria artifact] Doctrine concept | Existing Valoria artifact | State / gap :: **Propagation spec** (boundary transform per direction; ordering & determinism; termination/convergence guarantee) | Scattered: Key substrate (up), register #1 (down), `engine_clock` module contract `doc: null` (the temporal spine that would carry ordering) | **The highest-val'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_proactive_governance_menus.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   engine_timeout:
@@ -2062,31 +1945,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/_architecture/integration_proposal_v30.md
-    - systems/_architecture/key_type_registry_v30.md
-    - systems/_architecture/ners_vsg_reconciliation_v1.md
-    - systems/_architecture/propagation_spec_v1.md
-    purpose: The V30 documents (faction_layer, fieldwork, social_contest) describe *world physics* — how the world moves, resists, and responds.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  faction_politics:
-    identifier: faction_politics
-    docs:
-    - systems/_architecture/governance_ripple_substrate_v1.md
-    - systems/_architecture/key_echo_armature_v1.md
-    - systems/_architecture/key_type_registry_v30.md
-    - systems/_architecture/propagation_spec_v1.md
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: '[§14.1 · The loop, mapped to module contracts (owner · resolver · Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN → OUT (registry vocabulary) | Compliance :: Standing bridge (§5) | `faction_politics` | `deterministic_accounting` | IN: consumes the `da_outcome.*` / `scene.*_resolved` Key (carrying `resolution_quality` on its impact_vector) → OUT: **`state'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   faction_stat:
     identifier: faction_stat
     docs:
@@ -2166,28 +2024,11 @@ identifiers:
     docs:
     - systems/_architecture/key_echo_armature_v1.md
     purpose: '`ECHO_TRANSPORT=0` default with byte-exact legacy pins (the MB FIELD_MOVEMENT/ED-1089 CI-pin'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/ci_golden_modes_check.py
+    disposition: BUILT
     doc_status: null
     in_table: false
-  field_type_registry_v30:
-    identifier: field_type_registry_v30
-    docs:
-    - systems/_architecture/governance_type_registry_v1.md
-    purpose: 'Landing it for real is follow-on work: a `field_type_registry_v30.md` companion to'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  fieldwork_hybrid:
-    identifier: fieldwork_hybrid
-    docs:
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: '[§3.9 Fieldwork ↔ All Systems] Direction | Trigger | Procedure :: BG Survey → TTRPG Discovery | Hybrid mode, Survey degree sets Fieldwork Offset | BG degree: Failure −1 Ob, Partial +0, Success +1 Ob reduction, Overwhelming +2 Ob reduction (cap ±2) on TTRPG personal fieldwork scene. (fieldwork_hybrid.md §9.1)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   fieldwork_knots:
     identifier: fieldwork_knots
     docs:
@@ -2344,8 +2185,10 @@ identifiers:
     - systems/_architecture/key_type_registry_v30.md
     - systems/_architecture/propagation_spec_v1.md
     purpose: gap_notes for the pointer (W3 item 3, ED-IN-0096)."
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/build_execution_map.py
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   gen_definition_views:
@@ -2393,24 +2236,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  governance_consolidation:
-    identifier: governance_consolidation
-    docs:
-    - systems/_architecture/ners_vsg_reconciliation_v1.md
-    purpose: 'Status: ALL SIX ITEMS RULED (D1–D5: ED-IN-0046; D6+B1: ED-IN-0047; B2+B12: direct Jordan ruling 2026-07-13) — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record D1–D6) and folds `generation_sourcebook_v1.md`''s blocker register into o…'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  governance_play_redesign:
-    identifier: governance_play_redesign
-    docs:
-    - systems/_architecture/governance_consolidation_v1.md
-    purpose: Two engines model "what happens to a settlement each season." The **stateful card deck** (`governance_play_redesign §2`, Goldenfurt, the grounded deck) — Π-weighted draw, cooldowns, a forced queue, `seeds:` chaining — is the **player-facing** engine; it carries authored drama and the churn invariant…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   governor_expelled:
     identifier: governor_expelled
     docs:
@@ -2425,8 +2250,9 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_event_deck_engine.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   horizon_factor:
@@ -2434,15 +2260,6 @@ identifiers:
     docs:
     - systems/_architecture/key_substrate_v30.md
     purpose: 'horizon_factor = {immediate: 1.5, near: 1.0, far: 0.5}[time_horizon]'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  hybrid_gaps_resolved:
-    identifier: hybrid_gaps_resolved
-    docs:
-    - systems/_architecture/hybrid_gaps_v30.md
-    purpose: <!-- v30 baseline — renamed from designs/hybrid/hybrid_gaps_resolved.md on 2026-04-13 -->
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -2620,16 +2437,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  investigation_systems:
-    identifier: investigation_systems
-    docs:
-    - systems/_architecture/governance_ripple_substrate_v1.md
-    - systems/_architecture/integration_proposal_v30.md
-    purpose: '[§14.1 · The loop, mapped to module contracts (owner · resolver · Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN → OUT (registry vocabulary) | Compliance :: FI ripple (§6.1) | `scene_slate` / `fieldwork_knots` | `manifest` / `dice_pool` | a negative-resolution Key raises the concealment inventory the `Investigate` (`dice_pool`, `investigation_systems`) '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   investigation_systems_proposal:
     identifier: investigation_systems_proposal
     docs:
@@ -2673,8 +2480,9 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'causes # [key_ids] of prior Keys contributing to shock (unified provenance naming — was cause_keys; C-INJ-12/ED-IN-0022, converges on the universal key_substrate_v30 `causes[]`)'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/observability/build_lexicon.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   key_log:
@@ -2707,26 +2515,6 @@ identifiers:
     docs:
     - systems/_architecture/key_substrate_v30.md
     purpose: 'by_time_window: # season_index bucket → list of key_refs'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  key_substrate:
-    identifier: key_substrate
-    docs:
-    - systems/_architecture/governance_ripple_substrate_v1.md
-    - systems/_architecture/key_echo_armature_v1.md
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: '[§13 · Self-audit — grading the loop edges against this spec''s own §9 test] Loop edge | Grade | Verified against canon | What it still needs :: Cross-scale stamping (§7) | **WIRED** | `key_substrate §2.1` `scale_signature: [personal\ | settlement\ | territory\ | peninsula]` — the four scales already on every Key | —'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  key_type_registry:
-    identifier: key_type_registry
-    docs:
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: 'The J-1 analysis enumerates eight cross-band down-seams / fifteen type-edges whose *consume intent is already registry-canonical* (the consumers are listed in key_type_registry) but whose strategic emitters do not yet populate sub-scale targets: `domain_actions -> {npc_behavior, piety_track, settlem…'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -2806,8 +2594,11 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_event_deck_engine.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_recognition_accountability.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   leader_id_at_resolution:
@@ -3113,20 +2904,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/_architecture/generational_transition_v30.md
-    - systems/_architecture/key_echo_armature_v1.md
-    - systems/_architecture/key_type_registry_v30.md
-    - systems/_architecture/player_agency_v30.md
-    - systems/_architecture/propagation_spec_v1.md
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: 'All Knots: rupture (relational threads sever — Knotted NPCs receive Knot rupture strain per npc_behavior §5.0b)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   npc_id:
     identifier: npc_id
     docs:
@@ -3148,15 +2925,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  npc_roster:
-    identifier: npc_roster
-    docs:
-    - systems/_architecture/campaign_architecture_v30.md
-    purpose: '[§5.3 Elske Residency During Löwenritter Graduated Autonomy (ED-662)] Löwenritter Autonomy stage | Crown effect | Elske residency :: Split | Löwenritter constitutes itself as opposing faction; Ehrenwall Split Card fires | **Conditional effect.** If Crown enters open civil war and is at risk of elimination (Crown Stability ≤ 1), Altonia may *recall* Elske on its own diplomatic calculation (Laskaris'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   npcs_generated:
     identifier: npcs_generated
     docs:
@@ -3322,8 +3090,9 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: **B8** | "Event-deck engine S3–S6 unbuilt... zero-code" | **STALE.** `pr119_event_deck_engine.py` is real, committed, working code: a 13-of-28-card subset with trigger/cooldown/response dispatch, the Π homeostat, and per-NPC ambition ticks (`hedda_progress`/`konrad_progress`/`orsk'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_event_deck_engine.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   outcome_class:
@@ -3345,38 +3114,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  params_core:
-    identifier: params_core
-    docs:
-    - systems/_architecture/derived_stats_v30.md
-    - systems/_architecture/player_agency_v30.md
-    - systems/_architecture/player_agency_v30_index.md
-    purpose: 'Cross-reference: fieldwork_v30 §5.1, params_core §Bonds (PP-632/PP-684), companion_specification §2.1.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_scale_transitions:
-    identifier: params_scale_transitions
-    docs:
-    - systems/_architecture/scale_transitions_v30.md
-    - systems/_architecture/scale_transitions_v30_index.md
-    - systems/_architecture/scale_transitions_v30_infill.md
-    purpose: 'Sources: params_scale_transitions.md, PP-089/090, PP-103, PP-107–112, PP-232, PP-261, PP-340–343'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_threadwork:
-    identifier: params_threadwork
-    docs:
-    - systems/_architecture/campaign_architecture_v30.md
-    - systems/_architecture/campaign_architecture_v30_index.md
-    purpose: '[PART 8: PROPAGATION REQUIRED] Target Document | Section | Change :: params_threadwork §Coherence | Cost table | Replace with Part 3 §3.2'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   parent_scene_id:
     identifier: parent_scene_id
     docs:
@@ -3404,22 +3141,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  peninsular_strain:
-    identifier: peninsular_strain
-    docs:
-    - systems/_architecture/canonical_registry.md
-    - systems/_architecture/derived_stats_v30.md
-    - systems/_architecture/governance_ripple_substrate_v1.md
-    - systems/_architecture/key_echo_armature_v1.md
-    - systems/_architecture/key_substrate_v30.md
-    - systems/_architecture/key_type_registry_v30.md
-    - systems/_architecture/propagation_spec_v1.md
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: Stale:** check_victory uses pre-peninsular_strain victory conditions.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   peninsular_strain_shock:
     identifier: peninsular_strain_shock
     docs:
@@ -3432,18 +3153,6 @@ identifiers:
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
-    doc_status: null
-    in_table: true
-  peninsular_strain_v1:
-    identifier: peninsular_strain_v1
-    docs:
-    - systems/_architecture/campaign_architecture_v30.md
-    - systems/_architecture/campaign_architecture_v30_index.md
-    - systems/_architecture/scale_transitions_v30.md
-    - systems/_architecture/scale_transitions_v30_index.md
-    purpose: 'Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, ms_budget.md, player_agency_v30.md, npc_behavior_v30.md'
-    built_in: []
-    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   per_system_lookup:
@@ -3460,8 +3169,10 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'emitting_systems: [personal_combat]'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/dashboard_data.py
+    - py:tools/observability/build_proposals.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   personal_convictions:
@@ -3517,18 +3228,6 @@ identifiers:
     - systems/_architecture/propagation_spec_v1.md
     - systems/_architecture/scale_transitions_v30.md
     purpose: '[2.2 Top-down (strategic/environmental → settlement/personal)] Emitter family | Keys | targets[] population spec (the §12.3 obligation, now per-row) | finding_basis :: `domain_actions` → npc_behavior, piety_track, settlement_economy† | `da.*` (5 types) | Every da.* Key names the affected settlement(s) and every present/affected named NPC with role (subject/witness/bystander) + per-target impact_ve'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  player_agency:
-    identifier: player_agency
-    docs:
-    - systems/_architecture/auto_manual_resolution_duality_v1.md
-    - systems/_architecture/derived_stats_v30.md
-    - systems/_architecture/integration_proposal_v30.md
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: 'This is not new design: it is `player_agency_v30 §4` (implemented as `sim/autoload/scene_slate.py`).'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -3781,15 +3480,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  propagation_spec:
-    identifier: propagation_spec
-    docs:
-    - systems/_architecture/key_echo_armature_v1.md
-    purpose: '[§5 · Consolidated fork docket — RULED 2026-07-07 (Jordan consolidated ruling pass, ED-IN-0026; table kept verbatim as the historical decision surface, ruling recorded per-row below the table)] # | Fork | Default the armature assumes (reversible) | Blocks :: 5.1 | **OF-D6 double-count/disjointness** (propagation_spec §3 D.6, HIGH) — do down-targeted settlement stat_deltas overlap what AGGREGATE_s '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   public_announcement:
     identifier: public_announcement
     docs:
@@ -3944,8 +3634,9 @@ identifiers:
     docs:
     - systems/_architecture/repo_state_armature_v1.md
     purpose: 2.2 `tools/review_core.py` → `review_state.json` — the one review engine (Phase 1, BUILT)
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/dashboard_data.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   rhetorical_style_used:
@@ -4014,6 +3705,7 @@ identifiers:
     purpose: '[1. The cross-map: spec concept → existing Valoria artifact] Doctrine concept | Existing Valoria artifact | State / gap :: **Determinism** (seeded RNG, fixed timestep, stable iteration order — emergence is debugged by replaying seeds) | `mc_v18.run_campaign(seed…)`; ED-1053 seeded regression (`sim/tests/`); Gate-0 RNG service for Godot (Jordan-gated) | Established in the Python reference; the Godo'
     built_in:
     - py:engine/mc_v18.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -4103,18 +3795,10 @@ identifiers:
     purpose: '[§13 · Self-audit — grading the loop edges against this spec''s own §9 test] Loop edge | Grade | Verified against canon | What it still needs :: Cross-scale stamping (§7) | **WIRED** | `key_substrate §2.1` `scale_signature: [personal\ | settlement\ | territory\ | peninsula]` — the four scales already on every Key | —'
     built_in:
     - py:engine/substrate/keys.py
+    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: true
-  scale_transitions_design_v1:
-    identifier: scale_transitions_design_v1
-    docs:
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: <!-- v30 baseline — renamed from designs/hybrid/scale_transitions_design_v1.md on 2026-04-13 -->
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   scar_acquired:
     identifier: scar_acquired
     docs:
@@ -4435,15 +4119,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  settlement_adjacency:
-    identifier: settlement_adjacency
-    docs:
-    - systems/_architecture/ners_vsg_reconciliation_v1.md
-    purpose: '[Generation/build-substrate blockers (from `generation_sourcebook_v1`, updated)] ID | Blocker | Update after PR#127 :: B9 | ~~Geography YAML `settlements:` block stale 36-scheme~~ **RESOLVED 2026-07-13** ("reconcile all geography stuff with bias towards recency") — full 37-settlement migration against `settlement_layer_v30.md`''s already-current table, cross-verified against the already-correct `se'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   settlement_bridge_unification:
     identifier: settlement_bridge_unification
     docs:
@@ -4486,23 +4161,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  settlement_layer:
-    identifier: settlement_layer
-    docs:
-    - systems/_architecture/conflict_architecture_proposal.md
-    - systems/_architecture/derived_stats_v30.md
-    - systems/_architecture/governance_consolidation_v1.md
-    - systems/_architecture/governance_ripple_substrate_v1.md
-    - systems/_architecture/key_echo_armature_v1.md
-    - systems/_architecture/key_type_registry_v30.md
-    - systems/_architecture/player_agency_v30.md
-    - systems/_architecture/propagation_spec_v1.md
-    - systems/_architecture/scale_transitions_v30.md
-    purpose: The bishop appointment mechanic integrates with the existing governor system (settlement_layer §3.2).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   settlement_mgmt:
     identifier: settlement_mgmt
     docs:
@@ -4633,26 +4291,6 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'stack_depth_after # int — zoom-stack depth after push (1=top-level, 2=nested)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  stage11_scale_transitions_deprecated:
-    identifier: stage11_scale_transitions_deprecated
-    docs:
-    - systems/_architecture/scale_transitions_v30.md
-    - systems/_architecture/scale_transitions_v30_index.md
-    - systems/_architecture/scale_transitions_v30_infill.md
-    purpose: 'Supersedes: compilation/v0.14/stage11_scale_transitions_deprecated.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  stage12_campaign_modes_deprecated:
-    identifier: stage12_campaign_modes_deprecated
-    docs:
-    - systems/_architecture/campaign_modes_v30.md
-    purpose: <!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage12_campaign_modes_deprecated.md -->
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -5043,25 +4681,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  tc_political_redesign:
-    identifier: tc_political_redesign
-    docs:
-    - systems/_architecture/canonical_registry.md
-    purpose: Per tc_political_redesign_v30.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  tc_political_redesign_v30:
-    identifier: tc_political_redesign_v30
-    docs:
-    - systems/_architecture/canonical_registry.md
-    - systems/_architecture/complete_systems_reference.md
-    purpose: Per tc_political_redesign_v30.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   territorial_outcome:
     identifier: territorial_outcome
     docs:
@@ -5113,6 +4732,7 @@ identifiers:
     purpose: 'target_territories # [territory_ids]'
     built_in:
     - py:systems/world/sim/insurgency_pipeline.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_subnational_factions.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -5169,15 +4789,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  throughline_resolutions_v1:
-    identifier: throughline_resolutions_v1
-    docs:
-    - systems/_architecture/player_agency_v30.md
-    purpose: See throughline_resolutions_v1 §2 for full reconciliation.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   tick_keys:
     identifier: TICK_KEYS
     docs:
@@ -5194,6 +4805,8 @@ identifiers:
     purpose: 'time_horizon: <immediate | near | far> # immediate=this season; near=1-3; far=4+'
     built_in:
     - py:engine/substrate/keys.py
+    - py:tools/build_key_graph.py
+    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -5279,6 +4892,7 @@ identifiers:
     - py:engine/cross_scale/articulation.py
     - py:engine/substrate/keys.py
     - py:engine/tests/test_pipeline_reach.py
+    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -5305,24 +4919,6 @@ identifiers:
     docs:
     - systems/_architecture/key_type_registry_v30.md
     purpose: 'reason # abstract_resolve | unbuilt_container | depth_exceeded'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_canonical_definitive:
-    identifier: valoria_canonical_definitive
-    docs:
-    - systems/_architecture/canonical_registry.md
-    purpose: 'Supersedes: valoria_canonical_definitive.md (Revision 1)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_complete_systems:
-    identifier: valoria_complete_systems
-    docs:
-    - systems/_architecture/complete_systems_reference.md
-    purpose: 'Supersedes: valoria_complete_systems.md (Revision 1)'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -5363,15 +4959,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  valoria_ttrpg_complete:
-    identifier: valoria_ttrpg_complete
-    docs:
-    - systems/_architecture/derived_stats_v30.md
-    purpose: '[5.3 Inspiration (motivation resource — propagated 2026-04-25)] Mechanic | Scale | Function | Persistence :: **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete §10.2 — TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   victory_milestone:
     identifier: victory_milestone
     docs:

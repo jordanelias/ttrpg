@@ -30,8 +30,8 @@ docs:
 - systems/factions/varfell_path_b_v30.md
 - systems/factions/varfell_path_b_v30_infill.md
 counts:
-  UNRESOLVED: 301
-  BUILT: 39
+  UNRESOLVED: 259
+  BUILT: 40
 identifiers:
   accounting_stability_check:
     identifier: ACCOUNTING_STABILITY_CHECK
@@ -276,15 +276,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  articulation_layer:
-    identifier: articulation_layer
-    docs:
-    - systems/factions/faction_systems_overview_v30.md
-    purpose: 'Canon: `articulation_layer_v30.md`.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   articulation_significance:
     identifier: articulation_significance
     docs:
@@ -329,15 +320,6 @@ identifiers:
     docs:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: '+ axis_relevance_threshold=0.3, # tunable; default 0.3'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  baralta_crown_claim_mechanic:
-    identifier: baralta_crown_claim_mechanic
-    docs:
-    - systems/factions/baralta_crown_claim_v30.md
-    purpose: <!-- v30 baseline — renamed from designs/mechanics/baralta_crown_claim_mechanic.md on 2026-04-13 -->
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -416,15 +398,6 @@ identifiers:
     docs:
     - systems/factions/faction_state_authoring_v30.md
     purpose: 'bjorn_holdar # Western Highlands Senior Jarl'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  board_game_v30:
-    identifier: board_game_v30
-    docs:
-    - systems/factions/factions_personal_v30.md
-    purpose: '<!-- NOTE: BG faction starting stats and BG-specific actions are in designs/board_game/board_game_v30.md -->'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -559,15 +532,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  caste_integration_v1:
-    identifier: caste_integration_v1
-    docs:
-    - systems/factions/faction_politics_v30.md
-    purpose: '[PART 11 — PROPAGATION MAP] File | Changes Required :: New file: **caste_integration_v1.md** | Part 3 of this register as a canonical doc.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   causal_graph:
     identifier: CAUSAL_GRAPH
     docs:
@@ -582,15 +546,6 @@ identifiers:
     docs:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: '''belief_revision'': resolution.causes_belief_revision,'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  character_canon:
-    identifier: character_canon
-    docs:
-    - systems/factions/faction_canon_v30.md
-    purpose: 'Companion: `designs/npcs/character_canon_v30.md` (per-NPC sheets) — pending.'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -613,16 +568,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  ci_political:
-    identifier: ci_political
-    docs:
-    - systems/factions/faction_layer_v30.md
-    - systems/factions/faction_systems_overview_v30.md
-    purpose: '[§0 — AUDIT PATCHES APPLIED IN THIS DOCUMENT] Conflict resolved | Resolution :: FACTION_RESOLVER_PROPAGATION (ED-874, W3.3) | Remaining in-scope bare-stat faction checks migrated to the deterministic+stochastic resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution): §1.4 Accounting Stability (M = Stability − loss magnitude), §1.5 Reconstitute (M = Influence − 4), §2.5 Resistance ('
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   combat_resolved:
     identifier: combat_resolved
     docs:
@@ -722,6 +667,7 @@ identifiers:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: Bottom-up = registry consuming_systems (npc_behavior on contest/battle/combat_resolved) + the §5.1 input filter.
     built_in:
+    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -784,16 +730,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  conviction_track:
-    identifier: conviction_track
-    docs:
-    - systems/factions/faction_politics_v30.md
-    - systems/factions/faction_systems_overview_v30.md
-    purpose: 'Cross-references: player_agency_v30 (Standing §5, Renown §5.4, Duties §3), factions_ttrpg_v30 (8-faction roster §8.2–§8.9), worldbuilding_v30 (Four-Cardinal Church §3, Löwenritter arms §4, Guild structure §5, Parliament §6), npc_roster_v30 §14 (caste annotations), conviction_track_v30 (CV/WA), tc_po…'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   coronation_renewal:
     identifier: coronation_renewal
     docs:
@@ -1081,15 +1017,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  einhir_revival_v30:
-    identifier: einhir_revival_v30
-    docs:
-    - systems/factions/parliamentary_transfer_v30.md
-    purpose: '[§3. Casus Belli Sources] Source | Mechanism :: **Einhir Revival Partial** | Varfell gains CB vs territory holder per Einhir Revival Partial outcome (per `einhir_revival_v30.md`, Pass 2d pending).'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   emit_key:
     identifier: emit_key
     docs:
@@ -1240,26 +1167,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  faction_behavior:
-    identifier: faction_behavior
-    docs:
-    - systems/factions/faction_canon_v30.md
-    - systems/factions/faction_state_authoring_v30.md
-    purpose: '<!-- [PROVISIONAL: 2026-05-07 — Faction canon consolidation; supersedes piecemeal lookup across faction_layer_v30 / faction_behavior_v30 / faction_state_authoring_v30 / faction_politics_v30 / factions_personal_v30 / params/factions/* for per-faction texture.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  faction_canon:
-    identifier: faction_canon
-    docs:
-    - systems/factions/faction_behavior_v30.md
-    - systems/factions/faction_systems_overview_v30.md
-    purpose: '[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue faction_canon flagged.]** Popular Support is a **per-settlement** value (0–7), not faction state.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   faction_id:
     identifier: faction_id
     docs:
@@ -1271,31 +1178,6 @@ identifiers:
     - py:engine/autoload/victory.py
     - py:systems/factions/sim/parliamentary_transfer.py
     disposition: BUILT
-    doc_status: null
-    in_table: false
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/factions/ci_political_v30.md
-    - systems/factions/faction_behavior_v30.md
-    - systems/factions/faction_canon_v30.md
-    - systems/factions/faction_layer_v30.md
-    - systems/factions/faction_succession_split_v30.md
-    - systems/factions/fractional_province_ownership_v30.md
-    purpose: '[§3.2 CI Institutional Weight (Church in Political Forums)] Context | Resolution method | CI applied as :: Parliamentary motion (proposing or defending) | Deterministic Mandate **tally** (faction_layer §5.3) | **+⌊CI/20⌋ votes** to Church''s contribution'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  faction_politics:
-    identifier: faction_politics
-    docs:
-    - systems/factions/faction_canon_v30.md
-    - systems/factions/faction_state_authoring_v30.md
-    - systems/factions/faction_succession_split_v30.md
-    purpose: '<!-- [PROVISIONAL: 2026-05-07 — Faction canon consolidation; supersedes piecemeal lookup across faction_layer_v30 / faction_behavior_v30 / faction_state_authoring_v30 / faction_politics_v30 / factions_personal_v30 / params/factions/* for per-faction texture.'
-    built_in: []
-    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   faction_politics_patch_register_2026:
@@ -1326,50 +1208,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  faction_state_authoring:
-    identifier: faction_state_authoring
-    docs:
-    - systems/factions/faction_behavior_v30.md
-    - systems/factions/faction_canon_v30.md
-    purpose: Engine init (LPS-2e migration):** per-settlement L and PS seed from the controlling faction's prior authored value (faction_state_authoring §8) — each settlement starts at that faction's old {Legitimacy, Popular_Support}; thereafter per-territory dynamics (§3.4–§3.5 per settlement) and the Mandate a…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   faction_unique_actions:
     identifier: faction_unique_actions
     docs:
     - systems/factions/faction_systems_overview_v30.md
     purpose: 'Authority: catalog derived from `canon/mechanics_index.yaml` `categories.faction_unique_actions` + `canon/02_canon_constraints.md §B` + Pass 2 canonized docs.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  factions_ttrpg:
-    identifier: factions_ttrpg
-    docs:
-    - systems/factions/baralta_crown_claim_v30.md
-    purpose: '[7.1 Generational Shift × Löwenritter Autonomy] Shift Trigger | Torben Disposition to player | Torben Loyalty vector | Löwenritter Autonomy effect :: Campaign Seasons ≥ 24 | Any | ≤ 3 (Altonian) | +1 (standard per factions_ttrpg §8.9)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  factions_ttrpg_v30:
-    identifier: factions_ttrpg_v30
-    docs:
-    - systems/factions/faction_politics_v30.md
-    - systems/factions/faction_politics_v30_index.md
-    - systems/factions/factions_personal_v30_infill.md
-    purpose: '[Hafenmark Ladder Table] Standing | Title | Initiation Gate | Access | Obligations | Hall Tier | Livery | Mentor | Demotion :: **4** | **Parliamentarian** (Parlamentsmitglied) | **Public Deed:** A specified Parliamentary intervention that passes (the player proposes and carries a motion — not merely votes on one). Plus: completion of 3 Aldermanic Duties at Success+. The Parliamentary intervention '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  factions_ttrpg_v30_infill:
-    identifier: factions_ttrpg_v30_infill
-    docs:
-    - systems/factions/factions_personal_v30.md
-    purpose: '<!-- Infill: factions_ttrpg_v30_infill.md -->'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1406,15 +1249,6 @@ identifiers:
     docs:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: + new_memory_refs = filter_memory_refs(npc.memory_refs,
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  fractional_province_ownership:
-    identifier: fractional_province_ownership
-    docs:
-    - systems/factions/faction_succession_split_v30.md
-    purpose: Stage 2 Organization:** RM captures one settlement (via `peninsular_strain §2.5` RM exception or Secession per `fractional_province_ownership §2.6`).
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1586,15 +1420,6 @@ identifiers:
     docs:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: gossip_key = emit_key(
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  governance_play_redesign:
-    identifier: governance_play_redesign
-    docs:
-    - systems/factions/faction_layer_v30.md
-    purpose: Interaction with Levy.** Where a `governance_play_redesign` Levy-type verb exists or is later
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1817,15 +1642,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  mass_battle_integration:
-    identifier: mass_battle_integration
-    docs:
-    - systems/factions/faction_systems_overview_v30.md
-    purpose: '`military_conquest` | `designs/provincial/mass_battle_v30.md` + `mass_battle_integration_v30.md` (Pass 2n) | READY (v22-port plan) |'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   mechanical_event:
     identifier: mechanical_event
     docs:
@@ -1872,26 +1688,8 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  military_layer:
-    identifier: military_layer
-    docs:
-    - systems/factions/faction_layer_v30.md
-    purpose: Crown faction Military stat 5 is expressed through Löwenritter Power 5 / Discipline 6 elite units (per stats_1_7_scale; military_layer §1.3 Power ceiling).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   ministry_system_v1:
     identifier: ministry_system_v1
-    docs:
-    - systems/factions/faction_politics_v30.md
-    purpose: '[PART 11 — PROPAGATION MAP] File | Changes Required :: New file: **ministry_system_v2.md** | Parts 7.1–7.4 of this register. Supersedes original register''s ministry_system_v1.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  ministry_system_v2:
-    identifier: ministry_system_v2
     docs:
     - systems/factions/faction_politics_v30.md
     purpose: '[PART 11 — PROPAGATION MAP] File | Changes Required :: New file: **ministry_system_v2.md** | Parts 7.1–7.4 of this register. Supersedes original register''s ministry_system_v1.'
@@ -1994,27 +1792,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/factions/baralta_crown_claim_v30.md
-    - systems/factions/faction_canon_v30.md
-    - systems/factions/faction_politics_v30.md
-    - systems/factions/political_dynamics_keys_migration_v30.md
-    purpose: Torben becomes formal Altonian diplomatic contact point (npc_behavior §7.8).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  npc_character_analyses:
-    identifier: npc_character_analyses
-    docs:
-    - systems/factions/faction_succession_split_v30.md
-    purpose: '[§3 Worked Example: Vaynard Falls] Contender | Claim Type | Disposition | Standing | Pool :: Maret Uln | Blood heir (canonical per `npc_character_analyses §2`) | +2 toward Varfell apparatus | 4 | Mandate 3 + Influence 4 = 7'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   npc_id:
     identifier: npc_id
     docs:
@@ -2072,17 +1849,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  npc_roster:
-    identifier: npc_roster
-    docs:
-    - systems/factions/faction_canon_v30.md
-    - systems/factions/faction_politics_v30.md
-    - systems/factions/faction_state_authoring_v30.md
-    purpose: 'Cardinal of **Prudence** — Aldric Tormann (per `npc_roster #13`)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   obstructor_id:
     identifier: obstructor_id
     docs:
@@ -2176,46 +1942,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  params_board_game:
-    identifier: params_board_game
-    docs:
-    - systems/factions/baralta_crown_claim_v30.md
-    - systems/factions/baralta_crown_claim_v30_infill.md
-    - systems/factions/ci_political_v30.md
-    - systems/factions/faction_layer_v30.md
-    - systems/factions/fail_forward_pp177.md
-    purpose: 'Affects: params_board_game.md, worldbuilding_integration_v3.md (Named Character Event Cards)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_board_game_history:
-    identifier: params_board_game_history
-    docs:
-    - systems/factions/fail_forward_pp177.md
-    purpose: 'Affects: params_board_game.md, params_board_game_history.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  params_contest:
-    identifier: params_contest
-    docs:
-    - systems/factions/faction_layer_v30.md
-    purpose: Follows params_contest.md structure.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  params_npc:
-    identifier: params_npc
-    docs:
-    - systems/factions/faction_politics_v30.md
-    purpose: '[PART 11 — PROPAGATION MAP] File | Changes Required :: params_npc.md (when created) | Populate inner-circle and Cardinal NPCs with Stance Triangle specifications per §1.1d, §1.2c, §1.3c, §1.4b of this register.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   parl_majority_ob_bonus:
     identifier: PARL_MAJORITY_OB_BONUS
     docs:
@@ -2274,16 +2000,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  peninsular_strain:
-    identifier: peninsular_strain
-    docs:
-    - systems/factions/faction_layer_v30.md
-    - systems/factions/faction_succession_split_v30.md
-    purpose: '[§2.3 Occupation Effects] Effect | On displaced faction | On occupying faction :: Accord | May decline during Occupation from Stability effects (faction_layer §1.2 Trigger 1) — NOT frozen. Accord resets at control transfer per peninsular_strain §7b table. (Prior "Accord frozen" text struck — superseded by peninsular_strain §7b 2026-04-29.) | N/A (occupier has no Accord until control transfers)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   peninsular_strain_shock:
     identifier: peninsular_strain_shock
     docs:
@@ -2294,30 +2010,12 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  peninsular_strain_v1:
-    identifier: peninsular_strain_v1
-    docs:
-    - systems/factions/faction_layer_v30.md
-    purpose: '<!-- Integrates with: Phase 4 Priority-4 Social actions; Phase 5 Accounting steps 1–13; peninsular_strain_v1.md (Accord, Strain, battle consequences) -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   personal_convictions:
     identifier: personal_convictions
     docs:
     - systems/factions/faction_behavior_v30.md
     - systems/factions/faction_canon_v30.md
     purpose: '[§3.9 Edge Cases (resolves audit P2-4)] Case | Rule :: Zero-vector leader (personal_convictions magnitude < 0.1) | Faction enters Provisional state; aggregate from non-leader NPCs only; succession forced next Accounting'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  piety_track_v30:
-    identifier: piety_track_v30
-    docs:
-    - systems/factions/faction_politics_v30.md
-    purpose: '[§10.2 New Editorial Items Raised] New ED | Description | Priority :: ED-644 | **CV ≡ PT terminology reconciliation** — Conviction (CV) in conviction_track_v30 and Piety (PT) in tc_political_redesign_v30 are the same per-territory stat. Full rename (CV → PT, file rename conviction_track_v30.md → piety_track_v30.md) is deferred pending cost-benefit review; this register adds an equivalence note to '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -2515,15 +2213,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  rank_ladder_v1:
-    identifier: rank_ladder_v1
-    docs:
-    - systems/factions/faction_politics_v30.md
-    purpose: '[PART 11 — PROPAGATION MAP] File | Changes Required :: New file: **rank_ladder_v1.md** | Full specification of all rank ladders (Part 1, 2 here) — may be large enough to warrant its own document. Alternative: keep inline in factions_ttrpg_v30 and player_agency_v30.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   rate_mult:
     identifier: rate_mult
     docs:
@@ -2645,6 +2334,7 @@ identifiers:
     purpose: scale_signature='personal',
     built_in:
     - py:engine/substrate/keys.py
+    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -2754,21 +2444,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  settlement_layer:
-    identifier: settlement_layer
-    docs:
-    - systems/factions/faction_behavior_v30.md
-    - systems/factions/faction_canon_v30.md
-    - systems/factions/faction_layer_v30.md
-    - systems/factions/faction_state_authoring_v30.md
-    - systems/factions/faction_succession_split_v30.md
-    - systems/factions/fractional_province_ownership_v30.md
-    - systems/factions/franchise_v30.md
-    purpose: 'Stateful — RELOCATED per LPS-1 (settlement_layer_v30 §1.8, Jordan ruling 2026-05-30):'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   share_knowledge:
     identifier: share_knowledge
     docs:
@@ -2811,15 +2486,6 @@ identifiers:
     docs:
     - systems/factions/fail_forward_pp177.md
     purpose: 'Authority: stage1_core_engine §1.6 → this document (BG-mode operationalisation)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  stage6_factions_deprecated:
-    identifier: stage6_factions_deprecated
-    docs:
-    - systems/factions/factions_personal_v30.md
-    purpose: <!-- v30 baseline — design-layer doc created 2026-04-13 from compilation/v0.14/stage6_factions_deprecated.md -->
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -2936,34 +2602,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  tc_political_redesign:
-    identifier: tc_political_redesign
-    docs:
-    - systems/factions/faction_politics_v30.md
-    purpose: '[PART 0 — AUDIT FINDINGS] # | Finding | Severity | Addressed in :: A-06 | CV (Piety Track) and PT (Piety Track) are the same per-territory stat under two names across two v30 documents. Plus SW (Spiritual Weight, fixed) was introduced in tc_political_redesign without explicit dissolution of CV. The register silently uses none of the three. | P1 | Part 4 (terminology reconciliation)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  tc_political_redesign_v30:
-    identifier: tc_political_redesign_v30
-    docs:
-    - systems/factions/faction_politics_v30.md
-    - systems/factions/faction_politics_v30_index.md
-    purpose: '[§10.2 New Editorial Items Raised] New ED | Description | Priority :: ED-644 | **CV ≡ PT terminology reconciliation** — Conviction (CV) in conviction_track_v30 and Piety (PT) in tc_political_redesign_v30 are the same per-territory stat. Full rename (CV → PT, file rename conviction_track_v30.md → piety_track_v30.md) is deferred pending cost-benefit review; this register adds an equivalence note to '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  tc_political_redesign_v30_infill:
-    identifier: tc_political_redesign_v30_infill
-    docs:
-    - systems/factions/ci_political_v30.md
-    purpose: '<!-- Companion infill: tc_political_redesign_v30_infill.md -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   tc_suppress_stability:
     identifier: TC_SUPPRESS_STABILITY
     docs:
@@ -2997,8 +2635,9 @@ identifiers:
     - systems/factions/parliamentary_transfer_v30.md
     - systems/factions/treaty_expiration_v30.md
     purpose: 'Per `canon/mechanics_index.yaml` entry `parliamentary_transfer`, `test_status: validated_n1000_v12c`.'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   theodor_kreutz:
@@ -3043,16 +2682,6 @@ identifiers:
     docs:
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: + time_window=(current_season - 1, current_season),
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  treaty_expiration:
-    identifier: treaty_expiration
-    docs:
-    - systems/factions/faction_systems_overview_v30.md
-    - systems/factions/treaty_expiration_v30.md
-    purpose: '`crown_treaty` | `treaty_expiration_v30.md` (Pass 2h) | READY (3 flags) |'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -3158,24 +2787,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  varfell_path_b:
-    identifier: varfell_path_b
-    docs:
-    - systems/factions/faction_state_authoring_v30.md
-    purpose: Per **GD-1** (canon/02_canon_constraints.md §B) and the victory restructure (peninsular_strain_v30 §6.2 STRUCK; ci_political_v30 §2.2 CIP-2), the **sole** victory condition for every faction is **Peninsular Sovereignty**; the faction-specific tracks in victory_v30 §3.2–3.5 (`solmundan_orthodoxy`, `d…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  varfell_path_b_redesign_ed311:
-    identifier: varfell_path_b_redesign_ed311
-    docs:
-    - systems/factions/varfell_path_b_v30.md
-    purpose: <!-- v30 baseline — renamed from designs/board_game/varfell_path_b_redesign_ed311.md on 2026-04-13 -->
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   vaynards_hall:
     identifier: vaynards_hall
     docs:
@@ -3218,16 +2829,6 @@ identifiers:
     docs:
     - systems/factions/franchise_v30.md
     purpose: var weighted_sum := 0.0
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  worldbuilding_integration_v3:
-    identifier: worldbuilding_integration_v3
-    docs:
-    - systems/factions/baralta_crown_claim_v30.md
-    - systems/factions/baralta_crown_claim_v30_infill.md
-    purpose: 'Affects: params_board_game.md, worldbuilding_integration_v3.md (Named Character Event Cards)'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

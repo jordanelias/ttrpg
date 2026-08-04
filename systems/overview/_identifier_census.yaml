@@ -9,7 +9,7 @@ docs:
 - systems/overview/peninsular_strain_v30_index.md
 - systems/overview/wc_survival_spine.md
 counts:
-  UNRESOLVED: 29
+  UNRESOLVED: 9
 identifiers:
   arc_expansion_v1:
     identifier: arc_expansion_v1
@@ -29,56 +29,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  campaign_architecture_v1:
-    identifier: campaign_architecture_v1
-    docs:
-    - systems/overview/ms_budget.md
-    purpose: '[Operation-Driven] Source | Cost | Condition | Document :: ~~Mass battle MS ×3 multiplier~~ | **STRUCK (campaign_architecture_v1 §3.1).** Replaced by flat −1 per battle in which any Thread operation occurs. | During mass battle | params_threadwork PP-192 (struck)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   canonical_definitive_r2:
     identifier: canonical_definitive_r2
     docs:
     - systems/overview/clock_registry_v30.md
     purpose: '[Faction-Specific Tracks (BG/Hybrid)] Track | Owner | Range | Start | Source :: Popular Will (PW) | Shared (Hybrid only) | 0–5 | 0 | params_board_game.md §RM Founding [PROVISIONAL: ED-795 — staleness report says STRUCK per canonical_definitive_r2; verify]'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  clock_registry:
-    identifier: clock_registry
-    docs:
-    - systems/overview/clock_registry_v30.md
-    purpose: '<!-- Infill: clock_registry_v30_infill.md -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  derived_stats:
-    identifier: derived_stats
-    docs:
-    - systems/overview/clock_registry_v30.md
-    purpose: 'Created: 2026-04-08 | Updated: 2026-06-24 (contest-track sync — Persuasion Track + Obligation clocks registered; Composure/Concentration/Health/Stamina formulas synced to derived_stats §14.1; ED-939, docket J-31) | Status: CANONICAL'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  derived_stats_v1:
-    identifier: derived_stats_v1
-    docs:
-    - systems/overview/peninsular_strain_v30.md
-    purpose: '[§4.3 Strain Threshold Effects] Strain | Name | Effect :: 3–4 | Tension | All factions: Legitimacy −25 at Accounting (derived_stats_v1).'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/overview/peninsular_strain_v30.md
-    purpose: '[§2.3 Accord Changes — Gaining] Method | Accord Change | Notes :: Peace or Truce treaty with territory cession (faction_layer §3) | Accord set to 2 | Diplomatic legitimacy from negotiated transfer.'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -92,30 +47,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  historical_precedents_warfare:
-    identifier: historical_precedents_warfare
-    docs:
-    - systems/overview/peninsular_strain_v30.md
-    purpose: Historical grounding (historical_precedents_warfare §5.3):** Accord varies by acquisition method because the *type* of legitimacy determines population acceptance.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   military_advance:
     identifier: military_advance
     docs:
     - systems/overview/peninsular_strain_v30.md
     purpose: Recapture:** The displaced faction may attempt military_advance at -1 Ob (home territory advantage per faction_layer §2.2).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/overview/ms_budget.md
-    - systems/overview/wc_survival_spine.md
-    purpose: See npc_behavior §5.2 Edeyja Arc E for full mechanic.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -129,99 +65,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  params_bg_core:
-    identifier: params_bg_core
-    docs:
-    - systems/overview/clock_registry_v30.md
-    purpose: '[Shared Clocks (All Modes)] Clock | Range | Start | Direction | Source :: Institutional Pressure (IP) | 0–100 | 20 | ↑ | peninsular_strain_v30.md §4.4, params_board_game.md §IP [PROVISIONAL: ED-793 — start value 20 per staleness report item 3; verify against params_bg_core]'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_board_game:
-    identifier: params_board_game
-    docs:
-    - systems/overview/clock_registry_v30.md
-    - systems/overview/ms_budget.md
-    - systems/overview/peninsular_strain_v30.md
-    - systems/overview/peninsular_strain_v30_index.md
-    - systems/overview/wc_survival_spine.md
-    purpose: '[Shared Clocks (All Modes)] Clock | Range | Start | Direction | Source :: Institutional Pressure (IP) | 0–100 | 20 | ↑ | peninsular_strain_v30.md §4.4, params_board_game.md §IP [PROVISIONAL: ED-793 — start value 20 per staleness report item 3; verify against params_bg_core]'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_combat:
-    identifier: params_combat
-    docs:
-    - systems/overview/clock_registry_v30.md
-    purpose: '[Personal Tracks (TTRPG/Hybrid)] Track | Range | Start | Source :: Wounds | 0–max | 0 (accumulates) | params_combat.md §Wounds. Max = floor(End/2)+1.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_core:
-    identifier: params_core
-    docs:
-    - systems/overview/clock_registry_v30.md
-    - systems/overview/ms_budget.md
-    purpose: '[Personal Tracks (TTRPG/Hybrid)] Track | Range | Start | Source :: Truth | 0–5 | Varies by background (see params_core.md) | params_core.md §Truth Track (formerly §Certainty; consolidates the character piety/religious-standing meter, ED-IN-0075). Oscillating: 5 = Solmund orthodoxy (*Himmelenger pole*), 0 = Thread-truth acceptance (*Edeyja pole*). Engine-internal number; players see qualitative ban'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_factions:
-    identifier: params_factions
-    docs:
-    - systems/overview/clock_registry_v30.md
-    purpose: '[Faction Stats (All Factions)] Stat | Range | Source :: Mandate | 0–7 (0 = subjugated) | params_factions.md §Faction Stats'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  params_threadwork:
-    identifier: params_threadwork
-    docs:
-    - systems/overview/clock_registry_v30.md
-    - systems/overview/ms_budget.md
-    purpose: '[Personal Tracks (TTRPG/Hybrid)] Track | Range | Start | Source :: Coherence | 0–10 | 10 | params_threadwork.md §Coherence'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  peninsular_strain:
-    identifier: peninsular_strain
-    docs:
-    - systems/overview/peninsular_strain_v30.md
-    - systems/overview/wc_survival_spine.md
-    purpose: '[§8 Open Items] # | Item | Status (PP-667) :: 2 | Hafenmark Parliamentary Sovereignty struck, Dynastic Assertion primary. | **CONFIRMED** — peninsular_strain §6.2 STRUCK; victory_v30 §3.3 Dynastic Assertion primary.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  peninsular_strain_v1:
-    identifier: peninsular_strain_v1
-    docs:
-    - systems/overview/ms_budget.md
-    purpose: '[Passive / Environmental] Source | Rate | Condition | Document :: Strain 9–10 additional drain | −1/season | While Turmoil ≥ 9 | peninsular_strain_v1 §4.3'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   read_sections:
     identifier: read_sections
     docs:
     - systems/overview/peninsular_strain_v30_index.md
     purpose: Usage:** `g.read_sections('designs/provincial/peninsular_strain_v30.md', [indices])` to load specific sections.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  rs_budget:
-    identifier: rs_budget
-    docs:
-    - systems/overview/ms_budget.md
-    purpose: 'Rename history: references/rs_budget.md → references/ms_budget.md (2026-04-20, ED-731 terminology propagation)'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -235,34 +83,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  settlement_layer:
-    identifier: settlement_layer
-    docs:
-    - systems/overview/peninsular_strain_v30.md
-    purpose: Derivation (authoritative, per settlement_layer_v30 §1.3 REVISED):** Province Accord = floor(mean Order across all settlements in the province).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  tc_political_redesign_v30:
-    identifier: tc_political_redesign_v30
-    docs:
-    - systems/overview/peninsular_strain_v30.md
-    - systems/overview/peninsular_strain_v30_index.md
-    purpose: §7c CI 0-100 Integration (tc_political_redesign_v30.md)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  thread_constitutive_integration_analysis_v2:
-    identifier: thread_constitutive_integration_analysis_v2
-    docs:
-    - systems/overview/wc_survival_spine.md
-    purpose: 'Per thread_constitutive_integration_analysis_v2.md:'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   throughlines_2026:
     identifier: throughlines_2026
     docs:
@@ -272,12 +92,3 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  victory_architecture_v1:
-    identifier: victory_architecture_v1
-    docs:
-    - systems/overview/clock_registry_v30.md
-    purpose: '[Faction-Specific Tracks (BG/Hybrid)] Track | Owner | Range | Start | Source :: Warden Cooperation (WC) | Shared | 0–3 | 0 | victory_architecture_v1.md §6'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true

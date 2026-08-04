@@ -4,8 +4,8 @@ subsystem: articulation
 docs:
 - systems/articulation/articulation_layer_v30.md
 counts:
-  BUILT: 23
-  UNRESOLVED: 39
+  BUILT: 24
+  UNRESOLVED: 36
 identifiers:
   accord_echo:
     identifier: accord_echo
@@ -217,6 +217,7 @@ identifiers:
     - systems/articulation/articulation_layer_v30.md
     purpose: '`key_type_registry_v30.md:969-1006`''s (re-derived round 2, fix-round-2 — was :943-977) `scene.accord_echo` entry declares `articulation` a `consuming_systems`'
     built_in:
+    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -265,6 +266,7 @@ identifiers:
     - systems/articulation/articulation_layer_v30.md
     purpose: 'Confirmed in registry (`emitting_systems: [personal_combat]`, `consuming_systems: [npc_behavior, faction_layer, articulation]`); no new type declaration needed.'
     built_in:
+    - py:tools/observability/build_graph.py
     - typed:engine/engine_params/key_types.json
     disposition: BUILT
     doc_status: null
@@ -287,15 +289,6 @@ identifiers:
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
-    doc_status: null
-    in_table: false
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/articulation/articulation_layer_v30.md
-    purpose: '`scene.combat_resolved` and `scene.combat_felled` (alongside `npc_behavior`/`faction_layer`, which have'
-    built_in: []
-    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   inspiration_name:
@@ -373,15 +366,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/articulation/articulation_layer_v30.md
-    purpose: The Concern queue (per `doc 12 Procedure A` and `npc_behavior_v30.md`) is rendered as the protagonist's "current focus" UI.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   on_key_emitted:
     identifier: on_key_emitted
     docs:
@@ -415,8 +399,10 @@ identifiers:
     docs:
     - systems/articulation/articulation_layer_v30.md
     purpose: 'Confirmed in registry (`emitting_systems: [personal_combat]`, `consuming_systems: [npc_behavior, faction_layer, articulation]`); no new type declaration needed.'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/dashboard_data.py
+    - py:tools/observability/build_proposals.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   protagonist_alignment:
@@ -444,6 +430,7 @@ identifiers:
     purpose: 'stakes_weight(key) # 1-5 from Key.scale_signature + targets'
     built_in:
     - py:engine/substrate/keys.py
+    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -562,6 +549,7 @@ identifiers:
     - py:engine/cross_scale/articulation.py
     - py:engine/substrate/keys.py
     - py:engine/tests/test_pipeline_reach.py
+    - py:tools/observability/build_graph.py
     disposition: BUILT
     doc_status: null
     in_table: false

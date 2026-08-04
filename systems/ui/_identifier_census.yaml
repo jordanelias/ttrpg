@@ -12,8 +12,8 @@ docs:
 - systems/ui/valoria_ui_ux_v4_2_workplan_index.md
 - systems/ui/valoria_ui_ux_v4_index.md
 counts:
-  UNRESOLVED: 162
-  BUILT: 22
+  UNRESOLVED: 139
+  BUILT: 24
 identifiers:
   active_slate:
     identifier: active_slate
@@ -89,32 +89,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  board_game_v30:
-    identifier: board_game_v30
-    docs:
-    - systems/ui/valoria_ui_ux_v4.md
-    - systems/ui/valoria_ui_ux_v4_1.md
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: 'Authoritative sources: player_agency_v30 §7.2, board_game_v30 §9.1 + §9.8, faction_layer_v30 §7, scale_transitions_v30 §4, §6, companion_specification_v30 §4.3.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   calamity_proximity:
     identifier: calamity_proximity
     docs:
     - systems/ui/valoria_ui_ux_v4.md
     purpose: 'calamity_proximity: enum {Distant, Near, Close, Adjacent, Askeheim}'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  calamity_radiation:
-    identifier: calamity_radiation
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: Documents read lightly (secondary reference):** calamity_radiation, geography, southernmost, tc_political_redesign, military_layer, hybrid_gaps, factions_ttrpg.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -196,15 +175,6 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4.md
     purpose: signal clock_changed(clock_name, old, new)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  clock_registry:
-    identifier: clock_registry
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m…
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -324,16 +294,6 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4_1_max_audit.md
     purpose: Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  companion_specification:
-    identifier: companion_specification
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1.md
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: 'Authoritative sources: player_agency_v30 §4–6, board_game_v30 §9.1+§9.8, companion_specification_v30 §4.3.'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -531,8 +491,9 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4.md
     purpose: signal slate_entry_selected(entry_id)
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/ci_claim_provenance_check.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   epistemic_axis:
@@ -660,34 +621,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1.md
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: 'Three phases per faction_layer §3.3:'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  factions_ttrpg:
-    identifier: factions_ttrpg
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: Documents read lightly (secondary reference):** calamity_radiation, geography, southernmost, tc_political_redesign, military_layer, hybrid_gaps, factions_ttrpg.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  fieldwork_hybrid:
-    identifier: fieldwork_hybrid
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: 'Finding F-45 [P2] — Transition inventory incomplete.** Missing: Fieldwork → Contest Findings-as-preparation (F-TRANS-11: Findings cited in Contest opening grant +1D per Finding, max +2D); Fieldwork → Mass Battle suspension (F-TRANS-06); BG Survey → TTRPG Discovery Fieldwork Offset (Survey degree pro…'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   final_track:
     identifier: final_track
     docs:
@@ -716,29 +649,11 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4.md
     purpose: 'generated_at: Season'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/dashboard_data.py
+    disposition: BUILT
     doc_status: null
     in_table: false
-  hybrid_gaps:
-    identifier: hybrid_gaps
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: Documents read lightly (secondary reference):** calamity_radiation, geography, southernmost, tc_political_redesign, military_layer, hybrid_gaps, factions_ttrpg.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  integration_proposal:
-    identifier: integration_proposal
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   integration_proposal_2026:
     identifier: integration_proposal_2026
     docs:
@@ -877,15 +792,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  military_layer:
-    identifier: military_layer
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: Documents read lightly (secondary reference):** calamity_radiation, geography, southernmost, tc_political_redesign, military_layer, hybrid_gaps, factions_ttrpg.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   motion_ref:
     identifier: motion_ref
     docs:
@@ -956,18 +862,6 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4_2_workplan.md
     purpose: '[Stage 1 — Honesty fix (F-69 Option B)] Item | File | Change | Validation :: 1.2 | `canon/editorial_ledger.yaml` | New entry: ED-637 (F-69 recorded) | next_id bumped to 602'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/ui/valoria_ui_ux_v4.md
-    - systems/ui/valoria_ui_ux_v4_1.md
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: '[§5.3 The eight row types] Row type | Visual | Mechanical effect :: **Belief-targeted** | Purple ◆ mark + Belief text | Adds pressure tick; 3 cumulative = Belief Scar per npc_behavior §3.3'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1065,26 +959,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  peninsular_strain:
-    identifier: peninsular_strain
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  peninsular_strain_v1:
-    identifier: peninsular_strain_v1
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m…
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   phase_changed:
     identifier: phase_changed
     docs:
@@ -1110,18 +984,6 @@ identifiers:
     - systems/ui/valoria_ui_ux_v4_1_max_audit.md
     - systems/ui/valoria_ui_ux_v4_2_workplan.md
     purpose: 'Candidates include: `obligation_added/removed`, `knot_formed/strained/ruptured`, `coherence_band_crossed`, `rs_band_crossed`, `tc/ip/pi_threshold_crossed`, `belief_scar_added`, `conviction_strain_added/revised`, `disposition_changed`, `exposure_threshold_crossed`, `season_boundary`, `phase_transitio…'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  player_agency:
-    identifier: player_agency
-    docs:
-    - systems/ui/valoria_ui_ux_v4.md
-    - systems/ui/valoria_ui_ux_v4_1.md
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: '[§5.3 The eight row types] Row type | Visual | Mechanical effect :: **Conviction-driven** | ✦ gold mark + Conviction text | +1 Momentum on Belief-aligned success per player_agency §2.3'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1421,19 +1283,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  settlement_layer:
-    identifier: settlement_layer
-    docs:
-    - systems/ui/valoria_ui_ux_v4.md
-    - systems/ui/valoria_ui_ux_v4_1.md
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    - systems/ui/valoria_ui_ux_v4_index.md
-    purpose: 'Authoritative sources: fieldwork_v30 §3.3, settlement_layer_v30 §4.1, scale_transitions_v30 §4, geography_v30.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   slate_entries_pursued_this_season:
     identifier: slate_entries_pursued_this_season
     docs:
@@ -1548,15 +1397,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  tc_political_redesign:
-    identifier: tc_political_redesign
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1_max_audit.md
-    purpose: Documents read lightly (secondary reference):** calamity_radiation, geography, southernmost, tc_political_redesign, military_layer, hybrid_gaps, factions_ttrpg.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   temporal_axis:
     identifier: temporal_axis
     docs:
@@ -1688,51 +1528,6 @@ identifiers:
     docs:
     - systems/ui/valoria_ui_ux_v4.md
     purpose: 'unlocked_codex_entries: [EntryId]'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_ui_proposal_v3:
-    identifier: valoria_ui_proposal_v3
-    docs:
-    - systems/ui/valoria_ui_ux_v4.md
-    purpose: Supersedes:** valoria_ui_proposal_v3.md (earlier today)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_ui_ux:
-    identifier: valoria_ui_ux
-    docs:
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: Source audit:** `audit/lane-a/valoria_ui_ux_v4_1_max_audit.md` (69 findings, 20 P1 / 37 P2 / 12 P3)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_ui_ux_v4_2:
-    identifier: valoria_ui_ux_v4_2
-    docs:
-    - systems/ui/valoria_ui_ux_v4_2_workplan.md
-    purpose: '[Stage 13 — v4.2 publication] Item | Action :: 13.1 | Rename file: `designs/ui/valoria_ui_ux_v4_1.md` → `designs/ui/valoria_ui_ux_v4_2.md`'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  valoria_ui_ux_v4_audit:
-    identifier: valoria_ui_ux_v4_audit
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1.md
-    purpose: Audit trail:** incorporates all critical findings from valoria_ui_ux_v4_audit.md + valoria_ui_ux_v4_audit_addendum.md (both 2026-04-16)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  valoria_ui_ux_v4_audit_addendum:
-    identifier: valoria_ui_ux_v4_audit_addendum
-    docs:
-    - systems/ui/valoria_ui_ux_v4_1.md
-    purpose: Audit trail:** incorporates all critical findings from valoria_ui_ux_v4_audit.md + valoria_ui_ux_v4_audit_addendum.md (both 2026-04-16)
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

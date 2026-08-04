@@ -15,7 +15,7 @@ docs:
 - systems/characters/conviction_track_v30_index.md
 - systems/characters/conviction_track_v30_infill.md
 counts:
-  UNRESOLVED: 54
+  UNRESOLVED: 38
   BUILT: 1
 identifiers:
   altonian_imperial:
@@ -45,17 +45,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  calamity_radiation:
-    identifier: calamity_radiation
-    docs:
-    - systems/characters/character_histories_v30.md
-    - systems/characters/character_histories_v30_index.md
-    - systems/characters/character_histories_v30_infill.md
-    purpose: 'Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   character_analyses:
     identifier: character_analyses
     docs:
@@ -65,47 +54,11 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  character_histories_lifepath:
-    identifier: character_histories_lifepath
-    docs:
-    - systems/characters/character_histories_v30.md
-    purpose: <!-- v30 baseline — renamed from designs/characters/character_histories_lifepath.md on 2026-04-13 -->
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   character_name:
     identifier: character_name
     docs:
     - systems/characters/conviction_migration_roster_v30.md
     purpose: 'character_name:'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  church_territorial_seizure:
-    identifier: church_territorial_seizure
-    docs:
-    - systems/characters/conviction_track_v30.md
-    purpose: Replaces:** Current "Fort level + 1" and the church_territorial_seizure.md CI 80 procedure.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  conviction_axis_matrix:
-    identifier: CONVICTION_AXIS_MATRIX
-    docs:
-    - systems/characters/conviction_axis_matrix_v30.md
-    purpose: npc.personal_convictions[c] × CONVICTION_AXIS_MATRIX[c][axis]
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  conviction_track:
-    identifier: conviction_track
-    docs:
-    - systems/characters/conviction_track_v30.md
-    purpose: '<!-- Infill: conviction_track_v30_infill.md -->'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -197,17 +150,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  history_skill_integration:
-    identifier: history_skill_integration
-    docs:
-    - systems/characters/character_histories_v30.md
-    - systems/characters/character_histories_v30_index.md
-    - systems/characters/character_histories_v30_infill.md
-    purpose: 'Godot implementation: jordanelias/valoria-game (see docs/history_skill_integration.md)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   lowenritter_military:
     identifier: lowenritter_military
     docs:
@@ -237,17 +179,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  mass_battle_v3:
-    identifier: mass_battle_v3
-    docs:
-    - systems/characters/character_histories_v30.md
-    - systems/characters/character_histories_v30_index.md
-    - systems/characters/character_histories_v30_infill.md
-    purpose: 'Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   max_equipped:
     identifier: max_equipped
     docs:
@@ -266,24 +197,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/characters/conviction_track_v1_pp718_vetting.md
-    purpose: '[Μ — Modes (primary served + non-undermining check)] Mode | Served? | Reasoning :: Μ-β AUTONOMOUS AGENT COMPOSITION | **Secondary** | NPC priority trees consume Conviction state per Resonant Style Taxonomy (`npc_behavior §1.3`). Per-Conviction crisis means an NPC''s crisis-state varies by which Conviction was Scarred — different Resonant Styles activate; different Solidarity / Authority / Evidence '
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  npc_roster:
-    identifier: npc_roster
-    docs:
-    - systems/characters/character_generation_questionnaire_v30.md
-    purpose: '[§3.2 NPC scope by tier] Tier | Questions | Hooks | Replaces :: Tier 2 NPC | 8–10 (abbreviated) | 8–10 | npc_roster flaw + implicit goals'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   ob_floor:
     identifier: OB_FLOOR
     docs:
@@ -294,15 +207,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  opus_design_proposal:
-    identifier: opus_design_proposal
-    docs:
-    - systems/characters/conviction_track_v30.md
-    purpose: <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   outcome_with_collective_sacrifice:
     identifier: outcome_with_collective_sacrifice
     docs:
@@ -323,18 +227,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  params_core:
-    identifier: params_core
-    docs:
-    - systems/characters/character_histories_v30.md
-    - systems/characters/character_histories_v30_index.md
-    - systems/characters/character_histories_v30_infill.md
-    - systems/characters/conviction_track_v1.md
-    purpose: 'Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   personal_convictions:
     identifier: personal_convictions
     docs:
@@ -351,15 +243,6 @@ identifiers:
     docs:
     - systems/characters/conviction_taxonomy_v30.md
     purpose: 'philosophical_tradition_legacy:'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  piety_track_v30:
-    identifier: piety_track_v30
-    docs:
-    - systems/characters/conviction_track_v30.md
-    purpose: Full rename (PT → PT, file rename conviction_track_v30.md → piety_track_v30.md) deferred to future cleanup pass.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -466,35 +349,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  stage6_factions:
-    identifier: stage6_factions
-    docs:
-    - systems/characters/character_histories_v30.md
-    - systems/characters/character_histories_v30_index.md
-    - systems/characters/character_histories_v30_infill.md
-    purpose: 'Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  tc_political_redesign:
-    identifier: tc_political_redesign
-    docs:
-    - systems/characters/conviction_track_v30.md
-    purpose: Conviction (PT) here is the same per-territory stat as Piety (PT) in tc_political_redesign_v30 §1.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  tc_political_redesign_v30:
-    identifier: tc_political_redesign_v30
-    docs:
-    - systems/characters/conviction_track_v30.md
-    purpose: Conviction (PT) here is the same per-territory stat as Piety (PT) in tc_political_redesign_v30 §1.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   template_name:
     identifier: template_name
     docs:
@@ -504,17 +358,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  threadwork_redesign_v25:
-    identifier: threadwork_redesign_v25
-    docs:
-    - systems/characters/character_histories_v30.md
-    - systems/characters/character_histories_v30_index.md
-    - systems/characters/character_histories_v30_infill.md
-    purpose: 'Cross-references: params_core.md, combat_design_v1.md, social_contest_v30.md, mass_battle_v3.md, stage6_factions.md, threadwork_redesign_v25.md, calamity_radiation.md'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   threadwork_v25:
     identifier: threadwork_v25
     docs:

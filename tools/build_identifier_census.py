@@ -131,6 +131,19 @@ def doc_stems() -> set[str]:
                 for suf in ('_index', '_infill', '_part2', '_part3'):
                     if stem.lower().endswith(suf):
                         _DOC_STEMS.add(stem.lower()[:-len(suf)])
+                # a versioned doc is cited by its unversioned stem as often as not
+                _DOC_STEMS.add(re.sub(r'_v\d+(?:_\d+)?$', '', stem.lower()))
+        # RETIRED doc names are still cited -- and after the evacuation slices run, EVERY citation
+        # of an evacuated doc would flip from filtered to "unbuilt mechanic" unless the retired
+        # spellings are known. The alias map is exactly that list, so the census gets QUIETER as
+        # the cut proceeds instead of noisier. (Reviewer's forward hazard; pathres already owns it.)
+        exact, prefix = pathres.load_alias_map()
+        for old in list(exact) + [o for o, _ in prefix]:
+            stem = os.path.basename(old.rstrip('/'))
+            stem = stem.rsplit('.', 1)[0] if '.' in stem else stem
+            if len(stem) > 4:
+                _DOC_STEMS.add(stem.lower())
+                _DOC_STEMS.add(re.sub(r'_v\d+(?:_\d+)?$', '', stem.lower()))
     return _DOC_STEMS
 
 
@@ -149,7 +162,10 @@ def subsystems() -> list[str]:
 def built_names() -> dict[str, list[str]]:
     """{lowercased identifier: [where it is defined]} across code, typed exports, Key registry."""
     built: dict[str, list[str]] = collections.defaultdict(list)
-    for root in ('engine', 'systems'):
+    # tools/ COUNTS. The reviewer's find: `all_legacy` read UNRESOLVED in _architecture while
+    # being defined at tools/names.py:91 -- process/armature docs legitimately name tooling, and
+    # excluding tools/ made every such name look like an unbuilt mechanic.
+    for root in ('engine', 'systems', 'tools'):
         for path in glob.glob(os.path.join(REPO, root, '**', '*.py'), recursive=True):
             rel = os.path.relpath(path, REPO).replace(os.sep, '/')
             try:
@@ -264,6 +280,15 @@ def census_for(sub: str, built: dict) -> dict:
         rel = os.path.relpath(path, REPO).replace(os.sep, '/')
         text = open(path, encoding='utf-8', errors='ignore').read()
         rowctx = table_purposes(text)          # rows first — they carry the meaning
+        # A TOKEN THE DOC ITSELF SPELLS WITH `.md` IS A CITATION, whatever the filesystem says.
+        # The reviewer's named falsifiers (threadwork <=3, victory <=2) still failed after the
+        # alias-map pass, and reading the 12 survivors showed why: every one cites a doc that no
+        # longer exists AND is not in the alias map (batch_d_designs.md, mass_battle_v3.md,
+        # opus_design_proposal). A filesystem lookup cannot see those. The text can -- and being a
+        # CONTENT signal rather than a lookup, it keeps working after the evacuation slices run,
+        # which is when the lookup-based filters get weakest.
+        cited_docs = {m.group(1).lower()
+                      for m in re.finditer(r'([A-Za-z0-9_.-]+)\.md\b', text)}
         status = doc_status(text)
         superseded = bool(status and 'SUPERSEDED' in status.upper()
                           and 'PART' not in status.upper())
@@ -273,6 +298,8 @@ def census_for(sub: str, built: dict) -> dict:
             if key in NOT_A_MECHANIC or len(key) < 5:
                 continue
             if key in doc_stems() or key in module_names():   # citation, not a mechanic
+                continue
+            if key in cited_docs:                            # the doc spells it with .md
                 continue
             row = rows.setdefault(key, {
                 'identifier': ident, 'docs': [], 'purpose': None,

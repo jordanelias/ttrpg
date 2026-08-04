@@ -8,8 +8,8 @@ docs:
 - systems/social_contest/social_contest_v30_index.md
 - systems/social_contest/social_contest_v30_infill.md
 counts:
-  SUPERSEDED-DOC: 8
-  UNRESOLVED: 13
+  SUPERSEDED-DOC: 1
+  UNRESOLVED: 4
   BUILT: 9
 identifiers:
   armature_position:
@@ -17,15 +17,6 @@ identifiers:
     docs:
     - systems/social_contest/social_contest_v30.md
     purpose: 'The Adjudicator Armature (Stage 3 / Gate C; ED-1062).** Every adjudicator (Expert Judge, Crowd member, Panel juror) carries a hidden `armature_position` — a Conviction-like vector over four axes: **Evidence, Consequence, Authority, Insinuation**.'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  baralta_crown_claim:
-    identifier: baralta_crown_claim
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: Cross-faction challengers (e.g., Hafenmark claiming Crown per baralta_crown_claim_v30 §2) require Mandate ≥ 3 in their home faction plus a structural claim mechanism (Deed-Claim, Bloodline, institutional precedent).
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -38,35 +29,6 @@ identifiers:
     built_in:
     - py:systems/social_contest/sim/contest/wrapper.py
     disposition: BUILT
-    doc_status: null
-    in_table: false
-  conviction_migration_roster:
-    identifier: conviction_migration_roster
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[EDITORIAL: ED-1042 — outbound dangling cross-reference repairs (docket J-31): CM-4 §9.1 `fieldwork_investigation §2.3` → §4.1/§4.3; CM-6 §6.1.1 self-ref `§3.6.1` → conviction_track_v1 §2/§3; CM-7 §6.1 Wager eligibility deprecated labels Continuity → Warden, Reason → Scholastic (npc_behavior_v30 §1.…'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  debate_system_redesign_v1:
-    identifier: debate_system_redesign_v1
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    - systems/social_contest/social_contest_v30_index.md
-    - systems/social_contest/social_contest_v30_infill.md
-    purpose: Supersedes debate_system_redesign_v1.md Part 6.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  derived_stats:
-    identifier: derived_stats
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[ED-891: ×3-scaled to match the ×3 Face/standing buffer (CR3/ED-1056; formerly "Composure ×3") and derived_stats §5.1; resolves the prior unscaled-0–2 vs scaled-0–6 strain-math ambiguity.'
-    built_in: []
-    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   ethos_present:
@@ -122,33 +84,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[§6.1 Obligations (NEW — post-contest binding commitments)] Edge Case | Trigger | Resolution :: **Counterparty institutional collapse** | The counterparty''s faction collapses (Stability 0, formal dissolution per faction_layer §1) before the Wager condition resolves AND the counterparty was institutionally bound (e.g., wagered as Cardinal, as Jarl, as Crown Inner Circle member) | Wager is **suspend'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  faction_politics:
-    identifier: faction_politics
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[§7.3 Heresy Investigation Lifecycle (ED-772)] Condition | Effect | Rationale :: **Target''s death** | Investigation closes. Postmortem Tribunal possible (per faction_politics §2.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost −1 to file). | The proceeding''s purpose (correction) becomes moot at target''s death; Postmortem Tr'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  generational_transition:
-    identifier: generational_transition
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: 'All three resolve through the canonical `generational_transition_v30` machinery — no bespoke apparatus per Obligation type: the Obligation **TRANSFERS** to the relevant faction/institution (the institution remembers the commitment; the countdown and violation conditions carry to the successor), and …'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   guilds_boost_for:
     identifier: guilds_boost_for
     docs:
@@ -157,74 +92,6 @@ identifiers:
     built_in:
     - py:systems/social_contest/sim/contest/dictionaries.py
     disposition: BUILT
-    doc_status: null
-    in_table: false
-  mass_battle_v3:
-    identifier: mass_battle_v3
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Future design work (not blocking)] Topic | Status :: Mass battle rally action (Attunement-based) | Gap identified, belongs in mass_battle_v3'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  npc_behavior:
-    identifier: npc_behavior
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: This is what the ADJUDICATOR is moved by, distinct from (and in addition to) the audience-resistance scalar (§2 Step 4) and the existing opponent-aimed Resonant Style targeting (npc_behavior_v30.md §1.3/§6.3), which fires on the party you are *arguing against*.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  params_combat:
-    identifier: params_combat
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Propagation required on approval] File | Change :: references/params_combat.md | Any Presence references'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  params_core:
-    identifier: params_core
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Propagation required on approval] File | Change :: references/params_core.md | Attribute names; Composure in derived scores'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  params_debate:
-    identifier: params_debate
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Propagation required on approval] File | Change :: references/params_debate.md | Full rewrite'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  params_mass_combat:
-    identifier: params_mass_combat
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Propagation required on approval] File | Change :: references/params_mass_combat.md | Coherence Rating derivation'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  player_agency:
-    identifier: player_agency
-    docs:
-    - systems/social_contest/social_contest_v30.md
-    purpose: The unresolved contest generates a Scene Slate entry for the following season per player_agency_v30 §4.2 (Priority 1 — the unresolved political tension is a crisis event).
-    built_in: []
-    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   ratified_2026:
@@ -281,26 +148,6 @@ identifiers:
     - systems/social_contest/social_contest_system_v2.md
     - systems/social_contest/social_contest_v30.md
     purpose: '[Propagation required on approval] File | Change :: references/canonical_sources.yaml | Update canonical doc for social_debate'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  stage1_core_engine_deprecated:
-    identifier: stage1_core_engine_deprecated
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Propagation required on approval] File | Change :: compilation/v0.14/stage1_core_engine_deprecated.md | Attribute rename in attribute table and derived scores'
-    built_in: []
-    disposition: SUPERSEDED-DOC
-    doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h
-    in_table: true
-  stage2_characters_deprecated:
-    identifier: stage2_characters_deprecated
-    docs:
-    - systems/social_contest/social_contest_system_v2.md
-    - systems/social_contest/social_contest_v30.md
-    purpose: '[Propagation required on approval] File | Change :: compilation/v0.14/stage2_characters_deprecated.md | Attribute rename throughout; Composure formula; Circles/Resources pool base; §4.14 social rolls'
     built_in: []
     disposition: SUPERSEDED-DOC
     doc_status: SUPERSEDED — canonical doc is designs/scene/social_contest_v30.md (editorial batch acceptance 2026-04-17). Retained as h

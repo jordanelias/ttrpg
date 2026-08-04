@@ -9,8 +9,8 @@ docs:
 - systems/mass_battle/military_layer_v30.md
 - systems/mass_battle/military_layer_v30_index.md
 counts:
-  BUILT: 56
-  UNRESOLVED: 76
+  BUILT: 61
+  UNRESOLVED: 59
 identifiers:
   a_size:
     identifier: a_size
@@ -68,15 +68,6 @@ identifiers:
     built_in:
     - py:systems/mass_battle/sim/units.py
     disposition: BUILT
-    doc_status: null
-    in_table: false
-  battery_report:
-    identifier: battery_report
-    docs:
-    - systems/mass_battle/mass_battle_integration_v30.md
-    purpose: '`tests/sim/battery_report_v22.md` — D-8 calibration analysis'
-    built_in: []
-    disposition: UNRESOLVED
     doc_status: null
     in_table: false
   battlefield_center_col:
@@ -289,16 +280,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  derived_stats_v1:
-    identifier: derived_stats_v1
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    - systems/mass_battle/mass_battle_v30_index.md
-    purpose: '[B.3 BG BATTLE RESOLUTION] Margin | Outcome | Effect :: Margin ≤ 1 either direction | Partial | No territory change; Attacker Discipline −15 (commitment cost, derived_stats_v1)'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   eff_power:
     identifier: eff_power
     docs:
@@ -372,15 +353,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  faction_layer:
-    identifier: faction_layer
-    docs:
-    - systems/mass_battle/military_layer_v30.md
-    purpose: See faction_layer §1.5 for full doctrine note.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   faction_tactic_card_pool_modifiers:
     identifier: FACTION_TACTIC_CARD_POOL_MODIFIERS
     docs:
@@ -396,8 +368,9 @@ identifiers:
     docs:
     - systems/mass_battle/mass_battle_v30.md
     purpose: '`obs_core.first_status()` (the single owner of status parsing) returns the'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/observability/obs_core.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   formation_area_depth:
@@ -484,16 +457,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
-  historical_precedents_warfare:
-    identifier: historical_precedents_warfare
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    - systems/mass_battle/mass_battle_v30_index.md
-    purpose: Morale Cascade (NEW — historical_precedents_warfare §1.3c):** When a unit routs (Morale reaches 0), at Phase 6 Step 3 (Morale checks), all friendly units in the same engagement make a Discipline check (Ob 1).
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
   hp_max:
     identifier: hp_max
     docs:
@@ -523,15 +486,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  mass_battle_v3:
-    identifier: mass_battle_v3
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    purpose: '<!-- Infill: mass_battle_v30_infill.md -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   max_sub_phases:
     identifier: MAX_SUB_PHASES
     docs:
@@ -542,15 +496,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  military_layer_v30_infill:
-    identifier: military_layer_v30_infill
-    docs:
-    - systems/mass_battle/military_layer_v30.md
-    purpose: '<!-- Infill: military_layer_v30_infill.md -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   min_discipline:
     identifier: MIN_DISCIPLINE
     docs:
@@ -601,51 +546,14 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  params_board_game:
-    identifier: params_board_game
-    docs:
-    - systems/mass_battle/military_layer_v30.md
-    purpose: '<!-- Sources: mass_battle_v30.md §A.4, §A.13, §B.2, §B.3, §B.5; params_board_game.md §Unit Muster Ob Table, §Accord, §CI Generation; canonical_sources.yaml -->'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  params_combat:
-    identifier: params_combat
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    - systems/mass_battle/mass_battle_v30_infill.md
-    purpose: See references/params_combat.md §Ranged Combat Rules.
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   pc_envelop_shock:
     identifier: PC_ENVELOP_SHOCK
     docs:
     - systems/mass_battle/mass_battle_v30.md
     purpose: 'Engine note (2026-06-20):** The videogame engine delivers the encirclement effect through the **envelopment moral-shock model** (`PC_ENVELOP_SHOCK` — a sub-unit fixed frontally and struck on flank/rear takes the du Picq shock; coverage_matrix: "a loose/shaken/shallow one shatters (Cannae)") plus the…'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
-  peninsular_strain:
-    identifier: peninsular_strain
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    purpose: '[§E.2 Accounting Consequences (revised per ED-743)] Consequence | Trigger | Mechanism :: Vulnerability Signal (deferred) | Conquered/contested territories at Accord ≤ 1 at next Accounting | IP advance per peninsular_strain §3.2 (territory-count thresholds: 2-3 → +1; 4-5 → +2; 6+ → +3).'
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: true
-  peninsular_strain_v1:
-    identifier: peninsular_strain_v1
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    - systems/mass_battle/military_layer_v30.md
-    purpose: Battle outcome → peninsular consequences (PP-647, peninsular_strain_v1.md §3):**
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/ci_golden_modes_check.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   phase_boundary:
@@ -663,8 +571,9 @@ identifiers:
     docs:
     - systems/mass_battle/mass_battle_v30.md
     purpose: '`POOL_QUALITY_MODEL=1`: base pool = `eff_power × eff_size × POOL_QUALITY_SCALE`, where `eff_power`'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/ci_golden_modes_check.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   pool_quality_scale:
@@ -672,8 +581,9 @@ identifiers:
     docs:
     - systems/mass_battle/mass_battle_v30.md
     purpose: '`POOL_QUALITY_MODEL=1`: base pool = `eff_power × eff_size × POOL_QUALITY_SCALE`, where `eff_power`'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/ci_golden_modes_check.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   pool_variant:
@@ -965,16 +875,6 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
-  stage5_clocks:
-    identifier: stage5_clocks
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    - systems/mass_battle/mass_battle_v30_infill.md
-    purpose: requires separate compilation pass on stage5_clocks.md]*
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   stamina_check:
     identifier: stamina_check
     docs:
@@ -1041,8 +941,9 @@ identifiers:
     docs:
     - systems/mass_battle/military_layer_v30.md
     purpose: '(`<!-- Status: CANONICAL — approved 2026-04-17 -->`), which `obs_core.STATUS_RE` cannot'
-    built_in: []
-    disposition: UNRESOLVED
+    built_in:
+    - py:tools/observability/obs_core.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   subunit_combat_pool:
@@ -1182,15 +1083,6 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
-  threadwork_redesign_v25:
-    identifier: threadwork_redesign_v25
-    docs:
-    - systems/mass_battle/mass_battle_v30.md
-    purpose: Leap resolves (Coherence check if applicable — see threadwork_redesign_v25.md §2.3)
-    built_in: []
-    disposition: UNRESOLVED
-    doc_status: null
-    in_table: false
   ticks_per_phase:
     identifier: TICKS_PER_PHASE
     docs:
