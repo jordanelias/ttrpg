@@ -101,6 +101,33 @@ Hence: **this document, authored fresh.** `build_fork.py` survives in a reduced 
 
 ## 4. The keep-set (measured 2026-08-04)
 
+> ## ⚠ THE PARTITION OF RECORD IS NOW `tools/evacuation_plan.py` (ED-IN-0128).
+> The table below is the **rationale**, not the authority. It was the authority for exactly one day,
+> and a prose partition is the thing this session watched fail twice: `CARRY`/`LEAVE` read like a
+> partition and were not one, and a proposal that duplicated live state became a *third* disagreeing
+> current-state surface. Two surfaces drift; one owner does not. **Run the tool for the verdict:**
+>
+> ```
+> python3 tools/evacuation_plan.py            # report + per-slice blocking readers
+> python3 tools/evacuation_plan.py --check    # totality + contract guard (exit 1 on fail)
+> ```
+>
+> **Current measurement: 3146 tracked files → 1149 KEEP / 6 RELOCATE / 1991 EVACUATE.**
+>
+> **Deltas since this table was written**, all from Jordan's rulings later the same day:
+> - **`dashboard/` is KEPT** (was: evacuate). ⚠ Its *inputs* still shrink — it surfaces `proposals/`
+>   by location and reads `workplans/`, which is still evacuating with 16 blocking readers including
+>   `tools/dashboard_data.py` and `tools/workplan_status.py`. **Unresolved coupling, §10.**
+> - **A third verdict, RELOCATE.** Keep/evacuate cannot say *"this is ours but filed in the wrong
+>   place"*. Six MB instruments move to `systems/mass_battle/workbench/` — four from
+>   `audit/2026-07-29-scenario-visualization/` (`measure_colocation.py` is the standing measurement
+>   behind ED-MB-0056/0059, not a session record) and two from
+>   `research/diagrams/mass_battle_formations/`. Precedent: `systems/combat/combat_engine_v1/workbench/`.
+>   Rendered output does not travel; it regenerates from the relocated source.
+> - **"Streamlined" means the WORKING TREE** (Jordan). Clone/pack size is not a goal — see §11.
+> - **A keep-rule in the first draft was 20× too broad** and is deleted: it kept *any* `.py` under
+>   `audit/` (82 files) to save four visualisation generators. Ordering does the job instead.
+
 | Keep | Size | Files | Basis |
 |---|---|---|---|
 | `canon/` | 156K | 7 (7 md) | prose, **no code pair** → authoritative spec |
@@ -247,3 +274,37 @@ Its `--verify-only` empty-scan defect is fixed under ED-IN-0126 (`_scanned_py`, 
 - **Where provenance authority migrates** if `engine/params/` is ever revisited: the natural successor is
   the typed layer (`engine/engine_params/sim_params.json` citation fields + the plan §5 ratchet), which
   makes the PP/ED ledgers, not the prose tables, the referent.
+
+---
+
+## 11. "Streamlined" means the working tree — and history rewriting is the wrong tool here
+
+> "streamlined as in working tree. repo size irrelevant to me I think unless it impacts Claude code
+> performance?" — Jordan, 2026-08-04
+
+**It does not meaningfully impact it, and the deletion delivers essentially all the benefit.**
+
+Measured: the pack is **51 MiB**; the working tree is **121 MB**. Deleting files removes them from the
+tree while every byte stays in history, so a fresh clone is the same size afterwards. That sounds like
+a gap and is not one, because the things that actually cost an agent are working-tree properties:
+
+- **Search breadth.** Every `Grep`/`Glob` walks the *working tree* — 3,146 files today, ~1,155 after.
+  History is never scanned.
+- **Result dilution, which is the real cost.** Searching for a current fact today returns hits from 966
+  stale audit markdowns. That is not a slowdown, it is a *correctness* hazard, and it is the documented
+  mechanism behind several errors this session catalogued — including one of mine, where a `[DRIFT]`
+  docstring naming a path retired 2026-07-21 was read as current state.
+- **Context.** Only files actually read enter context. Pack size never does.
+
+So evacuation fixes the expensive problem completely. A history rewrite would buy ~51 MiB of one-off
+clone time and cost:
+
+- **Every commit SHA in the repository changes.** This repo *cites SHAs* —
+  `references/canonical_sources.yaml`'s `canonical_sha__*` pins, `freshness_gate`, and commit
+  references throughout the ledgers. A rewrite invalidates all of them at once.
+- `git-filter-repo` is **not installed**, and the operation is not `git revert`-able.
+
+**Recommendation: do not rewrite history. Deletion plus a `pre-evacuation-<date>` tag is correct**, and
+the tag is what makes the archive real. This is the reverse of the extract-era reasoning, where
+history-preserving extraction needed `filter-repo` precisely *because* the code was moving to a new
+repo; under keep-main the code never moves, so the problem disappears rather than being solved.

@@ -4323,6 +4323,97 @@
     }
    }
   },
+  "test_evacuation_plan.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Unit tests for `tools/evacuation_plan.py` \u2014 the keep/relocate/evacuate partition (ED-IN-0128).",
+   "helper_loc": 2,
+   "helpers": [
+    {
+     "loc": 2,
+     "name": "part"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN",
+    "MB"
+   ],
+   "loc": 161,
+   "modules_under_test": [
+    "engine/mc_v18.py",
+    "engine/params/core.md",
+    "engine/substrate/keys.py",
+    "systems/",
+    "systems/mass_battle/mass_battle_v30.md",
+    "systems/mass_battle/sim/massbattle.py",
+    "tools",
+    "tools/valoria_local.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 11,
+   "tests": {
+    "test_audit_cutoff_boundary": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "On the cutoff date is IN; the day before is OUT."
+    },
+    "test_contract_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL: plant a contracted path in the evacuate set and require a complaint."
+    },
+    "test_generated_output_evacuates_but_its_generator_does_not": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The 36 MB render directory is six days old: age alone would keep it."
+    },
+    "test_known_files_land_correctly": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Pins the verdicts whose flip would be most expensive. Paths need not all exist."
+    },
+    "test_no_contracted_unit_is_evacuated": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A unit with a contract but no code YET is the backlog, not dead weight."
+    },
+    "test_ordering_is_load_bearing": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "FIRST-MATCH-WINS: these files match a later, opposite rule too."
+    },
+    "test_partition_covers_every_tracked_file": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The buckets sum to the tree \u2014 no file counted twice, none dropped."
+    },
+    "test_partition_is_total": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every tracked file gets a verdict. No neither-set."
+    },
+    "test_relocations_land_in_a_subsystem": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Jordan: \"visualization tool for mb should be moved to mb and wiring should be to systems\"."
+    },
+    "test_the_totality_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "POSITIVE CONTROL (CLAUDE.md \u00a70.1 point 2)."
+    },
+    "test_undated_audit_entries_are_not_recent": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "`audit/lane-a/\u2026` and bare files carry no date; they must not sneak through the window."
+    }
+   }
+  },
   "test_execution_map.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10372,8 +10463,8 @@
   "by_lane": {
    "FA": 3,
    "FI": 1,
-   "IN": 29,
-   "MB": 2,
+   "IN": 30,
+   "MB": 3,
    "PC": 6,
    "SC": 3,
    "SE": 2,
@@ -10495,16 +10586,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 138,
+  "files": 139,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 98,
+  "files_naming_a_module": 99,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 32,
-  "helper_defs": 257,
-  "helper_loc": 2258,
+  "files_with_a_lane": 33,
+  "helper_defs": 258,
+  "helper_loc": 2260,
   "ratchet_baselines": 8,
-  "tests": 1212,
+  "tests": 1223,
   "undocumented_files": 0
  }
 }
