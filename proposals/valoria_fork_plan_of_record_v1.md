@@ -347,9 +347,18 @@ ruling or a fix changes behaviour, XPASS fires and the record surfaces. This is 
 re-pinning goldens to current behaviour, which the MB retrospective forbids in terms: *"re-basing before
 fixing F1–F8 would bake nine defects into the definition of correct."*
 
+> ## ⚠ C7 IS STRUCK — it was never an open question (ED-IN-0125, 2026-08-04). The paragraph below is
+> ## preserved as the record of the error, not as a live question. **Do not re-open it.**
+> Jordan had ALREADY ruled this a real defect (F1-class) on 2026-08-03 —
+> `audit/2026-08-03-session-oddities.md:55` (D1) — and this document re-opened it the same day. It is
+> also incoherent against canon: **PP-233 "Damage is simultaneous"**, implemented at
+> `tests/sim/mass_battle/orchestration.py:1834,:1839,:2053,:2056,:2372,:2698`. Under simultaneous
+> application a winner taking zero losses means the loser dealt zero damage — a damage-path defect,
+> not a balance opinion. See §9 for the struck row and J9 for the live thread.
+
 The underlying question is canon and is filed as **C7**: the failing tests are TRUE POSITIVES about a
 real state — 60/60 battles ended in one turn, 42/60 with the winner taking zero losses. *Is a one-turn
-rout with an untouched winner correct?* Only Jordan can answer that.
+rout with an untouched winner correct?* ~~Only Jordan can answer that.~~ **He already had.**
 
 ### 7.2 Track independence — the previous draft's claim was false in two places
 
@@ -431,6 +440,12 @@ infrastructure fixes.
 **The forcing mechanism (this is the ED-1094 repair).** "Nothing ratifies on merge" without a
 forcing step is how ED-1083's doctrine sat PROPOSED in `main` indefinitely — the exact failure ED-1094
 was written to close. So: **each C-item above is filed as its own ED entry with `needs_jordan: true`,
+⚠ **CORRECTED 2026-08-04 (ED-IN-0125):** this sentence was present-tense for work that had not been
+done — the same defect this document prosecutes in ED-IN-0124(f). What actually happened is better:
+**all eight C-items were RULED by Jordan on 2026-08-04** and registered collectively in ED-IN-0125
+(with C2's mass-battle content in ED-MB-0064), so per-item `needs_jordan` EDs would now double-register
+settled decisions. The forcing mechanism was not needed because the ruling arrived first. Original
+text follows.**
 and appears on the SessionStart banner's Jordan docket until ruled.** A held item that is not on a
 register is not held; it is forgotten. See §10.
 

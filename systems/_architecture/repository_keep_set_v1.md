@@ -112,12 +112,13 @@ Hence: **this document, authored fresh.** `build_fork.py` survives in a reduced 
 > python3 tools/evacuation_plan.py --check    # totality + contract guard (exit 1 on fail)
 > ```
 >
-> **Current measurement: 3146 tracked files → 1149 KEEP / 6 RELOCATE / 1991 EVACUATE.**
+> **Current measurement: 3148 tracked files → 1691 KEEP / 33 RELOCATE / 1424 EVACUATE.**
+> Do not quote a count from this document — it has been stale three times. Run the tool.
 >
 > **Deltas since this table was written**, all from Jordan's rulings later the same day:
-> - **`dashboard/` is KEPT** (was: evacuate). ⚠ Its *inputs* still shrink — it surfaces `proposals/`
->   by location and reads `workplans/`, which is still evacuating with 16 blocking readers including
->   `tools/dashboard_data.py` and `tools/workplan_status.py`. **Unresolved coupling, §10.**
+> - **`dashboard/` AND `workplans/` are both KEPT** (was: evacuate). The coupling this banner
+>   previously flagged as unresolved is **CLOSED** (ED-IN-0129): `dashboard_data.py` and
+>   `workplan_status.py` keep their inputs, so neither retires and neither reads a deleted tree.
 > - **A third verdict, RELOCATE.** Keep/evacuate cannot say *"this is ours but filed in the wrong
 >   place"*. Six MB instruments move to `systems/mass_battle/workbench/` — four from
 >   `audit/2026-07-29-scenario-visualization/` (`measure_colocation.py` is the standing measurement
@@ -141,20 +142,20 @@ Hence: **this document, authored fresh.** `build_fork.py` survives in a reduced 
 | `tests/valoria/` | 1.9M | 145 (**0 md**) | the shipping gate + the plan's falsifiers |
 | `tests/sim/mass_battle/` | 872K | 28 py, **0 md** | **canon MB engine (J2)** — inside an otherwise-evacuating parent |
 | `tests/sim/v32-combat-balance/` | 580K | — | the numpy-free parity oracle |
-| `audit/` ≥ 2026-07-21, renders stripped | ~3M | 16 dirs | two-week rule + the generated-artifact filter |
+| `audit/` ≥ **2026-07-01**, renders stripped | — | all of July onward | Jordan widened the two-week rule to the calendar month (ED-IN-0129); ⚠ this is what makes the kept set 52% markdown — see §11 |
 | `godot/` | 272K | 27 | the eventual `res://` root (CLAUDE.md §6) |
 | `skills/` | 1.4M | 45 | **selectively** — see §6 |
 | `.github/`, `.githooks/`, `.claude/`, `CLAUDE.md`, `CURRENT.md`, `HANDOFF.md` | — | — | the enforcement tier and session protocol |
 
 | Evacuate | Size | Basis |
 |---|---|---|
-| `audit/` < 2026-07-21 + the lane buckets | ~29M | two-week rule |
+| `audit/` < **2026-07-01** + the lane buckets | — | pre-July; the lane buckets are undated so they evacuate too |
 | generated renders (**keep the 4 generators**) | 36M | generated-artifact filter |
 | `deprecated/` | 7.7M | history; the tag preserves it |
 | `tests/sim/` (rest), `tests/stress/`, `tests/sim_framework/` | ~13M, 332 md | prose with neither code pair nor spec role |
 | `arcs/` | 1016K | generated narrative content |
 | `proposals/` — **selectively**, per §6 | 844K | most are neither |
-| `workplans/`, `dashboard/` | 580K | process surfaces; see §8 item 6 |
+| ~~`workplans/`, `dashboard/`~~ | — | **BOTH NOW KEPT** (ED-IN-0129). `workplans/` is the steering surface and carries its own status; `dashboard/` was ruled kept, and keeping `workplans/` closes the coupling that would have left `dashboard_data.py` reading a deleted input |
 
 **Two structural facts the top-level view hides, and they are why the cut is per-file, not per-root:**
 `engine/params/` is prose inside a keep root; `tests/sim/mass_battle/` is canon code inside an
@@ -187,9 +188,10 @@ committed golden — keep; `dead_primitive_census.py`). The dead-tool pruning al
 (CLAUDE.md §8). **Orphan-hunting yields ~1 tool.**
 
 The real cut is by subject: **a tool retires or re-scopes in the same commit as the tree it serves.**
-Tools whose subject is evacuating: `audit_staleness`, `scope_ratchet`, `dashboard_data`,
-`ci_register_size_check`, `ci_audit_registry_check`, and the observability suite (`build_decisions`,
-`build_proposals`, `build_incompleteness`). Same rule for skills: under "prose is information only",
+Tools whose subject is evacuating: `audit_staleness`, `ci_audit_registry_check`, and the parts of
+the observability suite that read `proposals/` (`build_proposals`) or the audit corpus
+(`build_incompleteness`). ⚠ **Corrected (ED-IN-0129):** `dashboard_data` and `scope_ratchet` are NOT
+on this list any more — `workplans/` and `dashboard/` are both kept, so their subjects survive. Same rule for skills: under "prose is information only",
 `prose-writer` (676K — half the skills tree) and the editorial/workplan-workflow skills lose their
 subject. `valoria-vector-audit` (416K) is the other large one.
 

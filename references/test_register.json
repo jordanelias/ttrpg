@@ -4342,7 +4342,7 @@
     "IN",
     "MB"
    ],
-   "loc": 245,
+   "loc": 281,
    "modules_under_test": [
     "engine.py",
     "engine/",
@@ -4351,7 +4351,9 @@
     "engine/reference/",
     "engine/substrate/keys.py",
     "registers/",
+    "systems",
     "systems/",
+    "systems/_architecture",
     "systems/mass_battle/mass_battle_v30.md",
     "systems/mass_battle/sim/massbattle.py",
     "tools",
@@ -4359,7 +4361,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 15,
+   "test_count": 16,
    "tests": {
     "test_audit_cutoff_boundary": {
      "assertionless": false,
@@ -4375,6 +4377,11 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "The 36 MB render directory is six days old: age alone would keep it."
+    },
+    "test_keep_set_doc_cutoff_matches_the_tool": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The keep-set doc must not restate a cutoff the tool disagrees with."
     },
     "test_known_files_land_correctly": {
      "assertionless": false,
@@ -10619,7 +10626,7 @@
   "helper_defs": 258,
   "helper_loc": 2260,
   "ratchet_baselines": 8,
-  "tests": 1227,
+  "tests": 1228,
   "undocumented_files": 0
  }
 }

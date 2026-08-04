@@ -11,7 +11,7 @@ Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
       blocked on ORD-3 — see module docstring of engine.substrate).
   - systems/_architecture/key_type_registry_v30.md
       §1 type format (required/optional payload fields, defaults) · §2-§8 the
-      44-type roster, parsed at load time — the registry markdown remains the
+      55-type roster, parsed at load time — the registry markdown remains the
       single source of truth; nothing is duplicated here.
   - systems/_architecture/propagation_spec_v1.md
       §1 O.4/SSI-1..4 (sub_step_index = append-order tiebreak ONLY; the
@@ -180,7 +180,7 @@ class TypeRegistry:
 
     The registry markdown is the single source of truth (CLAUDE.md §8 "every
     rule lives once"); this class parses it at load time rather than
-    duplicating the 44-type roster in code. Parsing accepts the §1 template
+    duplicating the 55-type roster in code. Parsing accepts the §1 template
     fields plus the Class-B extras (default_visibility, class, declared_by,
     articulation_significance) without requiring them.
     """

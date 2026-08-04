@@ -242,3 +242,39 @@ def test_the_ed_universe_survives_evacuation(part):
     assert stranded == [], (
         f'{len(stranded)} ED-archive file(s) in the evacuate set would break the blocking '
         f'citation gate, e.g. {stranded[:3]}')
+
+
+# --------------------------------------------------------------------------------------
+# Doc↔tool agreement — the falsifier for prose that restates a machine value
+# --------------------------------------------------------------------------------------
+
+def test_keep_set_doc_cutoff_matches_the_tool():
+    """The keep-set doc must not restate a cutoff the tool disagrees with.
+
+    WHY THIS TEST EXISTS. `repository_keep_set_v1.md` stated `2026-07-21` for a full day after
+    Jordan widened the window to `2026-07-01` — the doc and the tool disagreed about the rule that
+    decides ~500 files. That is the two-surfaces-drift failure this whole programme keeps hitting:
+    `CARRY`/`LEAVE` vs the tree, a proposal vs the manifest, this doc vs `evacuation_plan`. A prose
+    correction with no guard just resets the clock until the next ruling.
+
+    So: any ISO date the doc presents as THE audit cutoff must equal `AUDIT_CUTOFF`. The doc is free
+    to mention other dates (ledger entries, incident dates); only the ones marked as the cutoff bind.
+    """
+    doc = os.path.join(HERE, '..', '..', 'systems', '_architecture', 'repository_keep_set_v1.md')
+    with open(doc, encoding='utf-8') as fh:
+        text = fh.read()
+
+    # Lines that state the audit cutoff: an `audit/` row carrying a >= or < comparison.
+    import re
+    stated = set()
+    for line in text.splitlines():
+        if '`audit/`' in line and ('≥' in line or '<' in line):
+            stated.update(re.findall(r'\d{4}-\d{2}-\d{2}', line))
+
+    assert stated, (
+        'no audit-cutoff row found in the keep-set doc — either the doc stopped stating the rule '
+        '(fine, delete this test) or the row format changed and this guard has gone blind')
+    assert stated == {ep.AUDIT_CUTOFF}, (
+        f'keep-set doc states audit cutoff(s) {sorted(stated)} but the tool uses '
+        f'{ep.AUDIT_CUTOFF!r}. The doc and the partition-of-record disagree about the rule that '
+        f'decides the largest slice.')
