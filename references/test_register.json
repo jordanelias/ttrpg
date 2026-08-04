@@ -140,6 +140,58 @@
     }
    }
   },
+  "test_build_fork_scan_guard.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Unit tests for `tools/build_fork.py`'s empty-scan guard (ED-IN-0126).",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 110,
+   "modules_under_test": [
+    "engine",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 6,
+   "tests": {
+    "test_guard_ignores_pycache": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "__pycache__ must not be able to satisfy the guard \u2014 it would make an empty tree pass."
+    },
+    "test_guard_rejects_a_directory_with_no_python": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An EXISTING but empty tree is the subtler half: it also scans vacuously clean."
+    },
+    "test_guard_rejects_a_missing_directory": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The exact --verify-only-on-a-fresh-dir case."
+    },
+    "test_scanners_refuse_an_empty_tree": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "Both scanners previously returned a clean empty result here."
+    },
+    "test_the_guard_itself_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL (CLAUDE.md \u00a70.1 point 2)."
+    },
+    "test_verify_only_on_a_missing_tree_exits_nonzero": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "Returns 2 and \u2014 the point of the fix \u2014 prints NO clean-scan line on the way out."
+    }
+   }
+  },
   "test_build_proposals.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10443,16 +10495,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 137,
+  "files": 138,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 97,
+  "files_naming_a_module": 98,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 32,
   "helper_defs": 257,
   "helper_loc": 2258,
   "ratchet_baselines": 8,
-  "tests": 1206,
+  "tests": 1212,
   "undocumented_files": 0
  }
 }

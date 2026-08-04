@@ -280,9 +280,17 @@ data rather than fields); the mass-battle canon adapter.
 — so re-homing is import-clean, and `build_fork.py` already re-homes it as `systems/mass_battle/canon/`
 while carrying the live 5-module tree beside it. That is the structural resolution's first half.
 
-Second half: an adapter in `faction_action`'s shape, mapping canon's `{winner, turns, phases}` to the
-caller's `{attacker_wins, degree, *_size_pct}`. **`degree` is the blocker** — canon has no four-band
-degree and it drives the territorial outcome. Build the adapter **now**, with `degree_map` as a
+Second half: an adapter in `faction_action`'s shape, mapping canon's return to the
+caller's `{attacker_wins, degree, *_size_pct}`. ⚠ **Corrected 2026-08-04 (ED-IN-0125): the return shape
+stated here was wrong.** `{winner, turns, phases}` is the `kind='single'` path; **the caller uses
+`kind='multi'`, which returns `{winner, battle_turns, log, a_loss_final, b_loss_final}`** — see
+`audit/2026-08-03-session-oddities.md` §H, which superseded this shape *before* this document was
+rewritten and was copied in anyway. Three of the caller's four fields map mechanically.
+**`degree` is the blocker** — canon has no four-band
+degree and it drives the territorial outcome. **Partially unblocked 2026-08-04 (Jordan, C2):** mass
+battle occurs **on a map**, and the loser of the scene is whoever **loses more units or has their
+settlement captured** — that supplies `attacker_wins` and constrains the ladder to a
+unit-differential/objective-capture basis, but does not fix the four band edges. Build the adapter **now**, with `degree_map` as a
 **required argument with no default**. That is this repo's own established pattern for unruled canon:
 `keys.py:27-30` makes the OF-CAP termination caps required constructor args precisely so *"no fabricated
 constant enters the repo."* Engineering proceeds; the canon slot stays loudly empty.
@@ -402,16 +410,23 @@ blocking ones.** Removed from the list and built instead, each with an explicit 
 `Character` dataclass (roster-as-data), the weapon export (ED-1050-compliant direction), and the CI
 infrastructure fixes.
 
-| # | Decision | Blocks | Prepared how |
+> ## ⚠ ALL EIGHT RULED 2026-08-04 (Jordan) — registered as ED-IN-0125 / ED-MB-0064.
+> **Two of the eight were never decisions.** C5 and C7 are STRUCK: each converted a recorded *absence*
+> into a prohibition, and one of them re-opened a ruling Jordan had given the same day. That is a
+> defect in this document, not a question he failed to answer. The "Prepared how" column below was
+> also **false in three rows** — it asserted three artifacts that do not exist in the tree — and is
+> replaced by a measured "State in tree" column.
+
+| # | Decision | RULING (2026-08-04) | State in tree (measured) |
 |---|---|---|---|
-| **C1** | **What triggers a personal combat?** Nothing queues a combat scene; `evaluate_triggers` emits only `contest`. This is why rank-0 `personal_combat` never runs | The golden path, and with it the port template | Trigger hook exists and is unreachable; wiring is one call once the condition is ruled |
-| **C2** | **The mass-battle `degree` mapping.** Canon has no four-band degree; it drives the territorial outcome | The canon-tree swap | Adapter built, `degree_map` a required arg with no default (§6.3) |
-| **C3** | **`engine_clock`** — `doc: null` temporal spine, ED-1051, the sole remaining T0 blocker | The season/accounting cadence | — |
-| **C4** | **The attribute roster** — 9 vs 10 (OPT-AV-1) | The roster's *contents* only | `Character` built with attributes as a `descriptor_registry`-keyed dict |
-| **C5** | **ED-1006 — downward Key delivery** | Any downward-*Key*-dispatching orchestrator. **Not** downward function calls (§6.2) | Upward spine built; every downward edge flagged per strategy §IV.2 |
-| **C6** | **`da.territorial_transfer`**, or ratify that `da.public_governance` + `target_territory_id` means an ownership change. Today that rule is an interpretation the registry does not declare | Replay correctness beyond the three live emitters | Emitter uses only registered fields, so nothing mints canon by implication |
-| **C7** | **Is a one-turn rout with an untouched winner correct?** (§7.1) | The 9 red MB tests; the golden-mode matrix | Carried as `xfail(strict)`, citing ED-MB-0061 |
-| **C8** | **The contested `CI` scalar** — `ci_political` vs `territorial_piety`, both CANONICAL docs | Single-writer discipline for the one contested scalar in the tree | Both writers instrumented; neither removed |
+| **C1** | **What triggers a personal combat?** `evaluate_triggers` emits only `contest`, so nothing queues a fight | **Field investigation, mass battle, AND scene contest can all trigger it — and it can also be invoked directly.** Four entry points, not the single escalation hook this document offered | `engine/cross_scale/combat_bridge.py` is the already-built seam (OI-01, ED-IN-0091) |
+| **C2** | **The mass-battle `degree` mapping.** Canon has no four-band degree; it drives the territorial outcome | **Mass battle occurs ON A MAP; the loser of the scene is whoever loses more units or has their settlement captured.** Supplies `attacker_wins`, constrains the ladder to unit-differential/objective-capture. Band edges still unruled | ⚠ **Adapter NOT built.** `degree_map` appears nowhere in code. §6.3 says "build it now"; the old cell claimed it was done |
+| **C3** | **`engine_clock`** — `doc: null` temporal spine, ED-1051 | **It stands.** It is the season counter **plus** the accounting boundary — the moment deferred Key effects land | `TickScheduler` (`engine/substrate/keys.py:404`) calls itself "the engine_clock-shaped emission seam"; close by pointing `doc:` at CANONICAL `propagation_spec_v1.md` |
+| **C4** | **The attribute roster** — 9 vs 10 (OPT-AV-1) | **TEN — 3/3/3 plus Spirit.** Jordan flagged this as *not fully settled*, so it stays reversible | ⚠ **`Character` NOT built.** No such dataclass in `engine/` or `systems/`. Build it with attributes as a `descriptor_registry`-keyed dict so the roster is data |
+| ~~**C5**~~ | ~~ED-1006 — downward Key delivery~~ **STRUCK — not a decision** | **Keys work all directions.** Scaling back and forth — faction actions ↔ scenes, mass battles ↔ duels, all scene information transported to impact the world — is a defining mechanism. ED-1006 recorded a **gap** ("scale_transitions SS3 has NO top-down Key-delivery rule"), which this document read as a gate | ⚠ **"Upward spine built" was false, and "upward" is the wrong frame.** `engine/cross_scale/` implements bidirectional transport and `ECHO_TRANSPORT` is **default ON**; but 30 of `Faction.adjust`'s 31 call sites emit no Key. Built and live, bypassed at 30/31 sites |
+| **C6** | **`da.territorial_transfer`**, or ratify that `da.public_governance` + `target_territory_id` implies an ownership change | **No** — do not mint a new type. **The owner of territory is keyed** | `target_territory_id` at `key_type_registry_v30.md:200`; falsifier `tests/valoria/test_public_governance_transfer_key.py` |
+| ~~**C7**~~ | ~~Is a one-turn rout with an untouched winner correct?~~ **STRUCK — already ruled** | **Jordan ruled it a real defect (F1-class) on 2026-08-03** — `audit/2026-08-03-session-oddities.md:55` (D1). This document re-opened it the same day at §7.1 ("Only Jordan can answer that"). It is also incoherent against canon: **PP-233 "Damage is simultaneous"** | Implemented at `orchestration.py:1834,:1839,:2053,:2056,:2372,:2698`. Under simultaneous application a zero-loss winner in 42/60 is a **damage-path defect**. Live thread: **J9** — does one rout fix green all nine red MB tests? |
+| **C8** | ~~The contested `CI` scalar — `ci_political` vs `territorial_piety`~~ | **Not one scalar — a category error.** **Church Influence is a GLOBAL peninsula-wide tracker** that gates behaviours and actions (e.g. the mass-seizure attempt). **`territorial_piety` is a per-territory stat** for how religious that territory is, and it **feeds** CI | `ci_track.py:2` "Church Influence (CI) **world-track**" (PP-412); `mass_seizure.py:107` `_church_influence(world)`; `key_type_registry_v30.md:563` fires Mass Seizure at CI 100. ⚠ The "two CI generators" claim filed this session is **RETRACTED** — one generator, one stale docstring (`ci_track.py:18-23`) |
 
 **The forcing mechanism (this is the ED-1094 repair).** "Nothing ratifies on merge" without a
 forcing step is how ED-1083's doctrine sat PROPOSED in `main` indefinitely — the exact failure ED-1094

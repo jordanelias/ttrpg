@@ -1,0 +1,249 @@
+# Repository Keep-Set — the code-first `main`
+
+## Status: RULES RATIFIED (Jordan, in-session 2026-08-04, ED-IN-0125/0127). PER-DIRECTORY
+## DISPOSITIONS PROPOSED — the four rulings below are Jordan's words; the table that applies them
+## to 16 directories is this document's inference from them and is Jordan-vetoable row by row.
+## Class: A — substrate/architecture. **No deletion is authorised by this document.** It defines
+## the keep-set; execution is sequenced in §7 and gated on §8.
+## Version: v1 — supersedes `tools/build_fork.py`'s `CARRY`/`LEAVE` as the partition of record.
+
+---
+
+## 1. The direction
+
+**`main` is the code-first go-forward repository. The fork/archive receives the outdated prose.**
+
+> "our *fork* is going to hold all the outdated largely-prose work that contaminates our code-based
+> work" · "if we keep MAIN for our actual ongoing work, it's a lot cleaner going forward than with a
+> fork" — Jordan, 2026-08-04
+
+This is the **evacuate** arm of `audit/2026-08-03-session-oddities.md` §M, now ruled. It inverts what
+every prior artifact assumed (that the fork receives the *code*). Consequences, each of which removes
+work rather than adding it:
+
+- History of the kept code survives. The `tests/sim/mass_battle` → `systems/mass_battle/canon` re-home
+  (J2/J4) becomes a `git mv` that `--follow` traverses, not a copy that truncates history.
+- CI, hooks, branch protection and PR history survive untouched.
+- What left is one reviewable commit per slice — `git show` *is* the exhaustive list, versus a `LEAVE`
+  list plus a manifest that was never in the repo (the E5 unfalsifiability defect).
+- Reversal is `git revert`. Re-absorbing a missed file is not a hand-copy.
+- No second repository is required: a `pre-evacuation-<date>` tag preserves everything. An archive repo
+  is a browsing convenience.
+- `git-filter-repo` (not installed), `git subtree split`, and the 11-roots/2-relocations path-rewrite
+  cost all drop out of the plan entirely.
+
+**J1 is registered reinterpreted** (ED-IN-0125). Ruled as "`main` does NOT keep moving after the fork"
+under the extract framing, its referents swap here: the **archive** freezes, `main` continues.
+
+---
+
+## 2. The rule — three-way, and it cuts on *outdated*, not on *format*
+
+The session's near-miss is worth stating, because the plan and §M both partitioned by format:
+
+> Jordan's sentence discriminates on **outdated**, not on **prose**. Those axes disagree exactly where
+> it is expensive.
+
+| Prose | Disposition | Authority |
+|---|---|---|
+| **No code pair** — `canon/` P-01..P-14, the 14 `godot: no-oracle` module specs | **stays** | **authoritative — it *is* the spec** |
+| **Has a code pair** — `systems/` design docs, `engine/params/` | **stays** | **information only**; code wins (principle 7 / ED-1050) |
+| **Neither** — session audits, process ledgers, generated narrative, superseded proposals | **evacuates** | — |
+
+> "current prose with no code pair stays (philosophical, specs of unimplemented) · prose with code pair
+> is information only" — Jordan, 2026-08-04
+
+**Two consequences that a format-based cut would have got wrong:**
+
+1. **`engine/params/` is prose but current.** Verified with a positive control that passes: zero runtime
+   readers in `engine/` or `systems/` — while the same method finds the real path constructions for
+   `key_type_registry_v30.md` at `echo_transport.py:62` and `build_graph.py:50`. (Two earlier attempts
+   at this measurement failed their control and were discarded rather than reported.) But it has ~50
+   **provenance referents** from kept code, including the canon MB engine's core arithmetic
+   (`orchestration.py:2438,:2546,:2553` — "Pool = min(Size,Cmd)+Cmd", "Damage = successes × (1+Power)",
+   all `[canonical: params/mass_combat.md PP-233]`). It has code pairs, so it is **demoted, not
+   deleted** — and **J11's premise ("the fork's biggest deletion") dissolves.**
+2. **`canon/` is prose with no code pair, and is therefore the *most* protected category, not the
+   least.** The fork plan's own §4 already said so: *"the prose is the only spec that exists… demoted
+   from runtime authority, not from the repo."*
+
+**A second filter is required, because age alone fails.** `audit/2026-07-29-scenario-visualization/` is
+**36 MB — 21 PNGs and an 11 MB HTML — and six days old**, so a pure two-week rule keeps it. Add:
+**generated artifacts evacuate; their generators stay.** The four `.py` generators in that directory are
+wanted (Jordan: "we need visualizations for mass battle and eventually grid-based scene combat on maps")
+and arguably belong in `tools/`, not under `audit/`.
+
+---
+
+## 3. Why `CARRY`/`LEAVE` cannot simply be run backwards
+
+**`CARRY ∪ LEAVE` does not partition the tree.** The neither-set is large and load-bearing:
+`.github/`, `.githooks/`, `.claude/`, `tools/`, `tests/valoria/`, most of `references/`, `research/`,
+`skills/`, and the root files `CLAUDE.md`, `CURRENT.md`, `HANDOFF.md`.
+
+Under **extract** the neither-set defaults to *left behind* — harmless. Under **evacuate**, §M's literal
+recommendation (*"`git rm` everything that is not in `CARRY`"*) **deletes it** — the entire enforcement
+tier (CLAUDE.md §8), the shipping gate, and the session protocol. **That command must not be run.**
+
+`LEAVE` also conflates two categories that only extraction merges:
+
+1. **Prose contamination** — `audit/`, `arcs/`, most of `proposals/`, `deprecated/`. These evacuate.
+2. **Source-repo infrastructure** — `tools/` (*"the fork re-derives what it needs"*) and `tests/valoria/`
+   (*"engine/tests comes instead"*). Both rationales are **extraction-only**. Under keep-main,
+   `tests/valoria/` is the shipping gate *and* the home of the fork plan's own falsifiers —
+   `test_faction_l_reconstruction`, `test_key_graph`, `test_execution_map`,
+   `test_public_governance_transfer_key`, `test_morale_write_sweep`. Evacuating them deletes the guards
+   every step of the plan cites.
+
+Hence: **this document, authored fresh.** `build_fork.py` survives in a reduced role — see §9.
+
+---
+
+## 4. The keep-set (measured 2026-08-04)
+
+| Keep | Size | Files | Basis |
+|---|---|---|---|
+| `canon/` | 156K | 7 (7 md) | prose, **no code pair** → authoritative spec |
+| `engine/` | 1.6M | 89 (38 py) | code |
+| `engine/params/` | 584K | 43 md | prose **with** code pair → information only, demoted |
+| `systems/` | 6.7M | 326 (115 py, 206 md) | code + its design accompaniment |
+| `tools/` | 4.3M | 125 (102 py) | infrastructure / compliance — **99 of 102 reachable** |
+| `references/` | 1.5M | 42 | the registries the tools read (implied by "infrastructure") |
+| `registers/` | 2.2M | 31 | see §5 — kept, but **restarted** |
+| `research/` | 2.7M | 38 (32 md) | named by Jordan |
+| `tests/valoria/` | 1.9M | 145 (**0 md**) | the shipping gate + the plan's falsifiers |
+| `tests/sim/mass_battle/` | 872K | 28 py, **0 md** | **canon MB engine (J2)** — inside an otherwise-evacuating parent |
+| `tests/sim/v32-combat-balance/` | 580K | — | the numpy-free parity oracle |
+| `audit/` ≥ 2026-07-21, renders stripped | ~3M | 16 dirs | two-week rule + the generated-artifact filter |
+| `godot/` | 272K | 27 | the eventual `res://` root (CLAUDE.md §6) |
+| `skills/` | 1.4M | 45 | **selectively** — see §6 |
+| `.github/`, `.githooks/`, `.claude/`, `CLAUDE.md`, `CURRENT.md`, `HANDOFF.md` | — | — | the enforcement tier and session protocol |
+
+| Evacuate | Size | Basis |
+|---|---|---|
+| `audit/` < 2026-07-21 + the lane buckets | ~29M | two-week rule |
+| generated renders (**keep the 4 generators**) | 36M | generated-artifact filter |
+| `deprecated/` | 7.7M | history; the tag preserves it |
+| `tests/sim/` (rest), `tests/stress/`, `tests/sim_framework/` | ~13M, 332 md | prose with neither code pair nor spec role |
+| `arcs/` | 1016K | generated narrative content |
+| `proposals/` — **selectively**, per §6 | 844K | most are neither |
+| `workplans/`, `dashboard/` | 580K | process surfaces; see §8 item 6 |
+
+**Two structural facts the top-level view hides, and they are why the cut is per-file, not per-root:**
+`engine/params/` is prose inside a keep root; `tests/sim/mass_battle/` is canon code inside an
+evacuating root.
+
+---
+
+## 5. `registers/` — kept, but restarted
+
+> "we must start fresh for registers imo" — Jordan, 2026-08-04
+
+**The constraint that shapes how.** **103 files under `engine/` + `systems/` cite `ED-` IDs inline**, and
+`tools/validate_ed_citations.py` is a **blocking CI gate**; **30 tools read `registers/`**. A clean-slate
+register makes all 103 citations dangle and takes the gate with them.
+
+**Recommended mechanism (PROPOSED):** freeze the existing ledgers as a **read-only snapshot** at
+`registers/archive/`, and open a fresh register for all new work. Old citations still resolve; new IDs
+start clean; `validate_ed_citations` keeps its ground truth. The alternative — stripping ED citations out
+of code — destroys the provenance chain and is not recommended.
+
+**Seed the fresh register with what is still open, not with history.** The still-open set is small.
+
+---
+
+## 6. "Judicious" — the criterion is *subject*, not orphan status
+
+**Measured: 99 of 102 tools are referenced** by CI, hooks, `.claude/`, or another tool. Only three are
+not (`build_fork.py`, about to be repurposed; `gen_sigma_parity_goldens.py`, which regenerates a
+committed golden — keep; `dead_primitive_census.py`). The dead-tool pruning already happened
+(CLAUDE.md §8). **Orphan-hunting yields ~1 tool.**
+
+The real cut is by subject: **a tool retires or re-scopes in the same commit as the tree it serves.**
+Tools whose subject is evacuating: `audit_staleness`, `scope_ratchet`, `dashboard_data`,
+`ci_register_size_check`, `ci_audit_registry_check`, and the observability suite (`build_decisions`,
+`build_proposals`, `build_incompleteness`). Same rule for skills: under "prose is information only",
+`prose-writer` (676K — half the skills tree) and the editorial/workplan-workflow skills lose their
+subject. `valoria-vector-audit` (416K) is the other large one.
+
+**`proposals/` is per-file.** Must stay (load-bearing on kept code): `valoria_fork_plan_of_record_v1.md`
+(⚠ it lives in `proposals/`, which `LEAVE` evacuates — a naive sweep deletes the plan governing the
+sweep), `repo-reorganization-v1.md` (RATIFIED, execution pending), `pc_formation_system.md`,
+`weapon_physics_and_concentration_model.md` §7, `mass_battle_fighting_withdrawal_v1.md`,
+`multiunit_envelopment_plan.md`, the personal-combat curriculum. Evacuate: the four 2026-07-17/18
+speculative-analysis docs (which self-declare "ratifies nothing"), `pessimist_ners_audit_v1.md`,
+`2026-05-25-mechanics-integration-v3_1.md`, `2026-05-16-PC-4.4-unified-success-stress.md`. Already
+superseded, no loss: `2026-05-16-faction-audit-followup-plan.md`, `mass_battle_shape_echelon_revamp.md`,
+`stub_infill_plan.md`.
+
+⚠ **A held-for-Jordan flag on an evacuated file must survive as a ledger entry, or evacuation silently
+un-holds it** — a held item that is not on a register is not held.
+
+---
+
+## 7. Sequence
+
+| # | Step | Reversible? |
+|---|---|---|
+| 0 | **Rulings first.** Direction + J1 reinterpretation registered (**done** — ED-IN-0125/ED-MB-0064) | n/a |
+| 1 | **Register + correct.** The eight C-rulings; the false surfaces; the `--verify-only` guard (**done** — ED-IN-0125/0126) | pure additions |
+| 2 | **Carry the 9 attributed MB failures as `xfail(strict)`, citing ED-MB-0061.** ⚠ **This must precede the first deletion** — `main` is CI-red and stays red through the migration, so a deletion-induced breakage would be indistinguishable from background | yes |
+| 3 | **Tag `pre-evacuation-<date>`.** Everything after is `git revert`-able | n/a |
+| 4 | **Measure before deleting:** the extended J11 (every table cited by kept code, not a 5-table sample); a reader-enumeration grep per candidate directory over `tests/valoria` + `tools/` | n/a |
+| 5 | **Jordan rules the line per directory** against §4 | n/a |
+| 6 | **Execute in slices, one root per commit** — each commit deleting the tree **plus its dedicated gates/tests plus its alias row** together. `pytest tests/valoria` + a seeded campaign green after every slice. Baseline re-record **last** | yes (revert) |
+
+**Not reversible:** the archive's divergence once anyone commits to it; golden/baseline re-records once
+superseding work lands on top; ledger rewrites (append-only — never).
+
+---
+
+## 8. What goes red under mass deletion
+
+Each needs its fix **in the same commit as the deletion**, which is the auditable-deletion property that
+made §M prefer evacuation in the first place.
+
+1. **`validate_ed_citations.py`** (blocking) — kept code cites EDs whose evidence lives in `audit/`.
+   Needs: ledgers stay (§5), plus alias rows or tolerance for archived evidence paths.
+2. **`broken_dependency_checker.py`** — live ledger refs into deleted paths. The mechanism already
+   exists: longest-dir-prefix alias resolution in `references/restructure_ledger.md`. **One alias row
+   per evacuated root, landed in the deletion commit.**
+3. **`ci_co_file_checker.py`** — rule 4 loses `engine/params/` (or not, since it stays demoted); rule 3
+   (`coverage_matrix`) breaks on MB edits if the tests-prose corpus goes.
+4. **`compliance_check --check-only` + `review_core.py --check`** — the scope ratchet will report a
+   large delta (J13 already trips it). Re-record the baseline **after** the slices are final, with an
+   explicit ED and a loud call-out.
+5. **`canonical_sources.yaml` pins / `freshness_gate`** — ~12 pins already stale; prune the index per slice.
+6. **SessionStart banner** (`session_status.py`, `workplan_status.py`) — reads root `HANDOFF.md` and
+   `workplans/workplan_v6_progress.yaml`. **Evacuate `workplans/` and every session boots against a
+   missing file.** Keep, or rewire the banner first.
+7. **`tests/valoria/` itself** — any test reading an evacuated tree fails. Step 4's grep is the guard.
+8. **`dashboard/` + `audit-refresh.yml` + `build_proposals.py`** — surfaces `proposals/` **by location**;
+   retire or re-point in the same commit.
+
+---
+
+## 9. `build_fork.py`'s new role
+
+It is **no longer the executor**. It survives as:
+
+1. **The keep-set guard.** `contract_coverage()` — which takes no argument and reads the *source* repo —
+   reinterprets cleanly as *"nothing with a contract or a stub may be evacuated"*, run against the
+   post-deletion tree. Its docstring already states the trap it exists to catch: the tempting "minimal
+   fork" of just the 58 runtime files would silently drop 14 units that have a contract but no code yet.
+2. **The source of per-root rationale strings** for §4.
+
+Its `--verify-only` empty-scan defect is fixed under ED-IN-0126 (`_scanned_py`, mutation-verified in
+`tests/valoria/test_build_fork_scan_guard.py`).
+
+---
+
+## 10. Open calls
+
+- **§5's archive-snapshot mechanism** for restarting `registers/` — recommended, not ruled.
+- **Per-file dispositions in §6** for `skills/` and `proposals/`.
+- **`godot/`'s four stale pre-`d+σ` docs** (ED-1054 banners) — evacuate individually, or keep with the
+  port target? The unit of decision is the file, not the root.
+- **Where provenance authority migrates** if `engine/params/` is ever revisited: the natural successor is
+  the typed layer (`engine/engine_params/sim_params.json` citation fields + the plan §5 ratchet), which
+  makes the PP/ED ledgers, not the prose tables, the referent.

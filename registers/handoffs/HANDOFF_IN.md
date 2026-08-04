@@ -1302,13 +1302,27 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
     — `conditional_orders`, `dg2_yield_residuals`, `stochastic_rout` all need the battle to last
     long enough for a trigger to fire. Nobody has checked whether one fix greens all nine (J8).
 
-- **UNRESOLVED, and it decides the fork's mechanics: does `main` keep moving after the fork?**
-  `build_fork.py` is a one-way build (`rmtree` first), so re-running it CLOBBERS fork-side commits.
-  Fine while the fork is a pure derivative; wrong the moment it diverges — which is the point.
-  If `main` keeps receiving MB/PC/SC work, a **GitHub fork with shared history** is close to forced
-  (merges keep working). `git subtree split` handles one prefix; this carry list has **11 roots and
-  2 relocations**, so history-preserving extraction needs `git-filter-repo` (not installed) and
-  then charges path-rewriting on every future merge. **Jordan's call, not a session's.**
+- **RESOLVED 2026-08-04 (ED-IN-0125) — the direction is INVERTED. `main` is the go-forward repo.**
+  ~~UNRESOLVED, and it decides the fork's mechanics: does `main` keep moving after the fork?~~
+  The question was posed under the EXTRACT framing, where "the fork" meant a new **code** repo built
+  by copying `CARRY` into an empty tree. Jordan ruled the opposite operation: **the fork/archive holds
+  the outdated largely-prose work; THIS repo stays as the code-first go-forward repo.** So the
+  one-way-build objection below is dissolved rather than answered — nothing is ever rebuilt from
+  `main` into the archive, so `rmtree` cannot clobber anything, and no history-preserving extraction
+  is needed at all. `git-filter-repo`, `git subtree split`, and the 11-roots/2-relocations path-rewrite
+  cost all drop out of the plan. The archive is this repo's history at an evacuation tag; a browsable
+  archive repo is a convenience, not a requirement.
+  ⚠ **J1 is registered REINTERPRETED, not verbatim** (ED-IN-0125): its literal wording — "`main` does
+  NOT keep moving after the fork" — would, read under the new framing, freeze the go-forward repo. The
+  thing that freezes is the **archive**; `main` continues.
+  ⚠ **`build_fork.py`'s `CARRY`/`LEAVE` must NOT simply be run backwards.** `CARRY ∪ LEAVE` does not
+  partition the tree, and the neither-set (`.github/`, `.githooks/`, `.claude/`, `tools/`,
+  `tests/valoria/`, most of `references/`, `research/`, `skills/`, `CLAUDE.md`, `CURRENT.md`,
+  `HANDOFF.md`) defaults to *kept* under extract and *deleted* under evacuate. `LEAVE` also carries two
+  extraction-only rationales — `tools/` "the fork re-derives what it needs" and `tests/valoria/`
+  "engine/tests comes instead" — which under keep-main would delete the enforcement tier, the shipping
+  gate, and the fork plan's own falsifiers. **The keep-set is authored fresh; see
+  `systems/_architecture/repository_keep_set_v1.md`.**
 
 - **I1 (get `main` green) is CANON-BLOCKED, measured not assumed.** 60/60 identical 1200v1200
   battles end in ONE turn; the winner takes ZERO losses in 42/60. That is why
