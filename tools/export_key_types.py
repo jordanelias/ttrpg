@@ -3,11 +3,16 @@
 
 WHY THIS EXISTS.
 
-`systems/_architecture/key_type_registry_v30.md` is a **registry parsed at runtime**.
-`engine/substrate/keys.py:181` says so in its own words: *"The registry markdown is the single
-source of truth (CLAUDE.md §8 'every rule lives once'); this class parses it at load time rather
-than duplicating the 55-type roster in code."* That was the right call when the alternative was a
-hand-copied roster in Python. It is the wrong call now, for three reasons the tree already proves:
+`systems/_architecture/key_type_registry_v30.md` WAS a **registry parsed at runtime** — until this
+tool existed, `TypeRegistry` parsed the prose at load time, and its docstring argued that beat
+duplicating the 55-type roster in code. It did. That argument stops holding once the roster has to
+reach somewhere Python cannot follow, for three reasons the tree already proves:
+
+(This paragraph deliberately DESCRIBES that former docstring instead of quoting it with a line
+number. The commit that created this file also rewrote it, so a quotation here was false on
+arrival — the third instance in this programme of correcting a source without sweeping its
+quotations, ED-IN-0134/0138. Quoting a file that moves is a self-inflicted staleness generator;
+prose about code should describe, or cite something that does not shift.)
 
 1. **Godot re-implements the logic** (Jordan, 2026-08-04) and **cannot parse markdown.** The port's
    answer today is `godot/skeleton/data/key_types/*.tres` — four files, HAND-MADE, covering 4 of 55
@@ -22,13 +27,13 @@ hand-copied roster in Python. It is the wrong call now, for three reasons the tr
    paired to a system. A registry is data.
 
 WHAT THIS DOES NOT DO. It does not re-parse the markdown. `TypeRegistry.load()` IS the schema
-definition — its tolerant line-based parser (`keys.py:208-239`) exists because the registry's
+definition — its tolerant line-based parser (`TypeRegistry._parse_entry`) exists because the registry's
 ```yaml blocks are prose-flavoured (unquoted colons and parentheticals inside scalars make strict
 `yaml.safe_load` fail on real canonical entries). Writing a second parser here would re-commit the
 duplication this tool exists to end, so the export calls the live loader and serialises its result.
 The markdown stays as the authored, reviewable surface; the JSON becomes what code and Godot read.
 
-ORDER IS LOAD-BEARING. `keys.py:190` — "dict preserves registry order (ORD-1 discipline)". So this
+ORDER IS LOAD-BEARING. `TypeRegistry.__init__` records that dict order IS registry order (ORD-1). So this
 emits keys in REGISTRY ORDER and never sorts them. `json.dumps(..., sort_keys=True)` would be
 byte-stabler and would silently destroy an ordering invariant; byte-stability comes from the source
 order being deterministic instead.

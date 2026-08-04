@@ -11,8 +11,11 @@ Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
       blocked on ORD-3 — see module docstring of engine.substrate).
   - systems/_architecture/key_type_registry_v30.md
       §1 type format (required/optional payload fields, defaults) · §2-§8 the
-      55-type roster, parsed at load time — the registry markdown remains the
-      single source of truth; nothing is duplicated here.
+      55-type roster. AUTHORED here; COOKED to engine/engine_params/key_types.json
+      by tools/export_key_types.py, and that JSON is what runtime loads
+      (ED-IN-0136). The two are pinned identical by a blocking round-trip gate
+      plus test_key_substrate.py::test_json_and_markdown_registries_are_identical,
+      so this is one roster with two representations, not two sources.
   - systems/_architecture/propagation_spec_v1.md
       §1 O.4/SSI-1..4 (sub_step_index = append-order tiebreak ONLY; the
       re-entrancy meter `cascade_depth` lives on the tick-scoped scheduler and
@@ -173,6 +176,9 @@ class Key:
 
 _TYPE_HEADING = re.compile(r"^### (?P<tid>[a-z_]+\.[a-z_]+)\s*$", re.MULTILINE)
 _YAML_BLOCK = re.compile(r"```yaml\s*\n(?P<body>.*?)\n```", re.DOTALL)
+# The id shape the markdown headings enforce structurally; reused by load_json so the
+# two loaders cannot disagree about what a valid type id is.
+_TYPE_ID = re.compile(r"[a-z_]+\.[a-z_]+")
 
 
 class TypeRegistry:
@@ -235,6 +241,27 @@ class TypeRegistry:
         types = doc.get("types")
         if not isinstance(types, dict) or not types:
             raise KeyValidationError(f"no key types in {path}")
+        # PARITY WITH THE MARKDOWN PATH. Without these, this loader was strictly WEAKER than
+        # load(): the heading regex `[a-z_]+\.[a-z_]+` (_TYPE_HEADING) makes a malformed id
+        # unrepresentable in markdown, and _parse_entry always returns a dict — so
+        # `{"types": {"NotAnId": 42}}` was REJECTED by markdown and ACCEPTED here. Two consumers
+        # of a CI-pinned file made that survivable; W4b binds three more, and W4c binds Godot.
+        # A weaker validator on the path that is becoming primary is the wrong direction.
+        bad_ids = [k for k in types if not _TYPE_ID.fullmatch(str(k))]
+        if bad_ids:
+            raise KeyValidationError(
+                f"{len(bad_ids)} malformed type id(s) in {path}: {bad_ids[:5]} — "
+                f"ids must match family.type ([a-z_]+.[a-z_]+), as the markdown headings enforce")
+        non_dict = [k for k, v in types.items() if not isinstance(v, dict)]
+        if non_dict:
+            raise KeyValidationError(
+                f"{len(non_dict)} entr(y/ies) in {path} are not objects: {non_dict[:5]} — "
+                f"the markdown path always yields a dict per type")
+        # The document carries its own count; use it rather than letting it rot unread.
+        declared = doc.get("type_count")
+        if isinstance(declared, int) and declared != len(types):
+            raise KeyValidationError(
+                f"{path} declares type_count={declared} but carries {len(types)} types")
         return cls(types)
 
     @staticmethod

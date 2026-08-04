@@ -487,3 +487,32 @@ def test_the_round_trip_check_can_fail(tmp_path):
     r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
                        capture_output=True, text=True, cwd=ROOT)
     assert r.returncode == 0, 'restore failed — the working tree was left mutated'
+
+
+@pytest.mark.parametrize('name,payload,expect', [
+    ('malformed id',   {'types': {'NotAnId': {}}},                  'malformed type id'),
+    ('entry not dict', {'types': {'scene.x': 42}},                  'not objects'),
+    ('count mismatch', {'type_count': 99, 'types': {'scene.x': {}}}, 'declares type_count'),
+])
+def test_load_json_is_not_weaker_than_the_markdown_path(tmp_path, name, payload, expect):
+    """The JSON loader must reject what the markdown loader structurally cannot represent.
+
+    WHY THIS EXISTS. `load_json` originally checked only "types is a non-empty dict", so
+    `{"types": {"NotAnId": 42}}` LOADED — while the markdown path rejects it for free, because the
+    heading regex `[a-z_]+\\.[a-z_]+` makes a malformed id unrepresentable and `_parse_entry` always
+    returns a dict. A weaker validator on the path that is BECOMING primary is the wrong direction:
+    one consumer of a CI-pinned file made it survivable, W4b binds three more and W4c binds Godot.
+    Found by the ED-IN-0132 gate review of W4a, not by the author.
+    """
+    import json as _json
+    p = tmp_path / 'reg.json'
+    p.write_text(_json.dumps(payload), encoding='utf-8')
+    with pytest.raises(KeyValidationError) as e:
+        TypeRegistry.load(str(p))
+    assert expect in str(e.value)
+
+
+def test_the_json_validator_still_accepts_the_real_registry(tmp_path):
+    """POSITIVE CONTROL for the test above: the tightened validator must not reject valid data."""
+    reg = TypeRegistry.load(JSON_REGISTRY)
+    assert len(reg.types) == 55

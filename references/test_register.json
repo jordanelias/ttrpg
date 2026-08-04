@@ -6061,7 +6061,7 @@
     "GO",
     "IN"
    ],
-   "loc": 490,
+   "loc": 519,
    "modules_under_test": [
     "engine.substrate",
     "engine/engine_params/key_types.json",
@@ -6070,7 +6070,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 32,
+   "test_count": 34,
    "tests": {
     "test_apply_immediate_when_defer_flag_off": {
      "assertionless": false,
@@ -6142,6 +6142,11 @@
      "assertions": 1,
      "summary": null
     },
+    "test_load_json_is_not_weaker_than_the_markdown_path": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The JSON loader must reject what the markdown loader structurally cannot represent."
+    },
     "test_missing_required_payload_rejected": {
      "assertionless": false,
      "assertions": 0,
@@ -6206,6 +6211,11 @@
      "assertionless": false,
      "assertions": 0,
      "summary": null
+    },
+    "test_the_json_validator_still_accepts_the_real_registry": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL for the test above: the tightened validator must not reject valid data."
     },
     "test_the_round_trip_check_can_fail": {
      "assertionless": false,
@@ -10650,7 +10660,7 @@
   "helper_defs": 259,
   "helper_loc": 2276,
   "ratchet_baselines": 8,
-  "tests": 1231,
+  "tests": 1233,
   "undocumented_files": 0
  }
 }
