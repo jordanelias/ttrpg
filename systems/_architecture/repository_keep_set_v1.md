@@ -223,6 +223,41 @@ un-holds it** — a held item that is not on a register is not held.
 **Not reversible:** the archive's divergence once anyone commits to it; golden/baseline re-records once
 superseding work lands on top; ledger rewrites (append-only — never).
 
+### 7.1 The standing review gate — after EVERY milestone, not at the end (Jordan, 2026-08-04)
+
+> **Every step above closes with an adversarial read-only Fable-5 review — steelmanned — for
+> accuracy, logic, and fidelity to this plan.** A step is not complete until that review has run and
+> its findings are either applied or explicitly refused with a reason.
+
+**This is a cadence rule, and the cadence is the point.** CLAUDE.md §10 already requires the
+agonist→antagonist relay and wires `valoria-critic` (`Read, Grep, Glob` only — independence that is
+structural, not declared). What it does not say is *how often*. This does: **per milestone**, not
+per programme.
+
+**Why, from this programme's own record rather than from principle.** Three defects in the
+separation work were found by adversarial passes and by nothing else, and each was invisible to the
+instrument that had just been built and pronounced sound:
+
+| Found by review | What it would have cost |
+|---|---|
+| The parity oracle was in the evacuate set | A committed golden with no source; a kept CI test unregenerable |
+| `readers()` could not see split paths (`os.path.join(REPO, 'audit', …)`) | The blocking-reader counts that sequence the whole deletion were blind to an entire idiom — 45 readers missed |
+| `deprecated/` holds 26 files of the BLOCKING ED-citation gate's universe | CI red on the first deletion commit, and the tempting fix destroys the anti-fabrication check |
+
+Each was cheap to check and expensive to have acted on — the exact pattern the fork plan's §12
+records and then re-committed. Reviewing only at the end would have caught all three *after* the
+work they invalidate.
+
+**Three properties the gate must keep, or it decays into ceremony:**
+1. **Read-only by construction.** Route through `valoria-critic`, never a declared-read-only prompt —
+   a sentence inside a prompt restricts nothing (ED-IN-0087).
+2. **Steelman first.** The reviewer states the strongest case for the work *before* attacking it. A
+   finding that only defeats a weak reading is noise, and "this is correct, here is the best argument
+   for it" is a valid verdict.
+3. **The reviewer's claims are checked too.** Reviews have been wrong here — one reported an ID
+   reservation unbumped when it was bumped (it had read a mid-session snapshot). Verify before acting;
+   an audit is evidence, not a verdict.
+
 ---
 
 ## 8. What goes red under mass deletion
