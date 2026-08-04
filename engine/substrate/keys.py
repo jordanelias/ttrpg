@@ -176,13 +176,27 @@ _YAML_BLOCK = re.compile(r"```yaml\s*\n(?P<body>.*?)\n```", re.DOTALL)
 
 
 class TypeRegistry:
-    """Loader/validator over systems/_architecture/key_type_registry_v30.md.
+    """Loader/validator for the Key-type registry, from JSON or from the authored markdown.
 
-    The registry markdown is the single source of truth (CLAUDE.md §8 "every
-    rule lives once"); this class parses it at load time rather than
-    duplicating the 55-type roster in code. Parsing accepts the §1 template
-    fields plus the Class-B extras (default_visibility, class, declared_by,
-    articulation_significance) without requiring them.
+    THE SOURCE OF TRUTH IS STILL AUTHORED IN MARKDOWN
+    (`systems/_architecture/key_type_registry_v30.md`) — that is where a human edits a type and
+    where review happens. What changed (ED-IN-0136) is what CODE reads: `tools/export_key_types.py`
+    cooks that markdown into `engine/engine_params/key_types.json` and callers load the JSON.
+
+    WHY, since the old docstring argued the opposite and was right at the time. Parsing prose at
+    runtime beat duplicating a 55-type roster in Python. It does not beat cooking it, because:
+      * **Godot re-implements the logic and cannot parse markdown.** Its answer today is four
+        HAND-MADE `.tres` files covering 4 of 55 types — a hand shadow of a machine-readable thing.
+      * **The roster had already drifted in every hand-maintained copy**, including this class's own
+        docstring, which said "44-type" for the file it parses (ED-IN-0134).
+
+    `load()` dispatches on suffix, so a caller switches source by changing its path constant and
+    nothing else. Both paths yield identical `types` dicts — pinned by
+    `tests/valoria/test_key_substrate.py::test_json_and_markdown_registries_are_identical`, which is
+    what stops the cooked file and the authored file drifting apart.
+
+    Markdown parsing accepts the §1 template fields plus the Class-B extras (default_visibility,
+    class, declared_by, articulation_significance) without requiring them.
     """
 
     def __init__(self, types: dict):
@@ -191,6 +205,9 @@ class TypeRegistry:
 
     @classmethod
     def load(cls, registry_path: str | Path) -> "TypeRegistry":
+        """Load from `.json` (cooked) or markdown (authored). Suffix decides."""
+        if str(registry_path).endswith(".json"):
+            return cls.load_json(registry_path)
         text = Path(registry_path).read_text(encoding="utf-8")
         types: dict = {}
         headings = list(_TYPE_HEADING.finditer(text))
@@ -203,6 +220,21 @@ class TypeRegistry:
             types[m.group("tid")] = cls._parse_entry(block.group("body"))
         if not types:
             raise KeyValidationError(f"no key types parsed from {registry_path}")
+        return cls(types)
+
+    @classmethod
+    def load_json(cls, path: str | Path) -> "TypeRegistry":
+        """Load the cooked registry (`tools/export_key_types.py` output).
+
+        Key order is REGISTRY order and significant (ORD-1); `json.load` preserves object order, so
+        the invariant survives the round trip. An empty or type-less document raises rather than
+        yielding an empty registry — the same refusal `load()` makes, for the same reason: a scan
+        or a load that silently returns nothing reads exactly like a clean result.
+        """
+        doc = json.loads(Path(path).read_text(encoding="utf-8"))
+        types = doc.get("types")
+        if not isinstance(types, dict) or not types:
+            raise KeyValidationError(f"no key types in {path}")
         return cls(types)
 
     @staticmethod

@@ -119,6 +119,7 @@ jobs:
           v python3 tools/ci_naming_check.py
           v python3 tools/ci_names_consistency.py
           v python3 tools/export_engine_params.py --check
+          v python3 tools/export_key_types.py --check
           v python3 tools/ci_sim_fabrication_check.py
           v python3 tools/ci_claim_provenance_check.py
           v python3 tools/ci_claude_workflow_paths.py

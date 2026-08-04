@@ -10,7 +10,9 @@ arbitrary values — OF-CAP is an open fork and the substrate takes caps as
 required parameters (no canonical constants exist to assert against).
 """
 
+import os
 import random
+import sys
 
 import pytest
 
@@ -26,6 +28,7 @@ from engine.substrate import (
     Visibility,
 )
 
+ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
 
 
@@ -424,3 +427,63 @@ def test_registry_defaults_applied_on_emit(registry):
     assert k.scale_signature == ["personal"]
     # scene.dialogue: default_permanence=persistent, default_time_horizon=near
     assert k.permanence == "persistent" and k.time_horizon == "near"
+
+
+# ---------------------------------------------------------------------------
+# W4 — the cooked registry (ED-IN-0136)
+# ---------------------------------------------------------------------------
+
+JSON_REGISTRY = "engine/engine_params/key_types.json"
+
+
+def test_json_and_markdown_registries_are_identical():
+    """THE PIN. The cooked file and the authored file must parse to the same registry.
+
+    This is the whole safety of the inversion. The markdown stays authored (a human edits it and
+    review happens there); code reads the JSON. Two surfaces holding the same content is exactly
+    the drift generator this repo keeps getting caught by — `keys.py`'s own docstring said
+    "44-type" for the file it parses; four `.tres` files hand-shadow four of fifty-five types. The
+    difference here is that this pair is *checked*, so drift is a red test rather than a discovery.
+    """
+    md = TypeRegistry.load(REGISTRY_PATH)
+    js = TypeRegistry.load(JSON_REGISTRY)
+    assert js.types == md.types, 'cooked JSON has drifted from the authored markdown — re-run tools/export_key_types.py'
+    # ORD-1: registry order is significant, so equality of dicts is not enough.
+    assert list(js.types) == list(md.types), 'key ORDER differs (ORD-1) — the cook must not sort'
+
+
+def test_export_round_trips_byte_exact():
+    """`--check` must pass against the committed file, or the committed file is stale."""
+    import subprocess
+    r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    assert r.returncode == 0, f'key-types export drifted:\n{r.stdout}\n{r.stderr}'
+
+
+def test_the_round_trip_check_can_fail(tmp_path):
+    """POSITIVE CONTROL: mutate ONE value in the committed JSON and the checker must exit 1.
+
+    Without this, `--check` passing proves only that it ran. A gate that has never been shown to
+    go red is a gate whose failure mode is unmeasured — the defect class this session has hit
+    repeatedly (a scan reporting clean over nothing; a `>= 44` floor that could not see a drop).
+    """
+    import json as _json, shutil, subprocess
+    live = os.path.join(ROOT, JSON_REGISTRY)
+    backup = tmp_path / 'key_types.json.bak'
+    shutil.copy(live, backup)
+    try:
+        doc = _json.loads(open(live, encoding='utf-8').read())
+        first = next(iter(doc['types']))
+        doc['types'][first]['description'] = 'MUTANT — planted by test_the_round_trip_check_can_fail'
+        with open(live, 'w', encoding='utf-8') as fh:
+            fh.write(_json.dumps(doc, indent=1, ensure_ascii=False, sort_keys=False) + '\n')
+        r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
+                           capture_output=True, text=True, cwd=ROOT)
+        assert r.returncode == 1, 'a mutated committed registry passed --check; the gate cannot fail'
+        assert 'DRIFT' in r.stdout
+    finally:
+        shutil.copy(backup, live)
+    # and the restore must itself be clean, or this test poisons the tree
+    r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    assert r.returncode == 0, 'restore failed — the working tree was left mutated'

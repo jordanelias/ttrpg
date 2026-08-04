@@ -6057,16 +6057,19 @@
    ],
    "lane_derived": true,
    "lanes": [
+    "GO",
     "IN"
    ],
-   "loc": 427,
+   "loc": 490,
    "modules_under_test": [
     "engine.substrate",
-    "systems/_architecture/key_type_registry_v30.md"
+    "engine/engine_params/key_types.json",
+    "systems/_architecture/key_type_registry_v30.md",
+    "tools/export_key_types.py"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 29,
+   "test_count": 32,
    "tests": {
     "test_apply_immediate_when_defer_flag_off": {
      "assertionless": false,
@@ -6108,6 +6111,11 @@
      "assertions": 0,
      "summary": null
     },
+    "test_export_round_trips_byte_exact": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`--check` must pass against the committed file, or the committed file is stale."
+    },
     "test_fanout_width_does_not_increment_depth": {
      "assertionless": false,
      "assertions": 1,
@@ -6117,6 +6125,11 @@
      "assertionless": false,
      "assertions": 0,
      "summary": null
+    },
+    "test_json_and_markdown_registries_are_identical": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE PIN. The cooked file and the authored file must parse to the same registry."
     },
     "test_keylog_replay_byte_identical": {
      "assertionless": false,
@@ -6192,6 +6205,11 @@
      "assertionless": false,
      "assertions": 0,
      "summary": null
+    },
+    "test_the_round_trip_check_can_fail": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "POSITIVE CONTROL: mutate ONE value in the committed JSON and the checker must exit 1."
     },
     "test_undrained_queue_blocks_tick_advance": {
      "assertionless": false,
@@ -10498,6 +10516,7 @@
   "by_lane": {
    "FA": 3,
    "FI": 1,
+   "GO": 1,
    "IN": 30,
    "MB": 3,
    "PC": 6,
@@ -10630,7 +10649,7 @@
   "helper_defs": 259,
   "helper_loc": 2276,
   "ratchet_baselines": 8,
-  "tests": 1228,
+  "tests": 1231,
   "undocumented_files": 0
  }
 }
