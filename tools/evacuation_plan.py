@@ -255,8 +255,18 @@ RULES = [
      'kept but RESTARTED (ED-IN-0127 §5): 103 kept files cite ED ids inline and 30 tools read this tree'),
     (lambda p: p.startswith('research/'), 'keep', 'R-RESEARCH', 'named in the keep-set by Jordan'),
     (lambda p: p.startswith('godot/'), 'keep', 'R-GODOT', 'the eventual res:// root (CLAUDE.md §6)'),
+    # RULED 2026-08-04, Jordan: "prose writer must stay." The ED-IN-0132 review recommended
+    # evacuating prose-writer + its 19-file reference corpus on the grounds that its subject (the
+    # index+infill pipeline) is retired -- and stated the counter itself: canon narrative STAYS on
+    # main, and prose-writer is CLAUDE.md §9's routed skill for authoring it. Jordan took the
+    # counter. The corpus is a live capability's calibration set, not detritus.
+    # The rest of skills/ is still awaiting per-skill triage; this rule no longer pretends
+    # otherwise for prose-writer specifically.
+    (lambda p: p.startswith('skills/prose-writer/'), 'keep', 'R-SKILL-PROSE',
+     'RULED KEPT (Jordan, 2026-08-04): canon narrative stays on main and this is the skill that '
+     'authors it -- its reference corpus is a live capability, not a retired subject'),
     (lambda p: p.startswith('skills/'), 'keep', 'R-SKILLS',
-     'kept pending per-skill triage -- prose-writer and the editorial/workplan skills lose their subject'),
+     'kept pending per-skill triage -- the editorial/workplan skills lose their subject'),
 
     # ---- proposals/: per file
     (lambda p: p.startswith('proposals/') and os.path.basename(p) in PROPOSALS_KEEP, 'keep',
