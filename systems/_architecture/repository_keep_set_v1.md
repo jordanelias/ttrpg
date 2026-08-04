@@ -47,7 +47,8 @@ The session's near-miss is worth stating, because the plan and §M both partitio
 | Prose | Disposition | Authority |
 |---|---|---|
 | **No code pair** — `canon/` P-01..P-14, the 14 `godot: no-oracle` module specs | **stays** | **authoritative — it *is* the spec** |
-| **Has a code pair** — `systems/` design docs, `engine/params/` | **stays** | **information only**; code wins (principle 7 / ED-1050) |
+| **Has a code pair** — `systems/` design docs | **stays** | **information only**; code wins (principle 7 / ED-1050) |
+| **Has a code pair that has SUPERSEDED it** — `engine/params/` | **evacuates** (2026-08-04) | see the amendment below |
 | **Neither** — session audits, process ledgers, generated narrative, superseded proposals | **evacuates** | — |
 
 > "current prose with no code pair stays (philosophical, specs of unimplemented) · prose with code pair
@@ -55,14 +56,31 @@ The session's near-miss is worth stating, because the plan and §M both partitio
 
 **Two consequences that a format-based cut would have got wrong:**
 
-1. **`engine/params/` is prose but current.** Verified with a positive control that passes: zero runtime
-   readers in `engine/` or `systems/` — while the same method finds the real path constructions for
-   `key_type_registry_v30.md` at `echo_transport.py:62` and `build_graph.py:50`. (Two earlier attempts
-   at this measurement failed their control and were discarded rather than reported.) But it has ~50
-   **provenance referents** from kept code, including the canon MB engine's core arithmetic
-   (`orchestration.py:2438,:2546,:2553` — "Pool = min(Size,Cmd)+Cmd", "Damage = successes × (1+Power)",
-   all `[canonical: params/mass_combat.md PP-233]`). It has code pairs, so it is **demoted, not
-   deleted** — and **J11's premise ("the fork's biggest deletion") dissolves.**
+1. ~~**`engine/params/` is prose but current.**~~ **AMENDED 2026-08-04 (ED-IN-0139) — `engine/params/`
+   EVACUATES.** Jordan: *"params .md are largely useless at this point and I want them gone. code
+   should have superseded them all by now"*, and *"provenance can cite to a fork"*.
+
+   The measurement below stands and is left intact, because it is what the amendment had to answer
+   rather than something the amendment falsified: zero runtime readers in `engine/` or `systems/`
+   (verified with a positive control that passes — the same method finds the real path constructions
+   for `key_type_registry_v30.md` at `echo_transport.py:62` and `build_graph.py:50`; two earlier
+   attempts at this measurement failed their control and were discarded rather than reported), but
+   ~50 **provenance referents** from kept code, including the canon MB engine's core arithmetic
+   (`orchestration.py:2438,:2546,:2553` — "Pool = min(Size,Cmd)+Cmd", "Damage = successes ×
+   (1+Power)", all `[canonical: params/mass_combat.md PP-233]`).
+
+   **The provenance referents were the whole objection, and the fork-citation ruling dissolves it** —
+   an evacuated file is tagged and reachable, so a `[canonical: params/…]` citation still resolves.
+   What the ruling does *not* dissolve is losing what the tables assert, so the disposition is gated
+   on capture, not on trust: `tools/export_params_constants.py` writes
+   `engine/engine_params/params_tables.yaml`, holding all **43 files byte-identically** alongside a
+   structured table view (258 tables, 1,367 rows). Lossless **by construction** rather than by the
+   parser being complete — and it is not complete: six files (index stubs, `history/`) yield no
+   table at all, which is exactly the shape a silent loss would have taken. Falsifier:
+   `tests/valoria/test_params_dump.py`, with a positive control.
+
+   J11's premise ("the fork's biggest deletion") therefore holds after all, at 43 files / 584K —
+   though `audit/` dwarfs it either way.
 2. **`canon/` is prose with no code pair, and is therefore the *most* protected category, not the
    least.** The fork plan's own §4 already said so: *"the prose is the only spec that exists… demoted
    from runtime authority, not from the repo."*
@@ -133,7 +151,7 @@ Hence: **this document, authored fresh.** `build_fork.py` survives in a reduced 
 |---|---|---|---|
 | `canon/` | 156K | 7 (7 md) | prose, **no code pair** → authoritative spec |
 | `engine/` | 1.6M | 89 (38 py) | code |
-| `engine/params/` | 584K | 43 md | prose **with** code pair → information only, demoted |
+| ~~`engine/params/`~~ | ~~584K~~ | ~~43 md~~ | **EVACUATES** 2026-08-04 (ED-IN-0139) — captured verbatim into `engine/engine_params/params_tables.yaml` first |
 | `systems/` | 6.7M | 326 (115 py, 206 md) | code + its design accompaniment |
 | `tools/` | 4.3M | 125 (102 py) | infrastructure / compliance — **99 of 102 reachable** |
 | `references/` | 1.5M | 42 | the registries the tools read (implied by "infrastructure") |
@@ -155,11 +173,14 @@ Hence: **this document, authored fresh.** `build_fork.py` survives in a reduced 
 | `tests/sim/` (rest), `tests/stress/`, `tests/sim_framework/` | ~13M, 332 md | prose with neither code pair nor spec role |
 | `arcs/` | 1016K | generated narrative content |
 | `proposals/` — **selectively**, per §6 | 844K | most are neither |
+| `engine/params/` | 584K, 43 md | **ADDED 2026-08-04 (ED-IN-0139)** — code superseded it; tables captured verbatim into `engine/engine_params/params_tables.yaml` first, provenance cites the fork |
 | ~~`workplans/`, `dashboard/`~~ | — | **BOTH NOW KEPT** (ED-IN-0129). `workplans/` is the steering surface and carries its own status; `dashboard/` was ruled kept, and keeping `workplans/` closes the coupling that would have left `dashboard_data.py` reading a deleted input |
 
 **Two structural facts the top-level view hides, and they are why the cut is per-file, not per-root:**
-`engine/params/` is prose inside a keep root; `tests/sim/mass_battle/` is canon code inside an
-evacuating root.
+`engine/params/` is an evacuating sub-tree inside a keep root; `tests/sim/mass_battle/` is canon code
+inside an evacuating root. Both directions occur, and each broke a scan that assumed the top-level
+directory was the unit — see ED-IN-0139 for the two false-positive classes that surfaced when
+`engine/params/` became the first sub-root evacuation.
 
 ---
 
@@ -272,7 +293,10 @@ made §M prefer evacuation in the first place.
 2. **`broken_dependency_checker.py`** — live ledger refs into deleted paths. The mechanism already
    exists: longest-dir-prefix alias resolution in `references/restructure_ledger.md`. **One alias row
    per evacuated root, landed in the deletion commit.**
-3. **`ci_co_file_checker.py`** — rule 4 loses `engine/params/` (or not, since it stays demoted); rule 3
+3. **`ci_co_file_checker.py`** — rule 4 loses `engine/params/` outright now that it evacuates
+   (ED-IN-0139): the rule demands a params co-change when a `_v30` doc changes, and its target tree
+   will not exist. Retire or re-aim rule 4 in the deletion commit, along with
+   `export_params_constants.py --check`, which re-derives from that tree and cannot outlive it; rule 3
    (`coverage_matrix`) breaks on MB edits if the tests-prose corpus goes.
 4. **`compliance_check --check-only` + `review_core.py --check`** — the scope ratchet will report a
    large delta (J13 already trips it). Re-record the baseline **after** the slices are final, with an
@@ -308,9 +332,13 @@ Its `--verify-only` empty-scan defect is fixed under ED-IN-0126 (`_scanned_py`, 
 - **Per-file dispositions in §6** for `skills/` and `proposals/`.
 - **`godot/`'s four stale pre-`d+σ` docs** (ED-1054 banners) — evacuate individually, or keep with the
   port target? The unit of decision is the file, not the root.
-- **Where provenance authority migrates** if `engine/params/` is ever revisited: the natural successor is
-  the typed layer (`engine/engine_params/sim_params.json` citation fields + the plan §5 ratchet), which
-  makes the PP/ED ledgers, not the prose tables, the referent.
+- ~~**Where provenance authority migrates** if `engine/params/` is ever revisited~~ — **RULED
+  2026-08-04 (ED-IN-0139).** It was revisited immediately: `engine/params/` evacuates, and *"provenance
+  can cite to a fork"* (Jordan), so the ~50 `[canonical: params/…]` referents in kept code keep
+  resolving against the evacuation tag rather than needing to be re-pointed. The typed layer
+  (`engine/engine_params/sim_params.json` citation fields + the plan §5 ratchet) remains the natural
+  successor for **new** provenance; migrating the existing citations onto it is optional cleanup, not
+  a precondition of the deletion.
 
 ---
 

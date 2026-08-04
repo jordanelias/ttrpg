@@ -83,8 +83,12 @@ def test_the_totality_guard_can_fail():
     ('systems/mass_battle/sim/massbattle.py', 'keep'),
     # prose with NO code pair -> authoritative spec
     ('canon/philosophical_foundations.md', 'keep'),
-    # prose WITH a code pair -> information only, still kept
-    ('engine/params/core.md', 'keep'),
+    # prose WITH a code pair, WHERE THE CODE SUPERSEDED IT -> the prose goes (Jordan, 2026-08-04),
+    # gated on tools/export_params_constants.py having captured the tables verbatim first.
+    # This row read 'keep' until ED-IN-0139; it is flipped deliberately, not by rule drift.
+    ('engine/params/core.md', 'evacuate'),
+    # …but the CAPTURE it evacuates into is code-adjacent data and stays
+    ('engine/engine_params/params_tables.yaml', 'keep'),
     # canon engine misfiled under an evacuating parent
     ('tests/sim/mass_battle/orchestration.py', 'keep'),
     # detritus
@@ -211,6 +215,50 @@ def test_the_split_scan_can_fail():
             """))
         hits = ep.joined_path_readers(['deprecated'], [os.path.join(rel, 'probe.py')])
         assert hits['deprecated'], 'planted split path into deprecated/ was not detected'
+
+
+def test_a_partly_evacuating_root_slices_to_its_evacuating_subtree(part):
+    """`engine/` is the first root that is only PARTLY evacuating, and it broke the reader scan.
+
+    The scan used to search kept files for the evacuating file's TOP-LEVEL directory. With
+    `engine/params/` flipped to evacuate (ED-IN-0139), the pattern `engine/` matches nearly every
+    kept file in the tree, so a 43-file slice would report hundreds of blocking readers that have
+    nothing to do with it. `slice_prefixes` must therefore hand back `engine/params`, never
+    `engine`.
+    """
+    prefixes = ep.slice_prefixes(part['buckets']['evacuate'],
+                                 part['buckets']['keep'] + part['buckets']['relocate'])
+    assert prefixes['engine'] == ['engine/params'], (
+        f"expected the engine slice to be exactly engine/params, got {prefixes['engine']}. "
+        "A slice that names a root containing kept code cannot produce a usable reader count.")
+    # and no slice may name a prefix that contains something we are keeping
+    retained = set(part['buckets']['keep'] + part['buckets']['relocate'])
+    for root, prefs in prefixes.items():
+        for p in prefs:
+            clashes = [r for r in retained if r == p or r.startswith(p + '/')]
+            assert not clashes, f'slice {p} contains kept file(s), e.g. {clashes[:2]}'
+
+
+def test_split_path_hits_require_a_WHOLLY_evacuating_target(part):
+    """`tests/sim` holds both evacuating stress prose and the KEPT canon mass-battle engine.
+
+    Testing "something under this path evacuates" reported all 30 kept readers of the canon engine
+    as split-path breakages — 30 false alarms on the single most load-bearing kept tree under an
+    evacuating root. Wholly-evacuating is the property that predicts an actual break.
+    """
+    evac = set(part['buckets']['evacuate'])
+    retained = part['buckets']['keep'] + part['buckets']['relocate']
+    pure = ep.pure_prefixes(sorted(evac), retained)
+    assert ep._is_evacuating_path('tests/sim', pure, evac) is False, \
+        'tests/sim contains the kept canon mass-battle engine and must not count as evacuating'
+    assert ep._is_evacuating_path('engine/params', pure, evac) is True
+    assert ep._is_evacuating_path('deprecated/skills', pure, evac) is True
+    # the concrete false alarm this removed
+    jr = ep.joined_path_readers(sorted({e.split('/')[0] for e in evac}), retained, evac)
+    flat = [h for lst in jr.values() for h in lst]
+    assert not any('test_mass_battle_byte_exact' in h for h in flat), \
+        'a kept reader of the kept canon MB engine is being reported as a split-path breakage'
+    assert flat, 'the split-path scan found nothing at all — the tightening went too far'
 
 
 def test_the_parity_oracle_is_not_evacuated():

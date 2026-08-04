@@ -13,7 +13,7 @@ could not: the plan was not in the tree. A gate that cannot be checked is ceremo
 | W3 | **Deletion rehearsal** in a scratch worktree | W1 | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | open |
 | W4 | `key_type_registry.md` → JSON; repoint readers; regenerate `.tres` | **R1 done** (ED-IN-0135) | round-trip byte-exact; mutate-one exits 1; `.tres` byte-compared; `test_key_substrate` exact-roster | sonnet + opus on schema | ready |
 | W5 | Weapons → typed JSON; regenerate GDScript | Jordan confirm | 53 exported; generated `.gd` has no `reach/weight/spd/handling` | sonnet | ruling |
-| W6 | `engine/params` census + demotion | none | planted control: a table value absent from code must appear in the gap report | haiku + opus | open |
+| W6 | ~~`engine/params` census + demotion~~ → **capture + EVACUATION** | none | 43/43 files byte-identical in the YAML capture; `--check` blocking in all four wiring points; positive control on the losslessness guard | haiku + opus | **DONE** ED-IN-0139 |
 | W7 | Deletion slices, one root per commit | W1, W3, W9, Jordan sign-off | 4 gates green per slice | sonnet + critic gate | ruling |
 | W8 | `handoff_atomize` first run | **2** Jordan calls | `--check` exit 0 + `test_handoff_structure` | sonnet | ruling |
 | W9 | Replace frozen `AUDIT_CUTOFF` with citation-based retention | Jordan ruling | `--check` total; new count pins | sonnet | ruling |
@@ -23,14 +23,34 @@ could not: the plan was not in the tree. A gate that cannot be checked is ceremo
 
 **Filed residuals from the W2 gate review** (none block W4 after R1):
 - **R4 — `references/restructure_ledger.md` must invert BEFORE the first evacuation slice.** It is an
-  alias registry parsed at runtime by **four** tools (`broken_dependency_checker`,
-  `ci_claude_workflow_paths`, `observability/build_incompleteness`, `evacuation_plan` itself), and
-  keep-set §8 item 2 requires **every deletion commit to write a new alias row into it**. A hand-edited
-  `.md` that blocking CI machine-reads, about to take one write per slice, is the highest-blast-radius
-  format violation in the tree. Not a W4 dependency; a W7 dependency.
-- **R5** — evacuate rule for `engine/params/history/` (8 files) + `threadwork_superseded.md`: superseded
-  params prose surviving on a blanket keep rule.
+  alias registry parsed at runtime by **two** tools — `broken_dependency_checker:106` and
+  `ci_claude_workflow_paths:38`. (I relayed "four" from the review without checking:
+  `build_incompleteness:363` merely *excludes* the filename from a scan, and the `evacuation_plan`
+  hits were my own comment and print string. Corrected here; the R4 conclusion is unchanged, its
+  blast radius is half what I stated.) Keep-set §8 item 2 requires **every deletion commit to write a
+  new alias row into it**. A hand-edited `.md` that blocking CI machine-reads, about to take one write
+  per slice, is the highest-blast-radius format violation in the tree. Not a W4 dependency; a W7
+  dependency.
+- ~~**R5** — evacuate rule for `engine/params/history/` (8 files) + `threadwork_superseded.md`~~ —
+  **RESOLVED by ED-IN-0139**, and by the broader rule rather than the special case R5 asked for: the
+  whole of `engine/params/` evacuates, so superseded params prose is not surviving on a blanket keep
+  rule because there is no longer a keep rule to survive on.
 - The `:443` correction in the fork plan is spliced mid-sentence; tidy if that doc is touched again.
+
+**Filed by W6 (ED-IN-0139) — carry into W7:**
+- **The params gate must die with its source.** `export_params_constants.py --check` re-derives from
+  `engine/params/`, so the deletion commit must ALSO remove it from `.github/workflows/valoria-ci.yml`,
+  `tools/valoria_local.py`, `references/ci_checks_registry.yaml` and
+  `tests/valoria/test_gate_coverage.py::EXPECTED_COMMANDS`. Deliberately strict — there is no
+  vacuous-pass-on-absent-source path — so forgetting is loud. Same commit, four files.
+- **`ci_co_file_checker.py` rule 4** targets `engine/params/{basename}.md` (`:90-91`). It loses its
+  target tree in the same slice; retire or re-aim it there.
+- **The `engine/params` slice has 30 blocking readers and 2 split-path readers** as measured by
+  `python3 tools/evacuation_plan.py --slice engine/params`. Most are mentions in comments and
+  docstrings rather than loads — the scan is a substring scan over whole files — but the two
+  split-path hits (`tools/ci_formula_prose_check.py` and its test) are real: that checker walks
+  `engine/params/**/*.md` as its live corpus and needs a decision, not a re-point. Triage belongs to
+  the slice, not to the capture.
 
 
 ## 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN-0124)

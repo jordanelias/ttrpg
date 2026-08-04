@@ -4339,14 +4339,18 @@
    ],
    "lane_derived": true,
    "lanes": [
+    "GO",
     "IN",
     "MB"
    ],
-   "loc": 281,
+   "loc": 329,
    "modules_under_test": [
+    "engine",
     "engine.py",
     "engine/",
+    "engine/engine_params/params_tables.yaml",
     "engine/mc_v18.py",
+    "engine/params",
     "engine/params/core.md",
     "engine/reference/",
     "engine/substrate/keys.py",
@@ -4361,8 +4365,13 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 16,
+   "test_count": 18,
    "tests": {
+    "test_a_partly_evacuating_root_slices_to_its_evacuating_subtree": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "`engine/` is the first root that is only PARTLY evacuating, and it broke the reader scan."
+    },
     "test_audit_cutoff_boundary": {
      "assertionless": false,
      "assertions": 3,
@@ -4412,6 +4421,11 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "Jordan: \"visualization tool for mb should be moved to mb and wiring should be to systems\"."
+    },
+    "test_split_path_hits_require_a_WHOLLY_evacuating_target": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": "`tests/sim` holds both evacuating stress prose and the KEPT canon mass-battle engine."
     },
     "test_split_path_scan_finds_what_substring_scan_cannot": {
      "assertionless": false,
@@ -5178,7 +5192,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 35
+     "size": 36
     }
    ],
    "cites_measurement": false,
@@ -5196,7 +5210,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 241,
+   "loc": 244,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -5228,6 +5242,7 @@
     "tools/currency_consistency_check.py",
     "tools/export_engine_params.py",
     "tools/export_key_types.py",
+    "tools/export_params_constants.py",
     "tools/freshness_gate.py",
     "tools/mechanics_index_gen.py",
     "tools/patch_propagation_checker.py",
@@ -7405,6 +7420,62 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "WAVE-2 REPAIR (critic 'missing', CLAUDE.md \u00a70.1 point 2): the prior version of this"
+    }
+   }
+  },
+  "test_params_dump.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guards for `tools/export_params_constants.py` \u2014 the dump that lets engine/params/*.md leave.",
+   "helper_loc": 8,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "doc"
+    },
+    {
+     "loc": 5,
+     "name": "_source_files"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 79,
+   "modules_under_test": [
+    "engine",
+    "engine/engine_params",
+    "engine/params",
+    "engine_params",
+    "tools/export_params_constants.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_capture_is_lossless": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "EVERY source file present, and byte-identical. This is the deletion's safety argument."
+    },
+    "test_round_trip_check_passes": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_tables_were_actually_parsed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The structured view is a convenience, but an empty one would mean the parser broke."
+    },
+    "test_the_losslessness_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL: drop one file from the capture and the assertion must notice."
     }
    }
   },
@@ -10527,8 +10598,8 @@
   "by_lane": {
    "FA": 3,
    "FI": 1,
-   "GO": 1,
-   "IN": 30,
+   "GO": 2,
+   "IN": 31,
    "MB": 3,
    "PC": 6,
    "SC": 3,
@@ -10651,16 +10722,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 139,
+  "files": 140,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 99,
+  "files_naming_a_module": 100,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 33,
-  "helper_defs": 259,
-  "helper_loc": 2276,
+  "files_with_a_lane": 34,
+  "helper_defs": 261,
+  "helper_loc": 2284,
   "ratchet_baselines": 8,
-  "tests": 1233,
+  "tests": 1239,
   "undocumented_files": 0
  }
 }

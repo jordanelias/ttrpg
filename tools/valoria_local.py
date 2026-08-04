@@ -164,6 +164,8 @@ def main(argv):
         ('ci_module_shape_check.py',    [],          False),  # report-only container/shape hygiene (ED-1085)
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
         ('export_key_types.py',         ['--check'], True),   # key registry md -> typed-JSON round-trip (ED-IN-0136; blocking)
+        # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
+        ('export_params_constants.py',  ['--check'], True),   # params prose -> YAML capture, byte-lossless (ED-IN-0139; blocking)
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
         ('ci_audit_registry_check.py',   [],          False),  # report-only audit-registry freshness gate
         ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)

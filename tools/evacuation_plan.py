@@ -192,10 +192,26 @@ RULES = [
     (lambda p: p.startswith('audit/'), 'evacuate', 'R-AUDIT-STALE',
      f'audit older than {AUDIT_CUTOFF}, or undated -- process record, not canon'),
 
-    # ---- prose WITH a code pair: stays, demoted to information only
-    (lambda p: p.startswith('engine/params/'), 'keep', 'R-PARAMS-INFO',
-     'prose WITH a code pair -> information only (ED-1050). Zero runtime readers but ~50 '
-     'provenance referents from kept code; deleting it orphans them'),
+    # ---- prose WITH a code pair, WHERE THE CODE HAS SUPERSEDED IT: the prose goes.
+    # Jordan, 2026-08-04: "params .md are largely useless at this point and I want them gone. code
+    # should have superseded them all by now" / "just dump the constants to a yaml".
+    # This rule previously said KEEP ("information only"), on the strength of ~50 provenance
+    # referents from kept code that deleting it would orphan. That objection is dissolved, not
+    # ignored: "provenance can cite to a fork" (Jordan, same day), so the citations stay valid
+    # against the evacuation tag. What is NOT dissolved is losing what the tables assert, so the
+    # deletion is gated on tools/export_params_constants.py having captured them --
+    # engine/engine_params/params_tables.yaml holds all 43 files BYTE-IDENTICALLY (the structured
+    # table view is the useful part; the verbatim `raw` capture is what makes the claim provable
+    # rather than dependent on my parser being total). tests/valoria/test_params_dump.py is the
+    # falsifier, and it carries a positive control.
+    # EXECUTION NOTE for the deletion slice: `export_params_constants.py --check` re-derives from
+    # this tree, so it CANNOT survive its own source. Retire the gate -- from valoria-ci.yml,
+    # valoria_local.py, ci_checks_registry.yaml and test_gate_coverage.EXPECTED_COMMANDS -- in the
+    # SAME commit that removes engine/params/. It is a migration-window gate, deliberately strict
+    # (no vacuous pass on an absent source) so it goes loudly red if anyone forgets.
+    (lambda p: p.startswith('engine/params/'), 'evacuate', 'R-PARAMS-DUMPED',
+     'parameter tables captured verbatim into engine/engine_params/params_tables.yaml -- data '
+     'wearing prose, superseded by the typed layer; provenance cites the fork'),
 
     # ---- prose with NO code pair: stays, and it IS the spec
     (lambda p: p.startswith('canon/'), 'keep', 'R-CANON',
@@ -289,15 +305,79 @@ BLOCKING_PREFIXES = ('tools/', 'tests/valoria/', '.github/', '.githooks/', '.cla
 _CODE_EXT = ('.py', '.yml', '.yaml', '.json', '.sh', '.toml', '.ini')
 
 
-def readers(evac_roots: list[str], keep: list[str]) -> dict:
-    """For each evacuating top-level root, which KEPT files name it.
+def slice_prefixes(evac: list[str], retained: list[str]) -> dict:
+    """Group the evacuate set by the SHORTEST PURELY-EVACUATING prefix of each file.
+
+    THE DEFECT THIS FIXES, which arrived with the first sub-root evacuation. `readers()` used to
+    scan kept files for the evacuating file's TOP-LEVEL directory. That was already loose for
+    `tests/` (three kept sub-trees under it) and became actively misleading when
+    `engine/params/` flipped to evacuate: the pattern `engine/` matches nearly every kept file in
+    the tree, so a 43-file slice would report hundreds of "blocking readers" that have nothing to
+    do with it. A slice report whose blocking count is noise is worse than none -- it trains the
+    reader to discount the number that exists to stop a bad deletion.
+
+    So a slice is the shortest prefix under which NOTHING is retained. `engine` is impure (all the
+    code), `engine/params` is pure -> that is the slice. A file with no pure ancestor (a lone
+    evacuating file in a kept directory) is its own slice. Returned as {top-level root: [prefixes]}
+    so the readiness table stays short while the scan stays precise.
+    """
+    out = collections.defaultdict(set)
+    for chosen in pure_prefixes(evac, retained):
+        out[chosen.split('/')[0]].add(chosen)
+    return {k: sorted(v) for k, v in sorted(out.items())}
+
+
+def pure_prefixes(evac: list[str], retained: list[str]) -> set:
+    """The shortest wholly-evacuating ancestor of each evacuating file (or the file itself)."""
+    impure = set()
+    for r in retained:
+        segs = r.split('/')
+        for i in range(1, len(segs)):
+            impure.add('/'.join(segs[:i]))
+    out = set()
+    for rel in evac:
+        segs = rel.split('/')
+        chosen = rel
+        for i in range(1, len(segs)):
+            pref = '/'.join(segs[:i])
+            if pref not in impure:
+                chosen = pref
+                break
+        out.add(chosen)
+    return out
+
+
+def _is_evacuating_path(built: str, pure: set, evac_set: set) -> bool:
+    """Is this constructed path wholly inside the evacuate set?
+
+    `built in evac_set` alone is too narrow (it is usually a directory) and "something under it
+    evacuates" is too broad -- `tests/sim` contains both the evacuating stress prose and the KEPT
+    canon mass-battle engine, and the broad test reported all 30 kept readers of the latter as
+    split-path breakages. Wholly-evacuating is the property that actually predicts a break.
+    """
+    if built in evac_set:
+        return True
+    return any(built == p or built.startswith(p + '/') for p in pure)
+
+
+def readers(prefixes_by_root: dict, keep: list[str], evac_set: set) -> dict:
+    """For each evacuating root, which KEPT files name any of its evacuating prefixes.
 
     Split blocking (executable) from prose (a mention in a kept document). A prose mention needs a
     restructure_ledger alias row; a blocking reader needs code retired or re-pointed in the SAME
     commit as the deletion.
     """
-    result = {r: {'blocking': [], 'prose': []} for r in evac_roots}
-    pats = {r: re.compile(r'(?<![\w/])' + re.escape(r.rstrip('/')) + r'/') for r in evac_roots}
+    result = {r: {'blocking': [], 'prose': []} for r in prefixes_by_root}
+    pats = {}
+    for root, prefs in prefixes_by_root.items():
+        alts = []
+        for p in prefs:
+            # a prefix that IS a tracked file needs no trailing slash -- but it does need a right
+            # boundary, so `audit/foo.md` cannot match inside `audit/foo.mdx`. A directory prefix
+            # carries its own boundary in the slash, and must NOT take the lookahead (the next
+            # character there is a word character by construction).
+            alts.append(re.escape(p) + (r'(?![\w-])' if p in evac_set else '/'))
+        pats[root] = re.compile(r'(?<![\w/.-])(?:' + '|'.join(alts) + r')')
     for rel in keep:
         full = os.path.join(REPO, rel)
         try:
@@ -312,7 +392,7 @@ def readers(evac_roots: list[str], keep: list[str]) -> dict:
     return result
 
 
-def joined_path_readers(evac_roots: list[str], retained: list[str]) -> dict:
+def joined_path_readers(evac_roots: list[str], retained: list[str], evac_set: set | None = None) -> dict:
     """Kept CODE that builds a path into an evacuating tree OUT OF SEGMENTS.
 
     THE FALSE NEGATIVE THIS EXISTS FOR, and it was a real one. `readers()` greps for the literal
@@ -330,9 +410,16 @@ def joined_path_readers(evac_roots: list[str], retained: list[str]) -> dict:
     segments (variables) are skipped rather than guessed -- guessing is the fabrication this repo
     forbids, and a skipped segment yields a shorter path that still matches on its root, which is
     the level the slice cares about.
+
+    `evac_set`, when given, tightens the hit test from "this path exists" to "this path is
+    EVACUATING". Without it, a root that is only partly evacuating (`engine/`, now that
+    `engine/params/` has flipped) reports every kept `os.path.join(REPO, 'engine', ...)` as a
+    split-path breakage. Same reason as `slice_prefixes`: a false blocking hit costs the report
+    its credibility.
     """
     hits = {r: [] for r in evac_roots}
     roots = set(evac_roots)
+    pure = pure_prefixes(sorted(evac_set), retained) if evac_set is not None else set()
 
     def const_segments(node):
         """Constant string pieces of a join/Path/`/`-chain, in order."""
@@ -366,7 +453,11 @@ def joined_path_readers(evac_roots: list[str], retained: list[str]) -> dict:
             for i, s in enumerate(segs):
                 if s in roots and i + 1 < len(segs):
                     built = '/'.join(segs[i:])
-                    if os.path.exists(os.path.join(REPO, built)):
+                    if evac_set is not None:
+                        leaves = _is_evacuating_path(built, pure, evac_set)
+                    else:
+                        leaves = os.path.exists(os.path.join(REPO, built))
+                    if leaves:
                         hits[s].append(f'{rel} -> {built}')
                     break
     return {k: sorted(set(v)) for k, v in hits.items()}
@@ -422,8 +513,10 @@ def main(argv=None):
         if args.check:
             return 1
 
-    evac_roots = sorted({e.split('/')[0] for e in evac})
-    bad = contract_guard(set(evac))
+    evac_set = set(evac)
+    prefixes = slice_prefixes(evac, retained)
+    evac_roots = sorted(prefixes)
+    bad = contract_guard(evac_set)
 
     if args.check:
         if bad:
@@ -437,12 +530,15 @@ def main(argv=None):
         return 0
 
     if args.slice:
+        # accepts a top-level root ('audit') or any evacuating prefix ('engine/params')
         root = args.slice.rstrip('/')
-        members = [e for e in evac if e.split('/')[0] == root]
+        members = [e for e in evac if e == root or e.startswith(root + '/')]
         if not members:
             print(f"[EVAC] {root!r} is not an evacuating root. Evacuating: {', '.join(evac_roots)}")
             return 1
-        r = readers([root], retained)[root]
+        prefs = [p for lst in prefixes.values() for p in lst
+                 if p == root or p.startswith(root + '/')] or [root]
+        r = readers({root: prefs}, retained, evac_set)[root]
         print(f"[EVAC] slice {root}/ -- {len(members)} file(s) would be evacuated")
         print(f"       blocking readers (must be retired/re-pointed in the SAME commit): {len(r['blocking'])}")
         for b in sorted(r['blocking']):
@@ -462,8 +558,8 @@ def main(argv=None):
     print(f"[EVAC] rules fired:")
     for rule_id, n in p['by_rule'].most_common():
         print(f"        {rule_id:18s} {n:>5}   {p['reasons'][rule_id][:88]}")
-    rd = readers(evac_roots, retained)
-    jr = joined_path_readers(evac_roots, retained)
+    rd = readers(prefixes, retained, evac_set)
+    jr = joined_path_readers(evac_roots, retained, evac_set)
     print(f"\n[EVAC] per-slice readiness (blocking readers must go in the same commit):")
     for root in evac_roots:
         n = len([e for e in evac if e.split('/')[0] == root])
@@ -472,6 +568,11 @@ def main(argv=None):
         flag = 'READY' if (b == 0 and j == 0) else f'{b} BLOCKING'
         print(f"        {root:14s} {n:>5} files   {flag:>14s}   {s:>4} prose refs"
               f"{'   +' + str(j) + ' SPLIT-PATH' if j else ''}")
+        # a partly-evacuating root: name the sub-trees, or the count above reads as the whole root
+        if prefixes[root] != [root]:
+            shown = prefixes[root][:4]
+            more = f' ... +{len(prefixes[root]) - 4} more' if len(prefixes[root]) > 4 else ''
+            print(f"          slices: {', '.join(shown)}{more}")
     if any(jr.values()):
         print("\n[EVAC] SPLIT-PATH readers -- kept code building a path into an evacuating tree out of")
         print("       segments. A literal-substring scan CANNOT see these; each is a silent breakage:")
