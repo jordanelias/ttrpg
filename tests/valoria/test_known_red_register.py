@@ -49,6 +49,28 @@ def test_the_register_has_not_grown_by_accretion():
         'gate becomes a permanently ignored one (ED-MB-0061).')
 
 
+def _stale_ids(nodeids):
+    """The detection logic, extracted so a control can actually exercise it.
+
+    F5 from the process review: the control below asserted only that a planted path does not
+    exist -- it never fed that path through the check. Cripple the detection loop and the
+    "control" still passed. That is verbatim the defect ED-IN-0139 F3 recorded the same day
+    (a control covering one branch, described as covering both), committed inside the test file
+    written to prevent it. Extracting the predicate is what makes the control able to fail.
+    """
+    missing = []
+    for nodeid in nodeids:
+        path, _, testname = nodeid.partition('::')
+        full = os.path.join(HERE, path)
+        if not os.path.exists(full):
+            missing.append(nodeid + ' (no such file)')
+            continue
+        with open(full, encoding='utf-8', errors='ignore') as fh:
+            if ('def ' + testname + '(') not in fh.read():
+                missing.append(nodeid + ' (file exists, test does not)')
+    return missing
+
+
 def test_every_known_red_id_names_a_real_test(pytestconfig):
     """No stale entries: every id must correspond to a file and a test that exists.
 
@@ -56,27 +78,24 @@ def test_every_known_red_id_names_a_real_test(pytestconfig):
     suite is slow and re-entrant. A file-plus-`def` check catches the realistic rot (renamed test,
     deleted file) without that cost.
     """
-    missing = []
-    for nodeid in valoria_conftest.KNOWN_RED:
-        path, _, testname = nodeid.partition('::')
-        full = os.path.join(HERE, path)
-        if not os.path.exists(full):
-            missing.append(f'{nodeid} (no such file)')
-            continue
-        with open(full, encoding='utf-8', errors='ignore') as fh:
-            if f'def {testname}(' not in fh.read():
-                missing.append(f'{nodeid} (file exists, test does not)')
+    missing = _stale_ids(valoria_conftest.KNOWN_RED)
     assert not missing, (
         'KNOWN_RED entries that name nothing — a stale entry excuses a test that no longer '
         f'exists and hides one that does: {missing}')
 
 
 def test_the_staleness_guard_can_fail():
-    """POSITIVE CONTROL (§0.1 point 2): the check above must be able to observe a stale id."""
-    fake = 'test_no_such_module.py::test_no_such_test'
-    path, _, testname = fake.partition('::')
-    assert not os.path.exists(os.path.join(HERE, path)), \
-        'the control planted a path that actually exists — it proves nothing'
+    """POSITIVE CONTROL: the check must OBSERVE a stale id, in both ways an id can go stale.
+
+    The earlier version asserted only that a planted path was absent and never called the
+    detection logic — a control that could not fail.
+    """
+    assert _stale_ids(['test_no_such_module.py::test_no_such_test']), \
+        'the staleness check cannot observe an id whose FILE is gone'
+    assert _stale_ids(['test_known_red_register.py::test_renamed_away']), \
+        'the staleness check cannot observe an id whose TEST is gone'
+    assert _stale_ids(['test_known_red_register.py::test_the_staleness_guard_can_fail']) == [], \
+        'the staleness check cries wolf on an id that is fine'
 
 
 def test_the_register_is_scoped_to_the_known_lane():

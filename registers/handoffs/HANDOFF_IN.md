@@ -8,9 +8,9 @@ could not: the plan was not in the tree. A gate that cannot be checked is ceremo
 
 | # | Work | Precondition | Falsifier | Tier | State |
 |---|---|---|---|---|---|
-| W1 | Carry the 9 MB failures as `xfail(strict)`, citing ED-MB-0061 | none | `pytest tests/valoria` → 0 failed / 9 xfailed | sonnet | open |
+| W1 | Carry the 9 MB failures as `xfail(strict)`, citing ED-MB-0061 | none | `pytest tests/valoria` → 0 failed / 9 xfailed | sonnet | **DONE** ED-IN-0140 |
 | W2 | Truth-surface sweep (keep-set cutoff, plan residuals, `keys.py` 44→55) + doc↔tool pin | none | `test_keep_set_doc_cutoff_matches_the_tool`, mutation-verified | haiku/sonnet | **DONE** ED-IN-0134 |
-| W3 | **Deletion rehearsal** in a scratch worktree | W1 | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | open |
+| W3 | **Deletion rehearsal** in a scratch worktree | ~~W1~~ **UNBLOCKED** | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | **NEXT** |
 | W4 | `key_type_registry.md` → JSON; repoint readers; regenerate `.tres` | **R1 done** (ED-IN-0135) | round-trip byte-exact; mutate-one exits 1; `.tres` byte-compared; `test_key_substrate` exact-roster | sonnet + opus on schema | ready |
 | W5 | Weapons → typed JSON; regenerate GDScript | Jordan confirm | 53 exported; generated `.gd` has no `reach/weight/spd/handling` | sonnet | ruling |
 | W6 | ~~`engine/params` census + demotion~~ → **capture + EVACUATION** | none | 43/43 files byte-identical in the YAML capture; `--check` blocking in all four wiring points; positive control on the losslessness guard | haiku + opus | **DONE** ED-IN-0139 |
@@ -99,6 +99,69 @@ fallback) before reporting a path-based count.
   `engine/params/**/*.md` as its live corpus and needs a decision, not a re-point. Triage belongs to
   the slice, not to the capture.
 
+
+## 2026-08-04 (late) — STATE AS OF `9c0a616`. Read this before resuming.
+
+**Why this section exists: the record had stopped nine commits short of the tree.** A process
+review (Fable-5, read-only) found this file had zero mentions of `pathres`, the identifier census,
+the known-red register or ED-IN-0140/0141/0142, and still marked W1 open after ED-IN-0140 executed
+it. Six commits carried no ledger entry at all, so their findings lived only in commit messages —
+which no tool reads. **This is the exact defect this session spent the day prosecuting in others**
+(the "none for infrastructure" ruling that reached no file). Reconciled here.
+
+**Tracked file count: 3,144 at branch point → 3,018 now.** 164 files deleted (the audit
+working-paper join). The W7 deletion slices have NOT run.
+
+### What landed since the last handoff update
+- **ED-IN-0140 — W1 DONE.** 9 known-red MB tests carried as `xfail(strict=True)` from one register
+  (`tests/valoria/conftest.py`), falsifier in `test_known_red_register.py` (count pinned at 9, stale
+  ids fail, every entry must cite ED-MB-0061). **W3 is therefore unblocked** and is the next step.
+- **ED-IN-0141 — the audit ruling's second clause + the join.** `R-AUDIT-INFRA` evacuates
+  infrastructure-lane audit units (dominant cited `ED-<LANE>` tag); `AUDIT_KEEP_OVERRIDE` holds
+  `emergent-narrative-engine` by Jordan's explicit ruling. `tools/join_audit_workings.py` verifies a
+  byte-exact round-trip before purging. Kept audit `.md` 493 → 119.
+- **ED-IN-0142 — two gate defects.** A generated-sidecar exemption in `validate_ed_citations`
+  (the census QUOTES citations; it does not make them), and `build_test_register.py --check`, which
+  exited 0 unconditionally and so never gated — it drifted 3× in one session, CI catching it each
+  time. Now diffs, wired in **five** places (the workflow, `valoria_local.py`,
+  `ci_checks_registry.yaml`, `test_gate_coverage.EXPECTED_COMMANDS`, and its own falsifier —
+  I had been calling it four-way in three commit messages).
+- **`tools/pathres.py`** — the single owner for path-reference extraction / alias resolution /
+  file-I/O tracing, extracted from `ci_claude_workflow_paths` + `evacuation_plan`. Net removal:
+  the alias ledger had **four** independent parsers. `Resolution` is an object, not a string, and
+  raises on `bool()` so a caller must say which question they are asking. CLI: `resolve | scan |
+  pipeline`. 25 canaries in `test_pathres.py`, each binding one branch to one named defect.
+  ⚠ `pipeline` is a **LOWER BOUND** — dynamic paths are invisible and guessing is forbidden.
+  **Migration steps 2–8 of the guardrail plan are NOT done**: four parsers still live, and
+  `broken_dependency_checker` must migrate at `max_hops=1` or the refactor silently loosens a
+  blocking gate.
+- **`tools/build_identifier_census.py`** — per-subsystem `_identifier_census.yaml` + a roll-up.
+  ⚠⚠ **NOT SAFE TO CULL DOCUMENTS FROM.** Two antagonist rounds found: `engine_clock` marked BUILT
+  off a local variable in a tool whose docstring says it is unauthored; a filter of mine erasing
+  each doc's own headline mechanic with no audit trail; a dead alias pass advertising an
+  enforcement that never ran. Fixed, but the real-mechanic fraction of UNRESOLVED still runs 0%
+  (threadwork, victory) to ~75% (settlements), and parameter rows inflate the count 2–3× over
+  distinct design decisions. Read `dropped_as_not_a_mechanic` before concluding anything is absent.
+- **RULED (Jordan, 2026-08-04): `prose-writer` stays** — `R-SKILL-PROSE` in `evacuation_plan.py`.
+  Canon narrative stays on main and this is the skill that authors it.
+
+### Correction to R4 above, which the LEDGER still gets wrong
+ED-IN-0135's entry says `restructure_ledger.md` is "parsed at runtime by **FOUR** tools". It is
+**two** (`broken_dependency_checker:106`, `ci_claude_workflow_paths:38`); I relayed a reviewer's
+count into the ledger without checking it. Corrected in this file when found, but the ledger row is
+append-only and still carries FOUR — treat this section as the correction of record.
+
+### Open rulings for Jordan
+1. **Contest gate packets** (7 audit units citing no ED). Kept because the lane classifier abstains;
+   but they are records of *how a decision was made*, which "none for infrastructure" would evacuate.
+2. **Nested `.json` working tiers** in kept audit units — the join was markdown-only, so
+   `ners-qualitative-audit/01_workings/` still holds ~30 JSON dossiers beside its joined file.
+
+### The trajectory signal, stated so it can be checked against me
+The tree re-grew 2,999 → 3,018 after the one deletion commit. **Within three commits of this
+section, one must either run W3 or land a W7 slice that takes `git ls-files` below 3,018 with the
+four gates green.** Three more commits of instruments with a non-decreasing tracked count confirms
+this has become a tooling programme rather than a separation.
 
 ## 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN-0124)
 

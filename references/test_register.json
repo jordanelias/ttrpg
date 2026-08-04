@@ -6378,16 +6378,20 @@
    "declared_lane": null,
    "documented": true,
    "guards": "The falsifier for `conftest.py`'s KNOWN_RED register (W1, ED-MB-0061).",
-   "helper_loc": 12,
+   "helper_loc": 32,
    "helpers": [
     {
      "loc": 12,
      "name": "_load_conftest"
+    },
+    {
+     "loc": 20,
+     "name": "_stale_ids"
     }
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 93,
+   "loc": 112,
    "modules_under_test": [],
    "mutation_claimed": false,
    "mutation_count": null,
@@ -6410,8 +6414,8 @@
     },
     "test_the_staleness_guard_can_fail": {
      "assertionless": false,
-     "assertions": 1,
-     "summary": "POSITIVE CONTROL (\u00a70.1 point 2): the check above must be able to observe a stale id."
+     "assertions": 3,
+     "summary": "POSITIVE CONTROL: the check must OBSERVE a stale id, in both ways an id can go stale."
     }
    }
   },
@@ -10979,8 +10983,8 @@
   "files_naming_a_module": 102,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 35,
-  "helper_defs": 263,
-  "helper_loc": 2308,
+  "helper_defs": 264,
+  "helper_loc": 2328,
   "ratchet_baselines": 9,
   "tests": 1272,
   "undocumented_files": 0
