@@ -4342,8 +4342,9 @@
     "IN",
     "MB"
    ],
-   "loc": 161,
+   "loc": 224,
    "modules_under_test": [
+    "engine.py",
     "engine/mc_v18.py",
     "engine/params/core.md",
     "engine/substrate/keys.py",
@@ -4355,11 +4356,11 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 11,
+   "test_count": 14,
    "tests": {
     "test_audit_cutoff_boundary": {
      "assertionless": false,
-     "assertions": 2,
+     "assertions": 3,
      "summary": "On the cutoff date is IN; the day before is OUT."
     },
     "test_contract_guard_can_fail": {
@@ -4401,6 +4402,21 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "Jordan: \"visualization tool for mb should be moved to mb and wiring should be to systems\"."
+    },
+    "test_split_path_scan_finds_what_substring_scan_cannot": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The concrete miss: gen_sigma_parity_goldens.py builds its oracle path from segments."
+    },
+    "test_the_parity_oracle_is_not_evacuated": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Regression pin for the casualty that motivated the split-path scan."
+    },
+    "test_the_split_scan_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL: a constructed path into an evacuating root must be reported."
     },
     "test_the_totality_guard_can_fail": {
      "assertionless": false,
@@ -10595,7 +10611,7 @@
   "helper_defs": 258,
   "helper_loc": 2260,
   "ratchet_baselines": 8,
-  "tests": 1223,
+  "tests": 1226,
   "undocumented_files": 0
  }
 }

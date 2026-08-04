@@ -167,3 +167,57 @@ def test_contract_guard_can_fail():
     """POSITIVE CONTROL: plant a contracted path in the evacuate set and require a complaint."""
     planted = ep.contract_guard({'systems/mass_battle/mass_battle_v30.md'})
     assert planted, 'the contract guard did not object to evacuating a contracted doc'
+
+
+# --------------------------------------------------------------------------------------
+# Split-path readers — the false negative that a substring scan cannot fix
+# --------------------------------------------------------------------------------------
+
+def test_split_path_scan_finds_what_substring_scan_cannot(part):
+    """The concrete miss: gen_sigma_parity_goldens.py builds its oracle path from segments.
+
+        os.path.join(REPO_ROOT, 'audit', '2026-06-03-contest-groundup', 'engine.py')
+
+    contains no literal 'audit/', so `readers()` reported that file as unread while a kept tool
+    loaded it to regenerate a committed golden a kept CI test asserts on. This pins the AST scan
+    that catches it, and `test_the_split_scan_can_fail` below stops it passing vacuously.
+    """
+    retained = part['buckets']['keep'] + part['buckets']['relocate']
+    roots = sorted({e.split('/')[0] for e in part['buckets']['evacuate']})
+    jr = ep.joined_path_readers(roots, retained)
+    flat = [h for lst in jr.values() for h in lst]
+    assert flat, 'the split-path scan found nothing at all — it has stopped working'
+    # deprecated/ is evacuating and has kept-code readers built from segments
+    assert any('currency_consistency_check.py' in h for h in flat), \
+        'currency_consistency_check.py builds a deprecated/skills path from segments; not detected'
+
+
+def test_the_split_scan_can_fail():
+    """POSITIVE CONTROL: a constructed path into an evacuating root must be reported.
+
+    Without this, a scanner that returned [] for everything would satisfy the test above only by
+    accident of another hit existing.
+    """
+    import tempfile, textwrap
+    with tempfile.TemporaryDirectory(dir=os.path.join(HERE, '..', '..')) as d:
+        rel = os.path.relpath(d, os.path.join(HERE, '..', '..'))
+        f = os.path.join(d, 'probe.py')
+        with open(f, 'w', encoding='utf-8') as fh:
+            fh.write(textwrap.dedent("""
+                import os
+                P = os.path.join(REPO, 'deprecated', 'tools')
+            """))
+        hits = ep.joined_path_readers(['deprecated'], [os.path.join(rel, 'probe.py')])
+        assert hits['deprecated'], 'planted split path into deprecated/ was not detected'
+
+
+def test_the_parity_oracle_is_not_evacuated():
+    """Regression pin for the casualty that motivated the split-path scan.
+
+    tools/gen_sigma_parity_goldens.py regenerates engine/tests/goldens/sigma_leverage_parity.json;
+    engine/tests/test_sigma_leverage_parity.py asserts on it. Evacuating the oracle leaves a
+    committed generated table with no source.
+    """
+    verdict, rule_id, _ = ep.classify('audit/2026-06-03-contest-groundup/engine.py')
+    assert verdict == 'keep', f'the ground-up parity oracle must be kept, got {verdict}'
+    assert rule_id == 'R-PARITY-GROUNDUP'

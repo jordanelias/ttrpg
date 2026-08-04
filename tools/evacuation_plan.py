@@ -38,6 +38,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import ast
 import collections
 import json
 import os
@@ -121,6 +122,19 @@ RULES = [
      'the CANON mass-battle engine (J2/ED-MB-0064) -- 28 .py, zero .md, misfiled under tests/'),
     (lambda p: p.startswith('tests/sim/v32-combat-balance/'), 'keep', 'R-PARITY',
      'the numpy-free parity oracle the sigma kernel validates against'),
+    # THE SECOND PARITY ORACLE, and the reason it is a keep rather than a relocate. It is loaded by
+    # ABSOLUTE PATH from kept tools/gen_sigma_parity_goldens.py:96 to regenerate the COMMITTED golden
+    # engine/tests/goldens/sigma_leverage_parity.json, which kept CI test
+    # engine/tests/test_sigma_leverage_parity.py:115 asserts on (`by_oracle["groundup"] >= 259`).
+    # Evacuating it leaves a committed generated table with no source -- a frozen artifact that can
+    # never be re-derived, which is the exact stale-artifact hazard this programme keeps closing.
+    # It does NOT relocate: gen_sigma's own docstring (:11-12) says both oracles are frozen
+    # provenance that must stay put, and the whole point of that generator is to INVERT the coupling
+    # (oracle stays, test reads a table) rather than move the oracle around.
+    # CAUGHT BY: the join-split reader scan below, after a literal-substring scan missed it entirely.
+    (lambda p: p.startswith('audit/2026-06-03-contest-groundup/') and p.endswith('.py'), 'keep',
+     'R-PARITY-GROUNDUP',
+     'the ground-up contest oracle regenerating a committed golden a kept CI test asserts on'),
     (lambda p: p.startswith('tests/valoria/'), 'keep', 'R-SHIPGATE',
      'the shipping gate (CLAUDE.md 0.1) and the home of the fork plan\'s own falsifiers'),
     (lambda p: p == 'tests/coverage_matrix.md', 'keep', 'R-COVMATRIX',
@@ -268,6 +282,66 @@ def readers(evac_roots: list[str], keep: list[str]) -> dict:
     return result
 
 
+def joined_path_readers(evac_roots: list[str], retained: list[str]) -> dict:
+    """Kept CODE that builds a path into an evacuating tree OUT OF SEGMENTS.
+
+    THE FALSE NEGATIVE THIS EXISTS FOR, and it was a real one. `readers()` greps for the literal
+    `audit/`. `tools/gen_sigma_parity_goldens.py:96` writes
+
+        os.path.join(REPO_ROOT, 'audit', '2026-06-03-contest-groundup', 'engine.py')
+
+    which contains no such substring, so the scan reported that file as having no readers while a
+    kept tool loaded it to regenerate a committed golden that a kept CI test asserts on. A
+    substring scan cannot see a split path -- not "did not", *cannot*. The same shape hides
+    `tools/m1_acceptance.py`'s read of the workplans progress board.
+
+    So: parse each kept `.py`, walk every `os.path.join(...)` / `Path(...)` call and every `/`
+    chain, keep the CONSTANT string segments, and test the reconstructed relative path. Non-constant
+    segments (variables) are skipped rather than guessed -- guessing is the fabrication this repo
+    forbids, and a skipped segment yields a shorter path that still matches on its root, which is
+    the level the slice cares about.
+    """
+    hits = {r: [] for r in evac_roots}
+    roots = set(evac_roots)
+
+    def const_segments(node):
+        """Constant string pieces of a join/Path/`/`-chain, in order."""
+        out = []
+        if isinstance(node, ast.Call):
+            f = node.func
+            name = getattr(f, 'attr', None) or getattr(f, 'id', None)
+            if name in ('join', 'Path'):
+                for a in node.args:
+                    out.extend(const_segments(a))
+        elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+            out.extend(const_segments(node.left))
+            out.extend(const_segments(node.right))
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            out.append(node.value)
+        return out
+
+    for rel in retained:
+        if not rel.endswith('.py'):
+            continue
+        try:
+            tree = ast.parse(open(os.path.join(REPO, rel), encoding='utf-8', errors='ignore').read())
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            continue
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.Call, ast.BinOp)):
+                continue
+            segs = [s for s in const_segments(node) if s and '/' not in s and s not in ('.', '..')]
+            if len(segs) < 2:
+                continue
+            for i, s in enumerate(segs):
+                if s in roots and i + 1 < len(segs):
+                    built = '/'.join(segs[i:])
+                    if os.path.exists(os.path.join(REPO, built)):
+                        hits[s].append(f'{rel} -> {built}')
+                    break
+    return {k: sorted(set(v)) for k, v in hits.items()}
+
+
 def contract_guard(evacuating: set[str]) -> list[str]:
     """Nothing that a module contract points at may be evacuated.
 
@@ -359,12 +433,21 @@ def main(argv=None):
     for rule_id, n in p['by_rule'].most_common():
         print(f"        {rule_id:18s} {n:>5}   {p['reasons'][rule_id][:88]}")
     rd = readers(evac_roots, retained)
+    jr = joined_path_readers(evac_roots, retained)
     print(f"\n[EVAC] per-slice readiness (blocking readers must go in the same commit):")
     for root in evac_roots:
         n = len([e for e in evac if e.split('/')[0] == root])
         b, s = len(rd[root]['blocking']), len(rd[root]['prose'])
-        flag = 'READY' if b == 0 else f'{b} BLOCKING'
-        print(f"        {root:14s} {n:>5} files   {flag:>14s}   {s:>4} prose refs")
+        j = len(jr.get(root, []))
+        flag = 'READY' if (b == 0 and j == 0) else f'{b} BLOCKING'
+        print(f"        {root:14s} {n:>5} files   {flag:>14s}   {s:>4} prose refs"
+              f"{'   +' + str(j) + ' SPLIT-PATH' if j else ''}")
+    if any(jr.values()):
+        print("\n[EVAC] SPLIT-PATH readers -- kept code building a path into an evacuating tree out of")
+        print("       segments. A literal-substring scan CANNOT see these; each is a silent breakage:")
+        for root, lst in jr.items():
+            for h in lst:
+                print(f"        ! {h}")
 
     if args.json:
         out = os.path.join(REPO, 'references', 'evacuation_manifest.json')
@@ -381,6 +464,7 @@ def main(argv=None):
                 'reasons': p['reasons'],
                 'evacuate_roots': evac_roots,
                 'readers': rd,
+                'split_path_readers': jr,
                 'evacuate': sorted(evac),
             }, indent=1, sort_keys=True) + '\n')
         print(f"\n[EVAC] -> references/evacuation_manifest.json")
