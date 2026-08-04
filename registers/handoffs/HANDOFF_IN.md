@@ -57,6 +57,33 @@ taken, none disputed. The two that matter as *pattern*, not incident:
   carrying the claim is decoration, and describing it as stronger than it is makes the decoration
   load-bearing. Four content mutations added.
 
+**Provenance census (2026-08-04, scratch measurement — carry into W7).** Jordan asked whether we
+needed to flatten contested files to find `.md`-vs-code value conflicts. **We did not, and there is
+no conflict problem**: a (identifier, number) census over kept prose produced a "conflict" bucket
+that sampling showed to be artifact (3 read, 2 provably false — `block_size`'s `0` came from the
+prose sentence `Size = 0`; `base_pool`'s `1` is the pool FLOOR in `max(1, base_pool − penalties)`).
+Co-occurrence on a line is not an assertion, and no amount of heuristic sharpening fixes that.
+
+What the sampling found instead is the real relationship, and it is not competition: **the engine
+holds the value and cites the doc as its ORIGIN** — `BLOCK_SIZE = 100  # [canonical:
+systems/mass_battle/mass_battle_v30.md §A.3]`. Jordan's ruling ("design docs are just information
+only at this point. real values live in engine") is already implemented as a code convention.
+
+**The number W7 needs: 112 provenance citations in `engine/`+`systems/`+`tools/` `.py`; 58 (52%)
+target an EVACUATING doc, 54 target a kept one, 0 unresolvable.** The 58 are `params/core.md` (23),
+`params/mass_combat.md` (15), `modifier_system_spec.md` (10), `params/factions.md` (6),
+`params/threadwork.md` (2), `audit_sim_mb_06_v14.md` (2). All become fork references, which Jordan
+authorised ("provenance can cite to a fork") — so they do NOT block the slice, but the slice must
+land the alias rows.
+
+⚠ **METHOD WARNING, and the third instance on this branch.** The first run of that census reported
+**0** citations targeting evacuating docs. It matched LITERAL paths, and `params/core.md` only
+reaches `engine/params/core.md` through the restructure alias map — so the largest affected group
+scored zero. Same defect class as the `audit/scripts/` phantom (ED-IN-0133) and the split-path
+reader miss (ED-IN-0128). **Any scan over this corpus that does not resolve aliases is wrong by
+default, not occasionally.** Resolve through `restructure_ledger` (or at minimum a basename
+fallback) before reporting a path-based count.
+
 **Filed by W6 (ED-IN-0139) — carry into W7:**
 - **The params gate must die with its source.** `export_params_constants.py --check` re-derives from
   `engine/params/`, so the deletion commit must ALSO remove it from `.github/workflows/valoria-ci.yml`,
