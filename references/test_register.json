@@ -6032,7 +6032,7 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Tests for sim/substrate/keys.py \u2014 the executable Key substrate v1 (ED-IN-0018).",
-   "helper_loc": 36,
+   "helper_loc": 52,
    "helpers": [
     {
      "loc": 2,
@@ -6041,6 +6041,10 @@
     {
      "loc": 11,
      "name": "make_key"
+    },
+    {
+     "loc": 16,
+     "name": "_declared_total"
     },
     {
      "loc": 12,
@@ -6055,7 +6059,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 397,
+   "loc": 427,
    "modules_under_test": [
     "engine.substrate",
     "systems/_architecture/key_type_registry_v30.md"
@@ -6141,8 +6145,8 @@
     },
     "test_registry_loads_full_roster": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": null
+     "assertions": 3,
+     "summary": "EXACT roster equality, three ways, because W4 replaces the loading path."
     },
     "test_registry_loads_oi25_silent_emitter_registrations": {
      "assertionless": false,
@@ -10623,8 +10627,8 @@
   "files_naming_a_module": 99,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 33,
-  "helper_defs": 258,
-  "helper_loc": 2260,
+  "helper_defs": 259,
+  "helper_loc": 2276,
   "ratchet_baselines": 8,
   "tests": 1228,
   "undocumented_files": 0

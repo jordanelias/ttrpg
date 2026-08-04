@@ -1,5 +1,38 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## THE SEPARATION WORK LIST (W1–W10) — written down 2026-08-04 (ED-IN-0135)
+
+**Why this is here.** The W-list existed only in a review transcript and a chat reply. The ED-IN-0132
+gate asks each milestone's reviewer to check *fidelity to plan*, and a reviewer correctly reported it
+could not: the plan was not in the tree. A gate that cannot be checked is ceremony. So:
+
+| # | Work | Precondition | Falsifier | Tier | State |
+|---|---|---|---|---|---|
+| W1 | Carry the 9 MB failures as `xfail(strict)`, citing ED-MB-0061 | none | `pytest tests/valoria` → 0 failed / 9 xfailed | sonnet | open |
+| W2 | Truth-surface sweep (keep-set cutoff, plan residuals, `keys.py` 44→55) + doc↔tool pin | none | `test_keep_set_doc_cutoff_matches_the_tool`, mutation-verified | haiku/sonnet | **DONE** ED-IN-0134 |
+| W3 | **Deletion rehearsal** in a scratch worktree | W1 | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | open |
+| W4 | `key_type_registry.md` → JSON; repoint readers; regenerate `.tres` | **R1 done** (ED-IN-0135) | round-trip byte-exact; mutate-one exits 1; `.tres` byte-compared; `test_key_substrate` exact-roster | sonnet + opus on schema | ready |
+| W5 | Weapons → typed JSON; regenerate GDScript | Jordan confirm | 53 exported; generated `.gd` has no `reach/weight/spd/handling` | sonnet | ruling |
+| W6 | `engine/params` census + demotion | none | planted control: a table value absent from code must appear in the gap report | haiku + opus | open |
+| W7 | Deletion slices, one root per commit | W1, W3, W9, Jordan sign-off | 4 gates green per slice | sonnet + critic gate | ruling |
+| W8 | `handoff_atomize` first run | **2** Jordan calls | `--check` exit 0 + `test_handoff_structure` | sonnet | ruling |
+| W9 | Replace frozen `AUDIT_CUTOFF` with citation-based retention | Jordan ruling | `--check` total; new count pins | sonnet | ruling |
+| W10 | Ratchet re-record | W7 | `scope_ratchet --check` exit 0 | sonnet | open |
+
+**Independent, parallelisable now:** W1, W2, W4, W6. **Chains:** W1→W3→W7→W10; W9→W7's audit slice.
+
+**Filed residuals from the W2 gate review** (none block W4 after R1):
+- **R4 — `references/restructure_ledger.md` must invert BEFORE the first evacuation slice.** It is an
+  alias registry parsed at runtime by **four** tools (`broken_dependency_checker`,
+  `ci_claude_workflow_paths`, `observability/build_incompleteness`, `evacuation_plan` itself), and
+  keep-set §8 item 2 requires **every deletion commit to write a new alias row into it**. A hand-edited
+  `.md` that blocking CI machine-reads, about to take one write per slice, is the highest-blast-radius
+  format violation in the tree. Not a W4 dependency; a W7 dependency.
+- **R5** — evacuate rule for `engine/params/history/` (8 files) + `threadwork_superseded.md`: superseded
+  params prose surviving on a blanket keep rule.
+- The `:443` correction in the fork plan is spliced mid-sentence; tidy if that doc is touched again.
+
+
 ## 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN-0124)
 
 **This section is now the fork plan's execution log.** The proposal had become a *third* current-state

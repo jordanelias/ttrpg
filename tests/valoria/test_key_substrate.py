@@ -49,11 +49,41 @@ def make_key(kid, ktype="scene.dialogue", season=0, payload=None, **kw):
 
 # -- registry ---------------------------------------------------------------
 
+def _declared_total(path=REGISTRY_PATH):
+    """The roster size the registry DECLARES, read from its own §9 Total row.
+
+    Derived, not hardcoded, because the number this test used to carry went stale twice while
+    the file grew: the old comment said "§9 counts 44 types; the file physically carries 48"
+    when both had been 55 since 2026-07-29 (ED-IN-0014/OI-25 +5, ED-IN-0091 +1). A hand-typed
+    expectation in a roster test is the same defect class as the hand-typed count that was
+    sitting in keys.py's own docstring (ED-IN-0134).
+    """
+    import re as _re
+    with open(path, encoding='utf-8') as fh:
+        for line in fh:
+            m = _re.match(r'\|\s*\*\*Total\*\*\s*\|\s*\*\*(\d+)\*\*', line)
+            if m:
+                return int(m.group(1))
+    raise AssertionError('no §9 Total row found in the registry — this guard has gone blind')
+
+
 def test_registry_loads_full_roster(registry):
-    # §9 counts 44 types; the file physically carries 48 ### type headings
-    # (44 + combat STUB entries counted with personal_combat). Assert the
-    # parse found at least the §9 roster and the entries the substrate needs.
-    assert len(registry.types) >= 44
+    """EXACT roster equality, three ways, because W4 replaces the loading path.
+
+    The old assertion was `>= 44` under a comment stale by 11. Under a floor, an inversion
+    (markdown -> JSON, ED-IN-0128 W4) that silently DROPPED up to eleven types would pass. A
+    lower bound cannot observe the failure it exists to exclude (CLAUDE.md §0.1 point 2), so
+    this pins physical headings == declared total == parsed types.
+    """
+    import re as _re
+    with open(REGISTRY_PATH, encoding='utf-8') as fh:
+        headings = len(_re.findall(r'^### [a-z_]+\.[a-z_]+\s*$', fh.read(), _re.M))
+    declared = _declared_total()
+    assert headings == declared, (
+        f'registry self-inconsistent: {headings} `###` type headings vs §9 Total {declared}')
+    assert len(registry.types) == declared, (
+        f'parser returned {len(registry.types)} types, registry declares {declared} — a loader '
+        f'change dropped or invented types')
     for tid in ("scene.dialogue", "scene.contest_resolved", "env.crisis",
                 "meta.miraculous_event", "mechanical.accounting"):
         assert tid in registry.types, tid

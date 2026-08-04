@@ -165,9 +165,14 @@ It is demoted from runtime authority, not from the repo.
 
 ### 4.1 The inversion target the plan never named
 
-`engine/substrate/keys.py:179` is a **loader/validator over a markdown file**, and its docstring says
+`engine/substrate/keys.py:179` is a **loader/validator over a markdown file**, and its docstring said
 so: *"The registry markdown is the single source of truth (CLAUDE.md §8 'every rule lives once'); this
-class parses it at load time rather than duplicating the 44-type roster in code."* The repo already
+class parses it at load time rather than duplicating the ~~44~~ **55**-type roster in code."*
+⚠ **Quote updated 2026-08-04 (ED-IN-0134/0135):** the docstring said "44-type" when the roster had been
+**55** since 2026-07-29. W2 fixed the docstring and did not sweep this restatement of it — correcting a
+source without grepping its quotations is the §0.1-point-1 hazard applied to prose, and it is the
+sharpest possible argument for the inversion this very section proposes: a count hand-maintained in
+four places drifts in all four. The repo already
 treats one prose file as runtime data — parsed by regex, at load, in Python. Meanwhile
 `godot/skeleton/data/key_types/*.tres` (4 files) is a **hand-made shadow** of the same roster.
 
