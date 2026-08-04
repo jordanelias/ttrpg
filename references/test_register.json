@@ -4254,7 +4254,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 167,
+   "loc": 213,
    "modules_under_test": [
     "engine/params/",
     "references",
@@ -4264,7 +4264,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 11,
+   "test_count": 13,
    "tests": {
     "test_a_retired_prefix_is_tolerated_rather_than_fatal": {
      "assertionless": false,
@@ -4291,6 +4291,11 @@
      "assertions": 1,
      "summary": "Stops the allow-list outliving its findings. A stale entry is latent permission for debt"
     },
+    "test_generated_sidecar_exemption_requires_BOTH_conditions": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "A quoted citation is not a made citation \u2014 but the exemption must not become a hatch."
+    },
     "test_scope_is_derived_from_the_declared_prefixes_not_a_second_list": {
      "assertionless": false,
      "assertions": 1,
@@ -4305,6 +4310,11 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "THE BUG THE SCOPE FIX INTRODUCED. Archived EDs are legitimately citable (ED-IN-0075), so"
+    },
+    "test_the_exemption_does_not_shrink_the_ED_universe": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE HAZARD THIS TOOL'S OWN DOCSTRING RECORDS: losing one archive directory shrank the"
     },
     "test_the_live_tree_has_no_nonexistent_citations": {
      "assertionless": false,
@@ -5192,7 +5202,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 36
+     "size": 37
     }
    ],
    "cites_measurement": false,
@@ -5210,11 +5220,12 @@
    "lanes": [
     "IN"
    ],
-   "loc": 244,
+   "loc": 245,
    "modules_under_test": [
     "engine/tests",
     "tools",
     "tools/broken_dependency_checker.py",
+    "tools/build_test_register.py",
     "tools/canon_coverage_check.py",
     "tools/ci_audit_registry_check.py",
     "tools/ci_claim_provenance_check.py",
@@ -7628,6 +7639,137 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "A lone attacker is not a convergence group and must get no entry at all."
+    }
+   }
+  },
+  "test_pathres.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Canary corpus for `tools/pathres.py` \u2014 the path-resolution owner.",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 235,
+   "modules_under_test": [
+    "engine.py",
+    "engine/params/core.md",
+    "engine/substrate/keys.py",
+    "references",
+    "references/params_core.md",
+    "references/restructure_ledger.md",
+    "references/x.yaml",
+    "registers/old.jsonl",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 20,
+   "tests": {
+    "test_a_chained_alias_resolves": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The ledger contains a real two-hop chain. A single-hop resolver silently calls it dead."
+    },
+    "test_a_constructed_path_is_reconstructed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE ED-IN-0128 DEFECT, verbatim: the parity-oracle load that no substring scan can see."
+    },
+    "test_a_glob_is_captured_whole": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Truncating at the `*` yields a path that never exists and reports a false DEAD."
+    },
+    "test_a_live_path_needs_no_alias": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_a_mention_is_not_traced_as_io": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The distinction the whole tracer exists for: `evacuation_plan.readers()` calls any file"
+    },
+    "test_a_non_constant_segment_is_skipped_not_guessed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Guessing a variable's value is the fabrication this repo forbids. A shorter path that still"
+    },
+    "test_a_prefix_that_maps_but_whose_target_is_absent_is_DEAD": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "NEVER-FALSE-PASS. `designs/` maps to `audit/`, but the file does not exist at either end."
+    },
+    "test_a_real_reference_is_still_extracted": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Anti-vacuity: an anchor that rejects everything would pass the test above."
+    },
+    "test_a_resolution_has_no_truth_value": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "`if resolve(x):` is the question-hiding shortcut. It must raise, not silently mean"
+    },
+    "test_a_resolution_is_not_a_string": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "All three defects were a silent substitution of the question. A Resolution that compares"
+    },
+    "test_a_tree_name_inside_a_longer_word_is_not_a_path_token": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE ED-IN-0133 DEFECT, verbatim."
+    },
+    "test_glob_resolution_does_not_use_the_exists_path": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`resolve()` tests os.path.exists, always False for a pattern \u2014 a legitimate glob would"
+    },
+    "test_io_mode_is_classified": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_io_through_a_module_constant_is_traced": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE DEFECT I CAUSED BUILDING THIS. Without a constant environment the tracer saw 24 paths"
+    },
+    "test_max_hops_one_reproduces_single_hop_behaviour": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`broken_dependency_checker` resolves one hop. Migrating it must be able to keep that"
+    },
+    "test_same_file_resolves_both_sides": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_the_alias_map_is_not_empty": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Every resolve() degrades to DEAD if the ledger stops parsing. That failure must be loud."
+    },
+    "test_the_io_tracer_is_not_vacuous": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A tracer returning [] for everything would satisfy the mention test above."
+    },
+    "test_the_known_blind_spot_is_a_blind_spot_and_is_recorded": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "DYNAMIC PATHS ARE INVISIBLE, and pretending otherwise is how a partial tool gets trusted"
+    },
+    "test_the_relocated_params_path_resolves": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "THE 2026-08-04 CENSUS DEFECT. `params/core.md` is how 46 provenance citations in kept code"
     }
    }
   },
@@ -10708,7 +10850,7 @@
    "FA": 3,
    "FI": 1,
    "GO": 2,
-   "IN": 31,
+   "IN": 32,
    "MB": 3,
    "PC": 6,
    "SC": 3,
@@ -10831,16 +10973,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 142,
+  "files": 143,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 101,
+  "files_naming_a_module": 102,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 34,
+  "files_with_a_lane": 35,
   "helper_defs": 263,
   "helper_loc": 2308,
   "ratchet_baselines": 9,
-  "tests": 1250,
+  "tests": 1272,
   "undocumented_files": 0
  }
 }
