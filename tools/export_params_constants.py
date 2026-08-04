@@ -67,10 +67,30 @@ def _cells(line: str) -> list[str]:
     return [c.strip() for c in row.split('|')]
 
 
-def parse_file(path: str) -> list[dict]:
+def read_source(full: str) -> str:
+    """Decode STRICTLY, from bytes, with no newline translation.
+
+    The gate review (ED-IN-0132 pass on ED-IN-0139) found the original read here — text mode,
+    `errors='ignore'` — could not support the word "byte-identical" that four surfaces were
+    claiming. Text mode applies universal-newline translation (a CRLF source would be captured as
+    LF and the capture would still "match"), and `errors='ignore'` DROPS an undecodable byte
+    silently. Worse, the falsifier verified with the SAME lossy read, so the pair agreed with each
+    other while both diverged from the file: §0.1 point 2, an assertion that cannot observe the
+    failure it excludes.
+
+    Reading bytes and decoding strictly makes both failures loud — an invalid byte now raises here
+    rather than vanishing, and a CR survives into the capture where the byte comparison can see it.
+    Measured at the time of the fix: zero CR bytes across the 43 files, so this changes no output
+    today. It changes what happens to a file that arrives before the deletion slice.
+    """
+    with open(full, 'rb') as fh:
+        return fh.read().decode('utf-8')
+
+
+def parse_file(text: str) -> list[dict]:
     """Every markdown table, tagged with the heading it sits under. Cells verbatim."""
     out, heading, i = [], None, 0
-    lines = open(os.path.join(REPO, path), encoding='utf-8', errors='ignore').read().splitlines()
+    lines = text.splitlines()
     while i < len(lines):
         line = lines[i]
         m = _HEADING.match(line)
@@ -91,8 +111,33 @@ def parse_file(path: str) -> list[dict]:
     return out
 
 
+def tree_files() -> list[str]:
+    """EVERY file under engine/params/, not just the ones the glob pattern admits.
+
+    THE SCOPE GAP THIS CLOSES (gate review F2). The evacuation rule matches `engine/params/**` —
+    the whole tree — while the capture matched `**/*.md`, and the falsifier used the SAME `.md`
+    filter. Guard and capture shared a blind spot, so a non-markdown file (or a dotfile, which
+    `glob` skips regardless) arriving here before the deletion slice would be deleted uncaptured
+    with nothing going red. Empty today: all 43 files are `.md`. A gap that is empty by luck and
+    invisible by construction is still the defect.
+    """
+    root = os.path.join(REPO, 'engine', 'params')
+    out = []
+    for dirpath, _dirnames, filenames in os.walk(root):
+        for name in filenames:
+            out.append(os.path.relpath(os.path.join(dirpath, name), REPO).replace(os.sep, '/'))
+    return sorted(out)
+
+
 def build() -> dict:
     files = sorted(glob.glob(os.path.join(REPO, SRC_GLOB), recursive=True))
+    captured = {os.path.relpath(f, REPO).replace(os.sep, '/') for f in files}
+    uncaptured = [f for f in tree_files() if f not in captured]
+    if uncaptured:
+        raise SystemExit(
+            f"[params-dump] {len(uncaptured)} file(s) under engine/params/ are NOT matched by "
+            f"{SRC_GLOB} and would be evacuated uncaptured: {uncaptured[:5]}. "
+            "Widen SRC_GLOB (and the test's _source_files) rather than deleting them.")
     tables, n_tables, n_rows, raw = {}, 0, 0, {}
     for full in files:
         rel = os.path.relpath(full, REPO).replace(os.sep, '/')
@@ -101,8 +146,10 @@ def build() -> dict:
         # (index stubs, history/) yield no table at all, and a cell caveat my regex mishandles
         # would vanish silently. So every file's full text is captured verbatim too. Proving a
         # parser total is harder than storing the source, and the cost here is ~580 KB.
-        raw[rel] = open(full, encoding='utf-8', errors='ignore').read()
-        t = parse_file(rel)
+        # The table view is parsed FROM this captured text, not from a second read of the file,
+        # so the two views cannot disagree about what the source said.
+        raw[rel] = read_source(full)
+        t = parse_file(raw[rel])
         if not t:
             continue
         tables[rel] = t
@@ -147,14 +194,16 @@ def main(argv=None):
         if open(out, encoding='utf-8').read() != text:
             print(f"[params-dump] DRIFT: {OUT} does not match a fresh dump of {SRC_GLOB}")
             return 1
-        print(f"[params-dump] OK — {doc['file_count']} files, {doc['table_count']} tables, "
-              f"{doc['row_count']} rows")
+        print(f"[params-dump] OK — {doc['raw_file_count']} files captured verbatim "
+              f"({doc['file_count']} of them yield tables: {doc['table_count']} tables, "
+              f"{doc['row_count']} rows)")
         return 0
 
     with open(out, 'w', encoding='utf-8') as fh:
         fh.write(text)
-    print(f"[params-dump] wrote {OUT} — {doc['file_count']} files, {doc['table_count']} tables, "
-          f"{doc['row_count']} rows")
+    print(f"[params-dump] wrote {OUT} — {doc['raw_file_count']} files captured verbatim "
+          f"({doc['file_count']} of them yield tables: {doc['table_count']} tables, "
+          f"{doc['row_count']} rows)")
     return 0
 
 

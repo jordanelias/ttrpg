@@ -37,6 +37,26 @@ could not: the plan was not in the tree. A gate that cannot be checked is ceremo
   rule because there is no longer a keep rule to survive on.
 - The `:443` correction in the fork plan is spliced mid-sentence; tidy if that doc is touched again.
 
+**W6 gate review (ED-IN-0132 pass, verdict COMPLETE-WITH-RESIDUALS).** Six actionable findings, all
+taken, none disputed. The two that matter as *pattern*, not incident:
+- **F1 — a claim's guard was weaker than the claim, and the two were weak in the SAME way.** The
+  exporter read text-mode `errors='ignore'`; the falsifier verified with the identical read. Two lossy
+  reads that agree with each other are not evidence about the file. This is §0.1 point 2 in a form I
+  had not seen before: not a missing assertion, a *matched pair* of assertions blind to the same thing.
+  **Generalise it:** whenever a test verifies X by re-deriving X the same way the code derived it, the
+  test measures agreement, not truth. **SWEPT (§0.1 point 5), and the other two exporters are clean —
+  for a reason worth stating rather than a lucky one.** Neither `export_key_types.py` nor
+  `export_engine_params.py` uses `errors=`, and more importantly neither *claims* fidelity to a file's
+  bytes: their claim is "the committed artifact agrees with what the single loader/config produces",
+  and agreement is exactly what they assert. The defect needed a claim about the SOURCE (byte-identical
+  to 43 `.md`) checked by a derivation that shared the source-reading path. So the rule to carry is
+  narrower and sharper than "exporters are suspect": **when a claim is about bytes on disk, the check
+  must read those bytes independently of the producer.**
+- **F3 — a positive control covering only one branch, described as covering both.** The control planted
+  an omission; the ledger said it planted "a mismatch". A control that does not exercise the branch
+  carrying the claim is decoration, and describing it as stronger than it is makes the decoration
+  load-bearing. Four content mutations added.
+
 **Filed by W6 (ED-IN-0139) — carry into W7:**
 - **The params gate must die with its source.** `export_params_constants.py --check` re-derives from
   `engine/params/`, so the deletion commit must ALSO remove it from `.github/workflows/valoria-ci.yml`,

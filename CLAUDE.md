@@ -163,7 +163,7 @@ are more "current state" files than there should be; trust them in this strict p
 | `workplans/` | The master workplan + progress board, promoted out of `designs/workplans/` (ED-IN-0071 P1, 2026-07-16) to a top-level primary. `workplan_v6_progress.yaml` is the board the SessionStart banner reads (`tools/workplan_status.py`); `valoria_master_workplan_v6.md` is the live steering surface. Old `designs/workplans/…` paths alias via `references/restructure_ledger.md`. |
 | `dashboard/` | The published GitHub-Pages status site, promoted out of `docs/dashboard/` (ED-IN-0071 P1). `tools/dashboard_data.py` writes `dashboard/data.json`; `.github/workflows/dashboard.yml` deploys it. |
 | `proposals/` | Unratified design proposals, promoted out of `designs/proposals/` (ED-IN-0071 P1, 2026-07-16). Surfaced BY LOCATION by `tools/observability/build_proposals.py`. Old `designs/proposals/…` citations alias via `references/restructure_ledger.md`. |
-| `engine/params/` | Extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*` — moved from top-level `engine/params/` into the `engine/` executable-model primary (ED-IN-0071 P3, 2026-07-16). ⚠️ Numbers live as English tables, not typed data (see §5). ⚠️ **Prose refs to the old `engine/params/…` path (sim comments, design-doc mentions, the append-only ledgers, and these tables' own internal cross-refs) were left in place and resolve via `references/restructure_ledger.md`'s alias map** — only the machine-read functional layer (tools/, `references/*.yaml`, `registers/*.yaml`) was rewritten to `engine/params/`. |
+| `engine/params/` | **⚠️ EVACUATING (2026-08-04, ED-IN-0139) — deletion lands in W7.** Ruled out by Jordan ("code should have superseded them all by now"); all 43 files are captured byte-identically in `engine/engine_params/params_tables.yaml` and provenance may cite the fork. Do not add files here, do not cite it as a head, and expect these paths to resolve via the fork rather than the tree. Contents, for as long as they exist: extracted mechanical parameters as **prose markdown tables** — `core.md` (dice), `board_game.md` (+ `bg/`), `contest.md`, `mass_combat.md`, `threadwork.md`, `factions*` — moved from top-level `engine/params/` into the `engine/` executable-model primary (ED-IN-0071 P3, 2026-07-16). ⚠️ Numbers live as English tables, not typed data (see §5). ⚠️ **Prose refs to the old `engine/params/…` path (sim comments, design-doc mentions, the append-only ledgers, and these tables' own internal cross-refs) were left in place and resolve via `references/restructure_ledger.md`'s alias map** — only the machine-read functional layer (tools/, `references/*.yaml`, `registers/*.yaml`) was rewritten to `engine/params/`. |
 | `references/` | Registries/indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `definitions/`, propagation maps, throughlines. ⚠️ **`values_master.yaml`, `numeric_bounds_report.yaml` and `collation_report_summary.yaml` were RETIRED to `deprecated/references/` (2026-08-02, ED-IN-0122)** — executing the armature §6 SUPERSEDED/RETIRE disposition (`repo_state_armature_v1.md`, RATIFIED). 261 KB removed from the live surface; the two report files had **zero** Python readers, and `values_master`'s four all existed to *babysit its staleness* (a size cap so it could not grow, phantom-source enumeration, a banner flag) — all guarded on `.exists()`, so they went inert rather than breaking. Do not resurrect: nothing may cite it as canonical. The retired-machinery subsystem docs moved to `deprecated/session_machinery/` (ED-1084). |
 | `tests/` | The `tests/valoria/` **pytest unit suite** (the only executable tests) + simulation outputs + coverage matrix. ⚠️ Also holds ~850KB of narrative/audit `*.md` ("emergent_arc_skeleton_test_*", session audits) that are **prose, not executable specs** — don't mine them as behavioral contracts. ⚠️ `tests/sim/` and `tests/sim_framework/` are **not** the `sim/` package below and not duplicates of each other — see `sim/README.md` for the three-way disambiguation before assuming any of them overlap. |
 | ~~`sim/`~~ | **RETIRED 2026-07-21 (ED-IN-0071 P4 continuation — sim/ hollow-out).** The tree is empty and gone. It was the Monte-Carlo / simulation **1:1 Python reference the GDScript port is built from**; that reference now lives distributed across `engine/` (the CORE: `substrate`/`autoload`/`cross_scale`/`mc_v18`, moved P3 Phase A) and `systems/<subsystem>/sim/` (the per-subsystem sims, moved across P4 slices 2–10). The **final residuals** routed to homes in this pass: `sim/peninsular/` (CI/RS/MS/IP world-tracks + season/accounting) → `systems/overview/sim/`; `sim/personal/{conviction,beliefs,companion}` → `systems/characters/sim/`; `sim/personal/tribunal` + `sim/provincial/home_sanctuary` → `systems/factions/sim/`; `sim/tests/` (the seeded regression + parity suite, CI job `sim-regression`) → `engine/tests/`; and the orientation docs `README.md`/`CONVENTIONS.md`/`mc_v18_walkthrough.md` → `engine/` (as `sim_reference_README.md` / `sim_reference_CONVENTIONS.md` / `mc_v18_walkthrough.md`). All live imports rewritten to `systems.<sub>.sim.*` / `engine.*`; prose refs resolve via `references/restructure_ledger.md`. **Do not recreate `sim/`.** (The confusingly-named `tests/sim/` and `tests/sim_framework/` are unrelated and untouched — see `engine/sim_reference_README.md`.) |
@@ -228,9 +228,19 @@ are more "current state" files than there should be; trust them in this strict p
 This is the most fragile and most load-bearing surface for the videogame, and it has known traps. Do
 not treat any "structured" data layer as ground truth without checking it against the prose.
 
-- **Numbers live as prose, not typed data.** All mechanical parameters in `engine/params/*.md` are markdown
-  tables (unicode `×`, en-dashes, parenthetical caveats like "minimum 5", footnotes). A Godot importer
-  **cannot ingest these directly** — there is no typed engine-params file yet.
+- **⚠️ `engine/params/` is EVACUATING (2026-08-04, ED-IN-0139) — do not add to it, and do not treat it as
+  the head.** Jordan ruled the parameter prose out ("code should have superseded them all by now");
+  the 43 files are captured **byte-identically** in `engine/engine_params/params_tables.yaml`
+  (`tools/export_params_constants.py`, CI round-trip-checked) and the tree goes to the fork in W7.
+  Provenance citations naming `engine/params/…` **may cite the fork** — they do not block the deletion.
+  Read the capture, or better, the typed layer; if you need to *change* a number, change the code.
+- **Numbers still live as prose in places.** Where they do (the `engine/params/*.md` tables, until they
+  leave) they are markdown (unicode `×`, en-dashes, caveats like "minimum 5", footnotes) and a Godot
+  importer **cannot ingest them directly**. The typed layer is now partly real, not absent:
+  `engine/engine_params/combat_engine_v1.json` (from `config.py`), `engine/engine_params/key_types.json`
+  (ED-IN-0136), and the params capture above — each generated by a `tools/export_*.py` with a blocking
+  `--check` round-trip. What does **not** yet exist is a typed file with *numeric operands and structured
+  formulas* for the general parameter surface; the capture preserves the prose, it does not type it.
 - **`references/values_master.yaml` is RETIRED** (2026-08-02, ED-IN-0122 → `deprecated/references/`).
   It was auto-extracted and partly stale/wrong: free-text English `formula` fields (not parseable ASTs),
   ~70 entries indexing a **nonexistent** `engine/params/combat.md`, and 8 values pulled from
@@ -244,9 +254,12 @@ not treat any "structured" data layer as ground truth without checking it agains
 - **When you need a number for the engine:** resolve the subsystem head via `CURRENT.md` → read the prose
   param/design doc → cite the `PP-NNN`/`ED-NNN` that established it. Do not synthesize a value the ledger
   does not back (the anti-fabrication gate exists, but is leaky — §7).
-- **Recommended (not yet built):** a typed engine-params YAML/JSON (numeric operands, structured
-  formulas, explicit clamps) generated from the prose and CI round-trip-checked, ingested directly by
-  Godot. Until that exists, every value crossing into Godot is hand-transcribed — flag drift risk.
+- **Recommended (PARTLY BUILT as of 2026-08-04):** a typed engine-params YAML/JSON (numeric operands,
+  structured formulas, explicit clamps) generated from the prose and CI round-trip-checked, ingested
+  directly by Godot. The **generation + blocking round-trip pattern now exists** and has three
+  instances (see the first bullet); what is still missing is the **typing** — numeric operands and
+  structured formulas rather than verbatim cells. Until that exists, every value crossing into Godot
+  is hand-transcribed — flag drift risk.
 
 ---
 

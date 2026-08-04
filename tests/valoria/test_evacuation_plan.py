@@ -1,8 +1,11 @@
 """
 Unit tests for `tools/evacuation_plan.py` — the keep/relocate/evacuate partition (ED-IN-0128).
 
-WHY A DELETION PLANNER NEEDS A TEST MORE THAN MOST TOOLS. Its output authorises removing 1,996
-files. Every other tool in `tools/` fails visibly when it is wrong; this one fails by quietly
+WHY A DELETION PLANNER NEEDS A TEST MORE THAN MOST TOOLS. Its output authorises removing most of
+the tree — a four-figure number that MOVES with every rule change, which is why this docstring no
+longer states it: it said "1,996" while the tool's own manifest said 1,467, having gone stale
+across the rule changes it was describing. Run `python3 tools/evacuation_plan.py` for the current
+count. Every other tool in `tools/` fails visibly when it is wrong; this one fails by quietly
 assigning a file to the wrong side, and the failure is only observable after the deletion.
 
 THE DEFECT CLASS IT GUARDS. `build_fork.py`'s `CARRY`/`LEAVE` read like a partition and are not
