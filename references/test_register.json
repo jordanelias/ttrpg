@@ -4343,7 +4343,7 @@
     "IN",
     "MB"
    ],
-   "loc": 329,
+   "loc": 332,
    "modules_under_test": [
     "engine",
     "engine.py",
@@ -5941,6 +5941,52 @@
     }
    }
   },
+  "test_join_audit_workings.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guards for `tools/join_audit_workings.py` \u2014 the join that lets working papers be purged.",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 100,
+   "modules_under_test": [
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_every_joined_unit_in_the_tree_round_trips": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The CI property. After a purge this checks the join is still internally splittable;"
+    },
+    "test_join_split_round_trips": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "split(join(x)) == x, for the content shapes that break naive concatenation."
+    },
+    "test_joined_units_are_not_secretly_empty": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A joined file that recovers zero fragments would pass a naive 'no problems' check."
+    },
+    "test_split_of_something_with_no_fragments_is_empty_not_wrong": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An inert join must be detectable as inert rather than reported as a successful zero-file one."
+    },
+    "test_the_round_trip_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL (\u00a70.1 point 2): a corrupted join must NOT round-trip."
+    }
+   }
+  },
   "test_key_graph.py": {
    "assertionless_count": 0,
    "baselines": [
@@ -6306,6 +6352,55 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    }
+   }
+  },
+  "test_known_red_register.py": {
+   "assertionless_count": 0,
+   "baselines": [
+    {
+     "name": "EXPECTED_KNOWN_RED",
+     "size": null
+    }
+   ],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The falsifier for `conftest.py`'s KNOWN_RED register (W1, ED-MB-0061).",
+   "helper_loc": 12,
+   "helpers": [
+    {
+     "loc": 12,
+     "name": "_load_conftest"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 93,
+   "modules_under_test": [],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_every_known_red_id_names_a_real_test": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "No stale entries: every id must correspond to a file and a test that exists."
+    },
+    "test_the_register_has_not_grown_by_accretion": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_register_is_scoped_to_the_known_lane": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every excused test must be one the ED-MB-0061 failure set actually covers."
+    },
+    "test_the_staleness_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL (\u00a70.1 point 2): the check above must be able to observe a stale id."
     }
    }
   },
@@ -7430,22 +7525,26 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Guards for `tools/export_params_constants.py` \u2014 the dump that lets engine/params/*.md leave.",
-   "helper_loc": 8,
+   "helper_loc": 20,
    "helpers": [
     {
      "loc": 3,
      "name": "doc"
     },
     {
-     "loc": 5,
+     "loc": 14,
      "name": "_source_files"
+    },
+    {
+     "loc": 3,
+     "name": "_source_bytes"
     }
    ],
    "lane_derived": true,
    "lanes": [
     "IN"
    ],
-   "loc": 79,
+   "loc": 138,
    "modules_under_test": [
     "engine",
     "engine/engine_params",
@@ -7455,8 +7554,13 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 4,
+   "test_count": 6,
    "tests": {
+    "test_a_non_markdown_file_would_not_evacuate_uncaptured": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The capture's glob must cover the whole tree the evacuation rule deletes (F2)."
+    },
     "test_capture_is_lossless": {
      "assertionless": false,
      "assertions": 3,
@@ -7472,10 +7576,15 @@
      "assertions": 2,
      "summary": "The structured view is a convenience, but an empty one would mean the parser broke."
     },
-    "test_the_losslessness_guard_can_fail": {
+    "test_the_byte_comparison_can_fail": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "POSITIVE CONTROL for the BYTE branch \u2014 the one the completeness control never touched."
+    },
+    "test_the_completeness_guard_can_fail": {
      "assertionless": false,
      "assertions": 1,
-     "summary": "POSITIVE CONTROL: drop one file from the capture and the assertion must notice."
+     "summary": "POSITIVE CONTROL for the COMPLETENESS branch: drop one file, the assertion must notice."
     }
    }
   },
@@ -10722,16 +10831,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 140,
+  "files": 142,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 100,
+  "files_naming_a_module": 101,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 34,
-  "helper_defs": 261,
-  "helper_loc": 2284,
-  "ratchet_baselines": 8,
-  "tests": 1239,
+  "helper_defs": 263,
+  "helper_loc": 2308,
+  "ratchet_baselines": 9,
+  "tests": 1250,
   "undocumented_files": 0
  }
 }

@@ -65,6 +65,14 @@ AUDIT_CUTOFF = "2026-07-01"
 # grid-scene visualisation, so `.py` under a render directory is kept by rule R-AUDIT-GEN below.
 GENERATED_EXT = ('.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf', '.html')
 
+# Audit units kept AGAINST the lane rule, by explicit ruling. One entry, one reason, no pattern --
+# an override list is how a ruled exception stays visible; a cleverer classifier is how it hides.
+AUDIT_KEEP_OVERRIDE = {
+    # Jordan, 2026-08-04: "emergent narrative to be kept but joined appropriately". 46 .md, 175 IN
+    # citations, design by subject -- the exact over-capture flagged before the lane rule was ruled.
+    'audit/2026-07-05-emergent-narrative-engine',
+}
+
 # proposals/ is per-file: some are load-bearing on kept code, most are not (ED-IN-0127 §6).
 PROPOSALS_KEEP = {
     'valoria_fork_plan_of_record_v1.md',        # the plan governing this very operation
@@ -187,8 +195,28 @@ RULES = [
     # instead: R-AUDIT-GEN evacuates rendered output at any date, then the ordinary two-week rule
     # applies to source, so generators inside the window are kept BECAUSE their session is current
     # and stale one-off sims leave with their session.
+    # ---- the SECOND clause of Jordan's audit ruling, which was missing until 2026-08-04.
+    # He said "probably keep audits from july overall" AND "Audit history for all of July, but
+    # NONE FOR INFRASTRUCTURE". Only the first clause was implemented; the string "none for
+    # infrastructure" appeared NOWHERE in the repository. R-AUDIT-RECENT became the single largest
+    # keep rule in the partition -- 675 files, ~40% of the whole retained tree -- on half a ruling.
+    # Found by the ED-IN-0132 adversarial audit of the programme, not by me.
+    # ---- the ONE ruled exception to the lane rule. Jordan, 2026-08-04: "emergent narrative to be
+    # kept but joined appropriately". This is the unit the lane rule's known over-capture was
+    # always going to take -- a design effort filed under IN because cross-cutting work gets IN
+    # ids -- and it was flagged as such BEFORE the rule was ruled on, so this is an override the
+    # ruling anticipated, not a hole in it. "Joined appropriately" is a separate operation
+    # (tools/join_audit_workings.py), not a verdict: the unit stays, as fewer files.
+    (lambda p: audit_unit(p) in AUDIT_KEEP_OVERRIDE, 'keep', 'R-AUDIT-OVERRIDE',
+     'design-subject unit that the lane rule would over-capture -- Jordan-ruled kept, and joined'),
+
+    (lambda p: _audit_lane_verdict(p) == 'infra', 'evacuate', 'R-AUDIT-INFRA',
+     'infrastructure-lane audit -- Jordan: "none for infrastructure" / "we would only keep design '
+     'lane dominant stuff". The record of HOW we worked, not what the game is'),
+
     (lambda p: _audit_is_recent(p), 'keep', 'R-AUDIT-RECENT',
-     f'audit dated on/after {AUDIT_CUTOFF} (two-week rule) -- includes generators in-window'),
+     f'audit dated on/after {AUDIT_CUTOFF}, DESIGN-subject, unit head -- includes generators '
+     f'in-window'),
     (lambda p: p.startswith('audit/'), 'evacuate', 'R-AUDIT-STALE',
      f'audit older than {AUDIT_CUTOFF}, or undated -- process record, not canon'),
 
@@ -253,6 +281,83 @@ RULES = [
 ]
 
 _AUDIT_DATE = re.compile(r'^audit/(\d{4}-\d{2}-\d{2})')
+
+# ---------------------------------------------------------------------------------------------
+# THE SECOND CLAUSE OF THE AUDIT RULING (added 2026-08-04, ED-IN-0140)
+#
+# Jordan said TWO things and only the first was implemented: "probably keep audits from july
+# overall" (done, AUDIT_CUTOFF) and "Audit history for all of July, but NONE FOR INFRASTRUCTURE"
+# (absent -- the string appeared nowhere in the repository). R-AUDIT-RECENT therefore became the
+# largest keep rule in the partition, ~40% of the whole retained tree, on half a ruling. The
+# ED-IN-0132 adversarial audit of the programme found this; I did not.
+#
+# HOW "INFRASTRUCTURE" IS DECIDED, and why not by me reading 59 directory names. The repo already
+# has a lane vocabulary -- the `ED-<LANE>-NNNN` namespace -- and an audit unit's own citations say
+# which lanes its findings belong to. So the unit's DOMINANT cited lane is the classifier: IN
+# means infrastructure/cross-cutting, anything else (MB/PC/FI/SC/FA/WR/SE/GO) means design.
+# Jordan ruled this form directly: "we would only keep design lane dominant stuff."
+#
+# THE KNOWN OVER-CAPTURE, stated because it is real and was ruled on with eyes open: a lane tag
+# records who FILED an item, not what it is ABOUT, and cross-cutting design work is filed under IN
+# by convention. The largest casualty is audit/2026-07-05-emergent-narrative-engine (46 .md, 175
+# IN citations), which is a design effort by subject. Jordan was shown this before ruling.
+#
+# UNITS THAT CITE NO ED AT ALL have no dominant lane and are NOT infrastructure by default --
+# they are the 2026-07-01/02 contest-gate packets and scene-combat redesign work, design by
+# subject. Evacuating them would be inferring a ruling that was not given; they are kept and
+# flagged rather than silently cut.
+_ED_LANE = re.compile(r'ED-([A-Z]{2})-\d{4}')
+_LANE_CACHE: dict = {}
+
+
+def audit_unit(rel: str) -> str:
+    """The session unit a path belongs to: `audit/<session>` (or the bare file for loose ones)."""
+    parts = rel.split('/')
+    return '/'.join(parts[:2]) if len(parts) > 2 else rel
+
+
+def _audit_unit_lane(unit: str) -> str | None:
+    """Dominant `ED-<LANE>` cited across the unit's prose. None if it cites no ED at all.
+
+    Cached per unit: `classify()` runs once per tracked file, and rescanning a 46-file unit that
+    many times would make the planner unusable. The scan reads the working tree, consistent with
+    every other rule here.
+    """
+    if unit in _LANE_CACHE:
+        return _LANE_CACHE[unit]
+    counts: collections.Counter = collections.Counter()
+    base = os.path.join(REPO, unit)
+    paths = []
+    if os.path.isdir(base):
+        for dirpath, _dirnames, filenames in os.walk(base):
+            paths += [os.path.join(dirpath, n) for n in filenames if n.endswith('.md')]
+    elif os.path.isfile(base):
+        paths = [base]
+    for full in paths:
+        try:
+            with open(full, encoding='utf-8', errors='ignore') as fh:
+                counts.update(_ED_LANE.findall(fh.read()))
+        except OSError:
+            continue
+    lane = counts.most_common(1)[0][0] if counts else None
+    _LANE_CACHE[unit] = lane
+    return lane
+
+
+def _audit_lane_verdict(rel: str) -> str | None:
+    """'infra' | 'design' | 'uncited' for an IN-WINDOW audit file; None if the rule does not apply.
+
+    Restricted to the window on purpose: an out-of-window infrastructure audit already evacuates
+    under R-AUDIT-STALE, and letting this rule claim it would move files between rule buckets
+    without changing a single verdict -- making the rule-fired counts lie about what each rule
+    decides.
+    """
+    if not _audit_is_recent(rel):
+        return None
+    lane = _audit_unit_lane(audit_unit(rel))
+    if lane is None:
+        return 'uncited'
+    return 'infra' if lane == 'IN' else 'design'
 
 
 def _audit_is_recent(rel: str) -> bool:
