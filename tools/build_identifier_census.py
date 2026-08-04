@@ -30,10 +30,10 @@ WHAT COUNTS AS "BUILT". Resolution runs through the primitives the repo actually
   1. a Python name (module-level constant, class, function, or dict key) in engine/ or systems/
   2. a key in the typed exports (engine/engine_params/*.json) -- what Godot will read
   3. a Key TYPE in the substrate registry (systems/_architecture/key_type_registry_v30.md)
-  4. an alias -- `pathres` resolves relocated spellings, so a name that only LOOKS absent because
-     its home moved is not miscounted as dead. This is the ED-IN-0139/0141 lesson applied to
-     identifiers rather than paths: the third confirmed instance of that defect was exactly a
-     literal comparison that skipped alias resolution.
+  (There is deliberately NO alias step here. An earlier version claimed one and its body was
+  byte-identical to the plain lookup -- dead code advertising an enforcement that did not exist.
+  It was wrong in principle too: `pathres` resolves PATHS, and no path resolution can change an
+  IDENTIFIER lookup. Aliases enter this tool only where they belong, in `doc_stems()`.)
 
 Usage:
     python3 tools/build_identifier_census.py                 # write per-subsystem + the roll-up
@@ -131,8 +131,7 @@ def doc_stems() -> set[str]:
                 for suf in ('_index', '_infill', '_part2', '_part3'):
                     if stem.lower().endswith(suf):
                         _DOC_STEMS.add(stem.lower()[:-len(suf)])
-                # a versioned doc is cited by its unversioned stem as often as not
-                _DOC_STEMS.add(re.sub(r'_v\d+(?:_\d+)?$', '', stem.lower()))
+
         # RETIRED doc names are still cited -- and after the evacuation slices run, EVERY citation
         # of an evacuated doc would flip from filtered to "unbuilt mechanic" unless the retired
         # spellings are known. The alias map is exactly that list, so the census gets QUIETER as
@@ -143,7 +142,6 @@ def doc_stems() -> set[str]:
             stem = stem.rsplit('.', 1)[0] if '.' in stem else stem
             if len(stem) > 4:
                 _DOC_STEMS.add(stem.lower())
-                _DOC_STEMS.add(re.sub(r'_v\d+(?:_\d+)?$', '', stem.lower()))
     return _DOC_STEMS
 
 
@@ -172,6 +170,14 @@ def built_names() -> dict[str, list[str]]:
                 tree = ast.parse(open(path, encoding='utf-8', errors='ignore').read())
             except (SyntaxError, OSError, UnicodeDecodeError):
                 continue
+            is_tool = rel.startswith('tools/')
+            # module-level bindings only; a nested `x = ...` is a local, not a definition
+            toplevel = set()
+            for stmt in ast.walk(tree):
+                if isinstance(stmt, ast.Module):
+                    toplevel.update(id(n) for n in stmt.body)
+                elif isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    toplevel.update(id(n) for n in stmt.body)
             for node in ast.walk(tree):
                 names = []
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -180,15 +186,19 @@ def built_names() -> dict[str, list[str]]:
                     # being a live function parameter -- module-level-only harvesting understates
                     # "built" and inflates the bucket Jordan has to adjudicate.
                     a = getattr(node, 'args', None)
-                    if a is not None:
+                    if a is not None and not is_tool:   # tool params collide with game vocabulary
                         names += [x.arg for x in
                                   list(a.args) + list(a.posonlyargs) + list(a.kwonlyargs)
                                   + ([a.vararg] if a.vararg else [])
                                   + ([a.kwarg] if a.kwarg else [])]
                 elif isinstance(node, ast.Assign):
+                    if id(node) not in toplevel:
+                        continue                        # a LOCAL binding is not a definition
                     names = [getattr(t, 'id', None) or getattr(t, 'attr', None)
                              for t in node.targets]
                 elif isinstance(node, ast.AnnAssign):
+                    if id(node) not in toplevel:
+                        continue
                     names = [getattr(node.target, 'id', None)]
                 elif isinstance(node, ast.Dict):
                     names = [k.value for k in node.keys
@@ -276,6 +286,7 @@ def purpose_for(ident: str, text: str) -> str | None:
 def census_for(sub: str, built: dict) -> dict:
     docs = sorted(glob.glob(os.path.join(REPO, 'systems', sub, '*.md')))
     rows: dict[str, dict] = {}
+    dropped: dict[str, str] = {}
     for path in docs:
         rel = os.path.relpath(path, REPO).replace(os.sep, '/')
         text = open(path, encoding='utf-8', errors='ignore').read()
@@ -296,10 +307,16 @@ def census_for(sub: str, built: dict) -> dict:
             ident = m.group(1)
             key = ident.lower()
             if key in NOT_A_MECHANIC or len(key) < 5:
-                continue
-            if key in doc_stems() or key in module_names():   # citation, not a mechanic
+                dropped.setdefault(key, 'boilerplate-or-too-short')
                 continue
             if key in cited_docs:                            # the doc spells it with .md
+                dropped.setdefault(key, 'the doc spells it as <name>.md — a citation')
+                continue
+            if key in doc_stems():
+                dropped.setdefault(key, 'matches a tracked/aliased document stem')
+                continue
+            if key in module_names():
+                dropped.setdefault(key, 'matches a module or path component')
                 continue
             row = rows.setdefault(key, {
                 'identifier': ident, 'docs': [], 'purpose': None,
@@ -315,14 +332,6 @@ def census_for(sub: str, built: dict) -> dict:
                 row['doc_status'] = status[:120]
     for key, row in rows.items():
         where = built.get(key, [])
-        if not where:
-            # ALIAS PASS: a name may only look absent because its home moved. Same lesson as the
-            # path defect -- a literal comparison that skips alias resolution under-reports.
-            for doc in row['docs']:
-                r = pathres.resolve(doc)
-                if r.status == pathres.ALIASED:
-                    where = built.get(key, [])
-                    break
         row['built_in'] = where
         if where:
             row['disposition'] = 'BUILT'
@@ -335,6 +344,15 @@ def census_for(sub: str, built: dict) -> dict:
             'GENERATED by tools/build_identifier_census.py. NEVER hand-edit: re-run the tool. '
             'Every identifier named in this subsystem\'s design docs, with the sentence the doc '
             'uses it in and whether anything in engine/ or systems/ defines it. '
+            'KNOWN LIMITS, so this file is not read as more than it is. (1) BUILT is a NAME '
+            'match, not a wiring proof: it means something in engine/systems/tools defines that '
+            'name, which for a common word can be a collision -- read `built_in` before trusting '
+            'a BUILT row. (2) Identifiers shorter than 5 chars, and any not written in snake_case '
+            'or SCREAMING_CASE, are INVISIBLE here -- victory_v30 s WC/WR/MS tracks do not appear '
+            'at all, so an empty census is NOT evidence a subsystem has nothing unbuilt. '
+            '(3) Parameters of one mechanic are separate rows, so the count overstates DISTINCT '
+            'design decisions by roughly 2-3x. (4) `dropped_as_not_a_mechanic` lists every token '
+            'filtered out and why -- read it before concluding something is missing. '
             'DISPOSITION IS EVIDENCE, NOT A VERDICT: UNRESOLVED means "no definition found", '
             'which is UNBUILT (keep — this is the backlog, CLAUDE.md §6) or OUTMODED (cut) '
             'depending on design intent a scanner cannot read.'),
@@ -343,6 +361,9 @@ def census_for(sub: str, built: dict) -> dict:
         'docs': [os.path.relpath(d, REPO).replace(os.sep, '/') for d in docs],
         'counts': collections.Counter(r['disposition'] for r in rows.values()),
         'identifiers': {k: rows[k] for k in sorted(rows)},
+        # AUDIT TRAIL. Silent filtering is how a subsystem's whole mechanic set disappeared
+        # without leaving a row anyone could disagree with. Every drop, with its reason.
+        'dropped_as_not_a_mechanic': {k: dropped[k] for k in sorted(dropped)},
     }
 
 
