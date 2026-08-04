@@ -310,6 +310,13 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING, and deliberately TEMPORARY — a MIGRATION-WINDOW gate (ED-IN-0139). engine/params/ is classified EVACUATE (evacuation_plan R-PARAMS-DUMPED, Jordan 2026-08-04: 'params .md are largely useless at this point and I want them gone'); this gate stops the capture drifting from the prose while both still exist. It re-derives from that tree, so it CANNOT survive it: retire this entry, the valoria-ci.yml line, the valoria_local.py row and the test_gate_coverage.EXPECTED_COMMANDS row in the SAME commit that deletes engine/params/. No vacuous-pass path exists on an absent source, so forgetting turns CI loudly red rather than quietly green. Falsifier: tests/valoria/test_params_dump.py::test_the_losslessness_guard_can_fail. Also runs locally via valoria_local.py --staged (blocking)."
 
+  - path: tools/build_test_register.py
+    level: 5
+    role: "Test-register drift gate: references/test_register.json must match a fresh AST scan of tests/valoria/ (--check mode)."
+    paired_hook: ""
+    ci_job: validators
+    notes: "BLOCKING from 2026-08-04 (ED-IN-0142). --check previously printed fresh statistics and exited 0 UNCONDITIONALLY -- it never compared anything -- so the register went stale three times in one session and only tests/valoria/test_test_register.py in CI ever noticed, never the tool that owns the artifact and never the local hook. Local-green while CI-red is how a local tier stops being trusted. Falsifier: delete or add a test file without rebuilding -> exit 1. Also runs locally via valoria_local.py --staged (blocking)."
+
   - path: tools/mechanics_index_gen.py
     level: 5
     role: "registers/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
