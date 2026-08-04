@@ -52,10 +52,13 @@ except ImportError:
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# The two-week audit cutoff (Jordan: "audits, but we aren't keeping any older than two weeks").
+# The audit cutoff. Jordan first set a two-week rule ("we aren't keeping any older than two
+# weeks", 2026-07-21) then widened it to the calendar month: "probably keep audits from july
+# overall" (2026-08-04). July is the period the current architecture was built in, so the widening
+# buys continuity of reasoning rather than volume for its own sake.
 # Expressed as a date string so the rule is inspectable rather than a computed "now" that would
 # make this tool's output depend on when it ran -- a silent nondeterminism in a deletion planner.
-AUDIT_CUTOFF = "2026-07-21"
+AUDIT_CUTOFF = "2026-07-01"
 
 # Generated artefacts. The GENERATOR stays, the OUTPUT goes -- Jordan wants mass-battle and
 # grid-scene visualisation, so `.py` under a render directory is kept by rule R-AUDIT-GEN below.
@@ -179,8 +182,10 @@ RULES = [
      'history -- the evacuation tag preserves it'),
     (lambda p: p.startswith('dashboard/'), 'keep', 'R-DASHBOARD',
      'the published status site -- KEPT (Jordan, 2026-08-04). See the caveat below: its INPUTS shrink'),
-    (lambda p: p.startswith('workplans/'), 'evacuate', 'R-WORKPLANS',
-     'progress board. WARNING: session_status/workplan_status read it -- rewire the banner first'),
+    (lambda p: p.startswith('workplans/'), 'keep', 'R-WORKPLANS',
+     'the steering surface -- KEPT (Jordan, 2026-08-04). 13 files: master workplan, the progress '
+     'board the SessionStart banner reads, and 10 POINTER stubs. This is the continuity context, '
+     'and it CARRIES ITS OWN STATUS -- which is the property that makes context safe to keep'),
 
     # ---- root files
     (lambda p: '/' not in p, 'keep', 'R-ROOT',

@@ -122,9 +122,18 @@ def test_undated_audit_entries_are_not_recent():
 
 
 def test_audit_cutoff_boundary():
-    """On the cutoff date is IN; the day before is OUT."""
+    """On the cutoff date is IN; the day before is OUT.
+
+    Derived from AUDIT_CUTOFF rather than hardcoded, so moving the cutoff (two weeks -> all of
+    July, 2026-08-04) re-aims the test instead of silently falsifying it.
+    """
+    import datetime as _dt
+    cutoff = _dt.date.fromisoformat(ep.AUDIT_CUTOFF)
+    day_before = (cutoff - _dt.timedelta(days=1)).isoformat()
     assert ep._audit_is_recent(f'audit/{ep.AUDIT_CUTOFF}-x/f.md') is True
-    assert ep._audit_is_recent('audit/2026-07-20-x/f.md') is False
+    assert ep._audit_is_recent(f'audit/{day_before}-x/f.md') is False
+    # a date unambiguously before any plausible cutoff
+    assert ep._audit_is_recent('audit/2026-04-30-x/f.md') is False
 
 
 def test_generated_output_evacuates_but_its_generator_does_not():
