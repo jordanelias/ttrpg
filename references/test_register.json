@@ -5178,7 +5178,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 34
+     "size": 35
     }
    ],
    "cites_measurement": false,
@@ -5196,7 +5196,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 240,
+   "loc": 241,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -5227,6 +5227,7 @@
     "tools/compliance_check.py",
     "tools/currency_consistency_check.py",
     "tools/export_engine_params.py",
+    "tools/export_key_types.py",
     "tools/freshness_gate.py",
     "tools/mechanics_index_gen.py",
     "tools/patch_propagation_checker.py",
