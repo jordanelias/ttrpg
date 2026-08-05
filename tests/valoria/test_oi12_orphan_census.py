@@ -58,27 +58,6 @@ _OI12_VERIFIED_ORPHAN_NO_CALLSITE = (
 )
 
 
-def test_oi12_census_is_recorded_in_the_execution_ledger():
-    """The census itself (documentation only, no code edits per the L-artic lane's own note) lives
-    in 04_execution_ledger.md, not here — this asserts the full 14-module list this wave's census
-    covers is genuinely present there, so a future edit that silently drops a module from the
-    ledger's record trips here rather than the census quietly rotting out of sync with this
-    pointer. Does not re-verify each module's live import-orphan status (that is
-    `test_oi12_census_matches_the_real_structure_audit_classification` below, split out so a
-    doc-presence failure and a live-classification-drift failure report distinctly)."""
-    doc_path = os.path.join(_REPO_ROOT, "audit", "2026-07-29-code-shape-open-items",
-                             "04_execution_ledger.md")
-    assert os.path.isfile(doc_path), "04_execution_ledger.md (OI-12 census's home) is missing"
-    text = open(doc_path, encoding="utf-8").read()
-    assert "OI-12 census" in text, "OI-12 census is no longer recorded in the execution ledger"
-
-    missing = [mod_path for mod_path in _OI12_ALREADY_STUB_WIRED + _OI12_VERIFIED_ORPHAN_NO_CALLSITE
-               if mod_path not in text]
-    assert not missing, (
-        "module(s) dropped from the OI-12 census record in 04_execution_ledger.md:\n"
-        + "\n".join(missing)
-    )
-
 
 def test_oi12_census_matches_the_real_structure_audit_classification():
     """WAVE-2 REPAIR (critic 'missing', CLAUDE.md §0.1 point 2): the prior version of this

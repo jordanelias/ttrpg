@@ -210,7 +210,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 98,
+   "loc": 100,
    "modules_under_test": [
     "references",
     "tools",
@@ -247,7 +247,7 @@
     },
     "test_links_out_not_reranks": {
      "assertionless": false,
-     "assertions": 2,
+     "assertions": 1,
      "summary": null
     },
     "test_needs_jordan_split_matches_ledger": {
@@ -637,128 +637,6 @@
      "summary": null
     },
     "test_has_main_guard_rejects_string_literal_false_positive": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    }
-   }
-  },
-  "test_ci_formula_prose_check.py": {
-   "assertionless_count": 0,
-   "baselines": [],
-   "cites_measurement": false,
-   "declared_lane": null,
-   "documented": true,
-   "guards": "Tests for tools/ci_formula_prose_check.py (A18 \u2014 formula prose-drift detector, ED-1052 slice).",
-   "helper_loc": 13,
-   "helpers": [
-    {
-     "loc": 13,
-     "name": "_census"
-    }
-   ],
-   "lane_derived": false,
-   "lanes": [],
-   "loc": 208,
-   "modules_under_test": [
-    "engine",
-    "tools"
-   ],
-   "mutation_claimed": false,
-   "mutation_count": null,
-   "test_count": 19,
-   "tests": {
-    "test_core_expr_takes_primary_not_recovery_subformula": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_defining_formula_matches_annotated_surface_not_first_listed": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_defining_formula_never_anchors_on_struck_when_live_exists": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_extract_line_formula_matches_only_correct_subject": {
-     "assertionless": false,
-     "assertions": 3,
-     "summary": null
-    },
-    "test_looks_like_formula_rejects_bold_number_and_hyphenated_word": {
-     "assertionless": false,
-     "assertions": 5,
-     "summary": null
-    },
-    "test_main_exit_zero": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_norm_distinguishes_genuinely_different_formulas": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_norm_does_not_truncate_after_second_operator": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": null
-    },
-    "test_norm_operator_and_markdown_equivalence": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": null
-    },
-    "test_norm_rejects_bare_numeric_range": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": null
-    },
-    "test_reuses_quantity_registry_resolver": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_roster_aggregate_counted_skipped_not_invisible": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_scan_does_not_flag_matching_carrier": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": null
-    },
-    "test_scan_does_not_oversuppress_on_the_word_was": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_scan_excludes_attribute_rows_while_roster_open": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": null
-    },
-    "test_scan_flags_divergent_carrier": {
-     "assertionless": false,
-     "assertions": 3,
-     "summary": null
-    },
-    "test_scan_live_flags_prose_restatement": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_scan_live_off_by_default_reads_no_prose": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_scan_suppresses_superseded_restatement": {
      "assertionless": false,
      "assertions": 1,
      "summary": null
@@ -4250,13 +4128,10 @@
      "name": "ved"
     }
    ],
-   "lane_derived": true,
-   "lanes": [
-    "IN"
-   ],
-   "loc": 213,
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 208,
    "modules_under_test": [
-    "engine/params/",
     "references",
     "systems/",
     "systems/brand/new_doc.md",
@@ -4264,7 +4139,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 13,
+   "test_count": 12,
    "tests": {
     "test_a_retired_prefix_is_tolerated_rather_than_fatal": {
      "assertionless": false,
@@ -4280,11 +4155,6 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "ADVERSARIAL REVIEW FINDING. A count-only ceiling was launderable: fix one of the 10 existing"
-    },
-    "test_engine_params_is_scanned": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
     },
     "test_every_allowed_pair_is_still_a_real_finding": {
      "assertionless": false,
@@ -4353,16 +4223,16 @@
     "IN",
     "MB"
    ],
-   "loc": 343,
+   "loc": 347,
    "modules_under_test": [
     "engine",
     "engine.py",
     "engine/",
     "engine/engine_params/params_tables.yaml",
     "engine/mc_v18.py",
-    "engine/params",
     "engine/params/core.md",
     "engine/reference/",
+    "engine/substrate",
     "engine/substrate/keys.py",
     "registers/",
     "systems",
@@ -4379,8 +4249,8 @@
    "tests": {
     "test_a_partly_evacuating_root_slices_to_its_evacuating_subtree": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": "`engine/` is the first root that is only PARTLY evacuating, and it broke the reader scan."
+     "assertions": 3,
+     "summary": "A slice must never name a prefix containing a KEPT file."
     },
     "test_audit_cutoff_boundary": {
      "assertionless": false,
@@ -4434,13 +4304,13 @@
     },
     "test_split_path_hits_require_a_WHOLLY_evacuating_target": {
      "assertionless": false,
-     "assertions": 6,
-     "summary": "`tests/sim` holds both evacuating stress prose and the KEPT canon mass-battle engine."
+     "assertions": 3,
+     "summary": "`tests/sim` held both evacuating stress prose and the KEPT canon mass-battle engine."
     },
     "test_split_path_scan_finds_what_substring_scan_cannot": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": "The concrete miss: gen_sigma_parity_goldens.py builds its oracle path from segments."
+     "assertions": 1,
+     "summary": "The concrete miss: gen_sigma_parity_goldens.py built its oracle path from segments."
     },
     "test_the_ed_universe_survives_evacuation": {
      "assertionless": false,
@@ -4455,7 +4325,7 @@
     "test_the_split_scan_can_fail": {
      "assertionless": false,
      "assertions": 1,
-     "summary": "POSITIVE CONTROL: a constructed path into an evacuating root must be reported."
+     "summary": "POSITIVE CONTROL: the scan must NOT report a constructed path that is not evacuating."
     },
     "test_the_totality_guard_can_fail": {
      "assertionless": false,
@@ -5248,11 +5118,11 @@
    "baselines": [
     {
      "name": "EXPECTED_ROOTS",
-     "size": 3
+     "size": 2
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 36
+     "size": 35
     }
    ],
    "cites_measurement": false,
@@ -5270,7 +5140,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 242,
+   "loc": 256,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -5282,7 +5152,6 @@
     "tools/ci_claude_workflow_paths.py",
     "tools/ci_co_file_checker.py",
     "tools/ci_editorial_checker.py",
-    "tools/ci_formula_prose_check.py",
     "tools/ci_generation_consistency.py",
     "tools/ci_golden_modes_check.py",
     "tools/ci_hooks_verifier.py",
@@ -5456,7 +5325,7 @@
     "PC",
     "SC"
    ],
-   "loc": 366,
+   "loc": 369,
    "modules_under_test": [
     "references",
     "registers/editorial_ledger_pc.jsonl",
@@ -7550,7 +7419,7 @@
     "SE",
     "WR"
    ],
-   "loc": 138,
+   "loc": 117,
    "modules_under_test": [
     "engine/autoload/npc_ai.py",
     "systems/characters/sim/companion.py",
@@ -7568,87 +7437,12 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 2,
+   "test_count": 1,
    "tests": {
-    "test_oi12_census_is_recorded_in_the_execution_ledger": {
-     "assertionless": false,
-     "assertions": 3,
-     "summary": "The census itself (documentation only, no code edits per the L-artic lane's own note) lives"
-    },
     "test_oi12_census_matches_the_real_structure_audit_classification": {
      "assertionless": false,
      "assertions": 2,
      "summary": "WAVE-2 REPAIR (critic 'missing', CLAUDE.md \u00a70.1 point 2): the prior version of this"
-    }
-   }
-  },
-  "test_params_dump.py": {
-   "assertionless_count": 0,
-   "baselines": [],
-   "cites_measurement": false,
-   "declared_lane": null,
-   "documented": true,
-   "guards": "Guards for `tools/export_params_constants.py` \u2014 the dump that lets engine/params/*.md leave.",
-   "helper_loc": 20,
-   "helpers": [
-    {
-     "loc": 3,
-     "name": "doc"
-    },
-    {
-     "loc": 14,
-     "name": "_source_files"
-    },
-    {
-     "loc": 3,
-     "name": "_source_bytes"
-    }
-   ],
-   "lane_derived": true,
-   "lanes": [
-    "IN"
-   ],
-   "loc": 138,
-   "modules_under_test": [
-    "engine",
-    "engine/engine_params",
-    "engine/params",
-    "engine_params",
-    "tools/export_params_constants.py"
-   ],
-   "mutation_claimed": false,
-   "mutation_count": null,
-   "test_count": 6,
-   "tests": {
-    "test_a_non_markdown_file_would_not_evacuate_uncaptured": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "The capture's glob must cover the whole tree the evacuation rule deletes (F2)."
-    },
-    "test_capture_is_lossless": {
-     "assertionless": false,
-     "assertions": 3,
-     "summary": "EVERY source file present, and byte-identical. This is the deletion's safety argument."
-    },
-    "test_round_trip_check_passes": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_tables_were_actually_parsed": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "The structured view is a convenience, but an empty one would mean the parser broke."
-    },
-    "test_the_byte_comparison_can_fail": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "POSITIVE CONTROL for the BYTE branch \u2014 the one the completeness control never touched."
-    },
-    "test_the_completeness_guard_can_fail": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "POSITIVE CONTROL for the COMPLETENESS branch: drop one file, the assertion must notice."
     }
    }
   },
@@ -7708,10 +7502,9 @@
    "lanes": [
     "IN"
    ],
-   "loc": 235,
+   "loc": 241,
    "modules_under_test": [
     "engine.py",
-    "engine/params/core.md",
     "engine/substrate/keys.py",
     "references",
     "references/params_core.md",
@@ -7726,7 +7519,7 @@
    "tests": {
     "test_a_chained_alias_resolves": {
      "assertionless": false,
-     "assertions": 3,
+     "assertions": 2,
      "summary": "The ledger contains a real two-hop chain. A single-hop resolver silently calls it dead."
     },
     "test_a_constructed_path_is_reconstructed": {
@@ -7802,7 +7595,7 @@
     "test_same_file_resolves_both_sides": {
      "assertionless": false,
      "assertions": 2,
-     "summary": null
+     "summary": "Two spellings of the SAME forked path agree; a live file does not match a forked one."
     },
     "test_the_alias_map_is_not_empty": {
      "assertionless": false,
@@ -7822,7 +7615,7 @@
     "test_the_relocated_params_path_resolves": {
      "assertionless": false,
      "assertions": 3,
-     "summary": "THE 2026-08-04 CENSUS DEFECT. `params/core.md` is how 46 provenance citations in kept code"
+     "summary": "THE 2026-08-04 CENSUS DEFECT, and what became of it."
     }
    }
   },
@@ -10474,7 +10267,7 @@
    ],
    "lane_derived": true,
    "lanes": [
-    "SC"
+    "IN"
    ],
    "loc": 473,
    "modules_under_test": [
@@ -10626,7 +10419,7 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 284,
+   "loc": 295,
    "modules_under_test": [
     "tools"
    ],
@@ -10903,10 +10696,10 @@
    "FA": 3,
    "FI": 1,
    "GO": 2,
-   "IN": 33,
+   "IN": 32,
    "MB": 3,
    "PC": 6,
-   "SC": 3,
+   "SC": 2,
    "SE": 2,
    "WR": 2
   },
@@ -11026,16 +10819,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 144,
+  "files": 142,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 103,
+  "files_naming_a_module": 101,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 36,
-  "helper_defs": 264,
-  "helper_loc": 2328,
+  "files_with_a_lane": 34,
+  "helper_defs": 260,
+  "helper_loc": 2295,
   "ratchet_baselines": 9,
-  "tests": 1277,
+  "tests": 1250,
   "undocumented_files": 0
  }
 }

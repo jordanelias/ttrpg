@@ -14,7 +14,18 @@ import ci_gate_coverage as g  # noqa: E402
 
 # MEASURED 2026-07-30 against .github/workflows/valoria-ci.yml. If CI gains a pytest root, this
 # set must grow in the SAME commit — that is the regression this pin exists to force.
-EXPECTED_ROOTS = {'tests/valoria', 'tests/contracts', 'engine/tests'}
+# UPDATED 2026-08-05 (ED-IN-0145), per this test's own instruction to say so in the same commit:
+# `tests/contracts` EVACUATED and its CI step is removed. Two roots remain.
+#
+# ⚠ AND A NEAR-MISS WORTH RECORDING, because I got this right for the wrong reason first. When this
+# assertion failed I dropped `tests/contracts` from the pin — but at that moment the CI STEP STILL
+# EXISTED (valoria-ci.yml:298) and `ci_gate_coverage` simply could not see it: the parser takes ONE
+# pytest root per job, and `unit-tests` had two. So I aligned the pin to the PARSER rather than to
+# reality, which is precisely the failure this test exists to catch (the W4 gate forgot a root).
+# The step is now genuinely gone, so pin and reality agree — but the parser's one-root-per-job
+# blind spot is real and survives. If a job ever runs two pytest roots again, this test will pass
+# while silently ignoring the second.
+EXPECTED_ROOTS = {'tests/valoria', 'engine/tests'}
 
 
 def test_workflow_parses_into_jobs():
@@ -66,7 +77,7 @@ def test_every_discovered_root_actually_exists_on_disk():
     for r in {r for j in g.jobs() for r in j['pytest_roots']}:
         assert os.path.isdir(os.path.join(ROOT, r)) or os.path.isfile(os.path.join(ROOT, r)), r
         checked += 1
-    assert checked == len(EXPECTED_ROOTS) == 3, f'checked {checked} roots'
+    assert checked == len(EXPECTED_ROOTS) == 2, f'checked {checked} roots'
 
 
 def test_base_distance_reports_an_integer_or_none():
@@ -100,7 +111,6 @@ EXPECTED_COMMANDS = {
     ('tools/ci_claude_workflow_paths.py', ''),
     ('tools/ci_co_file_checker.py', ''),
     ('tools/ci_editorial_checker.py', ''),
-    ('tools/ci_formula_prose_check.py', '--report'),
     ('tools/ci_generation_consistency.py', ''),
     ('tools/ci_golden_modes_check.py', ''),
     ('tools/ci_hooks_verifier.py', ''),
@@ -236,6 +246,10 @@ def test_the_live_validators_report_job_still_carries_its_commands():
     """Pins the live tree against the failure above, not just a fixture."""
     rep = [j for j in g.jobs() if j['id'] == 'validators-report']
     assert rep, 'validators-report did not parse'
-    assert len(rep[0]['tool_commands']) >= 13, (
+    # floor 13 -> 12 on 2026-08-05 (ED-IN-0145): ci_formula_prose_check RETIRED with its subject —
+    # both its census input and its whole live-scan surface (engine/params) evacuated, so it was a
+    # report-only gate printing "no drift" over nothing. Purpose unchanged: catch the parser
+    # silently discovering nothing.
+    assert len(rep[0]['tool_commands']) >= 12, (
         f"validators-report parsed only {len(rep[0]['tool_commands'])} command(s) — its report-only "
         f"validators have stopped being discovered by --ci")

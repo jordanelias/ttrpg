@@ -83,7 +83,13 @@ _ROW_RE = re.compile(r"^\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|", re.M)
 
 MAX_ALIAS_HOPS = 6
 
-LIVE, ALIASED, DEAD = 'LIVE', 'ALIASED', 'DEAD'
+LIVE, ALIASED, DEAD, FORKED = 'LIVE', 'ALIASED', 'DEAD', 'FORKED'
+
+# FORKED: the path left main deliberately and its content is at the named ref. Introduced by the
+# 2026-08-05 evacuation (ED-IN-0145) and already understood by broken_dependency_checker; taught
+# here so the two agree. It is NOT "missing" — a path with no ledger row is still DEAD, which is
+# the distinction that keeps this from erasing the anti-fabrication property.
+FORK_PREFIX = 'FORK:'
 
 
 @dataclasses.dataclass(frozen=True)
@@ -162,9 +168,14 @@ def resolve(ref: str, root: str = REPO, max_hops: int = MAX_ALIAS_HOPS) -> Resol
         if current in exact:
             nxt = exact[current]
             hops.append((current, nxt))
+            if nxt.startswith(FORK_PREFIX):
+                return Resolution(ref, FORKED, nxt, tuple(hops))
         else:
             for old, new in prefix:
                 if current.startswith(old):
+                    if new.startswith(FORK_PREFIX):
+                        hops.append((old, new))
+                        return Resolution(ref, FORKED, new, tuple(hops))
                     nxt = new + current[len(old):]
                     hops.append((old, new))
                     break

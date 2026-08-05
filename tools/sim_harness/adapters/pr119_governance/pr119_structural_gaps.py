@@ -30,7 +30,12 @@ _REPO_ROOT = Path(__file__).resolve().parents[4]
 _REGISTRY_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "registry.py"
 _LEDGER_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "ledger.py"
 _SETTLEMENT_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "settlement.py"
-_PREDICATE_SWEEP_DIR = _REPO_ROOT / "tests" / "sim" / "settlement_mgmt_stress_01"
+# EVACUATED 2026-08-05 (ED-IN-0145) -> fork ref c451bcb. The settlement stress corpus this adapter
+# swept was session prose with neither a code pair nor a spec role. DISABLED rather than repointed:
+# there is no surviving equivalent, and a constant naming a path that no longer exists is exactly
+# the blind-scan defect tests/valoria/test_tool_input_paths_resolve.py exists to catch — a tool
+# whose input is gone reports "nothing found" indistinguishably from "nothing is wrong".
+_PREDICATE_SWEEP_DIR = None
 _CARD_DECK_DOC = _REPO_ROOT / "systems" / "settlements" / "goldenfurt_slice" / "event_deck.md"
 
 
@@ -45,7 +50,7 @@ class StructuralGapsAdapter(Adapter):
             "registry_py_path": str(_REGISTRY_PY.relative_to(_REPO_ROOT)),
             "ledger_py_path": str(_LEDGER_PY.relative_to(_REPO_ROOT)),
             "settlement_py_path": str(_SETTLEMENT_PY.relative_to(_REPO_ROOT)),
-            "predicate_sweep_dir": str(_PREDICATE_SWEEP_DIR.relative_to(_REPO_ROOT)),
+            "predicate_sweep_dir": None,   # corpus evacuated — see the constant above
             "card_deck_doc": str(_CARD_DECK_DOC.relative_to(_REPO_ROOT)),
         }
         provenance = {k: "test-scenario value, not a canon citation: a literal repo path "
@@ -87,7 +92,7 @@ class StructuralGapsAdapter(Adapter):
             return Outcome(decision_point.name, hits, {"branch": branch})
 
         if decision_point.name == "event_architecture_fork":
-            predicate_sweep_present = _PREDICATE_SWEEP_DIR.is_dir()
+            predicate_sweep_present = False   # corpus evacuated (ED-IN-0145)
             card_deck_present = _CARD_DECK_DOC.is_file()
             if predicate_sweep_present and card_deck_present:
                 branch = "both_present"

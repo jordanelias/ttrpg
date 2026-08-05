@@ -106,7 +106,7 @@ PROVENANCE_PATHS = {
 }
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
-SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'engine/params/', 'references/')
+SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'references/')  # engine/params/ evacuated 2026-08-05
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 
 # ── Burn-down tier (2026-08-01, ED-IN-0117) ───────────────────────────────────────────────────
@@ -131,7 +131,7 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # `git mv`ing a doc from canon/ (blocking) into systems/ laundered the same way. Nothing pinned
 # WHICH findings were deferred. Now nothing but these five exact (path, id) pairs is ever
 # deferred; anything else is a build failure wherever it appears.
-BURN_DOWN_PREFIXES = ('systems/', 'engine/params/')
+BURN_DOWN_PREFIXES = ('systems/',)  # engine/params/ evacuated 2026-08-05
 BURN_DOWN_ALLOW = frozenset({
     ('systems/_architecture/decision_policy_v1.md', 'ED-IN-0113'),
     ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0014'),

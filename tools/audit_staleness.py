@@ -64,7 +64,7 @@ FAMILIES = [
         # so a patch-register edit changes the emitted findings and MUST count as drift. godot/ +
         # proposals/ were WRONG here: they contribute 0 docs at L0 (only at L1), so their churn was
         # inflating false "stale". (If --emit-findings is ever switched to --layer L1, add them back.)
-        "scope_prefixes": ("systems/", "engine/", "canon/", "arcs/", "audit/",
+        "scope_prefixes": ("systems/", "engine/", "canon/",  "audit/",
                            "references/", "registers/patch_register_active.yaml"),
     },
     {

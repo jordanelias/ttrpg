@@ -171,7 +171,6 @@ jobs:
           w python3 tools/ci_names_check.py
           w python3 tools/currency_consistency_check.py
           w python3 tools/ci_quantity_vocabulary_check.py
-          w python3 tools/ci_formula_prose_check.py --report
           w python3 tools/mechanics_index_gen.py --strict
           w python3 tools/ci_generation_consistency.py
           w python3 tools/canon_coverage_check.py --strict --json
@@ -294,9 +293,8 @@ jobs:
       # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
       # collection. Do not select a subset of it.
       - run: python -m pytest tests/valoria -q -n auto
-      # tests/contracts (the contract_adjudicator's own suite) was orphaned from CI
-      # until 2026-07-07 (unaddressed-areas audit, ED-IN-0017) — run it here too.
-      - run: python -m pytest tests/contracts -q
+      # tests/contracts EVACUATED 2026-08-05 (ED-IN-0145); its step is removed here. It had been
+      # wired since 2026-07-07 (ED-IN-0017) after being orphaned from CI. Content at fork ref c451bcb.
 
   sim-regression:
     name: Sim Reference Regression

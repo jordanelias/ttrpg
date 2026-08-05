@@ -37,7 +37,6 @@ if str(HERE) not in sys.path:
 import obs_core as core  # noqa: E402
 
 # the current human-authored ranked queue + tiered register (LINKED, not parsed)
-RANKED_QUEUE = "audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md"
 WORKPLAN_TIERS = "workplans/valoria_master_workplan_v6.md"  # §5 T0/T1/T2
 
 # audit-registry subsystem -> ED lane
@@ -165,7 +164,6 @@ def build() -> dict:
         "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). "
                 "One deduplicated, lane-partitioned view of unratified work in flight. "
                 "Complementary to DECISIONS.md (marker-level decision debt).",
-        "ranked_view": RANKED_QUEUE,          # link, not a re-ranking (detect-not-author)
         "workplan_tiers": WORKPLAN_TIERS,
         "counts": {"total": len(items), "needs_jordan": nj,
                    "by_kind": by_kind,
@@ -187,7 +185,6 @@ def render_md(reg: dict) -> str:
          "",
          f"**{c['total']} open work items** · **{c['needs_jordan']} need your decision**.",
          "",
-         f"Ranked view (human-authored): [`{reg['ranked_view']}`]({reg['ranked_view']}) · "
          f"tiered register: [`{reg['workplan_tiers']}` §5]({reg['workplan_tiers']})",
          "",
          "By kind: " + ", ".join(f"{KIND_LABELS.get(k, k)} — {v}"

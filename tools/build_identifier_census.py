@@ -54,9 +54,45 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, 'tools'))
 import pathres  # noqa: E402
-# ONE table parser (CLAUDE.md §8). export_params_constants already owns markdown-table extraction;
-# writing a second one here is the duplication that produced four alias parsers.
-from export_params_constants import parse_file as parse_tables  # noqa: E402
+# TABLE PARSER, inlined 2026-08-05. It used to import export_params_constants.parse_file on the
+# "one owner" principle (CLAUDE.md §8) — correct at the time, but that tool was RETIRED WITH ITS
+# SOURCE when engine/params/ evacuated, so this module ImportError'd on invocation. Deferring to a
+# single owner is right until the owner's subject leaves; then the dependency is the defect. ~20
+# lines of markdown-table extraction, with no second consumer to drift against.
+_TBL_SEP = re.compile(r'^\s*\|[\s:|-]+\|\s*$')
+_TBL_HEAD = re.compile(r'^(#{1,6})\s+(.*?)\s*$')
+
+
+def _cells(line):
+    row = line.strip()
+    if row.startswith('|'):
+        row = row[1:]
+    if row.endswith('|'):
+        row = row[:-1]
+    return [c.strip() for c in row.split('|')]
+
+
+def parse_tables(text):
+    """Every markdown table, tagged with the heading it sits under. Cells verbatim."""
+    out, heading, i = [], None, 0
+    lines = text.splitlines()
+    while i < len(lines):
+        line = lines[i]
+        m = _TBL_HEAD.match(line)
+        if m:
+            heading = m.group(2)
+            i += 1
+            continue
+        if line.lstrip().startswith('|') and i + 1 < len(lines) and _TBL_SEP.match(lines[i + 1]):
+            header = _cells(line)
+            rows, i = [], i + 2
+            while i < len(lines) and lines[i].lstrip().startswith('|'):
+                rows.append(_cells(lines[i]))
+                i += 1
+            out.append({'section': heading, 'header': header, 'rows': rows})
+            continue
+        i += 1
+    return out
 
 try:
     import yaml

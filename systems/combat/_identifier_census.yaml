@@ -11,7 +11,7 @@ docs:
 - systems/combat/combat_v30_infill.md
 - systems/combat/scene_combat_design_v1.md
 counts:
-  UNRESOLVED: 22
+  UNRESOLVED: 24
   BUILT: 11
 identifiers:
   actor_id:
@@ -205,8 +205,26 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  phase11_c4_v0:
+    identifier: phase11_c4_v0
+    docs:
+    - systems/combat/combat_c4_draft_v0.md
+    purpose: Sim validation:** Phase 11 (`tests/sim/phase11_c4_v0_2026-05-17.md`) + Phase 12 (`tests/sim/phase12_mass_archetype_v0_2026-05-17.md`)
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   phase11_c4_v0_2026:
     identifier: phase11_c4_v0_2026
+    docs:
+    - systems/combat/combat_c4_draft_v0.md
+    purpose: Sim validation:** Phase 11 (`tests/sim/phase11_c4_v0_2026-05-17.md`) + Phase 12 (`tests/sim/phase12_mass_archetype_v0_2026-05-17.md`)
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  phase12_mass_archetype_v0:
+    identifier: phase12_mass_archetype_v0
     docs:
     - systems/combat/combat_c4_draft_v0.md
     purpose: Sim validation:** Phase 11 (`tests/sim/phase11_c4_v0_2026-05-17.md`) + Phase 12 (`tests/sim/phase12_mass_archetype_v0_2026-05-17.md`)
@@ -363,8 +381,6 @@ dropped_as_not_a_mechanic:
   mass_combat: matches a tracked/aliased document stem
   module_contracts: boilerplate-or-too-short
   npc_behavior_v30: matches a tracked/aliased document stem
-  phase11_c4_v0: matches a tracked/aliased document stem
-  phase12_mass_archetype_v0: matches a tracked/aliased document stem
   player_agency_v30: matches a tracked/aliased document stem
   scale_transitions_design_v1: the doc spells it as <name>.md — a citation
   scale_transitions_v30: matches a tracked/aliased document stem

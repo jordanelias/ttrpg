@@ -3,9 +3,9 @@
  "by_subsystem": {
   "_architecture": {
    "BUILT": 160,
-   "UNRESOLVED": 381,
+   "UNRESOLVED": 390,
    "docs": 40,
-   "identifiers": 541
+   "identifiers": 550
   },
   "articulation": {
    "BUILT": 25,
@@ -15,40 +15,40 @@
   },
   "characters": {
    "BUILT": 2,
-   "UNRESOLVED": 42,
+   "UNRESOLVED": 43,
    "docs": 12,
-   "identifiers": 44
+   "identifiers": 45
   },
   "combat": {
    "BUILT": 11,
-   "UNRESOLVED": 22,
+   "UNRESOLVED": 24,
    "docs": 7,
-   "identifiers": 33
+   "identifiers": 35
   },
   "factions": {
    "BUILT": 41,
-   "UNRESOLVED": 280,
+   "UNRESOLVED": 281,
    "docs": 27,
-   "identifiers": 321
+   "identifiers": 322
   },
   "fieldwork": {
    "BUILT": 2,
-   "UNRESOLVED": 16,
+   "UNRESOLVED": 17,
    "docs": 18,
-   "identifiers": 18
+   "identifiers": 19
   },
   "mass_battle": {
    "BUILT": 60,
-   "UNRESOLVED": 63,
+   "UNRESOLVED": 65,
    "docs": 6,
-   "identifiers": 123
+   "identifiers": 125
   },
   "npcs": {
    "BUILT": 1,
    "SUPERSEDED-DOC": 2,
-   "UNRESOLVED": 68,
+   "UNRESOLVED": 69,
    "docs": 18,
-   "identifiers": 71
+   "identifiers": 72
   },
   "overview": {
    "BUILT": 1,
@@ -58,9 +58,9 @@
   },
   "settlements": {
    "BUILT": 15,
-   "UNRESOLVED": 99,
+   "UNRESOLVED": 101,
    "docs": 12,
-   "identifiers": 114
+   "identifiers": 116
   },
   "social_contest": {
    "BUILT": 10,
@@ -71,9 +71,9 @@
   },
   "threadwork": {
    "BUILT": 1,
-   "UNRESOLVED": 6,
+   "UNRESOLVED": 7,
    "docs": 9,
-   "identifiers": 7
+   "identifiers": 8
   },
   "ui": {
    "BUILT": 24,
@@ -89,11 +89,11 @@
   },
   "world": {
    "BUILT": 2,
-   "UNRESOLVED": 16,
+   "UNRESOLVED": 18,
    "docs": 20,
-   "identifiers": 18
+   "identifiers": 20
   }
  },
- "engine_names": 6231,
+ "engine_names": 6163,
  "schema_version": 1
 }

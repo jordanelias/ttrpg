@@ -16,7 +16,7 @@ docs:
 - systems/characters/conviction_track_v30_index.md
 - systems/characters/conviction_track_v30_infill.md
 counts:
-  UNRESOLVED: 42
+  UNRESOLVED: 43
   BUILT: 2
 identifiers:
   altonian_imperial:
@@ -69,6 +69,15 @@ identifiers:
     docs:
     - systems/characters/conviction_axis_matrix_v30.md
     purpose: npc.personal_convictions[c] × CONVICTION_AXIS_MATRIX[c][axis]
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  conviction_stress_01:
+    identifier: conviction_stress_01
+    docs:
+    - systems/characters/conviction_track_v1_pp718_vetting.md
+    purpose: (a) makes PP-684's structured concentration cosmetic at the crisis layer; (b) is exactly the spec ambiguity the conviction_stress_01 stress test surfaced.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -455,7 +464,6 @@ dropped_as_not_a_mechanic:
   conflict_architecture_proposal: the doc spells it as <name>.md — a citation
   conviction_axis_matrix_v30: the doc spells it as <name>.md — a citation
   conviction_migration_roster_v30: matches a tracked/aliased document stem
-  conviction_stress_01: matches a tracked/aliased document stem
   conviction_taxonomy_v30: matches a tracked/aliased document stem
   conviction_track_v1: the doc spells it as <name>.md — a citation
   conviction_track_v1_pp718_vetting: the doc spells it as <name>.md — a citation

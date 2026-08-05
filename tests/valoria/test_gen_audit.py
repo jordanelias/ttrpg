@@ -301,7 +301,10 @@ def real_run(tmp_path_factory):
 
 def test_real_corpus_smoke_runs_end_to_end(real_run):
     sc = real_run['scorecard']
-    assert sc['md_files_classified'] > 1000          # sanity: real corpus, not an empty scan
+    # Floor 1000 -> 300 on 2026-08-05 (ED-IN-0145): the corpus legitimately shrank from ~1,900 to
+    # ~460 markdown files when 1,721 files evacuated. The assertion's PURPOSE is unchanged — catch
+    # "the scan found nothing" — and 300 still does that against a 460-file corpus.
+    assert sc['md_files_classified'] > 300           # sanity: real corpus, not an empty scan
     assert sc['live_head_count'] > 0
     assert sc['historical_count'] > 0
 

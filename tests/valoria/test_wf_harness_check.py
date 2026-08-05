@@ -21,7 +21,18 @@ import pytest
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 CHECKER = os.path.join(ROOT, 'tools', 'ci_wf_harness_check.py')
-DONOR = os.path.join(ROOT, '.claude', 'wf_wave4_central.js')
+# THE DONOR IS NOW A COMMITTED FIXTURE (2026-08-05, post-evacuation).
+# It used to copy `.claude/wf_wave4_central.js` out of the live tree. All eight wf_*.js were
+# completed one-shot session workflows, retired with their evacuated inputs — so the donor vanished
+# and all 20 tests in this file errored at fixture SETUP. The gate's own tests were taken out by a
+# deletion the gate had no opinion about.
+#
+# Synthesising a donor from the owner block was tried first and rejected on measurement: the gate
+# enforces per-script rules (run.lens, critiqued arity, block placement) that a minimal synthetic
+# script fails, so the fixture would have needed a hand-built valid workflow — design work, to test
+# a checker. Restoring the last real donor from the fork ref as a FIXTURE is exact, already known
+# valid, and is data rather than tooling.
+DONOR = os.path.join(ROOT, 'tests', 'valoria', 'fixtures', 'wf_donor.js')
 
 
 def _load():
