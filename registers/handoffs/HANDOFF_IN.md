@@ -10,7 +10,7 @@ could not: the plan was not in the tree. A gate that cannot be checked is ceremo
 |---|---|---|---|---|---|
 | W1 | Carry the 9 MB failures as `xfail(strict)`, citing ED-MB-0061 | none | `pytest tests/valoria` → 0 failed / 9 xfailed | sonnet | **DONE** ED-IN-0140 |
 | W2 | Truth-surface sweep (keep-set cutoff, plan residuals, `keys.py` 44→55) + doc↔tool pin | none | `test_keep_set_doc_cutoff_matches_the_tool`, mutation-verified | haiku/sonnet | **DONE** ED-IN-0134 |
-| W3 | **Deletion rehearsal** in a scratch worktree | ~~W1~~ **UNBLOCKED** | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | **NEXT** |
+| W3 | **Deletion rehearsal** in a scratch worktree | ~~W1~~ | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | **DONE** ED-IN-0144 |
 | W4 | `key_type_registry.md` → JSON; repoint readers; regenerate `.tres` | **R1 done** (ED-IN-0135) | round-trip byte-exact; mutate-one exits 1; `.tres` byte-compared; `test_key_substrate` exact-roster | sonnet + opus on schema | ready |
 | W5 | Weapons → typed JSON; regenerate GDScript | Jordan confirm | 53 exported; generated `.gd` has no `reach/weight/spd/handling` | sonnet | ruling |
 | W6 | ~~`engine/params` census + demotion~~ → **capture + EVACUATION** | none | 43/43 files byte-identical in the YAML capture; `--check` blocking in all four wiring points; positive control on the losslessness guard | haiku + opus | **DONE** ED-IN-0139 |
@@ -162,6 +162,48 @@ The tree re-grew 2,999 → 3,018 after the one deletion commit. **Within three c
 section, one must either run W3 or land a W7 slice that takes `git ls-files` below 3,018 with the
 four gates green.** Three more commits of instruments with a non-decreasing tracked count confirms
 this has become a tooling programme rather than a separation.
+
+## W3 DELETION REHEARSAL — EXECUTED 2026-08-04 (ED-IN-0144). Read before any W7 slice.
+
+Ran the partition for real in a throwaway worktree: **1,724 files deleted, 3,003 → 1,279 tracked.**
+Then ran every blocking validator and the shipping gate against the result. This is the falsifier
+for every static prediction the planner had made, and **it broke four gates, only one predicted.**
+
+| gate | result | fix |
+|---|---|---|
+| `pytest tests/valoria` | **DOES NOT COLLECT** | see below — the headline finding |
+| `export_params_constants --check` | red | PREDICTED; retire it in the params slice commit |
+| `ci_claude_workflow_paths` | 34 DEAD | `.claude/wf_*.js` name evacuated audit units + params docs |
+| `broken_dependency_checker` | 28 broken, 26 under `designs/` | live ledger entries whose EVIDENCE evacuates |
+| `freshness_gate` | 21 | `canonical_sources` pins into evacuated docs |
+
+### THE HEADLINE FINDING: a third reader blind spot, and the worst kind
+`tests/sim/gauge_mb.py` is classified EVACUATE. Two KEPT shipping-gate tests do **`import
+gauge_mb`** — a bare module name. Neither scan could see it: `readers()` greps for the path string
+(never appears), `joined_path_readers()` looks for constructed paths (there is no join). The
+dependency exists only as a name resolved through `sys.path` at runtime.
+
+**Deleting it does not fail a test. It stops `pytest tests/valoria` COLLECTING AT ALL** — the whole
+shipping gate becomes unrunnable, which is strictly worse than a red test and was invisible to
+every static prediction. Only executing the deletion found it.
+
+`module_import_readers()` added, wired BLOCKING into `--check`, and made **transitive** — one hop
+was demonstrably the wrong answer: keeping `github_ops.py` immediately made its two imports
+load-bearing, and reporting one hop per run turns a dependency closure into whack-a-mole where a
+partially-kept import chain is exactly as uncollectable as none. A false positive was killed before
+reporting (`import engine` resolves to the top-level PACKAGE, not `tests/sim_framework/engine.py`).
+
+### OPEN, and the reason `--check` is currently RED
+`tools/compliance_check.py:76` — a **BLOCKING CI gate** — does `import github_ops`, and that chains
+`github_ops -> index_bootstrap -> regenerate_file_index` plus `valoria_hooks`: **four files under
+`deprecated/` that live CI transitively depends on.** CLAUDE.md §8 records that tools importing
+`github_ops` were retired for exactly this reason; `compliance_check` itself was never cleaned up.
+Two ways out and they are not equivalent — removing the dead orchestrator import kills the whole
+chain, keeping four `deprecated/` files as a permanent exception does not. **Do not paper over this
+with keep-rules.** It is the cleanest available test of whether `deprecated/` can actually leave.
+
+Three modules were given keep rules (`R-IMPORTED-MODULE`) because their readers are legitimate:
+`tests/sim/gauge_mb.py`, and `descriptor_registry.py` / `github_ops.py` under `deprecated/`.
 
 ## 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN-0124)
 

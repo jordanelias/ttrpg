@@ -173,6 +173,22 @@ RULES = [
     # provenance that must stay put, and the whole point of that generator is to INVERT the coupling
     # (oracle stays, test reads a table) rather than move the oracle around.
     # CAUGHT BY: the join-split reader scan below, after a literal-substring scan missed it entirely.
+    # FOUND BY THE W3 REHEARSAL (ED-IN-0144), not by any static prediction. Each of these is a
+    # Python module imported BY BARE NAME from kept code; deleting one does not fail a test, it
+    # stops `pytest tests/valoria` COLLECTING, which is strictly worse and was invisible to both
+    # the substring and the constructed-path scans.
+    (lambda p: p == 'tests/sim/gauge_mb.py', 'keep', 'R-IMPORTED-MODULE',
+     'imported as `import gauge_mb` by two KEPT shipping-gate tests (test_gauge_invariants, '
+     'test_morale_write_sweep) -- evacuating it makes the whole suite uncollectable'),
+    (lambda p: p == 'deprecated/skills/valoria-orchestrator/scripts/descriptor_registry.py',
+     'keep', 'R-IMPORTED-MODULE',
+     'imported as `import descriptor_registry` by two kept tests and a kept skill script -- '
+     'filed under deprecated/ but still load-bearing on the shipping gate'),
+    (lambda p: p == 'deprecated/skills/valoria-orchestrator/scripts/github_ops.py',
+     'keep', 'R-IMPORTED-MODULE',
+     'imported by tools/compliance_check.py, a BLOCKING CI gate. CLAUDE.md §8 records this '
+     'import as the reason several tools were retired; the importer itself was never cleaned up'),
+
     (lambda p: p.startswith('tests/valoria/'), 'keep', 'R-SHIPGATE',
      'the shipping gate (CLAUDE.md 0.1) and the home of the fork plan\'s own falsifiers'),
     (lambda p: p == 'tests/coverage_matrix.md', 'keep', 'R-COVMATRIX',
@@ -589,6 +605,76 @@ def joined_path_readers(evac_roots: list[str], retained: list[str], evac_set: se
     return {k: sorted(set(v)) for k, v in hits.items()}
 
 
+def module_import_readers(evac_set: set, retained: list[str]) -> dict:
+    """Kept Python that IMPORTS a module living in an evacuating tree, BY BARE NAME.
+
+    THE THIRD BLIND SPOT, and the one only a real rehearsal could find (W3, ED-IN-0144).
+    `tests/valoria/test_gauge_invariants.py` and `test_morale_write_sweep.py` do
+
+        import gauge_mb
+
+    where `gauge_mb` is `tests/sim/gauge_mb.py`, classified EVACUATE by R-TESTS-PROSE. Neither
+    existing scan can see it: `readers()` greps for the path string `tests/sim/gauge_mb.py`, which
+    never appears; `joined_path_readers()` looks for constructed paths, and there is no join. The
+    dependency is expressed as a MODULE NAME resolved through sys.path at runtime.
+
+    Deleting it does not fail a test -- it stops `pytest tests/valoria` COLLECTING AT ALL. The
+    entire shipping gate becomes unrunnable, which is a strictly worse outcome than a red test and
+    is invisible to every static prediction the planner had made.
+
+    So: for each evacuating `.py`, take its module name, and find kept `.py` that import it.
+    Bare-name imports only -- a dotted package import is already visible to the path scans.
+    """
+    # A bare name that is ALSO a real top-level package resolves to the package, not to a
+    # same-named file in an evacuating tree. Without this, `import engine` in engine/autoload/*.py
+    # reports tests/sim_framework/engine.py as a breakage -- a false positive on the most
+    # load-bearing package in the repo. Checked before reporting, not after.
+    packages = {d for d in os.listdir(REPO)
+                if os.path.isdir(os.path.join(REPO, d))
+                and os.path.exists(os.path.join(REPO, d, '__init__.py'))}
+    by_module = {}
+    for rel in evac_set:
+        if rel.endswith('.py') and not rel.endswith('__init__.py'):
+            mod = os.path.basename(rel)[:-3]
+            if mod in packages:
+                continue
+            by_module.setdefault(mod, []).append(rel)
+    if not by_module:
+        return {}
+    def bare_imports(rel):
+        try:
+            tree = ast.parse(open(os.path.join(REPO, rel), encoding='utf-8',
+                                  errors='ignore').read())
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            return []
+        names = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names += [a.name.split('.')[0] for a in node.names]
+            elif isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+                names.append(node.module.split('.')[0])
+        return names
+
+    # TRANSITIVE CLOSURE, because one hop is the wrong answer and says so out loud: keeping
+    # github_ops.py because a blocking gate imports it immediately makes ITS two imports
+    # load-bearing as well. Reporting one hop per run turns a dependency closure into a
+    # whack-a-mole loop where each fix reveals the next -- and a partially-kept import chain is
+    # exactly as uncollectable as no chain at all.
+    hits = collections.defaultdict(list)
+    frontier = [r for r in retained if r.endswith('.py')]
+    seen_sources = set()
+    while frontier:
+        rel = frontier.pop()
+        if rel in seen_sources:
+            continue
+        seen_sources.add(rel)
+        for n in bare_imports(rel):
+            for target in by_module.get(n, []):
+                hits[target].append(f'{rel} (import {n})')
+                frontier.append(target)      # its own imports are now load-bearing too
+    return {k: sorted(set(v)) for k, v in hits.items()}
+
+
 def contract_guard(evacuating: set[str]) -> list[str]:
     """Nothing that a module contract points at may be evacuated.
 
@@ -645,6 +731,14 @@ def main(argv=None):
     bad = contract_guard(evac_set)
 
     if args.check:
+        imports = module_import_readers(evac_set, retained)
+        if imports:
+            print(f"[EVAC] MODULE-IMPORT READERS -- {len(imports)} evacuating module(s) are "
+                  f"imported BY NAME from kept code. Deleting these does not fail a test, it "
+                  f"stops pytest COLLECTING:")
+            for target, readers_ in sorted(imports.items()):
+                print(f"        ! {target}  <-  {', '.join(readers_[:3])}")
+            return 1
         if bad:
             print(f"[EVAC] CONTRACT GUARD FAILED -- {len(bad)} contracted unit(s) inside the evacuate set:")
             for b in bad:
