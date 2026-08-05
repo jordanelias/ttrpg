@@ -26,7 +26,7 @@ import broken_dependency_checker as bdc  # noqa: E402
 
 
 def test_a_forked_target_is_recognised():
-    assert bdc._is_forked('FORK:c2e5bc8') is True
+    assert bdc._is_forked('FORK:c451bcb') is True
     assert bdc._is_forked('FORK:refs/tags/pre-evacuation-2026-08-05') is True
 
 

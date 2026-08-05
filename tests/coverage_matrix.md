@@ -678,5 +678,5 @@ parity oracle (`tests/sim/v32-combat-balance/`), and `gauge_mb.py` — the modul
 tests import by name.
 
 Rows below that point at evacuated reports are retained as the record of what was covered before the
-cut; their subjects live at the fork reference (`c2e5bc8`). Do not treat a row here as evidence a file
+cut; their subjects live at the fork reference (`c451bcb`). Do not treat a row here as evidence a file
 is present.

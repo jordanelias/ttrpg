@@ -30,7 +30,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[4]
 _REGISTRY_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "registry.py"
 _LEDGER_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "ledger.py"
 _SETTLEMENT_PY = _REPO_ROOT / "systems" / "settlements" / "sim" / "settlement.py"
-# EVACUATED 2026-08-05 (ED-IN-0145) -> fork ref c2e5bc8. The settlement stress corpus this adapter
+# EVACUATED 2026-08-05 (ED-IN-0145) -> fork ref c451bcb. The settlement stress corpus this adapter
 # swept was session prose with neither a code pair nor a spec role. DISABLED rather than repointed:
 # there is no surviving equivalent, and a constant naming a path that no longer exists is exactly
 # the blind-scan defect tests/valoria/test_tool_input_paths_resolve.py exists to catch — a tool
