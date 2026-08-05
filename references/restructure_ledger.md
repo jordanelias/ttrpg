@@ -1145,3 +1145,20 @@ interlock §0.1 row 1, which claims that file as its W1.3 subject.
 | `references/numeric_bounds_report.yaml` | `deprecated/references/numeric_bounds_report.yaml` |
 | `references/collation_report_summary.yaml` | `deprecated/references/collation_report_summary.yaml` |
 | `references/values_master.yaml` | `deprecated/references/values_master.yaml` |
+
+## EVACUATED TO FORK — 2026-08-05 (ED-IN-0145)
+
+A `FORK:<ref>` target means the path left `main` deliberately and its content is at that ref. It is
+a TERMINAL status, distinct from a broken reference: a path with no row here still fails the
+dependency gate. That distinction is the anti-fabrication property, and
+`tests/valoria/test_forked_status.py` plants both cases to keep it.
+
+| old | new | STATUS |
+|---|---|---|
+| `designs/audit/` | `FORK:c2e5bc8` | FORKED |
+| `designs/arcs/` | `FORK:c2e5bc8` | FORKED |
+| `arcs/` | `FORK:c2e5bc8` | FORKED |
+| `deprecated/` | `FORK:c2e5bc8` | FORKED |
+| `engine/params/` | `FORK:c2e5bc8` | FORKED |
+| `references/values_master.yaml` | `FORK:c2e5bc8` | FORKED |
+| `designs/arcs/arc_expansion_v30.md` | `FORK:c2e5bc8` | FORKED |

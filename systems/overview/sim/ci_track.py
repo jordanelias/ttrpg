@@ -15,12 +15,22 @@ Implements PP-412 5-step Seasonal CI Calculation:
 
 Plus apply_ci_delta for non-seasonal mutations (Excommunication +4, etc).
 
-[DRIFT: accounting._ci_generation (sim/peninsular/accounting.py L23-32)
- implements a simplified version (+2 per Church-held territory). That
- predates the Pass 2l ci_track stub. This module is the canonical surface
- per PP-412; accounting's inline is legacy. Migration deferred (same
- pattern as ms_track / season — out of stub-infill scope to touch
- implemented module).]
+[RESOLVED 2026-08-04 (ED-IN-0125) — the drift below is GONE; this note is kept
+ as a corrected record because it was twice read as current state.
+ The migration it called "deferred" HAPPENED: systems/overview/sim/accounting.py
+ contains no _ci_generation, imports apply_seasonal_ci from this module at :42 and
+ calls it at :112, and its own docstring at :16 reads "Track arithmetic lives in
+ dedicated modules (ci_track, ms_track)". Recorded at
+ tests/sim/v18-integration/module_manifest.md:251. There is ONE global-CI generator
+ (this module) and there was one stale docstring (this one).
+ WHY IT MISLED: the note cited `sim/peninsular/accounting.py`, a path RETIRED
+ 2026-07-21 with the whole sim/ tree — so the referenced file had not merely changed,
+ it had ceased to exist, and neither reader checked. Original text:
+   "DRIFT: accounting._ci_generation (sim/peninsular/accounting.py L23-32)
+    implements a simplified version (+2 per Church-held territory). That
+    predates the Pass 2l ci_track stub. This module is the canonical surface
+    per PP-412; accounting's inline is legacy. Migration deferred."
+ This module remains the canonical CI surface per PP-412.]
 
 Dependencies:
   - sim/autoload/game_state

@@ -296,6 +296,20 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."
 
+  - path: tools/export_key_types.py
+    level: 5
+    role: "Registry -> typed-JSON round-trip: engine/engine_params/key_types.json must match the authored systems/_architecture/key_type_registry_v30.md (--check mode)."
+    paired_hook: ""
+    ci_job: validators
+    notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
+
+  - path: tools/build_test_register.py
+    level: 5
+    role: "Test-register drift gate: references/test_register.json must match a fresh AST scan of tests/valoria/ (--check mode)."
+    paired_hook: ""
+    ci_job: validators
+    notes: "BLOCKING from 2026-08-04 (ED-IN-0142). --check previously printed fresh statistics and exited 0 UNCONDITIONALLY -- it never compared anything -- so the register went stale three times in one session and only tests/valoria/test_test_register.py in CI ever noticed, never the tool that owns the artifact and never the local hook. Local-green while CI-red is how a local tier stops being trusted. Falsifier: delete or add a test file without rebuilding -> exit 1. Also runs locally via valoria_local.py --staged (blocking)."
+
   - path: tools/mechanics_index_gen.py
     level: 5
     role: "registers/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."

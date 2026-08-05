@@ -14,8 +14,8 @@ WHAT MAKES IT DIFFERENT FROM WHAT ALREADY EXISTS, so this does not duplicate:
 This map adds the missing axis: **temporal order**, from `run_campaign` through the season loop
 to the terminal condition, with every other view joined onto it.
 
-THE HONESTY RULE, which is the whole point. A boot-to-termination map of a game where 3 of 27
-modules execute would, drawn naively, be a picture of intent presented as behaviour. So every
+THE HONESTY RULE, which is the whole point. A boot-to-termination map of a game where most of the
+27 modules do not execute would, drawn naively, be a picture of intent presented as behaviour. So every
 node carries `executes`, derived from `wiring_manifest`'s build ladder, and the phases are
 derived from the ACTUAL call sequence in `engine/mc_v18.py` + `systems/overview/sim/season.py`,
 not from a design document. Nodes that do not run are IN the map and marked, because for a fork

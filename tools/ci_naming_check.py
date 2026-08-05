@@ -75,6 +75,12 @@ EXCLUDE = (
     'references/synonym_registry.yaml',     # GENERATED view (ED-IN-0078 fold) — lists legacy synonyms by design
     'dashboard/data.json',                 # generated: embeds the definitions/lexicon incl. legacy names
     'engine/params/bg/institutions.md',
+    # GENERATED verbatim capture of engine/params/**/*.md (ED-IN-0139). It inherits whatever the
+    # sources contain, including the line already excluded above. Excluding the capture hides
+    # nothing: every source file is still scanned in place, so a NEW violation is caught at the
+    # only surface where it can be fixed. When engine/params/ evacuates, this entry and the one
+    # above go with it.
+    'engine/engine_params/params_tables.yaml',
     'skills/prose-writer/',
     'tests/',
     'deprecated/archives/',

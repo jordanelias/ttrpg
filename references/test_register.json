@@ -140,6 +140,58 @@
     }
    }
   },
+  "test_build_fork_scan_guard.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Unit tests for `tools/build_fork.py`'s empty-scan guard (ED-IN-0126).",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 110,
+   "modules_under_test": [
+    "engine",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 6,
+   "tests": {
+    "test_guard_ignores_pycache": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "__pycache__ must not be able to satisfy the guard \u2014 it would make an empty tree pass."
+    },
+    "test_guard_rejects_a_directory_with_no_python": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An EXISTING but empty tree is the subtler half: it also scans vacuously clean."
+    },
+    "test_guard_rejects_a_missing_directory": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The exact --verify-only-on-a-fresh-dir case."
+    },
+    "test_scanners_refuse_an_empty_tree": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "Both scanners previously returned a clean empty result here."
+    },
+    "test_the_guard_itself_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL (CLAUDE.md \u00a70.1 point 2)."
+    },
+    "test_verify_only_on_a_missing_tree_exits_nonzero": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "Returns 2 and \u2014 the point of the fix \u2014 prints NO clean-scan line on the way out."
+    }
+   }
+  },
   "test_build_proposals.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -4202,7 +4254,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 167,
+   "loc": 213,
    "modules_under_test": [
     "engine/params/",
     "references",
@@ -4212,7 +4264,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 11,
+   "test_count": 13,
    "tests": {
     "test_a_retired_prefix_is_tolerated_rather_than_fatal": {
      "assertionless": false,
@@ -4239,6 +4291,11 @@
      "assertions": 1,
      "summary": "Stops the allow-list outliving its findings. A stale entry is latent permission for debt"
     },
+    "test_generated_sidecar_exemption_requires_BOTH_conditions": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "A quoted citation is not a made citation \u2014 but the exemption must not become a hatch."
+    },
     "test_scope_is_derived_from_the_declared_prefixes_not_a_second_list": {
      "assertionless": false,
      "assertions": 1,
@@ -4254,6 +4311,11 @@
      "assertions": 2,
      "summary": "THE BUG THE SCOPE FIX INTRODUCED. Archived EDs are legitimately citable (ED-IN-0075), so"
     },
+    "test_the_exemption_does_not_shrink_the_ED_universe": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE HAZARD THIS TOOL'S OWN DOCSTRING RECORDS: losing one archive directory shrank the"
+    },
     "test_the_live_tree_has_no_nonexistent_citations": {
      "assertionless": false,
      "assertions": 1,
@@ -4268,6 +4330,142 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "The archive walk must not be reachable from the audit scope, or the coupling returns."
+    }
+   }
+  },
+  "test_evacuation_plan.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Unit tests for `tools/evacuation_plan.py` \u2014 the keep/relocate/evacuate partition (ED-IN-0128).",
+   "helper_loc": 2,
+   "helpers": [
+    {
+     "loc": 2,
+     "name": "part"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "GO",
+    "IN",
+    "MB"
+   ],
+   "loc": 343,
+   "modules_under_test": [
+    "engine",
+    "engine.py",
+    "engine/",
+    "engine/engine_params/params_tables.yaml",
+    "engine/mc_v18.py",
+    "engine/params",
+    "engine/params/core.md",
+    "engine/reference/",
+    "engine/substrate/keys.py",
+    "registers/",
+    "systems",
+    "systems/",
+    "systems/_architecture",
+    "systems/mass_battle/mass_battle_v30.md",
+    "systems/mass_battle/sim/massbattle.py",
+    "tools",
+    "tools/valoria_local.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 18,
+   "tests": {
+    "test_a_partly_evacuating_root_slices_to_its_evacuating_subtree": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "`engine/` is the first root that is only PARTLY evacuating, and it broke the reader scan."
+    },
+    "test_audit_cutoff_boundary": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "On the cutoff date is IN; the day before is OUT."
+    },
+    "test_contract_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL: plant a contracted path in the evacuate set and require a complaint."
+    },
+    "test_generated_output_evacuates_but_its_generator_does_not": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The 36 MB render directory is six days old: age alone would keep it."
+    },
+    "test_keep_set_doc_cutoff_matches_the_tool": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The keep-set doc must not restate a cutoff the tool disagrees with."
+    },
+    "test_known_files_land_correctly": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Pins the verdicts whose flip would be most expensive. Paths need not all exist."
+    },
+    "test_no_contracted_unit_is_evacuated": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A unit with a contract but no code YET is the backlog, not dead weight."
+    },
+    "test_ordering_is_load_bearing": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "FIRST-MATCH-WINS: these files match a later, opposite rule too."
+    },
+    "test_partition_covers_every_tracked_file": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The buckets sum to the tree \u2014 no file counted twice, none dropped."
+    },
+    "test_partition_is_total": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every tracked file gets a verdict. No neither-set."
+    },
+    "test_relocations_land_in_a_subsystem": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Jordan: \"visualization tool for mb should be moved to mb and wiring should be to systems\"."
+    },
+    "test_split_path_hits_require_a_WHOLLY_evacuating_target": {
+     "assertionless": false,
+     "assertions": 6,
+     "summary": "`tests/sim` holds both evacuating stress prose and the KEPT canon mass-battle engine."
+    },
+    "test_split_path_scan_finds_what_substring_scan_cannot": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The concrete miss: gen_sigma_parity_goldens.py builds its oracle path from segments."
+    },
+    "test_the_ed_universe_survives_evacuation": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The blocking citation gate reads its ED universe from three deprecated/ dirs."
+    },
+    "test_the_parity_oracle_is_not_evacuated": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Regression pin for the casualty that motivated the split-path scan."
+    },
+    "test_the_split_scan_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL: a constructed path into an evacuating root must be reported."
+    },
+    "test_the_totality_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "POSITIVE CONTROL (CLAUDE.md \u00a70.1 point 2)."
+    },
+    "test_undated_audit_entries_are_not_recent": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "`audit/lane-a/\u2026` and bare files carry no date; they must not sneak through the window."
     }
    }
   },
@@ -4534,6 +4732,56 @@
      "assertionless": false,
      "assertions": 3,
      "summary": null
+    }
+   }
+  },
+  "test_forked_status.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The control for the FORKED terminal status (ED-IN-0145).",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 92,
+   "modules_under_test": [
+    "systems/_architecture/derived_stats_v30.md",
+    "systems/no_such_subsystem/no_such_doc.md",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_a_forked_target_is_recognised": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_a_live_path_is_not_forked": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The discriminator must not fire on ordinary alias rows, or every relocation becomes a"
+    },
+    "test_a_reference_with_NO_row_still_resolves_to_nothing": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE ANTI-FABRICATION CONTROL, and the reason this file exists."
+    },
+    "test_the_evacuated_content_is_actually_at_the_ref": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The promise a FORK row makes is 'the content is at this ref'. Verify it, rather than"
+    },
+    "test_the_fork_rows_name_a_real_ref": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A FORK row whose ref does not exist is a tombstone pointing at nothing \u2014 worse than DEAD,"
     }
    }
   },
@@ -5004,7 +5252,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 34
+     "size": 36
     }
    ],
    "cites_measurement": false,
@@ -5022,11 +5270,12 @@
    "lanes": [
     "IN"
    ],
-   "loc": 240,
+   "loc": 242,
    "modules_under_test": [
     "engine/tests",
     "tools",
     "tools/broken_dependency_checker.py",
+    "tools/build_test_register.py",
     "tools/canon_coverage_check.py",
     "tools/ci_audit_registry_check.py",
     "tools/ci_claim_provenance_check.py",
@@ -5053,6 +5302,7 @@
     "tools/compliance_check.py",
     "tools/currency_consistency_check.py",
     "tools/export_engine_params.py",
+    "tools/export_key_types.py",
     "tools/freshness_gate.py",
     "tools/mechanics_index_gen.py",
     "tools/patch_propagation_checker.py",
@@ -5751,6 +6001,52 @@
     }
    }
   },
+  "test_join_audit_workings.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guards for `tools/join_audit_workings.py` \u2014 the join that lets working papers be purged.",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 100,
+   "modules_under_test": [
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_every_joined_unit_in_the_tree_round_trips": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The CI property. After a purge this checks the join is still internally splittable;"
+    },
+    "test_join_split_round_trips": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "split(join(x)) == x, for the content shapes that break naive concatenation."
+    },
+    "test_joined_units_are_not_secretly_empty": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A joined file that recovers zero fragments would pass a naive 'no problems' check."
+    },
+    "test_split_of_something_with_no_fragments_is_empty_not_wrong": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An inert join must be detectable as inert rather than reported as a successful zero-file one."
+    },
+    "test_the_round_trip_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL (\u00a70.1 point 2): a corrupted join must NOT round-trip."
+    }
+   }
+  },
   "test_key_graph.py": {
    "assertionless_count": 0,
    "baselines": [
@@ -5858,7 +6154,7 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Tests for sim/substrate/keys.py \u2014 the executable Key substrate v1 (ED-IN-0018).",
-   "helper_loc": 36,
+   "helper_loc": 52,
    "helpers": [
     {
      "loc": 2,
@@ -5867,6 +6163,10 @@
     {
      "loc": 11,
      "name": "make_key"
+    },
+    {
+     "loc": 16,
+     "name": "_declared_total"
     },
     {
      "loc": 12,
@@ -5879,16 +6179,19 @@
    ],
    "lane_derived": true,
    "lanes": [
+    "GO",
     "IN"
    ],
-   "loc": 397,
+   "loc": 519,
    "modules_under_test": [
     "engine.substrate",
-    "systems/_architecture/key_type_registry_v30.md"
+    "engine/engine_params/key_types.json",
+    "systems/_architecture/key_type_registry_v30.md",
+    "tools/export_key_types.py"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 29,
+   "test_count": 34,
    "tests": {
     "test_apply_immediate_when_defer_flag_off": {
      "assertionless": false,
@@ -5930,6 +6233,11 @@
      "assertions": 0,
      "summary": null
     },
+    "test_export_round_trips_byte_exact": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`--check` must pass against the committed file, or the committed file is stale."
+    },
     "test_fanout_width_does_not_increment_depth": {
      "assertionless": false,
      "assertions": 1,
@@ -5940,6 +6248,11 @@
      "assertions": 0,
      "summary": null
     },
+    "test_json_and_markdown_registries_are_identical": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE PIN. The cooked file and the authored file must parse to the same registry."
+    },
     "test_keylog_replay_byte_identical": {
      "assertionless": false,
      "assertions": 3,
@@ -5949,6 +6262,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_load_json_is_not_weaker_than_the_markdown_path": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The JSON loader must reject what the markdown loader structurally cannot represent."
     },
     "test_missing_required_payload_rejected": {
      "assertionless": false,
@@ -5967,8 +6285,8 @@
     },
     "test_registry_loads_full_roster": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": null
+     "assertions": 3,
+     "summary": "EXACT roster equality, three ways, because W4 replaces the loading path."
     },
     "test_registry_loads_oi25_silent_emitter_registrations": {
      "assertionless": false,
@@ -6014,6 +6332,16 @@
      "assertionless": false,
      "assertions": 0,
      "summary": null
+    },
+    "test_the_json_validator_still_accepts_the_real_registry": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL for the test above: the tightened validator must not reject valid data."
+    },
+    "test_the_round_trip_check_can_fail": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "POSITIVE CONTROL: mutate ONE value in the committed JSON and the checker must exit 1."
     },
     "test_undrained_queue_blocks_tick_advance": {
      "assertionless": false,
@@ -6084,6 +6412,59 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    }
+   }
+  },
+  "test_known_red_register.py": {
+   "assertionless_count": 0,
+   "baselines": [
+    {
+     "name": "EXPECTED_KNOWN_RED",
+     "size": null
+    }
+   ],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The falsifier for `conftest.py`'s KNOWN_RED register (W1, ED-MB-0061).",
+   "helper_loc": 32,
+   "helpers": [
+    {
+     "loc": 12,
+     "name": "_load_conftest"
+    },
+    {
+     "loc": 20,
+     "name": "_stale_ids"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 112,
+   "modules_under_test": [],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_every_known_red_id_names_a_real_test": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "No stale entries: every id must correspond to a file and a test that exists."
+    },
+    "test_the_register_has_not_grown_by_accretion": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_register_is_scoped_to_the_known_lane": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every excused test must be one the ED-MB-0061 failure set actually covers."
+    },
+    "test_the_staleness_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "POSITIVE CONTROL: the check must OBSERVE a stale id, in both ways an id can go stale."
     }
    }
   },
@@ -7201,6 +7582,76 @@
     }
    }
   },
+  "test_params_dump.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guards for `tools/export_params_constants.py` \u2014 the dump that lets engine/params/*.md leave.",
+   "helper_loc": 20,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "doc"
+    },
+    {
+     "loc": 14,
+     "name": "_source_files"
+    },
+    {
+     "loc": 3,
+     "name": "_source_bytes"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 138,
+   "modules_under_test": [
+    "engine",
+    "engine/engine_params",
+    "engine/params",
+    "engine_params",
+    "tools/export_params_constants.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 6,
+   "tests": {
+    "test_a_non_markdown_file_would_not_evacuate_uncaptured": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The capture's glob must cover the whole tree the evacuation rule deletes (F2)."
+    },
+    "test_capture_is_lossless": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "EVERY source file present, and byte-identical. This is the deletion's safety argument."
+    },
+    "test_round_trip_check_passes": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_tables_were_actually_parsed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The structured view is a convenience, but an empty one would mean the parser broke."
+    },
+    "test_the_byte_comparison_can_fail": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "POSITIVE CONTROL for the BYTE branch \u2014 the one the completeness control never touched."
+    },
+    "test_the_completeness_guard_can_fail": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "POSITIVE CONTROL for the COMPLETENESS branch: drop one file, the assertion must notice."
+    }
+   }
+  },
   "test_partition_invariance.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -7241,6 +7692,137 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "A lone attacker is not a convergence group and must get no entry at all."
+    }
+   }
+  },
+  "test_pathres.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Canary corpus for `tools/pathres.py` \u2014 the path-resolution owner.",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 235,
+   "modules_under_test": [
+    "engine.py",
+    "engine/params/core.md",
+    "engine/substrate/keys.py",
+    "references",
+    "references/params_core.md",
+    "references/restructure_ledger.md",
+    "references/x.yaml",
+    "registers/old.jsonl",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 20,
+   "tests": {
+    "test_a_chained_alias_resolves": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The ledger contains a real two-hop chain. A single-hop resolver silently calls it dead."
+    },
+    "test_a_constructed_path_is_reconstructed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE ED-IN-0128 DEFECT, verbatim: the parity-oracle load that no substring scan can see."
+    },
+    "test_a_glob_is_captured_whole": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Truncating at the `*` yields a path that never exists and reports a false DEAD."
+    },
+    "test_a_live_path_needs_no_alias": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_a_mention_is_not_traced_as_io": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The distinction the whole tracer exists for: `evacuation_plan.readers()` calls any file"
+    },
+    "test_a_non_constant_segment_is_skipped_not_guessed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Guessing a variable's value is the fabrication this repo forbids. A shorter path that still"
+    },
+    "test_a_prefix_that_maps_but_whose_target_is_absent_is_DEAD": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "NEVER-FALSE-PASS. `designs/` maps to `audit/`, but the file does not exist at either end."
+    },
+    "test_a_real_reference_is_still_extracted": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Anti-vacuity: an anchor that rejects everything would pass the test above."
+    },
+    "test_a_resolution_has_no_truth_value": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "`if resolve(x):` is the question-hiding shortcut. It must raise, not silently mean"
+    },
+    "test_a_resolution_is_not_a_string": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "All three defects were a silent substitution of the question. A Resolution that compares"
+    },
+    "test_a_tree_name_inside_a_longer_word_is_not_a_path_token": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE ED-IN-0133 DEFECT, verbatim."
+    },
+    "test_glob_resolution_does_not_use_the_exists_path": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`resolve()` tests os.path.exists, always False for a pattern \u2014 a legitimate glob would"
+    },
+    "test_io_mode_is_classified": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_io_through_a_module_constant_is_traced": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE DEFECT I CAUSED BUILDING THIS. Without a constant environment the tracer saw 24 paths"
+    },
+    "test_max_hops_one_reproduces_single_hop_behaviour": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`broken_dependency_checker` resolves one hop. Migrating it must be able to keep that"
+    },
+    "test_same_file_resolves_both_sides": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_the_alias_map_is_not_empty": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Every resolve() degrades to DEAD if the ledger stops parsing. That failure must be loud."
+    },
+    "test_the_io_tracer_is_not_vacuous": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A tracer returning [] for everything would satisfy the mention test above."
+    },
+    "test_the_known_blind_spot_is_a_blind_spot_and_is_recorded": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "DYNAMIC PATHS ARE INVISIBLE, and pretending otherwise is how a partial tool gets trusted"
+    },
+    "test_the_relocated_params_path_resolves": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "THE 2026-08-04 CENSUS DEFECT. `params/core.md` is how 46 provenance citations in kept code"
     }
    }
   },
@@ -9894,7 +10476,7 @@
    "lanes": [
     "SC"
    ],
-   "loc": 466,
+   "loc": 473,
    "modules_under_test": [
     "engine/params/contest.md",
     "tools"
@@ -10320,8 +10902,9 @@
   "by_lane": {
    "FA": 3,
    "FI": 1,
-   "IN": 29,
-   "MB": 2,
+   "GO": 2,
+   "IN": 33,
+   "MB": 3,
    "PC": 6,
    "SC": 3,
    "SE": 2,
@@ -10443,16 +11026,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 137,
+  "files": 144,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 97,
+  "files_naming_a_module": 103,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 32,
-  "helper_defs": 257,
-  "helper_loc": 2258,
-  "ratchet_baselines": 8,
-  "tests": 1206,
+  "files_with_a_lane": 36,
+  "helper_defs": 264,
+  "helper_loc": 2328,
+  "ratchet_baselines": 9,
+  "tests": 1277,
   "undocumented_files": 0
  }
 }

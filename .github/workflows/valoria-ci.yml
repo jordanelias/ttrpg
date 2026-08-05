@@ -119,6 +119,10 @@ jobs:
           v python3 tools/ci_naming_check.py
           v python3 tools/ci_names_consistency.py
           v python3 tools/export_engine_params.py --check
+          v python3 tools/export_key_types.py --check
+          # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
+          # noticed, because --check could not fail. Both fixed; this is the CI half.
+          v python3 tools/build_test_register.py --check
           v python3 tools/ci_sim_fabrication_check.py
           v python3 tools/ci_claim_provenance_check.py
           v python3 tools/ci_claude_workflow_paths.py

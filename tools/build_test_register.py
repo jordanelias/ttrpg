@@ -268,7 +268,8 @@ def summarize(files: dict) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument('--with-results', action='store_true', help='run pytest per file (slow)')
-    ap.add_argument('--check', action='store_true', help='do not write; report only')
+    ap.add_argument('--check', action='store_true',
+                    help='do not write; FAIL (exit 1) if the committed register has drifted')
     a = ap.parse_args()
 
     files = scan()
@@ -282,10 +283,26 @@ def main() -> int:
         'summary': summarize(files),
         'files': files,
     }
-    if not a.check:
+    text = json.dumps(reg, indent=1, sort_keys=True) + '\n'
+    if a.check:
+        # A DRIFT GATE THAT CANNOT FAIL IS DECORATION (ED-IN-0142). `--check` printed the fresh
+        # stats and exited 0 unconditionally, so the register went stale three times in one
+        # session and each time it was `tests/valoria/test_test_register.py` in CI -- not this
+        # gate, not the local hook -- that noticed. The tool that owns the artifact must be the
+        # one that reports it stale, or the local tier is green while CI is red, which is exactly
+        # how a gate stops being trusted.
+        if not os.path.exists(OUT):
+            print(f'[test-register] MISSING: {OUT} — run the builder')
+            return 1
+        with open(OUT, encoding='utf-8') as f:
+            if f.read() != text:
+                print(f'[test-register] DRIFT: {OUT} does not match a fresh build.')
+                print('           A test file was added, renamed or deleted. Re-run '
+                      '`python3 tools/build_test_register.py` and commit the result.')
+                return 1
+    else:
         with open(OUT, 'w', encoding='utf-8') as f:
-            json.dump(reg, f, indent=1, sort_keys=True)
-            f.write('\n')
+            f.write(text)
     s = reg['summary']
     print(f"[test-register] {s['files']} files · {s['tests']} tests")
     print(f"   claim mutation-verified : {s['files_claiming_mutation']}/{s['files']}")

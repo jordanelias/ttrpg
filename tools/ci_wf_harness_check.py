@@ -383,8 +383,21 @@ def check(fix=False, staged_only=False):
     block = _owner_block()
     scripts = sorted(glob.glob(WF_GLOB))
     if not scripts:
-        print("[wf-harness ✗] no .claude/wf_*.js found — this gate would pass vacuously")
-        return 1
+        # ZERO SCRIPTS IS NOW A LEGITIMATE STATE (2026-08-05, the evacuation). All eight wf_*.js
+        # were completed one-shot session workflows whose INPUTS were evacuated audit units and
+        # engine/params docs; they were retired with their subject rather than kept pointing at
+        # the fork. The vacuity this guard exists to catch is "scripts exist and the scan missed
+        # them", which is still caught: the owner block must be present and parseable, and the
+        # moment a wf_*.js reappears every per-script rule applies to it again.
+        if not block:
+            print("[wf-harness ✗] tools/wf_harness.js is missing or unparseable — the harness "
+                  "owner must survive even with no consumers, or a new workflow has nothing to "
+                  "copy from")
+            return 1
+        print("[wf-harness —] no .claude/wf_*.js in the tree. The owner (tools/wf_harness.js) is "
+              "present and parseable, so a new workflow can be created correctly. Not vacuous: "
+              "there is genuinely nothing to check.")
+        return 0
 
     staged = _staged_paths() if staged_only else None
     dispute_legal, dispute_required = _dispute_contract()

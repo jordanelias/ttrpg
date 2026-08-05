@@ -668,3 +668,15 @@ this file sits in `tests/sim/mass_battle/`, the LIVE ENGINE directory, would exe
 engine tree's constants from the gate. So the fix is filed rather than forced, per §0.1 point 5's own
 instruction to sweep only what the task is load-bearing on. Scope: harness-only; no engine path, no
 golden motion, and the engine-side half of this defect class was already closed by ED-MB-0058.
+
+## 2026-08-05 — the evacuation (ED-IN-0145)
+
+The `tests/sim/` stress corpus this matrix indexed was evacuated: ~330 simulation reports, batteries
+and manifests, none of which were an executable spec or a code pair. What SURVIVES under `tests/sim/`
+and is still covered here is the canon mass-battle engine (`tests/sim/mass_battle/`), the numpy-free
+parity oracle (`tests/sim/v32-combat-balance/`), and `gauge_mb.py` — the module two kept shipping-gate
+tests import by name.
+
+Rows below that point at evacuated reports are retained as the record of what was covered before the
+cut; their subjects live at the fork reference (`c2e5bc8`). Do not treat a row here as evidence a file
+is present.

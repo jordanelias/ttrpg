@@ -58,14 +58,25 @@ from engine.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, Type
 from systems.settlements.sim import registry as settlement_registry
 
 
+# THE COOKED REGISTRY, not the markdown (ED-IN-0136). The markdown remains the AUTHORED surface —
+# edit it, then re-run `tools/export_key_types.py` — but runtime reads typed data. Parsing prose at
+# import time was defensible while the alternative was a hand-copied roster; it stopped being
+# defensible once Godot (which re-implements the logic and cannot parse markdown) needed the same
+# roster and got four HAND-MADE `.tres` files covering 4 of 55 types.
+# The two sources are pinned identical by
+# tests/valoria/test_key_substrate.py::test_json_and_markdown_registries_are_identical.
 _REGISTRY_PATH = (Path(__file__).resolve().parents[2]
-                  / "systems" / "_architecture" / "key_type_registry_v30.md")
+                  / "engine" / "engine_params" / "key_types.json")
 _REGISTRY: Optional[TypeRegistry] = None
 
 
 def _registry() -> TypeRegistry:
-    """Load the canonical Key-type registry once and cache it (the registry markdown
-    stays the single source of truth — the substrate parses it, never a copy)."""
+    """Load the canonical Key-type registry once and cache it.
+
+    Reads the cooked JSON; `TypeRegistry.load` dispatches on suffix, so this is a path change and
+    not a behaviour change — the parsed `types` dict is byte-for-byte the same mapping, in the same
+    ORD-1 registry order.
+    """
     global _REGISTRY
     if _REGISTRY is None:
         _REGISTRY = TypeRegistry.load(_REGISTRY_PATH)

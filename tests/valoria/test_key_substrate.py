@@ -10,7 +10,9 @@ arbitrary values — OF-CAP is an open fork and the substrate takes caps as
 required parameters (no canonical constants exist to assert against).
 """
 
+import os
 import random
+import sys
 
 import pytest
 
@@ -26,6 +28,7 @@ from engine.substrate import (
     Visibility,
 )
 
+ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
 
 
@@ -49,11 +52,41 @@ def make_key(kid, ktype="scene.dialogue", season=0, payload=None, **kw):
 
 # -- registry ---------------------------------------------------------------
 
+def _declared_total(path=REGISTRY_PATH):
+    """The roster size the registry DECLARES, read from its own §9 Total row.
+
+    Derived, not hardcoded, because the number this test used to carry went stale twice while
+    the file grew: the old comment said "§9 counts 44 types; the file physically carries 48"
+    when both had been 55 since 2026-07-29 (ED-IN-0014/OI-25 +5, ED-IN-0091 +1). A hand-typed
+    expectation in a roster test is the same defect class as the hand-typed count that was
+    sitting in keys.py's own docstring (ED-IN-0134).
+    """
+    import re as _re
+    with open(path, encoding='utf-8') as fh:
+        for line in fh:
+            m = _re.match(r'\|\s*\*\*Total\*\*\s*\|\s*\*\*(\d+)\*\*', line)
+            if m:
+                return int(m.group(1))
+    raise AssertionError('no §9 Total row found in the registry — this guard has gone blind')
+
+
 def test_registry_loads_full_roster(registry):
-    # §9 counts 44 types; the file physically carries 48 ### type headings
-    # (44 + combat STUB entries counted with personal_combat). Assert the
-    # parse found at least the §9 roster and the entries the substrate needs.
-    assert len(registry.types) >= 44
+    """EXACT roster equality, three ways, because W4 replaces the loading path.
+
+    The old assertion was `>= 44` under a comment stale by 11. Under a floor, an inversion
+    (markdown -> JSON, ED-IN-0128 W4) that silently DROPPED up to eleven types would pass. A
+    lower bound cannot observe the failure it exists to exclude (CLAUDE.md §0.1 point 2), so
+    this pins physical headings == declared total == parsed types.
+    """
+    import re as _re
+    with open(REGISTRY_PATH, encoding='utf-8') as fh:
+        headings = len(_re.findall(r'^### [a-z_]+\.[a-z_]+\s*$', fh.read(), _re.M))
+    declared = _declared_total()
+    assert headings == declared, (
+        f'registry self-inconsistent: {headings} `###` type headings vs §9 Total {declared}')
+    assert len(registry.types) == declared, (
+        f'parser returned {len(registry.types)} types, registry declares {declared} — a loader '
+        f'change dropped or invented types')
     for tid in ("scene.dialogue", "scene.contest_resolved", "env.crisis",
                 "meta.miraculous_event", "mechanical.accounting"):
         assert tid in registry.types, tid
@@ -394,3 +427,92 @@ def test_registry_defaults_applied_on_emit(registry):
     assert k.scale_signature == ["personal"]
     # scene.dialogue: default_permanence=persistent, default_time_horizon=near
     assert k.permanence == "persistent" and k.time_horizon == "near"
+
+
+# ---------------------------------------------------------------------------
+# W4 — the cooked registry (ED-IN-0136)
+# ---------------------------------------------------------------------------
+
+JSON_REGISTRY = "engine/engine_params/key_types.json"
+
+
+def test_json_and_markdown_registries_are_identical():
+    """THE PIN. The cooked file and the authored file must parse to the same registry.
+
+    This is the whole safety of the inversion. The markdown stays authored (a human edits it and
+    review happens there); code reads the JSON. Two surfaces holding the same content is exactly
+    the drift generator this repo keeps getting caught by — `keys.py`'s own docstring said
+    "44-type" for the file it parses; four `.tres` files hand-shadow four of fifty-five types. The
+    difference here is that this pair is *checked*, so drift is a red test rather than a discovery.
+    """
+    md = TypeRegistry.load(REGISTRY_PATH)
+    js = TypeRegistry.load(JSON_REGISTRY)
+    assert js.types == md.types, 'cooked JSON has drifted from the authored markdown — re-run tools/export_key_types.py'
+    # ORD-1: registry order is significant, so equality of dicts is not enough.
+    assert list(js.types) == list(md.types), 'key ORDER differs (ORD-1) — the cook must not sort'
+
+
+def test_export_round_trips_byte_exact():
+    """`--check` must pass against the committed file, or the committed file is stale."""
+    import subprocess
+    r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    assert r.returncode == 0, f'key-types export drifted:\n{r.stdout}\n{r.stderr}'
+
+
+def test_the_round_trip_check_can_fail(tmp_path):
+    """POSITIVE CONTROL: mutate ONE value in the committed JSON and the checker must exit 1.
+
+    Without this, `--check` passing proves only that it ran. A gate that has never been shown to
+    go red is a gate whose failure mode is unmeasured — the defect class this session has hit
+    repeatedly (a scan reporting clean over nothing; a `>= 44` floor that could not see a drop).
+    """
+    import json as _json, shutil, subprocess
+    live = os.path.join(ROOT, JSON_REGISTRY)
+    backup = tmp_path / 'key_types.json.bak'
+    shutil.copy(live, backup)
+    try:
+        doc = _json.loads(open(live, encoding='utf-8').read())
+        first = next(iter(doc['types']))
+        doc['types'][first]['description'] = 'MUTANT — planted by test_the_round_trip_check_can_fail'
+        with open(live, 'w', encoding='utf-8') as fh:
+            fh.write(_json.dumps(doc, indent=1, ensure_ascii=False, sort_keys=False) + '\n')
+        r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
+                           capture_output=True, text=True, cwd=ROOT)
+        assert r.returncode == 1, 'a mutated committed registry passed --check; the gate cannot fail'
+        assert 'DRIFT' in r.stdout
+    finally:
+        shutil.copy(backup, live)
+    # and the restore must itself be clean, or this test poisons the tree
+    r = subprocess.run([sys.executable, 'tools/export_key_types.py', '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    assert r.returncode == 0, 'restore failed — the working tree was left mutated'
+
+
+@pytest.mark.parametrize('name,payload,expect', [
+    ('malformed id',   {'types': {'NotAnId': {}}},                  'malformed type id'),
+    ('entry not dict', {'types': {'scene.x': 42}},                  'not objects'),
+    ('count mismatch', {'type_count': 99, 'types': {'scene.x': {}}}, 'declares type_count'),
+])
+def test_load_json_is_not_weaker_than_the_markdown_path(tmp_path, name, payload, expect):
+    """The JSON loader must reject what the markdown loader structurally cannot represent.
+
+    WHY THIS EXISTS. `load_json` originally checked only "types is a non-empty dict", so
+    `{"types": {"NotAnId": 42}}` LOADED — while the markdown path rejects it for free, because the
+    heading regex `[a-z_]+\\.[a-z_]+` makes a malformed id unrepresentable and `_parse_entry` always
+    returns a dict. A weaker validator on the path that is BECOMING primary is the wrong direction:
+    one consumer of a CI-pinned file made it survivable, W4b binds three more and W4c binds Godot.
+    Found by the ED-IN-0132 gate review of W4a, not by the author.
+    """
+    import json as _json
+    p = tmp_path / 'reg.json'
+    p.write_text(_json.dumps(payload), encoding='utf-8')
+    with pytest.raises(KeyValidationError) as e:
+        TypeRegistry.load(str(p))
+    assert expect in str(e.value)
+
+
+def test_the_json_validator_still_accepts_the_real_registry(tmp_path):
+    """POSITIVE CONTROL for the test above: the tightened validator must not reject valid data."""
+    reg = TypeRegistry.load(JSON_REGISTRY)
+    assert len(reg.types) == 55

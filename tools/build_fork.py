@@ -12,12 +12,26 @@ engine that ports to Godot. Values live in code and typed tables; Keys carry int
 prose stays behind. So the carry list is deliberately narrow, and everything left out is left out
 ON PURPOSE rather than forgotten -- LEAVE below is as load-bearing as CARRY.
 
-THE ONE THING THIS DOES NOT DECIDE. `systems/mass_battle/sim/` (5 modules) is what the campaign
-actually calls; `tests/sim/mass_battle/` (28 modules) is CANON per ED-MB-0043. Their APIs differ --
-canon returns {winner, turns, phases}, the caller needs {attacker_wins, degree, *_size_pct}, and
-`degree` has no canon mapping. So BOTH are carried: the live one keeps the campaign running, canon
-comes as `systems/mass_battle/canon/` so the fork is not born missing its own canon. The swap is an
-open decision, and a fork that silently picked one would be designing that ruling by implication.
+THE MASS-BATTLE TREES -- RULED 2026-08-03 (J2), REGISTERED 2026-08-04 as ED-MB-0064.
+`systems/mass_battle/sim/` (5 modules) is what the campaign actually calls; `tests/sim/mass_battle/`
+(28 modules) is CANON. The live 5-module tree is RETIRED, not kept alongside.
+  CORRECTION (ED-IN-0125): the API line below was WRONG in every copy of it. `{winner, turns, phases}`
+  is the `kind='single'` path; the caller uses `kind='multi'`, which returns
+  `{winner, battle_turns, log, a_loss_final, b_loss_final}` -- see audit/2026-08-03-session-oddities.md
+  section H. Three of the caller's four fields map mechanically.
+  `degree` still has no canon mapping and must be AUTHORED, but it is partially unblocked: Jordan
+  ruled 2026-08-04 (C2) that mass battle occurs ON A MAP and the loser of the scene is whoever loses
+  more units or has their settlement captured. That supplies `attacker_wins` and constrains the ladder;
+  the four band edges remain unruled, so `degree_map` stays a required arg with no default.
+  ⚠ STATUS OF THIS TOOL. The repository direction was INVERTED 2026-08-04 (ED-IN-0125): `main` is the
+  code-first go-forward repo and the fork/archive receives the outdated prose. This script's
+  copy-into-an-empty-tree operation is therefore NO LONGER the executor. Both trees are still carried
+  below because the carry list doubles as the keep-set draft, but the canon re-home is now an in-repo
+  `git mv` (history survives via --follow), not a copy. Do NOT run CARRY/LEAVE backwards to produce a
+  deletion list: CARRY union LEAVE does not partition the tree, and the neither-set -- .github/,
+  .githooks/, .claude/, tools/, tests/valoria/, most of references/, research/, skills/, CLAUDE.md,
+  CURRENT.md, HANDOFF.md -- would be DELETED, taking the enforcement tier and the shipping gate with
+  it. The authored keep-set is systems/_architecture/repository_keep_set_v1.md.
 
 Usage:
     python3 tools/build_fork.py --out /path/to/fork      # assemble + verify
@@ -130,6 +144,49 @@ def assemble(out: str) -> list[str]:
     return carried
 
 
+class EmptyScanError(RuntimeError):
+    """A scan was asked to walk a tree with no Python in it.
+
+    See `_scanned_py` for why this is an error rather than an empty result.
+    """
+
+
+def _scanned_py(out: str) -> list[str]:
+    """THE SINGLE OWNER of "which .py files does a tree-scan see", and it refuses to see none.
+
+    CLAUDE.md 0.1 point 2: an assertion must be able to observe the failure it excludes. Both
+    scanners below (`escapes`, `classify`) walked `out` directly with `os.walk`, which yields
+    NOTHING for a path that does not exist -- it does not raise. A scan over a missing tree
+    therefore reported "no path literal reaches an uncarried tree", which is textually identical
+    to the clean result and carries none of its meaning. That is the gate-reporting-clean-over-
+    nothing class (#283/#284, and `tests/valoria/test_tool_input_paths_resolve.py` names it).
+
+    The concrete defect this closes: `--verify-only` skips `assemble()`, so on a fresh `--out`
+    the tree never existed; the run printed a green escape line over zero files and then died at
+    the FORK_MANIFEST write with a bare FileNotFoundError. Both halves were wrong -- the green
+    line was meaningless and the failure was illegible.
+
+    NOT fixed by having `--verify-only` assemble into a temp dir: that silently verifies a
+    different tree than the one the caller named, and collapses the two documented modes into one.
+    `--verify-only` re-verifies an EXISTING assembled tree; if there isn't one, say so.
+    """
+    if not os.path.isdir(out):
+        raise EmptyScanError(
+            f"{out!r} does not exist. `--verify-only` re-verifies an ALREADY-ASSEMBLED tree; "
+            f"run without --verify-only first to build it."
+        )
+    files = []
+    for dirpath, dirnames, filenames in os.walk(out):
+        dirnames[:] = [d for d in dirnames if d != '__pycache__']
+        files.extend(os.path.join(dirpath, fn) for fn in filenames if fn.endswith('.py'))
+    if not files:
+        raise EmptyScanError(
+            f"{out!r} contains no .py files, so every scan over it is vacuously clean. "
+            f"Refusing to report a green result that means nothing."
+        )
+    return files
+
+
 def escapes(out: str) -> list[tuple[str, int, str]]:
     """Path literals in the assembled tree naming a directory the fork did NOT carry.
 
@@ -178,17 +235,12 @@ def escapes(out: str) -> list[tuple[str, int, str]]:
         def visit_Constant(self, node):
             self._chk(node, False)
 
-    for dirpath, dirnames, filenames in os.walk(out):
-        dirnames[:] = [d for d in dirnames if d != '__pycache__']
-        for fn in filenames:
-            if not fn.endswith('.py'):
-                continue
-            p = os.path.join(dirpath, fn)
-            try:
-                tree = ast.parse(open(p, encoding='utf-8').read())
-            except (SyntaxError, UnicodeDecodeError):
-                continue
-            V(os.path.relpath(p, out), tree).visit(tree)
+    for p in _scanned_py(out):          # guarded: refuses to scan an empty/missing tree
+        try:
+            tree = ast.parse(open(p, encoding='utf-8').read())
+        except (SyntaxError, UnicodeDecodeError):
+            continue
+        V(os.path.relpath(p, out), tree).visit(tree)
     return found
 
 
@@ -269,25 +321,20 @@ def classify(out: str) -> dict:
                 frontier.add(dep)
 
     buckets = collections.defaultdict(list)
-    for dirpath, dirnames, filenames in os.walk(out):
-        dirnames[:] = [d for d in dirnames if d != '__pycache__']
-        for fn in filenames:
-            if not fn.endswith('.py'):
-                continue
-            q = os.path.join(dirpath, fn)
-            rel = os.path.relpath(q, out)
-            if q in runtime:
-                buckets['runtime'].append(rel)
-            elif rel.startswith(os.path.join('engine', 'tests')):
-                buckets['test'].append(rel)
-            elif rel.startswith(os.path.join('engine', 'reference')):
-                buckets['oracle'].append(rel)
-            elif rel.startswith(os.path.join('systems', 'mass_battle', 'canon')):
-                buckets['canon_unwired'].append(rel)
-            elif os.sep + 'workbench' + os.sep in rel:
-                buckets['workbench'].append(rel)
-            else:
-                buckets['subsystem_unwired'].append(rel)
+    for q in _scanned_py(out):          # guarded: refuses to scan an empty/missing tree
+        rel = os.path.relpath(q, out)
+        if q in runtime:
+            buckets['runtime'].append(rel)
+        elif rel.startswith(os.path.join('engine', 'tests')):
+            buckets['test'].append(rel)
+        elif rel.startswith(os.path.join('engine', 'reference')):
+            buckets['oracle'].append(rel)
+        elif rel.startswith(os.path.join('systems', 'mass_battle', 'canon')):
+            buckets['canon_unwired'].append(rel)
+        elif os.sep + 'workbench' + os.sep in rel:
+            buckets['workbench'].append(rel)
+        else:
+            buckets['subsystem_unwired'].append(rel)
     return {k: sorted(v) for k, v in buckets.items()}
 
 
@@ -326,6 +373,15 @@ def main(argv=None):
         n_py = sum(len([f for f in fs if f.endswith('.py')]) for _, _, fs in os.walk(out))
         print(f"[FORK] assembled {len(carried)} carry roots -> {out}")
         print(f"[FORK] {n_py} .py files")
+    else:
+        # FAIL BEFORE PRINTING ANYTHING GREEN. `--verify-only` does not assemble, so on a fresh
+        # --out there is no tree; the scanners would otherwise report a vacuous clean line and
+        # only then die at the manifest write. Check first, exit legibly.
+        try:
+            _scanned_py(out)
+        except EmptyScanError as e:
+            print(f"[FORK] CANNOT VERIFY: {e}")
+            return 2
 
     gaps = contract_coverage()
     if gaps:

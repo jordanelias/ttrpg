@@ -111,6 +111,28 @@ def _load_restructure_map():
     return mapping
 
 
+# THE FORKED TERMINAL STATUS (2026-08-05, the evacuation).
+#
+# A live ledger entry cites the audit unit that was its EVIDENCE, and that unit has been evacuated
+# to the fork. The entry is not wrong and the reference is not broken -- the file is legitimately
+# absent from main and present at a named ref. Nothing in the tree could express that: every
+# unresolvable reference was DEAD, so 25 correct citations read as breakage.
+#
+# So a restructure_ledger row may point at `FORK:<ref>` instead of a live path. It means: this
+# path left main deliberately; its content is at <ref>.
+#
+# WHAT THIS IS NOT, and the distinction is the entire value: it is NOT "ignore missing". A
+# reference with NO row still fails, exactly as before. Implementing FORKED as "tolerate anything
+# unresolvable that has a row" would erase the only difference between a forked file and a
+# fabricated one, which is the repo's anti-fabrication property. `tests/valoria/test_forked_status.py`
+# plants both cases and requires the gate to separate them.
+FORK_PREFIX = 'FORK:'
+
+
+def _is_forked(target):
+    return isinstance(target, str) and target.startswith(FORK_PREFIX)
+
+
 def _resolve_remap(ref, remap):
     """Resolve a pre-restructure path to its current home: exact row first, then the
     longest matching DIRECTORY-prefix row (an old→new row whose old path ends in '/').
@@ -120,7 +142,7 @@ def _resolve_remap(ref, remap):
     None if nothing matches; the caller still verifies the mapped home actually exists,
     so a prefix match to a nonexistent path stays BROKEN (never a false pass)."""
     if ref in remap:
-        return remap[ref]
+        return remap[ref]          # may be a FORK:<ref> sentinel; the caller checks
     best = None
     for old, new in remap.items():
         if old.endswith('/') and ref.startswith(old) and (best is None or len(old) > len(best[0])):
@@ -177,7 +199,12 @@ def check_editorial_ledger(all_files):
                 if ref in all_files:
                     continue
                 new_home = _resolve_remap(ref, remap)
-                if new_home and new_home in all_files:
+                if _is_forked(new_home):
+                    # Legitimately absent: evacuated to the fork, provenance at the named ref.
+                    # NOT the same as unresolvable — a ref with no row still falls through to
+                    # `broken` below, which is what keeps this from becoming "ignore missing".
+                    infos.append(f"{ed_id}: {ref} -> {new_home} (EVACUATED; provenance at fork ref)")
+                elif new_home and new_home in all_files:
                     infos.append(f"{ed_id}: {ref} -> {new_home} (pre-restructure path; mapped home exists)")
                 else:
                     broken.append(f"{ref} (live entry {ed_id})")

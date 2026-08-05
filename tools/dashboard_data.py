@@ -791,7 +791,7 @@ def build_keys():
         {"name": "Key", "role": "The universal typed, validated, append-only event object (id/type/targets/scale_signature/symbolic_dimensions/…). No cascade_depth field."},
         {"name": "Target", "role": "One targets[] entry (actor, role, impact_vector, stat_deltas). Wide fan-out is ONE Key with N targets, never N Keys."},
         {"name": "KeyLog", "role": "The append-only canonical log — enforces all 8 universal invariants, deterministic serialize()/content_hash() for replay."},
-        {"name": "TypeRegistry", "role": "Loads/validates against key_type_registry_v30.md at runtime (parses the markdown) instead of duplicating the roster in code."},
+        {"name": "TypeRegistry", "role": "Loads/validates the Key-type roster. Runtime reads the COOKED engine/engine_params/key_types.json (ED-IN-0136); key_type_registry_v30.md stays the authored surface and the two are pinned identical by a blocking round-trip gate."},
         {"name": "TickScheduler", "role": "The engine_clock-shaped emission seam — tick queue, cascade_depth re-entrancy meter, Level-B termination guard, deferred-apply at ACCOUNTING."},
         {"name": "TerminationBreach", "role": "Raised when a Level-B termination invariant is violated — never silently clamped."},
     ]

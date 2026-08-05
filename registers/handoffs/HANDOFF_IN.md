@@ -1,5 +1,210 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## THE SEPARATION WORK LIST (W1–W10) — written down 2026-08-04 (ED-IN-0135)
+
+**Why this is here.** The W-list existed only in a review transcript and a chat reply. The ED-IN-0132
+gate asks each milestone's reviewer to check *fidelity to plan*, and a reviewer correctly reported it
+could not: the plan was not in the tree. A gate that cannot be checked is ceremony. So:
+
+| # | Work | Precondition | Falsifier | Tier | State |
+|---|---|---|---|---|---|
+| W1 | Carry the 9 MB failures as `xfail(strict)`, citing ED-MB-0061 | none | `pytest tests/valoria` → 0 failed / 9 xfailed | sonnet | **DONE** ED-IN-0140 |
+| W2 | Truth-surface sweep (keep-set cutoff, plan residuals, `keys.py` 44→55) + doc↔tool pin | none | `test_keep_set_doc_cutoff_matches_the_tool`, mutation-verified | haiku/sonnet | **DONE** ED-IN-0134 |
+| W3 | **Deletion rehearsal** in a scratch worktree | ~~W1~~ | *is* the falsifier of every static prediction made so far | sonnet + opus verdict | **DONE** ED-IN-0144 |
+| W4 | `key_type_registry.md` → JSON; repoint readers; regenerate `.tres` | **R1 done** (ED-IN-0135) | round-trip byte-exact; mutate-one exits 1; `.tres` byte-compared; `test_key_substrate` exact-roster | sonnet + opus on schema | ready |
+| W5 | Weapons → typed JSON; regenerate GDScript | Jordan confirm | 53 exported; generated `.gd` has no `reach/weight/spd/handling` | sonnet | ruling |
+| W6 | ~~`engine/params` census + demotion~~ → **capture + EVACUATION** | none | 43/43 files byte-identical in the YAML capture; `--check` blocking in all four wiring points; positive control on the losslessness guard | haiku + opus | **DONE** ED-IN-0139 |
+| W7 | Deletion slices, one root per commit | W1, W3, W9, Jordan sign-off | 4 gates green per slice | sonnet + critic gate | ruling |
+| W8 | `handoff_atomize` first run | **2** Jordan calls | `--check` exit 0 + `test_handoff_structure` | sonnet | ruling |
+| W9 | Replace frozen `AUDIT_CUTOFF` with citation-based retention | Jordan ruling | `--check` total; new count pins | sonnet | ruling |
+| W10 | Ratchet re-record | W7 | `scope_ratchet --check` exit 0 | sonnet | open |
+
+**Independent, parallelisable now:** W1, W2, W4, W6. **Chains:** W1→W3→W7→W10; W9→W7's audit slice.
+
+**Filed residuals from the W2 gate review** (none block W4 after R1):
+- **R4 — `references/restructure_ledger.md` must invert BEFORE the first evacuation slice.** It is an
+  alias registry parsed at runtime by **two** tools — `broken_dependency_checker:106` and
+  `ci_claude_workflow_paths:38`. (I relayed "four" from the review without checking:
+  `build_incompleteness:363` merely *excludes* the filename from a scan, and the `evacuation_plan`
+  hits were my own comment and print string. Corrected here; the R4 conclusion is unchanged, its
+  blast radius is half what I stated.) Keep-set §8 item 2 requires **every deletion commit to write a
+  new alias row into it**. A hand-edited `.md` that blocking CI machine-reads, about to take one write
+  per slice, is the highest-blast-radius format violation in the tree. Not a W4 dependency; a W7
+  dependency.
+- ~~**R5** — evacuate rule for `engine/params/history/` (8 files) + `threadwork_superseded.md`~~ —
+  **RESOLVED by ED-IN-0139**, and by the broader rule rather than the special case R5 asked for: the
+  whole of `engine/params/` evacuates, so superseded params prose is not surviving on a blanket keep
+  rule because there is no longer a keep rule to survive on.
+- The `:443` correction in the fork plan is spliced mid-sentence; tidy if that doc is touched again.
+
+**W6 gate review (ED-IN-0132 pass, verdict COMPLETE-WITH-RESIDUALS).** Six actionable findings, all
+taken, none disputed. The two that matter as *pattern*, not incident:
+- **F1 — a claim's guard was weaker than the claim, and the two were weak in the SAME way.** The
+  exporter read text-mode `errors='ignore'`; the falsifier verified with the identical read. Two lossy
+  reads that agree with each other are not evidence about the file. This is §0.1 point 2 in a form I
+  had not seen before: not a missing assertion, a *matched pair* of assertions blind to the same thing.
+  **Generalise it:** whenever a test verifies X by re-deriving X the same way the code derived it, the
+  test measures agreement, not truth. **SWEPT (§0.1 point 5), and the other two exporters are clean —
+  for a reason worth stating rather than a lucky one.** Neither `export_key_types.py` nor
+  `export_engine_params.py` uses `errors=`, and more importantly neither *claims* fidelity to a file's
+  bytes: their claim is "the committed artifact agrees with what the single loader/config produces",
+  and agreement is exactly what they assert. The defect needed a claim about the SOURCE (byte-identical
+  to 43 `.md`) checked by a derivation that shared the source-reading path. So the rule to carry is
+  narrower and sharper than "exporters are suspect": **when a claim is about bytes on disk, the check
+  must read those bytes independently of the producer.**
+- **F3 — a positive control covering only one branch, described as covering both.** The control planted
+  an omission; the ledger said it planted "a mismatch". A control that does not exercise the branch
+  carrying the claim is decoration, and describing it as stronger than it is makes the decoration
+  load-bearing. Four content mutations added.
+
+**Provenance census (2026-08-04, scratch measurement — carry into W7).** Jordan asked whether we
+needed to flatten contested files to find `.md`-vs-code value conflicts. **We did not, and there is
+no conflict problem**: a (identifier, number) census over kept prose produced a "conflict" bucket
+that sampling showed to be artifact (3 read, 2 provably false — `block_size`'s `0` came from the
+prose sentence `Size = 0`; `base_pool`'s `1` is the pool FLOOR in `max(1, base_pool − penalties)`).
+Co-occurrence on a line is not an assertion, and no amount of heuristic sharpening fixes that.
+
+What the sampling found instead is the real relationship, and it is not competition: **the engine
+holds the value and cites the doc as its ORIGIN** — `BLOCK_SIZE = 100  # [canonical:
+systems/mass_battle/mass_battle_v30.md §A.3]`. Jordan's ruling ("design docs are just information
+only at this point. real values live in engine") is already implemented as a code convention.
+
+**The number W7 needs: 112 provenance citations in `engine/`+`systems/`+`tools/` `.py`; 58 (52%)
+target an EVACUATING doc, 54 target a kept one, 0 unresolvable.** The 58 are `params/core.md` (23),
+`params/mass_combat.md` (15), `modifier_system_spec.md` (10), `params/factions.md` (6),
+`params/threadwork.md` (2), `audit_sim_mb_06_v14.md` (2). All become fork references, which Jordan
+authorised ("provenance can cite to a fork") — so they do NOT block the slice, but the slice must
+land the alias rows.
+
+⚠ **METHOD WARNING, and the third instance on this branch.** The first run of that census reported
+**0** citations targeting evacuating docs. It matched LITERAL paths, and `params/core.md` only
+reaches `engine/params/core.md` through the restructure alias map — so the largest affected group
+scored zero. Same defect class as the `audit/scripts/` phantom (ED-IN-0133) and the split-path
+reader miss (ED-IN-0128). **Any scan over this corpus that does not resolve aliases is wrong by
+default, not occasionally.** Resolve through `restructure_ledger` (or at minimum a basename
+fallback) before reporting a path-based count.
+
+**Filed by W6 (ED-IN-0139) — carry into W7:**
+- **The params gate must die with its source.** `export_params_constants.py --check` re-derives from
+  `engine/params/`, so the deletion commit must ALSO remove it from `.github/workflows/valoria-ci.yml`,
+  `tools/valoria_local.py`, `references/ci_checks_registry.yaml` and
+  `tests/valoria/test_gate_coverage.py::EXPECTED_COMMANDS`. Deliberately strict — there is no
+  vacuous-pass-on-absent-source path — so forgetting is loud. Same commit, four files.
+- **`ci_co_file_checker.py` rule 4** targets `engine/params/{basename}.md` (`:90-91`). It loses its
+  target tree in the same slice; retire or re-aim it there.
+- **The `engine/params` slice has 30 blocking readers and 2 split-path readers** as measured by
+  `python3 tools/evacuation_plan.py --slice engine/params`. Most are mentions in comments and
+  docstrings rather than loads — the scan is a substring scan over whole files — but the two
+  split-path hits (`tools/ci_formula_prose_check.py` and its test) are real: that checker walks
+  `engine/params/**/*.md` as its live corpus and needs a decision, not a re-point. Triage belongs to
+  the slice, not to the capture.
+
+
+## 2026-08-04 (late) — STATE AS OF `9c0a616`. Read this before resuming.
+
+**Why this section exists: the record had stopped nine commits short of the tree.** A process
+review (Fable-5, read-only) found this file had zero mentions of `pathres`, the identifier census,
+the known-red register or ED-IN-0140/0141/0142, and still marked W1 open after ED-IN-0140 executed
+it. Six commits carried no ledger entry at all, so their findings lived only in commit messages —
+which no tool reads. **This is the exact defect this session spent the day prosecuting in others**
+(the "none for infrastructure" ruling that reached no file). Reconciled here.
+
+**Tracked file count: 3,144 at branch point → 3,018 now.** 164 files deleted (the audit
+working-paper join). The W7 deletion slices have NOT run.
+
+### What landed since the last handoff update
+- **ED-IN-0140 — W1 DONE.** 9 known-red MB tests carried as `xfail(strict=True)` from one register
+  (`tests/valoria/conftest.py`), falsifier in `test_known_red_register.py` (count pinned at 9, stale
+  ids fail, every entry must cite ED-MB-0061). **W3 is therefore unblocked** and is the next step.
+- **ED-IN-0141 — the audit ruling's second clause + the join.** `R-AUDIT-INFRA` evacuates
+  infrastructure-lane audit units (dominant cited `ED-<LANE>` tag); `AUDIT_KEEP_OVERRIDE` holds
+  `emergent-narrative-engine` by Jordan's explicit ruling. `tools/join_audit_workings.py` verifies a
+  byte-exact round-trip before purging. Kept audit `.md` 493 → 119.
+- **ED-IN-0142 — two gate defects.** A generated-sidecar exemption in `validate_ed_citations`
+  (the census QUOTES citations; it does not make them), and `build_test_register.py --check`, which
+  exited 0 unconditionally and so never gated — it drifted 3× in one session, CI catching it each
+  time. Now diffs, wired in **five** places (the workflow, `valoria_local.py`,
+  `ci_checks_registry.yaml`, `test_gate_coverage.EXPECTED_COMMANDS`, and its own falsifier —
+  I had been calling it four-way in three commit messages).
+- **`tools/pathres.py`** — the single owner for path-reference extraction / alias resolution /
+  file-I/O tracing, extracted from `ci_claude_workflow_paths` + `evacuation_plan`. Net removal:
+  the alias ledger had **four** independent parsers. `Resolution` is an object, not a string, and
+  raises on `bool()` so a caller must say which question they are asking. CLI: `resolve | scan |
+  pipeline`. 25 canaries in `test_pathres.py`, each binding one branch to one named defect.
+  ⚠ `pipeline` is a **LOWER BOUND** — dynamic paths are invisible and guessing is forbidden.
+  **Migration steps 2–8 of the guardrail plan are NOT done**: four parsers still live, and
+  `broken_dependency_checker` must migrate at `max_hops=1` or the refactor silently loosens a
+  blocking gate.
+- **`tools/build_identifier_census.py`** — per-subsystem `_identifier_census.yaml` + a roll-up.
+  ⚠⚠ **NOT SAFE TO CULL DOCUMENTS FROM.** Two antagonist rounds found: `engine_clock` marked BUILT
+  off a local variable in a tool whose docstring says it is unauthored; a filter of mine erasing
+  each doc's own headline mechanic with no audit trail; a dead alias pass advertising an
+  enforcement that never ran. Fixed, but the real-mechanic fraction of UNRESOLVED still runs 0%
+  (threadwork, victory) to ~75% (settlements), and parameter rows inflate the count 2–3× over
+  distinct design decisions. Read `dropped_as_not_a_mechanic` before concluding anything is absent.
+- **RULED (Jordan, 2026-08-04): `prose-writer` stays** — `R-SKILL-PROSE` in `evacuation_plan.py`.
+  Canon narrative stays on main and this is the skill that authors it.
+
+### Correction to R4 above, which the LEDGER still gets wrong
+ED-IN-0135's entry says `restructure_ledger.md` is "parsed at runtime by **FOUR** tools". It is
+**two** (`broken_dependency_checker:106`, `ci_claude_workflow_paths:38`); I relayed a reviewer's
+count into the ledger without checking it. Corrected in this file when found, but the ledger row is
+append-only and still carries FOUR — treat this section as the correction of record.
+
+### Open rulings for Jordan
+1. **Contest gate packets** (7 audit units citing no ED). Kept because the lane classifier abstains;
+   but they are records of *how a decision was made*, which "none for infrastructure" would evacuate.
+2. **Nested `.json` working tiers** in kept audit units — the join was markdown-only, so
+   `ners-qualitative-audit/01_workings/` still holds ~30 JSON dossiers beside its joined file.
+
+### The trajectory signal, stated so it can be checked against me
+The tree re-grew 2,999 → 3,018 after the one deletion commit. **Within three commits of this
+section, one must either run W3 or land a W7 slice that takes `git ls-files` below 3,018 with the
+four gates green.** Three more commits of instruments with a non-decreasing tracked count confirms
+this has become a tooling programme rather than a separation.
+
+## W3 DELETION REHEARSAL — EXECUTED 2026-08-04 (ED-IN-0144). Read before any W7 slice.
+
+Ran the partition for real in a throwaway worktree: **1,724 files deleted, 3,003 → 1,279 tracked.**
+Then ran every blocking validator and the shipping gate against the result. This is the falsifier
+for every static prediction the planner had made, and **it broke four gates, only one predicted.**
+
+| gate | result | fix |
+|---|---|---|
+| `pytest tests/valoria` | **DOES NOT COLLECT** | see below — the headline finding |
+| `export_params_constants --check` | red | PREDICTED; retire it in the params slice commit |
+| `ci_claude_workflow_paths` | 34 DEAD | `.claude/wf_*.js` name evacuated audit units + params docs |
+| `broken_dependency_checker` | 28 broken, 26 under `designs/` | live ledger entries whose EVIDENCE evacuates |
+| `freshness_gate` | 21 | `canonical_sources` pins into evacuated docs |
+
+### THE HEADLINE FINDING: a third reader blind spot, and the worst kind
+`tests/sim/gauge_mb.py` is classified EVACUATE. Two KEPT shipping-gate tests do **`import
+gauge_mb`** — a bare module name. Neither scan could see it: `readers()` greps for the path string
+(never appears), `joined_path_readers()` looks for constructed paths (there is no join). The
+dependency exists only as a name resolved through `sys.path` at runtime.
+
+**Deleting it does not fail a test. It stops `pytest tests/valoria` COLLECTING AT ALL** — the whole
+shipping gate becomes unrunnable, which is strictly worse than a red test and was invisible to
+every static prediction. Only executing the deletion found it.
+
+`module_import_readers()` added, wired BLOCKING into `--check`, and made **transitive** — one hop
+was demonstrably the wrong answer: keeping `github_ops.py` immediately made its two imports
+load-bearing, and reporting one hop per run turns a dependency closure into whack-a-mole where a
+partially-kept import chain is exactly as uncollectable as none. A false positive was killed before
+reporting (`import engine` resolves to the top-level PACKAGE, not `tests/sim_framework/engine.py`).
+
+### OPEN, and the reason `--check` is currently RED
+`tools/compliance_check.py:76` — a **BLOCKING CI gate** — does `import github_ops`, and that chains
+`github_ops -> index_bootstrap -> regenerate_file_index` plus `valoria_hooks`: **four files under
+`deprecated/` that live CI transitively depends on.** CLAUDE.md §8 records that tools importing
+`github_ops` were retired for exactly this reason; `compliance_check` itself was never cleaned up.
+Two ways out and they are not equivalent — removing the dead orchestrator import kills the whole
+chain, keeping four `deprecated/` files as a permanent exception does not. **Do not paper over this
+with keep-rules.** It is the cleanest available test of whether `deprecated/` can actually leave.
+
+Three modules were given keep rules (`R-IMPORTED-MODULE`) because their readers are legitimate:
+`tests/sim/gauge_mb.py`, and `descriptor_registry.py` / `github_ops.py` under `deprecated/`.
+
 ## 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN-0124)
 
 **This section is now the fork plan's execution log.** The proposal had become a *third* current-state
@@ -1302,13 +1507,27 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
     — `conditional_orders`, `dg2_yield_residuals`, `stochastic_rout` all need the battle to last
     long enough for a trigger to fire. Nobody has checked whether one fix greens all nine (J8).
 
-- **UNRESOLVED, and it decides the fork's mechanics: does `main` keep moving after the fork?**
-  `build_fork.py` is a one-way build (`rmtree` first), so re-running it CLOBBERS fork-side commits.
-  Fine while the fork is a pure derivative; wrong the moment it diverges — which is the point.
-  If `main` keeps receiving MB/PC/SC work, a **GitHub fork with shared history** is close to forced
-  (merges keep working). `git subtree split` handles one prefix; this carry list has **11 roots and
-  2 relocations**, so history-preserving extraction needs `git-filter-repo` (not installed) and
-  then charges path-rewriting on every future merge. **Jordan's call, not a session's.**
+- **RESOLVED 2026-08-04 (ED-IN-0125) — the direction is INVERTED. `main` is the go-forward repo.**
+  ~~UNRESOLVED, and it decides the fork's mechanics: does `main` keep moving after the fork?~~
+  The question was posed under the EXTRACT framing, where "the fork" meant a new **code** repo built
+  by copying `CARRY` into an empty tree. Jordan ruled the opposite operation: **the fork/archive holds
+  the outdated largely-prose work; THIS repo stays as the code-first go-forward repo.** So the
+  one-way-build objection below is dissolved rather than answered — nothing is ever rebuilt from
+  `main` into the archive, so `rmtree` cannot clobber anything, and no history-preserving extraction
+  is needed at all. `git-filter-repo`, `git subtree split`, and the 11-roots/2-relocations path-rewrite
+  cost all drop out of the plan. The archive is this repo's history at an evacuation tag; a browsable
+  archive repo is a convenience, not a requirement.
+  ⚠ **J1 is registered REINTERPRETED, not verbatim** (ED-IN-0125): its literal wording — "`main` does
+  NOT keep moving after the fork" — would, read under the new framing, freeze the go-forward repo. The
+  thing that freezes is the **archive**; `main` continues.
+  ⚠ **`build_fork.py`'s `CARRY`/`LEAVE` must NOT simply be run backwards.** `CARRY ∪ LEAVE` does not
+  partition the tree, and the neither-set (`.github/`, `.githooks/`, `.claude/`, `tools/`,
+  `tests/valoria/`, most of `references/`, `research/`, `skills/`, `CLAUDE.md`, `CURRENT.md`,
+  `HANDOFF.md`) defaults to *kept* under extract and *deleted* under evacuate. `LEAVE` also carries two
+  extraction-only rationales — `tools/` "the fork re-derives what it needs" and `tests/valoria/`
+  "engine/tests comes instead" — which under keep-main would delete the enforcement tier, the shipping
+  gate, and the fork plan's own falsifiers. **The keep-set is authored fresh; see
+  `systems/_architecture/repository_keep_set_v1.md`.**
 
 - **I1 (get `main` green) is CANON-BLOCKED, measured not assumed.** 60/60 identical 1200v1200
   battles end in ONE turn; the winner takes ZERO losses in 42/60. That is why
