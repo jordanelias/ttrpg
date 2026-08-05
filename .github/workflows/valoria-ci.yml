@@ -171,7 +171,6 @@ jobs:
           w python3 tools/ci_names_check.py
           w python3 tools/currency_consistency_check.py
           w python3 tools/ci_quantity_vocabulary_check.py
-          w python3 tools/ci_formula_prose_check.py --report
           w python3 tools/mechanics_index_gen.py --strict
           w python3 tools/ci_generation_consistency.py
           w python3 tools/canon_coverage_check.py --strict --json

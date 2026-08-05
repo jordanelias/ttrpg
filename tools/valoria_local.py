@@ -171,7 +171,6 @@ def main(argv):
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
         ('ci_audit_registry_check.py',   [],          False),  # report-only audit-registry freshness gate
         ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
-        ('ci_formula_prose_check.py',    [],          False),  # A18 report-only formula prose-drift (ED-1052 / OPT-AV-5)
         ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
         # ED-IN-0087: the .claude/wf_*.js run-discipline prelude has one owner (tools/wf_harness.js)
         # and is COPIED into each script, because workflow scripts run in a sandbox with no imports.

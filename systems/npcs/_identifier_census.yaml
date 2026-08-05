@@ -22,7 +22,7 @@ docs:
 - systems/npcs/npc_roster_v30_index.md
 - systems/npcs/npc_roster_v30_infill.md
 counts:
-  UNRESOLVED: 68
+  UNRESOLVED: 69
   SUPERSEDED-DOC: 2
   BUILT: 1
 identifiers:
@@ -140,6 +140,15 @@ identifiers:
     docs:
     - systems/npcs/npc_relational_graph_v30.md
     purpose: Both parties take **Conviction Scar +1** on Honor (oath-violation is an Honor-axis wound per `conviction_axis_matrix §3.13`).
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  conviction_stress_01:
+    identifier: conviction_stress_01
+    docs:
+    - systems/npcs/npc_behavior_v30.md
+    purpose: Scar accumulation mechanics from `conviction_track_v1.md §2` remain canonical pending PP-718 review of weight-scaling under PP-684 structured concentration (per stress-test `conviction_stress_01` open finding).*
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -697,7 +706,6 @@ dropped_as_not_a_mechanic:
   conflict_architecture_proposal: matches a tracked/aliased document stem
   conviction_axis_matrix_v30: the doc spells it as <name>.md — a citation
   conviction_migration_roster_v30: the doc spells it as <name>.md — a citation
-  conviction_stress_01: matches a tracked/aliased document stem
   conviction_taxonomy_v30: the doc spells it as <name>.md — a citation
   conviction_track_v1: the doc spells it as <name>.md — a citation
   coverage_matrix: boilerplate-or-too-short

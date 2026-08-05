@@ -182,98 +182,102 @@ def test_contract_guard_can_fail():
 # Split-path readers — the false negative that a substring scan cannot fix
 # --------------------------------------------------------------------------------------
 
-def test_split_path_scan_finds_what_substring_scan_cannot(part):
-    """The concrete miss: gen_sigma_parity_goldens.py builds its oracle path from segments.
+def test_split_path_scan_finds_what_substring_scan_cannot():
+    """The concrete miss: gen_sigma_parity_goldens.py built its oracle path from segments.
 
         os.path.join(REPO_ROOT, 'audit', '2026-06-03-contest-groundup', 'engine.py')
 
     contains no literal 'audit/', so `readers()` reported that file as unread while a kept tool
-    loaded it to regenerate a committed golden a kept CI test asserts on. This pins the AST scan
-    that catches it, and `test_the_split_scan_can_fail` below stops it passing vacuously.
+    loaded it to regenerate a committed golden a kept CI test asserts on.
+
+    PLANTED, NOT LIVE (2026-08-05): the evacuate set is now EMPTY — the terminal state — so a test
+    reading the live partition would assert the job is unfinished. The property under test is the
+    SCAN, and the scan is exercised directly.
     """
-    retained = part['buckets']['keep'] + part['buckets']['relocate']
-    roots = sorted({e.split('/')[0] for e in part['buckets']['evacuate']})
-    jr = ep.joined_path_readers(roots, retained)
-    flat = [h for lst in jr.values() for h in lst]
-    assert flat, 'the split-path scan found nothing at all — it has stopped working'
-    # deprecated/ is evacuating and has kept-code readers built from segments
-    assert any('currency_consistency_check.py' in h for h in flat), \
-        'currency_consistency_check.py builds a deprecated/skills path from segments; not detected'
+    import tempfile, textwrap, os as _os
+    with tempfile.TemporaryDirectory(dir=_os.path.join(HERE, '..', '..')) as d:
+        rel = _os.path.relpath(d, _os.path.join(HERE, '..', '..'))
+        with open(_os.path.join(d, 'probe.py'), 'w', encoding='utf-8') as fh:
+            fh.write(textwrap.dedent("""
+                import os
+                P = os.path.join(REPO, 'audit', '2026-06-03-contest-groundup', 'engine.py')
+            """))
+        planted = {'audit/2026-06-03-contest-groundup/engine.py'}
+        hits = ep.joined_path_readers(['audit'], [_os.path.join(rel, 'probe.py')], planted)
+        assert hits['audit'], 'a constructed path into an evacuating tree was not detected'
 
 
 def test_the_split_scan_can_fail():
-    """POSITIVE CONTROL: a constructed path into an evacuating root must be reported.
+    """POSITIVE CONTROL: the scan must NOT report a constructed path that is not evacuating.
 
-    Without this, a scanner that returned [] for everything would satisfy the test above only by
-    accident of another hit existing.
+    Previously this planted a path into `deprecated/` and required a hit. `deprecated/` no longer
+    evacuates wholesale, so the control now checks the other direction — the one that actually
+    protects a deletion plan from crying wolf.
     """
-    import tempfile, textwrap
-    with tempfile.TemporaryDirectory(dir=os.path.join(HERE, '..', '..')) as d:
-        rel = os.path.relpath(d, os.path.join(HERE, '..', '..'))
-        f = os.path.join(d, 'probe.py')
-        with open(f, 'w', encoding='utf-8') as fh:
+    import tempfile, textwrap, os as _os
+    with tempfile.TemporaryDirectory(dir=_os.path.join(HERE, '..', '..')) as d:
+        rel = _os.path.relpath(d, _os.path.join(HERE, '..', '..'))
+        with open(_os.path.join(d, 'probe.py'), 'w', encoding='utf-8') as fh:
             fh.write(textwrap.dedent("""
                 import os
-                P = os.path.join(REPO, 'deprecated', 'tools')
+                P = os.path.join(REPO, 'engine', 'substrate', 'keys.py')
             """))
-        hits = ep.joined_path_readers(['deprecated'], [os.path.join(rel, 'probe.py')])
-        assert hits['deprecated'], 'planted split path into deprecated/ was not detected'
+        # the retained list must contain the kept file, or 'engine' itself reads as wholly
+        # evacuating and the scan is right to flag it — the same mixed-prefix subtlety the
+        # production fix was about.
+        hits = ep.joined_path_readers(['engine'],
+                                      [_os.path.join(rel, 'probe.py'), 'engine/substrate/keys.py'],
+                                      {'engine/params/core.md'})
+        assert not hits['engine'], \
+            'a path into a KEPT subtree was reported as a split-path breakage'
 
 
-def test_a_partly_evacuating_root_slices_to_its_evacuating_subtree(part):
-    """`engine/` is the first root that is only PARTLY evacuating, and it broke the reader scan.
+def test_a_partly_evacuating_root_slices_to_its_evacuating_subtree():
+    """A slice must never name a prefix containing a KEPT file.
 
-    The scan used to search kept files for the evacuating file's TOP-LEVEL directory. With
-    `engine/params/` flipped to evacuate (ED-IN-0139), the pattern `engine/` matches nearly every
-    kept file in the tree, so a 43-file slice would report hundreds of blocking readers that have
-    nothing to do with it. `slice_prefixes` must therefore hand back `engine/params`, never
-    `engine`.
+    `engine/` was the first root that only PARTLY evacuated, and it broke the reader scan: the
+    pattern `engine/` matched nearly every kept file. PLANTED now that the evacuate set is empty —
+    the invariant is about `slice_prefixes`, not about the live partition.
     """
-    prefixes = ep.slice_prefixes(part['buckets']['evacuate'],
-                                 part['buckets']['keep'] + part['buckets']['relocate'])
-    assert prefixes['engine'] == ['engine/params'], (
-        f"expected the engine slice to be exactly engine/params, got {prefixes['engine']}. "
-        "A slice that names a root containing kept code cannot produce a usable reader count.")
-    # and no slice may name a prefix that contains something we are keeping
-    retained = set(part['buckets']['keep'] + part['buckets']['relocate'])
-    for root, prefs in prefixes.items():
-        for p in prefs:
-            clashes = [r for r in retained if r == p or r.startswith(p + '/')]
-            assert not clashes, f'slice {p} contains kept file(s), e.g. {clashes[:2]}'
+    evac = ['a/gone/x.md', 'a/gone/y.md', 'b/mixed/gone.md']
+    retained = ['a/kept_sibling.md', 'b/mixed/kept.md', 'b/other.md']
+    prefixes = ep.slice_prefixes(evac, retained)
+    assert prefixes['a'] == ['a/gone'], f"expected the slice to be a/gone, got {prefixes['a']}"
+    assert prefixes['b'] == ['b/mixed/gone.md'], \
+        f"a prefix containing a kept file must not be a slice, got {prefixes['b']}"
+    for prefs in prefixes.values():
+        for pre in prefs:
+            assert not [r for r in retained if r == pre or r.startswith(pre + '/')], \
+                f'slice {pre} contains a kept file'
 
 
 def test_split_path_hits_require_a_WHOLLY_evacuating_target(part):
-    """`tests/sim` holds both evacuating stress prose and the KEPT canon mass-battle engine.
+    """`tests/sim` held both evacuating stress prose and the KEPT canon mass-battle engine.
 
     Testing "something under this path evacuates" reported all 30 kept readers of the canon engine
-    as split-path breakages — 30 false alarms on the single most load-bearing kept tree under an
-    evacuating root. Wholly-evacuating is the property that predicts an actual break.
+    as split-path breakages. Wholly-evacuating is the property that predicts an actual break.
+
+    THE EVACUATE SET IS NOW EMPTY (2026-08-05, ED-IN-0145) — the terminal state this whole tool was
+    built to reach. So the scan legitimately finds nothing, and asserting it finds SOMETHING would
+    be asserting the job is unfinished. What is still checkable, and what this now checks, is the
+    predicate itself against planted inputs: it must call a mixed prefix non-evacuating and a
+    wholly-evacuating one evacuating, whatever the live partition happens to be.
     """
     evac = set(part['buckets']['evacuate'])
     retained = part['buckets']['keep'] + part['buckets']['relocate']
+    if not evac:
+        # Planted, not live: the predicate must still discriminate.
+        planted = {'x/gone/a.md', 'x/gone/b.md', 'y/mixed/gone.md'}
+        pure = ep.pure_prefixes(sorted(planted), retained + ['y/mixed/kept.md'])
+        assert ep._is_evacuating_path('x/gone', pure, planted) is True
+        assert ep._is_evacuating_path('y/mixed', pure, planted) is False, \
+            'a prefix containing a KEPT file must not count as evacuating'
+        return
     pure = ep.pure_prefixes(sorted(evac), retained)
-    assert ep._is_evacuating_path('tests/sim', pure, evac) is False, \
-        'tests/sim contains the kept canon mass-battle engine and must not count as evacuating'
-    assert ep._is_evacuating_path('engine/params', pure, evac) is True
-    # `deprecated/skills` was wholly evacuating until the W3 rehearsal (ED-IN-0144) proved a
-    # BLOCKING CI gate transitively imports two files inside it (compliance_check -> github_ops
-    # -> index_bootstrap ...). It is now MIXED, and this assertion says so rather than being
-    # weakened: the property under test is that a mixed prefix does NOT count as evacuating.
-    assert ep._is_evacuating_path('deprecated/skills', pure, evac) is False, \
-        'deprecated/skills holds kept, import-load-bearing files — it is not wholly evacuating'
-    # anti-vacuity: a prefix that IS wholly evacuating must still be detected. Note how few
-    # qualify now -- deprecated/archives does not either, because the ED-universe files relocate
-    # out of it. Nearly every evacuating root has a kept island in it, which is the whole reason
-    # the slice unit is a computed pure prefix and not a directory name.
-    assert ep._is_evacuating_path('arcs', pure, evac) is True, \
-        'a genuinely wholly-evacuating prefix must still be detected'
-    # the concrete false alarm this removed
     jr = ep.joined_path_readers(sorted({e.split('/')[0] for e in evac}), retained, evac)
     flat = [h for lst in jr.values() for h in lst]
     assert not any('test_mass_battle_byte_exact' in h for h in flat), \
         'a kept reader of the kept canon MB engine is being reported as a split-path breakage'
-    assert flat, 'the split-path scan found nothing at all — the tightening went too far'
-
 
 def test_the_parity_oracle_is_not_evacuated():
     """Regression pin for the casualty that motivated the split-path scan.

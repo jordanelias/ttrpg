@@ -10,8 +10,8 @@ docs:
 - systems/mass_battle/military_layer_v30.md
 - systems/mass_battle/military_layer_v30_index.md
 counts:
+  UNRESOLVED: 65
   BUILT: 60
-  UNRESOLVED: 63
 identifiers:
   a_size:
     identifier: a_size
@@ -74,6 +74,15 @@ identifiers:
     docs:
     - systems/mass_battle/mass_battle_integration_v30.md
     purpose: '`tests/sim/battery_report_v22.md` — D-8 calibration analysis'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  battery_v22:
+    identifier: battery_v22
+    docs:
+    - systems/mass_battle/mass_battle_integration_v30.md
+    purpose: 'Validation gate: D-8 battery `tests/sim/battery_v22.py` must run within new band ranges (NOT v9 single-turn bands — see §3.2)'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -902,6 +911,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  sim_mb_06_v22:
+    identifier: sim_mb_06_v22
+    docs:
+    - systems/mass_battle/mass_battle_integration_v30.md
+    purpose: 'Scope: integration plan for porting the sim_mb_06_v22 mass-battle feature set into sim/provincial/massbattle.py and companion modules.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   stamina_check:
     identifier: stamina_check
     docs:
@@ -1199,7 +1217,6 @@ identifiers:
 dropped_as_not_a_mechanic:
   audit_sim_mb_06_v16: the doc spells it as <name>.md — a citation
   battery_report_v22: the doc spells it as <name>.md — a citation
-  battery_v22: matches a tracked/aliased document stem
   board_game: matches a tracked/aliased document stem
   calamity_radiation_v30: matches a tracked/aliased document stem
   canonical_sha: boilerplate-or-too-short
@@ -1237,7 +1254,6 @@ dropped_as_not_a_mechanic:
   scale_transitions_v30: matches a tracked/aliased document stem
   settlement_layer_v30: matches a tracked/aliased document stem
   sim_audit_v5_to_v22: the doc spells it as <name>.md — a citation
-  sim_mb_06_v22: matches a tracked/aliased document stem
   sim_mb_06_v9_historical_spec: the doc spells it as <name>.md — a citation
   stage5_clocks: the doc spells it as <name>.md — a citation
   tactic_cards: matches a tracked/aliased document stem

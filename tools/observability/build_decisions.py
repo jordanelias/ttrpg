@@ -92,22 +92,19 @@ SWEEP_DIRS = ["systems", "canon", "references", "engine", "godot"]
 # of individually-named audit folders ARE included below because a HANDOFF_<LANE>.md file
 # explicitly cites them as that lane's own audit trail (not a guess from the folder name).
 LANE_PATH_PREFIXES: list[tuple[str, str]] = [
+    # PRUNED 2026-08-05 (ED-IN-0145): 46 rows named audit units and engine/params docs that
+    # EVACUATED. A lane-map row matching nothing does not fail loudly — it silently leaves the
+    # lane unassigned, which is why the guard test counts them rather than trusting the list.
     # --- MB: mass battle ---
     ("systems/mass_battle/mass_battle_v30", "MB"),
     ("systems/mass_battle/mass_battle_integration_v30.md", "MB"),
     ("systems/mass_battle/military_layer_v30", "MB"),
     ("proposals/mass_battle_fighting_withdrawal_v1.md", "MB"),
     ("proposals/multiunit_envelopment_plan.md", "MB"),
-    ("engine/params/mass_combat.md", "MB"),
     ("systems/mass_battle/sim/massbattle.py", "MB"),
     ("systems/mass_battle/sim/units.py", "MB"),
     ("systems/mass_battle/sim/tactic_cards.py", "MB"),
     ("systems/mass_battle/sim/altonian_reinforcements.py", "MB"),
-    ("audit/2026-06-30-massbattle-bottomup/", "MB"),
-    ("audit/2026-06-01-massbattle-stub-wiring/", "MB"),
-    ("audit/2026-05-29-massbattle-sim-foundation/", "MB"),
-    ("audit/2026-05-15-mb-comparative-audit/", "MB"),
-    ("audit/2026-06-23-mb-fidelity-critique/", "MB"),
 
     # --- PC: personal combat ---
     ("systems/combat/combat_v30", "PC"),
@@ -121,38 +118,17 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     # spans-multiple-lanes -> null policy (caught in adversarial review of
     # Phase 4 / ED-IN-0032's audit-ecosystem plan).
     ("systems/combat/sim/combat.py", "PC"),
-    ("audit/2026-06-09-personal-combat-comprehensive/", "PC"),
-    ("audit/2026-06-13-combat-bottomup/", "PC"),
-    ("audit/2026-06-16-combat-reconciliation/", "PC"),
-    ("audit/2026-06-17-combat-decision-docket/", "PC"),
-    ("audit/2026-06-19-personal-combat-loose-ends/", "PC"),
-    ("audit/2026-06-22-combat-analysis/", "PC"),
-    ("audit/2026-06-28-combat-critique/", "PC"),
-    ("audit/2026-06-28-combat-critique-recovered.json", "PC"),
-    ("audit/2026-06-29-combat-corpus-recovery/", "PC"),
-    ("audit/2026-06-30-combat-grounding/", "PC"),
     ("audit/2026-07-04-weapon-morphology-granularity/", "PC"),
-    ("audit/2026-06-02-combat-engine/", "PC"),
-    ("audit/2026-05-28-combat-reframe/", "PC"),
-    ("audit/2026-05-29-combat-armature/", "PC"),
-    ("audit/2026-05-31-percell-combat/", "PC"),
 
     # --- SC: social contest ---
     ("systems/social_contest/social_contest_v30", "SC"),
     ("systems/social_contest/social_contest_system_v2", "SC"),
     ("systems/social_contest/sim/contest/", "SC"),
     ("systems/social_contest/sim/contest_legacy_stub.py", "SC"),
-    ("engine/params/contest.md", "SC"),
-    ("engine/params/contest_extensions.md", "SC"),
-    ("audit/2026-06-01-contest-redesign/", "SC"),
     ("audit/2026-06-03-contest-groundup/", "SC"),
-    ("audit/2026-06-30-contest-stage0-reconciliation/", "SC"),
-    ("audit/2026-06-30-contest-fractional-ob-probe/", "SC"),
-    ("audit/2026-06-30-contest-gate-1c-packet/", "SC"),
     ("audit/2026-07-01-contest-gate-a-packet/", "SC"),
     ("audit/2026-07-01-contest-gate-b-packet/", "SC"),
     ("audit/2026-07-01-contest-player-interaction/", "SC"),
-    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-2_SC", "SC"),
 
     # --- FI: field investigation ---
     ("systems/fieldwork/fieldwork", "FI"),
@@ -161,8 +137,6 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/fieldwork/sim/fieldwork.py", "FI"),
     ("systems/fieldwork/sim/investigation.py", "FI"),
     ("systems/fieldwork/sim/knots.py", "FI"),
-    ("engine/params/fieldwork.md", "FI"),
-    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-4_FI", "FI"),
 
     # --- FA: faction actions ---
     ("systems/factions/faction_", "FA"),
@@ -176,8 +150,6 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/factions/political_dynamics_keys_migration_v30.md", "FA"),
     ("systems/factions/treaty_expiration_v30.md", "FA"),
     ("systems/factions/varfell_path_b_v30", "FA"),
-    ("audit/2026-04-28-political-dynamics-session/", "FA"),
-    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-1_FA", "FA"),
     ("systems/factions/sim/faction_action.py", "FA"),
     ("systems/factions/sim/parliamentary_action.py", "FA"),
     ("systems/factions/sim/parliamentary_transfer.py", "FA"),
@@ -194,27 +166,13 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/factions/sim/varfell_territorial_acquisition.py", "FA"),
     ("systems/social_contest/sim/parliamentary_stay.py", "FA"),
     ("systems/social_contest/sim/parliamentary_vote.py", "FA"),
-    ("engine/params/bg/faction_actions.md", "FA"),
-    ("engine/params/bg/parliament.md", "FA"),
-    ("engine/params/bg/ministry.md", "FA"),
-    ("engine/params/bg/ci_seizure.md", "FA"),
-    ("engine/params/bg/royal_assassination.md", "FA"),
-    ("engine/params/bg/institutions.md", "FA"),
-    ("engine/params/bg/tensions_deck.md", "FA"),
-    ("engine/params/factions.md", "FA"),
-    ("engine/params/factions_personal.md", "FA"),
-    ("engine/params/factions/", "FA"),
 
     # --- WR: world ---
     ("systems/world/", "WR"),
     ("systems/threadwork/", "WR"),
     ("systems/world/miraculous_event_v30.md", "WR"),   # sim counterpart lives in sim/world/
-    ("engine/params/threadwork.md", "WR"),
-    ("engine/params/threadwork_superseded.md", "WR"),
-    ("engine/params/southernmost.md", "WR"),
     ("systems/world/sim/", "WR"),
     ("systems/threadwork/sim/", "WR"),
-    ("audit/2026-07-08-pessimist-action-audit/decision_packets/DP-3_WR", "WR"),
 
     # --- GO: godot ---
     ("godot/", "GO"),
@@ -232,7 +190,6 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/overview/peninsular_strain_v30", "SE"),
     ("systems/settlements/sim/", "SE"),
     ("systems/overview/sim/", "SE"),
-    ("engine/params/bg/geography.md", "SE"),
 
     # --- IN: infrastructure / cross-cutting ---
     ("canon/", "IN"),

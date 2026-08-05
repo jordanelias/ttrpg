@@ -17,7 +17,7 @@ docs:
 - systems/settlements/valoria_political_hierarchy_v30.md
 counts:
   BUILT: 15
-  UNRESOLVED: 99
+  UNRESOLVED: 101
 identifiers:
   actor_id:
     identifier: actor_id
@@ -320,6 +320,15 @@ identifiers:
     docs:
     - systems/settlements/generation_sourcebook_v1.md
     purpose: content** (filename/content mismatch) · **`faction_systems_overview` stale Legitimacy** (faction-level vs
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  fieldwork_lifecycle_stress_01:
+    identifier: fieldwork_lifecycle_stress_01
+    docs:
+    - systems/settlements/march_layer_v30.md
+    purpose: 'Cost: +1 Knot strain per observation (per F2 `fieldwork_lifecycle_stress_01 F-L06`).'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -893,6 +902,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  settlement_mgmt_stress_01:
+    identifier: settlement_mgmt_stress_01
+    docs:
+    - systems/settlements/generation_sourcebook_v1.md
+    purpose: '`settlement_mgmt_stress_01`** (403 tests, 13 modules, "STRUCTURALLY COMPLETE") — candidate downstream'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   sim_npc_as_player:
     identifier: sim_npc_as_player
     docs:
@@ -1124,7 +1142,6 @@ dropped_as_not_a_mechanic:
   faction_state_authoring_v30: matches a tracked/aliased document stem
   faction_succession_split_v30: matches a tracked/aliased document stem
   factions_ttrpg_v30: matches a tracked/aliased document stem
-  fieldwork_lifecycle_stress_01: matches a tracked/aliased document stem
   fieldwork_v30: the doc spells it as <name>.md — a citation
   fractional_province_ownership_v30: matches a tracked/aliased document stem
   franchise_v30: matches a tracked/aliased document stem
@@ -1163,7 +1180,6 @@ dropped_as_not_a_mechanic:
   settlement_adjacency_v30: the doc spells it as <name>.md — a citation
   settlement_generator_v1: the doc spells it as <name>.md — a citation
   settlement_layer_v30: matches a tracked/aliased document stem
-  settlement_mgmt_stress_01: matches a module or path component
   sim_harness: matches a module or path component
   social_contest_v30: matches a tracked/aliased document stem
   stats_1_7_scale: the doc spells it as <name>.md — a citation

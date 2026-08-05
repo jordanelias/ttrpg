@@ -93,5 +93,7 @@ def test_design_docs_can_carry_needs_jordan():
 def test_links_out_not_reranks():
     # detect-not-author: the register LINKS the human ranked queue, never re-ranks
     reg = _reg()
-    assert reg["ranked_view"].endswith("decision_queue_delta_v1.md")
+    # `ranked_view` REMOVED 2026-08-05 (ED-IN-0145): it linked at an evacuated audit doc, and a
+    # link nobody can follow is worse than no link. The surrounding assertions — that this register
+    # LINKS OUT rather than re-ranking — are the property and they still hold.
     assert "valoria_master_workplan_v6.md" in reg["workplan_tiers"]

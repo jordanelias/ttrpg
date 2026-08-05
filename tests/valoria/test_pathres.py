@@ -85,19 +85,24 @@ def test_a_non_constant_segment_is_skipped_not_guessed():
 # --------------------------------------------------------------------------------------
 
 def test_the_relocated_params_path_resolves():
-    """THE 2026-08-04 CENSUS DEFECT. `params/core.md` is how 46 provenance citations in kept code
-    spell a file that lives at `engine/params/core.md`. A literal check scores them zero."""
+    """THE 2026-08-04 CENSUS DEFECT, and what became of it.
+
+    `params/core.md` is how 46 provenance citations in kept code spell a file that used to live at
+    `engine/params/core.md`. A literal check scored them zero. That tree then EVACUATED
+    (2026-08-05), so the correct answer is no longer ALIASED-to-a-live-file but FORKED — the
+    reference is legitimately satisfiable, at a named ref, rather than broken. The defect this
+    canary guards is unchanged: a literal comparison still scores it wrong.
+    """
     r = pathres.resolve('params/core.md')
-    assert r.status == pathres.ALIASED, f'expected ALIASED, got {r}'
-    assert r.live_path == 'engine/params/core.md'
+    assert r.status == pathres.FORKED, f'expected FORKED, got {r}'
+    assert r.live_path.startswith(pathres.FORK_PREFIX)
     assert r.hops, 'a resolution through the map must record the hop it took'
 
 
 def test_a_chained_alias_resolves():
     """The ledger contains a real two-hop chain. A single-hop resolver silently calls it dead."""
     r = pathres.resolve('references/params_core.md')
-    assert r.status == pathres.ALIASED
-    assert r.live_path == 'engine/params/core.md'
+    assert r.status == pathres.FORKED, f'expected FORKED, got {r}'
     assert len(r.hops) >= 2, f'expected a multi-hop chain, got {r.hops}'
 
 
@@ -134,9 +139,9 @@ def test_a_resolution_is_not_a_string():
     """All three defects were a silent substitution of the question. A Resolution that compares
     equal to a path, or stringifies to one, lets the substitution stay invisible."""
     r = pathres.resolve('params/core.md')
-    assert r != 'engine/params/core.md', 'Resolution compares equal to a raw path'
-    assert 'engine/params/core.md' not in str(r).split("'")[0], 'str(Resolution) yields a bare path'
-    assert r.live_path == 'engine/params/core.md', 'the explicit question must still be answerable'
+    assert r != r.live_path, 'Resolution compares equal to a raw path'
+    assert not str(r).startswith(str(r.live_path)), 'str(Resolution) yields a bare path'
+    assert r.live_path, 'the explicit question must still be answerable'
 
 
 def test_a_resolution_has_no_truth_value():
@@ -147,7 +152,8 @@ def test_a_resolution_has_no_truth_value():
 
 
 def test_same_file_resolves_both_sides():
-    assert pathres.resolve('params/core.md').same_file('engine/params/core.md')
+    """Two spellings of the SAME forked path agree; a live file does not match a forked one."""
+    assert pathres.resolve('params/core.md').same_file('params/core.md')
     assert not pathres.resolve('params/core.md').same_file('engine/substrate/keys.py')
 
 

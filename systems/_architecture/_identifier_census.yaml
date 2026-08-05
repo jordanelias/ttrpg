@@ -45,7 +45,7 @@ docs:
 - systems/_architecture/videogame_mode_spec_index.md
 counts:
   BUILT: 160
-  UNRESOLVED: 381
+  UNRESOLVED: 390
 identifiers:
   abstract_resolve:
     identifier: abstract_resolve
@@ -1935,6 +1935,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  export_params_constants:
+    identifier: export_params_constants
+    docs:
+    - systems/_architecture/repository_keep_set_v1.md
+    purpose: 'on capture, not on trust: `tools/export_params_constants.py` writes'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   exposure_witnesses:
     identifier: exposure_witnesses
     docs:
@@ -2825,6 +2834,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  m2_ci_political_revision:
+    identifier: m2_ci_political_revision
+    docs:
+    - systems/_architecture/key_type_registry_v30.md
+    purpose: homes; the retired tests/sim/v17-integration/m2_ci_political_revision*.py pair predates the
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   m_ratings:
     identifier: m_ratings
     docs:
@@ -3524,6 +3542,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  pp687_sim_output:
+    identifier: pp687_sim_output
+    docs:
+    - systems/_architecture/key_substrate_v30.md
+    purpose: 'From `designs/audit/2026-04-30-architecture-session/sims/pp687_sim_output.txt`:'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   pp_329_echo_per_scene_per_faction:
     identifier: PP_329_ECHO_PER_SCENE_PER_FACTION
     docs:
@@ -4402,6 +4429,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  settlement_mgmt_stress_01:
+    identifier: settlement_mgmt_stress_01
+    docs:
+    - systems/_architecture/governance_consolidation_v1.md
+    - systems/_architecture/ners_vsg_reconciliation_v1.md
+    purpose: the **reconciliation** against `goldenfurt_slice`, the **built `sim/territory/` code**, the **500-seed `settlement_mgmt_stress_01`** framework, and the **2026-06-22 baseline audit** + march/hierarchy layer.
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   settlement_revolt:
     identifier: settlement_revolt
     docs:
@@ -4458,6 +4495,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  sim_framework:
+    identifier: sim_framework
+    docs:
+    - systems/_architecture/repository_keep_set_v1.md
+    purpose: '[4. The keep-set (measured 2026-08-04)] Evacuate | Size | Basis :: `tests/sim/` (rest), `tests/stress/`, `tests/sim_framework/` | ~13M, 332 md | prose with neither code pair nor spec role'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   slate_priority:
     identifier: slate_priority
     docs:
@@ -4722,6 +4768,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  subsystem_nexus_artifact:
+    identifier: subsystem_nexus_artifact
+    docs:
+    - systems/_architecture/key_type_registry_v30.md
+    purpose: '(subsystem_nexus_artifact.html: ''GAP-E1 zero-Key INERT — key the Church card-game'' /'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   succession_mode:
     identifier: succession_mode
     docs:
@@ -4975,6 +5030,15 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  test_params_dump:
+    identifier: test_params_dump
+    docs:
+    - systems/_architecture/repository_keep_set_v1.md
+    purpose: '`tests/valoria/test_params_dump.py`, with a positive control.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   theocracy_unification_declared:
     identifier: theocracy_unification_declared
     docs:
@@ -5161,6 +5225,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  valoria_how_to_play:
+    identifier: valoria_how_to_play
+    docs:
+    - systems/_architecture/integration_proposal_v30.md
+    purpose: valoria_how_to_play** is the most important document in the set for videogame design purposes, because it is the only document written from the player's perspective.
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   valoria_investigation_systems_proposal:
     identifier: valoria_investigation_systems_proposal
     docs:
@@ -5197,6 +5270,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  valoria_sim:
+    identifier: valoria_sim
+    docs:
+    - systems/_architecture/canonical_registry.md
+    purpose: '[SIMULATION CALIBRATION DATA] System | Finding | Source :: Campaign outcomes | Church 53%, Crown Treaty 14%, Timeout 32% | valoria_sim v4'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   victory_milestone:
     identifier: victory_milestone
     docs:
@@ -5420,7 +5502,6 @@ dropped_as_not_a_mechanic:
   engine_params: matches a tracked/aliased document stem
   evacuation_plan: matches a tracked/aliased document stem
   export_engine_params: matches a tracked/aliased document stem
-  export_params_constants: matches a tracked/aliased document stem
   faction_action: matches a tracked/aliased document stem
   faction_actions: the doc spells it as <name>.md — a citation
   faction_behavior_v30: the doc spells it as <name>.md — a citation
@@ -5462,7 +5543,6 @@ dropped_as_not_a_mechanic:
   key_type_registry_v30: the doc spells it as <name>.md — a citation
   key_types: matches a tracked/aliased document stem
   knots_v30: matches a tracked/aliased document stem
-  m2_ci_political_revision: matches a tracked/aliased document stem
   mass_battle: matches a module or path component
   mass_battle_fighting_withdrawal_v1: the doc spells it as <name>.md — a citation
   mass_battle_formations: matches a module or path component
@@ -5505,7 +5585,6 @@ dropped_as_not_a_mechanic:
   pessimist_ners_audit_v1: the doc spells it as <name>.md — a citation
   player_agency_v30: matches a tracked/aliased document stem
   political_dynamics_keys_migration_v30: matches a tracked/aliased document stem
-  pp687_sim_output: matches a tracked/aliased document stem
   pr119_bind_the_cells: matches a tracked/aliased document stem
   pr119_clerk_capacity: matches a tracked/aliased document stem
   pr119_event_deck_engine: matches a tracked/aliased document stem
@@ -5539,9 +5618,7 @@ dropped_as_not_a_mechanic:
   session_status: matches a tracked/aliased document stem
   settlement_generator_v1: the doc spells it as <name>.md — a citation
   settlement_layer_v30: the doc spells it as <name>.md — a citation
-  settlement_mgmt_stress_01: matches a module or path component
   sigma_leverage: matches a tracked/aliased document stem
-  sim_framework: matches a module or path component
   sim_harness: matches a module or path component
   sim_params: matches a tracked/aliased document stem
   social_contest: matches a module or path component
@@ -5551,7 +5628,6 @@ dropped_as_not_a_mechanic:
   stage12_campaign_modes_deprecated: the doc spells it as <name>.md — a citation
   state_transfer_spec: the doc spells it as <name>.md — a citation
   stub_infill_plan: the doc spells it as <name>.md — a citation
-  subsystem_nexus_artifact: matches a tracked/aliased document stem
   supersession_register: matches a tracked/aliased document stem
   synonym_registry: matches a tracked/aliased document stem
   tc_political_redesign_v30: matches a tracked/aliased document stem
@@ -5563,7 +5639,6 @@ dropped_as_not_a_mechanic:
   test_key_graph: matches a tracked/aliased document stem
   test_key_substrate: matches a tracked/aliased document stem
   test_morale_write_sweep: matches a tracked/aliased document stem
-  test_params_dump: matches a tracked/aliased document stem
   test_public_governance_transfer_key: matches a tracked/aliased document stem
   threadwork_v30: the doc spells it as <name>.md — a citation
   throughline_resolutions_v1: matches a tracked/aliased document stem
@@ -5578,9 +5653,7 @@ dropped_as_not_a_mechanic:
   valoria_dice: matches a tracked/aliased document stem
   valoria_fork_plan_of_record_v1: the doc spells it as <name>.md — a citation
   valoria_geography_v30: matches a tracked/aliased document stem
-  valoria_how_to_play: matches a tracked/aliased document stem
   valoria_political_hierarchy_v30: the doc spells it as <name>.md — a citation
-  valoria_sim: matches a tracked/aliased document stem
   valoria_ttrpg_complete: the doc spells it as <name>.md — a citation
   values_master: matches a tracked/aliased document stem
   victory_v30: the doc spells it as <name>.md — a citation

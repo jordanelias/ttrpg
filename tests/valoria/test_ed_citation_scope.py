@@ -54,11 +54,6 @@ def test_the_subsystem_corpus_is_actually_scanned(ved):
         f"corpus, so the gate is passing over it")
 
 
-def test_engine_params_is_scanned(ved):
-    docs = ved.select_docs()
-    assert any(p.startswith('engine/params/') for p in docs), \
-        "engine/params/ is declared in SCAN_PREFIXES but produces nothing"
-
 
 def test_scope_is_derived_from_the_declared_prefixes_not_a_second_list(ved):
     """Every scanned doc must sit under a declared prefix. A path outside them means a second,
