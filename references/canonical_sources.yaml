@@ -39,13 +39,6 @@ sources:
     canonized: "2026-05-17"
     canonized_pass: "Pass 2 follow-up"
 
-  v18_integration_plan:
-    design_doc: audit/2026-05-17-v18-integration/integration_plan_v18.md
-    canonical_sha__audit__2026-05-17-v18-integration__integration_plan_v18_md: "0696479924f7fbf4f786ad4a43efeb0e673beb12"
-    canonized: "2026-05-17"
-    canonized_pass: "Pass 2m"
-    declares_pass_2_content_complete: true
-
   insurgency_pipeline_v30:
     design_doc: systems/world/insurgency_pipeline_v30.md
     canonical_sha__systems__world__insurgency_pipeline_v30_md: "04f91ee43a8041dd692661c2595c6d132f8528ac"
@@ -98,12 +91,6 @@ systems:
   core_engine:
     design_doc: systems/_architecture/complete_systems_reference.md
     canonical_sha__systems___architecture__complete_systems_reference_md: "8e5c96b05c0f87f54077e10cd2c8bf64ca13665e"
-    params: engine/params/core.md
-    canonical_sha__engine__params__core_md: "01db5583fc6bd0ded0d5594c21ea865711babd86"
-    canonical_sha__params__core_md: "1b58325bc4949d76af1f5b755298604e7d496734"
-    bg_params: engine/params/bg/core.md
-    canonical_sha__engine__params__bg__core_md: "4f98d87a741445c44441dfc45278a48abff6306f"
-    canonical_sha__params__bg__core_md: "4f98d87a741445c44441dfc45278a48abff6306f"
   combat:
     design_doc: systems/combat/combat_v30.md
     canonical_sha__systems__combat__combat_v30_md: "f625519a6acdfa0df3855f7a745440b2f83d5429"
@@ -117,32 +104,13 @@ systems:
   threadwork:
     design_doc: systems/threadwork/threadwork_v30.md
     canonical_sha__systems__threadwork__threadwork_v30_md: "75d1f3f96e7068091accdb1ccf2a4014e02b2f52"
-    params: engine/params/threadwork.md
-    canonical_sha__engine__params__threadwork_md: "49c243108975a5a2f1d739d6a752dc6ab8364c64"
-    canonical_sha__params__threadwork_md: "49c243108975a5a2f1d739d6a752dc6ab8364c64"
-  clocks:
-    design_doc: engine/params/bg/clocks.md
-    canonical_sha__engine__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
-    canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
-    params: engine/params/bg/clocks.md
-    canonical_sha__engine__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
-    canonical_sha__params__bg__clocks_md: "9b1139f13c176847480f2bf44b08e42bdcac540a"
   factions:
     design_doc: systems/factions/factions_personal_v30.md
     canonical_sha__systems__factions__factions_personal_v30_md: "1d7d217a3d722e974817188144392733ff86605a"
     canonical_sha__designs__provincial__factions_personal_v30_md: "1d7d217a3d722e974817188144392733ff86605a"
-    params: engine/params/factions.md
-    canonical_sha__engine__params__factions_md: "05593acfaadf6713bfc839b339563c75ff8e564f"
-    canonical_sha__params__factions_md: "05593acfaadf6713bfc839b339563c75ff8e564f"
-    stats: engine/params/factions/stats_1_7_scale.md
-    canonical_sha__engine__params__factions__stats_1_7_scale_md: "836eaf92d7dae92a2d015c82a711069904c4b9d3"
-    canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
   victory:
     design_doc: systems/victory/victory_v30.md
     canonical_sha__systems__victory__victory_v30_md: "dd4f89da9af220dc6ed7c2bbc8137a333ddfe090"
-    params: engine/params/bg/victory.md
-    canonical_sha__engine__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
-    canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: systems/settlements/settlement_layer_v30.md
     canonical_sha__systems__settlements__settlement_layer_v30_md: "099d96c2e6f5b2941f412d927778a51743eac967"
@@ -172,9 +140,6 @@ systems:
     canonical_sha__systems__mass_battle__mass_battle_v30_index_md: "b3575f49657900a1ee49b4707725857c90ad12fd"
     mass_battle_infill: systems/mass_battle/mass_battle_v30_infill.md
     canonical_sha__systems__mass_battle__mass_battle_v30_infill_md: "561bb6efe38c3413bb7e22792f1fc63d5bd1e96c"
-    params: engine/params/mass_combat.md
-    canonical_sha__engine__params__mass_combat_md: "445206bf52b7ea8a1dc235ec79743a245f48862d"
-    canonical_sha__params__mass_combat_md: "445206bf52b7ea8a1dc235ec79743a245f48862d"
   # social_debate SHA-pins current as of 2026-07-01 (Contest Stage 2 / Gate B closeout).
   # Detailed per-round rationale lives in the ED chain, not here (ED-1055/1056 Gate A CR1/CR2/CR3
   # fold-in; ED-1057 Panel aggregation=weighted-by-standing; ED-1058 Stage-2 dictionaries;
@@ -185,25 +150,9 @@ systems:
   # produces on an LF/CI checkout. NOT raw-CRLF-disk-byte SHAs. social_contest_v30_index.md is
   # REGENERATED (doc_index_gen.py) from the design doc, not hand-edited — re-run the generator
   # after any structural edit to the design doc, then re-pin both.
-  social_debate:
-    design_doc: engine/params/contest.md
-    canonical_sha__engine__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
-    canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
-    social_contest_design: systems/social_contest/social_contest_v30.md
-    canonical_sha__systems__social_contest__social_contest_v30_md: "1f142648857d1a41b324828d3b3ebe563d67039e"
-    social_contest_index: systems/social_contest/social_contest_v30_index.md
-    canonical_sha__systems__social_contest__social_contest_v30_index_md: "5f2c182f8603b422b15f74b870f6c6b51366dd34"
-    social_contest_infill: systems/social_contest/social_contest_v30_infill.md
-    canonical_sha__systems__social_contest__social_contest_v30_infill_md: "b7f7c69e2d761203a823ca32ba62b891588bacc4"
-    params: engine/params/contest.md
-    canonical_sha__engine__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
-    canonical_sha__params__contest_md: "b79ba97d3b6df83b95e581b44f7f23465be87da8"
   scale_transitions:
     design_doc: systems/_architecture/scale_transitions_v30.md
     canonical_sha__systems___architecture__scale_transitions_v30_md: "c5a3d35697c1e5c2622c6720e232536c6fb4af18"
-    params: engine/params/scale_transitions.md
-    canonical_sha__engine__params__scale_transitions_md: "4d24fc8fe33ea8a9307d9cf639884580f8aa0773"
-    canonical_sha__params__scale_transitions_md: "4d24fc8fe33ea8a9307d9cf639884580f8aa0773"
   faction_layer:
     design_doc: systems/factions/faction_layer_v30.md
     canonical_sha__systems__factions__faction_layer_v30_md: "2b24f59e0bc464e48e909606263b7b599bcca883"
@@ -235,9 +184,6 @@ systems:
   derived_stats:
     design_doc: systems/_architecture/derived_stats_v30.md
     canonical_sha__systems___architecture__derived_stats_v30_md: "5ebff478516c320e58e46b89de9d50578c649b7d"
-    supplemental: engine/params/factions/stats_1_7_scale.md
-    canonical_sha__engine__params__factions__stats_1_7_scale_md: "836eaf92d7dae92a2d015c82a711069904c4b9d3"
-    canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
@@ -246,25 +192,12 @@ systems:
     conviction_track_index: systems/characters/conviction_track_v30_index.md
     canonical_sha__systems__characters__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by systems/characters/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
-    params: engine/params/factions/npc_stance_triangles.md
-    canonical_sha__engine__params__factions__npc_stance_triangles_md: "2c3761dd04677273004e72538fc7a00a21b2d0fc"
-    canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
     related: systems/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
     canonical_sha__systems__npcs__npc_behavior_v30_md: "d3fcb3b4c9c21fce33e6883ebfb03c8a92eef4b1"
   faction_succession_split:
     design_doc: systems/factions/faction_succession_split_v30.md
     canonical_sha__systems__factions__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
-  royal_assassination_fuse:
-    design_doc: engine/params/bg/royal_assassination.md
-    canonical_sha__engine__params__bg__royal_assassination_md: "0388ed54ad203d5a5c3632b00c9e4fc8e0400432"
-    canonical_sha__params__bg__royal_assassination_md: "0388ed54ad203d5a5c3632b00c9e4fc8e0400432"
-    source: conflict_architecture_proposal.md
-  tensions_deck:
-    design_doc: engine/params/bg/tensions_deck.md
-    canonical_sha__engine__params__bg__tensions_deck_md: "c3e77304addce12c41507800bf0c058ea8667d74"
-    canonical_sha__params__bg__tensions_deck_md: "c3e77304addce12c41507800bf0c058ea8667d74"
-    source: conflict_architecture_proposal.md
   conflict_architecture:
     design_doc: systems/_architecture/conflict_architecture_proposal.md
     canonical_sha__systems___architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
@@ -427,13 +360,6 @@ systems:
     status: provisional
 
   # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
-  arc_expansion:
-    design_doc: arcs/arc_expansion_v30.md
-    canonical_sha__arcs__arc_expansion_v30_md: "3dfd7fc84370d03935130fece0f3b46b002f6671"
-    canonical_sha__designs__arcs__arc_expansion_v30_md: "0f3fb011914a0d0908ee0118cab64df16a134dc3"
-    index: arcs/arc_expansion_v30_index.md
-    canonical_sha__arcs__arc_expansion_v30_index_md: "3ebbeb24138c195e87292f035302dd1501e4a477"
-    canonical_sha__designs__arcs__arc_expansion_v30_index_md: "5f2e99014ee3e06e1e9da6b337f5a9ffdd8e4fd6"
   calamity_radiation:
     design_doc: systems/world/calamity_radiation_v30.md
     canonical_sha__systems__world__calamity_radiation_v30_md: "4e931058375aed6a92cf879dcdde0c1fd88f3fa3"
@@ -517,13 +443,6 @@ systems:
     canonical_sha__systems__threadwork__thread_horizontal_integration_spec_md: "c76f0211d27cc6d0a034d1eeea252c0341b2b9ab"
     index: systems/threadwork/thread_horizontal_integration_spec_index.md
     canonical_sha__systems__threadwork__thread_horizontal_integration_spec_index_md: "e560fff9c339f20732fe95809c80a5878ce997cc"
-  throughline_resolutions:
-    design_doc: arcs/throughline_resolutions_v30.md
-    canonical_sha__arcs__throughline_resolutions_v30_md: "5aa4ea143cd4d9cec19da2991eec0eb61f3d636b"
-    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "5aa4ea143cd4d9cec19da2991eec0eb61f3d636b"
-    index: arcs/throughline_resolutions_v30_index.md
-    canonical_sha__arcs__throughline_resolutions_v30_index_md: "f0fd23ef129d6f66d08f20c64543374a9950fed5"
-    canonical_sha__designs__arcs__throughline_resolutions_v30_index_md: "2c9ca8c1c2414173a6440fcaa13b8ae79a2c9f07"
   ui_ux:
     design_doc: systems/ui/valoria_ui_ux_v4.md
     canonical_sha__systems__ui__valoria_ui_ux_v4_md: "499468046e9207d25e2391fde9472d22622dc65d"

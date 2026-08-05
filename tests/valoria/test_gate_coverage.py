@@ -122,9 +122,6 @@ EXPECTED_COMMANDS = {
     ('tools/currency_consistency_check.py', ''),
     ('tools/export_engine_params.py', '--check'),
     ('tools/export_key_types.py', '--check'),      # ED-IN-0136: key registry md -> typed JSON round-trip
-    # ED-IN-0139: params prose -> YAML capture. MIGRATION-WINDOW gate — remove this row in the same
-    # commit that deletes engine/params/ (evacuation_plan R-PARAMS-DUMPED).
-    ('tools/export_params_constants.py', '--check'),
     ('tools/build_test_register.py', '--check'),   # ED-IN-0142: drift gate, now able to fail
     ('tools/freshness_gate.py', ''),
     ('tools/mechanics_index_gen.py', '--strict'),

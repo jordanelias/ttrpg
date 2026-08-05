@@ -303,13 +303,6 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
 
-  - path: tools/export_params_constants.py
-    level: 5
-    role: "Prose -> YAML capture: engine/engine_params/params_tables.yaml must match a fresh dump of engine/params/**/*.md (--check mode). Captures every file BYTE-IDENTICALLY plus a structured table view."
-    paired_hook: ""
-    ci_job: validators
-    notes: "BLOCKING, and deliberately TEMPORARY — a MIGRATION-WINDOW gate (ED-IN-0139). engine/params/ is classified EVACUATE (evacuation_plan R-PARAMS-DUMPED, Jordan 2026-08-04: 'params .md are largely useless at this point and I want them gone'); this gate stops the capture drifting from the prose while both still exist. It re-derives from that tree, so it CANNOT survive it: retire this entry, the valoria-ci.yml line, the valoria_local.py row and the test_gate_coverage.EXPECTED_COMMANDS row in the SAME commit that deletes engine/params/. No vacuous-pass path exists on an absent source, so forgetting turns CI loudly red rather than quietly green. Falsifier: tests/valoria/test_params_dump.py::test_the_losslessness_guard_can_fail. Also runs locally via valoria_local.py --staged (blocking)."
-
   - path: tools/build_test_register.py
     level: 5
     role: "Test-register drift gate: references/test_register.json must match a fresh AST scan of tests/valoria/ (--check mode)."

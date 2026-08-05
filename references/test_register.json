@@ -5202,7 +5202,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 37
+     "size": 36
     }
    ],
    "cites_measurement": false,
@@ -5220,7 +5220,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 245,
+   "loc": 242,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -5253,7 +5253,6 @@
     "tools/currency_consistency_check.py",
     "tools/export_engine_params.py",
     "tools/export_key_types.py",
-    "tools/export_params_constants.py",
     "tools/freshness_gate.py",
     "tools/mechanics_index_gen.py",
     "tools/patch_propagation_checker.py",
@@ -10427,7 +10426,7 @@
    "lanes": [
     "SC"
    ],
-   "loc": 466,
+   "loc": 473,
    "modules_under_test": [
     "engine/params/contest.md",
     "tools"
