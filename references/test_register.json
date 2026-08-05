@@ -4735,6 +4735,56 @@
     }
    }
   },
+  "test_forked_status.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The control for the FORKED terminal status (ED-IN-0145).",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 92,
+   "modules_under_test": [
+    "systems/_architecture/derived_stats_v30.md",
+    "systems/no_such_subsystem/no_such_doc.md",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_a_forked_target_is_recognised": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_a_live_path_is_not_forked": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The discriminator must not fire on ordinary alias rows, or every relocation becomes a"
+    },
+    "test_a_reference_with_NO_row_still_resolves_to_nothing": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE ANTI-FABRICATION CONTROL, and the reason this file exists."
+    },
+    "test_the_evacuated_content_is_actually_at_the_ref": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The promise a FORK row makes is 'the content is at this ref'. Verify it, rather than"
+    },
+    "test_the_fork_rows_name_a_real_ref": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A FORK row whose ref does not exist is a tombstone pointing at nothing \u2014 worse than DEAD,"
+    }
+   }
+  },
   "test_formula_audit.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10853,7 +10903,7 @@
    "FA": 3,
    "FI": 1,
    "GO": 2,
-   "IN": 32,
+   "IN": 33,
    "MB": 3,
    "PC": 6,
    "SC": 3,
@@ -10976,16 +11026,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 143,
+  "files": 144,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 102,
+  "files_naming_a_module": 103,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 35,
+  "files_with_a_lane": 36,
   "helper_defs": 264,
   "helper_loc": 2328,
   "ratchet_baselines": 9,
-  "tests": 1272,
+  "tests": 1277,
   "undocumented_files": 0
  }
 }

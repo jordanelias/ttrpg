@@ -222,10 +222,40 @@ def check_current_stamp(drift):
             drift.append(f"CURRENT.md stamp {stamp} predates head {path} (last commit {last}) — re-reconcile")
 
 
+# A TOMBSTONE IS NOT A HEAD CLAIM (2026-08-05, the evacuation).
+# CURRENT.md's job is to name the LIVE canonical head per subsystem, and this check exists to stop
+# it naming something that does not exist. But after the evacuation, the honest CURRENT.md row for
+# an evacuated subsystem NAMES the old path in order to say it is gone and where the capture is —
+# "⚠️ EVACUATED 2026-08-05 → captured in engine/engine_params/params_tables.yaml (fork ref …)".
+# The checker cannot distinguish "this is the head" from "this is where the head used to be", so it
+# read four tombstones as four drift items.
+#
+# The discriminator is deliberately a LINE-LOCAL marker, not a global allowlist: the exemption
+# applies only on a line that says the path is gone, so a genuinely stale head reference elsewhere
+# in the file still fails. This is the small half of the FORKED-status mechanism that
+# broken_dependency_checker needs for ledger evidence; the same idea, one file, no new format.
+_TOMBSTONE = re.compile(r'EVACUATED|FORKED|fork ref', re.I)
+
+
+def _tombstoned_paths(text):
+    """Paths named on a line that declares them evacuated — mentioned, not claimed as live."""
+    out = set()
+    for line in text.splitlines():
+        if not _TOMBSTONE.search(line):
+            continue
+        out.update(re.findall(
+            r'`((?:designs|systems|engine|params|references|canon|sim|tools|tests|skills)/[^`\s]*)`',
+            line))
+    return out
+
+
 def check_current_paths_exist(drift):
     text = _read('CURRENT.md') or ''
     all_files = _bdc.get_all_repo_files()
+    tombstoned = _tombstoned_paths(text)
     for path in _current_md_paths(text):
+        if path in tombstoned:
+            continue
         p = path.rstrip('/')
         if p in all_files:
             continue
