@@ -637,7 +637,7 @@ calibrate before canon (CLAUDE.md §5/§7).
 
 ### §3.3b Patron-backed privilege lapse — the Za model (NEW — ED-SE-0021, 2026-07-09)
 
-**Status: PROPOSED.** Extends the §3.3a Charter machinery (does not replace it) with a **patron**
+**Status: RATIFIED (ED-SE-0021, 2026-07-13; consolidated per ED-IN-0046).** Extends the §3.3a Charter machinery (does not replace it) with a **patron**
 field, giving a Charter a second, independent failure mode beyond Quo Warranto. Provenance:
 `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md`
 §Step 3 SE-JP3.

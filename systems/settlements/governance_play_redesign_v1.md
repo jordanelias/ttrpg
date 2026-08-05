@@ -94,7 +94,7 @@ Plus the always-available **Petition / Defy** response to the Directive (§1.4),
 
 ### §1.3c Ordenanza Ratification — guild self-regulation vs. civic check
 
-**Status: PROPOSED (NEW — ED-SE-0023, 2026-07-09).** A new resolution branch under the `Hold Court` verb (§1.3). Cross-references `faction_politics_v30` §2.5 Guild Ladder (Guild Master obligations). Provenance: same docket, §Step 3 HAB-7.
+**Status: RATIFIED (ED-SE-0023, 2026-07-13; consolidated per ED-IN-0046).** A new resolution branch under the `Hold Court` verb (§1.3). Cross-references `faction_politics_v30` §2.5 Guild Ladder (Guild Master obligations). Provenance: same docket, §Step 3 HAB-7.
 
 **Grounding.** Spanish *gremios* (craft guilds): guild-authored *ordenanzas* — entry standards, price floors, output quotas, quality rules — required municipal or royal sanction to be enforceable, with continuing municipal inspection to check the guild's own self-interest (Encyclopedia.com, "Guilds (Gremios)"; Academia.edu, "Guild Authorities in Late Medieval Spain").
 

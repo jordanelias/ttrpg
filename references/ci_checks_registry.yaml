@@ -91,13 +91,6 @@ ci_checks:
     ci_job: validators    # collapsed 2026-08-01: was its own `integrity` job
     notes: ""
 
-  - path: tools/patch_propagation_checker.py
-    level: 5
-    role: "Patches in patch_register are reflected in target params file headers."
-    paired_hook: ""
-    ci_job: validators
-    notes: ""
-
   - path: tools/freshness_gate.py
     level: 5
     role: "engine/params/canonical SHA drift detection — compares live HEAD SHA of canonical doc against recorded SHA in canonical_sources.yaml."

@@ -119,7 +119,14 @@ class Resolution:
 
 
 # --------------------------------------------------------------------------------------------
-# The alias map — SOLE PARSER of references/restructure_ledger.md
+# The alias map — INTENDED sole parser of references/restructure_ledger.md, not yet the actual
+# one. Four independent parsers still exist and have not been migrated onto this module:
+# tools/broken_dependency_checker.py (_load_restructure_map / _resolve_remap, single-hop),
+# tools/ci_claude_workflow_paths.py (chained, existence-checked, glob-aware — the parser this
+# module was extracted from), and skills/valoria-vector-audit/scripts/vector_audit.py +
+# skills/valoria-vector-audit/scripts/workbench.py (each re-parsing the table locally). Until
+# those four are ported to call resolve()/load_alias_map() here, "sole parser" is aspirational —
+# see the module docstring's "WHY AN OWNER RATHER THAN A FOURTH FIX" for why that count matters.
 # --------------------------------------------------------------------------------------------
 _MAP_CACHE: dict = {}
 
