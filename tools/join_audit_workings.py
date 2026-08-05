@@ -75,18 +75,26 @@ def unit_root(unit: str) -> str:
     return os.path.join(REPO, unit)
 
 
-def fragments(unit: str) -> list[str]:
-    """Nested `.md` of the unit — everything below the unit's top level. Sorted, repo-relative.
+def fragments(unit: str, include_top: bool = False) -> list[str]:
+    """`.md` of the unit to join. Sorted, repo-relative.
 
-    The unit's TOP-LEVEL files are the findings and stay as they are; only the nested tier joins.
-    That boundary is the one the corpus already draws, and it means a reader still finds the
-    unit's conclusions where they expect them.
+    DEFAULT — nested only. The unit's TOP-LEVEL files are the findings and stay where a reader
+    expects them; only the working tier joins. That boundary is the one the corpus already draws.
+
+    `include_top` — EVERY `.md`, top level included. Jordan, 2026-08-04, on the contest gate
+    packets: *"contest gate packets like social contest or whatever get joined if multiple mds and
+    retained"*. Those units are small multi-document packets with no nested tier at all, so the
+    default mode finds nothing to join. Retained either way; this only reduces the file count.
+
+    Non-markdown files are NEVER touched, in either mode. Jordan, same day: *"keep them if their
+    accompanying audit directories are being kept in main"* — a kept unit keeps its JSON.
     """
     root = unit_root(unit)
     out = []
     for dirpath, _dirnames, filenames in os.walk(root):
-        if os.path.abspath(dirpath) == os.path.abspath(root):
-            continue                      # top level: the findings, left alone
+        at_top = os.path.abspath(dirpath) == os.path.abspath(root)
+        if at_top and not include_top:
+            continue
         for name in filenames:
             if name.endswith('.md') and name != JOINED_NAME:
                 out.append(os.path.relpath(os.path.join(dirpath, name), REPO).replace(os.sep, '/'))
@@ -100,8 +108,8 @@ def _read(rel: str) -> str:
         return fh.read().decode('utf-8')
 
 
-def join(unit: str) -> tuple[str, list[str]]:
-    frags = fragments(unit)
+def join(unit: str, include_top: bool = False) -> tuple[str, list[str]]:
+    frags = fragments(unit, include_top)
     parts = [HEADER.format(unit=unit, count=len(frags))]
     for rel in frags:
         parts.append(BEGIN.format(path=rel) + '\n')
@@ -127,7 +135,7 @@ def split(text: str) -> dict[str, str]:
         pos = body_end + len(end_marker)
 
 
-def verify(unit: str, against_sources: bool = True) -> list[str]:
+def verify(unit: str, against_sources: bool = True, include_top: bool = False) -> list[str]:
     """Round-trip the joined file. Returns a list of problems; empty means it is reversible."""
     joined_path = os.path.join(unit_root(unit), JOINED_NAME)
     if not os.path.exists(joined_path):
@@ -138,7 +146,7 @@ def verify(unit: str, against_sources: bool = True) -> list[str]:
         return [f'{unit}: {JOINED_NAME} contains no recoverable fragment — the join is inert']
     problems = []
     if against_sources:
-        srcs = fragments(unit)
+        srcs = fragments(unit, include_top)
         for rel in srcs:
             if rel not in recovered:
                 problems.append(f'{unit}: {rel} missing from the join')
@@ -166,6 +174,8 @@ def main(argv=None):
     ap.add_argument('--check', action='store_true',
                     help='every already-joined unit still round-trips (CI mode)')
     ap.add_argument('--list', action='store_true', help='units with a nested working tier')
+    ap.add_argument('--include-top', action='store_true',
+                    help='join EVERY .md of the unit, top level included (gate-packet mode)')
     args = ap.parse_args(argv)
 
     if args.list:
@@ -201,17 +211,17 @@ def main(argv=None):
     if not args.unit:
         ap.error('--unit, --check or --list required')
     unit = args.unit.rstrip('/')
-    frags = fragments(unit)
-    if not frags:
-        print(f'[join] {unit}: no nested working papers — nothing to join')
+    frags = fragments(unit, args.include_top)
+    if len(frags) < 2:
+        print(f'[join] {unit}: {len(frags)} joinable .md — nothing to join')
         return 1
-    text, _ = join(unit)
+    text, _ = join(unit, args.include_top)
     out = os.path.join(unit_root(unit), JOINED_NAME)
     with open(out, 'w', encoding='utf-8') as fh:
         fh.write(text)
     print(f'[join] wrote {os.path.relpath(out, REPO)} — {len(frags)} fragment(s)')
 
-    problems = verify(unit)
+    problems = verify(unit, include_top=args.include_top)
     if problems:
         print(f'[join] REFUSING TO PURGE — {len(problems)} round-trip problem(s):')
         for p in problems:

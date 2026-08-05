@@ -210,6 +210,17 @@ RULES = [
     (lambda p: audit_unit(p) in AUDIT_KEEP_OVERRIDE, 'keep', 'R-AUDIT-OVERRIDE',
      'design-subject unit that the lane rule would over-capture -- Jordan-ruled kept, and joined'),
 
+    # RULED 2026-08-04, Jordan, on the units that cite no ED so the lane classifier abstains:
+    # "contest gate packets like social contest or whatever get joined if multiple mds and
+    # RETAINED". So the abstention outcome is ratified as a verdict rather than left as a default,
+    # and the reduction comes from JOINING (tools/join_audit_workings.py --include-top), not cutting.
+    # And on their non-markdown contents: "keep them if their accompanying audit directories are
+    # being kept in main" -- a kept unit keeps its JSON. The joiner is .md-only by construction,
+    # so that ruling is already satisfied; encoded here so it is a rule and not an accident.
+    (lambda p: _audit_lane_verdict(p) == 'uncited', 'keep', 'R-AUDIT-UNCITED',
+     'RULED KEPT (Jordan, 2026-08-04): design-subject packets that cite no ED -- retained, and '
+     'joined where they carry multiple .md. Non-markdown contents stay with the kept unit'),
+
     (lambda p: _audit_lane_verdict(p) == 'infra', 'evacuate', 'R-AUDIT-INFRA',
      'infrastructure-lane audit -- Jordan: "none for infrastructure" / "we would only keep design '
      'lane dominant stuff". The record of HOW we worked, not what the game is'),
