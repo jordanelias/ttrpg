@@ -4353,7 +4353,7 @@
     "IN",
     "MB"
    ],
-   "loc": 332,
+   "loc": 343,
    "modules_under_test": [
     "engine",
     "engine.py",
@@ -4434,7 +4434,7 @@
     },
     "test_split_path_hits_require_a_WHOLLY_evacuating_target": {
      "assertionless": false,
-     "assertions": 5,
+     "assertions": 6,
      "summary": "`tests/sim` holds both evacuating stress prose and the KEPT canon mass-battle engine."
     },
     "test_split_path_scan_finds_what_substring_scan_cannot": {

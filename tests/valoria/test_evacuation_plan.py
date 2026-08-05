@@ -255,7 +255,18 @@ def test_split_path_hits_require_a_WHOLLY_evacuating_target(part):
     assert ep._is_evacuating_path('tests/sim', pure, evac) is False, \
         'tests/sim contains the kept canon mass-battle engine and must not count as evacuating'
     assert ep._is_evacuating_path('engine/params', pure, evac) is True
-    assert ep._is_evacuating_path('deprecated/skills', pure, evac) is True
+    # `deprecated/skills` was wholly evacuating until the W3 rehearsal (ED-IN-0144) proved a
+    # BLOCKING CI gate transitively imports two files inside it (compliance_check -> github_ops
+    # -> index_bootstrap ...). It is now MIXED, and this assertion says so rather than being
+    # weakened: the property under test is that a mixed prefix does NOT count as evacuating.
+    assert ep._is_evacuating_path('deprecated/skills', pure, evac) is False, \
+        'deprecated/skills holds kept, import-load-bearing files — it is not wholly evacuating'
+    # anti-vacuity: a prefix that IS wholly evacuating must still be detected. Note how few
+    # qualify now -- deprecated/archives does not either, because the ED-universe files relocate
+    # out of it. Nearly every evacuating root has a kept island in it, which is the whole reason
+    # the slice unit is a computed pure prefix and not a directory name.
+    assert ep._is_evacuating_path('arcs', pure, evac) is True, \
+        'a genuinely wholly-evacuating prefix must still be detected'
     # the concrete false alarm this removed
     jr = ep.joined_path_readers(sorted({e.split('/')[0] for e in evac}), retained, evac)
     flat = [h for lst in jr.values() for h in lst]
