@@ -15,8 +15,16 @@ import ci_gate_coverage as g  # noqa: E402
 # MEASURED 2026-07-30 against .github/workflows/valoria-ci.yml. If CI gains a pytest root, this
 # set must grow in the SAME commit — that is the regression this pin exists to force.
 # UPDATED 2026-08-05 (ED-IN-0145), per this test's own instruction to say so in the same commit:
-# `tests/contracts` EVACUATED with the tests/ stress corpus and its CI line went with it. Two roots
-# remain. The assertion is unchanged in purpose — a root CI runs that nobody lists is still a fail.
+# `tests/contracts` EVACUATED and its CI step is removed. Two roots remain.
+#
+# ⚠ AND A NEAR-MISS WORTH RECORDING, because I got this right for the wrong reason first. When this
+# assertion failed I dropped `tests/contracts` from the pin — but at that moment the CI STEP STILL
+# EXISTED (valoria-ci.yml:298) and `ci_gate_coverage` simply could not see it: the parser takes ONE
+# pytest root per job, and `unit-tests` had two. So I aligned the pin to the PARSER rather than to
+# reality, which is precisely the failure this test exists to catch (the W4 gate forgot a root).
+# The step is now genuinely gone, so pin and reality agree — but the parser's one-root-per-job
+# blind spot is real and survives. If a job ever runs two pytest roots again, this test will pass
+# while silently ignoring the second.
 EXPECTED_ROOTS = {'tests/valoria', 'engine/tests'}
 
 
