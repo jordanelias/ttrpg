@@ -5122,7 +5122,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 35
+     "size": 34
     }
    ],
    "cites_measurement": false,
@@ -5140,7 +5140,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 256,
+   "loc": 255,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -5174,7 +5174,6 @@
     "tools/export_key_types.py",
     "tools/freshness_gate.py",
     "tools/mechanics_index_gen.py",
-    "tools/patch_propagation_checker.py",
     "tools/review_core.py",
     "tools/scope_ratchet.py",
     "tools/validate_ed_citations.py",

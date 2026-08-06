@@ -113,7 +113,7 @@ systems:
     canonical_sha__systems__victory__victory_v30_md: "dd4f89da9af220dc6ed7c2bbc8137a333ddfe090"
   territories:
     design_doc: systems/settlements/settlement_layer_v30.md
-    canonical_sha__systems__settlements__settlement_layer_v30_md: "099d96c2e6f5b2941f412d927778a51743eac967"
+    canonical_sha__systems__settlements__settlement_layer_v30_md: "3e4626ad1f2abe14933173771a13a1d8c3bba82c"
     political_hierarchy_doc: systems/settlements/valoria_political_hierarchy_v30.md
     canonical_sha__systems__settlements__valoria_political_hierarchy_v30_md: "8b8b8e3cf889ec805b733886701fde0c3bd9cd5a"
     settlement_layer_index: systems/settlements/settlement_layer_v30_index.md
@@ -175,7 +175,7 @@ systems:
     note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
     note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: systems/settlements/settlement_layer_v30.md
-    canonical_sha__systems__settlements__settlement_layer_v30_md: "099d96c2e6f5b2941f412d927778a51743eac967"
+    canonical_sha__systems__settlements__settlement_layer_v30_md: "3e4626ad1f2abe14933173771a13a1d8c3bba82c"
   campaign_architecture:
     design_doc: systems/_architecture/campaign_architecture_v30.md
     canonical_sha__systems___architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
@@ -385,7 +385,7 @@ systems:
     canonical_sha__systems__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
   faction_politics:
     design_doc: systems/factions/faction_politics_v30.md
-    canonical_sha__systems__factions__faction_politics_v30_md: "254c264e54aa086ac5f905daef9a140583ea3c6d"
+    canonical_sha__systems__factions__faction_politics_v30_md: "be88411bb1d345ca59d4e9036df780c38c02c900"
     canonical_sha__designs__provincial__faction_politics_v30_md: "ee2b98542f93dc7732a39056ad547e8b42625bd0"
     index: systems/factions/faction_politics_v30_index.md
     canonical_sha__systems__factions__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"

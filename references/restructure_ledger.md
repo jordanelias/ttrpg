@@ -1163,10 +1163,136 @@ provenance pointer nobody can follow is not provenance, which is exactly what th
 
 | old | new | STATUS |
 |---|---|---|
-| `designs/audit/` | `FORK:c451bcb` | FORKED |
 | `designs/arcs/` | `FORK:c451bcb` | FORKED |
 | `arcs/` | `FORK:c451bcb` | FORKED |
 | `deprecated/` | `FORK:c451bcb` | FORKED |
 | `engine/params/` | `FORK:c451bcb` | FORKED |
 | `references/values_master.yaml` | `FORK:c451bcb` | FORKED |
 | `designs/arcs/arc_expansion_v30.md` | `FORK:c451bcb` | FORKED |
+
+<!-- Per-unit back-fill (2026-08-05, ED-IN-0145 follow-up): the blanket `designs/audit/` -> FORK
+row above was removed -- most audit units survived the evacuation and the blanket row was
+silently shadowing the live `designs/audit/` -> `audit/` alias (MOVES table, above) for all of
+them. These rows name only the `audit/<unit>/` (and pre-restructure `designs/audit/<unit>/`)
+directories that git diff c451bcb..HEAD confirms are actually gone from `audit/` on disk AND
+are still cited somewhere in the live tree; uncited evacuated units get no row (nothing here
+needs their provenance resolved). Both prefixes are listed per unit, mirroring the `arcs/` /
+`designs/arcs/` pair above -- check_editorial_ledger's extractor only recognises
+`designs/`-prefixed refs (the dominant citation form still in the ledger), and single-hop
+resolution means the bare `audit/<unit>/` row alone cannot catch those. -->
+| `designs/audit/2026-04-28-political-dynamics-session/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-04-28-political-dynamics-session/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-04-30-architecture-session/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-04-30-architecture-session/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-04-30-geography-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-04-30-geography-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-01-stage-10-validation/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-01-stage-10-validation/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-01-stage-8-sim/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-01-stage-8-sim/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-14-balance-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-14-balance-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-17-scene-combat-contest/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-17-scene-combat-contest/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-17-v18-integration/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-17-v18-integration/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-28-combat-reframe/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-28-combat-reframe/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-28-resolution-diagnostic/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-28-resolution-diagnostic/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-29-combat-armature/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-29-combat-armature/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-05-31-percell-combat/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-05-31-percell-combat/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-01-contest-redesign/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-01-contest-redesign/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-01-massbattle-stub-wiring/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-01-massbattle-stub-wiring/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-02-combat-engine/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-02-combat-engine/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-09-personal-combat-comprehensive/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-09-personal-combat-comprehensive/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-10-master-workplan-v3/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-10-master-workplan-v3/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-11-orchestration/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-11-orchestration/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-13-combat-bottomup/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-13-combat-bottomup/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-16-combat-reconciliation/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-16-combat-reconciliation/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-17-combat-decision-docket/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-17-combat-decision-docket/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-22-combat-analysis/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-22-combat-analysis/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-23-mb-fidelity-critique/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-23-mb-fidelity-critique/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-28-combat-critique/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-28-combat-critique/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-28-deprecation-currency-sweep/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-28-deprecation-currency-sweep/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-28-ed-citation-triage/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-28-ed-citation-triage/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-28-editorial-relevance-triage/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-28-editorial-relevance-triage/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-28-social-contest-deliberation-critique/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-28-social-contest-deliberation-critique/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-29-combat-corpus-recovery/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-29-combat-corpus-recovery/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-30-combat-grounding/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-30-combat-grounding/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-30-contest-fractional-ob-probe/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-30-contest-fractional-ob-probe/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-30-contest-stage0-reconciliation/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-30-contest-stage0-reconciliation/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-06-30-massbattle-bottomup/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-06-30-massbattle-bottomup/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-01-month-overview-architecture-consolidation/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-01-month-overview-architecture-consolidation/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-05-edge-playability-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-05-edge-playability-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-05-fable5-social-contest-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-05-fable5-social-contest-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-07-unaddressed-areas-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-07-unaddressed-areas-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-08-attribute-value-coherence-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-08-attribute-value-coherence-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-08-pessimist-action-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-08-pessimist-action-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-12-simulation-test-harness-methodology/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-12-simulation-test-harness-methodology/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-12-skills-ecosystem-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-12-skills-ecosystem-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-13-cross-scale-governance-grounding/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-13-cross-scale-governance-grounding/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-14-gameplay-subsystem-observatory/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-14-gameplay-subsystem-observatory/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-14-governance-vector-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-14-governance-vector-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-14-holistic-unification/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-14-holistic-unification/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-14-scale-chain-and-decision-surface-map/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-14-scale-chain-and-decision-surface-map/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-15-proposal-reconciliation/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-15-proposal-reconciliation/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-17-character-decision-adversarial-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-17-character-decision-adversarial-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-17-mc-wiring-coverage-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-17-mc-wiring-coverage-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-18-balance-mechanics-audit/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-18-balance-mechanics-audit/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-18-two-day-review/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-18-two-day-review/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-29-centralization-single-owner/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-29-centralization-single-owner/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-29-code-shape-open-items/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-29-code-shape-open-items/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/2026-07-30-audit-family-critique/` | `FORK:c451bcb` | FORKED |
+| `audit/2026-07-30-audit-family-critique/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/lane-a/` | `FORK:c451bcb` | FORKED |
+| `audit/lane-a/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/lane-b/` | `FORK:c451bcb` | FORKED |
+| `audit/lane-b/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/lane-c/` | `FORK:c451bcb` | FORKED |
+| `audit/lane-c/` | `FORK:c451bcb` | FORKED |
+| `designs/audit/other/` | `FORK:c451bcb` | FORKED |
+| `audit/other/` | `FORK:c451bcb` | FORKED |

@@ -47,7 +47,6 @@ separately below, matching that job's own internal grouping.
 | Tool | Purpose |
 |---|---|
 | `broken_dependency_checker.py` | Scans propagation_map / canonical_sources / editorial ledgers for refs to nonexistent files; also runs `check_ci_registry_coverage()` (this file's own self-check, see above) |
-| `patch_propagation_checker.py` | Verifies patches listed in `patch_register` are reflected in params file headers |
 | `freshness_gate.py` | Detects drift between canonical docs and their SHA records in `canonical_sources.yaml` |
 
 ## Utility Tools (manual use, not covered by `ci_checks_registry.yaml`)

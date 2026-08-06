@@ -135,7 +135,6 @@ EXPECTED_COMMANDS = {
     ('tools/build_test_register.py', '--check'),   # ED-IN-0142: drift gate, now able to fail
     ('tools/freshness_gate.py', ''),
     ('tools/mechanics_index_gen.py', '--strict'),
-    ('tools/patch_propagation_checker.py', ''),
     ('tools/review_core.py', '--check'),
     ('tools/validate_ed_citations.py', ''),
     ('tools/wiring_map_check.py', '--check'),

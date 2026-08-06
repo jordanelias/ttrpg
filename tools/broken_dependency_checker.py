@@ -147,7 +147,16 @@ def _resolve_remap(ref, remap):
     for old, new in remap.items():
         if old.endswith('/') and ref.startswith(old) and (best is None or len(old) > len(best[0])):
             best = (old, new)
-    return best[1] + ref[len(best[0]):] if best else None
+    if best is None:
+        return None
+    old, new = best
+    if _is_forked(new):
+        # A bare `new + ref[len(old):]` concatenation here drops the fork ref/path separator AND
+        # the original prefix, producing an unfollowable pointer like
+        # `FORK:c451bcb2026-07-13-cross-scale-governance-grounding/README.md`. Keep the sentinel
+        # followable by pairing it with the full original ref: `FORK:<ref>:<ref-path>`.
+        return f"{new}:{ref}"
+    return new + ref[len(old):]
 
 
 # Statuses whose entries are still live obligations; resolved/struck/superseded

@@ -114,7 +114,7 @@ A faction leader or inner-circle NPC choosing Confirm two Recognition Events in 
 
 ### §1.0c Court Attendance and Hostage-Kin (NEW — ED-FA-0020, 2026-07-09)
 
-**Status: PROPOSED.** A new cross-rank dimension, additive alongside Rival Cohort / Rank-Restricted Dialogue / Dismissal (§1.0). Applies at Standing 4+ to any rank-holder governing a settlement away from their faction's capital (per `settlement_layer_v30.md` §3.2); specified here for Crown (§1.1) and Varfell (§1.3), the two ladders whose Standing-4+ ranks routinely govern settlements at a remove from Valorsplatz/Sigurdshelm. Provenance: same docket, §Step 3 FA-JP4.
+**Status: RATIFIED (ED-FA-0020, 2026-07-13; consolidated per ED-IN-0046).** A new cross-rank dimension, additive alongside Rival Cohort / Rank-Restricted Dialogue / Dismissal (§1.0). Applies at Standing 4+ to any rank-holder governing a settlement away from their faction's capital (per `settlement_layer_v30.md` §3.2); specified here for Crown (§1.1) and Varfell (§1.3), the two ladders whose Standing-4+ ranks routinely govern settlements at a remove from Valorsplatz/Sigurdshelm. Provenance: same docket, §Step 3 FA-JP4.
 
 **Grounding.** *Sankin-kōtai* ("alternate attendance"), formalized 1635 under Tokugawa Iemitsu's Buke Shohatto: daimyo alternated residence between their domain and Edo on a fixed schedule, while their principal wife and heir were required to reside *permanently* in Edo — de facto hostages guaranteeing the daimyo's continued compliance. The processions and dual-residence upkeep structurally drained domain treasuries, which was as much the point as the hostage mechanism itself (Wikipedia, "Sankin-kōtai"; Nippon.com, "All Roads Lead to Edo").
 
@@ -565,7 +565,7 @@ The Guildmaster Council leadership structure per factions_ttrpg_v30 §8.6 means 
 
 ### §2.5a Entry and Mastership Forks (NEW — ED-FA-0023/ED-FA-0022, 2026-07-09)
 
-**Status: PROPOSED.** Two forks landed together per the judged synthesis recommendation (comparative-governance-research docket §3 S-4): entry (Gu-Std 0→1) and mastership (Gu-Std 1→2) each gain a genuine skill/capital/social-collateral tradeoff rather than the single flat gate each currently specifies. Both interact deliberately with the §2.5 caste note above (the Masterpiece Examination committee's documented Einhir bias) — the bought paths let capital purchase a route past that committee, at a durable-tag cost. Provenance: `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` §Step 3 BYZ-3, IT-8.
+**Status: RATIFIED (ED-FA-0022/ED-FA-0023, 2026-07-13; consolidated per ED-IN-0046).** Two forks landed together per the judged synthesis recommendation (comparative-governance-research docket §3 S-4): entry (Gu-Std 0→1) and mastership (Gu-Std 1→2) each gain a genuine skill/capital/social-collateral tradeoff rather than the single flat gate each currently specifies. Both interact deliberately with the §2.5 caste note above (the Masterpiece Examination committee's documented Einhir bias) — the bought paths let capital purchase a route past that committee, at a durable-tag cost. Provenance: `designs/audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` §Step 3 BYZ-3, IT-8.
 
 **BYZ-3 — Guarantor-gated entry (replaces the Gu-Std 0 Initiation Gate cell "Accepted by a Guild Master in a trade").** The applicant chooses one of two entry paths:
 
