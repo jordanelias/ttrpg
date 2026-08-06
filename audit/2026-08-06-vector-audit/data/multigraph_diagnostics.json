@@ -1,0 +1,1020 @@
+{
+ "A_multigraph_hubs": [
+  {
+   "token": "Mass Battle",
+   "in_graphs": 4,
+   "cite": 148,
+   "throughline": 12,
+   "mu": 20,
+   "pp": 0,
+   "key": 4
+  },
+  {
+   "token": "Peninsular Strain",
+   "in_graphs": 4,
+   "cite": 137,
+   "throughline": 16,
+   "mu": 20,
+   "pp": 0,
+   "key": 8
+  },
+  {
+   "token": "Settlement Layer",
+   "in_graphs": 4,
+   "cite": 158,
+   "throughline": 15,
+   "mu": 20,
+   "pp": 0,
+   "key": 7
+  },
+  {
+   "token": "Threadwork",
+   "in_graphs": 4,
+   "cite": 175,
+   "throughline": 21,
+   "mu": 22,
+   "pp": 0,
+   "key": 4
+  },
+  {
+   "token": "CI Political",
+   "in_graphs": 3,
+   "cite": 137,
+   "throughline": 1,
+   "mu": 12,
+   "pp": 0,
+   "key": 0
+  },
+  {
+   "token": "Conflict Architecture",
+   "in_graphs": 3,
+   "cite": 116,
+   "throughline": 10,
+   "mu": 20,
+   "pp": 12,
+   "key": 0
+  },
+  {
+   "token": "Conviction Track",
+   "in_graphs": 3,
+   "cite": 138,
+   "throughline": 11,
+   "mu": 20,
+   "pp": 0,
+   "key": 0
+  },
+  {
+   "token": "Domain Actions",
+   "in_graphs": 3,
+   "cite": 142,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 12,
+   "key": 10
+  },
+  {
+   "token": "Duchess Inge Baralta",
+   "in_graphs": 3,
+   "cite": 145,
+   "throughline": 4,
+   "mu": 11,
+   "pp": 0,
+   "key": 0
+  },
+  {
+   "token": "Factions",
+   "in_graphs": 3,
+   "cite": 175,
+   "throughline": 13,
+   "mu": 20,
+   "pp": 0,
+   "key": 0
+  },
+  {
+   "token": "Miraculous Event",
+   "in_graphs": 3,
+   "cite": 41,
+   "throughline": 4,
+   "mu": 11,
+   "pp": 0,
+   "key": 3
+  },
+  {
+   "token": "NPC Behavior",
+   "in_graphs": 3,
+   "cite": 142,
+   "throughline": 10,
+   "mu": 0,
+   "pp": 0,
+   "key": 48
+  },
+  {
+   "token": "Social Contest",
+   "in_graphs": 3,
+   "cite": 149,
+   "throughline": 5,
+   "mu": 0,
+   "pp": 0,
+   "key": 8
+  },
+  {
+   "token": "Territories",
+   "in_graphs": 3,
+   "cite": 187,
+   "throughline": 7,
+   "mu": 18,
+   "pp": 0,
+   "key": 0
+  },
+  {
+   "token": "Victory",
+   "in_graphs": 3,
+   "cite": 147,
+   "throughline": 14,
+   "mu": 20,
+   "pp": 0,
+   "key": 0
+  }
+ ],
+ "B_implied_missing": [
+  {
+   "a": "Campaign Architecture",
+   "b": "Faction Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Campaign Architecture",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "Campaign Architecture",
+   "b": "Scale Transitions",
+   "meta_links": 2
+  },
+  {
+   "a": "Conflict Architecture",
+   "b": "Faction Succession Split",
+   "meta_links": 2
+  },
+  {
+   "a": "Conflict Architecture",
+   "b": "Leap Mechanism",
+   "meta_links": 2
+  },
+  {
+   "a": "Conflict Architecture",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Conviction Track",
+   "b": "Derived Stats",
+   "meta_links": 2
+  },
+  {
+   "a": "Conviction Track",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "Derived Stats",
+   "b": "Self-Rendering",
+   "meta_links": 2
+  },
+  {
+   "a": "Derived Stats",
+   "b": "Solmund",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Layer",
+   "b": "Faction Succession Split",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Layer",
+   "b": "Mass Battle",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Layer",
+   "b": "Scale Transitions",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Succession Split",
+   "b": "Factions",
+   "meta_links": 2
+  },
+  {
+   "a": "Faction Succession Split",
+   "b": "Scale Transitions",
+   "meta_links": 2
+  },
+  {
+   "a": "Factions",
+   "b": "MS Trajectory",
+   "meta_links": 2
+  },
+  {
+   "a": "Factions",
+   "b": "Miraculous Event",
+   "meta_links": 2
+  },
+  {
+   "a": "MS Trajectory",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "MS Trajectory",
+   "b": "Settlement Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Mass Battle",
+   "b": "Settlement Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Military Layer",
+   "b": "Settlement Layer",
+   "meta_links": 2
+  },
+  {
+   "a": "Miraculous Event",
+   "b": "Threadwork",
+   "meta_links": 2
+  },
+  {
+   "a": "NPC Behavior",
+   "b": "Peninsular Strain",
+   "meta_links": 2
+  },
+  {
+   "a": "Peninsular Strain",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Self-Rendering",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Tensions Deck",
+   "meta_links": 2
+  },
+  {
+   "a": "Scale Transitions",
+   "b": "Threadwork",
+   "meta_links": 2
+  },
+  {
+   "a": "Tensions Deck",
+   "b": "Victory",
+   "meta_links": 2
+  }
+ ],
+ "C_notional": [
+  {
+   "source": "Aldric Tormann",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "CI Political",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Cardinal Arnlod Olafsson",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Cardinal Osten Jarnstal",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Church",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Confessor Arne Himlensendt",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Conviction Track",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Duchess Inge Baralta",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Einhir",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Factions",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Gerik Strand",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Grandmaster Ehrenwall",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Guilds",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Hafenmark",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Key: scene.witness",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "L\u00f6wenritter",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Maret Uln",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "NPC Roster",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Peder Almstedt",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Prince Torben Almqvist",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Riskbreaker",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Standing",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Varfell",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Wardens",
+   "target": "Crown",
+   "cite_weight": 183
+  },
+  {
+   "source": "Campaign Architecture",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Coherence",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Leap",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Leap Mechanism",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Mending Stability",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "TS",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Thread Pool Score",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Thread Revelation",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Thread Sensitivity",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Threadwork",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Will",
+   "target": "MS",
+   "cite_weight": 153
+  },
+  {
+   "source": "Aldric Tormann",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "CI Political",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Cardinal Arnlod Olafsson",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Cardinal Osten Jarnstal",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Church",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Confessor Arne Himlensendt",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Conviction Track",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Crown",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Duchess Inge Baralta",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Einhir",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Factions",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Gerik Strand",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Grandmaster Ehrenwall",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Guilds",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Hafenmark",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Key: scene.witness",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "L\u00f6wenritter",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Maret Uln",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "NPC Roster",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Peder Almstedt",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Prince Torben Almqvist",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Riskbreaker",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Varfell",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Wardens",
+   "target": "Standing",
+   "cite_weight": 149
+  },
+  {
+   "source": "Aldric Tormann",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "CI Political",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Cardinal Arnlod Olafsson",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Cardinal Osten Jarnstal",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Church",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Confessor Arne Himlensendt",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Conviction Track",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Crown",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Duchess Inge Baralta",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Einhir",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Factions",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Gerik Strand",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Grandmaster Ehrenwall",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Guilds",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Key: scene.witness",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "L\u00f6wenritter",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Maret Uln",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "NPC Roster",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Peder Almstedt",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Prince Torben Almqvist",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Riskbreaker",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Standing",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Varfell",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Wardens",
+   "target": "Hafenmark",
+   "cite_weight": 135
+  },
+  {
+   "source": "Aldric Tormann",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "CI Political",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Cardinal Arnlod Olafsson",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Cardinal Osten Jarnstal",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Confessor Arne Himlensendt",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Conviction Track",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Crown",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Duchess Inge Baralta",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Einhir",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Factions",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Gerik Strand",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Grandmaster Ehrenwall",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Guilds",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Hafenmark",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Key: scene.witness",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "L\u00f6wenritter",
+   "target": "Church",
+   "cite_weight": 133
+  },
+  {
+   "source": "Maret Uln",
+   "target": "Church",
+   "cite_weight": 133
+  }
+ ],
+ "C_notional_total": 13707,
+ "D_cascade_sinks": [
+  {
+   "terminal": "Conviction",
+   "chains": 859
+  },
+  {
+   "terminal": "Church",
+   "chains": 833
+  },
+  {
+   "terminal": "Audit",
+   "chains": 765
+  },
+  {
+   "terminal": "Territories",
+   "chains": 752
+  },
+  {
+   "terminal": "Disposition",
+   "chains": 728
+  },
+  {
+   "terminal": "Mandate",
+   "chains": 724
+  },
+  {
+   "terminal": "CI",
+   "chains": 722
+  },
+  {
+   "terminal": "Threadwork",
+   "chains": 698
+  },
+  {
+   "terminal": "Knot",
+   "chains": 693
+  },
+  {
+   "terminal": "NPC Behavior",
+   "chains": 693
+  },
+  {
+   "terminal": "Key: mechanical.accounting",
+   "chains": 688
+  },
+  {
+   "terminal": "Factions",
+   "chains": 669
+  },
+  {
+   "terminal": "Stability",
+   "chains": 667
+  },
+  {
+   "terminal": "Social Contest",
+   "chains": 651
+  },
+  {
+   "terminal": "Investigation",
+   "chains": 638
+  }
+ ],
+ "D_cascade_sinks_total": 235,
+ "D_cascade_truncated_calls": 58860,
+ "E_sparse_context": [
+  {
+   "token": "Active Inquisition",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Counter-Intelligence",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Key: mechanical.scene_exited",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Key: mechanical.scene_skipped",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "faction Mandate (cross-module \u2192 faction_state)",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "faction Treasury income (cross-module \u2192 faction_state)",
+   "paragraphs": 0,
+   "cite_deg": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Mind",
+   "paragraphs": 1,
+   "cite_deg": 12,
+   "status": "canonical"
+  },
+  {
+   "token": "NPC Relational Graph",
+   "paragraphs": 1,
+   "cite_deg": 23,
+   "status": "canonical"
+  },
+  {
+   "token": "Holonic Container Doctrine",
+   "paragraphs": 2,
+   "cite_deg": 19,
+   "status": "canonical"
+  },
+  {
+   "token": "Key: env.disaster",
+   "paragraphs": 2,
+   "cite_deg": 17,
+   "status": "canonical"
+  },
+  {
+   "token": "Key: mechanical.season_change",
+   "paragraphs": 3,
+   "cite_deg": 19,
+   "status": "canonical"
+  },
+  {
+   "token": "Key: state.standing_change",
+   "paragraphs": 3,
+   "cite_deg": 21,
+   "status": "canonical"
+  }
+ ],
+ "H_isolates": [
+  {
+   "token": "Active Inquisition",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "key": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "Counter-Intelligence",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "key": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "faction Mandate (cross-module \u2192 faction_state)",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "key": 0,
+   "status": "canonical"
+  },
+  {
+   "token": "faction Treasury income (cross-module \u2192 faction_state)",
+   "cite": 0,
+   "throughline": 0,
+   "mu": 0,
+   "pp": 0,
+   "key": 0,
+   "status": "canonical"
+  }
+ ],
+ "F_throughline_orphans": [],
+ "G_vocabulary_debt": [
+  {
+   "term": "Game Master",
+   "total": 70,
+   "docs": 20,
+   "concentration": [
+    [
+     "systems/_architecture/hybrid_gaps_v30.md",
+     9
+    ],
+    [
+     "systems/_architecture/hybrid_gaps_v30_infill.md",
+     9
+    ],
+    [
+     "systems/_architecture/campaign_modes_v30_infill.md",
+     8
+    ]
+   ]
+  },
+  {
+   "term": "Coup Counter",
+   "total": 46,
+   "docs": 19,
+   "concentration": [
+    [
+     "systems/_architecture/early_game_ignition_analysis.md",
+     16
+    ],
+    [
+     "systems/npcs/npc_behavior_system_v1.md",
+     7
+    ],
+    [
+     "systems/_architecture/conflict_architecture_proposal.md",
+     3
+    ]
+   ]
+  },
+  {
+   "term": "Cultural Reformation",
+   "total": 24,
+   "docs": 10,
+   "concentration": [
+    [
+     "systems/overview/peninsular_strain_v30.md",
+     10
+    ],
+    [
+     "systems/victory/victory_v30.md",
+     4
+    ],
+    [
+     "systems/_architecture/complete_systems_reference.md",
+     2
+    ]
+   ]
+  }
+ ]
+}

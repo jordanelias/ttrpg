@@ -1,0 +1,34 @@
+{
+ "p1": {
+  "pass": false,
+  "foundation_cite_mean": 59.75,
+  "overall_cite_median": 76.5,
+  "foundation_tl_mean": 1.0,
+  "overall_tl_median": 0.0
+ },
+ "p2": {
+  "pass": true,
+  "measure": "context_gated_paragraphs",
+  "measurable": true,
+  "conviction_presence": [
+   84,
+   83,
+   49,
+   31,
+   43,
+   71,
+   29
+  ],
+  "mean": 55.714,
+  "cv": 0.39
+ },
+ "p3": {
+  "pass": true,
+  "n_cite_edges": 14062,
+  "n_tokens": 268,
+  "mean_cite_degree": 52.47,
+  "floor": 6.0
+ },
+ "passed": 2,
+ "verdict": "VALIDATED"
+}
