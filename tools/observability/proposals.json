@@ -4,13 +4,13 @@
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 258,
-    "needs_jordan": 115,
+    "total": 259,
+    "needs_jordan": 116,
     "by_kind": {
       "proposal_doc": 9,
       "provisional_status_doc": 7,
       "ledger_actionable": 121,
-      "ledger_needs_jordan": 102,
+      "ledger_needs_jordan": 103,
       "audit_partial": 19
     },
     "by_lane": {
@@ -35,8 +35,8 @@
         "needs_jordan": 1
       },
       "SC": {
-        "total": 22,
-        "needs_jordan": 12
+        "total": 23,
+        "needs_jordan": 13
       },
       "SE": {
         "total": 48,
@@ -2002,8 +2002,8 @@
       ]
     },
     "SC": {
-      "total": 22,
-      "needs_jordan": 12,
+      "total": 23,
+      "needs_jordan": 13,
       "items": [
         {
           "kind": "ledger_actionable",
@@ -2200,6 +2200,16 @@
           "source": "registers/editorial_ledger",
           "id": "ED-SC-0025",
           "title": "DOCS 4/5 ADJUDICATION -- a filed recommendation cited a FABRICATION, and the only playtest evidence in the corpus hits our kernel. Three read-only Fable 5 adjudication lenses over the two newer source documents (now preserved verbatim at au",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0026",
+          "title": "REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play",
           "lane": "SC",
           "needs_jordan": true,
           "status": "open",
@@ -4602,6 +4612,16 @@
       "source": "registers/editorial_ledger",
       "id": "ED-SC-0025",
       "title": "DOCS 4/5 ADJUDICATION -- a filed recommendation cited a FABRICATION, and the only playtest evidence in the corpus hits our kernel. Three read-only Fable 5 adjudication lenses over the two newer source documents (now preserved verbatim at au",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0026",
+      "title": "REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play",
       "lane": "SC",
       "needs_jordan": true,
       "status": "open",
