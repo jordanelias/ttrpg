@@ -192,7 +192,13 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 9 }   # no reservation held; allocate at next_free as normal. Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 17 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 23 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    # ED-SC-0017..0022 allocated 2026-08-06 (all status open; 0017/0019/0020/0021 needs_jordan):
+    # three-lens pessimistic NERS audit + upload delta (audit/2026-08-06-social-contest-three-lens-audit/).
+    # 0017 spec/kernel divergence + KU-1 sharpening + params-provenance break; 0018 CR4 reachability
+    # (Projection half); 0019 no record spine / compose on settlements LedgerTag + M2 Scope; 0020 FORK A
+    # burden-parameterized gate; 0021 FORK B anti-collapse device; 0022 live bug batch (8 defects).
+    # next_free bumped 17->23.
     # ED-SC-0011 allocated 2026-07-07 (status open): ed_options OPT-11 (contest live-dispatch acceptance criterion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     FA: { name: "Faction actions",     next_free: 37 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0037-0039 returned, max allocated ED-FA-0036. Narrative: id_reservations_history.md#fa
     # ED-FA-0004 + ED-FA-0005 allocated 2026-07-07 (status open): ed_options OPT-1 (faction-oracle reconciliation, banner-now sequencing ruled) + OPT-2 (elimination-lockout, no-permanent-lockout ruled) — 2026-07-07 consolidated ruling pass, see ED-IN-0026

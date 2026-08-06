@@ -6,6 +6,41 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
+- **Three-lens pessimistic NERS audit + upload delta FILED 2026-08-06 (ED-SC-0017..0022).**
+  `audit/2026-08-06-social-contest-three-lens-audit/` (synthesis + working records). Three read-only
+  Fable 5 lenses (primitives / mechanics / emergence) relayed agonist→antagonist per CLAUDE.md §10;
+  every gating claim re-verified by the orchestrator against the working tree (verification log at
+  synthesis §1). **Headline: the subsystem is three resolution models wearing one name**, and the
+  canonical head's entire §4 loop has no engine while the kernel's actual loop has no canonical prose.
+  - **P1 · ED-SC-0022 — bug batch, do first, no design authority needed.** F1: Stage 3 is unreachable
+    in production (`build_contest` has no armature parameter → CR4/armature/CR5 fire only in tests).
+    F6: the "one-season" Mandate −1 is **permanent** (no temporary-modifier facility exists in
+    `season_manager.py`). Plus 6 more (F2–F5, F7, F8).
+  - **P1 · ED-SC-0019 — no record spine, and it is a composition failure, not a gap.** The Record
+    primitive already exists single-owner at `systems/settlements/sim/ledger.py:7-14` (`Precedent` /
+    `Grudge` / `Debt` / `Reputation` / `Leverage`, durable across succession). Compose on it rather
+    than emitting bespoke stat deltas. Sibling: M2 Scope — a contest win binds a whole faction with
+    no authority check and no repudiation path.
+  - **ED-SC-0017 closes ED-SC-0005 without a new number:** CR6 already ratifies a tanh soft-cap at
+    `M_MAX = 1.5σ` and the kernel already enforces it — the doc's four flat pool dice violate the
+    subsystem's own ratified substrate. Also: `params/contest.md` is cited 97× across the kernel and
+    was evacuated 2026-08-05 (content safe in `engine/engine_params/params_tables.yaml`; citations
+    dangling), and `CURRENT.md:151` cites an audit directory that no longer exists.
+  - **ED-SC-0018:** ED-1062 fixed Memory's CR4 reachability and left Projection's identically broken —
+    CONSEQUENCE/FEASIBILITY is no proceeding's start ground and the doc specifies no reframe action.
+  - **⚠ TWO FORKS NEED JORDAN, held back explicitly per CLAUDE.md §2, not bundled:**
+    **ED-SC-0020 (Fork A)** — adopt a burden-parameterized gate? We already have the burden family in
+    disguise (ProofBar / GraceThreshold / TallyAtClose) and lack only stall semantics; adopting
+    replaces four WinCondition classes + two biased track starts + the tracker tri-state with one
+    Venue field. *Audit recommends ADOPT.* **ED-SC-0021 (Fork B)** — the armature is not an
+    anti-collapse device (all four Styles produce identical state changes differing only in one
+    upside-only scalar; the orientation bit is dominated contest-wide, and CR5's cost half is wired
+    while the Doubt Marker upside is not). *Audit recommends warrant × attack — but the falsifier
+    (AI-vs-AI best-response sweep) has NOT been run; do not ratify without it.*
+  - **Cut docket: ~800 lines** off the live surface, of which ~50 are the only ones a player would
+    have noticed (synthesis §4.3). Includes moving the banner-superseded
+    `social_contest_system_v2.md` (+ index, 513 lines) out of the live subsystem folder.
+
 - **ED-SC-0012 (RESOLVED 2026-07-08) — pessimist-audit SC verdicts EXECUTED (design side)** (SC-lane
   follow-up to ED-IN-0027; `social_contest_v30.md` + `params/contest.md`, no sim-kernel edits — the
   kernel is under active rebuild and `ED-SC-0004` is Jordan's). Three verdicts:
