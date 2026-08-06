@@ -68,6 +68,36 @@ CIP-7 splits the proposal along exactly that seam.
 `faction.fixed_lean:20` is a hardcoded red line. What is missing is **memory, patience, and a voiced
 reason** — not belief. This materially cheapens CIP-6.
 
+### 0.2b — AMENDMENT 2026-08-06 (ED-SC-0025): two source documents arrived after filing, and they retract part of this
+
+Documents 4 and 5 of the same series (now preserved at
+`audit/2026-08-06-social-contest-three-lens-audit/sources/`) postdate this proposal. Full adjudication:
+`audit/2026-08-06-social-contest-three-lens-audit/03_persuasion_documents_adjudication.md`. Three
+amendments bind here:
+
+**C-5 — CIP-2 cited a fabrication.** Document 4 retracts document 3's warrant × attack matrix in its own
+opening as "invented rather than derived … formatted to look rigorous." The **three-attack taxonomy**
+(Undermine/Rebut/Undercut) is genuinely sourced — Prakken over Dung, and it belongs to upload 1's P7 —
+but the **warrant-keyed vulnerability assignments are unsourced and are hereby WITHDRAWN from CIP-2**.
+CIP-2's core condition survives because it rests on C-1, C-2 and the clinch-generalisation argument, none
+of which cite that table; it is restated one notch stronger below. The **40% authoring invariant** was
+part of the same apparatus and survives only as our own `[SEED]` threshold, not as an imported standard.
+*The tell was in our own text* — §0.3 of `02_system_vs_proposals_overview.md` notes the proposals have
+"no mechanism preventing a number from being invented," and nobody followed that sentence to §6.2.
+
+**C-6 — the story model does not fix it either.** Document 4's replacement scores minds on coverage,
+coherence and uniqueness — but `acceptance = h(coverage, coherence)` is a fixed scalarizer, so those
+convert at fixed rates inside `h`. That is C-1's defect one level down. Adopting it would not satisfy the
+corrected principle; the principle would have to be imposed on it. Its real value to us is different: it
+is a theory of **how the adjudicating mind scores**, the half our kernel models thinnest.
+
+**C-7 — the Klei refutation hits our kernel, not just the doc.** Document 4's A1 is the only direct
+playtest evidence in the corpus. Adjudged: our loop is structurally *a stationary, always-full action
+menu resolving through a random roll into a single scoring scalar*. What cards fixed decomposes to
+**non-stationarity of the per-turn decision problem**, of which a persistent claim board is the second
+carrier — **no deckbuilder required**. This raises CIP-2's priority and makes its sweeps mandatory rather
+than prudent.
+
 ### 0.3 Epistemic status of the precedent claims — read before ratifying anything
 
 The four lenses had no web access. Every precedent claim is model knowledge, tagged `[HIGH]` / `[MED]` /
@@ -234,11 +264,16 @@ belongs at the **outcome layer** (the compromise band and the loser's Record), n
 And the decisive correction (C-1): Burning Wheel's manoeuvres already differed in what they changed, and
 collapsed anyway, because one currency priced them all.
 
-**Proposal.** Adopt warrant × attack as the verb set, keep the armature as seasoning — **and add the
-condition without which the fork changes the nouns and keeps the failure**:
+**Proposal** *(amended 2026-08-06 per C-5/C-6/C-7)*. Adopt the **three-attack taxonomy** as the verb set
+— Undermine / Rebut / Undercut, Prakken-sourced. The **warrant-keyed vulnerability payoff table is
+withdrawn**; which attack is *available* may depend on claim structure, but which is *strong* per warrant
+type is now unbacked and must not be asserted. Keep the armature as seasoning. And add the condition
+without which the fork changes the nouns and keeps the failure — **strengthened**, because the story
+model showed that "consumed" is not enough:
 
 > **The contest close must consume claim-graph state — which claims stand, which premises are severed,
-> which pairs the body must weigh — and not only the accumulated scalar.**
+> which pairs the body must weigh — NON-FUNGIBLY, and not only the accumulated scalar.** A second
+> dimension that is scalarized into the first at a fixed rate is not a second currency.
 
 Concretely, promote what we already have. The fault/clinch catalogue is the one thing in the kernel that
 does not cash into `adv` (C-2). Generalise it from a terminal condition into a **second scored dimension**:
@@ -517,6 +552,49 @@ it is clause (ii) of the discriminating principle, i.e. half the variety mechani
 
 **One rule across all four, from Blades:** the read is announced **before commitment**, not revealed in a
 post-mortem. That is why CIP-5 (the writ) is the delivery vehicle for most of this layer.
+
+---
+
+### CIP-11 — Deliberation: extend the ballot we already ratified
+**Risk: EVIDENCED · Added 2026-08-06 (ED-SC-0025)**
+
+**Proposal.** Adopt doc 4's N10 as an **extension of `VoteAtClose`**, not a replacement. Retain the
+first-ballot sample per member instead of aggregating it immediately; add influence rounds where
+majorities apply informational *and* normative pressure while minorities may apply informational only;
+add acceleration and a momentum lock whose one reversal event is the first crossing to the minority. The
+ratified weighted-by-standing threshold (ED-1057) becomes the count rule *inside* deliberation, unchanged.
+
+**Why it is close.** Today's `VoteAtClose` is formally a **degenerate zero-round N10**
+(`resolver.py:96-145`). `appraise_armature`'s four-band reveal pointed at `Panel.members[i]` gives the
+"first defector" its read with no new information mechanic.
+
+**The real blocker, stated honestly.** `ContestView` exposes the audience as two booleans with no
+per-member view, and `Panel` **averages** member `discipline` and `character()` during the bout
+(`contract.py:37-51`). We author individual minds — the inquisitor is `char_ethos=0.20, char_pathos=0.15,
+char_logos=0.65` (`modes.py:286-288`) — and discard them at exactly the moment they would matter.
+Per-member exposure is the prerequisite.
+
+**Falsifier.** After CIP-11, a contest must exist in which persuading one *named* juror before the ballot
+changes the verdict, and the player can identify which juror that was.
+
+---
+
+### CIP-12 — Attribution as the second currency
+**Risk: CONDITIONAL (observability untested) · Added 2026-08-06 (ED-SC-0025)**
+
+**Proposal.** Score **whether the target believes the decision was their own**, as a field on CIP-1's
+record emission — selecting record kind (persuader-attributed ⇒ a `Grudge` for the loser) and decay class.
+
+**Why it answers C-2 where the story model does not.** Its value realises in a *different subsystem at a
+different time* — breach probability, `Grudge` magnitude, opposition patience — so no close-time exchange
+rate can be fixed. And it is anti-correlated with `adv`-maximal play at the margin: the merits-maximal
+line (public crushing) is plausibly attribution-minimal. A currency you sometimes buy by *not* spending
+the other is exactly C-1's signature.
+
+**Two binding constraints.** Its consumers must be **strictly post-close** — wire it as an additive
+close-time term and it collapses into the scalar like everything else. And ground it on the **ELM
+durability leg (T0/T1), never on the Guiguzi paraphrase**, which document 5's own B1 tier-floors at T2
+("a paraphrase of a paraphrase").
 
 ---
 
