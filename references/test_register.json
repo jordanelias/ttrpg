@@ -5716,7 +5716,7 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 231,
+   "loc": 232,
    "modules_under_test": [
     "references",
     "registers"

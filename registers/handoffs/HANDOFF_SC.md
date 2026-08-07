@@ -268,6 +268,31 @@ index; see it for cross-lane/global items.
 
 ## Next actions
 
+- **ED-SC-0027 (2026-08-06) — TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's requirements.**
+  `audit/2026-08-06-social-contest-three-lens-audit/05_track_architecture_and_state_graph.md`.
+  Eight requirements (C1-C4 character: HOW one argues = rhetoric x temporal · WHAT · WHY · HOW
+  effectively; P1-P4 type: WHAT KIND · WHO adjudicates · HOW adjudication occurs · HOW audience
+  impacts), seven world-interface questions W1-W7, nine tracks, fifteen interaction edges.
+  **Fourteen forks filed, ALL needing Jordan (§10).** Headlines:
+  (a) **Decorum is the content-dynamic weighting operator** — both lenses converged on one object
+  from opposite directions; generalise the EXISTING binary relevance gate (`Stasis.relevant` /
+  `Dossier.available`) from {0,1} to graded and it absorbs `RhetoricalWeights` + the venue tense
+  trio + CR4's +1D. A 1:1 venue→style table is *anti*-decorum.
+  (b) **Temporal orientation becomes an orator CHOICE**, not a lookup from the rung; `Stasis.TENSE`
+  is deleted, which dissolves the DEFINITION past-vs-present incoherence (ED-SC-0026 item a).
+  (c) **The contest is sealed off from the world in both directions — MEASURED:** the entire
+  world→contest interface is two integers (`scene_dispatch.py:298`), every `EvidenceItem` in the
+  tree is a hand-authored literal, and `systems/fieldwork/sim/investigation.py` is all stubs.
+  (d) **"Lose the case, win the room"** — verdict and reputation route through different profiles to
+  different consumers. Supplies the foundational choice `04` found missing and satisfies the
+  duality doctrine on its own terms.
+  (e) **Six priors (3 objects x 2 holders)** read from the same `LedgerTag` ledger the contest
+  writes — loop closed, no new primitive.
+  (f) **TWO OF MY OWN VERDICTS CORRECTED:** `split_standing` (ascribed Rank vs earned Credit) is the
+  institutional-party primitive, not excess; `FactionBoost`'s *table* is authoring data for the
+  faction disposition row even though its *die* dies.
+  (g) Genre is NOT rescued — both lenses rejected chosen-vs-terrain-genre divergence independently.
+
 - **P0 decision docket awaiting Jordan: ED-SC-0003..0005** (Piety/Persuasion tracker naming; pool
   formula; bonus-stack cap — ED-SC-0002 is RULED, see Decisions above). ED-SC-0004 blocks
   calibration + ED-IN-0013 re-verdict.
