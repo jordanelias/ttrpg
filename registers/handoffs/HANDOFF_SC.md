@@ -268,6 +268,23 @@ index; see it for cross-lane/global items.
 
 ## Next actions
 
+- **ED-SC-0028 (2026-08-06) — ADVERSARIAL AUDIT OF ED-SC-0027 + CORRECTIONS.**
+  `audit/2026-08-06-social-contest-three-lens-audit/06_adversarial_audit_of_05.md`; `05` revised in place.
+  Three read-only Fable critics found four broken claims. **CRITICAL:** `05`'s headline
+  ("the contest is sealed off from the world in both directions") is FALSE at the scope written —
+  `mc_v18.py:148-151` runs `parliamentary_bridge` every season (ECHO_TRANSPORT default ON),
+  `_derive_vote` generates a topic from world pressure, and `parliamentary_vote.py:206-216` writes
+  back. **`05`'s own falsifier named that exact test and was never run.** Surviving claim: the
+  personal-scale Bout kernel is sealed. **THE INSTRUMENT WAS BROKEN:** the two-category test lost
+  its "…that anything reads" rider and graded kills against the kernel-as-built while grading
+  withdrawals against the architecture-as-proposed — a rescue licence, and it was used (the
+  FactionBoost→disposition-matrix category error). Repaired with two riders. **The duality claim
+  does not hold** without CIP-9b, an unratified amendment `05` never cited. **"No new primitive" is
+  false** — `ledger_add` is single-valued by kind, and there is no holder dimension: one primitive,
+  extended cross-lane, **needs SE**. Architecture reduced to 8 tracks / 8 edges / 2 config surfaces /
+  1 ledger interface by `05`'s own rows-not-code rule. Warrant-vs-appeal downgraded to undecided;
+  `00` Fork B's sweep condition reinstated. **18 forks open, all needing Jordan.**
+
 - **ED-SC-0027 (2026-08-06) — TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's requirements.**
   `audit/2026-08-06-social-contest-three-lens-audit/05_track_architecture_and_state_graph.md`.
   Eight requirements (C1-C4 character: HOW one argues = rhetoric x temporal · WHAT · WHY · HOW

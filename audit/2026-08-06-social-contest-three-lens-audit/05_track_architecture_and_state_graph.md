@@ -1,401 +1,280 @@
-# Social contest — the eight requirements, track architecture, and state graph
+# Social contest — requirements, track architecture, and state graph
 
-## Status: PROPOSED (2026-08-06, ED-SC-0027)
+## Status: PROPOSED (2026-08-06, ED-SC-0027; **REVISED same day after adversarial audit, ED-SC-0028**)
 ## Lane: SC
-## Supersedes: nothing. Distils `00`–`04` in this unit plus `proposals/social_contest_consolidation_integration_v1.md`.
+## Supersedes: nothing. Distils `00`–`04` + `proposals/social_contest_consolidation_integration_v1.md`.
 
-**Produced by:** two read-only Fable adjudication lenses (orthogonality/state-graph; duplication-vs-classical-warrant),
-reconciled and authored by Opus per CLAUDE.md §10. Every `file:line` marked ✓ was read from the working tree this
-session by the author; those marked ⟨R⟩/⟨S⟩ come from a lens and were not independently re-read.
+**Provenance.** Two read-only Fable adjudication lenses produced the analysis; Opus authored. **Three further
+read-only Fable critics then audited this document** for correctness, logic, and elegance (record: §12,
+`06_adversarial_audit_of_05.md`). They broke four claims, one of them the headline. This is the corrected text; the
+errors are recorded rather than quietly repaired.
 
-> **Locator warning, load-bearing.** Every classical chapter/section number below is model knowledge with no web
-> access. Doctrine confidence is generally high; *locator* confidence is medium at best. **No locator here may enter
-> a ratified doc without a human check against the texts.** This is the failure class of the withdrawn warrant×attack
-> matrix (`sources/README.md` item 1) — a table "formatted to look rigorous." Doctrine is used here to *rule*;
-> locators are offered only so a human can verify or delete them.
+`file:line` marked ✓ was verified by the author or a critic against the working tree. ⟨R⟩/⟨S⟩ = lens-sourced,
+not independently re-read.
 
----
-
-## §0. What three corrections changed
-
-**Correction 1 — venue weighting is dynamic to the specific content being adjudicated, not a 1:1 mapping.**
-
-Today: `venue_w = role()[appeal] × R[appeal][tense] × tense_weight()[tense]` (`resolver.py:170-176` ✓). Its *only*
-content input is `tense = Stasis.tense(live_ground)` (`resolver.py:303` ✓), a fixed 6→3 lookup
-(`primitives.py:15-16` ✓). Everything else is constant at venue construction. Two different disputed *facts* — a
-ledger entry versus who was in the room — weight logos identically, because the engine cannot see the claim, only
-its tense token. **Both static objects die:** a static appeal×tense matrix and a static venue triple are each
-**one-place functions of something that classically takes two arguments**.
-
-**Correction 2 — these are tracks/trajectories that interact, not co-extensive things.**
-
-Every prior pass in this unit, including K1–K15 in `04`, ran a collapse test: *is A a function of B? then one dies.*
-That is correct for **two representations of one state** and wrong for **two trajectories that correlate**. The
-corrected test is §7: *does A carry state B does not?* If yes, the design object is the **interaction**.
-
-**Correction 3 — the eight requirements (§1).** This is the organising frame, and slot **C1** corrects a conclusion I
-had drawn two hours earlier. I had ruled that *tense dies as stored state*. That is right about the wrong object.
-What dies is `Stasis.TENSE` — the **bijection from rung to tense**. Temporal orientation itself does not die; it
-becomes what it should always have been: **a choice the orator makes**, independent of which rung is live. You can
-argue future consequences in a forensic case; the *koina* of past-fact and future-fact are explicitly common to all
-three genres. So the DEFINITION past-vs-present contradiction (`primitives.py:16` ✓ tags DEFINITION "past" while CR4
-forbids the intermediary) dissolves in a better way than I proposed: **the rung stops carrying a tense at all.**
-
-**What none of the corrections rescued.** I hypothesised that genre survives as chosen-genre vs terrain-genre
-divergence. Both lenses reject it independently: genre is derived from the hearer's role and the question's tense
-(*Rhet.* I.3), never a stance an orator picks — an advocate in court does not choose to be deliberative. The kernel
-had already reached the same verdict from purely mechanical evidence. **The divergence intuition was right; I
-attached it to the wrong object.** It belongs to C1's temporal orientation and C3's *why*, not to genre.
+> **Locator warning.** Every classical chapter/section number is model knowledge with no web access — doctrine
+> confident, locators MEDIUM at best. **None may enter a ratified doc without a human text check.** This is the
+> failure class of the warrant×attack matrix retracted in ED-SC-0025.
 
 ---
 
-## §1. The eight requirements
+## §0. The instrument
 
-Four on the character side, four on the type side. This is the specification; everything after it is the machinery.
+Two corrections from Jordan reshaped the method; a third, from the audit, repaired it.
+
+**Correction 1 — venue weighting is dynamic to the content being adjudicated, not a 1:1 map.** Today
+`venue_w = role()[appeal] × R[appeal][tense] × tense_weight()[tense]` (`resolver.py:170-176` ✓), and its only
+content input is `tense = Stasis.tense(ground)` (`resolver.py:303` ✓), a fixed 6→3 lookup (`primitives.py:16-17` ✓).
+Two different disputed *facts* weight logos identically. A static appeal×tense matrix and a static venue triple are
+each **one-place functions of something that classically takes two arguments**.
+
+**Correction 2 — these are tracks that interact, not co-extensive things.** The collapse test every prior pass used
+(*is A a function of B? then one dies*) is right for two **representations of one state** and wrong for two
+**trajectories that correlate**.
+
+**Correction 3 (from the audit) — correction 2 broke the instrument, and this is the repair.** As written, the
+two-category test was not decidable, and it was applied to a **moving target**: every *kill* was graded against the
+kernel **as built**, every *withdrawal* against the architecture **as proposed**. That asymmetry lets any pair be
+rescued by hypothesising a future reader. **I used it that way** (§7.3, §12).
+
+> **THE TEST, corrected.** A and B are one state written twice iff, at every reachable moment, A is recoverable
+> from B by a fixed rule **and carries no state that anything reads**. Otherwise they are two tracks.
+>
+> **Two riders, both mandatory:**
+> 1. **State which system the verdict is graded against** — the kernel as built, or the architecture as proposed.
+>    Never mix them inside one verdict table.
+> 2. **Every withdrawal must name the consumer** — an existing reader, or the numbered fork that would create one.
+>    A withdrawal that names neither is not a finding; it is a wish.
+
+**Correction 4 (from the audit) — temporal orientation.** I had ruled "tense dies as stored state." Right about the
+wrong object: what dies is the `Stasis.TENSE` **bijection**; temporal orientation becomes **an orator's choice**,
+independent of the live rung (you can argue future consequences in a forensic case). The audit's caveat stands:
+this is a **proposal, not a finding** — the two axes are independent *because I propose to make them so*.
+
+**Genre is not rescued.** I hypothesised chosen-vs-terrain-genre divergence; both analysis lenses rejected it
+independently — genre derives from the hearer's role and the question's tense (*Rhet.* I.3), never a stance an
+orator picks. The divergence intuition belongs to C1's temporal orientation and to C3's *why*.
+
+---
+
+## §1. The requirements
 
 ### Character side
 
-| # | Requirement | What it is | Where it lives | Kernel status |
-|---|---|---|---|---|
-| **C1** | **HOW one argues** — rhetoric × temporal | appeal {ethos, pathos, logos} × temporal orientation {past, present, future} = **nine ways to make the same point**. Classical: the three *pisteis* crossed with the *koina* of past-fact / future-fact | a **move field pair**, chosen per move | **HALF-PRESENT.** The 3×3 matrix exists (`primitives.py:184-206` ✓) but the temporal argument is *looked up from the rung*, not chosen. Fix: temporal orientation becomes a move field; `Stasis.TENSE` is deleted |
-| **C2** | **WHAT one argues** | the live rung (stasis) · the warrant / proof-type · the claim itself and its status | tracks T1 + T2 | rung PRESENT (`primitives.py:11-25` ✓); **warrant ABSENT**; **claim record ABSENT** — the kernel has one scalar, `ContestState.adv` (`resolver.py:44-48` ✓), and all six win-conditions read only it (`resolver.py:52-145` ✓) |
-| **C3** | **WHY one argues** | the end you are pursuing — your own value-*topos* and the stake you filed. **Its divergence from the adjudicator's end is state**, and it is the honest home of the divergence intuition | speaker-side T4a-mirror + the writ | **ABSENT.** Conviction exists as a character system; nothing connects it to a contest. The single largest gap on the character side |
-| **C4** | **HOW effectively** | faculty · preparation (dossier) · δσ leverage · credibility, slope **and** intercept | T3a/T3b, T5, the σ-kernel | MOSTLY PRESENT. Slope wired (`resolver.py:317-318` ✓); **intercept slot exists with no producer** (`standing_start`, `resolver.py:182-193` ✓) |
+| # | Requirement | Where it lives | Kernel status |
+|---|---|---|---|
+| **C1** | **HOW one argues** — appeal {ethos, pathos, logos} × temporal orientation {past, present, future} = nine ways to make the same point | move fields | HALF-PRESENT: the 3×3 matrix exists (`primitives.py:184-206` ✓) but temporal is *looked up from the rung*, not chosen |
+| **C2** | **WHAT one argues** — live rung · warrant · the claim and its status | T1 + T2 | rung PRESENT (`primitives.py:11-25` ✓); **warrant and claim record ABSENT** — the kernel has one scalar, `ContestState.adv` (`resolver.py:44-48` ✓) |
+| **C3** | **WHY one argues** — the end pursued; its divergence from the adjudicator's end is state | speaker's *topos* + the writ | **ABSENT.** The only requirement with no partial implementation |
+| **C4** | **HOW effectively** — faculty · preparation · δσ · credibility slope **and** intercept | T3a/T3b, T5 | slope wired (`resolver.py:317-318` ✓); intercept slot exists, **no producer** (`resolver.py:182-193` ✓, though `wrapper.py:92` ✓ *accepts* one) |
 
 ### Type side
 
-| # | Requirement | What it is | Where it lives | Kernel status |
-|---|---|---|---|---|
-| **P1** | **WHAT KIND of contest** | rung vocabulary · admissible proof classes · phase mask · fault catalogue · budget · decorum table | the **Venue row** — config, not code | PRESENT and structurally correct. This is the kernel's best feature |
-| **P2** | **WHO adjudicates** | the hearer object: role ∈ {judge, spectator} · value-*topos* (T4a) · emotion state (T4b) · discipline | a parameter, never a state | PRESENT-BUT-DEGENERATE. `Panel` **averages its members' minds away** ⟨R⟩; audience state is one capped scalar + two floats + two booleans |
-| **P3** | **HOW adjudication occurs** | the verdict **function** + burden placement + band structure: threshold · per-member ballot · compromise band · *no verdict at all* (spectator hearer) | the Venue's win-condition + burden field | PRESENT as six WinConditions — **but every one reads only `adv`** (`resolver.py:52-145` ✓). Faults are the sole non-`adv` terminal |
-| **P4** | **HOW audience impacts** — reaching **both** characters and adjudicators, **and carrying impressions out into the world** | **three** channels | Room, Pressure, and (missing) the *fama* emission | **TWO OF THREE WIRED.** Audience → **character**: `Room` feeds `Readiness`, gating how hard your appeals land (`resolver.py:314` ✓). Audience → **adjudicator**: `Pressure` feeds `_bias` toward a side (`resolver.py:291-293` ✓) **and raises `leak`** (`resolver.py:304-305` ✓) — a public gallery loosens the judge from the institutional standard toward their personal character. **Audience → world: ABSENT.** The crowd forms no impression of anyone and carries nothing out (W5, T8c, E13). Also absent: the bench's own weight pressing back on the speakers (W6, T4c) |
+| # | Requirement | Where it lives | Kernel status |
+|---|---|---|---|
+| **P1** | **WHAT KIND of contest** | the **Venue row** — config, not code | PRESENT and structurally correct; the kernel's best feature |
+| **P2** | **WHO adjudicates** — role ∈ {judge, spectator} · frame · emotion · discipline · authority | a parameter, never a state | PRESENT-BUT-THIN. `Panel` averages minds for the in-bout path (`contract.py:42-51` ✓) though `VoteAtClose` ballots per member (`resolver.py:131-142` ✓) |
+| **P3** | **HOW adjudication occurs** — verdict function + burden + bands | Venue's win-condition | PRESENT: six WinConditions. **Corrected:** they read no *contest* state but `adv`; `VoteAtClose` also reads juror `discipline` as bench-weight (`resolver.py:109-140` ✓) |
+| **P4** | **HOW audience impacts** — characters, adjudicator, **and the world after** | Room, Pressure, the *fama* emission | **TWO OF THREE WIRED.** → character: `Room`→`Readiness` (`resolver.py:314` ✓). → adjudicator: `Pressure`→`_bias` (`:291-293` ✓) and →`leak` (`:304-305` ✓). **→ world: ABSENT** |
 
-**The C1 × P1 cross is where correction 1 lands.** Nine ways to argue, weighed by a venue against the specific
-content in front of it — that product is the decorum operator (§4), and it is the single largest structural change
-this document recommends.
-
-### What the eight requirements imply — four live questions
-
-The requirements are not satisfied by *storing* eight things. They are satisfied by four questions the engine must
-be able to answer at every beat. Each is a strict addition to what the kernel does today.
+### The four live questions
 
 | Q | Question | Kernel today | What it needs |
 |---|---|---|---|
-| **Q1** | **How do two characters' arguments interact with each other?** | **They don't.** Each move adds independently to `ContestState.adv` (`resolver.py:315-316` ✓); my claim and yours are related only by moving one scalar in opposite directions. There is no such thing as *your claim answering mine* | T2 becomes a **claim graph with attack relations** (Undermine the premise · Rebut the conclusion · Undercut the inference — CIP-2's sourced taxonomy, which survives the doc-4 retraction). **This is the anti-collapse condition**: options must differ in what they change *and* the close must contain no common scalar into which all effects convert at fixed rates. Today it does |
-| **Q2** | **What does the adjudicator find more convincing?** | one preference vector, blended by leak (`resolver.py:306-307` ✓) — structurally right | extend from a bare appeal-triple to the judge argument of `f`: appeal × temporal × proof-type × rung, plus the value-*topos* (T4a) |
-| **Q3** | **What does the *audience* find more convincing?** | **Nothing — the crowd has taste-free approval.** `Room` is a single capped float built only by pathos (`primitives.py:232-236` ✓). It has no preferences at all | **A second preference vector, on T8.** See below — this is a new track, not a re-skin of Q2 |
-| **Q4** | **What kind of argumentation, rebuttal, refutation or counterargument works best *here*?** | undifferentiated: `rebut` is one verb, venue-gated by a boolean (`resolver.py:163` ✓) | attack-type efficacy enters `f` alongside proof-type. Undercutting a witness bites at conjecture; undercutting a *definition* does not |
+| **Q1** | How do two characters' arguments interact? | **They don't.** Each move adds independently to `adv` (`resolver.py:315-316` ✓); claims never answer each other | T2 as a **claim graph with attack relations**. The in-bout anti-collapse condition |
+| **Q2** | What does the adjudicator find convincing? | one preference vector blended by leak (`:306-307` ✓) — structurally right | extend to the judge argument of `f` |
+| **Q3** | What does the **audience** find convincing? | **Nothing — the crowd has taste-free approval.** `Room` is two per-side capped floats built only by pathos (`primitives.py:232-236` ✓) | a crowd profile — **a venue config row, not a track** |
+| **Q4** | What argumentation works **here**? | undifferentiated; `rebut` is one verb behind a boolean (`resolver.py:163` ✓) | §4.4 — schemes carry their own attacks |
 
-**Q3 is the addition, and it is the one with real design consequence.** Once the gallery has taste distinct from the
-bench, **playing to the crowd and playing to the judge become different actions**, and the gap between them is
-playable state. That is the classical problem, not a modern one: *thorubos* is crowd clamour with its own
-preferences, Aristotle complains that emotion "warps the judge's rule," and *Rhet.* III.1 says delivery has most
-power before crowds — a claim that only means anything if crowds weigh differently from benches.
+**Q4's boundary.** Context-dependent attack efficacy is structurally warranted. The warrant×attack matrix retracted
+in ED-SC-0025 **stays retracted**; §4.4 makes it unnecessary rather than smaller.
 
-It also converts an already-wired mechanism into a strategic one. `leak` currently rises with public pressure
-(`resolver.py:304-305` ✓), but its destination is the *judge's own character*. With a crowd profile there are two
-candidate destinations — the judge's private taste, and the room's taste — and which one a noisy gallery pulls
-toward is a **fork, not a default** (§10). Choosing "toward the room" makes a hostile crowd a live threat to a
-disciplined judge; choosing "toward private character" keeps the crowd purely a bias term.
+### The world interface — W1…W7
 
-**The boundary Q4 must not cross.** Attack-type efficacy being context-dependent is *structurally* warranted
-(Quintilian classifies proofs by type and treats each type's force as case-conditional). The specific
-warrant×attack vulnerability matrix retracted in ED-SC-0025 as "invented rather than derived … formatted to look
-rigorous" **stays retracted**. Q4 licenses the shape, never those numbers; every cell ships `[SEED]`.
+**Corrected scope, and this was the headline error.** I wrote that the contest is "sealed off from the world in both
+directions" and that topics "today they don't" enter. **False.** A second path is live by default:
 
-### The world interface — measured, not estimated
+- `mc_v18.py:148-151` ✓ runs `parliamentary_bridge.run_parliamentary_scene` **every season**; `ECHO_TRANSPORT`
+  is **default ON** (your ratification 2026-07-08 — the docstring calls it "the baseline campaign").
+- `_derive_vote` (`parliamentary_bridge.py:82-97` ✓) **generates a topic from world pressure** — lowest-Stability
+  faction proposes, highest-Mandate defends — and passes a `Motion` in.
+- It writes back directly: `world.factions[dominant].adjust("L", …)` (`parliamentary_vote.py:206-216` ✓), plus a
+  composed echo. Two more world-side callers exist in `systems/factions/sim/`.
 
-**The contest is currently sealed off from the world in both directions.** This is the single most consequential
-measurement in this document, and every part of it was read from disk this session.
+**My own falsifier caught this and I had not run it.** The true statement is narrower and still worth having:
 
-- **In:** the entire world→contest interface is `build_contest(parts[0], parts[1], venue=proceeding)`
-  (`scene_dispatch.py:298` ✓), where `parts` are **two integers** — faculty values, recorded back as
-  `side_a_faculty` / `side_b_faculty` (`scene_dispatch.py:307-308` ✓). No evidence, no topic, no participant
-  history, no institutional standing crosses the boundary.
-- **Evidence:** **every `EvidenceItem` in the tree is a hand-authored literal** in a harness, a kernel test, or a
-  stub — `faction.py:35` ✓ returns two hardcoded QUALITY items; `agon_harness.py:199-200` ✓ and
-  `_kernel_tests.py` ✓ are the rest. **There is no world producer of evidence anywhere.**
-- **The subsystem that should produce it is empty:** all three entry points of
-  `systems/fieldwork/sim/investigation.py` return `stubwire.stub_resolve` ✓.
-- **Out:** one stat delta ⟨R⟩ — the `04` §12 result.
+> **The personal-scale Bout kernel is sealed.** Its entire world interface is
+> `build_contest(parts[0], parts[1], venue=proceeding)` — **two integers** (`scene_dispatch.py:298, 306-307` ✓).
+> The parliamentary path carries a topic and writes back, but it is a **Mandate-pool roll, not the agôn**: no
+> evidence, no claim record, no rhetoric crosses it either.
 
-So the honest statement of the current design is: **two integers in, one stat delta out.** Everything the four
-questions below ask about is un-built rather than badly built, which is the better problem to have.
-
-| W | Question | Answer this architecture gives |
+| W | Question | Answer |
 |---|---|---|
-| **W1** | **How do salient topics enter a debate?** | Today they don't: the question is `venue.start_ground`, a constant per proceeding (QUALITY for seven of eight canonical proceedings). A topic must be **generated by world pressure** — a Precedent about to expire, a Grudge with a claimant, a Debt called in, a clock about to run out — and filed as **the writ** (CIP-5), which fixes the question and the judgment options *before* the hearing. That is the Roman formulary shape: the praetor's formula fixes the *quaestio* and the available judgments; the *iudex* then hears only that. A topic the world did not raise should not be arguable |
-| **W2** | **How does an inquisition present its case?** | An institution is not a person with a different portrait. It differs in four measurable ways: **(a) ascribed vs earned standing** — the office carries authority the officer did not earn; **(b) a dossier assembled over time** by investigation rather than owned at scene start; **(c) a mandate** that bounds which rungs it may even reach (jurisdiction is a precondition, not a rung); **(d) institutional consequence on defeat** — the institution's Reputation moves, not only the inquisitor's. Point (a) already has a primitive: `split_standing` splits fused Standing into **ascribed Rank** (gates the hard-tactic gradient) and **earned Credit** (drives readiness and leak) — `resolver.py:200-214` ✓. **I had this in the excess pile; that was wrong.** It is excess as a per-venue toggle on individuals and exactly right as the institutional-party primitive. It is not dead code, it is an un-triggered one |
-| **W3** | **What is evidence and proof?** | Classically the ***atechnoi pisteis*** — laws, witnesses, contracts, oaths: proofs **not furnished by the art**. The engine, not the orator, fixes their value, which is why the kernel's hidden weight is the best classical fit in the tree (`primitives.py:282-310` ✓). Three things are missing and all three are world-facing: **(i) a producer** — evidence should be an *output of fieldwork/investigation*, so the case you can make is the case you did the work for; **(ii) apparent vs true value** — with one weight, forgery, mistaken testimony and honest error are all unrepresentable ⟨R⟩; **(iii) provenance** — where an item came from determines who may challenge it and how, which is what makes Q4's attack types bite differently |
-| **W5** | **What does the audience carry out of the room?** | Its **impressions of the people**, which become reputation, respect and feeling in the world (T8c → E13). This is the third audience channel and the only one that outlives the contest: the first two press on the character (E3) and on the adjudicator (E2 + bias); this one **is how a contest writes to persistent credibility at all**. It is bounded by presence — only the factions who had someone in the room learn anything — which is the classical *fama*, and it makes *who attends* a decision with consequences rather than set dressing |
-| **W6** | **How much does *this* adjudicator's judgment weigh?** | **The kernel has no answer — and the gap is structural, not a missing number.** `Adjudicator` carries six fields (`learned`, `hostile`, `discipline`, three character weights — `contract.py:25-35` ✓) and **no authority of any kind**; `Panel` aggregates the same six. Meanwhile `Pressure`'s own docstring defines it as *"External force **on** the adjudicator"* (`contract.py:65-77` ✓). **Pressure in this engine is a one-way arrow into the bench.** A king pressing on the people arguing before him is the arrow out, and it does not exist. Adding it needs one field on the hearer (T4c) and two consumers (E14): the speakers' footing before the bench, and — the part that composes rather than adds — **the reach and lifetime of what the verdict writes to the world**, which `LedgerTag.ttl` already supports |
-| **W4** | **What is relevant?** | Relevance is the `{0,1}` floor of the same salience function §4 generalises. Today it is exact string match: `it.ground == live_ground` (`primitives.py:300-301` ✓) — the crudest possible test, and the reason a document is either fully admitted or wholly unusable. Graded relevance **is** the fix, and it makes relevance **contestable**: objecting that an argument does not bear on the live question becomes a move rather than an engine rule, which is precisely the classical *critical question* |
+| **W1** | How do salient topics enter? | For the agôn, they don't — the question is `venue.start_ground`, constant per proceeding (QUALITY for 7 of 8, `modes.py:59-61` ✓). The parliamentary bridge shows the shape that works: **world pressure raises the motion.** Generalise it into the writ (CIP-5), which fixes question and judgment options *before* the hearing — the Roman formulary shape |
+| **W2** | How does an inquisition present its case? | An institution differs in four ways: **(a) ascribed vs earned standing**; **(b) a dossier assembled over time**; **(c) a mandate** bounding reachable rungs; **(d) institutional consequence on defeat.** (a) has a primitive — `split_standing` (`resolver.py:200-214` ✓) — but see §8's coupling caveat |
+| **W3** | What is evidence and proof? | The ***atechnoi pisteis*** (§4.2). Three gaps, all world-facing: **(i) no producer** — evidence should be an output of fieldwork, so *the case you can make is the case you did the work for*; **(ii) no apparent-vs-true split**, so forgery is unrepresentable; **(iii) no provenance**, which is what makes attacks bite differently |
+| **W4** | What is relevant? | The `{0,1}` floor of §4.5's operator. Today exact match — `it.ground == live_ground` (`primitives.py:300-301` ✓). Graded relevance makes relevance **contestable**, which is the classical *critical question* |
+| **W5** | What does the audience carry out? | Its **impressions of the people** — the third channel, and the only one that outlives the contest. Bounded by presence: only factions with someone in the room learn anything (*fama*). Makes *who attends* a decision |
+| **W6** | How much does this adjudicator's judgment weigh? | **Corrected.** I claimed "no authority of any kind" and "pressure is a one-way arrow into the bench." Both overstated: juror `discipline` is explicitly repurposed as bench-weight — "institutional rank/rigor" (`resolver.py:109-118` ✓, ED-1057) — and `SelfGating.licit` gates the contestant's `hard` on `adj.learned`/`hostile` (`resolver.py:357` ✓). What is genuinely absent is **cross-contest authority**: a king versus a regional governor. Its interesting consumer is **reach**, not difficulty |
+| **W7** | What do the room and the bench already think? | The **disposition matrix**: 3 objects (character · faction · question) × 2 holders (bench · room) = **six priors**. Orthogonal — a judge may respect you, distrust your order, and have pre-judged the question |
 
-**The out-side is already solved in another subsystem and should not be rebuilt.** `systems/settlements/sim/ledger.py`
-✓ defines `LedgerTag(kind, key, value, created_season, ttl)` with kinds **Precedent · Grudge · Debt · Reputation ·
-Leverage** — an exact match for what a verdict should emit. Its docstring states the reason it lives on the
-settlement rather than the governor: *"so they survive succession — the player→world persistence guarantee."* That
-is the Record spine CIP-1 asks for, already built, single-owner, in the right place. **Per §0's bottom-up rule the
-contest composes on it; it does not grow its own.** And W1 closes the loop: those same tags are what *raise* the
-next topic, so the contest's outputs become the next contest's inputs.
-
-### The consequence: two independent outputs, and the foundational choice that follows
-
-W5 forces the verdict and the reputation apart, because they route through **different profiles to different
-consumers**: the verdict through the bench's taste (T4a/T4b) to the win-condition; the reputation through the
-crowd's taste (T8b) to `LedgerTag`. Nothing converts one into the other at a fixed rate. So:
-
-> **You can lose the case and win the room — and the reverse.**
-
-That single sentence resolves three separately-filed problems in this audit unit.
-
-1. **It supplies the missing foundational choice.** `04` found the system has none: all three candidates were dead
-   (the Style bet is API-unreachable, the appeal-vs-judge read is illegible, forum choice is foreclosed by
-   `v30:39`). *Argue to win, or argue to be seen* is a real choice — legible before you commit, consequential
-   after, and available every beat rather than once at setup.
-2. **It satisfies the duality doctrine on its own terms.** `auto_manual_resolution_duality_v1.md:65` rules that
-   consistency makes the fidelity choice "free of strategic advantage — a choice of richness/agency only," and `04`
-   showed that under scalar-only outputs this makes playing strictly wasted attention. Playing now shapes **which**
-   consequences occur — which factions think what of whom — not the expected size of one number. That is the
-   richness the doctrine promised.
-3. **It is the anti-collapse condition satisfied at the top level, not just inside the claim graph.** Q1 removes
-   the common scalar *within* the argument; W5 removes it *at the close*. Both are needed: a claim graph that still
-   drains into one verdict number would collapse again at the boundary.
-
-**The honest caveat:** this is the strongest structural result in the document and it is entirely un-built. T8b,
-T8c and E13 do not exist; `Room` is one float. Nothing here is a description of the game as it stands.
-
-### The disposition matrix — six priors, and the loop closes
-
-Every contest starts from what the room and the bench **already think**. That is 3 × 2:
-
-| | **the adjudicator** | **the audience** |
-|---|---|---|
-| respect for **the character** | D[bench][you] | D[room][you] |
-| respect for **their faction** | D[bench][your side] | D[room][your side] |
-| opinion on **the topic** | D[bench][the question] | D[room][the question] |
-
-**Three objects of disposition — person, faction, question — held by two parties.** Orthogonal by construction:
-a judge may respect you personally, distrust your order, and have already made up their mind about the question.
-That is three independent facts, and flattening them to one "favour" number is precisely the collapse this
-document exists to prevent.
-
-**Disposition is not taste, and they must not merge.** Taste (T4a, T8b) is *what kind of argument this holder finds
-convincing* — it weights the appeal. Disposition is *how this holder feels about you, your side, and the question*
-— it sets the starting position and biases reception. **A judge can love logos and hate you.** Two axes, and only
-the second is world-written.
-
-**This closes the *fama* loop and needs no new primitive.** The six priors are the **read** side of the exact ledger
-E13 **writes**: the audience's impression of you at the close of one contest *is* their respect for you at the
-opening of the next. `LedgerTag(kind, key, value, created_season, ttl)` ✓ already keys by an arbitrary string, so
-`key` is a character id, a faction id, or a topic id — one table, three object types, and `ttl` gives opinions the
-decay that respect and grievance actually have. Per §0's bottom-up rule the contest reads and writes that ledger;
-it does not grow a second one.
-
-**What exists today:** nothing for person or topic; for faction, only `FactionBoost` — a seven-faction table
-(`dictionaries.py:387-442` ✓) whose consumer is a boost **die**. **I had this in the free-to-remove pile and that
-was too blunt.** The die is the wrong shape and still dies; **the table is authoring data** for the
-(holder × faction) row. Same disposition as the ethical-mode table: kill the channel, keep the content.
-
-**One consequence worth naming:** once the six priors are real, **choosing where to bring your case and who hears
-it becomes a strategic decision with legible stakes** — the same forum-shopping the C-3 ruling forecloses inside a
-bout. There is no contradiction: forum choice belongs *before* the contest (W1's writ), not as a mid-bout verb.
-But it does mean C-3's cost is lower than it looks, because the interesting version of that choice moves upstream
-rather than disappearing.
-
-**Open, not asserted:** person and faction map cleanly onto `Reputation`/`Grudge`; **opinion on the topic does
-not** — `Precedent` is the nearest kind and is not obviously the same thing. Whether topic-opinion is a ledger tag,
-a faction-ideology read, or a third source is a call, not a detail (§10.14).
+**Disposition is not taste.** Taste weights the appeal; disposition biases reception. A judge can love logos and
+hate you. Only the second is world-written.
 
 ---
 
-## §2. The tracks
+## §2. The architecture
 
-Nine trajectories. Each carries state nothing else carries. Rate matters: two tracks on the same object at
-different rates are two tracks; so are two *audiences* with different taste.
+The audit's charge was accretion, and it was right: I presented "nine trajectories" over a 14-row table. The
+reduction below is generated by **this document's own rule** — *rows, not code* — which I had not applied to myself.
 
-| # | Track | State it carries | What moves it | Rate | Slot |
-|---|---|---|---|---|---|
-| T1 | **The question** | which rung is live; which are closed and how | `shift`; a rung resolving | slow | C2 |
-| T2 | **The claim record** | what has been asserted on each rung, by whom, with what proof-type, its status — **and which claims attack which** (Q1) | claim · evidence · rebut · critical question | per move | C2 |
-| T3a | **Credibility — slope** (Aristotle) | in-bout ethos, built *by the speech itself* | ETHOS moves | per move | C4 |
-| T3b | **Credibility — intercept** (Quintilian) | persistent *auctoritas* across contests | prior verdicts, kept oaths, broken debts | per contest | C4 |
-| T4a | **Hearer's frame** | the value-*topos* this mind judges from | authored; ~constant in-bout | static | P2 |
-| T4c | **Hearer's authority** (W6) | *whose* judgment this is — a king weighs more than a regional governor | fixed at Constitution | static | P2 |
-| T4b | **Hearer's feeling** | Book II triple: `(state, toward whom, on what grounds)` | pathos moves, with preconditions | fast | P2 |
-| T5 | **Evidence inventory** | proofs held vs spent; corroboration decay; **apparent vs true value; provenance** (W3) | present-evidence; **fieldwork, between contests** | consumed | C4 |
-| T6 | **Procedural standing** | faults accrued · burden holder · distance to clinch | fault detection; a rung stalling | ratchet | P3 |
-| T7 | **Effort** | reserve remaining | spend / regroup | per move | C4 |
-| T8a | **The room's favour** | which side the crowd wants to win — pressure, never itself a verdict | pathos; institutional and public pressure | slow | P4 |
-| T8b | **The room's taste** (Q3) | what *this crowd* finds convincing — a preference vector distinct from the bench's | authored per venue/occasion; ~static in-bout | static | P4 |
-| T9 | **The disposition matrix** (W7) | `D[holder][object]` for holder ∈ {bench, room} × object ∈ {character, faction, topic} — **six priors** | written at close (E13 for the room; the verdict for the bench); decays by `ttl` | cross-contest | P2 + P4 |
-| T8c | **The room's impression** (W5) | what the crowd now thinks *of each speaker as a person* — respect, contempt, sympathy — and **who was present to think it** | any move, weighed through T8b | per move; **survives the contest** | P4 → world |
+### In-bout tracks (8) — state that moves during a contest
 
-**T3a/T3b and T4a/T4b are the pairs the collapse test was destroying.** Aristotle insists ethos is produced by the
-speech; Cicero and Quintilian admit the speaker's *life*. That is not a contradiction to resolve — it is
-**intercept and slope**, and the corpus names both because both exist. Likewise a judge's governing end is slow and
-their anger is fast.
+| # | Track | State carried | Moved by |
+|---|---|---|---|
+| T1 | **The question** | live rung; which are closed and how | `shift`; a rung resolving |
+| T2 | **The claim record** | what is asserted on each rung, with what proof-type and status, **and which claims attack which** | every argumentative move |
+| T3a | **Credibility slope** (Aristotle) | ethos built *by the speech itself* | ETHOS moves |
+| T4b | **Hearer's feeling** | Book II triple `(state, toward whom, on what grounds)` | pathos moves, precondition-gated |
+| T5 | **Evidence inventory** | proofs held vs spent; corroboration; apparent-vs-true; provenance | present-evidence |
+| T6 | **Procedural standing** | faults · burden holder · distance to clinch | fault detection; a rung stalling |
+| T7 | **Effort** | reserve remaining | spend / regroup |
+| T8 | **The room's read** | favour (which side) **and** impression (what it thinks of each speaker) — one object, two consumers | any move, weighed by the crowd profile |
+
+### Config rows (not tracks) — fixed at Constitution
+
+- **Venue (P1):** rung vocabulary · admissible proof classes · phase mask · fault catalogue · budget · burden ·
+  verdict function · decorum table · **the crowd profile (Q3)** · **emission reach (W6)**.
+- **The hearer (P2):** role · **frame** (value-*topos*) · discipline · **authority**.
+
+A preference vector that never moves during a bout is configuration. That demotion removes three of my nine
+"tracks" without losing a single design consequence.
+
+### The ledger interface (stated once)
+
+**Read priors at Constitution; write records and impressions at Record.** This subsumes what I had split across
+four edges. `T3b` (persistent *auctoritas*) and the six priors **are not contest state — they are the ledger**, a
+thing I said in one paragraph while counting them as tracks in another.
 
 ---
 
-## §3. The interaction model
-
-Orthogonal means **independently specifiable**, not non-interacting. The edges *are* the design.
+## §3. Interaction edges (8)
 
 | Edge | Reads | Writes | Meaning |
 |---|---|---|---|
-| **E1 — Decorum** (§4) | move's appeal **× temporal orientation** (C1) + proof-type; T1 live rung; T4a frame; venue | T2; **T3a on misfit** | Fitness of *this* argument to *this* question before *this* mind |
-| **E2 — Leak** | T3a; judge discipline; **T8 public pressure** | the weights inside E1 | How far this decision drifts from the institution's standard toward this particular mind (`primitives.py:244-245` ✓, `resolver.py:304-305` ✓) |
-| **E3 — Readiness** | T3a; T8 | gates magnitude of T2 writes | Built support is what makes an appeal *land*; floor 0.40 (`primitives.py:253-260` ✓) |
-| **E4 — Emotion precondition** | T2; the Record spine | gates T4b | Anger requires a slight *by a specific party*; pity requires undeserved suffering |
-| **E5 — Example / precedent** | Record spine | T2 | Argument by example **is** citation of a prior judgment (*praeiudicia*) |
-| **E6 — Intercept wiring** | Record spine | T3b at Constitution | The one legitimate place an outcome feeds back into the apparatus |
-| **E7 — Burden** | T6 | gates T1 shift | Who loses a stalled rung. `NONE` turns the gate from adjudication into agenda-sequencing (negotiation) |
-| **E8 — Clinch** | T6 | terminal | Procedural collapse, orthogonal to the merits |
-| **E9 — Amplification** | T2 | magnitude of the close | The greater/lesser *koinon*. **No owner anywhere in the tree** (§9) |
-| **E10 — Ends divergence** | C3 speaker end; T4a judge frame | E1's weighting | Arguing from an end this judge does not hold is *available but expensive*. **The honest home of the divergence intuition** |
-| **E11 — Clash** (Q1) | T2's attack relations | T2 statuses | A rebutted claim stops counting; an undercut inference stops carrying its premise. **Arguments answer each other instead of both draining one scalar.** This is the anti-collapse condition |
-| **E12 — Gallery vs bench** (Q3) | T8b room taste; T4a/T4b judge | E1's weighting; T8a favour | The same speech scores differently with the crowd than with the decider. **Playing to the gallery becomes a distinct action**, and the gap between the two profiles is playable state |
-| **E13 — *Fama*** (W5) | T8c impression at close; who was present | `LedgerTag` Reputation / Grudge / Leverage, keyed to the **witnesses' factions** | The audience is the **transmission mechanism** by which a contest becomes reputation. Not the verdict — *what the people in the room now think of you*. Bounded by presence: only those who were there know |
-| **E15 — Priors** (W7) | T9's six cells | starting position; a bias on E1's reception, **separate from taste** | What the room and the bench already think of you, your side, and the question. The **read** side of the ledger E13 writes — the loop, closed |
-| **E14 — Awe** (W6) | T4c authority | the character's own footing; and E13's **reach and durability** | The bench presses back on the speakers. Two effects, and the second is the interesting one: a king's ruling emits a Precedent with wide reach and long life; a regional governor's is local and expires. **Composes on `LedgerTag.ttl`, which already exists** — no new mechanism |
+| **E1 — Decorum** | move's appeal × temporal × proof-type; T1; hearer frame; venue | T2; **T3a on misfit** | Fitness of *this* argument to *this* question before *this* mind (§4.5) |
+| **E2 — Leak** | T3a; discipline; public pressure | E1's weights | How far the decision drifts from the institution's standard toward this mind (`primitives.py:244-245` ✓) |
+| **E3 — Readiness** | T3a; T8 favour | magnitude of T2 writes | Built support makes appeals land; floor 0.40 (`primitives.py:253-260` ✓) |
+| **E4 — Emotion precondition** | T2; the ledger | gates T4b | Anger requires a slight *by a specific party* |
+| **E5 — Burden** | T6 | gates T1 shift | Who loses a stalled rung; `NONE` turns adjudication into agenda-sequencing |
+| **E6 — Clinch** | T6 | terminal | Procedural collapse, orthogonal to the merits |
+| **E7 — Clash** (Q1) | T2's attack relations | T2 statuses | Arguments answer each other instead of both draining one scalar. **The in-bout anti-collapse condition** |
+| **E8 — Gallery vs bench** (Q3) | crowd profile; hearer frame | E1's weighting; T8 | The same speech scores differently with the room than the decider |
 
-**Divergence is a real term in exactly four places** — E1 (fit), E2 (institution vs mind), E10 (speaker's end vs
-judge's end), E12 (gallery vs bench). The track model does **not** license inventing divergence terms elsewhere;
-that count is the discipline, and E12 earns its place only because Q3 supplies the second profile that makes a gap
-measurable.
+**Deferred to forks, not modelled here** (the audit's cut, accepted): amplification had no owner and was an absence
+wearing an edge number; the speaker's-end divergence and the awe-footing consumer both read tracks that do not
+exist. They live in §10, not §3.
+
+**Divergence terms: three** — E1 (fit), E2 (institution vs mind), E8 (gallery vs bench). I previously claimed
+"exactly four" and then added a fifth without adjusting the count; the audit caught it. **Per-holder priors bias
+reception per holder, which is structurally a divergence** — it is counted here as part of E8's gap rather than
+smuggled in unnumbered.
 
 ---
 
-## §4. The classical substrate, and the decorum operator that runs over it
+## §4. The classical substrate
 
-Four pieces of classical apparatus define what decorum weighs. Taking them in order also answers the last open
-structural question — what may attack what — **without** the fabricated matrix.
+### 4.1 Hermagoras — and *thesis* vs *hypothesis*
 
-### 4.1 Hermagoras' *staseis* — and the *thesis*/*hypothesis* distinction we have been missing
+The four *staseis*: conjecture · definition · quality · **objection/transference**. Three questions about an act
+plus **one procedural escape**, which is why §6 C-2 extracts the fourth from the ladder rather than ranking it.
 
-Hermagoras of Temnos supplies the four-part system Cicero and Quintilian transmit: **conjecture** (did it happen),
-**definition** (what is it), **quality** (was it right), **objection/transference** (should this be heard here at
-all). Three questions about an act plus **one procedural escape** — which is why C-2 extracts the fourth from the
-ladder rather than ranking it fourth.
+The part with no representation anywhere: **thesis** (the general question) versus **hypothesis** (the specific
+case). A contest is always a hypothesis, but arguing up to the thesis widens the ground and **changes what the
+verdict is worth** — a judgment on the particular binds one case; on the general, many.
 
-The part with no representation anywhere in our tree is Hermagoras' other distinction: **thesis** (the general
-question — *is loyalty owed to an unjust lord?*) versus **hypothesis** (the specific case — *did this man owe
-loyalty to this lord?*). A contest is always a hypothesis. But **arguing up to the thesis is a real move with a
-real cost**: it widens the ground, invites the *koina*, and — critically — **changes what the verdict is worth to
-the world**. A judgment on the particular binds one case; a judgment on the general becomes a Precedent that binds
-many. That is the same reach axis W6 gives the adjudicator's authority, reached from the other end, and it makes
-`LedgerTag`'s existing key/`ttl` structure carry both.
+**Corrected accounting.** I called this "nearly free: one flag on a claim." It is not: C2 rules the claim record
+ABSENT, so the flag's cost includes the object it sits on. And it shares one axis — verdict reach — with W6. **Two
+mechanisms for one axis is one too many**; W6's is cheaper, so thesis/hypothesis is filed as a fork, not shipped.
 
-**This is the sharpest single unclaimed mechanic in the document**, and it is nearly free: one flag on a claim,
-consumed by the record emission.
-
-### 4.2 Technic vs atechnic proofs — the division that explains the whole world interface
-
-Aristotle divides proofs into the **entechnic** — ethos, pathos, logos, *furnished by the art* — and the
-**atechnic**: laws, witnesses, contracts, oaths, testimony under compulsion, *not furnished by the art*, only
-**used**. This is not a taxonomy detail. It is the reason the architecture splits where it does:
+### 4.2 Technic vs atechnic — the division that explains the world interface
 
 | | **Technic** | **Atechnic** |
 |---|---|---|
 | Source | generated in the moment by skill | acquired beforehand, in the world |
-| Owner | C1 (how one argues) + C4 (how effectively) | W3 (evidence) — **fieldwork, between contests** |
+| Owner | C1 + C4 | W3 — **fieldwork, between contests** |
 | Value set by | the roll, the venue, the hearer | the **engine**, hidden and fixed |
-| Renewable? | yes, every beat | no — spent, with corroboration decay |
+| Renewable | every beat | no — spent, with corroboration decay |
 
-So **the hidden fixed weight on `EvidenceItem` is not a simplification, it is the classical definition being
-honoured** — the orator does not *make* a contract more probative, only decides when to produce it. And it follows
-that the evidence producer belongs in fieldwork/investigation, not in rhetoric: *the case you can make is the case
-you did the work for.* Our kernel gets the atechnic side structurally right (`primitives.py:282-310` ✓) and then
-supplies it with nothing but literals (§1's boundary measurement).
+So the hidden fixed weight on `EvidenceItem` is **the classical definition being honoured**, not a simplification:
+the orator cannot make a contract more probative, only choose when to produce it.
 
-### 4.3 Victory requirements and points of defeat — two independent terminals
+**A tension the audit found and I had papered over:** §4.5 absorbs `Dossier.available` into judge-graded salience,
+while this table insists atechnic value is engine-fixed. Both cannot hold unqualified. **Resolution:** the item's
+*weight* stays engine-fixed and hidden; only its *relevance to the live question* is graded. A judge does not make
+a ledger more authentic — they decide whether it bears. Those are different quantities and the operator must keep
+them so.
 
-Two orthogonal ways a contest ends, and **the kernel already keeps them independent**, which is one of its genuinely
-good properties:
+### 4.3 Victory requirements and points of defeat
 
-- **Victory requirement** — the venue's standard of judgment: threshold, tally at close, proof bar, grace
-  threshold, persuasion band, ballot (`resolver.py:52-145` ✓). All six read `adv`.
-- **Points of defeat** — regulated failures that end it regardless of the merits: barred device,
-  self-contradiction, evasion, silence (`primitives.py:262-279` ✓). **The only terminal that does not read `adv`**
-  (`resolver.py:438-442`).
+Two independent terminals, and the kernel already keeps them independent — one of its genuinely good properties.
 
-You can be winning on the merits and lose on a clinch. Keep that. Two design notes: **which** failures are fatal is
-correctly a venue property already — a disputation clinches on all four, a ceremony has none — and the *catalogue*
-is grounded in Nyāya *nigrahasthāna*, classical **Indian**. The nearest Greco-Roman relative is Aristotle's
-**dialectic** (Topics VIII's regulation of the question-and-answer contest; *Sophistici Elenchi* on failed
-refutations), **not** his *Rhetoric*. Re-ground after a human text check, or keep the Nyāya label as
-ours-by-adoption — but do not manufacture a Greco-Roman citation for it.
+- **Victory requirement** — the venue's standard: six WinConditions (`resolver.py:52-145` ✓), reading no contest
+  state but `adv`.
+- **Points of defeat** — barred device, self-contradiction, evasion, silence (`primitives.py:262-279` ✓). **The
+  only terminal reading no `adv` at all** (`resolver.py:438-442` ✓).
 
-### 4.4 Warrant schemes carry their own critical questions — which retires the fabricated matrix
+You can be winning on the merits and lose on a clinch. Keep that. The catalogue is grounded in Nyāya
+*nigrahasthāna* — classical **Indian**; the nearest Greco-Roman relative is Aristotle's **dialectic**, not his
+*Rhetoric*. Re-ground after a human text check or keep the label as ours-by-adoption; do not manufacture a citation.
 
-**This is the important one.** An argumentation scheme is not just a label on a proof; it is a triple: a **premise
-pattern**, a **conclusion pattern**, and a fixed set of **critical questions** that are the recognised ways to
-challenge it. Argument from expert opinion is challenged by asking whether the source is genuinely an expert *in
-this field*, whether experts agree, whether the source is biased. Argument from sign, from precedent, from
-consequences, from analogy each carry their own list.
+### 4.4 Warrant schemes carry their own critical questions
 
-The consequence for Q4 is decisive:
+A scheme is a triple: **premise pattern · conclusion pattern · critical questions** — the recognised ways to
+challenge it. Argument from expert opinion is challenged by asking whether the source is an expert *in this field*,
+whether experts agree, whether they are biased. Sign, precedent, consequences, analogy each carry their own list.
 
-> **A warrant scheme defines its own attack surface. There is no warrant × attack matrix to author, because each
-> scheme ships with its attacks.**
+> **A scheme defines its own attack surface. There is no warrant × attack matrix to author.**
 
-The matrix retracted in ED-SC-0025 as "invented rather than derived … formatted to look rigorous" was solving a
-problem that **does not exist once warrants are schemes rather than tags**. That retraction stands, and this is its
-principled replacement: not a smaller matrix, no matrix. Undermine / Rebut / Undercut then become the three
-*structural positions* an attack can occupy (premise, conclusion, inference), while the scheme's critical questions
-supply the *content* — which is exactly the Q1 claim-graph and the Q4 context-sensitivity, from one primitive.
+The matrix retracted in ED-SC-0025 was solving a problem that **does not exist once warrants are schemes rather
+than tags**. Undermine/Rebut/Undercut become the three *structural positions* (premise, conclusion, inference);
+the scheme's critical questions supply the content.
 
-It also gives the engine a legible way to present attacks without prose: the available moves against a standing
-claim **are** that claim's scheme's critical questions. And it bounds the authoring budget honestly — the cost is
-per *scheme*, a small closed set, not per (warrant × attack) pair.
+**Condition I dropped and am restoring:** `00` Fork B ratified this direction **conditional on a pick-entropy
+sweep that has not been run**. I adopted the mechanism without the condition — a §0.1 point-3 violation against my
+own standard. **The condition is reinstated: schemes are conditional on that sweep.** Sourcing: Toulmin/Walton,
+modern argumentation theory, ours-by-adoption; numbers are `[SEED]`s.
 
-**Sourcing discipline:** the scheme-with-critical-questions apparatus is modern argumentation theory (Toulmin's
-layout; Walton's schemes), **not** Aristotle, Cicero or Quintilian — though it is a direct descendant of the
-*topoi* and of dialectic's regulated challenge. Label it ours-by-adoption, exactly as §4.3 requires for the defeat
-catalogue. Its numbers remain `[SEED]`s.
+### 4.5 Decorum — the content-dynamic weighting operator
 
-### 4.5 Decorum is the content-dynamic weighting operator
+Both lenses arrived at one slot from opposite directions: a salience function `f(proof-type × appeal × temporal,
+live question, judge)`, and *decorum* as fitness between speech and (speaker, subject, hearer, occasion).
 
-The reconciliation point. Both lenses reached it from opposite directions and named it differently.
+**Corrected claim.** I wrote "these are the same object." They are **the same slot reached from two directions**,
+not the same object: `f` has no speaker and no occasion argument, and the coupling operator is strictly larger —
+speaker-side state reaches E1 through other edges. The identity was an elision.
 
-- The duplication lens, from Quintilian's status theory and *Rhet.* I.15's **conditional** treatment of each
-  inartistic proof (argue documents up when they favour you, down when they don't): replace both static objects with
-  **one salience function `f(proof-type × appeal × temporal orientation, live question, judge)`**.
-- The orthogonality lens, from *decorum* as fitness between speech and (speaker, subject, hearer, occasion):
-  **decorum is not apparatus and not context — it is the coupling operator**, and orthogonality holds exactly
-  insofar as every context-dependence routes through it and nowhere else.
+The kernel already implements an unnamed version: `gain = MERIT_SCALE × magnitude × res × readiness × jitter ×
+bias` (`resolver.py:315` ✓). Three defects:
 
-**These are the same object**, and it is the C1 × P1 cross. Correction 1 is therefore not a departure from the
-classical frame; it is the most classical thing in the design. **A 1:1 venue→style table is *anti*-decorum**:
-decorum is defined by taking more than one argument.
+1. **One-place.** Generalise the existing binary relevance gate — `Stasis.relevant` (`primitives.py:21` ✓),
+   `Dossier.available` (`:300-301` ✓) — from {0,1} to graded, absorbing `RhetoricalWeights`, the venue tense trio,
+   and CR4's +1D into one owner. **Three static objects, one owner.**
+2. **Temporal is a lookup.** It becomes a move field; `Stasis.TENSE` is deleted (falsifier run: its only non-test
+   reader is `resolver.py:303`, inside the weight path ✓).
+3. **The cost half is missing.** Classically the wrong register costs ethos. A **fork**, not a default.
 
-The kernel already implements an unnamed decorum operator — `gain = MERIT_SCALE × magnitude × res × readiness ×
-jitter × bias` (`resolver.py:315` ✓), where `res` blends venue role-weights with judge character by leak
-(`resolver.py:306-307` ✓). Three things are wrong with it:
-
-1. **It is one-place.** Generalise the *existing* binary relevance gate — `Stasis.relevant` (`primitives.py:21` ✓)
-   and `Dossier.available` (`primitives.py:300-301` ✓) — from {0,1} to graded, and it absorbs `RhetoricalWeights`,
-   the venue tense trio, **and** CR4's +1D into one owner. Per §0's bottom-up rule: the primitive already exists.
-2. **Temporal orientation moves from lookup to choice** (C1). `Stasis.TENSE` is deleted; the move carries its own
-   orientation; the venue weighs the *combination* against the live content.
-3. **The cost half is missing.** Classically the wrong register does not merely earn less — it costs ethos. The
-   kernel's only misfit penalty is the CR5 foul (`resolver.py:404-419` ✓), a different concept: eristic that failed,
-   not register that misfit. Wiring the cost half is a **fork, not a default** (§10).
-
-**Every number inside `f` is ours.** The *concept* has classical warrant; the salience values are `[SEED]`s authored
-under §0.1 discipline. Do not let the pedigree of the shape launder the numbers.
+**Unpriced liability, named:** mechanism count falls, **parameter count explodes** — `f` is hundreds of authored
+cells replacing twelve `[SEED]`s, with no authoring-budget bound. Elegance in the object model bought with a
+combinatorial content liability. That bound is fork §10.15.
 
 ---
 
 ## §5. The state graph
 
-Genre appears nowhere. That is the test the decomposition passes.
-
 ```mermaid
 stateDiagram-v2
-    [*] --> Constitution : writ filed
+    [*] --> Constitution : writ filed — read priors from the ledger
     Constitution --> Exordium : venue + hearer instantiated
     Exordium --> TranslatioWindow : forum contested (once, pre-merits)
     Exordium --> Narratio : standing established
@@ -403,11 +282,12 @@ stateDiagram-v2
     TranslatioWindow --> Narratio : challenge fails (burden penalty)
     Narratio --> Partitio : facts framed
     Partitio --> StasisLoop : rung vocabulary published
-    StasisLoop --> StasisLoop : claim (enthymeme | example) · present proof · question · rebut
+    StasisLoop --> StasisLoop : claim · present proof · question · rebut
     StasisLoop --> StasisLoop : shift — advance the gate one rung
     StasisLoop --> Clinch : fault catalogue fires
     StasisLoop --> Peroratio : rungs closed or budget spent
     Peroratio --> Verdict : last word delivered
+    Peroratio --> Record : spectator hearer — no verdict state
     Verdict --> Settlement : compromise band
     Verdict --> Record : decisive band
     Clinch --> Record
@@ -415,126 +295,115 @@ stateDiagram-v2
     Record --> [*]
 ```
 
-**Where each requirement enters — and only here.**
-
 | Slot | Entry mode | Where |
 |---|---|---|
-| **P1 kind** | PARAMETER at Constitution; GUARD inside the loop | the Venue row. Contested **only** in TranslatioWindow |
-| **P2 who** | PARAMETER (the hearer object); MODIFIER via decorum | never a state; T4b is a *field* of it |
-| **P3 how adjudicated** | the verdict **function** at Verdict | single judge → threshold; bench → per-member ballot; spectator-hearer → **no verdict state at all**, the graph short-circuits Peroratio → Record with credibility deltas only |
-| **P4 audience** | MODIFIER throughout, on both sides | E3 into the character, E2 + bias into the adjudicator |
-| **C1 how** | move fields, every StasisLoop transition | appeal × temporal orientation, weighed by E1 |
-| **C2 what** | the loop's move set | rung + warrant + claim |
-| **C3 why** | filed at Constitution; read by E10 | the speaker's end, declared in the writ |
-| **C4 effectively** | E3 + the σ-kernel | plus E6 at Constitution for the intercept |
-| **Outcome** | EMISSION at terminals; re-enters as GUARD (E5) and input MODIFIER (E6) | Record{status, citableAs}, Debt, Precedent, Grudge, oath/contract |
+| **P1 kind** | PARAMETER at Constitution; GUARD in the loop | the Venue row. Contested **only** in TranslatioWindow |
+| **P2 who** | PARAMETER; MODIFIER via E1 | frame, discipline and authority are fields; T4b is a field it carries |
+| **P3 how adjudicated** | the verdict **function** | threshold · per-member ballot · compromise band · **no verdict at all** (spectator — the graph short-circuits) |
+| **P4 audience** | MODIFIER throughout; **EMISSION at Record** | E3 into the character, E2+bias into the adjudicator, impressions out to the ledger |
+| **C1–C4** | move fields + Constitution | priors and the credibility intercept read at Constitution |
+| **Outcome** | EMISSION at terminals; re-enters as GUARD and input MODIFIER | Record{status, citableAs} · Precedent · Debt · Grudge · **Reputation** · **Leverage** · oath/contract |
 
-**The outcome axis currently has length zero.** Every wired contest output is a stat delta ⟨R⟩. Orthogonality along
-it is vacuously satisfied until the Record spine exists.
+**Corrected:** my earlier emission list omitted Reputation and Leverage — the very kinds the *fama* channel writes.
+The state graph did not know about its own headline mechanism.
 
-**Phases are a venue mask, not a second graph.** The six-part oration is the *forensic configuration* of a phase
-machine; the tradition itself drops *narratio*/*partitio* for deliberative causes.
+**Phases are a venue mask, not a second graph.** The six-part oration is the forensic configuration; the tradition
+itself drops *narratio*/*partitio* for deliberative causes.
 
 ---
 
-## §6. The four constitutive couplings
+## §6. Couplings that must be named
 
-An orthogonal product space is achievable **iff** these four are named rather than papered over.
+**Softened.** I claimed an orthogonal product space is achievable **iff** four couplings are named. Neither
+direction was argued, the four are not one kind of thing (C-2 is a config refactor; C-4 is an unbuilt mechanism),
+and the list was incomplete. Corrected: **these are the couplings that must be named rather than papered over**,
+and there are five.
 
-**C-1 — Genre is DERIVED, fatally.** It is a projection of three venue parameters: `hearer_role ∈ {judge,
-spectator}` × `question_tense` × `verdict_standard`. All three already exist. The decomposition is strictly *better*
-than the label: each parent is independently orthogonal, and epideictic returns for free as a venue row (spectator
-hearer, no verdict) rather than needing a third genre. Deleting genre dissolves the unmapped Style↔Appeal seam
-rather than solving it. **Collides with ratified ED-1062 and CR4 — Jordan's call.**
+**C-1 — Genre is DERIVED.** A projection of `hearer_role × question_tense × verdict_standard`. **Corrected:** I
+said "all three already exist," but correction 4 deletes `Stasis.TENSE`, so after this document's own
+recommendations *question_tense is stored nowhere*. The **kill survives** on the independent argument (an advocate
+does not choose to be deliberative); the *decomposition* needs its middle term re-founded — on the venue's
+temporal weights, not on a rung tag. Collides with ED-1062 and CR4.
 
-**C-2 — The stasis gate is free; the six-rung total order is a category error.** The ladder welds four forensic
-stases to two deliberative grounds into one order (`primitives.py:14` ✓). The symptom was already found
-independently: JURISDICTION is ruled *pre-merits* yet sits fourth, reachable only mid-merits and outrankable by
-CONSEQUENCE. **Ruling: one gate mechanism, per-venue rung vocabulary as a config row** — forensic {conjecture,
-definition, quality}; deliberative {feasibility, advantage, honour}; negotiation {existence, definition, valuation,
-authority}. The CONSEQUENCE/FEASIBILITY merge then becomes within-vocabulary housekeeping, with the classical seam
-named: *can we* (the *koinon* of the possible) versus *should we* (advantage) genuinely differ, and reopen if
-`settle()` ever needs a "you cannot deliver this" challenge.
+**C-2 — The stasis gate is free; the six-rung total order is a category error.** Four forensic stases welded to two
+deliberative grounds (`primitives.py:14` ✓), with JURISDICTION ruled pre-merits yet sitting fourth and outrankable
+by CONSEQUENCE. One gate, **per-venue rung vocabulary as a config row.**
 
-**C-3 — *Translatio* is the reflexive element.** The one classical move whose subject matter *is* a contextual
-dimension: resolving it rewrites P1/P2 mid-contest. Canon already picked the clean horn — "if circumstances change
-enough to shift the adjudicator type … the current contest ends and a new contest begins"
-(`social_contest_v30.md:38-39` ⟨R⟩). The kernel contradicts canon *and* the alternative: nothing consumes a
-JURISDICTION win as a forum change, and the real mechanic (`parliamentary_stay.py`) has zero campaign callers.
-**Ruling: extract JURISDICTION from the ladder; pre-merits window; terminate-and-reinstantiate.**
+**C-3 — *Translatio* is reflexive.** Resolving it rewrites P1/P2. Canon already picked terminate-and-reinstantiate
+(`social_contest_v30.md:39` ✓); the kernel implements neither horn, and `parliamentary_stay.py` has zero campaign
+callers ✓.
 
-**C-4 — Pathos supplies the audience type; the coupling runs backwards.** Book II analyses each emotion as (state of
-mind, toward whom, on what grounds). That triple **is the interface specification for P2's emotion field.** The one
-place classical fidelity buys a mechanism instead of costing one, and it is cheap: a pathos move names a target
-emotion whose precondition is checked against the Record ledger (anger available only if a Grudge exists). One rule,
-composing on the Record spine, **no new state**. Do not build fourteen emotions.
+**C-4 — Pathos supplies the audience type.** Book II analyses each emotion as (state, toward whom, on what
+grounds) — the interface specification for T4b. Cheap: precondition checks against the ledger. Do not build
+fourteen emotions. *(A build item, not a structural coupling — listed here because it constrains P2's shape.)*
 
-Everything else — admissibility rosters, register-fitness tables, rung vocabularies, phase masks — is **venue
-configuration: rows, not code.** The *kernel* is already mostly on the right side of this line; the orthogonality
-failures are concentrated in the doc-side Style/Genre/Orientation grid and in the missing outcome axis.
+**C-5 — Leak (NEW, from the audit).** Public pressure rewrites the weights *inside* E1 mid-contest
+(`resolver.py:304-307` ✓) — P4 rewriting P3's effective standard. This also qualifies C-3's claim that translatio
+is *the one* move whose resolution rewrites a contextual dimension; leak does it continuously and quietly.
 
 ---
 
-## §7. Duplication, under the corrected two-category test
+## §7. Duplication — graded against the kernel as built
 
-**The test:** at every reachable moment, is A recoverable from B by a fixed rule *and* carries no state B lacks?
-Yes → one state written twice, collapse. No → two tracks, model the interaction.
+**Rider 1 applied:** this section grades against the **kernel as built**. Withdrawals (§7.2) each name a consumer
+or a fork, per rider 2.
 
-### 7a. One state written twice — collapse stands
+### 7.1 One state written twice — collapse stands
 
 | Pile | Why | Survivor |
 |---|---|---|
-| `FaceScale` / `Face_max` / `Face_current` / Charisma×3 | pure re-expression: `face_current = round(Standing/10 × face_max)` (`resolver.py:228-234` ✓) | **Standing** (needs Jordan, ED-1056) |
-| Renown as a second name for persistent repute | same function | **Reputation** (FA/WR lane; observation only) |
-| three resistance representations ⟨S⟩ · two bench defaults ⟨S⟩ · `TRACKERS` registry · `split_standing` (`resolver.py:162` ✓) · Concentration formula chain | naming/prototype layers over live primitives | the primitives |
+| `FaceScale` / `Face_max` / `Face_current` / Charisma×3 | `face_current = round(Standing/10 × face_max)` (`resolver.py:228-234` ✓) | **Standing** (ED-1056) |
+| Renown as a second name for persistent repute | same function | **Reputation** (FA/WR lane — *observation only*) |
+| three resistance representations ⟨S⟩ · two bench defaults ⟨S⟩ · `TRACKERS` registry · Concentration chain | naming layers over live primitives | the primitives |
 
-**The corpus licenses exactly three owners of credibility**, and the count is the argument: in-speech ethos
-(Aristotle) → **Standing**; persistent *auctoritas* / the *vir bonus* → **Reputation**; the hearer's goodwill toward
-the person (*eunoia*) → **Disposition**. Three functions, three owners; the current eight-mechanism pile is
-duplication by that standard.
+**Three owners of credibility, and the count is the argument:** in-speech ethos → **Standing**; persistent
+*auctoritas* → **Reputation**; the hearer's goodwill (*eunoia*) → **Disposition**.
 
-### 7b. Two tracks — verdicts WITHDRAWN, do not collapse
+### 7.2 Two tracks — withdrawals, each naming its consumer
 
-| Pair | State each carries that the other does not | The interaction |
+| Pair | Consumer or fork | Verdict |
 |---|---|---|
-| **T3a slope vs T3b intercept** | what this speech earned vs what a life earned | E6. Quintilian sets the intercept, Aristotle the slope. Prior passes were resolving a contradiction that isn't one |
-| **T4a frame vs T4b feeling** | the end this mind judges from vs who it is angry at, and why | E1 reads the frame; E4 gates the feeling. Two rates, one object |
-| **Warrant vs appeal — REVERSAL** | *kind* of proof vs which *pistis* it engages | Collinear only under one-place salience. Under `f(proof-type, live question)` they separate exactly as Jordan said: a document is near-decisive at conjecture and near-irrelevant at quality; a character witness the reverse. **This is the classical treatment** — Quintilian Book V classifies proofs by type and treats each type's force as case-conditional. **Warrant survives as a genuine axis in CIP-2.** Boundaries: the withdrawn warrant×attack matrix stays withdrawn; every number is a `[SEED]` |
-| **Appeal vs temporal orientation (C1)** | which *pistis* vs which tense the argument runs in | The 3×3 cross **is** the C1 requirement. Previously collapsed because tense was derived from the rung; as a *choice* they are independent |
-| **T1 question vs T2 claim record** | which rung is live vs what has been said on it | E7 / E9 |
+| **T3a slope vs T3b intercept** | fork §10.6 (does the ledger feed `standing_start`?) | **Withdrawn as design intent; vacuous on the kernel today** — a constant intercept is recoverable at every reachable moment. Honest status, not a banked win |
+| **Hearer frame vs feeling** | frame → E1 (live); feeling → C-4 (fork) | **Withdrawn on content grounds**: an end and a targeted emotion-triple are not recoverable from each other by any fixed rule. **Corrected:** my stated reason was "two rates on one object," which is neither necessary nor sufficient — a lagged copy of any scalar has a different rate |
+| **Warrant vs appeal** | fork §10.16 (the salience table) | **DOWNGRADED to undecided.** The separation is a property of a table that does not exist and whose every cell is a `[SEED]`. That is the same authoring cliff that produced the ED-SC-0025 retraction. "Separable in principle, pending authored evidence" — not a banked reversal |
+| **Appeal vs temporal** | correction 4 (a proposal) | **Not a finding.** They are independent *because I propose to make them so*. A test that ratifies its own recommendation is not an instrument |
+| **T1 question vs T2 claim record** | E5, E7 | Withdrawn; both consumers named |
 
-### 7c. Not rescued
+### 7.3 What the broken instrument cost — recorded, not buried
 
-**Genre** (§0, §6 C-1) — both lenses, independently, from classical *and* mechanical evidence.
+Under the un-rider'd test I rescued **`FactionBoost`'s table into the disposition matrix**. That was a category
+error: the table maps *faction → the argument-style a room dominated by that faction rewards* (`dictionaries.py:
+386-442` ✓) — it contains no holder, no valence toward a faction, no opinion *of* anyone *about* anyone. It is
+**crowd-profile data (Q3) plus ethical-mode vocabulary**, not `D[holder][faction]`. The new track wanted content, so
+content was found for it. The die is still dead; the data is still reusable; the assignment was wrong.
 
 ---
 
 ## §8. Excess — carries no state anything reads
 
-1. **Free:** three resistance representations · the FactionBoost **die** (the *channel* only — its seven-faction
-   **table** is authoring data for T9's faction row, W7) · `TRACKERS` registry · legacy stub surface · dual bench
-   defaults.
-   **`split_standing` is REMOVED from this list — my earlier verdict was wrong.** It splits Standing into ascribed
-   **Rank** and earned **Credit** (`resolver.py:200-214` ✓), which is exactly the primitive an institutional party
-   needs (W2a). It is excess as a per-venue toggle on individuals and correct as the inquisition/office primitive:
-   an un-triggered mechanism, not a dead one.
-2. **Cheap:** **`hard`** — byte-identical to `advance` after the gate ⟨R⟩ with UI copy ("Press hard — a bigger
-   swing", `agon_harness.py:327` ⟨R⟩) that is **false against the code**. Its classical name is *auxesis* —
-   amplification, a **magnitude** operation — and `hard` delivers no magnitude difference. Amplification's ghost
-   with the amplification missing. Also: the Concentration chain; the abandoned TTRPG/BG/Hybrid framing.
-3. **Newly condemned:** **Momentum-as-purchasable-successes.** No classical function — buying assent is precisely
-   what the art of persuasion is *not* — and no demonstrated play function.
-4. **Rewrite, not delete:** `RhetoricalWeights` + the venue tense trio → the decorum operator (§4); flat setup dice
-   → Dossier/δσ; **Reserve** — `support` costs 2 and regains 4 (`primitives.py:51-52` ✓), so the economy constrains
-   nothing. Fix cost ≥ regain, or cut it: a resource that constrains nothing is excess wearing a resource's clothes.
-5. **Needs Jordan:** Doubt Marker (coupled to CIP-2 — if CIP-2 lands the marker duplicates Undercut; if CIP-2 is
-   rejected the marker is the **only** owner of the anticipation function and the kill must be re-argued);
-   FaceScale; Genre/Orientation/Style/InteractionType as stored axes; the armature merge into one judge vector.
+1. **Free:** three resistance representations · the FactionBoost **die** (the table is Q3/frame data, §7.3) ·
+   `TRACKERS` registry · legacy stub · dual bench defaults. **Sharpened by the audit:** `FactionBoost` has **no
+   resolution consumer at all** in code — the +1D is prose-level. More inert than I said.
+2. **Cheap:** **`hard`** — byte-identical to `advance` post-gate ⟨R⟩, costs 5 vs 3 (`primitives.py:51` ✓), risks a
+   barred-device clinch, and `agon_harness.py:327` ⟨R⟩ sells it as "a bigger swing." **Strictly dominated with
+   false UI copy.** Its classical name is *auxesis* — a **magnitude** operation it does not perform.
+3. **Newly condemned:** Momentum-as-purchasable-successes — buying assent is precisely what the art of persuasion
+   is not.
+4. **Rewrite:** `RhetoricalWeights` + the venue tense trio → §4.5; flat setup dice → Dossier/δσ; **Reserve** —
+   `support` costs 2 and regains 4 *and* builds ethos (`primitives.py:51-52`, `resolver.py:331-332` ✓), so it is
+   net-positive. Fix cost ≥ regain or cut it.
+5. **Needs Jordan:** Doubt Marker (coupled to CIP-2) · FaceScale · Genre/Orientation/Style as stored axes · the
+   armature merge.
 
-**Keep despite no Greco-Roman warrant — label as ours, never dress in a citation:** the σ-kernel (no classical chance
-model exists; the classical resolution instrument is the judge's *krisis*); the fault/clinch catalogue (grounded to
-Nyāya *nigrahasthāna* — classical **Indian**, off-period for a Renaissance game; the nearest Greco-Roman relative is
-Aristotle's *dialectic*, not his *Rhetoric*); the Insinuation axis; jitter.
+**`split_standing` — coupled verdict, the contradiction resolved.** I moved it out of the excess pile as the
+institutional-party primitive (W2a) and left it in §7.1's collapse pile: the document ruled both ways. The audit
+also found the rescue depends on `hard` — ascribed Rank's one distinct in-bout consumer is `SelfGating.licit`
+(`primitives.py:219-220` ✓), and §8.2 kills `hard`. **Resolution: its fate is coupled to fork §10.12.** If the
+institutional party is built, Rank needs a consumer that is not `hard`. If it is not, `split_standing` is excess.
+It cannot be rescued *and* have its only consumer deleted.
+
+**Keep despite no Greco-Roman warrant — label as ours:** the σ-kernel; the fault catalogue; the Insinuation axis;
+jitter.
 
 ---
 
@@ -542,106 +411,127 @@ Aristotle's *dialectic*, not his *Rhetoric*); the Insinuation axis; jitter.
 
 | Missing | Verdict |
 |---|---|
-| **Book II emotion model** | The one genuine fidelity gap, and the classical text is effectively an algorithm spec. Cheap composition — E4. **Build.** |
-| **Amplification (greater/lesser *koinon*)** | The only *koinon* with no disguise in the tree. Home is the stakes dials or Peroratio, **not** a verb variant |
-| **Peroration** | Absent; the close is a pure tally read. Cheapest shape: a closing move re-weighing *already-presented* Dossier items — peroration-shaped, no new state. **Opportunity only** |
-| **Enthymeme vs example** | The example half gets an owner the moment the Record spine lands (E5). Adequate post-CIP-1 |
-| **Cardinal virtues** | Present in disguise: the QUALITY rung has no sub-structure, and the ethical-mode table is the ghost of the *qualitas* topics. A **content** axis (a topic library), not an outcome axis |
-| ***Dispositio*** | Correctly out of scope *and implicitly present* — choosing what to spend and when under a budget **is** arrangement |
-| ***Elocutio*** / ***memoria*** / ***pronuntiatio*** | Correctly out of scope; the player composes no prose. *Pronuntiatio*'s strategic residue — delivery matters more before crowds — is real, and argues for the Cognition-before-judges / Charisma-before-crowds differentiation: **ship the attribute mapping rather than deleting the table** |
+| **Book II emotion model** | The one genuine fidelity gap; the text is effectively an algorithm spec. Cheap (E4). **Build.** |
+| **Amplification** (greater/lesser *koinon*) | The only *koinon* with no disguise. Home is the stakes dials, **not** a verb variant. **A fork, not an edge** — the audit's cut, accepted |
+| **Peroration** | Absent. Cheapest shape: a closing move re-weighing already-presented Dossier items. **Opportunity only** |
+| **Enthymeme vs example** | The example half gets an owner when the ledger read lands |
+| **Cardinal virtues** | Present in disguise — the QUALITY rung has no sub-structure, and the ethical-mode table is the ghost of the *qualitas* topics. A **content** axis |
+| ***Dispositio*** | Out of scope *and implicitly present* — spending under a budget **is** arrangement |
+| ***Elocutio*** / ***memoria*** / ***pronuntiatio*** | Out of scope; the player composes no prose. *Pronuntiatio*'s residue — delivery matters more before crowds — argues for shipping the attribute mapping rather than deleting the table |
 
-**The ethical-mode table is modern philosophy in classical dress.** Of the seven modes
-(`social_contest_v30.md:70-78` ⟨S⟩), Kant's Categorical Imperative, Rawls (1971), consequentialism-as-doctrine and
-moral relativism **do not exist in Aristotle, Cicero or Quintilian**. Two have real classical content (Virtue Ethics;
-Duty / *officium*). As a taxonomy it has no classical warrant — the fabricated-pedigree pattern this session already
-caught once.
+**The ethical-mode table is modern philosophy in classical dress.** Of the seven modes (`social_contest_v30.md:
+70-78` ✓), Kant's Categorical Imperative, Rawls (1971), consequentialism-as-doctrine and moral relativism **do not
+exist in Aristotle, Cicero or Quintilian**. Two have classical content. As a taxonomy it has no warrant — the same
+fabricated-pedigree pattern ED-SC-0025 caught.
 
-But the underlying question — *is the ethical mode the adjudicator's* topos*?* — is **yes**, and it upgrades the
-table's role: each kind of judgment has a governing end the judge weighs from (the advantageous, the just, the
-honourable), which is exactly the **judge argument of `f`**. The table survives as **authoring vocabulary for T4a**,
-not as a mechanism and not as a boost die — **and it is simultaneously the vocabulary for C3**, the speaker's own
-end, which is what makes E10 expressible. Suggested period relabelling, **all seven interpretive and ours**: Divine
-Command → the divine law; Virtue Ethics → the *kalon*; Consequentialism → the *sympheron*; Categorical Imperative →
-the *dikaion* as universal law (loosest fit); Rawlsian → *epieikeia* / equity (genuinely Aristotelian); Relativism →
-*nomos* / custom; Duty → *officium*. Resonant Styles then stop being a parallel taxonomy: Evidence / Consequence /
-Authority are proof-type preferences of a *specific mind* — rows of the same vector — and Solidarity is Knot-gated
-relational state (*eunoia*), already correctly excluded from third-party judges.
+But *is the ethical mode the adjudicator's* topos*?* — **yes**, and that upgrades the table's role: each kind of
+judgment has a governing end (the advantageous, the just, the honourable), which is the judge argument of `f`. It
+survives as **authoring vocabulary for the hearer's frame**, and simultaneously for C3. Period relabellings, all
+interpretive and ours: Divine Command → divine law; Virtue → the *kalon*; Consequentialism → the *sympheron*;
+Categorical Imperative → the *dikaion* as universal law; Rawlsian → *epieikeia*/equity (genuinely Aristotelian);
+Relativism → *nomos*; Duty → *officium*.
 
 ---
 
-## §10. The forks — recommend, never execute
+## §10. Forks — recommend, never execute
 
-Each collides with a ratified item or commits an authoring budget. **All need Jordan.**
+1. **Genre: keep or decompose** (C-1; re-found `question_tense` first). 2. **Stasis: one ladder or per-venue
+vocabularies** (C-2). 3. **Translatio: terminate-and-reinstantiate or in-flight remit** (C-3). 4. **Audience type:**
+typed per-member emotion state, **or** pathos stays a flat multiplier and the fidelity claim is dropped (C-4).
+5. **Decorum's cost half:** does misfit cost ethos or merely earn less? 6. **Ethos intercept:** does the ledger feed
+`standing_start`, and is the intercept **attackable**? Neither is expressible in `VALID_KINDS` (`resolver.py:32` ✓).
+7. **C3's scope:** is the speaker's end a declared choice with mechanical consequence, or flavour? 8. **Reserve:**
+fix or cut. 9. **Epideictic:** register-only, or the C-1 spectator-venue row. 10. **Leak's destination** under a
+noisy gallery: the judge's private character (today) or the room's taste? 11. **Adjudicator authority: level or
+gap?** The level effect is the recommendation; the gap is not asserted — §3 permits three divergence terms and
+inventing a fourth because it sounds right is the failure this document is written against. 12. **The institutional
+party** (W2) — and with it `split_standing`'s fate (§8). 13. **What the audience emits** (W5): which `LedgerTag`
+kinds, and keyed to whom. 14. **Where topic-opinion lives** (W7): person and faction map to Reputation/Grudge;
+opinion on the *question* maps to nothing. 15. **The authoring budget for `f`** (§4.5) — an explicit cell-count
+bound and a day-one check, the discipline `00` Fork B had and §4.5 lacks. 16. **The warrant×rung salience table**
+(§7.2) — the fork the warrant/appeal verdict now depends on. 17. **Thesis/hypothesis** (§4.1) versus W6's reach —
+one axis, two candidate mechanisms; pick one. 18. **Amplification's home** (§9).
 
-1. **Genre: keep or decompose** (C-1). Collides with ED-1062 and CR4; decomposing deletes Styles with it.
-2. **Stasis: one ladder or per-venue vocabularies** (C-2). Vocabularies force the JURISDICTION extraction.
-3. **Translatio: terminate-and-reinstantiate (canon's existing answer) or in-flight remit.** Clean vs rich.
-4. **Audience type** (C-4): typed per-member emotion state, **or** pathos stays a flat multiplier and the classical
-   fidelity claim for pathos is dropped. No honest middle position.
-5. **Decorum's cost half:** does register misfit *cost* ethos, or merely earn less?
-6. **Ethos intercept:** does the Record spine feed `standing_start` — and is the intercept **attackable** (arguing
-   against a record rather than a claim)? Neither is expressible in the current `VALID_KINDS` (`resolver.py:32` ✓).
-7. **C3's scope:** is the speaker's end a *declared* choice with mechanical consequence (E10), or flavour? This is
-   the only requirement with no partial implementation to fall back on.
-8. **Reserve:** fix `support` to cost ≥ regain, or cut the resource.
-9. **Epideictic:** ratified register-only, or the C-1 spectator-venue row (strictly more expressive at zero new
-   apparatus). Reopens a ratified item.
-10. **Leak's destination under a noisy gallery** (Q3): does public pressure pull the judge toward their *private
-    character* (today's behaviour) or toward *the room's taste* (T8b)? The second makes a hostile crowd a live
-    threat to a disciplined judge; the first keeps the crowd a pure bias term. Both are one line; they are
-    different games.
-11. **Adjudicator authority: level or gap** (W6)? Jordan's statement establishes the **level** effect — a king
-    weighs more than a governor — and that is the recommendation. Whether the *gap* between the speaker's station
-    and the bench's also matters (a farmer before a king vs a duke before a king) is a separate call. I am not
-    asserting it: §3 permits divergence terms in four named places, and inventing a fifth because it sounds right
-    is the failure this document is written against.
-12. **The institutional party** (W2): does an inquisition/office become a first-class contestant kind — ascribed
-    Rank via the existing `split_standing`, a mandate bounding reachable rungs, a dossier built by prior
-    fieldwork, and institutional Reputation on defeat — or does it stay a person with a different portrait?
-13. **What the audience emits** (W5): which `LedgerTag` kinds a contest may write (Reputation and Grudge are
-    clear; Leverage is arguable), and whether emission is keyed to *factions represented in the room* or to a
-    broader public. The presence bound is the design claim; its width is a call.
-14. **Where topic-opinion lives** (W7): person and faction disposition map onto `Reputation`/`Grudge`; opinion on
-    the *question* does not map cleanly onto any existing `LedgerTag` kind. Ledger tag, faction-ideology read, or
-    a third source — this determines whether the six priors are one table or two.
+**Cross-lane, and I had not marked these:** W3's evidence producer commits **FI** (`investigation.py` is all stubs
+✓); W5/W7's ledger work commits **SE**; C3 commits **characters**; W2(d) commits **FA**. *Observations, not
+rulings.*
+
+**The ledger claim, corrected.** I wrote that W5/W7 need "no new primitive." **False.** `ledger_add` treats
+Reputation as `SINGLE_VALUED` **by kind, ignoring `key`** — it deletes every prior Reputation tag on insert
+(`ledger.py:31-32, 50-53` ✓); tags live on **one settlement** (`ledger.py:14-16` ✓), so there is **no holder
+dimension**, and factions do not have ledgers. W6's *reach* has no carrier at all: `key`/`ttl` give identity and
+lifetime, not which ledgers hold a tag. The import **direction** is fine — `systems.*→systems.*` is established
+practice with no cycle ✓. **Correct statement: one primitive, extended cross-lane, needs SE.**
 
 ---
 
-## §11. Falsifiers and confidence (§0.1 #3)
+## §11. Falsifiers and confidence
 
-**What would show this wrong, concretely:**
+**Run, and held:** the `Stasis.TENSE` grep (only non-test reader is the weight path ✓); the `EvidenceItem`
+enumeration (repo-wide grep reproduces the list exactly — `wrapper.py:95`, `faction.py:35`,
+`agon_harness.py:199-200`, `_kernel_tests.py` ✓; no world producer); the six fields of `Adjudicator` ✓; the
+`support` economy ✓.
 
-- **§4's central claim** — one decorum owner absorbing three static objects — is falsified if a consumer needs
-  `tense` as *stored* state independent of the live rung and of a move-chosen orientation. Grep readers of
-  `Stasis.TENSE` outside `joint_weight`; a hit outside the resolver's weight path falsifies it.
-- **§7b's warrant reversal** is falsified if the warrant×rung salience table cannot be authored without a number
-  whose only justification is that it completes the table. That is the C-5 failure mode; the guard is that every
-  cell ships `[SEED]` with no claimed pedigree.
-- **§6 C-1** is falsified if any consumer reads genre for something not recoverable from (hearer_role,
-  question_tense, verdict_standard). Two independent passes found none; a third finding one kills the ruling.
-- **§8's `hard` kill** is falsified by any behavioural difference between `advance` and `hard` post-gate. The
-  falsifier is a non-identity test; it would currently fail.
-- **§1 P4's claim that two audience channels are wired** is falsified by removing `Room` from `Readiness` or
-  `pr.public` from `leak` and observing no behavioural change. Both are live reads today.
-- **The sealed-boundary measurement** (two integers in, one stat delta out) is falsified by any world→contest
-  call site passing evidence, a topic, or participant history. One call site exists (`scene_dispatch.py:298` ✓);
-  a second one anywhere kills the claim.
-- **"There is no world producer of evidence"** is falsified by a single `EvidenceItem(...)` construction outside a
-  harness, kernel test, or stub. Today the complete list is `wrapper.py:95`, `faction.py:35`,
-  `agon_harness.py:199-200`, `_kernel_tests.py` ✓ — all of them literals or adapters over literals.
-- **W6's structural claim** — that pressure is a one-way arrow into the bench — is falsified by any field on
-  `Adjudicator`/`Panel` that a *contestant-side* computation reads. There are six fields and none qualifies
-  (`contract.py:25-51` ✓).
-- **The "lose the case, win the room" separation** is falsified the moment any rule converts T8c into `adv` or
-  the verdict into T8c at a fixed rate. That conversion is exactly the collapse this architecture exists to
-  prevent, and it would be easy to add by accident.
+**Fired, correctly, against me:** "a second world→contest call site anywhere kills the claim." It exists
+(`mc_v18.py:148-151` → `parliamentary_bridge`). I wrote the falsifier and did not run it. §1's world-interface
+claim is now scoped to the Bout kernel.
 
-**Confidence.** HIGH: every `file:line` marked ✓; the genre ruling (two independent derivations, classical and
-mechanical); the decorum/salience unification; the three-owner credibility count; the two-category test and its
-assignments; P4's dual-channel finding. MEDIUM: the adjudicator/audience fusion in the classical basis; Quintilian
-extending stasis to deliberative causes; six-parts-as-forensic-config; most classical locators. LOW: Topics VIII as
-a defeat-catalogue source; burden-of-proof as treatise doctrine (it is practice-level Roman law, **not** A/C/Q —
-CIP-3 should say so rather than imply treatise pedigree).
+**New falsifiers for structures that had none:**
+- **The disposition matrix / priors:** falsified if any two of the six cells are always equal across authored
+  content — then the 3×2 is symmetry aesthetics, not structure. Test on the first authored venue set.
+- **The crowd profile (Q3):** falsified if bench taste and room taste are never authored to diverge — the choice
+  in §12's headline is a **content dependency wearing a mechanic's clothes**, exactly the caveat `00` Fork B
+  attached to warrant diversity and this document had not attached to itself.
+- **"Lose the case, win the room":** falsified by any rule converting the room's impression into `adv`, or the
+  verdict into impression, at a fixed rate. **Guard required, not just a falsifier** (§0.1 point 5) — a
+  registry-style test on the conversion sites, on the `_CELL_OWNED` template. **Not yet written.** Open work,
+  named as such. *Residual the guard does not cover:* whether the two axes re-converge two hops downstream through
+  `domain_echo` into common faction scalars is unexamined (FA/SE lane — *observation*).
 
-**Nothing here is executable as routine work.** Every §8.5 and §10 item touches a ratified decision. This document
-recommends; ratification is `[design]` work under ED-1094, and the loud-exception rule applies.
+**Replaced, because it could not fail:** the old warrant falsifier ("a number whose only justification is
+completing the table") named no procedure. Replaced by fork §10.16: the verdict stands only if the table is
+authored and the sweep run.
+
+**Confidence.** HIGH: every `file:line` marked ✓ (three critics re-checked ~25 of them and found zero misquotes);
+the `hard` kill (sharpened to strictly dominated); the Reserve economy; the genre kill; the sealed-*Bout-kernel*
+measurement; the no-evidence-producer null. MEDIUM: the reduced architecture's completeness; most classical
+locators; the couplings. **DOWNGRADED from HIGH:** "the two-category test and its assignments" — the instrument
+was broken and its assignments are re-graded in §7. LOW: Topics VIII as a defeat-catalogue source; burden-of-proof
+as treatise doctrine (it is practice-level Roman law, **not** A/C/Q — CIP-3 should say so).
+
+---
+
+## §12. What the adversarial audit changed
+
+The one result worth keeping is that **the verdict and the reputation route through different profiles to different
+consumers**, so *you can lose the case and win the room* — argue to win, or argue to be seen. It is a real
+choice-shape and it fills a verified-real gap.
+
+**But it is conditional, and I claimed it was not.** It required three things I did not state:
+
+1. **The duality doctrine is not satisfied "on its own terms."** Fork A is RULED — "auto = the contest kernel run
+   headless… consistent by construction" (`auto_manual_resolution_duality_v1.md:75` ✓), and §6 makes matched-input
+   consistency the hard constraint (`:61-65` ✓). So either the headless kernel reproduces both axes, and `04` §2's
+   wasted-attention charge returns on two scalars instead of one; or the player can steer the trade-off the auto
+   policy does not, which is **mode-shopping in consequence space — the exact exploit §6 exists to prevent.** The
+   escape is **CIP-9b**, filed as an amendment to ratified doctrine needing Jordan. I cited the doctrine and never
+   mentioned CIP-9b.
+2. **Authored taste divergence** (§11's new falsifier) and a reputation economy with stakes comparable to the
+   verdict — which is the unbuilt ledger work of §10.
+3. **Reconciliation with CIP-12 (attribution) and CIP-6 (disposition-reads-record)**, which are the two nearest
+   existing proposals and which this document did not mention. The unit now carries **three independently-derived
+   "second currencies"** with no statement of whether they are one axis or three. An anti-collapse condition that
+   licenses a new output currency per document is collapsing in the other direction.
+
+**Ledger of what the audit corrected:** the world-interface scope (headline, false as written) · three absolutes
+about authority and one-way pressure · "no new primitive" · "same object" · the "iff" · the divergence count ·
+the object count ("nine" over fourteen rows) · a dangling W7 · a wrong cross-reference · the state graph's own
+emission list · the `split_standing` contradiction · the `FactionBoost`→matrix category error · the dropped
+Fork-B sweep condition · an un-failable falsifier · four unmarked cross-lane commitments.
+
+**Net direction, stated plainly.** The unit's brief was prune, cut, consolidate, distil. `00` and `04` executed it.
+This document is **net-additive** — its additions trace to requirements specified after those documents, but that
+explains the growth without excusing what came with it: I never reconciled against `04`'s eleven-primitive
+irreducible set, and the architecture grew by appending. §2's reduction — 8 tracks, 8 edges, 2 config surfaces,
+one ledger interface — is generated by this document's own *rows, not code* rule, which I had applied to the
+kernel and not to myself.
