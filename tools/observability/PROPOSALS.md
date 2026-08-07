@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**259 open work items** · **116 need your decision**.
+**262 open work items** · **119 need your decision**.
 
 tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionable (no ruling needed) — 121, Editorial ledger — needs your decision — 103, Proposal docs (proposals/) — 9, Provisional / draft design docs — 7
+By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionable (no ruling needed) — 121, Editorial ledger — needs your decision — 106, Proposal docs (proposals/) — 9, Provisional / draft design docs — 7
 
 ## MB — Mass battle  (12 items, 9 need decision)
 
@@ -43,7 +43,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionab
 - `ED-FI-0002` — Counter-espionage loop (edge-playability EP-6). Enemy da.covert_betrayal reaches the player only as a non-interactive Tier-2 cut scene and only when exposed==true; da.antinomian_action and da.economic_intervention (whose nominal consumer se  _(open)_
 - `valoria-mechanic-audit-2026-07-13:fieldwork_investigation:fieldwork_investigation` — [PARTIAL] mechanic_audit / fieldwork_investigation: 3 P1 (2 wound-formula self-contradictions from incomplete ED-PC-0005/0006 propagation; 1 P-06 canon violation — threadcut Coherence drain in Knot mechanic, also replicated in knots_v30.md)  _(PARTIAL)_
 
-## SC — Social contest  (23 items, 13 need decision)
+## SC — Social contest  (26 items, 16 need decision)
 
 - 🔸 `ED-SC-0003` — P0 docket / P2 FORK (no stated default): resolve the 'Piety Track' name collision (audit finding N-4b). One name, two referents, three docs: the 0-10 debate tracker is 'Piety Track' in scale_transitions_v30/npc_behavior_v30/glossary (glossa  _(open)_
 - 🔸 `ED-SC-0004` — P0 docket / P1-severity FORK (no stated default): choose the kernel's canonical Argue-pool formula (audit finding N-2). Two contradictory implementations are simultaneously live: the deprecated legacy stub implements canon verbatim ((Primar  _(open)_
@@ -58,6 +58,9 @@ By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionab
 - 🔸 `ED-SC-0024` — AMENDS RATIFIED DOCTRINE -- refine the Auto/Manual Resolution Duality parity constraint (CIP-9b). auto_manual_resolution_duality_v1.md carries the load-bearing constraint E[auto] ~= E[played] for exploit prevention. Precedent (Lens D) says   _(open)_
 - 🔸 `ED-SC-0025` — DOCS 4/5 ADJUDICATION -- a filed recommendation cited a FABRICATION, and the only playtest evidence in the corpus hits our kernel. Three read-only Fable 5 adjudication lenses over the two newer source documents (now preserved verbatim at au  _(open)_
 - 🔸 `ED-SC-0026` — REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play  _(open)_
+- 🔸 `ED-SC-0027` — TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's eight requirements (C1-C4 character side: HOW one argues = rhetoric x temporal; WHAT; WHY; HOW effectively. P1-P4 type side: WHAT KIND; WHO adjudicates; HOW adjudication occurs; HOW au  _(open)_
+- 🔸 `ED-SC-0028` — ADVERSARIAL AUDIT OF ED-SC-0027, AND ITS CORRECTIONS. Three read-only Fable critics (valoria-critic: Read/Grep/Glob only -- independence structural per CLAUDE.md 10, not declared in a prompt) attacked 05_track_architecture_and_state_graph.m  _(open)_
+- 🔸 `ED-SC-0029` — PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc  _(open)_
 - `ED-SC-0001` — Targeted dominance sweeps for the audit's unverified degenerate-play candidates, when their lanes next open. SOCIAL (fold into contest Stage 4): Recall/Corroborate/Prep stacking vs a global pool cap; boost-lookup vs Appraise value; coalitio  _(open)_
 - `ED-SC-0008` — P2 hygiene work item (accepted): refresh references/module_contracts.yaml's social_contest entry (lines 425-447; audit finding N-3, UPHELD). The entry predates the entire Stage 1b-3 rebuild: resolver reads dice_pool where the kernel has bee  _(open)_
 - `ED-SC-0009` — Stage-4 entry-criteria work item (accepted; fold into the ratified Stage 4 gate, not a new stage): (1) wire the Face/Rattled strain channel -- the CR3 three-tracker tradeoff triangle currently runs on two legs; Face is monotonic-up (primiti  _(open)_
@@ -208,7 +211,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionab
 - 🔸 `proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _(PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - `proposals/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
 - `proposals/repo-reorganization-v1.md` — repo-reorganization-v1  _(RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **EXECUTED.** The migration (P0–P5, §4) ran to completion across P0–P4's slices; `designs/` was retired 2026-07-19 (ED-IN-0071 P4/P5 continuation, PR #191) and no longer exists in the working tree — see `CURRENT.md`/`systems/` §3. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.)_
-- `proposals/social_contest_consolidation_integration_v1.md` — social contest consolidation integration v1  _(PROPOSED — CIP-1..CIP-10 filed for ratification; CIP-3, CIP-7b and CIP-9b need Jordan)_
+- `proposals/social_contest_consolidation_integration_v1.md` — social contest consolidation integration v1  _(PROPOSED — CIP-0..CIP-15 filed. **Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15**)_
 - 🔸 `systems/npcs/character_canon_v30.md` — character canon v30  _(PROVISIONAL — pending ratification.)_
 - `systems/settlements/lps_wiring_v1.md` — lps wiring v1  _(PROPOSED (buildable spec) — 2026-07-14 · Lane: SE · executes E5 / ED-FA-0004 Stratum-B / ED-SE-0007)_
 - 🔸 `ED-1006` — Stage-1 module-contract extraction (module_contracts v2, 27 modules: 25 extracted / 2 stubs). Two mechanical-tier decisions for Jordan veto: (1) political_dynamics module CONSOLIDATED into npc_behavior — political_dynamics_keys_migration_v3  _(open)_

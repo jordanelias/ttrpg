@@ -4,13 +4,13 @@
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 259,
-    "needs_jordan": 116,
+    "total": 262,
+    "needs_jordan": 119,
     "by_kind": {
       "proposal_doc": 9,
       "provisional_status_doc": 7,
       "ledger_actionable": 121,
-      "ledger_needs_jordan": 103,
+      "ledger_needs_jordan": 106,
       "audit_partial": 19
     },
     "by_lane": {
@@ -35,8 +35,8 @@
         "needs_jordan": 1
       },
       "SC": {
-        "total": 23,
-        "needs_jordan": 13
+        "total": 26,
+        "needs_jordan": 16
       },
       "SE": {
         "total": 48,
@@ -104,7 +104,7 @@
           "title": "social contest consolidation integration v1",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "PROPOSED — CIP-1..CIP-10 filed for ratification; CIP-3, CIP-7b and CIP-9b need Jordan",
+          "status": "PROPOSED — CIP-0..CIP-15 filed. **Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15**",
           "links": []
         },
         {
@@ -2002,8 +2002,8 @@
       ]
     },
     "SC": {
-      "total": 23,
-      "needs_jordan": 13,
+      "total": 26,
+      "needs_jordan": 16,
       "items": [
         {
           "kind": "ledger_actionable",
@@ -2210,6 +2210,36 @@
           "source": "registers/editorial_ledger",
           "id": "ED-SC-0026",
           "title": "REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0027",
+          "title": "TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's eight requirements (C1-C4 character side: HOW one argues = rhetoric x temporal; WHAT; WHY; HOW effectively. P1-P4 type side: WHAT KIND; WHO adjudicates; HOW adjudication occurs; HOW au",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0028",
+          "title": "ADVERSARIAL AUDIT OF ED-SC-0027, AND ITS CORRECTIONS. Three read-only Fable critics (valoria-critic: Read/Grep/Glob only -- independence structural per CLAUDE.md 10, not declared in a prompt) attacked 05_track_architecture_and_state_graph.m",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0029",
+          "title": "PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc",
           "lane": "SC",
           "needs_jordan": true,
           "status": "open",
@@ -2804,7 +2834,7 @@
       "title": "social contest consolidation integration v1",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "PROPOSED — CIP-1..CIP-10 filed for ratification; CIP-3, CIP-7b and CIP-9b need Jordan",
+      "status": "PROPOSED — CIP-0..CIP-15 filed. **Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15**",
       "links": []
     },
     {
@@ -4622,6 +4652,36 @@
       "source": "registers/editorial_ledger",
       "id": "ED-SC-0026",
       "title": "REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0027",
+      "title": "TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's eight requirements (C1-C4 character side: HOW one argues = rhetoric x temporal; WHAT; WHY; HOW effectively. P1-P4 type side: WHAT KIND; WHO adjudicates; HOW adjudication occurs; HOW au",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0028",
+      "title": "ADVERSARIAL AUDIT OF ED-SC-0027, AND ITS CORRECTIONS. Three read-only Fable critics (valoria-critic: Read/Grep/Glob only -- independence structural per CLAUDE.md 10, not declared in a prompt) attacked 05_track_architecture_and_state_graph.m",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0029",
+      "title": "PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc",
       "lane": "SC",
       "needs_jordan": true,
       "status": "open",

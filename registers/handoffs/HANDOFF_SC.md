@@ -268,6 +268,24 @@ index; see it for cross-lane/global items.
 
 ## Next actions
 
+- **ED-SC-0029 (2026-08-06) — PROPOSAL REWRITTEN (v2).**
+  `proposals/social_contest_consolidation_integration_v1.md` (filename kept per CLAUDE.md §4 —
+  renaming breaks ~a dozen ED citations; the header carries v2). Restructured around Jordan's eight
+  requirements + seven world questions, which are now the **grading standard** (§1), each naming its
+  owning CIP. Five new corrections C-8..C-12. **Four new proposals, three of them net removals:**
+  CIP-13 (decorum operator — one graded owner absorbs `RhetoricalWeights` + the venue tense trio +
+  CR4's +1D, deletes `Stasis.TENSE`, retires the `hard` verb), CIP-15 (per-venue rung vocabularies,
+  translatio extracted, genre decomposed), CIP-7c (institutional party — and it **settles
+  `split_standing`**, whose only in-bout consumer is the `hard` verb CIP-13 kills), CIP-14 (the
+  audience as a party — the headline, with all four of its conditions stated). **CIP-2 strengthened,
+  not shrunk:** warrant schemes carry their own critical questions, so there is no warrant × attack
+  matrix to author at all — the C-5 retraction was solving a problem that stops existing. **CIP-12
+  reframed** into the reconciliation of three unreconciled second currencies, with a proposed ruling:
+  one currency, two holders. **Strict sequencing CIP-9b → CIP-12 → CIP-14** (unsound before the
+  first, ambiguous before the second). **10 forks need Jordan**, including a new one: the programme
+  has never been counted against `04`'s eleven-primitive irreducible set. ⚠ **File is 14,503 tokens
+  against the 15,000 blocking cap — the next substantive addition must split into `_part2`.**
+
 - **ED-SC-0028 (2026-08-06) — ADVERSARIAL AUDIT OF ED-SC-0027 + CORRECTIONS.**
   `audit/2026-08-06-social-contest-three-lens-audit/06_adversarial_audit_of_05.md`; `05` revised in place.
   Three read-only Fable critics found four broken claims. **CRITICAL:** `05`'s headline
