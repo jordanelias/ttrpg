@@ -1,6 +1,6 @@
 # Social contest — requirements, track architecture, and state graph
 
-## Status: PROPOSED (2026-08-06, ED-SC-0027; **REVISED same day after adversarial audit, ED-SC-0028**)
+## Status: PROPOSED (2026-08-07, ED-SC-0027; **REVISED same day after adversarial audit, ED-SC-0028**)
 ## Lane: SC
 ## Supersedes: nothing. Distils `00`–`04` + `proposals/social_contest_consolidation_integration_v1.md`.
 

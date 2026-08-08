@@ -1,6 +1,6 @@
 # Adversarial audit of `05_track_architecture_and_state_graph.md`
 
-## Status: RECORD (2026-08-06, ED-SC-0028)
+## Status: RECORD (2026-08-07, ED-SC-0028)
 ## Lane: SC
 
 Three read-only Fable critics (`valoria-critic`: Read/Grep/Glob only — independence structural, not declared) were

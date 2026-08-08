@@ -1,7 +1,7 @@
 # Social Contest — Consolidation & Integration Proposals (v2)
 
 ## Status: PROPOSED — CIP-0..CIP-15 filed. **Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15**
-## Date: 2026-08-06 (v2 same day) · Lane: SC
+## Date: v1 2026-08-06 · v2 2026-08-07 · Lane: SC
 ## IDs: ED-SC-0023 (programme), ED-SC-0024 (duality refinement), ED-SC-0027 (requirements + tracks), ED-SC-0028 (adversarial audit + corrections)
 ## Depends on: `audit/2026-08-06-social-contest-three-lens-audit/` — `00`–`06`
 ## Method: four read-only Fable precedent lenses, then two analysis lenses, then **three adversarial critics** who

@@ -1,6 +1,6 @@
 # Social contest — Keys, Knots, NPCs, and the combat model
 
-## Status: PROPOSED (2026-08-06, ED-SC-0030)
+## Status: PROPOSED (2026-08-08, ED-SC-0030)
 ## Lane: SC
 ## Supersedes: nothing. Extends `05` (track architecture) and `06` (adversarial audit) along four axes Jordan named.
 
