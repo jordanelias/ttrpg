@@ -117,7 +117,17 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     pointers is caught rather than passing as 'nothing to do'.
     """
     nf = _next_free()
-    released = {'SC': 17, 'FA': 37, 'WR': 10, 'SE': 50}
+    # PIN UPDATED 2026-08-06: SC 17 -> ... -> 31, eight allocations in one session.
+    # ED-SC-0017..0022 came from the three-lens social-contest audit
+    # (audit/2026-08-06-social-contest-three-lens-audit/); ED-SC-0023..0024 from the precedent-grounded
+    # consolidation programme (proposals/social_contest_consolidation_integration_v1.md); ED-SC-0025
+    # from the docs-4/5 adjudication; ED-SC-0026 from the reductive primitives/foundations audit;
+    # ED-SC-0027 from the track-architecture/state-graph distillation; ED-SC-0028 from the three-critic
+    # adversarial audit of 0027 and its corrections; ED-SC-0029 from the v2 proposal rewrite. All
+    # thirteen entries exist in registers/editorial_ledger_sc.jsonl. This is the update-the-pin-and-
+    # say-so path the assertion message below prescribes, not a revert of the walk-back: the frozen
+    # pre-walk-back SC pointer was 21, so 30 cannot be reached by reverting ED-IN-0098.
+    released = {'SC': 31, 'FA': 37, 'WR': 10, 'SE': 50}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

@@ -2,16 +2,15 @@
   "schema_version": 1,
   "generator": "tools/observability/build_proposals.py",
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
-  "ranked_view": "audit/2026-07-14-scale-chain-and-decision-surface-map/decision_queue_delta_v1.md",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 259,
-    "needs_jordan": 109,
+    "total": 262,
+    "needs_jordan": 119,
     "by_kind": {
-      "proposal_doc": 20,
+      "proposal_doc": 9,
       "provisional_status_doc": 7,
-      "ledger_actionable": 119,
-      "ledger_needs_jordan": 94,
+      "ledger_actionable": 121,
+      "ledger_needs_jordan": 106,
       "audit_partial": 19
     },
     "by_lane": {
@@ -24,8 +23,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 42,
-        "needs_jordan": 22
+        "total": 43,
+        "needs_jordan": 23
       },
       "MB": {
         "total": 12,
@@ -36,8 +35,8 @@
         "needs_jordan": 1
       },
       "SC": {
-        "total": 13,
-        "needs_jordan": 5
+        "total": 26,
+        "needs_jordan": 16
       },
       "SE": {
         "total": 48,
@@ -48,106 +47,16 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 96,
-        "needs_jordan": 28
+        "total": 85,
+        "needs_jordan": 26
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 96,
-      "needs_jordan": 28,
+      "total": 85,
+      "needs_jordan": 26,
       "items": [
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-          "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-          "title": "2026-05-16-PC-4.4-unified-success-stress",
-          "lane": "unassigned",
-          "needs_jordan": true,
-          "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-05-16-faction-audit-followup-plan.md",
-          "id": "proposals/2026-05-16-faction-audit-followup-plan.md",
-          "title": "2026-05-16-faction-audit-followup-plan",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-          "id": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-          "title": "2026-05-25-mechanics-integration-v3 1",
-          "lane": "unassigned",
-          "needs_jordan": true,
-          "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-17-cast-and-culture-expansion.md",
-          "id": "proposals/2026-07-17-cast-and-culture-expansion.md",
-          "title": "2026-07-17-cast-and-culture-expansion",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "(no Status line — proposals/)",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
-          "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
-          "title": "2026-07-17-world-factions-npcs-narrative-assessment",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "(no Status line — proposals/)",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
-          "id": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
-          "title": "2026-07-17-world-factions-npcs-narrative-companion",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "(no Status line — proposals/)",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
-          "id": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
-          "title": "2026-07-18-precedent-to-mechanism-design-brief",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "(no Status line — proposals/)",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-21-observatory-holonic-refactor.md",
-          "id": "proposals/2026-07-21-observatory-holonic-refactor.md",
-          "title": "2026-07-21-observatory-holonic-refactor",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED (r2) — 2026-07-21 (merge of PR #202 ratifies the Assay/Atlas/Augur architecture by default per ED-1094; its §7 phasing is amended/subsumed by the Reconciliation Program's R1–R6, 2026-07-21-reconciliation-program.md §6). The §8 P2-redefinition + mean==0 sentinel fix is now RULED (option A) and applied as ED-IN-0080. STILL HELD for separate Jordan sign-off — the remaining §8 items, NOT ratified by this merge: any Assay change altering P1 medians, unbuilt dispositions, elevating a symmetry probe to a Tier-3 gate / making the workflow blocking, build_graph↔substrate unification, and the four-bloc win-probability gate. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-21-reconciliation-program.md",
-          "id": "proposals/2026-07-21-reconciliation-program.md",
-          "title": "2026-07-21-reconciliation-program",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
-          "links": []
-        },
         {
           "kind": "proposal_doc",
           "source": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
@@ -156,16 +65,6 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
-          "source": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-          "id": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-          "title": "2026-07-28-external-practice-corpus-investigation",
-          "lane": "unassigned",
-          "needs_jordan": true,
-          "status": "PROPOSED — investigation complete; **every** adoption in §7, including the declines, is HELD FOR JORDAN except P1, which is marked `RATIFY-ON-MERGE` as a bug fix. See §0.3.",
           "links": []
         },
         {
@@ -180,16 +79,6 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "proposals/mass_battle_shape_echelon_revamp.md",
-          "id": "proposals/mass_battle_shape_echelon_revamp.md",
-          "title": "mass battle shape echelon revamp",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
           "source": "proposals/pc_formation_system.md",
           "id": "proposals/pc_formation_system.md",
           "title": "pc formation system",
@@ -200,32 +89,32 @@
         },
         {
           "kind": "proposal_doc",
-          "source": "proposals/pessimist_ners_audit_v1.md",
-          "id": "proposals/pessimist_ners_audit_v1.md",
-          "title": "pessimist ners audit v1",
-          "lane": "unassigned",
-          "needs_jordan": false,
-          "status": "FILED — 2026-07-11 · Lane: IN (cross-cutting; FA, SE). Max-effort adversarial audit (canonical §8.2-A, `references/throughlines_meta.md`) of the 44 proposals kept by the 2026-07-09 comparative-governance research docket, cross-referenced against the 2026-07-10 historical-concerns action catalogue. Read-only — NOT canon; a review artifact. The 12 already-authored-into-canon items sit live in the open PR, so their verdicts here are directly actionable (edit/hold before merge).",
-          "links": []
-        },
-        {
-          "kind": "proposal_doc",
           "source": "proposals/repo-reorganization-v1.md",
           "id": "proposals/repo-reorganization-v1.md",
           "title": "repo-reorganization-v1",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.",
+          "status": "RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **EXECUTED.** The migration (P0–P5, §4) ran to completion across P0–P4's slices; `designs/` was retired 2026-07-19 (ED-IN-0071 P4/P5 continuation, PR #191) and no longer exists in the working tree — see `CURRENT.md`/`systems/` §3. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.",
           "links": []
         },
         {
           "kind": "proposal_doc",
-          "source": "proposals/stub_infill_plan.md",
-          "id": "proposals/stub_infill_plan.md",
-          "title": "stub infill plan",
+          "source": "proposals/social_contest_consolidation_integration_v1.md",
+          "id": "proposals/social_contest_consolidation_integration_v1.md",
+          "title": "social contest consolidation integration v1",
           "lane": "unassigned",
           "needs_jordan": false,
-          "status": "SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]",
+          "status": "PROPOSED — CIP-0..CIP-15 filed. **Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15**",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/valoria_fork_plan_of_record_v1.md",
+          "id": "proposals/valoria_fork_plan_of_record_v1.md",
+          "title": "valoria fork plan of record v1",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROPOSED (ED-IN-0124, 2026-08-03). Jordan-vetoable throughout.",
           "links": []
         },
         {
@@ -1151,8 +1040,8 @@
       ]
     },
     "IN": {
-      "total": 42,
-      "needs_jordan": 22,
+      "total": 43,
+      "needs_jordan": 23,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -1271,16 +1160,6 @@
           "title": "Renumbered off the ED-IN-0013 double-allocation (armature §5.10 ruling, ED-IN-0026). GM-token sweep of the cross-scale handoffs (edge-playability EP-1/SIG-3) from the edge-playability §7 batch (PR #81/#82): GM-era adjudication language surv",
           "lane": "IN",
           "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0029",
-          "title": "Attribute/value coherence audit -- the quantity-layer extension of the Key & Echo Armature (Jordan directive 2026-07-08: 'we desperately lack unity, consistency and coherence with our explosion of attributes and derived scores across all ou",
-          "lane": "IN",
-          "needs_jordan": true,
           "status": "open",
           "links": []
         },
@@ -1499,6 +1378,26 @@
           "source": "registers/editorial_ledger",
           "id": "ED-IN-0113",
           "title": "Carried forward from ED-IN-0112's ratification so nothing is lost in the flip. A. THE DECISION-POLICY FORK — the one artifact only Jordan can author, and the reason the 94-item needs_jordan queue cannot drain. MEASURED EVIDENCE (134 Jordan-",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0123",
+          "title": "Rewrite of a same-day v1 that failed an independent critic pass (16 CONFIRMED-WRONG vs 19 survivals). THE THESIS CHANGED. `godot/godot_conversion_strategy_v1.md` already specifies Gate-0's five blocking preconditions, the Stage-1 spine, a s",
+          "lane": "IN",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-IN-0124",
+          "title": "Jordan asked for a read-only Fable-5 adversarial steelman of the fork Plan of Record, a fidelity/accuracy verification, best-practice reasoning toward a code-first repo with centralized values and modular architecture, and an Opus-5 rewrite",
           "lane": "IN",
           "needs_jordan": true,
           "status": "open",
@@ -2103,8 +2002,8 @@
       ]
     },
     "SC": {
-      "total": 13,
-      "needs_jordan": 5,
+      "total": 26,
+      "needs_jordan": 16,
       "items": [
         {
           "kind": "ledger_actionable",
@@ -2211,6 +2110,136 @@
           "source": "registers/editorial_ledger",
           "id": "ED-SC-0016",
           "title": "SS7.2.1 Faction split rule (Succession Contest Compromise outcome, L418-425) specifies track-weighted split ratios Track 4 = 60/40, Track 5 = 55/45, Track 6 = 50/50, cited to ED-762. The table is internally incoherent under its own 'track-d",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0017",
+          "title": "SPEC/KERNEL DIVERGENCE + provenance-spine break (three-lens audit synthesis §0/§2/§3). (a) The canonical head's entire §4 resolution loop (Appraise as a costed action, per-exchange style picks, CLASH/REINFORCE/CROSS/TIE margin algebra, audi",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0018",
+          "title": "CR4 REACHABILITY - ED-1062 fixed the wrong half, and its fix is itself unreachable. (a) Stasis only ever shifts UPWARD and the doc specifies NO reframe action at all (the kernel's Move('shift') is undocumented in canon), so CONSEQUENCE/FEAS",
+          "lane": "SC",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0019",
+          "title": "NO RECORD SPINE - a composition failure, not a gap (audit SS4.2). Traced exhaustively, every wired contest output is a stat delta; the only thing that GUARDS a later transition anywhere in the wired loop is parl_transfer_used_this_arc (engi",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0020",
+          "title": "FORK A (Jordan) - adopt a burden-parameterized gate? Upload 3 SS6.4 collapses court/inquisition/political-tribunal/negotiation to ONE gate() with burden in {ACCUSER, RESPONDENT, LOWER_STANDING, NONE}, and shows negotiation is not a separate",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0021",
+          "title": "FORK B (Jordan) - what is the anti-collapse device? The adjudicator armature is NOT one: all four Styles produce IDENTICAL state changes (an additive _advance gain) differing only in the magnitude of one upside-only scalar (<=0.5 sigma, arm",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_actionable",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0022",
+          "title": "LIVE BUG BATCH (8 defects, mechanical - no design authority needed). F1 (P1) Stage 3 is UNREACHABLE in production: build_contest has no armature parameter (wrapper.py:101-102) and _resolve_agon constructs Bout without one (wrapper.py:197), ",
+          "lane": "SC",
+          "needs_jordan": false,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0023",
+          "title": "CONSOLIDATION/INTEGRATION PROGRAMME CIP-0..CIP-10, precedent-grounded (proposals/social_contest_consolidation_integration_v1.md). Four read-only Fable 5 precedent lenses (record spine / argument loop / opposition+authority / consolidation+l",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0024",
+          "title": "AMENDS RATIFIED DOCTRINE -- refine the Auto/Manual Resolution Duality parity constraint (CIP-9b). auto_manual_resolution_duality_v1.md carries the load-bearing constraint E[auto] ~= E[played] for exploit prevention. Precedent (Lens D) says ",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0025",
+          "title": "DOCS 4/5 ADJUDICATION -- a filed recommendation cited a FABRICATION, and the only playtest evidence in the corpus hits our kernel. Three read-only Fable 5 adjudication lenses over the two newer source documents (now preserved verbatim at au",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0026",
+          "title": "REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0027",
+          "title": "TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's eight requirements (C1-C4 character side: HOW one argues = rhetoric x temporal; WHAT; WHY; HOW effectively. P1-P4 type side: WHAT KIND; WHO adjudicates; HOW adjudication occurs; HOW au",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0028",
+          "title": "ADVERSARIAL AUDIT OF ED-SC-0027, AND ITS CORRECTIONS. Three read-only Fable critics (valoria-critic: Read/Grep/Glob only -- independence structural per CLAUDE.md 10, not declared in a prompt) attacked 05_track_architecture_and_state_graph.m",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0029",
+          "title": "PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc",
           "lane": "SC",
           "needs_jordan": true,
           "status": "open",
@@ -2740,112 +2769,12 @@
   "items": [
     {
       "kind": "proposal_doc",
-      "source": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "title": "2026-05-16-PC-4.4-unified-success-stress",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROPOSED — LIVE / UN-ADOPTED (no footprint in current faction canon; the turn-on-you success-stress generalization was never built). HELD FOR JORDAN. [## Status: heading added 2026-07-15 proposal-reconciliation pass — was bold-inline only, so dashboard-invisible]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-05-16-faction-audit-followup-plan.md",
-      "id": "proposals/2026-05-16-faction-audit-followup-plan.md",
-      "title": "2026-05-16-faction-audit-followup-plan",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "SUPERSEDED / OBSOLETE — process plan; Phase-0/1 closed same-day, Phase-2 Jordan decisions never taken, ground since covered by the 2026-07-08/09 comparative-governance-research lineage. Archive candidate (2026-06-28 currency sweep, Bucket B). [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "id": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "title": "2026-05-25-mechanics-integration-v3 1",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROPOSED — LIVE / UN-ADOPTED (31 proposals; zero mechanical footprint in current canon; Sprint-0 prerequisites never executed). HELD FOR JORDAN — review against the newer 2026-07-08/09 comparative-governance-research corpus before reviving any sub-proposal. [## Status: heading added 2026-07-15]",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-17-cast-and-culture-expansion.md",
-      "id": "proposals/2026-07-17-cast-and-culture-expansion.md",
-      "title": "2026-07-17-cast-and-culture-expansion",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "(no Status line — proposals/)",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
-      "id": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
-      "title": "2026-07-17-world-factions-npcs-narrative-assessment",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "(no Status line — proposals/)",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
-      "id": "proposals/2026-07-17-world-factions-npcs-narrative-companion.md",
-      "title": "2026-07-17-world-factions-npcs-narrative-companion",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "(no Status line — proposals/)",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
-      "id": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
-      "title": "2026-07-18-precedent-to-mechanism-design-brief",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "(no Status line — proposals/)",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-21-observatory-holonic-refactor.md",
-      "id": "proposals/2026-07-21-observatory-holonic-refactor.md",
-      "title": "2026-07-21-observatory-holonic-refactor",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED (r2) — 2026-07-21 (merge of PR #202 ratifies the Assay/Atlas/Augur architecture by default per ED-1094; its §7 phasing is amended/subsumed by the Reconciliation Program's R1–R6, 2026-07-21-reconciliation-program.md §6). The §8 P2-redefinition + mean==0 sentinel fix is now RULED (option A) and applied as ED-IN-0080. STILL HELD for separate Jordan sign-off — the remaining §8 items, NOT ratified by this merge: any Assay change altering P1 medians, unbuilt dispositions, elevating a symmetry probe to a Tier-3 gate / making the workflow blocking, build_graph↔substrate unification, and the four-bloc win-probability gate. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-21-reconciliation-program.md",
-      "id": "proposals/2026-07-21-reconciliation-program.md",
-      "title": "2026-07-21-reconciliation-program",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "RATIFIED — 2026-07-21 (merge of PR #203 ratifies this program's plan by default per ED-1094; it amends the observatory proposal's §7 phasing, 2026-07-21-observatory-holonic-refactor.md). The §5 A8→P2 decision is RULED (option A) and implemented as ED-IN-0080; R1 (the Workbench prototype) shipped in PR #204. STILL HELD for separate Jordan sign-off — NOT ratified by this merge: any lens→gate promotion, the observatory §8 items, the four-bloc win-probability gate, build_graph↔substrate unification, and key-level G_code descent. (Ratification recorded: ED-IN-0083 — renumbered from ED-IN-0081 during the PR #205↔main merge; origin/main allocated ED-IN-0081 to session_open_work and merged first.)",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
       "source": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
       "id": "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md",
       "title": "2026-07-26-personal-combat-player-agency-and-tradition-curriculum",
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
-      "source": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-      "id": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-      "title": "2026-07-28-external-practice-corpus-investigation",
-      "lane": "unassigned",
-      "needs_jordan": true,
-      "status": "PROPOSED — investigation complete; **every** adoption in §7, including the declines, is HELD FOR JORDAN except P1, which is marked `RATIFY-ON-MERGE` as a bug fix. See §0.3.",
       "links": []
     },
     {
@@ -2870,16 +2799,6 @@
     },
     {
       "kind": "proposal_doc",
-      "source": "proposals/mass_battle_shape_echelon_revamp.md",
-      "id": "proposals/mass_battle_shape_echelon_revamp.md",
-      "title": "mass battle shape echelon revamp",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "SUPERSEDED — absorbed into mass_battle_v30.md §A.6 (ED-909/ED-1088; Unit-level build_envelopment/build_refused_flank). Only the allocation-grid UI / priority toggle is deferred to Stage-E (explicitly not a gap). [## Status: heading added 2026-07-15; was bold 'PARTIALLY EXECUTED']",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
       "source": "proposals/multiunit_envelopment_plan.md",
       "id": "proposals/multiunit_envelopment_plan.md",
       "title": "multiunit envelopment plan",
@@ -2900,32 +2819,32 @@
     },
     {
       "kind": "proposal_doc",
-      "source": "proposals/pessimist_ners_audit_v1.md",
-      "id": "proposals/pessimist_ners_audit_v1.md",
-      "title": "pessimist ners audit v1",
-      "lane": "unassigned",
-      "needs_jordan": false,
-      "status": "FILED — 2026-07-11 · Lane: IN (cross-cutting; FA, SE). Max-effort adversarial audit (canonical §8.2-A, `references/throughlines_meta.md`) of the 44 proposals kept by the 2026-07-09 comparative-governance research docket, cross-referenced against the 2026-07-10 historical-concerns action catalogue. Read-only — NOT canon; a review artifact. The 12 already-authored-into-canon items sit live in the open PR, so their verdicts here are directly actionable (edit/hold before merge).",
-      "links": []
-    },
-    {
-      "kind": "proposal_doc",
       "source": "proposals/repo-reorganization-v1.md",
       "id": "proposals/repo-reorganization-v1.md",
       "title": "repo-reorganization-v1",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **No files have moved.** The migration (P0–P5, §4) is authorized but not executed; sequencing ruled P0-first. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.",
+      "status": "RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **EXECUTED.** The migration (P0–P5, §4) ran to completion across P0–P4's slices; `designs/` was retired 2026-07-19 (ED-IN-0071 P4/P5 continuation, PR #191) and no longer exists in the working tree — see `CURRENT.md`/`systems/` §3. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.",
       "links": []
     },
     {
       "kind": "proposal_doc",
-      "source": "proposals/stub_infill_plan.md",
-      "id": "proposals/stub_infill_plan.md",
-      "title": "stub infill plan",
+      "source": "proposals/social_contest_consolidation_integration_v1.md",
+      "id": "proposals/social_contest_consolidation_integration_v1.md",
+      "title": "social contest consolidation integration v1",
       "lane": "unassigned",
       "needs_jordan": false,
-      "status": "SUPERSEDED — Pass-2l stub infill COMPLETE per the doc's own final amendment (37/45 implementable); sim/ has since progressed (~19 NotImplementedError remain, CLAUDE.md §7). Historical roadmap. [## Status: heading added 2026-07-15]",
+      "status": "PROPOSED — CIP-0..CIP-15 filed. **Needs Jordan: CIP-3, CIP-7b, CIP-9b, CIP-12, CIP-15**",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/valoria_fork_plan_of_record_v1.md",
+      "id": "proposals/valoria_fork_plan_of_record_v1.md",
+      "title": "valoria fork plan of record v1",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED (ED-IN-0124, 2026-08-03). Jordan-vetoable throughout.",
       "links": []
     },
     {
@@ -4171,16 +4090,6 @@
     {
       "kind": "ledger_needs_jordan",
       "source": "registers/editorial_ledger",
-      "id": "ED-IN-0029",
-      "title": "Attribute/value coherence audit -- the quantity-layer extension of the Key & Echo Armature (Jordan directive 2026-07-08: 'we desperately lack unity, consistency and coherence with our explosion of attributes and derived scores across all ou",
-      "lane": "IN",
-      "needs_jordan": true,
-      "status": "open",
-      "links": []
-    },
-    {
-      "kind": "ledger_needs_jordan",
-      "source": "registers/editorial_ledger",
       "id": "ED-IN-0030",
       "title": "Phantom 'debt scene' mechanic -- dangling citation surfaced while executing ED-IN-0016's citation-repoint pass. designs/architecture/scale_transitions_v30.md §4.3.2 row 8 (Rank Advancement Recognition Event) reads: 'Recognition can be withh",
       "lane": "IN",
@@ -4393,6 +4302,26 @@
       "source": "registers/editorial_ledger",
       "id": "ED-IN-0113",
       "title": "Carried forward from ED-IN-0112's ratification so nothing is lost in the flip. A. THE DECISION-POLICY FORK — the one artifact only Jordan can author, and the reason the 94-item needs_jordan queue cannot drain. MEASURED EVIDENCE (134 Jordan-",
+      "lane": "IN",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-IN-0123",
+      "title": "Rewrite of a same-day v1 that failed an independent critic pass (16 CONFIRMED-WRONG vs 19 survivals). THE THESIS CHANGED. `godot/godot_conversion_strategy_v1.md` already specifies Gate-0's five blocking preconditions, the Stage-1 spine, a s",
+      "lane": "IN",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-IN-0124",
+      "title": "Jordan asked for a read-only Fable-5 adversarial steelman of the fork Plan of Record, a fidelity/accuracy verification, best-practice reasoning toward a code-first repo with centralized values and modular architecture, and an Opus-5 rewrite",
       "lane": "IN",
       "needs_jordan": true,
       "status": "open",
@@ -4623,6 +4552,136 @@
       "source": "registers/editorial_ledger",
       "id": "ED-SC-0016",
       "title": "SS7.2.1 Faction split rule (Succession Contest Compromise outcome, L418-425) specifies track-weighted split ratios Track 4 = 60/40, Track 5 = 55/45, Track 6 = 50/50, cited to ED-762. The table is internally incoherent under its own 'track-d",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0017",
+      "title": "SPEC/KERNEL DIVERGENCE + provenance-spine break (three-lens audit synthesis §0/§2/§3). (a) The canonical head's entire §4 resolution loop (Appraise as a costed action, per-exchange style picks, CLASH/REINFORCE/CROSS/TIE margin algebra, audi",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_actionable",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0018",
+      "title": "CR4 REACHABILITY - ED-1062 fixed the wrong half, and its fix is itself unreachable. (a) Stasis only ever shifts UPWARD and the doc specifies NO reframe action at all (the kernel's Move('shift') is undocumented in canon), so CONSEQUENCE/FEAS",
+      "lane": "SC",
+      "needs_jordan": false,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0019",
+      "title": "NO RECORD SPINE - a composition failure, not a gap (audit SS4.2). Traced exhaustively, every wired contest output is a stat delta; the only thing that GUARDS a later transition anywhere in the wired loop is parl_transfer_used_this_arc (engi",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0020",
+      "title": "FORK A (Jordan) - adopt a burden-parameterized gate? Upload 3 SS6.4 collapses court/inquisition/political-tribunal/negotiation to ONE gate() with burden in {ACCUSER, RESPONDENT, LOWER_STANDING, NONE}, and shows negotiation is not a separate",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0021",
+      "title": "FORK B (Jordan) - what is the anti-collapse device? The adjudicator armature is NOT one: all four Styles produce IDENTICAL state changes (an additive _advance gain) differing only in the magnitude of one upside-only scalar (<=0.5 sigma, arm",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_actionable",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0022",
+      "title": "LIVE BUG BATCH (8 defects, mechanical - no design authority needed). F1 (P1) Stage 3 is UNREACHABLE in production: build_contest has no armature parameter (wrapper.py:101-102) and _resolve_agon constructs Bout without one (wrapper.py:197), ",
+      "lane": "SC",
+      "needs_jordan": false,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0023",
+      "title": "CONSOLIDATION/INTEGRATION PROGRAMME CIP-0..CIP-10, precedent-grounded (proposals/social_contest_consolidation_integration_v1.md). Four read-only Fable 5 precedent lenses (record spine / argument loop / opposition+authority / consolidation+l",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0024",
+      "title": "AMENDS RATIFIED DOCTRINE -- refine the Auto/Manual Resolution Duality parity constraint (CIP-9b). auto_manual_resolution_duality_v1.md carries the load-bearing constraint E[auto] ~= E[played] for exploit prevention. Precedent (Lens D) says ",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0025",
+      "title": "DOCS 4/5 ADJUDICATION -- a filed recommendation cited a FABRICATION, and the only playtest evidence in the corpus hits our kernel. Three read-only Fable 5 adjudication lenses over the two newer source documents (now preserved verbatim at au",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0026",
+      "title": "REDUCTIVE AUDIT (prune/cut/consolidate/distil) at the primitive+foundation layer. Two read-only Fable 5 lenses; every new claim re-verified against disk. HEADLINE (new, strongest result in the session): under our OWN ratified doctrine, play",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0027",
+      "title": "TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's eight requirements (C1-C4 character side: HOW one argues = rhetoric x temporal; WHAT; WHY; HOW effectively. P1-P4 type side: WHAT KIND; WHO adjudicates; HOW adjudication occurs; HOW au",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0028",
+      "title": "ADVERSARIAL AUDIT OF ED-SC-0027, AND ITS CORRECTIONS. Three read-only Fable critics (valoria-critic: Read/Grep/Glob only -- independence structural per CLAUDE.md 10, not declared in a prompt) attacked 05_track_architecture_and_state_graph.m",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0029",
+      "title": "PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc",
       "lane": "SC",
       "needs_jordan": true,
       "status": "open",

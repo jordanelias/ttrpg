@@ -6,6 +6,41 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
+- **Three-lens pessimistic NERS audit + upload delta FILED 2026-08-06 (ED-SC-0017..0022).**
+  `audit/2026-08-06-social-contest-three-lens-audit/` (synthesis + working records). Three read-only
+  Fable 5 lenses (primitives / mechanics / emergence) relayed agonist→antagonist per CLAUDE.md §10;
+  every gating claim re-verified by the orchestrator against the working tree (verification log at
+  synthesis §1). **Headline: the subsystem is three resolution models wearing one name**, and the
+  canonical head's entire §4 loop has no engine while the kernel's actual loop has no canonical prose.
+  - **P1 · ED-SC-0022 — bug batch, do first, no design authority needed.** F1: Stage 3 is unreachable
+    in production (`build_contest` has no armature parameter → CR4/armature/CR5 fire only in tests).
+    F6: the "one-season" Mandate −1 is **permanent** (no temporary-modifier facility exists in
+    `season_manager.py`). Plus 6 more (F2–F5, F7, F8).
+  - **P1 · ED-SC-0019 — no record spine, and it is a composition failure, not a gap.** The Record
+    primitive already exists single-owner at `systems/settlements/sim/ledger.py:7-14` (`Precedent` /
+    `Grudge` / `Debt` / `Reputation` / `Leverage`, durable across succession). Compose on it rather
+    than emitting bespoke stat deltas. Sibling: M2 Scope — a contest win binds a whole faction with
+    no authority check and no repudiation path.
+  - **ED-SC-0017 closes ED-SC-0005 without a new number:** CR6 already ratifies a tanh soft-cap at
+    `M_MAX = 1.5σ` and the kernel already enforces it — the doc's four flat pool dice violate the
+    subsystem's own ratified substrate. Also: `params/contest.md` is cited 97× across the kernel and
+    was evacuated 2026-08-05 (content safe in `engine/engine_params/params_tables.yaml`; citations
+    dangling), and `CURRENT.md:151` cites an audit directory that no longer exists.
+  - **ED-SC-0018:** ED-1062 fixed Memory's CR4 reachability and left Projection's identically broken —
+    CONSEQUENCE/FEASIBILITY is no proceeding's start ground and the doc specifies no reframe action.
+  - **⚠ TWO FORKS NEED JORDAN, held back explicitly per CLAUDE.md §2, not bundled:**
+    **ED-SC-0020 (Fork A)** — adopt a burden-parameterized gate? We already have the burden family in
+    disguise (ProofBar / GraceThreshold / TallyAtClose) and lack only stall semantics; adopting
+    replaces four WinCondition classes + two biased track starts + the tracker tri-state with one
+    Venue field. *Audit recommends ADOPT.* **ED-SC-0021 (Fork B)** — the armature is not an
+    anti-collapse device (all four Styles produce identical state changes differing only in one
+    upside-only scalar; the orientation bit is dominated contest-wide, and CR5's cost half is wired
+    while the Doubt Marker upside is not). *Audit recommends warrant × attack — but the falsifier
+    (AI-vs-AI best-response sweep) has NOT been run; do not ratify without it.*
+  - **Cut docket: ~800 lines** off the live surface, of which ~50 are the only ones a player would
+    have noticed (synthesis §4.3). Includes moving the banner-superseded
+    `social_contest_system_v2.md` (+ index, 513 lines) out of the live subsystem folder.
+
 - **ED-SC-0012 (RESOLVED 2026-07-08) — pessimist-audit SC verdicts EXECUTED (design side)** (SC-lane
   follow-up to ED-IN-0027; `social_contest_v30.md` + `params/contest.md`, no sim-kernel edits — the
   kernel is under active rebuild and `ED-SC-0004` is Jordan's). Three verdicts:
@@ -232,6 +267,82 @@ index; see it for cross-lane/global items.
   behind pre-existing sim-fabrication debt (19 uncited constants on `main`).
 
 ## Next actions
+
+- **ED-SC-0030 (2026-08-06) — KEYS, KNOTS, NPCs AND THE COMBAT MODEL.**
+  `audit/2026-08-06-social-contest-three-lens-audit/07_keys_knots_npcs_and_the_combat_model.md`.
+  Six read-only Fable lenses, Opus authorship. **Coverage finding against this unit's own work:**
+  `00`–`06` never opened `systems/combat/combat_engine_v1/` — the repo's own reference
+  implementation of "multiple tracks and balances", on the *same* σ-kernel — and no CIP addresses
+  repetition or Knots. **NEW FINDING — the Standing dead zone:** `frac()` is `(v−5)/5` clamped, and
+  both consumers read `frac`, so **Standing 0 and Standing 5 are identical in reception**; the cliff
+  belongs there (`discredit_bar`), not in a re-founded `frac`. **Combat's rule made testable:** tracks
+  may only multiply/gate process or terminate — no fixed-rate conversion into `adv`. That guard
+  **lands first**. **OF-CAP is now rulable:** `cascade_depth_max = 3`, `emissions_per_tick_max = 64`.
+  **Live latent break:** `drain_tick` has zero production callers; the first scheduling subscriber
+  makes `next_tick` raise. **Knots:** `public_citation` rupture is *unfireable in principle* —
+  `EvidenceItem` has no provenance, which gives W3 a second consumer. **Churn: insufficient** — the
+  auto path repeats to campaign end; the repeat detector ships **xfail**. **Ten corrections to filed
+  work, seven of them mine.** Nine forks, incl. the missing NPC lane.
+
+- **ED-SC-0029 (2026-08-06) — PROPOSAL REWRITTEN (v2).**
+  `proposals/social_contest_consolidation_integration_v1.md` (filename kept per CLAUDE.md §4 —
+  renaming breaks ~a dozen ED citations; the header carries v2). Restructured around Jordan's eight
+  requirements + seven world questions, which are now the **grading standard** (§1), each naming its
+  owning CIP. Five new corrections C-8..C-12. **Four new proposals, three of them net removals:**
+  CIP-13 (decorum operator — one graded owner absorbs `RhetoricalWeights` + the venue tense trio +
+  CR4's +1D, deletes `Stasis.TENSE`, retires the `hard` verb), CIP-15 (per-venue rung vocabularies,
+  translatio extracted, genre decomposed), CIP-7c (institutional party — and it **settles
+  `split_standing`**, whose only in-bout consumer is the `hard` verb CIP-13 kills), CIP-14 (the
+  audience as a party — the headline, with all four of its conditions stated). **CIP-2 strengthened,
+  not shrunk:** warrant schemes carry their own critical questions, so there is no warrant × attack
+  matrix to author at all — the C-5 retraction was solving a problem that stops existing. **CIP-12
+  reframed** into the reconciliation of three unreconciled second currencies, with a proposed ruling:
+  one currency, two holders. **Strict sequencing CIP-9b → CIP-12 → CIP-14** (unsound before the
+  first, ambiguous before the second). **10 forks need Jordan**, including a new one: the programme
+  has never been counted against `04`'s eleven-primitive irreducible set. ⚠ **File is 14,503 tokens
+  against the 15,000 blocking cap — the next substantive addition must split into `_part2`.**
+
+- **ED-SC-0028 (2026-08-06) — ADVERSARIAL AUDIT OF ED-SC-0027 + CORRECTIONS.**
+  `audit/2026-08-06-social-contest-three-lens-audit/06_adversarial_audit_of_05.md`; `05` revised in place.
+  Three read-only Fable critics found four broken claims. **CRITICAL:** `05`'s headline
+  ("the contest is sealed off from the world in both directions") is FALSE at the scope written —
+  `mc_v18.py:148-151` runs `parliamentary_bridge` every season (ECHO_TRANSPORT default ON),
+  `_derive_vote` generates a topic from world pressure, and `parliamentary_vote.py:206-216` writes
+  back. **`05`'s own falsifier named that exact test and was never run.** Surviving claim: the
+  personal-scale Bout kernel is sealed. **THE INSTRUMENT WAS BROKEN:** the two-category test lost
+  its "…that anything reads" rider and graded kills against the kernel-as-built while grading
+  withdrawals against the architecture-as-proposed — a rescue licence, and it was used (the
+  FactionBoost→disposition-matrix category error). Repaired with two riders. **The duality claim
+  does not hold** without CIP-9b, an unratified amendment `05` never cited. **"No new primitive" is
+  false** — `ledger_add` is single-valued by kind, and there is no holder dimension: one primitive,
+  extended cross-lane, **needs SE**. Architecture reduced to 8 tracks / 8 edges / 2 config surfaces /
+  1 ledger interface by `05`'s own rows-not-code rule. Warrant-vs-appeal downgraded to undecided;
+  `00` Fork B's sweep condition reinstated. **18 forks open, all needing Jordan.**
+
+- **ED-SC-0027 (2026-08-06) — TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's requirements.**
+  `audit/2026-08-06-social-contest-three-lens-audit/05_track_architecture_and_state_graph.md`.
+  Eight requirements (C1-C4 character: HOW one argues = rhetoric x temporal · WHAT · WHY · HOW
+  effectively; P1-P4 type: WHAT KIND · WHO adjudicates · HOW adjudication occurs · HOW audience
+  impacts), seven world-interface questions W1-W7, nine tracks, fifteen interaction edges.
+  **Fourteen forks filed, ALL needing Jordan (§10).** Headlines:
+  (a) **Decorum is the content-dynamic weighting operator** — both lenses converged on one object
+  from opposite directions; generalise the EXISTING binary relevance gate (`Stasis.relevant` /
+  `Dossier.available`) from {0,1} to graded and it absorbs `RhetoricalWeights` + the venue tense
+  trio + CR4's +1D. A 1:1 venue→style table is *anti*-decorum.
+  (b) **Temporal orientation becomes an orator CHOICE**, not a lookup from the rung; `Stasis.TENSE`
+  is deleted, which dissolves the DEFINITION past-vs-present incoherence (ED-SC-0026 item a).
+  (c) **The contest is sealed off from the world in both directions — MEASURED:** the entire
+  world→contest interface is two integers (`scene_dispatch.py:298`), every `EvidenceItem` in the
+  tree is a hand-authored literal, and `systems/fieldwork/sim/investigation.py` is all stubs.
+  (d) **"Lose the case, win the room"** — verdict and reputation route through different profiles to
+  different consumers. Supplies the foundational choice `04` found missing and satisfies the
+  duality doctrine on its own terms.
+  (e) **Six priors (3 objects x 2 holders)** read from the same `LedgerTag` ledger the contest
+  writes — loop closed, no new primitive.
+  (f) **TWO OF MY OWN VERDICTS CORRECTED:** `split_standing` (ascribed Rank vs earned Credit) is the
+  institutional-party primitive, not excess; `FactionBoost`'s *table* is authoring data for the
+  faction disposition row even though its *die* dies.
+  (g) Genre is NOT rescued — both lenses rejected chosen-vs-terrain-genre divergence independently.
 
 - **P0 decision docket awaiting Jordan: ED-SC-0003..0005** (Piety/Persuasion tracker naming; pool
   formula; bonus-stack cap — ED-SC-0002 is RULED, see Decisions above). ED-SC-0004 blocks
