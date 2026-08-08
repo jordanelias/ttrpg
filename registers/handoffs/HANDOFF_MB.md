@@ -1171,3 +1171,39 @@ undershoot. Not chosen, because per-cell state redefines what a "section" is.
 3. **Re-decide `ROUT_CASCADE_FRAC`** once per-cell granularity lands (the "section" it counts changes).
 4. Remaining Tier-3: box/square all-around brace (C2/C6 — mechanism, not magnitude, §8.4); ranged-mirror
    resolution path (R3, the only UNMEASURED row); disengage-and-recharge cycle.
+
+---
+
+## [OPEN] ED-MB-0065 — J2 is ruled-but-not-executable; record corrected, nothing deleted (2026-08-08)
+
+**Do not delete `systems/mass_battle/sim/` without reading this.** J2 (2026-08-03) retired it; the
+2026-08-04 CURRENT.md stamp recorded that as done. It was not done, and it is not doable as written.
+
+**Three independently sufficient blockers, measured:**
+1. **The retired tree holds the campaign's only faction-scale seam.** `engine/mc_v18.py` →
+   `faction_take_action` → `_try_conquest` (`faction_action.py:431`) →
+   `resolve_mass_battle(faction_a, faction_b, terrain, world)`. Runs every season. Deleting it
+   breaks Military Conquest.
+2. **The canon tree cannot receive that call.** `tests/sim/mass_battle/` is unit/geometry-scale and
+   **cell-based**; the retired tree is the pre-cell v22 model. Feeding canon's `run_battle` a unit
+   from `_faction_to_unit` raises `AttributeError: 'Subunit' object has no attribute 'cells_float'`.
+   The two `run_battle` docstrings are identical — canon is a descendant fork that diverged at the
+   cell model.
+3. **A later ruling already kept it.** ED-IN-0127/0128 (2026-08-04, *one day after J2*) pin
+   `systems/mass_battle/sim/massbattle.py` as `keep`, guarded by `test_evacuation_plan.py`.
+
+**What executing J2 actually costs:** a strategic → cell-based-`Unit` adapter. `_faction_to_unit`'s
+docstring already concedes *"[GAP: no canonical spec for faction.Mil → Unit construction]"*, so the
+adapter needs a spec before it needs code.
+
+**Guard:** `tests/valoria/test_j2_mass_battle_seam.py` — a **disjunction**, green in the current
+state *and* after a completed migration, failing only on the half-done state. Mutation-verified:
+deleting the tree while `faction_action` still imports it fails it.
+
+**Next action — Jordan's call, three options:**
+- **WITHDRAW** — accept the later keep-set; the trees coexist (canon tactical, `systems/` strategic
+  seam) and the "not kept alongside" clause is struck.
+- **DEFER** — J2 stands as intent, gated on the adapter + a canonical `faction.Mil → Unit` spec.
+- **EXECUTE-WITH-SCOPE** — build the adapter as MB work, then delete.
+
+This item takes none of the three. It only stops the record claiming the deletion happened.
