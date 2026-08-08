@@ -4,13 +4,13 @@
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 262,
-    "needs_jordan": 119,
+    "total": 263,
+    "needs_jordan": 120,
     "by_kind": {
       "proposal_doc": 9,
       "provisional_status_doc": 7,
       "ledger_actionable": 121,
-      "ledger_needs_jordan": 106,
+      "ledger_needs_jordan": 107,
       "audit_partial": 19
     },
     "by_lane": {
@@ -35,8 +35,8 @@
         "needs_jordan": 1
       },
       "SC": {
-        "total": 26,
-        "needs_jordan": 16
+        "total": 27,
+        "needs_jordan": 17
       },
       "SE": {
         "total": 48,
@@ -2002,8 +2002,8 @@
       ]
     },
     "SC": {
-      "total": 26,
-      "needs_jordan": 16,
+      "total": 27,
+      "needs_jordan": 17,
       "items": [
         {
           "kind": "ledger_actionable",
@@ -2240,6 +2240,16 @@
           "source": "registers/editorial_ledger",
           "id": "ED-SC-0029",
           "title": "PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc",
+          "lane": "SC",
+          "needs_jordan": true,
+          "status": "open",
+          "links": []
+        },
+        {
+          "kind": "ledger_needs_jordan",
+          "source": "registers/editorial_ledger",
+          "id": "ED-SC-0030",
+          "title": "KEYS, KNOTS, NPCs AND THE COMBAT MODEL -- six read-only Fable lenses across two waves (inventory/wire, breakage, design consequences; then Keys I/O + scatter-gather, Knots + world churn, and the combat comparison), Opus authorship. COVERAGE",
           "lane": "SC",
           "needs_jordan": true,
           "status": "open",
@@ -4682,6 +4692,16 @@
       "source": "registers/editorial_ledger",
       "id": "ED-SC-0029",
       "title": "PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc",
+      "lane": "SC",
+      "needs_jordan": true,
+      "status": "open",
+      "links": []
+    },
+    {
+      "kind": "ledger_needs_jordan",
+      "source": "registers/editorial_ledger",
+      "id": "ED-SC-0030",
+      "title": "KEYS, KNOTS, NPCs AND THE COMBAT MODEL -- six read-only Fable lenses across two waves (inventory/wire, breakage, design consequences; then Keys I/O + scatter-gather, Knots + world churn, and the combat comparison), Opus authorship. COVERAGE",
       "lane": "SC",
       "needs_jordan": true,
       "status": "open",

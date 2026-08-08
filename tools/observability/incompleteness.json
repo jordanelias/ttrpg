@@ -3,9 +3,9 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 263,
+    "findings": 238,
     "by_category": {
-      "apparatus_orphan": 4,
+      "apparatus_orphan": 6,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
@@ -20,22 +20,22 @@
       "contract_no_resolver": 1,
       "integrity_unverified_pin": 1,
       "key_orphan_emit": 1,
-      "prose_marker": 32,
+      "prose_marker": 22,
       "sim_not_implemented": 23,
       "stale_retired_pointer": 17,
-      "status_noncurrent": 28,
-      "unregistered_term": 40
+      "status_noncurrent": 23,
+      "unregistered_term": 28
     },
     "by_severity": {
       "high": 22,
-      "med": 102,
-      "low": 139
+      "med": 97,
+      "low": 119
     }
   },
   "by_lane": {
     "MB": {
-      "total": 6,
-      "prose_marker": 4,
+      "total": 5,
+      "prose_marker": 3,
       "sim_not_implemented": 1,
       "status_noncurrent": 1
     },
@@ -51,10 +51,10 @@
       "status_noncurrent": 1
     },
     "FA": {
-      "total": 21,
+      "total": 16,
       "code_marker": 2,
       "contract_island": 1,
-      "prose_marker": 11,
+      "prose_marker": 6,
       "sim_not_implemented": 5,
       "status_noncurrent": 2
     },
@@ -64,8 +64,8 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 180,
-      "apparatus_orphan": 4,
+      "total": 165,
+      "apparatus_orphan": 6,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
       "audit_implied_missing": 28,
@@ -77,11 +77,11 @@
       "contract_island": 2,
       "contract_no_resolver": 1,
       "integrity_unverified_pin": 1,
-      "prose_marker": 8,
+      "prose_marker": 4,
       "sim_not_implemented": 5,
       "stale_retired_pointer": 17,
-      "status_noncurrent": 8,
-      "unregistered_term": 40
+      "status_noncurrent": 7,
+      "unregistered_term": 28
     },
     "SE": {
       "total": 5,
@@ -89,7 +89,7 @@
       "sim_not_implemented": 2
     },
     "unassigned": {
-      "total": 34,
+      "total": 30,
       "code_marker": 1,
       "contract_doc_null": 9,
       "contract_island": 2,
@@ -97,14 +97,14 @@
       "key_orphan_emit": 1,
       "prose_marker": 4,
       "sim_not_implemented": 2,
-      "status_noncurrent": 13
+      "status_noncurrent": 9
     }
   },
   "prose_marker_rollup": {
     "gap": 64,
     "assumption": 62,
     "stub": 4,
-    "todo": 8
+    "todo": 9
   },
   "coverage_gaps": [
     "null/empty REQUIRED fields in registries other than module_contracts (id_reservations, descriptor_registry 'IN FLUX' roster, names_index, \u2026) are not yet structurally scanned",
@@ -119,37 +119,55 @@
   "findings": [
     {
       "category": "apparatus_orphan",
-      "id": "tools/build_audit_registry_backfill.py",
-      "title": "tools/build_audit_registry_backfill.py",
+      "id": "tools/build_execution_map.py",
+      "title": "tools/build_execution_map.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/build_audit_registry_backfill.py",
+      "path": "tools/build_execution_map.py",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "apparatus_orphan",
-      "id": "tools/geography/jsx_to_canonical.py",
-      "title": "tools/geography/jsx_to_canonical.py",
+      "id": "tools/build_identifier_census.py",
+      "title": "tools/build_identifier_census.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/geography/jsx_to_canonical.py",
+      "path": "tools/build_identifier_census.py",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "apparatus_orphan",
-      "id": "tools/measure_stamp_false_positives.py",
-      "title": "tools/measure_stamp_false_positives.py",
+      "id": "tools/build_key_graph.py",
+      "title": "tools/build_key_graph.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/measure_stamp_false_positives.py",
+      "path": "tools/build_key_graph.py",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "apparatus_orphan",
-      "id": "tools/observability/npc_audit_report_gen.py",
-      "title": "tools/observability/npc_audit_report_gen.py",
+      "id": "tools/dead_primitive_census.py",
+      "title": "tools/dead_primitive_census.py",
       "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
-      "path": "tools/observability/npc_audit_report_gen.py",
+      "path": "tools/dead_primitive_census.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "apparatus_orphan",
+      "id": "tools/gen_sigma_parity_goldens.py",
+      "title": "tools/gen_sigma_parity_goldens.py",
+      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
+      "path": "tools/gen_sigma_parity_goldens.py",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "apparatus_orphan",
+      "id": "tools/trace_execution_phases.py",
+      "title": "tools/trace_execution_phases.py",
+      "detail": "apparatus registry flags this as orphaned (no importer/invoker)",
+      "path": "tools/trace_execution_phases.py",
       "lane": "IN",
       "severity": "low"
     },
@@ -1209,8 +1227,8 @@
     {
       "category": "integrity_unverified_pin",
       "id": "canonical_sha_layer",
-      "title": "163 canonical_sha pins \u2014 all advisory",
-      "detail": "CLAUDE.md \u00a71: the entire canonical_sha pin layer (163 pins) is NOT verified against the working tree \u2014 treat as advisory, not an integrity signal. Stale subset via freshness_gate.py --update.",
+      "title": "123 canonical_sha pins \u2014 all advisory",
+      "detail": "CLAUDE.md \u00a71: the entire canonical_sha pin layer (123 pins) is NOT verified against the working tree \u2014 treat as advisory, not an integrity signal. Stale subset via freshness_gate.py --update.",
       "path": "references/canonical_sources.yaml",
       "lane": "IN",
       "severity": "med"
@@ -1231,96 +1249,6 @@
       "detail": "prose gap markers: TBD\u00d74",
       "path": "canon/03_canonical_timeline.md",
       "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/bg/ci_seizure.md",
-      "title": "engine/params/bg/ci_seizure.md",
-      "detail": "prose gap markers: TBD\u00d72",
-      "path": "engine/params/bg/ci_seizure.md",
-      "lane": "FA",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/bg/core.md",
-      "title": "engine/params/bg/core.md",
-      "detail": "prose gap markers: TBD\u00d71",
-      "path": "engine/params/bg/core.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/bg/faction_actions.md",
-      "title": "engine/params/bg/faction_actions.md",
-      "detail": "prose gap markers: TBD\u00d71",
-      "path": "engine/params/bg/faction_actions.md",
-      "lane": "FA",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/bg/institutions.md",
-      "title": "engine/params/bg/institutions.md",
-      "detail": "prose gap markers: TBD\u00d72",
-      "path": "engine/params/bg/institutions.md",
-      "lane": "FA",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/bg/phases.md",
-      "title": "engine/params/bg/phases.md",
-      "detail": "prose gap markers: TBD\u00d72",
-      "path": "engine/params/bg/phases.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/bg/stress_patches.md",
-      "title": "engine/params/bg/stress_patches.md",
-      "detail": "prose gap markers: TODO\u00d72",
-      "path": "engine/params/bg/stress_patches.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/board_game.md",
-      "title": "engine/params/board_game.md",
-      "detail": "prose gap markers: TBD\u00d72",
-      "path": "engine/params/board_game.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/factions/riskbreakers_identity.md",
-      "title": "engine/params/factions/riskbreakers_identity.md",
-      "detail": "prose gap markers: TODO\u00d72",
-      "path": "engine/params/factions/riskbreakers_identity.md",
-      "lane": "FA",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/factions/stats_1_7_scale.md",
-      "title": "engine/params/factions/stats_1_7_scale.md",
-      "detail": "prose gap markers: TODO\u00d71",
-      "path": "engine/params/factions/stats_1_7_scale.md",
-      "lane": "FA",
-      "severity": "low"
-    },
-    {
-      "category": "prose_marker",
-      "id": "engine/params/mass_combat.md",
-      "title": "engine/params/mass_combat.md",
-      "detail": "prose gap markers: TBD\u00d71",
-      "path": "engine/params/mass_combat.md",
-      "lane": "MB",
       "severity": "low"
     },
     {
@@ -1874,47 +1802,11 @@
     },
     {
       "category": "status_noncurrent",
-      "id": "engine/params/history/mass_combat.md",
-      "title": "engine/params/history/mass_combat.md",
-      "detail": "doc Status is not current: PROVISIONAL",
-      "path": "engine/params/history/mass_combat.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
       "id": "engine/sim_reference_CONVENTIONS.md",
       "title": "engine/sim_reference_CONVENTIONS.md",
       "detail": "doc Status is not current: PROVISIONAL",
       "path": "engine/sim_reference_CONVENTIONS.md",
       "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
-      "id": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "title": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "detail": "doc Status is not current: PROPOSED",
-      "path": "proposals/2026-05-16-PC-4.4-unified-success-stress.md",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
-      "id": "proposals/2026-05-16-faction-audit-followup-plan.md",
-      "title": "proposals/2026-05-16-faction-audit-followup-plan.md",
-      "detail": "doc Status is not current: SUPERSEDED",
-      "path": "proposals/2026-05-16-faction-audit-followup-plan.md",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
-      "id": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "title": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "detail": "doc Status is not current: PROPOSED",
-      "path": "proposals/2026-05-25-mechanics-integration-v3_1.md",
-      "lane": "unassigned",
       "severity": "med"
     },
     {
@@ -1928,28 +1820,10 @@
     },
     {
       "category": "status_noncurrent",
-      "id": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-      "title": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-      "detail": "doc Status is not current: PROPOSED",
-      "path": "proposals/2026-07-28-external-practice-corpus-investigation.md",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
       "id": "proposals/grounded_event_card_deck_v1.md",
       "title": "proposals/grounded_event_card_deck_v1.md",
       "detail": "doc Status is not current: PROPOSED",
       "path": "proposals/grounded_event_card_deck_v1.md",
-      "lane": "unassigned",
-      "severity": "med"
-    },
-    {
-      "category": "status_noncurrent",
-      "id": "proposals/mass_battle_shape_echelon_revamp.md",
-      "title": "proposals/mass_battle_shape_echelon_revamp.md",
-      "detail": "doc Status is not current: SUPERSEDED",
-      "path": "proposals/mass_battle_shape_echelon_revamp.md",
       "lane": "unassigned",
       "severity": "med"
     },
@@ -1973,10 +1847,19 @@
     },
     {
       "category": "status_noncurrent",
-      "id": "proposals/stub_infill_plan.md",
-      "title": "proposals/stub_infill_plan.md",
-      "detail": "doc Status is not current: SUPERSEDED",
-      "path": "proposals/stub_infill_plan.md",
+      "id": "proposals/social_contest_consolidation_integration_v1.md",
+      "title": "proposals/social_contest_consolidation_integration_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/social_contest_consolidation_integration_v1.md",
+      "lane": "unassigned",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "proposals/valoria_fork_plan_of_record_v1.md",
+      "title": "proposals/valoria_fork_plan_of_record_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/valoria_fork_plan_of_record_v1.md",
       "lane": "unassigned",
       "severity": "med"
     },
@@ -2127,8 +2010,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Casus Belli",
-      "title": "\u201cCasus Belli\u201d \u2014 in 24 docs, unregistered",
-      "detail": "appears in 24 design docs (69 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/_architecture/early_game_ignition_analysis.md, systems/factions/faction_layer_v30.md, engine/params/bg/ci_seizure.md",
+      "title": "\u201cCasus Belli\u201d \u2014 in 21 docs, unregistered",
+      "detail": "appears in 21 design docs (57 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/_architecture/early_game_ignition_analysis.md, systems/factions/faction_layer_v30.md, systems/overview/peninsular_strain_v30.md",
       "path": "systems/_architecture/early_game_ignition_analysis.md",
       "lane": "IN",
       "severity": "low"
@@ -2136,8 +2019,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Categorical Imperative",
-      "title": "\u201cCategorical Imperative\u201d \u2014 in 17 docs, unregistered",
-      "detail": "appears in 17 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/characters/conviction_taxonomy_v30.md, systems/factions/factions_personal_v30.md",
+      "title": "\u201cCategorical Imperative\u201d \u2014 in 13 docs, unregistered",
+      "detail": "appears in 13 design docs (22 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/characters/conviction_taxonomy_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/npcs/npc_behavior_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2145,8 +2028,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Church Attention Pool",
-      "title": "\u201cChurch Attention Pool\u201d \u2014 in 23 docs, unregistered",
-      "detail": "appears in 23 design docs (37 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/fieldwork_v30.md, systems/factions/faction_politics_v30.md, systems/threadwork/threadwork_v30.md",
+      "title": "\u201cChurch Attention Pool\u201d \u2014 in 19 docs, unregistered",
+      "detail": "appears in 19 design docs (33 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/fieldwork_v30.md, systems/factions/faction_politics_v30.md, systems/threadwork/threadwork_v30.md",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2163,17 +2046,17 @@
     {
       "category": "unregistered_term",
       "id": "term::Church Stability",
-      "title": "\u201cChurch Stability\u201d \u2014 in 18 docs, unregistered",
-      "detail": "appears in 18 design docs (68 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/factions/baralta_crown_claim_v30.md, systems/npcs/npc_behavior_v30.md",
-      "path": "arcs/arc_expansion_v30.md",
+      "title": "\u201cChurch Stability\u201d \u2014 in 13 docs, unregistered",
+      "detail": "appears in 13 design docs (48 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/baralta_crown_claim_v30.md, systems/npcs/npc_behavior_v30.md, systems/world/worldbuilding_v30.md",
+      "path": "systems/factions/baralta_crown_claim_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
       "id": "term::Close Knot",
-      "title": "\u201cClose Knot\u201d \u2014 in 15 docs, unregistered",
-      "detail": "appears in 15 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/knots_v30.md, systems/fieldwork/fieldwork_editorial.md, systems/npcs/npc_behavior_system_v1.md",
+      "title": "\u201cClose Knot\u201d \u2014 in 13 docs, unregistered",
+      "detail": "appears in 13 design docs (24 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/knots_v30.md, systems/fieldwork/fieldwork_editorial.md, systems/npcs/npc_behavior_system_v1.md",
       "path": "systems/fieldwork/knots_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2181,8 +2064,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Combat Pool",
-      "title": "\u201cCombat Pool\u201d \u2014 in 15 docs, unregistered",
-      "detail": "appears in 15 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, engine/params/core.md",
+      "title": "\u201cCombat Pool\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (31 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, systems/_architecture/canonical_registry.md",
       "path": "systems/combat/combat_design_v1.md",
       "lane": "IN",
       "severity": "low"
@@ -2190,8 +2073,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Community Weaving",
-      "title": "\u201cCommunity Weaving\u201d \u2014 in 19 docs, unregistered",
-      "detail": "appears in 19 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, engine/params/factions/riskbreakers_identity.md",
+      "title": "\u201cCommunity Weaving\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, systems/_architecture/complete_systems_reference.md",
       "path": "systems/characters/conviction_track_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2199,8 +2082,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Consul Inward",
-      "title": "\u201cConsul Inward\u201d \u2014 in 16 docs, unregistered",
-      "detail": "appears in 16 design docs (45 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/npcs/npc_behavior_system_v1.md, engine/params/bg/ministry.md",
+      "title": "\u201cConsul Inward\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/npcs/npc_behavior_system_v1.md, systems/fieldwork/fieldwork_bg_v30.md",
       "path": "systems/npcs/npc_behavior_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2208,27 +2091,18 @@
     {
       "category": "unregistered_term",
       "id": "term::Coup Counter",
-      "title": "\u201cCoup Counter\u201d \u2014 in 25 docs, unregistered",
-      "detail": "appears in 25 design docs (98 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/early_game_ignition_analysis.md, arcs/throughline_resolutions_v30.md",
-      "path": "arcs/arc_expansion_v30.md",
+      "title": "\u201cCoup Counter\u201d \u2014 in 17 docs, unregistered",
+      "detail": "appears in 17 design docs (43 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/_architecture/early_game_ignition_analysis.md, systems/npcs/npc_behavior_system_v1.md, systems/_architecture/conflict_architecture_proposal.md",
+      "path": "systems/_architecture/early_game_ignition_analysis.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
       "id": "term::Crown Mandate",
-      "title": "\u201cCrown Mandate\u201d \u2014 in 17 docs, unregistered",
-      "detail": "appears in 17 design docs (46 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/baralta_crown_claim_v30.md, systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md",
+      "title": "\u201cCrown Mandate\u201d \u2014 in 16 docs, unregistered",
+      "detail": "appears in 16 design docs (45 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/baralta_crown_claim_v30.md, systems/victory/victory_v30.md, systems/characters/conviction_track_v30.md",
       "path": "systems/factions/baralta_crown_claim_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Crown Stability",
-      "title": "\u201cCrown Stability\u201d \u2014 in 13 docs, unregistered",
-      "detail": "appears in 13 design docs (22 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/campaign_architecture_v30.md, systems/_architecture/conflict_architecture_proposal.md",
-      "path": "arcs/arc_expansion_v30.md",
       "lane": "IN",
       "severity": "low"
     },
@@ -2244,8 +2118,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Domain Echoes",
-      "title": "\u201cDomain Echoes\u201d \u2014 in 16 docs, unregistered",
-      "detail": "appears in 16 design docs (29 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_roster_v30.md, godot/godot_architecture_specification.md, systems/_architecture/campaign_modes_v30_infill.md",
+      "title": "\u201cDomain Echoes\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (28 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_roster_v30.md, godot/godot_architecture_specification.md, systems/_architecture/campaign_modes_v30_infill.md",
       "path": "systems/npcs/npc_roster_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2253,8 +2127,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Ein Sof",
-      "title": "\u201cEin Sof\u201d \u2014 in 20 docs, unregistered",
-      "detail": "appears in 20 design docs (78 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/threadwork/threadwork_v30_infill.md",
+      "title": "\u201cEin Sof\u201d \u2014 in 17 docs, unregistered",
+      "detail": "appears in 17 design docs (65 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/00_philosophical_foundations.md, systems/threadwork/threadwork_v30_infill.md, canon/01_foundations_amendment_self_rendering.md",
       "path": "canon/00_philosophical_foundations.md",
       "lane": "IN",
       "severity": "low"
@@ -2262,116 +2136,62 @@
     {
       "category": "unregistered_term",
       "id": "term::Ethical Framework",
-      "title": "\u201cEthical Framework\u201d \u2014 in 17 docs, unregistered",
-      "detail": "appears in 17 design docs (66 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30.md, systems/factions/factions_personal_v30.md",
+      "title": "\u201cEthical Framework\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (53 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/npcs/npc_behavior_system_v1.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
-      "id": "term::Framework Drift",
-      "title": "\u201cFramework Drift\u201d \u2014 in 12 docs, unregistered",
-      "detail": "appears in 12 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/ui/valoria_ui_ux_v4.md, systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30.md",
-      "path": "systems/ui/valoria_ui_ux_v4.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Grand Contest",
-      "title": "\u201cGrand Contest\u201d \u2014 in 12 docs, unregistered",
-      "detail": "appears in 12 design docs (23 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/social_contest/social_contest_v30.md, systems/ui/valoria_ui_ux_v4.md, engine/params/contest.md",
+      "id": "term::Heresy Investigation",
+      "title": "\u201cHeresy Investigation\u201d \u2014 in 24 docs, unregistered",
+      "detail": "appears in 24 design docs (49 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/social_contest/social_contest_v30.md, systems/factions/factions_personal_v30.md, systems/npcs/npc_roster_v30.md",
       "path": "systems/social_contest/social_contest_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
-      "id": "term::Heresy Investigation",
-      "title": "\u201cHeresy Investigation\u201d \u2014 in 31 docs, unregistered",
-      "detail": "appears in 31 design docs (64 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/social_contest/social_contest_v30.md, systems/factions/factions_personal_v30.md",
-      "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Institutional Pressure",
-      "title": "\u201cInstitutional Pressure\u201d \u2014 in 16 docs, unregistered",
-      "detail": "appears in 16 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. proposals/2026-07-18-precedent-to-mechanism-design-brief.md, systems/_architecture/hybrid_gaps_v30.md, systems/world/geography_v30.md",
-      "path": "proposals/2026-07-18-precedent-to-mechanism-design-brief.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
       "id": "term::Mass Seizure",
-      "title": "\u201cMass Seizure\u201d \u2014 in 15 docs, unregistered",
-      "detail": "appears in 15 design docs (42 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, engine/params/bg/ci_seizure.md",
+      "title": "\u201cMass Seizure\u201d \u2014 in 13 docs, unregistered",
+      "detail": "appears in 13 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/factions/ci_political_v30.md, systems/_architecture/conflict_architecture_proposal.md",
       "path": "systems/victory/victory_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Moral Relativism",
-      "title": "\u201cMoral Relativism\u201d \u2014 in 12 docs, unregistered",
-      "detail": "appears in 12 design docs (16 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/_architecture/complete_systems_reference.md, systems/npcs/npc_behavior_system_v1.md",
-      "path": "proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
       "id": "term::Parliamentary Manoeuvre",
-      "title": "\u201cParliamentary Manoeuvre\u201d \u2014 in 18 docs, unregistered",
-      "detail": "appears in 18 design docs (38 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/ministry.md, engine/params/bg/institutions.md, systems/factions/faction_layer_v30.md",
-      "path": "engine/params/bg/ministry.md",
+      "title": "\u201cParliamentary Manoeuvre\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (22 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/faction_layer_v30.md, systems/_architecture/tensions_pair_validation.md, systems/factions/fail_forward_pp177.md",
+      "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
       "id": "term::Parliamentary Vote",
-      "title": "\u201cParliamentary Vote\u201d \u2014 in 19 docs, unregistered",
-      "detail": "appears in 19 design docs (34 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/parliamentary_transfer_v30.md, systems/social_contest/social_contest_v30.md, systems/social_contest/social_contest_system_v2.md",
+      "title": "\u201cParliamentary Vote\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (27 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/factions/parliamentary_transfer_v30.md, systems/social_contest/social_contest_v30.md, systems/social_contest/social_contest_system_v2.md",
       "path": "systems/factions/parliamentary_transfer_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
-      "id": "term::Past-Oriented Pulling",
-      "title": "\u201cPast-Oriented Pulling\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (35 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/threadwork_superseded.md, systems/threadwork/threadwork_v30.md, systems/threadwork/threadwork_v30_infill.md",
-      "path": "engine/params/threadwork_superseded.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
       "id": "term::Peninsular Sovereignty",
-      "title": "\u201cPeninsular Sovereignty\u201d \u2014 in 19 docs, unregistered",
-      "detail": "appears in 19 design docs (46 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/overview/peninsular_strain_v30.md, systems/overview/peninsular_strain_v30_index.md",
+      "title": "\u201cPeninsular Sovereignty\u201d \u2014 in 17 docs, unregistered",
+      "detail": "appears in 17 design docs (43 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, systems/overview/peninsular_strain_v30.md, systems/overview/peninsular_strain_v30_index.md",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
-      "id": "term::Priority Tree",
-      "title": "\u201cPriority Tree\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (99 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30_index.md, systems/npcs/npc_behavior_system_v1_index.md, systems/npcs/npc_behavior_v30.md",
-      "path": "systems/npcs/npc_behavior_v30_index.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
       "id": "term::Rendering Crisis",
-      "title": "\u201cRendering Crisis\u201d \u2014 in 15 docs, unregistered",
-      "detail": "appears in 15 design docs (31 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/threadwork/threadwork_v30.md, systems/threadwork/threadwork_v30_infill.md, engine/params/threadwork_superseded.md",
+      "title": "\u201cRendering Crisis\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/threadwork/threadwork_v30.md, systems/threadwork/threadwork_v30_infill.md, systems/threadwork/thread_horizontal_integration_spec.md",
       "path": "systems/threadwork/threadwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2379,35 +2199,17 @@
     {
       "category": "unregistered_term",
       "id": "term::Resonant Style",
-      "title": "\u201cResonant Style\u201d \u2014 in 33 docs, unregistered",
-      "detail": "appears in 33 design docs (159 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30_infill.md, systems/npcs/npc_behavior_v30.md",
+      "title": "\u201cResonant Style\u201d \u2014 in 26 docs, unregistered",
+      "detail": "appears in 26 design docs (141 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30_infill.md, systems/npcs/npc_behavior_v30.md",
       "path": "systems/npcs/npc_behavior_system_v1.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
-      "id": "term::Self-Other",
-      "title": "\u201cSelf-Other\u201d \u2014 in 12 docs, unregistered",
-      "detail": "appears in 12 design docs (50 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v1_pp718_vetting.md, systems/characters/conviction_taxonomy_v30.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md",
-      "path": "systems/characters/conviction_track_v1_pp718_vetting.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Southernmost Dominion",
-      "title": "\u201cSouthernmost Dominion\u201d \u2014 in 13 docs, unregistered",
-      "detail": "appears in 13 design docs (20 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. canon/02_canon_constraints.md, engine/params/bg/geography.md, engine/params/bg/victory.md",
-      "path": "canon/02_canon_constraints.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
       "id": "term::Sovereign Authority Doctrine",
-      "title": "\u201cSovereign Authority Doctrine\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/factions/faction_politics_v30.md",
+      "title": "\u201cSovereign Authority Doctrine\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (16 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_v30.md, systems/factions/faction_politics_v30.md, systems/npcs/npc_behavior_system_v1.md",
       "path": "systems/npcs/npc_behavior_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2424,8 +2226,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Thread Operation",
-      "title": "\u201cThread Operation\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v1.md, systems/characters/conviction_track_v30_index.md, systems/npcs/npc_behavior_v30.md",
+      "title": "\u201cThread Operation\u201d \u2014 in 13 docs, unregistered",
+      "detail": "appears in 13 design docs (18 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v1.md, systems/characters/conviction_track_v30_index.md, systems/npcs/npc_behavior_v30.md",
       "path": "systems/characters/conviction_track_v1.md",
       "lane": "IN",
       "severity": "low"
@@ -2433,8 +2235,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Thread Tension",
-      "title": "\u201cThread Tension\u201d \u2014 in 18 docs, unregistered",
-      "detail": "appears in 18 design docs (54 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
+      "title": "\u201cThread Tension\u201d \u2014 in 16 docs, unregistered",
+      "detail": "appears in 16 design docs (52 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
       "path": "systems/world/southernmost_v30_infill.md",
       "lane": "IN",
       "severity": "low"
@@ -2442,45 +2244,18 @@
     {
       "category": "unregistered_term",
       "id": "term::Thread-Read",
-      "title": "\u201cThread-Read\u201d \u2014 in 28 docs, unregistered",
-      "detail": "appears in 28 design docs (119 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/fieldwork_v30.md, systems/fieldwork/fieldwork_v30_infill.md, systems/fieldwork/fieldwork_rationale.md",
+      "title": "\u201cThread-Read\u201d \u2014 in 25 docs, unregistered",
+      "detail": "appears in 25 design docs (114 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/fieldwork/fieldwork_v30.md, systems/fieldwork/fieldwork_v30_infill.md, systems/fieldwork/fieldwork_rationale.md",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
-      "id": "term::Torben Loyalty",
-      "title": "\u201cTorben Loyalty\u201d \u2014 in 12 docs, unregistered",
-      "detail": "appears in 12 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. arcs/arc_expansion_v30.md, systems/_architecture/early_game_ignition_analysis.md, systems/npcs/npc_behavior_v30.md",
-      "path": "arcs/arc_expansion_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Varfell Path",
-      "title": "\u201cVarfell Path\u201d \u2014 in 12 docs, unregistered",
-      "detail": "appears in 12 design docs (26 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/victory.md, engine/params/bg/geography.md, engine/params/bg/ed_resolutions.md",
-      "path": "engine/params/bg/victory.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
       "id": "term::Warden Cooperation",
-      "title": "\u201cWarden Cooperation\u201d \u2014 in 19 docs, unregistered",
-      "detail": "appears in 19 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. engine/params/bg/geography.md, engine/params/bg/phases.md, engine/params/threadwork.md",
-      "path": "engine/params/bg/geography.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "unregistered_term",
-      "id": "term::Warden Recognition",
-      "title": "\u201cWarden Recognition\u201d \u2014 in 13 docs, unregistered",
-      "detail": "appears in 13 design docs (19 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/victory/victory_v30.md, proposals/2026-07-17-world-factions-npcs-narrative-assessment.md, systems/fieldwork/fieldwork_bg_v30.md",
-      "path": "systems/victory/victory_v30.md",
+      "title": "\u201cWarden Cooperation\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (18 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/fieldwork/fieldwork_bg_v30.md, systems/fieldwork/fieldwork_v30.md",
+      "path": "systems/characters/conviction_track_v30.md",
       "lane": "IN",
       "severity": "low"
     }
