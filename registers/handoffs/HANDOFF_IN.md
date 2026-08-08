@@ -528,6 +528,33 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **[OPEN] ED-IN-0148 — world-churn audit: the machinery is built and DISCONNECTED (2026-08-08).**
+  `audit/2026-08-08-world-churn-audit/`: `00_findings.md` (defect register D1–D12 + latent traps +
+  stale-claim register) + `01_plan.md` (PROPOSED, tiered by leverage-per-unit-of-new-design).
+  Seven independent Fable-5 read-only lenses. **Headline:** the world does not churn because the
+  churn machinery is disconnected, not because it is scripted — the anti-scripting-drift guardrail
+  HELD (one contained instance across seven lenses), and scenes ARE seeded from live world state.
+  **Nothing executed:** no head moved, no design text changed, no flag flipped, no golden re-recorded.
+  **NEXT ACTIONS, in order:** (1) land Tier 0 — T0-1 conviction-gate fix (a live silent-no-op bug:
+  `knots.py:348-353` passes `'Loyalty'`, absent from `CONVICTIONS`, so magnitude 0 is applied while
+  the caller reports 1), T0-2 stale-claim retirement, T0-3 `temperaments.py` read/write-asymmetry
+  guard, **T0-4 the connectivity instrument** (highest value: converts the audit's grep-based
+  absence-claims into a maintained gate — no guard currently pins ANY of them). (2) Author T1-1
+  (battle→`Mil` attrition) and T1-5 (season/accounting boundary Keys) flag-gated OFF.
+  (3) **Do not start** T1-2/3/4 or Tier 2 — each is blocked on a Tier-3 ruling.
+  **EIGHT DECISIONS HELD FOR JORDAN** (`01_plan.md` §4): J-A the L0 identity fork (a RATIFIED design
+  whose calibration corpus was evacuated vs an UNRATIFIED proposal now occupying the slot — leaving
+  both true is scripting-drift-by-neglect), J-B insurgency `L` growth rule (no canon rate exists;
+  needs a ruling, not an invented number), J-C conviction-vocabulary reconciliation (4 substrate axes
+  vs 9 character-sim names vs 8 NPE names — any person-facing Key edge built first is shape
+  divergence by construction), J-D ED-1051 `engine_clock`, J-E Strain/Turmoil/PI key collapse,
+  J-F council→`Sta` direction/magnitude, J-G `spec/churn_amendments.md` (RATIFIED, no longer
+  resolves, content sits inside a file banner-marked "Not independently ratifiable" while
+  `CURRENT.md:165` still cites the dead path), J-H the `valoria-arc-generator` skill's evacuated
+  read/write paths. **Merging the audit PR ratifies NONE of these** (ED-1094 exception, flagged loudly).
+  ⚠ Adversarial review by two read-only critics (fidelity + plan logic) was IN FLIGHT at first commit;
+  their verdicts land as a follow-up. Weakest claims are declared in `00_findings.md` §6.
+
 - **[OPEN] ED-IN-0091 — code-shape open-items register + orchestration plan (2026-07-29).**
   `audit/2026-07-29-code-shape-open-items/`: `00_open_items_register.md` (~60 rows, classed
   M/B/J/D, orchestrator-spot-checked) + `01_orchestration_plan_v1.md` (PROPOSED; merge ratifies
