@@ -48,8 +48,16 @@ Conquest → adjacency/mil-advantage/undergoverned signals (`faction_action.py:1
 → conquest. Clamp-damped at `[0.5, 7.0]` (`game_state.py:124-129`).
 
 **Autonomous drift that genuinely exists:** CI +1/season unconditional (`ci_track.py:51,116`), MS −1/year
-(`accounting.py:116-117`), NPE stance drift every season (`accounting.py:138`), and per-season stochastic
-faction actions (`faction_action.py:220`, seed-deterministic over state-conditioned weights).
+(`accounting.py:116-117`), and per-season stochastic faction actions (`faction_action.py:220`,
+seed-deterministic over state-conditioned weights).
+
+> **CORRECTED after adversarial review (OVERTURN).** An earlier draft listed *"NPE stance drift every
+> season (`accounting.py:138`)"* as live autonomous drift. **It is not.** `simulate_npc_actions` iterates
+> `_npc_store(world)` = `world.npcs` (`npe.py:338-339`) — the very store D5 proves stays **empty** in
+> every live campaign (strict xfail, `test_pipeline_reach.py:596-599`). The call happens every season;
+> the drift never does. This was the document's one real internal contradiction — §1 crediting churn that
+> D5 of the same document proves impossible — and it is exactly the failure mode this repo names:
+> pattern-matching on the call site instead of the concept. Recorded rather than quietly deleted.
 
 **Factions do act on their own** — the single biggest affirmative in the audit. `faction_take_action`
 runs per parliamentary, territory-holding faction per season (`mc_v18.py:124-130`).
@@ -67,7 +75,10 @@ Formation requires ≥2 contiguous **uncontrolled** territories (`insurgency_pip
 one territory starts unowned (T15, `game_state.py:48`) and **no code path anywhere ever sets
 `Territory.owner = None`** — every owner-assign site writes a faction name
 (`faction_action.py:468`, `parliamentary_transfer.py:293`, `mass_seizure.py:292`); both
-`.territories.remove` sites immediately reassign. The Revolt step that would create uncontrolled
+`.territories.remove` sites immediately reassign. *(One qualification, from adversarial review:
+`restore_world` (`game_state.py:357`) constructs `Territory(owner=td['owner'])` and **can** re-materialize
+`None` from a serialized world. Not a live-campaign churn path — but "no code path anywhere ever" was one
+site too absolute, and this is precisely where T1-2's guard test should also look.)* The Revolt step that would create uncontrolled
 territory (`peninsular_strain_v30.md:60,483`) is unimplemented, and faction collapse
 (`faction_canon_v30.md:300`) is documented-only.
 
@@ -106,8 +117,11 @@ asserting `world.npcs` stays empty (`test_pipeline_reach.py:596-599`); `world.kn
 
 **The `world event → Key → person` path terminates at the Key.** `Target.impact_vector` over the 4
 Conviction axes exists (`keys.py:59,96`) and **no code anywhere applies a Key's `impact_vector` or
-`stat_deltas` to any person store** — grep finds only validation (`keys.py:400`) and tests. Both live
-`stat_deltas=` emission sites are faction-facing.
+`stat_deltas` to any person store** — grep finds only validation (`keys.py:400`) and tests. Of the two live
+`stat_deltas=` emission sites, **one is faction-facing (`echo_transport.py:421-422`) and one is
+settlement-facing (`:319-320`, `actor_id=sid`, `scale_signature=["settlement"]`); neither is
+person-facing.** *(Corrected by adversarial review — an earlier draft said both were faction-facing. The
+headline is unchanged: no Key reaches a person.)*
 
 ⚠ **`generate_npc`'s zero-call state is a Jordan-held honest deferral**, not a defect to "fix" — do not
 invent a population count.
@@ -119,12 +133,26 @@ still reports `conviction_scar=1`** (`knots.py:345`). Inert today only because `
 production caller. Fix the **gate**, not the call site — otherwise every future scar writer no-ops
 through the same hole.
 
+> **Adversarial review found the defect worse-shaped than described.** The call is *also* wrapped in
+> `try/except (ImportError, AttributeError): pass` (`knots.py:353-354`) — **a second silencing layer**. A
+> fixed gate that raises would still be swallowed at this call site unless the fix raises a non-caught
+> type or the wrapper is removed. "Fix the gate, not the call site" is therefore **incomplete as
+> originally written**; plan item T0-1 is revised accordingly.
+
 ### D7 — The Key substrate is a telemetry spine, not the churn engine
 3 of 55 registry types emit in a live campaign; exactly **one** (`scene.contest_resolved`) closes a
 feedback loop through a Key; **zero** Key-to-Key cascades can ever occur because
 `DEFAULT_CASCADE_DEPTH_MAX = 0` (`echo_transport.py:91`) makes any depth-1 scheduling raise
 `TerminationBreach`. All 13 registered consumers are stubwire no-ops (`articulation.py:140-149`), and
-**10 of 13 subscribe to types nothing emits**. ~39 of 55 types have zero traffic in either direction.
+**11 of 13 subscribe to types with no code producer at all — and at default-flag runtime, 13 of 13
+receive nothing** (`scene.accord_echo` dormant, `scene.combat_resolved` unreachable). ~39 of 55 types
+have zero traffic in either direction.
+
+> **SHARPENED by adversarial review.** An earlier draft printed *10 of 13*. The critic recomputed and
+> found no criterion yielding 10: only two of the thirteen types have any code emitter, and
+> `scene.combat_felled` has **no Python emit site anywhere**. **The disconnect is worse than first
+> claimed.** Operationally this matters: plan item T0-4's instrument must be required to reproduce
+> **11/13**, not the erroneous 10/13, or the mistake gets baked into the baseline it pins.
 
 The repo already knows: *"real inter-subsystem traffic ran over 16 direct Python imports. A substrate
 with one call site is a prototype, not an architecture"* (`faction_action.py:326-327`).
@@ -133,7 +161,14 @@ with one call site is a prototype, not an architecture"* (`faction_action.py:326
 graph.
 
 ### D8 — Top-down Key delivery has no emitter at all
-The armature specs four top-down emitter families (`key_echo_armature_v1.md:98-103`); **zero have code**.
+The armature specs four top-down emitter families (`key_echo_armature_v1.md:98-103`).
+
+> **SOFTENED by adversarial review.** An earlier draft said *"zero have code"* — too absolute. The
+> `domain_actions` family has one live emitter: `da.public_governance`
+> (`parliamentary_transfer.py:162-176`), fired from the live campaign via `parliamentary_bridge.py:173`.
+> It is log-only, names a territory rather than sub-scale actors, and meets none of the row's
+> `targets[]`/`impact_vector` spec — so **"no genuinely top-down *delivery* ever fires" stands** — but
+> remediation should **extend that existing emitter**, not design the first `da.*` emitter from scratch.
 The substrate is direction-agnostic by design, so nothing prohibits it — but
 `test_pipeline_reach.py:427-440` "proves" direction #4 by **reusing a bottom-up Key**. No genuinely
 top-down Key ever fires in any campaign.

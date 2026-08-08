@@ -552,8 +552,20 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   resolves, content sits inside a file banner-marked "Not independently ratifiable" while
   `CURRENT.md:165` still cites the dead path), J-H the `valoria-arc-generator` skill's evacuated
   read/write paths. **Merging the audit PR ratifies NONE of these** (ED-1094 exception, flagged loudly).
-  ⚠ Adversarial review by two read-only critics (fidelity + plan logic) was IN FLIGHT at first commit;
-  their verdicts land as a follow-up. Weakest claims are declared in `00_findings.md` §6.
+  **ADVERSARIAL REVIEW COMPLETE** — `02_adversarial_review.md`. Two structurally read-only critics
+  (no write tooling) **overturned or materially altered 6 of 11 plan items** and found a
+  self-contradiction the producer could not have caught alone: §1 credited "NPE stance drift every
+  season" as live churn while D5 of the same document proves its store is always empty. Also: T1-1 was
+  scheduled unblocked and is not (**new J-I** — no canon maps `size_pct`→`Mil`; FACTION-P2-02 is
+  EDITORIAL-proposed); T1-2 was **unimplementable** (`accord` floors at 0.5, so `== 0` is inert forever
+  — use the existing `canon_buckets.canonical_accord`); T0-3's guard would have been **vacuous**
+  (`_CELL_OWNED` is hard-scoped to mass_battle); T0-1 **breaks a currently-green test** in
+  `engine/tests/`, which the plan's verification list never named. **Sharpened:** subscriptions with no
+  producer are **11 of 13**, not 10 — the instrument must reproduce 11/13 or freeze the error.
+  **Sequencing INVERTED:** the genuinely unblocked first moves are **T0-4** (connectivity instrument)
+  and **T1-5** (boundary Keys), then **T1-2-formation**. Plan is now **v2**; `git diff` is the record.
+  **NINE decisions held (J-A..J-I).** Four surfaces neither critic checked are marked producer-only/
+  unaudited — not clean — in `02` §5.
 
 - **[OPEN] ED-IN-0091 — code-shape open-items register + orchestration plan (2026-07-29).**
   `audit/2026-07-29-code-shape-open-items/`: `00_open_items_register.md` (~60 rows, classed
