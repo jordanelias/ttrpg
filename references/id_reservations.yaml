@@ -192,7 +192,7 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 9 }   # no reservation held; allocate at next_free as normal. Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 30 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 31 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
     # ED-SC-0023..0024 allocated 2026-08-06 (both open, both needs_jordan): the precedent-grounded
     # consolidation/integration programme CIP-0..CIP-10 (proposals/social_contest_consolidation_integration_v1.md)
     # + the CIP-9b amendment to the RATIFIED Auto/Manual Duality parity constraint. next_free 23->25.

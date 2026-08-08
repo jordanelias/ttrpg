@@ -268,6 +268,22 @@ index; see it for cross-lane/global items.
 
 ## Next actions
 
+- **ED-SC-0030 (2026-08-06) — KEYS, KNOTS, NPCs AND THE COMBAT MODEL.**
+  `audit/2026-08-06-social-contest-three-lens-audit/07_keys_knots_npcs_and_the_combat_model.md`.
+  Six read-only Fable lenses, Opus authorship. **Coverage finding against this unit's own work:**
+  `00`–`06` never opened `systems/combat/combat_engine_v1/` — the repo's own reference
+  implementation of "multiple tracks and balances", on the *same* σ-kernel — and no CIP addresses
+  repetition or Knots. **NEW FINDING — the Standing dead zone:** `frac()` is `(v−5)/5` clamped, and
+  both consumers read `frac`, so **Standing 0 and Standing 5 are identical in reception**; the cliff
+  belongs there (`discredit_bar`), not in a re-founded `frac`. **Combat's rule made testable:** tracks
+  may only multiply/gate process or terminate — no fixed-rate conversion into `adv`. That guard
+  **lands first**. **OF-CAP is now rulable:** `cascade_depth_max = 3`, `emissions_per_tick_max = 64`.
+  **Live latent break:** `drain_tick` has zero production callers; the first scheduling subscriber
+  makes `next_tick` raise. **Knots:** `public_citation` rupture is *unfireable in principle* —
+  `EvidenceItem` has no provenance, which gives W3 a second consumer. **Churn: insufficient** — the
+  auto path repeats to campaign end; the repeat detector ships **xfail**. **Ten corrections to filed
+  work, seven of them mine.** Nine forks, incl. the missing NPC lane.
+
 - **ED-SC-0029 (2026-08-06) — PROPOSAL REWRITTEN (v2).**
   `proposals/social_contest_consolidation_integration_v1.md` (filename kept per CLAUDE.md §4 —
   renaming breaks ~a dozen ED citations; the header carries v2). Restructured around Jordan's eight
