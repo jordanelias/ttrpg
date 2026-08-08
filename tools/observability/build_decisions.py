@@ -107,8 +107,7 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
     ("systems/mass_battle/sim/altonian_reinforcements.py", "MB"),
 
     # --- PC: personal combat ---
-    ("systems/combat/combat_v30", "PC"),
-    ("systems/combat/combat_design_v1", "PC"),
+    ("systems/combat/combat_reference_v1", "PC"),   # ED-PC-0056: combat_v30 + combat_design_v1 consolidated here
     ("systems/combat/combat_c4_draft_v0.md", "PC"),
     ("systems/combat/combat_engine_v1/", "PC"),
     # derived_stats_v30 deliberately NOT mapped: it explicitly scopes itself

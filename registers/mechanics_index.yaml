@@ -224,7 +224,7 @@ mechanics:
     canon_sources:
       - "systems/combat/combat_engine_v1/"   # CANONICAL (ED-900/904; docket ED-1029)
       - "systems/_architecture/complete_systems_reference.md#part-2"
-      - "systems/combat/combat_v30.md"   # DEPRECATED — lore/structure retained, resolution superseded
+      - "systems/combat/combat_reference_v1.md"   # design-layer reference (ED-PC-0056 consolidation); resolution superseded by combat_engine_v1
     params: "systems/combat/combat_engine_v1/config.py"   # Class-C tunables (engine/params/combat.md deprecated -> deprecated/params/)
     sim_module: systems/combat/combat_engine_v1/   # canonical engine; systems/combat/sim/combat.py is the DEPRECATED v30 wiring
     godot_home: godot/skeleton/engines/combat/   # CombatEngine + Strike/Wound modules; contract: references/module_contracts.yaml#personal_combat
@@ -510,7 +510,7 @@ mechanics:
     scale: provincial
     faction: universal
     canon_sources:
-      - "systems/combat/combat_v30.md#section-11"
+      - "systems/combat/combat_reference_v1.md#section-11"
       - "systems/mass_battle/mass_battle_v30.md"
     sim_module: systems/mass_battle/sim/units.py
     test_status: not_implemented

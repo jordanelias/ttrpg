@@ -1296,3 +1296,27 @@ resolution means the bare `audit/<unit>/` row alone cannot catch those. -->
 | `audit/lane-c/` | `FORK:c451bcb` | FORKED |
 | `designs/audit/other/` | `FORK:c451bcb` | FORKED |
 | `audit/other/` | `FORK:c451bcb` | FORKED |
+
+## Personal-combat design-doc consolidation (ED-PC-0056, 2026-08-08)
+
+Five overlapping files collapsed into one design-layer reference. Each of the three prose docs carried
+the byte-identical `## Status:` line claiming to be *"the design-layer source for personal combat"* at
+three different versions, and 73% of `combat_design_v1.md` was byte-identical to `combat_v30.md`.
+`combat_v30.md` v1.7 was the mechanical base (verified to SUPERSEDE, not merely differ from, v1.6 on
+every contested value); `combat_v30_infill.md` supplied prose; **§11.4 Surrender and Disengage existed
+in `combat_design_v1.md` alone** and was carried forward — §13.1's Domain Echo table consumes
+"surrender" as an outcome and nothing else in the corpus defines it. The head is unchanged:
+`systems/combat/combat_engine_v1/` remains canonical per `CURRENT.md`.
+
+| old | new | STATUS |
+|---|---|---|
+| `systems/combat/combat_v30.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `systems/combat/combat_v30_index.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `systems/combat/combat_v30_infill.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `systems/combat/combat_design_v1.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `systems/combat/combat_design_v1_index.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `designs/combat/combat_v30.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `designs/combat/combat_v30_index.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `designs/combat/combat_v30_infill.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `designs/combat/combat_design_v1.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
+| `designs/combat/combat_design_v1_index.md` | `systems/combat/combat_reference_v1.md` | CONSOLIDATED |
