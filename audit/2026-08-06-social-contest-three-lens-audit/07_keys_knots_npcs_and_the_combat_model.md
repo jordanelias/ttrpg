@@ -24,6 +24,20 @@ as a *multimodal combat with multiple tracks and balances*.
 
 ## §1. The contest as multimodal combat
 
+> **How to read this section — corrected after the fact.** Jordan's *"it's a multimodal combat with multiple tracks
+> and balances"* was **communicating how dynamic a social contest is**, not proposing an architecture to port from.
+> This section first over-read it: it built a structural mapping and then began importing combat's constraints as
+> though they were design laws. Two things follow.
+>
+> **Combat is not a finished reference.** It is the most mature subsystem in the tree, which is not the same as
+> settled. Its answers are provisional, and several are shaped by *physical* constraints — a body can only do one
+> thing at a time, a feint is not a separable act — that rhetoric does not share.
+>
+> **So the comparison is a source of questions, not answers.** Used that way it earned its place: it is what
+> surfaced the Standing dead zone (§1.4), the missing win paths (§1.3), and the non-fungibility rule (§1.6). Used
+> the other way it produced one wrong ruling, corrected in §1.5 — and the correction points at where the contest is
+> **more** dynamic than combat, not less.
+
 ### 1.1 Track comparison
 
 Combat maintains eight tracks with distinct timescales, consumers and terminals ✓. Mapped:
@@ -91,23 +105,49 @@ be rejected as the higher-blast-radius option.
 nothing but a self-inflicted foul strips Standing today. It ships **with** the attack channel, not before. Same rule
 that `06` established for `split_standing`/`hard`.
 
-### 1.5 Being "suckered in" — combat has the mechanism, and half of it already runs here
+### 1.5 Tricks and feints — where the contest is *more* dynamic than combat
 
-Combat models every element of Jordan's sentence: commitment is a **continuous chosen depth**, not a verb rung;
-**the feint is not a verb** — WS-5 dissolved it into the attack, so deception is *how* you attack (shallow commit,
-illegible mode) read through a legibility-scaled contest; the punish is the **Indes steal**, where a defender who
-out-reads a deep commit takes the initiative and counters — and a botched counter cedes it back. Being drawn in is
-**symmetrically dangerous**.
+> **Correction, from Jordan, and it inverts what this section first said.** *"A feint in combat isn't an actually
+> chosen executed move — it is literally part of just trying to land a hit. Social contest as deliberate choosing to
+> speak can actually have explicit tricks/feints in a way that martial combat cannot."*
 
-So the bait class is **not a new `bait` verb** — that repeats the double-machinery mistake WS-5 retired. It is three
-ported properties on moves that already exist:
+My first draft concluded that a bait class must **not** be a verb, on the grounds that WS-5 dissolved the feint into
+the attack. **That reasoning is right for combat and does not transfer.** A sword feint is not a separate act — the
+physical motion of a committed strike and a drawn one are the same class of thing, and the deception lives in depth
+and legibility. That is a fact about *bodies*, not a design principle.
+
+**Speech is different in kind.** An orator chooses what to say and composes it. You genuinely can:
+
+- advance a claim you intend to abandon, so the opponent spends the exchange refuting it;
+- concede a point in order to set up a later contradiction;
+- raise a rung you do not want, to bait a shift onto ground that suits you;
+- argue weakly on purpose, to draw an over-attack you have the answer to;
+- provoke, so the reply is intemperate rather than good.
+
+Those are **distinct chosen speech acts**, not depths of one act. So an explicit trick/feint class is warranted
+here, and it is **not** the double-machinery mistake WS-5 retired — because the thing WS-5 retired was a second
+mechanism for something the body does in one motion, and this is not that.
+
+**The asymmetry that only a three-party contest allows, and it is the distinctive mechanic.** A trick has a
+**target** (the opponent) and an **observer** (the bench, the room) who may detect it *independently*:
+
+| Who detects it | Cost |
+|---|---|
+| The opponent | the gambit fails — they don't take the bait |
+| **The adjudicator or the room** | **you are seen trying to manipulate** — a Face/credibility cost, and with the venue's catalogue possibly a fault |
+
+Being caught being clever is worse than being seen through, and the two detections are independent rolls against
+different minds. **Combat has no counterpart because there is nobody watching who decides.** §1.2 said the analogy
+breaks at the third party; this is that break turned into a mechanic rather than a caveat.
+
+What still ports, because it is about *argument* and not about bodies:
 
 1. **Commitment depth on `advance`**, replacing the dead `advance`/`hard` rung pair: gain scales with commit, and
    commit carries **overcommit exposure** — a fault or Face strip when the move is read, or when its scheme's
    critical question lands.
-2. **Legibility derived from the move's own properties** — a syllogism reads easy, an insinuation hard; deeper
-   commit reads easier — feeding an orator-vs-orator read contest. This is the concealment *between players* the
-   kernel entirely lacks.
+2. **Legibility as a property of the utterance** — a syllogism reads easy, an insinuation hard — feeding a read
+   contest. Note this now runs **twice, against different minds**: the opponent reading your intent, and the bench
+   reading it. The kernel has neither; all concealment today is engine-vs-player.
 3. **The punish routed through what exists** — a failed baited reply lands a fault or a Face strip; and under CIP-2's
    schemes, a rebuttal that fails a critical question leaves the attacked claim **strengthened**.
 
