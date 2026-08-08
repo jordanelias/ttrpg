@@ -976,3 +976,31 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 - **ED-1051 residual affecting this lane:** `engine_clock`'s doc:null grade now has a candidate home doc
   (`propagation_spec_v1.md`, ED-1093) but ED-1051 itself (module-contract closure priorities across all 27
   modules) is an **IN**-lane item — see `registers/handoffs/HANDOFF_IN.md`.
+
+---
+
+## [OPEN] ED-PC-0056 — personal-combat design docs consolidated 5 → 1 (2026-08-08)
+
+`systems/combat/combat_reference_v1.md` replaces `combat_v30.md` + `combat_v30_index.md` +
+`combat_v30_infill.md` + `combat_design_v1.md` + `combat_design_v1_index.md`. Old paths alias via
+`references/restructure_ledger.md`. **The head is unchanged** — `combat_engine_v1/` stays canonical
+per `CURRENT.md`, and the new doc says so explicitly: where prose and engine disagree, the engine wins.
+
+**Why it was needed:** three of the five carried the byte-identical `## Status:` line claiming to be
+*"the design-layer source for personal combat"* at three different versions, and 240 non-blank lines
+(73% of `combat_design_v1.md`) were byte-identical to `combat_v30.md`.
+
+**The finding worth carrying forward:** keeping the newer doc alone would have silently dropped
+**§11.4 Surrender and Disengage**, present in `combat_design_v1.md` and nowhere else. It is
+load-bearing — `combat_v30.md` §13.1's Domain Echo table consumes "surrender" as an outcome and
+nothing in the corpus defined how it happens. Carried forward verbatim.
+
+**Next actions:**
+1. **§11.4 is live spec with no implementation.** The engine's only `yield`/`surrender` tokens are
+   materials-science shear-yield, unrelated. Decide whether Surrender/Disengage becomes a resolver in
+   `combat_engine_v1/` or is struck.
+2. **GM register rows 1 and 5 survive** (`combat_reference_v1.md`, the Stunt `+N` free parameter and
+   the Cover obstacle determination) and still need their design call — rows 3 and 4 closed as
+   duplicates. See `audit/2026-08-06-vector-audit/05_gm_resolution_register.md`.
+3. `combat_c4_draft_v0.md` and `scene_combat_design_v1.md` were deliberately left standalone — a draft
+   and a scene-envelope doc, not duplicates. Revisit only if they start claiming head status.

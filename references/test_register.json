@@ -5324,11 +5324,12 @@
     "PC",
     "SC"
    ],
-   "loc": 369,
+   "loc": 371,
    "modules_under_test": [
     "references",
     "registers/editorial_ledger_pc.jsonl",
     "systems/_architecture/campaign_architecture_v30_index.md",
+    "systems/combat/combat_reference_v1.md",
     "systems/combat/combat_v30.md",
     "systems/combat/combat_v30.py",
     "systems/mass_battle/mass_battle_integration_v30.md",
@@ -5421,7 +5422,7 @@
      "assertions": 4,
      "summary": null
     },
-    "test_real_corpus_finds_the_known_combat_v30_currency_drift": {
+    "test_real_corpus_finds_the_known_combat_reference_currency_drift": {
      "assertionless": false,
      "assertions": 1,
      "summary": null

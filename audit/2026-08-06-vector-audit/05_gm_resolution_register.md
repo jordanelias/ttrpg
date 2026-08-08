@@ -63,6 +63,13 @@ Ordered by port impact. Resolution-type column is the *proposed* §3 type, not a
 
 ### A1. Combat — free parameters with no formula
 
+> **UPDATE 2026-08-08 (ED-PC-0056) — four A1 rows are now partly resolved by consolidation.**
+> The five overlapping personal-combat design docs were consolidated into
+> `systems/combat/combat_reference_v1.md`. **Rows 3 and 4 (`combat_design_v1.md:111` and `:234`) are
+> CLOSED as duplicates** — they existed only because the same Stunt and Cover text was stated in two
+> files; there is now one. Rows 1 and 5 survive in the consolidated doc and still need their design
+> call. Old paths resolve via `references/restructure_ledger.md`.
+
 | # | Location | The delegation | Proposed type | Note |
 |---|---|---|---|---|
 | A1.1 | `systems/combat/combat_v30.md:106` | Stunt: "+N dice to Offence from environmental/positional narrative (**Game Master sets N, max 5**)" | Deterministic | **Highest severity in this register.** An unbounded-within-5 dice-pool modifier with no derivation. A combat resolver cannot ship with this open. |
