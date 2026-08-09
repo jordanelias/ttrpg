@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**262 open work items** · **119 need your decision**.
+**263 open work items** · **120 need your decision**.
 
 tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionable (no ruling needed) — 121, Editorial ledger — needs your decision — 106, Proposal docs (proposals/) — 9, Provisional / draft design docs — 7
+By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionable (no ruling needed) — 121, Editorial ledger — needs your decision — 107, Proposal docs (proposals/) — 9, Provisional / draft design docs — 7
 
 ## MB — Mass battle  (12 items, 9 need decision)
 
@@ -43,7 +43,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionab
 - `ED-FI-0002` — Counter-espionage loop (edge-playability EP-6). Enemy da.covert_betrayal reaches the player only as a non-interactive Tier-2 cut scene and only when exposed==true; da.antinomian_action and da.economic_intervention (whose nominal consumer se  _(open)_
 - `valoria-mechanic-audit-2026-07-13:fieldwork_investigation:fieldwork_investigation` — [PARTIAL] mechanic_audit / fieldwork_investigation: 3 P1 (2 wound-formula self-contradictions from incomplete ED-PC-0005/0006 propagation; 1 P-06 canon violation — threadcut Coherence drain in Knot mechanic, also replicated in knots_v30.md)  _(PARTIAL)_
 
-## SC — Social contest  (26 items, 16 need decision)
+## SC — Social contest  (27 items, 17 need decision)
 
 - 🔸 `ED-SC-0003` — P0 docket / P2 FORK (no stated default): resolve the 'Piety Track' name collision (audit finding N-4b). One name, two referents, three docs: the 0-10 debate tracker is 'Piety Track' in scale_transitions_v30/npc_behavior_v30/glossary (glossa  _(open)_
 - 🔸 `ED-SC-0004` — P0 docket / P1-severity FORK (no stated default): choose the kernel's canonical Argue-pool formula (audit finding N-2). Two contradictory implementations are simultaneously live: the deprecated legacy stub implements canon verbatim ((Primar  _(open)_
@@ -61,6 +61,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 19, Editorial ledger — actionab
 - 🔸 `ED-SC-0027` — TRACK ARCHITECTURE + STATE GRAPH, organised by Jordan's eight requirements (C1-C4 character side: HOW one argues = rhetoric x temporal; WHAT; WHY; HOW effectively. P1-P4 type side: WHAT KIND; WHO adjudicates; HOW adjudication occurs; HOW au  _(open)_
 - 🔸 `ED-SC-0028` — ADVERSARIAL AUDIT OF ED-SC-0027, AND ITS CORRECTIONS. Three read-only Fable critics (valoria-critic: Read/Grep/Glob only -- independence structural per CLAUDE.md 10, not declared in a prompt) attacked 05_track_architecture_and_state_graph.m  _(open)_
 - 🔸 `ED-SC-0029` — PROPOSAL REWRITTEN (v2) -- proposals/social_contest_consolidation_integration_v1.md. Filename kept deliberately (CLAUDE.md 4: versioning != currency; renaming buys no clarity and breaks ~a dozen ED citations); the header carries v2. Restruc  _(open)_
+- 🔸 `ED-SC-0030` — KEYS, KNOTS, NPCs AND THE COMBAT MODEL -- six read-only Fable lenses across two waves (inventory/wire, breakage, design consequences; then Keys I/O + scatter-gather, Knots + world churn, and the combat comparison), Opus authorship. COVERAGE  _(open)_
 - `ED-SC-0001` — Targeted dominance sweeps for the audit's unverified degenerate-play candidates, when their lanes next open. SOCIAL (fold into contest Stage 4): Recall/Corroborate/Prep stacking vs a global pool cap; boost-lookup vs Appraise value; coalitio  _(open)_
 - `ED-SC-0008` — P2 hygiene work item (accepted): refresh references/module_contracts.yaml's social_contest entry (lines 425-447; audit finding N-3, UPHELD). The entry predates the entire Stage 1b-3 rebuild: resolver reads dice_pool where the kernel has bee  _(open)_
 - `ED-SC-0009` — Stage-4 entry-criteria work item (accepted; fold into the ratified Stage 4 gate, not a new stage): (1) wire the Face/Rattled strain channel -- the CR3 three-tracker tradeoff triangle currently runs on two legs; Face is monotonic-up (primiti  _(open)_

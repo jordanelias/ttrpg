@@ -528,6 +528,45 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
+- **[OPEN] ED-IN-0149 — world-churn audit: the machinery is built and DISCONNECTED (2026-08-08).**
+  `audit/2026-08-08-world-churn-audit/`: `00_findings.md` (defect register D1–D12 + latent traps +
+  stale-claim register) + `01_plan.md` (PROPOSED, tiered by leverage-per-unit-of-new-design).
+  Seven independent Fable-5 read-only lenses. **Headline:** the world does not churn because the
+  churn machinery is disconnected, not because it is scripted — the anti-scripting-drift guardrail
+  HELD (one contained instance across seven lenses), and scenes ARE seeded from live world state.
+  **Nothing executed:** no head moved, no design text changed, no flag flipped, no golden re-recorded.
+  **NEXT ACTIONS, in order:** (1) land Tier 0 — T0-1 conviction-gate fix (a live silent-no-op bug:
+  `knots.py:348-353` passes `'Loyalty'`, absent from `CONVICTIONS`, so magnitude 0 is applied while
+  the caller reports 1), T0-2 stale-claim retirement, T0-3 `temperaments.py` read/write-asymmetry
+  guard, **T0-4 the connectivity instrument** (highest value: converts the audit's grep-based
+  absence-claims into a maintained gate — no guard currently pins ANY of them). (2) Author T1-1
+  (battle→`Mil` attrition) and T1-5 (season/accounting boundary Keys) flag-gated OFF.
+  (3) **Do not start** T1-2/3/4 or Tier 2 — each is blocked on a Tier-3 ruling.
+  **EIGHT DECISIONS HELD FOR JORDAN** (`01_plan.md` §4): J-A the L0 identity fork (a RATIFIED design
+  whose calibration corpus was evacuated vs an UNRATIFIED proposal now occupying the slot — leaving
+  both true is scripting-drift-by-neglect), J-B insurgency `L` growth rule (no canon rate exists;
+  needs a ruling, not an invented number), J-C conviction-vocabulary reconciliation (4 substrate axes
+  vs 9 character-sim names vs 8 NPE names — any person-facing Key edge built first is shape
+  divergence by construction), J-D ED-1051 `engine_clock`, J-E Strain/Turmoil/PI key collapse,
+  J-F council→`Sta` direction/magnitude, J-G `spec/churn_amendments.md` (RATIFIED, no longer
+  resolves, content sits inside a file banner-marked "Not independently ratifiable" while
+  `CURRENT.md:165` still cites the dead path), J-H the `valoria-arc-generator` skill's evacuated
+  read/write paths. **Merging the audit PR ratifies NONE of these** (ED-1094 exception, flagged loudly).
+  **ADVERSARIAL REVIEW COMPLETE** — `02_adversarial_review.md`. Two structurally read-only critics
+  (no write tooling) **overturned or materially altered 6 of 11 plan items** and found a
+  self-contradiction the producer could not have caught alone: §1 credited "NPE stance drift every
+  season" as live churn while D5 of the same document proves its store is always empty. Also: T1-1 was
+  scheduled unblocked and is not (**new J-I** — no canon maps `size_pct`→`Mil`; FACTION-P2-02 is
+  EDITORIAL-proposed); T1-2 was **unimplementable** (`accord` floors at 0.5, so `== 0` is inert forever
+  — use the existing `canon_buckets.canonical_accord`); T0-3's guard would have been **vacuous**
+  (`_CELL_OWNED` is hard-scoped to mass_battle); T0-1 **breaks a currently-green test** in
+  `engine/tests/`, which the plan's verification list never named. **Sharpened:** subscriptions with no
+  producer are **11 of 13**, not 10 — the instrument must reproduce 11/13 or freeze the error.
+  **Sequencing INVERTED:** the genuinely unblocked first moves are **T0-4** (connectivity instrument)
+  and **T1-5** (boundary Keys), then **T1-2-formation**. Plan is now **v2**; `git diff` is the record.
+  **NINE decisions held (J-A..J-I).** Four surfaces neither critic checked are marked producer-only/
+  unaudited — not clean — in `02` §5.
+
 - **[OPEN] ED-IN-0091 — code-shape open-items register + orchestration plan (2026-07-29).**
   `audit/2026-07-29-code-shape-open-items/`: `00_open_items_register.md` (~60 rows, classed
   M/B/J/D, orchestrator-spot-checked) + `01_orchestration_plan_v1.md` (PROPOSED; merge ratifies
@@ -1824,3 +1863,31 @@ occurrences / 22 files, 67 live**, all dispositioned — 30 OPEN design decision
 `systems/mass_battle/sim/` "retired, not kept alongside"; all five modules are still present and
 still load-bearing (`massbattle ↔ units` is one of three import cycles, both cut-vertices). Either
 execute the deletion or correct the CURRENT.md stamp — currently it reads resolved.
+### ED-IN-0149 — world-churn audit: master synthesis landed (2026-08-09)
+
+`audit/2026-08-08-world-churn-audit/06_master_synthesis.md` is the **capstone and the reading
+surface** for this audit; the six prior documents remain authoritative for their detail. It carries
+the reconciliation (including the retraction-and-its-withdrawal), the consolidated churn model, the
+architecture ruling, the P0–P5 programme, and Part VIII's record of 24 adversarial corrections.
+`topology_probe.py` ships beside it as the re-runnable falsifier for every topology figure.
+
+**Read Part VII.0 first.** The programme's load-bearing assumption — that the Key mesh deserves
+promotion from telemetry spine to churn engine at all — is filed as **J-O** and can invalidate
+P1–P5 wholesale. Settle it before building anything in P1+.
+
+**Next actions**
+- **J-O** and **J-N** are new and blocking; **J-A** re-gated onto P0-3, **J-H** narrowed to P2-2.
+  Fourteen decisions held in total (J-A..J-L, J-N, J-O).
+- **J-M is RULED** (Jordan, in session, 2026-08-09): *"local actors should be NPCs."* P4-1 is
+  unblocked — seed Local Actors through the NPC path into `world.npcs`, with
+  `settlement_layer_v30.md §4.5` supplying the count, per-type table and profile. **Cross-lane:
+  echo this into `HANDOFF_SE.md` and `HANDOFF_WR.md`.** It raises the urgency of **J-C**, since each
+  Local Actor carries one Conviction and three incompatible vocabularies compete to supply it.
+- **P0-6 (Accord unit guard) needs no ruling — it is the cheapest real win available.** One owner
+  (`canon_buckets.canonical_accord`) exists; at least three live sites bypass it and
+  `settlement.py:120` runs a fourth `math.floor` dialect. Write it **with an allowlist**; several
+  literal comparisons are deliberate.
+- **P0-3 must pin Turmoil's UNIT, not just its writer** — the registry says 0–10, `PS_MAX` is 6.0,
+  and the first strain-shock pass will write it. That is the Accord defect visible in advance.
+- Two live defects remain **unfixed by design** (read-only audit): the victory Accord gate at half
+  its canonical height, and the conviction gate's double silencer.

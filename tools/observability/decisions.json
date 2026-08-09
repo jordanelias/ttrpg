@@ -1,7 +1,7 @@
 {
   "meta": {
-    "files_scanned": 460,
-    "total_open": 225,
+    "files_scanned": 431,
+    "total_open": 226,
     "by_category": {
       "ratification": 13,
       "naming": 31,
@@ -10,19 +10,19 @@
       "gap": 64,
       "assumption": 62,
       "stub": 4,
-      "todo": 8
+      "todo": 9
     },
     "by_priority": {
       "1": 64,
       "2": 23,
-      "3": 138
+      "3": 139
     },
     "by_lane": {
-      "IN": 18,
-      "unassigned": 132,
-      "FA": 26,
+      "IN": 17,
+      "unassigned": 133,
+      "FA": 25,
       "SC": 6,
-      "GO": 19,
+      "GO": 21,
       "MB": 11,
       "SE": 3,
       "PC": 1,
@@ -33,17 +33,17 @@
       "IN": {
         "1": 2,
         "2": 1,
-        "3": 15
+        "3": 14
       },
       "unassigned": {
         "1": 44,
         "2": 20,
-        "3": 68
+        "3": 69
       },
       "FA": {
         "1": 3,
         "2": 0,
-        "3": 23
+        "3": 22
       },
       "SC": {
         "1": 5,
@@ -53,7 +53,7 @@
       "GO": {
         "1": 9,
         "2": 2,
-        "3": 8
+        "3": 10
       },
       "MB": {
         "1": 1,
@@ -127,6 +127,10 @@
         5
       ],
       [
+        "engine/engine_params/params_tables.yaml",
+        4
+      ],
+      [
         "systems/social_contest/sim/parliamentary_vote.py",
         4
       ],
@@ -136,10 +140,6 @@
       ],
       [
         "systems/factions/faction_behavior_v30.md",
-        2
-      ],
-      [
-        "systems/social_contest/social_contest_v30_index.md",
         2
       ]
     ],
@@ -519,7 +519,7 @@
       "priority": 1,
       "label": "Awaiting ratification",
       "locations": [
-        "references/canonical_sources.yaml:308"
+        "references/canonical_sources.yaml:241"
       ],
       "systems": [],
       "count": 1,
@@ -1478,17 +1478,17 @@
       "lane": null
     },
     {
-      "text": "Ministry: NPC faction (source document not yet identified \u2014 [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])",
+      "text": "purpose: '[\u00a712 Decision Log] # | Decision | Resolution :: **D5** | Inspirations field \u2014 lift scattered Venice/Florence/Lohengramm/Talleyrand prose into structured `inspiration` field | Two facets per faction: `historical_parallel` (period-realistic anchor) + `in_character_aspiration` (in-fiction aim). Where no paral\u2026",
       "category": "gap",
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "engine/params/bg/core.md:27",
-        "engine/params/bg/core.md:46"
+        "systems/factions/_identifier_census.yaml:1591",
+        "systems/factions/_identifier_census.yaml:1618"
       ],
       "systems": [],
       "count": 2,
-      "lane": "IN"
+      "lane": null
     },
     {
       "text": "<!-- [STUB: provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->",
@@ -1504,17 +1504,30 @@
       "lane": "IN"
     },
     {
+      "text": "'Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below)'",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "engine/engine_params/params_tables.yaml:1954",
+        "engine/engine_params/params_tables.yaml:1992"
+      ],
+      "systems": [],
+      "count": 2,
+      "lane": "GO"
+    },
+    {
       "text": "| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |",
       "category": "todo",
       "priority": 3,
       "label": "TODO / FIXME",
       "locations": [
-        "engine/params/bg/stress_patches.md:63",
-        "engine/params/bg/stress_patches.md:115"
+        "engine/engine_params/params_tables.yaml:7889",
+        "engine/engine_params/params_tables.yaml:7978"
       ],
       "systems": [],
       "count": 2,
-      "lane": "IN"
+      "lane": "GO"
     },
     {
       "text": "[ASSUMPTION: 1:1 territory->settlement mapping for Tier 0 \u2014 basis: game_state",
@@ -2566,7 +2579,7 @@
       "priority": 3,
       "label": "Documented gap",
       "locations": [
-        "systems/factions/sim/faction_action.py:354"
+        "systems/factions/sim/faction_action.py:436"
       ],
       "systems": [],
       "count": 1,
@@ -2979,6 +2992,18 @@
       "lane": "IN"
     },
     {
+      "text": "purpose: '[5.3 Inspiration (motivation resource \u2014 propagated 2026-04-25)] Mechanic | Scale | Function | Persistence :: **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete \u00a710.2 \u2014 TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces \u2026",
+      "category": "todo",
+      "priority": 3,
+      "label": "TODO / FIXME",
+      "locations": [
+        "systems/_architecture/_identifier_census.yaml:781"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "IN"
+    },
+    {
       "text": "deliberately NOT built here \u2014 see the module TODO for the future-extension surface.",
       "category": "todo",
       "priority": 3,
@@ -3025,18 +3050,6 @@
       "systems": [],
       "count": 1,
       "lane": null
-    },
-    {
-      "text": "Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 \u00a73.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said \"Mandate 3 / Wealth 3\" while \u2026",
-      "category": "todo",
-      "priority": 3,
-      "label": "TODO / FIXME",
-      "locations": [
-        "engine/params/factions/stats_1_7_scale.md:45"
-      ],
-      "systems": [],
-      "count": 1,
-      "lane": "FA"
     }
   ],
   "resolved": [

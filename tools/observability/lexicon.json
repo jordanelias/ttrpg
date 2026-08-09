@@ -21,7 +21,7 @@
       "placeholders": 8,
       "handshakes": 9,
       "with_definition": 133,
-      "linked_to_graph": 14
+      "linked_to_graph": 17
     }
   },
   "terms": [
@@ -1645,6 +1645,12 @@
       "collision_note": "",
       "sources": [
         "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "faction_politics::Coup posture"
+        }
       ]
     },
     {
@@ -6152,6 +6158,12 @@
         "references/alias_registry.yaml",
         "references/name_collision_database.yaml",
         "references/glossary.md"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "faction_politics::Standing"
+        }
       ]
     },
     {
@@ -6259,6 +6271,12 @@
       "collision_note": "",
       "sources": [
         "references/descriptor_registry.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "faction_politics::Succession status"
+        }
       ]
     },
     {
