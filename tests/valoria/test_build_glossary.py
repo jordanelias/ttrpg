@@ -1,4 +1,4 @@
-"""Guards for the generated glossary (ED-IN-0149).
+"""Guards for the generated glossary (ED-IN-0150).
 
 Three of these pin defects the tool SHIPPED WITH and had to be fixed during the build. They are
 here because each was silent — the tool ran green, printed a confident count, and was wrong:

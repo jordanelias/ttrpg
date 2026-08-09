@@ -90,7 +90,7 @@ FAMILIES = [
     },
     {
         "name": "glossary",
-        # build_glossary.py (ED-IN-0149) reads five registries and locates every term across
+        # build_glossary.py (ED-IN-0150) reads five registries and locates every term across
         # SCAN_ROOTS. Scope is those five sources PLUS the scanned corpus itself — a doc move
         # changes where a term lives, which is the whole point of the artifact. Deliberately
         # REPORT-ONLY (this family) rather than a blocking --check: the output is a function of

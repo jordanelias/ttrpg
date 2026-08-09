@@ -1,9 +1,14 @@
 # VALORIA GLOSSARY
 ## Terms, Abbreviations, and Acronyms
-## Last updated: 2026-08-08 (generated companion views added — ED-IN-0149; content last swept 2026-04-30, PP-691)
+## Last updated: 2026-08-08 (generated companion views added — ED-IN-0150; content last swept 2026-04-30, PP-691)
 ## Authority: This file is the canonical reference for all term expansions project-wide.
 
-> **Where to look, as of 2026-08-08 (ED-IN-0149).**
+## Maintained by: hand, in the same commit as any file that introduces or retires a term
+## (the former maintainer, the valoria-orchestrator skill, was retired to deprecated/skills/
+## on 2026-06-28 — LB-22. Definition display names live in references/names_index.yaml;
+## this glossary covers expansions and abbreviations.)
+
+> **Where to look, as of 2026-08-08 (ED-IN-0150).**
 >
 > This file stays the authority for **curated definitions** — a scanner cannot write a definition,
 > and 176 terms carry one only because a human wrote it here.
@@ -23,10 +28,6 @@
 > names_index + the consistency checker is a follow-on tooling change") **only in part**: the mirror
 > and location index exist; the 7-vs-9 attribute-roster conflict recorded below is **still
 > unresolved**, and the generated views inherit it rather than hiding it.
-## Maintained by: hand, in the same commit as any file that introduces or retires a term
-## (the former maintainer, the valoria-orchestrator skill, was retired to deprecated/skills/
-## on 2026-06-28 — LB-22. Definition display names live in references/names_index.yaml;
-## this glossary covers expansions and abbreviations.)
 
 ---
 

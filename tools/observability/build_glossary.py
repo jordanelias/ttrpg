@@ -371,7 +371,12 @@ def _term_row(term: str, e: dict, here: str, by_sub: dict[str, list[str]]) -> st
     if e.get("aliases"):
         extra.append("alias: " + ", ".join(e["aliases"][:3]))
     if e.get("legacy"):
-        extra.append("legacy: " + ", ".join(e["legacy"][:2]))
+        # COUNT, never the spelling. names_index marks legacy names `enforce: block` and
+        # tools/ci_naming_check.py fails on the deprecated token appearing anywhere outside its
+        # registry home — reprinting `Galbados` here propagated exactly what that gate exists to
+        # stop. The reader still learns a deprecated form exists and where to look it up.
+        n = len(e["legacy"])
+        extra.append(f"{n} legacy spelling{'s' if n > 1 else ''} — see names_index.yaml")
     if e.get("ambiguous"):
         extra.append(f"⚠️ broad ({e['file_count']} files)")
     tail = f" · {'; '.join(extra)}" if extra else ""
@@ -465,7 +470,11 @@ def build() -> tuple[dict[str, str], dict]:
             "refused": len(refused),
         },
         "refused": refused,
-        "terms": {t: {**{k: v for k, v in e.items() if k != "sources"},
+        # `legacy` is replaced by a COUNT for the same reason as in the markdown: those spellings
+        # are `enforce: block` in names_index and a blocking naming gate fails on them anywhere
+        # else. names_index.yaml remains the single home for the actual strings.
+        "terms": {t: {**{k: v for k, v in e.items() if k not in ("sources", "legacy")},
+                      "legacy_count": len(e.get("legacy") or []),
                       "sources": sorted(e["sources"]),
                       "locations": hits.get(t, {})}
                   for t, e in sorted(terms.items())},
