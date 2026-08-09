@@ -373,8 +373,8 @@ def _term_row(term: str, e: dict, here: str, by_sub: dict[str, list[str]]) -> st
     if e.get("legacy"):
         # COUNT, never the spelling. names_index marks legacy names `enforce: block` and
         # tools/ci_naming_check.py fails on the deprecated token appearing anywhere outside its
-        # registry home — reprinting `Galbados` here propagated exactly what that gate exists to
-        # stop. The reader still learns a deprecated form exists and where to look it up.
+        # registry home — reprinting the deprecated spelling here propagated exactly what that
+        # gate exists to stop. The reader still learns a legacy form exists and where to look it up.
         n = len(e["legacy"])
         extra.append(f"{n} legacy spelling{'s' if n > 1 else ''} — see names_index.yaml")
     if e.get("ambiguous"):
