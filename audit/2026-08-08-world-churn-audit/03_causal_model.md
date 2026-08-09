@@ -1,7 +1,7 @@
 # World churn — the causal model: opportunities, Keys, and the adjudicated build order
 
 ## Status: PROPOSED (read-only audit; nothing executed, no head moved, no flag flipped)
-## Date: 2026-08-08 · Lane: IN · ED-IN-0148 · Seven causal lenses + two adversarial critics, all Fable-5 read-only
+## Date: 2026-08-08 · Lane: IN · ED-IN-0149 · Seven causal lenses + two adversarial critics, all Fable-5 read-only
 ## Method note: lenses were barred from lexical evidence — a term appearing (or not) is not evidence.
 ## Claims are semantic ("the design defines X as Y, therefore Z"), and every edge is labelled by build state.
 

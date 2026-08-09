@@ -528,7 +528,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Pending
 
-- **[OPEN] ED-IN-0148 — world-churn audit: the machinery is built and DISCONNECTED (2026-08-08).**
+- **[OPEN] ED-IN-0149 — world-churn audit: the machinery is built and DISCONNECTED (2026-08-08).**
   `audit/2026-08-08-world-churn-audit/`: `00_findings.md` (defect register D1–D12 + latent traps +
   stale-claim register) + `01_plan.md` (PROPOSED, tiered by leverage-per-unit-of-new-design).
   Seven independent Fable-5 read-only lenses. **Headline:** the world does not churn because the
@@ -1825,7 +1825,45 @@ allocate, bump, co-commit; never max+1.)_
     `n_cite_edges≥100` bar is trivially met at L1's larger corpus; make it scale-relative. Already
     honestly DISCLOSED as "L0-calibrated, not re-validated for L1", so the gap is surfaced not hidden.
 
-### ED-IN-0148 — world-churn audit: master synthesis landed (2026-08-09)
+---
+
+## [OPEN] ED-IN-0148 — post-evacuation vector audit + the GM Resolution Register (2026-08-06)
+
+`audit/2026-08-06-vector-audit/`. First corpus-wide vector audit since `c492de9` (2026-07-22) — a
+baseline predating the fork inversion, the evacuation and the CLAUDE.md restoration.
+
+**The deliverable is `05_gm_resolution_register.md`.** `systems/_architecture/videogame_mode_spec.md`
+§3 defines a "GM Decides" Resolution Register with five types and states it "is not exhaustive here —
+each design doc should be audited for GM references". That audit had never run. It has now: **84
+occurrences / 22 files, 67 live**, all dispositioned — 30 OPEN design decisions, 6 RESOLVABLE
+(rule already stated, only the attribution needs removing), 12 ALREADY RULED by spec §1's
+`"GM tracks" → Engine tracks` row, 16 DISCARD per §4, 3 non-defects.
+
+**Next actions, cheapest first:**
+1. **Sweep the 12 C-rows and 6 B-rows — zero design risk**, clears 18 of 67. C is documentation lag
+   against a ruling that already exists; B strips attribution from rules the docs already state in full.
+2. **Currency-check A1 before designing it.** `CLAUDE.md` §4 records the combat head as
+   `combat_engine_v1/` with `combat_v30.md` *PARTIALLY SUPERSEDED* — A1.1's unbounded Stunt `+N`
+   may already be resolved in the engine and merely stale in prose.
+3. **Three design calls held for Jordan:** A3.1 (social-contest format table), A4.1 (the nine
+   political axes, explicitly "not tracked numerically"), A2.1 (MS threshold consequence generation).
+
+**Four instrument defects filed, not worked around** (detail in the ledger entry):
+- Mode C reports **97.5% of cite-edges as "notional"** — guaranteed by construction at L1.
+- **The TF-IDF graph is inert**: sklearn-present and sklearn-absent runs are byte-identical
+  everywhere except a `degrees.json` block nothing consumes — and absent sklearn it writes zeros
+  rather than nothing, so "not computed" is indistinguishable from "genuinely zero".
+- `structure_register`'s inline claim that a nonzero contract-UNDECLARED count "is itself a
+  regression, not a pre-existing gap" is **false for its only row** — `mass_battle` never had a
+  `sim_module` field (verified at `f03357d`).
+- `review_baseline`'s `stubs.count` seeds a **ceiling** while `review_core` compares for **equality**,
+  so 24/25 is red by construction and no IN action can green it.
+
+**Cross-lane, for MB:** **J2 is registered but not executed.** J2 (2026-08-03) ruled
+`systems/mass_battle/sim/` "retired, not kept alongside"; all five modules are still present and
+still load-bearing (`massbattle ↔ units` is one of three import cycles, both cut-vertices). Either
+execute the deletion or correct the CURRENT.md stamp — currently it reads resolved.
+### ED-IN-0149 — world-churn audit: master synthesis landed (2026-08-09)
 
 `audit/2026-08-08-world-churn-audit/06_master_synthesis.md` is the **capstone and the reading
 surface** for this audit; the six prior documents remain authoritative for their detail. It carries

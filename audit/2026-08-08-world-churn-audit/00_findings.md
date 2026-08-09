@@ -1,7 +1,7 @@
 # World Churn — seven-lens read-only audit
 
 ## Status: PROPOSED (read-only audit; no canonical head moved, no design text changed, nothing executed)
-## Date: 2026-08-08 · Lane: IN (cross-cutting) · ED-IN-0148 · Method: 7 independent Fable-5 read-only lenses
+## Date: 2026-08-08 · Lane: IN (cross-cutting) · ED-IN-0149 · Method: 7 independent Fable-5 read-only lenses
 
 **Question asked:** how does Key-substrate state dynamically change over a campaign as subsystems
 interact with events, and do the primitives compose into emergent conditions that reach NPCs, arcs and

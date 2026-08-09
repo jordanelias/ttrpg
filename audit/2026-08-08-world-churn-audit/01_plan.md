@@ -1,7 +1,7 @@
 # World Churn — the interdependency plan
 
 ## Status: PROPOSED — nothing here is ratified by merging this audit PR. Tier 3 is HELD for Jordan.
-## Date: 2026-08-08 · Lane: IN (cross-cutting) · ED-IN-0148 · Companions: `00_findings.md`, `02_adversarial_review.md`
+## Date: 2026-08-08 · Lane: IN (cross-cutting) · ED-IN-0149 · Companions: `00_findings.md`, `02_adversarial_review.md`
 ## Revision: **v2 — rewritten after adversarial review.** The critic inverted the sequencing, falsified one
 ## "compose on an existing primitive" claim, found a missing blocker, and showed one item was not
 ## Tier-0-safe. Every change is attributed inline. `git diff` against v1 is the record.
@@ -237,7 +237,7 @@ flips no flag authored under Tier 1.
 `pytest tests/valoria` **and `engine/tests/`** — the latter added after review caught that T0-1 lands in
 the sim-regression suite v1 never named — plus the lane validator, plus the item's own falsifier. Baseline
 at audit time, verified before and after the audit commit: **1637 passed, 23 skipped, 14 xfailed,
-1 xpassed**. Commit `[scope]` citing `ED-IN-0148`. No item reported done on a check that was not run.
+1 xpassed**. Commit `[scope]` citing `ED-IN-0149`. No item reported done on a check that was not run.
 
 ## §7 · What the adversarial pass changed
 

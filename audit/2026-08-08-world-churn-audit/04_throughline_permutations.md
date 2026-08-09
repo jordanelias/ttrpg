@@ -1,7 +1,7 @@
 # Throughlines under composition — branch structure across permutations of systems
 
 ## Status: PROPOSED (read-only; nothing executed). **Adversarial pass COMPLETE — corrections applied inline.**
-## Date: 2026-08-08 · Lane: IN · ED-IN-0148 · Four Fable-5 read-only hub traces, lexical evidence barred
+## Date: 2026-08-08 · Lane: IN · ED-IN-0149 · Four Fable-5 read-only hub traces, lexical evidence barred
 
 ---
 

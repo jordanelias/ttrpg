@@ -1,17 +1,32 @@
-<!-- [PARTIALLY SUPERSEDED 2026-06-04, Jordan / ED-900] Personal-combat RESOLUTION superseded by designs/scene/combat_engine_v1/ (canonical modular resolver). Lore/flavor/non-resolution content here retained. config.py supersedes params/combat.md resolution values (pool, stamina, etc.). -->
-<!-- SKELETON — mechanical spec only — atomized 2026-04-13 from designs/combat/combat_v30.md -->
-<!-- Infill: designs/combat/combat_v30_infill.md -->
-<!-- DO NOT add prose. Rationale/examples live in the infill file. -->
+# Valoria — Personal Combat: Design Reference
 
-<!-- v30 baseline — renamed from designs/combat/combat_design_v1.md on 2026-04-13 -->
-# VALORIA — COMBAT DESIGN (v1)
-## Date: 2026-04-02
-## Version: v1.7 [combat-armature ratified decisions 2026-05-29/30 propagated: R1 pool (Agi-independent, supersedes PP-247), D1 damage (Impact×Coupling×Quality, supersedes the STR-multiplier formula + crit-doubles-PP-211), W1/W5 weapon-vs-armour subsumed into Coupling, L1 leverage→degree. See designs/audit/2026-05-29-combat-armature/RATIFIED*.] (PP-238, PP-239, PP-247 superseded-in-part; PP-232: PP-238, PP-239, PP-247 applied; PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
-## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
-## Authority: Philosophical Foundations → this document → compilation (when ready)
-## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
-## Patches incorporated: PP-086–092, P2-B11 series (from sim_combat_batch_11.md), PP-172 (SIM-001 ranged subtypes), PP-210–218 (audit gap fixes 2026-04-03)
-## Source checkpoint: compilation/v0.14/stage8_combat_deprecated.md (for reference values)
+## Status: REFERENCE — subordinate to the `combat_engine_v1/` head (PROPOSED, ED-PC-0056)
+## Version: v1.0 (consolidation of combat_v30 v1.7 + combat_v30_infill v1.6 + combat_design_v1 v1.6)
+## Date: 2026-08-08
+## Authority: Philosophical Foundations → `systems/combat/combat_engine_v1/` (the resolver, canonical per CURRENT.md) → **this document** (design-layer prose reference)
+## Mode applicability: personal scale. Per `systems/_architecture/videogame_mode_spec.md` §4, TTRPG-only and board-game-only modes are formally discarded; mode-split passages below are retained as historical rationale, not as live alternatives.
+
+> **What this document is.** The single design-layer reference for personal combat. It replaces five
+> overlapping files that each claimed, in identical words, to be *"the design-layer source for personal
+> combat"* at three different version numbers — `combat_v30.md` (v1.7), `combat_design_v1.md` (v1.6) and
+> `combat_v30_infill.md` (v1.6), plus the two index halves. 73% of `combat_design_v1.md` was byte-identical
+> to `combat_v30.md`.
+>
+> **What this document is NOT.** It is not the head. `CURRENT.md` names
+> `systems/combat/combat_engine_v1/` — the resolver package — as the canonical personal-combat surface.
+> Where this prose and the engine disagree, **the engine wins**; report the divergence rather than
+> editing a value here to match.
+>
+> **Consolidation method (ED-PC-0056).** `combat_v30.md` v1.7 was taken as the mechanical base: on every
+> contested value it was verified to supersede `combat_design_v1.md` v1.6 rather than merely differ —
+> same Combat Pool formula `max(5, Relevant History + 6)`, a strictly richer Wounds model (adds Wound
+> Interval and the ED-548/ED-694 Vitality reframing), and both PP-211 and PP-247 already present.
+> `combat_v30_infill.md` supplied the prose/rationale, interleaved under its own section headings.
+> **One section existed in no other file and would have been lost by keeping the newer doc alone:
+> §11.4 Surrender and Disengage** — carried forward verbatim below. It is load-bearing: §13.1's Domain
+> Echo table consumes "surrender" as an outcome and nothing else in the corpus defines how it happens.
+> One dead reference (`designs/ttrpg/threadwork_redesign_v25.md`, a retired path) was dropped in favour
+> of §10.1–10.3, which supersede it.
 
 ---
 
@@ -29,6 +44,10 @@ Translation rules for each scale are noted inline.
 
 ---
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+TTRPG is always the most granular layer. Hybrid uses TTRPG rules when a named Player Character is present. Board Game uses abstracted equivalents.
+
 ## 1. COMBAT POOL
 
 **TTRPG:**
@@ -44,6 +63,11 @@ Modifiers:
 **Hybrid:** Player Character uses full TTRPG pool. Non-Player Character units use Martial stat.
 
 ---
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+Pool split: allocate between Offence and Defence before any dice are revealed. This split IS the action economy — no separate action declaration needed.
+**Board Game equivalent:** Unit Martial stat replaces Combat Pool. No split — Martial dice used for both attack and defence (abstracted).
 
 ## 2. ROUND STRUCTURE
 
@@ -73,6 +97,13 @@ Round duration: 6–10 seconds narrative.
 
 
 ---
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+Initiative determines declaration order, not action speed. Higher initiative = more information.
+**Exchange 1:** Higher Attunement acts last (highest information advantage). **Tiebreaker — equal Attunement (PP-239):** higher Agility acts last. If Agility is also equal: GM determines or coin flip.
+**Mixed outcome (PP-276):** When both combatants succeed in the same exchange at different priorities (e.g. opponent lands a Strike at Priority 1 while PC lands a Feint at Priority 2), initiative stays with the current holder. No decisive momentum shift occurred — both sides scored their intended outcome.
+Initiative replaces the prior range-priority system. Positional advantage from weapon reach is handled by the weapon TN matrix (§5). Longer weapon user must manoeuvre at disadvantage to re-establish distance.
 
 ## 4. ACTIONS
 
@@ -112,6 +143,12 @@ Round duration: 6–10 seconds narrative.
 
 ---
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+A practitioner declaring Leap (Priority 5) may be struck at Priority 1 before contact. Consistent with mass battle ruling: a declared attacker targeting a practitioner in their Leap round makes the Leap ineligible.
+**Incapacitation timing:** Complete currently-resolving action. Fall at end of that priority step. Later-declared actions do not resolve.
+Note: Stage 1/Stage 2 in personal combat are the same framework as general incapacitation in mass battle (§A.5), applied at personal scale.
+
 ## 5. WEAPON SYSTEM
 
 ### Weapon TN Matrix (PP-232)
@@ -150,6 +187,10 @@ Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
 | Unarmed | 8 | Fists, grappling, improvised |
 
 [ED-129 RESOLVED: Ranged weapons are a distinct weapon category, not integrated into the 3-axis melee matrix. Rationale: ranged weapons do not share the Reach (Short/Long) or Weight (Light/Heavy) characteristics that define melee combat profiles. A bow is neither Short nor Long in the melee sense; a crossbow has no meaningful Reach axis. The 3-axis matrix applies to melee only. Ranged weapons use the dedicated table below. For Godot implementation: melee and ranged are separate weapon-type enums with independent TN lookups.]
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+**"Blade"** encompasses cutting, piercing, and stabbing weapons. **"Blunt"** encompasses bludgeoning weapons.
 
 ### Ranged Weapons (distinct category — ED-129 resolved)
 
@@ -205,6 +246,15 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 
 - Ranged defence at Close zone: a character carrying a ranged weapon may defend at Def TN 8 if forced into Close zone by a melee attacker. The full pool is allocated to Defence; no Offence allocation is permitted. This represents using the weapon as a physical barrier or emergency grapple resist.
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+- Short vs Long at **Melee range**: Short weapon has priority. Long weapon user must manoeuvre at disadvantage to re-establish Long weapon range.
+- Long vs Short at **Ranged distance**: Long weapon has priority. Short weapon user must close at disadvantage.
+- Ranged weapons (LP/HP/LBl/HBl): require Far zone to attack. At Close zone, ranged weapons cannot make an Offence roll. Melee weapons cannot retaliate against a ranged attack from Far zone.
+- Sling at Close zone: LBl and HBl slingers who are forced to Close zone are assumed to carry a melee weapon (typically a knife, Light Cut). May draw it as a Retrieve Weapon action.
+- HP crossbow reload: after firing, HP user must take a full-round Reload action before firing again. No other action may be taken during Reload.
+- Ranged vs closing melee: closing character must take a Move action each round. While closing, they are exposed to ranged fire and cannot allocate dice to Defence against it.
+
 ### Environmental Factors (Ranged Combat)
 
 | Terrain | Rounds to close | Penalty to closer |
@@ -225,6 +275,12 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 **Board Game:** Weapon types map to BG unit type. No TN variation — units use Martial stat pool vs standard TN 7. Anti-Armour keyword (PP-217): units with HP (crossbow) or HBl (lead sling) weapon type carry the Anti-Armour keyword. When an Anti-Armour unit attacks, reduce target unit's effective armour tier by 1 for that engagement (e.g. Heavy → Medium DR applies). Does not stack from multiple attacking units.
 
 ---
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+Melee users must close to reach a ranged attacker. Terrain affects the number of rounds of exposure and imposes penalties.
+Cover (a physical obstacle between attacker and defender) adds DR to the defender:
+Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 ### Stress-FF (ranged into melee under stress conditions) — PP-720
 
@@ -278,6 +334,10 @@ DR is subtracted from damage after net hits + weapon modifier.
 
 ---
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+**Ranged DR design note:** LP (arrows) are deflected by plate at high angles — Heavy armour DR 5 reflects this. HP (bolts) penetrate all armour tiers best — Heavy armour DR only 3. LBl (stone) follows same curve as LP (blunt impact degrades similarly). HBl (lead) is anti-armour: uniquely flat DR curve (0/0/1/2) — non-deflecting dense mass transfers energy through armour. Heavy armour + cover stacks: DR totals apply cumulatively.
+
 ## 7. WOUNDS AND STAMINA
 
 ### Wounds (ED-548, ED-694 — Vitality replaces Health)
@@ -326,6 +386,10 @@ Each additional attacker beyond the first against a single unsupported target ad
 | 8+ | +5 (cap) |
 
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+Bonus only applies when target has no allies in the zone (unsupported). Supported target uses standard pool split against each attacker.
+
 ### Rescue
 
 **Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally (subject to Fibonacci bonus this round). Assessed at declaration only; mid-round incapacitations do not retroactively qualify. Ineligible Rescue fails silently — action lost.
@@ -344,6 +408,16 @@ Rescued actor exemptions expire at round end.
 **Rescue chain block (PP-290):** A character who has declared Rescue this round cannot themselves be the target of another Rescue declaration.
 
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+One ally may interpose against one incoming attack. Rescuer must specify which attacker is being contested. Declare in Phase 1 before resolution. Requires adjacent zone. Fails silently if no incoming attack was declared — action lost.
+- **Rescuer wins (net ≥ attacker net):** Attack redirects to rescuer. Redirected attack resolves against rescuer's armour DR only — contest dice are expended and unavailable for Defence against this attack. Rescuer may be wounded by both the redirected attack (DR only) and their own engagement's attacker (pool−N Defence applies).
+- **Rescuer loses (net < attacker net):** Attack resolves against original target. Rescuer's N dice are wasted. Remaining (pool−N) dice still defend the rescuer's own engagement normally. No wounds from the contested attack.
+- **Rescuer Momentum (PP-406):** Gains **2 Momentum** on successful intercept (rescuer struck by ≥1 wound from any source — own engagement or redirected attack). Capped at 2 Momentum per Rescue round regardless of number of wounds taken.
+- **Martyr Rule (PP-407):** If Rescue attempt **fails** AND the rescuer takes ≥1 wound from their own engagement in the same round → **+1 Momentum**. Distinct from successful intercept payoff. Failed intercept with no rescuer wound: no Momentum return.
+- **Rescued actor (successful intercept only):** Exempt from Fibonacci group penalty this round; cannot be targeted by any other attacker this round.
+**Rescuer incapacitated before resolution (PP-290):** If the rescuer is incapacitated at Priority 1 before the contest resolves, the Rescue fails. The attack reverts to the original target. No Momentum is granted.
+
 ### Multi-Engagement (3v2, 4v3)
 
 **Multi-engagement pool split (PP-274):** A target facing multiple attackers in separate pairings declares one Offence/Defence split for the round. All attackers roll against the same Defence allocation independently. The target cannot declare a different split against each attacker. This forces the target to choose a single defensive posture, accepting vulnerability to one attacker while defending against another.
@@ -351,6 +425,10 @@ Rescued actor exemptions expire at round end.
 **P2-B11-08:** If two parties rout simultaneously in a three-way engagement, the surviving party wins and receives veteran bonus.
 
 ---
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+Each combatant is engaged in one primary pairing per round. Extras choose which pairing to support (Fibonacci bonus) or maintain their own engagement.
 
 ### Architecture-B Presentation Flag (PP-721 — R9 C9.3 refinement)
 
@@ -393,6 +471,10 @@ Architecture B (slot formation) is dropped as a distinct combat architecture per
 - **Weapon Type:** Inherits personal combat TN table (above).
 - **Armour Tier:** Inherits DR table (above).
 
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+**Effective CP = min(CP, current Strength).** As Strength drops, fewer dice regardless of quality.
 
 ### PP-086 — Base Damage Formula (mass combat)
 
@@ -487,6 +569,31 @@ Default unit stats (board game / mass combat):
 
 ---
 
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+> **[PROVISIONAL] Graduated Autonomy — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Graduated Autonomy is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Graduated Autonomy resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
+Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
+> **[PROVISIONAL] Church Influence seasonal cap:** Church Influence cannot change by more than ±3 per season from Domain Actions alone. All Church Influence sources combined (Domain Actions, Mending Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Church Influence change per season. Changes exceeding the cap are discarded. This prevents runaway Church Influence spirals from multi-action stacking.
+> **[PROVISIONAL] Stability recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season.
+
+## 11.4 SURRENDER AND DISENGAGE
+
+**Yield (declared at Phase 1):**
+The yielding character drops all offensive action and signals surrender. The opponent chooses:
+- **Accept:** Combat ends. Yielding character is taken prisoner, allowed to withdraw, or released at opponent's discretion. No further rolls.
+- **Refuse:** Combat continues. The yielding character is unresisting — the refusing opponent may execute, take prisoner, or continue fighting without a contest roll. Social consequences follow from the choice.
+
+A character cannot Yield while their faction's objective is still contested in the same zone (i.e., allies are still fighting on their behalf). Yield is individual, not collective.
+
+**Disengage (declared at Phase 1, requires a viable exit route):**
+The disengaging character attempts to break off and leave the zone. Contested:
+- Disengager rolls Agility pool (TN 7, Ob 1). Opponent may spend their action to pursue — if they do, they roll their Agility pool (TN 7) opposed.
+- **Disengager wins (or unopposed):** Leaves zone cleanly. Combat ends for this character.
+- **Disengager loses or ties:** Cannot disengage this round. Remains in combat. May try again next round.
+- **Partial (unopposed, net 0):** Leaves zone but the pursuing opponent gets one free undefended strike before they exit.
+
+A character with 0 Stamina (Out of Breath) takes −2D on the Agility disengage roll. Wounds do not directly penalise disengage (it's physical exertion, not technique). A character at max Wounds may still disengage — incapacitation only occurs when they take further damage.
+
 ## 11.5 FIELDWORK TRANSITIONS
 
 
@@ -507,6 +614,11 @@ Default unit stats (board game / mass combat):
 
 **Let It Ride in combat (clarification):**
 Standard attack actions are NOT subject to Let It Ride — re-attempting the same attack against the same opponent each round is the core mechanic (round structure handles iteration through pool depletion and Stamina). Let It Ride DOES apply to declared manoeuvres (Feint, Rescue, Disarm, Tie Up): each may only be declared once per round. PP-293 (Feint non-stacking) is the operative implementation. A failed manoeuvre cannot be re-declared in the same round; circumstances must change between rounds.
+
+
+<!-- prose/rationale, from combat_v30_infill.md -->
+Fieldwork scenes interact with combat at two defined handoff points (scale_transitions_design_v1.md §3.9):
+- Exposure accumulated during fieldwork converts to ambusher Initiative advantage when combat triggers from fieldwork discovery or surveillance failure.
 
 ## 12. DESIGN NOTES AND OPEN ITEMS
 

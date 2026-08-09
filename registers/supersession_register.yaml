@@ -213,8 +213,8 @@ entries:
     files_to_recheck:
       - godot/data_serialization_spec.md
 
-  - superseded_id: systems/combat/combat_v30.md
-    scope: "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only"
+  - superseded_id: systems/combat/combat_reference_v1.md
+    scope: "personal-combat RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only. Repointed from combat_v30.md by the ED-PC-0056 consolidation (5 docs -> 1); the partial-supersession fact is unchanged"
     superseded_by: ED-900
     superseded_date: 2026-06-04
     replacement: >
@@ -222,7 +222,7 @@ entries:
       RESOLUTION superseded by combat_engine_v1; config.py supersedes engine/params/combat.md values.
       Lore / flavor / non-resolution content is RETAINED and canonical — DO NOT full-deprecate this file.
     files_to_recheck:
-      - systems/combat/combat_v30.md
+      - systems/combat/combat_reference_v1.md
 
   - superseded_id: "PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)"
     scope: "Disposition range −4..Bonds with direct-subtraction Ob + Bonds ceiling; Knot tier-cost model (Loose/Medium/Close 1/2/5, any character, pool (Bonds×2)+3)"

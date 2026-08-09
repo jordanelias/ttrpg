@@ -5324,11 +5324,12 @@
     "PC",
     "SC"
    ],
-   "loc": 369,
+   "loc": 371,
    "modules_under_test": [
     "references",
     "registers/editorial_ledger_pc.jsonl",
     "systems/_architecture/campaign_architecture_v30_index.md",
+    "systems/combat/combat_reference_v1.md",
     "systems/combat/combat_v30.md",
     "systems/combat/combat_v30.py",
     "systems/mass_battle/mass_battle_integration_v30.md",
@@ -5421,7 +5422,7 @@
      "assertions": 4,
      "summary": null
     },
-    "test_real_corpus_finds_the_known_combat_v30_currency_drift": {
+    "test_real_corpus_finds_the_known_combat_reference_currency_drift": {
      "assertionless": false,
      "assertions": 1,
      "summary": null
@@ -5866,6 +5867,55 @@
      "assertionless": false,
      "assertions": 3,
      "summary": null
+    }
+   }
+  },
+  "test_j2_mass_battle_seam.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "J2's execution blocker, stated so it can fail \u2014 the guard for ED-MB-0065.",
+   "helper_loc": 40,
+   "helpers": [
+    {
+     "loc": 4,
+     "name": "_importer_still_binds_the_retired_tree"
+    },
+    {
+     "loc": 36,
+     "name": "_canon_accepts_a_strategic_unit"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "MB"
+   ],
+   "loc": 155,
+   "modules_under_test": [
+    "systems",
+    "systems.mass_battle.sim.massbattle",
+    "systems/mass_battle/sim/massbattle.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 3,
+   "tests": {
+    "test_the_campaign_conquest_path_can_actually_resolve": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "State A is not merely declared \u2014 the seam must import and be callable."
+    },
+    "test_the_later_keep_decision_is_still_recorded": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "ED-IN-0127/0128 (2026-08-04) pinned this file as 'keep' one day AFTER J2 retired it."
+    },
+    "test_the_mass_battle_strategic_seam_is_in_a_coherent_state": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Exactly one of the two coherent states above must hold."
     }
    }
   },
@@ -10696,7 +10746,7 @@
    "FI": 1,
    "GO": 2,
    "IN": 32,
-   "MB": 3,
+   "MB": 4,
    "PC": 6,
    "SC": 2,
    "SE": 2,
@@ -10818,16 +10868,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 142,
+  "files": 143,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 101,
+  "files_naming_a_module": 102,
   "files_with_a_kill_count": 0,
-  "files_with_a_lane": 34,
-  "helper_defs": 260,
-  "helper_loc": 2295,
+  "files_with_a_lane": 35,
+  "helper_defs": 262,
+  "helper_loc": 2335,
   "ratchet_baselines": 9,
-  "tests": 1250,
+  "tests": 1253,
   "undocumented_files": 0
  }
 }

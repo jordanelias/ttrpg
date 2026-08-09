@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED. Read-only audit. Nothing executed, no canonical head moved, no flag flipped, no design text changed.
 ## ⚠ HELD, LOUDLY (ED-1094): **Parts III, V and VI are all held — not merely Part V.** Merging this PR ratifies the *audit*: the measurements, the reconciliations, and the record of what the adversarial passes overturned. It does **not** ratify (a) any Part V ruling, (b) **Part III's architecture ruling**, or (c) **Part VI's do-not-build prohibitions**. Adversarial review caught the original header holding only Part V — which would have let the document's *largest* design decisions (the herald architecture; six standing prohibitions) ratify silently by merge while a ×10-vs-×50 constant was held explicitly. That is the ED-1094 failure mode applied one level up, and the header is corrected accordingly. No Part IV item may be built until the ruling it blocks on is made.
-## Date: 2026-08-09 · Lane: IN (cross-cutting) · ED-IN-0148 · Tree state: `690f4c3`, working tree clean
+## Date: 2026-08-09 · Lane: IN (cross-cutting) · ED-IN-0149 · Tree state: `690f4c3`, working tree clean
 ## Supersedes as the reading surface: `00_findings.md`, `01_plan.md`, `02_adversarial_review.md`, `03_causal_model.md`, `04_throughline_permutations.md`, `05_key_catalogue.md` — all six remain authoritative for their detail; this document is the reconciled index over them and, where they disagree, the adjudication.
 
 ---
@@ -692,6 +692,26 @@ critic's reading — is what settles it.
 | `05_key_catalogue.md` | 67 edges × complete Key sets; per-key producers, consumers, payload |
 | `06_master_synthesis.md` | **This document** — reconciliation, consolidation, orchestration |
 | `topology_probe.py` | The falsifier for every figure in Part II.4 |
+
+## Appendix A.1 · ID collision repair (2026-08-09)
+
+This audit was allocated **ED-IN-0148** on 2026-08-08. Merging `origin/main` revealed that a second
+session had *concurrently* allocated the same id on 2026-08-06 for the post-evacuation vector audit,
+which landed first (PR #291). Both sessions read `next_free: 148`, took it, and bumped to 149 from
+different bases — the classic concurrent-allocation failure.
+
+**Resolution:** the landed claim keeps `ED-IN-0148`; **this audit renumbered to `ED-IN-0149`** and
+`next_free` went 149 → 150. All citations in this directory, the ledger rows, and the two
+`HANDOFF_IN.md` sections belonging to this work were rewritten; the vector audit's references were
+left untouched.
+
+**Worth recording as a process finding.** CLAUDE.md §4 introduces the `ED-<LANE>-NNNN` taxonomy
+because *"a lane tag makes cross-lane collision impossible by construction, not just by allocation
+discipline."* That is true and it held — this was not a cross-lane collision. But it shows the
+remaining exposure plainly: **same-lane concurrent allocation is still possible, and IN is the lane
+most likely to see it**, since cross-cutting work concentrates there. The guard that would close it
+is a check that no id appears twice across all ledger files with different `system` values — nameable,
+and not currently written.
 
 ## Appendix B · Method
 

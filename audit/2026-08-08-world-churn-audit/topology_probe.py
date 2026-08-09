@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Topology probe for the declared Key graph (ED-IN-0148).
+"""Topology probe for the declared Key graph (ED-IN-0149).
 
 Falsifier for every topology number quoted in 06_master_synthesis.md. Run:
     python audit/2026-08-08-world-churn-audit/topology_probe.py

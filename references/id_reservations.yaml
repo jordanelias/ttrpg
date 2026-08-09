@@ -108,7 +108,7 @@ lane_ids:
   updated: "2026-07-29"
   cutover_ed: "ED-IN-0001"   # the entry that created this namespace; first-ever lane-tagged ED
   lanes:
-    MB: { name: "Mass battle",         next_free: 65 }   # block 0046-0060 was the 2026-07-29 dedicated-session reservation (now spent). ED-MB-0064 = the 2026-08-04 governance repair registering Jordan's J2 canon-tree ruling (closes ED-MB-0043 follow_on (b)); status resolved, no ruling needed. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
+    MB: { name: "Mass battle",         next_free: 66 }   # block 0046-0060 was the 2026-07-29 dedicated-session reservation (now spent). ED-MB-0065 = J2 ruled-but-not-executable (strategic seam blocker); PENDING Jordan's re-issue as WITHDRAW/DEFER/EXECUTE — asserts no basis. ED-MB-0064 = the 2026-08-04 governance repair registering Jordan's J2 canon-tree ruling (closes ED-MB-0043 follow_on (b)); status resolved, no ruling needed. Per-ED detail: registers/editorial_ledger_mb.jsonl. Narrative: id_reservations_history.md#mb
     # Older MB history (moved to its own comment lines 2026-07-13 so a fresh OPEN citation on the
     # primary line above no longer inherits a "ratified"/"resolved" basis-keyword hit from these —
     # tools/validate_ed_citations.py's OPEN_AS_BASIS check is line-scoped; mirrors the PC lane's
@@ -121,7 +121,7 @@ lane_ids:
     # ED-MB-0006: Command abandoned for combat pool -- troop type/quality/numbers model (POOL_QUALITY_MODEL), 2026-07-08
     # ED-MB-0007: 11-surface agonist-antagonist gauge architecture audit (why 7/20), resolved 2026-07-08, opens DG-6..DG-16
     # ED-MB-0004 allocated 2026-07-07 (status open): unaddressed-areas ed_options OPT-13 (gauge triage continuation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    PC: { name: "Personal combat",     next_free: 56 }   # block FULLY CONSUMED, 0 released 2026-07-30 (ED-IN-0098): max allocated ED-PC-0055 = exactly the block top, so the reservation was undersized. Narrative: id_reservations_history.md#pc
+    PC: { name: "Personal combat",     next_free: 57 }   # ED-PC-0056 allocated 2026-08-08 (combat design-doc consolidation 5->1). block FULLY CONSUMED, 0 released 2026-07-30 (ED-IN-0098): max allocated ED-PC-0055 = exactly the block top, so the reservation was undersized. Narrative: id_reservations_history.md#pc
     # ED-PC-0003 + ED-PC-0004 allocated 2026-07-07 (status open): ed_options OPT-10 (sigma band-discipline unification, executes armature §5.12) + OPT-15 (ED-1042 reconciliation) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     # ED-PC-0005 allocated 2026-07-07 (status open): ED-1042 residual wound-Ob prose drift, re-filed from ED-PC-0004/OPT-15 during the Stratum-A execution PR. NOTE: a plan-text label "ED-PC-0005" in designs/audit/2026-07-04-weapon-morphology-granularity/consolidation_v1.md:115 (U4 item) is NOT an allocation and must renumber when actually filed (the ED-PC-0001 plan-label collision class). RESOLVED 2026-07-08 (Jordan ruling "never -1D, always fractional Ob").
     # ED-PC-0006 allocated 2026-07-08 (status resolved): non-combat wound fractional-Ob calibration — follow-on to the ED-PC-0005 ruling. RESOLVED 2026-07-08: adopted +0.15 Ob per wound (cumulative), reusing ED-1041's combat "attacking" magnitude, propagated to Thread ops/fieldwork/mass-battle Command + params mirrors (see ledger entry). next_free bumped 6→7.
@@ -231,7 +231,7 @@ lane_ids:
     # renumbers): register-honesty fix to tools/observability/build_proposals.py --
     # obs_core.text_needs_jordan() rescues design-doc + flat-ledger Jordan-gating (register
     # needs_jordan 79->97). status resolved, no ruling needed. next_free 72->73.
-    IN: { name: "Infrastructure",      next_free: 149 }   # DELIBERATE GAP: CSO holds 0103-0111, so ids below next_free are unallocated ON PURPOSE (pinned by tests/valoria/test_id_reservations_walkback.py, which requires the string 0103-0111 to stay in THIS file). Latest: ED-IN-0148 (world-churn audit; PARTIAL, eight items HELD for Jordan). Narrative: id_reservations_history.md#in
+    IN: { name: "Infrastructure",      next_free: 150 }   # DELIBERATE GAP: CSO holds 0103-0111, so ids below next_free are unallocated ON PURPOSE (pinned by tests/valoria/test_id_reservations_walkback.py, which requires the string 0103-0111 to stay in THIS file). Latest: ED-IN-0149 (world-churn audit master synthesis; PARTIAL, fourteen held for Jordan) — RENUMBERED from 0148 in a same-lane collision repair, see id_reservations_history.md#in. Narrative: id_reservations_history.md#in
     # [ED-IN-0064 DUP-KEY REPAIR] A stale duplicate `IN:` mapping once shadowed the authoritative one above (YAML last-key-wins). Neutralized; full incident write-up, including why a duplicate key is silent rather than an error: id_reservations_history.md#dup-key
     # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
     # ED-IN-0019/0020 (armature §5.10 decided + executed, see repair note above); ED-IN-0021..0025

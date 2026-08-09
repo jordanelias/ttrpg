@@ -1,7 +1,7 @@
 # Adversarial review of the world-churn audit — verdicts
 
 ## Status: RECORD (read-only critics; both structurally read-only — `Read`/`Grep`/`Glob` only, no write tooling)
-## Date: 2026-08-08 · Lane: IN · ED-IN-0148
+## Date: 2026-08-08 · Lane: IN · ED-IN-0149
 
 Two independent critics attacked `00_findings.md` and `01_plan.md` as an agonist→antagonist relay
 (CLAUDE.md §10): each received the producer's **output only**, never its reasoning, and ran as

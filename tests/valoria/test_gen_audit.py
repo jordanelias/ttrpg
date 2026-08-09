@@ -318,20 +318,22 @@ def test_real_corpus_partition_sums_to_classified_total(real_run):
     assert set(partition['live']).isdisjoint(set(partition['historical']))
 
 
-def test_real_corpus_finds_the_known_combat_v30_currency_drift(real_run):
-    # systems/combat/combat_v30.md is registered canonical (via some key) AND
+def test_real_corpus_finds_the_known_combat_reference_currency_drift(real_run):
+    # systems/combat/combat_reference_v1.md is registered canonical (via some key) AND
+    # (path repointed from combat_v30.md by the ED-PC-0056 consolidation; the standing
+    # defect this control pins is unchanged, only its filename moved)
     # recorded as a supersession_register.yaml superseded_id — a live, standing
     # instance of currency drift in this corpus as of this writing.
-    assert 'systems/combat/combat_v30.md' in real_run['drift']
+    assert 'systems/combat/combat_reference_v1.md' in real_run['drift']
 
 
 def test_real_corpus_finds_the_known_mass_battle_stale_pointer(real_run):
     # systems/mass_battle/mass_battle_integration_v30.md (a real LIVE head) cites
-    # `systems/combat/combat_v30.md` (a superseded_ids() entry) — a live, standing
+    # `systems/combat/combat_reference_v1.md` (a superseded_ids() entry) — a live, standing
     # stale version-pointer in this corpus as of this writing (see module docstring).
     hits = [s for s in real_run['stale']
             if s['live_head'] == 'systems/mass_battle/mass_battle_integration_v30.md'
-            and s['ref'] == 'systems/combat/combat_v30.md']
+            and s['ref'] == 'systems/combat/combat_reference_v1.md']
     assert hits and hits[0]['reason'] == 'superseded'
 
 
