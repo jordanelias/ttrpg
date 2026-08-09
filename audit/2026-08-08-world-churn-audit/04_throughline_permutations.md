@@ -1,6 +1,6 @@
 # Throughlines under composition — branch structure across permutations of systems
 
-## Status: PROPOSED (read-only; nothing executed). Adversarial pass PENDING at time of writing.
+## Status: PROPOSED (read-only; nothing executed). **Adversarial pass COMPLETE — corrections applied inline.**
 ## Date: 2026-08-08 · Lane: IN · ED-IN-0148 · Four Fable-5 read-only hub traces, lexical evidence barred
 
 ---
@@ -21,10 +21,26 @@ Two gates in the same hub, both meaning "Accord ≥ 2", using 2.0 and 4.0. Victo
 to 4.0, or was "≥ 2" always meant as continuous?). It is checked every season (`mc_v18.py:267-273`), so
 any campaign measurement taken before it is ruled is measuring the wrong game.
 
+> **UPHELD DEFINITIVELY by adversarial review**, which tried to falsify it and could not: the field is
+> continuous at the read with no conversion on the path; **no test anywhere exercises
+> `check_peninsular_sovereignty` at all**, so nothing pins 2.0 as a deliberate choice; and intent is
+> demonstrably canonical — `victory_v30.md:82` glosses the threshold in band labels ("Accord 2
+> (Compliant)"), while `game_state.py:63-66` *mandates* that "modules that look up canon-keyed tables MUST
+> bucket through these helpers." `victory.py` does not.
+>
+> **SHARPENED: two of the three victory legs are defective, not one.** The same function's PS leg
+> (`victory.py:73`) reads `Turmoil`, which is initialised 0.0 and written nowhere — lenient on Accord,
+> vacuous on PS. This document knew the Turmoil half (§3) and never joined it to the victory function.
+>
+> **Sweep note:** `mass_seizure.py:17` states the same gate as **"11+ territories"** against
+> `victory.py:27`'s 15 (J-22) — a third, stale statement of the exact gate. Any ruling must sweep it.
+
 **Adjacent landmine, dormant:** `mass_seizure.py:295` writes *canonical ints into the continuous field*,
-so a Success (canonical 2) and an Overwhelming (canonical 3) seizure both read back as canonical 1 —
-**inverting the design's core seizure-beats-conquest distinction**. No caller today; it detonates the day
-one is added.
+so a Success (canonical 2) and an Overwhelming (canonical 3) seizure read back at the *same* canonical
+band — **erasing** the design's seizure-beats-conquest distinction. *(Corrected by review: "erasing", not
+"inverting"; and not universal — at PT 7 a Success writes 4.0, which does bucket to canonical 2. The write
+site is also already partially tracked as an OI-37/SE-lane divergence at `accounting.py:32,65`.)* No caller
+today; it detonates the day one is added.
 
 ---
 
@@ -32,8 +48,10 @@ one is added.
 
 `references/throughlines_complete.md` carries **43 `### T-` headers, 42 live** (T-10 struck). It states
 **"Count: 30"** at `:298` and **"Count: 41"** at `:375` — two contradictory totals in one file, both wrong.
-Sibling files add two more inconsistent counts: **four mutually inconsistent counts across three documents
-that cite each other.**
+*(Review softened this: an earlier draft claimed "four mutually inconsistent counts across three
+documents." `throughlines_meta.md:78` says "41", which **agrees** with `:375`, and the four-way mutual
+inconsistency is not cleanly reproducible. **The substantive point stands: no count anywhere matches the
+43/42 reality.**)*
 
 Consequence: the naive pair space is **C(42,2) = 861**, not 435. The hand-authored interaction matrix
 covers **20 pairs — 2.3%.**
@@ -66,6 +84,15 @@ authored cells — not a row.
 **Type-admissible pairs: 297 of 861.** Realized (shared declared state): estimated **~90, about 10%** —
 **explicitly not banked**; it is exactly the number §5's fix would replace with a measurement.
 
+> **Two review findings against this section.** (1) **297 is not checkable by a reader** — this document
+> never publishes the per-entry type assignment, so the number cannot be reproduced. That is the same
+> publish-the-falsifier gap §0.1 point 3 names, committed here. The sidecar's `type` field in §5 is what
+> fixes it. (2) **T-20's classification is contested, and the challenge is good:**
+> `wc_survival_spine.md:18` says the two contests "compete for the same resources: player time, faction
+> actions, military assets… This resource tension IS the game's strategic architecture" — that is
+> mediated shared-resource composition (the *Postures* rule), not second-order commentary. Reclassifying
+> T-20 moves the 297.
+
 **The tooling already ruled on this, in July.** `vector_audit.py:1067-1069` records that the interaction
 matrix **was measured and REJECTED**: *"20/21 throughline pairs 'interact', a near-complete graph that
 would just inflate the Clocks/MS hubs with no discrimination."* The right object is the **bipartite
@@ -86,9 +113,11 @@ the valuable part. Net ≈ **34 independent entries.**
 season to one net delta, clamped ±10. Real multiplication lives only in *side-state*: hysteresis flags, the
 one-shot Surge, permanent expedition streams — all unbuilt.
 
-**The radiation matrix is ~85% false richness.** Nominally 6 bands × 6 distances × 4 settlement types ≈
-144 cells; actually a **shifted diagonal** (severity ≈ band − distance) yielding **~11 distinct mechanical
-states**, of which perhaps **4 are distinguishable in play**. Settlement type adds no states — and two live
+**The radiation matrix is a shifted diagonal, not a 2-D surface** — severity ≈ band − distance, so its
+nominal 6 bands × 6 distances × 4 settlement types ≈ 144 cells collapse to a ladder. *(Review correction:
+the **structural** claim carries this finding. The earlier "~85% false richness" headline, and the ~11
+distinct states / ~4 distinguishable-in-play counts, are model outputs with no instrument and should not
+have been promoted to a headline — they belong in §7 with the other unbanked numbers.)* Settlement type adds no states — and two live
 surfaces contradict each other on whether that axis exists at all (`calamity_radiation_v30.md:22-31` vs
 `settlement_layer_v30.md:1156`).
 
@@ -113,17 +142,37 @@ campaigns."*
 **In 40% of campaigns the game reaches a state where a Theocracy declaration is mechanically forced, and
 nothing happens.**
 
-**`Territory.adjust_pt` has exactly one occurrence in the tree — its own definition.** Zero callers:
+> **SOFTENED by review, and the softening belongs in §7.** The quote is verbatim and was a real
+> instrumented measurement *per its own record* (40 seeds, `Territory.__setattr__` instrumentation,
+> 2026-08-03) — but **no instrument in the tree reproduces it today**, and this analysis re-quoted a
+> six-day-old comment rather than re-deriving the number. That is the §0.1-point-4 hazard in its
+> sourced-but-unreproduced form, and §7 listed softer numbers while omitting this one.
+
+**`Territory.adjust_pt` has exactly one *code* occurrence — its own definition** (prose mentions exist
+elsewhere, e.g. `module_contracts.yaml:305`; the earlier "exactly one occurrence in the tree" was literally
+false). Zero callers, and the only `.pt` mutation in the tree sits inside that definition:
 **Piety is frozen at authored start values forever**, so the Church's yield source can never move. The
 designed decoupling triple (world decays → piety collapses → Church ends powerful but unbelieved) is
-negated by that single missing writer. And the **only reachable CI consumer is Excommunication, which adds
-CI +3** — the sole live feedback through the hub is positive.
+negated by that single missing writer. And the **only reachable CI consumer that writes CI back is Excommunication, which adds CI +3** — the
+sole live *feedback* through the hub is positive.
+
+> **OVERTURNED as originally written.** An earlier draft said "the only reachable CI consumer." False:
+> `council_solmund.py:32` reads CI (`floor(CI/30)+2`) and is reached from the production loop via
+> `faction_action.py:303`; `tribunal.py:83` reads CI too. Only the *write-back* claim survives — which is
+> the one the positive-feedback argument actually needs.
+>
+> Review also found, in that same reachable consumer, an **intent/formula inversion**:
+> `council_solmund.py:31-33` comments "easier when CI high" while `floor(CI/30)+2` makes the Ob *harder*
+> as CI rises. And `ci_track.py:16` says Excommunication is "+4" where `excommunication.py:45` sets `3`.
 
 ### Accord / control — collapse by scoping, plus a canon-level gap
-**Anarchy is invisible to the instruments that exist to detect it.** Both the Strain and IP counts scope to
-territories *"controlled by playable factions"*, so once territory goes Uncontrolled it **leaves both
-counts** — total governance collapse reads as calm, and Strain even qualifies for its −1/season decay.
-**The worst world-state produces the least pressure.**
+**Persistent anarchy is invisible to the instruments that exist to detect it.** Both the Strain and IP
+counts scope to territories *"controlled by playable factions"*, so once territory goes Uncontrolled it
+**leaves both counts** — sustained governance collapse reads as calm, and Strain even qualifies for its
+−1/season decay. **The worst world-state produces the least ongoing pressure.**
+
+> *Softened by review:* the **transition into** anarchy *is* instrumented — `peninsular_strain_v30.md:298`
+> gives an uncapped "+1 Strain per Revolt event". Entry is visible once; **persistence** is what vanishes.
 
 **T-04's return limb does not exist in canon text at all.** `calamity_radiation_v30.md` contains **zero
 occurrences of "Order" or "Accord"** — so T-18's cited *"settlement Order effects → Accord erosion"* has no
@@ -165,6 +214,13 @@ live entry — `{id, type, reads, writes, status}` — whose `reads`/`writes` to
    immediately), and threshold-conjunction across clocks. Hand-author only those.
 3. **One CI assertion**: every `### T-NN` block has an index row, and every token resolves.
 
+> **⚠ REVIEW FOUND A DEFECT IN THIS FIX AS SPECIFIED.** `descriptor_registry.yaml:186-189`'s `clocks`
+> list is `[Evidence, CI, MS, IP]` — **no Strain, no Turmoil, no Accord, no Order**. The very tokens this
+> audit's headline findings turn on would **fail to resolve** against the vocabulary lines cited. Step 3
+> either fails on day one or needs a wider vocabulary source than the one named (Turmoil and province
+> Accord are registered in a different block, per ED-IN-0059). **Resolve the vocabulary source before
+> building the sidecar.**
+
 This fixes the pre-rename staleness (**RS 22× vs MS 3×; TC 14× vs CI 0×**) at the index layer for free,
 without touching a historical document — and **the parser already exists** (`vector_audit.py:1073-1098`,
 already letter-suffix aware and already skipping struck T-10).
@@ -182,7 +238,7 @@ rediscovering things this register stated in April. It is the metadata that fail
 | Column | State |
 |---|---|
 | `Systems:` | Free text — **186 distinct tokens, 4 (2%) canonical**; some are parse debris from mid-sentence commas. Cannot be machine-joined to anything. |
-| `Implementation status` | Claims **"Fully implemented"** for T-04, T-05, T-07 — chains with no writer, no evaluator, and no callers. It measures *design* completeness while labelled as implementation. |
+| `Implementation status` | Claims **"Fully implemented"** for T-04, T-05, T-07. It measures *design* completeness while labelled as implementation. *(Review softened the gloss: true as "no writer/evaluator/callers" for T-07 and T-04's return limb; for **T-05 the CI writer is live** — it is the consumer half that is unreachable.)* |
 | `Arc Register Coverage` | Of 20 ARC vectors cited: **9 dangling**, **6 resolving only into evacuated audit workings** banner-marked "not independently ratifiable", **5 reaching a live surface**. |
 
 ---
