@@ -1824,3 +1824,58 @@ occurrences / 22 files, 67 live**, all dispositioned — 30 OPEN design decision
 `systems/mass_battle/sim/` "retired, not kept alongside"; all five modules are still present and
 still load-bearing (`massbattle ↔ units` is one of three import cycles, both cut-vertices). Either
 execute the deletion or correct the CURRENT.md stamp — currently it reads resolved.
+
+---
+
+## [OPEN] ED-IN-0149 — generated per-subsystem glossary + master term index (2026-08-08)
+
+`references/glossary/` — 19 per-subsystem glossaries, `MASTER_GLOSSARY.md`, `glossary.json`.
+Generator: `tools/observability/build_glossary.py`. **1,537 terms, 1,350 located, 0 refused.**
+
+**Division of authority — do not collapse these:**
+- `references/glossary.md` = **curated definitions**, hand-written, still authoritative. 176 terms
+  have a definition only because a human wrote one there.
+- `references/glossary/` = **locations**, generated. Never hand-edit; re-run the tool after doc moves.
+
+Composed on five existing registries (§0: no term list is invented), including
+`tools/build_identifier_census.py` — which was a zero-caller tool and now has a caller.
+
+**Three silent-coverage defects in the tool, found by auditing its output rather than its exit
+code.** Each is now pinned by a test in `tests/valoria/test_build_glossary.py`:
+1. `descriptor_registry` read field names that file doesn't use → contributed **zero** terms while
+   still being advertised as one of five sources. Guard `_assert_every_source_contributes()` now
+   fails the build on any dead source (mutation-verified).
+2. The `glossary.md` table parser required ≥4 columns → read **31 of ~130 rows** (93 are 3-column).
+3. `MIN_TERM_LEN=3` refused **MS, CI, IP, PI, TS, CP, TD, RS, DD** — the repo's nine most-used
+   abbreviations. Floor is now 2, uppercase-only, with breadth measured before lowering it.
+
+All three are the same shape: *a reader quietly covering a fraction of its source* — the class this
+repo found three times in one week as gates reporting clean over nothing.
+
+**Deliberate scope calls:**
+- Markdown is the compact reading surface (one row per term); `glossary.json` carries every path.
+  The first cut emitted 5.2 MB with one file at 414 KB — a concordance, not a glossary.
+- **No JS bundle** (Jordan, 2026-08-08): it duplicated `glossary.json` byte-for-byte and nothing in
+  `dashboard/` loads any of the five sibling `*_data.js` files. `test_no_js_bundle_is_emitted` pins
+  this — add a consumer before re-adding the file.
+- Staleness is **report-only** (`tools/audit_staleness.py` family `glossary`), not a blocking
+  `--check`: the output is a function of every `.md` in five roots, so a blocking gate would redden
+  CI on most doc PRs. `--check` exists for local use.
+
+**Next actions:**
+1. **176 of 1,537 terms have a definition.** The generated views mark the rest
+   `_no curated definition_` — that list is a ready-made work queue for `glossary.md`.
+2. **186 terms are registered but located nowhere** in the scanned corpus (see MASTER's "Registered
+   but not located"). Each is a stale registry entry, a moved doc, or code-only vocabulary — worth
+   a triage pass.
+3. The 7-vs-9 attribute-roster conflict between `glossary.md` and `descriptor_registry.yaml` is
+   **still unresolved** and now visible in the generated output.
+
+**Size, stated rather than slipped:** 10 of the 20 generated files exceed `compliance_check`'s
+15k-token warn threshold — `MASTER_GLOSSARY.md` 62k, `GLOSSARY__architecture.md` 38k,
+`GLOSSARY_factions.md` 32k. Compliance stays green (warnings, 0 errors) and this is the established
+shape for generated reference tables (`engine/engine_params/params_tables.yaml` is 165k,
+`references/restructure_ledger.md` 26k). It is nonetheless a real tension with §4's
+"split at ~15k into sequential parts" rule. Not split, deliberately: a master index you must first
+guess the part of is not an index. If Jordan wants them split, the natural cut is alphabetical
+ranges in the generator, not hand-editing the output.

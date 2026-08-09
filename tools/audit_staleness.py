@@ -89,6 +89,19 @@ FAMILIES = [
                            "workplans/"),
     },
     {
+        "name": "glossary",
+        # build_glossary.py (ED-IN-0149) reads five registries and locates every term across
+        # SCAN_ROOTS. Scope is those five sources PLUS the scanned corpus itself — a doc move
+        # changes where a term lives, which is the whole point of the artifact. Deliberately
+        # REPORT-ONLY (this family) rather than a blocking --check: the output is a function of
+        # every .md in five roots, so a blocking gate would redden CI on most doc PRs. The
+        # generator does have --check for anyone who wants it locally.
+        "artifact_paths": ["references/glossary/glossary.json"],
+        "scope_prefixes": ("systems/", "canon/", "engine/", "godot/", "proposals/",
+                           "references/glossary.md", "references/names_index.yaml",
+                           "references/descriptor_registry.yaml", "registers/mechanics_index.yaml"),
+    },
+    {
         "name": "apparatus-registry",
         "artifact_paths": ["references/apparatus_registry.yaml"],
         # build_apparatus_registry.py scans tools/, skills/, .githooks/, .claude/,

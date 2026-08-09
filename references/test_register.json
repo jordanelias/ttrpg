@@ -192,6 +192,84 @@
     }
    }
   },
+  "test_build_glossary.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guards for the generated glossary (ED-IN-0149).",
+   "helper_loc": 5,
+   "helpers": [
+    {
+     "loc": 5,
+     "name": "payload"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 161,
+   "modules_under_test": [
+    "references",
+    "systems",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 10,
+   "tests": {
+    "test_broad_terms_are_flagged_not_hidden": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Breadth is reported. A term in 144 files is a fact about the term, not something to bury."
+    },
+    "test_committed_output_matches_a_fresh_build": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "The artifact is generated; a stale commit is a lie about the corpus."
+    },
+    "test_every_declared_source_contributes_terms": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "DEFECT 1. A source that reads nothing must fail loudly, not pad the source list."
+    },
+    "test_every_located_term_carries_its_locations": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The master's promise is 'all locations'. An empty location map breaks it."
+    },
+    "test_matching_is_word_boundary_and_case_sensitive": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The Mode-C hazard: substring matching turns common nouns into universal hits."
+    },
+    "test_no_js_bundle_is_emitted": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Dropped deliberately (Jordan, 2026-08-08): it duplicated glossary.json byte-for-byte and"
+    },
+    "test_substring_prefilter_matches_regex_only": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The scan pre-rejects with `term not in text` before running the \\b-anchored regex."
+    },
+    "test_the_core_abbreviations_are_not_refused": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "DEFECT 3. MS/CI/TS/RS are load-bearing project vocabulary, not noise."
+    },
+    "test_the_glossary_md_parser_reads_three_column_tables": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "DEFECT 2. The file mixes column counts; a >=4-column parser reads a quarter of it."
+    },
+    "test_two_char_lowercase_terms_are_still_refused": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The floor was lowered to 2 for UPPERCASE only. Lowercase 2-char terms match unsafely."
+    }
+   }
+  },
   "test_build_proposals.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10868,16 +10946,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 143,
+  "files": 144,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 102,
+  "files_naming_a_module": 103,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 35,
-  "helper_defs": 262,
-  "helper_loc": 2335,
+  "helper_defs": 263,
+  "helper_loc": 2340,
   "ratchet_baselines": 9,
-  "tests": 1253,
+  "tests": 1263,
   "undocumented_files": 0
  }
 }
