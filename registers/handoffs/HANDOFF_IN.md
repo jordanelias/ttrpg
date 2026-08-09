@@ -1824,3 +1824,32 @@ allocate, bump, co-commit; never max+1.)_
   - **Dir #4 (pending, now lowest priority)** — L1-layer validation calibration: P3's absolute
     `n_cite_edges≥100` bar is trivially met at L1's larger corpus; make it scale-relative. Already
     honestly DISCLOSED as "L0-calibrated, not re-validated for L1", so the gap is surfaced not hidden.
+
+### ED-IN-0148 — world-churn audit: master synthesis landed (2026-08-09)
+
+`audit/2026-08-08-world-churn-audit/06_master_synthesis.md` is the **capstone and the reading
+surface** for this audit; the six prior documents remain authoritative for their detail. It carries
+the reconciliation (including the retraction-and-its-withdrawal), the consolidated churn model, the
+architecture ruling, the P0–P5 programme, and Part VIII's record of 24 adversarial corrections.
+`topology_probe.py` ships beside it as the re-runnable falsifier for every topology figure.
+
+**Read Part VII.0 first.** The programme's load-bearing assumption — that the Key mesh deserves
+promotion from telemetry spine to churn engine at all — is filed as **J-O** and can invalidate
+P1–P5 wholesale. Settle it before building anything in P1+.
+
+**Next actions**
+- **J-O** and **J-N** are new and blocking; **J-A** re-gated onto P0-3, **J-H** narrowed to P2-2.
+  Fourteen decisions held in total (J-A..J-L, J-N, J-O).
+- **J-M is RULED** (Jordan, in session, 2026-08-09): *"local actors should be NPCs."* P4-1 is
+  unblocked — seed Local Actors through the NPC path into `world.npcs`, with
+  `settlement_layer_v30.md §4.5` supplying the count, per-type table and profile. **Cross-lane:
+  echo this into `HANDOFF_SE.md` and `HANDOFF_WR.md`.** It raises the urgency of **J-C**, since each
+  Local Actor carries one Conviction and three incompatible vocabularies compete to supply it.
+- **P0-6 (Accord unit guard) needs no ruling — it is the cheapest real win available.** One owner
+  (`canon_buckets.canonical_accord`) exists; at least three live sites bypass it and
+  `settlement.py:120` runs a fourth `math.floor` dialect. Write it **with an allowlist**; several
+  literal comparisons are deliberate.
+- **P0-3 must pin Turmoil's UNIT, not just its writer** — the registry says 0–10, `PS_MAX` is 6.0,
+  and the first strain-shock pass will write it. That is the Accord defect visible in advance.
+- Two live defects remain **unfixed by design** (read-only audit): the victory Accord gate at half
+  its canonical height, and the conviction gate's double silencer.
