@@ -8,6 +8,16 @@ It measures the DECLARED graph (references/key_graph.json), which is a paper
 graph: a declaration here is not evidence of runtime traffic (00_findings D7).
 Thresholds are stated in the output so a reader can see what each label means
 rather than inferring it.
+
+WILDCARD HANDLING — load-bearing, and the source of a correction. key_graph.json
+carries 56 entries, one of which is the literal key `"*"`: a wildcard SUBSCRIPTION
+pattern declared in module_contracts by articulation_layer and fieldwork_knots
+(`well_formed: false`, no producers). It is not a key type. Counting it as one
+inflates the key count 55->56, the consume-declaration total 125->127, and
+articulation_layer's in-degree 43->44 -- and it flips fieldwork_knots from a pure
+source into a bidirectional module, changing "16 of 27 modules consume nothing"
+into 15. This probe EXCLUDES it by default and reports the inflated basis
+alongside, so neither figure can be quoted without its basis.
 """
 import collections
 import json
@@ -25,9 +35,13 @@ def name(entry):
     return entry if isinstance(entry, str) else entry.get("module")
 
 
+WILDCARD = "*"
+
+
 def main():
     graph = load()
-    keys = graph["keys"]
+    all_keys = graph["keys"]
+    keys = {k: v for k, v in all_keys.items() if k != WILDCARD}
     producers = {k: {name(p) for p in (v.get("producers") or [])} for k, v in keys.items()}
     consumers = {k: {name(c) for c in (v.get("consumers") or [])} for k, v in keys.items()}
 
@@ -93,6 +107,17 @@ def main():
     print()
     print("== PRODUCERLESS ==")
     print(f"key types with no declared producer: {len(orphan_prod)}/{len(keys)}")
+
+    # The inflated basis, printed so a mismatch is diagnosable rather than mysterious.
+    if WILDCARD in all_keys:
+        w_cons = {name(c) for c in (all_keys[WILDCARD].get("consumers") or [])}
+        print()
+        print("== WILDCARD (excluded above) ==")
+        print(f'the literal "{WILDCARD}" entry is a subscription pattern, not a key type; '
+              f"consumers: {', '.join(sorted(w_cons))}")
+        print(f"counting it would give: key types {len(all_keys)}, "
+              f"consume-declarations {total_consume + len(w_cons)}, "
+              f"and would move fieldwork_knots out of the pure-source set.")
 
     return 0
 

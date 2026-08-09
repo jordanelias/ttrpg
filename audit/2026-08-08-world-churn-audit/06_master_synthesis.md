@@ -32,28 +32,60 @@ Three self-imposed rules, because the answer is only worth what its weakest clai
 
 # PART I · RECONCILIATION
 
-## I.1 · Retractions — numbers I published this session that do not reproduce
+## I.1 · A retraction, and the retraction of that retraction
 
-The topology figures I gave in conversation were miscounted. `references/key_graph.json` is
-**unchanged** since `f09984e` (verified: clean working tree, no intervening commit), so this is my
-arithmetic error, not graph drift. The probe is the falsifier.
+This section changed twice, and the sequence matters more than the numbers, because it is a worked
+example of the defect class this whole audit is about.
 
-| Published in session | Measured by `topology_probe.py` | Verdict |
-|---|---|---|
-| "16 of 27 modules consume nothing" | **15 of 27** pure sources | **Retracted → corrected.** Direction unaffected. |
-| "108 of 125 consume-declarations on four modules" | **109 of 127 (86%)** | **Substantively confirmed**, figures corrected. |
-| "32 broadcasts : 3 seams : 11 nexus" | **Unreproducible at any threshold.** Max fan-out in the graph is **4 consumers**; the histogram is 0→8, 1→4, 2→16, 3→21, 4→7. There is no cut yielding 11 of anything. | **Retracted in full.** |
+**First pass.** I re-derived the topology figures I had given in conversation and got different
+answers. `references/key_graph.json` is unchanged since `f09984e` (clean working tree, no
+intervening commit), so this could not be graph drift — it had to be my arithmetic. I retracted
+three figures.
 
-**The retraction has a consequence downstream.** The synthesis lens built its closing argument on
-"nine of eleven nexus keys are witnessing." At the declared ≥4 threshold there are **seven** highest-
-fan-out key types, of which **four** are scene-scale witnessing events (`scene.battle_concluded`,
-`scene.dialogue`, `scene.insult`, `scene.threat`); the other three are `da.antinomian_action`,
-`da.covert_betrayal`, `env.peninsular_strain_shock`. The claim *"the substrate's native metaphor is
-witnessing"* therefore survives **directionally but weakened**: 4 of 7, not 9 of 11. It is now an
-observation, not a majority argument, and Part III does not lean on it.
+**Second pass.** Preparing the adversarial brief, I asked a critic to check whether *"a defensible
+alternative reading reproduces the retracted numbers — if so the retraction is itself wrong."*
+Checking that question myself first, it turned out to be exactly so.
 
-That lens flagged, unprompted, that it had not re-verified the handed figures. It was right not to
-trust them.
+`key_graph.json` carries **56 entries, one of which is the literal key `"*"`** — a wildcard
+*subscription pattern* declared in `module_contracts` by `articulation_layer` and `fieldwork_knots`,
+with `well_formed: false` and no producers. **It is not a key type.** My probe had counted it as
+one. Excluding it:
+
+| Published in session | Probe **counting** the wildcard | Probe **excluding** it | Verdict |
+|---|---|---|---|
+| "16 of 27 modules consume nothing" | 15 | **16** | **Correct as published — retraction withdrawn.** |
+| "108 of 125 consume-declarations on four modules" | 109 / 127 | **108 / 125** | **Correct as published, exactly — retraction withdrawn.** |
+| "32 broadcasts : 3 seams : 11 nexus" | unreproducible | **still unreproducible** | **Retracted, and it stays retracted.** |
+
+The wildcard alone accounts for every discrepancy: it inflates the key count 55→56 and the
+declaration total 125→127, adds one to `articulation_layer`'s in-degree, and — the qualitative
+change — flips `fieldwork_knots` from a **pure source** into a bidirectional module, which is
+precisely the 16-vs-15 difference. It also silently reconciles a discrepancy sitting unexplained
+between two parts of this document: `00_findings.md` D7 counts **55 registry types** while my first
+probe printed **56**. Same wildcard.
+
+**The third figure is genuinely gone.** The real consumer histogram is 0→8, 1→4, 2→15, 3→21, 4→7.
+Maximum fan-out in the entire graph is **four consumers**. No threshold, and no alternative
+definition I tried (producer-gated, module-span, family-span), yields 11 of anything. That number
+was invented by me and is withdrawn without replacement.
+
+**Consequence for the argument.** The synthesis lens built its closing flourish on *"nine of eleven
+nexus keys are witnessing."* On the corrected basis there are **seven** highest-fan-out key types,
+of which **four** are scene-scale witnessing events (`scene.battle_concluded`, `scene.dialogue`,
+`scene.insult`, `scene.threat`); the rest are `da.antinomian_action`, `da.covert_betrayal`,
+`env.peninsular_strain_shock`. The claim *"the substrate's native metaphor is witnessing"* survives
+**directionally but weakened** — 4 of 7 is an observation, not a majority argument. Part III does not
+rest on it, and that has been checked rather than asserted.
+
+**Why this belongs in the document rather than in a quiet fix.** The wildcard is a *pseudo-entry
+that reads as data*, and it produced a wrong number in a probe written specifically to be the
+falsifier for other numbers. An instrument is not automatically more trustworthy than the memory it
+corrects — it encodes its author's model of the data, and mine was wrong about what a "key" is.
+`topology_probe.py` now excludes the wildcard by default, prints the inflated basis alongside, and
+carries the reasoning in its docstring, so neither figure can be quoted again without its basis.
+
+That synthesis lens flagged, unprompted, that it had not re-verified the handed figures. It was
+right to flag it — and, as it happens, the figures it declined to trust were the correct ones.
 
 ## I.2 · Contradictions inside the corpus, adjudicated
 
@@ -223,21 +255,22 @@ D1–D12 are stated in full in `00_findings.md §2`; D13 is added here. Condense
 Verbatim from `topology_probe.py` at `690f4c3` (thresholds declared in the output, not inferred):
 
 ```
-modules declared: 27 · pure sources 15 · pure sinks 4 · bidirectional 8
-consume-declarations 127 · produce-declarations 69
-top 4 consumers hold 109/127 (86%): articulation_layer=44, npc_behavior=31,
+modules declared: 27 · pure sources 16 · pure sinks 4 · bidirectional 7
+consume-declarations 125 · produce-declarations 69
+top 4 consumers hold 108/125 (86%): articulation_layer=43, npc_behavior=31,
                                     faction_state=25, piety_track=9
-key types 56 — orphan(0 consumers) 8 · seam(1) 4 · channel(2-3) 37 · nexus(>=4) 7
-key types with no declared producer: 2/56
+key types 55 — orphan(0 consumers) 8 · seam(1) 4 · channel(2-3) 36 · nexus(>=4) 7
+key types with no declared producer: 1/55
+(the literal "*" wildcard subscription is excluded — see Part I.1)
 ```
 
-**What this shape means.** Fifteen modules emit and hear nothing. Four hear and never speak. Of the
-eight bidirectional modules, only `personal_combat` and `settlement_layer` are close to balanced;
+**What this shape means.** Sixteen modules emit and hear nothing. Four hear and never speak. Of the
+seven bidirectional modules, only `personal_combat` and `settlement_layer` are close to balanced;
 `articulation_layer` is 44-in / 1-out. Read structurally, this is not a telephone exchange of
 point-to-point wires, and it is not a router: it is **a public square with four standing audiences**
 — people, factions, faith, narration. The concentration is not a defect to be flattened. What is
 missing is (a) anything worth hearing at world scale, and (b) rule content in the ears — every one
-of the 127 declarations is a subscription with no behaviour behind it.
+of the 125 declarations is a subscription with no behaviour behind it.
 
 ## II.5 · Latent traps — inert today, wrong tomorrow
 
@@ -267,7 +300,7 @@ which is scripting drift arrived at honestly, because a central author has no lo
 generalise over, only cases. And it ports to Godot as a monolithic autoload owning everyone's rules
 — the exact inversion of the ruled one-subsystem-one-module-tree shape.
 
-**The mesh already exists too — on paper.** 127 consuming declarations with no runtime behind any of
+**The mesh already exists too — on paper.** 125 consuming declarations with no runtime behind any of
 them. Declaration is cheap; **rule content is the entire cost**, and it scales by authored meaning,
 not by subscription. Worse, the mesh is structurally deaf exactly where world churn lives: the
 "derive, never write" rule forbids any module from writing Mandate, province Accord or band state —
