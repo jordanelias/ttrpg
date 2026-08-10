@@ -3482,7 +3482,7 @@
    "declared_lane": null,
    "documented": true,
    "guards": "The review surface must describe the tree, and its links must land.",
-   "helper_loc": 9,
+   "helper_loc": 14,
    "helpers": [
     {
      "loc": 4,
@@ -3491,11 +3491,15 @@
     {
      "loc": 5,
      "name": "docs"
+    },
+    {
+     "loc": 5,
+     "name": "_load_builder"
     }
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 130,
+   "loc": 229,
    "modules_under_test": [
     "engine",
     "references",
@@ -3503,7 +3507,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 5,
+   "test_count": 8,
    "tests": {
     "test_adjudicator_verdicts_are_imported_not_reimplemented": {
      "assertionless": false,
@@ -3529,6 +3533,21 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "`module_contracts.yaml` writes `from: 'engine'` (scalar) on two rows and `from: [a, b]`"
+    },
+    "test_registry_only_reaches_a_review_queue": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every under-declared key must appear in SOME review queue."
+    },
+    "test_render_is_deterministic": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The same inputs must render the same bytes, or `--check` is a coin flip."
+    },
+    "test_wildcard_consumers_are_not_reported_as_unauthored": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A wildcard consume is authored on purpose; calling it unauthored misdirects the reviewer."
     }
    }
   },
@@ -11095,10 +11114,10 @@
   "files_naming_a_module": 105,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 35,
-  "helper_defs": 269,
-  "helper_loc": 2433,
+  "helper_defs": 270,
+  "helper_loc": 2438,
   "ratchet_baselines": 9,
-  "tests": 1277,
+  "tests": 1280,
   "undocumented_files": 0
  }
 }

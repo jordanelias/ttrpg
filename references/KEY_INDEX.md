@@ -40,14 +40,23 @@ Ordered by the kind of answer needed, not by severity: a chain that terminates i
 
 ### 3. Under-declaration (filing questions)
 
-**42** key type(s) where the registry names systems the contracts have not declared back. No contradiction — the contract side is simply unauthored.
+**49** key type(s) where the registry names systems the contracts have not declared back. No contradiction — but "not declared back" has two different causes and they need different answers.
 
-**Grouped by the module that is missing** — 42 undeclared edge(s) across 2 module(s). `articulation_layer` alone accounts for **41 of 42**, so most of this column is one decision applied repeatedly, not 42 separate ones.
+⚠ **Not all of this is unauthored.** `articulation_layer`, `fieldwork_knots` declare a **wildcard** consume (`{type: "*"}`) — authored deliberately, as a universal reader of the Key stream. This join does not expand wildcards, so every explicit type the registry names them against appears here. For those rows the question is *should the wildcard be expanded into explicit declarations*, which is a different decision from *someone forgot to file this*.
+
+Rows whose contract side declares **nothing** on that side (`registry_only`) may also appear in queue 1 above: a key can both terminate and be under-declared. That is two problems on one key, not double-counting.
+
+**Grouped by the module that is missing** — 52 undeclared edge(s) across 7 module(s). `articulation_layer` alone accounts for **44 of 52**, so most of this column is one decision applied repeatedly, not 49 separate ones.
 
 | module missing the declaration | as producer of | as consumer of | total |
 |---|---|---|---|
-| [`articulation_layer`](CONTRACT_INDEX.md#articulation_layer) | 0 | 41 | 41 |
+| [`articulation_layer`](CONTRACT_INDEX.md#articulation_layer) | 1 | 43 | 44 |
+| [`settlement_layer`](CONTRACT_INDEX.md#settlement_layer) | 2 | 0 | 2 |
+| [`victory`](CONTRACT_INDEX.md#victory) | 2 | 0 | 2 |
+| [`ci_political`](CONTRACT_INDEX.md#ci_political) | 1 | 0 | 1 |
+| `echo_transport` _(not a contract module — unresolved reference)_ | 1 | 0 | 1 |
 | `player_input` _(not a contract module — unresolved reference)_ | 1 | 0 | 1 |
+| [`territorial_piety`](CONTRACT_INDEX.md#territorial_piety) | 1 | 0 | 1 |
 
 <details><summary>per-key detail</summary>
 
@@ -62,14 +71,22 @@ Ordered by the kind of answer needed, not by severity: a chain that terminates i
 | [`env.peninsular_strain_shock`](#envpeninsular_strain_shock) | consumers | `articulation_layer`, `faction_state`, `npc_behavior`, `settlement_layer` | `faction_state`, `npc_behavior`, `settlement_layer` |
 | [`mechanical.accounting`](#mechanicalaccounting) | consumers | `articulation_layer`, `faction_state` | `faction_state` |
 | [`mechanical.cascade_resolution`](#mechanicalcascade_resolution) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
+| [`mechanical.era_transition`](#mechanicalera_transition) | producers | `victory` | — |
 | [`mechanical.mission_shift`](#mechanicalmission_shift) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
 | [`mechanical.project_advanced`](#mechanicalproject_advanced) | consumers | `articulation_layer`, `npc_behavior` | `npc_behavior` |
 | [`mechanical.scene_entered`](#mechanicalscene_entered) | consumers | `articulation_layer`, `audit`, `scene_timer` | `audit`, `scene_timer` |
 | [`mechanical.scene_exited`](#mechanicalscene_exited) | consumers | `articulation_layer`, `audit`, `scene_timer` | `audit`, `scene_timer` |
+| [`mechanical.second_calamity`](#mechanicalsecond_calamity) | producers | `victory` | — |
+| [`mechanical.settlement_captured`](#mechanicalsettlement_captured) | producers | `settlement_layer` | — |
+| [`mechanical.theocracy_unification_declared`](#mechanicaltheocracy_unification_declared) | producers | `ci_political`, `territorial_piety` | — |
+| [`meta.cascade_cluster_event`](#metacascade_cluster_event) | producers | `articulation_layer` | — |
+| [`meta.cascade_cluster_event`](#metacascade_cluster_event) | consumers | `articulation_layer` | — |
 | [`meta.knot_formed`](#metaknot_formed) | consumers | `articulation_layer`, `npc_behavior` | `npc_behavior` |
 | [`meta.knot_ruptured`](#metaknot_ruptured) | consumers | `articulation_layer`, `npc_behavior`, `piety_track` | `npc_behavior`, `piety_track` |
 | [`meta.miraculous_event`](#metamiraculous_event) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
 | [`meta.thread_woven`](#metathread_woven) | consumers | `articulation_layer`, `npc_behavior`, `piety_track` | `npc_behavior`, `piety_track` |
+| [`scene.accord_echo`](#sceneaccord_echo) | producers | `echo_transport` | — |
+| [`scene.accord_echo`](#sceneaccord_echo) | consumers | `articulation_layer` | — |
 | [`scene.battle_concluded`](#scenebattle_concluded) | consumers | `articulation_layer`, `faction_state`, `npc_behavior`, `piety_track` | `faction_state`, `npc_behavior`, `piety_track` |
 | [`scene.combat_felled`](#scenecombat_felled) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
 | [`scene.combat_resolved`](#scenecombat_resolved) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
@@ -93,6 +110,7 @@ Ordered by the kind of answer needed, not by severity: a chain that terminates i
 | [`state.project_completed`](#stateproject_completed) | consumers | `articulation_layer`, `npc_behavior` | `npc_behavior` |
 | [`state.project_failed`](#stateproject_failed) | consumers | `articulation_layer`, `npc_behavior` | `npc_behavior` |
 | [`state.scar_acquired`](#statescar_acquired) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
+| [`state.settlement_revolt`](#statesettlement_revolt) | producers | `settlement_layer` | — |
 | [`state.standing_change`](#statestanding_change) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
 | [`state.succession`](#statesuccession) | consumers | `articulation_layer`, `faction_state`, `npc_behavior` | `faction_state`, `npc_behavior` |
 

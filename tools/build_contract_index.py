@@ -226,7 +226,24 @@ def table(headers, rows) -> list:
 
 # ── KEY_INDEX.md ─────────────────────────────────────────────────────────────
 
-def render_keys(graph) -> str:
+# What counts as "the registry names a system the contracts have not declared back".
+#
+# `registry_superset` = contracts declared SOME of that side and the registry names more.
+# `registry_only`     = contracts declared NONE of that side at all — the STRONGER case.
+#
+# Both are under-declarations and both belong in the §3 filing queue. `registry_only` was
+# omitted at introduction, which silently hid every key whose producer AND consumer were both
+# registry-only from EVERY review queue: not §3 (filtered out), not §1 (they have producers and
+# consumers, so the chain does not terminate), not §2 (no contradiction). Two keys fell through
+# that hole — `scene.accord_echo`, one of the few key types with a live construction site, and
+# `meta.cascade_cluster_event`. Pinned by test_registry_only_reaches_a_review_queue.
+#
+# One owner: the three sites below (the filter, the missing-module grouping, and the per-key
+# detail table) all read this tuple. They previously each hardcoded the single status.
+UNDECLARED_STATUSES = ('registry_superset', 'registry_only')
+
+
+def render_keys(graph, contracts) -> str:
     keys = graph['keys']
     real = {k: v for k, v in keys.items() if v['well_formed']}
     malformed = {k: v for k, v in keys.items() if not v['well_formed']}
@@ -236,9 +253,17 @@ def render_keys(graph) -> str:
     conflicts = sorted(k for k, v in real.items()
                        if 'conflict' in (v['reconciliation']['producer_status'],
                                          v['reconciliation']['consumer_status']))
+    # A contract may declare a WILDCARD consume (`{type: "*"}`). The registry↔contract join does
+    # not expand it, so every explicit type the registry names that module against reads as
+    # undeclared. That is a join artefact, not an authoring gap, and the difference decides what a
+    # reviewer is being asked: expand the wildcard into N rows, or leave it as one deliberate edge.
+    wildcard_consumers = sorted(
+        m.get('module') for m in (contracts.get('modules') or [])
+        if any((e or {}).get('type') == '*' for e in (m.get('consumes') or [])))
+
     under = sorted(k for k, v in real.items()
-                   if v['reconciliation']['consumer_status'] == 'registry_superset'
-                   or v['reconciliation']['producer_status'] == 'registry_superset')
+                   if v['reconciliation']['consumer_status'] in UNDECLARED_STATUSES
+                   or v['reconciliation']['producer_status'] in UNDECLARED_STATUSES)
 
     L = [f'# Valoria — Key Index ({len(real)} key types)', '', BANNER, '']
     L += ['**Sources joined:** `references/key_graph.json` (generated) ← '
@@ -283,7 +308,19 @@ def render_keys(graph) -> str:
 
     L += ['### 3. Under-declaration (filing questions)', '',
           f'**{len(under)}** key type(s) where the registry names systems the contracts have not '
-          'declared back. No contradiction — the contract side is simply unauthored.', '']
+          'declared back. No contradiction — but "not declared back" has two different causes and '
+          'they need different answers.', '']
+    if wildcard_consumers:
+        L += ['⚠ **Not all of this is unauthored.** '
+              + code_list(wildcard_consumers)
+              + ' declare a **wildcard** consume (`{type: "*"}`) — authored deliberately, as a '
+              'universal reader of the Key stream. This join does not expand wildcards, so every '
+              'explicit type the registry names them against appears here. For those rows the '
+              'question is *should the wildcard be expanded into explicit declarations*, which is '
+              'a different decision from *someone forgot to file this*.', '']
+    L += ['Rows whose contract side declares **nothing** on that side (`registry_only`) may also '
+          'appear in queue 1 above: a key can both terminate and be under-declared. That is two '
+          'problems on one key, not double-counting.', '']
 
     # Group by the module that is MISSING, not by key. The row count is what a reviewer sees first
     # and it badly overstates the work: if one module accounts for most of the gap, this is one
@@ -293,13 +330,21 @@ def render_keys(graph) -> str:
     for k in under:
         r = real[k]['reconciliation']
         for side in ('producer', 'consumer'):
-            if r[f'{side}_status'] != 'registry_superset':
+            if r[f'{side}_status'] not in UNDECLARED_STATUSES:
                 continue
             w = side + 's'
             for m in set(r[f'registry_{w}']) - set(r[f'contract_{w}']):
                 missing.setdefault(m, {'producer': [], 'consumer': []})[side].append(k)
+    # Sort must be TOTAL. Ranking by count alone leaves ties broken by `missing`'s insertion
+    # order, which comes from iterating `set(registry) - set(contract)` — PYTHONHASHSEED-dependent,
+    # so the rendered file differed between runs and `--check` was flaky. Latent while only two
+    # modules appeared here; live as soon as there were ties. Name is the tiebreak.
+    # Pinned by test_render_is_deterministic.
     ranked = sorted(missing.items(),
-                    key=lambda kv: -(len(kv[1]['producer']) + len(kv[1]['consumer'])))
+                    key=lambda kv: (-(len(kv[1]['producer']) + len(kv[1]['consumer'])), kv[0]))
+    for v in missing.values():
+        v['producer'].sort()
+        v['consumer'].sort()
     total_gaps = sum(len(v['producer']) + len(v['consumer']) for v in missing.values())
     if ranked:
         top, tv = ranked[0]
@@ -324,7 +369,7 @@ def render_keys(graph) -> str:
                 for k in under
                 for r in [real[k]['reconciliation']]
                 for side, w in (('producers', 'producers'), ('consumers', 'consumers'))
-                if r[f'{side[:-1]}_status'] == 'registry_superset'])
+                if r[f'{side[:-1]}_status'] in UNDECLARED_STATUSES])
     L += ['</details>', '']
 
     L += ['### 4. Names that resolve to no module', '',
@@ -422,7 +467,10 @@ def render_modules(graph, contracts, wiring, violations, warnings) -> str:
           '`references/wiring_manifest.yaml` (build + port status). '
           'Key-level companion: [KEY_INDEX.md](KEY_INDEX.md).', '']
     L += ['`authority` is derived, not stored (Jordan\'s 2026-08-02 precedence rule): **code** if a '
-          'declared `sim_module` resolves on disk, **prose** if only a design doc exists, **none** '
+          'declared `sim_module` resolves on disk **or the module is on `build_key_graph.py`\'s '
+          'CODE_EXISTS_UNDECLARED list** (code demonstrably present while its row deliberately '
+          'declares no `sim_module` — `mass_battle`\'s row is MB-lane-owned and IN must not fill '
+          'it), **prose** if only a design doc exists, **none** '
           'if neither. It expires on someone else\'s commit, which is why nothing hand-annotates '
           'it.', '']
 
@@ -584,7 +632,7 @@ def render_modules(graph, contracts, wiring, violations, warnings) -> str:
 def build():
     graph, contracts, wiring = load_all()
     violations, warnings = adjudicate()
-    return {OUT_KEYS: render_keys(graph),
+    return {OUT_KEYS: render_keys(graph, contracts),
             OUT_MODULES: render_modules(graph, contracts, wiring, violations, warnings)}
 
 
