@@ -4,7 +4,7 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**123 apparatuses** — claude-agent: 1, hook: 4, skill-script: 10, tool: 105, workflow: 3 · **6 orphaned**.
+**124 apparatuses** — claude-agent: 1, hook: 4, skill-script: 10, tool: 106, workflow: 3 · **6 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
@@ -38,6 +38,7 @@
 | `tools/freshness_gate.py` | `references/canonical_sources.yaml` (yaml) | yes | ci:valoria-ci.yml |
 | `tools/link_values_pointers.py` | `value_pointer_links.json` (json) | yes | tool:imported |
 | `tools/observability/build_decisions.py` | `decisions.json` (json); `decisions_data.js` (js); `DECISIONS.md` (markdown) | yes | ci:audit-refresh.yml, ci:dashboard.yml, tool:imported |
+| `tools/observability/build_glossary.py` | `glossary.json` (json); `<name>` (unknown) | yes | tool:imported |
 | `tools/observability/build_graph.py` | `graph.json` (json); `graph_data.js` (js); `console.html` (html) | yes | ci:audit-refresh.yml, skill:valoria-vector-audit |
 | `tools/observability/build_lexicon.py` | `lexicon.json` (json); `lexicon_data.js` (js) | yes | tool:imported |
 | `tools/observability/build_proposals.py` | `proposals.json` (json); `PROPOSALS.md` (markdown) | yes | ci:audit-refresh.yml, tool:imported |

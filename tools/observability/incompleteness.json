@@ -3,33 +3,33 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 238,
+    "findings": 234,
     "by_category": {
       "apparatus_orphan": 6,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
-      "audit_implied_missing": 28,
-      "audit_isolate": 9,
+      "audit_implied_missing": 18,
+      "audit_isolate": 7,
       "audit_notional": 1,
-      "audit_sparse": 16,
+      "audit_sparse": 17,
       "audit_vocab_debt": 3,
       "code_marker": 12,
       "contract_doc_null": 9,
       "contract_island": 5,
-      "contract_missing_entirely": 2,
+      "contract_missing_entirely": 3,
       "contract_no_resolver": 1,
       "integrity_unverified_pin": 1,
-      "key_orphan_emit": 1,
+      "key_orphan_emit": 6,
       "prose_marker": 22,
       "sim_not_implemented": 23,
       "stale_retired_pointer": 17,
-      "status_noncurrent": 23,
+      "status_noncurrent": 24,
       "unregistered_term": 28
     },
     "by_severity": {
-      "high": 22,
-      "med": 97,
-      "low": 119
+      "high": 26,
+      "med": 88,
+      "low": 120
     }
   },
   "by_lane": {
@@ -37,6 +37,10 @@
       "total": 5,
       "prose_marker": 3,
       "sim_not_implemented": 1,
+      "status_noncurrent": 1
+    },
+    "PC": {
+      "total": 1,
       "status_noncurrent": 1
     },
     "FI": {
@@ -64,14 +68,14 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 165,
+      "total": 154,
       "apparatus_orphan": 6,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
-      "audit_implied_missing": 28,
-      "audit_isolate": 9,
+      "audit_implied_missing": 18,
+      "audit_isolate": 7,
       "audit_notional": 1,
-      "audit_sparse": 16,
+      "audit_sparse": 17,
       "audit_vocab_debt": 3,
       "code_marker": 6,
       "contract_island": 2,
@@ -89,12 +93,12 @@
       "sim_not_implemented": 2
     },
     "unassigned": {
-      "total": 30,
+      "total": 36,
       "code_marker": 1,
       "contract_doc_null": 9,
       "contract_island": 2,
-      "contract_missing_entirely": 2,
-      "key_orphan_emit": 1,
+      "contract_missing_entirely": 3,
+      "key_orphan_emit": 6,
       "prose_marker": 4,
       "sim_not_implemented": 2,
       "status_noncurrent": 9
@@ -173,36 +177,27 @@
     },
     {
       "category": "audit_cascade_sink",
-      "id": "sink::Altonia",
-      "title": "Altonia \u2014 cascade sink (576 chains)",
-      "detail": "\u201cAltonia\u201d is reached by 576 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "canon/03_canonical_timeline.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_cascade_sink",
       "id": "sink::Audit",
-      "title": "Audit \u2014 cascade sink (792 chains)",
-      "detail": "\u201cAudit\u201d is reached by 792 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "audit/2026-05-17-v18-integration/integration_plan_v18.md",
+      "title": "Audit \u2014 cascade sink (692 chains)",
+      "detail": "\u201cAudit\u201d is reached by 692 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/mass_battle/mass_battle_integration_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_cascade_sink",
-      "id": "sink::Church",
-      "title": "Church \u2014 cascade sink (597 chains)",
-      "detail": "\u201cChurch\u201d is reached by 597 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/factions/faction_politics_v30.md",
+      "id": "sink::CI",
+      "title": "CI \u2014 cascade sink (547 chains)",
+      "detail": "\u201cCI\u201d is reached by 547 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/ci_political_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_cascade_sink",
       "id": "sink::Conviction",
-      "title": "Conviction \u2014 cascade sink (639 chains)",
-      "detail": "\u201cConviction\u201d is reached by 639 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Conviction \u2014 cascade sink (510 chains)",
+      "detail": "\u201cConviction\u201d is reached by 510 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/npcs/npc_behavior_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -210,8 +205,26 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Disposition",
-      "title": "Disposition \u2014 cascade sink (609 chains)",
-      "detail": "\u201cDisposition\u201d is reached by 609 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Disposition \u2014 cascade sink (673 chains)",
+      "detail": "\u201cDisposition\u201d is reached by 673 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/fieldwork/fieldwork_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Fort Level",
+      "title": "Fort Level \u2014 cascade sink (498 chains)",
+      "detail": "\u201cFort Level\u201d is reached by 498 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/settlements/settlement_layer_v30.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_cascade_sink",
+      "id": "sink::Investigation",
+      "title": "Investigation \u2014 cascade sink (575 chains)",
+      "detail": "\u201cInvestigation\u201d is reached by 575 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -219,8 +232,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Key: mechanical.accounting",
-      "title": "Key: mechanical.accounting \u2014 cascade sink (682 chains)",
-      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 682 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Key: mechanical.accounting \u2014 cascade sink (674 chains)",
+      "detail": "\u201cKey: mechanical.accounting\u201d is reached by 674 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -228,8 +241,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Knot",
-      "title": "Knot \u2014 cascade sink (663 chains)",
-      "detail": "\u201cKnot\u201d is reached by 663 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Knot \u2014 cascade sink (765 chains)",
+      "detail": "\u201cKnot\u201d is reached by 765 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/knots_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -237,17 +250,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Mass Battle",
-      "title": "Mass Battle \u2014 cascade sink (612 chains)",
-      "detail": "\u201cMass Battle\u201d is reached by 612 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/mass_battle/mass_battle_integration_v30.md",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_cascade_sink",
-      "id": "sink::Mass Combat",
-      "title": "Mass Combat \u2014 cascade sink (612 chains)",
-      "detail": "\u201cMass Combat\u201d is reached by 612 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Mass Battle \u2014 cascade sink (588 chains)",
+      "detail": "\u201cMass Battle\u201d is reached by 588 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_integration_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -255,8 +259,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::NPC Behavior",
-      "title": "NPC Behavior \u2014 cascade sink (581 chains)",
-      "detail": "\u201cNPC Behavior\u201d is reached by 581 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "NPC Behavior \u2014 cascade sink (647 chains)",
+      "detail": "\u201cNPC Behavior\u201d is reached by 647 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/npcs/character_canon_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -264,8 +268,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Restoration Movement",
-      "title": "Restoration Movement \u2014 cascade sink (601 chains)",
-      "detail": "\u201cRestoration Movement\u201d is reached by 601 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Restoration Movement \u2014 cascade sink (494 chains)",
+      "detail": "\u201cRestoration Movement\u201d is reached by 494 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -273,8 +277,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Social Contest",
-      "title": "Social Contest \u2014 cascade sink (592 chains)",
-      "detail": "\u201cSocial Contest\u201d is reached by 592 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Social Contest \u2014 cascade sink (624 chains)",
+      "detail": "\u201cSocial Contest\u201d is reached by 624 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/fieldwork/fieldwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -282,8 +286,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Stability",
-      "title": "Stability \u2014 cascade sink (579 chains)",
-      "detail": "\u201cStability\u201d is reached by 579 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Stability \u2014 cascade sink (569 chains)",
+      "detail": "\u201cStability\u201d is reached by 569 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/factions/faction_layer_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -291,8 +295,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Territories",
-      "title": "Territories \u2014 cascade sink (747 chains)",
-      "detail": "\u201cTerritories\u201d is reached by 747 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Territories \u2014 cascade sink (665 chains)",
+      "detail": "\u201cTerritories\u201d is reached by 665 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/victory/victory_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -300,8 +304,8 @@
     {
       "category": "audit_cascade_sink",
       "id": "sink::Threadwork",
-      "title": "Threadwork \u2014 cascade sink (676 chains)",
-      "detail": "\u201cThreadwork\u201d is reached by 676 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 234 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 51,459 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "Threadwork \u2014 cascade sink (620 chains)",
+      "detail": "\u201cThreadwork\u201d is reached by 620 citation chains (len\u22653) but never cites back \u2014 a concept things flow INTO but nothing flows back from (vector-audit Mode D; 223 sinks total). Terminal-by-design or a broken feedback loop. \u26a0 UNVERIFIED LEAD: the return-path search hit its traversal cap 45,076 times this run, so this 'no-return' may be a cap artifact, not a real sink \u2014 verify by hand (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -452,15 +456,6 @@
     },
     {
       "category": "audit_implied_missing",
-      "id": "impl::CI Political||Clocks",
-      "title": "CI Political \u22ef Clocks \u2014 implied but never cited",
-      "detail": "\u201cCI Political\u201d and \u201cClocks\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/factions/faction_politics_v30.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
       "id": "impl::Campaign Architecture||Faction Layer",
       "title": "Campaign Architecture \u22ef Faction Layer \u2014 implied but never cited",
       "detail": "\u201cCampaign Architecture\u201d and \u201cFaction Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
@@ -483,60 +478,6 @@
       "title": "Campaign Architecture \u22ef Scale Transitions \u2014 implied but never cited",
       "detail": "\u201cCampaign Architecture\u201d and \u201cScale Transitions\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/threadwork/threadwork_v30.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Clocks||Faction Layer",
-      "title": "Clocks \u22ef Faction Layer \u2014 implied but never cited",
-      "detail": "\u201cClocks\u201d and \u201cFaction Layer\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Clocks||MS Trajectory",
-      "title": "Clocks \u22ef MS Trajectory \u2014 implied but never cited",
-      "detail": "\u201cClocks\u201d and \u201cMS Trajectory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Clocks||Peninsular Strain",
-      "title": "Clocks \u22ef Peninsular Strain \u2014 implied but never cited",
-      "detail": "\u201cClocks\u201d and \u201cPeninsular Strain\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Clocks||Royal Assassination Fuse",
-      "title": "Clocks \u22ef Royal Assassination Fuse \u2014 implied but never cited",
-      "detail": "\u201cClocks\u201d and \u201cRoyal Assassination Fuse\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Clocks||Threadwork",
-      "title": "Clocks \u22ef Threadwork \u2014 implied but never cited",
-      "detail": "\u201cClocks\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/conflict_architecture_proposal.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Clocks||Victory",
-      "title": "Clocks \u22ef Victory \u2014 implied but never cited",
-      "detail": "\u201cClocks\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/conflict_architecture_proposal.md",
       "lane": "IN",
       "severity": "med"
     },
@@ -582,15 +523,6 @@
       "title": "Derived Stats \u22ef Solmund \u2014 implied but never cited",
       "detail": "\u201cDerived Stats\u201d and \u201cSolmund\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/mass_battle/mass_battle_v30.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Faction Layer||Mass Combat",
-      "title": "Faction Layer \u22ef Mass Combat \u2014 implied but never cited",
-      "detail": "\u201cFaction Layer\u201d and \u201cMass Combat\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/factions/faction_canon_v30.md",
       "lane": "IN",
       "severity": "med"
     },
@@ -650,15 +582,6 @@
     },
     {
       "category": "audit_implied_missing",
-      "id": "impl::Royal Assassination Fuse||Tensions Deck",
-      "title": "Royal Assassination Fuse \u22ef Tensions Deck \u2014 implied but never cited",
-      "detail": "\u201cRoyal Assassination Fuse\u201d and \u201cTensions Deck\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/npcs/npc_behavior_v30.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
       "id": "impl::Scale Transitions||Self-Rendering",
       "title": "Scale Transitions \u22ef Self-Rendering \u2014 implied but never cited",
       "detail": "\u201cScale Transitions\u201d and \u201cSelf-Rendering\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
@@ -680,15 +603,6 @@
       "id": "impl::Scale Transitions||Threadwork",
       "title": "Scale Transitions \u22ef Threadwork \u2014 implied but never cited",
       "detail": "\u201cScale Transitions\u201d and \u201cThreadwork\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "systems/_architecture/propagation_spec_v1.md",
-      "lane": "IN",
-      "severity": "med"
-    },
-    {
-      "category": "audit_implied_missing",
-      "id": "impl::Scale Transitions||Victory",
-      "title": "Scale Transitions \u22ef Victory \u2014 implied but never cited",
-      "detail": "\u201cScale Transitions\u201d and \u201cVictory\u201d are linked in 2 metadata graphs (throughline/mu/pp) but are NEVER cited together \u2014 a missing connection the design should make explicit or is a real gap (vector-audit Mode B; snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "systems/_architecture/propagation_spec_v1.md",
       "lane": "IN",
       "severity": "med"
@@ -731,28 +645,10 @@
     },
     {
       "category": "audit_isolate",
-      "id": "iso::Key: scene_outcome.battle_concluded",
-      "title": "Key: scene_outcome.battle_concluded \u2014 no design-prose home",
-      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d has max degree 1 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "references/module_contracts.yaml",
-      "lane": "IN",
-      "severity": "high"
-    },
-    {
-      "category": "audit_isolate",
       "id": "iso::NPC Relational Graph",
       "title": "NPC Relational Graph \u2014 no design-prose home",
       "detail": "\u201cNPC Relational Graph\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/canonical_sources.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "references/canonical_sources.yaml",
-      "lane": "IN",
-      "severity": "high"
-    },
-    {
-      "category": "audit_isolate",
-      "id": "iso::Territorial Piety",
-      "title": "Territorial Piety \u2014 no design-prose home",
-      "detail": "\u201cTerritorial Piety\u201d has max degree 0 (\u22641) across ALL FIVE structural graphs (cite/throughline/mu/pp + engine Key-propagation) AND has no primary design doc \u2014 a registered term with no home the graphs can see (a strong incompleteness signal). If it is a Key type, check the register for the mechanism: an orphan emit (emitted, unconsumed), an unemitted/unconsumed Key, or a cross-module `derivations` flow the Key graph does not read; registered via references/module_contracts.yaml. vector-audit Mode H; status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "references/module_contracts.yaml",
       "lane": "IN",
       "severity": "high"
     },
@@ -786,8 +682,8 @@
     {
       "category": "audit_notional",
       "id": "notional::rollup",
-      "title": "14662 notional citations \u2014 cited but content-empty",
-      "detail": "14662 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: Aldric Tormann\u2192Crown (w183); CI Political\u2192Crown (w183); Cardinal Arnlod Olafsson\u2192Crown (w183); Cardinal Osten Jarnstal\u2192Crown (w183); Church\u2192Crown (w183). The feed carries a top-100 sample (not all 14662); the full ranked list is reproducible by re-running the deterministic audit (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "title": "14491 notional citations \u2014 cited but content-empty",
+      "detail": "14491 token pairs are cited together but share NO metadata-graph support (throughline/mu/pp/key) \u2014 a citation with nothing structural behind it (vector-audit Mode C). Top by weight: Aldric Tormann\u2192Crown (w183); CI Political\u2192Crown (w183); Cardinal Arnlod Olafsson\u2192Crown (w183); Cardinal Osten Jarnstal\u2192Crown (w183); Church\u2192Crown (w183). The feed carries a top-100 sample (not all 14491); the full ranked list is reproducible by re-running the deterministic audit (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -798,6 +694,15 @@
       "title": "Active Inquisition \u2014 thinly developed",
       "detail": "\u201cActive Inquisition\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
+      "id": "sparse::Armature System",
+      "title": "Armature System \u2014 thinly developed",
+      "detail": "\u201cArmature System\u201d is in the bottom decile of BOTH prose volume (2 paragraphs) and citation degree (15) \u2014 an under-developed concept (vector-audit Mode E); status provisional (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/factions/political_dynamics_keys_migration_v30.md",
       "lane": "IN",
       "severity": "low"
     },
@@ -848,6 +753,15 @@
     },
     {
       "category": "audit_sparse",
+      "id": "sparse::Holonic Container Doctrine",
+      "title": "Holonic Container Doctrine \u2014 thinly developed",
+      "detail": "\u201cHolonic Container Doctrine\u201d is in the bottom decile of BOTH prose volume (2 paragraphs) and citation degree (20) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/_architecture/propagation_spec_v1.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "audit_sparse",
       "id": "sparse::Key: mechanical.scene_exited",
       "title": "Key: mechanical.scene_exited \u2014 thinly developed",
       "detail": "\u201cKey: mechanical.scene_exited\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
@@ -860,15 +774,6 @@
       "id": "sparse::Key: mechanical.scene_skipped",
       "title": "Key: mechanical.scene_skipped \u2014 thinly developed",
       "detail": "\u201cKey: mechanical.scene_skipped\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "",
-      "lane": "IN",
-      "severity": "low"
-    },
-    {
-      "category": "audit_sparse",
-      "id": "sparse::Key: scene_outcome.battle_concluded",
-      "title": "Key: scene_outcome.battle_concluded \u2014 thinly developed",
-      "detail": "\u201cKey: scene_outcome.battle_concluded\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -893,18 +798,18 @@
     },
     {
       "category": "audit_sparse",
-      "id": "sparse::Scene Timer",
-      "title": "Scene Timer \u2014 thinly developed",
-      "detail": "\u201cScene Timer\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (6) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "",
+      "id": "sparse::Personal Combat",
+      "title": "Personal Combat \u2014 thinly developed",
+      "detail": "\u201cPersonal Combat\u201d is in the bottom decile of BOTH prose volume (1 paragraphs) and citation degree (25) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/articulation/articulation_layer_v30.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "audit_sparse",
-      "id": "sparse::Territorial Piety",
-      "title": "Territorial Piety \u2014 thinly developed",
-      "detail": "\u201cTerritorial Piety\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (0) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "id": "sparse::Scene Timer",
+      "title": "Scene Timer \u2014 thinly developed",
+      "detail": "\u201cScene Timer\u201d is in the bottom decile of BOTH prose volume (0 paragraphs) and citation degree (6) \u2014 an under-developed concept (vector-audit Mode E); status canonical (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
       "path": "",
       "lane": "IN",
       "severity": "low"
@@ -940,8 +845,8 @@
       "category": "audit_vocab_debt",
       "id": "vocab::Coup Counter",
       "title": "\u201cCoup Counter\u201d \u2014 struck term still in use",
-      "detail": "the struck/deprecated term \u201cCoup Counter\u201d still appears 57\u00d7 across 13 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. arcs/arc_expansion_v30.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "arcs/arc_expansion_v30.md",
+      "detail": "the struck/deprecated term \u201cCoup Counter\u201d still appears 13\u00d7 across 9 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. systems/_architecture/conflict_architecture_proposal.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/_architecture/conflict_architecture_proposal.md",
       "lane": "IN",
       "severity": "low"
     },
@@ -958,8 +863,8 @@
       "category": "audit_vocab_debt",
       "id": "vocab::Game Master",
       "title": "\u201cGame Master\u201d \u2014 struck term still in use",
-      "detail": "the struck/deprecated term \u201cGame Master\u201d still appears 21\u00d7 across 8 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. arcs/throughline_resolutions_v30.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
-      "path": "arcs/throughline_resolutions_v30.md",
+      "detail": "the struck/deprecated term \u201cGame Master\u201d still appears 17\u00d7 across 6 doc(s) (vector-audit Mode G) \u2014 vocabulary debt to sweep; e.g. systems/combat/combat_reference_v1.md (snapshot (audit_findings.json, refreshed weekly by audit-refresh))",
+      "path": "systems/combat/combat_reference_v1.md",
       "lane": "IN",
       "severity": "low"
     },
@@ -1199,6 +1104,15 @@
     },
     {
       "category": "contract_missing_entirely",
+      "id": "echo_transport",
+      "title": "echo_transport",
+      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "contract_missing_entirely",
       "id": "engine",
       "title": "engine",
       "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
@@ -1235,8 +1149,53 @@
     },
     {
       "category": "key_orphan_emit",
+      "id": "mechanical.era_transition",
+      "title": "mechanical.era_transition",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "mechanical.second_calamity",
+      "title": "mechanical.second_calamity",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "mechanical.settlement_captured",
+      "title": "mechanical.settlement_captured",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "mechanical.theocracy_unification_declared",
+      "title": "mechanical.theocracy_unification_declared",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
       "id": "meta.legacy_event",
       "title": "meta.legacy_event",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "state.settlement_revolt",
+      "title": "state.settlement_revolt",
       "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
       "path": "",
       "lane": "unassigned",
@@ -1928,6 +1887,15 @@
     },
     {
       "category": "status_noncurrent",
+      "id": "systems/combat/combat_reference_v1.md",
+      "title": "systems/combat/combat_reference_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "systems/combat/combat_reference_v1.md",
+      "lane": "PC",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
       "id": "systems/factions/faction_canon_v30.md",
       "title": "systems/factions/faction_canon_v30.md",
       "detail": "doc Status is not current: PROVISIONAL",
@@ -2064,17 +2032,17 @@
     {
       "category": "unregistered_term",
       "id": "term::Combat Pool",
-      "title": "\u201cCombat Pool\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (31 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, systems/_architecture/canonical_registry.md",
-      "path": "systems/combat/combat_design_v1.md",
+      "title": "\u201cCombat Pool\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_reference_v1.md, systems/_architecture/canonical_registry.md, systems/_architecture/derived_stats_v30.md",
+      "path": "systems/combat/combat_reference_v1.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
       "id": "term::Community Weaving",
-      "title": "\u201cCommunity Weaving\u201d \u2014 in 15 docs, unregistered",
-      "detail": "appears in 15 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, systems/_architecture/complete_systems_reference.md",
+      "title": "\u201cCommunity Weaving\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (29 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, systems/_architecture/complete_systems_reference.md",
       "path": "systems/characters/conviction_track_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2235,8 +2203,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Thread Tension",
-      "title": "\u201cThread Tension\u201d \u2014 in 16 docs, unregistered",
-      "detail": "appears in 16 design docs (52 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
+      "title": "\u201cThread Tension\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (51 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
       "path": "systems/world/southernmost_v30_infill.md",
       "lane": "IN",
       "severity": "low"
