@@ -4,15 +4,15 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 123
+  total: 124
   by_kind:
-    tool: 105
+    tool: 106
     skill-script: 10
     hook: 4
     workflow: 3
     claude-agent: 1
   by_role:
-    A:writes-artifact: 23
+    A:writes-artifact: 24
     B:stdout-or-gate: 59
     D:import-only-library: 37
     workflow: 3
@@ -988,6 +988,27 @@ entries:
   role: A:writes-artifact
   imports:
   - names
+  - yaml
+- path: tools/observability/build_glossary.py
+  kind: tool
+  stem: build_glossary
+  writes:
+  - dest: glossary.json
+    format: json
+    mode: write
+  - dest: <name>
+    format: unknown
+    mode: write
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: A:writes-artifact
+  imports:
   - yaml
 - path: tools/observability/build_graph.py
   kind: tool

@@ -3,17 +3,8 @@
   "generator": "skills/valoria-vector-audit/scripts/vector_audit.py --emit-findings",
   "note": "GENERATED \u2014 ALL EIGHT of the vector-audit's structural diagnostic modes (A hubs are context, B implied-missing, C notional, D cascade-sinks, E sparse-context, F throughline-orphans, G vocabulary-debt, H isolates), for the Incompleteness Ledger to surface. Layer L0 (curated slice \u2014 not whole-repo). SCOPE: triangulates FIVE structural graphs \u2014 design cite/throughline/mu/pp AND the engine Key-propagation graph (module_contracts emit\u2192consume). B/D/E/F/G/H retain EVERY item (Mode-B hub\u00d7hub pairs carry a `filtered`+`filter_reason` flag, not dropped). Mode C is the ONE exception \u2014 ~14.6k items, so it carries a top-100-by-weight SAMPLE + the true `notional_total`; the non-sampled items are reproducible by re-running the (now deterministic) audit. Severity is assigned by the ledger, by category.",
   "layer": "L0",
-  "design_docs": 110,
+  "design_docs": 93,
   "implied_missing": [
-    {
-      "a": "CI Political",
-      "b": "Clocks",
-      "meta_links": 2,
-      "a_doc": "systems/factions/faction_politics_v30.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "filtered": false,
-      "filter_reason": null
-    },
     {
       "a": "Campaign Architecture",
       "b": "Faction Layer",
@@ -38,60 +29,6 @@
       "meta_links": 2,
       "a_doc": "systems/threadwork/threadwork_v30.md",
       "b_doc": "systems/_architecture/propagation_spec_v1.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "a": "Clocks",
-      "b": "Faction Layer",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/factions/faction_canon_v30.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "a": "Clocks",
-      "b": "MS Trajectory",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "canon/02_foundations_amendment_leap_mechanism.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "a": "Clocks",
-      "b": "Peninsular Strain",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/factions/faction_layer_v30.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "a": "Clocks",
-      "b": "Royal Assassination Fuse",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/npcs/npc_behavior_v30.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "a": "Clocks",
-      "b": "Threadwork",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "systems/threadwork/threadwork_v30.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "a": "Clocks",
-      "b": "Victory",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "engine/params/bg/victory.md",
       "filtered": false,
       "filter_reason": null
     },
@@ -151,12 +88,12 @@
     },
     {
       "a": "Faction Layer",
-      "b": "Mass Combat",
+      "b": "Mass Battle",
       "meta_links": 2,
       "a_doc": "systems/factions/faction_canon_v30.md",
       "b_doc": "systems/mass_battle/mass_battle_integration_v30.md",
-      "filtered": false,
-      "filter_reason": null
+      "filtered": true,
+      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     },
     {
       "a": "Faction Layer",
@@ -204,20 +141,11 @@
       "filter_reason": null
     },
     {
-      "a": "Mass Combat",
+      "a": "Mass Battle",
       "b": "Settlement Layer",
       "meta_links": 2,
       "a_doc": "systems/mass_battle/mass_battle_integration_v30.md",
       "b_doc": "systems/factions/faction_canon_v30.md",
-      "filtered": true,
-      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
-    },
-    {
-      "a": "Mass Combat",
-      "b": "Victory",
-      "meta_links": 2,
-      "a_doc": "systems/mass_battle/mass_battle_integration_v30.md",
-      "b_doc": "engine/params/bg/victory.md",
       "filtered": true,
       "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     },
@@ -258,15 +186,6 @@
       "filter_reason": null
     },
     {
-      "a": "Royal Assassination Fuse",
-      "b": "Tensions Deck",
-      "meta_links": 2,
-      "a_doc": "systems/npcs/npc_behavior_v30.md",
-      "b_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
       "a": "Scale Transitions",
       "b": "Self-Rendering",
       "meta_links": 2,
@@ -294,31 +213,13 @@
       "filter_reason": null
     },
     {
-      "a": "Scale Transitions",
-      "b": "Victory",
-      "meta_links": 2,
-      "a_doc": "systems/_architecture/propagation_spec_v1.md",
-      "b_doc": "engine/params/bg/victory.md",
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
       "a": "Tensions Deck",
       "b": "Victory",
       "meta_links": 2,
       "a_doc": "systems/_architecture/conflict_architecture_proposal.md",
-      "b_doc": "engine/params/bg/victory.md",
+      "b_doc": "systems/overview/peninsular_strain_v30.md",
       "filtered": false,
       "filter_reason": null
-    },
-    {
-      "a": "Threadwork",
-      "b": "Victory",
-      "meta_links": 2,
-      "a_doc": "systems/threadwork/threadwork_v30.md",
-      "b_doc": "engine/params/bg/victory.md",
-      "filtered": true,
-      "filter_reason": "both-endpoints-are-multigraph-hubs (lower confidence, not dropped)"
     }
   ],
   "isolates": [
@@ -350,28 +251,10 @@
       "filter_reason": null
     },
     {
-      "token": "Key: scene_outcome.battle_concluded",
-      "status": "canonical",
-      "doc": null,
-      "registry": "references/module_contracts.yaml",
-      "max_deg": 1,
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
       "token": "NPC Relational Graph",
       "status": "canonical",
       "doc": null,
       "registry": "references/canonical_sources.yaml",
-      "max_deg": 0,
-      "filtered": false,
-      "filter_reason": null
-    },
-    {
-      "token": "Territorial Piety",
-      "status": "canonical",
-      "doc": null,
-      "registry": "references/module_contracts.yaml",
       "max_deg": 0,
       "filtered": false,
       "filter_reason": null
@@ -441,6 +324,13 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
+      "source": "Confessor Arne Himlensendt",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "source": "Conviction Track",
       "target": "Crown",
       "cite_weight": 183,
@@ -470,6 +360,13 @@
     },
     {
       "source": "Gerik Strand",
+      "target": "Crown",
+      "cite_weight": 183,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Grandmaster Ehrenwall",
       "target": "Crown",
       "cite_weight": 183,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -679,6 +576,13 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
+      "source": "Confessor Arne Himlensendt",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "source": "Conviction Track",
       "target": "Standing",
       "cite_weight": 149,
@@ -715,6 +619,13 @@
     },
     {
       "source": "Gerik Strand",
+      "target": "Standing",
+      "cite_weight": 149,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Grandmaster Ehrenwall",
       "target": "Standing",
       "cite_weight": 149,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -840,6 +751,13 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
+      "source": "Confessor Arne Himlensendt",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "source": "Conviction Track",
       "target": "Hafenmark",
       "cite_weight": 135,
@@ -876,6 +794,13 @@
     },
     {
       "source": "Gerik Strand",
+      "target": "Hafenmark",
+      "cite_weight": 135,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
+      "source": "Grandmaster Ehrenwall",
       "target": "Hafenmark",
       "cite_weight": 135,
       "source_doc": "systems/factions/faction_politics_v30.md",
@@ -994,6 +919,13 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
+      "source": "Confessor Arne Himlensendt",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "source": "Conviction Track",
       "target": "Church",
       "cite_weight": 133,
@@ -1036,6 +968,13 @@
       "target_doc": "systems/factions/faction_politics_v30.md"
     },
     {
+      "source": "Grandmaster Ehrenwall",
+      "target": "Church",
+      "cite_weight": 133,
+      "source_doc": "systems/factions/faction_politics_v30.md",
+      "target_doc": "systems/factions/faction_politics_v30.md"
+    },
+    {
       "source": "Guilds",
       "target": "Church",
       "cite_weight": 133,
@@ -1048,144 +987,88 @@
       "cite_weight": 133,
       "source_doc": "systems/factions/faction_politics_v30.md",
       "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Key: scene.witness",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Key: state.succession",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "L\u00f6wenritter",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Maret Uln",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "NPC Roster",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Peder Almstedt",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Prince Torben Almqvist",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "source": "Riskbreaker",
-      "target": "Church",
-      "cite_weight": 133,
-      "source_doc": "systems/factions/faction_politics_v30.md",
-      "target_doc": "systems/factions/faction_politics_v30.md"
     }
   ],
-  "notional_total": 14662,
+  "notional_total": 14491,
   "cascade_sinks": [
     {
-      "terminal": "Audit",
-      "chains": 792,
-      "doc": "audit/2026-05-17-v18-integration/integration_plan_v18.md"
-    },
-    {
-      "terminal": "Territories",
-      "chains": 747,
-      "doc": "systems/victory/victory_v30.md"
-    },
-    {
-      "terminal": "Key: mechanical.accounting",
-      "chains": 682,
-      "doc": "systems/factions/faction_layer_v30.md"
-    },
-    {
-      "terminal": "Threadwork",
-      "chains": 676,
-      "doc": "systems/threadwork/threadwork_v30.md"
-    },
-    {
       "terminal": "Knot",
-      "chains": 663,
+      "chains": 765,
       "doc": "systems/fieldwork/knots_v30.md"
     },
     {
-      "terminal": "Conviction",
-      "chains": 639,
-      "doc": "systems/npcs/npc_behavior_v30.md"
-    },
-    {
-      "terminal": "Mass Battle",
-      "chains": 612,
+      "terminal": "Audit",
+      "chains": 692,
       "doc": "systems/mass_battle/mass_battle_integration_v30.md"
     },
     {
-      "terminal": "Mass Combat",
-      "chains": 612,
-      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
-    },
-    {
-      "terminal": "Disposition",
-      "chains": 609,
-      "doc": "systems/fieldwork/fieldwork_v30.md"
-    },
-    {
-      "terminal": "Restoration Movement",
-      "chains": 601,
-      "doc": "systems/victory/victory_v30.md"
-    },
-    {
-      "terminal": "Church",
-      "chains": 597,
-      "doc": "systems/factions/faction_politics_v30.md"
-    },
-    {
-      "terminal": "Social Contest",
-      "chains": 592,
-      "doc": "systems/fieldwork/fieldwork_v30.md"
-    },
-    {
-      "terminal": "NPC Behavior",
-      "chains": 581,
-      "doc": "systems/npcs/character_canon_v30.md"
-    },
-    {
-      "terminal": "Stability",
-      "chains": 579,
+      "terminal": "Key: mechanical.accounting",
+      "chains": 674,
       "doc": "systems/factions/faction_layer_v30.md"
     },
     {
-      "terminal": "Altonia",
-      "chains": 576,
-      "doc": "canon/03_canonical_timeline.md"
+      "terminal": "Disposition",
+      "chains": 673,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Territories",
+      "chains": 665,
+      "doc": "systems/victory/victory_v30.md"
+    },
+    {
+      "terminal": "NPC Behavior",
+      "chains": 647,
+      "doc": "systems/npcs/character_canon_v30.md"
+    },
+    {
+      "terminal": "Social Contest",
+      "chains": 624,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Threadwork",
+      "chains": 620,
+      "doc": "systems/threadwork/threadwork_v30.md"
+    },
+    {
+      "terminal": "Mass Battle",
+      "chains": 588,
+      "doc": "systems/mass_battle/mass_battle_integration_v30.md"
+    },
+    {
+      "terminal": "Investigation",
+      "chains": 575,
+      "doc": "systems/fieldwork/fieldwork_v30.md"
+    },
+    {
+      "terminal": "Stability",
+      "chains": 569,
+      "doc": "systems/factions/faction_layer_v30.md"
+    },
+    {
+      "terminal": "CI",
+      "chains": 547,
+      "doc": "systems/factions/ci_political_v30.md"
+    },
+    {
+      "terminal": "Conviction",
+      "chains": 510,
+      "doc": "systems/npcs/npc_behavior_v30.md"
+    },
+    {
+      "terminal": "Fort Level",
+      "chains": 498,
+      "doc": "systems/settlements/settlement_layer_v30.md"
+    },
+    {
+      "terminal": "Restoration Movement",
+      "chains": 494,
+      "doc": "systems/victory/victory_v30.md"
     }
   ],
-  "cascade_sinks_total": 234,
-  "cascade_truncated_calls": 51459,
+  "cascade_sinks_total": 223,
+  "cascade_truncated_calls": 45076,
   "sparse_context": [
     {
       "token": "Active Inquisition",
@@ -1230,13 +1113,6 @@
       "doc": null
     },
     {
-      "token": "Key: scene_outcome.battle_concluded",
-      "paragraphs": 0,
-      "cite_deg": 0,
-      "status": "canonical",
-      "doc": null
-    },
-    {
       "token": "NPC Relational Graph",
       "paragraphs": 0,
       "cite_deg": 0,
@@ -1247,13 +1123,6 @@
       "token": "Scene Timer",
       "paragraphs": 0,
       "cite_deg": 6,
-      "status": "canonical",
-      "doc": null
-    },
-    {
-      "token": "Territorial Piety",
-      "paragraphs": 0,
-      "cite_deg": 0,
       "status": "canonical",
       "doc": null
     },
@@ -1298,16 +1167,31 @@
       "cite_deg": 12,
       "status": "canonical",
       "doc": "systems/world/solmund_voice_v30.md"
+    },
+    {
+      "token": "Personal Combat",
+      "paragraphs": 1,
+      "cite_deg": 25,
+      "status": "canonical",
+      "doc": "systems/articulation/articulation_layer_v30.md"
+    },
+    {
+      "token": "Armature System",
+      "paragraphs": 2,
+      "cite_deg": 15,
+      "status": "provisional",
+      "doc": "systems/factions/political_dynamics_keys_migration_v30.md"
+    },
+    {
+      "token": "Holonic Container Doctrine",
+      "paragraphs": 2,
+      "cite_deg": 20,
+      "status": "canonical",
+      "doc": "systems/_architecture/propagation_spec_v1.md"
     }
   ],
   "throughline_orphans": [],
   "vocab_debt": [
-    {
-      "term": "Coup Counter",
-      "total": 57,
-      "docs": 13,
-      "top_doc": "arcs/arc_expansion_v30.md"
-    },
     {
       "term": "Cultural Reformation",
       "total": 23,
@@ -1316,9 +1200,15 @@
     },
     {
       "term": "Game Master",
-      "total": 21,
-      "docs": 8,
-      "top_doc": "arcs/throughline_resolutions_v30.md"
+      "total": 17,
+      "docs": 6,
+      "top_doc": "systems/combat/combat_reference_v1.md"
+    },
+    {
+      "term": "Coup Counter",
+      "total": 13,
+      "docs": 9,
+      "top_doc": "systems/_architecture/conflict_architecture_proposal.md"
     }
   ]
 }
