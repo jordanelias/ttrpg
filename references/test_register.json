@@ -4683,6 +4683,85 @@
     }
    }
   },
+  "test_flow_skeletons.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The subsystem flow skeletons must be TRACED, not recalled.",
+   "helper_loc": 84,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "_read"
+    },
+    {
+     "loc": 14,
+     "name": "_roster"
+    },
+    {
+     "loc": 36,
+     "name": "_symbol_covers"
+    },
+    {
+     "loc": 31,
+     "name": "_anchor_failures"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 311,
+   "modules_under_test": [
+    "systems",
+    "systems/_architecture"
+   ],
+   "mutation_claimed": true,
+   "mutation_count": "8/8",
+   "test_count": 8,
+   "tests": {
+    "test_anchors_resolve": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_every_roster_subsystem_has_a_skeleton": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_format_spec_is_the_single_owner_of_the_roster": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "No second roster. If one appears, this points at it."
+    },
+    "test_no_unparseable_anchor_lookalikes": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every citation that LOOKS like an anchor must BE one the guard can check."
+    },
+    "test_required_sections_present_and_ordered": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": null
+    },
+    "test_roster_parses": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "If the roster parse breaks, every parameterized test below silently vanishes."
+    },
+    "test_skeletons_carry_anchors": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_suite_actually_checked_symbols": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "An assertion that never ran is not a passing assertion (CLAUDE.md \u00a70.1 point 2)."
+    }
+   }
+  },
   "test_forked_status.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10882,6 +10961,7 @@
     "test_reserve_commit.py"
    ],
    "_read": [
+    "test_flow_skeletons.py",
     "test_model_router_ids.py",
     "test_scope_vocabulary.py"
    ],
@@ -10946,16 +11026,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 144,
+  "files": 145,
   "files_citing_a_measurement": 14,
-  "files_claiming_mutation": 8,
-  "files_naming_a_module": 103,
-  "files_with_a_kill_count": 0,
+  "files_claiming_mutation": 9,
+  "files_naming_a_module": 104,
+  "files_with_a_kill_count": 1,
   "files_with_a_lane": 35,
-  "helper_defs": 263,
-  "helper_loc": 2340,
+  "helper_defs": 267,
+  "helper_loc": 2424,
   "ratchet_baselines": 9,
-  "tests": 1263,
+  "tests": 1271,
   "undocumented_files": 0
  }
 }

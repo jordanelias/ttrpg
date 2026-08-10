@@ -1505,6 +1505,35 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **[OPEN] ED-IN-0151 — subsystem flow skeletons exist for all 15 `systems/` folders (2026-08-10).**
+  `systems/<x>/<x>_flow_skeleton_v1.md`, format + roster single-owned by
+  `systems/_architecture/subsystem_flow_skeletons_v1.md`, guarded by
+  `tests/valoria/test_flow_skeletons.py`. Structure only — entry points, ordered flow, IN/OUT,
+  state, seams, traced gaps — built from **code**, not design prose. **Ratifies nothing:** no head
+  moved, no status flipped, no contract edited.
+  - **What they are for next.** The Godot port's conversion unit is one module contract
+    (`godot/godot_conversion_strategy_v1.md` Part IV.3) and its ritual wants a flatten artifact per
+    module; the 2026-06 flatten artifacts are scattered and stale. These are that category of
+    object, rebuilt uniformly and guarded against rot.
+  - **The gaps are the finding, and they are observations, not proposals.** Each subsystem's §7
+    carries evidenced absences (declared-but-unimplemented, stubbed, unreachable, default-off, or
+    code↔contract divergence). Several are corroborated by lanes that never saw each other — the
+    `world.clocks['Turmoil']` victory gate was found independently by the `victory` and `overview`
+    traces. **None of them is dispositioned here.** Deciding which are defects and which are
+    deliberate deferrals is per-lane design work, not IN's call.
+  - **Known guard blind spot, stated not implied:** the anchor check catches wrong file, wrong
+    function, wrong symbol and out-of-function drift, but NOT line drift *within* the named
+    definition. Measured, not assumed — see the test docstring.
+  - **FILED, not swept (§0.1 point 5).** Standing rule 5 was applied to *comparison thresholds*
+    (gate predicates) across the corpus. **Effect magnitudes** — Coherence/MS deltas, ±Ob
+    adjustments, deck sizes — were left in place. They are constants by the spec's own preamble
+    and arguably in scope, but sweeping them touches all 15 files for marginal gain and would
+    widen a task that was load-bearing only on the gates. One deliberate inconsistency, recorded
+    rather than hidden.
+  - Follow-up available if wanted: fold the §7 gap rows into a single cross-subsystem register so
+    the absences can be ranked in one place instead of fifteen. Not done — it is a judgment surface
+    and would need a lane owner.
+
 - **THE FORK IS BUILT AND RUNS (2026-08-03, ED-IN-0123, PR #286). Start here.**
   `python3 tools/build_fork.py --out <dir>` assembles it and **runs a seeded campaign inside it
   with the source repo off `sys.path`** — self-containment is a subprocess exit code, not a claim.
