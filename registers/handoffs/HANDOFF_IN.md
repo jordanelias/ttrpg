@@ -1523,6 +1523,22 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
     terminal; (d) the 9 missing scale-transition declarations.
   - `build_key_graph.py` now emits `family` per key (schema_version 1 → 2, additive) — parsed in the
     sole registry parser, because the dotted prefix is not the family (`scene.*` spans two).
+  - **Independently re-derived (same session), and every figure reproduced exactly.** A second
+    parser sharing no code with the generator — registry walked line-by-line with string methods
+    instead of regex, contracts re-reconciled from `yaml.safe_load`, A6/A8 recomputed from the rule
+    as authored, rendered docs re-checked by character-scanning rather than the committed test's
+    regex — returned identical figures throughout (55 types + identical family filing, 27 modules,
+    1/8/0, 42 edges split 41 `articulation_layer` + 1 `player_input`, 20 A6 across the same 9 pairs,
+    2 A8, 491 anchor links resolving, 55/55 + 27/27 coverage). The authority tally is the one number
+    where a naive independent count is *expected* to differ, and the difference was predicted before
+    running: 13 declared-and-existing sim modules + the 1 `mass_battle` declared-absent exception =
+    14 code / 5 prose / 8 none.
+  - ⚠ **NEW, unrelated to the above and NOT fixed here — needs a call.** `key_type_registry_v30.md`
+    §1 declares `type_id: <family.subtype>` as the first field of every entry; **0 of 55 entries
+    carry it**, the `###` heading holds the identity instead. The generator is right to key off the
+    heading, but §1 documents a field absent from the corpus it governs, so a validator written to
+    §1 matches nothing. Left alone deliberately: that file is Class A canonical and the fix (correct
+    §1, or add the field to 55 entries) is a ruling, not a cleanup.
 
 - **THE FORK IS BUILT AND RUNS (2026-08-03, ED-IN-0123, PR #286). Start here.**
   `python3 tools/build_fork.py --out <dir>` assembles it and **runs a seeded campaign inside it
