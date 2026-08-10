@@ -3475,6 +3475,63 @@
     }
    }
   },
+  "test_contract_index.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The review surface must describe the tree, and its links must land.",
+   "helper_loc": 9,
+   "helpers": [
+    {
+     "loc": 4,
+     "name": "_slug"
+    },
+    {
+     "loc": 5,
+     "name": "docs"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 130,
+   "modules_under_test": [
+    "engine",
+    "references",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_adjudicator_verdicts_are_imported_not_reimplemented": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "CLAUDE.md \u00a78: every rule lives once. The index must show the SAME violation count the"
+    },
+    "test_every_anchor_link_resolves": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE LOAD-BEARING CHECK. Four dead links shipped in the first draft; none was visible by"
+    },
+    "test_every_contract_module_and_key_type_is_rendered": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Coverage: the point of an index is that nothing is missing from it. A silently truncated"
+    },
+    "test_indexes_are_current": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The committed files must equal a fresh build \u2014 they are generated, so any drift means a"
+    },
+    "test_no_row_was_rendered_by_iterating_a_string": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`module_contracts.yaml` writes `from: 'engine'` (scalar) on two rows and `from: [a, b]`"
+    }
+   }
+  },
   "test_coverage_matrix_threshold.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10946,16 +11003,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 144,
+  "files": 145,
   "files_citing_a_measurement": 14,
   "files_claiming_mutation": 8,
-  "files_naming_a_module": 103,
+  "files_naming_a_module": 104,
   "files_with_a_kill_count": 0,
   "files_with_a_lane": 35,
-  "helper_defs": 263,
-  "helper_loc": 2340,
+  "helper_defs": 265,
+  "helper_loc": 2349,
   "ratchet_baselines": 9,
-  "tests": 1263,
+  "tests": 1268,
   "undocumented_files": 0
  }
 }

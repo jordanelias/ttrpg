@@ -136,6 +136,22 @@ def load_registry():
     """{key_type: {...}} from the markdown registry's fenced yaml blocks."""
     txt = open(REGISTRY, encoding='utf-8').read()
     out = {}
+    # The registry's `## §N Family: <name>` headers are the ONLY place the family grouping exists —
+    # the dotted prefix is not a substitute, because `scene.*` spans two families (scene_event §2
+    # and scene_outcome §7) by design. Captured here, in the sole registry parser, so a renderer
+    # never has to re-parse the markdown to group by family (CLAUDE.md §8: rules live once).
+    fam_at = [(m.start(), m.group(1).strip())
+              for m in re.finditer(r'^## §\d+ Family:\s*(.+?)\s*$', txt, re.M)]
+
+    def family_of(pos):
+        name = None
+        for start, fam in fam_at:
+            if start < pos:
+                name = fam
+            else:
+                break
+        return name
+
     for m in re.finditer(r'^### ([a-z_]+\.[a-z_]+)\s*\n+```yaml\n(.*?)```', txt, re.S | re.M):
         kt, body = m.group(1), m.group(2)
         try:
@@ -143,6 +159,7 @@ def load_registry():
         except yaml.YAMLError:
             continue
         out[kt] = {
+            'family': family_of(m.start()),
             'description': y.get('description'),
             'required': list(y.get('required_payload_fields') or []),
             'optional': list(y.get('optional_payload_fields') or []),
@@ -247,6 +264,9 @@ def build():
 
         keys[kt] = {
             'well_formed': bool(KEY_RE.match(kt)),
+            # nullable: a key the contracts reference but the registry never declares has no
+            # family, and inventing one from its prefix would be a guess wearing a fact's clothes.
+            'family': r.get('family'),
             'description': r.get('description'),
             'payload': {'required': r.get('required') or [], 'optional': r.get('optional') or []},
             'scale': r.get('scale'),
@@ -270,7 +290,9 @@ def build():
                        'systems/_architecture/key_type_registry_v30.md + '
                        'references/module_contracts.yaml. NEVER hand-edit: regenerate. '
                        'Conflicts are RECORDED, not resolved — see reconciliation.*_status.'),
-        'schema_version': 1,
+        # 2 (2026-08-10): every key row carries `family`, read from the registry's `## §N Family:`
+        # headers. Purely additive — no existing field changed meaning.
+        'schema_version': 2,
         'modules': dict(sorted(modules.items())),
         'keys': keys,
         'unresolved_references': sorted(unresolved_refs),
