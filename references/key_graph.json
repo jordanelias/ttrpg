@@ -7,6 +7,7 @@
     "fieldwork_knots"
    ],
    "description": null,
+   "family": null,
    "payload": {
     "optional": [],
     "required": []
@@ -37,6 +38,7 @@
     "piety_track"
    ],
    "description": "Action that contradicts faction Mission or institutional role.",
+   "family": "da_outcome",
    "payload": {
     "optional": [
      "mission_alignment",
@@ -88,6 +90,7 @@
     "piety_track"
    ],
    "description": "Covert action against ally or stated mission.",
+   "family": "da_outcome",
    "payload": {
     "optional": [
      "exposure_witnesses",
@@ -139,6 +142,7 @@
     "faction_state"
    ],
    "description": "Treaty, alliance formation, or formal accord.",
+   "family": "da_outcome",
    "payload": {
     "optional": [
      "witnesses",
@@ -187,6 +191,7 @@
     "settlement_economy"
    ],
    "description": "Direct economic action \u2014 taxation, market manipulation, sumptuary law, gift to populace.",
+   "family": "da_outcome",
    "payload": {
     "optional": [
      "mission_alignment",
@@ -236,6 +241,7 @@
     "npc_behavior"
    ],
    "description": "Visible administrative or sovereign-role action.",
+   "family": "da_outcome",
    "payload": {
     "optional": [
      "target_territory_id",
@@ -281,6 +287,7 @@
   "env.crisis": {
    "consumers": [],
    "description": "Acute peninsula-scale event (war, plague, succession crisis, schism).",
+   "family": "environmental",
    "payload": {
     "optional": [
      "duration",
@@ -326,6 +333,7 @@
     "settlement_layer"
    ],
    "description": "Localized environmental damage (fire, flood, earthquake, blight).",
+   "family": "environmental",
    "payload": {
     "optional": [
      "severity"
@@ -376,6 +384,7 @@
     "settlement_layer"
    ],
    "description": "Peninsula-scale Strain delta event.",
+   "family": "environmental",
    "payload": {
     "optional": [
      "symbolic_register",
@@ -425,6 +434,7 @@
     "settlement_economy"
    ],
    "description": "Settlement population shift (migration, mortality, birth surge).",
+   "family": "environmental",
    "payload": {
     "optional": [
      "destination_or_origin"
@@ -474,6 +484,7 @@
     "faction_state"
    ],
    "description": "Per-season Accounting completed; faction state recomputes.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "annual"
@@ -518,6 +529,7 @@
     "npc_behavior"
    ],
    "description": "Faction Cascade re-resolved (per PP-686 \u00a73.2).",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "leader_id_at_resolution"
@@ -563,6 +575,7 @@
   "mechanical.era_transition": {
    "consumers": [],
    "description": "World-state era boundary crossed \u2014 MS=0 Post-Calamity Era entry (victory_v30 \u00a75.1), MS restored to 20 within 10 seasons Post-Calamity Recovery (\u00a75.1), IP=100 Phased Occupation Era entry incl. the 3-phase escalation (\u00a75.2), all factions dissolved Anarchy Era entry (\u00a75.3). The MS<=5-sustained-10-seasons Second Calamity is registered SEPARATELY (mechanical.second_calamity, below) \u2014 victory_v30 \u00a75.1/\u00a75.3 both call it out by name as \"the only true campaign terminal\", a distinction this registry preserves rather than folding into the general transition type.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "occupation_phase"
@@ -600,6 +613,7 @@
     "npc_behavior"
    ],
    "description": "Faction Mission redefined (per PP-686 \u00a73.1).",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "public_announcement"
@@ -648,6 +662,7 @@
     "npc_behavior"
    ],
    "description": "NPC Project advanced one step (Procedure C). Doc-12 \u00a74.1.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "mood_modifier"
@@ -694,6 +709,7 @@
     "scene_timer"
    ],
    "description": "Scene boundary marker \u2014 fired when GameDirector pushes a scene container onto the zoom stack. Payload-only (no state mutation). Wall-clock timestamps are NEVER added to payload \u2014 the SceneTimer sidecar records wall-clock to `user://telemetry/<campaign_id>.jsonl` and joins by scene_id at analysis time. This separation preserves PP-687 \u00a76 V4 replay determinism.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "display_name"
@@ -750,6 +766,7 @@
     "scene_timer"
    ],
    "description": "Scene boundary marker \u2014 fired when GameDirector pops a scene container after `scene_completed` (or on engine cancel). Pairs with scene_entered via scene_id. Wall-clock excluded from payload (see scene_entered notes); SceneTimer sidecar computes elapsed_ms by joining records.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "scopes_invoked",
@@ -801,6 +818,7 @@
     "scene_timer"
    ],
    "description": "Scene-opportunity marker \u2014 fired when GameDirector resolves an opportunity abstractly (player declined to zoom in, or no container available). No scene_entered/exited pair is emitted; this is the sole record of the dispatch. Carries zero-elapsed sidecar telemetry to support opportunity-density analysis.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "source_action_type"
@@ -847,6 +865,7 @@
   "mechanical.season_change": {
    "consumers": [],
    "description": "Season boundary crossed.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "annual"
@@ -884,6 +903,7 @@
   "mechanical.second_calamity": {
    "consumers": [],
    "description": "MS <= 5 sustained for 10 seasons during the Post-Calamity Era \u2014 \"the only true campaign terminal\" (victory_v30 \u00a75.1, restated \u00a75.3). Kept distinct from mechanical.era_transition because every other era boundary is recoverable (\u00a75.1's own Recovery clause, \u00a75.3's quorum-restoration clause) while this one is not.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [],
     "required": [
@@ -914,6 +934,7 @@
   "mechanical.settlement_captured": {
    "consumers": [],
    "description": "Undefended settlement (Defense 0, no garrison) auto-captured on hostile military entry \u2014 no roll (settlement_layer_v30 \u00a75.2).",
+   "family": "mechanical_event",
    "payload": {
     "optional": [],
     "required": [
@@ -948,6 +969,7 @@
   "mechanical.theocracy_unification_declared": {
    "consumers": [],
    "description": "CI reaches 100 \u2014 Church publicly declares Papal Sovereignty and triggers the one-shot Mass Seizure on every territory with Church buildings (ci_political_v30 \u00a72.2). The SAME threshold is independently gated by territorial_piety's g_ci100 entry (module_contracts.yaml :288-292), which cites this identical section as its source \u2014 one event, registered once, closing both silent emitters named in ED-IN-0014 rather than duplicating a type per module.",
+   "family": "mechanical_event",
    "payload": {
     "optional": [
      "outcome"
@@ -986,6 +1008,7 @@
     "articulation_layer"
    ],
    "description": "Cross-faction cascade cluster forms or dissolves (sustained \u2265 4 seasons of |cosine similarity| > 0.40 between two factions' cascade_fidelity_history). A CANONICAL articulation trigger (articulation_layer_v30 \u00a73.1",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "regime_transition"
@@ -1026,6 +1049,7 @@
     "npc_behavior"
    ],
    "description": "Knot formed between two NPCs (per fieldwork_socializing \u00a75.6).",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "formation_scene_id"
@@ -1070,6 +1094,7 @@
     "piety_track"
    ],
    "description": "Knot rupture event (per ED-773 lifecycle).",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "composure_damage",
@@ -1114,6 +1139,7 @@
   "meta.legacy_event": {
    "consumers": [],
    "description": "Wrapper for legacy event channels during Phase B partial migration (per substrate spec \u00a77.2).",
+   "family": "system_meta",
    "payload": {
     "optional": [],
     "required": [
@@ -1148,6 +1174,7 @@
     "npc_behavior"
    ],
    "description": "Miraculous Event activated (per miraculous_event_v30.md).",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "peninsula_visibility"
@@ -1197,6 +1224,7 @@
     "piety_track"
    ],
    "description": "Thread operation completed.",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "subject_npcs",
@@ -1243,6 +1271,7 @@
     "articulation_layer"
    ],
    "description": "\u00a75.5 Accord Domain Echo \u2014 a resolved scene's downstream settlement-Order consequence (scale_transitions_v30.md \u00a75.5, degree-keyed governance/destabilisation/territorial_transfer/violence rows), applied to Settlement.order at the settlement where the scene occurred (AUD-SET-02, :215) and queued to Accounting Step 4c per \u00a75.5's own caption (:221). Distinct from scene.contest_resolved/scene.combat_resolved (the SAME scene resolution's \u00a75.2 Domain Echo Key, a disjoint faction-stat consequence) \u2014 one resolved scene may emit both, and this Key's causes[] cites that Key's id when it also fired (OI-28).",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "accord_delta"
@@ -1283,6 +1312,7 @@
     "piety_track"
    ],
    "description": "Mass battle ended.",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "duration_seasons",
@@ -1335,6 +1365,7 @@
     "npc_behavior"
    ],
    "description": "A combatant incapacitated by Health depletion (ED-1041 wound model). Witnessable; ripples up to factions and into NPC memory.",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "by_actor"
@@ -1378,6 +1409,7 @@
     "personal_combat"
    ],
    "description": "A landed blow within a fight; carries the wound as a write-protected `health` stat_delta on the defender target (F1 \u2014 the wound rides the substrate, never a direct write). StrikeModule emits; WoundModule consumes.",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "degree",
@@ -1420,6 +1452,7 @@
     "npc_behavior"
    ],
    "description": "Personal / skirmish combat concluded (F3 \u2014 the missing combat scene_outcome subtype; mirrors scene.contest_resolved on the combat path).",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "casualties",
@@ -1466,6 +1499,7 @@
     "personal_combat"
    ],
    "description": "A declared combat action (a strike) entering personal-combat resolution \u2014 the action-input subtype the CombatEngine's StrikeModule consumes (F3 \u2014 combat-path action vocabulary; 2-part family.subtype per registry convention).",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "commit",
@@ -1512,6 +1546,7 @@
     "npc_behavior"
    ],
    "description": "Social contest (Wager, debate) concluded.",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "persuasion_track_final",
@@ -1561,6 +1596,7 @@
     "piety_track"
    ],
    "description": "Per-scene exchange of speech; advances persuasion or relational state.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "rhetorical_style_used",
@@ -1619,6 +1655,7 @@
     "npc_behavior"
    ],
    "description": "Displacement / neglect perceived (Procedure displacement_neglect_observed) \u2014 an NPC registers being displaced or neglected in a relation.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "displaced_by",
@@ -1663,6 +1700,7 @@
     "npc_behavior"
    ],
    "description": "Domain Action drafted / submitted (pre-resolution); resolution later emits da_outcome.*.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "target_id"
@@ -1707,6 +1745,7 @@
     "npc_behavior"
    ],
    "description": "Material or symbolic transfer between actors.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "value",
@@ -1757,6 +1796,7 @@
     "npc_memory"
    ],
    "description": "Emitted by Procedure E \u00a76.3 when cumulative interaction drift > 0.5. Generates a propagatable gossip artifact reachable by inner-circle observers and (via propagation) third-parties. (PP-687 Phase B Stage 1 \u00a77.3)",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "propagation_observers"
@@ -1803,6 +1843,7 @@
     "piety_track"
    ],
    "description": "Public or private dishonor against an actor.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "severity",
@@ -1854,6 +1895,7 @@
     "npc_memory"
    ],
    "description": "Emitted by Procedure E (Off-Screen Interactions) for ambient inner-circle interactions and cross-faction Distant Contact. Carries pre-mutation drift values; state.opinion_revised emits separately if drift threshold crossed. (PP-687 Phase B Stage 1 \u00a77.2)",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "faction",
@@ -1901,6 +1943,7 @@
     "npc_behavior"
    ],
    "description": "Investigation, inquiry, or trial concluded.",
+   "family": "scene_outcome",
    "payload": {
     "optional": [
      "public",
@@ -1952,6 +1995,7 @@
     "npc_behavior"
    ],
    "description": "Thread operation performed (weave / cut / reinforce); per-scene threadwork act.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "target_thread",
@@ -1998,6 +2042,7 @@
     "piety_track"
    ],
    "description": "Coercive demand against an actor.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "implicit",
@@ -2051,6 +2096,7 @@
     "piety_track"
    ],
    "description": "NPC observes an event without participating directly.",
+   "family": "scene_event",
    "payload": {
     "optional": [
      "thread_event_subtype"
@@ -2099,6 +2145,7 @@
     "npc_behavior"
    ],
    "description": "Player Belief revision per fieldwork_socializing \u00a75.5 marker.",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "triggering_keys"
@@ -2145,6 +2192,7 @@
     "npc_memory"
    ],
    "description": "Emitted by Procedure B (Concern Generation and Resolution) when Concern resolves with subject_npc_id set. Carries resolution polarity and Belief-revision flag. (Belief revision itself emits state.belief_revised separately.) (PP-687 Phase B Stage 1 \u00a77.4)",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "belief_revision"
@@ -2189,6 +2237,7 @@
     "npc_behavior"
    ],
    "description": "Internal challenge to faction leadership.",
+   "family": "state_transition",
    "payload": {
     "optional": [
      "public",
@@ -2238,6 +2287,7 @@
     "social_contest"
    ],
    "description": "Emitted by Procedure D (Opinion Drift) when an Opinion's affect_axis changes by \u2265 0.5 or confidence value changes. Drives Articulation Tier 2 trigger evaluation. (PP-687 Phase B Stage 1 / political_dynamics_keys_migration_v30 \u00a77.1)",
+   "family": "system_meta",
    "payload": {
     "optional": [
      "driver_memory_refs"
@@ -2286,6 +2336,7 @@
     "npc_behavior"
    ],
    "description": "NPC Project completed (progress >= 10; Procedure C). Doc-12 \u00a74.3.",
+   "family": "state_transition",
    "payload": {
     "optional": [],
     "required": [
@@ -2331,6 +2382,7 @@
     "npc_behavior"
    ],
    "description": "NPC Project failed via stall (seasons_stalled >= 8; Procedure C). Doc-12 \u00a74.2.",
+   "family": "state_transition",
    "payload": {
     "optional": [],
     "required": [
@@ -2374,6 +2426,7 @@
     "npc_behavior"
    ],
    "description": "NPC takes a Conviction Scar.",
+   "family": "state_transition",
    "payload": {
     "optional": [
      "thread_event_subtype"
@@ -2419,6 +2472,7 @@
   "state.settlement_revolt": {
    "consumers": [],
    "description": "Settlement Order reaches 0 \u2014 local revolt; governor expelled unless a garrison is present (settlement_layer_v30 \u00a74.3 Settlement Events table, \"Order 0\" row; also \u00a71.3 \"Order 0 = local revolt\").",
+   "family": "state_transition",
    "payload": {
     "optional": [
      "controlling_faction_id"
@@ -2458,6 +2512,7 @@
     "npc_behavior"
    ],
    "description": "NPC Standing rank shifts (promotion, demotion).",
+   "family": "state_transition",
    "payload": {
     "optional": [
      "decided_by",
@@ -2510,6 +2565,7 @@
     "npc_behavior"
    ],
    "description": "Leader change in a faction.",
+   "family": "state_transition",
    "payload": {
     "optional": [
      "public_ceremony",
@@ -2772,7 +2828,7 @@
    "subsystem": "engine"
   }
  },
- "schema_version": 1,
+ "schema_version": 2,
  "unresolved_references": [
   "all",
   "all subscribing systems",
