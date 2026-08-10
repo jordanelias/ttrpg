@@ -4768,19 +4768,25 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 311,
+   "loc": 353,
    "modules_under_test": [
+    "references",
     "systems",
     "systems/_architecture"
    ],
    "mutation_claimed": true,
-   "mutation_count": "8/8",
-   "test_count": 8,
+   "mutation_count": "10/10",
+   "test_count": 9,
    "tests": {
     "test_anchors_resolve": {
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_contract_names_resolve_in_the_generated_index": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "A skeleton's `Contracts:` header must name real module contracts."
     },
     "test_every_roster_subsystem_has_a_skeleton": {
      "assertionless": false,
@@ -11092,7 +11098,7 @@
   "helper_defs": 269,
   "helper_loc": 2433,
   "ratchet_baselines": 9,
-  "tests": 1276,
+  "tests": 1277,
   "undocumented_files": 0
  }
 }

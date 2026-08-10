@@ -108,7 +108,7 @@ empty section says "traced, found nothing", which is information; deleting it sa
    scripting drift — record the general step and file the special case in §7.
 4. **Default-off flags are structure.** A branch that never executes at default settings is
    still flow; tag it `[branch]` and record the flag's default in §7.
-5. **Name the gate, not its value (RULED here 2026-08-10, ED-IN-0151).** Two reviewers split on
+5. **Name the gate, not its value (RULED here 2026-08-10, ED-IN-0152).** Two reviewers split on
    this, so it is settled once rather than per-file. A threshold's *existence* is structure — the
    branch is there because something is compared — and survives the number changing. The *value*
    does not, so by this file's own test it is out of scope. Write "the stamina-collapse gate" and
@@ -138,9 +138,22 @@ One row per subsystem folder under `systems/`. The guard reads this table.
 | `victory` | IN | `systems/victory/victory_flow_skeleton_v1.md` |
 | `world` | WR | `systems/world/world_flow_skeleton_v1.md` |
 
-Lane assignments follow `CLAUDE.md` §4's `ED-<LANE>-NNNN` taxonomy. `characters`, `overview`,
-`victory` and `ui` are doc homes that are **not yet formalized 1:1 subsystems** (`CLAUDE.md` §3)
-— their lane column is the nearest owning lane, not a claim that the lane exists for them.
+Lane assignments follow `CLAUDE.md` §4's `ED-<LANE>-NNNN` taxonomy. For the folders that are not
+yet formalized 1:1 subsystems, the lane column is the nearest owning lane, not a claim that the
+lane exists for them.
+
+**Which those are, measured rather than inherited (corrected 2026-08-10, ED-IN-0152).** Enumerating
+`CURRENT.md`'s head-row table and asking which rows name a doc inside each folder gives **four
+folders with no row of their own: `characters`, `ui`, `victory`, `world`.** An earlier draft of this
+note copied `CLAUDE.md` §3's list (`characters`/`overview`/`victory`) and added `ui`, which was wrong
+twice over: it **included `overview`**, which does have a row — *Clocks & tracks (cross-cutting)*,
+naming `systems/overview/clock_registry_v30.md` — and it **omitted `world`**, which has none, despite
+`systems/world/` holding live code that the season loop reaches every turn. `npcs` also has a row
+(*NPC behaviour*), so it is not on the list either.
+
+`CLAUDE.md` §3 still carries the older wording. The discrepancy is recorded here rather than fixed
+there, because `overview`'s row is titled for a cross-cutting concern rather than for the subsystem,
+so whether it "counts" is a governance call and not a fact this file may settle on its own.
 
 ## 4. What these are for
 
@@ -156,6 +169,7 @@ ratify nothing: no head moves, no status flips, no contract edits follow from au
 | Surface | Relationship |
 |---|---|
 | `references/module_contracts.yaml` | Declares the intended `consumes → resolver → emits` per module. A skeleton traces what the code does; §7 records where the two disagree. Neither edits the other. |
+| `references/CONTRACT_INDEX.md` + `KEY_INDEX.md` | **The declared view, generated** (`tools/build_contract_index.py`, ED-IN-0151) — always fresh, because it is rebuilt from the contracts, the key graph and the wiring manifest. These skeletons are **the as-built view, hand-traced**. **Precedence: on any question of what is *declared*, the generated index wins and a skeleton must not restate it; on any question of what the code *does at the traced commit*, the skeleton wins.** Where they disagree, that is usually not an error in either — a declared-but-unbuilt edge is the system's real state, and §7 is where that gap is recorded. A skeleton's `Contracts:` header names contracts the index defines; `test_contract_names_resolve_in_the_generated_index` enforces that the names resolve there, so the two cannot drift in the place they overlap. |
 | `godot/skeleton/` | GDScript illustration of one module (personal combat). Different artifact, different language, same word. These are `*_flow_skeleton_v1.md`; that one stays `godot/skeleton/`. |
 | The retired index+infill pair | Unrelated. `CLAUDE.md` §4 retired `*_index.md`/`*_infill.md` as a default; "skeleton" there meant a document-atomization half. Here it means structure-without-mechanics. |
 | `CURRENT.md` heads | Unchanged by these files. A skeleton is subordinate to its head on every question of design; on questions of what the code does, the code wins and the skeleton cites it. |

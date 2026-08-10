@@ -5,7 +5,7 @@
 > Skeleton: base logical flow only. No mechanics, no numbers, no prose infill.
 > Every claim carries a `path:line symbol` anchor. Guard: `tests/valoria/test_flow_skeletons.py`.
 
-**Subsystem:** `systems/mass_battle/` · **Lane:** `MB` · **Contracts:** `mass_battle` (`references/module_contracts.yaml`)
+**Subsystem:** `systems/mass_battle/` · **Lane:** `MB` · **Contracts:** `mass_battle`
 **Code roots traced:** `systems/mass_battle/sim/` (5 modules — TREE A, retired-but-live-seam) ·
 `tests/sim/mass_battle/` (28 modules — TREE B, canon per J2) · the calling chain through
 `systems/factions/sim/faction_action.py` and `engine/mc_v18.py` · the seam guard

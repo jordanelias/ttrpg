@@ -1524,6 +1524,29 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   - **Known guard blind spot, stated not implied:** the anchor check catches wrong file, wrong
     function, wrong symbol and out-of-function drift, but NOT line drift *within* the named
     definition. Measured, not assumed — see the test docstring.
+  - **SECOND PASS RUN 2026-08-10 — independent re-derivation, method-disjoint from the first.**
+    The skeletons were built by grep-driven code tracing. To test whether that method's blind
+    spots were *the artifact's* blind spots, a second pass re-derived the same subjects under an
+    inverted constraint: **no grep, no pattern matching, files read whole**, agents forbidden from
+    opening the skeletons, sourced from the declarative surfaces (`module_contracts.yaml`,
+    `mechanics_index.yaml`, `canonical_sources.yaml`, `CURRENT.md`) and the 2026-08-06 corpus
+    vector audit's structural graph, then diffed.
+    - **Result: ~168 claims independently rediscovered; 4 contradictions; 3 outright errors in the
+      shipped files, all corrected.** The errors were: threadwork §7 asserting state was "not
+      schema-migrated" when the migration landed 2026-05-19 (and contradicting its own §2);
+      settlements' `Contracts:` header listing Python modules rather than contract names; and
+      factions labelling the govern branch a "fallback" when it is unconditional.
+    - **Two of the second pass's own claims were WRONG and must not be re-propagated:**
+      `sigma_leverage`/`dice_engine` are NOT dead — they are imported by combat, social_contest
+      and five faction modules; the agent that called them orphans had a scope that excluded
+      combat. And overview IS present in the execution trace
+      (`by_contract["loop.s3"]["peninsular_strain"]`); the agent read `by_subsystem_path` only.
+      Recorded here because a plausible-sounding dead-module claim is exactly the kind of thing
+      that gets copied forward.
+    - **Method note worth keeping:** the two passes agreed on nearly everything *reachability*-
+      related and disagreed mainly where a claim rested on a **registry** rather than on code.
+      Grep tracing is strong on "what calls what" and weak on "what was declared and never
+      built"; reading the contracts whole is the opposite. Neither alone is sufficient.
   - **FILED, not swept (§0.1 point 5).** Standing rule 5 was applied to *comparison thresholds*
     (gate predicates) across the corpus. **Effect magnitudes** — Coherence/MS deltas, ±Ob
     adjustments, deck sizes — were left in place. They are constants by the spec's own preamble

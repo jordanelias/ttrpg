@@ -2,7 +2,7 @@
  "ambiguity_floor": 60,
  "counts": {
   "ambiguous": 30,
-  "located": 1356,
+  "located": 1357,
   "refused": 0,
   "terms": 1537
  },
@@ -1144,7 +1144,7 @@
     "systems/ui/valoria_ui_ux_v4.md": 6,
     "systems/ui/valoria_ui_ux_v4_1_max_audit.md": 16,
     "systems/ui/valoria_ui_ux_v4_2_workplan.md": 5,
-    "systems/victory/victory_flow_skeleton_v1.md": 1,
+    "systems/victory/victory_flow_skeleton_v1.md": 2,
     "systems/victory/victory_v30.md": 71,
     "systems/victory/victory_v30_index.md": 8,
     "systems/world/miraculous_event_v30.md": 5,
@@ -1557,7 +1557,7 @@
     "systems/factions/faction_state_authoring_v30.md": 6,
     "systems/factions/faction_succession_split_v30.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 9,
-    "systems/factions/factions_flow_skeleton_v1.md": 4,
+    "systems/factions/factions_flow_skeleton_v1.md": 5,
     "systems/factions/factions_personal_v30.md": 59,
     "systems/factions/factions_personal_v30_index.md": 2,
     "systems/factions/factions_personal_v30_infill.md": 17,
@@ -2378,7 +2378,7 @@
     "systems/factions/faction_state_authoring_v30.md": 16,
     "systems/factions/faction_succession_split_v30.md": 6,
     "systems/factions/faction_systems_overview_v30.md": 5,
-    "systems/factions/factions_flow_skeleton_v1.md": 3,
+    "systems/factions/factions_flow_skeleton_v1.md": 4,
     "systems/factions/factions_personal_v30.md": 22,
     "systems/factions/factions_personal_v30_index.md": 2,
     "systems/factions/factions_personal_v30_infill.md": 9,
@@ -4971,7 +4971,7 @@
   "IP": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 62,
+   "file_count": 63,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 2,
@@ -5028,6 +5028,7 @@
     "systems/ui/valoria_ui_ux_v4_1.md": 4,
     "systems/ui/valoria_ui_ux_v4_1_max_audit.md": 14,
     "systems/ui/valoria_ui_ux_v4_2_workplan.md": 2,
+    "systems/victory/victory_flow_skeleton_v1.md": 1,
     "systems/victory/victory_v30.md": 37,
     "systems/victory/victory_v30_index.md": 2,
     "systems/world/geography_v30.md": 3,
@@ -5920,7 +5921,7 @@
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/complete_systems_reference.md": 9,
     "systems/_architecture/early_game_ignition_analysis.md": 8,
-    "systems/characters/characters_flow_skeleton_v1.md": 3,
+    "systems/characters/characters_flow_skeleton_v1.md": 5,
     "systems/factions/baralta_crown_claim_v30.md": 8,
     "systems/factions/ci_political_v30.md": 1,
     "systems/factions/faction_layer_v30.md": 1,
@@ -6124,7 +6125,7 @@
     "systems/threadwork/threadwork_v30.md": 30,
     "systems/ui/valoria_ui_ux_v4.md": 28,
     "systems/ui/valoria_ui_ux_v4_2_workplan.md": 7,
-    "systems/victory/victory_flow_skeleton_v1.md": 4,
+    "systems/victory/victory_flow_skeleton_v1.md": 5,
     "systems/victory/victory_v30.md": 39,
     "systems/world/calamity_radiation_v30.md": 31,
     "systems/world/insurgency_pipeline_v30.md": 6,
@@ -6162,7 +6163,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 95,
+   "file_count": 96,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6254,6 +6255,7 @@
     "systems/ui/valoria_ui_ux_v4_1.md": 2,
     "systems/ui/valoria_ui_ux_v4_1_max_audit.md": 7,
     "systems/ui/valoria_ui_ux_v4_2_workplan.md": 3,
+    "systems/victory/victory_flow_skeleton_v1.md": 1,
     "systems/victory/victory_v30.md": 58,
     "systems/world/insurgency_pipeline_v30.md": 5,
     "systems/world/miraculous_event_v30.md": 2,
@@ -9140,7 +9142,7 @@
     "systems/settlements/settlement_generator_v1.md": 2,
     "systems/settlements/settlement_layer_v30.md": 10,
     "systems/settlements/valoria_political_hierarchy_v30.md": 2,
-    "systems/social_contest/social_contest_flow_skeleton_v1.md": 1,
+    "systems/social_contest/social_contest_flow_skeleton_v1.md": 3,
     "systems/social_contest/social_contest_v30.md": 31,
     "systems/ui/valoria_ui_ux_v4.md": 1,
     "systems/ui/valoria_ui_ux_v4_1.md": 6,
@@ -9909,7 +9911,7 @@
     "systems/overview/peninsular_strain_v30.md": 11,
     "systems/overview/peninsular_strain_v30_index.md": 4,
     "systems/settlements/generation_sourcebook_v1.md": 1,
-    "systems/victory/victory_flow_skeleton_v1.md": 9,
+    "systems/victory/victory_flow_skeleton_v1.md": 11,
     "systems/victory/victory_v30.md": 4,
     "systems/victory/victory_v30_index.md": 4,
     "systems/world/miraculous_event_v30.md": 1,
@@ -10358,7 +10360,7 @@
     "systems/ui/valoria_ui_ux_v4.md": 7,
     "systems/ui/valoria_ui_ux_v4_1.md": 6,
     "systems/ui/valoria_ui_ux_v4_1_max_audit.md": 1,
-    "systems/victory/victory_flow_skeleton_v1.md": 1,
+    "systems/victory/victory_flow_skeleton_v1.md": 2,
     "systems/victory/victory_v30.md": 22,
     "systems/victory/victory_v30_index.md": 20,
     "systems/victory/victory_v30_infill.md": 11
@@ -14172,7 +14174,7 @@
   "beliefs": {
    "ambiguous": false,
    "definition": "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass.",
-   "file_count": 14,
+   "file_count": 15,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
@@ -14186,6 +14188,7 @@
     "systems/fieldwork/investigation_systems_v30.md": 1,
     "systems/npcs/npc_roster_v30_infill.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 4,
+    "systems/threadwork/threadwork_flow_skeleton_v1.md": 1,
     "systems/threadwork/threadwork_v25_historical.md": 1,
     "systems/threadwork/threadwork_v30.md": 1,
     "systems/ui/valoria_ui_ux_v4.md": 2
@@ -14772,11 +14775,12 @@
      "purpose": "Loyalty Track interaction:** Elske Loyalty Track effects (campaign_architecture \u00a75.2 Diplomatic Repulsion, \u00a76.2 Path D Crown-Warden integration) operate independently of L\u00f6wenritter Autonomy stages."
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
+    "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
     "systems/_architecture/campaign_architecture_v30.md": 1
    },
    "sources": [
@@ -16486,7 +16490,7 @@
      "purpose": "[\u00a70 \u2014 AUDIT PATCHES APPLIED IN THIS DOCUMENT] Conflict resolved | Resolution :: FACTION_RESOLVER_PROPAGATION (ED-874, W3.3) | Remaining in-scope bare-stat faction checks migrated to the deterministic+stochastic resolver (params/factions/stats_1_7_scale.md \u00a7Domain Action Resolution): \u00a71.4 Accounting Stability (M = Stability \u2212 loss magnitude), \u00a71.5 Reconstitute (M = Influence \u2212 4), \u00a72.5 Resistance ("
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
@@ -16495,7 +16499,8 @@
     "systems/_architecture/key_echo_armature_v1.md": 5,
     "systems/_architecture/key_type_registry_v30.md": 7,
     "systems/factions/faction_layer_v30.md": 1,
-    "systems/factions/faction_systems_overview_v30.md": 2
+    "systems/factions/faction_systems_overview_v30.md": 2,
+    "systems/factions/factions_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
@@ -17166,7 +17171,7 @@
     "systems/combat/combat_engine_v1/engagement_psychology_recovered.md": 3,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 20,
     "systems/combat/combat_engine_v1/tradition_decomposition_v1.md": 7,
-    "systems/combat/combat_flow_skeleton_v1.md": 128,
+    "systems/combat/combat_flow_skeleton_v1.md": 133,
     "systems/combat/combat_reference_v1.md": 67,
     "systems/combat/scene_combat_design_v1.md": 5,
     "systems/factions/faction_behavior_v30.md": 1,
@@ -17934,7 +17939,7 @@
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/key_type_registry_v30.md": 1,
-    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 2
+    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 5
    },
    "sources": [
     "identifier_census"
@@ -18927,7 +18932,7 @@
    "legacy_count": 0,
    "locations": {
     "systems/characters/characters_flow_skeleton_v1.md": 3,
-    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 1
+    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 3
    },
    "sources": [
     "mechanics_index"
@@ -22869,7 +22874,7 @@
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
-    "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
+    "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/holonic_container_doctrine_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -24657,7 +24662,7 @@
      "purpose": "[\u00a77.3 Heresy Investigation Lifecycle (ED-772)] Condition | Effect | Rationale :: **Target's death** | Investigation closes. Postmortem Tribunal possible (per faction_politics \u00a72.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost \u22121 to file). | The proceeding's purpose (correction) becomes moot at target's death; Postmortem Tr"
     }
    },
-   "file_count": 13,
+   "file_count": 14,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
@@ -24671,6 +24676,7 @@
     "systems/factions/faction_canon_v30.md": 3,
     "systems/factions/faction_state_authoring_v30.md": 4,
     "systems/factions/faction_succession_split_v30.md": 1,
+    "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/npcs/npc_relational_graph_v30.md": 2,
     "systems/social_contest/social_contest_v30.md": 4
    },
@@ -24823,7 +24829,7 @@
      "purpose": "[\u00a714.1 \u00b7 The loop, mapped to module contracts (owner \u00b7 resolver \u00b7 Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN \u2192 OUT (registry vocabulary) | Compliance :: FA ripple (\u00a76.3) | `faction_state` | `deterministic_accounting` | via `settlement_layer`'s existing **Mandate derivation** \u2192 `faction_state` | **WIRED via Mandate** (the derivation is in the contrac"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
@@ -24831,7 +24837,8 @@
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/governance_ripple_substrate_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 1,
-    "systems/factions/factions_flow_skeleton_v1.md": 3,
+    "systems/factions/factions_flow_skeleton_v1.md": 11,
+    "systems/npcs/npcs_flow_skeleton_v1.md": 1,
     "systems/ui/ui_flow_skeleton_v1.md": 1
    },
    "sources": [
@@ -24841,6 +24848,7 @@
     "_architecture",
     "factions",
     "godot",
+    "npcs",
     "proposals",
     "ui"
    ],
@@ -25218,7 +25226,7 @@
     "systems/fieldwork/fieldwork_editorial.md": 1,
     "systems/fieldwork/fieldwork_exploration.md": 2,
     "systems/fieldwork/fieldwork_exposure.md": 6,
-    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 115,
+    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 121,
     "systems/fieldwork/fieldwork_godot.md": 12,
     "systems/fieldwork/fieldwork_hybrid_v30.md": 3,
     "systems/fieldwork/fieldwork_hybrid_v30_infill.md": 1,
@@ -26914,7 +26922,7 @@
   "govern": {
    "ambiguous": false,
    "definition": "GD-2 mandatory trigger: Accord <= 2 garrisoned territory.",
-   "file_count": 28,
+   "file_count": 29,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
@@ -26928,6 +26936,7 @@
     "systems/factions/faction_canon_v30.md": 1,
     "systems/factions/faction_politics_v30.md": 7,
     "systems/factions/faction_systems_overview_v30.md": 1,
+    "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/fieldwork/fieldwork_rationale.md": 1,
     "systems/npcs/npc_behavior_system_v1.md": 1,
     "systems/npcs/npc_behavior_v30.md": 1,
@@ -27877,7 +27886,7 @@
     "systems/settlements/goldenfurt_slice/npc_cast.md": 1,
     "systems/settlements/governance_play_redesign_v1.md": 1,
     "systems/settlements/settlement_layer_v30.md": 10,
-    "systems/settlements/settlements_flow_skeleton_v1.md": 12,
+    "systems/settlements/settlements_flow_skeleton_v1.md": 15,
     "systems/social_contest/social_contest_v30.md": 2,
     "systems/ui/valoria_ui_ux_supplement_derived_settlement.md": 2,
     "systems/victory/victory_v30.md": 11,
@@ -28236,7 +28245,7 @@
     "systems/settlements/lps_wiring_v1.md": 1,
     "systems/settlements/settlements_flow_skeleton_v1.md": 8,
     "systems/world/insurgency_pipeline_v30.md": 5,
-    "systems/world/world_flow_skeleton_v1.md": 48
+    "systems/world/world_flow_skeleton_v1.md": 50
    },
    "sources": [
     "mechanics_index"
@@ -29419,11 +29428,11 @@
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/characters/characters_flow_skeleton_v1.md": 10,
     "systems/factions/faction_systems_overview_v30.md": 1,
-    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 65,
+    "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 71,
     "systems/fieldwork/knots_v30.md": 9,
     "systems/social_contest/social_contest_v30.md": 5,
     "systems/social_contest/social_contest_v30_infill.md": 1,
-    "systems/threadwork/threadwork_flow_skeleton_v1.md": 11,
+    "systems/threadwork/threadwork_flow_skeleton_v1.md": 12,
     "systems/threadwork/threadwork_v30_infill.md": 1,
     "systems/ui/valoria_ui_ux_v4.md": 1
    },
@@ -30439,7 +30448,7 @@
    "locations": {
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 2,
-    "systems/factions/factions_flow_skeleton_v1.md": 5,
+    "systems/factions/factions_flow_skeleton_v1.md": 6,
     "systems/overview/overview_flow_skeleton_v1.md": 8,
     "systems/settlements/settlements_flow_skeleton_v1.md": 11,
     "systems/world/world_flow_skeleton_v1.md": 6
@@ -31111,7 +31120,7 @@
     "systems/factions/faction_behavior_v30.md": 2,
     "systems/factions/faction_canon_v30.md": 2,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 3,
-    "systems/world/world_flow_skeleton_v1.md": 11
+    "systems/world/world_flow_skeleton_v1.md": 13
    },
    "sources": [
     "mechanics_index"
@@ -31485,7 +31494,7 @@
    "legacy_count": 0,
    "locations": {
     "systems/factions/faction_systems_overview_v30.md": 1,
-    "systems/overview/overview_flow_skeleton_v1.md": 10,
+    "systems/overview/overview_flow_skeleton_v1.md": 13,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 7
    },
    "sources": [
@@ -31536,7 +31545,7 @@
   "muster": {
    "ambiguous": false,
    "definition": "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory.",
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
@@ -31547,6 +31556,7 @@
     "systems/factions/faction_layer_v30.md": 4,
     "systems/factions/faction_politics_v30.md": 2,
     "systems/factions/faction_systems_overview_v30.md": 1,
+    "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/mass_battle/mass_battle_v30.md": 3,
     "systems/mass_battle/military_layer_v30.md": 4
    },
@@ -32216,7 +32226,7 @@
    "file_count": 1,
    "legacy_count": 0,
    "locations": {
-    "systems/npcs/npcs_flow_skeleton_v1.md": 2
+    "systems/npcs/npcs_flow_skeleton_v1.md": 4
    },
    "sources": [
     "mechanics_index"
@@ -32385,7 +32395,7 @@
     "systems/factions/baralta_crown_claim_v30.md": 1,
     "systems/factions/faction_canon_v30.md": 7,
     "systems/factions/faction_politics_v30.md": 4,
-    "systems/factions/factions_flow_skeleton_v1.md": 1,
+    "systems/factions/factions_flow_skeleton_v1.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1,
     "systems/fieldwork/fieldwork_v30.md": 3,
     "systems/fieldwork/knots_v30.md": 3,
@@ -32394,7 +32404,7 @@
     "systems/npcs/npc_behavior_system_v1.md": 1,
     "systems/npcs/npc_behavior_v30.md": 2,
     "systems/npcs/npc_relational_graph_v30.md": 4,
-    "systems/npcs/npcs_flow_skeleton_v1.md": 7,
+    "systems/npcs/npcs_flow_skeleton_v1.md": 12,
     "systems/overview/ms_budget.md": 1,
     "systems/overview/wc_survival_spine.md": 2,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 1,
@@ -32814,7 +32824,7 @@
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
     "systems/overview/overview_flow_skeleton_v1.md": 4,
-    "systems/world/world_flow_skeleton_v1.md": 47
+    "systems/world/world_flow_skeleton_v1.md": 49
    },
    "sources": [
     "mechanics_index"
@@ -34008,7 +34018,7 @@
     "systems/factions/faction_systems_overview_v30.md": 2,
     "systems/factions/parliamentary_transfer_v30.md": 2,
     "systems/overview/overview_flow_skeleton_v1.md": 4,
-    "systems/social_contest/social_contest_flow_skeleton_v1.md": 10
+    "systems/social_contest/social_contest_flow_skeleton_v1.md": 9
    },
    "sources": [
     "mechanics_index"
@@ -34305,7 +34315,7 @@
     }
    },
    "definition": "GD-1 sole victory condition. all 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6.",
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 3,
@@ -34313,6 +34323,7 @@
     "systems/factions/faction_canon_v30.md": 2,
     "systems/factions/faction_state_authoring_v30.md": 2,
     "systems/factions/faction_systems_overview_v30.md": 1,
+    "systems/victory/victory_flow_skeleton_v1.md": 1,
     "systems/world/insurgency_pipeline_v30.md": 1
    },
    "sources": [
@@ -34323,6 +34334,7 @@
     "canon",
     "engine",
     "factions",
+    "victory",
     "world"
    ],
    "term": "peninsular_sovereignty"
@@ -34407,7 +34419,7 @@
     "systems/factions/faction_layer_v30.md": 2,
     "systems/factions/faction_succession_split_v30.md": 1,
     "systems/mass_battle/mass_battle_v30.md": 5,
-    "systems/overview/overview_flow_skeleton_v1.md": 2,
+    "systems/overview/overview_flow_skeleton_v1.md": 5,
     "systems/overview/peninsular_strain_v30.md": 2,
     "systems/overview/wc_survival_spine.md": 1,
     "systems/settlements/generation_sourcebook_v1.md": 1,
@@ -34480,7 +34492,7 @@
      "purpose": "A territory's temperament can drift toward `outcomes-only` under sustained `env.peninsular_strain_shock` Keys (\u00a73.4.2)."
     }
    },
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "proposals/grounded_event_card_deck_v1.md": 1,
@@ -34492,6 +34504,7 @@
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
     "systems/articulation/articulation_layer_v30.md": 2,
     "systems/factions/faction_behavior_v30.md": 3,
+    "systems/overview/overview_flow_skeleton_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 3
    },
    "sources": [
@@ -34501,6 +34514,7 @@
     "_architecture",
     "articulation",
     "factions",
+    "overview",
     "proposals",
     "settlements"
    ],
@@ -34999,7 +35013,7 @@
      "purpose": "[2.2 Top-down (strategic/environmental \u2192 settlement/personal)] Emitter family | Keys | targets[] population spec (the \u00a712.3 obligation, now per-row) | finding_basis :: `domain_actions` \u2192 npc_behavior, piety_track, settlement_economy\u2020 | `da.*` (5 types) | Every da.* Key names the affected settlement(s) and every present/affected named NPC with role (subject/witness/bystander) + per-target impact_ve"
     }
    },
-   "file_count": 6,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
@@ -35007,7 +35021,9 @@
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 1,
     "systems/_architecture/scale_transitions_v30.md": 1,
-    "systems/characters/characters_flow_skeleton_v1.md": 2
+    "systems/characters/characters_flow_skeleton_v1.md": 2,
+    "systems/factions/factions_flow_skeleton_v1.md": 1,
+    "systems/npcs/npcs_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
@@ -35015,7 +35031,9 @@
    "subsystems": [
     "_architecture",
     "characters",
+    "factions",
     "godot",
+    "npcs",
     "proposals"
    ],
    "term": "piety_track"
@@ -35496,17 +35514,19 @@
      "purpose": "[\u00a73 Key Type Registry] Family | Subtypes (initial) :: **environmental** | env.peninsular_strain_shock, env.crisis, env.disaster, env.population_change"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/key_substrate_v30.md": 1,
-    "systems/_architecture/key_type_registry_v30.md": 1
+    "systems/_architecture/key_type_registry_v30.md": 1,
+    "systems/overview/overview_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "overview"
    ],
    "term": "population_change"
   },
@@ -40021,7 +40041,7 @@
     }
    },
    "definition": "Placeholder registered 2026-07-07 (ED-IN-0023, C-INJ-3): scenario_authoring had no mechanics_index entry despite carrying a module_contracts.yaml contract. Authoring-vs-runtime RATIFIED (fork 11, ED-IN-0011): compile is authoring-time; its output packs seed runtime.",
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
@@ -40029,6 +40049,7 @@
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/_architecture/propagation_spec_v1.md": 1,
     "systems/_architecture/scale_transitions_v30.md": 1,
+    "systems/overview/overview_flow_skeleton_v1.md": 1,
     "systems/settlements/generation_sourcebook_v1.md": 1
    },
    "sources": [
@@ -40038,6 +40059,7 @@
    "subsystems": [
     "_architecture",
     "godot",
+    "overview",
     "settlements"
    ],
    "term": "scenario_authoring"
@@ -40849,10 +40871,11 @@
      "purpose": "critic required (a single-scale `mechanical.season_change` never fires it)."
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -41322,7 +41345,7 @@
    "locations": {
     "systems/_architecture/governance_consolidation_v1.md": 2,
     "systems/factions/factions_flow_skeleton_v1.md": 1,
-    "systems/settlements/settlements_flow_skeleton_v1.md": 7
+    "systems/settlements/settlements_flow_skeleton_v1.md": 8
    },
    "sources": [
     "identifier_census"
@@ -41758,7 +41781,7 @@
      "purpose": "[2.2 Top-down (strategic/environmental \u2192 settlement/personal)] Emitter family | Keys | targets[] population spec (the \u00a712.3 obligation, now per-row) | finding_basis :: `domain_actions` \u2192 npc_behavior, piety_track, settlement_economy\u2020 | `da.*` (5 types) | Every da.* Key names the affected settlement(s) and every present/affected named NPC with role (subject/witness/bystander) + per-target impact_ve"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
@@ -41766,7 +41789,8 @@
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/_architecture/propagation_spec_v1.md": 3,
-    "systems/_architecture/scale_transitions_v30.md": 2
+    "systems/_architecture/scale_transitions_v30.md": 2,
+    "systems/settlements/settlements_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
@@ -41774,7 +41798,8 @@
    "subsystems": [
     "_architecture",
     "godot",
-    "proposals"
+    "proposals",
+    "settlements"
    ],
    "term": "settlement_economy"
   },
@@ -41918,7 +41943,7 @@
      "purpose": "Authoritative sources: fieldwork_v30 \u00a73.3, settlement_layer_v30 \u00a74.1, scale_transitions_v30 \u00a74, geography_v30."
     }
    },
-   "file_count": 32,
+   "file_count": 33,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
@@ -41947,6 +41972,7 @@
     "systems/settlements/march_layer_v30.md": 4,
     "systems/settlements/settlement_adjacency_v30.md": 4,
     "systems/settlements/settlement_layer_v30.md": 1,
+    "systems/settlements/settlements_flow_skeleton_v1.md": 3,
     "systems/settlements/valoria_political_hierarchy_v30.md": 5,
     "systems/ui/valoria_ui_ux_v4.md": 1,
     "systems/ui/valoria_ui_ux_v4_1.md": 3,
@@ -42872,7 +42898,7 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 31,
+   "file_count": 32,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
@@ -42888,7 +42914,7 @@
     "systems/characters/characters_flow_skeleton_v1.md": 12,
     "systems/factions/faction_politics_v30.md": 2,
     "systems/factions/faction_systems_overview_v30.md": 8,
-    "systems/factions/factions_flow_skeleton_v1.md": 5,
+    "systems/factions/factions_flow_skeleton_v1.md": 6,
     "systems/factions/parliamentary_transfer_v30.md": 2,
     "systems/fieldwork/fieldwork_v30.md": 3,
     "systems/fieldwork/knots_v30.md": 5,
@@ -42896,11 +42922,12 @@
     "systems/npcs/companion_specification_v30.md": 1,
     "systems/npcs/npc_behavior_v30.md": 3,
     "systems/npcs/npc_relational_graph_v30.md": 1,
+    "systems/npcs/npcs_flow_skeleton_v1.md": 1,
     "systems/overview/ms_budget.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 4,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 1,
     "systems/settlements/goldenfurt_slice/verification_findings.md": 1,
-    "systems/social_contest/social_contest_flow_skeleton_v1.md": 141,
+    "systems/social_contest/social_contest_flow_skeleton_v1.md": 157,
     "systems/social_contest/social_contest_v30.md": 1,
     "systems/ui/valoria_ui_ux_v4.md": 4,
     "systems/ui/valoria_ui_ux_v4_1.md": 3,
@@ -46641,7 +46668,7 @@
    "file_count": 1,
    "legacy_count": 0,
    "locations": {
-    "systems/threadwork/threadwork_flow_skeleton_v1.md": 4
+    "systems/threadwork/threadwork_flow_skeleton_v1.md": 7
    },
    "sources": [
     "mechanics_index"
@@ -48475,13 +48502,17 @@
   "victory_check_service": {
    "ambiguous": false,
    "definition": "GD-1 enforcement boundary. Sole module producing game-end faction-victory triggers.",
-   "file_count": 0,
+   "file_count": 1,
    "legacy_count": 0,
-   "locations": {},
+   "locations": {
+    "systems/victory/victory_flow_skeleton_v1.md": 1
+   },
    "sources": [
     "mechanics_index"
    ],
-   "subsystems": [],
+   "subsystems": [
+    "victory"
+   ],
    "term": "victory_check_service"
   },
   "victory_condition_met": {
