@@ -1505,6 +1505,40 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **[OPEN — BLOCKED ON JORDAN] Canonical nomenclature plan written (2026-08-11).**
+  `proposals/canonical_nomenclature_v1.md` — plan only, **no ED allocated, nothing renamed, nothing
+  ratified**. It executes the "Dotted-namespace nomenclature" item held under ED-IN-0152 below,
+  now with the axis question answered by Jordan's own worked examples (`npc.almud_almqvist`,
+  `settlement.piety_track`, `world.invasion_pressure`).
+  - **The headline is that this is an ADOPTION problem, not a rename problem.** The dotted
+    namespace already exists in `names_index.yaml` (113 keys). Measured: of the 51 non-proper-noun
+    keys, **16 appear nowhere outside the generated registries, 32 only in tooling/tests, and 3 in
+    engine code or a design doc** — and one of those three (`substrate.key`) is most of the real
+    adoption. So the scope is "plug in a layer nobody wired", not "rewrite 10k references".
+  - **Three namespace axes are live and mutually contradictory**: kind (`clock.ip`, `set.legitimacy`
+    — `names_index`), event-domain (`scene.*`/`state.*` — the 56 Key types), owner/scale (Jordan's
+    examples). Recommendation: **owner/scale governs entities + owned state, event-domain is kept
+    unchanged for Keys, kind is retired.** Keys are the control group that proves the thesis
+    (median 24 hits vs contract names' median 131) — §0.1 point 5 says do not sweep what works.
+  - **Four rulings are Jordan's and the plan deliberately does not pre-empt them:** (a) `piety_track`'s
+    owner — Jordan's example says `settlement.`, `module_contracts.yaml:253` files it under
+    `characters`, and `conviction_track_v30.md:31` calls it per-**territory**; the three disagree
+    independently of this proposal; (b) whether Key types take a `key.` prefix (recommend: no);
+    (c) contract names — full rename vs citation-form-only (recommend: citation-form only);
+    (d) freeing `world.` from its 62 proper nouns so `world.invasion_pressure` can exist.
+  - ⚠ **BLOCKER FOUND WHILE PLANNING, not yet fixed — `tools/valoria_rename.py` covers almost
+    nothing.** Its `SCOPE_DIRS = ('designs', 'params', 'references', 'canon')`: `designs/` was
+    retired 2026-07-19 (ED-IN-0071 P4/P5) and `params/` evacuated 2026-08-05 (ED-IN-0145), so two
+    of its four roots no longer exist — and `iter_files()` does `if not os.path.isdir(d): continue`,
+    so they vanish with **no error and no warning**. `systems/`/`engine/` were never added and
+    `.py`/`.json` are not in `EXTS`. Measured coverage: **67 files in scope, 270 live design-corpus
+    files missed, 261 `.py` missed, 41 `.json` missed.** The repo's designated "change once"
+    executor would silently rewrite a fraction of the corpus and report success. Same defect class
+    as the gates-reporting-clean-over-nothing trio (ED-IN-0147/0148) and the `build_glossary`
+    silent-coverage defects (ED-IN-0150): a reader quietly covering a fraction of its source, correct
+    when written, broken by a tree move. **Fix + guard is a Phase-1 prerequisite; no phase can be
+    trusted until a test fails on an absent configured root.**
+
 - **[OPEN] ED-IN-0152 — subsystem flow skeletons exist for all 15 `systems/` folders (2026-08-10).**
   `systems/<x>/<x>_flow_skeleton_v1.md`, format + roster single-owned by
   `systems/_architecture/subsystem_flow_skeletons_v1.md`, guarded by

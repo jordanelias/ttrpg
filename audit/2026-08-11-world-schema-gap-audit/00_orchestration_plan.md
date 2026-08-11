@@ -103,7 +103,15 @@ prefix cannot read each other's cache.
 ## 5. Scope stops
 
 - **The run edits nothing.** Its return value is the deliverable.
-- **No renames.** The dotted-namespace nomenclature proposal is HELD for Jordan (ED-IN-0152).
+- **No renames.** The dotted-namespace nomenclature proposal was HELD for Jordan (ED-IN-0152) when
+  this run was designed, and the constraint bound every lane. ⚠ **Updated at merge, 2026-08-11:**
+  `main` has since landed `proposals/canonical_nomenclature_v1.md` (PR #301) — a **plan, PROPOSED
+  only, ratifying nothing and renaming nothing**. The constraint therefore still holds exactly as
+  stated, but the question is no longer only a held line item: read that proposal alongside this
+  unit. Its headline is directly load-bearing on §5 of the gap register — the dotted namespace
+  *already exists* in `names_index.yaml` (113 keys) and was never wired in, making this an
+  **adoption** problem rather than a rename problem. It also independently reaches this audit's
+  finding that Keys are the control group that works.
 - **No scale-vocabulary unification.** Four vocabularies are unreconciled and HELD at ED-IN-0103
   fork 1. Lanes *record* the seam where they hit it; they do not resolve it.
 - **No key type may actually be appended.** `key_type_registry_v30.md` §10 (RATIFIED 2026-07-07,

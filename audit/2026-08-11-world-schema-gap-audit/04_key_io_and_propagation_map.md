@@ -397,7 +397,17 @@ contracts.
 not 'provincial': the substrate's canonical roster is
 `("personal","settlement","territory","peninsula")`."*
 
-**Unification is HELD at ED-IN-0103 §6 fork 1**, whose text bars any change "here or anywhere else."
+⚠ **Merge note, 2026-08-11.** `main` landed `proposals/canonical_nomenclature_v1.md` (PR #301) after
+this map was written. It is a **plan, PROPOSED only** — nothing renamed, no ED allocated — so nothing
+here changes. Two of its findings corroborate this map from an independent direction: that **Keys are
+the control group that already satisfies a greppable-namespace rule** (median 24 corpus hits against
+contract names' median 131), and that the dotted namespace *already exists* and was never wired in.
+This map's §7 observation 1 — that the transport is largely sound and the endpoints are not — is the
+same conclusion reached through the naming axis rather than the propagation axis.
+
+**Vocabulary unification is HELD at ED-IN-0103 §6 fork 1**, whose text bars *vocabulary unification*
+"here or anywhere else" (`module_contracts.yaml:20-21`, which also calls itself "a coordination
+pointer, not a change" — narrower than "any change", as adversarial review noted)."
 This map contributes measurements and proposes nothing. But the practical consequence should be
 explicit: **a key emitted at a scale the substrate does not know is rejected at runtime** —
 `keys.py:415-418` raises `KeyValidationError`, it does not warn, so the vocabulary split is not cosmetic — it is a hard constraint on which of §5's
