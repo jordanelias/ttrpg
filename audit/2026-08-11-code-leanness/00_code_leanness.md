@@ -464,92 +464,18 @@ blinder** by advancing the max date. Registering an audit is the act that hides 
 
 ---
 
-## 4. The merged plan
+## 4. The plan
 
-**One plan, replacing both.** Three tracks. Steps within a track are ordered; **G** and **S** may run
-concurrently in different lanes. Every step names the mechanism at risk, because "without sacrificing
-mechanisms" is the binding constraint.
+**The plan of record is the companion document: [`01_plan.md`](01_plan.md).** It was chunked out of
+this file so it can grow without evidence here being cut to fit a cap (Jordan, 2026-08-11).
 
-**Governing rule (from §3.2):** collapse to one owner **only where the copies agree today**. Where
-they disagree, a ruling comes first and the merge is a behaviour change.
+It reconciles this session's two audits, PR #304's remediation plan, and the centralization directive
+(§8–§9) into three ordered tracks — **G** gates and tooling, **S** engine/systems correctness,
+**T** instruments — each step naming its dependencies and the mechanism at risk, plus the items held
+for Jordan.
 
-**Governing discipline (CLAUDE.md §8, already ruled):** every migration of a blocking gate ships with
-its own expected-delta test. This is why the plan is ~20 small changes, not one refactor.
-
-### Track G — gates and tooling (IN lane)
-
-| # | step | depends on | mechanism at risk |
-|---|---|---|---|
-| **G1** | Excise `compliance_check.py`'s dead branch (`_lazy_import`, `check_all`, the interactive path); update `test_compliance_on_exceed_vocabulary.py:98-99` in the same commit | — | None — the live `--check-only` mode is inline |
-| **G2** | **Dead-scope sweep as ONE pattern** (§1.6): retire `ci_co_file_checker` Rule 4, fix the three siblings, delete the `designs/` policy row, retire `atomizer`/`doc_index_gen`/`index_gen` to `deprecated/tools/` | G1 | Rule 4's co-change pressure — #304 argues three code-to-artifact gates now carry it. **The 37 `*_index.md` files are grandfathered (2026-07-26 ruling) — HELD, do not delete with the generator** |
-| **G3** | Move the two always-exit-0 gates to `validators-report`; flip their registry `ci_job` rows **in the same commit**; prune the `valoria_hooks.py` ghosts (§1.10) | — | Split the commit and `broken_dependency_checker` reds |
-| **G4** | Make `pathres` the owner: migrate the **four** parsers it names (§2.3); add #304's two-tier walk exclusions; fix the TREES roster 17 to 19 | — | `broken_dependency_checker`'s inclusion of `deprecated/` is **correct** — live ledger entries cite the ED archives, the anti-fabrication universe. The two-tier design preserves it deliberately |
-| **G5** | **#304's C4 meta-guard** — a vitality check that every blocking validator's scope still matches something | G1, G2, G4 | None. If its first run reds on `review_core.py`, that is a finding |
-| **G6** | Size caps, one sequence: adopt the policy cap and delete the stale duplicate block (`atomization_rules.yaml:231-232`), **then** merge the two gates | G2 | **The `.jsonl` caps and the local-tier coverage** (§1.8). The merged gate must carry both or coverage regresses |
-| **G7** | The mechanical one-owner migrations — `REPO`, YAML load, `LANES`, `tokens()`, `ID_RE`, ledger read — each with an expected-delta test asserting **delta = none**; gates last | — | Any behaviour change here is a bug, not a delta |
-| **G8** | **`STATUS_RE` to one owner.** The only intended behaviour change in Track G. Its test must name all 7 disputed docs **and assert both directions** (§1.3a) | G7 | A one-sided test lets the incompleteness census silently shrink |
-| **G9** | Glob the syntax job **and** exclude that job from `invoked_by()` **in one commit**, with a test that a known-dead tool still reports orphaned | — | **Shipping the halves separately zeroes the orphan census** (§2.2; measured: basename-in-workflow goes 46/108 to 108/108) |
-| **G10** | Repoint the provenance citations — **all 354 across 12 paths**, not just `params/core.md` — at `engine/engine_params/params_tables.yaml`; add a test that no live `.py` cites an evacuated path | after S1 (avoid double-touching lines #304's B1 rewrites) | None; the capture is byte-faithful |
-| **G11** | Fix the 3 broken-anchor probes; wire `validate_ed_citations` locally; drop `systems/combat/sim` from `export_sim_params`'s `SCAN_DIRS` and regenerate (**unblocked**, §3.5); finish the `ci_names_consistency` migration | — | **Do not delete the deprecated resolver** — it is still the campaign default. Only its *export* presence goes |
-
-### Track S — engine/systems correctness (#304's plan, adjudicated; FA/PC/MB/WR lanes)
-
-Run in #304's own order (conventions and units before vocabularies): **A1** (pin the unpinned canon
-ladder — precondition for everything), then **B1, B2, B3**, then **B7, B8**, then **B9**, **B10**,
-**A2**, **A3, A4**, **A6**, **A8**, **A9**, **B5, B6**, **B11**.
-
-Three adjudications applied:
-
-- **B4 moves out of P0.** #304's sequencing table lists it as behaviour-preserving; its own body says
-  "BLOCKED ON B0", and B0 is HELD. It goes behind the ruling.
-- **The `altonian_reinforcements` conversion item is STRUCK** (§3.3). It is an accepted cross-session
-  handoff with a passing guard; converting it is MB plan §12 I1's call, not this plan's.
-- **Two items are added that neither plan had:** bind and guard the 4x faction-roster literal (§3.5),
-  and disposition the forked degree ladder in `skills/valoria-dice-model/valoria_dice.py:45`.
-
-### Track T — instruments
-
-| # | step | depends on |
-|---|---|---|
-| **T1** | Land #304's **C6** fix (atlas probe under `tmp_path`; the no-test-writes-into-`systems/` guard) | — |
-| **T2** | Promote the Class-A batteries into `tests/valoria/` as `xfail(strict)` citing an ED, marked slow | **T1 — mandatory.** They were written as free-standing scripts; promoting them into a `-n auto` suite without C6's guard reproduces the exact race C6 documents (6/6 repro on clean main) |
-| **T3** | Promote Class B to a standing `tools/mechanism_census.py` — one owner over `flag_ablation` + `harness` + `interaction` + `reachability_sweep` | T2 |
-| **T4** | **Run it.** Its output is an explicit input to the HELD rulings below | T3 |
-| **T5** | One `conftest.py` path helper for the 32+7 bootstrap blocks; finish the `tests/valoria` same-fact analysis **via `test_register.json`**, not by hand | — |
-| **T6** | Teach `dead_primitive_census.py` to exclude `stub_resolve` bodies (#304 8b); pair with G9's `invoked_by` fix — **same defect class, ship as one pattern fix** (§2.2) | G9 |
-| **T7** | Pin or retire the forked resolution core (§1.13); coordinate with A3/A9 — same constant family | — |
-| **T8** | Resume the `systems`/`engine` uncalled tracing **with string-path grepping** (§2.1) | T4 |
-
-### Held for Jordan
-
-#304's six (**#0** which `net`/`ob` convention is canonical — *blocks #1 and #2*; **#1** the
-`faction_action` band shift and its `s == ob` dead zone; **#1b** the strategic layer resolving on
-**d6 >= 4** rather than the canonical d10 engine; **#2** one owner for degree bands; **#7**
-`standing`'s bounds; **#8** the 10 dead `infrastructure.py` constants), plus **the 37 grandfathered
-`*_index.md` files** and **the `sim_harness` promote-or-retire call** (28 files).
-
-**Recommendation: run T4 before ruling #1, #1b, #2 and #8.** The mechanism census prices exactly those
-questions — how often the dead `s == ob` band actually fires in seeded campaigns, whether the 10
-constants are behaviourally dead.
-
-**On #7 specifically:** the leanness instinct — reuse the existing `contest.primitives.Standing` — is
-**correctly refuted** by #304's B11: rebasing silently adds +5 to two dice pools and imports a
-venue-local shape across scales. Its dedicated mutator is the mechanism-preserving answer. Keep that
-reasoning; it is the clearest worked example of the mission's binding constraint.
-
-### What this is worth
-
-**Not a large file-count reduction.** Track G removes ~3 files; Track T *adds* an owner; the honest
-ceiling is the `sim_harness` cluster plus whatever tracing confirms.
-
-**It is a large edit-surface reduction** — the number of files you must touch to change one rule goes
-53 to 1, 44 to 1, 8 to 1, 6 to 1, 5 to 1; adding a tenth lane goes from 8 edits to 1.
-
-**And it closes four live defect classes**: seven documents whose status two tools cannot see; 354
-constants citing an evacuated authority; dead scope in six blocking gates; and two dead-code censuses
-that are both wrong in opposite directions.
-
----
+**Everything below in this document is evidence.** §5 lists the falsifier command for each finding;
+§6 what remains unmeasured; §8–§9 the directive and what it targets.
 
 ## 5. Falsifiers
 
@@ -631,7 +557,7 @@ defect. The signal is `roll_net` (combat + engine.autoload + social_contest), `r
 
 Same value; one carries a canonical citation (to an evacuated path — §1.4), the other carries none.
 **Neither #304's fingerprinting nor my token census found this**; it needs the name-collision lens.
-Because the values agree, this is a **clean single-owner candidate** under §4's governing rule —
+Because the values agree, this is a **clean single-owner candidate** under the plan's governing rule (`01_plan.md`) —
 a cleanup, not a behaviour change. Add it to plan step **G7**.
 
 ### 7.3 `degree` is a name collision with different signatures — #304's finding, reached independently
@@ -681,3 +607,221 @@ action list** — shared vocabulary is evidence of coupling, not proof of a call
 It reads the **declared surface**, not behaviour. A term can collide by coincidence; a real call can
 use no shared vocabulary at all. For behavioural deadness the instrument remains `harness.py`
 (§1.11), which is strictly better and still unrun — plan step **T4**.
+
+---
+
+## 8. The centralization directive — and what it targets
+
+**Ruled by Jordan, 2026-08-11**, in three statements taken together as one directive:
+
+> "Callables should be defined ONCE in centralized locations if appearing across multiple subsystems,
+> or as a dictionary within the subsystem if it only appears in the subsystem."
+>
+> "We want to centralize as much information as possible through injectable code, dictionaries,
+> glossaries, masters, etc such that we can maximize code uniformity and prevent duplication."
+>
+> "The less code we have overall, the better. The fewer definitions we have overall, the better. The
+> leaner our codebase, the better. We achieve this through centralizing and
+> injecting/pointing/calling as much as possible."
+
+This **supersedes the plan's original governing rule**, which said to collapse only where copies agree and
+to leave the rest — including treating #304's `A7 LEAVE list` as permanent. It is not permanent.
+
+### 8.1 The target, measured: 200 definitions → 20
+
+Every row is a measurement already made in this document or in #304, not an estimate.
+
+| primitive | now | after | removed | copies | scope |
+|---|---:|---:|---:|---|---|
+| repo-root / path anchoring | 53 | 1 | **52** | agree | tools |
+| YAML register load | 44 | 1 | **43** | agree | tools |
+| rng "no rng supplied" fallback | 16 | 1 | 15 | **disagree** | engine+systems |
+| degree ladder (producers) | 16 | 1 | 15 | **disagree** | engine+systems |
+| editorial-ledger read | 8 | 1 | 7 | agree | tools |
+| 9-lane roster | 8 | 1 | 7 | agree | tools |
+| `id_reservations` read | 8 | 1 | 7 | agree | tools |
+| TN-7 dice constants | 7 | 1 | 6 | agree | engine+systems |
+| token estimation | 6 | 1 | 5 | agree | tools |
+| PP/ED id regex | 6 | 1 | 5 | agree | tools |
+| `## Status:` regex | 5 | 1 | 4 | **disagree** | tools |
+| `restructure_ledger` parser | 4 | 1 | 3 | agree | tools |
+| faction-roster literal | 4 | 1 | 3 | agree | engine+systems |
+| `roll_net` | 3 | 1 | 2 | **disagree** | engine+systems |
+| `TN_STANDARD`, `CONVICTIONS`, `CI_CEILING`, `WEAPONS`, `TRADITIONS`, `roll_pool` | 12 | 6 | 6 | mixed | systems |
+| **TOTAL** | **200** | **20** | **180** | | |
+
+**140 of the 180 are mechanical** — the copies agree today, so the expected delta is *none* and any
+behaviour change is a bug. **40 need a ruling first.** That split is the plan's sequencing, not a
+reason to stop at 140.
+
+### 8.2 Disagreement does not block centralization — it blocks *implicit* centralization
+
+This is the one place the directive and the mission's other half ("without sacrificing mechanisms")
+have to be reconciled precisely, because the naive reading of each contradicts the other.
+
+#304's finding is that one rule — "what degree of success is this?" — has **16 producers** and **four
+incompatible meanings of the parameter named `net`** (raw successes / Ob pre-subtracted / opposed
+margin / the opponent's roll), *all typed `(int, int) -> str`*. Nothing distinguishes them, so a
+refactor that "obviously" swaps one for another compiles, runs, and silently changes outcomes.
+
+**The resolution is not to leave sixteen copies.** It is:
+
+1. **Rule which convention is canonical** — #304's held item **#0**. Under this directive that item is
+   promoted from "held, blocks two items" to **the gating decision for the largest single
+   centralization in the plan.**
+2. **One owner** implementing the canonical convention.
+3. **The surviving variants become explicit adapters over it** — named for what they mean
+   (`degree_from_opposed_margin`, `degree_from_pre_subtracted`), not four look-alike functions. A
+   caller then cannot pick the wrong one silently, because the wrong one is no longer spelled the
+   same as the right one.
+
+That is strictly leaner than today (one implementation instead of sixteen), strictly more uniform,
+**and** strictly safer, because the difference moves from invisible to named. #304's `A7 LEAVE list`
+is therefore **deferred pending #0**, not exempt.
+
+**The one genuine exception stays an exception.** #304's B11: rebasing `standing` onto the existing
+`contest.primitives.Standing` silently adds +5 to two dice pools and imports a venue-local shape
+across scales. That is not centralizing a definition; it is *merging two different quantities that
+share a name*. Centralization applies to one concept with many definitions, never to two concepts
+with one name. **Its dedicated mutator is correct and stays.**
+
+### 8.3 The three shapes the directive names
+
+- **Injectable code** — `ci_common` re-exporting `obs_core`'s canonical primitives as the single
+  import surface for `tools/` (plan G7). Not a fourth library: the abstractions already exist and
+  reach 8–9% adoption (§1.1); the work is adoption, not authorship.
+- **Dictionaries** — the directive's rule for subsystem-local repetition. `WEAPONS`/`TRADITIONS`
+  already have canonical registries with hardcoded literal twins in `workbench/balance.py` (§7.1);
+  the fix is the registry, not a second list. Same shape for `CONVICTIONS` and the faction roster.
+- **Glossaries / masters** — the repo already generates `references/glossary/`,
+  `CONTRACT_INDEX.md`, `KEY_INDEX.md`, `ENGINE_ATLAS.md` and `test_register.json` as freshness-gated
+  masters. The directive extends that discipline from *documentation* into *code*: a master the code
+  reads, not only one a reader reads.
+
+### 8.4 Revised plan ordering
+
+The tracks in `01_plan.md` stand; the directive changes their **priority and their terminus**.
+
+| | change |
+|---|---|
+| **G7** (mechanical one-owner migrations) | **Promoted to the head of Track G.** It is 140 of the 180 definitions, every one with expected delta = none. Nothing gates it |
+| **G8** (`STATUS_RE`) | Unchanged in substance — still the one Track-G behaviour change, still needs the two-sided test (§1.3a) |
+| **NEW G12** | Centralize the `engine`/`systems` constants whose copies agree: TN-7 family, `TN_STANDARD`, the faction roster, `CONVICTIONS`. Mechanical, delta = none. **Do not touch `m1_dice_sigma_core.py`** — frozen parity oracle |
+| **NEW G13** | Replace the `WEAPONS`/`TRADITIONS` literals in `workbench/balance.py` with reads of the canonical registries |
+| **S / #0** | **Elevated.** The `net`/`ob` convention ruling now gates the degree family (16→1), `roll_net` (3→1) and `roll_pool` (2→1) — 18 of the 40 ruling-gated definitions |
+| **NEW S-rng** | One owner for the "no rng supplied" fallback (16→1). **Ruling needed first**: `dice_engine`'s fallback is not seed-reproducible and `massbattle`'s is (§3.5), so this is a *semantic* choice, not a merge |
+| **A7 LEAVE list** | Reclassified from "must survive verbatim" to **"deferred pending #0"** |
+
+**What the directive does not change:** every migration of a blocking gate still ships its own
+expected-delta test (CLAUDE.md §8, already ruled), and §8.2's exception still holds. Leanness is the
+goal; the expected-delta test is how it is reached without sacrificing a mechanism.
+
+---
+
+## 9. The content layer — formulae, mechanics, values, names
+
+The directive extends to **the content of the code**: formulae, mechanics, values/scores/attributes,
+and names. Measured over `engine/` + `systems/` (127 modules, 33,021 LOC):
+
+### 9.1 The constant surface has effectively no live provenance
+
+| | count | share |
+|---|---:|---:|
+| module-level constants | **498** | 100% |
+| carrying a `[canonical: …]` / `params/` citation | 81 | **16%** |
+| carrying no provenance comment at all | **417** | **83%** |
+
+And the 16% that *do* cite are the §1.4 finding: **every cited `params/…` path is absent from the
+tree.** So the live provenance of the constant layer is **zero** — 83% never had it, and the
+remainder points at an evacuated authority.
+
+### 9.2 The masters already exist. The code does not read them.
+
+| store | size | modules under `engine/`+`systems/` that read it |
+|---|---:|---:|
+| `engine/engine_params/params_tables.yaml` | 669 KB | **0** |
+| `engine/engine_params/sim_params.json` | 118 KB | **0** |
+| `engine/engine_params/value_pointer_links.json` | 40 KB | **0** |
+| `engine/engine_params/combat_engine_v1.json` | 7.7 KB | 1 |
+| `engine/engine_params/key_types.json` | 50 KB | 2 |
+
+`params_tables.yaml` is a **byte-faithful capture of all 43 param files** (ED-IN-0139). `sim_params`
+and `combat_engine_v1.json` are typed exports round-trip-checked in CI. `value_pointer_links.json`
+was generated **for exactly this purpose** — its header: *"values↔pointers by LITERAL token match"*,
+107 links. **Four of the five have no reader in the executable model.**
+
+**This is the decisive argument for the directive, and the evacuation proved it.** On 2026-08-05 the
+entire `engine/params/` tree — the cited authority for every constant in the engine — was removed,
+and **nothing broke**. Not one test, not one gate. Because nothing was *reading* it: the values are
+hardcoded and the authority is named in a comment. **A provenance comment is not a pointer; it is a
+promise nobody checks.** The 354 dangling citations are the receipt.
+
+### 9.3 What centralizing the content layer means, concretely
+
+Not "move the numbers to YAML" — that already happened, twice, and changed nothing. It means
+**making the code read the master it already cites**:
+
+1. **Values** — a constant's definition becomes a lookup against `params_tables.yaml` /
+   `sim_params.json`, so the master is load-bearing and drift is impossible by construction rather
+   than by comment. The round-trip discipline already proven by `export_engine_params.py` and
+   `export_key_types.py` (both `--check`-gated in CI) is the template: those two are the only stores
+   with readers, and they are the only ones that cannot rot.
+2. **Formulae and mechanics** — one owner per rule, variants as explicit named adapters (§8.2). The
+   degree family is the worked example: 16 producers, four incompatible `net` meanings, gated on #0.
+3. **Names** — the registries exist (`names_index.yaml`, `descriptor_registry.yaml`,
+   `proper_noun_registry.yaml`, the generated glossary) and are enforced for *prose* by
+   `ci_naming_check`. The gap is that in-code rosters — `CONVICTIONS` (2 definitions), the faction
+   roster (4), `WEAPONS`/`TRADITIONS` (registry + hardcoded twin) — are not bound to them.
+4. **Attributes/scores** — `MULTS`, `STARTING_STATS`, `ACCORD_MAP`, `PT_MAP`, `VICTORY_THRESHOLD`
+   and their neighbours in `game_state.py` are uncited dictionaries defining the game's opening
+   state. They are the highest-value uncited block in the tree.
+
+### 9.4 The falsifier for the whole programme
+
+**A centralization that leaves the master unread is not centralization.** The test for every step in
+§8.4, §9.3 and `01_plan.md` is the one the evacuation accidentally ran: *delete the master and see whether anything
+fails.* If nothing fails, the code is still hardcoded and the master is still decorative.
+
+`export_engine_params.py --check` and `export_key_types.py --check` already pass that test today.
+Nothing else in the content layer does.
+
+### 9.5 Sequencing, and one caution
+
+The 140 mechanical definitions (§8.1) do not depend on any of this and should land first (plan step G7). The content
+layer is larger, is mostly uncited, and touches game behaviour — so its order is: **bind what is
+already captured** (values with a byte-faithful master and a `--check`), **then** the ruling-gated
+formulae, **then** the rosters.
+
+**Caution, from §8.2's exception:** binding a constant to a master is safe only where the master's
+value and the code's value already agree. Where they differ, the difference is a finding — possibly a
+retune that never made it back — and must be ruled, not silently resolved in either direction. The
+byte-faithful capture makes that check mechanical: **compare before binding.**
+
+### 9.6 Namespaced identifiers are the addressing scheme this requires
+
+`proposals/canonical_nomenclature_v1.md` (#301, **PROPOSED**) specifies subsystem-scoped identifiers —
+`npc.almud_almqvist`, `scene.accord_echo`. **That proposal and this directive are one programme.**
+Centralization needs a way to *point*, and a namespaced identifier is the pointer: it names the owning
+subsystem, so a value can be looked up in a master instead of copied, and two subsystems cannot claim
+the same bare name without the collision being visible.
+
+Three measurements already in this document say the scheme is needed and barely adopted:
+
+- **Only 37 distinct dotted `a.b` keys** exist across all 127 `engine/`+`systems/` modules (§7's
+  extraction), against **498** module-level constants and **1,234** distinct quoted keys. Almost
+  nothing is namespaced today.
+- **Every §7.1 definition collision is a bare-name collision** — `CONVICTIONS`, `TN_STANDARD`,
+  `CI_CEILING`, `WEAPONS`, `degree`, `roll_net`. Under the scheme they would be
+  `characters.convictions` vs `world.convictions`, and the duplication would be *nameable* at the
+  point of definition rather than discoverable only by a census like this one.
+- **`ENGINE_ATLAS.md`'s ambiguity census counts bare occurrences of every contract name** — the signal
+  #301 exists to remove, and the same coupling that makes every prose-adding PR regenerate the atlas
+  (sweep §6.1).
+
+**Sequencing consequence.** §9.3's step 1 (make the code read the master) and #301 are mutually
+reinforcing but independently landable: binding to `params_tables.yaml` works with today's bare names,
+and renaming to `npc.*` works whether or not the read is bound. **Do not gate either on the other.**
+The one ordering that matters: **rename before binding a given value**, so the pointer written into
+the code is the canonical one and is not rewritten twice.
+
+⚠ #301 is PROPOSED and unratified — this section records the tie, and rules nothing.

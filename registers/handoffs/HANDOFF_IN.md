@@ -2483,7 +2483,7 @@ cites the m2–r10 stations — moving a cited instrument turns `ci_claim_proven
 
 **[OPEN] ED-IN-0159 — FULL REWRITE after PR #304 (2026-08-11).** Both audit documents rewritten so
 each states its findings once, in final form, and **one merged 3-track plan** (in
-`00_code_leanness.md` §4) now replaces this audit's earlier plan, the consolidation sweep's ranking,
+`audit/2026-08-11-code-leanness/01_plan.md`) now replaces this audit's earlier plan, the sweep's ranking,
 **and** #304's 887-line remediation plan. Adjudicated by a second Fable-5 read-only pass; every
 load-bearing claim re-verified with Bash.
 
@@ -2522,3 +2522,17 @@ load-bearing claim re-verified with Bash.
 strategic layer's d6>=4, #2, #7 `standing` bounds, #8), plus the 37 grandfathered `*_index.md` files
 and the `sim_harness` call. **Run plan T4 (the mechanism census) before ruling #1/#1b/#2/#8** — it
 prices exactly those questions.
+
+**[OPEN] ED-IN-0159 — the plan is chunked, and the audit cap is 30k (Jordan, 2026-08-11).**
+*"Chunk the plan instead of cutting content from plan. Threshold can be 30k for these."*
+
+- **`audit/2026-08-11-code-leanness/01_plan.md`** is now the **plan of record** — three ordered
+  tracks reconciling this session's two audits, #304's 887-line remediation plan, and the
+  centralization directive. `00_code_leanness.md` keeps the evidence and points at it.
+- **`references/atomization_rules.yaml` gains one row**: `audit/**/*.md` → `max_tokens: 30000`,
+  placed above the `**/*.md` catch-all because `_match_rule` is first-match. **Single owner** —
+  deliberately *not* a second cap in `ci_register_size_check`'s `THRESHOLDS`, which already carries
+  three rows single-sourced from this file because they kept drifting (ED-IN-0097), and where the
+  two gates still disagree on the register cap (15,000 vs 10,000 — §1.8, plan step G6).
+- Verified: both documents match the new rule (30,000), `CURRENT.md` and the other non-audit files
+  still match the 15,000 catch-all — the change is scoped, not global.
