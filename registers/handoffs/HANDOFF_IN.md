@@ -2086,3 +2086,113 @@ shape for generated reference tables (`engine/engine_params/params_tables.yaml` 
 "split at ~15k into sequential parts" rule. Not split, deliberately: a master index you must first
 guess the part of is not an index. If Jordan wants them split, the natural cut is alphabetical
 ranges in the generator, not hand-editing the output.
+
+- **[OPEN] ED-IN-0153 — world-schema gap register: 50 rows, 13 needing a Jordan ruling (2026-08-11).**
+  `audit/2026-08-11-world-schema-gap-audit/` — a three-axis agonist→antagonist interrogation of the
+  ratified entity ladder, 19 domain lenses, and the individuation/authoring surface against the Key
+  type registry and the module contracts. 17 agents, 0 errors, `stop_reason: completed`, 61 disputes
+  recorded and 0 left unadjudicated. **Ratifies nothing:** no head moved, no status flipped, no
+  contract or registry edited.
+  - **The verdict is that the schema cannot express the ratified ladder, and it breaks at two seams.**
+    Vertically: `scale_hierarchy_v1` is ratified at Country > Duchy > Province > Territory > Settlement
+    while the substrate enum is four values with no national/duchy/country member, `provincial` appears
+    in 0 of 55 key entries, and the B12 Territory tier collapses back into the same 17 T-codes it was
+    meant to sit beneath. Horizontally, hardest at the faction rung: **no key type announces a faction
+    coming into or going out of existence at any tier**, found by four lanes across all three passes.
+  - **On individuation the answer is worse and simpler:** the schema mostly cannot distinguish two
+    instances of anything it does carry. Every per-province authoring field the geography file supplies
+    has zero code readers; `institutional_culture` — the one scalar meant to individuate faction
+    behaviour — is read by no Python and authors the same value for three of six factions; and the
+    genuinely faction-unique behaviours are dispatched by `faction.name` string equality while a
+    capability map that would do it as data sits unread in `mechanics_index.yaml`.
+  - **8 of the register's proposals are structurally ungovernable today** (G-17): §10 forbids appending
+    any key type without `references/rendering_dispositions.yaml`, which does not exist. Whoever picks
+    this up should expect to author that file first, or get a ruling that waives it.
+  - **Read `02_verdict_and_residuals.md` before acting on any row.** Three producer claims were
+    overturned; **two proposals would have caused damage if executed** and are flagged rather than
+    silently dropped — notably a templar-siting fix resting on a false "T9 is highest of all 17" claim
+    (T15 is higher, verified by full census).
+  - **Both standing holds were honoured, not routed around:** the scale-vocabulary conflict is recorded
+    as *additional evidence* for ED-IN-0103 fork 1, and no rename was proposed (ED-IN-0152).
+
+- **[OPEN] ED-IN-0154 — `hRediscover` zeroes the corroboration signal it exists to compute (2026-08-11).**
+  Found by ED-IN-0153 **in that run's own instrument**: 75 findings → 75 groups, every `rediscovery`
+  value 1. `hSameFinding` gates on first-cited-file equality *before* comparing content words, so two
+  lanes describing one gap through different citations never group. The owner's own comment predicts
+  this failure for the exact key and the remedy inherited it. **Not fixed** — `tools/wf_harness.js` is
+  copied into every workflow script and needs an expected-delta test, not a drop-in edit. **The guard
+  is the deliverable:** a fixture of two paraphrases citing different files must group to 2, or the
+  pattern recurs invisibly. Note the existing suite is green and mutation-verified and did not catch
+  this, because it pins that `signal()` never throws — not that grouping groups.
+
+- **[OPEN] ED-IN-0155 — the Key bus's own emit-coverage figure is stale prose in a guard file (2026-08-11).**
+  `tests/valoria/test_key_graph.py:4` states *"MEASURED 2026-08-02: 55 key types declared, 1 emitted
+  anywhere in the codebase"*. **No assertion in that file tests it** — its assertions cover
+  producer/consumer presence, the `KNOWN_NO_PRODUCER`/`KNOWN_NO_CONSUMER` ratchet, name well-formedness
+  and graph size. And it has drifted: measured this session, **4 real `sched.emit()` call sites emit
+  5 distinct type_ids** — `scene.accord_echo`, `scene.contest_resolved`, `scene.combat_resolved`
+  (all three via OF-7 `apply=`, all three write state) plus `da.public_governance` and
+  `scene.battle_concluded` (deliberately log-only, byte-exact goldens). Live coverage is **5/55**, not
+  1/55. Reachability was confirmed by caller tracing, not assumed.
+  - The defect class is the corpus's most familiar one, occurring **inside a guard file**: a dated
+    measurement in prose, rotting independently of its subject, with nothing that fails when it drifts.
+  - **Filed rather than silently corrected** because the ED-IN-0153 audit repeated the stale figure
+    before measuring it. The adjacent *"16 direct Python imports"* and *"47 dotted key names"* figures
+    in the same docstring were **not** re-measured — do not cite them without measuring.
+  - **The guard is the deliverable, not the edited sentence.** A test must COMPUTE live emit coverage
+    and fail when it changes without the recorded figure changing with it — composing on the
+    `KNOWN_NO_*` ratchet already in that file. ⚠ Caution for whoever writes it: a naive grep for
+    `apply=` over the four emit lines returns **4, not 2**, because two of the comments contain the
+    literal string `NO apply=`. I made that exact mistake this session and caught it on re-read.
+  - Map of the whole bus — declared topology, live emit ledger, subscriber wall, 12 broken
+    throughlines, and where the 8 proposed keys attach:
+    `audit/2026-08-11-world-schema-gap-audit/04_key_io_and_propagation_map.md`.
+  - **ADVERSARIAL PASS ON THE WRITE-UPS (2026-08-11), and it changed them.** Two read-only
+    `valoria-critic` agents attacked `03_discussion.md` and `04_key_io_and_propagation_map.md` for
+    fidelity and accuracy. **Twelve claims were overturned or materially softened, and every one is
+    corrected in place with a ⚠ marker rather than quietly dropped** — the pattern of *how* a synthesis
+    drifts from its own sources is a finding in its own right (`03` §6.1). The ones worth knowing:
+    - **`04` §2.3 was backwards.** It said 5 of the 8 consumerless keys are declare-only registrations
+      "where the emit exists". **DECLARE-ONLY means the emit does not exist** — the registry says so
+      verbatim (`key_type_registry_v30.md:1251`, *"zero live emit calls"*). It also credited the wrong
+      ED: the registrations are **ED-IN-0014**; ED-IN-0096 is the later correction that emptied
+      `consuming_systems`. The error reversed the conclusion — those five are *more* debt-shaped, not
+      less — and contradicted `04`'s own §3.2.
+    - **`03` §5 miscounted the scripting drift, by the exact error it was arguing against.** It
+      reported "8 sites of `.name == 'Crown'…'`". Six are assertions in
+      `engine/tests/test_parliamentary_action.py`; production sites are **2**. G-16's concept-level
+      census is the right one and is **larger — 5 sites across 3 comparison idioms** (`.name ==`,
+      `t.owner ==`, `initiator ==`) in 4 modules. Substituting a literal string count for a concept
+      census is pattern-matching on the term, CLAUDE.md §0's costliest named error.
+    - **`03` §3 inverted the A6 reading.** `scale_transitions_v30.md` §12.4 is headed *"Known
+      down-seams (Lane-B implementation targets)"* — **enumerated open debt, not a non-defect.**
+    - **`03` §3's NPE claim had no instrument.** "Two generated NPCs differ on every axis" is
+      unsupported: stance is territory-keyed so same-territory NPCs match, and the deviation die flips
+      **one** axis. A number-shaped claim with no control, inside the section citing §0.1 point 4.
+    - **`04` §5 said six of eight proposed keys land in `state_transition`; it is seven**, and the
+      family is *not* the smallest (`environmental` 4, `da_outcome` 5). Also: the registry's §9
+      **logical** count for that family is 9, not the join's 7 — the flattering figure was used.
+    - **Roster error in `04` §2.1, on 4 of 27 rows.** `echo_transport` and `player_input` are **not
+      contract modules** (`key_graph.json` files them under `unresolved_references`), while
+      `campaign_architecture` and `clock_registry` **are** modules with **zero key edges**. The total
+      of 27 survived only because the two errors cancelled.
+    - **`fieldwork_knots` also declares the `{type: "*"}` wildcard** (`module_contracts.yaml:387`), so
+      the articulation wildcard question is **two** decisions, not one.
+    - **G-19 was grouped with G-18 as a do-now correction.** It is a **Class A supersession** and held
+      item 14 of 17 — exactly the misclassification that would have produced an unratified change.
+    - **G-17's blocking framing was overstated.** §10's A15 is **report-only today**, so appends are
+      *governed and unrecorded*, not mechanically refused.
+    - **Two substrate qualifications** `04` §7 had to accept: the registry loader carries a live parser
+      defect (`engine/substrate/keys.py:294`), and the **cascade path has never run** —
+      `schedule_emission` (`keys.py:525`) has zero production callers and `DEFAULT_CASCADE_DEPTH_MAX=0`
+      would raise `TerminationBreach` if it did. "No defect in the substrate" was too strong.
+    - **Two counts I fixed before the critics reached them**, recorded because self-check found them
+      first: "~140 consume edges" → **125** (the doc's own table summed to 125 two lines above), and
+      "60 findings across 12 lanes" → **75** (60 was the nine-lane interim, silently dropping the
+      entire individuation pass).
+    - **Uncorrected, flagged:** the "19 domain lenses" denominator — `00`'s own enumeration lists
+      **18**. Inherited from the original request and never reconciled. `03` §9 now says so.
+    - **A defect in `02` the critics found and I did not fix:** it says "all 39 state rows" where the
+      register says 40 twice and a census returns **40**. Left as-is and recorded here, because `02`
+      is the synthesis stage's own return value and editing it would falsify the record of what the
+      run produced.

@@ -89,6 +89,21 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 <a id="in"></a>
 
+**ED-IN-0153 allocated 2026-08-11** (next_free 153 -> 154): world-schema gap audit — a three-axis
+agonist->antagonist interrogation of the ratified entity ladder, 19 domain lenses, and the
+individuation/authoring surface, against the Key type registry and the module contracts, to find
+MISSING keys and contracts. Read-only; ratifies nothing. See
+`audit/2026-08-11-world-schema-gap-audit/` and `registers/editorial_ledger_in.jsonl`.
+
+**ED-IN-0152** (prior): subsystem flow skeletons + the anchor guard. RENUMBERED from ED-IN-0151,
+which PR #298 claimed concurrently and merged first — a **same-lane** collision, which is the case
+the `ED-<LANE>` tag does *not* prevent by construction (it prevents cross-lane collision only).
+
+*Housekeeping, 2026-08-11: the yaml line carried a mangled pointer — a stray `.md#in.` fragment
+left mid-sentence by an earlier edit, immediately before the real `Narrative:` pointer. Removed
+while shortening the line back under the 600-char cap that
+`tests/valoria/test_id_reservations_walkback.py` enforces.*
+
 *Moved verbatim from `id_reservations.yaml` line 225, 2026-08-01. 3802 chars.*
 
 **COLLISION 2026-08-09 — ED-IN-0148 double-allocated; the later-merging side renumbered** (the recurring pattern already recorded below for ED-IN-0031, ED-IN-0032, ED-IN-0044/0045 and
