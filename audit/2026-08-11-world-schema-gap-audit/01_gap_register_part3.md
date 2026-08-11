@@ -138,6 +138,8 @@ _Continues [part 2](01_gap_register_part2.md)._
 
 **Existing tracking.** none found — grep of all ledger files and both index files for 'subnational' and 'foothold' returns zero hits outside the prose doc and the dead dict. The same defect class IS filed for sibling fields at systems/settlements/settlements_flow_skeleton_v1.md:147,:149 (Settlement.legitimacy/.popular_support/.religious_building), which no lane cited.
 
+
+⚠ **[CORRECTED 2026-08-11, ED-IN-0157]** "none found" is **OVERTURNED as worded**: `audit/2026-08-10-subsystem-atlas-verification/code_strategic.md:111-114` independently measures `.subnational` as dead. The row's grep scope (ledgers + index files) was exactly the too-narrow scope `02` §4 item 5 warned about. The schema-row claim survives.
 ---
 
 <a id="g-37"></a>
@@ -282,6 +284,8 @@ _Continues [part 2](01_gap_register_part2.md)._
 
 **Existing tracking.** OI-37 (cited at systems/overview/sim/accounting.py:34-38; registers/handoffs/HANDOFF_SE.md:127-134, 'single highest-priority open item') tracks the VALUE reconciliation between registry.province_accord and Territory.accord — adjacent and distinct from the membership edge's missing declaration. No dedicated tracking found for the edge itself.
 
+
+⚠ **[CORRECTED 2026-08-11, ED-IN-0157]** The OI-37 anchor is **false**: `registers/handoffs/HANDOFF_SE.md` contains **zero** occurrences of "OI-37" (`grep -c` → 0). The mis-attribution was inherited verbatim from a stale code comment at `systems/overview/sim/accounting.py:35` without opening the file it cites. The substantive claim survives and is properly anchored at `settlements_flow_skeleton_v1.md:141-142`.
 ---
 
 <a id="g-45"></a>

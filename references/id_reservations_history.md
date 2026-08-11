@@ -89,6 +89,33 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 <a id="in"></a>
 
+**ED-IN-0158/0159 allocated 2026-08-11, RENUMBERED from 0156/0157** (next_free 156 -> 160): the
+consolidation sweep and the code-leanness census. **A same-lane DOUBLE collision.** This branch
+(`claude/repo-cleanup-consolidation-lig2jo`) and PR #302 both branched from `c26a22c` reading
+`next_free: 156`, and both allocated 156 **and** 157. #302 merged first (2026-08-11 17:52Z,
+`9aabd35`), so it keeps `ED-IN-0156` (CLAUDE.md's 13 unguarded countable figures) and `ED-IN-0157`
+(the second adversarial pass over the ED-IN-0153 residuals); this branch renumbered both, per the
+standing later-merging-side-renumbers rule.
+
+**This is at least the sixth same-lane renumber-at-merge on the IN lane**, after 0074, 0075, 0083,
+0086 and 0087 — the list `tests/valoria/test_id_reservations_walkback.py`'s own docstring keeps. The
+`ED-<LANE>-NNNN` namespace eliminates *cross-lane* collision by construction and, as
+`id_reservations.yaml`'s header says, explicitly does not address the same-lane case, calling it
+"much narrower, already-expected". Six occurrences on one lane says otherwise: IN is the
+cross-cutting lane every infrastructure session uses, so two concurrent IN sessions is the normal
+case, not the narrow one.
+
+**Nothing catches it.** Measured 2026-08-11 across all live lane ledgers: 1,195 entries, 13 ids
+appearing more than once (`ED-129`, `ED-131`, `ED-200`, `ED-295`, `ED-297`, `ED-306`, `ED-IN-0012`,
+`ED-IN-0013`, `ED-IN-0016`, `ED-IN-0029` x3, `ED-IN-0149` x3, `ED-MB-0042`, `ED-MB-0063`), and no
+test asserts id uniqueness. Some are deliberate progress-appends; others may be unresolved
+collisions; the register carries nothing that distinguishes them. `next_free` is a hand-edited
+counter with no relation to the ledger it indexes — a check that fails when an allocated id already
+exists in the merged ledger, and when `next_free` is not strictly above every allocated id in its
+lane, would have caught this before either PR opened. Instrument + the shape of that guard:
+`audit/2026-08-11-code-leanness/duplication_census.py` §6. Full adjudication:
+`audit/2026-08-11-consolidation-sweep/00_consolidation_sweep.md` §8.
+
 **ED-IN-0153 allocated 2026-08-11** (next_free 153 -> 154): world-schema gap audit — a three-axis
 agonist->antagonist interrogation of the ratified entity ladder, 19 domain lenses, and the
 individuation/authoring surface, against the Key type registry and the module contracts, to find

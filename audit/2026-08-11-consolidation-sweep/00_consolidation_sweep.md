@@ -1,4 +1,4 @@
-# Consolidation sweep — findings, retractions, and the attack record (ED-IN-0156)
+# Consolidation sweep — findings, retractions, and the attack record (ED-IN-0158)
 
 ## Status: REFERENCE — observation with evidence; nothing ruled, nothing executed
 
@@ -529,11 +529,11 @@ handoffs repeated the defect the root file was archived for.
 
 ### 7.3 What I did not verify
 
-1. **The PP-NNN scope mismatch is unreconciled.** My scan found **320 of 527** distinct `PP-NNN`
-   numbers cited across live surfaces resolve to no row in `patch_register_active.yaml` or
-   `patch_register_index.md`. CLAUDE.md §0 states **433 of 452**. My scan roots are wider (includes
-   `audit/`, `tools/`, `tests/`) and my register set may be narrower. **My number neither confirms
-   nor refutes §0's.** Both agree a majority do not resolve. Flagged for whoever owns ED-IN-0147.
+1. ~~**The PP-NNN scope mismatch is unreconciled.**~~ **RESOLVED — see §8.3.** `main`'s
+   `ED-IN-0156` supplied the missing variable: the 433/452 figure reproduces only against
+   `patch_register_active.yaml` alone (6 entries); including the live 196-entry
+   `patch_register_index.md` the ratio is **328 of 466**, which is where my 320/527 was pointing.
+   The discrepancy was an unstated denominator, not a disagreement about the tree.
 2. **F1's remediation is unproven in a browser.** I read `index.html`'s script tags; I did not open
    the page.
 3. **F4's atomization block was not re-evaluated.** Only that the banner bullet and the drifted IN
@@ -569,3 +569,129 @@ Each is a command; if it does not produce the stated result, the finding is wron
 | F5 | `ls engine/` shows no `params/`; `find tests -name '*.md' \| wc -l` → 8 |
 | F6 | `test_build_glossary.py::test_committed_output_matches_a_fresh_build` **passes** — this runs *against* reading F6 as a defect |
 | §3.1 | `grep -n 'BUILDER.*--check' tests/valoria/test_engine_atlas.py tests/valoria/test_contract_index.py` — if absent, my retraction is itself wrong |
+
+---
+
+## 8. Adjudication against PR #302 (merged into `main` 2026-08-11 17:52Z, `9aabd35`)
+
+PR #302 branched from the same base as this work (`c26a22c`) and merged while this branch was open.
+Folded in here rather than left to a merge commit, because three of its results bear directly on the
+findings above — one corroborating, one resolving an uncertainty I flagged, and one implicating my
+own citation practice.
+
+### 8.1 A live same-lane ID collision — **double**, and nothing catches it
+
+Both branches read `next_free: 156` from `references/id_reservations.yaml` and both allocated **156
+and 157**. `main` now carries `ED-IN-0156` (CLAUDE.md's unguarded figures) and `ED-IN-0157` (the
+second adversarial pass); this branch had allocated the same two numbers for the consolidation sweep
+and the code-leanness census.
+
+**Resolved by renumbering this branch to `ED-IN-0158` / `ED-IN-0159`**, `next_free` → 160, per the
+standing precedent that the later-merging branch renumbers (ED-1088→1090→1093/1094;
+ED-IN-0012/0013). Every citation, handoff heading, audit-registry row and document header was moved
+in the same commit.
+
+**This is the class the `ED-<LANE>-NNNN` namespace explicitly does not prevent.**
+`id_reservations.yaml`'s own header says so: a lane tag makes *cross-lane* collision impossible by
+construction, while "same-lane collisions are still possible … but are a much narrower,
+already-expected case." Two concurrent IN-lane sessions is now the *normal* case, not a narrow one —
+IN is the cross-cutting lane every infrastructure session uses.
+
+**And there is no guard.** Measured across all live lane ledgers: **1,195 entries, 13 IDs appearing
+more than once** — `ED-129`, `ED-131`, `ED-200`, `ED-295`, `ED-297`, `ED-306`, `ED-IN-0012`,
+`ED-IN-0013`, `ED-IN-0016`, `ED-IN-0029` (×3), `ED-IN-0149` (×3), `ED-MB-0042`, `ED-MB-0063`. No
+test asserts ID uniqueness. (My first hand-run of this enumeration listed twelve — it sliced the
+output at twelve rows. The committed instrument lists all thirteen, which is the argument for having
+one.) Some of those are certainly *deliberate progress appends* (ED-IN-0149's three entries are
+dated 08-08 and 08-09 and read as successive updates); others may be unresolved collisions — and
+**the register carries nothing that distinguishes the two.** That indistinguishability is the finding,
+not the raw count.
+
+The cheap remedy is the shape §5 already recommends elsewhere: `next_free` is a hand-edited counter
+with no relation to the ledger it indexes. A check that (a) fails when an allocated ID already exists
+in the merged ledger and (b) fails when `next_free` is ≤ any allocated ID would have caught this
+before either PR opened. Filed, not executed.
+
+### 8.2 `main`'s `ED-IN-0156` independently rediscovered F5 — and the two halves are complementary
+
+`main`'s entry: *"CLAUDE.md asserts 13 countable figures about the tree and NOT ONE is guarded; three
+of three re-measured have drifted or are scope-ambiguous."* It enumerates all 13 figures, establishes
+that no test asserts any of them, and re-measures three: `48,612 chars` → **56,384** (understating
+itself by 16%, and that figure is the load-bearing input to §11's per-wake-up token floor);
+`106 modules` → **108**; and the PP ratio (below).
+
+**F5 and it overlap on exactly one figure** — the `tools/` row's "36 of 106". Otherwise they are
+disjoint and each carries something the other misses:
+
+- **Only `main`'s entry** has the char-count drift, the enumeration of all 13, and the diagnosis:
+  every *other* countable surface here is generated and freshness-guarded, so CLAUDE.md "sits outside
+  the generated-artifact discipline it prescribes for everything else."
+- **Only F5** has the **internal contradiction** — §3's `engine/` row asserting engine/ holds
+  `engine/params/` while the struck row three above records its evacuation and `ls engine/` confirms
+  it is gone — and the `tests/` row's "~850KB of narrative `.md`" against a measured 8 files / 90 KB.
+
+Two sessions, same day, same file, arriving from different directions. **No retraction is owed on
+either side.** F5's remedy (distil §3, delete the four retired rows) and `main`'s remedy (a guard that
+fails when a figure drifts) are the two halves of §0.1 point 5 — one owner, and a guard that fails on
+recurrence — and should land together.
+
+### 8.3 `main`'s `ED-IN-0156` **resolves** the uncertainty §7.3 item 1 flagged
+
+§7.3 recorded that my scan found **320 of 527** distinct `PP-NNN` unresolvable while CLAUDE.md §0
+claims **433 of 452**, and stated plainly that mine "neither confirms nor refutes" that figure
+because the scan roots differ.
+
+`main`'s entry supplies the missing variable: **scope**. The 433/452 figure reproduces *only* if the
+universe is `registers/patch_register_active.yaml` alone (6 entries). Including
+`registers/patch_register_index.md` — a live register surface carrying 196 entries — the same
+measurement gives **328 of 466, i.e. 70% unresolvable rather than 96%**. My 320/527 was measuring
+against both registers, which is why it landed near 328/466 and nowhere near 433/452.
+
+**So §7.3 item 1 is closed:** the discrepancy was never a disagreement about the tree, it was an
+unstated denominator. CLAUDE.md §0's warning is "directionally right and overstated by ~26 points"
+(`main`'s wording, and I agree with it). §7.3 item 1 should be read as resolved, not open.
+
+### 8.4 #302's process lesson converges with §1.1
+
+#302 records: *"a verifier launched beside the work rather than before the commit that ships it
+produces a review that lands after the merge."* Its two critics returned after PR #300 had merged, so
+two of their findings shipped and needed a second branch to correct.
+
+§1.1 of this document records the sibling failure: a suite run *before* the work rather than after it,
+producing a green claim that belonged to a different commit. **Same defect, opposite end of the same
+axis — verification performed at the wrong time relative to the commit it certifies.** Two independent
+instances in one repository on one day is a pattern, not two accidents, and neither is fixed by
+resolving to be more careful. The generalisable form: *a verification is only evidence about the
+artifact it ran against.* Both cases are cheap to guard mechanically (a pre-push hook that re-runs the
+suite on the exact HEAD being pushed; a merge gate that refuses while a launched critic is
+outstanding) and neither is guarded today.
+
+### 8.5 #302's "cite the id, never the line" applies to this audit — anchors corrected
+
+#302's G-17/G-20 finding: citing `editorial_ledger_in.jsonl:57` is structurally unstable, because the
+entry moved to `:54` and then `:50` as the ledger was appended to and archived. Its rule: **cite the
+id, never the line, in an append-and-archive register.**
+
+Applied to my own work: this document and the code-leanness census cite
+`references/restructure_ledger.md:720`, `:981`, and rows 177 / 852. **All four still resolve
+correctly** — re-checked after this merge — but `restructure_ledger.md` is in exactly the flagged
+class: its own W7 requirement is that *"every deletion commit writes a new alias row into it."* The
+anchors hold today by luck, not by construction.
+
+Where the row has no id to cite, the stable citation is its **content**:
+
+| was cited as | stable form |
+|---|---|
+| `restructure_ledger.md:720` | the row `` `params/` → `engine/params/` `` |
+| `restructure_ledger.md:981` | the row `` `designs/audit/` → `audit/` `` |
+| `restructure_ledger.md:177` | the row `` `designs/systems/npc_behavior_v30.md` → `systems/npcs/npc_behavior_v30.md` `` |
+| `restructure_ledger.md:852` | the row `` `designs/scene/social_contest_v30.md` → `systems/social_contest/social_contest_v30.md` `` |
+
+Line anchors into **code** are not affected and are not changed — `test_flow_skeletons.py` verifies
+that class against the tree on every run, which is precisely the guard the register rows lack.
+
+### 8.6 What #302 does not change
+
+Its substance is the world-schema register (G-17's report-only framing, an 18-vs-19 lens denominator,
+the ED-IN-0153 falsifier correction). **None of it touches F1–F4 or F6–F8**, the code-leanness census,
+or the §5 plan. No finding above is withdrawn or weakened by the merge.

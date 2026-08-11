@@ -474,7 +474,7 @@ A correction, not a ruling; it should not wait on the held forks.
 
 - **It is a map of the *declared* and *live* bus, not of all inter-module traffic.** The corpus's own
   figure is that real traffic is dominated by **direct Python imports**, not Key emissions. Those
-  imports are not mapped here; `references/ENGINE_ATLAS.md` and the flow skeletons cover them.
+  imports are not mapped here. ⚠ **Corrected by second-pass review:** an earlier version said `references/ENGINE_ATLAS.md` covers them — **it has no import map** (its sections are coverage, subsystem atlas, declared-vs-executed, authored-coverage, attribution and nomenclature). The per-subsystem flow skeletons and `skills/valoria-vector-audit`'s structural graph are the surfaces that do.
 - **No path was verified by execution.** Reachability claims rest on grep plus caller tracing. No
   campaign was run, no key log inspected at runtime.
 - **The 16-direct-imports figure is from the same stale docstring as the 1-of-55 figure** (§3.1) and is

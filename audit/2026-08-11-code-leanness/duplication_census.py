@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""duplication_census.py — the instrument behind every number in 00_code_leanness.md (ED-IN-0157).
+"""duplication_census.py — the instrument behind every number in 00_code_leanness.md (ED-IN-0159).
 
 WHY THIS EXISTS. The audit next to it argues that instruments left uncommitted and unrun are the
 repo's recurring defect (§4: `flag_ablation.py`, `harness.py` and a 22-check invariant battery all
@@ -169,6 +169,45 @@ def main():
         vals = re.findall(r'MU_PER_DIE\s*=\s*([\d.]+)|SD_PER_DIE\s*=\s*([\d.]+)', read(f))
         flat = [v for pair in vals for v in pair if v]
         print(f'     {f}  {flat}')
+
+    section('6  ledger ID uniqueness  (ED-IN-0158 §8.1)')
+    # Added after a live SAME-LANE double collision: this branch and PR #302 both read
+    # `next_free: 156` and both allocated 156+157. Nothing in the tree catches that, so the
+    # measurement behind the finding lives here — and this is the shape the guard would take.
+    ids = []
+    for led in git_ls('registers/editorial_ledger*.jsonl'):
+        for line in read(led).splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            m = re.match(r'\{"id":\s*"([^"]+)"', line)
+            if m:
+                ids.append(m.group(1))
+    counts = {}
+    for i in ids:
+        counts[i] = counts.get(i, 0) + 1
+    dupes = sorted((k, v) for k, v in counts.items() if v > 1)
+    print(f'  {len(ids)} ledger entr(y/ies) · {len(dupes)} id(s) appearing more than once')
+    for k, v in dupes:
+        print(f'     {k} x{v}')
+    print('  NOTE: some are deliberate progress-appends, others may be unresolved collisions.')
+    print('  Nothing in the register distinguishes them — that indistinguishability is the finding.')
+
+    # next_free must exceed every allocated id in its lane, or the counter has already been passed.
+    resv = read('references/id_reservations.yaml')
+    for lane in ('IN',):
+        m = re.search(r'\b' + lane + r':\s*\{[^}]*next_free:\s*(\d+)', resv)
+        if not m:
+            continue
+        nf = int(m.group(1))
+        allocated = [int(i.rsplit('-', 1)[1]) for i in ids
+                     if i.startswith(f'ED-{lane}-') and i.rsplit('-', 1)[1].isdigit()]
+        top = max(allocated) if allocated else 0
+        ok = nf > top
+        print(f'  lane {lane}: next_free={nf} · highest allocated={top} · '
+              f'{"OK" if ok else "PASSED — next_free is not ahead of the ledger"}')
+        if not ok:
+            fail.append(f'lane {lane}: next_free {nf} is not ahead of allocated max {top}')
 
     print('\n' + '=' * 78)
     if fail:

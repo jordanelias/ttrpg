@@ -1,4 +1,4 @@
-# Code leanness — duplication census, uncalled-code candidates, and a consolidation plan (ED-IN-0157)
+# Code leanness — duplication census, uncalled-code candidates, and a consolidation plan (ED-IN-0159)
 
 ## Status: REFERENCE — observation with evidence; nothing ruled, nothing executed
 
@@ -387,3 +387,187 @@ touch to change one rule goes 53→1, 44→1, 8→1, 6→1, 5→1. Adding a lane
   defeats the reference-based method used here.
 - Phase 1's "expected delta: none" claims are **predictions**, not measurements. Each is exactly what
   its own migration test must establish.
+
+---
+
+## 8. Fable-5 read-only second pass — two of my findings overturned, five new confirmed
+
+A `valoria-critic` agent (read-only: Read/Grep/Glob, no Bash, no writes — structural independence
+per §10) was given this document and the consolidation sweep as **prior art to attack**, and asked to
+work the lines they left uncovered. Its findings are adjudicated below. **I re-ran every load-bearing
+claim with Bash**, which it could not; the verdicts are mine, the discoveries are its.
+
+### 8.1 OVERTURNED — §3.2's four "possibly-uncalled" modules are reached, and my ranking signal was wrong
+
+§3.2 named `charter_liberties`, `home_sanctuary`, `hafenmark_equipment` and
+`infrastructure_reclamation` as the place to start tracing, on the strength of **two independent
+methods agreeing** they were uncalled — invoking §10's rank-by-independent-rediscovery.
+
+**All four are reached by a blocking test.** `engine/tests/test_pipeline_reach.py:749-755` lists them
+in `_OI17_FULL_MODULE_ENTRYPOINTS`, and `test_oi17_full_module_conversions_are_stub_wired` (`:767-779`)
+asserts each resolves as `stub_wired`. Re-run here: **1 passed.** All four are `stubwire.stub_resolve`
+no-ops (`charter_liberties.py:27-32`, `home_sanctuary.py:29-42`, `hafenmark_equipment.py:30-35`,
+`infrastructure_reclamation.py:29-34`) whose docstrings hold Jordan directives recorded nowhere else —
+`home_sanctuary.py:5` (the T9 Ob +4 / 12-season exit condition), `infrastructure_reclamation.py:5`
+(the attacker/defender pool formula). **Deleting any of them fails CI and destroys design content.**
+
+**The reasoning error matters more than the wrong answer.** Both my methods were blind to *the same
+thing* — `test_pipeline_reach.py` dispatches by **string module path**, invisible to an AST import
+graph and to an `import X` grep alike. "Independent rediscovery" is a ranking signal only when the
+blind spots actually differ; mine were correlated, so the agreement carried no information. I flagged
+this hazard in §3.1 and then walked into it one section later.
+
+**Phase 3.1 is therefore closed, not started** — the guard it asked me to write already exists, and
+it is `test_pipeline_reach.py`. Any further tracing in `systems/`/`engine/` must grep string-form
+module paths, not imports.
+
+### 8.2 OVERTURNED — the apparatus registry's orphan count is an undercount by construction, and §F5 inherited it
+
+`tools/build_apparatus_registry.py:213-220`: `invoked_by()` tags a tool `ci:<workflow>` if its
+**basename appears anywhere in the workflow text**, and `:306-307` then sets `orphaned=False` for any
+such tag. The syntax-check job is a bare `py_compile` list — so **being compiled counts as being
+invoked.** Confirmed in the output: `references/apparatus_registry.md` reports `index_gen.py` (:90),
+`atomizer.py` (:32), `doc_index_gen.py` (:83) and `valoria_rename.py` (:104) as "Invoked by
+ci:valoria-ci.yml", while the registry's *own* row 165 — enumerating what `valoria-ci.yml` actually
+invokes — lists none of them.
+
+**This invalidates a number I used.** The consolidation sweep's F5 corrected CLAUDE.md's stale
+"36 of 106 modules have zero automated callers" by citing "123 entries, 6 orphaned" from this
+registry. The staleness of CLAUDE.md's figure stands; **my replacement figure does not.** Neither
+number is a valid orphan census. F5's claim is narrowed to what remains true: the row is stale and
+unguarded, and the correct count is *not currently computed by anything*.
+
+### 8.3 The fold-in found a defect in my own plan: Phase 0.1 would destroy the orphan signal
+
+§5 Phase 0.1 proposes replacing the syntax gate's hand-enumerated 32-file list with a glob. Measured
+now: **46 of 108** `tools/*.py` have their basename somewhere in `valoria-ci.yml`. Under a glob that
+becomes **108 of 108**, and by §8.2's mechanism `invoked_by()` would mark **every tool non-orphaned** —
+silently zeroing the census.
+
+**Phase 0.1 is amended:** glob the syntax job **and** exclude the syntax-check job from
+`invoked_by()`'s scan in the same commit, with a test asserting a known-dead tool still reports
+orphaned. Shipping the two halves separately makes the registry worse than it is today. This is the
+§8-invariant hazard in miniature — a remedy for one gate corrupting a different gate's input.
+
+### 8.4 CONFIRMED — dead code inside a blocking gate's file
+
+`tools/compliance_check.py` calls **two functions that do not exist**: `_lazy_import()` at `:165` and
+`check_all()` at `:306` (`grep -c 'def _lazy_import\|def check_all'` → **0**). Executed here:
+
+```
+$ python3 tools/compliance_check.py
+  File "tools/compliance_check.py", line 306, in <module>
+    violations = check_all()
+NameError: name 'check_all' is not defined
+```
+
+The **live CI mode** (`--check-only --repo-state .`) is fully inline and unaffected — which is why
+this has survived — but the file is half dead-on-arrival, and it is a **blocking gate's** file. No
+census row records it, mine included.
+
+It is one leg of a coherent inert cluster the agent assembled:
+
+- The only skeleton/index policy rule targets `designs/**/*.md` (`references/atomization_rules.yaml:243-249`)
+  — a tree **retired 2026-07-19**, so it matches nothing.
+- `_check_index` reads `require_index_above` (`compliance_check.py:166`), a key absent from
+  `atomization_rules.yaml`, whose rule uses `require_skeleton_above` (`:245`).
+- `doc_index_gen.py` has no importers and no invocation beyond `py_compile`, while its **37 outputs**
+  at `systems/**/*_index.md` carry **no freshness guard of any kind**.
+
+Retiring `atomizer.py`, `doc_index_gen.py`, `index_gen.py` to `deprecated/tools/` and excising the
+dead functions is a clean −3 files plus dead code out of a blocking gate. **Coupled edit:**
+`tests/valoria/test_compliance_on_exceed_vocabulary.py:98-99` asserts `_on_exceed_severity(` appears
+≥3 times, counting `_check_size` as one site. The 37 `*_index.md` files are a **Jordan call** — the
+2026-07-26 ruling grandfathered existing pairs.
+
+`index_gen.py` is separately dead on its own evidence: zero importers, and its only artifact carries
+`<!-- auto-generated by index_gen.py — 2026-05-10T20:34:39Z -->`
+(`registers/patch_register_index.md:3`) — untouched for three months. **Keep `valoria_rename.py`**: it
+is the designated executor of `proposals/canonical_nomenclature_v1.md:231`.
+
+### 8.5 CONFIRMED — three more single-owner opportunities in the gate tier
+
+- **Two blocking size-cap gates overlap on one policy file.** `compliance_check`'s CI mode walks every
+  `.md`/`.yaml` against `atomization_rules.yaml` (`:257-284`); `ci_register_size_check` enforces a
+  hand-maintained `THRESHOLDS` dict, three of whose entries are read *from that same file* precisely
+  because they kept drifting (`ci_register_size_check.py:39-48`, recording three incidents, ED-IN-0097).
+  `tests/coverage_matrix.md`, `patch_register_active.yaml` and `module_contracts.yaml` are size-checked
+  **twice per CI run by two tools**. Unique to `ci_register_size_check`: the `.jsonl` caps (`:81-125`),
+  since compliance's walk skips non-`.md`/`.yaml` (`:259`). **Mechanism that must survive a merge:**
+  `ci_register_size_check` runs in `valoria_local` and `compliance_check` deliberately does not
+  (`ci_checks_registry.yaml:262` — "local-green != compliance-green"), so a merge must add the merged
+  gate locally or local coverage regresses.
+- **Two always-exit-0 tools sit in the BLOCKING job.** `ci_audit_registry_check`
+  ("Always exits 0 by design", `ci_checks_registry.yaml:113`) at `valoria-ci.yml:132`, and
+  `ci_supersession_check` ("Never fails the build", `:248`) at `:129`. Moving both to
+  `validators-report` changes no behaviour and makes the blocking tier's membership truthful.
+- **`ci_names_consistency.py` is a self-declared migration babysitter** (`:4-9`): it exists only while
+  `descriptor_registry.yaml` / `proper_noun_registry.yaml` still carry mirror `name`/`canonical`
+  fields, and says removing them is the follow-up. Finishing it retires a blocking gate, its CI line,
+  its `valoria_local` row, and two registries' mirror fields.
+
+### 8.6 CONFIRMED — `ci_checks_registry.yaml` documents a file that does not exist
+
+`valoria_hooks.py` is **absent from the tree** (`find` → nothing), yet the registry — which calls
+itself the single source of truth — references it **5 times**, including its level-4 definition
+(`:14`), its field definitions (`:21-22`), and an entire `in_session_hooks` section (`:345-428`, ~18
+hooks, some describing the ED-1084-retired checkpoint machinery at `:422-424`). Every `paired_hook:`
+field on the live CI entries points into it. ~90 lines describing an enforcement level that does not
+exist. Pruning changes nothing enforced.
+
+### 8.7 Reframed, not discovered — two "duplications" that are ruled or docketed
+
+- **The mass-battle dual engine** (§D of the brief, the highest hope for a real consolidation) is
+  already docketed as **ED-MB-0065** with three measured blockers and a guard
+  (`tests/valoria/test_j2_mass_battle_seam.py`), awaiting WITHDRAW/DEFER/EXECUTE. The feared *third*
+  copy does not exist — the v22 source named at `systems/mass_battle/sim/massbattle.py:16` is already
+  gone from disk. **Nothing new to propose.**
+- **Personal combat is duplicated by design**: the DEPRECATED v30 resolver (`systems/combat/sim/combat.py:4-11`)
+  is still the default campaign path (`engine/mc_v18.py:75`, `scene_dispatch.py:273`) while
+  `combat_engine_v1` sits behind a default-OFF flag. Retiring the old resolver removes a whole
+  duplicate mechanic — but the gate is **flag ratification, a design decision**, not a leanness edit.
+
+### 8.8 `tests/valoria` — the tree I left out of scope
+
+The agent sampled ~15 of 153 modules, chosen adversarially by name collision, and found **no
+superseded or duplicate-fact modules**: every suspicious pair resolved to distinct, ED-cited, live
+purposes (the three "pins" files guard three different facts; the three geometry files, three
+different EDs). The real duplication is **boilerplate**: `conftest.py` is only the KNOWN_RED register
+(`:35-65`), so **32 files repeat an identical `ENGINE = …combat_engine_v1` + `sys.path.insert` block**,
+≥7 more repeat a `_SIM` block, and ~10 define local `_unit()` factories with differing defaults. One
+conftest helper collapses the path setup; the factories need case-by-case judgment. **Zero files
+removed, ~40 edit-sites collapsed.**
+
+**And the instrument to finish the job already exists** — `references/test_register.json`, 132 files /
+1,186 tests with a per-row "what it guards", generated and drift-gated blocking since ED-IN-0142
+(`tests/valoria/test_test_register.py`). §7's "deliberately left out of scope because pytest
+collection defeats the reference-based method" was true of *my* method and not of the repo's: the
+same-fact analysis is a query against a register I did not know to use.
+
+### 8.9 Amendments to §5
+
+| # | change |
+|---|---|
+| **0.1** | **AMENDED** — glob the syntax job **and** exclude it from `invoked_by()` in the same commit (§8.3), with a test that a known-dead tool still reports orphaned |
+| **0.4** | **NEW** — excise `_lazy_import`/`check_all` and the unreachable interactive branch from `compliance_check.py`; update `test_compliance_on_exceed_vocabulary.py:98-99` in the same commit |
+| **0.5** | **NEW** — retire `atomizer.py`, `doc_index_gen.py`, `index_gen.py` to `deprecated/tools/`; delete the dead `designs/**` policy row |
+| **0.6** | **NEW** — prune `in_session_hooks` / `paired_hook` from `ci_checks_registry.yaml` (§8.6) |
+| **1.9** | **NEW** — merge the two size-cap gates onto the policy file, extended to `.jsonl`, **and add the merged gate to `valoria_local`** (§8.5) |
+| **1.10** | **NEW** — move the two always-exit-0 tools to `validators-report` |
+| **1.11** | **NEW** — finish the `ci_names_consistency` migration and retire the gate |
+| **2.5** | **NEW** — one `conftest.py` path helper for the 32+7 bootstrap blocks (§8.8) |
+| **3.1** | **CLOSED** — the guard already exists (§8.1) |
+
+### 8.10 Still unverified
+
+**F10 (PLAUSIBLE, not confirmed):** `tools/evacuation_plan.py:164-165` keeps the whole
+`tests/sim/v32-combat-balance/` prefix as the parity oracle, but the actual consumers name only
+`m1_dice_sigma_core.py` (`tools/gen_sigma_parity_goldens.py:9,91-94`;
+`engine/tests/test_sigma_leverage_parity.py:11`; `build_fork.py:70-71`). Every out-of-directory hit on
+the other ~25 module names was a substring false positive. **Do not act on this** until a
+`MEASURED-BY:`/prose citation sweep confirms nothing cites the m2–r10 stations — moving a cited
+instrument turns `ci_claim_provenance_check` red. Ceiling is ~26 files *relocated*, zero deleted.
+
+Also unreached: 138 of 153 `tests/valoria` modules (use `test_register.json`), and the 25 `systems` +
+19 `engine` low-confidence candidates from §3.2 — which, after §8.1, need string-path grepping rather
+than import analysis.

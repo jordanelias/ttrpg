@@ -102,6 +102,8 @@ _Continues [part 1](01_gap_register.md)._
 
 **Existing tracking.** none — the struck-enum half is filed by no claim in this audit and was surfaced only by adversarial re-reading of the cited lines. The relation_kind half: ED-391 (cited in character_histories_v30_infill.md:121) is adjacent but distinct (whether the GM-side 'ghost sheet' of a lost Knot partner is a design-layer requirement).
 
+
+⚠ **[CORRECTED 2026-08-11, second adversarial pass — ED-IN-0157]** The "none found" verdict is **OVERTURNED**: `registers/supersession_register.yaml:227-230` registers PP-632's Knot tier-cost model as superseded by **ED-912** (2026-06-28). This row's own Evidence field quotes `knots_v30.md:58` pointing at that register. **The sharpening is worth more than the overturn:** `supersession_register.yaml:238-240`'s `files_to_recheck` omits `key_type_registry_v30.md`, which is the nameable mechanism by which the struck enum survived and reached the generated `key_types.json`.
 ---
 
 <a id="g-20"></a>
@@ -210,6 +212,8 @@ _Continues [part 1](01_gap_register.md)._
 
 **Existing tracking.** Partially: governance_type_registry_v1.md:151 already inventories AP as an unowned VECTOR in the §2.7 cross-cutting-clock gap table the claim itself cites. Zero ledger hits for 'Church Attention' across all lane + archive files. ED-IN-0062 names 'heresy/cultural-suppression threads' plausibly covering the area without naming AP or this absence.
 
+
+⚠ **[SOFTENED 2026-08-11, ED-IN-0157]** `tools/observability/INCOMPLETENESS.md:336` carries *"Church Attention Pool — in 19 docs, unregistered (IN)"* — same file and format as the `Casus Belli` entry at `:334` that this audit **did** harvest into G-06. The file was read and one entry taken, not the other.
 ---
 
 <a id="g-26"></a>
