@@ -2201,14 +2201,17 @@ ranges in the generator, not hand-editing the output.
 
 ## [OPEN] ED-IN-0156 — consolidation sweep: 8 opportunities, 3 candidate findings killed (2026-08-11)
 
-`audit/2026-08-11-consolidation-sweep/`. Whole-tree read-only sweep at `c26a22c` for
-prune / cut / refine / distil / dedup / aggregate / consolidate opportunities, read against the
-twelve commits of 2026-08-04..11. Solo — no fan-out, no workflow. **Nothing executed.**
+**One document:** `audit/2026-08-11-consolidation-sweep/00_consolidation_sweep.md`. Whole-tree
+read-only sweep at `c26a22c` for prune / cut / refine / distil / dedup / aggregate / consolidate
+opportunities, read against the twelve commits of 2026-08-04..11. Solo — no fan-out, no workflow.
+**Nothing executed.**
 
-**Read `01_adversarial_pass.md` before acting on `00_findings.md`.** The attack killed the draft
-headline and corrected two survivors; the numbers in the first pass were wrong.
+Reconciled from an original `00_findings.md` + `01_adversarial_pass.md` split (superseded, git
+history only — `4a101b1`, `32f8cfa`): in that layout a reader of the findings got claims whose
+corrections lived in a file they had to be told to read first. **Every finding now carries its
+attack result inline**; §3 holds the retractions, §7.5 the falsifiers.
 
-**What the attack killed (A1).** The draft's strongest finding was that `build_glossary`,
+**What the attack killed (§3.1).** The draft's strongest finding was that `build_glossary`,
 `build_engine_atlas` and `build_contract_index` — all shipped this week, all with **zero callers**
 in CI / hooks / `valoria_local` — were three fresh instances of the defect ED-IN-0149 had named
 three days earlier. Grep supported it. Reading the tests refuted it: each is invoked by a blocking
@@ -2269,8 +2272,23 @@ framework; §4 grandfathers it). Both pattern-match as prunable and are load-bea
 
 **Method limit, stated:** sweep and critic shared one context — not the structural independence
 §10 asks for (`hCritic`/`valoria-critic` was unavailable). Every finding was re-derived from a
-command against the working tree rather than from the draft's prose, which is what caught A1/A2/A3,
-but that is not equivalent. **F1/F2/F3 want an independent read before execution.** Unverified and
-listed in `01`'s §A7: the PP-NNN scope mismatch (my 320/527 neither confirms nor refutes §0's
+command against the working tree rather than from the draft's prose, which is what caught the three
+retractions, but that is not equivalent. **F1/F2/F3 want an independent read before execution.**
+Unverified, listed in §7.3: the PP-NNN scope mismatch (my 320/527 neither confirms nor refutes §0's
 433/452 — different scan roots), F1's remediation untested in a browser, and the two report-only
 `review_core` failures (`vocab.a17`, `stubs.count`).
+
+**Two self-implicating items the document records rather than hides.** (1) A **process failure**:
+`pytest tests/valoria` was run once as the session's opening baseline, *before any file in this
+sweep existed*; `valoria_local --staged` was run after the edits and does not include the suite, so
+a PR body claimed a green that belonged to `c26a22c`. CI caught it in four minutes
+(`test_engine_atlas.py::test_atlas_is_current`, fixed in `32f8cfa`) — the guard worked, I did not.
+(2) **This entry grew `HANDOFF_IN.md` from 191,413 to ~197 KB**, worsening F4 on the session that
+filed it; the append-only dynamic operating on its own describer. Both are in §1.1 and §F4.
+
+**Residual filed, not proposed (§6.1):** `ENGINE_ATLAS.md`'s ambiguity census counts bare
+occurrences of every contract name corpus-wide, and `audit` is one — so any document using the
+ordinary English word turns the committed atlas stale (measured: 2183 → 2186 from this sweep alone)
+and every prose-adding PR in any lane inherits a regenerate-and-commit step for a file it has no
+other relationship to. Correct gate behaviour; the signal `proposals/canonical_nomenclature_v1.md`
+(#301) targets. Not proposed as a change to the gate.
