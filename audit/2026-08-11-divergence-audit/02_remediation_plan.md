@@ -726,3 +726,162 @@ path-local module that must stay standalone-runnable, so rebinding is unavailabl
 instead — recover σ through the arithmetic (`_sigma_net_boost(1, 1, tn) / _sigma_softcap(1)`) and
 compare to the owner table. Per §0.1 point 5, **the guard is what makes the copy tolerable.**
 
+
+---
+
+## Section C — gates, validators, exports (complete)
+
+### C0 · The governing constraint, and the backlog count
+
+**A repaired gate fails on a backlog, and the backlog must be counted before the gate is switched
+on.** For D4's Rule 4 that count is now measured: intersecting the 73 live `systems/**/*_v30.md`
+basenames against the flat keys of `engine/engine_params/params_tables.yaml` gives exactly **six**
+docs the rule ever governed — `campaign_modes_v30`, `scale_transitions_v30`, `factions_personal_v30`,
+`fieldwork_v30`, `threadwork_v30`, `southernmost_v30`.
+
+### C1 · **Retire** Rule 4 rather than repointing it
+
+**Defect** D4 · **File** `tools/ci_co_file_checker.py:8, 80-101` · **Label** CORRECTNESS
+
+All three alternatives fail concretely, which is why deletion is right rather than lazy:
+
+- **Repoint at `params_tables.yaml`** — its own header says `NEVER hand-edit: re-run the tool`, and
+  it is a frozen byte-capture where "THE CODE WINS". A rule demanding co-change of a file that
+  cannot legitimately change is a **100% false-positive gate on all six docs, by construction.**
+- **Repoint at the typed exports** — those are generated *from code* and already drift-gated at the
+  code→artifact boundary by three blocking checks. Coupling them to prose edits **inverts the pipeline.**
+- **Hold for the §5 ruling** — leaving dead code in a blocking gate *while held* is the defect itself.
+
+So: delete the loop, leave a tombstone naming the class and the three gates that now carry the
+pressure. Flag in the PR body that this touches held §4–7 territory (§2's loud-exception rule) — but
+the deletion is of dead code, not of the held design question.
+
+### C2 · Sweep the three siblings — the pattern, not the instance
+
+**Defect** D4-as-pattern · **Files** `ci_editorial_checker.py:26` (`arcs/simulated/`),
+`ci_naming_check.py:77` (`engine/params/bg/institutions.md`), `ci_register_size_check.py:69,126`
+
+This is the item that converts a one-off into a swept pattern (§0.1 point 5). `ci_naming_check.py:78`
+already *promised* in a comment that its entry "go[es] with it" when `engine/params/` evacuated. The
+evacuation happened 2026-08-05. The entry stayed.
+
+### C3 · Move the two can't-fail validators out of the blocking bucket
+
+**Defect** D10 · **Files** `valoria-ci.yml:129,132` → the report block; `ci_checks_registry.yaml:112,247`
+
+**Do NOT make them able to fail.** Audit cadence and supersession churn are legitimately advisory,
+and both tools are correct as designed — `valoria_local.py` already lists them non-blocking. The
+defect is *placement*: under "Every blocking validator" they assert a gate that does not exist.
+
+The workflow edit and the registry `ci_job` flips **must land in one commit** — `broken_dependency_checker`
+fails if a registry row claims a job that no longer invokes the tool.
+
+### C4 · THE META-GUARD — a blocking validator must be able to do its job
+
+**Defect** D4+D10+the `pathres` divergence · **File** NEW `tests/valoria/test_blocking_gate_vitality.py`
+
+Two checks, and the honest statement of what is and is not mechanical is the valuable part:
+
+- **(b) Vitality — fully mechanical** as a syntactic under-approximation. Every blocking validator's
+  source must contain a nonzero exit. It cannot prove *reachability*, but it catches the shipped
+  class (every-return-is-constant-0) and the mutation `sys.exit(1)` → `sys.exit(0)`.
+- **(a) Scope — NOT mechanically writable in general.** A scope built from variables or bare prefix
+  fragments is invisible to any static check. The closest achievable approximation: no blocking
+  validator's *code string literals* may name a tree-anchored path that resolves DEAD or FORKED
+  through `pathres`. **Tested by hand against the live tree**: it catches all four C1/C2 targets and
+  would have caught the retired `patch_propagation_checker`. Its blind spot is declared in the
+  docstring — per §0.1 point 5, the guard is what makes grep's blind spots tolerable.
+
+The blocking set is **derived** from the workflow via `ci_gate_coverage.jobs()`, so a new blocking
+validator inherits both checks with zero edits. It asserts the derived set is non-empty — otherwise
+the meta-guard is graded on nothing.
+
+### C5–C8 · Make `pathres` the owner it declares itself to be
+
+**Defect** D-pathres, D-walkers · **Files** `ci_claude_workflow_paths.py:65-73,98-154,186-216`;
+`broken_dependency_checker.py:102-111,136-159`; `pathres.py:77-79`
+
+Delete both private parsers and both private rosters; import the owner. Then pin it with
+`test_path_owner_parity.py`, whose three tests fail if either copy returns.
+
+**The walker verdict is a correction worth stating.** `broken_dependency_checker` including
+`deprecated/` is **correct behaviour wrongly left implicit** — its question is *existence*, and live
+ledger entries legitimately cite the deprecated ED archives. The defect is that the inclusion is an
+accident of `{'.git'}` rather than a decision. So declare two tiers in the owner —
+`WALK_EXCLUDE_ALWAYS` and `NEVER_CANONICAL` — and let each walker pick one **on purpose**.
+
+The other ~21 walkers are **filed, not swept**: sweeping them drags out-of-scope gates into churn,
+which is the exact trap the ~100-constant incident documents.
+
+### C9 · Single-source the propagation-map cap
+
+**Defect** D-caps · Gate says 15,000; policy says 10,000. Safety checked: the file measures ~3.2k
+tokens, so adopting the policy cap **cannot fail at adoption**. Also delete the stale duplicate block
+at `atomization_rules.yaml:228-238` — `yaml_max_tokens` returns the *first* match, so if the live
+entry is ever removed the cap silently drops to a stale 5,000.
+
+### C10 · Wire the anti-fabrication gate into the local tier
+
+**Defect** D-cilocal · `validate_ed_citations` is CI-only, so **local-green excludes the one gate
+§0 calls the anti-fabrication check** — the same gap the file itself documents for `freshness_gate`.
+Cost is the unknown: measure with `time python3 tools/validate_ed_citations.py` before merging; if it
+exceeds ~5s, demote to report-only with that rationale stated, never remove the row.
+
+### C11 · Stop publishing the superseded combat model as typed truth
+
+**Defect** D11 · **File** `export_sim_params.py:32-37` · **Label** CORRECTNESS
+
+**The fix is to exclude the directory from `SCAN_DIRS`** — the other two options fail:
+
+- *Delete `combat/sim/combat.py`* — **forbidden today.** `mc_v18.py:70-81` documents that with
+  `DISPATCH_COMBAT_BRIDGE` defaulting **off** (the shipped default), scene dispatch still calls it.
+  Deletion is the follow-up to that flip, not this fix.
+- *Tag the 13 records `superseded: true`* — adds a schema field every consumer must honour, and the
+  contradiction stays published.
+
+Regeneration must land in the same commit (`test_sim_params_current` is a blocking pytest). Guard
+generically: **no scanned module may carry a `[DEPRECATED` banner** — that catches the class, not
+just this instance.
+
+### C12 · Guard the missing-key direction of the combat export
+
+**Defect** D-exportgap · Measured backlog: 59 module-level constants (`weapon_physics.py` 33,
+`combat_systems.py` 18, `combatant.py` 8) outside the typed export, several canonical per
+derived_stats_v30 §4.1 / PP-717.
+
+**A ratchet, not a burn-down.** Every constant is either exported or rostered with a reason; a *new*
+one added without either fails. Deciding which of the 59 are canonical versus derived intermediates
+is PC-lane judgment — **filed, not swept**. The guard asserts its own scan found >30 constants,
+because an empty scan would make the assertion vacuously true (§0.1 point 2).
+
+### C13–C15 · Instruments and tripwires
+
+- **C13** — a report-only `ci_key_emitter_conformance.py` makes the "4 of ~150 edges, all
+  wrong-owner" number **re-runnable instead of hand-counted**. Report-only deliberately: *who should
+  emit `scene.battle_concluded`* is an FA/MB design call, and the instrument surfaces the divergence
+  without deciding it.
+- **C14** — inverse tripwires for the two dead-default Keys, on the repo's own `VICTORY_THRESHOLD`
+  pattern: they pin the *current dead state* so the day a producer appears the test fails loudly,
+  forcing the wiring to be finished rather than half-landed. Self-retiring — if the reads are
+  removed, the roster is done.
+- **C15** — the dashboard list-description guard, with a **correction to my own finding**: `_safe`
+  (`dashboard_data.py:57-62`) catches the `AttributeError`, so the impact is not a build crash but a
+  **silently degraded queue section** (`available: false` with a stderr WARN). That is the masked-failure
+  class this repo treats as worse than a crash. The guard is warranted either way; the description
+  needed fixing.
+
+### Section C — cross-cutting
+
+**Same-commit couplings CI enforces** (splitting them breaks the build): C3's workflow edit ↔ registry
+`ci_job` flips · C11's `SCAN_DIRS` edit ↔ `sim_params.json` regen · C13's workflow line ↔ registry row
+↔ `EXPECTED_COMMANDS`.
+
+**Measurements not run** (read-only agents), each a blocker to merging but not to writing:
+`validate_ed_citations` local runtime · the `tables_vs_log` reader count · the
+`ci_sim_fabrication_check` ↔ `SCAN_DIRS` coupling · C4's first full run over `compliance_check.py`
+and `review_core.py` literals. **If C4's first run fails on either, that is a finding — a blocking
+gate carrying a dead path — not a test bug.**
+
+**Filed as cleanup, deliberately not swept:** ~21 hardcoded size caps · ~21 tree-walkers · the two
+`skills/valoria-vector-audit/scripts/` ledger parsers · `pathres.resolve_glob`'s missing FORK branch ·
+the `_ledger_open_entries` → `obs_core` migration.
