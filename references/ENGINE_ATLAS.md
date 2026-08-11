@@ -472,7 +472,7 @@ A canonical identifier is only a usable handle if searching for it returns its r
 
 | contract | bare occurrences | qualified uses |
 |---|---|---|
-| `audit` | 2178 | 0 |
+| `audit` | 2180 | 0 |
 | `mass_battle` | 2075 | 0 |
 | `victory` | 1929 | 0 |
 | `threadwork` | 1878 | 0 |

@@ -2052,3 +2052,41 @@ shape for generated reference tables (`engine/engine_params/params_tables.yaml` 
 "split at ~15k into sequential parts" rule. Not split, deliberately: a master index you must first
 guess the part of is not an index. If Jordan wants them split, the natural cut is alphabetical
 ranges in the generator, not hand-editing the output.
+
+- **[OPEN] ED-IN-0153 — world-schema gap register: 50 rows, 13 needing a Jordan ruling (2026-08-11).**
+  `audit/2026-08-11-world-schema-gap-audit/` — a three-axis agonist→antagonist interrogation of the
+  ratified entity ladder, 19 domain lenses, and the individuation/authoring surface against the Key
+  type registry and the module contracts. 17 agents, 0 errors, `stop_reason: completed`, 61 disputes
+  recorded and 0 left unadjudicated. **Ratifies nothing:** no head moved, no status flipped, no
+  contract or registry edited.
+  - **The verdict is that the schema cannot express the ratified ladder, and it breaks at two seams.**
+    Vertically: `scale_hierarchy_v1` is ratified at Country > Duchy > Province > Territory > Settlement
+    while the substrate enum is four values with no national/duchy/country member, `provincial` appears
+    in 0 of 55 key entries, and the B12 Territory tier collapses back into the same 17 T-codes it was
+    meant to sit beneath. Horizontally, hardest at the faction rung: **no key type announces a faction
+    coming into or going out of existence at any tier**, found by four lanes across all three passes.
+  - **On individuation the answer is worse and simpler:** the schema mostly cannot distinguish two
+    instances of anything it does carry. Every per-province authoring field the geography file supplies
+    has zero code readers; `institutional_culture` — the one scalar meant to individuate faction
+    behaviour — is read by no Python and authors the same value for three of six factions; and the
+    genuinely faction-unique behaviours are dispatched by `faction.name` string equality while a
+    capability map that would do it as data sits unread in `mechanics_index.yaml`.
+  - **8 of the register's proposals are structurally ungovernable today** (G-17): §10 forbids appending
+    any key type without `references/rendering_dispositions.yaml`, which does not exist. Whoever picks
+    this up should expect to author that file first, or get a ruling that waives it.
+  - **Read `02_verdict_and_residuals.md` before acting on any row.** Three producer claims were
+    overturned; **two proposals would have caused damage if executed** and are flagged rather than
+    silently dropped — notably a templar-siting fix resting on a false "T9 is highest of all 17" claim
+    (T15 is higher, verified by full census).
+  - **Both standing holds were honoured, not routed around:** the scale-vocabulary conflict is recorded
+    as *additional evidence* for ED-IN-0103 fork 1, and no rename was proposed (ED-IN-0152).
+
+- **[OPEN] ED-IN-0154 — `hRediscover` zeroes the corroboration signal it exists to compute (2026-08-11).**
+  Found by ED-IN-0153 **in that run's own instrument**: 75 findings → 75 groups, every `rediscovery`
+  value 1. `hSameFinding` gates on first-cited-file equality *before* comparing content words, so two
+  lanes describing one gap through different citations never group. The owner's own comment predicts
+  this failure for the exact key and the remedy inherited it. **Not fixed** — `tools/wf_harness.js` is
+  copied into every workflow script and needs an expected-delta test, not a drop-in edit. **The guard
+  is the deliverable:** a fixture of two paraphrases citing different files must group to 2, or the
+  pattern recurs invisibly. Note the existing suite is green and mutation-verified and did not catch
+  this, because it pins that `signal()` never throws — not that grouping groups.
