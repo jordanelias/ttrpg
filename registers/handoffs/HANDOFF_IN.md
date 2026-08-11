@@ -2196,3 +2196,29 @@ ranges in the generator, not hand-editing the output.
       register says 40 twice and a census returns **40**. Left as-is and recorded here, because `02`
       is the synthesis stage's own return value and editing it would falsify the record of what the
       run produced.
+
+- **[PART] ED-IN-0153 second-pass correction — two defects survived the first adversarial review
+  and shipped in PR #300 (2026-08-11).** The audit's two critics returned after the merge had already
+  landed; most of their verdicts were applied in `92b700f` before merge, but two were not, and both
+  are now corrected on a fresh branch (a merged PR cannot carry follow-up work).
+  - **G-17 was misframed in the very document that cites it.** `03_discussion.md` §8 said *"nothing in
+    the key half of this register can proceed until this is answered or waived"* — the exact
+    overstatement the G-17 row was written to correct. `key_type_registry_v30.md:1287-1291` has A15
+    enforce the `rendering_dispositions.yaml` precondition **report-only** against the existing 55-type
+    roster, flipping to blocking only *"once the file exists and the backlog is at zero"*. Appends
+    today are **governed and unrecorded, not mechanically refused.** ED-IN-0153's own entry carried the
+    same overstatement (*"structurally cannot append"*) and is corrected in place. The real obligation
+    is narrower and shippable: each `propose_key` row carries its rendering-disposition row as a
+    **co-artifact**, plus regeneration of the GENERATED `engine/engine_params/key_types.json`.
+  - **The lens list enumerates EIGHTEEN, and the whole unit said 19.** Not an execution error — an
+    error in the original decomposition: Jordan's brief named 17, `history` split into personal and
+    world to make 18, and 19 was asserted without counting. Inherited by `00` §2, `03` §2, `02` §4's
+    coverage denominator, the ED-IN-0153 title/description, and 4 sites in
+    `.claude/wf_world_schema_gaps.js`. All corrected; the coverage shortfall itself is unaffected
+    (~14 lenses visible in findings, denominator 18).
+  - **ED-IN-0153's `falsifier` field still carried the prediction ED-IN-0154 falsified** — that
+    rediscovery "under-reports and cannot over-report". It reported nothing. Annotated in place rather
+    than deleted, and ED-IN-0154 added to its citations.
+  - **Process note worth keeping:** both critics were launched read-only and returned *after* the PR
+    merged. A review that lands after the merge is still a review — it just costs a second branch.
+    Launch the verifier before the commit that ships the thing it verifies, not beside it.
