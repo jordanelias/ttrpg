@@ -2196,3 +2196,81 @@ ranges in the generator, not hand-editing the output.
       register says 40 twice and a census returns **40**. Left as-is and recorded here, because `02`
       is the synthesis stage's own return value and editing it would falsify the record of what the
       run produced.
+
+---
+
+## [OPEN] ED-IN-0156 — consolidation sweep: 8 opportunities, 3 candidate findings killed (2026-08-11)
+
+`audit/2026-08-11-consolidation-sweep/`. Whole-tree read-only sweep at `c26a22c` for
+prune / cut / refine / distil / dedup / aggregate / consolidate opportunities, read against the
+twelve commits of 2026-08-04..11. Solo — no fan-out, no workflow. **Nothing executed.**
+
+**Read `01_adversarial_pass.md` before acting on `00_findings.md`.** The attack killed the draft
+headline and corrected two survivors; the numbers in the first pass were wrong.
+
+**What the attack killed (A1).** The draft's strongest finding was that `build_glossary`,
+`build_engine_atlas` and `build_contract_index` — all shipped this week, all with **zero callers**
+in CI / hooks / `valoria_local` — were three fresh instances of the defect ED-IN-0149 had named
+three days earlier. Grep supported it. Reading the tests refuted it: each is invoked by a blocking
+pytest that runs the real builder's `--check` or byte-compares committed output to a fresh build.
+**The conclusion inverts** — a freshness gate is *better* than a scheduled regenerator, because it
+fails the PR that caused the staleness instead of someone else's a week later. Credit, not fault.
+What survives is the **contrast**: the pattern was proven three times this week and is absent on
+the two artifacts below.
+
+**Unblocked, cheap, ranked:**
+
+1. **F3 — `handoff_atomize` has 33 live findings and its test cannot see them.** `--all --check`
+   exits non-zero on all nine lanes: IN's executive summary claims **44 live items when the file
+   has 73**, and is dated 2026-07-28 while the file carries an item from **2026-08-11**; 30 of IN's
+   37 bullets carry no `[OPEN|PART|DONE]` tag, so the banner infers from prose — the inference
+   ED-IN-0086 introduced the tag to replace. Wired into nothing.
+   `tests/valoria/test_handoff_structure.py` exercises `status_tag`/`classify`/`tag_problems` on
+   **synthetic strings** and never invokes `--check` against `registers/handoffs/*.md`. §0.1 point 2.
+   **The fix is a ~10-line copy of `test_engine_atlas.py:46`.** Distinct from W8 (the atomization
+   *run*, blocked on 2 Jordan calls) — the guard is not blocked on anything.
+2. **F5 — CLAUDE.md, 13,963 tok, §3 contradicts itself.** The `engine/` row says engine/ holds "the
+   prose param tables `engine/params/`"; the struck `~~engine/params/~~` row three rows above
+   records its 2026-08-05 evacuation; `ls engine/` confirms no `params/`. Also measured stale: the
+   `tests/` row's "~850KB of narrative/audit `*.md`" (**8 files, 90 KB**, none carrying the named
+   prefix) and the `tools/` row's "36 of 106 modules" (apparatus_registry: **123 entries, 6
+   orphaned**). Four struck rows (2,392 chars) restate relocations `restructure_ledger.md` already
+   owns machine-readably — §8's invariant applied to CLAUDE.md itself. Paid on every session **and
+   every subagent**.
+3. **F2 — `audit_registry.jsonl` indexes 7 of 41 units and its gate is tail-blind.** After
+   resolving the `designs/audit/ → audit/` prefix (`restructure_ledger.md:981`): **34 dirs
+   unindexed, 10 rows dangling** at subjects the evacuation removed. `ci_audit_registry_check.py`
+   reports **3**, because it filters to entries newer than the registry's own latest date — blind
+   by construction, ED-IN-0115..0119's class. Needs a keep-or-retire call.
+4. **F1 — 688 KB of committed derivatives, no consistency guard.** Five `_data.js` decode
+   byte-equal to their `.json` (all five verified), beside a 752 KB `console.html` that inlines all
+   six feeds. The README calls the `index.html`+`_data.js` pair "Dev pair (**regenerable**)" and
+   `console.html` the primary. `index.html:185` loads `review_state_data.js`, which `.gitignore`
+   excludes — **the committed dev pair is broken in every fresh clone.** No test asserts the three
+   tiers agree.
+5. **F4 — the lane handoffs repeated the defect the root file was archived for.** `HANDOFF_IN.md`
+   **191 KB** vs the root file's 16 KB at archiving; `## Next actions` starts at line **1506**.
+   Separately and *not* blocked on W8: the root `HANDOFF.md`'s first Next-actions bullet — what the
+   SessionStart banner surfaces above all else — has been a struck-through `✅ RESOLVED` item since
+   2026-07-30, and appeared verbatim in this session's banner.
+
+**Also filed:** F7 `research/` (2.7 MB, live, **zero** CLAUDE.md mentions while §3 documents four
+trees that no longer exist); F6 glossary retention (3.0 MB, three renderings — **flagged as cost,
+not defect**: it is correctly guarded); F8 two SUPERSEDED heads pointing at `designs/` paths
+(verified resolvable, non-breaking).
+
+**Spared under attack, recorded so they are not re-flagged:** the 16 `*_flow_skeleton_v1.md` (every
+line anchored `path:line symbol` and verified against the tree by `test_flow_skeletons.py`; the
+"aggregate" is the format spec + roster, not a concatenation) and the `throughlines_meta` +
+`_meta_infill` pair (retired convention, but `ci_vetting_check.py` — blocking — reads it as its
+framework; §4 grandfathers it). Both pattern-match as prunable and are load-bearing.
+
+**Needs Jordan:** the F2 keep-or-retire call, and F6's retention shape.
+
+**Method limit, stated:** sweep and critic shared one context — not the structural independence
+§10 asks for (`hCritic`/`valoria-critic` was unavailable). Every finding was re-derived from a
+command against the working tree rather than from the draft's prose, which is what caught A1/A2/A3,
+but that is not equivalent. **F1/F2/F3 want an independent read before execution.** Unverified and
+listed in `01`'s §A7: the PP-NNN scope mismatch (my 320/527 neither confirms nor refutes §0's
+433/452 — different scan roots), F1's remediation untested in a browser, and the two report-only
+`review_core` failures (`vocab.a17`, `stubs.count`).
