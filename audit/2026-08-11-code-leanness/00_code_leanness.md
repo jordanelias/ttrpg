@@ -1,458 +1,163 @@
-# Code leanness — duplication census, uncalled-code candidates, and a consolidation plan (ED-IN-0159)
+# Code leanness — findings, corrections, and the merged consolidation plan (ED-IN-0159)
 
 ## Status: REFERENCE — observation with evidence; nothing ruled, nothing executed
 
-## Date: 2026-08-11 · Lane: IN (cross-cutting) · Baseline: `922ad1f`
+## Date: 2026-08-11 · Lane: IN (cross-cutting) · Baseline: `ff9e3e3` (post-#302, post-#304)
 
-**The mission this serves** (Jordan, 2026-08-11): *"make this project as lean as possible without
-sacrificing mechanisms"*, where lean means **fewer files to continually track, review, edit and
-audit** — not fewer bytes. **Scope is code**: `tools/`, `.githooks/`, `skills/*/scripts/`, `engine/`,
-`systems/*/sim/`, `tests/`, and the `.py` committed inside `audit/`. Registers, logs and lane files
-are explicitly **out of scope** — chunking those is fine.
+**Mission** (Jordan, 2026-08-11): *"make this project as lean as possible without sacrificing
+mechanisms"*, where lean means **fewer files to continually track, review, edit and audit** — not
+fewer bytes. Scope is **code**: `tools/`, `.githooks/`, `skills/*/scripts/`, `engine/`,
+`systems/*/sim/`, `tests/`, and the `.py` under `audit/`. Registers, logs and lane files are out of
+scope — chunking those is fine.
 
-**Method.** Read, then measure, then attack the measurement. Solo; no fan-out, no workflow. Every
-figure below is from a command run against the working tree in this session. Three candidate
-findings were discarded mid-analysis for method defects; §7 records them, because a census that
-reports only what survived is not a census.
+**This is a full rewrite.** It supersedes every earlier revision of this document (`ed732f5`,
+`cbc7da9`). Findings are stated **once, in final adjudicated form**, with retractions inline rather
+than in an appendix; the plan is **one current plan**, not a plan plus a list of amendments.
 
-**Verification.** `pytest tests/valoria` 1775 passed · `valoria_local --staged` all gates passed ·
-`build_engine_atlas --check` current.
+**Provenance of the findings below.** Three passes, deliberately different in kind:
+
+1. **This session (Opus, Bash)** — the duplication census over `tools/`.
+2. **A `valoria-critic` read-only pass (Fable, Read/Grep/Glob)** — attacked pass 1 as prior art.
+3. **PR #304** (merged `655c9c5`), an independent session auditing all 115 `systems/` modules, plus a
+   second `valoria-critic` pass reconciling it against passes 1–2.
+
+Passes 2 and 3 each **overturned findings from pass 1**. Those overturns are §2 and are the most
+useful part of this document.
+
+**Instrument.** `duplication_census.py`, beside this file. Every quantitative claim here is
+reproduced by it; a number it cannot reproduce is withdrawn. It **self-invalidates** (exit 1) if the
+Status readers ever agree, if `params_tables.yaml` loses its original-path key, if any cited
+`params/` path starts resolving, or if `next_free` falls behind its lane.
+
+**Verification at this baseline.** `pytest tests/valoria` 1775 passed / 23 skipped / 14 xfailed /
+1 xpassed · `valoria_local --staged` all gates passed · `ci_claim_provenance_check` OK ·
+`validate_ed_citations` 0 violations · `build_engine_atlas --check` current.
 
 ---
 
-## 1. The duplication census
+## 1. Findings
 
-**Population: 118 `.py` modules** under `tools/`, `tools/observability/`, `tools/sim_harness/`,
-`.githooks/`, `skills/*/scripts/`.
+Population for §1.1–1.3: **118 `.py` modules** under `tools/`, `tools/observability/`,
+`tools/sim_harness/`, `.githooks/`, `skills/*/scripts/`. **State the denominator when quoting these**
+— §2.2 explains why.
 
-### 1.1 Three shared libraries already exist. Adoption stalled.
+### 1.1 The shared libraries exist, are correct, and were never adopted
 
-| library | what it owns | imported by |
+| library | owns | imported by |
 |---|---|---:|
 | `tools/ci_common.py` | changed-file/diff plumbing, `read_text`, sim-reference roots | **11 / 118** |
-| `tools/observability/obs_core.py` | ledger read, lane roster, `STATUS_RE`, needs-Jordan vocab, JS bundle writer | **9 / 118** |
-| `tools/names.py` | naming gate primitives | **9 / 118** |
+| `tools/observability/obs_core.py` | ledger read, lane roster, `STATUS_RE`, needs-Jordan vocab, JS-bundle writer | **9 / 118** |
+| `tools/names.py` | naming-gate primitives | **9 / 118** |
 | `tools/registry.py` | register access | **2 / 118** |
-| `tools/pathres.py` | **declares itself the SOLE PARSER** of `restructure_ledger.md` | **1 / 118** |
+| `tools/pathres.py` | alias resolution over `restructure_ledger.md` | **1 / 118** |
 
-The problem is not an absent abstraction. It is that **the abstractions exist, are correct, and were
-never adopted** — `obs_core` was built precisely to end this (its header documents the five
-primitives it consolidated) and it reaches 8% of the tooling.
+The problem is not an absent abstraction. `obs_core` was built precisely to end this — its header
+documents the five primitives it consolidated — and it reaches 8% of the tooling.
 
 ### 1.2 Primitive re-implementation
 
 | primitive | independent implementations |
 |---|---:|
-| repo-root / path anchoring | **53** |
+| repo-root / path anchoring | **53**, in **15 distinct spellings** |
 | YAML register load (`yaml.safe_load`) | **44** |
 | staged/changed-file listing | 10 |
 | `## Status:` parsing | 9 |
 | the 9-lane roster | 9 |
-| `restructure_ledger.md` parsing | 9 (6 genuinely parse it) |
+| `restructure_ledger.md` parsing | 9 mention it; **4 genuinely parse it** (§2.3) |
 | editorial-ledger read | 8 |
 | `id_reservations` read | 8 |
 | token estimation (`len//4`) | 6 |
 | `PP-NNN` / `ED-NNN` regex | 6 |
 
-### 1.3 Where the duplicates **disagree** — the consistency cost, measured
+Top repo-root spellings: `os.path.dirname(os.path.dirname(os.path.abspath(__file__)))` x24 ·
+`Path(__file__).resolve().parents[1]` x6 · `os.path.dirname(os.path.abspath(__file__))` x5 ·
+`os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))` x4 · eleven more, 1–4 each.
+`ci_common` already computes it — as `_REPO`, **underscore-private**, so it is not offered.
 
-Duplication that agrees is cost. Duplication that disagrees is a defect. I tested for divergence
+### 1.3 Where the duplicates disagree — the consistency cost, measured
+
+Duplication that agrees is cost; duplication that disagrees is a defect. I tested for divergence
 rather than assuming it.
 
-**(a) `## Status:` — five live regexes, and they disagree on real files.**
+**(a) `## Status:` — five live regexes, disagreeing on real files.**
 
 | parser | pattern |
 |---|---|
-| `dashboard_data` | `^#{1,3}\s*Status:` — requires a hash, no space before the colon |
+| `dashboard_data` | `^#{1,3}\s*Status:` — needs a hash, no space before the colon |
 | `build_identifier_census` | `^##\s*Status:` — **exactly two** hashes |
-| `ci_generation_consistency` | `#{0,3}\s*Status\s*:` — tolerant |
+| `ci_generation_consistency` | `#{0,3}\s*Status\s*:` |
 | `obs_core.STATUS_RE` | `^#{0,3}\s*Status\s*:` — the canonical one |
 | `build_incompleteness` | `#{0,4}\s*Status\s*:` + a status vocabulary |
 
-Across **551 tracked `.md`** (excluding `deprecated/`): **200 carry a Status line · 193 are read
-identically by all five · 7 are DISPUTED.** The disputed set, in full:
+Across **557 tracked `.md`**: **205 carry a Status line · 198 read identically by all five ·
+7 DISPUTED.** The disputed set has been **stable at exactly 7 across four re-runs** spanning two
+merges:
 
 - `workplans/valoria_master_workplan_v6.md` — **the live steering surface**
-- `systems/ui/valoria_ui_ux_v4.md`
-- `references/restructure_ledger.md`
-- `engine/sim_reference_CONVENTIONS.md`
-- `systems/combat/combat_engine_v1/README.md`
+- `systems/ui/valoria_ui_ux_v4.md` · `references/restructure_ledger.md`
+- `engine/sim_reference_CONVENTIONS.md` · `systems/combat/combat_engine_v1/README.md`
 - `skills/valoria-simulator/SKILL.md`
 - `audit/2026-08-06-social-contest-three-lens-audit/sources/03_consolidation.md`
 
-Six of the seven are invisible to **both** `dashboard_data` and `build_identifier_census`; the
-seventh to `build_identifier_census` alone. The failure is silent: the dashboard renders a corpus
-that omits the master workplan's status and reports no error. **This is the residue after `obs_core`
-already consolidated** — the divergence it fixed is documented in its own header (a GO-lane
-undercount, disagreeing Status regexes), and it re-grew.
+Six are invisible to **both** `dashboard_data` and `build_identifier_census`. The failure is silent:
+the dashboard renders a corpus omitting the master workplan's status and reports no error. **This is
+the residue after `obs_core` already consolidated this primitive** — its header records the
+divergence it fixed (a GO-lane undercount, disagreeing Status regexes), and it re-grew.
 
-**(b) Repo-root — 15 distinct spellings for one concept.**
+**The consolidation delta is two-sided.** `build_incompleteness` **over**-matches the canonical owner
+(0–4 hashes, leading whitespace tolerated). Collapsing onto `obs_core.STATUS_RE` therefore *adds*
+documents to two parsers' view and can *remove* them from a third's. The migration test must assert
+**both** directions, or the incompleteness census silently shrinks. (Found by the #304 reconciliation;
+my first statement of this finding was one-sided.)
 
-| spelling | sites |
-|---|---:|
-| `os.path.dirname(os.path.dirname(os.path.abspath(__file__)))` | 24 |
-| `Path(__file__).resolve().parents[1]` | 6 |
-| `os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)…` | 5 |
-| `os.path.dirname(os.path.abspath(__file__))` | 5 |
-| `os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))` | 4 |
-| `Path(__file__).resolve().parents[2]` | 4 |
-| `Path(__file__).resolve().parent` | 4 |
-| …8 more spellings | 1–3 each |
+**(b) The 9-lane roster — 8 sites, agreeing today, diverged before.** Verbatim
+`("MB","PC","FI","SC","FA","WR","IN","GO","SE")` in `ci_workplan_pointer_check`,
+`broken_dependency_checker`, `handoff_atomize`, `validate_ed_citations`,
+`currency_consistency_check`, plus `obs_core`'s canonical copy and two derived spellings. They agree
+**now**; `obs_core`'s header records that one previously undercounted GO. **Adding a tenth lane means
+editing 8 files.**
 
-`ci_common` already computes it — as `_REPO`, **underscore-private**, so it is not offered.
+**(c) The TN-7 dice constants — and both audits' censuses were partial.** `MU_PER_DIE = 0.40` /
+`SD_PER_DIE = 0.80` are hardcoded as **named constants** in `engine/autoload/sigma_leverage.py:100-101`
+and `audit/2026-06-03-contest-groundup/engine.py`, and as an **unnamed tuple** `7: (0.40, 0.800)` in
+`engine/autoload/dice_engine.py:56,60`, `tests/sim/v32-combat-balance/m1_dice_sigma_core.py:28` and
+`sigma_leverage.py:75`. #304 independently found a sixth — the canon-twin `_SIG` at
+`tests/sim/mass_battle/resolution.py:195` — which I missed, while it missed two I found. **The union
+is ~7 sites; neither census was complete.** A grep for the constant *name* finds two of seven.
+`m1_dice_sigma_core.py` is the frozen parity oracle — do not touch it (§6 item 8).
 
-**(c) The 9-lane roster — 8 sites, agreeing today, diverged before.**
+### 1.4 The provenance defect — 354 citations to paths that left the tree
 
-Verbatim `("MB","PC","FI","SC","FA","WR","IN","GO","SE")` in `ci_workplan_pointer_check`,
-`broken_dependency_checker`, `handoff_atomize`, `validate_ed_citations`, `currency_consistency_check`,
-plus `obs_core`'s canonical copy and two derived spellings. They agree **now**; `obs_core`'s header
-records that one previously undercounted GO. **Adding a tenth lane today means editing 8 files.**
+Live `.py` files carry **354 citations of `params/…` paths across 74 files and 12 distinct paths**,
+in the form `# [canonical: params/core.md §Expected Value (per die), TN7]` — the annotation the
+anti-fabrication gate is built around, by which a constant in code names its authority.
 
-**(d) The TN-7 dice constants — five hardcodings across four files.**
+| path | citations | | path | citations |
+|---|---:|---|---|---:|
+| `params/core.md` | 168 | | `params/threadwork.md` | 5 |
+| `params/contest.md` | 102 | | `params/x.md` | 5 |
+| `params/mass_combat.md` | 49 | | `params/combat.md` | 2 |
+| `params/factions/stats_1_7_scale.md` | 10 | | 4 more | 1 each |
+| `params/factions.md` | 9 | | | |
 
-Two files hardcode the **named constants** `MU_PER_DIE = 0.40` / `SD_PER_DIE = 0.80` —
-`engine/autoload/sigma_leverage.py:100–101` and `audit/2026-06-03-contest-groundup/engine.py`
-(the census §5 reports exactly these two). Two more hardcode **the same values as an unnamed
-tuple**: `engine/autoload/dice_engine.py:56,60` and
-`tests/sim/v32-combat-balance/m1_dice_sigma_core.py:28`, both as `7: (0.40, 0.800)`, plus a third
-such table in `sigma_leverage.py:75`. So: **2 named + 3 tuple sites, 5 in total.** Values agree
-today. The distinction matters for the remedy — a grep for the constant name finds two of five.
+**Every one of the twelve is absent from the tree.** `params/` aliases to `engine/params/`, evacuated
+2026-08-05 (ED-IN-0145) to fork ref `c451bcb`. So every constant in the executable model cites an
+authority that is not in the repository.
 
-### 1.4 Checked and NOT found — the editorial-ledger readers
+**I first published this as "168 across 46 files" — 47% of the class.** I counted one basename and
+called it the defect; the #304 reconciliation found `params/factions.md` also cited and also
+evacuated, and widening the instrument found ten more paths. The instrument now measures the class and
+fails if any path starts resolving.
 
-A first pass flagged that of 15 modules reading the editorial ledger, only 5 read the lane files —
-implying ten tools silently see pre-cutover flat IDs only. **Refuted on inspection.** Most use the
-glob `editorial_ledger*.jsonl`, which matches every lane file; my detector only recognised explicit
-lane interpolation. Of the three genuine suspects: `index_gen.py`'s flat-file mentions are all in a
-docstring describing its own superseded behaviour; `ci_claim_provenance_check.py`'s two filenames are
-a hardcoded provenance-anchor map, not a reader; and `currency_consistency_check.py` reads the flat
-file at :115 for a max-ED comparison **but globs all lane files at :152**, and documents the
-limitation at :129–130. **No confirmed divergence.** Recorded because CLAUDE.md §8 still describes
-`currency_consistency_check` as having a "flat-file-only ledger reader" — that description is now at
-best half-true.
-
----
-
-## 2. The provenance defect: 168 citations to a path that left the tree
-
-**168 citations of `params/core.md` across 46 live `.py` files**, in the form
-`# [canonical: params/core.md §Expected Value (per die), TN7]`. This is the annotation the
-anti-fabrication gate is built around — the mechanism by which a constant in code names its authority.
-
-`params/core.md` **does not exist**. It aliases `params/ → engine/params/`
-(`restructure_ledger.md:720`), and `engine/params/` was **evacuated 2026-08-05** (ED-IN-0145) to fork
-ref `c451bcb`. So every constant in the executable model currently cites an authority that is not in
-the repository.
-
-The 46 files span the whole executable surface: `engine/autoload/{sigma_leverage,dice_engine}.py`,
-`systems/{combat,mass_battle,factions,overview}/…`, all of `tests/sim/mass_battle/`, the
-`v32-combat-balance` harnesses, `tools/export_sim_params.py`, `tools/sim_harness/`, and
-`skills/valoria-dice-model/`.
-
-**The fix is available and byte-faithful.** ED-IN-0139 captured all 43 param files into
+**The remedy is in-tree and byte-faithful.** ED-IN-0139 captured all 43 param files into
 `engine/engine_params/params_tables.yaml` (669 KB) *before* the evacuation, keyed by original path —
-the file literally contains `engine/params/bg/core.md:` as a key, with cells captured verbatim. So
-the content is in the tree and addressable; only the pointer is stale. Repointing is mechanical, and
-its falsifier is a grep count going to zero.
+it literally contains `engine/params/bg/core.md:` as a key. Only the pointer is stale. This is
+CLAUDE.md §0's PP-NNN disease one register down: the provenance layer of the code.
 
-**This is the same disease as CLAUDE.md §0's PP-NNN finding** (433 of 452 cited patch numbers resolve
-to no register), one register down: the provenance layer of the code, not the prose.
-
----
-
-## 3. Uncalled code — scoped to what the evidence supports
-
-### 3.1 What the method can and cannot see
-
-Two independent passes: an AST import-graph (the repo's own `structure_audit.py`) and a scan for
-`import X` / `python …/X.py` across every tracked text file. **Both have disqualifying blind spots
-and I am not reporting either as a delete list.**
-
-- The AST graph reported 64 orphans **including `combat_engine_v1.wrapper`**, which is demonstrably
-  called (`combat_bridge.py:141`). `combat_engine_v1/` is a deliberate scripts-on-path directory whose
-  internal imports are bare (`from weapons import …`), so the resolver cannot dot-qualify them.
-  **Discarded.**
-- The import/invoke scan reported 249 of 486 (51%) uncalled — **156 of which are `tests/valoria` and
-  `tests/sim`**, which pytest collects by filename rather than importing. For those the measurement
-  is meaningless. **Headline discarded**; the residue is below.
-
-Neither sees dynamic imports or duck-typed doubles. Per §0.1 point 5, that makes grep tolerable
-**only** where a guard can be written — so every item below is a *candidate for tracing*, and the
-deliverable of that tracing is a guard, not a deletion.
-
-### 3.2 Residue after correction (~93 files)
-
-| tree | files | confidence |
-|---|---:|---|
-| `audit/*` probe scripts | 27 | **see §4 — these are not dead, they are unpromoted** |
-| `systems/*` | 25 | low — needs per-module tracing |
-| `engine/*` | 19 | low — needs per-module tracing |
-| `tools/sim_harness/` | 15 | **high** — CLAUDE.md §3 independently flags the 28-file cluster as having no automated callers |
-| `tools/` top-level | 6 | medium — `atomizer`, `doc_index_gen`, `valoria_rename`, `trace_execution_phases`, `build_identifier_census`, `gen_sigma_parity_goldens` |
-| `skills/valoria-module-adjudicator` | 1 | low |
-
-Four `systems/*/sim/` modules — `charter_liberties`, `home_sanctuary`, `hafenmark_equipment`,
-`infrastructure_reclamation` — appeared in **both** passes. Independent rediscovery by methods with
-different blind spots is the one ranking signal §10 credits, so these four are the place to start
-tracing. It is **not** proof they are dead.
-
-### 3.3 One genuine duplicate
-
-`audit/2026-06-03-contest-groundup/engine.py` (59 lines) is a **standalone reimplementation of the
-core resolution engine** — `MU_PER_DIE`, `SD_PER_DIE`, `OVERWHELM_SIGMA`, `eff_sigma`, `net_boost`,
-the ED-884/ED-934 mu-shift semantics and the P-232 Ob floor — with the canonical constants hardcoded.
-It is not a probe of the engine; it is a fork of it, and it cites ED and P numbers so a future reader
-would reasonably treat its output as authoritative. Values match live today. Nothing would report it
-if they stopped matching.
-
----
-
-## 4. The audit probe scripts are not disposable — they are unpromoted instruments
-
-I initially listed the 41 `.py` under `audit/` as clean deletion candidates. **That was wrong**, and
-reading them is what showed it.
-
-### 4.1 They still run
-
-**38 of 41 have path anchors that all resolve.** Three are broken:
-`wp_reach_authority_measurement.py` and `wt_spd_deleak_measurement.py` (both reach for
-`designs/scene/combat_engine_v1`, pre-restructure) and `stageBC_test_obb_contact_toi.py` (reaches for
-`audit/sim`).
-
-I executed one. `audit/2026-07-22-combat-engine-stress-test/stress_battery.py` runs in ~110 s and
-reports **22 checks: 21 PASS, 1 FAIL** —
-
-```
-## symmetry
-  [FAIL] mirror-match ~50% (N=400): worst dev=0.500 @ arming/heavy p=0.000
-```
-
-A mirror match — identical combatants — returns p=0.000 for arming-sword/heavy-armour. Whether that
-is a degenerate no-damage case or a genuine side bias I did not diagnose. **What matters here is that
-a correctness-invariant battery covering determinism, mirror symmetry, numerical sanity, attribute
-monotonicity, the upset cap and bounded runtime exists, executes today, reports a failure, and is in
-no CI job.**
-
-### 4.2 What they measure
-
-**Class A — invariant / falsifier batteries** (belong in `tests/`):
-`stress_battery.py` (22 mechanical invariants) · `grounding_battery.py` (falsifiable HEMA/physics
-assertions against Williams 2003, Fiore, Talhoffer, Le Jeu de la Hache; reports MATCH/DIVERGE) ·
-`symmetry_probe.py` (width-scaling side bias) · `reverse_pair_symmetry.py` (*"the cheapest invariant
-the gauge has, and it fails today"*) · `topology_probe.py` (*"falsifier for every topology number
-quoted in 06_master_synthesis.md"*) · `stageBC_test_obb_contact_toi.py` (an acceptance test) ·
-`primitives_probe.py` (hammers the standing claim that weapon behaviour **emerges** from geometry
-primitives with no weapon-name tables — the design philosophy under test) ·
-`measure_colocation.py` (self-described as *"the standing measurement behind ED-MB-0056/0059"*).
-
-**Class B — mechanism-value instruments. This class *is* the mission's own tooling:**
-
-- `flag_ablation.py` — leave-one-out over every boolean flag: *"a flag whose removal HURTS is
-  load-bearing; a flag whose removal HELPS is actively costing the historical result."*
-- `harness.py` (combinatorial audit) — classifies every factor **WIRED-LIVE / WIRED-SITUATIONAL /
-  DEAD** by event-divergence and win-share delta.
-- `interaction.py` — pairwise lever classification: INDEPENDENT / MASKING / SYNERGY (degeneracy risk)
-  / ANTAGONISM.
-- `reachability_sweep.py` — per-row: *does **any** setting of the toggles move this into band?* A row
-  invariant under all settings is unreachable by constants.
-- `subphase_truncation_probe.py` — does the `MAX_SUB_PHASES` bound ever actually bite?
-
-**The instrument that answers "what can we cut without sacrificing mechanisms" already exists, and it
-is sitting unrun in an audit folder.** `harness.py` emits a DEAD classification per factor; that is a
-strictly better dead-mechanism detector than the import-graph greps of §3, because it measures
-*behavioural* deadness rather than *referential* deadness.
-
-Relatedly, CLAUDE.md §10 lists a standing **emergence-auditor** as a watched agent-role candidate
-blocked on *"once seeded headless sims + ablation are runnable."* Ablation is runnable. That blocker
-is stale.
-
-**Class C — diagnostic one-offs** (~15: `side_probe`, `side_face_probe`, `reface_probe`,
-`cluster_probe`, `depth_probe`, `depth_factorial`, `granularity_probe`, `envelop_probe`,
-`envelopment_stability_probe`, `close_ranks_probe`, `intent_probe`, `rout_probe`, `phasec_probe`,
-`adversarial_pass`, `trace_backward`). Each localised one hypothesis for one finding. Forward value is
-as **evidence for the finding they support**, not as tooling. They should stay where they are, beside
-their write-ups.
-
-**Class D — generators / drivers**: `render_scenarios.py`, `render_png.py`,
-`scaled_orders_of_battle.py`, `gauge_run.py`, `run.py`, `mb_fieldbased_stress.py`,
-`cannae_{historical,calib,bait}.py`. Reusable, and the historical-calibration set encodes Jordan
-directives (the real Cannae OOB, 5000 v 8600, ~1.72:1) that exist nowhere else in executable form.
-
-**Class E — retire or fix**: the 3 broken-anchor scripts, and the §3.3 forked engine.
-
----
-
-## 5. The plan
-
-Ordered by risk, not by size. **The governing constraint** — CLAUDE.md §8 already records that
-migrating `currency_consistency_check`'s and `ci_audit_registry_check`'s readers onto the core was
-*deliberately deferred* because "each needs its own expected-delta test, not a drop-in." That
-judgment is right and generalises: **every migration of a blocking gate changes what that gate sees,
-so each one ships with a test asserting the delta is the intended one.** This is why the plan is ~15
-small changes and not one refactor.
-
-### Phase 0 — no behaviour change, no judgment required
-
-| # | Change | Falsifier |
-|---|---|---|
-| **0.1** | Replace the syntax-check job's hand-enumerated 32-file list with a glob over tracked `.py`. It names **32 of 108** `tools/*.py`; 76 are uncovered, including `pathres`, `handoff_atomize`, every `build_*`, and all of `tools/observability/`. | job compiles every tracked `.py`; a deliberately broken new file fails it |
-| **0.2** | Repoint the **168** `params/core.md` provenance citations at `engine/engine_params/params_tables.yaml` (§2). | `grep -rn "params/core.md" --include=*.py` → 0; plus a test asserting no live `.py` cites an evacuated path |
-| **0.3** | Fix or retire the 3 broken-anchor probes (§4.1). | each either executes or is gone |
-
-### Phase 1 — one owner per primitive
-
-**Do not create a fourth library.** Make `ci_common` the single import surface for `tools/`,
-re-exporting `obs_core`'s already-canonical definitions. Each step is its own commit with its own
-expected-delta test; order is deliberately cheapest-first so the pattern is proven on zero-risk
-changes before it touches a gate.
-
-| # | Change | Sites | Expected delta |
-|---|---|---:|---|
-| **1.1** | Publish `ci_common.REPO` (drop the underscore); migrate call sites | 53 → 1 | **none** — pure refactor. Any behaviour change is a bug |
-| **1.2** | `ci_common.load_register(path)` wrapping `yaml.safe_load` + caching | 44 → 1 | none |
-| **1.3** | `ci_common.LANES` re-exporting `obs_core`'s roster | 8 → 1 | none today; adding a lane becomes 1 edit |
-| **1.4** | `ci_common.tokens()` | 6 → 1 | none |
-| **1.5** | `ci_common.ID_RE` for `PP-NNN`/`ED-<LANE>-NNNN` | 6 → 1 | none |
-| **1.6** | **`STATUS_RE` → `obs_core`'s single definition** | 5 → 1 | **NOT none — this is the one that must be asserted.** The 7 disputed docs of §1.3(a) become visible to `dashboard_data` and `build_identifier_census`. The test names all 7 and asserts they are now seen |
-| **1.7** | Ledger read → `obs_core.read_ledger_entries` | 8 → 1 | per-gate expected-delta test, gates last |
-| **1.8** | Make `pathres`'s SOLE PARSER claim true — migrate `broken_dependency_checker`, `build_identifier_census`, `ci_claude_workflow_paths`, `evacuation_plan`, `build_incompleteness`; **or delete the claim** | 6 → 1 | alias resolution identical on every current input |
-
-A single-owner comment asserting a property the tree lacks is worse than no comment — it stops the
-next reader from looking. 1.8 resolves that either way.
-
-### Phase 2 — promote the instruments (delete nothing)
-
-| # | Change | Falsifier |
-|---|---|---|
-| **2.1** | Promote Class A batteries into `tests/valoria/`. The `stress_battery` mirror-match FAIL and `reverse_pair_symmetry`'s known failure land as **`xfail(strict)` citing an ED** — a tracked failure, not a silent one | suite still green; removing an xfail marker turns it red |
-| **2.2** | Promote Class B into a standing `tools/mechanism_census.py` — one owner over `flag_ablation` + `harness` + `interaction` + `reachability_sweep`, emitting a per-mechanism verdict (LOAD-BEARING / SITUATIONAL / DEAD / COSTING) | it reproduces each probe's published numbers on the same seeds |
-| **2.3** | Run it. **Its output is the input to any decision about cutting mechanisms** — behavioural deadness beats referential deadness | a DEAD verdict is reproducible across seeds |
-| **2.4** | Re-open the §10 emergence-auditor candidate, whose blocker ("once ablation is runnable") is stale | — |
-
-### Phase 3 — uncalled code, guarded
-
-| # | Change | Falsifier |
-|---|---|---|
-| **3.1** | Trace the 4 doubly-rediscovered `systems/*/sim/` modules (§3.2). Deliverable is a **guard**, not a delete | a test that fails if a live caller appears/disappears |
-| **3.2** | Rule on `tools/sim_harness/` (28 files, 15 uncalled): promote the `pr119_governance` adapters or retire to `deprecated/tools/`, mirroring the 2026-07-09 precedent | nothing in CI/hooks/skills references it — re-confirm by grep before moving |
-| **3.3** | Retire the forked engine (§3.3), or pin it to the live constants with a test that fails on divergence | mutate `MU_PER_DIE` live → the test fails |
-| **3.4** | Then, and only then, the remaining `systems`/`engine` residue | per-module |
-
-### What this is worth
-
-**Not a large file-count reduction.** Phase 1 removes ~0 files; Phase 2 *adds* one owner while
-retiring nothing; Phase 3's honest ceiling is the 15 `sim_harness` files plus whatever tracing
-confirms. If the goal were file count alone, this plan would be a poor investment.
-
-**It is a large edit-surface reduction**, which is the stated concern: the number of files you must
-touch to change one rule goes 53→1, 44→1, 8→1, 6→1, 5→1. Adding a lane goes from 8 edits to 1.
-
-**And it closes one live correctness class** — the seven documents whose status two tools cannot see —
-**and one live provenance class** — 168 constants citing an evacuated authority.
-
----
-
-## 6. Falsifiers
-
-| claim | command |
-|---|---|
-| Status regexes disagree on 7 real files | run the five patterns over `git ls-files '*.md'`; union 200, intersection 193 |
-| 168 citations to an absent path | `duplication_census.py` §2 → 168 across 46 files; `ls params/core.md engine/params/core.md` → both absent |
-| the capture can absorb them | `grep -n "core\.md" engine/engine_params/params_tables.yaml` → key `engine/params/bg/core.md:` present |
-| syntax gate covers 32 of 108 | diff the job's file list against `git ls-files 'tools/*.py' 'tools/**/*.py'` |
-| the probes still run | `cd audit/2026-07-22-combat-engine-stress-test && python3 stress_battery.py` → 22 checks, 1 FAIL |
-| `pathres` is not the sole parser | `grep -rln restructure_ledger tools/**/*.py` → 6 files |
-| §3's orphan lists are unsound | `combat_engine_v1.wrapper` appears in the AST orphan list and is called at `engine/cross_scale/combat_bridge.py:141` |
-
-## 7. What I discarded, and what I did not verify
-
-**Discarded mid-analysis** (method defects, recorded so they are not re-derived):
-
-1. **AST orphan count (64).** Cannot dot-resolve `combat_engine_v1`'s bare imports; reported a
-   demonstrably-live module as an orphan.
-2. **Import/invoke orphan count (249 / 51%).** 156 of them are pytest-collected test files, for which
-   "never imported" measures nothing.
-3. **"Ten ledger readers miss the lane files."** An artifact of my pattern detector not recognising
-   the `editorial_ledger*.jsonl` glob (§1.4).
-
-**Not verified:**
-
-- The `stress_battery` mirror-match FAIL is **reported, not diagnosed.** It may be a degenerate
-  no-damage case rather than a side bias. It needs a real look before it becomes an xfail with an ED.
-- The other 40 probes were read but only **one** was executed. "38 anchors resolve" is a static
-  check, not proof they run.
-- The 25 `systems` + 19 `engine` candidates are **unconfirmed**; only 4 have two-method agreement.
-- I did not measure how much of `tests/valoria`'s 153 modules is itself duplicated — the largest
-  single code tree in the census population, deliberately left out of scope because pytest collection
-  defeats the reference-based method used here.
-- Phase 1's "expected delta: none" claims are **predictions**, not measurements. Each is exactly what
-  its own migration test must establish.
-
----
-
-## 8. Fable-5 read-only second pass — two of my findings overturned, five new confirmed
-
-A `valoria-critic` agent (read-only: Read/Grep/Glob, no Bash, no writes — structural independence
-per §10) was given this document and the consolidation sweep as **prior art to attack**, and asked to
-work the lines they left uncovered. Its findings are adjudicated below. **I re-ran every load-bearing
-claim with Bash**, which it could not; the verdicts are mine, the discoveries are its.
-
-### 8.1 OVERTURNED — §3.2's four "possibly-uncalled" modules are reached, and my ranking signal was wrong
-
-§3.2 named `charter_liberties`, `home_sanctuary`, `hafenmark_equipment` and
-`infrastructure_reclamation` as the place to start tracing, on the strength of **two independent
-methods agreeing** they were uncalled — invoking §10's rank-by-independent-rediscovery.
-
-**All four are reached by a blocking test.** `engine/tests/test_pipeline_reach.py:749-755` lists them
-in `_OI17_FULL_MODULE_ENTRYPOINTS`, and `test_oi17_full_module_conversions_are_stub_wired` (`:767-779`)
-asserts each resolves as `stub_wired`. Re-run here: **1 passed.** All four are `stubwire.stub_resolve`
-no-ops (`charter_liberties.py:27-32`, `home_sanctuary.py:29-42`, `hafenmark_equipment.py:30-35`,
-`infrastructure_reclamation.py:29-34`) whose docstrings hold Jordan directives recorded nowhere else —
-`home_sanctuary.py:5` (the T9 Ob +4 / 12-season exit condition), `infrastructure_reclamation.py:5`
-(the attacker/defender pool formula). **Deleting any of them fails CI and destroys design content.**
-
-**The reasoning error matters more than the wrong answer.** Both my methods were blind to *the same
-thing* — `test_pipeline_reach.py` dispatches by **string module path**, invisible to an AST import
-graph and to an `import X` grep alike. "Independent rediscovery" is a ranking signal only when the
-blind spots actually differ; mine were correlated, so the agreement carried no information. I flagged
-this hazard in §3.1 and then walked into it one section later.
-
-**Phase 3.1 is therefore closed, not started** — the guard it asked me to write already exists, and
-it is `test_pipeline_reach.py`. Any further tracing in `systems/`/`engine/` must grep string-form
-module paths, not imports.
-
-### 8.2 OVERTURNED — the apparatus registry's orphan count is an undercount by construction, and §F5 inherited it
-
-`tools/build_apparatus_registry.py:213-220`: `invoked_by()` tags a tool `ci:<workflow>` if its
-**basename appears anywhere in the workflow text**, and `:306-307` then sets `orphaned=False` for any
-such tag. The syntax-check job is a bare `py_compile` list — so **being compiled counts as being
-invoked.** Confirmed in the output: `references/apparatus_registry.md` reports `index_gen.py` (:90),
-`atomizer.py` (:32), `doc_index_gen.py` (:83) and `valoria_rename.py` (:104) as "Invoked by
-ci:valoria-ci.yml", while the registry's *own* row 165 — enumerating what `valoria-ci.yml` actually
-invokes — lists none of them.
-
-**This invalidates a number I used.** The consolidation sweep's F5 corrected CLAUDE.md's stale
-"36 of 106 modules have zero automated callers" by citing "123 entries, 6 orphaned" from this
-registry. The staleness of CLAUDE.md's figure stands; **my replacement figure does not.** Neither
-number is a valid orphan census. F5's claim is narrowed to what remains true: the row is stale and
-unguarded, and the correct count is *not currently computed by anything*.
-
-### 8.3 The fold-in found a defect in my own plan: Phase 0.1 would destroy the orphan signal
-
-§5 Phase 0.1 proposes replacing the syntax gate's hand-enumerated 32-file list with a glob. Measured
-now: **46 of 108** `tools/*.py` have their basename somewhere in `valoria-ci.yml`. Under a glob that
-becomes **108 of 108**, and by §8.2's mechanism `invoked_by()` would mark **every tool non-orphaned** —
-silently zeroing the census.
-
-**Phase 0.1 is amended:** glob the syntax job **and** exclude the syntax-check job from
-`invoked_by()`'s scan in the same commit, with a test asserting a known-dead tool still reports
-orphaned. Shipping the two halves separately makes the registry worse than it is today. This is the
-§8-invariant hazard in miniature — a remedy for one gate corrupting a different gate's input.
-
-### 8.4 CONFIRMED — dead code inside a blocking gate's file
+### 1.5 Dead code inside a blocking gate's file
 
 `tools/compliance_check.py` calls **two functions that do not exist**: `_lazy_import()` at `:165` and
-`check_all()` at `:306` (`grep -c 'def _lazy_import\|def check_all'` → **0**). Executed here:
+`check_all()` at `:306` (`grep -c 'def _lazy_import\|def check_all'` gives **0**). Executed:
 
 ```
 $ python3 tools/compliance_check.py
@@ -461,113 +166,429 @@ $ python3 tools/compliance_check.py
 NameError: name 'check_all' is not defined
 ```
 
-The **live CI mode** (`--check-only --repo-state .`) is fully inline and unaffected — which is why
-this has survived — but the file is half dead-on-arrival, and it is a **blocking gate's** file. No
-census row records it, mine included.
+The live CI mode (`--check-only --repo-state .`) is fully inline and unaffected — which is why this
+survived — but the file is half dead-on-arrival, and it is a **blocking gate's** file. Its own
+docstring at `:10` records them as leftovers of ED-IN-0145's excision.
 
-It is one leg of a coherent inert cluster the agent assembled:
+### 1.6 Dead scope in blocking gates — one pattern, at least six instances
 
-- The only skeleton/index policy rule targets `designs/**/*.md` (`references/atomization_rules.yaml:243-249`)
-  — a tree **retired 2026-07-19**, so it matches nothing.
-- `_check_index` reads `require_index_above` (`compliance_check.py:166`), a key absent from
-  `atomization_rules.yaml`, whose rule uses `require_skeleton_above` (`:245`).
-- `doc_index_gen.py` has no importers and no invocation beyond `py_compile`, while its **37 outputs**
-  at `systems/**/*_index.md` carry **no freshness guard of any kind**.
+`compliance_check`'s dead branch is not isolated. Combining both audits' instances:
 
-Retiring `atomizer.py`, `doc_index_gen.py`, `index_gen.py` to `deprecated/tools/` and excising the
-dead functions is a clean −3 files plus dead code out of a blocking gate. **Coupled edit:**
-`tests/valoria/test_compliance_on_exceed_vocabulary.py:98-99` asserts `_on_exceed_severity(` appears
-≥3 times, counting `_check_size` as one site. The 37 `*_index.md` files are a **Jordan call** — the
-2026-07-26 ruling grandfathered existing pairs.
+- `ci_co_file_checker.py:90` builds candidates under **evacuated `engine/params/`** — Rule 4 has
+  examined zero items since 2026-08-05 (#304 D4).
+- `atomization_rules.yaml:243-249` — the only skeleton/index policy rule targets **retired
+  `designs/`**, so it matches nothing.
+- `_check_index` reads `require_index_above` (`compliance_check.py:166`), a key absent from the policy
+  file, whose rule uses `require_skeleton_above` (`:245`).
+- `ci_editorial_checker`'s `arcs/` scope, `ci_naming_check`'s `engine/params` entry, and
+  `ci_register_size_check`'s rows for evacuated files (#304 C2's sweep).
 
-`index_gen.py` is separately dead on its own evidence: zero importers, and its only artifact carries
-`<!-- auto-generated by index_gen.py — 2026-05-10T20:34:39Z -->`
-(`registers/patch_register_index.md:3`) — untouched for three months. **Keep `valoria_rename.py`**: it
-is the designated executor of `proposals/canonical_nomenclature_v1.md:231`.
+**Neither audit found the other's instances.** #304's C4 meta-guard — a vitality check that a blocking
+validator's scope still matches something — is the recurrence guard for the whole class, and is the
+single highest-value new item either plan contains.
 
-### 8.5 CONFIRMED — three more single-owner opportunities in the gate tier
+### 1.7 Three dead or self-retiring tools
 
-- **Two blocking size-cap gates overlap on one policy file.** `compliance_check`'s CI mode walks every
-  `.md`/`.yaml` against `atomization_rules.yaml` (`:257-284`); `ci_register_size_check` enforces a
-  hand-maintained `THRESHOLDS` dict, three of whose entries are read *from that same file* precisely
-  because they kept drifting (`ci_register_size_check.py:39-48`, recording three incidents, ED-IN-0097).
-  `tests/coverage_matrix.md`, `patch_register_active.yaml` and `module_contracts.yaml` are size-checked
-  **twice per CI run by two tools**. Unique to `ci_register_size_check`: the `.jsonl` caps (`:81-125`),
-  since compliance's walk skips non-`.md`/`.yaml` (`:259`). **Mechanism that must survive a merge:**
-  `ci_register_size_check` runs in `valoria_local` and `compliance_check` deliberately does not
-  (`ci_checks_registry.yaml:262` — "local-green != compliance-green"), so a merge must add the merged
-  gate locally or local coverage regresses.
-- **Two always-exit-0 tools sit in the BLOCKING job.** `ci_audit_registry_check`
-  ("Always exits 0 by design", `ci_checks_registry.yaml:113`) at `valoria-ci.yml:132`, and
-  `ci_supersession_check` ("Never fails the build", `:248`) at `:129`. Moving both to
-  `validators-report` changes no behaviour and makes the blocking tier's membership truthful.
-- **`ci_names_consistency.py` is a self-declared migration babysitter** (`:4-9`): it exists only while
-  `descriptor_registry.yaml` / `proper_noun_registry.yaml` still carry mirror `name`/`canonical`
-  fields, and says removing them is the follow-up. Finishing it retires a blocking gate, its CI line,
-  its `valoria_local` row, and two registries' mirror fields.
+- **`index_gen.py`** — zero importers; only CI presence is `py_compile`; its sole artifact carries
+  `<!-- auto-generated by index_gen.py — 2026-05-10T20:34:39Z -->`
+  (`registers/patch_register_index.md:3`), untouched for three months.
+- **`doc_index_gen.py`** — same profile; its **37 outputs** at `systems/**/*_index.md` have **no
+  freshness guard of any kind**. The 37 files are **grandfathered by the 2026-07-26 ruling** — a
+  Jordan call, not an edit. Retire the generator without deleting them.
+- **`ci_names_consistency.py`** — a self-declared migration babysitter (`:4-9`): it exists only while
+  two registries carry mirror `name`/`canonical` fields, and says removing them is the follow-up.
 
-### 8.6 CONFIRMED — `ci_checks_registry.yaml` documents a file that does not exist
+**Keep `valoria_rename.py`** — it is the designated executor of
+`proposals/canonical_nomenclature_v1.md:231`, and looks dead only through the same `py_compile`
+artefact (§2.2).
 
-`valoria_hooks.py` is **absent from the tree** (`find` → nothing), yet the registry — which calls
-itself the single source of truth — references it **5 times**, including its level-4 definition
-(`:14`), its field definitions (`:21-22`), and an entire `in_session_hooks` section (`:345-428`, ~18
-hooks, some describing the ED-1084-retired checkpoint machinery at `:422-424`). Every `paired_hook:`
-field on the live CI entries points into it. ~90 lines describing an enforcement level that does not
-exist. Pruning changes nothing enforced.
+### 1.8 Two blocking size-cap gates check the same files twice — and disagree on the cap
 
-### 8.7 Reframed, not discovered — two "duplications" that are ruled or docketed
+`compliance_check`'s CI mode walks every `.md`/`.yaml` against `atomization_rules.yaml` (`:257-284`).
+`ci_register_size_check` enforces a hand-maintained `THRESHOLDS` dict, three of whose entries are read
+*from that same file* precisely because they kept drifting (`:39-48`, recording three incidents,
+ED-IN-0097). `tests/coverage_matrix.md`, `patch_register_active.yaml` and `module_contracts.yaml` are
+size-checked **twice per CI run by two tools**.
 
-- **The mass-battle dual engine** (§D of the brief, the highest hope for a real consolidation) is
-  already docketed as **ED-MB-0065** with three measured blockers and a guard
-  (`tests/valoria/test_j2_mass_battle_seam.py`), awaiting WITHDRAW/DEFER/EXECUTE. The feared *third*
-  copy does not exist — the v22 source named at `systems/mass_battle/sim/massbattle.py:16` is already
-  gone from disk. **Nothing new to propose.**
-- **Personal combat is duplicated by design**: the DEPRECATED v30 resolver (`systems/combat/sim/combat.py:4-11`)
-  is still the default campaign path (`engine/mc_v18.py:75`, `scene_dispatch.py:273`) while
-  `combat_engine_v1` sits behind a default-OFF flag. Retiring the old resolver removes a whole
-  duplicate mechanic — but the gate is **flag ratification, a design decision**, not a leanness edit.
+**They disagree on the value** (#304 C9, verified): the gate says **15,000**
+(`ci_register_size_check.py:70`), the policy file says **10,000** (`atomization_rules.yaml:169-170`),
+and a **stale duplicate block** at `:231-232` says 5,000.
 
-### 8.8 `tests/valoria` — the tree I left out of scope
+**Mechanism that must survive a merge:** the `.jsonl` caps are unique to `ci_register_size_check`
+(`:81-125`; compliance's walk skips non-`.md`/`.yaml` at `:259`), and `ci_register_size_check` runs in
+`valoria_local` while `compliance_check` deliberately does not (`ci_checks_registry.yaml:262` —
+"local-green != compliance-green"). A merged gate must carry both or coverage regresses.
 
-The agent sampled ~15 of 153 modules, chosen adversarially by name collision, and found **no
-superseded or duplicate-fact modules**: every suspicious pair resolved to distinct, ED-cited, live
-purposes (the three "pins" files guard three different facts; the three geometry files, three
-different EDs). The real duplication is **boilerplate**: `conftest.py` is only the KNOWN_RED register
-(`:35-65`), so **32 files repeat an identical `ENGINE = …combat_engine_v1` + `sys.path.insert` block**,
-≥7 more repeat a `_SIM` block, and ~10 define local `_unit()` factories with differing defaults. One
-conftest helper collapses the path setup; the factories need case-by-case judgment. **Zero files
-removed, ~40 edit-sites collapsed.**
+### 1.9 Two always-exit-0 tools sit in the blocking tier
 
-**And the instrument to finish the job already exists** — `references/test_register.json`, 132 files /
-1,186 tests with a per-row "what it guards", generated and drift-gated blocking since ED-IN-0142
-(`tests/valoria/test_test_register.py`). §7's "deliberately left out of scope because pytest
-collection defeats the reference-based method" was true of *my* method and not of the repo's: the
-same-fact analysis is a query against a register I did not know to use.
+`ci_audit_registry_check` ("Always exits 0 by design", `ci_checks_registry.yaml:113`) at
+`valoria-ci.yml:132`, and `ci_supersession_check` ("ALWAYS return 0", `ci_supersession_check.py:66`)
+at `:129`. Moving both to `validators-report` changes no behaviour and makes the blocking tier's
+membership truthful. **Constraint (#304 C3):** the workflow edit and the registry `ci_job` flip must
+be **one commit**, or `broken_dependency_checker` reds.
 
-### 8.9 Amendments to §5
+### 1.10 `ci_checks_registry.yaml` documents a file that does not exist
 
-| # | change |
+`valoria_hooks.py` is **absent from the tree** (`find` returns nothing), yet the registry — which
+calls itself the single source of truth — references it **5 times**: its level-4 definition (`:14`),
+its field definitions (`:21-22`), and an `in_session_hooks` section (`:345-428`, ~18 hooks, some
+describing the ED-1084-retired checkpoint machinery at `:422-424`). Every `paired_hook:` field on the
+live CI entries points into it. ~90 lines describing an enforcement level that does not exist.
+
+### 1.11 The audit probe scripts are unpromoted instruments, not dead one-offs
+
+I first listed the 42 `.py` under `audit/` as clean deletion candidates. Reading them refuted it.
+**39 of 42 have path anchors that all resolve**; three are broken
+(`wp_reach_authority_measurement.py`, `wt_spd_deleak_measurement.py` — both reaching for
+pre-restructure `designs/scene/combat_engine_v1` — and `stageBC_test_obb_contact_toi.py`).
+
+I executed one. `stress_battery.py` runs in ~110 s: **22 checks, 21 PASS, 1 FAIL** —
+`[FAIL] mirror-match ~50% (N=400): worst dev=0.500 @ arming/heavy p=0.000`. A correctness-invariant
+battery covering determinism, mirror symmetry, numerical sanity, attribute monotonicity, the upset cap
+and bounded runtime **exists, runs today, reports a failure, and is in no CI job.**
+
+**Class B is this mission's own tooling:** `flag_ablation.py` (leave-one-out per boolean flag —
+*"a flag whose removal HURTS is load-bearing; a flag whose removal HELPS is actively costing the
+result"*), `harness.py` (every factor to WIRED-LIVE / WIRED-SITUATIONAL / **DEAD**), `interaction.py`
+(INDEPENDENT / MASKING / SYNERGY / ANTAGONISM), `reachability_sweep.py`. **The instrument that answers
+"what can we cut without sacrificing mechanisms" already exists and is unrun** — and it measures
+*behavioural* deadness, which §2.2 establishes is strictly better than the referential deadness both
+of the repo's automated censuses attempt. CLAUDE.md §10's emergence-auditor candidate is blocked on
+*"once ablation is runnable"*; it is.
+
+### 1.12 `tests/valoria` — no duplicate modules found; ~40 repeated bootstrap blocks
+
+A 15-of-153 adversarially-selected sample found **no superseded or duplicate-fact modules**: every
+suspicious pair resolved to distinct, ED-cited, live purposes (three "pins" files guard three
+different facts; three geometry files, three different EDs). The real duplication is boilerplate —
+`conftest.py` is only the KNOWN_RED register (`:35-65`), so **32 files repeat an identical
+`ENGINE = …combat_engine_v1` + `sys.path.insert` block**, at least 7 more repeat a `_SIM` block, and
+~10 define local `_unit()` factories with differing defaults.
+
+**The instrument to finish this exists**: `references/test_register.json` — 132 files / 1,186 tests
+with a per-row "what it guards", generated and drift-gated blocking since ED-IN-0142. My "left out of
+scope because pytest collection defeats the method" was true of *my* method, not of the repo's.
+
+### 1.13 A forked copy of the resolution core
+
+`audit/2026-06-03-contest-groundup/engine.py` (59 lines) reimplements the core resolver —
+`MU_PER_DIE`, `SD_PER_DIE`, `OVERWHELM_SIGMA`, `eff_sigma`, `net_boost`, the ED-884/ED-934 mu-shift
+semantics, the P-232 Ob floor — with constants hardcoded. It cites ED and P numbers, so a future
+reader would reasonably treat its output as authoritative. Values match live today; nothing would
+report it if they stopped.
+
+---
+
+## 2. Overturned — and what each error teaches
+
+### 2.1 The four "possibly-uncalled" factions modules are reached; my ranking signal was invalid
+
+I named `charter_liberties`, `home_sanctuary`, `hafenmark_equipment` and `infrastructure_reclamation`
+as where to start tracing, on the strength of **two independent methods agreeing** they were uncalled
+— invoking §10's rank-by-independent-rediscovery.
+
+**All four are reached by a blocking test.** `engine/tests/test_pipeline_reach.py:749-755` lists them
+in `_OI17_FULL_MODULE_ENTRYPOINTS`; `test_oi17_full_module_conversions_are_stub_wired` (`:767-779`)
+asserts each resolves as `stub_wired`; re-run here, **1 passed**. All four are `stubwire.stub_resolve`
+no-ops whose docstrings carry Jordan directives recorded nowhere else — `home_sanctuary.py:5` (the T9
+Ob +4 / 12-season exit condition), `infrastructure_reclamation.py:5` (the attacker/defender pool
+formula). **Deleting any fails CI and destroys design content.**
+
+**The reasoning error matters more than the wrong answer.** Both methods were blind to *the same
+thing* — `test_pipeline_reach.py` dispatches by **string module path**, invisible to an AST import
+graph and to an `import X` grep alike. Independent rediscovery ranks only when the blind spots
+*differ*; mine were correlated, so the agreement carried no information. I named this hazard one
+section before walking into it.
+
+### 2.2 Both of the repo's dead-code censuses are wrong — in opposite directions
+
+- **`build_apparatus_registry.py:213-220`** tags a tool `ci:<workflow>` if its **basename appears
+  anywhere in the workflow text**, and `:306-307` sets `orphaned=False` for any such tag. The
+  syntax-check job is a bare `py_compile` list — so **being compiled counts as being invoked**.
+  Confirmed: the registry reports `index_gen.py`, `atomizer.py`, `doc_index_gen.py` and
+  `valoria_rename.py` as "Invoked by ci:valoria-ci.yml", while its *own* row 165 enumerating what that
+  workflow actually invokes lists none of them. So **orphans are UNDERCOUNTED; cull candidates
+  hidden.**
+- **`dead_primitive_census.py`** has **no stub concept at all** (`grep stub_resolve` returns nothing),
+  so it reports `stub_resolve` bodies as dead functions. #304 measured 8 of its 55 `systems/`-scoped
+  "dead functions" to be exactly that; corrected figure **47**. So **deadness is INFLATED; false cull
+  candidates produced.** (Its default scope is wider — `tests/sim/mass_battle` + `engine` + `systems`
+  — and reports 72/48 today. Both figures are consistent; state the scope when quoting either.)
+
+**Same defect class, opposite signs: each pattern-matches a proxy for the property it claims.** One
+would have had us keep dead things, the other delete declared interfaces a ratchet exists to track.
+
+**This invalidated a figure I published.** The consolidation sweep (ED-IN-0158) corrected CLAUDE.md's
+stale "36 of 106 modules have zero automated callers" by citing "123 entries, 6 orphaned". The
+staleness stands; **my replacement figure does not.** The honest statement is that **no valid orphan
+count is currently computed by anything.**
+
+**Hierarchy of evidence, for anyone acting on deadness:** behavioural (`harness.py`'s DEAD verdict)
+beats hand-filtered referential (#304's corrected 47+39), which beats raw instrument output (both
+invalid).
+
+### 2.3 `pathres`'s "sole parser" claim is no longer false — withdraw the rhetorical charge
+
+I wrote that `pathres.py` "declares itself the SOLE PARSER and is not", and invoked CLAUDE.md §8's
+"a single-owner comment asserting a property the tree lacks is worse than no comment".
+
+**The comment now reads honestly.** `tools/pathres.py:121-127`: *"**INTENDED** sole parser of
+references/restructure_ledger.md, **not yet the actual one**. Four independent parsers still exist and
+have not been migrated onto this module"* — and it names all four
+(`broken_dependency_checker`, `ci_claude_workflow_paths`, and two `skills/valoria-vector-audit/`
+modules), closing with *"'sole parser' is aspirational"*.
+
+**The charge is withdrawn; the consolidation is still undone.** My "6 genuinely parse it" was also
+high — three of my six only mention the filename (`build_incompleteness` *excludes* it from a scan;
+`evacuation_plan`'s hits are a comment and a print string). **The real number is 4 to migrate.**
+
+### 2.4 The instrument counted itself
+
+Its source contains the literals `params/core.md`, `MU_PER_DIE` and `## Status:` **as the patterns it
+searches for**, and it lives under `audit/` — so it counted itself as a citing module, a constant
+hardcoding and a probe script, inflating three published figures by one each (172/47, 3, 42). Caught
+only because the counts moved after a merge and the merge could not account for all of it.
+Self-exclusion restored the originals. **A census that includes itself in its own population is a
+measurement defect, not a rounding error.**
+
+### 2.5 Refuted before publication — the editorial-ledger readers
+
+A first pass flagged that of 15 ledger-reading modules only 5 read the lane files, implying ten tools
+see pre-cutover flat IDs only. **Refuted on inspection**: most use the glob
+`editorial_ledger*.jsonl`, which matches every lane file; my detector only recognised explicit lane
+interpolation. Of three genuine suspects, `index_gen.py`'s mentions are in a docstring describing its
+own superseded behaviour, `ci_claim_provenance_check.py`'s two filenames are a hardcoded
+provenance-anchor map, and `currency_consistency_check.py` globs all lane files at `:152` while
+documenting its flat-file limitation at `:129-130`. **No confirmed divergence.** Recorded because
+CLAUDE.md §8 still describes that tool as having a "flat-file-only ledger reader" — now at best
+half-true.
+
+---
+
+## 3. Adjudication of PR #304 — where it corrects me, and where I correct it
+
+#304 (`655c9c5`) audited all 115 `systems/` modules (25,116 LOC) and shipped a divergence audit with
+a 887-line remediation plan and its own verifier. **Its scope and mine are near-disjoint**, which is
+the most important thing about it.
+
+### 3.1 The two theses compose; neither refutes the other
+
+#304's headline is that `systems/` has **no copy-paste problem** — 7 redundant copies in 25k LOC —
+but an **idiom-divergence** problem. My thesis is that `tools/` is full of duplicated idioms. These
+are not in tension: **the methods are mutually blind.** Structural function-body fingerprinting cannot
+count one-line `REPO = …` assignments or `yaml.safe_load` calls; a token census cannot see sixteen
+degree ladders that share no token. And #304's own lens 7 covered `tools/` and **corroborated me**
+(12 duplicated rules, 23 walkers with bespoke exclusions).
+
+**The corpus has both diseases, segregated by tree:** `systems/` diverges in *approach* (many
+implementations of one rule, textually different); `tools/` duplicates in *text* (many copies of one
+idiom, textually near-identical). Each session's method would have missed the other tree's disease.
+
+### 3.2 The binding constraint this puts on my Phase 1
+
+My "one owner per primitive" recipe is valid **only where the copies agree today** — repo-root, YAML
+load, lane roster, token estimation, ID regex, where the expected delta is *none*. #304's degree
+ladders **do not agree**: one rule has **16 producers, 6 vocabularies, 5 Overwhelming formulas**, and
+four *incompatible* meanings of the parameter named `net` (raw successes / Ob pre-subtracted / opposed
+margin / the opponent's roll), all typed `(int, int) -> str`. Nothing distinguishes them.
+
+**There, folding is a behaviour change, not a cleanup** — it converts visible divergence into
+invisible divergence. #304's `A7 LEAVE list` (six producers that look like copies and are not) must
+survive any consolidation. A leanness-motivated merge of `sigma_leverage.degree` or
+`faction_action._degree` would sacrifice mechanisms, which is the one thing the mission forbids.
+
+### 3.3 Where #304 is wrong: `altonian_reinforcements` did **not** miss the stubwire sweep
+
+#304 states `systems/mass_battle/sim/altonian_reinforcements.py` "missed the OI-17 stubwire conversion
+sweep — it still raises where all ~19 siblings return a governed no-op," and plans its conversion.
+**Verified against the tree, this is incorrect**, and both read-only passes accepted it.
+
+`engine/tests/test_pipeline_reach.py:166` carries an `XFAIL_MANIFEST` row
+`"altonian-reinforcements-handoff"`, kind **`accepted-handoff`**, reason: *"the ONE accepted
+cross-session handoff (MB-owned file) — conversion is MB plan §12 I1, not this program's job (critic
+F9: an IN exit criterion may not be hostage to another session's schedule)."* Line `:747` has the
+OI-17 roster **explicitly exclude** it. And `test_only_accepted_handoff_still_raises_unconditionally`
+(`:783-793`) asserts it **must still raise**, instructing that when MB converts it you *delete the
+test and the manifest row rather than update the assertion*. **The test passes.**
+
+**Acting on #304's item would break a green guard and cross a lane boundary.** The item is struck from
+the merged plan. (#304's appendix separately marks the module `tested: Y` — true only under its
+referenced-by-name definition; the function unconditionally raises. Do not read that Y as
+exercised-green.)
+
+### 3.4 Where #304 corrects itself, and figures not to quote
+
+- **"Nine degree implementations"** (the PR headline) is **superseded by #304's own divergence audit**,
+  which calls it *"materially incomplete — at least seven more exist"* and reports **16 producers**
+  (`00_divergence_findings.md:50,59,191`). Quoting "nine" repeats a withdrawn claim.
+- **Its location count is inconsistent three ways**: `00_divergence_findings.md:24` says "168/168 OK",
+  `02_remediation_plan.md:5-6` says "196 locations, 196/196 verified", `verify_locations.py:6` says
+  "these 400 sites". **The tsv has 196 data rows**, and I ran the verifier: **196 rows, 196 OK, 55
+  groups.** The 196 figure is correct; the findings doc is stale.
+- **Numeric coincidence:** "168" is both #304's stale row count and my `params/core.md` citation
+  count. Unrelated. Do not merge them.
+- `DISPATCH_COMBAT_BRIDGE` is cited at four different line numbers across four documents; the runtime
+  default is `engine/mc_v18.py:79-81`.
+
+### 3.5 Where #304 is better evidenced than me
+
+- **The deprecated combat resolver.** I concluded "flag ratification, not a leanness edit, nothing to
+  do." #304 found more: `tools/export_sim_params.py:36` **publishes the superseded model as typed
+  truth** beside `combat_engine_v1.json`. Dropping `systems/combat/sim` from `SCAN_DIRS` and
+  regenerating is **not blocked** on the flag ruling. My "nothing to do" was wrong.
+- **Its stub framing matches mine from the other side**: it caught the *instrument* miscounting stubs
+  as dead; I caught my own *methods* miscounting stubs as unreached.
+- **The rng fallback.** 16 sites define "no rng supplied" in two non-equivalent ways. I proved the
+  mechanism: under `random.seed(42)` twice, `random.Random()` yields 0.349522 then 0.678761
+  (**not reproducible**); `random.random()` yields 0.639427 both times (**reproducible**).
+  `engine/autoload/dice_engine.py` — the core dice resolver — uses the former. **This is my §1.2
+  pattern one layer down, and there the copies disagree.**
+- **36 `engine/` to `systems/` downward import edges**, contradicting declared upward-only layering —
+  count verified exactly. Acyclicity is preserved by import *placement* (11 lazy in-function imports),
+  not by structure.
+- A **faction-roster literal duplicated 4x** (`game_state.py:51` owner; `mc_v18.py:323`,
+  `npe.py:245,298`, `temperaments.py:72`) — my lane-roster pattern one layer down, **planned by
+  nobody**.
+- **`skills/valoria-dice-model/valoria_dice.py:45` is a live forked degree ladder** (no >=3 floor,
+  Ob-10 not Ob-20) — cross-layer duplication between `skills/` and the engine, in neither plan.
+
+### 3.6 A live confirmation of the sweep's F2, which my own commit caused
+
+ED-IN-0158's F2 found `ci_audit_registry_check` structurally blind. #304 then added **two** audit
+units; **neither is registered**; the gate reports **OK**.
+
+Mechanism, `tools/ci_audit_registry_check.py:78`: `if date > max_registered_date` — **strictly
+greater**. My registry row is dated 2026-08-11; both new units are dated 2026-08-11. They are
+invisible. **The gate is not merely tail-blind — it is same-day blind, and every registration makes it
+blinder** by advancing the max date. Registering an audit is the act that hides its same-day siblings.
+
+---
+
+## 4. The merged plan
+
+**One plan, replacing both.** Three tracks. Steps within a track are ordered; **G** and **S** may run
+concurrently in different lanes. Every step names the mechanism at risk, because "without sacrificing
+mechanisms" is the binding constraint.
+
+**Governing rule (from §3.2):** collapse to one owner **only where the copies agree today**. Where
+they disagree, a ruling comes first and the merge is a behaviour change.
+
+**Governing discipline (CLAUDE.md §8, already ruled):** every migration of a blocking gate ships with
+its own expected-delta test. This is why the plan is ~20 small changes, not one refactor.
+
+### Track G — gates and tooling (IN lane)
+
+| # | step | depends on | mechanism at risk |
+|---|---|---|---|
+| **G1** | Excise `compliance_check.py`'s dead branch (`_lazy_import`, `check_all`, the interactive path); update `test_compliance_on_exceed_vocabulary.py:98-99` in the same commit | — | None — the live `--check-only` mode is inline |
+| **G2** | **Dead-scope sweep as ONE pattern** (§1.6): retire `ci_co_file_checker` Rule 4, fix the three siblings, delete the `designs/` policy row, retire `atomizer`/`doc_index_gen`/`index_gen` to `deprecated/tools/` | G1 | Rule 4's co-change pressure — #304 argues three code-to-artifact gates now carry it. **The 37 `*_index.md` files are grandfathered (2026-07-26 ruling) — HELD, do not delete with the generator** |
+| **G3** | Move the two always-exit-0 gates to `validators-report`; flip their registry `ci_job` rows **in the same commit**; prune the `valoria_hooks.py` ghosts (§1.10) | — | Split the commit and `broken_dependency_checker` reds |
+| **G4** | Make `pathres` the owner: migrate the **four** parsers it names (§2.3); add #304's two-tier walk exclusions; fix the TREES roster 17 to 19 | — | `broken_dependency_checker`'s inclusion of `deprecated/` is **correct** — live ledger entries cite the ED archives, the anti-fabrication universe. The two-tier design preserves it deliberately |
+| **G5** | **#304's C4 meta-guard** — a vitality check that every blocking validator's scope still matches something | G1, G2, G4 | None. If its first run reds on `review_core.py`, that is a finding |
+| **G6** | Size caps, one sequence: adopt the policy cap and delete the stale duplicate block (`atomization_rules.yaml:231-232`), **then** merge the two gates | G2 | **The `.jsonl` caps and the local-tier coverage** (§1.8). The merged gate must carry both or coverage regresses |
+| **G7** | The mechanical one-owner migrations — `REPO`, YAML load, `LANES`, `tokens()`, `ID_RE`, ledger read — each with an expected-delta test asserting **delta = none**; gates last | — | Any behaviour change here is a bug, not a delta |
+| **G8** | **`STATUS_RE` to one owner.** The only intended behaviour change in Track G. Its test must name all 7 disputed docs **and assert both directions** (§1.3a) | G7 | A one-sided test lets the incompleteness census silently shrink |
+| **G9** | Glob the syntax job **and** exclude that job from `invoked_by()` **in one commit**, with a test that a known-dead tool still reports orphaned | — | **Shipping the halves separately zeroes the orphan census** (§2.2; measured: basename-in-workflow goes 46/108 to 108/108) |
+| **G10** | Repoint the provenance citations — **all 354 across 12 paths**, not just `params/core.md` — at `engine/engine_params/params_tables.yaml`; add a test that no live `.py` cites an evacuated path | after S1 (avoid double-touching lines #304's B1 rewrites) | None; the capture is byte-faithful |
+| **G11** | Fix the 3 broken-anchor probes; wire `validate_ed_citations` locally; drop `systems/combat/sim` from `export_sim_params`'s `SCAN_DIRS` and regenerate (**unblocked**, §3.5); finish the `ci_names_consistency` migration | — | **Do not delete the deprecated resolver** — it is still the campaign default. Only its *export* presence goes |
+
+### Track S — engine/systems correctness (#304's plan, adjudicated; FA/PC/MB/WR lanes)
+
+Run in #304's own order (conventions and units before vocabularies): **A1** (pin the unpinned canon
+ladder — precondition for everything), then **B1, B2, B3**, then **B7, B8**, then **B9**, **B10**,
+**A2**, **A3, A4**, **A6**, **A8**, **A9**, **B5, B6**, **B11**.
+
+Three adjudications applied:
+
+- **B4 moves out of P0.** #304's sequencing table lists it as behaviour-preserving; its own body says
+  "BLOCKED ON B0", and B0 is HELD. It goes behind the ruling.
+- **The `altonian_reinforcements` conversion item is STRUCK** (§3.3). It is an accepted cross-session
+  handoff with a passing guard; converting it is MB plan §12 I1's call, not this plan's.
+- **Two items are added that neither plan had:** bind and guard the 4x faction-roster literal (§3.5),
+  and disposition the forked degree ladder in `skills/valoria-dice-model/valoria_dice.py:45`.
+
+### Track T — instruments
+
+| # | step | depends on |
+|---|---|---|
+| **T1** | Land #304's **C6** fix (atlas probe under `tmp_path`; the no-test-writes-into-`systems/` guard) | — |
+| **T2** | Promote the Class-A batteries into `tests/valoria/` as `xfail(strict)` citing an ED, marked slow | **T1 — mandatory.** They were written as free-standing scripts; promoting them into a `-n auto` suite without C6's guard reproduces the exact race C6 documents (6/6 repro on clean main) |
+| **T3** | Promote Class B to a standing `tools/mechanism_census.py` — one owner over `flag_ablation` + `harness` + `interaction` + `reachability_sweep` | T2 |
+| **T4** | **Run it.** Its output is an explicit input to the HELD rulings below | T3 |
+| **T5** | One `conftest.py` path helper for the 32+7 bootstrap blocks; finish the `tests/valoria` same-fact analysis **via `test_register.json`**, not by hand | — |
+| **T6** | Teach `dead_primitive_census.py` to exclude `stub_resolve` bodies (#304 8b); pair with G9's `invoked_by` fix — **same defect class, ship as one pattern fix** (§2.2) | G9 |
+| **T7** | Pin or retire the forked resolution core (§1.13); coordinate with A3/A9 — same constant family | — |
+| **T8** | Resume the `systems`/`engine` uncalled tracing **with string-path grepping** (§2.1) | T4 |
+
+### Held for Jordan
+
+#304's six (**#0** which `net`/`ob` convention is canonical — *blocks #1 and #2*; **#1** the
+`faction_action` band shift and its `s == ob` dead zone; **#1b** the strategic layer resolving on
+**d6 >= 4** rather than the canonical d10 engine; **#2** one owner for degree bands; **#7**
+`standing`'s bounds; **#8** the 10 dead `infrastructure.py` constants), plus **the 37 grandfathered
+`*_index.md` files** and **the `sim_harness` promote-or-retire call** (28 files).
+
+**Recommendation: run T4 before ruling #1, #1b, #2 and #8.** The mechanism census prices exactly those
+questions — how often the dead `s == ob` band actually fires in seeded campaigns, whether the 10
+constants are behaviourally dead.
+
+**On #7 specifically:** the leanness instinct — reuse the existing `contest.primitives.Standing` — is
+**correctly refuted** by #304's B11: rebasing silently adds +5 to two dice pools and imports a
+venue-local shape across scales. Its dedicated mutator is the mechanism-preserving answer. Keep that
+reasoning; it is the clearest worked example of the mission's binding constraint.
+
+### What this is worth
+
+**Not a large file-count reduction.** Track G removes ~3 files; Track T *adds* an owner; the honest
+ceiling is the `sim_harness` cluster plus whatever tracing confirms.
+
+**It is a large edit-surface reduction** — the number of files you must touch to change one rule goes
+53 to 1, 44 to 1, 8 to 1, 6 to 1, 5 to 1; adding a tenth lane goes from 8 edits to 1.
+
+**And it closes four live defect classes**: seven documents whose status two tools cannot see; 354
+constants citing an evacuated authority; dead scope in six blocking gates; and two dead-code censuses
+that are both wrong in opposite directions.
+
+---
+
+## 5. Falsifiers
+
+| claim | command |
 |---|---|
-| **0.1** | **AMENDED** — glob the syntax job **and** exclude it from `invoked_by()` in the same commit (§8.3), with a test that a known-dead tool still reports orphaned |
-| **0.4** | **NEW** — excise `_lazy_import`/`check_all` and the unreachable interactive branch from `compliance_check.py`; update `test_compliance_on_exceed_vocabulary.py:98-99` in the same commit |
-| **0.5** | **NEW** — retire `atomizer.py`, `doc_index_gen.py`, `index_gen.py` to `deprecated/tools/`; delete the dead `designs/**` policy row |
-| **0.6** | **NEW** — prune `in_session_hooks` / `paired_hook` from `ci_checks_registry.yaml` (§8.6) |
-| **1.9** | **NEW** — merge the two size-cap gates onto the policy file, extended to `.jsonl`, **and add the merged gate to `valoria_local`** (§8.5) |
-| **1.10** | **NEW** — move the two always-exit-0 tools to `validators-report` |
-| **1.11** | **NEW** — finish the `ci_names_consistency` migration and retire the gate |
-| **2.5** | **NEW** — one `conftest.py` path helper for the 32+7 bootstrap blocks (§8.8) |
-| **3.1** | **CLOSED** — the guard already exists (§8.1) |
+| §1.1–1.3, §1.4, §1.7 | `duplication_census.py` — exits 1 if the Status readers agree, if a cited `params/` path resolves, if `params_tables.yaml` loses its key, or if `next_free` falls behind |
+| §1.3a (7 disputed) | census §1.3a — union 205 / agreed 198 / disputed 7 |
+| §1.4 (354/74/12) | census §2 |
+| §1.5 | `python3 tools/compliance_check.py` gives `NameError: name 'check_all' is not defined` |
+| §1.9 | `grep -n "ALWAYS return 0" tools/ci_supersession_check.py` gives `:66` |
+| §1.11 | `cd audit/2026-07-22-combat-engine-stress-test && python3 stress_battery.py` gives 22 checks, 1 FAIL |
+| §2.1 | `pytest engine/tests/test_pipeline_reach.py -k oi17` gives 1 passed |
+| §2.2 | `grep -c 'stub_resolve' tools/dead_primitive_census.py` gives 0 |
+| §2.3 | `sed -n '121,127p' tools/pathres.py` gives "INTENDED sole parser … not yet the actual one" |
+| §3.3 | `pytest engine/tests/test_pipeline_reach.py -k altonian` gives **1 passed** (it must still raise) |
+| §3.4 | `awk 'NF && $0!~/^#/' audit/2026-08-11-divergence-audit/01_locations.tsv | wc -l` gives 196 |
+| §3.5 (rng) | `random.seed(42); random.Random().random()` twice differs; `random.random()` twice is identical |
+| §3.6 | `python3 tools/ci_audit_registry_check.py` reports OK while two 2026-08-11 units are unregistered |
 
-### 8.10 Still unverified
+## 6. Still unmeasured
 
-**F10 (PLAUSIBLE, not confirmed):** `tools/evacuation_plan.py:164-165` keeps the whole
-`tests/sim/v32-combat-balance/` prefix as the parity oracle, but the actual consumers name only
-`m1_dice_sigma_core.py` (`tools/gen_sigma_parity_goldens.py:9,91-94`;
-`engine/tests/test_sigma_leverage_parity.py:11`; `build_fork.py:70-71`). Every out-of-directory hit on
-the other ~25 module names was a substring false positive. **Do not act on this** until a
-`MEASURED-BY:`/prose citation sweep confirms nothing cites the m2–r10 stations — moving a cited
-instrument turns `ci_claim_provenance_check` red. Ceiling is ~26 files *relocated*, zero deleted.
-
-Also unreached: 138 of 153 `tests/valoria` modules (use `test_register.json`), and the 25 `systems` +
-19 `engine` low-confidence candidates from §3.2 — which, after §8.1, need string-path grepping rather
-than import analysis.
+1. **Behavioural deadness, repo-wide.** `harness.py`'s DEAD/LOAD-BEARING classification has never been
+   run as a census. It is the agreed superior instrument and the input to four HELD rulings. **No
+   valid orphan count exists in either direction** (§2.2).
+2. **`tests/valoria`** — 138 of 153 modules unread; the `test_register.json` same-fact query is
+   identified but unexecuted.
+3. **The 25 `systems/` + 19 `engine/` low-confidence uncalled candidates** — now requiring string-path
+   grepping (§2.1), untraced.
+4. **The mass-battle twin-engine constant diff** — `BATTLEFIELD_SIZE` 25 vs 51 found; the full
+   constant-by-constant sweep is undone (ED-MB-0065 pending).
+5. **The `stress_battery` mirror-match FAIL** — reported, undiagnosed. Blocks its xfail-with-ED
+   promotion (T2).
+6. **~21 tree-walkers and ~21 hardcoded size caps** — filed by both audits, swept by neither,
+   deliberately (the ~100-constant precedent).
+7. **Cross-layer duplication `tools`/`skills` against the engine** — one known instance
+   (`valoria_dice.py:45`); nobody has asked the general question.
+8. **The v32 keep-rule over-cover** — `evacuation_plan.py:164-165` keeps the whole
+   `tests/sim/v32-combat-balance/` prefix while only `m1_dice_sigma_core.py` is named by consumers.
+   **Do not act** until a `MEASURED-BY:` sweep confirms nothing cites the m2–r10 stations; moving a
+   cited instrument turns `ci_claim_provenance_check` red.
+9. **Every Track-G "expected delta: none" claim** — these are predictions. Each is exactly what its own
+   migration test must establish.

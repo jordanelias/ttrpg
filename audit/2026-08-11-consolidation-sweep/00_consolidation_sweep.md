@@ -223,9 +223,17 @@ findings, because it only considers entries dated *newer than the registry's own
 (2026-08-06). It can only ever see the tail; the 34-unit gap is invisible **by construction, not by
 threshold**. This is the class ED-IN-0115..0119 already named — a gate that cannot see what it guards.
 
+**Confirmed live, 2026-08-11, and worse than "tail-blind".** PR #304 then added **two** audit units.
+Neither was registered. The gate reported **OK**. The mechanism, `ci_audit_registry_check.py:78`, is
+`if date > max_registered_date` — **strictly greater**. My own registry row is dated 2026-08-11 and
+both new units are dated 2026-08-11, so they are invisible. The gate is **same-day blind, and every
+registration makes it blinder** by advancing the max date: registering an audit is the act that hides
+its same-day siblings. On-disk audit dirs are now 45.
+
 **Opportunity.** Backfill the rows or rule the registry retired; either is fine and the present state
 is the bad one — an index that is 17% accurate is worse than none, because it is consulted. If kept,
-the check must compare *sets*, not tails. **Needs Jordan:** keep or retire.
+the check must compare *sets*, not tails, and must not use a strict date inequality.
+**Needs Jordan:** keep or retire.
 
 ### F3 — `tools/handoff_atomize.py`: 33 live findings, zero callers, and its test cannot see them
 
@@ -323,8 +331,13 @@ invariant ("every rule lives once; never re-implement a rule") applied to CLAUDE
    session audits)". Measured: **8 `.md` files, 90 KB** excluding `coverage_matrix.md`, none named
    `emergent_arc_skeleton_test_*`. The evacuation removed them; the warning outlived them.
 3. **The `tools/` row** cites "36 of 106 modules have zero automated callers … 6 have zero callers of
-   any kind". `references/apparatus_registry.yaml` now counts **123 entries, 6 orphaned, 0 prune
-   candidates**.
+   any kind". The row is stale — but **my replacement figure is withdrawn.**
+   `references/apparatus_registry.yaml`'s "123 entries, 6 orphaned" is an **undercount by
+   construction**: `build_apparatus_registry.py:213-220` treats a tool's basename appearing anywhere
+   in a workflow as invocation, and the syntax-check job is a bare `py_compile` list, so *being
+   compiled counts as being invoked*. Full evidence in ED-IN-0159 §2.2, which also shows the repo's
+   other dead-code census is wrong in the opposite direction. **The honest statement: no valid orphan
+   count is currently computed by anything.**
 
 **Opportunity.** Cut §3 to what a reader cannot get from `CURRENT.md` + `restructure_ledger.md`:
 delete the four retired rows, compress `systems/` from migration history to current membership, fix
@@ -499,7 +512,16 @@ described as trivially reversible). Neither touches the **closed** bucket, which
 
 ---
 
-### 7.1 Ranking (impact × cheapness — see §7.0 for the measured correction)
+### 7.0b THE PLAN NOW LIVES IN ONE PLACE
+
+The recommendations below were written before PR #302 and PR #304 merged. **The single current,
+merged plan — reconciling this sweep, the code-leanness census and #304's 887-line remediation plan
+into three ordered tracks with per-step mechanism-at-risk — is
+`audit/2026-08-11-code-leanness/00_code_leanness.md` §4.** The ranking below is retained as the
+record of how these items were first prioritised, and because §7.0's token measurement stands; where
+the two differ, **§4 of the code-leanness document governs.**
+
+### 7.1 Ranking (impact × cheapness — see §7.0 for the measured correction, §7.0b for the live plan)
 
 | # | Finding | Impact | Cost | Blocked on |
 |---|---|---|---|---|

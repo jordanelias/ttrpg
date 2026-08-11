@@ -2480,3 +2480,45 @@ load-bearing claim was re-run with Bash here.
 **Next:** §8.9 lists the amended plan (0.1 amended; 0.4/0.5/0.6/1.9/1.10/1.11/2.5 new; 3.1 closed).
 **Do not act on F10** (the v32 keep-rule over-cover) until a `MEASURED-BY:` sweep confirms nothing
 cites the m2–r10 stations — moving a cited instrument turns `ci_claim_provenance_check` red.
+
+**[OPEN] ED-IN-0159 — FULL REWRITE after PR #304 (2026-08-11).** Both audit documents rewritten so
+each states its findings once, in final form, and **one merged 3-track plan** (in
+`00_code_leanness.md` §4) now replaces this audit's earlier plan, the consolidation sweep's ranking,
+**and** #304's 887-line remediation plan. Adjudicated by a second Fable-5 read-only pass; every
+load-bearing claim re-verified with Bash.
+
+- **My biggest figure was 47% of its class.** The provenance defect is **354 citations across 74
+  files and 12 distinct evacuated `params/` paths** (`contest.md` 102, `mass_combat.md` 49,
+  `factions/stats_1_7_scale.md` 10, `factions.md` 9, +7 more) — **not 168 across 46**. I counted one
+  basename and called it the defect. The instrument now measures the class and exits 1 if any cited
+  path starts resolving.
+- **The two theses compose.** #304 finds `systems/` has *no* copy-paste problem (7 copies in 25k LOC)
+  but an idiom-divergence one; this audit finds `tools/` full of duplicated idioms. **The methods are
+  mutually blind** — and #304's own lens 7 covered `tools/` and corroborated this audit.
+- **Binding constraint on Phase 1:** one-owner collapse is valid **only where the copies agree
+  today**. #304's degree ladders carry **four incompatible meanings of `net`** under one
+  `(int,int)->str` signature; folding there converts visible divergence into invisible divergence.
+  Its **A7 LEAVE list must survive**.
+- **I correct #304 on one item.** `altonian_reinforcements` did **not** miss the OI-17 sweep: it is
+  `test_pipeline_reach.py:166`'s **accepted-handoff** manifest row, excluded from the roster at
+  `:747`, and `test_only_accepted_handoff_still_raises_unconditionally` (`:783`) asserts it **must
+  still raise** — it passes. **STRUCK** from the merged plan; acting on it breaks a green guard and
+  crosses a lane boundary. Both read-only passes accepted the claim; only execution caught it.
+- **Do not quote from #304:** its "nine degree implementations" headline (its own divergence audit
+  supersedes it — **16 producers**), or its location count (inconsistent 168/196/400; the tsv has
+  **196** rows and its verifier runs 196/196, 55 groups).
+- **#304 is better evidenced than me on the deprecated combat resolver** —
+  `export_sim_params.py:36` publishes the superseded model as typed truth, and dropping it from
+  `SCAN_DIRS` is **not blocked** on the flag ruling. My "nothing to do until ratification" was wrong.
+- **Both dead-code censuses are wrong, in opposite directions** — `build_apparatus_registry` counts
+  `py_compile` as invocation (undercounts orphans); `dead_primitive_census` has no stub concept
+  (inflates deadness). **No valid orphan count exists in either direction.** Ship the two fixes as one
+  pattern fix (plan G9 + T6).
+- **Also withdrawn:** the `pathres` "false sole-parser claim" charge — `pathres.py:121-127` now says
+  "INTENDED sole parser … not yet the actual one" and names the four remaining parsers. The
+  consolidation is still undone; the rhetorical charge is not.
+
+**Held for Jordan:** #304's six (#0 the `net`/`ob` convention **blocks #1 and #2**; #1, #1b the
+strategic layer's d6>=4, #2, #7 `standing` bounds, #8), plus the 37 grandfathered `*_index.md` files
+and the `sim_harness` call. **Run plan T4 (the mechanism census) before ruling #1/#1b/#2/#8** — it
+prices exactly those questions.

@@ -137,12 +137,27 @@ def main():
         print(f'  {len(v):3d}  {k}')
     print(f'  distinct spellings: {len(idioms)}')
 
-    section('2  provenance citations to an evacuated path')
-    cites = [f for f in git_ls('*.py') if 'params/core.md' in read(f)]
-    n = sum(len(re.findall(r'params/core\.md', read(f))) for f in cites)
-    print(f'  `params/core.md` cited {n} time(s) across {len(cites)} live .py file(s)')
-    for rel in ('params/core.md', 'engine/params/core.md'):
-        print(f'    {rel:28s} exists: {os.path.exists(os.path.join(REPO, rel))}')
+    section('2  provenance citations to evacuated paths')
+    # WIDENED after the PR #304 reconciliation. The first version counted ONE basename
+    # (`params/core.md`) and published 168/46 as the finding. That was 47% of the class: the
+    # evacuation took the whole `engine/params/` tree, and live code cites twelve distinct paths
+    # under it. Counting one basename measured the example, not the defect.
+    by_path, cited = {}, set()
+    for f in git_ls('*.py'):
+        for h in re.findall(r'\bparams/[A-Za-z0-9_/]+\.md', read(f)):
+            by_path[h] = by_path.get(h, 0) + 1
+            cited.add(f)
+    total = sum(by_path.values())
+    print(f'  evacuated-params citations in live .py: {total} across {len(cited)} file(s), '
+          f'{len(by_path)} distinct path(s)')
+    for k, v in sorted(by_path.items(), key=lambda x: -x[1]):
+        resolves = os.path.exists(os.path.join(REPO, k)) or \
+                   os.path.exists(os.path.join(REPO, 'engine', k))
+        print(f'     {v:5d}  {k}{"   <-- RESOLVES" if resolves else ""}')
+        if resolves:
+            fail.append(f'{k} now resolves — the section 2 finding must be narrowed')
+    print(f"  `params/core.md` alone: {by_path.get('params/core.md', 0)}  "
+          f"(the figure first published; it is 47% of the class)")
     cap = read('engine/engine_params/params_tables.yaml')
     key = 'engine/params/bg/core.md:' in cap
     print(f'    remedy in tree — params_tables.yaml keyed by original path: {key}')
