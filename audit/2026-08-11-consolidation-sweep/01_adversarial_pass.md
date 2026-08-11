@@ -215,3 +215,33 @@ finding is wrong:
 | F5 | `ls engine/` shows no `params/`; `find tests -name '*.md' \| wc -l` → 8 |
 | F6 | `test_build_glossary.py::test_committed_output_matches_a_fresh_build` passes — this is the falsifier *against* reading F6 as a defect |
 | A1 | `grep -n 'BUILDER.*--check' tests/valoria/test_engine_atlas.py tests/valoria/test_contract_index.py` — if absent, my retraction is itself wrong |
+
+---
+
+## A9 — A process failure in this sweep, and one residual the sweep's own commit produced
+
+**The process failure, stated plainly.** `pytest tests/valoria` was run **once, as the opening
+baseline, before any file in this sweep existed**. After writing the audit documents and appending
+to four registers I ran `tools/valoria_local.py --staged` (which passed) but **did not re-run the
+suite** — `valoria_local` does not include it. The PR body was then written claiming the suite green.
+It was green *at `c26a22c`*, not on the commit it was cited for. CI caught it in four minutes:
+`test_engine_atlas.py::test_atlas_is_current` failed on the pushed head.
+
+This is §0's "close the loop, honestly" failing at the last step, and it is worth recording in the
+same document that credits `--check` guards for catching staleness — **the guard worked, and the
+person invoking it did not.** A green claim I did not verify is exactly what §0 says is worse than a
+red one I did.
+
+**The residual it exposed.** `references/ENGINE_ATLAS.md` §identifier-ambiguity counts **bare
+occurrences of every contract name across the whole corpus**. `audit` is a contract name. So *any*
+document that uses the ordinary English word "audit" — including an audit's own findings file —
+moves the count and turns the committed atlas stale, failing a blocking gate until it is
+regenerated. Measured here: adding these two files moved `audit` from **2183 → 2186** and nothing else.
+
+That is not a defect in the gate — the count is a real ambiguity signal, and it is precisely the
+signal `proposals/canonical_nomenclature_v1.md` (PROPOSED, #301) exists to address. It is a
+**coupling cost worth naming**: the atlas is a function of all prose in the tree, so every
+prose-adding PR in any lane inherits a regenerate-and-commit step for a file it has no other
+relationship to, and the resulting diff line is indistinguishable from a substantive atlas change.
+Filed as an observation for whoever takes the nomenclature proposal forward; **not** proposed as a
+change to the gate here.
