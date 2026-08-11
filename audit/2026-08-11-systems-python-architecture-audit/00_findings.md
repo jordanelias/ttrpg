@@ -52,7 +52,7 @@ results is not falsifiable:
 |---|---|---|
 | A. Architecture compliance | 5 classes | 1 high, 2 medium, 2 low |
 | B. Consolidation | 4 classes | 2 high, 2 medium |
-| C. Erroneous work | 5 classes | 1 high, 2 medium, 2 low |
+| C. Erroneous work | 6 classes | 1 high, 3 medium, 2 low |
 
 **The headline is not any single defect.** It is that the corpus shows exactly the signature you
 predicted: *many sessions, each internally coherent, composing badly.* The clearest measurement of
@@ -392,6 +392,52 @@ Routing these through `stubwire.stub_resolve` would put G-7/8/9 on the same trac
 other pending mechanic, at no behavioural cost. (`units.py:218 halt_before_enemy` is a *disabled*
 mechanism — "v11: over-run correction disabled" — not a stub; correctly excluded.)
 
+### C6 · MEDIUM — a test mutates the live `systems/` tree, racing every tree-walker under `-n auto`
+
+Found by this audit's own PR going red, and it is in scope: the defect is *about* `systems/`.
+
+`tests/valoria/test_engine_atlas.py:104` creates a real directory **inside the live tree** —
+`systems/zz_atlas_probe/thing.py` — asserts the atlas generator reports it as drift, and removes it
+in a `finally`. That is deliberate and the test says so ("Mutation-verified by construction: this
+test creates the mutation").
+
+It is not parallel-safe. CI runs `python -m pytest tests/valoria -q -n auto`, and several tests walk
+the real tree — `structure_audit.collect_py_modules()` enumerates files, then `build_g_code()` reads
+each one. When those land on a different xdist worker than the probe test, a file enumerated a
+moment ago is gone by the time it is read:
+
+```
+FAILED tests/valoria/test_import_cycle_game_state_npe.py::test_exactly_three_cycles_remain_and_they_are_the_expected_families
+  FileNotFoundError: .../systems/zz_atlas_probe/thing.py
+```
+
+**Reproduced 6/6 on clean `main`** (`pytest test_engine_atlas.py test_import_cycle_game_state_npe.py
+test_structure_audit.py -q -n 4`), at commit `c26a22c`, with this audit's commit absent — so it is
+pre-existing and unrelated to the change that surfaced it. Locally serial it passes 1775/1775; the
+symptom moves between tests depending on how xdist distributes, which is the signature of a race
+rather than a broken assertion.
+
+**Two things make this a pattern defect rather than a one-off**, per §0.1 point 5:
+
+1. **The repo already found this exact hazard and fixed it once, without sweeping.**
+   `tests/valoria/test_scope_ratchet.py:139` carries the diagnosis verbatim — *"A test that drops
+   scratch files into the collection directory is not parallel-safe (pytest-xdist workers share a
+   cwd)"* — and fixed itself with `tmp_path`. `test_engine_atlas.py` does the same forbidden thing
+   into a different shared directory and was never revisited.
+2. **The control that authorised `-n auto` could not have caught it.** ED-IN-0112's note records a
+   careful paired measurement — *"failure AND pass AND skip counts identical — the control that
+   separates 'faster' from 'ran less'"*. That control is sound for coverage and structurally blind to
+   races: a single paired run samples one interleaving. This is not a criticism of that measurement;
+   it is the case for adding a guard, which is the only thing that makes a race non-recurrent.
+
+**Fix (PROPOSED, not executed — out of lane for this report):** give `tools/build_engine_atlas.py`'s
+`build_rows()` a scan-root parameter so the probe can build under `tmp_path`, exactly mirroring the
+`test_scope_ratchet.py` precedent; then add the guard that makes it non-recurrent — a test asserting
+no test writes into `systems/`, `engine/` or the collection dir. Per §0.1, *if you cannot write the
+guard you have not understood the pattern* — here the guard is straightforward, which is the evidence
+that the pattern is understood. Serializing with `xdist_group` + `--dist loadgroup` would also work
+and is smaller, but leaves the anti-pattern in place for the next tree-walker to trip over.
+
 ### C5 · LOW — 138 pyflakes findings, of which the actionable subset is small
 
 Breakdown after inspection: ~95 are unused imports (`tradition.py` alone re-exports 11 names it never
@@ -446,6 +492,7 @@ Recorded so the report is not uniformly negative and so the good patterns are pr
 | 7 | Decide `standing`'s bounds + give it an `adjust`-family mutator | B3 | small | needs a canon call on the bound |
 | 8 | Disposition the 10 dead `infrastructure.py` constants: wire or cut | C3 | medium | design call |
 | 8b | Teach `dead_primitive_census.py` to exclude `stub_resolve` bodies | C3 | small | none — removes 8 false cull candidates |
+| 8c | Make `test_engine_atlas` probe under `tmp_path` + guard against tests writing into `systems/` | C6 | small | none — removes a live CI flake |
 | 9 | Narrow the 12 `except: pass`, starting with `knots.py:353,366` | C5 | small | none |
 | 10 | Strip unused imports / dead numpy | C5 | trivial | none |
 
