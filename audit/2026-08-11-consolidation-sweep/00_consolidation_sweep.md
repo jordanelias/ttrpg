@@ -433,7 +433,73 @@ with citation-based retention", state: **ruling**. Not pre-empted.
 
 ## 7. Ranking, unverified items, method
 
-### 7.1 Ranking (impact × cheapness)
+### 7.0 How much is actually cuttable — and a correction to §7.1's ranking
+
+Added after the findings were first ranked, because "how much?" had not been answered and answering
+it **overturned the ranking below**. Disk bytes turn out to be the wrong metric almost everywhere.
+
+**Disk (tracked: 39,702,092 B / 1,383 files).**
+
+| tier | bytes | share | gate |
+|---|---:|---:|---|
+| **1 — zero-loss, no ruling** (five `_data.js` + `index.html`) | 746,019 | 1.9% | none |
+| **2a — glossary per-subsystem tier** (derivable from `glossary.json`) | 1,357,376 | 3.4% | a retention ruling |
+| **2b — `audit/` units dated before 2026-07-15** (23 of 42) | 5,804,331 | 14.6% | W9's retention rule, in flight |
+| all tiers | 7,907,726 | 19.9% | — |
+
+So the *most* that is plausibly cuttable is **~20% of tracked bytes, and 92% of that needs a ruling
+first**. **Disk is not where the win is** — nobody's session cost is a function of repository size.
+
+**Session context — where the win actually is.** CLAUDE.md §9 directs every session to read
+`CURRENT.md`, root `HANDOFF.md`, and its lane's `HANDOFF_<LANE>.md`; CLAUDE.md itself is auto-loaded
+into the session **and every subagent**. Measured, for an IN-lane session:
+
+| | tokens |
+|---|---:|
+| CLAUDE.md (auto-loaded) | 14,096 |
+| CURRENT.md | 18,382 |
+| root HANDOFF.md | 3,960 |
+| `HANDOFF_IN.md` | 49,686 |
+| **total directed reading, before any work** | **86,126** |
+
+Other lanes: MB 62,590 · PC 61,429 · SC 44,741 · FA 39,938 · SE 39,744 · FI 37,194 · WR 37,152 ·
+GO 37,054.
+
+**What `handoff_atomize` would recover, by its own classifier and its own renderer** (not my
+estimate — `H.classify` and `H.one_line` run over the live files):
+
+| | tokens across all 9 lane files |
+|---|---:|
+| current | 116,818 |
+| **closed** — "DELIVERED counts as closed" is **already ruled** (ED-IN-0086) | 18,406 |
+| **stale** — gated on Jordan call #1 | 30,608 |
+| **skeleton the tool renders** (146 live items, one line each + summaries) | **3,210** |
+
+The nine lane files collapse from **116,818 → 3,210 tokens** as the orientation surface, with detail
+preserved in infill and archive documents opened only when a session needs a specific item. For the
+IN lane alone: **49,686 → 1,718**. This is consistent with ED-IN-0086's own prototype (19,920 → 1,392
+when `HANDOFF_IN.md` was smaller).
+
+An IN-lane session's directed reading therefore goes **86,126 → ~38,000 tokens**, and to ~35,000 with
+F5's §3 distillation — **a ~59% cut, deleting nothing.**
+
+**The ranking below is wrong on this axis.** It put F4 fifth on an unquantified sense of "impact";
+measured, F4 is the largest single lever in the sweep by more than an order of magnitude, and F5 —
+ranked second — is worth ~1,500 tokens against F4's ~46,000 for an IN session. F3 stays first only
+in the narrow sense that it is the *guard* which keeps the cut from silently regressing; it recovers
+no tokens itself. **Corrected order by measured recovery: F4 ≫ F5 > F1 > F6 > F2/F3/F7/F8** (the last
+four recover no context at all — they are correctness and accuracy fixes).
+
+**And the blocker is smaller than "W8 is blocked" suggests.** ED-IN-0086 holds the rollout on two
+Jordan calls: (1) should a stale-but-OPEN item archive as the rule says, or be held in the skeleton
+as dormant when no open ED backs it — the concern being that archiving an open item with no ledger
+entry silently loses it; and (2) confirm date-ranged archive filenames (already implemented,
+described as trivially reversible). Neither touches the **closed** bucket, which is already ruled.
+**~18,406 tokens are archivable today with no new ruling at all**; call #1 governs the further 30,608.
+
+---
+
+### 7.1 Ranking (impact × cheapness — see §7.0 for the measured correction)
 
 | # | Finding | Impact | Cost | Blocked on |
 |---|---|---|---|---|
