@@ -392,6 +392,22 @@ policies:
     note: "Frozen evidence artifact of a completed one-off audit merge stage (self-declared 'QUARANTINE-NOTE: not a registry and not a source of canonical truth' in the file header). Was hitting the generic **/*.yaml 10000 catch-all at ~18.5k tokens with no action possible or intended — same class as the tests/sim/ and research/ skip-policies above, scoped to this specific file rather than a blanket designs/audit/**/*.yaml exemption."
 
   # ────────────────────────────────────────────────────────────
+  # AUDIT CORPUS — 30k (Jordan, 2026-08-11)
+  # ────────────────────────────────────────────────────────────
+  # An audit unit is a findings report plus, increasingly, a remediation plan; both are read
+  # end-to-end by whoever executes them, and cutting evidence to fit a cap is the wrong trade.
+  # Ruled: chunk the plan into a companion document rather than cut content, and give these files
+  # 30,000. Placed ABOVE the catch-all because `_match_rule` is first-match.
+  #
+  # SINGLE OWNER: this row. Do not add a second cap for audit files in ci_register_size_check's
+  # THRESHOLDS — that dict already carries three rows single-sourced from this file precisely
+  # because they kept drifting (ED-IN-0097), and the two gates already disagree on the register cap
+  # (15,000 in the gate vs 10,000 here; ED-IN-0159 §1.8, plan step G6).
+  - match: "audit/**/*.md"
+    max_tokens: 30000
+    on_exceed: "flag_unknown_pattern"
+
+  # ────────────────────────────────────────────────────────────
   # CATCH-ALL — flag any unrecognized file above safe size
   # ────────────────────────────────────────────────────────────
   - match: "**/*.md"

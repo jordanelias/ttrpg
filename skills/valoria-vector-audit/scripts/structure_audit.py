@@ -287,6 +287,13 @@ def build_g_code(root, modules):
         except SyntaxError as e:
             parse_errors.append(f'{rel}: {e}')
             continue
+        except FileNotFoundError:
+            # The file was enumerated and then removed before we read it. Real under `pytest -n
+            # auto`: test_engine_atlas writes a probe folder into `systems/` and deletes it in a
+            # finally, while this walker runs in another worker (#304 C6). A tree-walker that
+            # crashes when a file vanishes mid-walk is fragile regardless of the cause, so this
+            # skips rather than special-casing the probe.
+            continue
         # The package this file lives in: for a package __init__.py the module NAME already IS
         # the package (so its own `from . import x` must resolve against itself); for a regular
         # module a.b.c it is a.b. (Fable-5 audit fix: the old `mod.rsplit('.',1)[0]` dropped the
@@ -342,7 +349,8 @@ def collect_cli_entry_modules(root, modules):
     for mod, rel in modules.items():
         try:
             tree = ast.parse((root / rel).read_text(encoding='utf-8', errors='replace'), filename=rel)
-        except SyntaxError:
+        except (SyntaxError, FileNotFoundError):
+            # FileNotFoundError: enumerated-then-removed mid-walk — see the note in build_g_code.
             continue
         if ci_common.has_main_guard(tree):
             entries.add(mod)

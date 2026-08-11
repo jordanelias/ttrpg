@@ -2288,3 +2288,251 @@ ranges in the generator, not hand-editing the output.
     and not finished; every emit and reachability claim remains static analysis. Both critics were
     read-only and could not run a test. **No third pass has been run** — two passes found ~14 then ~12
     defects, which is not evidence of convergence.
+
+---
+
+## [OPEN] ED-IN-0158 — consolidation sweep: 8 opportunities, 3 candidate findings killed (2026-08-11)
+
+**One document:** `audit/2026-08-11-consolidation-sweep/00_consolidation_sweep.md`. Whole-tree
+read-only sweep at `c26a22c` for prune / cut / refine / distil / dedup / aggregate / consolidate
+opportunities, read against the twelve commits of 2026-08-04..11. Solo — no fan-out, no workflow.
+**Nothing executed.**
+
+Reconciled from an original `00_findings.md` + `01_adversarial_pass.md` split (superseded, git
+history only — `4a101b1`, `32f8cfa`): in that layout a reader of the findings got claims whose
+corrections lived in a file they had to be told to read first. **Every finding now carries its
+attack result inline**; §3 holds the retractions, §7.5 the falsifiers.
+
+**What the attack killed (§3.1).** The draft's strongest finding was that `build_glossary`,
+`build_engine_atlas` and `build_contract_index` — all shipped this week, all with **zero callers**
+in CI / hooks / `valoria_local` — were three fresh instances of the defect ED-IN-0149 had named
+three days earlier. Grep supported it. Reading the tests refuted it: each is invoked by a blocking
+pytest that runs the real builder's `--check` or byte-compares committed output to a fresh build.
+**The conclusion inverts** — a freshness gate is *better* than a scheduled regenerator, because it
+fails the PR that caused the staleness instead of someone else's a week later. Credit, not fault.
+What survives is the **contrast**: the pattern was proven three times this week and is absent on
+the two artifacts below.
+
+**Unblocked, cheap, ranked:**
+
+1. **F3 — `handoff_atomize` has 33 live findings and its test cannot see them.** `--all --check`
+   exits non-zero on all nine lanes: IN's executive summary claims **44 live items when the file
+   has 73**, and is dated 2026-07-28 while the file carries an item from **2026-08-11**; 30 of IN's
+   37 bullets carry no `[OPEN|PART|DONE]` tag, so the banner infers from prose — the inference
+   ED-IN-0086 introduced the tag to replace. Wired into nothing.
+   `tests/valoria/test_handoff_structure.py` exercises `status_tag`/`classify`/`tag_problems` on
+   **synthetic strings** and never invokes `--check` against `registers/handoffs/*.md`. §0.1 point 2.
+   **The fix is a ~10-line copy of `test_engine_atlas.py:46`.** Distinct from W8 (the atomization
+   *run*, blocked on 2 Jordan calls) — the guard is not blocked on anything.
+2. **F5 — CLAUDE.md, 13,963 tok, §3 contradicts itself.** The `engine/` row says engine/ holds "the
+   prose param tables `engine/params/`"; the struck `~~engine/params/~~` row three rows above
+   records its 2026-08-05 evacuation; `ls engine/` confirms no `params/`. Also measured stale: the
+   `tests/` row's "~850KB of narrative/audit `*.md`" (**8 files, 90 KB**, none carrying the named
+   prefix) and the `tools/` row's "36 of 106 modules" (apparatus_registry: **123 entries, 6
+   orphaned**). Four struck rows (2,392 chars) restate relocations `restructure_ledger.md` already
+   owns machine-readably — §8's invariant applied to CLAUDE.md itself. Paid on every session **and
+   every subagent**.
+3. **F2 — `audit_registry.jsonl` indexes 7 of 41 units and its gate is tail-blind.** After
+   resolving the `designs/audit/ → audit/` prefix (`restructure_ledger.md:981`): **34 dirs
+   unindexed, 10 rows dangling** at subjects the evacuation removed. `ci_audit_registry_check.py`
+   reports **3**, because it filters to entries newer than the registry's own latest date — blind
+   by construction, ED-IN-0115..0119's class. Needs a keep-or-retire call.
+4. **F1 — 688 KB of committed derivatives, no consistency guard.** Five `_data.js` decode
+   byte-equal to their `.json` (all five verified), beside a 752 KB `console.html` that inlines all
+   six feeds. The README calls the `index.html`+`_data.js` pair "Dev pair (**regenerable**)" and
+   `console.html` the primary. `index.html:185` loads `review_state_data.js`, which `.gitignore`
+   excludes — **the committed dev pair is broken in every fresh clone.** No test asserts the three
+   tiers agree.
+5. **F4 — the lane handoffs repeated the defect the root file was archived for.** `HANDOFF_IN.md`
+   **191 KB** vs the root file's 16 KB at archiving; `## Next actions` starts at line **1506**.
+   Separately and *not* blocked on W8: the root `HANDOFF.md`'s first Next-actions bullet — what the
+   SessionStart banner surfaces above all else — has been a struck-through `✅ RESOLVED` item since
+   2026-07-30, and appeared verbatim in this session's banner.
+
+**Also filed:** F7 `research/` (2.7 MB, live, **zero** CLAUDE.md mentions while §3 documents four
+trees that no longer exist); F6 glossary retention (3.0 MB, three renderings — **flagged as cost,
+not defect**: it is correctly guarded); F8 two SUPERSEDED heads pointing at `designs/` paths
+(verified resolvable, non-breaking).
+
+**Spared under attack, recorded so they are not re-flagged:** the 16 `*_flow_skeleton_v1.md` (every
+line anchored `path:line symbol` and verified against the tree by `test_flow_skeletons.py`; the
+"aggregate" is the format spec + roster, not a concatenation) and the `throughlines_meta` +
+`_meta_infill` pair (retired convention, but `ci_vetting_check.py` — blocking — reads it as its
+framework; §4 grandfathers it). Both pattern-match as prunable and are load-bearing.
+
+**Needs Jordan:** the F2 keep-or-retire call, and F6's retention shape.
+
+**Method limit, stated:** sweep and critic shared one context — not the structural independence
+§10 asks for (`hCritic`/`valoria-critic` was unavailable). Every finding was re-derived from a
+command against the working tree rather than from the draft's prose, which is what caught the three
+retractions, but that is not equivalent. **F1/F2/F3 want an independent read before execution.**
+Unverified, listed in §7.3: the PP-NNN scope mismatch (my 320/527 neither confirms nor refutes §0's
+433/452 — different scan roots), F1's remediation untested in a browser, and the two report-only
+`review_core` failures (`vocab.a17`, `stubs.count`).
+
+**Two self-implicating items the document records rather than hides.** (1) A **process failure**:
+`pytest tests/valoria` was run once as the session's opening baseline, *before any file in this
+sweep existed*; `valoria_local --staged` was run after the edits and does not include the suite, so
+a PR body claimed a green that belonged to `c26a22c`. CI caught it in four minutes
+(`test_engine_atlas.py::test_atlas_is_current`, fixed in `32f8cfa`) — the guard worked, I did not.
+(2) **This entry grew `HANDOFF_IN.md` from 191,413 to ~197 KB**, worsening F4 on the session that
+filed it; the append-only dynamic operating on its own describer. Both are in §1.1 and §F4.
+
+**Residual filed, not proposed (§6.1):** `ENGINE_ATLAS.md`'s ambiguity census counts bare
+occurrences of every contract name corpus-wide, and `audit` is one — so any document using the
+ordinary English word turns the committed atlas stale (measured: 2183 → 2186 from this sweep alone)
+and every prose-adding PR in any lane inherits a regenerate-and-commit step for a file it has no
+other relationship to. Correct gate behaviour; the signal `proposals/canonical_nomenclature_v1.md`
+(#301) targets. Not proposed as a change to the gate.
+
+---
+
+## [OPEN] ED-IN-0159 — code-leanness census + a 4-phase consolidation plan (2026-08-11)
+
+**One document:** `audit/2026-08-11-code-leanness/00_code_leanness.md`. Scoped by Jordan: *"as lean
+as possible without sacrificing mechanisms"*, lean = **fewer files to track/review/edit/audit**, and
+**"my concern is with code"** — registers/logs/lane files explicitly out of scope. Population: 118
+`.py` under `tools/`, `.githooks/`, `skills/*/scripts/`. **Nothing executed.**
+
+- **[OPEN] The abstractions exist and were never adopted.** `ci_common` 11/118 · `obs_core` 9/118 ·
+  `names` 9/118 · `registry` 2/118 · **`pathres` 1/118 — while declaring itself the SOLE PARSER of
+  `restructure_ledger.md`, which 6 modules parse.** Re-implementation: repo-root **53 sites in 15
+  distinct spellings**, YAML register load 44, Status parsing 9, lane roster 9, ledger read 8,
+  `id_reservations` 8, token estimation 6, ID regex 6.
+- **[OPEN] The duplicates disagree — measured, not assumed.** Five live `## Status:` regexes over 551
+  tracked `.md`: union 200, intersection 193, **7 DISPUTED** — named in full, including
+  `workplans/valoria_master_workplan_v6.md` (the live steering surface) and
+  `systems/ui/valoria_ui_ux_v4.md`. Six are invisible to **both** `dashboard_data` (needs a hash, no
+  space) and `build_identifier_census` (exactly two hashes). Silent failure. **This is the residue
+  after `obs_core` already consolidated this exact primitive** — it re-grew.
+- **[OPEN] 166 citations of `params/core.md` across 47 live files**, a path that does not exist:
+  `params/ → engine/params/` (`restructure_ledger:720`), evacuated 2026-08-05 (ED-IN-0145). Every
+  constant in the executable model cites an absent authority — CLAUDE.md §0's PP-NNN disease, one
+  register down. **Remedy is in-tree and byte-faithful:** ED-IN-0139's
+  `engine/engine_params/params_tables.yaml` is keyed by original path.
+- **[OPEN] The audit probe scripts are unpromoted instruments, not dead one-offs** — I had them as
+  deletion candidates until I read them, and that was wrong. 38 of 41 anchors resolve;
+  `stress_battery.py` **executes today: 22 checks, 21 PASS, 1 FAIL** (mirror-match p=0.000 at
+  arming/heavy), in no CI job. **Class B is this mission's own tooling:** `flag_ablation.py`
+  (leave-one-out per boolean flag — load-bearing vs actively costing), `harness.py` (every factor →
+  WIRED-LIVE / WIRED-SITUATIONAL / **DEAD**), `interaction.py` (INDEPENDENT/MASKING/SYNERGY/
+  ANTAGONISM), `reachability_sweep.py`. **The instrument that answers "what can we cut without
+  sacrificing mechanisms" already exists and is unrun** — and it measures *behavioural* deadness,
+  strictly better than the referential deadness an import graph sees. **§10's emergence-auditor
+  candidate is blocked on "once ablation is runnable"; ablation is runnable — that blocker is stale.**
+- **[OPEN] `audit/2026-06-03-contest-groundup/engine.py` is a fork of the resolution core**
+  (`MU_PER_DIE`/`SD_PER_DIE`/`OVERWHELM_SIGMA`/`net_boost`, ED-884/ED-934 semantics, P-232 floor) with
+  constants hardcoded. Matches live today; nothing would report it if it stopped.
+
+**Plan (§5), ordered by risk.** Phase 0, no judgment required: glob the syntax-check job (**it names
+32 of 108 `tools/*.py`**), repoint the 166 citations, fix 3 broken anchors. Phase 1: one owner per
+primitive as **~8 individually-tested migrations into `ci_common` re-exporting `obs_core`** — *not* a
+fourth library — cheapest-first, gates last, because §8 already ruled each gate migration needs its
+own expected-delta test. **1.6 is the one with a real delta:** collapsing `STATUS_RE` makes the 7
+disputed docs visible, and the test must name all 7. Phase 2: promote the batteries to
+`tests/valoria/` as `xfail(strict)` and the Class-B instruments to a standing
+`tools/mechanism_census.py`, then **run it — its output is the input to any cut decision**. Phase 3:
+uncalled code, where **the deliverable is a guard, not a delete list**.
+
+**Honest accounting:** this is **not** a large file-count reduction — Phase 1 removes ~0 files, Phase
+2 adds an owner, Phase 3's ceiling is ~15 `sim_harness` files plus whatever tracing confirms. It is a
+large **edit-surface** reduction (53→1, 44→1, 8→1, 6→1, 5→1; adding a lane goes 8 edits → 1), plus
+one closed correctness class and one closed provenance class.
+
+**Three orphan measurements DISCARDED for method defects** (§7, recorded so they are not re-derived):
+the AST import graph cannot dot-resolve `combat_engine_v1`'s bare imports and called
+`wrapper` an orphan while `combat_bridge.py:141` calls it; 156 of 249 "never imported" are
+pytest-collected test files; the "ten ledger readers miss the lane files" flag was my detector failing
+to recognise the `editorial_ledger*.jsonl` glob. **No delete list is reported anywhere in this audit** —
+only tracing candidates. Four `systems/*/sim/` modules (`charter_liberties`, `home_sanctuary`,
+`hafenmark_equipment`, `infrastructure_reclamation`) have two-method agreement and are where tracing
+starts.
+
+**Needs Jordan:** the `sim_harness` promote-or-retire call (28 files), and whether Phase 2's
+`mechanism_census` should gate or merely report.
+
+**[OPEN] ED-IN-0159 §8 — Fable-5 read-only second pass. It overturned two of my findings.**
+
+A `valoria-critic` (Read/Grep/Glob only) was given both audits as prior art to attack; every
+load-bearing claim was re-run with Bash here.
+
+- **The four "possibly-uncalled" factions modules are REACHED** —
+  `engine/tests/test_pipeline_reach.py:749-755`, oi17 test passes. All four are `stub_resolve` no-ops
+  carrying Jordan directives found nowhere else. **Phase 3.1 is CLOSED, not started.** The reasoning
+  error is the lesson: both my methods were blind to the *same* thing (string-path dispatch), so
+  "two independent methods agreed" carried no information.
+- **`apparatus_registry`'s orphan count is an undercount by construction** —
+  `build_apparatus_registry.py:213-220` treats basename-in-workflow as invocation, and the syntax job
+  is a `py_compile` list, so being compiled counts as being invoked. **ED-IN-0158's F5 used that
+  number to correct CLAUDE.md; the staleness stands, my replacement figure does not.**
+- **Folding it in broke my own plan:** Phase 0.1 (glob the syntax gate) would take basename-in-workflow
+  from 46/108 to 108/108 and silently zero the orphan census. Amended — both halves in one commit.
+- **New, confirmed, all re-run:** `compliance_check.py` calls `_lazy_import()` (:165) and `check_all()`
+  (:306), **neither defined** — `python3 tools/compliance_check.py` raises `NameError`, dead code in a
+  **blocking gate's** file; the index+infill apparatus is inert three ways; two blocking size-cap gates
+  check the same files twice; two always-exit-0 tools sit in the blocking job;
+  `ci_checks_registry.yaml` references `valoria_hooks.py` **5 times** and that file does not exist.
+- **Reframed:** the mass-battle dual engine is already ED-MB-0065 awaiting a ruling (nothing new);
+  personal combat's duplicate resolver is flag-gated design, not a leanness edit.
+- **`tests/valoria`:** no duplicate-fact modules in a 15-of-153 sample; 32 files repeat one path
+  block. The instrument to finish it is `references/test_register.json` — which I did not know to use.
+
+**Next:** §8.9 lists the amended plan (0.1 amended; 0.4/0.5/0.6/1.9/1.10/1.11/2.5 new; 3.1 closed).
+**Do not act on F10** (the v32 keep-rule over-cover) until a `MEASURED-BY:` sweep confirms nothing
+cites the m2–r10 stations — moving a cited instrument turns `ci_claim_provenance_check` red.
+
+**[OPEN] ED-IN-0159 — FULL REWRITE after PR #304 (2026-08-11).** Both audit documents rewritten so
+each states its findings once, in final form, and **one merged 3-track plan** (in
+`audit/2026-08-11-code-leanness/01_plan.md`) now replaces this audit's earlier plan, the sweep's ranking,
+**and** #304's 887-line remediation plan. Adjudicated by a second Fable-5 read-only pass; every
+load-bearing claim re-verified with Bash.
+
+- **My biggest figure was 47% of its class.** The provenance defect is **354 citations across 74
+  files and 12 distinct evacuated `params/` paths** (`contest.md` 102, `mass_combat.md` 49,
+  `factions/stats_1_7_scale.md` 10, `factions.md` 9, +7 more) — **not 168 across 46**. I counted one
+  basename and called it the defect. The instrument now measures the class and exits 1 if any cited
+  path starts resolving.
+- **The two theses compose.** #304 finds `systems/` has *no* copy-paste problem (7 copies in 25k LOC)
+  but an idiom-divergence one; this audit finds `tools/` full of duplicated idioms. **The methods are
+  mutually blind** — and #304's own lens 7 covered `tools/` and corroborated this audit.
+- **Binding constraint on Phase 1:** one-owner collapse is valid **only where the copies agree
+  today**. #304's degree ladders carry **four incompatible meanings of `net`** under one
+  `(int,int)->str` signature; folding there converts visible divergence into invisible divergence.
+  Its **A7 LEAVE list must survive**.
+- **I correct #304 on one item.** `altonian_reinforcements` did **not** miss the OI-17 sweep: it is
+  `test_pipeline_reach.py:166`'s **accepted-handoff** manifest row, excluded from the roster at
+  `:747`, and `test_only_accepted_handoff_still_raises_unconditionally` (`:783`) asserts it **must
+  still raise** — it passes. **STRUCK** from the merged plan; acting on it breaks a green guard and
+  crosses a lane boundary. Both read-only passes accepted the claim; only execution caught it.
+- **Do not quote from #304:** its "nine degree implementations" headline (its own divergence audit
+  supersedes it — **16 producers**), or its location count (inconsistent 168/196/400; the tsv has
+  **196** rows and its verifier runs 196/196, 55 groups).
+- **#304 is better evidenced than me on the deprecated combat resolver** —
+  `export_sim_params.py:36` publishes the superseded model as typed truth, and dropping it from
+  `SCAN_DIRS` is **not blocked** on the flag ruling. My "nothing to do until ratification" was wrong.
+- **Both dead-code censuses are wrong, in opposite directions** — `build_apparatus_registry` counts
+  `py_compile` as invocation (undercounts orphans); `dead_primitive_census` has no stub concept
+  (inflates deadness). **No valid orphan count exists in either direction.** Ship the two fixes as one
+  pattern fix (plan G9 + T6).
+- **Also withdrawn:** the `pathres` "false sole-parser claim" charge — `pathres.py:121-127` now says
+  "INTENDED sole parser … not yet the actual one" and names the four remaining parsers. The
+  consolidation is still undone; the rhetorical charge is not.
+
+**Held for Jordan:** #304's six (#0 the `net`/`ob` convention **blocks #1 and #2**; #1, #1b the
+strategic layer's d6>=4, #2, #7 `standing` bounds, #8), plus the 37 grandfathered `*_index.md` files
+and the `sim_harness` call. **Run plan T4 (the mechanism census) before ruling #1/#1b/#2/#8** — it
+prices exactly those questions.
+
+**[OPEN] ED-IN-0159 — the plan is chunked, and the audit cap is 30k (Jordan, 2026-08-11).**
+*"Chunk the plan instead of cutting content from plan. Threshold can be 30k for these."*
+
+- **`audit/2026-08-11-code-leanness/01_plan.md`** is now the **plan of record** — three ordered
+  tracks reconciling this session's two audits, #304's 887-line remediation plan, and the
+  centralization directive. `00_code_leanness.md` keeps the evidence and points at it.
+- **`references/atomization_rules.yaml` gains one row**: `audit/**/*.md` → `max_tokens: 30000`,
+  placed above the `**/*.md` catch-all because `_match_rule` is first-match. **Single owner** —
+  deliberately *not* a second cap in `ci_register_size_check`'s `THRESHOLDS`, which already carries
+  three rows single-sourced from this file because they kept drifting (ED-IN-0097), and where the
+  two gates still disagree on the register cap (15,000 vs 10,000 — §1.8, plan step G6).
+- Verified: both documents match the new rule (30,000), `CURRENT.md` and the other non-audit files
+  still match the 15,000 catch-all — the change is scoped, not global.
