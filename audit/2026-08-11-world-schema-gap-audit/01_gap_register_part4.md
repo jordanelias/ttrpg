@@ -84,6 +84,8 @@ _Continues [part 3](01_gap_register_part3.md)._
 
 **Existing tracking.** TRACKED, contrary to 'none found': audit/2026-07-13-multi-agent-audit/_workings_joined.md:978 lists institutional_culture under 'Defined-but-never-referenced (orphaned) mechanics' and :1015 records it as a single-consumer narrow chain. The lane grepped only registers/editorial_ledger*.jsonl; this corpus also files findings in surviving audit units. references/glossary/GLOSSARY_factions.md:256 flags the term as UNRESOLVED — a glossary-definition gap, a different claim.
 
+
+⚠ **[CORRECTED 2026-08-11, ED-IN-0157]** The citation to `audit/2026-07-13-multi-agent-audit/_workings_joined.md:978` is **reversed**: read in full, that line says `institutional_culture` *"is narrow (single-consumer: feeds only α_institution) **but is consumed, not orphaned**"* — it sits under the orphaned-mechanics heading in order to EXCLUDE the field. ⚠ The disagreement **sharpens this row**: that audit's "consumed" is design-level (it feeds α_institution in the formula) while this session measured **zero Python readers**. Design-consumed and code-unread is precisely this row's subject.
 ---
 
 <a id="g-50"></a>
