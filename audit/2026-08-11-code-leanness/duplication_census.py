@@ -24,10 +24,21 @@ import sys
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 
 
+SELF = 'audit/2026-08-11-code-leanness/duplication_census.py'
+
+
 def git_ls(*patterns):
+    """Tracked paths matching `patterns`, minus deprecated/ and minus THIS FILE.
+
+    Self-exclusion is not cosmetic. This script's own source contains the literals
+    `params/core.md`, `MU_PER_DIE` and `## Status:` as the patterns it searches for, and it lives
+    under `audit/`, so without this filter it counted itself as a citing module, a constant
+    hardcoding and a probe script — inflating three published figures by one each. Caught on the
+    re-run after PR #302 merged, when the counts moved and the merge could not explain all of it.
+    """
     out = subprocess.run(['git', 'ls-files', *patterns], cwd=REPO,
                          capture_output=True, text=True).stdout.split()
-    return [p for p in out if not p.startswith('deprecated/')]
+    return [p for p in out if not p.startswith('deprecated/') and p != SELF]
 
 
 def read(rel):
