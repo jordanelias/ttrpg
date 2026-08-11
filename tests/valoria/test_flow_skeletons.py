@@ -109,6 +109,14 @@ def _roster():
 ROSTER = _roster()
 SUBSYSTEM_IDS = [r[0] for r in ROSTER]
 
+# The authored master consolidation. It carries anchors copied from the skeletons, and copies rot
+# exactly like originals do — a review found ~178 of them checked by nothing, because this suite
+# was parameterized over the 15-row roster alone. Anchor-bearing files get anchor checks; the
+# roster decides which SUBSYSTEMS exist, not which files are guarded.
+ATLAS = 'systems/_architecture/engine_atlas_v1.md'
+ANCHORED_DOCS = [(r[0], r[1], r[2]) for r in ROSTER] + [('engine_atlas', 'IN', ATLAS)]
+ANCHORED_IDS = SUBSYSTEM_IDS + ['engine_atlas']
+
 
 def test_roster_parses():
     """If the roster parse breaks, every parameterized test below silently vanishes."""
@@ -230,7 +238,7 @@ def _anchor_failures(relpath):
     return failures, checked
 
 
-@pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
+@pytest.mark.parametrize('subsystem,lane,relpath', ANCHORED_DOCS, ids=ANCHORED_IDS)
 def test_anchors_resolve(subsystem, lane, relpath):
     if not os.path.isfile(os.path.join(ROOT, relpath)):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
@@ -272,7 +280,7 @@ _LOOKS_LIKE_ANCHOR_RE = re.compile(
     r'[A-Za-z0-9_./+-]+\.(?:py|gd|md|yaml|yml|json|jsonl|tres|js|cfg|toml|txt):\d')
 
 
-@pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
+@pytest.mark.parametrize('subsystem,lane,relpath', ANCHORED_DOCS, ids=ANCHORED_IDS)
 def test_no_unparseable_anchor_lookalikes(subsystem, lane, relpath):
     """Every citation that LOOKS like an anchor must BE one the guard can check.
 

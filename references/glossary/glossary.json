@@ -795,7 +795,7 @@
   "Belief": {
    "ambiguous": false,
    "definition": "Player-authored character conviction. Mechanical driver for Momentum and Character Points. Distinct from Inspiration (see below).",
-   "file_count": 49,
+   "file_count": 50,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -805,6 +805,7 @@
     "systems/_architecture/campaign_modes_v30_infill.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 10,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/hybrid_gaps_v30_infill.md": 2,
     "systems/_architecture/integration_proposal_v30.md": 17,
     "systems/_architecture/key_type_registry_v30.md": 5,
@@ -1064,7 +1065,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 85,
+   "file_count": 86,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1088,6 +1089,7 @@
     "systems/_architecture/decision_policy_v1.md": 1,
     "systems/_architecture/derived_stats_v30.md": 4,
     "systems/_architecture/early_game_ignition_analysis.md": 7,
+    "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_consolidation_v1.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 7,
@@ -1496,7 +1498,7 @@
   "Church": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 147,
+   "file_count": 148,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 9,
@@ -1522,6 +1524,7 @@
     "systems/_architecture/conflict_architecture_proposal.md": 29,
     "systems/_architecture/derived_stats_v30.md": 4,
     "systems/_architecture/early_game_ignition_analysis.md": 30,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_consolidation_v1.md": 3,
     "systems/_architecture/governance_type_registry_v1.md": 5,
@@ -1842,7 +1845,7 @@
   "Coherence": {
    "ambiguous": true,
    "definition": "Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner.",
-   "file_count": 81,
+   "file_count": 82,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -1866,6 +1869,7 @@
     "systems/_architecture/complete_systems_reference.md": 3,
     "systems/_architecture/decision_policy_v1.md": 1,
     "systems/_architecture/derived_stats_v30.md": 4,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 2,
     "systems/_architecture/hybrid_gaps_v30.md": 3,
     "systems/_architecture/integration_proposal_v30.md": 15,
@@ -2995,7 +2999,7 @@
   "Domain Echo": {
    "ambiguous": false,
    "definition": "Faction-level consequence triggered by decisive Debate outcomes.",
-   "file_count": 56,
+   "file_count": 57,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -3006,6 +3010,7 @@
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 1,
     "systems/_architecture/hybrid_gaps_v30.md": 1,
     "systems/_architecture/integration_proposal_v30.md": 21,
@@ -4039,7 +4044,7 @@
   "Gap": {
    "ambiguous": true,
    "definition": "A rupture in the rendered substrate. Severity scales: Micro-Gap, Standard Gap, Entrenched Gap, Catastrophic Gap.",
-   "file_count": 65,
+   "file_count": 66,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -4053,6 +4058,7 @@
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/complete_systems_reference.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/hybrid_gaps_v30.md": 2,
     "systems/_architecture/hybrid_gaps_v30_infill.md": 1,
     "systems/_architecture/integration_proposal_v30.md": 14,
@@ -4971,7 +4977,7 @@
   "IP": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 63,
+   "file_count": 64,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 2,
@@ -4987,6 +4993,7 @@
     "systems/_architecture/conflict_architecture_proposal.md": 5,
     "systems/_architecture/derived_stats_v30.md": 4,
     "systems/_architecture/early_game_ignition_analysis.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 4,
     "systems/_architecture/integration_proposal_v30.md": 4,
@@ -5388,7 +5395,7 @@
   "Key": {
    "ambiguous": false,
    "category": "substrate",
-   "file_count": 51,
+   "file_count": 52,
    "legacy_count": 1,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
@@ -5404,6 +5411,7 @@
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/decision_policy_v1.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 13,
     "systems/_architecture/governance_ripple_substrate_v1.md": 55,
     "systems/_architecture/governance_type_registry_v1.md": 16,
     "systems/_architecture/holonic_container_doctrine_v1.md": 7,
@@ -5506,7 +5514,7 @@
   "Knot": {
    "ambiguous": true,
    "definition": "A significant relationship bond (Close / Regular / Distant). Mechanically tracked with strain. Lifecycle specified per ED-773.",
-   "file_count": 70,
+   "file_count": 71,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -5521,6 +5529,7 @@
     "systems/_architecture/companion_app_design_note.md": 1,
     "systems/_architecture/complete_systems_reference.md": 4,
     "systems/_architecture/derived_stats_v30.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/generational_transition_v30.md": 2,
     "systems/_architecture/hybrid_gaps_v30.md": 3,
     "systems/_architecture/hybrid_gaps_v30_infill.md": 2,
@@ -6065,7 +6074,7 @@
   "MS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 65,
+   "file_count": 66,
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 7,
@@ -6084,6 +6093,7 @@
     "systems/_architecture/complete_systems_reference.md": 6,
     "systems/_architecture/derived_stats_v30.md": 4,
     "systems/_architecture/early_game_ignition_analysis.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 11,
     "systems/_architecture/integration_proposal_v30.md": 15,
@@ -6163,7 +6173,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 96,
+   "file_count": 97,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6183,6 +6193,7 @@
     "systems/_architecture/complete_systems_reference.md": 9,
     "systems/_architecture/derived_stats_v30.md": 28,
     "systems/_architecture/early_game_ignition_analysis.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_consolidation_v1.md": 13,
     "systems/_architecture/governance_ripple_substrate_v1.md": 22,
@@ -6810,7 +6821,7 @@
   "Order": {
    "ambiguous": true,
    "category": "settlement_stat",
-   "file_count": 83,
+   "file_count": 84,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
@@ -6823,6 +6834,7 @@
     "systems/_architecture/complete_systems_reference.md": 7,
     "systems/_architecture/conflict_architecture_proposal.md": 6,
     "systems/_architecture/derived_stats_v30.md": 6,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_consolidation_v1.md": 5,
     "systems/_architecture/governance_ripple_substrate_v1.md": 5,
@@ -7929,7 +7941,7 @@
   "RS": {
    "ambiguous": false,
    "definition": "Use Mending Stability (MS). RS appears only as historical annotation in `canon/02_foundations_amendment_leap_mechanism.md` per intentional retention.",
-   "file_count": 44,
+   "file_count": 45,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -7937,6 +7949,7 @@
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/companion_app_design_note.md": 4,
     "systems/_architecture/conflict_architecture_proposal.md": 3,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/_architecture/scale_transitions_v30.md": 7,
     "systems/characters/character_histories_v30.md": 6,
@@ -8907,7 +8920,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Internal coherence. 0 = Collapse trigger (P-15).",
-   "file_count": 93,
+   "file_count": 94,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -8928,6 +8941,7 @@
     "systems/_architecture/conflict_architecture_proposal.md": 5,
     "systems/_architecture/derived_stats_v30.md": 24,
     "systems/_architecture/early_game_ignition_analysis.md": 7,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 1,
     "systems/_architecture/hybrid_gaps_v30.md": 1,
@@ -9887,7 +9901,7 @@
   "Turmoil": {
    "ambiguous": false,
    "definition": "Cross-cutting world-scale pressure system (T-07 throughline). Multi-graph hub (Mode A \u2014 top quintile in cite + mu + pp).",
-   "file_count": 26,
+   "file_count": 27,
    "glossary_part": "PART ELEVEN \u2014 TOP-LEVEL SYSTEMS (non-stat, non-mechanic)",
    "legacy_count": 0,
    "locations": {
@@ -9896,6 +9910,7 @@
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 3,
     "systems/_architecture/early_game_ignition_analysis.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 3,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/characters/conviction_track_v1_pp718_vetting.md": 1,
@@ -9994,7 +10009,7 @@
    ],
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 72,
+   "file_count": 73,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
@@ -10014,6 +10029,7 @@
     "systems/_architecture/conflict_architecture_proposal.md": 1,
     "systems/_architecture/decision_policy_v1.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 12,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/holonic_container_doctrine_v1.md": 5,
     "systems/_architecture/integration_proposal_v30.md": 6,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -10314,7 +10330,7 @@
   "Victory": {
    "ambiguous": false,
    "definition": "Win-condition specification across factions. Faction-specific victory paths (Crown / Church / Hafenmark / Varfell / L\u00f6wenritter / RM / Guilds).",
-   "file_count": 46,
+   "file_count": 47,
    "glossary_part": "PART ELEVEN \u2014 TOP-LEVEL SYSTEMS (non-stat, non-mechanic)",
    "legacy_count": 0,
    "locations": {
@@ -10330,6 +10346,7 @@
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/complete_systems_reference.md": 3,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/integration_proposal_v30.md": 1,
     "systems/_architecture/session_a_spec_patches.md": 1,
     "systems/characters/conviction_track_v30.md": 21,
@@ -11028,11 +11045,12 @@
      "purpose": "[\u00a71 \u00b7 The seam-contract row (the format every crossing must satisfy)] Field | Obligation | Checker (\u00a74) :: `timing` | The accounting phase binding (accounting_sequence spine) + deferred-apply discipline (AU-3.2/OF-7 \u2014 **assumes OF-7; provisional/reversible, docket \u00a75.3**): echo Keys log LIVE at scene end, settlement effects land at ACCOUNTING_BOUNDARY. | A12 + substrate"
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 2,
@@ -11735,11 +11753,12 @@
      "purpose": "[O.1 The clock model: season is the tick] Named phase | Registry phase id | What it does | Code binding :: SEASON_TICK | season_tick | Advance season counter; detect arc boundary; engine_clock emits mechanical.season_change | season_manager.advance_season, called at season.py:64"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_architecture_specification.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 2,
     "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 6,
@@ -12609,10 +12628,11 @@
      "purpose": "Accounting like the Accord component \u2014 it stays a direct rs_track.apply_rs_delta call outside"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 4
    },
@@ -14174,7 +14194,7 @@
   "beliefs": {
    "ambiguous": false,
    "definition": "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass.",
-   "file_count": 15,
+   "file_count": 16,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
@@ -14182,6 +14202,7 @@
     "engine/sim_reference_README.md": 2,
     "godot/data_serialization_spec.md": 2,
     "proposals/repo-reorganization-v1.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 68,
     "systems/factions/factions_personal_v30_infill.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1,
@@ -14197,6 +14218,7 @@
     "mechanics_index"
    ],
    "subsystems": [
+    "_architecture",
     "canon",
     "characters",
     "engine",
@@ -16516,11 +16538,12 @@
   "ci_track": {
    "ambiguous": false,
    "definition": "Church Influence world-track. SW-weighted CI generation per Tier 2 gap.",
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_CONVENTIONS.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 1,
     "systems/factions/factions_flow_skeleton_v1.md": 3,
     "systems/overview/overview_flow_skeleton_v1.md": 13,
@@ -16530,6 +16553,7 @@
     "mechanics_index"
    ],
    "subsystems": [
+    "_architecture",
     "engine",
     "factions",
     "overview",
@@ -17122,7 +17146,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 88,
+   "file_count": 89,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -17148,6 +17172,7 @@
     "systems/_architecture/decision_policy_v1.md": 1,
     "systems/_architecture/derived_stats_v30.md": 18,
     "systems/_architecture/early_game_ignition_analysis.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 21,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/holonic_container_doctrine_v1.md": 1,
     "systems/_architecture/integration_proposal_v30.md": 2,
@@ -17579,7 +17604,7 @@
   "companion": {
    "ambiguous": false,
    "definition": "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc.",
-   "file_count": 33,
+   "file_count": 34,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
@@ -17592,6 +17617,7 @@
     "systems/_architecture/governance_type_registry_v1.md": 2,
     "systems/_architecture/player_agency_v30.md": 1,
     "systems/_architecture/scale_transitions_v30.md": 7,
+    "systems/_architecture/subsystem_flow_skeletons_v1.md": 1,
     "systems/_architecture/videogame_mode_spec.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 11,
     "systems/combat/combat_engine_v1/ability_armature.md": 1,
@@ -19449,11 +19475,12 @@
      "purpose": "One seeded random.Random lives on World.rng, seeded once at create_world."
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/_architecture/propagation_spec_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 2,
     "systems/overview/overview_flow_skeleton_v1.md": 10,
@@ -21246,10 +21273,11 @@
      "purpose": "ACTION sub-steps: faction-action loop over world.factions.items() (dict insertion order) \u2192 scene_dispatch.run_scene_phase (evaluate_triggers \u2192 queue_triggered_scenes \u2192 dispatch_scenes, drains scene_slate in stable priority order)."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 4
    },
    "sources": [
@@ -23150,11 +23178,12 @@
      "purpose": "ACTION sub-steps: faction-action loop over world.factions.items() (dict insertion order) \u2192 scene_dispatch.run_scene_phase (evaluate_triggers \u2192 queue_triggered_scenes \u2192 dispatch_scenes, drains scene_slate in stable priority order)."
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 9,
+    "systems/_architecture/engine_atlas_v1.md": 4,
     "systems/_architecture/propagation_spec_v1.md": 3,
     "systems/combat/combat_flow_skeleton_v1.md": 2,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 2,
@@ -24829,12 +24858,13 @@
      "purpose": "[\u00a714.1 \u00b7 The loop, mapped to module contracts (owner \u00b7 resolver \u00b7 Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN \u2192 OUT (registry vocabulary) | Compliance :: FA ripple (\u00a76.3) | `faction_state` | `deterministic_accounting` | via `settlement_layer`'s existing **Mandate derivation** \u2192 `faction_state` | **WIRED via Mandate** (the derivation is in the contrac"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/factions/factions_flow_skeleton_v1.md": 11,
@@ -25193,7 +25223,7 @@
   "fieldwork": {
    "ambiguous": true,
    "definition": "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure.",
-   "file_count": 65,
+   "file_count": 66,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
@@ -25207,6 +25237,7 @@
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 13,
     "systems/_architecture/governance_type_registry_v1.md": 1,
     "systems/_architecture/integration_proposal_v30.md": 8,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -26922,13 +26953,14 @@
   "govern": {
    "ambiguous": false,
    "definition": "GD-2 mandatory trigger: Accord <= 2 garrisoned territory.",
-   "file_count": 29,
+   "file_count": 30,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "engine/mc_v18_walkthrough.md": 2,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 1,
@@ -27837,7 +27869,7 @@
   "infrastructure": {
    "ambiguous": false,
    "definition": "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending.",
-   "file_count": 53,
+   "file_count": 54,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 3,
@@ -27853,6 +27885,7 @@
     "systems/_architecture/conflict_architecture_proposal.md": 5,
     "systems/_architecture/derived_stats_v30.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 1,
     "systems/_architecture/ners_vsg_reconciliation_v1.md": 1,
@@ -28234,12 +28267,13 @@
   "insurgency_pipeline": {
    "ambiguous": false,
    "definition": "GD-3 enforcement boundary. State machine: disorganized -> emergent -> extra-parliamentary | parliamentary. Promoted-RM with PT<3 emergence is extra-parliamentary.",
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
     "engine/sim_reference_README.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 4,
     "systems/overview/overview_flow_skeleton_v1.md": 4,
     "systems/settlements/lps_wiring_v1.md": 1,
@@ -28251,6 +28285,7 @@
     "mechanics_index"
    ],
    "subsystems": [
+    "_architecture",
     "canon",
     "engine",
     "factions",
@@ -28746,9 +28781,10 @@
   "ip_track": {
    "ambiguous": false,
    "definition": "Altonian Imperial Pressure world-track.",
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 10
    },
@@ -28756,6 +28792,7 @@
     "mechanics_index"
    ],
    "subsystems": [
+    "_architecture",
     "factions",
     "overview"
    ],
@@ -29414,7 +29451,7 @@
   "knots": {
    "ambiguous": false,
    "definition": "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc.",
-   "file_count": 18,
+   "file_count": 19,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 6,
@@ -29425,6 +29462,7 @@
     "engine/mc_v18_walkthrough.md": 1,
     "engine/sim_reference_README.md": 1,
     "proposals/repo-reorganization-v1.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/characters/characters_flow_skeleton_v1.md": 10,
     "systems/factions/faction_systems_overview_v30.md": 1,
@@ -30334,7 +30372,7 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 33,
+   "file_count": 34,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
@@ -30344,6 +30382,7 @@
     "proposals/pc_formation_system.md": 4,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/valoria_fork_plan_of_record_v1.md": 7,
+    "systems/_architecture/engine_atlas_v1.md": 12,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/_architecture/player_agency_v30.md": 1,
@@ -31545,12 +31584,13 @@
   "muster": {
    "ambiguous": false,
    "definition": "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory.",
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/ners_vsg_reconciliation_v1.md": 1,
     "systems/factions/ci_political_v30.md": 1,
     "systems/factions/faction_layer_v30.md": 4,
@@ -32818,10 +32858,11 @@
   "npe": {
    "ambiguous": false,
    "definition": "NPC Population Engine.",
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
     "systems/overview/overview_flow_skeleton_v1.md": 4,
     "systems/world/world_flow_skeleton_v1.md": 49
@@ -34034,10 +34075,11 @@
   "parliamentary_transfer": {
    "ambiguous": false,
    "definition": "CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending.",
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 15,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 4,
     "systems/factions/factions_flow_skeleton_v1.md": 19,
     "systems/factions/parliamentary_transfer_v30.md": 6,
@@ -34064,7 +34106,7 @@
   "parliamentary_vote": {
    "ambiguous": false,
    "definition": "BG Parliamentary Vote contest. GD-3 enforcement point: extra-parliamentary status flag gates vote eligibility (promoted-RM cannot cast).",
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -34072,6 +34114,7 @@
     "proposals/repo-reorganization-v1.md": 3,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/factions/faction_systems_overview_v30.md": 3,
     "systems/factions/factions_flow_skeleton_v1.md": 2,
@@ -34402,7 +34445,7 @@
      "purpose": "Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m\u2026"
     }
    },
-   "file_count": 22,
+   "file_count": 23,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
@@ -34410,6 +34453,7 @@
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 4,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/governance_ripple_substrate_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -38288,10 +38332,11 @@
      "purpose": "CR1 \u2014 wrapper\u2192modules architecture.** Contest resolution runs through a wrapper that ADAPTS + ROUTES but RESOLVES NOTHING (`sim/personal/contest/wrapper.py`: `build_contest` adapter + `resolve_contest` router, mirroring `tests/sim/mass_battle/engine.py`)."
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 26,
     "systems/social_contest/social_contest_v30.md": 1
@@ -38408,13 +38453,14 @@
      "purpose": "[1. Module decomposition] Concern | Target module | Notes :: Top-level orchestrator | `sim/provincial/massbattle.py` | `resolve_mass_battle`, `run_multi_unit_battle`, `run_battle`, `run_multi_turn_battle`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
     "engine/sim_reference_README.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/factions_flow_skeleton_v1.md": 4,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 11,
     "systems/mass_battle/mass_battle_integration_v30.md": 3
@@ -39182,10 +39228,11 @@
   "rs_track": {
    "ambiguous": false,
    "definition": "Rendering Stability world-track.",
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 9,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 6,
@@ -39216,11 +39263,12 @@
      "purpose": "[O.1 The clock model: season is the tick] Named phase | Registry phase id | What it does | Code binding :: ACCOUNTING_BOUNDARY | accounting_boundary | CI calc; MS year-end decay (gated); insurgency triggers/promotion; NPC ecology; engine_clock emits mechanical.accounting | accounting.run_accounting, called at season.py:66"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
     "godot/godot_architecture_specification.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 9,
     "systems/_architecture/propagation_spec_v1.md": 3,
     "systems/npcs/npcs_flow_skeleton_v1.md": 2,
     "systems/overview/overview_flow_skeleton_v1.md": 7,
@@ -39290,11 +39338,12 @@
      "purpose": "[1. The cross-map: spec concept \u2192 existing Valoria artifact] Doctrine concept | Existing Valoria artifact | State / gap :: **Determinism** (seeded RNG, fixed timestep, stable iteration order \u2014 emergence is debugged by replaying seeds) | `mc_v18.run_campaign(seed\u2026)`; ED-1053 seeded regression (`sim/tests/`); Gate-0 RNG service for Godot (Jordan-gated) | Established in the Python reference; the Godo"
     }
    },
-   "file_count": 13,
+   "file_count": 14,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 15,
     "systems/_architecture/holonic_container_doctrine_v1.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,
@@ -39397,11 +39446,12 @@
      "purpose": "ACTION sub-steps: faction-action loop over world.factions.items() (dict insertion order) \u2192 scene_dispatch.run_scene_phase (evaluate_triggers \u2192 queue_triggered_scenes \u2192 dispatch_scenes, drains scene_slate in stable priority order)."
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 6,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/propagation_spec_v1.md": 6,
     "systems/combat/combat_flow_skeleton_v1.md": 1,
     "systems/factions/factions_flow_skeleton_v1.md": 1,
@@ -39437,11 +39487,12 @@
      "purpose": "`run_season` composes exactly three steps in order (season.py:57-72): SEASON_TICK \u2192 ACTION \u2192 ACCOUNTING_BOUNDARY, the last itself a fixed five-step composition (accounting.py:37-79)."
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 4,
     "systems/_architecture/propagation_spec_v1.md": 1,
     "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 3,
@@ -40735,10 +40786,11 @@
      "purpose": "[OF-CAP]; B1 schedule_emission + no-sync-re-entry, **default ON** \u2014 OF-B1 RATIFIED \u00a75.4; OF-7"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 7,
@@ -41781,11 +41833,12 @@
      "purpose": "[2.2 Top-down (strategic/environmental \u2192 settlement/personal)] Emitter family | Keys | targets[] population spec (the \u00a712.3 obligation, now per-row) | finding_basis :: `domain_actions` \u2192 npc_behavior, piety_track, settlement_economy\u2020 | `da.*` (5 types) | Every da.* Key names the affected settlement(s) and every present/affected named NPC with role (subject/witness/bystander) + per-target impact_ve"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/_architecture/propagation_spec_v1.md": 3,
@@ -42898,13 +42951,14 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 32,
+   "file_count": 33,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "proposals/repo-reorganization-v1.md": 8,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
+    "systems/_architecture/engine_atlas_v1.md": 10,
     "systems/_architecture/governance_ripple_substrate_v1.md": 3,
     "systems/_architecture/integration_proposal_v30.md": 1,
     "systems/_architecture/key_substrate_v30.md": 3,
@@ -44353,10 +44407,11 @@
      "purpose": "the extension of `engine/cross_scale/articulation.py`'s `subscribe_all` to the full 13-type_id roster in"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/articulation/articulation_flow_skeleton_v1.md": 18,
     "systems/articulation/articulation_layer_v30.md": 2,
     "systems/overview/overview_flow_skeleton_v1.md": 2
@@ -45674,12 +45729,13 @@
      "purpose": "[\u00a79 Type Count Summary] Family | Subtypes | Notes :: **Total** | **55** | reconciled to the physical `###` type-headers (was 49 per ED-IN-0022, 2026-07-07); +5 ED-IN-0014 (OI-25, 2026-07-29 W3 item 7 \u2014 the code-shape open-items program's silent-emitter registration: settlement_layer's revolt/auto-capture gates, victory's era/occupation/terminal transitions, and the shared ci_political/territorial_"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/repo-reorganization-v1.md": 3,
     "proposals/valoria_fork_plan_of_record_v1.md": 5,
+    "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 8,
     "systems/overview/overview_flow_skeleton_v1.md": 1
    },
@@ -46692,9 +46748,10 @@
      "purpose": "[1. Module decomposition] Concern | Target module | Notes :: Phase boundary hooks | `sim/provincial/massbattle.py` | `stamina_check`, `morale_check_phase`, `rout_resolution`, `rally_check`, `reform_check`, `threadwork_check`"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 5,
     "systems/mass_battle/mass_battle_integration_v30.md": 4,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 4
@@ -46703,6 +46760,7 @@
     "identifier_census"
    ],
    "subsystems": [
+    "_architecture",
     "mass_battle",
     "threadwork"
    ],

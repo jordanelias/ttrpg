@@ -4357,6 +4357,66 @@
     }
    }
   },
+  "test_engine_atlas.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The generated atlas must stay fresh, deterministic, and honest about what it skipped.",
+   "helper_loc": 5,
+   "helpers": [
+    {
+     "loc": 5,
+     "name": "_builder"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 153,
+   "modules_under_test": [
+    "engine_atlas.json",
+    "references",
+    "systems",
+    "systems/zz_atlas_probe",
+    "tools"
+   ],
+   "mutation_claimed": true,
+   "mutation_count": null,
+   "test_count": 6,
+   "tests": {
+    "test_an_added_subsystem_surfaces_as_drift": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": "A new folder must APPEAR, flagged as not-yet-declared \u2014 not vanish."
+    },
+    "test_atlas_is_current": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_every_subsystem_folder_on_disk_appears": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Discovery is from the FILESYSTEM, so an addition can never be silently skipped."
+    },
+    "test_json_and_markdown_agree_on_the_roster": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The two outputs are rendered from one pass; if they disagree, one is stale."
+    },
+    "test_missing_input_is_reported_not_silently_absorbed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An absent input must be stated, because its absence looks exactly like a finding."
+    },
+    "test_render_is_deterministic": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Same inputs, same bytes \u2014 otherwise `--check` above is a coin flip."
+    }
+   }
+  },
   "test_evacuation_plan.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -4785,13 +4845,17 @@
      "name": "_anchor_failures"
     }
    ],
-   "lane_derived": false,
-   "lanes": [],
-   "loc": 353,
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 361,
    "modules_under_test": [
+    "engine_atlas",
     "references",
     "systems",
-    "systems/_architecture"
+    "systems/_architecture",
+    "systems/_architecture/engine_atlas_v1.md"
    ],
    "mutation_claimed": true,
    "mutation_count": "10/10",
@@ -10984,7 +11048,7 @@
    "FA": 3,
    "FI": 1,
    "GO": 2,
-   "IN": 32,
+   "IN": 33,
    "MB": 4,
    "PC": 6,
    "SC": 2,
@@ -11108,16 +11172,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 146,
+  "files": 147,
   "files_citing_a_measurement": 14,
-  "files_claiming_mutation": 9,
-  "files_naming_a_module": 105,
+  "files_claiming_mutation": 10,
+  "files_naming_a_module": 106,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 35,
-  "helper_defs": 270,
-  "helper_loc": 2438,
+  "files_with_a_lane": 36,
+  "helper_defs": 271,
+  "helper_loc": 2443,
   "ratchet_baselines": 9,
-  "tests": 1280,
+  "tests": 1286,
   "undocumented_files": 0
  }
 }
