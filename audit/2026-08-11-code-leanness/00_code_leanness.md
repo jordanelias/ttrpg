@@ -592,3 +592,92 @@ that are both wrong in opposite directions.
    cited instrument turns `ci_claim_provenance_check` red.
 9. **Every Track-G "expected delta: none" claim** — these are predictions. Each is exactly what its own
    migration test must establish.
+
+---
+
+## 7. The connectivity matrix — throughlines by shared vocabulary
+
+**Method** (Jordan's, 2026-08-11): restrict to `.py` under `engine/` and `systems/`, build document
+sets by term/value/name, and derive a throughlines matrix. Instrument: `connectivity_matrix.py`
+beside this file. **Corpus: 127 modules across 15 subsystems, 33,021 LOC.**
+
+**Why it sees what the other passes could not.** Every prior instrument in this session measured
+*references*: an AST import graph, an `import X` grep, a token census. All three are blind to
+coupling that no import expresses — which is precisely how §2.1's error happened. Shared vocabulary
+is a different observable: two modules that both speak `TN_STANDARD` are coupled whether or not
+either imports the other.
+
+### 7.1 Definition collisions — 27 terms defined in more than one module
+
+**8 constants whose values disagree.** The important ones:
+
+| term | definitions | verdict |
+|---|---|---|
+| `CI_CEILING` | `100.0` (`factions/sim/excommunication.py`) vs `100` (`overview/sim/ci_track.py`) | one ceiling, two owners, float vs int |
+| `CONVICTIONS` | `characters/sim/conviction.py` vs `world/sim/npe.py` | **the conviction roster duplicated across subsystems** — #304's faction-roster pattern at a second term |
+| `WEAPONS` / `TRADITIONS` | the registry (`weapons.py`, `traditions.py`) vs a hardcoded list in `workbench/balance.py` | a canonical registry and a literal beside it |
+| `GOLDEN_*` (3) | `test_f7_smoke_oracle.py` vs `test_mc_v18_regression.py` — win share 62.5 vs 100.0, battles-mean 35.5 vs 33.5 | two goldens under one name; plausibly distinct fixtures, worth a look |
+
+`CLI` is a false positive (three unrelated locals).
+
+**18 callables with competing owners.** `to_dict`/`from_dict` ×10 is a serialization protocol, not a
+defect. The signal is `roll_net` (combat + engine.autoload + social_contest), `roll_pool`
+(engine.autoload + mass_battle) and **`degree` (combat + engine.autoload)**.
+
+### 7.2 A new finding: `TN_STANDARD` has two owners, and the copies AGREE
+
+- `engine/autoload/sigma_leverage.py:79` — `TN_STANDARD = 7  # [canonical: params/core.md §TN Values]`
+- `systems/threadwork/sim/operations.py:46` — `TN_STANDARD = 7  # Weave, Pull, Mend, Leap, …`
+
+Same value; one carries a canonical citation (to an evacuated path — §1.4), the other carries none.
+**Neither #304's fingerprinting nor my token census found this**; it needs the name-collision lens.
+Because the values agree, this is a **clean single-owner candidate** under §4's governing rule —
+a cleanup, not a behaviour change. Add it to plan step **G7**.
+
+### 7.3 `degree` is a name collision with different signatures — #304's finding, reached independently
+
+Four producers share the stem: `sigma_leverage.py:284 degree(net, ob, pool=None) -> int` ·
+`combat_engine_v1/core.py:57 degree(net, ob)` · `dice_engine.py:94 degree_from_net(...) -> Degree` ·
+`probabilities.py:25 degree_distribution(...)`. **The bare name `degree` resolves to two different
+functions with different arities and return types.**
+
+This is #304's "16 producers, four incompatible meanings of `net`, all typed `(int,int) -> str`,
+nothing distinguishes them" — arrived at from name collision rather than from reading the ladders.
+**Two methods with genuinely different blind spots agreeing is the signal §2.1 says is worth
+ranking**, and this time the blind spots do differ. It reinforces that the #0 ruling gates any
+consolidation here.
+
+### 7.4 Cross-subsystem throughlines and hidden coupling
+
+**292 (term, consumer) edges cross a subsystem boundary. 144 of them — 49% — have no import path
+from consumer to producer.** The highest-value hidden edges, after filtering:
+
+- **`degree`** — defined in combat + engine.autoload, used by **4** foreign subsystems that import
+  neither: `engine.cross_scale`, `engine.tests`, `mass_battle`, `social_contest`. This is the
+  consumer map for the #0 held ruling: whoever rules on the `net`/`ob` convention is ruling for these
+  four.
+- **`TN_STANDARD`**, **`PER_DIE`**, **`ACCORD_MAP`**, **`accounting_boundary`**, **`canonical_accord`**
+  — substrate and dice vocabulary crossing boundaries without imports.
+- **`DISPATCH_COMBAT_BRIDGE`** — the flag name is defined in `engine.tests` and used by `engine` and
+  `engine.cross_scale`.
+
+**Subsystem adjacency, top edges:** `engine.autoload ↔ engine.tests` 45 · **`combat ↔ social_contest`
+40** · `engine.autoload ↔ factions` 31 · `engine.tests ↔ social_contest` 26. The
+combat↔social_contest edge is the strongest between two *design* subsystems and matches the shared
+resolution substrate both use.
+
+### 7.5 The instrument's own false-positive class, caught on its first run
+
+The first run reported `append` as vocabulary shared by **12** subsystems. It is `list.append`. The
+bare-call pattern `\b([a-z_]{4,})\s*\(` was matching `x.append(`, `obj.strip(`, `.load(`. Fixed with a
+`(?<![.\w])` guard plus a stop-list of stdlib verbs: **507 → 292 edges, 226 → 144 hidden.**
+
+Residual noise is acknowledged, not hidden: `NOTE`, `STATUS`, `case`, `zero`, `weight`, `role` are
+coincidental collisions, not throughlines. **§7.4's ranking is evidence for a reading order, never an
+action list** — shared vocabulary is evidence of coupling, not proof of a call.
+
+### 7.6 What it does not measure
+
+It reads the **declared surface**, not behaviour. A term can collide by coincidence; a real call can
+use no shared vocabulary at all. For behavioural deadness the instrument remains `harness.py`
+(§1.11), which is strictly better and still unrun — plan step **T4**.
