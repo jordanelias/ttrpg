@@ -2292,3 +2292,69 @@ ordinary English word turns the committed atlas stale (measured: 2183 → 2186 f
 and every prose-adding PR in any lane inherits a regenerate-and-commit step for a file it has no
 other relationship to. Correct gate behaviour; the signal `proposals/canonical_nomenclature_v1.md`
 (#301) targets. Not proposed as a change to the gate.
+
+---
+
+## [OPEN] ED-IN-0157 — code-leanness census + a 4-phase consolidation plan (2026-08-11)
+
+**One document:** `audit/2026-08-11-code-leanness/00_code_leanness.md`. Scoped by Jordan: *"as lean
+as possible without sacrificing mechanisms"*, lean = **fewer files to track/review/edit/audit**, and
+**"my concern is with code"** — registers/logs/lane files explicitly out of scope. Population: 118
+`.py` under `tools/`, `.githooks/`, `skills/*/scripts/`. **Nothing executed.**
+
+- **[OPEN] The abstractions exist and were never adopted.** `ci_common` 11/118 · `obs_core` 9/118 ·
+  `names` 9/118 · `registry` 2/118 · **`pathres` 1/118 — while declaring itself the SOLE PARSER of
+  `restructure_ledger.md`, which 6 modules parse.** Re-implementation: repo-root **53 sites in 15
+  distinct spellings**, YAML register load 44, Status parsing 9, lane roster 9, ledger read 8,
+  `id_reservations` 8, token estimation 6, ID regex 6.
+- **[OPEN] The duplicates disagree — measured, not assumed.** Five live `## Status:` regexes over 551
+  tracked `.md`: union 200, intersection 193, **7 DISPUTED** — named in full, including
+  `workplans/valoria_master_workplan_v6.md` (the live steering surface) and
+  `systems/ui/valoria_ui_ux_v4.md`. Six are invisible to **both** `dashboard_data` (needs a hash, no
+  space) and `build_identifier_census` (exactly two hashes). Silent failure. **This is the residue
+  after `obs_core` already consolidated this exact primitive** — it re-grew.
+- **[OPEN] 166 citations of `params/core.md` across 47 live files**, a path that does not exist:
+  `params/ → engine/params/` (`restructure_ledger:720`), evacuated 2026-08-05 (ED-IN-0145). Every
+  constant in the executable model cites an absent authority — CLAUDE.md §0's PP-NNN disease, one
+  register down. **Remedy is in-tree and byte-faithful:** ED-IN-0139's
+  `engine/engine_params/params_tables.yaml` is keyed by original path.
+- **[OPEN] The audit probe scripts are unpromoted instruments, not dead one-offs** — I had them as
+  deletion candidates until I read them, and that was wrong. 38 of 41 anchors resolve;
+  `stress_battery.py` **executes today: 22 checks, 21 PASS, 1 FAIL** (mirror-match p=0.000 at
+  arming/heavy), in no CI job. **Class B is this mission's own tooling:** `flag_ablation.py`
+  (leave-one-out per boolean flag — load-bearing vs actively costing), `harness.py` (every factor →
+  WIRED-LIVE / WIRED-SITUATIONAL / **DEAD**), `interaction.py` (INDEPENDENT/MASKING/SYNERGY/
+  ANTAGONISM), `reachability_sweep.py`. **The instrument that answers "what can we cut without
+  sacrificing mechanisms" already exists and is unrun** — and it measures *behavioural* deadness,
+  strictly better than the referential deadness an import graph sees. **§10's emergence-auditor
+  candidate is blocked on "once ablation is runnable"; ablation is runnable — that blocker is stale.**
+- **[OPEN] `audit/2026-06-03-contest-groundup/engine.py` is a fork of the resolution core**
+  (`MU_PER_DIE`/`SD_PER_DIE`/`OVERWHELM_SIGMA`/`net_boost`, ED-884/ED-934 semantics, P-232 floor) with
+  constants hardcoded. Matches live today; nothing would report it if it stopped.
+
+**Plan (§5), ordered by risk.** Phase 0, no judgment required: glob the syntax-check job (**it names
+32 of 108 `tools/*.py`**), repoint the 166 citations, fix 3 broken anchors. Phase 1: one owner per
+primitive as **~8 individually-tested migrations into `ci_common` re-exporting `obs_core`** — *not* a
+fourth library — cheapest-first, gates last, because §8 already ruled each gate migration needs its
+own expected-delta test. **1.6 is the one with a real delta:** collapsing `STATUS_RE` makes the 7
+disputed docs visible, and the test must name all 7. Phase 2: promote the batteries to
+`tests/valoria/` as `xfail(strict)` and the Class-B instruments to a standing
+`tools/mechanism_census.py`, then **run it — its output is the input to any cut decision**. Phase 3:
+uncalled code, where **the deliverable is a guard, not a delete list**.
+
+**Honest accounting:** this is **not** a large file-count reduction — Phase 1 removes ~0 files, Phase
+2 adds an owner, Phase 3's ceiling is ~15 `sim_harness` files plus whatever tracing confirms. It is a
+large **edit-surface** reduction (53→1, 44→1, 8→1, 6→1, 5→1; adding a lane goes 8 edits → 1), plus
+one closed correctness class and one closed provenance class.
+
+**Three orphan measurements DISCARDED for method defects** (§7, recorded so they are not re-derived):
+the AST import graph cannot dot-resolve `combat_engine_v1`'s bare imports and called
+`wrapper` an orphan while `combat_bridge.py:141` calls it; 156 of 249 "never imported" are
+pytest-collected test files; the "ten ledger readers miss the lane files" flag was my detector failing
+to recognise the `editorial_ledger*.jsonl` glob. **No delete list is reported anywhere in this audit** —
+only tracing candidates. Four `systems/*/sim/` modules (`charter_liberties`, `home_sanctuary`,
+`hafenmark_equipment`, `infrastructure_reclamation`) have two-method agreement and are where tracing
+starts.
+
+**Needs Jordan:** the `sim_harness` promote-or-retire call (28 files), and whether Phase 2's
+`mechanism_census` should gate or merely report.
