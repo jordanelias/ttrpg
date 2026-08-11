@@ -128,3 +128,38 @@ prefix cannot read each other's cache.
   never becomes pressure to manufacture findings.
 - Three passes over one tree is not a proof of completeness. §7 of the findings document states
   what was not covered.
+
+---
+
+## 7. Correction — characters *are* NPCs (Jordan, in-session 2026-08-11)
+
+**Valoria has no PC/NPC distinction.** The character entity is the `NPC` dataclass in
+`systems/world/sim/npe.py`; there is no separate player-character schema because there is no
+separate player-character *concept*.
+
+This corrects a framing in this unit's pre-run grounding, which recorded *"no `Character` class
+exists anywhere in the tree"*. That statement is **literally true and was verified** (`grep -rn
+"^class .*Character" --include=*.py` returns zero hits) — but it is a claim about class *names* that
+invited a false conclusion about the *model*: that a PC schema is missing. Nothing is missing on
+that axis. The pattern is the one CLAUDE.md §0.1 names — a check that observes the wrong thing can
+pass while the conclusion drawn from it is wrong.
+
+**The measured gap survives the correction and sharpens under it.** Reading `NPC` as *the* character
+type does not close anything; it relocates the finding:
+
+- **No contract and no key family owns character identity.** All 27 modules in
+  `references/module_contracts.yaml` treat `npc_id` / `actor_id` as an opaque foreign key. There is
+  no owner, so there is no schema answer to *what a character is*.
+- **Identity is recorded twice, at two scales, with no bridge.** `NPC.territory_id` binds a
+  character at the *province* grain (`systems/world/sim/npe.py`), while `Settlement.npc_ids` binds
+  at the settlement grain (`systems/settlements/sim/registry.py`). There is **no `settlement_id` on
+  any character**, and nothing joins the two stores.
+- The scene, conviction and belief systems key on a bare `actor_id` string, which is a *third*
+  representation that joins to neither.
+
+**The run is not invalidated by the correction.** Lane A1 was pointed at `npe.py` explicitly and
+reached the character≡NPC framing on its own, without being told — its first finding is that no
+module owns character/NPC identity, phrased in exactly those terms. That independent arrival is the
+evidence the correction was to the *record* rather than to the *audit*. Where any later lane's
+output rests on the superseded PC/NPC framing, this section governs and that lane's row is
+re-stated in the findings register rather than carried forward.
