@@ -194,10 +194,11 @@
   "Almqvist": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 18,
+   "file_count": 19,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 15,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/factions/faction_canon_v30.md": 12,
     "systems/factions/faction_politics_v30.md": 6,
@@ -225,6 +226,7 @@
     "canon",
     "factions",
     "npcs",
+    "proposals",
     "ui",
     "victory"
    ],
@@ -651,11 +653,12 @@
   "Authority": {
    "ambiguous": true,
    "category": "pressure_point",
-   "file_count": 67,
+   "file_count": 68,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 2,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1976,12 +1979,13 @@
    "ambiguous": false,
    "category": "mass_combat_stat",
    "definition": "Unit commander stat in mass battle. \u2308(Presence + Cognition) \u00f7 2\u2309. Caps both Size contribution to pool and Discipline contribution to Health. (PP-232)",
-   "file_count": 35,
+   "file_count": 36,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 1,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 27,
@@ -2201,13 +2205,14 @@
   "Consequence": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 41,
+   "file_count": 42,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 1,
     "godot/godot_architecture_specification.md": 11,
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 7,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -2651,11 +2656,12 @@
    "ambiguous": false,
    "category": "mass_combat_stat",
    "definition": "Unit organisational integrity (replaces Cohesion, PP-232). Contribution to Health per Size capped at Command.",
-   "file_count": 32,
+   "file_count": 33,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 1,
    "locations": {
     "godot/implementation_sequence.md": 2,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/pc_formation_system.md": 20,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/cogload_moderate_target.md": 4,
@@ -3562,12 +3568,13 @@
   "Evidence": {
    "ambiguous": true,
    "category": "pressure_point",
-   "file_count": 73,
+   "file_count": 74,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/complete_systems_reference.md": 8,
@@ -3655,6 +3662,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -4977,7 +4985,7 @@
   "IP": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 64,
+   "file_count": 65,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 2,
@@ -4986,6 +4994,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 2,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 20,
     "systems/_architecture/campaign_architecture_v30_index.md": 4,
     "systems/_architecture/cogload_moderate_target.md": 2,
@@ -5060,6 +5069,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "ui",
     "victory",
@@ -5395,13 +5405,14 @@
   "Key": {
    "ambiguous": false,
    "category": "substrate",
-   "file_count": 52,
+   "file_count": 53,
    "legacy_count": 1,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
     "engine/mc_v18_walkthrough.md": 4,
     "godot/README.md": 3,
     "godot/godot_conversion_strategy_v1.md": 37,
+    "proposals/canonical_nomenclature_v1.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 14,
     "proposals/repo-reorganization-v1.md": 3,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -5743,12 +5754,13 @@
   "Legitimacy": {
    "ambiguous": false,
    "category": "settlement_stat",
-   "file_count": 31,
+   "file_count": 32,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "systems/_architecture/derived_stats_v30.md": 10,
     "systems/_architecture/generational_transition_v30.md": 1,
@@ -6074,7 +6086,7 @@
   "MS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 66,
+   "file_count": 67,
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 7,
@@ -6086,6 +6098,7 @@
     "godot/godot_architecture_specification.md": 17,
     "godot/implementation_sequence.md": 2,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 20,
     "systems/_architecture/campaign_architecture_v30_index.md": 10,
     "systems/_architecture/canonical_registry.md": 4,
@@ -6159,6 +6172,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -6492,12 +6506,13 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Military power. 0 = cannot Muster.",
-   "file_count": 82,
+   "file_count": 83,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 3,
     "engine/mc_v18_walkthrough.md": 2,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 3,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/complete_systems_reference.md": 3,
@@ -6595,6 +6610,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "ui",
@@ -6821,13 +6837,14 @@
   "Order": {
    "ambiguous": true,
    "category": "settlement_stat",
-   "file_count": 84,
+   "file_count": 85,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 3,
     "systems/_architecture/campaign_modes_v30.md": 2,
@@ -7515,11 +7532,12 @@
    "ambiguous": false,
    "category": "mass_combat_stat",
    "definition": "Unit offensive quality (replaces Combat Power, PP-232/PP-233). Damage per success = 1 + Power. Derived from unit type.",
-   "file_count": 22,
+   "file_count": 23,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 1,
    "locations": {
     "godot/implementation_sequence.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 4,
     "systems/_architecture/derived_stats_v30.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 1,
@@ -7556,6 +7574,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "ui",
     "victory"
    ],
@@ -7564,9 +7583,10 @@
   "Precedent": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 48,
+   "file_count": 49,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 25,
     "proposals/social_contest_consolidation_integration_v1.md": 9,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
@@ -8014,9 +8034,10 @@
   "Reason": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 24,
+   "file_count": 25,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 3,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/complete_systems_reference.md": 6,
     "systems/_architecture/videogame_mode_spec.md": 1,
@@ -8052,6 +8073,7 @@
     "factions",
     "fieldwork",
     "npcs",
+    "proposals",
     "social_contest",
     "ui",
     "world"
@@ -9104,7 +9126,7 @@
    "ambiguous": false,
    "category": "mechanic",
    "definition": "Reputation track. Range 0\u201310 (exception to 1\u20137 scale). No in-game benefit above 7; 10 is cosmetic maximum.",
-   "file_count": 55,
+   "file_count": 56,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -9112,6 +9134,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
@@ -10653,9 +10676,10 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 13,
+   "file_count": 14,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 3,
     "systems/combat/combat_reference_v1.md": 1,
     "systems/factions/factions_personal_v30_infill.md": 1,
@@ -10682,6 +10706,7 @@
     "fieldwork",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "world"
    ],
@@ -17341,9 +17366,10 @@
      "purpose": "`{id: \"combat.scene\", resolver: state_reader, status: PENDING, in: [\"scene.combat_strike\",\"scene.combat_hit\","
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/combat/combat_flow_skeleton_v1.md": 3,
     "systems/combat/scene_combat_design_v1.md": 1
@@ -17353,7 +17379,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "combat_hit"
   },
@@ -19155,10 +19182,11 @@
      "purpose": "[\u00a71. Pipeline Overview \u2014 4 Stages] Stage | Name | Mechanical character | Canon source :: **2** | Latent RM (ambient influence) | Active NPC influence in low-PT territories; does NOT control territory | conviction_track \u00a75 PP-416"
     }
    },
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 4,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 10,
@@ -30372,12 +30400,13 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 34,
+   "file_count": 35,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
     "godot/godot_conversion_strategy_v1.md": 3,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 4,
     "proposals/repo-reorganization-v1.md": 9,
@@ -30888,16 +30917,18 @@
      "purpose": "consent.legitimacy, pressure.homeostat, clock.mending_stability"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "mending_stability"
   },
@@ -35057,10 +35088,11 @@
      "purpose": "[2.2 Top-down (strategic/environmental \u2192 settlement/personal)] Emitter family | Keys | targets[] population spec (the \u00a712.3 obligation, now per-row) | finding_basis :: `domain_actions` \u2192 npc_behavior, piety_track, settlement_economy\u2020 | `da.*` (5 types) | Every da.* Key names the affected settlement(s) and every present/affected named NPC with role (subject/witness/bystander) + per-target impact_ve"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/canonical_nomenclature_v1.md": 8,
     "proposals/repo-reorganization-v1.md": 9,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 1,
@@ -35522,9 +35554,10 @@
      "purpose": "[\u00a71 \u00b7 State (canonical, already on `Settlement`)] field | type | range | axis (Weber, \u00a71.8a) | mutability :: `s.popular_support` (PS) | int | 0\u20137 | charismatic / performance (fast) | write-side \u00a74 only"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/governance_consolidation_v1.md": 1,
     "systems/_architecture/ners_vsg_reconciliation_v1.md": 1,
     "systems/factions/faction_behavior_v30.md": 2,
@@ -35539,6 +35572,7 @@
    "subsystems": [
     "_architecture",
     "factions",
+    "proposals",
     "settlements"
    ],
    "term": "popular_support"
@@ -36990,9 +37024,10 @@
      "purpose": "[ED-SE-0005, 2026-07-08] Ownership note \u2014 Grant/Revoke is a Provincial-Authority Domain Action, single-homed in the FA lane.** The ratified pessimist-action audit (`designs/audit/2026-07-08-pessimist-action-audit/`, ED-IN-0027) confirms Grant/Revoke Subnational Management is exercised in the provinc\u2026"
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -41996,10 +42031,11 @@
      "purpose": "Authoritative sources: fieldwork_v30 \u00a73.3, settlement_layer_v30 \u00a74.1, scale_transitions_v30 \u00a74, geography_v30."
     }
    },
-   "file_count": 33,
+   "file_count": 34,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
+    "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "systems/_architecture/conflict_architecture_proposal.md": 1,
     "systems/_architecture/derived_stats_v30.md": 3,
