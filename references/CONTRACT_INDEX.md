@@ -5,7 +5,7 @@
 
 **Sources joined:** `references/module_contracts.yaml` (authored contracts) + `references/key_graph.json` (generated homes/authority) + `references/wiring_manifest.yaml` (build + port status). Key-level companion: [KEY_INDEX.md](KEY_INDEX.md).
 
-`authority` is derived, not stored (Jordan's 2026-08-02 precedence rule): **code** if a declared `sim_module` resolves on disk, **prose** if only a design doc exists, **none** if neither. It expires on someone else's commit, which is why nothing hand-annotates it.
+`authority` is derived, not stored (Jordan's 2026-08-02 precedence rule): **code** if a declared `sim_module` resolves on disk **or the module is on `build_key_graph.py`'s CODE_EXISTS_UNDECLARED list** (code demonstrably present while its row deliberately declares no `sim_module` — `mass_battle`'s row is MB-lane-owned and IN must not fill it), **prose** if only a design doc exists, **none** if neither. It expires on someone else's commit, which is why nothing hand-annotates it.
 
 ---
 

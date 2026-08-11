@@ -1505,6 +1505,77 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
 
 ## Next actions
 
+- **[OPEN] ED-IN-0152 — subsystem flow skeletons exist for all 15 `systems/` folders (2026-08-10).**
+  `systems/<x>/<x>_flow_skeleton_v1.md`, format + roster single-owned by
+  `systems/_architecture/subsystem_flow_skeletons_v1.md`, guarded by
+  `tests/valoria/test_flow_skeletons.py`. Structure only — entry points, ordered flow, IN/OUT,
+  state, seams, traced gaps — built from **code**, not design prose. **Ratifies nothing:** no head
+  moved, no status flipped, no contract edited.
+  - **What they are for next.** The Godot port's conversion unit is one module contract
+    (`godot/godot_conversion_strategy_v1.md` Part IV.3) and its ritual wants a flatten artifact per
+    module; the 2026-06 flatten artifacts are scattered and stale. These are that category of
+    object, rebuilt uniformly and guarded against rot.
+  - **The gaps are the finding, and they are observations, not proposals.** Each subsystem's §7
+    carries evidenced absences (declared-but-unimplemented, stubbed, unreachable, default-off, or
+    code↔contract divergence). Several are corroborated by lanes that never saw each other — the
+    `world.clocks['Turmoil']` victory gate was found independently by the `victory` and `overview`
+    traces. **None of them is dispositioned here.** Deciding which are defects and which are
+    deliberate deferrals is per-lane design work, not IN's call.
+  - **Known guard blind spot, stated not implied:** the anchor check catches wrong file, wrong
+    function, wrong symbol and out-of-function drift, but NOT line drift *within* the named
+    definition. Measured, not assumed — see the test docstring.
+  - **[HELD FOR JORDAN — NOT ratified by merging this PR] Dotted-namespace nomenclature for
+    canonical identifiers.** Jordan raised it in-session: every canonical name should carry a
+    greppable prefix — `contract.victory`, `settlement.`, `npc.`, `scores.` — so a region can be
+    found by searching for it instead of re-derived by heuristics. **The evidence is now measured**
+    rather than asserted, in `references/ENGINE_ATLAS.md` §5 (generated, so it stays current):
+    - **Key types already satisfy the rule by construction** — dotted and distinctive, median
+      **24** occurrences corpus-wide. Nothing to change.
+    - **Contract names do not** — median **131**, worst `audit` at **2,162**, `mass_battle` 2,085,
+      `social_contest` 1,953, `victory` 1,911. They are ordinary English words, so a search returns
+      prose and unrelated identifiers. **Zero** qualified (`contract:<name>`) uses exist anywhere.
+    - The repo already has the convention in embryo: `_identifier_census.yaml` uses `key:` / `py:`
+      prefixes, and `stubwire.stub_resolve(module, symbol, reason)` is the same idea — a
+      machine-findable declaration with structured payload, which is why stub sites are the one
+      gap class that never needs re-discovering.
+    **Why this is held and not done:** a rename touches 27 contract names across ~10k references
+    and every generated artifact that joins on them. A cheaper variant preserves the names and
+    mandates only the *citation form* (`contract.victory` when referring to the contract in prose
+    or comments) — additive, nothing renames, and the atlas already measures adoption. Choosing
+    between full rename and citation-form-only is a Jordan call; **nothing here implements either**.
+  - **SECOND PASS RUN 2026-08-10 — independent re-derivation, method-disjoint from the first.**
+    The skeletons were built by grep-driven code tracing. To test whether that method's blind
+    spots were *the artifact's* blind spots, a second pass re-derived the same subjects under an
+    inverted constraint: **no grep, no pattern matching, files read whole**, agents forbidden from
+    opening the skeletons, sourced from the declarative surfaces (`module_contracts.yaml`,
+    `mechanics_index.yaml`, `canonical_sources.yaml`, `CURRENT.md`) and the 2026-08-06 corpus
+    vector audit's structural graph, then diffed.
+    - **Result: ~168 claims independently rediscovered; 4 contradictions; 3 outright errors in the
+      shipped files, all corrected.** The errors were: threadwork §7 asserting state was "not
+      schema-migrated" when the migration landed 2026-05-19 (and contradicting its own §2);
+      settlements' `Contracts:` header listing Python modules rather than contract names; and
+      factions labelling the govern branch a "fallback" when it is unconditional.
+    - **Two of the second pass's own claims were WRONG and must not be re-propagated:**
+      `sigma_leverage`/`dice_engine` are NOT dead — they are imported by combat, social_contest
+      and five faction modules; the agent that called them orphans had a scope that excluded
+      combat. And overview IS present in the execution trace
+      (`by_contract["loop.s3"]["peninsular_strain"]`); the agent read `by_subsystem_path` only.
+      Recorded here because a plausible-sounding dead-module claim is exactly the kind of thing
+      that gets copied forward.
+    - **Method note worth keeping:** the two passes agreed on nearly everything *reachability*-
+      related and disagreed mainly where a claim rested on a **registry** rather than on code.
+      Grep tracing is strong on "what calls what" and weak on "what was declared and never
+      built"; reading the contracts whole is the opposite. Neither alone is sufficient.
+  - **FILED, not swept (§0.1 point 5).** Standing rule 5 was applied to *comparison thresholds*
+    (gate predicates) across the corpus. **Effect magnitudes** — Coherence/MS deltas, ±Ob
+    adjustments, deck sizes — were left in place. They are constants by the spec's own preamble
+    and arguably in scope, but sweeping them touches all 15 files for marginal gain and would
+    widen a task that was load-bearing only on the gates. One deliberate inconsistency, recorded
+    rather than hidden.
+  - Follow-up available if wanted: fold the §7 gap rows into a single cross-subsystem register so
+    the absences can be ranked in one place instead of fifteen. Not done — it is a judgment surface
+    and would need a lane owner.
+
 - **THE CONTRACT + KEY INDEXES ARE READABLE NOW (2026-08-10, ED-IN-0151). Jordan review pending.**
   `references/KEY_INDEX.md` (55 key types by family) and `references/CONTRACT_INDEX.md` (27 modules,
   IN → resolver → OUT + owned state, gates, derivations, loops) are generated by

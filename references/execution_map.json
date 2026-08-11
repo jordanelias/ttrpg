@@ -1001,7 +1001,7 @@
    "accounting_phase": null,
    "gap_notes": true,
    "contract_status": "extracted",
-   "note": "owns Turmoil + IP; env.* emitters + occupation ladder unbuilt (IP isn't even a clocks key)."
+   "note": "owns Turmoil + IP; env.* emitters + occupation ladder unbuilt. [CORRECTED 2026-08-10, ED-IN-0152: this note previously claimed IP is not even a clocks key -- false on both readings. engine/autoload/game_state.py:244 seeds IP: 20.0 inside the clocks mapping, and clock_registry_v30.md:18 lists Institutional Pressure (IP), start 20. What IS true is that no module writes IP after world-gen -- ip_track.py's two entry points are stubs with no production caller.]"
   },
   "scene_slate": {
    "module": "scene_slate",
