@@ -67,7 +67,7 @@
     "qualified": 0
    },
    "mass_battle": {
-    "occurrences": 2075,
+    "occurrences": 2080,
     "qualified": 0
    },
    "miraculous_event": {
@@ -91,7 +91,7 @@
     "qualified": 0
    },
    "piety_track": {
-    "occurrences": 134,
+    "occurrences": 136,
     "qualified": 0
    },
    "scenario_authoring": {
@@ -115,7 +115,7 @@
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 1856,
+    "occurrences": 1860,
     "qualified": 0
    },
    "territorial_piety": {
@@ -123,11 +123,11 @@
     "qualified": 0
    },
    "threadwork": {
-    "occurrences": 1878,
+    "occurrences": 1880,
     "qualified": 0
    },
    "victory": {
-    "occurrences": 1929,
+    "occurrences": 1935,
     "qualified": 0
    }
   },
