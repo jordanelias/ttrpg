@@ -53,7 +53,7 @@ Three orthogonal decompositions of one subject, none seeing the others' output:
 | Pass | Axis | Question | Lanes |
 |---|---|---|---|
 | **A · Strata** | the entity ladder | per rung: what does canon say this rung *is*, and which of those facts has no key and no contract? | 4 |
-| **B · Lenses** | 19 domain lenses | per lens across every rung: what must the world remember, change, and announce? | 5 |
+| **B · Lenses** | 18 domain lenses | per lens across every rung: what must the world remember, change, and announce? | 5 |
 | **C · Config** | individuation | per entity class: what must be **authored** for an instance to be unique, consequential, legible? | 3 |
 
 Then a read-only `valoria-critic` relay (4 clusters) and an Opus synthesis. **17 agents, 0 errors,
@@ -397,9 +397,19 @@ faction-lifecycle gap, and that convergence is legible in the lane outputs thems
 several bundle multiple rows or raise items that are not rows at all. Ordered by how much each
 unblocks:
 
-1. **G-17 — who authors `references/rendering_dispositions.yaml`?** This blocks **all 8 `propose_key`
-   rows**. §10's precondition is RATIFIED (ED-IN-0026) and the file does not exist. Nothing in the
-   key half of this register can proceed until this is answered or waived. **Start here.**
+1. **G-17 — who authors `references/rendering_dispositions.yaml`?** It governs **all 8 `propose_key`
+   rows**. §10's precondition is RATIFIED (ED-IN-0026) and the file does not exist.
+   ⚠ **Corrected by second-pass review — an earlier version of this item said "nothing in the key half
+   of this register can proceed until this is answered or waived," and G-17 exists precisely to correct
+   that overstatement.** `key_type_registry_v30.md:1287-1291` has A15 enforce the rule **report-only**
+   against the existing 55-type roster first, flipping to blocking *"once `rendering_dispositions.yaml`
+   exists and the backlog is at zero"* — standard warn→block discipline. So appends today are
+   **governed and unrecorded, not mechanically refused**. The practical obligation is real but
+   different: every `propose_key` row must ship its rendering-disposition row as a **co-artifact**, and
+   a second obligation rides along that no proposal mentioned —
+   `engine/engine_params/key_types.json` is GENERATED from the registry by `tools/export_key_types.py`,
+   declares *"NEVER hand-edit"*, and pins registry order as significant. **Still start here**, because
+   answering it is what makes the other seven rows shippable rather than merely arguable.
 2. **G-24 — does the bucket taxonomy gain a relational shape?** Sits underneath at least six rows
    (treaties, relational edges, subnational footholds, sanctions). The largest single unlock in the
    contract half.
@@ -472,3 +482,5 @@ Three passes over one tree is not a completeness proof. It is a floor on coverag
 | `04`: consumerless keys "the emit exists" — **DECLARE-ONLY means it does not**; and the ED was **ED-IN-0014**, not 0096 | `04` §2.3 |
 | `04`: "~140 consume edges" → **125**; roster wrong on 4 of 27; "six of eight" → **seven** | `04` §2, §5 |
 | `04`: "emit sites dated after the measurement" — **no date supports it; two contradict it** | `04` §3.1 |
+| **2nd-pass review, post-merge:** G-17 framing — appends are **report-only-governed, not mechanically refused**; the item asserted the very overstatement G-17 was written to correct | §8 |
+| **2nd-pass review:** the lens list enumerates **18**, not 19 — an error in the original decomposition inherited by every downstream artifact | §2 · `00` §2 · `02` §4 · ED-IN-0153 |

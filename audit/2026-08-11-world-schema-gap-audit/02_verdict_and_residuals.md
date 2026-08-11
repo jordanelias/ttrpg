@@ -109,7 +109,7 @@ a design call that an observation pass has no standing to make.
 Stated plainly so a reader can tell a clean surface from an unread one. The synthesis stage authored
 these against its own output.
 
-1. LANE COVERAGE IS PARTIAL AND UNEVEN. Twelve lanes reported (A1-A4, B1-B5, C1-C3). The lens pass is described as 19 domain lenses but only about 14 are visible in the findings. Lenses named in lane titles that produced NO finding: world history and threadwork. Treat those as unread, not clean.
+1. LANE COVERAGE IS PARTIAL AND UNEVEN. Twelve lanes reported (A1-A4, B1-B5, C1-C3). The lens pass is described as 19 domain lenses but only about 14 are visible in the findings. [CORRECTED 2026-08-11 by second-pass review: the method doc enumerates EIGHTEEN lenses, not 19 — see 00 §2. The shortfall stands; the denominator is 18.] Lenses named in lane titles that produced NO finding: world history and threadwork. Treat those as unread, not clean.
 
 2. WHOLE SUBSYSTEMS PRODUCED NOTHING. No finding in this register comes from combat (PC lane), social_contest (SC lane), fieldwork/investigation, threadwork, articulation/UI, npcs beyond the relational graph, or victory beyond the Altonia residual. Given that the faction and settlement rungs — the ones that WERE swept — yielded ~50 gaps, the absence of findings from six subsystems is a coverage fact about this run, not evidence those surfaces are clean.
 

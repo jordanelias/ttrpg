@@ -37,7 +37,7 @@ applied here prospectively.
 | Pass | Axis | Asks | Lanes |
 |---|---|---|---|
 | **A · Strata** | the entity ladder | per rung: what does canon say this rung *is*, and which of those facts has no key and no contract? | 4 |
-| **B · Lenses** | 19 domain lenses | per lens, across every rung at once: what must the world remember, change, and announce? | 5 |
+| **B · Lenses** | 18 domain lenses | per lens, across every rung at once: what must the world remember, change, and announce? | 5 |
 | **C · Config** | individuation / authoring | per entity class: what must be **authored** for an instance to be unique, consequential, and legible? | 3 |
 
 **The ladder (A):** character → settlement → settlement faction & governance → territory/province →
@@ -47,6 +47,8 @@ provincial faction & governance → national faction & governance.
 history · social status · society (class, caste, culture) · demographics · religion · economics ·
 military · invasion threats · geography · politics · geopolitics · diplomacy · world history ·
 events · threadwork.
+
+⚠ **Count corrected by second-pass adversarial review, 2026-08-11: that list enumerates EIGHTEEN, and this unit said 19 throughout.** The error is in the original decomposition, not the execution: Jordan's brief named 17 lenses, `history` was split into personal and world to make 18, and 19 was asserted without counting. Every downstream '19' inherited it — including this document's own table above, `03_discussion.md`, the workflow script's `meta.description`, and the ED-IN-0153 title. The coverage shortfall in `02` §4 item 1 is unaffected in substance (about 14 lenses visible in findings) but its denominator is 18.
 
 **Pass C is a different class of question.** A and B ask what the engine must *remember and
 announce*. C asks what must be *authored*. A world of 37 near-identical settlements and four

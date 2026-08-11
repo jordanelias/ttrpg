@@ -2196,3 +2196,95 @@ ranges in the generator, not hand-editing the output.
       register says 40 twice and a census returns **40**. Left as-is and recorded here, because `02`
       is the synthesis stage's own return value and editing it would falsify the record of what the
       run produced.
+
+- **[PART] ED-IN-0153 second-pass correction — two defects survived the first adversarial review
+  and shipped in PR #300 (2026-08-11).** The audit's two critics returned after the merge had already
+  landed; most of their verdicts were applied in `92b700f` before merge, but two were not, and both
+  are now corrected on a fresh branch (a merged PR cannot carry follow-up work).
+  - **G-17 was misframed in the very document that cites it.** `03_discussion.md` §8 said *"nothing in
+    the key half of this register can proceed until this is answered or waived"* — the exact
+    overstatement the G-17 row was written to correct. `key_type_registry_v30.md:1287-1291` has A15
+    enforce the `rendering_dispositions.yaml` precondition **report-only** against the existing 55-type
+    roster, flipping to blocking only *"once the file exists and the backlog is at zero"*. Appends
+    today are **governed and unrecorded, not mechanically refused.** ED-IN-0153's own entry carried the
+    same overstatement (*"structurally cannot append"*) and is corrected in place. The real obligation
+    is narrower and shippable: each `propose_key` row carries its rendering-disposition row as a
+    **co-artifact**, plus regeneration of the GENERATED `engine/engine_params/key_types.json`.
+  - **The lens list enumerates EIGHTEEN, and the whole unit said 19.** Not an execution error — an
+    error in the original decomposition: Jordan's brief named 17, `history` split into personal and
+    world to make 18, and 19 was asserted without counting. Inherited by `00` §2, `03` §2, `02` §4's
+    coverage denominator, the ED-IN-0153 title/description, and 4 sites in
+    `.claude/wf_world_schema_gaps.js`. All corrected; the coverage shortfall itself is unaffected
+    (~14 lenses visible in findings, denominator 18).
+  - **ED-IN-0153's `falsifier` field still carried the prediction ED-IN-0154 falsified** — that
+    rediscovery "under-reports and cannot over-report". It reported nothing. Annotated in place rather
+    than deleted, and ED-IN-0154 added to its citations.
+  - **Process note worth keeping:** both critics were launched read-only and returned *after* the PR
+    merged. A review that lands after the merge is still a review — it just costs a second branch.
+    Launch the verifier before the commit that ships the thing it verifies, not beside it.
+
+- **[OPEN · needs Jordan] ED-IN-0156 — CLAUDE.md asserts 13 countable figures about the tree and
+  NOT ONE is guarded (2026-08-11).** Found while adversarially checking the ED-IN-0153 residual *"no
+  cited PP number was provenance-verified"* — the check confirmed the residual and then found a
+  larger defect behind it.
+  - **No test asserts any of the 13.** `ci_hooks_verifier`'s CLAUDE.md checks (2 and 6) assert the
+    **presence of prose** — the commit path is documented, §11 survives — never a number. The file
+    reads as guarded while every factual claim in it is unprotected.
+  - **Three of three re-measured are wrong or scope-ambiguous.** `48,612 chars` → actually **56,384**
+    (a 16% understatement, and that figure is the load-bearing input to §11's per-wake-up token
+    floor); `106 modules` in `tools/` → **108**; and `433 of 452` PP-unresolvable reproduces **only**
+    against `patch_register_active.yaml` alone (6 entries; 460/466 today). Include
+    `registers/patch_register_index.md` — a live register on `main` with **196 entries** — and it is
+    **328/466, 70% not 96%**. The scope is unstated, so the number is not merely stale, it is
+    **unreproducible without knowing which registers count**.
+  - **The residual it came from is now answered.** ED-IN-0153 cites 11 distinct PP numbers; **6
+    resolve** (2 active, 4 index). The 5 that do not — PP-687, PP-510, PP-519, PP-723, PP-688 — are
+    **evacuation casualties, not fabrications**: each is heavily cited across the live tree (PP-687 in
+    29 files, PP-688 in 17, PP-723 in 11), so their entries went to fork ref `c451bcb`.
+    `tools/validate_ed_citations.py` has **no PP handling at all**, so neither case is caught.
+  - **Why this file and not the others.** Every other countable surface here is GENERATED and
+    freshness-guarded — ENGINE_ATLAS, KEY_INDEX, CONTRACT_INDEX, the glossary, apparatus_registry.
+    CLAUDE.md is hand-written instructions, so it sits outside the generated-artifact discipline it
+    prescribes for everything else, while being the one document every session reads as authority at
+    SessionStart. §0.1 point 5 names the remedy and the file does not apply it to itself.
+  - **Proposed fix, held for Jordan — not new machinery.** A test that recomputes each asserted figure
+    and fails on disagreement, in the ratchet shape `test_key_graph.py` already uses. Figures too
+    expensive to recompute should stop being asserted and cite their generator instead. Any fix must
+    also **state each figure's scope**.
+  - ⚠ Filed by a session that had itself repeated `433 of 452` earlier the same day without measuring
+    it. That is the cost being described, not a hypothetical one.
+
+- **[OPEN] ED-IN-0157 — second adversarial pass: the ED-IN-0153 RESIDUALS were themselves unverified
+  claims (2026-08-11).** The first review checked what the register *asserted*; nobody checked `02` §4,
+  the list of what the run never did. Record: `audit/2026-08-11-world-schema-gap-audit/05_second_adversarial_pass.md`.
+  - **`existing_tracking`, 22 "none found" rows checked:** G-19 and G-36 **overturned**, G-25/G-44/G-13
+    softened, 17 upheld. G-19 is the sharpest — `supersession_register.yaml:227-230` registers PP-632's
+    struck Knot tier model, and **the row's own Evidence field quotes the pointer its tracking field
+    denied**. The sharpening beats the overturn: that register's `files_to_recheck` **omits**
+    `key_type_registry_v30.md`, which is the nameable mechanism by which the struck enum survived into
+    the generated `key_types.json`.
+  - **The reverse error is worse than "none found", because a citation looks verified. Four found.**
+    G-49 cites a line that says the **opposite** (*"is consumed, not orphaned"*); G-44/G-45 cite OI-37
+    at `HANDOFF_SE.md`, which contains **zero** occurrences of it — inherited verbatim from a stale code
+    comment without opening the cited file; G-17/G-20 cite a **line anchor into a JSONL ledger** that
+    has since moved twice. **Cite the id, never the line** — an append-and-archive ledger renumbers.
+  - **Every flow-skeleton and code anchor opened matched verbatim.** The failures cluster entirely in
+    ledger/handoff line anchors and one reversed prose read. That is a usable rule for the next auditor.
+  - **"Unread, not clean" is right in direction, wrong in detail** — `world history`, victory and npcs
+    all produced findings; the residual was true of lane *labels* and false of subject matter.
+  - **Seven unfiled gaps found in the unread surfaces, recorded as OBSERVATIONS not filings** (several
+    straddle lane boundaries; the G-33 precedent says that is not IN's call). Sharpest: **`echo_transport`
+    emits the combat keys and has no row among the 27 contracts** while the registry names it an emitting
+    system elsewhere; `World.threadcut_beings`/`comovement_deck` are built-and-unowned with the threadwork
+    contract explicitly disclaiming them; and **victory's fallback winner-decision is inline in
+    `mc_v18.py:276-286`** — in every campaign not decided by GD-1, the outcome is computed by a formula no
+    contract owns.
+  - ⚠ **N-4 exposes a scoping defect in held decision 5**: it asks whether the 7-member
+    `not_descriptors.tracks` block is swept and never mentions the structurally identical **21-member
+    `derived_values` block on the line above**. Ruling on one and not the other special-cases a block —
+    the same objection G-05 raises to promoting Renown alone. **Jordan should be asked about both blocks.**
+  - ⚠ **STILL UNVERIFIED, and it is the residual that matters most:** nothing in this unit has been
+    verified **by execution**. The campaign run to confirm `04` §3.2's emit ledger empirically was begun
+    and not finished; every emit and reachability claim remains static analysis. Both critics were
+    read-only and could not run a test. **No third pass has been run** — two passes found ~14 then ~12
+    defects, which is not evidence of convergence.

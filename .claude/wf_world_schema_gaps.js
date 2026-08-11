@@ -1,6 +1,6 @@
 export const meta = {
   name: 'world-schema-gaps',
-  description: 'World-schema gap audit (ED-IN-0153): interrogate the entity ladder (character -> settlement -> settlement faction/governance -> territory/province -> provincial faction/governance -> national faction/governance) and 19 domain lenses against the Key type registry + module contracts, to find MISSING keys and contracts. Read-only: produces a gap register, ratifies nothing.',
+  description: 'World-schema gap audit (ED-IN-0153): interrogate the entity ladder (character -> settlement -> settlement faction/governance -> territory/province -> provincial faction/governance -> national faction/governance) and 18 domain lenses against the Key type registry + module contracts, to find MISSING keys and contracts. Read-only: produces a gap register, ratifies nothing.',
   phases: [
     { title: 'Strata', detail: '4 ladder-first lanes: character-binding, settlement+subnational, territory/province+provincial, national+cross-scale', model: 'sonnet' },
     { title: 'Lenses', detail: '5 lens-first lanes over the same ladder: interior life, social order, material/martial, governance/relations, dynamics', model: 'sonnet' },
@@ -358,7 +358,7 @@ function hCritic(opts) { return Object.assign({}, opts || {}, H_CRITIC) }
 // of retrospectively.
 //   Pass A (Strata) walks the entity ladder and asks, per rung: what does canon say this rung IS,
 //     and which of those facts has no key type and no contract expression?
-//   Pass B (Lenses) walks 19 domain lenses and asks the same question across every rung at once.
+//   Pass B (Lenses) walks 18 domain lenses and asks the same question across every rung at once.
 //   A finding both passes reach independently ranks above one only a single lane reached.
 //
 // GROUNDING (measured this session, so lanes start from fact and spend their budget on the gap,
@@ -910,7 +910,7 @@ existing_tracking: ${g.findings[0].existing_tracking} | producer confidence: ${g
 
 const critiques = await parallel(clusterSets.filter(c => c.groups.length).map(c => () =>
   run.attempt('Adversarial', agent(`You are the antagonist in a Valoria agonist->antagonist relay.
-Twelve producer lanes swept the entity ladder, 19 domain lenses, and the individuation/authoring
+Twelve producer lanes swept the entity ladder, 18 domain lenses, and the individuation/authoring
 surface against the Key type registry
 (systems/_architecture/key_type_registry_v30.md, 55 types) and the module contracts
 (references/module_contracts.yaml, 27 modules) looking for MISSING keys and contracts. Below is the
@@ -971,7 +971,7 @@ register. You are the stage that gates the result; everything below has already 
 adversarially checked, and your job is to decide what survives and how it is stated.
 
 RANKED GAPS (deduped across THREE method-disjoint decompositions of the same subject: a strata
-pass that walked the entity ladder rung by rung, a lens pass that swept 19 domain lenses across
+pass that walked the entity ladder rung by rung, a lens pass that swept 18 domain lenses across
 every rung at once, and a config pass that asked what must be AUTHORED for an instance to be unique
 and consequential. 'rediscovery' counts INDEPENDENT lanes; a gap reached by lanes from different
 passes is corroborated by disjoint METHOD, which is worth materially more than two lanes of the
