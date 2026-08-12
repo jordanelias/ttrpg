@@ -279,8 +279,30 @@ def built_names() -> dict[str, list[str]]:
 
 
 def doc_status(text: str) -> str | None:
-    m = re.search(r'^##\s*Status:\s*(.+)$', text, re.M)
-    return m.group(1).strip() if m else None
+    """ONE OWNER: ci_common.doc_status (plan G8, ED-IN-0159 §1.3a).
+
+    Was `^##\\s*Status:` — EXACTLY two hashes, over the WHOLE document. That is
+    both halves of the §1.3a divergence in one line, and the measured delta of
+    replacing it is +3 / -1, with ZERO change to any doc's SUPERSEDED
+    classification (which is what this function actually gates, at :348):
+
+      GAINED  engine/sim_reference_CONVENTIONS.md      (bare `Status:`)
+      GAINED  references/restructure_ledger.md         (`# Status:`, one hash)
+      GAINED  systems/combat/combat_engine_v1/README.md (bare `Status:`)
+      LOST    godot/godot_architecture_specification.md
+
+    The loss is a FIX, not a regression: that file's `## Status:` line reads
+    "NOT STARTED / IN PROGRESS / COMPLETE" — a legend, past the head window, not
+    a status. Scanning the whole document is what made it visible.
+
+    The window matters more than the regex here and was chosen by measurement,
+    not inheritance. At the whole document this function newly reads
+    `  status : IN_FORCE | VETOED | SUPERSEDED` — a schema TEMPLATE inside an
+    audit doc — and would flip a live document to SUPERSEDED. At a 12-line
+    window, two genuinely-superseded docs stop being recognised. 40 and 80 give
+    the same answer; ci_common.STATUS_HEAD_LINES is 80.
+    """
+    return ci_common.doc_status(text)
 
 
 def table_purposes(text: str) -> dict[str, str]:

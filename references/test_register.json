@@ -9667,6 +9667,130 @@
     }
    }
   },
+  "test_status_reader_one_owner.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The EXPECTED-DELTA test for plan step G8 (ED-IN-0159 \u00a71.3a).",
+   "helper_loc": 15,
+   "helpers": [
+    {
+     "loc": 4,
+     "name": "tracked_md"
+    },
+    {
+     "loc": 5,
+     "name": "read"
+    },
+    {
+     "loc": 6,
+     "name": "_status_re_line"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN",
+    "PC"
+   ],
+   "loc": 371,
+   "modules_under_test": [
+    "engine",
+    "engine/sim_reference_CONVENTIONS.md",
+    "references",
+    "references/restructure_ledger.md",
+    "systems",
+    "systems/combat/combat_engine_v1/README.md",
+    "systems/engine",
+    "systems/factions/faction_canon_v30.md",
+    "systems/ui/valoria_ui_ux_v4.md",
+    "tools",
+    "tools/observability",
+    "tools/skills"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 15,
+   "tests": {
+    "test_a_doc_with_two_contradictory_status_lines_is_still_reported": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The concrete case that made \"scan every Status line\" load-bearing."
+    },
+    "test_build_identifier_census_delta_is_plus_three_minus_one": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The ONE reader that moves. Both directions asserted by name."
+    },
+    "test_build_identifier_census_superseded_classification_is_unchanged": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The assertion with the real teeth. `doc_status` exists to gate a SUPERSEDED"
+    },
+    "test_build_incompleteness_delta_is_none_in_its_own_scope": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "The direction the plan explicitly warned could shrink silently."
+    },
+    "test_ci_generation_consistency_delta_is_none": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Its regex was ALREADY equivalent to the owner. \u00a71.3a counted it as a"
+    },
+    "test_dashboard_data_has_no_independent_status_regex": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Correction 1: \u00a71.3a's fifth reader does not exist."
+    },
+    "test_every_disputed_doc_still_exists": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "If one is renamed or removed, the accounting below silently stops meaning"
+    },
+    "test_only_one_status_regex_is_compiled_in_the_whole_tooling_tier": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The recurrence guard. \u00a71.3a's own framing is that this primitive was"
+    },
+    "test_the_disputed_seven_are_exactly_build_identifier_census_blind_spot": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The whole of \u00a71.3a's disputed set, explained by ONE cause."
+    },
+    "test_the_one_lost_document_is_a_legend_not_a_status": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A loss has to be justified, not just counted. This file's `## Status:` line"
+    },
+    "test_the_seven_are_partitioned_with_nothing_left_over": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_the_three_real_statuses_are_now_visible": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "GAIN direction. Each was a genuine document status that the two-hash regex"
+    },
+    "test_the_two_document_defects_are_still_open_and_named": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "G8 does NOT close these, and saying so is the point."
+    },
+    "test_the_two_false_positives_stay_out": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "LOSS direction, and the reason the window is not simply widened."
+    },
+    "test_window_choice_is_the_one_that_flips_no_superseded_classification": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "Correction 3, and the justification for STATUS_HEAD_LINES = 80."
+    }
+   }
+  },
   "test_stochastic_rout.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -11190,12 +11314,12 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 3,
+   "FA": 4,
    "FI": 1,
    "GO": 2,
-   "IN": 34,
+   "IN": 35,
    "MB": 4,
-   "PC": 6,
+   "PC": 7,
    "SC": 2,
    "SE": 2,
    "WR": 2
@@ -11317,16 +11441,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 148,
-  "files_citing_a_measurement": 14,
+  "files": 149,
+  "files_citing_a_measurement": 15,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 107,
+  "files_naming_a_module": 108,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 37,
-  "helper_defs": 271,
-  "helper_loc": 2443,
+  "files_with_a_lane": 38,
+  "helper_defs": 274,
+  "helper_loc": 2458,
   "ratchet_baselines": 9,
-  "tests": 1310,
+  "tests": 1325,
   "undocumented_files": 0
  }
 }

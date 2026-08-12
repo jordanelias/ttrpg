@@ -112,23 +112,20 @@ def open_ledger_entries(repo: Path | None = None) -> list[dict]:
     return [e for e in read_ledger_entries(repo) if e.get("status") == "open"]
 
 
-# --- D. status-line parsing (single owner) -------------------------------------
-# One tolerance policy, a superset of the two prior regexes it replaces:
-#   dashboard_data._STATUS_RE        = ^#{1,3}\s*Status:        (needs a hash, no space)
-#   ci_generation_consistency.status_of = #{0,3}\s*Status\s*:   (0-3 hashes, tolerates 'Status :')
-# Using the tolerant superset is a deliberate RECONCILIATION (may match a few more
-# docs); the expected delta is asserted in the core test, not hidden under a
-# "byte-identical" claim.
-STATUS_RE = re.compile(r'^#{0,3}\s*Status\s*:\s*(.+)$', re.I)
-
-
-def first_status(head_text: str) -> str | None:
-    """The first `## Status:` value in a doc head, or None."""
-    for line in head_text.splitlines():
-        m = STATUS_RE.match(line.strip())
-        if m:
-            return m.group(1).strip()
-    return None
+# --- D. status-line parsing --------------------------------------------------
+# OWNED BY ci_common (plan G8, ED-IN-0159 §1.3a) and re-exported here, same as the
+# lane roster: the regex has no dependencies, and stdlib-only gates
+# (ci_generation_consistency) read it. Every consumer of obs_core.STATUS_RE /
+# obs_core.first_status is unaffected — they are the same objects.
+#
+# The prior comment here recorded a reconciliation of two regexes. The measurement
+# behind G8 found a third fact worth carrying forward: the divergence that
+# actually changed results was never the regex, it was the WINDOW each caller
+# scanned. ci_common owns both, and STATUS_HEAD_LINES is the named default.
+STATUS_RE = _cc.STATUS_RE
+first_status = _cc.first_status
+doc_status = _cc.doc_status
+STATUS_HEAD_LINES = _cc.STATUS_HEAD_LINES
 
 
 def is_unratified_status(status: str | None) -> bool:

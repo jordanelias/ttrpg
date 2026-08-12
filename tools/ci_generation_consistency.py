@@ -54,13 +54,20 @@ def canonical_docs():
 
 
 def status_of(relpath):
+    """ONE OWNER: ci_common.first_status (plan G8, ED-IN-0159 §1.3a).
+
+    EXPECTED DELTA: NONE. This module's own regex was already equivalent to the
+    canonical one — measured over all 558 tracked .md, both select the same 206
+    documents, 0 gained and 0 lost. §1.3a listed it as one of five disagreeing
+    parsers; it never disagreed with the owner.
+
+    The 12-line window is this gate's own and is preserved deliberately: a
+    generation-currency check wants the doc's OPENING status, and widening it
+    here would be an unmeasured behaviour change in a step scoped to the regex.
+    """
     with open(os.path.join(ROOT, relpath), encoding="utf-8") as fh:
-        head = fh.read().splitlines()[:12]
-    for ln in head:
-        m = re.match(r"\s*#{0,3}\s*Status\s*:\s*(.+)", ln, re.IGNORECASE)
-        if m:
-            return m.group(1).strip()
-    return None
+        head = fh.read()
+    return ci_common.first_status(head, head_lines=12)
 
 
 def superseded_ids():

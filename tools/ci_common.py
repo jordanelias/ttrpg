@@ -320,6 +320,61 @@ ED_ID_RE = re.compile(ED_ID_PAT)
 ANY_ID_RE = re.compile(ANY_ID_PAT)
 
 
+# ── the `## Status:` reader (plan G8 — the one intended behaviour change) ────
+# ONE OWNER for BOTH axes of the question, because the finding conflated them and
+# only one of the two was doing the damage:
+#
+#   axis 1, THE REGEX  — how many hashes, how much whitespace, bold or not
+#   axis 2, THE WINDOW — head-only or whole-document
+#
+# 00_code_leanness.md §1.3a measured axis 1 by running five regexes over whole
+# documents. Three of the five are not used that way: ci_generation_consistency
+# reads the first 12 lines, dashboard_data the first 80, build_identifier_census
+# the whole file. Measured properly, axis 1 is nearly a non-event —
+# ci_generation_consistency's regex is *equivalent* to this one (206 docs, 0
+# gained, 0 lost) and build_incompleteness composes on it with no change (54 ->
+# 54). Axis 2 is where the behaviour lives, and it is where the false positives
+# come from: over a WHOLE document this pattern matches a schema template
+# (`  status : IN_FORCE | VETOED | SUPERSEDED`) and a legend
+# (`## Status: NOT STARTED / IN PROGRESS / COMPLETE`).
+#
+# So the window is a named constant with a default, not a per-caller literal.
+STATUS_RE = re.compile(r'^#{0,3}\s*Status\s*:\s*(.+)$', re.I)
+
+# A document's status is its HEAD's status. 80 lines is the window dashboard_data
+# already used; it was chosen here by measurement, not inheritance — at 12 lines
+# two genuinely-SUPERSEDED docs stop being recognised, and at the whole document a
+# schema template starts being read as one. 40 and 80 both give the same answer,
+# which is the stability the choice rests on.
+STATUS_HEAD_LINES = 80
+
+
+def first_status(text, head_lines=None):
+    """The first `## Status:` value in `text`, or None.
+
+    `head_lines=None` scans everything it is given — the behaviour obs_core's
+    `first_status` has always had, since its callers slice the head themselves.
+    Pass an integer to apply the window here instead.
+
+    Lines are stripped before matching, so leading indentation is tolerated; that
+    was already true of every reader this replaces.
+    """
+    lines = text.splitlines()
+    if head_lines is not None:
+        lines = lines[:head_lines]
+    for line in lines:
+        m = STATUS_RE.match(line.strip())
+        if m:
+            return m.group(1).strip()
+    return None
+
+
+def doc_status(text):
+    """A document's status: `first_status` over its head. The shape a caller
+    asking "what is this doc's status" wants, with the window not left to it."""
+    return first_status(text, head_lines=STATUS_HEAD_LINES)
+
+
 def tokens(text) -> int:
     """The repo's token estimate: characters // 4. ONE OWNER (§1.2, 6 sites).
 
@@ -398,8 +453,6 @@ def load_register(name, default=None):
 _LAZY_FROM_OBS_CORE = (
     'read_ledger_entries',      # registers/editorial_ledger*.jsonl, normalized
     'open_ledger_entries',
-    'STATUS_RE',                # the canonical `## Status:` reader (plan G8)
-    'first_status',
     'is_unratified_status',
     'text_needs_jordan',
     'write_js_bundle',

@@ -311,9 +311,46 @@ def scan_prose_markers():
     return out
 
 
-NONCURRENT_STATUS = re.compile(
-    r"^\s*#{0,4}\s*Status\s*:\s*.*?\b(PROPOSED|PROVISIONAL|DRAFT|STALE|SUPERSEDED|DEPRECATED|WIP|TODO)\b",
-    re.I | re.M)
+# The NON-CURRENT VOCABULARY is this feed's own concern and stays here. The
+# `## Status:` half is NOT: it is ci_common.STATUS_RE, composed with the
+# vocabulary below (plan G8, ED-IN-0159 §1.3a).
+#
+# EXPECTED DELTA: NONE — measured over all 558 tracked .md, the composed form
+# selects the same 54 documents as the fused regex did, 0 gained and 0 lost.
+# §1.3a warned that this parser OVER-matches the owner (0-4 hashes, leading
+# whitespace) so collapsing it could *remove* documents. It does not: the owner
+# strips each line before matching, which already tolerated the indentation, and
+# no tracked document uses a fourth hash on a Status line.
+NONCURRENT_VOCAB = re.compile(
+    r"\b(PROPOSED|PROVISIONAL|DRAFT|STALE|SUPERSEDED|DEPRECATED|WIP|TODO)\b", re.I)
+
+
+def noncurrent_status(text):
+    """The first non-current status word on ANY `## Status:` line of `text`, or None.
+
+    SCANS EVERY STATUS LINE, not just the first — and that is not a detail. The
+    first attempt at this helper returned at the first Status line it found, which
+    looked obviously right and changed the result: `systems/factions/faction_canon_v30.md`
+    carries TWO consecutive Status lines,
+
+        :6  ## Status: CANONICAL
+        :7  ## Status: PROVISIONAL — pending ratification.
+
+    and stopping at :6 dropped it from this feed. The fused regex it replaces used
+    `re.M` search, which skipped :6 (no non-current word) and matched :7. Preserving
+    that is what makes the migration's expected delta actually none — measured
+    in-scope, 25 -> 25, 0 gained, 0 lost.
+
+    The contradictory pair is itself a live document defect and is reported by this
+    feed rather than fixed here: it is FA-lane content.
+    """
+    for line in text.splitlines():
+        m = ci_common.STATUS_RE.match(line.strip())
+        if m:
+            v = NONCURRENT_VOCAB.search(m.group(1))
+            if v:
+                return v.group(1)
+    return None
 
 
 def scan_status_headers():
@@ -333,10 +370,10 @@ def scan_status_headers():
                 text = md.read_text(encoding="utf-8")
             except Exception:
                 continue
-            m = NONCURRENT_STATUS.search(text)
-            if m:
+            word = noncurrent_status(text)
+            if word:
                 out.append(finding("status_noncurrent", rel, rel,
-                                   f"doc Status is not current: {m.group(1).upper()}", path=rel))
+                                   f"doc Status is not current: {word.upper()}", path=rel))
     return out
 
 
