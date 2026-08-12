@@ -5,7 +5,7 @@ Runs in CI. Checks that commits to editorial-governed paths contain
 [EDITORIAL] or [PROVISIONAL] markers for substantive content.
 
 Editorial paths: systems/npcs/, systems/world/,
-                 arcs/simulated/, canon/03_ (timeline)
+                 canon/03_ (timeline)   [arcs/simulated/ retired: tree evacuated 2026-08-05]
 
 Short stubs (< 200 chars) are exempt.
 Mechanical-only content (tables, formulas) is NOT exempt — the rule is path-based.
@@ -23,7 +23,9 @@ except ImportError:
 EDITORIAL_PATHS = (
     'systems/npcs/',
     'systems/world/',
-    'arcs/simulated/',
+    # 'arcs/simulated/' RETIRED 2026-08-12 (plan step G2, ED-IN-0159 §1.6): the
+    # arcs/ tree was EVACUATED 2026-08-05 (ED-IN-0145) to fork ref c451bcb, and
+    # CLAUDE.md §3 says do not recreate it. This prefix has matched nothing since.
     'canon/03_',
 )
 MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')

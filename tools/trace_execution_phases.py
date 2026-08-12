@@ -45,7 +45,11 @@ import os
 import sys
 import collections
 
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# ONE OWNER for the repo root: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO
 if REPO not in sys.path:
     sys.path.insert(0, REPO)
 
@@ -64,8 +68,7 @@ BOUNDARIES = [
 def _unit_index():
     """dotted module path -> manifest unit, from module_contracts' `sim_module`."""
     import yaml
-    with open(os.path.join(REPO, 'references', 'module_contracts.yaml'), encoding='utf-8') as fh:
-        contracts = yaml.safe_load(fh)
+    contracts = ci_common.load_yaml(os.path.join(REPO, 'references', 'module_contracts.yaml'))
     idx = {}
     for c in contracts.get('modules') or []:
         code = c.get('sim_module')

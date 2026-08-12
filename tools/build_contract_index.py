@@ -107,10 +107,8 @@ STATUS_GLOSS = {
 def load_all():
     with open(GRAPH, encoding='utf-8') as fh:
         graph = json.load(fh)
-    with open(CONTRACTS, encoding='utf-8') as fh:
-        contracts = yaml.safe_load(fh)
-    with open(WIRING, encoding='utf-8') as fh:
-        wiring = yaml.safe_load(fh)
+    contracts = ci_common.load_yaml(CONTRACTS)
+    wiring = ci_common.load_yaml(WIRING)
     return graph, contracts, wiring
 
 
@@ -126,8 +124,7 @@ def adjudicate():
     spec = importlib.util.spec_from_file_location('contract_adjudicator', ADJUDICATOR)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    with open(CONTRACTS, encoding='utf-8') as fh:
-        contracts = yaml.safe_load(fh)
+    contracts = ci_common.load_yaml(CONTRACTS)
     with open(REGISTRY, encoding='utf-8') as fh:
         registry_md = fh.read()
     with open(SOURCES, encoding='utf-8') as fh:

@@ -74,12 +74,19 @@ EXCLUDE = (
     'references/censured_vocabulary.yaml',  # GENERATED view (ED-IN-0078 fold) — lists censured terms by design
     'references/synonym_registry.yaml',     # GENERATED view (ED-IN-0078 fold) — lists legacy synonyms by design
     'dashboard/data.json',                 # generated: embeds the definitions/lexicon incl. legacy names
-    'engine/params/bg/institutions.md',
-    # GENERATED verbatim capture of engine/params/**/*.md (ED-IN-0139). It inherits whatever the
-    # sources contain, including the line already excluded above. Excluding the capture hides
-    # nothing: every source file is still scanned in place, so a NEW violation is caught at the
-    # only surface where it can be fixed. When engine/params/ evacuates, this entry and the one
-    # above go with it.
+    # 'engine/params/bg/institutions.md' RETIRED 2026-08-12 (plan step G2,
+    # ED-IN-0159 §1.6) — engine/params/ was EVACUATED 2026-08-05 (ED-IN-0145), so
+    # the exclusion excluded nothing. The comment below PREDICTED this exact
+    # retirement ("when engine/params/ evacuates, this entry and the one above go
+    # with it") and was then not acted on for a week; that is the §1.6 pattern in
+    # miniature, and it is why the recurrence guard matters more than the cut.
+    #
+    # GENERATED verbatim capture of the evacuated engine/params/**/*.md (ED-IN-0139).
+    # It inherits whatever the sources contained, including the line excluded above.
+    # NOTE the capture's exclusion CANNOT be retired with its source: the capture is
+    # still in the tree, still contains the legacy token, and is now the ONLY place
+    # that content exists — so it must stay excluded or the naming gate reds on a
+    # byte-faithful archive nobody can edit.
     'engine/engine_params/params_tables.yaml',
     'skills/prose-writer/',
     'tests/',

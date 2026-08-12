@@ -174,8 +174,7 @@ if __name__ == "__main__":
             print("[COMPLIANCE] No atomization_rules.yaml found — skipping")
             sys.exit(0)
 
-        with open(rules_path) as f:
-            rules = yaml.safe_load(f)
+        rules = ci_common.load_yaml(rules_path)
 
         violations = []
         # Walk local files

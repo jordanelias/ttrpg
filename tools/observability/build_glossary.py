@@ -53,6 +53,7 @@ Run: python3 tools/observability/build_glossary.py [--check]
 """
 from __future__ import annotations
 
+import os
 import argparse
 import json
 import re
@@ -63,7 +64,12 @@ from pathlib import Path
 import yaml
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
+# ONE OWNER for the repo root: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
+# Two dirnames — this module lives one level below the owner.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO_PATH
 sys.path.insert(0, str(HERE))
 import obs_core as core  # noqa: E402
 

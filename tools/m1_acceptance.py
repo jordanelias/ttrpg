@@ -182,8 +182,7 @@ def row_m1_junctures():
     """All seven M1 junctures execute. Measurable today from the progress board."""
     path = _repo(BOARD)
     try:
-        with open(path, encoding='utf-8') as fh:
-            data = yaml.safe_load(fh)
+        data = ci_common.load_yaml(path)
         junctures = data['milestones']['M1']['junctures']
     except Exception as exc:
         return _blocked('m1_junctures', 'All seven M1 junctures execute',

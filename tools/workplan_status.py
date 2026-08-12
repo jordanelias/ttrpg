@@ -39,8 +39,7 @@ GLYPH = {
 def _load():
     try:
         import yaml
-        with open(BOARD, encoding='utf-8') as f:
-            data = yaml.safe_load(f)
+        data = ci_common.load_yaml(BOARD)
         if not isinstance(data, dict) or 'milestones' not in data:
             return None
         return data

@@ -132,7 +132,7 @@ def _iter_py_files():
 
 _CITE_RE = re.compile(
     r"\[canonical:\s*([^\]]+)\]"          # [canonical: <source>]  — the dominant form
-    r"|\b(PP-\d+)\b"                        # a patch id
+    r"|\b(" + ci_common.PP_ID_PAT + r")\b"   # a patch id (ONE OWNER: ci_common)
     r"|\b(ED-(?:[A-Z]{2}-)?\d+)\b"          # flat ED-NNNN or lane-tagged ED-XX-NNNN (CLAUDE.md §4)
     r"|\b(J-\d+)\b"                         # a Jordan ruling id, e.g. "(Jordan 2026-06-19, J-22)"
 )

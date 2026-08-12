@@ -182,7 +182,7 @@ def load_registry():
 
 def load_contracts():
     """(modules, emitters, consumers) keyed by module id / key type."""
-    d = yaml.safe_load(open(CONTRACTS, encoding='utf-8'))
+    d = ci_common.load_yaml(CONTRACTS)
     rows = d['modules']
     rows = rows if isinstance(rows, list) else list(rows.values())
     modules, em, co = {}, {}, {}

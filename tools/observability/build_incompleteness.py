@@ -38,10 +38,6 @@ except ImportError:
     print("PyYAML required: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-HERE = Path(__file__).resolve()
-OBS_DIR = HERE.parent
-REPO = OBS_DIR.parents[1]
-
 # ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
 # regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
 # the irreducible bootstrap — a module cannot import its owner without first
@@ -50,6 +46,10 @@ REPO = OBS_DIR.parents[1]
 # this module lives in tools/observability/, one level below the owner.)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import ci_common  # noqa: E402
+
+HERE = Path(__file__).resolve()
+OBS_DIR = HERE.parent
+REPO = ci_common.REPO_PATH
 
 # lane inference — reuse the single resolver (build_decisions.infer_lane), same as the other feeds
 sys.path.insert(0, str(OBS_DIR))

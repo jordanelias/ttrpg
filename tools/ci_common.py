@@ -310,14 +310,44 @@ LEDGER_LANE_CODES: tuple = tuple(c.lower() for c in LANE_CODES)
 # recurring bug here — `index_gen.py:129` documents its own r'ED-\d+' as
 # predating the lane format and never updated.
 PP_ID_PAT = r'PP-\d+'
-ED_FLAT_ID_PAT = r'ED-\d+'                 # pre-cutover, frozen at ED-1096
-ED_LANE_ID_PAT = r'ED-[A-Z]{2}-\d{4}'      # the live format
-ED_ID_PAT = r'ED-(?:[A-Z]{2}-)?\d+'        # either format
-ANY_ID_PAT = rf'(?:{PP_ID_PAT}|{ED_ID_PAT})'
 
-PP_ID_RE = re.compile(PP_ID_PAT)
-ED_ID_RE = re.compile(ED_ID_PAT)
-ANY_ID_RE = re.compile(ANY_ID_PAT)
+# ── ONLY ONE ID PATTERN IS EXPORTED, and that is the honest state ────────────
+# This block first shipped SEVEN names — ED_FLAT_ID_PAT, ED_LANE_ID_PAT,
+# ED_ID_PAT, ANY_ID_PAT and compiled PP_ID_RE / ED_ID_RE / ANY_ID_RE — labelled
+# "ONE OWNER (§1.2: 6 sites)". An adversarial pass established that NONE of them
+# had a single caller: the six copies they claimed to own were all still live,
+# including two in `ci_vetting_check`, a BLOCKING gate that did not import
+# ci_common at all. That is ED-IN-0149's build-then-disconnect defect, shipped
+# inside the commit that cites it — and CLAUDE.md §8's named anti-pattern, "a
+# single-owner comment asserting a property the tree lacks is worse than no
+# comment", re-earned one section after §2.3 withdrew the same charge against
+# `pathres`.
+#
+# `PP_ID_PAT` survives because its call sites were migrated in the same commit:
+# `ci_vetting_check.py` (both patterns) and `export_sim_params.py`. It is exported
+# as a PATTERN STRING, not a compiled object, because every one of those sites
+# embeds it in a larger expression (`-\s+id:\s+` + PP_ID_PAT) — which a compiled
+# object cannot do, and which is why a compiled export had no takers.
+#
+# THE ED PATTERNS ARE DELIBERATELY NOT EXPORTED. The two live ED readers must NOT
+# be collapsed onto a shared pattern, and that is a finding rather than an
+# omission: `validate_ed_citations.py:304` matches flat `ED-\d+` ONLY BY DESIGN
+# (the archives it salvages predate the lane-tagged format), and
+# `ci_claim_provenance_check.py:84` parses `^(ED-[A-Z]+)-(\d+)$` into two capture
+# groups. They mean different things. Giving them one owner would be §8.2's
+# "merging two concepts that share a name", which the mission forbids.
+#
+# `tests/valoria/test_ci_common_primitives.py::test_every_ci_common_primitive_has_a_caller`
+# is the guard: a primitive exported here with no consumer fails the suite.
+
+
+# Sentinel: "no default was given". Distinguishes load_yaml(p) — which must RAISE
+# on a missing file, exactly as the bare `open()` it replaced did — from
+# load_yaml(p, None), which asks for None. Without it the helper silently absorbed
+# a missing input, which is the failure `tests/valoria/test_engine_atlas.py::
+# test_missing_input_is_reported_not_silently_absorbed` exists to prevent, and
+# which it CAUGHT on this migration.
+_RAISE = object()
 
 
 # ── the `## Status:` reader (plan G8 — the one intended behaviour change) ────
@@ -329,23 +359,29 @@ ANY_ID_RE = re.compile(ANY_ID_PAT)
 #
 # 00_code_leanness.md §1.3a measured axis 1 by running five regexes over whole
 # documents. Three of the five are not used that way: ci_generation_consistency
-# reads the first 12 lines, dashboard_data the first 80, build_identifier_census
-# the whole file. Measured properly, axis 1 is nearly a non-event —
-# ci_generation_consistency's regex is *equivalent* to this one (206 docs, 0
-# gained, 0 lost) and build_incompleteness composes on it with no change (54 ->
-# 54). Axis 2 is where the behaviour lives, and it is where the false positives
-# come from: over a WHOLE document this pattern matches a schema template
-# (`  status : IN_FORCE | VETOED | SUPERSEDED`) and a legend
+# reads the first 12 lines, dashboard_data read the first 4,000 CHARACTERS,
+# build_identifier_census the whole file. Measured properly, axis 1 is nearly a
+# non-event — ci_generation_consistency's regex is *equivalent* to this one (206
+# docs, 0 gained, 0 lost) and build_incompleteness composes on it with no change
+# (25 -> 25). Axis 2 is where the behaviour lives, and it is where the false
+# positives come from: over a WHOLE document this pattern matches a schema
+# template (`  status : IN_FORCE | VETOED | SUPERSEDED`) and a legend
 # (`## Status: NOT STARTED / IN PROGRESS / COMPLETE`).
 #
-# So the window is a named constant with a default, not a per-caller literal.
+# ⚠ CORRECTED 2026-08-12 (ED-IN-0164). This comment first claimed 80 was "the
+# window dashboard_data already used". It was not — dashboard_data read 4,000
+# CHARACTERS, a per-caller literal, so after G8 four different windows still
+# existed and the one thing the plan calls "where the behaviour lives" had no
+# owner. An adversarial pass caught it. dashboard_data now uses
+# STATUS_HEAD_LINES; the delta on its corpus was 114 -> 114, i.e. the divergence
+# was latent rather than firing, and unifying the window closes it before it does.
 STATUS_RE = re.compile(r'^#{0,3}\s*Status\s*:\s*(.+)$', re.I)
 
-# A document's status is its HEAD's status. 80 lines is the window dashboard_data
-# already used; it was chosen here by measurement, not inheritance — at 12 lines
-# two genuinely-SUPERSEDED docs stop being recognised, and at the whole document a
-# schema template starts being read as one. 40 and 80 both give the same answer,
-# which is the stability the choice rests on.
+# A document's status is its HEAD's status. Chosen BY MEASUREMENT against the
+# SUPERSEDED classification that consumes it: at 12 lines two genuinely-superseded
+# docs stop being recognised, at the whole document a schema template starts being
+# read as one, and 40 and 80 give the same answer — that stability is what the
+# choice rests on.
 STATUS_HEAD_LINES = 80
 
 
@@ -385,6 +421,12 @@ def tokens(text) -> int:
     same file against caps computed by two different estimators is a class of
     disagreement this repo has already paid for once (ED-IN-0097).
 
+    Six inline `len(x) // 4` sites survive, ALL of them in atomizer /
+    doc_index_gen / index_gen, which plan step G2 retires — migrating a module
+    scheduled for retirement is work done twice. `test_inline_token_estimation_is
+    _confined_to_the_modules_being_retired` pins that residue, so a new inline
+    estimator anywhere else fails and this exemption cannot outlive its retirement.
+
     Accepts str or bytes; `None` counts as 0 so a missing file is not a crash in
     a size sweep.
     """
@@ -393,9 +435,23 @@ def tokens(text) -> int:
     return len(text) // 4
 
 
-def load_yaml(path, default=None):
+def load_yaml(path, default=_RAISE):
     """`yaml.safe_load` a file, returning `default` when it is missing or empty.
-    ONE OWNER (§1.2, 44 sites).
+
+    THE INTENDED OWNER OF YAML REGISTER LOAD — **not yet the only one**, and this
+    docstring says so because the alternative has a name in this repo. It first
+    read "ONE OWNER (§1.2, 44 sites)" while having ZERO CALLERS, which is CLAUDE.md
+    §8's named anti-pattern ("a single-owner comment asserting a property the tree
+    lacks is worse than no comment") and the exact charge `00_code_leanness.md`
+    §2.3 withdrew against `pathres` once `pathres` started stating its own status
+    honestly. An adversarial pass re-earned it here within one commit.
+
+    Migrated: 12 call sites, both idioms — `yaml.safe_load(open(x))` and
+    `with open(x) as f: y = yaml.safe_load(f)`. **52 bare `yaml.safe_load` calls
+    remain in `tools/`**, each of which does something this helper does not (loads
+    a stream, a string, a StringIO, or wants the exception on a missing file).
+    `tests/valoria/test_ci_common_primitives.py` pins that count, so it can only
+    go down.
 
     PyYAML is imported INSIDE the function, deliberately. `ci_common` is
     imported by stdlib-only blocking gates, and a module-level `import yaml`
@@ -414,19 +470,20 @@ def load_yaml(path, default=None):
         with open(path, encoding='utf-8') as fh:
             data = yaml.safe_load(fh)
     except FileNotFoundError:
+        if default is _RAISE:
+            raise
         return default
-    return default if data is None else data
+    if data is None:
+        return None if default is _RAISE else default
+    return data
 
 
-def load_register(name, default=None):
-    """`load_yaml` against `registers/<name>` or `references/<name>`, whichever
-    exists — the two homes the process registers live in after the ED-IN-0071 P0
-    move out of `canon/`."""
-    for parent in ('registers', 'references'):
-        candidate = os.path.join(REPO, parent, name)
-        if os.path.exists(candidate):
-            return load_yaml(candidate, default)
-    return default
+# `load_register()` WAS HERE AND IS NOT SHIPPED (ED-IN-0164). It resolved a name
+# against registers/ then references/, and it had ZERO callers — which makes it the
+# same defect as the id_reservations reader refused below. Caught by an adversarial
+# pass that noticed this file refusing one speculative helper while shipping two
+# more fifty lines above it. `load_yaml` survives only because call sites were
+# migrated onto it in the same commit; had they not been, it would have gone too.
 
 
 # ── NOT provided: an `id_reservations` reader ────────────────────────────────
@@ -434,9 +491,20 @@ def load_register(name, default=None):
 # it found nothing to collapse: measured across the whole tree
 # (`grep -rn id_reservations --include=*.py . | grep -E 'safe_load|yaml.load'`),
 # **zero** modules load that file. The census's detector for this row is the bare
-# pattern `id_reservations`, so the 8 are MENTIONS — six are prose comments
-# explaining the ID rules, one is a `ci_register_size_check` size-cap row keyed by
-# path string, one is a `build_decisions` source-tuple. Nothing parses it.
+# pattern `id_reservations`, so its 8 are mostly MENTIONS — prose comments
+# explaining the ID rules, a `ci_register_size_check` size-cap row keyed by
+# path string, a `build_decisions` source tuple.
+#
+# ⚠ CORRECTED 2026-08-12 by an adversarial pass (ED-IN-0164). This comment used to
+# end "Nothing parses it." THAT IS FALSE, and it was the only justification given
+# for striking a plan row. `tools/currency_consistency_check.py:280` reads the file
+# and genuinely PARSES it — four fields extracted by regex (`verified_live_max.ED`,
+# per-block `next_free`, `lane_ids.<lane>.next_free`) driving a BLOCKING currency
+# gate. `duplication_census.py` reads it too.
+#
+# The true statement is narrower and still sufficient: nothing loads it with
+# PyYAML, and a text-plus-regex reader is not served by `load_yaml`. The decision
+# now rests on what the tree does rather than on an overstatement.
 #
 # Shipping a `read_id_reservations()` here anyway would have added an abstraction
 # with no caller — the precise defect ED-IN-0149 named and the consolidation sweep

@@ -127,8 +127,7 @@ def load_inputs():
     """
     import yaml
     absent = []
-    with open(CONTRACTS, encoding='utf-8') as fh:
-        contracts = yaml.safe_load(fh)
+    contracts = ci_common.load_yaml(CONTRACTS)
 
     def opt(path, fallback):
         if os.path.exists(path):

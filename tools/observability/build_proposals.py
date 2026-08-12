@@ -25,11 +25,17 @@ Output: proposals.json, proposals_data.js (window.VALORIA_PROPOSALS), PROPOSALS.
 Run:    python3 tools/observability/build_proposals.py
 """
 from __future__ import annotations
-import json, sys
+import json, os, sys
 from pathlib import Path
 
+# ONE OWNER for the repo root: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
+# Two dirnames — this module lives one level below the owner.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
+
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
+REPO = ci_common.REPO_PATH
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 # obs_core (not "core"): a distinct top-level module name, so it can't collide in

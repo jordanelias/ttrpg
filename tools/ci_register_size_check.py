@@ -74,7 +74,8 @@ THRESHOLDS = {
     # the policy file (one place) and this validator follows. Drift between the two
     # is caught by tests/valoria/test_coverage_matrix_threshold.py.
     "tests/coverage_matrix.md":   COVERAGE_MATRIX_LIMIT,
-    "arcs/registers/arc_register.md":            20_000,
+    # "arcs/registers/arc_register.md" RETIRED 2026-08-12 (plan step G2, §1.6):
+    # arcs/ was EVACUATED 2026-08-05 (ED-IN-0145); CLAUDE.md §3 says do not recreate.
     "references/propagation_map.md":         15_000,
     "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)
     # ── Previously-uncapped large registers (added 2026-07-20, ED-IN-0077 data-mgmt review) ──
@@ -131,7 +132,9 @@ THRESHOLDS = {
     # -simulator). Same append-only shape as the editorial ledger; generous headroom
     # since audit cadence is far lower than editorial-decision cadence.
     "references/audit_registry.jsonl": 50_000,
-    "deprecated/archives/session/session_log_archive_part_7.md": 100_000,
+    # "deprecated/archives/session/session_log_archive_part_7.md" RETIRED 2026-08-12
+    # (plan step G2, §1.6): evacuated 2026-08-05 with the rest of deprecated/archives/
+    # except the editorial-ledger archives the ED citation gate reads.
     "registers/patch_register_index.md":         20_000,
 }
 

@@ -166,7 +166,7 @@ def main(argv):
                     help='sim reference root to scan (repeatable). Defaults to every live root.')
     a = ap.parse_args(argv)
 
-    contracts = yaml.safe_load(open(a.contracts, encoding='utf-8')) or {}
+    contracts = ci_common.load_yaml(a.contracts) or {}
     sim_roots = a.sim_root or ci_common.sim_reference_roots(REPO_ROOT)
     resolved, findings = check(contracts, sim_roots)
 

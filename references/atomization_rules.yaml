@@ -240,13 +240,18 @@ policies:
   # ────────────────────────────────────────────────────────────
   # DESIGN DOCS — skeleton required above threshold
   # ────────────────────────────────────────────────────────────
-  - match: "designs/**/*.md"
-    exclude_suffix: ["_skeleton.md", "_infill.md"]
-    require_skeleton_above: 5000
-    skeleton_pattern: "{basename}_skeleton.md"
-    infill_pattern: "{basename}_infill.md"
-    on_read: "skeleton_first"
-    skeleton_must_update_on: [any_canonical_change]
+  # RETIRED 2026-08-12 (plan step G2, ED-IN-0159 §1.6). The only skeleton/index
+  # policy rule matched "designs/**/*.md", and `designs/` was RETIRED 2026-07-19
+  # (ED-IN-0071 P4/P5, PR #191) — CLAUDE.md §3: "Do not recreate designs/". The
+  # rule therefore matched nothing for three weeks. Its `require_skeleton_above`
+  # key was read by compliance_check's `_check_index`, itself dead and excised by
+  # plan step G1 in this same programme, so nothing now reads it either.
+  #
+  # THIS DOES NOT UNDO THE 2026-07-26 RULING. That ruling grandfathered the
+  # existing skeleton/index pairs and retired the pattern as a DEFAULT; the 37
+  # `systems/**/*_index.md` files stay exactly where they are and their
+  # disposition remains HELD for Jordan. This deletes a policy row that could not
+  # have applied to any of them — they are not under `designs/`.
 
   # ────────────────────────────────────────────────────────────
   # REFERENCE INDEXES — must stay compact
@@ -387,7 +392,10 @@ policies:
     on_exceed: "skip"
     note: "Per-run sim activity logs. Frozen historical output (same class as tests/sim/sim_*.md)."
 
-  - match: "designs/audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml"
+  # RETIRED 2026-08-12 (plan step G2): a `skip` exemption for one file under
+  # `designs/audit/`, a path retired 2026-07-19. The audit corpus moved to
+  # `audit/` and the file it exempted is not at this path.
+  - match: "audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml"
     on_exceed: "skip"
     note: "Frozen evidence artifact of a completed one-off audit merge stage (self-declared 'QUARANTINE-NOTE: not a registry and not a source of canonical truth' in the file header). Was hitting the generic **/*.yaml 10000 catch-all at ~18.5k tokens with no action possible or intended — same class as the tests/sim/ and research/ skip-policies above, scoped to this specific file rather than a blanket designs/audit/**/*.yaml exemption."
 

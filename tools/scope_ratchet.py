@@ -332,8 +332,7 @@ def _measure_health(baseline):
     total = spec.get('total', 7)
     board = _repo(os.path.join('workplans', 'workplan_v6_progress.yaml'))
     try:
-        with open(board, encoding='utf-8') as fh:
-            data = yaml.safe_load(fh)
+        data = ci_common.load_yaml(board)
         junctures = data['milestones']['M1']['junctures']
         closed = sum(1 for j in junctures if j.get('state') == 'done')
         measured_total = len(junctures)

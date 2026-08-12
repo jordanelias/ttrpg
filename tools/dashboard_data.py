@@ -21,6 +21,7 @@ CLI: `python tools/dashboard_data.py [--out PATH]` writes the JSON and prints
 the path. Importable: `from dashboard_data import build_all`.
 """
 import argparse
+
 import ast
 import glob
 import json
@@ -33,6 +34,12 @@ import urllib.request
 from datetime import datetime, timezone
 
 import yaml
+
+# ONE OWNER for the repo root, the id regexes, token estimation and YAML register
+# load: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
@@ -689,10 +696,20 @@ def build_proposals():
             continue
         try:
             with open(path, encoding='utf-8', errors='replace') as f:
-                head = f.read(4000)
+                head = f.read()
         except OSError:
             continue
-        status = _obs_core.first_status(head)
+        # ONE OWNER for the WINDOW too, not only the regex (plan G8 correction,
+        # ED-IN-0164). This read `f.read(4000)` — 4,000 CHARACTERS, a per-caller
+        # literal, while build_identifier_census used 80 lines and
+        # ci_generation_consistency 12. G8 claimed the window was single-owned and
+        # justified STATUS_HEAD_LINES = 80 as "the window dashboard_data already
+        # used"; both halves were false, and an adversarial pass caught it.
+        # 4,000 chars is not 80 lines for any document whose head is not ~50
+        # chars/line, so a doc with wide tables or long front matter had its status
+        # seen by one reader and not the other — the exact silent disagreement G8
+        # exists to close.
+        status = _obs_core.first_status(head, head_lines=_obs_core.STATUS_HEAD_LINES)
         in_proposals_dir = path.startswith('proposals/')
         if in_proposals_dir:
             shown = status or '(no Status line — proposals/)'
@@ -936,8 +953,7 @@ def build_review_state():
 # never drift from canon the way a hand-maintained copy would.
 
 def build_browse():
-    with open(os.path.join('references', 'module_contracts.yaml'), encoding='utf-8') as f:
-        mc = yaml.safe_load(f)
+    mc = ci_common.load_yaml(os.path.join('references', 'module_contracts.yaml'))
     modules = mc.get('modules') or []
     module_names = {m.get('module') for m in modules}
 

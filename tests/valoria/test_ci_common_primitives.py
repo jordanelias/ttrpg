@@ -26,6 +26,7 @@ point 5 asks for.
 The transcriptions below are deliberately verbatim-ugly. Normalising them would
 test the owner against itself.
 """
+import ast
 import os
 import re
 import subprocess
@@ -176,49 +177,46 @@ def test_tokens_treats_missing_content_as_zero():
 
 # ── id regexes ───────────────────────────────────────────────────────────────
 
-def test_id_patterns_are_composable_strings():
-    """Half the call sites embed the pattern in a larger expression
-    (`-\\s+id:\\s+PP-(\\d+)` in ci_vetting_check:105). A compiled object cannot be
-    composed, so the owner must publish the source text too."""
+def test_pp_id_pattern_is_a_composable_string_with_real_callers():
+    """The ONLY id pattern exported, and the reason it is a string.
+
+    Every migrated site embeds it in a larger expression — `ci_vetting_check.py`
+    twice (a BLOCKING gate) and `export_sim_params.py` once — which a compiled
+    object cannot do. The six compiled/narrow variants originally shipped beside it
+    had ZERO callers and were removed; see the owner's comment.
+    """
     assert isinstance(ci_common.PP_ID_PAT, str)
     assert re.compile(r'-\s+id:\s+' + ci_common.PP_ID_PAT).search('- id: PP-674')
+    assert re.compile(ci_common.PP_ID_PAT).findall('PP-674 and PP-1') == ['PP-674', 'PP-1']
 
 
-@pytest.mark.parametrize('text,expected', [
-    ('see PP-674 and PP-1', ['PP-674', 'PP-1']),
-    ('no ids here', []),
-])
-def test_pp_id_regex_matches_the_pre_migration_form(text, expected):
-    """Transcribed from atomizer:239 and index_gen:234 — r'PP-\\d+'."""
-    assert ci_common.PP_ID_RE.findall(text) == re.compile(r'PP-\d+').findall(text) == expected
+def test_pp_pattern_migration_is_delta_none_on_the_live_register():
+    """Expected delta for the two `ci_vetting_check` sites, measured against the
+    register they actually parse rather than against a synthetic string."""
+    text = (Path(ci_common.REPO) / 'registers' / 'patch_register_active.yaml').read_text(
+        encoding='utf-8')
+    old_block = re.compile(r'-\s+id:\s+PP-(\d+)\s*\n(.*?)(?=\n-\s+id:\s+PP-\d+|\Z)', re.S)
+    new_block = re.compile(
+        r'-\s+id:\s+PP-(\d+)\s*\n(.*?)(?=\n-\s+id:\s+' + ci_common.PP_ID_PAT + r'|\Z)', re.S)
+    assert old_block.findall(text) == new_block.findall(text)
+    assert len(re.findall(r'-\s+id:\s+PP-\d+', text)) == \
+        len(re.findall(r'-\s+id:\s+' + ci_common.PP_ID_PAT, text))
 
 
-def test_ed_id_regex_matches_BOTH_formats():
-    """CLAUDE.md §4: both formats are permanently valid — the flat sequence is
-    FROZEN at ED-1096, not retired, and every new item is lane-tagged.
+def test_the_two_live_ed_readers_are_deliberately_not_collapsed():
+    """A NON-consolidation, asserted so it cannot be "tidied" later.
 
-    This is the assertion with teeth. `index_gen.py:129` documents its own
-    r'ED-\\d+' as predating the lane format and never updated, so the flat-only
-    pattern is a live bug in the tree, not a hypothetical: against
-    'ED-IN-0159' it matches the substring 'ED-0159'... no, it fails to match at
-    all, and the item is silently invisible. The owner must match both.
+    `validate_ed_citations` matches flat `ED-\d+` ONLY BY DESIGN — the archives it
+    salvages predate the lane-tagged format — while `ci_claim_provenance_check`
+    parses `^(ED-[A-Z]+)-(\d+)$` into two capture groups. Same-looking, different
+    meanings. Merging them is §8.2's "two concepts with one name", which the
+    mission forbids; this test is the record of that decision.
     """
-    assert ci_common.ED_ID_RE.findall('ED-1094 and ED-IN-0159') == ['ED-1094', 'ED-IN-0159']
-    # the flat-only form that motivated this — kept as the contrast
-    assert re.compile(r'ED-\d+').findall('ED-IN-0159') == []
-
-
-def test_any_id_pattern_covers_both_families():
-    assert ci_common.ANY_ID_RE.findall('PP-674 ED-1094 ED-MB-0065') == \
-        ['PP-674', 'ED-1094', 'ED-MB-0065']
-
-
-def test_ed_lane_pattern_only_accepts_real_lanes_shape():
-    """Zero-padded to 4 digits, 2-letter lane (CLAUDE.md §4)."""
-    rx = re.compile(ci_common.ED_LANE_ID_PAT)
-    assert rx.fullmatch('ED-IN-0159')
-    assert not rx.fullmatch('ED-I-0159')
-    assert not rx.fullmatch('ED-IN-159')
+    assert not hasattr(ci_common, 'ED_ID_PAT'), (
+        'an ED pattern was exported — check first that the two live readers really '
+        'do mean the same thing, because today they do not')
+    vec = (Path(ci_common.REPO) / 'tools' / 'validate_ed_citations.py').read_text(encoding='utf-8')
+    assert r'(ED-\d+)' in vec, 'validate_ed_citations no longer flat-only — re-open the question'
 
 
 # ── YAML register load ───────────────────────────────────────────────────────
@@ -233,14 +231,51 @@ def test_load_yaml_matches_bare_safe_load(tmp_path):
     assert ci_common.load_yaml(p) == expected == {'a': 1, 'b': ['x', 'y']}
 
 
-def test_load_yaml_missing_and_empty_return_the_default(tmp_path):
-    """The documented contract: a register that does not exist reads as the
-    default rather than raising, because a lane file exists only once that lane
-    has allocated an ED (CLAUDE.md §4)."""
+def test_load_yaml_RAISES_on_a_missing_file_unless_a_default_is_given(tmp_path):
+    """THE CONTRACT THAT A FAILING TEST FORCED, and the most useful thing in this
+    file.
+
+    `load_yaml` first defaulted to `default=None`, so a migrated call site that had
+    been a bare `open()` — which RAISES — began silently returning None on a
+    missing input. That is the exact defect
+    `test_engine_atlas.py::test_missing_input_is_reported_not_silently_absorbed`
+    exists to prevent, and it CAUGHT the migration: 12 tests went red, five of them
+    on this behaviour rather than on the stray `encoding=` kwarg.
+
+    The fix is a sentinel, not a looser test. `load_yaml(p)` raises, exactly as the
+    `open()` it replaced did, so every migration is delta-none; the forgiving mode
+    is opt-in via an explicit default, which is what a caller reading an optional
+    register (a lane file exists only once that lane has allocated an ED —
+    CLAUDE.md §4) actually wants.
+    """
+    with pytest.raises(FileNotFoundError):
+        ci_common.load_yaml(tmp_path / 'nope.yaml')
     assert ci_common.load_yaml(tmp_path / 'nope.yaml', {}) == {}
-    assert ci_common.load_yaml(tmp_path / 'nope.yaml') is None
+    assert ci_common.load_yaml(tmp_path / 'nope.yaml', None) is None
     (tmp_path / 'empty.yaml').write_text('', encoding='utf-8')
     assert ci_common.load_yaml(tmp_path / 'empty.yaml', {}) == {}
+    assert ci_common.load_yaml(tmp_path / 'empty.yaml') is None
+
+
+def test_load_yaml_is_delta_none_against_the_bare_open_it_replaced(tmp_path):
+    """Expected-delta, both branches: present file and missing file."""
+    import yaml
+    p = tmp_path / 'r.yaml'
+    p.write_text('a: 1\n', encoding='utf-8')
+    with open(p, encoding='utf-8') as fh:
+        assert ci_common.load_yaml(p) == yaml.safe_load(fh)
+    missing = tmp_path / 'gone.yaml'
+    old_exc = new_exc = None
+    try:
+        with open(missing, encoding='utf-8') as fh:
+            yaml.safe_load(fh)
+    except Exception as e:
+        old_exc = type(e)
+    try:
+        ci_common.load_yaml(missing)
+    except Exception as e:
+        new_exc = type(e)
+    assert old_exc is new_exc is FileNotFoundError
 
 
 def test_load_yaml_does_not_swallow_a_syntax_error(tmp_path):
@@ -344,3 +379,189 @@ def test_lazy_reexport_is_actually_lazy():
 def test_unknown_attribute_still_raises():
     with pytest.raises(AttributeError):
         ci_common.no_such_primitive
+
+
+# ── the recurrence guards (added 2026-08-12, ED-IN-0164) ─────────────────────
+#
+# ADDED IN RESPONSE TO AN ADVERSARIAL PASS, which made a charge that was correct
+# and specific: G8 shipped a recurrence guard for `STATUS_RE`
+# (test_status_reader_one_owner.test_only_one_status_regex_is_compiled_...) and G7
+# shipped NONE for the five primitives it consolidated. CLAUDE.md §0.1 point 5 is
+# unambiguous — "if you cannot write the guard you have not understood the
+# pattern" — and the guard was demonstrably writable, because one of the six got
+# it. Without these, tomorrow's sixteenth repo-root spelling fails nothing.
+#
+# The same pass also refuted the claim these guards now protect: "ZERO unmigrated
+# repo-root definitions remain in tools/" was FALSE when published. Five live
+# sites remained — build_incompleteness:43, build_proposals:32, build_glossary:66,
+# session_open_work:39, trace_execution_phases:48 — four of them in modules whose
+# siblings HAD been migrated, so it was a partial sweep reported as a complete one.
+# They are migrated now, and this is what stops the claim rotting again.
+
+def _tooling_py_files():
+    out = []
+    for base in ('tools', '.githooks'):
+        for dirpath, dirnames, filenames in os.walk(os.path.join(ROOT, base)):
+            dirnames[:] = [d for d in dirnames if d not in {'__pycache__', 'deprecated'}]
+            for fn in filenames:
+                if fn.endswith('.py'):
+                    out.append(os.path.join(dirpath, fn))
+    return out
+
+
+# `tools/sim_harness/` is EXCLUDED, and the exclusion is a held ruling rather than
+# convenience: the plan lists "the sim_harness promote-or-retire call (28 files)"
+# among the items HELD FOR JORDAN. Migrating a cluster that may be retired whole is
+# work done twice. It is named here so the exemption is visible, not silent.
+_HELD_FOR_JORDAN = 'tools/sim_harness/'
+
+
+def test_no_module_re_derives_the_repo_root():
+    """The recurrence guard for §1.2's largest row: 53 sites, 15 spellings.
+
+    A repo-root derivation is legitimate ONLY as the two-line bootstrap that
+    imports the owner — a module cannot import ci_common without first knowing
+    where ci_common is. That bootstrap anchors on the module's OWN directory, so
+    the test is: does any module compute a path that walks ABOVE its own directory
+    without then being the bootstrap?
+    """
+    strays = []
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel.startswith(_HELD_FOR_JORDAN) or rel == 'tools/ci_common.py':
+            continue
+        src = open(p, encoding='utf-8', errors='ignore').read()
+        for node in ast.walk(ast.parse(src)):
+            if not isinstance(node, ast.Assign):
+                continue
+            expr = ast.unparse(node.value)
+            if '__file__' not in expr:
+                continue
+            # walking above the module's own directory == deriving an ancestor
+            ancestor = ('dirname(os.path.dirname' in expr
+                        or re.search(r'parents\[\d+\]', expr)
+                        or re.search(r"join\([^)]*'\.\.'", expr))
+            if not ancestor:
+                continue
+            target = ast.unparse(node.targets[0])
+            # the bootstrap itself is a sys.path.insert, never an assignment
+            strays.append(f'{rel}:{node.lineno}: {target} = {expr}')
+    assert not strays, (
+        'a module derives an ancestor directory instead of using ci_common.REPO '
+        f'(plan G7, ED-IN-0159 §8.1): {strays}')
+
+
+def test_the_lane_roster_literal_appears_only_in_its_owner():
+    """The recurrence guard for the roster. obs_core's header records that a prior
+    copy silently OMITTED 'GO' — a whole lane undercounted — which is why a second
+    copy is a defect and not merely repetition."""
+    owners = []
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel.startswith(_HELD_FOR_JORDAN):
+            continue
+        src = open(p, encoding='utf-8', errors='ignore').read()
+        for i, ln in enumerate(src.splitlines(), 1):
+            if ln.lstrip().startswith('#'):
+                continue
+            if re.search(r'''['"]MB['"]\s*,\s*['"]PC['"]\s*,\s*['"]FI['"]''', ln):
+                owners.append(f'{rel}:{i}')
+    assert owners == ['tools/ci_common.py:%d' % _lane_codes_line()], (
+        f'the 9-lane roster literal exists outside its owner: {owners}')
+
+
+def _lane_codes_line():
+    src = (Path(ROOT) / 'tools' / 'ci_common.py').read_text(encoding='utf-8').splitlines()
+    for i, ln in enumerate(src, 1):
+        if ln.startswith('LANE_CODES'):
+            return i
+    raise AssertionError('ci_common.LANE_CODES definition not found')
+
+
+def test_inline_token_estimation_is_confined_to_the_modules_being_retired():
+    """`len(x) // 4` is the denominator every size cap in the repo is written in.
+
+    Six inline sites survive and they are ALL in atomizer / doc_index_gen /
+    index_gen, which plan step G2 retires — migrating a module scheduled for
+    retirement is work done twice. This asserts the residue is exactly that set, so
+    a NEW inline estimator anywhere else fails, and so this exemption cannot
+    quietly outlive the retirement it is waiting on.
+    """
+    RETIRING = {'tools/atomizer.py', 'tools/doc_index_gen.py', 'tools/index_gen.py'}
+    found = set()
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel.startswith(_HELD_FOR_JORDAN) or rel == 'tools/ci_common.py':
+            continue
+        src = open(p, encoding='utf-8', errors='ignore').read()
+        for ln in src.splitlines():
+            if ln.lstrip().startswith('#'):
+                continue
+            if re.search(r'len\([^)]*\)\s*//\s*4', ln):
+                found.add(rel)
+    assert found <= RETIRING, f'a new inline token estimator appeared: {sorted(found - RETIRING)}'
+
+
+def test_the_bare_yaml_load_residual_can_only_shrink():
+    """`load_yaml` is the INTENDED owner, not the only loader, and its docstring
+    says so. This pins the residual so the honest number cannot rot upward.
+
+    52 bare `yaml.safe_load` calls remain in tools/, each doing something the
+    helper does not — loading a stream, a string, or wanting the exception on a
+    missing file. If this fails HIGH, a new bare call was added; if it fails LOW,
+    migrate the count in the docstring with it.
+    """
+    total = 0
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel == 'tools/ci_common.py':
+            continue
+        total += open(p, encoding='utf-8', errors='ignore').read().count('yaml.safe_load')
+    assert total <= 52, f'bare yaml.safe_load count ROSE to {total} — a new copy was added'
+    src = (Path(ROOT) / 'tools' / 'ci_common.py').read_text(encoding='utf-8')
+    assert f'**{total} bare `yaml.safe_load` calls' in src or total == 52, (
+        f'residual is now {total}; update load_yaml\'s docstring to match')
+
+
+def test_every_ci_common_primitive_has_a_caller():
+    """THE GUARD FOR THE DEFECT THIS FILE ITSELF SHIPPED.
+
+    An adversarial pass found `ci_common` labelling id regexes, `load_yaml` and
+    `load_register` "ONE OWNER" while NONE of them had a single caller outside this
+    test file — the module refusing a speculative `read_id_reservations()` on one
+    line for exactly that reason, and shipping three more fifty lines above. That
+    is ED-IN-0149's build-then-disconnect defect, committed inside the commit that
+    cites it.
+
+    `load_register` was removed. The rest gained real call sites. This asserts the
+    property directly, so the next speculative primitive fails here instead of
+    surviving to the next census.
+    """
+    src_by_file = {}
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel == 'tools/ci_common.py':
+            continue
+        src_by_file[rel] = open(p, encoding='utf-8', errors='ignore').read()
+
+    PUBLIC = [n for n in vars(ci_common)
+              if not n.startswith('_') and n not in {
+                  'ast', 'glob', 'os', 're', 'subprocess', 'Path',
+                  # documented lazy re-exports: reachable, but obs_core is their home
+                  *ci_common._LAZY_FROM_OBS_CORE}]
+    owner_src = (Path(ROOT) / 'tools' / 'ci_common.py').read_text(encoding='utf-8')
+    uncalled = []
+    for name in PUBLIC:
+        # A primitive counts as called if a module names it through ci_common OR
+        # through obs_core, which RE-EXPORTS the dependency-free ones under the
+        # same names (dashboard_data reaches LEDGER_LANE_CODES that way), or if the
+        # owner itself consumes it internally (EMPTY_TREE feeds _diff_args).
+        via = (f'ci_common.{name}', f'obs_core.{name}', f'_obs_core.{name}')
+        if any(v in s for s in src_by_file.values() for v in via):
+            continue
+        if re.search(rf'(?<![\w.]){re.escape(name)}\b', owner_src.split(f'{name} =', 1)[-1]):
+            continue
+        uncalled.append(name)
+    assert not uncalled, (
+        'ci_common exports primitives no module in tools/ uses — an abstraction '
+        f'with no caller is the defect ED-IN-0149 named: {uncalled}')

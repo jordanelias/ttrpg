@@ -36,7 +36,11 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parent
+# ONE OWNER for the repo root: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO_PATH
 _OBS = HERE / "observability"
 for p in (str(HERE), str(_OBS)):
     if p not in sys.path:
