@@ -35,7 +35,13 @@ Exit codes:
 
 import os, sys, re, hashlib, argparse
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO_ROOT = ci_common.REPO
 CANONICAL_SOURCES_PATH = "references/canonical_sources.yaml"
 
 # ── Working-tree blob SHA (git hash-object equivalent) ──────────────────────────

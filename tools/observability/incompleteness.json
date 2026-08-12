@@ -3,7 +3,7 @@
   "generator": "tools/observability/build_incompleteness.py",
   "note": "GENERATED \u2014 the Incompleteness Ledger. Surfaces incompleteness across a BOUNDED, GROWING set of categories (see totals.by_category), each carrying a `severity` (high/med/low, see totals.by_severity). It is deliberately NOT claimed exhaustive: known coverage gaps are listed in `coverage_gaps` so the ledger surfaces its OWN incompleteness. Nothing within a covered category is culled to stay 'signal-heavy'.",
   "totals": {
-    "findings": 238,
+    "findings": 247,
     "by_category": {
       "apparatus_orphan": 6,
       "audit_cascade_sink": 15,
@@ -16,20 +16,20 @@
       "code_marker": 12,
       "contract_doc_null": 9,
       "contract_island": 5,
-      "contract_missing_entirely": 2,
+      "contract_missing_entirely": 3,
       "contract_no_resolver": 1,
       "integrity_unverified_pin": 1,
-      "key_orphan_emit": 1,
+      "key_orphan_emit": 6,
       "prose_marker": 22,
       "sim_not_implemented": 23,
       "stale_retired_pointer": 17,
-      "status_noncurrent": 23,
-      "unregistered_term": 28
+      "status_noncurrent": 25,
+      "unregistered_term": 29
     },
     "by_severity": {
-      "high": 22,
-      "med": 97,
-      "low": 119
+      "high": 28,
+      "med": 99,
+      "low": 120
     }
   },
   "by_lane": {
@@ -37,6 +37,10 @@
       "total": 5,
       "prose_marker": 3,
       "sim_not_implemented": 1,
+      "status_noncurrent": 1
+    },
+    "PC": {
+      "total": 1,
       "status_noncurrent": 1
     },
     "FI": {
@@ -64,7 +68,7 @@
       "status_noncurrent": 3
     },
     "IN": {
-      "total": 165,
+      "total": 166,
       "apparatus_orphan": 6,
       "audit_cascade_sink": 15,
       "audit_excluded_system": 16,
@@ -81,7 +85,7 @@
       "sim_not_implemented": 5,
       "stale_retired_pointer": 17,
       "status_noncurrent": 7,
-      "unregistered_term": 28
+      "unregistered_term": 29
     },
     "SE": {
       "total": 5,
@@ -89,19 +93,19 @@
       "sim_not_implemented": 2
     },
     "unassigned": {
-      "total": 30,
+      "total": 37,
       "code_marker": 1,
       "contract_doc_null": 9,
       "contract_island": 2,
-      "contract_missing_entirely": 2,
-      "key_orphan_emit": 1,
+      "contract_missing_entirely": 3,
+      "key_orphan_emit": 6,
       "prose_marker": 4,
       "sim_not_implemented": 2,
-      "status_noncurrent": 9
+      "status_noncurrent": 10
     }
   },
   "prose_marker_rollup": {
-    "gap": 64,
+    "gap": 75,
     "assumption": 62,
     "stub": 4,
     "todo": 9
@@ -1064,8 +1068,8 @@
     },
     {
       "category": "code_marker",
-      "id": "tools/review_core.py:65",
-      "title": "STUB @ tools/review_core.py:65",
+      "id": "tools/review_core.py:73",
+      "title": "STUB @ tools/review_core.py:73",
       "detail": "# stubs.count \u2014 the P1 stubwire ratchet (ED-IN-0091, plan \u00a72.1). Runs structure_audit's",
       "path": "tools/review_core.py",
       "lane": "IN",
@@ -1199,6 +1203,15 @@
     },
     {
       "category": "contract_missing_entirely",
+      "id": "echo_transport",
+      "title": "echo_transport",
+      "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "contract_missing_entirely",
       "id": "engine",
       "title": "engine",
       "detail": "module appears in the propagation graph (referenced by Keys) but has NO module_contracts entry \u2014 no authored IN/OUT contract at all (and it is an island: no emits/consumes)",
@@ -1235,8 +1248,53 @@
     },
     {
       "category": "key_orphan_emit",
+      "id": "mechanical.era_transition",
+      "title": "mechanical.era_transition",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "mechanical.second_calamity",
+      "title": "mechanical.second_calamity",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "mechanical.settlement_captured",
+      "title": "mechanical.settlement_captured",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "mechanical.theocracy_unification_declared",
+      "title": "mechanical.theocracy_unification_declared",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
       "id": "meta.legacy_event",
       "title": "meta.legacy_event",
+      "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
+      "path": "",
+      "lane": "unassigned",
+      "severity": "high"
+    },
+    {
+      "category": "key_orphan_emit",
+      "id": "state.settlement_revolt",
+      "title": "state.settlement_revolt",
       "detail": "Key is emitted but has NO consumer \u2014 downstream dead-end",
       "path": "",
       "lane": "unassigned",
@@ -1631,8 +1689,8 @@
     },
     {
       "category": "sim_not_implemented",
-      "id": "tools/observability/build_incompleteness.py:754",
-      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:754",
+      "id": "tools/observability/build_incompleteness.py:803",
+      "title": "NotImplementedError @ tools/observability/build_incompleteness.py:803",
       "detail": "\"sim_not_implemented\": \"Runtime stubs (raise NotImplementedError)\",",
       "path": "tools/observability/build_incompleteness.py",
       "lane": "IN",
@@ -1649,19 +1707,19 @@
     },
     {
       "category": "stale_retired_pointer",
-      "id": "references/alias_registry.yaml",
-      "title": "references/alias_registry.yaml",
-      "detail": "2 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md",
-      "path": "references/alias_registry.yaml",
+      "id": "references/CONTRACT_INDEX.md",
+      "title": "references/CONTRACT_INDEX.md",
+      "detail": "2 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md",
+      "path": "references/CONTRACT_INDEX.md",
       "lane": "IN",
       "severity": "med"
     },
     {
       "category": "stale_retired_pointer",
-      "id": "references/atomization_rules.yaml",
-      "title": "references/atomization_rules.yaml",
-      "detail": "1 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/audit/2026-07-08-attribute-value-coherence-audit/02_census/quantity_census.yaml",
-      "path": "references/atomization_rules.yaml",
+      "id": "references/alias_registry.yaml",
+      "title": "references/alias_registry.yaml",
+      "detail": "2 reference(s) to the retired designs/ tree (alias-resolved, not live): e.g. designs/provincial/ci_political_v30.md, designs/provincial/faction_layer_v30.md",
+      "path": "references/alias_registry.yaml",
       "lane": "IN",
       "severity": "med"
     },
@@ -1820,6 +1878,15 @@
     },
     {
       "category": "status_noncurrent",
+      "id": "proposals/canonical_nomenclature_v1.md",
+      "title": "proposals/canonical_nomenclature_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "proposals/canonical_nomenclature_v1.md",
+      "lane": "unassigned",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
       "id": "proposals/grounded_event_card_deck_v1.md",
       "title": "proposals/grounded_event_card_deck_v1.md",
       "detail": "doc Status is not current: PROPOSED",
@@ -1924,6 +1991,15 @@
       "detail": "doc Status is not current: STALE",
       "path": "systems/_architecture/repo_state_armature_v1.md",
       "lane": "IN",
+      "severity": "med"
+    },
+    {
+      "category": "status_noncurrent",
+      "id": "systems/combat/combat_reference_v1.md",
+      "title": "systems/combat/combat_reference_v1.md",
+      "detail": "doc Status is not current: PROPOSED",
+      "path": "systems/combat/combat_reference_v1.md",
+      "lane": "PC",
       "severity": "med"
     },
     {
@@ -2064,17 +2140,17 @@
     {
       "category": "unregistered_term",
       "id": "term::Combat Pool",
-      "title": "\u201cCombat Pool\u201d \u2014 in 14 docs, unregistered",
-      "detail": "appears in 14 design docs (31 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_design_v1.md, systems/combat/combat_v30.md, systems/_architecture/canonical_registry.md",
-      "path": "systems/combat/combat_design_v1.md",
+      "title": "\u201cCombat Pool\u201d \u2014 in 12 docs, unregistered",
+      "detail": "appears in 12 design docs (25 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/combat/combat_reference_v1.md, systems/_architecture/canonical_registry.md, systems/_architecture/derived_stats_v30.md",
+      "path": "systems/combat/combat_reference_v1.md",
       "lane": "IN",
       "severity": "low"
     },
     {
       "category": "unregistered_term",
       "id": "term::Community Weaving",
-      "title": "\u201cCommunity Weaving\u201d \u2014 in 15 docs, unregistered",
-      "detail": "appears in 15 design docs (30 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, systems/_architecture/complete_systems_reference.md",
+      "title": "\u201cCommunity Weaving\u201d \u2014 in 14 docs, unregistered",
+      "detail": "appears in 14 design docs (29 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/characters/conviction_track_v30.md, systems/factions/factions_personal_v30.md, systems/_architecture/complete_systems_reference.md",
       "path": "systems/characters/conviction_track_v30.md",
       "lane": "IN",
       "severity": "low"
@@ -2139,6 +2215,15 @@
       "title": "\u201cEthical Framework\u201d \u2014 in 12 docs, unregistered",
       "detail": "appears in 12 design docs (53 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/npcs/npc_behavior_system_v1.md, systems/npcs/npc_behavior_v30.md, systems/factions/factions_personal_v30.md",
       "path": "systems/npcs/npc_behavior_system_v1.md",
+      "lane": "IN",
+      "severity": "low"
+    },
+    {
+      "category": "unregistered_term",
+      "id": "term::Flow Skeleton",
+      "title": "\u201cFlow Skeleton\u201d \u2014 in 16 docs, unregistered",
+      "detail": "appears in 16 design docs (16 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/_architecture/_architecture_flow_skeleton_v1.md, systems/_architecture/subsystem_flow_skeletons_v1.md, systems/articulation/articulation_flow_skeleton_v1.md",
+      "path": "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "lane": "IN",
       "severity": "low"
     },
@@ -2235,8 +2320,8 @@
     {
       "category": "unregistered_term",
       "id": "term::Thread Tension",
-      "title": "\u201cThread Tension\u201d \u2014 in 16 docs, unregistered",
-      "detail": "appears in 16 design docs (52 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
+      "title": "\u201cThread Tension\u201d \u2014 in 15 docs, unregistered",
+      "detail": "appears in 15 design docs (51 mentions) but the central ontology (tokens/modules/descriptors/graph nodes) has no match \u2014 a candidate missing registration; register it or confirm it is not canonical \u2014 e.g. systems/world/southernmost_v30_infill.md, systems/factions/factions_personal_v30.md, systems/threadwork/threadwork_v30.md",
       "path": "systems/world/southernmost_v30_infill.md",
       "lane": "IN",
       "severity": "low"

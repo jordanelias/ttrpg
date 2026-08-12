@@ -32,7 +32,13 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+ROOT = Path(ci_common.REPO)
 STATE_PATH = ROOT / "tools" / "observability" / "review_state.json"
 BASELINE_PATH = ROOT / "registers" / "review_baseline.yaml"
 SCHEMA_VERSION = 1

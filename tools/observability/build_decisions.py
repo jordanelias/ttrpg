@@ -19,14 +19,20 @@ Output: decisions.json, decisions_data.js (window.VALORIA_DECISIONS), DECISIONS.
 Run:    python tools/observability/build_decisions.py
 """
 from __future__ import annotations
-import json, re, sys
+import json, os, re, sys
 from pathlib import Path
 try:
     import yaml
 except ImportError:
     print("PyYAML required", file=sys.stderr); sys.exit(1)
 
-REPO = Path(__file__).resolve().parents[2]
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO_PATH
 OUT = Path(__file__).resolve().parent
 
 # Redact EVERY legacy name (block- and warn-tier alike, references/names_index.yaml —
@@ -209,12 +215,18 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
 _LANE_PREFIXES_SORTED = sorted(LANE_PATH_PREFIXES, key=lambda kv: -len(kv[0]))
 
 
-LANE_ORDER = ["MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE"]
-LANE_NAMES = {
+# ONE OWNER: ci_common.LANE_CODES (plan G7). Kept as a list because this
+# module's consumers index and extend it.
+LANE_ORDER = list(ci_common.LANE_CODES)
+# Keys DERIVE from ci_common.LANE_CODES (ED-IN-0165); only the display strings are
+# owned here. G7's "roster 9 -> 3" measured the tuple SPELLING and never saw this
+# dict or dashboard_data's rival copy, which had already diverged on SE and FA.
+_LANE_TITLES = {
     "MB": "Mass battle", "PC": "Personal combat", "FI": "Field investigation",
     "SC": "Social contest", "FA": "Faction actions", "WR": "World",
     "IN": "Infrastructure / cross-cutting", "GO": "Godot", "SE": "Settlements",
 }
+LANE_NAMES = {code: _LANE_TITLES[code] for code in ci_common.LANE_CODES}
 
 
 def infer_lane(path_or_loc: str) -> str | None:

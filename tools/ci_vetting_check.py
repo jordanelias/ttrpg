@@ -35,6 +35,12 @@ import os
 import re
 import sys
 
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
 # ── Framework constants (mirrored from valoria_hooks.py) ──────────────────────
 VETTING_REQUIRED_KEYS = ('class', 'necessity', 'omega', 'mu', 'm_ratings', 'q')
 VETTING_CLASS_VALUES = ('A', 'B', 'C', 'D', 'E')
@@ -102,7 +108,7 @@ def check_register(content: str) -> list:
     # not be available in every environment; use the same regex style other
     # hooks use).
     entries = re.findall(
-        r'-\s+id:\s+PP-(\d+)\s*\n(.*?)(?=\n-\s+id:\s+PP-\d+|\Z)',
+        r'-\s+id:\s+PP-(\d+)\s*\n(.*?)(?=\n-\s+id:\s+' + ci_common.PP_ID_PAT + r'|\Z)',
         content, re.DOTALL
     )
     errors = []
@@ -191,7 +197,7 @@ def main() -> int:
         )
         return 1
 
-    n_entries = len(re.findall(r'-\s+id:\s+PP-\d+', content))
+    n_entries = len(re.findall(r'-\s+id:\s+' + ci_common.PP_ID_PAT, content))
     print(f"OK {REGISTER_PATH}: vetting gate passed — {n_entries} PP entries scanned.")
     return 0
 

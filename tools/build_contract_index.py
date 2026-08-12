@@ -58,7 +58,13 @@ except ImportError:
     print('[contract-index] pyyaml required', file=sys.stderr)
     raise SystemExit(2)
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+ROOT = ci_common.REPO
 GRAPH = os.path.join(ROOT, 'references', 'key_graph.json')
 CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
 WIRING = os.path.join(ROOT, 'references', 'wiring_manifest.yaml')
@@ -99,10 +105,8 @@ STATUS_GLOSS = {
 def load_all():
     with open(GRAPH, encoding='utf-8') as fh:
         graph = json.load(fh)
-    with open(CONTRACTS, encoding='utf-8') as fh:
-        contracts = yaml.safe_load(fh)
-    with open(WIRING, encoding='utf-8') as fh:
-        wiring = yaml.safe_load(fh)
+    contracts = ci_common.load_yaml(CONTRACTS)
+    wiring = ci_common.load_yaml(WIRING)
     return graph, contracts, wiring
 
 
@@ -118,8 +122,7 @@ def adjudicate():
     spec = importlib.util.spec_from_file_location('contract_adjudicator', ADJUDICATOR)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    with open(CONTRACTS, encoding='utf-8') as fh:
-        contracts = yaml.safe_load(fh)
+    contracts = ci_common.load_yaml(CONTRACTS)
     with open(REGISTRY, encoding='utf-8') as fh:
         registry_md = fh.read()
     with open(SOURCES, encoding='utf-8') as fh:

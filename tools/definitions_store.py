@@ -30,7 +30,13 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parents[1]
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ci_common  # noqa: E402
+
+ROOT = Path(ci_common.REPO)
 NAMES = ROOT / "references" / "names_index.yaml"
 DESCRIPTORS = ROOT / "references" / "descriptor_registry.yaml"
 STORE = ROOT / "references" / "definitions" / "definitions.yaml"

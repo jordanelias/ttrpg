@@ -25,14 +25,20 @@ Output: tools/observability/lexicon.json and lexicon_data.js (window.VALORIA_LEX
 Run:    python tools/observability/build_lexicon.py
 """
 from __future__ import annotations
-import json, re, sys
+import json, os, re, sys
 from pathlib import Path
 try:
     import yaml
 except ImportError:
     print("PyYAML required", file=sys.stderr); sys.exit(1)
 
-REPO = Path(__file__).resolve().parents[2]
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO_PATH
 OUT = Path(__file__).resolve().parent
 REF = REPO / "references"
 

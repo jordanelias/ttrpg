@@ -66,7 +66,7 @@ except ImportError:  # same repo-root invocation path as quantity_registry above
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ci_common
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
 _STAT_DICT_RE = re.compile(r'(stat_deltas|impact_vector)\s*=\s*\{([^{}]*)\}')
 _STR_KEY_RE = re.compile(r'''["']([^"']+)["']\s*:''')
@@ -166,7 +166,7 @@ def main(argv):
                     help='sim reference root to scan (repeatable). Defaults to every live root.')
     a = ap.parse_args(argv)
 
-    contracts = yaml.safe_load(open(a.contracts, encoding='utf-8')) or {}
+    contracts = ci_common.load_yaml(a.contracts) or {}
     sim_roots = a.sim_root or ci_common.sim_reference_roots(REPO_ROOT)
     resolved, findings = check(contracts, sim_roots)
 

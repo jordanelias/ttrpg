@@ -42,7 +42,13 @@ import json
 import os
 import sys
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO_ROOT = ci_common.REPO
 ENGINE_DIR = os.path.join(REPO_ROOT, 'systems', 'combat', 'combat_engine_v1')
 OUT_PATH = os.path.join(REPO_ROOT, 'engine', 'engine_params', 'combat_engine_v1.json')
 

@@ -40,7 +40,13 @@ import re
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+ROOT = ci_common.REPO
 
 # Ledgers under the rule, each with the FIRST entry id the rule binds on (see FORWARD-LOOKING above). Scoped to the
 # lane that generated the failure; widen deliberately, lane by lane, once each lane has a measurement instrument to
@@ -58,6 +64,29 @@ LEDGERS = {
     # linter's sense only — it names its instrument in prose, and its wrong numbers were retracted in
     # its own successor rather than left standing.
     "registers/editorial_ledger_in.jsonl": "ED-IN-0087",
+
+    # ── THE ARCHIVES, added 2026-08-12 (ED-IN-0165) ──────────────────────────
+    # ARCHIVING AN ENTRY USED TO REMOVE ITS CLAIMS FROM THIS GATE FOREVER, and
+    # nothing said so. `LEDGERS` named only the two LIVE lane files, so the moment
+    # a settled id moved to its archive sibling — which is now ROUTINE, four times
+    # in three commits, because the 50,000-token cap forces it — every measured
+    # number in that entry stopped being checked. The gate reported OK on a
+    # shrinking population, which is this repo's signature defect class (§1.6,
+    # ED-IN-0149) sitting inside the gate built to stop claims going unverified.
+    #
+    # Found by an adversarial pass on the branch that CAUSED it: archiving
+    # ED-IN-0160/0161 to make room under the cap moved this branch's own headline
+    # measurements out of scope, and the gate's entry count dropped 23 -> 22
+    # between origin/main and HEAD while still reporting green.
+    #
+    # MEASURED, NOT PREDICTED: scope goes 22 -> 47 entries across 4 ledgers, and
+    # the gate STAYS GREEN — every one of the 25 recovered entries already names
+    # an instrument. The coverage was free and had simply never been claimed.
+    #
+    # Same cutover ids as the live files: an archived entry is the same entry, and
+    # its id decides whether the rule binds. Guard: tests/valoria/test_claim_provenance_archives.py.
+    "registers/editorial_ledger_in_archive.jsonl": "ED-IN-0087",
+    "registers/editorial_ledger_pc_archive.jsonl": "ED-PC-0040",
 }
 
 # The marker an entry uses to name its instrument.

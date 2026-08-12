@@ -41,7 +41,13 @@ import argparse
 import os
 import sys
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO
 JOINED_NAME = '_workings_joined.md'
 
 # The delimiter. Chosen to be (a) unmistakable, (b) illegal as ordinary prose, (c) parseable by an

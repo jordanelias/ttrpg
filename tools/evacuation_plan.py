@@ -51,7 +51,13 @@ try:
 except ImportError:
     yaml = None
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO
 
 # The audit cutoff. Jordan first set a two-week rule ("we aren't keeping any older than two
 # weeks", 2026-07-21) then widened it to the calendar month: "probably keep audits from july

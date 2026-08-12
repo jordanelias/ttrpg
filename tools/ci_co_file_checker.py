@@ -5,7 +5,7 @@ Runs in CI. Checks that commits satisfy co-file requirements:
 - Design doc change → canonical_sources.yaml must change (or be unchanged and already correct)
 - Patch content → patch_register_active.yaml must change
 - Simulation output → coverage_matrix.md must change
-- Mechanical value change → corresponding params file must change
+- (RETIRED 2026-08-12) design doc → params file — engine/params/ was evacuated
 
 Uses git diff to get changed files. Exits 1 on violation.
 """
@@ -42,7 +42,12 @@ violations = []
 # has added lines, so it stays governed.
 _added = ci_common.get_added_lines(_mode)
 design_docs = [f for f in changed
-               if re.match(r'(?:designs|systems)/.+_v30\.md$', f) and 'infill' not in f
+               # `designs/` dropped 2026-08-12 (ED-IN-0165): that tree was RETIRED
+               # 2026-07-19 (CLAUDE.md §3, 'do not recreate'), so the alternation had
+               # been half-dead for three weeks — inside the gate whose Rule 4 was
+               # retired for exactly this, by a sweep that read this line and did not
+               # see it. Found by an adversarial pass.
+               if re.match(r'systems/.+_v30\.md$', f) and 'infill' not in f
                and f in _added]
 if design_docs and 'references/canonical_sources.yaml' not in changed:
     violations.append(
@@ -77,28 +82,40 @@ if sim_outputs and 'tests/coverage_matrix.md' not in changed:
         f"  Required: tests/coverage_matrix.md"
     )
 
-# ── Rule 4: design doc change → params file (only for params-bearing systems) ──
-# Conditional, not blanket: many design docs legitimately have NO params file, so
-# the old hard requirement false-positived on every prose-only design. We now
-# require the co-change only when a params file for this system actually exists in
-# the repo (i.e. the system is params-bearing). If a candidate exists on disk but
-# is absent from the changeset, that is the real co-file violation we want to catch.
-for doc in design_docs:
-    # Extract system name from path: designs/{category}/{system}_v30.md
-    basename = os.path.basename(doc).replace('_v30.md', '')
-    params_candidates = [
-        f'engine/params/{basename}.md',
-        f'engine/params/{basename.replace("_design","")}.md',
-    ]
-    existing = [p for p in params_candidates if os.path.exists(p)]
-    if not existing:
-        continue  # params-less system — nothing to require
-    if not any(p in changed for p in existing):
-        violations.append(
-            f"DESIGN DOC {doc} changed but its params file not in commit.\n"
-            f"  This system is params-bearing; expected one of: {existing}\n"
-            f"  Include the params file if mechanical values changed."
-        )
+# ── Rule 4: RETIRED 2026-08-12 (plan step G2, ED-IN-0159 §1.6) ────────────────
+#
+# It required a design-doc change to co-change `engine/params/{system}.md`. That
+# TREE WAS EVACUATED on 2026-08-05 (ED-IN-0145) to fork ref c451bcb, so both of
+# the candidate paths it built are unconditionally absent, `existing` is
+# unconditionally empty, and every candidate hit the `continue`. The rule has
+# EXAMINED ZERO ITEMS since — a blocking gate reporting clean over nothing, which
+# is §1.6's whole pattern.
+#
+# WHY IT IS SAFE TO REMOVE, stated accurately (CORRECTED after an adversarial
+# pass, ED-IN-0164). The first version of this note said six --check gates "now
+# carry" Rule 4's mechanism and were "strictly stronger". Both halves overreached
+# and the correction matters, because a tombstone that misstates why a gate was
+# removed is how a removal gets re-litigated from the wrong premise:
+#
+#   · Those six run CODE -> GENERATED ARTIFACT (export_engine_params --check,
+#     export_key_types --check, export_sim_params, build_engine_atlas --check,
+#     build_test_register, build_contract_index). Rule 4 ran DESIGN DOC -> PARAMS
+#     PROSE. Different mechanism, not a stronger form of the same one.
+#   · All six PRE-EXISTED this retirement. Nothing was transferred.
+#
+# The accurate reason is simpler and sufficient: **Rule 4's SUBJECT LEFT THE TREE.**
+# There is no `engine/params/` file for any design doc to co-change, so the rule
+# cannot fire for any commit. Separately — and as reassurance rather than as
+# justification — the corpus retains strong code-to-artifact freshness gating
+# through the six above, each of which byte-compares a committed artifact against a
+# fresh build.
+#
+# Rules 1-3 above are untouched and still blocking, and
+# `tests/valoria/test_co_file_rules.py` now asserts that each of them can still
+# FAIL — not merely still run. That test did not exist when Rule 4 was removed,
+# which was itself a violation of the plan's rule that every blocking-gate
+# migration ships its own expected-delta test.
+
 
 if violations:
     print(f"[CO-FILE VIOLATIONS: {len(violations)}]\n")

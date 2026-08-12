@@ -17,7 +17,13 @@ Output: prints broken dependencies; exits 1 if any found.
 
 import os, sys, re
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO_ROOT = ci_common.REPO
 
 # Trees that are not part of the live corpus for ref-resolution purposes.
 _IGNORE_DIRS = {'.git'}
@@ -168,7 +174,10 @@ LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
 # Pre-cutover flat-ID entries stay in the main file (no retrofit). Both are "active" and
 # must be checked the same way, or the lane-tagged 1/3 of live entries would silently stop
 # being validated for broken paths — the exact failure class ED-1081 already fixed once.
-_LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+# ONE OWNER: ci_common.LANE_CODES (plan G7, ED-IN-0159 §8.3). Was a verbatim
+# copy of the 9-code tuple; obs_core's header records that one such copy once
+# silently omitted GO, undercounting a whole lane.
+_LANE_CODES = ci_common.LANE_CODES
 LANE_LEDGER_PATHS = tuple(f'registers/editorial_ledger_{lane.lower()}.jsonl' for lane in _LANE_CODES)
 
 

@@ -42,14 +42,23 @@ import os
 import re
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+ROOT = ci_common.REPO
 POINTER_GLOB = os.path.join(ROOT, "workplans", "POINTER_*.md")
 
 # The 9-lane roster (CLAUDE.md §4). `tools/observability/obs_core.py` owns this list for the
 # observability generators; it is restated here rather than imported because obs_core lives
 # under tools/observability/ and importing across that boundary for one tuple would couple a
 # CI gate to the observability package's import graph. If the roster ever changes, both move.
-LANE_CODES = ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
+# ONE OWNER: ci_common.LANE_CODES (plan G7, ED-IN-0159 §8.3). Was a verbatim
+# copy of the 9-code tuple; obs_core's header records that one such copy once
+# silently omitted GO, undercounting a whole lane.
+LANE_CODES = ci_common.LANE_CODES
 
 REQUIRED_FIELDS = ("target", "lane", "liveness", "scope")
 

@@ -39,8 +39,14 @@ except ImportError:  # pragma: no cover
     print("m1_acceptance: PyYAML required", file=sys.stderr)
     sys.exit(2)
 
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO_ROOT = os.path.dirname(HERE)
+REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
 BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
 CONTRACTS = os.path.join('references', 'module_contracts.yaml')
@@ -174,8 +180,7 @@ def row_m1_junctures():
     """All seven M1 junctures execute. Measurable today from the progress board."""
     path = _repo(BOARD)
     try:
-        with open(path, encoding='utf-8') as fh:
-            data = yaml.safe_load(fh)
+        data = ci_common.load_yaml(path)
         junctures = data['milestones']['M1']['junctures']
     except Exception as exc:
         return _blocked('m1_junctures', 'All seven M1 junctures execute',

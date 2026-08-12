@@ -15,6 +15,7 @@ The tests below pin two things a comment cannot enforce: that every token actual
 the policy file is implemented, and that an unimplemented token fails LOUDLY instead of
 defaulting to a blocking error indistinguishable from an intentional one.
 """
+import ast
 import os
 import re
 import sys
@@ -94,6 +95,43 @@ def test_severity_is_single_owned_no_inline_copy_remains():
     live = [ln.strip() for ln in src.splitlines()
             if "startswith('flag')" in ln and not ln.strip().startswith('#')]
     assert not live, f'an inline on_exceed severity copy survives outside the owner: {live}'
-    # And both consumers must call the owner.
-    assert src.count('_on_exceed_severity(') >= 3, (
-        'expected the owner definition plus both call sites (_check_size and the CI-mode path)')
+
+    # And every consumer must call the owner.
+    #
+    # CO-CHANGED 2026-08-12 by plan step G1 (ED-IN-0159 §1.5), which the plan
+    # required to land in the same commit as the excision. This assertion used to
+    # read `count(...) >= 3` — the owner's definition plus TWO call sites,
+    # `_check_size` and the CI-mode path. `_check_size` is gone: its only caller
+    # was `check_all()`, excised with the orchestrator on 2026-08-05, so it had
+    # been unreachable for a week. One consumer now remains.
+    #
+    # The count is replaced rather than decremented. A literal `>= N` re-breaks on
+    # every future edit and says nothing about the property it stands for; what the
+    # test actually means is "no site computes a severity except through the
+    # owner", so assert THAT: every assignment to a `severity` variable is either
+    # a call to the owner or a read of a Violation's field.
+    # AST, not a regex over lines. The regex first written here (`^severity\\s*=`)
+    # flagged `severity=severity,` — a KEYWORD ARGUMENT inside a `Violation(...)`
+    # call, not an assignment at all. A textual proxy for a syntactic property
+    # reports the property it can see, not the one it means; the parser knows the
+    # difference between `ast.Assign` and `ast.keyword` and cannot be fooled by
+    # indentation or line breaks.
+    assert '_on_exceed_severity(' in src, 'the owner itself is gone'
+    strays = []
+    for node in ast.walk(ast.parse(src)):
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(isinstance(t, ast.Name) and t.id == 'severity' for t in node.targets):
+            continue
+        v = node.value
+        via_owner = (isinstance(v, ast.Call) and isinstance(v.func, ast.Name)
+                     and v.func.id == '_on_exceed_severity')
+        if not via_owner:
+            strays.append(f'{node.lineno}: severity = {ast.unparse(v)}')
+    assert not strays, f'a severity is computed without the owner: {strays}'
+
+    # ...and the one surviving consumer really is wired to it, so the assertion
+    # above cannot pass vacuously by there being no consumers at all.
+    assert src.count('_on_exceed_severity(') >= 2, (
+        'expected the owner definition plus at least one live call site; if this '
+        'drops to 1 the gate has no consumer and the vocabulary is unenforced')

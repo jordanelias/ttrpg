@@ -26,7 +26,13 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ci_common  # noqa: E402
+
+ROOT = Path(ci_common.REPO)
 OUT = ROOT / "engine" / "engine_params" / "sim_params.json"
 
 # The sim reference surfaces (the computational truth). Combat keeps its own dedicated export.
@@ -124,7 +130,7 @@ def _iter_py_files():
 
 _CITE_RE = re.compile(
     r"\[canonical:\s*([^\]]+)\]"          # [canonical: <source>]  — the dominant form
-    r"|\b(PP-\d+)\b"                        # a patch id
+    r"|\b(" + ci_common.PP_ID_PAT + r")\b"   # a patch id (ONE OWNER: ci_common)
     r"|\b(ED-(?:[A-Z]{2}-)?\d+)\b"          # flat ED-NNNN or lane-tagged ED-XX-NNNN (CLAUDE.md §4)
     r"|\b(J-\d+)\b"                         # a Jordan ruling id, e.g. "(Jordan 2026-06-19, J-22)"
 )

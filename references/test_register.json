@@ -721,6 +721,200 @@
     }
    }
   },
+  "test_ci_common_primitives.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The EXPECTED-DELTA test for plan step G7 (ED-IN-0159 \u00a78.1).",
+   "helper_loc": 15,
+   "helpers": [
+    {
+     "loc": 9,
+     "name": "_tooling_py_files"
+    },
+    {
+     "loc": 6,
+     "name": "_lane_codes_line"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 687,
+   "modules_under_test": [
+    "registers",
+    "tools",
+    "tools/atomizer.py",
+    "tools/ci_common.py",
+    "tools/doc_index_gen.py",
+    "tools/index_gen.py",
+    "tools/observability",
+    "tools/sim_harness/"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 31,
+   "tests": {
+    "test_ci_common_does_not_import_yaml_at_module_level": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The layering claim in the module docstring, made falsifiable."
+    },
+    "test_every_ci_common_primitive_has_a_caller": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE GUARD FOR THE DEFECT THIS FILE ITSELF SHIPPED."
+    },
+    "test_every_lane_display_map_is_total_over_the_owner": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The roster guard the tuple-spelling one could not see (ED-IN-0165)."
+    },
+    "test_inline_token_estimation_is_confined_to_the_modules_being_retired": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`len(x) // 4` is the denominator every size cap in the repo is written in."
+    },
+    "test_lane_roster_includes_go": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The specific failure on the record: obs_core's header notes that a prior"
+    },
+    "test_lane_roster_matches_claude_md": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "CLAUDE.md \u00a74 is the prose owner of the taxonomy. If a tenth lane is added"
+    },
+    "test_lane_roster_matches_the_pre_migration_literals": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Transcribed verbatim from ci_workplan_pointer_check:52,"
+    },
+    "test_lazy_reexport_is_actually_lazy": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Import ci_common in a fresh interpreter and assert obs_core did NOT come"
+    },
+    "test_lazy_reexports_resolve_to_obs_core": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "\u00a78.3's \"single import surface\" claim: the heavy primitives are reachable"
+    },
+    "test_load_yaml_RAISES_on_a_missing_file_unless_a_default_is_given": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "THE CONTRACT THAT A FAILING TEST FORCED, and the most useful thing in this"
+    },
+    "test_load_yaml_does_not_swallow_a_syntax_error": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": "A malformed register must be loud. Returning the default here would turn"
+    },
+    "test_load_yaml_is_delta_none_against_the_bare_open_it_replaced": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Expected-delta, both branches: present file and missing file."
+    },
+    "test_load_yaml_matches_bare_safe_load": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The 44 migrated sites all did `yaml.safe_load(open(path))`."
+    },
+    "test_no_module_actually_loads_id_reservations": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The falsifier for a CORRECTION to the plan's \u00a78.1 table."
+    },
+    "test_no_module_re_derives_the_repo_root": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The recurrence guard for \u00a71.2's largest row: 53 sites, 15 spellings."
+    },
+    "test_obs_core_re_exports_the_same_roster_object": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "obs_core kept its LANE_CODES name for its 9 consumers. If it ever stopped"
+    },
+    "test_pp_id_pattern_is_a_composable_string_with_real_callers": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The ONLY id pattern exported, and the reason it is a string."
+    },
+    "test_pp_pattern_migration_is_delta_none_on_the_live_register": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Expected delta for the two `ci_vetting_check` sites, measured against the"
+    },
+    "test_repo_path_is_derived_not_duplicated": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "REPO and REPO_PATH are one definition in two shapes. If they ever differ,"
+    },
+    "test_repo_root_actually_points_at_this_repo": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A spelling that resolved one level too high would still be self-consistent"
+    },
+    "test_repo_root_from_the_observability_layer": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`tools/observability/*` used `Path(__file__).resolve().parents[2]`."
+    },
+    "test_repo_root_is_the_git_toplevel": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The independent check: git's own answer, which no spelling above consults."
+    },
+    "test_repo_root_matches_every_pre_migration_spelling": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "\u00a71.3b measured 15 distinct spellings across 53 sites. Every one of them"
+    },
+    "test_the_bare_yaml_load_residual_can_only_shrink": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "`load_yaml` is the INTENDED owner, not the only loader, and its docstring"
+    },
+    "test_the_bootstrap_pointer_stays_short": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The pointer must not regrow into the explanation it replaced. Four lines is"
+    },
+    "test_the_bootstrap_rationale_is_not_copy_pasted_across_the_tier": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "G7's own comment was the duplication G7 exists to remove (ED-IN-0165)."
+    },
+    "test_the_lane_roster_literal_appears_only_in_its_owner": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The recurrence guard for the roster. obs_core's header records that a prior"
+    },
+    "test_the_two_live_ed_readers_are_deliberately_not_collapsed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A NON-consolidation, asserted so it cannot be \"tidied\" later."
+    },
+    "test_tokens_matches_the_inline_len_div_4": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Every migrated site computed `len(content) // 4` inline:"
+    },
+    "test_tokens_treats_missing_content_as_zero": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The one deliberate addition over the inline form: a size sweep over a tree"
+    },
+    "test_unknown_attribute_still_raises": {
+     "assertionless": false,
+     "assertions": 0,
+     "summary": null
+    }
+   }
+  },
   "test_ci_sim_fabrication_check.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -967,6 +1161,54 @@
     }
    }
   },
+  "test_claim_provenance_archives.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "`ci_claim_provenance_check` must not lose an entry when it is archived (ED-IN-0165).",
+   "helper_loc": 10,
+   "helpers": [
+    {
+     "loc": 10,
+     "name": "_load_provenance_gate"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 136,
+   "modules_under_test": [
+    "registers",
+    "registers/editorial_ledger_in_archive.jsonl",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_every_live_ledger_has_its_archive_sibling_in_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE GUARD. For each live ledger under the rule, if an archive sibling"
+    },
+    "test_gate_is_green_with_the_archives_in_scope": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The change is only safe because the recovered entries already comply. If a"
+    },
+    "test_the_archives_actually_carry_entries_in_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Non-vacuity. The test above passes trivially if the archives are empty or"
+    },
+    "test_this_branchs_own_archived_entries_are_back_in_scope": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The specific regression, named."
+    }
+   }
+  },
   "test_claim_provenance_fields.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -1077,6 +1319,74 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    }
+   }
+  },
+  "test_co_file_rules.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Expected-delta test for `tools/ci_co_file_checker.py` (plan step G2, ED-IN-0164).",
+   "helper_loc": 2,
+   "helpers": [
+    {
+     "loc": 2,
+     "name": "_src"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 200,
+   "modules_under_test": [
+    "engine",
+    "engine/params",
+    "engine/params/",
+    "references",
+    "systems",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 7,
+   "tests": {
+    "test_each_surviving_rules_subject_still_exists": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The vitality check #304's C4 generalises, applied to this gate now."
+    },
+    "test_rule_1_actually_REJECTS_a_changeset_it_must_reject": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The assertion with real teeth \u2014 it EXECUTES the gate (ED-IN-0165)."
+    },
+    "test_rule_1s_scope_has_no_dead_alternation": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Rule 4 went inert because its scope named an evacuated tree. Rule 1 carried"
+    },
+    "test_rule_4s_subject_really_is_absent_from_the_tree": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The whole basis for the retirement. If `engine/params/` ever returns \u2014 its"
+    },
+    "test_rules_1_to_3_are_still_present_and_rule_4_is_gone": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The direct expected-delta assertion: three rules in, one out."
+    },
+    "test_the_gate_still_runs_and_still_reports": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Non-vacuity: the gate executes and produces its success line. A gate that"
+    },
+    "test_the_retirement_note_does_not_overclaim": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "\u00a70.1 point 3 applied to a tombstone."
     }
    }
   },
@@ -3359,7 +3669,7 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 100,
+   "loc": 138,
    "modules_under_test": [
     "references",
     "references/module_contracts.yaml",
@@ -3392,7 +3702,7 @@
     },
     "test_severity_is_single_owned_no_inline_copy_remains": {
      "assertionless": false,
-     "assertions": 2,
+     "assertions": 4,
      "summary": "No site may recompute the rule. The `startswith('flag')` idiom must be gone from live code."
     },
     "test_unknown_token_fails_loudly_and_names_itself": {
@@ -9522,6 +9832,130 @@
     }
    }
   },
+  "test_status_reader_one_owner.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The EXPECTED-DELTA test for plan step G8 (ED-IN-0159 \u00a71.3a).",
+   "helper_loc": 15,
+   "helpers": [
+    {
+     "loc": 4,
+     "name": "tracked_md"
+    },
+    {
+     "loc": 5,
+     "name": "read"
+    },
+    {
+     "loc": 6,
+     "name": "_status_re_line"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN",
+    "PC"
+   ],
+   "loc": 371,
+   "modules_under_test": [
+    "engine",
+    "engine/sim_reference_CONVENTIONS.md",
+    "references",
+    "references/restructure_ledger.md",
+    "systems",
+    "systems/combat/combat_engine_v1/README.md",
+    "systems/engine",
+    "systems/factions/faction_canon_v30.md",
+    "systems/ui/valoria_ui_ux_v4.md",
+    "tools",
+    "tools/observability",
+    "tools/skills"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 15,
+   "tests": {
+    "test_a_doc_with_two_contradictory_status_lines_is_still_reported": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The concrete case that made \"scan every Status line\" load-bearing."
+    },
+    "test_build_identifier_census_delta_is_plus_three_minus_one": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The ONE reader that moves. Both directions asserted by name."
+    },
+    "test_build_identifier_census_superseded_classification_is_unchanged": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The assertion with the real teeth. `doc_status` exists to gate a SUPERSEDED"
+    },
+    "test_build_incompleteness_delta_is_none_in_its_own_scope": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "The direction the plan explicitly warned could shrink silently."
+    },
+    "test_ci_generation_consistency_delta_is_none": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Its regex was ALREADY equivalent to the owner. \u00a71.3a counted it as a"
+    },
+    "test_dashboard_data_has_no_independent_status_regex": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Correction 1: \u00a71.3a's fifth reader does not exist."
+    },
+    "test_every_disputed_doc_still_exists": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "If one is renamed or removed, the accounting below silently stops meaning"
+    },
+    "test_only_one_status_regex_is_compiled_in_the_whole_tooling_tier": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The recurrence guard. \u00a71.3a's own framing is that this primitive was"
+    },
+    "test_the_disputed_seven_are_exactly_build_identifier_census_blind_spot": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The whole of \u00a71.3a's disputed set, explained by ONE cause."
+    },
+    "test_the_one_lost_document_is_a_legend_not_a_status": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A loss has to be justified, not just counted. This file's `## Status:` line"
+    },
+    "test_the_seven_are_partitioned_with_nothing_left_over": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_the_three_real_statuses_are_now_visible": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "GAIN direction. Each was a genuine document status that the two-hash regex"
+    },
+    "test_the_two_document_defects_are_still_open_and_named": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "G8 does NOT close these, and saying so is the point."
+    },
+    "test_the_two_false_positives_stay_out": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "LOSS direction, and the reason the window is not simply widened."
+    },
+    "test_window_choice_is_the_one_that_flips_no_superseded_classification": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "Correction 3, and the justification for STATUS_HEAD_LINES = 80."
+    }
+   }
+  },
   "test_stochastic_rout.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -11045,12 +11479,12 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 3,
+   "FA": 4,
    "FI": 1,
    "GO": 2,
-   "IN": 33,
+   "IN": 36,
    "MB": 4,
-   "PC": 6,
+   "PC": 7,
    "SC": 2,
    "SE": 2,
    "WR": 2
@@ -11172,16 +11606,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 147,
-  "files_citing_a_measurement": 14,
+  "files": 151,
+  "files_citing_a_measurement": 16,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 106,
+  "files_naming_a_module": 110,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 36,
-  "helper_defs": 271,
-  "helper_loc": 2443,
+  "files_with_a_lane": 39,
+  "helper_defs": 278,
+  "helper_loc": 2485,
   "ratchet_baselines": 9,
-  "tests": 1286,
+  "tests": 1343,
   "undocumented_files": 0
  }
 }

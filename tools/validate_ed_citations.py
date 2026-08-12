@@ -43,11 +43,22 @@ tests/hooks/ on 2026-08-01, ED-IN-0119: it was live and passing and nothing ran 
 """
 import os, re, sys, json, argparse
 
-REPO = 'jordanelias/ttrpg'
+# (Removed 2026-08-12, ED-IN-0165: a dead `REPO = 'jordanelias/ttrpg'` GitHub slug —
+# a THIRD meaning of the name `REPO` in a tier where it now means the repo root, with
+# no reader. G7 edited this file and did not notice; an adversarial pass did.)
 
 # Lane roster for the ED-<LANE>-NNNN namespace (references/id_reservations.yaml is the
 # source of truth for allocation; kept here too since the regex needs the closed set).
-LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+# ONE OWNER: ci_common.LANE_CODES (plan G7, ED-IN-0159 §8.3). Was a verbatim
+# copy of the 9-code tuple; obs_core's header records that one such copy once
+# silently omitted GO, undercounting a whole lane.
+LANE_CODES = ci_common.LANE_CODES
 _LANE_ALT = '|'.join(LANE_CODES)
 
 # Captures compact groups (ED-865/874) and inclusive ranges (ED-844-856 / ED-844–856),

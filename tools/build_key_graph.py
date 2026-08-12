@@ -50,7 +50,13 @@ except ImportError:
     print('[key-graph] pyyaml required', file=sys.stderr)
     raise SystemExit(2)
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+ROOT = ci_common.REPO
 REGISTRY = os.path.join(ROOT, 'systems', '_architecture', 'key_type_registry_v30.md')
 CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
 OUT = os.path.join(ROOT, 'references', 'key_graph.json')
@@ -174,7 +180,7 @@ def load_registry():
 
 def load_contracts():
     """(modules, emitters, consumers) keyed by module id / key type."""
-    d = yaml.safe_load(open(CONTRACTS, encoding='utf-8'))
+    d = ci_common.load_yaml(CONTRACTS)
     rows = d['modules']
     rows = rows if isinstance(rows, list) else list(rows.values())
     modules, em, co = {}, {}, {}

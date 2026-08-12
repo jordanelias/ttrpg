@@ -47,7 +47,13 @@ import re
 import subprocess
 import sys
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+REPO_ROOT = ci_common.REPO
 
 try:
     import broken_dependency_checker as _bdc
@@ -119,7 +125,10 @@ def _ledger_max_ed():
 
 # Lane roster for the ED-<LANE>-NNNN namespace (2026-07-02) — mirrors
 # validate_ed_citations.LANE_CODES / references/id_reservations.yaml.
-LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+# ONE OWNER: ci_common.LANE_CODES (plan G7, ED-IN-0159 §8.3). Was a verbatim
+# copy of the 9-code tuple; obs_core's header records that one such copy once
+# silently omitted GO, undercounting a whole lane.
+LANE_CODES = ci_common.LANE_CODES
 
 
 def _ledger_lane_max():
