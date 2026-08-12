@@ -23,11 +23,11 @@
  "nomenclature": {
   "contracts": {
    "articulation_layer": {
-    "occurrences": 313,
+    "occurrences": 319,
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2214,
+    "occurrences": 2226,
     "qualified": 0
    },
    "campaign_architecture": {
@@ -35,7 +35,7 @@
     "qualified": 0
    },
    "ci_political": {
-    "occurrences": 73,
+    "occurrences": 72,
     "qualified": 0
    },
    "clock_registry": {
@@ -43,11 +43,11 @@
     "qualified": 0
    },
    "domain_actions": {
-    "occurrences": 118,
+    "occurrences": 117,
     "qualified": 0
    },
    "engine_clock": {
-    "occurrences": 128,
+    "occurrences": 129,
     "qualified": 0
    },
    "faction_politics": {
@@ -55,51 +55,51 @@
     "qualified": 0
    },
    "faction_state": {
-    "occurrences": 328,
+    "occurrences": 342,
     "qualified": 0
    },
    "fieldwork_knots": {
-    "occurrences": 68,
+    "occurrences": 70,
     "qualified": 0
    },
    "game_director": {
-    "occurrences": 55,
+    "occurrences": 59,
     "qualified": 0
    },
    "mass_battle": {
-    "occurrences": 2082,
+    "occurrences": 2494,
     "qualified": 0
    },
    "miraculous_event": {
-    "occurrences": 84,
+    "occurrences": 91,
     "qualified": 0
    },
    "npc_behavior": {
-    "occurrences": 636,
+    "occurrences": 649,
     "qualified": 0
    },
    "npc_memory": {
-    "occurrences": 65,
+    "occurrences": 67,
     "qualified": 0
    },
    "peninsular_strain": {
-    "occurrences": 164,
+    "occurrences": 175,
     "qualified": 0
    },
    "personal_combat": {
-    "occurrences": 103,
+    "occurrences": 106,
     "qualified": 0
    },
    "piety_track": {
-    "occurrences": 140,
+    "occurrences": 152,
     "qualified": 0
    },
    "scenario_authoring": {
-    "occurrences": 61,
+    "occurrences": 66,
     "qualified": 0
    },
    "scene_slate": {
-    "occurrences": 181,
+    "occurrences": 197,
     "qualified": 0
    },
    "scene_timer": {
@@ -107,7 +107,7 @@
     "qualified": 0
    },
    "settlement_economy": {
-    "occurrences": 57,
+    "occurrences": 60,
     "qualified": 0
    },
    "settlement_layer": {
@@ -115,24 +115,24 @@
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 1858,
+    "occurrences": 2173,
     "qualified": 0
    },
    "territorial_piety": {
-    "occurrences": 50,
+    "occurrences": 55,
     "qualified": 0
    },
    "threadwork": {
-    "occurrences": 1887,
+    "occurrences": 2238,
     "qualified": 0
    },
    "victory": {
-    "occurrences": 1941,
+    "occurrences": 2101,
     "qualified": 0
    }
   },
-  "contracts_median_occurrences": 128,
-  "keys_median_occurrences": 24
+  "contracts_median_occurrences": 129,
+  "keys_median_occurrences": 27
  },
  "schema_version": 1,
  "subsystems": [

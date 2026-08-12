@@ -21,11 +21,59 @@ docs:
 - systems/npcs/npc_roster_v30.md
 - systems/npcs/npc_roster_v30_index.md
 - systems/npcs/npc_roster_v30_infill.md
+- systems/npcs/npcs_flow_skeleton_v1.md
 counts:
-  UNRESOLVED: 69
+  UNRESOLVED: 76
   SUPERSEDED-DOC: 2
-  BUILT: 1
+  BUILT: 34
 identifiers:
+  action_type:
+    identifier: action_type
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: T6** `[emit]` Append an `NPCAction(action_type='stance_drift', ...)` descriptor.
+    built_in:
+    - py:systems/combat/sim/combat.py
+    - py:systems/settlements/sim/temperaments.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  active_issues:
+    identifier: ACTIVE_ISSUES
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '`systems/world/sim/npe.py:250-259 ACTIVE_ISSUES`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  actor_id:
+    identifier: actor_id
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `select_action(actor_id, world)` | `engine/autoload/npc_ai.py:33 select_action` | `—` (only reached by `engine/tests/test_pipeline_reach.py:763`, a stub-wired-check probe, not a production caller; see §7 gap 2)'
+    built_in:
+    - py:engine/autoload/npc_ai.py
+    - py:engine/cross_scale/articulation.py
+    - py:engine/substrate/keys.py
+    - py:engine/tests/test_thread_mending_ed871.py
+    - py:systems/combat/sim/combat.py
+    - py:systems/threadwork/sim/operations.py
+    - py:systems/threadwork/sim/threadcut.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  adj_pairs:
+    identifier: adj_pairs
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '`systems/world/sim/npe.py:347-354 adj_pairs`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   arc_expansion_v1:
     identifier: arc_expansion_v1
     docs:
@@ -71,6 +119,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  avg_vol:
+    identifier: avg_vol
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '`systems/world/sim/npe.py:356-357 avg_vol`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   axis_matrix:
     identifier: axis_matrix
     docs:
@@ -107,6 +164,27 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  canon_sources:
+    identifier: canon_sources
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: Zero `mechanics_index.yaml` entries resolve into `systems/npcs/` — no mechanic cites any `systems/npcs/` path in `canon_sources` or `sim_module`; the conceptually-matching `npc_ai_service` entry is canon''d and sim''d elsewhere. | `registers/mechanics_index.yaml:192 npc_ai_service`'
+    built_in:
+    - py:tools/ci_generation_consistency.py
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  canonical_accord:
+    identifier: canonical_accord
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: down | `engine/substrate/canon_buckets` | `_ecology_weights` imports `canonical_accord` as a no-deps leaf | `systems/world/sim/npe.py:44 canonical_accord`'
+    built_in:
+    - py:engine/substrate/canon_buckets.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   character_analyses:
     identifier: character_analyses
     docs:
@@ -191,6 +269,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  dev_roll:
+    identifier: dev_roll
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '`systems/world/sim/npe.py:279-305 dev_roll`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  deviation_die_max:
+    identifier: DEVIATION_DIE_MAX
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: S7** `[branch]` Tier-2 deviation roll (`rng.randint(1, DEVIATION_DIE_MAX)`); above threshold,
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   disposition_toward:
     identifier: disposition_toward
     docs:
@@ -227,6 +325,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  evaluate_priority_stack:
+    identifier: evaluate_priority_stack
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `evaluate_priority_stack(actor_id, world)` | `engine/autoload/npc_ai.py:41 evaluate_priority_stack` | `—` (no caller found; see §7 gap 2)'
+    built_in:
+    - py:engine/autoload/npc_ai.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   faction_canon:
     identifier: faction_canon
     docs:
@@ -245,6 +353,25 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  faction_state:
+    identifier: faction_state
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `npc_behavior` sits in an L2 contract-layer cycle with `faction_state`, `piety_track` and `social_contest`, and is itself an L2-layer cut-vertex. | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:338 npc_behavior` · `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:333 npc_behavior`'
+    built_in:
+    - py:systems/factions/sim/hafenmark_equipment.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  flip_choice:
+    identifier: flip_choice
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: Tier-2 deviation''s `flip_choice == 2` branch (hidden allegiance) computes a local `hidden_allegiance` value that is never passed to the `NPC(...)` constructor — the constructor call has no `hidden_allegiance=` kwarg, so this branch is dead: every generated NPC keeps the dataclass default (`None`) regardless of the roll. | `systems/world/sim/npe.py:296-299 '
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   formed_by:
     identifier: formed_by
     docs:
@@ -254,6 +381,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  generate_npc:
+    identifier: generate_npc
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `generate_npc(faction, role, world, territory_id, rng)` | `systems/world/sim/npe.py:215 generate_npc` | `—` (no production call site; see §7 gap 1)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_npcs_in_territory:
+    identifier: get_npcs_in_territory
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `get_npcs_in_territory(territory_id, world)` | `systems/world/sim/npe.py:375 get_npcs_in_territory` | `—` (no caller found; see §7 gap 4)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   hafenmark_procedural:
     identifier: hafenmark_procedural
     docs:
@@ -261,6 +408,16 @@ identifiers:
     purpose: '[§11 Decision Log] # | Decision | Resolution :: **D6** | Baralta (Hafenmark sovereign claimant) misfiled in `migration_roster §2.3` under "Ecclesiastical Faction" with cultural template `ecclesiastical` | **Surface, do not fix.** Per-NPC sheet shows `[CONFLICT: migration_roster §2.3 places under Ecclesiastical with template "ecclesiastical"; npc_behavior §2.3 places her in Hafenmark with Categoric'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  hidden_allegiance:
+    identifier: hidden_allegiance
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: Tier-2 deviation''s `flip_choice == 2` branch (hidden allegiance) computes a local `hidden_allegiance` value that is never passed to the `NPC(...)` constructor — the constructor call has no `hidden_allegiance=` kwarg, so this branch is dead: every generated NPC keeps the dataclass default (`None`) regardless of the roll. | `systems/world/sim/npe.py:296-299 '
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   historical_parallel:
@@ -308,6 +465,27 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  io_contract:
+    identifier: io_contract
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult(module, io_contract, reason)` | arg | caller of `select_action`/`evaluate_priority_stack` — none in production | `engine/autoload/npc_ai.py:34-38 select_action`'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    - py:engine/tests/test_world_population.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  is_arc_vector:
+    identifier: is_arc_vector
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '`is_arc_vector` is set and one of four live axes (Stance / Worldview / Compromise / Volatility)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   lenneth_threadwork_design:
     identifier: lenneth_threadwork_design
     docs:
@@ -390,6 +568,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  npc_ai_service:
+    identifier: npc_ai_service
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `mechanics_index.yaml`''s `npc_ai_service` entry cites `systems/_architecture/complete_systems_reference.md#part-1` as its canon source and marks `test_status: contested`, flagging the priority-stack contents as possibly contaminated pending an audit — a doc↔code divergence the contract layer records but the code carries no trace of (the function bodies are'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   npc_b:
     identifier: NPC_B
     docs:
@@ -407,10 +594,40 @@ identifiers:
     - systems/npcs/npc_behavior_system_v1.md
     - systems/npcs/npc_behavior_v30.md
     - systems/npcs/npc_relational_graph_v30.md
+    - systems/npcs/npcs_flow_skeleton_v1.md
     purpose: '[§10.1 Per-dimension status (per audit 2026-05-07)] Dimension | Status pre-consolidation | This consolidation :: (implicit) Voice anchor | UNEVEN | First-person Beliefs in `npc_behavior §2` pulled into `Beliefs` field. Coverage gaps flagged.'
     built_in: []
     disposition: SUPERSEDED-DOC
     doc_status: SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md (editorial batch acceptance 2026-04-17). Retained as h
+    in_table: true
+  npc_counter:
+    identifier: npc_counter
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:107-109 _next_npc_id` / `engine/mc_v18.py:299 npcs_generated`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  npc_faction:
+    identifier: npc_faction
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '`systems/world/sim/npe.py:243-246 npc_faction`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  npc_memory:
+    identifier: npc_memory
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: The `npc_behavior` module contract (`references/module_contracts.yaml`) declares a full `consumes`/`emits`/`state`/`gates` Key-flow shape (Procedures B/C/D/E — all four declared accounting phases, none implemented) against `sim_module: none` — explicitly re-verified (OI-54, ED-IN-0097) that `systems/npcs/` holds zero `.py` files. None of this declared flow'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
     in_table: true
   npc_roster:
     identifier: npc_roster
@@ -422,6 +639,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  npcs_generated:
+    identifier: npcs_generated
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npc_counter` increment | write | `world` state; read back as `CampaignResult.npcs_generated` telemetry | `systems/world/sim/npe.py:107-109 _next_npc_id` / `engine/mc_v18.py:299 npcs_generated`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  opinion_revised:
+    identifier: opinion_revised
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract''s `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` — see §7 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`'
+    built_in:
+    - key:key_type_registry_v30.md
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   outcome_with_collective_sacrifice:
     identifier: outcome_with_collective_sacrifice
     docs:
@@ -458,6 +695,35 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  piety_high:
+    identifier: PIETY_HIGH
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `PIETY_HIGH`/`PIETY_LOW` are declared but never referenced in `_ecology_weights` or `generate_npc` — the code comment there states Territory has no piety field and prosperity is used as a proxy instead. | `systems/world/sim/npe.py:56-57 PIETY_HIGH` · `systems/world/sim/npe.py:198-199 _ecology_weights`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  piety_low:
+    identifier: PIETY_LOW
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `PIETY_HIGH`/`PIETY_LOW` are declared but never referenced in `_ecology_weights` or `generate_npc` — the code comment there states Territory has no piety field and prosperity is used as a proxy instead. | `systems/world/sim/npe.py:56-57 PIETY_HIGH` · `systems/world/sim/npe.py:198-199 _ecology_weights`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  piety_track:
+    identifier: piety_track
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `npc_behavior` sits in an L2 contract-layer cycle with `faction_state`, `piety_track` and `social_contest`, and is itself an L2-layer cut-vertex. | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:338 npc_behavior` · `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:333 npc_behavior`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   player_agency:
     identifier: player_agency
     docs:
@@ -497,6 +763,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  reset_npcs:
+    identifier: reset_npcs
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `reset_npcs(world)` | `systems/world/sim/npe.py:380 reset_npcs` | `—` (test-helper docstring; no caller found)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   restoration_reformist:
     identifier: restoration_reformist
     docs:
@@ -506,6 +782,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  restore_world:
+    identifier: restore_world
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs[territory_id]` append | write | `world` (persisted via `game_state.serialize_world`/`restore_world`) | `systems/world/sim/npe.py:320-321 store`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   round_half_up:
     identifier: round_half_up
     docs:
@@ -515,6 +801,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  run_accounting:
+    identifier: run_accounting
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `list[NPCAction]` (return value) | arg | `systems/overview/sim/accounting.run_accounting`, which discards it by design | `systems/overview/sim/accounting.py:138 simulate_npc_actions`'
+    built_in:
+    - py:systems/overview/sim/accounting.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   scenario_init:
     identifier: scenario_init
     docs:
@@ -533,6 +829,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  select_action:
+    identifier: select_action
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `select_action(actor_id, world)` | `engine/autoload/npc_ai.py:33 select_action` | `—` (only reached by `engine/tests/test_pipeline_reach.py:763`, a stub-wired-check probe, not a production caller; see §7 gap 2)'
+    built_in:
+    - py:engine/autoload/npc_ai.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  serialize_world:
+    identifier: serialize_world
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs[territory_id]` append | write | `world` (persisted via `game_state.serialize_world`/`restore_world`) | `systems/world/sim/npe.py:320-321 store`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   settlement_adjacency:
     identifier: settlement_adjacency
     docs:
@@ -561,11 +877,41 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  sim_module:
+    identifier: sim_module
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract''s `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` — see §7 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`'
+    built_in:
+    - py:tools/build_key_graph.py
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  simulate_npc_actions:
+    identifier: simulate_npc_actions
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `simulate_npc_actions(world)` | `systems/world/sim/npe.py:325 simulate_npc_actions` | `systems/overview/sim/accounting.py:138 simulate_npc_actions`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   source_section:
     identifier: source_section
     docs:
     - systems/npcs/baralta_v30.md
     purpose: '<!-- atom: solmund_master_document__25__22-faction-response-pathways | section_index: 25 | source_section: "22.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  stance_drift:
+    identifier: stance_drift
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: T6** `[emit]` Append an `NPCAction(action_type='stance_drift', ...)` descriptor.
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -615,6 +961,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  stub_hits:
+    identifier: stub_hits
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `stubwire.invocations` increment | write | `engine/substrate/stubwire.py` module counter, folded into `CampaignResult.stub_hits` | `engine/substrate/stubwire.py:65-66 invocations`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  stub_resolve:
+    identifier: stub_resolve
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `engine/mc_v18` | honest-deferral `stubwire.stub_resolve(''generate_npc(world-gen | season-tick)'', ...)` fired once per season instead of calling `generate_npc` | `engine/mc_v18.py:186-194 stub_resolve`'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   succession_alternate:
     identifier: succession_alternate
     docs:
@@ -633,6 +999,52 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  territory_id:
+    identifier: territory_id
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `generate_npc(faction, role, world, territory_id, rng)` | `systems/world/sim/npe.py:215 generate_npc` | `—` (no production call site; see §7 gap 1)'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    - py:systems/factions/sim/mass_seizure.py
+    - py:systems/factions/sim/parliamentary_transfer.py
+    - py:systems/overview/sim/ci_track.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/temperaments.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  test_generate_npc_has_no_automatic_call_site_this_wave:
+    identifier: test_generate_npc_has_no_automatic_call_site_this_wave
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `generate_npc` has no world-gen or season-tick call site — `engine/mc_v18.py` fires a `stubwire.stub_resolve(''generate_npc(world-gen | season-tick)'', ...)` in its place every season, and a dedicated test pins `npcs_generated == 0` on a seeded campaign. Only `simulate_npc_actions` (the drift half) is wired. | `engine/mc_v18.py:186-194 stub_resolve` · `engin'
+    built_in:
+    - py:engine/tests/test_world_population.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  test_oi17_full_module_conversions_are_stub_wired:
+    identifier: test_oi17_full_module_conversions_are_stub_wired
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine/autoload/npc_ai.py`''s two declared entry points (`select_action`, `evaluate_priority_stack`) are unconditional `stubwire.stub_resolve` no-ops with no branching and no production caller anywhere in `engine/`, `systems/`, or `tests/` — the only reference outside the module itself is a test asserting the stub-wired shape, not a live call. | `engine/au'
+    built_in:
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  test_status:
+    identifier: test_status
+    docs:
+    - systems/npcs/npcs_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `mechanics_index.yaml`''s `npc_ai_service` entry cites `systems/_architecture/complete_systems_reference.md#part-1` as its canon source and marks `test_status: contested`, flagging the priority-stack contents as possibly contaminated pending an audit — a doc↔code divergence the contract layer records but the code carries no trace of (the function bodies are'
+    built_in:
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   thread_witnessed:
     identifier: thread_witnessed
     docs:
@@ -693,6 +1105,7 @@ dropped_as_not_a_mechanic:
   alias_registry: matches a tracked/aliased document stem
   baralta_v30: the doc spells it as <name>.md — a citation
   campaign_architecture_v1: the doc spells it as <name>.md — a citation
+  canon_buckets: matches a tracked/aliased document stem
   canonical_sha: boilerplate-or-too-short
   canonical_sources: boilerplate-or-too-short
   canonical_tokens: boilerplate-or-too-short
@@ -703,6 +1116,7 @@ dropped_as_not_a_mechanic:
   combat_engine_v1: matches a tracked/aliased document stem
   combat_v30: matches a tracked/aliased document stem
   companion_specification_v30: the doc spells it as <name>.md — a citation
+  complete_systems_reference: the doc spells it as <name>.md — a citation
   conflict_architecture_proposal: matches a tracked/aliased document stem
   conviction_axis_matrix_v30: the doc spells it as <name>.md — a citation
   conviction_migration_roster_v30: the doc spells it as <name>.md — a citation
@@ -716,12 +1130,17 @@ dropped_as_not_a_mechanic:
   faction_politics_v30: matches a tracked/aliased document stem
   factions_personal: matches a tracked/aliased document stem
   fieldwork_v30: matches a tracked/aliased document stem
+  game_state: matches a tracked/aliased document stem
   marriage_v30: the doc spells it as <name>.md — a citation
   mass_battle: matches a module or path component
   mass_battle_v30: the doc spells it as <name>.md — a citation
   mass_combat: matches a tracked/aliased document stem
+  mc_v18: matches a tracked/aliased document stem
+  mechanics_index: boilerplate-or-too-short
   miraculous_event_v30: the doc spells it as <name>.md — a citation
+  module_contracts: boilerplate-or-too-short
   ms_budget: matches a tracked/aliased document stem
+  npc_ai: matches a tracked/aliased document stem
   npc_behavior_system_v1: the doc spells it as <name>.md — a citation
   npc_behavior_v30: the doc spells it as <name>.md — a citation
   npc_behavior_v30_infill: the doc spells it as <name>.md — a citation
@@ -760,6 +1179,12 @@ dropped_as_not_a_mechanic:
   solmund_v30: the doc spells it as <name>.md — a citation
   solmund_voice_v30: the doc spells it as <name>.md — a citation
   stage6_factions: the doc spells it as <name>.md — a citation
+  structure_audit: matches a tracked/aliased document stem
+  structure_metrics: matches a tracked/aliased document stem
+  subsystem_flow_skeletons_v1: the doc spells it as <name>.md — a citation
+  test_flow_skeletons: matches a tracked/aliased document stem
+  test_pipeline_reach: matches a tracked/aliased document stem
+  test_world_population: matches a tracked/aliased document stem
   threadwork_redesign_v25: the doc spells it as <name>.md — a citation
   threadwork_v30: matches a tracked/aliased document stem
   throughlines_meta: matches a tracked/aliased document stem

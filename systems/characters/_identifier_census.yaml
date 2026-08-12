@@ -7,6 +7,7 @@ docs:
 - systems/characters/character_histories_v30.md
 - systems/characters/character_histories_v30_index.md
 - systems/characters/character_histories_v30_infill.md
+- systems/characters/characters_flow_skeleton_v1.md
 - systems/characters/conviction_axis_matrix_v30.md
 - systems/characters/conviction_migration_roster_v30.md
 - systems/characters/conviction_taxonomy_v30.md
@@ -16,9 +17,19 @@ docs:
 - systems/characters/conviction_track_v30_index.md
 - systems/characters/conviction_track_v30_infill.md
 counts:
-  UNRESOLVED: 43
-  BUILT: 2
+  UNRESOLVED: 45
+  BUILT: 37
 identifiers:
+  add_belief:
+    identifier: add_belief
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `beliefs.add_belief` | `systems/characters/sim/beliefs.py:121 add_belief` | — (see §7 gap 2)'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   altonian_imperial:
     identifier: altonian_imperial
     docs:
@@ -28,6 +39,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  apply_conviction_scar:
+    identifier: apply_conviction_scar
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.apply_conviction_scar` | `systems/characters/sim/conviction.py:167 apply_conviction_scar` | `systems/fieldwork/sim/knots.py:350 apply_conviction_scar` (late-imported at :348) — see §7 gap 1'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_knot_loss:
+    identifier: apply_knot_loss
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: in | `fieldwork` (FI) | `systems/fieldwork/sim/knots.py` late-imports and calls `conviction.apply_conviction_scar` from `apply_knot_loss`''s break-consequence branch | `systems/fieldwork/sim/knots.py:348-352 apply_knot_loss`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   armature_position:
     identifier: armature_position
     docs:
@@ -46,6 +77,27 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  belief_id:
+    identifier: belief_id
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `belief_id`, `new_position`, `evidence` | arg | caller | `systems/characters/sim/beliefs.py:140-141 revise_belief`'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  build_contest:
+    identifier: build_contest
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 1. No production entry point currently exercises the subsystem''s core mechanics. `apply_conviction_scar`''s only caller, `knots.apply_knot_loss`, itself has zero production callers (only `engine/tests/test_knots_ed912.py:106`, `engine/tests/test_knots_ed912.py:112`, `engine/tests/test_knots_ed912.py:115`, `engine/tests/test_knots_ed912.py:121`). `social_success`''s'
+    built_in:
+    - py:systems/social_contest/sim/contest/wrapper.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   character_analyses:
     identifier: character_analyses
     docs:
@@ -64,6 +116,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  check_conviction_threshold:
+    identifier: check_conviction_threshold
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.check_conviction_threshold` | `systems/characters/sim/conviction.py:231 check_conviction_threshold` | — (see §7 gap 5)'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   conviction_axis_matrix:
     identifier: CONVICTION_AXIS_MATRIX
     docs:
@@ -73,6 +135,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  conviction_scar:
+    identifier: conviction_scar
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 7. `apply_conviction_scar`''s nearest-to-production call site carries a bug independent of gap 1''s wiring: `knots.apply_knot_loss` calls it with `conviction=''Loyalty''`, which is not a member of the module''s `CONVICTIONS` tuple (`Faith`, `Order`, `Reason`, `Equity`, `Precedent`, `Autonomy`, `Continuity`, `Community`, `Warden`). Every such call therefore takes the `'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   conviction_stress_01:
     identifier: conviction_stress_01
     docs:
@@ -90,6 +162,16 @@ identifiers:
     built_in:
     - py:tools/build_key_graph.py
     - py:tools/observability/build_graph.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  create_world:
+    identifier: create_world
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: S7.1 `create_world` builds a fresh `World`; `convictions`/`beliefs` default to empty dicts and are not populated during world-gen.
+    built_in:
+    - py:engine/autoload/game_state.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -140,6 +222,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  current_momentum:
+    identifier: current_momentum
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `aligned` (bool), `current_momentum` (int) | arg | caller | `systems/characters/sim/beliefs.py:189-190 social_success`'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   dice_bonus:
     identifier: dice_bonus
     docs:
@@ -148,6 +240,20 @@ identifiers:
     purpose: '[Skill Level Design Principle] Level | Gate | Design :: 2 | dice_bonus ≥ 3 + spark at Ob 3+ | Quantitative enhancement'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  echo_scheduler:
+    identifier: echo_scheduler
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 3. Code↔contract divergence: `references/module_contracts.yaml`''s `piety_track` entry declares `conviction.py` as a Key-substrate consumer of 9 Key types and an emitter of `state.scar_acquired`, but `conviction.py`/`beliefs.py`/`companion.py` contain no Key subscription, `echo_scheduler`/`TickScheduler` reference, or `.emit(` call anywhere — the module is a plain'
+    built_in:
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_parliamentary_bridge.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   effective_convictions:
@@ -169,6 +275,56 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  final_state:
+    identifier: final_state
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state[''convictions''/''beliefs'']` | return value | nothing reads these two keys downstream — see §7 gap 2 | `engine/mc_v18.py:307 final_state`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  from_dict:
+    identifier: from_dict
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` — see §7 gap 4'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    - py:systems/factions/sim/treaty.py
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/registry.py
+    - py:systems/threadwork/sim/coherence.py
+    - py:systems/threadwork/sim/threadcut.py
+    - py:systems/world/sim/insurgency_pipeline.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_active_beliefs:
+    identifier: get_active_beliefs
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `beliefs.get_active_beliefs` | `systems/characters/sim/beliefs.py:237 get_active_beliefs` | —'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_state:
+    identifier: get_state
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.get_state` | `systems/characters/sim/conviction.py:264 get_state` | —'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    - py:systems/threadwork/sim/coherence.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   hafenmark_procedural:
     identifier: hafenmark_procedural
     docs:
@@ -178,6 +334,26 @@ identifiers:
     purpose: 'cultural_label: hafenmark_procedural'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  in_crisis:
+    identifier: in_crisis
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `ConvictionState.in_crisis` | RW | `systems/characters/sim/conviction.py` | `systems/characters/sim/conviction.py:117`, `systems/characters/sim/conviction.py:219-220`'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  last_scar_season:
+    identifier: last_scar_season
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `ConvictionState.last_scar_season` | RW | `systems/characters/sim/conviction.py` | `systems/characters/sim/conviction.py:121`, `systems/characters/sim/conviction.py:202`, `systems/characters/sim/conviction.py:214`'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   lowenritter_military:
@@ -209,6 +385,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  mark_belief_revision_pending:
+    identifier: mark_belief_revision_pending
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.mark_belief_revision_pending` | `systems/characters/sim/conviction.py:254 mark_belief_revision_pending` | `systems/characters/sim/beliefs.py:177 mark_belief_revision_pending`, `systems/characters/sim/beliefs.py:228 mark_belief_revision_pending` (both intra-subsystem, late-imported)'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   max_equipped:
     identifier: max_equipped
     docs:
@@ -225,6 +411,16 @@ identifiers:
     purpose: '[Τ — Throughlines] T | Title | Touch | Verdict :: T-09 | Varfell Thread Progressive | Indirect | **Preserves.** Varfell substrate-posture (Honor/Warden load-bearing per migration_roster) responds to axis-specific erosion appropriately.'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  new_position:
+    identifier: new_position
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `belief_id`, `new_position`, `evidence` | arg | caller | `systems/characters/sim/beliefs.py:140-141 revise_belief`'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   npc_behavior:
@@ -275,6 +471,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  pending_belief_revisions:
+    identifier: pending_belief_revisions
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `ConvictionState.pending_belief_revisions` | RW | `systems/characters/sim/conviction.py` | `systems/characters/sim/conviction.py:119 pending_belief_revisions`, `systems/characters/sim/conviction.py:260 mark_belief_revision_pending`, `systems/characters/sim/conviction.py:261 mark_belief_revision_pending`'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   personal_convictions:
     identifier: personal_convictions
     docs:
@@ -295,6 +501,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  piety_track:
+    identifier: piety_track
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 3. Code↔contract divergence: `references/module_contracts.yaml`''s `piety_track` entry declares `conviction.py` as a Key-substrate consumer of 9 Key types and an emitter of `state.scar_acquired`, but `conviction.py`/`beliefs.py`/`companion.py` contain no Key subscription, `echo_scheduler`/`TickScheduler` reference, or `.emit(` call anywhere — the module is a plain'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   primary_convictions:
     identifier: primary_convictions
     docs:
@@ -350,6 +565,38 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  reset_all:
+    identifier: reset_all
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.reset_all` | `systems/characters/sim/conviction.py:268 reset_all` | —'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    - py:systems/threadwork/sim/coherence.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resolve_contest:
+    identifier: resolve_contest
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 1. No production entry point currently exercises the subsystem''s core mechanics. `apply_conviction_scar`''s only caller, `knots.apply_knot_loss`, itself has zero production callers (only `engine/tests/test_knots_ed912.py:106`, `engine/tests/test_knots_ed912.py:112`, `engine/tests/test_knots_ed912.py:115`, `engine/tests/test_knots_ed912.py:121`). `social_success`''s'
+    built_in:
+    - py:systems/social_contest/sim/contest/wrapper.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resonant_active:
+    identifier: resonant_active
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `ConvictionState.resonant_active` | RW | `systems/characters/sim/conviction.py` | `systems/characters/sim/conviction.py:115`, `systems/characters/sim/conviction.py:217-218`'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   restoration_reformist:
     identifier: restoration_reformist
     docs:
@@ -359,6 +606,66 @@ identifiers:
     purpose: 'cultural_label: restoration_reformist'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  restore_world:
+    identifier: restore_world
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` — see §7 gap 4'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  revise_belief:
+    identifier: revise_belief
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `beliefs.revise_belief` | `systems/characters/sim/beliefs.py:140 revise_belief` | — (see §7 gap 5)'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  revision_pressure:
+    identifier: revision_pressure
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Belief.revision_pressure` | RW | `systems/characters/sim/beliefs.py` | `systems/characters/sim/beliefs.py:57`, `systems/characters/sim/beliefs.py:225`'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_companion_scene:
+    identifier: run_companion_scene
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `companion.run_companion_scene` | `systems/characters/sim/companion.py:28 run_companion_scene` | `engine/tests/test_pipeline_reach.py:760 run_companion_scene` (conformance probe only) — see §7 gap 1'
+    built_in:
+    - py:systems/characters/sim/companion.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_contest:
+    identifier: run_contest
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: in | `social_contest` (SC) | `systems/social_contest/sim/contest_legacy_stub.py` late-imports and calls `beliefs.social_success` from `run_contest`''s post-contest resolution | `systems/social_contest/sim/contest_legacy_stub.py:239-247 run_contest`'
+    built_in:
+    - py:systems/social_contest/sim/contest_legacy_stub.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  scar_acquired:
+    identifier: scar_acquired
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 3. Code↔contract divergence: `references/module_contracts.yaml`''s `piety_track` entry declares `conviction.py` as a Key-substrate consumer of 9 Key types and an emitter of `state.scar_acquired`, but `conviction.py`/`beliefs.py`/`companion.py` contain no Key subscription, `echo_scheduler`/`TickScheduler` reference, or `.emit(` call anywhere — the module is a plain'
+    built_in:
+    - key:key_type_registry_v30.md
+    disposition: BUILT
     doc_status: null
     in_table: true
   self_other_initial:
@@ -379,6 +686,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  serialize_world:
+    identifier: serialize_world
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`)'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   settlement_bridge_unification:
     identifier: settlement_bridge_unification
     docs:
@@ -388,6 +705,27 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  sim_module:
+    identifier: sim_module
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 3. Code↔contract divergence: `references/module_contracts.yaml`''s `piety_track` entry declares `conviction.py` as a Key-substrate consumer of 9 Key types and an emitter of `state.scar_acquired`, but `conviction.py`/`beliefs.py`/`companion.py` contain no Key subscription, `echo_scheduler`/`TickScheduler` reference, or `.emit(` call anywhere — the module is a plain'
+    built_in:
+    - py:tools/build_key_graph.py
+    - py:tools/observability/build_graph.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  social_success:
+    identifier: social_success
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `beliefs.social_success` | `systems/characters/sim/beliefs.py:189 social_success` | `systems/social_contest/sim/contest_legacy_stub.py:242 social_success` (late-imported at :240) — see §7 gap 1'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   stage4_southernmost:
     identifier: stage4_southernmost
     docs:
@@ -397,6 +735,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  taxonomy_v30:
+    identifier: taxonomy_v30
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 7. `apply_conviction_scar`''s nearest-to-production call site carries a bug independent of gap 1''s wiring: `knots.apply_knot_loss` calls it with `conviction=''Loyalty''`, which is not a member of the module''s `CONVICTIONS` tuple (`Faith`, `Order`, `Reason`, `Equity`, `Precedent`, `Autonomy`, `Continuity`, `Community`, `Warden`). Every such call therefore takes the `'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   tc_political_redesign:
     identifier: tc_political_redesign
     docs:
@@ -415,6 +762,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  test_ed912_break_disposition_minus3_and_positive_strain_close_scar:
+    identifier: test_ed912_break_disposition_minus3_and_positive_strain_close_scar
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 7. `apply_conviction_scar`''s nearest-to-production call site carries a bug independent of gap 1''s wiring: `knots.apply_knot_loss` calls it with `conviction=''Loyalty''`, which is not a member of the module''s `CONVICTIONS` tuple (`Faith`, `Order`, `Reason`, `Equity`, `Precedent`, `Autonomy`, `Continuity`, `Community`, `Warden`). Every such call therefore takes the `'
+    built_in:
+    - py:engine/tests/test_knots_ed912.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  test_oi17_full_module_conversions_are_stub_wired:
+    identifier: test_oi17_full_module_conversions_are_stub_wired
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: 1. No production entry point currently exercises the subsystem''s core mechanics. `apply_conviction_scar`''s only caller, `knots.apply_knot_loss`, itself has zero production callers (only `engine/tests/test_knots_ed912.py:106`, `engine/tests/test_knots_ed912.py:112`, `engine/tests/test_knots_ed912.py:115`, `engine/tests/test_knots_ed912.py:121`). `social_success`''s'
+    built_in:
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   threadwork_v25:
     identifier: threadwork_v25
     docs:
@@ -424,6 +791,35 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  to_dict:
+    identifier: to_dict
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`)'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    - py:systems/factions/sim/treaty.py
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/registry.py
+    - py:systems/threadwork/sim/coherence.py
+    - py:systems/threadwork/sim/threadcut.py
+    - py:systems/world/sim/insurgency_pipeline.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  underlying_convictions:
+    identifier: underlying_convictions
+    docs:
+    - systems/characters/characters_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `underlying_convictions` (list) | arg (default) | caller | `systems/characters/sim/beliefs.py:123 add_belief`'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   valorian_court:
     identifier: valorian_court
     docs:
@@ -462,6 +858,7 @@ dropped_as_not_a_mechanic:
   combat_design_v1: the doc spells it as <name>.md — a citation
   complete_systems_reference: the doc spells it as <name>.md — a citation
   conflict_architecture_proposal: the doc spells it as <name>.md — a citation
+  contest_legacy_stub: matches a tracked/aliased document stem
   conviction_axis_matrix_v30: the doc spells it as <name>.md — a citation
   conviction_migration_roster_v30: matches a tracked/aliased document stem
   conviction_taxonomy_v30: matches a tracked/aliased document stem
@@ -469,13 +866,17 @@ dropped_as_not_a_mechanic:
   conviction_track_v1_pp718_vetting: the doc spells it as <name>.md — a citation
   conviction_track_v30: the doc spells it as <name>.md — a citation
   conviction_track_v30_infill: the doc spells it as <name>.md — a citation
+  cross_scale: matches a tracked/aliased document stem
   doc_index_gen: matches a tracked/aliased document stem
   editorial_ledger: boilerplate-or-too-short
   faction_behavior_v30: matches a tracked/aliased document stem
   faction_canon_v30: matches a tracked/aliased document stem
+  game_state: matches a tracked/aliased document stem
   history_skill_integration: the doc spells it as <name>.md — a citation
   key_substrate_v30: the doc spells it as <name>.md — a citation
   mass_battle_v3: the doc spells it as <name>.md — a citation
+  mc_v18: matches a tracked/aliased document stem
+  module_contracts: boilerplate-or-too-short
   npc_behavior_v30: the doc spells it as <name>.md — a citation
   npc_character_analyses_v30: the doc spells it as <name>.md — a citation
   opus_design_proposal: the doc spells it as <name>.md — a citation
@@ -483,13 +884,19 @@ dropped_as_not_a_mechanic:
   patch_register: boilerplate-or-too-short
   piety_track_v30: the doc spells it as <name>.md — a citation
   scale_transitions_v30: the doc spells it as <name>.md — a citation
+  scene_dispatch: matches a tracked/aliased document stem
   settlement_layer_v30: the doc spells it as <name>.md — a citation
+  social_contest: matches a module or path component
   social_contest_system_v2: the doc spells it as <name>.md — a citation
   social_contest_v30: the doc spells it as <name>.md — a citation
   solmund_v30: the doc spells it as <name>.md — a citation
   stage6_factions: the doc spells it as <name>.md — a citation
   supersession_register: matches a tracked/aliased document stem
   tc_political_redesign_v30: matches a tracked/aliased document stem
+  test_flow_skeletons: matches a tracked/aliased document stem
+  test_knots_ed912: matches a tracked/aliased document stem
+  test_pipeline_reach: matches a tracked/aliased document stem
+  test_world_population: matches a tracked/aliased document stem
   threadwork_redesign_v25: the doc spells it as <name>.md — a citation
   threadwork_v30: the doc spells it as <name>.md — a citation
   throughlines_meta: the doc spells it as <name>.md — a citation

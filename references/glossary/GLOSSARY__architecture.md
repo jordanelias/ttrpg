@@ -4,13 +4,14 @@
 
 # Glossary — `_architecture`
 
-**707 terms** appear in this subsystem; **100** carry a curated definition. A term used by several subsystems is listed in each, with cross-references — the repetition is the point.
+**774 terms** appear in this subsystem; **100** carry a curated definition. A term used by several subsystems is listed in each, with cross-references — the repetition is the point.
 
 Files column shows this subsystem's docs only (basenames). Full paths for every term are in [`glossary.json`](glossary.json). Master index: [MASTER_GLOSSARY.md](MASTER_GLOSSARY.md).
 
 | Term | Definition | In this subsystem | Also in |
 |---|---|---|---|
 | **abstract_resolve** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **accord_applied** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **accord_delta** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · BUILT |
 | **accord_echo** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md), [settlements](GLOSSARY_settlements.md) · BUILT |
 | **accounting_boundary** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `key_echo_armature_v1.md` +2 | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
@@ -24,6 +25,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **actor_ids** | _no curated definition_ | `key_type_registry_v30.md`, `propagation_spec_v1.md` | [combat](GLOSSARY_combat.md) · UNRESOLVED |
 | **actors_in_scale** | _no curated definition_ | `key_substrate_v30.md`, `propagation_spec_v1.md`, `scale_transitions_v30.md` | _local only_ · UNRESOLVED |
 | **Acuity** | _no curated definition_ | `integration_proposal_v30.md` | _local only_ · alias: Reasoning, Cognition |
+| **add_belief** | _no curated definition_ | `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md) · BUILT |
 | **add_edge** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **advance_season** | _no curated definition_ | `engine_atlas_v1.md`, `propagation_spec_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md), [world](GLOSSARY_world.md) · BUILT |
 | **affect_axis** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
@@ -44,12 +46,18 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **anti_aligned** | _no curated definition_ | `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md) · UNRESOLVED |
 | **antinomian_action** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · BUILT |
 | **append_echo_key** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
+| **apply_ci_delta** | _no curated definition_ | `engine_atlas_v1.md` | [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md) · BUILT |
+| **apply_conviction_scar** | _no curated definition_ | `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [fieldwork](GLOSSARY_fieldwork.md) · BUILT |
+| **apply_defaults** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
+| **apply_handoff** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [threadwork](GLOSSARY_threadwork.md) · BUILT |
+| **apply_ip_delta** | _no curated definition_ | `engine_atlas_v1.md` | [overview](GLOSSARY_overview.md) · BUILT |
+| **apply_knot_loss** | _no curated definition_ | `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [fieldwork](GLOSSARY_fieldwork.md) · BUILT |
 | **apply_rs_delta** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `key_type_registry_v30.md` | [overview](GLOSSARY_overview.md) · BUILT |
 | **apply_state_changes** | _no curated definition_ | `key_substrate_v30.md`, `propagation_spec_v1.md`, `scale_transitions_v30.md` | _local only_ · UNRESOLVED |
 | **Arc** | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in arcs/. See `arcs/arc_expansion_v30.md`. | `campaign_modes_v30.md`, `campaign_modes_v30_infill.md`, `complete_systems_reference.md` +7 | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) |
 | **armature_position** | _no curated definition_ | `key_substrate_v30.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [social_contest](GLOSSARY_social_contest.md) · UNRESOLVED |
 | **armour_mod** | _no curated definition_ | `derived_stats_v30.md` | _local only_ · UNRESOLVED |
-| **articulation_layer** | Tier 1 Protagonist UI Lens / Tier 2 Trigger Ruleset / Tier 3 Chronicle Generator. | `_architecture_flow_skeleton_v1.md` | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md) |
+| **articulation_layer** | Tier 1 Protagonist UI Lens / Tier 2 Trigger Ruleset / Tier 3 Chronicle Generator. | `_architecture_flow_skeleton_v1.md` | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md) · UNRESOLVED |
 | **articulation_significance** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · BUILT |
 | **Askeheim** | _no curated definition_ | `canonical_registry.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **assessed_base** | _no curated definition_ | `governance_ripple_substrate_v1.md` | [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
@@ -74,7 +82,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **block_size** | _no curated definition_ | `derived_stats_v30.md` | [mass_battle](GLOSSARY_mass_battle.md) · BUILT |
 | **Board Game** (`BG`) | **Exception — abbreviation permitted standalone.** Strategic layer of the Valoria videogame. | `campaign_modes_v30.md`, `campaign_modes_v30_infill.md`, `hybrid_gaps_v30.md` +3 | [combat](GLOSSARY_combat.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) |
 | **Bonds** | _no curated definition_ | `canonical_registry.md`, `cogload_moderate_target.md`, `complete_systems_reference.md` +4 | [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) · alias: Sincerity, Affability |
-| **build_contest** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [characters](GLOSSARY_characters.md), [social_contest](GLOSSARY_social_contest.md) |
+| **build_contest** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [characters](GLOSSARY_characters.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **build_review_state** | _no curated definition_ | `repo_state_armature_v1.md` | _local only_ · BUILT |
 | **by_actor** | _no curated definition_ | `key_type_registry_v30.md` | [combat](GLOSSARY_combat.md) · UNRESOLVED |
 | **by_axis_relevance** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
@@ -83,6 +91,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **Campaign Architecture** | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. | `campaign_architecture_v30.md`, `campaign_architecture_v30_index.md` | _local only_ |
 | **campaign_architecture** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `campaign_architecture_v30.md` | [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
 | **campaign_id** | _no curated definition_ | `key_type_registry_v30.md` | [ui](GLOSSARY_ui.md) · UNRESOLVED |
+| **canonical_accord** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
 | **canonical_key_log** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
 | **capturing_faction_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **card_cooldown_expired** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
@@ -99,12 +108,16 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **cause_id** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **cause_key** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **cause_keys** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **caused_by_key_id** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **center_actor** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **challenger_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **character_histories** | _no curated definition_ | `derived_stats_v30.md` | [threadwork](GLOSSARY_threadwork.md) · UNRESOLVED |
 | **Charisma** | _no curated definition_ | `campaign_architecture_v30.md`, `canonical_registry.md`, `companion_app_design_note.md` +3 | [fieldwork](GLOSSARY_fieldwork.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) · alias: Influence, Presence |
+| **check_all_factions** | _no curated definition_ | `engine_atlas_v1.md` | [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [victory](GLOSSARY_victory.md) · BUILT |
 | **check_ci_registry_coverage** | _no curated definition_ | `repo_state_armature_v1.md` | _local only_ · BUILT |
+| **check_insurgency_triggers** | _no curated definition_ | `engine_atlas_v1.md` | [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
 | **check_mandatory_triggers** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `auto_manual_resolution_duality_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
+| **check_peninsular_sovereignty** | _no curated definition_ | `engine_atlas_v1.md` | [victory](GLOSSARY_victory.md) · BUILT |
 | **check_victory** | _no curated definition_ | `canonical_registry.md` | [godot](GLOSSARY_godot.md) · UNRESOLVED |
 | **Church** | _no curated definition_ | `campaign_architecture_v30.md`, `campaign_architecture_v30_index.md`, `campaign_modes_v30.md` +19 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · ⚠️ broad (148 files) |
 | **Church Influence** (`CI`) | Church political dominance accumulation. Church-specific clock. Per `designs/provincial/ci_political_v30.md` §2.1 (canonical). **Renamed from "Church Influence" (CI) per ED-782.** Old 75 = Phase Transition / Territorial Seizure threshold REMOVED — Mass Seizure now probabilistic from CI ≥ 60. | `campaign_modes_v30.md`, `campaign_modes_v30_infill.md`, `canonical_registry.md` +3 | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) · 1 legacy spelling — see names_index.yaml |
@@ -114,6 +127,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **ci_political** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
 | **ci_track** | Church Influence world-track. SW-weighted CI generation per Tier 2 gap. | `engine_atlas_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [world](GLOSSARY_world.md) |
 | **ci_value** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **classify_scene_outcome** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [settlements](GLOSSARY_settlements.md) · BUILT |
 | **clock_advance** | _no curated definition_ | `propagation_spec_v1.md` | [godot](GLOSSARY_godot.md) · UNRESOLVED |
 | **clock_registry** | _no curated definition_ | `campaign_architecture_v30.md` | [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) · UNRESOLVED |
 | **cluster_pair** | _no curated definition_ | `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md) · UNRESOLVED |
@@ -151,6 +165,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **Consequence** | _no curated definition_ | `complete_systems_reference.md`, `derived_stats_v30.md`, `governance_ripple_substrate_v1.md` +3 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) |
 | **consolidation_progress** | _no curated definition_ | `governance_ripple_substrate_v1.md`, `governance_type_registry_v1.md` | _local only_ · UNRESOLVED |
 | **consuming_systems** | _no curated definition_ | `governance_type_registry_v1.md`, `key_type_registry_v30.md`, `propagation_spec_v1.md` | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md) · BUILT |
+| **content_hash** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **contest_resolved** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_echo_armature_v1.md`, `key_substrate_v30.md` +1 | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [ui](GLOSSARY_ui.md) · BUILT |
 | **contingent_on_unauthored_engine_clock** | _no curated definition_ | `ners_vsg_reconciliation_v1.md` | _local only_ · UNRESOLVED |
 | **Continuity** | _no curated definition_ | `complete_systems_reference.md`, `derived_stats_v30.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md) |
@@ -191,6 +206,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **deliberate_silent** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
 | **depth_exceeded** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **depth_limit** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
+| **derive_parties** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [combat](GLOSSARY_combat.md) · BUILT |
 | **derived_flags** | _no curated definition_ | `governance_type_registry_v1.md` | _local only_ · UNRESOLVED |
 | **derived_stats** | _no curated definition_ | `derived_stats_v30.md`, `governance_ripple_substrate_v1.md` | [fieldwork](GLOSSARY_fieldwork.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · UNRESOLVED |
 | **derived_value** | _no curated definition_ | `derived_stats_v30.md` | _local only_ · UNRESOLVED |
@@ -201,6 +217,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **diplomatic_alliance** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · BUILT |
 | **disaster_type** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Discipline** | Unit organisational integrity (replaces Cohesion, PP-232). Contribution to Health per Size capped at Command. | `canonical_registry.md`, `cogload_moderate_target.md`, `companion_app_design_note.md` +3 | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · 1 legacy spelling — see names_index.yaml |
+| **dispatch_combat_bridge** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [combat](GLOSSARY_combat.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **dispatch_scenes** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `propagation_spec_v1.md` | _local only_ · BUILT |
 | **displaced_by** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **displaced_relation** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
@@ -216,24 +233,30 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **Domain Echo** | Faction-level consequence triggered by decisive Debate outcomes. | `campaign_modes_v30.md`, `complete_systems_reference.md`, `derived_stats_v30.md` +13 | [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **domain_actions** | _no curated definition_ | `governance_ripple_substrate_v1.md`, `key_echo_armature_v1.md`, `key_type_registry_v30.md` +2 | [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
 | **domain_echo** | Scene -> Faction propagation. ED-300 autonomous resolution. | `_architecture_flow_skeleton_v1.md`, `key_echo_armature_v1.md`, `propagation_spec_v1.md` +1 | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) |
+| **domain_echoes** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [godot](GLOSSARY_godot.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
+| **domain_echoes_queued** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **Doux Alexios Laskaris** | _no curated definition_ | `campaign_architecture_v30.md` | [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md) · alias: Laskaris |
 | **draft_da** | _no curated definition_ | `key_echo_armature_v1.md`, `key_substrate_v30.md`, `key_type_registry_v30.md` | [godot](GLOSSARY_godot.md) · BUILT |
 | **drain_emission_queue** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
+| **drain_tick** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **drift_a_to_b** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **drift_b_to_a** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **driver_memory_refs** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **Duchess Inge Baralta** | _no curated definition_ | `complete_systems_reference.md` | [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) · alias: Baralta |
 | **Duke Magnus Vaynard** | _no curated definition_ | `complete_systems_reference.md` | [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [world](GLOSSARY_world.md) · alias: Vaynard, Duke |
 | **duration_seasons** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **echo_scheduler** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **economic_intervention** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · BUILT |
 | **Edeyja** | _no curated definition_ | `campaign_architecture_v30.md`, `complete_systems_reference.md`, `derived_stats_v30.md` +2 | [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) |
 | **effective_convictions** | _no curated definition_ | `key_substrate_v30.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md) · UNRESOLVED |
 | **effective_damage** | _no curated definition_ | `derived_stats_v30.md` | [mass_battle](GLOSSARY_mass_battle.md) · UNRESOLVED |
+| **effective_params** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [articulation](GLOSSARY_articulation.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [victory](GLOSSARY_victory.md) · BUILT |
 | **Ehrenfeld** | _no curated definition_ | `canonical_registry.md`, `conflict_architecture_proposal.md`, `early_game_ignition_analysis.md` +1 | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **Einhir** | Pre-colonial indigenous culture of the Southernmost territories. Cultural/political axis. | `campaign_architecture_v30.md`, `conflict_architecture_proposal.md`, `derived_stats_v30.md` +3 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) · alias: Southern Einhir, Southern Einhir Descendant, Einhir Lore; ⚠️ broad (77 files) |
 | **elapsed_ms** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · BUILT |
 | **elective_high** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **emit_clause** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
+| **emit_scene_echo** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **emitted_at** | _no curated definition_ | `key_substrate_v30.md`, `propagation_spec_v1.md` | [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md) · BUILT |
 | **emitting_systems** | _no curated definition_ | `governance_type_registry_v1.md`, `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md) · BUILT |
 | **ended_by** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
@@ -244,6 +267,8 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **equipment_health** | _no curated definition_ | `derived_stats_v30.md` | [proposals](GLOSSARY_proposals.md) · BUILT |
 | **Equity** | _no curated definition_ | `complete_systems_reference.md` | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md) |
 | **era_transition** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
+| **evaluate_articulation_triggers** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [articulation](GLOSSARY_articulation.md) · BUILT |
+| **evaluate_priority_stack** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [npcs](GLOSSARY_npcs.md) · BUILT |
 | **evaluate_triggers** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `propagation_spec_v1.md` | [combat](GLOSSARY_combat.md), [fieldwork](GLOSSARY_fieldwork.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **event_architecture_fork** | _no curated definition_ | `ners_vsg_reconciliation_v1.md` | _local only_ · UNRESOLVED |
 | **event_impact** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
@@ -265,6 +290,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **faction_politics** | _no curated definition_ | `governance_ripple_substrate_v1.md`, `key_echo_armature_v1.md`, `key_type_registry_v30.md` +2 | [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) · UNRESOLVED |
 | **faction_stat** | _no curated definition_ | `propagation_spec_v1.md` | [social_contest](GLOSSARY_social_contest.md) · UNRESOLVED |
 | **faction_state** | _no curated definition_ | `engine_atlas_v1.md`, `governance_ripple_substrate_v1.md`, `key_echo_armature_v1.md` | [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) · BUILT |
+| **faction_take_action** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **factions_processed** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **failed_counterattack** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **failed_mandate_floor** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
@@ -275,12 +301,15 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **fieldwork** | Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure. | `_architecture_flow_skeleton_v1.md`, `canonical_registry.md`, `derived_stats_v30.md` +10 | [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) · ⚠️ broad (66 files) |
 | **fieldwork_hybrid** | _no curated definition_ | `scale_transitions_v30.md` | [fieldwork](GLOSSARY_fieldwork.md), [ui](GLOSSARY_ui.md) |
 | **fieldwork_knots** | _no curated definition_ | `governance_ripple_substrate_v1.md` | [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md) · UNRESOLVED |
+| **final_state** | _no curated definition_ | `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [fieldwork](GLOSSARY_fieldwork.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · BUILT |
 | **finding_basis** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
 | **floor_mean** | _no curated definition_ | `governance_type_registry_v1.md` | _local only_ · UNRESOLVED |
 | **Focus** | Attribute governing Thread contact economy — see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description). | `canonical_registry.md`, `companion_app_design_note.md`, `complete_systems_reference.md` +2 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) |
 | **follow_on** | _no curated definition_ | `governance_ripple_substrate_v1.md` | [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
+| **form_knot** | _no curated definition_ | `engine_atlas_v1.md` | [fieldwork](GLOSSARY_fieldwork.md), [overview](GLOSSARY_overview.md), [world](GLOSSARY_world.md) · BUILT |
 | **formation_scene_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Fort Level** | _no curated definition_ | `canonical_registry.md`, `derived_stats_v30.md`, `integration_proposal_v30.md` | [characters](GLOSSARY_characters.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) · alias: Fort |
+| **from_scale** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **g_ci100** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **g_def0** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **g_diss** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | [victory](GLOSSARY_victory.md) · UNRESOLVED |
@@ -295,6 +324,8 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **gap_note** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | [fieldwork](GLOSSARY_fieldwork.md) · UNRESOLVED |
 | **gap_notes** | _no curated definition_ | `key_type_registry_v30.md`, `propagation_spec_v1.md` | [victory](GLOSSARY_victory.md) · BUILT |
 | **gen_definition_views** | _no curated definition_ | `repo_state_armature_v1.md` | _local only_ · UNRESOLVED |
+| **generate_chronicle_entry** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [articulation](GLOSSARY_articulation.md) · BUILT |
+| **generate_npc** | _no curated definition_ | `engine_atlas_v1.md`, `subsystem_flow_skeletons_v1.md` | [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [world](GLOSSARY_world.md) · BUILT |
 | **Genre** | Debate argument type selection each exchange. | `canonical_registry.md`, `cogload_moderate_target.md` | [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md) |
 | **get_scene_members** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **gift_type** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
@@ -310,7 +341,9 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **Guilds** | _no curated definition_ | `complete_systems_reference.md`, `conflict_architecture_proposal.md`, `early_game_ignition_analysis.md` +4 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) |
 | **Hafenmark** | _no curated definition_ | `campaign_architecture_v30.md`, `canonical_registry.md`, `complete_systems_reference.md` +9 | [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · ⚠️ broad (94 files) |
 | **Halvardshelm** | _no curated definition_ | `early_game_ignition_analysis.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
+| **handoff_reason** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · UNRESOLVED |
 | **handoff_rules** | 8 handoff rules: Personal<->Thread, Personal<->Faction, Personal<->Scene, Scene<->Faction Domain Echo, Thread<->Faction, Thread<->Mass, Mass<->Personal General Duel, Scene<->Mass, Fieldwork<->All. | `_architecture_flow_skeleton_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [threadwork](GLOSSARY_threadwork.md) |
+| **handoff_stub** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **Health** (`HP*`) | Wound track. Resets per wound. *HP not standalone — write Health.* | `canonical_registry.md`, `cogload_moderate_target.md`, `complete_systems_reference.md` +2 | [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) |
 | **hedda_progress** | _no curated definition_ | `ners_vsg_reconciliation_v1.md` | _local only_ · BUILT |
 | **Himmelenger** | _no curated definition_ | `canonical_registry.md`, `derived_stats_v30.md`, `early_game_ignition_analysis.md` +3 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · alias: Himmelenger Child |
@@ -352,12 +385,14 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **key_id** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
 | **key_ids** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **key_log** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [combat](GLOSSARY_combat.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
-| **key_ref** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
+| **key_log_hash** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md) · BUILT |
+| **key_ref** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · BUILT |
 | **key_refs** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **key_substrate** | _no curated definition_ | `governance_ripple_substrate_v1.md`, `key_echo_armature_v1.md`, `scale_transitions_v30.md` | [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
 | **key_type_registry** | _no curated definition_ | `scale_transitions_v30.md` | [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
 | **key_type_string** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **key_uuid** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
+| **keys_emitted** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md) · BUILT |
 | **King Almud Almqvist** | _no curated definition_ | `complete_systems_reference.md` | [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [ui](GLOSSARY_ui.md) · alias: Almud |
 | **Knot** | A significant relationship bond (Close / Regular / Distant). Mechanically tracked with strain. Lifecycle specified per ED-773. | `campaign_architecture_v30.md`, `canonical_registry.md`, `companion_app_design_note.md` +11 | [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) · ⚠️ broad (71 files) |
 | **knot_formed** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md), [fieldwork](GLOSSARY_fieldwork.md), [ui](GLOSSARY_ui.md) · BUILT |
@@ -377,6 +412,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **legacy_payload** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Legitimacy** | _no curated definition_ | `derived_stats_v30.md`, `generational_transition_v30.md`, `governance_ripple_substrate_v1.md` +3 | [articulation](GLOSSARY_articulation.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) |
 | **legitimacy_drift** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
+| **load_json** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **Locking** | Forced Resolution; stabilises a thread configuration permanently. Requires Thread Sensitivity 50+. | `cogload_moderate_target.md`, `complete_systems_reference.md`, `derived_stats_v30.md` | [canon](GLOSSARY_canon.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) |
 | **Lowenskyst** | _no curated definition_ | `ners_vsg_reconciliation_v1.md`, `player_agency_v30.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **Loyalty** | _no curated definition_ | `campaign_architecture_v30.md`, `canonical_registry.md`, `complete_systems_reference.md` +1 | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md) |
@@ -384,12 +420,14 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **Löwenritter** | _no curated definition_ | `campaign_architecture_v30.md`, `canonical_registry.md`, `complete_systems_reference.md` +10 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · alias: Lions; ⚠️ broad (72 files) |
 | **m2_ci_political_revision** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **m_ratings** | _no curated definition_ | `key_substrate_v30.md` | [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
+| **make_scheduler** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [overview](GLOSSARY_overview.md) · BUILT |
 | **Mandate** (`M`) | Institutional authority and political legitimacy. 0 = Collapse state. | `_architecture_flow_skeleton_v1.md`, `auto_manual_resolution_duality_v1.md`, `campaign_architecture_v30.md` +20 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · ⚠️ broad (97 files) |
 | **Maret Uln** | _no curated definition_ | `complete_systems_reference.md`, `player_agency_v30.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [world](GLOSSARY_world.md) |
 | **mass_battle** | v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. ⚠️ STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum — do not ha … | `engine_atlas_v1.md`, `key_substrate_v30.md`, `key_type_registry_v30.md` +4 | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) |
 | **mass_seizure_targets** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **max_cascade_depth** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **max_derived_value** | _no curated definition_ | `derived_stats_v30.md` | _local only_ · UNRESOLVED |
+| **max_s** | _no curated definition_ | `engine_atlas_v1.md` | [overview](GLOSSARY_overview.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · BUILT |
 | **mechanical_event** | _no curated definition_ | `key_echo_armature_v1.md`, `key_substrate_v30.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md), [victory](GLOSSARY_victory.md) · UNRESOLVED |
 | **memory_query** | _no curated definition_ | `key_substrate_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **memory_record** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
@@ -416,6 +454,8 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **new_leader_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **new_mission** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **new_season** | _no curated definition_ | `key_type_registry_v30.md`, `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
+| **next_scene** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
+| **next_tick** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [engine](GLOSSARY_engine.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md) · BUILT |
 | **no_scene_appended_to_slate_after_generation** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **no_sync_reentry** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · BUILT |
 | **Non-Player Character** (`NPC`) | A character not controlled by the player. In implementation: AI-driven entity with behaviour-tree decision logic per `systems/npcs/npc_behavior_v30.md`. | `campaign_modes_v30.md`, `campaign_modes_v30_infill.md`, `hybrid_gaps_v30.md` +1 | [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) |
@@ -446,6 +486,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **origin_keys** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **originating_system** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **orsk_progress** | _no curated definition_ | `ners_vsg_reconciliation_v1.md` | _local only_ · BUILT |
+| **other_echoes** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · UNRESOLVED |
 | **outcome_class** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Overwhelming** | Net successes ≥ 2× Ob AND ≥ 3 minimum (TTRPG, PP-232); ≥ Ob + 1 (BG, provisional). | `campaign_architecture_v30.md`, `cogload_moderate_target.md`, `derived_stats_v30.md` +4 | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · ⚠️ broad (70 files) |
 | **p_success** | _no curated definition_ | `governance_consolidation_v1.md` | [engine](GLOSSARY_engine.md) · BUILT |
@@ -456,6 +497,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **Past-Oriented Pulling** (`POP`) | Pulling operation targeting historical thread configurations. Requires Thread Sensitivity 70+. | `cogload_moderate_target.md`, `scale_transitions_v30.md` | [canon](GLOSSARY_canon.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) |
 | **Patch** (`PP-NNN`) | Mechanical patch identifier. PP = patch prefix; NNN = sequential number. | `complete_systems_reference.md`, `key_type_registry_v30.md`, `session_a_spec_patches.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) |
 | **pc_embedding_applied** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
+| **pending_count** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **peninsula_visibility** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **peninsular_strain** | _no curated definition_ | `canonical_registry.md`, `derived_stats_v30.md`, `engine_atlas_v1.md` +6 | [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) · UNRESOLVED |
 | **peninsular_strain_shock** | _no curated definition_ | `governance_ripple_substrate_v1.md`, `key_echo_armature_v1.md`, `key_substrate_v30.md` +2 | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) · BUILT |
@@ -476,6 +518,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **pop_next** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **Popular Support** | _no curated definition_ | `derived_stats_v30.md`, `governance_ripple_substrate_v1.md`, `governance_type_registry_v1.md` | [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [settlements](GLOSSARY_settlements.md) |
 | **popular_support** | _no curated definition_ | `governance_consolidation_v1.md`, `ners_vsg_reconciliation_v1.md` | [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) · BUILT |
+| **populate_from_geography** | _no curated definition_ | `engine_atlas_v1.md` | [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
 | **population_change** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | [overview](GLOSSARY_overview.md) · BUILT |
 | **post_calamity** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **post_calamity_recovery** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
@@ -500,6 +543,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **propagate_fn** | _no curated definition_ | `governance_type_registry_v1.md` | _local only_ · UNRESOLVED |
 | **propagation_observers** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **propagation_spec** | _no curated definition_ | `key_echo_armature_v1.md` | [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
+| **propose_transfer** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [factions](GLOSSARY_factions.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **Prosperity** | _no curated definition_ | `canonical_registry.md`, `conflict_architecture_proposal.md`, `derived_stats_v30.md` +10 | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **province Accord** | _no curated definition_ | `conflict_architecture_proposal.md`, `session_a_spec_patches.md` | [mass_battle](GLOSSARY_mass_battle.md), [settlements](GLOSSARY_settlements.md) |
 | **Public Instability** (`PI`) | Parliamentary health tracker. Board Game mode only. | `canonical_registry.md` | [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md) |
@@ -517,13 +561,17 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **regime_transition** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **relay_tier_temporal_dependency** | _no curated definition_ | `ners_vsg_reconciliation_v1.md` | _local only_ · UNRESOLVED |
 | **remaining_slots** | _no curated definition_ | `player_agency_v30.md` | _local only_ · UNRESOLVED |
+| **render_protagonist_lens** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [ui](GLOSSARY_ui.md) · BUILT |
 | **rendering_dispositions** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Rendstad** | _no curated definition_ | `tensions_pair_validation.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **required_payload_fields** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
 | **resolution_quality** | _no curated definition_ | `governance_consolidation_v1.md`, `governance_ripple_substrate_v1.md` | [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
-| **resolve_contest** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [social_contest](GLOSSARY_social_contest.md) |
-| **resolve_mass_battle** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md) |
+| **resolve_combat_round** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [combat](GLOSSARY_combat.md) · BUILT |
+| **resolve_contest** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
+| **resolve_mass_battle** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md) · BUILT |
+| **resolve_opposing_operations** | _no curated definition_ | `engine_atlas_v1.md` | [fieldwork](GLOSSARY_fieldwork.md), [threadwork](GLOSSARY_threadwork.md) · BUILT |
 | **Restoration Movement** | _no curated definition_ | `canonical_registry.md`, `complete_systems_reference.md`, `governance_consolidation_v1.md` +2 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · alias: Restoration, Movement |
+| **restore_world** | _no curated definition_ | `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) · BUILT |
 | **review_state** | _no curated definition_ | `repo_state_armature_v1.md` | _local only_ · BUILT |
 | **rhetorical_style_used** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Riskbreaker** | _no curated definition_ | `complete_systems_reference.md`, `conflict_architecture_proposal.md`, `early_game_ignition_analysis.md` +1 | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · alias: Riskbreaker Exposure, Riskbreaker Identity, Riskbreakers |
@@ -534,7 +582,11 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **rs_delta** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
 | **rs_track** | Rendering Stability world-track. | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [threadwork](GLOSSARY_threadwork.md) |
 | **run_accounting** | _no curated definition_ | `engine_atlas_v1.md`, `propagation_spec_v1.md` | [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
+| **run_batch** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [engine](GLOSSARY_engine.md), [overview](GLOSSARY_overview.md), [victory](GLOSSARY_victory.md) · BUILT |
 | **run_campaign** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `holonic_container_doctrine_v1.md` +1 | [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · BUILT |
+| **run_excommunication_tribunal** | _no curated definition_ | `engine_atlas_v1.md` | [factions](GLOSSARY_factions.md) · BUILT |
+| **run_parliamentary_scene** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
+| **run_parliamentary_vote** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [factions](GLOSSARY_factions.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **run_scene_phase** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `propagation_spec_v1.md` | [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **run_season** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `propagation_spec_v1.md` | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · BUILT |
 | **run_tick** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
@@ -558,10 +610,12 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **scene_outcomes** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · BUILT |
 | **scene_skipped** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · BUILT |
 | **scene_timer** | _no curated definition_ | `key_type_registry_v30.md` | [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
+| **scene_type** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [threadwork](GLOSSARY_threadwork.md) · BUILT |
 | **scenes_resolved** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_echo_armature_v1.md` | [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **schedule_emission** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `key_echo_armature_v1.md` +2 | [articulation](GLOSSARY_articulation.md) · BUILT |
 | **Schoenland** | _no curated definition_ | `campaign_architecture_v30.md`, `early_game_ignition_analysis.md`, `ners_vsg_reconciliation_v1.md` +1 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · alias: Schoenland Factor |
 | **scope_ids** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **scope_met** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [social_contest](GLOSSARY_social_contest.md) · BUILT |
 | **scopes_invoked** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **season counter** | _no curated definition_ | `propagation_spec_v1.md` | [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) |
 | **season_change** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_echo_armature_v1.md`, `key_substrate_v30.md` +2 | [godot](GLOSSARY_godot.md) · BUILT |
@@ -574,7 +628,9 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **second_calamity** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
 | **seed_key** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **seizure_ob_modifier** | _no curated definition_ | `governance_consolidation_v1.md` | [factions](GLOSSARY_factions.md), [settlements](GLOSSARY_settlements.md) · BUILT |
+| **select_action** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [npcs](GLOSSARY_npcs.md) · BUILT |
 | **semi_public_observers** | _no curated definition_ | `key_substrate_v30.md`, `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · BUILT |
+| **serialize_world** | _no curated definition_ | `engine_atlas_v1.md` | [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · BUILT |
 | **settlement_adjacency** | _no curated definition_ | `ners_vsg_reconciliation_v1.md` | [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
 | **settlement_bridge_unification** | _no curated definition_ | `player_agency_v30.md` | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) · UNRESOLVED |
 | **settlement_captured** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
@@ -591,6 +647,8 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **signed_magnitude** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **Sigurdshelm** | _no curated definition_ | `player_agency_v30.md` | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **sim_framework** | _no curated definition_ | `repository_keep_set_v1.md` | [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
+| **sim_module** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md`, `subsystem_flow_skeletons_v1.md` | [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [engine](GLOSSARY_engine.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) · BUILT |
+| **simulate_npc_actions** | _no curated definition_ | `engine_atlas_v1.md` | [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
 | **Size** | Unit headcount stat (replaces Strength). At 0: unit destroyed. Pool contribution capped at Command. (PP-232) | `canonical_registry.md`, `cogload_moderate_target.md`, `companion_app_design_note.md` +6 | [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) |
 | **slate_priority** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **slate_target_size** | _no curated definition_ | `player_agency_v30.md` | _local only_ · UNRESOLVED |
@@ -614,25 +672,30 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **stat_delta** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **stat_deltas** | _no curated definition_ | `governance_type_registry_v1.md`, `key_echo_armature_v1.md`, `key_substrate_v30.md` +2 | [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) · BUILT |
 | **stat_name** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
+| **stat_vocabulary** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **state_reader** | _no curated definition_ | `key_type_registry_v30.md` | [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md) · UNRESOLVED |
 | **state_transition** | _no curated definition_ | `key_echo_armature_v1.md`, `key_substrate_v30.md`, `key_type_registry_v30.md` | [victory](GLOSSARY_victory.md) · UNRESOLVED |
 | **step_number** | _no curated definition_ | `player_agency_v30.md` | _local only_ · UNRESOLVED |
 | **strain_delta** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) · BUILT |
 | **strain_shock** | _no curated definition_ | `key_echo_armature_v1.md` | _local only_ · UNRESOLVED |
 | **Strength** | Raw physical power. Weapon minimum requirement. | `canonical_registry.md`, `derived_stats_v30.md` | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) |
+| **stub_hits** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | [articulation](GLOSSARY_articulation.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [world](GLOSSARY_world.md) · BUILT |
+| **stub_resolve** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) · BUILT |
 | **style_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **sub_actor** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **sub_step_index** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_echo_armature_v1.md`, `key_substrate_v30.md` +1 | [godot](GLOSSARY_godot.md) · BUILT |
 | **subject_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **subject_npc_id** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **subject_npcs** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
-| **subscribe_all** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [overview](GLOSSARY_overview.md) |
+| **subscribe_all** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `engine_atlas_v1.md` | [articulation](GLOSSARY_articulation.md), [overview](GLOSSARY_overview.md) · BUILT |
 | **subscribing_system** | _no curated definition_ | `key_substrate_v30.md` | _local only_ · UNRESOLVED |
 | **substep_queue** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **subsystem_nexus_artifact** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **succession_mode** | _no curated definition_ | `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
 | **sufficient_scope** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **sustain_knot** | _no curated definition_ | `engine_atlas_v1.md` | [fieldwork](GLOSSARY_fieldwork.md), [threadwork](GLOSSARY_threadwork.md) · BUILT |
 | **sustained_seasons** | _no curated definition_ | `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md) · UNRESOLVED |
+| **symbol_name** | _no curated definition_ | `subsystem_flow_skeletons_v1.md` | _local only_ · UNRESOLVED |
 | **symbolic_dimensions** | _no curated definition_ | `key_substrate_v30.md` | [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md) · BUILT |
 | **symbolic_register** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **system_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
@@ -656,6 +719,8 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **territorial_transfer** | _no curated definition_ | `key_type_registry_v30.md` | [articulation](GLOSSARY_articulation.md), [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
 | **territory_id** | _no curated definition_ | `key_type_registry_v30.md` | [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) · BUILT |
 | **territory_ids** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · BUILT |
+| **test_contract_names_resolve_in_the_generated_index** | _no curated definition_ | `subsystem_flow_skeletons_v1.md` | _local only_ · UNRESOLVED |
+| **test_no_unparseable_anchor_lookalikes** | _no curated definition_ | `subsystem_flow_skeletons_v1.md` | _local only_ · UNRESOLVED |
 | **test_params_dump** | _no curated definition_ | `repository_keep_set_v1.md` | _local only_ · UNRESOLVED |
 | **The Rupture** | Campaign-ending event when Mending Stability reaches 0. | `campaign_modes_v30.md` | [threadwork](GLOSSARY_threadwork.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **theocracy_unification_declared** | _no curated definition_ | `key_echo_armature_v1.md`, `key_type_registry_v30.md` | _local only_ · BUILT |
@@ -667,10 +732,11 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **thread_id** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **thread_operation** | _no curated definition_ | `key_echo_armature_v1.md`, `key_substrate_v30.md`, `key_type_registry_v30.md` | [godot](GLOSSARY_godot.md), [threadwork](GLOSSARY_threadwork.md) · BUILT |
 | **thread_woven** | _no curated definition_ | `key_echo_armature_v1.md`, `key_substrate_v30.md`, `key_type_registry_v30.md` | [godot](GLOSSARY_godot.md), [threadwork](GLOSSARY_threadwork.md) · BUILT |
-| **threadwork_check** | _no curated definition_ | `engine_atlas_v1.md` | [mass_battle](GLOSSARY_mass_battle.md), [threadwork](GLOSSARY_threadwork.md) |
+| **threadwork_check** | _no curated definition_ | `engine_atlas_v1.md` | [mass_battle](GLOSSARY_mass_battle.md), [threadwork](GLOSSARY_threadwork.md) · BUILT |
 | **time_horizon** | _no curated definition_ | `_architecture_flow_skeleton_v1.md`, `key_substrate_v30.md` | [godot](GLOSSARY_godot.md) · BUILT |
 | **time_window** | _no curated definition_ | `key_substrate_v30.md` | [factions](GLOSSARY_factions.md) · UNRESOLVED |
 | **to_era** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
+| **to_scale** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **Total Health** | Size × H. Full Size always used regardless of Command cap. (PP-233) | `derived_stats_v30.md` | [mass_battle](GLOSSARY_mass_battle.md) |
 | **total_emitted** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **trade_volume** | _no curated definition_ | `governance_ripple_substrate_v1.md` | _local only_ · UNRESOLVED |
@@ -686,6 +752,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **unbuilt_container** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **Uncontrolled** | _no curated definition_ | `canonical_registry.md`, `early_game_ignition_analysis.md`, `session_a_spec_patches.md` | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
 | **units** | Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis. | `cogload_moderate_target.md`, `conflict_architecture_proposal.md`, `derived_stats_v30.md` +2 | [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) |
+| **validate_payload** | _no curated definition_ | `_architecture_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **Valoria** | _no curated definition_ | `campaign_architecture_v30.md`, `campaign_architecture_v30_index.md`, `campaign_modes_v30_infill.md` +10 | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) · alias: Average Valorian, Stable Valoria, Unstable Valoria; ⚠️ broad (73 files) |
 | **valoria_how_to_play** | _no curated definition_ | `integration_proposal_v30.md` | _local only_ · UNRESOLVED |
 | **valoria_investigation_systems_proposal** | _no curated definition_ | `integration_proposal_v30.md` | _local only_ · UNRESOLVED |

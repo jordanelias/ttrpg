@@ -181,11 +181,71 @@ def analyze_py(path: Path) -> dict:
             "has_main": has_main, "prints": prints, "uses_cli": uses_cli}
 
 # --------------------------------------------------------------- invocation graph
+_COMPILES = re.compile(r'\bpy_compile\b|\bcompileall\b')
+_INVOKES = re.compile(r'python3?\s+tools/\S+\.py')
+
+
+def strip_compile_only_steps(text: str) -> str:
+    """Remove workflow steps whose `run:` only COMPILES files (G9, ED-IN-0159 §2.2).
+
+    BEING COMPILED IS NOT BEING INVOKED, and conflating the two is how this registry
+    undercounted orphans. `invoked_by` tags a tool `ci:<workflow>` when its basename appears
+    anywhere in the workflow text, and `.github/workflows/valoria-ci.yml`'s syntax-check job
+    was a bare `py_compile` list — so four tools (`atomizer`, `doc_index_gen`, `index_gen`,
+    `valoria_rename`) read as "Invoked by ci:valoria-ci.yml" while the registry's OWN row for
+    that workflow listed none of them. Cull candidates were hidden by the instrument meant to
+    surface them.
+
+    THIS SHIPS WITH THE GLOB, NOT AFTER IT. The syntax job was globbed in the same commit,
+    which removes the 32 basenames from the workflow text and so produces the same four flips
+    on its own. That makes this function's measured delta TODAY zero, and saying otherwise
+    would be a claim without a control (§0.1 point 4). Its job is the recurrence case: the
+    obvious "fix" for a compile gate covering 32 of 108 tools is to name all 108, and that
+    alone would take basename-in-workflow to 108/108 and drive the orphan count to a
+    permanent, silent zero. This makes that fix harmless instead of catastrophic.
+
+    A LINE SCANNER, NOT A REGEX, AND THE REASON IS AN INCIDENT. The first version matched the
+    step block with one multiline regex and swallowed the whole `validators-report` job,
+    because that job's `run:` mentions `py_compile` INSIDE A COMMENT ("no workflow invokes
+    valoria_local at all (only py_compile on it)"). Two real validators — mechanics_index_gen
+    and ci_workplan_pointer_check — were reported as orphans on that run. That is the exact
+    trap `test_gate_coverage.py::test_a_comment_mentioning_py_compile_does_not_zero_a_jobs_
+    command_list` exists to name, reproduced one file away from the test that names it. Hence
+    the `_INVOKES` guard below: a step that ALSO invokes a tool is never compile-only,
+    whatever its comments happen to mention.
+    """
+    lines = text.splitlines(keepends=True)
+    # ANY keyed list item starts a step, not just `- name:`. Measured while attacking this
+    # function: SIX steps in valoria-ci.yml carry `run:` with no `name:` (the `pip install`
+    # lines in validators, validators-report, unit-tests, sim-regression, field-goldens and
+    # lanchester-signature). None is a compile step today, so keying on `- name:` was correct
+    # by accident — and an unnamed compile step would have slipped past the guard this
+    # function IS, which is the same undercount returning by a side door.
+    starts = [i for i, ln in enumerate(lines) if re.match(r'\s*-\s+\w+:', ln)]
+    drop = set()
+    for n, i in enumerate(starts):
+        indent = len(lines[i]) - len(lines[i].lstrip())
+        end = starts[n + 1] if n + 1 < len(starts) else len(lines)
+        # A step ends at the first non-blank line indented at or above its own `- ` marker.
+        # COMMENTS COUNT AS ENDINGS. Skipping them made the compile step swallow the 21-line
+        # banner comment that introduces the NEXT job — text that names valoria_local.py and
+        # ci_gate_coverage.py — so the strip would have quietly widened its own blast radius
+        # past the thing it was removing.
+        for j in range(i + 1, end):
+            if lines[j].strip() and (len(lines[j]) - len(lines[j].lstrip())) <= indent:
+                end = j
+                break
+        block = ''.join(lines[i:end])
+        if _COMPILES.search(block) and not _INVOKES.search(block):
+            drop.update(range(i, end))
+    return ''.join(ln for i, ln in enumerate(lines) if i not in drop)
+
+
 def _text_index() -> str:
     """Concatenate every invoker surface once (workflows, hooks, settings, SKILL.md)."""
     parts = []
     for wf in _workflows():
-        parts.append(wf.read_text(encoding="utf-8", errors="replace"))
+        parts.append(strip_compile_only_steps(wf.read_text(encoding="utf-8", errors="replace")))
     for hk in (REPO / ".githooks").glob("*"):
         if hk.is_file():
             parts.append(hk.read_text(encoding="utf-8", errors="replace"))
@@ -220,7 +280,10 @@ def invoked_by(stem: str, rel: str, inv_text: str, py_text: str) -> list[str]:
     if re.search(rf'\b{re.escape(base)}\b', inv_text):
         # distinguish which surface
         for wf in _workflows():
-            if base in wf.read_text(encoding="utf-8", errors="replace"):
+            # SAME STRIP AS `_text_index` (G9). This is a SECOND read of the workflow text,
+            # and stripping only the first would have left the `ci:` tag attached anyway —
+            # the fix applied to the gate that counts but not to the one that labels.
+            if base in strip_compile_only_steps(wf.read_text(encoding="utf-8", errors="replace")):
                 tags.append(f"ci:{wf.name}")
         hk = REPO / ".githooks" / "pre-commit"
         if hk.exists() and base in hk.read_text(encoding="utf-8", errors="replace"):

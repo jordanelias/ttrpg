@@ -18,15 +18,36 @@ docs:
 - systems/world/solmund_voice_v30.md
 - systems/world/southernmost_v30.md
 - systems/world/southernmost_v30_infill.md
+- systems/world/world_flow_skeleton_v1.md
 - systems/world/worldbuilding_canon_audit_v30.md
 - systems/world/worldbuilding_canon_audit_v30_infill.md
 - systems/world/worldbuilding_v30.md
 - systems/world/worldbuilding_v30_index.md
 - systems/world/worldbuilding_v30_infill.md
 counts:
-  UNRESOLVED: 18
-  BUILT: 2
+  UNRESOLVED: 20
+  BUILT: 44
 identifiers:
+  action_callback:
+    identifier: action_callback
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `systems.overview.sim.season` | `run_season` composes `advance_season → action_callback → run_accounting`; this subsystem''s per-season steps execute only inside that composition | `systems/overview/sim/season.py:69-72`'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  advance_season:
+    identifier: advance_season
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `systems.overview.sim.season` | `run_season` composes `advance_season → action_callback → run_accounting`; this subsystem''s per-season steps execute only inside that composition | `systems/overview/sim/season.py:69-72`'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   atoms_pending:
     identifier: atoms_pending
     docs:
@@ -48,6 +69,76 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  canonical_accord:
+    identifier: canonical_accord
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `canonical_accord(float) -> int` | registry (leaf fn) | `engine.substrate.canon_buckets` | `engine/substrate/canon_buckets.py:38`, imported at `systems/world/sim/npe.py:44`'
+    built_in:
+    - py:engine/substrate/canon_buckets.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  canonical_pt:
+    identifier: canonical_pt
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_insurgency_promotion:
+    identifier: check_insurgency_promotion
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_insurgency_promotion(insurgency_id, world)` | `systems/world/sim/insurgency_pipeline.py:199 check_insurgency_promotion` | `systems/overview/sim/accounting.py:132 run_accounting`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_insurgency_triggers:
+    identifier: check_insurgency_triggers
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_insurgency_triggers(world)` | `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers` | `systems/overview/sim/accounting.py:124 run_accounting`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_rm_emergence_trigger:
+    identifier: check_rm_emergence_trigger
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_rm_emergence_trigger(world)` | `systems/world/sim/restoration_movement.py:38 check_rm_emergence_trigger` | — (stub; not called anywhere, not even by a stub-wire probe)'
+    built_in:
+    - py:systems/world/sim/restoration_movement.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  compute_seasonal_ci_delta:
+    identifier: compute_seasonal_ci_delta
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  continuous_pt:
+    identifier: continuous_pt
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   conviction_track:
     identifier: conviction_track
     docs:
@@ -56,6 +147,16 @@ identifiers:
     built_in:
     - py:tools/build_key_graph.py
     - py:tools/observability/build_graph.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  create_world:
+    identifier: create_world
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    built_in:
+    - py:engine/autoload/game_state.py
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -68,6 +169,18 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  event_type:
+    identifier: event_type
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `trigger_miraculous_event(event_type, world)` | `systems/world/sim/miraculous_event.py:28 trigger_miraculous_event` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:758` stub-wire probe)'
+    built_in:
+    - py:engine/cross_scale/domain_echo.py
+    - py:systems/world/sim/insurgency_pipeline.py
+    - py:systems/world/sim/miraculous_event.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   faction_balance_convergence_v12c_2026:
     identifier: faction_balance_convergence_v12c_2026
     docs:
@@ -88,6 +201,56 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  final_state:
+    identifier: final_state
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:294-298`, `engine/mc_v18.py:298`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  form_knot:
+    identifier: form_knot
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.mc_v18` | `run_campaign` creates/serializes `World`, drives the season loop, records `insurgencies_formed`/`npcs_generated` telemetry, and explicitly defers `generate_npc`/`form_knot` via named `stubwire` calls | `engine/mc_v18.py:224`, `engine/mc_v18.py:260-267`, `engine/mc_v18.py:298-299`, `engine/mc_v18.py:307`, `engine/mc_v18.py:'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  generate_npc:
+    identifier: generate_npc
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `generate_npc(faction, role, world, ...)` | `systems/world/sim/npe.py:215 generate_npc` | — (no call site anywhere in production; see §7 gap 3)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_insurgencies:
+    identifier: get_insurgencies
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `get_insurgencies(world=None)` | `systems/world/sim/insurgency_pipeline.py:258 get_insurgencies` | `systems/overview/sim/accounting.py:131 run_accounting`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_npcs_in_territory:
+    identifier: get_npcs_in_territory
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `get_npcs_in_territory(territory_id, world=None)` | `systems/world/sim/npe.py:375 get_npcs_in_territory` | — (no production caller found)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   handoff_2026:
     identifier: handoff_2026
     docs:
@@ -97,6 +260,65 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  ins_id:
+    identifier: ins_id
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '`check_insurgency_promotion(ins_id, world)` for each.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  insurgencies_formed:
+    identifier: insurgencies_formed
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:294-298`, `engine/mc_v18.py:298`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  insurgency_id:
+    identifier: insurgency_id
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_insurgency_promotion(insurgency_id, world)` | `systems/world/sim/insurgency_pipeline.py:199 check_insurgency_promotion` | `systems/overview/sim/accounting.py:132 run_accounting`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  max_s:
+    identifier: max_s
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: S2** `[loop]` `run_campaign` iterates seasons (`for _ in range(max_s)`), calling
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  npc_counter:
+    identifier: npc_counter
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.npcs` / `world.npc_counter` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:185-186`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  npcs_generated:
+    identifier: npcs_generated
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` → `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:299-302`, `engine/mc_v18.py:299`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   peninsular_sovereignty:
     identifier: peninsular_sovereignty
     docs:
@@ -104,6 +326,26 @@ identifiers:
     purpose: '[§7. GD-3 Sim Enforcement Boundaries] Module | Responsibility :: `sim/autoload/victory.py` | **GD-1 binding**: Insurgencies and Promoted Factions can WIN via peninsular_sovereignty (the sole victory path) once they hold 11+ territories sustained 2 seasons. There is no parliamentary-status gate on victory eligibility.'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  populate_from_geography:
+    identifier: populate_from_geography
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: down | `systems.settlements.sim.registry` | `create_world` calls `populate_from_geography(world)` to build `world.settlements` | `engine/autoload/game_state.py:257-258`'
+    built_in:
+    - py:systems/settlements/sim/registry.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  process_rm_pt_decay:
+    identifier: process_rm_pt_decay
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `process_rm_pt_decay(world)` | `systems/world/sim/restoration_movement.py:30 process_rm_pt_decay` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:759` stub-wire probe)'
+    built_in:
+    - py:systems/world/sim/restoration_movement.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   read_sections:
@@ -115,6 +357,46 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  reset_for_world:
+    identifier: reset_for_world
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `reset_for_world(world=None)` | `systems/world/sim/insurgency_pipeline.py:263 reset_for_world` | — (test helper only)'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  reset_npcs:
+    identifier: reset_npcs
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `reset_npcs(world=None)` | `systems/world/sim/npe.py:380 reset_npcs` | — (test helper only)'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resolve_mass_seizure:
+    identifier: resolve_mass_seizure
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    built_in:
+    - py:systems/factions/sim/mass_seizure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  restore_world:
+    identifier: restore_world
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `restore_world(snapshot)` | `engine/autoload/game_state.py:332 restore_world` | — (no production caller; only `engine/tests/test_world_population.py:82`)'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   rm_base_strength:
     identifier: RM_BASE_STRENGTH
     docs:
@@ -160,6 +442,37 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  run_accounting:
+    identifier: run_accounting
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_insurgency_triggers(world)` | `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers` | `systems/overview/sim/accounting.py:124 run_accounting`'
+    built_in:
+    - py:systems/overview/sim/accounting.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_campaign:
+    identifier: run_campaign
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    built_in:
+    - py:engine/mc_v18.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_season:
+    identifier: run_season
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `systems.overview.sim.season` | `run_season` composes `advance_season → action_callback → run_accounting`; this subsystem''s per-season steps execute only inside that composition | `systems/overview/sim/season.py:69-72`'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   section_index:
     identifier: section_index
     docs:
@@ -173,6 +486,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  serialize_world:
+    identifier: serialize_world
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:262 serialize_world` | `engine/mc_v18.py:307 run_campaign`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   sim_insurgency_dissolution:
     identifier: sim_insurgency_dissolution
     docs:
@@ -191,6 +514,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  simulate_npc_actions:
+    identifier: simulate_npc_actions
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `simulate_npc_actions(world)` | `systems/world/sim/npe.py:325 simulate_npc_actions` | `systems/overview/sim/accounting.py:138 run_accounting`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   source_section:
     identifier: source_section
     docs:
@@ -204,6 +537,102 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  starting_accord:
+    identifier: STARTING_ACCORD
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:systems/factions/sim/mass_seizure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  starting_garrison:
+    identifier: STARTING_GARRISON
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  starting_owner:
+    identifier: STARTING_OWNER
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  starting_pt:
+    identifier: STARTING_PT
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  starting_stats:
+    identifier: STARTING_STATS
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  streak_extended:
+    identifier: streak_extended
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: emits `'streak_extended'`.
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  stub_hits:
+    identifier: stub_hits
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter → `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  stub_resolve:
+    identifier: stub_resolve
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter → `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  territory_id:
+    identifier: territory_id
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `get_npcs_in_territory(territory_id, world=None)` | `systems/world/sim/npe.py:375 get_npcs_in_territory` | — (no production caller found)'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    - py:systems/factions/sim/mass_seizure.py
+    - py:systems/factions/sim/parliamentary_transfer.py
+    - py:systems/overview/sim/ci_track.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/temperaments.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   threadwork_v25:
     identifier: threadwork_v25
     docs:
@@ -212,6 +641,26 @@ identifiers:
     purpose: '[Threadcut Being Classification by Gap Severity] Classification | Gap Severity | Thread Sensitivity (TS) Range | Self-Sustaining Capacity | Combat Status :: Standard Gap emergent | Standard Gap (persists without Mending) | 50–70 | Seasons. Sustained self-rendering. Can interact with the rendered world. | Combat-capable. Observer-dependent rendering per threadwork_v25 §6.2. Health pool = Spirit × 2'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  trigger_miraculous_event:
+    identifier: trigger_miraculous_event
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `trigger_miraculous_event(event_type, world)` | `systems/world/sim/miraculous_event.py:28 trigger_miraculous_event` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:758` stub-wire probe)'
+    built_in:
+    - py:systems/world/sim/miraculous_event.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  uncontrolled_streaks:
+    identifier: uncontrolled_streaks
+    docs:
+    - systems/world/world_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:183-184`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   validated_n1000_v12c:
@@ -229,30 +678,42 @@ dropped_as_not_a_mechanic:
   calamity_radiation: the doc spells it as <name>.md — a citation
   calamity_radiation_v30: the doc spells it as <name>.md — a citation
   calamity_radiation_v30_infill: the doc spells it as <name>.md — a citation
+  canon_buckets: matches a tracked/aliased document stem
   canonical_sha: boilerplate-or-too-short
   canonical_sources: boilerplate-or-too-short
   canonical_tokens: boilerplate-or-too-short
   character_histories_v30: the doc spells it as <name>.md — a citation
+  ci_track: matches a tracked/aliased document stem
   clock_registry_v30: the doc spells it as <name>.md — a citation
   conflict_architecture_proposal: the doc spells it as <name>.md — a citation
   conviction_track_v30: the doc spells it as <name>.md — a citation
+  dice_engine: matches a tracked/aliased document stem
   doc_index_gen: matches a tracked/aliased document stem
+  execution_map: matches a tracked/aliased document stem
+  execution_trace: matches a tracked/aliased document stem
   faction_action: matches a tracked/aliased document stem
   faction_actions: the doc spells it as <name>.md — a citation
   fieldwork_v30: the doc spells it as <name>.md — a citation
   file_index: the doc spells it as <name>.md — a citation
+  game_state: matches a tracked/aliased document stem
   geography_design: the doc spells it as <name>.md — a citation
   geography_v30: the doc spells it as <name>.md — a citation
   geography_v30_infill: the doc spells it as <name>.md — a citation
   insurgency_dissolution_proposal: the doc spells it as <name>.md — a citation
   insurgency_pipeline: matches a tracked/aliased document stem
+  insurgency_pipeline_v30: the doc spells it as <name>.md — a citation
+  investigation_systems_v30: the doc spells it as <name>.md — a citation
   knots_v30: the doc spells it as <name>.md — a citation
   mass_battle_v30: the doc spells it as <name>.md — a citation
+  mass_seizure: matches a tracked/aliased document stem
+  mc_v18: matches a tracked/aliased document stem
   mechanics_index: boilerplate-or-too-short
+  miraculous_event: matches a tracked/aliased document stem
   module_contracts: boilerplate-or-too-short
   ms_trajectory_v1: the doc spells it as <name>.md — a citation
   ners_historical_precedent_matrix: the doc spells it as <name>.md — a citation
   npc_character_analyses_v30: the doc spells it as <name>.md — a citation
+  npcs_flow_skeleton_v1: the doc spells it as <name>.md — a citation
   params_board_game: the doc spells it as <name>.md — a citation
   params_factions: matches a tracked/aliased document stem
   parliamentary_transfer: matches a tracked/aliased document stem
@@ -261,6 +722,7 @@ dropped_as_not_a_mechanic:
   peninsular_strain_v30: the doc spells it as <name>.md — a citation
   restoration_movement: matches a tracked/aliased document stem
   restoration_movement_v30: the doc spells it as <name>.md — a citation
+  season_manager: matches a tracked/aliased document stem
   session_master_2026_04_20: the doc spells it as <name>.md — a citation
   settlement_adjacency_v30: the doc spells it as <name>.md — a citation
   settlement_layer_v30: matches a tracked/aliased document stem
@@ -272,6 +734,10 @@ dropped_as_not_a_mechanic:
   stage4_southernmost_deprecated: the doc spells it as <name>.md — a citation
   stage7_territories_deprecated: the doc spells it as <name>.md — a citation
   stats_1_7_scale: the doc spells it as <name>.md — a citation
+  subsystem_flow_skeletons_v1: the doc spells it as <name>.md — a citation
+  test_flow_skeletons: matches a tracked/aliased document stem
+  test_pipeline_reach: matches a tracked/aliased document stem
+  test_world_population: matches a tracked/aliased document stem
   threadwork_redesign_v25: the doc spells it as <name>.md — a citation
   threadwork_v30: matches a tracked/aliased document stem
   treaty_expiration_v30: the doc spells it as <name>.md — a citation

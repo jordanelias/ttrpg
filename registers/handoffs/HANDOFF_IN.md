@@ -2608,3 +2608,62 @@ branch had run none against the repo's own mutation standard.
 **Next in the plan:** G3, G4, G5, G6, G9, G10, G11, G12, G13, then Track T. **G2 is blocked on Jordan.**
 Track S is #304's engine/systems work in other lanes and is mostly gated on **#0**. Track S is #304's engine/systems work in FA/PC/MB/WR lanes and is mostly gated on **#0**.
 
+
+## [DONE] ED-IN-0166/0167/0168 — Track G continued: ED-IN-0162 executed, G3, G9 (2026-08-12)
+
+Plan: `audit/2026-08-11-code-leanness/01_plan.md`. **Landed: G1 · G3 · G7 · G8 · G9.**
+**Still blocked: G2's second half (Jordan, ED-IN-0163). Not started: G4, G5, G6, G10, G11,
+Track S, Track T.** The plan's `## Status:` line is reconciled to match, and its claim that
+"G12, G13" were not started is **corrected — those steps do not exist**; Track G ends at G11.
+
+- **ED-IN-0166 — ED-IN-0162 CLOSED.** The census was regenerated (15 subsystem files + the
+  roll-up, 9,798 lines) and the glossary rebuilt from it (**1,537 → 2,065 terms**). Confirmed the
+  finding against the tree first: the committed combat census listed **SEVEN docs**, five of them
+  deleted by the 08-08 5→1 consolidation, and knew nothing of `combat_reference_v1.md` or the
+  08-10 flow skeleton. **Two corrections to ED-IN-0162**: there are **15** subsystem census files,
+  not 16; and the `--check` it prescribed wiring in **returned before comparing the roll-up**, so
+  the gate it asked for would have been blind to the artifact it names first. Tool fixed, then
+  gated (`tests/valoria/test_identifier_census.py`, 7 tests, 2/2 mutants killed).
+- **ED-IN-0167 — G3.** Two structurally-unfailable tools left the blocking job; registry `ci_job`
+  flipped in the same commit. **`valoria_local.py:162,172` already had both report-only**, so the
+  tiers had disagreed for months and the stricter-looking one was wrong. The `valoria_hooks.py`
+  ghost tier (level 4, `paired_hook`, the 19-entry `in_session_hooks` section — **124 ghost lines** — 89 for the section, 35 `paired_hook` lines — **zero
+  code consumers** (the file goes 479 → 373, a net 106, after ~18 lines of tombstone)) is deleted, along with `broken_dependency_checker`'s check (d), which had been
+  `os.walk`-ing the **entire repo on every run of a blocking gate** since the 08-05 evacuation to
+  rediscover the file was gone. Guard: `test_blocking_tier_is_honest.py`, 6/6 mutants killed,
+  **no allowlist needed — 17/17 blocking tools can fail and all 6 that cannot are report-only.**
+- **ED-IN-0168 — G9, both halves in one commit.** The compile gate covered **32 of 108** tools;
+  globbed. `invoked_by` no longer counts compilation as invocation. **Orphans 7 → 11**,
+  **prune candidates 0 → 2**, exactly §2.2's predicted +4. Half B's measured delta today is
+  **zero** and is recorded as zero (§0.1 point 4) — its job is the recurrence case, which is
+  *executed* rather than argued by
+  `test_naming_every_tool_in_the_compile_gate_does_not_zero_the_census`.
+
+**MY FIRST G9 IMPLEMENTATION WAS WRONG, AND THE INSTRUMENT CAUGHT IT RATHER THAN A REVIEW.**
+`strip_compile_only_steps` began as one multiline regex and swallowed the whole `validators-report`
+job — because that job's `run:` mentions `py_compile` **inside a comment**. It reported 13 orphans
+and 2 prune candidates, of which `mechanics_index_gen` and `ci_workplan_pointer_check` were FALSE.
+That is `test_gate_coverage.py::test_a_comment_mentioning_py_compile_does_not_zero_a_jobs_command_list`
+reproduced **one file away from the test that names it** — the ED-IN-0161 "instrument counted
+itself" shape, third instance in three commits. Rewritten as a line scanner with an explicit
+`_INVOKES` guard; a second over-reach (comment-skipping step-end swallowing the next job's banner)
+was found by the same route. Final strip removes exactly 6 lines. **The over-reach direction is now
+tested at least as hard as the under-reach one**, because only the over-reach produced a false
+finding.
+
+**NEXT, in dependency order.** **G4** (make `pathres` the actual sole parser — four parsers, plus
+the two-tier walk exclusions and the TREES roster 17→19) and **G6** (size caps: adopt the policy
+cap, delete the stale duplicate block, then merge the two gates — the merged gate MUST carry the
+`.jsonl` caps *and* the local-tier coverage or coverage regresses) are both unblocked and
+independent. **G5** (the vitality meta-guard) depends on G1+G2+G4 and so is still gated on G2's
+Jordan call. **G10** waits on Track S's S1. **G11** is unblocked. Note that G5's meta-guard must
+encode ED-IN-0163's anticipatory rule or its first run demands deletion of every correct
+forward-looking policy row — and the **25 zero-match rows** ED-IN-0164 recorded are its triage
+input, deliberately left untouched.
+
+**HELD FOR JORDAN, unchanged by this pass:** #304's six (**#0** the `net`/`ob` convention, which
+gates the degree family 16→1 — plus #1, #1b, #2, #7, #8), the **37 grandfathered `*_index.md`
+files**, the **`sim_harness` promote-or-retire call**, and **G2's retirement destination**
+(ED-IN-0163). The plan's own recommendation stands: **run T4 (the mechanism census) before ruling
+#1/#1b/#2/#8** — it prices exactly those questions behaviourally, and it already exists and has
+never been run.

@@ -6,13 +6,163 @@ docs:
 - systems/overview/clock_registry_v30.md
 - systems/overview/clock_registry_v30_infill.md
 - systems/overview/ms_budget.md
+- systems/overview/overview_flow_skeleton_v1.md
 - systems/overview/peninsular_strain_v30.md
 - systems/overview/peninsular_strain_v30_index.md
 - systems/overview/wc_survival_spine.md
 counts:
-  UNRESOLVED: 13
-  BUILT: 1
+  UNRESOLVED: 18
+  BUILT: 82
 identifiers:
+  accord_drift_probe_hits:
+    identifier: accord_drift_probe_hits
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.accord_drift_probe_hits` | world-state (write, additive telemetry) | `CampaignResult.accord_drift_probe_hits` | `systems/overview/sim/accounting.py:83-92`; `engine/mc_v18.py:304`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  accord_level:
+    identifier: accord_level
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `accounting.py`''s module docstring cites parliamentary_transfer.py line 210 as the province-Accord write site feeding the drift probe''s divergence; `systems/factions/sim/parliamentary_transfer.py:210` is that file''s §1.3 last-territory-protection guard, not an Accord write — the actual write (`terr.accord = ACCORD_MAP[accord_level]`) is at `systems/faction'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  accord_map:
+    identifier: ACCORD_MAP
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  accounting_boundary:
+    identifier: accounting_boundary
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: 'S2.2.2.4** `[branch][gate: world.echo_scheduler is not None][write]` `_sched.accounting_boundary()` then `_sched.next_tick()` `engine/mc_v18.py:158-161`'
+    built_in:
+    - py:engine/substrate/keys.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  accounting_run:
+    identifier: accounting_run
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `run_season`''s `SeasonResult` return value is discarded at its sole production call site (`run_campaign`); the composed step data (`season`, `arc`, `new_arc`, `accounting_run`) is computed every season and never consumed there. | `systems/overview/sim/season.py:73-78` (return); `engine/mc_v18.py:267` (call site, return unassigned)'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  action_callback:
+    identifier: action_callback
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  adjust_accord:
+    identifier: adjust_accord
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:482`, `systems/factions/sim/faction_action.py:493` (both `_t'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  advance_season:
+    identifier: advance_season
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `advance_season(world) -> SeasonResult` | `engine/autoload/season_manager.py:31 advance_season` | `systems/overview/sim/season.py:69`'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  all_playable_15:
+    identifier: ALL_PLAYABLE_15
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `game_state.ALL_PLAYABLE_15` | param | module constant | `engine/mc_v18.py:282`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_ci_delta:
+    identifier: apply_ci_delta
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_ci_delta(delta, source, world) -> float` | `systems/overview/sim/ci_track.py:170 apply_ci_delta` | `systems/overview/sim/ci_track.py:187` (via `apply_seasonal_ci`); `systems/factions/sim/excommunication.py:166-167`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_ip_delta:
+    identifier: apply_ip_delta
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_ip_delta(delta, source, world)` | `systems/overview/sim/ip_track.py:29 apply_ip_delta` | — (uncalled outside tests; see §7)'
+    built_in:
+    - py:systems/overview/sim/ip_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_ms_baseline_decay:
+    identifier: apply_ms_baseline_decay
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_ms_baseline_decay(world) -> int` | `systems/overview/sim/ms_track.py:59 apply_ms_baseline_decay` | `systems/overview/sim/accounting.py:117`'
+    built_in:
+    - py:systems/overview/sim/ms_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_ms_delta:
+    identifier: apply_ms_delta
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_ms_delta(delta, source, world) -> int` | `systems/overview/sim/ms_track.py:73 apply_ms_delta` | `systems/threadwork/sim/opposing.py:232`; `systems/threadwork/sim/co_movement.py:143` — no call from `accounting.py`/`season.py`'
+    built_in:
+    - py:systems/overview/sim/ms_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_rs_delta:
+    identifier: apply_rs_delta
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_rs_delta(delta, source, world)` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` | `engine/cross_scale/echo_transport.py:355`'
+    built_in:
+    - py:systems/overview/sim/rs_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_seasonal_ci:
+    identifier: apply_seasonal_ci
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `compute_seasonal_ci_delta(world, ...) -> dict` | `systems/overview/sim/ci_track.py:100 compute_seasonal_ci_delta` | `systems/overview/sim/ci_track.py:186` (via `apply_seasonal_ci`)'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   arc_expansion_v1:
     identifier: arc_expansion_v1
     docs:
@@ -22,6 +172,57 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  assert_attempted:
+    identifier: assert_attempted
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  assert_success:
+    identifier: assert_success
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  attempt_royal_progress:
+    identifier: attempt_royal_progress
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:482`, `systems/factions/sim/faction_action.py:493` (both `_t'
+    built_in:
+    - py:systems/factions/sim/crown_initiative.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  base_seed:
+    identifier: base_seed
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:311 run_batch` | `engine/mc_v18.py:334 __main__`; no external-tooling call site — `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  battle_count:
+    identifier: battle_count
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:495` | `engine/mc_v18.py:296`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   bg_v05:
     identifier: bg_v05
     docs:
@@ -29,6 +230,18 @@ identifiers:
     purpose: '[Faction Stats (All Factions)] Track | Range | Source :: Reputation | 0–5 | bg_v05 §Standing (P-14)'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  campaign_seasons:
+    identifier: CAMPAIGN_SEASONS
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    built_in:
+    - py:engine/mc_v18.py
+    - py:tools/trace_execution_phases.py
+    - typed:engine/engine_params/sim_params.json
+    disposition: BUILT
     doc_status: null
     in_table: true
   canonical_definitive_r2:
@@ -40,6 +253,107 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  check_all_factions:
+    identifier: check_all_factions
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign`'
+    built_in:
+    - py:engine/autoload/victory.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_arc_boundary:
+    identifier: check_arc_boundary
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_arc_boundary(season) -> bool` | `engine/autoload/season_manager.py:46 check_arc_boundary` | — declared entry point, zero callers (see §7); only a prose mention at `systems/factions/sim/treaty.py:127`'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_insurgency_promotion:
+    identifier: check_insurgency_promotion
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.world.sim.insurgency_pipeline` | `check_insurgency_triggers`, `check_insurgency_promotion`, `get_insurgencies` | `systems/overview/sim/accounting.py:124`, `systems/overview/sim/accounting.py:131-132`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_insurgency_triggers:
+    identifier: check_insurgency_triggers
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.world.sim.insurgency_pipeline` | `check_insurgency_triggers`, `check_insurgency_promotion`, `get_insurgencies` | `systems/overview/sim/accounting.py:124`, `systems/overview/sim/accounting.py:131-132`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_phased_occupation_threshold:
+    identifier: check_phased_occupation_threshold
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `check_phased_occupation_threshold(world)` | `systems/overview/sim/ip_track.py:37 check_phased_occupation_threshold` | — (uncalled anywhere, incl. tests; see §7)'
+    built_in:
+    - py:systems/overview/sim/ip_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  compute_seasonal_ci_delta:
+    identifier: compute_seasonal_ci_delta
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `compute_seasonal_ci_delta(world, ...) -> dict` | `systems/overview/sim/ci_track.py:100 compute_seasonal_ci_delta` | `systems/overview/sim/ci_track.py:186` (via `apply_seasonal_ci`)'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  consul_used:
+    identifier: consul_used
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  council_used_this_arc:
+    identifier: council_used_this_arc
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:systems/factions/sim/council_solmund.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  create_world:
+    identifier: create_world
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  default_params:
+    identifier: DEFAULT_PARAMS
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   derived_stats:
     identifier: derived_stats
     docs:
@@ -49,6 +363,42 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  dispatch_combat_bridge:
+    identifier: DISPATCH_COMBAT_BRIDGE
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `''0''`) | caller / environment | `engine/mc_v18.py:70-81 _dispatch_combat_bridge_on`'
+    built_in:
+    - py:engine/mc_v18.py
+    - py:engine/tests/test_combat_bridge_seam.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  echo_scheduler:
+    identifier: echo_scheduler
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` presence | registry | set by `run_campaign` | `engine/mc_v18.py:241-250`'
+    built_in:
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_parliamentary_bridge.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  effective_params:
+    identifier: effective_params
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `DEFAULT_PARAMS[''VICTORY_THRESHOLD''] = 11` is a documented DEAD param — the live victory gate is `engine/autoload/victory.py`''s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params[''VICTORY_THRESHOLD'']`. | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESH'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   faction_layer:
     identifier: faction_layer
     docs:
@@ -60,6 +410,45 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  faction_take_action:
+    identifier: faction_take_action
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:177`, `systems/factions/sim/faction_action.py:495`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  final_state:
+    identifier: final_state
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: S4** `[emit]` Build and return `CampaignResult` (winner, season, surviving, battle_count, scenes_resolved, insurgencies_formed, npcs_generated, stub_hits, accord_drift_probe_hits, key_log_hash, keys_emitted, final_state) `engine/mc_v18.py:288-308`
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  form_knot:
+    identifier: form_knot
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `CampaignResult.stub_hits`''s own field comment asserts "0 while no live call site is stub-wired yet" — stale: this skeleton''s S2.2.2.5/S2.2.2.6 record two `stubwire.stub_resolve` call sites (`generate_npc`, `form_knot`) that run every season, so hits ARE live, not zero-by-construction. | `engine/mc_v18.py:93-96` (comment); `engine/mc_v18.py:186-194`, `engi'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  game_director:
+    identifier: game_director
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: Subsystem:** `systems/overview/` · **Lane:** `IN` · **Contracts:** `peninsular_strain`, `territorial_piety`, `game_director` (all
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   gap_resolution_2026:
     identifier: gap_resolution_2026
     docs:
@@ -69,6 +458,109 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  generate_npc:
+    identifier: generate_npc
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `CampaignResult.stub_hits`''s own field comment asserts "0 while no live call site is stub-wired yet" — stale: this skeleton''s S2.2.2.5/S2.2.2.6 record two `stubwire.stub_resolve` call sites (`generate_npc`, `form_knot`) that run every season, so hits ARE live, not zero-by-construction. | `engine/mc_v18.py:93-96` (comment); `engine/mc_v18.py:186-194`, `engi'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_insurgencies:
+    identifier: get_insurgencies
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.world.sim.insurgency_pipeline` | `check_insurgency_triggers`, `check_insurgency_promotion`, `get_insurgencies` | `systems/overview/sim/accounting.py:124`, `systems/overview/sim/accounting.py:131-132`'
+    built_in:
+    - py:systems/world/sim/insurgency_pipeline.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  ins_id:
+    identifier: ins_id
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: S2.2.3.4** `[loop][write]` `check_insurgency_promotion(ins_id, world)` for each existing insurgency `systems/overview/sim/accounting.py:131-132`
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  insurgencies_formed:
+    identifier: insurgencies_formed
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: S4** `[emit]` Build and return `CampaignResult` (winner, season, surviving, battle_count, scenes_resolved, insurgencies_formed, npcs_generated, stub_hits, accord_drift_probe_hits, key_log_hash, keys_emitted, final_state) `engine/mc_v18.py:288-308`
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  key_log:
+    identifier: key_log
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.key_log` / `world.echo_scheduler` | world-state (write) | `CampaignResult.key_log_hash`/`keys_emitted`; `engine/cross_scale/*` readers | `engine/mc_v18.py:243-249`; `:305-306`'
+    built_in:
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_parliamentary_bridge.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  key_log_hash:
+    identifier: key_log_hash
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.key_log` / `world.echo_scheduler` | world-state (write) | `CampaignResult.key_log_hash`/`keys_emitted`; `engine/cross_scale/*` readers | `engine/mc_v18.py:243-249`; `:305-306`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  keys_emitted:
+    identifier: keys_emitted
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.key_log` / `world.echo_scheduler` | world-state (write) | `CampaignResult.key_log_hash`/`keys_emitted`; `engine/cross_scale/*` readers | `engine/mc_v18.py:243-249`; `:305-306`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  make_scheduler:
+    identifier: make_scheduler
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.cross_scale.echo_transport` | `make_scheduler` (campaign init) | `engine/mc_v18.py:243-248`'
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  max_s:
+    identifier: max_s
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '`run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally…'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  max_seasons:
+    identifier: max_seasons
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   military_advance:
     identifier: military_advance
     docs:
@@ -76,6 +568,27 @@ identifiers:
     purpose: Recapture:** The displaced faction may attempt military_advance at -1 Ob (home territory advantage per faction_layer §2.2).
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  new_arc:
+    identifier: new_arc
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `run_season`''s `SeasonResult` return value is discarded at its sole production call site (`run_campaign`); the composed step data (`season`, `arc`, `new_arc`, `accounting_run`) is computed every season and never consumed there. | `systems/overview/sim/season.py:73-78` (return); `engine/mc_v18.py:267` (call site, return unassigned)'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  next_tick:
+    identifier: next_tick
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: 'S2.2.2.4** `[branch][gate: world.echo_scheduler is not None][write]` `_sched.accounting_boundary()` then `_sched.next_tick()` `engine/mc_v18.py:158-161`'
+    built_in:
+    - py:engine/substrate/keys.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   npc_behavior:
@@ -88,6 +601,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  npc_counter:
+    identifier: npc_counter
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs`, `world.npc_counter` | world-state (write) | `systems/world/sim/npe.py` own readers; `CampaignResult.npcs_generated` | `systems/world/sim/npe.py:99-115`; `engine/mc_v18.py:299`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  npcs_generated:
+    identifier: npcs_generated
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs`, `world.npc_counter` | world-state (write) | `systems/world/sim/npe.py` own readers; `CampaignResult.npcs_generated` | `systems/world/sim/npe.py:99-115`; `engine/mc_v18.py:299`'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   occupation_tcv_unspecified:
     identifier: OCCUPATION_TCV_UNSPECIFIED
     docs:
@@ -97,14 +630,97 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  parl_transfer_used_this_arc:
+    identifier: parl_transfer_used_this_arc
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:systems/factions/sim/parliamentary_transfer.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   peninsular_strain:
     identifier: peninsular_strain
     docs:
+    - systems/overview/overview_flow_skeleton_v1.md
     - systems/overview/peninsular_strain_v30.md
     - systems/overview/wc_survival_spine.md
-    purpose: '[§8 Open Items] # | Item | Status (PP-667) :: 2 | Hafenmark Parliamentary Sovereignty struck, Dynastic Assertion primary. | **CONFIRMED** — peninsular_strain §6.2 STRUCK; victory_v30 §3.3 Dynastic Assertion primary.'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `world.clocks[''Turmoil'']` is read as the Political-Stability victory gate (`ps = world.clocks.get(''Turmoil'', 0.0)`) but has **zero write sites** anywhere in the tree outside its `create_world` seed of `0.0` — the gate is therefore permanently satisfied (`ps_ok` always `True`) in every traced campaign. `references/module_contracts.yaml`''s own `peninsular_st'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  peninsular_strain_shock:
+    identifier: peninsular_strain_shock
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `peninsular_strain`''s contract declares `env.crisis` among its emits, also emitted by `scenario_authoring`; no `consumes:` row anywhere in the file carries `env.crisis`, unlike its three sibling `env.*` types, which each have a `from:` consumer row — a dangling emit. Worse: none of `peninsular_strain`''s four declared emits (`env.crisis`, `env.disaster`, `e'
+    built_in:
+    - key:key_type_registry_v30.md
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  populate_from_geography:
+    identifier: populate_from_geography
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`'
+    built_in:
+    - py:systems/settlements/sim/registry.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  population_change:
+    identifier: population_change
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `peninsular_strain`''s contract declares `env.crisis` among its emits, also emitted by `scenario_authoring`; no `consumes:` row anywhere in the file carries `env.crisis`, unlike its three sibling `env.*` types, which each have a `from:` consumer row — a dangling emit. Worse: none of `peninsular_strain`''s four declared emits (`env.crisis`, `env.disaster`, `e'
+    built_in:
+    - key:key_type_registry_v30.md
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  province_accord:
+    identifier: province_accord
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`'
+    built_in:
+    - py:systems/settlements/sim/registry.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  province_members:
+    identifier: province_members
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`'
+    built_in:
+    - py:systems/settlements/sim/registry.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  ps_ok:
+    identifier: ps_ok
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `world.clocks[''Turmoil'']` is read as the Political-Stability victory gate (`ps = world.clocks.get(''Turmoil'', 0.0)`) but has **zero write sites** anywhere in the tree outside its `create_world` seed of `0.0` — the gate is therefore permanently satisfied (`ps_ok` always `True`) in every traced campaign. `references/module_contracts.yaml`''s own `peninsular_st'
+    built_in:
+    - py:engine/autoload/victory.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  pt_map:
+    identifier: PT_MAP
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   read_sections:
@@ -116,6 +732,161 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  reset_arc:
+    identifier: reset_arc
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  reset_seasonal:
+    identifier: reset_seasonal
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_accounting:
+    identifier: run_accounting
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_accounting(world)` | `systems/overview/sim/accounting.py:95 run_accounting` | `systems/overview/sim/season.py:72`'
+    built_in:
+    - py:systems/overview/sim/accounting.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_batch:
+    identifier: run_batch
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_campaign:
+    identifier: run_campaign
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`''s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and in'
+    built_in:
+    - py:engine/mc_v18.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_parliamentary_scene:
+    identifier: run_parliamentary_scene
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.cross_scale.parliamentary_bridge` | `run_parliamentary_scene` | `engine/mc_v18.py:150`'
+    built_in:
+    - py:engine/cross_scale/parliamentary_bridge.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_scene_phase:
+    identifier: run_scene_phase
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.cross_scale.scene_dispatch` | `run_scene_phase` (personal-scale scene phase, part of the per-season action callback) | `engine/mc_v18.py:141`'
+    built_in:
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_season:
+    identifier: run_season
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`)'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  scenario_authoring:
+    identifier: scenario_authoring
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `peninsular_strain`''s contract declares `env.crisis` among its emits, also emitted by `scenario_authoring`; no `consumes:` row anywhere in the file carries `env.crisis`, unlike its three sibling `env.*` types, which each have a `from:` consumer row — a dangling emit. Worse: none of `peninsular_strain`''s four declared emits (`env.crisis`, `env.disaster`, `e'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  scene_outcome:
+    identifier: scene_outcome
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: in | `engine.cross_scale.echo_transport` | calls `rs_track.apply_rs_delta`, gated on `world.echo_scheduler` + an explicit caller-declared `echo`/`scene_outcome` block | `engine/cross_scale/echo_transport.py:354-355`'
+    built_in:
+    - py:engine/cross_scale/domain_echo.py
+    - py:engine/cross_scale/echo_transport.py
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  scenes_resolved:
+    identifier: scenes_resolved
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.scenes_resolved` | RW | `engine/mc_v18.py`, `engine/cross_scale/parliamentary_bridge.py` | `engine/mc_v18.py:142`, `engine/mc_v18.py:152`, `engine/mc_v18.py:297`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  seasons_per_arc:
+    identifier: SEASONS_PER_ARC
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:21`'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  seasons_per_year:
+    identifier: SEASONS_PER_YEAR
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `SEASONS_PER_YEAR` | param | module constant | `systems/overview/sim/ms_track.py:48`'
+    built_in:
+    - py:systems/overview/sim/ms_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  senator_inward_used:
+    identifier: senator_inward_used
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:systems/factions/sim/crown_initiative.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  serialize_world:
+    identifier: serialize_world
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies`, `world.uncontrolled_streaks` | world-state (write) | `systems/world/sim/insurgency_pipeline.py` own readers; serialized via `game_state.serialize_world` | `systems/world/sim/insurgency_pipeline.py:57-96`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   settlement_bridge_unification:
     identifier: settlement_bridge_unification
     docs:
@@ -134,6 +905,95 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  simulate_npc_actions:
+    identifier: simulate_npc_actions
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.world.sim.npe` | `simulate_npc_actions` | `systems/overview/sim/accounting.py:138`'
+    built_in:
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  starting_owner:
+    identifier: STARTING_OWNER
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  starting_stats:
+    identifier: STARTING_STATS
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  stub_hits:
+    identifier: stub_hits
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `CampaignResult.stub_hits`''s own field comment asserts "0 while no live call site is stub-wired yet" — stale: this skeleton''s S2.2.2.5/S2.2.2.6 record two `stubwire.stub_resolve` call sites (`generate_npc`, `form_knot`) that run every season, so hits ARE live, not zero-by-construction. | `engine/mc_v18.py:93-96` (comment); `engine/mc_v18.py:186-194`, `engi'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  stub_resolve:
+    identifier: stub_resolve
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.substrate.stubwire` | `stub_resolve`, module counter `invocations` | `engine/mc_v18.py:186`, `engine/mc_v18.py:204`, `engine/mc_v18.py:222`; `systems/overview/sim/ip_track.py:30`, `systems/overview/sim/ip_track.py:38`; `systems/overview/sim/rs_track.py:29`'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  subscribe_all:
+    identifier: subscribe_all
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.cross_scale.articulation` | `subscribe_all` | `engine/mc_v18.py:258`'
+    built_in:
+    - py:engine/cross_scale/articulation.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  suppress_attempted:
+    identifier: suppress_attempted
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  suppress_success:
+    identifier: suppress_success
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  territorial_piety:
+    identifier: territorial_piety
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: Subsystem:** `systems/overview/` · **Lane:** `IN` · **Contracts:** `peninsular_strain`, `territorial_piety`, `game_director` (all
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   throughlines_2026:
     identifier: throughlines_2026
     docs:
@@ -143,30 +1003,71 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  uncontrolled_streaks:
+    identifier: uncontrolled_streaks
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies`, `world.uncontrolled_streaks` | world-state (write) | `systems/world/sim/insurgency_pipeline.py` own readers; serialized via `game_state.serialize_world` | `systems/world/sim/insurgency_pipeline.py:57-96`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  victory_threshold:
+    identifier: VICTORY_THRESHOLD
+    docs:
+    - systems/overview/overview_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    built_in:
+    - py:engine/autoload/victory.py
+    - py:engine/mc_v18.py
+    - py:engine/tests/test_f7_smoke_oracle.py
+    - typed:engine/engine_params/sim_params.json
+    disposition: BUILT
+    doc_status: null
+    in_table: true
 dropped_as_not_a_mechanic:
+  altonian_reinforcements: matches a tracked/aliased document stem
   arc_register: matches a tracked/aliased document stem
+  build_fork: matches a tracked/aliased document stem
   calamity_radiation_v30: the doc spells it as <name>.md — a citation
   campaign_architecture_v1: matches a tracked/aliased document stem
   canonical_sha: boilerplate-or-too-short
   canonical_tokens: boilerplate-or-too-short
   ci_political_v30: the doc spells it as <name>.md — a citation
+  ci_track: matches a tracked/aliased document stem
   clock_registry: the doc spells it as <name>.md — a citation
   clock_registry_v30: the doc spells it as <name>.md — a citation
   clock_registry_v30_infill: the doc spells it as <name>.md — a citation
+  co_movement: matches a tracked/aliased document stem
   complete_systems_reference: matches a tracked/aliased document stem
   conflict_architecture_proposal: matches a tracked/aliased document stem
   conviction_track_v30: the doc spells it as <name>.md — a citation
+  council_solmund: matches a tracked/aliased document stem
+  cross_scale: matches a tracked/aliased document stem
+  crown_initiative: matches a tracked/aliased document stem
+  dashboard_data: matches a tracked/aliased document stem
   derived_stats_v1: matches a tracked/aliased document stem
   derived_stats_v30: the doc spells it as <name>.md — a citation
   doc_index_gen: matches a tracked/aliased document stem
+  echo_transport: matches a tracked/aliased document stem
+  faction_action: matches a tracked/aliased document stem
   faction_layer_v30: the doc spells it as <name>.md — a citation
+  factions_flow_skeleton_v1: the doc spells it as <name>.md — a citation
   fieldwork_v30: the doc spells it as <name>.md — a citation
+  game_state: matches a tracked/aliased document stem
   geography_v30: the doc spells it as <name>.md — a citation
   historical_precedents_warfare: the doc spells it as <name>.md — a citation
+  insurgency_pipeline: matches a tracked/aliased document stem
+  ip_track: matches a tracked/aliased document stem
   mass_battle: matches a module or path component
   mass_battle_v30: the doc spells it as <name>.md — a citation
+  mass_seizure: matches a tracked/aliased document stem
+  mc_v18: matches a tracked/aliased document stem
   military_layer_v30: matches a tracked/aliased document stem
+  module_contracts: boilerplate-or-too-short
   ms_budget: the doc spells it as <name>.md — a citation
+  ms_track: matches a tracked/aliased document stem
   ms_trajectory_v1: matches a tracked/aliased document stem
   npc_behavior_v30: matches a tracked/aliased document stem
   params_bg_core: matches a tracked/aliased document stem
@@ -175,18 +1076,30 @@ dropped_as_not_a_mechanic:
   params_core: the doc spells it as <name>.md — a citation
   params_factions: the doc spells it as <name>.md — a citation
   params_threadwork: the doc spells it as <name>.md — a citation
+  parliamentary_bridge: matches a tracked/aliased document stem
+  parliamentary_stay: matches a tracked/aliased document stem
+  parliamentary_transfer: matches a tracked/aliased document stem
   peninsular_strain_v1: the doc spells it as <name>.md — a citation
   peninsular_strain_v30: the doc spells it as <name>.md — a citation
   player_agency_v30: matches a tracked/aliased document stem
   rs_budget: the doc spells it as <name>.md — a citation
+  rs_track: matches a tracked/aliased document stem
   scale_transitions: matches a tracked/aliased document stem
   scale_transitions_v30: the doc spells it as <name>.md — a citation
+  scene_dispatch: matches a tracked/aliased document stem
+  scene_slate: matches a tracked/aliased document stem
+  season_manager: matches a tracked/aliased document stem
   settlement_layer_v30: matches a tracked/aliased document stem
   social_contest: matches a module or path component
+  social_contest_flow_skeleton_v1: the doc spells it as <name>.md — a citation
   social_contest_v30: the doc spells it as <name>.md — a citation
   supersession_register: matches a tracked/aliased document stem
   tc_political_redesign_v30: the doc spells it as <name>.md — a citation
+  test_flow_skeletons: matches a tracked/aliased document stem
+  test_pipeline_reach: matches a tracked/aliased document stem
   thread_constitutive_integration_analysis_v2: the doc spells it as <name>.md — a citation
+  threadwork_flow_skeleton_v1: the doc spells it as <name>.md — a citation
   threadwork_v30: the doc spells it as <name>.md — a citation
+  trace_execution_phases: matches a tracked/aliased document stem
   victory_architecture_v1: the doc spells it as <name>.md — a citation
   victory_v30: the doc spells it as <name>.md — a citation

@@ -30,41 +30,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      # GLOBBED 2026-08-12 (G9, ED-IN-0159 §2.2). This was a hand-maintained list of 32
+      # names covering 32 of the 108 `.py` under `tools/` — so 76 tools, including all of
+      # `tools/observability/` and `tools/sim_harness/`, could carry a syntax error into
+      # main and this gate would pass. A roster that must be edited whenever a file is
+      # added is a roster that rots; the glob cannot.
+      #
+      # `find | xargs`, not `tools/*.py`: the shell glob does not descend into
+      # `tools/observability/` or `tools/sim_harness/`, which is half the uncovered set.
+      # `py_compile` is kept as the mechanism (rather than `compileall`) because
+      # `ci_gate_coverage.jobs()` keys "this job is compile-only, it invokes nothing" on
+      # that literal token, and `test_gate_coverage` pins that classification.
+      #
+      # SHIPPED WITH THE `invoked_by` FIX, NOT BEFORE IT — see G9's note in
+      # tools/build_apparatus_registry.py. Being compiled is not being invoked, and the
+      # orphan census used to conflate the two. Expanding this list to name all 108 tools
+      # would have been the obvious fix and would have driven the orphan count to zero.
       - name: Compile all validators and tools
         run: |
-          python -m py_compile \
-            tools/ci_common.py \
-            tools/ci_golden_modes_check.py \
-            tools/ci_register_size_check.py \
-            tools/ci_co_file_checker.py \
-            tools/ci_editorial_checker.py \
-            tools/ci_hooks_verifier.py \
-            tools/ci_naming_check.py \
-            tools/names.py \
-            tools/ci_names_check.py \
-            tools/ci_names_consistency.py \
-            tools/valoria_rename.py \
-            tools/ci_vetting_check.py \
-            tools/ci_supersession_check.py \
-            tools/ci_sim_fabrication_check.py \
-            tools/validate_ed_citations.py \
-            tools/valoria_local.py \
-            tools/hook_naming_guard.py \
-            tools/session_status.py \
-            tools/session_handoff_reminder.py \
-            tools/broken_dependency_checker.py \
-            tools/freshness_gate.py \
-            tools/compliance_check.py \
-            tools/atomizer.py \
-            tools/doc_index_gen.py \
-            tools/index_gen.py \
-            tools/quantity_registry.py \
-            tools/ci_quantity_vocabulary_check.py \
-            tools/wiring_map_check.py \
-            tools/ci_claim_provenance_check.py \
-            tools/ci_claude_workflow_paths.py \
-            tools/ci_wf_harness_check.py \
-            tools/ci_workplan_pointer_check.py
+          files=$(find tools -name '*.py' -not -path '*/__pycache__/*' | sort)
+          echo "$files" | wc -l | xargs echo "compiling tools:"
+          python -m py_compile $files
           echo "All tools: syntax OK"
 
   # ── REGISTER + ARCHITECTURE GATES ───────────────────────────────────────────
@@ -126,10 +112,8 @@ jobs:
           v python3 tools/ci_claim_provenance_check.py
           v python3 tools/ci_claude_workflow_paths.py
           v python3 tools/ci_wf_harness_check.py
-          v python3 tools/ci_supersession_check.py
           v python3 tools/ci_vetting_check.py
           v python3 tools/validate_ed_citations.py
-          v python3 tools/ci_audit_registry_check.py
           v python3 tools/broken_dependency_checker.py
           v python3 tools/freshness_gate.py
           exit $fail
@@ -166,6 +150,16 @@ jobs:
           # wrapping it inside an echo string made the parser capture the closing quote
           # and invent a phantom arg, which `--ci` would then have tried to execute.
           w() { echo "::group::$*"; "$@" || echo "::warning::non-zero (report-only): $*"; echo "::endgroup::"; }
+          # G3 (ED-IN-0159 §1.9): these two moved DOWN from `validators` on 2026-08-12. Both
+          # are structurally incapable of failing — ci_supersession_check.py:66 documents
+          # "ALWAYS return 0 (WARN-ONLY)" and every one of its returns is 0;
+          # ci_audit_registry_check is "Always exits 0 by design" per its own registry row.
+          # A tool that cannot fail cannot gate, so hosting them in the blocking job made
+          # that job's membership a false claim about what blocks a merge. Nothing about
+          # their behaviour changes here; `valoria_local.py:162,172` ALREADY ran both
+          # report-only, so this is CI catching up to the local tier, not a relaxation.
+          w python3 tools/ci_supersession_check.py
+          w python3 tools/ci_audit_registry_check.py
           w python3 tools/ci_names_check.py
           w python3 tools/currency_consistency_check.py
           w python3 tools/ci_quantity_vocabulary_check.py

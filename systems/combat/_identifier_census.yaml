@@ -4,16 +4,82 @@ schema_version: 1
 subsystem: combat
 docs:
 - systems/combat/combat_c4_draft_v0.md
-- systems/combat/combat_design_v1.md
-- systems/combat/combat_design_v1_index.md
-- systems/combat/combat_v30.md
-- systems/combat/combat_v30_index.md
-- systems/combat/combat_v30_infill.md
+- systems/combat/combat_flow_skeleton_v1.md
+- systems/combat/combat_reference_v1.md
 - systems/combat/scene_combat_design_v1.md
 counts:
-  UNRESOLVED: 24
-  BUILT: 11
+  UNRESOLVED: 36
+  BUILT: 84
 identifiers:
+  a_history:
+    identifier: a_history
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `combat_bridge.resolve()` return dict (`result`, `winner`, `a_label`, `b_label`, `a_history`, `b_history`) | return value | `scene_dispatch._resolve_slot`''s `out["result"]` | `engine/cross_scale/combat_bridge.py:142-150`'
+    built_in:
+    - py:engine/cross_scale/combat_bridge.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  a_label:
+    identifier: a_label
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `combat_bridge.resolve()` return dict (`result`, `winner`, `a_label`, `b_label`, `a_history`, `b_history`) | return value | `scene_dispatch._resolve_slot`''s `out["result"]` | `engine/cross_scale/combat_bridge.py:142-150`'
+    built_in:
+    - py:engine/cross_scale/combat_bridge.py
+    - py:systems/combat/combat_engine_v1/workbench/narrate.py
+    - py:systems/combat/combat_engine_v1/workbench/server.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  act_threshold:
+    identifier: ACT_THRESHOLD
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.6 `[gate]` **Closed exchange gate**: `actors = [c for c in (A,B) if ready[c]>=ACT_THRESHOLD]`; `continue` if empty.'
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  action_resolution_order:
+    identifier: ACTION_RESOLUTION_ORDER
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: Deprecated engine `systems/combat/sim/combat.py`''s action set (`Feint`, `Disarm`, `Tie Up`, `Retrieve`, `Escape`, `Leap`, `Rescue`) is explicitly unimplemented — falls through to a `Failure` stub. Structural, not mechanical: no dispatch branch exists for these action types. | `systems/combat/sim/combat.py:89-96` (the declared action set, `ACTION_RESOLUTION_ORDER`'
+    built_in:
+    - py:systems/combat/sim/combat.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  action_type:
+    identifier: action_type
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `systems.combat.sim.combat.resolve_action(actor, target, action_type, scene=None, rng=None)` | `systems/combat/sim/combat.py:189 resolve_action` | `resolve_combat_round:293` only'
+    built_in:
+    - py:systems/combat/sim/combat.py
+    - py:systems/settlements/sim/temperaments.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  actor_faction:
+    identifier: actor_faction
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S5.1.2 `[write]` Sets `ctx["echo"]` (`actor_faction`/`target_faction`/`most_relevant_stat="Mil"`/`degree`) keyed off the bridge's `result` int.
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    - py:engine/cross_scale/parliamentary_bridge.py
+    - py:engine/cross_scale/scene_dispatch.py
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   actor_id:
     identifier: actor_id
     docs:
@@ -42,10 +108,51 @@ identifiers:
   apply_wound:
     identifier: apply_wound
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: Reused, untouched:** `engagement()` (one scene bout = one call); `Combatant` + `WoundTracker` + `apply_wound`
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.wt` (`WoundTracker`: `cumulative_damage`, `wounds`, `felled`) | RW | `systems/combat/combat_engine_v1/combatant.py:50 WoundTracker` | `systems/combat/combat_engine_v1/wrapper.py:471` (A.wt.__init__(...)); `systems/combat/combat_engine_v1/combatant.py:154 apply_wound`'
     built_in:
     - py:systems/combat/combat_engine_v1/combatant.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  approach_step:
+    identifier: approach_step
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.5 `[branch]` **Approach phase** (`if not closed:`): stop-thrust roll (`core.resolve`/`core.strike`, may fell + arrest the closer), then `approach_step` advances `measure_gap`; `[gate]` `just_closed` transitions to closed (`ready=_carry(...)`).'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  armor_defeat_sigma:
+    identifier: armor_defeat_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  assemble_net_sigma:
+    identifier: assemble_net_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  attack_sigma:
+    identifier: attack_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -58,13 +165,94 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  attribute_parity_table:
+    identifier: attribute_parity_table
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `combat_engine_v1/workbench/balance.py` CLI (`weapon_matchup_table`, `attribute_parity_table`, `run_all`, …) | `systems/combat/combat_engine_v1/workbench/balance.py:222` (if __name__) | Jordan/operator, direct invocation (CLAUDE.md §9 routing table)'
+    built_in:
+    - py:systems/combat/combat_engine_v1/workbench/balance.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  b_history:
+    identifier: b_history
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `combat_bridge.resolve()` return dict (`result`, `winner`, `a_label`, `b_label`, `a_history`, `b_history`) | return value | `scene_dispatch._resolve_slot`''s `out["result"]` | `engine/cross_scale/combat_bridge.py:142-150`'
+    built_in:
+    - py:engine/cross_scale/combat_bridge.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  b_label:
+    identifier: b_label
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `combat_bridge.resolve()` return dict (`result`, `winner`, `a_label`, `b_label`, `a_history`, `b_history`) | return value | `scene_dispatch._resolve_slot`''s `out["result"]` | `engine/cross_scale/combat_bridge.py:142-150`'
+    built_in:
+    - py:engine/cross_scale/combat_bridge.py
+    - py:systems/combat/combat_engine_v1/workbench/narrate.py
+    - py:systems/combat/combat_engine_v1/workbench/server.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   b_mode:
     identifier: B_MODE
     docs:
-    - systems/combat/combat_v30.md
+    - systems/combat/combat_reference_v1.md
     purpose: The flag attaches to encounter authoring metadata (Game-Master / scenario writer sets B_MODE=TRUE for qualifying encounters); the engine reads the flag and renders simplified UI.
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  beat_aside:
+    identifier: beat_aside
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.15 `[branch]` **Displace-and-step-inside** gate (an `opening_created` precondition site): committed point-thrust exploited by `beat_aside`/`slip_inside`, gated on `read_win` + `DISPLACE_P`; may pull-back-graze and fells / sets `riposte`.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  beat_exhaustion:
+    identifier: beat_exhaustion
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.8 `[emit]` Loop exhaustion (`beat_exhaustion`) → `return None, closed`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/workbench/commentary.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  bind_dominance_p:
+    identifier: bind_dominance_p
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.18 `[branch][loop]` `if bind:` up to 3 extra sub-beats of bind resolution (`bind_sigma`, `bind_dominance_p`) — may strike/fell or flip to riposte; entering the bind is itself an `opening_created` precondition site.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  bind_sigma:
+    identifier: bind_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.18 `[branch][loop]` `if bind:` up to 3 extra sub-beats of bind resolution (`bind_sigma`, `bind_dominance_p`) — may strike/fell or flip to riposte; entering the bind is itself an `opening_created` precondition site.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  burst_max:
+    identifier: BURST_MAX
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.22 `[gate]` **Turn/exchange separation checks**: stamina collapse → `return None`; `exchanges >= BURST_MAX` → `return None`; clean defence (no hit/riposte/bind) → `return None`.'
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
     doc_status: null
     in_table: false
   by_actor:
@@ -76,53 +264,137 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  close_gap_ref:
+    identifier: CLOSE_GAP_REF
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.3 `[gate][branch]` Determine `closed` (measure state) from `measure_gap` against a probabilistic band (`CLOSE_GAP_REF` ± `CLOSE_LATCH_BAND`).
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  close_latch_band:
+    identifier: CLOSE_LATCH_BAND
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.3 `[gate][branch]` Determine `closed` (measure state) from `measure_gap` against a probabilistic band (`CLOSE_GAP_REF` ± `CLOSE_LATCH_BAND`).
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  close_tempo:
+    identifier: close_tempo
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.2 Compute per-fighter cadence `rate` (open: `weapon_tempo`; closed: `close_tempo`), then advance `ready` by `rate * tempo_pressure`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   combat_felled:
     identifier: combat_felled
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: '`scene.combat_felled` (`actor_id`, `by_actor`), drop from next round''s pairing.'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1018-1021`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
     doc_status: null
-    in_table: false
+    in_table: true
   combat_hit:
     identifier: combat_hit
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: '`{id: "combat.scene", resolver: state_reader, status: PENDING, in: ["scene.combat_strike","scene.combat_hit",'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1018-1021`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
     doc_status: null
-    in_table: false
+    in_table: true
   combat_resolved:
     identifier: combat_resolved
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: encounter emitting a single `scene.combat_resolved` Key — **wrapping `engagement()` as a black box, never
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.combat_resolved` `Key` (substrate) | emit | `engine.substrate.TickScheduler` log; deferred `Faction.adjust(stat, delta)` apply at accounting boundary | `engine/cross_scale/echo_transport.py:416-438`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
     doc_status: null
-    in_table: false
+    in_table: true
   combat_strike:
     identifier: combat_strike
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: Per-bout `scene.combat_strike/_hit/_felled` Keys emit en route — the Godot `combat_engine.gd`
+    purpose: '[7. Traced gaps] Gap | Evidence :: **`combat_engine_v1` neither emits nor consumes a substrate `Key`.** The `personal_combat` module contract declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` and `consumes: scene.combat_strike / scene.combat_hit` as the engine''s own I/O, but zero `.py` files under `combat_engine_v1/` reference `engine.substrate`, `Key(`, or `KeyLog` '
     built_in:
     - key:key_type_registry_v30.md
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  commit_depth:
+    identifier: commit_depth
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.8 `[write]` Consume `aggressor`'s `ready`; roll `commit_depth`; `[branch][gate]` possible lunge (`lunge_quality`); pay stamina/tempo cost.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  counter_attempt:
+    identifier: counter_attempt
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.14 `[branch][gate]` If `counter_attempt`: `counter_success_prob` resolves the counter (voids the hit, riposte) or fails (cedes the steal, defender eats an undefended hit).'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  counter_select:
+    identifier: counter_select
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.10 `[branch][gate]` If defender won the read and the deep-commit gate holds (`systems/combat/combat_engine_v1/wrapper.py:299`): INDES initiative steal (`indes_steal_amount`) + possible `counter_select`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  counter_success_prob:
+    identifier: counter_success_prob
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.14 `[branch][gate]` If `counter_attempt`: `counter_success_prob` resolves the counter (voids the hit, riposte) or fails (cedes the steal, defender eats an undefended hit).'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
     disposition: BUILT
     doc_status: null
     in_table: false
   cumulative_damage:
     identifier: cumulative_damage
     docs:
-    - systems/combat/combat_v30.md
-    purpose: Wounds accrue at floor(cumulative_damage / Wound_Interval).
+    - systems/combat/combat_flow_skeleton_v1.md
+    - systems/combat/combat_reference_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.wt` (`WoundTracker`: `cumulative_damage`, `wounds`, `felled`) | RW | `systems/combat/combat_engine_v1/combatant.py:50 WoundTracker` | `systems/combat/combat_engine_v1/wrapper.py:471` (A.wt.__init__(...)); `systems/combat/combat_engine_v1/combatant.py:154 apply_wound`'
     built_in:
     - py:systems/combat/combat_engine_v1/combatant.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  defence_sigma:
+    identifier: defence_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -135,12 +407,106 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  derive_parties:
+    identifier: derive_parties
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `combat_bridge.derive_parties(ctx, world)` | `engine/cross_scale/combat_bridge.py:114 derive_parties` | `engine/cross_scale/scene_dispatch.py:234 derive_parties`'
+    built_in:
+    - py:engine/cross_scale/combat_bridge.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  disengage_attempt_p:
+    identifier: disengage_attempt_p
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.4 `[branch][gate]` If closed and `beats>1`: proactive disengage attempt (`disengage_attempt_p`) — on a clean break (`disengage_clean_p`) the engagement re-opens and `continue`s; on a failed/read break the pursuer resolves a strike (`core.resolve` → `core.strike`) and may fell the withdrawer (`r…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  disengage_clean_p:
+    identifier: disengage_clean_p
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.4 `[branch][gate]` If closed and `beats>1`: proactive disengage attempt (`disengage_attempt_p`) — on a clean break (`disengage_clean_p`) the engagement re-opens and `continue`s; on a failed/read break the pursuer resolves a strike (`core.resolve` → `core.strike`) and may fell the withdrawer (`r…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  dispatch_combat_bridge:
+    identifier: dispatch_combat_bridge
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:70 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`'
+    built_in:
+    - py:engine/mc_v18.py
+    - py:engine/tests/test_combat_bridge_seam.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  displace_p:
+    identifier: DISPLACE_P
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.15 `[branch]` **Displace-and-step-inside** gate (an `opening_created` precondition site): committed point-thrust exploited by `beat_aside`/`slip_inside`, gated on `read_win` + `DISPLACE_P`; may pull-back-graze and fells / sets `riposte`.'
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   disposition_modifier:
     identifier: disposition_modifier
     docs:
-    - systems/combat/combat_design_v1.md
-    - systems/combat/combat_v30.md
+    - systems/combat/combat_reference_v1.md
     purpose: Damage = max(0, net successes − Ob) + disposition_modifier.
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  disrupt_resist_p:
+    identifier: disrupt_resist_p
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.19 `[branch]` `if riposte:` if `sim` (simultaneous hit+riposte), first resolve a `disrupt_resist_p`-gated graze on the original aggressor (may fell); then, unconditionally, drain the (pre-flip) defender's `conc`; only then role-flip `aggressor, defender = defender, aggressor`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  echo_scheduler:
+    identifier: echo_scheduler
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` / `world.key_log` | W (once, campaign init) / R (per scene) | `engine/mc_v18.py` / `engine/cross_scale/echo_transport.py` | `engine/mc_v18.py:243-249`'
+    built_in:
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_parliamentary_bridge.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  emit_scene_echo:
+    identifier: emit_scene_echo
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `ctx["echo"]` block (ON-branch only) | write to caller-owned dict | `echo_transport.emit_scene_echo` | `engine/cross_scale/scene_dispatch.py:266-267`'
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  ended_closed:
+    identifier: ended_closed
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '**`engagement(A, B, first, cfg, rng, prev_closed)`** — one exchange-bout inside a fight; returns `(felled Combatant | None, ended_closed)`.'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -154,6 +520,34 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  engagement_end:
+    identifier: engagement_end
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `wrapper._emit(kind, **data)` trace events (`fight_start`, `turn_start`, `engagement_start`, `disengage`, `approach`, `stophit`, `commit`, `read`, `mode`, `roll`, `outcome`, `contact`, `separation`, `engagement_end`, `fight_result`) | emit (in-process callback) | `workbench/trace.py`''s `wrapper._TRACE` seam only when set; no-op (`_TRACE is None`) other'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  engagement_start:
+    identifier: engagement_start
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `wrapper._emit(kind, **data)` trace events (`fight_start`, `turn_start`, `engagement_start`, `disengage`, `approach`, `stophit`, `commit`, `read`, `mode`, `roll`, `outcome`, `contact`, `separation`, `engagement_end`, `fight_result`) | emit (in-process callback) | `workbench/trace.py`''s `wrapper._TRACE` seam only when set; no-op (`_TRACE is None`) other'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  evaluate_triggers:
+    identifier: evaluate_triggers
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: **No live trigger ever queues a `combat`-type scene**, so the entire `st == "combat"` branch of `scene_dispatch._resolve_slot` — both the bridge (ON) and the deprecated engine (OFF, default) sub-branches — is unreachable from the season loop today, independent of `DISPATCH_COMBAT_BRIDGE`''s value. `evaluate_triggers` only ever fires a `"contest"` scene (Stability '
+    built_in:
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   faction_layer:
     identifier: faction_layer
     docs:
@@ -165,6 +559,42 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  fid_a:
+    identifier: fid_a
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ctx[''factions''] = (fid_a, fid_b)` | arg | queued scene context (never populated live — §7) | `engine/cross_scale/combat_bridge.py:121 derive_parties`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  fid_b:
+    identifier: fid_b
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ctx[''factions''] = (fid_a, fid_b)` | arg | queued scene context (never populated live — §7) | `engine/cross_scale/combat_bridge.py:121 derive_parties`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  fight_result:
+    identifier: fight_result
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `wrapper._emit(kind, **data)` trace events (`fight_start`, `turn_start`, `engagement_start`, `disengage`, `approach`, `stophit`, `commit`, `read`, `mode`, `roll`, `outcome`, `contact`, `separation`, `engagement_end`, `fight_result`) | emit (in-process callback) | `workbench/trace.py`''s `wrapper._TRACE` seam only when set; no-op (`_TRACE is None`) other'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  fight_start:
+    identifier: fight_start
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `wrapper._emit(kind, **data)` trace events (`fight_start`, `turn_start`, `engagement_start`, `disengage`, `approach`, `stophit`, `commit`, `read`, `mode`, `roll`, `outcome`, `contact`, `separation`, `engagement_end`, `fight_result`) | emit (in-process callback) | `workbench/trace.py`''s `wrapper._TRACE` seam only when set; no-op (`_TRACE is None`) other'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   focus_counts:
     identifier: focus_counts
     docs:
@@ -174,14 +604,185 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  foot_pin:
+    identifier: foot_pin
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.20 `[branch][gate]` **Contact axis** (grapple): `contact.grab_available` gated on `opening_created`; `contact.grab_outcome` resolves disarm/throw/pin/foot_pin/control, applying poise/initiative deltas.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  grab_available:
+    identifier: grab_available
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.20 `[branch][gate]` **Contact axis** (grapple): `contact.grab_available` gated on `opening_created`; `contact.grab_outcome` resolves disarm/throw/pin/foot_pin/control, applying poise/initiative deltas.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/contact.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  grab_outcome:
+    identifier: grab_outcome
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.20 `[branch][gate]` **Contact axis** (grapple): `contact.grab_available` gated on `opening_created`; `contact.grab_outcome` resolves disarm/throw/pin/foot_pin/control, applying poise/initiative deltas.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/contact.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  grip_position:
+    identifier: grip_position
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141`'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combatant.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  halfsword_form:
+    identifier: HALFSWORD_FORM
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `WEAPONS`, `GEOMETRY`, `HALFSWORD_FORM/BASE` (weapon data registry) | registry | `systems/combat/combat_engine_v1/weapons.py:74 WEAPONS` | `systems/combat/combat_engine_v1/combatant.py:7` (from weapons import)'
+    built_in:
+    - py:systems/combat/combat_engine_v1/weapons.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  halfsword_target:
+    identifier: halfsword_target
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.weapon` (half-sword form switch) | RW | `combatant.py` field; mutated by `wrapper.py` via `combat_systems.halfsword_target` | `systems/combat/combat_engine_v1/wrapper.py:241-242`'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  indes_steal_amount:
+    identifier: indes_steal_amount
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.10 `[branch][gate]` If defender won the read and the deep-commit gate holds (`systems/combat/combat_engine_v1/wrapper.py:299`): INDES initiative steal (`indes_steal_amount`) + possible `counter_select`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  initiative_sigma:
+    identifier: initiative_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  just_closed:
+    identifier: just_closed
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.5 `[branch]` **Approach phase** (`if not closed:`): stop-thrust roll (`core.resolve`/`core.strike`, may fell + arrest the closer), then `approach_step` advances `measure_gap`; `[gate]` `just_closed` transitions to closed (`ready=_carry(...)`).'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  key_log:
+    identifier: key_log
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` / `world.key_log` | W (once, campaign init) / R (per scene) | `engine/mc_v18.py` / `engine/cross_scale/echo_transport.py` | `engine/mc_v18.py:243-249`'
+    built_in:
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_parliamentary_bridge.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  key_type:
+    identifier: key_type
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S5.2b `[gate]` Inside `emit_scene_echo`: early-returns `{}` if `ctx["echo"]` (only set by S5.1.2, ON-branch only) or its derived `key_type` is absent.'
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  lunge_depth:
+    identifier: lunge_depth
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141`'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combatant.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  lunge_quality:
+    identifier: lunge_quality
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.8 `[write]` Consume `aggressor`'s `ready`; roll `commit_depth`; `[branch][gate]` possible lunge (`lunge_quality`); pay stamina/tempo cost.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   max_bouts:
     identifier: max_bouts
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: with a `SCENE_ROUND_CAP` (the scene analog of `max_bouts=12`); `focus_counts` (enemies targeting each actor this
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:465 fight` | `engine/cross_scale/combat_bridge.py:141 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_eng'
     built_in:
     - py:systems/combat/combat_engine_v1/workbench/trace.py
     - py:systems/combat/combat_engine_v1/wrapper.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  measure_gap:
+    identifier: measure_gap
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.3 `[gate][branch]` Determine `closed` (measure state) from `measure_gap` against a probabilistic band (`CLOSE_GAP_REF` ± `CLOSE_LATCH_BAND`).
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    - py:systems/combat/combat_engine_v1/wrapper.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  most_relevant_stat:
+    identifier: most_relevant_stat
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S5.1.2 `[write]` Sets `ctx["echo"]` (`actor_faction`/`target_faction`/`most_relevant_stat="Mil"`/`degree`) keyed off the bridge's `result` int.
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    - py:engine/cross_scale/parliamentary_bridge.py
+    - py:engine/cross_scale/scene_dispatch.py
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  net_sigma:
+    identifier: net_sigma
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`.
+    built_in:
+    - py:engine/autoload/sigma_leverage.py
+    - py:systems/combat/combat_engine_v1/core.py
+    - py:systems/combat/combat_engine_v1/workbench/probabilities.py
     disposition: BUILT
     doc_status: null
     in_table: false
@@ -194,17 +795,38 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  opening_created:
+    identifier: opening_created
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.15 `[branch]` **Displace-and-step-inside** gate (an `opening_created` precondition site): committed point-thrust exploited by `beat_aside`/`slip_inside`, gated on `read_win` + `DISPLACE_P`; may pull-back-graze and fells / sets `riposte`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/contact.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  overcommit_exposure:
+    identifier: overcommit_exposure
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.12 `[write]` Apply `overcommit_exposure` (initiative/poise loss) if positive.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   personal_combat:
     identifier: personal_combat
     docs:
+    - systems/combat/combat_flow_skeleton_v1.md
     - systems/combat/scene_combat_design_v1.md
-    purpose: Add a `combat.scene` module row to the `personal_combat` entry — the IN→resolver→OUT contract (the
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys — see §7 divergence | `references/module_contracts.yaml:1018-1021`'
     built_in:
     - py:tools/dashboard_data.py
     - py:tools/observability/build_proposals.py
     disposition: BUILT
     doc_status: null
-    in_table: false
+    in_table: true
   phase11_c4_v0:
     identifier: phase11_c4_v0
     docs:
@@ -241,16 +863,127 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
-  read_sections:
-    identifier: read_sections
+  prev_closed:
+    identifier: prev_closed
     docs:
-    - systems/combat/combat_design_v1_index.md
-    - systems/combat/combat_v30_index.md
-    purpose: Usage:** `g.read_sections('designs/scene/combat_design_v1.md', [indices])` to load specific sections.
-    built_in: []
-    disposition: UNRESOLVED
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `wrapper.engagement(A, B, first, cfg, rng, prev_closed=False)` | `systems/combat/combat_engine_v1/wrapper.py:47 engagement` | `wrapper.fight:480` only — internal, not an outside-callable entry'
+    built_in:
+    - py:systems/combat/combat_engine_v1/wrapper.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  queue_scene:
+    identifier: queue_scene
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: **No live trigger ever queues a `combat`-type scene**, so the entire `st == "combat"` branch of `scene_dispatch._resolve_slot` — both the bridge (ON) and the deprecated engine (OFF, default) sub-branches — is unreachable from the season loop today, independent of `DISPATCH_COMBAT_BRIDGE`''s value. `evaluate_triggers` only ever fires a `"contest"` scene (Stability '
+    built_in:
+    - py:engine/autoload/scene_slate.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  range_avail:
+    identifier: range_avail
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141`'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    - py:systems/combat/combat_engine_v1/combatant.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  reach_base:
+    identifier: reach_base
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.2 Derive `reach_base` for both fighters via `combat_systems.reach_base`; fix `longer`/`shorter` labels (tie broken by `rng`).
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
     doc_status: null
     in_table: false
+  read_contest:
+    identifier: read_contest
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S2.7.9a Run the **read contest** (`read_contest`), selecting defender `mode` (`msig`) — this selection is an INPUT consumed by the σ-assembly in S2.7.9b, not the other way around.
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  read_win:
+    identifier: read_win
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.15 `[branch]` **Displace-and-step-inside** gate (an `opening_created` precondition site): committed point-thrust exploited by `beat_aside`/`slip_inside`, gated on `read_win` + `DISPLACE_P`; may pull-back-graze and fells / sets `riposte`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  reopen_moment:
+    identifier: reopen_moment
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.3 `[branch][gate]` If closed, `beats>1`, and a `reopen_moment` is pending: roll `reopen_prob`; on success the engagement **re-opens** (`closed=False`, `ready=_carry(...)`) and `continue`s the beat loop.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/wrapper.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  reopen_prob:
+    identifier: reopen_prob
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.3 `[branch][gate]` If closed, `beats>1`, and a `reopen_moment` is pending: roll `reopen_prob`; on success the engagement **re-opens** (`closed=False`, `ready=_carry(...)`) and `continue`s the beat loop.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  represent_measure_p:
+    identifier: represent_measure_p
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.4 `[gate][branch]` Re-presentation gate: if `prev_closed` and the fresh state would be open, the longer weapon must win `represent_measure_p` or the engagement re-starts closed.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  resolution_pool:
+    identifier: resolution_pool
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.11 `[gate]` **The roll**: `pool = core.resolution_pool(aggressor.history)`; `deg, net = core.resolve(pool, net_sigma, rng)`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  resolve_action:
+    identifier: resolve_action
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `systems.combat.sim.combat.resolve_action(actor, target, action_type, scene=None, rng=None)` | `systems/combat/sim/combat.py:189 resolve_action` | `resolve_combat_round:293` only'
+    built_in:
+    - py:systems/combat/sim/combat.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resolve_combat_round:
+    identifier: resolve_combat_round
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `systems.combat.sim.combat.resolve_combat_round(participants, scene=None, rng=None)` (DEPRECATED engine) | `systems/combat/sim/combat.py:268 resolve_combat_round` | `engine/cross_scale/scene_dispatch.py:274 resolve_combat_round` (flag-off default branch)'
+    built_in:
+    - py:systems/combat/sim/combat.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   resolve_round:
     identifier: resolve_round
     docs:
@@ -269,6 +1002,37 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  run_all:
+    identifier: run_all
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `combat_engine_v1/workbench/balance.py` CLI (`weapon_matchup_table`, `attribute_parity_table`, `run_all`, …) | `systems/combat/combat_engine_v1/workbench/balance.py:222` (if __name__) | Jordan/operator, direct invocation (CLAUDE.md §9 routing table)'
+    built_in:
+    - py:systems/combat/combat_engine_v1/workbench/balance.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_campaign:
+    identifier: run_campaign
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:70 _dispatch_combat_bridge_on`, `engine/mc_v18.py:237`'
+    built_in:
+    - py:engine/mc_v18.py
+    - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_scene_phase:
+    identifier: run_scene_phase
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine/mc_v18.py` (campaign driver) | decides+stashes `world.dispatch_combat_bridge` once per campaign; calls `scene_dispatch.run_scene_phase` every season | `engine/mc_v18.py:141`, `engine/mc_v18.py:237`'
+    built_in:
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   scene_cfg:
     identifier: SCENE_CFG
     docs:
@@ -307,29 +1071,65 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  scene_type:
+    identifier: scene_type
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence :: **No live trigger ever queues a `combat`-type scene**, so the entire `st == "combat"` branch of `scene_dispatch._resolve_slot` — both the bridge (ON) and the deprecated engine (OFF, default) sub-branches — is unreachable from the season loop today, independent of `DISPATCH_COMBAT_BRIDGE`''s value. `evaluate_triggers` only ever fires a `"contest"` scene (Stability '
+    built_in:
+    - py:engine/autoload/scene_slate.py
+    - py:engine/cross_scale/echo_transport.py
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  select_mode:
+    identifier: select_mode
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.1 `[write]` Per-beat state update: initiative decay + disposition drift, poise regen, per-fighter `grip_position`/`range_avail`/`facing`/`lunge_depth` reset, `select_mode` (use-mode selection) + `selected_arm_magnitudes`, `reach_base` refresh #1.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  selected_arm_magnitudes:
+    identifier: selected_arm_magnitudes
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.1 `[write]` Per-beat state update: initiative decay + disposition drift, poise regen, per-fighter `grip_position`/`range_avail`/`facing`/`lunge_depth` reset, `select_mode` (use-mode selection) + `selected_arm_magnitudes`, `reach_base` refresh #1.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   settlement_bridge_unification:
     identifier: settlement_bridge_unification
     docs:
-    - systems/combat/combat_v30.md
-    - systems/combat/combat_v30_index.md
+    - systems/combat/combat_reference_v1.md
     purpose: §13.2b Settlement-Level Combat Consequences (NEW — per settlement_bridge_unification C-07)
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
-    in_table: true
+    in_table: false
   sim_x_06:
     identifier: sim_x_06
     docs:
-    - systems/combat/combat_design_v1.md
-    - systems/combat/combat_design_v1_index.md
-    - systems/combat/combat_v30.md
-    - systems/combat/combat_v30_index.md
-    - systems/combat/combat_v30_infill.md
+    - systems/combat/combat_reference_v1.md
     purpose: From sim_x_06 (confirmed working)
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
-    in_table: true
+    in_table: false
+  slip_inside:
+    identifier: slip_inside
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.15 `[branch]` **Displace-and-step-inside** gate (an `opening_created` precondition site): committed point-thrust exploited by `beat_aside`/`slip_inside`, gated on `read_win` + `DISPLACE_P`; may pull-back-graze and fells / sets `riposte`.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   state_reader:
     identifier: state_reader
     docs:
@@ -339,13 +1139,89 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  target_faction:
+    identifier: target_faction
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S5.1.2 `[write]` Sets `ctx["echo"]` (`actor_faction`/`target_faction`/`most_relevant_stat="Mil"`/`degree`) keyed off the bridge's `result` int.
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    - py:engine/cross_scale/parliamentary_bridge.py
+    - py:engine/cross_scale/scene_dispatch.py
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_pipeline_reach.py
+    - py:systems/factions/sim/absolution.py
+    - py:systems/factions/sim/excommunication.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  tempo_pressure:
+    identifier: tempo_pressure
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.2 Compute per-fighter cadence `rate` (open: `weapon_tempo`; closed: `close_tempo`), then advance `ready` by `rate * tempo_pressure`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  tradition_kit:
+    identifier: TRADITION_KIT
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `TRADITIONS`, `ADJACENT`, `ABILITIES`, `TRADITION_KIT` (tradition/ability registries) | registry | `systems/combat/combat_engine_v1/traditions.py:18 TRADITIONS`, `ability_primitives.py` | `systems/combat/combat_engine_v1/tradition.py:13-19` facade re-export'
+    built_in:
+    - py:systems/combat/combat_engine_v1/ability_primitives.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  turn_start:
+    identifier: turn_start
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `wrapper._emit(kind, **data)` trace events (`fight_start`, `turn_start`, `engagement_start`, `disengage`, `approach`, `stophit`, `commit`, `read`, `mode`, `roll`, `outcome`, `contact`, `separation`, `engagement_end`, `fight_result`) | emit (in-process callback) | `workbench/trace.py`''s `wrapper._TRACE` seam only when set; no-op (`_TRACE is None`) other'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  upset_floor:
+    identifier: UPSET_FLOOR
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: S1.4 `[branch][gate]` If `result != 0`, apply the symmetric `UPSET_FLOOR` upset-chance flip.
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  weapon_matchup_table:
+    identifier: weapon_matchup_table
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `combat_engine_v1/workbench/balance.py` CLI (`weapon_matchup_table`, `attribute_parity_table`, `run_all`, …) | `systems/combat/combat_engine_v1/workbench/balance.py:222` (if __name__) | Jordan/operator, direct invocation (CLAUDE.md §9 routing table)'
+    built_in:
+    - py:systems/combat/combat_engine_v1/workbench/balance.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   weapon_modifier_vs_armour:
     identifier: weapon_modifier_vs_armour
     docs:
-    - systems/combat/combat_v30.md
+    - systems/combat/combat_reference_v1.md
     purpose: 'On secondary hit: damage = floor(STR / 2) + weapon_modifier_vs_armour (per R7-L05 net hits min 0; if net hits 0 after Defence, no FF damage).'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  weapon_tempo:
+    identifier: weapon_tempo
+    docs:
+    - systems/combat/combat_flow_skeleton_v1.md
+    purpose: 'S2.7.2 Compute per-fighter cadence `rate` (open: `weapon_tempo`; closed: `close_tempo`), then advance `ready` by `rate * tempo_pressure`.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   wounds_inflicted:
@@ -358,38 +1234,50 @@ identifiers:
     doc_status: null
     in_table: false
 dropped_as_not_a_mechanic:
+  ability_primitives: matches a tracked/aliased document stem
+  armour_participation: matches a tracked/aliased document stem
   battlecon_extraction: the doc spells it as <name>.md — a citation
-  bg_v05_simulation_and_patches: the doc spells it as <name>.md — a citation
-  canonical_sha: boilerplate-or-too-short
-  canonical_tokens: boilerplate-or-too-short
+  build_levers: matches a tracked/aliased document stem
+  combat_bridge: matches a tracked/aliased document stem
   combat_design_v1: the doc spells it as <name>.md — a citation
   combat_engine: matches a tracked/aliased document stem
   combat_engine_v1: matches a tracked/aliased document stem
+  combat_systems: matches a tracked/aliased document stem
   combat_v30: the doc spells it as <name>.md — a citation
   combat_v30_infill: the doc spells it as <name>.md — a citation
   companion_specification_v30: matches a tracked/aliased document stem
+  cross_scale: matches a tracked/aliased document stem
   derived_stats_v1: matches a tracked/aliased document stem
   derived_stats_v30: the doc spells it as <name>.md — a citation
-  doc_index_gen: matches a tracked/aliased document stem
+  echo_transport: matches a tracked/aliased document stem
   faction_layer_v30: matches a tracked/aliased document stem
   fieldwork_exploration: the doc spells it as <name>.md — a citation
   fieldwork_investigation: the doc spells it as <name>.md — a citation
   fieldwork_v30: matches a tracked/aliased document stem
+  game_state: matches a tracked/aliased document stem
+  godot_conversion_strategy_v1: the doc spells it as <name>.md — a citation
   key_type_registry_v30: the doc spells it as <name>.md — a citation
   mass_battle_v3: the doc spells it as <name>.md — a citation
   mass_battle_v30: matches a tracked/aliased document stem
   mass_combat: matches a tracked/aliased document stem
+  mc_v18: matches a tracked/aliased document stem
   module_contracts: boilerplate-or-too-short
   npc_behavior_v30: matches a tracked/aliased document stem
   player_agency_v30: matches a tracked/aliased document stem
   scale_transitions_design_v1: the doc spells it as <name>.md — a citation
   scale_transitions_v30: matches a tracked/aliased document stem
   scene_combat_v1: matches a tracked/aliased document stem
-  sim_combat_batch_11: the doc spells it as <name>.md — a citation
+  scene_dispatch: matches a tracked/aliased document stem
+  scene_slate: matches a tracked/aliased document stem
+  sigma_leverage: matches a tracked/aliased document stem
+  sim_combat_batch_11: matches a tracked/aliased document stem
   social_contest_v30: matches a tracked/aliased document stem
   stage11_scale_transitions_deprecated: the doc spells it as <name>.md — a citation
-  stage8_combat_deprecated: the doc spells it as <name>.md — a citation
   state_graph: matches a tracked/aliased document stem
+  test_combat_invariants: matches a tracked/aliased document stem
   test_combat_state_graph: matches a tracked/aliased document stem
+  test_flow_skeletons: matches a tracked/aliased document stem
   threadwork_redesign_v25: the doc spells it as <name>.md — a citation
   threadwork_v30: the doc spells it as <name>.md — a citation
+  videogame_mode_spec: the doc spells it as <name>.md — a citation
+  weapon_physics: matches a tracked/aliased document stem
