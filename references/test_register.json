@@ -5878,7 +5878,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 34
+     "size": 35
     }
    ],
    "cites_measurement": false,
@@ -5896,11 +5896,12 @@
    "lanes": [
     "IN"
    ],
-   "loc": 255,
+   "loc": 256,
    "modules_under_test": [
     "engine/tests",
     "tools",
     "tools/broken_dependency_checker.py",
+    "tools/build_identifier_census.py",
     "tools/build_test_register.py",
     "tools/canon_coverage_check.py",
     "tools/ci_audit_registry_check.py",
@@ -6534,7 +6535,7 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 200,
+   "loc": 206,
    "modules_under_test": [
     "engine_names",
     "references",
@@ -6543,7 +6544,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 8,
+   "test_count": 7,
    "tests": {
     "test_a_deleted_rollup_is_drift_not_a_crash": {
      "assertionless": false,
@@ -6569,11 +6570,6 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "The direction that already worked. Kept so a refactor cannot trade one side for the other."
-    },
-    "test_committed_census_matches_a_fresh_build": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "~3s corpus sweep. This is the gate that did not exist for eight days."
     },
     "test_scoped_check_does_not_report_rollup_drift": {
      "assertionless": false,
@@ -11832,7 +11828,7 @@
   "helper_defs": 286,
   "helper_loc": 2679,
   "ratchet_baselines": 9,
-  "tests": 1362,
+  "tests": 1361,
   "undocumented_files": 0
  }
 }

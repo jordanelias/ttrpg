@@ -31,7 +31,6 @@ monkeypatch the module's `REPO` instead.
 import importlib.util
 import json
 import os
-import subprocess
 import sys
 
 import pytest
@@ -83,17 +82,24 @@ def _fake_repo(tmp_path, mod, monkeypatch):
 
 
 # ------------------------------------------------------------------------------------------
-# The freshness gate itself — what ED-IN-0162 asked for
+# THE WHOLE-TREE FRESHNESS CHECK IS NOT HERE. It is a validator step (ED-IN-0172).
+#
+# `test_committed_census_matches_a_fresh_build` lived here and was RACY BY CONSTRUCTION. It
+# shelled out to `--check`, which reads the WHOLE tree, while `test_engine_atlas` deliberately
+# plants `systems/zz_atlas_probe/thing.py` in the REAL tree to prove a new subsystem folder is
+# detected. Under `-n auto` the census counted that file's public callable and `engine_names`
+# drifted by exactly one — and ONLY the roll-up moved, because the probe directory carries no
+# `.md` and so is not a subsystem. Green locally every time, red in CI.
+#
+# The docstring above still stands and is worth keeping for the lesson it got half right: this
+# file was careful never to WRITE to the working tree, and then shipped a test that READ the
+# entire working tree while another test wrote to it. Same race, opposite direction.
+#
+# `python3 tools/build_identifier_census.py --check` now runs in the `validators` job beside
+# export_engine_params / export_key_types / build_test_register, which is where every other
+# whole-tree freshness check in this repo already lives. What stays here is what is hermetic:
+# the tmp_path falsifiers below, which monkeypatch `REPO` and cannot see the real tree at all.
 # ------------------------------------------------------------------------------------------
-@pytest.mark.slow
-def test_committed_census_matches_a_fresh_build():
-    """~3s corpus sweep. This is the gate that did not exist for eight days."""
-    r = subprocess.run([sys.executable, BUILDER, '--check'],
-                       capture_output=True, text=True, cwd=ROOT)
-    assert r.returncode == 0, (
-        f'identifier census is stale:\n{r.stdout}\n{r.stderr}\n'
-        'Regenerate with `python3 tools/build_identifier_census.py`, then regenerate the '
-        'glossary that reads it (`python3 tools/observability/build_glossary.py`), and commit.')
 
 
 def test_the_rollup_is_committed_and_covers_every_subsystem():

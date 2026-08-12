@@ -108,6 +108,14 @@ jobs:
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
           v python3 tools/build_test_register.py --check
+          # ED-IN-0172: moved OUT of the pytest suite, where it was racy by construction.
+          # It shells out and reads the WHOLE tree, while `test_engine_atlas` deliberately
+          # plants `systems/zz_atlas_probe/thing.py` in the real tree. Under `-n auto` the
+          # census saw that file, counted `probe_entry`, and the roll-up drifted by exactly
+          # one name — per-subsystem files unaffected, because the probe dir has no `.md`
+          # so it is not a subsystem. Green locally, red in CI, and the signature said so.
+          # Whole-tree freshness belongs in a validator step, next to its three siblings.
+          v python3 tools/build_identifier_census.py --check
           v python3 tools/ci_sim_fabrication_check.py
           v python3 tools/ci_claim_provenance_check.py
           v python3 tools/ci_claude_workflow_paths.py

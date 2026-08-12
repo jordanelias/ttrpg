@@ -275,6 +275,12 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
 
+  - path: tools/build_identifier_census.py
+    level: 5
+    role: "Freshness gate for the per-subsystem identifier census (systems/*/_identifier_census.yaml) and its roll-up references/identifier_census.json: --check re-derives both and exits 1 on drift."
+    ci_job: validators
+    notes: "Wired 2026-08-12 (ED-IN-0172). Gated because references/glossary/ is BUILT from this census and IS itself freshness-gated — a gated artifact downstream of an ungated one, which ran green for eight days while its inputs described deleted files (ED-IN-0162/0166). MOVED OUT OF PYTEST, where the equivalent test was racy by construction: it shells out and reads the WHOLE tree while tests/valoria/test_engine_atlas.py deliberately plants systems/zz_atlas_probe/thing.py in the real tree, so under -n auto the census counted the probe's public callable and the roll-up drifted by exactly one name (per-subsystem files unaffected — the probe dir carries no .md, so it is not a subsystem). Whole-tree freshness belongs in a validator step alongside export_engine_params/export_key_types/build_test_register; the hermetic tmp_path falsifiers stay in tests/valoria/test_identifier_census.py."
+
   - path: tools/build_test_register.py
     level: 5
     role: "Test-register drift gate: references/test_register.json must match a fresh AST scan of tests/valoria/ (--check mode)."
