@@ -89,6 +89,20 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 <a id="in"></a>
 
+**ED-IN-0170/0171 allocated 2026-08-12** (next_free 170 -> 172), moved here from the lane row so
+that row stays a pointer rather than a narrative (`test_narrative_does_not_creep_back_into_the_state_file`
+caps it at 600 chars, and it caught this append at 659).
+
+- **ED-IN-0170 — degree-vocabulary equivalence census.** Prices the held ruling #0. The divergence
+  audit's "16 producers" is a count of code sites; measured behaviourally it is **7 equivalence
+  classes over 11 sites**, and **8 of those 11 need no ruling at all**. Instrument:
+  `audit/2026-08-12-degree-vocabulary-census/degree_census.py`.
+- **ED-IN-0171 — Jordan ruling, 2026-08-12: "Dead files get moved to deprecated."** Resolves
+  ED-IN-0163 and unblocks G2's generator-retirement half. ⚠ One conflict flagged, not routed
+  around: `tests/valoria/test_evacuation_plan.py:98/:166` pins the opposite disposition and must be
+  amended deliberately when the retirement is executed. Not executed in the same commit as the
+  census — it is its own scoped change.
+
 **ED-IN-0158/0159 allocated 2026-08-11, RENUMBERED from 0156/0157** (next_free 156 -> 160): the
 consolidation sweep and the code-leanness census. **A same-lane DOUBLE collision.** This branch
 (`claude/repo-cleanup-consolidation-lig2jo`) and PR #302 both branched from `c26a22c` reading
