@@ -25,9 +25,24 @@ import json, re, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))       # sibling import of build_decisions
+if str(HERE.parents[0]) not in sys.path:
+    sys.path.insert(0, str(HERE.parents[0]))   # tools/ — for ci_common
+
+# The dependency-free primitives (repo root, lane roster, token estimate, id
+# regexes) are owned ONE LAYER DOWN, in tools/ci_common.py, and re-exported here
+# (plan G7, ED-IN-0159 §8.3). The direction is forced by the dependency graph:
+# this module imports build_decisions, which requires PyYAML and sweeps the
+# corpus at import time, while several stdlib-only BLOCKING gates need nothing
+# from here but the 9-code tuple. Owning it here would have made those gates
+# depend on the observability tier to read a constant.
+#
+# Nothing that imports obs_core changes: every name below is still available
+# under the name it always had.
+import ci_common as _cc                 # noqa: E402
+
+REPO = _cc.REPO_PATH
 
 # --- reuse build_decisions' owned primitives (do not re-implement) -------------
 import build_decisions as _bd            # noqa: E402
@@ -38,10 +53,13 @@ DECISION_MARKERS = _bd.MARKERS                    # corpus-wide 13-pattern open-
 redact_forbidden_names = _bd._redact_forbidden_names  # names_index.yaml redaction mirror
 
 # --- lane roster (the single canonical 9-code tuple) ---------------------------
-# The prior rosters that must migrate to this: dashboard_data.LEDGER_LANES (which
-# silently OMITTED 'go'), currency_consistency_check.LANE_CODES, validate_ed_citations.LANE_CODES.
-LANE_CODES: tuple[str, ...] = ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
-LEDGER_LANE_CODES: tuple[str, ...] = tuple(c.lower() for c in LANE_CODES)  # ledger filename lanes
+# OWNED BY ci_common (plan G7) and re-exported here. The rosters that migrated onto
+# it: dashboard_data.LEDGER_LANES (which silently OMITTED 'go'),
+# currency_consistency_check.LANE_CODES, validate_ed_citations.LANE_CODES,
+# ci_workplan_pointer_check.LANE_CODES, broken_dependency_checker._LANE_CODES,
+# handoff_atomize.LANES.
+LANE_CODES: tuple[str, ...] = _cc.LANE_CODES
+LEDGER_LANE_CODES: tuple[str, ...] = _cc.LEDGER_LANE_CODES  # ledger filename lanes
 
 
 # --- A. editorial-ledger reader (single owner) ---------------------------------

@@ -26,7 +26,15 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parents[1]
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ci_common  # noqa: E402
+
+ROOT = Path(ci_common.REPO)
 SOURCE = ROOT / "references" / "definitions" / "vocab_source.yaml"
 
 # register key -> its path. Only DATA-field-read registers (build_lexicon-safe under a YAML dump).

@@ -66,7 +66,7 @@ except ImportError:  # same repo-root invocation path as quantity_registry above
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ci_common
 
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
 _STAT_DICT_RE = re.compile(r'(stat_deltas|impact_vector)\s*=\s*\{([^{}]*)\}')
 _STR_KEY_RE = re.compile(r'''["']([^"']+)["']\s*:''')

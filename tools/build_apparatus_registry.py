@@ -20,7 +20,9 @@ from __future__ import annotations
 import argparse, ast, json, re, sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[1]
+# repo root: ONE OWNER, tools/ci_common.py (plan G7). This module already
+# bootstraps ci_common below; the assignment is re-stated after that import.
+REPO = None  # set from ci_common.REPO immediately after the bootstrap below
 
 # Single-owner __main__-guard predicate (OI-52a, ED-IN-0097, 2026-07-29-code-shape-open-items
 # plan §3 Wave 4 item 2). Was a local regex over raw source text (`re.search(r'if\s+__name__...`)
@@ -34,6 +36,8 @@ try:
 except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import ci_common
+
+REPO = Path(ci_common.REPO)
 
 # ------------------------------------------------------------------ enumeration
 def _iter_tool_scripts() -> list[Path]:

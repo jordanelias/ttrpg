@@ -63,7 +63,15 @@ from typing import Iterable
 import yaml
 
 
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+_REPO_ROOT = ci_common.REPO
 SYSTEMS_DIR = os.path.join(_REPO_ROOT, 'systems')
 CANONICAL_SOURCES_PATH = os.path.join(_REPO_ROOT, 'references', 'canonical_sources.yaml')
 STATUS_MARKER = 'Status: CANONICAL'

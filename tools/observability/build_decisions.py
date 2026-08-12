@@ -19,14 +19,19 @@ Output: decisions.json, decisions_data.js (window.VALORIA_DECISIONS), DECISIONS.
 Run:    python tools/observability/build_decisions.py
 """
 from __future__ import annotations
-import json, re, sys
+import json, os, re, sys
 from pathlib import Path
 try:
     import yaml
 except ImportError:
     print("PyYAML required", file=sys.stderr); sys.exit(1)
 
-REPO = Path(__file__).resolve().parents[2]
+# ONE OWNER for the repo root and the 9-lane roster: tools/ci_common.py (plan G7,
+# ED-IN-0159 §8.3). Anchors on THIS FILE's directory, never on the repo root.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO_PATH
 OUT = Path(__file__).resolve().parent
 
 # Redact EVERY legacy name (block- and warn-tier alike, references/names_index.yaml —
@@ -209,7 +214,9 @@ LANE_PATH_PREFIXES: list[tuple[str, str]] = [
 _LANE_PREFIXES_SORTED = sorted(LANE_PATH_PREFIXES, key=lambda kv: -len(kv[0]))
 
 
-LANE_ORDER = ["MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE"]
+# ONE OWNER: ci_common.LANE_CODES (plan G7). Kept as a list because this
+# module's consumers index and extend it.
+LANE_ORDER = list(ci_common.LANE_CODES)
 LANE_NAMES = {
     "MB": "Mass battle", "PC": "Personal combat", "FI": "Field investigation",
     "SC": "Social contest", "FA": "Faction actions", "WR": "World",

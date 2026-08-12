@@ -16,16 +16,63 @@ Modes:
   'local'   — HEAD~1..HEAD (or empty tree for the first commit): ad-hoc local runs.
 
 All functions are pure wrappers over `git`; no network, no PAT, no cache.
+
+────────────────────────────────────────────────────────────────────────────────
+THE SINGLE IMPORT SURFACE FOR `tools/` (plan step G7, ED-IN-0159 §8.3)
+────────────────────────────────────────────────────────────────────────────────
+Jordan's centralization directive (2026-08-11): *"We want to centralize as much
+information as possible through injectable code, dictionaries, glossaries,
+masters, etc such that we can maximize code uniformity and prevent duplication."*
+
+`00_code_leanness.md` §1.2 measured what that directive targets in this tier:
+the repo root re-derived **53 times in 15 distinct spellings**, YAML register
+load **44 times**, the 9-lane roster **8 times**, token estimation **6**, the
+PP/ED id regex **6**. Every one of those copies AGREES today, so collapsing them
+is mechanical and the expected delta is *none* — which is what
+`tests/valoria/test_ci_common_primitives.py` asserts, site by site.
+
+WHY THE PRIMITIVES LAND HERE AND NOT IN `observability/obs_core.py`.
+§8.3 names `ci_common` as the import surface, and the layering falls out of the
+dependency graph rather than from taste: `obs_core` imports `build_decisions`,
+which requires PyYAML and sweeps the corpus at import time. Several BLOCKING
+gates (`validate_ed_citations`, `currency_consistency_check`,
+`ci_workplan_pointer_check`) need only the 9-code tuple. Routing them through
+`obs_core` to get it would make a stdlib-only gate depend on the observability
+tier — a real regression bought for a tuple.
+
+So the rule is: **dependency-free primitives are owned here and re-exported by
+`obs_core`** (which keeps every one of its 9 consumers working unchanged), and
+`obs_core`'s genuinely heavier primitives — the ledger reader, the JS-bundle
+writer — are re-exported *lazily* from here via module `__getattr__`, so
+`import ci_common` never pulls PyYAML in. One definition either way; the import
+cost is paid only by callers that actually want the heavy thing.
+
+This is NOT a fourth library. §1.1 measured `ci_common` at 11/118 and `obs_core`
+at 9/118 adoption: the abstractions already exist and are correct. The work here
+is adoption, not authorship.
 """
 import ast
 import glob
 import os
+import re
 import subprocess
+from pathlib import Path
 
 # git's well-known empty-tree object — diff against this == "everything is new".
 EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
 
-_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ── one owner: the repository root ────────────────────────────────────────────
+# Exposed in BOTH shapes because the tier is split between the two idioms and a
+# call site should never have to convert. They are one definition — REPO_PATH is
+# derived from REPO — so they cannot drift.
+#   REPO      (str)  — the `os.path.join(REPO, ...)` / `subprocess(cwd=REPO)` idiom
+#   REPO_PATH (Path) — the `REPO_PATH / 'references' / 'x.yaml'` idiom
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_PATH = Path(REPO)
+
+# Pre-G7 private name, kept so nothing that already imported it breaks. New code
+# uses REPO.
+_REPO = REPO
 
 
 def sim_reference_roots(repo_root=None):
@@ -225,3 +272,149 @@ def has_main_guard(tree):
            (_is_dunder_name(right) and _is_main_const(left)):
             return True
     return False
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# G7 — the mechanical one-owner primitives (ED-IN-0159 §8.1)
+#
+# Every constant and function below replaces a set of copies that AGREE today.
+# The expected delta of each migration is therefore *none*, and any behaviour
+# change is a bug rather than a finding — which is exactly what
+# tests/valoria/test_ci_common_primitives.py exists to establish, by recomputing
+# each primitive the way its call sites used to and asserting equality.
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── the 9-lane roster (§1.3b: 8 sites, agreeing today, diverged before) ───────
+# The lane tag makes cross-lane ED collision impossible by construction
+# (CLAUDE.md §4). Verbatim copies previously lived in ci_workplan_pointer_check,
+# broken_dependency_checker, handoff_atomize, validate_ed_citations,
+# currency_consistency_check and obs_core, plus two derived spellings.
+#
+# The reason this is a defect and not merely repetition is on the record:
+# obs_core's own header notes that one of the prior rosters silently OMITTED
+# 'GO', undercounting a whole lane. Adding a tenth lane used to be 8 edits.
+LANE_CODES: tuple = ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
+
+# Ledger filenames use the lowercase code: registers/editorial_ledger_<xx>.jsonl
+LEDGER_LANE_CODES: tuple = tuple(c.lower() for c in LANE_CODES)
+
+
+# ── id regexes (§1.2: 6 sites) ───────────────────────────────────────────────
+# Exposed as PATTERN STRINGS, not only as compiled objects, because half the
+# call sites embed them in a larger expression (`-\s+id:\s+PP-(\d+)`) and a
+# compiled object cannot be composed. The compiled forms below cover the rest.
+#
+# Both ED formats are permanently valid (CLAUDE.md §4): the flat ED-NNNN
+# sequence is FROZEN at ED-1096 but never retired, and all new items are
+# lane-tagged ED-<LANE>-NNNN. A pattern that matches only one of the two is the
+# recurring bug here — `index_gen.py:129` documents its own r'ED-\d+' as
+# predating the lane format and never updated.
+PP_ID_PAT = r'PP-\d+'
+ED_FLAT_ID_PAT = r'ED-\d+'                 # pre-cutover, frozen at ED-1096
+ED_LANE_ID_PAT = r'ED-[A-Z]{2}-\d{4}'      # the live format
+ED_ID_PAT = r'ED-(?:[A-Z]{2}-)?\d+'        # either format
+ANY_ID_PAT = rf'(?:{PP_ID_PAT}|{ED_ID_PAT})'
+
+PP_ID_RE = re.compile(PP_ID_PAT)
+ED_ID_RE = re.compile(ED_ID_PAT)
+ANY_ID_RE = re.compile(ANY_ID_PAT)
+
+
+def tokens(text) -> int:
+    """The repo's token estimate: characters // 4. ONE OWNER (§1.2, 6 sites).
+
+    This is the number every size cap in the repo is denominated in —
+    `references/atomization_rules.yaml`, `ci_register_size_check`,
+    `compliance_check`, `ci_hooks_verifier`, `handoff_atomize` — so it is not a
+    convenience wrapper but the definition the caps mean. Two gates checking the
+    same file against caps computed by two different estimators is a class of
+    disagreement this repo has already paid for once (ED-IN-0097).
+
+    Accepts str or bytes; `None` counts as 0 so a missing file is not a crash in
+    a size sweep.
+    """
+    if text is None:
+        return 0
+    return len(text) // 4
+
+
+def load_yaml(path, default=None):
+    """`yaml.safe_load` a file, returning `default` when it is missing or empty.
+    ONE OWNER (§1.2, 44 sites).
+
+    PyYAML is imported INSIDE the function, deliberately. `ci_common` is
+    imported by stdlib-only blocking gates, and a module-level `import yaml`
+    would make PyYAML a hard requirement of every one of them for the benefit of
+    the subset that reads registers.
+
+    The `default` contract is the one the call sites already had: a register
+    that does not exist reads as empty rather than raising, because several
+    gates legitimately run against trees where an optional register is absent
+    (a lane file exists only once that lane has allocated an ED — CLAUDE.md §4).
+    Call sites that WANT the exception should keep calling yaml.safe_load
+    directly; this helper does not take that choice away from them.
+    """
+    import yaml
+    try:
+        with open(path, encoding='utf-8') as fh:
+            data = yaml.safe_load(fh)
+    except FileNotFoundError:
+        return default
+    return default if data is None else data
+
+
+def load_register(name, default=None):
+    """`load_yaml` against `registers/<name>` or `references/<name>`, whichever
+    exists — the two homes the process registers live in after the ED-IN-0071 P0
+    move out of `canon/`."""
+    for parent in ('registers', 'references'):
+        candidate = os.path.join(REPO, parent, name)
+        if os.path.exists(candidate):
+            return load_yaml(candidate, default)
+    return default
+
+
+# ── NOT provided: an `id_reservations` reader ────────────────────────────────
+# The plan's §8.1 table lists "id_reservations read | 8 | 1 | removed 7". Executing
+# it found nothing to collapse: measured across the whole tree
+# (`grep -rn id_reservations --include=*.py . | grep -E 'safe_load|yaml.load'`),
+# **zero** modules load that file. The census's detector for this row is the bare
+# pattern `id_reservations`, so the 8 are MENTIONS — six are prose comments
+# explaining the ID rules, one is a `ci_register_size_check` size-cap row keyed by
+# path string, one is a `build_decisions` source-tuple. Nothing parses it.
+#
+# Shipping a `read_id_reservations()` here anyway would have added an abstraction
+# with no caller — the precise defect ED-IN-0149 named and the consolidation sweep
+# ranked (build-then-disconnect). Callers that need the file can use load_yaml();
+# when the first real reader appears, THAT is the moment to give it an owner.
+# Recorded rather than silently skipped: §0.1 point 3.
+
+
+# ── lazy re-exports of obs_core's heavier primitives ──────────────────────────
+# PEP 562 module __getattr__. `ci_common.read_ledger_entries(...)` works and is
+# the single import surface §8.3 asks for, but `import ci_common` still costs
+# nothing: obs_core (and through it build_decisions, and through that PyYAML) is
+# imported only if one of these names is actually touched.
+_LAZY_FROM_OBS_CORE = (
+    'read_ledger_entries',      # registers/editorial_ledger*.jsonl, normalized
+    'open_ledger_entries',
+    'STATUS_RE',                # the canonical `## Status:` reader (plan G8)
+    'first_status',
+    'is_unratified_status',
+    'text_needs_jordan',
+    'write_js_bundle',
+    'infer_lane',
+    'LANE_NAMES',
+    'DECISION_MARKERS',
+)
+
+
+def __getattr__(name):
+    if name in _LAZY_FROM_OBS_CORE:
+        import sys
+        obs_dir = os.path.join(REPO, 'tools', 'observability')
+        if obs_dir not in sys.path:
+            sys.path.insert(0, obs_dir)
+        import obs_core
+        return getattr(obs_core, name)
+    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')

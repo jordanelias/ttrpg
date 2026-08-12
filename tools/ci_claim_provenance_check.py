@@ -40,7 +40,15 @@ import re
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+ROOT = ci_common.REPO
 
 # Ledgers under the rule, each with the FIRST entry id the rule binds on (see FORWARD-LOOKING above). Scoped to the
 # lane that generated the failure; widen deliberately, lane by lane, once each lane has a measurement instrument to

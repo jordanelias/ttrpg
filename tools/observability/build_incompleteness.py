@@ -42,6 +42,15 @@ HERE = Path(__file__).resolve()
 OBS_DIR = HERE.parent
 REPO = OBS_DIR.parents[1]
 
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace. (Two dirnames:
+# this module lives in tools/observability/, one level below the owner.)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
 # lane inference — reuse the single resolver (build_decisions.infer_lane), same as the other feeds
 sys.path.insert(0, str(OBS_DIR))
 try:
@@ -52,7 +61,10 @@ try:
 except Exception:
     def infer_lane(p):
         return "unassigned"
-    LANE_ORDER = ["MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE", "unassigned"]
+    # ONE OWNER: ci_common.LANE_CODES (plan G7). This is the FALLBACK arm,
+    # reached only when build_decisions fails to import; it had its own
+    # verbatim copy, so a lane added upstream would have been invisible here.
+    LANE_ORDER = list(ci_common.LANE_CODES) + ["unassigned"]
 
 # the vector-audit's own cull manifest — surface what IT excludes, too
 sys.path.insert(0, str(REPO / "skills" / "valoria-vector-audit" / "scripts"))

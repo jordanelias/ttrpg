@@ -33,6 +33,14 @@ import glob
 import os
 import sys
 
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
 DEFAULT_SKILL_LIMIT = 8_000  # tokens (chars // 4)
 
 violations = []
@@ -70,7 +78,7 @@ else:
 # session), so an oversized skill is a lint signal, not a hard violation.
 for skill_md in sorted(glob.glob('skills/*/SKILL.md')):
     with open(skill_md, encoding='utf-8', errors='replace') as f:
-        tokens = len(f.read()) // 4
+        tokens = ci_common.tokens(f.read())
     if tokens > DEFAULT_SKILL_LIMIT:
         warnings.append(f"SKILL LARGE: {skill_md.replace(os.sep, '/')}: {tokens:,} tokens "
                         f"(soft limit {DEFAULT_SKILL_LIMIT:,})")

@@ -27,6 +27,7 @@ Usage:
     python tools/handoff_atomize.py --all --check        # report only, exit 1 on violation
     python tools/handoff_atomize.py --all --today 2026-07-28
 """
+import os
 import argparse
 import datetime
 import pathlib
@@ -34,7 +35,18 @@ import re
 import sys
 
 HANDOFF_DIR = pathlib.Path(__file__).resolve().parent.parent / "registers" / "handoffs"
-LANES = ("MB", "PC", "FI", "SC", "FA", "WR", "IN", "GO", "SE")
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+# ONE OWNER: ci_common.LANE_CODES (plan G7, ED-IN-0159 §8.3). Was a verbatim
+# copy of the 9-code tuple; obs_core's header records that one such copy once
+# silently omitted GO, undercounting a whole lane.
+LANES = ci_common.LANE_CODES
 
 MAX_TOKENS = 10_000          # per infill / archive document (Jordan 2026-07-28)
 STALE_DAYS = 30              # "older than a month"
@@ -79,9 +91,13 @@ SUMMARY_TODO = ("<!-- TODO(ED-IN-0086): author a ~60-word executive summary. Bul
 
 
 def tokens(text: str) -> int:
-    """Repo convention: characters // 4 (matches ci_register_size_check and compliance_check).
+    """Thin alias of `ci_common.tokens` — the ONE owner of the repo's token estimate
+    (plan G7, ED-IN-0159 §8.3). Kept as a name here because this module's own API and
+    tests call `tokens(...)` locally; it re-exports rather than re-implements.
+
+    Repo convention: characters // 4 (matches ci_register_size_check and compliance_check).
     NB characters, not bytes — a byte count overstates unicode-heavy files."""
-    return len(text) // 4
+    return ci_common.tokens(text)
 
 
 def split_bullets(section: str) -> list[str]:

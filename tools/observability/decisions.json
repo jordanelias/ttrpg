@@ -1,44 +1,44 @@
 {
   "meta": {
-    "files_scanned": 431,
-    "total_open": 226,
+    "files_scanned": 467,
+    "total_open": 255,
     "by_category": {
       "ratification": 13,
-      "naming": 31,
-      "ruling": 31,
-      "mechanics": 12,
-      "gap": 64,
+      "ruling": 44,
+      "naming": 33,
+      "mechanics": 15,
+      "gap": 75,
       "assumption": 62,
       "stub": 4,
       "todo": 9
     },
     "by_priority": {
-      "1": 64,
-      "2": 23,
-      "3": 139
+      "1": 78,
+      "2": 27,
+      "3": 150
     },
     "by_lane": {
-      "IN": 17,
-      "unassigned": 133,
+      "IN": 20,
+      "unassigned": 155,
       "FA": 25,
       "SC": 6,
       "GO": 21,
       "MB": 11,
       "SE": 3,
       "PC": 1,
-      "WR": 8,
+      "WR": 12,
       "FI": 1
     },
     "by_lane_priority": {
       "IN": {
-        "1": 2,
+        "1": 5,
         "2": 1,
         "3": 14
       },
       "unassigned": {
-        "1": 44,
-        "2": 20,
-        "3": 69
+        "1": 55,
+        "2": 24,
+        "3": 76
       },
       "FA": {
         "1": 3,
@@ -73,7 +73,7 @@
       "WR": {
         "1": 0,
         "2": 0,
-        "3": 8
+        "3": 12
       },
       "FI": {
         "1": 0,
@@ -89,6 +89,10 @@
       [
         "references/module_contracts.yaml",
         59
+      ],
+      [
+        "references/CONTRACT_INDEX.md",
+        37
       ],
       [
         "godot/godot_conversion_strategy_v1.md",
@@ -135,12 +139,8 @@
         4
       ],
       [
-        "systems/factions/sim/mass_seizure.py",
-        3
-      ],
-      [
-        "systems/factions/faction_behavior_v30.md",
-        2
+        "systems/threadwork/threadwork_flow_skeleton_v1.md",
+        4
       ]
     ],
     "resolved_count": 25
@@ -188,6 +188,153 @@
       "systems": [],
       "count": 2,
       "lane": "FA"
+    },
+    {
+      "text": "registry-derived; runtime-system vs QA-tooling classification [OPEN \u2014 Jordan]; home doc unlocated [GAP]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:265",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "audit"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) \u2014 a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:295",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "campaign_architecture"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:485",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "faction_politics"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:570",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "faction_state"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:738",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "miraculous_event"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territo\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1054",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "piety_track"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry-derived; relationship to settlement_layer \u00a71.3 Local Economy derived value unestablished \u2014 possibly the same system [OPEN \u2014 Jordan]; home doc [GAP]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1193",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "settlement_economy"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "name collision with personal piety_track \u2014 see piety_track gap_note [OPEN \u2014 Jordan]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1362",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "territorial_piety"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "threadwork_v30 header: \"design proposal, requires editorial approval\" yet carries CANONICAL POOL NOTICE \u2014 doc status ambiguity [OPEN \u2014 Jordan]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1411",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "threadwork"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "| `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 24 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/s\u2026",
+      "category": "naming",
+      "priority": 1,
+      "label": "Naming collision",
+      "locations": [
+        "systems/ui/ui_flow_skeleton_v1.md:46"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
     },
     {
       "text": "<!-- [EDITORIAL: PP-665 \u2014 Yrsa Vossen \u2192 Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->",
@@ -550,6 +697,162 @@
       "lane": "GO"
     },
     {
+      "text": "`[OPEN \u2014 Jordan]` markers are carried in `references/CONTRACT_INDEX.md`'s own gap notes. None of that is",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "systems/_architecture/engine_atlas_v1.md:365"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "IN"
+    },
+    {
+      "text": "| Retire-vs-merge for the phantom settlement-economy module and its edges | SE | `references/CONTRACT_INDEX.md:122 settlement_economy` `[OPEN \u2014 Jordan]`. ED-SE-0005 is **resolved** \u2014 it settled the settlement-action half only |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "systems/_architecture/engine_atlas_v1.md:375"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "IN"
+    },
+    {
+      "text": "| The threadwork head's doc-status ambiguity: a header reading \"design proposal, requires editorial approval\" over a CANONICAL POOL NOTICE | WR | `references/CONTRACT_INDEX.md:108 threadwork` `[OPEN \u2014 Jordan]` |",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "systems/_architecture/engine_atlas_v1.md:376"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "IN"
+    },
+    {
+      "text": "| [`campaign_architecture`](CONTRACT_INDEX.md#campaign_architecture) | RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) \u2014 a cross-cutting design doc, not a runtime module; its con\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:87"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [faction_state]: registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:96"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [piety_track]: NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-40\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:104"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [territorial_piety]: name collision with personal piety_track \u2014 see piety_track gap_note [OPEN \u2014 Jordan]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:106"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [threadwork]: threadwork_v30 header: \"design proposal, requires editorial approval\" yet carries CANONICAL POOL NOTICE \u2014 doc status ambiguity [OPEN \u2014 Jordan]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:108"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [audit]: registry-derived; runtime-system vs QA-tooling classification [OPEN \u2014 Jordan]; home doc unlocated [GAP]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:114"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [settlement_economy]: registry-derived; relationship to settlement_layer \u00a71.3 Local Economy derived value unestablished \u2014 possibly the same system [OPEN \u2014 Jordan]; home doc [GAP]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:122"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [faction_politics]: registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:135"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [miraculous_event]: registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contrad\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:138"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [campaign_architecture]: RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) \u2014 a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwo\u2026",
+      "category": "ruling",
+      "priority": 1,
+      "label": "Open ruling (awaiting Jordan)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:148"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "\"registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]\"",
       "category": "ruling",
       "priority": 1,
@@ -814,128 +1117,98 @@
       "lane": "GO"
     },
     {
-      "text": "registry system name faction_layer vs module faction_state \u2014 vocabulary unification [OPEN \u2014 Jordan]",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
+      "text": "ZERO Key integration in a CANONICAL doc \u2014 no registry entry names ci_political; CI=100 Theocracy Unification Attempt (\u00a72.2) is unkeyed [registry \u00a710 candidate]",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
       "locations": [
+        "references/CONTRACT_INDEX.md:330",
         "references/module_contracts.yaml"
       ],
       "systems": [
-        "faction_state"
+        "ci_political"
       ],
-      "count": 1,
+      "count": 2,
       "lane": null
     },
     {
-      "text": "NAME COLLISION (3-way) [OPEN \u2014 Jordan]: substrate \u00a78.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territo\u2026",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
+      "text": "CANONICAL BG-era doc with ZERO Key integration \u2014 no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (\u00a71.3b ED-676) and Calamity drift (\u00a71.3) with no Key types [registry \u00a710 candidate / Keys-migration pending]",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
       "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "piety_track"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "name collision with personal piety_track \u2014 see piety_track gap_note [OPEN \u2014 Jordan]",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
+        "references/CONTRACT_INDEX.md:1361",
         "references/module_contracts.yaml"
       ],
       "systems": [
         "territorial_piety"
       ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "world-state era transitions (\u00a75: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED \u2014 no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry \u00a710 candidate]",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1456",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "victory"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered",
+      "category": "naming",
+      "priority": 2,
+      "label": "Vocabulary / attribution conflict",
+      "locations": [
+        "references/CONTRACT_INDEX.md:668",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "game_director"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [territorial_piety]: CANONICAL BG-era doc with ZERO Key integration \u2014 no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (\u00a71.3b ED-676) and Calamity drift (\u00a71.3) with no Key types [registry \u00a710 candidate / Keys-migration pending]",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
+      "locations": [
+        "references/CONTRACT_INDEX.md:105"
+      ],
+      "systems": [],
       "count": 1,
       "lane": null
     },
     {
-      "text": "threadwork_v30 header: \"design proposal, requires editorial approval\" yet carries CANONICAL POOL NOTICE \u2014 doc status ambiguity [OPEN \u2014 Jordan]",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
+      "text": "W-GAP [ci_political]: ZERO Key integration in a CANONICAL doc \u2014 no registry entry names ci_political; CI=100 Theocracy Unification Attempt (\u00a72.2) is unkeyed [registry \u00a710 candidate]",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
       "locations": [
-        "references/module_contracts.yaml"
+        "references/CONTRACT_INDEX.md:125"
       ],
-      "systems": [
-        "threadwork"
-      ],
+      "systems": [],
       "count": 1,
       "lane": null
     },
     {
-      "text": "registry-derived; runtime-system vs QA-tooling classification [OPEN \u2014 Jordan]; home doc unlocated [GAP]",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
+      "text": "W-GAP [victory]: world-state era transitions (\u00a75: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED \u2014 no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry \u00a710 candidate]",
+      "category": "mechanics",
+      "priority": 2,
+      "label": "Unregistered Key (F2 / registry \u00a710)",
       "locations": [
-        "references/module_contracts.yaml"
+        "references/CONTRACT_INDEX.md:127"
       ],
-      "systems": [
-        "audit"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "registry-derived; relationship to settlement_layer \u00a71.3 Local Economy derived value unestablished \u2014 possibly the same system [OPEN \u2014 Jordan]; home doc [GAP]",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "settlement_economy"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) \u2014 boundary vs faction_state unestablished [OPEN \u2014 Jordan]; home doc [GAP]",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "faction_politics"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "registry-derived; system-vs-event-source classification [OPEN \u2014 Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL \u2014 the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc\u2026",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "miraculous_event"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) \u2014 a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_\u2026",
-      "category": "ruling",
-      "priority": 1,
-      "label": "Open ruling (awaiting Jordan)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "campaign_architecture"
-      ],
+      "systems": [],
       "count": 1,
       "lane": null
     },
@@ -1040,48 +1313,6 @@
       "lane": null
     },
     {
-      "text": "CANONICAL BG-era doc with ZERO Key integration \u2014 no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (\u00a71.3b ED-676) and Calamity drift (\u00a71.3) with no Key types [registry \u00a710 candidate / Keys-migration pending]",
-      "category": "mechanics",
-      "priority": 2,
-      "label": "Unregistered Key (F2 / registry \u00a710)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "territorial_piety"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "ZERO Key integration in a CANONICAL doc \u2014 no registry entry names ci_political; CI=100 Theocracy Unification Attempt (\u00a72.2) is unkeyed [registry \u00a710 candidate]",
-      "category": "mechanics",
-      "priority": 2,
-      "label": "Unregistered Key (F2 / registry \u00a710)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "ci_political"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "world-state era transitions (\u00a75: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED \u2014 no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry \u00a710 candidate]",
-      "category": "mechanics",
-      "priority": 2,
-      "label": "Unregistered Key (F2 / registry \u00a710)",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "victory"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
       "text": "personal_combat: feedback loop open \u2014 damper/cap unconfirmed",
       "category": "mechanics",
       "priority": 2,
@@ -1092,6 +1323,18 @@
       "systems": [
         "personal_combat"
       ],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [game_director]: registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered",
+      "category": "naming",
+      "priority": 2,
+      "label": "Vocabulary / attribution conflict",
+      "locations": [
+        "references/CONTRACT_INDEX.md:112"
+      ],
+      "systems": [],
       "count": 1,
       "lane": null
     },
@@ -1118,20 +1361,6 @@
       "systems": [],
       "count": 1,
       "lane": "GO"
-    },
-    {
-      "text": "registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered",
-      "category": "naming",
-      "priority": 2,
-      "label": "Vocabulary / attribution conflict",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "game_director"
-      ],
-      "count": 1,
-      "lane": null
     },
     {
       "text": "Placeholder name 'varfell_mandate_action' (was 'vaynards_hall') \u2014 needs canonical name []",
@@ -1487,6 +1716,81 @@
         "systems/factions/_identifier_census.yaml:1618"
       ],
       "systems": [],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "home doc unlocated [GAP] \u2014 DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:400",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "domain_actions"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry-derived; home doc unlocated [GAP] \u2014 campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:441",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "engine_clock"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "home doc unlocated \u2014 Memory schema lives in doc-12 \u00a72.3 schema bridge; standalone spec [GAP]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:875",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "npc_memory"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "home doc unlocated \u2014 scene slate spec referenced from settlement_layer \u00a74.1 and substrate \u00a78.5; standalone doc [GAP]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1126",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "scene_slate"
+      ],
+      "count": 2,
+      "lane": null
+    },
+    {
+      "text": "registry-derived; home doc unlocated [GAP]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:1160",
+        "references/module_contracts.yaml"
+      ],
+      "systems": [
+        "scene_timer"
+      ],
       "count": 2,
       "lane": null
     },
@@ -2262,6 +2566,30 @@
       "lane": "GO"
     },
     {
+      "text": "S2.2.2.5** `[gap]` `stubwire.stub_resolve(...)` for `generate_npc(world-gen|season-tick)` `engine/mc_v18.py:186-194`",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/overview/overview_flow_skeleton_v1.md:77"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "S2.2.2.6** `[gap]` `stubwire.stub_resolve(...)` for `form_knot(world-gen|season-tick)` `engine/mc_v18.py:204-209`",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/overview/overview_flow_skeleton_v1.md:78"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
       "text": "[GAP: CI pacing needs simulation with actual faction AI behavior to validate 20-season estimate. Flag for SIM-DEBT.]",
       "category": "gap",
       "priority": 3,
@@ -2586,6 +2914,54 @@
       "lane": "FA"
     },
     {
+      "text": "S9. [branch][gap] Cross-scale handoff into/out of Thread scale is a descriptor lookup only.** `engine.cross_scale.handoff_rules.apply_handoff` matches `(SCALE_PERSONAL, SCALE_THREAD)` and `(SCALE_THREAD, SCALE_FACTION)`/`(SCALE_THREAD, SCALE_MASS)` and returns a `HandoffResult` naming a procedure in prose strings; i\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/threadwork/threadwork_flow_skeleton_v1.md:95"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "S10. [gate][gap] Production scene dispatch never derives a Thread-scale scene.** `engine.cross_scale.scene_dispatch._resolve_slot` branches on `scene_type` \u2208 `{\"combat\", \"contest\", \"fieldwork\", \"investigation\"}` plus a catch-all `stubwire.stub_resolve` fallback; no `\"thread\"` branch exists, and `_HANDOFF_SCALE_PAIR_\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/threadwork/threadwork_flow_skeleton_v1.md:97"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "S11. [gap] Campaign season driver never imports threadwork.** `engine/mc_v18.py`'s `run_campaign` imports `game_state`, `victory`, `scene_slate`, `stubwire`, `faction_action`, `season`, `scene_dispatch` \u2014 no `systems.threadwork` import anywhere in the file. `engine/mc_v18.py:35-39`",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/threadwork/threadwork_flow_skeleton_v1.md:99"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
+      "text": "S12. [gap][branch] Mass-battle phase-boundary hook is a declared, empty no-op.** `massbattle.py`'s canonical phase-boundary order names `threadwork` last; `threadwork_check(unit_a, unit_b, phase_idx)` is `pass`-bodied and is called from `phase_boundary` every phase, but performs no threadwork call. `systems/mass_bat\u2026",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "systems/threadwork/threadwork_flow_skeleton_v1.md:101"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": "WR"
+    },
+    {
       "text": "age: null  # [GAP: no age in canon]",
       "category": "gap",
       "priority": 3,
@@ -2688,6 +3064,66 @@
       "label": "Documented gap",
       "locations": [
         "references/npc_registry.yaml:697"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [npc_memory]: home doc unlocated \u2014 Memory schema lives in doc-12 \u00a72.3 schema bridge; standalone spec [GAP]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:103"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [scene_slate]: home doc unlocated \u2014 scene slate spec referenced from settlement_layer \u00a74.1 and substrate \u00a78.5; standalone doc [GAP]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:111"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [scene_timer]: registry-derived; home doc unlocated [GAP]",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:113"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [domain_actions]: home doc unlocated [GAP] \u2014 DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:115"
+      ],
+      "systems": [],
+      "count": 1,
+      "lane": null
+    },
+    {
+      "text": "W-GAP [engine_clock]: registry-derived; home doc unlocated [GAP] \u2014 campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)",
+      "category": "gap",
+      "priority": 3,
+      "label": "Documented gap",
+      "locations": [
+        "references/CONTRACT_INDEX.md:133"
       ],
       "systems": [],
       "count": 1,
@@ -2860,76 +3296,6 @@
       "systems": [],
       "count": 1,
       "lane": "GO"
-    },
-    {
-      "text": "home doc unlocated \u2014 Memory schema lives in doc-12 \u00a72.3 schema bridge; standalone spec [GAP]",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "npc_memory"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "home doc unlocated \u2014 scene slate spec referenced from settlement_layer \u00a74.1 and substrate \u00a78.5; standalone doc [GAP]",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "scene_slate"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "registry-derived; home doc unlocated [GAP]",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "scene_timer"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "home doc unlocated [GAP] \u2014 DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "domain_actions"
-      ],
-      "count": 1,
-      "lane": null
-    },
-    {
-      "text": "registry-derived; home doc unlocated [GAP] \u2014 campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)",
-      "category": "gap",
-      "priority": 3,
-      "label": "Documented gap",
-      "locations": [
-        "references/module_contracts.yaml"
-      ],
-      "systems": [
-        "engine_clock"
-      ],
-      "count": 1,
-      "lane": null
     },
     {
       "text": "<!-- [STUB: combat-path action vocabulary; provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->",
@@ -3166,8 +3532,8 @@
       "replacement": "FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml + the Descriptor Registry, not sim_framework/state.py (conversion str"
     },
     {
-      "id": "systems/combat/combat_v30.md",
-      "scope": "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) \u2014 NOTE: PARTIAL only",
+      "id": "systems/combat/combat_reference_v1.md",
+      "scope": "personal-combat RESOLUTION layer (pool/stamina/wound resolution) \u2014 NOTE: PARTIAL only. Repointed from combat_v30.md by the ED-PC-0056 consolidation (5 docs -> 1); the partial-supersession fact is unchanged",
       "superseded_by": "ED-900",
       "date": "2026-06-04",
       "replacement": "PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04). RESOLUTION superseded by combat_engine_v1; config.py supersedes e"

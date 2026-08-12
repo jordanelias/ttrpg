@@ -19,6 +19,15 @@ never called any of it. Removing it cost zero live functionality and unanchored 
 import sys, os, re, fnmatch
 
 import yaml
+
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
 from dataclasses import dataclass, field
 
 @dataclass
@@ -125,7 +134,7 @@ def _check_size(path: str, content: str, rule: dict) -> Violation | None:
     max_tokens = rule.get('max_tokens')
     if max_tokens is None:
         return None
-    current_tokens = len(content) // 4
+    current_tokens = ci_common.tokens(content)
     if current_tokens <= max_tokens:
         return None
 
@@ -166,7 +175,7 @@ def _check_index(path: str, content: str, rule: dict,
     require_above = rule.get('require_index_above')
     if require_above is None:
         return None
-    current_tokens = len(content) // 4
+    current_tokens = ci_common.tokens(content)
     if current_tokens <= require_above:
         return None
 
@@ -195,7 +204,7 @@ def _check_archive_pressure(path: str, content: str, rule: dict) -> Violation | 
 
     max_tokens = rule.get('max_tokens', 10000)
     archive_threshold = rule.get('archive_threshold', int(max_tokens * 0.9))
-    current_tokens = len(content) // 4
+    current_tokens = ci_common.tokens(content)
 
     if current_tokens <= archive_threshold:
         return None
@@ -266,7 +275,7 @@ if __name__ == "__main__":
                 with open(full_path) as f:
                     content = f.read()
                 max_tokens = rule.get('max_tokens')
-                if max_tokens and len(content) // 4 > max_tokens:
+                if max_tokens and ci_common.tokens(content) > max_tokens:
                     on_exceed = rule.get('on_exceed', 'error')
                     # ED-IN-0098: this CI-mode path carried its OWN copy of the severity rule and
                     # had DIVERGED from _check_size above — it never honoured 'skip', so an
@@ -278,7 +287,7 @@ if __name__ == "__main__":
                     severity = _on_exceed_severity(on_exceed, rel_path)
                     violations.append(Violation(
                         path=rel_path, rule=rule, kind='size_exceeded',
-                        current_tokens=len(content) // 4, threshold=max_tokens,
+                        current_tokens=ci_common.tokens(content), threshold=max_tokens,
                         auto_fixable=False, fix_action='',
                         severity=severity,
                     ))

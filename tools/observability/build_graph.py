@@ -25,6 +25,7 @@ Run:  python tools/observability/build_graph.py
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -45,7 +46,12 @@ except Exception:
     def _infer_lane(_p):
         return None
 
-REPO = Path(__file__).resolve().parents[2]
+# ONE OWNER for the repo root and the 9-lane roster: tools/ci_common.py (plan G7,
+# ED-IN-0159 §8.3). Anchors on THIS FILE's directory, never on the repo root.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import ci_common  # noqa: E402
+
+REPO = ci_common.REPO_PATH
 CONTRACTS = REPO / "references" / "module_contracts.yaml"
 REGISTRY = REPO / "systems" / "_architecture" / "key_type_registry_v30.md"
 MECHANICS = REPO / "registers" / "mechanics_index.yaml"

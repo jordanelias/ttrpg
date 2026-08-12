@@ -47,7 +47,18 @@ REPO = 'jordanelias/ttrpg'
 
 # Lane roster for the ED-<LANE>-NNNN namespace (references/id_reservations.yaml is the
 # source of truth for allocation; kept here too since the regex needs the closed set).
-LANE_CODES = ('MB', 'PC', 'FI', 'SC', 'FA', 'WR', 'IN', 'GO', 'SE')
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
+# ONE OWNER: ci_common.LANE_CODES (plan G7, ED-IN-0159 §8.3). Was a verbatim
+# copy of the 9-code tuple; obs_core's header records that one such copy once
+# silently omitted GO, undercounting a whole lane.
+LANE_CODES = ci_common.LANE_CODES
 _LANE_ALT = '|'.join(LANE_CODES)
 
 # Captures compact groups (ED-865/874) and inclusive ranges (ED-844-856 / ED-844–856),

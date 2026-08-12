@@ -27,15 +27,15 @@
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2210,
+    "occurrences": 2212,
     "qualified": 0
    },
    "campaign_architecture": {
-    "occurrences": 32,
+    "occurrences": 35,
     "qualified": 0
    },
    "ci_political": {
-    "occurrences": 71,
+    "occurrences": 73,
     "qualified": 0
    },
    "clock_registry": {
@@ -51,11 +51,11 @@
     "qualified": 0
    },
    "faction_politics": {
-    "occurrences": 146,
+    "occurrences": 148,
     "qualified": 0
    },
    "faction_state": {
-    "occurrences": 324,
+    "occurrences": 328,
     "qualified": 0
    },
    "fieldwork_knots": {
@@ -71,7 +71,7 @@
     "qualified": 0
    },
    "miraculous_event": {
-    "occurrences": 82,
+    "occurrences": 84,
     "qualified": 0
    },
    "npc_behavior": {
@@ -91,7 +91,7 @@
     "qualified": 0
    },
    "piety_track": {
-    "occurrences": 136,
+    "occurrences": 140,
     "qualified": 0
    },
    "scenario_authoring": {
@@ -107,27 +107,27 @@
     "qualified": 0
    },
    "settlement_economy": {
-    "occurrences": 54,
+    "occurrences": 57,
     "qualified": 0
    },
    "settlement_layer": {
-    "occurrences": 344,
+    "occurrences": 346,
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 1860,
+    "occurrences": 1858,
     "qualified": 0
    },
    "territorial_piety": {
-    "occurrences": 47,
+    "occurrences": 50,
     "qualified": 0
    },
    "threadwork": {
-    "occurrences": 1881,
+    "occurrences": 1887,
     "qualified": 0
    },
    "victory": {
-    "occurrences": 1937,
+    "occurrences": 1941,
     "qualified": 0
    }
   },

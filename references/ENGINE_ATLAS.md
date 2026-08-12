@@ -472,16 +472,16 @@ A canonical identifier is only a usable handle if searching for it returns its r
 
 | contract | bare occurrences | qualified uses |
 |---|---|---|
-| `audit` | 2210 | 0 |
+| `audit` | 2212 | 0 |
 | `mass_battle` | 2080 | 0 |
-| `victory` | 1937 | 0 |
-| `threadwork` | 1881 | 0 |
-| `social_contest` | 1860 | 0 |
+| `victory` | 1941 | 0 |
+| `threadwork` | 1887 | 0 |
+| `social_contest` | 1858 | 0 |
 | `npc_behavior` | 636 | 0 |
-| `settlement_layer` | 344 | 0 |
-| `faction_state` | 324 | 0 |
+| `settlement_layer` | 346 | 0 |
+| `faction_state` | 328 | 0 |
 | `articulation_layer` | 313 | 0 |
 | `scene_slate` | 181 | 0 |
 | `peninsular_strain` | 164 | 0 |
-| `faction_politics` | 146 | 0 |
+| `faction_politics` | 148 | 0 |
 

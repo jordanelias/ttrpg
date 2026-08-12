@@ -47,6 +47,14 @@ PATCH_REGISTER_LIMIT = yaml_max_tokens("registers/patch_register_active.yaml") o
 # hardcoded copy kept failing, which is exactly how the drift announces itself. Single-sourced.
 MODULE_CONTRACTS_LIMIT = yaml_max_tokens("references/module_contracts.yaml") or 18_000
 
+# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
+# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
+# the irreducible bootstrap — a module cannot import its owner without first
+# knowing where the owner is — and they anchor on THIS FILE's directory, never on
+# the repo root, so they are not the duplication they replace.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_common  # noqa: E402
+
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
     # session_log_current.md / session_logs/index.md entries removed 2026-07-01 (ED-1084):
@@ -161,7 +169,7 @@ def main():
             violations.append((path, -1, threshold))
             checked += 1
             continue
-        tokens = len(content) // 4
+        tokens = ci_common.tokens(content)
         checked += 1
         if tokens > threshold:
             violations.append((path, tokens, threshold))
