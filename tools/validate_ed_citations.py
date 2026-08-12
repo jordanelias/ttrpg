@@ -43,15 +43,15 @@ tests/hooks/ on 2026-08-01, ED-IN-0119: it was live and passing and nothing ran 
 """
 import os, re, sys, json, argparse
 
-REPO = 'jordanelias/ttrpg'
+# (Removed 2026-08-12, ED-IN-0165: a dead `REPO = 'jordanelias/ttrpg'` GitHub slug —
+# a THIRD meaning of the name `REPO` in a tier where it now means the repo root, with
+# no reader. G7 edited this file and did not notice; an adversarial pass did.)
 
 # Lane roster for the ED-<LANE>-NNNN namespace (references/id_reservations.yaml is the
 # source of truth for allocation; kept here too since the regex needs the closed set).
-# ONE OWNER for the repo root, the 9-lane roster, token estimation and the id
-# regexes: tools/ci_common.py (plan G7, ED-IN-0159 §8.3). The two lines below are
-# the irreducible bootstrap — a module cannot import its owner without first
-# knowing where the owner is — and they anchor on THIS FILE's directory, never on
-# the repo root, so they are not the duplication they replace.
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ci_common  # noqa: E402
 

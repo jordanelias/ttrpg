@@ -28,8 +28,9 @@ from __future__ import annotations
 import json, os, sys
 from pathlib import Path
 
-# ONE OWNER for the repo root: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
-# Two dirnames — this module lives one level below the owner.
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import ci_common  # noqa: E402
 
@@ -67,11 +68,28 @@ def _rd(text: str) -> str:
     return core.redact_forbidden_names(text or "")
 
 
-def _doc_head(path: Path, n: int = 4000) -> str:
+def _doc_head(path: Path) -> str:
+    """The document head, windowed by the ONE owner (ED-IN-0165).
+
+    THE FIFTH WINDOW. G8 claimed to give the `## Status:` window a single owner and
+    justified `STATUS_HEAD_LINES = 80` as "the window dashboard_data already used".
+    Both halves were wrong, and correcting dashboard_data was not enough: THIS
+    function kept the identical 4,000-CHARACTER literal, and passed the result to
+    `core.first_status(head)` with no window of its own — so `PROPOSALS.md` and the
+    dashboard card, which `dashboard_data.py` asserts "call the same core, so they
+    agree", measurably did not.
+
+    Failure it closes: a doc with ~25-char lines carrying `## Status: PROPOSED` at
+    line 120 is inside 4,000 chars but outside 80 lines — surfaced by this feed,
+    omitted by the dashboard. A wide-table doc inverts it.
+
+    Found by an adversarial pass reading a file the producer never cited.
+    """
     try:
-        return path.read_text(encoding="utf-8", errors="replace")[:n]
+        text = path.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return ""
+    return "\n".join(text.splitlines()[:core.STATUS_HEAD_LINES])
 
 
 def collect() -> list[dict]:

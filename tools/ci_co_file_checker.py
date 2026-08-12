@@ -5,7 +5,7 @@ Runs in CI. Checks that commits satisfy co-file requirements:
 - Design doc change → canonical_sources.yaml must change (or be unchanged and already correct)
 - Patch content → patch_register_active.yaml must change
 - Simulation output → coverage_matrix.md must change
-- Mechanical value change → corresponding params file must change
+- (RETIRED 2026-08-12) design doc → params file — engine/params/ was evacuated
 
 Uses git diff to get changed files. Exits 1 on violation.
 """
@@ -42,7 +42,12 @@ violations = []
 # has added lines, so it stays governed.
 _added = ci_common.get_added_lines(_mode)
 design_docs = [f for f in changed
-               if re.match(r'(?:designs|systems)/.+_v30\.md$', f) and 'infill' not in f
+               # `designs/` dropped 2026-08-12 (ED-IN-0165): that tree was RETIRED
+               # 2026-07-19 (CLAUDE.md §3, 'do not recreate'), so the alternation had
+               # been half-dead for three weeks — inside the gate whose Rule 4 was
+               # retired for exactly this, by a sweep that read this line and did not
+               # see it. Found by an adversarial pass.
+               if re.match(r'systems/.+_v30\.md$', f) and 'infill' not in f
                and f in _added]
 if design_docs and 'references/canonical_sources.yaml' not in changed:
     violations.append(

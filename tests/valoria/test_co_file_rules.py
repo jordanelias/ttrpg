@@ -68,29 +68,92 @@ def test_the_gate_still_runs_and_still_reports():
     assert 'Co-file check' in r.stdout or 'CO-FILE VIOLATIONS' in r.stdout, r.stdout[-2000:]
 
 
-def test_rules_1_to_3_can_still_FAIL_not_merely_run():
-    """The assertion with teeth, and the one that makes this file a guard rather
-    than a smoke test.
+def test_rule_1_actually_REJECTS_a_changeset_it_must_reject():
+    """The assertion with real teeth — it EXECUTES the gate (ED-IN-0165).
 
-    CLAUDE.md §0.1 point 2: an assertion must be able to observe the failure it
-    excludes. A gate whose rules had ALSO gone inert would pass every test above.
-    So: construct a changeset that Rule 1 must reject, and require rejection.
+    The first version of this test claimed in its docstring to "construct a
+    changeset that Rule 1 must reject" and then grepped the gate's source for the
+    string `violations.append`. Two independent adversarial passes caught it, and
+    the objection is exact: Rule 4 was retired precisely because it contained
+    `violations.append` and was UNREACHABLE. A source-grep is blind to the defect
+    class this whole step exists to remove.
 
-    Rule 1 fires when a design doc changes without `canonical_sources.yaml`. The
-    gate reads the changeset from git, so this drives it through the real diff
-    machinery in a scratch clone rather than by importing internals.
+    So this builds a real git repo, stages a design-doc change WITHOUT its co-file,
+    runs the gate in `--staged` mode, and requires a non-zero exit. If Rule 1's
+    scope ever goes dead the way Rule 4's did, this fails.
     """
+    import subprocess as sp
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        def git(*a):
+            return sp.run(['git', *a], cwd=td, capture_output=True, text=True)
+        git('init', '-q')
+        git('config', 'user.email', 't@t')
+        git('config', 'user.name', 't')
+        # the gate reads paths relative to the repo it runs in
+        doc = Path(td) / 'systems' / 'combat' / 'thing_v30.md'
+        doc.parent.mkdir(parents=True)
+        doc.write_text('# seed\n', encoding='utf-8')
+        (Path(td) / 'references').mkdir()
+        (Path(td) / 'references' / 'canonical_sources.yaml').write_text('a: 1\n', encoding='utf-8')
+        git('add', '-A')
+        git('commit', '-qm', 'seed')
+
+        # change the design doc ONLY — Rule 1 must reject this
+        doc.write_text('# seed\nchanged\n', encoding='utf-8')
+        git('add', '-A')
+        r = sp.run([sys.executable, GATE, '--staged'], cwd=td,
+                   capture_output=True, text=True, timeout=300)
+        assert r.returncode == 1, (
+            'Rule 1 did NOT reject a design-doc change with no canonical_sources '
+            f'co-change — its scope may have gone dead like Rule 4\'s.\n'
+            f'rc={r.returncode}\n{r.stdout}\n{r.stderr}')
+        assert 'canonical_sources' in r.stdout, r.stdout
+
+        # ...and the CONTROL: add the co-file and it must pass. Without this the
+        # test above could pass because the gate rejects everything.
+        (Path(td) / 'references' / 'canonical_sources.yaml').write_text('a: 2\n', encoding='utf-8')
+        git('add', '-A')
+        r2 = sp.run([sys.executable, GATE, '--staged'], cwd=td,
+                    capture_output=True, text=True, timeout=300)
+        assert r2.returncode == 0, f'the co-changed case must pass\n{r2.stdout}\n{r2.stderr}'
+
+
+def test_rule_1s_scope_has_no_dead_alternation():
+    """Rule 4 went inert because its scope named an evacuated tree. Rule 1 carried
+    the same latent defect — `(?:designs|systems)/` — for three weeks, in the file
+    this programme edited, and the sweep read the line without seeing it.
+
+    `designs/` was retired 2026-07-19 (CLAUDE.md §3, "do not recreate"), so the
+    alternation was half-dead. This asserts no surviving rule scopes on a tree that
+    is not in the repository.
+    """
+    import ast as _ast
     src = _src()
-    # Rule 1's condition, transcribed from the gate rather than re-derived.
-    assert re.search(r'canonical_sources', src), 'Rule 1 no longer names its co-file'
-    body = src[src.index('# ── Rule 1:'):src.index('# ── Rule 2:')]
-    assert 'violations.append' in body, (
-        'Rule 1 no longer appends a violation — it can run and never fail, which is '
-        'the inert-gate shape this whole step exists to remove')
-    for n, nxt in ((2, 3), (3, 4)):
-        start = src.index(f'# ── Rule {n}:')
-        end = src.index(f'# ── Rule {nxt}:')
-        assert 'violations.append' in src[start:end], f'Rule {n} can no longer fail'
+    # CODE ONLY. The first version scanned raw lines and flagged the gate's own
+    # module docstring, where the retired rule is legitimately NAMED as retired —
+    # a prose mention read as a live scope. Collect string literals and comparison
+    # operands from the parsed tree instead, so only what the gate actually
+    # MATCHES ON is examined.
+    # Identify docstrings by NODE, not by value: ast.get_docstring() returns the
+    # cleaned text while the raw Constant carries the original leading newline and
+    # indentation, so a value-set comparison never matched and the module docstring
+    # leaked through. (Third textual-proxy false positive in this branch; the
+    # parser knows which node is a docstring, so ask it.)
+    tree_ = _ast.parse(src)
+    doc_nodes = set()
+    for n in _ast.walk(tree_):
+        if isinstance(n, (_ast.Module, _ast.FunctionDef, _ast.ClassDef)) and n.body:
+            first = n.body[0]
+            if isinstance(first, _ast.Expr) and isinstance(first.value, _ast.Constant) \
+                    and isinstance(first.value.value, str):
+                doc_nodes.add(id(first.value))
+    literals = [n.value for n in _ast.walk(tree_)
+                if isinstance(n, _ast.Constant) and isinstance(n.value, str)
+                and id(n) not in doc_nodes]
+    for tree in ('designs/', 'arcs/', 'engine/params/'):
+        live = [x for x in literals if tree in x]
+        assert not live, f'a rule still scopes on the retired tree {tree!r}: {live}'
 
 
 def test_the_retirement_note_does_not_overclaim():

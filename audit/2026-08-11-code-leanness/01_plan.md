@@ -1,6 +1,15 @@
 # Code leanness — the merged consolidation plan (ED-IN-0159, companion)
 
-## Status: REFERENCE — plan of record for the consolidation programme; nothing ruled, nothing executed
+## Status: REFERENCE — plan of record; PARTIALLY EXECUTED 2026-08-12 (ED-IN-0160..0165)
+
+> **Execution state, so a resuming session does not re-do landed work.** `G7` DONE · `G8` DONE ·
+> `G1` DONE · **`G2` HALF-DONE** — its five dead-scope retirements landed; its
+> generator-retirement half is **NOT EXECUTABLE AS WRITTEN and needs Jordan** (the
+> `deprecated/tools/` landing site it names was removed by the 2026-08-05 evacuation and is
+> pinned as `evacuate` by `tests/valoria/test_evacuation_plan.py:98`, with `:166` forbidding any
+> destination under `deprecated/`). **Not started:** G3, G4, G5, G6, G9, G10, G11, G12, G13,
+> Track S, Track T (T1 landed early in #303). Nothing in this document is RULED; the execution
+> record is `registers/editorial_ledger_in.jsonl` + `registers/handoffs/HANDOFF_IN.md`.
 
 ## Date: 2026-08-11 · Lane: IN (cross-cutting) · Companion to `00_code_leanness.md`
 

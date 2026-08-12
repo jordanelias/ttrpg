@@ -550,18 +550,137 @@ def test_every_ci_common_primitive_has_a_caller():
                   # documented lazy re-exports: reachable, but obs_core is their home
                   *ci_common._LAZY_FROM_OBS_CORE}]
     owner_src = (Path(ROOT) / 'tools' / 'ci_common.py').read_text(encoding='utf-8')
+    owner_tree = ast.parse(owner_src)
+
+    # INTERNAL USE, DETERMINED BY AST — not by string surgery.
+    #
+    # This clause was `owner_src.split(f'{name} =', 1)[-1]`, and it was VACUOUS for
+    # every `def`-defined export: a function has no `name =` in the source, so
+    # `split` returns a one-element list, `[-1]` yields the WHOLE FILE, and the
+    # regex then matched the function's own `def` line. `load_yaml`, `doc_status`,
+    # `tokens`, `read_text` and every `get_*` helper could have had zero callers
+    # and passed.
+    #
+    # That is the exact defect this test exists to catch — `load_register` shipped
+    # with no caller — so the guard was blind to its own incident class. THREE
+    # INDEPENDENT ADVERSARIAL PASSES found it separately, which is §10's
+    # rank-by-independent-rediscovery signal firing on a real defect rather than on
+    # correlated blind spots.
+    #
+    # The replacement asks the parser: is this name LOADED anywhere in the owner
+    # outside its own definition or assignment target? A `def` line is a
+    # `FunctionDef`, never a `Name` load, so it cannot self-satisfy.
+    internally_used = set()
+    for node in ast.walk(owner_tree):
+        if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load):
+            internally_used.add(node.id)
+        elif isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Load):
+            internally_used.add(node.attr)
+
     uncalled = []
     for name in PUBLIC:
         # A primitive counts as called if a module names it through ci_common OR
         # through obs_core, which RE-EXPORTS the dependency-free ones under the
         # same names (dashboard_data reaches LEDGER_LANE_CODES that way), or if the
-        # owner itself consumes it internally (EMPTY_TREE feeds _diff_args).
+        # owner itself genuinely consumes it (EMPTY_TREE feeds _diff_args).
         via = (f'ci_common.{name}', f'obs_core.{name}', f'_obs_core.{name}')
         if any(v in s for s in src_by_file.values() for v in via):
             continue
-        if re.search(rf'(?<![\w.]){re.escape(name)}\b', owner_src.split(f'{name} =', 1)[-1]):
+        if name in internally_used:
             continue
         uncalled.append(name)
     assert not uncalled, (
         'ci_common exports primitives no module in tools/ uses — an abstraction '
         f'with no caller is the defect ED-IN-0149 named: {uncalled}')
+
+
+def test_the_bootstrap_rationale_is_not_copy_pasted_across_the_tier():
+    """G7's own comment was the duplication G7 exists to remove (ED-IN-0165).
+
+    The migration attached a 5-line explanation of WHY the bootstrap is legitimate
+    to every module it touched — 242 comment lines across 54 files, one
+    explanation copy-pasted 54 times. That is precisely the defect class the step
+    was executing against, committed by the execution: a rule with one owner, and
+    its rationale with fifty-four.
+
+    Found by measuring this branch's own line delta rather than by reading it:
+    `tools/` grew +2,384/-896 lines while its NON-COMMENT delta was only
+    +406/-226. The explanation now lives once, in `ci_common`'s module docstring,
+    and each call site carries a three-line pointer to it.
+
+    The assertion is on the LONG form, not on the pointer: pointers are supposed to
+    repeat, explanations are not.
+    """
+    copies = []
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel == 'tools/ci_common.py':
+            continue
+        src = open(p, encoding='utf-8', errors='ignore').read()
+        if 'irreducible bootstrap' in src:
+            copies.append(rel)
+    assert not copies, (
+        'the bootstrap rationale is being copy-pasted again — it belongs once, in '
+        f"ci_common's docstring, with a pointer at each call site: {copies}")
+
+
+def test_the_bootstrap_pointer_stays_short():
+    """The pointer must not regrow into the explanation it replaced. Four lines is
+    the budget: three of comment plus the `import ci_common` line."""
+    import re as _re
+    over = []
+    for p in _tooling_py_files():
+        rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
+        if rel == 'tools/ci_common.py':
+            continue
+        src = open(p, encoding='utf-8', errors='ignore').read()
+        # Anchor on the pointer's OWN first line, not on "any run of comment lines
+        # above the bootstrap". The greedy version flagged
+        # tools/validate_ed_citations.py, whose pre-existing lane-roster comment
+        # merely sits adjacent — a textual proxy capturing more than it means, the
+        # same class of false positive this file has now produced three times
+        # (the CLAUDE.md lane regex matching "IP world-tracks"; the `severity =`
+        # regex matching a keyword argument). Measure the block that starts where
+        # the pointer starts.
+        m = _re.search(r'^(# Primitives \(repo root.*?)sys\.path\.insert\(0, os\.path[^\n]*\n'
+                       r'import ci_common', src, _re.M | _re.S)
+        if m and m.group(1).count('\n') > 4:
+            over.append(f'{rel} ({m.group(1).count(chr(10))} comment lines)')
+    assert not over, f'the bootstrap pointer is regrowing into an explanation: {over}'
+
+
+def test_every_lane_display_map_is_total_over_the_owner():
+    """The roster guard the tuple-spelling one could not see (ED-IN-0165).
+
+    `test_the_lane_roster_literal_appears_only_in_its_owner` matches
+    `'MB','PC','FI'` adjacent on one line — the TUPLE spelling. Two live DICT
+    enumerations evaded it entirely (`build_decisions.LANE_NAMES`,
+    `dashboard_data.LANE_NAMES`), and they had already diverged: 'SE' read
+    "Settlements" in one and "settlement / territory" in the other; 'FA'
+    "Faction actions" vs "faction / political".
+
+    That is CLAUDE.md §8's same-name-divergent-value class, live in the tree, while
+    G7 reported the roster collapsing "9 -> 3". The figure was wrong on CONCEPT:
+    the census pattern-matched a spelling, not the roster, and the guard inherited
+    the blind spot — the exact error §2.1 of the findings document names as the
+    costliest in this project, committed by the step that quotes it.
+
+    Display strings stay per-surface on purpose (the dashboard's lower-case card
+    vocabulary is not the ledger's title-case one). What must not diverge is WHICH
+    LANES EXIST, so this asserts each map is TOTAL over the owner.
+    """
+    sys.path.insert(0, os.path.join(ROOT, 'tools', 'observability'))
+    import build_decisions
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        'dashboard_data', os.path.join(ROOT, 'tools', 'dashboard_data.py'))
+    dd = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(dd)
+
+    for label, mapping in (('build_decisions.LANE_NAMES', build_decisions.LANE_NAMES),
+                           ('dashboard_data.LANE_NAMES', dd.LANE_NAMES)):
+        assert set(mapping) == set(ci_common.LANE_CODES), (
+            f'{label} is not total over the owner: '
+            f'missing {set(ci_common.LANE_CODES) - set(mapping)}, '
+            f'extra {set(mapping) - set(ci_common.LANE_CODES)}')
+        assert all(v for v in mapping.values()), f'{label} has an empty display name'

@@ -193,8 +193,9 @@ landing site was itself evacuated 2026-08-05 — they are now at fork ref `c451b
   outgrows ~15k tokens splits into **`_part2`, `_part3`, … in reading order**. The old `*_index.md`
   (skeleton) + `*_infill.md` (prose) pair is **RETIRED as a default** — existing pairs are grandfathered,
   not a migration target. ⚠️ This bullet previously claimed the pair was "CI-enforced
-  (`tools/ci_co_file_checker.py`)". **That was false:** that checker has no pair rule at all (its four
-  rules are canonical_sources / propagation_map / coverage_matrix / params, and its only mention of
+  (`tools/ci_co_file_checker.py`)". **That was false:** that checker has no pair rule at all (its
+  rules are canonical_sources / propagation_map / coverage_matrix — the fourth, params,
+  was RETIRED 2026-08-12 with the evacuated `engine/params/` tree, ED-IN-0163, and its only mention of
   `infill` is an *exclusion*), `compliance_check.py` merely skips such files, and
   `atomization_rules.yaml`'s `force_skeleton_routing_for_design_docs` / `skeleton_threshold_tokens` had
   **zero readers** anywhere in `tools/`, `.githooks/` or `skills/`. The convention propagated by imitation

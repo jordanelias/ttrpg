@@ -743,7 +743,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 568,
+   "loc": 687,
    "modules_under_test": [
     "registers",
     "tools",
@@ -756,7 +756,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 28,
+   "test_count": 31,
    "tests": {
     "test_ci_common_does_not_import_yaml_at_module_level": {
      "assertionless": false,
@@ -767,6 +767,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "THE GUARD FOR THE DEFECT THIS FILE ITSELF SHIPPED."
+    },
+    "test_every_lane_display_map_is_total_over_the_owner": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The roster guard the tuple-spelling one could not see (ED-IN-0165)."
     },
     "test_inline_token_estimation_is_confined_to_the_modules_being_retired": {
      "assertionless": false,
@@ -872,6 +877,16 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "`load_yaml` is the INTENDED owner, not the only loader, and its docstring"
+    },
+    "test_the_bootstrap_pointer_stays_short": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The pointer must not regrow into the explanation it replaced. Four lines is"
+    },
+    "test_the_bootstrap_rationale_is_not_copy_pasted_across_the_tier": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "G7's own comment was the duplication G7 exists to remove (ED-IN-0165)."
     },
     "test_the_lane_roster_literal_appears_only_in_its_owner": {
      "assertionless": false,
@@ -1146,6 +1161,54 @@
     }
    }
   },
+  "test_claim_provenance_archives.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "`ci_claim_provenance_check` must not lose an entry when it is archived (ED-IN-0165).",
+   "helper_loc": 10,
+   "helpers": [
+    {
+     "loc": 10,
+     "name": "_load_provenance_gate"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 136,
+   "modules_under_test": [
+    "registers",
+    "registers/editorial_ledger_in_archive.jsonl",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_every_live_ledger_has_its_archive_sibling_in_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE GUARD. For each live ledger under the rule, if an archive sibling"
+    },
+    "test_gate_is_green_with_the_archives_in_scope": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The change is only safe because the recovered entries already comply. If a"
+    },
+    "test_the_archives_actually_carry_entries_in_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Non-vacuity. The test above passes trivially if the archives are empty or"
+    },
+    "test_this_branchs_own_archived_entries_are_back_in_scope": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The specific regression, named."
+    }
+   }
+  },
   "test_claim_provenance_fields.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -1277,20 +1340,33 @@
    "lanes": [
     "IN"
    ],
-   "loc": 137,
+   "loc": 200,
    "modules_under_test": [
     "engine",
     "engine/params",
+    "engine/params/",
+    "references",
+    "systems",
     "tools"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 6,
+   "test_count": 7,
    "tests": {
     "test_each_surviving_rules_subject_still_exists": {
      "assertionless": false,
      "assertions": 1,
      "summary": "The vitality check #304's C4 generalises, applied to this gate now."
+    },
+    "test_rule_1_actually_REJECTS_a_changeset_it_must_reject": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The assertion with real teeth \u2014 it EXECUTES the gate (ED-IN-0165)."
+    },
+    "test_rule_1s_scope_has_no_dead_alternation": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Rule 4 went inert because its scope named an evacuated tree. Rule 1 carried"
     },
     "test_rule_4s_subject_really_is_absent_from_the_tree": {
      "assertionless": false,
@@ -1301,11 +1377,6 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "The direct expected-delta assertion: three rules in, one out."
-    },
-    "test_rules_1_to_3_can_still_FAIL_not_merely_run": {
-     "assertionless": false,
-     "assertions": 3,
-     "summary": "The assertion with teeth, and the one that makes this file a guard rather"
     },
     "test_the_gate_still_runs_and_still_reports": {
      "assertionless": false,
@@ -11535,16 +11606,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 150,
-  "files_citing_a_measurement": 15,
+  "files": 151,
+  "files_citing_a_measurement": 16,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 109,
+  "files_naming_a_module": 110,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 39,
-  "helper_defs": 277,
-  "helper_loc": 2475,
+  "helper_defs": 278,
+  "helper_loc": 2485,
   "ratchet_baselines": 9,
-  "tests": 1335,
+  "tests": 1343,
   "undocumented_files": 0
  }
 }

@@ -35,8 +35,9 @@ from datetime import datetime, timezone
 
 import yaml
 
-# ONE OWNER for the repo root, the id regexes, token estimation and YAML register
-# load: tools/ci_common.py (plan G7, ED-IN-0159 §8.3).
+# Primitives (repo root, lane roster, token estimate, ids, Status reader) are
+# owned by tools/ci_common.py — plan G7, ED-IN-0159 §8.3. See its module docstring;
+# the two lines below are the bootstrap, anchored on THIS file's directory.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ci_common  # noqa: E402
 
@@ -598,11 +599,30 @@ def _generated_at():
 # actionable without him. Lane comes free from the lane-split ledger filenames;
 # the two cross-cutting overlays (sim/testing, godot) are keyword-detected.
 
-LANE_NAMES = {
+# THE ROSTER IS ONE-OWNED; THE DISPLAY STRINGS ARE THIS SURFACE'S OWN (ED-IN-0165).
+#
+# G7 reported the 9-lane roster collapsing "9 -> 3". That figure was wrong on
+# CONCEPT, not arithmetic: the census matched on the tuple-of-codes SPELLING
+# `("MB","PC",...)`, so it never saw the two DICT enumerations — this one and
+# `build_decisions.LANE_NAMES` — and the recurrence guard inherited the same blind
+# spot. The two dicts had already DIVERGED, which is CLAUDE.md §8's
+# same-name-divergent-value class live in the tree: 'SE' read
+# "settlement / territory" here and "Settlements" there; 'FA' "faction / political"
+# vs "Faction actions".
+#
+# The keys now DERIVE from the owner, so adding a tenth lane cannot silently skip
+# this surface. The display strings stay local on purpose — this is the dashboard's
+# lower-case card vocabulary, not the ledger's title-case one, and unifying them
+# would be a user-visible change smuggled into an infrastructure step. A missing
+# key would now be a KeyError at build time rather than a lane silently rendering
+# as 'other'; `_LANE_DISPLAY` is asserted total against LANE_CODES by
+# tests/valoria/test_ci_common_primitives.py.
+_LANE_DISPLAY = {
     'PC': 'personal combat', 'MB': 'mass battle', 'SC': 'social contest',
     'SE': 'settlement / territory', 'WR': 'world', 'FI': 'field investigation',
     'FA': 'faction / political', 'IN': 'infrastructure', 'GO': 'godot',
 }
+LANE_NAMES = {code: _LANE_DISPLAY[code] for code in _obs_core.LANE_CODES}
 _SIM_RE = re.compile(r'\bsim/|sim_harness|mc_v18|\boracle\b|regression|\btests?/|harness', re.I)
 _GODOT_RE = re.compile(r'godot|gdscript|\.gd\b|valoria-game', re.I)
 CATEGORY_ORDER = ['infrastructure', 'subsystem', 'simulation', 'godot']

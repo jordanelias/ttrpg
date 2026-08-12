@@ -2592,6 +2592,19 @@ infrastructure): `workplans/valoria_master_workplan_v6.md` — the live steering
 conventional `## Status:` line at all, and `systems/ui/valoria_ui_ux_v4.md` bolds its. The G8 test
 asserts both are **still invisible** and fails when either is fixed, so neither can rot unnoticed.
 
-**Next in the plan:** G2 (dead-scope sweep as ONE pattern), G3, G4, G6, G9, G11, the new G12/G13, then
-Track T. Track S is #304's engine/systems work in FA/PC/MB/WR lanes and is mostly gated on **#0**.
+**[PART] ED-IN-0163 — G2 IS HALF-DONE AND ITS SECOND HALF NEEDS JORDAN.** Five dead-scope retirements
+landed. The generator-retirement half names `deprecated/tools/` as its landing site — removed by the
+2026-08-05 evacuation, pinned `evacuate` by `test_evacuation_plan.py:98`, and forbidden as a destination
+by `:166`. **Jordan must rule** the retirement mechanism for dead tools post-evacuation. Do NOT re-execute
+G2; do NOT force the move.
+
+**[DONE] ED-IN-0164/0165 — two rounds of adversarial review over this branch's own work.** Fourteen claims
+refuted and fixed, including a guard that was vacuous for every `def`-defined export (found by THREE
+independent passes), a gate whose coverage archiving silently shrank (22 → 47 entries, still green), a
+dead policy row the dead-scope sweep itself created, a roster figure wrong on concept, a fifth surviving
+`## Status:` window, and a 5-line rationale copy-pasted into 54 files. **20 mutants now killed** where the
+branch had run none against the repo's own mutation standard.
+
+**Next in the plan:** G3, G4, G5, G6, G9, G10, G11, G12, G13, then Track T. **G2 is blocked on Jordan.**
+Track S is #304's engine/systems work in other lanes and is mostly gated on **#0**. Track S is #304's engine/systems work in FA/PC/MB/WR lanes and is mostly gated on **#0**.
 
