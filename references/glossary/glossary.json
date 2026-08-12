@@ -17363,7 +17363,7 @@
       "systems/ui/ui_flow_skeleton_v1.md",
       "systems/ui/valoria_ui_ux_v4.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 24 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 28 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
     }
    },
    "file_count": 7,
@@ -18104,7 +18104,7 @@
      "docs": [
       "systems/ui/ui_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 24 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 28 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
     }
    },
    "file_count": 1,
@@ -40835,7 +40835,7 @@
       "systems/ui/ui_flow_skeleton_v1.md",
       "systems/ui/valoria_ui_ux_v4.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 24 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 28 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
     }
    },
    "file_count": 4,

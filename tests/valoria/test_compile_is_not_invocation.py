@@ -14,12 +14,21 @@ list, which covered 32 of 108 tools. The obvious alternative fix — name all 10
 taken basename-in-workflow to 108/108 and driven the orphan count to a permanent silent zero.
 `test_naming_every_tool_in_the_compile_gate_does_not_zero_the_census` is that scenario, run.
 
-AND THE STRIP MUST NOT OVER-REACH. The first implementation was one multiline regex and it
-swallowed the entire `validators-report` job, because that job's `run:` mentions `py_compile`
-inside a comment. Two live validators were reported orphaned on that run. It is the trap
-`test_gate_coverage.py::test_a_comment_mentioning_py_compile_does_not_zero_a_jobs_command_list`
-already names, reproduced one file away from it — so the over-reach direction is tested here at
-least as hard as the under-reach one.
+THE STRIP THIS FILE ONCE TESTED IS GONE (ED-IN-0169). G9 originally shipped a 54-line
+indentation-aware line scanner in `build_apparatus_registry.py` to decide which workflow steps
+only compile. `tools/ci_gate_coverage.py:63` states it is the SINGLE OWNER of workflow parsing —
+"the only function in the tree that reads .github/workflows/valoria-ci.yml structurally… a
+second list would be a second owner of the same rule… the exact §8 violation this repo keeps
+finding" — and it already exposed `compiles_only` per job, computed over comment-stripped text.
+
+The scanner therefore re-derived a rule that had an owner, AND re-derived its bug: its first cut
+classified a job as compile-only because a COMMENT in its `run:` mentioned `py_compile`, falsely
+orphaning two live validators. `ci_gate_coverage` had hit that exact defect and fixed it on
+2026-08-01, and says so in its own comment. The registry now delegates; the orphan/prune figures
+are unchanged at 11/2, which is the delta-none proof that the owner and the copy agreed.
+
+Five tests were deleted with it — they existed only to test the re-implementation. What remains
+is the guard that is actually about G9's subject: the compile gate must not name tools.
 """
 import os
 import sys
@@ -72,123 +81,20 @@ def test_a_known_dead_tool_still_reports_orphaned(registry):
 def test_the_compile_gate_names_no_individual_tool(workflow_text):
     """The recurrence guard on the workflow side. A named list is what rotted (32 of 108)
     and what would zero the census if it were completed."""
-    kept = set(bar.strip_compile_only_steps(workflow_text).splitlines())
-    compile_step = [ln for ln in workflow_text.splitlines() if ln not in kept]
-    assert any('py_compile' in ln for ln in compile_step), \
-        'no compile step was identified, so this test is asserting over nothing'
-    named = [ln for ln in compile_step if ln.strip().startswith('tools/')]
+    import ci_gate_coverage
+    compile_jobs = [j for j in ci_gate_coverage.jobs() if j.get('compiles_only')]
+    assert compile_jobs, 'no compile-only job found, so this test asserts over nothing'
+    named = [ln for j in compile_jobs for ln in j['runnable'].splitlines()
+             if ln.strip().startswith('tools/')]
     assert not named, (
         'the compile gate names individual tools again:\n  ' + '\n  '.join(named)
         + '\nUse the glob. A named list covers a subset that rots, and completing it '
           'silently zeroes the orphan census.')
 
 
-def test_naming_every_tool_in_the_compile_gate_does_not_zero_the_census(workflow_text):
-    """THE SCENARIO THE TWO HALVES EXIST TO SURVIVE, actually executed.
-
-    Simulate someone 'fixing' the 32-of-108 coverage gap the obvious way. Without the strip
-    this tags every tool as CI-invoked; with it, nothing changes.
-    """
-    import glob
-    import re
-    names = sorted(os.path.basename(p) for p in
-                   glob.glob(os.path.join(ROOT, 'tools', '**', '*.py'), recursive=True))
-    assert len(names) > 100, f'expected ~108 tools, found {len(names)}'
-    hypothetical = workflow_text.replace(
-        '          python -m py_compile $files',
-        '          python -m py_compile \\\n'
-        + ' \\\n'.join(f'            tools/{n}' for n in names))
-
-    raw_hits = [n for n in names if re.search(rf'\b{re.escape(n)}\b', hypothetical)]
-    assert len(raw_hits) == len(names), \
-        'the simulation did not actually inject the names; the test proves nothing'
-
-    stripped = bar.strip_compile_only_steps(hypothetical)
-    surviving = [n for n in ('atomizer.py', 'doc_index_gen.py', 'index_gen.py',
-                             'valoria_rename.py')
-                 if re.search(rf'\b{re.escape(n)}\b', stripped)]
-    assert not surviving, (
-        f'naming all {len(names)} tools in the compile gate re-tagged {surviving} as '
-        'CI-invoked. The strip is not covering the compile step.')
 
 
-# ------------------------------------------------------------------------------------
-# The strip must not over-reach — the direction that produced a false finding
-# ------------------------------------------------------------------------------------
-def test_the_strip_removes_only_the_compile_step(workflow_text):
-    """AN INDEX-ACCURATE DIFF, not set membership.
 
-    The first version computed `[ln for ln in original if ln not in set(stripped)]`, which
-    UNDERCOUNTS: `        run: |` is removed with the compile step but appears verbatim in
-    five other steps, so it tested as "kept" and the removal read as 5 lines instead of 7.
-    An over-reach test that undercounts removals is weaker than it looks — the §0.1 point 2
-    shape, in the test written to catch an over-reach.
-    """
-    import difflib
-    stripped = bar.strip_compile_only_steps(workflow_text)
-    removed = [ln[1:] for ln in difflib.unified_diff(
-        workflow_text.splitlines(), stripped.splitlines(), lineterm='', n=0)
-        if ln.startswith('-') and not ln.startswith('---')]
-    assert any('py_compile' in ln for ln in removed), 'the compile step was not removed at all'
-    assert len(removed) <= 10, (
-        f'the strip removed {len(removed)} lines; the compile step is 7 including its blank '
-        'separator. It is eating neighbouring content:\n  ' + '\n  '.join(removed[:25]))
-
-
-def test_a_step_that_compiles_AND_invokes_is_not_stripped():
-    """`_INVOKES` is the guard that keeps a mixed step. Without it, a job that compiled and
-    then ran validators would have its validators erased from the invocation index."""
-    wf = (
-        'jobs:\n'
-        '  mixed:\n'
-        '    steps:\n'
-        '      - name: compile then run\n'
-        '        run: |\n'
-        '          python -m py_compile tools/foo.py\n'
-        '          python3 tools/ci_naming_check.py\n'
-    )
-    out = bar.strip_compile_only_steps(wf)
-    assert 'ci_naming_check.py' in out, 'a real invocation was stripped as if it were a compile'
-
-
-def test_an_UNNAMED_compile_step_is_still_stripped():
-    """Found by attacking this function, not by a test failing.
-
-    SIX steps in valoria-ci.yml carry `run:` with no `name:`. The scanner originally keyed
-    step starts on `- name:` alone, so it was correct only because none of those six happens
-    to be a compile step — an unnamed one would have slipped past the guard entirely and
-    restored the undercount by a side door.
-    """
-    wf = (
-        'jobs:\n'
-        '  j:\n'
-        '    steps:\n'
-        '      - uses: actions/checkout@v4\n'
-        '      - run: python -m py_compile tools/atomizer.py\n'
-        '      - name: real\n'
-        '        run: python3 tools/ci_naming_check.py\n'
-    )
-    out = bar.strip_compile_only_steps(wf)
-    assert 'atomizer.py' not in out, 'an UNNAMED compile step was not stripped'
-    assert 'ci_naming_check.py' in out, 'the neighbouring real invocation was eaten'
-
-
-def test_a_comment_mentioning_py_compile_does_not_strip_the_step():
-    """THE INCIDENT. The report-only job's run block says 'only py_compile on it' in a
-    comment; the first implementation deleted the whole job and orphaned two live validators."""
-    wf = (
-        'jobs:\n'
-        '  report:\n'
-        '    steps:\n'
-        '      - name: Every report-only validator\n'
-        '        run: |\n'
-        '          # nothing runs valoria_local (only py_compile on it)\n'
-        '          w python3 tools/mechanics_index_gen.py --strict\n'
-        '          w python3 tools/ci_workplan_pointer_check.py\n'
-    )
-    out = bar.strip_compile_only_steps(wf)
-    for tool in ('mechanics_index_gen.py', 'ci_workplan_pointer_check.py'):
-        assert tool in out, f'{tool} was stripped because a COMMENT mentioned py_compile'
 
 
 @pytest.mark.slow

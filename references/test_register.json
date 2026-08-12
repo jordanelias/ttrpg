@@ -147,15 +147,19 @@
    "declared_lane": null,
    "documented": true,
    "guards": "A tool in the blocking job must be capable of failing, and the ghost hook tier must stay dead.",
-   "helper_loc": 54,
+   "helper_loc": 147,
    "helpers": [
     {
      "loc": 3,
      "name": "_jobs"
     },
     {
-     "loc": 29,
+     "loc": 105,
      "name": "_can_fail"
+    },
+    {
+     "loc": 17,
+     "name": "_is_main_guard"
     },
     {
      "loc": 22,
@@ -166,20 +170,39 @@
    "lanes": [
     "IN"
    ],
-   "loc": 182,
+   "loc": 364,
    "modules_under_test": [
     "references",
     "tools",
     "tools/ci_audit_registry_check.py",
-    "tools/ci_supersession_check.py"
+    "tools/ci_hooks_verifier.py",
+    "tools/ci_naming_check.py",
+    "tools/ci_register_size_check.py",
+    "tools/ci_supersession_check.py",
+    "tools/validate_ed_citations.py"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 5,
+   "test_count": 8,
    "tests": {
-    "test_no_blocking_validator_is_incapable_of_failing": {
+    "test_all_three_entry_shapes_are_understood": {
      "assertionless": false,
      "assertions": 1,
+     "summary": "`_can_fail` must handle every entry shape the blocking tier actually uses."
+    },
+    "test_an_ordinary_boolean_helper_does_not_fake_a_failure_path": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "THE MUTATION THAT DEFEATED THE FIRST VERSION OF `_can_fail` (ED-IN-0169)."
+    },
+    "test_main_guard_matcher_agrees_with_the_owner": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`ci_common.has_main_guard` is the ONE OWNER; this file needs the node, not the bool."
+    },
+    "test_no_blocking_validator_is_incapable_of_failing": {
+     "assertionless": false,
+     "assertions": 3,
      "summary": "THE RECURRENCE GUARD. A tool that cannot exit non-zero cannot gate anything."
     },
     "test_the_dead_paired_hook_check_is_gone_from_the_blocking_gate": {
@@ -3739,7 +3762,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 203,
+   "loc": 109,
    "modules_under_test": [
     "tools",
     "tools/",
@@ -3754,47 +3777,22 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 8,
+   "test_count": 3,
    "tests": {
-    "test_a_comment_mentioning_py_compile_does_not_strip_the_step": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "THE INCIDENT. The report-only job's run block says 'only py_compile on it' in a"
-    },
     "test_a_known_dead_tool_still_reports_orphaned": {
      "assertionless": false,
      "assertions": 1,
      "summary": "`index_gen`/`doc_index_gen`/`atomizer` are dead (plan G2 retires them; its landing"
-    },
-    "test_a_step_that_compiles_AND_invokes_is_not_stripped": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "`_INVOKES` is the guard that keeps a mixed step. Without it, a job that compiled and"
-    },
-    "test_an_UNNAMED_compile_step_is_still_stripped": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "Found by attacking this function, not by a test failing."
     },
     "test_live_validators_are_not_orphaned": {
      "assertionless": false,
      "assertions": 1,
      "summary": "The false-positive control on the real tree, in registry terms rather than text."
     },
-    "test_naming_every_tool_in_the_compile_gate_does_not_zero_the_census": {
-     "assertionless": false,
-     "assertions": 3,
-     "summary": "THE SCENARIO THE TWO HALVES EXIST TO SURVIVE, actually executed."
-    },
     "test_the_compile_gate_names_no_individual_tool": {
      "assertionless": false,
      "assertions": 2,
      "summary": "The recurrence guard on the workflow side. A named list is what rotted (32 of 108)"
-    },
-    "test_the_strip_removes_only_the_compile_step": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "AN INDEX-ACCURATE DIFF, not set membership."
     }
    }
   },
@@ -6523,20 +6521,20 @@
    "declared_lane": null,
    "documented": true,
    "guards": "The identifier census must be current, and `--check` must be able to SEE the roll-up.",
-   "helper_loc": 27,
+   "helper_loc": 35,
    "helpers": [
     {
      "loc": 13,
      "name": "_census_builder"
     },
     {
-     "loc": 14,
+     "loc": 22,
      "name": "_fake_repo"
     }
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 173,
+   "loc": 200,
    "modules_under_test": [
     "engine_names",
     "references",
@@ -6545,12 +6543,17 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 7,
+   "test_count": 8,
    "tests": {
     "test_a_deleted_rollup_is_drift_not_a_crash": {
      "assertionless": false,
      "assertions": 2,
      "summary": "Absence and mismatch must land in the same bucket. A generator that raises on a missing"
+    },
+    "test_a_scoped_WRITE_does_not_clobber_the_rollup": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "THE BUG THE ONE-SUBSYSTEM FIXTURE COULD NOT SEE (ED-IN-0169)."
     },
     "test_check_is_green_on_a_freshly_written_tree": {
      "assertionless": false,
@@ -11826,10 +11829,10 @@
   "files_naming_a_module": 113,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 41,
-  "helper_defs": 285,
-  "helper_loc": 2578,
+  "helper_defs": 286,
+  "helper_loc": 2679,
   "ratchet_baselines": 9,
-  "tests": 1363,
+  "tests": 1362,
   "undocumented_files": 0
  }
 }

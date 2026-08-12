@@ -46,34 +46,129 @@ def _jobs():
 
 
 def _can_fail(path: str) -> bool:
-    """Is there any code path by which this module exits non-zero?
+    """Can this module's PROCESS EXIT be non-zero? Analysed along the exit path only.
 
-    Deliberately GENEROUS — it says yes on the mere presence of a non-zero return or exit
-    anywhere in the module, without proving reachability. A generous detector makes the
-    assertion below hard to trip, so when it DOES trip the finding is real. The failure mode
-    it cannot see is a tool that gates by letting an exception escape; that is itself worth
-    finding, and the assertion message says so rather than pretending otherwise.
+    REWRITTEN 2026-08-12 (ED-IN-0169) BECAUSE THE FIRST VERSION WAS HOLLOW. It walked the
+    WHOLE module and returned True on any non-zero `Return` constant anywhere — so a helper
+    like `def _is_thing(x): return True`, which is ordinary in any codebase, made a tool read
+    as "can fail" regardless of its actual exit. Demonstrated, not theorised: appending one
+    such helper to `ci_supersession_check.py` — a tool whose own line 66 says "ALWAYS return 0
+    (WARN-ONLY)" — flipped it from CANNOT to CAN. The guard would then have passed the very
+    tool it was written to catch.
+
+    It gave the right answer for all 17 blocking tools ONLY BY LUCK: neither
+    `ci_supersession_check` nor `ci_audit_registry_check` happens to contain `return True` or
+    `return False`. And it was right about `validate_ed_citations` for the WRONG REASON — it
+    matched a `return True` predicate at :206 while SKIPPING the real exit at :569,
+    `sys.exit(1 if errors or over else 0)`, whose argument is an IfExp rather than a Constant.
+
+    That is CLAUDE.md §0.1 point 2 — an assertion that cannot observe the failure it excludes
+    — inside the guard written to prevent a recurrence, and the third instance of the class in
+    three commits (ED-IN-0165's `owner_src.split` guard was the second).
+
+    THE ANALYSIS NOW FOLLOWS THE EXIT PATH: find the `if __name__ == '__main__':` block, take
+    every `sys.exit(...)` / `exit(...)` / `raise SystemExit(...)` in it, and resolve each
+    argument — a non-zero constant is a failure path; a call to a local function means
+    inspecting THAT function's returns (one level); anything non-constant (`IfExp`, a
+    comparison, a computed count) is treated as capable, because it can evaluate non-zero.
+    Returns in unrelated helpers are now invisible, which is the whole point.
     """
     tree = ast.parse(open(path, encoding='utf-8').read())
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Return) and isinstance(node.value, ast.Constant):
-            if node.value.value not in (0, None, False):
+    funcs = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+
+    def _nonzero_constant(node) -> bool:
+        return isinstance(node, ast.Constant) and node.value not in (0, None, False)
+
+    def _returns_can_be_nonzero(fn) -> bool:
+        """Any return in `fn` that is non-zero, or that is not a constant at all."""
+        for n in ast.walk(fn):
+            if not isinstance(n, ast.Return) or n.value is None:
+                continue
+            if not isinstance(n.value, ast.Constant):
+                return True           # computed — len(errors), 1 if x else 0, ...
+            if _nonzero_constant(n.value):
                 return True
-        # sys.exit(N) / exit(N) / raise SystemExit(N)
-        target = None
-        if isinstance(node, ast.Call):
-            f = node.func
-            if isinstance(f, ast.Attribute) and f.attr == 'exit':
-                target = node
-            elif isinstance(f, ast.Name) and f.id in ('exit', 'SystemExit'):
-                target = node
-        if target is not None and target.args:
-            a = target.args[0]
-            if not isinstance(a, ast.Constant):
-                continue          # sys.exit(main()) — value comes from main's returns
-            if a.value not in (0, None, False):
-                return True
-    return False
+        return False
+
+    def _exit_value_can_be_nonzero(arg) -> bool:
+        if arg is None:
+            return False
+        if isinstance(arg, ast.Constant):
+            return _nonzero_constant(arg)
+        if isinstance(arg, ast.Call) and isinstance(arg.func, ast.Name) \
+                and arg.func.id in funcs:
+            return _returns_can_be_nonzero(funcs[arg.func.id])
+        return True                   # IfExp / Compare / computed — capable
+
+    def _scan(body, seen, depth=0) -> bool:
+        """Any reachable non-zero exit from these statements, following local calls.
+
+        THE ENTRY POINT IS NOT THE ONLY PLACE THE EXIT LIVES. Measured across the 17 blocking
+        tools, three shapes are in use and an analyser that knows only one is wrong about the
+        other two:
+          A  `if __name__ == '__main__': main()`, with `sys.exit(...)` INSIDE main
+             (ci_register_size_check, validate_ed_citations, broken_dependency_checker)
+          B  no `__main__` guard at all — module-level `sys.exit(1)` / `sys.exit(0)`
+             (ci_hooks_verifier, ci_co_file_checker, ci_editorial_checker)
+          C  `sys.exit(main())`, with the code in main's return values (ci_naming_check, ...)
+        A first cut of this rewrite handled only C and reported four live gates as unable to
+        fail, which would have red-flagged them as offenders. Following calls fixes it.
+        """
+        if depth > 3:
+            return False
+        for stmt in body:
+            for node in ast.walk(stmt):
+                if isinstance(node, ast.Raise) and isinstance(node.exc, ast.Call) \
+                        and isinstance(node.exc.func, ast.Name) \
+                        and node.exc.func.id == 'SystemExit':
+                    if _exit_value_can_be_nonzero(
+                            node.exc.args[0] if node.exc.args else None):
+                        return True
+                if not isinstance(node, ast.Call):
+                    continue
+                f = node.func
+                if (isinstance(f, ast.Attribute) and f.attr == 'exit') or \
+                        (isinstance(f, ast.Name) and f.id == 'exit'):
+                    if _exit_value_can_be_nonzero(node.args[0] if node.args else None):
+                        return True
+                # follow a call into a local function
+                name = f.id if isinstance(f, ast.Name) else None
+                if name and name in funcs and name not in seen:
+                    seen.add(name)
+                    if _scan(funcs[name].body, seen, depth + 1):
+                        return True
+        return False
+
+    main_blocks = [n for n in tree.body if isinstance(n, ast.If) and _is_main_guard(n)]
+    if main_blocks:
+        entry = [s for b in main_blocks for s in b.body]
+    else:
+        # Shape B: no guard, the module body IS the entry. Function/class definitions are
+        # skipped — defining a function is not running it; only an explicit call reaches it.
+        entry = [s for s in tree.body
+                 if not isinstance(s, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))]
+        if not entry:
+            return None
+    return _scan(entry, set())
+
+
+def _is_main_guard(node: ast.If) -> bool:
+    """BOTH operand orders, because `ci_common.has_main_guard` — the ONE OWNER of this
+    predicate (OI-52a, ED-IN-0097) — documents that it exists precisely because an earlier
+    local copy "only matched the conventional operand order". The first version of this
+    function reproduced that exact defect, in a file arguing for single ownership.
+
+    The owner answers "does this tree have a guard", not "which node is it", so it cannot be
+    called directly here. `test_main_guard_matcher_agrees_with_the_owner` pins the two
+    together instead, so they cannot drift.
+    """
+    t = node.test
+    if not isinstance(t, ast.Compare):
+        return False
+    operands = [t.left] + list(t.comparators)
+    names = {o.id for o in operands if isinstance(o, ast.Name)}
+    consts = {o.value for o in operands if isinstance(o, ast.Constant)}
+    return '__name__' in names and '__main__' in consts
 
 
 # --------------------------------------------------------------------------------------
@@ -81,16 +176,37 @@ def _can_fail(path: str) -> bool:
 # --------------------------------------------------------------------------------------
 def test_no_blocking_validator_is_incapable_of_failing():
     """THE RECURRENCE GUARD. A tool that cannot exit non-zero cannot gate anything."""
-    offenders = []
+    offenders, unjudgeable, checked = [], [], 0
     for job in _jobs():
-        if not job.get('blocking') or job['id'] == 'syntax-check':
+        if not job.get('blocking'):
             continue
         for cmd in job.get('tool_commands') or []:
             path = os.path.join(ROOT, cmd['script'])
             if not os.path.exists(path) or not path.endswith('.py'):
                 continue
-            if not _can_fail(path):
+            checked += 1
+            verdict = _can_fail(path)
+            if verdict is None:
+                unjudgeable.append(f"{cmd['script']} (in {job['id']}): no __main__ guard")
+            elif verdict is False:
                 offenders.append(f"{cmd['script']} (in blocking job {job['id']})")
+
+    # A LOOP THAT ASSERTS CONDITIONALLY MUST ASSERT THAT IT ASSERTED (§0.1 point 2).
+    # `ci_gate_coverage.jobs()` returns [] if the workflow is absent, and its JOB_RE only
+    # matches lowercase-hyphen job ids — rename a job with an underscore and it drops out
+    # silently. Either way both lists below stay empty and this guard reports green over
+    # nothing. Its sibling test_gate_coverage.py:151 already carries this assertion.
+    assert checked >= 17, (
+        f'only {checked} blocking tool invocations were examined; the workflow parse has '
+        'collapsed and this guard is reporting green over nothing')
+
+    # AN UNJUDGEABLE TOOL MUST REACH A HUMAN, not be silently counted as fine. The first
+    # version of this test had no such bucket, so any shape the analyser could not read
+    # would have passed as "can fail".
+    assert not unjudgeable, (
+        'these blocking tools have no `if __name__ == "__main__":` entry point, so whether '
+        'they can fail cannot be determined by reading them:\n  ' + '\n  '.join(unjudgeable)
+        + '\nGive them one, or teach _can_fail the shape deliberately.')
     assert not offenders, (
         'these tools sit in a BLOCKING CI job but have no non-zero exit anywhere in them, so '
         'they can never fail a build and their presence misreports what gates a merge:\n  '
@@ -123,6 +239,72 @@ def _local_blocking_flags() -> dict:
                 out[elt.elts[0].value] = elt.elts[2].value
         return out
     raise AssertionError('valoria_local.py no longer defines a `checks = [...]` table')
+
+
+def test_an_ordinary_boolean_helper_does_not_fake_a_failure_path(tmp_path):
+    """THE MUTATION THAT DEFEATED THE FIRST VERSION OF `_can_fail` (ED-IN-0169).
+
+    That version walked the WHOLE module and returned True on any non-zero `Return` constant,
+    so appending `def _t(x): return True` — ordinary in any codebase — to a tool documented
+    "ALWAYS return 0 (WARN-ONLY)" flipped it to "can fail". The guard would then have waved
+    through the exact tool it exists to catch. It was right about all 17 tools only because
+    neither always-exit-0 tool happened to contain a boolean helper.
+
+    Both directions are pinned: the decoys must not flip it, and a REAL added exit must.
+    """
+    base = open(os.path.join(ROOT, 'tools', 'ci_supersession_check.py'), encoding='utf-8').read()
+    assert _can_fail(os.path.join(ROOT, 'tools', 'ci_supersession_check.py')) is False, \
+        'the control tool is no longer always-exit-0; pick another'
+
+    for label, decoy in (
+            ('boolean helper', '\ndef _t(x):\n    if x:\n        return True\n    return False\n'),
+            ('non-zero helper', '\ndef _n():\n    return 7\n'),
+            ('uncalled exiting fn', '\ndef _never():\n    sys.exit(3)\n')):
+        p = tmp_path / f'decoy_{label.split()[0]}.py'
+        p.write_text(base + decoy, encoding='utf-8')
+        assert _can_fail(str(p)) is False, \
+            f'a {label} made an always-exit-0 tool read as able to fail — the guard is hollow'
+
+    real = tmp_path / 'real.py'
+    real.write_text(base.replace("if __name__ == '__main__':\n    sys.exit(main(sys.argv[1:]))",
+                                 "if __name__ == '__main__':\n    sys.exit(1)"), encoding='utf-8')
+    assert _can_fail(str(real)) is True, \
+        'adding a genuine non-zero exit did not register — the detector now under-reports'
+
+
+def test_main_guard_matcher_agrees_with_the_owner():
+    """`ci_common.has_main_guard` is the ONE OWNER; this file needs the node, not the bool.
+    Pin them together over the real blocking tools so the local matcher cannot drift from it."""
+    import ci_common
+    for job in _jobs():
+        if not job.get('blocking'):
+            continue
+        for cmd in job.get('tool_commands') or []:
+            path = os.path.join(ROOT, cmd['script'])
+            if not os.path.exists(path) or not path.endswith('.py'):
+                continue
+            tree = ast.parse(open(path, encoding='utf-8').read())
+            mine = any(isinstance(n, ast.If) and _is_main_guard(n) for n in tree.body)
+            assert mine == ci_common.has_main_guard(tree), \
+                f'{cmd["script"]}: local guard matcher disagrees with ci_common.has_main_guard'
+
+
+def test_all_three_entry_shapes_are_understood():
+    """`_can_fail` must handle every entry shape the blocking tier actually uses.
+
+    A first cut of the rewrite understood only `sys.exit(main())` and reported four live
+    gates as unable to fail. One representative of each measured shape is pinned here so a
+    future simplification cannot quietly drop one.
+    """
+    shapes = {
+        'tools/ci_register_size_check.py': 'A: __main__ calls main(), sys.exit inside main',
+        'tools/ci_hooks_verifier.py': 'B: no __main__ guard, module-level sys.exit',
+        'tools/ci_naming_check.py': 'C: sys.exit(main())',
+        'tools/validate_ed_citations.py': 'A + computed code: sys.exit(1 if errors else 0)',
+    }
+    for rel, shape in shapes.items():
+        assert _can_fail(os.path.join(ROOT, rel)) is True, \
+            f'{rel} ({shape}) reads as unable to fail; the analyser lost this shape'
 
 
 def test_the_two_moved_tools_are_report_only_in_both_tiers():

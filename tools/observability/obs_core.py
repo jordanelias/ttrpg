@@ -109,7 +109,29 @@ def read_ledger_entries(repo: Path | None = None) -> list[dict]:
 
 
 def open_ledger_entries(repo: Path | None = None) -> list[dict]:
-    return [e for e in read_ledger_entries(repo) if e.get("status") == "open"]
+    """Live open debt — ONE ROW PER ID, resolved by its LAST row.
+
+    THE LEDGERS ARE APPEND-ONLY, so an id's effective status is its last row. That rule is
+    documented in CLAUDE.md §4, enforced for archiving by `ci_register_size_check` ("archive
+    WHOLE settled ids… moving only the resolved row silently reverts it"), and implemented by
+    `validate_ed_citations.build_status_map`, which is last-write-wins.
+
+    THIS FUNCTION DID NOT IMPLEMENT IT (fixed 2026-08-12, ED-IN-0169). It filtered every row
+    with `status == "open"`, so an id closed by appending a resolution row — the normal way to
+    close one without rewriting history — kept appearing as open debt to every consumer of this
+    owner: the decisions and incompleteness registers, the dashboard's registers card, and the
+    SessionStart banner. Meanwhile `validate_ed_citations` reported it resolved. Two readers of
+    one file, disagreeing, with this one declaring itself the single owner (ED-IN-0068).
+
+    Found by an independent critic on ED-IN-0162, which this session closed by appending a
+    resolution row and which consequently read as BOTH open and resolved in the same tree.
+    Fixing it in the owner fixes it for every consumer at once, which is the whole point of
+    having one.
+    """
+    latest: dict[str, dict] = {}
+    for e in read_ledger_entries(repo):
+        latest[e.get("id", "?")] = e          # dict preserves order; last row wins
+    return [e for e in latest.values() if e.get("status") == "open"]
 
 
 # --- D. status-line parsing --------------------------------------------------

@@ -59,11 +59,19 @@ def _census_builder():
 
 
 def _fake_repo(tmp_path, mod, monkeypatch):
-    """Smallest tree the census can render: one subsystem, one doc, one identifier."""
-    (tmp_path / 'systems' / 'probe').mkdir(parents=True)
-    (tmp_path / 'systems' / 'probe' / 'probe_design_v1.md').write_text(
-        '# Probe\n\n## Status: CANONICAL\n\nThe probe_threshold_value governs the probe.\n',
-        encoding='utf-8')
+    """TWO subsystems, deliberately — one was a blind spot (ED-IN-0169).
+
+    The first fixture built a ONE-subsystem repo, in which a scoped `--subsystem X` run and a
+    full run produce an identical roll-up. `test_scoped_check_does_not_report_rollup_drift`
+    therefore claimed to exercise the scoped/full distinction while being structurally unable
+    to observe it — and it hid a real bug: scoped WRITE runs clobbered the whole-tree roll-up
+    with a single row. Two subsystems is the smallest fixture in which the distinction exists.
+    """
+    for sub, ident in (('probe', 'probe_threshold_value'), ('other', 'other_gauge_value')):
+        (tmp_path / 'systems' / sub).mkdir(parents=True)
+        (tmp_path / 'systems' / sub / f'{sub}_design_v1.md').write_text(
+            f'# {sub}\n\n## Status: CANONICAL\n\nThe {ident} governs the {sub}.\n',
+            encoding='utf-8')
     (tmp_path / 'references').mkdir()
     monkeypatch.setattr(mod, 'REPO', str(tmp_path))
     # These caches are populated from `git ls-files` in REPO; a tmp dir is not a repo, so they
@@ -132,6 +140,25 @@ def test_check_sees_a_corrupted_rollup(tmp_path, monkeypatch, capsys):
     assert mod.main(['--check']) == 1, 'a corrupted roll-up was not reported as drift'
     assert 'identifier_census.json' in capsys.readouterr().out, \
         'the roll-up drifted but the report did not name it'
+
+
+def test_a_scoped_WRITE_does_not_clobber_the_rollup(tmp_path, monkeypatch):
+    """THE BUG THE ONE-SUBSYSTEM FIXTURE COULD NOT SEE (ED-IN-0169).
+
+    `--subsystem X` computes one row. Writing that over the whole-tree roll-up reduced it to a
+    single subsystem, and the next freshness run reported "stale" rather than "clobbered".
+    """
+    mod = _census_builder()
+    repo = _fake_repo(tmp_path, mod, monkeypatch)
+    assert mod.main([]) == 0
+    rollup = repo / 'references' / 'identifier_census.json'
+    before = json.loads(rollup.read_text())
+    assert len(before['by_subsystem']) == 2, 'fixture must have two subsystems to test this'
+
+    assert mod.main(['--subsystem', 'probe']) == 0
+    after = json.loads(rollup.read_text())
+    assert after == before, \
+        'a scoped write changed the whole-tree roll-up; it must leave it alone'
 
 
 def test_check_sees_a_corrupted_subsystem_file(tmp_path, monkeypatch):

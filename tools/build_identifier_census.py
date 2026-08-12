@@ -492,6 +492,20 @@ def main(argv=None):
         print(f'[identifier-census] OK — {scope} current')
         return 0
 
+    # THE ROLL-UP IS ONLY WRITTEN BY A FULL RUN (ED-IN-0169). `--subsystem X` computes ONE
+    # row, and this used to write it over the 15-row committed file — silently reducing the
+    # roll-up to a single subsystem, after which the freshness gate reds with a message about
+    # staleness rather than about the clobber. The `--check` side already refused scoped runs
+    # for exactly this reason ("comparing a 1-row roll-up against the 15-row committed file
+    # would report drift that is an artifact of the flag") and the same reasoning was simply
+    # never carried to the write side. Found by an independent critic; the test fixture could
+    # not see it because it builds a ONE-subsystem repo, in which scoped and full runs are
+    # identical — so the fixture is now two subsystems.
+    if args.subsystem:
+        print(f'[identifier-census] wrote systems/{args.subsystem}/{OUT_NAME}; '
+              f'{ROLLUP} left alone (a scoped run cannot produce a whole-tree roll-up)')
+        return 0
+
     with open(os.path.join(REPO, ROLLUP), 'w', encoding='utf-8') as fh:
         fh.write(_rollup_text(rollup, built))
     tot = collections.Counter()

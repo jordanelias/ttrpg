@@ -2631,7 +2631,7 @@ Track S, Track T.** The plan's `## Status:` line is reconciled to match, and its
   code consumers** (the file goes 479 → 373, a net 106, after ~18 lines of tombstone)) is deleted, along with `broken_dependency_checker`'s check (d), which had been
   `os.walk`-ing the **entire repo on every run of a blocking gate** since the 08-05 evacuation to
   rediscover the file was gone. Guard: `test_blocking_tier_is_honest.py`, 6/6 mutants killed,
-  **no allowlist needed — 17/17 blocking tools can fail and all 6 that cannot are report-only.**
+  **no allowlist needed — 20/20 blocking tools can fail and all 5 that cannot are report-only** (first published as 17/6; both wrong, corrected under ED-IN-0169).
 - **ED-IN-0168 — G9, both halves in one commit.** The compile gate covered **32 of 108** tools;
   globbed. `invoked_by` no longer counts compilation as invocation. **Orphans 7 → 11**,
   **prune candidates 0 → 2**, exactly §2.2's predicted +4. Half B's measured delta today is
