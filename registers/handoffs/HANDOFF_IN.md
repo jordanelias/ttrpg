@@ -2536,3 +2536,62 @@ prices exactly those questions.
   two gates still disagree on the register cap (15,000 vs 10,000 — §1.8, plan step G6).
 - Verified: both documents match the new rule (30,000), `CURRENT.md` and the other non-audit files
   still match the 15,000 catch-all — the change is scoped, not global.
+
+**[PART] ED-IN-0160/0161/0162 — the consolidation plan of record is being EXECUTED (2026-08-12, PR #305).**
+
+Plan: `audit/2026-08-11-code-leanness/01_plan.md`, Track G, in the order its §8.4 sets.
+
+- **G7 DONE** — `tools/ci_common.py` is now the single import surface for `tools/`: repo root, 9-lane
+  roster, token estimation, PP/ED id regexes. `obs_core` **re-exports** all of them, so its nine
+  consumers are byte-identical. The layering direction (primitives *below* the observability tier, not
+  in it) is forced by the dependency graph — `obs_core` → `build_decisions` → PyYAML + a corpus sweep
+  at import time, and stdlib-only blocking gates need only the tuple. Heavier primitives re-export
+  **lazily** via PEP-562 `__getattr__`; a subprocess test asserts `import ci_common` still pulls in
+  neither `obs_core` nor PyYAML. Measured: adoption 11/118 → **60/118**, repo-root 53 → 24, roster
+  9 → 3, tokens 6 → 5, **zero** unmigrated repo-root definitions left in `tools/`.
+- **G8 DONE** — one owner for `## Status:`; four compiled regexes in the tooling tier → **one**.
+- **G1 DONE** — `compliance_check.py`'s dead check/report half excised (111 lines), co-change test
+  updated in the same commit as the plan required.
+
+**FOUR CORRECTIONS TO THE PLAN, each measured, each with a falsifier:**
+
+1. §8.1's `id_reservations read | 8 → 1` had **nothing to collapse** — zero modules load that file;
+   its 8 are *mentions*. No reader was shipped: an abstraction with no caller is the defect
+   ED-IN-0149 named.
+2. One of §1.3a's **five** diverging Status parsers **does not exist**. `dashboard_data._STATUS_RE`
+   went when `obs_core` was built; the pattern survives only in `obs_core`'s *historical comment*.
+   The census read a comment describing a past state as a present one, so every
+   "invisible to: dashboard_data" cell in the disputed table is wrong.
+3. The G8 delta is **one-sided, not two-sided**. Nothing is removed from any parser;
+   `ci_generation_consistency` never diverged from the owner at all (206 docs, 0/0).
+4. The divergence that mattered was the **window**, not the regex. `STATUS_HEAD_LINES = 80`, chosen
+   by measuring SUPERSEDED reclassifications: 12 lines flips 2, 40 flips 0, 80 flips 0, whole-doc
+   flips 1.
+
+**Two mechanisms nearly lost, both caught by tests the plan required:** a first-Status-line-wins
+helper silently dropped `systems/factions/faction_canon_v30.md` (two contradictory `## Status:` lines,
+6 and 7) from the incompleteness feed — a one-sided test would have passed; and
+`test_no_module_actually_loads_id_reservations` **counted itself**, §2.4 reproduced one section from
+where the trap is documented.
+
+**[OPEN] ED-IN-0162 — a stale generated artifact feeds a freshness-gated one.**
+`references/identifier_census.json` + the 16 `systems/*/_identifier_census.yaml` were last built
+**2026-08-04**; the docs they index changed 08-08 and 08-10 (regenerating = 9,773 lines). **Nothing
+gates them** — no CI job, no `valoria_local` entry, no `--check` test — while `references/glossary/`
+**is** built from them (1,243 of its 1,537 terms) and **is** gated. The glossary's `--check` can only
+prove it matches its inputs, never that its inputs match the tree. Fix: regenerate, then add the
+`--check` gate on the `test_engine_atlas.py:46` pattern.
+
+**NOT ratified, still held for Jordan:** #304's six (**#0** the `net`/`ob` convention — gates the
+degree family 16→1, `roll_net` 3→1, `roll_pool` 2→1 — plus #1, #1b, #2, #7, #8), the **37
+grandfathered `*_index.md` files**, and the **`sim_harness` promote-or-retire call** (28 files, and
+12 of G7's 24 residual repo-root sites are in that cluster — they are deliberately unmigrated).
+
+**Two DOCUMENT defects surfaced and deliberately NOT fixed** (other lanes' content, not
+infrastructure): `workplans/valoria_master_workplan_v6.md` — the live steering surface — carries no
+conventional `## Status:` line at all, and `systems/ui/valoria_ui_ux_v4.md` bolds its. The G8 test
+asserts both are **still invisible** and fails when either is fixed, so neither can rot unnoticed.
+
+**Next in the plan:** G2 (dead-scope sweep as ONE pattern), G3, G4, G6, G9, G11, the new G12/G13, then
+Track T. Track S is #304's engine/systems work in FA/PC/MB/WR lanes and is mostly gated on **#0**.
+

@@ -3504,7 +3504,7 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 100,
+   "loc": 138,
    "modules_under_test": [
     "references",
     "references/module_contracts.yaml",
@@ -3537,7 +3537,7 @@
     },
     "test_severity_is_single_owned_no_inline_copy_remains": {
      "assertionless": false,
-     "assertions": 2,
+     "assertions": 4,
      "summary": "No site may recompute the rule. The `startswith('flag')` idiom must be gone from live code."
     },
     "test_unknown_token_fails_loudly_and_names_itself": {

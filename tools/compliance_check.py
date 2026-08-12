@@ -50,8 +50,6 @@ class Violation:
 
 # ── Rules loading ────────────────────────────────────────────────────────────
 
-_rules_cache = None
-
 def _match_rule(path: str, rules: dict) -> dict | None:
     """First-match policy lookup using fnmatch patterns."""
     policies = rules.get('policies', [])
@@ -129,116 +127,34 @@ def _on_exceed_severity(on_exceed: str, path: str) -> str:
         f"blocking error is the ED-IN-0098 defect this exception exists to prevent.")
 
 
-def _check_size(path: str, content: str, rule: dict) -> Violation | None:
-    """Check file size against max_tokens."""
-    max_tokens = rule.get('max_tokens')
-    if max_tokens is None:
-        return None
-    current_tokens = ci_common.tokens(content)
-    if current_tokens <= max_tokens:
-        return None
+# ── Check functions ──────────────────────────────────────────────────────────
+#
+# THE REST OF THIS SECTION WAS EXCISED 2026-08-12 (plan step G1, ED-IN-0159 §1.5).
+#
+# `_check_size`, `_check_index`, `_check_archive_pressure` and `report` were the
+# check/report half of the orchestrator removed on 2026-08-05 (ED-IN-0145). Their
+# only caller was `check_all()`, which went with it — so for a week this BLOCKING
+# GATE'S FILE carried four functions nothing could reach, two of which could not
+# even run:
+#
+#   $ python3 tools/compliance_check.py
+#     NameError: name 'check_all' is not defined
+#
+# `_check_index` was the worse of the two. It called `_lazy_import()` and
+# `_doc_index_gen`, NEITHER OF WHICH IS DEFINED ANYWHERE IN THE TREE, and it
+# branched on `require_index_above` — a key that does not exist in
+# `references/atomization_rules.yaml`, whose rule uses `require_skeleton_above`
+# (§1.6). Dead code reading a policy key that was never written.
+#
+# WHAT SURVIVES IS THE WHOLE LIVE GATE. The CI mode (`--check-only --repo-state .`)
+# is fully inline below and called none of this; that is precisely why the rot went
+# unnoticed. `_match_rule`, `_on_exceed_severity`, the `on_exceed` vocabulary and
+# `Violation` are all still here because the live path uses every one of them.
+#
+# Expected delta: none. `tests/valoria/test_gate_coverage.py:131` pins the gate's
+# invocation, and the working-tree scan reports the same 48 warnings / 0 errors
+# before and after.
 
-    on_exceed = rule.get('on_exceed', 'error')
-
-    # 'skip' means explicitly exempted — produce no violation.
-    if on_exceed == 'skip':
-        return None
-
-    strategy = rule.get('split_strategy')
-
-    # Determine if auto-fixable
-    auto_fixable = strategy is not None or on_exceed == 'block_commit'
-    if on_exceed in ('flag_unknown_pattern', 'flag_for_split', 'flag_for_next_session'):
-        auto_fixable = False
-
-    fix_action = ''
-    if strategy:
-        fix_action = 'atomizer.atomize'
-    elif rule.get('auto_archive_status'):
-        fix_action = 'atomizer.archive_by_status'
-        auto_fixable = True
-
-    severity = _on_exceed_severity(on_exceed, path)
-
-    return Violation(
-        path=path, rule=rule, kind='size_exceeded',
-        current_tokens=current_tokens, threshold=max_tokens,
-        auto_fixable=auto_fixable, fix_action=fix_action,
-        severity=severity,
-    )
-
-
-def _check_index(path: str, content: str, rule: dict,
-                    repo_files: dict) -> Violation | None:
-    """Check if index exists and is fresh for design docs."""
-    _lazy_import()
-    require_above = rule.get('require_index_above')
-    if require_above is None:
-        return None
-    current_tokens = ci_common.tokens(content)
-    if current_tokens <= require_above:
-        return None
-
-    idx_path = _doc_index_gen.index_path_for(path)
-    idx_content = repo_files.get(idx_path)
-
-    if idx_content is None:
-        return Violation(
-            path=path, rule=rule, kind='missing_index',
-            current_tokens=current_tokens, threshold=require_above,
-            auto_fixable=True,
-            fix_action='doc_index_gen.generate_index',
-            fix_args={'canonical_path': path, 'index_path': idx_path},
-        )
-
-    # Check staleness (would need SHA comparison — simplified: always regen if content differs)
-    # In practice, the SHA check happens via needs_regeneration()
-    return None
-
-
-def _check_archive_pressure(path: str, content: str, rule: dict) -> Violation | None:
-    """Check if active register needs archiving."""
-    archive_statuses = rule.get('auto_archive_status')
-    if not archive_statuses:
-        return None
-
-    max_tokens = rule.get('max_tokens', 10000)
-    archive_threshold = rule.get('archive_threshold', int(max_tokens * 0.9))
-    current_tokens = ci_common.tokens(content)
-
-    if current_tokens <= archive_threshold:
-        return None
-
-    return Violation(
-        path=path, rule=rule, kind='archive_needed',
-        current_tokens=current_tokens, threshold=archive_threshold,
-        auto_fixable=True,
-        fix_action='atomizer.archive_by_status',
-        fix_args={'active_path': path},
-    )
-
-
-# ── Public interface ─────────────────────────────────────────────────────────
-
-def report(violations: list[Violation]) -> str:
-    """Human-readable violation summary."""
-    if not violations:
-        return "No violations found."
-
-    lines = [f"Compliance Report — {len(violations)} violation(s):", ""]
-    for v in violations:
-        auto = " [AUTO-FIXABLE]" if v.auto_fixable else " [MANUAL]"
-        lines.append(f"  [{v.severity.upper()}]{auto} {v.kind}")
-        lines.append(f"    Path: {v.path}")
-        lines.append(f"    Size: {v.current_tokens:,} tokens (threshold: {v.threshold:,})")
-        if v.fix_action:
-            lines.append(f"    Fix: {v.fix_action}")
-        lines.append("")
-
-    return "\n".join(lines)
-
-
-# ── CLI interface ────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     import argparse
@@ -311,11 +227,11 @@ if __name__ == "__main__":
             print("[COMPLIANCE ✓] All files within thresholds")
             sys.exit(0)
     else:
-        # Interactive mode
-        violations = check_all()
-        if violations:
-            print(report(violations))
-            sys.exit(1 if args.check_only else 0)
-        else:
-            print("[COMPLIANCE ✓] No violations")
-            sys.exit(0)
+        # There is no second mode. The interactive path called `check_all()` and
+        # `report()`, both excised with the orchestrator (ED-IN-0145) — so running
+        # this file without --repo-state raised NameError rather than doing
+        # anything. Say so and exit cleanly instead of pretending.
+        print("[COMPLIANCE] --repo-state is required; the interactive/orchestrator "
+              "mode was excised 2026-08-05 (ED-IN-0145). "
+              "Use: compliance_check.py --check-only --repo-state .", file=sys.stderr)
+        sys.exit(2)
