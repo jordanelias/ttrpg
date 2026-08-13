@@ -59,7 +59,8 @@ def audit_refresh_yaml():
 
 def test_every_family_declares_a_refresher():
     """A family with no `refresher` key is the state that hid mechanics-index. `None` is a valid
-    answer — a deliberately frozen artifact — but it has to be said out loud."""
+    answer, but it must be paired with `no_refresher_because` — see the test below; None alone
+    once meant two different dispositions."""
     for fam in ast_mod.FAMILIES:
         assert 'refresher' in fam, (
             f"family {fam['name']!r} declares no `refresher`. Name the script that regenerates it, "
@@ -88,7 +89,41 @@ def test_every_refreshable_family_is_actually_run_by_the_cron(audit_refresh_yaml
     assert not missing, (
         'family/families declare a refresher that .github/workflows/audit-refresh.yml never runs:\n  '
         + '\n  '.join(f'{n} -> {g}' for n, g in missing)
-        + '\n\nAdd the step to the cron, or set refresher=None and say why it is frozen.')
+        + '\n\nAdd the step to the cron, or set refresher=None WITH a no_refresher_because reason.')
+
+
+def test_every_refreshed_artifact_is_actually_committed(audit_refresh_yaml):
+    """RUNNING A GENERATOR IS NOT REFRESHING AN ARTIFACT (ED-IN-0182).
+
+    The test above checks the cron INVOKES the generator. That is one level short of the failure
+    it was built after, and the gap was live: `build_glossary.py` was added to the cron while
+    `references/glossary/` appeared in neither the diff-check nor the `git add` list, so the job
+    regenerated the glossary inside the runner and discarded it. The job would have reported
+    success and the coverage guard would have reported the family covered, over a family that was
+    still only fresh by luck — a green light over the exact condition it was written to detect.
+
+    So the join has two legs now: the generator is invoked, AND its output is committed.
+    """
+    add_lines = [ln for ln in audit_refresh_yaml.splitlines() if ln.strip().startswith('git add ')]
+    assert add_lines, 'no `git add` line in audit-refresh.yml — nothing it generates is committed'
+    staged = ' '.join(add_lines)
+
+    orphaned = []
+    for fam in ast_mod.FAMILIES:
+        if fam.get('refresher') is None:
+            continue
+        for artifact in fam.get('artifact_paths', ()):
+            # a directory entry in `git add` covers everything beneath it
+            covered = artifact in staged or any(
+                artifact.startswith(tok) for tok in staged.split() if tok.endswith('/'))
+            if not covered:
+                orphaned.append((fam['name'], artifact))
+    assert not orphaned, (
+        'the cron regenerates these artifacts and never commits them:\n  '
+        + '\n  '.join(f'{n} -> {a}' for n, a in orphaned)
+        + '\n\nAdd the path to BOTH the diff-check and the `git add` list in audit-refresh.yml. '
+          'A generator that runs and whose output is discarded is worse than one that never ran: '
+          'the job goes green and the coverage guard reports the family covered.')
 
 
 def test_the_join_is_not_vacuous(audit_refresh_yaml):
@@ -138,15 +173,44 @@ def test_mechanics_index_is_NOT_wired_because_its_generator_is_destructive(audit
         f'Its --update flag strips every comment from the register it writes (ED-IN-0181).')
 
 
-def test_a_frozen_family_is_allowed_but_must_be_explicit():
-    """npc-audit points at a frozen historical artifact. The rule is that it says so."""
-    frozen = {f['name'] for f in ast_mod.FAMILIES if f.get('refresher') is None}
-    # npc-audit  — a frozen historical artifact; nothing should regenerate it.
-    # mechanics-index — NOT frozen: it has no refresher because its generator is destructive
-    #   (`--update` strips every comment, ED-IN-0181). It stays stale on purpose until the
-    #   generator is fixed. Listed here so the reason is visible, not so the gap is excused.
-    expected = {'npc-audit', 'mechanics-index'}
-    assert frozen == expected, (
-        f'families without a refresher changed: {sorted(frozen)}, expected {sorted(expected)}. '
-        f'A new one means either a genuinely frozen artifact — say so here — or the '
-        f'reported-but-never-fixed defect recurring.')
+def test_a_family_without_a_refresher_must_say_why():
+    """`refresher: None` means "nothing regenerates this" and NOTHING MORE (ED-IN-0182).
+
+    An earlier version of this file treated None as "frozen historical artifact" and put both
+    None-families in one set called `frozen` — while one of them was not frozen at all, it was
+    blocked by a defect. One word carrying two dispositions, inside the session that ruled
+    vocabulary must be idempotent (ED-IN-0179). The reason is now an explicit field.
+    """
+    for fam in ast_mod.FAMILIES:
+        if fam.get('refresher') is not None:
+            continue
+        reason = fam.get('no_refresher_because')
+        assert reason, (
+            f"family {fam['name']!r} has no refresher and no `no_refresher_because`. Say which it "
+            f"is — 'frozen' (nothing should regenerate it) or 'blocked-by-defect' (something "
+            f"should, and cannot yet). A bare None hides the difference.")
+
+
+def test_every_family_points_at_a_live_artifact():
+    """THE CHECK THAT WOULD HAVE CAUGHT npc-audit, and it had rotted twice before anyone did.
+
+    That family's artifact was `audit/lane-a/…`, which left main in the 2026-08-05 evacuation
+    (`restructure_ledger.md:1319` carries `audit/lane-a/` as `FORK:c451bcb`). The family reported
+    "(no data)" silently — and its own comment recorded an EARLIER repointing after exactly the
+    same failure, from the retired `designs/audit/` tree. It was repointed onto a path that was
+    itself evacuated two weeks later.
+
+    A staleness row whose subject has left the tree degrades to silence rather than to an error,
+    so it cannot announce its own death. This is the announcement.
+    """
+    dead = []
+    for fam in ast_mod.FAMILIES:
+        for artifact in fam.get('artifact_paths', ()):
+            base = artifact.split('*')[0]
+            if not os.path.exists(os.path.join(ROOT, base)):
+                dead.append((fam['name'], artifact))
+    assert not dead, (
+        'family/families name an artifact that is not in the tree:\n  '
+        + '\n  '.join(f'{n} -> {a}' for n, a in dead)
+        + '\n\nIf its subject was retired, RETIRE THE FAMILY — do not repoint it at a third path. '
+          'If the artifact merely moved, repoint it and say so.')

@@ -194,18 +194,18 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 153,
+   "loc": 217,
    "modules_under_test": [
     "tools"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 6,
+   "test_count": 8,
    "tests": {
-    "test_a_frozen_family_is_allowed_but_must_be_explicit": {
+    "test_a_family_without_a_refresher_must_say_why": {
      "assertionless": false,
      "assertions": 1,
-     "summary": "npc-audit points at a frozen historical artifact. The rule is that it says so."
+     "summary": "`refresher: None` means \"nothing regenerates this\" and NOTHING MORE (ED-IN-0182)."
     },
     "test_every_declared_refresher_exists_on_disk": {
      "assertionless": false,
@@ -217,10 +217,20 @@
      "assertions": 1,
      "summary": "A family with no `refresher` key is the state that hid mechanics-index. `None` is a valid"
     },
+    "test_every_family_points_at_a_live_artifact": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE CHECK THAT WOULD HAVE CAUGHT npc-audit, and it had rotted twice before anyone did."
+    },
     "test_every_refreshable_family_is_actually_run_by_the_cron": {
      "assertionless": false,
      "assertions": 1,
      "summary": "THE REGRESSION. Declaring a refresher the cron never invokes is the same blind spot with"
+    },
+    "test_every_refreshed_artifact_is_actually_committed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "RUNNING A GENERATOR IS NOT REFRESHING AN ARTIFACT (ED-IN-0182)."
     },
     "test_mechanics_index_is_NOT_wired_because_its_generator_is_destructive": {
      "assertionless": false,
@@ -5522,18 +5532,25 @@
    "lanes": [
     "IN"
    ],
-   "loc": 120,
+   "loc": 146,
    "modules_under_test": [
-    "engine/params/core.md"
+    "engine/anything_fabricated.md",
+    "engine/params/core.md",
+    "systems/combat/combat_v30.md"
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 6,
+   "test_count": 7,
    "tests": {
     "test_baseline_pairs_still_separate_evacuated_from_fabricated": {
      "assertionless": false,
      "assertions": 1,
      "summary": "THE RATCHET. Losing a pair is an anti-fabrication regression, not a style drift."
+    },
+    "test_bdc_cannot_see_engine_paths_at_all": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE FINDING THAT OUTRANKS EVERY COLLAPSE ABOVE (ED-IN-0182)."
     },
     "test_bdc_still_collapses_the_two_hop_chain_and_that_is_recorded_not_asserted": {
      "assertionless": false,
@@ -12134,7 +12151,7 @@
   "helper_defs": 299,
   "helper_loc": 2805,
   "ratchet_baselines": 9,
-  "tests": 1392,
+  "tests": 1395,
   "undocumented_files": 0
  }
 }

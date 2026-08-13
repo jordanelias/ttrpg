@@ -117,3 +117,29 @@ def test_bdc_still_collapses_the_two_hop_chain_and_that_is_recorded_not_asserted
         "broken_dependency_checker now DISTINGUISHES the 2-hop chain params/core.md — that is a "
         "FIX, not a failure. Add the pair to DISTINGUISHING_BASELINE in fork_divergence.py in "
         "this same commit and delete this test's expectation.")
+
+
+def test_bdc_cannot_see_engine_paths_at_all(fd):
+    """THE FINDING THAT OUTRANKS EVERY COLLAPSE ABOVE (ED-IN-0182).
+
+    `broken_dependency_checker` is a BLOCKING gate whose stated job is separating a real citation
+    from a fabricated one. Its `extract_file_refs` tree roster omits `engine/`, `params/`,
+    `audit/` and `registers/` (bdc:71-74), so a live ledger entry citing a fabricated
+    `engine/…` path extracts to the EMPTY SET and passes without a word.
+
+    That is not a wrong verdict — it is the gate not looking, and it is why this harness's bdc
+    rows describe a classifier rather than a deployed decision.
+
+    Pinned as a KNOWN HOLE, not asserted as correct. When the roster is widened (its own
+    expected-delta test required, CLAUDE.md §8), this test fails and points at the fix.
+    """
+    reach = fd.extraction_reachable(['engine/params/core.md', 'params/core.md',
+                                     'engine/anything_fabricated.md',
+                                     'systems/combat/combat_v30.md'])
+    assert reach['systems/combat/combat_v30.md'], (
+        'bdc cannot extract a systems/ path — the roster broke entirely, not just at its edges')
+    for blind in ('engine/params/core.md', 'params/core.md', 'engine/anything_fabricated.md'):
+        assert not reach[blind], (
+            f'bdc now extracts {blind!r} — if the tree roster was widened deliberately, that is a '
+            f'FIX: update this test and the harness docstring in the same commit, and make sure '
+            f'the widening shipped its own expected-delta test.')

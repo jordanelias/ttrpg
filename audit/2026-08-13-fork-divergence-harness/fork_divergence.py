@@ -23,9 +23,17 @@ property, and no amount of disagreement-about-FORK analysis surfaces that. Measu
 consumers collapse it.** The plan asserts "three of five" from reading; the difference is what a
 control buys.
 
-HOW EACH CONSUMER IS INVOKED — the real code path, never a re-implementation. Re-deriving a
-consumer's semantics here would measure this file's model of it, which is the defect class §0.1
-point 2 names and which this harness would otherwise be a fresh instance of.
+HOW EACH CONSUMER IS INVOKED — and this claim has been CORRECTED once already, so read it exactly.
+`pathres`, `ci_claude_workflow_paths` and `vector_audit` are invoked through their real entry
+points. `workbench` and `gen_audit`'s classification, and `broken_dependency_checker`'s, are
+TRANSCRIBED from their sources rather than called.
+
+⚠ AN EARLIER VERSION OF THIS PARAGRAPH SAID "the real code path, never a re-implementation" FOR ALL
+SIX. That was false and an adversarial review caught it (ED-IN-0182). A transcription is only as
+good as the boundary you draw around "the decision", and twice now that boundary has been drawn too
+small — see the trap below, and `extraction_reachable()`, which exists because bdc's decision starts
+one function earlier than this file assumed. Treat every transcribed row as a claim about a
+CLASSIFIER, not about what the gate does in production.
 
 ⚠ ONE MODELLING TRAP, HIT ON THE FIRST RUN AND RECORDED SO THE NEXT READER DOES NOT REPEAT IT.
 `broken_dependency_checker._resolve_remap()` is NOT the decision. It returns a mapped path; the
@@ -142,6 +150,39 @@ def probe_all(queries: list[str]) -> dict[str, dict[str, str]]:
     return verdicts
 
 
+def extraction_reachable(queries: list[str]) -> dict[str, bool]:
+    """Can `broken_dependency_checker` even SEE these paths? (ED-IN-0182)
+
+    THE CLASSIFIER IS NOT THE DECISION, AND THIS HARNESS LEARNED THAT TWICE. The docstring above
+    records fixing it once — modelling `_resolve_remap` instead of the caller's `all_files` test.
+    An adversarial review then found the same trap one level further out and it is worse: before
+    any classification happens, bdc extracts candidate refs with `extract_file_refs`, whose tree
+    roster is `designs|systems|compilation|references|canon|tests|skills|tools`
+    (broken_dependency_checker.py:71-74). **No `engine/`. No `params/`. No `audit/`. No
+    `registers/`.**
+
+    So for every FORK probe in this file, bdc's real production answer is not INFO-EVACUATED or
+    BROKEN — it is *nothing at all*. Those paths never enter its pipeline. The verdicts this
+    harness reports for bdc are its classifier's, and the classifier is unreachable for these
+    inputs.
+
+    AND THAT IS A BIGGER FINDING THAN THE ONE THIS FILE WAS WRITTEN FOR. bdc is a BLOCKING gate
+    whose stated job is separating a real citation from a fabricated one. A live ledger entry
+    citing `engine/anything_fabricated.md` extracts to the empty set and passes without a word —
+    silent non-extraction, not a wrong verdict. Every collapse reported below is a consumer giving
+    the same answer to two different things; this is a gate not looking.
+
+    Reported, not fixed here: widening that roster changes what a blocking gate examines and needs
+    its own expected-delta test (CLAUDE.md §8).
+    """
+    import broken_dependency_checker as bdc
+    out = {}
+    for q in queries:
+        refs = bdc.extract_file_refs(f'a live entry citing `{q}` here', 'probe.jsonl')
+        out[q] = bool(refs)
+    return out
+
+
 def distinguishing(verdicts: dict[str, dict[str, str]]) -> set[tuple[str, str]]:
     """(consumer, query) pairs where the FORK verdict differs from that consumer's control verdict."""
     pairs = set()
@@ -191,6 +232,18 @@ def main(argv=None) -> int:
         print(f'    {c:28s} {state}')
     print('  A collapsed pair gives an evacuated path and a fabricated one the SAME answer —')
     print('  the distinction tests/valoria/test_forked_status.py exists to defend.')
+
+    reach = extraction_reachable(queries)
+    unreachable = [q for q, ok in reach.items() if not ok]
+    print(f'\nbroken_dependency_checker EXTRACTION REACHABILITY (ED-IN-0182):')
+    for q in queries:
+        print(f'    {q:38s} {"reaches the classifier" if reach[q] else "NEVER EXTRACTED"}')
+    if unreachable:
+        print(f'  ⚠ {len(unreachable)}/{len(queries)} probe path(s) never enter bdc at all — its tree')
+        print('    roster omits engine/, params/, audit/, registers/ (bdc:71-74). The bdc verdicts')
+        print('    above are its CLASSIFIER\'s; in production it answers nothing for these paths.')
+        print('    A fabricated `engine/…` citation in a live ledger entry passes SILENTLY. That is')
+        print('    a blocking gate not looking, which outranks every collapse listed above.')
 
     if args.check:
         lost = DISTINGUISHING_BASELINE - keep

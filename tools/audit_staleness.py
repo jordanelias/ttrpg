@@ -57,9 +57,16 @@ except ImportError:  # allow `python tools/audit_staleness.py` from repo root
 # acted on — 32 files behind before anyone joined the two facts.
 #
 # `refresher` names the script that regenerates the artifact, and
-# tests/valoria/test_audit_refresh_coverage.py joins it to .github/workflows/audit-refresh.yml, so
-# a family with no refresher, or one naming a script the cron does not run, now FAILS instead of
-# quietly drifting. `None` means deliberately unrefreshed — a frozen historical artifact.
+# tests/valoria/test_audit_refresh_coverage.py joins it to .github/workflows/audit-refresh.yml —
+# in BOTH directions: the generator must be invoked AND its artifact must be committed. A family
+# with no refresher, or one naming a script the cron does not run, or one whose output the cron
+# discards, now FAILS instead of quietly drifting.
+#
+# `refresher: None` MEANS "NOTHING REGENERATES THIS" AND NOTHING MORE. It does NOT mean "frozen".
+# An earlier version of this note said it did, while one of the two None families was not frozen at
+# all — it was blocked by a defect. One word carrying two dispositions, in the file whose own
+# session ruled that vocabulary must be idempotent (ED-IN-0179). `no_refresher_because` now carries
+# the reason, and the guard reads THAT rather than inferring intent from a null.
 FAMILIES = [
     {
         "name": "vector-audit",
@@ -140,16 +147,23 @@ FAMILIES = [
         # registers/placeholder_names.yaml, systems/_architecture/scale_transitions_v30.md).
         "scope_prefixes": ("references/", "canon/", "systems/_architecture/"),
     },
-    {
-        "name": "npc-audit",
-        "refresher": None,
-        # Repointed 2026-07-22: the audit corpus moved out of the retired `designs/audit/` tree to
-        # `audit/lane-a/` (ED-IN-0071 P4/P5) — the old path was dead, so the family reported "no data".
-        "artifact_paths": ["audit/lane-a/2026-06-22-npc-comprehensive-audit.md"],
-        "scope_prefixes": ("systems/npcs/", "references/npc_registry.yaml"),
-    },
+    # ── npc-audit RETIRED 2026-08-13 (ED-IN-0182) ──────────────────────────────────────────
+    # Its artifact was `audit/lane-a/2026-06-22-npc-comprehensive-audit.md`, and `audit/lane-a/`
+    # left main in the 2026-08-05 evacuation — `references/restructure_ledger.md:1319` carries it
+    # as `FORK:c451bcb`. The family had been silently reporting "(no data)" ever since.
+    #
+    # DELETED RATHER THAN REPOINTED, under the rule ED-IN-0163 had to state: an absent path is dead
+    # only if its SUBJECT was retired. Here the subject WAS retired, deliberately, so there is no
+    # live artifact whose staleness this could measure.
+    #
+    # ⚠ AND IT HAD ROTTED THIS WAY BEFORE. The row's own comment recorded a 2026-07-22 repointing
+    # after the SAME failure (the previous home, `designs/audit/`, had been retired and the family
+    # reported "no data"). It was repointed at a path that was itself evacuated two weeks later.
+    # A row that silently degrades to "no data" cannot announce its own death, which is why the
+    # replacement is deletion plus a guard rather than a third repointing.
     {
         "name": "mechanics-index",
+        "no_refresher_because": "blocked-by-defect",
         # NO REFRESHER — and this is a defect being recorded, not a frozen artifact (ED-IN-0181).
         # `mechanics_index_gen.py --update` says it writes the drift report back; it actually
         # round-trips the whole YAML and strips EVERY comment (measured: 39 -> 0, 5,081 chars).

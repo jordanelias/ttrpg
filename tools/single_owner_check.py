@@ -25,6 +25,23 @@ text scan measures prose density. This walks the AST and looks only at **string 
 docstrings**, i.e. values the code actually computes with. Same lesson as `tools/pathres.py`'s
 module header, arrived at again from a different direction.
 
+KNOWN LIMITS, MEASURED BY AN ADVERSARIAL REVIEW AND RECORDED RATHER THAN QUIETLY CARRIED
+(ED-IN-0182). This is a useful signal, not a complete one, and the gaps run in both directions:
+
+  · IT CAN BE LAUNDERED. The test is `touches AND owner_import not in imports`, so a module that
+    adds `import pathres` for anything at all — while keeping its own row regex — drops out of the
+    count with the duplicate parser fully intact. That is the cheapest way to turn this green
+    without consolidating anything, and Phase A2 will walk straight past it.
+  · IT STILL COUNTS SOME MENTIONS. Excluding docstrings does not exclude OUTPUT strings:
+    `gen_audit.py:629` and `handoff_atomize.py:408` embed a registry filename in prose they PRINT,
+    and both are counted. So "reads a registry" overstates at least 2 of the 14.
+  · GLOB-FORM READS ARE INVISIBLE. `match` is a literal substring, so a module that opens every
+    ledger via a glob pattern — the most complete read there is — matches nothing.
+  · `tests/` is out of scope entirely (`_modules()` scans tools/, .githooks/, skills/).
+
+The number is therefore instrument-defined and only meaningful against ITS OWN baseline. Do not
+quote 14 as "the number of duplicate readers" anywhere else.
+
 REPORT-ONLY, AND IT REDS ON DAY ONE BY DESIGN. There are known bypasses right now — that is the
 finding, not a regression. Blocking on them would refuse unrelated commits for a pre-existing
 condition, which ED-IN-0112 already paid for. `--check` compares against the recorded baseline and

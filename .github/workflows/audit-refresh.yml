@@ -81,6 +81,11 @@ jobs:
         # run the generator by hand in fdbef6b. Nothing scheduled refreshed it, so its freshness was
         # luck, not coverage — a worse state than mechanics-index's visible staleness, because the
         # report said everything was fine.
+        # ⚠ THE ARTIFACT MUST ALSO REACH THE DIFF-CHECK AND `git add` LISTS BELOW, or this step
+        # regenerates the glossary inside the runner and throws it away — the job would report
+        # success, the guard would report the family covered, and nothing would ever change.
+        # That is exactly what the first version of this step did (ED-IN-0182); `references/glossary/`
+        # was added to both lists as the fix. Running a generator is not refreshing an artifact.
         run: python3 tools/observability/build_glossary.py
 
       # NO mechanics-index STEP HERE, DELIBERATELY (ED-IN-0181, and it was added then removed
@@ -135,7 +140,7 @@ jobs:
           # (whose volatile fields build_graph strips), so gating on it could still churn; the
           # corpus/content feeds here are the real "is there work?" signal. It IS git-added so it
           # ships fresh whenever a real change opens a PR.
-          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json; then
+          if git diff --quiet -- tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json references/glossary/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -156,7 +161,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/console.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json
+          git add tools/observability/decisions.json tools/observability/DECISIONS.md tools/observability/decisions_data.js tools/observability/proposals.json tools/observability/PROPOSALS.md tools/observability/proposals_data.js references/apparatus_registry.yaml references/apparatus_registry.md tools/observability/graph.json tools/observability/graph_data.js tools/observability/index.html tools/observability/console.html tools/observability/lexicon.json tools/observability/lexicon_data.js tools/observability/incompleteness.json tools/observability/INCOMPLETENESS.md tools/observability/incompleteness_data.js tools/observability/audit_findings.json references/glossary/
           git commit -m "[infrastructure] Scheduled decisions-digest + proposals + apparatus refresh (${DATE})"
           git push origin "$BRANCH"
           URL=$(gh pr create \

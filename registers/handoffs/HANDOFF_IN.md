@@ -2670,6 +2670,63 @@ never been run.
 
 ---
 
+## [DONE] ED-IN-0182 — second adversarial review, vocabulary as the lens: five real defects
+
+**Jordan asked whether Waves 3–5 had been audited against the vocabulary convention. They had not.**
+The first Fable-5 pass covered only Waves 1+2, and the convention (ED-IN-0179) was written *after*
+it — so nothing had ever been checked against it, including Waves 4+5, which were the first work
+produced *under* it. A read-only critic was run over all three commits with vocabulary as the
+primary lens. Five real defects, all fixed.
+
+1. **My glossary fix was a no-op, and worse than the problem.** `build_glossary.py` went into the
+   cron but `references/glossary/` went into neither the diff-check nor the `git add` list — the job
+   regenerated the glossary in the runner and threw it away. The run would have gone green and the
+   new coverage guard would have reported the family **covered**, over a family still fresh only by
+   luck. **Running a generator is not refreshing an artifact.** The guard now has a second leg
+   asserting the artifact is committed, with a control that reds on the pre-fix workflow line.
+   ⚠ The guard's own docstring had named this blind spot — one level up from where it recurred.
+2. **The fork harness measures a classifier production never reaches** — the trap it already
+   recorded fixing once, drawn too small again. `bdc`'s decision starts at `extract_file_refs`,
+   whose roster omits `engine/`, `params/`, `audit/`, `registers/`. Verified: 3 of 4 probes extract
+   to the **empty set**. Docstring corrected to say which consumers are *invoked* and which are
+   *transcribed*.
+3. **And the finding that falls out of it, which outranks everything Wave 3 reported:** a live
+   ledger entry citing a fabricated `engine/…` path passes `broken_dependency_checker` **silently**.
+   Not a wrong verdict — a blocking gate not looking. Pinned, **not fixed**: widening a blocking
+   gate's scope needs its own expected-delta test.
+4. **`npc-audit` pointed at an evacuated artifact** and had been reporting "(no data)" silently.
+   Wave 5 edited that exact table, called it "a frozen historical artifact", and pinned it — while
+   its own comment recorded an *earlier* repointing after the identical failure. Retired, not
+   repointed a third time. New guard fails on any family naming an absent artifact.
+5. **`refresher: None` carried two dispositions** — "frozen" and "blocked by a defect" — inside the
+   session that ruled vocabulary must be idempotent. Split into `no_refresher_because`.
+
+**The lens also judged the convention itself, and found the headline wanting.** *Idempotent* is a
+term of art for operations whose re-application changes nothing — not for a word whose meaning
+survives a cold read. **The rule's own headline is a coinage defined only by the body beneath it**,
+which is the exact defect the rule describes. Left as-is pending Jordan; renaming a convention he
+authored is his call.
+
+RISKY terms: `refresher` (fixed), `bypass` (claims a read, measures a mention — limits now recorded
+at the tool), `wave` (points at session-local numbering that lives nowhere in the tree), `frozen`
+(three live senses). PASS: `control`, `probe`, `ratchet`, `pair`, `hop`, `drift`, `harness`,
+`single owner`, `distinguishing`, `collapsed`, `family`, `baseline`, `join`, `fork row`.
+
+**One false positive, and the fault is mine.** The review reported `ED-IN-0181` as cited-but-never-
+allocated. It was allocated — the critic read the tree **mid-edit**, because I ran a read-only audit
+against a working tree I was actively modifying. **Audit a committed ref, not a live tree.**
+
+### Open after this pass
+
+- **`broken_dependency_checker`'s extraction roster** (item 3) — the largest live anti-fabrication
+  hole in the tree, pinned and unfixed. Needs its own expected-delta test.
+- **`mechanics_index_gen.py`** needs a comment-preserving write before that family can be refreshed.
+- **The IN ledger capacity**, unchanged.
+- **G5** is unblocked and now has three worked examples of its own subject: apparatus whose scope,
+  output, or subject nothing consumes.
+
+---
+
 ## [DONE] ED-IN-0180 — Waves 4+5: the duplication guardrail, and two artifacts nothing refreshed
 
 ### Wave 4 — single-owner bypasses: 14, measured
@@ -2736,8 +2793,17 @@ one level up: not dead scope, but **a live signal with no consumer**, which is d
 and added to the cron — **and both of those were then REVERTED, see ED-IN-0181 above.**
 
 **Then the guard found a second one I had not looked for** — `glossary` also had no scheduled refresher.
+
+⚠ **And my fix for it was a no-op, caught by the same review (ED-IN-0182).** I added
+`build_glossary.py` to the cron but **not** `references/glossary/` to the diff-check or `git add`
+lists — so the job regenerated the glossary inside the runner and threw it away. The run would have
+gone green and the coverage guard would have reported the family *covered*, over a family still
+fresh only by luck. **Running a generator is not refreshing an artifact.** Both lists fixed, and the
+guard gained an artifact-side leg: it now asserts each refreshed artifact is actually committed,
+verified against a simulated pre-fix workflow.
 It read *fresh, drift=0* only because a session ran the generator by hand in `fdbef6b`. **That is worse
-than visible staleness, because the report said everything was fine.** Both now in `audit-refresh.yml`.
+than visible staleness, because the report said everything was fine.** Both now in `audit-refresh.yml` — **and see the correction directly above; the glossary half was
+incomplete until ED-IN-0182.**
 
 **The join is the deliverable.** `audit_staleness.FAMILIES` had no field naming what refreshes each
 artifact — which is exactly why the gap was invisible; it could report six families stale and never say
