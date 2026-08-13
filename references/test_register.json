@@ -140,6 +140,93 @@
     }
    }
   },
+  "test_blocking_tier_is_honest.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "A tool in the blocking job must be capable of failing, and the ghost hook tier must stay dead.",
+   "helper_loc": 147,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "_jobs"
+    },
+    {
+     "loc": 105,
+     "name": "_can_fail"
+    },
+    {
+     "loc": 17,
+     "name": "_is_main_guard"
+    },
+    {
+     "loc": 22,
+     "name": "_local_blocking_flags"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 364,
+   "modules_under_test": [
+    "references",
+    "tools",
+    "tools/ci_audit_registry_check.py",
+    "tools/ci_hooks_verifier.py",
+    "tools/ci_naming_check.py",
+    "tools/ci_register_size_check.py",
+    "tools/ci_supersession_check.py",
+    "tools/validate_ed_citations.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 8,
+   "tests": {
+    "test_all_three_entry_shapes_are_understood": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`_can_fail` must handle every entry shape the blocking tier actually uses."
+    },
+    "test_an_ordinary_boolean_helper_does_not_fake_a_failure_path": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "THE MUTATION THAT DEFEATED THE FIRST VERSION OF `_can_fail` (ED-IN-0169)."
+    },
+    "test_main_guard_matcher_agrees_with_the_owner": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`ci_common.has_main_guard` is the ONE OWNER; this file needs the node, not the bool."
+    },
+    "test_no_blocking_validator_is_incapable_of_failing": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "THE RECURRENCE GUARD. A tool that cannot exit non-zero cannot gate anything."
+    },
+    "test_the_dead_paired_hook_check_is_gone_from_the_blocking_gate": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Check (d) walked the WHOLE repo on every run of a blocking gate to find a deleted file."
+    },
+    "test_the_registry_declares_no_in_session_hook_apparatus": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": null
+    },
+    "test_the_two_moved_tools_are_report_only_in_both_tiers": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "CI and `valoria_local` disagreed about these two for months; pin the agreement."
+    },
+    "test_valoria_hooks_is_only_ever_mentioned_as_history": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Provenance is fine (\"Ports valoria_hooks.vetting_gate\"); a live claim is not."
+    }
+   }
+  },
   "test_build_fork_scan_guard.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -3653,6 +3740,62 @@
     }
    }
   },
+  "test_compile_is_not_invocation.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Being COMPILED is not being INVOKED \u2014 the orphan census must be able to see a dead tool.",
+   "helper_loc": 12,
+   "helpers": [
+    {
+     "loc": 2,
+     "name": "workflow_text"
+    },
+    {
+     "loc": 10,
+     "name": "registry"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 109,
+   "modules_under_test": [
+    "tools",
+    "tools/",
+    "tools/atomizer.py",
+    "tools/canon_coverage_check.py",
+    "tools/ci_naming_check.py",
+    "tools/ci_workplan_pointer_check.py",
+    "tools/doc_index_gen.py",
+    "tools/index_gen.py",
+    "tools/mechanics_index_gen.py",
+    "tools/valoria_rename.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 3,
+   "tests": {
+    "test_a_known_dead_tool_still_reports_orphaned": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`index_gen`/`doc_index_gen`/`atomizer` are dead (plan G2 retires them; its landing"
+    },
+    "test_live_validators_are_not_orphaned": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The false-positive control on the real tree, in registry terms rather than text."
+    },
+    "test_the_compile_gate_names_no_individual_tool": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The recurrence guard on the workflow side. A named list is what rotted (32 of 108)"
+    }
+   }
+  },
   "test_compliance_on_exceed_vocabulary.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -5735,7 +5878,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 34
+     "size": 35
     }
    ],
    "cites_measurement": false,
@@ -5753,11 +5896,12 @@
    "lanes": [
     "IN"
    ],
-   "loc": 255,
+   "loc": 256,
    "modules_under_test": [
     "engine/tests",
     "tools",
     "tools/broken_dependency_checker.py",
+    "tools/build_identifier_census.py",
     "tools/build_test_register.py",
     "tools/canon_coverage_check.py",
     "tools/ci_audit_registry_check.py",
@@ -6368,6 +6512,74 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "The pointer must resolve, or the split silently becomes a deletion."
+    }
+   }
+  },
+  "test_identifier_census.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The identifier census must be current, and `--check` must be able to SEE the roll-up.",
+   "helper_loc": 35,
+   "helpers": [
+    {
+     "loc": 13,
+     "name": "_census_builder"
+    },
+    {
+     "loc": 22,
+     "name": "_fake_repo"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 206,
+   "modules_under_test": [
+    "engine_names",
+    "references",
+    "systems",
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 7,
+   "tests": {
+    "test_a_deleted_rollup_is_drift_not_a_crash": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Absence and mismatch must land in the same bucket. A generator that raises on a missing"
+    },
+    "test_a_scoped_WRITE_does_not_clobber_the_rollup": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "THE BUG THE ONE-SUBSYSTEM FIXTURE COULD NOT SEE (ED-IN-0169)."
+    },
+    "test_check_is_green_on_a_freshly_written_tree": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The control. Without it, the two red-side tests below could pass on a --check that is"
+    },
+    "test_check_sees_a_corrupted_rollup": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "THE MUTATION THE PRE-FIX CODE SURVIVES (ED-IN-0162)."
+    },
+    "test_check_sees_a_corrupted_subsystem_file": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The direction that already worked. Kept so a refactor cannot trade one side for the other."
+    },
+    "test_scoped_check_does_not_report_rollup_drift": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "`--subsystem X --check` computes ONE row, so it cannot honestly compare a 15-row roll-up."
+    },
+    "test_the_rollup_is_committed_and_covers_every_subsystem": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The roll-up's subsystem set must equal the per-subsystem files' \u2014 the two are one build."
     }
    }
   },
@@ -11482,7 +11694,7 @@
    "FA": 4,
    "FI": 1,
    "GO": 2,
-   "IN": 36,
+   "IN": 38,
    "MB": 4,
    "PC": 7,
    "SC": 2,
@@ -11597,6 +11809,7 @@
    ],
    "registry": [
     "test_articulation_subscriber.py",
+    "test_compile_is_not_invocation.py",
     "test_key_substrate.py"
    ],
    "teardown_module": [
@@ -11606,16 +11819,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 151,
-  "files_citing_a_measurement": 16,
+  "files": 154,
+  "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 110,
+  "files_naming_a_module": 113,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 39,
-  "helper_defs": 278,
-  "helper_loc": 2485,
+  "files_with_a_lane": 41,
+  "helper_defs": 286,
+  "helper_loc": 2679,
   "ratchet_baselines": 9,
-  "tests": 1343,
+  "tests": 1361,
   "undocumented_files": 0
  }
 }

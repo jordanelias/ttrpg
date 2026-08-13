@@ -7,9 +7,11 @@ each checker enforces, which CI job runs it, and whether it's blocking or report
 When a tool or job changes, update the registry first; this table is downstream of it, not
 an independent record. (`references/ci_checks_registry.yaml` also carries a small mechanical
 verifier — `tools/broken_dependency_checker.py::check_ci_registry_coverage()`, run in the
-`integrity` CI job — that cross-checks the registry's `path`/`ci_job`/`paired_hook` fields
-against the working tree, so this pairing can't silently drift the way the pre-2026-07-11
-snapshot did.)
+`validators` CI job — that cross-checks the registry's `path` and `ci_job` fields against
+the working tree and the workflow, so this pairing can't silently drift the way the
+pre-2026-07-11 snapshot did. The `paired_hook` field it also used to check was retired
+2026-08-12 with `valoria_hooks.py`'s evacuation; the `integrity` job it used to name was
+collapsed into `validators` on 2026-08-01.)
 
 ## CI Tools (wired into `.github/workflows/valoria-ci.yml`)
 

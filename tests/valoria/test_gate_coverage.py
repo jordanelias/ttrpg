@@ -132,7 +132,8 @@ EXPECTED_COMMANDS = {
     ('tools/currency_consistency_check.py', ''),
     ('tools/export_engine_params.py', '--check'),
     ('tools/export_key_types.py', '--check'),      # ED-IN-0136: key registry md -> typed JSON round-trip
-    ('tools/build_test_register.py', '--check'),   # ED-IN-0142: drift gate, now able to fail
+    ('tools/build_test_register.py', '--check'),
+    ('tools/build_identifier_census.py', '--check'),   # ED-IN-0172: moved out of pytest (racy whole-tree read under -n auto)   # ED-IN-0142: drift gate, now able to fail
     ('tools/freshness_gate.py', ''),
     ('tools/mechanics_index_gen.py', '--strict'),
     ('tools/review_core.py', '--check'),

@@ -1,15 +1,28 @@
 # Code leanness — the merged consolidation plan (ED-IN-0159, companion)
 
-## Status: REFERENCE — plan of record; PARTIALLY EXECUTED 2026-08-12 (ED-IN-0160..0165)
+## Status: REFERENCE — plan of record; PARTIALLY EXECUTED 2026-08-12 (ED-IN-0160..0168)
 
-> **Execution state, so a resuming session does not re-do landed work.** `G7` DONE · `G8` DONE ·
-> `G1` DONE · **`G2` HALF-DONE** — its five dead-scope retirements landed; its
-> generator-retirement half is **NOT EXECUTABLE AS WRITTEN and needs Jordan** (the
+> **Execution state, so a resuming session does not re-do landed work.** `G1` DONE · `G3` DONE ·
+> `G7` DONE · `G8` DONE · `G9` DONE · **`G2` HALF-DONE** — its five dead-scope retirements
+> landed; its generator-retirement half is **NOT EXECUTABLE AS WRITTEN and needs Jordan** (the
 > `deprecated/tools/` landing site it names was removed by the 2026-08-05 evacuation and is
 > pinned as `evacuate` by `tests/valoria/test_evacuation_plan.py:98`, with `:166` forbidding any
-> destination under `deprecated/`). **Not started:** G3, G4, G5, G6, G9, G10, G11, G12, G13,
-> Track S, Track T (T1 landed early in #303). Nothing in this document is RULED; the execution
-> record is `registers/editorial_ledger_in.jsonl` + `registers/handoffs/HANDOFF_IN.md`.
+> destination under `deprecated/`). **Not started:** G4, G5, G6, G10, G11, Track S, Track T
+> (T1 landed early in #303).
+>
+> ⚠ **This line previously listed "G12, G13" as not-started. There is no G12 or G13** — Track G
+> ends at G11 in §1 below. Corrected 2026-08-12 (ED-IN-0168): a resuming session would have gone
+> looking for two steps that were never written, which is the same class as the phantom fifth
+> `## Status:` parser G8 had to correct in §1.3a.
+>
+> **G9 note for whoever picks up G5.** Its orphan-census fix moved `doc_index_gen` and
+> `index_gen` into `prune_candidates` (0 → 2) and `atomizer` into `orphaned` — i.e. the
+> instrument now independently produces the evidence for exactly the three tools G2's blocked
+> half wants to retire. That strengthens the case for the *retirement*; it does not unblock the
+> *destination*, which is still Jordan's call (ED-IN-0163).
+>
+> Nothing in this document is RULED; the execution record is
+> `registers/editorial_ledger_in.jsonl` + `registers/handoffs/HANDOFF_IN.md`.
 
 ## Date: 2026-08-11 · Lane: IN (cross-cutting) · Companion to `00_code_leanness.md`
 

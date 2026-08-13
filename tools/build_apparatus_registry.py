@@ -37,6 +37,18 @@ except ImportError:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import ci_common
 
+# G9's "compile is not invocation" fix lives in the WORKFLOW, not here (ED-IN-0169).
+# This module briefly carried a 54-line scanner to strip compile-only steps, then a
+# delegation to ci_gate_coverage. BOTH ARE DELETED, because the fix that actually works is
+# upstream: once the syntax gate is a `find | py_compile` GLOB, no tool basename appears in
+# it at all, so `invoked_by` cannot be fooled and there is nothing to strip. Measured — the
+# glob alone produces all four orphan flips; the strip's own delta was ZERO.
+# The delegation was worse than nothing: `compiles_only` is JOB-level, so one py_compile line
+# added to the `validators` job would have dropped that job's whole text and orphaned all 17
+# blocking validators. Making the extra code safe needed more code than deleting it.
+# The recurrence guard is `test_compile_is_not_invocation.py::test_the_compile_gate_names_no_individual_tool`,
+# which reds if the gate ever names tools again — 12 lines, upstream, no coupling.
+
 REPO = Path(ci_common.REPO)
 
 # ------------------------------------------------------------------ enumeration

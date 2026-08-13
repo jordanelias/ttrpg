@@ -466,22 +466,22 @@ How each contract was attributed to its subsystem. `declared` is a package-level
 
 ## 5. Nomenclature — can a canonical name be found by searching for it?
 
-A canonical identifier is only a usable handle if searching for it returns its references and little else. **Key types satisfy this by construction** — dotted and distinctive, median 24 occurrence(s). **Contract names largely do not**: several are ordinary English words, so the count below is dominated by unrelated prose and identifiers (median 128). This is evidence for a naming rule, not the rule itself — nothing is enforced here.
+A canonical identifier is only a usable handle if searching for it returns its references and little else. **Key types satisfy this by construction** — dotted and distinctive, median 27 occurrence(s). **Contract names largely do not**: several are ordinary English words, so the count below is dominated by unrelated prose and identifiers (median 129). This is evidence for a naming rule, not the rule itself — nothing is enforced here.
 
 `qualified` counts uses of a namespaced form (`contract:<name>`), the convention `_identifier_census.yaml` already uses with `key:`/`py:`. A name with a high raw count and zero qualified uses cannot be located by search today.
 
 | contract | bare occurrences | qualified uses |
 |---|---|---|
-| `audit` | 2214 | 0 |
-| `mass_battle` | 2082 | 0 |
-| `victory` | 1941 | 0 |
-| `threadwork` | 1887 | 0 |
-| `social_contest` | 1858 | 0 |
-| `npc_behavior` | 636 | 0 |
+| `mass_battle` | 2494 | 0 |
+| `threadwork` | 2238 | 0 |
+| `audit` | 2228 | 0 |
+| `social_contest` | 2173 | 0 |
+| `victory` | 2101 | 0 |
+| `npc_behavior` | 649 | 0 |
 | `settlement_layer` | 346 | 0 |
-| `faction_state` | 328 | 0 |
-| `articulation_layer` | 313 | 0 |
-| `scene_slate` | 181 | 0 |
-| `peninsular_strain` | 164 | 0 |
-| `faction_politics` | 148 | 0 |
+| `faction_state` | 342 | 0 |
+| `articulation_layer` | 319 | 0 |
+| `scene_slate` | 197 | 0 |
+| `peninsular_strain` | 175 | 0 |
+| `piety_track` | 152 | 0 |
 

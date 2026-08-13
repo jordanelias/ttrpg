@@ -1,8 +1,8 @@
 # Valoria CI / Compliance / Verifier Checks — Registry
 #
-# Single source of truth for what tools/ scripts exist, what they enforce,
-# whether they have a paired in-session hook, and what level of enforcement
-# they sit at on the architecture spec's enforcement_spectrum.
+# Single source of truth for what tools/ scripts exist, what they enforce, and
+# what level of enforcement they sit at on the architecture spec's
+# enforcement_spectrum.
 #
 # Architecture spec V2.2 explicitly names "code and text drifting apart is its
 # own defect." This file mechanizes that discipline for the CI/compliance class.
@@ -11,22 +11,36 @@
 #   1 — text rule in PI (low reliability)
 #   2 — skill description (medium)
 #   3 — pre-commit grep / heuristic check (high)
-#   4 — code hook with RuntimeError in valoria_hooks.py (highest, in-session)
 #   5 — CI external check via GitHub Actions (highest, post-push, mirror)
+#
+# LEVEL 4 IS RETIRED (2026-08-12, G3 / ED-IN-0159 §1.10). It read "code hook with
+# RuntimeError in valoria_hooks.py (highest, in-session)". That file lived only at
+# `deprecated/skills/valoria-orchestrator/scripts/valoria_hooks.py` and was removed by the
+# 2026-08-05 evacuation (`cadf9c7`), so the ladder's top-but-one rung described an apparatus
+# with no implementation, and three rows below claimed it while being report-only CI tools.
+# Disposition is DELETE rather than KEEP-AS-ANTICIPATORY under the rule ED-IN-0163 had to
+# state for the opposite case: an absent path is dead only if its SUBJECT was retired, never
+# merely because it is absent. Here the subject — the in-session orchestrator hook tier — was
+# retired deliberately and is not coming back. The numbering is deliberately left as 1/2/3/5
+# with the gap visible; renumbering 5 to 4 would silently rewrite the meaning of every
+# `level: 5` row already in this file.
 #
 # Field definitions:
 #   path             — script path
-#   level            — enforcement level (3, 4, or 5)
+#   level            — enforcement level (3 or 5)
 #   role             — what defect class it catches
-#   paired_hook      — corresponding in-session hook function in valoria_hooks.py
-#                      (empty string if standalone)
 #   ci_job           — name of the GitHub Actions job that invokes it (empty
 #                      if not wired in CI yet)
 #   notes            — anything important
 #
-# Drift discipline: when a hook changes, this registry must update in the same
-# commit if the hook is registered here. CI mirror should add a check that
-# every paired_hook listed here actually exists in valoria_hooks.py.
+# `paired_hook` WENT WITH IT. Every one of its six non-empty values named a function in
+# valoria_hooks.py, and `broken_dependency_checker`'s check (d) — the one that verified them —
+# had been silently skipping since the evacuation while walking the entire repo on every run
+# of a blocking gate looking for the file. Both are gone.
+#
+# Drift discipline: when ci-yml adds or removes a tool invocation, this registry must update
+# in the same commit; `broken_dependency_checker.check_ci_registry_coverage()` enforces that
+# join in both directions.
 
 version: 1
 generated: 2026-07-11
@@ -45,126 +59,108 @@ ci_checks:
   - path: tools/ci_register_size_check.py
     level: 5
     role: "Token-threshold enforcement on governed files (session log, ledgers, registers, canonical_sources)."
-    paired_hook: ""    # in-session size checks live inside pre_commit_gate sub-rules
     ci_job: validators
     notes: "External enforcement gate; runs outside Claude."
 
   - path: tools/ci_hooks_verifier.py
     level: 5
     role: "Enforcement architecture intact: hooks wired, orchestrator imports them, skills don't bypass safe_commit, skeleton limits."
-    paired_hook: ""    # this IS the verifier of paired hooks
     ci_job: validators
     notes: "Meta-check. Drift here means the whole hook system has been bypassed."
 
   - path: tools/ci_co_file_checker.py
     level: 5
     role: "Co-file requirements (design→canonical_sources, patch→propagation_map, sim→coverage_matrix, SKILL.md→skill_registry)."
-    paired_hook: pre_commit_gate     # in-session co-file rules live inline in pre_commit_gate
     ci_job: validators
     notes: "Mirrors in-session co-file rules. Both must pass."
 
   - path: tools/ci_editorial_checker.py
     level: 5
     role: "Editorial paths (systems/npcs/, systems/world/, canon/03_*) carry [EDITORIAL] or [PROVISIONAL] markers."
-    paired_hook: editorial_gate
     ci_job: validators
     notes: ""
 
   - path: tools/ci_golden_modes_check.py
     level: 5
     role: "Golden-mode byte-exact gate (unit_field/cell_field + the §4a cell_cm mode) with the FULL digest-relevant toggle vector pinned — the shipped configuration's regression oracle (ED-MB-0045 A1b)."
-    paired_hook: ""    # deliberately CI-only: the two field batteries take ~4-8 min, far over local-hook budget
     ci_job: field-goldens
     notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests."
 
   - path: tests/sim/mass_battle/lanchester_signature.py
     level: 5
     role: "Attrition-law signature instrument (linear melee / square volley, conserved-quantity exponent fit) — REPORT-ONLY (ED-MB-0050 A6a/A6b)."
-    paired_hook: ""    # deliberately CI-only: the sweeps + trajectories run several minutes
     ci_job: lanchester-signature
     notes: "REPORT-ONLY on purpose: the repaired instrument legitimately FAILS (melee fits p~3.20 against a <=1.4 linear bar), which is an engine finding held for plan-v2 fork #2 (two incompatible 2:1 targets), not a regression to gate on. Flips to blocking when that fork is ruled. Before A6a it was neither wired nor correct: its no-rout pin did not disable rout (PC_STOCHASTIC_ROUT keys on casualty fraction), its volley scenario never fired, and its exponent was the scan-grid ceiling."
 
   - path: tools/broken_dependency_checker.py
     level: 5
     role: "References to nonexistent files in propagation_map / canonical_sources."
-    paired_hook: ""
     ci_job: validators    # collapsed 2026-08-01: was its own `integrity` job
     notes: ""
 
   - path: tools/freshness_gate.py
     level: 5
     role: "engine/params/canonical SHA drift detection — compares live HEAD SHA of canonical doc against recorded SHA in canonical_sources.yaml."
-    paired_hook: ""
     ci_job: validators
     notes: "Bootstrap currently calls but the function get_live_sha is absent in active session; warning emitted, non-blocking."
 
   - path: tools/canon_coverage_check.py
     level: 5
     role: "Bidirectional Status:CANONICAL ↔ canonical_sources.yaml verification."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Added 2026-05-10. Ported off the GitHub code-search API onto a working-tree os.walk (ED-IN-0032, doctrine fix). Wired into CI report-only 2026-07-11 (Jordan's ruling, Phase 2 item 9). RE-MEASURED 2026-08-01: 4 unregistered-with-header, 27 registered-no-header. The prior figures (1/28, 2026-07-11) were the LAST READING BEFORE THE INSTRUMENT BROKE -- its scan root was designs/, retired 2026-07-19, so it reported 0/0/0 for 13 days while this note looked like current state. Repointed at systems/."
 
   - path: tools/ci_audit_registry_check.py
     level: 5
     role: "Report-only freshness gate for references/audit_registry.jsonl: flags a designs/audit/ folder newer than the registry's latest known date with no matching record (a skill's append-on-completion step silently didn't run)."
-    paired_hook: ""
-    ci_job: validators
-    notes: "Added 2026-07-10 (PR #121, ED-IN-0031, mobile-friendly GitHub Pages status dashboard). Always exits 0 by design (audit cadence is irregular/manual, unlike code) — feeds tools/dashboard_data.py's audit-verdict table, not a merge gate. Complementary to tools/audit_staleness.py (added the same day, Phase 5a of the audit-ecosystem consolidation plan, no ED filed — a SessionStart-only signal, not a CI check): this checks 'did a completed audit get logged,' audit_staleness.py checks 'has an already-logged audit's content drifted behind the corpus since' — two different failure modes on the same underlying question, deliberately kept as two small tools rather than merged into one."
+    ci_job: validators-report
+    notes: "Moved validators -> validators-report 2026-08-12 (G3, ED-IN-0159 §1.9): a tool that always exits 0 cannot gate, so its presence in the blocking job made that job's membership a false claim. Behaviour unchanged; valoria_local.py:172 already ran it report-only. Added 2026-07-10 (PR #121, ED-IN-0031, mobile-friendly GitHub Pages status dashboard). Always exits 0 by design (audit cadence is irregular/manual, unlike code) — feeds tools/dashboard_data.py's audit-verdict table, not a merge gate. Complementary to tools/audit_staleness.py (added the same day, Phase 5a of the audit-ecosystem consolidation plan, no ED filed — a SessionStart-only signal, not a CI check): this checks 'did a completed audit get logged,' audit_staleness.py checks 'has an already-logged audit's content drifted behind the corpus since' — two different failure modes on the same underlying question, deliberately kept as two small tools rather than merged into one."
 
   - path: tools/ci_naming_check.py
     level: 5
     role: "Blocking naming-invariant gate: no new use of a deprecated name (Solmund never Galbados), diff-aware over enforce:block entries in names_index.yaml."
-    paired_hook: forbidden_token_gate
     ci_job: validators
     notes: "Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/ci_names_check.py
     level: 5
     role: "Report-only naming-drift lint over every enforce:warn entry in names_index.yaml; flags newly-added legacy terms and names the canonical replacement."
-    paired_hook: ""
     ci_job: validators-report
     notes: "continue-on-error in CI; report-only (blocking=False) in valoria_local.py. Flip an index entry warn->block to promote it under ci_naming_check."
 
   - path: tools/ci_names_consistency.py
     level: 5
     role: "Asserts descriptor_registry.yaml / proper_noun_registry.yaml mirror fields equal names_index.yaml's canonical value (index is authoritative)."
-    paired_hook: ""
     ci_job: validators
     notes: "Whole-tree gate, no diff needed. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/ci_generation_consistency.py
     level: 5
     role: "v40 generation currency invariant: every canonical design doc exists, carries a recognized Status: line, and isn't recorded as superseded."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Warn-only by design (always exits 0 per its own docstring). Already ran locally via valoria_local.py --staged; CI wire added 2026-07-11 (Phase 2 item 8) to close the local/CI parity gap."
 
   - path: tools/ci_module_shape_check.py
     level: 5
     role: "Holonic container/shape hygiene on engine/sim runtime code (ED-1085): no sys.path reach-ins into tests/ trees, no tests/ imports; INFO-tier untagged module-scope constant surfacing."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
 
   - path: tools/ci_quantity_vocabulary_check.py
     level: 5
     role: "A17 stat-vocabulary closure: every stat identifier in module_contracts.yaml / sim stat_deltas / impact_vector dicts resolves to descriptor_registry.yaml or names_index.yaml (via tools/quantity_registry.py)."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Report-only (continue-on-error), ED-IN-0029. Not listed in ci-summary's needs."
 
   - path: tools/ci_sim_fabrication_check.py
     level: 5
     role: "Blocking anti-fabrication guard: every numeric literal in sim/*.py must be ledger-cited or carry a canonical-source comment."
-    paired_hook: sim_fabrication_check
     ci_job: validators
     notes: "Ports valoria_hooks.sim_fabrication_check (deprecated/skills/valoria-orchestrator/) into a standalone validator. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/ci_claim_provenance_check.py
     level: 5
     role: "Blocking claim-provenance guard: a ledger entry stating MEASURED numbers must carry `MEASURED-BY: <path>` naming a re-runnable instrument that exists in the tree."
-    paired_hook: ""
     ci_job: validators
     notes: >-
       ED-PC-0040. Sibling to ci_sim_fabrication_check and aimed at the gap it leaves: that gate asks whether a
@@ -184,7 +180,6 @@ ci_checks:
   - path: tools/ci_claude_workflow_paths.py
     level: 5
     role: "Blocking .claude/ path-resolution gate: every repo path referenced by a .claude/ file (wf_*.js orchestration scripts, launch.json) resolves — LIVE on disk, or ALIASED through references/restructure_ledger.md — with no DEAD references."
-    paired_hook: ""
     ci_job: validators
     notes: >-
       ED-IN-0085 (shipped) / ED-IN-0087 (wired into CI). The .claude/ tree was the one part of this repo's machinery
@@ -202,7 +197,6 @@ ci_checks:
       Report-only workplans-pointer gate (ED-IN-0103) — every workplans/POINTER_*.md carries the
       five required fields, names a lane from the 9-lane roster, claims no duplicate target, and,
       the load-bearing check, resolves its target on disk.
-    paired_hook: ""
     ci_job: validators-report
     notes: >-
       ED-IN-0103. Jordan ruled 2026-07-29 that every plan is reachable from workplans/ by direct
@@ -224,7 +218,6 @@ ci_checks:
   - path: tools/ci_wf_harness_check.py
     level: 5
     role: "Blocking workflow run-discipline gate: the .claude/wf_*.js run-discipline prelude is byte-identical to its owner tools/wf_harness.js, is actually CALLED, routes every critic stage through a structurally read-only agentType, and keeps model:'fable' off artifact-writing stages."
-    paired_hook: ""
     ci_job: validators
     notes: >-
       ED-IN-0087 (finding: ED-IN-0085). All three orchestration scripts shared four holes — no loop-termination
@@ -243,199 +236,105 @@ ci_checks:
   - path: tools/ci_supersession_check.py
     level: 5
     role: "Warn-only churn guard: flags changesets touching a path listed in a supersession_register.yaml entry's files_to_recheck."
-    paired_hook: supersession_check
-    ci_job: validators
-    notes: "Ports valoria_hooks.supersession_check. Never fails the build (always exits 0). Also runs locally via valoria_local.py --staged (report-only)."
+    ci_job: validators-report
+    notes: "Moved validators -> validators-report 2026-08-12 (G3, ED-IN-0159 §1.9): every return in main() is 0 and :66 says so explicitly, so it could never gate. Behaviour unchanged. Never fails the build (always exits 0). Also runs locally via valoria_local.py --staged (report-only)."
 
   - path: tools/ci_vetting_check.py
     level: 5
     role: "PP-674 framework vetting gate: PP entries id>=674 without a class:C|D|E/pre-framework exemption must carry a valid vetting: block."
-    paired_hook: vetting_gate
     ci_job: validators
     notes: "Ports valoria_hooks.vetting_gate. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/compliance_check.py
     level: 5
     role: "Working-tree size-cap compliance scan (atomization_rules.yaml thresholds)."
-    paired_hook: ""
     ci_job: compliance-check
     notes: "CI mode (--check-only --repo-state .) is the live BLOCKING half; NOT in valoria_local.py's local check list, so local-green != compliance-green (ED-1082 correction, CLAUDE.md §8). Its orchestrator-era check_all()/validate_commit() harness paths (github_ops import, /home/claude sys.path insert) remain dead outside CI mode."
 
   - path: tools/review_core.py
     level: 5
     role: "Repository State Armature verdict aggregator (ED-IN-0077) — the regression ratchet. --check fails on any signal exceeding its registers/review_baseline.yaml baseline."
-    paired_hook: ""    # the SessionStart banner (session_status.py) reads review_core.collect()
     ci_job: compliance-check
     notes: "Stage C (ED-IN-0082): wired as a --check step inside the compliance-check job so report-only signals are blocking-on-regression with no branch-protection edit. Also read by dashboard.yml + the SessionStart banner."
 
   - path: tools/currency_consistency_check.py
     level: 5
     role: "Self-updating recency gate (ED-1087): CURRENT.md reconcile-stamp vs head freshness, ED-ceiling consistency, register header/body currency, dead maintainer pointers."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
 
   - path: tools/export_engine_params.py
     level: 5
     role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match systems/combat/combat_engine_v1/config.py (--check mode)."
-    paired_hook: ""
     ci_job: validators
     notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."
 
   - path: tools/export_key_types.py
     level: 5
     role: "Registry -> typed-JSON round-trip: engine/engine_params/key_types.json must match the authored systems/_architecture/key_type_registry_v30.md (--check mode)."
-    paired_hook: ""
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
+
+  - path: tools/build_identifier_census.py
+    level: 5
+    role: "Freshness gate for the per-subsystem identifier census (systems/*/_identifier_census.yaml) and its roll-up references/identifier_census.json: --check re-derives both and exits 1 on drift."
+    ci_job: validators
+    notes: "Wired 2026-08-12 (ED-IN-0172). Gated because references/glossary/ is BUILT from this census and IS itself freshness-gated — a gated artifact downstream of an ungated one, which ran green for eight days while its inputs described deleted files (ED-IN-0162/0166). MOVED OUT OF PYTEST, where the equivalent test was racy by construction: it shells out and reads the WHOLE tree while tests/valoria/test_engine_atlas.py deliberately plants systems/zz_atlas_probe/thing.py in the real tree, so under -n auto the census counted the probe's public callable and the roll-up drifted by exactly one name (per-subsystem files unaffected — the probe dir carries no .md, so it is not a subsystem). Whole-tree freshness belongs in a validator step alongside export_engine_params/export_key_types/build_test_register; the hermetic tmp_path falsifiers stay in tests/valoria/test_identifier_census.py."
 
   - path: tools/build_test_register.py
     level: 5
     role: "Test-register drift gate: references/test_register.json must match a fresh AST scan of tests/valoria/ (--check mode)."
-    paired_hook: ""
     ci_job: validators
     notes: "BLOCKING from 2026-08-04 (ED-IN-0142). --check previously printed fresh statistics and exited 0 UNCONDITIONALLY -- it never compared anything -- so the register went stale three times in one session and only tests/valoria/test_test_register.py in CI ever noticed, never the tool that owns the artifact and never the local hook. Local-green while CI-red is how a local tier stops being trusted. Falsifier: delete or add a test file without rebuilding -> exit 1. Also runs locally via valoria_local.py --staged (blocking)."
 
   - path: tools/mechanics_index_gen.py
     level: 5
     role: "registers/mechanics_index.yaml schema + cross-reference validator: required fields, valid scale/test_status enums, gd_applicable resolves, sim_module/canon_sources paths exist, GD-1 victory_paths singularity."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Fully CI-shaped (--strict exit-code contract) but never wired before 2026-07-11 (Phase 2 item 7). Report-only (continue-on-error). Not listed in ci-summary's needs."
 
   - path: tools/wiring_map_check.py
     level: 5
     role: "Report-only wiring-manifest gate (ED-IN-0074): every module:/adapter: tag in references/wiring_manifest.yaml resolves in its live registry (module_contracts.yaml, engine/cross_scale/), full 27/27 + 7/7 coverage, valid build/godot vocab. Backs the MC-wiring map (designs/audit/2026-07-17-mc-wiring-coverage-audit/wiring_map.html) — catches a module rename / moved adapter as a caught error, not silent drift."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Added 2026-07-18 (ED-IN-0074 follow-up). Report-only (continue-on-error): the manifest is analysis-derived, not ratified canon, so a legitimate rename shouldn't block an unrelated PR. Also runs locally via valoria_local.py --staged (report-only). The same tool also emits --work-list (ranked Godot port queue), --summary, and --emit-map-json (regenerates the map's embedded PORT block). Flip to blocking (drop continue-on-error, add to ci-summary needs) once the manifest ratifies."
 
   - path: tools/validate_ed_citations.py
     level: 5
     role: "Every ED-NNN / ED-<LANE>-NNNN cited in canon/design docs resolves to a real, non-open ledger entry (active + archives)."
-    paired_hook: ""
     ci_job: validators
     notes: "Blocking as of 2026-06-29 (backlog reconciled 292 -> 0, designs/audit/2026-06-28-ed-citation-triage/02_reconciliation.md)."
 
   - path: tools/ci_vacuous_assertion_check.py
-    level: 4
+    level: 5
     role: "VACUOUS-ASSERTION detector — scans tests/valoria + engine/tests for assertions that cannot observe the failure they exclude: loops that may assert zero times with no `assert checked >= N`, pytest.approx on an exactness claim, try/except: pass. CLAUDE.md §0.1 point 2 names this the repo's known past failure mode."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Wired 2026-08-01 (ED-IN-0118). It shipped with its own pytest suite and NO invoker and NO registry row — a detector nobody runs is the defect it detects, and its own test file says so: 'a switched-off guard is worse than none because the repo still believes it is covered.' Report-only: 18 suspicious findings today, 0 provably vacuous."
 
   - path: tools/ci_program_claim_check.py
-    level: 4
+    level: 5
     role: "PROGRAM-CLAIM checker — verifies that LIVE workplan pointers declaring paths still name files that exist, so a program's own status surface cannot cite a tree that moved."
-    paired_hook: ""
     ci_job: validators-report
     notes: "Wired 2026-08-01 (ED-IN-0118). Same profile as ci_vacuous_assertion_check: tests present, zero invokers, absent from the registry that calls itself the single source of truth for what tools/ scripts exist. Changeset-scoped, so it is a no-op on a clean tree and does real work on a PR."
 
   - path: tools/scope_ratchet.py
-    level: 4
+    level: 5
     role: "SCOPE ratchet — five measured ceilings (open EDs, needs_jordan, audit corpus, tracked files, unratified proposals) plus the G13 activity control that stops a do-nothing session scoring as HELD. Companion to review_core/review_baseline, which ratchets TECHNICAL debt and is structurally blind to scope growth because every signal it grades is a quality signal."
-    paired_hook: ""    # no valoria_hooks function; it rides tools/valoria_local.py's check table
     ci_job: validators-report
     notes: "REPORT-ONLY by design (ED-IN-0112). Rides valoria_local rather than taking its own CI job — the repo has 34 jobs and adding a 35th to report one number would be the defect this instrument exists to measure. Promotion to blocking is a Jordan call with a loud ED-1094 call-out, never a quiet flag change: an adversarial pass found an earlier version asserting its --check inside the BLOCKING pytest suite at zero headroom, which would have broken the build for the next author to file an ED."
 
-# ── Level 3-4 (in-session hooks, mostly pre_commit_gate) ─────────────────────
-# These fire in-session via valoria_hooks.py before commit. CI mirrors
-# (Level 5) should run equivalent post-push.
-
-in_session_hooks:
-
-  - hook: assert_bootstrap
-    level: 4
-    role: "Confirms github_ops fetched this session — no commit possible without bootstrap."
-
-  - hook: task_gate
-    level: 4
-    role: "Required-fetch enforcement per task type (audit, simulation, propose_mechanic, etc.)."
-    notes: "Reads TASK_REQUIRED_FILES literal. Promote to yaml registry deferred — see open_items in architecture spec."
-
-  - hook: editorial_gate
-    level: 4
-    role: "Editorial path markers (mirrors ci_editorial_checker.py)."
-    paired_ci: tools/ci_editorial_checker.py
-
-  - hook: forbidden_token_gate
-    level: 4
-    role: "PI core_rules canonical-name enforcement (Solmund, never Galbados). The live gate is tools/ci_naming_check.py (+ the edit-time tools/hook_naming_guard.py); the GitHub-API-only predecessor this row originally pointed at, prose-writer/scripts/consistency_check.py, was never wired into any hook or CI job and was retired to deprecated/skills/prose-writer/scripts/ (2026-07-09)."
-
-  - hook: abbreviation_registry_gate
-    level: 4
-    role: "One-owner-per-abbreviation enforcement. Consumes references/name_collision_database.yaml; fires on definitional 'Name (ACR)' patterns; halts on enforced owner-violations + deprecated abbreviations, soft-warns on status:recorded / unregistered."
-    paired_ci: ""    # was tools/valoria_collator.py — never actually wired into any hook or CI job (confirmed 2026-07-09); the tool retired to deprecated/tools/. This hook's enforcement remains a documented-but-unbuilt gap, not a live pairing.
-    notes: "Added 2026-06-04. Closes the gap where name_collision_database.yaml declared itself hook-checkable but no hook consumed it. Collisions CI/Crown-Index, IP/Imperial-Pressure, PT/Piety-Territory+Parliamentary-Transfer registered status:recorded pending Jordan rename ruling."
-
-  - hook: vetting_gate
-    level: 4
-    role: "Class A/B patches require vetting block (PP-674)."
-
-  - hook: commit_message_gate
-    level: 4
-    role: "[scope] description format enforcement."
-
-  - hook: supersession_check
-    level: 4
-    role: "Warn (non-blocking) if commit touches files in registers/supersession_register.yaml files_to_recheck list."
-
-  - hook: assert_unique_ids
-    level: 4
-    role: "Prevent ED-NNN / PP-NNN collisions in ledger/register files."
-
-  - hook: pre_commit_gate
-    level: 4
-    role: "Aggregate gate. Runs editorial_gate, size, co-file rules, forbidden_token, unique_id, vetting, supersession."
-    paired_ci: tools/ci_co_file_checker.py
-    notes: "The umbrella in-session check. CI mirror (ci_co_file_checker) covers the co-file subset."
-
-  - hook: propose_mechanic_gate
-    level: 4
-    role: "task_gate('propose_mechanic') variant requiring system-specific canonical doc fetch."
-
-  - hook: memory_contamination_guard
-    level: 4
-    role: "Prevents writing remembered values where canonical fetch is required."
-
-  - hook: audit_gate
-    level: 4
-    role: "task description audit-keyword detection requires audit-task fetches."
-
-  - hook: assert_index_before_full_read
-    level: 4
-    role: "Skeleton-first enforcement on canonical doc reads."
-
-  - hook: safe_commit
-    level: 4
-    role: "Single valid path to atomic_commit. Runs all gates."
-    paired_ci: ""
-
-  - hook: sim_gate
-    level: 4
-    role: "Multi-system simulation requires module_manifest.md fetch + verification ledger."
-
-  - hook: sim_fabrication_check
-    level: 4
-    role: "Catches uncited mechanical constants in tests/sim/ files."
-
-  - hook: write_checkpoint / close_checkpoint / read_active_checkpoint
-    level: 4
-    role: "Session-checkpoint state machine for resumability."
-
-  - hook: context_gate
-    level: 4
-    role: "Token-budget tracking; soft (60%), checkpoint (75%), hard (90%) thresholds."
 
 # ── Level 1-2 (text/skill, supervisory only) ─────────────────────────────────
-# Listed for completeness; promotion to Level 4 is the long-term direction.
+# Listed for completeness; promotion to Level 5 is the long-term direction. (Was
+# "Level 4" — the in-session hook tier, retired 2026-08-12 with valoria_hooks.py; see the
+# header. CI is now the only rung above a heuristic check.)
 
 advisory_only:
 
   - locus: PI core_rules
     level: 1
     role: "GitHub > memory; investigate don't guess; bootstrap before game-state work."
-    notes: "Largely backed by Level 4 hooks; the text reminders are belt-and-braces."
+    notes: "Backed by CLAUDE.md §2/§8 and the .githooks/ local tier. (Previously read 'largely backed by Level 4 hooks' — those hooks were evacuated 2026-08-05 and the claim outlived them.)"
 
   - locus: skill descriptions (valoria-mechanic-audit, valoria-simulator)
     level: 2
@@ -443,7 +342,8 @@ advisory_only:
 
 # ── Drift-detection notes ────────────────────────────────────────────────────
 # - When ci-yml adds or removes a tool invocation, update this file in the same commit.
-# - When valoria_hooks.py adds or removes a hook function, update this file.
+# - When a row's ci_job changes, the workflow edit and this file MUST land together:
+#   broken_dependency_checker joins them in both directions and reds if they disagree.
 # - The ci_hooks_verifier should ideally read from this file rather than carry its
 #   own list (deferred — current state is two sources, this one and the hardcoded
 #   set in ci_hooks_verifier.py; reconcile when ci_hooks_verifier is next touched).

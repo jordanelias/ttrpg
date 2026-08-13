@@ -8,6 +8,7 @@ docs:
 - systems/fieldwork/fieldwork_editorial.md
 - systems/fieldwork/fieldwork_exploration.md
 - systems/fieldwork/fieldwork_exposure.md
+- systems/fieldwork/fieldwork_flow_skeleton_v1.md
 - systems/fieldwork/fieldwork_godot.md
 - systems/fieldwork/fieldwork_hybrid_v30.md
 - systems/fieldwork/fieldwork_hybrid_v30_infill.md
@@ -22,9 +23,131 @@ docs:
 - systems/fieldwork/investigation_systems_v30_index.md
 - systems/fieldwork/knots_v30.md
 counts:
-  UNRESOLVED: 17
-  BUILT: 2
+  UNRESOLVED: 18
+  BUILT: 59
 identifiers:
+  a_knot_id:
+    identifier: a_knot_id
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`'
+    built_in:
+    - py:systems/threadwork/sim/opposing.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  actor_a:
+    identifier: actor_a
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `form_knot(actor_a, actor_b, world, actor_a_obj, actor_b_obj, season, rng)` | `systems/fieldwork/sim/knots.py:172 form_knot` | `—` in production (`engine/mc_v18.py` records a `stubwire.stub_resolve` call under the literal name `''form_knot(world-gen | season-tick)''` at `engine/mc_v18.py:204-205` instead of calling this function — see §7). Called on'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/threadwork/sim/opposing.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  actor_a_obj:
+    identifier: actor_a_obj
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `form_knot(actor_a, actor_b, world, actor_a_obj, actor_b_obj, season, rng)` | `systems/fieldwork/sim/knots.py:172 form_knot` | `—` in production (`engine/mc_v18.py` records a `stubwire.stub_resolve` call under the literal name `''form_knot(world-gen | season-tick)''` at `engine/mc_v18.py:204-205` instead of calling this function — see §7). Called on'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  actor_b:
+    identifier: actor_b
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `form_knot(actor_a, actor_b, world, actor_a_obj, actor_b_obj, season, rng)` | `systems/fieldwork/sim/knots.py:172 form_knot` | `—` in production (`engine/mc_v18.py` records a `stubwire.stub_resolve` call under the literal name `''form_knot(world-gen | season-tick)''` at `engine/mc_v18.py:204-205` instead of calling this function — see §7). Called on'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/threadwork/sim/opposing.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  actor_b_obj:
+    identifier: actor_b_obj
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `form_knot(actor_a, actor_b, world, actor_a_obj, actor_b_obj, season, rng)` | `systems/fieldwork/sim/knots.py:172 form_knot` | `—` in production (`engine/mc_v18.py` records a `stubwire.stub_resolve` call under the literal name `''form_knot(world-gen | season-tick)''` at `engine/mc_v18.py:204-205` instead of calling this function — see §7). Called on'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  advance_disposition:
+    identifier: advance_disposition
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `advance_disposition(target, delta)` | `systems/fieldwork/sim/fieldwork.py:46 advance_disposition` | `—` (no caller found anywhere in `engine/`, `systems/`, `tests/`)'
+    built_in:
+    - py:systems/fieldwork/sim/fieldwork.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  advance_evidence:
+    identifier: advance_evidence
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `advance_evidence(case, delta)` | `systems/fieldwork/sim/fieldwork.py:54 advance_evidence` | `—` (no caller found)'
+    built_in:
+    - py:systems/fieldwork/sim/fieldwork.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_coherence_delta:
+    identifier: apply_coherence_delta
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:363-364`'
+    built_in:
+    - py:systems/threadwork/sim/coherence.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_conviction_scar:
+    identifier: apply_conviction_scar
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:348-352`'
+    built_in:
+    - py:systems/characters/sim/conviction.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_knot_loss:
+    identifier: apply_knot_loss
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `apply_knot_loss(actor, knot_id, mode, world)` | `systems/fieldwork/sim/knots.py:315 apply_knot_loss` | `—` in production; unit tests only (`engine/tests/test_knots_ed912.py:106`, `engine/tests/test_knots_ed912.py:112`, `engine/tests/test_knots_ed912.py:115`, `engine/tests/test_knots_ed912.py:121`)'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  apply_response_matrix:
+    identifier: apply_response_matrix
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `apply_response_matrix(actor, target, action)` | `systems/fieldwork/sim/investigation.py:46 apply_response_matrix` | `—` (no caller found)'
+    built_in:
+    - py:systems/fieldwork/sim/investigation.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  b_knot_id:
+    identifier: b_knot_id
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`'
+    built_in:
+    - py:systems/threadwork/sim/opposing.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   bg_v05:
     identifier: bg_v05
     docs:
@@ -35,6 +158,68 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  bonds_a:
+    identifier: bonds_a
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: S2.5 `[gate]` `_count_knots_for_actor(actor_a, world) < floor(bonds_a/2)+1`.
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  check_knot_rupture:
+    identifier: check_knot_rupture
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `check_knot_rupture(knot_id, trigger, world)` | `systems/fieldwork/sim/knots.py:275 check_knot_rupture` | `—` in production; unit tests only (`engine/tests/test_knots_ed912.py:87`, `engine/tests/test_knots_ed912.py:91`, `engine/tests/test_knots_ed912.py:97`, `engine/tests/test_knots_ed912.py:100`)'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  coherence_band_strain_pacing:
+    identifier: COHERENCE_BAND_STRAIN_PACING
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `COHERENCE_BAND_STRAIN_PACING` (a passive strain-accrual table) is declared and never read anywhere in the repo. | `systems/fieldwork/sim/knots.py:100-106`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  coherence_delta:
+    identifier: coherence_delta
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/threadwork/sim/operations.py
+    - py:systems/threadwork/sim/opposing.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  composure_damage:
+    identifier: composure_damage
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  conviction_scar:
+    identifier: conviction_scar
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   derived_stats:
     identifier: derived_stats
     docs:
@@ -54,15 +239,46 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  disposition_set_to:
+    identifier: disposition_set_to
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  evaluate_dialogue_lattice:
+    identifier: evaluate_dialogue_lattice
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `evaluate_dialogue_lattice(scene, choice)` | `systems/fieldwork/sim/investigation.py:38 evaluate_dialogue_lattice` | `—` (no caller found)'
+    built_in:
+    - py:systems/fieldwork/sim/investigation.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  evaluate_triggers:
+    identifier: evaluate_triggers
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: No production code path ever queues a `scene_type="fieldwork"` or `"investigation"` scene. `queue_triggered_scenes` (the sole caller of `scene_slate.queue_scene` in the whole tree — verified by grep, only call site) only ever fires `scene_type="contest"` for the "Stability Crisis" trigger; the other 7 canonical §4.3.2 triggers are explicitly deferred, not '
+    built_in:
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   fieldwork_knots:
     identifier: fieldwork_knots
     docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
     - systems/fieldwork/knots_v30.md
-    purpose: ED-FI-0003 propagation completion (2026-07-07):** the 2026-06-28 rulings (ED-841/842/843/912) that resolved TIER-DRIFT-001/COMPOSURE-DRIFT-001/TRUNC-DRIFT-001 had reached only fieldwork_v30 §5.6b; this pass propagated them into §6.1 (bidirectional −5..+5 gauge, rupture at +5, break Disposition −3), …
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`''s own module docstring states this explicitly and cites its "Entry points" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:373` (only `fieldwork_knots`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
-    in_table: false
+    in_table: true
   fieldwork_lifecycle_stress_01:
     identifier: fieldwork_lifecycle_stress_01
     docs:
@@ -72,6 +288,45 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  final_state:
+    identifier: final_state
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `form_knot` has NO auto-call anywhere in the season/campaign loop. `engine/mc_v18.py` deliberately records a `stubwire.stub_resolve` call under the literal string `''form_knot(world-gen | season-tick)''` as an "honest deferral" marker — this is not a call to `systems.fieldwork.sim.knots.form_knot`, just a stand-in name; `form_knot` itself is never imported b'
+    built_in:
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  form_knot:
+    identifier: form_knot
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `form_knot(actor_a, actor_b, world, actor_a_obj, actor_b_obj, season, rng)` | `systems/fieldwork/sim/knots.py:172 form_knot` | `—` in production (`engine/mc_v18.py` records a `stubwire.stub_resolve` call under the literal name `''form_knot(world-gen | season-tick)''` at `engine/mc_v18.py:204-205` instead of calling this function — see §7). Called on'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  from_dict:
+    identifier: from_dict
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:396` (world-snapshot deserialization)'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    - py:systems/factions/sim/treaty.py
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/registry.py
+    - py:systems/threadwork/sim/coherence.py
+    - py:systems/threadwork/sim/threadcut.py
+    - py:systems/world/sim/insurgency_pipeline.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   gap_note:
     identifier: gap_note
     docs:
@@ -81,6 +336,36 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  get_active_knots:
+    identifier: get_active_knots
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `get_active_knots(world)` | `systems/fieldwork/sim/knots.py:376 get_active_knots` | `—` (no caller found)'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  get_knot:
+    identifier: get_knot
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `get_knot(knot_id, world)` | `systems/fieldwork/sim/knots.py:372 get_knot` | `—` (no caller found)'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  history_relationships:
+    identifier: history_relationships
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `actor_a`, `actor_b`, `actor_a_obj`, `actor_b_obj` | `arg` | caller-supplied duck-typed actors (`.bonds`, `.spirit`, `.history_relationships`, `.ts`, `.disposition_with_<other>`) | `systems/fieldwork/sim/knots.py:172-192 form_knot`'
+    built_in:
+    - py:engine/tests/test_knots_ed912.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   investigation_systems_proposal_2026:
     identifier: investigation_systems_proposal_2026
     docs:
@@ -90,6 +375,17 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  io_contract:
+    identifier: io_contract
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult(module, io_contract, reason, stub=True)` | `key`-shaped no-op | `engine.cross_scale.scene_dispatch._resolve_slot`''s `out["reason"]`/`out["stub"]` | `systems/fieldwork/sim/fieldwork.py:39-43`, `engine/cross_scale/scene_dispatch.py:357-358`'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    - py:engine/tests/test_world_population.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   is_perceivable:
     identifier: is_perceivable
     docs:
@@ -100,6 +396,46 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  knot_bonds_min:
+    identifier: KNOT_BONDS_MIN
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  knot_disposition_min:
+    identifier: KNOT_DISPOSITION_MIN
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  knot_formation_ob:
+    identifier: KNOT_FORMATION_OB
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  knot_formation_tn:
+    identifier: KNOT_FORMATION_TN
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   knot_formed:
     identifier: knot_formed
     docs:
@@ -110,6 +446,27 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  knot_id:
+    identifier: knot_id
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    built_in:
+    - py:engine/tests/test_knots_ed912.py
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  knot_id_counter:
+    identifier: knot_id_counter
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:197`; increment `systems/fieldwork/sim/knots.py:236-238`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   knot_partners_present:
     identifier: knot_partners_present
     docs:
@@ -129,6 +486,25 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  knot_strain_delta:
+    identifier: knot_strain_delta
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  knot_ts_min_party:
+    identifier: KNOT_TS_MIN_PARTY
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   log_event:
     identifier: log_event
     docs:
@@ -148,6 +524,17 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  npc_id:
+    identifier: npc_id
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_npe_response(npc_id, prompt, world)` | `systems/fieldwork/sim/investigation.py:30 resolve_npe_response` | `engine/cross_scale/scene_dispatch.py:356` (`_resolve_slot`, `st == "investigation"` branch) — same test-only reachability as `run_fieldwork_scene` above'
+    built_in:
+    - py:systems/fieldwork/sim/investigation.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   player_agency:
     identifier: player_agency
     docs:
@@ -156,6 +543,26 @@ identifiers:
     purpose: '[§5.6b Knot Lifecycle (NEW — ED-773)] Trigger | Source | Notes :: Knot partner''s death | Universal | Disposition becomes irrelevant; Knot partner enters Memory state. Knot-as-buffer can absorb final Composure damage to dying partner per Last Stand rule (player_agency §X — TBD).'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  queue_scene:
+    identifier: queue_scene
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine.autoload.scene_slate` | declares `"fieldwork"` as an example `scene_type` string on `SceneSlot`; no production `queue_scene("fieldwork", ...)` call site exists (§7) | `engine/autoload/scene_slate.py:26`, `engine/autoload/scene_slate.py:34`'
+    built_in:
+    - py:engine/autoload/scene_slate.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  queue_triggered_scenes:
+    identifier: queue_triggered_scenes
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: No production code path ever queues a `scene_type="fieldwork"` or `"investigation"` scene. `queue_triggered_scenes` (the sole caller of `scene_slate.queue_scene` in the whole tree — verified by grep, only call site) only ever fires `scene_type="contest"` for the "Stability Crisis" trigger; the other 7 canonical §4.3.2 triggers are explicitly deferred, not '
+    built_in:
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   read_sections:
@@ -178,6 +585,47 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  reset_knots:
+    identifier: reset_knots
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `reset_knots(world)` | `systems/fieldwork/sim/knots.py:380 reset_knots` | test helper only: `engine/tests/test_knots_ed912.py:43`, `engine/tests/test_knots_ed912.py:54`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resolve_npe_response:
+    identifier: resolve_npe_response
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_npe_response(npc_id, prompt, world)` | `systems/fieldwork/sim/investigation.py:30 resolve_npe_response` | `engine/cross_scale/scene_dispatch.py:356` (`_resolve_slot`, `st == "investigation"` branch) — same test-only reachability as `run_fieldwork_scene` above'
+    built_in:
+    - py:systems/fieldwork/sim/investigation.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resolve_opposing_operations:
+    identifier: resolve_opposing_operations
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    built_in:
+    - py:systems/threadwork/sim/opposing.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  roll_pool:
+    identifier: roll_pool
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: dice pool roll | `key` | `engine.autoload.dice_engine.roll_pool` | `systems/fieldwork/sim/knots.py:45 import`, `:222 roll_pool` call'
+    built_in:
+    - py:engine/autoload/dice_engine.py
+    - py:systems/mass_battle/sim/massbattle.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   rs_critical_threshold:
     identifier: RS_CRITICAL_THRESHOLD
     docs:
@@ -185,6 +633,119 @@ identifiers:
     purpose: '[§10 VALIDATION FINDINGS (2026-04-13)] ID | §Ref | Priority | Finding | Implementation Path :: G10-F06 | §10.6 | P2 | Clock HUD absent. Two existing bugs affect fieldwork season integration: B-03 (`Constants.RS_CRITICAL_THRESHOLD` missing — POI gates use MS bands) and A-05 (`NarrativeState.log_event()` hardcodes `season = 0`). | Fix B-03 and A-05 first. New: `scenes/ui/ClockHUD.tscn`. Wire to `Tra'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  run_fieldwork_scene:
+    identifier: run_fieldwork_scene
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_fieldwork_scene(scene)` | `systems/fieldwork/sim/fieldwork.py:38 run_fieldwork_scene` | `engine/cross_scale/scene_dispatch.py:354` (`_resolve_slot`, `st == "fieldwork"` branch) — reachable only via a `SceneSlot` manually constructed by a test (`engine/tests/test_pipeline_reach.py:298`); no production caller ever queues `scene_type="fieldwork"'
+    built_in:
+    - py:systems/fieldwork/sim/fieldwork.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  rupture_coherence_loss:
+    identifier: RUPTURE_COHERENCE_LOSS
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `RUPTURE_COHERENCE_LOSS` (the Coherence-on-rupture constant `apply_knot_loss` applies) is flagged `[UNVERIFIED post-ED-912]` in-code — retained provisionally, not a settled canonical value. Structural (not mechanical) implication: the `apply_knot_loss` → `apply_coherence_delta` lateral edge fires on a value the code itself marks unverified. | `systems/fiel'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  rupture_strain:
+    identifier: RUPTURE_STRAIN
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: tier's `TIER_RANGE`; `[branch]` `strain >= RUPTURE_STRAIN` sets `knot.active = False` (`broke`).
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  rupture_wound_dissolution:
+    identifier: RUPTURE_WOUND_DISSOLUTION
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `RUPTURE_WOUND_DISSOLUTION` (declared for the FR-Dissolution rupture Wound consequence) is never referenced outside its own declaration. `apply_knot_loss`''s signature takes no `trigger` parameter that could condition Wound application, and the consequences dict''s `''wound''` key is initialized to 0 and never reassigned in either the `''break''` or `''rupture''` '
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  scene_type:
+    identifier: scene_type
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_fieldwork_scene(scene)` | `systems/fieldwork/sim/fieldwork.py:38 run_fieldwork_scene` | `engine/cross_scale/scene_dispatch.py:354` (`_resolve_slot`, `st == "fieldwork"` branch) — reachable only via a `SceneSlot` manually constructed by a test (`engine/tests/test_pipeline_reach.py:298`); no production caller ever queues `scene_type="fieldwork"'
+    built_in:
+    - py:engine/autoload/scene_slate.py
+    - py:engine/cross_scale/echo_transport.py
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  strain_after:
+    identifier: strain_after
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `KnotState(knot, broke, ruptured, strain_after, notes)` | `arg` return value | caller of `sustain_knot`/`check_knot_rupture` (only live caller: `opposing.py`, itself orphaned — §7) | `systems/fieldwork/sim/knots.py:250-272`, `:275-312`'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  strain_delta:
+    identifier: strain_delta
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/settlements/sim/temperaments.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  stub_resolve:
+    identifier: stub_resolve
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `form_knot(actor_a, actor_b, world, actor_a_obj, actor_b_obj, season, rng)` | `systems/fieldwork/sim/knots.py:172 form_knot` | `—` in production (`engine/mc_v18.py` records a `stubwire.stub_resolve` call under the literal name `''form_knot(world-gen | season-tick)''` at `engine/mc_v18.py:204-205` instead of calling this function — see §7). Called on'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  sustain_knot:
+    identifier: sustain_knot
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  tempered_strain:
+    identifier: TEMPERED_STRAIN
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: knot at `<= TEMPERED_STRAIN` absorbs the trigger once (`[write]` reset strain to 0), else
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  test_knots_stay_unpopulated_honest_deferral:
+    identifier: test_knots_stay_unpopulated_honest_deferral
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `form_knot` has NO auto-call anywhere in the season/campaign loop. `engine/mc_v18.py` deliberately records a `stubwire.stub_resolve` call under the literal string `''form_knot(world-gen | season-tick)''` as an "honest deferral" marker — this is not a call to `systems.fieldwork.sim.knots.form_knot`, just a stand-in name; `form_knot` itself is never imported b'
+    built_in:
+    - py:engine/tests/test_world_population.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   throughline_specifications:
@@ -196,6 +757,55 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  tier_close:
+    identifier: TIER_CLOSE
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: result branches to `TIER_CLOSE`, `TIER_DISTANT`, or `None` (partial/failure).
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  tier_distant:
+    identifier: TIER_DISTANT
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: result branches to `TIER_CLOSE`, `TIER_DISTANT`, or `None` (partial/failure).
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  tier_range:
+    identifier: TIER_RANGE
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: tier's `TIER_RANGE`; `[branch]` `strain >= RUPTURE_STRAIN` sets `knot.active = False` (`broke`).
+    built_in:
+    - py:systems/fieldwork/sim/knots.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  to_dict:
+    identifier: to_dict
+    docs:
+    - systems/fieldwork/fieldwork_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:313-314`'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    - py:systems/factions/sim/treaty.py
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/registry.py
+    - py:systems/threadwork/sim/coherence.py
+    - py:systems/threadwork/sim/threadcut.py
+    - py:systems/world/sim/insurgency_pipeline.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   unified_canon_target:
     identifier: unified_canon_target
     docs:
@@ -217,6 +827,7 @@ dropped_as_not_a_mechanic:
   coverage_matrix: boilerplate-or-too-short
   cross_scale: matches a tracked/aliased document stem
   derived_stats_v30: the doc spells it as <name>.md — a citation
+  dice_engine: matches a tracked/aliased document stem
   doc_index_gen: matches a tracked/aliased document stem
   fieldwork_bg: the doc spells it as <name>.md — a citation
   fieldwork_bg_v30: the doc spells it as <name>.md — a citation
@@ -229,9 +840,11 @@ dropped_as_not_a_mechanic:
   fieldwork_socializing: the doc spells it as <name>.md — a citation
   fieldwork_v30: the doc spells it as <name>.md — a citation
   fieldwork_v30_infill: the doc spells it as <name>.md — a citation
+  game_state: matches a tracked/aliased document stem
   geography_design: the doc spells it as <name>.md — a citation
   investigation_systems_v30: matches a tracked/aliased document stem
   knots_v30: matches a tracked/aliased document stem
+  mc_v18: matches a tracked/aliased document stem
   mechanics_index: boilerplate-or-too-short
   module_contracts: boilerplate-or-too-short
   npc_behavior_v30: matches a tracked/aliased document stem
@@ -242,11 +855,19 @@ dropped_as_not_a_mechanic:
   player_agency_v30: matches a tracked/aliased document stem
   propagation_map: the doc spells it as <name>.md — a citation
   scale_transitions: matches a tracked/aliased document stem
+  scene_dispatch: matches a tracked/aliased document stem
+  scene_slate: matches a tracked/aliased document stem
   settlement_layer_v30: matches a tracked/aliased document stem
   social_contest: matches a module or path component
   social_contest_system_v2: the doc spells it as <name>.md — a citation
   social_contest_v30: the doc spells it as <name>.md — a citation
   stage11_scale_transitions_deprecated: the doc spells it as <name>.md — a citation
+  structure_audit: matches a tracked/aliased document stem
   supersession_register: matches a tracked/aliased document stem
+  test_flow_skeletons: matches a tracked/aliased document stem
+  test_knots_ed912: matches a tracked/aliased document stem
+  test_oi12_orphan_census: matches a tracked/aliased document stem
+  test_pipeline_reach: matches a tracked/aliased document stem
+  test_world_population: matches a tracked/aliased document stem
   threadwork_redesign_v25: the doc spells it as <name>.md — a citation
   threadwork_v30: matches a tracked/aliased document stem

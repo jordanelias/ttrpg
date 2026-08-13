@@ -18,6 +18,7 @@ docs:
 - systems/factions/faction_succession_split_v30.md
 - systems/factions/faction_succession_split_v30_index.md
 - systems/factions/faction_systems_overview_v30.md
+- systems/factions/factions_flow_skeleton_v1.md
 - systems/factions/factions_personal_v30.md
 - systems/factions/factions_personal_v30_index.md
 - systems/factions/factions_personal_v30_infill.md
@@ -31,9 +32,19 @@ docs:
 - systems/factions/varfell_path_b_v30.md
 - systems/factions/varfell_path_b_v30_infill.md
 counts:
-  UNRESOLVED: 281
-  BUILT: 41
+  UNRESOLVED: 287
+  BUILT: 108
 identifiers:
+  accounting_boundary:
+    identifier: accounting_boundary
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: 'S5** `[write]` Accounting boundary: apply deferred Key effects, advance the tick counter — `engine/mc_v18.py:158-161 accounting_boundary`.'
+    built_in:
+    - py:engine/substrate/keys.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   accounting_stability_check:
     identifier: ACCOUNTING_STABILITY_CHECK
     docs:
@@ -52,6 +63,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  action_callback:
+    identifier: action_callback
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` → `action_callback` | `engine/mc_v18.py:130 world`'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   active_npcs:
     identifier: active_npcs
     docs:
@@ -80,6 +101,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  adjust_accord:
+    identifier: adjust_accord
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:482 adjust_accord`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   advance_project:
     identifier: advance_project
     docs:
@@ -89,6 +120,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  advance_season:
+    identifier: advance_season
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: in | `overview` | `season_manager.advance_season` resets `Faction.reset_arc`/`reset_seasonal` before the action pass runs | `engine/autoload/season_manager.py:38-42 reset_arc`'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   affect_axis:
     identifier: affect_axis
     docs:
@@ -174,6 +215,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  all_playable_15:
+    identifier: ALL_PLAYABLE_15
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `MULTS`, `ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:34 MULTS`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   all_territories:
     identifier: all_territories
     docs:
@@ -231,6 +282,16 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  apply_ci_delta:
+    identifier: apply_ci_delta
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.clocks[''CI'']` | RW | `engine/autoload/game_state.py` (field), `systems/overview/sim/ci_track.py` (writer) | `systems/factions/sim/excommunication.py:166-167 apply_ci_delta`'
+    built_in:
+    - py:systems/overview/sim/ci_track.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   apply_drift:
     identifier: apply_drift
     docs:
@@ -249,6 +310,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  apply_hafenmark_equipment:
+    identifier: apply_hafenmark_equipment
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `apply_hafenmark_equipment(faction_state)` | `systems/factions/sim/hafenmark_equipment.py:30 apply_hafenmark_equipment` | — (stub; only `engine/tests/test_pipeline_reach.py:755`)'
+    built_in:
+    - py:systems/factions/sim/hafenmark_equipment.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   armature_position:
     identifier: armature_position
     docs:
@@ -296,6 +367,56 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  attacker_wins:
+    identifier: attacker_wins
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: 'S2.5.4** `[branch][write]` On attacker win: transfer territory ownership, apply a loser Legitimacy penalty; then fork Terms (`deg == ''Success''`) vs Storm on Accord penalty and an `entry_terms_l_seed` proxy write — `systems/factions/sim/faction_action.py:461-497 attacker_wins`.'
+    built_in:
+    - py:systems/mass_battle/sim/massbattle.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  attempt_charter:
+    identifier: attempt_charter
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `attempt_charter(world)` | `systems/factions/sim/charter_liberties.py:27 attempt_charter` | — (stub; only `engine/tests/test_pipeline_reach.py:750`)'
+    built_in:
+    - py:systems/factions/sim/charter_liberties.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  attempt_mandate_action:
+    identifier: attempt_mandate_action
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `attempt_mandate_action(world)` | `systems/factions/sim/varfell_mandate_action.py:40 attempt_mandate_action` | — (stub; only `engine/tests/test_pipeline_reach.py:753`)'
+    built_in:
+    - py:systems/factions/sim/varfell_mandate_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  attempt_mass_seizure_declaration:
+    identifier: attempt_mass_seizure_declaration
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `attempt_mass_seizure_declaration(world, force_declare=False)` | `systems/factions/sim/mass_seizure.py:161 attempt_mass_seizure_declaration` | — (implemented, zero production callers)'
+    built_in:
+    - py:systems/factions/sim/mass_seizure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  attempt_territorial_acquisition:
+    identifier: attempt_territorial_acquisition
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `attempt_territorial_acquisition(target_territory, world)` | `systems/factions/sim/varfell_territorial_acquisition.py:42 attempt_territorial_acquisition` | — (stub; only `engine/tests/test_pipeline_reach.py:754`)'
+    built_in:
+    - py:systems/factions/sim/varfell_territorial_acquisition.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   attributed_mission_outcome:
     identifier: attributed_mission_outcome
     docs:
@@ -361,17 +482,39 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  base_w_unique:
+    identifier: BASE_W_UNIQUE
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   battle_concluded:
     identifier: battle_concluded
     docs:
     - systems/factions/faction_behavior_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: '`scene.battle_concluded` additionally drives MS / Stability through `mass_battle`.'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
     doc_status: null
-    in_table: false
+    in_table: true
+  battle_count:
+    identifier: battle_count
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:495 battle_count`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:engine/mc_v18.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   belief_id:
     identifier: belief_id
     docs:
@@ -516,6 +659,7 @@ identifiers:
     identifier: cascade_resolution
     docs:
     - systems/factions/faction_behavior_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     purpose: '[§5.1 Faction state changes emit Keys] State change | Emit Key :: Cascade re-resolution | `mechanical.cascade_resolution`'
     built_in:
     - key:key_type_registry_v30.md
@@ -541,6 +685,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  casus_belli:
+    identifier: casus_belli
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.casus_belli` | flag (optional, duck-typed) | absent by default; no populating writer found in this trace | `systems/factions/sim/parliamentary_transfer.py:110 casus_belli`'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   causal_graph:
     identifier: CAUSAL_GRAPH
     docs:
@@ -577,6 +730,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  check_all_factions:
+    identifier: check_all_factions
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: up/out | `overview`/victory | `Territory.owner` and `Faction.territories` writes are read by `victory.check_all_factions` for the territory-count win condition | `engine/autoload/victory.py:65-66 owner`'
+    built_in:
+    - py:engine/autoload/victory.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  check_sanctuary_active:
+    identifier: check_sanctuary_active
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `check_sanctuary_active(world)` | `systems/factions/sim/home_sanctuary.py:37 check_sanctuary_active` | — (stub; zero callers anywhere, including tests)'
+    built_in:
+    - py:systems/factions/sim/home_sanctuary.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   church_of_solmund:
     identifier: church_of_solmund
     docs:
@@ -591,6 +764,7 @@ identifiers:
     docs:
     - systems/factions/faction_layer_v30.md
     - systems/factions/faction_systems_overview_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     purpose: '[§0 — AUDIT PATCHES APPLIED IN THIS DOCUMENT] Conflict resolved | Resolution :: FACTION_RESOLVER_PROPAGATION (ED-874, W3.3) | Remaining in-scope bare-stat faction checks migrated to the deterministic+stochastic resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution): §1.4 Accounting Stability (M = Stability − loss magnitude), §1.5 Reconstitute (M = Influence − 4), §2.5 Resistance ('
     built_in: []
     disposition: UNRESOLVED
@@ -634,6 +808,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  compute_reclamation_bonus:
+    identifier: compute_reclamation_bonus
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `compute_reclamation_bonus(target_territory, world)` | `systems/factions/sim/infrastructure_reclamation.py:29 compute_reclamation_bonus` | — (stub; only `engine/tests/test_pipeline_reach.py:751`)'
+    built_in:
+    - py:systems/factions/sim/infrastructure_reclamation.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   compute_territory_influence:
     identifier: compute_territory_influence
     docs:
@@ -689,6 +873,56 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  conquest_miladv_coef:
+    identifier: CONQUEST_MILADV_COEF
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  conquest_min_mil:
+    identifier: CONQUEST_MIN_MIL
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  conquest_mult:
+    identifier: conquest_mult
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector — `systems/factions/sim/faction_action.py:199-212 conquest_mult`.
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  conquest_target_coef:
+    identifier: CONQUEST_TARGET_COEF
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  consul_used:
+    identifier: consul_used
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:133 consul_used`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   consuming_systems:
     identifier: consuming_systems
     docs:
@@ -779,6 +1013,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: true
+  coronation_renewal_prereq:
+    identifier: coronation_renewal_prereq
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `coronation_renewal_prereq`''s docstring asserts Coronation is blocked when Crown is both excommunicated and the Church just attempted an excommunication this same season; the body implements no such check — it only tests whether `church` is present and parliamentary. | `systems/factions/sim/crown_initiative.py:193-208 coronation_renewal_prereq`'
+    built_in:
+    - py:systems/factions/sim/crown_initiative.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   cosine_similarity:
     identifier: cosine_similarity
     docs:
@@ -790,6 +1034,27 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  council_used_this_arc:
+    identifier: council_used_this_arc
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/council_solmund.py:59 council_used_this_arc`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:systems/factions/sim/council_solmund.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  count_infrastructure:
+    identifier: count_infrastructure
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: down (declared, unreached) | `settlements` | `count_infrastructure`/`seizure_ob_modifier` imports in `mass_seizure.py` | `systems/factions/sim/mass_seizure.py:51-54 count_infrastructure`'
+    built_in:
+    - py:systems/settlements/sim/infrastructure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   coup_attempted:
     identifier: coup_attempted
     docs:
@@ -812,6 +1077,15 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  crisis_stability:
+    identifier: crisis_stability
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `world.casus_belli`, the optional duck-typed ledger `parliamentary_transfer._available_cb` reads to find non-Crown CB sources, has ZERO production writers, for two distinct reasons: the Crown-restoration source is appended only to `_available_cb`''s own LOCAL `sources` list, never to `world.casus_belli` itself; and `propose_transfer`''s Partial-outcome CB gr'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
   cross_faction_distant_contact:
     identifier: cross_faction_distant_contact
     docs:
@@ -855,6 +1129,36 @@ identifiers:
     purpose: Per **GD-1** (canon/02_canon_constraints.md §B) and the victory restructure (peninsular_strain_v30 §6.2 STRUCK; ci_political_v30 §2.2 CIP-2), the **sole** victory condition for every faction is **Peninsular Sovereignty**; the faction-specific tracks in victory_v30 §3.2–3.5 (`solmundan_orthodoxy`, `d…
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  cum_conquest:
+    identifier: cum_conquest
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: S2.5** `[branch]` `roll < cum_conquest` → `_try_conquest` — `systems/factions/sim/faction_action.py:230-233 _try_conquest`.
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  cum_muster:
+    identifier: cum_muster
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:236-239 _try_muster`, `systems/factions/sim/faction_action.py:500-528 _try_muster`.'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  cum_unique:
+    identifier: cum_unique
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: S2.4** `[branch]` `roll < cum_unique` → `_try_faction_unique` — `systems/factions/sim/faction_action.py:223-227 _try_faction_unique`.
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   cumulative_drift:
@@ -1026,6 +1330,20 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  echo_scheduler:
+    identifier: echo_scheduler
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` (gated on `world.echo_scheduler`)'
+    built_in:
+    - py:engine/tests/test_accord_echo.py
+    - py:engine/tests/test_echo_transport.py
+    - py:engine/tests/test_parliamentary_bridge.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
+    - py:engine/tests/test_pipeline_reach.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   economic_intervention:
     identifier: economic_intervention
     docs:
@@ -1066,6 +1384,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  emit_scene_echo:
+    identifier: emit_scene_echo
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Domain Echo (`echo_transport.emit_scene_echo`) | emit (deferred write) | applied at the accounting boundary (S5) via the substrate | `engine/cross_scale/parliamentary_bridge.py:212 emit_scene_echo`'
+    built_in:
+    - py:engine/cross_scale/echo_transport.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   emitted_at:
     identifier: emitted_at
     docs:
@@ -1090,6 +1418,15 @@ identifiers:
     docs:
     - systems/factions/faction_layer_v30.md
     purpose: '[§10 — OPEN ITEMS AND EDITORIAL FLAGS] ID | Description | Status (PP-667) :: BALANCE-NEW-001 | Stability recovery pace. | **DEFERRED** to engine_v4 smoke-test.'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  entry_terms_l_seed:
+    identifier: entry_terms_l_seed
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none — see §7 | `systems/factions/sim/faction_action.py:489 entry_terms_l_seed`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1197,6 +1534,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  faction_a:
+    identifier: faction_a
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`'
+    built_in:
+    - py:systems/mass_battle/sim/massbattle.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  faction_b:
+    identifier: faction_b
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`'
+    built_in:
+    - py:systems/mass_battle/sim/massbattle.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   faction_balance_convergence_v12c_2026:
     identifier: faction_balance_convergence_v12c_2026
     docs:
@@ -1248,6 +1605,7 @@ identifiers:
     - systems/factions/faction_canon_v30.md
     - systems/factions/faction_layer_v30.md
     - systems/factions/faction_succession_split_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     - systems/factions/fractional_province_ownership_v30.md
     purpose: '[§3.2 CI Institutional Weight (Church in Political Forums)] Context | Resolution method | CI applied as :: Parliamentary motion (proposing or defending) | Deterministic Mandate **tally** (faction_layer §5.3) | **+⌊CI/20⌋ votes** to Church''s contribution'
     built_in:
@@ -1262,6 +1620,7 @@ identifiers:
     - systems/factions/faction_canon_v30.md
     - systems/factions/faction_state_authoring_v30.md
     - systems/factions/faction_succession_split_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     purpose: '<!-- [PROVISIONAL: 2026-05-07 — Faction canon consolidation; supersedes piecemeal lookup across faction_layer_v30 / faction_behavior_v30 / faction_state_authoring_v30 / faction_politics_v30 / factions_personal_v30 / params/factions/* for per-faction texture.'
     built_in: []
     disposition: UNRESOLVED
@@ -1295,6 +1654,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  faction_state:
+    identifier: faction_state
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `apply_hafenmark_equipment(faction_state)` | `systems/factions/sim/hafenmark_equipment.py:30 apply_hafenmark_equipment` | — (stub; only `engine/tests/test_pipeline_reach.py:755`)'
+    built_in:
+    - py:systems/factions/sim/hafenmark_equipment.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   faction_state_authoring:
     identifier: faction_state_authoring
     docs:
@@ -1303,6 +1672,16 @@ identifiers:
     purpose: Engine init (LPS-2e migration):** per-settlement L and PS seed from the controlling faction's prior authored value (faction_state_authoring §8) — each settlement starts at that faction's old {Legitimacy, Popular_Support}; thereafter per-territory dynamics (§3.4–§3.5 per settlement) and the Mandate a…
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  faction_take_action:
+    identifier: faction_take_action
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:177 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   faction_unique_actions:
@@ -1359,6 +1738,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  force_declare:
+    identifier: force_declare
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `attempt_mass_seizure_declaration(world, force_declare=False)` | `systems/factions/sim/mass_seizure.py:161 attempt_mass_seizure_declaration` | — (implemented, zero production callers)'
+    built_in:
+    - py:systems/factions/sim/mass_seizure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   fractional_province_ownership:
     identifier: fractional_province_ownership
     docs:
@@ -1395,6 +1784,25 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  from_dict:
+    identifier: from_dict
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:381 TreatyRecord` (`restore_world`, deserialization only)'
+    built_in:
+    - py:systems/characters/sim/beliefs.py
+    - py:systems/characters/sim/conviction.py
+    - py:systems/factions/sim/treaty.py
+    - py:systems/fieldwork/sim/knots.py
+    - py:systems/settlements/sim/infrastructure.py
+    - py:systems/settlements/sim/registry.py
+    - py:systems/threadwork/sim/coherence.py
+    - py:systems/threadwork/sim/threadcut.py
+    - py:systems/world/sim/insurgency_pipeline.py
+    - py:systems/world/sim/npe.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   gap_bg_officer_fate:
     identifier: GAP_BG_OFFICER_FATE
     docs:
@@ -1747,6 +2155,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  lapse_rate:
+    identifier: lapse_rate
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `process_treaty_expirations(world, lapse_rate=...)` | `systems/factions/sim/treaty.py:121 process_treaty_expirations` | — (implemented, zero production callers)'
+    built_in:
+    - py:systems/factions/sim/treaty.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   last_season:
     identifier: last_season
     docs:
@@ -1756,6 +2174,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  low_accord_seed:
+    identifier: LOW_ACCORD_SEED
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   m6_faction_actions:
     identifier: m6_faction_actions
     docs:
@@ -1873,6 +2301,7 @@ identifiers:
     - systems/factions/faction_behavior_v30.md
     - systems/factions/faction_canon_v30.md
     - systems/factions/faction_state_authoring_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     purpose: '[§5.1 Faction state changes emit Keys] State change | Emit Key :: Mission shift | `mechanical.mission_shift`'
     built_in:
     - key:key_type_registry_v30.md
@@ -1888,6 +2317,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  muster_wealth_cost:
+    identifier: MUSTER_WEALTH_COST
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  muster_wealth_to_pool_div:
+    identifier: MUSTER_WEALTH_TO_POOL_DIV
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:236-239 _try_muster`, `systems/factions/sim/faction_action.py:500-528 _try_muster`.'
+    built_in:
+    - py:systems/factions/sim/faction_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   national_influence:
     identifier: national_influence
     docs:
@@ -1895,6 +2344,26 @@ identifiers:
     purpose: national_influence(faction) = clamp(
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  negotiated_agreement:
+    identifier: negotiated_agreement
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `world.casus_belli`, the optional duck-typed ledger `parliamentary_transfer._available_cb` reads to find non-Crown CB sources, has ZERO production writers, for two distinct reasons: the Crown-restoration source is appended only to `_available_cb`''s own LOCAL `sources` list, never to `world.casus_belli` itself; and `propose_transfer`''s Partial-outcome CB gr'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  new_arc:
+    identifier: new_arc
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: 'S0** `[gate][write]` Arc boundary: only when `new_arc` (season is the first of a new arc) does `Faction.reset_arc` clear arc-scoped flags on every faction — `engine/autoload/season_manager.py:34-39 new_arc`.'
+    built_in:
+    - py:engine/autoload/season_manager.py
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   new_memories:
@@ -1948,6 +2417,7 @@ identifiers:
     - systems/factions/baralta_crown_claim_v30.md
     - systems/factions/faction_canon_v30.md
     - systems/factions/faction_politics_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     - systems/factions/political_dynamics_keys_migration_v30.md
     purpose: Torben becomes formal Altonian diplomatic contact point (npc_behavior §7.8).
     built_in: []
@@ -2127,9 +2597,22 @@ identifiers:
   parl_majority_ob_bonus:
     identifier: PARL_MAJORITY_OB_BONUS
     docs:
+    - systems/factions/factions_flow_skeleton_v1.md
     - systems/factions/parliamentary_transfer_v30.md
-    purpose: '[§1.1 Action properties] Field | Value :: **Ob** | Holder Legitimacy + `PARL_MAJORITY_OB_BONUS` (default 2)'
+    purpose: S4.6.3.4** `[gate]` Roll `pool = Proposer.I + mod` vs `Ob = Holder.L + PARL_MAJORITY_OB_BONUS` — `systems/factions/sim/parliamentary_transfer.py:257-260 roll_pool`.
     built_in:
+    - py:systems/factions/sim/parliamentary_transfer.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  parl_transfer_used_this_arc:
+    identifier: parl_transfer_used_this_arc
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.parl_transfer_used_this_arc` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/parliamentary_transfer.py:241 parl_transfer_used_this_arc`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:engine/tests/test_parliamentary_transfer_bridge.py
     - py:systems/factions/sim/parliamentary_transfer.py
     disposition: BUILT
     doc_status: null
@@ -2208,6 +2691,15 @@ identifiers:
     - systems/factions/faction_behavior_v30.md
     - systems/factions/faction_canon_v30.md
     purpose: '[§3.9 Edge Cases (resolves audit P2-4)] Case | Rule :: Zero-vector leader (personal_convictions magnitude < 0.1) | Faction enters Provisional state; aggregate from non-leader NPCs only; succession forced next Accounting'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  piety_track:
+    identifier: piety_track
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `faction_state` sits in an L2 contract-layer cycle with `npc_behavior`, `piety_track` and `social_contest`. | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:337 faction_state`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -2291,6 +2783,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  proceeding_type:
+    identifier: proceeding_type
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_tribunal(accused, accusers, proceeding_type, world=None, rng=None)` | `systems/factions/sim/tribunal.py:143 run_tribunal` | — (stub; zero callers anywhere, including tests)'
+    built_in:
+    - py:systems/factions/sim/tribunal.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  process_treaty_expirations:
+    identifier: process_treaty_expirations
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `process_treaty_expirations(world, lapse_rate=...)` | `systems/factions/sim/treaty.py:121 process_treaty_expirations` | — (implemented, zero production callers)'
+    built_in:
+    - py:systems/factions/sim/treaty.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   progress_after:
     identifier: progress_after
     docs:
@@ -2393,18 +2905,49 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  propose_censure:
+    identifier: propose_censure
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:266 propose_censure`'
+    built_in:
+    - py:systems/factions/sim/parliamentary_action.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  propose_transfer:
+    identifier: propose_transfer
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_transfer(initiator, target_territory, mode, world, ...)` | `systems/factions/sim/parliamentary_transfer.py:182 propose_transfer` | `engine/cross_scale/parliamentary_bridge.py:173 propose_transfer` (via `_run_transfer_motion`)'
+    built_in:
+    - py:systems/factions/sim/parliamentary_transfer.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  propose_treaty:
+    identifier: propose_treaty
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_treaty(parties, terms, world=None)` | `systems/factions/sim/treaty.py:99 propose_treaty` | — (stubwired no-op via `stubwire.stub_resolve`, does not raise despite its own docstring — see §7; zero production callers)'
+    built_in:
+    - py:systems/factions/sim/treaty.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   public_governance:
     identifier: public_governance
     docs:
     - systems/factions/faction_behavior_v30.md
     - systems/factions/faction_canon_v30.md
     - systems/factions/faction_state_authoring_v30.md
+    - systems/factions/factions_flow_skeleton_v1.md
     purpose: '`aligned_categories` and `contradicted_categories` reference **PP-687 da_outcome subtypes** (per `key_type_registry_v30.md` §3): `da.public_governance`, `da.covert_betrayal`, `da.diplomatic_alliance`, `da.antinomian_action`, `da.economic_intervention`.'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
     doc_status: null
-    in_table: false
+    in_table: true
   rate_mult:
     identifier: rate_mult
     docs:
@@ -2446,6 +2989,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  register_treaty:
+    identifier: register_treaty
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `register_treaty(...)` | `systems/factions/sim/treaty.py:145 register_treaty` | — (zero callers anywhere, including tests)'
+    built_in:
+    - py:systems/factions/sim/treaty.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   relational_consequence:
     identifier: relational_consequence
     docs:
@@ -2464,6 +3017,26 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  reset_arc:
+    identifier: reset_arc
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_arc()` | `engine/autoload/game_state.py:135 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  reset_seasonal:
+    identifier: reset_seasonal
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_seasonal()` | `engine/autoload/game_state.py:131 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   resolve_concern:
     identifier: resolve_concern
     docs:
@@ -2473,6 +3046,36 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  resolve_mass_battle:
+    identifier: resolve_mass_battle
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`'
+    built_in:
+    - py:systems/mass_battle/sim/massbattle.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  resolve_mass_seizure:
+    identifier: resolve_mass_seizure
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_seizure(world, rng=None)` | `systems/factions/sim/mass_seizure.py:222 resolve_mass_seizure` | — (implemented, zero production callers)'
+    built_in:
+    - py:systems/factions/sim/mass_seizure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  restore_world:
+    identifier: restore_world
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:381 TreatyRecord` (`restore_world`, deserialization only)'
+    built_in:
+    - py:engine/autoload/game_state.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   revised_belief:
     identifier: revised_belief
     docs:
@@ -2501,6 +3104,17 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  roll_pool:
+    identifier: roll_pool
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: S4.6.3.4** `[gate]` Roll `pool = Proposer.I + mod` vs `Ob = Holder.L + PARL_MAJORITY_OB_BONUS` — `systems/factions/sim/parliamentary_transfer.py:257-260 roll_pool`.
+    built_in:
+    - py:engine/autoload/dice_engine.py
+    - py:systems/mass_battle/sim/massbattle.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   royal_progress:
     identifier: royal_progress
     docs:
@@ -2508,6 +3122,66 @@ identifiers:
     purpose: '[§3.2 Crown unique (4)] Action | Canon | Status :: `royal_progress` | `part10 §3.2` (Pass 2h Ob iteration; ED-840 closed) | READY'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  run_excommunication_tribunal:
+    identifier: run_excommunication_tribunal
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_excommunication_tribunal(accused, church, world, rng, ...)` | `systems/factions/sim/tribunal.py:87 run_excommunication_tribunal` | `systems/factions/sim/excommunication.py:119 run_excommunication_tribunal`'
+    built_in:
+    - py:systems/factions/sim/tribunal.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_parliamentary_scene:
+    identifier: run_parliamentary_scene
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` (gated on `world.echo_scheduler`)'
+    built_in:
+    - py:engine/cross_scale/parliamentary_bridge.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_parliamentary_vote:
+    identifier: run_parliamentary_vote
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` — Censure vote, Territory-Transfer vote, and the season''s two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:40-44 run_parliamentary_vote`'
+    built_in:
+    - py:systems/social_contest/sim/parliamentary_vote.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_scene_phase:
+    identifier: run_scene_phase
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: S3** `[emit]` Scene phase dispatch (peer subsystem, not traced further here) — `engine/mc_v18.py:141-142 run_scene_phase`.
+    built_in:
+    - py:engine/cross_scale/scene_dispatch.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  run_season:
+    identifier: run_season
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` → `action_callback` | `engine/mc_v18.py:130 world`'
+    built_in:
+    - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  run_tribunal:
+    identifier: run_tribunal
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_tribunal(accused, accusers, proceeding_type, world=None, rng=None)` | `systems/factions/sim/tribunal.py:143 run_tribunal` | — (stub; zero callers anywhere, including tests)'
+    built_in:
+    - py:systems/factions/sim/tribunal.py
+    disposition: BUILT
     doc_status: null
     in_table: true
   salience_floor:
@@ -2590,6 +3264,36 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  seizure_ob_modifier:
+    identifier: seizure_ob_modifier
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: down (declared, unreached) | `settlements` | `count_infrastructure`/`seizure_ob_modifier` imports in `mass_seizure.py` | `systems/factions/sim/mass_seizure.py:51-54 count_infrastructure`'
+    built_in:
+    - py:systems/settlements/sim/infrastructure.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  select_excommunication_target:
+    identifier: select_excommunication_target
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: The docstring/module-header claim of "GD-2: mandatory threat-response before stochastic selection" does not match the code: there is no unconditional mandatory-action pass. `faction_take_action` computes RNG-free signals only to re-weight the probabilities of a single stochastic draw (`roll = rng.random()`); every branch, including the Church "priority cha'
+    built_in:
+    - py:systems/factions/sim/excommunication.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
+  select_initiative_mode:
+    identifier: select_initiative_mode
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: 'S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` → `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` → priority chain Excommunication → Council → Absolution; any other name → immediate NOOP — `systems/factions/sim/faction_action.py:277-318 _faction_specific_unique`.'
+    built_in:
+    - py:systems/factions/sim/crown_initiative.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   select_proposal:
     identifier: select_proposal
     docs:
@@ -2627,6 +3331,17 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  senator_inward_used:
+    identifier: senator_inward_used
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/crown_initiative.py:78 senator_inward_used`'
+    built_in:
+    - py:engine/autoload/game_state.py
+    - py:systems/factions/sim/crown_initiative.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   setting_geography_v30:
     identifier: setting_geography_v30
     docs:
@@ -2727,6 +3442,16 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  stub_resolve:
+    identifier: stub_resolve
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_treaty(parties, terms, world=None)` | `systems/factions/sim/treaty.py:99 propose_treaty` | — (stubwired no-op via `stubwire.stub_resolve`, does not raise despite its own docstring — see §7; zero production callers)'
+    built_in:
+    - py:engine/substrate/stubwire.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   subject_npc_id:
     identifier: subject_npc_id
     docs:
@@ -2791,6 +3516,16 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  t9_invasion_modifier:
+    identifier: t9_invasion_modifier
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `t9_invasion_modifier(world)` | `systems/factions/sim/home_sanctuary.py:29 t9_invasion_modifier` | — (stub; only `engine/tests/test_pipeline_reach.py:752`)'
+    built_in:
+    - py:systems/factions/sim/home_sanctuary.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   target_belief:
     identifier: target_belief
     docs:
@@ -2809,6 +3544,20 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  target_territory:
+    identifier: target_territory
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_transfer(initiator, target_territory, mode, world, ...)` | `systems/factions/sim/parliamentary_transfer.py:182 propose_transfer` | `engine/cross_scale/parliamentary_bridge.py:173 propose_transfer` (via `_run_transfer_motion`)'
+    built_in:
+    - py:engine/cross_scale/domain_echo.py
+    - py:engine/cross_scale/parliamentary_bridge.py
+    - py:systems/factions/sim/infrastructure_reclamation.py
+    - py:systems/factions/sim/parliamentary_transfer.py
+    - py:systems/factions/sim/varfell_territorial_acquisition.py
+    disposition: BUILT
+    doc_status: null
+    in_table: true
   tc_political_redesign:
     identifier: tc_political_redesign
     docs:
@@ -2917,6 +3666,15 @@ identifiers:
     docs:
     - systems/factions/treaty_expiration_v30.md
     purpose: '[§1.1 Expiration check] Field | Value :: **Lapse rate** | `TREATY_LAPSE_RATE` ∈ [0.90, 0.95] (canonical default: **0.90**)'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: true
+  treaty_violation:
+    identifier: treaty_violation
+    docs:
+    - systems/factions/factions_flow_skeleton_v1.md
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `world.casus_belli`, the optional duck-typed ledger `parliamentary_transfer._available_cb` reads to find non-Crown CB sources, has ZERO production writers, for two distinct reasons: the Crown-restoration source is appended only to `_available_cb`''s own LOCAL `sources` list, never to `world.casus_belli` itself; and `propose_transfer`''s Partial-outcome CB gr'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -3087,12 +3845,14 @@ dropped_as_not_a_mechanic:
   baralta_crown_claim_v30_infill: the doc spells it as <name>.md — a citation
   board_game: matches a tracked/aliased document stem
   board_game_v30: the doc spells it as <name>.md — a citation
+  build_execution_map: matches a tracked/aliased document stem
   campaign_architecture_v30: the doc spells it as <name>.md — a citation
   canonical_sha: boilerplate-or-too-short
   canonical_sources: boilerplate-or-too-short
   canonical_tokens: boilerplate-or-too-short
   caste_integration_v1: the doc spells it as <name>.md — a citation
   character_canon_v30: the doc spells it as <name>.md — a citation
+  charter_liberties: matches a tracked/aliased document stem
   ci_political_v30: the doc spells it as <name>.md — a citation
   ci_track: matches a tracked/aliased document stem
   companion_specification_v30: matches a tracked/aliased document stem
@@ -3104,11 +3864,17 @@ dropped_as_not_a_mechanic:
   conviction_track_v30: matches a tracked/aliased document stem
   council_solmund: matches a tracked/aliased document stem
   coverage_matrix: boilerplate-or-too-short
+  cross_scale: matches a tracked/aliased document stem
   crown_initiative: matches a tracked/aliased document stem
+  dice_engine: matches a tracked/aliased document stem
   doc_index_gen: matches a tracked/aliased document stem
   domain_echo: matches a tracked/aliased document stem
+  echo_transport: matches a tracked/aliased document stem
   editorial_ledger: boilerplate-or-too-short
   einhir_revival_v30: the doc spells it as <name>.md — a citation
+  engine_params: matches a tracked/aliased document stem
+  execution_map: matches a tracked/aliased document stem
+  execution_trace: matches a tracked/aliased document stem
   fa_se_historical_precedent_research_v1: the doc spells it as <name>.md — a citation
   faction_action: matches a tracked/aliased document stem
   faction_actions: the doc spells it as <name>.md — a citation
@@ -3131,21 +3897,26 @@ dropped_as_not_a_mechanic:
   governance_play_redesign_v1: the doc spells it as <name>.md — a citation
   hafenmark_equipment: matches a tracked/aliased document stem
   handoff_rules: matches a tracked/aliased document stem
+  home_sanctuary: matches a tracked/aliased document stem
   infrastructure_reclamation: matches a tracked/aliased document stem
   insurgency_pipeline: matches a tracked/aliased document stem
   insurgency_pipeline_v30: the doc spells it as <name>.md — a citation
   integration_plan_v18: the doc spells it as <name>.md — a citation
   ip_track: matches a tracked/aliased document stem
+  key_graph: matches a tracked/aliased document stem
   key_substrate_v30: the doc spells it as <name>.md — a citation
   key_type_registry_v30: the doc spells it as <name>.md — a citation
+  key_types: matches a tracked/aliased document stem
   mass_battle: matches a module or path component
   mass_battle_integration_v30: the doc spells it as <name>.md — a citation
   mass_battle_v30: the doc spells it as <name>.md — a citation
   mass_seizure: matches a tracked/aliased document stem
+  mc_v18: matches a tracked/aliased document stem
   mechanics_index: boilerplate-or-too-short
   military_layer_v30: matches a tracked/aliased document stem
   ministry_system_v2: the doc spells it as <name>.md — a citation
   miraculous_event: matches a tracked/aliased document stem
+  module_contracts: boilerplate-or-too-short
   ms_track: matches a tracked/aliased document stem
   needs_jordan: boilerplate-or-too-short
   npc_ai: matches a tracked/aliased document stem
@@ -3159,6 +3930,8 @@ dropped_as_not_a_mechanic:
   params_board_game_history: the doc spells it as <name>.md — a citation
   params_contest: the doc spells it as <name>.md — a citation
   params_npc: the doc spells it as <name>.md — a citation
+  parliamentary_action: matches a tracked/aliased document stem
+  parliamentary_bridge: matches a tracked/aliased document stem
   parliamentary_stay: matches a tracked/aliased document stem
   parliamentary_transfer: matches a tracked/aliased document stem
   parliamentary_transfer_v30: the doc spells it as <name>.md — a citation
@@ -3186,10 +3959,14 @@ dropped_as_not_a_mechanic:
   stage6_factions_deprecated: the doc spells it as <name>.md — a citation
   stats_1_7_scale: the doc spells it as <name>.md — a citation
   strategic_layer_v30: matches a tracked/aliased document stem
+  structure_audit: matches a tracked/aliased document stem
+  structure_metrics: matches a tracked/aliased document stem
   supersession_register: matches a tracked/aliased document stem
   tactic_cards: matches a tracked/aliased document stem
   tc_political_redesign_v30: the doc spells it as <name>.md — a citation
   tc_political_redesign_v30_infill: the doc spells it as <name>.md — a citation
+  test_flow_skeletons: matches a tracked/aliased document stem
+  test_pipeline_reach: matches a tracked/aliased document stem
   throughlines_meta_infill: the doc spells it as <name>.md — a citation
   treaty_expiration_v30: the doc spells it as <name>.md — a citation
   varfell_mandate_action: matches a tracked/aliased document stem

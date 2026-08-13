@@ -232,17 +232,6 @@ def check_editorial_ledger(all_files):
         print(f"  [INFO] {note}")
     return broken, []
 
-def _find_valoria_hooks_path():
-    """Locate valoria_hooks.py anywhere in the working tree. Returns None if it
-    doesn't exist at all -- callers must then skip the paired_hook existence
-    check rather than inventing a check against a file that isn't here."""
-    for root, dirs, names in os.walk(REPO_ROOT):
-        dirs[:] = [d for d in dirs if d not in _IGNORE_DIRS]
-        if 'valoria_hooks.py' in names:
-            return os.path.join(root, 'valoria_hooks.py')
-    return None
-
-
 def _extract_field(block, field):
     """Pull a scalar YAML field's value out of one `- path: ...` entry block.
     Handles both `field: ""` (quoted, possibly empty) and `field: bare-value`
@@ -261,7 +250,7 @@ def _extract_field(block, field):
 
 
 def _parse_ci_checks_entries(registry_text):
-    """Extract (path, ci_job, paired_hook) for every `ci_checks:` list entry."""
+    """Extract (path, ci_job) for every `ci_checks:` list entry."""
     m = re.search(r'^ci_checks:\s*\n(.*?)(?=^\S|\Z)', registry_text, re.M | re.S)
     section = m.group(1) if m else ''
     entries = []
@@ -272,7 +261,6 @@ def _parse_ci_checks_entries(registry_text):
         entries.append({
             'path': pm.group(1).strip(),
             'ci_job': _extract_field(block, 'ci_job'),
-            'paired_hook': _extract_field(block, 'paired_hook'),
         })
     return entries
 
@@ -281,19 +269,20 @@ def check_ci_registry_coverage(all_files):
     """Cross-check references/ci_checks_registry.yaml against the working tree and
     .github/workflows/valoria-ci.yml (ED-IN-0033, Phase 2 item 11 -- the registry's
     own header has demanded a self-check since 2026-05-10: "this registry must
-    update in the same commit" plus a proposed-but-never-built check that every
-    listed paired_hook actually exists).
+    update in the same commit").
 
-    Four checks:
+    Three checks:
       (a) every registry `path:` exists on disk;
-      (b) every non-empty `ci_job:` names a real job id in valoria-ci.yml;
+      (b) every non-empty `ci_job:` names a real job id in valoria-ci.yml, AND that job
+          actually invokes the tool (b2) -- a row recording intent rather than fact is
+          worse than no row, because it is read as evidence of coverage;
       (c) every `python[3] tools/X.py` invocation anywhere in valoria-ci.yml has a
-          corresponding `path: tools/X.py` entry somewhere in the registry;
-      (d) every non-empty `paired_hook:` exists as a `def <name>(` in
-          valoria_hooks.py -- skipped (INFO note, not a violation) if that file
-          doesn't exist anywhere in the repo (it currently lives only under
-          deprecated/skills/valoria-orchestrator/scripts/, so the check DOES run
-          against that path when present).
+          corresponding `path: tools/X.py` entry somewhere in the registry.
+
+    THERE WAS A CHECK (d) -- paired_hook existence in valoria_hooks.py. Retired 2026-08-12
+    with its subject; see the tombstone at the end of this function. Deliberately NOT
+    renumbered: (a)/(b)/(c) are cited by letter elsewhere, and shifting them to close a gap
+    would silently re-point those citations.
     """
     violations = []
     errors = []
@@ -415,29 +404,14 @@ def check_ci_registry_coverage(all_files):
                 f"in references/ci_checks_registry.yaml"
             )
 
-    # (d)
-    hooks_path = _find_valoria_hooks_path()
-    if hooks_path is None:
-        errors.append(
-            "valoria_hooks.py not found anywhere in the repo -- paired_hook existence "
-            "check (d) skipped, not invented against a nonexistent file"
-        )
-    else:
-        try:
-            with open(hooks_path, encoding='utf-8') as f:
-                hooks_content = f.read()
-        except OSError:
-            hooks_content = ''
-        defined_hooks = set(re.findall(r'^def (\w+)\(', hooks_content, re.M))
-        hooks_rel = os.path.relpath(hooks_path, REPO_ROOT).replace(os.sep, '/')
-        for e in entries:
-            hook = e['paired_hook']
-            if hook and hook not in defined_hooks:
-                violations.append(
-                    f"ci_checks_registry.yaml: paired_hook {hook!r} (path={e['path']}) not "
-                    f"found as a function in {hooks_rel}"
-                )
-
+    # (d) RETIRED 2026-08-12 (G3, ED-IN-0159 §1.10). It verified that every registry
+    # `paired_hook:` existed as a `def` in valoria_hooks.py. That file lived only under
+    # `deprecated/skills/valoria-orchestrator/scripts/` and was removed by the 2026-08-05
+    # evacuation (`cadf9c7`), so from that day the check did nothing except walk the ENTIRE
+    # repo on every run of a blocking gate to conclude the file was absent, then append an
+    # ERROR saying so. Its subject is retired, not merely missing, which is what makes the
+    # disposition deletion rather than the anticipatory-keep ED-IN-0163 ruled for absent-but-
+    # live-roster paths. The `paired_hook` field went with it; nothing else read it.
     return violations, errors
 
 
