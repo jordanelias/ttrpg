@@ -2670,6 +2670,60 @@ never been run.
 
 ---
 
+## [RULED] ED-IN-0179 — Jordan: there is no `deprecated/` conflict, and the real lesson is about vocabulary surviving sessions
+
+**Jordan, verbatim (2026-08-13):** *"The completed evacuation **is** the retirement of all those
+files that were live prior to the evacuation. All future retirements, then, are joining
+already-retired items. There is no contradiction or conflict."*
+
+ED-IN-0177 raised, and PR #307 held for decision, a claimed clash between two meanings of
+`deprecated/`. **There was no clash.** "evacuate" is not a deletion queue — it means *move it out of
+`main`, keep it at a named ref*, which is what we want for a file nobody uses. New retirements
+joining old ones is the policy working.
+
+**Why I got it wrong, and Jordan's framing is sharper than mine.** I first called this a jargon
+problem: the code says **"evacuate"**, the prose says **"retirement"**, neither is standard usage,
+and I read two invented labels as two policies. Jordan named the deeper mechanism:
+
+> *"Claude is not a human who has context between sessions... every session will need to reinterpret
+> vocabulary used for a particular purpose in another session, and that can create compounding
+> issues since the particular use of vocabulary isn't carried over and consequently causes the word
+> to be misinterpreted going forward."*
+
+That is exactly what happened, **observed live**: `evacuate` was coined in an earlier session; I read
+it cold, inferred a meaning its author never held, and escalated the invention to a blocker across
+three surfaces and two PR bodies. The cost was not confusion — it was fabricated work.
+
+**The consequence for how this repo should be written.** A coined term is a *pointer to context that
+does not survive*. Plain words fail more gracefully because ordinary usage re-supplies the meaning;
+a coined word has no such fallback, so each session re-derives it and the derivations drift apart.
+Simplicity is not a style preference here — it is the only form of definition that survives a
+context reset.
+
+**MEASURED (2026-08-13):** **32 distinct process terms** in circulation across ~26,000 uses
+(`disposition` 4,894 · `ratif*` 3,396 · `consolidat*` 2,046 · `retire` 1,547 · `evacuat*` 632 · and
+27 more). **None of the six vocabulary registries governs any of them** — `censured_vocabulary`,
+`synonym_registry` and `definitions.yaml` return **zero** hits for the four biggest offenders. Every
+existing registry governs *design/world* terms; **process vocabulary is entirely ungoverned**, which
+is why the term that caused this had nothing to anchor it.
+
+**The adjacent worry was empty too, and checking beat reasoning again.** The load-bearing
+editorial-ledger archives are not swept up: `deprecated/archives/editorial*` and `deprecated/canon/`
+match `R-RELOCATE` **above** `R-DEPRECATED` and classify `relocate`. Two lines of `classify()` would
+have shown it. **Third time this session an instrument overturned something I reasoned to.**
+
+**Action taken:** HELD language removed from `tools/evacuation_plan.py`, CLAUDE.md §3 and the PR
+bodies; both surfaces now say plainly what the directory is *for*, and name the trap.
+
+**Recommendation on Jordan's question (standing instruction vs. vocabulary matrix) — in the reply,
+not executed.** Short form: a standing "simplify" instruction is the thing §0.1 already ruled
+useless (no artifact, no falsifier); a *seventh* registry built up front is the duplication this
+programme is fighting. The evidenced move is to extend the existing `synonym_registry.yaml` to
+process verbs, seeded **only** from terms that have actually caused harm, with a report-only check
+that flags a NEW coined process term. Grow by recurrence.
+
+---
+
 ## [DONE] ED-IN-0178 — Wave 3: the alias plan's foundation EXECUTED, and a control the plan never ran
 
 **Confirmed.** One 1-hop FORK row yields **5 distinct verdicts across 6 consumers**; the hop-count

@@ -177,7 +177,7 @@ landing site was itself evacuated 2026-08-05 — they are now at fork ref `c451b
 | ~~`sim/`~~ | **RETIRED 2026-07-21 (ED-IN-0071 P4 continuation — sim/ hollow-out).** The tree is empty and gone. It was the Monte-Carlo / simulation **1:1 Python reference the GDScript port is built from**; that reference now lives distributed across `engine/` (the CORE: `substrate`/`autoload`/`cross_scale`/`mc_v18`, moved P3 Phase A) and `systems/<subsystem>/sim/` (the per-subsystem sims, moved across P4 slices 2–10). The **final residuals** routed to homes in this pass: `sim/peninsular/` (CI/RS/MS/IP world-tracks + season/accounting) → `systems/overview/sim/`; `sim/personal/{conviction,beliefs,companion}` → `systems/characters/sim/`; `sim/personal/tribunal` + `sim/provincial/home_sanctuary` → `systems/factions/sim/`; `sim/tests/` (the seeded regression + parity suite, CI job `sim-regression`) → `engine/tests/`; and the orientation docs `README.md`/`CONVENTIONS.md`/`mc_v18_walkthrough.md` → `engine/` (as `sim_reference_README.md` / `sim_reference_CONVENTIONS.md` / `mc_v18_walkthrough.md`). All live imports rewritten to `systems.<sub>.sim.*` / `engine.*`; prose refs resolve via `references/restructure_ledger.md`. **Do not recreate `sim/`.** (The confusingly-named `tests/sim/` and `tests/sim_framework/` are unrelated and untouched — see `engine/sim_reference_README.md`.) |
 | `engine/` | Executable-model primary (assembling per ED-IN-0071 P3). Holds the typed Class-C export `engine/engine_params/combat_engine_v1.json` (moved from `references/engine_params/`, 2026-07-16 — GENERATED from `systems/combat/combat_engine_v1/config.py` via `tools/export_engine_params.py`, round-trip-checked in CI; the Godot port regenerates from it) + the prose param tables `engine/params/` (moved from top-level `params/`, 2026-07-16) + the sigma-leverage armature/audit docs. **Is now a Python PACKAGE** (`engine/__init__.py`): the executable engine CORE — `engine/substrate/` (Key substrate), `engine/autoload/` (singleton/registry hub), `engine/cross_scale/` (inter-scale), `engine/mc_v18.py` (campaign driver) — moved from `sim/` (ED-IN-0071 P3 Phase A, 2026-07-16); imported as `engine.substrate` etc. Per-subsystem sims live in `systems/<subsystem>/sim/` (the `sim/` tree is now fully retired — see the `sim/` row) and depend UPWARD on this core (acyclic — autoload is a leaf). Also holds `engine/tests/` (the seeded sim-reference regression + parity suite, CI job `sim-regression`, relocated from `sim/tests/` 2026-07-21) + the `sim_reference_{README,CONVENTIONS}.md` orientation docs + `mc_v18_walkthrough.md`. ⚠️ Historical `sim.{substrate,autoload,cross_scale,mc_v18}` refs in prose/frozen `tests/sim/` are left to the alias map. The dead `engine_audit_harness.py` was retired to `deprecated/engine/` (2026-07-09) — do not resurrect. |
 | `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once — §8. ⚠️ **Measured 2026-08-05 (ED-IN-0147): 36 of 106 modules have zero automated callers** (28 of them the `sim_harness/` prototype cluster); 6 have zero callers of any kind, their only CI presence being compiled by the syntax check. GitHub-dependence is NOT the live issue — only `dashboard_data.py` calls the API, legitimately (§2). |
-| `deprecated/` | **Two things now, and the second was added later — read both.** (1) **MOSTLY EVACUATED 2026-08-05 (ED-IN-0145).** What REMAINS from that era is deliberate and load-bearing: the editorial-ledger archives under `deprecated/archives/editorial*` and `deprecated/canon/`, which are the ED universe that the BLOCKING citation gate (`tools/validate_ed_citations.py`) reads — removing them turns valid citations into NONEXISTENT and destroys the anti-fabrication check (pinned by `tests/valoria/test_evacuation_plan.py`). Everything else from that era is at fork ref `c451bcb`. (2) **THE FORWARD LANDING SITE for retirements, since Jordan's ruling of 2026-08-12** — *"Dead files get moved to deprecated."* (ED-IN-0171). `deprecated/tools/` was recreated on 2026-08-13 by the G2 retirement (ED-IN-0175); "everything else is at the fork" stopped being true then, and this row said otherwise for a commit (ED-IN-0177). ⚠ **The two senses conflict and the conflict is HELD, not resolved:** `tools/evacuation_plan.py`'s `R-DEPRECATED` rule still classifies everything under `deprecated/` as `evacuate`, so the partition-of-record queues the newly-designated landing site for deletion. Not flipped unilaterally — see the rule's comment. Never canonical under either sense. |
+| `deprecated/` | **Where files go when we stop using them.** One rule, applied twice. In 2026-08-05 a large batch was moved out (ED-IN-0145); everything in that batch is recoverable at ref `c451bcb`. Since Jordan's ruling of 2026-08-12 — *"Dead files get moved to deprecated."* (ED-IN-0171) — new ones land here too; `deprecated/tools/` came back on 2026-08-13 (ED-IN-0175). **Two words, one thing:** the code calls this "evacuate" and the prose calls it "retirement". Neither is standard usage — both were coined here, and treating the difference as meaningful is what produced a false alarm in ED-IN-0177, settled by Jordan in ED-IN-0179: *"The completed evacuation IS the retirement of all those files that were live prior... All future retirements are joining already-retired items. There is no contradiction."* So `tools/evacuation_plan.py` marking this whole tree "evacuate" is right — it means *move out of `main`, keep it at a named ref*, which is what we want for anything retired. ⚠ **One real exception, and it works by rule order:** the old editorial-ledger files under `deprecated/archives/editorial*` and `deprecated/canon/` are matched by an earlier rule and kept. The blocking citation check (`tools/validate_ed_citations.py`) reads them to tell a real ID from an invented one; delete them and every valid citation starts reading as fabricated (pinned by `tests/valoria/test_evacuation_plan.py`). Never canonical either way. |
 
 ---
 
@@ -232,6 +232,53 @@ landing site was itself evacuated 2026-08-05 — they are now at fork ref `c451b
   lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
   to that lane's files — avoid a single PR touching unrelated lanes except for genuinely
   cross-cutting `IN` work (like this namespace itself) or resolving a cross-lane collision.
+- **Word choice: idempotent in meaning, idiomatic in choosing (RULED 2026-08-13, Jordan, ED-IN-0179).**
+  Two tests, both applying to *process* vocabulary — how we describe operations on the repo — as much
+  as to design terms:
+  - **Idempotent in meaning.** Reading the word cold, in a later session, must yield the *same*
+    meaning. Re-deriving it is not allowed to change it. This is the binding constraint because
+    **there is no context between sessions.** As Jordan put it: *"every session will need to
+    reinterpret vocabulary used for a particular purpose in another session, and that can create
+    compounding issues since the particular use of vocabulary isn't carried over."*
+  - **Idiomatic in choosing.** Pick the word ordinary usage already supplies for the thing. Then the
+    meaning is carried by the language and survives the reset; a coined word is a pointer to context
+    that does not.
+
+  **The worked failure, which cost real work.** `evacuate` was coined here for "move out of `main`,
+  keep at a named ref" — a thing the plain word **retire** already covers. It is neither idiomatic
+  (not standard usage; the real term of art, *deprecate*, means something else — still shipped, but
+  discouraged) nor idempotent (a later session, reading it cold, derived "queued for deletion",
+  concluded the tree held two conflicting policies, and escalated a non-existent blocker across three
+  surfaces and two PR bodies). Two words for one operation manufactured a distinction that the next
+  reader then tried to honour.
+
+  **How to check yourself, since "be simpler" is unfalsifiable and this is not:** would a reader with
+  no memory of this repo land on your meaning? Is the word used this way *outside* this repo? If
+  either answer is no, use the ordinary word. **Coin nothing that a plain word already covers**; if a
+  term genuinely must be coined, define it where the next session is certain to read it, not where it
+  was invented.
+
+  **DEFINE IT IN BOTH PLACES — prose AND the code that calls it (Jordan, 2026-08-13).** These words
+  name specific functions, processes and methodologies, so a definition that lives only in prose is
+  half a definition: the next session usually meets the term *in code* first — a rule code, a flag, a
+  job name, a hook command — and infers its meaning from the call site. That inference is exactly what
+  went wrong above. So a process term must be defined where it is **invoked**, not only where it is
+  described. The sites that already exist for this, and are the ones to use rather than inventing a
+  new home:
+  - `references/ci_checks_registry.yaml` — every tool has a `role:` line. That is the definition of
+    what the tool's verb *means*, and it is machine-read, so it cannot silently rot away from CI.
+  - the rule/flag string itself — e.g. `evacuation_plan.py`'s `R-DEPRECATED` carries its reason inline
+    (*"where files go when we stop using them — moved out of main, kept at a named ref"*), so anyone
+    reading the classifier's output gets the definition with the verdict.
+  - the tool's module docstring and `--help`, for anything a session runs directly.
+  - `.claude/settings.json` hook commands and CI job names — if the name is the only thing a reader
+    sees, the name has to carry the meaning or point at where it is defined.
+
+  ⚠ **Measured 2026-08-13: 32 distinct process terms are in circulation across ~26,000 uses, and NONE
+  of the six vocabulary registries governs any of them** — every registry in the tree covers
+  design/world vocabulary, so process vocabulary is entirely ungoverned. Not retrofitted (a rename at
+  that volume costs more than it buys); this rule binds **new** coinage, the same no-retrofit posture
+  as the `ED-<LANE>-NNNN` cutover.
 - **Naming gate.** Canonical name is **Solmund** — never **Galbados** (deprecated). Enforced by
   `tools/ci_naming_check.py` (CI + pre-commit) and an edit-time nudge. Definition naming is centralized
   in `references/names_index.yaml`.
