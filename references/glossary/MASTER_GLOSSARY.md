@@ -1362,7 +1362,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **rs_band_crossed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **rs_delta** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
 | **rs_threshold_crossed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
-| **rs_track** | Rendering Stability world-track. | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [threadwork](GLOSSARY_threadwork.md) | 6 | mechanics_index |
+| **rs_track** | Mending Stability world-track. | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [threadwork](GLOSSARY_threadwork.md) | 6 | mechanics_index |
 | **run_accounting** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) | 8 | identifier_census |
 | **run_all** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **run_batch** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [overview](GLOSSARY_overview.md), [victory](GLOSSARY_victory.md) | 4 | identifier_census |

@@ -2727,6 +2727,23 @@ against a working tree I was actively modifying. **Audit a committed ref, not a 
 
 ---
 
+### ⚠ Same-day correction to BOTH reviews' glossary finding — caught by the shipping gate
+
+**"Fresh only by luck" was wrong, and neither the critic nor I caught it.**
+`tests/valoria/test_build_glossary.py::test_committed_output_matches_a_fresh_build` rebuilds the
+glossary and **byte-compares every committed file** inside the BLOCKING pytest suite. Any corpus
+change not followed by a regeneration reds `pytest tests/valoria` — it fired on this branch after my
+own edits.
+
+So the glossary is **enforced, just manually**. What it lacked was an *unattended* refresher, which is
+a much smaller gap. **`mechanics-index` is the genuinely unenforced one** — its only check is
+`--strict` in the warn-only tier, which reports and gates nothing.
+
+I collapsed "has no cron step" into "has no enforcement" and asserted the stronger claim for both.
+The cron step for glossary is still worth keeping — it moves the work off whoever next edits the
+corpus — but it is **convenience, not the closing of a hole**, and "worse than visible staleness"
+does not apply to it.
+
 ## [DONE] ED-IN-0180 — Waves 4+5: the duplication guardrail, and two artifacts nothing refreshed
 
 ### Wave 4 — single-owner bypasses: 14, measured
@@ -2793,6 +2810,8 @@ one level up: not dead scope, but **a live signal with no consumer**, which is d
 and added to the cron — **and both of those were then REVERTED, see ED-IN-0181 above.**
 
 **Then the guard found a second one I had not looked for** — `glossary` also had no scheduled refresher.
+⚠ **But my reading of what that meant was wrong** — see the same-day correction under ED-IN-0182: the
+glossary is enforced by a blocking test, not lucky.
 
 ⚠ **And my fix for it was a no-op, caught by the same review (ED-IN-0182).** I added
 `build_glossary.py` to the cron but **not** `references/glossary/` to the diff-check or `git add`
@@ -2985,6 +3004,14 @@ guard is narrow.
   (93%)**, and **44 of the remaining entries are `open`**. The archive remedy is exhausted; the next
   IN session hits a hard wall and cannot archive its way out. This needs a real disposition — burn
   down open entries, split the lane file, or raise the cap with an explicit ED.
+
+  ⚠ **THREE overflows in one session now (2026-08-13).** The ledger red at 50,523, again at 50,132,
+  and each time the only entries available to archive were this session's own. Live sits at 44,295
+  purely because six of my entries were moved out on the day they were written — so the live ledger
+  does not show the work of the PRs under review, and the narrative lives here and in commit
+  messages instead. **This is not a cap that is slightly too low; it is a register whose live half
+  is 44 open entries and whose churn is one session's output.** A per-entry budget and an
+  open-entry burn-down are both required; raising the cap alone moves the wall.
 
   ⚠ **UPDATE, same session: the wall arrived immediately.** Wave 3's four files pushed the ledger
   to **50,523 / 50,000 — a hard red** — and the only settled ids available to archive were this

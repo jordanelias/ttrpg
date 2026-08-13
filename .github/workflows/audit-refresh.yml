@@ -77,10 +77,15 @@ jobs:
 
       - name: Regenerate the per-subsystem glossary + master term index
         # ADDED 2026-08-13 (ED-IN-0180), and it was found by the guard rather than by inspection.
-        # This family read "fresh" in tools/audit_staleness.py only because a session happened to
-        # run the generator by hand in fdbef6b. Nothing scheduled refreshed it, so its freshness was
-        # luck, not coverage — a worse state than mechanics-index's visible staleness, because the
-        # report said everything was fine.
+        # ⚠ THE ORIGINAL REASON GIVEN HERE WAS WRONG, corrected same-day (ED-IN-0182 addendum).
+        # It said the glossary was "fresh only by luck". It is not: tests/valoria/test_build_glossary.py
+        # ::test_committed_output_matches_a_fresh_build byte-compares every committed glossary file
+        # against a fresh build inside the BLOCKING pytest suite, so any corpus change without a
+        # regeneration reds the shipping gate. The glossary is ENFORCED, just manually.
+        #
+        # This step is therefore a CONVENIENCE — it moves the regeneration off whoever next edits the
+        # corpus — not the closing of a hole. Keeping it, because unattended is better than
+        # attended-on-pain-of-a-red-suite, but the honest reason is smaller than the one first given.
         # ⚠ THE ARTIFACT MUST ALSO REACH THE DIFF-CHECK AND `git add` LISTS BELOW, or this step
         # regenerates the glossary inside the runner and throws it away — the job would report
         # success, the guard would report the family covered, and nothing would ever change.
