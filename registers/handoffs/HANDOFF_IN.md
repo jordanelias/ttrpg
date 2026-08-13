@@ -2746,6 +2746,43 @@ guard is narrow.
   Pre-existing and not touched here; it is the same open-entry backlog as the row above, seen from
   the other side.
 
+### [DONE] ED-IN-0176 — six validators were blocking in CI and ran in no local tier
+
+**Caught by its own failure mode, on this very PR.** `valoria_local --staged` printed *all local
+gates passed*; CI then failed on `build_identifier_census.py --check`, because retiring three tools
+moved `engine_names` 6278 → 6209 and no local tier re-derived it.
+
+**Third recorded instance of one pattern.** `tools/valoria_local.py` already carried two tombstones
+for the identical defect — **ED-IN-0142** (`build_test_register`, "stale 3x in one session") and
+**ED-PC-0040** (`freshness_gate`, "five consecutive local-green commits shipped a stale pin"). Each
+was fixed for its one tool; nobody asked how many others sat in the same position. All six now run
+locally, **report-only**, on the file's own freshness_gate/wf_harness precedent: they scan the whole
+tree, so a blocking local copy would hold an unrelated commit hostage. Cost 4.9s. This also executes
+one of **G11**'s four sub-items (`validate_ed_citations` wired locally).
+
+**My own measurement was short by two, and the guard is what found them.** I measured the gap with a
+regex over `v python3 tools/…` lines — which sees only the `validators` job — and got four. The guard
+derives from `ci_gate_coverage.jobs()` across *all* jobs and immediately reported `ci_golden_modes_check`
+(job `field-goldens`) and `review_core` (job `compliance-check`). **The real residual was six.** A
+hand-rolled scan under-counting a corpus a proper instrument covers is ED-IN-0135's alias-census lesson
+repeating — the argument for writing the guard *before* trusting the sweep.
+
+`review_core` turned out to be genuinely covered, by a `.claude/settings.json` **Stop hook** — a second
+local tier the first guard could not see, so it now reads both surfaces and measures *coverage* rather
+than membership in one list. `ci_golden_modes_check` is a documented exception: **275s (~4.6 min)**, against a list whose every
+other entry is under 5s. *An interim draft of this note said ">8 minutes, still running" — a
+wall-clock glance at a job sharing the box with the test suite. Corrected before commit by letting
+the instrument finish; the habit of quoting an impatient glance as a measurement is the same class
+this lane keeps filing, at the smallest possible scale.*
+
+### Filed, not fixed (this pass)
+
+- **`ci_claim_provenance_check` ignores the `falsifier` field.** The ledger schema has a dedicated
+  `falsifier` key and it is the natural home for `MEASURED-BY:`; the gate reads only `description`,
+  so a correctly-filled entry fails and the author duplicates the text. Hit twice this session.
+  Small, but it changes a BLOCKING gate's scope, so it needs its own expected-delta test rather than
+  a drive-by widening.
+
 ### NEXT, in dependency order (revised by this pass)
 
 - **G5 is now unblocked** — G1+G2+G4 was its stated dependency and **G2 is closed**; only G4

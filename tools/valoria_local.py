@@ -207,6 +207,33 @@ def main(argv):
         # refuse someone else's commit. If it ever becomes blocking, that is Jordan's call with
         # a loud ED-1094 call-out, not a quiet flag change.
         ('scope_ratchet.py',             ['--check'], False),  # scope ceilings + G13 activity control (ED-IN-0112)
+        # ────────────────────────────────────────────────────────────────────────────────
+        # THE CI-ONLY RESIDUAL, CLOSED (ED-IN-0176). Four validators sat in CI's BLOCKING
+        # `validators` job and in no local list, so `valoria_local` could report "all local
+        # gates passed" on a tree CI was about to red. It did exactly that on PR #307: the
+        # identifier census drifted when three tools were retired, local went green, CI failed.
+        #
+        # THIS IS THE THIRD RECORDED INSTANCE OF ONE PATTERN, which is why it is swept rather
+        # than patched. ED-IN-0142 fixed it for `build_test_register` ("the register went stale
+        # 3x in one session and CI caught it every time, because --check could not fail and this
+        # list did not run it"); ED-PC-0040 fixed it for `freshness_gate` ("five consecutive
+        # local-green commits shipped a stale canonical_sha__ pin"). Each was fixed as an
+        # incident. MEASURED here instead: 18 CI validator invocations against this list left
+        # exactly these four unrun, and `tests/valoria/test_gate_coverage.py` now fails on a
+        # fifth (§0.1 point 5 — the guard is the deliverable, not the wiring).
+        #
+        # `compliance_check.py` stays deliberately absent and is NOT part of this residual —
+        # ci_checks_registry.yaml:262 records that call ("local-green != compliance-green").
+        #
+        # Report-only, following the freshness_gate/wf_harness precedent above: all four scan
+        # the WHOLE tree rather than the changeset, so a blocking local copy would hold an
+        # unrelated commit hostage to a file the author is still writing. CI remains the
+        # unbypassable boundary (CLAUDE.md §8) and all four are blocking there, so nothing is
+        # weakened — what changes is that local-green now SEES them. Measured cost: 4.9s total.
+        ('ci_hooks_verifier.py',         [],          False),  # enforcement architecture intact (BLOCKING in CI)
+        ('build_identifier_census.py',   ['--check'], False),  # census + roll-up freshness (ED-IN-0172; BLOCKING in CI)
+        ('validate_ed_citations.py',     [],          False),  # anti-fabrication citation integrity (BLOCKING in CI; plan step G11)
+        ('broken_dependency_checker.py', [],          False),  # ledger path refs resolve (BLOCKING in CI)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

@@ -5948,18 +5948,30 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Guard for tools/ci_gate_coverage.py (ED-IN-0098).",
-   "helper_loc": 2,
+   "helper_loc": 42,
    "helpers": [
     {
      "loc": 2,
      "name": "_live_commands"
+    },
+    {
+     "loc": 23,
+     "name": "_local_check_scripts"
+    },
+    {
+     "loc": 15,
+     "name": "_hook_wired_scripts"
+    },
+    {
+     "loc": 2,
+     "name": "_locally_covered"
     }
    ],
    "lane_derived": true,
    "lanes": [
     "IN"
    ],
-   "loc": 256,
+   "loc": 374,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -6001,7 +6013,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 13,
+   "test_count": 16,
    "tests": {
     "test_a_comment_mentioning_py_compile_does_not_zero_a_jobs_command_list": {
      "assertionless": false,
@@ -6028,6 +6040,11 @@
      "assertions": 2,
      "summary": "sim-regression has no continue-on-error, so a local gate skipping it is skipping a gate."
     },
+    "test_every_blocking_ci_validator_also_runs_locally": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
     "test_every_ci_pytest_root_is_discovered": {
      "assertionless": false,
      "assertions": 1,
@@ -6052,6 +6069,16 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "Pins the live tree against the failure above, not just a fixture."
+    },
+    "test_the_local_check_list_is_actually_readable": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that the next test can assert. An AST walk that silently finds nothing would"
+    },
+    "test_the_parity_guard_can_observe_a_gap": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Positive control: the guard must fail when a blocking validator is absent locally."
     },
     "test_the_two_collapsed_jobs_keep_their_blocking_tiers_apart": {
      "assertionless": false,
@@ -11888,10 +11915,10 @@
   "files_naming_a_module": 114,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 41,
-  "helper_defs": 290,
-  "helper_loc": 2715,
+  "helper_defs": 293,
+  "helper_loc": 2755,
   "ratchet_baselines": 9,
-  "tests": 1365,
+  "tests": 1368,
   "undocumented_files": 0
  }
 }
