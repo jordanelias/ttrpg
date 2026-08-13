@@ -2670,6 +2670,48 @@ never been run.
 
 ---
 
+## [DONE] ED-IN-0178 — Wave 3: the alias plan's foundation EXECUTED, and a control the plan never ran
+
+**Confirmed.** One 1-hop FORK row yields **5 distinct verdicts across 6 consumers**; the hop-count
+and payload-shape claims reproduce exactly. `audit/2026-08-12-alias-index-consolidation/00_plan.md`
+is safe to build Phase A on — its central claim was read off the page and is now measured.
+
+**The finding it does not have.** The plan asks whether consumers disagree about a FORK row. The
+question that matters is the one `test_forked_status.py` calls *the repo's anti-fabrication
+property* — a path that left deliberately must not look like one that never existed — and that file
+proves it for exactly **one** consumer. So every probe here also runs a **control**: a path with no
+ledger row at all.
+
+**Forked-vs-fabricated survives in 5 of 18 (consumer × fork-row) pairs.** `ci_claude_workflow_paths`,
+`vector_audit`, `workbench` and `gen_audit` collapse it on *every* row; `broken_dependency_checker`
+collapses it **conditionally** — `INFO-EVACUATED` at 1 hop, `BROKEN` at 2, and `BROKEN` is what a
+fabricated path returns. Only `pathres` preserves it throughout, which makes it the right
+consolidation target **on evidence**, not just on design.
+
+**Per-pair, not per-consumer — carry this.** The instrument first tracked consumer *names*, on the
+natural assumption that a module either understands `FORK:` or does not. `bdc` refutes it. A
+per-consumer roster would have had to call `bdc` wholly safe or wholly broken and both are false.
+**The granularity of a measurement decides which findings are expressible** — it is not a
+presentation choice.
+
+**Two corrections to my own work, since they are the method.** The instrument was wrong *before* the
+plan was: its first version modelled `bdc._resolve_remap()` as the decision and reported
+`params/core.md` as "mapped", contradicting the plan's BROKEN prediction — the plan was right, and
+the helper is not the decision (`bdc:217-227` tests `all_files` membership first). And I reported
+"only `pathres` and `bdc` preserve the distinction" before running the strict comparison; that is
+too generous to `bdc`.
+
+**Deliberately NOT a conformance gate.** Failing on today's 13 collapsed pairs would red every
+unrelated PR immediately — ED-IN-0112 already paid for that mistake. The ratchet pins the 5 working
+pairs and fails only when one stops working. **Phase A2 grows it.** Nothing here pre-empts Phase A1's
+five semantics, still HELD.
+
+**Not measured, and named so the next wave inherits it:** the 116 header-less FORK rows (parser
+fidelity, the next thing a capture must prove), duplicate-key precedence, and the existence-test
+disagreement. All real per the plan, none exercised by these four probes; extending `PROBES` is the
+cheap way to settle them.
+
+---
 ## [DONE] ED-IN-0173/0174/0175 — Wave 1+2: the merge's own compliance debt, and G2 CLOSED (2026-08-13)
 
 **Session shape.** Jordan asked for the backlog partitioned into what needs no ruling, then ran as
@@ -2735,6 +2777,15 @@ guard is narrow.
   (93%)**, and **44 of the remaining entries are `open`**. The archive remedy is exhausted; the next
   IN session hits a hard wall and cannot archive its way out. This needs a real disposition — burn
   down open entries, split the lane file, or raise the cap with an explicit ED.
+
+  ⚠ **UPDATE, same session: the wall arrived immediately.** Wave 3's four files pushed the ledger
+  to **50,523 / 50,000 — a hard red** — and the only settled ids available to archive were this
+  session's own six. They were archived (live now **44,295 / 89%**), which works but means the live
+  ledger no longer shows the work of the PR under review; the narrative lives here and in the commit
+  messages instead. **And the cause is not only the 44 open entries: my own six entries totalled
+  6,227 tokens, 12% of the whole file.** Entry verbosity is a real contributing cause and it is mine.
+  A disposition should address both — burn down the open backlog *and* set a per-entry budget — not
+  just raise the cap.
 
   ⚠ **Do not read 49,628 → 46,560 as "archiving bought 3,068 tokens" — an earlier draft of this note
   invited exactly that, and it is a confounded pair (§0.1 point 4, caught by adversarial review,
