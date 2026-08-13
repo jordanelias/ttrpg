@@ -67,15 +67,36 @@ def registry():
 # ------------------------------------------------------------------------------------
 @pytest.mark.slow
 def test_a_known_dead_tool_still_reports_orphaned(registry):
-    """`index_gen`/`doc_index_gen`/`atomizer` are dead (plan G2 retires them; its landing
-    site is what is blocked, not its finding). If the census cannot see THEM it cannot see
-    anything, because they are the four the compile list was hiding."""
+    """The census must be able to see a dead tool at all. If it cannot see THIS one it cannot
+    see anything, because these are the tools the compile list was hiding.
+
+    SUBJECT NARROWED 2026-08-13 (ED-IN-0175), and the narrowing is the honest move rather than
+    a weakening. This pinned four tools; three of them — `index_gen`, `doc_index_gen`,
+    `atomizer` — were the ones G2 was waiting on a landing site for, and Jordan's ruling
+    ("Dead files get moved to deprecated.", ED-IN-0171) supplied it. They now live at
+    `deprecated/tools/` and the apparatus registry does not census `deprecated/`, so pinning
+    them here would assert a property of a tree the instrument does not read.
+
+    `valoria_rename.py` is the RIGHT survivor to carry the assertion, not merely the leftover:
+    it is live, it is genuinely orphaned, and — per ED-IN-0159 §1.7 — it must NOT be retired,
+    because it is the designated executor of `proposals/canonical_nomenclature_v1.md:231` and
+    looks dead only through the `py_compile` artefact that G9 fixed. So the guard keeps a
+    subject that is dead-by-census and alive-by-intent, which is exactly the discrimination
+    the census has to get right.
+    """
     orphans = set(registry.get('orphaned_no_cli') or [])
-    for dead in ('tools/index_gen.py', 'tools/doc_index_gen.py', 'tools/atomizer.py',
-                 'tools/valoria_rename.py'):
-        assert dead in orphans, (
-            f'{dead} has no importer and no invoker but is not reported orphaned. '
-            'If the compile gate started naming tools again, that is the cause.')
+    dead = 'tools/valoria_rename.py'
+    assert dead in orphans, (
+        f'{dead} has no importer and no invoker but is not reported orphaned. '
+        'If the compile gate started naming tools again, that is the cause.')
+
+    # The retired three must NOT reappear under tools/ — that would mean the retirement was
+    # reverted without this guard noticing, and the census would silently regain a subject
+    # it no longer reads.
+    for retired in ('tools/index_gen.py', 'tools/doc_index_gen.py', 'tools/atomizer.py'):
+        assert not os.path.exists(os.path.join(ROOT, retired)), (
+            f'{retired} is back under tools/ — ED-IN-0175 retired it to deprecated/tools/. '
+            'Either the move was reverted or a new file reused a retired name.')
 
 
 def test_the_compile_gate_names_no_individual_tool(workflow_text):

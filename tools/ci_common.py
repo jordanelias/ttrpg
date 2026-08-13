@@ -447,11 +447,15 @@ def load_yaml(path, default=_RAISE):
     honestly. An adversarial pass re-earned it here within one commit.
 
     Migrated: 12 call sites, both idioms — `yaml.safe_load(open(x))` and
-    `with open(x) as f: y = yaml.safe_load(f)`. **52 bare `yaml.safe_load` calls
+    `with open(x) as f: y = yaml.safe_load(f)`. **44 bare `yaml.safe_load` calls
     remain in `tools/`**, each of which does something this helper does not (loads
     a stream, a string, a StringIO, or wants the exception on a missing file).
     `tests/valoria/test_ci_common_primitives.py` pins that count, so it can only
-    go down.
+    go down. **52 -> 44 on 2026-08-13 by RETIREMENT, not migration** (ED-IN-0175):
+    `atomizer`/`doc_index_gen`/`index_gen` left `tools/` for `deprecated/tools/`
+    carrying 8 bare calls with them. Worth distinguishing — a ratchet that falls
+    because its corpus shrank has not adopted anything, and reading it as progress
+    would overstate the migration by 8 sites.
 
     PyYAML is imported INSIDE the function, deliberately. `ci_common` is
     imported by stdlib-only blocking gates, and a module-level `import yaml`

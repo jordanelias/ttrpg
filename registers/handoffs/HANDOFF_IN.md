@@ -2667,3 +2667,108 @@ files**, the **`sim_harness` promote-or-retire call**, and **G2's retirement des
 (ED-IN-0163). The plan's own recommendation stands: **run T4 (the mechanism census) before ruling
 #1/#1b/#2/#8** — it prices exactly those questions behaviourally, and it already exists and has
 never been run.
+
+---
+
+## [DONE] ED-IN-0173/0174/0175 — Wave 1+2: the merge's own compliance debt, and G2 CLOSED (2026-08-13)
+
+**Session shape.** Jordan asked for the backlog partitioned into what needs no ruling, then ran as
+three PRs: **1+2 here**, 3 alone, 4+5 together.
+
+### G2 IS DONE — and the guard conflict everyone predicted does not exist
+
+Jordan ruled *"Dead files get moved to deprecated."* (**ED-IN-0171**), resolving **ED-IN-0163**.
+`atomizer`/`doc_index_gen`/`index_gen` → `deprecated/tools/`. **The 37 grandfathered
+`systems/**/*_index.md` outputs are untouched and still HELD** — the generator retires, not its
+artifacts.
+
+**The result worth carrying forward is a refutation of my own prior record.** ED-IN-0171 stated —
+and the wave plan handed to me repeated — that `tests/valoria/test_evacuation_plan.py:166` forbids
+the destination, so executing the ruling *requires* amending a pinned guard. It does not.
+I made the move and ran the suite **before** editing anything: **32/32 pass, unamended.** `:166`
+binds `p['moves']`, the destinations the `evacuation_plan` **tool** computes from its own
+relocation rules; a `git mv` never populates that dict. `:98`'s pin still holds, and is in fact the
+same verdict the moved files now receive — `('evacuate', 'R-DEPRECATED', 'history — the evacuation
+tag preserves it')`, which was never a contradiction of the ruling: preserved-as-history *is* the
+disposition.
+
+**The generalisable bit, and it cuts against a habit this lane has been rewarded for.** CLAUDE.md
+§0.1 point 3 says name the falsifier. The failure here was subtler: the falsifier *was* named, in
+ED-IN-0171, and then **not run before preparing to edit the thing it guards**. A predicted red is
+not evidence. Had I "carefully, deliberately, flagged-not-routed-around" narrowed that pin, I would
+have weakened a guard for a conflict that never existed and left a tombstone explaining it. **Run
+the guard against the change before you touch the guard.**
+
+### Two defects the previous merge created, both mine
+
+- **ED-IN-0173** — `audit/2026-08-12-alias-index-consolidation/00_plan.md` cited `ED-IN-0173` while
+  `id_reservations.yaml` read `next_free: 173`. Cited, never allocated; the register would have
+  handed 0173 to the next unrelated allocation — precisely the collision the lane namespace exists
+  to prevent. Allocated retroactively (173 → 176). The plan's `## Status:` is **flipped to RATIFIED
+  as plan of record** per ED-1094 (Jordan confirmed the flip was mine to make); **Phase A1's five
+  semantics questions stay HELD** — ratifying a plan is not ratifying the rulings it requests.
+- **ED-IN-0174** — why the BLOCKING anti-fabrication gate missed it, and **the obvious answer is
+  wrong**. Everyone's reading, mine included, was "`validate_ed_citations` excludes `audit/` by
+  mandate" via `WORKING_PREFIXES`. **A fix aimed there would have landed and changed nothing.**
+  `SCAN_PREFIXES` (:120) is `('canon/','designs/','systems/','references/')` — live `audit/` is
+  never *selected*, so the mandate exclusion never gets the chance to apply. Measured: the gate
+  prints `Scanning 285 doc(s)`, none under `audit/`.
+  **Not fixed by widening scope** — the mandate is right on its merits (an audit citing an *open* ED
+  is normal), so widening trades a blind spot for false positives on a blocking gate. The new guard
+  `tests/valoria/test_audit_plan_ids_are_allocated.py` checks the one property always wrong
+  regardless of status: citing a number nobody allocated. Verified to fail on the pre-fix tree.
+
+**Header scope is evidenced, not assumed.** A full-text sweep of 1,143 files returned five hits and
+**all five were artifacts** — including `HANDOFF_IN.md:667`, which flagged the sentence
+"**ED-WR-0010 NOT allocated**", i.e. the text documenting the non-allocation. Co-occurrence of a
+token is not an assertion; a `## Date:` header is a structured claim. That measurement is why the
+guard is narrow.
+
+### Filed, not fixed
+
+- **Two more dead-scope instances, in the provenance gate itself** — `WORKING_PREFIXES` names
+  `designs/audit/` and `SCAN_PREFIXES` names `designs/`, and `designs/` was retired 2026-07-19.
+  ED-IN-0159 §1.6's pattern inside the gate that guards provenance. **Triage input for G5.**
+- ⚠ **The IN ledger has run out of archivable slack.** It was at **49,628 / 50,000 (99.3%)** on
+  arrival — one entry from a blocking red for whoever committed next, unrelated to their change.
+  Archiving every settled id (5 of them: 0163, 0169, 0170, 0171, 0172) only reaches **46,560
+  (93%)**, because **44 of the remaining entries are `open`**. The archive remedy is exhausted;
+  the next IN session hits a hard wall and cannot archive its way out. This needs a real
+  disposition — burn down open entries, split the lane file, or raise the cap with an explicit ED
+  — and it is not a next-session-discovers-it-the-hard-way problem.
+- **`build_engine_atlas` is order-coupled to prose edits, and the gate is blocking.** Its
+  "bare occurrences" table counts identifier hits across the whole repo, so editing *this handoff*
+  invalidated a freshly-regenerated atlas and cost a full 10-minute suite run to discover. Working
+  rule until it is fixed: **make every prose edit first, regenerate generated artifacts last.**
+  This is the generated-artifact gap G6 should absorb — "split the document" is not an available
+  remedy for a file no human writes.
+- `scope_ratchet` reports **REGRESSED** on `ed.stale` (+115) and `ed.needs_jordan_stale` (+56).
+  Pre-existing and not touched here; it is the same open-entry backlog as the row above, seen from
+  the other side.
+
+### NEXT, in dependency order (revised by this pass)
+
+- **G5 is now unblocked** — G1+G2+G4 was its stated dependency and **G2 is closed**; only G4
+  remains. Feed it the two dead-scope instances above plus ED-IN-0164's 25 zero-match rows. It must
+  encode ED-IN-0163's anticipatory rule or its first run demands deleting every correct
+  forward-looking policy row.
+- **G4 folds into alias-plan Phase A2** — do it once, there, and only after **Wave 3** executes the
+  five-parser FORK divergence the alias plan currently asserts from reading rather than running.
+- **G6 correction.** The §1.8 finding needs restating before execution: coverage_matrix /
+  patch_register / module_contracts are **already single-sourced**, so that half is closed. The
+  surviving disagreement is `references/propagation_map.md` at **three** values — gate hardcodes
+  `15_000`, `atomization_rules.yaml:164` declares `10000`, and the stale duplicate block at `:230`
+  says `5000`. Also absorb the generated-artifact gap: caps apply where "split the document" is not
+  an available remedy.
+- **G11 unblocked**, four independent sub-items, all re-verified live this session: `systems/combat/sim`
+  still in `export_sim_params.SCAN_DIRS`; `validate_ed_citations` in CI (`valoria-ci.yml:127`) but
+  **absent from `tools/valoria_local.py`**; 3 broken-anchor probes; the `ci_names_consistency`
+  migration.
+- **G10 is not executable** and its stated dependency is itself a plan defect: it reads "after S1",
+  but **Track S has no S1** — the parenthetical means #304's **B1**. It waits on other lanes.
+
+**HELD FOR JORDAN, unchanged:** #304's six (**#0** `net`/`ob`, gating the degree family 16→1, plus
+#1, #1b, #2, #7, #8), the **37 grandfathered `*_index.md` files**, the **`sim_harness`
+promote-or-retire call**, and **alias-plan Phase A1's five semantics**. **G2's destination is no
+longer on this list** — ruled and executed. The plan's standing recommendation is unchanged: **run
+T4 before ruling #1/#1b/#2/#8**; it prices exactly those questions and has never been run.

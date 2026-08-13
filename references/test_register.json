@@ -96,6 +96,69 @@
     }
    }
   },
+  "test_audit_plan_ids_are_allocated.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "A document header may not cite an `ED-<LANE>-NNNN` that was never allocated (ED-IN-0174).",
+   "helper_loc": 36,
+   "helpers": [
+    {
+     "loc": 4,
+     "name": "lane_next_free"
+    },
+    {
+     "loc": 7,
+     "name": "header_ed_ids"
+    },
+    {
+     "loc": 12,
+     "name": "check_header"
+    },
+    {
+     "loc": 13,
+     "name": "_iter_docs"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 184,
+   "modules_under_test": [
+    "references",
+    "references/",
+    "registers/handoffs",
+    "systems",
+    "systems/",
+    "systems/references"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_body_mentions_are_deliberately_out_of_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The measured false-positive class \u2014 see the module docstring. Not an oversight."
+    },
+    "test_no_doc_header_cites_an_unallocated_ed": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": null
+    },
+    "test_positive_and_negative_controls": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_checker_reproduces_the_ED_IN_0173_defect": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE FALSIFIER. The exact pre-fix header against the exact pre-fix register state."
+    }
+   }
+  },
   "test_battle_concluded_key.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -3762,7 +3825,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 109,
+   "loc": 130,
    "modules_under_test": [
     "tools",
     "tools/",
@@ -3781,8 +3844,8 @@
    "tests": {
     "test_a_known_dead_tool_still_reports_orphaned": {
      "assertionless": false,
-     "assertions": 1,
-     "summary": "`index_gen`/`doc_index_gen`/`atomizer` are dead (plan G2 retires them; its landing"
+     "assertions": 2,
+     "summary": "The census must be able to see a dead tool at all. If it cannot see THIS one it cannot"
     },
     "test_live_validators_are_not_orphaned": {
      "assertionless": false,
@@ -11819,16 +11882,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 154,
+  "files": 155,
   "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 113,
+  "files_naming_a_module": 114,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 41,
-  "helper_defs": 286,
-  "helper_loc": 2679,
+  "helper_defs": 290,
+  "helper_loc": 2715,
   "ratchet_baselines": 9,
-  "tests": 1361,
+  "tests": 1365,
   "undocumented_files": 0
  }
 }
