@@ -2056,7 +2056,6 @@ entries:
   runs:
   - skills/valoria-vector-audit/scripts/vector_audit.py
   - tools/build_apparatus_registry.py
-  - tools/mechanics_index_gen.py
   - tools/observability/build_decisions.py
   - tools/observability/build_glossary.py
   - tools/observability/build_graph.py

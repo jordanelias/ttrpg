@@ -11,6 +11,19 @@ hand.
 That is the ED-IN-0159 §1.6 shape one level up: not dead scope, but a live signal with no consumer.
 A staleness report nobody is obliged to answer is decoration.
 
+⚠ AND THE OBVIOUS FIX WAS DESTRUCTIVE, which is the second half and the more useful one
+(ED-IN-0181). I wired that generator's `--update` into the cron and ran it. It reported success.
+It also round-tripped the whole register through a YAML loader/dumper and stripped **39 comment
+lines to 0, losing 5,081 characters** of section headers and repointing rationale — while its own
+`--help` calls the flag "Write drift_report back into mechanics_index.yaml". Reverted; the cron
+step was added in 04e0289 and removed in the next commit, before it ever ran; the family now
+declares NO refresher, with the
+reason recorded at the declaration.
+
+The lesson generalises past this tool: **a `--update` flag's description is not its effect.**
+Before scheduling any generator, run it once and diff for what it removed, not only for what it
+wrote. A weekly unattended write is the worst possible place to discover the difference.
+
 THE JOIN. Each family now declares a `refresher`; this test checks that script is actually run by
 `.github/workflows/audit-refresh.yml`. It is the same both-directions join
 `broken_dependency_checker` already performs between `ci_checks_registry.yaml` and the CI workflow,
@@ -33,8 +46,13 @@ import audit_staleness as ast_mod  # noqa: E402
 WORKFLOW = os.path.join(ROOT, '.github', 'workflows', 'audit-refresh.yml')
 
 
+# NAMED FOR THE FILE IT READS, not `workflow_text` (ED-IN-0181). That name already exists in
+# tests/valoria/test_compile_is_not_invocation.py where it holds valoria-ci.yml — a DIFFERENT
+# file. Two fixtures, one name, two meanings is the same defect this session spent the day on,
+# at fixture scope; the duplicate-helper gate caught it, and the fix is to say which workflow,
+# not to share a helper that was never shared logic.
 @pytest.fixture(scope='module')
-def workflow_text():
+def audit_refresh_yaml():
     assert os.path.exists(WORKFLOW), f'{WORKFLOW} is gone — nothing refreshes anything'
     return open(WORKFLOW, encoding='utf-8').read()
 
@@ -57,7 +75,7 @@ def test_every_declared_refresher_exists_on_disk():
             f"family {fam['name']!r} names refresher {gen}, which is not in the tree")
 
 
-def test_every_refreshable_family_is_actually_run_by_the_cron(workflow_text):
+def test_every_refreshable_family_is_actually_run_by_the_cron(audit_refresh_yaml):
     """THE REGRESSION. Declaring a refresher the cron never invokes is the same blind spot with
     extra paperwork."""
     missing = []
@@ -65,7 +83,7 @@ def test_every_refreshable_family_is_actually_run_by_the_cron(workflow_text):
         gen = fam.get('refresher')
         if gen is None:
             continue
-        if gen not in workflow_text:
+        if gen not in audit_refresh_yaml:
             missing.append((fam['name'], gen))
     assert not missing, (
         'family/families declare a refresher that .github/workflows/audit-refresh.yml never runs:\n  '
@@ -73,10 +91,10 @@ def test_every_refreshable_family_is_actually_run_by_the_cron(workflow_text):
         + '\n\nAdd the step to the cron, or set refresher=None and say why it is frozen.')
 
 
-def test_the_join_is_not_vacuous(workflow_text):
+def test_the_join_is_not_vacuous(audit_refresh_yaml):
     """Assert that it asserted — a workflow that ran nothing would pass the test above trivially
     only if every family were frozen, so pin that the cron really does invoke generators."""
-    invoked = set(re.findall(r'python3 ([\w/.\-]+\.py)', workflow_text))
+    invoked = set(re.findall(r'python3 ([\w/.\-]+\.py)', audit_refresh_yaml))
     assert len(invoked) >= 5, (
         f'audit-refresh.yml invokes only {len(invoked)} generator(s): {sorted(invoked)}. '
         f'The cron was gutted, or the parse broke.')
@@ -84,21 +102,51 @@ def test_the_join_is_not_vacuous(workflow_text):
     assert declared & invoked, 'no declared refresher matches anything the cron runs'
 
 
-def test_mechanics_index_specifically_is_covered(workflow_text):
-    """The one that was missing. Named explicitly so a future edit that drops it fails loudly
-    rather than reverting to the reported-but-never-fixed state."""
+def test_mechanics_index_is_NOT_wired_because_its_generator_is_destructive(audit_refresh_yaml):
+    """The inverse of what this test asserted an hour ago, and the inversion is the finding.
+
+    I wired `mechanics_index_gen.py --update` into the cron, ran it, and it looked fine: the tool
+    printed `[OK] Wrote drift_report back` and the diff was large but plausible for a register 32
+    files behind. It was not fine. `--update` documents itself as writing the drift report back;
+    it actually round-trips the entire YAML through a loader/dumper and **silently strips every
+    comment** — measured on the real file, **39 comment lines to 0 and 5,081 characters gone**,
+    including the section headers and the inline notes recording why individual paths were
+    repointed.
+
+    Scheduling that weekly would have deleted hand-written prose unattended, in a PR nobody reads
+    closely because "it is just a regeneration". Reverted in the commit after the one that added it, before the cron ever fired.
+
+    So the honest state is: mechanics-index has NO refresher, keeps reporting stale, and the fix is
+    a code change making the generator comment-preserving — not a cron line. This test pins that,
+    so nobody re-wires it from the tempting half of the story.
+    """
     fam = next(f for f in ast_mod.FAMILIES if f['name'] == 'mechanics-index')
-    assert fam.get('refresher') == 'tools/mechanics_index_gen.py'
-    assert 'tools/mechanics_index_gen.py --update' in workflow_text, (
-        'the mechanics index is back to being validated but never regenerated. `--strict` in '
-        'valoria-ci.yml only REPORTS drift; `--update` in audit-refresh.yml is what fixes it.')
+    assert fam.get('refresher') is None, (
+        'mechanics-index declares a refresher again. If mechanics_index_gen.py was made '
+        'comment-preserving, prove it first — regenerate and assert the comment count is '
+        'unchanged — then wire it and update this test.')
+    # Match a `run:` LINE, not the substring. The first version of this assertion checked
+    # `'--update' not in audit_refresh_yaml` and failed on the workflow's own comment EXPLAINING why
+    # --update is absent — prose about a thing counted as the thing, at small scale, in a test
+    # written minutes after recording that exact class twice (ED-IN-0180's grep-vs-AST and the
+    # HANDOFF_IN "ED-WR-0010 NOT allocated" false positive). It is a persistent reflex, not a
+    # one-off, which is why it is written down here rather than quietly fixed.
+    runs = [ln for ln in audit_refresh_yaml.splitlines() if ln.strip().startswith('run:')]
+    offenders = [ln.strip() for ln in runs if 'mechanics_index_gen' in ln]
+    assert not offenders, (
+        f'a mechanics_index_gen invocation is back in audit-refresh.yml: {offenders}. '
+        f'Its --update flag strips every comment from the register it writes (ED-IN-0181).')
 
 
 def test_a_frozen_family_is_allowed_but_must_be_explicit():
     """npc-audit points at a frozen historical artifact. The rule is that it says so."""
-    frozen = [f['name'] for f in ast_mod.FAMILIES if f.get('refresher') is None]
-    assert frozen, 'expected at least one deliberately-frozen family (npc-audit)'
-    for name in frozen:
-        assert name == 'npc-audit', (
-            f'{name} declares no refresher. If it is genuinely frozen say so here; if it just '
-            f'lacks one, that is the mechanics-index defect recurring.')
+    frozen = {f['name'] for f in ast_mod.FAMILIES if f.get('refresher') is None}
+    # npc-audit  — a frozen historical artifact; nothing should regenerate it.
+    # mechanics-index — NOT frozen: it has no refresher because its generator is destructive
+    #   (`--update` strips every comment, ED-IN-0181). It stays stale on purpose until the
+    #   generator is fixed. Listed here so the reason is visible, not so the gap is excused.
+    expected = {'npc-audit', 'mechanics-index'}
+    assert frozen == expected, (
+        f'families without a refresher changed: {sorted(frozen)}, expected {sorted(expected)}. '
+        f'A new one means either a genuinely frozen artifact — say so here — or the '
+        f'reported-but-never-fixed defect recurring.')

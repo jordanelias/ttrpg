@@ -150,7 +150,13 @@ FAMILIES = [
     },
     {
         "name": "mechanics-index",
-        "refresher": "tools/mechanics_index_gen.py",
+        # NO REFRESHER — and this is a defect being recorded, not a frozen artifact (ED-IN-0181).
+        # `mechanics_index_gen.py --update` says it writes the drift report back; it actually
+        # round-trips the whole YAML and strips EVERY comment (measured: 39 -> 0, 5,081 chars).
+        # It was briefly wired into audit-refresh.yml and removed in the same commit. This family
+        # will keep reporting stale, correctly: the drift is real and the fix is to make the
+        # generator comment-preserving, not to schedule a destructive write.
+        "refresher": None,
         "artifact_paths": ["registers/mechanics_index.yaml"],
         # Broad systems/ scope (no cheaply-determinable mechanics-relevant subset).
         # `designs/` DROPPED (OI-53a, 2026-07-29) — retired, resolved to nothing;

@@ -2695,6 +2695,35 @@ baseline **14**.
 
 Report-only, reds on day one by design — those 14 are the finding, not a regression.
 
+### ⚠ ED-IN-0181 — Wave 5's fix was DESTRUCTIVE, and the gate caught it, not me
+
+**Read this before touching `mechanics_index_gen.py`.** Wave 5 regenerated `mechanics_index.yaml`
+with `--update` and added that command to the weekly cron. The tool printed `[OK] Wrote drift_report
+back` and produced a diff that looked plausible for a register 32 files behind.
+
+It was destructive. `--update` says it writes the drift report back; it round-trips the **entire
+YAML** through a loader/dumper and **strips every comment**. Measured: **39 comment lines → 0,
+5,081 characters gone** — section headers and the inline notes recording why individual paths were
+repointed. The `notes:` *fields* survived (71 both sides), which is exactly what made the diff look
+survivable at a glance; the losses were all in comments, invisible to any field-level check.
+
+**Reverted — added in `04e0289`, removed in the next commit, before the cron ever fired.** mechanics-index now
+declares `refresher=None` with the reason at the declaration and keeps reporting stale — honest,
+because the drift is real and the fix is making the generator comment-preserving, not a cron line.
+
+**Why this was worse than an ordinary bug:** it was an *unattended weekly write*. It would have
+deleted hand-written prose every Monday in an auto-opened PR nobody reads closely, compounding
+silently. **A flag's description is not its effect — before scheduling a generator, run it once and
+diff for what it REMOVED, not only for what it wrote.**
+
+**How it was caught, which is the part that worked.** `pytest` went red on
+`test_no_retired_tree_pointers_remain_in_the_mechanics_index` — and *not* because retired pointers
+appeared. The opposite: the regeneration deleted the excused occurrences that test used as its own
+positive control, so it failed with *"no excused occurrences found — the two exclusions above are
+now untested"*. A guard written to prove it could tell a live pointer from a documented absence
+detected that its own evidence had been destroyed. §0.1 point 2 paying out in a direction nobody
+designed for.
+
 ### Wave 5 — the brief's assumption was inverted by measurement
 
 The plan said *"two carry the pre-change orphan set and will self-correct on their cron — worth
@@ -2704,7 +2733,7 @@ families are on the weekly cron and self-correct. **`mechanics-index` was on not
 Its generator is wired into CI as `--strict`, which only **validates** and is warn-only — so drift was
 reported every run and acted on by nobody, reaching **32 files behind**. That is ED-IN-0159 §1.6's shape
 one level up: not dead scope, but **a live signal with no consumer**, which is decoration. Regenerated
-and added to the cron.
+and added to the cron — **and both of those were then REVERTED, see ED-IN-0181 above.**
 
 **Then the guard found a second one I had not looked for** — `glossary` also had no scheduled refresher.
 It read *fresh, drift=0* only because a session ran the generator by hand in `fdbef6b`. **That is worse

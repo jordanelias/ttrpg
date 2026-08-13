@@ -33,7 +33,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 HARNESS = os.path.join(ROOT, 'audit', '2026-08-13-fork-divergence-harness', 'fork_divergence.py')
 
 
-def _load():
+def _load_fork_divergence_module():
+    # Not `_load` — that bare name is already defined in 12 other test modules, each loading
+    # something different (ED-IN-0181). A helper name that says nothing is a collision waiting
+    # for the duplicate-helper gate to find it.
     spec = importlib.util.spec_from_file_location('fork_divergence', HARNESS)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -45,7 +48,7 @@ def fd():
     if not os.path.exists(HARNESS):
         pytest.fail(f'the instrument is gone: {HARNESS}. A ratchet without its instrument is not '
                     f'a passing test, it is an absent one.')
-    return _load()
+    return _load_fork_divergence_module()
 
 
 @pytest.fixture(scope='module')

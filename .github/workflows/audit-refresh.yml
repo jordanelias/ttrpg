@@ -83,15 +83,19 @@ jobs:
         # report said everything was fine.
         run: python3 tools/observability/build_glossary.py
 
-      - name: Regenerate the mechanics index drift report
-        # ADDED 2026-08-13 (ED-IN-0180). This family was the ONLY one of the six that
-        # tools/audit_staleness.py reported stale which nothing refreshed. The tool is both a
-        # validator and a generator; CI ran only its VALIDATOR half (`--strict`, warn-only in
-        # validators-report, valoria-ci.yml:177), so the drift was reported every run and never
-        # acted on — 32 files behind by the time anyone looked. A gate that reports a staleness
-        # it is not wired to fix is the same shape as the dead-scope class in ED-IN-0159 §1.6:
-        # the signal exists and nothing consumes it. `--update` is the generator half.
-        run: python3 tools/mechanics_index_gen.py --update
+      # NO mechanics-index STEP HERE, DELIBERATELY (ED-IN-0181, and it was added then removed
+      # in the next commit, before it ever fired). `tools/mechanics_index_gen.py --update` documents itself as "Write
+      # drift_report back into mechanics_index.yaml" — a narrow write. It is not: it round-trips
+      # the whole YAML through a loader/dumper and SILENTLY STRIPS EVERY COMMENT. Measured on the
+      # real file: 39 comment lines -> 0, 5,081 characters lost, including the section headers and
+      # the inline notes recording why particular paths were repointed. Running it weekly would
+      # have destroyed that prose on a schedule, unattended, in a PR nobody reads closely because
+      # "it is just a regeneration".
+      #
+      # So mechanics-index has NO refresher until the generator preserves comments, and
+      # tools/audit_staleness.py records that with a reason rather than leaving the field blank.
+      # It will keep reporting stale. That is honest: the drift is real and the fix is a code
+      # change to the generator, not a cron line.
 
       - name: Emit the vector-audit's structural findings feed (implied-missing + isolates)
         # The audit's UNIQUE cross-graph findings (Mode B implied-but-missing connections + Mode H
