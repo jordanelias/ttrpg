@@ -4,7 +4,7 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**124 apparatuses** — claude-agent: 1, claude-workflow: 1, hook: 4, skill-script: 10, tool: 105, workflow: 3 · **8 orphaned**.
+**125 apparatuses** — claude-agent: 1, claude-workflow: 1, hook: 4, skill-script: 10, tool: 106, workflow: 3 · **8 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
@@ -39,7 +39,7 @@
 | `tools/freshness_gate.py` | `references/canonical_sources.yaml` (yaml) | yes | ci:valoria-ci.yml |
 | `tools/link_values_pointers.py` | `value_pointer_links.json` (json) | yes | tool:imported |
 | `tools/observability/build_decisions.py` | `decisions.json` (json); `decisions_data.js` (js); `DECISIONS.md` (markdown) | yes | ci:audit-refresh.yml, ci:dashboard.yml, tool:imported |
-| `tools/observability/build_glossary.py` | `glossary.json` (json); `<name>` (unknown) | yes | tool:imported |
+| `tools/observability/build_glossary.py` | `glossary.json` (json); `<name>` (unknown) | yes | ci:audit-refresh.yml, tool:imported |
 | `tools/observability/build_graph.py` | `graph.json` (json); `graph_data.js` (js); `console.html` (html) | yes | ci:audit-refresh.yml, skill:valoria-vector-audit |
 | `tools/observability/build_lexicon.py` | `lexicon.json` (json); `lexicon_data.js` (js) | yes | tool:imported |
 | `tools/observability/build_proposals.py` | `proposals.json` (json); `PROPOSALS.md` (markdown) | yes | ci:audit-refresh.yml, tool:imported |
@@ -92,7 +92,7 @@
 | `tools/hook_naming_guard.py` | — | yes | hook:claude |
 | `tools/join_audit_workings.py` | `<out>` (unknown) | yes | tool:imported |
 | `tools/m1_acceptance.py` | — | yes | ci:dashboard.yml |
-| `tools/mechanics_index_gen.py` | `<stream>` (yaml); `<index_path>` (unknown) | yes | ci:valoria-ci.yml |
+| `tools/mechanics_index_gen.py` | `<stream>` (yaml); `<index_path>` (unknown) | yes | ci:audit-refresh.yml, ci:valoria-ci.yml |
 | `tools/observability/build_incompleteness.py` | `<pj>` (unknown); `<pjs>` (unknown); `<pmd>` (unknown) | yes | ci:audit-refresh.yml, ci:dashboard.yml, skill:valoria-vector-audit, tool:imported |
 | `tools/pathres.py` | — | yes | tool:imported |
 | `tools/scope_ratchet.py` | `<path>` (unknown) | yes | ci:dashboard.yml, ci:valoria-ci.yml, tool:imported |
@@ -100,6 +100,7 @@
 | `tools/session_status.py` | — | yes | hook:claude |
 | `tools/sim_harness/adapters/pr119_governance/campaign_stats.py` | — | yes | — |
 | `tools/sim_harness/harness.py` | — | yes | — |
+| `tools/single_owner_check.py` | — | yes | tool:imported |
 | `tools/trace_execution_phases.py` | `<json>` (unknown) | yes | — |
 | `tools/validate_ed_citations.py` | — | yes | ci:valoria-ci.yml, skill:valoria-editorial-register, tool:imported |
 | `tools/valoria_local.py` | — | yes | ci:valoria-ci.yml, hook:pre-commit |
@@ -162,7 +163,7 @@
 
 | Workflow | Runs | Emits |
 |---|---|---|
-| `.github/workflows/audit-refresh.yml` | `skills/valoria-vector-audit/scripts/vector_audit.py`, `tools/build_apparatus_registry.py`, `tools/observability/build_decisions.py`, `tools/observability/build_graph.py`, `tools/observability/build_incompleteness.py`, `tools/observability/build_proposals.py`, `tools/review_core.py` | commit/PR |
+| `.github/workflows/audit-refresh.yml` | `skills/valoria-vector-audit/scripts/vector_audit.py`, `tools/build_apparatus_registry.py`, `tools/mechanics_index_gen.py`, `tools/observability/build_decisions.py`, `tools/observability/build_glossary.py`, `tools/observability/build_graph.py`, `tools/observability/build_incompleteness.py`, `tools/observability/build_proposals.py`, `tools/review_core.py` | commit/PR |
 | `.github/workflows/dashboard.yml` | `skills/valoria-vector-audit/scripts/vector_audit.py`, `tools/dashboard_data.py`, `tools/observability/build_decisions.py`, `tools/observability/build_incompleteness.py` | github-pages |
 | `.github/workflows/valoria-ci.yml` | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`, `tools/broken_dependency_checker.py`, `tools/build_identifier_census.py`, `tools/build_test_register.py`, `tools/canon_coverage_check.py`, `tools/ci_audit_registry_check.py`, `tools/ci_claim_provenance_check.py`, `tools/ci_claude_workflow_paths.py`, `tools/ci_co_file_checker.py`, `tools/ci_editorial_checker.py`, `tools/ci_generation_consistency.py`, `tools/ci_golden_modes_check.py`, `tools/ci_hooks_verifier.py`, `tools/ci_module_shape_check.py`, `tools/ci_names_check.py`, `tools/ci_names_consistency.py`, `tools/ci_naming_check.py`, `tools/ci_program_claim_check.py`, `tools/ci_quantity_vocabulary_check.py`, `tools/ci_register_size_check.py`, `tools/ci_sim_fabrication_check.py`, `tools/ci_supersession_check.py`, `tools/ci_vacuous_assertion_check.py`, `tools/ci_vetting_check.py`, `tools/ci_wf_harness_check.py`, `tools/ci_workplan_pointer_check.py`, `tools/compliance_check.py`, `tools/currency_consistency_check.py`, `tools/export_engine_params.py`, `tools/export_key_types.py`, `tools/freshness_gate.py`, `tools/mechanics_index_gen.py`, `tools/review_core.py`, `tools/scope_ratchet.py`, `tools/validate_ed_citations.py`, `tools/wiring_map_check.py` | ci-status |
 

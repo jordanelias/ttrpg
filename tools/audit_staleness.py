@@ -49,9 +49,21 @@ except ImportError:  # allow `python tools/audit_staleness.py` from repo root
 # Scopes for decisions-digest / graph / lexicon are lifted from those generators' own
 # stated source lists (their docstrings/header comments), not reinvented — "one rule, one
 # home" (CLAUDE.md §8) applies to scope definitions too.
+# WHAT REFRESHES EACH FAMILY — added 2026-08-13 (ED-IN-0180), and its absence was the defect.
+#
+# This table reported six families stale and could not say which of them anything would ever fix.
+# Five were on the weekly audit-refresh cron; `mechanics-index` was on NOTHING. Its generator runs
+# in CI as `--strict` (validate only, warn-only), so the drift was reported on every run and never
+# acted on — 32 files behind before anyone joined the two facts.
+#
+# `refresher` names the script that regenerates the artifact, and
+# tests/valoria/test_audit_refresh_coverage.py joins it to .github/workflows/audit-refresh.yml, so
+# a family with no refresher, or one naming a script the cron does not run, now FAILS instead of
+# quietly drifting. `None` means deliberately unrefreshed — a frozen historical artifact.
 FAMILIES = [
     {
         "name": "vector-audit",
+        "refresher": "skills/valoria-vector-audit/scripts/vector_audit.py",
         # Repointed 2026-07-22 (ED-IN-0071 continuation) from the dead `designs/audit/2026-07-14-…/`
         # tree (retired with `designs/`, so the base could never resolve — the family was silently
         # inert) to the LIVE committed feed the audit now emits: `--emit-findings` writes
@@ -69,6 +81,7 @@ FAMILIES = [
     },
     {
         "name": "decisions-digest",
+        "refresher": "tools/observability/build_decisions.py",
         "artifact_paths": ["tools/observability/decisions.json"],
         # per build_decisions.py's own header: "corpus sweep (designs/ canon/ engine/params/
         # references/ sim/) for explicit markers" — `designs/` and `sim/` are RETIRED
@@ -81,6 +94,7 @@ FAMILIES = [
     },
     {
         "name": "proposals-register",
+        "refresher": "tools/observability/build_proposals.py",
         "artifact_paths": ["tools/observability/proposals.json"],
         # per build_proposals.py's sources: the editorial ledgers, audit registry,
         # proposals/ + Status-tagged design docs, and workplan §5. `designs/` DROPPED
@@ -90,6 +104,7 @@ FAMILIES = [
     },
     {
         "name": "glossary",
+        "refresher": "tools/observability/build_glossary.py",
         # build_glossary.py (ED-IN-0150) reads five registries and locates every term across
         # SCAN_ROOTS. Scope is those five sources PLUS the scanned corpus itself — a doc move
         # changes where a term lives, which is the whole point of the artifact. Deliberately
@@ -103,6 +118,7 @@ FAMILIES = [
     },
     {
         "name": "apparatus-registry",
+        "refresher": "tools/build_apparatus_registry.py",
         "artifact_paths": ["references/apparatus_registry.yaml"],
         # build_apparatus_registry.py scans tools/, skills/, .githooks/, .claude/,
         # .github/workflows/ for the output/format/orphan inventory.
@@ -110,6 +126,7 @@ FAMILIES = [
     },
     {
         "name": "graph-lexicon",
+        "refresher": "tools/observability/build_graph.py",
         # Tracked as one family (not two): build_graph.py and build_lexicon.py are
         # regenerated together in practice and their source scopes overlap heavily
         # (references/ + canon/); splitting them would double-count the same drift.
@@ -125,6 +142,7 @@ FAMILIES = [
     },
     {
         "name": "npc-audit",
+        "refresher": None,
         # Repointed 2026-07-22: the audit corpus moved out of the retired `designs/audit/` tree to
         # `audit/lane-a/` (ED-IN-0071 P4/P5) — the old path was dead, so the family reported "no data".
         "artifact_paths": ["audit/lane-a/2026-06-22-npc-comprehensive-audit.md"],
@@ -132,6 +150,7 @@ FAMILIES = [
     },
     {
         "name": "mechanics-index",
+        "refresher": "tools/mechanics_index_gen.py",
         "artifact_paths": ["registers/mechanics_index.yaml"],
         # Broad systems/ scope (no cheaply-determinable mechanics-relevant subset).
         # `designs/` DROPPED (OI-53a, 2026-07-29) — retired, resolved to nothing;

@@ -4,16 +4,16 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 124
+  total: 125
   by_kind:
-    tool: 105
+    tool: 106
     skill-script: 10
     hook: 4
     workflow: 3
     claude-workflow: 1
     claude-agent: 1
   by_role:
-    B:stdout-or-gate: 59
+    B:stdout-or-gate: 60
     A:writes-artifact: 23
     D:import-only-library: 37
     workflow: 3
@@ -969,6 +969,7 @@ entries:
   has_cli: true
   uses_cli_args: true
   invoked_by:
+  - ci:audit-refresh.yml
   - ci:valoria-ci.yml
   imported_internally: false
   orphaned: false
@@ -1034,6 +1035,7 @@ entries:
   has_cli: true
   uses_cli_args: true
   invoked_by:
+  - ci:audit-refresh.yml
   - tool:imported
   imported_internally: true
   orphaned: false
@@ -1682,6 +1684,21 @@ entries:
   prune_candidate: false
   role: D:import-only-library
   imports: []
+- path: tools/single_owner_check.py
+  kind: tool
+  stem: single_owner_check
+  writes: []
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
+  imports:
+  - ci_common
 - path: tools/tag_normalizer.py
   kind: tool
   stem: tag_normalizer
@@ -2039,7 +2056,9 @@ entries:
   runs:
   - skills/valoria-vector-audit/scripts/vector_audit.py
   - tools/build_apparatus_registry.py
+  - tools/mechanics_index_gen.py
   - tools/observability/build_decisions.py
+  - tools/observability/build_glossary.py
   - tools/observability/build_graph.py
   - tools/observability/build_incompleteness.py
   - tools/observability/build_proposals.py

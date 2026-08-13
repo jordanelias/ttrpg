@@ -2670,6 +2670,65 @@ never been run.
 
 ---
 
+## [DONE] ED-IN-0180 — Waves 4+5: the duplication guardrail, and two artifacts nothing refreshed
+
+### Wave 4 — single-owner bypasses: 14, measured
+
+`tools/single_owner_check.py` reports modules that read a registry directly when a single owner
+exists. **5** read `references/restructure_ledger.md` outside `pathres`; **6** read the editorial
+ledgers outside `obs_core`; **3** read `id_reservations.yaml` outside `registry.py`.
+
+**It keys on the file, not on the words "SINGLE OWNER".** Grepping for ownership claims would be this
+programme's signature defect one level up — `pathres` declared itself the owner for months while four
+modules parsed the same file, and the declaration is what stopped readers checking. The question asked
+is factual: *does this module build a path to the registry?*
+
+**And it parses rather than greps** — the first version grepped and reported `build_engine_atlas.py`,
+which only *mentions* the filename in a comment. Comments discuss registries constantly here, so a text
+scan measures prose density. It now walks the AST and reads only string constants **outside docstrings**.
+
+⚠ **Then it counted itself, reporting 17** — matching its own `OWNED` table across all three registries.
+That is **ED-IN-0159 §2.4 recurring verbatim in a brand-new instrument**. The lesson is worth more than
+the fix: *a census whose configuration names its own subject is self-matching by construction*, and the
+only reliable defence is to check raw output for the tool's own name before believing a number. Honest
+baseline **14**.
+
+Report-only, reds on day one by design — those 14 are the finding, not a regression.
+
+### Wave 5 — the brief's assumption was inverted by measurement
+
+The plan said *"two carry the pre-change orphan set and will self-correct on their cron — worth
+confirming rather than assuming."* Confirmed, and it is the other way round: **five** of the six stale
+families are on the weekly cron and self-correct. **`mechanics-index` was on nothing.**
+
+Its generator is wired into CI as `--strict`, which only **validates** and is warn-only — so drift was
+reported every run and acted on by nobody, reaching **32 files behind**. That is ED-IN-0159 §1.6's shape
+one level up: not dead scope, but **a live signal with no consumer**, which is decoration. Regenerated
+and added to the cron.
+
+**Then the guard found a second one I had not looked for** — `glossary` also had no scheduled refresher.
+It read *fresh, drift=0* only because a session ran the generator by hand in `fdbef6b`. **That is worse
+than visible staleness, because the report said everything was fine.** Both now in `audit-refresh.yml`.
+
+**The join is the deliverable.** `audit_staleness.FAMILIES` had no field naming what refreshes each
+artifact — which is exactly why the gap was invisible; it could report six families stale and never say
+which of them anything would fix. Every family now declares a `refresher` (`None` = deliberately frozen,
+and it must be *said*), joined to the workflow in both directions by
+`tests/valoria/test_audit_refresh_coverage.py` — the same shape `broken_dependency_checker` already
+applies between `ci_checks_registry.yaml` and `valoria-ci.yml`. It immediately caught my own fabricated
+filename: I guessed `tools/build_glossary.py`; the real path is `tools/observability/build_glossary.py`.
+
+### Still open after this wave
+
+- **The IN ledger capacity** — unchanged and now the oldest live item. My entries are a measured
+  contributor; a per-entry budget is part of any real fix.
+- **G5** (vitality meta-guard) is unblocked and is the natural next step: it generalises exactly the
+  defect Wave 5 found — apparatus whose scope or output nothing consumes.
+- **G4** folds into alias-plan Phase A2, now that Wave 3 has measured the foundation.
+- **G6** and **G11** unblocked; **G10** waits on other lanes.
+
+---
+
 ## [RULED] ED-IN-0179 — Jordan: there is no `deprecated/` conflict, and the real lesson is about vocabulary surviving sessions
 
 **Jordan, verbatim (2026-08-13):** *"The completed evacuation **is** the retirement of all those
