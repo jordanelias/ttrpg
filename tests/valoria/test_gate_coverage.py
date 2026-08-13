@@ -322,13 +322,24 @@ def _hook_wired_scripts():
     on Stop (ED-IN-0087) and is genuinely covered locally; a parity guard that only knew
     about `valoria_local` would have demanded it be wired a second time. Reading both is
     what makes this measure local COVERAGE rather than membership in one list.
+
+    NARROWED 2026-08-13 (ED-IN-0177, adversarial review). The first version dumped the WHOLE
+    settings.json to JSON and regexed it, so a tool named anywhere in the file — a
+    `permissions.deny` entry, a comment-shaped string, an unrelated key — counted as "covered".
+    That is a proxy satisfied without the property, in a guard written to stop exactly that.
+    Only hook COMMAND strings count now.
     """
     import json as _json
     path = os.path.join(ROOT, '.claude', 'settings.json')
     if not os.path.exists(path):
         return set()
-    blob = _json.dumps(_json.load(open(path, encoding='utf-8')))
-    return set(re.findall(r'tools/([\w_]+\.py)', blob))
+    data = _json.load(open(path, encoding='utf-8'))
+    found = set()
+    for _event, groups in (data.get('hooks') or {}).items():
+        for group in groups:
+            for hook in group.get('hooks') or []:
+                found |= set(re.findall(r'tools/([\w_]+\.py)', hook.get('command', '')))
+    return found
 
 
 def _locally_covered():

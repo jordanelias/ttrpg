@@ -2731,11 +2731,17 @@ guard is narrow.
   ED-IN-0159 §1.6's pattern inside the gate that guards provenance. **Triage input for G5.**
 - ⚠ **The IN ledger has run out of archivable slack.** It was at **49,628 / 50,000 (99.3%)** on
   arrival — one entry from a blocking red for whoever committed next, unrelated to their change.
-  Archiving every settled id (5 of them: 0163, 0169, 0170, 0171, 0172) only reaches **46,560
-  (93%)**, because **44 of the remaining entries are `open`**. The archive remedy is exhausted;
-  the next IN session hits a hard wall and cannot archive its way out. This needs a real
-  disposition — burn down open entries, split the lane file, or raise the cap with an explicit ED
-  — and it is not a next-session-discovers-it-the-hard-way problem.
+  After archiving every settled id (5 of them: 0163, 0169, 0170, 0171, 0172) it sits at **46,560
+  (93%)**, and **44 of the remaining entries are `open`**. The archive remedy is exhausted; the next
+  IN session hits a hard wall and cannot archive its way out. This needs a real disposition — burn
+  down open entries, split the lane file, or raise the cap with an explicit ED.
+
+  ⚠ **Do not read 49,628 → 46,560 as "archiving bought 3,068 tokens" — an earlier draft of this note
+  invited exactly that, and it is a confounded pair (§0.1 point 4, caught by adversarial review,
+  ED-IN-0177).** The two numbers are not the same experiment: between them this session BOTH removed
+  five settled entries AND appended four large new ones (0173–0176). Archiving's real yield is much
+  larger than 3,068 and this session's own additions consumed most of it. The conclusion is unchanged
+  — 93% with nothing left to archive — but the arithmetic as first framed did not support it.
 - **`build_engine_atlas` is order-coupled to prose edits, and the gate is blocking.** Its
   "bare occurrences" table counts identifier hits across the whole repo, so editing *this handoff*
   invalidated a freshly-regenerated atlas and cost a full 10-minute suite run to discover. Working
@@ -2755,10 +2761,16 @@ moved `engine_names` 6278 → 6209 and no local tier re-derived it.
 **Third recorded instance of one pattern.** `tools/valoria_local.py` already carried two tombstones
 for the identical defect — **ED-IN-0142** (`build_test_register`, "stale 3x in one session") and
 **ED-PC-0040** (`freshness_gate`, "five consecutive local-green commits shipped a stale pin"). Each
-was fixed for its one tool; nobody asked how many others sat in the same position. All six now run
-locally, **report-only**, on the file's own freshness_gate/wf_harness precedent: they scan the whole
-tree, so a blocking local copy would hold an unrelated commit hostage. Cost 4.9s. This also executes
-one of **G11**'s four sub-items (`validate_ed_citations` wired locally).
+was fixed for its one tool; nobody asked how many others sat in the same position.
+
+**Disposition of the six, stated exactly — an earlier draft of this note said "all six now run
+locally" and that was false (corrected by adversarial review, ED-IN-0177).** **Four** were wired into
+`valoria_local.py`, **report-only**, on the file's own freshness_gate/wf_harness precedent: they scan
+the whole tree, so a blocking local copy would hold an unrelated commit hostage. Cost 4.9s. **One**
+(`review_core`) needed nothing — it was already covered by a Stop hook. **One**
+(`ci_golden_modes_check`) is **exempted, not covered**, on runtime. Four wired + one pre-covered +
+one exempted is not "all six covered", and the headline is the thing later sessions quote. This also
+executes one of **G11**'s four sub-items (`validate_ed_citations` wired locally).
 
 **My own measurement was short by two, and the guard is what found them.** I measured the gap with a
 regex over `v python3 tools/…` lines — which sees only the `validators` job — and got four. The guard

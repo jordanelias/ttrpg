@@ -59,9 +59,26 @@ RESERVATIONS = os.path.join(REPO, 'references', 'id_reservations.yaml')
 DOC_ROOTS = ('audit', 'proposals', 'workplans', 'godot', 'registers/handoffs',
              'canon', 'systems', 'references')
 
-HEADER_LINES = 8
+# HEADER_LINES was 8 and that MISSED THE PLAN OF RECORD (ED-IN-0177, adversarial review).
+# `audit/2026-08-11-code-leanness/01_plan.md` carries its `## Date:` at line 37 — pushed down by an
+# execution-state block — so the guard covered ZERO of that document's ID claims while appearing to
+# cover the corpus. And the realistic recurrence is exactly that: a plan doc grows a preamble. The
+# floors below could not notice, because they count docs that ARE in scope, never one that slid out.
+#
+# 60 is not a guess: measured over the corpus, the deepest live `## Date:` sits at line 37, so 60
+# carries headroom for another preamble without reaching into body prose (the body-mention class the
+# module docstring measures as 100% false-positive).
+HEADER_LINES = 60
 DATE_HEADER_RE = re.compile(r'^##\s*Date:.*$', re.M)
 LANE_ID_RE = re.compile(r'\bED-([A-Z]{2})-(\d{3,4})\b')
+
+# IDs inside a lane's DELIBERATE RESERVATION GAP are not allocated either (ED-IN-0177).
+# `references/id_reservations.yaml:234` records that IN holds 0103–0111 for
+# `audit/2026-07-29-centralization-single-owner/`. Those numbers are below `next_free`, so a bare
+# `num >= next_free` test calls them allocated. The stated property is "citing a number nobody
+# allocated", and a held-but-unissued number is exactly that. Parsed from the register rather than
+# hardcoded, so walking the hold back does not silently strand this rule.
+_GAP_RE = re.compile(r'CSO holds\s+(\d{3,4})-(\d{3,4})')
 
 # Measured at write time: 67 header-bearing docs, 12 of them carrying an ED id. The floor guards
 # against this test silently becoming vacuous if the header convention or DOC_ROOTS drift — a
@@ -76,6 +93,21 @@ def lane_next_free() -> dict[str, int]:
     return {lane: row['next_free'] for lane, row in data['lane_ids']['lanes'].items()}
 
 
+def reserved_gaps() -> dict[str, set[int]]:
+    """Lane -> ID numbers held but not issued. See _GAP_RE's note."""
+    raw = open(RESERVATIONS, encoding='utf-8').read()
+    gaps: dict[str, set[int]] = {}
+    for line in raw.splitlines():
+        m = _GAP_RE.search(line)
+        if not m:
+            continue
+        lane_m = re.match(r'\s*([A-Z]{2}):', line)
+        if lane_m:
+            lo, hi = int(m.group(1)), int(m.group(2))
+            gaps.setdefault(lane_m.group(1), set()).update(range(lo, hi + 1))
+    return gaps
+
+
 def header_ed_ids(text: str) -> list[tuple[str, int]]:
     """Lane ids claimed by a document's `## Date:` header line, if it has one."""
     head = ''.join(text.splitlines(keepends=True)[:HEADER_LINES])
@@ -85,8 +117,9 @@ def header_ed_ids(text: str) -> list[tuple[str, int]]:
     return [(lane, int(num)) for lane, num in LANE_ID_RE.findall(m.group(0))]
 
 
-def check_header(text: str, next_free: dict[str, int]) -> list[str]:
+def check_header(text: str, next_free: dict[str, int], gaps: dict[str, set[int]] | None = None) -> list[str]:
     """Ids in this header that no lane has allocated. Empty list means clean."""
+    gaps = gaps or {}
     bad = []
     for lane, num in header_ed_ids(text):
         if lane not in next_free:
@@ -96,6 +129,11 @@ def check_header(text: str, next_free: dict[str, int]) -> list[str]:
                 f'ED-{lane}-{num:04d} is NOT ALLOCATED — {lane} next_free is {next_free[lane]}. '
                 f'Allocate it in references/id_reservations.yaml (read next_free, bump, write the '
                 f'ledger row, co-commit) rather than citing max+1 (CLAUDE.md §4).')
+        elif num in gaps.get(lane, ()):
+            bad.append(
+                f'ED-{lane}-{num:04d} sits in {lane}\'s RESERVED GAP — the number is held for '
+                f'another owner and has not been issued. Below next_free is not the same as '
+                f'allocated (ED-IN-0177).')
     return bad
 
 
@@ -116,6 +154,7 @@ def _iter_docs():
 
 def test_no_doc_header_cites_an_unallocated_ed():
     next_free = lane_next_free()
+    gaps = reserved_gaps()
     header_docs = 0
     docs_with_ids = 0
     failures = []
@@ -126,7 +165,7 @@ def test_no_doc_header_cites_an_unallocated_ed():
             header_docs += 1
         if ids:
             docs_with_ids += 1
-        for msg in check_header(text, next_free):
+        for msg in check_header(text, next_free, gaps):
             failures.append(f'{rel}: {msg}')
 
     # Assert that it asserted.
@@ -181,3 +220,31 @@ def test_body_mentions_are_deliberately_out_of_scope():
         'Later in the body: **ED-WR-0010 NOT allocated** — and `ED-FA-9999` as a placeholder.\n'
     )
     assert check_header(doc, lane_next_free()) == []
+
+
+def test_the_reserved_gap_is_actually_parsed():
+    """Assert that it asserted: if the gap parse silently returns nothing, the gap rule is off."""
+    gaps = reserved_gaps()
+    assert gaps.get('IN'), (
+        'no reserved gap parsed for IN. references/id_reservations.yaml:234 records "CSO holds '
+        '0103-0111"; if that wording changed, this rule went quiet without failing.')
+    assert 105 in gaps['IN'] and 112 not in gaps['IN']
+
+
+def test_a_gap_id_is_reported_even_though_it_is_below_next_free():
+    """The blind spot ED-IN-0177 closed. ED-IN-0105 < next_free, and is still nobody's."""
+    hdr = '## Date: 2026-08-13 · Lane: IN · ED-IN-0105\n'
+    bad = check_header(hdr, lane_next_free(), reserved_gaps())
+    assert len(bad) == 1 and 'RESERVED GAP' in bad[0], bad
+    # …and the same id passes when the gap is not declared — the rule is the gap, not the number.
+    assert check_header(hdr, lane_next_free(), {}) == []
+
+
+def test_the_plan_of_record_is_actually_in_scope():
+    """HEADER_LINES=8 covered ZERO of this document's id claims. Pin that it is now reachable."""
+    rel = 'audit/2026-08-11-code-leanness/01_plan.md'
+    text = open(os.path.join(REPO, rel), encoding='utf-8').read()
+    head = ''.join(text.splitlines(keepends=True)[:HEADER_LINES])
+    assert DATE_HEADER_RE.search(head), (
+        f'{rel} has a `## Date:` header the guard cannot reach. HEADER_LINES={HEADER_LINES} is '
+        f'too small again — the exact regression ED-IN-0177 fixed.')

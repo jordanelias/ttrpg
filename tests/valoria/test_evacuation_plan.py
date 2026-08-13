@@ -257,11 +257,22 @@ def test_split_path_hits_require_a_WHOLLY_evacuating_target(part):
     Testing "something under this path evacuates" reported all 30 kept readers of the canon engine
     as split-path breakages. Wholly-evacuating is the property that predicts an actual break.
 
-    THE EVACUATE SET IS NOW EMPTY (2026-08-05, ED-IN-0145) — the terminal state this whole tool was
-    built to reach. So the scan legitimately finds nothing, and asserting it finds SOMETHING would
-    be asserting the job is unfinished. What is still checkable, and what this now checks, is the
-    predicate itself against planted inputs: it must call a mixed prefix non-evacuating and a
-    wholly-evacuating one evacuating, whatever the live partition happens to be.
+    THE EVACUATE SET WAS EMPTIED (2026-08-05, ED-IN-0145) — the terminal state this whole tool was
+    built to reach.
+
+    ⚠ IT IS NOT EMPTY ANY MORE, and this docstring said otherwise until 2026-08-13 (ED-IN-0177).
+    The G2 retirement moved three tools INTO `deprecated/tools/` under Jordan's ruling
+    (ED-IN-0171), and `R-DEPRECATED` classifies everything under `deprecated/` as 'evacuate' —
+    so the set repopulated the moment the ruling was executed. "Terminal state" was true for
+    eight days and then quietly stopped being true; nothing failed, because this test was
+    already written to hold either way.
+
+    That is the point worth keeping: the assertion below is unaffected because it checks the
+    PREDICATE against planted inputs rather than the live partition — it must call a mixed
+    prefix non-evacuating and a wholly-evacuating one evacuating, whatever the live partition
+    happens to be. A version of this test that had asserted "the set is empty" would now be
+    red for a correct change. The prose was the only thing that rotted, which is why it is
+    corrected rather than deleted.
     """
     evac = set(part['buckets']['evacuate'])
     retained = part['buckets']['keep'] + part['buckets']['relocate']

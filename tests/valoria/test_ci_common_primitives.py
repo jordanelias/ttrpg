@@ -478,16 +478,24 @@ def _lane_codes_line():
     raise AssertionError('ci_common.LANE_CODES definition not found')
 
 
-def test_inline_token_estimation_is_confined_to_the_modules_being_retired():
+def test_no_inline_token_estimation_survives_in_live_tooling():
     """`len(x) // 4` is the denominator every size cap in the repo is written in.
 
-    Six inline sites survive and they are ALL in atomizer / doc_index_gen /
-    index_gen, which plan step G2 retires — migrating a module scheduled for
-    retirement is work done twice. This asserts the residue is exactly that set, so
-    a NEW inline estimator anywhere else fails, and so this exemption cannot
-    quietly outlive the retirement it is waiting on.
+    THE EXEMPTION IS GONE, AND IT ALMOST OUTLIVED ITS RETIREMENT ANYWAY (ED-IN-0177).
+    This test carried `RETIRING = {atomizer, doc_index_gen, index_gen}` because those six
+    inline sites lived in modules G2 was scheduled to retire, and migrating a module
+    scheduled for deletion is work done twice. Its own docstring promised the exemption
+    "cannot quietly outlive the retirement it is waiting on".
+
+    It did, for one commit. When ED-IN-0175 moved the three files to `deprecated/tools/`
+    they left `_tooling_py_files()`'s corpus, so `found` went empty and `found <= RETIRING`
+    passed VACUOUSLY — green for the wrong reason, with the allowlist still in the source
+    naming three files that no longer exist. Caught by adversarial review, not by the guard.
+
+    The lesson is narrow and worth keeping: an allowlist keyed on paths goes vacuous rather
+    than red when its paths leave the corpus, so a subset assertion (`found <= ALLOWED`)
+    cannot detect its own obsolescence. An equality assertion against the empty set can.
     """
-    RETIRING = {'tools/atomizer.py', 'tools/doc_index_gen.py', 'tools/index_gen.py'}
     found = set()
     for p in _tooling_py_files():
         rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
@@ -499,17 +507,24 @@ def test_inline_token_estimation_is_confined_to_the_modules_being_retired():
                 continue
             if re.search(r'len\([^)]*\)\s*//\s*4', ln):
                 found.add(rel)
-    assert found <= RETIRING, f'a new inline token estimator appeared: {sorted(found - RETIRING)}'
+    assert found == set(), (
+        f'inline token estimator(s) in live tooling: {sorted(found)}. The three modules that\n'
+        f'held the last six sites were retired to deprecated/tools/ on 2026-08-13 (ED-IN-0175),\n'
+        f'so the residue is now zero and tools/ci_common.py:tokens() is the only owner. Route\n'
+        f'the new site through it rather than re-adding an allowlist.')
 
 
 def test_the_bare_yaml_load_residual_can_only_shrink():
     """`load_yaml` is the INTENDED owner, not the only loader, and its docstring
     says so. This pins the residual so the honest number cannot rot upward.
 
-    52 bare `yaml.safe_load` calls remain in tools/, each doing something the
+    44 bare `yaml.safe_load` calls remain in tools/, each doing something the
     helper does not — loading a stream, a string, or wanting the exception on a
     missing file. If this fails HIGH, a new bare call was added; if it fails LOW,
     migrate the count in the docstring with it.
+
+    Was 52 until 2026-08-13, when the G2 retirement (ED-IN-0175) carried 8 sites out of the
+    corpus. That is a SHRINKING CORPUS, not adoption — see tools/ci_common.py's own note.
     """
     total = 0
     for p in _tooling_py_files():

@@ -421,11 +421,18 @@ def tokens(text) -> int:
     same file against caps computed by two different estimators is a class of
     disagreement this repo has already paid for once (ED-IN-0097).
 
-    Six inline `len(x) // 4` sites survive, ALL of them in atomizer /
-    doc_index_gen / index_gen, which plan step G2 retires — migrating a module
-    scheduled for retirement is work done twice. `test_inline_token_estimation_is
-    _confined_to_the_modules_being_retired` pins that residue, so a new inline
-    estimator anywhere else fails and this exemption cannot outlive its retirement.
+    ZERO inline `len(x) // 4` sites now survive in live tooling. Six did, all in
+    atomizer / doc_index_gen / index_gen, exempted because plan step G2 was going
+    to retire them and migrating a module scheduled for deletion is work done
+    twice. G2 executed on 2026-08-13 (ED-IN-0175) and they left with it, so the
+    exemption is gone and this function is the only owner.
+
+    ⚠ The guard did NOT notice that transition — `test_no_inline_token_estimation_
+    survives_in_live_tooling` was written as `found <= RETIRING`, and once the three
+    files left the scanned corpus `found` went empty and the subset assertion passed
+    VACUOUSLY, allowlist and all (ED-IN-0177, caught by review). It now asserts
+    `found == set()`. A path-keyed allowlist goes quiet rather than red when its
+    paths leave the corpus, so a subset test cannot detect its own obsolescence.
 
     Accepts str or bytes; `None` counts as 0 so a missing file is not a crash in
     a size sweep.

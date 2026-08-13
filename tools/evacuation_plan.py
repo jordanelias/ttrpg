@@ -309,8 +309,31 @@ RULES = [
 
     # ---- unambiguous detritus
     (lambda p: p.startswith('arcs/'), 'evacuate', 'R-ARCS', 'generated narrative content'),
+    # ⚠ THIS RULE NOW HAS A SECOND, FORWARD-LOOKING SUBJECT, and it is not the one it was
+    # written for (ED-IN-0177, correcting an omission in ED-IN-0175).
+    #
+    # Written for the 2026-08-05 evacuation, where `deprecated/` meant "history already
+    # superseded, safe to leave main". On 2026-08-12 Jordan ruled the opposite direction for
+    # NEW work: "Dead files get moved to deprecated." (ED-IN-0171). So `deprecated/` is now
+    # BOTH the residue of a completed evacuation AND the designated landing site for future
+    # retirements -- and this rule queues the latter for deletion by the former's logic.
+    #
+    # ED-IN-0175 refuted the TEST-level half of that conflict (test_evacuation_plan.py:166
+    # binds only the tool's computed `moves`, so a git mv trips nothing) and then treated the
+    # whole conflict as disposed of. It was not: the RULE-level half is real and is recorded
+    # here rather than silently carried. Concretely, `classify('deprecated/tools/atomizer.py')`
+    # returns 'evacuate', so a future evacuation wave that acts on this partition would delete
+    # the contents of the landing site the ruling just established.
+    #
+    # NOT CHANGED HERE, deliberately. Flipping this to 'keep' would silently reclassify the
+    # ~19 genuinely-evacuable files this rule was written for, and the ED archives under
+    # deprecated/ are load-bearing for the anti-fabrication gate (CLAUDE.md §3). Choosing
+    # between "evacuate deprecated/" and "deprecated/ is the landing site" is a disposition
+    # call for Jordan, not a drive-by flag change -- exactly the kind of thing ED-1094 says
+    # must be raised loudly rather than bundled. Filed in registers/handoffs/HANDOFF_IN.md.
     (lambda p: p.startswith('deprecated/'), 'evacuate', 'R-DEPRECATED',
-     'history -- the evacuation tag preserves it'),
+     'history -- the evacuation tag preserves it. AMBIGUOUS since the 2026-08-12 ruling made '
+     'deprecated/ the forward landing site for retirements too (ED-IN-0171/0177) -- HELD'),
     (lambda p: p.startswith('dashboard/'), 'keep', 'R-DASHBOARD',
      'the published status site -- KEPT (Jordan, 2026-08-04). See the caveat below: its INPUTS shrink'),
     (lambda p: p.startswith('workplans/'), 'keep', 'R-WORKPLANS',

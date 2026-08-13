@@ -241,20 +241,44 @@ def main(argv):
     child_env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
 
     failed = []
+    # Report-only failures were previously DISCARDED, not merely unreported — the `and blocking`
+    # guard threw the result away, so the summary below could not have mentioned them even if it
+    # had wanted to. See the note at the summary (ED-IN-0177).
+    failed_reportonly = []
     for script, extra, blocking in checks:
         path = os.path.join(HERE, script)
         if not os.path.exists(path):
             continue
         print(f"\n--- {script} ---")
         r = subprocess.run([sys.executable, path] + extra, env=child_env)
-        if r.returncode != 0 and blocking:
-            failed.append(script)
+        if r.returncode != 0:
+            (failed if blocking else failed_reportonly).append(script)
 
     print()
     if failed:
         print(f"[valoria check] FAILED: {', '.join(failed)}")
         print("Fix the above, or `git commit --no-verify` to bypass locally (CI still enforces on the PR).")
         return 1
+    # A REPORT-ONLY FAILURE MUST NOT PRINT AS AN UNQUALIFIED PASS (ED-IN-0177).
+    #
+    # This line read "all local gates passed" whenever no BLOCKING check failed — including when
+    # a report-only validator had just failed twenty lines up. That is the operator-visible half
+    # of the PR #307 incident and it survived the fix that was supposed to close it: ED-IN-0176
+    # wired four CI-only validators in here as report-only, which puts MORE failures in exactly
+    # the class this summary was hiding. An author reads the last line, sees a green claim, pushes,
+    # and CI reds on something local already knew.
+    #
+    # `run_ci_validators` has printed a report-only summary since it was written (:134-135); only
+    # `main()` was silent. Same information, same file, two exits — one of them lying by omission.
+    #
+    # NOT a promotion to blocking: report-only stays non-gating, the return code is unchanged, and
+    # nothing new can refuse a commit. What changes is that the last line stops asserting something
+    # the run does not support.
+    if failed_reportonly:
+        print(f"[valoria check] blocking gates passed — but {len(failed_reportonly)} REPORT-ONLY "
+              f"check(s) failed: {', '.join(failed_reportonly)}")
+        print("  Not gating locally. Several ARE blocking in CI (ED-IN-0176), so read them before pushing.")
+        return 0
     print("[valoria check] all local gates passed.")
     return 0
 

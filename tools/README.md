@@ -60,9 +60,9 @@ gates/checkers, so they're intentionally not in the registry above.
 |---|---|
 | `build_apparatus_registry.py` | Generates `references/apparatus_registry.{yaml,md}` — the inventory of every tool/skill/hook/workflow (output destination + format + orphan status) |
 | `valoria_rename.py` | The "change once" executor for `names_index.yaml`-centralized definition renames |
-| `atomizer.py` | Splitting engine for file atomization (content + rule → new file set) |
-| `index_gen.py` | Generates index files for registers, archives, and atomized file sets |
-| `doc_index_gen.py` | Generates `_index.md` files from canonical design docs (renamed from `skeleton_gen.py`, PP-673) |
+| ~~`atomizer.py`~~ | **RETIRED 2026-08-13 → `deprecated/tools/` (ED-IN-0175).** Zero importers/invokers; Jordan's ruling *"Dead files get moved to deprecated."* (ED-IN-0171) |
+| ~~`index_gen.py`~~ | **RETIRED 2026-08-13 → `deprecated/tools/` (ED-IN-0175).** Same wave. Its sole artifact (`registers/patch_register_index.md`) was last regenerated 2026-05-10 |
+| ~~`doc_index_gen.py`~~ | **RETIRED 2026-08-13 → `deprecated/tools/` (ED-IN-0175).** Same wave. ⚠ Its **37 `systems/**/*_index.md` outputs are NOT retired** — grandfathered by the 2026-07-26 ruling, disposition HELD |
 | `observability/obs_core.py` | Shared observability primitives (ledger reader, lane roster, status/marker parse, JS-bundle) — single owner, imported by the generators |
 | `observability/build_proposals.py` | Generates the unified proposals/open-work register (`PROPOSALS.md` triad) |
 | `names.py` | The single reader for `references/names_index.yaml` (legacy→canonical mapping) |
