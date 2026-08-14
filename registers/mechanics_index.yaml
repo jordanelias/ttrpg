@@ -816,7 +816,7 @@ mechanics:
     canon_sources: ["systems/threadwork/threadwork_v30.md#part-5"]
     sim_module: systems/overview/sim/rs_track.py
     test_status: not_implemented
-    notes: "Rendering Stability world-track."
+    notes: "Mending Stability world-track."   # canonical name applied by hand 2026-08-13 (ED-IN-0181): mechanics_index_gen --update fixes this drift, but strips every comment in the file while doing it, so the rename is taken and the round-trip is not.
 
   ms_track:
     scale: peninsular
