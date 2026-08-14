@@ -29,7 +29,7 @@ enter/exit them: `engine/mc_v18.py`, `engine/autoload/game_state.py`, `systems/f
 | `KeyLog.content_hash` | `engine/substrate/keys.py:459 content_hash` | `engine/mc_v18.py:305 key_log_hash` |
 | `KeyLog.__len__` | `engine/substrate/keys.py:358 __len__` | `engine/mc_v18.py:306 keys_emitted` |
 | `TickScheduler.subscribe` | `engine/substrate/keys.py:506 subscribe` | `engine/cross_scale/articulation.py:169` (inside `subscribe_all`, def at `:152`) |
-| `TickScheduler.emit` | `engine/substrate/keys.py:510 emit` | `engine/cross_scale/echo_transport.py:343`, `:438`; `systems/factions/sim/faction_action.py:408`; `systems/factions/sim/parliamentary_transfer.py:176` |
+| `TickScheduler.emit` | `engine/substrate/keys.py:510 emit` | `engine/cross_scale/echo_transport.py:343`, `:438`; `systems/factions/sim/faction_action.py:414`; `systems/factions/sim/parliamentary_transfer.py:176` |
 | `TickScheduler.schedule_emission` | `engine/substrate/keys.py:525 schedule_emission` | — (no production caller anywhere in `engine/` or `systems/`; only `tests/valoria/test_key_substrate.py:331` etc.) |
 | `TickScheduler.drain_tick` | `engine/substrate/keys.py:538 drain_tick` | — (no production caller; only `tests/valoria/test_key_substrate.py:336` etc.) |
 | `TickScheduler.accounting_boundary` | `engine/substrate/keys.py:581 accounting_boundary` | `engine/mc_v18.py:160` |
@@ -76,7 +76,7 @@ enter/exit them: `engine/mc_v18.py`, `engine/autoload/game_state.py`, `systems/f
 | `echo['scope_met']` | key | `ctx['echo']` block (see above), defaults True | `engine/cross_scale/echo_transport.py:390` |
 | `echo['degree']` | key | `ctx['echo']` block, falls back to `_derive_degree` when absent | `engine/cross_scale/echo_transport.py:389` |
 | `echo['target_settlement']` | key | `ctx['echo']` block | `engine/cross_scale/echo_transport.py:291` |
-| `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:410` |
+| `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:416` |
 
 ## 3. Flow
 
@@ -102,7 +102,7 @@ ids — `engine/substrate/keys.py:390-392` (comment) / `:384-389` (enforcement).
 - S2 `[branch]` if `ECHO_TRANSPORT` on: `echo_transport.make_scheduler` builds `TypeRegistry.load` → `KeyLog` → `TickScheduler`, attached as `world.echo_scheduler`/`world.key_log` — `engine/mc_v18.py:241-249`, `engine/cross_scale/echo_transport.py:181-184`
 - S2.1 `[write]` `articulation.subscribe_all` registers 13 Tier-2 trigger callbacks (§3.1 roster) on the scheduler — `engine/mc_v18.py:257-258`, `engine/cross_scale/articulation.py:168-170`
 - S3 `[loop]` per season, `run_season` invokes `_faction_actions_callback` — `engine/mc_v18.py:267`, `:116`
-  - S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` → `resolve_mass_battle` → `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) — `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:443-473`, emit at `:394`
+  - S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` → `resolve_mass_battle` → `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) — `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:449-479`, emit at `:394`
   - S3.2 `scene_dispatch.run_scene_phase(world, rng)` — `engine/mc_v18.py:141`
     - S3.2.1 `queue_triggered_scenes`: `evaluate_triggers` scans `world.factions` for the one field-evaluable §4.3.2 trigger (Stability Crisis), queues via `scene_slate.queue_scene` — `engine/cross_scale/scene_dispatch.py:75-99`, `:102-106`
     - S3.2.2 `[loop]` `dispatch_scenes` drains `scene_slate` one slot at a time — `engine/cross_scale/scene_dispatch.py:401-413`
@@ -136,7 +136,7 @@ ids — `engine/substrate/keys.py:390-392` (comment) / `:384-389` (enforcement).
 | `Faction.adjust(stat, delta)` call | write | `engine.autoload.game_state.Faction` | `engine/cross_scale/echo_transport.py:430-436` (`_apply` closure) |
 | `Settlement.order` write | write | `systems.settlements.sim.registry.Settlement` | `engine/cross_scale/echo_transport.py:325-341` (`_apply` closure) |
 | `rs_track.apply_rs_delta` call | write (never lands — see §7) | `systems.overview.sim.rs_track` | `engine/cross_scale/echo_transport.py:354-355`; stub body `systems/overview/sim/rs_track.py:28-33` |
-| `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176` |
+| `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:381-414`; `systems/factions/sim/parliamentary_transfer.py:162-176` |
 | `CampaignResult.key_log_hash` / `.keys_emitted` / `.stub_hits` | telemetry | `engine.mc_v18.CampaignResult`, read by `run_batch`/callers | `engine/mc_v18.py:103-104`, `:300`, `:305-306` |
 | `HandoffResult` (from `apply_handoff`) | value | `scene_dispatch._handoff_validity_check_pair`, folded into the per-slot `out` dict as `handoff_stub`/`handoff_reason` | `engine/cross_scale/scene_dispatch.py:188-195`, `:381-384` |
 | `ZoomTrigger` list (from `check_mandatory_triggers`) | value | `scene_dispatch.evaluate_triggers` (filters the `deferred` trigger-name list) | `engine/cross_scale/zoom_in_out.py:165-198`, `engine/cross_scale/scene_dispatch.py:97-98` |
@@ -147,13 +147,13 @@ ids — `engine/substrate/keys.py:390-392` (comment) / `:384-389` (enforcement).
 
 | Field | R/W/RW | Owning module | Anchor |
 |---|---|---|---|
-| `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:362`, `systems/factions/sim/parliamentary_transfer.py:153` |
+| `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:368`, `systems/factions/sim/parliamentary_transfer.py:153` |
 | `world.key_log` | RW | `engine.mc_v18` | W: `engine/mc_v18.py:249`; R: `engine/mc_v18.py:290`, `engine/mc_v18.py:305-306` |
 | `world._echo_key_seq` | RW | `engine.cross_scale.echo_transport` | `engine/cross_scale/echo_transport.py:306-307`, `engine/cross_scale/echo_transport.py:411-412` |
 | `world.season` | R | `engine.autoload.game_state` (owned elsewhere; this subsystem only reads) | `engine/cross_scale/echo_transport.py:308`, `engine/cross_scale/echo_transport.py:413`; monotonicity invariant enforced at `engine/substrate/keys.py:395-398` |
 | `world.dispatch_combat_bridge` | RW | `engine.mc_v18` writes; `scene_dispatch` reads | W: `engine/mc_v18.py:237`; R: `engine/cross_scale/scene_dispatch.py:232` |
 | `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:174`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152` |
-| `world._battle_key_seq` | RW | `systems.factions.sim.faction_action` | `systems/factions/sim/faction_action.py:368-369` |
+| `world._battle_key_seq` | RW | `systems.factions.sim.faction_action` | `systems/factions/sim/faction_action.py:374-375` |
 | `world._parl_key_seq` | RW | `systems.factions.sim.parliamentary_transfer` | `systems/factions/sim/parliamentary_transfer.py:159-160` |
 | Faction stat (`L`/`Sta`/`W`/`I`/`Mil`, via `.adjust`) | W | `engine.autoload.game_state.Faction` | `engine/cross_scale/echo_transport.py:435-436` |
 | `Settlement.order` | W | `systems.settlements.sim.registry` | `engine/cross_scale/echo_transport.py:335-341` |
@@ -175,7 +175,7 @@ ids — `engine/substrate/keys.py:390-392` (comment) / `:384-389` (enforcement).
 | lateral | `systems.factions.sim.parliamentary_transfer` (FA) | `propose_transfer` + CB-availability helpers | `engine/cross_scale/parliamentary_bridge.py:64`, `:173` |
 | lateral | `systems.combat.sim.combat` (deprecated) / `combat_engine_v1` (PC) | `resolve_combat_round` / `wrapper.fight` | `engine/cross_scale/scene_dispatch.py:273-274`; `engine/cross_scale/combat_bridge.py:97-98`, `:141` |
 | lateral | `systems.fieldwork.sim.fieldwork` / `investigation` (FI) | stub-wired resolvers | `engine/cross_scale/scene_dispatch.py:351-356` |
-| in (up) | `systems.factions.sim.faction_action` (FA) | Direct `TickScheduler.emit` call into the substrate from outside `engine/cross_scale/` | `systems/factions/sim/faction_action.py:408` |
+| in (up) | `systems.factions.sim.faction_action` (FA) | Direct `TickScheduler.emit` call into the substrate from outside `engine/cross_scale/` | `systems/factions/sim/faction_action.py:414` |
 | in (up) | `systems.factions.sim.parliamentary_transfer` (FA) | Direct `TickScheduler.emit` call into the substrate from outside `engine/cross_scale/` | `systems/factions/sim/parliamentary_transfer.py:176` |
 | up | `engine.mc_v18` | Top-level orchestrator: owns flag decisions and every season-loop call into this subsystem | `engine/mc_v18.py:141`, `:148-152`, `:158-161`, `:241-258` |
 
@@ -196,7 +196,7 @@ ids — `engine/substrate/keys.py:390-392` (comment) / `:384-389` (enforcement).
 | `render_protagonist_lens`/`evaluate_articulation_triggers`/`generate_chronicle_entry` are all `stubwire.stub_resolve` typed no-ops (Pass-2l armature stubs), not implementations; of the three, only `evaluate_articulation_triggers` is reached at all, and only by a test probe, never production code | `engine/cross_scale/articulation.py:35-59`; probe at `engine/tests/test_pipeline_reach.py:762`, `:773` |
 | `engine_clock` — the `module_contracts.yaml`-declared contract this scheduler notionally realizes — carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:863-866` |
 | `TypeRegistry.load_json` is never called directly by any production or test call site; it is reached exclusively through `TypeRegistry.load`'s suffix dispatch | `engine/substrate/keys.py:213-216`; repo-wide grep for `.load_json(` outside `keys.py` itself returns nothing |
-| `faction_action.py`'s in-code claim carries two stale statements. (1) "THE FIRST KEY EMISSION OUTSIDE `echo_transport`" is stale as of this trace — a third non-`echo_transport` emitter now exists (`parliamentary_transfer.py`'s `_emit_public_governance_transfer`), not named by that comment. (2) The same span's measurement that `scene.accord_echo` was the substrate's sole live emitter at 13 keys/campaign cannot hold given this skeleton's own dormancy row above (the whole Accord-Echo branch is organically dormant, `classify_scene_outcome` always returns `None` in production) — the live per-campaign emitter is `scene.contest_resolved` via the domain-echo leg's `sched.emit` call | `systems/factions/sim/faction_action.py:338-341` (claim); `systems/factions/sim/parliamentary_transfer.py:116-176` (the uncounted emitter); `engine/cross_scale/echo_transport.py:438` (the actual live emitter) |
+| `faction_action.py`'s in-code claim carries two stale statements. (1) "THE FIRST KEY EMISSION OUTSIDE `echo_transport`" is stale as of this trace — a third non-`echo_transport` emitter now exists (`parliamentary_transfer.py`'s `_emit_public_governance_transfer`), not named by that comment. (2) The same span's measurement that `scene.accord_echo` was the substrate's sole live emitter at 13 keys/campaign cannot hold given this skeleton's own dormancy row above (the whole Accord-Echo branch is organically dormant, `classify_scene_outcome` always returns `None` in production) — the live per-campaign emitter is `scene.contest_resolved` via the domain-echo leg's `sched.emit` call | `systems/factions/sim/faction_action.py:344-347` (claim); `systems/factions/sim/parliamentary_transfer.py:116-176` (the uncounted emitter); `engine/cross_scale/echo_transport.py:438` (the actual live emitter) |
 | `campaign_architecture` is the contract this folder actually doc-homes (`doc: systems/_architecture/campaign_architecture_v30.md`) and the only module in the file with `status: stub`; it uniquely omits `resolver`/`consumes`/`emits`/`state`/`transitions`/`loops` keys entirely rather than carrying empty lists like every other zero-edge module. | `references/module_contracts.yaml:1065 campaign_architecture`; `references/module_contracts.yaml:1076` |
 | `engine/autoload/npc_ai.py`'s two declared entry points (`select_action`, `evaluate_priority_stack`) are both unconditional `stubwire.stub_resolve` no-ops AND uncalled by any production code — the engine core's sole orphan; the only call site anywhere is a test probe. Its module docstring names `systems/factions/sim/faction_action` as a dependency, but the live season-loop dispatch calls `faction_take_action` directly and never imports `npc_ai`. | `engine/autoload/npc_ai.py:33 select_action`; `engine/autoload/npc_ai.py:41 evaluate_priority_stack`; `engine/autoload/npc_ai.py:10` (docstring dependency claim); `engine/mc_v18.py:130` (live dispatch, bypasses npc_ai) |
 | `engine_clock`'s declared emit `mechanical.season_change` is itself a dangling emit — the only `from: [engine_clock]` consumer row in the file is for its sibling `mechanical.accounting`. | `references/module_contracts.yaml:876 mechanical.season_change`; `references/module_contracts.yaml:82` |

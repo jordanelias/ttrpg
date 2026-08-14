@@ -708,7 +708,7 @@ this engine, no change to the RNG path, no new file.
 Re-recorded from the reference CI run, with the previous values preserved inline.
 
 **Read this before trusting a local green on these modes.** `tests/valoria/test_mass_battle_byte_exact.py`
-covers the two GRID modes and reports skip/xfail locally (documented platform non-portability plus a
+covers the two legacy-lattice modes and reports skip/xfail locally (documented platform non-portability plus a
 pre-existing known-red). The three modes above are gated by `tools/ci_golden_modes_check.py`, a
 separate blocking CI job that does not run locally at all. A local suite green says nothing about
 them — which is how an adversarial critic's correct prediction got recorded as "overturned" here
@@ -731,4 +731,7 @@ Renamed in `bat._mode_key` and the three affected `EXPECTED` keys (`unit_legacy_
 
 Coverage is unchanged in extent. What changed is that a cold reader can no longer infer a movement
 mode that does not exist. Historical dated entries in `bat.py` keep the old word (no-retrofit,
-CLAUDE.md §4); `validators.py`'s separate `path='grid'|'node'` argument is filed, not swept.
+CLAUDE.md §4) — **except two 2026-07 blocks a blanket replace caught before that rule was written,
+which now sit inconsistently beside their unchanged neighbours; disclosed in `bat.py`'s vocabulary
+block rather than tidied away.** `validators.py`'s separate `path='grid'|'node'` argument is filed,
+not swept.

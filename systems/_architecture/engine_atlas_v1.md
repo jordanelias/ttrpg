@@ -86,7 +86,7 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
 - **S7 — Step 2, the action callback** supplied by the driver — `engine/mc_v18.py:116 _faction_actions_callback`.
   - **S7.1 Faction actions.** For each faction parliamentary *and* holding territory: `faction_take_action`,
     wrapped so one faction's exception cannot abort the season — `engine/mc_v18.py:124-136 _faction_actions_callback`;
-    resolver `systems/factions/sim/faction_action.py:191 faction_take_action`. Four state signals re-weight
+    resolver `systems/factions/sim/faction_action.py:197 faction_take_action`. Four state signals re-weight
     one probability vector, then a **single** `rng.random()` draw selects among faction-unique / conquest /
     muster / govern — `systems/factions/sim/faction_action.py:220 faction_take_action`. Conquest resolves
     through mass battle — `systems/factions/sim/faction_action.py:431-438 _try_conquest`; on an attacker
@@ -200,7 +200,7 @@ flag — the blocker is a missing trigger, not a wiring bug — `engine/cross_sc
 **`factions` — the strategic actor layer.** Every season each parliamentary landholding faction re-weights four
 action buckets from state and takes one stochastic draw; conquest, muster, govern and faction-unique actions
 resolve here, as do the parliamentary vote, censure and territory-transfer motions —
-`systems/factions/sim/faction_action.py:191 faction_take_action`. It is the only non-substrate subsystem
+`systems/factions/sim/faction_action.py:197 faction_take_action`. It is the only non-substrate subsystem
 constructing Keys in production. Several of its modules are pure stub armature, and two faction identities have no
 unique action at all, falling through to the universal censure fallback —
 `systems/factions/sim/faction_action.py:315-318 _faction_specific_unique` (§3c, §3d).

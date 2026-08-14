@@ -24,7 +24,7 @@
 | Callable | Anchor | Called-by |
 |---|---|---|
 | **TREE A** (`systems/mass_battle/sim/`) | | |
-| `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) → `:433` (call) |
+| `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:451 resolve_mass_battle` (import) → `:433` (call) |
 | `run_battle(unit_a, unit_b, max_turns, rng)` | `systems/mass_battle/sim/massbattle.py:1127 run_battle` | (a) `systems/mass_battle/sim/massbattle.py:1831 run_battle` (from `resolve_mass_battle`); (b) `tests/valoria/test_mass_battle_systems_movement.py:51 run_battle` |
 | `run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/massbattle.py:1357 run_multi_turn_battle` | `—` (no caller found; see §7) |
 | `run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/massbattle.py:1526 run_multi_unit_battle` | `—` (no caller found; see §7) |
@@ -40,10 +40,10 @@
 | Input | Kind | Origin | Anchor |
 |---|---|---|---|
 | **TREE A** | | | |
-| `faction_a` (attacker; has `.name`, `.Mil`) | arg | `systems/factions/sim/faction_action.py:448 faction_a` (the calling faction) | `systems/factions/sim/faction_action.py:447-452` |
-| `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:446 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:446` |
-| `terrain` | arg | hardcoded `None` at the call site (deferred) | `systems/factions/sim/faction_action.py:450` |
-| `world` (for `world.rng`) | world-state | `systems/factions/sim/faction_action.py:437 world` | `systems/mass_battle/sim/massbattle.py:1831 world.rng` |
+| `faction_a` (attacker; has `.name`, `.Mil`) | arg | `systems/factions/sim/faction_action.py:454 faction_a` (the calling faction) | `systems/factions/sim/faction_action.py:453-458` |
+| `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:452 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:452` |
+| `terrain` | arg | hardcoded `None` at the call site (deferred) | `systems/factions/sim/faction_action.py:456` |
+| `world` (for `world.rng`) | world-state | `systems/factions/sim/faction_action.py:443 world` | `systems/mass_battle/sim/massbattle.py:1831 world.rng` |
 | **TREE B** | | | |
 | `unit_a`, `unit_b` (`Unit` dataclass instances) | arg | constructed by `engine.build_unit`/`build_army`/`build_envelopment`/`build_refused_flank` | `tests/sim/mass_battle/engine.py:176-509` |
 | `shape_a`, `shape_b`, `anchor_map` | arg | caller-supplied deployment geometry | `tests/sim/mass_battle/orchestration.py:2357-2358 run_multi_turn_battle` |
@@ -56,8 +56,8 @@
 
 ### TREE A — `systems/mass_battle/sim/massbattle.py` (the live campaign seam)
 
-- **S0.1** `[gate]` the campaign action roll: the mass-battle path is reached only if `roll < cum_conquest` selects Conquest for this faction's turn, ahead of `_try_conquest`. `systems/factions/sim/faction_action.py:244`
-- **S0.2** `[gate]` `_try_conquest` no-ops (`return _NOOP`, no battle) if the faction has no reachable `targets`. `systems/factions/sim/faction_action.py:437-438`. The former `faction.Mil >= CONQUEST_MIN_MIL` half of this gate was DELETED 2026-08-14 (Jordan ruling), so low-Military factions now reach the battle engine rather than being filtered before it.
+- **S0.1** `[gate]` the campaign action roll: the mass-battle path is reached only if `roll < cum_conquest` selects Conquest for this faction's turn, ahead of `_try_conquest`. `systems/factions/sim/faction_action.py:250`
+- **S0.2** `[gate]` `_try_conquest` no-ops (`return _NOOP`, no battle) if the faction has no reachable `targets`. `systems/factions/sim/faction_action.py:443-444`. The former `faction.Mil >= CONQUEST_MIN_MIL` half of this gate was DELETED 2026-08-14 (Jordan ruling), so low-Military factions now reach the battle engine rather than being filtered before it.
 - **S1** `[gate]` `resolve_mass_battle` constructs `unit_a` from `faction_a` via `_faction_to_unit`; if `faction_b` is `None`, constructs `unit_b` from a synthetic `_GarrisonStub`, else from `faction_b`. `systems/mass_battle/sim/massbattle.py:1817-1822 _faction_to_unit`
 - **S2** `[emit]` calls `run_battle(unit_a, unit_b, max_turns, rng=world.rng)` — single-encounter, no multi-turn/multi-unit orchestration invoked from this path. `systems/mass_battle/sim/massbattle.py:1831 run_battle`
   - **S2.1** `[loop]` per-tick loop, `t` in `1..max_turns`: `[gate]` break if either unit already routed. `systems/mass_battle/sim/massbattle.py:1141-1143`
@@ -82,8 +82,8 @@
 Continuing in the caller (`_try_conquest`, outside this subsystem's own folder but the only place
 the return value is consumed):
 
-- **S5** `[emit]` `_emit_battle_concluded` builds and emits a `scene.battle_concluded` Key — additive only (no `apply=`), silently no-ops if `world.echo_scheduler` is absent. `systems/factions/sim/faction_action.py:473 _emit_battle_concluded`, body at `:321-397`
-- **S6** `[branch]` `if battle['attacker_wins']`: territory ownership transfer, loser `L` penalty, then `[branch]` Terms (`degree == 'Success'`) vs Storm (otherwise) settlement-side fork, then `world.battle_count += 1`. `systems/factions/sim/faction_action.py:475-511`
+- **S5** `[emit]` `_emit_battle_concluded` builds and emits a `scene.battle_concluded` Key — additive only (no `apply=`), silently no-ops if `world.echo_scheduler` is absent. `systems/factions/sim/faction_action.py:479 _emit_battle_concluded`, body at `:321-397`
+- **S6** `[branch]` `if battle['attacker_wins']`: territory ownership transfer, loser `L` penalty, then `[branch]` Terms (`degree == 'Success'`) vs Storm (otherwise) settlement-side fork, then `world.battle_count += 1`. `systems/factions/sim/faction_action.py:481-517`
 
 ### TREE B — `tests/sim/mass_battle/` (canon per J2; not reachable from the campaign — see §7)
 
@@ -131,8 +131,8 @@ the return value is consumed):
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
 | **TREE A** | | | |
-| `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851` |
-| `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key)) |
+| `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:459 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851` |
+| `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:414` (sched.emit(key)) |
 | **TREE B** | | | |
 | `{winner, turns, phases, tick_in_phase, a_stamina, b_stamina, a_hp_pct, b_hp_pct, a_morale, b_morale, truncated_groups, truncated_pairs, truncated_troops, max_groups}` | dict (return) | `run_multi_turn_battle` (`:2374`), `run_multi_unit_battle` (`:2666`), test callers | `tests/sim/mass_battle/orchestration.py:2166-2182` |
 | `{winner, battle_turns, log, a_loss_final, b_loss_final}` | dict (return) | `tests/sim/gauge_mb.py`, `tests/valoria/test_deployment_geometry.py`, `test_friction_cev.py` | `tests/sim/mass_battle/orchestration.py:2408-2414` |
@@ -151,7 +151,7 @@ the return value is consumed):
 | `unit.stamina` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1211-1222` |
 | `unit.discipline` | W | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:289` |
 | `world.rng` | R | caller (`GameState`, outside this subsystem) | `systems/mass_battle/sim/massbattle.py:1830` |
-| `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder — see §6) | `systems/factions/sim/faction_action.py:509` |
+| `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder — see §6) | `systems/factions/sim/faction_action.py:515` |
 | **TREE B** | | | |
 | `unit.hp` | RW | `tests/sim/mass_battle/hierarchy/units.py` (`Unit`) | write `tests/sim/mass_battle/orchestration.py:2064-2065` |
 | `unit.morale` | RW | `tests/sim/mass_battle/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `tests/sim/mass_battle/hierarchy/units.py:2455` (set_morale, 2472 cascade_morale_hit) |
@@ -165,8 +165,8 @@ the return value is consumed):
 |---|---|---|---|
 | up | `engine/mc_v18.py` (campaign driver) | `run_campaign` → `run_season(action_callback=_faction_actions_callback)` | `engine/mc_v18.py:212 run_campaign`, `:267 run_season` |
 | lateral | `systems/overview/sim/season.py` | `run_season`'s Step 2 invokes the passed `action_callback(world)` | `systems/overview/sim/season.py:70-71` (action_callback(world)) |
-| lateral | `systems/factions/sim/faction_action.py` (FA lane) | `_faction_actions_callback` → `faction_take_action` → `_try_conquest` → `resolve_mass_battle` (TREE A) — the one live faction-scale battle call, reached only past the action-roll gate and the targets/Mil-floor gate (TREE A S0.1–S0.2) | `engine/mc_v18.py:130 faction_take_action`; `systems/factions/sim/faction_action.py:245 _try_conquest`, `:431-438 resolve_mass_battle` |
-| down | `engine/substrate/keys.py` | `_try_conquest` emits `scene.battle_concluded` off the battle result, additive-only | `systems/factions/sim/faction_action.py:366` (from engine.substrate.keys import ..., :361 key =) |
+| lateral | `systems/factions/sim/faction_action.py` (FA lane) | `_faction_actions_callback` → `faction_take_action` → `_try_conquest` → `resolve_mass_battle` (TREE A) — the one live faction-scale battle call, reached only past the action-roll gate and the targets/Mil-floor gate (TREE A S0.1–S0.2) | `engine/mc_v18.py:130 faction_take_action`; `systems/factions/sim/faction_action.py:251 _try_conquest`, `:431-438 resolve_mass_battle` |
+| down | `engine/substrate/keys.py` | `_try_conquest` emits `scene.battle_concluded` off the battle result, additive-only | `systems/factions/sim/faction_action.py:372` (from engine.substrate.keys import ..., :361 key =) |
 | — | `systems/social_contest/sim/contest/wrapper.py` | comment-only reference ("Mirrors mass_battle.engine") — not an import, no runtime coupling | `systems/social_contest/sim/contest/wrapper.py:4`, `systems/social_contest/sim/contest/wrapper.py:290` |
 | — (none found) | `engine/`, other `systems/*` | TREE B (`tests/sim/mass_battle/`) has zero `import` statements reaching `systems.` or `engine.` anywhere in its 28 modules | grep evidence, no anchor to cite (absence) — see §7 |
 

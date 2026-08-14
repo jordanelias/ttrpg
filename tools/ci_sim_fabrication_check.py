@@ -88,13 +88,21 @@ _MECHANICAL_NUMERIC_PATTERN = re.compile(r'(?<![\w.])(\d+(?:\.\d+)?)(?![\w.])')
 _CANONICAL_COMMENT_PATTERN = re.compile(
     r'#\s*\[(?:canonical|GROUNDED|JUSTIFIED|DECLARED-DIVERGENCE|CALIBRATED-DEBT|FORK):\s*[^\]]+\]')
 
-# THE REF GRAMMAR IS NOT REDEFINED HERE. `FORK:` already had an owner before this gate used it —
-# `broken_dependency_checker.FORK_PREFIX` / `_is_forked`, mirrored in `pathres.FORK_PREFIX`, for the
-# restructure ledger's path sentinels — and `tests/valoria/test_forked_status.py` pins that a ref may
-# be EITHER a sha (`FORK:c451bcb`) OR a symbolic name (`FORK:refs/tags/pre-evacuation-2026-08-05`).
-# A first draft of this check accepted only 7-40 hex, which both admitted ordinary words that happen
-# to be hex-ish (`defaced`, `acceded`) and REJECTED the symbolic form the shipped test calls valid —
-# a third, disagreeing implementation of one rule, which is the §8 defect this repo treats as a bug.
+# THIS IS THE FIRST REF GRAMMAR FOR `FORK:` IN THE TREE, and an earlier version of this comment
+# claimed the opposite ("the ref grammar is NOT redefined here"). The prior owners define no grammar
+# at all: `broken_dependency_checker._is_forked` and `pathres.FORK_PREFIX` only test
+# `startswith('FORK:')` and never inspect what follows. So there was nothing to defer to, and saying
+# there was is exactly the §8 comment-asserting-a-property-the-tree-lacks defect.
+# What DOES constrain the grammar is `tests/valoria/test_forked_status.py`, which pins that a ref may
+# be EITHER a sha (`FORK:c451bcb`) OR a symbolic name (`FORK:refs/tags/pre-evacuation-2026-08-05`) —
+# so both forms are accepted below. A first draft accepted only 7-40 hex, which admitted hex-spelled
+# English words AND rejected the symbolic form that shipped test calls valid.
+# ⚠ A STRONGER CHECK ALREADY EXISTS AND IS NOT USED HERE: test_forked_status.py verifies refs with
+# `git cat-file -e <ref>^{commit}` — a LOCAL object read, no network. The "network fetch" reason this
+# gate gives for format-only checking is therefore wrong for the REF (it holds only for the blob's
+# CONTENT at that ref). Routing this gate through a git existence check is a real available
+# consolidation; it is filed, not done, because it makes a blocking gate depend on the ref being
+# present in every clone's object store.
 # The sha branch requires AT LEAST ONE DIGIT. Without it, `[0-9a-f]{7,40}` matches ordinary English
 # words that happen to be spelled in hex letters — `defaced`, `acceded`, `deadbeef` — so a tag with
 # no ref at all would pass on prose alone. And there is no bare `ref <name>` branch, because that
@@ -553,7 +561,7 @@ def main(argv) -> int:
 
     if refless_forks:
         print("[SIM-FABRICATION] `[FORK: ...]` tag(s) naming no ref — a FORK citation must say "
-              "WHERE it resolves (a 7-40 char sha, optionally prefixed `ref`):")
+              "WHERE it resolves: a 7-40 char hex sha with at least one digit, or a `refs/...` path:")
         for path, ln, tag in refless_forks[:10]:
             print(f"[SIM-FABRICATION]   {path}:{ln}: [FORK: {tag[:70]}]")
         if len(refless_forks) > 10:

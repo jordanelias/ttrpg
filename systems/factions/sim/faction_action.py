@@ -5,7 +5,7 @@ Canon source: GD-2 (mandatory before stochastic). LIVE DRIVER: engine/mc_v18.py,
               imports faction_take_action from here (mc_v18.py:37).
               Historical origin: mc_v17.py faction_take_action -- mc_v18 SUPERSEDED mc_v17,
               and mc_v17.py itself left `main` in the 2026-08-05 evacuation (ED-IN-0145).
-              Every `v17` tag below is FORK: provenance resolving at ref c451bcb, never a
+              Every `v17` tag below is [FORK: provenance resolving at ref c451bcb] — never a
               pointer to a file on `main`. See ED-IN-0188.
 Game Design constraints applicable: GD-1, GD-2
 Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-unique
@@ -101,8 +101,14 @@ def _successes(pool: float, rng) -> float:
 
     The retired convention was `d6, success on 4+`, a second dice system that existed only here.
     This now delegates to the canonical continuous d10 engine through the sigma-leverage layer, so
-    the strategic layer is fractional-native: a fractional pool is a real pool, and the returned net
-    is fractional rather than a count of whole dice.
+    the returned net is fractional rather than a count of whole dice.
+
+    ⚠ THE POOL IS STILL NOT FRACTIONAL, and an earlier draft of this docstring claimed it was.
+    `sigma_leverage.roll_net_continuous` does `effective_pool = max(1, int(round(pool)))` before
+    sampling (sigma_leverage.py:276), so a fractional pool is rounded to whole dice and floored at
+    one. Jordan ruled "fractional dice"; only the fractional RESULT is implemented. ED-IN-0187
+    recorded this correction and it was written into the ledger without being applied here — which
+    is worse than an unimplemented feature, because the call site asserted the opposite.
     """
     if pool <= 0:
         return 0.0

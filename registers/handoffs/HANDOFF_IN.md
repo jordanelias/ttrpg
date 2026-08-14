@@ -1,6 +1,6 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## 2026-08-14 — Jordan's ruling session: 5 of 8 calls EXECUTED, 1 site HELD, 3 calls NOT STARTED (ED-IN-0187/0188)
+## 2026-08-14 — Jordan's ruling session: all 10 calls RULED; 4 executed, 1 part-built, 5 not started; 2 sites HELD (ED-IN-0187/0188)
 
 **⚠ THE AGENDA IS CLOSED — ED-IN-0185 is RULED, not open.** All seven questions plus two raised in
 session were answered on 2026-08-14 and the answers are recorded verbatim in the ledger entry and in
@@ -20,14 +20,25 @@ what was executed against those rulings and — more importantly for whoever res
 |---|---|---|
 | Q1a | `CURRENT.md` history line: **delete**; keep only instructions to read recent commits + where the registers/logs/indexes are | **NOT STARTED** |
 | Q1b | The head-per-subsystem table: **generate, never hard code** | **NOT STARTED** |
-| Q2 | Fractional dice + fractional obstacles everywhere; Ob against a character/faction is **score/2 + that instance's modifiers**; **"a 3 or more is always overwhelming"**; **partial ⟺ obstacle met but not exceeded** (zero count difference) | **EXECUTED** ED-IN-0187 |
-| Q3 | **d10 always**, fractional, sigma-leveraged — the strategic-layer d6/4+ convention is retired | **EXECUTED** ED-IN-0187 |
+| Q2 | Fractional dice + fractional obstacles everywhere; Ob against a character/faction is **score/2 + that instance's modifiers**; **"a 3 or more is always overwhelming"**; **partial ⟺ obstacle met but not exceeded** (zero count difference) | **BANDS EXECUTED** ED-IN-0187; the **score/2 obstacle derivation is wired NOWHERE** — the largest unexecuted piece of the whole agenda |
+| Q3 | **d10 always**, fractional, sigma-leveraged — the strategic-layer d6/4+ convention is retired | **d10 + sigma EXECUTED** ED-IN-0187; **fractional DICE are not implemented** — `roll_net_continuous` does `int(round(pool))`, so pools are still whole dice and only the result is fractional |
 | Q4 | PP citations: **(b)** blanket-mark historical-resolves-at-fork, checker verifies format only | **VOCABULARY BUILT** (ED-IN-0188) — `FORK:` accepted + ref-format checked. **The PP sweep itself is NOT DONE**: 433 of 452 PP numbers still uncited. |
 | Q5 | Ledger overflow: **(a)** numbered continuation, full file frozen — **plus a companion index** | **NOT STARTED** |
 | Q6 | **Restore** CLAUDE.md §5–§7 | **NOT STARTED** — closes 327 dangling section citations across 176 files |
 | Q7 | Roster will be **10 attributes** (not 7, not 9); **delete the code that blocks itself from being ported — it is stale** | **NOT STARTED** — the 10th attribute is unnamed; that is the workshop |
 | — | *(in-session)* `CONQUEST_MIN_MIL` — "minimum military score needing to be 3 to attack is wrong and must be deleted" | **EXECUTED** ED-IN-0187 |
 | — | *(in-session)* "mc_v18 superseded v17. what's going on with referencing v17" | **EXECUTED** ED-IN-0188 |
+
+**⚠ A THIRD THING NEEDS JORDAN, AND IT IS SYSTEM-WIDE: the reband is a DIFFICULTY INCREASE that
+compounds with Ob, and no consumer table was recalibrated for it.** Measured: **181 of 600 integer
+(net, ob) cells moved Partial → Failure — 30.2%** — and it scales, because the old Partial band was
+`0 < net < Ob`. At Ob 3 that is net 1–2; at Ob 8, net 1–7; at Ob 12, net 1–11. Only `net == Ob` is
+Partial now. Every downstream table distinguishes the two bands: `domain_echo` charges Failure −1 to
+the acting faction's own stat (Partial cost nothing), `zoom_in_out` makes the next scene +1 Ob harder
+(Partial did not), and `DAMAGE_BY_DEGREE` pays 0 instead of 1 — which is the mechanism behind the
+moved battle digests. This FOLLOWS from the ruling and is not a defect; whether those tables should
+be recalibrated against the new band widths is an unmade design call. It was invisible because the
+migration verified the **ladders** and never enumerated their **22 consumers**.
 
 **THE ONE THING NEEDING JORDAN BEFORE ANYTHING ELSE IN PC/COMBAT MOVES.**
 `systems/combat/combat_engine_v1/core.py:degree` is **HELD at the pre-ruling ladder**, and it is the
@@ -65,6 +76,17 @@ largest piece of the ruling still outstanding and it touches every subsystem.
   `build_identifier_census.py`, `build_test_register.py`. Missing any leaves a freshness test red.
 - Touching anything under `tests/sim/` trips the co-file rule → `tests/coverage_matrix.md` must be
   updated in the same commit.
+
+**⚠ SELF-FINDING, AND IT MAKES Q5 THE OBVIOUS NEXT ITEM: this lane's prose is now part of the
+problem Q5 exists to solve.** `registers/editorial_ledger_in_archive.jsonl` grew **496,174 → 521,788
+bytes (+5.2%)** in this change and sits at **87% of its cap** (130,298 / 150,000 tokens, 19,702
+headroom). The three entries written here total ~26,600 chars ≈ **6,600 tokens — about a third of all
+remaining headroom** — and `ED-IN-0187` alone is 16,023 chars. `editorial_ledger_in.jsonl` is at 89%.
+**Q5 (numbered continuation + companion index) is RULED and UNEXECUTED**, so the next lane session is
+writing into a register that will hit its cap, using the overflow mechanism Jordan already replaced.
+Measured prose:logic ratio across this change ≈ **2.1 : 1** (1,140 prose lines to 542 logic lines).
+That is finding T3 — instrumentation outpacing remediation — reproduced by the session that cited it.
+**Execute Q5 before adding more narrative to this lane.**
 
 **VOCABULARY CORRECTION (Jordan, 2026-08-14) — mass battle has no 'grid' mode.** *"It always
 occurs on a coordinate field. Only the subunits can be said to be a grid."* `FIELD_MOVEMENT`

@@ -169,10 +169,17 @@ def trial_vector(ua, ub, r):
 # The only real grid here is the SUBUNIT's cells — the `cell` axis, reserved for exactly that by
 # ED-MB-0062's ruling.
 #
-# ⚠ The dated entries below still say "grid modes" where that is what was written at the time.
-# They are the historical record of past re-records and are NOT retrofitted (CLAUDE.md §4's
-# no-retrofit posture): rewriting them would falsify what a given commit actually claimed. Read
-# "grid mode" in any pre-2026-08-14 note as "the legacy integer-lattice arm".
+# ⚠ The dated entries below MOSTLY still say "grid modes" — that is what was written at the time,
+# they are the historical record of past re-records, and rewriting them would falsify what a given
+# commit actually claimed. Read "grid mode" in any pre-2026-08-14 note as "the legacy integer-lattice
+# arm".
+# ⚠⚠ TWO OF THEM WERE RETROFITTED ANYWAY, and the inconsistency is left visible rather than tidied:
+# the 2026-07-22 and 2026-07-24 blocks now read "LEGACY-lattice modes" while their neighbours in the
+# SAME dated entries still read "GRID modes". A blanket search-and-replace caught them before the
+# no-retrofit rule above was written. Reverting them would restore two accurate historical lines;
+# extending the rewrite would erase the record. Neither is worth a commit on its own, so this note
+# is the disclosure — and the lesson is that a no-retrofit policy has to be decided BEFORE the
+# sweep, not written above one that already ran.
 #
 # STILL CARRYING THE OLD WORD, filed not swept (§0.1 point 5 — sweep only what the task is
 # load-bearing on): `validators.py`'s `path='grid'|'node'` argument and its callers in
@@ -401,7 +408,7 @@ EXPECTED = {
     # ⚠ RECORDED FROM THE REFERENCE CI ENVIRONMENT, NOT LOCALLY, and that distinction is the
     # finding. Locally `tests/valoria/test_mass_battle_byte_exact.py` reports these modes as
     # skip/xfail (documented platform non-portability + a pre-existing known-red), so a local
-    # green says NOTHING about them — the pytest wrapper covers the grid modes while
+    # green says NOTHING about them — the pytest wrapper covers the two legacy-lattice modes while
     # `tools/ci_golden_modes_check.py` is what actually gates these three. An adversarial critic
     # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
     # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
@@ -575,7 +582,7 @@ def _mode_key(per_cell, field_movement, cell_morale):
 
 
 def compute():
-    """mode key: 'cell'/'unit' (grid, PER_CELL selects) or '..._field' when FIELD_MOVEMENT is on. Read
+    """mode key: 'cell'/'unit' (PER_CELL selects the geometry) + '_legacy'/'_field' (FIELD_MOVEMENT). Read
     at CALL TIME so the reported mode always matches what this process actually ran, not just PER_CELL
     -- [Stage A] before this, mode was PER_CELL-only, so a FIELD_MOVEMENT default-flip would silently
     run the field path but report/check it as plain 'unit'/'cell', comparing against the WRONG

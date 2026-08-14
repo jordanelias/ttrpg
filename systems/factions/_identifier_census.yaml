@@ -105,7 +105,7 @@ identifiers:
     identifier: adjust_accord
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:496 adjust_accord`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:502 adjust_accord`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -371,7 +371,7 @@ identifiers:
     identifier: attacker_wins
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S2.5.4** `[branch][write]` On attacker win: transfer territory ownership, apply a loser Legitimacy penalty; then fork Terms (`deg == ''Success''`) vs Storm on Accord penalty and an `entry_terms_l_seed` proxy write — `systems/factions/sim/faction_action.py:461-497 attacker_wins`.'
+    purpose: 'S2.5.4** `[branch][write]` On attacker win: transfer territory ownership, apply a loser Legitimacy penalty; then fork Terms (`deg == ''Success''`) vs Storm on Accord penalty and an `entry_terms_l_seed` proxy write — `systems/factions/sim/faction_action.py:467-503 attacker_wins`.'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -508,7 +508,7 @@ identifiers:
     identifier: battle_count
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:509 battle_count`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:515 battle_count`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py
@@ -896,7 +896,7 @@ identifiers:
     identifier: conquest_mult
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector — `systems/factions/sim/faction_action.py:213-226 conquest_mult`.
+    purpose: S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector — `systems/factions/sim/faction_action.py:219-232 conquest_mult`.
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1134,7 +1134,7 @@ identifiers:
     identifier: cum_conquest
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S2.5** `[branch]` `roll < cum_conquest` → `_try_conquest` — `systems/factions/sim/faction_action.py:244-247 _try_conquest`.
+    purpose: S2.5** `[branch]` `roll < cum_conquest` → `_try_conquest` — `systems/factions/sim/faction_action.py:250-253 _try_conquest`.
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1144,7 +1144,7 @@ identifiers:
     identifier: cum_muster
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`.'
+    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:256-259 _try_muster`, `systems/factions/sim/faction_action.py:520-548 _try_muster`.'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1154,7 +1154,7 @@ identifiers:
     identifier: cum_unique
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S2.4** `[branch]` `roll < cum_unique` → `_try_faction_unique` — `systems/factions/sim/faction_action.py:237-241 _try_faction_unique`.
+    purpose: S2.4** `[branch]` `roll < cum_unique` → `_try_faction_unique` — `systems/factions/sim/faction_action.py:243-247 _try_faction_unique`.
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1425,7 +1425,7 @@ identifiers:
     identifier: entry_terms_l_seed
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none — see §7 | `systems/factions/sim/faction_action.py:503 entry_terms_l_seed`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none — see §7 | `systems/factions/sim/faction_action.py:509 entry_terms_l_seed`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1537,7 +1537,7 @@ identifiers:
     identifier: faction_a
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:451-458 resolve_mass_battle`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -1547,7 +1547,7 @@ identifiers:
     identifier: faction_b
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:451-458 resolve_mass_battle`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -1677,7 +1677,7 @@ identifiers:
     identifier: faction_take_action
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:191 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -2330,7 +2330,7 @@ identifiers:
     identifier: MUSTER_WEALTH_TO_POOL_DIV
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`.'
+    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:256-259 _try_muster`, `systems/factions/sim/faction_action.py:520-548 _try_muster`.'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -2908,7 +2908,7 @@ identifiers:
     identifier: propose_censure
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:266 propose_censure`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`'
     built_in:
     - py:systems/factions/sim/parliamentary_action.py
     disposition: BUILT
@@ -3049,7 +3049,7 @@ identifiers:
     identifier: resolve_mass_battle
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:451-458 resolve_mass_battle`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT

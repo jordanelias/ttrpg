@@ -7003,7 +7003,7 @@
   },
   "Overwhelming": {
    "ambiguous": true,
-   "definition": "Net successes \u2265 2\u00d7 Ob AND \u2265 3 minimum (TTRPG, PP-232); \u2265 Ob + 1 (BG, provisional).",
+   "definition": "margin (net \u2212 Ob) \u2265 3, at every scale (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c\u2265 2\u00d7 Ob AND \u2265 3 (PP-232)\u201d and the separate BG form.",
    "file_count": 70,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
@@ -7162,7 +7162,7 @@
   },
   "Partial": {
    "ambiguous": true,
-   "definition": "Net successes > 0 but < Ob.",
+   "definition": "The obstacle MET but not EXCEEDED \u2014 margin (net \u2212 Ob) in [0, 1) (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c> 0 but < Ob\u201d, which now reads Failure.",
    "file_count": 65,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
@@ -11552,7 +11552,7 @@
       "systems/_architecture/key_type_registry_v30.md",
       "systems/_architecture/propagation_spec_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.lookup` | `engine/substrate/keys.py:364 lookup` | `engine/substrate/keys.py:588` (inside `accounting_boundary`, def at `:581` \u2014 resolves the Key for every queued `_pending_apply` callable at the ACCOUNTING boundary, the hottest production path); also `engine/tests/test_accord_echo.py:311`, `engine/tests/test_echo_transport.py:89`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.lookup` | `engine/substrate/keys.py:364 lookup` | `engine/substrate/keys.py:588` (inside `accounting_boundary`, def at `:581` \u2014 resolves the Key for every queued `_pending_apply` callable at the ACCOUNTING boundary, the hottest production path); also `engine/tests/test_accord_echo.py:311`, `engine/tests/test_echo_transport.py:100`"
     },
     "factions": {
      "built_in": [
@@ -13608,7 +13608,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:97-98 test_mc_v18_batch_matches_golden`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden`"
     }
    },
    "file_count": 1,
@@ -63146,7 +63146,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:97-98 test_mc_v18_batch_matches_golden`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden`"
     }
    },
    "file_count": 1,
@@ -67254,7 +67254,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:97-98 test_mc_v18_batch_matches_golden`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden`"
     }
    },
    "file_count": 1,

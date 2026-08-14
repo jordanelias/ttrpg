@@ -114,9 +114,14 @@ def degree_from_net(net: int | float, ob: int | float) -> Degree:
         0 <= margin < 1    Partial        the obstacle is MET but not EXCEEDED
         margin <  0        Failure        fell short
 
-    Both operands may be fractional and are expected to be: obstacles derived from an opposing
-    character or faction are score/2 plus that instance's modifiers, and the continuous engine
-    returns fractional nets. The Partial band is therefore a whole-success-wide window rather
+    Both operands may be fractional. `net` already is — the continuous engine returns fractional
+    nets. `ob` is RULED to become fractional (Jordan, 2026-08-14: an obstacle rolled against a
+    character or faction is "their corresponding score/2 plus whatever specific modifiers exist for
+    them in that instance") but ⚠ THAT DERIVATION IS IMPLEMENTED NOWHERE — every call site in the
+    tree still passes a hand-set Ob. An earlier draft of this paragraph stated it as an accomplished
+    fact; it is a ruling awaiting execution, and the distinction matters here more than anywhere
+    else, because this is the function a reader consults to learn what an obstacle IS.
+    The Partial band is a whole-success-wide window rather
     than the single point `margin == 0`, which is what the same rule reduces to on integers
     (`floor(margin) == 0`) — the two readings agree everywhere the game rolls whole dice, and
     only the windowed one survives contact with fractional obstacles, where exact equality
