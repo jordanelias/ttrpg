@@ -27,7 +27,7 @@
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2249,
+    "occurrences": 2270,
     "qualified": 0
    },
    "campaign_architecture": {
@@ -47,7 +47,7 @@
     "qualified": 0
    },
    "engine_clock": {
-    "occurrences": 129,
+    "occurrences": 130,
     "qualified": 0
    },
    "faction_politics": {
@@ -115,7 +115,7 @@
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 2173,
+    "occurrences": 2182,
     "qualified": 0
    },
    "territorial_piety": {
@@ -127,11 +127,11 @@
     "qualified": 0
    },
    "victory": {
-    "occurrences": 2101,
+    "occurrences": 2102,
     "qualified": 0
    }
   },
-  "contracts_median_occurrences": 129,
+  "contracts_median_occurrences": 130,
   "keys_median_occurrences": 27
  },
  "schema_version": 1,

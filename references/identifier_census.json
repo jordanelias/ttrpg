@@ -20,10 +20,10 @@
    "identifiers": 82
   },
   "combat": {
-   "BUILT": 84,
-   "UNRESOLVED": 36,
-   "docs": 4,
-   "identifiers": 120
+   "BUILT": 97,
+   "UNRESOLVED": 39,
+   "docs": 5,
+   "identifiers": 136
   },
   "factions": {
    "BUILT": 107,
@@ -59,15 +59,15 @@
   "settlements": {
    "BUILT": 78,
    "UNRESOLVED": 109,
-   "docs": 13,
+   "docs": 14,
    "identifiers": 187
   },
   "social_contest": {
-   "BUILT": 84,
+   "BUILT": 85,
    "SUPERSEDED-DOC": 1,
-   "UNRESOLVED": 14,
-   "docs": 6,
-   "identifiers": 99
+   "UNRESOLVED": 15,
+   "docs": 7,
+   "identifiers": 101
   },
   "threadwork": {
    "BUILT": 78,
