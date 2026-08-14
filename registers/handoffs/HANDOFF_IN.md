@@ -1,5 +1,116 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-08-14 — Jordan's ruling session: 5 of 8 calls EXECUTED, 1 site HELD, 3 calls NOT STARTED (ED-IN-0187/0188)
+
+**What happened.** Jordan was presented the batched ruling agenda `audit/2026-08-14-five-lens-repo-assessment/01_plan.md`
+§2 (filed as ED-IN-0185) and ruled on all seven questions plus two raised in-session. This entry records
+what was executed against those rulings and — more importantly for whoever resumes — **what was not**.
+
+**THE RULINGS, verbatim, so a later session re-derives the same meaning (§4 idempotence):**
+| # | Ruling | State |
+|---|---|---|
+| Q1a | `CURRENT.md` history line: **delete**; keep only instructions to read recent commits + where the registers/logs/indexes are | **NOT STARTED** |
+| Q1b | The head-per-subsystem table: **generate, never hard code** | **NOT STARTED** |
+| Q2 | Fractional dice + fractional obstacles everywhere; Ob against a character/faction is **score/2 + that instance's modifiers**; **"a 3 or more is always overwhelming"**; **partial ⟺ obstacle met but not exceeded** (zero count difference) | **EXECUTED** ED-IN-0187 |
+| Q3 | **d10 always**, fractional, sigma-leveraged — the strategic-layer d6/4+ convention is retired | **EXECUTED** ED-IN-0187 |
+| Q4 | PP citations: **(b)** blanket-mark historical-resolves-at-fork, checker verifies format only | **VOCABULARY BUILT** (ED-IN-0188) — `FORK:` accepted + ref-format checked. **The PP sweep itself is NOT DONE**: 433 of 452 PP numbers still uncited. |
+| Q5 | Ledger overflow: **(a)** numbered continuation, full file frozen — **plus a companion index** | **NOT STARTED** |
+| Q6 | **Restore** CLAUDE.md §5–§7 | **NOT STARTED** — closes 327 dangling section citations across 176 files |
+| Q7 | Roster will be **10 attributes** (not 7, not 9); **delete the code that blocks itself from being ported — it is stale** | **NOT STARTED** — the 10th attribute is unnamed; that is the workshop |
+| — | *(in-session)* `CONQUEST_MIN_MIL` — "minimum military score needing to be 3 to attack is wrong and must be deleted" | **EXECUTED** ED-IN-0187 |
+| — | *(in-session)* "mc_v18 superseded v17. what's going on with referencing v17" | **EXECUTED** ED-IN-0188 |
+
+**THE ONE THING NEEDING JORDAN BEFORE ANYTHING ELSE IN PC/COMBAT MOVES.**
+`systems/combat/combat_engine_v1/core.py:degree` is **HELD at the pre-ruling ladder**, and it is the
+only site in the tree that is. Applying the ruled bands there moves the Failure edge two whole
+successes (at `DECISIVE_OB=3`: `fail <0.5` → `<2.5`) and breaks a ratified invariant —
+`test_plate_participation_tracks_armour_defeat_capability` takes guandao (armour-defeat capability
+0.13) from settling **2.5% → 47.5%** of its plate fights against a 40% ceiling, i.e. penetration
+decouples from armour-defeat capability, exactly what ED-PC-0038/0039 ratified that guard to prevent.
+Re-recording the golden would hide it; relaxing the guard would discard the principle. **Do not
+"fix" this by tuning.** It is entangled with the unexecuted half of Q2: this resolver rolls against a
+fixed `DECISIVE_OB = 3` and carries the opposition in `net_sigma`, so it does not derive Ob from the
+defender at all. Deriving Ob as score/2 would move the bands again — calibrating the fixed-Ob form
+first is work thrown away. Sequence: rule the Ob derivation, then recalibrate, then migrate.
+`tests/valoria/test_degree_ladder_single_owner.py::test_the_held_site_still_diverges_and_the_hold_is_still_needed`
+fails the moment the hold is resolved, so it cannot outlive its reason.
+
+**Q2's score/2 obstacle derivation is UNIMPLEMENTED ANYWHERE.** ED-IN-0187 executed the *bands*; the
+*obstacle source* — "their corresponding score/2 plus whatever specific modifiers exist for them in
+that instance" — is not wired at any scale. Every current call site still passes a hand-set Ob
+(`Muster Ob 1`, `Govern Ob 2`, `DECISIVE_OB 3`, the threadwork three-axis table). This is the single
+largest piece of the ruling still outstanding and it touches every subsystem.
+
+**Gotchas for whoever resumes, each of which cost time here:**
+- **The flow skeletons carry hand-maintained `file:line` anchors and 253 of them broke** on a change
+  that moved ~14 lines of module header. Remap them **through the diff** (`git diff -U0 HEAD` old→new
+  line correspondence), NOT by searching for the symbol name — searching resolved `npc_counter` to the
+  dataclass field instead of the snapshot block it was citing, and `_emit_battle_concluded` to the
+  definition instead of the call site. Both would have passed the suite's resolver while pointing at
+  the wrong thing. And **remap exactly once from a clean revert**: running the remapper twice
+  double-shifts and produced an anchor past end-of-file.
+- Anchors carrying **no symbol** get only a range check, so a wrong-but-in-range line passes silently.
+  One (`overview` → `faction_action.py:546`) had to be fixed by reading it.
+- Regenerate in this order after touching engine code: `build_engine_atlas.py`, `export_sim_params.py
+  --build`, `link_values_pointers.py --build`, `observability/build_glossary.py`,
+  `build_identifier_census.py`, `build_test_register.py`. Missing any leaves a freshness test red.
+- Touching anything under `tests/sim/` trips the co-file rule → `tests/coverage_matrix.md` must be
+  updated in the same commit.
+
+**VOCABULARY CORRECTION (Jordan, 2026-08-14) — mass battle has no 'grid' mode.** *"It always
+occurs on a coordinate field. Only the subunits can be said to be a grid."* `FIELD_MOVEMENT`
+defaults to **1**; `=0` is the pre-migration integer lattice kept as a byte-exact regression arm,
+which `validators.py:220` already called "the legacy integer path". The golden mode key called it
+`grid`, and I read that as a movement mode and wrote it into two commit messages. Renamed to
+`legacy` in `bat._mode_key`, the three `EXPECTED` keys, both asserting tests and the CI checker —
+**labels only, no digest touched**. Historical dated entries keep the old word (no-retrofit);
+`validators.py`'s `path='grid'|'node'` is filed, not swept. **The general point for this lane: a
+mode key is a definition, and a wrong one propagates into prose faster than any doc does.**
+
+**THE ADVERSARIAL PASS FOUND EIGHT THINGS, and two of them change how you should read this lane's
+output.** Jordan required an adversarial crusher before commit; two independent read-only critics
+(structural independence per §10 — `Read/Grep/Glob` only, given the diff as OUTPUT, never the
+reasoning) ran over the finished change. Full detail in ED-IN-0187/0188; the two that generalise:
+
+1. **AN AUDIT INSTRUMENT'S ROSTER IS A CLAIM, NOT A MEASUREMENT.** The degree census enrolled 8
+   ladders and was trusted because it was written down and re-runnable. Both critics independently
+   found a NINTH — `sigma_leverage.degree`, the social-contest surface, **in the same package as the
+   owner** — plus a TENTH (`systems/combat/sim/combat.py`) neither the census nor I had enrolled.
+   Everything downstream inherited the undercount, including this lane's headline. The repair is a
+   **source sweep that does not depend on anyone having enrolled the file**; a roster-based
+   instrument can only ever confirm what its author already knew.
+2. **`pytest tests/valoria` IS NOT THE WHOLE SHIPPING GATE.** CLAUDE.md §8 names it, and it was
+   green — while **`engine/tests` (CI job `sim-regression`) had six failures, all mine.** Run BOTH.
+   Baselines: `tests/valoria` 1905/0 and `engine/tests` 2051/0 at `85bf491`.
+
+Also caught, and worth knowing because each is a habit rather than a slip: my recurrence guard
+would have caught **4 of the 11** ladders it claimed to guard (fixed and re-verified against all
+five missed forms); two assertions I added were **vacuous**, one of them arithmetically forced by
+the loop that computed it; and I asserted "a fractional pool is a real pool" when the delegate does
+`int(round(pool))` — **the fractional-DICE half of the ruling is not implemented**, only fractional
+results. And the finding I called **overturned was not**: I refuted the critic's "byte-exact goldens break"
+claim by running `test_mass_battle_byte_exact.py` (skip/xfail locally) — **but that wrapper covers the
+GRID modes, while the three field/cell-morale digests are gated by `tools/ci_golden_modes_check.py`, a
+separate blocking job.** CI failed on exactly the digests the critic named. Re-recorded from the
+reference CI environment, since these are platform-sensitive and a locally-computed value would have
+been a wrong number recorded confidently. **The error is the same shape as running only one of the two
+blocking suites: I answered a claim with evidence from a NEIGHBOURING instrument without checking that
+the instrument governed the claim.** Check the gate that gates the thing.
+
+**Verification state at handoff:** `pytest tests/valoria` **1917 passed / 0 failed** (baseline
+1905/0); `pytest engine/tests` **2051 passed / 0 failed** (baseline 2051/0). Six seeded-campaign
+goldens re-recorded, each with its before/after and cause in the file. `valoria_local.py --staged`
+blocking gates green. **Neither local suite covers `tools/ci_golden_modes_check.py`** — the field-golden byte-exact job, which is blocking and runs only on CI; three digests moved there and were re-recorded from the CI run. `scope_ratchet` REGRESSED on `ed.stale`/`ed.needs_jordan_stale` —
+**pre-existing, identical at baseline**, not caused here.
+
+**TWO sites are HELD, not one.** `combat_engine_v1/core.py` (above) and now
+`engine/autoload/sigma_leverage.py` — the contest surface, whose top band is a deliberate
+POOL-AWARE bar and whose `net == ob` cell the ruling flips (pinned as-is by `_kernel_tests.py`).
+Both are registered in `tests/valoria/test_degree_ladder_single_owner.py::HELD`, which fails if
+either stops diverging, so neither can outlive its reason.
+
+---
+
 ## THE SEPARATION WORK LIST (W1–W10) — written down 2026-08-04 (ED-IN-0135)
 
 **Why this is here.** The W-list existed only in a review transcript and a chat reply. The ED-IN-0132

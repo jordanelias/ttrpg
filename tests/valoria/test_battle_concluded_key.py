@@ -18,8 +18,10 @@ call; an announcement that something HAPPENED becomes a Key. Not every cross-sub
 Key candidate, and a migration that ignores the difference is cargo-culting.
 
 WHAT THE EMISSION IMMEDIATELY FOUND, which is the argument for doing it at all: `world.battle_count`
-increments INSIDE `if battle['attacker_wins']:` (faction_action.py:488), so the field named
-"battle_count" counts attacker VICTORIES. Seed 42: **62 battles resolved, 29 reported.** The Key
+increments INSIDE `if battle['attacker_wins']:` (faction_action.py:509), so the field named
+"battle_count" counts attacker VICTORIES. Seed 42: **76 battles resolved, 33 reported** (was
+62/29 before the 2026-08-14 degree-ladder and strategic-dice ruling moved the campaign,
+ED-IN-0187 — the UNDERCOUNT is the point here, and it survived the reband). The Key
 fires on every battle regardless of outcome, so adding it produced a measurement the existing
 telemetry did not have.
 """
@@ -72,16 +74,40 @@ def test_payload_validates_under_strict_mode(seeded_battle_campaign):
 
 
 def test_emission_is_additive_and_changes_no_outcome(seeded_battle_campaign):
-    """Byte-exact safety: the campaign lands where it landed before the emitter existed.
+    """The emitter changes no outcome — asserted by SUPPRESSING it and comparing, not by pinning.
 
-    Baseline captured on seed 42 immediately BEFORE the emit site was added: winner Crown, 50
-    seasons, battle_count 29. `emit()` is called with no `apply=`, so there is no write path at
-    all — this asserts the property the design relies on rather than trusting the argument.
+    ⚠ THIS TEST USED TO PIN ABSOLUTE CAMPAIGN VALUES (winner Crown, 50 seasons, battle_count 29),
+    captured on seed 42 immediately before the emit site was added. That is a proxy for the claim,
+    not the claim, and it fails whenever ANYTHING else in the campaign moves — which it did on
+    2026-08-14, when Jordan's degree-ladder and strategic-dice ruling changed how faction actions
+    resolve (ED-IN-0187). The pinned values then read as "the emitter broke something", which is
+    precisely backwards: the emitter was the one thing that had not changed.
+
+    So the claim is now tested directly. The campaign runs twice on the same seed, once with
+    `_emit_battle_concluded` replaced by a no-op, and the two outcomes must be identical. This is
+    immune to any future rebalancing — it can only fail if the emission actually writes state,
+    which is the property the design relies on.
     """
     result, _seen = seeded_battle_campaign
-    assert result.winner == 'Crown'
-    assert result.season == 50
-    assert result.battle_count == 29
+
+    from systems.factions.sim import faction_action
+    real = faction_action._emit_battle_concluded
+    faction_action._emit_battle_concluded = lambda *a, **k: None
+    try:
+        silent, _world, silent_seen = _campaign.run(SEED)
+    finally:
+        faction_action._emit_battle_concluded = real
+
+    assert silent_seen['scene.battle_concluded'] == 0, (
+        'the suppression did not take — the control arm still emitted, so the comparison below '
+        'would be one campaign against itself and could not fail (CLAUDE.md §0.1 point 2)')
+    assert (silent.winner, silent.season, silent.battle_count) == \
+           (result.winner, result.season, result.battle_count), (
+        f'emitting scene.battle_concluded MOVED the campaign: '
+        f'{(result.winner, result.season, result.battle_count)} with the emitter, '
+        f'{(silent.winner, silent.season, silent.battle_count)} without it. The emission is '
+        f'supposed to be additive (`emit()` with no `apply=`); if it now writes state, that is the '
+        f'bug, not this test.')
 
 
 def test_battle_count_undercounts_battles(seeded_battle_campaign):

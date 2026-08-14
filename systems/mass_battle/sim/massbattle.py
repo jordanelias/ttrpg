@@ -638,10 +638,9 @@ def roll_pool(n, tn=7, rng=None):
     return net
 
 def compute_degree(net, ob):
-    if net <= 0:                    return "Failure"
-    if net >= 2 * ob and net >= 3:  return "Overwhelming"
-    if net >= ob:                   return "Success"
-    return "Partial"
+    """Adapter over the owner (Jordan ruling 2026-08-14) — not a second ladder."""
+    from engine.autoload import dice_engine
+    return dice_engine.degree_label(net, ob)
 
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
                      "Partial": lambda p: 1,        "Failure": lambda p: 0}

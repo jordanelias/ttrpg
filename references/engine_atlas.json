@@ -27,7 +27,7 @@
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2247,
+    "occurrences": 2248,
     "qualified": 0
    },
    "campaign_architecture": {
@@ -67,7 +67,7 @@
     "qualified": 0
    },
    "mass_battle": {
-    "occurrences": 2494,
+    "occurrences": 2495,
     "qualified": 0
    },
    "miraculous_event": {
@@ -123,7 +123,7 @@
     "qualified": 0
    },
    "threadwork": {
-    "occurrences": 2237,
+    "occurrences": 2238,
     "qualified": 0
    },
    "victory": {
@@ -504,32 +504,32 @@
       "name": "grab_sigma"
      },
      {
-      "at": "systems/combat/combat_engine_v1/core.py:328",
-      "name": "thrust_authority"
-     },
-     {
-      "at": "systems/combat/combat_engine_v1/core.py:333",
-      "name": "cut_thrust_arm"
+      "at": "systems/combat/combat_engine_v1/core.py:115",
+      "name": "heft_resp"
      },
      {
       "at": "systems/combat/combat_engine_v1/core.py:34",
       "name": "logistic"
      },
      {
-      "at": "systems/combat/combat_engine_v1/core.py:363",
+      "at": "systems/combat/combat_engine_v1/core.py:357",
+      "name": "thrust_authority"
+     },
+     {
+      "at": "systems/combat/combat_engine_v1/core.py:362",
+      "name": "cut_thrust_arm"
+     },
+     {
+      "at": "systems/combat/combat_engine_v1/core.py:392",
       "name": "coupling"
      },
      {
-      "at": "systems/combat/combat_engine_v1/core.py:425",
+      "at": "systems/combat/combat_engine_v1/core.py:454",
       "name": "adef_cap"
      },
      {
       "at": "systems/combat/combat_engine_v1/core.py:56",
       "name": "roll_net"
-     },
-     {
-      "at": "systems/combat/combat_engine_v1/core.py:86",
-      "name": "heft_resp"
      },
      {
       "at": "systems/combat/combat_engine_v1/geometry.py:28",
@@ -852,7 +852,7 @@
       "name": "run_traced_fight"
      },
      {
-      "at": "systems/combat/sim/combat.py:100",
+      "at": "systems/combat/sim/combat.py:101",
       "name": "ActionResult"
      }
     ]
@@ -909,15 +909,15 @@
     "public": 46,
     "unnamed": [
      {
-      "at": "systems/factions/sim/absolution.py:38",
+      "at": "systems/factions/sim/absolution.py:39",
       "name": "AbsolutionResult"
      },
      {
-      "at": "systems/factions/sim/absolution.py:50",
+      "at": "systems/factions/sim/absolution.py:51",
       "name": "attempt_absolution"
      },
      {
-      "at": "systems/factions/sim/absolution.py:91",
+      "at": "systems/factions/sim/absolution.py:92",
       "name": "select_absolution_target"
      },
      {
@@ -965,15 +965,15 @@
       "name": "attempt_excommunication"
      },
      {
-      "at": "systems/factions/sim/mass_seizure.py:300",
+      "at": "systems/factions/sim/mass_seizure.py:298",
       "name": "is_available"
      },
      {
-      "at": "systems/factions/sim/mass_seizure.py:85",
+      "at": "systems/factions/sim/mass_seizure.py:86",
       "name": "SeizureDeclaration"
      },
      {
-      "at": "systems/factions/sim/mass_seizure.py:95",
+      "at": "systems/factions/sim/mass_seizure.py:96",
       "name": "SeizureResult"
      },
      {
@@ -1108,7 +1108,7 @@
     "public": 42,
     "unnamed": [
      {
-      "at": "systems/mass_battle/sim/massbattle.py:1500",
+      "at": "systems/mass_battle/sim/massbattle.py:1499",
       "name": "freed_attacker_damage"
      },
      {
@@ -1168,7 +1168,7 @@
       "name": "compute_degree"
      },
      {
-      "at": "systems/mass_battle/sim/massbattle.py:804",
+      "at": "systems/mass_battle/sim/massbattle.py:803",
       "name": "count_engagements_per_atom"
      }
     ]

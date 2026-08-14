@@ -4,8 +4,8 @@
 Runs `tests/sim/mass_battle/bat.py --check` in the two FIELD_MOVEMENT=1 modes
 (`unit_field` PER_CELL=0, `cell_field` PER_CELL=1) with the FULL digest-relevant
 toggle vector pinned. Complements tests/valoria/test_mass_battle_byte_exact.py,
-which covers only the two grid modes — before this gate existed, both field
-goldens sat red for 5 days undetected (PRs #235/#236 re-recorded grid only;
+which covers only the two LEGACY-LATTICE modes — before this gate existed, both field
+goldens sat red for 5 days undetected (PRs #235/#236 re-recorded the lattice arm only;
 bisected and re-recorded in plan-v2 A1a).
 
 PIN DOCTRINE (ED-1089, ED-MB-0045 A1b): every pin below is the value the field
@@ -50,7 +50,7 @@ BAT = os.path.join(REPO, 'tests', 'sim', 'mass_battle', 'bat.py')
 FIELD_PINS = {
     # determinism (empirically hash-order-independent per A1a's runs; pinned anyway)
     'PYTHONHASHSEED': '0',
-    # _PINNED_OFF carry-over (grid dict minus the two field-mode selectors)
+    # _PINNED_OFF carry-over (lattice dict minus the two field-mode selectors)
     'FIELD_CONTACT': '0', 'PC_FACING_MODEL': '0', 'CONTACT_REACH': '0.0',
     'PC_OCTAGON_DMG': '1', 'PC_CELL_MORALE': '0',
     # Group A — unconditional in shared code (digest-relevant in all four modes)
@@ -83,7 +83,7 @@ FIELD_PINS = {
     'PC_FRICTION_CEV': '0', 'PC_FRICTION_SIGMA': '1.1', 'PC_FRACTIONAL_POOL': '0',
     'PC_INTENT_RESOLUTION': '0', 'PC_CLOSE_RANKS': '0', 'PC_TROOP_DENSITY_CAP': '0',
     # [ED-MB-0059, 2026-07-29] Same-side cell exclusion. Default ON, and STRONGLY digest-moving on
-    # the two field modes (it is a no-op on the grid modes — the pass lives inside
+    # the two field modes (it is a no-op on the legacy-lattice modes — the pass lives inside
     # resolve_toi_and_commit, which only runs under FIELD_MOVEMENT). Pinned at its shipped default
     # for the same reason every Group C entry is: an ambient flip must produce a named red here,
     # not a mystery digest mismatch.
@@ -107,7 +107,7 @@ MODES = {
     # desync motivates the ownership work, and "if a digest moves, you changed behaviour" was
     # vacuous over exactly the state B1a is about to refactor. This overrides FIELD_PINS'
     # PC_CELL_MORALE='0' deliberately; the mode-key assertion below is what makes that safe.
-    'cell_grid_mor1': {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'PER_CELL': '1',
+    'cell_legacy_mor1': {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'PER_CELL': '1',
                 'PC_CELL_MORALE': '1'},
 }
 

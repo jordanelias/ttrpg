@@ -37,6 +37,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, Any
 
+from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 from systems.threadwork.sim.coherence import apply_coherence_delta
 
@@ -131,15 +132,14 @@ class OperationResult:
     notes: list[str] = field(default_factory=list)
 
 
-def _compute_degree(net_successes: int, ob: int) -> str:
-    """Map net_successes vs Ob to a degree label per standard dice-engine semantics."""
-    if net_successes <= 0:
-        return "Failure"
-    if net_successes < ob:
-        return "Partial"
-    if net_successes >= ob + 3:
-        return "Overwhelming"
-    return "Success"
+def _compute_degree(net_successes: int | float, ob: int | float) -> str:
+    """Map net_successes vs Ob to a degree label. Adapter over the owner, not a second ladder.
+
+    This module's own `ob + 3` Overwhelming bar was already the ruled margin rule; what changed
+    with the 2026-08-14 ruling is the Partial band, which was `0 < net < Ob` and is now the
+    met-but-not-exceeded window. See `dice_engine.degree_from_net`.
+    """
+    return dice_engine.degree_label(net_successes, ob)
 
 
 def _actor_pool(actor) -> int:

@@ -21,7 +21,7 @@ identifiers:
     identifier: a_knot_id
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | — none found'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -31,7 +31,7 @@ identifiers:
     identifier: actor_a
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | — none found'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     - py:systems/threadwork/sim/opposing.py
@@ -42,7 +42,7 @@ identifiers:
     identifier: actor_b
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | — none found'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     - py:systems/threadwork/sim/opposing.py
@@ -69,7 +69,7 @@ identifiers:
     identifier: apply_coherence_delta
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:138 apply_coherence_delta` | `systems/threadwork/sim/operations.py:194 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:185 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:221 apply_coherence_delta` (internal);'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:138 apply_coherence_delta` | `systems/threadwork/sim/operations.py:194 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:179 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal);'
     built_in:
     - py:systems/threadwork/sim/coherence.py
     disposition: BUILT
@@ -99,7 +99,7 @@ identifiers:
     identifier: apply_ms_delta
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.clocks[''MS'']` | W (via `ms_track.apply_ms_delta`) | `systems.overview.sim.ms_track` (peer module, not owned here) | `systems/threadwork/sim/opposing.py:231-232`; `systems/threadwork/sim/co_movement.py:142-143`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.clocks[''MS'']` | W (via `ms_track.apply_ms_delta`) | `systems.overview.sim.ms_track` (peer module, not owned here) | `systems/threadwork/sim/opposing.py:238-239`; `systems/threadwork/sim/co_movement.py:142-143`'
     built_in:
     - py:systems/overview/sim/ms_track.py
     disposition: BUILT
@@ -208,7 +208,7 @@ identifiers:
     identifier: b_knot_id
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | — none found'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -287,7 +287,7 @@ identifiers:
     identifier: COHERENCE_COST_BY_SCALE
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`'
     built_in:
     - py:systems/threadwork/sim/operations.py
     disposition: BUILT
@@ -330,7 +330,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.clocks[''MS'']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:244` `create_world` clock init | `engine/autoload/game_state.py:244 clocks`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.clocks[''MS'']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:244 clocks`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -340,7 +340,7 @@ identifiers:
     identifier: deactualisation_round
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:405-407`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:407-409`'
     built_in:
     - py:systems/threadwork/sim/threadcut.py
     disposition: BUILT
@@ -350,7 +350,7 @@ identifiers:
     identifier: DEPTH_OB
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`'
     built_in:
     - py:systems/threadwork/sim/operations.py
     disposition: BUILT
@@ -430,7 +430,7 @@ identifiers:
     identifier: lattice_fractured
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`collective.py`''s lattice-fracture arithmetic is self-flagged uncertain in-line.** The module computes `lattice_fractured` once, comments through a re-derivation of the canon condition, then recomputes and overwrites it — both computations and the surrounding commentary are left in the file. | `systems/threadwork/sim/collective.py:116-136`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`collective.py`''s lattice-fracture arithmetic is self-flagged uncertain in-line.** The module computes `lattice_fractured` once, comments through a re-derivation of the canon condition, then recomputes and overwrites it — both computations and the surrounding commentary are left in the file. | `systems/threadwork/sim/collective.py:117-137`'
     built_in:
     - py:systems/threadwork/sim/collective.py
     disposition: BUILT
@@ -450,7 +450,7 @@ identifiers:
     identifier: MENDING_OB
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`'
     built_in:
     - py:systems/threadwork/sim/operations.py
     disposition: BUILT
@@ -586,7 +586,7 @@ identifiers:
     identifier: rendering_strain
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:405-407`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:407-409`'
     built_in:
     - py:systems/threadwork/sim/threadcut.py
     disposition: BUILT
@@ -615,7 +615,7 @@ identifiers:
     identifier: resolve_opposing_operations
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | — none found'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | — none found'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -749,7 +749,7 @@ identifiers:
     identifier: sustain_knot
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Knot strain (`sustain_knot`) | cross-subsystem call | `systems.fieldwork.sim.knots` | `systems/threadwork/sim/opposing.py:238-247`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Knot strain (`sustain_knot`) | cross-subsystem call | `systems.fieldwork.sim.knots` | `systems/threadwork/sim/opposing.py:245-254`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -849,7 +849,7 @@ identifiers:
     identifier: TN_STANDARD
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`'
     built_in:
     - py:engine/autoload/sigma_leverage.py
     - py:systems/combat/combat_engine_v1/workbench/presets.py

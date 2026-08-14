@@ -28,6 +28,16 @@ class Degree(Enum):
     FAILURE = "failure"
 
 
+# Several subsystems carry the four bands as Title-Case strings rather than the enum. ONE map, so a
+# string-speaking module still resolves its bands through the owner instead of re-deciding them.
+DEGREE_LABEL: dict["Degree", str] = {
+    Degree.OVERWHELMING: "Overwhelming",
+    Degree.SUCCESS: "Success",
+    Degree.PARTIAL: "Partial",
+    Degree.FAILURE: "Failure",
+}
+
+
 @dataclass
 class RollResult:
     pool_size: int
@@ -92,31 +102,47 @@ def continuous_engine_sample(pool: float, tn: int = 7,
 
 
 def degree_from_net(net: int | float, ob: int | float) -> Degree:
-    """Determine degree of success from net successes and Ob.
+    """THE degree ladder. Single owner for every scale of the game (Jordan ruling, 2026-08-14).
 
-    Canon: params/core.md §Degrees of Success
-      Overwhelming: net >= 2*Ob AND net >= 3 (PP-232 floor)
-      Success: net >= Ob
-      Partial: net > 0 but < Ob
-      Failure: net <= 0
-      Ob 20 exception: Overwhelming unavailable; Partial requires net >= 10
+    The ladder reads the MARGIN — how far the dice cleared the obstacle — never the obstacle's
+    own size:
+
+        margin = net - ob
+
+        margin >= 3        Overwhelming   "3 or more is always overwhelming"
+        margin >= 1        Success        cleared it by at least one whole success
+        0 <= margin < 1    Partial        the obstacle is MET but not EXCEEDED
+        margin <  0        Failure        fell short
+
+    Both operands may be fractional and are expected to be: obstacles derived from an opposing
+    character or faction are score/2 plus that instance's modifiers, and the continuous engine
+    returns fractional nets. The Partial band is therefore a whole-success-wide window rather
+    than the single point `margin == 0`, which is what the same rule reduces to on integers
+    (`floor(margin) == 0`) — the two readings agree everywhere the game rolls whole dice, and
+    only the windowed one survives contact with fractional obstacles, where exact equality
+    essentially never occurs and Partial would otherwise vanish.
+
+    RULED OUT, explicitly, by the same ruling (all three were live here until 2026-08-14):
+      * Ob-scaled Overwhelming (`net >= 2*Ob`) — Overwhelming no longer depends on difficulty.
+      * The separate PP-232 `net >= 3` floor — subsumed; the margin bar IS 3.
+      * The Ob-20 exception (Overwhelming unavailable, Partial needing net >= 10) — "always"
+        admits no ceiling case.
+
+    Behaviour change, stated rather than buried (CLAUDE.md 0.1 point 4): the Partial band was
+    `0 < net < Ob`, so a roll that cleared zero but fell far short of a hard obstacle read as a
+    Partial. It now reads as a Failure. Partial is the near-miss-by-nothing outcome, not the
+    tried-and-failed one. Measured deltas are in the ED-IN-0187 ledger entry.
     """
-    if ob >= 20:
-        # Ob 20 exception
-        if net >= ob:
-            return Degree.SUCCESS
-        elif net >= 10:
-            return Degree.PARTIAL
-        elif net > 0:
-            return Degree.FAILURE  # net > 0 but < 10 at Ob 20 = Failure, not Partial
-        else:
-            return Degree.FAILURE
-    # Standard degrees
-    if net >= 2 * ob and net >= 3:
-        return Degree.OVERWHELMING
-    elif net >= ob:
-        return Degree.SUCCESS
-    elif net > 0:
-        return Degree.PARTIAL
-    else:
+    margin = net - ob
+    if margin < 0:
         return Degree.FAILURE
+    if margin < 1:
+        return Degree.PARTIAL
+    if margin >= 3:
+        return Degree.OVERWHELMING
+    return Degree.SUCCESS
+
+
+def degree_label(net: int | float, ob: int | float) -> str:
+    """`degree_from_net` in the Title-Case string vocabulary. Convenience, not a second ladder."""
+    return DEGREE_LABEL[degree_from_net(net, ob)]

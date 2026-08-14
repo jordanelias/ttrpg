@@ -39,6 +39,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 
 
@@ -158,15 +159,16 @@ def _str_multiplier(weapon: dict) -> float:
     return wm * tm
 
 
-def _degree(net: int) -> str:
-    """§5 Degree Table."""
-    if net <= 0:
-        return "Failure"
-    if net == 1:
-        return "Partial"
-    if net >= 3:
-        return "Overwhelming"
-    return "Success"
+def _degree(margin: int | float) -> str:
+    """§5 Degree Table — adapter over the owner (Jordan ruling 2026-08-14), not a second ladder.
+
+    Strike is an OPPOSED roll, so the defender's result is the obstacle and it has already been
+    subtracted: `margin` is the owner's `net - ob` with the subtraction done at the call site.
+    Pass the UNCLAMPED difference — `net_hits` is clamped at 0 for damage, and feeding the clamped
+    value here would make losing the exchange indistinguishable from tying it, which under this
+    ladder is the difference between Failure and Partial.
+    """
+    return dice_engine.degree_label(margin, 0)
 
 
 def _damage(net_hits: int, actor, weapon: dict, target_armor: str = 'None') -> int:
@@ -213,10 +215,11 @@ def resolve_action(actor, target, action_type: str, scene=None, rng=None) -> Act
         def_tn = _weapon_tn(getattr(target, 'weapon', {})) if target else 7
         def_roll = roll_pool(defense_pool_target, tn=def_tn, rng=rng).net if defense_pool_target > 0 else 0
 
-        net_hits = max(0, off_roll - def_roll)
+        exchange_margin = off_roll - def_roll          # unclamped: a loss stays a loss
+        net_hits = max(0, exchange_margin)             # clamped: damage never goes negative
         target_armor = getattr(target, 'armor_tier', 'None')
         damage = _damage(net_hits, actor, weapon, target_armor)
-        degree = _degree(net_hits)
+        degree = _degree(exchange_margin)
 
         return ActionResult(
             actor_id=actor_id, action_type='Strike', target_id=target_id,

@@ -72,9 +72,42 @@ _MECHANICAL_NUMERIC_PATTERN = re.compile(r'(?<![\w.])(\d+(?:\.\d+)?)(?![\w.])')
 #   [DECLARED-DIVERGENCE: ...] deliberately unlike canon, with the reason (Jordan 2026-07-24: breaking
 #                              canon for balance/tuning is permitted — it must simply be visible)
 #   [CALIBRATED-DEBT: ...]     pre-existing honest self-label already used in the engine
+#   [FORK: ...]                the source exists, but at a named ref rather than on `main`
 # Labelling a value honestly must never be harder than mislabelling it.
+#
+# FORK is the 2026-08-14 addition (Jordan ruling on Q4; ED-IN-0188). The 2026-08-05 evacuation moved
+# whole trees off `main` — `mc_v17.py`, `tests/sim/v17-integration/`, `engine/params/`, the patch
+# archives — while the constants they sourced stayed. Every citation naming one of those paths then
+# read as a live pointer to a file that is not there, and nothing could tell that apart from an
+# invented citation. FORK says the honest thing: this resolves at a ref, go and look there.
+#
+# WHAT THE GATE CHECKS FOR A FORK TAG IS THE FORMAT, NOT THE TARGET, and that is deliberate rather
+# than lax — a blob at a ref is not on disk, so verifying it would mean a network fetch, which
+# CLAUDE.md 2 forbids for exactly the reason that made these citations rot. The tag must name a ref,
+# so "FORK:" cannot be used as a bare escape hatch.
 _CANONICAL_COMMENT_PATTERN = re.compile(
-    r'#\s*\[(?:canonical|GROUNDED|JUSTIFIED|DECLARED-DIVERGENCE|CALIBRATED-DEBT):\s*[^\]]+\]')
+    r'#\s*\[(?:canonical|GROUNDED|JUSTIFIED|DECLARED-DIVERGENCE|CALIBRATED-DEBT|FORK):\s*[^\]]+\]')
+
+# THE REF GRAMMAR IS NOT REDEFINED HERE. `FORK:` already had an owner before this gate used it —
+# `broken_dependency_checker.FORK_PREFIX` / `_is_forked`, mirrored in `pathres.FORK_PREFIX`, for the
+# restructure ledger's path sentinels — and `tests/valoria/test_forked_status.py` pins that a ref may
+# be EITHER a sha (`FORK:c451bcb`) OR a symbolic name (`FORK:refs/tags/pre-evacuation-2026-08-05`).
+# A first draft of this check accepted only 7-40 hex, which both admitted ordinary words that happen
+# to be hex-ish (`defaced`, `acceded`) and REJECTED the symbolic form the shipped test calls valid —
+# a third, disagreeing implementation of one rule, which is the §8 defect this repo treats as a bug.
+# The sha branch requires AT LEAST ONE DIGIT. Without it, `[0-9a-f]{7,40}` matches ordinary English
+# words that happen to be spelled in hex letters — `defaced`, `acceded`, `deadbeef` — so a tag with
+# no ref at all would pass on prose alone. And there is no bare `ref <name>` branch, because that
+# matched the word "ref" in a sentence ("no ref at all" satisfied it). A symbolic ref must be
+# written the way git writes it, `refs/...`, which is also the form test_forked_status.py pins.
+_FORK_REF_PATTERN = re.compile(
+    r'(?:\b(?=[0-9a-f]{7,40}\b)[a-f]*[0-9][0-9a-f]*\b'   # a sha: hex, 7-40, at least one digit
+    r'|\brefs/[\w./-]+)')                                 # refs/tags/..., refs/heads/...
+
+# Deliberately NOT anchored to `#`: four of this change's own FORK tags live in module DOCSTRINGS,
+# and a check that silently skipped those would have made the "cannot be a bare escape hatch" claim
+# false in exactly the places it was first used.
+_FORK_TAG_PATTERN = re.compile(r'\[FORK:\s*([^\]]+)\]')
 # Associates a numeric literal with its assignment target / keyword-arg name, so a
 # constant can be matched against the ledger by (variable, value) rather than value
 # alone — `CFG = dict(adef=1.7)` associates `1.7` with `adef`.
@@ -487,6 +520,7 @@ def main(argv) -> int:
         return 0
 
     problems = []          # list of (path, genuine_violations)
+    refless_forks = []     # list of (path, line_no, tag_body)
     scanned = 0
     carried = 0            # pre-existing, on lines this changeset did not add
     for path in sim_paths:
@@ -495,6 +529,12 @@ def main(argv) -> int:
             # Deleted or unreadable in the working tree — skip (nothing to scan).
             continue
         scanned += 1
+        # A FORK tag without a ref is a citation to nowhere wearing a citation's clothes — the
+        # precise failure mode this vocabulary was added to end, so it is checked, not trusted.
+        for ln, line in enumerate(content.splitlines(), 1):
+            for tag in _FORK_TAG_PATTERN.findall(line):
+                if not _FORK_REF_PATTERN.search(tag):
+                    refless_forks.append((path, ln, tag.strip()))
         ledger_pairs = load_ledger_pairs(path)
         ledger_values = load_ledger_values(path)
         genuine = genuine_violations_by_pair(content, ledger_pairs, ledger_values)
@@ -511,9 +551,19 @@ def main(argv) -> int:
         print(f"[SIM-FABRICATION] {carried} pre-existing uncited constant(s) in the touched "
               f"file(s) are NOT gated (only added lines are). `--full` lists them.")
 
-    if not problems:
+    if refless_forks:
+        print("[SIM-FABRICATION] `[FORK: ...]` tag(s) naming no ref — a FORK citation must say "
+              "WHERE it resolves (a 7-40 char sha, optionally prefixed `ref`):")
+        for path, ln, tag in refless_forks[:10]:
+            print(f"[SIM-FABRICATION]   {path}:{ln}: [FORK: {tag[:70]}]")
+        if len(refless_forks) > 10:
+            print(f"[SIM-FABRICATION]   ... and {len(refless_forks) - 10} more")
+
+    if not problems and not refless_forks:
         print(f"[SIM-FABRICATION OK] {scanned} sim file(s) scanned, all constants cited.")
         return 0
+    if not problems:
+        return 1
 
     print("[SIM-FABRICATION] uncited mechanical constants found:")
     for path, items in problems:

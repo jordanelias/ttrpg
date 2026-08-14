@@ -155,6 +155,30 @@ def trial_vector(ua, ub, r):
 # winning"). Both are additive/structural, not magnitude tuning to fit a band. Full rationale,
 # verification (bat.py all 4 modes, tests/valoria, gauge_mb.py re-run) in coverage_matrix.md's
 # 2026-07-04 entry.
+# ─── VOCABULARY, because this table's keys taught a session the wrong design fact ──────────────
+# [Jordan, 2026-08-14] "We have no 'grid' mode in mass battle. It always occurs on a coordinate
+# field. Only the subunits can be said to be a grid."
+#
+# MASS BATTLE HAS ONE MOVEMENT MODEL: the coordinate field. `FIELD_MOVEMENT` defaults to 1
+# (hierarchy/units.py:32). `FIELD_MOVEMENT=0` selects the pre-migration integer lattice — Chebyshev
+# king-move distance, int-rounded positions (orchestration.py:403, :1516) — kept ONLY as a
+# byte-exact regression arm. It is not a way the game can be played, and no shipped configuration
+# uses it. The key calls it `legacy` for that reason; it was called `grid` until 2026-08-14 and was
+# duly read as a second mode, in ED-IN-0187's own commit message.
+#
+# The only real grid here is the SUBUNIT's cells — the `cell` axis, reserved for exactly that by
+# ED-MB-0062's ruling.
+#
+# ⚠ The dated entries below still say "grid modes" where that is what was written at the time.
+# They are the historical record of past re-records and are NOT retrofitted (CLAUDE.md §4's
+# no-retrofit posture): rewriting them would falsify what a given commit actually claimed. Read
+# "grid mode" in any pre-2026-08-14 note as "the legacy integer-lattice arm".
+#
+# STILL CARRYING THE OLD WORD, filed not swept (§0.1 point 5 — sweep only what the task is
+# load-bearing on): `validators.py`'s `path='grid'|'node'` argument and its callers in
+# tests/valoria/test_mass_battle_maneuvers.py + test_obb_contact_toi.py. That is a separate
+# surface with its own two-value semantics; its docstring at validators.py:220 already says
+# "the legacy integer path", so it is inconsistent rather than misleading.
 EXPECTED = {
     # [2026-07-08, ED-MB-0004, partition-invariance fix, Jordan-ruled "genuine defect -- fix it"]
     # re-recorded a final time, all 4 modes -- orchestration.py's new `_convergence_scale` renormalizes
@@ -213,7 +237,7 @@ EXPECTED = {
     # ee0fdec4.../a7b01a0d..., then the flip was RETRACTED the same day (confounded measurement — see
     # config.py at the flag), so these revert to their pre-flip values. Recorded here because the next
     # attempt will move them again and should be able to see that this is the second, not the first.
-    'unit_grid_mor0': '241f04e5b2a4e3d626024816872d7903f9a43507abd205cedc8a6c030d2f7794',
+    'unit_legacy_mor0': '241f04e5b2a4e3d626024816872d7903f9a43507abd205cedc8a6c030d2f7794',
     # [2026-07-04, re-recorded a second time, caught by CI not local dev] 'cell' also moved after the
     # adversarial-review fixes (pair_pool_contribution's cell_troops iteration bug; the sibling-morale
     # pull reorder/snapshot fix) -- missed locally because test_byte_exact_cell_mode only hard-fails
@@ -269,7 +293,7 @@ EXPECTED = {
     # Controls: both moved modes reproduced their new digest on two consecutive runs (2/2), and
     # `cell` reproduced it again with PYTHONHASHSEED unset (fresh hash seed => hash-order
     # independent). Recorded on Linux/Python 3.11.15.
-    'cell_grid_mor0': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
+    'cell_legacy_mor0': 'f58a9cb415cd2b273cb8cd2915537bc2bf5accd64db6bced67068217703fb189',
     # [Stage A, 2026-07-01; TOI refactor 2026-07-02; re-recorded 2026-07-02 for LC-8 + ED-1089/1091]
     # The coordinate-field path's OWN golden digests (FIELD_MOVEMENT=1 + PC_NODE_COHESION=1 -- required
     # by run_battle's own assert; since the ED-1089 default flip this is what a BARE invocation runs).
@@ -332,7 +356,7 @@ EXPECTED = {
     # extended box): bodies close to touch and FIGHT instead of standing off at gap 2*(CELL_RADIUS+reach)
     # doing nothing (the reach-touch-boundary deadlock). This MOVES the field gauge broadly (units that
     # used to freeze at range now engage) — a DG-6-gated balance surface, disclosed, no constant tuned.
-    # Both GRID modes stay BYTE-IDENTICAL (resolve_toi_and_commit runs only under `if FIELD_MOVEMENT`,
+    # Both LEGACY-lattice modes stay BYTE-IDENTICAL (resolve_toi_and_commit runs only under `if FIELD_MOVEMENT`,
     # orchestration.py:1405; test_mass_battle_byte_exact.py pins FIELD_MOVEMENT=0 and still passes: 2 passed).
     # [2026-07-22, ED-MB-0013+0014, spatial-model v2 Stages D+E — see the 'unit_field' note above] re-recorded
     # (Stage F digest re-record). Stage D routed the melee Lanchester frontage off the integer distinct-column
@@ -366,7 +390,23 @@ EXPECTED = {
     # alone, which is its whole intended scope). The two GRID modes are byte-identical with the
     # flag ON, as they must be — the pass lives inside resolve_toi_and_commit, which only runs
     # under FIELD_MOVEMENT.
-    'unit_field_mor0': '0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c',
+    # ─── [ED-IN-0187, 2026-08-14] RE-RECORDED: the ruled degree ladder ─────────────────────────
+    # Jordan's 2026-08-14 ruling rebanded `resolution.compute_degree` onto the margin `net - ob`
+    # (>=3 Overwhelming, >=1 Success, [0,1) Partial, <0 Failure), replacing `net >= 2*ob AND
+    # net >= 3`. `compute_degree` feeds `DAMAGE_BY_DEGREE` on every exchange, so every mode's
+    # digest necessarily moves. The cause is a RULING, not drift.
+    # ATTRIBUTION (§0.1 #4): the ONLY change in this file's reach is that function. The epsilon,
+    # the RNG path, the battery rows and every pinned toggle are untouched, so the three moved
+    # digests are attributable to the reband and nothing else.
+    # ⚠ RECORDED FROM THE REFERENCE CI ENVIRONMENT, NOT LOCALLY, and that distinction is the
+    # finding. Locally `tests/valoria/test_mass_battle_byte_exact.py` reports these modes as
+    # skip/xfail (documented platform non-portability + a pre-existing known-red), so a local
+    # green says NOTHING about them — the pytest wrapper covers the grid modes while
+    # `tools/ci_golden_modes_check.py` is what actually gates these three. An adversarial critic
+    # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
+    # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
+    # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
+    'unit_field_mor0': '7d4a996cad34a7ee8a811b844e49a381869130fe321c7768f869d7ecd489d019',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -407,7 +447,7 @@ EXPECTED = {
     # [2026-07-22, ED-MB-0012, spatial-model v2 Stage B+C — see the 'unit_field' note above] re-recorded.
     # resolve_toi_and_commit halts on the BODY box (not the reach-extended box): bodies close to touch and
     # fight rather than freezing at the reach-touch boundary (a 0-casualty standoff). Moves the field gauge
-    # broadly (DG-6-gated, disclosed, no constant tuned); GRID modes byte-identical (FIELD_MOVEMENT-gated).
+    # broadly (DG-6-gated, disclosed, no constant tuned); LEGACY-lattice modes byte-identical (FIELD_MOVEMENT-gated).
     # [2026-07-22, ED-MB-0013+0014, spatial-model v2 Stages D+E — see the 'unit_field' note above] re-recorded
     # (Stage F). Continuous OBB frontage (D) + per-troop-type reach (E). DG-6-gated field-gauge shift,
     # disclosed, no constant tuned; GRID modes byte-identical (field-gated).
@@ -440,7 +480,9 @@ EXPECTED = {
     # [ED-MB-0059, 2026-07-29] RE-RECORDED with the same attribution control as unit_field above
     # (was 2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b; reproduced exactly at
     # PC_CELL_EXCLUSION=0).
-    'cell_field_mor0': 'da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8',
+    # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
+    # was da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8
+    'cell_field_mor0': '717ad3b87ff72762d0e06ee0720f9b393aa5e85cb5500ba6ed989cf270793baf',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -463,7 +505,9 @@ EXPECTED = {
     # divergence survives the recovery step. CONTROL: the other four modes are byte-identical, as
     # they must be — at PC_CELL_MORALE=0 the cell-morale maps are empty and the two writers agree.
     # A fix that moved any of them would have been touching something it did not claim to.
-    'cell_grid_mor1': 'd11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9',
+    # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
+    # was d11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9
+    'cell_legacy_mor1': 'fbe2d87f02b4017acdb985c3432718bb3574d69e46778014c67ebf3ecc577e4b',
 }
 
 
@@ -514,8 +558,18 @@ def _mode_key(per_cell, field_movement, cell_morale):
     #
     # NO DIGEST CHANGES HERE. This renames lookup KEYS only; every recorded value is carried
     # across byte-for-byte. It is not a golden re-record and G11 does not apply.
+    # [Jordan, 2026-08-14] 'grid' RENAMED TO 'legacy', because it named a mode that does not exist:
+    #   "We have no 'grid' mode in mass battle. It always occurs on a coordinate field.
+    #    Only the subunits can be said to be a grid."
+    # FIELD_MOVEMENT defaults to 1 (hierarchy/units.py:32) — the coordinate field IS the model.
+    # FIELD_MOVEMENT=0 is the pre-migration integer-lattice path (Chebyshev distance, int rounding),
+    # retained ONLY as a byte-exact regression arm; validators.py:220 already called it "the legacy
+    # integer path". Calling it 'grid' implied a second way the game can be played and was read that
+    # way — by me, in ED-IN-0187's own commit message. The only genuine grid in mass battle is the
+    # SUBUNIT's cells, which this key already calls `cell` (reserved for it by ED-MB-0062).
+    # KEYS ONLY — no digest is touched; every recorded value carries across byte-for-byte.
     geometry = 'cell' if per_cell else 'unit'          # mass-battle cell (reserved, per ruling)
-    movement = 'field' if field_movement else 'grid'
+    movement = 'field' if field_movement else 'legacy'
     morale = 'mor1' if cell_morale else 'mor0'         # cell-MORALE, distinct from cell-GEOMETRY
     return f'{geometry}_{movement}_{morale}'
 

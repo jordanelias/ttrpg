@@ -1,8 +1,19 @@
 import math
+import os
 import random
+import sys
 from typing import List, Dict, Optional
 
 TRIALS = 200_000
+
+
+def _owner_degree(net, ob):
+    """Resolve the degree ladder through its single owner, wherever this script is run from."""
+    repo = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+    if repo not in sys.path:
+        sys.path.insert(0, repo)
+    from engine.autoload import dice_engine
+    return dice_engine.degree_from_net(net, ob)
 
 # Continuous engine (Decision E, params/core.md "Continuous Engine") — canonical for the
 # Godot videogame implementation. net ~ Normal(mu*N, sigma*sqrt(N)) per die at the active TN;
@@ -42,19 +53,17 @@ def roll_pool(n: int, tn: int, rng: Optional[random.Random] = None) -> int:
     having been called first."""
     return _roll_pool(n, tn, rng)
 
-def classify_outcome(r: int, ob: int) -> str:
-    """Bucket a net-successes result against an obstacle: overwhelming/success/
-    partial/failure. Extracted from outcome_probs' loop body so any caller needing
-    single-trial classification (not just a bulk trial distribution) shares the
-    exact same rule rather than re-deriving it."""
-    if ob == 10:
-        if r >= ob:  return "success"
-        if r >= 5:   return "partial"
-        return "failure"
-    if r >= 2 * ob: return "overwhelming"
-    if r >= ob:     return "success"
-    if r > 0:       return "partial"
-    return "failure"
+def classify_outcome(r: float, ob: float) -> str:
+    """Bucket a net result against an obstacle. Adapter over the owner, not a second ladder.
+
+    Owner: `engine.autoload.dice_engine.degree_from_net` — the ruled margin ladder (Jordan,
+    2026-08-14). The Ob-10 special case this carried is RULED OUT along with the Ob-20 one in
+    the owner: "3 or more is always overwhelming" admits no difficulty-indexed exception.
+
+    Imported lazily and by path so the skill still runs when invoked from its own directory
+    rather than the repo root.
+    """
+    return _owner_degree(r, ob).value
 
 def simulate_pool(n: int, tn: int, trials: int = TRIALS) -> List[int]:
     return [_roll_pool(n, tn) for _ in range(trials)]
@@ -118,14 +127,13 @@ def momentum_value(tn: int, ob: int, pool: int, trials: int = TRIALS) -> Dict:
     base   = outcome_probs(pool,   tn, ob, trials)
     extra  = outcome_probs(pool+1, tn, ob, trials)
     results = simulate_pool(pool, tn, trials)
-    mom_full = partial = 0
+    # "Full" = Success or better under the ruled ladder, i.e. margin >= 1. The Ob-10 special case
+    # that stood here is RULED OUT with the rest (ED-IN-0187); it also set a `partial` counter that
+    # was never read, so it changed nothing but the reader's understanding.
+    mom_full = 0
     for r in results:
-        net = r + 1
-        if ob == 10:
-            if net >= ob:  mom_full += 1
-            elif net >= 5: partial += 1
-        else:
-            if net >= ob:  mom_full += 1
+        if classify_outcome(r + 1, ob) in ("success", "overwhelming"):
+            mom_full += 1
     return {
         "base_p_full":       base["p_full"],
         "extra_die_p_full":  extra["p_full"],
@@ -142,11 +150,13 @@ def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
     the ER-2 fix landed in params/core.md, commit a3d3888) so odds track the discrete model
     even at small pools, per params/core.md's own equivalence note. Ob may be fractional
     (fractional Ob is canonical in videogame mode); clamped to the canonical [1, 20] range.
-    Degree thresholds match params/core.md's Degrees of Success table: Overwhelming
-    net >= max(2*Ob, 3), Success net >= Ob, Partial 0 < net < Ob, Failure net <= 0 —
-    EXCEPT the documented Ob-20 exception (params/core.md "Degrees of Success"): at Ob 20,
-    Overwhelming is unavailable (folds into Success) and Partial requires net >= 10 instead
-    of net > 0."""
+    Degree thresholds are the RULED margin ladder (Jordan 2026-08-14, ED-IN-0187), matching
+    `engine.autoload.dice_engine.degree_from_net`: Overwhelming at margin >= 3, Success at >= 1,
+    Partial at [0, 1), Failure below. The `2*Ob` bar and the Ob-20 exception this function used to
+    implement are both ruled out. They are called out here because an ANALYTIC form is the one
+    place a stale band can survive every guard in the tree — no per-cell equivalence test can see
+    a closed-form probability, so this docstring is the only thing standing between a future
+    reader and a silently wrong Godot-mode resolver."""
     if tn not in _CONTINUOUS_MU:
         raise ValueError(f"No continuous-engine mu/sigma for TN {tn} — only 6/7/8 defined")
     mu = _CONTINUOUS_MU[tn] * n
@@ -156,19 +166,14 @@ def continuous_outcome_probs(n: int, tn: int, ob: float) -> Dict[str, float]:
     def p_at_least(x: float) -> float:
         return 1 - _norm_cdf((x - 0.5 - mu) / sigma)
 
-    p_success_or_better = p_at_least(ob)
-    if ob >= 20:
-        # Ob-20 exception: Overwhelming unavailable, Partial requires net >= 10.
-        p_partial_or_better = p_at_least(10)
-        return {
-            "overwhelming": 0.0,
-            "success": p_success_or_better,
-            "partial": p_partial_or_better - p_success_or_better,
-            "failure": 1 - p_partial_or_better,
-            "p_full": p_success_or_better,
-        }
-    p_overwhelming = p_at_least(max(2 * ob, 3))
-    p_partial_or_better = p_at_least(1e-9)  # net > 0
+    # The RULED band edges (Jordan 2026-08-14), stated as margins so they cannot drift from
+    # `dice_engine.degree_from_net`: Partial at margin 0, Success at 1, Overwhelming at 3. The
+    # Ob-20 exception and the `2*Ob` bar this function used to carry are RULED OUT — "3 or more is
+    # always overwhelming" admits no difficulty-indexed exception, and an analytic form is exactly
+    # where such an exception survives unnoticed, because no per-cell guard can see it.
+    p_partial_or_better = p_at_least(ob)
+    p_success_or_better = p_at_least(ob + 1)
+    p_overwhelming = p_at_least(ob + 3)
     return {
         "overwhelming": p_overwhelming,
         "success": p_success_or_better - p_overwhelming,

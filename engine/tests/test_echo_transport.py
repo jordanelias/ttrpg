@@ -30,7 +30,18 @@ from engine.cross_scale import echo_transport
 # for the two-session merge: with the flag OFF, only this branch's FA-lane mechanics
 # (ED-FA-0009/0012/0013) move seed-42 RNG — parliamentary_bridge and the play-out echo are inert.
 # The flag-ON default is a DIFFERENT distribution now (test_f7_smoke_oracle.GOLDEN_WIN_SHARE).
-_GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
+# REPINNED 2026-08-14 (ED-IN-0187 — Jordan's degree-ladder + strategic-dice ruling). Three ruled
+# mechanisms move every seeded campaign at once: faction actions roll the continuous d10 through
+# sigma_leverage instead of `d6, 4+` (different distribution AND different RNG draw count), the
+# degree bands moved to the ruled margin ladder (Partial is now met-but-not-exceeded, so many former
+# Partials are Failures), and `CONQUEST_MIN_MIL` was deleted (low-Military factions now reach the
+# battle engine). The cause is a RULING, not drift; the deltas are published rather than buried
+# (CLAUDE.md 0.1 point 4). OLD values, preserved:
+#   _GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
+# The flag-OFF arm moves too, which is the point of recording it: ECHO_TRANSPORT gates the echo
+# SPINE, not the dice, so a dice ruling is expected to move both arms. If OFF had held still while
+# ON moved, THAT would have been the anomaly worth investigating.
+_GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62.5}
 
 
 # ── 1. Flag OFF: byte-exact, no substrate ────────────────────────────────────

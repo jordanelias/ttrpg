@@ -32,6 +32,7 @@ from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
     _actor_pool, _resolve_operation, OperationResult,
 )
+from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 
 
@@ -163,14 +164,7 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
     roll = roll_pool(total_pool, tn=tn, rng=rng)
     net = roll.net
 
-    if net >= ob + 3:
-        degree = 'Overwhelming'
-    elif net >= ob:
-        degree = 'Success'
-    elif net >= 1:
-        degree = 'Partial'
-    else:
-        degree = 'Failure'
+    degree = dice_engine.degree_label(net, ob)  # owner's ladder (Jordan ruling 2026-08-14)
 
     # Apply Coherence cost to each successful Leap participant per §3.2 + §2.5
     # ("Co-Movement / Coherence fires per-practitioner per §3.2 — each

@@ -42,6 +42,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, Any
 
+from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 
 
@@ -222,11 +223,11 @@ def form_knot(actor_a: str, actor_b: str, world=None,
     roll_result = roll_pool(pool, tn=KNOT_FORMATION_TN, rng=rng)
     net = roll_result.net
 
-    # Degree
-    if net >= KNOT_FORMATION_OB + 3:
-        # Overwhelming
+    # Degree from the owner (Jordan ruling 2026-08-14); this site decides only the tier mapping.
+    degree = dice_engine.degree_label(net, KNOT_FORMATION_OB)
+    if degree == 'Overwhelming':
         tier = TIER_CLOSE
-    elif net >= KNOT_FORMATION_OB:
+    elif degree == 'Success':
         tier = TIER_DISTANT
     else:
         # Partial / Failure — no knot

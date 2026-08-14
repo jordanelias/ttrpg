@@ -86,7 +86,7 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
 - **S7 — Step 2, the action callback** supplied by the driver — `engine/mc_v18.py:116 _faction_actions_callback`.
   - **S7.1 Faction actions.** For each faction parliamentary *and* holding territory: `faction_take_action`,
     wrapped so one faction's exception cannot abort the season — `engine/mc_v18.py:124-136 _faction_actions_callback`;
-    resolver `systems/factions/sim/faction_action.py:177 faction_take_action`. Four state signals re-weight
+    resolver `systems/factions/sim/faction_action.py:191 faction_take_action`. Four state signals re-weight
     one probability vector, then a **single** `rng.random()` draw selects among faction-unique / conquest /
     muster / govern — `systems/factions/sim/faction_action.py:220 faction_take_action`. Conquest resolves
     through mass battle — `systems/factions/sim/faction_action.py:431-438 _try_conquest`; on an attacker
@@ -174,7 +174,7 @@ authoritative for them.
 notify, `engine/substrate/keys.py:510 emit` — and is the only place deferred world writes land,
 `engine/substrate/keys.py:581 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
 four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:309 Key`,
-`engine/cross_scale/echo_transport.py:416 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:361 Key`
+`engine/cross_scale/echo_transport.py:416 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:375 Key`
 and `systems/factions/sim/parliamentary_transfer.py:162 Key`. Two of its three termination guards are
 structurally unreachable, the queue path they defend having no production caller —
 `engine/substrate/keys.py:525 schedule_emission` (§3a).
@@ -200,7 +200,7 @@ flag — the blocker is a missing trigger, not a wiring bug — `engine/cross_sc
 **`factions` — the strategic actor layer.** Every season each parliamentary landholding faction re-weights four
 action buckets from state and takes one stochastic draw; conquest, muster, govern and faction-unique actions
 resolve here, as do the parliamentary vote, censure and territory-transfer motions —
-`systems/factions/sim/faction_action.py:177 faction_take_action`. It is the only non-substrate subsystem
+`systems/factions/sim/faction_action.py:191 faction_take_action`. It is the only non-substrate subsystem
 constructing Keys in production. Several of its modules are pure stub armature, and two faction identities have no
 unique action at all, falling through to the universal censure fallback —
 `systems/factions/sim/faction_action.py:315-318 _faction_specific_unique` (§3c, §3d).
@@ -290,14 +290,14 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | Kind | Cross-lane row | Subsystems | Anchor / link |
 |---|---|---|---|
 | a | The combat dispatch branch is dead at the *trigger*, not the wiring: no live trigger queues a `combat` scene, so neither the bridge nor the legacy engine is reachable, independent of the flag | combat, `_architecture` | `engine/cross_scale/scene_dispatch.py:75 evaluate_triggers` |
-| a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` |
+| a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` |
 | a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:332 restore_world` |
 | a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:215 generate_npc` |
 | b | The ratified per-settlement Mandate/Treasury pipeline has no step in the accounting cascade — recorded in the module's own port-blocking note | overview, settlements | `systems/overview/sim/accounting.py:11-13 run_accounting` |
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
 | c | The RS-track write is a no-op whose one call site sits behind an organically dormant branch — wired, never landing | overview, `_architecture` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` |
 | c | Phase-boundary hooks named for threadwork are empty bodies called unconditionally every phase, in both battle trees | mass_battle, threadwork | `systems/mass_battle/sim/massbattle.py:301-303 threadwork_check` |
-| d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:324-327 _emit_battle_concluded` |
+| d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:338-341 _emit_battle_concluded` |
 | d | A comment declares a canonical thirteen-member Conviction set and calls the legacy nine "superseded" — directly above a nine-member tuple; a caller passes a name absent from it, so every such call silently no-ops. **Which surface is wrong is unsettled by the tree** | characters, fieldwork | `systems/characters/sim/conviction.py:43-46 CONVICTIONS` |
 | e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:416 Key` |
 | e | A track's design doc is homed in one subsystem while its code lives in another — and it executes despite its map flag saying otherwise | characters, overview | `systems/overview/sim/ci_track.py:170 apply_ci_delta` |

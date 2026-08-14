@@ -196,7 +196,7 @@ def test_mode_selectors_cover_every_out_of_budget_golden_mode():
     claims, because a selector disagreeing with its key is the ED-1089 shape — a run checked against
     the wrong golden.
     """
-    assert set(MODES) == {'unit_field_mor0', 'cell_field_mor0', 'cell_grid_mor1'}
+    assert set(MODES) == {'unit_field_mor0', 'cell_field_mor0', 'cell_legacy_mor1'}
     # ED-MB-0062: keys are now absolute — <geometry>_<movement>_<morale>, every axis present
     # with its value — so the selector check reads the axis out of the key rather than guessing
     # from a suffix that only appeared when a flag was on.
@@ -211,7 +211,7 @@ def test_mode_selectors_cover_every_out_of_budget_golden_mode():
         if morale == 'mor1':
             assert sel.get('PC_CELL_MORALE') == '1', mode
     # the §4a mode is the ONLY one that overrides the PC_CELL_MORALE pin, and it must
-    assert MODES['cell_grid_mor1']['PC_CELL_MORALE'] == '1'
+    assert MODES['cell_legacy_mor1']['PC_CELL_MORALE'] == '1'
     for mode in ('unit_field_mor0', 'cell_field_mor0'):
         assert 'PC_CELL_MORALE' not in MODES[mode], (
             f"{mode} must inherit the FIELD_PINS PC_CELL_MORALE='0'; overriding it here would "

@@ -188,3 +188,42 @@ if __name__ == '__main__':
             print(f"ERROR {fn.__name__}: {type(exc).__name__}: {exc}")
     print(f"{passed} passed, {failed} failed")
     sys.exit(1 if failed else 0)
+
+
+# ── the FORK provenance vocabulary (ED-IN-0188) ────────────────────────────────────────────────
+# These ship WITH the FORK addition rather than after it (CLAUDE.md §0.1 point 3). The first draft
+# of that gate shipped with no test and two real defects — it accepted English words spelled in hex
+# (`defaced`) and REJECTED the symbolic ref form `tests/valoria/test_forked_status.py` already pins
+# as valid. Both are pinned below so neither can come back.
+
+def test_fork_is_accepted_as_provenance_like_the_other_markers():
+    """A FORK-tagged constant is CITED. Without this the marker is decoration."""
+    assert ci_sim_fabrication_check._CANONICAL_COMMENT_PATTERN.search(
+        'X = 3  # [FORK: mc_v17.py Muster Ob 1 — source at ref c451bcb]')
+
+
+def test_a_fork_tag_must_name_a_ref():
+    """The whole point of the marker: it says WHERE the source went."""
+    assert ci_sim_fabrication_check._FORK_REF_PATTERN.search('mc_v17.py Muster Ob 1 — source at ref c451bcb')
+    assert ci_sim_fabrication_check._FORK_REF_PATTERN.search('refs/tags/pre-evacuation-2026-08-05')
+    assert not ci_sim_fabrication_check._FORK_REF_PATTERN.search('the old params tree, wherever that went')
+
+
+def test_a_hex_looking_english_word_is_not_a_ref():
+    """`[0-9a-f]{7,40}` alone matches ordinary words — the defect the digit requirement closes.
+
+    Without this the tag `[FORK: the file was defaced]` would satisfy a gate whose entire job is to
+    make provenance checkable.
+    """
+    for word in ('defaced', 'acceded', 'deadbeef', 'facade'):
+        assert not ci_sim_fabrication_check._FORK_REF_PATTERN.search(word), word
+
+
+def test_the_ref_check_sees_docstring_tags_not_only_hash_comments():
+    """Four of ED-IN-0188's own FORK tags live in module docstrings.
+
+    A `#`-anchored pattern would skip exactly those, making the gate's "cannot be a bare escape
+    hatch" claim false in the first places the marker was used.
+    """
+    docstring_use = '"""Canon source: FORK: mc_v17.py [FORK: starting-state tables at ref c451bcb]"""'
+    assert ci_sim_fabrication_check._FORK_TAG_PATTERN.search(docstring_use)

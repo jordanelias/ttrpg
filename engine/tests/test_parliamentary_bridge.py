@@ -38,8 +38,19 @@ from systems.social_contest.sim.parliamentary_vote import VoteResult
 # seeds) moved. Isolated via pristine `git archive HEAD` vs. the fixed tree (see
 # test_f7_smoke_oracle.py's matching note for the full control-isolation rationale). OLD value:
 #   _ON_WIN_SHARE = {'Crown': 37.5, 'Church': 12.5, 'Hafenmark': 12.5, 'Varfell': 37.5}
-_OFF_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
-_ON_WIN_SHARE = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# REPINNED 2026-08-14 (ED-IN-0187 — Jordan's degree-ladder + strategic-dice ruling). Three ruled
+# mechanisms move every seeded campaign at once: faction actions roll the continuous d10 through
+# sigma_leverage instead of `d6, 4+` (different distribution AND different RNG draw count), the
+# degree bands moved to the ruled margin ladder (Partial is now met-but-not-exceeded, so many former
+# Partials are Failures), and `CONQUEST_MIN_MIL` was deleted (low-Military factions now reach the
+# battle engine). The cause is a RULING, not drift; the deltas are published rather than buried
+# (CLAUDE.md 0.1 point 4). OLD values, preserved:
+#   _OFF_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 25.0}
+#   _ON_WIN_SHARE  = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# The ON/OFF arms still DIVERGE from each other, which is the property this file exists to pin —
+# the spine changes outcomes. Both arms simply moved to new positions under the ruled dice.
+_OFF_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 62.5}
+_ON_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
 # ── GOLDEN RE-RECORD 2026-08-02 (ED-IN-0122) — deliberate, and here is the whole reason ────────
 # `systems/factions/sim/faction_action` gained a SECOND live Key emitter, `scene.battle_concluded`.
 # The KeyLog is append-only, so a new emitter necessarily changes both the count and the content
@@ -59,11 +70,21 @@ _ON_WIN_SHARE = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5
 # any subsystem starts emitting — even though this module is about the parliamentary bridge. The
 # per-type assertion in the test below exists so that a future mismatch says WHICH type changed
 # rather than just reporting two different integers.
-_ON_KEYLOG_HASH = '2fd2c2dc1eb7996f738f7dedec185633999d72ebf4304b5289000b9b630174c1'
-_ON_SCENES_RESOLVED = 50
-_ON_KEYS_EMITTED = 75
+# REPINNED 2026-08-14 (ED-IN-0187). The seed-42 single-campaign pins move for the same three ruled
+# mechanisms as the batch shares above. The KeyLog hash necessarily changes with them: it is a
+# content hash over an append-only log whose contents are the campaign. OLD values, preserved:
+#   _ON_KEYLOG_HASH     = '2fd2c2dc1eb7996f738f7dedec185633999d72ebf4304b5289000b9b630174c1'
+#   _ON_SCENES_RESOLVED = 50
+#   _ON_KEYS_EMITTED    = 75
+_ON_KEYLOG_HASH = '9d9b7e80cec85c2effb0ce60a643e6b2a3b0b15a17f1bea1384286138dd4110c'
+_ON_SCENES_RESOLVED = 104
+_ON_KEYS_EMITTED = 155
 # The composition behind that total — the diagnostic half of the pin.
-_ON_KEYS_BY_TYPE = {'scene.contest_resolved': 13, 'scene.battle_concluded': 62}
+_ON_KEYS_BY_TYPE = {'scene.contest_resolved': 79, 'scene.battle_concluded': 76}
+# 2026-08-14 (ED-IN-0187): contest_resolved 13 -> 79 and battle_concluded 62 -> 76. The
+# contest jump is the larger and has a mechanism worth naming — more faction actions now land
+# in bands that open a scene, and the deleted Mil gate opens more conquests, so both emitters
+# fire more often. No new emitter was added in this change.
 
 
 def test_flag_on_resolves_contests_and_fires_echoes():
