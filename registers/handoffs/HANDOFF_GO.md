@@ -4,6 +4,12 @@ Lane-scoped continuity for the `GO` (godot conversion) lane, per the `ED-<LANE>-
 (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. Root `HANDOFF.md` is the
 index; see it for cross-lane/global items.
 
+**LANE STATUS: ACTIVE** (Jordan ruling, 2026-08-14 — ED-GO-0001, resolving ED-IN-0185 Q6). Before
+that ruling this lane had never allocated an ED and had no lane ledger, so its emptiness read as
+neglect rather than as a state anyone had chosen. Active means the lane appears in banners and
+allocates ids normally (`registers/editorial_ledger_go.jsonl`, `next_free` in
+`references/id_reservations.yaml`); it does **not** mean Gate-0 is unblocked — see Next actions.
+
 No dedicated session work tracked directly under this lane as of the 2026-07-02 HANDOFF split
 (the one concrete Godot artifact shipped so far — `tools/export_engine_params.py` — is filed
 under `registers/handoffs/HANDOFF_IN.md`'s ED-1052 item, since it's a typed-params/tooling deliverable,
@@ -31,6 +37,13 @@ task here — the skeleton is illustrative, not buildable (covers 1/27 modules, 
 
 ## Next actions
 
+- **Entry is still gated — activation did not unblock it.** Gate-0 waits on **ED-1051**
+  (`engine_clock` ratification), which is also M1 juncture 6's blocker and the last T0 item on
+  the workplan wall. The GO lane cannot start its spine until IN closes that.
+- **The port spec now carries an honest Status** (`godot/godot_architecture_specification.md:5`):
+  **STALE REFERENCE** — dated 2026-04-11, predates the d+σ model canonized 2026-05-15. The
+  governing spec is `godot_conversion_strategy_v1.md` (PROPOSED). Activating the lane did not
+  promote the stale document, and the port must not be built from its numbers.
 - **The strategy doc's 8-item open register** (`godot/`)
   — downward Key delivery (ED-1006), Python end-state, faction-stat inversion, Key runtime
   form (needs K8), autoload ruling, first module target, D6 Church 4/4-vs-5/5, standing

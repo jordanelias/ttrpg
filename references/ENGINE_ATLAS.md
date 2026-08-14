@@ -466,7 +466,7 @@ How each contract was attributed to its subsystem. `declared` is a package-level
 
 ## 5. Nomenclature — can a canonical name be found by searching for it?
 
-A canonical identifier is only a usable handle if searching for it returns its references and little else. **Key types satisfy this by construction** — dotted and distinctive, median 27 occurrence(s). **Contract names largely do not**: several are ordinary English words, so the count below is dominated by unrelated prose and identifiers (median 130). This is evidence for a naming rule, not the rule itself — nothing is enforced here.
+A canonical identifier is only a usable handle if searching for it returns its references and little else. **Key types satisfy this by construction** — dotted and distinctive, median 27 occurrence(s). **Contract names largely do not**: several are ordinary English words, so the count below is dominated by unrelated prose and identifiers (median 131). This is evidence for a naming rule, not the rule itself — nothing is enforced here.
 
 `qualified` counts uses of a namespaced form (`contract:<name>`), the convention `_identifier_census.yaml` already uses with `key:`/`py:`. A name with a high raw count and zero qualified uses cannot be located by search today.
 

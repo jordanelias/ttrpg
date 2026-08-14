@@ -241,7 +241,7 @@ lane_ids:
     # pass (see their own ledger entries) — not repeated here to avoid a stray basis-keyword tainting
     # this comment's open-ED citations.
     # ED-IN-0028 allocated 2026-07-08 (status resolved — plumbing complete, downstream deferred): Key & Echo Armature PR-2a — deterministic echo-transport plumbing (ECHO_TRANSPORT flag, default OFF/byte-exact) un-orphaning domain_echo.py + the campaign's first substrate KeyLog. next_free bumped 28->29. Downstream owned by FA-comeback (ED-FA-0005) + SC context-derivation bridge (ED-SC-0006/0007).
-    GO: { name: "Godot",               next_free: 1 }
+    GO: { name: "Godot",               next_free: 2 }   # LANE ACTIVATED 2026-08-14 (Jordan ruling; ED-GO-0001 = the activation). Was next_free 1 with no ED ever allocated, which read as neglect rather than dormancy. Detail: registers/handoffs/HANDOFF_GO.md
     SE: { name: "Settlements",         next_free: 50 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0050-0052 returned, max allocated ED-SE-0049. Narrative: id_reservations_history.md#se
     # ED-SE-0003 + ED-SE-0004 allocated 2026-07-07 (status open): ed_options OPT-9 (armature keying wave) + OPT-16 (execute ED-SE-0001's own updates) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
 

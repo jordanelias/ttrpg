@@ -2,6 +2,10 @@
 ## Architecture, Engine, Pipeline, and Procedure
 ## Date: 2026-04-11
 ## Engine: Godot 4.x (GDScript)
+## Status: STALE REFERENCE — predates the d+σ resolution model (canonized 2026-05-15) and the
+v40 consolidation; retained for its pipeline/procedure structure, not its numbers. The GOVERNING
+spec for the port is `godot/godot_conversion_strategy_v1.md`. Lane: GO (activated 2026-08-14,
+Jordan ruling — ED-GO-0001).
 
 ---
 
