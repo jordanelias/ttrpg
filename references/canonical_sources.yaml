@@ -281,7 +281,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   holonic_container_doctrine:
     design_doc: systems/_architecture/holonic_container_doctrine_v1.md
-    canonical_sha__systems___architecture__holonic_container_doctrine_v1_md: "a6b38a827f9c4582e1da44eb6cc74a2392bb977b"
+    canonical_sha__systems___architecture__holonic_container_doctrine_v1_md: "82b4b81616dee3031bc9afbba110466d8ddf8a80"
     status: canonical
     added: '2026-07-02 ED-1083/ED-1094 ratification — holonic container/wrapper doctrine (cross-map only; propagation-spec transform authored separately, J-38)'
   propagation_spec:

@@ -7,7 +7,7 @@ Immutable source documents and compliance records. Higher-ranked document always
 |------|------|------|
 | `00_philosophical_foundations.md` | **Rank 1** — metaphysical canon; governs everything | 2026-03-30 |
 | `01_foundations_amendment_self_rendering.md` | **Rank 1 extension** — canonical amendment, always-already self-rendering | 2026-04-01 |
-| `02_canon_constraints.md` | Extracted constraint table (P-01–P-14+) with violation tests | 2026-03-26 |
+| `02_canon_constraints.md` | Extracted constraint table (P-01–P-15+) with violation tests | 2026-03-26 |
 | `03_canonical_timeline.md` | Canonical setting chronology; supersedes all checkpoint timeline refs | 2026-04-01 |
 
 ## Audit Records

@@ -276,7 +276,7 @@ RULES = [
 
     # ---- prose with NO code pair: stays, and it IS the spec
     (lambda p: p.startswith('canon/'), 'keep', 'R-CANON',
-     'philosophical canon P-01..P-14 -- prose with NO code pair, therefore authoritative'),
+     'philosophical canon P-01..P-15 -- prose with NO code pair, therefore authoritative'),
 
     # ---- code and the machinery that guards it
     (lambda p: p.startswith(('engine/', 'systems/')), 'keep', 'R-CODE', 'the executable model'),
@@ -309,31 +309,35 @@ RULES = [
 
     # ---- unambiguous detritus
     (lambda p: p.startswith('arcs/'), 'evacuate', 'R-ARCS', 'generated narrative content'),
-    # ⚠ THIS RULE NOW HAS A SECOND, FORWARD-LOOKING SUBJECT, and it is not the one it was
-    # written for (ED-IN-0177, correcting an omission in ED-IN-0175).
+    # THIS RULE IS RIGHT, AND THE PROBLEM I RAISED ABOUT IT WAS NOT REAL.
+    # Ruled by Jordan 2026-08-13 (ED-IN-0179), settling ED-IN-0177.
     #
-    # Written for the 2026-08-05 evacuation, where `deprecated/` meant "history already
-    # superseded, safe to leave main". On 2026-08-12 Jordan ruled the opposite direction for
-    # NEW work: "Dead files get moved to deprecated." (ED-IN-0171). So `deprecated/` is now
-    # BOTH the residue of a completed evacuation AND the designated landing site for future
-    # retirements -- and this rule queues the latter for deletion by the former's logic.
+    # I claimed `deprecated/` had come to mean two incompatible things: leftovers from the big
+    # 2026-08-05 move-out, and -- after Jordan's ruling "Dead files get moved to deprecated."
+    # (ED-IN-0171) -- where files go NOW when we stop using them. On that reading this rule lines
+    # the second group up for deletion, so I stopped and asked.
     #
-    # ED-IN-0175 refuted the TEST-level half of that conflict (test_evacuation_plan.py:166
-    # binds only the tool's computed `moves`, so a git mv trips nothing) and then treated the
-    # whole conflict as disposed of. It was not: the RULE-level half is real and is recorded
-    # here rather than silently carried. Concretely, `classify('deprecated/tools/atomizer.py')`
-    # returns 'evacuate', so a future evacuation wave that acts on this partition would delete
-    # the contents of the landing site the ruling just established.
+    # JORDAN, VERBATIM: "The completed evacuation *is* the retirement of all those files that
+    # were live prior to the evacuation. All future retirements, then, are joining already-retired
+    # items. There is no contradiction or conflict."
     #
-    # NOT CHANGED HERE, deliberately. Flipping this to 'keep' would silently reclassify the
-    # ~19 genuinely-evacuable files this rule was written for, and the ED archives under
-    # deprecated/ are load-bearing for the anti-fabrication gate (CLAUDE.md §3). Choosing
-    # between "evacuate deprecated/" and "deprecated/ is the landing site" is a disposition
-    # call for Jordan, not a drive-by flag change -- exactly the kind of thing ED-1094 says
-    # must be raised loudly rather than bundled. Filed in registers/handoffs/HANDOFF_IN.md.
+    # He is right, and the reason I got it wrong is worth writing down. THIS CODE SAYS "evacuate";
+    # the prose says "retirement". NEITHER IS STANDARD USAGE -- both were made up here for this
+    # operation. I read two invented words as evidence of two different policies, when they are
+    # one policy named twice. "evacuate" is not a deletion queue; it means MOVE IT OUT OF `main`
+    # AND KEEP IT AT A NAMED REF, which is exactly what we want for a file nobody uses.
+    #
+    # The related worry was empty too, and CHECKING beat reasoning again: the old editorial-ledger
+    # files are not swept up here. `deprecated/archives/editorials/*` and `deprecated/canon/*` are
+    # caught by R-RELOCATE ABOVE this line and marked 'relocate'. The citation check reads them to
+    # tell a real ID from an invented one, and rule ORDER is what protects them.
+    #
+    # THE LESSON, since this is the third time today: I reasoned about what two labels SUGGESTED
+    # instead of running the classifier and reading what it DID. Two lines of work would have
+    # shown the mechanism was already coherent.
     (lambda p: p.startswith('deprecated/'), 'evacuate', 'R-DEPRECATED',
-     'history -- the evacuation tag preserves it. AMBIGUOUS since the 2026-08-12 ruling made '
-     'deprecated/ the forward landing site for retirements too (ED-IN-0171/0177) -- HELD'),
+     'where files go when we stop using them -- moved out of main, kept at a named ref. Covers '
+     'both the 2026-08-05 batch and everything retired since (Jordan, ED-IN-0171/0179)'),
     (lambda p: p.startswith('dashboard/'), 'keep', 'R-DASHBOARD',
      'the published status site -- KEPT (Jordan, 2026-08-04). See the caveat below: its INPUTS shrink'),
     (lambda p: p.startswith('workplans/'), 'keep', 'R-WORKPLANS',

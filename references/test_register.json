@@ -178,6 +178,72 @@
     }
    }
   },
+  "test_audit_refresh_coverage.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Every generated artifact that can go stale must have something that un-stales it (ED-IN-0180).",
+   "helper_loc": 3,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "audit_refresh_yaml"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 217,
+   "modules_under_test": [
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 8,
+   "tests": {
+    "test_a_family_without_a_refresher_must_say_why": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`refresher: None` means \"nothing regenerates this\" and NOTHING MORE (ED-IN-0182)."
+    },
+    "test_every_declared_refresher_exists_on_disk": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_every_family_declares_a_refresher": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A family with no `refresher` key is the state that hid mechanics-index. `None` is a valid"
+    },
+    "test_every_family_points_at_a_live_artifact": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE CHECK THAT WOULD HAVE CAUGHT npc-audit, and it had rotted twice before anyone did."
+    },
+    "test_every_refreshable_family_is_actually_run_by_the_cron": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE REGRESSION. Declaring a refresher the cron never invokes is the same blind spot with"
+    },
+    "test_every_refreshed_artifact_is_actually_committed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "RUNNING A GENERATOR IS NOT REFRESHING AN ARTIFACT (ED-IN-0182)."
+    },
+    "test_mechanics_index_is_NOT_wired_because_its_generator_is_destructive": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The inverse of what this test asserted an hour ago, and the inversion is the finding."
+    },
+    "test_the_join_is_not_vacuous": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Assert that it asserted \u2014 a workflow that ran nothing would pass the test above trivially"
+    }
+   }
+  },
   "test_battle_concluded_key.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -1506,7 +1572,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 200,
+   "loc": 244,
    "modules_under_test": [
     "engine",
     "engine/params",
@@ -1546,8 +1612,8 @@
     },
     "test_the_gate_still_runs_and_still_reports": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": "Non-vacuity: the gate executes and produces its success line. A gate that"
+     "assertions": 3,
+     "summary": "Non-vacuity: the gate executes and produces its report line. A gate that"
     },
     "test_the_retirement_note_does_not_overclaim": {
      "assertionless": false,
@@ -5440,6 +5506,79 @@
     }
    }
   },
+  "test_fork_divergence.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The anti-fabrication ratchet over the restructure-ledger consumers (ED-IN-0178).",
+   "helper_loc": 15,
+   "helpers": [
+    {
+     "loc": 8,
+     "name": "_load_fork_divergence_module"
+    },
+    {
+     "loc": 5,
+     "name": "fd"
+    },
+    {
+     "loc": 2,
+     "name": "verdicts"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 146,
+   "modules_under_test": [
+    "engine/anything_fabricated.md",
+    "engine/params/core.md",
+    "systems/combat/combat_v30.md"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 7,
+   "tests": {
+    "test_baseline_pairs_still_separate_evacuated_from_fabricated": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE RATCHET. Losing a pair is an anti-fabrication regression, not a style drift."
+    },
+    "test_bdc_cannot_see_engine_paths_at_all": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE FINDING THAT OUTRANKS EVERY COLLAPSE ABOVE (ED-IN-0182)."
+    },
+    "test_bdc_still_collapses_the_two_hop_chain_and_that_is_recorded_not_asserted": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The finding the plan's per-consumer framing could not express."
+    },
+    "test_the_baseline_is_not_vacuous": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An empty or trivially-satisfied baseline would make the ratchet decorative."
+    },
+    "test_the_control_is_dead_everywhere": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A path with NO ledger row must resolve nowhere. If this ever passes somewhere, the alias"
+    },
+    "test_the_probe_reaches_every_consumer": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that it asserted. An import failure inside probe_all must not read as agreement."
+    },
+    "test_the_ratchet_can_observe_a_loss": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Positive control: plant a regression and require the comparison to report exactly it."
+    }
+   }
+  },
   "test_forked_status.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -8658,6 +8797,49 @@
     }
    }
   },
+  "test_philosophy_range_is_current.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The stated philosophy range must match what canon actually defines (ED-IN-0184).",
+   "helper_loc": 6,
+   "helpers": [
+    {
+     "loc": 6,
+     "name": "canon_max_p"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 86,
+   "modules_under_test": [
+    "engine",
+    "references",
+    "systems",
+    "systems/references",
+    "tools",
+    "tools/engine"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 2,
+   "tests": {
+    "test_canon_defines_at_least_fifteen": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that it asserted: a parse returning a low number would make the check vacuous."
+    },
+    "test_no_doc_understates_the_philosophy_range": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Any `P-01..P-NN` range string must not stop below what canon defines."
+    }
+   }
+  },
   "test_pointer_audit.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10147,6 +10329,147 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "Guards the guard. Every assertion below passes vacuously over an empty file list \u2014 which"
+    }
+   }
+  },
+  "test_single_owner_check.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guard for tools/single_owner_check.py (ED-IN-0180).",
+   "helper_loc": 2,
+   "helpers": [
+    {
+     "loc": 2,
+     "name": "found"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 114,
+   "modules_under_test": [
+    "references",
+    "references/restructure_ledger.md",
+    "tools",
+    "tools/broken_dependency_checker.py",
+    "tools/ci_claude_workflow_paths.py",
+    "tools/single_owner_check.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 9,
+   "tests": {
+    "test_a_comment_mentioning_a_registry_is_NOT_a_bypass": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The defect the first version of this tool actually had."
+    },
+    "test_a_real_path_build_IS_a_bypass": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The positive control. Without this, the test above only proves the tool finds nothing."
+    },
+    "test_baseline_is_not_stale_low": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A baseline BELOW the truth would make the assertion above fail for everyone else's commit."
+    },
+    "test_every_declared_owner_exists": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "An owner that is not in the tree makes its whole row unfalsifiable."
+    },
+    "test_known_bypasses_are_actually_found": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The tool must see the bypasses the alias plan and ED-IN-0159 independently documented."
+    },
+    "test_the_bypass_count_has_not_grown": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE RATCHET. Report-only in the tool; here it is a real assertion because a NEW direct"
+    },
+    "test_the_scan_reaches_a_real_corpus": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Assert that it asserted. A walk that finds nothing would make the ratchet vacuous."
+    },
+    "test_the_tool_does_not_count_itself": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "It did, on its first run \u2014 reporting itself against all three registries because its OWNED"
+    },
+    "test_the_tool_is_report_only": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "It reds on day one by design; `--check` must still exit 0 at the baseline."
+    }
+   }
+  },
+  "test_single_status_line.py": {
+   "assertionless_count": 0,
+   "baselines": [
+    {
+     "name": "KNOWN_MULTI_STATUS",
+     "size": 5
+    }
+   ],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "A design doc may not carry two `## Status:` lines in its head window (ED-IN-0184).",
+   "helper_loc": 27,
+   "helpers": [
+    {
+     "loc": 15,
+     "name": "_multi_status_docs"
+    },
+    {
+     "loc": 12,
+     "name": "_iter_status_docs"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN"
+   ],
+   "loc": 130,
+   "modules_under_test": [
+    "systems",
+    "systems/_architecture/derived_stats_v30.md",
+    "systems/_architecture/scale_transitions_v30.md",
+    "systems/_architecture/subsystem_flow_skeletons_v1.md",
+    "systems/characters/character_generation_questionnaire_v30.md",
+    "systems/factions/faction_canon_v30.md"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_no_new_doc_carries_two_status_lines": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE RATCHET. A second Status line is invisible to the single owner, so it cannot be"
+    },
+    "test_the_known_set_has_not_silently_shrunk_without_being_fixed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "If a pinned doc drops off the list it was fixed \u2014 good, and the pin must shrink with it,"
+    },
+    "test_the_scan_reaches_a_real_corpus": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that it asserted \u2014 a walk finding nothing would make the ratchet vacuous."
+    },
+    "test_the_three_real_contradictions_are_still_the_named_ones": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Named explicitly so a future session does not have to re-derive which of the five matter."
     }
    }
   },
@@ -11797,10 +12120,10 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 4,
+   "FA": 5,
    "FI": 1,
    "GO": 2,
-   "IN": 38,
+   "IN": 42,
    "MB": 4,
    "PC": 7,
    "SC": 2,
@@ -11925,16 +12248,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 155,
+  "files": 160,
   "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 114,
+  "files_naming_a_module": 119,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 41,
-  "helper_defs": 294,
-  "helper_loc": 2785,
-  "ratchet_baselines": 9,
-  "tests": 1371,
+  "files_with_a_lane": 45,
+  "helper_defs": 302,
+  "helper_loc": 2838,
+  "ratchet_baselines": 10,
+  "tests": 1401,
   "undocumented_files": 0
  }
 }

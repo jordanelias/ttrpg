@@ -60,11 +60,55 @@ def test_rule_4s_subject_really_is_absent_from_the_tree():
 
 
 def test_the_gate_still_runs_and_still_reports():
-    """Non-vacuity: the gate executes and produces its success line. A gate that
-    crashed after the edit would also 'not report violations'."""
-    r = subprocess.run([sys.executable, GATE, '--local'],
-                       cwd=ROOT, capture_output=True, text=True, timeout=300)
+    """Non-vacuity: the gate executes and produces its report line. A gate that
+    crashed after the edit would also 'not report violations'.
+
+    ⚠ REWRITTEN 2026-08-14 (ED-IN-0186). The first version ran the gate in `--local`
+    mode against the AMBIENT WORKING TREE, so its input was "whatever the author
+    happened to have uncommitted". On a clean tree the gate correctly prints
+    "No changed files detected. Skipping co-file check." and the assertion failed —
+    **the test passed or failed based on whether you had unsaved work**, which is the
+    one thing it was not trying to measure.
+
+    It went unnoticed because a session almost always runs the suite mid-change. It
+    surfaced only when the suite was run against a fully committed and pushed tree,
+    which is the state CI is closest to.
+
+    A test whose verdict depends on ambient environment measures the environment, not
+    the subject. So this now builds a deterministic COMPLIANT changeset — the same
+    temp-repo technique `test_rule_1_actually_REJECTS_a_changeset_it_must_reject`
+    below already uses — and requires the gate to run it and report. The non-vacuity
+    intent is unchanged; only its input is now controlled instead of borrowed.
+    """
+    import subprocess as sp
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        def git(*a):
+            return sp.run(['git', *a], cwd=td, capture_output=True, text=True)
+        git('init', '-q')
+        git('config', 'user.email', 't@t')
+        git('config', 'user.name', 't')
+        doc = Path(td) / 'systems' / 'combat' / 'thing_v30.md'
+        doc.parent.mkdir(parents=True)
+        doc.write_text('# seed\n', encoding='utf-8')
+        (Path(td) / 'references').mkdir()
+        cs = Path(td) / 'references' / 'canonical_sources.yaml'
+        cs.write_text('a: 1\n', encoding='utf-8')
+        git('add', '-A')
+        git('commit', '-qm', 'seed')
+
+        # A COMPLIANT change: the design doc AND its co-file move together, so the
+        # gate has real work, finds no violation, and must say so.
+        doc.write_text('# seed\nchanged\n', encoding='utf-8')
+        cs.write_text('a: 2\n', encoding='utf-8')
+        git('add', '-A')
+        r = sp.run([sys.executable, GATE, '--staged'], cwd=td,
+                   capture_output=True, text=True, timeout=300)
+
     assert r.returncode in (0, 1), f'gate crashed: {r.returncode}\n{r.stderr[-2000:]}'
+    assert 'Skipping' not in r.stdout, (
+        'the gate skipped a changeset that HAS changed files — its change detection '
+        f'broke, which is the defect this test exists to catch.\n{r.stdout[-2000:]}')
     assert 'Co-file check' in r.stdout or 'CO-FILE VIOLATIONS' in r.stdout, r.stdout[-2000:]
 
 

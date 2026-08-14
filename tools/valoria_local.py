@@ -234,6 +234,12 @@ def main(argv):
         ('build_identifier_census.py',   ['--check'], False),  # census + roll-up freshness (ED-IN-0172; BLOCKING in CI)
         ('validate_ed_citations.py',     [],          False),  # anti-fabrication citation integrity (BLOCKING in CI; plan step G11)
         ('broken_dependency_checker.py', [],          False),  # ledger path refs resolve (BLOCKING in CI)
+        # ED-IN-0180. Reports modules that read a registry directly when a single owner exists.
+        # Report-only and it REDS ON DAY ONE by design — 14 known bypasses are the finding, not a
+        # regression, and blocking on them would refuse unrelated commits for a pre-existing
+        # condition (ED-IN-0112 paid for that once). The tight assertion lives in
+        # tests/valoria/test_single_owner_check.py, which fails when the count GROWS.
+        ('single_owner_check.py',        ['--check'], False),  # CLAUDE.md §8 "every rule lives once"
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the

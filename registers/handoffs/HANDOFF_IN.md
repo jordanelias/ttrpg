@@ -2670,6 +2670,275 @@ never been run.
 
 ---
 
+## [DONE] ED-IN-0182 — second adversarial review, vocabulary as the lens: five real defects
+
+**Jordan asked whether Waves 3–5 had been audited against the vocabulary convention. They had not.**
+The first Fable-5 pass covered only Waves 1+2, and the convention (ED-IN-0179) was written *after*
+it — so nothing had ever been checked against it, including Waves 4+5, which were the first work
+produced *under* it. A read-only critic was run over all three commits with vocabulary as the
+primary lens. Five real defects, all fixed.
+
+1. **My glossary fix was a no-op, and worse than the problem.** `build_glossary.py` went into the
+   cron but `references/glossary/` went into neither the diff-check nor the `git add` list — the job
+   regenerated the glossary in the runner and threw it away. The run would have gone green and the
+   new coverage guard would have reported the family **covered**, over a family still fresh only by
+   luck. **Running a generator is not refreshing an artifact.** The guard now has a second leg
+   asserting the artifact is committed, with a control that reds on the pre-fix workflow line.
+   ⚠ The guard's own docstring had named this blind spot — one level up from where it recurred.
+2. **The fork harness measures a classifier production never reaches** — the trap it already
+   recorded fixing once, drawn too small again. `bdc`'s decision starts at `extract_file_refs`,
+   whose roster omits `engine/`, `params/`, `audit/`, `registers/`. Verified: 3 of 4 probes extract
+   to the **empty set**. Docstring corrected to say which consumers are *invoked* and which are
+   *transcribed*.
+3. **And the finding that falls out of it, which outranks everything Wave 3 reported:** a live
+   ledger entry citing a fabricated `engine/…` path passes `broken_dependency_checker` **silently**.
+   Not a wrong verdict — a blocking gate not looking. Pinned, **not fixed**: widening a blocking
+   gate's scope needs its own expected-delta test.
+4. **`npc-audit` pointed at an evacuated artifact** and had been reporting "(no data)" silently.
+   Wave 5 edited that exact table, called it "a frozen historical artifact", and pinned it — while
+   its own comment recorded an *earlier* repointing after the identical failure. Retired, not
+   repointed a third time. New guard fails on any family naming an absent artifact.
+5. **`refresher: None` carried two dispositions** — "frozen" and "blocked by a defect" — inside the
+   session that ruled vocabulary must be idempotent. Split into `no_refresher_because`.
+
+**The lens also judged the convention itself, and found the headline wanting.** *Idempotent* is a
+term of art for operations whose re-application changes nothing — not for a word whose meaning
+survives a cold read. **The rule's own headline is a coinage defined only by the body beneath it**,
+which is the exact defect the rule describes. Left as-is pending Jordan; renaming a convention he
+authored is his call.
+
+RISKY terms: `refresher` (fixed), `bypass` (claims a read, measures a mention — limits now recorded
+at the tool), `wave` (points at session-local numbering that lives nowhere in the tree), `frozen`
+(three live senses). PASS: `control`, `probe`, `ratchet`, `pair`, `hop`, `drift`, `harness`,
+`single owner`, `distinguishing`, `collapsed`, `family`, `baseline`, `join`, `fork row`.
+
+**One false positive, and the fault is mine.** The review reported `ED-IN-0181` as cited-but-never-
+allocated. It was allocated — the critic read the tree **mid-edit**, because I ran a read-only audit
+against a working tree I was actively modifying. **Audit a committed ref, not a live tree.**
+
+### Open after this pass
+
+- **`broken_dependency_checker`'s extraction roster** (item 3) — the largest live anti-fabrication
+  hole in the tree, pinned and unfixed. Needs its own expected-delta test.
+- **`mechanics_index_gen.py`** needs a comment-preserving write before that family can be refreshed.
+- **The IN ledger capacity**, unchanged.
+- **G5** is unblocked and now has three worked examples of its own subject: apparatus whose scope,
+  output, or subject nothing consumes.
+
+---
+
+### ⚠ Same-day correction to BOTH reviews' glossary finding — caught by the shipping gate
+
+**"Fresh only by luck" was wrong, and neither the critic nor I caught it.**
+`tests/valoria/test_build_glossary.py::test_committed_output_matches_a_fresh_build` rebuilds the
+glossary and **byte-compares every committed file** inside the BLOCKING pytest suite. Any corpus
+change not followed by a regeneration reds `pytest tests/valoria` — it fired on this branch after my
+own edits.
+
+So the glossary is **enforced, just manually**. What it lacked was an *unattended* refresher, which is
+a much smaller gap. **`mechanics-index` is the genuinely unenforced one** — its only check is
+`--strict` in the warn-only tier, which reports and gates nothing.
+
+I collapsed "has no cron step" into "has no enforcement" and asserted the stronger claim for both.
+The cron step for glossary is still worth keeping — it moves the work off whoever next edits the
+corpus — but it is **convenience, not the closing of a hole**, and "worse than visible staleness"
+does not apply to it.
+
+## [DONE] ED-IN-0180 — Waves 4+5: the duplication guardrail, and two artifacts nothing refreshed
+
+### Wave 4 — single-owner bypasses: 14, measured
+
+`tools/single_owner_check.py` reports modules that read a registry directly when a single owner
+exists. **5** read `references/restructure_ledger.md` outside `pathres`; **6** read the editorial
+ledgers outside `obs_core`; **3** read `id_reservations.yaml` outside `registry.py`.
+
+**It keys on the file, not on the words "SINGLE OWNER".** Grepping for ownership claims would be this
+programme's signature defect one level up — `pathres` declared itself the owner for months while four
+modules parsed the same file, and the declaration is what stopped readers checking. The question asked
+is factual: *does this module build a path to the registry?*
+
+**And it parses rather than greps** — the first version grepped and reported `build_engine_atlas.py`,
+which only *mentions* the filename in a comment. Comments discuss registries constantly here, so a text
+scan measures prose density. It now walks the AST and reads only string constants **outside docstrings**.
+
+⚠ **Then it counted itself, reporting 17** — matching its own `OWNED` table across all three registries.
+That is **ED-IN-0159 §2.4 recurring verbatim in a brand-new instrument**. The lesson is worth more than
+the fix: *a census whose configuration names its own subject is self-matching by construction*, and the
+only reliable defence is to check raw output for the tool's own name before believing a number. Honest
+baseline **14**.
+
+Report-only, reds on day one by design — those 14 are the finding, not a regression.
+
+### ⚠ ED-IN-0181 — Wave 5's fix was DESTRUCTIVE, and the gate caught it, not me
+
+**Read this before touching `mechanics_index_gen.py`.** Wave 5 regenerated `mechanics_index.yaml`
+with `--update` and added that command to the weekly cron. The tool printed `[OK] Wrote drift_report
+back` and produced a diff that looked plausible for a register 32 files behind.
+
+It was destructive. `--update` says it writes the drift report back; it round-trips the **entire
+YAML** through a loader/dumper and **strips every comment**. Measured: **39 comment lines → 0,
+5,081 characters gone** — section headers and the inline notes recording why individual paths were
+repointed. The `notes:` *fields* survived (71 both sides), which is exactly what made the diff look
+survivable at a glance; the losses were all in comments, invisible to any field-level check.
+
+**Reverted — added in `04e0289`, removed in the next commit, before the cron ever fired.** mechanics-index now
+declares `refresher=None` with the reason at the declaration and keeps reporting stale — honest,
+because the drift is real and the fix is making the generator comment-preserving, not a cron line.
+
+**Why this was worse than an ordinary bug:** it was an *unattended weekly write*. It would have
+deleted hand-written prose every Monday in an auto-opened PR nobody reads closely, compounding
+silently. **A flag's description is not its effect — before scheduling a generator, run it once and
+diff for what it REMOVED, not only for what it wrote.**
+
+**How it was caught, which is the part that worked.** `pytest` went red on
+`test_no_retired_tree_pointers_remain_in_the_mechanics_index` — and *not* because retired pointers
+appeared. The opposite: the regeneration deleted the excused occurrences that test used as its own
+positive control, so it failed with *"no excused occurrences found — the two exclusions above are
+now untested"*. A guard written to prove it could tell a live pointer from a documented absence
+detected that its own evidence had been destroyed. §0.1 point 2 paying out in a direction nobody
+designed for.
+
+### Wave 5 — the brief's assumption was inverted by measurement
+
+The plan said *"two carry the pre-change orphan set and will self-correct on their cron — worth
+confirming rather than assuming."* Confirmed, and it is the other way round: **five** of the six stale
+families are on the weekly cron and self-correct. **`mechanics-index` was on nothing.**
+
+Its generator is wired into CI as `--strict`, which only **validates** and is warn-only — so drift was
+reported every run and acted on by nobody, reaching **32 files behind**. That is ED-IN-0159 §1.6's shape
+one level up: not dead scope, but **a live signal with no consumer**, which is decoration. Regenerated
+and added to the cron — **and both of those were then REVERTED, see ED-IN-0181 above.**
+
+**Then the guard found a second one I had not looked for** — `glossary` also had no scheduled refresher.
+⚠ **But my reading of what that meant was wrong** — see the same-day correction under ED-IN-0182: the
+glossary is enforced by a blocking test, not lucky.
+
+⚠ **And my fix for it was a no-op, caught by the same review (ED-IN-0182).** I added
+`build_glossary.py` to the cron but **not** `references/glossary/` to the diff-check or `git add`
+lists — so the job regenerated the glossary inside the runner and threw it away. The run would have
+gone green and the coverage guard would have reported the family *covered*, over a family still
+fresh only by luck. **Running a generator is not refreshing an artifact.** Both lists fixed, and the
+guard gained an artifact-side leg: it now asserts each refreshed artifact is actually committed,
+verified against a simulated pre-fix workflow.
+It read *fresh, drift=0* only because a session ran the generator by hand in `fdbef6b`. **That is worse
+than visible staleness, because the report said everything was fine.** Both now in `audit-refresh.yml` — **and see the correction directly above; the glossary half was
+incomplete until ED-IN-0182.**
+
+**The join is the deliverable.** `audit_staleness.FAMILIES` had no field naming what refreshes each
+artifact — which is exactly why the gap was invisible; it could report six families stale and never say
+which of them anything would fix. Every family now declares a `refresher` (`None` = deliberately frozen,
+and it must be *said*), joined to the workflow in both directions by
+`tests/valoria/test_audit_refresh_coverage.py` — the same shape `broken_dependency_checker` already
+applies between `ci_checks_registry.yaml` and `valoria-ci.yml`. It immediately caught my own fabricated
+filename: I guessed `tools/build_glossary.py`; the real path is `tools/observability/build_glossary.py`.
+
+### Still open after this wave
+
+- **The IN ledger capacity** — unchanged and now the oldest live item. My entries are a measured
+  contributor; a per-entry budget is part of any real fix.
+- **G5** (vitality meta-guard) is unblocked and is the natural next step: it generalises exactly the
+  defect Wave 5 found — apparatus whose scope or output nothing consumes.
+- **G4** folds into alias-plan Phase A2, now that Wave 3 has measured the foundation.
+- **G6** and **G11** unblocked; **G10** waits on other lanes.
+
+---
+
+## [RULED] ED-IN-0179 — Jordan: there is no `deprecated/` conflict, and the real lesson is about vocabulary surviving sessions
+
+**Jordan, verbatim (2026-08-13):** *"The completed evacuation **is** the retirement of all those
+files that were live prior to the evacuation. All future retirements, then, are joining
+already-retired items. There is no contradiction or conflict."*
+
+ED-IN-0177 raised, and PR #307 held for decision, a claimed clash between two meanings of
+`deprecated/`. **There was no clash.** "evacuate" is not a deletion queue — it means *move it out of
+`main`, keep it at a named ref*, which is what we want for a file nobody uses. New retirements
+joining old ones is the policy working.
+
+**Why I got it wrong, and Jordan's framing is sharper than mine.** I first called this a jargon
+problem: the code says **"evacuate"**, the prose says **"retirement"**, neither is standard usage,
+and I read two invented labels as two policies. Jordan named the deeper mechanism:
+
+> *"Claude is not a human who has context between sessions... every session will need to reinterpret
+> vocabulary used for a particular purpose in another session, and that can create compounding
+> issues since the particular use of vocabulary isn't carried over and consequently causes the word
+> to be misinterpreted going forward."*
+
+That is exactly what happened, **observed live**: `evacuate` was coined in an earlier session; I read
+it cold, inferred a meaning its author never held, and escalated the invention to a blocker across
+three surfaces and two PR bodies. The cost was not confusion — it was fabricated work.
+
+**The consequence for how this repo should be written.** A coined term is a *pointer to context that
+does not survive*. Plain words fail more gracefully because ordinary usage re-supplies the meaning;
+a coined word has no such fallback, so each session re-derives it and the derivations drift apart.
+Simplicity is not a style preference here — it is the only form of definition that survives a
+context reset.
+
+**MEASURED (2026-08-13):** **32 distinct process terms** in circulation across ~26,000 uses
+(`disposition` 4,894 · `ratif*` 3,396 · `consolidat*` 2,046 · `retire` 1,547 · `evacuat*` 632 · and
+27 more). **None of the six vocabulary registries governs any of them** — `censured_vocabulary`,
+`synonym_registry` and `definitions.yaml` return **zero** hits for the four biggest offenders. Every
+existing registry governs *design/world* terms; **process vocabulary is entirely ungoverned**, which
+is why the term that caused this had nothing to anchor it.
+
+**The adjacent worry was empty too, and checking beat reasoning again.** The load-bearing
+editorial-ledger archives are not swept up: `deprecated/archives/editorial*` and `deprecated/canon/`
+match `R-RELOCATE` **above** `R-DEPRECATED` and classify `relocate`. Two lines of `classify()` would
+have shown it. **Third time this session an instrument overturned something I reasoned to.**
+
+**Action taken:** HELD language removed from `tools/evacuation_plan.py`, CLAUDE.md §3 and the PR
+bodies; both surfaces now say plainly what the directory is *for*, and name the trap.
+
+**Recommendation on Jordan's question (standing instruction vs. vocabulary matrix) — in the reply,
+not executed.** Short form: a standing "simplify" instruction is the thing §0.1 already ruled
+useless (no artifact, no falsifier); a *seventh* registry built up front is the duplication this
+programme is fighting. The evidenced move is to extend the existing `synonym_registry.yaml` to
+process verbs, seeded **only** from terms that have actually caused harm, with a report-only check
+that flags a NEW coined process term. Grow by recurrence.
+
+---
+
+## [DONE] ED-IN-0178 — Wave 3: the alias plan's foundation EXECUTED, and a control the plan never ran
+
+**Confirmed.** One 1-hop FORK row yields **5 distinct verdicts across 6 consumers**; the hop-count
+and payload-shape claims reproduce exactly. `audit/2026-08-12-alias-index-consolidation/00_plan.md`
+is safe to build Phase A on — its central claim was read off the page and is now measured.
+
+**The finding it does not have.** The plan asks whether consumers disagree about a FORK row. The
+question that matters is the one `test_forked_status.py` calls *the repo's anti-fabrication
+property* — a path that left deliberately must not look like one that never existed — and that file
+proves it for exactly **one** consumer. So every probe here also runs a **control**: a path with no
+ledger row at all.
+
+**Forked-vs-fabricated survives in 5 of 18 (consumer × fork-row) pairs.** `ci_claude_workflow_paths`,
+`vector_audit`, `workbench` and `gen_audit` collapse it on *every* row; `broken_dependency_checker`
+collapses it **conditionally** — `INFO-EVACUATED` at 1 hop, `BROKEN` at 2, and `BROKEN` is what a
+fabricated path returns. Only `pathres` preserves it throughout, which makes it the right
+consolidation target **on evidence**, not just on design.
+
+**Per-pair, not per-consumer — carry this.** The instrument first tracked consumer *names*, on the
+natural assumption that a module either understands `FORK:` or does not. `bdc` refutes it. A
+per-consumer roster would have had to call `bdc` wholly safe or wholly broken and both are false.
+**The granularity of a measurement decides which findings are expressible** — it is not a
+presentation choice.
+
+**Two corrections to my own work, since they are the method.** The instrument was wrong *before* the
+plan was: its first version modelled `bdc._resolve_remap()` as the decision and reported
+`params/core.md` as "mapped", contradicting the plan's BROKEN prediction — the plan was right, and
+the helper is not the decision (`bdc:217-227` tests `all_files` membership first). And I reported
+"only `pathres` and `bdc` preserve the distinction" before running the strict comparison; that is
+too generous to `bdc`.
+
+**Deliberately NOT a conformance gate.** Failing on today's 13 collapsed pairs would red every
+unrelated PR immediately — ED-IN-0112 already paid for that mistake. The ratchet pins the 5 working
+pairs and fails only when one stops working. **Phase A2 grows it.** Nothing here pre-empts Phase A1's
+five semantics, still HELD.
+
+**Not measured, and named so the next wave inherits it:** the 116 header-less FORK rows (parser
+fidelity, the next thing a capture must prove), duplicate-key precedence, and the existence-test
+disagreement. All real per the plan, none exercised by these four probes; extending `PROBES` is the
+cheap way to settle them.
+
+---
 ## [DONE] ED-IN-0173/0174/0175 — Wave 1+2: the merge's own compliance debt, and G2 CLOSED (2026-08-13)
 
 **Session shape.** Jordan asked for the backlog partitioned into what needs no ruling, then ran as
@@ -2735,6 +3004,23 @@ guard is narrow.
   (93%)**, and **44 of the remaining entries are `open`**. The archive remedy is exhausted; the next
   IN session hits a hard wall and cannot archive its way out. This needs a real disposition — burn
   down open entries, split the lane file, or raise the cap with an explicit ED.
+
+  ⚠ **THREE overflows in one session now (2026-08-13).** The ledger red at 50,523, again at 50,132,
+  and each time the only entries available to archive were this session's own. Live sits at 44,295
+  purely because six of my entries were moved out on the day they were written — so the live ledger
+  does not show the work of the PRs under review, and the narrative lives here and in commit
+  messages instead. **This is not a cap that is slightly too low; it is a register whose live half
+  is 44 open entries and whose churn is one session's output.** A per-entry budget and an
+  open-entry burn-down are both required; raising the cap alone moves the wall.
+
+  ⚠ **UPDATE, same session: the wall arrived immediately.** Wave 3's four files pushed the ledger
+  to **50,523 / 50,000 — a hard red** — and the only settled ids available to archive were this
+  session's own six. They were archived (live now **44,295 / 89%**), which works but means the live
+  ledger no longer shows the work of the PR under review; the narrative lives here and in the commit
+  messages instead. **And the cause is not only the 44 open entries: my own six entries totalled
+  6,227 tokens, 12% of the whole file.** Entry verbosity is a real contributing cause and it is mine.
+  A disposition should address both — burn down the open backlog *and* set a per-entry budget — not
+  just raise the cap.
 
   ⚠ **Do not read 49,628 → 46,560 as "archiving bought 3,068 tokens" — an earlier draft of this note
   invited exactly that, and it is a confounded pair (§0.1 point 4, caught by adversarial review,
