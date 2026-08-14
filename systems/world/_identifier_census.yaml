@@ -205,7 +205,7 @@ identifiers:
     identifier: final_state
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:294-298`, `engine/mc_v18.py:298`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:296-300`, `engine/mc_v18.py:298`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -273,7 +273,7 @@ identifiers:
     identifier: insurgencies_formed
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:294-298`, `engine/mc_v18.py:298`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:296-300`, `engine/mc_v18.py:298`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -303,7 +303,7 @@ identifiers:
     identifier: npc_counter
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.npcs` / `world.npc_counter` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:185-186`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.npcs` / `world.npc_counter` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:187-188`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -313,7 +313,7 @@ identifiers:
     identifier: npcs_generated
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` → `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:299-302`, `engine/mc_v18.py:299`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` → `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:301-304`, `engine/mc_v18.py:299`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -332,7 +332,7 @@ identifiers:
     identifier: populate_from_geography
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: down | `systems.settlements.sim.registry` | `create_world` calls `populate_from_geography(world)` to build `world.settlements` | `engine/autoload/game_state.py:257-258`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: down | `systems.settlements.sim.registry` | `create_world` calls `populate_from_geography(world)` to build `world.settlements` | `engine/autoload/game_state.py:259-260`'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -541,7 +541,7 @@ identifiers:
     identifier: STARTING_ACCORD
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:systems/factions/sim/mass_seizure.py
@@ -552,7 +552,7 @@ identifiers:
     identifier: STARTING_GARRISON
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -562,7 +562,7 @@ identifiers:
     identifier: STARTING_OWNER
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -572,7 +572,7 @@ identifiers:
     identifier: STARTING_PT
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -582,7 +582,7 @@ identifiers:
     identifier: STARTING_STATS
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -657,7 +657,7 @@ identifiers:
     identifier: uncontrolled_streaks
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:183-184`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:187-188`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

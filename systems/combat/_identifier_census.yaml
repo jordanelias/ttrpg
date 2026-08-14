@@ -47,7 +47,7 @@ identifiers:
     identifier: ACTION_RESOLUTION_ORDER
     docs:
     - systems/combat/combat_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence :: Deprecated engine `systems/combat/sim/combat.py`''s action set (`Feint`, `Disarm`, `Tie Up`, `Retrieve`, `Escape`, `Leap`, `Rescue`) is explicitly unimplemented — falls through to a `Failure` stub. Structural, not mechanical: no dispatch branch exists for these action types. | `systems/combat/sim/combat.py:89-96` (the declared action set, `ACTION_RESOLUTION_ORDER`'
+    purpose: '[7. Traced gaps] Gap | Evidence :: Deprecated engine `systems/combat/sim/combat.py`''s action set (`Feint`, `Disarm`, `Tie Up`, `Retrieve`, `Escape`, `Leap`, `Rescue`) is explicitly unimplemented — falls through to a `Failure` stub. Structural, not mechanical: no dispatch branch exists for these action types. | `systems/combat/sim/combat.py:90-97` (the declared action set, `ACTION_RESOLUTION_ORDER`'
     built_in:
     - py:systems/combat/sim/combat.py
     disposition: BUILT

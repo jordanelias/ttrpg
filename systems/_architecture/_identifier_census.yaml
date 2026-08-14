@@ -47,8 +47,8 @@ docs:
 - systems/_architecture/videogame_mode_spec.md
 - systems/_architecture/videogame_mode_spec_index.md
 counts:
-  UNRESOLVED: 400
-  BUILT: 233
+  UNRESOLVED: 401
+  BUILT: 232
 identifiers:
   abstract_resolve:
     identifier: abstract_resolve
@@ -100,7 +100,7 @@ identifiers:
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
     - systems/_architecture/propagation_spec_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.lookup` | `engine/substrate/keys.py:364 lookup` | `engine/substrate/keys.py:588` (inside `accounting_boundary`, def at `:581` — resolves the Key for every queued `_pending_apply` callable at the ACCOUNTING boundary, the hottest production path); also `engine/tests/test_accord_echo.py:311`, `engine/tests/test_echo_transport.py:89`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.lookup` | `engine/substrate/keys.py:364 lookup` | `engine/substrate/keys.py:588` (inside `accounting_boundary`, def at `:581` — resolves the Key for every queued `_pending_apply` callable at the ACCOUNTING boundary, the hottest production path); also `engine/tests/test_accord_echo.py:311`, `engine/tests/test_echo_transport.py:100`'
     built_in:
     - py:engine/substrate/keys.py
     disposition: BUILT
@@ -562,7 +562,7 @@ identifiers:
     - systems/_architecture/key_echo_armature_v1.md
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:361-394`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -706,7 +706,7 @@ identifiers:
     identifier: canonical_accord
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `canon_buckets.canonical_accord` | `engine/substrate/canon_buckets.py:38 canonical_accord` | `engine/autoload/game_state.py:33` (re-export); `systems/overview/sim/accounting.py:88`; `systems/world/sim/npe.py:189`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `canon_buckets.canonical_accord` | `engine/substrate/canon_buckets.py:38 canonical_accord` | `engine/autoload/game_state.py:35` (re-export); `systems/overview/sim/accounting.py:88`; `systems/world/sim/npe.py:189`'
     built_in:
     - py:engine/substrate/canon_buckets.py
     disposition: BUILT
@@ -1270,9 +1270,8 @@ identifiers:
     docs:
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     purpose: '[Extensions / execution items (design-level, once their gating D is ruled)] ID | Item | Source | PR#127 update :: **E8 (NEW)** | **Reconcile IT-2 Condotta''s Aspetto ×0.5 Mil clause against all four real `faction.Mil` read sites** — `_mil_advantage_signal` (`faction_action.py` ~line 142), the `CONQUEST_MIN_MIL` gate (~lines 192/341), the muster-pool formula (~line 416), and `massbattle.py::_faction'
-    built_in:
-    - py:systems/factions/sim/faction_action.py
-    disposition: BUILT
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   consolidation_progress:
@@ -2001,7 +2000,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:348`, `systems/factions/sim/parliamentary_tr'
+    purpose: '[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:362`, `systems/factions/sim/parliamentary_tr'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -4286,7 +4285,7 @@ identifiers:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:361-394`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -4451,7 +4450,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: 'S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` → `resolve_mass_battle` → `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) — `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:429-459`, emit at `:39…'
+    purpose: 'S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` → `resolve_mass_battle` → `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) — `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:443-473`, emit at `:39…'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -4461,7 +4460,7 @@ identifiers:
     identifier: resolve_opposing_operations
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations`'
+    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations`'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -4884,7 +4883,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/key_echo_armature_v1.md
-    purpose: '[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:172`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152`'
+    purpose: '[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:174`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py
@@ -5623,7 +5622,7 @@ identifiers:
     identifier: sustain_knot
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations`'
+    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -6178,7 +6177,7 @@ identifiers:
     identifier: VALORIA_STRICT_KEYS
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:396`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:410`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

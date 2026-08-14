@@ -87,10 +87,22 @@ _DEGREE_EPS = 1e-9   # [JUSTIFIED: ulp-recovery tolerance, 4 orders above measur
 
 
 def compute_degree(net, ob):
-    if net <= _DEGREE_EPS:                                        return "Failure"
-    if net >= 2 * ob - _DEGREE_EPS and net >= 3 - _DEGREE_EPS:    return "Overwhelming"
-    if net >= ob - _DEGREE_EPS:                                   return "Success"
-    return "Partial"
+    """The ruled margin ladder (Jordan, 2026-08-14). Owner: engine.autoload.dice_engine.
+
+    Spelled out here rather than imported ON PURPOSE: this tree is the self-contained canon
+    engine (J2) and deliberately takes no `engine.*` dependency — that coupling is a porting
+    -architecture call nobody has made. Equivalence is held by a guard instead of by an import:
+    `tests/valoria/test_degree_ladder_single_owner.py` evaluates every ladder in the tree over
+    the integer AND quarter-step domains and fails unless they collapse to ONE behavioural
+    class, so a divergence here is loud rather than silent.
+
+    The epsilon is unchanged in role — ulp recovery at a band boundary, justified above.
+    """
+    margin = net - ob
+    if margin < -_DEGREE_EPS:      return "Failure"
+    if margin < 1 - _DEGREE_EPS:   return "Partial"
+    if margin >= 3 - _DEGREE_EPS:  return "Overwhelming"
+    return "Success"
 
 def _morale_sigma(u, atom=None):
     # Graded morale effectiveness as a delta-sigma: 0 at full morale, down to -MORALE_SIGMA_SCALE near rout.

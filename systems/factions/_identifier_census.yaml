@@ -32,8 +32,8 @@ docs:
 - systems/factions/varfell_path_b_v30.md
 - systems/factions/varfell_path_b_v30_infill.md
 counts:
-  UNRESOLVED: 287
-  BUILT: 108
+  UNRESOLVED: 288
+  BUILT: 107
 identifiers:
   accounting_boundary:
     identifier: accounting_boundary
@@ -105,7 +105,7 @@ identifiers:
     identifier: adjust_accord
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:482 adjust_accord`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:496 adjust_accord`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -219,7 +219,7 @@ identifiers:
     identifier: ALL_PLAYABLE_15
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `MULTS`, `ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:34 MULTS`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `MULTS`, `ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:41 MULTS`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -486,7 +486,7 @@ identifiers:
     identifier: BASE_W_UNIQUE
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -508,7 +508,7 @@ identifiers:
     identifier: battle_count
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:495 battle_count`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:509 battle_count`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py
@@ -877,7 +877,7 @@ identifiers:
     identifier: CONQUEST_MILADV_COEF
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -887,17 +887,16 @@ identifiers:
     identifier: CONQUEST_MIN_MIL
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
-    built_in:
-    - py:systems/factions/sim/faction_action.py
-    disposition: BUILT
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`'
+    built_in: []
+    disposition: UNRESOLVED
     doc_status: null
     in_table: true
   conquest_mult:
     identifier: conquest_mult
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector — `systems/factions/sim/faction_action.py:199-212 conquest_mult`.
+    purpose: S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector — `systems/factions/sim/faction_action.py:213-226 conquest_mult`.
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -907,7 +906,7 @@ identifiers:
     identifier: CONQUEST_TARGET_COEF
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1135,7 +1134,7 @@ identifiers:
     identifier: cum_conquest
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S2.5** `[branch]` `roll < cum_conquest` → `_try_conquest` — `systems/factions/sim/faction_action.py:230-233 _try_conquest`.
+    purpose: S2.5** `[branch]` `roll < cum_conquest` → `_try_conquest` — `systems/factions/sim/faction_action.py:244-247 _try_conquest`.
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1145,7 +1144,7 @@ identifiers:
     identifier: cum_muster
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:236-239 _try_muster`, `systems/factions/sim/faction_action.py:500-528 _try_muster`.'
+    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`.'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1155,7 +1154,7 @@ identifiers:
     identifier: cum_unique
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S2.4** `[branch]` `roll < cum_unique` → `_try_faction_unique` — `systems/factions/sim/faction_action.py:223-227 _try_faction_unique`.
+    purpose: S2.4** `[branch]` `roll < cum_unique` → `_try_faction_unique` — `systems/factions/sim/faction_action.py:237-241 _try_faction_unique`.
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -1426,7 +1425,7 @@ identifiers:
     identifier: entry_terms_l_seed
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none — see §7 | `systems/factions/sim/faction_action.py:489 entry_terms_l_seed`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none — see §7 | `systems/factions/sim/faction_action.py:503 entry_terms_l_seed`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -1538,7 +1537,7 @@ identifiers:
     identifier: faction_a
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -1548,7 +1547,7 @@ identifiers:
     identifier: faction_b
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -1678,7 +1677,7 @@ identifiers:
     identifier: faction_take_action
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:177 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:191 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -2178,7 +2177,7 @@ identifiers:
     identifier: LOW_ACCORD_SEED
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -2321,7 +2320,7 @@ identifiers:
     identifier: MUSTER_WEALTH_COST
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -2331,7 +2330,7 @@ identifiers:
     identifier: MUSTER_WEALTH_TO_POOL_DIV
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:236-239 _try_muster`, `systems/factions/sim/faction_action.py:500-528 _try_muster`.'
+    purpose: 'S2.6** `[branch][write]` `roll < cum_muster` → `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success — `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`.'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -3050,7 +3049,7 @@ identifiers:
     identifier: resolve_mass_battle
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT

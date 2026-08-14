@@ -1,7 +1,9 @@
 """
 sim/autoload/game_state.py — Global mutable state container — factions, territories, world tracks
 
-Canon source: designs/architecture/complete_systems_reference.md; mc_v17.py starting state tables
+Canon source: designs/architecture/complete_systems_reference.md;
+              FORK: mc_v17.py starting state tables (ref c451bcb -- superseded by mc_v18,
+              file evacuated 2026-08-05, ED-IN-0145/ED-IN-0188)
 Status: [CANONICAL — Phase 1 implementation 2026-05-17]
 [PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: the Faction dataclass below
  (L/Sta/W/I/Mil; no Mandate / PS / Treasury / da.* Keys) implements the pre-LPS-1 SUPERSEDED

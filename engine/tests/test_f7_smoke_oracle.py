@@ -76,13 +76,28 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 #   GOLDEN_WINNERS    = {'Crown': 3, 'Church': 1, 'Hafenmark': 1, 'Varfell': 3}
 #   GOLDEN_BATTLES_MEAN    = 30.2
 #   GOLDEN_SCENES_RESOLVED = 383
-GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+# REPINNED 2026-08-14 (ED-IN-0187 — Jordan's degree-ladder + strategic-dice ruling). Three ruled
+# mechanisms move every seeded campaign at once: faction actions roll the continuous d10 through
+# sigma_leverage instead of `d6, 4+` (different distribution AND different RNG draw count), the
+# degree bands moved to the ruled margin ladder (Partial is now met-but-not-exceeded, so many former
+# Partials are Failures), and `CONQUEST_MIN_MIL` was deleted (low-Military factions now reach the
+# battle engine). The cause is a RULING, not drift; the deltas are published rather than buried
+# (CLAUDE.md 0.1 point 4). OLD values, preserved:
+#   GOLDEN_WIN_SHARE       = {'Crown': 62.5, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 37.5}
+#   GOLDEN_WINNERS         = {'Crown': 5, 'Varfell': 3}
+#   GOLDEN_BATTLES_MEAN    = 35.5
+#   GOLDEN_SCENES_RESOLVED = 463
+# Note SCENES_RESOLVED nearly doubles (463 -> 862). That is the largest single delta here and it
+# has a mechanism: more faction actions now resolve to a band that opens a scene, and the deleted
+# Mil gate lets more conquests start. Recorded explicitly because 'the spine output moved,
+# investigate before regenerating' is what this assertion says, and this IS the investigation.
+GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a
 # key (Church/Hafenmark win 0/8 now, so they are simply absent, not present at 0 — matching how
 # the OLD golden's all-four-present shape happened to reflect all four winning at least once).
-GOLDEN_WINNERS = {'Crown': 5, 'Varfell': 3}
-GOLDEN_BATTLES_MEAN = 35.5
-GOLDEN_SCENES_RESOLVED = 463  # was 383 pre-OI-04 (see REPINNED 2026-07-29 note above) — was 0 pre-spine
+GOLDEN_WINNERS = {'Church': 2, 'Varfell': 4, 'Crown': 2}
+GOLDEN_BATTLES_MEAN = 31.6
+GOLDEN_SCENES_RESOLVED = 862  # 463 -> 862 under the 2026-08-14 ruling; see the REPINNED note above
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}

@@ -30,7 +30,7 @@ identifiers:
     identifier: a_knot_id
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253`'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -102,7 +102,7 @@ identifiers:
     identifier: apply_coherence_delta
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:363-364`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:364-365`'
     built_in:
     - py:systems/threadwork/sim/coherence.py
     disposition: BUILT
@@ -112,7 +112,7 @@ identifiers:
     identifier: apply_conviction_scar
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:348-352`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:349-353`'
     built_in:
     - py:systems/characters/sim/conviction.py
     disposition: BUILT
@@ -142,7 +142,7 @@ identifiers:
     identifier: b_knot_id
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253`'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -182,7 +182,7 @@ identifiers:
     identifier: COHERENCE_BAND_STRAIN_PACING
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `COHERENCE_BAND_STRAIN_PACING` (a passive strain-accrual table) is declared and never read anywhere in the repo. | `systems/fieldwork/sim/knots.py:100-106`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `COHERENCE_BAND_STRAIN_PACING` (a passive strain-accrual table) is declared and never read anywhere in the repo. | `systems/fieldwork/sim/knots.py:101-107`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -192,7 +192,7 @@ identifiers:
     identifier: coherence_delta
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:328-337`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     - py:systems/threadwork/sim/operations.py
@@ -204,7 +204,7 @@ identifiers:
     identifier: composure_damage
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:328-337`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -214,7 +214,7 @@ identifiers:
     identifier: conviction_scar
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:328-337`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -243,7 +243,7 @@ identifiers:
     identifier: disposition_set_to
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:327-336`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found — §7) | `systems/fieldwork/sim/knots.py:328-337`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -312,7 +312,7 @@ identifiers:
     identifier: from_dict
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:396` (world-snapshot deserialization)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:398` (world-snapshot deserialization)'
     built_in:
     - py:systems/characters/sim/beliefs.py
     - py:systems/characters/sim/conviction.py
@@ -400,7 +400,7 @@ identifiers:
     identifier: KNOT_BONDS_MIN
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -410,7 +410,7 @@ identifiers:
     identifier: KNOT_DISPOSITION_MIN
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -420,7 +420,7 @@ identifiers:
     identifier: KNOT_FORMATION_OB
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -430,7 +430,7 @@ identifiers:
     identifier: KNOT_FORMATION_TN
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -450,7 +450,7 @@ identifiers:
     identifier: knot_id
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
     built_in:
     - py:engine/tests/test_knots_ed912.py
     - py:systems/fieldwork/sim/knots.py
@@ -461,7 +461,7 @@ identifiers:
     identifier: knot_id_counter
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:197`; increment `systems/fieldwork/sim/knots.py:236-238`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:199`; increment `systems/fieldwork/sim/knots.py:237-239`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -490,7 +490,7 @@ identifiers:
     identifier: knot_strain_delta
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`''s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -499,7 +499,7 @@ identifiers:
     identifier: KNOT_TS_MIN_PARTY
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -609,7 +609,7 @@ identifiers:
     identifier: resolve_opposing_operations
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
     built_in:
     - py:systems/threadwork/sim/opposing.py
     disposition: BUILT
@@ -691,7 +691,7 @@ identifiers:
     identifier: strain_after
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `KnotState(knot, broke, ruptured, strain_after, notes)` | `arg` return value | caller of `sustain_knot`/`check_knot_rupture` (only live caller: `opposing.py`, itself orphaned — §7) | `systems/fieldwork/sim/knots.py:250-272`, `:275-312`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `KnotState(knot, broke, ruptured, strain_after, notes)` | `arg` return value | caller of `sustain_knot`/`check_knot_rupture` (only live caller: `opposing.py`, itself orphaned — §7) | `systems/fieldwork/sim/knots.py:251-273`, `:275-312`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -701,7 +701,7 @@ identifiers:
     identifier: strain_delta
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     - py:systems/settlements/sim/temperaments.py
@@ -722,7 +722,7 @@ identifiers:
     identifier: sustain_knot
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) — but `resolve_opposing_operations` itself has no caller anywhere in the tree (§7); also called directly by unit tests'
     built_in:
     - py:systems/fieldwork/sim/knots.py
     disposition: BUILT
@@ -791,7 +791,7 @@ identifiers:
     identifier: to_dict
     docs:
     - systems/fieldwork/fieldwork_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:313-314`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:315-316`'
     built_in:
     - py:systems/characters/sim/beliefs.py
     - py:systems/characters/sim/conviction.py

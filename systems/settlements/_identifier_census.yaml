@@ -1614,7 +1614,7 @@ identifiers:
     identifier: STARTING_PT
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:221-232`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geo…'
+    purpose: '`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geo…'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

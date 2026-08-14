@@ -260,8 +260,10 @@
    ],
    "lane_derived": false,
    "lanes": [],
-   "loc": 101,
-   "modules_under_test": [],
+   "loc": 127,
+   "modules_under_test": [
+    "systems.factions.sim"
+   ],
    "mutation_claimed": false,
    "mutation_count": null,
    "test_count": 4,
@@ -273,8 +275,8 @@
     },
     "test_emission_is_additive_and_changes_no_outcome": {
      "assertionless": false,
-     "assertions": 3,
-     "summary": "Byte-exact safety: the campaign lands where it landed before the emitter existed."
+     "assertions": 2,
+     "summary": "The emitter changes no outcome \u2014 asserted by SUPPRESSING it and comparing, not by pinning."
     },
     "test_payload_validates_under_strict_mode": {
      "assertionless": false,
@@ -1165,7 +1167,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 191,
+   "loc": 230,
    "modules_under_test": [
     "engine/combat_sim.py",
     "engine/simulation_core.py",
@@ -1174,8 +1176,18 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 20,
+   "test_count": 24,
    "tests": {
+    "test_a_fork_tag_must_name_a_ref": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "The whole point of the marker: it says WHERE the source went."
+    },
+    "test_a_hex_looking_english_word_is_not_a_ref": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`[0-9a-f]{7,40}` alone matches ordinary words \u2014 the defect the digit requirement closes."
+    },
     "test_by_pair_cites_registered_variable": {
      "assertionless": false,
      "assertions": 1,
@@ -1210,6 +1222,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_fork_is_accepted_as_provenance_like_the_other_markers": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A FORK-tagged constant is CITED. Without this the marker is decoration."
     },
     "test_genuine_violations_filters_ledger_value": {
      "assertionless": false,
@@ -1265,6 +1282,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_the_ref_check_sees_docstring_tags_not_only_hash_comments": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Four of ED-IN-0188's own FORK tags live in module docstrings."
     },
     "test_trivial_dot_zero_floats_are_exempt": {
      "assertionless": false,
@@ -4356,15 +4378,15 @@
    "helpers": [],
    "lane_derived": false,
    "lanes": [],
-   "loc": 126,
+   "loc": 181,
    "modules_under_test": [],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 7,
+   "test_count": 8,
    "tests": {
     "test_failure_boundary_is_guarded_too_and_symmetrically": {
      "assertionless": false,
-     "assertions": 3,
+     "assertions": 4,
      "summary": "The asymmetry that guarding only `Success` would institutionalise."
     },
     "test_guard_is_not_vacuous_the_v1_form_would_have_passed_unfixed": {
@@ -4374,8 +4396,13 @@
     },
     "test_overwhelming_boundary_survives_one_ulp_below": {
      "assertionless": false,
-     "assertions": 1,
-     "summary": "`net >= 2*ob and net >= 3` \u2014 BOTH conjuncts guarded. A guard on one leaves the other able to"
+     "assertions": 2,
+     "summary": "Margin 3 \u2014 the Success/Overwhelming step (`net >= ob + 3`)."
+    },
+    "test_partial_boundary_survives_one_ulp_below": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Margin 0 \u2014 the Failure/Partial step. New with the 2026-08-14 ruling: meeting the obstacle"
     },
     "test_sigma_chokepoint_snaps_dust_but_not_a_designed_modifier": {
      "assertionless": false,
@@ -4385,17 +4412,124 @@
     "test_success_boundary_survives_one_ulp_below": {
      "assertionless": false,
      "assertions": 2,
-     "summary": "`net >= ob`. nextafter, not `ob - 1e-16`: at ob=3 and ob=6 the latter IS ob in float64, so"
+     "summary": "Margin 1 \u2014 the Partial/Success step under the ruled ladder (`net >= ob + 1`)."
     },
     "test_the_documented_repro_no_longer_zeroes_an_exchange": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": "The exact failure from the audit, verbatim. `net` lands a hair under `ob`; the intended"
+     "assertions": 4,
+     "summary": "The exact failure from the audit, verbatim \u2014 and it still bites the same way after the"
     },
     "test_the_epsilon_cannot_promote_a_real_decrement": {
      "assertionless": false,
-     "assertions": 4,
+     "assertions": 6,
      "summary": "The ceiling, which is the half of this that stops the fix becoming a balance change."
+    }
+   }
+  },
+  "test_degree_ladder_single_owner.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "[ED-IN-0187 sweep] One degree ladder for the whole game, and a guard that fails on a second.",
+   "helper_loc": 41,
+   "helpers": [
+    {
+     "loc": 5,
+     "name": "band"
+    },
+    {
+     "loc": 7,
+     "name": "_load"
+    },
+    {
+     "loc": 2,
+     "name": "_owner"
+    },
+    {
+     "loc": 3,
+     "name": "_threadwork_operations"
+    },
+    {
+     "loc": 5,
+     "name": "_faction_action"
+    },
+    {
+     "loc": 3,
+     "name": "_massbattle_twin"
+    },
+    {
+     "loc": 4,
+     "name": "_massbattle_canon"
+    },
+    {
+     "loc": 4,
+     "name": "_combat_engine"
+    },
+    {
+     "loc": 5,
+     "name": "_contest_surface"
+    },
+    {
+     "loc": 3,
+     "name": "_dice_model_skill"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN",
+    "MB",
+    "PC",
+    "WR"
+   ],
+   "loc": 327,
+   "modules_under_test": [
+    "engine",
+    "engine.autoload",
+    "engine/autoload/dice_engine.py",
+    "engine/autoload/sigma_leverage.py",
+    "engine/cross_scale/echo_transport.py",
+    "engine/cross_scale/scene_dispatch.py",
+    "engine/systems",
+    "systems",
+    "systems.factions.sim.faction_action",
+    "systems.mass_battle.sim.massbattle",
+    "systems.threadwork.sim.operations",
+    "systems.threadwork.sim.opposing",
+    "systems/combat/combat_engine_v1/core.py",
+    "systems/combat/sim/combat.py",
+    "systems/factions/sim/faction_action.py",
+    "systems/mass_battle/sim/massbattle.py",
+    "systems/threadwork/sim/operations.py",
+    "systems/threadwork/sim/opposing.py",
+    "tools",
+    "tools/tests"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_every_ladder_is_behaviourally_the_owner": {
+     "assertionless": false,
+     "assertions": 4,
+     "summary": "All ladders agree with the owner cell-for-cell, over integers AND quarter steps."
+    },
+    "test_no_new_hand_rolled_ladder": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A new `if net ...: return 'Success'` outside the registry fails until it is routed."
+    },
+    "test_the_held_site_still_diverges_and_the_hold_is_still_needed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "When combat is migrated or recalibrated, this fails \u2014 which is the point."
+    },
+    "test_three_band_shorthand_is_a_declared_fold_not_a_ladder": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "`threadwork/opposing` speaks 3 bands. It must be the owner's 4 folded, nothing else."
     }
    }
   },
@@ -12120,15 +12254,15 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 5,
+   "FA": 6,
    "FI": 1,
    "GO": 2,
-   "IN": 42,
-   "MB": 4,
-   "PC": 7,
+   "IN": 43,
+   "MB": 5,
+   "PC": 8,
    "SC": 2,
    "SE": 2,
-   "WR": 2
+   "WR": 3
   },
   "duplicated_helper_names": 21,
   "duplicated_helpers": {
@@ -12149,6 +12283,7 @@
     "test_combat_invariants.py"
    ],
    "_load": [
+    "test_degree_ladder_single_owner.py",
     "test_formula_audit.py",
     "test_gen_audit.py",
     "test_pointer_audit.py",
@@ -12248,16 +12383,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 160,
+  "files": 161,
   "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 119,
+  "files_naming_a_module": 121,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 45,
-  "helper_defs": 302,
-  "helper_loc": 2838,
+  "files_with_a_lane": 46,
+  "helper_defs": 312,
+  "helper_loc": 2879,
   "ratchet_baselines": 10,
-  "tests": 1401,
+  "tests": 1410,
   "undocumented_files": 0
  }
 }

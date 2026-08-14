@@ -124,8 +124,8 @@ grepping `characters.sim` / `sim.personal.(conviction|beliefs|companion)` across
 | `Belief.history` | W | `systems/characters/sim/beliefs.py` | `systems/characters/sim/beliefs.py:58`, `systems/characters/sim/beliefs.py:163-167` |
 | `Belief.revision_pressure` | RW | `systems/characters/sim/beliefs.py` | `systems/characters/sim/beliefs.py:57`, `systems/characters/sim/beliefs.py:225` |
 | `_beliefs_by_actor` (module-level fallback dict) | RW | `systems/characters/sim/beliefs.py` | `systems/characters/sim/beliefs.py:102 _store`, `systems/characters/sim/beliefs.py:109-110 _store` |
-| `world.convictions` | RW | `engine/autoload/game_state.py` (field), `systems/characters/sim/conviction.py` (accessor) | `engine/autoload/game_state.py:194`, `systems/characters/sim/conviction.py:75-80 _store` |
-| `world.beliefs` | RW | `engine/autoload/game_state.py` (field), `systems/characters/sim/beliefs.py` (accessor) | `engine/autoload/game_state.py:195`, `systems/characters/sim/beliefs.py:105-110 _store` |
+| `world.convictions` | RW | `engine/autoload/game_state.py` (field), `systems/characters/sim/conviction.py` (accessor) | `engine/autoload/game_state.py:196`, `systems/characters/sim/conviction.py:75-80 _store` |
+| `world.beliefs` | RW | `engine/autoload/game_state.py` (field), `systems/characters/sim/beliefs.py` (accessor) | `engine/autoload/game_state.py:197`, `systems/characters/sim/beliefs.py:105-110 _store` |
 
 ## 6. Seams
 

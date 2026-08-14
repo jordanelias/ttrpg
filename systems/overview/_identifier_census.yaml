@@ -37,7 +37,7 @@ identifiers:
     identifier: ACCORD_MAP
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -77,7 +77,7 @@ identifiers:
     identifier: adjust_accord
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:482`, `systems/factions/sim/faction_action.py:493` (both `_t'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -137,7 +137,7 @@ identifiers:
     identifier: apply_ms_delta
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_ms_delta(delta, source, world) -> int` | `systems/overview/sim/ms_track.py:73 apply_ms_delta` | `systems/threadwork/sim/opposing.py:232`; `systems/threadwork/sim/co_movement.py:143` — no call from `accounting.py`/`season.py`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `apply_ms_delta(delta, source, world) -> int` | `systems/overview/sim/ms_track.py:73 apply_ms_delta` | `systems/threadwork/sim/opposing.py:239`; `systems/threadwork/sim/co_movement.py:143` — no call from `accounting.py`/`season.py`'
     built_in:
     - py:systems/overview/sim/ms_track.py
     disposition: BUILT
@@ -196,7 +196,7 @@ identifiers:
     identifier: attempt_royal_progress
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:482`, `systems/factions/sim/faction_action.py:493` (both `_t'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t'
     built_in:
     - py:systems/factions/sim/crown_initiative.py
     disposition: BUILT
@@ -216,7 +216,7 @@ identifiers:
     identifier: battle_count
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:495` | `engine/mc_v18.py:296`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:509` | `engine/mc_v18.py:296`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py
@@ -317,7 +317,7 @@ identifiers:
     identifier: consul_used
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -327,7 +327,7 @@ identifiers:
     identifier: council_used_this_arc
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:systems/factions/sim/council_solmund.py
@@ -414,7 +414,7 @@ identifiers:
     identifier: faction_take_action
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:177`, `systems/factions/sim/faction_action.py:495`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:191`, `systems/factions/sim/faction_action.py:509`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -634,7 +634,7 @@ identifiers:
     identifier: parl_transfer_used_this_arc
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/tests/test_parliamentary_transfer_bridge.py
@@ -667,7 +667,7 @@ identifiers:
     identifier: populate_from_geography
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:259-260`'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -687,7 +687,7 @@ identifiers:
     identifier: province_accord
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:259-260`'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -697,7 +697,7 @@ identifiers:
     identifier: province_members
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:259-260`'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -717,7 +717,7 @@ identifiers:
     identifier: PT_MAP
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -736,7 +736,7 @@ identifiers:
     identifier: reset_arc
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -746,7 +746,7 @@ identifiers:
     identifier: reset_seasonal
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -850,7 +850,7 @@ identifiers:
     identifier: SEASONS_PER_ARC
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:21`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:23`'
     built_in:
     - py:engine/autoload/season_manager.py
     disposition: BUILT
@@ -870,7 +870,7 @@ identifiers:
     identifier: senator_inward_used
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:systems/factions/sim/crown_initiative.py
@@ -919,7 +919,7 @@ identifiers:
     identifier: STARTING_OWNER
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -929,7 +929,7 @@ identifiers:
     identifier: STARTING_STATS
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

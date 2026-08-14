@@ -73,11 +73,26 @@ from engine.mc_v18 import run_batch, run_campaign  # noqa: E402
 #   GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
 #   GOLDEN_WINNERS   = {'Varfell': 1, 'Crown': 1}
 #   GOLDEN_BATTLES_MEAN  = 30.5
+# REPINNED 2026-08-14 (ED-IN-0187 — Jordan's degree-ladder + strategic-dice ruling). THE CAUSE IS
+# A RULING, NOT A DEFECT, and three separate mechanisms moved this campaign at once:
+#   1. faction actions now roll the continuous d10 through sigma_leverage instead of `d6, 4+`, so
+#      both the distribution AND the RNG draw count changed (int(pool) randint draws -> one gauss);
+#   2. the degree bands moved to the ruled margin ladder — Partial is now met-but-not-exceeded, so
+#      a great many former Partials are Failures;
+#   3. `CONQUEST_MIN_MIL` was deleted, so low-Military factions now reach the battle engine.
+# Any one of these would move a seeded campaign; together the outcome is a different campaign, and
+# re-recording is the honest response rather than evidence of a bug. Deltas, published rather than
+# buried (CLAUDE.md 0.1 point 4): Crown 100.0 -> 0.0, Hafenmark 0.0 -> 50.0, Varfell 0.0 -> 50.0;
+# winners {'Crown': 2} -> {'Hafenmark': 1, 'Varfell': 1}; battles_mean 33.5 -> 36.0 (more battles is
+# the expected direction — the deleted Mil gate lets more conquests open). OLD values, preserved:
+#   GOLDEN_WIN_SHARE = {'Crown': 100.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 0.0}
+#   GOLDEN_WINNERS   = {'Crown': 2}
+#   GOLDEN_BATTLES_MEAN  = 33.5
 _SEED = 0
 _N = 2
-GOLDEN_WIN_SHARE = {'Crown': 100.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 0.0}
-GOLDEN_WINNERS = {'Crown': 2}
-GOLDEN_BATTLES_MEAN = 33.5
+GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 0.0, 'Hafenmark': 50.0, 'Varfell': 50.0}
+GOLDEN_WINNERS = {'Hafenmark': 1, 'Varfell': 1}
+GOLDEN_BATTLES_MEAN = 36.0
 
 
 def test_mc_v18_batch_is_deterministic():

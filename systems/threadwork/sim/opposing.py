@@ -33,6 +33,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 from systems.threadwork.sim.operations import (
     DEPTH_OB, MENDING_OB, TN_STANDARD, TN_BINDING, TN_POP,
@@ -84,11 +85,17 @@ def opposing_engagement_modifier(opponent_tps: int) -> int:
     return max(OPPOSING_OB_MODIFIER_MIN, opponent_tps // 2)
 
 
-def _degree_label(net: int, ob: int) -> str:
-    """§2.6 uses 3-degree shorthand: Meets / Partial / Failure."""
-    if net >= ob:
+def _degree_label(net: int | float, ob: int | float) -> str:
+    """§2.6's 3-degree shorthand — a RELABELLING of the owner's four bands, not a fourth ladder.
+
+    §2.6 does not distinguish Overwhelming from Success, so both fold to 'Meets'. Everything
+    below that comes straight from `dice_engine.degree_from_net` (Jordan ruling, 2026-08-14),
+    which is what moved 'Partial' from "cleared zero" to "met the Ob without exceeding it".
+    """
+    degree = dice_engine.degree_from_net(net, ob)
+    if degree in (dice_engine.Degree.OVERWHELMING, dice_engine.Degree.SUCCESS):
         return 'Meets'
-    if net >= 1:
+    if degree is dice_engine.Degree.PARTIAL:
         return 'Partial'
     return 'Failure'
 

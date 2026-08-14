@@ -46,6 +46,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from engine.autoload import dice_engine
 from engine.autoload.dice_engine import roll_pool
 from engine.autoload.game_state import canonical_pt
 from systems.settlements.sim.infrastructure import (
@@ -226,7 +227,8 @@ def resolve_mass_seizure(world, rng=None) -> list[SeizureResult]:
     Per-territory:
       Pool = Influence + floor(CI / 15)
       Ob = 10 − PT − sum(infrastructure modifiers per settlement), floor 1
-      Seized if net_successes >= Ob
+      Seized if net_successes >= Ob + 1  (margin >= 1 — the ruled Success band, ED-IN-0187;
+                                          margin EXACTLY 0 is a Partial and does NOT seize)
       Overwhelming if net_successes >= Ob + 3
       Accord on success: max(floor(PT/2)+1, 2)
       Accord on Overwhelming: min(floor(PT/2)+2, 3)
@@ -261,14 +263,10 @@ def resolve_mass_seizure(world, rng=None) -> list[SeizureResult]:
         roll = roll_pool(pool, tn=7, rng=rng)
         net = roll.net
 
-        if net >= ob + 3:
-            degree, seized = 'Overwhelming', True
-        elif net >= ob:
-            degree, seized = 'Success', True
-        elif net >= 1:
-            degree, seized = 'Partial', False
-        else:
-            degree, seized = 'Failure', False
+        # Bands come from the owner (Jordan ruling 2026-08-14); this site decides only what a
+        # band MEANS here — seizure happens on Success or better.
+        degree = dice_engine.degree_label(net, ob)
+        seized = degree in ('Overwhelming', 'Success')
 
         # Accord on seizure per §3.2
         if seized:

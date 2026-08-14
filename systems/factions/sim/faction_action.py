@@ -1,7 +1,12 @@
 """
 systems/factions/sim/faction_action.py — Faction action selection + resolution
 
-Canon source: mc_v17.py faction_take_action; GD-2 (mandatory before stochastic)
+Canon source: GD-2 (mandatory before stochastic). LIVE DRIVER: engine/mc_v18.py, which
+              imports faction_take_action from here (mc_v18.py:37).
+              Historical origin: mc_v17.py faction_take_action -- mc_v18 SUPERSEDED mc_v17,
+              and mc_v17.py itself left `main` in the 2026-08-05 evacuation (ED-IN-0145).
+              Every `v17` tag below is FORK: provenance resolving at ref c451bcb, never a
+              pointer to a file on `main`. See ED-IN-0188.
 Game Design constraints applicable: GD-1, GD-2
 Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-unique
          dispatch wired 2026-05-17]
@@ -31,6 +36,8 @@ from __future__ import annotations
 
 import math
 import os
+from engine.autoload import dice_engine
+from engine.autoload import sigma_leverage
 from engine.autoload.game_state import MULTS, ALL_PLAYABLE_15
 from systems.settlements.sim.adjacency import ADJACENCY
 from systems.factions.sim import crown_initiative
@@ -80,28 +87,35 @@ ACCORD_STORM = -25           # [canonical: settlement_layer_v30 §5.1 FA-6 branc
 # a different number — this is the doc's exact Confirm-Privileges seed.
 ENTRY_TERMS_CONFIRM_L_SEED = 3  # [canonical: settlement_layer_v30 §5.3 Entry Terms — "Confirm Privileges … L seeds 3" (ED-SE-0011)]
 
-# Minimum Military to open a conquest at all (existing v17 gate, preserved).
-CONQUEST_MIN_MIL = 3.0       # [canonical: faction_action.py v17 conquest gate — Mil >= 3 to attack]
+# The v17 `CONQUEST_MIN_MIL = 3.0` gate is DELETED (Jordan ruling, 2026-08-14: "that minimum
+# military score needing to be 3 to attack is wrong and must be deleted"). A faction that wants to
+# attack may attack; whether it should is what the battle resolves. The gate also leaked into the
+# ED-FA-0012 action-mix `has_target` indicator, which now keys on target existence alone.
 
 # Sentinel the _try_* dispatch convention returns when an action is unavailable (fall through).
 _NOOP = 'invalid'
 
 
-def _successes(pool: float, rng) -> int:
-    """Strategic-scale roll: d6 >= 4 per die (v17 convention, M3 compatible)."""
+def _successes(pool: float, rng) -> float:
+    """Strategic-scale roll — the SAME d10 engine as every other scale (Jordan ruling, 2026-08-14).
+
+    The retired convention was `d6, success on 4+`, a second dice system that existed only here.
+    This now delegates to the canonical continuous d10 engine through the sigma-leverage layer, so
+    the strategic layer is fractional-native: a fractional pool is a real pool, and the returned net
+    is fractional rather than a count of whole dice.
+    """
     if pool <= 0:
-        return 0
-    return sum(1 for _ in range(int(pool)) if rng.randint(1, 6) >= 4)  # [canonical: v17 strategic-scale resolution — d6, success on >=4 per die (M3)]
+        return 0.0
+    return sigma_leverage.roll_net_continuous(pool, rng=rng)  # [canonical: Jordan ruling 2026-08-14 — d10 everywhere, fractional, sigma-leveraged]
 
 
-def _degree(net: int) -> str:
-    if net >= 3:
-        return 'Overwhelming'
-    elif net >= 1:
-        return 'Success'
-    elif net == 0:
-        return 'Partial'
-    return 'Failure'
+def _degree(net: float) -> str:
+    """Adapter: the owner's ladder in this module's string vocabulary. NOT a second ladder.
+
+    `net` arrives with Ob already subtracted at the call sites, so the owner is asked for the
+    margin against a zero obstacle — the same question, spelled the way this module spells it.
+    """
+    return dice_engine.degree_label(net, 0)
 
 
 def _conquest_targets(faction, world) -> list:
@@ -190,7 +204,7 @@ def faction_take_action(faction, world, rng) -> str:
     """
     # ── State signals (RNG-free) ────────────────────────────────────────────────────────────────
     targets = _conquest_targets(faction, world)
-    has_target = 1.0 if (targets and faction.Mil >= CONQUEST_MIN_MIL) else 0.0  # [canonical: ED-FA-0012 (FA-5) target-exists indicator]
+    has_target = 1.0 if targets else 0.0  # [canonical: ED-FA-0012 (FA-5) target-exists indicator; Mil>=3 term deleted 2026-08-14 by Jordan ruling]
     mil_adv = _mil_advantage_signal(faction, world, targets)
     deficit = _undergoverned_share(faction, world)
     threat = _threat_signal(faction, world)
@@ -420,7 +434,7 @@ def _try_conquest(faction, world, rng) -> str:
     """
     targets = _conquest_targets(faction, world)
 
-    if not targets or faction.Mil < CONQUEST_MIN_MIL:  # [canonical: v17 conquest gate — Mil >= 3]
+    if not targets:  # the Mil >= 3 half of this gate is DELETED (Jordan ruling 2026-08-14)
         return _NOOP
 
     target = rng.choice(targets)
@@ -516,12 +530,12 @@ def _try_muster(faction, world, rng) -> str:
 
     # Money raises troops: pool = Mil + floor(W/2). [canonical: ED-FA-0009 (FA-2); Redlich 1964]
     pool = faction.Mil + math.floor(faction.W / MUSTER_WEALTH_TO_POOL_DIV)
-    ob = 1  # [canonical: v17 Muster Ob 1]
+    ob = 1  # [FORK: mc_v17.py Muster Ob 1 — superseded by mc_v18, source at ref c451bcb]
     net = _successes(pool, rng) - ob
     deg = _degree(net)
 
     if deg in ('Overwhelming', 'Success'):
-        faction.adjust('Mil', 5 if deg == 'Overwhelming' else 3)  # [canonical: v17 Muster Mil gain +5/+3]
+        faction.adjust('Mil', 5 if deg == 'Overwhelming' else 3)  # [FORK: mc_v17.py Muster Mil gain +5/+3 — superseded by mc_v18, source at ref c451bcb]
     # ED-FA-0009 (FA-2): Failure carries NO additional Wealth penalty — the up-front cost above already
     # priced the failed levy. Do NOT re-charge the retired v17 W-3-on-Failure here (double-charge).
 
@@ -538,13 +552,13 @@ def _try_govern(faction, world, rng) -> str:
         return _NOOP
 
     pool = faction.I
-    ob = 2  # [canonical: v17 Govern Ob 2]
+    ob = 2  # [FORK: mc_v17.py Govern Ob 2 — superseded by mc_v18, source at ref c451bcb]
     net = _successes(pool, rng) - ob
     deg = _degree(net)
 
     if deg in ('Overwhelming', 'Success'):
-        t.adjust_accord(15 if deg == 'Overwhelming' else 10)  # [canonical: v17 Govern Accord gain +15/+10]
+        t.adjust_accord(15 if deg == 'Overwhelming' else 10)  # [FORK: mc_v17.py Govern Accord gain +15/+10 — superseded by mc_v18, source at ref c451bcb]
     elif deg == 'Failure':
-        faction.adjust('Sta', -5)  # [canonical: v17 Govern Failure Stability -5]
+        faction.adjust('Sta', -5)  # [FORK: mc_v17.py Govern Failure Stability -5 — superseded by mc_v18, source at ref c451bcb]
 
     return f'Govern:{deg}'

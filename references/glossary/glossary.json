@@ -6506,7 +6506,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Military power. 0 = cannot Muster.",
-   "file_count": 83,
+   "file_count": 84,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6542,6 +6542,7 @@
     "systems/factions/faction_state_authoring_v30.md": 2,
     "systems/factions/faction_succession_split_v30.md": 3,
     "systems/factions/faction_systems_overview_v30.md": 2,
+    "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/factions/factions_personal_v30.md": 14,
     "systems/factions/factions_personal_v30_index.md": 2,
     "systems/factions/factions_personal_v30_infill.md": 2,
@@ -6550,7 +6551,7 @@
     "systems/factions/franchise_v30.md": 3,
     "systems/factions/parliamentary_transfer_v30.md": 2,
     "systems/factions/treaty_expiration_v30.md": 1,
-    "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 1,
+    "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 2,
     "systems/mass_battle/mass_battle_integration_v30.md": 2,
     "systems/mass_battle/mass_battle_v30.md": 20,
     "systems/mass_battle/military_layer_v30.md": 32,
@@ -10982,7 +10983,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253`"
     },
     "threadwork": {
      "built_in": [
@@ -10992,7 +10993,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | \u2014 none found"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
    "file_count": 2,
@@ -11463,7 +11464,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`"
     },
     "settlements": {
      "built_in": [
@@ -11935,7 +11936,7 @@
      "docs": [
       "systems/combat/combat_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence :: Deprecated engine `systems/combat/sim/combat.py`'s action set (`Feint`, `Disarm`, `Tie Up`, `Retrieve`, `Escape`, `Leap`, `Rescue`) is explicitly unimplemented \u2014 falls through to a `Failure` stub. Structural, not mechanical: no dispatch branch exists for these action types. | `systems/combat/sim/combat.py:89-96` (the declared action set, `ACTION_RESOLUTION_ORDER`"
+     "purpose": "[7. Traced gaps] Gap | Evidence :: Deprecated engine `systems/combat/sim/combat.py`'s action set (`Feint`, `Disarm`, `Tie Up`, `Retrieve`, `Escape`, `Leap`, `Rescue`) is explicitly unimplemented \u2014 falls through to a `Failure` stub. Structural, not mechanical: no dispatch branch exists for these action types. | `systems/combat/sim/combat.py:90-97` (the declared action set, `ACTION_RESOLUTION_ORDER`"
     }
    },
    "file_count": 0,
@@ -12141,7 +12142,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | \u2014 none found"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
    "file_count": 2,
@@ -12209,7 +12210,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | \u2014 none found"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
    "file_count": 2,
@@ -12866,7 +12867,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:482 adjust_accord`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:496 adjust_accord`"
     },
     "overview": {
      "built_in": [
@@ -12876,7 +12877,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:482`, `systems/factions/sim/faction_action.py:493` (both `_t"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t"
     }
    },
    "file_count": 2,
@@ -13539,7 +13540,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `MULTS`, `ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:34 MULTS`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `MULTS`, `ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:41 MULTS`"
     },
     "overview": {
      "built_in": [
@@ -14074,7 +14075,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:363-364`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `apply_coherence_delta(...)` call | `lateral` | `systems.threadwork.sim.coherence` | `systems/fieldwork/sim/knots.py:364-365`"
     },
     "threadwork": {
      "built_in": [
@@ -14084,7 +14085,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:138 apply_coherence_delta` | `systems/threadwork/sim/operations.py:194 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:185 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:221 apply_coherence_delta` (internal);"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `apply_coherence_delta(actor, delta, source, world)` | `systems/threadwork/sim/coherence.py:138 apply_coherence_delta` | `systems/threadwork/sim/operations.py:194 apply_coherence_delta` (internal); `systems/threadwork/sim/collective.py:179 apply_coherence_delta` (internal); `systems/threadwork/sim/opposing.py:228 apply_coherence_delta` (internal);"
     }
    },
    "file_count": 2,
@@ -14160,7 +14161,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:348-352`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `apply_conviction_scar(...)` call | `lateral` | `systems.characters.sim.conviction` | `systems/fieldwork/sim/knots.py:349-353`"
     }
    },
    "file_count": 3,
@@ -14451,7 +14452,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `apply_ms_delta(delta, source, world) -> int` | `systems/overview/sim/ms_track.py:73 apply_ms_delta` | `systems/threadwork/sim/opposing.py:232`; `systems/threadwork/sim/co_movement.py:143` \u2014 no call from `accounting.py`/`season.py`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `apply_ms_delta(delta, source, world) -> int` | `systems/overview/sim/ms_track.py:73 apply_ms_delta` | `systems/threadwork/sim/opposing.py:239`; `systems/threadwork/sim/co_movement.py:143` \u2014 no call from `accounting.py`/`season.py`"
     },
     "threadwork": {
      "built_in": [
@@ -14461,7 +14462,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.clocks['MS']` | W (via `ms_track.apply_ms_delta`) | `systems.overview.sim.ms_track` (peer module, not owned here) | `systems/threadwork/sim/opposing.py:231-232`; `systems/threadwork/sim/co_movement.py:142-143`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.clocks['MS']` | W (via `ms_track.apply_ms_delta`) | `systems.overview.sim.ms_track` (peer module, not owned here) | `systems/threadwork/sim/opposing.py:238-239`; `systems/threadwork/sim/co_movement.py:142-143`"
     }
    },
    "file_count": 2,
@@ -15315,7 +15316,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:439 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1847-1852`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
     }
    },
    "file_count": 1,
@@ -15387,7 +15388,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:439 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1847-1852`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
     }
    },
    "file_count": 4,
@@ -15690,7 +15691,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:482`, `systems/factions/sim/faction_action.py:493` (both `_t"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t"
     }
    },
    "file_count": 1,
@@ -16200,7 +16201,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253`"
     },
     "threadwork": {
      "built_in": [
@@ -16210,7 +16211,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | \u2014 none found"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
    "file_count": 2,
@@ -16753,7 +16754,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`"
     }
    },
    "file_count": 0,
@@ -16829,7 +16830,7 @@
       "systems/_architecture/key_substrate_v30.md",
       "systems/_architecture/key_type_registry_v30.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:361-394`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
     },
     "articulation": {
      "built_in": [
@@ -16861,7 +16862,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:394` (sched.emit(key))"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key))"
     }
    },
    "file_count": 9,
@@ -16900,7 +16901,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:495 battle_count`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:509 battle_count`"
     },
     "mass_battle": {
      "built_in": [
@@ -16911,7 +16912,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder \u2014 see \u00a76) | `systems/factions/sim/faction_action.py:495`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder \u2014 see \u00a76) | `systems/factions/sim/faction_action.py:509`"
     },
     "overview": {
      "built_in": [
@@ -16922,7 +16923,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:495` | `engine/mc_v18.py:296`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:509` | `engine/mc_v18.py:296`"
     }
    },
    "file_count": 4,
@@ -18547,7 +18548,7 @@
      "docs": [
       "systems/_architecture/_architecture_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `canon_buckets.canonical_accord` | `engine/substrate/canon_buckets.py:38 canonical_accord` | `engine/autoload/game_state.py:33` (re-export); `systems/overview/sim/accounting.py:88`; `systems/world/sim/npe.py:189`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `canon_buckets.canonical_accord` | `engine/substrate/canon_buckets.py:38 canonical_accord` | `engine/autoload/game_state.py:35` (re-export); `systems/overview/sim/accounting.py:88`; `systems/world/sim/npe.py:189`"
     },
     "npcs": {
      "built_in": [
@@ -21478,7 +21479,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `COHERENCE_BAND_STRAIN_PACING` (a passive strain-accrual table) is declared and never read anywhere in the repo. | `systems/fieldwork/sim/knots.py:100-106`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `COHERENCE_BAND_STRAIN_PACING` (a passive strain-accrual table) is declared and never read anywhere in the repo. | `systems/fieldwork/sim/knots.py:101-107`"
     }
    },
    "file_count": 0,
@@ -21528,7 +21529,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`"
     }
    },
    "file_count": 0,
@@ -21603,7 +21604,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:327-336`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:328-337`"
     },
     "threadwork": {
      "built_in": [
@@ -22636,7 +22637,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:327-336`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:328-337`"
     }
    },
    "file_count": 2,
@@ -23158,7 +23159,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`"
     }
    },
    "file_count": 0,
@@ -23174,24 +23175,28 @@
    "ambiguous": false,
    "census": {
     "_architecture": {
-     "built_in": [
-      "py:systems/factions/sim/faction_action.py"
-     ],
-     "disposition": "BUILT",
+     "built_in": [],
+     "disposition": "UNRESOLVED",
      "docs": [
       "systems/_architecture/ners_vsg_reconciliation_v1.md"
      ],
      "purpose": "[Extensions / execution items (design-level, once their gating D is ruled)] ID | Item | Source | PR#127 update :: **E8 (NEW)** | **Reconcile IT-2 Condotta's Aspetto \u00d70.5 Mil clause against all four real `faction.Mil` read sites** \u2014 `_mil_advantage_signal` (`faction_action.py` ~line 142), the `CONQUEST_MIN_MIL` gate (~lines 192/341), the muster-pool formula (~line 416), and `massbattle.py::_faction"
     },
     "factions": {
-     "built_in": [
-      "py:systems/factions/sim/faction_action.py"
-     ],
-     "disposition": "BUILT",
+     "built_in": [],
+     "disposition": "UNRESOLVED",
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`"
+    },
+    "mass_battle": {
+     "built_in": [],
+     "disposition": "UNRESOLVED",
+     "docs": [
+      "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
+     ],
+     "purpose": "The former `faction.Mil >= CONQUEST_MIN_MIL` half of this gate was DELETED 2026-08-14 (Jordan ruling), so low-Military factions now reach the battle engine rather than being filtered before it."
     }
    },
    "file_count": 0,
@@ -23214,7 +23219,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector \u2014 `systems/factions/sim/faction_action.py:199-212 conquest_mult`."
+     "purpose": "S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector \u2014 `systems/factions/sim/faction_action.py:213-226 conquest_mult`."
     }
    },
    "file_count": 1,
@@ -23241,7 +23246,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`"
     }
    },
    "file_count": 0,
@@ -23328,7 +23333,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
     }
    },
    "file_count": 2,
@@ -23962,7 +23967,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:327-336`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:328-337`"
     }
    },
    "definition": "Sections 1-3 and 5 of conviction_track_v30 remain canonical post-GD-1. Sections 4.2, 4.3, 6, 7 SUPERSEDED-BY GD-1.",
@@ -24334,7 +24339,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
     }
    },
    "file_count": 2,
@@ -24777,7 +24782,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.clocks['MS']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:244` `create_world` clock init | `engine/autoload/game_state.py:244 clocks`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.clocks['MS']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:244 clocks`"
     },
     "victory": {
      "built_in": [
@@ -25201,7 +25206,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.5** `[branch]` `roll < cum_conquest` \u2192 `_try_conquest` \u2014 `systems/factions/sim/faction_action.py:230-233 _try_conquest`."
+     "purpose": "S2.5** `[branch]` `roll < cum_conquest` \u2192 `_try_conquest` \u2014 `systems/factions/sim/faction_action.py:244-247 _try_conquest`."
     },
     "mass_battle": {
      "built_in": [
@@ -25240,7 +25245,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:236-239 _try_muster`, `systems/factions/sim/faction_action.py:500-528 _try_muster`."
+     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`."
     }
    },
    "file_count": 1,
@@ -25267,7 +25272,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.4** `[branch]` `roll < cum_unique` \u2192 `_try_faction_unique` \u2014 `systems/factions/sim/faction_action.py:223-227 _try_faction_unique`."
+     "purpose": "S2.4** `[branch]` `roll < cum_unique` \u2192 `_try_faction_unique` \u2014 `systems/factions/sim/faction_action.py:237-241 _try_faction_unique`."
     }
    },
    "file_count": 1,
@@ -25801,7 +25806,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:405-407`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:407-409`"
     }
    },
    "file_count": 1,
@@ -26145,7 +26150,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:432 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:432`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:446 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:446`"
     }
    },
    "file_count": 1,
@@ -26197,7 +26202,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:439 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1847-1852`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
     }
    },
    "file_count": 1,
@@ -26475,7 +26480,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`"
     }
    },
    "file_count": 0,
@@ -27520,7 +27525,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:327-336`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:328-337`"
     }
    },
    "file_count": 1,
@@ -28531,7 +28536,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:348`, `systems/factions/sim/parliamentary_tr"
+     "purpose": "[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:362`, `systems/factions/sim/parliamentary_tr"
     },
     "articulation": {
      "built_in": [
@@ -28601,7 +28606,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:394` (sched.emit(key))"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key))"
     },
     "overview": {
      "built_in": [
@@ -29029,7 +29034,7 @@
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md",
       "systems/mass_battle/mass_battle_integration_v30.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `unit.hp` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1275-1276`; read `:1834 effective_size`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `unit.hp` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1274-1275`; read `:1834 effective_size`"
     }
    },
    "file_count": 2,
@@ -29966,7 +29971,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none \u2014 see \u00a77 | `systems/factions/sim/faction_action.py:489 entry_terms_l_seed`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none \u2014 see \u00a77 | `systems/factions/sim/faction_action.py:503 entry_terms_l_seed`"
     }
    },
    "file_count": 1,
@@ -31173,7 +31178,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`"
     },
     "mass_battle": {
      "built_in": [
@@ -31183,7 +31188,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:431 resolve_mass_battle` (import) \u2192 `:433` (call)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) \u2192 `:433` (call)"
     }
    },
    "file_count": 4,
@@ -31288,7 +31293,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`"
     },
     "mass_battle": {
      "built_in": [
@@ -31298,7 +31303,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:431 resolve_mass_battle` (import) \u2192 `:433` (call)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) \u2192 `:433` (call)"
     }
    },
    "file_count": 4,
@@ -32307,7 +32312,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:177 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:191 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)"
     },
     "mass_battle": {
      "built_in": [
@@ -32327,7 +32332,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:177`, `systems/factions/sim/faction_action.py:495`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:191`, `systems/factions/sim/faction_action.py:509`"
     },
     "settlements": {
      "built_in": [
@@ -33072,7 +33077,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` \u2192 `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:294-298`, `engine/mc_v18.py:298`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` \u2192 `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:296-300`, `engine/mc_v18.py:298`"
     }
    },
    "file_count": 7,
@@ -33799,7 +33804,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:396` (world-snapshot deserialization)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `Knot.from_dict(d)` | `systems/fieldwork/sim/knots.py:131 from_dict` | `engine/autoload/game_state.py:398` (world-snapshot deserialization)"
     },
     "settlements": {
      "built_in": [
@@ -37130,7 +37135,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` \u2192 `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:294-298`, `engine/mc_v18.py:298`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` \u2192 `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:296-300`, `engine/mc_v18.py:298`"
     }
    },
    "file_count": 3,
@@ -38422,7 +38427,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`"
     }
    },
    "file_count": 0,
@@ -38445,7 +38450,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`"
     }
    },
    "file_count": 0,
@@ -38468,7 +38473,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`"
     }
    },
    "file_count": 0,
@@ -38491,7 +38496,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`"
     }
    },
    "file_count": 0,
@@ -38597,7 +38602,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
     },
     "ui": {
      "built_in": [
@@ -38639,7 +38644,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:197`; increment `systems/fieldwork/sim/knots.py:236-238`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.knot_id_counter` | RW | `engine.autoload.game_state` field; incremented in `form_knot` | field decl `engine/autoload/game_state.py:199`; increment `systems/fieldwork/sim/knots.py:237-239`"
     },
     "threadwork": {
      "built_in": [
@@ -38850,7 +38855,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:236-246`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `knot_id`, `strain_delta`, `source`, `world` | `arg` | `resolve_opposing_operations`'s locals (`a_knot_id`/`b_knot_id`, `knot_strain_delta`) | `systems/threadwork/sim/opposing.py:243-253`"
     }
    },
    "file_count": 1,
@@ -38902,7 +38907,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:51-58`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`"
     }
    },
    "file_count": 0,
@@ -39240,7 +39245,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`collective.py`'s lattice-fracture arithmetic is self-flagged uncertain in-line.** The module computes `lattice_fractured` once, comments through a re-derivation of the canon condition, then recomputes and overwrites it \u2014 both computations and the surrounding commentary are left in the file. | `systems/threadwork/sim/collective.py:116-136`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`collective.py`'s lattice-fracture arithmetic is self-flagged uncertain in-line.** The module computes `lattice_fractured` once, comments through a re-derivation of the canon condition, then recomputes and overwrites it \u2014 both computations and the surrounding commentary are left in the file. | `systems/threadwork/sim/collective.py:117-137`"
     }
    },
    "file_count": 1,
@@ -39772,7 +39777,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`"
     }
    },
    "file_count": 0,
@@ -41096,7 +41101,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`"
     }
    },
    "file_count": 0,
@@ -41994,7 +41999,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, `CONQUEST_MIN_MIL`, etc. | param | module-level constants | `systems/factions/sim/faction_action.py:47-84 BASE_W_UNIQUE`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `BASE_W_UNIQUE/CONQUEST/MUSTER/GOVERN`, `CONQUEST_TARGET_COEF`, `CONQUEST_MILADV_COEF`, `LOW_ACCORD_SEED`, `MUSTER_WEALTH_COST`, etc. (`CONQUEST_MIN_MIL` DELETED 2026-08-14, Jordan ruling) | param | module-level constants | `systems/factions/sim/faction_action.py:54-88 BASE_W_UNIQUE`"
     }
    },
    "file_count": 0,
@@ -42017,7 +42022,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:236-239 _try_muster`, `systems/factions/sim/faction_action.py:500-528 _try_muster`."
+     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`."
     }
    },
    "file_count": 0,
@@ -43223,7 +43228,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.npcs` / `world.npc_counter` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:185-186`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.npcs` / `world.npc_counter` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:187-188`"
     }
    },
    "file_count": 3,
@@ -43675,7 +43680,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` \u2192 `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:299-302`, `engine/mc_v18.py:299`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` \u2192 `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:301-304`, `engine/mc_v18.py:299`"
     }
    },
    "file_count": 4,
@@ -45130,7 +45135,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
     },
     "social_contest": {
      "built_in": [
@@ -47236,7 +47241,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:259-260`"
     },
     "settlements": {
      "built_in": [
@@ -47256,7 +47261,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: down | `systems.settlements.sim.registry` | `create_world` calls `populate_from_geography(world)` to build `world.settlements` | `engine/autoload/game_state.py:257-258`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: down | `systems.settlements.sim.registry` | `create_world` calls `populate_from_geography(world)` to build `world.settlements` | `engine/autoload/game_state.py:259-260`"
     }
    },
    "file_count": 4,
@@ -48755,7 +48760,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:259-260`"
     },
     "settlements": {
      "built_in": [
@@ -48854,7 +48859,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:257-258`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.settlements.sim.registry` | `province_members`, `province_accord` (drift probe); `populate_from_geography` (world-gen) | `systems/overview/sim/accounting.py:85`, `systems/overview/sim/accounting.py:87`; `engine/autoload/game_state.py:259-260`"
     },
     "settlements": {
      "built_in": [
@@ -49039,7 +49044,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`"
     }
    },
    "file_count": 0,
@@ -49114,7 +49119,7 @@
       "systems/_architecture/key_substrate_v30.md",
       "systems/_architecture/key_type_registry_v30.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:361-394`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
     },
     "factions": {
      "built_in": [
@@ -50713,7 +50718,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:405-407`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `ThreadcutState` (rendering_strain, deactualisation_round) | `world-state write` | `world.threadcut_beings`, read back by snapshot restore | `systems/threadwork/sim/threadcut.py:71-82 ThreadcutState`; `engine/autoload/game_state.py:407-409`"
     }
    },
    "file_count": 1,
@@ -50973,7 +50978,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:135-138`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
     }
    },
    "file_count": 2,
@@ -51134,7 +51139,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
     }
    },
    "file_count": 2,
@@ -51560,7 +51565,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` \u2192 `resolve_mass_battle` \u2192 `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) \u2014 `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:429-459`, emit at `:39\u2026"
+     "purpose": "S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` \u2192 `resolve_mass_battle` \u2192 `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) \u2014 `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:443-473`, emit at `:39\u2026"
     },
     "factions": {
      "built_in": [
@@ -51570,7 +51575,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:431-438 resolve_mass_battle`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`"
     },
     "mass_battle": {
      "built_in": [
@@ -51581,7 +51586,7 @@
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md",
       "systems/mass_battle/mass_battle_integration_v30.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:431 resolve_mass_battle` (import) \u2192 `:433` (call)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) \u2192 `:433` (call)"
     }
    },
    "file_count": 8,
@@ -51685,7 +51690,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends \u2014 the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations`"
+     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends \u2014 the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations`"
     },
     "fieldwork": {
      "built_in": [
@@ -51695,7 +51700,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
     },
     "threadwork": {
      "built_in": [
@@ -51705,7 +51710,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations` | \u2014 none found"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
    "file_count": 3,
@@ -55319,7 +55324,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/key_echo_armature_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:172`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152`"
+     "purpose": "[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.scenes_resolved` | RW | `engine.mc_v18` (dataclass field owned by `engine.autoload.game_state`) | field: `engine/autoload/game_state.py:174`; RW: `engine/mc_v18.py:142`, `engine/mc_v18.py:152`"
     },
     "overview": {
      "built_in": [
@@ -55795,7 +55800,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:21`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:23`"
     }
    },
    "file_count": 0,
@@ -56423,7 +56428,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:131-133`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
     }
    },
    "file_count": 2,
@@ -59366,7 +59371,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`"
     }
    },
    "file_count": 1,
@@ -59393,7 +59398,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`"
     }
    },
    "file_count": 0,
@@ -59416,7 +59421,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`"
     },
     "settlements": {
      "built_in": [
@@ -59436,7 +59441,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`"
     }
    },
    "file_count": 0,
@@ -59491,7 +59496,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:221-232`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geo\u2026"
+     "purpose": "`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geo\u2026"
     },
     "world": {
      "built_in": [
@@ -59501,7 +59506,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`"
     }
    },
    "file_count": 0,
@@ -59524,7 +59529,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:44-59`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61`"
     },
     "world": {
      "built_in": [
@@ -59534,7 +59539,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:44-91`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93`"
     }
    },
    "file_count": 0,
@@ -59910,7 +59915,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `KnotState(knot, broke, ruptured, strain_after, notes)` | `arg` return value | caller of `sustain_knot`/`check_knot_rupture` (only live caller: `opposing.py`, itself orphaned \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:250-272`, `:275-312`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `KnotState(knot, broke, ruptured, strain_after, notes)` | `arg` return value | caller of `sustain_knot`/`check_knot_rupture` (only live caller: `opposing.py`, itself orphaned \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:251-273`, `:275-312`"
     }
    },
    "file_count": 1,
@@ -59960,7 +59965,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
     },
     "settlements": {
      "built_in": [
@@ -61083,7 +61088,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends \u2014 the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:96 resolve_opposing_operations`"
+     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The knot-strain-on-opposing-operations path is dead at **both** ends \u2014 the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations`"
     },
     "fieldwork": {
      "built_in": [
@@ -61093,7 +61098,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:238` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:96`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `sustain_knot(knot_id, strain_delta, source, world)` | `systems/fieldwork/sim/knots.py:250 sustain_knot` | `systems/threadwork/sim/opposing.py:245` (inside `resolve_opposing_operations`, `systems/threadwork/sim/opposing.py:103`) \u2014 but `resolve_opposing_operations` itself has no caller anywhere in the tree (\u00a77); also called directly by unit tests"
     },
     "threadwork": {
      "built_in": [
@@ -61103,7 +61108,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Knot strain (`sustain_knot`) | cross-subsystem call | `systems.fieldwork.sim.knots` | `systems/threadwork/sim/opposing.py:238-247`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Knot strain (`sustain_knot`) | cross-subsystem call | `systems.fieldwork.sim.knots` | `systems/threadwork/sim/opposing.py:245-254`"
     }
    },
    "file_count": 3,
@@ -64474,7 +64479,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:46-116`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117`"
     }
    },
    "file_count": 0,
@@ -64537,7 +64542,7 @@
      "docs": [
       "systems/fieldwork/fieldwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:313-314`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.knots[k].to_dict()` | `world-state` (serialized) | save-snapshot writer | `engine/autoload/game_state.py:315-316`"
     },
     "settlements": {
      "built_in": [
@@ -65599,7 +65604,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:183-184`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:187-188`"
     }
    },
    "file_count": 2,
@@ -66370,7 +66375,7 @@
      "docs": [
       "systems/_architecture/_architecture_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:396`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:410`"
     }
    },
    "file_count": 0,

@@ -284,9 +284,23 @@ def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random |
 def degree(net: float, ob: float, pool: float | None = None) -> int:
     """Contest-surface degree bands: 0 Failure / 1 Partial / 2 Success / 3 Overwhelming.
 
+    ⚠ HELD AT THE PRE-2026-08-14 BANDS (ED-IN-0187). Jordan's ruling unified the ladder on the
+    margin `net - ob` — bands at 0/1/3, owner `dice_engine.degree_from_net` — and every other
+    resolver in the tree now routes through it. THIS ONE DOES NOT, and it is the second and last
+    declared hold. Two of its three lower boundaries contradict the ruling outright:
+    `net == ob` returns 2 (Success) where the ruling says Partial, and `0 < net < ob` returns 1
+    (Partial) where the ruling says Failure.
+
+    Why it is held rather than migrated: the top band here is a POOL-AWARE bar that is a
+    deliberate, documented design decision (below), so migrating means deciding whether the
+    ruling overrides a contract that was chosen on purpose — a design call, not a mechanical
+    one. It is also load-bearing on the 151 groundup tests named below plus the contest kernel's
+    own `_kernel_tests.py`, which pins `degree(3, 3) == 2` — the exact cell the ruling flips.
+    Recorded in `tests/valoria/test_degree_ladder_single_owner.py`'s HELD registry, which fails
+    if the divergence ever silently disappears.
+
     RECONCILIATION NOTE (Stage 1b, degree carry-across — NOT a fork):
-    This is a DISTINCT contract from dice_engine.degree_from_net (which returns a
-    Degree enum with a 2*Ob Overwhelming bar for the COMBAT surface). The social
+    This is a DISTINCT contract from dice_engine.degree_from_net. The social
     contest kernel needs (a) INTEGER bands it uses as a numeric magnitude in
     _advance, and (b) a POOL-AWARE Overwhelming bar (pool mean + OVERWHELM_SIGMA·σ)
     that de-saturates the degree-3 rate to ~uniform across pool sizes (diagnostic

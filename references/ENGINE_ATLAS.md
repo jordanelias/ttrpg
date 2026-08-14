@@ -155,13 +155,13 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 | `health_full` | `systems/combat/combat_engine_v1/combatant.py:40` |
 | `stamina_max` | `systems/combat/combat_engine_v1/combatant.py:45` |
 | `grab_sigma` | `systems/combat/combat_engine_v1/contact.py:41` |
-| `thrust_authority` | `systems/combat/combat_engine_v1/core.py:328` |
-| `cut_thrust_arm` | `systems/combat/combat_engine_v1/core.py:333` |
+| `heft_resp` | `systems/combat/combat_engine_v1/core.py:115` |
 | `logistic` | `systems/combat/combat_engine_v1/core.py:34` |
-| `coupling` | `systems/combat/combat_engine_v1/core.py:363` |
-| `adef_cap` | `systems/combat/combat_engine_v1/core.py:425` |
+| `thrust_authority` | `systems/combat/combat_engine_v1/core.py:357` |
+| `cut_thrust_arm` | `systems/combat/combat_engine_v1/core.py:362` |
+| `coupling` | `systems/combat/combat_engine_v1/core.py:392` |
+| `adef_cap` | `systems/combat/combat_engine_v1/core.py:454` |
 | `roll_net` | `systems/combat/combat_engine_v1/core.py:56` |
-| `heft_resp` | `systems/combat/combat_engine_v1/core.py:86` |
 | `gap_precision` | `systems/combat/combat_engine_v1/geometry.py:28` |
 | `thrust_factor` | `systems/combat/combat_engine_v1/geometry.py:37` |
 | `cut_factor` | `systems/combat/combat_engine_v1/geometry.py:50` |
@@ -242,7 +242,7 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 | `report` | `systems/combat/combat_engine_v1/workbench/structure_scan.py:217` |
 | `zero_caller_functions` | `systems/combat/combat_engine_v1/workbench/structure_scan.py:65` |
 | `run_traced_fight` | `systems/combat/combat_engine_v1/workbench/trace.py:14` |
-| `ActionResult` | `systems/combat/sim/combat.py:100` |
+| `ActionResult` | `systems/combat/sim/combat.py:101` |
 
 </details>
 
@@ -250,9 +250,9 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 
 | callable | at |
 |---|---|
-| `AbsolutionResult` | `systems/factions/sim/absolution.py:38` |
-| `attempt_absolution` | `systems/factions/sim/absolution.py:50` |
-| `select_absolution_target` | `systems/factions/sim/absolution.py:91` |
+| `AbsolutionResult` | `systems/factions/sim/absolution.py:39` |
+| `attempt_absolution` | `systems/factions/sim/absolution.py:51` |
+| `select_absolution_target` | `systems/factions/sim/absolution.py:92` |
 | `council_ob` | `systems/factions/sim/council_solmund.py:30` |
 | `CouncilResult` | `systems/factions/sim/council_solmund.py:37` |
 | `attempt_council` | `systems/factions/sim/council_solmund.py:49` |
@@ -264,9 +264,9 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 | `attempt_royal_progress` | `systems/factions/sim/crown_initiative.py:61` |
 | `ExcommResult` | `systems/factions/sim/excommunication.py:63` |
 | `attempt_excommunication` | `systems/factions/sim/excommunication.py:78` |
-| `is_available` | `systems/factions/sim/mass_seizure.py:300` |
-| `SeizureDeclaration` | `systems/factions/sim/mass_seizure.py:85` |
-| `SeizureResult` | `systems/factions/sim/mass_seizure.py:95` |
+| `is_available` | `systems/factions/sim/mass_seizure.py:298` |
+| `SeizureDeclaration` | `systems/factions/sim/mass_seizure.py:86` |
+| `SeizureResult` | `systems/factions/sim/mass_seizure.py:96` |
 | `select_censure_target` | `systems/factions/sim/parliamentary_action.py:63` |
 | `TransferResult` | `systems/factions/sim/parliamentary_transfer.py:80` |
 | `get_active_treaties` | `systems/factions/sim/treaty.py:157` |
@@ -282,7 +282,7 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 
 | callable | at |
 |---|---|
-| `freed_attacker_damage` | `systems/mass_battle/sim/massbattle.py:1500` |
+| `freed_attacker_damage` | `systems/mass_battle/sim/massbattle.py:1499` |
 | `arrowhead_cells` | `systems/mass_battle/sim/massbattle.py:369` |
 | `line_cells` | `systems/mass_battle/sim/massbattle.py:379` |
 | `horseshoe_cells` | `systems/mass_battle/sim/massbattle.py:384` |
@@ -297,7 +297,7 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 | `cell_speed` | `systems/mass_battle/sim/massbattle.py:591` |
 | `roll_pool` | `systems/mass_battle/sim/massbattle.py:627` |
 | `compute_degree` | `systems/mass_battle/sim/massbattle.py:640` |
-| `count_engagements_per_atom` | `systems/mass_battle/sim/massbattle.py:804` |
+| `count_engagements_per_atom` | `systems/mass_battle/sim/massbattle.py:803` |
 
 </details>
 
@@ -472,9 +472,9 @@ A canonical identifier is only a usable handle if searching for it returns its r
 
 | contract | bare occurrences | qualified uses |
 |---|---|---|
-| `mass_battle` | 2494 | 0 |
-| `audit` | 2247 | 0 |
-| `threadwork` | 2237 | 0 |
+| `mass_battle` | 2495 | 0 |
+| `audit` | 2248 | 0 |
+| `threadwork` | 2238 | 0 |
 | `social_contest` | 2173 | 0 |
 | `victory` | 2101 | 0 |
 | `npc_behavior` | 649 | 0 |

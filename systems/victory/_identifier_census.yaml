@@ -45,7 +45,7 @@ identifiers:
     identifier: all_winners
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:97-98 test_mc_v18_batch_matches_golden`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -359,7 +359,7 @@ identifiers:
     identifier: test_mc_v18_batch_matches_golden
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:97-98 test_mc_v18_batch_matches_golden`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden`'
     built_in:
     - py:engine/tests/test_mc_v18_regression.py
     disposition: BUILT
@@ -391,7 +391,7 @@ identifiers:
     identifier: win_share
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:97-98 test_mc_v18_batch_matches_golden`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT

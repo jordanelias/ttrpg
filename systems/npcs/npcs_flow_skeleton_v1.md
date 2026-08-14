@@ -104,7 +104,7 @@ found elsewhere in the tree.]
 | `World.rng` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:231 rng` / `systems/world/sim/npe.py:333 rng` |
 | `World.season` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:369 NPCAction` |
 | `_npcs_by_territory` / `_npc_counter` (module fallback) | RW | `systems/world/sim/npe.py` | `systems/world/sim/npe.py:95-96` |
-| serialized `snapshot['npcs']` / `snapshot['npc_counter']` | W (serialize) / R (restore) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:299-302 npc_counter` / `engine/autoload/game_state.py:375-379 NPC` |
+| serialized `snapshot['npcs']` / `snapshot['npc_counter']` | W (serialize) / R (restore) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:301-304 npc_counter` / `engine/autoload/game_state.py:375-379 NPC` |
 
 ## 6. Seams
 

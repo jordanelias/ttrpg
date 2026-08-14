@@ -12,7 +12,7 @@ docs:
 - systems/mass_battle/military_layer_v30_index.md
 counts:
   BUILT: 122
-  UNRESOLVED: 92
+  UNRESOLVED: 93
 identifiers:
   a_casualties:
     identifier: a_casualties
@@ -175,7 +175,7 @@ identifiers:
     identifier: attacker_size_pct
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:439 deg`, `:461 battle[''attacker_wins'']` | `systems/mass_battle/sim/massbattle.py:1847-1852`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle[''attacker_wins'']` | `systems/mass_battle/sim/massbattle.py:1846-1851`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -185,7 +185,7 @@ identifiers:
     identifier: attacker_wins
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:439 deg`, `:461 battle[''attacker_wins'']` | `systems/mass_battle/sim/massbattle.py:1847-1852`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle[''attacker_wins'']` | `systems/mass_battle/sim/massbattle.py:1846-1851`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -311,7 +311,7 @@ identifiers:
     identifier: battle_concluded
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:394` (sched.emit(key))'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key))'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -321,7 +321,7 @@ identifiers:
     identifier: battle_count
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem''s own folder — see §6) | `systems/factions/sim/faction_action.py:495`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem''s own folder — see §6) | `systems/factions/sim/faction_action.py:509`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py
@@ -598,6 +598,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  conquest_min_mil:
+    identifier: CONQUEST_MIN_MIL
+    docs:
+    - systems/mass_battle/mass_battle_flow_skeleton_v1.md
+    purpose: The former `faction.Mil >= CONQUEST_MIN_MIL` half of this gate was DELETED 2026-08-14 (Jordan ruling), so low-Military factions now reach the battle engine rather than being filtered before it.
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   cum_conquest:
     identifier: cum_conquest
     docs:
@@ -631,7 +640,7 @@ identifiers:
     identifier: defender_faction
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:432 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:432`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:446 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:446`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -650,7 +659,7 @@ identifiers:
     identifier: defender_size_pct
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:439 deg`, `:461 battle[''attacker_wins'']` | `systems/mass_battle/sim/massbattle.py:1847-1852`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle[''attacker_wins'']` | `systems/mass_battle/sim/massbattle.py:1846-1851`'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -717,7 +726,7 @@ identifiers:
     identifier: echo_scheduler
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:394` (sched.emit(key))'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key))'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -768,7 +777,7 @@ identifiers:
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
     - systems/mass_battle/mass_battle_integration_v30.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `unit.hp` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1275-1276`; read `:1834 effective_size`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `unit.hp` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1274-1275`; read `:1834 effective_size`'
     built_in:
     - py:systems/mass_battle/sim/units.py
     disposition: BUILT
@@ -814,7 +823,7 @@ identifiers:
     identifier: faction_a
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:431 resolve_mass_battle` (import) → `:433` (call)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) → `:433` (call)'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -824,7 +833,7 @@ identifiers:
     identifier: faction_b
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:431 resolve_mass_battle` (import) → `:433` (call)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) → `:433` (call)'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -1410,7 +1419,7 @@ identifiers:
     docs:
     - systems/mass_battle/mass_battle_flow_skeleton_v1.md
     - systems/mass_battle/mass_battle_integration_v30.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:431 resolve_mass_battle` (import) → `:433` (call)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) → `:433` (call)'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT

@@ -305,8 +305,13 @@ class TestLevelsToNetSigma:
 
 class TestPoolAwareDegree:
     """degree(net, ob, pool) — pool-aware INTEGER bands (contest surface), distinct from
-    dice_engine.degree_from_net (combat enum, 2*Ob bar). Cross-oracle parity is the
-    golden table; these pin the named boundary cases."""
+    dice_engine.degree_from_net. Cross-oracle parity is the golden table; these pin the named
+    boundary cases.
+
+    ⚠ The description "combat enum, 2*Ob bar" that stood here is STALE as of 2026-08-14: the owner
+    no longer has a 2*Ob bar (Jordan's ruling replaced it with a margin ladder, ED-IN-0187). The
+    contest surface is a declared HOLD against that ruling, so these cases still pass — but they
+    pin the HELD behaviour, not canonical behaviour."""
 
     def test_bands_basic(self):
         assert (SL.degree(0, 3), SL.degree(3, 3), SL.degree(6, 3)) == (0, 2, 3)

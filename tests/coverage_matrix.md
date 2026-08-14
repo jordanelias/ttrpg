@@ -680,3 +680,22 @@ tests import by name.
 Rows below that point at evacuated reports are retained as the record of what was covered before the
 cut; their subjects live at the fork reference (`c451bcb`). Do not treat a row here as evidence a file
 is present.
+
+## 2026-08-14 — the ruled degree ladder reaches the canon engine (ED-IN-0187)
+
+`tests/sim/mass_battle/resolution.py:compute_degree` was rebanded onto Jordan's 2026-08-14 ruling:
+the margin `net - ob` decides the band (`>=3` Overwhelming, `>=1` Success, `[0,1)` Partial, `<0`
+Failure), replacing the `net >= 2*ob AND net >= 3` bar. The `_DEGREE_EPS` ulp-recovery tolerance is
+unchanged in role and now guards the three margin boundaries instead of the old three.
+
+**The ladder is spelled out here rather than imported, and that is deliberate.** This tree is the
+canon engine (J2) and takes no `engine.*` dependency; adding one is a porting-architecture call
+nobody has made. Equivalence with the owner (`engine/autoload/dice_engine.degree_from_net`) is held
+by measurement instead: `tests/valoria/test_degree_ladder_single_owner.py` evaluates both over 1,490
+cells (integer + quarter-step) and fails on any divergence, so drift is loud rather than silent.
+
+**Coverage unchanged in extent, sharpened in claim.** `tests/valoria/test_degree_boundary_epsilon.py`
+still guards this function and now pins the *adjacent* band at each boundary rather than a distant
+one — the old ceiling assertion (`!= "Success"` at a margin of −1e−6) had become unfalsifiable under
+the reband, since Success sits three bands away. Scope: the degree function only. No golden motion in
+this engine, no change to the RNG path, no new file.

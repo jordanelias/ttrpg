@@ -55,7 +55,36 @@ def resolution_pool(history):
 # mis-resolving helper sitting next to the live resolver is a trap for a future caller, not a convenience.
 def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)
 def degree(net, ob):
-    """Band a CONTINUOUS net into a degree, with the ER-2 continuity correction applied (params/core.md
+    """⚠ HELD AT THE PRE-2026-08-14 LADDER, DELIBERATELY. Everything below this paragraph describes
+    the ladder as it still stands; the reason it was not migrated is ED-IN-0187, and the reason is
+    a MEASUREMENT, not a preference.
+
+    Jordan's 2026-08-14 ruling unified the degree ladder on the margin `net - ob` (bands at 0/1/3,
+    owner `engine.autoload.dice_engine.degree_from_net`). Every other resolver in the tree now
+    routes through it. Applying it HERE, with the ER-2 shift preserved, moves this resolver's band
+    edges at the fixed DECISIVE_OB of 3 from {fail <0.5, partial 0.5-2.5, success 2.5-5.5,
+    overwhelming >=5.5} to {fail <2.5, partial 2.5-3.5, success 3.5-5.5, overwhelming >=5.5} — the
+    Failure edge moves by two whole successes. This engine's damage constants (QUAL, DMG_SCALE,
+    ADEF_THRESHOLD, the penetration floor) were emergent-calibrated AGAINST the old placement, and
+    the shift breaks a ratified invariant: `test_plate_participation_tracks_armour_defeat_capability`
+    takes guandao (armour-defeat capability 0.13) from settling 2.5% of its plate fights to 47.5%,
+    against a 40% ceiling — i.e. penetration decouples from armour-defeat capability, which is
+    exactly what ED-PC-0038/0039 ratified this guard to prevent.
+
+    Re-recording that golden would hide the collision; relaxing the guard would discard the ruling
+    it was built to protect. So this site is HELD and the collision is Jordan's to resolve. It is
+    also entangled with the OTHER half of the same ruling — "for rolling against a character the
+    obstacle is their score/2 plus modifiers" — which this resolver does not do at all: it rolls
+    against a FIXED `DECISIVE_OB = 3` and carries the opposition in `net_sigma` instead. Deriving
+    Ob from the defender would change the band placement again, so calibrating against the current
+    fixed-Ob form first would be work thrown away.
+
+    `tests/valoria/test_degree_ladder_single_owner.py` records this as a declared hold with the
+    same reasoning, so the divergence is visible in the guard rather than silently tolerated.
+
+    ---- the held ladder, unchanged ----
+
+    Band a CONTINUOUS net into a degree, with the ER-2 continuity correction applied (params/core.md
     §Continuous Engine, commit a3d3888 — landed in canon TEXT, never propagated to engine CODE until now).
     The continuous net approximates a sum of integer per-die effects, so each integer degree threshold k is
     read at the k-0.5 boundary; without it the continuous read ran 5-9pp LOW across the whole 5-13D combat
