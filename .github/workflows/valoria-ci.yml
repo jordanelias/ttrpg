@@ -101,6 +101,7 @@ jobs:
           v python3 tools/ci_hooks_verifier.py
           v python3 tools/ci_co_file_checker.py
           v python3 tools/ci_editorial_checker.py
+          v python3 tools/ci_pp_frozen_check.py
           v python3 tools/ci_naming_check.py
           v python3 tools/ci_names_consistency.py
           v python3 tools/export_engine_params.py --check

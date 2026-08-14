@@ -151,6 +151,7 @@ def main(argv):
 
     # (script, extra_args, blocking)
     checks = [
+        ('ci_pp_frozen_check.py',       [],          True),   # PP frozen vocabulary (ED-IN-0190, Jordan 2026-08-14)
         ('ci_naming_check.py',          [mode_flag], True),
         ('ci_names_consistency.py',     [],          True),   # index <-> registry mirrors agree
         ('ci_names_check.py',           [mode_flag], False),  # report-only naming-drift lint

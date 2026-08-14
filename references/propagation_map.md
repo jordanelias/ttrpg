@@ -158,3 +158,27 @@ its own body (PP-726 present); reconciled to 727. No mechanical propagation.
 - Vetting: 4 + · 3 ✓ · 4 ○ · 0 − pass. Genuine extensions: M-2 (correct-granularity substrate strain), M-3 (political-administrative substrate vectorization), M-4 (explicit duchy/province/territory ownership), M-5 (full cross-scale chain canonical).
 - Old S-IDs deprecated; lazy migration in non-substrate documents.
 - Per Jordan canonical clarifications: settlement = siege-target; Ehrenfeld fortress-city gates crownlands W+N (no forward screens — fortress is the gate); Gransol Switzerland-like landlocked lake province (Harbor district is lake-harbor); Schoenland foreign-Altonian connects to Valorsplatz via port (single sea edge until ED-055).
+
+## PP FROZEN — no new patch numbers (2026-08-14, ED-IN-0190)
+
+**Not a patch. This is the record of the register itself changing status**, which is why it carries
+no `PP-NNN` heading — issuing one would be the first violation of the thing it documents.
+
+Jordan ruled (ED-IN-0185 Q4): PP is **frozen historical vocabulary**. Measured at the ruling: 537
+distinct PP ids cited across 318 live files, of which **six** resolve in
+`registers/patch_register_active.yaml`; the rest resolve at fork ref `c451bcb`, where the archived
+registers went in the 2026-08-05 evacuation (ED-IN-0145). That is now their declared, permanent
+disposition — such citations are historical provenance, neither dangling nor fabricated.
+
+- **Frozen ceiling: PP-726** (the highest id cited anywhere live), not the header's aspirational
+  "Next PP number: 727" — a next-free pointer is a plan, and a freeze must bind what the tree
+  actually contains.
+- **New work takes an `ED-<LANE>-NNNN` id**, the same posture as the flat `ED-NNNN` freeze
+  (CLAUDE.md §4). Raising the ceiling un-freezes a frozen vocabulary and needs its own ED and a
+  ruling; it is not a maintenance action.
+- **Guard:** `tools/ci_pp_frozen_check.py`, blocking in CI and locally. It fails on any live PP
+  above the ceiling and on any archive pointer naming a register absent from `main` without naming
+  the fork ref it resolves at. Four such pointers were unannotated before this change.
+- Propagation surface: the register header only. **No design document changed, no mechanic moved,
+  and no existing PP citation anywhere was rewritten** — a retrofit at 537-id scale costs more than
+  it buys, the same no-retrofit posture the `ED-<LANE>-NNNN` cutover took.

@@ -116,6 +116,12 @@ ci_checks:
     ci_job: validators-report
     notes: "Moved validators -> validators-report 2026-08-12 (G3, ED-IN-0159 §1.9): a tool that always exits 0 cannot gate, so its presence in the blocking job made that job's membership a false claim. Behaviour unchanged; valoria_local.py:172 already ran it report-only. Added 2026-07-10 (PR #121, ED-IN-0031, mobile-friendly GitHub Pages status dashboard). Always exits 0 by design (audit cadence is irregular/manual, unlike code) — feeds tools/dashboard_data.py's audit-verdict table, not a merge gate. Complementary to tools/audit_staleness.py (added the same day, Phase 5a of the audit-ecosystem consolidation plan, no ED filed — a SessionStart-only signal, not a CI check): this checks 'did a completed audit get logged,' audit_staleness.py checks 'has an already-logged audit's content drifted behind the corpus since' — two different failure modes on the same underlying question, deliberately kept as two small tools rather than merged into one."
 
+  - path: tools/ci_pp_frozen_check.py
+    level: 5
+    role: "Blocking gate making PP frozen historical vocabulary REAL rather than declared (Jordan ruling 2026-08-14, ED-IN-0190): fails if any live PP id exceeds the frozen ceiling PP-726, and if any archive pointer in patch_register_active.yaml names a register absent from main without naming the fork ref it resolves at."
+    ci_job: validators
+    notes: "Executes Q4 of ED-IN-0185's ruling agenda. The ruling said 'verify only the format'; a literal format check over PP-\\d+ can never fail, so the intent (frozen vocabulary + provenance resolves at a named ref) is discharged as two rules that CAN fail. Carries its own left-boundary pattern rather than ci_common.PP_ID_PAT, which is bare PP-\\d+ and matches inside OPP-03 -- measured: the owner's pattern produces 34 fabricated findings on one proposals doc. Excludes itself from its own scan after reporting a violation against its own docstring on first run (ED-IN-0159 2.4, the instrument counting itself). Raising PP_FROZEN_CEILING un-freezes a frozen vocabulary and needs its own ED plus a ruling."
+
   - path: tools/ci_naming_check.py
     level: 5
     role: "Blocking naming-invariant gate: no new use of a deprecated name (Solmund never Galbados), diff-aware over enforce:block entries in names_index.yaml."
