@@ -8797,6 +8797,49 @@
     }
    }
   },
+  "test_philosophy_range_is_current.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The stated philosophy range must match what canon actually defines (ED-IN-0184).",
+   "helper_loc": 6,
+   "helpers": [
+    {
+     "loc": 6,
+     "name": "canon_max_p"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 86,
+   "modules_under_test": [
+    "engine",
+    "references",
+    "systems",
+    "systems/references",
+    "tools",
+    "tools/engine"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 2,
+   "tests": {
+    "test_canon_defines_at_least_fifteen": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that it asserted: a parse returning a low number would make the check vacuous."
+    },
+    "test_no_doc_understates_the_philosophy_range": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Any `P-01..P-NN` range string must not stop below what canon defines."
+    }
+   }
+  },
   "test_pointer_audit.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10364,6 +10407,69 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "It reds on day one by design; `--check` must still exit 0 at the baseline."
+    }
+   }
+  },
+  "test_single_status_line.py": {
+   "assertionless_count": 0,
+   "baselines": [
+    {
+     "name": "KNOWN_MULTI_STATUS",
+     "size": 5
+    }
+   ],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "A design doc may not carry two `## Status:` lines in its head window (ED-IN-0184).",
+   "helper_loc": 27,
+   "helpers": [
+    {
+     "loc": 15,
+     "name": "_multi_status_docs"
+    },
+    {
+     "loc": 12,
+     "name": "_iter_status_docs"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "FA",
+    "IN"
+   ],
+   "loc": 130,
+   "modules_under_test": [
+    "systems",
+    "systems/_architecture/derived_stats_v30.md",
+    "systems/_architecture/scale_transitions_v30.md",
+    "systems/_architecture/subsystem_flow_skeletons_v1.md",
+    "systems/characters/character_generation_questionnaire_v30.md",
+    "systems/factions/faction_canon_v30.md"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 4,
+   "tests": {
+    "test_no_new_doc_carries_two_status_lines": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE RATCHET. A second Status line is invisible to the single owner, so it cannot be"
+    },
+    "test_the_known_set_has_not_silently_shrunk_without_being_fixed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "If a pinned doc drops off the list it was fixed \u2014 good, and the pin must shrink with it,"
+    },
+    "test_the_scan_reaches_a_real_corpus": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that it asserted \u2014 a walk finding nothing would make the ratchet vacuous."
+    },
+    "test_the_three_real_contradictions_are_still_the_named_ones": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Named explicitly so a future session does not have to re-derive which of the five matter."
     }
    }
   },
@@ -12014,10 +12120,10 @@
  "summary": {
   "assertionless_tests": 4,
   "by_lane": {
-   "FA": 4,
+   "FA": 5,
    "FI": 1,
    "GO": 2,
-   "IN": 40,
+   "IN": 42,
    "MB": 4,
    "PC": 7,
    "SC": 2,
@@ -12142,16 +12248,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 158,
+  "files": 160,
   "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 117,
+  "files_naming_a_module": 119,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 43,
-  "helper_defs": 299,
-  "helper_loc": 2805,
-  "ratchet_baselines": 9,
-  "tests": 1395,
+  "files_with_a_lane": 45,
+  "helper_defs": 302,
+  "helper_loc": 2838,
+  "ratchet_baselines": 10,
+  "tests": 1401,
   "undocumented_files": 0
  }
 }

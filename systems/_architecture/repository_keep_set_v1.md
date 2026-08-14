@@ -46,7 +46,7 @@ The session's near-miss is worth stating, because the plan and §M both partitio
 
 | Prose | Disposition | Authority |
 |---|---|---|
-| **No code pair** — `canon/` P-01..P-14, the 14 `godot: no-oracle` module specs | **stays** | **authoritative — it *is* the spec** |
+| **No code pair** — `canon/` P-01..P-15, the 14 `godot: no-oracle` module specs | **stays** | **authoritative — it *is* the spec** |
 | **Has a code pair** — `systems/` design docs | **stays** | **information only**; code wins (principle 7 / ED-1050) |
 | **Has a code pair that has SUPERSEDED it** — `engine/params/` | **evacuates** (2026-08-04) | see the amendment below |
 | **Neither** — session audits, process ledgers, generated narrative, superseded proposals | **evacuates** | — |

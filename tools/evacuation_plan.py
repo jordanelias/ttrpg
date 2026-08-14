@@ -276,7 +276,7 @@ RULES = [
 
     # ---- prose with NO code pair: stays, and it IS the spec
     (lambda p: p.startswith('canon/'), 'keep', 'R-CANON',
-     'philosophical canon P-01..P-14 -- prose with NO code pair, therefore authoritative'),
+     'philosophical canon P-01..P-15 -- prose with NO code pair, therefore authoritative'),
 
     # ---- code and the machinery that guards it
     (lambda p: p.startswith(('engine/', 'systems/')), 'keep', 'R-CODE', 'the executable model'),

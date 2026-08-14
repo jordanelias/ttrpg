@@ -194,11 +194,26 @@ was retired, never merely because nothing calls it.*
   re-raising a settled question**, which is a direct cost of the framing in CURRENT.md and prior
   audit prose, not of any genuine ambiguity.
 
-  **The actual blocker is narrow and is NOT about mass battle:** the migration of
-  `faction_action.py:431` onto the canon engine is blocked on **ruling the four `degree` band
-  edges** (`__init__.py:8-9`). That is one bounded question about degree bands. Lens B measured the
-  surrounding surface: **8 of 11 degree sites are mergeable with no ruling at all**; only
-  `faction_action.py:97` — diverging on 45% of the band surface — needs the call.
+  **Migrating `faction_action.py` onto the canon engine needs two plain decisions, and neither is
+  about mass battle:**
+  1. **When a faction takes a strategic action, is "how well did it go" judged against how hard the
+     action was, or against fixed numbers?** Canon (`dice_engine.degree_from_net:94-122`) scales to
+     the difficulty — beat it by double for Overwhelming, meet it for Success, fall short but beat
+     zero for Partial. `faction_action._degree:97-104` ignores difficulty: 3+ Overwhelming, 1–2
+     Success, exactly 0 Partial, below Failure.
+  2. **Does scraping exactly zero count as a partial success, or a failure?** Canon says failure.
+     `faction_action` says partial. Same number, opposite outcome.
+
+  (A third difference, not part of this call: `faction_action` rolls d6 counting 4+, while the
+  canonical engine is d10. That is the separate `#1b` strategic-layer question.)
+
+  ⚠ The source comment at `systems/mass_battle/sim/__init__.py:8-9` calls this "ruling the four
+  `degree` band edges", and an earlier draft of this document repeated that phrase. **It does not
+  mean anything in English** (Jordan, 2026-08-14) — it is exactly the coined-jargon failure §4
+  legislates against, propagated by copying a source comment instead of translating it.
+
+  Lens B measured the surrounding surface: **8 of 11 degree sites are mergeable with no decision at
+  all**; only `faction_action.py:97` needs these two answers.
 - **`audit/2026-06-03-contest-groundup/engine.py`** and **`audit/2026-08-13-.../fork_divergence.py`**
   — pinned by shipped tests. Evacuating `audit/` per the classifier **breaks a shipped test.** These
   need the promotion path that does not exist.

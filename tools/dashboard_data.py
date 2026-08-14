@@ -759,7 +759,7 @@ def build_repo_shape():
     subdirs = sorted(os.path.basename(d) for d in glob.glob('systems/*') if os.path.isdir(d))
     lines = [
         'graph TD',
-        '  CANON["canon/ — philosophy P-01..P-14 · ledgers · mechanics index"]',
+        '  CANON["canon/ — philosophy P-01..P-15 · ledgers · mechanics index"]',
         '  REF["references/ — registries · module_contracts · indices"]',
         '  DESIGN["designs/ — subsystem design docs"]',
         '  PARAMS["engine/params/ — mechanical parameter tables"]',
