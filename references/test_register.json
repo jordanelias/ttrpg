@@ -4252,13 +4252,22 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Unit tests for tools/currency_consistency_check.py (ED-1087) \u2014 the self-updating recency",
-   "helper_loc": 0,
-   "helpers": [],
+   "helper_loc": 6,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "_write_current"
+    },
+    {
+     "loc": 3,
+     "name": "_body"
+    }
+   ],
    "lane_derived": true,
    "lanes": [
     "PC"
    ],
-   "loc": 127,
+   "loc": 222,
    "modules_under_test": [
     "references",
     "registers",
@@ -4267,12 +4276,32 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 11,
+   "test_count": 17,
    "tests": {
+    "test_clean_descending_chain_reports_nothing": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
     "test_current_md_paths_filter_globs": {
      "assertionless": false,
      "assertions": 3,
      "summary": null
+    },
+    "test_flags_a_date_inversion": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The exact defect three independent lenses found by reading and no tool could see."
+    },
+    "test_flags_a_verbatim_duplicated_stamp_body": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_guard_is_wired_into_run_checks": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A check nothing calls is decoration (ED-IN-0180's 'live signal with no consumer')."
     },
     "test_lane_id_ceiling_clean_when_no_lane_ids_yet": {
      "assertionless": false,
@@ -4318,6 +4347,16 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_same_day_reconciles_from_different_lanes_are_LEGAL": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE FALSIFIER FOR THE PLAN'S OWN WORDING, and the reason this guard deviates from it."
+    },
+    "test_short_repeats_stay_below_the_duplication_floor": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Connective fragments recur legitimately; only stamp-sized bodies are splice evidence."
     },
     "test_summary_line_never_raises": {
      "assertionless": false,
@@ -12389,10 +12428,10 @@
   "files_naming_a_module": 121,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 46,
-  "helper_defs": 312,
-  "helper_loc": 2879,
+  "helper_defs": 314,
+  "helper_loc": 2885,
   "ratchet_baselines": 10,
-  "tests": 1410,
+  "tests": 1416,
   "undocumented_files": 0
  }
 }

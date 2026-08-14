@@ -124,3 +124,98 @@ def test_summary_line_never_raises(monkeypatch):
     monkeypatch.setattr(ccc, 'run_checks', boom)
     line = ccc.summary_line()
     assert 'errored' in line
+
+
+# ---------------------------------------------------------------------------
+# check_current_stamp_structure — the reconcile-chain guard (ED-IN-0189, 2026-08-14).
+#
+# These pin the guard that replaces the deleted 38,164-char CURRENT.md history blob. Every
+# assertion below is one the pre-deletion file WOULD HAVE FAILED: measured on `9933ff2`, the
+# check reported 1 chronology inversion (link 13, 2026-08-10 following 2026-07-30) and 8
+# verbatim-duplicated stamp bodies of 466-3,303 chars. That measurement is what the floor and
+# the monotonicity rule were chosen against, not a fixture written to make them pass.
+
+_HEAD = "# Valoria\n\nintro paragraph\n\n"
+_TAIL = "\n\n| Subsystem | Current head |\n|---|---|\n| **X** | `systems/x/x.md` |\n"
+
+
+def _write_current(tmp_path, monkeypatch, stamp_para):
+    (tmp_path / 'CURRENT.md').write_text(_HEAD + stamp_para + _TAIL)
+    monkeypatch.setattr(ccc, 'REPO_ROOT', str(tmp_path))
+
+
+def _body(tag, n=600):
+    """A stamp body over the duplication floor, distinct per tag."""
+    return f"(**{tag}-lane stamp reconcile**: " + (f"{tag} detail. " * n)[:n] + ")"
+
+
+def test_clean_descending_chain_reports_nothing(tmp_path, monkeypatch):
+    para = (f"_Last reconciled: 2026-08-14 {_body('IN')} "
+            f"Prior reconcile: 2026-08-10 {_body('PC')} "
+            f"Prior reconcile: 2026-08-03 {_body('MB')}_")
+    _write_current(tmp_path, monkeypatch, para)
+    drift = []
+    ccc.check_current_stamp_structure(drift)
+    assert drift == [], drift
+
+
+def test_flags_a_date_inversion(tmp_path, monkeypatch):
+    """The exact defect three independent lenses found by reading and no tool could see."""
+    para = (f"_Last reconciled: 2026-08-12 {_body('IN')} "
+            f"Prior reconcile: 2026-07-30 {_body('PC')} "
+            f"Prior reconcile: 2026-08-10 {_body('MB')}_")   # climbs — the splice signature
+    _write_current(tmp_path, monkeypatch, para)
+    drift = []
+    ccc.check_current_stamp_structure(drift)
+    assert any('non-monotonic' in d for d in drift), drift
+    assert any('2026-08-10' in d for d in drift), drift
+
+
+def test_flags_a_verbatim_duplicated_stamp_body(tmp_path, monkeypatch):
+    dup = _body('SC')
+    para = (f"_Last reconciled: 2026-08-14 {_body('IN')} "
+            f"Prior reconcile: 2026-08-08 {dup} "
+            f"Prior reconcile: 2026-08-06 {dup} "
+            f"Prior reconcile: 2026-08-01 {_body('WR')}_")
+    _write_current(tmp_path, monkeypatch, para)
+    drift = []
+    ccc.check_current_stamp_structure(drift)
+    assert any('repeats' in d for d in drift), drift
+    # Reported ONCE per distinct body, not once per extra copy.
+    assert sum('repeats' in d for d in drift) == 1, drift
+
+
+def test_same_day_reconciles_from_different_lanes_are_LEGAL(tmp_path, monkeypatch):
+    """THE FALSIFIER FOR THE PLAN'S OWN WORDING, and the reason this guard deviates from it.
+
+    ED-IN-0185 step A2 prescribed "strictly-descending dates". The real tree falsifies that:
+    on 2026-08-08 the IN, MB, PC and SC lanes each landed a legitimate reconcile stamp. A
+    strict rule reds on correct content, and a guard that reds on correct content gets
+    weakened by the next session rather than obeyed. Non-increasing is the true invariant.
+    """
+    para = (f"_Last reconciled: 2026-08-08 {_body('IN')} "
+            f"Prior reconcile: 2026-08-08 {_body('MB')} "
+            f"Prior reconcile: 2026-08-08 {_body('PC')} "
+            f"Prior reconcile: 2026-08-08 {_body('SC')}_")
+    _write_current(tmp_path, monkeypatch, para)
+    drift = []
+    ccc.check_current_stamp_structure(drift)
+    assert drift == [], "same-day cross-lane reconciles must not be reported as drift"
+
+
+def test_short_repeats_stay_below_the_duplication_floor(tmp_path, monkeypatch):
+    """Connective fragments recur legitimately; only stamp-sized bodies are splice evidence."""
+    short = "(see the lane handoff)"
+    para = (f"_Last reconciled: 2026-08-14 {short} "
+            f"Prior reconcile: 2026-08-08 {short} "
+            f"Prior reconcile: 2026-08-06 {short}_")
+    _write_current(tmp_path, monkeypatch, para)
+    drift = []
+    ccc.check_current_stamp_structure(drift)
+    assert drift == [], drift
+
+
+def test_guard_is_wired_into_run_checks():
+    """A check nothing calls is decoration (ED-IN-0180's 'live signal with no consumer')."""
+    import inspect
+    assert 'check_current_stamp_structure' in inspect.getsource(ccc.run_checks)

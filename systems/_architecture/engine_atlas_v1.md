@@ -223,7 +223,7 @@ The two trees share no code, so any result measured on one is a result about tha
 `systems/world/sim/npe.py:325 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:215 generate_npc`
 (never called); the engine-core AI shell is a pair of typed no-ops, `engine/autoload/npc_ai.py:33 select_action`. The
 folder owns neither the code nor, since a 2026-07-29 repoint, the doc of its own primary contract, and the currency
-authority still heads at the demoted doc — `CURRENT.md:163 npc_behavior_v30` (§3e).
+authority still heads at the demoted doc — `CURRENT.md:49 npc_behavior_v30` (§3e).
 
 **`overview` — the season loop, accounting, and the world tracks.** Composes the canonical three-step season and the
 six-step accounting cascade, and owns the CI/MS/IP/RS track modules — `systems/overview/sim/accounting.py:95 run_accounting`.
