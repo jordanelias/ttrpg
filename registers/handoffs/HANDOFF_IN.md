@@ -1,5 +1,77 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## PORT NOTE — this branch is to be absorbed into PR #313 (`claude/review-commits-workplan-7x4q4g`)
+
+**Jordan's instruction, 2026-08-14.** PR #312 (`claude/recent-commits-review-oumr8s`) and PR #313 are
+siblings off the same base (`9933ff2`). #313 is ACTIVE in another session. This branch is the one
+that moves; **do not push to #313's branch from here** — it has a live session on it.
+
+**THE MERGE IS CLEAN, AND THIS WAS EXECUTED, NOT PREDICTED.** Trial-merged `fba35c1` into #313's head
+in a scratch worktree: **18 conflicts, every one a GENERATED file** (the 16 per-subsystem glossary
+views + `MASTER_GLOSSARY.md` + `glossary.json`). `test_register.json`, `engine_atlas_v1.md` and
+`_identifier_census.yaml` auto-merged. **Zero conflicts in source, tests, ledger, handoff or
+registers.**
+
+**TRIAL RESULT, RUN IN FULL: `pytest tests/valoria` → 1920 passed, 3 failed. TWO OF THE THREE ARE
+PRE-EXISTING ON #313's BRANCH, NOT CAUSED BY THIS PORT** — `test_status_reader_one_owner.py`'s
+`test_build_identifier_census_delta_is_plus_three_minus_one` and
+`test_the_one_lost_document_is_a_legend_not_a_status` both fail on `fba71e0` ALONE (verified in a
+separate worktree with none of this branch's commits). They pin `godot/godot_architecture_specification.md`'s
+Status, which #313's own GO-lane activation commit changed. **That is #313's to fix and it is failing
+today regardless of this merge.** The third was mine and is described under the anchors below.
+
+**RESOLVE BY REGENERATING, NEVER BY PICKING HUNKS.** A generated file has an owner; hand-merging two
+generator outputs produces a third thing that matches neither input and passes no freshness gate.
+All 18 resolved with one command:
+
+```
+git merge --no-ff <this-branch>
+python tools/observability/build_glossary.py && git add references/glossary/
+python tools/build_test_register.py
+python tools/build_engine_atlas.py
+python tools/build_identifier_census.py
+python tools/link_values_pointers.py --build
+python tools/vocab_store.py --build
+```
+
+**DO NOT run the bulk anchor remapper on the merged tree.** I did, in the trial, and it produced
+`faction_action.py:572` in a 570-line file — the double-shift trap, because the merge had ALREADY
+brought in this branch's remapped anchors and the remapper then shifted them a second time. The
+correct step is the opposite of a sweep: run `pytest tests/valoria/test_flow_skeletons.py`, and fix
+only the anchors it names. In the trial that was **exactly one** — `overview_flow_skeleton_v1.md`'s
+`faction_action.py:572` → `:566` (the `_try_govern` `adjust_accord` line). 95 passed after.
+
+(The bulk remapper is still the right tool on a NON-merge change, where it maps `git diff -U0`'s
+old→new correspondence. Never resolve an anchor by searching for the symbol NAME: that resolved
+`npc_counter` to the dataclass field instead of the snapshot block it cited, and
+`_emit_battle_concluded` to the definition instead of the call site — both would have passed the
+resolver while pointing at the wrong thing.)
+
+**WHAT #313 SHOULD KNOW IT IS INHERITING:**
+- Two DECLARED HOLDS in `tests/valoria/test_degree_ladder_single_owner.py::HELD`, both needing Jordan
+  — `combat_engine_v1/core.py` and `sigma_leverage.degree`. Each is asserted to STILL DIVERGE, so
+  resolving either fails that file and forces the update. Do not "fix" them by tuning.
+- **The unrecorded design consequence:** 181/600 cells moved Partial → Failure (30.2%), scaling with
+  Ob. Three consumer tables pay differently for those bands (`domain_echo` −1 to the acting faction's
+  own stat, `zoom_in_out` +1 Ob on the next scene, `DAMAGE_BY_DEGREE` 0 instead of 1). Instrument:
+  `audit/2026-08-14-degree-reband-consumer-cost/reband_delta.py`.
+- **Q2's score/2 obstacle derivation and Q3's fractional DICE are wired NOWHERE.** `roll_net_continuous`
+  does `int(round(pool))`. The score/2 derivation GATES both holds — it moves the bands again, so
+  calibrating either before it lands is wasted work.
+
+**PROPAGATION STILL OWED, and it needs NO NEW TOOL** — `tools/ci_supersession_check.py` already reads
+`files_to_recheck`; what is missing is the DATA. Four registers never received the ruling:
+`supersession_register.yaml` (PP-232 + the Ob-20 exception + the 2×Ob bar → ED-IN-0187, with
+`files_to_recheck`), `CURRENT.md`'s Dice/resolution row, `propagation_map.md`, `mechanics_index.yaml`.
+The ruling DID reach the 19 generated glossary views — but only after an adversarial pass found the
+definition registry still publishing the superseded formula.
+
+⚠ **Two branches regenerated the same artifacts, which is why 18 files collided over nothing.** If
+sibling branches are run again, have exactly one of them own artifact regeneration and let the other
+carry source only.
+
+---
+
 ## 2026-08-14 — Jordan's ruling session: all 10 calls RULED; 4 executed, 1 part-built, 5 not started; 2 sites HELD (ED-IN-0187/0188)
 
 **⚠ THE AGENDA IS CLOSED — ED-IN-0185 is RULED, not open.** All seven questions plus two raised in
