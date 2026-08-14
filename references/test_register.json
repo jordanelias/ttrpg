@@ -1572,7 +1572,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 200,
+   "loc": 244,
    "modules_under_test": [
     "engine",
     "engine/params",
@@ -1612,8 +1612,8 @@
     },
     "test_the_gate_still_runs_and_still_reports": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": "Non-vacuity: the gate executes and produces its success line. A gate that"
+     "assertions": 3,
+     "summary": "Non-vacuity: the gate executes and produces its report line. A gate that"
     },
     "test_the_retirement_note_does_not_overclaim": {
      "assertionless": false,
