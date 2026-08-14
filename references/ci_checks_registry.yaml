@@ -84,7 +84,7 @@ ci_checks:
     level: 5
     role: "Golden-mode byte-exact gate (unit_field/cell_field + the §4a cell_cm mode) with the FULL digest-relevant toggle vector pinned — the shipped configuration's regression oracle (ED-MB-0045 A1b)."
     ci_job: field-goldens
-    notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests."
+    notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests. DELIBERATELY CI-ONLY (ED-IN-0176): every other blocking CI validator now also runs in tools/valoria_local.py's list, report-only, so local-green sees them. This one does not, on cost — measured 2026-08-13 at rc=0 in 275s (~4.6 min), against a local list whose every other entry is under 5s. A 4.6-minute pre-commit step holds unrelated commits hostage, which is the exact reason freshness_gate and ci_wf_harness_check are report-only locally. Recorded HERE because tests/valoria/test_gate_coverage.py's CI_ONLY_BY_DESIGN set requires the reason to live in this registry, not in the test."
 
   - path: tests/sim/mass_battle/lanchester_signature.py
     level: 5

@@ -1,7 +1,21 @@
 # Path-alias finding aid — consolidation plan
 
-## Status: PROPOSED — RATIFIES NOTHING. No parser moved, no row rewritten, no format changed.
-## Date: 2026-08-12 · Lane: IN (cross-cutting) · ED-IN-0173
+## Status: RATIFIED as PLAN OF RECORD (2026-08-13, ED-1094) — still no parser moved, no row rewritten, no format changed.
+## Date: 2026-08-12 · Lane: IN (cross-cutting) · ED-IN-0173 (allocated retroactively 2026-08-13 — see below)
+
+> **What the ratification does and does not cover (ED-IN-0173).** Under CLAUDE.md §2 / ED-1094,
+> Jordan's review-and-merge of the PR carrying this document ratified it, and the `## Status:` flip
+> belongs in that merge rather than a later step nobody triggers. Jordan confirmed 2026-08-13 that
+> the flip was mine to make. **Ratified: this document as the plan of record** — the ordering, the
+> "consolidate while the markdown is still the source" thesis, the phases. **NOT ratified, and this
+> plan is the document arguing they must be settled first: Phase A1's five semantics questions,
+> which stay HELD for Jordan.** Ratifying a plan is not ratifying the rulings it requests.
+>
+> ⚠ **This header cited `ED-IN-0173` while `references/id_reservations.yaml` still read
+> `next_free: 173`** — the ID was cited but never allocated, so the register would have handed 0173
+> to the next unrelated allocation. Allocated retroactively 2026-08-13; the guard that now catches
+> this class is `tests/valoria/test_audit_plan_ids_are_allocated.py` (ED-IN-0174), which also records
+> why the blocking citation gate could not see it.
 ## Opening pass: three independent read-only Fable-5 lenses (parsers · data · blast radius)
 ## Authored by: Opus, from those three reports. Per CLAUDE.md §10 the audit tier does not author.
 

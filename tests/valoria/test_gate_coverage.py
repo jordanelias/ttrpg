@@ -6,6 +6,7 @@ never let a pytest root that CI runs go unlisted, so that is what these tests pi
 count, so a root being ADDED to CI and silently missed here fails rather than passes.
 """
 import os
+import re
 import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -253,3 +254,131 @@ def test_the_live_validators_report_job_still_carries_its_commands():
     assert len(rep[0]['tool_commands']) >= 12, (
         f"validators-report parsed only {len(rep[0]['tool_commands'])} command(s) — its report-only "
         f"validators have stopped being discovered by --ci")
+
+
+# ------------------------------------------------------------------------------------
+# CI <-> LOCAL PARITY — the residual closed by ED-IN-0176
+# ------------------------------------------------------------------------------------
+# A validator in CI's BLOCKING tier and in no local list means `valoria_local` can print
+# "all local gates passed" on a tree CI is about to red. That is not a hypothetical: it
+# happened on PR #307 (identifier census drifted when three tools were retired; local
+# green, CI red), and it is the THIRD recorded instance of the pattern — ED-IN-0142 fixed
+# it for build_test_register, ED-PC-0040 for freshness_gate, each as a one-off incident.
+#
+# This is the guard that makes a fourth instance fail here instead of on someone's PR.
+# Per CLAUDE.md §0.1 point 5: if you cannot write the guard you have not understood the
+# pattern, and the guard — not the wiring — is the deliverable.
+
+# The deliberate exceptions. Each is documented at its SOURCE — the registry — rather than
+# merely asserted here; a line in a test is not a reason.
+#
+#   compliance_check.py     ci_checks_registry.yaml:262 — CI-only on purpose
+#                           ("local-green != compliance-green").
+#   ci_golden_modes_check.py  a byte-exact golden regeneration over the shipped field
+#                           configuration. MEASURED 2026-08-13: rc=0 in 275s (~4.6 min),
+#                           against a local list whose every other entry is under 5s. The
+#                           file's own precedent (freshness_gate, wf_harness) is that a local
+#                           gate must not hold an unrelated commit hostage, and a 4.6-minute
+#                           pre-commit step is that failure by two orders of magnitude. CI is
+#                           the boundary for this one.
+#                           (An interim note here read ">8 minutes, still running". That was
+#                           wrong — a wall-clock glance at a job sharing the box with the test
+#                           suite, not a measurement. The 275s figure is the completed run.)
+#
+# Anything added here needs the same treatment, in the same commit.
+CI_ONLY_BY_DESIGN = {'compliance_check.py', 'ci_golden_modes_check.py'}
+
+
+def _local_check_scripts():
+    """Script basenames in valoria_local's `checks` list, read by AST rather than regex.
+
+    AST because the list is built inside main() and its entries carry trailing comments;
+    a regex over the source would also match the word in a comment, which is the exact
+    over-match class tools/pathres.py exists to prevent.
+    """
+    import ast
+    src = open(os.path.join(ROOT, 'tools', 'valoria_local.py'), encoding='utf-8').read()
+    found = set()
+    for node in ast.walk(ast.parse(src)):
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(isinstance(t, ast.Name) and t.id == 'checks' for t in node.targets):
+            continue
+        if not isinstance(node.value, ast.List):
+            continue
+        for elt in node.value.elts:
+            if isinstance(elt, ast.Tuple) and elt.elts:
+                first = elt.elts[0]
+                if isinstance(first, ast.Constant) and isinstance(first.value, str):
+                    found.add(first.value)
+    return found
+
+
+def _hook_wired_scripts():
+    """Tools invoked by .claude/settings.json hooks — the OTHER local tier.
+
+    CLAUDE.md §8 describes two local surfaces, not one: the pre-commit list in
+    `valoria_local.py` AND the `.claude/settings.json` hooks. `review_core.py --check` runs
+    on Stop (ED-IN-0087) and is genuinely covered locally; a parity guard that only knew
+    about `valoria_local` would have demanded it be wired a second time. Reading both is
+    what makes this measure local COVERAGE rather than membership in one list.
+
+    NARROWED 2026-08-13 (ED-IN-0177, adversarial review). The first version dumped the WHOLE
+    settings.json to JSON and regexed it, so a tool named anywhere in the file — a
+    `permissions.deny` entry, a comment-shaped string, an unrelated key — counted as "covered".
+    That is a proxy satisfied without the property, in a guard written to stop exactly that.
+    Only hook COMMAND strings count now.
+    """
+    import json as _json
+    path = os.path.join(ROOT, '.claude', 'settings.json')
+    if not os.path.exists(path):
+        return set()
+    data = _json.load(open(path, encoding='utf-8'))
+    found = set()
+    for _event, groups in (data.get('hooks') or {}).items():
+        for group in groups:
+            for hook in group.get('hooks') or []:
+                found |= set(re.findall(r'tools/([\w_]+\.py)', hook.get('command', '')))
+    return found
+
+
+def _locally_covered():
+    return _local_check_scripts() | _hook_wired_scripts()
+
+
+def test_the_local_check_list_is_actually_readable():
+    """Assert that the next test can assert. An AST walk that silently finds nothing would
+    make the parity check below vacuously green — §0.1 point 2."""
+    scripts = _local_check_scripts()
+    assert len(scripts) >= 20, (
+        f'only {len(scripts)} script(s) parsed out of valoria_local\'s `checks` list. The list '
+        f'moved, was renamed, or stopped being a literal — the parity guard below is now blind.')
+
+
+def test_every_blocking_ci_validator_also_runs_locally():
+    blocking = {c['script'] for j in g.jobs() if j.get('blocking') for c in j['tool_commands']}
+    assert blocking, 'no blocking CI tool commands found — the parser or workflow is broken'
+    local = _locally_covered()
+    missing = sorted(p for p in blocking
+                     if p.split('/')[-1] not in local
+                     and p.split('/')[-1] not in CI_ONLY_BY_DESIGN)
+    assert not missing, (
+        f'{len(missing)} validator(s) are BLOCKING in CI but run in no local tier:\n  '
+        + '\n  '.join(missing)
+        + '\n\nAdd each to the `checks` list in tools/valoria_local.py (report-only is fine — '
+          'CI stays the blocking boundary; the point is that local-green SEES them). If a '
+          'validator is deliberately CI-only, record the reason in '
+          'references/ci_checks_registry.yaml and add it to CI_ONLY_BY_DESIGN in the SAME commit.')
+
+
+def test_the_parity_guard_can_observe_a_gap():
+    """Positive control: the guard must fail when a blocking validator is absent locally."""
+    local = _locally_covered()
+    blocking = {c['script'] for j in g.jobs() if j.get('blocking') for c in j['tool_commands']}
+    # Plant the failure the real test excludes, without mutating the tree.
+    pretend_local = local - {'broken_dependency_checker.py'}
+    missing = [p for p in blocking
+               if p.split('/')[-1] not in pretend_local
+               and p.split('/')[-1] not in CI_ONLY_BY_DESIGN]
+    assert missing == ['tools/broken_dependency_checker.py'], (
+        f'the parity computation cannot see a planted gap: {missing}')

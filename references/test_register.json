@@ -96,6 +96,88 @@
     }
    }
   },
+  "test_audit_plan_ids_are_allocated.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "A document header may not cite an `ED-<LANE>-NNNN` that was never allocated (ED-IN-0174).",
+   "helper_loc": 55,
+   "helpers": [
+    {
+     "loc": 4,
+     "name": "lane_next_free"
+    },
+    {
+     "loc": 13,
+     "name": "reserved_gaps"
+    },
+    {
+     "loc": 7,
+     "name": "header_ed_ids"
+    },
+    {
+     "loc": 18,
+     "name": "check_header"
+    },
+    {
+     "loc": 13,
+     "name": "_iter_docs"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 251,
+   "modules_under_test": [
+    "references",
+    "references/",
+    "registers/handoffs",
+    "systems",
+    "systems/",
+    "systems/references"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 7,
+   "tests": {
+    "test_a_gap_id_is_reported_even_though_it_is_below_next_free": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The blind spot ED-IN-0177 closed. ED-IN-0105 < next_free, and is still nobody's."
+    },
+    "test_body_mentions_are_deliberately_out_of_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The measured false-positive class \u2014 see the module docstring. Not an oversight."
+    },
+    "test_no_doc_header_cites_an_unallocated_ed": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": null
+    },
+    "test_positive_and_negative_controls": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_checker_reproduces_the_ED_IN_0173_defect": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "THE FALSIFIER. The exact pre-fix header against the exact pre-fix register state."
+    },
+    "test_the_plan_of_record_is_actually_in_scope": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "HEADER_LINES=8 covered ZERO of this document's id claims. Pin that it is now reachable."
+    },
+    "test_the_reserved_gap_is_actually_parsed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Assert that it asserted: if the gap parse silently returns nothing, the gap rule is off."
+    }
+   }
+  },
   "test_battle_concluded_key.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -830,14 +912,11 @@
    "lanes": [
     "IN"
    ],
-   "loc": 687,
+   "loc": 702,
    "modules_under_test": [
     "registers",
     "tools",
-    "tools/atomizer.py",
     "tools/ci_common.py",
-    "tools/doc_index_gen.py",
-    "tools/index_gen.py",
     "tools/observability",
     "tools/sim_harness/"
    ],
@@ -859,11 +938,6 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "The roster guard the tuple-spelling one could not see (ED-IN-0165)."
-    },
-    "test_inline_token_estimation_is_confined_to_the_modules_being_retired": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "`len(x) // 4` is the denominator every size cap in the repo is written in."
     },
     "test_lane_roster_includes_go": {
      "assertionless": false,
@@ -909,6 +983,11 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "The 44 migrated sites all did `yaml.safe_load(open(path))`."
+    },
+    "test_no_inline_token_estimation_survives_in_live_tooling": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`len(x) // 4` is the denominator every size cap in the repo is written in."
     },
     "test_no_module_actually_loads_id_reservations": {
      "assertionless": false,
@@ -3762,7 +3841,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 109,
+   "loc": 130,
    "modules_under_test": [
     "tools",
     "tools/",
@@ -3781,8 +3860,8 @@
    "tests": {
     "test_a_known_dead_tool_still_reports_orphaned": {
      "assertionless": false,
-     "assertions": 1,
-     "summary": "`index_gen`/`doc_index_gen`/`atomizer` are dead (plan G2 retires them; its landing"
+     "assertions": 2,
+     "summary": "The census must be able to see a dead tool at all. If it cannot see THIS one it cannot"
     },
     "test_live_validators_are_not_orphaned": {
      "assertionless": false,
@@ -4890,7 +4969,7 @@
     "IN",
     "MB"
    ],
-   "loc": 347,
+   "loc": 358,
    "modules_under_test": [
     "engine",
     "engine.py",
@@ -5885,18 +5964,30 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Guard for tools/ci_gate_coverage.py (ED-IN-0098).",
-   "helper_loc": 2,
+   "helper_loc": 53,
    "helpers": [
     {
      "loc": 2,
      "name": "_live_commands"
+    },
+    {
+     "loc": 23,
+     "name": "_local_check_scripts"
+    },
+    {
+     "loc": 26,
+     "name": "_hook_wired_scripts"
+    },
+    {
+     "loc": 2,
+     "name": "_locally_covered"
     }
    ],
    "lane_derived": true,
    "lanes": [
     "IN"
    ],
-   "loc": 256,
+   "loc": 385,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -5938,7 +6029,7 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 13,
+   "test_count": 16,
    "tests": {
     "test_a_comment_mentioning_py_compile_does_not_zero_a_jobs_command_list": {
      "assertionless": false,
@@ -5965,6 +6056,11 @@
      "assertions": 2,
      "summary": "sim-regression has no continue-on-error, so a local gate skipping it is skipping a gate."
     },
+    "test_every_blocking_ci_validator_also_runs_locally": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
     "test_every_ci_pytest_root_is_discovered": {
      "assertionless": false,
      "assertions": 1,
@@ -5989,6 +6085,16 @@
      "assertionless": false,
      "assertions": 2,
      "summary": "Pins the live tree against the failure above, not just a fixture."
+    },
+    "test_the_local_check_list_is_actually_readable": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Assert that the next test can assert. An AST walk that silently finds nothing would"
+    },
+    "test_the_parity_guard_can_observe_a_gap": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Positive control: the guard must fail when a blocking validator is absent locally."
     },
     "test_the_two_collapsed_jobs_keep_their_blocking_tiers_apart": {
      "assertionless": false,
@@ -11819,16 +11925,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 154,
+  "files": 155,
   "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 113,
+  "files_naming_a_module": 114,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 41,
-  "helper_defs": 286,
-  "helper_loc": 2679,
+  "helper_defs": 294,
+  "helper_loc": 2785,
   "ratchet_baselines": 9,
-  "tests": 1361,
+  "tests": 1371,
   "undocumented_files": 0
  }
 }

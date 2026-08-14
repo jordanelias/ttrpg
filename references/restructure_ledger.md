@@ -1146,6 +1146,33 @@ interlock §0.1 row 1, which claims that file as its W1.3 subject.
 | `references/collation_report_summary.yaml` | `deprecated/references/collation_report_summary.yaml` |
 | `references/values_master.yaml` | `deprecated/references/values_master.yaml` |
 
+## 2026-08-13 — G2 generator retirements → deprecated/tools/ (ED-IN-0175, ED-IN-0177)
+
+The three doc/index generators retired under Jordan's 2026-08-12 ruling (*"Dead files get moved to
+deprecated."*, ED-IN-0171), which resolved ED-IN-0163 and supplied the landing site. Deadness was
+independently corroborated by the G9 orphan-census fix: `doc_index_gen` and `index_gen` moved into
+`prune_candidates` (0 → 2) and `atomizer` into `orphaned`, from an instrument that had been hiding
+all three. Zero invokers re-verified across `.github/workflows/`, `.githooks/`, `skills/`,
+`references/ci_checks_registry.yaml` and `references/apparatus_registry.yaml` before the move.
+
+⚠️ **These rows were MISSING from the retirement commit and are added here as a correction
+(ED-IN-0177).** An adversarial read-only review caught it: the 2026-07-29 wave above wrote pointer
+rows for exactly this operation, and `audit/2026-08-12-alias-index-consolidation/00_plan.md` — a
+document ratified in the *same* commit that made these moves — argues that Jordan's ruling **raises**
+the write rate on this file. So the first move made under the newly ratified plan failed that plan's
+central convention, authored by the same session. Recorded rather than quietly back-filled, because
+the failure mode (a convention ratified and then not applied by its own author) is the useful part.
+
+**The 37 `systems/**/*_index.md` outputs of `doc_index_gen` are NOT retired** — they are grandfathered
+by the 2026-07-26 ruling and their disposition stays HELD for Jordan. The generator moved; its
+artifacts did not.
+
+| Old Path | New Path |
+|----------|----------|
+| `tools/atomizer.py` | `deprecated/tools/atomizer.py` |
+| `tools/doc_index_gen.py` | `deprecated/tools/doc_index_gen.py` |
+| `tools/index_gen.py` | `deprecated/tools/index_gen.py` |
+
 ## EVACUATED TO FORK — 2026-08-05 (ED-IN-0145)
 
 A `FORK:<ref>` target means the path left `main` deliberately and its content is at that ref. It is

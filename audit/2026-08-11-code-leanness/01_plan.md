@@ -2,13 +2,23 @@
 
 ## Status: REFERENCE — plan of record; PARTIALLY EXECUTED 2026-08-12 (ED-IN-0160..0168)
 
-> **Execution state, so a resuming session does not re-do landed work.** `G1` DONE · `G3` DONE ·
-> `G7` DONE · `G8` DONE · `G9` DONE · **`G2` HALF-DONE** — its five dead-scope retirements
-> landed; its generator-retirement half is **NOT EXECUTABLE AS WRITTEN and needs Jordan** (the
-> `deprecated/tools/` landing site it names was removed by the 2026-08-05 evacuation and is
-> pinned as `evacuate` by `tests/valoria/test_evacuation_plan.py:98`, with `:166` forbidding any
-> destination under `deprecated/`). **Not started:** G4, G5, G6, G10, G11, Track S, Track T
-> (T1 landed early in #303).
+> **Execution state, so a resuming session does not re-do landed work.** `G1` DONE · **`G2` DONE
+> (2026-08-13)** · `G3` DONE · `G7` DONE · `G8` DONE · `G9` DONE. **Not started:** G4, G5, G6,
+> G10, G11, Track S, Track T (T1 landed early in #303).
+>
+> **G2 closed 2026-08-13 (ED-IN-0175).** Its five dead-scope retirements landed in #305/#306; its
+> generator half was held on ED-IN-0163 for a landing site and Jordan ruled it — *"Dead files get
+> moved to deprecated."* (ED-IN-0171). `atomizer`/`doc_index_gen`/`index_gen` are now at
+> `deprecated/tools/`. **The 37 grandfathered `systems/**/*_index.md` outputs were NOT touched** and
+> their disposition stays HELD — the generator is retired, not its artifacts.
+>
+> ⚠ **This block previously stated that the retirement was blocked by
+> `tests/valoria/test_evacuation_plan.py:98`/`:166`. That was WRONG and is corrected here.** The
+> move was executed and the suite run before anything was edited: `test_evacuation_plan.py` passes
+> **32/32 unamended**. `:166` binds the destinations the *tool* computes into `p['moves']`, which a
+> `git mv` does not populate; `:98`'s pin still holds and is in fact the same verdict the moved
+> files now get. **No guard was amended, because none needed to be.** The landing-site blocker was
+> real; the guard conflict predicted alongside it was not.
 >
 > ⚠ **This line previously listed "G12, G13" as not-started. There is no G12 or G13** — Track G
 > ends at G11 in §1 below. Corrected 2026-08-12 (ED-IN-0168): a resuming session would have gone

@@ -207,6 +207,33 @@ def main(argv):
         # refuse someone else's commit. If it ever becomes blocking, that is Jordan's call with
         # a loud ED-1094 call-out, not a quiet flag change.
         ('scope_ratchet.py',             ['--check'], False),  # scope ceilings + G13 activity control (ED-IN-0112)
+        # ────────────────────────────────────────────────────────────────────────────────
+        # THE CI-ONLY RESIDUAL, CLOSED (ED-IN-0176). Four validators sat in CI's BLOCKING
+        # `validators` job and in no local list, so `valoria_local` could report "all local
+        # gates passed" on a tree CI was about to red. It did exactly that on PR #307: the
+        # identifier census drifted when three tools were retired, local went green, CI failed.
+        #
+        # THIS IS THE THIRD RECORDED INSTANCE OF ONE PATTERN, which is why it is swept rather
+        # than patched. ED-IN-0142 fixed it for `build_test_register` ("the register went stale
+        # 3x in one session and CI caught it every time, because --check could not fail and this
+        # list did not run it"); ED-PC-0040 fixed it for `freshness_gate` ("five consecutive
+        # local-green commits shipped a stale canonical_sha__ pin"). Each was fixed as an
+        # incident. MEASURED here instead: 18 CI validator invocations against this list left
+        # exactly these four unrun, and `tests/valoria/test_gate_coverage.py` now fails on a
+        # fifth (§0.1 point 5 — the guard is the deliverable, not the wiring).
+        #
+        # `compliance_check.py` stays deliberately absent and is NOT part of this residual —
+        # ci_checks_registry.yaml:262 records that call ("local-green != compliance-green").
+        #
+        # Report-only, following the freshness_gate/wf_harness precedent above: all four scan
+        # the WHOLE tree rather than the changeset, so a blocking local copy would hold an
+        # unrelated commit hostage to a file the author is still writing. CI remains the
+        # unbypassable boundary (CLAUDE.md §8) and all four are blocking there, so nothing is
+        # weakened — what changes is that local-green now SEES them. Measured cost: 4.9s total.
+        ('ci_hooks_verifier.py',         [],          False),  # enforcement architecture intact (BLOCKING in CI)
+        ('build_identifier_census.py',   ['--check'], False),  # census + roll-up freshness (ED-IN-0172; BLOCKING in CI)
+        ('validate_ed_citations.py',     [],          False),  # anti-fabrication citation integrity (BLOCKING in CI; plan step G11)
+        ('broken_dependency_checker.py', [],          False),  # ledger path refs resolve (BLOCKING in CI)
     ]
 
     # Force UTF-8 in child validators so their output never crashes on the
@@ -214,20 +241,44 @@ def main(argv):
     child_env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
 
     failed = []
+    # Report-only failures were previously DISCARDED, not merely unreported — the `and blocking`
+    # guard threw the result away, so the summary below could not have mentioned them even if it
+    # had wanted to. See the note at the summary (ED-IN-0177).
+    failed_reportonly = []
     for script, extra, blocking in checks:
         path = os.path.join(HERE, script)
         if not os.path.exists(path):
             continue
         print(f"\n--- {script} ---")
         r = subprocess.run([sys.executable, path] + extra, env=child_env)
-        if r.returncode != 0 and blocking:
-            failed.append(script)
+        if r.returncode != 0:
+            (failed if blocking else failed_reportonly).append(script)
 
     print()
     if failed:
         print(f"[valoria check] FAILED: {', '.join(failed)}")
         print("Fix the above, or `git commit --no-verify` to bypass locally (CI still enforces on the PR).")
         return 1
+    # A REPORT-ONLY FAILURE MUST NOT PRINT AS AN UNQUALIFIED PASS (ED-IN-0177).
+    #
+    # This line read "all local gates passed" whenever no BLOCKING check failed — including when
+    # a report-only validator had just failed twenty lines up. That is the operator-visible half
+    # of the PR #307 incident and it survived the fix that was supposed to close it: ED-IN-0176
+    # wired four CI-only validators in here as report-only, which puts MORE failures in exactly
+    # the class this summary was hiding. An author reads the last line, sees a green claim, pushes,
+    # and CI reds on something local already knew.
+    #
+    # `run_ci_validators` has printed a report-only summary since it was written (:134-135); only
+    # `main()` was silent. Same information, same file, two exits — one of them lying by omission.
+    #
+    # NOT a promotion to blocking: report-only stays non-gating, the return code is unchanged, and
+    # nothing new can refuse a commit. What changes is that the last line stops asserting something
+    # the run does not support.
+    if failed_reportonly:
+        print(f"[valoria check] blocking gates passed — but {len(failed_reportonly)} REPORT-ONLY "
+              f"check(s) failed: {', '.join(failed_reportonly)}")
+        print("  Not gating locally. Several ARE blocking in CI (ED-IN-0176), so read them before pushing.")
+        return 0
     print("[valoria check] all local gates passed.")
     return 0
 
