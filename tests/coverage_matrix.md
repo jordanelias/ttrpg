@@ -699,3 +699,16 @@ still guards this function and now pins the *adjacent* band at each boundary rat
 one — the old ceiling assertion (`!= "Success"` at a margin of −1e−6) had become unfalsifiable under
 the reband, since Success sits three bands away. Scope: the degree function only. No golden motion in
 this engine, no change to the RNG path, no new file.
+
+### Field goldens re-recorded (same change, 2026-08-14)
+
+`bat.py`'s `unit_field_mor0`, `cell_field_mor0` and `cell_grid_mor1` moved with the reband —
+`compute_degree` feeds `DAMAGE_BY_DEGREE` on every exchange, so a band change reaches every digest.
+Re-recorded from the reference CI run, with the previous values preserved inline.
+
+**Read this before trusting a local green on these modes.** `tests/valoria/test_mass_battle_byte_exact.py`
+covers the two GRID modes and reports skip/xfail locally (documented platform non-portability plus a
+pre-existing known-red). The three modes above are gated by `tools/ci_golden_modes_check.py`, a
+separate blocking CI job that does not run locally at all. A local suite green says nothing about
+them — which is how an adversarial critic's correct prediction got recorded as "overturned" here
+before CI settled it.

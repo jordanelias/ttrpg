@@ -78,13 +78,19 @@ would have caught **4 of the 11** ladders it claimed to guard (fixed and re-veri
 five missed forms); two assertions I added were **vacuous**, one of them arithmetically forced by
 the loop that computed it; and I asserted "a fractional pool is a real pool" when the delegate does
 `int(round(pool))` — **the fractional-DICE half of the ruling is not implemented**, only fractional
-results. One critic finding was **overturned by execution** (the mass-battle byte-exact goldens are
-skip/xfail for pre-existing reasons) — it was flagged honestly as unverifiable without running it.
+results. And the finding I called **overturned was not**: I refuted the critic's "byte-exact goldens break"
+claim by running `test_mass_battle_byte_exact.py` (skip/xfail locally) — **but that wrapper covers the
+GRID modes, while the three field/cell-morale digests are gated by `tools/ci_golden_modes_check.py`, a
+separate blocking job.** CI failed on exactly the digests the critic named. Re-recorded from the
+reference CI environment, since these are platform-sensitive and a locally-computed value would have
+been a wrong number recorded confidently. **The error is the same shape as running only one of the two
+blocking suites: I answered a claim with evidence from a NEIGHBOURING instrument without checking that
+the instrument governed the claim.** Check the gate that gates the thing.
 
 **Verification state at handoff:** `pytest tests/valoria` **1917 passed / 0 failed** (baseline
 1905/0); `pytest engine/tests` **2051 passed / 0 failed** (baseline 2051/0). Six seeded-campaign
 goldens re-recorded, each with its before/after and cause in the file. `valoria_local.py --staged`
-blocking gates green. `scope_ratchet` REGRESSED on `ed.stale`/`ed.needs_jordan_stale` —
+blocking gates green. **Neither local suite covers `tools/ci_golden_modes_check.py`** — the field-golden byte-exact job, which is blocking and runs only on CI; three digests moved there and were re-recorded from the CI run. `scope_ratchet` REGRESSED on `ed.stale`/`ed.needs_jordan_stale` —
 **pre-existing, identical at baseline**, not caused here.
 
 **TWO sites are HELD, not one.** `combat_engine_v1/core.py` (above) and now

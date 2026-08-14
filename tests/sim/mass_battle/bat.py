@@ -366,7 +366,23 @@ EXPECTED = {
     # alone, which is its whole intended scope). The two GRID modes are byte-identical with the
     # flag ON, as they must be — the pass lives inside resolve_toi_and_commit, which only runs
     # under FIELD_MOVEMENT.
-    'unit_field_mor0': '0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c',
+    # ─── [ED-IN-0187, 2026-08-14] RE-RECORDED: the ruled degree ladder ─────────────────────────
+    # Jordan's 2026-08-14 ruling rebanded `resolution.compute_degree` onto the margin `net - ob`
+    # (>=3 Overwhelming, >=1 Success, [0,1) Partial, <0 Failure), replacing `net >= 2*ob AND
+    # net >= 3`. `compute_degree` feeds `DAMAGE_BY_DEGREE` on every exchange, so every mode's
+    # digest necessarily moves. The cause is a RULING, not drift.
+    # ATTRIBUTION (§0.1 #4): the ONLY change in this file's reach is that function. The epsilon,
+    # the RNG path, the battery rows and every pinned toggle are untouched, so the three moved
+    # digests are attributable to the reband and nothing else.
+    # ⚠ RECORDED FROM THE REFERENCE CI ENVIRONMENT, NOT LOCALLY, and that distinction is the
+    # finding. Locally `tests/valoria/test_mass_battle_byte_exact.py` reports these modes as
+    # skip/xfail (documented platform non-portability + a pre-existing known-red), so a local
+    # green says NOTHING about them — the pytest wrapper covers the grid modes while
+    # `tools/ci_golden_modes_check.py` is what actually gates these three. An adversarial critic
+    # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
+    # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
+    # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
+    'unit_field_mor0': '7d4a996cad34a7ee8a811b844e49a381869130fe321c7768f869d7ecd489d019',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -440,7 +456,9 @@ EXPECTED = {
     # [ED-MB-0059, 2026-07-29] RE-RECORDED with the same attribution control as unit_field above
     # (was 2a9214eb7e663c49a4f5763074926d13e417d6b684765585928ce24af203263b; reproduced exactly at
     # PC_CELL_EXCLUSION=0).
-    'cell_field_mor0': 'da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8',
+    # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
+    # was da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8
+    'cell_field_mor0': '717ad3b87ff72762d0e06ee0720f9b393aa5e85cb5500ba6ed989cf270793baf',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + PC_CELL_MORALE=1 (grid). The other four all run at PC_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -463,7 +481,9 @@ EXPECTED = {
     # divergence survives the recovery step. CONTROL: the other four modes are byte-identical, as
     # they must be — at PC_CELL_MORALE=0 the cell-morale maps are empty and the two writers agree.
     # A fix that moved any of them would have been touching something it did not claim to.
-    'cell_grid_mor1': 'd11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9',
+    # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
+    # was d11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9
+    'cell_grid_mor1': 'fbe2d87f02b4017acdb985c3432718bb3574d69e46778014c67ebf3ecc577e4b',
 }
 
 
