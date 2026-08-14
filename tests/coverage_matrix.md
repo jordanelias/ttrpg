@@ -74,6 +74,7 @@ directive requires) re-points the plain grid run onto the fifth mode's golden an
 recorded keys. Note the key was **already injective**, so the injectivity pin could not see this.
 Keys now name every axis with its value: `unit`→`unit_grid_mor0`, `cell`→`cell_grid_mor0`,
 `unit_field`→`unit_field_mor0`, `cell_field`→`cell_field_mor0`, `cell_cm`→`cell_grid_mor1`
+(the `grid` token was renamed `legacy` on 2026-08-14 — see that dated section below)
 (`cell` reserved for the mass-battle GEOMETRY primitive; `mor` for the distinct morale flag).
 **No digest changed** — lookup keys only, values carried byte-for-byte, so this is not a re-record
 and G11 does not apply. Control: `cell_field_mor0` still matches its golden under the new key, which
@@ -702,7 +703,7 @@ this engine, no change to the RNG path, no new file.
 
 ### Field goldens re-recorded (same change, 2026-08-14)
 
-`bat.py`'s `unit_field_mor0`, `cell_field_mor0` and `cell_grid_mor1` moved with the reband —
+`bat.py`'s `unit_field_mor0`, `cell_field_mor0` and `cell_legacy_mor1` moved with the reband —
 `compute_degree` feeds `DAMAGE_BY_DEGREE` on every exchange, so a band change reaches every digest.
 Re-recorded from the reference CI run, with the previous values preserved inline.
 
@@ -712,3 +713,22 @@ pre-existing known-red). The three modes above are gated by `tools/ci_golden_mod
 separate blocking CI job that does not run locally at all. A local suite green says nothing about
 them — which is how an adversarial critic's correct prediction got recorded as "overturned" here
 before CI settled it.
+
+### Mode-key vocabulary corrected: `grid` → `legacy` (Jordan, 2026-08-14)
+
+> "We have no 'grid' mode in mass battle. It always occurs on a coordinate field. Only the subunits
+> can be said to be a grid."
+
+`FIELD_MOVEMENT` defaults to **1** — the coordinate field is the model, not a mode of it.
+`FIELD_MOVEMENT=0` is the pre-migration integer lattice (Chebyshev distance, int-rounded positions),
+retained only as a byte-exact regression arm; `validators.py:220` already described it as "the legacy
+integer path". The golden mode key called it `grid`, which reads as a second way the game can be
+played — and was read that way, by me, in ED-IN-0187's own commit message.
+
+Renamed in `bat._mode_key` and the three affected `EXPECTED` keys (`unit_legacy_mor0`,
+`cell_legacy_mor0`, `cell_legacy_mor1`), plus the two tests and the CI checker that assert them.
+**No digest is touched** — these are lookup labels; every recorded value carries across byte-for-byte.
+
+Coverage is unchanged in extent. What changed is that a cold reader can no longer infer a movement
+mode that does not exist. Historical dated entries in `bat.py` keep the old word (no-retrofit,
+CLAUDE.md §4); `validators.py`'s separate `path='grid'|'node'` argument is filed, not swept.

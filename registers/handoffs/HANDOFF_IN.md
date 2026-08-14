@@ -57,6 +57,16 @@ largest piece of the ruling still outstanding and it touches every subsystem.
 - Touching anything under `tests/sim/` trips the co-file rule → `tests/coverage_matrix.md` must be
   updated in the same commit.
 
+**VOCABULARY CORRECTION (Jordan, 2026-08-14) — mass battle has no 'grid' mode.** *"It always
+occurs on a coordinate field. Only the subunits can be said to be a grid."* `FIELD_MOVEMENT`
+defaults to **1**; `=0` is the pre-migration integer lattice kept as a byte-exact regression arm,
+which `validators.py:220` already called "the legacy integer path". The golden mode key called it
+`grid`, and I read that as a movement mode and wrote it into two commit messages. Renamed to
+`legacy` in `bat._mode_key`, the three `EXPECTED` keys, both asserting tests and the CI checker —
+**labels only, no digest touched**. Historical dated entries keep the old word (no-retrofit);
+`validators.py`'s `path='grid'|'node'` is filed, not swept. **The general point for this lane: a
+mode key is a definition, and a wrong one propagates into prose faster than any doc does.**
+
 **THE ADVERSARIAL PASS FOUND EIGHT THINGS, and two of them change how you should read this lane's
 output.** Jordan required an adversarial crusher before commit; two independent read-only critics
 (structural independence per §10 — `Read/Grep/Glob` only, given the diff as OUTPUT, never the
