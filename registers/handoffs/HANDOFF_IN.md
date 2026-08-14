@@ -2,6 +2,15 @@
 
 ## 2026-08-14 — Jordan's ruling session: 5 of 8 calls EXECUTED, 1 site HELD, 3 calls NOT STARTED (ED-IN-0187/0188)
 
+**⚠ THE AGENDA IS CLOSED — ED-IN-0185 is RULED, not open.** All seven questions plus two raised in
+session were answered on 2026-08-14 and the answers are recorded verbatim in the ledger entry and in
+the table below. **What remains is EXECUTION, not decision.** The only items still needing Jordan are
+the two HELD SITES in ED-IN-0187 (combat's band collision, and whether the ruling overrides the
+contest surface's deliberate pool-aware bar) — neither of which was on this agenda. This banner
+exists because the assessment's own finding T5 was that settled rulings get re-raised when the answer
+is not written where the question lives; leaving the agenda marked open would have rebuilt that trap
+within a day of naming it.
+
 **What happened.** Jordan was presented the batched ruling agenda `audit/2026-08-14-five-lens-repo-assessment/01_plan.md`
 §2 (filed as ED-IN-0185) and ruled on all seven questions plus two raised in-session. This entry records
 what was executed against those rulings and — more importantly for whoever resumes — **what was not**.

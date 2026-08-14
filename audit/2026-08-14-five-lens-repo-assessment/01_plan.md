@@ -1,6 +1,15 @@
 # Post-assessment remediation — the plan of record
 
-## Status: PROPOSED — plan only; nothing here is ruled, nothing executed
+## Status: RULED 2026-08-14 — §2's seven questions are ANSWERED; the tracks are part-executed
+
+> ⚠ **§2 is a CLOSED agenda. Do not re-raise it.** Jordan answered all seven questions on
+> 2026-08-14; the answers are recorded verbatim in `ED-IN-0185` and summarised in
+> `registers/handoffs/HANDOFF_IN.md`. Q2 and Q3's band/dice halves are executed (ED-IN-0187),
+> Q4's vocabulary is built (ED-IN-0188); Q1a, Q1b, Q4's sweep, Q5, Q6, Q7 are **ruled and
+> awaiting execution**, and Q2's `score/2` obstacle derivation plus Q3's fractional *dice* are
+> the two largest unexecuted pieces. This banner exists because this document's own finding
+> T5 is that settled rulings get re-raised when the answer is not written where the question
+> lives.
 
 ## Date: 2026-08-14 · Lane: IN (cross-cutting) · ED-IN-0185 · Companion to `00_findings.md`
 
