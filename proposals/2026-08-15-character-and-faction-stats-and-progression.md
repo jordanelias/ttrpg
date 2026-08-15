@@ -821,3 +821,63 @@ attributes survive"* — **still holds, but its prerequisites are now known and 
 3. **Wire or strike the dead levers** before authoring content onto them.
 4. **Decide ED-IN-0187 first**, because it determines whether the layer attaches to the pool or to δσ
    (§13.2).
+
+---
+
+## §14 THE ROUNDING FIX, PRECISELY — and a correction to §11's cost estimate
+
+Jordan, reading the census: *"`roll_net` floors with `max(1, int(round(pool)))` — but that's an
+integer rounding the pool."* Correct, and §11 conflated two separable things.
+
+### 14.1 The floor is cited canon; the cast is not
+
+```python
+effective_pool = max(1, int(round(pool)))   # [canonical: params/core.md §Pool Floor (all systems)]
+```
+
+§Pool Floor says *"No penalty may reduce a pool below 1D."* **That authorises `max(1, …)` and
+nothing else.** The `int(round(…))` is an **uncited integer quantisation riding inside a cited
+floor** — which is how it survived: a reader checking the citation finds a real rule and stops.
+
+Worse in `roll_net_continuous` (`:276-277`): it casts to `int`, then back with
+`float(effective_pool)`, to call `continuous_engine_sample` — which accepts fractional pools
+natively (*"Pool may be fractional"*). A float → int → float round-trip is **pure loss dressed as
+continuity.**
+
+### 14.2 Three measured facts
+
+1. **It is banker's rounding, so the quantisation is not even uniform.** `2.5 → 2` but `3.5 → 4`;
+   `8.5 → 8` but `9.5 → 10`. Half-integer pools jump by parity. This is the artifact behind §1.2's
+   anomalous `+0.5D` row: pool 9.5 rounded *up* to a whole extra die.
+2. **Stochastic rounding is mean-exact.** Roll `floor(pool)` dice plus one more with probability
+   `frac(pool)`: measured 9.1 → 9.0997, 9.4 → 9.3999, 9.9 → 9.9001 (n=200k). A d10 engine that can
+   never roll 9.1 dice can still honour a fractional pool honestly.
+3. **The draw must be GUARDED on `frac > 0`.** Guarded, the RNG stream after integer-pool calls is
+   identical to a fresh stream; unguarded, it shifts — re-recording every golden for nothing.
+
+### 14.3 ⚠ CORRECTION — §11 overstated the cost of Half A
+
+§11 said Half A *"is a behaviour change, not a repair — it moves every seeded trajectory and will
+re-record goldens."* **Measured false.** Instrumenting `roll_net` across a live balance run:
+**1,163 calls, every one at pool 9.0, zero non-integral.** `int(round(pool))` is a **no-op on every
+call the live engine makes today** — which is precisely why the defect went unnoticed. It is dormant
+until someone uses fractional pools, and then it silently eats them.
+
+*Scope, stated not glossed:* that run exercises **combat only**, whose pool is integral by
+construction at `core.py:52` (`int(round(history)) + BASE_POOL` returns an `int`), so the downstream
+cast is redundant there. Other callers' pools were not directly instrumented.
+
+### 14.4 The fix, per site
+
+| site | change | cost |
+|---|---|---|
+| `sigma_leverage.py:276` `roll_net_continuous` | **delete the cast**; keep `max(1.0, pool)` as a float | none — pure removal, the callee already takes a float |
+| `sigma_leverage.py:265` `roll_net` | **guarded stochastic rounding**: `n = int(p); frac = p - n; if frac > 0.0 and rng.random() < frac: n += 1; return max(1, n)` | none on existing content (stream-neutral) |
+| `core.py:52` `resolution_pool` | drop `int(round(history))`; keep `max(POOL_FLOOR, …)` as a float | none until History goes fractional |
+
+Then the §11-C sites (11 integer-only pool arithmetic sites) and §11-D (threadwork's
+`-> int` / `ts // 10` / `min(3, history+3)`), each of which would re-truncate downstream.
+
+**Write the diagnosis into the code at the fix:** the floor and the cast should never have shared a
+line. A quantisation hid behind a citation long enough that three independent surfaces — including
+`dice_engine.py`'s own docstring — ended up describing the tree wrongly.

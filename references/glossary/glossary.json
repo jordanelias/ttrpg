@@ -4829,7 +4829,7 @@
     "canon/02_canon_constraints.md": 2,
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 20,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 21,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 6,
     "systems/_architecture/complete_systems_reference.md": 2,
@@ -21822,7 +21822,7 @@
     "godot/implementation_sequence.md": 3,
     "godot/scene_tree_architecture.md": 5,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 25,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 26,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -51313,7 +51313,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
@@ -52558,7 +52558,7 @@
    "file_count": 3,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 6,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 6
    },
