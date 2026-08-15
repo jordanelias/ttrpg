@@ -93,7 +93,7 @@ systems:
     canonical_sha__systems___architecture__complete_systems_reference_md: "8e5c96b05c0f87f54077e10cd2c8bf64ca13665e"
   combat:
     design_doc: systems/combat/combat_reference_v1.md
-    canonical_sha__systems__combat__combat_reference_v1_md: "a6b0f74369ecb80ccb601bdc950f63643ebe22ba"
+    canonical_sha__systems__combat__combat_reference_v1_md: "c66b04f548d7cf45d1bd68ee41373c49c78cad49"
     # engine/params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
     # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
     # systems/combat/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION

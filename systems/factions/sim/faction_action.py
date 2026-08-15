@@ -10,9 +10,10 @@ Canon source: GD-2 (mandatory before stochastic). LIVE DRIVER: engine/mc_v18.py,
 Game Design constraints applicable: GD-1, GD-2
 Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-unique
          dispatch wired 2026-05-17]
-[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: this module's scalar-L reads and
+[PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: this module's scalar-L reads and
  string-label da_outcome emission are the pre-LPS-1 SUPERSEDED oracle (no per-settlement L/PS,
- no da.* Key plumbing — C-FA-1). Do NOT port as canon-conformant until ED-FA-0004 (Stratum B).]
+ no da.* Key plumbing — C-FA-1). The self-imposed port block is DELETED (Jordan, 2026-08-15 —
+ED-IN-0193); the gap is unchanged and ED-FA-0004 is still open.]
 
 v17 port: probabilistic action mix (M7_ASSUMPTION_SIX).
 Historically the 30/35/20/15 (unique/Conquest/Muster/Govern) vector was a FIXED, uncited prior.

@@ -20,10 +20,11 @@ Status: [implemented: 2026-07-08 — ED-SC-0007 residual "parliamentary_vote-in-
     standalone unreachable mechanism. Not yet wired: scene_dispatch.py has no direct caller (the
     faction_action.py path supersedes that need for the Censure tier).]
 
-[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: this module reads Mandate as the scalar
+[PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: this module reads Mandate as the scalar
  Faction.L (`proposer.L >= 2`), inheriting the SUPERSEDED pre-LPS-1 Mandate==Faction.L convention
  documented at the top of systems/social_contest/sim/parliamentary_vote.py. LPS-1 relocates Legitimacy/Mandate
- per-settlement; do NOT port this scalar-L read as canon-conformant until ED-FA-0004 (Stratum B)
+ per-settlement. The self-imposed port block is DELETED (Jordan, 2026-08-15 — ED-IN-0193); the
+gap is unchanged and ED-FA-0004 is still open
  closes. This is KNOWN inherited debt, not new debt introduced here.]
 
 Dependencies:

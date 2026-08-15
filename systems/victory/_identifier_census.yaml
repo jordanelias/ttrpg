@@ -222,7 +222,7 @@ identifiers:
     identifier: peninsular_sovereignty
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:147-170` (hea'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:33-56` (head '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -369,7 +369,7 @@ identifiers:
     identifier: victory_check_service
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:147-170` (hea'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`''s subsystem table, and `references/canonical_sources.yaml`''s `victory` entry names only the design doc, no code pointer — both of this module''s mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:33-56` (head '
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

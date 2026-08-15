@@ -118,6 +118,7 @@ EXPECTED_COMMANDS = {
     ('tools/ci_module_shape_check.py', ''),
     ('tools/ci_names_check.py', ''),
     ('tools/ci_names_consistency.py', ''),
+    ('tools/ci_pp_frozen_check.py', ''),
     ('tools/ci_naming_check.py', ''),
     ('tools/ci_program_claim_check.py', ''),        # wired 2026-08-01 (ED-IN-0118)
     ('tools/ci_quantity_vocabulary_check.py', ''),

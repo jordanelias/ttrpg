@@ -223,7 +223,7 @@ The two trees share no code, so any result measured on one is a result about tha
 `systems/world/sim/npe.py:325 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:215 generate_npc`
 (never called); the engine-core AI shell is a pair of typed no-ops, `engine/autoload/npc_ai.py:33 select_action`. The
 folder owns neither the code nor, since a 2026-07-29 repoint, the doc of its own primary contract, and the currency
-authority still heads at the demoted doc — `CURRENT.md:163 npc_behavior_v30` (§3e).
+authority still heads at the demoted doc — `CURRENT.md:49 npc_behavior_v30` (§3e).
 
 **`overview` — the season loop, accounting, and the world tracks.** Composes the canonical three-step season and the
 six-step accounting cascade, and owns the CI/MS/IP/RS track modules — `systems/overview/sim/accounting.py:95 run_accounting`.
@@ -297,7 +297,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
 | c | The RS-track write is a no-op whose one call site sits behind an organically dormant branch — wired, never landing | overview, `_architecture` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` |
 | c | Phase-boundary hooks named for threadwork are empty bodies called unconditionally every phase, in both battle trees | mass_battle, threadwork | `systems/mass_battle/sim/massbattle.py:301-303 threadwork_check` |
-| d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:338-341 _emit_battle_concluded` |
+| d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:342-345 _emit_battle_concluded` |
 | d | A comment declares a canonical thirteen-member Conviction set and calls the legacy nine "superseded" — directly above a nine-member tuple; a caller passes a name absent from it, so every such call silently no-ops. **Which surface is wrong is unsettled by the tree** | characters, fieldwork | `systems/characters/sim/conviction.py:43-46 CONVICTIONS` |
 | e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:416 Key` |
 | e | A track's design doc is homed in one subsystem while its code lives in another — and it executes despite its map flag saying otherwise | characters, overview | `systems/overview/sim/ci_track.py:170 apply_ci_delta` |

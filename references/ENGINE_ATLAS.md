@@ -256,18 +256,18 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 | `council_ob` | `systems/factions/sim/council_solmund.py:30` |
 | `CouncilResult` | `systems/factions/sim/council_solmund.py:37` |
 | `attempt_council` | `systems/factions/sim/council_solmund.py:49` |
-| `attempt_great_work` | `systems/factions/sim/crown_initiative.py:131` |
-| `coronation_renewal_ob` | `systems/factions/sim/crown_initiative.py:188` |
-| `attempt_coronation_renewal` | `systems/factions/sim/crown_initiative.py:211` |
-| `InitiativeResult` | `systems/factions/sim/crown_initiative.py:278` |
-| `royal_progress_ob` | `systems/factions/sim/crown_initiative.py:45` |
-| `attempt_royal_progress` | `systems/factions/sim/crown_initiative.py:61` |
+| `attempt_great_work` | `systems/factions/sim/crown_initiative.py:132` |
+| `coronation_renewal_ob` | `systems/factions/sim/crown_initiative.py:189` |
+| `attempt_coronation_renewal` | `systems/factions/sim/crown_initiative.py:212` |
+| `InitiativeResult` | `systems/factions/sim/crown_initiative.py:279` |
+| `royal_progress_ob` | `systems/factions/sim/crown_initiative.py:46` |
+| `attempt_royal_progress` | `systems/factions/sim/crown_initiative.py:62` |
 | `ExcommResult` | `systems/factions/sim/excommunication.py:63` |
 | `attempt_excommunication` | `systems/factions/sim/excommunication.py:78` |
 | `is_available` | `systems/factions/sim/mass_seizure.py:298` |
 | `SeizureDeclaration` | `systems/factions/sim/mass_seizure.py:86` |
 | `SeizureResult` | `systems/factions/sim/mass_seizure.py:96` |
-| `select_censure_target` | `systems/factions/sim/parliamentary_action.py:63` |
+| `select_censure_target` | `systems/factions/sim/parliamentary_action.py:64` |
 | `TransferResult` | `systems/factions/sim/parliamentary_transfer.py:80` |
 | `get_active_treaties` | `systems/factions/sim/treaty.py:157` |
 | `reset_registry` | `systems/factions/sim/treaty.py:162` |
@@ -307,7 +307,7 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 |---|---|
 | `BuildResult` | `systems/settlements/sim/infrastructure.py:103` |
 | `reset_infrastructure` | `systems/settlements/sim/infrastructure.py:257` |
-| `reset_registry` | `systems/settlements/sim/registry.py:210` |
+| `reset_registry` | `systems/settlements/sim/registry.py:211` |
 | `SettlementState` | `systems/settlements/sim/settlement.py:45` |
 | `ProvinceState` | `systems/settlements/sim/settlement.py:65` |
 | `reset_drift` | `systems/settlements/sim/temperaments.py:168` |
@@ -418,7 +418,7 @@ Public top-level callables in each subsystem folder that its authored skeleton n
 | `resolve_exchange` | `systems/social_contest/sim/contest_legacy_stub.py:132` |
 | `ExchangeResult` | `systems/social_contest/sim/contest_legacy_stub.py:84` |
 | `ContestResult` | `systems/social_contest/sim/contest_legacy_stub.py:99` |
-| `VoteResult` | `systems/social_contest/sim/parliamentary_vote.py:96` |
+| `VoteResult` | `systems/social_contest/sim/parliamentary_vote.py:97` |
 
 </details>
 
@@ -466,17 +466,17 @@ How each contract was attributed to its subsystem. `declared` is a package-level
 
 ## 5. Nomenclature — can a canonical name be found by searching for it?
 
-A canonical identifier is only a usable handle if searching for it returns its references and little else. **Key types satisfy this by construction** — dotted and distinctive, median 27 occurrence(s). **Contract names largely do not**: several are ordinary English words, so the count below is dominated by unrelated prose and identifiers (median 129). This is evidence for a naming rule, not the rule itself — nothing is enforced here.
+A canonical identifier is only a usable handle if searching for it returns its references and little else. **Key types satisfy this by construction** — dotted and distinctive, median 27 occurrence(s). **Contract names largely do not**: several are ordinary English words, so the count below is dominated by unrelated prose and identifiers (median 131). This is evidence for a naming rule, not the rule itself — nothing is enforced here.
 
 `qualified` counts uses of a namespaced form (`contract:<name>`), the convention `_identifier_census.yaml` already uses with `key:`/`py:`. A name with a high raw count and zero qualified uses cannot be located by search today.
 
 | contract | bare occurrences | qualified uses |
 |---|---|---|
 | `mass_battle` | 2495 | 0 |
-| `audit` | 2249 | 0 |
-| `threadwork` | 2238 | 0 |
-| `social_contest` | 2173 | 0 |
-| `victory` | 2101 | 0 |
+| `audit` | 2273 | 0 |
+| `threadwork` | 2239 | 0 |
+| `social_contest` | 2182 | 0 |
+| `victory` | 2102 | 0 |
 | `npc_behavior` | 649 | 0 |
 | `settlement_layer` | 346 | 0 |
 | `faction_state` | 342 | 0 |

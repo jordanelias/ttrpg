@@ -11,9 +11,10 @@ Status: [PROVISIONAL — Phase 5/9 integration 2026-05-17. Three modes implement
          tracking deferred to PP-515 personal/pledge module, canonical Phase 5+).
          Coronation Renewal lifts Excommunication state on success per §6.4
          (Q-11 resolution).]
-[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: Great Work's int(crown.L) Mandate-as-pool
+[PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: Great Work's int(crown.L) Mandate-as-pool
  convention is the pre-LPS-1 SUPERSEDED scalar; the ratified per-settlement Mandate aggregate is
- UNIMPLEMENTED. Do NOT port as canon-conformant until ED-FA-0004 (Stratum B).]
+ UNIMPLEMENTED. The self-imposed port block is DELETED (Jordan, 2026-08-15 — ED-IN-0193); the
+gap is unchanged and ED-FA-0004 is still open.]
 
 Dependencies:
   - sim/autoload/dice_engine — d10 pool resolution

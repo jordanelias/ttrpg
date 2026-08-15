@@ -2908,7 +2908,7 @@ identifiers:
     identifier: propose_censure
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:276 propose_censure`'
     built_in:
     - py:systems/factions/sim/parliamentary_action.py
     disposition: BUILT
@@ -3147,7 +3147,7 @@ identifiers:
     identifier: run_parliamentary_vote
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` — Censure vote, Territory-Transfer vote, and the season''s two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:40-44 run_parliamentary_vote`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` — Censure vote, Territory-Transfer vote, and the season''s two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:44-48 run_parliamentary_vote`'
     built_in:
     - py:systems/social_contest/sim/parliamentary_vote.py
     disposition: BUILT
@@ -3287,7 +3287,7 @@ identifiers:
     identifier: select_initiative_mode
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` → `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` → priority chain Excommunication → Council → Absolution; any other name → immediate NOOP — `systems/factions/sim/faction_action.py:277-318 _faction_specific_unique`.'
+    purpose: 'S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` → `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` → priority chain Excommunication → Council → Absolution; any other name → immediate NOOP — `systems/factions/sim/faction_action.py:294-335 _faction_specific_unique`.'
     built_in:
     - py:systems/factions/sim/crown_initiative.py
     disposition: BUILT
