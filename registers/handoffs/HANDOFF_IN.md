@@ -143,9 +143,12 @@ largest piece of the ruling still outstanding and it touches every subsystem.
   double-shifts and produced an anchor past end-of-file.
 - Anchors carrying **no symbol** get only a range check, so a wrong-but-in-range line passes silently.
   One (`overview` → `faction_action.py:546`) had to be fixed by reading it.
-- Regenerate in this order after touching engine code — **or after adding a file anywhere under
-  `audit/`**, which is what actually caught me: `build_engine_atlas` counts the whole tree, not just
-  the engine, so a new audit instrument goes stale the moment it lands. Order: `build_engine_atlas.py`, `export_sim_params.py
+- **`build_engine_atlas` goes stale on PROSE, not just code — and I got this wrong twice.** Its
+  nomenclature audit counts BARE-WORD occurrences of every module-contract name (`audit`, `world`,
+  `victory`, …) across `systems/ engine/ references/ registers/ tools/`, and `.md` is scanned. So
+  adding a sentence to a handoff that uses the word "audit" changes the artifact. I first blamed a
+  file count and wrote that into this very list; the commit correcting THAT then broke it again by
+  containing the word. Regenerate the atlas after ANY prose change in those five trees. Order: `build_engine_atlas.py`, `export_sim_params.py
   --build`, `link_values_pointers.py --build`, `observability/build_glossary.py`,
   `build_identifier_census.py`, `build_test_register.py`. Missing any leaves a freshness test red.
 - Touching anything under `tests/sim/` trips the co-file rule → `tests/coverage_matrix.md` must be
