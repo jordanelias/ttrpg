@@ -89,9 +89,43 @@ paraphrase.
 | Q6 | *"restore"* — CLAUDE.md §5–§7; plus *"q6 active"* for the lane | lane **ACTIVATED** (ED-GO-0001); ⚠ **the §5–§7 restore is NOT done** — 327 dangling citations across 176 files |
 | Q7 | *"it will be 10 attributes, and delete the code that blocks itself from being ported as that is stale"* | **RULED, not executed.** The roster ships **nine** today; **the tenth is UNNAMED** — naming it is the workshop, the count is not |
 
-**Only two items still need Jordan**, and neither was on this agenda: **ED-IN-0187's two HELD
-degree sites** — `combat_engine_v1/core.py` (migrating collides with the ratified plate invariant)
-and `sigma_leverage.degree` (whether the ruling overrides a deliberate pool-aware bar).
+### Resolver architecture — RULED 2026-08-15
+
+Jordan, in session. These close the two HELD degree sites and set the extension pattern.
+
+- **ONE resolver for all d10 probability.** Rolls are adjusted by **standard deviation (sigma)** —
+  that is our word; "volatility" is used nowhere. `engine/autoload/sigma_leverage.py` is the sigma
+  surface, `engine/autoload/dice_engine.py` owns the ladder.
+- **TN 7 — "a roll of 7 or higher is a success"**, equivalently "above 6". Both readings were in
+  circulation; they are the same rule and the ambiguity is now closed at the owner. **No constant
+  changed.** TN 6/7/8 (Controlled/Standard/Desperate) remains canon as a *situational* scale.
+- **All weapons are TN 7** — "now that we have a physics engine". Weapon speed is carried by the
+  physics (reach, mass, percussion authority, recovery), never by the TN. ⚠ The engine **already**
+  did this (`core.py:46`, `TN = SL.TN_STANDARD`); the per-weapon TN 5–8 existed only in prose and is
+  corrected.
+- **Degree bands are universal.** Failure below Ob · Partial from Ob to Ob+1 · Success at Ob+1 or
+  more · Overwhelming at Ob+3 or more. This is exactly what `dice_engine.degree_from_net` already
+  implements, so **the ladder itself needs no change** — only the systems that bypass it.
+- **No system keeps its own bands.** Where a system genuinely needs a modification, the **wrapper
+  injects the engine** so the change is clean and visible — never a private re-banding.
+- **`DECISIVE_OB` is dead** — *"stupid as hell … Ob should be determined by your opponent more than
+  anything"*. Combat's fixed Ob of 3 goes; the obstacle becomes the opponent's **score/2 plus that
+  instance's modifiers**.
+
+**THE SEQUENCE MATTERS AND IS COUNTER-INTUITIVE.** Combat is *not* migrated bands-first. Derive Ob
+from the defender **first**, then the owner's ladder applies directly. `core.py`'s own docstring
+predicted this: calibrating against the fixed-Ob form first "would be work thrown away". Both HELD
+entries in `tests/valoria/test_degree_ladder_single_owner.py` now record the ruling and this order;
+delete a HELD entry when its migration lands, not before.
+
+**Not yet executed:** the combat Ob derivation + band migration (PC lane, a real redesign with a
+measured balance delta — Jordan: migrate, measure, **report before tuning**), and the
+`sigma_leverage.degree` migration (flips `degree(3,3)` from 2 to 1, pinned by 151 groundup tests and
+`_kernel_tests.py`). Also still open: **fractional dice** (`roll_net_continuous` does
+`int(round(pool))`).
+
+_(The two HELD degree sites that previously sat here as needing Jordan are **RULED** — see the
+section above. Nothing on the ED-IN-0185 agenda is awaiting a decision.)_
 
 ### Open and agent-executable — no ruling needed
 

@@ -399,7 +399,7 @@ Bonus only applies when target has no allies in the zone (unsupported). Supporte
 
 Rescuer rolls N dice (TN 7) vs the target attacker's Offence roll (contested):
 
-**Weapon speed note:** Attacker TN affects contest difficulty. Light/fast weapons (TN 5–6) roll more net successes on average — harder to intercept. Heavy weapons (TN 7–8) are slower and easier to redirect. Rescuers should commit more dice against fast attackers.
+**Weapon speed note — SUPERSEDED 2026-08-15 (Jordan: "all weapons are TN7 now that we have a physics engine").** Weapon speed no longer moves the TN. It is carried by the physics engine (reach, mass, percussion authority, recovery), which is where it belongs; every weapon rolls the standard **TN 7**. The engine has always agreed — `combat_engine_v1/core.py:46` reads `TN = SL.TN_STANDARD` and has no per-weapon TN at all, so this paragraph described a mechanic that existed only in prose. _(TN 6/7/8 as Controlled/Standard/Desperate remains canon and is unaffected — that is a situational mode, never a property of the weapon.)_
 
 **Rescue payoffs (PP-292, PP-295, PP-406, PP-407):**
 

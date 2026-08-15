@@ -64949,6 +64949,18 @@
   "tn_standard": {
    "ambiguous": false,
    "census": {
+    "combat": {
+     "built_in": [
+      "py:engine/autoload/sigma_leverage.py",
+      "py:systems/combat/combat_engine_v1/workbench/presets.py",
+      "py:systems/threadwork/sim/operations.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_reference_v1.md"
+     ],
+     "purpose": "The engine has always agreed \u2014 `combat_engine_v1/core.py:46` reads `TN = SL.TN_STANDARD` and has no per-weapon TN at all, so this paragraph described a mechanic that existed only in prose."
+    },
     "threadwork": {
      "built_in": [
       "py:engine/autoload/sigma_leverage.py",

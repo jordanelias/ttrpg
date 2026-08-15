@@ -10,7 +10,7 @@ docs:
 - systems/combat/scene_combat_design_v1.md
 counts:
   UNRESOLVED: 39
-  BUILT: 97
+  BUILT: 98
 identifiers:
   a_history:
     identifier: a_history
@@ -1331,6 +1331,18 @@ identifiers:
     built_in:
     - py:systems/combat/combat_engine_v1/core.py
     - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  tn_standard:
+    identifier: TN_STANDARD
+    docs:
+    - systems/combat/combat_reference_v1.md
+    purpose: The engine has always agreed — `combat_engine_v1/core.py:46` reads `TN = SL.TN_STANDARD` and has no per-weapon TN at all, so this paragraph described a mechanic that existed only in prose.
+    built_in:
+    - py:engine/autoload/sigma_leverage.py
+    - py:systems/combat/combat_engine_v1/workbench/presets.py
+    - py:systems/threadwork/sim/operations.py
     disposition: BUILT
     doc_status: null
     in_table: false
