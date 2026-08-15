@@ -541,3 +541,80 @@ ruling the roster. It is building the acquisition tier for one non-combat system
 is the ready candidate, since it already has Standing, Room, Dossier and Stasis and lacks only the
 learned-technique tier — and seeing which attributes it still needs afterwards. That is the same
 sequence combat ran, and it ended with an attribute being removed rather than chosen.
+
+---
+
+## §11 THE NO-ROUNDING RULING — COMPLETE SITE CENSUS
+
+**Jordan, 2026-08-15: "I do not want any fractional dice pools or obstacles to be rounded or treated
+only as integers."** This is not a new ruling. It is **ED-IN-0187 (2026-08-14)**, and the tree
+already documents, in two places, that it was recorded and never executed:
+
+- `engine/autoload/dice_engine.py:118-123` — *"`ob` is RULED to become fractional (Jordan,
+  2026-08-14: an obstacle rolled against a character or faction is 'their corresponding score/2 plus
+  whatever specific modifiers exist for them in that instance') but ⚠ **THAT DERIVATION IS
+  IMPLEMENTED NOWHERE** — every call site in the tree still passes a hand-set Ob."*
+- `systems/factions/sim/faction_action.py:106-111` — *"⚠ **THE POOL IS STILL NOT FRACTIONAL**…
+  Jordan ruled 'fractional dice'; only the fractional RESULT is implemented. ED-IN-0187 recorded this
+  correction and it was written into the ledger without being applied here — which is worse than an
+  unimplemented feature, because the call site asserted the opposite."*
+
+Census by AST (every `int`/`round`/`floor`/`ceil`/`//` applied to a pool, obstacle, or aptitude term
+across the eight live resolver trees). **22 sites.** Classified by what each one blocks:
+
+### A — The die-roll boundary (blocks ALL fractional pools; fix these three and the rest become visible)
+| Site | Code | Effect |
+|---|---|---|
+| `sigma_leverage.py:265` | `roll_net`: `max(1, int(round(pool)))` | quantizes every discrete-path pool |
+| `sigma_leverage.py:276` | `roll_net_continuous`: same | quantizes the **continuous** path too — the one that must not |
+| `core.py:52` | `resolution_pool`: `int(round(history)) + BASE_POOL` | quantizes combat's only pool input |
+
+`dice_engine.continuous_engine_sample` underneath already documents *"Pool may be fractional"* and
+samples `Normal(μ·pool, σ·√pool)` with no rounding. **The primitive is already correct; only the
+wrappers are wrong.**
+
+### B — Obstacles rounded (direct violations, live)
+| Site | Code | Note |
+|---|---|---|
+| `tribunal.py:119` | `max(1.0, round(base_ob * TRIBUNAL_RESISTANCE_HALVED_FACTOR))` | `base_ob = float(accused.L)` — an Ob that is **already a float** is rounded to an integer |
+| `tribunal.py:122` | `max(1.0, round(base_ob))` | same |
+
+⚠ Both then log `f"Ob {base_ob:.1f} -> {effective_ob:.1f}"` — it **prints one decimal place while
+having already rounded the fraction away.** That is the worst failure mode: it reads as fractional
+and is not.
+
+### C — Integer-only pool arithmetic (each independently truncates)
+`massbattle.py:879, 880` `math.floor(a_pool_raw/b_pool_raw)` · `:945, 946` `a_pool // 3`, `b_pool // 3`
+(ranged) · `:1238` `(h_per_size + 1) // 2` · `:1521` `math.floor(LETHALITY_SCALE · …)` ·
+`units.py:360` `total // TROOPS_PER_SIZE` · `:379` `math.floor(effective_size)` ·
+`collective.py:117` `anchor_solo_pool // 2` · `faction_action.py:538`
+`math.floor(W / MUSTER_WEALTH_TO_POOL_DIV)` · `mass_seizure.py:243` `int(ci) // POOL_CI_DIVISOR`.
+
+### D — Threadwork's pool is integer three times over
+`operations.py:145-157` — signature is `def _actor_pool(actor) -> int`, and inside:
+`tps = ts // 10` (integer division), `history_contrib = min(3, history + 3)` (the inert cap, §7),
+and an integer return annotation. Three separate integer-isms in one seven-line function.
+
+### E — Display-only, no change needed
+`wrapper.py:214, 306` — `round(net, 2)` / `round(net_sigma, 3)` inside `_emit(...)` trace calls.
+Telemetry formatting, not resolution. **Leave them.**
+
+### The two halves, and their asymmetric cost
+
+**Half A — fractional pools.** Three lines (A above), then the C/D sites so nothing re-truncates
+downstream. This is a **behaviour change**: it moves every seeded trajectory and re-records goldens.
+Measured cost of *not* doing it (§1.2): the reward quantum stays at a whole die, ~+16pp, versus
++0.1D at ~+1.6pp.
+
+**Half B — fractional obstacles, derived.** Strictly larger, and nothing has started. The ruling
+says an obstacle is *the opposing actor's corresponding score ÷ 2, plus that instance's modifiers.*
+Today **every** resolver passes a hand-set Ob: combat a fixed `DECISIVE_OB = 3`; contest a flat
+`venue.base_ob`; threadwork/knots scale tables; mass battle alone uses the opponent's roll, and
+there the degree is inert. So Half B is not a rounding fix — it is **the introduction of opposed
+obstacles to a tree that has never had them**, and it changes what every difficulty in the game
+*means*. It should be sequenced and gated on its own, not folded into Half A.
+
+**Why this matters for §4's progression proposal:** with Half A done, `+0.1D` becomes a real
+quantum. With Half B done, the obstacle becomes a *function of the opponent* — which is the single
+biggest lever on mechanical distinctiveness in the whole tree, because it makes "who you are facing"
+enter every roll, in every subsystem, instead of only in combat's `net_sigma`.

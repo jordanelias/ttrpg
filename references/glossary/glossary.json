@@ -16636,15 +16636,17 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`resistance` is metadata-only, never plumbed into resolution** (independently confirmed, not just self-reported): `Contest.resistance` is computed by `_derive_resistance` but the resolver has no `resistance`-named field read anywhere in `resolver.py`, and `Venue.base_ob` is never set from it. In the one live production seam (`engine/cross_scale/scene_dis"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "base_ob"
@@ -21811,7 +21813,7 @@
     "godot/implementation_sequence.md": 3,
     "godot/scene_tree_architecture.md": 5,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 13,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 16,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -28996,15 +28998,17 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine/autoload/sigma_leverage.py` | The kernel's roll/degree/leverage primitives (`roll_net`, `net_boost`, `degree`, `effective_ob`, `level`) are imported, not reimplemented | `systems/social_contest/sim/contest/resolver.py:23-24 roll_net`, `systems/social_contest/sim/contest/primitives.py:9 Stasis`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "effective_ob"
@@ -29089,9 +29093,10 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `unit.hp` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1274-1275`; read `:1834 effective_size`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 2,
     "systems/mass_battle/mass_battle_integration_v30.md": 1
    },
@@ -29099,7 +29104,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "effective_size"
   },
@@ -35802,16 +35808,18 @@
      "purpose": "[2.6 Multi-turn structure (v16+)] Feature | Intro version | v22 status | Port priority :: `h_per_size = min(Discipline, Command) + DR` | v16 | PRESENT | P0"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/mass_battle/mass_battle_integration_v30.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "h_per_size"
   },
@@ -38987,7 +38995,7 @@
     "canon/02_foundations_amendment_leap_mechanism.md": 8,
     "engine/mc_v18_walkthrough.md": 1,
     "engine/sim_reference_README.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/repo-reorganization-v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -40490,9 +40498,10 @@
   "mass_seizure": {
    "ambiguous": false,
    "definition": "3 canon sources potentially drifted. Pass 2f reconciliation pending. Per supersession_register 250715f: declaration probabilistic P(declare) = ((CI-60)/40)^3.3. GD-1: produces territorial conversion, not game-end victory trigger.",
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 2,
     "systems/factions/factions_flow_skeleton_v1.md": 6,
@@ -42264,7 +42273,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/combat/combat_engine_v1/combat_balancing_methodology.md": 1,
     "systems/combat/combat_engine_v1/combat_throughlines_v1.md": 2,
@@ -51284,7 +51293,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
@@ -52527,7 +52536,7 @@
    "file_count": 3,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 6
    },
@@ -65893,12 +65902,13 @@
   "units": {
    "ambiguous": false,
    "definition": "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis.",
-   "file_count": 44,
+   "file_count": 45,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
     "proposals/pc_formation_system.md": 3,
