@@ -108,7 +108,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 2,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
@@ -599,7 +599,7 @@
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
     "godot/godot_architecture_specification.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
@@ -980,7 +980,7 @@
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 6,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
     "systems/_architecture/canonical_registry.md": 7,
     "systems/_architecture/cogload_moderate_target.md": 3,
     "systems/_architecture/complete_systems_reference.md": 4,
@@ -1460,7 +1460,7 @@
    "file_count": 29,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 12,
     "proposals/pc_formation_system.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1797,7 +1797,7 @@
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 6,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1997,7 +1997,7 @@
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
@@ -2744,7 +2744,7 @@
     "godot/godot_conversion_strategy_v1.md": 2,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -3493,7 +3493,7 @@
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 21,
     "systems/_architecture/scale_transitions_v30.md": 1,
@@ -3592,7 +3592,7 @@
     "canon/02_canon_constraints.md": 1,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -3863,7 +3863,7 @@
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "godot/godot_architecture_specification.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 13,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 15,
     "proposals/weapon_physics_and_concentration_model.md": 7,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -4686,7 +4686,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 4,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "proposals/weapon_physics_and_concentration_model.md": 2,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/cogload_moderate_target.md": 1,
@@ -4827,7 +4827,7 @@
     "canon/02_canon_constraints.md": 2,
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 19,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 6,
     "systems/_architecture/complete_systems_reference.md": 2,
@@ -5561,7 +5561,7 @@
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -7618,9 +7618,10 @@
   "Precedent": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 49,
+   "file_count": 50,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 25,
     "proposals/social_contest_consolidation_integration_v1.md": 9,
@@ -8575,7 +8576,7 @@
   "Social": {
    "ambiguous": true,
    "category": "aggregate",
-   "file_count": 65,
+   "file_count": 66,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
@@ -8583,6 +8584,7 @@
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -8905,7 +8907,7 @@
     "engine/sigma_leverage_engine_armature.md": 3,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 16,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 4,
@@ -9170,7 +9172,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -9306,7 +9308,7 @@
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 17,
     "systems/characters/character_histories_v30_infill.md": 1,
@@ -9469,7 +9471,7 @@
   "TS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 88,
+   "file_count": 89,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 2,
@@ -9481,6 +9483,7 @@
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 3,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 4,
     "systems/_architecture/complete_systems_reference.md": 11,
@@ -9576,6 +9579,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -9734,7 +9738,7 @@
    ],
    "ambiguous": false,
    "definition": "Perception depth and operation eligibility. Determines accessible operation scale.",
-   "file_count": 59,
+   "file_count": 60,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -9746,6 +9750,7 @@
     "canon/03_canonical_timeline.md": 1,
     "godot/data_serialization_spec.md": 1,
     "godot/godot_architecture_specification.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 2,
@@ -9813,6 +9818,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -21805,7 +21811,7 @@
     "godot/implementation_sequence.md": 3,
     "godot/scene_tree_architecture.md": 5,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 13,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -31094,15 +31100,17 @@
      "purpose": "This is implemented as a pure derived accessor (`FaceScale.face_max` / `FaceScale.face_current`, and `_Side.face_max()` / `_Side.face_current()`) added ON TOP OF the existing Standing primitive \u2014 no new invented constants (it reuses the existing Cha\u00d73 formula and the existing 0\u201310 Standing range) an\u2026"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/social_contest/social_contest_v30.md": 5
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "face_max"
@@ -35374,7 +35382,7 @@
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "engine/mc_v18_walkthrough.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 2,
@@ -59134,16 +59142,18 @@
      "purpose": "[2.5 Stamina model (v15)] Feature | Intro version | v22 status | Port priority :: `STAMINA_MAX = 100` | v15 | PRESENT | P0"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "stamina_max"
   },
@@ -60417,7 +60427,7 @@
    "file_count": 11,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,

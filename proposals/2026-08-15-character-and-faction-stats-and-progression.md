@@ -389,3 +389,155 @@ Each is independent of every design call above.
 ---
 
 *End proposal. PROPOSED — design-only, held for Jordan. Nothing ratified.*
+
+---
+
+## §10 THE CODE-DERIVED ATTRIBUTE CENSUS (added on Jordan's direction: read the code, no grep)
+
+### 10.1 What every resolver actually asks of an actor
+
+Read from the resolvers themselves, not matched by token.
+
+**Combat.** No attribute reaches resolution directly. Every one enters through a *faculty function*:
+
+| Faculty (computed per beat) | Governing inputs | Modulated by | Site |
+|---|---|---|---|
+| Impact | Strength + weapon heft | — | `core.py:537` |
+| Handling deficit | Strength vs `str_demand`(weapon) | fatigue | `combat_systems.py:179` |
+| Tempo | Agility `+K·(agi−4)`, weapon | fatigue, poise | `:113` |
+| Balance | ½Agi + ½Str + `skill('balance')` | poise, fatigue | `:188` |
+| Reading | (2·Cog + Att)/3 + K·(History−3) | — | `:171` |
+| Reflex | (w₁·Agi + w₂·Att)/Σw | — | `:172` |
+| Durability | WI = End+4+0.4·Spirit; Health = WI(MW+1)+0.25·Str·End | wounds | `combatant.py:20-47` |
+| Action economy | `stamina_max` = 3·End + 2·Spirit | `act_cost`(heft, commit) | `:27` |
+| Steadiness | `conc_max` = 3·Foc+2·Spi; `disrupt_resist`; `poise_regen` | — | `:1435`, `:1451` |
+| **Pool** | **`max(5, History + 6)` — no attribute** | — | `core.py:50` |
+| Aggression | `disp_lean` = (disp−4)/3 | — | `:186` |
+
+`balance_eff` carries a ruling in its own comment that generalises: **"BALANCE is NOT a stat (Jordan):
+it is GOVERNED BY AGILITY, modulated by CURRENT poise."** That is the architecture — *attributes
+govern, faculties resolve, state modulates* — and it is already law in the one finished engine.
+
+**Contest kernel.** Refuses attributes outright. Its primitives are Standing/Face (0–10, ethos-built),
+Room (pathos), Reserve (stamina, MAX 12), Stasis (6-rung ground), Readiness = Standing.frac ×
+Room.frac, Resonance/leak, Dossier/EvidenceItem, and `faculty`. Charisma exists only as a derived
+*view* (`FaceScale.face_max = Cha × 3`), explicitly *"not kernel state."*
+
+**Threadwork.** Spirit (pool ×2), TS (gate + TPS), Cognition (collective helper only), History (inert).
+**Knots.** Bonds (gate ≥5; count `floor(B/2)+1`), Spirit, History(Relationships), TS, Disposition.
+**Mass battle.** Command = `⌈(2·Cha + Cog)/3⌉`; otherwise unit stats.
+
+### 10.2 `faculty` is the Primary-Attribute slot, made per-domain
+
+`primitives.py:208-211` — `class Pool: BASE = 3; size(faculty) = max(5, faculty*2 + BASE)`.
+
+That is the canonical Universal Pool `(Primary × 2) + History + 3, min 5` with History folded to 0.
+The kernel did not invent a primitive: it took the canonical formula, declined to commit to *which*
+attribute fills the Primary slot, and abstracted the slot. Every pool in the game is then one shape:
+
+| System | aptitude slot | practice slot | base |
+|---|---|---|---|
+| Universal (canon) | Primary × 2 | + History | + 3 |
+| Contest kernel | **`faculty` × 2** | — | + 3 |
+| Combat | **removed (ED-901)** | + History | + 6 |
+| Threadwork | Spirit × 2 | + History *(inert)* + TPS | — |
+| Fieldwork | Primary × 2 | + History | + 3 |
+
+**Proposal: make `faculty` the single owner of the aptitude slot, DERIVED and PER-DOMAIN.**
+`faculty(domain) = f(governing aptitudes, practice in that domain)`.
+
+Why this is the right answer to *"what attributes are appropriate, primary or derived":*
+
+1. **It is per-domain, so it cannot become a "who-bought-X" contest.** That degeneracy is not
+   hypothetical — `traditions.py`'s header records it: *"The scalar 7-channel weight vector was
+   REMOVED 2026-06-29 (Jordan) — proven a degenerate 'who-bought-balance' contest."* A single global
+   aptitude scalar has exactly that shape. A vector of per-domain faculties does not, because
+   investment in one is not investment in another.
+2. **It preserves ED-901 rather than fighting it.** Combat's ruled position — pool is practice, not
+   aptitude — is just `faculty(arms)` weighted heavily toward practice. No supersession needed.
+3. **It is what "distinctive" actually means.** *Good as a spy vs a debater vs a combatant* is a
+   statement about a **faculty vector across domains**, not about a Cognition score. Ten global
+   attributes cannot express it; a faculty per domain expresses nothing else.
+4. **It collapses five bespoke pool formulas to one owner** (`CLAUDE.md` §8, every rule lives once).
+
+### 10.3 Classification of the current ten
+
+| Attribute | Verdict from code | Evidence |
+|---|---|---|
+| **Strength** | **PRIMARY** — irreducible; Impact, handling, bind, grab, Health buffer | +9.2pp |
+| **Agility** | **PRIMARY** — irreducible; tempo, footwork | +6.3pp |
+| **Endurance** | **PRIMARY** — irreducible; WI, Health, stamina | +10.2pp |
+| **Cognition** | **PRIMARY** — reading (2/3), collective thread, Command | **+20.4pp** |
+| **Spirit** | **PRIMARY** — thread pool/threshold; low-weight in WI/Health/stamina/conc | +6.0pp |
+| **Attunement** | **WEAK PRIMARY** — never appears alone; a 1/3 term in reading, a minority term in reflex | +12.0pp |
+| **Focus** | **CONTESTED** — governs only `conc_max`/`disrupt_resist`/`poise_regen`; declared-but-unread in threadwork | **+0.3pp** |
+| **Charisma** | **CONTESTED** — zero occurrences in any `.py`; specified only in Command and a derived Face view | unmeasurable |
+| **Recall** | **CAPACITY, not attribute** — equip slots + learning rate; never rolled; zero engine presence | — |
+| **Bonds** | **CAPACITY, not attribute** — Knot gate and count; never rolled | — |
+
+**Candidates the code computes that are NOT attributes and should stay derived:** Balance (ruled),
+Reflex, Reading, Tempo, Impact, Durability, Steadiness, Command.
+
+**Candidates the code reaches for that no attribute supplies — and where distinctiveness actually
+lives today:** `skill(axis)` on six named axes (bind · parry · dodge · balance · technique · grab),
+`equipped` graded technique investment, `known_traditions` cross-training, `familiarity` (how well
+you read a style you have met), Disposition, and Thread Sensitivity. Six inputs, one of which
+(Disposition) appears on the character sheet. **That is the mechanical-distinctiveness surface, and
+it is almost entirely invisible to the attribute roster.**
+
+### 10.4 The distinctiveness answer, stated plainly
+
+An attribute is a monotone scalar: more is always better, it moves aggregate win-rate (§1.1: 6–20pp),
+and it produces **no texture** — the character does not play differently, they win more often. That is
+the D3 monotone-stat failure, and it is why both finished engines removed attributes from their pools
+independently (ED-901 in combat; `faculty` left unbound in contest).
+
+What produces texture is measured and is already in the tree: **graded technique investment** (~0pp
+aggregate, ~12–13% of fights play out differently) and **kit** (weapon spread up to +47pp with
+deliberately spiky matchup tables under the ratified "no option globally best" principle). Jordan has
+already ruled twice in this direction — the tradition weight-vector removal, and `IMPOSITION_GATE`'s
+retirement in favour of *"efficacy EMERGES from the invested level, not tradition membership."*
+
+**⚠️ Correction (Jordan, same session): for combat specifically, that is already DONE.** Abilities-as-
+primitives, tradition-as-a-bundle-of-abilities, the imposition gate retired, *"efficacy EMERGES from
+the invested level, not tradition membership"* — all shipped. So the paragraph above is not a
+proposal; it is a description of `systems/combat/`. Restating it as a recommendation is the same
+sampling error as §1.3's grep census: **generalising from the one subsystem that has an engine.**
+
+### 10.5 The finding that survives once combat is excluded
+
+Combat is the only system that has an acquisition layer. Ask what each *other* system has in the
+same slot:
+
+| System | Pool aptitude | Acquisition layer (the kit/school/technique tier) | Status |
+|---|---|---|---|
+| **Combat** | removed (ED-901) | weapons · traditions · `equipped` graded abilities · `skill()` on 6 axes · familiarity | **DONE** |
+| Governance | AP × compliance | **Ledger tags** — Precedent · Grudge · Debt · Reputation · Leverage, durable, survive succession | **partly built** |
+| Social contest | `faculty` (abstract) | style (2×2) is a per-contest *choice*; Dossier is evidence. **No learned-technique tier at all.** | **absent** |
+| Threadwork | Spirit ×2 + TPS | operations are typed by scale; no school, no kit, no invested technique | **absent** |
+| Mass battle | Command (2Cha+Cog)/3 | tactic cards — `FACTION_TACTIC_CARD_POOL_MODIFIERS = {}`, an empty stub | **absent** |
+| Fieldwork | Primary ×2 | none (sim is `stub_resolve` throughout) | **absent** |
+
+**Four of six systems have no acquisition layer, and those four are exactly the four that still lean
+on attributes as their primary differentiator.** That is not a coincidence and it reframes the whole
+roster question:
+
+> **An attribute dependency is what a subsystem has instead of an acquisition layer.** Combat had
+> `(Agility×2)+History+3` until it grew weapons, traditions and abilities — then ED-901 removed the
+> attribute. Contest never committed to one, and abstracted the slot to `faculty`. Fieldwork's seven
+> attribute-primaries are a placeholder for the tradecraft/method tier it does not yet have.
+
+So the honest prediction is that **the attribute roster shrinks as the other systems get built**, and
+sizing it now against subsystems that will change is premature for exactly the ones it looks most
+needed for. What will *not* be replaced by an acquisition layer, because no amount of training
+substitutes for it, is the substrate tier: **Strength · Agility · Endurance** (bodily) and
+**Spirit / Thread Sensitivity** (substrate contact). Those are the durable primaries. Cognition,
+Attunement, Focus, Charisma, Recall and Bonds are all doing work that a built subsystem would plausibly
+re-home into method, evidence, standing, reputation, or capacity — and two of them (Charisma, Recall)
+have no engine presence to defend today.
+
+**The actionable consequence:** the highest-value next move for mechanical distinctiveness is **not**
+ruling the roster. It is building the acquisition tier for one non-combat system — the contest kernel
+is the ready candidate, since it already has Standing, Room, Dossier and Stasis and lacks only the
+learned-technique tier — and seeing which attributes it still needs afterwards. That is the same
+sequence combat ran, and it ended with an attribute being removed rather than chosen.
