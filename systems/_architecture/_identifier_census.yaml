@@ -562,7 +562,7 @@ identifiers:
     - systems/_architecture/key_echo_armature_v1.md
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:381-414`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -2000,7 +2000,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:362`, `systems/factions/sim/parliamentary_tr'
+    purpose: '[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:368`, `systems/factions/sim/parliamentary_tr'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -4285,7 +4285,7 @@ identifiers:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only — no live reader beyond counts) | `systems/factions/sim/faction_action.py:381-414`; `systems/factions/sim/parliamentary_transfer.py:162-176`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -4450,7 +4450,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: 'S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` → `resolve_mass_battle` → `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) — `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:443-473`, emit at `:39…'
+    purpose: 'S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` → `resolve_mass_battle` → `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) — `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:449-479`, emit at `:39…'
     built_in:
     - py:systems/mass_battle/sim/massbattle.py
     disposition: BUILT
@@ -6177,7 +6177,7 @@ identifiers:
     identifier: VALORIA_STRICT_KEYS
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:410`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:416`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null

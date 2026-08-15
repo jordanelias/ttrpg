@@ -92,9 +92,11 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # Mil gate lets more conquests start. Recorded explicitly because 'the spine output moved,
 # investigate before regenerating' is what this assertion says, and this IS the investigation.
 GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 25.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
-# GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a
-# key (Church/Hafenmark win 0/8 now, so they are simply absent, not present at 0 — matching how
-# the OLD golden's all-four-present shape happened to reflect all four winning at least once).
+# GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
+# ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
+# pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
+# Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
+# it no longer describes is how the next re-record gets reasoned about wrongly.
 GOLDEN_WINNERS = {'Church': 2, 'Varfell': 4, 'Crown': 2}
 GOLDEN_BATTLES_MEAN = 31.6
 GOLDEN_SCENES_RESOLVED = 862  # 463 -> 862 under the 2026-08-14 ruling; see the REPINNED note above

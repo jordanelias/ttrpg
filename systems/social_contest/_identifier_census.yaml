@@ -677,7 +677,7 @@ identifiers:
     identifier: propose_censure
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:266 propose_censure`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`'
     built_in:
     - py:systems/factions/sim/parliamentary_action.py
     disposition: BUILT
