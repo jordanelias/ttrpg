@@ -724,3 +724,100 @@ distinctiveness currently lives, so neither is evidence about where it should.**
 Where it should live, on this pass's evidence: **δσ**, because it is the only advantage channel
 present at all three built scales, it is continuous where the pool is quantised, and the repo has
 already litigated and won that argument once.
+
+---
+
+## §13 THE ACQUISITION-LAYER DESIGN FAILS — and the reason inverts §12.2
+
+A concrete acquisition layer was designed for the contest kernel (schools + 20 grounded rhetorical
+techniques mapped to lever sites) and attacked by an independent read-only critic. **It fails
+structurally.** Recorded because the failure is the most useful finding of the pass.
+
+### 13.1 The fatal defect: the policy layer cannot see the acquisition layer
+
+`ContestView` (`contract.py:53-66`) is the **only** channel from resolution to decision — `_view`
+builds it (`resolver.py:258-267`) and `Bout.resolve` passes nothing else (`:425`). Its twelve fields
+carry ground, appeals, standings, `can_hard`, `reserve_frac`, turn index, `leading`, audience flags
+and evidence count. **No field for a school, a technique, an invested level, or even the side's own
+chosen Style** (`ArmatureConfig.styles` is a per-`Bout` constant, never surfaced).
+
+Therefore **all 11 policies play identically with or without a school.** A school can only change
+the outcome of moves the policy would have made anyway. That is a stat block, not an acquisition
+layer — **the exact "who-bought-balance" degeneracy removed from combat on 2026-06-29
+(`traditions.py:8-11`), re-entering through the front door under a new name.**
+
+Combat's layer works because its levers sit inside *continuous per-event* resolution
+(`bind_dominance_p`, `read_contest`, `grab_outcome`), which is why
+`test_levers_add_texture_without_shifting_balance` can measure texture at all. The contest has **no
+per-event trace** comparable to `run_traced_fight`. And transmission is quantised: `_advance` takes
+`magnitude = deg ∈ {0,1,2,3}`, and at `faculty = 4` the Success band spans `2 ≤ net < 6.66` — twenty
+graded abilities feeding a three-value quantiser across a band that wide change nothing, most of the
+time.
+
+### 13.2 ⚠ ED-IN-0187 INVERTS §12.2's CHANNEL ASSIGNMENT
+
+§12.2 concluded distinctiveness belongs in δσ because the pool is quantised. **That conclusion is
+conditional on the very rounding the ruling abolishes.** The δσ-over-pool argument rests entirely on
+`roll_net`'s `max(1, int(round(pool)))` (`sigma_leverage.py:265`) — site A-1 of §11's census.
+
+> **Execute Half A and the pool becomes the better lever: it is finer-grained (+0.1D ≈ +1.6pp vs
+> +0.05σ ≈ +1.0–2.0pp), it scales with √pool rather than uniformly in z, and it needs no soft-cap.
+> The channel assignment flips.**
+
+§12.2 was stated with more confidence than the evidence supports. Corrected: **the right channel is
+a function of whether the ruling is executed, and the ruling should be decided first.**
+
+### 13.3 Lever census — most of the contest is dead
+
+| lever | status | evidence |
+|---|---|---|
+| `rebut` magnitude | **DEAD on all 8 canonical proceedings** | `Venue.allow_rebuttal=False` (`resolver.py:163`); `proceeding_venue` never sets it. Where live, `min(REBUT_CAP, deg)` is inert at `deg==3` |
+| CLASH / REINFORCE / CROSS / TIE | **DEAD — display only** | `derive_interaction` (`dictionaries.py:310-323`) has no resolver consumer; `agon_harness.py:458-462` says so |
+| Doubt Marker / Obscuring-attacks-Face | **DEAD — a label** | `rhetoric.py:390-392`: *"a LABEL LOOKUP naming the ratified design intent"*; `_kernel_tests.py:1364` |
+| `Pressure` / `_bias` | **UNREACHABLE** via `build_contest` | `proceeding_venue` never sets `pressure`; default `toward=None` ⇒ `_bias` returns 1.0 |
+| `regroup` / `REGAIN` | **near-dead** | `min(self.max, …)` (`primitives.py:56`); past `REGAIN ≥ max`, exactly inert |
+| pool magnitude < 0.5D | **silently inert** | judge finding 5 (`armature.py:54-59`) |
+| `split_standing` | unreachable via canonical path | `resolver.py:162`, never set |
+
+**Live and healthy, in order:** the δσ leverage term (`resolver.py:287`), the `gain` product
+(`:315`), and `Standing.build`/`Room.build` (`primitives.py:35, 235`). **Put nothing anywhere else
+until the dead levers are wired or struck.**
+
+### 13.4 Two corrections to this document's own analysis
+
+- **A bug the design would have shipped.** `resolver.py:343` refunds `Reserve.COST["evidence"]` from
+  the **class constant**. A per-side cost-reduction ability spends `3·k` and refunds `3` — a reserve
+  pump.
+- **The `regroup` hazard was pattern-matched, not read.** It was flagged as a `1.30**level` overflow
+  risk by analogy to combat's `value**level` crash (`ability_primitives.py:88-97`). `regroup` is
+  `min(self.max, cur + REGAIN)` — clamped. The diagnosis was the **opposite** of the truth. Third
+  instance this session of reasoning from a proxy instead of the code.
+
+### 13.5 Measured, not asserted
+
+- **Readiness headroom is +13.6% total.** `Readiness.of = 0.40 + 0.60·min(1, 0.40·sf + 0.40·rf)`;
+  both fracs at 1.0 ⇒ 0.88. Raising `W_STANDING + W_ROOM` past 1.25 saturates the `min` and buys
+  nothing.
+- **The contest's "byte-identical" pin is weaker than claimed.** `_kernel_tests.py:1612-1618`
+  compares **one derived float** with `isclose` over 40 seeds — the §0.1 point 2 anti-pattern
+  (*"`pytest.approx` on an exactness claim … is not a weak test, it is an absent one"*). The right
+  shape is combat's: an event-signature tuple compared with `==`
+  (`test_combat_tradition_levers.py:130-147`).
+- **The contest's fairness controls exist but are blind.** `_kernel_tests.py:127,150` assert mirror
+  symmetry at `|a−b| < 0.07` / `< 0.06`; at N=2500 the per-side binomial noise is ≈±2.0pp, so the
+  gate tolerates a genuine **±3.5pp seat advantage** without failing.
+
+### 13.6 What this means for the recommendation
+
+The §10.5 sequencing — *"build the acquisition tier for one non-combat system, then see which
+attributes survive"* — **still holds, but its prerequisites are now known and they are not small**:
+
+1. **Extend `ContestView`** so a policy can see its own school/kit. Without this, no acquisition
+   layer in this kernel is playable, only purchasable.
+2. **Build the instrument first** — position-swap (rebuilding the venue for role-asymmetric win
+   conditions), Wilson CI, per-cell crc32 seeding, **policy-crossed and reported per-cell** (averaging
+   over policies averages over *lever reachability*, since e.g. `logos_spammer` never emits an ethos
+   move, so a Face ability measures exactly zero under it).
+3. **Wire or strike the dead levers** before authoring content onto them.
+4. **Decide ED-IN-0187 first**, because it determines whether the layer attaches to the pool or to δσ
+   (§13.2).

@@ -31,7 +31,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **b_label** | _no curated definition_ | `combat_flow_skeleton_v1.md` | _local only_ · BUILT |
 | **beat_aside** | _no curated definition_ | `combat_flow_skeleton_v1.md` | _local only_ · UNRESOLVED |
 | **beat_exhaustion** | _no curated definition_ | `combat_flow_skeleton_v1.md` | _local only_ · BUILT |
-| **bind_dominance_p** | _no curated definition_ | `combat_flow_skeleton_v1.md` | _local only_ · BUILT |
+| **bind_dominance_p** | _no curated definition_ | `combat_flow_skeleton_v1.md` | [proposals](GLOSSARY_proposals.md) · BUILT |
 | **bind_sigma** | _no curated definition_ | `phase4_5_plan_v1.md`, `combat_flow_skeleton_v1.md` | [proposals](GLOSSARY_proposals.md) · BUILT |
 | **Board Game** (`BG`) | **Exception — abbreviation permitted standalone.** Strategic layer of the Valoria videogame. | `combat_reference_v1.md` | [_architecture](GLOSSARY__architecture.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) |
 | **by_actor** | _no curated definition_ | `scene_combat_design_v1.md` | [_architecture](GLOSSARY__architecture.md) · UNRESOLVED |
