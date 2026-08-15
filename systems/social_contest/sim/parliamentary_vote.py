@@ -17,10 +17,11 @@ Dependencies:
 Entry points:
   - run_parliamentary_vote(motion: Motion, parties: list[VoteDeclaration], world, rng=None) -> VoteResult
 
-[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: Mandate is stored as the scalar Faction.L
+[PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: Mandate is stored as the scalar Faction.L
  (basis: crown_initiative.py Great Work pool `int(crown.L)`). LPS-1 IS ratified and DOES relocate
  Legitimacy/Mandate per-settlement — so this Faction.L-as-Mandate-pool convention is the pre-LPS-1
- SUPERSEDED scalar and must NOT be ported as canon-conformant until ED-FA-0004 closes (Stratum B).
+ SUPERSEDED scalar. The self-imposed port block is DELETED (Jordan, 2026-08-15 — ED-IN-0193);
+the gap is unchanged and ED-FA-0004 is still open.
  (Upgrades the prior hedged [ASSUMPTION] note, which predated ED-FA-0004's ruling.)]
 [ASSUMPTION: GD-3 'extra-parliamentary' == Faction.parliamentary is False — basis: game_state
  Faction has a `parliamentary: bool`, no `parliamentary_status` string; canon GD-3 names a

@@ -48962,7 +48962,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:276 propose_censure`"
     },
     "social_contest": {
      "built_in": [
@@ -48972,7 +48972,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:276 propose_censure`"
     }
    },
    "file_count": 3,
@@ -53891,7 +53891,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` \u2014 Censure vote, Territory-Transfer vote, and the season's two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:40-44 run_parliamentary_vote`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` \u2014 Censure vote, Territory-Transfer vote, and the season's two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:44-48 run_parliamentary_vote`"
     },
     "social_contest": {
      "built_in": [
@@ -56612,7 +56612,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` \u2192 `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` \u2192 priority chain Excommunication \u2192 Council \u2192 Absolution; any other name \u2192 immediate NOOP \u2014 `systems/factions/sim/faction_action.py:277-318 _faction_specific_unique`."
+     "purpose": "S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` \u2192 `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` \u2192 priority chain Excommunication \u2192 Council \u2192 Absolution; any other name \u2192 immediate NOOP \u2014 `systems/factions/sim/faction_action.py:294-335 _faction_specific_unique`."
     }
    },
    "file_count": 1,

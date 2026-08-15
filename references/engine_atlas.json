@@ -933,27 +933,27 @@
       "name": "attempt_council"
      },
      {
-      "at": "systems/factions/sim/crown_initiative.py:131",
+      "at": "systems/factions/sim/crown_initiative.py:132",
       "name": "attempt_great_work"
      },
      {
-      "at": "systems/factions/sim/crown_initiative.py:188",
+      "at": "systems/factions/sim/crown_initiative.py:189",
       "name": "coronation_renewal_ob"
      },
      {
-      "at": "systems/factions/sim/crown_initiative.py:211",
+      "at": "systems/factions/sim/crown_initiative.py:212",
       "name": "attempt_coronation_renewal"
      },
      {
-      "at": "systems/factions/sim/crown_initiative.py:278",
+      "at": "systems/factions/sim/crown_initiative.py:279",
       "name": "InitiativeResult"
      },
      {
-      "at": "systems/factions/sim/crown_initiative.py:45",
+      "at": "systems/factions/sim/crown_initiative.py:46",
       "name": "royal_progress_ob"
      },
      {
-      "at": "systems/factions/sim/crown_initiative.py:61",
+      "at": "systems/factions/sim/crown_initiative.py:62",
       "name": "attempt_royal_progress"
      },
      {
@@ -977,7 +977,7 @@
       "name": "SeizureResult"
      },
      {
-      "at": "systems/factions/sim/parliamentary_action.py:63",
+      "at": "systems/factions/sim/parliamentary_action.py:64",
       "name": "select_censure_target"
      },
      {
@@ -1334,7 +1334,7 @@
       "name": "reset_infrastructure"
      },
      {
-      "at": "systems/settlements/sim/registry.py:210",
+      "at": "systems/settlements/sim/registry.py:211",
       "name": "reset_registry"
      },
      {
@@ -1794,7 +1794,7 @@
       "name": "ContestResult"
      },
      {
-      "at": "systems/social_contest/sim/parliamentary_vote.py:96",
+      "at": "systems/social_contest/sim/parliamentary_vote.py:97",
       "name": "VoteResult"
      }
     ]

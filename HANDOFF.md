@@ -127,6 +127,38 @@ measured balance delta — Jordan: migrate, measure, **report before tuning**), 
 _(The two HELD degree sites that previously sat here as needing Jordan are **RULED** — see the
 section above. Nothing on the ED-IN-0185 agenda is awaiting a decision.)_
 
+### NEEDS JORDAN — faction stats (asked for 2026-08-15, evidence gathered, not ruled)
+
+Jordan asked to rule faction stats and the session closed first. Everything needed to rule is below;
+nothing was changed.
+
+**The registry and the code disagree about what a faction *is*.**
+
+| | Roster |
+|---|---|
+| `references/descriptor_registry.yaml` declares **5** | Influence (1–7) · Wealth (0–7) · Military (0–7) · Intel (0–7) · Stability (0–7) |
+| `engine/autoload/game_state.py` implements **6** | `L` · `Sta` · `W` · `I` · `Mil` · `intel` |
+
+The conflict is `L`. The registry's own note says **"Mandate is a size-weighted derived aggregate of
+settlement L/PS — NOT a base attribute."** The code stores Mandate *as* the base scalar `Faction.L`.
+That is ED-FA-0004, still open.
+
+**Three things exist only in comments, never as code:** `Treasury`, the Mandate formula
+`7T/(T+6)`, and the per-settlement L/PS → Mandate pipeline. `Faction` has `W` (Wealth) and no
+Treasury; whether those are the same thing is undecided.
+
+**The registry's cited source is gone** — `engine/params/factions/stats_1_7_scale.md` was evacuated
+2026-08-05 (resolves at fork `c451bcb`).
+
+**Why this now matters more than it did:** obstacles are ruled to be **score/2 plus modifiers**, so
+the faction stat roster *is* the faction obstacle surface. A 0–7 stat yields obstacles 0–3.5, and
+**Influence is 1–7 while every other stat is 0–7** — that inconsistency decides whether a faction can
+present a zero obstacle.
+
+**The calls:** (1) which roster — the declared 5, the coded 6, or another; (2) is Mandate a base stat
+or derived from settlement L/PS; (3) does Treasury exist separately from Wealth; (4) is the scale
+0–7 or 1–7, uniformly.
+
 ### Open and agent-executable — no ruling needed
 
 - **The remediation plan's remaining tracks** (`audit/2026-08-14-five-lens-repo-assessment/01_plan.md`).
