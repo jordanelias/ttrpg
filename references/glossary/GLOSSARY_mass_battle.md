@@ -187,7 +187,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **resolve_cross_side_contention** | _no curated definition_ | `mass_battle_flow_skeleton_v1.md`, `mass_battle_integration_v30.md` | [proposals](GLOSSARY_proposals.md) · BUILT |
 | **resolve_engagements** | _no curated definition_ | `mass_battle_flow_skeleton_v1.md`, `mass_battle_integration_v30.md` | [proposals](GLOSSARY_proposals.md) · BUILT |
 | **resolve_engagements_cascading** | _no curated definition_ | `mass_battle_flow_skeleton_v1.md` | _local only_ · BUILT |
-| **resolve_internal_collisions** | _no curated definition_ | `mass_battle_integration_v30.md` | _local only_ · BUILT |
+| **resolve_internal_collisions** | _no curated definition_ | `mass_battle_integration_v30.md` | [proposals](GLOSSARY_proposals.md) · BUILT |
 | **resolve_mass_battle** | _no curated definition_ | `mass_battle_flow_skeleton_v1.md`, `mass_battle_integration_v30.md` | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) · BUILT |
 | **resolve_toi_and_commit** | _no curated definition_ | `mass_battle_flow_skeleton_v1.md` | [proposals](GLOSSARY_proposals.md) · UNRESOLVED |
 | **rout_resolution** | _no curated definition_ | `mass_battle_flow_skeleton_v1.md`, `mass_battle_integration_v30.md` | _local only_ · BUILT |

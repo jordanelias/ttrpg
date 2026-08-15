@@ -2219,13 +2219,14 @@
   "Consequence": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 42,
+   "file_count": 43,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 1,
     "godot/godot_architecture_specification.md": 11,
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 7,
@@ -4827,7 +4828,7 @@
     "canon/02_canon_constraints.md": 2,
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 19,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 20,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 6,
     "systems/_architecture/complete_systems_reference.md": 2,
@@ -12956,9 +12957,10 @@
      "purpose": "S2.4** `assign_targets(unit_a, unit_b)` then per-atom `advance_cells` / `halt_before_enemy`."
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 1,
     "proposals/pc_formation_system.md": 3,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 3
@@ -16639,7 +16641,7 @@
    "file_count": 2,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 6,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
@@ -21813,7 +21815,7 @@
     "godot/implementation_sequence.md": 3,
     "godot/scene_tree_architecture.md": 5,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 16,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 21,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -33207,9 +33209,10 @@
      "purpose": "S2.3** pre-movement contact detection (`find_contacts`) halts atoms already touching the enemy before they advance."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/multiunit_envelopment_plan.md": 2,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 7
    },
@@ -40387,12 +40390,13 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 35,
+   "file_count": 36,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
     "godot/godot_conversion_strategy_v1.md": 3,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 4,
@@ -40501,7 +40505,7 @@
    "file_count": 7,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 2,
     "systems/factions/factions_flow_skeleton_v1.md": 6,
@@ -41659,10 +41663,11 @@
   "momentum": {
    "ambiguous": false,
    "definition": "PP-255 momentum carry mechanic.",
-   "file_count": 17,
+   "file_count": 18,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/pc_formation_system.md": 3,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 1,
@@ -44540,15 +44545,17 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:79 opposing_engagement_modifier` | \u2014 none found"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "threadwork"
    ],
    "term": "opponent_tps"
@@ -44567,15 +44574,17 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:79 opposing_engagement_modifier` | \u2014 none found"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "threadwork"
    ],
    "term": "opposing_engagement_modifier"
@@ -51609,16 +51618,18 @@
      "purpose": "Problem.** `resolve_internal_collisions` implemented on Subunit at v13 but has 0 call sites."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/mass_battle/mass_battle_integration_v30.md": 4
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "resolve_internal_collisions"
   },
@@ -52536,7 +52547,7 @@
    "file_count": 3,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 6
    },
@@ -65908,7 +65919,7 @@
     "engine/sigma_leverage_engine_armature.md": 2,
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
     "proposals/pc_formation_system.md": 3,

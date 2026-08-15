@@ -618,3 +618,109 @@ obstacles to a tree that has never had them**, and it changes what every difficu
 quantum. With Half B done, the obstacle becomes a *function of the opponent* — which is the single
 biggest lever on mechanical distinctiveness in the whole tree, because it makes "who you are facing"
 enter every roll, in every subsystem, instead of only in combat's `net_sigma`.
+
+---
+
+## §12 RELAY PASS — CORRECTIONS, AND THE CONCLUSION THEY INVERT
+
+Agonist→antagonist relay per `CLAUDE.md` §10 (producers, then structurally-independent read-only
+critics receiving only the producers' OUTPUT). **Three claims in §11 and in this session's reporting
+were REFUTED.** They are corrected here rather than silently dropped.
+
+### 12.1 REFUTED — "the opponent-derived obstacle is implemented nowhere"
+
+§11 asserted this, citing `dice_engine.py:118-123`. **The docstring is wrong and §11 inherited its
+error instead of measuring.** `systems/threadwork/sim/opposing.py:80-85` implements the ruled shape:
+
+```python
+def opposing_engagement_modifier(opponent_tps: int) -> int:
+    return max(OPPOSING_OB_MODIFIER_MIN, opponent_tps // 2)
+```
+
+with `a_ob = base_ob + a_ob_mod` at `:120-140` — the opposing actor's score halved plus that
+instance's modifiers — routed into the owner's ladder at `:95`. Live. `mass_seizure.py:258-268`
+additionally derives an Ob from the contested entity's Prominence Tier.
+
+**Consequence for the ruling: COMPOSE, do not re-derive.** ED-IN-0187's Half B has a working
+primitive to build on. And the meta-finding is the more important one: `dice_engine.py:118-123`,
+`test_degree_ladder_single_owner.py:38-41`, and this document all independently asserted the
+primitive does not exist. **It is at active risk of being reinvented three scales over** — textbook
+shape divergence (`CLAUDE.md` §10 guardrails).
+
+### 12.2 REFUTED — "σ is a combat-and-contest-only channel"
+
+`tests/sim/mass_battle/resolution.py` — the **J2 canon** mass-battle engine — self-describes as the
+*"sigma-leverage head"* and exports `_morale_sigma` (`:107`), `_charge_shock_sigma` (`:161`),
+`_sigma_softcap` (`:194`), `_sigma_net_boost` (`:206-210`). Morale and charge shock are carried as
+δσ, soft-capped, μ-shifted — architecturally the same channel as combat. It takes **no `engine.*`
+import by design**, which is exactly why an importer-graph survey misses it.
+
+Also corrected: contest's σ is not "one 0.50σ setup advantage." `Leverage.net` puts the character's
+own `faculty` into σ as `(faculty − 4)/6` (`primitives.py:227-230`) — a live distinctiveness channel
+in σ, *in addition* to `faculty` entering the pool at `:211`. **`faculty` is double-dipped.**
+
+**This inverts the design conclusion.** σ is the one advantage channel present at every scale that
+has actually been built:
+
+| scale | σ carries | site |
+|---|---|---|
+| personal combat | **all** opposition, against a fixed Ob 3 | `core.py:98-104` |
+| social contest | `faculty` + armature alignment | `resolver.py:287`, `primitives.py:227-230` |
+| canon mass battle | morale + charge shock | `tests/sim/mass_battle/resolution.py:107,161,206-210` |
+
+> **Character distinctiveness expressed as pool dice is quantised and lossy; expressed as δσ it is
+> continuous and survives.**
+
+And the reason is *documented in the code as a judge finding*, not asserted: `resolver.py:279-282`
+records that routing the armature through the pool turned a continuous 0.15 alignment into a
+categorical 0.5-threshold step, because `roll_net` floors with `max(1, int(round(pool)))`; moving it
+to the δσ μ-shift made it a real gradient. **This is ED-IN-0187's own argument, already made and
+already won, inside one subsystem.**
+
+### 12.3 REFUTED — "degree_from_net is single-owner by import"
+
+Call sites are **eight in `systems/`** (§11 said six; it missed `mass_seizure.py:268` and
+`systems/combat/sim/combat.py:171`), nine including `skills/valoria-dice-model/`. More importantly
+the *property* is false: the J2 canon engine takes no `engine.*` dependency and its ladder
+equivalence is held by **measurement, not an import edge** — stated at
+`test_degree_ladder_single_owner.py:24-27`, whose own docstring (`:17`) says *"the tree does NOT
+collapse to a single implementation and this file must not be read as claiming it does."*
+
+### 12.4 Corrections of severity and novelty
+
+- `units.py:299`'s missing `import random` is **unreachable** — `resolve_internal_collisions` is
+  never invoked (`massbattle.py:1205`; named as the canonical dead-primitive example in
+  `tools/dead_primitive_census.py:11`). Reporting it beside the **live** `CELL_PATTERN_FN` crash
+  (`units.py:230`, reached from `massbattle.py:850` for any Arrowhead subunit) was the wrong
+  severity signal.
+- Threadwork's dead `BREADTH_OB`/`DISTANCE_OB` is **already recorded** in three standing instruments
+  (`threadwork/_identifier_census.yaml:228-231`, the 2026-08-10 subsystem atlas, the 2026-07-29 dead
+  primitive census). Presenting it as new inflated the audit's apparent yield.
+- The contest's unimplemented `(Primary × 2) + History` is **already tracked as ED-SC-0004**, a P1
+  blocker awaiting Jordan (`HANDOFF_SC.md:46`), with the identical finding in the 2026-08-06
+  three-lens audit. Not a discovery. Sharpen: `ADJUDICATOR_PRIMARY` *is* read by the adapter
+  (`wrapper.py:159` → `Contest.primary_attribute`) — just never by the resolver.
+
+### 12.5 NEW — the strategic mass-battle path is geometrically degenerate
+
+`_faction_to_unit` (`massbattle.py:1866-1894`) gives **both** sides `starting_position=(8, 12)` and
+`advance_dir=1`. Identical shape + tier + position + direction ⇒ `Subunit.cells()` returns the same
+cell set for both. Therefore: `find_contacts` (`:782-801`) admits distance 0, so the armies are in
+full contact at tick 1 having never manoeuvred; and `advance_cells` (`units.py:181-191`) steers
+toward the enemy centroid, which equals the unit's own, giving `dr = dc = 0` and a `continue` — so
+**nothing ever moves.** Approach, facing, momentum, encirclement and the entire octagon-angle
+apparatus are structurally inert on the wired path. The `[GAP:]` markers at `:1811-1813` and
+`:1869-1872` disclose the stat defaults; they do not disclose the co-location.
+`SIDE_A_START_ROW = 16` exists at `:60` as the canonical symmetric-deployment constant and is unused
+here.
+
+### 12.6 What survives, and what it means for the attribute question
+
+The two most legible "this character is different" hooks in the tree are **Primary Attribute**
+(metadata, never read by a resolver) and **tradition familiarity** (a pure function over a frozen
+3-value table — `traditions.py:47-55`, confirmed: no state, no accumulation). **Neither is a place
+distinctiveness currently lives, so neither is evidence about where it should.**
+
+Where it should live, on this pass's evidence: **δσ**, because it is the only advantage channel
+present at all three built scales, it is continuous where the pool is quantised, and the repo has
+already litigated and won that argument once.
