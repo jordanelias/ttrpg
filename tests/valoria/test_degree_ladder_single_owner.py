@@ -25,15 +25,20 @@ owner. So this module does two different jobs, and it needs both.
     mass-battle engine (`tests/sim/mass_battle/`) keep its deliberate no-`engine.*`-imports
     property: its ladder is spelled out rather than imported, and equivalence is held by
     measurement instead of by an import edge nobody has decided to add.
-  * `test_no_new_hand_rolled_ladder` fails when a NEW band literal appears outside the registry
-    below. Without it the first test only proves today's eight agree, and the ninth arrives next
-    week -- which is the documented history of this exact defect.
+  * `test_no_new_hand_rolled_ladder` fails when a file starts PRODUCING two or more distinct bands
+    (returning or assigning them) outside the registry below. Without it the first test only proves
+    that today's ROSTER agrees, and an unenrolled ladder arrives next week -- which is exactly what
+    happened here: the census missed `sigma_leverage.degree` entirely.
 
 THE FRACTIONAL DOMAIN IS NOT OPTIONAL. `audit/2026-08-12-degree-vocabulary-census` recorded that
 checking integers alone gave a WRONG answer: a continuity correction is invisible at integer nets,
-which is the one domain a continuous resolver never runs on. Obstacles are now score/2 plus
-modifiers and nets come off the continuous engine, so the fractional cells are where the game
-actually lives.
+which is the one domain a continuous resolver never runs on. Nets come off the continuous engine
+already, so the fractional cells are where the game actually lives.
+
+⚠ Do NOT read this file as saying obstacles are score/2 plus modifiers. Jordan RULED that, and it
+is implemented NOWHERE -- every call site still passes a hand-set Ob. An earlier draft of this
+paragraph asserted it as fact, which is the failure mode this module exists to guard against,
+committed in the guard's own docstring.
 """
 import importlib
 import importlib.util
@@ -135,7 +140,7 @@ LADDERS = {
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
 }
 
-# ── the one declared HOLD ───────────────────────────────────────────────────────────────────────
+# ── the TWO declared HOLDs ──────────────────────────────────────────────────────────────────────
 # A hold is not an exemption. It is a divergence with a measured reason and an owner, and it is
 # asserted to STILL DIVERGE below — so when it is resolved, this file fails and forces the update.
 # Silence would let a resolved hold sit here forever looking like a live exception.
@@ -178,7 +183,12 @@ def test_the_held_site_still_diverges_and_the_hold_is_still_needed():
 
 INT_DOMAIN = [(n, o) for n in range(-4, 26) for o in range(1, 21)]
 FRAC_DOMAIN = [(i / 4, o) for i in range(-8, 81) for o in range(1, 11)]
-DOMAIN = INT_DOMAIN + FRAC_DOMAIN
+# ⚠ FRAC_DOMAIN's obstacle is an INTEGER at every cell — it sweeps fractional NETS only. That was a
+# real hole: the ruling's other half is "fractional obstacles" (Ob = score/2 + modifiers, so
+# half-integers are the expected case), and the one axis the ruling ADDS was the one the guard did
+# not cover. HALF_OB_DOMAIN closes it.
+HALF_OB_DOMAIN = [(i / 4, o / 2) for i in range(-8, 81) for o in range(1, 21)]
+DOMAIN = INT_DOMAIN + FRAC_DOMAIN + HALF_OB_DOMAIN
 
 
 def test_every_ladder_is_behaviourally_the_owner():
@@ -206,7 +216,9 @@ def test_every_ladder_is_behaviourally_the_owner():
     assert len(LADDERS) >= 5, f'only {len(LADDERS)} ladder(s) enrolled — the roster shrank'
     assert len(DOMAIN) >= 1_000, 'the shared domain collapsed — the guard is not measuring'
     assert any(isinstance(n, float) and n % 1 for n, _ in DOMAIN), \
-        'the domain lost its fractional cells — the one place a continuity defect is visible'
+        'the domain lost its fractional NETS — the one place a continuity defect is visible'
+    assert any(isinstance(o, float) and o % 1 for _, o in DOMAIN), \
+        'the domain lost its fractional OBSTACLES — the axis the 2026-08-14 ruling actually adds'
     assert not mismatches, (
         f'{len(mismatches)} cell(s) diverge from the single owner '
         f'(engine.autoload.dice_engine.degree_from_net). First 10:\n  '
@@ -245,8 +257,12 @@ DECLARED_ADAPTERS = {
     # — spells the ladder out instead of importing it, equivalence held by the test above —
     'tests/sim/mass_battle/resolution.py': (
         'The canon engine (J2), which deliberately takes no engine.* dependency.'),
+
+    # — imports the owner and RELABELS its output; trips the detector only on the fold's labels —
     'systems/threadwork/sim/opposing.py': (
-        'The 3-band shorthand, pinned as a fold of the owner by its own test above.'),
+        "The 3-band shorthand. It DOES import and call dice_engine.degree_from_net (opposing.py:88) "
+        "— an earlier draft filed it under 'spells the ladder out', which was false — and its own "
+        "test above pins it as exactly the owner's four bands folded to three."),
 
     # — PRODUCE bands from something that is not a dice margin. Not ladders; nothing to route. —
     'engine/cross_scale/echo_transport.py': (
@@ -269,12 +285,17 @@ DECLARED_ADAPTERS = {
     # — this file, which necessarily contains every band literal in order to detect them —
     'tests/valoria/test_degree_ladder_single_owner.py': 'The detector itself.',
 }
-# NOTHING ELSE IS EXEMPT, and the emptiness of this registry is deliberate. A first draft listed
-# eight more files -- the cross_scale band->effect tables, massbattle's DAMAGE_BY_DEGREE, the contest
-# display mapping -- on the theory that they "consume a degree" and so deserve a pass. NONE of them
-# matches the detector: every one reads a degree that is already decided, and a pre-emptive exemption
-# for a file that has no ladder is worse than no entry at all, because the day that file DOES grow
-# one the guard stays silent. An exemption is earned by a detector hit, never granted in advance.
+# EVERY ENTRY ABOVE IS EARNED BY A DETECTOR HIT. That is the rule, and it is the whole reason this
+# registry can be trusted: an exemption granted in advance for a file with no ladder is worse than
+# no entry at all, because the day that file DOES grow one the guard stays silent.
+#
+# ⚠ The comment that stood here said the registry was deliberately EMPTY except for one entry, and
+# it survived unedited while the registry grew to twelve -- so it sat directly above a list it
+# argued against. Both statements were true once: under the earlier SYNTACTIC detector these files
+# genuinely did not match, and a draft that pre-listed them was correctly pruned. Rewriting the
+# detector to catch band PRODUCTION made them match for real, and each was then verified by hand
+# before being added. The stale comment is the point: a claim about a data structure must be
+# re-read when the data structure changes, and a targeted string edit never forces that re-read.
 
 # WHAT COUNTS AS DEFINING A LADDER. The first version of this detector required an `if` whose
 # condition contained the literal word `net`/`margin`/`successes`, immediately returning a quoted
@@ -286,8 +307,13 @@ DECLARED_ADAPTERS = {
 # §0.1-point-5 failure this file was written to prevent, committed inside the fix for it.
 #
 # So the test is structural instead of syntactic, and deliberately loose: a file DEFINES a ladder if
-# it names two or more distinct bands AND compares something against an obstacle. Reading a decided
-# degree (a lookup table, a `degree in (...)` gate) trips neither half. False positives are handled
+# it PRODUCES two or more distinct bands — returns or assigns them. Reading a decided degree (a
+# lookup table, a `degree in (...)` gate) does not produce one, which is what separates the eleven
+# real ladders from the ~17 files that legitimately name bands.
+# ⚠ An earlier draft of this comment added "AND compares something against an obstacle". There is NO
+# such term in the code, and never was — the same docstring-stronger-than-guard defect this module
+# was written to fix. Stated here rather than implemented, because adding the obstacle term would
+# make the detector MISS `sigma_leverage.degree`, which returns integer bands 0-3 with no literal. False positives are handled
 # by the registry, which is the right direction for a guard to fail in.
 _BAND_RE = r"""['"](?:overwhelming|success|partial|failure)['"]|Degree\.(?:OVERWHELMING|SUCCESS|PARTIAL|FAILURE)"""
 # A ladder PRODUCES bands; everything else merely mentions them. `return 'Success'` and

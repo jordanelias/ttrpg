@@ -77,7 +77,7 @@ identifiers:
     identifier: adjust_accord
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:502`, `systems/factions/sim/faction_action.py:513` (both `_t'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -196,7 +196,7 @@ identifiers:
     identifier: attempt_royal_progress
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment — a grep for the literal misses it: `systems/factions/sim/faction_action.py:502`, `systems/factions/sim/faction_action.py:513` (both `_t'
     built_in:
     - py:systems/factions/sim/crown_initiative.py
     disposition: BUILT
@@ -216,7 +216,7 @@ identifiers:
     identifier: battle_count
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:509` | `engine/mc_v18.py:296`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:515` | `engine/mc_v18.py:296`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py
@@ -414,7 +414,7 @@ identifiers:
     identifier: faction_take_action
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:191`, `systems/factions/sim/faction_action.py:509`'
+    purpose: '[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:197`, `systems/factions/sim/faction_action.py:515`'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT

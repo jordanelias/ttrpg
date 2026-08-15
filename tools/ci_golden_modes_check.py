@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Field-golden byte-exact gate — the shipped configuration's regression oracle (plan-v2 A1b).
 
-Runs `tests/sim/mass_battle/bat.py --check` in the two FIELD_MOVEMENT=1 modes
-(`unit_field` PER_CELL=0, `cell_field` PER_CELL=1) with the FULL digest-relevant
-toggle vector pinned. Complements tests/valoria/test_mass_battle_byte_exact.py,
+Runs `tests/sim/mass_battle/bat.py --check` in THREE modes with the FULL digest-relevant toggle
+vector pinned: the two FIELD_MOVEMENT=1 modes (`unit_field` PER_CELL=0, `cell_field` PER_CELL=1)
+and the §4a cell-morale mode (`cell_legacy_mor1`, FIELD_MOVEMENT=0 PC_CELL_MORALE=1). The docstring
+said "two" while MODES held three from the moment the fifth golden landed. Complements tests/valoria/test_mass_battle_byte_exact.py,
 which covers only the two LEGACY-LATTICE modes — before this gate existed, both field
 goldens sat red for 5 days undetected (PRs #235/#236 re-recorded the lattice arm only;
 bisected and re-recorded in plan-v2 A1a).

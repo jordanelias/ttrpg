@@ -24,7 +24,7 @@
 | `resolve_stay_lift` | `systems/social_contest/sim/parliamentary_stay.py:101 resolve_stay_lift` | — (zero callers anywhere in the tree — see §7) |
 | `run_parliamentary_scene` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` |
 | `run_scene_phase` | `engine/cross_scale/scene_dispatch.py:416 run_scene_phase` | `engine/mc_v18.py:141 run_scene_phase` |
-| `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:266 propose_censure` |
+| `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure` |
 | `propose_transfer` | `systems/factions/sim/parliamentary_transfer.py:182 propose_transfer` | `engine/cross_scale/parliamentary_bridge.py:173 propose_transfer` (`_run_transfer_motion`) |
 | `agon_harness.main` | `systems/social_contest/sim/contest/agon_harness.py:502 main` | — (standalone interactive CLI harness; zero callers found anywhere in the tree) |
 | `mechanics_selftest` | `systems/social_contest/sim/contest/wrapper.py:416 mechanics_selftest` | — no production caller; only `systems/social_contest/sim/contest/_kernel_tests.py:745 mechanics_selftest`, itself run via `engine/tests/test_contest_kernel.py` |
@@ -110,7 +110,7 @@
   S8.5 `[branch]` Independently (not gated on S8.2's outcome) attempt `_run_transfer_motion` → `parliamentary_transfer.propose_transfer` — fires both on the normal path after the vote resolves (S8.3/S8.4) and on the `_derive_vote`-returned-`None` early-return path (fewer than two eligible factions still runs a Transfer motion). `engine/cross_scale/parliamentary_bridge.py:165-177 _run_transfer_motion`, `engine/cross_scale/parliamentary_bridge.py:194 run_parliamentary_scene`, `engine/cross_scale/parliamentary_bridge.py:217 run_parliamentary_scene`
 
 **S9. `[branch]` The per-season Censure seam (`faction_action` → `parliamentary_action.propose_censure`) — unconditional, not gated on `world.echo_scheduler`.**
-  S9.1 Runs inside `faction_take_action`'s per-faction loop, called every season for every parliamentary faction holding territory. `systems/factions/sim/faction_action.py:266 propose_censure`, `engine/mc_v18.py:124-130 _faction_actions_callback`
+  S9.1 Runs inside `faction_take_action`'s per-faction loop, called every season for every parliamentary faction holding territory. `systems/factions/sim/faction_action.py:272 propose_censure`, `engine/mc_v18.py:124-130 _faction_actions_callback`
   S9.2 `propose_censure` builds a `Motion`/`VoteDeclaration` pair and calls `run_parliamentary_vote` directly (same function as S8.3), applying `Stability`/`Mandate` deltas on a passed censure. `systems/factions/sim/parliamentary_action.py:96-136 propose_censure`
 
 ## 4. OUT

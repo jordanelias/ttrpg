@@ -356,13 +356,15 @@ dice_engine:
     canonical: Overwhelming
     abbreviations: []
     category: mechanic
-    formula_ttrpg: Net successes ≥ 2× Ob AND ≥ 3 minimum (PP-232)
-    formula_bg: Net successes ≥ Ob + 1 (provisional)
+    formula_ttrpg: margin (net − Ob) ≥ 3 (Jordan ruling 2026-08-14, ED-IN-0187 — supersedes the ≥ 2× Ob
+      AND ≥ 3 form, PP-232)
+    formula_bg: margin (net − Ob) ≥ 3 (unified with TTRPG by the same ruling)
   partial:
     canonical: Partial
     abbreviations: []
     category: mechanic
-    formula: Net successes > 0 but < Ob
+    formula: margin (net − Ob) in [0, 1) — the obstacle MET but not EXCEEDED (Jordan ruling 2026-08-14,
+      ED-IN-0187 — supersedes the "> 0 but < Ob" form, which is now Failure)
 world_narrative:
   gap:
     canonical: Gap

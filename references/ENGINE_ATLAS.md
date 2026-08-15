@@ -473,9 +473,9 @@ A canonical identifier is only a usable handle if searching for it returns its r
 | contract | bare occurrences | qualified uses |
 |---|---|---|
 | `mass_battle` | 2495 | 0 |
-| `audit` | 2270 | 0 |
+| `audit` | 2273 | 0 |
 | `threadwork` | 2238 | 0 |
-| `social_contest` | 2182 | 0 |
+| `social_contest` | 2181 | 0 |
 | `victory` | 2102 | 0 |
 | `npc_behavior` | 649 | 0 |
 | `settlement_layer` | 346 | 0 |

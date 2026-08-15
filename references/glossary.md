@@ -166,8 +166,8 @@ For dice mechanics — Target Number (TN) and Obstacle (Ob) — see Part Six.
 | Obstacle | Ob | **Exception — abbreviation permitted standalone.** The number of net successes required for a Success result. |
 | Expected Value | EV | Probability-weighted average outcome per die or pool. Used in simulation analysis. |
 | Degree of Success | — | Outcome tier: Overwhelming / Success / Partial / Failure. |
-| Overwhelming | — | Net successes ≥ 2× Ob AND ≥ 3 minimum (TTRPG, PP-232); ≥ Ob + 1 (BG, provisional). |
-| Partial | — | Net successes > 0 but < Ob. |
+| Overwhelming | — | margin (net − Ob) ≥ 3, at every scale (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes “≥ 2× Ob AND ≥ 3 (PP-232)” and the separate BG form. |
+| Partial | — | The obstacle MET but not EXCEEDED — margin (net − Ob) in [0, 1) (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes “> 0 but < Ob”, which now reads Failure. |
 
 ---
 

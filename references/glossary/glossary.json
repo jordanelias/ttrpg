@@ -7013,7 +7013,7 @@
   },
   "Overwhelming": {
    "ambiguous": true,
-   "definition": "Net successes \u2265 2\u00d7 Ob AND \u2265 3 minimum (TTRPG, PP-232); \u2265 Ob + 1 (BG, provisional).",
+   "definition": "margin (net \u2212 Ob) \u2265 3, at every scale (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c\u2265 2\u00d7 Ob AND \u2265 3 (PP-232)\u201d and the separate BG form.",
    "file_count": 70,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
@@ -7172,7 +7172,7 @@
   },
   "Partial": {
    "ambiguous": true,
-   "definition": "Net successes > 0 but < Ob.",
+   "definition": "The obstacle MET but not EXCEEDED \u2014 margin (net \u2212 Ob) in [0, 1) (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c> 0 but < Ob\u201d, which now reads Failure.",
    "file_count": 66,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
@@ -12944,7 +12944,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:496 adjust_accord`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.accord` | RW | `engine/autoload/game_state.py` | `systems/factions/sim/faction_action.py:502 adjust_accord`"
     },
     "overview": {
      "built_in": [
@@ -12954,7 +12954,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:502`, `systems/factions/sim/faction_action.py:513` (both `_t"
     }
    },
    "file_count": 2,
@@ -15393,7 +15393,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:459 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
     }
    },
    "file_count": 1,
@@ -15455,7 +15455,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.5.4** `[branch][write]` On attacker win: transfer territory ownership, apply a loser Legitimacy penalty; then fork Terms (`deg == 'Success'`) vs Storm on Accord penalty and an `entry_terms_l_seed` proxy write \u2014 `systems/factions/sim/faction_action.py:461-497 attacker_wins`."
+     "purpose": "S2.5.4** `[branch][write]` On attacker win: transfer territory ownership, apply a loser Legitimacy penalty; then fork Terms (`deg == 'Success'`) vs Storm on Accord penalty and an `entry_terms_l_seed` proxy write \u2014 `systems/factions/sim/faction_action.py:467-503 attacker_wins`."
     },
     "mass_battle": {
      "built_in": [
@@ -15465,7 +15465,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:459 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
     }
    },
    "file_count": 4,
@@ -15768,7 +15768,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:496`, `systems/factions/sim/faction_action.py:507` (both `_t"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.territories[*].accord` | R (drift probe) | `engine/autoload/game_state.py` (write-owner is SE/FA-lane. The dominant in-loop path is `Territory.adjust_accord(...)`, NOT a bare `.accord =` assignment \u2014 a grep for the literal misses it: `systems/factions/sim/faction_action.py:502`, `systems/factions/sim/faction_action.py:513` (both `_t"
     }
    },
    "file_count": 1,
@@ -16907,7 +16907,7 @@
       "systems/_architecture/key_substrate_v30.md",
       "systems/_architecture/key_type_registry_v30.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:381-414`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
     },
     "articulation": {
      "built_in": [
@@ -16939,7 +16939,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key))"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:414` (sched.emit(key))"
     }
    },
    "file_count": 9,
@@ -16978,7 +16978,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:509 battle_count`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.battle_count` increment | world-state write | no reader found in this trace | `systems/factions/sim/faction_action.py:515 battle_count`"
     },
     "mass_battle": {
      "built_in": [
@@ -16989,7 +16989,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder \u2014 see \u00a76) | `systems/factions/sim/faction_action.py:509`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder \u2014 see \u00a76) | `systems/factions/sim/faction_action.py:515`"
     },
     "overview": {
      "built_in": [
@@ -17000,7 +17000,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:509` | `engine/mc_v18.py:296`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.battle_count` | R | write-owner `systems/factions/sim/faction_action.py:515` | `engine/mc_v18.py:296`"
     }
    },
    "file_count": 4,
@@ -23320,7 +23320,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector \u2014 `systems/factions/sim/faction_action.py:213-226 conquest_mult`."
+     "purpose": "S2.2** `[gate]` Turn signals into per-bucket multipliers, re-weight the four base weights, renormalize to a probability vector \u2014 `systems/factions/sim/faction_action.py:219-232 conquest_mult`."
     }
    },
    "file_count": 1,
@@ -25332,7 +25332,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.5** `[branch]` `roll < cum_conquest` \u2192 `_try_conquest` \u2014 `systems/factions/sim/faction_action.py:244-247 _try_conquest`."
+     "purpose": "S2.5** `[branch]` `roll < cum_conquest` \u2192 `_try_conquest` \u2014 `systems/factions/sim/faction_action.py:250-253 _try_conquest`."
     },
     "mass_battle": {
      "built_in": [
@@ -25371,7 +25371,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`."
+     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:256-259 _try_muster`, `systems/factions/sim/faction_action.py:520-548 _try_muster`."
     }
    },
    "file_count": 1,
@@ -25398,7 +25398,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.4** `[branch]` `roll < cum_unique` \u2192 `_try_faction_unique` \u2014 `systems/factions/sim/faction_action.py:237-241 _try_faction_unique`."
+     "purpose": "S2.4** `[branch]` `roll < cum_unique` \u2192 `_try_faction_unique` \u2014 `systems/factions/sim/faction_action.py:243-247 _try_faction_unique`."
     }
    },
    "file_count": 1,
@@ -26300,7 +26300,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:446 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:446`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:452 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:452`"
     }
    },
    "file_count": 1,
@@ -26352,7 +26352,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:453 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:459 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:1846-1851`"
     }
    },
    "file_count": 1,
@@ -28687,7 +28687,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:362`, `systems/factions/sim/parliamentary_tr"
+     "purpose": "[5. State touched] Field | R/W/RW | Owning module | Anchor :: `world.echo_scheduler` | RW | `engine.mc_v18` writes (attach); read throughout `engine/cross_scale/` as the ECHO_TRANSPORT gate | W: `engine/mc_v18.py:243`; R: `engine/cross_scale/scene_dispatch.py:390`, `engine/cross_scale/parliamentary_bridge.py:190`, `systems/factions/sim/faction_action.py:368`, `systems/factions/sim/parliamentary_tr"
     },
     "articulation": {
      "built_in": [
@@ -28757,7 +28757,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:408` (sched.emit(key))"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:414` (sched.emit(key))"
     },
     "overview": {
      "built_in": [
@@ -30124,7 +30124,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none \u2014 see \u00a77 | `systems/factions/sim/faction_action.py:503 entry_terms_l_seed`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Territory.entry_terms_l_seed` | W (dynamic, not a dataclass field) | none \u2014 see \u00a77 | `systems/factions/sim/faction_action.py:509 entry_terms_l_seed`"
     }
    },
    "file_count": 1,
@@ -31331,7 +31331,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:451-458 resolve_mass_battle`"
     },
     "mass_battle": {
      "built_in": [
@@ -31341,7 +31341,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) \u2192 `:433` (call)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:451 resolve_mass_battle` (import) \u2192 `:433` (call)"
     }
    },
    "file_count": 4,
@@ -31446,7 +31446,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:451-458 resolve_mass_battle`"
     },
     "mass_battle": {
      "built_in": [
@@ -31456,7 +31456,7 @@
      "docs": [
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) \u2192 `:433` (call)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:451 resolve_mass_battle` (import) \u2192 `:433` (call)"
     }
    },
    "file_count": 4,
@@ -32465,7 +32465,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:191 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)"
     },
     "mass_battle": {
      "built_in": [
@@ -32485,7 +32485,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:191`, `systems/factions/sim/faction_action.py:509`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `systems.factions.sim.faction_action` | `faction_take_action(faction, world, rng)`, writes `world.battle_count` | `engine/mc_v18.py:130`; `systems/factions/sim/faction_action.py:197`, `systems/factions/sim/faction_action.py:515`"
     },
     "settlements": {
      "built_in": [
@@ -42266,7 +42266,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:250-253 _try_muster`, `systems/factions/sim/faction_action.py:514-542 _try_muster`."
+     "purpose": "S2.6** `[branch][write]` `roll < cum_muster` \u2192 `_try_muster`: pay Wealth up front, roll `pool = Mil + floor(W / MUSTER_WEALTH_TO_POOL_DIV)`, apply Mil gain on success \u2014 `systems/factions/sim/faction_action.py:256-259 _try_muster`, `systems/factions/sim/faction_action.py:520-548 _try_muster`."
     }
    },
    "file_count": 0,
@@ -48962,7 +48962,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:266 propose_censure`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`"
     },
     "social_contest": {
      "built_in": [
@@ -48972,7 +48972,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:266 propose_censure`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`"
     }
    },
    "file_count": 3,
@@ -49486,7 +49486,7 @@
       "systems/_architecture/key_substrate_v30.md",
       "systems/_architecture/key_type_registry_v30.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:375-408`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` / `da.public_governance` Keys | key (log-only, no `apply=`) | `KeyLog` (telemetry only \u2014 no live reader beyond counts) | `systems/factions/sim/faction_action.py:381-414`; `systems/factions/sim/parliamentary_transfer.py:162-176`"
     },
     "factions": {
      "built_in": [
@@ -51934,7 +51934,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` \u2192 `resolve_mass_battle` \u2192 `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) \u2014 `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:443-473`, emit at `:39\u2026"
+     "purpose": "S3.1 `[loop]` per parliamentary faction with territory: `faction_take_action`; may reach `_try_conquest` \u2192 `resolve_mass_battle` \u2192 `[emit]` `_emit_battle_concluded` (`sched.emit(key)`, no `apply=`, log-only) \u2014 `engine/mc_v18.py:124-136`; `systems/factions/sim/faction_action.py:449-479`, emit at `:39\u2026"
     },
     "factions": {
      "built_in": [
@@ -51944,7 +51944,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:445-452 resolve_mass_battle`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `mass_battle` | `resolve_mass_battle(faction_a, faction_b, terrain, world)` for Conquest resolution | `systems/factions/sim/faction_action.py:451-458 resolve_mass_battle`"
     },
     "mass_battle": {
      "built_in": [
@@ -51955,7 +51955,7 @@
       "systems/mass_battle/mass_battle_flow_skeleton_v1.md",
       "systems/mass_battle/mass_battle_integration_v30.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:445 resolve_mass_battle` (import) \u2192 `:433` (call)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:1791 resolve_mass_battle` | `systems/factions/sim/faction_action.py:451 resolve_mass_battle` (import) \u2192 `:433` (call)"
     }
    },
    "file_count": 8,
@@ -66856,7 +66856,7 @@
      "docs": [
       "systems/_architecture/_architecture_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:410`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `VALORIA_STRICT_KEYS` env var | flag | `os.environ`, default off (swallow validation errors) | `systems/factions/sim/faction_action.py:416`"
     }
    },
    "file_count": 0,
