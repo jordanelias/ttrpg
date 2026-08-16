@@ -27,7 +27,7 @@
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2273,
+    "occurrences": 2274,
     "qualified": 0
    },
    "campaign_architecture": {
@@ -67,7 +67,7 @@
     "qualified": 0
    },
    "mass_battle": {
-    "occurrences": 2495,
+    "occurrences": 2518,
     "qualified": 0
    },
    "miraculous_event": {
@@ -115,7 +115,7 @@
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 2182,
+    "occurrences": 2206,
     "qualified": 0
    },
    "territorial_piety": {
@@ -123,11 +123,11 @@
     "qualified": 0
    },
    "threadwork": {
-    "occurrences": 2239,
+    "occurrences": 2273,
     "qualified": 0
    },
    "victory": {
-    "occurrences": 2102,
+    "occurrences": 2112,
     "qualified": 0
    }
   },

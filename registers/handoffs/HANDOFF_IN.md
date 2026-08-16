@@ -3323,3 +3323,53 @@ this lane keeps filing, at the smallest possible scale.*
 promote-or-retire call**, and **alias-plan Phase A1's five semantics**. **G2's destination is no
 longer on this list** — ruled and executed. The plan's standing recommendation is unchanged: **run
 T4 before ruling #1/#1b/#2/#8**; it prices exactly those questions and has never been run.
+
+---
+
+## ANCHOR — Progression scaffolding (2026-08-15/16, session `claude/valoria-progression-systems-5rdj94`, PR #315)
+
+**Status: INFORMATION ONLY — no `.py` touched, nothing ratified.** Deliverable is one PROPOSED
+design document; the only other changed files are regenerated glossary/atlas artifacts (CI staleness
+gates fire whenever a file is added under `proposals/`).
+
+**READ THIS FIRST NEXT SESSION:** `proposals/2026-08-15-character-and-faction-stats-and-progression.md`
+**§15** — the full next-session plan, written for resumption. Its §15.0 gives the read order and
+names the sections of that same document that are **superseded** (§7, §10.4, §12.2 — do not act on
+them).
+
+**Jordan's framing for the next session:** build **SCAFFOLDING** for progression; **do not choose a
+system**. §15.3 stages it S1–S7, each system-agnostic, each shipping inert or provably neutral, each
+with a falsifier.
+
+**The four load-bearing findings, all measured by running the engine (not cited):**
+1. **ED-IN-0187 is unexecuted and its cost was overstated.** `max(1, int(round(pool)))` —
+   §Pool Floor authorises `max(1, …)` and **nothing else**; the integer cast is uncited and rode in
+   under that citation. Measured: 1,163 live `roll_net` calls, all integral ⇒ **the cast is a no-op
+   today**. Fix is 3 sites (§14.4); guarded stochastic rounding is mean-exact and stream-neutral.
+2. **The opponent-derived Ob EXISTS** — `threadwork/sim/opposing.py:80-85`, the ruled shape, live.
+   `dice_engine.py:118-123`, `test_degree_ladder_single_owner.py:38-41` and an earlier draft of the
+   proposal all say it does not. **COMPOSE on it; it is one reinvention away from shape divergence.**
+3. **A whole attribute point is 6–20pp against a ±4pp control** (re-measured at HEAD, n=600;
+   `cog` +20.4, `history` +14.9 — the July audit's *ranking* survives, its *values* do not; `focus`
+   +0.3pp and unread in threadwork). No integer-attribute progression exists that is not a balance
+   event. Precedent (DCSS/EVE/RimWorld/Battle Brothers/Darklands/WFRP/Blood Bowl/Dwarf Fortress)
+   converges on **attribute = price/rate, never power**.
+4. **An acquisition layer is not buildable in the contest kernel today** — `ContestView`
+   (`contract.py:53-66`) carries no school/technique/level, so all 11 policies play identically with
+   or without one. Structural blocker, not a balance problem.
+
+**Defects filed (design-independent, severity-ordered in §15.6):** live crash `units.py:230`
+(`CELL_PATTERN_FN` unbound, reached for any Arrowhead subunit); strategic mass battle geometrically
+degenerate (`massbattle.py:1866-1894` — both sides co-located, nothing ever moves); threadwork
+History inert (`operations.py:156`); `massbattle` duplicate `roll_pool` non-equivalent off TN 7;
+`tribunal.py:119,122` rounds an already-float Ob; `sim/conviction.py` 9-vs-13 set with a no-op
+`'Loyalty'` caller; Standing has four live ranges, one executable.
+
+**Method note, carried deliberately (§15.2):** three separate errors this session came from
+reasoning off a proxy instead of the code — grep counts (which *inverted* the true attribute
+ranking), an AST importer graph (missed the J2 σ head, which takes no import by design), and a
+hazard transplanted from combat without reading the target. Jordan's *"read code, not prose"* and
+*"no pattern matching, no grep"* were diagnoses of a live failure. Every substantive error was caught
+by an independent read-only critic, none by the producer — budget for the relay.
+
+**Nothing here is ratified. §15.5 lists what is Jordan's, split into blocking vs non-blocking.**

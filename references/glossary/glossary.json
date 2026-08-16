@@ -1,7 +1,7 @@
 {
  "ambiguity_floor": 60,
  "counts": {
-  "ambiguous": 30,
+  "ambiguous": 32,
   "located": 1805,
   "refused": 0,
   "terms": 2083
@@ -103,11 +103,13 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Physical speed and coordination. Combat pool base.",
-   "file_count": 15,
+   "file_count": 17,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 12,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 2,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
@@ -136,6 +138,7 @@
     "fieldwork",
     "godot",
     "npcs",
+    "proposals",
     "social_contest",
     "ui",
     "world"
@@ -592,12 +595,14 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Sensitivity to people, environments, and Thread-adjacent phenomena.",
-   "file_count": 30,
+   "file_count": 32,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
+    "proposals/2026-08-16-system-scores-census.md": 3,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
@@ -643,6 +648,7 @@
     "godot",
     "mass_battle",
     "npcs",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -799,13 +805,14 @@
   "Belief": {
    "ambiguous": false,
    "definition": "Player-authored character conviction. Mechanical driver for Momentum and Character Points. Distinct from Inspiration (see below).",
-   "file_count": 50,
+   "file_count": 51,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
     "godot/gm_to_engine_conversion.md": 6,
     "godot/godot_architecture_specification.md": 3,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 10,
@@ -866,6 +873,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "threadwork",
     "ui",
@@ -973,10 +981,12 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 25,
+   "file_count": 27,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 15,
+    "proposals/2026-08-16-system-scores-census.md": 4,
     "systems/_architecture/canonical_registry.md": 7,
     "systems/_architecture/cogload_moderate_target.md": 3,
     "systems/_architecture/complete_systems_reference.md": 4,
@@ -1015,6 +1025,7 @@
     "fieldwork",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "threadwork",
     "ui"
@@ -1025,10 +1036,11 @@
    "abbreviation": "BW",
    "ambiguous": false,
    "definition": "Precedent game (Burning Wheel by Luke Crane). Referenced in cognitive load / precedent analysis. **Design-precedent term**; not an in-game mechanic.",
-   "file_count": 1,
+   "file_count": 2,
    "glossary_part": "PART NINE \u2014 SIMULATION / INFRASTRUCTURE TERMS",
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 3
    },
    "sources": [
@@ -1069,7 +1081,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 87,
+   "file_count": 89,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1082,6 +1094,8 @@
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -1241,11 +1255,12 @@
   "CP": {
    "ambiguous": false,
    "definition": "CP = Character Points only [ED-136]. Use \"Power\" for the unit offensive stat.",
-   "file_count": 15,
+   "file_count": 16,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "systems/_architecture/campaign_modes_v30.md": 3,
     "systems/_architecture/derived_stats_v30.md": 6,
     "systems/_architecture/hybrid_gaps_v30.md": 2,
@@ -1270,6 +1285,7 @@
     "factions",
     "godot",
     "mass_battle",
+    "proposals",
     "settlements",
     "threadwork"
    ],
@@ -1450,9 +1466,11 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 28,
+   "file_count": 30,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 23,
+    "proposals/2026-08-16-system-scores-census.md": 6,
     "proposals/pc_formation_system.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1785,11 +1803,13 @@
   "Cognition": {
    "ambiguous": false,
    "definition": "Reasoning, memory, analysis.",
-   "file_count": 38,
+   "file_count": 40,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 22,
+    "proposals/2026-08-16-system-scores-census.md": 4,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1852,7 +1872,7 @@
   "Coherence": {
    "ambiguous": true,
    "definition": "Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner.",
-   "file_count": 82,
+   "file_count": 83,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -1865,6 +1885,7 @@
     "godot/godot_architecture_specification.md": 14,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "systems/_architecture/campaign_architecture_v30.md": 10,
     "systems/_architecture/campaign_architecture_v30_index.md": 6,
     "systems/_architecture/campaign_modes_v30.md": 3,
@@ -1953,6 +1974,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -1983,12 +2005,14 @@
    "ambiguous": false,
    "category": "mass_combat_stat",
    "definition": "Unit commander stat in mass battle. \u2308(Presence + Cognition) \u00f7 2\u2309. Caps both Size contribution to pool and Discipline contribution to Health. (PP-232)",
-   "file_count": 36,
+   "file_count": 38,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 1,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 21,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
@@ -2112,12 +2136,13 @@
   "Concentration": {
    "ambiguous": false,
    "definition": "Debate resource spent to sustain rhetorical positions.",
-   "file_count": 20,
+   "file_count": 21,
    "glossary_part": "PART THREE \u2014 DEBATE SYSTEM TERMS",
    "legacy_count": 0,
    "locations": {
     "godot/gm_to_engine_conversion.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "proposals/pc_formation_system.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 3,
     "systems/_architecture/canonical_registry.md": 2,
@@ -2209,13 +2234,14 @@
   "Consequence": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 42,
+   "file_count": 43,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 1,
     "godot/godot_architecture_specification.md": 11,
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 7,
@@ -2660,11 +2686,12 @@
    "ambiguous": false,
    "category": "mass_combat_stat",
    "definition": "Unit organisational integrity (replaces Cohesion, PP-232). Contribution to Health per Size capped at Command.",
-   "file_count": 33,
+   "file_count": 34,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 1,
    "locations": {
     "godot/implementation_sequence.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/pc_formation_system.md": 20,
     "systems/_architecture/canonical_registry.md": 2,
@@ -2725,7 +2752,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
-   "file_count": 72,
+   "file_count": 73,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -2733,6 +2760,7 @@
     "godot/godot_conversion_strategy_v1.md": 2,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -2830,13 +2858,14 @@
   "Dissolution": {
    "ambiguous": false,
    "definition": "Forced Resolution; destroys a thread configuration. Requires Thread Sensitivity 50+.",
-   "file_count": 43,
+   "file_count": 44,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "canon/03_canonical_timeline.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 3,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -2892,6 +2921,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -3098,10 +3128,11 @@
   "Doubt Marker": {
    "ambiguous": false,
    "definition": "Applied on Obscuring loss in Diverge state.",
-   "file_count": 9,
+   "file_count": 10,
    "glossary_part": "PART THREE \u2014 DEBATE SYSTEM TERMS",
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/characters/character_histories_v30.md": 1,
     "systems/factions/faction_politics_v30.md": 3,
@@ -3368,7 +3399,7 @@
    "ambiguous": true,
    "category": "proper_noun",
    "definition": "Pre-colonial indigenous culture of the Southernmost territories. Cultural/political axis.",
-   "file_count": 77,
+   "file_count": 78,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -3379,6 +3410,7 @@
     "canon/02_foundations_amendment_leap_mechanism.md": 4,
     "canon/03_canonical_timeline.md": 23,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 3,
     "systems/_architecture/conflict_architecture_proposal.md": 8,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -3464,6 +3496,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -3478,10 +3511,12 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Physical resilience. Determines Health and Stamina base.",
-   "file_count": 20,
+   "file_count": 22,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 21,
     "systems/_architecture/scale_transitions_v30.md": 1,
@@ -3516,6 +3551,7 @@
     "fieldwork",
     "mass_battle",
     "npcs",
+    "proposals",
     "social_contest",
     "threadwork",
     "ui",
@@ -3573,12 +3609,13 @@
   "Evidence": {
    "ambiguous": true,
    "category": "pressure_point",
-   "file_count": 74,
+   "file_count": 75,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -3843,12 +3880,14 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Attribute governing Thread contact economy \u2014 see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description).",
-   "file_count": 23,
+   "file_count": 25,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "godot/godot_architecture_specification.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 29,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "proposals/weapon_physics_and_concentration_model.md": 7,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -4667,11 +4706,12 @@
    "abbreviation": "HP*",
    "ambiguous": false,
    "definition": "Wound track. Resets per wound. *HP not standalone \u2014 write Health.*",
-   "file_count": 23,
+   "file_count": 24,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 4,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "proposals/weapon_physics_and_concentration_model.md": 2,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/cogload_moderate_target.md": 1,
@@ -4805,13 +4845,15 @@
   "History": {
    "ambiguous": false,
    "definition": "Skill-equivalent. Specific experiential knowledge that grants bonus dice. Cap = Memory score.",
-   "file_count": 45,
+   "file_count": 47,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 35,
+    "proposals/2026-08-16-system-scores-census.md": 5,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 6,
     "systems/_architecture/complete_systems_reference.md": 2,
@@ -4869,6 +4911,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -4991,7 +5034,7 @@
   "IP": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 65,
+   "file_count": 66,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 2,
@@ -5000,6 +5043,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 2,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 20,
     "systems/_architecture/campaign_architecture_v30_index.md": 4,
@@ -5088,7 +5132,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Social and cultural reach. Cannot drop below 1 (faction remains extant).",
-   "file_count": 76,
+   "file_count": 78,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -5096,6 +5140,8 @@
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 7,
@@ -5308,12 +5354,13 @@
    "ambiguous": false,
    "category": "faction_stat",
    "definition": "Intelligence capacity.",
-   "file_count": 31,
+   "file_count": 32,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 4,
     "systems/_architecture/early_game_ignition_analysis.md": 2,
@@ -5360,6 +5407,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -5531,7 +5579,7 @@
   "Knot": {
    "ambiguous": true,
    "definition": "A significant relationship bond (Close / Regular / Distant). Mechanically tracked with strain. Lifecycle specified per ED-773.",
-   "file_count": 71,
+   "file_count": 73,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -5541,6 +5589,8 @@
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -5621,6 +5671,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -5683,7 +5734,7 @@
   "Leap": {
    "ambiguous": false,
    "definition": "Entering Thread contact. Prerequisite for all Thread operations. Full-round action (Priority 5).",
-   "file_count": 49,
+   "file_count": 51,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -5693,6 +5744,8 @@
     "godot/godot_architecture_specification.md": 8,
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/companion_app_design_note.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -5750,6 +5803,7 @@
     "godot",
     "mass_battle",
     "npcs",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -5760,12 +5814,13 @@
   "Legitimacy": {
    "ambiguous": false,
    "category": "settlement_stat",
-   "file_count": 32,
+   "file_count": 33,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "systems/_architecture/derived_stats_v30.md": 10,
@@ -5844,12 +5899,13 @@
   "Locking": {
    "ambiguous": false,
    "definition": "Forced Resolution; stabilises a thread configuration permanently. Requires Thread Sensitivity 50+.",
-   "file_count": 17,
+   "file_count": 18,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -5875,6 +5931,7 @@
     "fieldwork",
     "godot",
     "mass_battle",
+    "proposals",
     "threadwork",
     "ui"
    ],
@@ -5941,10 +5998,11 @@
   "Loyalty": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 24,
+   "file_count": 25,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 4,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/complete_systems_reference.md": 9,
@@ -5981,6 +6039,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "victory"
    ],
@@ -6094,7 +6153,7 @@
   "MS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 67,
+   "file_count": 68,
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 7,
@@ -6106,6 +6165,7 @@
     "godot/godot_architecture_specification.md": 17,
     "godot/implementation_sequence.md": 2,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/canonical_nomenclature_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 20,
     "systems/_architecture/campaign_architecture_v30_index.md": 10,
@@ -6195,7 +6255,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 99,
+   "file_count": 101,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6204,6 +6264,8 @@
     "godot/data_serialization_spec.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 8,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 26,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
@@ -6370,7 +6432,7 @@
   "Mending": {
    "ambiguous": false,
    "definition": "Substrate repair. Targets Gaps and Shifting Objects. Requires Thread Sensitivity 50+.",
-   "file_count": 55,
+   "file_count": 56,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -6378,6 +6440,7 @@
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 13,
     "systems/_architecture/campaign_architecture_v30_index.md": 4,
     "systems/_architecture/campaign_modes_v30.md": 11,
@@ -6444,6 +6507,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -6516,12 +6580,13 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Military power. 0 = cannot Muster.",
-   "file_count": 84,
+   "file_count": 85,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 3,
     "engine/mc_v18_walkthrough.md": 2,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 3,
     "systems/_architecture/canonical_registry.md": 3,
@@ -6822,10 +6887,11 @@
    "abbreviation": "Ob",
    "ambiguous": false,
    "definition": "**Exception \u2014 abbreviation permitted standalone.** The number of net successes required for a Success result.",
-   "file_count": 6,
+   "file_count": 7,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 5,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/combat/combat_reference_v1.md": 1,
     "systems/factions/ci_political_v30.md": 1,
@@ -6841,6 +6907,7 @@
     "combat",
     "factions",
     "fieldwork",
+    "proposals",
     "world"
    ],
    "term": "Obstacle"
@@ -7510,9 +7577,10 @@
   "Popular Support": {
    "ambiguous": false,
    "category": "settlement_stat",
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 1,
     "systems/_architecture/governance_type_registry_v1.md": 3,
@@ -7536,6 +7604,7 @@
     "articulation",
     "characters",
     "factions",
+    "proposals",
     "settlements"
    ],
    "term": "Popular Support"
@@ -7595,9 +7664,11 @@
   "Precedent": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 49,
+   "file_count": 51,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 25,
     "proposals/social_contest_consolidation_integration_v1.md": 9,
@@ -7896,7 +7967,7 @@
   "Pulling": {
    "ambiguous": false,
    "definition": "Things Open. De-actualises threads. **Default sense is Present-Oriented**; see also Past-Oriented Pulling.",
-   "file_count": 27,
+   "file_count": 28,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -7905,6 +7976,7 @@
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "godot/godot_architecture_specification.md": 2,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -7938,6 +8010,7 @@
     "fieldwork",
     "godot",
     "mass_battle",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -7973,11 +8046,12 @@
   "RS": {
    "ambiguous": false,
    "definition": "Use Mending Stability (MS). RS appears only as historical annotation in `canon/02_foundations_amendment_leap_mechanism.md` per intentional retention.",
-   "file_count": 45,
+   "file_count": 46,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/companion_app_design_note.md": 4,
     "systems/_architecture/conflict_architecture_proposal.md": 3,
@@ -8035,6 +8109,7 @@
     "fieldwork",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -8504,11 +8579,12 @@
   "Size": {
    "ambiguous": false,
    "definition": "Unit headcount stat (replaces Strength). At 0: unit destroyed. Pool contribution capped at Command. (PP-232)",
-   "file_count": 25,
+   "file_count": 26,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 0,
    "locations": {
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/canonical_registry.md": 8,
@@ -8552,7 +8628,7 @@
   "Social": {
    "ambiguous": true,
    "category": "aggregate",
-   "file_count": 66,
+   "file_count": 67,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
@@ -8560,6 +8636,7 @@
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -8877,13 +8954,15 @@
   "Spirit": {
    "ambiguous": false,
    "definition": "Internal coherence, resolve, and Thread operation capacity.",
-   "file_count": 48,
+   "file_count": 50,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 3,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 33,
+    "proposals/2026-08-16-system-scores-census.md": 7,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 4,
@@ -8956,7 +9035,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Internal coherence. 0 = Collapse trigger (P-15).",
-   "file_count": 95,
+   "file_count": 97,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -8965,6 +9044,8 @@
     "canon/03_canonical_timeline.md": 1,
     "engine/mc_v18_walkthrough.md": 2,
     "godot/godot_architecture_specification.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
@@ -9141,7 +9222,7 @@
    "ambiguous": false,
    "category": "mechanic",
    "definition": "Reputation track. Range 0\u201310 (exception to 1\u20137 scale). No in-game benefit above 7; 10 is cosmetic maximum.",
-   "file_count": 56,
+   "file_count": 58,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -9149,6 +9230,8 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 12,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -9279,11 +9362,13 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Raw physical power. Weapon minimum requirement.",
-   "file_count": 21,
+   "file_count": 23,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 17,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 17,
     "systems/characters/character_histories_v30_infill.md": 1,
@@ -9320,6 +9405,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -9445,7 +9531,7 @@
   "TS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 88,
+   "file_count": 90,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 2,
@@ -9457,6 +9543,8 @@
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 3,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
+    "proposals/2026-08-16-system-scores-census.md": 4,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 4,
     "systems/_architecture/complete_systems_reference.md": 11,
@@ -9552,6 +9640,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -9708,9 +9797,9 @@
    "aliases": [
     "TS"
    ],
-   "ambiguous": false,
+   "ambiguous": true,
    "definition": "Perception depth and operation eligibility. Determines accessible operation scale.",
-   "file_count": 59,
+   "file_count": 61,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -9722,6 +9811,8 @@
     "canon/03_canonical_timeline.md": 1,
     "godot/data_serialization_spec.md": 1,
     "godot/godot_architecture_specification.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-16-system-scores-census.md": 4,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 2,
@@ -9789,6 +9880,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -9939,12 +10031,13 @@
   "Turmoil": {
    "ambiguous": false,
    "definition": "Cross-cutting world-scale pressure system (T-07 throughline). Multi-graph hub (Mode A \u2014 top quintile in cite + mu + pp).",
-   "file_count": 27,
+   "file_count": 28,
    "glossary_part": "PART ELEVEN \u2014 TOP-LEVEL SYSTEMS (non-stat, non-mechanic)",
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 3,
     "systems/_architecture/early_game_ignition_analysis.md": 1,
@@ -9985,6 +10078,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "victory",
     "world"
@@ -10047,7 +10141,7 @@
    ],
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 73,
+   "file_count": 74,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
@@ -10057,6 +10151,7 @@
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 18,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "proposals/pc_formation_system.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 1,
@@ -10511,15 +10606,17 @@
   },
   "Wealth": {
    "abbreviation": "W",
-   "ambiguous": false,
+   "ambiguous": true,
    "category": "faction_stat",
    "definition": "Economic capacity. 0 = cannot Trade or fund Wealth-requiring actions.",
-   "file_count": 59,
+   "file_count": 61,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
     "engine/mc_v18_walkthrough.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/conflict_architecture_proposal.md": 1,
@@ -10595,6 +10692,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "ui",
@@ -10606,7 +10704,7 @@
   "Weaving": {
    "ambiguous": false,
    "definition": "Things Cohere. Stabilises threads, restores actualisation.",
-   "file_count": 54,
+   "file_count": 55,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -10615,6 +10713,7 @@
     "canon/03_canonical_timeline.md": 2,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/complete_systems_reference.md": 3,
@@ -10679,6 +10778,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -11278,16 +11378,18 @@
   },
   "absolution": {
    "ambiguous": false,
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/factions/faction_systems_overview_v30.md": 2
    },
    "sources": [
     "mechanics_index"
    ],
    "subsystems": [
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "absolution"
   },
@@ -12192,9 +12294,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 4,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 1
    },
@@ -12203,6 +12306,7 @@
    ],
    "subsystems": [
     "fieldwork",
+    "proposals",
     "threadwork"
    ],
    "term": "actor_a"
@@ -12260,9 +12364,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 4,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 1
    },
@@ -12271,6 +12376,7 @@
    ],
    "subsystems": [
     "fieldwork",
+    "proposals",
     "threadwork"
    ],
    "term": "actor_b"
@@ -12986,9 +13092,10 @@
      "purpose": "S2.4** `assign_targets(unit_a, unit_b)` then per-atom `advance_cells` / `halt_before_enemy`."
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 1,
     "proposals/pc_formation_system.md": 3,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 3
@@ -13715,15 +13822,17 @@
      "purpose": "\u2014 `rebut` \u2192 gated by `venue.allow_rebuttal` (default `False`); on a landed reception, erases opponent advancement up to a cap."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "allow_rebuttal"
@@ -15555,15 +15664,17 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `attempt_dissolution(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:307 attempt_dissolution` | \u2014 none found"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "threadwork"
    ],
    "term": "attempt_dissolution"
@@ -15609,15 +15720,17 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `attempt_locking(actor, target, world, rng)` | `systems/threadwork/sim/operations.py:290 attempt_locking` | \u2014 none found"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "threadwork"
    ],
    "term": "attempt_locking"
@@ -16666,15 +16779,18 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`resistance` is metadata-only, never plumbed into resolution** (independently confirmed, not just self-reported): `Contest.resistance` is computed by `_derive_resistance` but the resolver has no `resistance`-named field read anywhere in `resolver.py`, and `Venue.base_ob` is never set from it. In the one live production seam (`engine/cross_scale/scene_dis"
     }
    },
-   "file_count": 1,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "base_ob"
@@ -17556,13 +17672,15 @@
   "beliefs": {
    "ambiguous": false,
    "definition": "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass.",
-   "file_count": 16,
+   "file_count": 18,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
     "engine/mc_v18_walkthrough.md": 1,
     "engine/sim_reference_README.md": 2,
     "godot/data_serialization_spec.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/repo-reorganization-v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 68,
@@ -17698,16 +17816,18 @@
      "purpose": "S2.7.18 `[branch][loop]` `if bind:` up to 3 extra sub-beats of bind resolution (`bind_sigma`, `bind_dominance_p`) \u2014 may strike/fell or flip to riposte; entering the bind is itself an `opening_created` precondition site."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "bind_dominance_p"
   },
@@ -17845,16 +17965,18 @@
      "purpose": "S2.5 `[gate]` `_count_knots_for_actor(actor_a, world) < floor(bonds_a/2)+1`."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "bonds_a"
   },
@@ -18020,9 +18142,10 @@
      "purpose": "**2026-07-08: the P1 consequence spine (ED-SC-0006/0007) is EXECUTED and ECHO_TRANSPORT is DEFAULT ON** (Jordan \"Yes echo transport on\") via two complementary fidelities of the same conflict class: (a) the FACTION-scale auto-resolve \u2014 `engine/cross_scale/parliamentary_bridge.py` runs a \u00a710 Parliamen\u2026"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
     "systems/social_contest/social_contest_currency_v1.md": 2,
@@ -18035,6 +18158,7 @@
    "subsystems": [
     "_architecture",
     "characters",
+    "proposals",
     "social_contest"
    ],
    "term": "build_contest"
@@ -21179,11 +21303,12 @@
      "purpose": "Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m\u2026"
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/repo-reorganization-v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/fieldwork/fieldwork_bg_v30.md": 1,
@@ -21293,9 +21418,10 @@
      "purpose": "S2.7.2 Compute per-fighter cadence `rate` (open: `weapon_tempo`; closed: `close_tempo`), then advance `ready` by `rate * tempo_pressure`."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/combat/combat_engine_v1/combat_throughlines_v1.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
@@ -21303,7 +21429,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "close_tempo"
   },
@@ -21850,7 +21977,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 90,
+   "file_count": 92,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -21862,6 +21989,8 @@
     "godot/implementation_sequence.md": 3,
     "godot/scene_tree_architecture.md": 5,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 77,
+    "proposals/2026-08-16-system-scores-census.md": 6,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -22374,11 +22503,12 @@
   "companion": {
    "ambiguous": false,
    "definition": "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc.",
-   "file_count": 34,
+   "file_count": 35,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 3,
     "proposals/repo-reorganization-v1.md": 2,
     "proposals/social_contest_consolidation_integration_v1.md": 12,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -25429,9 +25559,10 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.wt` (`WoundTracker`: `cumulative_damage`, `wounds`, `felled`) | RW | `systems/combat/combat_engine_v1/combatant.py:50 WoundTracker` | `systems/combat/combat_engine_v1/wrapper.py:471` (A.wt.__init__(...)); `systems/combat/combat_engine_v1/combatant.py:154 apply_wound`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 1,
     "systems/combat/combat_reference_v1.md": 1
    },
@@ -25439,7 +25570,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "cumulative_damage"
   },
@@ -27678,16 +27810,18 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: consequences `dict` (`composure_damage`, `coherence_delta`, `disposition_set_to`, `wound`, `conviction_scar`) | `arg` return value | caller of `apply_knot_loss` (no live caller found \u2014 \u00a77) | `systems/fieldwork/sim/knots.py:328-337`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 6
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "disposition_set_to"
   },
@@ -27742,16 +27876,18 @@
      "purpose": "S2.7.19 `[branch]` `if riposte:` if `sim` (simultaneous hit+riposte), first resolve a `disrupt_resist_p`-gated graze on the original aggressor (may fell); then, unconditionally, drain the (pre-flip) defender's `conc`; only then role-flip `aggressor, defender = defender, aggressor`."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "disrupt_resist_p"
   },
@@ -29095,15 +29231,17 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine/autoload/sigma_leverage.py` | The kernel's roll/degree/leverage primitives (`roll_net`, `net_boost`, `degree`, `effective_ob`, `level`) are imported, not reimplemented | `systems/social_contest/sim/contest/resolver.py:23-24 roll_net`, `systems/social_contest/sim/contest/primitives.py:9 Stasis`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "effective_ob"
@@ -29188,9 +29326,10 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `unit.hp` | RW | `systems/mass_battle/sim/units.py` (`Unit`) | write `systems/mass_battle/sim/massbattle.py:1274-1275`; read `:1834 effective_size`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 2,
     "systems/mass_battle/mass_battle_integration_v30.md": 1
    },
@@ -29198,7 +29337,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "effective_size"
   },
@@ -31201,15 +31341,17 @@
      "purpose": "This is implemented as a pure derived accessor (`FaceScale.face_max` / `FaceScale.face_current`, and `_Side.face_max()` / `_Side.face_current()`) added ON TOP OF the existing Standing primitive \u2014 no new invented constants (it reuses the existing Cha\u00d73 formula and the existing 0\u201310 Standing range) an\u2026"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/social_contest/social_contest_v30.md": 5
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "face_max"
@@ -31266,9 +31408,11 @@
      "purpose": "W(s) = base(s.stype) + s.prosperity + s.facility_tier # \u00a71.8 Settlement Weight"
     }
    },
-   "file_count": 6,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 3,
     "systems/_architecture/governance_consolidation_v1.md": 1,
     "systems/settlements/goldenfurt_slice/README.md": 1,
     "systems/settlements/goldenfurt_slice/generation_methodology.md": 3,
@@ -31281,6 +31425,7 @@
    ],
    "subsystems": [
     "_architecture",
+    "proposals",
     "settlements"
    ],
    "term": "facility_tier"
@@ -32113,10 +32258,11 @@
      "purpose": "[\u00a77.3 Heresy Investigation Lifecycle (ED-772)] Condition | Effect | Rationale :: **Target's death** | Investigation closes. Postmortem Tribunal possible (per faction_politics \u00a72.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost \u22121 to file). | The proceeding's purpose (correction) becomes moot at target's death; Postmortem Tr"
     }
    },
-   "file_count": 14,
+   "file_count": 15,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 2,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 4,
@@ -32836,7 +32982,7 @@
   "fieldwork": {
    "ambiguous": true,
    "definition": "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure.",
-   "file_count": 66,
+   "file_count": 68,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
@@ -32845,6 +32991,8 @@
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -33300,9 +33448,10 @@
      "purpose": "S2.3** pre-movement contact detection (`find_contacts`) halts atoms already touching the enemy before they advance."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/multiunit_envelopment_plan.md": 2,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 7
    },
@@ -33745,11 +33894,13 @@
      "purpose": "fort_level: int (0-4)"
     }
    },
-   "file_count": 8,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 4,
     "systems/settlements/generation_sourcebook_v1.md": 1,
     "systems/settlements/goldenfurt_slice/generation_methodology.md": 4,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 1,
@@ -33763,6 +33914,7 @@
    "subsystems": [
     "engine",
     "godot",
+    "proposals",
     "settlements",
     "ui"
    ],
@@ -33979,9 +34131,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **Two same-named, differently-keyed fields, both called `religious_building`.** `Settlement.religious_building` (`registry.py`) is touched only by the dataclass's own `to_dict`/`from_dict` \u2014 never set by `populate_from_geography`, never read by any logic \u2014 so it round-trips through serialization while being logically dead. The live field is a different sto"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 7,
     "systems/factions/factions_flow_skeleton_v1.md": 2,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 3,
@@ -33994,6 +34147,7 @@
     "characters",
     "factions",
     "fieldwork",
+    "proposals",
     "settlements"
    ],
    "term": "from_dict"
@@ -35500,11 +35654,12 @@
   "govern": {
    "ambiguous": false,
    "definition": "GD-2 mandatory trigger: Accord <= 2 garrisoned territory.",
-   "file_count": 30,
+   "file_count": 31,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "engine/mc_v18_walkthrough.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 2,
@@ -35702,9 +35857,10 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Settlement.governor_id` | `W` | `registry.succeed_governor` (no production caller) | `systems/settlements/sim/registry.py:205 governor_id`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 1,
     "systems/settlements/settlements_flow_skeleton_v1.md": 2
    },
@@ -35712,6 +35868,7 @@
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "settlements"
    ],
    "term": "governor_id"
@@ -35759,10 +35916,11 @@
      "purpose": "S2.7.20 `[branch][gate]` **Contact axis** (grapple): `contact.grab_available` gated on `opening_created`; `contact.grab_outcome` resolves disarm/throw/pin/foot_pin/control, applying poise/initiative deltas."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
@@ -35816,9 +35974,10 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 2,
     "systems/combat/combat_flow_skeleton_v1.md": 3
    },
@@ -35826,7 +35985,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "grip_position"
   },
@@ -35924,16 +36084,19 @@
      "purpose": "[2.6 Multi-turn structure (v16+)] Feature | Intro version | v22 status | Port priority :: `h_per_size = min(Discipline, Command) + DR` | v16 | PRESENT | P0"
     }
    },
-   "file_count": 1,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/mass_battle/mass_battle_integration_v30.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "h_per_size"
   },
@@ -36357,16 +36520,19 @@
      "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `actor_a`, `actor_b`, `actor_a_obj`, `actor_b_obj` | `arg` | caller-supplied duck-typed actors (`.bonds`, `.spirit`, `.history_relationships`, `.ts`, `.disposition_with_<other>`) | `systems/fieldwork/sim/knots.py:172-192 form_knot`"
     }
    },
-   "file_count": 1,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "history_relationships"
   },
@@ -36461,16 +36627,18 @@
      "purpose": "**ED-1013 (smooth pool, 2026-06-15):** the base is not flat \u2014 the live engine computes `Command \u00d7 (1 + cohesion)` where `cohesion = current Size \u00f7 max Size` (hp/hp_max): 2 \u00d7 Command at full strength, degrading smoothly to Command at annihilation, which holds the Lanchester exponent ~1 while letting \u2026"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/mass_battle/mass_battle_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "hp_max"
   },
@@ -36703,16 +36871,18 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `ConvictionState.in_crisis` | RW | `systems/characters/sim/conviction.py` | `systems/characters/sim/conviction.py:117`, `systems/characters/sim/conviction.py:219-220`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "characters"
+    "characters",
+    "proposals"
    ],
    "term": "in_crisis"
   },
@@ -38814,9 +38984,10 @@
      "purpose": "signal knot_strained(knot_id, strain_delta)"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 6,
     "systems/ui/valoria_ui_ux_v4.md": 2
@@ -38827,6 +38998,7 @@
    "subsystems": [
     "_architecture",
     "fieldwork",
+    "proposals",
     "ui"
    ],
    "term": "knot_id"
@@ -39120,7 +39292,7 @@
   "knots": {
    "ambiguous": false,
    "definition": "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc.",
-   "file_count": 19,
+   "file_count": 21,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 6,
@@ -39130,6 +39302,8 @@
     "canon/02_foundations_amendment_leap_mechanism.md": 8,
     "engine/mc_v18_walkthrough.md": 1,
     "engine/sim_reference_README.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 17,
+    "proposals/2026-08-16-system-scores-census.md": 7,
     "proposals/repo-reorganization-v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -40104,16 +40278,18 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "lunge_depth"
   },
@@ -40544,12 +40720,14 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 35,
+   "file_count": 37,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
     "godot/godot_conversion_strategy_v1.md": 3,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-16-system-scores-census.md": 3,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 4,
@@ -40655,9 +40833,10 @@
   "mass_seizure": {
    "ambiguous": false,
    "definition": "3 canon sources potentially drifted. Pass 2f reconciliation pending. Per supersession_register 250715f: declaration probabilistic P(declare) = ((CI-60)/40)^3.3. GD-1: produces territorial conversion, not game-end victory trigger.",
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 2,
     "systems/factions/factions_flow_skeleton_v1.md": 6,
@@ -41838,10 +42017,11 @@
   "momentum": {
    "ambiguous": false,
    "definition": "PP-255 momentum carry mechanic.",
-   "file_count": 17,
+   "file_count": 18,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/pc_formation_system.md": 3,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 1,
@@ -42125,9 +42305,10 @@
   "ms_track": {
    "ambiguous": false,
    "definition": "Mending Stability world-track. PP-255 baseline decay.",
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 13,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 7
@@ -42138,6 +42319,7 @@
    "subsystems": [
     "factions",
     "overview",
+    "proposals",
     "threadwork"
    ],
    "term": "ms_track"
@@ -42448,10 +42630,11 @@
      "purpose": "S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`."
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/combat/combat_engine_v1/combat_balancing_methodology.md": 1,
     "systems/combat/combat_engine_v1/combat_throughlines_v1.md": 2,
@@ -43949,9 +44132,10 @@
   "npe": {
    "ambiguous": false,
    "definition": "NPC Population Engine.",
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
@@ -43965,6 +44149,7 @@
     "_architecture",
     "npcs",
     "overview",
+    "proposals",
     "world"
    ],
    "term": "npe"
@@ -44718,15 +44903,17 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:79 opposing_engagement_modifier` | \u2014 none found"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "threadwork"
    ],
    "term": "opponent_tps"
@@ -44745,15 +44932,17 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `opposing_engagement_modifier(opponent_tps)` | `systems/threadwork/sim/opposing.py:79 opposing_engagement_modifier` | \u2014 none found"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "threadwork"
    ],
    "term": "opposing_engagement_modifier"
@@ -45209,9 +45398,10 @@
      "purpose": "Per settlement `s`, toward its **controlling faction** `f = s.owner_faction` (Church-Governor settlements,"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 3,
     "systems/settlements/lps_wiring_v1.md": 3
    },
@@ -45219,6 +45409,7 @@
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "settlements"
    ],
    "term": "owner_faction"
@@ -45237,10 +45428,11 @@
      "purpose": "Odds from code, not estimate.** Roll odds come from `valoria_dice.py` / `sigma_leverage.p_success` (the"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "systems/_architecture/governance_consolidation_v1.md": 1
    },
    "sources": [
@@ -45248,7 +45440,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "engine"
+    "engine",
+    "proposals"
    ],
    "term": "p_success"
   },
@@ -47092,10 +47285,11 @@
      "purpose": "[\u00a75.3 The eight row types] Row type | Visual | Mechanical effect :: **Conviction-driven** | \u2726 gold mark + Conviction text | +1 Momentum on Belief-aligned success per player_agency \u00a72.3"
     }
    },
-   "file_count": 14,
+   "file_count": 15,
    "legacy_count": 0,
    "locations": {
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 8,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -47564,9 +47758,10 @@
      "purpose": "[\u00a71 \u00b7 State (canonical, already on `Settlement`)] field | type | range | axis (Weber, \u00a71.8a) | mutability :: `s.popular_support` (PS) | int | 0\u20137 | charismatic / performance (fast) | write-side \u00a74 only"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 5,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/governance_consolidation_v1.md": 1,
     "systems/_architecture/ners_vsg_reconciliation_v1.md": 1,
@@ -48459,15 +48654,17 @@
      "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `use_tracker` (tri-state bool\\ | None) | flag | caller of `build_contest` / `proceeding_venue` | `systems/social_contest/sim/contest/wrapper.py:101 build_contest`, `systems/social_contest/sim/contest/modes.py:536 proceeding_venue`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 4
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "proceeding_venue"
@@ -49201,9 +49398,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `province_members(province_id, world=None)` | `systems/settlements/sim/registry.py:180 province_members` | `systems/settlements/sim/settlement.py:175 province_members`; `systems/overview/sim/accounting.py:85 province_members`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 1,
     "systems/settlements/settlements_flow_skeleton_v1.md": 6
    },
@@ -49211,6 +49409,7 @@
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "settlements"
    ],
    "term": "province_id"
@@ -49835,9 +50034,10 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine.autoload.scene_slate` | declares `\"fieldwork\"` as an example `scene_type` string on `SceneSlot`; no production `queue_scene(\"fieldwork\", ...)` call site exists (\u00a77) | `engine/autoload/scene_slate.py:26`, `engine/autoload/scene_slate.py:34`"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 3,
@@ -49849,7 +50049,8 @@
    "subsystems": [
     "_architecture",
     "combat",
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "queue_scene"
   },
@@ -49963,16 +50164,18 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "range_avail"
   },
@@ -50149,10 +50352,11 @@
      "purpose": "S2.7.9a Run the **read contest** (`read_contest`), selecting defender `mode` (`msig`) \u2014 this selection is an INPUT consumed by the \u03c3-assembly in S2.7.9b, not the other way around."
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 4,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 2,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
@@ -50479,16 +50683,18 @@
      "purpose": "S4.3** pursuit-phase resolution for units already pursuing a routed enemy (`recall_check` gate, else `pursuit_damage`)."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "recall_check"
   },
@@ -50939,9 +51145,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **Two same-named, differently-keyed fields, both called `religious_building`.** `Settlement.religious_building` (`registry.py`) is touched only by the dataclass's own `to_dict`/`from_dict` \u2014 never set by `populate_from_geography`, never read by any logic \u2014 so it round-trips through serialization while being logically dead. The live field is a different sto"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/settlements/goldenfurt_slice/README.md": 1,
     "systems/settlements/goldenfurt_slice/event_deck.md": 1,
     "systems/settlements/goldenfurt_slice/generation_methodology.md": 1,
@@ -50953,6 +51160,7 @@
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "settlements"
    ],
    "term": "religious_building"
@@ -51282,15 +51490,18 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Contestant.faculty`, `.standing_start`, `.reserve_max`, `.evidence`, `.charisma` | R | per-bout spec, immutable | `systems/social_contest/sim/contest/resolver.py:178-193 Contestant`"
     }
    },
-   "file_count": 1,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "reserve_max"
@@ -51588,10 +51799,11 @@
      "purpose": "S2.7.11 `[gate]` **The roll**: `pool = core.resolution_pool(aggressor.history)`; `deg, net = core.resolve(pool, net_sigma, rng)`."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
@@ -51852,9 +52064,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence :: **`CASCADING_ENABLED` is a hardcoded `True` module constant in both trees, not an env-read flag** \u2014 despite TREE B's `config.py` being otherwise env-var-driven for its other toggles (\u00a72), `CASCADING_ENABLED` there is still a bare `True` assignment. The `else resolve_engagements(...)` branch is therefore unreachable in either tree without a source edit. | `systems"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/multiunit_envelopment_plan.md": 2,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 3,
     "systems/mass_battle/mass_battle_integration_v30.md": 6
@@ -51909,16 +52122,18 @@
      "purpose": "Problem.** `resolve_internal_collisions` implemented on Subunit at v13 but has 0 call sites."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/mass_battle/mass_battle_integration_v30.md": 4
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "resolve_internal_collisions"
   },
@@ -52082,9 +52297,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_opposing_operations(actor_a, actor_b, op_type, target, world, rng, a_knot_id, b_knot_id)` | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` | \u2014 none found"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 8,
     "systems/threadwork/threadwork_flow_skeleton_v1.md": 5
@@ -52095,6 +52311,7 @@
    "subsystems": [
     "_architecture",
     "fieldwork",
+    "proposals",
     "threadwork"
    ],
    "term": "resolve_opposing_operations"
@@ -52244,16 +52461,18 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `ConvictionState.resonant_active` | RW | `systems/characters/sim/conviction.py` | `systems/characters/sim/conviction.py:115`, `systems/characters/sim/conviction.py:217-218`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "characters"
+    "characters",
+    "proposals"
    ],
    "term": "resonant_active"
   },
@@ -52863,9 +53082,10 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine/autoload/sigma_leverage.py` | The kernel's roll/degree/leverage primitives (`roll_net`, `net_boost`, `degree`, `effective_ob`, `level`) are imported, not reimplemented | `systems/social_contest/sim/contest/resolver.py:23-24 roll_net`, `systems/social_contest/sim/contest/primitives.py:9 Stasis`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 18,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 6
    },
@@ -52874,6 +53094,7 @@
    ],
    "subsystems": [
     "combat",
+    "proposals",
     "social_contest"
    ],
    "term": "roll_net"
@@ -52937,9 +53158,10 @@
      "purpose": "static func roll_pool(pool_size: int, tn: int = 7, context: RollContext) -> RollResult:"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 4,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 2,
@@ -52952,6 +53174,7 @@
    "subsystems": [
     "factions",
     "fieldwork",
+    "proposals",
     "social_contest",
     "threadwork",
     "ui"
@@ -55686,10 +55909,11 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up (declared, not wired) | `engine.cross_scale.scene_dispatch` | no `\"thread\"` `scene_type` branch exists; Thread-scale scenes cannot be produced by the live dispatcher | `engine/cross_scale/scene_dispatch.py:216-224`, `:360-371`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -55706,6 +55930,7 @@
     "combat",
     "fieldwork",
     "godot",
+    "proposals",
     "threadwork"
    ],
    "term": "scene_type"
@@ -58612,16 +58837,18 @@
      "purpose": "S3** `[branch]` `resolve_mass_battle` computes `a_size_pct`/`b_size_pct` from `effective_size`/`size_max`, derives `attacker_wins`, then maps to one of four `degree` strings via nested threshold checks."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "size_max"
   },
@@ -58874,10 +59101,12 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 34,
+   "file_count": 36,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "proposals/repo-reorganization-v1.md": 8,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -59509,16 +59738,19 @@
      "purpose": "[2.5 Stamina model (v15)] Feature | Intro version | v22 status | Port priority :: `STAMINA_MAX = 100` | v15 | PRESENT | P0"
     }
    },
-   "file_count": 1,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "stamina_max"
   },
@@ -59707,9 +59939,11 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Contestant.faculty`, `.standing_start`, `.reserve_max`, `.evidence`, `.charisma` | R | per-bout spec, immutable | `systems/social_contest/sim/contest/resolver.py:178-193 Contestant`"
     }
    },
-   "file_count": 2,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-16-system-scores-census.md": 2,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1
    },
@@ -60789,9 +61023,11 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter \u2192 `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`"
     }
    },
-   "file_count": 10,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,
@@ -60813,6 +61049,7 @@
     "fieldwork",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "threadwork",
     "world"
@@ -61912,9 +62149,10 @@
   "tactic_cards": {
    "ambiguous": false,
    "definition": "Card pool contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending before authoring new cards.",
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 2,
     "systems/mass_battle/mass_battle_flow_skeleton_v1.md": 2,
@@ -63551,10 +63789,11 @@
      "purpose": "**A 4-critic + NERS adversarial review corrected the record:** the ability layer's aggregate win-rate edge is ~0 (the earlier \"+2.8pp\" was a tradition-membership CONFOUND, retracted); the correct instrument for a situational lever is **per-fight TEXTURE with outcome-preservation** (16\u201328% of fights \u2026"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/combat/combat_currency_v1.md": 1
    },
    "sources": [
@@ -65056,9 +65295,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **Two same-named, differently-keyed fields, both called `religious_building`.** `Settlement.religious_building` (`registry.py`) is touched only by the dataclass's own `to_dict`/`from_dict` \u2014 never set by `populate_from_geography`, never read by any logic \u2014 so it round-trips through serialization while being logically dead. The live field is a different sto"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 6,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 1,
     "systems/settlements/settlements_flow_skeleton_v1.md": 2
@@ -65069,6 +65309,7 @@
    "subsystems": [
     "characters",
     "fieldwork",
+    "proposals",
     "settlements"
    ],
    "term": "to_dict"
@@ -66319,12 +66560,14 @@
   "units": {
    "ambiguous": false,
    "definition": "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis.",
-   "file_count": 45,
+   "file_count": 47,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-16-system-scores-census.md": 5,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
     "proposals/pc_formation_system.md": 3,
@@ -67643,9 +67886,10 @@
      "purpose": "S2.7.2 Compute per-fighter cadence `rate` (open: `weapon_tempo`; closed: `close_tempo`), then advance `ready` by `rate * tempo_pressure`."
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 1,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/combat/combat_engine_v1/combat_throughlines_v1.md": 1,
