@@ -881,3 +881,272 @@ Then the §11-C sites (11 integer-only pool arithmetic sites) and §11-D (thread
 **Write the diagnosis into the code at the fix:** the floor and the cast should never have shared a
 line. A quantisation hid behind a citation long enough that three independent surfaces — including
 `dice_engine.py`'s own docstring — ended up describing the tree wrongly.
+
+---
+---
+
+# §15 NEXT-SESSION PLAN — SCAFFOLDING FOR PROGRESSION (no system chosen)
+
+**Jordan's framing:** *build SCAFFOLDING for these progression systems; we are not necessarily
+choosing one.* That is the right read of the evidence, and it is not a hedge — this session
+established that **which** progression system is correct depends on decisions that have not been
+made and instruments that do not exist. Scaffolding-first is therefore the only order in which the
+choice can be made on evidence rather than taste.
+
+**The governing insight for the whole plan:**
+
+> Every progression alternative in §5 needs the same four things: a continuous resolution substrate,
+> a place to put per-actor progression state, an instrument that can price a reward, and a channel
+> to put the reward in. **None of the four exists today, and all four are system-agnostic.** Build
+> them, and the choice becomes a measurement instead of an argument.
+
+---
+
+## §15.0 HOW TO RESUME
+
+Read in this order. Do not start from this document's §7 (superseded twice — see §12, §13).
+
+1. `CLAUDE.md` §0 and **§0.1** — the measurement discipline. §15.2 below is this session's evidence
+   that §0.1 is not boilerplate.
+2. `CURRENT.md` for currency; `registers/handoffs/HANDOFF_IN.md` for lane state.
+3. **This document, in this order: §1 (what was measured) → §11 (the rounding census) → §14 (the
+   precise fix) → §12 and §13 (what was refuted) → §15 (this plan).**
+4. `engine/autoload/sigma_leverage.py` and `dice_engine.py` — the substrate everything sits on.
+5. Only then the subsystem you intend to touch.
+
+⚠ **Sections superseded within this document, do not act on them:** §7 (draft-1 recommendation,
+withdrawn), §10.4's "put the budget in the acquisition layer" (that describes combat, which is
+already done — see §10.5), §12.2's channel conclusion (inverted by §13.2).
+
+---
+
+## §15.1 THROUGHLINES TO CARRY
+
+**Verified, survived adversarial attack:**
+
+| # | Throughline | Evidence |
+|---|---|---|
+| T1 | **Attributes are absent from resolution in every finished engine.** Combat removed one (ED-901); contest never bound one (`faculty` is *"an abstract pool-size parameter, not Charisma"*). Two independent arrivals. | `core.py:50-52`; `primitives.py:128` |
+| T2 | **Eight acclaimed games converged on the same rule: the attribute is a price or a rate, never a power.** DCSS, EVE, RimWorld, Battle Brothers, Darklands, WFRP, Blood Bowl, Dwarf Fortress. DF reached it under Valoria's exact posture (no GM, emergence). | §Appendix |
+| T3 | **σ is present at all three built scales** — combat (all opposition), contest (`faculty` as `(faculty−4)/6` + armature), canon mass battle (`_morale_sigma`, `_charge_shock_sigma`). | `core.py:98-104`; `primitives.py:227-230`; `tests/sim/mass_battle/resolution.py:107,161` |
+| T4 | **The acquisition layer is the real gap.** Combat has one (done); governance half-has one (Ledger tags, unconsumed); contest, threadwork, mass battle, fieldwork have none — and those four are exactly the four still leaning on attributes. | §10.5 |
+| T5 | **Every engine consumes blends, never a bare attribute.** Reading, Reflex, Balance, Tempo, Impact, Durability, Concentration, Command. `balance_eff`'s comment generalises the architecture: *"BALANCE is NOT a stat (Jordan): it is GOVERNED BY AGILITY, modulated by CURRENT poise."* | `combat_systems.py:113-188` |
+| T6 | **Deterioration is complete; the gain engine is absent.** Coherence, Scars, Knot rupture, demotion, collapse are all numerate and consistent. CP's spending menu cites a file that has never existed in this repo's history. | §1.5, §1.6 |
+
+**Refuted this session — do not carry these forward:**
+
+| # | Claim | Why it died |
+|---|---|---|
+| R1 | "The opponent-derived Ob is implemented nowhere" | `opposing.py:80-85` implements the ruled shape and is live. Three surfaces (incl. `dice_engine`'s docstring) assert otherwise — the primitive is at risk of a **fourth reinvention**. |
+| R2 | "σ is combat-and-contest only" | The J2 canon mass-battle engine is a σ head; it takes no `engine.*` import **by design**, so importer surveys miss it. |
+| R3 | "`degree_from_net` is single-owner by import" | 8 call sites, not 6; equivalence with the J2 engine is held by **measurement**, not an import edge. |
+| R4 | "Distinctiveness belongs in δσ because the pool is quantised" | **Conditional on the rounding the ruling abolishes.** Execute S1 and the pool becomes the finer lever. §13.2. |
+| R5 | "Combat's `familiarity` is durable memory" | A pure function over a frozen 3-value table. Nothing accumulates. |
+| R6 | "Half A is a behaviour change that re-records goldens" | Measured: 1,163 live `roll_net` calls, all integral. The cast is a **no-op today**. §14.3. |
+
+---
+
+## §15.2 LESSONS — carry these harder than the findings
+
+Every substantive error this session was caught by an independent critic, **none by me**, and they
+were all the same error wearing different clothes.
+
+1. **A proxy is not a measurement, and it can be anti-correlated with the truth.** §1.3's original
+   grep-count "load-bearing" table **inverted** the real ranking: Strength grep-15 → +9.2pp;
+   Cognition grep-2 → **+20.4pp**; Focus grep-4 → **+0.3pp**. Jordan's *"no pattern matching, no
+   grep"* was a correct diagnosis of a live failure, not a style preference.
+2. **The same error recurred three times** — grep counts, then an AST importer graph (missed the J2
+   σ head, which takes no import by design), then transplanting combat's `value**level` overflow
+   hazard onto `regroup` without reading `primitives.py:56`, where it is `min(self.max, …)` and
+   therefore the *opposite* of an overflow risk. **When a method fails, suspect the method, not the
+   instance.**
+3. **Prose goes stale; re-run, don't re-cite.** The 2026-07-26 balance audit had `cog` exactly right
+   and `history` off by 4.5pp. You cannot tell which without running it.
+4. **Check that a citation covers the whole line.** `max(1, int(round(pool)))` carries
+   `[canonical: §Pool Floor]`. §Pool Floor authorises the floor and **nothing else**; the integer
+   cast rode in under it and survived for exactly that reason.
+5. **Docstrings are inherited, including their errors.** `dice_engine.py:118-123` says the
+   opponent-derived Ob "IS IMPLEMENTED NOWHERE." It is implemented in `opposing.py`. I repeated it
+   as fact.
+6. **Absence claims need a positive control.** The `valoria_ttrpg_complete.md` result held only
+   because a known-present file was searched the same way in the same command.
+7. **Attack the SETUP, not just the statistics** — §0.1's founding lesson, re-learned. Draft 1's
+   adversarial pass checked the numbers and never asked whether the mechanism attached to a live
+   lever. It did not: combat's Ob is fixed at 3.
+8. **The relay works and is not optional.** Producer → independent read-only critic caught: two
+   fabricated quotations, an inverted instrument, a refuted channel conclusion, a shipped bug
+   (the `Reserve.COST` refund pump), and a structural blocker (`ContestView`). Budget for it.
+
+---
+
+## §15.3 THE SCAFFOLDING — seven stages
+
+Each stage is **system-agnostic**: it is required by every alternative in §15.4. Each ships inert or
+provably-neutral, each carries a falsifier, and none commits to a progression design.
+
+### S1 — Continuous resolution substrate (executes ED-IN-0187 Half A)
+**Why first:** it is the only work that changes *which channel a reward belongs in* (§13.2), and it
+is measured to cost nothing today (§14.3).
+
+| step | change | site |
+|---|---|---|
+| 1a | delete the cast; keep `max(1.0, pool)` as float | `sigma_leverage.py:276` |
+| 1b | guarded stochastic rounding: `n=int(p); f=p-n; if f>0.0 and rng.random()<f: n+=1` | `sigma_leverage.py:265` |
+| 1c | drop `int(round(history))`; keep float floor | `core.py:52` |
+| 1d | the 11 §11-C integer-arithmetic sites + §11-D's threadwork trio (`-> int`, `ts // 10`, `min(3, history+3)`) | §11 |
+
+**Falsifiers (all must pass):**
+- **F-S1a** every existing golden byte-identical, and `pytest tests/valoria` unchanged.
+- **F-S1b** RNG stream-neutrality: after N integer-pool calls the stream matches a fresh one
+  (guarded passes, unguarded fails — demonstrated §14.2).
+- **F-S1c** `p_success` strictly monotone in fractional pool across [5, 17].
+- **F-S1d** stochastic rounding mean-exact: pool 9.1 → 9.100 ± 0.005 at n=200k.
+- **F-S1e** a guard that fails on a *new* `int(`/`round(`/`//` applied to a pool or Ob — the §0.1
+  point-5 recurrence guard. **If you cannot write this guard you have not understood the pattern.**
+
+⚠ **1d is not free.** Fixing `min(3, history+3)` changes threadwork's pool by up to +3D
+(≈ +1.2 expected net) and threadwork **has no oracle**. Gate 1d separately from 1a–1c.
+
+### S2 — The obstacle substrate (ED-IN-0187 Half B) — **COMPOSE, do not re-derive**
+`opposing.py:80-85` already implements *opponent score ÷ 2 + instance modifiers*. Promote it to a
+single owner; make every other resolver able to call it; **correct the three surfaces that claim it
+does not exist** (`dice_engine.py:118-123`, `test_degree_ladder_single_owner.py:38-41`, §11 of this
+document).
+**Falsifier:** the promoted owner reproduces `opposing.py`'s current outputs exactly; plus a guard
+that fails on a new hand-rolled opponent-Ob derivation.
+**Gate: JORDAN.** This changes what an obstacle *means* in every subsystem.
+
+### S3 — The reward-pricing instrument
+Before choosing a channel or a quantum, build the thing that prices a reward **in either channel**:
+given Δ in {pool, δσ} at pool size N and Ob O, report marginal pp with Wilson CI at n ≥ 600.
+**Known-answer control:** it must reproduce §1.1's attribute-parity table within CI.
+**Why it is scaffolding:** every alternative in §15.4 needs to be priced, and none can be until this
+exists.
+
+### S4 — The contest instrument
+`workbench/balance.py`'s method, ported: position-swap **with venue rebuild** (role-asymmetric win
+conditions bind to the literal seat at construction), Wilson CI, crc32 per-cell seeding, **and
+policy-crossed with per-cell reporting** — averaging over policies averages over *lever
+reachability* (`logos_spammer` never emits an ethos move, so a Face lever measures exactly zero
+under it).
+**Control:** demonstrate that the kernel's existing `|a−b| < 0.07` mirror gate tolerates a genuine
+±3.5pp seat advantage at N=2500.
+**Do not author contest content before this exists** — that ordering is exactly how the "+2.8pp"
+tradition-membership confound happened.
+
+### S5 — Progression-agnostic state slots ← **the core of "scaffolding, not choosing"**
+Define **where** progression state lives without saying what it is. Four slots, each shipping inert:
+
+| slot | shape | precedent in tree | ships as |
+|---|---|---|---|
+| **Investment** | `{name: level}` on the actor | combat's `equipped` (`combatant.py:116`) | empty dict ⇒ factor 1.0 |
+| **Practice** | per-domain **float** scalar | combat's `history` (currently int-quantised) | current value, float-typed |
+| **Record** | durable, dedupe + TTL, survives succession | `settlements/sim/ledger.py` — the only real one | one owner; `familiarity` and `Dossier` become views |
+| **Aptitude** | per-domain rate/price, **never in a pool** | none — this is the new slot | inert (rate 1.0) |
+
+**Falsifier (and correct its known-bad precedent):** zero-investment must be **byte-identical across
+≥40 seeds compared with `==` on an event-signature tuple** — as
+`test_combat_tradition_levers.py:130-147` does. **Not** the kernel's `_kernel_tests.py:1612-1618`
+shape, which compares one float with `isclose` and is the §0.1 point-2 anti-pattern.
+
+Slots commit to nothing. They make every §15.4 alternative implementable as data.
+
+### S6 — `ContestView` extension
+Add school/kit/investment visibility to `contract.py:53-66`. Without it **no acquisition layer in
+this kernel is playable, only purchasable** (§13.1) — the degeneracy Jordan removed in 2026-06-29,
+re-entering by the front door.
+**Falsifier:** a policy demonstrably behaves differently with vs without a kit. Demonstrated, not
+asserted.
+
+### S7 — Dead-lever disposition
+**Wire or strike, before authoring anything onto them:** `rebut` (disabled on all 8 canonical
+proceedings), CLASH/REINFORCE/CROSS/TIE (display-only, no resolver consumer), Doubt Marker
+(*"a LABEL LOOKUP naming the ratified design intent"*), `Pressure`/`_bias` (unreachable via
+`build_contest`), `split_standing`, `regroup` (clamped ⇒ near-dead), threadwork's
+`BREADTH_OB`/`DISTANCE_OB`.
+**Gate: JORDAN for the strikes** — several are ratified design text.
+
+**Only after S1–S7: choose a system and author content.**
+
+---
+
+## §15.4 THE ALTERNATIVES, PRESERVED (so they are not re-derived)
+
+Do not re-litigate these from scratch; they are costed in §5 and §3–§4.
+
+**Character progression:** P1 Ledger/CP shop · P2 use-based sparking · P3 test-marking ·
+P4 Pendragon traits+passions · P5 position-not-power · P6 entropy budget · P7 three clocks.
+**Attribute rosters:** A-1 six faculties + two capacities · A-2 ratify the 10 · A-3 Focus derived ·
+A-4 registry 9 · A-5 glossary 7.
+**Faction:** F-1 ratify canon · F-2 Intel → Holdings ledger · F-3 split Mandate/Support ·
+F-4 ~~Administration~~ (withdrawn — `ap × compliance` exists).
+
+**Precedent shortlist that transfers** (§Appendix, and the §Precedent report): aptitude-as-price
+(DCSS/EVE/Battle Brothers), school-as-price-tier not wall (WFRP: off-career costs **double**),
+Netrunner **influence** as the non-degenerate cross-school budget, identity-as-named-objects at ~0pp
+(Slay the Spire/CK3/Victoria 3), competence-gates-**information** (KoDP), continuous accrual +
+quantised effect (EVE), attribute gains **rolled not chosen** (Blood Bowl d16).
+
+---
+
+## §15.5 DECISIONS THAT ARE JORDAN'S
+
+**Blocking the scaffolding:**
+1. **S2 — the obstacle substrate.** Changes what difficulty means everywhere. Nothing else in S1–S7
+   waits on it, but content does.
+2. **S7 strikes** — several dead levers are ratified text.
+3. **S1d** — the threadwork `history_contrib` fix is a real behaviour change with no oracle.
+
+**Not blocking (decide after the instruments exist):**
+4. **OPT-AV-1, the roster.** §10.5's argument stands: the roster likely *shrinks* as subsystems get
+   built, so ruling it now is premature exactly where it looks most needed.
+5. **Which progression system** (§15.4). By construction, deferred.
+6. **Focus** (+0.3pp, unread in threadwork) — cut, re-home, or give it a job.
+7. **Charisma** — zero code; needs a resolution role or an honest demotion.
+8. **Aging** — absent corpus-wide; raised, unanswered.
+
+---
+
+## §15.6 DEFECTS FOUND — independent of any design choice
+
+| severity | defect | site |
+|---|---|---|
+| **LIVE CRASH** | `role_at_contact` references unbound `CELL_PATTERN_FN`; reached from `resolve_engagements` for any Arrowhead subunit | `units.py:230` ← `massbattle.py:850` |
+| **HIGH** | Strategic mass battle is **geometrically degenerate**: both sides get `starting_position=(8,12)` and `advance_dir=1`, so contact is at tick 1 and `advance_cells` computes `dr=dc=0` — nothing ever moves | `massbattle.py:1866-1894` |
+| **HIGH** | Threadwork History is inert: `min(3, history+3)` ⇒ pool 12 for history ∈ {0,3,7} | `operations.py:156` |
+| **MED** | `massbattle.py` defines its own `roll_pool`, and it is **not equivalent off TN 7** (the owner ignores `tn`; this copy honours it) — latent divergence | `:627-638` vs `dice_engine.py:53-61` |
+| **MED** | `tribunal.py` rounds an Ob that is already a float, then prints it as `%.1f` | `:119,122` |
+| **MED** | `sim/conviction.py` runs a superseded 9-Conviction set; a live caller passes `'Loyalty'`, a member of neither set — silent no-op | `:42-49` |
+| **MED** | Standing has **four** live ranges, one of them executable (contest kernel 0–10 feeding `Face_current`) | `clock_registry` 0–5, `faction_politics` 0–7, `player_agency` both, `primitives.py:121` |
+| **LOW (latent)** | `resolve_internal_collisions` calls `random.randint` with no import — **unreachable**, a known dead primitive | `units.py:299` |
+
+---
+
+## §15.7 TRAPS
+
+1. **Do not differentiate subsystems by attribute weighting.** That is FM24's architecture and its
+   players' complaint. **Weighting masks are not an acquisition layer.**
+2. **Do not revive a per-character channel-weight vector.** Removed 2026-06-29 as *"a degenerate
+   who-bought-balance contest."* The failure mode is specific: *a free continuous allocation vector
+   over a shared axis is always a solved optimisation.* Use a discrete priced budget (Netrunner).
+3. **Do not put a sub-die reward in the pool while S1 is unexecuted** — `< 0.5D` is silently inert.
+4. **Do not author onto a dead lever** (§15.7 list in S7).
+5. **Do not build content before the instrument.** The "+2.8pp" retraction is the in-tree precedent.
+6. **Do not reinvent the opponent-Ob primitive** — it exists; three surfaces say it doesn't.
+7. **Do not let attributes be both the differentiator and the reward** — Oblivion's exact wedge.
+8. **Do not trust a docstring, an audit, or this document over a run.**
+
+---
+
+## §15.8 WHAT WOULD MAKE THIS SESSION'S CONCLUSIONS WRONG
+
+- **T1/T2 (attributes off the resolution surface)** fails if a built subsystem is found that
+  consumes a bare attribute *and* is balanced. None was found; fieldwork and mass battle are
+  unbuilt/degenerate respectively, so the sample is three engines.
+- **§10.5's "attribute dependency is what a subsystem has instead of an acquisition layer"** is a
+  pattern across six subsystems, four of which have no engine. **It is an inference, not a
+  measurement, and it is falsifiable exactly once** — build S6+the contest layer and see whether the
+  contest's attribute needs actually shrink. If they don't, the thesis is wrong.
+- **§13.2's channel inversion** assumes S1 succeeds at zero cost. Measured for combat only.
+- **The precedent convergence** is mechanism-level; two figures in the source report are flagged
+  contested (CK3 Prowess conversion, WFRP bracket boundary) and are not load-bearing here.
