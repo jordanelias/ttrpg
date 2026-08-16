@@ -1150,3 +1150,145 @@ quantised effect (EVE), attribute gains **rolled not chosen** (Blood Bowl d16).
 - **§13.2's channel inversion** assumes S1 succeeds at zero cost. Measured for combat only.
 - **The precedent convergence** is mechanism-level; two figures in the source report are flagged
   contested (CK3 Prowess conversion, WFRP bracket boundary) and are not load-bearing here.
+
+---
+
+# §16 THE EXPLICIT MAP — progression ↔ attributes ↔ systems
+
+Measured by AST over `systems/` + `engine/`, reading **assignments** rather than references
+(`CLAUDE.md` §0.1 point 1: *"grep the field's assignments — not its readers"*).
+
+## §16.0 The measurement that governs the whole map
+
+**Write sites for every per-actor quantity, excluding constructor self-assignment:**
+
+| quantity | writers | quantity | writers |
+|---|---|---|---|
+| Strength · Agility · Endurance | **0** | History | **0** |
+| Cognition · Attunement · Focus | **0** | Thread Sensitivity | **0** |
+| Spirit · Recall · Bonds · Charisma | **0** | `equipped` · `skills` · `tradition` | **0** |
+| Disposition | **0** | `faculty` | **0** |
+| Renown | **0** | **Coherence** | **1** (`coherence.py:155`) |
+
+And the three that *are* written are not what they look like:
+
+- `crown.standing` (10 sites, `crown_initiative.py:115,118`, `absolution.py:86`) — a **faction's**
+  standing, not a character's.
+- `knot.strain` (2 sites, `knots.py:266,304`) — lives on the **Knot** object, a relationship, not
+  the character.
+- `state.coherence` (`coherence.py:155`) — **the only character-scale quantity any live code
+  changes over time. It is a decay track.**
+
+> **Every character quantity in Valoria is write-once-at-construction, except Coherence, which only
+> goes down.** §1.6 called this "a complete loss engine and no gain engine" from the design texts.
+> The write-side census is the stronger statement: **the gain engine has no write path at all.**
+
+---
+
+## §16.1 MAP A — attribute × system, by connection TYPE
+
+`POOL` sizes the dice pool · `BLEND` enters a computed faculty · `GATE` is a threshold, never rolled ·
+`CEILING` bounds a resource · `META` is carried by an adapter, never read by a resolver · `—` absent.
+
+| | combat | contest | threadwork | knots/fieldwork | mass battle | factions |
+|---|---|---|---|---|---|---|
+| **Strength** | **BLEND** — Impact `Str+heft`; `½Agi+½Str` balance; bind; `0.25·Str·End` health | — | — | — | — | — |
+| **Agility** | **BLEND** — tempo `K(agi−4)`; reflex; balance; footwork | — | — | — | — | — |
+| **Endurance** | **BLEND** — `WI=End+4+0.4·Spi`; `stamina=3End+2Spi` | — | — | — | — | — |
+| **Cognition** | **BLEND** — `reading=(2Cog+Att)/3` | **META** (`expert_judge`/`panel`) | **BLEND** — collective helper `⌊Cog/2⌋` | *(doc: Examine/Surveil/Cover)* | **BLEND** — `Command=⌈(2Cha+Cog)/3⌉` | — |
+| **Attunement** | **BLEND** — reading (⅓), reflex | **META** (`no_adjudicator`) | — | *(doc: Interview/Read)* | — | — |
+| **Spirit** | **BLEND** — WI, health, stamina, `conc=3Foc+2Spi` | — | **POOL** — `Spirit×2` + fatigue threshold | **POOL** — `Spirit×2` | — | — |
+| **Focus** | **BLEND** — `conc_max`, `disrupt_resist`, `poise_regen` · **+0.3pp** | — | **declared, never read** | — | — | — |
+| **Recall** | — | **absent** (CR6 names it; no consumer) | — | *(doc only)* | — | — |
+| **Bonds** | — | — | — | **GATE** — `≥5`, count `⌊B/2⌋+1` | — | — |
+| **Charisma** | — | **CEILING** — `Face_max=Cha×3` | — | — | **BLEND** — Command | — |
+| — | | | | | | |
+| **History** | **POOL** — `max(5,H+6)`, the *whole* pool | — | **inert** — `min(3,H+3)` | **POOL** — `+History(Rel)` | — | — |
+| **Thread Sensitivity** | — | — | **POOL+GATE** — `⌊TS/10⌋`, gates at 30/50, **sets opponent's Ob** | **GATE** | — | — |
+| **`faculty`** | — | **POOL + BLEND** — `faculty×2+3` **and** `(faculty−4)/6` into σ (double-dipped) | — | — | — | — |
+| **`equipped`/`skills`/`tradition`** | **BLEND** — graded levers on σ components | — | — | — | — | — |
+| **Disposition** | **BLEND** — commit skew, counter tilt, Vor drift | — | — | — | — | — |
+
+**What the map shows:**
+1. **Six of ten attributes touch exactly one system.** Str/Agi/End/Focus touch only combat; Bonds
+   only knots; Charisma only contest+mass-battle.
+2. **No attribute connects three or more systems.** Cognition connects the most (four, one of them
+   `META`). The attributes are not a shared substrate — they are six private substrates.
+3. **The columns disagree about what an attribute even is.** Spirit is a POOL in threadwork and a
+   BLEND in combat. Charisma is a CEILING in contest and a BLEND in mass battle. There is no
+   consistent semantics for "attribute" across the tree.
+4. **The non-attribute rows are the load-bearing ones.** `History` *is* combat's entire pool;
+   `faculty` *is* contest's; `TS` is threadwork's gate, pool term **and** the opponent's obstacle.
+
+## §16.2 MAP B — the three-layer chain
+
+Every system resolves through the same shape; they differ only in what fills the slots.
+
+```
+   ATTRIBUTE  ──►  FACULTY (computed)  ──►  CHANNEL  ──►  net  ──►  DEGREE  ──►  consequence
+   (build-time)     (per-resolution)      pool | δσ
+```
+
+| system | attributes in | faculty computed | channel | Ob |
+|---|---|---|---|---|
+| combat | Str Agi End Cog Att Spi Foc | reading, reflex, balance, tempo, impact, durability, steadiness | **σ carries all opposition**; pool = History alone | **fixed 3** |
+| contest | *(none — `faculty`)* | readiness, resonance, leak, room | pool **and** σ | flat `venue.base_ob` |
+| threadwork | Spi (+Cog collective) | — *(no faculty layer)* | **pool only** | scale table **+ opponent TPS÷2** |
+| knots | Spi Bon | — | pool only | fixed 2 |
+| mass battle (canon) | Cha Cog → Command | morale, charge shock | **σ** | opponent's net |
+| factions | *(none)* | — | pool = bare stat | hand-set 1–2 |
+
+**The two structural facts:** the *faculty layer only exists in combat and contest*, and the
+*obstacle is opponent-derived only in threadwork* (`opposing.py:80-85`) — the primitive ED-IN-0187
+Half B should compose on.
+
+## §16.3 MAP C — progression: declared vs actual
+
+| quantity | design says it moves by | actual writer | status |
+|---|---|---|---|
+| Attributes ×10 | *"Advancement max 7"* | **none** | **no mechanism, no write path** |
+| History | SaGa sparking; levels 1–3 | **none** | two incompatible models, neither implemented |
+| CP | Belief/Duty/Domain-Echo at Accounting | **none** | menu cites a file never in this repo |
+| Thread Sensitivity | grows with practice | **none** | gate + pool + opponent-Ob, frozen at creation |
+| Renown | 8 sources, +2/season cap | **none** | fully specified, zero write path |
+| Standing (character) | Duty ±1, Exceeding +2 | **none** *(the 10 writes are a faction's)* | four live ranges, no writer |
+| `equipped` / techniques | graded investment | **none** | build-time input only |
+| Disposition (per NPC) | −1/season decay above +2 | **none** | |
+| **Coherence** | −1/op, banded, NPC at 0 | **`coherence.py:155`** | ✅ **the only live character loop** |
+| Knot strain | ±, rupture at +5 | `knots.py:266,304` | ✅ live (relationship, not character) |
+| Faction stats | 5 Stability triggers, income/drain | `crown_initiative`, `absolution`, `faction_action` | ✅ live at faction scale |
+
+## §16.4 MAP D — the loops
+
+**CLOSED (something changes, and the change feeds resolution):**
+- **Coherence** → band → +Ob on future Thread ops → more failures → more Coherence loss. The one
+  complete character feedback loop in the game, and it is a **death spiral by design**.
+- **Knot strain** → rupture → Disposition −3, +1 Scar both sides.
+- **Faction Stability/Wealth/Standing** → action pools → outcomes → stat deltas.
+
+**BROKEN — writer exists, no reader:** Coherence *bands* are computed and persisted, but nothing
+reads a band back into a pool or Ob outside threadwork; `COHERENCE_BAND_STRAIN_PACING` has no callers.
+Settlement Ledger tags have **zero consumers** in `systems/`.
+
+**BROKEN — reader exists, no writer:** *everything in §16.3's top eight rows.* Combat reads
+`History` as its entire pool and nothing can ever change it. Threadwork reads `TS` three ways and
+nothing can ever change it.
+
+> **This is the precise shape of the problem: the systems are wired to READ progression state that
+> nothing can WRITE.** The attribute roster question is downstream of that, and so is the choice of
+> progression system.
+
+## §16.5 MAP E — where progression would attach (the §15.3-S5 slots, per system)
+
+| slot | combat | contest | threadwork | knots | mass battle | factions |
+|---|---|---|---|---|---|---|
+| **Investment** (`{name: level}`) | ✅ `equipped` exists | ✗ blocked by `ContestView` (§13.1) | ✗ none | ✗ none | ✗ `tactic_cards` = `{}` | ✗ none |
+| **Practice** (float, per domain) | `history` — **int-quantised** | `faculty` — abstract | `history` — **inert** | `history_relationships` | ✗ | ✗ |
+| **Record** (durable) | `familiarity` = static table | `Dossier` = per-bout | `CoherenceState` ✅ | `Knot.log` ✅ | ✗ | `ledger.py` ✅ *(unconsumed)* |
+| **Aptitude** (rate/price, never rolled) | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+
+**Reading the table:** the Investment slot exists once, the Practice slot exists but is quantised or
+inert, the Record slot exists three times with **no shared owner**, and the Aptitude slot — the one
+every precedent in §Appendix says should carry the attributes — **does not exist anywhere.**
+
+That is the map. The scaffolding in §15.3 is exactly the work of filling the empty cells.
