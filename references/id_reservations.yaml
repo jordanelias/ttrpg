@@ -231,7 +231,7 @@ lane_ids:
     # renumbers): register-honesty fix to tools/observability/build_proposals.py --
     # obs_core.text_needs_jordan() rescues design-doc + flat-ledger Jordan-gating (register
     # needs_jordan 79->97). status resolved, no ruling needed. next_free 72->73.
-    IN: { name: "Infrastructure",      next_free: 189 }   # DELIBERATE GAP: CSO holds 0103-0111 (pinned by tests/valoria/test_id_reservations_walkback.py, which requires that string to stay in THIS file). Latest: ED-IN-0170..0188 (0187 = the 2026-08-14 degree-ladder + strategic-dice ruling; 0188 = FORK provenance vocabulary + the v17 citations it repairs. Both allocated BEFORE being cited, unlike 0173, which was allocated RETROACTIVELY 2026-08-13 after the alias plan cited it unallocated). Narrative: id_reservations_history.md#in
+    IN: { name: "Infrastructure",      next_free: 194 }   # DELIBERATE GAP: CSO holds 0103-0111 (pinned by tests/valoria/test_id_reservations_walkback.py, which requires that string to stay in THIS file). Latest: ED-IN-0170..0192 (0187 degree-ladder ruling; 0189 Track A repair; 0190 PP frozen; 0192 resolver architecture; 0193 §5-§7 restore + port-blocks deleted. Both allocated BEFORE being cited, unlike 0173, which was allocated RETROACTIVELY 2026-08-13 after the alias plan cited it unallocated). Narrative: id_reservations_history.md#in
     # [ED-IN-0064 DUP-KEY REPAIR] A stale duplicate `IN:` mapping once shadowed the authoritative one above (YAML last-key-wins). Neutralized; full incident write-up, including why a duplicate key is silent rather than an error: id_reservations_history.md#dup-key
     # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
     # ED-IN-0019/0020 (armature §5.10 decided + executed, see repair note above); ED-IN-0021..0025
@@ -241,7 +241,7 @@ lane_ids:
     # pass (see their own ledger entries) — not repeated here to avoid a stray basis-keyword tainting
     # this comment's open-ED citations.
     # ED-IN-0028 allocated 2026-07-08 (status resolved — plumbing complete, downstream deferred): Key & Echo Armature PR-2a — deterministic echo-transport plumbing (ECHO_TRANSPORT flag, default OFF/byte-exact) un-orphaning domain_echo.py + the campaign's first substrate KeyLog. next_free bumped 28->29. Downstream owned by FA-comeback (ED-FA-0005) + SC context-derivation bridge (ED-SC-0006/0007).
-    GO: { name: "Godot",               next_free: 1 }
+    GO: { name: "Godot",               next_free: 2 }   # LANE ACTIVATED 2026-08-14 (Jordan ruling; ED-GO-0001 = the activation). Was next_free 1 with no ED ever allocated, which read as neglect rather than dormancy. Detail: registers/handoffs/HANDOFF_GO.md
     SE: { name: "Settlements",         next_free: 50 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0050-0052 returned, max allocated ED-SE-0049. Narrative: id_reservations_history.md#se
     # ED-SE-0003 + ED-SE-0004 allocated 2026-07-07 (status open): ed_options OPT-9 (armature keying wave) + OPT-16 (execute ED-SE-0001's own updates) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
 

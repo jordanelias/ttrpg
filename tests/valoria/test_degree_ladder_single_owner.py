@@ -147,6 +147,15 @@ LADDERS = {
 HELD = {
     'systems/combat/combat_engine_v1/core.py': (
         _combat_engine,
+        "⚠ RULED 2026-08-15 — THE HOLD IS RESOLVED IN PRINCIPLE AND THE SEQUENCE IS FIXED. Jordan: "
+        "'systems should not need different degree bands', and separately 'DECISIVE_OB for combat is "
+        "stupid as hell and is dead because Ob should be determined by your opponent more than "
+        "anything'. So this site MIGRATES. It is still held here because the ORDER is now settled and "
+        "is the opposite of the obvious one: derive Ob from the defender FIRST (score/2 + that "
+        "instance's modifiers), THEN the owner's ladder applies directly. Migrating the bands against "
+        "the fixed Ob first is precisely the wasted work core.py's own docstring predicted. Delete "
+        "this entry when the Ob derivation lands, not before. Original reason follows, still true of "
+        "the fixed-Ob form: "
         "Migrating it moves the Failure edge two whole successes (at DECISIVE_OB=3: fail <0.5 -> "
         "<2.5) and breaks a ratified invariant — guandao, armour-defeat capability 0.13, goes from "
         "settling 2.5% of plate fights to 47.5% against a 40% ceiling "
@@ -156,6 +165,15 @@ HELD = {
         "is wasted work. Held for Jordan — ED-IN-0187."),
     'engine/autoload/sigma_leverage.py': (
         _contest_surface,
+        "⚠ RULED 2026-08-15 — MIGRATES. Jordan: 'systems should not need different degree bands. it "
+        "should be consistent in application. if a system does require any modification or extension, "
+        "then the wrapper needs to inject the engine in such a manner that it can be modified "
+        "cleanly.' That answers the question this hold was waiting on: the unified ladder DOES "
+        "override the deliberate pool-aware bar, and if the contest still needs pool-awareness it "
+        "becomes an explicitly injected extension over the owner rather than a private re-banding. "
+        "Not executed yet — it flips degree(3,3) from 2 to 1, which is pinned by the 151 groundup "
+        "tests and _kernel_tests.py, so it is a measured change with real fallout, not a refactor. "
+        "Original reason follows: "
         "The social-contest surface. Two lower boundaries contradict the ruling — net==ob returns "
         "Success where the ruling says Partial, and 0<net<ob returns Partial where it says Failure "
         "— but its TOP band is a deliberate POOL-AWARE bar (pool mean + OVERWHELM_SIGMA*sigma) "

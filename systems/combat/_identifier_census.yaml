@@ -4,12 +4,13 @@ schema_version: 1
 subsystem: combat
 docs:
 - systems/combat/combat_c4_draft_v0.md
+- systems/combat/combat_currency_v1.md
 - systems/combat/combat_flow_skeleton_v1.md
 - systems/combat/combat_reference_v1.md
 - systems/combat/scene_combat_design_v1.md
 counts:
-  UNRESOLVED: 36
-  BUILT: 84
+  UNRESOLVED: 39
+  BUILT: 98
 identifiers:
   a_history:
     identifier: a_history
@@ -33,6 +34,16 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  ability_factor:
+    identifier: ability_factor
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**U3 edges + U5 choke + U7 facing WIRED byte-identical at K=0 (ED-PC-0018/0019/0020, 2026-07-22).** **U9 capstone DONE + RATIFIED (ED-PC-0021, verdict ratified by PR #220 merge 2026-07-23; the held-back grip-invariant-thrust activation call stays needs_jordan) — closes U0→U9: the ablation gate (work…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/ability_primitives.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   act_threshold:
     identifier: ACT_THRESHOLD
     docs:
@@ -103,6 +114,17 @@ identifiers:
     purpose: '`outcome ∈ {attacker_win, defender_win, draw, rout, withdrawal}` from the terminal; `participants` = all actor_ids'
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  adef_cap:
+    identifier: adef_cap
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: 'Deferred (flagged, fix-spec''d): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combat_systems.py
+    - py:systems/combat/combat_engine_v1/core.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   apply_wound:
@@ -264,6 +286,15 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  choke_thrust:
+    identifier: CHOKE_THRUST
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**U3 edges + U5 choke + U7 facing WIRED byte-identical at K=0 (ED-PC-0018/0019/0020, 2026-07-22).** **U9 capstone DONE + RATIFIED (ED-PC-0021, verdict ratified by PR #220 merge 2026-07-23; the held-back grip-invariant-thrust activation call stays needs_jordan) — closes U0→U9: the ablation gate (work…'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   close_gap_ref:
     identifier: CLOSE_GAP_REF
     docs:
@@ -388,6 +419,17 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  cut_auth_ref:
+    identifier: CUT_AUTH_REF
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**JD-4 + JD-9 DETERMINED (ED-PC-0009) and WIRED LIVE (ED-PC-0011, 2026-07-08)** — `core.coupling`''s dual-reference percussion-authority fix (`PERC_AUTH_REF`/`PERC_AUTH_REF_SOFT`) and `CUT_AUTH_REF` cut-magnitude scaling, validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/p…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   defence_sigma:
     identifier: defence_sigma
     docs:
@@ -613,6 +655,17 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  gap_exposure:
+    identifier: GAP_EXPOSURE
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**Fiat audit (ED-PC-0023):** THRUST_LEVER_FLOOR/GAP_EXPOSURE fixes, dead `Combatant.pool` removed; **the imposition mechanism RETIRED as fiat (Jordan ruling) — `IMPOSITION_GATE=False`; tradition-preference now EMERGES from build (skill investment + weapon + abilities + disposition), not a forced nod…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   grab_available:
     identifier: grab_available
     docs:
@@ -663,6 +716,15 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  imposition_gate:
+    identifier: IMPOSITION_GATE
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**Fiat audit (ED-PC-0023):** THRUST_LEVER_FLOOR/GAP_EXPOSURE fixes, dead `Combatant.pool` removed; **the imposition mechanism RETIRED as fiat (Jordan ruling) — `IMPOSITION_GATE=False`; tradition-preference now EMERGES from build (skill investment + weapon + abilities + disposition), not a forced nod…'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
   indes_steal_amount:
     identifier: indes_steal_amount
     docs:
@@ -748,6 +810,16 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  max_tempo_pen:
+    identifier: MAX_TEMPO_PEN
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: 'Deferred (flagged, fix-spec''d): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head.'
+    built_in:
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   measure_gap:
     identifier: measure_gap
     docs:
@@ -815,6 +887,49 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  perc_auth_ref:
+    identifier: PERC_AUTH_REF
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**JD-4 + JD-9 DETERMINED (ED-PC-0009) and WIRED LIVE (ED-PC-0011, 2026-07-08)** — `core.coupling`''s dual-reference percussion-authority fix (`PERC_AUTH_REF`/`PERC_AUTH_REF_SOFT`) and `CUT_AUTH_REF` cut-magnitude scaling, validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/p…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  perc_auth_ref_soft:
+    identifier: PERC_AUTH_REF_SOFT
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**JD-4 + JD-9 DETERMINED (ED-PC-0009) and WIRED LIVE (ED-PC-0011, 2026-07-08)** — `core.coupling`''s dual-reference percussion-authority fix (`PERC_AUTH_REF`/`PERC_AUTH_REF_SOFT`) and `CUT_AUTH_REF` cut-magnitude scaling, validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/p…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  perc_exp:
+    identifier: PERC_EXP
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: 'Deferred (flagged, fix-spec''d): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/weapon_physics.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  perc_transmit_floor:
+    identifier: PERC_TRANSMIT_FLOOR
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: 'Deferred (flagged, fix-spec''d): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   personal_combat:
     identifier: personal_combat
     docs:
@@ -861,6 +976,16 @@ identifiers:
     purpose: Sim validation:** Phase 11 (`tests/sim/phase11_c4_v0_2026-05-17.md`) + Phase 12 (`tests/sim/phase12_mass_archetype_v0_2026-05-17.md`)
     built_in: []
     disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  phi_grip:
+    identifier: phi_grip
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: The held-back `CHOKE_THRUST` call is **DISSOLVED** — the choke cost was mis-parked against the (physically-correct) D2 force-invariant and RE-HOMED to the control/legibility channel, so `phi_grip('point')` is grip-invariant unconditionally (D2 byte-identical).
+    built_in:
+    - py:systems/combat/combat_engine_v1/weapon_physics.py
+    disposition: BUILT
     doc_status: null
     in_table: false
   prev_closed:
@@ -1002,6 +1127,17 @@ identifiers:
     disposition: UNRESOLVED
     doc_status: null
     in_table: false
+  ringen_am_schwert:
+    identifier: ringen_am_schwert
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**U3 edges + U5 choke + U7 facing WIRED byte-identical at K=0 (ED-PC-0018/0019/0020, 2026-07-22).** **U9 capstone DONE + RATIFIED (ED-PC-0021, verdict ratified by PR #220 merge 2026-07-23; the held-back grip-invariant-thrust activation call stays needs_jordan) — closes U0→U9: the ablation gate (work…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/ability_primitives.py
+    - py:systems/combat/combat_engine_v1/workbench/build_levers.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   run_all:
     identifier: run_all
     docs:
@@ -1083,6 +1219,18 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: true
+  sel_head:
+    identifier: sel_head
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: 'Deferred (flagged, fix-spec''d): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head.'
+    built_in:
+    - py:systems/combat/combat_engine_v1/combatant.py
+    - py:systems/combat/combat_engine_v1/core.py
+    - py:systems/combat/combat_engine_v1/weapon_physics.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   select_mode:
     identifier: select_mode
     docs:
@@ -1166,6 +1314,38 @@ identifiers:
     disposition: BUILT
     doc_status: null
     in_table: false
+  test_levers_add_texture_without_shifting_balance:
+    identifier: test_levers_add_texture_without_shifting_balance
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**A 4-critic + NERS adversarial review corrected the record:** the ability layer''s aggregate win-rate edge is ~0 (the earlier "+2.8pp" was a tradition-membership CONFOUND, retracted); the correct instrument for a situational lever is **per-fight TEXTURE with outcome-preservation** (16–28% of fights …'
+    built_in: []
+    disposition: UNRESOLVED
+    doc_status: null
+    in_table: false
+  thrust_lever_floor:
+    identifier: THRUST_LEVER_FLOOR
+    docs:
+    - systems/combat/combat_currency_v1.md
+    purpose: '**Fiat audit (ED-PC-0023):** THRUST_LEVER_FLOOR/GAP_EXPOSURE fixes, dead `Combatant.pool` removed; **the imposition mechanism RETIRED as fiat (Jordan ruling) — `IMPOSITION_GATE=False`; tradition-preference now EMERGES from build (skill investment + weapon + abilities + disposition), not a forced nod…'
+    built_in:
+    - py:systems/combat/combat_engine_v1/core.py
+    - typed:engine/engine_params/combat_engine_v1.json
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  tn_standard:
+    identifier: TN_STANDARD
+    docs:
+    - systems/combat/combat_reference_v1.md
+    purpose: The engine has always agreed — `combat_engine_v1/core.py:46` reads `TN = SL.TN_STANDARD` and has no per-weapon TN at all, so this paragraph described a mechanic that existed only in prose.
+    built_in:
+    - py:engine/autoload/sigma_leverage.py
+    - py:systems/combat/combat_engine_v1/workbench/presets.py
+    - py:systems/threadwork/sim/operations.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
   tradition_kit:
     identifier: TRADITION_KIT
     docs:
@@ -1242,26 +1422,35 @@ dropped_as_not_a_mechanic:
   combat_design_v1: the doc spells it as <name>.md — a citation
   combat_engine: matches a tracked/aliased document stem
   combat_engine_v1: matches a tracked/aliased document stem
+  combat_reference_v1: the doc spells it as <name>.md — a citation
   combat_systems: matches a tracked/aliased document stem
   combat_v30: the doc spells it as <name>.md — a citation
   combat_v30_infill: the doc spells it as <name>.md — a citation
   companion_specification_v30: matches a tracked/aliased document stem
+  consolidation_v1: the doc spells it as <name>.md — a citation
   cross_scale: matches a tracked/aliased document stem
   derived_stats_v1: matches a tracked/aliased document stem
   derived_stats_v30: the doc spells it as <name>.md — a citation
   echo_transport: matches a tracked/aliased document stem
+  editorial_ledger_pc: matches a tracked/aliased document stem
+  engine_params: matches a tracked/aliased document stem
+  export_engine_params: matches a tracked/aliased document stem
   faction_layer_v30: matches a tracked/aliased document stem
+  fiat_audit_v1: the doc spells it as <name>.md — a citation
   fieldwork_exploration: the doc spells it as <name>.md — a citation
   fieldwork_investigation: the doc spells it as <name>.md — a citation
   fieldwork_v30: matches a tracked/aliased document stem
   game_state: matches a tracked/aliased document stem
   godot_conversion_strategy_v1: the doc spells it as <name>.md — a citation
+  handoff_pc: the doc spells it as <name>.md — a citation
+  i8_capstone_audit: the doc spells it as <name>.md — a citation
   key_type_registry_v30: the doc spells it as <name>.md — a citation
   mass_battle_v3: the doc spells it as <name>.md — a citation
   mass_battle_v30: matches a tracked/aliased document stem
   mass_combat: matches a tracked/aliased document stem
   mc_v18: matches a tracked/aliased document stem
   module_contracts: boilerplate-or-too-short
+  needs_jordan: boilerplate-or-too-short
   npc_behavior_v30: matches a tracked/aliased document stem
   player_agency_v30: matches a tracked/aliased document stem
   scale_transitions_design_v1: the doc spells it as <name>.md — a citation
@@ -1279,5 +1468,6 @@ dropped_as_not_a_mechanic:
   test_flow_skeletons: matches a tracked/aliased document stem
   threadwork_redesign_v25: the doc spells it as <name>.md — a citation
   threadwork_v30: the doc spells it as <name>.md — a citation
+  u9_capstone_v1: the doc spells it as <name>.md — a citation
   videogame_mode_spec: the doc spells it as <name>.md — a citation
   weapon_physics: matches a tracked/aliased document stem

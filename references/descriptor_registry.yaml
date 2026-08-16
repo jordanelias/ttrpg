@@ -35,6 +35,12 @@ domains: [actor, settlement, equipment, environment]
 # ============================================================================
 # ATTRIBUTES (actor) -- DEFINED HERE. No prior single source existed; that gap is W1.13's reason.
 # Scalar 1-7. Roster IN FLUX: primary name + aliases (incl. legacy names for back-resolution).
+#
+# ⚠ THE COUNT IS RULED; THE ROSTER IS NOT COMPLETE. Jordan, 2026-08-14: "it will be 10 attributes".
+# NINE are defined below. The TENTH IS UNNAMED — naming it is the open workshop, and it is the ONLY
+# thing still open about the count. Do not infer the tenth from the aliases: Spirit folds to Will and
+# Perception folds to Attunement by the rows below, so neither is a candidate slot.
+# Until the tenth is named, "IN FLUX" stays and Godot fields stay unbound (CLAUDE.md §5). ED-IN-0193.
 # ============================================================================
 attributes:
   scale: "1-7"

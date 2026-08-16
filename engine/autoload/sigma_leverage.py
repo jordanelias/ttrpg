@@ -76,7 +76,15 @@ PER_DIE: dict[int, tuple[float, float]] = {
     8: (0.30, 0.781),   # [canonical: params/core.md §Expected Value (per die)]
 }
 
-TN_STANDARD = 7         # [canonical: params/core.md §TN Values]
+# TN 7 MEANS "A FACE OF 7 OR HIGHER SUCCEEDS" — equivalently, "roll above 6". Both readings are
+# the same rule and both are in circulation; RULED 2026-08-15 (Jordan: "TN7, roll of 7 or higher is
+# success") so the ambiguity stops here rather than being re-derived. The die rule it indexes:
+# face 1 = -1 success, 2-6 = 0, 7-9 = +1, 10 = +2.
+# ⚠ 7 is the STANDARD mode, not the only TN. Canon (params/core.md §TN Values, captured in
+# engine/engine_params/params_tables.yaml) is a three-value scale: Controlled 6 / Standard 7 /
+# Desperate 8, selected by SITUATION. It is never a property of the weapon — Jordan, 2026-08-15:
+# "all weapons are TN7 now that we have a physics engine", which this module already implemented.
+TN_STANDARD = 7         # [canonical: params/core.md §TN Values -- FORK: c451bcb]
 
 # ---------------------------------------------------------------------------
 # v32 σ-space modifier seeds (modifier_system_spec.md)

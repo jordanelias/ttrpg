@@ -5,11 +5,19 @@
 # RULES (anti-rot — this surface class killed roadmap_state.yaml, retired ED-IN-0006):
 #   1. Rollup ONLY. Lane detail stays in registers/handoffs/HANDOFF_<LANE>.md; every row POINTS at
 #      its evidence (PR / ED / commit), it never restates lane narrative.
-#   2. Verify before trust: tools/workplan_status.py --check warns whenever
-#      workplan-relevant paths (designs/, registers/handoffs/, canon/, sim/) changed since this
-#      file's last-touch commit (the machine freshness base; `as_of` below is the
-#      human-facing record). The navigator skill runs the check on EVERY read; stale
-#      board -> refresh rows from the registers/handoffs/ledger FIRST, then answer.
+#   2. Verify before trust: tools/workplan_status.py --check warns whenever workplan-relevant
+#      paths changed since this file's last-touch commit (the machine freshness base; `as_of`
+#      below is the human-facing record). The navigator skill runs the check on EVERY read;
+#      stale board -> refresh rows from the registers/handoffs/ledger FIRST, then answer.
+#      THE ROSTER IS NOT LISTED HERE. It is workplan_status.RELEVANT_PREFIXES, which composes
+#      systems/ + registers/handoffs/ + canon/ with ci_common.sim_reference_prefixes() (the
+#      single owner of the post-retirement sim roster, engine/ included). Naming it in this
+#      comment is what rotted: until 2026-08-14 these lines read "designs/, ..., sim/", two
+#      trees RETIRED in July, and the 2026-08-14 five-lens assessment (finding M1) read that
+#      prose and reported the detector itself as half-blind. It was not — OI-53a fixed the
+#      tool on 2026-07-29 and the comment was never updated. A duplicated roster rots
+#      independently of its subject, which is the same defect this board exists to prevent
+#      (ED-IN-0189). Point at the owner; do not restate it.
 #   3. Refresh-on-use: any session that lands juncture/stage-relevant work updates the
 #      touched rows + appends one last_progress line + bumps as_of (skill Workflow C).
 #   4. States: not_started | in_progress | blocked | done. `blocked_on` names the gate
@@ -18,8 +26,8 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "470aa09"
-  date: "2026-07-16"
+  sha: "9933ff2"
+  date: "2026-08-14"
 
 milestones:
   M1:
@@ -27,42 +35,56 @@ milestones:
     junctures:
       - n: 1
         label: "Strategic decision"
+        owner: "FA"
+        owner_deliverable: "FA decision-surface work (J-5) + the `domain_actions` module home, which IN must author first"
         state: not_started
         blocked_on: null
-        next: "author the domain_actions home (ED-FA-0002) + ratification-flip the FA §1.0c/§1.0d/§2.5 riders RULED 2026-07-13 (ED-IN-0046/0047), landing E11 (symmetric suspicion-reduction) in the same pass; fork-10 no longer blocks faction-scope work"
-        evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc", "fork-10 faction count RULED = 4 (ED-IN-0047, 2026-07-13; resolves ED-FA-0001) — faction-scope bank/binding work unblocked", "FA decision-surface riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder authored as PROPOSED in faction_politics_v30.md (2026-07-09) and RULED (ED-IN-0046/0047, 2026-07-13) — awaiting the ratification-flip + E11 authoring"]
+        next: "author the domain_actions home (ED-FA-0002) — junctures 1-2 still have NO owning design doc, the single largest M1 gap — + ratification-flip the FA §1.0c/§1.0d/§2.5 riders RULED 2026-07-13 (ED-IN-0046/0047), landing E11 (symmetric suspicion-reduction) in the same pass; fork-10 no longer blocks faction-scope work"
+        evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc", "fork-10 faction count RULED = 4 (ED-IN-0047, 2026-07-13; resolves ED-FA-0001) — faction-scope bank/binding work unblocked", "FA decision-surface riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder authored as PROPOSED in faction_politics_v30.md (2026-07-09) and RULED (ED-IN-0046/0047, 2026-07-13) — awaiting the ratification-flip + E11 authoring", "2026-08-14 (PR #311, ED-IN-0187): faction strategic actions now roll the canonical d10 through sigma_leverage (the d6/4+ convention is deleted) and resolve on the single-owner margin degree ladder (dice_engine.degree_from_net); CONQUEST_MIN_MIL deleted. ⚠ CORRECTED 2026-08-15 (ED-IN-0191): an earlier version of this row said \"resolution mechanics for this juncture are settled — the missing piece is the design doc, not the dice\". That is FALSE and PR #312 refutes it in two places. The score/2 obstacle derivation Jordan ruled (\"the obstacle is their corresponding score/2 plus whatever specific modifiers exist for them in that instance\") is wired NOWHERE, and fractional DICE are not implemented — sigma_leverage.roll_net_continuous does int(round(pool)), so pools are still whole dice and only the result is fractional. The dice are NOT settled"]
       - n: 2
         label: "Domain action"
+        owner: "IN"
+        owner_deliverable: "`domain_actions` authoring — the doc does not exist; echo render rides narrative Stage 0"
         state: not_started
         blocked_on: null
         next: "domain_actions authoring (IN); echo render rides narrative Stage 0"
         evidence: ["ED-IN-0028 echo-transport substrate landed 2026-07-08 (sim/cross_scale/echo_transport.py, flag-gated) — cross-scale plumbing only, not domain_actions authoring itself"]
       - n: 3
         label: "Social contest"
+        owner: "SC"
+        owner_deliverable: "SC Stage 4 (four deliberative games), gated on the P0 docket ED-SC-0003/0004/0005"
         state: in_progress
         blocked_on: null
         next: "Stage 4 (four deliberative games) — gated on P0 docket ED-SC-0003/0004/0005 (all needs_jordan: Piety/Persuasion naming, canonical Argue-pool formula, bonus-die cap)"
-        evidence: ["ED-SC-0002 resolved 2026-07-08 (composed keying ruling)", "ED-SC-0006/0007 executed 2026-07-08 (PR #95/#96) — contest kernel wired live in mc_v18 campaign (no longer dead-in-campaign) + parliamentary vote/Domain-Echo composition; ECHO_TRANSPORT flipped default ON (Jordan)", "Fable 5 subsystem audit RATIFIED 2026-07-05 (PR #80) sequenced P0→P1→Stage4→calibration", "ED-SC-0012 resolved 2026-07-08 (PR #104) — pessimist subtractive-action audit now fully executed across all 6 lanes (SC was the last outstanding one); 4 audit-residual decision packets (DP-1..DP-4) authored for Jordan, no verdict smuggled in", "Parliamentary Censure wired into campaign loop 2026-07-08 (PR #105) surfaced ED-SC-0015 (total-victory Mandate stacking, −1 vs −2) — filed needs_jordan; PR #117's open-items docket recommends the −1 cap but nothing is ratified yet"]
+        evidence: ["ED-SC-0002 resolved 2026-07-08 (composed keying ruling)", "ED-SC-0006/0007 executed 2026-07-08 (PR #95/#96) — contest kernel wired live in mc_v18 campaign (no longer dead-in-campaign) + parliamentary vote/Domain-Echo composition; ECHO_TRANSPORT flipped default ON (Jordan)", "Fable 5 subsystem audit RATIFIED 2026-07-05 (PR #80) sequenced P0→P1→Stage4→calibration", "ED-SC-0012 resolved 2026-07-08 (PR #104) — pessimist subtractive-action audit now fully executed across all 6 lanes (SC was the last outstanding one); 4 audit-residual decision packets (DP-1..DP-4) authored for Jordan, no verdict smuggled in", "Parliamentary Censure wired into campaign loop 2026-07-08 (PR #105) surfaced ED-SC-0015 (total-victory Mandate stacking, −1 vs −2) — filed needs_jordan; PR #117's open-items docket recommends the −1 cap but nothing is ratified yet", "2026-08-06..08 (ED-SC-0017..0030): three-lens pessimistic NERS audit + consolidation programme v2 filed at audit/2026-08-06-social-contest-three-lens-audit/ and proposals/. FINDINGS ONLY — no design text changed, no head moved. Headline: the subsystem carries THREE resolution models under one name; the canonical head's §4 loop has no engine, the kernel's loop has no canonical prose. ED-SC-0020/0021 held for Jordan", "2026-08-14 (PR #311): sigma_leverage.degree — the contest resolution surface — is the second degree site HELD OUT of the unified ladder; its top band is a deliberate pool-aware bar and the ruling flips its net==ob cell"]
       - n: 4
         label: "Personal combat"
+        owner: "PC"
+        owner_deliverable: "PC R3 U-series front half — one legible fight; NOT phase4_5"
         state: in_progress
         blocked_on: null
         next: "R3 U3 (Edges primitive, ED-PC-0004) — soft-gated on JD-2 (edges data table FLAG rows; default = land marked-provisional if unruled, so U3 is not hard-blocked); ED-PC-0008's bookkeeping (ledger status still open despite its findings being actioned by ED-PC-0009/0011) and ED-PC-0012 (point floor-lock, sabre-class) are open but explicitly non-blocking residuals"
-        evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)", "ED-PC-0005 wound ruling resolved+executed 2026-07-08 (combat scope only; non-combat calibration spun out as ED-PC-0006, resolved 2026-07-08)", "JD-1 RULED 2026-07-08 (Jordan: \"accept plan bands\") — U1 PoB recalibration DONE (ED-PC-0010, PR #99); T0 register item closed", "JD-4/JD-9 DETERMINED 2026-07-08 (ED-PC-0009) + U2 live-wired 2026-07-08 (ED-PC-0011, PR #109, 13-agent adversarial validation) — graded mode-affordance + Phase-C percussion enactment DONE; U0/U1/U2 all landed"]
+        evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)", "ED-PC-0005 wound ruling resolved+executed 2026-07-08 (combat scope only; non-combat calibration spun out as ED-PC-0006, resolved 2026-07-08)", "JD-1 RULED 2026-07-08 (Jordan: \"accept plan bands\") — U1 PoB recalibration DONE (ED-PC-0010, PR #99); T0 register item closed", "JD-4/JD-9 DETERMINED 2026-07-08 (ED-PC-0009) + U2 live-wired 2026-07-08 (ED-PC-0011, PR #109, 13-agent adversarial validation) — graded mode-affordance + Phase-C percussion enactment DONE; U0/U1/U2 all landed", "2026-08-08 (ED-PC-0056): personal-combat design docs consolidated 5 -> 1 at systems/combat/combat_reference_v1.md; head UNCHANGED (combat_engine_v1/ still canonical, engine wins on disagreement). §11.4 Surrender/Disengage recovered — live spec with no engine implementation, held for Jordan", "2026-08-14 (PR #311): combat_engine_v1/core.py is one of TWO degree sites HELD OUT of the unified ladder — migrating it moves the Failure edge two whole successes and breaks a ratified invariant (guandao settles 2.5% -> 47.5% of plate fights against a 40% ceiling). Asserted to still diverge, so resolving it fails the guard rather than leaving a stale exemption"]
       - n: 5
         label: "Thread operation"
+        owner: "WR"
+        owner_deliverable: "ED-WR-0001/0002 sweeps, then thread preconditions ED-1010/1011"
         state: in_progress
         blocked_on: null
         next: "WR sweeps ED-WR-0001/0002 (still open, cheap, unblocking); then thread preconditions ED-1010/1011"
         evidence: ["Stratum-B 2026-07-07: ED-871 closed (Mending cost fix) + C-TW-12 closed (knots.py rebuilt onto ED-912 gauge), both with pinned regression tests", "ED-WR-0007 subtractive-action verdicts executed 2026-07-08 (threadwork Pulling/Mending prose distilled)"]
       - n: 6
         label: "Season close"
+        owner: "IN"
+        owner_deliverable: "ED-1051 engine_clock ratification, then ordering flags ORD-3/ORD-4"
         state: blocked
         blocked_on: "ED-1051 (engine_clock ratification; home candidate = propagation_spec_v1)"
         next: "rule ED-1051, then ORD-3/ORD-4 ordering flags"
         evidence: ["propagation_spec_v1 CANONICAL (ED-1093)"]
       - n: 7
         label: "Articulation render"
+        owner: "IN"
+        owner_deliverable: "narrative engine Stage 0 (ED-IN-0004 render-gap close)"
         state: in_progress
         blocked_on: null
         next: "execute narrative Stage 0 (ED-IN-0004 render-gap close) — design PROPOSED, not yet implemented"
@@ -136,6 +158,21 @@ milestones:
         next: "load the compiled pack via the v2 §7 wrapper"
         evidence: []
 
+# OWNERSHIP (Jordan directive, 2026-08-14). Every M1 juncture now names the lane that closes it.
+# THE ROLLUP IS THE FINDING: IN owns 3 of 7 outright (2, 6, 7) and gates a 4th (juncture 1 cannot
+# start until IN authors the `domain_actions` home), so the cross-cutting lane is on the critical
+# path for FOUR junctures while the four subsystem lanes own one each. That is the structural
+# reason M1 sat at 0/7 through a month in which IN shipped infrastructure: the lane that owes M1
+# the most was spending itself elsewhere. Owners are LANES, not people — the repo's unit of
+# write-exclusivity (CLAUDE.md §4 session lane-scoping); references/lane_assignments.yaml still
+# describes the RETIRED A/B/C framing and is not the map to use.
+m1_ownership_rollup:
+  IN: [2, 6, 7]          # + gates juncture 1 via the unauthored domain_actions home
+  FA: [1]
+  SC: [3]
+  PC: [4]
+  WR: [5]
+
 decisions_t0_open:
   - "ED-1051 — engine_clock ratification"
 
@@ -150,3 +187,9 @@ last_progress:
   - "2026-07-14: WS0/WS1 Structural Observatory (ED-IN-0057..0064); ED-IN-0064 specs the L/PS §5 sequence (PR #136) but lps_inert_check stays 100/100 red (nothing has consequence yet); governance vector-audit run"
   - "2026-07-15: Observability apparatus consolidated (ED-IN-0068) — obs_core single-owner + unified PROPOSALS/DECISIONS register + apparatus_registry; 4 dead pure-function tools pruned. Proposal reconciliation (ED-IN-0069/0070) — dashboard awaiting-ratification count 55 -> 16"
   - "2026-07-16: Proposals-register needs-your-decision undercount FIXED (ED-IN-0072, renumbered from a 0071 collision with PR #150) — obs_core.text_needs_jordan rescues design-doc + flat-ledger Jordan-gating; the fix reclassified +18 (needs_jordan 79 -> 97, ledger_actionable 127 -> 119); register now 99 needs_jordan after merging main's repo-reorg proposal (ED-IN-0071), which the fix correctly flags"
+  - "2026-07-19..21: designs/ and sim/ RETIRED (ED-IN-0071 P4/P5). Every subsystem doc lives under systems/<x>/ and the sim reference is distributed across engine/ (core) + systems/<x>/sim/. Old paths alias via references/restructure_ledger.md. Structural only — no head moved, no juncture advanced"
+  - "2026-08-03..05: Jordan rulings J1 (fork direction INVERTED — main is the code-first go-forward repo, the fork holds outdated prose) and J2 (canon mass battle is tests/sim/mass_battle/, the 5-module systems/mass_battle/sim/ tree is retired). Then the EVACUATION (ED-IN-0145): arcs/, engine/params/ and the pre-July audit corpus moved off main to fork ref c451bcb. 433 of 452 cited PP-NNN numbers now resolve to no register on main — disposition HELD (Q4)"
+  - "2026-08-06..13: an unbroken run of IN-lane infrastructure — vector audit, generated glossary, contract/key indexes, subsystem flow skeletons, the code-leanness consolidation Track G, single-owner instrumentation, and six adversarial review passes. 19 of the 25 commits in this window are IN-lane. The repo's own five-lens assessment of the period: 'instrumented the disease more than it cured it' — the single-owner bypass count did not move while three new instruments landed. NO M1 JUNCTURE ADVANCED IN THIS WINDOW"
+  - "2026-08-14: five-lens read-only repo assessment (ED-IN-0183) + remediation plan (ED-IN-0185). Headline: the designated authority surfaces were the rotten ones — CURRENT.md's currency stamp was a single 38,164-char line with 8 verbatim-duplicated blocks and a broken chronology, and HANDOFF.md's Next actions (the only section the banner reads) opened with a blocker resolved 2026-07-30. Both found by reading; no tool could see either"
+  - "2026-08-14: JORDAN RULING SESSION (PR #311, ED-IN-0187/0188) — the degree ladder unified on the margin (net-ob: >=3 Overwhelming, >=1 Success, [0,1) Partial, <0 Failure), single-owned by dice_engine.degree_from_net; strategic dice unified on d10 (the d6/4+ convention deleted); CONQUEST_MIN_MIL deleted. Behaviour changed and six seeded goldens moved. TWO sites HELD: combat_engine_v1/core.py and sigma_leverage.degree. Q1(a), Q4, Q5, Q6, Q7 remain open"
+  - "2026-08-14: Track A authority-surface repair (ED-IN-0189, this commit) — CURRENT.md reduced 81,415 -> ~28,500 bytes per Jordan's delete ruling with the head-row table byte-identical; a structural stamp-chain guard added to currency_consistency_check (4/4 mutants killed, 9 findings against the deleted text as its control); HANDOFF.md Next actions rewritten; this board refreshed from a month-stale 2026-07-16"

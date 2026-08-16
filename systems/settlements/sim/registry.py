@@ -66,10 +66,11 @@ class Settlement:
     fort_level: int = 0
     garrison: bool = False
     # §1.8 per-settlement political acceptance (0-7)
-    # [PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: legitimacy/popular_support are declared
+    # [PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: legitimacy/popular_support are declared
     #  but NEVER READ OR WRITTEN anywhere in sim/ (zero non-definition references) — an INERT LPS-1
     #  schema stub, not a working per-settlement L/PS pipeline (R2's qualification to U-1). Wiring
-    #  them into a Mandate aggregate is ED-FA-0004 Stratum-B work.]
+    #  them into a Mandate aggregate is ED-FA-0004 Stratum-B work. The self-imposed port block is
+    #  DELETED (Jordan, 2026-08-15 — ED-IN-0193); the gap is unchanged and ED-FA-0004 is still open.]
     legitimacy: int = 0
     popular_support: int = 0
     # §1.4 / governance economy

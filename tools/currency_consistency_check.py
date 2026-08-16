@@ -231,6 +231,90 @@ def check_current_stamp(drift):
             drift.append(f"CURRENT.md stamp {stamp} predates head {path} (last commit {last}) — re-reconcile")
 
 
+# ---------------------------------------------------------------------------
+# STRUCTURAL VALIDATION OF THE RECONCILE-STAMP CHAIN (2026-08-14, ED-IN-0189).
+#
+# WHY THIS EXISTS. Every §1 authority in this repo was validated by METADATA and none by
+# STRUCTURE: check_current_stamp above reads the LEADING date of CURRENT.md and nothing else, so
+# the stamp paragraph was free to carry ~8 verbatim-duplicated blocks and a chronology running
+# 08-12 -> 07-30 -> 08-10 -> 07-30 while this tool reported "currency drift: none". Three
+# independent read-only lenses found that corruption by reading; no tool in the tree could see it
+# (audit/2026-08-14-five-lens-repo-assessment, findings T1 and L2). The blob is deleted in this
+# same commit; this is the guard that fails if the pattern comes back — CLAUDE.md §0.1 point 5,
+# "if you cannot write the guard you have not understood the pattern".
+#
+# THE INVARIANT IS NON-INCREASING, NOT STRICTLY DESCENDING, and the difference is load-bearing.
+# The remediation plan (ED-IN-0185 step A2) specified "strictly-descending dates"; the tree
+# falsifies that. MEASURED on the pre-deletion file: four lanes (IN, MB, PC, SC) each reconciled
+# on 2026-08-08 and wrote a stamp, so a strict rule would have failed on correct content and
+# taught the next session to weaken it. What actually went wrong is an INVERSION — a link dated
+# LATER than the link before it, in a chain that reads newest-first — and that is what is flagged.
+#
+# MEASURED BLIND SPOT, stated rather than left to be discovered: duplication is detected by
+# whitespace-normalized EXACT match, so two blocks differing by a single character — a stray
+# trailing underscore, a fixed typo — are two blocks. This is not hypothetical; it surfaced while
+# writing the test fixture below. It is the right trade anyway: near-match detection on prose
+# invites false positives on a gate, and the splice this guards against COPIES, so its output is
+# byte-identical. Exact match found all 8 real duplicates on the pre-deletion file.
+#
+# BOTH RULES ARE VERIFIED AGAINST THE PRE-DELETION FILE, not just against synthetic input:
+# tests/valoria/test_currency_consistency_check.py pins the real corrupted paragraph (recovered
+# from git) and asserts this check reports both defects on it. A guard whose only evidence is a
+# fixture its author wrote is measuring the fixture.
+_RECON_MARKER = re.compile(
+    r'(?:Last reconciled|Prior reconcile|\*\*Prior:\*\*)\s*:?\s*\d{4}-\d{2}-\d{2}')
+_RECON_DATE = re.compile(
+    r'(?:Last reconciled|Prior reconcile|\*\*Prior:\*\*)\s*:?\s*(\d{4}-\d{2}-\d{2})')
+
+# A duplicated stamp BODY is the splice signature. The floor exists so that short connective
+# fragments — which can legitimately recur — are not read as splices. MEASURED on the pre-deletion
+# paragraph: the genuine duplicate bodies ran 1,600-8,700 chars and the longest innocent repeat was
+# under 200, so 400 separates them with room on both sides and is not tuned to a single case.
+_DUP_BLOCK_MIN_CHARS = 400
+
+
+def _reconcile_paragraph(text):
+    """The reconcile-stamp block: the one blank-line-delimited paragraph holding the stamp."""
+    for para in text.split('\n\n'):
+        if 'Last reconciled:' in para:
+            return para
+    return None
+
+
+def _norm_ws(s):
+    return ' '.join(s.split())
+
+
+def check_current_stamp_structure(drift):
+    text = _read('CURRENT.md')
+    if text is None:
+        return                      # check_current_stamp already reported the missing file
+    para = _reconcile_paragraph(text)
+    if para is None:
+        return                      # ditto for the missing stamp
+
+    dates = _RECON_DATE.findall(para)
+    for i in range(1, len(dates)):
+        if dates[i] > dates[i - 1]:
+            drift.append(
+                f"CURRENT.md reconcile chain is non-monotonic: link {i + 1} ({dates[i]}) is newer "
+                f"than the link before it ({dates[i - 1]}) — the chain reads newest-first, so a "
+                f"date that climbs is a splice, not a reconcile")
+            break                   # one report; the whole chain needs a human either way
+
+    seen, reported = {}, set()
+    for block in _RECON_MARKER.split(para):
+        norm = _norm_ws(block)
+        if len(norm) < _DUP_BLOCK_MIN_CHARS:
+            continue
+        seen[norm] = seen.get(norm, 0) + 1
+        if seen[norm] == 2 and norm not in reported:
+            reported.add(norm)
+            drift.append(
+                f"CURRENT.md reconcile chain repeats a {len(norm)}-char stamp body verbatim "
+                f"({norm[:70]}…) — duplicated blocks are the signature of a mid-chain splice")
+
+
 # A TOMBSTONE IS NOT A HEAD CLAIM (2026-08-05, the evacuation).
 # CURRENT.md's job is to name the LIVE canonical head per subsystem, and this check exists to stop
 # it naming something that does not exist. But after the evacuation, the honest CURRENT.md row for
@@ -369,6 +453,7 @@ def check_handoff_heading(drift):
 def run_checks():
     drift = []
     check_current_stamp(drift)
+    check_current_stamp_structure(drift)
     check_current_paths_exist(drift)
     check_id_ceilings(drift)
     check_lane_id_ceilings(drift)

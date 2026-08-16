@@ -4257,13 +4257,22 @@
    "declared_lane": null,
    "documented": true,
    "guards": "Unit tests for tools/currency_consistency_check.py (ED-1087) \u2014 the self-updating recency",
-   "helper_loc": 0,
-   "helpers": [],
+   "helper_loc": 6,
+   "helpers": [
+    {
+     "loc": 3,
+     "name": "_write_current"
+    },
+    {
+     "loc": 3,
+     "name": "_body"
+    }
+   ],
    "lane_derived": true,
    "lanes": [
     "PC"
    ],
-   "loc": 127,
+   "loc": 222,
    "modules_under_test": [
     "references",
     "registers",
@@ -4272,12 +4281,32 @@
    ],
    "mutation_claimed": false,
    "mutation_count": null,
-   "test_count": 11,
+   "test_count": 17,
    "tests": {
+    "test_clean_descending_chain_reports_nothing": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
     "test_current_md_paths_filter_globs": {
      "assertionless": false,
      "assertions": 3,
      "summary": null
+    },
+    "test_flags_a_date_inversion": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The exact defect three independent lenses found by reading and no tool could see."
+    },
+    "test_flags_a_verbatim_duplicated_stamp_body": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_guard_is_wired_into_run_checks": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A check nothing calls is decoration (ED-IN-0180's 'live signal with no consumer')."
     },
     "test_lane_id_ceiling_clean_when_no_lane_ids_yet": {
      "assertionless": false,
@@ -4323,6 +4352,16 @@
      "assertionless": false,
      "assertions": 1,
      "summary": null
+    },
+    "test_same_day_reconciles_from_different_lanes_are_LEGAL": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE FALSIFIER FOR THE PLAN'S OWN WORDING, and the reason this guard deviates from it."
+    },
+    "test_short_repeats_stay_below_the_duplication_floor": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Connective fragments recur legitimately; only stamp-sized bodies are splice evidence."
     },
     "test_summary_line_never_raises": {
      "assertionless": false,
@@ -4489,7 +4528,7 @@
     "PC",
     "WR"
    ],
-   "loc": 353,
+   "loc": 371,
    "modules_under_test": [
     "engine",
     "engine.autoload",
@@ -6235,7 +6274,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 35
+     "size": 36
     }
    ],
    "cites_measurement": false,
@@ -6265,7 +6304,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 385,
+   "loc": 386,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -6285,6 +6324,7 @@
     "tools/ci_names_check.py",
     "tools/ci_names_consistency.py",
     "tools/ci_naming_check.py",
+    "tools/ci_pp_frozen_check.py",
     "tools/ci_program_claim_check.py",
     "tools/ci_quantity_vocabulary_check.py",
     "tools/ci_register_size_check.py",
@@ -9119,6 +9159,77 @@
     }
    }
   },
+  "test_pp_frozen_check.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Guards for tools/ci_pp_frozen_check.py \u2014 PP as frozen historical vocabulary (ED-IN-0190).",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 112,
+   "modules_under_test": [
+    "registers",
+    "systems",
+    "tools",
+    "tools/ci_pp_frozen_check.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 9,
+   "tests": {
+    "test_a_pointer_that_still_EXISTS_needs_no_annotation": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The rule is about absence, not about the path shape \u2014 otherwise it would demand a fork"
+    },
+    "test_an_id_above_the_ceiling_FAILS": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Positive control: plant the exact thing 'frozen' forbids."
+    },
+    "test_an_id_at_the_ceiling_PASSES": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The boundary is inclusive \u2014 PP-726 is a real, cited, historical id."
+    },
+    "test_an_unannotated_evacuated_pointer_FAILS": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Positive control for R1 \u2014 the state the register was actually in before the ruling."
+    },
+    "test_annotating_the_pointer_CLEARS_it": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_left_boundary_excludes_OPP": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "THE DEFECT THAT WOULD HAVE OPENED THIS GATE WITH 34 FABRICATED FINDINGS."
+    },
+    "test_right_boundary_does_not_truncate": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "`PP-72` must not match inside `PP-726` \u2014 that would read as under the ceiling."
+    },
+    "test_the_gate_does_not_count_itself": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "ED-IN-0159 \u00a72.4 recurring: the gate's own docstring spells an above-ceiling id as its"
+    },
+    "test_the_gate_passes_on_the_live_tree": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    }
+   }
+  },
   "test_program_claim_check.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -10640,7 +10751,7 @@
     "IN",
     "PC"
    ],
-   "loc": 371,
+   "loc": 397,
    "modules_under_test": [
     "engine",
     "engine/sim_reference_CONVENTIONS.md",
@@ -10664,7 +10775,7 @@
      "assertions": 2,
      "summary": "The concrete case that made \"scan every Status line\" load-bearing."
     },
-    "test_build_identifier_census_delta_is_plus_three_minus_one": {
+    "test_build_identifier_census_delta_is_plus_three_minus_zero": {
      "assertionless": false,
      "assertions": 2,
      "summary": "The ONE reader that moves. Both directions asserted by name."
@@ -10704,10 +10815,10 @@
      "assertions": 2,
      "summary": "The whole of \u00a71.3a's disputed set, explained by ONE cause."
     },
-    "test_the_one_lost_document_is_a_legend_not_a_status": {
+    "test_the_fenced_legend_still_cannot_be_read_as_a_status": {
      "assertionless": false,
-     "assertions": 2,
-     "summary": "A loss has to be justified, not just counted. This file's `## Status:` line"
+     "assertions": 4,
+     "summary": "The godot spec has TWO `## Status:` strings and only one is real."
     },
     "test_the_seven_are_partitioned_with_nothing_left_over": {
      "assertionless": false,
@@ -12262,7 +12373,7 @@
    "FA": 7,
    "FI": 1,
    "GO": 2,
-   "IN": 43,
+   "IN": 44,
    "MB": 5,
    "PC": 8,
    "SC": 2,
@@ -12388,16 +12499,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 161,
+  "files": 162,
   "files_citing_a_measurement": 17,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 121,
+  "files_naming_a_module": 122,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 46,
-  "helper_defs": 312,
-  "helper_loc": 2879,
+  "files_with_a_lane": 47,
+  "helper_defs": 314,
+  "helper_loc": 2885,
   "ratchet_baselines": 10,
-  "tests": 1410,
+  "tests": 1425,
   "undocumented_files": 0
  }
 }

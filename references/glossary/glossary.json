@@ -2,9 +2,9 @@
  "ambiguity_floor": 60,
  "counts": {
   "ambiguous": 32,
-  "located": 1798,
+  "located": 1805,
   "refused": 0,
-  "terms": 2065
+  "terms": 2083
  },
  "generated_by": "tools/observability/build_glossary.py",
  "refused": [],
@@ -238,7 +238,7 @@
   "Altonia": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 36,
+   "file_count": 37,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 14,
@@ -270,6 +270,7 @@
     "systems/npcs/npc_roster_v30_infill.md": 7,
     "systems/overview/peninsular_strain_v30.md": 2,
     "systems/settlements/generation_sourcebook_v1.md": 3,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 1,
     "systems/ui/valoria_ui_ux_v4.md": 1,
     "systems/victory/victory_v30.md": 2,
@@ -1080,7 +1081,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 87,
+   "file_count": 88,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1123,6 +1124,7 @@
     "systems/characters/conviction_track_v1_pp718_vetting.md": 1,
     "systems/characters/conviction_track_v30.md": 76,
     "systems/characters/conviction_track_v30_infill.md": 6,
+    "systems/combat/combat_currency_v1.md": 1,
     "systems/combat/combat_engine_v1/combat_balancing_methodology.md": 2,
     "systems/factions/baralta_crown_claim_v30.md": 9,
     "systems/factions/ci_political_v30.md": 97,
@@ -1252,7 +1254,7 @@
   "CP": {
    "ambiguous": false,
    "definition": "CP = Character Points only [ED-136]. Use \"Power\" for the unit offensive stat.",
-   "file_count": 15,
+   "file_count": 16,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1269,6 +1271,7 @@
     "systems/mass_battle/mass_battle_v30_index.md": 2,
     "systems/mass_battle/mass_battle_v30_infill.md": 1,
     "systems/settlements/settlement_layer_v30.md": 1,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/threadwork/threadwork_v25_historical.md": 5,
     "systems/threadwork/threadwork_v30.md": 5
    },
@@ -1518,7 +1521,7 @@
   "Church": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 148,
+   "file_count": 149,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 9,
@@ -1634,6 +1637,7 @@
     "systems/settlements/settlement_generator_v1.md": 5,
     "systems/settlements/settlement_layer_v30.md": 61,
     "systems/settlements/settlement_layer_v30_index.md": 4,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/settlements_flow_skeleton_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 3,
     "systems/settlements/valoria_political_hierarchy_v30.md": 7,
@@ -3034,7 +3038,7 @@
   "Domain Echo": {
    "ambiguous": false,
    "definition": "Faction-level consequence triggered by decisive Debate outcomes.",
-   "file_count": 57,
+   "file_count": 58,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -3082,6 +3086,7 @@
     "systems/overview/peninsular_strain_v30.md": 5,
     "systems/settlements/settlement_layer_v30.md": 2,
     "systems/settlements/settlements_flow_skeleton_v1.md": 2,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_system_v2.md": 2,
     "systems/social_contest/social_contest_v30.md": 2,
     "systems/threadwork/thread_horizontal_integration_spec.md": 9,
@@ -4463,7 +4468,7 @@
   "Hafenmark": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 94,
+   "file_count": 95,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
@@ -4541,6 +4546,7 @@
     "systems/settlements/settlement_generator_v1.md": 1,
     "systems/settlements/settlement_layer_v30.md": 13,
     "systems/settlements/settlement_layer_v30_index.md": 2,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 10,
     "systems/settlements/valoria_political_hierarchy_v30.md": 4,
     "systems/social_contest/social_contest_system_v2.md": 1,
@@ -5930,7 +5936,7 @@
   "Lowenskyst": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 31,
+   "file_count": 32,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/ners_vsg_reconciliation_v1.md": 2,
@@ -5953,6 +5959,7 @@
     "systems/settlements/settlement_adjacency_v30.md": 1,
     "systems/settlements/settlement_generator_v1.md": 3,
     "systems/settlements/settlement_layer_v30.md": 10,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 1,
     "systems/settlements/valoria_political_hierarchy_v30.md": 1,
     "systems/social_contest/social_contest_v30.md": 1,
@@ -6040,7 +6047,7 @@
    ],
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 72,
+   "file_count": 73,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 3,
@@ -6101,6 +6108,7 @@
     "systems/settlements/governance_play_redesign_v1.md": 2,
     "systems/settlements/scale_hierarchy_v1.md": 1,
     "systems/settlements/settlement_layer_v30.md": 13,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 4,
     "systems/social_contest/social_contest_system_v2.md": 1,
     "systems/social_contest/social_contest_v30.md": 2,
@@ -6242,7 +6250,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 99,
+   "file_count": 101,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6324,7 +6332,9 @@
     "systems/settlements/lps_wiring_v1.md": 14,
     "systems/settlements/settlement_layer_v30.md": 40,
     "systems/settlements/settlement_layer_v30_index.md": 2,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/valoria_political_hierarchy_v30.md": 2,
+    "systems/social_contest/social_contest_currency_v1.md": 5,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 4,
     "systems/social_contest/social_contest_system_v2.md": 4,
     "systems/social_contest/social_contest_v30.md": 26,
@@ -7225,7 +7235,7 @@
   "Partial": {
    "ambiguous": true,
    "definition": "The obstacle MET but not EXCEEDED \u2014 margin (net \u2212 Ob) in [0, 1) (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c> 0 but < Ob\u201d, which now reads Failure.",
-   "file_count": 65,
+   "file_count": 66,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -7275,6 +7285,7 @@
     "systems/overview/wc_survival_spine.md": 1,
     "systems/settlements/governance_play_redesign_v1.md": 1,
     "systems/settlements/settlement_adjacency_v30.md": 1,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_system_v2.md": 2,
     "systems/social_contest/social_contest_v30.md": 5,
     "systems/threadwork/thread_horizontal_integration_spec.md": 1,
@@ -8610,7 +8621,7 @@
   "Social": {
    "ambiguous": true,
    "category": "aggregate",
-   "file_count": 66,
+   "file_count": 67,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
@@ -8664,6 +8675,7 @@
     "systems/overview/peninsular_strain_v30.md": 1,
     "systems/settlements/settlement_layer_v30.md": 1,
     "systems/settlements/settlement_layer_v30_index.md": 2,
+    "systems/social_contest/social_contest_currency_v1.md": 2,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1,
     "systems/social_contest/social_contest_system_v2.md": 6,
     "systems/social_contest/social_contest_system_v2_index.md": 2,
@@ -8710,7 +8722,7 @@
   "Solmund": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 56,
+   "file_count": 57,
    "legacy_count": 1,
    "locations": {
     "canon/00_philosophical_foundations.md": 15,
@@ -8751,6 +8763,7 @@
     "systems/overview/peninsular_strain_v30.md": 1,
     "systems/settlements/generation_sourcebook_v1.md": 3,
     "systems/settlements/settlement_generator_v1.md": 1,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/threadwork/threadwork_v25_historical.md": 6,
     "systems/threadwork/threadwork_v30.md": 4,
     "systems/threadwork/threadwork_v30_infill.md": 2,
@@ -9015,7 +9028,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Internal coherence. 0 = Collapse trigger (P-15).",
-   "file_count": 96,
+   "file_count": 97,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -9090,6 +9103,7 @@
     "systems/settlements/generation_sourcebook_v1.md": 1,
     "systems/settlements/goldenfurt_slice/event_deck.md": 1,
     "systems/settlements/settlement_layer_v30.md": 10,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 3,
     "systems/social_contest/social_contest_system_v2.md": 4,
     "systems/social_contest/social_contest_v30.md": 13,
@@ -10224,7 +10238,7 @@
   "Valorsmark": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 3,
@@ -10237,6 +10251,7 @@
     "systems/settlements/scale_hierarchy_v1.md": 3,
     "systems/settlements/settlement_layer_v30.md": 2,
     "systems/settlements/settlement_layer_v30_index.md": 2,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/valoria_political_hierarchy_v30.md": 4,
     "systems/world/worldbuilding_v30.md": 8
    },
@@ -10316,7 +10331,7 @@
   "Varfell": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 94,
+   "file_count": 95,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
@@ -10393,6 +10408,7 @@
     "systems/settlements/settlement_generator_v1.md": 1,
     "systems/settlements/settlement_layer_v30.md": 7,
     "systems/settlements/settlement_layer_v30_index.md": 2,
+    "systems/settlements/settlements_currency_v1.md": 1,
     "systems/settlements/territory_temperaments_v30.md": 7,
     "systems/settlements/valoria_political_hierarchy_v30.md": 4,
     "systems/social_contest/social_contest_system_v2.md": 1,
@@ -10442,7 +10458,7 @@
   "Victory": {
    "ambiguous": false,
    "definition": "Win-condition specification across factions. Faction-specific victory paths (Crown / Church / Hafenmark / Varfell / L\u00f6wenritter / RM / Guilds).",
-   "file_count": 47,
+   "file_count": 48,
    "glossary_part": "PART ELEVEN \u2014 TOP-LEVEL SYSTEMS (non-stat, non-mechanic)",
    "legacy_count": 0,
    "locations": {
@@ -10482,6 +10498,7 @@
     "systems/overview/peninsular_strain_v30_index.md": 6,
     "systems/settlements/settlement_layer_v30.md": 3,
     "systems/settlements/settlement_layer_v30_index.md": 2,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 1,
     "systems/social_contest/social_contest_system_v2.md": 3,
     "systems/social_contest/social_contest_v30.md": 3,
@@ -11321,6 +11338,36 @@
     "mass_battle"
    ],
    "term": "a_surviving"
+  },
+  "ability_factor": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/ability_primitives.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**U3 edges + U5 choke + U7 facing WIRED byte-identical at K=0 (ED-PC-0018/0019/0020, 2026-07-22).** **U9 capstone DONE + RATIFIED (ED-PC-0021, verdict ratified by PR #220 merge 2026-07-23; the held-back grip-invariant-thrust activation call stays needs_jordan) \u2014 closes U0\u2192U9: the ablation gate (work\u2026"
+    }
+   },
+   "file_count": 3,
+   "legacy_count": 0,
+   "locations": {
+    "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 4,
+    "systems/combat/combat_currency_v1.md": 1,
+    "systems/combat/combat_engine_v1/ability_armature.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "combat",
+    "proposals"
+   ],
+   "term": "ability_factor"
   },
   "absolution": {
    "ambiguous": false,
@@ -12878,6 +12925,36 @@
     "settlements"
    ],
    "term": "add_tag"
+  },
+  "adef_cap": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/combat_systems.py",
+      "py:systems/combat/combat_engine_v1/core.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "Deferred (flagged, fix-spec'd): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head."
+    }
+   },
+   "file_count": 2,
+   "legacy_count": 0,
+   "locations": {
+    "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "systems/combat/combat_currency_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "combat",
+    "proposals"
+   ],
+   "term": "adef_cap"
   },
   "adj_pairs": {
    "ambiguous": false,
@@ -18045,18 +18122,20 @@
      ],
      "disposition": "BUILT",
      "docs": [
+      "systems/social_contest/social_contest_currency_v1.md",
       "systems/social_contest/social_contest_flow_skeleton_v1.md",
       "systems/social_contest/social_contest_v30.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `build_contest` | `systems/social_contest/sim/contest/wrapper.py:101 build_contest` | `engine/cross_scale/scene_dispatch.py:298 build_contest`; `systems/social_contest/sim/contest/agon_harness.py:204 build_contest`"
+     "purpose": "**2026-07-08: the P1 consequence spine (ED-SC-0006/0007) is EXECUTED and ECHO_TRANSPORT is DEFAULT ON** (Jordan \"Yes echo transport on\") via two complementary fidelities of the same conflict class: (a) the FACTION-scale auto-resolve \u2014 `engine/cross_scale/parliamentary_bridge.py` runs a \u00a710 Parliamen\u2026"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
+    "systems/social_contest/social_contest_currency_v1.md": 2,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 28,
     "systems/social_contest/social_contest_v30.md": 1
    },
@@ -20791,6 +20870,27 @@
    ],
    "term": "check_victory"
   },
+  "choke_thrust": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [],
+     "disposition": "UNRESOLVED",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**U3 edges + U5 choke + U7 facing WIRED byte-identical at K=0 (ED-PC-0018/0019/0020, 2026-07-22).** **U9 capstone DONE + RATIFIED (ED-PC-0021, verdict ratified by PR #220 merge 2026-07-23; the held-back grip-invariant-thrust activation call stays needs_jordan) \u2014 closes U0\u2192U9: the ablation gate (work\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "choke_thrust"
+  },
   "church_adjacent": {
    "ambiguous": false,
    "census": {
@@ -21864,7 +21964,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 91,
+   "file_count": 92,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -21908,6 +22008,7 @@
     "systems/articulation/articulation_layer_v30.md": 6,
     "systems/characters/character_histories_v30.md": 1,
     "systems/combat/combat_c4_draft_v0.md": 13,
+    "systems/combat/combat_currency_v1.md": 8,
     "systems/combat/combat_engine_v1/README.md": 2,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 4,
     "systems/combat/combat_engine_v1/ability_armature.md": 5,
@@ -23603,6 +23704,31 @@
     "ui"
    ],
    "term": "contest_initiated"
+  },
+  "contest_rebuild": {
+   "ambiguous": false,
+   "census": {
+    "social_contest": {
+     "built_in": [],
+     "disposition": "UNRESOLVED",
+     "docs": [
+      "systems/social_contest/social_contest_currency_v1.md"
+     ],
+     "purpose": "`systems/social_contest/social_contest_v30.md` (+ `_index`, `_infill`; the former `engine/params/contest.md` tables are EVACUATED 2026-08-05 \u2192 `engine/engine_params/params_tables.yaml`) \u2014 \u26a0\ufe0f a staged **contest_rebuild** is in flight (Gate 0 ratified 2026-06-30; reserved ED 1055\u20131079 / PP 800\u2013809; **\u2026"
+    }
+   },
+   "file_count": 1,
+   "legacy_count": 0,
+   "locations": {
+    "systems/social_contest/social_contest_currency_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "social_contest"
+   ],
+   "term": "contest_rebuild"
   },
   "contest_resolved": {
    "ambiguous": false,
@@ -25622,6 +25748,30 @@
     "factions"
    ],
    "term": "current_season"
+  },
+  "cut_auth_ref": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/core.py",
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**JD-4 + JD-9 DETERMINED (ED-PC-0009) and WIRED LIVE (ED-PC-0011, 2026-07-08)** \u2014 `core.coupling`'s dual-reference percussion-authority fix (`PERC_AUTH_REF`/`PERC_AUTH_REF_SOFT`) and `CUT_AUTH_REF` cut-magnitude scaling, validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/p\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "cut_auth_ref"
   },
   "cutscene_ended": {
    "ambiguous": false,
@@ -27974,7 +28124,7 @@
   "domain_echo": {
    "ambiguous": false,
    "definition": "Scene -> Faction propagation. ED-300 autonomous resolution.",
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -27986,6 +28136,7 @@
     "systems/_architecture/scale_transitions_v30.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 1,
     "systems/mass_battle/mass_battle_integration_v30.md": 3,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_v30.md": 1
    },
    "sources": [
@@ -29948,12 +30099,13 @@
      "built_in": [],
      "disposition": "UNRESOLVED",
      "docs": [
-      "systems/settlements/scale_hierarchy_v1.md"
+      "systems/settlements/scale_hierarchy_v1.md",
+      "systems/settlements/settlements_currency_v1.md"
      ],
      "purpose": "is **no longer blocked by B12** (resolved, item 2 above) but **remains blocked on `engine_clock`**"
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -29966,7 +30118,8 @@
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/_architecture/ners_vsg_reconciliation_v1.md": 4,
     "systems/_architecture/propagation_spec_v1.md": 31,
-    "systems/settlements/scale_hierarchy_v1.md": 1
+    "systems/settlements/scale_hierarchy_v1.md": 1,
+    "systems/settlements/settlements_currency_v1.md": 1
    },
    "sources": [
     "identifier_census"
@@ -34437,6 +34590,30 @@
    "subsystems": [],
    "term": "gap_church_seizure_occupation"
   },
+  "gap_exposure": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/core.py",
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**Fiat audit (ED-PC-0023):** THRUST_LEVER_FLOOR/GAP_EXPOSURE fixes, dead `Combatant.pool` removed; **the imposition mechanism RETIRED as fiat (Jordan ruling) \u2014 `IMPOSITION_GATE=False`; tradition-preference now EMERGES from build (skill investment + weapon + abilities + disposition), not a forced nod\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "gap_exposure"
+  },
   "gap_note": {
    "ambiguous": false,
    "census": {
@@ -36544,6 +36721,27 @@
     "factions"
    ],
    "term": "implied_affect"
+  },
+  "imposition_gate": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [],
+     "disposition": "UNRESOLVED",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**Fiat audit (ED-PC-0023):** THRUST_LEVER_FLOOR/GAP_EXPOSURE fixes, dead `Combatant.pool` removed; **the imposition mechanism RETIRED as fiat (Jordan ruling) \u2014 `IMPOSITION_GATE=False`; tradition-preference now EMERGES from build (skill investment + weapon + abilities + disposition), not a forced nod\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "imposition_gate"
   },
   "improvement_avenues": {
    "ambiguous": false,
@@ -40152,6 +40350,29 @@
    ],
    "term": "m6_faction_actions"
   },
+  "m_max": {
+   "ambiguous": false,
+   "census": {
+    "social_contest": {
+     "built_in": [
+      "py:engine/autoload/sigma_leverage.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/social_contest/social_contest_currency_v1.md"
+     ],
+     "purpose": "ED-SC-0017 proposes closing `ED-SC-0005` **without a new number** (CR6's ratified `M_MAX = 1.5\u03c3` tanh cap already governs the channels KU-1 flags)"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "m_max"
+  },
   "m_ratings": {
    "ambiguous": false,
    "census": {
@@ -40956,6 +41177,29 @@
    ],
    "subsystems": [],
    "term": "max_sub_phases"
+  },
+  "max_tempo_pen": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "Deferred (flagged, fix-spec'd): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head."
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "max_tempo_pen"
   },
   "max_turns": {
    "ambiguous": false,
@@ -45464,7 +45708,7 @@
   "parliamentary_vote": {
    "ambiguous": false,
    "definition": "BG Parliamentary Vote contest. GD-3 enforcement point: extra-parliamentary status flag gates vote eligibility (promoted-RM cannot cast).",
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -45477,6 +45721,7 @@
     "systems/factions/faction_systems_overview_v30.md": 3,
     "systems/factions/factions_flow_skeleton_v1.md": 2,
     "systems/factions/parliamentary_transfer_v30.md": 2,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 20,
     "systems/world/insurgency_pipeline_v30.md": 2
    },
@@ -45810,7 +46055,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`'s subsystem table, and `references/canonical_sources.yaml`'s `victory` entry names only the design doc, no code pointer \u2014 both of this module's mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:147-170` (hea"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`'s subsystem table, and `references/canonical_sources.yaml`'s `victory` entry names only the design doc, no code pointer \u2014 both of this module's mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:33-56` (head "
     },
     "world": {
      "built_in": [],
@@ -46096,6 +46341,101 @@
     "_architecture"
    ],
    "term": "per_system_lookup"
+  },
+  "perc_auth_ref": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/core.py",
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**JD-4 + JD-9 DETERMINED (ED-PC-0009) and WIRED LIVE (ED-PC-0011, 2026-07-08)** \u2014 `core.coupling`'s dual-reference percussion-authority fix (`PERC_AUTH_REF`/`PERC_AUTH_REF_SOFT`) and `CUT_AUTH_REF` cut-magnitude scaling, validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/p\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "perc_auth_ref"
+  },
+  "perc_auth_ref_soft": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/core.py",
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**JD-4 + JD-9 DETERMINED (ED-PC-0009) and WIRED LIVE (ED-PC-0011, 2026-07-08)** \u2014 `core.coupling`'s dual-reference percussion-authority fix (`PERC_AUTH_REF`/`PERC_AUTH_REF_SOFT`) and `CUT_AUTH_REF` cut-magnitude scaling, validated via a 13-agent agonist/antagonist adversarial Workflow against HEMA/p\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "perc_auth_ref_soft"
+  },
+  "perc_exp": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/weapon_physics.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "Deferred (flagged, fix-spec'd): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head."
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "perc_exp"
+  },
+  "perc_transmit_floor": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/core.py",
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "Deferred (flagged, fix-spec'd): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head."
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "perc_transmit_floor"
   },
   "perception_band": {
    "ambiguous": false,
@@ -46658,6 +46998,33 @@
     "_architecture"
    ],
    "term": "phased_occupation"
+  },
+  "phi_grip": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/weapon_physics.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "The held-back `CHOKE_THRUST` call is **DISSOLVED** \u2014 the choke cost was mis-parked against the (physically-correct) D2 force-invariant and RE-HOMED to the control/legibility channel, so `phi_grip('point')` is grip-invariant unconditionally (D2 byte-identical)."
+    }
+   },
+   "file_count": 1,
+   "legacy_count": 0,
+   "locations": {
+    "systems/combat/combat_currency_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "combat"
+   ],
+   "term": "phi_grip"
   },
   "philosophical_tradition_legacy": {
    "ambiguous": false,
@@ -48767,7 +49134,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure(proposer, world, rng)` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:276 propose_censure`"
     },
     "social_contest": {
      "built_in": [
@@ -48777,7 +49144,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:272 propose_censure`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `propose_censure` | `systems/factions/sim/parliamentary_action.py:96 propose_censure` | `systems/factions/sim/faction_action.py:276 propose_censure`"
     }
    },
    "file_count": 3,
@@ -51598,18 +51965,20 @@
      ],
      "disposition": "BUILT",
      "docs": [
+      "systems/social_contest/social_contest_currency_v1.md",
       "systems/social_contest/social_contest_flow_skeleton_v1.md",
       "systems/social_contest/social_contest_v30.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `resolve_contest` | `systems/social_contest/sim/contest/wrapper.py:229 resolve_contest` | `engine/cross_scale/scene_dispatch.py:299 resolve_contest` (only ever called with default `game=\"agon\"` \u2014 no production caller passes another `game`, verified by grep)"
+     "purpose": "**2026-07-08: the P1 consequence spine (ED-SC-0006/0007) is EXECUTED and ECHO_TRANSPORT is DEFAULT ON** (Jordan \"Yes echo transport on\") via two complementary fidelities of the same conflict class: (a) the FACTION-scale auto-resolve \u2014 `engine/cross_scale/parliamentary_bridge.py` runs a \u00a710 Parliamen\u2026"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
+    "systems/social_contest/social_contest_currency_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 26,
     "systems/social_contest/social_contest_v30.md": 1
    },
@@ -52389,6 +52758,36 @@
     "_architecture"
    ],
    "term": "rhetorical_style_used"
+  },
+  "ringen_am_schwert": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/ability_primitives.py",
+      "py:systems/combat/combat_engine_v1/workbench/build_levers.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**U3 edges + U5 choke + U7 facing WIRED byte-identical at K=0 (ED-PC-0018/0019/0020, 2026-07-22).** **U9 capstone DONE + RATIFIED (ED-PC-0021, verdict ratified by PR #220 merge 2026-07-23; the held-back grip-invariant-thrust activation call stays needs_jordan) \u2014 closes U0\u2192U9: the ablation gate (work\u2026"
+    }
+   },
+   "file_count": 2,
+   "legacy_count": 0,
+   "locations": {
+    "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "systems/combat/combat_currency_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "combat",
+    "proposals"
+   ],
+   "term": "ringen_am_schwert"
   },
   "rm_base_strength": {
    "ambiguous": false,
@@ -53686,7 +54085,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` \u2014 Censure vote, Territory-Transfer vote, and the season's two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:40-44 run_parliamentary_vote`"
+     "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: lateral | `social_contest` | `run_parliamentary_vote`/`Motion`/`VoteDeclaration` \u2014 Censure vote, Territory-Transfer vote, and the season's two-pole vote all wrap this resolver | `systems/factions/sim/parliamentary_action.py:44-48 run_parliamentary_vote`"
     },
     "social_contest": {
      "built_in": [
@@ -56301,6 +56700,35 @@
    ],
    "term": "seizure_ob_modifier"
   },
+  "sel_head": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/combatant.py",
+      "py:systems/combat/combat_engine_v1/core.py",
+      "py:systems/combat/combat_engine_v1/weapon_physics.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "Deferred (flagged, fix-spec'd): MAX_TEMPO_PEN 38-weapon flat-top (needs golden regen), PERC_EXP low-mass compression, PERC_TRANSMIT_FLOOR, adef_cap sel_head."
+    }
+   },
+   "file_count": 1,
+   "legacy_count": 0,
+   "locations": {
+    "systems/combat/combat_currency_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "combat"
+   ],
+   "term": "sel_head"
+  },
   "select_action": {
    "ambiguous": false,
    "census": {
@@ -56380,7 +56808,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` \u2192 `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` \u2192 priority chain Excommunication \u2192 Council \u2192 Absolution; any other name \u2192 immediate NOOP \u2014 `systems/factions/sim/faction_action.py:277-318 _faction_specific_unique`."
+     "purpose": "S2.4.1** `[branch]` Dispatch by `faction.name`: `Crown` \u2192 `crown_initiative.select_initiative_mode` then one of 3 modes; `Church` \u2192 priority chain Excommunication \u2192 Council \u2192 Absolution; any other name \u2192 immediate NOOP \u2014 `systems/factions/sim/faction_action.py:294-335 _faction_specific_unique`."
     }
    },
    "file_count": 1,
@@ -58644,7 +59072,7 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 34,
+   "file_count": 35,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
@@ -58675,6 +59103,7 @@
     "systems/overview/overview_flow_skeleton_v1.md": 4,
     "systems/settlements/goldenfurt_slice/sim_build_spec.md": 1,
     "systems/settlements/goldenfurt_slice/verification_findings.md": 1,
+    "systems/social_contest/social_contest_currency_v1.md": 5,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 157,
     "systems/social_contest/social_contest_v30.md": 1,
     "systems/ui/valoria_ui_ux_v4.md": 4,
@@ -63318,6 +63747,34 @@
    ],
    "term": "test_lethality_calibration"
   },
+  "test_levers_add_texture_without_shifting_balance": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [],
+     "disposition": "UNRESOLVED",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**A 4-critic + NERS adversarial review corrected the record:** the ability layer's aggregate win-rate edge is ~0 (the earlier \"+2.8pp\" was a tradition-membership CONFOUND, retracted); the correct instrument for a situational lever is **per-fight TEXTURE with outcome-preservation** (16\u201328% of fights \u2026"
+    }
+   },
+   "file_count": 3,
+   "legacy_count": 0,
+   "locations": {
+    "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "systems/combat/combat_currency_v1.md": 1
+   },
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [
+    "combat",
+    "proposals"
+   ],
+   "term": "test_levers_add_texture_without_shifting_balance"
+  },
   "test_massbattle": {
    "ambiguous": false,
    "census": {
@@ -64396,6 +64853,30 @@
    ],
    "term": "throughlines_2026"
   },
+  "thrust_lever_floor": {
+   "ambiguous": false,
+   "census": {
+    "combat": {
+     "built_in": [
+      "py:systems/combat/combat_engine_v1/core.py",
+      "typed:engine/engine_params/combat_engine_v1.json"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_currency_v1.md"
+     ],
+     "purpose": "**Fiat audit (ED-PC-0023):** THRUST_LEVER_FLOOR/GAP_EXPOSURE fixes, dead `Combatant.pool` removed; **the imposition mechanism RETIRED as fiat (Jordan ruling) \u2014 `IMPOSITION_GATE=False`; tradition-preference now EMERGES from build (skill investment + weapon + abilities + disposition), not a forced nod\u2026"
+    }
+   },
+   "file_count": 0,
+   "legacy_count": 0,
+   "locations": {},
+   "sources": [
+    "identifier_census"
+   ],
+   "subsystems": [],
+   "term": "thrust_lever_floor"
+  },
   "tick_in_phase": {
    "ambiguous": false,
    "census": {
@@ -64677,6 +65158,18 @@
   "tn_standard": {
    "ambiguous": false,
    "census": {
+    "combat": {
+     "built_in": [
+      "py:engine/autoload/sigma_leverage.py",
+      "py:systems/combat/combat_engine_v1/workbench/presets.py",
+      "py:systems/threadwork/sim/operations.py"
+     ],
+     "disposition": "BUILT",
+     "docs": [
+      "systems/combat/combat_reference_v1.md"
+     ],
+     "purpose": "The engine has always agreed \u2014 `combat_engine_v1/core.py:46` reads `TN = SL.TN_STANDARD` and has no per-weapon TN at all, so this paragraph described a mechanic that existed only in prose."
+    },
     "threadwork": {
      "built_in": [
       "py:engine/autoload/sigma_leverage.py",
@@ -66035,7 +66528,7 @@
   "units": {
    "ambiguous": false,
    "definition": "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis.",
-   "file_count": 46,
+   "file_count": 47,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
@@ -66054,6 +66547,7 @@
     "systems/_architecture/early_game_ignition_analysis.md": 3,
     "systems/_architecture/repository_keep_set_v1.md": 1,
     "systems/characters/conviction_track_v30.md": 1,
+    "systems/combat/combat_currency_v1.md": 1,
     "systems/combat/combat_engine_v1/phase4_5_plan_v1.md": 2,
     "systems/combat/combat_reference_v1.md": 10,
     "systems/factions/ci_political_v30.md": 3,
@@ -66957,7 +67451,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`'s subsystem table, and `references/canonical_sources.yaml`'s `victory` entry names only the design doc, no code pointer \u2014 both of this module's mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:147-170` (hea"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/victory/` has no head row of its own in `CURRENT.md`'s subsystem table, and `references/canonical_sources.yaml`'s `victory` entry names only the design doc, no code pointer \u2014 both of this module's mechanics (`victory_check_service`, `peninsular_sovereignty`) sim into `engine/autoload/victory.py`, never into this folder. | `CURRENT.md:33-56` (head "
     }
    },
    "definition": "GD-1 enforcement boundary. Sole module producing game-end faction-victory triggers.",

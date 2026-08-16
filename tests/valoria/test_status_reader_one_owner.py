@@ -183,8 +183,18 @@ def test_the_two_document_defects_are_still_open_and_named(doc):
 
 # ── per-reader, both directions ──────────────────────────────────────────────
 
-def test_build_identifier_census_delta_is_plus_three_minus_one():
-    """The ONE reader that moves. Both directions asserted by name."""
+def test_build_identifier_census_delta_is_plus_three_minus_zero():
+    """The ONE reader that moves. Both directions asserted by name.
+
+    WAS +3/-1 until 2026-08-14. The single loss was
+    `godot/godot_architecture_specification.md`, whose only `## Status:` was a fenced table
+    LEGEND below the head window — so the windowed owner correctly refused to read it, and the
+    document simply had no status at all. ED-GO-0001 gave it a real one at line 5 when Jordan
+    activated the GO lane, so the loss is CLOSED rather than tolerated: the census now sees a
+    status for every tracked doc the old whole-file regex saw one for.
+
+    The protection the old pair carried has not been dropped, only moved — see
+    `test_the_fenced_legend_still_cannot_be_read_as_a_status` below."""
     import build_identifier_census as bic
     gained, lost = set(), set()
     for d in tracked_md():
@@ -196,17 +206,33 @@ def test_build_identifier_census_delta_is_plus_three_minus_one():
         if old and not new:
             lost.add(d)
     assert sorted(gained) == sorted(FIXED_BY_G8)
-    assert sorted(lost) == ['godot/godot_architecture_specification.md']
+    assert sorted(lost) == []
 
 
-def test_the_one_lost_document_is_a_legend_not_a_status():
-    """A loss has to be justified, not just counted. This file's `## Status:` line
-    reads "NOT STARTED / IN PROGRESS / COMPLETE" — a legend for a table, below the
-    head. Dropping it is a fix."""
+def test_the_fenced_legend_still_cannot_be_read_as_a_status():
+    """The godot spec has TWO `## Status:` strings and only one is real.
+
+    Line ~5 is the document's actual status (added 2026-08-14, ED-GO-0001). The other lives
+    inside a ```markdown fence far below the head — it is the template legend
+    "NOT STARTED / IN PROGRESS / COMPLETE" for the per-document extraction worksheet, and
+    nothing should ever fill it in. This test is the survivor of the pair that previously
+    justified the reader LOSING this document: the loss is fixed, but the hazard that made the
+    loss the safer outcome is not, so it is still pinned.
+
+    Falsifies two distinct regressions: the legend drifting up into the head window where it
+    would be read as the document's status, and the real status being removed again.
+    """
     t = read('godot/godot_architecture_specification.md')
-    m = OLD_BIC.search(t)
-    assert m and 'NOT STARTED' in m.group(1), 'the legend changed — re-justify the loss'
-    assert t[:m.start()].count('\n') >= ci_common.STATUS_HEAD_LINES, \
+    import build_identifier_census as bic
+
+    real = bic.doc_status(t)
+    assert real is not None, 'the real head status was removed — the reader loses this doc again'
+    assert 'NOT STARTED' not in real, f'the reader picked up the legend, not the status: {real!r}'
+
+    legend = [i for i, ln in enumerate(t.splitlines())
+              if ln.startswith('## Status:') and 'NOT STARTED' in ln]
+    assert len(legend) == 1, f'expected exactly one legend line, found {len(legend)}'
+    assert legend[0] >= ci_common.STATUS_HEAD_LINES, \
         'the legend moved into the head window; it would now be read as a status'
 
 

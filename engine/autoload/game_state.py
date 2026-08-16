@@ -5,11 +5,12 @@ Canon source: designs/architecture/complete_systems_reference.md;
               [FORK: mc_v17.py starting state tables — ref c451bcb, superseded by mc_v18,
               file evacuated 2026-08-05, ED-IN-0145/ED-IN-0188]
 Status: [CANONICAL — Phase 1 implementation 2026-05-17]
-[PRE-LPS-1 / PORT-BLOCKING — ED-FA-0004, 2026-07-07: the Faction dataclass below
+[PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: the Faction dataclass below
  (L/Sta/W/I/Mil; no Mandate / PS / Treasury / da.* Keys) implements the pre-LPS-1 SUPERSEDED
  faction stat model — this is literally where "no Mandate" lives. The ratified LPS-1 model
- (per-settlement L/PS, Mandate = 7T/(T+6), Treasury) is UNIMPLEMENTED. Do NOT port this schema
- as canon-conformant until ED-FA-0004's Stratum-B reconciliation lands. See
+ (per-settlement L/PS, Mandate = 7T/(T+6), Treasury) is UNIMPLEMENTED. The self-imposed PORT BLOCK that stood here is DELETED (Jordan, 2026-08-15: "delete the code
+ that blocks itself from being ported as that is stale" — ED-IN-0193). The SCHEMA GAP IS NOT
+ STALE and is stated above; what was stale was gating the port on it. Port with eyes open. See
  systems/factions/faction_canon_v30.md / faction_behavior_v30.md.]
 
 Dependencies:

@@ -1,18 +1,30 @@
 # Patch Register — Active
-# Applied/approved/consumed patches archived to registers/patch_register_archive_*.yaml
+#
+# ⚠ PP IS FROZEN HISTORICAL VOCABULARY (Jordan ruling, 2026-08-14 — ED-IN-0190, resolving Q4 of
+# ED-IN-0185's agenda). Of the 537 distinct PP-NNN numbers cited across the live tree, SIX resolve
+# here; the rest point at registers that left `main` in the 2026-08-05 evacuation (ED-IN-0145).
+# They are not dangling and they are not fabricated — they resolve at fork ref c451bcb, and that is
+# now their declared, permanent disposition. Citations naming a PP stay valid forever and are read
+# as historical provenance.
+# FROZEN CEILING: PP-726. Nothing allocates a new PP. New work takes an ED-<LANE>-NNNN id
+# (CLAUDE.md §4), the same posture as the flat ED-NNNN freeze. Guard: tools/ci_pp_frozen_check.py,
+# which fails on any live PP above the ceiling and on any archive pointer below that does not name
+# the fork ref.
+#
+# Applied/approved/consumed patches archived to registers/patch_register_archive_*.yaml (all archive batches below are at FORK: c451bcb)
 # Next PP number: 727 (header reconciled 2026-07-01 — body already held PP-724..726; new PPs
 # allocate from reserved blocks, see references/id_reservations.yaml)
 # 2026-05-02: Renumbered mass-battle PP-684..688 → PP-711..715 to resolve register collision
 # with 2026-05-01 architecture-session ratification set (which retains canonical PP-684..688 as
 # the primary semantic owner — 50+ downstream files). Mass-battle entries below carry MB-03/04/06/02/07
 # finding_ids and date 2026-04-30 for archival traceability.
-# Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → deprecated/archives/patches/patch_register_archive_2026_05_01_b.yaml
+# Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → deprecated/archives/patches/patch_register_archive_2026_05_01_b.yaml  [FORK: c451bcb — not on main]
 # 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
-# Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → deprecated/archives/patches/patch_register_archive_2026_04_30_a.yaml
-# Archival batch 2026-05-02 (a): 17 applied PPs (date <= 2026-04-30) → deprecated/archives/patches/patch_register_archive_2026_05_02_a.yaml
+# Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → deprecated/archives/patches/patch_register_archive_2026_04_30_a.yaml  [FORK: c451bcb — not on main]
+# Archival batch 2026-05-02 (a): 17 applied PPs (date <= 2026-04-30) → deprecated/archives/patches/patch_register_archive_2026_05_02_a.yaml  [FORK: c451bcb — not on main]
 # Includes mass-battle PP-711..715 (renumbered from PP-684..688 per ED-782) and PP-681..683, PP-690..704.
 # Active register retains: 3 provisional (PP-652, PP-675, PP-676) + 11 applied 2026-05-01 entries (architecture set + workplan v3 series).
-# Archival batch 2026-05-10: PP-684..PP-688, PP-705..PP-723 (applied) → deprecated/archives/patches/patch_register_archive_2026_05_10.yaml
+# Archival batch 2026-05-10: PP-684..PP-688, PP-705..PP-723 (applied) → deprecated/archives/patches/patch_register_archive_2026_05_10.yaml  [FORK: c451bcb — not on main]
 
 patches:
 - id: PP-652

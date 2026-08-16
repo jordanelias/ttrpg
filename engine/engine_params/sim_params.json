@@ -258,8 +258,8 @@
       "kind": "scalar",
       "module": "engine.autoload",
       "file": "engine/autoload/sigma_leverage.py",
-      "note": "[canonical: params/core.md §TN Values]",
-      "citation": "params/core.md §TN Values",
+      "note": "[canonical: params/core.md §TN Values -- FORK: c451bcb]",
+      "citation": "params/core.md §TN Values -- FORK: c451bcb",
       "citation_grade": "source"
     },
     {
