@@ -1292,3 +1292,87 @@ inert, the Record slot exists three times with **no shared owner**, and the Apti
 every precedent in §Appendix says should carry the attributes — **does not exist anywhere.**
 
 That is the map. The scaffolding in §15.3 is exactly the work of filling the empty cells.
+
+---
+
+# §17 CORRECTION — attributes as formula inputs are FINE; three things were conflated
+
+**Jordan:** *"Attributes inform/govern different functions. I don't see the issue with them able to
+serve as input that define variable values in mechanical formulae."*
+
+Correct, and §16.1 was wrong to present variety as incoherence.
+
+## 17.1 WITHDRAWN — "the columns disagree about what an attribute is"
+
+§16.1 called it a defect that Spirit is a POOL term in threadwork and a BLEND term in combat, and
+that Charisma is a CEILING in contest and a BLEND in mass battle. **That is not incoherence, it is an
+attribute governing different functions in different contexts — which is what an attribute is for.**
+The POOL/BLEND/GATE/CEILING taxonomy is a *description*; presenting it as an indictment was an
+error. Likewise **"six of ten attributes touch exactly one system" is specialisation, not a defect**
+— Strength *should* matter mostly where bodies collide.
+
+## 17.2 WITHDRAWN — the precedent conclusion had an unstated precondition
+
+§15.1-T2 and §15.4 carried "attribute = price/rate, never power" from DCSS, EVE, RimWorld, Battle
+Brothers, Darklands, WFRP, Blood Bowl and Dwarf Fortress. **Those games can afford to take attributes
+off the resolution surface because they have DEEP skill systems** — DCSS runs 27 skill levels, EVE
+five levels × hundreds of skills, DF unbounded combat skill — **carrying all the differentiation.**
+
+Valoria has an acquisition layer in **one** subsystem. Therefore:
+
+> **You cannot take attributes off the resolution surface until something else is on it.** In four of
+> six systems nothing is, so attributes are currently the ONLY differentiator those systems have.
+> Removing them would make the game less distinctive, not more.
+
+The precedent transfer is **conditional on the acquisition layer existing first** — which is
+§15.3-S5/S6, and is why the scaffolding is prior to the roster ruling. §15.1-T2 is corrected from a
+recommendation to a *conditional*: it applies to a subsystem **after** that subsystem has a kit.
+
+## 17.3 WHAT ACTUALLY SURVIVES — a weight-calibration defect, not an architecture one
+
+Three separable things were flattened under one banner. Separated:
+
+| # | finding | kind | status |
+|---|---|---|---|
+| 1 | attributes are inputs to mechanical formulae | **architecture** | ✅ **correct as designed — no issue** |
+| 2 | the *weights* span 68× (`cog` +20.4pp → `focus` +0.3pp) while the creation points are fungible | **calibration** | ⚠️ real, and independent of progression |
+| 3 | nothing can *write* any attribute | **progression** | ⚠️ real, and independent of both |
+
+**Finding 2, stated precisely.** At creation, 31 points are freely allocable. Moving 2 points
+(3 → 5, the creation cap) is worth ≈ **+41pp in Cognition and ≈ +1pp in Focus.** So **Cognition is
+mandatory and Focus is a dump stat — at character creation, with no progression involved at all.**
+That is a defect in the *coefficients*, fixable by re-weighting the formulae, and it touches nothing
+architectural.
+
+## 17.4 ⚠ AND FINDING 2 IS ITSELF CONFOUNDED — the same error a third time
+
+The 68× spread is measured **in combat only**, because combat is the only fully built resolver.
+An attribute whose home is elsewhere will *always* read as a dump stat under a combat-only
+instrument. Focus's declared jobs are contest Concentration and threadwork ops-per-session;
+Charisma's are Face and Command. **Those systems mostly do not resolve.**
+
+So the honest statement is:
+
+> **Attribute balance is not measurable until more than one system resolves.** A combat-only
+> parity table cannot distinguish "this attribute is badly weighted" from "this attribute's
+> subsystem is not built yet."
+
+This is the §1.3 confound recurring in a new place — the third instance this session (grep counts,
+importer graph, now a single-subsystem instrument read as a whole-game verdict). The one row that
+survives the confound is **Focus**, because Focus is *also* declared-and-never-read in threadwork
+(`operations.py:16`), so it has no unbuilt home to be waiting for. Charisma and Recall are genuinely
+undecidable until contest and fieldwork resolve.
+
+## 17.5 CONSEQUENCES FOR THE PLAN (§15)
+
+- **§15.3 stage order is unchanged**, but its *rationale* is corrected: build the acquisition layers
+  because four systems need a differentiator **in addition to** attributes, not as a replacement for
+  them.
+- **§15.5 item 4 is strengthened.** Ruling OPT-AV-1 now is premature for a second, independent
+  reason: not only will the roster shrink or change as systems get built, but **the instrument that
+  would justify any roster decision cannot exist until they do.**
+- **§16.4's diagnosis stands unchanged** — the systems read progression state that nothing can
+  write. That finding never depended on attributes being off the resolution surface.
+- **New scaffolding item, S8 — per-attribute weight audit, deferred until ≥2 systems resolve.**
+  The deliverable is a cross-system parity table, not a combat one. Until then, do not re-weight any
+  attribute coefficient on combat evidence alone.
