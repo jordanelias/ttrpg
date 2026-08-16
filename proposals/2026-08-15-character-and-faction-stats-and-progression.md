@@ -1376,3 +1376,80 @@ undecidable until contest and fieldwork resolve.
 - **New scaffolding item, S8 — per-attribute weight audit, deferred until ≥2 systems resolve.**
   The deliverable is a cross-system parity table, not a combat one. Until then, do not re-weight any
   attribute coefficient on combat evidence alone.
+
+---
+
+# §18 THE CHARACTER-FACING SURFACE — corrected map, and the allocation question
+
+Jordan enumerated the surfaces and proposed a capability→surface mapping. Checked against code.
+
+## 18.1 The missing surface: THREADWORK
+
+Jordan's list — personal combat · mass combat as general · social contests · faction leadership
+(faction actions) · settlement governance · field investigations — omits **Thread operations**
+(Leap, Weaving, Pulling, Mending, Locking, Dissolution).
+
+It is not a minor omission: it is **M1 juncture 5** (`valoria_master_workplan_v6.md` §1), it owns the
+**only closed character feedback loop in the game** (Coherence → band → +Ob → more failure → more
+loss, §16.4), and it is the **only subsystem where an obstacle is already derived from the opponent**
+(`opposing.py:80-85`) — the primitive ED-IN-0187 Half B should compose on.
+
+Two lesser candidates, raised not insisted on: **Knot formation** (its own roll, `Spirit×2 +
+History(Rel)`, TN 7 Ob 2, where the degree selects a persistent *object type* — unique in the tree),
+and **the Scene Slate triage itself**, which `player_agency_v30` calls the actual gameplay
+(*"Choosing is the gameplay — not executing"*) without being a resolver.
+
+## 18.2 The capability→surface map, corrected
+
+| capability | Jordan's mapping | code says |
+|---|---|---|
+| **Physical** (Str/Agi/End) | direct: personal combat; secondary: field investigation, mass battle | **direct: personal combat — CONFIRMED** (15/8/4 read sites, all in combat). **Field investigation: by design only** (Endurance-exploration; the sim is `stub_resolve`). **Mass battle: REFUTED — no `strength`/`agi`/`end` read exists in `units.py` at all.** Command is `⌈(2Cha+Cog)/3⌉`, and `mass_battle_v30` states *"No mass-battle mechanic kills the general."* **A general's body is mechanically irrelevant.** |
+| **Intellectual / social** | direct: leadership, governance, contests, field investigation, mass combat; secondary: physical combat | direct set **CONFIRMED** (Command = Cha+Cog; contest keyed Cog/Cha/Att by adjudicator; fieldwork Cog/Att/Rec/Cha/Bon). **"Secondary in physical combat" is INVERTED: Cognition is the single highest-value attribute in combat (+20.4pp), beating Strength (+9.2) and Agility (+6.3) 2–3×**, via `reading = (2·Cog + Att)/3`. Combat is already more intellectual than physical. |
+| **Spirit** | primary: threadwork; secondary: all others | **CONFIRMED.** Threadwork's pool driver (`Spirit×2`) and fatigue threshold (`Spirit×5`); elsewhere only a secondary term (`WI = End+4+0.4·Spi`; `stamina = 3End+2Spi`; `conc = 3Foc+2Spi`); knots pool `Spirit×2`. Measured +6.0pp in combat — mid-table, the secondary signature. |
+
+⚠ **Two surfaces read NO character attribute at all**: faction actions (bare faction stats — Mil, W,
+I) and settlement governance (`ap × compliance`, Ledger tags). So of the seven surfaces, the
+character sheet reaches five.
+
+## 18.3 THE ALLOCATION QUESTION — measured
+
+> *"The value of physical attributes depends upon how much of the game surface is spent in physical
+> combat."*
+
+This is the correct lens, and the measurement is stark. `engine/cross_scale/scene_dispatch.py:37`,
+the dispatcher's own verification note:
+
+> *"yet queues a combat scene either way (**verified 2026-07-29: no `queue_scene("combat", …)`**"*
+
+The only `scene_type` the dispatcher queues is `"contest"` (`:86`). `DISPATCH_COMBAT_BRIDGE` defaults
+**OFF** (`mc_v18.py:71,81`), and the note is explicit that the flag's state does not change this.
+
+> **Personal combat is currently 0% of the generated game surface.** By the allocation argument,
+> **physical attributes are currently worth ~0 of the character sheet** — not because they are
+> badly weighted, but because the surface that consumes them is never generated.
+
+**And this completes §17.4's confound.** The 68× attribute spread (`cog` +20.4 → `focus` +0.3) was
+measured **in the one subsystem a campaign never enters.** An instrument aimed at a 0%-allocation
+surface cannot price a character sheet. That is the third and largest instance of the session's
+recurring error, and it is structural rather than careless: **combat is the only subsystem that *can*
+be measured, which is precisely why every measurement drifts toward it.**
+
+## 18.4 CONSEQUENCE — allocation is prior to weighting, and prior to the roster
+
+Three questions, in the only order in which they are answerable:
+
+1. **What is the surface allocation?** How many scene actions per season land on each of the seven
+   surfaces. Today: contest ~all, combat 0, threadwork/fieldwork/governance unqueued. **This is a
+   design decision nobody has made, and it sets every attribute's value.**
+2. **What are the weights within each surface?** Only answerable per-surface, once ≥2 surfaces
+   resolve (§17.4, S8).
+3. **What is the roster?** Downstream of both.
+
+**New scaffolding item, S9 — the surface-allocation budget.** Before any attribute weighting or
+roster ruling, state the intended share of scene actions per surface across a season. It is the
+denominator every other attribute question divides by, it is currently implicit and measured at
+combat = 0, and it is a pure design call requiring no instrument.
+
+⚠ **This also re-frames §1.1.** That parity table is not "the value of attributes." It is "the value
+of attributes *conditional on being in a fight*", multiplied by a fight frequency that is presently
+zero. Both factors are needed, and only one has ever been measured.

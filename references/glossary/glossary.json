@@ -108,7 +108,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 2,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
@@ -1799,7 +1799,7 @@
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 16,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 17,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1875,7 +1875,7 @@
     "godot/godot_architecture_specification.md": 14,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "systems/_architecture/campaign_architecture_v30.md": 10,
     "systems/_architecture/campaign_architecture_v30_index.md": 6,
     "systems/_architecture/campaign_modes_v30.md": 3,
@@ -2001,7 +2001,7 @@
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 15,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 17,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
@@ -2847,13 +2847,14 @@
   "Dissolution": {
    "ambiguous": false,
    "definition": "Forced Resolution; destroys a thread configuration. Requires Thread Sensitivity 50+.",
-   "file_count": 43,
+   "file_count": 44,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "canon/03_canonical_timeline.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 3,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -2909,6 +2910,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -3499,7 +3501,7 @@
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 21,
     "systems/_architecture/scale_transitions_v30.md": 1,
@@ -4833,7 +4835,7 @@
     "canon/02_canon_constraints.md": 2,
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 29,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 30,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 6,
     "systems/_architecture/complete_systems_reference.md": 2,
@@ -5567,7 +5569,7 @@
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -5711,7 +5713,7 @@
   "Leap": {
    "ambiguous": false,
    "definition": "Entering Thread contact. Prerequisite for all Thread operations. Full-round action (Priority 5).",
-   "file_count": 49,
+   "file_count": 50,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -5721,6 +5723,7 @@
     "godot/godot_architecture_specification.md": 8,
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/companion_app_design_note.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -5778,6 +5781,7 @@
     "godot",
     "mass_battle",
     "npcs",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -5873,12 +5877,13 @@
   "Locking": {
    "ambiguous": false,
    "definition": "Forced Resolution; stabilises a thread configuration permanently. Requires Thread Sensitivity 50+.",
-   "file_count": 17,
+   "file_count": 18,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -5904,6 +5909,7 @@
     "fieldwork",
     "godot",
     "mass_battle",
+    "proposals",
     "threadwork",
     "ui"
    ],
@@ -6398,7 +6404,7 @@
   "Mending": {
    "ambiguous": false,
    "definition": "Substrate repair. Targets Gaps and Shifting Objects. Requires Thread Sensitivity 50+.",
-   "file_count": 55,
+   "file_count": 56,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -6406,6 +6412,7 @@
     "canon/03_canonical_timeline.md": 1,
     "godot/godot_architecture_specification.md": 3,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 13,
     "systems/_architecture/campaign_architecture_v30_index.md": 4,
     "systems/_architecture/campaign_modes_v30.md": 11,
@@ -6472,6 +6479,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -7926,7 +7934,7 @@
   "Pulling": {
    "ambiguous": false,
    "definition": "Things Open. De-actualises threads. **Default sense is Present-Oriented**; see also Past-Oriented Pulling.",
-   "file_count": 27,
+   "file_count": 28,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -7935,6 +7943,7 @@
     "canon/02_foundations_amendment_leap_mechanism.md": 1,
     "godot/godot_architecture_specification.md": 2,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -7968,6 +7977,7 @@
     "fieldwork",
     "godot",
     "mass_battle",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -8913,7 +8923,7 @@
     "engine/sigma_leverage_engine_armature.md": 3,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 22,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 27,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 4,
@@ -9315,7 +9325,7 @@
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 13,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 14,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 17,
     "systems/characters/character_histories_v30_infill.md": 1,
@@ -10645,7 +10655,7 @@
   "Weaving": {
    "ambiguous": false,
    "definition": "Things Cohere. Stabilises threads, restores actualisation.",
-   "file_count": 54,
+   "file_count": 55,
    "glossary_part": "PART EIGHT \u2014 THREAD OPERATION TYPES",
    "legacy_count": 0,
    "locations": {
@@ -10654,6 +10664,7 @@
     "canon/03_canonical_timeline.md": 2,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/complete_systems_reference.md": 3,
@@ -10718,6 +10729,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -21832,7 +21844,7 @@
     "godot/implementation_sequence.md": 3,
     "godot/scene_tree_architecture.md": 5,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 49,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 66,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -32772,7 +32784,7 @@
     "godot/implementation_sequence.md": 1,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 6,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -39020,7 +39032,7 @@
     "canon/02_foundations_amendment_leap_mechanism.md": 8,
     "engine/mc_v18_walkthrough.md": 1,
     "engine/sim_reference_README.md": 1,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
     "proposals/repo-reorganization-v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -49570,9 +49582,10 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine.autoload.scene_slate` | declares `\"fieldwork\"` as an example `scene_type` string on `SceneSlot`; no production `queue_scene(\"fieldwork\", ...)` call site exists (\u00a77) | `engine/autoload/scene_slate.py:26`, `engine/autoload/scene_slate.py:34`"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/combat/combat_flow_skeleton_v1.md": 3,
@@ -49584,7 +49597,8 @@
    "subsystems": [
     "_architecture",
     "combat",
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "queue_scene"
   },
@@ -55400,10 +55414,11 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up (declared, not wired) | `engine.cross_scale.scene_dispatch` | no `\"thread\"` `scene_type` branch exists; Thread-scale scenes cannot be produced by the live dispatcher | `engine/cross_scale/scene_dispatch.py:216-224`, `:360-371`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 5,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -55420,6 +55435,7 @@
     "combat",
     "fieldwork",
     "godot",
+    "proposals",
     "threadwork"
    ],
    "term": "scene_type"
@@ -60478,7 +60494,7 @@
    "file_count": 11,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,
@@ -65951,7 +65967,7 @@
     "engine/sigma_leverage_engine_armature.md": 2,
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 2,
-    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 6,
+    "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
     "proposals/pc_formation_system.md": 3,
