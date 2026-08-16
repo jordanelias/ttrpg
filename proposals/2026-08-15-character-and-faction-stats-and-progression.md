@@ -1561,3 +1561,116 @@ gate, and let the roster fall out.
    roster gets for nothing.
 4. **Godot binding.** `descriptor_registry` is already flagged IN FLUX with a do-not-bind warning;
    inverting it changes the schema *shape*, not just its contents. Sequence before any field binding.
+
+---
+
+# §20 ADVERSARIAL PASS 2026-08-16 — thirteen corrections, and the error under all of them
+
+An independent read-only critic audited §14–§19. **Six claims wrong or unsound, seven overstated.**
+Corrected here rather than dropped. The single pattern beneath them is stated first, because it is
+the finding.
+
+## 20.0 THE ERROR: this document re-ran numbers and never re-attacked the harness
+
+`systems/combat/combat_engine_v1/workbench/balance.py:97`:
+
+```python
+base = {a: (4 if a in ('strength','agi','end') else (4 if a=='disp' else 3)) for a in ATTRS}
+```
+
+**Strength, Agility, Endurance and Disposition are measured 4→5. Cognition, Attunement, Spirit,
+Focus and History are measured 3→4.** The parity table compares marginals taken **at different points
+on a saturating curve.** And `:101` reports every marginal as `100*p − 50` against a flat 50, while
+this document's own mirror control reads **53.1**.
+
+Everything quantitative in §1.1, §17.3 and §18.2 inherits that setup: the ranking, the "68×", the
+"+41pp", and *"Cognition beats Strength 2–3×; combat is already more intellectual than physical."*
+
+§15.2 lesson 7 says **"attack the SETUP, not just the statistics."** §14–§19 attacked the statistics
+(n, CI, staleness), then the coverage (§17.4), then the allocation (§18.3) — and never opened the
+harness. **That is the fourth instance of the session's recurring error, in the section that counts
+to three.**
+
+## 20.1 ⚠ OPT-AV-1 IS RULED — §19.5's "it dissolves" is WRONG
+
+Jordan, **2026-08-14**: *"it will be 10 attributes"* (**ED-IN-0193**). Recorded on four surfaces:
+`descriptor_registry.yaml:39-43` (*"THE COUNT IS RULED… NINE are defined below. The TENTH IS
+UNNAMED — naming it is the open workshop, and it is the ONLY thing still open about the count"*),
+`HANDOFF.md:90` Q7, `CLAUDE.md:327`, `HANDOFF_IN.md:100`.
+
+**Mitigation, and its limit:** the ruling was **not present at this branch's base** (`94ac02f`) — it
+arrived with the `origin/main` merge performed *after* §19 was written. But `CLAUDE.md` §1 requires
+establishing currency, and the currency surfaces were not re-read post-merge. **§19 is stale on
+arrival and this is a currency failure, not bad luck.**
+
+**What survives:** the promotion criterion (§19.3) and the per-system census remain useful — as the
+method for **naming the tenth attribute**, which is the open workshop. **What is withdrawn:**
+"OPT-AV-1 dissolves", "there is no roster to rule", and §15.5 item 4's "the roster likely shrinks."
+The count is ten. Also: this document's working roster (…**Recall**…) is **not** the registry's nine
+(…**acuity**, **will**…) — it adds `Recall`, which is absent from the registry's attribute section,
+and then rules on it. The census never reconciled its roster against the registry.
+
+## 20.2 §14.3's measurement is UNATTRIBUTABLE, and my instrument perturbed the run
+
+`core.py:56` — `def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)`. **Combat
+has its own `roll_net` that delegates to the CONTINUOUS entry point.** My probe patched *both*
+`SL.roll_net` and `core.roll_net` with a spy wrapping `SL.roll_net` — so it **rerouted combat from
+the continuous sampler onto the discrete one for the duration of the measurement.**
+
+Consequences: the 1,163 counts are real calls but **attributed to a site combat never reaches**; and
+the run was perturbed by the instrument. What survives is narrower and still true: **combat's pools
+are integral by construction** at `core.py:52`. What does **not** survive is §15.1-R6's unscoped
+*"Half A is a no-op today."*
+
+**And the real caller says the opposite.** The only live callers of the discrete `SL.roll_net` are
+the contest kernel (`resolver.py:26-30`, `faction.py:144-145`), which documents **three times** that
+it feeds this path pools it expects to be quantised (`resolver.py:279-280`, `armature.py:311-313`,
+`_kernel_tests.py:1595` — *"rounded away … so misaligned was BYTE-IDENTICAL to flat"*). **The kernel
+was never instrumented.** S1 must measure it before proceeding.
+
+## 20.3 Line numbers are stale — including one inherited from a docstring
+
+The casts are at **`sigma_leverage.py:273` and `:284`**, not `:265`/`:276`/`:277`. `:265` is the
+`def` line; **`:276` is blank.** §14.4's fix table sends the next session to a blank line.
+Provenance: `faction_action.py:109` carries the identical stale `:276` — **the number was inherited
+from a docstring rather than read from the file**, which is §15.2 lesson 5, violated four sections
+after being written. §11 and §14 are corrected to `:273` / `:284`.
+
+## 20.4 The remaining ten
+
+| # | claim | verdict |
+|---|---|---|
+| 1 | §14.1 quotes *"No penalty may reduce a pool below 1D"* as §Pool Floor | **misattributed** — that is **§Pool Minimum** (`params_tables.yaml:9052`). §Pool Floor is `:9257`. The substance holds; the citation does not — in the subsection arguing that citations must cover the whole line |
+| 2 | banker's rounding explains §1.2's +0.5D jump | **wrong causally** — 9.5→10 under round-half-up too. The jump is quantisation *per se*; banker's rounding only changes *which* half-integers move |
+| 3 | §14.4's guarded snippet | **crashes on `rng=None`**, which is `roll_net`'s declared default. `dice_engine.roll_pool` defends itself; the proposed wrapper does not |
+| 4 | S1 is safe for the two entry points | **unflagged consequence** — after S1, `roll_net` at a fractional pool is a *mixture* (extra variance) while `roll_net_continuous` samples a Normal exactly. They would agree on the mean and differ in **shape**, and **F-S1d tests only the mean** — §0.1 point 2, in a plan citing §0.1 point 2 |
+| 5 | F-S1c (`p_success` monotone in fractional pool) | **vacuous** — `p_success` already takes a float and applies no rounding; it is monotone today and S1 does not touch it. A falsifier that passes identically before and after is not one |
+| 6 | §16.0 "the gain engine has no write path at all" | **overstated** — `coherence.py:141-142` documents the delta as **signed**: *"Positive = recovery (non-practice season, Anchoring Scene, Einhir)"*, with an upper clamp. **The primitive supports gain; no caller invokes it.** That distinction makes one of S5's four slots cheaper than the map implies |
+| 7 | §16.0's AST method | **unsound, and the tree already proved it** — `game_state.py:127-132` `Faction.adjust()` writes via `setattr`, and `test_public_governance_transfer_key.py:17-21` states outright that *"an AST scan for `Attribute` targets cannot see that."* The conclusion survives re-verification; the **method** does not, and §0.1 point 1 asks for a guard that was never shipped |
+| 8 | §16.4 lists Knot strain → Disposition as a CLOSED loop | **wrong by its own criterion** — `knots.py:343,360` set `consequences['disposition_set_to']` and the only readers are tests. It belongs in the *writer-no-reader* bucket. The strain half is genuinely live |
+| 9 | §16.1 tags mass-battle Cha/Cog as **BLEND** | **inverted** — they default to `None` and the derivation is guarded on both being non-None; `test_field_golden_pins.py:47-49` classifies the Command flags **provably inert**. Same status as Focus, which the same table marks correctly. Also: `Command` uses **`round()`, not `⌈⌉`** (`exchange.py:49`) — the ceiling notation was taken from prose, five times |
+| 10 | §15.6 "LIVE CRASH" for `CELL_PATTERN_FN` | **latent, not live** — nothing constructs an Arrowhead (`_faction_to_unit` builds `'Line'`), and `role_at_contact` returns early at `units.py:228`. It is also the **non-canonical** engine; the J2 counterpart raises a clean `ValueError` |
+
+## 20.5 And a defect in my own instrument, found by self-audit
+
+`'test' in dp` matches **`"con*test*"`**. Every AST census in this session silently excluded
+`systems/social_contest/`. The same substring bug hit the filename filter
+(`con**test**_legacy_stub.py`). **I saw the symptom** — `social_contest` missing from the import
+graph's left column — **and routed around it with a direct check instead of diagnosing it.**
+
+- **Write-site census: survives.** Re-run with path-*segment* matching: `coherence` 1, `standing` 10,
+  `strain` 2, all others zero. Identical.
+- **Import graph: was wrong.** It hid `contest_legacy_stub.py:240 → systems.characters.sim.beliefs`.
+
+Guard: exclude by path segment (`'tests' in dp.split(os.sep)`), never by substring.
+
+## 20.6 What this does to the plan
+
+- **§15.3 S1 gains a blocking precondition:** instrument the **contest kernel** before touching
+  `sigma_leverage`, since it is the only live caller of the site and documents a dependence on the
+  rounding. Fix F-S1c (vacuous) and add a *shape* falsifier for the two entry points.
+- **§15.3 S8/S9 gain a prior:** before any weighting claim, **rebuild `balance.py`'s baseline** to a
+  common base and report against the measured mirror control, not a flat 50.
+- **§15.5 item 4 is withdrawn.** The count is ruled at ten; the open work is **naming the tenth**,
+  and §19.3's criterion is a good method for exactly that.
+- **§16.0 needs the `__setattr__` instrument** the repo already built once, not an AST scan.

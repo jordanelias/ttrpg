@@ -202,3 +202,100 @@ Per the companion §16.0 (AST over assignments, excluding constructor self-assig
 3. **Fieldwork's assignments are design-only** — nothing executes, so §8 is a statement of intent, not of behaviour.
 4. **"Own vs borrowed"** is a judgement about where a score is *declared*, not about who should own it. It is descriptive.
 5. This is a **snapshot at `f92b840`.** It will change as systems are built — which, per §19, is the method working.
+
+---
+
+# 13. CORRECTIONS — adversarial audit 2026-08-16
+
+An independent read-only critic audited every claim. **Five claims false, three role tags
+unsupported, two overlap counts inflated, five entities missing.** Corrected here; the document above
+is left intact so the corrections are legible as corrections.
+
+## 13.1 ⚠ THE HEADLINE IN §11 IS FALSE
+
+*"The only per-character quantity any live code changes is `coherence`, and it only decreases."*
+**Wrong, and wrong in a way the instrument could not detect by construction.** The AST scan matched
+only `ast.Attribute` targets, so **`Subscript` writes were invisible**:
+
+- `systems/characters/sim/conviction.py:213` — `state.scars[conviction] = after` (plus
+  `resonant_active`, `in_crisis` at `:217-220`), reached from live code at `knots.py:349-351`.
+- `systems/world/sim/npe.py:355-365` — mutates NPC `stance[issue]` **up and down**.
+- `wrapper.py:23-26,219,260,301-313,387-391` — writes `stamina`, `conc`, `poise`, `initiative`.
+- `combatant.py:83-89` — `WoundTracker.apply` mutates `cumulative_damage`.
+
+The defensible claim is narrower: **no *durable roster attribute* has an external writer.** That
+still holds (verified: only constructor self-assignments). **The sweeping version is withdrawn.**
+
+**Three blind spots, not one:** `setattr`, dict-backed access, **and subscript writes**. §12's caveat
+1 — *"no evidence of those patterns was seen"* — is **falsified**: `known_traditions` is set
+post-construction and read via `getattr` (`ability_primitives.py:118`), and `build_levers.py:33` is a
+literal registry of the pattern (`_POST_INIT = ('known_traditions',)`). The repo had also already
+proved the point: `test_public_governance_transfer_key.py:17-21` states that `Faction.adjust()`'s
+`setattr` write *"an AST scan for `Attribute` targets cannot see."*
+
+## 13.2 FALSE CLAIMS
+
+| § | claim | correction |
+|---|---|---|
+| 3 | TS **"≥50 Lock/Dissolve"** gate | **No such gate.** `attempt_locking`/`attempt_dissolution` contain no TS check. The `50` at `operations.py:242` is a **Leap Ob band selector**. The ≥50 threshold lives in `DEPTH_TS_MINIMUM` — which §10 correctly lists as **never read**. The two claims contradicted each other. |
+| 5 | `Command = ⌈(2Cha+Cog)/3⌉` | **`clamp(round((2·Cha + Cog)/3), 1, 7)`** — `round`, not ceiling, and the clamp was dropped. Code agrees with the doc, not with me (`exchange.py:49`). Written five times across both documents. |
+| 5 | discipline **"persists across battles"** | **Not in the wired engine** — `_faction_to_unit` reconstructs `discipline=5, discipline_start=5` on every call. |
+| 5 | Cha/Cog row tagged **BLEND** | **Violates §5's own scope note.** It cites a *design doc* in a table of code sites, and the derivation exists only in the **excluded** J2 engine, flag-gated (`COMMAND_SIGMA_ENABLED`), with `charisma`/`cognition` defaulting to `None` and classified **provably inert** by `test_field_golden_pins.py:47-49`. In the wired engine `command` is the literal `4`. |
+| 7 | `AP = 2 + FacilityTier` | **`2 + facility_tier + bonus`**, `bonus = 1` at Seat/Cathedral/Cathedral-City (`registry.py:92-97`). |
+| 9 | *"History — three different fields"* | **Two names, not three.** Combat and threadwork **both** read `.history`; only knots differs. **The real finding is worse:** one name carrying two incompatible semantics — the entire combat pool, and structurally inert in threadwork. That is a homonym collision, not a naming spread. |
+| 5 | *"the only opposed-roll resolver"* | **False** — `opposing.resolve_opposing_operations` rolls both practitioners against Obs set by each other's TS. §3 documents this two sections earlier. |
+
+## 13.3 UNSUPPORTED ROLE TAGS (§7 is the weakest section)
+
+- **`ap` tagged CEILING** — it has **zero readers** in `systems/`. Same evidentiary position as
+  `legitimacy`/`popular_support`, which this document *does* flag as inert. Identical evidence,
+  opposite tags.
+- **`suspicion`, `pressure`, `church_attention`, `governor_emergence` tagged TRACK** — none is read
+  or written anywhere in `systems/` outside `to_dict`/`from_dict`. Nothing tracks them.
+- **`compliance(s)` tagged BLEND** — **zero occurrences in any `systems/**/*.py`**. It is from
+  `lps_wiring_v1.md`, whose status is **PROPOSED**. A proposed formula was tabulated as measured.
+- **The derived multipliers are mis-cited** to `registry.py`; they are in
+  `systems/settlements/sim/settlement.py:89-91`.
+- `legitimacy`/`popular_support` *"never read or written"* is literally false (`registry.py:120,145`
+  — serialisation). The source comment's qualifier — *"zero **non-definition** references"* — was
+  dropped.
+
+## 13.4 OVERLAP MATRIX — both homonym counts inflated
+
+- **Cognition: 4 → 3.** The mass-battle cell is doc-only and out of scope.
+- **Charisma: 2 → 0 wired reads.** Contest is a display *view* (`FaceScale` consumers are the
+  harness and tests; the wired adapter never sets `charisma`), and mass battle is the excluded
+  engine. **The "multi-system homonym" verdict for Charisma rested entirely on two cells this
+  document's own scope disallows.**
+- Charisma's contest tag is corrected **CEILING → META/display**.
+- Spirit, Thread Sensitivity, Attunement, Str/Agi/End, Focus, Bonds and **Recall = 0** all confirmed.
+
+## 13.5 ENTITIES AND SYSTEMS MISSING
+
+1. **`systems/characters/sim/` — omitted entirely.** Per-Conviction Scars, `certainty` 0–5 scaling
+   severity, thresholds, season caps; plus `beliefs.py`, `companion.py`. **For a census whose purpose
+   is raw material for a *character* stats method, this is the most consequential gap.**
+2. **`systems/world/sim/npe.py`** — a second character-like entity (`stance`, `affiliation_loyalty`,
+   `volatility`, `deviation_roll`) with live mutation.
+3. **`systems/overview/sim/`** — the CI/RS/MS/IP world tracks; `ms_track` is called *by threadwork*.
+4. **Contest's `Adjudicator` and `FaultState`** — the contest has three scored entities; §2 lists one.
+5. **`SettlementState` / `ProvinceState`** (`settlement.py:44-75`) — a second settlement entity.
+6. **The four degree ladders** — combat (held), threadwork/knots (`dice_engine`), contest
+   (`sigma_leverage`), mass battle (bespoke size-fraction). **A census that catalogues pools and
+   obstacles but not the degree channel omits the axis where the systems actually disagree.**
+
+## 13.6 Also: §1 and §2 incompletenesses
+
+`history` is not only POOL in combat — it is a σ BLEND at four further sites (`reading`, technique,
+bind, counter-success), and the `reading` formula quoted in §1 **drops its History term**.
+`known_traditions` is missing from §1 entirely. `Pool.size`'s `max(5, …)` floor is dropped in §2.
+Several `file:line` citations are off by one to a few lines.
+
+## 13.7 The pattern
+
+The document's own method line says *"AST over entity declarations… not grep frequency."* The audit's
+verdict is that **an AST over declarations is a weaker instrument than it appears**: it cannot see
+`setattr`, dict writes, subscript writes, or post-construction attachment, and it says nothing about
+whether a declared field is *read*. Role tags require reading call sites; several here were inferred
+from the declaration and from design prose. **Where this document is wrong, it is wrong because a
+declaration was read as though it were a behaviour.**
