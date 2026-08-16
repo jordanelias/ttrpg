@@ -1453,3 +1453,111 @@ combat = 0, and it is a pure design call requiring no instrument.
 ⚠ **This also re-frames §1.1.** That parity table is not "the value of attributes." It is "the value
 of attributes *conditional on being in a fight*", multiplied by a fight frequency that is presently
 zero. Both factors are needed, and only one has ever been measured.
+
+---
+
+# §19 BOTTOM-UP ATTRIBUTES — let each system own its scores; promote only discovered overlaps
+
+**Jordan:** *"Maybe the problem is having attributes in general that are top-down matched to systems
+rather than each system having its own specific set… and then we can identify overlaps if they
+exist. Working bottom up from primitives and designing the system in such a way we end up developing
+attributes from it that way."*
+
+This is `CLAUDE.md` §0's *"build bottom-up from primitives… emergence is the goal: small correct
+primitives, composed, not a bespoke top-level special case"* applied to the attribute layer. The
+evidence says the finished systems **already did this** and were never ratified for it.
+
+## 19.1 The systems already own their scores — the roster is the overlay
+
+| system | its OWN scores (declared locally) | roster scores it borrows |
+|---|---|---|
+| **combat** | `history`, `disp`, `skills{bind,parry,dodge,balance,technique,grab}`, `equipped{name:level}`, `tradition`, weapon, armour — plus computed faculties (reading, reflex, balance, tempo, impact, durability, steadiness, poise, initiative) | Str Agi End Cog Att Spi Foc |
+| **contest** | `faculty`, `standing_start`, `reserve_max`, `dossier` — plus Readiness, Resonance, leak, Room, Stasis | **none in resolution** (Charisma is a display ceiling) |
+| **threadwork** | `ts`, `coherence` | Spirit (pool), Cognition (collective), History (inert) |
+| **knots** | `strain`, `tier`, `disposition_with_X` | Bonds (gate), Spirit (pool), `history_relationships` |
+| **mass battle** | `power`, `command`, `discipline`, `morale`, size, `dr`, speed, stance, shape, tier | Cha, Cog → Command only |
+| **factions** | W, Mil, I, Sta, L, standing, territories | **none** |
+| **settlements** | prosperity, defense, order, L, PS, fort_level, facility_tier, `ap`, ledger tags | **none** |
+
+**Three of seven borrow nothing.** The two *finished* systems borrow least: contest borrows nothing
+into resolution, and combat's borrowings all enter through computed faculties, never bare.
+
+## 19.2 "History" is already a shape, not a score — proof
+
+| system | field read | site |
+|---|---|---|
+| combat | `history` | `core.py:50` |
+| knots | **`history_relationships`** | `knots.py:215` |
+| threadwork | `history`, and its own docstring says *"optionally `.history` **dict**"* | `operations.py:17,153` |
+
+**Three systems, three different fields, one of which the code already imagines as a per-domain
+dictionary.** The canonical "History, Level 1/2/3, cap = Recall" is a top-down single score the
+systems never adopted. **Per-domain practice is a SHAPE the tree converged on independently** — which
+is exactly the kind of overlap Jordan's method is designed to surface.
+
+## 19.3 The promotion criterion
+
+A locally-declared score is promoted to an **attribute** iff **all three** hold:
+
+1. **≥2 systems independently need it** — need, not merely name.
+2. **Same semantics** — it means the same thing in each, not a homonym.
+3. **Same shape** — both use it as a pool term, or both as a gate, etc. A pool term in one and a
+   ceiling in another is two scores sharing a word.
+
+Until promoted, **a score keeps a system-local name**. That rule alone would have prevented the
+`Recall` (attribute) vs `recall_check` (recall a pursuing unit) collision, and the four-way
+`Conviction` overload.
+
+## 19.4 Applying it to what exists — what actually emerges
+
+| candidate | ≥2 systems? | same semantics? | same shape? | verdict |
+|---|---|---|---|---|
+| **Spirit** | ✅ threadwork + knots (+combat 3rd) | ✅ contact with another thread/being | ✅ both `Spirit×2` pool | **PROMOTE — a genuine emergent attribute** |
+| **Thread Sensitivity** | ✅ threadwork + knots | ✅ perceptual depth | ✅ both a gate (30/50; ≥30) | **PROMOTE** |
+| Cognition | ✅ combat + mass battle + threadwork | ❌ tactical reading vs generalship vs lattice contribution | ❌ blend vs Command term vs helper dice | **HOLD — three things wearing one name** |
+| Charisma | ✅ contest + mass battle | ❌ Face ceiling vs generalship | ❌ ceiling vs blend | **HOLD** |
+| Strength / Agility / Endurance / Focus | ❌ combat only | — | — | **KEEP SYSTEM-LOCAL** |
+| Bonds | ❌ knots only | — | — | **KEEP SYSTEM-LOCAL** |
+| Recall | ❌ zero systems | — | — | **NOT A SCORE — no system needs it** |
+| History | ✅ three systems | ✅ practice | ❌ **three different fields** | **NOT AN ATTRIBUTE — a SHAPE** (per-domain practice) |
+
+**The bottom-up answer is small: two genuine cross-system attributes (Spirit, Thread Sensitivity),
+one recurring shape (per-domain practice), and everything else system-local.** And the two that
+survive do so for a *reason* — threadwork and knots genuinely share a mechanism: contact with
+another thread or being.
+
+⚠ **This is a snapshot over three built systems.** Fieldwork and settlements would add candidates
+(Cognition/Attunement/Bonds have declared fieldwork jobs). The criterion is the deliverable; this
+application will change as systems get built, and **that is the method working, not failing.**
+
+## 19.5 The architectural consequence
+
+`references/descriptor_registry.yaml` currently **imposes** a roster the systems must conform to,
+and four of seven don't. Inverted, it becomes a **GENERATED VIEW** of what the systems declare —
+exactly the pattern the repo already uses for vocabulary (`tools/vocab_store.py` → generated
+register views, ED-IN-0078).
+
+- Each system declares its own scores, locally named.
+- The registry is regenerated from those declarations.
+- **Promotion (§19.3) is the only way a name becomes shared**, and it requires evidence.
+- **OPT-AV-1 dissolves.** There is no roster to rule — there is a criterion, and a generated view.
+
+**Consequences for the plan:** this **supersedes §15.5 item 4 and §17.5's S8 framing.** The roster
+is not deferred-pending-instruments; it is *not a design object at all*. It is an output.
+**New scaffolding item, S10 — invert the descriptor registry** to a generated view + a promotion
+gate, and let the roster fall out.
+
+## 19.6 The honest costs
+
+1. **Character-sheet legibility.** Seven local score sets is more surface for a player than ten
+   attributes. Precedent says this is survivable — CK3 gives a character skills that only matter in
+   the role they occupy, and Victoria 3 has **no numeric stats at all**, only role-attached traits.
+   But it is a real UX cost and it is not measurable from code.
+2. **Creation allocation.** One budget across all systems, or a budget per system? Unanswered, and
+   it interacts directly with §18's surface-allocation question (S9).
+3. **Cross-system transfer becomes explicit authoring.** Under a shared roster, being perceptive
+   helps everywhere for free. Under local scores, every transfer must be authored. **That is a
+   feature** — it is the "identify overlaps if they exist" step — but it is work that a shared
+   roster gets for nothing.
+4. **Godot binding.** `descriptor_registry` is already flagged IN FLUX with a do-not-bind warning;
+   inverting it changes the schema *shape*, not just its contents. Sequence before any field binding.

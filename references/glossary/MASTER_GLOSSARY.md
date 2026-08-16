@@ -672,7 +672,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **face_current** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
 | **face_max** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 2 | identifier_census |
 | **face_tracker** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
-| **facility_tier** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [settlements](GLOSSARY_settlements.md) | 6 | identifier_census |
+| **facility_tier** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) | 7 | identifier_census |
 | **fact_tag** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **faction_a** | _no curated definition_ | [articulation](GLOSSARY_articulation.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md) | 4 | identifier_census |
 | **faction_action_keys** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
@@ -739,7 +739,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **formation_scene_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **formed_by** | _no curated definition_ | [npcs](GLOSSARY_npcs.md) | 1 | identifier_census |
 | **Fort Level** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) | 11 | descriptor_registry |
-| **fort_level** | _no curated definition_ | [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 8 | identifier_census |
+| **fort_level** | _no curated definition_ | [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 9 | identifier_census |
 | **fractional_province_ownership** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **franchise** | Per-territory parliamentary weight (0-5) deriving national Influence from held territories' Franchise sum, weighted by caste-system territorial expression. Doc status DRAFT — awaiting Jordan review (2026-07-29 sweep: currency-layer orphan fix, OI-57; entry indexes the doc as-is, does not ratify it). | [factions](GLOSSARY_factions.md) | 1 | mechanics_index |
 | **franchise_sum** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
@@ -1304,7 +1304,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **reopen_prob** | _no curated definition_ | [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **represent_measure_p** | _no curated definition_ | [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
 | **required_payload_fields** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
-| **reserve_max** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
+| **reserve_max** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 2 | identifier_census |
 | **reset_all** | _no curated definition_ | [characters](GLOSSARY_characters.md) | 1 | identifier_census |
 | **reset_arc** | _no curated definition_ | [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md) | 2 | identifier_census |
 | **reset_for_world** | _no curated definition_ | [world](GLOSSARY_world.md) | 1 | identifier_census |
@@ -1540,7 +1540,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **standing_after** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **standing_before** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **standing_change** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 6 | identifier_census |
-| **standing_start** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 2 | identifier_census |
+| **standing_start** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 3 | identifier_census |
 | **start_ground** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 2 | identifier_census |
 | **start_trace** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **starting_accord** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |

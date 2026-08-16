@@ -279,7 +279,7 @@ Files column shows this subsystem's docs only (basenames). Full paths for every 
 | **export_params_constants** | _no curated definition_ | `repository_keep_set_v1.md` | _local only_ · UNRESOLVED |
 | **exposure_witnesses** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **external_shock** | _no curated definition_ | `governance_ripple_substrate_v1.md` | [settlements](GLOSSARY_settlements.md) · UNRESOLVED |
-| **facility_tier** | _no curated definition_ | `governance_consolidation_v1.md` | [settlements](GLOSSARY_settlements.md) · BUILT |
+| **facility_tier** | _no curated definition_ | `governance_consolidation_v1.md` | [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) · BUILT |
 | **faction_action_keys** | _no curated definition_ | `propagation_spec_v1.md` | _local only_ · UNRESOLVED |
 | **faction_dissolution** | _no curated definition_ | `key_type_registry_v30.md` | _local only_ · UNRESOLVED |
 | **faction_id** | _no curated definition_ | `key_type_registry_v30.md` | [factions](GLOSSARY_factions.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) · BUILT |
