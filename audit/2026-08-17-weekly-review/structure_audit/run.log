@@ -1,0 +1,6 @@
+[structure_audit] repo root (working tree): /home/user/ttrpg
+[G_code] parsing sim/ + tools/ imports (AST)...
+         273 modules, 419 import edges, 3 cycle(s), 20 cut-vertex(es), 91 cli-entry(ies), 24 stub-wired
+[L2] building module_contracts wiring graph...
+     27 modules, 103 wiring edges, 0 phantom-producer, 3 dangling-emit, 9 doc:null
+[done] audit/2026-08-17-weekly-review/structure_audit/structure_register.md

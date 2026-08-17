@@ -72,6 +72,63 @@ carry source only.
 
 ---
 
+## 2026-08-17 — Weekly code review `d36498f`..`f2fc307` + full instrument sweep (ED-IN-0194)
+
+**Full report: `audit/2026-08-17-weekly-review/00_findings.md`.** Read-and-execute pass, not a
+read-only one: both blocking suites run to completion (`tests/valoria` **1933 passed / 0 failed**,
+`engine/tests` **2051 passed / 0 failed**), every `tools/` validator run from the working tree, and
+the vector audit (v3, L1) + structure audit re-run fresh. **All blocking gates green**; repo-state
+**AMBER**, 0 blocking, 0 regressions.
+
+**THE PROPAGATION THIS FILE SAID WAS OWED IS STILL OWED.** `ED-IN-0187` appears **zero times** in all
+four registers named above — `supersession_register.yaml`, `CURRENT.md`'s Dice/resolution row,
+`propagation_map.md`, `mechanics_index.yaml`. `ci_supersession_check` consequently ran clean this
+session against 25 entries **none of which know the degree ladder moved**. Still no new tool needed;
+still only the data. **This is item 1 of the next-actions list and it is ~30 minutes.**
+
+**Both degree-ladder HOLDs were RULED 2026-08-15 (both MIGRATE) and are unexecuted.** The guard is
+correct today — each is asserted to STILL DIVERGE — and becomes a stale exemption the moment either
+lands. The sequence is fixed and non-obvious: **derive Ob from the defender first**, then apply the
+owner's ladder. That derivation is wired nowhere and `roll_net_continuous` still does
+`int(round(pool))`, so the fractional-dice half is not implemented either. Both halves gate both holds.
+
+**Ten findings, five surfaced by an instrument rather than by reading.** The cheapest is F4:
+`module_contracts.yaml:749/757` embed prose inside identifier strings
+(`"faction Mandate (cross-module → faction_state)"`), and those two strings produce 2
+`ci_quantity_vocabulary` UNRESOLVED rows **+** 2 vector-audit Mode-H isolates **+** 2 Mode-E sparse
+tokens — six rows, two instruments that share no code, one one-line data defect.
+
+**The pointer-and-label class is the pattern §0.1 point 5 asks to repair as one thing, not five:**
+`review_core.py:136` prints `tools/structure_audit.py` (nonexistent — the tool lives under `skills/`)
+into the SessionStart banner and the dashboard card; **5 of 10 `workplans/POINTER_*.md` are `LIVE` and
+name targets removed in the 2026-08-05 evacuation** — two are the plans of record for the single-owner
+and code-shape programs currently being executed against — under a summary line that says
+"10 target(s) resolved"; `structure_audit.py:790` asserts `undeclared` must read 0 while
+`module_contracts.yaml:566` withholds that field deliberately; `CLAUDE.md:401` lists supersession in
+the blocking tier that `ci_checks_registry.yaml:245` records as never-failing.
+
+**Three five-lens findings re-verified at HEAD and unchanged:** `TN_STANDARD` still ownerless (two
+live defs + `roll_pool`'s hardcoded `tn=7`; `dice_engine.TN_STANDARD` — the symbol the committed
+remediation plan prescribes — still does not exist); `single_owner_check` still absent from
+`ci_checks_registry.yaml`; `glossary.md:45` still bans and mandates `CI` in one sentence.
+
+⚠ **`editorial_ledger_in.jsonl` has ~1,100 tokens of headroom under a BLOCKING cap** (48,892 /
+50,000; it was 48,217 before this entry, which had to be cut back to fit). That is roughly one more
+entry of the size sessions actually write. **ED-IN-0185 Q5 (ledger chunking) is the not-started
+ruling that fixes it**, and it now has a deadline set by the gate rather than by us. Three more
+registers are over 85%: `module_contracts.yaml` 87%, `editorial_ledger_in_archive.jsonl` 88%,
+`tests/coverage_matrix.md` 94%. Chunking must decide **which file new entries land in** — the archive
+is already the larger file and the pre-cutover convention made it the primary allocation surface for
+0160–0182.
+
+⚠ **The debt direction is the thing to actually worry about.** The window added **+82,021 / −15,588
+lines across 283 files**, overwhelmingly apparatus, while `scope_ratchet` **REGRESSED**: `ed.stale`
+198 against a ceiling of 76 (+122), `ed.needs_jordan_stale` 83 against 21 (+62). 246 open EDs, 114
+needing Jordan. L5's burn-down owner still does not exist, and that number decides whether the next
+month of audits is worth running.
+
+---
+
 ## 2026-08-14 — Jordan's ruling session: all 10 calls RULED; 4 executed, 1 part-built, 5 not started; 2 sites HELD (ED-IN-0187/0188)
 
 **⚠ THE AGENDA IS CLOSED — ED-IN-0185 is RULED, not open.** All seven questions plus two raised in
