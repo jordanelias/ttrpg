@@ -4,6 +4,14 @@
 
 ## Date: 2026-08-17 · Lane: IN (cross-cutting) · ED-IN-0194
 
+> ⚠ **SUPERSEDED IN FOUR PLACES by `01_consolidation.md` (same date).** Three Fable-5 read-only
+> critics audited this document; all eleven findings and five throughlines were CONFIRMED against the
+> tree, but four things here are wrong or missing and the corrections are marked inline below as
+> `[CORRECTED — see 01_consolidation.md §1.x]`. **The headline number of TL-1 is one of them.**
+> Read `01_consolidation.md` for those four, for findings F12–F19, and for the consolidated
+> outstanding-item register. Nothing here is deleted — a corrected claim is left visible with its
+> correction, per this repo's standing convention.
+
 **Scope.** The fifteen commits merged to `main` in the review window, plus a full instrument sweep
 over the tree at `f2fc307`: the v3 vector audit (L1), the structure audit (G_code + L2), and every
 `tools/` check that concerns code shape, contracts, wiring, provenance and currency.
@@ -69,6 +77,18 @@ Ranked by how much independent evidence converged on them, per §10's rediscover
 The five-lens assessment called this T3 from a snapshot on 2026-08-14. A week of commits makes it
 measurable. The window added **+82,021 / −15,588 lines across 283 files**, and the great majority of
 that is apparatus: contract and key indexes (#298), flow skeletons and the engine atlas (#299), the
+
+> ⚠ **[CORRECTED — see `01_consolidation.md` §1.1]. "The great majority is apparatus" is FALSE, and
+> it was the one load-bearing number here with no instrument behind it** — a critic named it as the
+> claim to bet against, correctly, on §0.1-point-4 grounds. Measured over the same range: **53.8% of
+> the churn is machine-generated artifacts**, 14.1% is `systems/` + `engine/`, 12.2% is `audit/`
+> prose, and hand-authored apparatus (`tools/` + `skills/` + `tests/`) is **11.9%** — less than
+> design got. `references/glossary/glossary.json` alone is **44.5% of the entire week's diff**,
+> rewritten in 8 of 15 commits. The corrected finding is sharper: **the diffstat is nearly
+> meaningless as a measure of work here, because half of it is one generated file being rewritten.**
+> TL-1's actual thesis — the ratchet regressed while the window shipped — survives, and is
+> corroborated by two earlier non-self measurements (173/60 on 2026-08-11; +115/+56 in a prior
+> handoff entry).
 world-schema and Python-architecture censuses (#300/#304), the consolidation sweeps (#303/#305/#306),
 five new guard tests and `single_owner_check` (#307/#310), the CURRENT.md stamp-structure guard
 (#313). Over exactly the same window:
@@ -91,6 +111,14 @@ in its own first two commits; #311's two read-only critics found a **ninth and t
 the census had never enrolled, a second blocking suite the author had never run (six failures, all
 his), a recurrence guard that would have caught only 4 of the 11 ladders it claimed to guard, and two
 vacuous assertions; #315 retracted two of its own numbers.
+
+> ⚠ **[CORRECTED — see `01_consolidation.md` §1.3]. The "ninth ladder" story is misattributed, and I
+> passed the tree's own wrong lesson along.** Both "newly found" ladders were already on `main`, as
+> rows **#2 and #4 of 8** in `audit/2026-08-11-systems-python-architecture-audit/00_findings.md:184-194`,
+> merged three days earlier. The filed lesson ("an audit instrument's ROSTER is a claim about the
+> tree") points at instrument blindness; the actual defect was that a later instrument in the same
+> window never read the earlier one's committed output. Both are worth keeping — the filed one is
+> currently the only one, and it is the wrong half.
 
 The recurring shape underneath them is one thing, and it now has a name in the tree:
 
@@ -337,6 +365,13 @@ gap — not new, and not closed.
 
 ### F11 — `editorial_ledger_in.jsonl` has ~1,100 tokens of headroom under a **blocking** cap
 
+> ⛔ **[UPDATED LATER THE SAME DAY — this finding came due during the session that filed it.]**
+> Filing `01_consolidation.md`'s ledger entry **hit the cap**: `50,048 / 50,000`, commit refused. The
+> entry was cut back twice to fit. **The file now stands at 49,892 with 108 tokens of headroom** —
+> less than any entry anyone will write. Q5 is not "not started," it is **overdue**, and the next IN
+> session is blocked before it starts. See `01_consolidation.md` §4 Q-D for the ruling actually
+> needed, which is not "chunk it" but *which file new entries land in afterwards*.
+
 Found by filing this review's own ED entry, which is the only reason it was found: the IN ledger sat
 at **48,217 / 50,000 tokens (96%)** before this commit and **48,892 (98%)** after, and
 `ci_register_size_check` is a blocking CI gate. Roughly **one more entry of the size sessions
@@ -380,6 +415,15 @@ Threadwork — which is the change-impact ranking to consult before touching any
 carries three struck terms in circulation: **Game Master** (68 uses / 18 docs — in a repo whose first
 line of CLAUDE.md is "there is no GM"), **Coup Counter** (46 / 19), **Cultural Reformation** (24 / 10).
 
+> ⚠ **[CORRECTED — see `01_consolidation.md` §1.4]. Four categories present in this run's own output
+> and not reported here:** **Mode B was omitted entirely and without disclosure** — 28
+> implied-but-missing pairs, two of which link the 4/4 hubs named just above (`Mass Battle ↔
+> Settlement Layer`, `Faction Layer ↔ Mass Battle`, metadata-linked, zero citations); **two canonical
+> Key types at 0 paragraphs / cite-degree 0** (`mechanical.scene_exited`, `mechanical.scene_skipped`)
+> while the other four members of that exact class are discussed below; **63 import orphans and 91
+> unverified CLI entries** dropped from the scorecard quotation; and `_kernel_tests` as a top import
+> hub (in 0, out 16) — a test module inside the shipped package.
+
 ⚠ Mode D tripped its traversal cap on 55,175 calls; its 237 cascade sinks are leads, not findings.
 P1 (foundation-periphery) FAILED — foundation cite-mean 59.75 against a corpus median of 75.5, i.e.
 the docs designated foundational are *less* central than the median document. The audit publishes at
@@ -411,7 +455,11 @@ the docs designated foundational are *less* central than the median document. Th
 
 ## 6. What this pass could not establish
 
-- **PP provenance.** 433 of 452 cited `PP-NNN` numbers resolve to no register on `main`, and
+- **PP provenance.** *[CORRECTED — see `01_consolidation.md` §1.2: **531 of 537** is the current
+  measurement (ED-IN-0190, 2026-08-14, 537 distinct PP ids across 318 live files, 6 resolving). The
+  433/452 figure below was copied from `CLAUDE.md:34`, which is stale; two uncontrolled numbers for
+  one quantity now circulate, which is §0.1 point 4 in the governing document itself.]*
+  433 of 452 cited `PP-NNN` numbers resolve to no register on `main`, and
   `validate_ed_citations.py` is ED-scoped by design (ED-IN-0190, frozen as historical). Every PP
   citation encountered here was taken on trust.
 - **Balance behaviour.** No CI job runs full `mc_v18` campaigns; §7's gap is unchanged. The seeded
