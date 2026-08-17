@@ -4,7 +4,7 @@
 > Inventories every skill, tool, hook and workflow with what it reads, what it
 > writes (destination + format), who invokes it, and whether it is orphaned.
 
-**125 apparatuses** — claude-agent: 1, claude-workflow: 1, hook: 4, skill-script: 10, tool: 106, workflow: 3 · **8 orphaned**.
+**126 apparatuses** — claude-agent: 1, claude-workflow: 1, hook: 4, skill-script: 10, tool: 107, workflow: 3 · **8 orphaned**.
 
 ## Orphaned but CLI-invocable (manual/one-off tools — not prune targets)
 
@@ -72,6 +72,7 @@
 | `tools/ci_names_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/ci_names_consistency.py` | — | yes | ci:valoria-ci.yml |
 | `tools/ci_naming_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
+| `tools/ci_pp_frozen_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/ci_program_claim_check.py` | — | yes | ci:valoria-ci.yml, tool:imported |
 | `tools/ci_quantity_vocabulary_check.py` | — | yes | ci:valoria-ci.yml, skill:valoria-vector-audit, tool:imported |
 | `tools/ci_register_size_check.py` | — | yes | ci:valoria-ci.yml, skill:valoria-editorial-register, tool:imported |
@@ -165,5 +166,5 @@
 |---|---|---|
 | `.github/workflows/audit-refresh.yml` | `skills/valoria-vector-audit/scripts/vector_audit.py`, `tools/build_apparatus_registry.py`, `tools/observability/build_decisions.py`, `tools/observability/build_glossary.py`, `tools/observability/build_graph.py`, `tools/observability/build_incompleteness.py`, `tools/observability/build_proposals.py`, `tools/review_core.py` | commit/PR |
 | `.github/workflows/dashboard.yml` | `skills/valoria-vector-audit/scripts/vector_audit.py`, `tools/dashboard_data.py`, `tools/observability/build_decisions.py`, `tools/observability/build_incompleteness.py` | github-pages |
-| `.github/workflows/valoria-ci.yml` | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`, `tools/broken_dependency_checker.py`, `tools/build_identifier_census.py`, `tools/build_test_register.py`, `tools/canon_coverage_check.py`, `tools/ci_audit_registry_check.py`, `tools/ci_claim_provenance_check.py`, `tools/ci_claude_workflow_paths.py`, `tools/ci_co_file_checker.py`, `tools/ci_editorial_checker.py`, `tools/ci_generation_consistency.py`, `tools/ci_golden_modes_check.py`, `tools/ci_hooks_verifier.py`, `tools/ci_module_shape_check.py`, `tools/ci_names_check.py`, `tools/ci_names_consistency.py`, `tools/ci_naming_check.py`, `tools/ci_program_claim_check.py`, `tools/ci_quantity_vocabulary_check.py`, `tools/ci_register_size_check.py`, `tools/ci_sim_fabrication_check.py`, `tools/ci_supersession_check.py`, `tools/ci_vacuous_assertion_check.py`, `tools/ci_vetting_check.py`, `tools/ci_wf_harness_check.py`, `tools/ci_workplan_pointer_check.py`, `tools/compliance_check.py`, `tools/currency_consistency_check.py`, `tools/export_engine_params.py`, `tools/export_key_types.py`, `tools/freshness_gate.py`, `tools/mechanics_index_gen.py`, `tools/review_core.py`, `tools/scope_ratchet.py`, `tools/validate_ed_citations.py`, `tools/wiring_map_check.py` | ci-status |
+| `.github/workflows/valoria-ci.yml` | `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py`, `tools/broken_dependency_checker.py`, `tools/build_identifier_census.py`, `tools/build_test_register.py`, `tools/canon_coverage_check.py`, `tools/ci_audit_registry_check.py`, `tools/ci_claim_provenance_check.py`, `tools/ci_claude_workflow_paths.py`, `tools/ci_co_file_checker.py`, `tools/ci_editorial_checker.py`, `tools/ci_generation_consistency.py`, `tools/ci_golden_modes_check.py`, `tools/ci_hooks_verifier.py`, `tools/ci_module_shape_check.py`, `tools/ci_names_check.py`, `tools/ci_names_consistency.py`, `tools/ci_naming_check.py`, `tools/ci_pp_frozen_check.py`, `tools/ci_program_claim_check.py`, `tools/ci_quantity_vocabulary_check.py`, `tools/ci_register_size_check.py`, `tools/ci_sim_fabrication_check.py`, `tools/ci_supersession_check.py`, `tools/ci_vacuous_assertion_check.py`, `tools/ci_vetting_check.py`, `tools/ci_wf_harness_check.py`, `tools/ci_workplan_pointer_check.py`, `tools/compliance_check.py`, `tools/currency_consistency_check.py`, `tools/export_engine_params.py`, `tools/export_key_types.py`, `tools/freshness_gate.py`, `tools/mechanics_index_gen.py`, `tools/review_core.py`, `tools/scope_ratchet.py`, `tools/validate_ed_citations.py`, `tools/wiring_map_check.py` | ci-status |
 
