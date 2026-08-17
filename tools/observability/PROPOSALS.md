@@ -5,11 +5,11 @@
 > Companion to [`DECISIONS.md`](DECISIONS.md) (marker-level decision *debt*); this is
 > whole *work* awaiting sign-off. Detect-not-author: nothing here ratifies on merge.
 
-**283 open work items** · **128 need your decision**.
+**284 open work items** · **128 need your decision**.
 
 tiered register: [`workplans/valoria_master_workplan_v6.md` §5](workplans/valoria_master_workplan_v6.md)
 
-By kind: Audit verdicts — PARTIAL / OPEN — 22, Editorial ledger — actionable (no ruling needed) — 128, Editorial ledger — needs your decision — 115, Proposal docs (proposals/) — 10, Provisional / draft design docs — 8
+By kind: Audit verdicts — PARTIAL / OPEN — 23, Editorial ledger — actionable (no ruling needed) — 127, Editorial ledger — needs your decision — 114, Proposal docs (proposals/) — 12, Provisional / draft design docs — 8
 
 ## MB — Mass battle  (13 items, 10 need decision)
 
@@ -119,7 +119,7 @@ By kind: Audit verdicts — PARTIAL / OPEN — 22, Editorial ledger — actionab
 - `ED-WR-0006` — OPT-12, filed per Jordan's 2026-07-07 "ratify all" ruling (ED-IN-0026). NPC orphan triage ED (the workplan T2 default, executed per the C-NPC disposition proposal): one consolidated Conviction/Ethics/TS migration-completion ED (~250-300 fin  _(open)_
 - `valoria-mechanic-audit-2026-07-13:threadwork:threadwork` — [PARTIAL] mechanic_audit / threadwork: 1 new P1 (P-25 Scale-based Mending Stability override table truncated to zero data rows, A7/D1) + 7 new P2 (History-bonus dual-phrasing A2/D8, Pulling-only 5D pool floor A3/D9, fractional wound-Ob no r  _(PARTIAL)_
 
-## IN — Infrastructure / cross-cutting  (59 items, 29 need decision)
+## IN — Infrastructure / cross-cutting  (58 items, 28 need decision)
 
 - 🔸 `systems/_architecture/decision_policy_v1.md` — decision policy v1  _(DRAFT FOR RULING — does NOT ratify on merge (ED-1094 exception) — ED-IN-0113 §A, 2026-07-31)_
 - 🔸 `systems/_architecture/governance_type_registry_v1.md` — governance type registry v1  _(PROPOSED / REFERENCE — 2026-07-13 · Lane: IN (cross-cutting SE, FA, WR) · Jordan-vetoable. A registry and index over existing (mostly PROPOSED, some CANONICAL) content — claims no new mechanical canon by itself. §4's architecture proposal is genuinely new and unratified. No ED allocated yet.)_
@@ -146,7 +146,6 @@ By kind: Audit verdicts — PARTIAL / OPEN — 22, Editorial ledger — actionab
 - 🔸 `ED-IN-0156` — MEASURED 2026-08-11 while adversarially checking the ED-IN-0153 residual 'no cited PP number was provenance-verified'. CLAUDE.md carries 13 figures that assert a countable fact about the working tree (433 of 452 / 36 of 106 / 39 of 51 / 97   _(open)_
 - 🔸 `ED-IN-0158` — Whole-tree read-only sweep at c26a22c against the twelve commits of 2026-08-04..11, solo (no fan-out, no workflow), followed by an adversarial pass. EIGHT FINDINGS, ranked in audit/2026-08-11-consolidation-sweep/00_consolidation_sweep.md (s  _(open)_
 - 🔸 `ED-IN-0159` — Scoped by Jordan 2026-08-11: 'as lean as possible without sacrificing mechanisms', where lean means FEWER FILES TO TRACK/REVIEW/EDIT/AUDIT, and 'my concern is with code' (registers/logs/lane files explicitly out of scope). Population 118 .p  _(open)_
-- 🔸 `ED-IN-0163` — Executes G2 of audit/2026-08-11-code-leanness/01_plan.md -- the dead-scope sweep as ONE pattern (section 1.6) -- and reports one half as blocked rather than forcing it. DONE, five instances, each verified absent from the tree before the cut  _(open)_
 - 🔸 `ED-IN-REMEDIATION-0064` — Gameplay-Subsystem Observatory docket (designs/audit/2026-07-14-gameplay-subsystem-observatory/), Jordan-requested: run the vector audit and, for each gameplay subsystem, graph shape-of-code-architecture -> connectivity -> gaps; then 'doubl  _(open)_
 - 🔸 `ED-IN-REMEDIATION-0066` — [RENUMBERED from ED-IN-0065 at merge -- COLLISION: this branch read next_free=65 from pre-#139 main and allocated ED-IN-0065 for the remediation program, but PR #139 (holistic 5-critic observatory adversarial pass + its own unification doc)  _(open)_
 - `ED-IN-0003` — Convergence Markers need a runtime detector/applier. arc_register_events.md §VI's 8 markers are hand-authored trigger+payload rows with no detector, no Key type, no module contract, no sim module; combined payloads are non-summative by the   _(open)_
@@ -161,7 +160,8 @@ By kind: Audit verdicts — PARTIAL / OPEN — 22, Editorial ledger — actionab
 - `ED-IN-0045` — Four independent quick-win findings from the ED-IN-0044 simulation-harness sweep, filed separately per Jordan's explicit ruling (design doc section 11 item 4, 'File separately') rather than bundled into that architecture PR. Each is cheap a  _(open)_
 - `ED-IN-0071` — Filed Jordan's previously-untracked suggestion to reorganize the repo around its architecture/schema (a corpus search found it recorded NOWHERE -- no ED/proposal/decision-queue row; only workplan v6 sec5 'queue 21-23' T2-H3 narrow ledger-pa  _(open)_
 - `ED-IN-0079` — Values/formulae unification, first slice (Jordan directive: 'I need all values and formulae'; redirect: 'what happened to the .py stuff and pointers'). The computational values live as ~324 typed module-scope constants in the sim reference   _(open)_
-- …and 19 more (see `proposals.json`).
+- `ED-IN-0091` — Code-shape open-items register + Sonnet/Opus orchestration plan (audit/2026-07-29-code-shape-open-items/): collates ~60 register rows (from 100+ raw findings, multiply-rediscovered defects merged) across the vector audits (2026-07-21 repo-s  _(open)_
+- …and 18 more (see `proposals.json`).
 
 ## SE — Settlements  (48 items, 23 need decision)
 
@@ -207,12 +207,14 @@ By kind: Audit verdicts — PARTIAL / OPEN — 22, Editorial ledger — actionab
 - `ED-SE-0026` — Convene the Circle -- Peer-settlement obligation pooling; first lateral governor-to-governor trust axis Grounding: Reichskreise 1512. Target: governance §1.3 + §1.6. Judged promote-ready (priority P2) but NOT authored into canon this sessio  _(open)_
 - …and 8 more (see `proposals.json`).
 
-## unassigned — Unassigned / cross-lane  (86 items, 26 need decision)
+## unassigned — Unassigned / cross-lane  (88 items, 27 need decision)
 
 - 🔸 `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md` — 2026-07-26-personal-combat-player-agency-and-tradition-curriculum  _(PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.)_
+- 🔸 `proposals/2026-08-15-character-and-faction-stats-and-progression.md` — 2026-08-15-character-and-faction-stats-and-progression  _(PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. No constant changed, no default flipped, no golden re-recorded, no `.py` touched. Every number below was **produced by running the engine at HEAD**, not transcribed from an audit.)_
 - 🔸 `proposals/pc_formation_system.md` — pc formation system  _(PARTIALLY SUPERSEDED — the engine half is BUILT (brace/missile-density/ROLE_SPEC/kiting, commits per §11/§13; tests/sim/mass_battle/). Residual: §8 canon reconciliation (strip flat dice rules from mass_battle_v30 §A.6, PARKED as ED-909 follow-up) + §9 opens. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
 - 🔸 `proposals/valoria_fork_plan_of_record_v1.md` — valoria fork plan of record v1  _(PROPOSED (ED-IN-0124, 2026-08-03). Jordan-vetoable throughout.)_
 - 🔸 `proposals/weapon_physics_and_concentration_model.md` — weapon physics and concentration model  _(PARTIALLY SUPERSEDED — §§1–6 composite-mass/PoB model BUILT (combat_engine_v1/weapon_physics.py; ED-PC-0010 resolved recalibration). Residual: §7 concentration-error mechanic (T_err/ERR_K; live conc/conc_max disruption-resistance) never built. HELD FOR JORDAN. [## Status: heading added 2026-07-15])_
+- `proposals/2026-08-16-system-scores-census.md` — 2026-08-16-system-scores-census  _(MEASURED REFERENCE — not a proposal, not ratified, not canon. This document records **what the code declares and reads**, so the bottom-up attribute method (`proposals/2026-08-15-character-and-faction-stats-and-progression.md` §19) has raw material. Nothing here is a recommendation.)_
 - `proposals/canonical_nomenclature_v1.md` — canonical nomenclature v1  _(PROPOSED — not ratified. Nothing in this document renames anything.)_
 - `proposals/grounded_event_card_deck_v1.md` — grounded event card deck v1  _(PROPOSED (2026-07-11) · Lane: IN (cross-cutting; SE, FA) · Author-pass, not yet Jordan-ratified)_
 - `proposals/repo-reorganization-v1.md` — repo-reorganization-v1  _(RATIFIED (plan-of-record) — execution pending (ED-IN-0071 · Lane: IN, cross-cutting all lanes · ratified on merge of PR #150, 2026-07-16). The taxonomy + all §5 forks are ratified per ED-1094 (Jordan's merge of #150 + his direct in-conversation rulings 2026-07-15/16). **EXECUTED.** The migration (P0–P5, §4) ran to completion across P0–P4's slices; `designs/` was retired 2026-07-19 (ED-IN-0071 P4/P5 continuation, PR #191) and no longer exists in the working tree — see `CURRENT.md`/`systems/` §3. ⚠ **Scope correction (§4):** P0's `canon`→`registers` move is **not** low-blast — it touches ~70 load-bearing hardcoded path references in the enforcement layer, so it is done via a verified path-rewrite pass (§3), never a hand-move.)_
@@ -247,7 +249,5 @@ By kind: Audit verdicts — PARTIAL / OPEN — 22, Editorial ledger — actionab
 - `ED-1054` — Navigation surface points at retired/stale state (ecosystem review #1.4/#5.1/#5.2/#5.3/#4.4). README.md cites a 2-gen-stale workplan, a retired bootstrap, and 'Phase 0'; references/subsystems/{handoff,checkpoint,session_log}_subsystem.md do  _(open)_
 - `ED-401` — Foils doc claims 'canonical per ED-393-401' but canonical_sources_notes lists ED-401-405 as 'Open editorials' in arc_register v8.  _(open)_
 - `ED-402` — Documentary Axis 2 before Axis 9: direction of interaction to specify (ARC-S40/ARC-P04). Open editorial.  _(open)_
-- `ED-403` — Listed only as one of 'Open editorials ED-401-405' in arc_register v8 (2026-04-13, PP-575). No decision recorded.  _(open)_
-- `ED-404` — Listed only as one of 'Open editorials ED-401-405' in arc_register v8 (2026-04-13, PP-575). No decision recorded.  _(open)_
-- …and 46 more (see `proposals.json`).
+- …and 48 more (see `proposals.json`).
 

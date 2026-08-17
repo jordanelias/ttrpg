@@ -4,16 +4,16 @@ generator: tools/build_apparatus_registry.py
 note: GENERATED — do not hand-edit; re-run the generator. Regenerable inventory of every skill/tool/hook/workflow
   with its output destination + format + invokers + orphan status.
 counts:
-  total: 125
+  total: 126
   by_kind:
-    tool: 106
+    tool: 107
     skill-script: 10
     hook: 4
     workflow: 3
     claude-workflow: 1
     claude-agent: 1
   by_role:
-    B:stdout-or-gate: 60
+    B:stdout-or-gate: 61
     A:writes-artifact: 23
     D:import-only-library: 37
     workflow: 3
@@ -494,6 +494,22 @@ entries:
   imports:
   - ci_common
   - names
+- path: tools/ci_pp_frozen_check.py
+  kind: tool
+  stem: ci_pp_frozen_check
+  writes: []
+  prints_stdout: true
+  has_cli: true
+  uses_cli_args: true
+  invoked_by:
+  - ci:valoria-ci.yml
+  - tool:imported
+  imported_internally: true
+  orphaned: false
+  prune_candidate: false
+  role: B:stdout-or-gate
+  imports:
+  - ci_common
 - path: tools/ci_program_claim_check.py
   kind: tool
   stem: ci_program_claim_check
@@ -2101,6 +2117,7 @@ entries:
   - tools/ci_names_check.py
   - tools/ci_names_consistency.py
   - tools/ci_naming_check.py
+  - tools/ci_pp_frozen_check.py
   - tools/ci_program_claim_check.py
   - tools/ci_quantity_vocabulary_check.py
   - tools/ci_register_size_check.py

@@ -4,14 +4,14 @@
   "note": "GENERATED — do not hand-edit; re-run the generator (audit-refresh.yml). One deduplicated, lane-partitioned view of unratified work in flight. Complementary to DECISIONS.md (marker-level decision debt).",
   "workplan_tiers": "workplans/valoria_master_workplan_v6.md",
   "counts": {
-    "total": 283,
+    "total": 284,
     "needs_jordan": 128,
     "by_kind": {
-      "proposal_doc": 10,
+      "proposal_doc": 12,
       "provisional_status_doc": 8,
-      "ledger_actionable": 128,
-      "ledger_needs_jordan": 115,
-      "audit_partial": 22
+      "ledger_actionable": 127,
+      "ledger_needs_jordan": 114,
+      "audit_partial": 23
     },
     "by_lane": {
       "FA": {
@@ -23,8 +23,8 @@
         "needs_jordan": 3
       },
       "IN": {
-        "total": 59,
-        "needs_jordan": 29
+        "total": 58,
+        "needs_jordan": 28
       },
       "MB": {
         "total": 13,
@@ -47,15 +47,15 @@
         "needs_jordan": 2
       },
       "unassigned": {
-        "total": 86,
-        "needs_jordan": 26
+        "total": 88,
+        "needs_jordan": 27
       }
     }
   },
   "by_lane": {
     "unassigned": {
-      "total": 86,
-      "needs_jordan": 26,
+      "total": 88,
+      "needs_jordan": 27,
       "items": [
         {
           "kind": "proposal_doc",
@@ -65,6 +65,26 @@
           "lane": "unassigned",
           "needs_jordan": true,
           "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-08-15-character-and-faction-stats-and-progression.md",
+          "id": "proposals/2026-08-15-character-and-faction-stats-and-progression.md",
+          "title": "2026-08-15-character-and-faction-stats-and-progression",
+          "lane": "unassigned",
+          "needs_jordan": true,
+          "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. No constant changed, no default flipped, no golden re-recorded, no `.py` touched. Every number below was **produced by running the engine at HEAD**, not transcribed from an audit.",
+          "links": []
+        },
+        {
+          "kind": "proposal_doc",
+          "source": "proposals/2026-08-16-system-scores-census.md",
+          "id": "proposals/2026-08-16-system-scores-census.md",
+          "title": "2026-08-16-system-scores-census",
+          "lane": "unassigned",
+          "needs_jordan": false,
+          "status": "MEASURED REFERENCE — not a proposal, not ratified, not canon. This document records **what the code declares and reads**, so the bottom-up attribute method (`proposals/2026-08-15-character-and-faction-stats-and-progression.md` §19) has raw material. Nothing here is a recommendation.",
           "links": []
         },
         {
@@ -1060,8 +1080,8 @@
       ]
     },
     "IN": {
-      "total": 59,
-      "needs_jordan": 29,
+      "total": 58,
+      "needs_jordan": 28,
       "items": [
         {
           "kind": "provisional_status_doc",
@@ -1534,26 +1554,6 @@
           "links": []
         },
         {
-          "kind": "ledger_actionable",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0162",
-          "title": "Found while executing plan step G8, outside its scope, filed rather than fixed in that commit. references/identifier_census.json and the 16 systems/*/_identifier_census.yaml files were last generated 2026-08-04 (commit e3eab09). The documen",
-          "lane": "IN",
-          "needs_jordan": false,
-          "status": "open",
-          "links": []
-        },
-        {
-          "kind": "ledger_needs_jordan",
-          "source": "registers/editorial_ledger",
-          "id": "ED-IN-0163",
-          "title": "Executes G2 of audit/2026-08-11-code-leanness/01_plan.md -- the dead-scope sweep as ONE pattern (section 1.6) -- and reports one half as blocked rather than forcing it. DONE, five instances, each verified absent from the tree before the cut",
-          "lane": "IN",
-          "needs_jordan": true,
-          "status": "open",
-          "links": []
-        },
-        {
           "kind": "audit_partial",
           "source": "references/audit_registry.jsonl",
           "id": "valoria-mechanic-audit-2026-07-13:architecture:architecture",
@@ -1671,6 +1671,18 @@
           "status": "PARTIAL",
           "links": [
             "audit/2026-08-11-code-leanness"
+          ]
+        },
+        {
+          "kind": "audit_partial",
+          "source": "references/audit_registry.jsonl",
+          "id": "five-lens-repo-assessment-2026-08-14:corpus:2026-08-14-five-lens-repo-assessment",
+          "title": "[PARTIAL] repo_state / corpus: Six throughlines ranked by independent-lens convergence. T1 (3 independent rediscoveries): the designated authority surfaces are the rotten ones -- CURRENT.md:31 carries ~8 verbatim-duplicated reconcile stamps",
+          "lane": "IN",
+          "needs_jordan": false,
+          "status": "PARTIAL",
+          "links": [
+            "audit/2026-08-14-five-lens-repo-assessment"
           ]
         }
       ]
@@ -2991,6 +3003,26 @@
       "lane": "unassigned",
       "needs_jordan": true,
       "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. Nothing here is built, ratified, or scheduled. No constant is changed by this document. It proposes an architecture and a registry; §9 states the preconditions that must land *before* any of it is implementable, and §11 lists the calls that are Jordan's, not mine.",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-08-15-character-and-faction-stats-and-progression.md",
+      "id": "proposals/2026-08-15-character-and-faction-stats-and-progression.md",
+      "title": "2026-08-15-character-and-faction-stats-and-progression",
+      "lane": "unassigned",
+      "needs_jordan": true,
+      "status": "PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. No constant changed, no default flipped, no golden re-recorded, no `.py` touched. Every number below was **produced by running the engine at HEAD**, not transcribed from an audit.",
+      "links": []
+    },
+    {
+      "kind": "proposal_doc",
+      "source": "proposals/2026-08-16-system-scores-census.md",
+      "id": "proposals/2026-08-16-system-scores-census.md",
+      "title": "2026-08-16-system-scores-census",
+      "lane": "unassigned",
+      "needs_jordan": false,
+      "status": "MEASURED REFERENCE — not a proposal, not ratified, not canon. This document records **what the code declares and reads**, so the bottom-up attribute method (`proposals/2026-08-15-character-and-faction-stats-and-progression.md` §19) has raw material. Nothing here is a recommendation.",
       "links": []
     },
     {
@@ -4674,26 +4706,6 @@
       "links": []
     },
     {
-      "kind": "ledger_actionable",
-      "source": "registers/editorial_ledger",
-      "id": "ED-IN-0162",
-      "title": "Found while executing plan step G8, outside its scope, filed rather than fixed in that commit. references/identifier_census.json and the 16 systems/*/_identifier_census.yaml files were last generated 2026-08-04 (commit e3eab09). The documen",
-      "lane": "IN",
-      "needs_jordan": false,
-      "status": "open",
-      "links": []
-    },
-    {
-      "kind": "ledger_needs_jordan",
-      "source": "registers/editorial_ledger",
-      "id": "ED-IN-0163",
-      "title": "Executes G2 of audit/2026-08-11-code-leanness/01_plan.md -- the dead-scope sweep as ONE pattern (section 1.6) -- and reports one half as blocked rather than forcing it. DONE, five instances, each verified absent from the tree before the cut",
-      "lane": "IN",
-      "needs_jordan": true,
-      "status": "open",
-      "links": []
-    },
-    {
       "kind": "ledger_needs_jordan",
       "source": "registers/editorial_ledger",
       "id": "ED-MB-0008",
@@ -5855,6 +5867,18 @@
       "status": "PARTIAL",
       "links": [
         "audit/2026-08-11-code-leanness"
+      ]
+    },
+    {
+      "kind": "audit_partial",
+      "source": "references/audit_registry.jsonl",
+      "id": "five-lens-repo-assessment-2026-08-14:corpus:2026-08-14-five-lens-repo-assessment",
+      "title": "[PARTIAL] repo_state / corpus: Six throughlines ranked by independent-lens convergence. T1 (3 independent rediscoveries): the designated authority surfaces are the rotten ones -- CURRENT.md:31 carries ~8 verbatim-duplicated reconcile stamps",
+      "lane": "IN",
+      "needs_jordan": false,
+      "status": "PARTIAL",
+      "links": [
+        "audit/2026-08-14-five-lens-repo-assessment"
       ]
     }
   ]
