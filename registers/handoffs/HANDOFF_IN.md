@@ -98,8 +98,12 @@ integer-band ladders *— the exact form of the ninth ladder that caused it to b
 docstring's "an unenrolled ladder still fails something" is false. **F13 — `ci_supersession_check` is
 listed blocking in `CLAUDE.md:401`, was demoted to never-failing by this same window, and is empty of
 the window's one supersession event**, so F5 understated: what is missing is the data *plus any
-forcing mechanism*. Also **F14** (the glossary is a concordance; the name is why 2.1 MB of tracked
-build output went unquestioned; 278 registered terms have no corpus presence), **F15** (four
+forcing mechanism*. Also **F14** (`references/glossary/` is **98.7% not-definitions** — an index of
+where 2,083 strings occur, 91.3% of them with `definition: null`; the name is why 2.1 MB of tracked
+build output went unquestioned, and **278 registered terms have no corpus presence at all**. ⚠ The
+first draft prescribed the name *concordance*; **withdrawn** — an audit doc is not a naming authority
+and §4 already counts 32 ungoverned process terms. Naming is Jordan's, filed as Q-A; the measurement
+and the track-or-untrack question stand without it), **F15** (four
 instruments, four `needs_jordan` counts — 121/114/128/110 — because the flag survives on ratified and
 resolved rows), **F16** (four stale authority surfaces, incl. `HANDOFF_MB.md:18`'s CI-RED banner and
 `CLAUDE.md:366`'s 10-vs-9 `doc: null`), **F17/F18/F19**.

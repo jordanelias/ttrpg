@@ -194,7 +194,24 @@ data."* **What is missing is the data *plus any forcing mechanism*:** even once 
 tool exits 0 unconditionally. The degree ladder is invisible to the supersession apparatus in both
 directions, and the governing document says it is guarded.
 
-### F14 — `references/glossary/` is a concordance called a glossary, and the name is why nobody questioned its size
+### F14 — `references/glossary/` is 98.7% not-definitions, and the name is why nobody questioned its size
+
+> ⚠ **[CORRECTED after review — the prescription was withdrawn, the measurement stands.]** An earlier
+> draft of this finding prescribed the name **concordance**. That was wrong twice over. First, an
+> audit document is not a naming authority: §4 measured **32 process terms already in circulation
+> across ~26,000 uses, none governed by any registry**, and introducing a 33rd through a findings
+> report is exactly the move §4 forbids. Second, the word fails §4's own binding test — *would a
+> reader with no memory of this repo land on your meaning?* — since it is precise in corpus
+> linguistics and opaque to most engineers, which is the same "pointer to context that does not
+> survive" defect this document criticises in `evacuate`. The plain word, if one is wanted, is
+> **index**. **Naming is Jordan's call (Q-A), not this document's.** Recorded rather than silently
+> edited: the draft asserted the word was "ordinary English, standard outside this repo," and
+> "ordinary" was an overstatement made while arguing against precision-over-accessibility.
+>
+> *Not-invented note, for the record:* the word was not coined here. `build_glossary.py:355` — the
+> generator's own source — reads *"That is a concordance dump, not a glossary."* The tool's author
+> drew this exact distinction first. But two passing, pejorative uses are a critique, not a
+> convention, and treating them as one is what produced the overreach above.
 
 Applying §4's two ruled tests to `glossary.json` as instantiated:
 
@@ -207,12 +224,15 @@ Applying §4's two ruled tests to `glossary.json` as instantiated:
 | `census` + `locations` share of payload | **88.2%** |
 | **`definition` share of payload** | **1.3%** |
 
-**Idiomatic in choosing — FAIL.** A glossary is terms *with definitions*. An index of a corpus's
-principal terms with their locations is a **concordance** — ordinary English, standard outside this
-repo, exactly correct. The generator's docstring states the concept in words — *"What it could never
-do by hand is answer **where does this term actually appear?**"* — and does not use the word. §4 says
-*coin nothing that a plain word already covers*; this is the more damaging variant, **an existing
-word reused for a different existing concept**, because a coinage at least makes a cold reader stop.
+**Idiomatic in choosing — FAIL.** A glossary is terms *with definitions*. This is an **index** of
+where terms occur. §4 says *coin nothing that a plain word already covers*; this is the more damaging
+variant — **an existing word reused for a different existing concept** — because a coinage at least
+makes a cold reader stop, whereas `glossary` reads as understood and nobody checks. The generator's
+own docstring states the real concept plainly and correctly: *"What it could never do by hand is
+answer **where does this term actually appear?**"* That sentence is the honest description; the
+filename disagrees with it.
+
+⚠ **This finding does not prescribe a replacement name** — see the correction banner above.
 
 **Idempotent in meaning — FAIL.** Cold read yields *the file where terms are defined*. The file is
 91.3% definitionless engine identifiers.
@@ -220,7 +240,7 @@ word reused for a different existing concept**, because a coinage at least makes
 **Three aggravating factors:**
 - **The name collides with itself in one namespace.** `references/glossary.md` is the curated
   authority (*"canonical reference for all term expansions"*, 27 KB, with definitions);
-  `references/glossary/` is the generated concordance (3.9 MB). A file and a directory, same name,
+  `references/glossary/` is the generated location index (3.9 MB). A file and a directory, same name,
   same parent — and the payload is at `references/glossary/glossary.json`, the word appearing **twice
   in one path meaning two different things**.
 - **The correct definition exists only where a reader arrives last.** `MASTER_GLOSSARY.md`'s header
@@ -231,10 +251,12 @@ word reused for a different existing concept**, because a coinage at least makes
   as F6b, on a second tool. §4 names that registry as a required definition site *precisely because
   it is machine-read and cannot silently rot*. The one correct definition lives in a Python docstring.
 
-**Why this is not a naming quibble.** Called a glossary, 2.1 MB reads as a big vocabulary. Called a
-concordance, the obvious question surfaces at once: *why is a derived occurrence index tracked in
-git?* It has a generator, a staleness gate and no hand-edits. It is build output — and tracking it is
-what made one file 44.5% of the week's diff (X1) and the dominant merge-conflict surface.
+**Why this is not a naming quibble.** Called a glossary, 2.1 MB reads as a big vocabulary —
+regrettable, not alarming. Described as what it is — *an index of where 2,083 strings occur* — the
+obvious question surfaces at once: **why is derived build output tracked in git?** It has a
+generator, a staleness gate and no hand-edits. Tracking it is what made one file 44.5% of the week's
+diff (X1) and the dominant merge-conflict surface. **That question is the finding; the name is only
+the reason nobody asked it.**
 
 **In fairness to the instrument, its reason to exist is sound:** `glossary.md`'s content was last
 swept **2026-04-30** and its maintainer was retired 2026-06-28. A curated glossary with no live
@@ -363,7 +385,7 @@ unguarded item does not announce itself, and 39 of the 45 rows are unguarded.
 | 33 | FA/SE ratified-text authoring: ED-FA-0020/0021+E11/0022/0023; SE Za/Ordenanza; B12 propagation | `HANDOFF_FA.md:113-139` |
 | 34 | **L/PS wiring (E5) — "the single highest-priority open item in this entire thread."** Spec exists (`lps_wiring_v1.md`, PROPOSED); `lps_inert_check` was 100/100 red, report-only | `HANDOFF_SE.md:130-140` |
 | 35 | 9 key types with no consumer (`env.crisis`, `mechanical.season_change`, `era_transition`, `second_calamity`, `settlement_captured`, `theocracy_unification_declared`, `state.settlement_revolt`, +1); **`meta.legacy_event` has neither producer nor consumer** | `EXECUTION_MAP.md:114-171` |
-| 36 | **F14 glossary/concordance**: rename + the track-or-untrack decision; 278 registered terms with no corpus presence | F14 |
+| 36 | **F14**: the track-or-untrack decision for `references/glossary/` (naming is Q-A, Jordan's); 278 registered terms with no corpus presence | F14 |
 | 37 | **F16 stale banners** ×4: MB CI-RED, HANDOFF Q6, `CLAUDE.md:366` 10-vs-9, `HANDOFF_IN.md:3-72` PORT NOTE | F16 |
 | 38 | **F15** — pin one `needs_jordan` definition and one owner | F15 |
 | 39 | **X4's four unreported categories**: Mode B's 28 pairs, 2 zero-presence Key types, 63 orphans / 91 CLI entries, `_kernel_tests` as import hub | §1.4 |
@@ -424,10 +446,16 @@ does not answer that reproduces the problem one file over.
 Three more registers are over 85%: `module_contracts.yaml` 87%, `editorial_ledger_in_archive.jsonl`
 88%, `tests/coverage_matrix.md` 94%.
 
-**Q-A. Does the concordance stay in git?** (F14, X1, row 36.) It is 44.5% of the week's diff, the
-dominant merge-conflict surface, and correctly named it would never have been tracked. Untracking is
-a one-line `.gitignore` change plus a CI-artifact step; renaming touches 20 generated files, a
-directory, a generator and a staleness gate. Both are cheap now and get more expensive monthly.
+**Q-A. Does `references/glossary/` stay in git, and does it keep that name?** (F14, X1, row 36.) It
+is 44.5% of the week's diff and the dominant merge-conflict surface. **Two independent decisions:**
+
+- *Tracking* — it is generated, gated and never hand-edited, i.e. build output. Untracking is a
+  one-line `.gitignore` change plus a CI-artifact step. This is the one with the measured cost.
+- *Naming* — 98.7% of its payload is not definitions, and the name collides with
+  `references/glossary.md`. **This document deliberately proposes no replacement**: §4 counts 32
+  ungoverned process terms already, and a findings report is not a naming authority. If a word is
+  wanted, the plain one is *index*. Renaming touches 20 generated files, a directory, a generator and
+  a staleness gate — so it is worth doing once, deliberately, or not at all.
 
 **Q-B. Who owns the ratchet burn-down?** (Row 45, TL-1, L5 — open since 2026-07-28.) `ed.stale` is
 198 against a ceiling of 76 and rising. Until someone owns it, every audit adds rows to §3 and
