@@ -341,7 +341,7 @@ glossary            fresh  drift=   0
 The tracked `tools/observability/audit_findings.json` has not been refreshed in twenty days across
 1,372 in-scope changes, so the Incompleteness Ledger's **Missing** face — the dashboard surface whose
 entire doctrine is *surface, never cull* — is reporting a July tree. This run produced a current
-findings feed at `audit/2026-08-17-weekly-review/vector_audit/audit_findings.json`; it is deliberately
+findings feed, which was **deleted 2026-08-18 along with 25,187 lines of this run's generated JSON** — committing regenerable instrument output was the very defect X1/Q-A names, enacted by the session that named it. Re-run the tool to reproduce. It was deliberately
 **not** written over the tracked artifact here, because that regeneration belongs to
 `audit-refresh.yml` and its owning tools, not to a review pass.
 

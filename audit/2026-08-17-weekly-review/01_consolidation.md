@@ -363,7 +363,7 @@ unguarded item does not announce itself, and 39 of the 45 rows are unguarded.
 | 16 | FI/WR: ED-FI-0006/0007/0008 (wound contradiction ×2 + a P-06 violation), ED-WR-0008 | lane ledgers |
 | 17 | #315 progression S1–S7 + §15.5 blocking calls | `proposals/2026-08-15-…md:§15.5` |
 | 18 | ED-1090 span-of-control; ED-IN-0030 phantom "debt scene"; ED-885 citation confirm; ED-507/508/634 authorial content | flat ledger |
-| 19 | DP-1..DP-4 decision packets — ⚠ home paths are pre-restructure `designs/audit/…`; **on-disk existence unverified** | workplan §5 `:355` |
+| 19 | DP-1..DP-4 decision packets — ⚠ **VERIFIED DEAD 2026-08-18: `audit/2026-07-08-pessimist-action-audit/` does not exist.** The live workplan points four JORDAN-blocked packets at a doubly-dead path (retired `designs/` prefix *and* evacuated directory). Same class as F2. *Filed as 'unverified' by a census that could have closed it with one command — recorded as a defect of that census.* | `valoria_master_workplan_v6.md:355` |
 
 ### 3.2 EXECUTION × UNGUARDED — ruled or uncontroversial, merely undone
 

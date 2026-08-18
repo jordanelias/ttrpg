@@ -31,7 +31,7 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
 - **Adversarial pass at every stage that gates a result.** Producing and checking are different jobs:
   after you draft canon, a number, or a fix, *try to break it* — verify provenance by hand against
   the cited `PP-NNN`/`ED-NNN` (the anti-fabrication gate is leaky — `validate_ed_citations.py` is
-  scoped to ED only, and since the 2026-08-05 evacuation removed the patch archives, **433 of 452
+  scoped to ED only, and since the 2026-08-05 evacuation removed the patch archives, **[SUPERSEDED 2026-08-18: ED-IN-0190 measured **531 of 537** distinct PP ids across 318 live files. The 433/452 below is the 2026-08-05 figure, kept only so older citations of it resolve.] 433 of 452
   distinct `PP-NNN` numbers cited in live surfaces resolve to no register on `main`**; disposition
   held, ED-IN-0147), run the relevant `tools/`
   validator, and for a judgment call put a genuinely independent critic on it (structural

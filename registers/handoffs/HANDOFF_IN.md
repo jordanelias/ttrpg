@@ -172,7 +172,10 @@ over. Filed as `01_consolidation.md` §4 Q-D. Three more registers are over 85%:
 `module_contracts.yaml` 87%, `editorial_ledger_in_archive.jsonl` 88%, `tests/coverage_matrix.md` 94%.
 
 ⚠ **The debt direction is the thing to actually worry about.** The window added **+82,021 / −15,588
-lines across 283 files**, overwhelmingly apparatus, while `scope_ratchet` **REGRESSED**: `ed.stale`
+lines across 283 files** — of which **53.8% is machine-generated artifacts** and hand-authored
+apparatus is only **11.9%**, less than design's 14.1% (measured; the "overwhelmingly apparatus"
+claim that stood here was refuted by X1 above, in this same entry, and I failed to update it here) —
+while `scope_ratchet` **REGRESSED**: `ed.stale`
 198 against a ceiling of 76 (+122), `ed.needs_jordan_stale` 83 against 21 (+62). 246 open EDs, 114
 needing Jordan. L5's burn-down owner still does not exist, and that number decides whether the next
 month of audits is worth running.
