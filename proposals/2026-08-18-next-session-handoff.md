@@ -16,7 +16,7 @@ infrastructure the last session built. The investigation measured it, went outsi
 actual Godot game (which no instrument here reads), compiled that game for the first time in its
 history, and diagnosed the mechanism. It shipped as PR #319. Fable 5 then adjudicated the result
 across three independent read-only nodes and **refuted the headline claim and overturned the
-culling disposition** — both corrected in PR #320. What survived is below, separated into *ruled*,
+culling disposition** — both corrected in PR #321. What survived is below, separated into *ruled*,
 *held for Jordan*, and *unblocked, do it now*. Nothing here is awaiting a model or an agent.
 
 **The two documents behind this one:**
@@ -293,7 +293,7 @@ since, this repo took **1,596 commits and +1,040,549 / −766,721 lines**. `syst
 
 - The investigation, its adversarial pass, and Fable 5's three-node adjudication. **Nothing is
   awaiting a model.**
-- PR #319 (the investigation) and PR #320 (the corrections) are merged.
+- PR #319 (the investigation) and PR #321 (the corrections) are merged.
 - The Recall derivation is verified twice, independently, and upheld.
 - The Key-type gap is recounted twice with no divergence.
 - The game has been compiled and bisected; the defect list in §1.2 is complete as of `5e01065`.

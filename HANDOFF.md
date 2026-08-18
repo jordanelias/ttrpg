@@ -54,7 +54,7 @@ and the July narrative is in `git log HANDOFF.md`._
 
 ### ⭐ READ FIRST (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
 
-The recursion investigation (PR #319) and its Fable-5 adjudication (PR #320) are complete. That
+The recursion investigation (PR #319) and its Fable-5 adjudication (PR #321) are complete. That
 handoff carries **six unblocked, verified actions that move the game**, the five items held for
 Jordan, the findings not to re-derive, and the traps this session hit. Highest-leverage first:
 
