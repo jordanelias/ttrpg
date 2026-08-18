@@ -812,7 +812,7 @@
   "Belief": {
    "ambiguous": false,
    "definition": "Player-authored character conviction. Mechanical driver for Momentum and Character Points. Distinct from Inspiration (see below).",
-   "file_count": 52,
+   "file_count": 53,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -820,7 +820,8 @@
     "godot/godot_architecture_specification.md": 3,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 5,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "systems/_architecture/campaign_modes_v30_infill.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 10,
@@ -2400,7 +2401,7 @@
   "Crown": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 115,
+   "file_count": 116,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
@@ -2409,6 +2410,7 @@
     "godot/data_serialization_spec.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 7,
     "proposals/grounded_event_card_deck_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 21,
@@ -2784,7 +2786,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
-   "file_count": 74,
+   "file_count": 75,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -2793,7 +2795,8 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 11,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 12,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -2994,11 +2997,12 @@
   "Domain Action": {
    "ambiguous": false,
    "definition": "Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `systems/_architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 346 chains).",
-   "file_count": 51,
+   "file_count": 52,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/conflict_architecture_proposal.md": 2,
     "systems/_architecture/derived_stats_v30.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
@@ -3061,6 +3065,7 @@
     "godot",
     "mass_battle",
     "npcs",
+    "proposals",
     "settlements",
     "social_contest",
     "ui",
@@ -4508,13 +4513,14 @@
   "Hafenmark": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 96,
+   "file_count": 97,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "canon/03_canonical_timeline.md": 5,
     "engine/mc_v18_walkthrough.md": 3,
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 4,
@@ -5504,7 +5510,7 @@
   "Key": {
    "ambiguous": false,
    "category": "substrate",
-   "file_count": 56,
+   "file_count": 57,
    "legacy_count": 1,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
@@ -5512,7 +5518,8 @@
     "godot/README.md": 3,
     "godot/godot_conversion_strategy_v1.md": 37,
     "proposals/2026-08-18-breaking-the-recursion.md": 5,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 50,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 6,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 52,
     "proposals/2026-08-18-recursion-interrogation-log.md": 8,
     "proposals/canonical_nomenclature_v1.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 14,
@@ -6308,7 +6315,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 102,
+   "file_count": 103,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6319,6 +6326,7 @@
     "godot/godot_conversion_strategy_v1.md": 8,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "proposals/grounded_event_card_deck_v1.md": 26,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
@@ -6771,11 +6779,13 @@
   "Momentum": {
    "ambiguous": false,
    "definition": "Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only).",
-   "file_count": 29,
+   "file_count": 31,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 5,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
@@ -7144,7 +7154,7 @@
     "engine/sigma_leverage_engine_armature.md": 2,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 3,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/cogload_moderate_target.md": 2,
     "systems/_architecture/derived_stats_v30.md": 4,
@@ -10021,11 +10031,12 @@
   "Truth": {
    "ambiguous": false,
    "definition": "Per-character metaphysical stance (**formerly \"Certainty\"**; also consolidates the retired character \"Piety Track\" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) \u2192 Thread-truth acceptance (0, *Edeyja pole*). Engine-internal 0\u20135; **players see qualitative bands, never the number**. All PCs have it; named NPCs at GM discretion; factions do not hold Truth. *Legacy \"Certainty\"/`CERT` resolve to Truth pending the corpus rename (ED-IN-0075 staged sweep).*",
-   "file_count": 51,
+   "file_count": 52,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/companion_app_design_note.md": 1,
     "systems/_architecture/complete_systems_reference.md": 8,
@@ -10089,6 +10100,7 @@
     "fieldwork",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "threadwork",
     "ui",
@@ -12678,10 +12690,11 @@
      "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `actor` (duck-typed practitioner: `.spirit`, `.ts`, `.history`, `.actor_id`) | `arg` | caller-supplied; no World practitioner-stat schema exists | `systems/threadwork/sim/operations.py:15-19` (module docstring ASSUMPTION)"
     }
    },
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 8,
     "systems/_architecture/key_type_registry_v30.md": 14,
@@ -12703,6 +12716,7 @@
     "combat",
     "godot",
     "npcs",
+    "proposals",
     "settlements",
     "threadwork"
    ],
@@ -17144,9 +17158,10 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:414` (sched.emit(key))"
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 2,
@@ -17164,7 +17179,8 @@
     "_architecture",
     "articulation",
     "factions",
-    "mass_battle"
+    "mass_battle",
+    "proposals"
    ],
    "term": "battle_concluded"
   },
@@ -17646,10 +17662,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 28 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 7,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
     "systems/_architecture/key_substrate_v30.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -17760,7 +17777,7 @@
   "beliefs": {
    "ambiguous": false,
    "definition": "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass.",
-   "file_count": 18,
+   "file_count": 19,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
@@ -17769,6 +17786,7 @@
     "godot/data_serialization_spec.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/repo-reorganization-v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 68,
@@ -22091,7 +22109,7 @@
     "proposals/2026-08-16-system-scores-census.md": 6,
     "proposals/2026-08-18-breaking-the-recursion.md": 3,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 6,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
@@ -22283,10 +22301,11 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1018-1021`"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -22416,7 +22435,7 @@
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 2,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
@@ -23377,10 +23396,11 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure B emits state.concern_resolved on resolution | \u00a73.2"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 8
@@ -23450,9 +23470,10 @@
      "purpose": "opinion.confidence_before != opinion.confidence_after:"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 4
    },
@@ -23461,7 +23482,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "confidence_after"
   },
@@ -23485,9 +23507,11 @@
      "purpose": "opinion.confidence_before != opinion.confidence_after:"
     }
    },
-   "file_count": 2,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 4
    },
@@ -23496,7 +23520,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "confidence_before"
   },
@@ -26107,9 +26132,10 @@
      "purpose": "[\u00a75.2 Faction consumes Keys] Key type | Faction-state effect :: `da_outcome.*` | Mission outcome attribution \u2192 \u0394PS, \u0394L"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 3,
     "systems/_architecture/key_substrate_v30.md": 8,
@@ -26426,16 +26452,18 @@
      "purpose": "default_permanence: <transient | persistent | indelible>"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 56
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "default_permanence"
   },
@@ -26453,16 +26481,18 @@
      "purpose": "default_scale_signature: [...]"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 56
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "default_scale_signature"
   },
@@ -26480,16 +26510,18 @@
      "purpose": "default_time_horizon: <immediate | near | far>"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 56
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "default_time_horizon"
   },
@@ -26508,9 +26540,10 @@
      "purpose": "default_visibility(scene_id, scale_signature):"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4
    },
@@ -26518,7 +26551,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "default_visibility"
   },
@@ -26779,16 +26813,18 @@
      "purpose": "degree_of_success"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "degree_of_success"
   },
@@ -28747,9 +28783,11 @@
      "purpose": "'driver_memory_refs': [m.key_uuid for m in new_memory_refs],"
     }
    },
-   "file_count": 2,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 2
    },
@@ -28758,7 +28796,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "driver_memory_refs"
   },
@@ -32045,9 +32084,10 @@
      "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `faction_id` | arg | iteration over `world.factions` | `engine/autoload/victory.py:106 check_all_factions`"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 13,
     "systems/factions/faction_behavior_v30.md": 1,
     "systems/factions/franchise_v30.md": 3,
@@ -32061,6 +32101,7 @@
    "subsystems": [
     "_architecture",
     "factions",
+    "proposals",
     "ui",
     "victory"
    ],
@@ -33145,7 +33186,7 @@
   "fieldwork": {
    "ambiguous": true,
    "definition": "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure.",
-   "file_count": 70,
+   "file_count": 71,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
@@ -33156,7 +33197,8 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "proposals/2026-08-16-system-scores-census.md": 2,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 70,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 72,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -33296,7 +33338,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 7,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 9,
     "systems/_architecture/governance_ripple_substrate_v1.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 3,
     "systems/fieldwork/knots_v30.md": 1
@@ -34665,7 +34707,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/overview/overview_flow_skeleton_v1.md": 1
    },
@@ -34825,9 +34867,10 @@
      "purpose": "ED-FI-0003 propagation completion (2026-07-07):** the 2026-06-28 rulings (ED-841/842/843/912) that resolved TIER-DRIFT-001/COMPOSURE-DRIFT-001/TRUNC-DRIFT-001 had reached only fieldwork_v30 \u00a75.6b; this pass propagated them into \u00a76.1 (bidirectional \u22125..+5 gauge, rupture at +5, break Disposition \u22123), \u2026"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/fieldwork/knots_v30.md": 1
@@ -34837,7 +34880,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "gap_note"
   },
@@ -34868,9 +34912,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares four world-state-era gates on the `victory` module (`g_ms0` MS=0\u2192Post-Calamity Era, `g_ms5` sustained MS\u22645\u2192Second Calamity, `g_msrec` MS-recovery, `g_diss` all-factions-dissolved\u2192Anarchy Era) \u2014 none appear in `engine/autoload/victory.py`, whose only exported checks implement GD-1 (peninsular sovereignty) alone. R"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 5,
     "systems/_architecture/propagation_spec_v1.md": 1,
@@ -38109,7 +38154,7 @@
    "file_count": 5,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 11,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -38514,9 +38559,10 @@
      "purpose": "causes: [<key_id>, ...] # provenance \u2014 Keys that led to this"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 4,
     "systems/_architecture/key_substrate_v30.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 2
    },
@@ -38524,7 +38570,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "key_id"
   },
@@ -43032,10 +43079,11 @@
      "purpose": "new_belief # short string"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
@@ -43741,11 +43789,12 @@
      "purpose": "[\u00a75.3 The eight row types] Row type | Visual | Mechanical effect :: **Belief-targeted** | Purple \u25c6 mark + Belief text | Adds pressure tick; 3 cumulative = Belief Scar per npc_behavior \u00a73.3"
     }
    },
-   "file_count": 34,
+   "file_count": 35,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 5,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 8,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 5,
@@ -44098,11 +44147,12 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: The `npc_behavior` module contract (`references/module_contracts.yaml`) declares a full `consumes`/`emits`/`state`/`gates` Key-flow shape (Procedures B/C/D/E \u2014 all four declared accounting phases, none implemented) against `sim_module: none` \u2014 explicitly re-verified (OI-54, ED-IN-0097) that `systems/npcs/` holds zero `.py` files. None of this declared flow"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/npcs/npcs_flow_skeleton_v1.md": 5
@@ -44342,7 +44392,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-16-system-scores-census.md": 2,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
@@ -45047,11 +45097,12 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
@@ -45089,9 +45140,10 @@
      "purpose": "'opinion_subject': opinion.subject_npc_id,"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 3
    },
@@ -45100,7 +45152,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "opinion_subject"
   },
@@ -45211,16 +45264,18 @@
      "purpose": "optional_payload_fields: [...]"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 56
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "optional_payload_fields"
   },
@@ -45454,16 +45509,18 @@
      "purpose": "outcome_class # overwhelming | success | partial | failure | unknown"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "outcome_class"
   },
@@ -45917,9 +45974,10 @@
   "parliamentary_transfer": {
    "ambiguous": false,
    "definition": "CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending.",
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 15,
     "systems/_architecture/engine_atlas_v1.md": 1,
@@ -48601,10 +48659,11 @@
      "purpose": "'prior_belief': resolution.target_belief.value_before,"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1
    },
@@ -48757,10 +48816,11 @@
      "purpose": "visibility={'private_observers': [npc.id, resolution.subject_npc_id]},"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "systems/_architecture/key_substrate_v30.md": 5,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/factions/political_dynamics_keys_migration_v30.md": 6
@@ -49093,7 +49153,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -49173,7 +49233,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -51498,9 +51558,10 @@
      "purpose": "datafile** \u2014 `references/rendering_dispositions.yaml` (type_id \u2192 {tier2, tier3, zoom,"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 3
    },
@@ -51508,7 +51569,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "rendering_dispositions"
   },
@@ -51704,9 +51766,10 @@
      "purpose": "[\u00a71 \u00b7 The seam-contract row (the format every crossing must satisfy)] Field | Obligation | Checker (\u00a74) :: `payload` | Per-type `required_payload_fields` (registry \u00a71) PLUS the universal obligations: `targets[]` w/ role + per-target `stat_deltas`/`impact_vector` on every down-Key (\u00a712.3/D.1); `scale_signature[]` incl. every scale touched; `causes[]` populated whenever the emitter knows prior Keys "
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 57
    },
@@ -51714,7 +51777,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "required_payload_fields"
   },
@@ -54205,7 +54269,7 @@
    "file_count": 2,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 6
    },
    "sources": [
@@ -55717,16 +55781,18 @@
      "purpose": "mechanical.scene_exited"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "scene_exited"
   },
@@ -56528,10 +56594,11 @@
      "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.season` | world-state | `engine.autoload.game_state` | read by every emitter to build `EmittedAt.season_index` \u2014 `engine/cross_scale/echo_transport.py:308`, also `:413`"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 5,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -56542,7 +56609,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "season_index"
   },
@@ -57873,9 +57941,10 @@
      "purpose": "signal settlement_event_fired(settlement_id, event_type)"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/settlements/settlements_flow_skeleton_v1.md": 2,
@@ -58926,10 +58995,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of "
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/engine_atlas_v1.md": 1,
@@ -60701,10 +60771,11 @@
      "purpose": "`{id: \"combat.scene\", resolver: state_reader, status: PENDING, in: [\"scene.combat_strike\",\"scene.combat_hit\","
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 6,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/combat/scene_combat_design_v1.md": 1
@@ -61316,12 +61387,13 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter \u2192 `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`"
     }
    },
-   "file_count": 13,
+   "file_count": 14,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/2026-08-16-system-scores-census.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,
@@ -63650,10 +63722,11 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called by :: `get_npcs_in_territory(territory_id, world=None)` | `systems/world/sim/npe.py:375 get_npcs_in_territory` | \u2014 (no production caller found)"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/npcs/npcs_flow_skeleton_v1.md": 7,
@@ -64890,10 +64963,11 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none \u2014 declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:354-355`; see \u00a77"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -64905,6 +64979,7 @@
    "subsystems": [
     "_architecture",
     "godot",
+    "proposals",
     "threadwork"
    ],
    "term": "thread_woven"
@@ -66173,16 +66248,18 @@
      "purpose": "triggering_keys # [key_ids] that led to revision"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "triggering_keys"
   },

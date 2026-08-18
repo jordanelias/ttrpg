@@ -56,7 +56,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **actor_b** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md), [proposals](GLOSSARY_proposals.md), [threadwork](GLOSSARY_threadwork.md) | 3 | identifier_census |
 | **actor_b_obj** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md) | 1 | identifier_census |
 | **actor_faction** | _no curated definition_ | [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md) | 4 | identifier_census |
-| **actor_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md) | 12 | identifier_census |
+| **actor_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md) | 13 | identifier_census |
 | **actor_id_a** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md) | 2 | identifier_census |
 | **actor_id_b** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md) | 2 | identifier_census |
 | **actor_ids** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md) | 3 | identifier_census |
@@ -211,7 +211,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **base_vision** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
 | **battery_report** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **battery_v22** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
-| **battle_concluded** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md) | 9 | identifier_census |
+| **battle_concluded** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md) | 10 | identifier_census |
 | **battle_count** | _no curated definition_ | [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md) | 4 | identifier_census |
 | **battle_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **battle_turn** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
@@ -219,16 +219,16 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **beat_aside** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **beat_exhaustion** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **being_id** | _no curated definition_ | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census |
-| **Belief** | Player-authored character conviction. Mechanical driver for Momentum and Character Points. Distinct from Inspiration (see below). | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 52 | glossary.md |
+| **Belief** | Player-authored character conviction. Mechanical driver for Momentum and Character Points. Distinct from Inspiration (see below). | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 53 | glossary.md |
 | **belief_engagement_for** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md) | 3 | identifier_census |
 | **belief_id** | _no curated definition_ | [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **belief_index** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **belief_pressure_added** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
-| **belief_revised** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) | 8 | identifier_census |
+| **belief_revised** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) | 9 | identifier_census |
 | **belief_revision** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **belief_scar_added** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **belief_scarred** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
-| **beliefs** | Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass. | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) | 18 | mechanics_index |
+| **beliefs** | Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass. | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md) | 19 | mechanics_index |
 | **between_turn_recovery** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **bg_v05** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md) | 4 | identifier_census |
 | **bind_dominance_p** | _no curated definition_ | [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
@@ -377,7 +377,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **combat** ⚠️ | Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) p … | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 96 | mechanics_index |
 | **Combat Endurance** | Stamina resource tracking in extended combat. Sub-application of Stamina (Part One); not a separate stat track. | [combat](GLOSSARY_combat.md) | 1 | glossary.md |
 | **combat_felled** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 7 | identifier_census |
-| **combat_hit** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 6 | identifier_census |
+| **combat_hit** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 7 | identifier_census |
 | **combat_initiated** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **combat_reputation** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **combat_resolved** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) | 13 | identifier_census |
@@ -411,11 +411,11 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **compute_thread_echo** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
 | **Concentration** | Debate resource spent to sustain rhetorical positions. | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 21 | glossary.md |
 | **concern_history** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
-| **concern_resolved** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
+| **concern_resolved** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 5 | identifier_census |
 | **concern_tag** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **Confessor Arne Himlensendt** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [world](GLOSSARY_world.md) | 13 | names_index |
-| **confidence_after** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
-| **confidence_before** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
+| **confidence_after** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
+| **confidence_before** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
 | **Conflict Architecture** | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. | [_architecture](GLOSSARY__architecture.md) | 1 | glossary.md |
 | **conquest_mult** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **consecutive_qualifying** | _no curated definition_ | [victory](GLOSSARY_victory.md) | 1 | identifier_census |
@@ -472,7 +472,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **crisis_stability** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **crisis_type** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **cross_faction_distant_contact** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
-| **Crown** ⚠️ | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 115 | names_index |
+| **Crown** ⚠️ | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 116 | names_index |
 | **crown_lowland** | _no curated definition_ | [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md) | 3 | identifier_census |
 | **crown_peninsular_sovereignty** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **crown_treaty** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census, mechanics_index |
@@ -498,7 +498,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **cutscene_started** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **d_sigma** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) | 6 | identifier_census |
 | **da_framework** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **da_outcome** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 7 | identifier_census |
+| **da_outcome** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 8 | identifier_census |
 | **da_outcome_key** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **da_subtype** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **Dalla Virke** | _no curated definition_ | [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md) | 7 | names_index |
@@ -508,10 +508,10 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **decay_rate** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **decided_by** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **declared_by** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
-| **default_permanence** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **default_scale_signature** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **default_time_horizon** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **default_visibility** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
+| **default_permanence** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
+| **default_scale_signature** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
+| **default_time_horizon** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
+| **default_visibility** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **defence_sigma** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **defender_faction** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **defender_size** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
@@ -522,7 +522,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **deferred_echo_apply_keys** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **deferred_echo_stat_deltas_applied_at_accounting_only** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **deferred_emissions** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **degree_of_success** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
+| **degree_of_success** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
 | **deliberate_silent** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **depth_exceeded** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **depth_limit** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
@@ -556,7 +556,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **displaced_relation** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **displacement_neglect_observed** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **display_name** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **Disposition** ⚠️ | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 74 | glossary.md, names_index |
+| **Disposition** ⚠️ | NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 391 chains). | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 75 | glossary.md, names_index |
 | **disposition_changed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 3 | identifier_census |
 | **disposition_modifier** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **disposition_set_to** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
@@ -572,7 +572,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **distribute_casualties_cellwise** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **distribute_down** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **doc_emit_ref** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **Domain Action** | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `systems/_architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 51 | glossary.md |
+| **Domain Action** | Faction-level strategic action resolved at scale-transition phase. Mechanically the unit of strategic-layer decision. Canonical in `systems/_architecture/scale_transitions_v30.md` + `designs/provincial/faction_layer_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D — 346 chains). | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 52 | glossary.md |
 | **Domain Echo** | Faction-level consequence triggered by decisive Debate outcomes. | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 59 | glossary.md |
 | **domain_actions** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) | 11 | identifier_census |
 | **domain_echo** | Scene -> Faction propagation. ED-300 autonomous resolution. | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 12 | mechanics_index |
@@ -591,7 +591,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **drift_b** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **drift_b_to_a** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **drift_coef** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
-| **driver_memory_refs** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
+| **driver_memory_refs** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
 | **dsigma_bonus** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
 | **Duchess Inge Baralta** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) | 15 | names_index |
 | **Duke Magnus Vaynard** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [world](GLOSSARY_world.md) | 13 | names_index |
@@ -691,7 +691,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **faction_dissolution** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **faction_effects** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **faction_emergence_stage_changed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
-| **faction_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) | 6 | identifier_census |
+| **faction_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) | 7 | identifier_census |
 | **faction_id_a** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **faction_id_b** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **faction_ids** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
@@ -717,7 +717,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **fid_a** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **fid_b** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **field_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **fieldwork** ⚠️ | Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure. | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) | 70 | mechanics_index |
+| **fieldwork** ⚠️ | Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure. | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) | 71 | mechanics_index |
 | **fieldwork_hybrid** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [fieldwork](GLOSSARY_fieldwork.md), [ui](GLOSSARY_ui.md) | 3 | identifier_census |
 | **fieldwork_knots** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) | 5 | identifier_census |
 | **fieldwork_lifecycle_stress_01** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md), [settlements](GLOSSARY_settlements.md) | 2 | identifier_census |
@@ -763,8 +763,8 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **game_director** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
 | **game_victory** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **Gap** ⚠️ | A rupture in the rendered substrate. Severity scales: Micro-Gap, Standard Gap, Entrenched Gap, Catastrophic Gap. | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 66 | glossary.md |
-| **gap_note** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [fieldwork](GLOSSARY_fieldwork.md) | 3 | identifier_census |
-| **gap_notes** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md), [victory](GLOSSARY_victory.md) | 4 | identifier_census |
+| **gap_note** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [fieldwork](GLOSSARY_fieldwork.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
+| **gap_notes** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md), [victory](GLOSSARY_victory.md) | 5 | identifier_census |
 | **gap_resolution_2026** | _no curated definition_ | [factions](GLOSSARY_factions.md), [mass_battle](GLOSSARY_mass_battle.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md) | 4 | identifier_census |
 | **gen_definition_views** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **generate_chronicle_entry** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md) | 2 | identifier_census |
@@ -814,7 +814,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **guilds_boost_for** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
 | **guilds_npc** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **h_per_size** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
-| **Hafenmark** ⚠️ | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 96 | names_index |
+| **Hafenmark** ⚠️ | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 97 | names_index |
 | **hafenmark_burgher_class** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **hafenmark_equipment** | Wagenburg + Bombards tactic cards per Jordan 2026-05-17 (Hussite battle wagons + proto-firearms). Pass 2e canon authoring pending contamination audit. Dependency: tactic_cards module pool may need to be partially struck before adding new cards. | [factions](GLOSSARY_factions.md) | 2 | mechanics_index |
 | **hafenmark_procedural** | _no curated definition_ | [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md) | 4 | identifier_census |
@@ -903,9 +903,9 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **is_perceivable** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md) | 2 | identifier_census |
 | **is_threadcut** | _no curated definition_ | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census |
 | **just_closed** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
-| **Key** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) | 56 | names_index |
+| **Key** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) | 57 | names_index |
 | **key_count** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **key_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
+| **key_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **key_ids** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **key_log** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md) | 4 | identifier_census |
 | **key_log_hash** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
@@ -974,7 +974,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **m_ratings** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md) | 6 | identifier_census |
 | **m_summary** | _no curated definition_ | [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md), [settlements](GLOSSARY_settlements.md) | 3 | identifier_census |
 | **make_scheduler** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [overview](GLOSSARY_overview.md) | 4 | identifier_census |
-| **Mandate** ⚠️ | Institutional authority and political legitimacy. 0 = Collapse state. | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 102 | glossary.md, names_index |
+| **Mandate** ⚠️ | Institutional authority and political legitimacy. 0 = Collapse state. | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 103 | glossary.md, names_index |
 | **map_point** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
 | **march_budget_pixels** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
 | **march_layer** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
@@ -1022,7 +1022,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **mission_alignment_modifier** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **mission_failure** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **mission_shift** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md) | 8 | identifier_census |
-| **Momentum** | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 29 | glossary.md |
+| **Momentum** | Tactical resource. Gained on Overwhelming success or Belief achieved. Spent for automatic successes (non-Thread only). | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 31 | glossary.md |
 | **momentum** | PP-255 momentum carry mechanic. | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 18 | mechanics_index |
 | **Monstrous Incursion** | Entity manifestation triggered by low Mending Stability or severe Dissolution failure. | [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [threadwork](GLOSSARY_threadwork.md) | 5 | glossary.md |
 | **mood_modifier** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
@@ -1046,7 +1046,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **new_aggregate** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **new_arc** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md) | 3 | identifier_census |
 | **new_band** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
-| **new_belief** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
+| **new_belief** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **new_coherence** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **new_count** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **new_governor** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
@@ -1069,7 +1069,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **npc_a** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **npc_ai_service** | Priority-stack contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending. | [npcs](GLOSSARY_npcs.md) | 1 | identifier_census, mechanics_index |
 | **npc_b** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
-| **npc_behavior** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md) | 34 | identifier_census |
+| **npc_behavior** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [ui](GLOSSARY_ui.md) | 35 | identifier_census |
 | **npc_character_analyses** | _no curated definition_ | [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md) | 4 | identifier_census |
 | **npc_counter** | _no curated definition_ | [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [world](GLOSSARY_world.md) | 3 | identifier_census |
 | **npc_drift_state** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
@@ -1078,7 +1078,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **npc_id_household_root** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **npc_id_military_root** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **npc_id_secular_root** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
-| **npc_memory** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md) | 5 | identifier_census |
+| **npc_memory** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md) | 6 | identifier_census |
 | **npc_observes_event** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **npc_presence** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **npc_relational_graph** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
@@ -1108,11 +1108,11 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **operation_type** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **operator_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **opinion_of** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
-| **opinion_revised** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md) | 7 | identifier_census |
-| **opinion_subject** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
+| **opinion_revised** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md) | 8 | identifier_census |
+| **opinion_subject** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **opponent_tps** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [threadwork](GLOSSARY_threadwork.md) | 2 | identifier_census |
 | **opposing_engagement_modifier** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [threadwork](GLOSSARY_threadwork.md) | 2 | identifier_census |
-| **optional_payload_fields** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
+| **optional_payload_fields** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
 | **oracle_requests** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **Order** ⚠️ | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md) | 86 | descriptor_registry, names_index |
 | **org_hierarchy** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
@@ -1123,7 +1123,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **originating_system** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
 | **orsk_progress** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **other_echoes** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **outcome_class** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
+| **outcome_class** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
 | **outcome_polarity_gate** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **outcome_with_collective_sacrifice** | _no curated definition_ | [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md) | 3 | identifier_census |
 | **outcome_with_self_benefit** | _no curated definition_ | [characters](GLOSSARY_characters.md), [npcs](GLOSSARY_npcs.md) | 3 | identifier_census |
@@ -1139,7 +1139,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **parliament_motion_declared** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **parliament_vote_resolved** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **parliamentary_stay** | ED-631 motion-pause mechanism. | [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 6 | mechanics_index |
-| **parliamentary_transfer** | CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending. | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [world](GLOSSARY_world.md) | 12 | mechanics_index |
+| **parliamentary_transfer** | CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending. | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [world](GLOSSARY_world.md) | 13 | mechanics_index |
 | **parliamentary_vote** | BG Parliamentary Vote contest. GD-3 enforcement point: extra-parliamentary status flag gates vote eligibility (promoted-RM cannot cast). | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [world](GLOSSARY_world.md) | 13 | mechanics_index |
 | **part10_crown_initiative_design** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **part10_crown_initiative_design_2026** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
@@ -1217,12 +1217,12 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **Prince Torben Almqvist** | _no curated definition_ | [canon](GLOSSARY_canon.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md) | 10 | names_index |
 | **Princess Elske Almqvist** | _no curated definition_ | [canon](GLOSSARY_canon.md), [npcs](GLOSSARY_npcs.md) | 5 | names_index |
 | **prior_aggregate** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **prior_belief** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
+| **prior_belief** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
 | **prior_controlling_faction_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **prior_labels** | _no curated definition_ | [characters](GLOSSARY_characters.md) | 1 | identifier_census |
 | **prior_leader_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **prior_mission** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 4 | identifier_census |
-| **private_observers** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
+| **private_observers** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [proposals](GLOSSARY_proposals.md) | 5 | identifier_census |
 | **proc_name** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
 | **procedural_event_score** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **proceeding_type** | _no curated definition_ | [factions](GLOSSARY_factions.md), [ui](GLOSSARY_ui.md) | 2 | identifier_census |
@@ -1303,7 +1303,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **religious_building** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) | 7 | identifier_census |
 | **remaining_slots** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **render_protagonist_lens** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [ui](GLOSSARY_ui.md) | 4 | identifier_census |
-| **rendering_dispositions** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
+| **rendering_dispositions** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **rendering_strain** | _no curated definition_ | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census |
 | **rendering_threshold** | _no curated definition_ | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census |
 | **Rendstad** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [factions](GLOSSARY_factions.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 16 | names_index |
@@ -1311,7 +1311,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **reopen_moment** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
 | **reopen_prob** | _no curated definition_ | [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **represent_measure_p** | _no curated definition_ | [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
-| **required_payload_fields** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
+| **required_payload_fields** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **reserve_max** | _no curated definition_ | [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 3 | identifier_census |
 | **reset_all** | _no curated definition_ | [characters](GLOSSARY_characters.md) | 1 | identifier_census |
 | **reset_arc** | _no curated definition_ | [factions](GLOSSARY_factions.md), [overview](GLOSSARY_overview.md) | 2 | identifier_census |
@@ -1416,7 +1416,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **scene_entered** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [ui](GLOSSARY_ui.md) | 5 | identifier_census |
 | **scene_event** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md) | 4 | identifier_census |
 | **scene_event_key** | _no curated definition_ | [articulation](GLOSSARY_articulation.md) | 1 | identifier_census |
-| **scene_exited** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
+| **scene_exited** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
 | **scene_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md) | 5 | identifier_census |
 | **scene_members** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **scene_outcome** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [overview](GLOSSARY_overview.md), [settlements](GLOSSARY_settlements.md) | 11 | identifier_census |
@@ -1437,7 +1437,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **season_boundary** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **season_change** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md) | 6 | identifier_census |
 | **season_factor** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
-| **season_index** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md) | 5 | identifier_census |
+| **season_index** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) | 6 | identifier_census |
 | **season_n** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **season_tick** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **seasons_held** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
@@ -1473,7 +1473,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **settlement_data** | _no curated definition_ | [godot](GLOSSARY_godot.md), [ui](GLOSSARY_ui.md) | 3 | identifier_census |
 | **settlement_economy** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) | 9 | identifier_census |
 | **settlement_event_fired** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
-| **settlement_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 4 | identifier_census |
+| **settlement_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 5 | identifier_census |
 | **settlement_layer** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 35 | identifier_census |
 | **settlement_mgmt** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 2 | identifier_census |
 | **settlement_mgmt_stress_01** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [settlements](GLOSSARY_settlements.md) | 4 | identifier_census |
@@ -1502,7 +1502,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **sim_framework** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [engine](GLOSSARY_engine.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) | 6 | identifier_census |
 | **sim_insurgency_dissolution** | _no curated definition_ | [world](GLOSSARY_world.md) | 1 | identifier_census |
 | **sim_mb_06_v22** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
-| **sim_module** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [engine](GLOSSARY_engine.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 11 | identifier_census |
+| **sim_module** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [characters](GLOSSARY_characters.md), [engine](GLOSSARY_engine.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [ui](GLOSSARY_ui.md) | 12 | identifier_census |
 | **sim_ms_hysteresis** | _no curated definition_ | [world](GLOSSARY_world.md) | 1 | identifier_census |
 | **sim_npc_as_player** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
 | **sim_x_06** | _no curated definition_ | [combat](GLOSSARY_combat.md) | 1 | identifier_census |
@@ -1559,7 +1559,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **stat_deltas** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md) | 8 | identifier_census |
 | **stat_name** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **stat_vocabulary** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
-| **state_reader** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) | 4 | identifier_census |
+| **state_reader** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [combat](GLOSSARY_combat.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md) | 5 | identifier_census |
 | **state_transition** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [victory](GLOSSARY_victory.md) | 4 | identifier_census |
 | **stature_changed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **step_number** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
@@ -1576,7 +1576,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **strength_signed** | _no curated definition_ | [npcs](GLOSSARY_npcs.md) | 1 | identifier_census |
 | **strip_points** | _no curated definition_ | [social_contest](GLOSSARY_social_contest.md) | 1 | identifier_census |
 | **stub_hits** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [world](GLOSSARY_world.md) | 5 | identifier_census |
-| **stub_resolve** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) | 13 | identifier_census |
+| **stub_resolve** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [world](GLOSSARY_world.md) | 14 | identifier_census |
 | **style_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **sub_actor** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **sub_step_index** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md) | 5 | identifier_census |
@@ -1650,7 +1650,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **territorial_transfer** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [articulation](GLOSSARY_articulation.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **territories_controlled** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **territory_count_ok** | _no curated definition_ | [victory](GLOSSARY_victory.md) | 1 | identifier_census |
-| **territory_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) | 6 | identifier_census |
+| **territory_id** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [world](GLOSSARY_world.md) | 7 | identifier_census |
 | **territory_ids** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **territory_influence** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **territory_infrastructure** | _no curated definition_ | [settlements](GLOSSARY_settlements.md) | 1 | identifier_census |
@@ -1697,7 +1697,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **thread_operation_resolved** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **thread_sensitivity** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **thread_witnessed** | _no curated definition_ | [npcs](GLOSSARY_npcs.md) | 1 | identifier_census |
-| **thread_woven** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [threadwork](GLOSSARY_threadwork.md) | 5 | identifier_census |
+| **thread_woven** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [godot](GLOSSARY_godot.md), [proposals](GLOSSARY_proposals.md), [threadwork](GLOSSARY_threadwork.md) | 6 | identifier_census |
 | **threadcut_beings** | P-06 - no layer-2 self-rendering. | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census, mechanics_index |
 | **threadcut_target_id** | _no curated definition_ | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census |
 | **threadwork_check** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [mass_battle](GLOSSARY_mass_battle.md), [threadwork](GLOSSARY_threadwork.md) | 4 | identifier_census |
@@ -1728,13 +1728,13 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **trigger_stat** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **triggered_by** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [factions](GLOSSARY_factions.md) | 2 | identifier_census |
 | **triggering_event_key** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
-| **triggering_keys** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
+| **triggering_keys** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
 | **troop_total** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **troops_frac** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **truncated_groups** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **truncated_pairs** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
 | **truncated_troops** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md) | 1 | identifier_census |
-| **Truth** | Per-character metaphysical stance (**formerly "Certainty"**; also consolidates the retired character "Piety Track" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Engine-internal 0–5; **players see qualitative bands, ne … | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 51 | glossary.md |
+| **Truth** | Per-character metaphysical stance (**formerly "Certainty"**; also consolidates the retired character "Piety Track" / religious-standing meter, ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Engine-internal 0–5; **players see qualitative bands, ne … | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 52 | glossary.md |
 | **TS** ⚠️ | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [canon](GLOSSARY_canon.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [overview](GLOSSARY_overview.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [social_contest](GLOSSARY_social_contest.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [world](GLOSSARY_world.md) | 91 | names_index |
 | **ts_minimum** | _no curated definition_ | [threadwork](GLOSSARY_threadwork.md) | 1 | identifier_census |
 | **ts_threshold_crossed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
