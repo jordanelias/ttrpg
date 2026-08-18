@@ -1100,7 +1100,7 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/2026-08-16-system-scores-census.md": 1,
-    "proposals/2026-08-18-breaking-the-recursion.md": 10,
+    "proposals/2026-08-18-breaking-the-recursion.md": 12,
     "proposals/2026-08-18-culling-plan-v1.md": 13,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
     "proposals/repo-reorganization-v1.md": 18,
@@ -40797,7 +40797,7 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 39,
+   "file_count": 40,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
@@ -40805,6 +40805,7 @@
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/2026-08-16-system-scores-census.md": 3,
+    "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
@@ -59207,12 +59208,13 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 37,
+   "file_count": 38,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "proposals/repo-reorganization-v1.md": 8,

@@ -584,8 +584,33 @@ the same 68,473-line artifact that was **44.5% of last week's entire diff**, rew
 commits. Untracking it is wave 5 — one of the four waves §5.2 recommends executing, and this is the
 argument for it in one paragraph.
 
+**And then it happened a third time, in CI, on the commit above.** `test_engine_atlas::test_atlas_is_current`
+failed on PR #319 — the atlas was stale. The diff, in full:
+
+```
+-| `mass_battle` | 2518 |      +| `mass_battle` | 2520 |
+-| `threadwork`  | 2273 |      +| `threadwork`  | 2277 |
+-| `social_contest` | 2207 |   +| `social_contest` | 2210 |
+-| `victory` | 2112 |          +| `victory` | 2114 |
+```
+
+Four counters moved by two-to-four each, because **this document names those subsystems in prose.**
+Nothing about the engine changed. A blocking gate failed because a design document mentioned the
+names of design subsystems.
+
+The culling plan predicted this defect in the exact words — *"three times in one session an edit to
+prose staled `engine_atlas.json` and failed a blocking gate — once because the word 'audit' appeared
+one more time in a comment"* — and it is the standing argument for wave 5.
+
+**Tally for one prose-only commit: three separate generated artifacts staled, two blocking-tier
+failures, one report-only failure firing 17 times at unchanged upstream content, and ~800 lines of
+generated churn attached to 1,400 lines of writing.** My own error is in there too and is worth
+naming: after the last edits I ran targeted tests instead of the full suite, so the atlas failure
+reached CI rather than being caught locally — which is CLAUDE.md §0.1's *"check the gate that gates
+the thing"* committed by the document that quotes it.
+
 **This section is the artifact §0.1 point 3 asks for: the specific checks that would have shown the
-claim wrong, run, with their outcomes — including the two that fired at me.**
+claim wrong, run, with their outcomes — including the three that fired at me.**
 
 ---
 
