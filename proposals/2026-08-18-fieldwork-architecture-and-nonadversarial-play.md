@@ -899,3 +899,71 @@ produce comparable claims about the world.
 **Filed, not fixed:** unifying the outcome payload is a cross-cutting IN/SC/FI change touching five
 registered types and their consumers. It is out of scope for an FI-lane proposal to execute, and it
 is the single highest-leverage thing this session found.
+
+---
+
+# §12 CORRECTIONS — three claims in this document are false
+
+Added 2026-08-18 after merge, from a read-only audit pass. Recorded inline rather than silently
+edited, per the convention §11 used. **All three were verified independently before filing.**
+
+## §12.1 §11.8's headline claim is false at roster scale
+
+§11.8 states five outcome vocabularies exist and *"not one of them is the degree ladder."* **True of
+the five types sampled; false of the 55-type roster.**
+
+- **`mechanical.scene_exited.outcome_class` (registry :403) is `overwhelming | success | partial | failure | unknown`** — verbatim the `dice_engine.Degree` enum values (`dice_engine.py:24-28`) plus `unknown`. A terminal outcome carrying the ladder **already exists**, is emitted by `game_director`, and is the closest in-roster precedent for the `resolution` field §11.8 proposes — closer than `investigation_resolved.finding`.
+- `scene.combat_hit.degree` (:943) carries the combat kernel's variant (`graze | partial | success | overwhelming`); `meta.thread_woven.degree_of_success` (:1065) is a third degree-shaped field with no declared vocabulary.
+
+**The census is also larger than five:** 9 enumerated verdict vocabularies, 7 before/after
+transition pairs, plus type-as-outcome splits (`state.project_completed` / `state.project_failed`).
+Two findings outrank the original: the **`da_outcome` family is headed "Domain Action results" and
+4 of its 5 members carry no outcome field at all**; and the **indeterminate outcome already exists
+roster-wide under five spellings** — `inconclusive` (investigation, coup), `unknown` (scene_exited),
+`stalemate` (dialogue, contest), `draw` (combat_resolved), null-`victor` (battle_concluded). That
+*strengthens* the unification case: the class is universal, only the naming is fragmented.
+
+**And the fragmentation already costs something in shipped code:** `echo_transport.py:103-108`
+(`_OUTCOME_BY_DEGREE`) down-converts the ladder into the bespoke vocabularies **lossily** at emit
+time — Overwhelming and Success collapse to one token — while `_derive_degree` (:187-197)
+reconstructs a degree going the other way. The seam pays conversion costs in both directions today.
+
+## §12.2 §5.2's "no call-site change needed" is false
+
+§5.2 states `fieldwork_action` "replaces the stub bodies in place; `scene_dispatch.py:349` needs no
+call-site change", citing that line's own comment: *"ctx/world are threaded through so a future real
+resolver drop-in needs no call-site change here."*
+
+**The comment is wrong about its own code.** `scene_dispatch.py:354` passes only
+`_fieldwork_mod.run_fieldwork_scene(ctx.get("scene"))` — **`world` is not passed**. Only the
+investigation branch (:356) receives it. A fieldwork resolver that must write a Leverage tag or
+reach the scheduler cannot, without a call-site change. This document took a code comment at face
+value instead of reading the line beneath it.
+
+## §12.3 §11.2's "adopt `state.belief_revised`" is falsified
+
+§11.2 proposed adopting `state.belief_revised` as the belief layer. It cannot serve:
+
+- `prior_belief`/`new_belief` are **free strings** (:1121-1122); **no confidence field** exists.
+- Its registered semantics are the **PC creed-Belief beat** — `fieldwork_socializing.md:104-110` is the Belief *Momentum* economy (aligned / challenging / betraying), `permanence: indelible`, Tier-2 cut scene — not an epistemic claim about the world.
+- `state.opinion_revised` (:1156-1177) is the shape template instead: `confidence_before/after int [1,5]`, `driver_memory_refs` provenance, `private_observers` visibility.
+- It is **inert**: zero emitters; its one code consumer (`articulation.py:126`) subscribes and routes to `stubwire.stub_resolve` without reading the payload.
+
+**Also, §11.8's reading that the "per fieldwork_socializing §5.5" citation resolves the standing
+attribution toward fieldwork is overdrawn.** The citation fixes the type's original referent as the
+PC creed beat; it does not settle who emits for NPC belief revision, and `module_contracts.yaml`
+carries a **three-way** tension (`npc_behavior` :187, `fieldwork_knots` :392, plus npc_behavior
+consuming it from `fieldwork_knots` :163). Still genuinely `[OPEN — Jordan]`.
+
+**Disposition:** superseded by `proposals/2026-08-18-epistemic-propositions-and-provenance.md`,
+written to Jordan's directive that epistemic propositions be available alongside provenance
+references. `state.belief_revised` keeps its registered meaning; the epistemic layer is a separate
+thing, homed in the already-declared-and-empty `npc_memory` module.
+
+## §12.4 What survived the audit unchanged
+
+§11.3 (no gossip/opinion emitter exists) was re-checked at full-tree scope — GDScript, YAML/JSON,
+and dynamic type construction, beyond the original `.py`-only grep — and **stands**. The live tree
+has exactly four `Key(` construction sites and none can produce those types; `npe.py` contains no
+`emit`, `Key(` or scheduler use at all. §11.1's ruling precedents and §11.7's unification are
+unaffected.
