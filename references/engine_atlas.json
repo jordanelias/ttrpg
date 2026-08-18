@@ -59,15 +59,15 @@
     "qualified": 0
    },
    "fieldwork_knots": {
-    "occurrences": 70,
+    "occurrences": 71,
     "qualified": 0
    },
    "game_director": {
-    "occurrences": 59,
+    "occurrences": 60,
     "qualified": 0
    },
    "mass_battle": {
-    "occurrences": 2520,
+    "occurrences": 2525,
     "qualified": 0
    },
    "miraculous_event": {
@@ -79,7 +79,7 @@
     "qualified": 0
    },
    "npc_memory": {
-    "occurrences": 67,
+    "occurrences": 68,
     "qualified": 0
    },
    "peninsular_strain": {
@@ -95,7 +95,7 @@
     "qualified": 0
    },
    "scenario_authoring": {
-    "occurrences": 66,
+    "occurrences": 68,
     "qualified": 0
    },
    "scene_slate": {
@@ -115,7 +115,7 @@
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 2210,
+    "occurrences": 2220,
     "qualified": 0
    },
    "territorial_piety": {
@@ -123,11 +123,11 @@
     "qualified": 0
    },
    "threadwork": {
-    "occurrences": 2277,
+    "occurrences": 2282,
     "qualified": 0
    },
    "victory": {
-    "occurrences": 2114,
+    "occurrences": 2122,
     "qualified": 0
    }
   },
