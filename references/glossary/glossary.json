@@ -2,7 +2,7 @@
  "ambiguity_floor": 60,
  "counts": {
   "ambiguous": 32,
-  "located": 1805,
+  "located": 1808,
   "refused": 0,
   "terms": 2083
  },
@@ -81,9 +81,10 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/integration_proposal_v30.md": 4
    },
    "registry_id": "attr.mind.acuity",
@@ -92,7 +93,8 @@
     "names_index"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "Acuity"
   },
@@ -1081,7 +1083,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 90,
+   "file_count": 91,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1097,6 +1099,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-culling-plan-v1.md": 13,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -1523,7 +1526,7 @@
   "Church": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 149,
+   "file_count": 150,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 9,
@@ -1536,6 +1539,7 @@
     "godot/godot_conversion_strategy_v1.md": 3,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
@@ -1804,13 +1808,14 @@
   "Cognition": {
    "ambiguous": false,
    "definition": "Reasoning, memory, analysis.",
-   "file_count": 40,
+   "file_count": 41,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 22,
     "proposals/2026-08-16-system-scores-census.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -1873,7 +1878,7 @@
   "Coherence": {
    "ambiguous": true,
    "definition": "Personal rendering stability for Thread practitioners. Starts at 10. **Coherence is what's broken** in a fractured practitioner.",
-   "file_count": 83,
+   "file_count": 84,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -1887,6 +1892,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 10,
     "systems/_architecture/campaign_architecture_v30_index.md": 6,
     "systems/_architecture/campaign_modes_v30.md": 3,
@@ -2072,13 +2078,14 @@
   "Composure": {
    "ambiguous": false,
    "definition": "Social endurance (see Part One). Also the damage track in Debate exchanges.",
-   "file_count": 38,
+   "file_count": 39,
    "glossary_part": "PART THREE \u2014 DEBATE SYSTEM TERMS",
    "legacy_count": 0,
    "locations": {
     "godot/gm_to_engine_conversion.md": 3,
     "godot/godot_architecture_specification.md": 4,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/cogload_moderate_target.md": 2,
@@ -2127,6 +2134,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "threadwork",
     "ui",
@@ -2235,7 +2243,7 @@
   "Consequence": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 43,
+   "file_count": 44,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 1,
@@ -2243,6 +2251,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 7,
@@ -2755,7 +2764,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "NPC-attached attitude state toward another entity (PC, faction, settlement). Drives behaviour-tree branching in NPC AI. Canonical in `systems/npcs/npc_behavior_v30.md`; no separate first-class doc. Heavy cascade-terminal (Mode D \u2014 391 chains).",
-   "file_count": 73,
+   "file_count": 74,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -2764,6 +2773,7 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -3042,7 +3052,7 @@
   "Domain Echo": {
    "ambiguous": false,
    "definition": "Faction-level consequence triggered by decisive Debate outcomes.",
-   "file_count": 58,
+   "file_count": 59,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -3050,6 +3060,7 @@
     "engine/sim_reference_README.md": 1,
     "godot/godot_architecture_specification.md": 4,
     "godot/godot_conversion_strategy_v1.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -3119,6 +3130,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -3612,13 +3624,14 @@
   "Evidence": {
    "ambiguous": true,
    "category": "pressure_point",
-   "file_count": 75,
+   "file_count": 76,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 14,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -4848,7 +4861,7 @@
   "History": {
    "ambiguous": false,
    "definition": "Skill-equivalent. Specific experiential knowledge that grants bonus dice. Cap = Memory score.",
-   "file_count": 47,
+   "file_count": 48,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -4857,6 +4870,7 @@
     "godot/godot_architecture_specification.md": 3,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 35,
     "proposals/2026-08-16-system-scores-census.md": 5,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 6,
     "systems/_architecture/complete_systems_reference.md": 2,
@@ -5421,13 +5435,14 @@
   "Intelligibility": {
    "ambiguous": false,
    "definition": "How legibly reality presents to a fractured practitioner. **Intelligibility is what they perceive of the breakage**. Non-practitioners sense wrongness at threshold.",
-   "file_count": 10,
+   "file_count": 11,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 4,
     "canon/00_philosophical_foundations_rules.md": 2,
     "canon/01_foundations_amendment_self_rendering.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/fieldwork/fieldwork_godot.md": 3,
     "systems/fieldwork/fieldwork_rationale.md": 2,
     "systems/fieldwork/fieldwork_v30.md": 2,
@@ -5442,6 +5457,7 @@
    "subsystems": [
     "canon",
     "fieldwork",
+    "proposals",
     "threadwork"
    ],
    "term": "Intelligibility"
@@ -5462,13 +5478,14 @@
   "Key": {
    "ambiguous": false,
    "category": "substrate",
-   "file_count": 53,
+   "file_count": 54,
    "legacy_count": 1,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
     "engine/mc_v18_walkthrough.md": 4,
     "godot/README.md": 3,
     "godot/godot_conversion_strategy_v1.md": 37,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 33,
     "proposals/canonical_nomenclature_v1.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 14,
     "proposals/repo-reorganization-v1.md": 3,
@@ -5582,7 +5599,7 @@
   "Knot": {
    "ambiguous": true,
    "definition": "A significant relationship bond (Close / Regular / Distant). Mechanically tracked with strain. Lifecycle specified per ED-773.",
-   "file_count": 73,
+   "file_count": 74,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -5594,6 +5611,7 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -6156,7 +6174,7 @@
   "MS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 68,
+   "file_count": 69,
    "legacy_count": 0,
    "locations": {
     "canon/02_foundations_amendment_leap_mechanism.md": 7,
@@ -6169,6 +6187,7 @@
     "godot/implementation_sequence.md": 2,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/canonical_nomenclature_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 20,
     "systems/_architecture/campaign_architecture_v30_index.md": 10,
@@ -7084,7 +7103,7 @@
   "Overwhelming": {
    "ambiguous": true,
    "definition": "margin (net \u2212 Ob) \u2265 3, at every scale (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c\u2265 2\u00d7 Ob AND \u2265 3 (PP-232)\u201d and the separate BG form.",
-   "file_count": 70,
+   "file_count": 71,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -7092,6 +7111,7 @@
     "engine/sigma_leverage_engine_armature.md": 2,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/cogload_moderate_target.md": 2,
     "systems/_architecture/derived_stats_v30.md": 4,
@@ -7173,6 +7193,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -7243,13 +7264,14 @@
   "Partial": {
    "ambiguous": true,
    "definition": "The obstacle MET but not EXCEEDED \u2014 margin (net \u2212 Ob) in [0, 1) (Jordan ruling 2026-08-14, ED-IN-0187). Supersedes \u201c> 0 but < Ob\u201d, which now reads Failure.",
-   "file_count": 66,
+   "file_count": 67,
    "glossary_part": "PART SIX \u2014 DICE ENGINE TERMS",
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
     "godot/gm_to_engine_conversion.md": 1,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 1,
     "systems/_architecture/complete_systems_reference.md": 2,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -7328,6 +7350,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -7667,11 +7690,12 @@
   "Precedent": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 51,
+   "file_count": 52,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 8,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 25,
     "proposals/social_contest_consolidation_integration_v1.md": 9,
@@ -9038,7 +9062,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Internal coherence. 0 = Collapse trigger (P-15).",
-   "file_count": 97,
+   "file_count": 98,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -9049,6 +9073,7 @@
     "godot/godot_architecture_specification.md": 5,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
@@ -9535,7 +9560,7 @@
   "TS": {
    "ambiguous": true,
    "category": "clock",
-   "file_count": 90,
+   "file_count": 91,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 2,
@@ -9549,6 +9574,7 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 5,
     "proposals/2026-08-16-system-scores-census.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/cogload_moderate_target.md": 4,
     "systems/_architecture/complete_systems_reference.md": 11,
@@ -10145,7 +10171,7 @@
    ],
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 74,
+   "file_count": 75,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
@@ -10156,6 +10182,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 18,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
     "proposals/pc_formation_system.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 1,
@@ -11802,16 +11829,18 @@
      "purpose": "accounting_phase: [season_tick, accounting_boundary]"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/propagation_spec_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "accounting_phase"
   },
@@ -14587,9 +14616,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `apply_knot_loss(actor, knot_id, mode, world)` | `systems/fieldwork/sim/knots.py:315 apply_knot_loss` | `\u2014` in production; unit tests only (`engine/tests/test_knots_ed912.py:106`, `engine/tests/test_knots_ed912.py:112`, `engine/tests/test_knots_ed912.py:115`, `engine/tests/test_knots_ed912.py:121`)"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 8,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 11
@@ -14600,7 +14630,8 @@
    "subsystems": [
     "_architecture",
     "characters",
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "apply_knot_loss"
   },
@@ -18146,10 +18177,11 @@
      "purpose": "**2026-07-08: the P1 consequence spine (ED-SC-0006/0007) is EXECUTED and ECHO_TRANSPORT is DEFAULT ON** (Jordan \"Yes echo transport on\") via two complementary fidelities of the same conflict class: (a) the FACTION-scale auto-resolve \u2014 `engine/cross_scale/parliamentary_bridge.py` runs a \u00a710 Parliamen\u2026"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
     "systems/social_contest/social_contest_currency_v1.md": 2,
@@ -19800,16 +19832,18 @@
      "purpose": "`causes=[caused_by_key_id]` when the sibling domain-echo leg fired for the same scene resolution,"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "caused_by_key_id"
   },
@@ -20698,9 +20732,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `zoom_in_out.check_mandatory_triggers` | `engine/cross_scale/zoom_in_out.py:165 check_mandatory_triggers` | `engine/cross_scale/scene_dispatch.py:97` (inside `evaluate_triggers`, def at `:75`)"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
@@ -20709,7 +20744,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "check_mandatory_triggers"
   },
@@ -21307,12 +21343,13 @@
      "purpose": "Documents read in full:** UI/UX v4.1 (uploaded); player_agency_v30; companion_specification_v30; scale_transitions_v30; integration_proposal_2026-04-15; investigation_systems_proposal_2026-04-15; combat_v30; social_contest_v30; npc_behavior_v30; settlement_layer_v30; threadwork_v30; fieldwork_v30; m\u2026"
     }
    },
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/fieldwork/fieldwork_bg_v30.md": 1,
@@ -21981,7 +22018,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 93,
+   "file_count": 94,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -21996,6 +22033,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 77,
     "proposals/2026-08-16-system-scores-census.md": 6,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -22309,10 +22347,11 @@
      "purpose": "signal combat_resolved(scene_ref, outcomes)"
     }
    },
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,
@@ -22332,6 +22371,7 @@
     "combat",
     "factions",
     "godot",
+    "proposals",
     "ui"
    ],
    "term": "combat_resolved"
@@ -22947,9 +22987,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `domain_echo.compute_domain_echo` | `engine/cross_scale/domain_echo.py:79 compute_domain_echo` | `engine/cross_scale/echo_transport.py:409` (inside `emit_scene_echo`, def at `:360`)"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/propagation_spec_v1.md": 3
    },
@@ -22957,7 +22998,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "compute_domain_echo"
   },
@@ -23796,10 +23838,11 @@
      "purpose": "signal contest_resolved(scene_ref, final_track, winner, obligation)"
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -23817,6 +23860,7 @@
     "articulation",
     "factions",
     "godot",
+    "proposals",
     "ui"
    ],
    "term": "contest_resolved"
@@ -24434,10 +24478,11 @@
      "purpose": "[\u00a71. Pipeline Overview \u2014 4 Stages] Stage | Name | Mechanical character | Canon source :: **2** | Latent RM (ambient influence) | Active NPC influence in low-PT territories; does NOT control territory | conviction_track \u00a75 PP-416"
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 4,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -24889,9 +24934,10 @@
      "purpose": "`aligned_categories` and `contradicted_categories` reference **PP-687 da_outcome subtypes** (per `key_type_registry_v30.md` \u00a73): `da.public_governance`, `da.covert_betrayal`, `da.diplomatic_alliance`, `da.antinomian_action`, `da.economic_intervention`."
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -24906,7 +24952,8 @@
    "subsystems": [
     "_architecture",
     "articulation",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "covert_betrayal"
   },
@@ -27003,16 +27050,18 @@
      "purpose": "Derivation formula:** `derived_value = attribute \u00d7 multiplier`"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/derived_stats_v30.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "derived_value"
   },
@@ -27288,10 +27337,11 @@
      "purpose": "[\u00a714.1 \u00b7 The loop, mapped to module contracts (owner \u00b7 resolver \u00b7 Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN \u2192 OUT (registry vocabulary) | Compliance :: Response resolution (\u00a73) | `domain_actions` (governance verbs / Directive) | **`d_sigma`** (ED-874: legible odds, flat +10%/pt uniform-P-ii, FLOOR .05/CAP .90, FAIL_FLOOR .97 graded-P-iv) | IN: play"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 5,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 5
    },
@@ -27858,13 +27908,17 @@
   "disposition_track": {
    "ambiguous": false,
    "definition": "Cap by Bonds attribute (same formula as Knot Max per derived_stats \u00a710.1).",
-   "file_count": 0,
+   "file_count": 1,
    "legacy_count": 0,
-   "locations": {},
+   "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1
+   },
    "sources": [
     "mechanics_index"
    ],
-   "subsystems": [],
+   "subsystems": [
+    "proposals"
+   ],
    "term": "disposition_track"
   },
   "disrupt_resist_p": {
@@ -28120,10 +28174,11 @@
      "purpose": "It is single-homed in the FA lane's `domain_actions` inventory (the C-FA-12 reconciliation; the full action definition is authored with the `domain_actions` home doc \u2014 ED-FA-0002, pending)."
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 3,
@@ -28146,11 +28201,12 @@
   "domain_echo": {
    "ambiguous": false,
    "definition": "Scene -> Faction propagation. ED-300 autonomous resolution.",
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_conversion_strategy_v1.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 10,
     "systems/_architecture/key_echo_armature_v1.md": 3,
@@ -29815,10 +29871,11 @@
      "purpose": "def timestamp(self): return Key.lookup(self.key_uuid).emitted_at"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/propagation_spec_v1.md": 6,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1
@@ -29829,7 +29886,8 @@
    "subsystems": [
     "_architecture",
     "factions",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "emitted_at"
   },
@@ -30127,11 +30185,12 @@
      "purpose": "is **no longer blocked by B12** (resolved, item 2 above) but **remains blocked on `engine_clock`**"
     }
    },
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
@@ -30573,9 +30632,10 @@
      "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.Sta` (Stability) | R (contest seams) | live campaign `World` | `engine/cross_scale/scene_dispatch.py:83 evaluate_triggers`, `engine/cross_scale/parliamentary_bridge.py:89 _derive_vote`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 9,
     "systems/_architecture/engine_atlas_v1.md": 4,
@@ -30844,13 +30904,17 @@
   },
   "evidence_track": {
    "ambiguous": false,
-   "file_count": 0,
+   "file_count": 1,
    "legacy_count": 0,
-   "locations": {},
+   "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1
+   },
    "sources": [
     "mechanics_index"
    ],
-   "subsystems": [],
+   "subsystems": [
+    "proposals"
+   ],
    "term": "evidence_track"
   },
   "exchange_count": {
@@ -32265,11 +32329,12 @@
      "purpose": "[\u00a77.3 Heresy Investigation Lifecycle (ED-772)] Condition | Effect | Rationale :: **Target's death** | Investigation closes. Postmortem Tribunal possible (per faction_politics \u00a72.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost \u22121 to file). | The proceeding's purpose (correction) becomes moot at target's death; Postmortem Tr"
     }
    },
-   "file_count": 15,
+   "file_count": 16,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 2,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 4,
@@ -32472,10 +32537,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of "
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
@@ -32989,7 +33055,7 @@
   "fieldwork": {
    "ambiguous": true,
    "definition": "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure.",
-   "file_count": 68,
+   "file_count": 69,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
@@ -33000,6 +33066,7 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "proposals/2026-08-16-system-scores-census.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 64,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -33134,10 +33201,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `module_contracts.yaml` declares a contract only for `fieldwork_knots`; `fieldwork.py`'s own module docstring states this explicitly and cites its \"Entry points\" docstring block as the substitute io_contract source (no registry entry backs it). `investigation.py` has no contract entry either. | `references/module_contracts.yaml:373` (only `fieldwork_knots`"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 7,
     "systems/_architecture/governance_ripple_substrate_v1.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 3,
     "systems/fieldwork/knots_v30.md": 1
@@ -33148,7 +33216,8 @@
    "subsystems": [
     "_architecture",
     "fieldwork",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "fieldwork_knots"
   },
@@ -33760,9 +33829,10 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up | `engine.mc_v18` | `run_campaign` creates/serializes `World`, drives the season loop, records `insurgencies_formed`/`npcs_generated` telemetry, and explicitly defers `generate_npc`/`form_knot` via named `stubwire` calls | `engine/mc_v18.py:224`, `engine/mc_v18.py:260-267`, `engine/mc_v18.py:298-299`, `engine/mc_v18.py:307`, `engine/mc_v18.py:"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 17,
     "systems/overview/overview_flow_skeleton_v1.md": 3,
@@ -33775,6 +33845,7 @@
     "_architecture",
     "fieldwork",
     "overview",
+    "proposals",
     "world"
    ],
    "term": "form_knot"
@@ -34499,10 +34570,11 @@
      "purpose": "Subsystem:** `systems/overview/` \u00b7 **Lane:** `IN` \u00b7 **Contracts:** `peninsular_strain`, `territorial_piety`, `game_director` (all"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/overview/overview_flow_skeleton_v1.md": 1
    },
@@ -34512,7 +34584,8 @@
    "subsystems": [
     "_architecture",
     "godot",
-    "overview"
+    "overview",
+    "proposals"
    ],
    "term": "game_director"
   },
@@ -34704,9 +34777,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares four world-state-era gates on the `victory` module (`g_ms0` MS=0\u2192Post-Calamity Era, `g_ms5` sustained MS\u22645\u2192Second Calamity, `g_msrec` MS-recovery, `g_diss` all-factions-dissolved\u2192Anarchy Era) \u2014 none appear in `engine/autoload/victory.py`, whose only exported checks implement GD-1 (peninsular sovereignty) alone. R"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 5,
     "systems/_architecture/propagation_spec_v1.md": 1,
     "systems/victory/victory_flow_skeleton_v1.md": 1
@@ -34716,6 +34790,7 @@
    ],
    "subsystems": [
     "_architecture",
+    "proposals",
     "victory"
    ],
    "term": "gap_notes"
@@ -37850,15 +37925,17 @@
      "purpose": "signal evidence_added(investigation_id, evidence_ref)"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/ui/valoria_ui_ux_v4.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "ui"
    ],
    "term": "investigation_id"
@@ -37866,13 +37943,17 @@
   "investigation_npe": {
    "ambiguous": false,
    "definition": "NPE + Investigation Interface + Dialogue Lattice + Response Resolution Matrix five-filter.",
-   "file_count": 0,
+   "file_count": 1,
    "legacy_count": 0,
-   "locations": {},
+   "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1
+   },
    "sources": [
     "mechanics_index"
    ],
-   "subsystems": [],
+   "subsystems": [
+    "proposals"
+   ],
    "term": "investigation_npe"
   },
   "investigation_proposal": {
@@ -37928,9 +38009,10 @@
      "purpose": "signal investigation_resolved(investigation_id, finding)"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 8,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -37941,6 +38023,7 @@
    ],
    "subsystems": [
     "_architecture",
+    "proposals",
     "ui"
    ],
    "term": "investigation_resolved"
@@ -38126,9 +38209,10 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult(module, io_contract, reason)` | arg | caller of `select_action`/`evaluate_priority_stack` \u2014 none in production | `engine/autoload/npc_ai.py:34-38 select_action`"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 2,
     "systems/npcs/npcs_flow_skeleton_v1.md": 1
    },
@@ -38137,7 +38221,8 @@
    ],
    "subsystems": [
     "fieldwork",
-    "npcs"
+    "npcs",
+    "proposals"
    ],
    "term": "io_contract"
   },
@@ -38931,9 +39016,10 @@
      "purpose": "signal knot_formed(char_a, char_b)"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -38950,6 +39036,7 @@
     "_architecture",
     "articulation",
     "fieldwork",
+    "proposals",
     "ui"
    ],
    "term": "knot_formed"
@@ -39202,9 +39289,10 @@
      "purpose": "signal knot_ruptured(knot_id)"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -39219,6 +39307,7 @@
     "_architecture",
     "articulation",
     "fieldwork",
+    "proposals",
     "ui"
    ],
    "term": "knot_ruptured"
@@ -39299,7 +39388,7 @@
   "knots": {
    "ambiguous": false,
    "definition": "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc.",
-   "file_count": 21,
+   "file_count": 22,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 6,
@@ -39311,6 +39400,7 @@
     "engine/sim_reference_README.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 17,
     "proposals/2026-08-16-system-scores-census.md": 7,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "proposals/repo-reorganization-v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -43546,10 +43636,11 @@
      "purpose": "[\u00a75.3 The eight row types] Row type | Visual | Mechanical effect :: **Belief-targeted** | Purple \u25c6 mark + Belief text | Adds pressure tick; 3 cumulative = Belief Scar per npc_behavior \u00a73.3"
     }
    },
-   "file_count": 33,
+   "file_count": 34,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 5,
@@ -43902,10 +43993,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: The `npc_behavior` module contract (`references/module_contracts.yaml`) declares a full `consumes`/`emits`/`state`/`gates` Key-flow shape (Procedures B/C/D/E \u2014 all four declared accounting phases, none implemented) against `sim_module: none` \u2014 explicitly re-verified (OI-54, ED-IN-0097) that `systems/npcs/` holds zero `.py` files. None of this declared flow"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/npcs/npcs_flow_skeleton_v1.md": 5
@@ -43916,7 +44008,8 @@
    "subsystems": [
     "_architecture",
     "godot",
-    "npcs"
+    "npcs",
+    "proposals"
    ],
    "term": "npc_memory"
   },
@@ -44140,10 +44233,11 @@
   "npe": {
    "ambiguous": false,
    "definition": "NPC Population Engine.",
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-16-system-scores-census.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
@@ -44224,16 +44318,18 @@
      "purpose": "observed_key_id # key_id of the observed event"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "observed_key_id"
   },
@@ -44249,16 +44345,18 @@
      "purpose": "observer_id # actor who perceives displacement"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "observer_id"
   },
@@ -45710,9 +45808,10 @@
   "parliamentary_transfer": {
    "ambiguous": false,
    "definition": "CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending.",
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 15,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 4,
@@ -45732,6 +45831,7 @@
     "_architecture",
     "factions",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "world"
@@ -46197,10 +46297,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `world.clocks['Turmoil']` (read as the Political-Stability gate `ps_ok`) is initialized once to `0.0` and never written anywhere else in the tree \u2014 repo-wide grep for any `clocks['Turmoil']`/`clocks[\"Turmoil\"]` assignment or `.clocks['Turmoil'] =` finds only the initializer and the victory.py reader. `ps_ok` is therefore unconditionally `True` for the life"
     }
    },
-   "file_count": 23,
+   "file_count": 24,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
@@ -46299,9 +46400,10 @@
      "purpose": "A territory's temperament can drift toward `outcomes-only` under sustained `env.peninsular_strain_shock` Keys (\u00a73.4.2)."
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
@@ -47216,10 +47318,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `npc_behavior` sits in an L2 contract-layer cycle with `faction_state`, `piety_track` and `social_contest`, and is itself an L2-layer cut-vertex. | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:338 npc_behavior` \u00b7 `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:333 npc_behavior`"
     }
    },
-   "file_count": 9,
+   "file_count": 10,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/canonical_nomenclature_v1.md": 8,
     "proposals/repo-reorganization-v1.md": 9,
     "systems/_architecture/key_echo_armature_v1.md": 1,
@@ -48540,9 +48643,10 @@
      "purpose": "visibility={'private_observers': [npc.id, resolution.subject_npc_id]},"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/key_substrate_v30.md": 5,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/factions/political_dynamics_keys_migration_v30.md": 6
@@ -48552,7 +48656,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "private_observers"
   },
@@ -50087,9 +50192,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: No production code path ever queues a `scene_type=\"fieldwork\"` or `\"investigation\"` scene. `queue_triggered_scenes` (the sole caller of `scene_slate.queue_scene` in the whole tree \u2014 verified by grep, only call site) only ever fires `scene_type=\"contest\"` for the \"Stability Crisis\" trigger; the other 7 canonical \u00a74.3.2 triggers are explicitly deferred, not "
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/propagation_spec_v1.md": 3,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 3
@@ -50099,7 +50205,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "queue_triggered_scenes"
   },
@@ -51123,9 +51230,10 @@
      "purpose": "\u2502 \u2502 \u251c\u2500\u2500 ClueItem { text, source, reliability_tag, depth }"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/fieldwork/fieldwork_godot.md": 1,
     "systems/fieldwork/fieldwork_v30.md": 1
    },
@@ -51133,7 +51241,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "reliability_tag"
   },
@@ -52005,9 +52114,10 @@
      "purpose": "**2026-07-08: the P1 consequence spine (ED-SC-0006/0007) is EXECUTED and ECHO_TRANSPORT is DEFAULT ON** (Jordan \"Yes echo transport on\") via two complementary fidelities of the same conflict class: (a) the FACTION-scale auto-resolve \u2014 `engine/cross_scale/parliamentary_bridge.py` runs a \u00a710 Parliamen\u2026"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
@@ -52021,6 +52131,7 @@
    "subsystems": [
     "_architecture",
     "characters",
+    "proposals",
     "social_contest"
    ],
    "term": "resolve_contest"
@@ -53166,10 +53277,11 @@
      "purpose": "static func roll_pool(pool_size: int, tn: int = 7, context: RollContext) -> RollResult:"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/factions/factions_flow_skeleton_v1.md": 1,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 4,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 2,
@@ -53548,11 +53660,12 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called by :: `check_insurgency_triggers(world)` | `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers` | `systems/overview/sim/accounting.py:124 run_accounting`"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 2,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 9,
     "systems/_architecture/propagation_spec_v1.md": 3,
     "systems/npcs/npcs_flow_skeleton_v1.md": 2,
@@ -53569,6 +53682,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "world"
    ],
@@ -53960,16 +54074,18 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `run_fieldwork_scene(scene)` | `systems/fieldwork/sim/fieldwork.py:38 run_fieldwork_scene` | `engine/cross_scale/scene_dispatch.py:354` (`_resolve_slot`, `st == \"fieldwork\"` branch) \u2014 reachable only via a `SceneSlot` manually constructed by a test (`engine/tests/test_pipeline_reach.py:298`); no production caller ever queues `scene_type=\"fieldwork\""
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/fieldwork/fieldwork_flow_skeleton_v1.md": 6
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "fieldwork"
+    "fieldwork",
+    "proposals"
    ],
    "term": "run_fieldwork_scene"
   },
@@ -54894,10 +55010,11 @@
      "purpose": "scale_signature='personal',"
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 5,
@@ -55015,9 +55132,10 @@
      "purpose": "[\u00a75.2 Faction consumes Keys] Key type | Faction-state effect :: `state.scar_acquired` (leader) | Triggers cascade re-resolution; if scars\u22653, crisis-bypass activates"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -55032,7 +55150,8 @@
     "_architecture",
     "articulation",
     "characters",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "scar_acquired"
   },
@@ -55168,10 +55287,11 @@
     }
    },
    "definition": "Placeholder registered 2026-07-07 (ED-IN-0023, C-INJ-3): scenario_authoring had no mechanics_index entry despite carrying a module_contracts.yaml contract. Authoring-vs-runtime RATIFIED (fork 11, ED-IN-0011): compile is authoring-time; its output packs seed runtime.",
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/_architecture/propagation_spec_v1.md": 1,
@@ -55187,6 +55307,7 @@
     "_architecture",
     "godot",
     "overview",
+    "proposals",
     "settlements"
    ],
    "term": "scenario_authoring"
@@ -55366,10 +55487,11 @@
      "purpose": "signal scene_entered(scene_ref)"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 7,
     "systems/ui/valoria_ui_ux_v4.md": 2
@@ -55380,6 +55502,7 @@
    "subsystems": [
     "_architecture",
     "godot",
+    "proposals",
     "ui"
    ],
    "term": "scene_entered"
@@ -55835,10 +55958,11 @@
      "purpose": "consuming_systems: [scene_timer, articulation, audit]"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 3
    },
@@ -55917,11 +56041,12 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: up (declared, not wired) | `engine.cross_scale.scene_dispatch` | no `\"thread\"` `scene_type` branch exists; Thread-scale scenes cannot be produced by the live dispatcher | `engine/cross_scale/scene_dispatch.py:216-224`, `:360-371`"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 5,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -57050,9 +57175,10 @@
      "purpose": "visibility_default: semi_public_observers=propagation_observers (initial: principals only)"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/key_substrate_v30.md": 4,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1
@@ -57062,7 +57188,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "semi_public_observers"
   },
@@ -57524,10 +57651,11 @@
      "purpose": "Subsystem:** `systems/settlements/` \u00b7 **Lane:** `SE` \u00b7 **Contracts:** `settlement_layer`, `settlement_economy`"
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -57606,9 +57734,10 @@
      "purpose": "signal settlement_event_fired(settlement_id, event_type)"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/settlements/settlements_flow_skeleton_v1.md": 2,
     "systems/ui/valoria_ui_ux_v4.md": 1
@@ -57618,6 +57747,7 @@
    ],
    "subsystems": [
     "_architecture",
+    "proposals",
     "settlements",
     "ui"
    ],
@@ -57698,10 +57828,11 @@
      "purpose": "Authoritative sources: fieldwork_v30 \u00a73.3, settlement_layer_v30 \u00a74.1, scale_transitions_v30 \u00a74, geography_v30."
     }
    },
-   "file_count": 34,
+   "file_count": 35,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "systems/_architecture/conflict_architecture_proposal.md": 1,
@@ -58652,10 +58783,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `references/module_contracts.yaml` declares no `ui` / `ui_ux` module. The file's full `module:` roster (27 entries, grepped ` - module:` across the file) contains no UI-named entry \u2014 the subsystem has no `consumes`/`emits`/`resolver`/`sim_module` contract at all, not merely an unbuilt one. | `references/module_contracts.yaml:59` (`faction_state`, first of "
     }
    },
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/subsystem_flow_skeletons_v1.md": 1,
@@ -58676,6 +58808,7 @@
     "engine",
     "mass_battle",
     "npcs",
+    "proposals",
     "settlements",
     "ui"
    ],
@@ -59109,12 +59242,13 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 36,
+   "file_count": 37,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "proposals/repo-reorganization-v1.md": 8,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -59292,10 +59426,11 @@
      "purpose": "(`key_substrate_v30.md` schema: `source_actor`, `causes`, `targets/impact_vector`, `scale_signature`)"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 5,
     "systems/_architecture/key_type_registry_v30.md": 3,
@@ -59307,7 +59442,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "source_actor"
   },
@@ -60385,16 +60521,18 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `KeyLog.append`'s WARN-tier `stat_vocabulary` check (`_check_stat_vocabulary`, candidate invariant 9) runs only when a caller supplies `stat_vocabulary` at construction; `make_scheduler` always constructs `KeyLog` with none, so the check is default-off corpus-wide | `engine/substrate/keys.py:369-370` (guard), `engine/substrate/keys.py:436-451 _check_stat_v"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "stat_vocabulary"
   },
@@ -60418,10 +60556,11 @@
      "purpose": "`{id: \"combat.scene\", resolver: state_reader, status: PENDING, in: [\"scene.combat_strike\",\"scene.combat_hit\","
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 6,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/combat/scene_combat_design_v1.md": 1
    },
@@ -60431,7 +60570,8 @@
    "subsystems": [
     "_architecture",
     "combat",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "state_reader"
   },
@@ -61031,11 +61171,12 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter \u2192 `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`"
     }
    },
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,
@@ -61919,10 +62060,11 @@
      "purpose": "Axis-relevance: `cosine_similarity(key.symbolic_dimensions, npc.armature_position_personal) >= 0.3`."
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 6,
     "systems/articulation/articulation_layer_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 2
@@ -61934,7 +62076,8 @@
     "_architecture",
     "articulation",
     "factions",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "symbolic_dimensions"
   },
@@ -63170,10 +63313,11 @@
      "purpose": "Subsystem:** `systems/overview/` \u00b7 **Lane:** `IN` \u00b7 **Contracts:** `peninsular_strain`, `territorial_piety`, `game_director` (all"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 3,
     "proposals/valoria_fork_plan_of_record_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
@@ -63359,10 +63503,11 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called by :: `get_npcs_in_territory(territory_id, world=None)` | `systems/world/sim/npe.py:375 get_npcs_in_territory` | \u2014 (no production caller found)"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/npcs/npcs_flow_skeleton_v1.md": 7,
     "systems/settlements/settlements_flow_skeleton_v1.md": 7,
@@ -63375,6 +63520,7 @@
     "_architecture",
     "godot",
     "npcs",
+    "proposals",
     "settlements",
     "world"
    ],
@@ -65073,10 +65219,11 @@
      "purpose": "S0.3 `[write]` `TypeRegistry.apply_defaults` fills unset `scale_signature`/`permanence`/`time_horizon` from the type's registry entry \u2014 `engine/substrate/keys.py:566`"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 9
    },
@@ -65085,7 +65232,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "godot"
+    "godot",
+    "proposals"
    ],
    "term": "time_horizon"
   },
@@ -66857,16 +67005,18 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `TypeRegistry.require` | `engine/substrate/keys.py:303 require` | `engine/substrate/keys.py:383 validate_payload` (internal)"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "validate_payload"
   },
@@ -68074,16 +68224,18 @@
      "purpose": "witness_actor # actor_id"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "witness_actor"
   },
@@ -68402,10 +68554,11 @@
   },
   "zoom_in_out": {
    "ambiguous": false,
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 11,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -68422,6 +68575,7 @@
     "articulation",
     "factions",
     "godot",
+    "proposals",
     "social_contest"
    ],
    "term": "zoom_in_out"
