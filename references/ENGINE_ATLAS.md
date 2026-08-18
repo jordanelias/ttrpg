@@ -475,7 +475,7 @@ A canonical identifier is only a usable handle if searching for it returns its r
 | `mass_battle` | 2518 | 0 |
 | `audit` | 2281 | 0 |
 | `threadwork` | 2273 | 0 |
-| `social_contest` | 2206 | 0 |
+| `social_contest` | 2207 | 0 |
 | `victory` | 2112 | 0 |
 | `npc_behavior` | 649 | 0 |
 | `settlement_layer` | 346 | 0 |

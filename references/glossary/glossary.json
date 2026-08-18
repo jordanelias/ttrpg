@@ -1081,7 +1081,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 89,
+   "file_count": 90,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1096,6 +1096,7 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-culling-plan-v1.md": 13,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -2319,9 +2320,10 @@
   "Continuity": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 17,
+   "file_count": 18,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-culling-plan-v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 3,
     "systems/_architecture/derived_stats_v30.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 1,
@@ -2350,6 +2352,7 @@
     "factions",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "ui"
    ],
@@ -9222,7 +9225,7 @@
    "ambiguous": false,
    "category": "mechanic",
    "definition": "Reputation track. Range 0\u201310 (exception to 1\u20137 scale). No in-game benefit above 7; 10 is cosmetic maximum.",
-   "file_count": 58,
+   "file_count": 59,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -9232,6 +9235,7 @@
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 12,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-culling-plan-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -21977,7 +21981,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 92,
+   "file_count": 93,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -21991,6 +21995,7 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 5,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 77,
     "proposals/2026-08-16-system-scores-census.md": 6,
+    "proposals/2026-08-18-culling-plan-v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -31172,16 +31177,18 @@
      "purpose": "on capture, not on trust: `tools/export_params_constants.py` writes"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-culling-plan-v1.md": 1,
     "systems/_architecture/repository_keep_set_v1.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "export_params_constants"
   },
@@ -40720,7 +40727,7 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 37,
+   "file_count": 38,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
@@ -40728,6 +40735,7 @@
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/2026-08-16-system-scores-census.md": 3,
+    "proposals/2026-08-18-culling-plan-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 4,
@@ -66560,7 +66568,7 @@
   "units": {
    "ambiguous": false,
    "definition": "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis.",
-   "file_count": 47,
+   "file_count": 48,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
@@ -66568,6 +66576,7 @@
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "proposals/2026-08-16-system-scores-census.md": 5,
+    "proposals/2026-08-18-culling-plan-v1.md": 3,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
     "proposals/pc_formation_system.md": 3,
