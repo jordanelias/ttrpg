@@ -72,6 +72,116 @@ carry source only.
 
 ---
 
+## 2026-08-17 — Weekly code review `d36498f`..`f2fc307` + full instrument sweep (ED-IN-0194)
+
+**⚠ `00_findings.md` IS SUPERSEDED IN FOUR PLACES — read `01_consolidation.md` first.** Three Fable-5
+`valoria-critic` agents (read-only, concurrent, blind to each other) audited the review. All 11
+findings and 5 throughlines CONFIRMED, and **four things corrected, each re-verified by execution**:
+
+- **X1 — TL-1's headline was wrong.** "Overwhelmingly apparatus" is REFUTED. Measured: **53.8% of the
+  week's churn is machine-generated artifacts**; hand-authored apparatus is **11.9%**, *less than
+  design's 14.1%*. `glossary.json` alone is **44.5% of the whole week's diff**, rewritten in 8 of 15
+  commits. Corrected finding: **the diffstat does not measure work here.** It also explains the 18
+  files that collided "over nothing" — regeneration churn *is* the merge-conflict surface.
+- **X2 — the 433/452 PP figure is stale.** `ED-IN-0190` measured **531/537**. `CLAUDE.md:34` and
+  `HANDOFF_IN.md:154` both still carry the old one; two uncontrolled numbers for one quantity.
+- **X3 — the "ninth ladder" lesson is misattributed, and this file carries the wrong half.** Both
+  ladders were rows **#2 and #4 of 8** in `audit/2026-08-11-systems-python-architecture-audit/00_findings.md:184-194`,
+  on `main` three days earlier. The defect was **intra-window knowledge transfer**, not instrument
+  blindness. Fix the lesson here and in `test_degree_ladder_single_owner.py:11-16`.
+- **X4 —** four categories from my own instrument output went unreported, **Mode B's 28 pairs**
+  among them without disclosure.
+
+**Eight new findings F12–F19.** The two that change how you should trust the tooling:
+**F12 — `_PRODUCES_BAND` detects ZERO bands in `sigma_leverage.py`**, so the degree guard cannot see
+integer-band ladders *— the exact form of the ninth ladder that caused it to be written* — and its
+docstring's "an unenrolled ladder still fails something" is false. **F13 — `ci_supersession_check` is
+listed blocking in `CLAUDE.md:401`, was demoted to never-failing by this same window, and is empty of
+the window's one supersession event**, so F5 understated: what is missing is the data *plus any
+forcing mechanism*. Also **F14** (`references/glossary/` is **98.7% not-definitions** — an index of
+where 2,083 strings occur, 91.3% of them with `definition: null`; the name is why 2.1 MB of tracked
+build output went unquestioned, and **278 registered terms have no corpus presence at all**. ⚠ The
+first draft prescribed the name *concordance*; **withdrawn** — an audit doc is not a naming authority
+and §4 already counts 32 ungoverned process terms. Naming is Jordan's, filed as Q-A; the measurement
+and the track-or-untrack question stand without it), **F15** (four
+instruments, four `needs_jordan` counts — 121/114/128/110 — because the flag survives on ratified and
+resolved rows), **F16** (four stale authority surfaces, incl. `HANDOFF_MB.md:18`'s CI-RED banner and
+`CLAUDE.md:366`'s 10-vs-9 `doc: null`), **F17/F18/F19**.
+
+**`01_consolidation.md` §3 is the consolidated register: 45 rows on blocked-on × guarded, 39 of them
+UNGUARDED, sorted rot-first, with 7 double-counting clusters named** (ED-1051 alone appears on six
+surfaces). §5 states what the census could not reach — `HANDOFF_IN.md`'s own `## Pending` and
+`## Next actions`, ~1,190 lines, were not enumerated item-by-item.
+
+**Full first-pass report: `audit/2026-08-17-weekly-review/00_findings.md`.** Read-and-execute pass, not a
+read-only one: both blocking suites run to completion (`tests/valoria` **1933 passed / 0 failed**,
+`engine/tests` **2051 passed / 0 failed**), every `tools/` validator run from the working tree, and
+the vector audit (v3, L1) + structure audit re-run fresh. **All blocking gates green**; repo-state
+**AMBER**, 0 blocking, 0 regressions.
+
+**THE PROPAGATION THIS FILE SAID WAS OWED IS STILL OWED.** `ED-IN-0187` appears **zero times** in all
+four registers named above — `supersession_register.yaml`, `CURRENT.md`'s Dice/resolution row,
+`propagation_map.md`, `mechanics_index.yaml`. `ci_supersession_check` consequently ran clean this
+session against 25 entries **none of which know the degree ladder moved**. Still no new tool needed;
+still only the data. **This is item 1 of the next-actions list and it is ~30 minutes.**
+
+**Both degree-ladder HOLDs were RULED 2026-08-15 (both MIGRATE) and are unexecuted.** The guard is
+correct today — each is asserted to STILL DIVERGE — and becomes a stale exemption the moment either
+lands. The sequence is fixed and non-obvious: **derive Ob from the defender first**, then apply the
+owner's ladder. That derivation is wired nowhere and `roll_net_continuous` still does
+`int(round(pool))`, so the fractional-dice half is not implemented either. Both halves gate both holds.
+
+**Ten findings, five surfaced by an instrument rather than by reading.** The cheapest is F4:
+`module_contracts.yaml:749/757` embed prose inside identifier strings
+(`"faction Mandate (cross-module → faction_state)"`), and those two strings produce 2
+`ci_quantity_vocabulary` UNRESOLVED rows **+** 2 vector-audit Mode-H isolates **+** 2 Mode-E sparse
+tokens — six rows, two instruments that share no code, one one-line data defect.
+
+**The pointer-and-label class is the pattern §0.1 point 5 asks to repair as one thing, not five:**
+`review_core.py:136` prints `tools/structure_audit.py` (nonexistent — the tool lives under `skills/`)
+into the SessionStart banner and the dashboard card; **5 of 10 `workplans/POINTER_*.md` are `LIVE` and
+name targets removed in the 2026-08-05 evacuation** — two are the plans of record for the single-owner
+and code-shape programs currently being executed against — under a summary line that says
+"10 target(s) resolved"; `structure_audit.py:790` asserts `undeclared` must read 0 while
+`module_contracts.yaml:566` withholds that field deliberately; `CLAUDE.md:401` lists supersession in
+the blocking tier that `ci_checks_registry.yaml:245` records as never-failing.
+
+**Three five-lens findings re-verified at HEAD and unchanged:** `TN_STANDARD` still ownerless (two
+live defs + `roll_pool`'s hardcoded `tn=7`; `dice_engine.TN_STANDARD` — the symbol the committed
+remediation plan prescribes — still does not exist); `single_owner_check` still absent from
+`ci_checks_registry.yaml`; `glossary.md:45` still bans and mandates `CI` in one sentence.
+
+⛔ **READ THIS BEFORE APPENDING TO `editorial_ledger_in.jsonl` — IT IS 108 TOKENS FROM A BLOCKING
+CAP (49,892 / 50,000). YOUR NEXT ENTRY WILL NOT COMMIT.**
+
+This is not a forecast. It happened here. The morning's finding F11 filed at ~1,100 tokens of
+headroom; filing the afternoon's consolidation entry **hit the cap at 50,048 and the commit was
+refused**, and that entry was cut back twice to fit. **ED-IN-0185 Q5 (ledger chunking) is therefore
+OVERDUE, not "not started"** — the gate set the deadline and the deadline has passed.
+
+The sanctioned action is in `ci_register_size_check`'s own output: **archive WHOLE settled ids to the
+`_archive` file, never individual rows** — the ledgers are append-only, so an id's effective status is
+its LAST row, and moving only the resolved row silently reverts it (the ED-IN-0112 incident, pinned by
+`tests/valoria/test_ledger_hygiene.py`).
+
+⚠ **What is NOT decided, and is the actual ruling needed:** Q5's companion-index shape and **which
+file new entries land in afterwards.** `editorial_ledger_in_archive.jsonl` is already the larger file
+(131,302 tokens, itself at 88%) and the pre-cutover convention made it the primary allocation surface
+for ED-IN-0160..0182. Chunking that does not answer that question reproduces the problem one file
+over. Filed as `01_consolidation.md` §4 Q-D. Three more registers are over 85%:
+`module_contracts.yaml` 87%, `editorial_ledger_in_archive.jsonl` 88%, `tests/coverage_matrix.md` 94%.
+
+⚠ **The debt direction is the thing to actually worry about.** The window added **+82,021 / −15,588
+lines across 283 files** — of which **53.8% is machine-generated artifacts** and hand-authored
+apparatus is only **11.9%**, less than design's 14.1% (measured; the "overwhelmingly apparatus"
+claim that stood here was refuted by X1 above, in this same entry, and I failed to update it here) —
+while `scope_ratchet` **REGRESSED**: `ed.stale`
+198 against a ceiling of 76 (+122), `ed.needs_jordan_stale` 83 against 21 (+62). 246 open EDs, 114
+needing Jordan. L5's burn-down owner still does not exist, and that number decides whether the next
+month of audits is worth running.
+
+---
+
 ## 2026-08-14 — Jordan's ruling session: all 10 calls RULED; 4 executed, 1 part-built, 5 not started; 2 sites HELD (ED-IN-0187/0188)
 
 **⚠ THE AGENDA IS CLOSED — ED-IN-0185 is RULED, not open.** All seven questions plus two raised in

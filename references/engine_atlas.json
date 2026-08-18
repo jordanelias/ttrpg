@@ -27,7 +27,7 @@
     "qualified": 0
    },
    "audit": {
-    "occurrences": 2274,
+    "occurrences": 2281,
     "qualified": 0
    },
    "campaign_architecture": {
@@ -55,7 +55,7 @@
     "qualified": 0
    },
    "faction_state": {
-    "occurrences": 342,
+    "occurrences": 343,
     "qualified": 0
    },
    "fieldwork_knots": {
@@ -115,7 +115,7 @@
     "qualified": 0
    },
    "social_contest": {
-    "occurrences": 2206,
+    "occurrences": 2207,
     "qualified": 0
    },
    "territorial_piety": {

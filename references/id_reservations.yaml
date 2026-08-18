@@ -231,7 +231,7 @@ lane_ids:
     # renumbers): register-honesty fix to tools/observability/build_proposals.py --
     # obs_core.text_needs_jordan() rescues design-doc + flat-ledger Jordan-gating (register
     # needs_jordan 79->97). status resolved, no ruling needed. next_free 72->73.
-    IN: { name: "Infrastructure",      next_free: 194 }   # DELIBERATE GAP: CSO holds 0103-0111 (pinned by tests/valoria/test_id_reservations_walkback.py, which requires that string to stay in THIS file). Latest: ED-IN-0170..0192 (0187 degree-ladder ruling; 0189 Track A repair; 0190 PP frozen; 0192 resolver architecture; 0193 §5-§7 restore + port-blocks deleted. Both allocated BEFORE being cited, unlike 0173, which was allocated RETROACTIVELY 2026-08-13 after the alias plan cited it unallocated). Narrative: id_reservations_history.md#in
+    IN: { name: "Infrastructure",      next_free: 195 }   # DELIBERATE GAP: CSO holds 0103-0111 (pinned by tests/valoria/test_id_reservations_walkback.py, which requires that string to stay in THIS file). Latest: ED-IN-0170..0194 (0187 degree ladder; 0189 Track A; 0190 PP frozen; 0192 resolver architecture; 0193 §5-§7 restore; 0194 weekly review + instrument sweep). Narrative: id_reservations_history.md#in
     # [ED-IN-0064 DUP-KEY REPAIR] A stale duplicate `IN:` mapping once shadowed the authoritative one above (YAML last-key-wins). Neutralized; full incident write-up, including why a duplicate key is silent rather than an error: id_reservations_history.md#dup-key
     # 2026-07-07 (status open unless noted): ED-IN-0012/0013's edge-playability pair RENUMBERED to
     # ED-IN-0019/0020 (armature §5.10 decided + executed, see repair note above); ED-IN-0021..0025
