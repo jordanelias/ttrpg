@@ -81,11 +81,12 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-breaking-the-recursion.md": 3,
+    "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 3,
     "proposals/2026-08-18-recursion-interrogation-log.md": 3,
     "systems/_architecture/integration_proposal_v30.md": 4
    },
@@ -107,13 +108,14 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Physical speed and coordination. Combat pool base.",
-   "file_count": 17,
+   "file_count": 18,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 12,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 2,
     "systems/_architecture/scale_transitions_v30_infill.md": 1,
@@ -599,7 +601,7 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Sensitivity to people, environments, and Thread-adjacent phenomena.",
-   "file_count": 33,
+   "file_count": 34,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -607,6 +609,7 @@
     "godot/godot_architecture_specification.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 9,
     "proposals/2026-08-16-system-scores-census.md": 3,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -989,12 +992,13 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 27,
+   "file_count": 28,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 15,
     "proposals/2026-08-16-system-scores-census.md": 4,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "systems/_architecture/canonical_registry.md": 7,
     "systems/_architecture/cogload_moderate_target.md": 3,
     "systems/_architecture/complete_systems_reference.md": 4,
@@ -1089,7 +1093,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 93,
+   "file_count": 94,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1104,9 +1108,10 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/2026-08-16-system-scores-census.md": 1,
-    "proposals/2026-08-18-breaking-the-recursion.md": 12,
+    "proposals/2026-08-18-breaking-the-recursion.md": 13,
     "proposals/2026-08-18-culling-plan-v1.md": 13,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
+    "proposals/2026-08-18-next-session-handoff.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
@@ -1478,11 +1483,12 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 31,
+   "file_count": 32,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 23,
     "proposals/2026-08-16-system-scores-census.md": 6,
+    "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/pc_formation_system.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 1,
@@ -1818,15 +1824,16 @@
   "Cognition": {
    "ambiguous": false,
    "definition": "Reasoning, memory, analysis.",
-   "file_count": 43,
+   "file_count": 44,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 22,
     "proposals/2026-08-16-system-scores-census.md": 4,
-    "proposals/2026-08-18-breaking-the-recursion.md": 3,
+    "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 4,
     "proposals/2026-08-18-recursion-interrogation-log.md": 4,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
@@ -2092,7 +2099,7 @@
   "Composure": {
    "ambiguous": false,
    "definition": "Social endurance (see Part One). Also the damage track in Debate exchanges.",
-   "file_count": 41,
+   "file_count": 42,
    "glossary_part": "PART THREE \u2014 DEBATE SYSTEM TERMS",
    "legacy_count": 0,
    "locations": {
@@ -2101,6 +2108,7 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 3,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 2,
     "systems/_architecture/canonical_registry.md": 2,
@@ -2259,7 +2267,7 @@
   "Consequence": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 46,
+   "file_count": 47,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 1,
@@ -2269,6 +2277,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
@@ -3546,12 +3555,13 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Physical resilience. Determines Health and Stamina base.",
-   "file_count": 22,
+   "file_count": 23,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/2026-08-16-system-scores-census.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/derived_stats_v30.md": 21,
     "systems/_architecture/scale_transitions_v30.md": 1,
@@ -3917,7 +3927,7 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Attribute governing Thread contact economy \u2014 see the Core Attributes table above; do not re-add a formula/range here (this row previously conflated the attribute with a stale derived-stat description).",
-   "file_count": 25,
+   "file_count": 26,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -3925,6 +3935,7 @@
     "godot/godot_architecture_specification.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 29,
     "proposals/2026-08-16-system-scores-census.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 7,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -5504,7 +5515,7 @@
   "Key": {
    "ambiguous": false,
    "category": "substrate",
-   "file_count": 56,
+   "file_count": 57,
    "legacy_count": 1,
    "locations": {
     "canon/03_canonical_timeline.md": 1,
@@ -5513,6 +5524,7 @@
     "godot/godot_conversion_strategy_v1.md": 37,
     "proposals/2026-08-18-breaking-the-recursion.md": 5,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 50,
+    "proposals/2026-08-18-next-session-handoff.md": 3,
     "proposals/2026-08-18-recursion-interrogation-log.md": 8,
     "proposals/canonical_nomenclature_v1.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 14,
@@ -6969,13 +6981,14 @@
   "Order": {
    "ambiguous": true,
    "category": "settlement_stat",
-   "file_count": 86,
+   "file_count": 87,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/canonical_nomenclature_v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 20,
@@ -8690,7 +8703,7 @@
   "Social": {
    "ambiguous": true,
    "category": "aggregate",
-   "file_count": 67,
+   "file_count": 68,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations_rules.md": 1,
@@ -8699,6 +8712,7 @@
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -9016,7 +9030,7 @@
   "Spirit": {
    "ambiguous": false,
    "definition": "Internal coherence, resolve, and Thread operation capacity.",
-   "file_count": 52,
+   "file_count": 53,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
@@ -9025,7 +9039,8 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 33,
     "proposals/2026-08-16-system-scores-census.md": 7,
-    "proposals/2026-08-18-breaking-the-recursion.md": 3,
+    "proposals/2026-08-18-breaking-the-recursion.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 6,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 2,
@@ -9430,13 +9445,14 @@
    "ambiguous": false,
    "category": "attribute",
    "definition": "Raw physical power. Weapon minimum requirement.",
-   "file_count": 23,
+   "file_count": 24,
    "glossary_part": "PART ONE \u2014 GAME STATS AND ATTRIBUTES",
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 17,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 17,
     "systems/characters/character_histories_v30_infill.md": 1,
@@ -10869,10 +10885,11 @@
    ],
    "ambiguous": false,
    "category": "attribute",
-   "file_count": 16,
+   "file_count": 17,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-breaking-the-recursion.md": 3,
+    "proposals/2026-08-18-breaking-the-recursion.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 4,
     "proposals/2026-08-18-recursion-interrogation-log.md": 4,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/early_game_ignition_analysis.md": 3,
@@ -11625,10 +11642,11 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` \u2014 dormant in a seeded campaign (see \u00a77) | `engine/cross_scale/echo_transport.py:309-323 key`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 4,
@@ -22075,7 +22093,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 96,
+   "file_count": 97,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -22092,6 +22110,7 @@
     "proposals/2026-08-18-breaking-the-recursion.md": 3,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
+    "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 6,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
@@ -22236,10 +22255,11 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1018-1021`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/articulation/articulation_flow_skeleton_v1.md": 2,
@@ -22283,10 +22303,11 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: out | `references/module_contracts.yaml` `personal_combat` module | declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` as though the engine itself emits Keys \u2014 see \u00a77 divergence | `references/module_contracts.yaml:1018-1021`"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -22411,12 +22432,13 @@
      "purpose": "signal combat_resolved(scene_ref, outcomes)"
     }
    },
-   "file_count": 13,
+   "file_count": 14,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
@@ -22467,10 +22489,11 @@
      "purpose": "[7. Traced gaps] Gap | Evidence :: **`combat_engine_v1` neither emits nor consumes a substrate `Key`.** The `personal_combat` module contract declares `emits: scene.combat_hit / scene.combat_felled / scene.combat_resolved` and `consumes: scene.combat_strike / scene.combat_hit` as the engine's own I/O, but zero `.py` files under `combat_engine_v1/` reference `engine.substrate`, `Key(`, or `KeyLog` "
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/combat/combat_flow_skeleton_v1.md": 1,
@@ -23377,10 +23400,11 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure B emits state.concern_resolved on resolution | \u00a73.2"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 8
@@ -28253,12 +28277,13 @@
      "purpose": "It is single-homed in the FA lane's `domain_actions` inventory (the C-FA-12 reconciliation; the full action definition is authored with the `domain_actions` home doc \u2014 ED-FA-0002, pending)."
     }
    },
-   "file_count": 11,
+   "file_count": 12,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-breaking-the-recursion.md": 2,
+    "proposals/2026-08-18-breaking-the-recursion.md": 3,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 2,
@@ -28437,11 +28462,12 @@
      "purpose": "edges ED-935's registrations orphaned (`scene.thread_operation`, `scene.draft_da`,"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -30500,10 +30526,11 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `mechanical.era_transition` | mechanical_event | victory g_ms0/g_msrec/g_diss + IP=100 phases (gateless \u2014 gate first `[C-MBSE-13]`) | EP-5"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4
@@ -33145,7 +33172,7 @@
   "fieldwork": {
    "ambiguous": true,
    "definition": "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure.",
-   "file_count": 70,
+   "file_count": 71,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
@@ -33157,6 +33184,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "proposals/2026-08-16-system-scores-census.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 70,
+    "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -37192,7 +37220,7 @@
   "infrastructure": {
    "ambiguous": false,
    "definition": "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending.",
-   "file_count": 57,
+   "file_count": 58,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 3,
@@ -37202,6 +37230,7 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 4,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 3,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 4,
@@ -40916,7 +40945,7 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 40,
+   "file_count": 41,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
@@ -40926,6 +40955,7 @@
     "proposals/2026-08-16-system-scores-census.md": 3,
     "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
@@ -45047,11 +45077,12 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
@@ -49045,10 +49076,11 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure C emits mechanical.project_advanced on advance | \u00a74.1"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -49089,11 +49121,12 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure C emits state.project_completed on completion | \u00a74.3"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -49169,11 +49202,12 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure C emits state.project_failed on stall \u2265 8 | \u00a74.2"
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
@@ -56809,10 +56843,11 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `mechanical.second_calamity` | mechanical_event | victory g_ms5 \u2014 the game's only true terminal deserves its own type | EP-5"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4
@@ -57720,11 +57755,12 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `mechanical.settlement_captured` | mechanical_event | settlement_layer g_def0 (undefended auto-capture) | EP-4, C-MBSE-9"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2
@@ -58101,11 +58137,12 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `state.settlement_revolt` | state_transition | settlement_layer g_ord0 (Order\u21920 revolt) | EP-4, C-MBSE-9"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2
@@ -61200,9 +61237,11 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter \u2192 `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`"
     }
    },
-   "file_count": 5,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/articulation/articulation_flow_skeleton_v1.md": 6,
     "systems/npcs/npcs_flow_skeleton_v1.md": 1,
@@ -61217,6 +61256,7 @@
     "articulation",
     "npcs",
     "overview",
+    "proposals",
     "world"
    ],
    "term": "stub_hits"
@@ -64493,11 +64533,12 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `mechanical.theocracy_unification_declared` | mechanical_event | ci_political CI=100 | EP-5"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3
@@ -64734,11 +64775,12 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `scene.thread_operation`, `meta.thread_woven` (declared Key types) | `key` | **none \u2014 declared in contract, never constructed anywhere in the tree** | `references/module_contracts.yaml:354-355`; see \u00a77"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/2026-08-18-breaking-the-recursion.md": 2,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -66870,7 +66912,7 @@
   "units": {
    "ambiguous": false,
    "definition": "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis.",
-   "file_count": 50,
+   "file_count": 51,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
@@ -66880,6 +66922,7 @@
     "proposals/2026-08-16-system-scores-census.md": 5,
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-culling-plan-v1.md": 3,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
@@ -68096,10 +68139,11 @@
      "purpose": "walk_forward(key, depth_limit):"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
+    "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1
    },
@@ -68619,16 +68663,18 @@
      "purpose": "Specified at architecture level: x86_64 with IEEE-754 default rounding (round-to-nearest-even)."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-next-session-handoff.md": 3,
     "systems/_architecture/key_substrate_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "x86_64"
   },

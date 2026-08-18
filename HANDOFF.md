@@ -52,6 +52,25 @@ carried nothing newer than July, while being **the only section the SessionStart
 Everything struck from it was already recorded in `HANDOFF_IN.md` or the ledgers; nothing was lost,
 and the July narrative is in `git log HANDOFF.md`._
 
+### ⭐ READ FIRST (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
+
+The recursion investigation (PR #319) and its Fable-5 adjudication (PR #320) are complete. That
+handoff carries **six unblocked, verified actions that move the game**, the five items held for
+Jordan, the findings not to re-derive, and the traps this session hit. Highest-leverage first:
+
+- **Put a Godot compiler in CI.** In 3,728 commits nothing has ever checked whether the game
+  compiles. It was compiled for the first time this session: five root causes plus one
+  `project.godot` setting took it from 58 errors to 16, and 5 of 6 autoloads then load.
+- **The "unnamed tenth attribute" is `Recall`** — named outright in this repo at
+  `engine/engine_params/params_tables.yaml:9118`. Naming it lifts the "do not bind Godot fields
+  yet" flag this banner prints every session. Jordan's call.
+- **The `domain_actions` gap** — junctures 1–2, `blocked_on: None`, open since 2026-07-05 — is
+  implemented as `valoria-game/systems/engine/DomainActionSystem.gd`, 276 lines.
+- **The Key-type gap is exactly 20 rows**, a strict subset with zero drift, recounted twice.
+
+⚠ **Do not open another audit of the apparatus.** The measured finding is that 78% of commits whose
+subject line says consolidate/cull/prune/retire were **net line increases**.
+
 ### Ruled and landed — do not re-raise
 
 - **Jordan's ruling session landed 2026-08-14 (PR #311, ED-IN-0187/0188).** The **degree ladder** is
