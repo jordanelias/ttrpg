@@ -760,9 +760,10 @@
   "Autonomy": {
    "ambiguous": false,
    "category": "conviction",
-   "file_count": 22,
+   "file_count": 23,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 5,
     "systems/_architecture/complete_systems_reference.md": 10,
     "systems/_architecture/conflict_architecture_proposal.md": 1,
@@ -797,6 +798,7 @@
     "factions",
     "npcs",
     "overview",
+    "proposals",
     "social_contest",
     "ui",
     "victory",
@@ -807,7 +809,7 @@
   "Belief": {
    "ambiguous": false,
    "definition": "Player-authored character conviction. Mechanical driver for Momentum and Character Points. Distinct from Inspiration (see below).",
-   "file_count": 51,
+   "file_count": 52,
    "glossary_part": "PART SEVEN \u2014 WORLD / NARRATIVE TERMS",
    "legacy_count": 0,
    "locations": {
@@ -815,6 +817,7 @@
     "godot/godot_architecture_specification.md": 3,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/campaign_modes_v30_infill.md": 2,
     "systems/_architecture/canonical_registry.md": 1,
     "systems/_architecture/derived_stats_v30.md": 10,
@@ -1099,7 +1102,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-culling-plan-v1.md": 13,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -1539,7 +1542,7 @@
     "godot/godot_conversion_strategy_v1.md": 3,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 12,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
@@ -1711,11 +1714,12 @@
    "ambiguous": false,
    "category": "clock",
    "definition": "Church political dominance accumulation. Church-specific clock. Per `designs/provincial/ci_political_v30.md` \u00a72.1 (canonical). **Renamed from \"Church Influence\" (CI) per ED-782.** Old 75 = Phase Transition / Territorial Seizure threshold REMOVED \u2014 Mass Seizure now probabilistic from CI \u2265 60.",
-   "file_count": 32,
+   "file_count": 33,
    "glossary_part": "PART TWO \u2014 WORLD CLOCKS (SHARED TRACKS)",
    "legacy_count": 1,
    "locations": {
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 7,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
@@ -2251,7 +2255,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "systems/_architecture/complete_systems_reference.md": 7,
@@ -2382,7 +2386,7 @@
   "Crown": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 114,
+   "file_count": 115,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
@@ -2391,6 +2395,7 @@
     "godot/data_serialization_spec.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 7,
     "proposals/grounded_event_card_deck_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 21,
     "systems/_architecture/campaign_modes_v30.md": 2,
@@ -2596,9 +2601,10 @@
   "Defense": {
    "ambiguous": false,
    "category": "settlement_stat",
-   "file_count": 23,
+   "file_count": 24,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 5,
     "systems/_architecture/derived_stats_v30.md": 5,
     "systems/_architecture/derived_stats_v30_index.md": 2,
@@ -2773,7 +2779,7 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 11,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -4487,13 +4493,14 @@
   "Hafenmark": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 95,
+   "file_count": 96,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
     "canon/03_canonical_timeline.md": 5,
     "engine/mc_v18_walkthrough.md": 3,
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/canonical_registry.md": 4,
     "systems/_architecture/complete_systems_reference.md": 4,
@@ -4603,6 +4610,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -5149,7 +5157,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Social and cultural reach. Cannot drop below 1 (faction remains extant).",
-   "file_count": 78,
+   "file_count": 79,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -5159,6 +5167,7 @@
     "godot/godot_conversion_strategy_v1.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 7,
@@ -5485,7 +5494,7 @@
     "engine/mc_v18_walkthrough.md": 4,
     "godot/README.md": 3,
     "godot/godot_conversion_strategy_v1.md": 37,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 33,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 50,
     "proposals/canonical_nomenclature_v1.md": 5,
     "proposals/grounded_event_card_deck_v1.md": 14,
     "proposals/repo-reorganization-v1.md": 3,
@@ -6019,11 +6028,12 @@
   "Loyalty": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 25,
+   "file_count": 26,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 4,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/complete_systems_reference.md": 9,
@@ -6072,12 +6082,13 @@
    ],
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 73,
+   "file_count": 74,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 3,
     "godot/data_serialization_spec.md": 1,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/campaign_architecture_v30.md": 12,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/complete_systems_reference.md": 5,
@@ -6163,6 +6174,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "ui",
@@ -6277,7 +6289,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 101,
+   "file_count": 102,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6288,6 +6300,7 @@
     "godot/godot_conversion_strategy_v1.md": 8,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "proposals/grounded_event_card_deck_v1.md": 26,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
@@ -6937,13 +6950,14 @@
   "Order": {
    "ambiguous": true,
    "category": "settlement_stat",
-   "file_count": 85,
+   "file_count": 86,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/canonical_nomenclature_v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 3,
@@ -7206,13 +7220,14 @@
   "PI": {
    "ambiguous": false,
    "category": "clock",
-   "file_count": 32,
+   "file_count": 33,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/data_serialization_spec.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/conflict_architecture_proposal.md": 3,
     "systems/_architecture/early_game_ignition_analysis.md": 3,
     "systems/_architecture/generational_transition_v30.md": 1,
@@ -7255,6 +7270,7 @@
     "godot",
     "npcs",
     "overview",
+    "proposals",
     "ui",
     "victory",
     "world"
@@ -7695,7 +7711,7 @@
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
     "proposals/2026-08-16-system-scores-census.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 25,
     "proposals/social_contest_consolidation_integration_v1.md": 9,
@@ -9073,7 +9089,7 @@
     "godot/godot_architecture_specification.md": 5,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
     "proposals/2026-08-16-system-scores-census.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
     "systems/_architecture/auto_manual_resolution_duality_v1.md": 1,
@@ -9250,7 +9266,7 @@
    "ambiguous": false,
    "category": "mechanic",
    "definition": "Reputation track. Range 0\u201310 (exception to 1\u20137 scale). No in-game benefit above 7; 10 is cosmetic maximum.",
-   "file_count": 59,
+   "file_count": 60,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -9261,6 +9277,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 12,
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -10182,7 +10199,7 @@
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 18,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
     "proposals/weapon_physics_and_concentration_model.md": 1,
@@ -10369,13 +10386,14 @@
   "Varfell": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 95,
+   "file_count": 96,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
     "canon/03_canonical_timeline.md": 6,
     "engine/mc_v18_walkthrough.md": 4,
     "godot/data_serialization_spec.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 8,
     "systems/_architecture/canonical_registry.md": 4,
     "systems/_architecture/complete_systems_reference.md": 4,
@@ -10484,6 +10502,7 @@
     "mass_battle",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "social_contest",
     "threadwork",
@@ -16705,15 +16724,17 @@
      "purpose": "Cross-faction challengers (e.g., Hafenmark claiming Crown per baralta_crown_claim_v30 \u00a72) require Mandate \u2265 3 in their home faction plus a structural claim mechanism (Deed-Claim, Bloodline, institutional precedent)."
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/social_contest/social_contest_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
+    "proposals",
     "social_contest"
    ],
    "term": "baralta_crown_claim"
@@ -17595,9 +17616,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `systems/ui/_identifier_census.yaml` (generated, `tools/build_identifier_census.py`) reports 28 identifiers as `disposition: BUILT` against the UI docs' vocabulary, but every `built_in:` pointer for those rows resolves into **other** subsystems' code (e.g. `systems/combat/combat_engine_v1/combatant.py`, `systems/settlements/sim/settlement.py`, `systems/fac"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 7,
     "systems/_architecture/key_substrate_v30.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -17613,6 +17635,7 @@
     "_architecture",
     "articulation",
     "factions",
+    "proposals",
     "ui"
    ],
    "term": "belief_revised"
@@ -22033,7 +22056,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 77,
     "proposals/2026-08-16-system-scores-census.md": 6,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -22827,9 +22850,10 @@
      "purpose": "'completion_effect': project.completion_effect.serialize(),"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 2
    },
@@ -22838,7 +22862,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "completion_effect"
   },
@@ -23842,7 +23867,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
@@ -25647,9 +25672,10 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure E emits scene.gossip on cumulative_drift > 0.5 | \u00a76.3"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/factions/political_dynamics_keys_migration_v30.md": 10
    },
@@ -25658,7 +25684,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "cumulative_drift"
   },
@@ -29079,9 +29106,10 @@
      "purpose": "`aligned_categories` and `contradicted_categories` reference **PP-687 da_outcome subtypes** (per `key_type_registry_v30.md` \u00a73): `da.public_governance`, `da.covert_betrayal`, `da.diplomatic_alliance`, `da.antinomian_action`, `da.economic_intervention`."
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/faction_behavior_v30.md": 1,
@@ -29093,7 +29121,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "economic_intervention"
   },
@@ -29875,7 +29904,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/propagation_spec_v1.md": 6,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1
@@ -33066,7 +33095,7 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "proposals/2026-08-16-system-scores-census.md": 2,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 64,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 70,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -36767,10 +36796,11 @@
      "purpose": "[\u00a714.1 \u00b7 The loop, mapped to module contracts (owner \u00b7 resolver \u00b7 Keys)] Loop arc | Owning module (`module_contracts.yaml`) | Resolver (fixed enum) | Keys IN \u2192 OUT (registry vocabulary) | Compliance :: Standing bridge (\u00a75) | `faction_politics` | `deterministic_accounting` | IN: consumes the `da_outcome.*` / `scene.*_resolved` Key (carrying `resolution_quality` on its impact_vector) \u2192 OUT: **`state"
     }
    },
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 5,
     "systems/_architecture/key_echo_armature_v1.md": 3,
@@ -37100,7 +37130,7 @@
   "infrastructure": {
    "ambiguous": false,
    "definition": "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending.",
-   "file_count": 54,
+   "file_count": 55,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 3,
@@ -37108,6 +37138,7 @@
     "engine/sim_reference_README.md": 1,
     "godot/godot_architecture_specification.md": 1,
     "godot/implementation_sequence.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 4,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
@@ -37365,16 +37396,18 @@
      "purpose": "outcome # initiator_win | target_win | compromise | stalemate"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "initiator_win"
   },
@@ -38012,7 +38045,7 @@
    "file_count": 5,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 10,
     "systems/_architecture/key_echo_armature_v1.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -42929,16 +42962,18 @@
      "purpose": "new_belief # short string"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "new_belief"
   },
@@ -43640,7 +43675,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 5,
@@ -43997,7 +44032,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/npcs/npcs_flow_skeleton_v1.md": 5
@@ -44237,7 +44272,7 @@
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-16-system-scores-census.md": 2,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
@@ -44942,9 +44977,10 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: declared, unimplemented | `systems/factions` (npc_behavior contract's `consumes`/`emits` Key edges: `scene.gossip`, `scene.witness`, `state.opinion_revised`, etc.) | contract declares edges against a `sim_module: none` \u2014 see \u00a77 gap 3 | `references/module_contracts.yaml:126 npc_behavior` / `references/module_contracts.yaml:162 npc_behavior`"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3,
     "systems/factions/political_dynamics_keys_migration_v30.md": 10,
@@ -44956,7 +44992,8 @@
    "subsystems": [
     "_architecture",
     "factions",
-    "npcs"
+    "npcs",
+    "proposals"
    ],
    "term": "opinion_revised"
   },
@@ -47981,9 +48018,10 @@
      "purpose": "[7. Traced gaps] Gap | Evidence anchor :: `peninsular_strain`'s contract declares `env.crisis` among its emits, also emitted by `scenario_authoring`; no `consumes:` row anywhere in the file carries `env.crisis`, unlike its three sibling `env.*` types, which each have a `from:` consumer row \u2014 a dangling emit. Worse: none of `peninsular_strain`'s four declared emits (`env.crisis`, `env.disaster`, `e"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 1
@@ -47993,7 +48031,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "overview"
+    "overview",
+    "proposals"
    ],
    "term": "population_change"
   },
@@ -48489,9 +48528,10 @@
      "purpose": "'prior_belief': resolution.target_belief.value_before,"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/factions/political_dynamics_keys_migration_v30.md": 1
    },
@@ -48500,7 +48540,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "prior_belief"
   },
@@ -48972,9 +49013,10 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure C emits state.project_completed on completion | \u00a74.3"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 5
@@ -48984,7 +49026,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "project_completed"
   },
@@ -49048,9 +49091,10 @@
      "purpose": "[\u00a710 Stage 1 Acceptance Criteria] Criterion | Met by :: Procedure C emits state.project_failed on stall \u2265 8 | \u00a74.2"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2,
     "systems/factions/political_dynamics_keys_migration_v30.md": 3
@@ -49060,7 +49104,8 @@
    ],
    "subsystems": [
     "_architecture",
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "project_failed"
   },
@@ -55014,7 +55059,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 3,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/governance_ripple_substrate_v1.md": 5,
@@ -55135,7 +55180,7 @@
    "file_count": 7,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_substrate_v30.md": 3,
     "systems/_architecture/key_type_registry_v30.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 1,
@@ -55167,16 +55212,18 @@
      "purpose": "scar_count_after"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "scar_count_after"
   },
@@ -55192,16 +55239,18 @@
      "purpose": "scar_count_before"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "scar_count_before"
   },
@@ -57585,9 +57634,10 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `mechanical.settlement_captured` | mechanical_event | settlement_layer g_def0 (undefended auto-capture) | EP-4, C-MBSE-9"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2
    },
@@ -57595,7 +57645,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "settlement_captured"
   },
@@ -57655,7 +57706,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -57832,7 +57883,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "systems/_architecture/conflict_architecture_proposal.md": 1,
@@ -57962,9 +58013,10 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `state.settlement_revolt` | state_transition | settlement_layer g_ord0 (Order\u21920 revolt) | EP-4, C-MBSE-9"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 2
    },
@@ -57972,7 +58024,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "settlement_revolt"
   },
@@ -62785,16 +62838,18 @@
      "purpose": "outcome # initiator_win | target_win | compromise | stalemate"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "target_win"
   },
@@ -64346,9 +64401,10 @@
      "purpose": "[\u00a73 \u00b7 Registry deltas (via the \u00a710 Extension Process; PROPOSED, Class-B vetting per PP-674 before filing)] Candidate type | Family | Emitter \u00b7 transition site | finding_basis :: `mechanical.theocracy_unification_declared` | mechanical_event | ci_political CI=100 | EP-5"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 3
    },
@@ -64356,7 +64412,8 @@
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "theocracy_unification_declared"
   },
@@ -65223,7 +65280,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 3,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 9
    },

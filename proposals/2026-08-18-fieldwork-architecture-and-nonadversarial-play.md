@@ -109,8 +109,7 @@ makes a generated case *playable*:
 > **a solvability invariant on the generator** — for a case to be admissible, there must exist a
 > reachable chain of Keys from the investigator's starting visibility to the true assertion.
 
-This is the single most important new requirement in this plan, and it is the one piece that is
-falsifiable by a generative test rather than by review (§10).
+*[CORRECTED 2026-08-18 — §11.1: this is NOT a "new requirement". Jordan ruled that scripting narrative hooks and sequences is allowed, and `baralta_crown_claim_v30`'s condition table is exactly this object: a scripted conjunction of world facts gating an emergent outcome. Read it as **generation-time precondition + emergent erosion**, never as a constraint maintained against the sim — that half would be scripting an arc.]*
 
 ## §2.4 P4 — THE TIME / ATTRITION PROBLEM (what makes *where to look* matter?)
 
@@ -278,8 +277,7 @@ that nothing consumes.** The only `scene_type` literal produced anywhere in `eng
 is `"contest"` (`scene_dispatch.py:86`).
 
 So the fieldwork pipeline is not missing a dispatcher, a queue, a scene type or a call site. It is
-missing **an entry in a set, and a resolver behind the seam that is already cut for it.** This is
-the strongest possible argument for the wiring-not-redesign posture.
+missing **an entry in a set, and a resolver behind the seam that is already cut for it.** *[CORRECTED 2026-08-18 — §11.4 C7: this framing is overweighted. Adding `"fieldwork"` to `evaluable` is necessary and nowhere near sufficient — it also needs trigger definitions, a resolver and state homes. It is a **seam**, not a gap, and a reader could otherwise conclude the system is nearly done.]*
 
 ### §4b.2 Fieldwork's prose degree tables encode the RULED-OUT ladder
 
@@ -413,7 +411,7 @@ semantics becomes model #4.
 
 ### §5.4 What fieldwork does NOT get
 
-- No `Clue` / `Lead` / `Evidence` / `Rumour` class — a clue is a Key (§3, §4). A parallel clue store forks save/replay ("save = serialize the log") **and** the causal graph. The Evidence *Track* is a bounded counter (a **clock**, per the registry); each *piece* of evidence is a Key; the Journal is a read.
+- No `Clue` / `Lead` / `Evidence` / `Rumour` class — a clue is a Key (§3, §4). *[AMENDED 2026-08-18 — §11.2: still no clue class, but a **belief layer is required and is not a Key**. A Key is an immutable event; much evidence is a mutable, per-agent proposition, and `state.belief_revised` already exists as its own type.]* A parallel clue store forks save/replay ("save = serialize the log") **and** the causal graph. The Evidence *Track* is a bounded counter (a **clock**, per the registry); each *piece* of evidence is a Key; the Journal is a read.
 - No second Interview object — ED-FI-0004 already ruled the Dialogue Lattice the single home.
 - No second NPC-response engine — the Response Matrix's five filters must each **read the owning module's state** (`conviction.py`, NPE genome, Disposition, contest rhetoric axes), not hold copies.
 - No settlement writes — fieldwork emitting `scene.poi_discovered` and `settlement_layer` applying the bonus is correct; `settlement.prosperity += 1` inside a fieldwork resolver is the holonic-doctrine §2.1 violation outright.
@@ -560,8 +558,7 @@ Per the steering instruction, everything else is wiring. The new set is four ite
 
 Plus three **architectural** additions that are new as *code* but not as *design intent*:
 `EvidenceView` (P-08 made executable), `Corroboration` (three same-question sites collapsed to one),
-and the **solvability invariant** (§2.3 — the only genuinely new *idea* in this document, borrowed
-from Blade Runner '97 / Shadows of Doubt, and the one the no-GM constraint forces).
+and the solvability precondition (§2.3). *[CORRECTED 2026-08-18 — §11.1: this was claimed as "the only genuinely new idea". **Withdrawn.** It is this repo's existing hook grammar applied to evidence, and the pattern has been in the tree since 2026-04-11. The genuinely absent primitive is instead the **belief layer** of §11.2.]*
 
 ---
 
@@ -605,3 +602,300 @@ differs by who holds it, or a partial reading that upgrades — then a Key (immu
 is the wrong carrier and §5.4's "no Clue class" collapses. The falsifier is cheap: try to express
 `fieldwork_v30` §4.3's reliability tags and the P-08 half-value rule purely as Key payload +
 `EvidenceView` filtering. **That test has not been run**, and it should be S2's first act.
+
+---
+
+# §11 RECONCILIATION — the adversarial pass, folded in
+
+Added 2026-08-18, same day. §1–§10 were critiqued adversarially; **one objection was overturned by
+a Jordan ruling, two were sustained and change the design, and the rest are accepted as
+corrections.** Per §0's rule that producing and checking are different jobs, this section is the
+checking half — kept as a visible reconciliation rather than a silent rewrite, so the next reader
+sees what changed and why.
+
+## §11.1 JORDAN'S RULING — scripting hooks and sequences is ALLOWED; scripting arcs is not
+
+> **"We can script narrative hooks and sequences so long as we don't script entire arcs.
+> We've done it with the coup counter, for example."** — Jordan, 2026-08-18
+
+**This overturns the critique's objection to §2.3, and it is load-bearing on the whole design.** The
+tree carries two worked precedents, and they draw the line precisely:
+
+| Precedent | What IS scripted | What is NOT scripted |
+|---|---|---|
+| **Löwenritter coup / graduated autonomy** (`systems/factions/factions_personal_v30_infill.md:74-77`; track per ED-781/ED-767) | A private counter that **never decrements** (:76); a **guaranteed** fire at threshold — "when it reaches 3, the Split fires at the next seasonal accounting" (:74); a fixed consequence sequence — Martial Law on all Crown-held territories simultaneously (:77) | *When* it trips, *who* pushed it there, what the player does about it, and everything downstream. The trigger is emergent state (Crown Stability, Ehrenwall's Disposition, accumulated failure marks) |
+| **Royal Assassination as Fuse** (`systems/_architecture/conflict_architecture_proposal.md:85-89`, **CANONICAL**) | One per campaign; fires at S8+; **"succeeds when it fires — no attempt/failure variance"**; target fixed at game start | The season within S8–S12; the target (deck draw / randomized); whether the player detects and averts it; the entire consequence arc per target (:91+) |
+| **Baralta's Crown Claim** (`systems/factions/baralta_crown_claim_v30.md:17, :26-40`; Status: DESIGN, ED-408) | A scripted **conjunction of world facts** that must obtain: Crown eliminated (Mandate 0 + Loyalty 0) **or** Royal Deposition (PI ≥ 5 + Church Mandate ≥ 5 + Crown Mandate ≤ 1 + 2 Standing tokens); then per-claimant conditions — *Baralta alive + Hafenmark Mandate ≥ 4*, *Löwenritter Autonomy ≥ 3*, *CI ≥ 40* | **Whether any of those facts ever obtain**, by what route, who else qualifies, and who wins the resulting Succession Contest |
+
+And the same document draws the boundary explicitly at the *arc* level: emergent narrative comes
+from fragmentation checks, bishop appointments and black-market emergence — **"all system-driven,
+no scripting"** (:156). So `conflict_architecture_proposal.md` is itself the worked example of the
+ruling: a scripted fuse sitting inside an unscripted narrative economy.
+
+### The Crown Claim generalizes it — and dissolves the invariant into existing grammar
+
+Jordan's third precedent is the decisive one: *"there are going to be certain worldly facts that
+she must navigate in order for her Crown Claim to occur."* Read the condition column above — the
+hook **is** a scripted conjunction of world facts, and everything about whether those facts obtain
+is emergent. Nothing scripts the arc; the script is the *predicate*.
+
+That is the same object as a case's solvability precondition, and it means:
+
+> **A case is a scripted conjunction of world facts that must obtain for a finding to be reachable
+> — expressed exactly the way `baralta_crown_claim_v30` expresses a claim's conditions.**
+
+So the "solvability invariant" is not a new mechanism, not a constraint on the sim, and not an
+import from Blade Runner '97. **It is this repo's existing hook grammar, applied to evidence.**
+§8's "genuinely new" list loses another entry: the invariant is a *condition table*, and the tree
+has had the pattern since 2026-04-11.
+
+**Note the assassination fuse is already an investigation hook** — *"Player can investigate (costs
+card slots). If the player identifies and stops the plot: assassination averted, but the
+investigation itself reveals faction-level tensions and NPC allegiances"* (:89). Fieldwork does not
+need to invent its hook grammar. **It has a CANONICAL one, and it is unbuilt.**
+
+### What this does to the solvability invariant (§2.3, §8)
+
+The critique argued the invariant was forbidden scripting, because the world sim can destroy an
+evidence chain — a witness dies in a mass battle, a settlement is sacked — so it could only be held
+by constraining the sim, which is scripting drift at world scale.
+
+**Half of that was right and the conclusion was wrong.** Under the ruling:
+
+- **Guaranteeing a case is solvable AT GENERATION is a scripted hook** — the same class of object as "the assassination succeeds when it fires". **Legitimate.**
+- **Maintaining solvability against the sim would be a scripted arc** — constraining who may die so the chain survives. **Forbidden**, and the critique was right about that half.
+
+So the invariant survives in a better form than either draft had:
+
+> **Generate solvable, let the world erode it, and make the erosion legible.** Solvability is a
+> generation-time precondition, never an ongoing constraint. A witness who dies before you reach
+> them is not a bug in the invariant — it is the Pathologic texture the game already wants, and it
+> is exactly what makes `finding: inconclusive` a real outcome rather than a consolation.
+
+Erosion is then *content*, and it is measurable: the fraction of generated cases still solvable at
+season N is telemetry on how hard the world bites, not a gate. **§8's "the only genuinely new idea"
+claim is withdrawn** — the invariant is not new, it is the assassination fuse applied to evidence.
+
+## §11.2 SUSTAINED — a Key is an event; evidence is often a proposition
+
+The critique's strongest hit, and it stands. `Key` is an **event**: `emitted_at`, `causes`,
+immutable once appended. Much evidence is a **proposition** — *"the steward was in Varfell that
+night"* — which is atemporal, can be **false**, and is **held at different confidence by different
+agents**. Collapsing the two means false belief has no clean home, two characters cannot hold
+contradictory readings of one artefact without minting divergent Keys that pollute the log with
+non-events, and confidence cannot change without a new event.
+
+**The tree already answered this and §5.4 walked over it: `state.belief_revised` exists as its own
+type.** So the corrected architecture is two layers, not one:
+
+| Layer | Carrier | Mutable? | Owner |
+|---|---|---|---|
+| **Observation** — *what happened, who saw it* | `Key` + `scene.witness` edges + `causes` ancestry | no (append-only) | `engine/substrate/keys.py` |
+| **Belief** — *what an agent holds true, at what confidence* | per-agent propositions, revised via `state.belief_revised` | **yes** | new, and it is the real absent primitive |
+
+`EvidenceView` (§5.2) is therefore **not** the whole answer — it is the *observation* filter, and a
+belief layer sits on top of it. §5.4's flat "no Clue class" is **amended**: no clue class, but a
+**proposition** record is required and is not a Key.
+
+**Consequence for §7: S2 is re-ordered.** Its own falsifier — can `fieldwork_v30` §4.3's
+reliability tags and the P-08 half-value rule be expressed as Key payload + view filtering? — must
+run **before** S2 builds, not as S2's first act. The answer is now expected to be *no*, which is
+why the belief layer is named here rather than discovered mid-build.
+
+## §11.3 SUSTAINED — the information economy already half-exists, and §5 builds pipes past it
+
+`module_contracts.yaml:192-195` declares `npc_behavior` as emitter of **`state.opinion_revised`**
+(per drift threshold), **`scene.interaction`** (per ambient pair) and **`scene.gossip`**
+(cumulative_drift > 0.5). The NPE that drives them is **built and season-wired**
+(`systems/world/sim/npe.py`, called from `systems/overview/sim/accounting.py`).
+
+That reframes the subsystem's thesis. Investigation in Valoria is not *"find the authored clue"* —
+it is **"tap a rumour network that runs whether or not you look, while your own tapping leaks back
+out through Exposure."** Information propagates on its own; the investigator intercepts, and is
+intercepted.
+
+⚠ **Stated at its true strength, not higher:** those three types are **contract-declared and not
+implemented** — no `.py` in the tree emits a gossip or opinion Key today. This is a
+designed-and-half-built opportunity, not a running one. Overstating it would be the same defect
+this document was written to avoid.
+
+**Consequence for §5:** the decomposition is sound but mis-centred. The organising loops are:
+
+```
+   NPE drift ──► scene.gossip / state.opinion_revised ──► EvidenceView ──► belief layer
+        ▲                                                                      │
+        │                                                                      ▼
+   Exposure ◄──── what you spend to learn ◄──── investigation actions ──► Finding
+                                                                              │
+                        ┌─────────────────────────────────────────────────────┤
+                        ▼                                                     ▼
+        contest Dossier/EvidenceItem                          settlements ledger.py Leverage
+        (dice for the argument)                               ("a hook the player holds",
+                                                               durable across succession)
+```
+
+**The central player decision is "what do you expose in order to learn?"** — because Cover/Exposure
+already couples investigation to Church attention and faction notice. §5.1's "allocate pool across
+sites" is the thin version of this and should be subordinate to it.
+
+## §11.4 ACCEPTED CORRECTIONS
+
+| # | Correction | Where it lands |
+|---|---|---|
+| C4 | Architecturally rich, gameplay-thin — no decision texture specified | §11.3's Exposure loop is the answer; §5.1 demoted |
+| C5 | Cross-system coupling asserted, not designed. `ledger.py`'s **Leverage** is literally *"a hook the player holds (e.g. konrad-corrupt)"* — investigation is the **acquisition path for a resource factions already spend**. Contest's `Dossier`/`EvidenceItem` makes investigate→dossier→contest a **complete loop already half-built**. **Combat coupling is entirely absent** — whether you know the garrison strength decides whether combat happens on your terms | §11.3 diagram; combat coupling filed as open |
+| C6 | Personal/scene-scoped plan wearing a multi-scale label. `Intelligence Holdings` is a registered faction-side derived value (`descriptor_registry.yaml:192`); BG Survey is an existing faction action. **A spy network and a personal investigation should be the same mechanic at two scales** — the actual multi-scale claim | Filed as the strongest unexplored direction |
+| C7 | "The gap is one line" overweighted. Adding `"fieldwork"` to `evaluable` is **necessary and nowhere near sufficient** — it needs trigger definitions, a resolver, and state homes. It is a **seam**, not a gap | §4b.1's framing corrected here |
+| C9 | Precedent selection biased toward **authored, finite, single-case** mysteries; the genuinely applicable generative precedents (Shadows of Doubt, Blade Runner '97, Dwarf Fortress) got the least detail and the only `[MED]` tag | §2 acknowledged as centre-of-gravity-wrong for a campaign game |
+| C10 | Seven stages and three rulings before one playable scene, in a subsystem stubbed since 2026-05-17. **A deliberately ugly vertical slice** — one trigger, one site, one roll, one Key, one consequence — de-risks more than S0's contract authoring, and the assassination fuse (§11.1) is the ready-made trigger | Recommended as the revised S0 |
+
+## §11.5 REVISED SEQUENCE — what actually changes in §7
+
+1. **New S0: the vertical slice.** Take the CANONICAL assassination fuse as the hook. One trigger, one site, one roll through `degree_from_net`, one Key, one consequence into `ledger.py` as Leverage. Ugly, end-to-end, playable. It answers more design questions than contract authoring does, and it exercises the seam that `scene_dispatch.py:344` already cut.
+2. **S2 is gated by its own falsifier** (§11.2), and the belief layer is expected to be needed.
+3. **Solvability is a generation-time precondition with erosion telemetry** (§11.1), not a maintained constraint.
+4. Everything else in §7 stands.
+
+## §11.6 WHAT WOULD FALSIFY THE RECONCILIATION
+
+- **§11.1** — if the coup counter and assassination fuse turn out to be `PROPOSED` rather than canonical, the ruling's in-tree support weakens. **Checked:** `conflict_architecture_proposal.md:2` reads `## Status: CANONICAL`, `:4` "CANON — approved by Jordan"; the Löwenritter track is live in `factions_personal_v30*`. ⚠ **`baralta_crown_claim_v30.md:6` is `## Status: DESIGN (editorial decision, flagged for review)` under ED-408, NOT canonical** — so it demonstrates the *grammar* and does not by itself ratify it. Two canonical precedents plus one design-tier one; the ruling holds on the first two.
+- **§11.2** — falsified if `state.belief_revised`'s registry entry turns out to be an *event* record with no per-agent confidence semantics, in which case the belief layer needs authoring rather than adopting. **Not checked** — read the entry before building S2.
+- **§11.3** — falsified if a gossip/opinion emitter exists under a name my grep missed, which would upgrade the opportunity from half-built to running. **Grep run**, `.py` only; a GDScript or data-driven emitter would not have been caught.
+
+## §11.7 THE UNIFICATION — worldly facts, and the two ways they perdure
+
+Jordan, 2026-08-18, extending the ruling three times in one sitting:
+
+> *"a drought within a territory causing crops to fail for a settlement, which causes food supply
+> and taxation issues offset by the Church buying favour in the area through its donations which in
+> turn allows it to build more infrastructure. All of these involve keys and conditions to be met
+> for worldly facts that propagate … players, characters and factions [can] see impacts in the
+> settlement and at the level of governance and parliament, argue and present what to do about the
+> current state of things and why. **It's just composites of worldly facts.**"*
+>
+> *"Church Influence hitting a certain point to enable attempted territory seizures and a pivot to
+> a theocratic military campaign is another major scripted moment."*
+>
+> *"Maybe the Church donates, maybe it doesn't. Maybe a duchy steps in. Maybe there's just famine.
+> Who's to say? But **the facts emerge and perdure in the world whether temporally and materially
+> or in memory later.**"*
+
+### The second example is already built, and it settles the pattern's status
+
+`mechanical.theocracy_unification_declared` is a **registered Key type** whose description reads:
+*"CI reaches 100 — Church publicly declares Papal Sovereignty and triggers the one-shot Mass
+Seizure on every territory with Church buildings (ci_political_v30 §2.2)."* A threshold over
+emergent world state, a guaranteed consequence, no roll. The registry note even records that it was
+registered **once** to close two silent emitters "rather than duplicating a type per module" —
+single-owner discipline applied to a scripted hook.
+
+And it is not exceptional. The same shape recurs across the roster:
+
+| Registered type | Predicate over world state | Guaranteed consequence |
+|---|---|---|
+| `mechanical.theocracy_unification_declared` | CI reaches 100 | Papal Sovereignty + one-shot Mass Seizure on every Church-building territory |
+| `state.settlement_revolt` | Settlement Order reaches 0 | Local revolt; governor expelled unless a garrison is present |
+| `mechanical.settlement_captured` | Defense 0, no garrison, hostile military entry | **Auto-captured — no roll** |
+
+**So "scripted hook" is not a concession the architecture has to make room for. It is already the
+tree's dominant idiom, registered in the Key type roster, and the fieldwork plan should have been
+written in it from the start.**
+
+### The unification
+
+Putting the three statements together with the substrate as read:
+
+> **A worldly fact is a Key.** A **scripted hook is a predicate over composites of worldly facts** —
+> `baralta_crown_claim`'s condition column, `CI ≥ 100`, `Order = 0`, `Autonomy = 3`.
+> **Nothing scripts the response.** Whether the Church donates, a duchy steps in, or there is simply
+> famine is faction logic weighing its own position — emergent, per Jordan's *"who's to say?"*
+
+And the last clause is the one that closes the design, because **the schema already distinguishes
+the two modes of perdurance Jordan names**:
+
+| Perdures… | Carrier in the tree | Property |
+|---|---|---|
+| **temporally and materially** | the `KeyLog` itself + the state Keys wrote — `Key.permanence` ∈ `transient / persistent / indelible`, `Key.time_horizon` ∈ `immediate / near / far` | complete, append-only, indifferent to who saw it |
+| **in memory later** | per-agent belief — `state.belief_revised`, the `npc_memory` module, `Key.visibility`, `scene.witness` edges | **partial, revisable, and can be wrong** |
+
+**The gap between those two columns is the investigation surface.** That is the thesis this document
+lacked and now has:
+
+> **Fieldwork is the mechanic by which memory is reconciled against the material record — and P-08's
+> epistemological barrier is precisely the guarantee that the two never fully converge.**
+
+### What this does to the plan
+
+1. **Fieldwork stops being a subsystem and becomes the epistemic layer of the whole game.** The same predicate language serves four consumers that today each roll their own: hooks fire on it, investigations discover whether it holds *and to whom*, **parliament arguments cite it**, and faction actions gate on it. Jordan's *"argue and present what to do about the current state of things and why"* is a social contest whose claims are world-fact predicates — which is exactly why contest already has `Dossier`/`EvidenceItem`.
+2. **§11.2's belief layer is promoted from a correction to the centrepiece.** It is the "memory" column, and it is the one genuinely absent primitive in the whole design.
+3. **The Church-donation branch is the worked test of "no scripted arc":** the *predicate* (drought → failed harvest → shortfall) is scripted; the *response* (Church donates / duchy intervenes / famine) is three factions weighing an emergent state. If a build ever hardcodes which one happens, that is the scripting-drift line being crossed, and it is now testable.
+
+### ⚠ A verified hole in Jordan's own example chain
+
+The drought chain is **typed at both ends and hollow in the middle.** `env.disaster` covers blight
+and is consumed by `settlement_layer`; `env.population_change` is emitted by it. But:
+
+- **`settlement_economy` has `doc: null`, an empty `emits:` list, and an empty `state:` list** — it consumes `da.economic_intervention` and `env.population_change` and produces nothing.
+- **There is no food, harvest, granary or taxation code anywhere** in `systems/` or `engine/` (grep, `.py`).
+
+So *drought → crop failure* is expressible today and *crop failure → food supply → taxation* is
+not. That is a `settlement_economy` authoring gap (SE lane), not a fieldwork one — filed here
+because it is load-bearing on the example Jordan chose, and because §6's "no `doc: null`" gate
+would catch it the moment anyone tried to wire the chain.
+
+## §11.8 ONE RESOLUTION GRAMMAR — verified, with the gap that stops it being one today
+
+> *"Field investigations give us a framework to explore narrative moments and set arcs in motion,
+> and their logic is scalable because of how our key schema works: a solution to a mystery is the
+> same as the conclusion to a negotiation is the same as a debate in parliament is the same as
+> developing a scar against an actor is the same as challenging a belief or meeting a goal: it's
+> all about keys and how they log worldly facts, interactions and outcomes."* — Jordan, 2026-08-18
+
+**Checked against the registry. The claim is right about the envelope and the tree does not yet
+honour it in the payload** — which is the most actionable finding in this document.
+
+### What is already one thing (the envelope)
+
+Every terminal outcome Jordan names is a `Key`, and they share the whole envelope: `targets[]` with
+a `role` from the canonical five and an `impact_vector` over the canonical four axes, plus
+`visibility`, `permanence`, `time_horizon`, `causes` and `scale_signature`. **That is the scalable
+grammar, and it is real** — a mystery's solution and a parliamentary vote genuinely propagate
+through identical machinery.
+
+### What is five things (the payload)
+
+| Outcome Jordan names | Registered type | Its "how did it come out" field |
+|---|---|---|
+| solution to a mystery | `scene.investigation_resolved` | `finding: exonerated \| guilty \| inconclusive` |
+| conclusion to a negotiation / debate in parliament | `scene.contest_resolved` | `outcome: initiator_win \| target_win \| compromise \| stalemate` |
+| developing a scar against an actor | `state.scar_acquired` | `scar_count_before` / `scar_count_after` |
+| challenging a belief | `state.belief_revised` | `prior_belief` / `new_belief` — **free strings** |
+| meeting a goal | `state.project_completed` / `state.project_failed` | `completion_effect` |
+
+**Five bespoke vocabularies for one concept, and not one of them is the degree ladder.** The tree
+single-owned *resolution* in `degree_from_net` (Jordan, 2026-08-14) and never single-owned the
+*record of a resolution*. So the outcomes propagate through one envelope and cannot be compared,
+aggregated or reasoned over as a class — which is exactly what "argue and present what to do about
+the current state of things" (§11.7) requires.
+
+Two consequences fall straight out:
+
+1. **The unifying move is a shared outcome shape on the payload** — a `resolution` field carrying
+   the `Degree` the ladder already produces, plus a valence, with each type's existing field kept
+   as its domain-specific detail. `scene.investigation_resolved`'s three-valued
+   `exonerated / guilty / inconclusive` is the closest existing thing to the general shape, and
+   `inconclusive` is the member the other four mostly lack.
+2. **`state.belief_revised`'s free-string payload is a direct blocker for §11.2's belief layer.**
+   A belief layer needs machine-comparable propositions — you cannot corroborate, contradict or
+   cite `prior_belief: "short string"`. Note also its description reads *"Player Belief revision per
+   fieldwork_socializing §5.5"*, which is in-tree evidence that the standing
+   `[OPEN — Jordan]` attribution on this type resolves **toward fieldwork** (§9 Q3's neighbour).
+
+This also sharpens the earlier social-contest finding — that lane's audit found *"three resolution
+models under one name"* (`HANDOFF_SC.md`). Corpus-wide the number is larger, and the fieldwork lane
+is where it becomes load-bearing, because investigation is the subsystem whose whole job is to
+produce comparable claims about the world.
+
+**Filed, not fixed:** unifying the outcome payload is a cross-cutting IN/SC/FI change touching five
+registered types and their consumers. It is out of scope for an FI-lane proposal to execute, and it
+is the single highest-leverage thing this session found.
