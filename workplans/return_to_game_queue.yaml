@@ -306,6 +306,22 @@ steps:
          the worktree only removes the precondition. Every driver run recreates it, so the next
          executor that follows pre_commit_checklist:517 with a run worktree still on disk gets the
          same unattributable red. Entry stays `blocked` on the SELF_EXCLUDE change."
+      - >
+         MECHANISM PROVEN DIRECTLY, AND IT HAS NOW FIRED THREE TIMES IN ONE SESSION (the S0, S1 and S2
+         driver runs). The earlier evidence was a correlation -- remove the worktree, the red goes away.
+         This is the mechanism itself: the assertion message names the walked paths, and they are the
+         worktree copies of the two SELF_EXCLUDE entries --
+         `.claude/worktrees/<run>/tests/valoria/test_ci_common_primitives.py` and
+         `.claude/worktrees/<run>/tools/ci_common.py`. SELF_EXCLUDE matches by exact relative path, so a
+         copy at a different path is not excluded and matches its own pattern. Three firings in one
+         session, one per driver run, makes the recurrence rate ONE PER STEP EXECUTED: this is not an
+         edge case, it is the normal condition of running this program.
+      - >
+         AND THE WORKAROUND IS NOT ALWAYS AVAILABLE: while its run is in flight the worktree is `locked`
+         (git worktree list shows the flag), so an executor that runs the checklist DURING a step cannot
+         remove it and must attribute the red by hand. That is the case for fixing SELF_EXCLUDE rather
+         than documenting the workaround.
+    critic_verdict: null
 
   - id: S0-R6
     title: "single_owner_check CI-wiring debt is already tracked in three places -- cite, do not open a fourth"

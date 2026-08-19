@@ -54,25 +54,53 @@ and the July narrative is in `git log HANDOFF.md`._
 
 ### ▶ RUN THIS (2026-08-19) — `workplans/return_to_game_queue.yaml`
 
-**The Return-to-Game program. It is an executable queue, not a plan to read.** Nine steps, S0–S8,
-~8 sessions, **zero of which require a ruling from Jordan**. Open the queue file, read the block at
-the top, take the first `state: pending` step whose precondition holds on disk, execute it, commit,
-write the state back, and stop when your context is degrading. There is nothing to ask anyone.
+**The Return-to-Game program. It is an executable queue, not a plan to read.** Open the queue file,
+read the block at the top, take the first `state: pending` step whose precondition holds **on disk**,
+run it through `.claude/wf_return_to_game.js`, commit, write the state back, and stop when your
+context is degrading. There is nothing to ask anyone.
+
+**▶ NEXT PENDING STEP: `S2` — arm the acceptance oracle.** Its precondition is `none`. S3/S4 need S1;
+S5 and S7 are independent; S6 needs S2; S8 needs S0.
+
+**Progress (2026-08-19, PR #323 on `claude/return-to-game-execution-74fdvc`):**
+
+| step | state | outcome |
+|---|---|---|
+| **S0** | `done` | IN ledger 49,920 → **45,998** tokens (headroom 80 → 4,002); `gates:` populated; push scope verified. Zero overturns across 42 verdicts. CI green. |
+| **S1** | `blocked` | Game compiles far better but not clean. Code landed as **jordanelias/valoria-game#2**. |
+| S2–S8 | `pending` | — |
+| S0-R1..R6, S1-R1..R7 | `blocked` | 13 residuals parked with `file:line` — never guessed, never silently fixed. |
 
 - **The entire human ask is `jordan_docket:` — seven one-sentence questions, each with a
-  recommendation**, down from 109 open `needs_jordan` rows (26 close as overtaken, 32 proceed at a
-  stated default under ED-1094, 64 park off the critical path, 8 are structurally dead). Answer D1
-  first if you answer only one; it is the multiplier that keeps the queue drained.
-- **Order matters and is load-bearing.** S1–S4 change what "done" means in this repo from a document
-  state to a program state. S5–S8 shrink things afterward. A cull or a reconcile run while `done`
-  still means "a document exists" is the ninth consolidation plan.
-- **S1 is measured, not estimated.** Godot 4.3 headless against `valoria-game@5e01065`: stock is
-  **54 script-load failures / 169 parse errors / 61 broken scripts**; applying five defect fixes plus
-  the project setting reached **5 / 14 / 8** in one unattended pass. Reproduction method is in the file.
-- ⚠️ **Four claims in the 2026-08-18 documents below are refuted there with evidence** — three
-  `sha256_buffer` sites (there are five), the defect list being "complete", the project setting being
-  worth more than the defects (alone it moves 169→161 and clears zero scripts), and `ci_names_check`
-  being blocking in CI (it is report-only in **both** tiers — do not spend budget on its 17 hits).
+  recommendation**, down from 109 open `needs_jordan` rows. Answer D1 first if you answer only one;
+  it is the multiplier that keeps the queue drained. **No step in the queue waits on any of them.**
+- **Order matters and is load-bearing.** S1–S4 change what "done" means here from a document state to
+  a program state. S5–S8 shrink things afterward. A cull or a reconcile run while `done` still means
+  "a document exists" is the ninth consolidation plan.
+- ⚠️ **S1 is `blocked`, and that is the honest verdict, not a failure.** A true fixed point was reached
+  and verified byte-identically, so the "zero fixes applied this iteration" half of PASS holds;
+  `errors.txt` is 97 lines, so the "empty" half does not. **Do not re-run S1's fix loop — it provably
+  converges to exactly this state.** What remains is S1-R1 (needs a numeric ruling), S1-R2 (annotation
+  work Group C scoped out) and S1-R4 (no CI compile job exists yet).
+- ⚠️ **The `5 / 14 / 8` endpoint previously advertised here is UNREPRODUCED and now unretestable**
+  (the scratch copy is gone). Measured like for like with fresh caches in both arms, Godot 4.3 against
+  `valoria-game@5e01065`:
+
+  | | failed-to-load | parse errors | broken scripts |
+  |---|---|---|---|
+  | excluding `res://tests/` | 41 → **14** | 156 → **63** | 61 → **21** |
+  | including `res://tests/` | 54 → **27** | 169 → **76** | 74 → **34** |
+
+  The old `54/169/61` baseline is itself **arm-mixed** — two including-tests numbers paired with one
+  excluding-tests number. Always state the exclusion convention with the triple (S1-R5/S1-R6).
+- ⚠️ **Two traps that cost real time this session.** (1) A warm `.godot` cache silently truncates the
+  scan — 51 vs 235 gate-matching lines on an *identical* tree. Always `rm -rf .godot` first. (2) A
+  leftover driver worktree under `.claude/worktrees/` falsely reds a blocking unit test, so the full
+  suite reports 1 failed / 1932 passed for a reason unrelated to your diff (S0-R5). `git worktree
+  remove --force <path> && git worktree prune`, then re-run.
+- ⚠️ **`valoria-game` CI is not evidence.** Its `GDScript Lint` job reported **green on a tree with 97
+  compile errors** — `find -exec` does not propagate exit status and the check never parses GDScript.
+  Its `Naming Consistency` job is red on `main` too (12 pre-existing `maret_vossen` hits).
 
 ### ⭐ READ SECOND (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
 
