@@ -67,7 +67,7 @@ steps:
 
   - id: S0
     title: "Clear the runway — the three things that silently stall an unattended executor"
-    state: pending
+    state: done
     blocked_on: null
     precondition: null
     rationale: >
@@ -90,10 +90,248 @@ steps:
     observable: "ci_register_size_check reports editorial_ledger_in.jsonl under 47,000 tokens; a scratch-branch push to valoria-game succeeds; gates: is populated."
     needs_ruling: false
     sessions: 0.5
+    evidence:
+      - "LOCATION, read this first: the producer ran in the isolated run worktree
+         .claude/worktrees/wf_a6d9c7eb-bf0-2/ and never said so, so every path it cited resolved
+         to nothing at the repo root and a commit staged from there would have been EMPTY while
+         still recording S0 done. Three critics independently hit this. RESOLVED at adjudication:
+         both trees shared base c9b0a86, the worktree diff was extracted and `git apply`d into
+         /home/user/ttrpg (applied clean), and all evidence below is measured in the REPO ROOT."
+      - "CONTROLLED measurement, both arms taken by the adjudicator with one instrument
+         (python3 tools/ci_register_size_check.py) in one session -- the producer had only a
+         post-edit arm and quoted a baseline from another session/tree (CLAUDE.md S0.1 point 4).
+         BEFORE (repo root, pre-apply): editorial_ledger_in.jsonl 49,920/50,000, headroom 80;
+         editorial_ledger_in_archive.jsonl 131,302/150,000, headroom 18,698.
+         AFTER  (repo root, post-apply): editorial_ledger_in.jsonl 45,998/50,000, headroom 4,002;
+         editorial_ledger_in_archive.jsonl 135,224/150,000, headroom 14,776.
+         Live -3,922 tokens, archive +3,922 -- EXACT conservation, which is the independent check
+         that the move was whole-row and byte-preserving rather than a re-edit. Tool exit 0."
+      - "OBSERVABLE MET as written in THIS file (:90): 'under 47,000 tokens' -> 45,998. The
+         'an OK line, not WARN' phrasing the producer argued against is NOT in this file (repo-wide
+         grep, zero hits); it came from the driver prompt. WARN fires at 85% of cap (42,500) and is
+         report-only by the tool's own design (ci_register_size_check.py:153,178,187-188), so WARN
+         here is expected and not a miss. No future pass should archive extra ids chasing an 'OK'
+         this file never asked for."
+      - "GUARD EXECUTED, not merely inspected: pytest tests/valoria/test_ledger_hygiene.py -> 19
+         passed (confirming the producer's count). Independently parsed both files post-move:
+         live-vs-archive id overlap is the EMPTY SET, and all five archived ids are terminal
+         (status=resolved, needs_jordan=false). ED-IN-0194 survives untouched with both its rows.
+         The ED-IN-0112 split incident is the failure this excludes and it cannot have occurred."
+      - "INSTRUMENT DEFECT in the producer's C1, confirmed and corrected. Its stated method
+         (`grep -c` per bare id, 'each returned 1') is NOT reproducible: on the pre-edit file
+         ED-IN-0189 and ED-IN-0190 each return 4, ED-IN-0191/0192 return 2 -- the bare id also
+         matches citations arrays and cross-references in other rows. The correct instrument is
+         the JSON field, `grep -c '\"id\": \"ED-IN-0189\"'`, which returns 1 for all five and is
+         what the guard itself uses (test_ledger_hygiene.py:219-231 reads entry['id']). The
+         CONCLUSION (exactly one row per id) is upheld; its provenance is replaced."
+      - "PUSH SCOPE: verified, and the falsifier the observable never ran has now been run.
+         The observable tested only `contents: write` (a branch push). S0's RATIONALE is that S1
+         cannot OPEN A PR -- which needs `pull_requests: write`, a distinct permission, and this
+         session's permission set is demonstrably NOT uniform (create-ref succeeds, delete-ref
+         403s). Falsifier executed at adjudication: opened draft PR jordanelias/valoria-game#1
+         from scratch-s0-push-test and closed it immediately. PR-open scope is HELD. S1's
+         precondition is discharged against its rationale, not just against its observable."
+      - "FULL SUITE RUN (the producer ran only a targeted subset; this file's own
+         pre_commit_checklist:517 warns that targeted runs are how the atlas failure reached CI):
+         pytest tests/valoria -q -n auto -> 1 failed, 1932 passed, 23 skipped, 15 xfailed.
+         The failure is test_ci_common_primitives.py::test_no_module_actually_loads_id_reservations.
+         CONTROLLED: it fails IDENTICALLY with S0's edits stashed, so it is NOT caused by this step.
+         Cause: the test walks ci_common.REPO and its SELF_EXCLUDE matches by exact relative path,
+         so the harness's own .claude/worktrees/ COPIES of the two self-excluded files are scanned
+         and match. .claude/worktrees/ is gitignored (.gitignore:22, zero tracked files), so a CI
+         checkout never sees it and this test is GREEN in CI. Filed as S0-R5 -- it is a local
+         false-red that makes the checklist's own instruction unusable while a worktree exists."
+      - "BLOCKING VALIDATORS re-run in the repo root post-apply, all exit 0: ci_register_size_check,
+         ci_claim_provenance_check, validate_ed_citations, broken_dependency_checker,
+         ci_editorial_checker, ci_co_file_checker, ci_workplan_pointer_check. Coverage is not lost
+         by archiving: ci_claim_provenance_check.py:88 lists the IN archive in LEDGERS, and
+         validate_ed_citations globs editorial_ledger_*_archive.jsonl, so the five moved ids still
+         resolve for every citing surface including CLAUDE.md."
+      - "ARTIFACT CORRECTED IN PLACE at adjudication (two lenses caught it independently): the
+         gates: block asserted 'all 9 CHECKS entries (:59-95) are tier=report_only ... blocking_failures
+         (:177)'. review_core.py's CHECKS has ELEVEN entries -- 9 report_only and 2 tier=info
+         (audit.staleness :69, workplan.state :70) -- and blocking_failures is at :178. The
+         load-bearing statement is 'NO entry is tier=blocking', which is true and is what the
+         conclusion (blocking-on-regression only) rests on. Left uncorrected, an unattended executor
+         diffing the tier map against CHECKS would find a phantom two-row mismatch."
+      - "gates: IS POPULATED -- 7 top-level subkeys (jobs, compliance_check_internals,
+         validators_job_tools, validators_report_job_tools, local_only_tools, valoria_game_ci,
+         residuals), parses as valid YAML. Roughly thirty of its line citations were opened at the
+         cited line by two independent lenses and every one was exact. This is the step's strongest
+         artifact; its one defect is duplication, filed as S0-R2."
+    critic_verdict: >
+      ADJUDICATED done. Three read-only critics (FIDELITY, FACTUALITY, LOGIC) x 14 claims = 42
+      verdicts. ZERO OVERTURNS on any claim, load-bearing or otherwise; all three returned full
+      14-claim coverage, so there is NO null result to declare. Distribution: 26 uphold, 11 soften,
+      5 sharpen. Per the adjudication rule a soften or sharpen adjusts recorded evidence and does
+      not block, so state is done -- NOT by averaging verdicts, but because nothing was overturned
+      and the one genuine BLOCKER (worktree-only edits, surfaced independently by all three lenses)
+      was resolved at adjudication rather than waived: the diff now lives in the repo root and every
+      number above was re-measured there. Four softens were CLOSED by taking the evidence the
+      producer omitted -- the missing pre-edit control arm (C5), the unexecuted hygiene suite (C4),
+      the unreproducible grep instrument (C1, conclusion upheld / provenance replaced), and the
+      unrun PR-scope falsifier (C8). C6 is resolved in the producer's favour and then some: the
+      discrepancy it honestly reported does not exist against THIS file, whose observable says only
+      'under 47,000 tokens'. The producer's restraint in not widening scope to chase a phantom 'OK'
+      was correct. Six real defects nobody had claimed are parked as S0-R1..S0-R6 rather than
+      silently fixed; two of them (archive headroom, gates/gate_tier duplication) were found by
+      multiple lenses independently and are the bankable kind. One residual is materially WORSE
+      than the producer reported and was verified live via the GitHub API -- see S0-R4.
+
+  - id: S0-R1
+    title: "S0 moved the cap problem one file downstream: the IN archive is at 90% and has no next home"
+    state: blocked
+    blocked_on: "No sanctioned third-level archive exists. Needs a convention decision before S8's sweep, not at the wall."
+    precondition: null
+    rationale: >
+      Found independently by all three lenses -- the bankable kind, and the sharpest finding of the
+      review: S0 relieved a blocking cap by spending 21% of the next file's remaining headroom
+      (3,922 of 18,698 measured tokens) and recorded the live file's headroom in gates: while
+      omitting the archive's. registers/editorial_ledger_in_archive.jsonl now sits at
+      135,224/150,000 -- 90% of a BLOCKING cap, 14,776 tokens of headroom. At the measured
+      ~784 tokens/row this absorbs roughly 18 more IN rows. S8's commit_order
+      (workplans/return_to_game_queue.yaml:376-382) plans exactly such a sweep over 48 terminal rows
+      plus buckets A and E, against 25 open IN rows. tools/ci_register_size_check.py:87-136 has rows
+      for _archive.jsonl and NOTHING beyond it, so the next writer to cross 150,000 hits a blocking
+      cap with no sanctioned move -- the same structurally-unlucky-next-writer failure the tool's
+      own WARN comment (:139-152) exists to prevent. This is S0's own defect class, relocated.
+    observable: "A third-level archive convention (or a compaction rule) exists in tools/ci_register_size_check.py's THRESHOLDS, and editorial_ledger_in_archive.jsonl is under 85% of its cap."
+    needs_ruling: true
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R2
+    title: "gates: and gate_tier: are two independently-rotting owners of one measurement in one file"
+    state: blocked
+    blocked_on: "Needs a single-owner decision (fold gate_tier: into gates:, or reduce it to a pointer). Not S0's to make unilaterally."
+    precondition: null
+    rationale: >
+      Found by two lenses independently. The gates: block S0 authored re-asserts SIX facts that
+      already live in this file's pre-existing gate_tier: block at :480-506, with no cross-pointer
+      in either direction: ci_names_check report-only in both tiers; ci_supersession_check and
+      ci_audit_registry_check structurally incapable of failing; contract-conformance
+      continue-on-error :219; lanchester ending || true :375; valoria-game lint cannot fail;
+      compliance_check blocking-in-CI-and-absent-from-local. Both blocks label themselves MEASURED.
+      This is CLAUDE.md S8 ('every rule lives once') and the exact ED-IN-0147 pattern S1 of CLAUDE.md
+      records for the CURRENT.md date stamp -- a duplicated fact rots independently of its subject.
+      The next CI change updates one and leaves the other lying, and an unattended executor has no
+      rule for which wins. The composing fix is to make gate_tier: a pointer at gates:, NOT to
+      maintain both. Parked rather than fixed here because deleting a block another step may cite
+      is a scope decision, and because S0 introduced the duplication -- it should not also
+      unilaterally resolve which copy is canonical.
+    observable: "workplans/return_to_game_queue.yaml contains exactly one owner of the gate tier; the other is a pointer or is gone."
+    needs_ruling: false
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R3
+    title: "No gate observes 'an UNSETTLED id was archived' -- only the split case is guarded"
+    state: blocked
+    blocked_on: "Needs the guard written before S8's larger archive sweep runs; writing it is not S0's scope."
+    precondition: null
+    rationale: >
+      tests/valoria/test_ledger_hygiene.py:234 catches SPLIT ids and catches them well -- it reads
+      entry['id'] rather than a substring, asserts non-vacuity at :254, and its SPLIT_GRANDFATHERED
+      set (:189-194) holds only four pre-cutover flat ids, so it genuinely covered this move. But
+      NOTHING anywhere asserts that a row moved into an archive has a TERMINAL last status. For S0's
+      five ids that predicate does hold (verified by hand at adjudication: all status=resolved,
+      needs_jordan=false) -- by hand, not by a gate. S8's commit_order (:378-382) plans a much larger
+      sweep driven by greps over descriptions; that is exactly where an open id gets archived and
+      drops silently off the open-work surface. Per CLAUDE.md S0.1 point 5 the guard is the thing
+      that makes the pattern safe, and if you cannot write the guard you have not understood the
+      pattern. It does not exist yet.
+    observable: "A test in tests/valoria/ fails when an id whose last row is unresolved or needs_jordan=true appears in any *_archive.jsonl."
+    needs_ruling: false
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R4
+    title: "TWO undeletable scratch branches on the frozen game repo, not one -- verified live"
+    state: blocked
+    blocked_on: "Delete-ref permission is not held by this session (HTTP 403, four attempts across two sessions). Needs whoever holds it."
+    precondition: null
+    rationale: >
+      The producer's residual named ONE scratch branch. A critic found a second in the reflog, and
+      adjudication confirmed BOTH are live on the remote via the GitHub API:
+      claude/s0-pushscope-probe @ 2cd1f4becb0c19e358f23fff2929ef2bc7e36181 and
+      scratch-s0-push-test @ d97e080789847cba85ead201a47a185b4b0c0931. The first one's own commit
+      message reads '[infrastructure] S0 push-scope probe (deleted immediately)' -- that parenthetical
+      is FALSE on the remote; only the local branch was deleted. Deletion re-attempted at adjudication
+      on both: HTTP 403 on each, non-transient, matching the producer's two earlier attempts. So the
+      session's scope creates refs and opens PRs but cannot delete refs. Also on that remote: closed
+      draft PR #1, opened and closed at adjudication as the PR-scope falsifier (see S0 evidence).
+      CLAUDE.md describes valoria-game as frozen since 2026-05-04, so this litter is visible.
+      Carries no content and blocks nothing -- S1 needs create-ref and pull_requests:write, both
+      verified held.
+    observable: "jordanelias/valoria-game has neither claude/s0-pushscope-probe nor scratch-s0-push-test."
+    needs_ruling: false
+    sessions: 0.1
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R5
+    title: "The driver's own worktree falsely reds a blocking unit test, breaking this file's pre-commit checklist"
+    state: blocked
+    blocked_on: "Needs SELF_EXCLUDE to match by basename or to prune .claude/worktrees/ from the walk; a test change is out of S0's scope."
+    precondition: null
+    rationale: >
+      Found at adjudication by running the FULL suite the producer skipped. pytest tests/valoria
+      -q -n auto returns 1 failed, 1932 passed:
+      test_ci_common_primitives.py::test_no_module_actually_loads_id_reservations. It is NOT caused
+      by S0 -- controlled by stashing S0's edits and re-running, where it fails identically. Cause:
+      the test walks ci_common.REPO and its SELF_EXCLUDE (:327-330) matches by EXACT RELATIVE PATH,
+      so the harness's own .claude/worktrees/<run>/ copies of the two self-excluded files
+      (test_ci_common_primitives.py and tools/ci_common.py) are walked and match their own patterns.
+      .claude/worktrees/ is gitignored (.gitignore:22, zero tracked files) so CI never sees it and
+      the test is green there. The damage is local and precise: this file's pre_commit_checklist:517
+      instructs every executor to run the full suite, and any executor that does so while a driver
+      worktree exists gets a red they cannot attribute -- a manufactured silent stall in the exact
+      program built to prevent silent stalls.
+    observable: "pytest tests/valoria -q -n auto is green in the repo root while a .claude/worktrees/ run worktree exists on disk."
+    needs_ruling: false
+    sessions: 0.25
+    evidence:
+      - "INDEPENDENTLY REPRODUCED by the executing session before committing S0, which is what
+         promoted this from a critic assertion to a measured fact. With the run worktree present:
+         1 failed / 1932 passed, the failure being exactly
+         test_ci_common_primitives.py::test_no_module_actually_loads_id_reservations.
+         `git worktree remove --force .claude/worktrees/wf_a6d9c7eb-bf0-2 && git worktree prune`
+         -> that file alone returns 36 passed, and the FULL suite returns 1933 passed / 0 failed,
+         identical to the pre-S0 baseline taken at the start of the same session."
+      - "THAT IS A WORKAROUND, NOT THE FIX, and the observable above is deliberately written so it
+         cannot be closed by one: it requires the suite to be green WHILE a worktree exists. Removing
+         the worktree only removes the precondition. Every driver run recreates it, so the next
+         executor that follows pre_commit_checklist:517 with a run worktree still on disk gets the
+         same unattributable red. Entry stays `blocked` on the SELF_EXCLUDE change."
+
+  - id: S0-R6
+    title: "single_owner_check CI-wiring debt is already tracked in three places -- cite, do not open a fourth"
+    state: blocked
+    blocked_on: "Tracked elsewhere with a costed remediation item; this entry exists to stop a fifth surface being opened."
+    precondition: null
+    rationale: >
+      S0's gates.local_only_tools records, correctly and as measured, that single_owner_check.py
+      (tools/valoria_local.py:243, the CLAUDE.md S8 single-owner guard) is invoked nowhere in
+      .github/workflows/valoria-ci.yml and nowhere in tools/review_core.py's CHECKS, so its findings
+      are never enforced in CI. A critic established the debt is ALREADY tracked at
+      registers/handoffs/HANDOFF_IN.md:151, at audit/2026-08-14-five-lens-repo-assessment/00_findings.md:68
+      with a costed item at 01_plan.md:73 ('B3 | Register single_owner_check.py in
+      ci_checks_registry.yaml with a role: line'), and again at
+      audit/2026-08-17-weekly-review/00_findings.md:294. Recording it a fourth time reproduces this
+      file's own documented count-spread problem (:354-361, where four instruments report four
+      different needs_jordan counts) one register down. Resolution is B3 in the existing plan, not a
+      new work item here.
+    observable: "single_owner_check.py has a role: line in references/ci_checks_registry.yaml and a CI wiring, per B3 -- tracked there, not here."
+    needs_ruling: false
+    sessions: 0
     evidence: []
     critic_verdict: null
 
   - id: S1
+
     title: "Make the game compile — and make a compiler, not a board, say so"
     state: pending
     blocked_on: null
@@ -568,4 +806,102 @@ cull_couplings_missed_by_both_documents:
   - "A golden re-record needs a tests/coverage_matrix.md entry (ci_co_file_checker.py:78, blocking) and that
      file is at 94% of its blocking 15,000-token cap. A re-record note can trip a size gate in the same commit."
 
-gates: {}   # populated by S0 — measured, never assumed
+gates:  # MEASURED 2026-08-19 (S0 action 3), not assumed. Two repos: ttrpg design repo
+        # (.github/workflows/valoria-ci.yml) and jordanelias/valoria-game
+        # (.github/workflows/godot-ci.yml, at commit 5e01065585c451733a603bda9c3b7fccf2a462f8).
+        # Method: read each workflow file directly, cross-referenced against tools/valoria_local.py's
+        # per-tool blocking flags and, for review_core, against tools/review_core.py's own CHECKS list
+        # and --check exit logic (read, not assumed). valoria-game's lint-job claim was additionally
+        # verified empirically (see valoria_game_ci.lint below).
+
+  jobs:  # top-level jobs in ttrpg's valoria-ci.yml
+    syntax-check:         { tier: blocking, why: 'required by ci-summary needs, valoria-ci.yml:421' }
+    validators:           { tier: blocking, why: '19 tool invocations under v(), no continue-on-error, exit $fail at :131; required by ci-summary needs :422' }
+    validators-report:    { tier: report_only, why: 'job-level continue-on-error true at :138 AND body always exit 0 at :194; absent from ci-summary needs :420-426' }
+    contract-conformance: { tier: report_only, why: 'step-level continue-on-error true at :219; absent from ci-summary needs' }
+    unit-tests:           { tier: blocking, why: 'pytest tests/valoria -n auto at :299; required by ci-summary needs :423' }
+    sim-regression:       { tier: blocking, why: 'pytest engine/tests at :321; required by ci-summary needs :424' }
+    field-goldens:        { tier: blocking, why: 'ci_golden_modes_check.py at :345; required by ci-summary needs :425' }
+    lanchester-signature: { tier: report_only, why: 'job title says REPORT-ONLY; body ends "|| true" at :375; absent from ci-summary needs' }
+    compliance-check:     { tier: blocking, why: 'both internal steps lack continue-on-error, required by ci-summary needs :426 -- but its two steps differ, see compliance_check_internals' }
+    ci-summary:           { tier: blocking, why: 'the single required branch-protection status check per its own comment :414-415; if:always() at :419, fails if any needed job result != success' }
+
+  compliance_check_internals:  # the two steps INSIDE the blocking compliance-check job have different failure semantics
+    compliance_check_py_check_only:
+      tier: blocking
+      why: 'valoria-ci.yml:401-402, "compliance_check.py --check-only --repo-state .", no continue-on-error; ABSENT from tools/valoria_local.py entirely (grepped, zero hits) -- local-green != CI-green, per CLAUDE.md S8 ED-1082 correction'
+    review_core_py_check:
+      tier: blocking_on_regression
+      why: 'valoria-ci.yml:404-411, "review_core.py --check", no continue-on-error. Verified by reading tools/review_core.py: all 11 CHECKS entries (:59-96) are non-blocking -- 9 tier=report_only and 2 tier=info (audit.staleness :69, workplan.state :70) -- zero tier=blocking, so collect()s blocking_failures (:178) is structurally always 0 (the load-bearing statement is NO entry is tier=blocking, not that every entry is report_only; corrected at S0 adjudication after two independent critics caught the miscount); --check (main():275) fails only if blocking_failures OR regressions_vs_baseline -- so this step is blocking ONLY on a signal regressing past its registers/review_baseline.yaml ceiling (_apply_ratchet, :155-170), never on a pre-existing at-or-under-baseline report_only failure.'
+
+  validators_job_tools:  # inside the blocking `validators` job, valoria-ci.yml:100-130 -- all 19 blocking in CI.
+                          # `local` is the SAME script's blocking flag in tools/valoria_local.py's
+                          # (script,args,blocking) list at :153-243 -- CI and local tiers frequently diverge.
+    ci_register_size_check.py:    { ci: blocking, local: blocking }                        # valoria-ci.yml:100, valoria_local.py:160
+    ci_hooks_verifier.py:         { ci: blocking, local: report_only }                      # :101, :234 -- CI-only residual, ED-IN-0176
+    ci_co_file_checker.py:        { ci: blocking, local: blocking }                         # :102, :158
+    ci_editorial_checker.py:      { ci: blocking, local: blocking }                         # :103, :159
+    ci_pp_frozen_check.py:        { ci: blocking, local: blocking }                         # :104, :154
+    ci_naming_check.py:           { ci: blocking, local: blocking, note: 'distinct tool from ci_names_check below' }  # :105, :155
+    ci_names_consistency.py:      { ci: blocking, local: blocking }                         # :106, :156
+    export_engine_params.py:      { ci: blocking, local: blocking, args: '--check' }        # :107, :166
+    export_key_types.py:          { ci: blocking, local: blocking, args: '--check' }        # :108, :167
+    build_test_register.py:       { ci: blocking, local: blocking, args: '--check' }        # :111, :171
+    build_identifier_census.py:   { ci: blocking, local: report_only, args: '--check' }     # :122, :235 -- CI-only residual, ED-IN-0172
+    ci_sim_fabrication_check.py:  { ci: blocking, local: blocking }                         # :123, :162
+    ci_claim_provenance_check.py: { ci: blocking, local: blocking }                         # :124, :175
+    ci_claude_workflow_paths.py:  { ci: blocking, local: report_only }                      # :125, :187 -- report-only locally, blocking in CI (ED-IN-0085)
+    ci_wf_harness_check.py:       { ci: blocking, local: report_only }                      # :126, :186 -- report-only locally, blocking in CI (ED-IN-0087)
+    ci_vetting_check.py:          { ci: blocking, local: blocking }                         # :127, :161
+    validate_ed_citations.py:     { ci: blocking, local: report_only }                      # :128, :236 -- CI-only residual
+    broken_dependency_checker.py: { ci: blocking, local: report_only }                      # :129, :237 -- CI-only residual
+    freshness_gate.py:            { ci: blocking, local: report_only }                      # :130, :198 -- report-only locally, blocking in CI (ED-PC-0040)
+
+  validators_report_job_tools:  # inside the report-only `validators-report` job, valoria-ci.yml:158-194.
+                                 # wrapped in w() (:164, never propagates status); body ends unconditional exit 0 (:194).
+    ci_supersession_check.py:        { ci: report_only, local: report_only, why: 'structurally cannot fail -- own code always returns 0' }        # :173, valoria_local.py:163
+    ci_audit_registry_check.py:      { ci: report_only, local: report_only, why: 'always exits 0 by design per its own registry row' }             # :174, :173
+    ci_names_check.py:               { ci: report_only, local: report_only, why: 'report-only in BOTH tiers -- distinct tool from ci_naming_check/ci_names_consistency above, both of which ARE blocking' }  # :175, :157
+    currency_consistency_check.py:   { ci: report_only, local: report_only }                                                                       # :176, :172
+    ci_quantity_vocabulary_check.py: { ci: report_only, local: absent }                                                                             # :177, absent from valoria_local.py entirely
+    mechanics_index_gen.py:          { ci: report_only, local: absent, args: '--strict' }                                                           # :178, absent
+    ci_generation_consistency.py:    { ci: report_only, local: report_only }                                                                       # :179, :164
+    canon_coverage_check.py:         { ci: report_only, local: absent, args: '--strict --json' }                                                    # :180, absent
+    ci_module_shape_check.py:        { ci: report_only, local: report_only }                                                                       # :181, :165
+    ci_workplan_pointer_check.py:    { ci: report_only, local: report_only, why: 'report-only in BOTH tiers -- confirmed by direct read, matches S0s known-fact' }  # :182, :193
+    wiring_map_check.py:             { ci: report_only, local: report_only, args: '--check', why: 'also folded into review_core CHECKS as wiring.coverage (review_core.py:64) -- additionally blocking-on-regression via the compliance-check job, same shape as review_core_py_check above' }  # :183, :174
+    scope_ratchet.py:                { ci: report_only, local: report_only, args: '--check' }                                                       # :191, :210
+    ci_vacuous_assertion_check.py:   { ci: report_only, local: absent }                                                                             # :192, absent
+    ci_program_claim_check.py:       { ci: report_only, local: absent }                                                                             # :193, absent
+
+  local_only_tools:  # present in tools/valoria_local.py, confirmed absent from both the ttrpg-repo
+                      # workflow jobs above (grepped) and from tools/review_core.py's CHECKS list (grepped)
+    single_owner_check.py:
+      ci: not_wired
+      local: report_only
+      why: 'CLAUDE.md S8 single-owner guard -- zero references in valoria-ci.yml and zero in review_core.py CHECKS; violations it finds are never checked in CI at all'  # valoria_local.py:243
+
+  valoria_game_ci:  # .github/workflows/godot-ci.yml in jordanelias/valoria-game, measured at commit 5e01065585c451733a603bda9c3b7fccf2a462f8
+    lint:
+      tier: cannot_fail
+      why: 'job body is find . -name STAR.gd -exec python3 -c ... {} SEMI -- GNU finds own exit status does not propagate the -exec childs nonzero exit in that form. VERIFIED EMPIRICALLY THIS SESSION in this worktrees shell: find /tmp -maxdepth 0 -exec python3 -c "import sys; sys.exit(1)" {} SEMI exits 0. The job cannot fail regardless of GDScript content -- S1s compile job is the first functional syntax gate on that repo.'
+    enum-check:
+      tier: blocking
+      why: 'direct grep -rn ... && exit 1 shell pattern, no -exec indirection -- propagates correctly'
+    naming-check:
+      tier: blocking
+      why: 'same direct grep-and-exit pattern as enum-check'
+
+  residuals:
+    - 'git push origin --delete scratch-s0-push-test (jordanelias/valoria-game) returned HTTP 403 twice
+       (retried once, not transient), even though the original push CREATING that branch succeeded --
+       the push scope this session holds can create refs but apparently cannot delete them. The branch
+       (commit d97e080, one throwaway file .s0_push_scope_test.txt, message "test: S0 push-scope
+       verification (scratch, to be deleted)") is still on the remote; the local branch and working
+       tree were cleaned up (checked out main, git branch -D scratch-s0-push-test). No gh CLI and no
+       delete-ref MCP tool were available in this session to remove it another way. Not a blocker for
+       S1 (opening a PR needs no delete-ref permission) -- flagged for whoever does branch cleanup.'
+    - 'single_owner_check.py (tools/valoria_local.py:243, the CLAUDE.md S8 single-owner guard) is not
+       invoked anywhere in .github/workflows/valoria-ci.yml and not in tools/review_core.py CHECKS
+       (both grepped, zero matches) -- its findings are local-only and never enforced in CI. Left
+       unresolved per S0s "do not widen the step" rule.'
