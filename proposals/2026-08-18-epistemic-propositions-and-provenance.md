@@ -1,6 +1,6 @@
 # Epistemic Propositions with Provenance — the belief layer, and where it lives
 
-## Status: PROPOSED — Jordan-directed design. No `.py` touched, no Key type registered, no registry amended. Every tree claim carries file:line.
+## Status: DESIGN CALLS RULED 2026-08-18 (§10) — all five §8 questions answered, four confirming the design as drafted and P1 taking the population-scale branch; the DESIGN remains PROPOSED and unbuilt. Jordan-directed. No `.py` touched, no Key type registered, no registry amended. Every tree claim carries file:line.
 
 **Date:** 2026-08-18 · **Lane:** FI (field investigation) · **IDs:** none allocated (design-only)
 **Directive:** *"I want epistemic proposition about the world to be available alongside provenance references."* — Jordan, 2026-08-18
@@ -222,3 +222,44 @@ be evaluable and large enough to be expressive. If it cannot, propositions degra
 and this design decays into the thing it replaced. The cheap test is to try to express, in
 predicates alone, the ten facts a player would most want to assert in Jordan's drought→donation
 chain and in a Crown Claim.
+
+---
+
+# §10 RULINGS LANDED — Jordan, 2026-08-18
+
+All five §8 questions ruled. **Four confirm the design as drafted; one changes the home's scope.**
+
+| # | Ruled | Effect on this design |
+|---|---|---|
+| **P1** | **NPCs hold propositions too** | The largest call, and it takes the expensive branch deliberately. Every NPC carries Holdings, so gossip propagation, lying, contradictory testimony and interrogation become mechanical rather than decorative. `npc_memory` being an *NPC* module is now load-bearing rather than incidental. **Obligation created:** NPE-generated NPCs need default holdings at spawn, and the store scales with population — see §10.2 |
+| **P2** | **`suspects` is a third stance** | §3.2 stands as drafted. The Case Board gets a real category for a live lead, which is what makes known-unknowns renderable (the Outer Wilds property §6 claims as its rendering disposition) rather than derived from a number |
+| **P3** | **Support may be empty** | §3.3 stands, and the permissive branch is ruled: a Holding may cite zero Keys. Rumour, prejudice and fabrication are representable, which a game with Exposure, Cover and `da.covert_betrayal` needs. **Consequence:** "do you believe it?" and "how do you know?" are now genuinely separate queries — the Case Board must not imply provenance where none exists |
+| **P4** | **Split the predicate registry** | IN owns the **engine-evaluable** predicates (those a scripted hook's condition may test against world state); FI owns the wider **claim-only** set usable in beliefs and arguments. Two registries plus a promotion rule — heavier than §6 proposed, but it matches the two genuinely different obligations: a hook predicate must be computable, a claim predicate need only be *sayable* |
+| **P5** | **Confirmation only through consequence** | No verdict surface. Act on a finding and the world's response reveals whether you were right. P-08 is preserved exactly as §3.4 wants it, and closure arrives without a truth oracle. **Obligation:** the Finding → `Leverage` / `Dossier` consequence paths must be legible enough to *read as* feedback, or the design silently becomes "never confirmed" |
+
+## §10.1 A ruling from the fieldwork docket lands here too
+
+**Q9 — per-NPC Disposition joins Holdings in `npc_memory`.** Relational state and epistemic state
+share a home, so one module answers both *"what does she know?"* and *"what does she think of me?"*
+
+⚠ **This stretches the contract's own framing.** `module_contracts.yaml`'s `npc_memory` resolver
+comment reads *"Memory store written from Keys; queried by Procedures"* — accurate for propositions,
+too narrow for a relational hub. **When the standalone Memory spec is authored (the module's own
+`gap_notes` asks for it), that line must be re-worded**, or the next reader inherits a description
+that no longer covers what the module holds. Filed as part of §4's contract delta.
+
+## §10.2 What P1 obliges that this document did not cost
+
+Population-scale Holdings is a real cost the draft assumed away, and it should be named before
+anyone builds:
+
+- **Default holdings at spawn.** `npe.generate_npc` must seed something. The cheap answer is nothing (an NPC believes only what they observe); the expensive one is demographic priors so a Church cleric starts believing Church things. Not ruled — flagged.
+- **Growth is unbounded without a forgetting rule.** Holdings accumulate per NPC per proposition. `Key.permanence` and confidence decay are the two levers already in the substrate; which applies is undecided.
+- **Only the belief layer is population-scale.** The `Proposition` store is shared and content-addressed, so it grows with distinct *claims*, not with `population × claims`. That is the design property that makes P1 affordable, and it is another argument for content-addressing beyond comparability.
+
+## §10.3 Still the first thing to nail down
+
+Unchanged by the rulings: **the content-address hashing rule is unspecified** (§9). If two agents
+hash the same claim differently, every property this design rests on fails silently — no
+comparison, no contradiction detection, no corroboration. With P1 ruled, this now matters across
+the whole NPC population rather than for one player. Specify it before any implementation.

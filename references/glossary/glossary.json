@@ -1536,7 +1536,7 @@
   "Church": {
    "ambiguous": true,
    "category": "proper_noun",
-   "file_count": 150,
+   "file_count": 151,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 9,
@@ -1549,6 +1549,7 @@
     "godot/godot_conversion_strategy_v1.md": 3,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 12,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
@@ -1827,7 +1828,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 22,
     "proposals/2026-08-16-system-scores-census.md": 4,
     "proposals/2026-08-18-breaking-the-recursion.md": 3,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
     "proposals/2026-08-18-recursion-interrogation-log.md": 4,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/campaign_modes_v30_infill.md": 1,
@@ -1906,7 +1907,7 @@
     "godot/implementation_sequence.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 10,
     "systems/_architecture/campaign_architecture_v30_index.md": 6,
@@ -2260,7 +2261,7 @@
   "Consequence": {
    "ambiguous": false,
    "category": "pressure_point",
-   "file_count": 46,
+   "file_count": 47,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 1,
@@ -2269,7 +2270,8 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
@@ -2795,8 +2797,8 @@
     "godot/implementation_sequence.md": 1,
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 10,
-    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 12,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 13,
     "proposals/social_contest_consolidation_integration_v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -5518,7 +5520,7 @@
     "godot/README.md": 3,
     "godot/godot_conversion_strategy_v1.md": 37,
     "proposals/2026-08-18-breaking-the-recursion.md": 5,
-    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 6,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 7,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 52,
     "proposals/2026-08-18-recursion-interrogation-log.md": 8,
     "proposals/canonical_nomenclature_v1.md": 5,
@@ -17786,7 +17788,7 @@
     "godot/data_serialization_spec.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
-    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/repo-reorganization-v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/characters/characters_flow_skeleton_v1.md": 68,
@@ -22109,7 +22111,7 @@
     "proposals/2026-08-16-system-scores-census.md": 6,
     "proposals/2026-08-18-breaking-the-recursion.md": 3,
     "proposals/2026-08-18-culling-plan-v1.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
     "proposals/2026-08-18-recursion-interrogation-log.md": 6,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
@@ -25033,9 +25035,10 @@
      "purpose": "`aligned_categories` and `contradicted_categories` reference **PP-687 da_outcome subtypes** (per `key_type_registry_v30.md` \u00a73): `da.public_governance`, `da.covert_betrayal`, `da.diplomatic_alliance`, `da.antinomian_action`, `da.economic_intervention`."
     }
    },
-   "file_count": 8,
+   "file_count": 9,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 1,
@@ -32672,7 +32675,7 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 4,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/engine_atlas_v1.md": 1,
@@ -33197,8 +33200,8 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 2,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 7,
     "proposals/2026-08-16-system-scores-census.md": 2,
-    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 72,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 78,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
@@ -34915,7 +34918,7 @@
    "file_count": 5,
    "legacy_count": 0,
    "locations": {
-    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 5,
     "systems/_architecture/propagation_spec_v1.md": 1,
@@ -35283,9 +35286,10 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called by :: `generate_npc(faction, role, world, ...)` | `systems/world/sim/npe.py:215 generate_npc` | \u2014 (no call site anywhere in production; see \u00a77 gap 3)"
     }
    },
-   "file_count": 5,
+   "file_count": 6,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 2,
     "systems/_architecture/subsystem_flow_skeletons_v1.md": 2,
     "systems/npcs/npcs_flow_skeleton_v1.md": 15,
@@ -35299,6 +35303,7 @@
     "_architecture",
     "npcs",
     "overview",
+    "proposals",
     "world"
    ],
    "term": "generate_npc"
@@ -43794,7 +43799,7 @@
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
     "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 5,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 8,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 9,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/generational_transition_v30.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 5,
@@ -44151,8 +44156,8 @@
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 1,
-    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 8,
-    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 3,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 11,
+    "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/_architecture/key_type_registry_v30.md": 4,
     "systems/npcs/npcs_flow_skeleton_v1.md": 5
@@ -44388,10 +44393,11 @@
   "npe": {
    "ambiguous": false,
    "definition": "NPC Population Engine.",
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-16-system-scores-census.md": 2,
+    "proposals/2026-08-18-epistemic-propositions-and-provenance.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 5,

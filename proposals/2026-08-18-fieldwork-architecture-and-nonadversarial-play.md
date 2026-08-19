@@ -1,6 +1,6 @@
 # Fieldwork, Investigation and Non-Adversarial Play — an architecture, not a redesign
 
-## Status: PROPOSED — DESIGN-ONLY, HELD FOR JORDAN. No `.py` touched, no constant changed, no default flipped, no golden re-recorded, no key type allocated. Every repo claim below was read off the working tree at HEAD and carries a file:line; every precedent claim carries a confidence tag.
+## Status: DESIGN CALLS RULED 2026-08-18 (§13) — the nine §9 questions are answered and ED-FI-0006/0007/0008 are released; the ARCHITECTURE remains PROPOSED and unbuilt. Still design-only: No `.py` touched, no constant changed, no default flipped, no golden re-recorded, no key type allocated. Every repo claim below was read off the working tree at HEAD and carries a file:line; every precedent claim carries a confidence tag.
 
 **Date:** 2026-08-18 · **Lane:** FI (field investigation) · **IDs:** none allocated (design-only)
 **Bears on:** ED-916 (the FI design gate) · ED-FI-0001 (investigation_systems_v30 audited by no lane) · ED-FI-0002 (EP-6 counter-espionage) · `godot_conversion_strategy_v1.md` Gate-0 · CLAUDE.md §6 "porting is blocked on authoring canon first"
@@ -967,3 +967,66 @@ and dynamic type construction, beyond the original `.py`-only grep — and **sta
 has exactly four `Key(` construction sites and none can produce those types; `npe.py` contains no
 `emit`, `Key(` or scheduler use at all. §11.1's ruling precedents and §11.7's unification are
 unaffected.
+
+---
+
+# §13 RULINGS LANDED — Jordan, 2026-08-18
+
+All nine §9 questions ruled in one sitting. **Two answers went beyond the options offered and are
+recorded verbatim, because both are general doctrine rather than fieldwork settlements.**
+
+## §13.1 Q1 RULED — and the ruling is broader than the question
+
+> **"Obstacles that are defined oppositionally (ie against a character, faction, attribute, etc) are
+> score/2. Obstacles that are not defined oppositionally, like a site, are a base plus relevant
+> modifiers."** — Jordan, 2026-08-18
+
+This supplies the discriminator §9 Q1 flagged as the *cost* of keeping both models: **the test is
+whether the obstacle is defined against something.** It is not a fieldwork rule — it settles, in one
+line, how every obstacle in the tree is derived, which root `HANDOFF.md` calls "the largest
+outstanding piece" (the 2026-08-14 score/2 ruling being wired nowhere).
+
+**Consequences:**
+- Fieldwork's Depth table (Ob 1/2/3/5/8) **stands** as a *base*, with situational modifiers added — it is non-oppositional by construction.
+- `fieldwork_v30` §4.6 Concealment Ob **changes**: contested investigation is oppositional, so it derives from the concealer's **score/2**, not from their roll.
+- §5.2's social actions were already score/2-shaped (`floor(NPC Cognition/2)+1`, `floor(NPC highest stat/2)+1`) — the ruling **generalizes what fieldwork already did** rather than overturning it.
+- ⚠ **This needs an IN-lane home.** It governs combat, contest, mass battle and faction actions equally; recording it only in a fieldwork proposal would be exactly the mis-homing this repo keeps filing. Flagged, not executed.
+
+## §13.2 Q2 RULED — conditionally, with an analytical task attached
+
+> **"Acquisition-layer, but interrogate it against player attributes as to whether it's truly
+> distinct."** — Jordan, 2026-08-18
+
+Adoption of the 2026-08-15 proposal's acquisition-layer answer **is conditional on a test that has
+not been run**: is the acquisition layer genuinely a distinct axis, or is it attributes wearing a
+different name? Until that is answered, no fieldwork pool may be written against either model.
+
+**The test, stated so it can fail:** take the fieldwork actions that would roll Research /
+Reconstruct / Interview, express each under (a) the acquisition layer and (b) ruled attributes, and
+check whether the two ever produce *different orderings between characters*. If they never diverge,
+the acquisition layer is a relabelling and the honest answer is attributes. This is the falsifier;
+it belongs to whoever executes Q2.
+
+## §13.3 The remaining seven
+
+| # | Ruled | Consequence |
+|---|---|---|
+| **Q3** | **Split the type** | Investigation findings and tribunal/inquiry verdicts become distinct types. Closes the standing `[OPEN — Jordan]` attribution by removing the collision rather than adjudicating it. Requires a new registration + `faction_state`/`npc_behavior` subscribing to both to preserve behaviour |
+| **Q4** | **Lattice first** | The Dialogue Lattice is the first-build Interview home, honouring ED-FI-0004 in full. Puts the REFINE gate on the critical path — ruled below |
+| **REFINE** | **Filters speak as named voices** | The Response Matrix surfaces its filters as characterised voices, not numbers. Consistent with `valoria_ui_ux_v4`'s "Disco Elysium's spiritual descendant" commitment and the social-contest proposal's `[HIGH]` skill-voices precedent. Unblocks the Matrix build; adds authored voice lines per filter |
+| **Q5** | **Only through consequence** | No verdict screen. Act on a finding and the world's response reveals whether you were right. P-08 stays intact; closure arrives as consequence. **Requires the consequence path to be legible as feedback** — a real design obligation on the Finding→Leverage/Dossier loops |
+| **Q6** | **Guarantee at generation, erosion allowed** | Solvability is a generation-time condition table; the world may then erode the chain and that erosion is content. Exactly the assassination-fuse shape. Erosion rate becomes telemetry, never a constraint |
+| **Q7** | **Confirm the P-06 swap** | Threadcut beings use **self-maintenance strain**, not Coherence. The FAIL-marked model never enters the sim. ED-FI-0008 released; knot-lifecycle wiring unblocked |
+| **Q8** | **+0.15 Ob per wound everywhere** | Propagate uniformly; strike the flat `+1 Ob` (§2.4) and the `−1D` remnant as stale prose. ED-FI-0006 / ED-FI-0007 released |
+| **Q9** | **Disposition joins Holdings in `npc_memory`** | Per-(NPC, PC) relational state lives with the proposition store. See the propositions proposal §10 — `npc_memory` becomes the epistemic **and** relational hub, which stretches its contract's "Memory store written from Keys" framing and should be re-worded when its doc is authored |
+| **Doc split** | **Leave whole** | This document stays one file despite exceeding §4's ~15k threshold. The gate is warn-only and the argument is continuous |
+
+## §13.4 What is now unblocked, and what still is not
+
+**Unblocked:** the vertical slice (§11.5) — Q1 gives it obstacle derivation, Q6 gives it a
+generation rule, Q7/Q8 clear the two canon contradictions in its path.
+
+**Still blocked:** Q2's acquisition-layer test (§13.2) gates any *pool* the slice rolls — the slice
+can proceed with a hand-set Ob and a placeholder pool, which is what every call site in the tree
+does today, but it cannot claim its numbers. And Q3's type split plus the REFINE voice lines are
+authoring work before the Lattice build.
