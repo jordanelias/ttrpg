@@ -1,0 +1,571 @@
+# return_to_game_queue.yaml — THE EXECUTABLE QUEUE for the Return-to-Game program.
+#
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+# IF YOU ARE A SESSION WITH NO MEMORY, READ THIS BLOCK AND NOTHING ELSE FIRST.
+#
+# WHAT THIS IS. A program that returns Jordan to building the game. It runs UNATTENDED. No step
+# blocks on a human. You execute it by running the driver below; you stop when your context is
+# degrading; you persist before you stop. There is nothing to ask anyone.
+#
+# HOW TO RUN IT.
+#   1. Pick the first step whose `state: pending` and whose `precondition` observable holds ON DISK.
+#      Verify the precondition yourself — do not trust a `done` marker you did not write.
+#   2. Run the driver against it:  Workflow({ scriptPath: ".claude/wf_return_to_game.js", args: "<id>" })
+#   3. The driver produces, critiques (structurally read-only critics), reconciles, and returns.
+#   4. YOU commit, set `state`, and write `evidence` + `critic_verdict` back into this file.
+#   5. Loop until your context is degrading, then Persist (below) and END THE TURN.
+#
+# WHY THERE IS NO AUTO-CHAIN. CLAUDE.md §11 forbids a session arming its own wake-up, and the
+# deny-list in .claude/settings.json is CI-enforced (tests/valoria/test_no_polling_triggers.py).
+# So the program is chained by whatever starts the next session. That costs one word ("continue")
+# and zero decisions. Every phase boundary is committed, so nothing is lost at a stop.
+#
+# WHAT "CONTEXT IS DEGRADING" MEANS, OPERATIONALLY. Stop and Persist when ANY of these is true:
+#   - the harness raised `repetition` or `round_cap` (wf_harness.js — further rounds add nothing);
+#   - you are re-reading files you already read this session to recover what they said;
+#   - a step's critic returned `overturn` twice on the same claim;
+#   - you have completed 2 steps and the next one is Group-D residual triage.
+# Stopping early is correct. A half-finished step that is committed and recorded costs one
+# session. A step finished badly under context pressure costs the trust in the whole program.
+#
+# PERSIST, before you stop, in this order: (1) update this file's step states + evidence;
+# (2) commit with `[scope] description` citing the step id; (3) update HANDOFF.md's Next actions
+# to name the next pending step. A commit IS the session close (CLAUDE.md §2).
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+
+schema_version: 1
+program: return-to-game
+lane: IN
+created: "2026-08-19"
+driver: ".claude/wf_return_to_game.js"
+authored_by: "adversarial-critique session 2026-08-19; 4 Fable-5 read-only nodes + measured execution"
+
+# The ordering thesis, so a later session does not 'improve' it into the loop it escapes:
+# S1-S4 change what DONE MEANS in this repo, from a document state to a program state. S5-S8 are
+# only safe AFTER that, because a cull or a reconcile performed while `done` still means `a document
+# exists` is the ninth consolidation plan. Do not reorder S5+ ahead of S1-S4.
+
+# ── measured baselines: the numbers a later session must beat, and how they were taken ───────
+baselines:
+  game_compile:
+    taken: "2026-08-19, Godot 4.3.stable.official.77dcf97d8, headless --editor --quit, valoria-game@5e01065"
+    method: "./Godot_v4.3-stable --headless --path . --editor --quit 2>&1 | grep -cE 'Failed to load script|Parse Error'"
+    stock:                  { failed_to_load: 54, parse_errors: 169, broken_scripts: 61 }
+    setting_only:           { failed_to_load: 54, parse_errors: 161, broken_scripts: 61 }
+    five_defects_plus_setting: { failed_to_load: 5, parse_errors: 14, broken_scripts: 8 }
+    note: >
+      REFUTES the 2026-08-18 handoff's framing that the project setting was "worth more than all
+      five defects": alone it moved 169 -> 161 and cleared zero broken scripts. The DEFECTS did the
+      work. The handoff's 121 -> 16 figure was evidently measured post-fix and is roughly consistent
+      with the 5/14/8 endpoint measured here. Both runs are reproducible by the method line above.
+  ledger_headroom:
+    taken: "2026-08-19 via python3 tools/ci_register_size_check.py"
+    editorial_ledger_in: { used: 49920, cap: 50000, headroom_tokens: 80 }
+    note: "BLOCKING cap. The next IN-lane ED filed exceeds it. See S0 — this is why S0 is first."
+
+steps:
+
+  - id: S0
+    title: "Clear the runway — the three things that silently stall an unattended executor"
+    state: pending
+    blocked_on: null
+    precondition: null
+    rationale: >
+      Each of these fails LATE and confusingly if skipped. The ledger cap blocks a commit at the
+      moment a step tries to file an ED; the missing push scope blocks S1's PR after the work is
+      done; an unknown gate tier makes a green local run mean nothing.
+    actions:
+      - "Archive the 5 settled IN ids ED-IN-0189..0193 as WHOLE IDS to registers/editorial_ledger_in_archive.jsonl.
+         Frees ~3,944 tokens (49,920 -> ~46,165; headroom 80 -> ~3,835).
+         ⚠ WHOLE IDS ONLY. The ledgers are append-only and an id's effective status is its LAST row;
+         moving only the resolved row silently reverts it. This is the ED-IN-0112 incident, pinned by
+         tests/valoria/test_ledger_hygiene.py. tools/ci_register_size_check.py prints this warning itself."
+      - "Re-attach the game repo with WRITE scope: add_repo(owner=jordanelias, repo=valoria-game, access='push').
+         This session attached it read-only; S1 cannot open a PR without push."
+      - "Record the blocking-vs-report-only gate tier into gates: below, measured not assumed.
+         Known today: validators-report exits 0 by construction; ci_workplan_pointer_check is report-only
+         in BOTH wirings (tools/valoria_local.py:193 passes False; .github/workflows/valoria-ci.yml:182);
+         compliance_check --check-only is BLOCKING in CI and ABSENT from valoria_local, so local-green
+         is not CI-green."
+    observable: "ci_register_size_check reports editorial_ledger_in.jsonl under 47,000 tokens; a scratch-branch push to valoria-game succeeds; gates: is populated."
+    needs_ruling: false
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S1
+    title: "Make the game compile — and make a compiler, not a board, say so"
+    state: pending
+    blocked_on: null
+    precondition: "S0 done (push scope)."
+    rationale: >
+      In 3,731 commits nothing has ever checked whether the game compiles. This is the step that
+      changes the repo's definition of done. It is measured, not estimated: the endpoint below was
+      reached in one unattended pass this session.
+    groups:
+      A_cascade_parents_fix_in_this_order:
+        - "A1 · Append BOARD to systems/util/Enums.gd:28 SceneType — APPEND, last position, so existing
+           ordinals 0-3 in serialized resources survive. Clears 5x 'Cannot find member BOARD' AND the
+           'Assigned value for constant _PATHS isn't a constant expression' error, which is a CASCADE of
+           the missing member via SceneTypeHelper.gd:19-25. Cascade confirmed empirically: _PATHS errors
+           went 1 -> 0 with only the enum fix applied."
+        - "A2 · THE ROOT CAUSE, and the one neither prior document found: `class_name CombatLogic` is
+           declared in TWO files — scenes/containers/combat/CombatLogic.gd:14 and
+           systems/engine/CombatLogic.gd:19. Rename the ENGINE one to CombatEngineLogic. This single fix
+           clears ~7 errors previously counted as five separate defects: 'Class CombatLogic hides a global
+           script class'; 2x 'Cannot find member Declaration' (exists at scenes/.../CombatLogic.gd:27);
+           'Could not find type CombatEndResult' (exists :116); 2x 'from_character() not found' (exists :82);
+           'Too few arguments for resolve_round()' (CombatContainer.gd:222 calls the SCENE class's :203
+           zero-arg form while the resolver bound the ENGINE class's :144 one-arg form).
+           Ruling-free because every qualified consumer matches the scene class, so zero call sites change,
+           and both files survive verbatim — the rename decides nothing about which combat model is canonical.
+           ⚠ THAT design question (two divergent combat pipelines vs the design repo's combat_engine_v1
+           oracle) is an OBSERVATION for S6, not S1 work. Do not resolve it here."
+        - "A3 · Declare `var _victory_candidates: Dictionary = {}` in autoload/Meta.gd (used at 705,706,786-789,793, declared nowhere). Clears 24."
+        - "A4 · One HashingContext helper systems/util/Hashing.gd, LENGTH-PARAMETERIZED, routed through all
+           FIVE sha256_buffer sites — KeyStore.gd:212 (truncates 16), Key.gd:87, GameDirector.gd:457,
+           CutSceneV30.gd:84, ChronicleParagraphV30.gd:66 (truncate 12). The handoff lists only three; five
+           is correct. Clears 28 across two message forms plus 8x 'Cannot infer the type of hashed'.
+           ⚠ The helper returns hex ALREADY — do not leave a `.hex_encode()` on the call sites. Doing so
+           was the single bug in this session's measured patch and it cost a whole extra iteration."
+        - "A5 · resources/data_types/CharacterData.gd:104 -> `charisma * Constants.COMPOSURE_MULTIPLIER`
+           (ED-694, Constants.gd:43, 'Composure = Charisma x 3, replaces Cha+6'). Clears 9. Also DELETE the
+           false tick at docs/design_sync.md:67 which claims '✓ Updated (Composure Cha×3)' — it is not."
+        - "A6 · Parenthesize the multi-line boolean expressions in systems/data/ArcEvaluatorRegistry.gd
+           (~12 sites from :80) and systems/engine/DomainActionSystem.gd:176. These are ILLEGAL LINE
+           CONTINUATION after a binary operator, NOT unfinished logic — the operand is present on the next
+           line at every site. Clears 2 plus the 4x 'Could not resolve class ArcEvaluatorRegistry' cascade."
+      B_real_gaps_each_with_a_verified_default:
+        - "B1 · CharacterCreationManager.gd:319 references State.SEASON_OVERVIEW, absent from
+           GameStateMachine.gd:20-29. Default: State.IN_SESSION, per that file's own comment at :32-33
+           ('IN_SESSION has no entry — GameDirector manages its sub-states'). Mark [ASSUMPTION]."
+        - "B2 · BattleContainer.gd:153 uses Dictionary.merge() as an expression; it returns void in Godot 4.
+           Default: split into merge() then append(result). Intent is unambiguous from the expression."
+        - "B3 · VersusResolution.gd:13 returns a value where parent ResolutionMode.gd:20 returns void and five
+           siblings conform. Default: rename the outlier to resolve_versus and update its callers — min-edit,
+           preserves the five-way polymorphic contract."
+        - "B4 · CharacterCreationManager.gd:70 set_name() shadows Node.set_name(). Default: set_character_name()."
+      C_the_inference_class_measure_do_not_assume:
+        - "~47-60 'Cannot infer the type of X' instances. MEASURE with and without
+           `[debug] gdscript/warnings/inference_on_variant=1` (two runs, CLAUDE.md §0.1 point 4 — a number
+           without a control is not a measurement), land the downgrade, and file the annotation debt as an
+           explicit residual WITH the measured number attached. Do not record it as '~9 residuals'.
+           MEASURED THIS SESSION: the setting alone moves 169 -> 161 and clears zero broken scripts."
+      D_residuals_triaged_only_at_fixed_point:
+        - "'Unexpected Identifier in class body' (1), 'Could not resolve external class member resolve' (1),
+           'Too few arguments for new()' (1, plausibly another A2 cascade), 20x bare 'Compile Error', and the
+           BattleLogic parse cascade. RULE: after each iteration, any error not mechanically attributable gets
+           a queue entry `state: blocked` with file:line. PARKED, NEVER GUESSED."
+    gate: |
+      iterate (cap 4):
+        ./Godot_v4.3-stable_linux.x86_64 --headless --path . --editor --quit 2>&1 | tee compile.log
+        grep -E "Failed to load script|Parse Error|Compile Error" compile.log \
+          | grep -v "res://tests/" > errors.txt     # tests/ EXCLUDED until S4 vendors gdUnit4
+        PASS iff errors.txt is empty AND this iteration applied zero fixes  (fixed point)
+        else fix the topmost cascade-parent classes present and continue
+      on cap without fixed point: Persist residuals as `blocked` with file:line, end turn
+      Godot 4.3 is reachable from this environment through the proxy (verified: HTTP 200, binary runs).
+    gate_note: >
+      PASS IS A FIXED POINT, NEVER A COUNT. Godot reports only the FIRST parse error per file, so
+      fixing a layer UNCOVERS the next and the count can rise. This session saw 54 -> 5 but a naive
+      count comparison mid-iteration would have read a rise as a regression.
+      res://tests/ is deliberately out of scope here — its 13 'Could not find base class GdUnitTestSuite'
+      errors are S4's subject. S4's observable includes DELETING this filter.
+    observable: "compile.log has zero non-tests errors at a fixed point; the CI compile job is green on the PR."
+    needs_ruling: false
+    sessions: 2
+    evidence:
+      - "MEASURED 2026-08-19 in a scratch copy: stock 54/169/61 -> 5/14/8 applying A1,A3,A4,A5,A6 + the setting.
+         A2 and group B were NOT applied in that run, so the true endpoint is better than 5/14/8.
+         Working patch: 12 files. Reproduce before trusting."
+    critic_verdict: null
+
+  - id: S2
+    title: "Arm the acceptance oracle — give m1_acceptance.py the run it is blocked on"
+    state: pending
+    blocked_on: null
+    precondition: "none — independent of S1, may run in parallel in a separate session."
+    rationale: >
+      tools/m1_acceptance.py already exists and is honest: five falsifiable rows, four reported BLOCKED,
+      and it refuses to guess. Its blocker text says 'a headless season run that does not exist' — but
+      engine/mc_v18.py runs 50-season campaigns in ~2.5s with a deterministic key-log hash. The oracle
+      does not need a new engine; it needs to be pointed at the one that exists.
+    actions:
+      - "row_stub_invocations: one seeded 1-season mc_v18 run wrapped in stubwire.reset_invocations() —
+         the exact procedure m1_acceptance.py:77 already names."
+      - "row_determinism: the same run twice under one seed; compare KeyLog.content_hash() (m1_acceptance.py:87
+         concedes the hash exists and 'needs a run to hash')."
+      - "row_invariant_violations: begin with the property tests m1_acceptance.py:212 says can be authored
+         against individual engines TODAY, ahead of the loop."
+      - "Add a seeded tests/valoria/ test pinning the two newly-implemented rows."
+    observable: "python3 tools/m1_acceptance.py --summary shows >=4 of 5 rows measured/partial rather than BLOCKED; --check exit code now means something."
+    needs_ruling: false
+    sessions: 1
+    evidence: []
+    critic_verdict: null
+
+  - id: S3
+    title: "Close the Key roster and bank Gate-0 evidence"
+    state: pending
+    blocked_on: null
+    precondition: "S1 done — the compile gate is what verifies a 20-entry dictionary diff broke nothing."
+    actions:
+      - "Add the 20 missing types to valoria-game/systems/keys/KeyTypeRegistry.gd. Canonical roster is 55
+         (engine/engine_params/key_types.json); game roster is 35; STRICT SUBSET, zero Godot-only types,
+         gap exactly 20 — recounted three times independently with no divergence."
+      - "Fix the pre-restructure citation in KeyStore.gd (designs/architecture/key_substrate_v30.md) to the
+         live path via references/restructure_ledger.md. That dead citation is WHY no design-repo instrument
+         ever resolved this file."
+      - "Mark Gate-0 G0.1 'build KeyStore v2' SATISFIED-BY-EVIDENCE in godot/godot_conversion_strategy_v1.md:
+         valoria-game/autoload/KeyStore.gd is 265 lines, autoload #3, with emit/subscribe/walk_back/
+         walk_forward/log_hash/reset_for_replay, per-emission RNG seeding, stable sort and cycle blocking.
+         G0.4 partially closed (it names 2 of the 20 types). Editing that doc is veto-passive: it is PROPOSED
+         and 'Jordan-vetoable throughout' by its own status line."
+    observable: "a set-diff of registry keys vs key_types.json is empty; compile job green."
+    needs_ruling: false
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S4
+    title: "Run the 13 test suites that have never run"
+    state: pending
+    blocked_on: null
+    precondition: "S1 done — tests cannot load against a tree that does not compile."
+    actions:
+      - "Vendor addons/gdUnit4/ into valoria-game. addons/ is NOT gitignored (.gitignore has only .godot/),
+         so it tracks. This is a dependency add, not authorship."
+      - "Add a CI test job invoking the gdUnit4 CLI headless."
+      - "Fix the README's false claim that tests/ uses GUT — 13 of 13 files extend GdUnitTestSuite."
+      - "Fill docs/conversion_ledger.md's Tested column ONLY from run evidence. It currently marks 41 Phase-0
+         systems extracted and implemented with the Tested column empty for all 41, and its own literal next
+         action ('Run test_dice_engine.gd and test_tracker_registry.gd. Fix any failures.') has been
+         unexecuted for 106 days."
+      - "DELETE the `grep -v res://tests/` filter from S1's gate and from the CI compile job."
+    observable: "a gdUnit4 report artifact with a real pass/fail count; the S1 filter is gone and the compile job is still green."
+    gate_note: "Test FAILURES are findings, not blockers. Record them as new queue entries. Do not silently fix beyond scope."
+    needs_ruling: false
+    sessions: 1
+    evidence: []
+    critic_verdict: null
+
+  - id: S5
+    title: "Unbind the attribute block — registry-only, zero code churn"
+    state: pending
+    blocked_on: null
+    precondition: "none — registry-only."
+    rationale: >
+      references/descriptor_registry.yaml:39-43 BLOCKS all Godot field binding — a flag printed to every
+      session at startup — pending the naming of a tenth attribute it calls 'the open workshop'. Jordan
+      already ruled the COUNT is ten (2026-08-14). The NAME is stated outright inside this repo, and shipped
+      in the game.
+    actions:
+      - "Add the tenth row (Recall) marked: [ASSUMPTION] — derived from engine/engine_params/params_tables.yaml:9118
+         (canonical capture: '31 points across 10 attributes', 'Recall (Rec)'), corroborated by 22 valoria-game
+         .tres files, CharacterData.gd:14-23's ten @export fields, Constants.gd:33 ATTRIBUTE_CREATION_POOL = 31,
+         and systems/fieldwork/fieldwork_v30.md:295-298; Jordan veto."
+      - "INVERT the fold directions: Cognition primary / Acuity alias, Spirit primary / Will alias.
+         This is the direction with ZERO code churn. The current direction would rename across 13 .gd + 22 .tres
+         + 19 .py files, and the registry's promise that consumers 'bind BY KEY so renames are free' is void —
+         GDScript @export fields and .tres rows bind by field NAME. The current direction is itself marked
+         [ASSUMPTION] -- Jordan veto at descriptor_registry.yaml:54, so awaiting-veto is already the established
+         state for exactly this question."
+      - "Flip 'IN FLUX / fields stay unbound' to 'PROVISIONAL — bindable under the [ASSUMPTION] roster'."
+    observable: "descriptor_registry.yaml shows 10 rows; the SessionStart binding-block flag is gone; ZERO non-registry files changed in the diff."
+    needs_ruling: false
+    needs_ruling_note: >
+      Nominally items 3 and 4 of the 2026-08-18 handoff's held list. The [ASSUMPTION] marker is
+      VETO-ON-SIGHT, not a queue entry — it adds zero needs_jordan items. Reversal is a registry-only revert.
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S6
+    title: "Make the M1 board measure the program instead of the paperwork"
+    state: pending
+    blocked_on: null
+    precondition: "S2 done — so row_m1_junctures reads a board that means execution."
+    rationale: >
+      The board scores M1 at 0/7 because its done-condition is a document state. Five of the seven
+      junctures have real implementations in valoria-game. Both facts are true at once; that is the disease.
+    actions:
+      - "Junctures 1-2 (workplan_v6_progress.yaml:40-49): rewrite `next` from 'author the domain_actions home
+         (ED-FA-0002)' to 'verify valoria-game/systems/engine/DomainActionSystem.gd (276 lines, Phase 1 roll /
+         2a scene_for / 2b resolve_abstractly per its docstring) against the FA sim; formalize the two real gaps
+         the board itself records at :43 — the score/2 obstacle derivation wired NOWHERE, and fractional dice
+         unimplemented (sigma_leverage.roll_net_continuous does int(round(pool)))'. State -> in_progress with
+         game-repo evidence."
+      - "Juncture 4 (:66): the `next` field currently cites ED-PC-0004, which is RESOLVED, and directs the
+         session to R3 U3 — superseded work. The PC lane's plan of record has been combat_completion_plan_v4.md
+         since 2026-07-30, U9/U10 landed 2026-07-23, and the lane is ID-BLOCKED (HANDOFF_PC.md:50-53: 'this is
+         now a blocker, not a formality') — a real blocker the board does not surface. Fix all three."
+      - "Juncture 6 (:80-81, blocked on ED-1051): record GameDirector.gd:132 _run_season()'s season order as an
+         [ASSUMPTION]-grade engine_clock contract in references/module_contracts.yaml — the grade 11 of 27
+         resolvers already carry. State -> in_progress."
+      - "Add the §6 reconcile stamp to valoria_master_workplan_v6.md. ONE LINE. 42 days overdue. NOT a rewrite —
+         the workplan is ratified CANON and its §5 rows are Jordan's."
+    observable: "m1_acceptance --summary juncture detail changes; no juncture marked done without a run artifact."
+    gate_note: "The board may only move toward states the CODE evidences. Marking a juncture done on a document is the defect this step exists to end."
+    needs_ruling: false
+    sessions: 1
+    evidence: []
+    critic_verdict: null
+
+  - id: S7
+    title: "Put the game in front of every future session"
+    state: pending
+    blocked_on: null
+    precondition: "S1 done — there must be a compile verdict to display."
+    rationale: >
+      Nothing in tools/, .github/, .claude/ or skills/ references valoria-game. 107 Python tools, zero
+      of which read the game. Every finding in this program follows from that one missing edge.
+    actions:
+      - "Extend tools/dashboard_data.py's existing Actions-API fetch (the ONE legitimate API caller per
+         CLAUDE.md §2) to also pull valoria-game's latest compile job conclusion into dashboard/data.json."
+      - "PREPEND one line to tools/session_status.py's banner, read from the cached data.json (no network at
+         session start): `game compiles: YES/NO (as of <run date>) · M1: <m1_acceptance one-liner>`."
+    observable: "the SessionStart banner's first content line is about the game."
+    needs_ruling: false
+    needs_ruling_note: >
+      PREPEND, not the handoff §1.6 full banner replacement. That replacement deletes ~389 surfaced items to
+      run a diagnosis experiment — a real judgment call, parked in held: below. Prepend is additive and
+      reversible and captures most of the value.
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S8
+    title: "The ratify-on-merge amnesty sweep — drain the queue mechanically"
+    state: pending
+    blocked_on: null
+    precondition: "S0 done (ledger headroom)."
+    rationale: >
+      CLAUDE.md §2 / ED-1094 is explicit: 'Jordan's review-and-merge of that PR IS the ratification', and the
+      flag flip belongs in 'the same merge, not a separate later step nobody triggers'. ED-1083 is documented
+      proof that the merged-but-never-flipped class is real and recurring. This step is the amnesty for every
+      flip that was skipped. It is LAST because it unblocks Jordan's queue, not the game.
+    actions:
+      - "For each open needs_jordan item: was its subject landed in a PR Jordan reviewed and merged? If yes,
+         the flip is mechanical. Producer flips; critic re-verifies EACH flip against named merge evidence."
+      - "Items WITHOUT a merged-PR subject are LEFT UNTOUCHED. No flip without a named PR."
+      - "Known-stale examples to start from, verified this session: ED-FA-0001 (fork-10 faction count) is
+         `ratified` while workplan §5 still lists it 'genuinely open'; ED-IN-0029 was resolved the day it was
+         filed while §5 still says it is held back from ratification."
+    observable: "the open needs_jordan count before and after, printed by the run and recorded here, with a citation per closure."
+    measured_starting_point: >
+      109 rows are status:open AND needs_jordan:true across the 14 ledger files (pc 2, se 23, fa 15, mb 8,
+      wr 1, fi 3, sc 17, in 25, flat 14, in_archive 1). Raw needs_jordan:true hits are 157 — so 48 TERMINAL
+      rows still carry the flag. That is why four instruments report four different counts (121/114/128/110,
+      ED-IN-0194 F15) and why this session's own first pass said 113. THE COUNT SPREAD IS ITSELF A BUG and
+      clearing the flag on terminal rows is part of this step. Separately: 79 of the open items are
+      unreachable from the master workplan even crediting its three range citations.
+    disposition:
+      A_overtaken_close_citing_the_overtaker: 26   # 15 ledger + 11 workplan §5 rows ratified at default 2026-07-05 and never struck
+      B_default_with_veto_proceed_now: 32          # authorized by ED-1094, the [ASSUMPTION]-awaiting-veto convention, and §5:310
+      C_off_critical_path_park: 64                 # real questions; block nothing on the compile-run-play path
+      D_genuinely_his: 7                           # see jordan_docket below — the entire human ask
+      E_structurally_dead: 8                       # ED-595..599,601,602,610 — all amend designs/arcs/, evacuated 2026-08-05
+    bulk_mechanism: >
+      Four predicates over the LAST row per id, first match wins, measured yield ~64 of 109 (59%) from four
+      greps: (E) source path resolves into an evacuated tree AND the subject is not captured in
+      params_tables.yaml — yield 8; (A) another surface cites the id with RULED|RATIFIED|EXECUTED|superseded
+      — yield ~10; (C) description matches "Not authored into canon this session -- queued" (23) or
+      "FORK (needs Jordan" (9) — yield 32; (B) description contains "Proposed remediation:" — yield 14.
+      The residue needs a hand pass, and that residue is exactly where bucket D hides — so the greps must
+      never auto-close anything above bucket C.
+    commit_order_avoiding_the_ledger_deadlock:
+      - "Commit 1 — archive whole settled ids. Allocate NOTHING. (S0 already does the IN five.)"
+      - "Commit 2 — buckets A and E as IN-PLACE edits to existing rows (status open->resolved, needs_jordan
+         true->false, one-line closure citation). Strictly shrinking. Clear the flag on the 48 terminal rows
+         repo-wide in the same pass. Then archive the newly-terminal ids."
+      - "Commit 3 — ONE disposition ED from id_reservations.yaml next_free, pointing at this table.
+         Per-item EDs would re-hit the cap; one row is the whole design."
+    safety_proof: >
+      Archiving loses no coverage: editorial_ledger_*_archive.jsonl is already inside
+      ci_claim_provenance_check.LEDGERS and validate_ed_citations globs *_archive.jsonl, and
+      broken_dependency_checker only inspects LIVE-status rows (its LIVE_STATUSES excludes resolved),
+      so nothing becomes newly checked or unchecked.
+    needs_ruling: false
+    sessions: 1
+    evidence: []
+    critic_verdict: null
+
+# ── HELD: real questions, parked where they cannot block a session ───────────────────────────
+# Nothing here is on the critical path. Do not promote an item out of this list without a ruling.
+held:
+  - id: H1
+    what: "The culling-plan disposition correction (waves 1-3 repair-not-refuse; 6b rewritten and run BEFORE 6a; wave 5's flip list regenerated)."
+    why_held: "It amends proposals/2026-08-18-culling-plan-v1.md, which is RATIFIED as plan of record."
+    why_not_blocking: "No wave unblocks a compile, a test, or a juncture. Culling is machinery-about-machinery; doing it before S1-S4 would be the ninth consolidation plan."
+  - id: H2
+    what: "The three doctrine amendments to CLAUDE.md §0/§0.1."
+    why_held: "Flow-level; the only items that reduce generation rather than stock."
+  - id: H3
+    what: "ci_claim_provenance_check / ci_vacuous_assertion_check, and whether to end structurally independent adversarial review."
+    why_held: "The culling plan itself held these."
+  - id: H4
+    what: "The full SessionStart banner replacement (handoff §1.6)."
+    why_held: "Deletes ~389 surfaced items to run a diagnosis experiment. S7's prepend captures most of the value reversibly."
+  - id: H5
+    what: "The degree-ladder HELD divergence — combat_engine_v1/core.py and sigma_leverage.degree."
+    why_held: "Held by explicit ruling 2026-08-14, and test_degree_ladder_single_owner.py ASSERTS they still diverge, so resolving one FAILS the guard rather than leaving a stale exemption. Touching it manufactures a dispute."
+  - id: H6
+    what: "Which combat pipeline is canonical — scenes/containers/combat/CombatLogic.gd vs systems/engine/CombatLogic.gd, against the design repo's combat_engine_v1 oracle."
+    why_held: "Surfaced by S1-A2. The RENAME is ruling-free and decides nothing; the MODEL question is real design and belongs to the PC lane."
+
+# ── deliberately excluded, with reasons, so a later session does not re-add them ─────────────
+excluded:
+  - "Any new guard, registry row, freshness pin, or CI check ABOUT the compile gate itself. The 2026-08-18
+     investigation put on record the prediction that a compile gate 'acquires its own stack within weeks'.
+     This program is the counterexample or it is nothing."
+  - "Authoring the ED-FA-0002 domain_actions design doc. DomainActionSystem.gd's docstring plus a contract
+     entry carries M1; the doc can follow verified behaviour instead of preceding it."
+  - "Repairing the stale-LIVE POINTER files and flipping ci_workplan_pointer_check to blocking. Report-only
+     hygiene with zero unblocking power. Worth doing; not worth doing first."
+  - "A new persistence primitive in tools/wf_harness.js. The harness is in-memory run discipline BY DESIGN;
+     cross-session state already has owners (workplans/ + HANDOFF.md + the banner). Adding it there would be
+     scale-local dialect for a problem the repo already solves."
+
+# ── THE ENTIRE HUMAN ASK: 7 rulings, each one sentence, each with a recommendation ───────────
+# This is what 109 open questions reduce to. Nothing in `steps:` waits on any of them.
+# Answer D1 FIRST if you answer only one — it is the multiplier: it converts every FUTURE queue
+# item into a bucket-B default instead of a fresh question, which is how the queue stays drained.
+jordan_docket:
+  - id: D1
+    question: "Does metaphysical canon (P-01..P-15) outrank measured behaviour, share mechanical canon's subordinate tier, or split — constraints supreme, numeric instantiations subordinate?"
+    options: ["(a) outranks", "(b) shares the subordinate tier", "(c) SPLIT — constraints supreme, numbers subordinate"]
+    recommend: "(c)"
+    why: "decision_policy_v1's own 134-ruling precedent mine is least inconsistent with (c). This is the ruling that makes future defaults self-executing."
+    home: "ED-IN-0113 §A, systems/_architecture/decision_policy_v1.md §3"
+  - id: D2
+    question: "Is the tenth attribute Recall, and should the Spirit/Will and Cognition/Acuity folds be inverted so the primaries match the code?"
+    options: ["(a) yes to both", "(b) a different tenth name", "(c) keep current folds and accept the rename"]
+    recommend: "(a)"
+    why: >
+      params_tables.yaml:9109-9122 states the roster outright inside this repo (31 points, 10 attributes,
+      'Recall (Rec)', 'Spirit (Spi)'); the game ships exactly those 10 as @export fields across 22 .tres.
+      The registry's warning at :41-42 excludes the ALIASES as candidates, not Recall, which is an omission.
+      Measured fold asymmetry: Cognition 141 occurrences across 46+ live systems/ files vs Acuity 3 in one.
+      (a) is a registry-only edit with ZERO code churn; (c) is a breaking rename across 13 .gd + 22 .tres +
+      19 .py, and the registry's promise that consumers 'bind BY KEY so renames are free' is void because
+      GDScript @export fields and .tres rows bind by field NAME.
+    home: "references/descriptor_registry.yaml:39-59"
+  - id: D3
+    question: "Re-issue, withdraw, or scope J2 (which mass-battle tree is canon)?"
+    options: ["(a) withdraw — the 2026-08-04 keep-set already kept the tree", "(b) defer behind an adapter", "(c) execute with scope"]
+    recommend: "(a)"
+    home: "ED-MB-0065"
+  - id: D4
+    question: "After the F1-F8 fixes, which flag configuration defines the mass-battle golden?"
+    options: ["(a) all-ON single global re-base", "(b) stay all-OFF", "(c) per-flag matrix"]
+    recommend: "(a) — the entry's own plan. Also resolves ED-MB-0016's friction flip."
+    home: "ED-MB-0061"
+  - id: D5
+    question: "Ratify CIP-1, the Record spine, with the CIP-9b duality amendment as its rider?"
+    options: ["(a) ratify", "(b) defer until the entropy sweep", "(c) reject"]
+    recommend: "(a) — ED-SC-0026: 'needs no new primitive, no new number and no sweep'. One yes drains the entire SC C-cluster into scheduled work."
+    home: "ED-SC-0023/0026 + ED-SC-0024"
+  - id: D6
+    question: "Adopt the three post-adjudication doctrine amendments to CLAUDE.md §0/§0.1?"
+    options: ["(a) adopt", "(b) decline"]
+    recommend: "no recommendation — this is the governing document and the only item that reduces GENERATION rather than stock. Act 4 of proposals/2026-08-18-breaking-the-recursion.md."
+    home: "2026-08-18 handoff §2.2"
+  - id: D7
+    question: "Approve the corrected culling disposition (waves 1-3 repair-not-refuse, 6b rewritten and run before 6a, wave 5 flip list regenerated), plus the two held tool calls, plus keep or end structurally independent adversarial review?"
+    options: ["(a) approve + keep adversarial review", "(b) approve + end it", "(c) hold"]
+    recommend: "(a) — the record shows critics overturning committed claims repeatedly (ED-SC-0028, ED-IN-0159 §8, ED-MB-0061 G19, and twice in this session's own authoring)."
+    home: "2026-08-18 handoff §2.1 + §2.5"
+
+# ── the gate tier, MEASURED. An unattended executor is only as safe as this table is true. ────
+gate_tier:
+  falsely_trusted:
+    - "ci_names_check is REPORT-ONLY IN BOTH TIERS (valoria-ci.yml:175 in validators-report which exits 0
+       by construction; valoria_local.py:157 passes False). The 2026-08-18 material asserts twice that it is
+       blocking in CI. THAT IS FALSE ON THIS TREE. Do not spend unattended budget chasing its 17 hits.
+       WARNING — three near-identical names: ci_naming_check (the deprecated-place-name gate) IS blocking
+       at :105; ci_names_consistency IS blocking at :106; ci_names_check is neither."
+    - "ci_supersession_check and ci_audit_registry_check are structurally incapable of failing
+       (documented at valoria-ci.yml:166-172). Nothing relying on the supersession gate to catch an
+       unpropagated ruling is protected."
+    - "contract-conformance has step-level continue-on-error: true (:219). lanchester-signature ends || true (:375)."
+    - "valoria-game's `lint` job CANNOT FAIL: `find . -name '*.gd' -exec python3 -c '...' {} \\;` does not
+       propagate the invoked command's exit status into find's. The game repo's only syntax gate is inert,
+       and its two grep jobs are the only functional gates. Green there does NOT mean compiles — which is
+       precisely what S1's compile job fixes."
+    - "A FRESH CLONE HAS NO LOCAL TIER AT ALL until `git config core.hooksPath .githooks` is run once."
+    - "valoria_local --staged SILENTLY SKIPS a missing tool (:256-258). After any deletion wave, local
+       pre-commit degrades toward a silent pass. Only --ci mode treats absence as failure (:139-141)."
+  inverse_trap:
+    - "review_core --check runs INSIDE the blocking compliance-check job (valoria-ci.yml:411). Every signal
+       labelled 'report_only' in review_core.py is therefore BLOCKING-ON-REGRESSION. A missing tool grades
+       `fail` rc 2, not `error`. Delete or break wiring_map_check, definitions_store, vocab_store,
+       export_sim_params, link_values_pointers or structure_audit's two modes and CI goes red."
+    - "compliance_check enforces a cap nobody watches: registers/patch_register_archive*.yaml blocks at
+       10,000 tokens (atomization_rules.yaml:82-84) while ci_register_size_check caps the same file at
+       100,000. compliance_check is BLOCKING in CI and ABSENT from valoria_local — local-green is not CI-green."
+  blocking_ci_jobs: ["syntax-check", "validators (19 invocations, no fail-fast)", "unit-tests (full pytest tests/valoria -n auto)", "sim-regression (pytest engine/tests)", "field-goldens (ci_golden_modes_check, 3 byte-exact modes)", "compliance-check (compliance_check --check-only AND review_core --check)"]
+
+pre_commit_checklist:
+  prose_or_design_md_changed:
+    - "If a systems/ design doc changed: stage references/canonical_sources.yaml in the SAME commit
+       (ci_co_file_checker.py:52, blocking); run tools/freshness_gate.py --update if it carries a canonical_sha__ pin."
+    - "Regenerate all three committed artifacts, in this order: build_identifier_census.py -> build_engine_atlas.py
+       -> observability/build_glossary.py. Their freshness gates are blocking (--check at CI :122;
+       test_engine_atlas::test_atlas_is_current; test_build_glossary::test_committed_output_matches_a_fresh_build).
+       MENTION COUNTERS MOVE WHEN PROSE MERELY NAMES A SUBSYSTEM. Budget ~800 lines of generated churn
+       for any prose commit. This is not a content defect; never hand-edit a generated artifact."
+    - "Run the FULL suite: pytest tests/valoria -q -n auto. Targeted runs are how the atlas failure reached CI on PR #319."
+    - "Run tools/valoria_local.py --ci (NOT --staged) — the only local mode covering all 19 CI validators."
+  tests_changed:
+    - "Regenerate references/test_register.json (build_test_register.py; blocking --check at CI :111)."
+  tools_or_workflow_changed:
+    - "Co-edit references/ci_checks_registry.yaml (broken_dependency_checker path-exists + invocation-has-row, blocking)."
+    - "Co-edit tests/valoria/test_gate_coverage.py EXPECTED_COMMANDS (:107) and keep valoria_local.py's list in parity (:359)."
+    - "Run tools/ci_wf_harness_check.py --fix after editing tools/wf_harness.js; run ci_claude_workflow_paths.py before committing."
+  ledger_or_register_written:
+    - "Check headroom FIRST: python3 tools/ci_register_size_check.py."
+    - "Patch-register writes need references/propagation_map.md co-change (ci_co_file_checker.py:61)."
+    - "Quantitative claims in pc/in lane ledgers need `MEASURED-BY: <existing tool>` (ci_claim_provenance_check.py:99, blocking)."
+    - "Allocate IDs from references/id_reservations.yaml next_free. Never max+1."
+
+failure_decoder:
+  "test_build_glossary / test_engine_atlas / build_identifier_census --check red after a prose or deletion commit":
+    "Not a content defect. A committed generated artifact went stale because prose named (or stopped naming) a subsystem. Regenerate; never hand-edit."
+  "ci_names_check firing repeatedly on references/glossary/*.md":
+    "Report-only in BOTH tiers. Regeneration reflowed lines containing a term already on main. Do not chase it."
+  "broken_dependency_checker red naming an ED- id and a tools/ path after a deletion":
+    "A LIVE ledger row cites the deleted file. Fix = a restructure/FORK remap row in the same commit. Not resurrecting the tool, and not editing the ledger (the cap may block that)."
+  "compliance-check red while validators is green":
+    "Either a size cap only compliance enforces (patch_register_archive > 10,000 tokens) or a review_core ratchet regression — often a deleted/broken tool in its CHECKS list. valoria_local --staged can NEVER predict this job."
+  "ci_register_size_check FAIL on a ledger while your diff added one row":
+    "You are the structurally-unlucky next writer at a 99% register. Archive WHOLE settled ids first. Never trim rows."
+  "test_the_held_site_still_diverges red (test_degree_ladder_single_owner.py:187)":
+    "You RESOLVED a HELD divergence. The guard is asserted-to-diverge by design: move the site from HELD into LADDERS and delete its HELD entry. The red is forced bookkeeping, not a regression."
+  "field-goldens DIGEST mismatch":
+    "A digest-relevant behaviour or env default moved. Bisect against FIELD_PINS (ci_golden_modes_check.py:51-90). If deliberate, re-record loudly with a tests/coverage_matrix.md entry — and WATCH ITS CAP, it is at 94%."
+  "valoria_local prints 'all local gates passed'":
+    "Read the line ABOVE it. Report-only failures print separately (:285-288) and several are CI-blocking."
+  "valoria-game CI green after a GDScript change":
+    "Weak evidence. The lint job cannot fail. Green there does not mean it compiles."
+
+# Known hidden couplings that BOTH 2026-08-18 documents missed — fold into the relevant wave's
+# same-commit edit list before executing any cull (H1). Not S1-S8 blockers; recorded here so the
+# next reader does not rediscover them the expensive way.
+cull_couplings_missed_by_both_documents:
+  - "broken_dependency_checker.check_editorial_ledger (blocking) reds waves 1-3: live ledger rows cite
+     deletion targets — editorial_ledger_in.jsonl:21 (ED-IN-0069 -> tools/dashboard_data.py, wave 1),
+     :26 (ED-IN-0085 -> review_core.py, wave 2), :32 (ED-IN-0113 -> scope_ratchet.py, wave 2),
+     :40 (ED-IN-0150 -> build_glossary.py x4, wave 1), :43-44 (ED-IN-0152/0153 -> wf_harness.js, wave 3).
+     Waves 1-3 plan NO FORK/remap rows, unlike wave 4."
+  - "tests/valoria/test_coverage_matrix_threshold.py:14 does `import ci_register_size_check`. Wave 2 deletes
+     that tool and this test is in NO wave's deletion list -> collection ImportError in the blocking unit-tests job."
+  - "check_ci_registry_coverage binds waves 2-3, not just wave 1: ~14 more registered tools and their CI lines."
+  - "Wave 1 stales two blocking freshness gates it never names: build_test_register --check (deleting 8 test
+     files) and build_identifier_census --check (deleting ~40 tools/skills — the exact PR #307 failure)."
+  - "Wave 4's verify grep has a blind spot on its own known-live oracle: gen_sigma_parity_goldens.py:102 builds
+     the audit/2026-06-03-contest-groundup/engine.py path from os.path.join segments, which
+     `grep -rl 'audit/2026-'` cannot see (the constructed-path under-match class, pathres.py:13, ED-IN-0128)."
+  - "A golden re-record needs a tests/coverage_matrix.md entry (ci_co_file_checker.py:78, blocking) and that
+     file is at 94% of its blocking 15,000-token cap. A re-record note can trip a size gate in the same commit."
+
+gates: {}   # populated by S0 — measured, never assumed

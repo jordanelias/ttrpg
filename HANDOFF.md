@@ -52,7 +52,29 @@ carried nothing newer than July, while being **the only section the SessionStart
 Everything struck from it was already recorded in `HANDOFF_IN.md` or the ledgers; nothing was lost,
 and the July narrative is in `git log HANDOFF.md`._
 
-### ⭐ READ FIRST (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
+### ▶ RUN THIS (2026-08-19) — `workplans/return_to_game_queue.yaml`
+
+**The Return-to-Game program. It is an executable queue, not a plan to read.** Nine steps, S0–S8,
+~8 sessions, **zero of which require a ruling from Jordan**. Open the queue file, read the block at
+the top, take the first `state: pending` step whose precondition holds on disk, execute it, commit,
+write the state back, and stop when your context is degrading. There is nothing to ask anyone.
+
+- **The entire human ask is `jordan_docket:` — seven one-sentence questions, each with a
+  recommendation**, down from 109 open `needs_jordan` rows (26 close as overtaken, 32 proceed at a
+  stated default under ED-1094, 64 park off the critical path, 8 are structurally dead). Answer D1
+  first if you answer only one; it is the multiplier that keeps the queue drained.
+- **Order matters and is load-bearing.** S1–S4 change what "done" means in this repo from a document
+  state to a program state. S5–S8 shrink things afterward. A cull or a reconcile run while `done`
+  still means "a document exists" is the ninth consolidation plan.
+- **S1 is measured, not estimated.** Godot 4.3 headless against `valoria-game@5e01065`: stock is
+  **54 script-load failures / 169 parse errors / 61 broken scripts**; applying five defect fixes plus
+  the project setting reached **5 / 14 / 8** in one unattended pass. Reproduction method is in the file.
+- ⚠️ **Four claims in the 2026-08-18 documents below are refuted there with evidence** — three
+  `sha256_buffer` sites (there are five), the defect list being "complete", the project setting being
+  worth more than the defects (alone it moves 169→161 and clears zero scripts), and `ci_names_check`
+  being blocking in CI (it is report-only in **both** tiers — do not spend budget on its 17 hits).
+
+### ⭐ READ SECOND (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
 
 The recursion investigation (PR #319) and its Fable-5 adjudication (PR #321) are complete. That
 handoff carries **six unblocked, verified actions that move the game**, the five items held for
