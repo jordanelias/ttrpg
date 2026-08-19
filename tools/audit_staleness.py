@@ -56,11 +56,21 @@ except ImportError:  # allow `python tools/audit_staleness.py` from repo root
 # in CI as `--strict` (validate only, warn-only), so the drift was reported on every run and never
 # acted on — 32 files behind before anyone joined the two facts.
 #
-# `refresher` names the script that regenerates the artifact, and
-# tests/valoria/test_audit_refresh_coverage.py joins it to .github/workflows/audit-refresh.yml —
-# in BOTH directions: the generator must be invoked AND its artifact must be committed. A family
-# with no refresher, or one naming a script the cron does not run, or one whose output the cron
-# discards, now FAILS instead of quietly drifting.
+# `refresher` names the script that regenerates the artifact.
+#
+# ⚠ THE JOIN THAT ENFORCED THIS IS GONE, 2026-08-19. `tests/valoria/test_audit_refresh_coverage.py`
+# used to check both directions — generator invoked AND artifact committed — against
+# `.github/workflows/audit-refresh.yml`. Both it and that workflow's weekly cron were removed by
+# Jordan's ruling to break the build/audit/gate recursion: the cron regenerated findings feeds and
+# opened a PR every Monday with no session in the loop, and the test was a 216-line guard whose
+# only subject was keeping audits of the repo fresh (CLAUDE.md §0.1 pt 5 forbids a guard on an
+# artifact load-bearing solely on this repo's process).
+#
+# WHAT THAT MEANS NOW, stated plainly rather than left to be rediscovered: these families will
+# drift, and NOTHING will fail when they do. That is the accepted cost, not an oversight — the
+# fields below still report staleness honestly when someone runs this tool, and the workflow is
+# still dispatchable by hand. Do not re-add a guard here; if a family's drift ever costs the game
+# something, that is the evidence that would earn one.
 #
 # `refresher: None` MEANS "NOTHING REGENERATES THIS" AND NOTHING MORE. It does NOT mean "frozen".
 # An earlier version of this note said it did, while one of the two None families was not frozen at

@@ -26,8 +26,11 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "9933ff2"
-  date: "2026-08-14"
+  sha: "c75c561"
+  date: "2026-08-19"
+  # Bumped 2026-08-19 with the juncture 1-2 rewrite (Act 2). This stamp had read 9933ff2 /
+  # 2026-08-14 while rows below said "rewritten 2026-08-19" — false by this file's own rule 3,
+  # and the duplicated-stamp rot class ED-IN-0147 records. Caught by a read-only audit.
 
 milestones:
   M1:
@@ -38,7 +41,7 @@ milestones:
         owner: "FA"
         owner_deliverable: "FA decision-surface work (J-5). RESOLUTION runs: faction strategic actions roll the canonical d10 through sigma_leverage on the single-owner degree ladder (PR #311). Two gaps remain, both in CODE."
         state: not_started
-        blocked_on: null
+        blocked_on: "SOFT, and only on the score/2 half — recorded 2026-08-19 after a read-only audit found this row claiming blocked_on: null while a real gate existed. Under the score/2 ruling the FACTION STAT ROSTER *is* the obstacle surface, and the roster is contested: references/descriptor_registry.yaml declares 5 faction stats, engine/autoload/game_state.py implements 6, Influence is 1-7 in one place and 0-7 in another, and Mandate-as-L is ED-FA-0004 open. Jordan's packet at HANDOFF.md:194-224 is the ruling. CONSEQUENCE, stated precisely so nobody over-reads it: a session CAN wire score/2 provisionally against the coded roster today, and CAN fully execute the fractional-dice half with no ruling at all (sigma_leverage.py:284, callee already takes a float) — what it cannot do is CLOSE this juncture cleanly while the roster is contested."
         next: "EXECUTABLE (rewritten 2026-08-19, Act 2 — done means it runs, CLAUDE.md 0.2): wire the score/2 obstacle derivation Jordan ruled, which this row's own evidence records as wired NOWHERE; and implement fractional dice pools — sigma_leverage.roll_net_continuous still does int(round(pool)), so only the RESULT is fractional. Verify both against engine/ and the FA sim. The ratification-flip of the RULED FA riders is bookkeeping that rides along; it is not the increment and cannot close this juncture."
         evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc", "fork-10 faction count RULED = 4 (ED-IN-0047, 2026-07-13; resolves ED-FA-0001) — faction-scope bank/binding work unblocked", "FA decision-surface riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder authored as PROPOSED in faction_politics_v30.md (2026-07-09) and RULED (ED-IN-0046/0047, 2026-07-13) — awaiting the ratification-flip + E11 authoring", "2026-08-14 (PR #311, ED-IN-0187): faction strategic actions now roll the canonical d10 through sigma_leverage (the d6/4+ convention is deleted) and resolve on the single-owner margin degree ladder (dice_engine.degree_from_net); CONQUEST_MIN_MIL deleted. ⚠ CORRECTED 2026-08-15 (ED-IN-0191): an earlier version of this row said \"resolution mechanics for this juncture are settled — the missing piece is the design doc, not the dice\". That is FALSE and PR #312 refutes it in two places. The score/2 obstacle derivation Jordan ruled (\"the obstacle is their corresponding score/2 plus whatever specific modifiers exist for them in that instance\") is wired NOWHERE, and fractional DICE are not implemented — sigma_leverage.roll_net_continuous does int(round(pool)), so pools are still whole dice and only the result is fractional. The dice are NOT settled"]
       - n: 2

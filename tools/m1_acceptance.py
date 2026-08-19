@@ -292,15 +292,30 @@ def row_m1_junctures():
     for j in junctures:
         states[j.get('state', '?')] = states.get(j.get('state', '?'), 0) + 1
 
+    # ⚠ THIS ROW IS DOC-DERIVED, AND SAYS SO. Labelled 2026-08-19 after two independent read-only
+    # audits found the same hole: CLAUDE.md §0.2 names this tool THE instrument of "done means it
+    # runs" and asserts a juncture may not be marked done on a document — but this row counts
+    # `state: done` strings in a hand-edited YAML board. Seven one-word edits green it, and the
+    # ratchet in review_core would bank that as real improvement.
+    #
+    # NOT SILENTLY FIXED, because the honest fix is not available yet: closing it requires a
+    # per-juncture EXECUTION artifact to check `state: done` against, and no such artifact exists
+    # for any of the seven. Inventing a schema here would be scripting drift. So the row keeps
+    # measuring what it can measure and DECLARES its own weakness in the output, where a reader
+    # deciding whether to trust the verdict will actually see it. Rows 1-2 are execution-derived
+    # (real seeded mc_v18 probe runs); this one is not, and the two must not read alike.
     return {
         'row': 'm1_junctures',
         'label': 'All M1 junctures execute',
         'state': 'measured',
+        'derived_from': 'document',
         'value': done,
         'total': total,
         'passes': done == total,
         'unblocked_by': None,
-        'detail': ' · '.join(f'{k}: {v}' for k, v in sorted(states.items())),
+        'detail': (' · '.join(f'{k}: {v}' for k, v in sorted(states.items()))
+                   + '  ⚠ DOC-DERIVED: counts `state: done` in workplan_v6_progress.yaml, not'
+                     ' execution. Editing the board greens this row — unlike rows 1-2.'),
     }
 
 

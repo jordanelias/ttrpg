@@ -68,11 +68,22 @@ def game_lines():
             nxt = ' '.join(str(j.get('next') or '—').split())
             out.append(f"▶ THE GAME — M1 juncture {i}/{n} ({done}/{n} done) · {title}"
                        + (f" [{j['owner']}]" if j.get('owner') else ''))
+            # WRAP, DO NOT TRUNCATE. These two fields ARE the increment. A 140-char cut was
+            # measured on 2026-08-19 to drop half of juncture 1's work ("implement fractional dice
+            # pools — roll_net_continuous still does int(round(pool))") and the sentence "Two gaps
+            # remain, both in CODE", leaving a session with a silently partial instruction. A
+            # banner that exists to name one increment must show all of it.
+            import textwrap
+            def _emit(label, text, width=96):
+                body = textwrap.wrap(text, width=width) or ['—']
+                out.append(f"  {label}: {body[0]}")
+                pad = ' ' * (len(label) + 4)
+                out.extend(pad + ln for ln in body[1:])
             if owns:
-                out.append(f"  deliverable: {owns[:140]}")
-            out.append(f"  board says next: {nxt[:140]}")
+                _emit('deliverable', owns)
+            _emit('board says next', nxt)
             if j.get('blocked_on') and str(j['blocked_on']) not in ('None', 'null', ''):
-                out.append(f"  blocked_on: {str(j['blocked_on'])[:110]}")
+                _emit('blocked_on', str(j['blocked_on']))
     except Exception:
         pass
 

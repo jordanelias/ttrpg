@@ -43,15 +43,30 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
   that row requires a human decision** (`needs_jordan: true`). **A finding that needs no ruling is
   either fixed in this commit or dropped.**
 
-  Why the row gate rather than a row ban: rows are the loop's carrier, but they are also the only
-  persistence channel across a session boundary, and this repo has no context between sessions. Ban
-  them outright and a real cross-lane game defect evaporates at Stop; allow them freely and the
-  generator's gain stays above 1. Gating on `needs_jordan` **makes the human the low-pass filter on
-  the only surviving channel** — gain below 1 by construction, because the loop can no longer feed
-  itself work no human ordered. This deletes `audit/` **as a category, not as a cleanup**.
+  Why the row gate rather than a row ban: rows are a principal carrier, and also a real persistence
+  channel across a session boundary, and this repo has no context between sessions. Ban them
+  outright and a real cross-lane game defect evaporates at Stop; allow them freely and the
+  generator's gain stays above 1. Gating on `needs_jordan` puts the human in the loop on that
+  channel. This deletes `audit/` **as a category, not as a cleanup**.
+
+  ⚠ **CORRECTED 2026-08-19 — the first wording of this paragraph was overstated and is retracted.**
+  It claimed `needs_jordan` gating made the human "the low-pass filter on **the only surviving
+  channel**", giving "gain below 1 **by construction**". A read-only audit refuted both halves.
+  *Only surviving channel* was false: `workplans/*.yaml` entries are neither ledger rows nor
+  documents, and seven `SKILL.md` files carried a standing order to append to a register on every
+  run — both bypass this gate entirely. *By construction* is earned only where a mechanism cannot
+  feed itself **regardless of agent choice**; that is true of the severed `audit-refresh` cron and
+  of the darkened banner, and it is **not** true of any prose channel, which depends on a session
+  choosing to comply. The honest claim: **the automated loop's gain is below 1; the agent-mediated
+  loop is mitigated, with a human-auditable tripwire, not structurally bounded.** Do not restore the
+  stronger wording without a mechanism that earns it.
 - **Max effort on the deliverable named by the current milestone**, where a juncture is done only
   when **the behaviour executes** (§0.2). Reach for the most thorough path *that deliverable*
-  warrants — exhaustive over cursory, verified over plausible. **Work is this session's work if
+  warrants — verified over plausible, and finish it rather than sampling it. (The word *exhaustive*
+  is deliberately absent: it was re-inserted here on 2026-08-19 and struck the same day, because
+  the amendment three paragraphs below indicts that exact word as the term that drifts effort to
+  whichever surface is enumerable. Restating it under a narrower scope does not disarm it.)
+  **Work is this session's work if
   Jordan asked for it this session, or it traces to an open M1 juncture; nothing else is.** If
   something broken blocks the milestone, **fix it minimally, without adding a guard.** Tier *down*
   only deliberately and per-task (§10), never as an excuse to under-invest on the judgment nodes.
@@ -155,6 +170,18 @@ Take that away and the freed capacity has nowhere to go but the game.
 **Consequences, so this is not just a sentence.**
 - A juncture may **not** be marked done on a document. `tools/m1_acceptance.py` is the instrument;
   its rows are falsifiable and it already refuses to guess.
+
+  ⚠ **QUALIFIED 2026-08-19 — the instrument is not yet uniformly execution-bound, and pretending
+  otherwise is the failure this section exists to end.** Rows 1-2 genuinely execute the engine (a
+  seeded `mc_v18` probe run and a same-seed `KeyLog.content_hash()` comparison) and no amount of
+  writing satisfies them. **Row 4 — the row that aggregates "all seven junctures execute" — counts
+  `state: done` strings in `workplans/workplan_v6_progress.yaml`, a hand-edited board.** Seven
+  one-word edits green it. Two independent read-only audits found this hole separately, which is
+  the maximally bankable signature. The row now declares itself DOC-DERIVED in its own output;
+  closing it properly needs a per-juncture execution artifact that does not exist yet for any of
+  the seven. Until it does: **treat row 4 as bookkeeping, not evidence**, and never cite a green
+  row 4 as proof a juncture runs. Rows 3 and 5 are honestly `partial`/`blocked`, which also means
+  the verdict `MET` is currently unreachable — the gate can say NOT-DONE, it cannot yet say DONE.
 - "Authoring the design doc" is **not** the deliverable for a juncture that has running code. Verify
   the code against the sim and record the contract; the doc may follow verified behaviour instead of
   preceding it.

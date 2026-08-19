@@ -77,8 +77,23 @@ line. `python tools/m1_acceptance.py --summary` is the instrument.
 ---
 
 **Program state (PR #323).** The Return-to-Game queue `workplans/return_to_game_queue.yaml` ran S0,
-S1, S2 on 2026-08-19. It is **superseded as the steering surface** by the ruling above; keep it for
-the measured facts and the 19 parked residuals, do not resume it as a queue.
+S1, S2 on 2026-08-19. It is **superseded as the steering surface**, is a **reference not a queue**,
+and its own header now says so. Do not resume it; do not run its driver; **S7 is inert and must not
+be executed** (it would prepend to the banner that §0.3 declares a running experiment).
+
+**The 19 residuals are DISPOSITIONED, 2026-08-19 — they are not a backlog.** An earlier version of
+this paragraph said "keep it for the measured facts and the 19 parked residuals", which read as live
+work and was flagged by three independent audits as this commit's own doctrine violated by the
+commit that installed it (§0: *a finding that needs no ruling is either fixed in this commit or
+dropped*). Disposition:
+- **14 carry `needs_ruling: false` → DROPPED.** They are apparatus findings about this repo's own
+  machinery. Under §0 they had to be fixed here or dropped, and they are dropped. They remain
+  readable in the file as history; **nothing may take them as work.** Do not re-file them.
+- **5 carry `needs_ruling: true`** (S0-R1, S1-R1, S2-R1, S2-R2, S2-R4) → they are legitimate under
+  the row gate, but they live in a workplans YAML rather than the `needs_jordan` ledger queue, which
+  is a second uninstrumented home for human-decision items. Route them through Jordan's docket.
+- What is worth keeping is the **measured facts**: the controlled compile numbers, the gate tier,
+  the failure decoder.
 
 | | | |
 |---|---|---|
@@ -223,22 +238,24 @@ present a zero obstacle.
 or derived from settlement L/PS; (3) does Treasury exist separately from Wealth; (4) is the scale
 0–7 or 1–7, uniformly.
 
-### Open and agent-executable — no ruling needed
+### ⛔ WITHDRAWN 2026-08-19 — this section used to hand out apparatus work as "no ruling needed"
 
-- **The remediation plan's remaining tracks** (`audit/2026-08-14-five-lens-repo-assessment/01_plan.md`).
-  Track A is done as of this commit. Still open: **B** (owner-in-code — `TN_STANDARD` has three live
-  definitions and none in its owner `dice_engine.py`; the bare-RNG sweep; register
-  `single_owner_check.py` in `ci_checks_registry.yaml`, whose absence makes CLAUDE.md §4 false as
-  written), **C** (gate perimeter — `validate_ed_citations` cannot see `audit/`;
-  `broken_dependency_checker` cannot see `engine/` at all), **D** (`tests/` governance — 159
-  `sys.path.insert` across 131 files, no registry), **E** (godot status line, vocabulary entries,
-  the `WI = End+6` transcription defect in `combat_reference_v1.md:218,347`).
-- **The plan's binding rule, and it is the point:** a step may add a guard **only** in the same commit
-  as a burn-down of the thing it guards, and every ratchet it touches must leave with a **lower**
-  pinned maximum. If the guards land and the burn-downs do not, the plan has failed by its own
-  standard.
+It listed tracks **B–E** of `audit/2026-08-14-five-lens-repo-assessment/01_plan.md` — owner-in-code
+sweeps, gate-perimeter widening, `sys.path.insert` governance across 131 test files, vocabulary
+entries — under the heading *"Open and agent-executable — no ruling needed"*. Every item is
+audit-sourced work on this repository's own machinery, pre-authorised for any session that read
+this file. That is precisely the T3 carrier CLAUDE.md §0.3 describes, sitting in the continuity
+surface, and it is now excluded twice over: by §0's selection term (work is this session's work only
+if Jordan asked this session, or it traces to an open M1 juncture — none of B–E does) and by §0.1
+pt 5 (the artifacts are load-bearing only on process). **Do not take this work. Do not restore this
+section.** The plan file still exists if a human ever wants it.
+
+**One item from it survives, because it is the opposite of apparatus** — it is engine code on the
+critical path of M1 juncture 1, which is why the board now names it as the increment:
+
 - **The largest unimplemented piece of the #311 ruling:** obstacles as score/2 plus modifiers is
-  **wired nowhere**.
+  **wired nowhere** (`engine/autoload/dice_engine.py:118-123` says so itself). Paired with
+  fractional dice pools (`sigma_leverage.py:284` still does `int(round(pool))`). See the board.
 
 ### Standing state
 

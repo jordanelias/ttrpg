@@ -1,11 +1,27 @@
 # return_to_game_queue.yaml — THE EXECUTABLE QUEUE for the Return-to-Game program.
 #
 # ─────────────────────────────────────────────────────────────────────────────────────────────
-# IF YOU ARE A SESSION WITH NO MEMORY, READ THIS BLOCK AND NOTHING ELSE FIRST.
+# ⛔ SUPERSEDED 2026-08-19. DO NOT RESUME THIS QUEUE. DO NOT RUN THE DRIVER.
 #
-# WHAT THIS IS. A program that returns Jordan to building the game. It runs UNATTENDED. No step
-# blocks on a human. You execute it by running the driver below; you stop when your context is
-# degrading; you persist before you stop. There is nothing to ask anyone.
+# This header used to read "IF YOU ARE A SESSION WITH NO MEMORY, READ THIS BLOCK AND NOTHING ELSE
+# FIRST … It runs UNATTENDED … You execute it by running the driver below … Loop." That is a file
+# that ARMS ITSELF: it instructed any memoryless session to start executing it, its supersession
+# lived only in HANDOFF.md, and steps S3-S8 still read `state: pending`. A read-only audit found it
+# to be one of the two surviving carriers by which a fully compliant session could hand itself
+# apparatus work — the reroute CLAUDE.md §0.3 predicts, in the file that was supposed to end it.
+#
+# WHAT TO READ INSTEAD: the SessionStart banner, then HANDOFF.md's "THE DELIVERABLE" block, then
+# CLAUDE.md §0.2. Your work is the current M1 juncture and nothing else (CLAUDE.md §0).
+#
+# WHY THIS FILE STILL EXISTS: it holds MEASURED FACTS worth keeping — the controlled compile
+# numbers, the gate tier, the failure decoder, and the residual record. It is a REFERENCE, not a
+# queue. `state: pending` on S3-S8 means "never started", not "next up".
+#
+# ⚠ S7 IS INERT AND MUST NOT BE EXECUTED: it instructs a session to prepend a line to
+# tools/session_status.py's banner. Act 3 replaced that banner outright and CLAUDE.md §0.3 declares
+# it a running experiment whose whole method is "change nothing else". Executing S7 would corrupt
+# the experiment mid-run. Same for `held:` H2/H4 below — both were EXECUTED 2026-08-19 by Jordan's
+# ruling and are no longer held.
 #
 # HOW TO RUN IT.
 #   1. Pick the first step whose `state: pending` and whose `precondition` observable holds ON DISK.
