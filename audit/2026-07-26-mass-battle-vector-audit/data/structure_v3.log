@@ -1,6 +1,0 @@
-[structure_audit] repo root (working tree): /home/user/ttrpg
-[G_code] parsing sim/ + tools/ imports (AST)...
-         248 modules, 336 import edges, 4 cycle(s), 21 cut-vertex(es)
-[L2] building module_contracts wiring graph...
-     27 modules, 99 wiring edges, 0 phantom-producer, 6 dangling-emit, 9 doc:null
-[done] audit/2026-07-26-mass-battle-vector-audit/structure_audit_v3/structure_register.md

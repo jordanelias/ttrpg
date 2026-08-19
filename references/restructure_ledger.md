@@ -1207,6 +1207,59 @@ needs their provenance resolved). Both prefixes are listed per unit, mirroring t
 `designs/arcs/` pair above -- check_editorial_ledger's extractor only recognises
 `designs/`-prefixed refs (the dominant citation form still in the ledger), and single-hop
 resolution means the bare `audit/<unit>/` row alone cannot catch those. -->
+
+<!-- CULLED TO FORK — 2026-08-19 (culling-plan-v1 wave 4, RATIFIED by Jordan 2026-08-18).
+     17 repository-subject audit units: 108 files, ~100,166 lines. Every one is an audit ABOUT this
+     repository — including 2026-07-13-multi-agent-audit, an audit of the audit apparatus, which
+     CLAUDE.md §0.3 identifies as the single largest source of self-generated work items.
+     §0 now retires audit/ as a CATEGORY, so this removes stock the doctrine already forbids growing.
+
+     THE REF IS `c9b0a86`, DELIBERATELY, AND THE ROWS ABOVE EXPLAIN WHY. The first evacuation named a
+     pre-deletion commit on the working BRANCH; PR #288 was SQUASH-merged and that object then existed
+     only in one local clone, which test_forked_status.py::test_the_fork_rows_name_a_real_ref caught.
+     c9b0a86 is main's own HEAD before this branch, already on origin/main, and contains all 108 files —
+     so it survives squash, rebase or merge-commit alike. A local tag was NOT used: tag pushes are
+     refused by this environment's proxy, and a ref that exists nowhere on origin is fabricated provenance.
+
+     KEPT DELIBERATELY: audit/2026-08-11-code-leanness/ is NOT in this set. Two of its files are
+     load-bearing on BLOCKING gates — duplication_census.py is named by MEASURED-BY in four ledger rows
+     and ci_claim_provenance_check tests bare path existence (so a FORK: row does NOT save it), and
+     01_plan.md is opened unconditionally by tests/valoria/test_audit_plan_ids_are_allocated.py:245.
+     Exempting the unit costs 1,446 lines and avoids editing append-only ledgers. -->
+| `designs/audit/2026-07-08-fable5-four-modes-review/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-08-fable5-four-modes-review/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-07-08-open-items-jordan-decision-docket/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-08-open-items-jordan-decision-docket/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-07-12-pr119-harness-verification/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-12-pr119-harness-verification/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-07-13-multi-agent-audit/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-13-multi-agent-audit/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-07-21-repo-state-vector-audit/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-21-repo-state-vector-audit/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-07-30-mb-session-retrospective/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-30-mb-session-retrospective/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-05-repo-analysis-sweep/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-05-repo-analysis-sweep/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-06-vector-audit/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-06-vector-audit/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-07-26-mass-battle-vector-audit/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-07-26-mass-battle-vector-audit/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-10-subsystem-atlas-verification/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-10-subsystem-atlas-verification/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-11-consolidation-sweep/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-11-consolidation-sweep/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-11-divergence-audit/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-11-divergence-audit/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-11-systems-python-architecture-audit/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-11-systems-python-architecture-audit/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-12-alias-index-consolidation/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-12-alias-index-consolidation/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-13-fork-divergence-harness/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-13-fork-divergence-harness/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-14-five-lens-repo-assessment/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-14-five-lens-repo-assessment/` | `FORK:c9b0a86` | FORKED |
+| `designs/audit/2026-08-17-weekly-review/` | `FORK:c9b0a86` | FORKED |
+| `audit/2026-08-17-weekly-review/` | `FORK:c9b0a86` | FORKED |
 | `designs/audit/2026-04-28-political-dynamics-session/` | `FORK:c451bcb` | FORKED |
 | `audit/2026-04-28-political-dynamics-session/` | `FORK:c451bcb` | FORKED |
 | `designs/audit/2026-04-30-architecture-session/` | `FORK:c451bcb` | FORKED |

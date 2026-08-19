@@ -5671,79 +5671,6 @@
     }
    }
   },
-  "test_fork_divergence.py": {
-   "assertionless_count": 0,
-   "baselines": [],
-   "cites_measurement": false,
-   "declared_lane": null,
-   "documented": true,
-   "guards": "The anti-fabrication ratchet over the restructure-ledger consumers (ED-IN-0178).",
-   "helper_loc": 15,
-   "helpers": [
-    {
-     "loc": 8,
-     "name": "_load_fork_divergence_module"
-    },
-    {
-     "loc": 5,
-     "name": "fd"
-    },
-    {
-     "loc": 2,
-     "name": "verdicts"
-    }
-   ],
-   "lane_derived": true,
-   "lanes": [
-    "IN"
-   ],
-   "loc": 146,
-   "modules_under_test": [
-    "engine/anything_fabricated.md",
-    "engine/params/core.md",
-    "systems/combat/combat_v30.md"
-   ],
-   "mutation_claimed": false,
-   "mutation_count": null,
-   "test_count": 7,
-   "tests": {
-    "test_baseline_pairs_still_separate_evacuated_from_fabricated": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "THE RATCHET. Losing a pair is an anti-fabrication regression, not a style drift."
-    },
-    "test_bdc_cannot_see_engine_paths_at_all": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "THE FINDING THAT OUTRANKS EVERY COLLAPSE ABOVE (ED-IN-0182)."
-    },
-    "test_bdc_still_collapses_the_two_hop_chain_and_that_is_recorded_not_asserted": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "The finding the plan's per-consumer framing could not express."
-    },
-    "test_the_baseline_is_not_vacuous": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "An empty or trivially-satisfied baseline would make the ratchet decorative."
-    },
-    "test_the_control_is_dead_everywhere": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "A path with NO ledger row must resolve nowhere. If this ever passes somewhere, the alias"
-    },
-    "test_the_probe_reaches_every_consumer": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "Assert that it asserted. An import failure inside probe_all must not read as agreement."
-    },
-    "test_the_ratchet_can_observe_a_loss": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "Positive control: plant a regression and require the comparison to report exactly it."
-    }
-   }
-  },
   "test_forked_status.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -12421,7 +12348,7 @@
    "FA": 7,
    "FI": 1,
    "GO": 2,
-   "IN": 45,
+   "IN": 44,
    "MB": 5,
    "PC": 8,
    "SC": 2,
@@ -12547,16 +12474,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 163,
+  "files": 162,
   "files_citing_a_measurement": 18,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 123,
+  "files_naming_a_module": 122,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 48,
-  "helper_defs": 314,
-  "helper_loc": 2891,
+  "files_with_a_lane": 47,
+  "helper_defs": 311,
+  "helper_loc": 2876,
   "ratchet_baselines": 10,
-  "tests": 1430,
+  "tests": 1423,
   "undocumented_files": 0
  }
 }
