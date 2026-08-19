@@ -59,8 +59,31 @@ read the block at the top, take the first `state: pending` step whose preconditi
 run it through `.claude/wf_return_to_game.js`, commit, write the state back, and stop when your
 context is degrading. There is nothing to ask anyone.
 
-**▶ NEXT PENDING STEP: `S2` — arm the acceptance oracle.** Its precondition is `none`. S3/S4 need S1;
-S5 and S7 are independent; S6 needs S2; S8 needs S0.
+**▶ NEXT PENDING STEP: `S5` — unbind the attribute block (registry-only, zero code churn).**
+
+⚠️ **READ THIS BEFORE PICKING, because the plan did not anticipate it.** The protocol says "take the
+first `pending` step whose precondition holds on disk", and the ordering thesis says "do not reorder
+S5+ ahead of S1–S4". **Both cannot be honoured**, because S1 resolved to `blocked` rather than `done`,
+so S3, S4 and S7 are all gated behind a precondition that will not clear on its own. Availability now:
+
+| step | precondition | holds? |
+|---|---|---|
+| S3, S4 | `S1 done` | **no** — S1 is `blocked` |
+| S7 | `S1 done` | **no** |
+| **S5** | `none` | **yes** ← first in file order |
+| S6 | `S2 done` | **yes** (S2 landed) |
+| S8 | `S0 done` | yes |
+
+The tension is narrower than it looks. The ordering thesis exists to stop *a cull or a reconcile*
+running while `done` still means "a document exists" — that is **S8** (the drain) and to a lesser
+degree **S6** (the reconcile). **S5 and S7 are additive, not shrinking**, so taking S5 does not spend
+the thesis. S8 is the one to keep last.
+
+**Recommended order from here: S5 → S6 → the S1 unblockers → S8.** S1's blockage is three concrete
+things, none of which needs Jordan: **S1-R4** (no CI compile job exists — this is the step that would
+actually deliver S1's headline promise of "a compiler, not a board, says so", and it needs its own
+scoped entry), **S1-R2** (annotation work, deliberately scoped out of S1), and **S1-R1** (a numeric
+ruling). Closing S1-R4 is the highest-leverage remaining item in the whole program.
 
 **Progress (2026-08-19, PR #323 on `claude/return-to-game-execution-74fdvc`):**
 
@@ -68,8 +91,9 @@ S5 and S7 are independent; S6 needs S2; S8 needs S0.
 |---|---|---|
 | **S0** | `done` | IN ledger 49,920 → **45,998** tokens (headroom 80 → 4,002); `gates:` populated; push scope verified. Zero overturns across 42 verdicts. CI green. |
 | **S1** | `blocked` | Game compiles far better but not clean. Code landed as **jordanelias/valoria-game#2**. |
-| S2–S8 | `pending` | — |
-| S0-R1..R6, S1-R1..R7 | `blocked` | 13 residuals parked with `file:line` — never guessed, never silently fixed. |
+| **S2** | `done` | `m1_acceptance` rows 1-2 now measured from a real headless probe season: 2/5 → **4/5**. Row 1 honestly **FAILs** at 2 stub hits — see S2-R1, the bar is unsatisfiable as written. |
+| S3–S8 | `pending` | S3/S4 gated behind S1. |
+| S0-R1..R6, S1-R1..R7, S2-R1..R6 | `blocked` | 19 residuals parked with `file:line` — never guessed, never silently fixed. Three of S2's are `needs_ruling`. |
 
 - **The entire human ask is `jordan_docket:` — seven one-sentence questions, each with a
   recommendation**, down from 109 open `needs_jordan` rows. Answer D1 first if you answer only one;
@@ -97,7 +121,9 @@ S5 and S7 are independent; S6 needs S2; S8 needs S0.
   scan — 51 vs 235 gate-matching lines on an *identical* tree. Always `rm -rf .godot` first. (2) A
   leftover driver worktree under `.claude/worktrees/` falsely reds a blocking unit test, so the full
   suite reports 1 failed / 1932 passed for a reason unrelated to your diff (S0-R5). `git worktree
-  remove --force <path> && git worktree prune`, then re-run.
+  remove --force <path> && git worktree prune`, then re-run. This has now fired on FOUR of four
+  driver runs — assume it, do not rediagnose it. While a run is in flight its worktree is `locked`
+  and cannot be removed, so attribute the red by hand rather than fighting it.
 - ⚠️ **`valoria-game` CI is not evidence.** Its `GDScript Lint` job reported **green on a tree with 97
   compile errors** — `find -exec` does not propagate exit status and the check never parses GDScript.
   Its `Naming Consistency` job is red on `main` too (12 pre-existing `maret_vossen` hits).
