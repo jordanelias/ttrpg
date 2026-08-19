@@ -63,3 +63,25 @@ signals:
     # — see 04_execution_ledger.md's predicate-refinement row (W5 candidate).
     baseline: 25
     target: 25
+
+  m1.acceptance:
+    # THE GAME'S EXECUTION VERDICT — seeded 2026-08-19 (Act 2 completion, Jordan-directed:
+    # "I need to break out of the infrastructure loop in the repository").
+    #
+    # LOUD CALL-OUT, per ED-1094: this adds a row to a baseline file. It is a SEED, not a raise —
+    # no existing ceiling is moved, and the signal it grades did not previously exist in the
+    # armature at all. Every other row here is lane IN and grades apparatus; this is the only one
+    # whose subject is whether the game runs.
+    #
+    # POLARITY: this counts FAILING acceptance rows, so the ceiling must go DOWN. Target is 0.
+    # That is the opposite of most rows here, and it is deliberate — a juncture-count signal would
+    # have to RISE, which the ratchet (which grades a regression as count > ceiling) cannot express.
+    #
+    # MEASURED 2026-08-19 via `python3 tools/m1_acceptance.py --check` = 2 failing rows:
+    #   - stub_invocations: 2 stub_resolve calls in a 1-season probe. Both are deliberate
+    #     OI-05/OI-07 no-fabrication deferrals, so this row is arguably unsatisfiable as written
+    #     (recorded as S2-R1, needs_jordan). It is INSIDE the ceiling, not excluded from it.
+    #   - m1_junctures: 0/7 execute.
+    # Rows that are BLOCKED never fail --check, so an unbuilt subsystem cannot manufacture a red.
+    baseline: 2
+    target: 0

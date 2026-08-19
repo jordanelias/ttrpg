@@ -376,7 +376,12 @@ def _fmt(result):
             lines.append(f"      {r['detail']}")
         if r.get('unblocked_by'):
             lines.append(f"      unblocked by: {r['unblocked_by']}")
+    # Machine-readable failure count. `failed` was already computed and only ever reached the
+    # --json path, so no gate could read this tool's verdict — which is why the game's acceptance
+    # state was absent from every Stop-hook and CI signal (T2, CLAUDE.md §0.3). review_core.py's
+    # `m1.acceptance` row parses this line. Printing an existing number, not measuring a new one.
     lines += ['', f"  verdict: {result['verdict']}",
+              f"  {result['failed']} row(s) failing",
               '', '  ' + result['note']]
     return '\n'.join(lines)
 
