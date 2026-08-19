@@ -18738,6 +18738,7 @@
     "overview": {
      "built_in": [
       "py:engine/mc_v18.py",
+      "py:tools/m1_acceptance.py",
       "py:tools/trace_execution_phases.py",
       "typed:engine/engine_params/sim_params.json"
      ],

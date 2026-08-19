@@ -838,7 +838,7 @@ steps:
 
   - id: S2
     title: "Arm the acceptance oracle — give m1_acceptance.py the run it is blocked on"
-    state: pending
+    state: done
     blocked_on: null
     precondition: "none — independent of S1, may run in parallel in a separate session."
     rationale: >
@@ -857,6 +857,278 @@ steps:
     observable: "python3 tools/m1_acceptance.py --summary shows >=4 of 5 rows measured/partial rather than BLOCKED; --check exit code now means something."
     needs_ruling: false
     sessions: 1
+    evidence:
+      - "LOCATION, read this first -- THE SAME BLOCKER AS S0, THIRD RECURRENCE, AND IT IS NOW
+         RESOLVED. The producer ran in the isolated run worktree .claude/worktrees/wf_35d5f40b-8aa-2/
+         and never said so; all three lenses independently found that NONE of the 7 FILES CHANGED
+         existed at /home/user/ttrpg, so a commit staged there would have been EMPTY while recording
+         S2 done. RESOLVED at adjudication by the S0 precedent: both trees shared base c9b0a86 (the
+         5 touched files had zero drift between c9b0a86 and the root HEAD 8bd3275), the worktree diff
+         was extracted and `git apply`d clean, the 2 untracked test files copied, and the spent
+         worktree was then REMOVED (`git worktree remove --force` + prune). Every number below is
+         measured in the REPO ROOT with no worktree on disk."
+      - "GATE RE-MEASURED AT THE REPO ROOT, byte-identical to the producer's worktree run:
+         row 1 stub_invocations = 2 FAIL (measured), row 2 determinism PASS hash 2b98c63e14f5...
+         (measured), row 3 key_log_closure PARTIAL, row 4 m1_junctures 0/7 FAIL (measured),
+         row 5 invariant_violations BLOCKED. --json reports states
+         ['measured','measured','partial','measured','blocked'] and failed=2. OBSERVABLE MET:
+         4 of 5 rows non-blocked (>=4 required) and --check exits 1 from TWO measured failures
+         rather than, as pre-S2, from the board-read m1_junctures row alone."
+      - "CONTROL, taken by the adjudicator with one instrument in one session (CLAUDE.md S0.1 pt 4).
+         PRE-S2 arm via `git stash --include-untracked` on the repo root: rows 1/2/5 BLOCKED,
+         2/5 non-blocked, --check exit 1. POST-S2 arm: 4/5 non-blocked, --check exit 1. The
+         producer's C5 is confirmed, including its own honest caveat that the exit CODE is
+         numerically unchanged -- what changed is what it is derived FROM."
+      - "SS8 VIOLATION IN THE STEP'S OWN NEW CODE -- FOUND BY 2 OF 3 LENSES, CONFIRMED BY A RUN
+         FALSIFIER, AND CORRECTED IN PLACE AT ADJUDICATION. _run_probe_season() opened with
+         `_stubwire.reset_invocations()`, justified by a docstring claiming a stale prior probe's
+         invocations would otherwise leak into CampaignResult.stub_hits. That leak is IMPOSSIBLE:
+         engine/mc_v18.py:222 snapshots `_stub_start = stubwire.invocations` and :300 returns
+         `stub_hits = stubwire.invocations - _stub_start` -- run_campaign is already the single
+         owner of that delta. FALSIFIER EXECUTED (not reasoned): with reset_invocations()
+         monkeypatched to a no-op and the cumulative counter standing at 6, the row still reported
+         exactly 2. The reset was also a contract breach -- engine/substrate/stubwire.py:71 says
+         'Never called from a production code path' and tools/dashboard_data.py:1256-1260 imports
+         this module and calls collect() IN-PROCESS. Correction applied: the reset and its now-unused
+         `_stubwire` import are gone, the false docstring is replaced with the falsifier and the
+         measured cost, and the row detail no longer mislabels the instrument as 'delta since reset'.
+         CONTROL ON THE CORRECTION: the gate reports the identical 2 / PASS / 2b98c63e14f5... after it."
+      - "COST MEASURED, both arms, closing the critics' 'no control' finding (S0.1 pt 4 applies to a
+         favourable number too). The producer's only basis was an INHERITED, uninstrumented '~2.5s
+         for 50 seasons' copied from queue prose into a tool docstring. Measured here, 3 subprocess
+         runs per arm, median: `tools/m1_acceptance.py --summary` 0.153s pre-S2 -> 0.617s post-S2,
+         +0.46s for the three campaigns collect() now runs. The uninstrumented figure was deleted
+         from the docstring and replaced with this one. The dashboard-cost worry is bounded: 0.46s
+         per deploy."
+      - "THE DASHBOARD SILENT-DISAGREEMENT HAZARD DOES NOT FIRE -- measured, not assumed. The LOGIC
+         lens flagged that .github/workflows/dashboard.yml:71 installs pyyaml ONLY, so if the new
+         engine import failed there, C4's fallback would silently report rows 1-2 `blocked` on the
+         published card while the CLI reports them `measured` -- against build_program's own
+         docstring ('if a number here disagrees with the CLI, the CLI is right and this is a bug').
+         Instrumented: importing engine.mc_v18 in a clean subprocess pulls in exactly one
+         third-party package, `yaml`. The dashboard job's install is sufficient. Structural residual
+         (the fallback is silent if the import EVER breaks) parked as S2-R6."
+      - "THE ONE OVERTURN IS REFUTED BY THE CRITIC'S OWN NAMED FALSIFIER. FACTUALITY overturned C14's
+         attribution that scope_ratchet's REGRESSED verdict is pre-existing drift and not this step's
+         files, reasoning that `git ls-files` cannot see uncommitted files so the reading was
+         guaranteed clean by construction; it named the falsifier: 'git add both new test files, then
+         scope_ratchet --check and read tracked.files; if it reports <=3112 I am wrong.' RUN, with
+         both files staged: tracked.files = 1440 against ceiling 3112 / target 3103 -- AT TARGET.
+         CONTROL arm (stash): 1438. Delta exactly +2, the two new files, with 1,672 files of headroom.
+         Both arms carry the IDENTICAL REGRESSED verdict from ed.stale +122 and
+         ed.needs_jordan_stale +62. The producer's attribution stands; the overturn does not."
+      - "A DEFECT TWO LENSES AGREED ON, AND BOTH WERE WRONG. FACTUALITY and LOGIC each concluded
+         independently that references/identifier_census.json 'cannot have changed' / is
+         byte-identical between trees, and that its presence in FILES CHANGED was unexplained. It
+         DID change: `git diff` shows `engine_names: 6238 -> 6240` at :97. Both lenses compared the
+         per-subsystem rollup blocks and grepped for built_in / m1_acceptance / CAMPAIGN_SEASONS,
+         missing the file-level total two lines from the end. Recorded because 'two lenses found it
+         separately' is the signal this protocol banks -- here it was bankable-wrong. The half of
+         their soften that IS right: the producer's C11 mis-describes WHAT changed in that file (it
+         carries no built_in arrays); the mention-counter mechanism and the YAML/glossary half are
+         exact."
+      - "ALL BLOCKING GATES GREEN AT THE REPO ROOT, worktree removed, artifacts regenerated in the
+         checklist's mandated order (build_test_register -> build_identifier_census ->
+         build_engine_atlas -> observability/build_glossary; the atlas re-emitted byte-identical):
+         pytest tests/valoria -q -n auto -> 1946 passed, 23 skipped, 15 xfailed, 0 FAILED [exit 0];
+         pytest engine/tests -q -> 2051 passed, 5 xfailed [exit 0];
+         tools/valoria_local.py --ci -> '36 validator invocation(s) across 4 job(s); 0 blocking
+         failure(s)', report-only failures ci_quantity_vocabulary_check / mechanics_index_gen /
+         canon_coverage_check / scope_ratchet -- the same four S1 recorded against a stashed clean
+         tree; compliance_check --check-only --repo-state . -> '[COMPLIANCE OK] 64 warning(s),
+         0 errors' [exit 0]; review_core --check -> '[REVIEW-STATE] AMBER -- no blocking failures or
+         regressions' [exit 0]; build_test_register --check and build_identifier_census --check both
+         clean; broken_dependency_checker -> 'All dependencies verified' [exit 0]."
+      - "S0-R5 DID NOT FIRE, and this is a STRONGER arm than the producer had. Two lenses correctly
+         warned that the producer's clean 1946/0-failed was taken INSIDE the worktree, and that
+         S0-R5 records `pytest tests/valoria -n auto` at the repo root returning 1 failed
+         (test_ci_common_primitives::test_no_module_actually_loads_id_reservations) whenever a
+         .claude/worktrees/ run worktree exists. The worktree was removed before this run, so the
+         repo-root suite is genuinely 0-failed. The count also reconciles independently: S1's
+         baseline 1933 + 13 new tests (8 probe + 5 dice) = 1946, skipped/xfailed unchanged."
+      - "tools_or_workflow_changed CHECKLIST BRANCH, which the producer never addressed and FIDELITY
+         flagged: EXECUTED and found non-binding. broken_dependency_checker (blocking, path-exists +
+         invocation-has-row) exits 0 -- m1_acceptance.py is not a CI-invoked check, has no
+         ci_checks_registry.yaml row today, and needs none; test_gate_coverage's EXPECTED_COMMANDS
+         covers CI commands only. The one real staleness FIDELITY found (apparatus_registry.yaml:942
+         still says imported_internally: false) is confirmed and DELIBERATELY NOT fixed here:
+         regenerating it drags in 2 unrelated pre-existing drift rows (ci_pp_frozen_check.py, a
+         second claude-workflow), which is scope-widening a step commit (CLAUDE.md S0.1 pt 5 -- sweep
+         only what the task is load-bearing on, file the rest). It self-heals on audit-refresh.yml's
+         schedule. Parked as S2-R5. FIDELITY's related sub-claim that the registry omits
+         engine.mc_v18 from `imports` is wrong -- the generator only tracks tools/ modules, and the
+         regenerated row still reads [ci_common, yaml]."
+      - "CROSS-TEST CONTAMINATION HAZARD (LOGIC): closed twice over. Every in-process reader of the
+         process-global stubwire counter was run in ONE pytest process together with the module that
+         calls collect() -- test_scope_ratchet + test_stubwire + test_articulation_subscriber +
+         test_handoff_dispatch_validity + both new files -> 56 passed. And the reset that created the
+         breach is now gone entirely."
+      - "PRODUCER WORK THAT SURVIVED UNCHALLENGED, so a later reader does not re-litigate it: the
+         defensive engine import + honest `blocked` degradation (C4, upheld x3); the 8 probe tests
+         including the non-vacuous-hash falsifier (C7, upheld x3); the 5 seeded dice-engine property
+         tests, whose degree-ladder oracle is genuinely re-derived rather than re-invoked and whose
+         boundary cases pin exactly the bands the 2026-08-14 Jordan ruling moved (C8, upheld/sharpened
+         -- LOGIC's caveat that the roll_pool half is a regression pin rather than an independent
+         check is recorded and correct); and the refusal to add `hypothesis` to a blocking job's
+         install list (C9, upheld x3)."
+    critic_verdict: >
+      ADJUDICATED done. Three read-only critics (FIDELITY, FACTUALITY, LOGIC) x 17 claims = 51
+      verdicts; all three returned full 17-claim coverage, so there is NO null result to declare.
+      Distribution: 34 uphold, 13 soften, 11 sharpen, 1 overturn. The single OVERTURN (FACTUALITY on
+      C14, the scope_ratchet attribution) was tested rather than averaged away, using the falsifier
+      the critic itself named -- with both new files STAGED, tracked.files reads 1440 against a 3112
+      ceiling, controlled against 1438 unstaged. The overturn is REFUTED and, decisively, it was
+      never load-bearing on this step's observable in any case; the LOGIC lens had independently
+      upheld the same claim. So no overturn stands and state is done -- not by averaging, but because
+      the one genuine BLOCKER (worktree-only edits, found by all three lenses, third recurrence of
+      the S0 defect) was RESOLVED at adjudication rather than waived, and every number was
+      re-measured in the repo root with the worktree removed. Three softens were CLOSED by taking
+      evidence the producer omitted: the missing cost control (measured, 0.153s -> 0.617s), the
+      unaddressed tools_or_workflow_changed branch (run; non-binding), and the worktree-scoped test
+      green (re-run at the root, 0 failed). ONE CORRECTION WAS APPLIED TO THE CODE rather than parked,
+      because it is a CLAUDE.md SS8 violation inside this step's own new lines and its falsifier was
+      cheap: the inert stubwire.reset_invocations() wrapper -- which the queue step itself and this
+      file's pre-S2 blocker text both prescribed -- is deleted, proven by a run falsifier to change no
+      reported value, and the gate emits identical numbers after. Six defects nobody claimed are
+      parked as S2-R1..S2-R6 rather than silently fixed. And one finding runs the other way: TWO
+      lenses independently asserted references/identifier_census.json could not have changed, and it
+      demonstrably did (engine_names 6238 -> 6240) -- multi-lens agreement is a strong signal, not a
+      proof, and this is the counterexample that keeps it honest.
+
+  - id: S2-R1
+    title: "The M1 bar's row 1 is UNSATISFIABLE as written: the only 2 stub hits are deliberate no-fabrication deferrals"
+    state: blocked
+    blocked_on: "A design call, not a code fix: either close OI-05/OI-07 (which means authoring NPC + knot generation canon) or amend the acceptance bar to whitelist declared deferrals. Neither is S2's to make."
+    precondition: null
+    rationale: >
+      S2 turned row 1 from a guess into a measurement and the measurement FAILS at 2 -- the most
+      valuable thing the step produced. Both hits are structurally located: engine/mc_v18.py:186
+      (generate_npc) and :204 (form_knot), inside _faction_actions_callback (:116), which
+      run_campaign invokes once per season (:267) -- so the count scales with season depth and
+      1 season => 2 is a property of the probe, not a constant of the engine. Both sites are
+      DELIBERATE: their stub_resolve `reason` text cites OI-05/OI-07 and says "Honest deferral,
+      not fabrication (CLAUDE.md SS5/SS7)". So a bar reading "stub invocations == 0" currently
+      demands the repo either fabricate that canon or keep failing its own gate forever. Recorded
+      by the producer as a residual and independently by the FIDELITY lens, which explicitly
+      declined to rule on it as out-of-lane.
+    observable: "Either engine/mc_v18.py:186/:204 no longer call stub_resolve, or row 1's pass condition names an explicit allowlist of design-gated deferrals and m1_acceptance --check exits 0 on that row."
+    needs_ruling: true
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R2
+    title: "Row 1's label says 'the M1 path'; the probe measures an mc_v18 season, and 0/7 M1 junctures execute"
+    state: blocked
+    blocked_on: "Fixing it properly means either cross-conditioning row 1 on row 4 or rewording the bar — both change what the acceptance gate asserts, which is S3+ territory."
+    precondition: null
+    rationale: >
+      Found independently by 2 of 3 lenses (FIDELITY C1, LOGIC C1b) and it is the sharpest
+      unclaimed finding: the row is labelled "Stub invocations on the M1 path == 0" while row 4 in
+      the SAME report shows 0/7 M1 junctures executing (1 blocked, 4 in_progress, 2 not_started per
+      workplans/workplan_v6_progress.yaml:35-88). An mc_v18 season is a PROXY for the M1 path, not
+      the M1 path; most M1 stub sites are unreachable by the probe. The asymmetry that makes this
+      worth parking rather than shrugging at: pre-S2 the row was `blocked` and could not emit a
+      false green, whereas `measured` can -- if the two OI deferrals of S2-R1 were closed, row 1
+      would read 0/PASS while the M1 path remained entirely unbuilt. S2 disclosed the instrument in
+      the row detail and (at adjudication) in row_stub_invocations' docstring; nothing yet makes the
+      gate itself refuse to green a proxy.
+    observable: "row_stub_invocations either reports `partial` (not `measured`) while m1_junctures < total, or its label names the probe rather than 'the M1 path'."
+    needs_ruling: true
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R3
+    title: "The determinism row PASSes on a 2-key KeyLog and cannot observe an almost-empty season"
+    state: blocked
+    blocked_on: "Needs the stronger instrument to be chosen (final_state vs a key floor) — a gate-semantics decision, and row 5's season sweep may subsume it."
+    precondition: null
+    rationale: >
+      Found by 2 of 3 lenses. `match = bool(h1) and h1 == h2` can only observe a TOTALLY empty log
+      (engine/mc_v18.py:103 empties key_log_hash only when ECHO_TRANSPORT is off), and the gate's
+      own output records 2/2 keys emitted -- against mc_v18.py:104's note that keys_emitted is
+      "0 while scenes defer (SC bridge pending)". A regression dropping the season to one emitted
+      key still reads PASS. A far stronger instrument sits unused on the same object:
+      CampaignResult.final_state = game_state.serialize_world(world) (mc_v18.py:307), which would
+      see non-determinism anywhere in the faction/battle/victory/accounting paths the seed actually
+      drives. Related: test_a_different_seed_can_diverge_from_the_probe_seed asserts inequality of
+      the TUPLE (key_log_hash, stub_hits) and carries an `or fixed.keys_emitted == 0` escape, so an
+      empty-season regression would convert that falsifier into a tautology instead of a red. The
+      escape is inert today (2 keys) and was left alone rather than edited under S2's scope.
+    observable: "row_determinism compares final_state (or asserts a minimum emitted-key floor), and the divergence test's keys_emitted escape hatch is gone."
+    needs_ruling: false
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R4
+    title: "The newly-meaningful --check exit code has no automated consumer"
+    state: blocked
+    blocked_on: "Wiring it into CI turns a 0/7-junctures board state into a red build; needs a decision on report-only vs blocking first."
+    precondition: null
+    rationale: >
+      LOGIC lens, on the step's own observable ("--check exit code now means something"). Confirmed
+      by repo-wide grep: outside *.md the only references to m1_acceptance are
+      tools/dashboard_data.py (imports the module and calls collect(); never reads an exit code),
+      .github/workflows/dashboard.yml:25 (a path FILTER, not an invocation),
+      tests/valoria/test_scope_ratchet.py:281, tools/evacuation_plan.py:581 (a prose comment) and
+      references/apparatus_registry.yaml. There is NO entry in references/ci_checks_registry.yaml,
+      none in tools/valoria_local.py, none in .github/workflows/valoria-ci.yml. So the exit code S2
+      armed cannot cause any CI failure. The step's observable is still met -- the code is now
+      DERIVED from measured facts rather than one board read -- but "means something" and "is
+      observed by something" are different properties and only the first was delivered.
+    observable: "m1_acceptance --check has a row in references/ci_checks_registry.yaml and is invoked by a named CI job (blocking or report-only, stated)."
+    needs_ruling: true
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R5
+    title: "apparatus_registry.yaml's m1_acceptance row is stale, and regenerating it drags in unrelated drift"
+    state: blocked
+    blocked_on: "Not blocking anything; deliberately deferred so an S2 commit does not absorb 2 unrelated pre-existing registry rows."
+    precondition: null
+    rationale: >
+      FIDELITY lens. references/apparatus_registry.yaml:942-957 records tools/m1_acceptance.py with
+      imported_internally: false; a tests/valoria file now imports it, so that field is wrong.
+      Regenerating (tools/build_apparatus_registry.py) was attempted at adjudication and REVERTED:
+      the fresh output also adds ci_pp_frozen_check.py and a second claude-workflow, pre-existing
+      drift unrelated to S2 -- exactly the widening CLAUDE.md SS0.1 pt 5 says to file rather than
+      sweep. Non-blocking: no workflow gates on it, and audit-refresh.yml:76 regenerates it on
+      schedule, so it self-heals. Note FIDELITY's companion sub-claim is WRONG and should not be
+      re-filed: the generator tracks only tools/ modules, so the row's `imports: [ci_common, yaml]`
+      is correct and does not omit engine.mc_v18.
+    observable: "references/apparatus_registry.yaml regenerates with no diff, in a commit whose scope is registry drift."
+    needs_ruling: false
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R6
+    title: "Two m1_acceptance test surfaces now exist, and the dashboard's engine-import fallback is silent"
+    state: blocked
+    blocked_on: "Both are conventions/robustness, not correctness; neither has a forcing event."
+    precondition: null
+    rationale: >
+      Two small findings, parked together because both are about how the S2 surface will age.
+      (a) ADJACENT CONVENTION (FACTUALITY): tests/valoria/test_scope_ratchet.py:269-277 is the
+      existing home of m1_acceptance's tests and carries a written reason -- "Housed HERE rather than
+      in a new file on purpose ... a new file would raise tracked.files -- the ceiling this very
+      module enforces." S2 created tests/valoria/test_m1_acceptance_probe.py anyway, splitting one
+      module's test surface across two owners. The stated COST is measured and turns out negligible
+      (tracked.files 1438 -> 1440 against a 3112 ceiling, S2's evidence), so this is a tidiness call,
+      not a scope breach -- and it does NOT apply to test_dice_engine_properties.py, which tests a
+      different module and rightly has its own file. (b) SILENT FALLBACK (LOGIC): tools/m1_acceptance
+      degrades rows 1-2 to `blocked` on an engine ImportError, and tools/dashboard_data.py:1256-1260
+      calls collect() in-process, so a future import break would publish `blocked` on the dashboard
+      card while the CLI (run in a fuller environment) reports `measured` -- against build_program's
+      own docstring that the CLI is authoritative. Measured today as NOT firing: engine.mc_v18 pulls
+      in exactly one third-party package (yaml) and dashboard.yml:71 installs it. Also unguarded:
+      a raise INSIDE run_campaign at row-evaluation time is uncaught and would crash the CLI outright.
+    observable: "the probe tests live in one owner, and an engine failure at row-evaluation time degrades the row rather than crashing --summary."
+    needs_ruling: false
+    sessions: 0.25
     evidence: []
     critic_verdict: null
 

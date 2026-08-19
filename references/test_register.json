@@ -4885,6 +4885,59 @@
     }
    }
   },
+  "test_dice_engine_properties.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Property tests against engine/autoload/dice_engine.py \u2014 an INDIVIDUAL engine, ahead of the",
+   "helper_loc": 9,
+   "helpers": [
+    {
+     "loc": 9,
+     "name": "_expected_degree"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 150,
+   "modules_under_test": [
+    "engine.autoload"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_degree_from_net_boundary_values_exactly": {
+     "assertionless": false,
+     "assertions": 6,
+     "summary": "Example-based edges at the exact band transitions -- the seeded sweep above lands near"
+    },
+    "test_degree_from_net_is_total_over_the_sweep_and_never_raises": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A ladder with a gap would raise (falling through an if/elif chain to an implicit None)"
+    },
+    "test_degree_from_net_matches_the_documented_margin_formula_property": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_roll_pool_is_deterministic_given_an_identically_seeded_rng": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A narrower, individual-engine echo of row_determinism's shape (same seed -> same"
+    },
+    "test_roll_pool_respects_pool_minimum_and_die_rule_bounds_property": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": null
+    }
+   }
+  },
   "test_ed_citation_integrity.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -7824,6 +7877,67 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "The guards hold: no link to an authoring abbreviation, and no cite-ID token (PP_329)."
+    }
+   }
+  },
+  "test_m1_acceptance_probe.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Behaviour pins for the S2 acceptance-oracle probe rows (return_to_game_queue.yaml S2,",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 115,
+   "modules_under_test": [
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 8,
+   "tests": {
+    "test_a_different_seed_can_diverge_from_the_probe_seed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Falsifier for 'the hash is a constant string regardless of input' -- content_hash()"
+    },
+    "test_check_exit_code_tracks_a_real_measured_failure": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "--check's exit code must be DERIVED from collect()['failed'], never a constant --"
+    },
+    "test_collect_reports_at_least_four_of_five_rows_measured_or_partial": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The step's own gate (return_to_game_queue.yaml S2 `observable`)."
+    },
+    "test_determinism_row_is_measured_and_passes": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": null
+    },
+    "test_engine_probe_import_succeeded": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Falsifier for every test below: if engine.mc_v18 failed to import, both rows would"
+    },
+    "test_probe_season_hash_matches_across_independent_helper_calls": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Exercises _run_probe_season directly (row_determinism already does this internally;"
+    },
+    "test_stub_invocations_reproducible_under_the_fixed_probe_seed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Same fixed seed, measured twice, independently -> same stub-call count. This is"
+    },
+    "test_stub_invocations_row_is_measured_not_blocked": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": null
     }
    }
   },
@@ -12373,7 +12487,7 @@
    "FA": 7,
    "FI": 1,
    "GO": 2,
-   "IN": 44,
+   "IN": 45,
    "MB": 5,
    "PC": 8,
    "SC": 2,
@@ -12499,16 +12613,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 162,
-  "files_citing_a_measurement": 17,
+  "files": 164,
+  "files_citing_a_measurement": 18,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 122,
+  "files_naming_a_module": 124,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 47,
-  "helper_defs": 314,
-  "helper_loc": 2885,
+  "files_with_a_lane": 48,
+  "helper_defs": 315,
+  "helper_loc": 2894,
   "ratchet_baselines": 10,
-  "tests": 1425,
+  "tests": 1438,
   "undocumented_files": 0
  }
 }

@@ -8,19 +8,28 @@ rule is vacuous where the oracle does not cover the behaviour). Left as a phrase
 "fully simulatable" is unbounded and becomes the scope problem it was meant to end.
 This file makes it five falsifiable rows.
 
-WHAT IT DELIBERATELY DOES NOT DO. Four of the five rows are NOT MEASURABLE YET because
-the season loop does not exist. This tool reports them as `blocked`, names the artifact
-that unblocks each, and NEVER guesses a value. A gate that reports readiness it has not
-measured is worse than no gate — it is the confounded-measurement failure of ED-MB-0042
-rebuilt as infrastructure.
+WHAT CHANGED (S2, workplans/return_to_game_queue.yaml, ED-IN-0112). The "headless season run
+that does not exist" this file used to name as the blocker for rows 1-2 DOES exist —
+engine.mc_v18.run_campaign already runs 50-season campaigns in ~2.5s with a deterministic
+KeyLog hash. Rows 1 and 2 were blocked only because nothing pointed this oracle at it; they
+are now MEASURED from a real headless 1-season probe run (`_run_probe_season` below). Row 5
+still needs the full season loop wired through invariant assertions — not attempted here —
+but a first, narrower slice of its "properties over individual engines TODAY, ahead of the
+loop" guidance is now live in tests/valoria/test_dice_engine_properties.py (dice_engine.py's
+Pool Minimum / Die Rule bounds and the degree-ladder margin formula), independent of this
+row's own `state` (still `blocked`, honestly — that file does not touch a season KeyLog).
+A gate that reports readiness it has not measured is worse than no gate — it is the
+confounded-measurement failure of ED-MB-0042 rebuilt as infrastructure, so every MEASURED
+row below reports its real value, pass or fail, never a guess (CLAUDE.md §0.1 point 4).
 
   row                     measurable today?  unblocked by
   ----------------------  -----------------  ---------------------------------------
-  1 stub_invocations      no                 a headless season run
-  2 determinism           no                 a headless season run (2 seeds)
+  1 stub_invocations      YES (S2)           a headless season run
+  2 determinism           YES (S2)           a headless season run (2 seeds)
   3 key_log_closure       PARTIAL            static contract check now; full at run
   4 m1_junctures          YES                the progress board
   5 invariant_violations  no                 property tests over a season run
+                                              (begun at the individual-engine level — see above)
 
 USAGE
   python3 tools/m1_acceptance.py --summary
@@ -48,12 +57,55 @@ import ci_common  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
+# engine.mc_v18 is the headless season run rows 1-2 need (S2). Imported defensively — never
+# fatally — so a broken engine import degrades those two rows back to `blocked` with the real
+# exception named, rather than crashing every other row's --summary/--json/--check output.
+sys.path.insert(0, REPO_ROOT)
+try:
+    from engine import mc_v18 as _mc_v18
+    _ENGINE_IMPORT_ERROR = None
+except Exception as _exc:  # pragma: no cover - defensive; surfaced via row detail, not raised
+    _mc_v18 = None
+    _ENGINE_IMPORT_ERROR = _exc
+
 BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
 CONTRACTS = os.path.join('references', 'module_contracts.yaml')
+
+# Fixed probe seed for rows 1-2 (S2). FIXED, not time-derived: CLAUDE.md §0.1 point 4 — "a
+# number without a control is not a measurement" — and the control here is that both rows read
+# the SAME seed's probe run, so a --summary invocation an hour from now reproduces the same
+# stub-invocation count and the same content_hash a reader can independently re-derive. Value
+# is arbitrary (the queue step's authoring date, S2/ED-IN-0112); only its fixedness matters.
+M1_PROBE_SEED = 20260819
 
 
 def _repo(p):
     return os.path.join(REPO_ROOT, p)
+
+
+def _run_probe_season(seed):
+    """Run ONE headless season of engine.mc_v18 under `seed`. Single owner for rows 1-2.
+
+    NO stubwire reset here, deliberately (S2 adjudication). The queue step and this file's
+    own pre-S2 blocker text both said "a headless season run wrapped in
+    stubwire.reset_invocations()"; executing it proved that wrapper INERT and wrong on two
+    counts. (1) engine/mc_v18.py:222 already snapshots `_stub_start = stubwire.invocations`
+    and :300 returns `stub_hits = stubwire.invocations - _stub_start` — run_campaign is the
+    single owner of that delta (CLAUDE.md §8: never re-implement a rule that already lives
+    once), so a leading reset cannot change the reported number. FALSIFIER, executed: with
+    reset_invocations() monkeypatched to a no-op and the cumulative counter left at 6, this
+    row still reported exactly 2. (2) engine/substrate/stubwire.py:70-72 declares
+    reset_invocations() test-only and "never called from a production code path" — and
+    tools/dashboard_data.py imports this module and calls collect() IN-PROCESS, so the reset
+    made a reporting surface mutate process-global engine state for no effect.
+
+    Caps the campaign at 1 season via CAMPAIGN_SEASONS. Note `max_seasons` alone is DEAD:
+    mc_v18.py:231 reads `effective_params.get('CAMPAIGN_SEASONS', max_seasons)` and
+    DEFAULT_PARAMS always supplies CAMPAIGN_SEASONS, so the params entry is what binds.
+    MEASURED cost of the three campaigns collect() now runs (controlled, both arms, one
+    session, 3 runs each): --summary median 0.153s pre-S2 -> 0.617s post-S2, +0.46s.
+    """
+    return _mc_v18.run_campaign(seed=seed, max_seasons=1, params={'CAMPAIGN_SEASONS': 1})
 
 
 def _blocked(key, label, unblocked_by, detail=''):
@@ -67,25 +119,73 @@ def _blocked(key, label, unblocked_by, detail=''):
 def row_stub_invocations():
     """Stub invocations on the M1 path must be 0.
 
-    engine.substrate.stubwire.invocations is process-cumulative, so this is only
-    meaningful as a delta around an actual season run. Importing the module and
-    reading the counter at rest would report 0 and mean nothing — a false green.
+    MEASURED (S2): a headless 1-season mc_v18 run (_run_probe_season). The value is
+    CampaignResult.stub_hits, which run_campaign computes as its own before/after delta on the
+    process-cumulative engine.substrate.stubwire.invocations counter — reading that counter at
+    rest would report 0 and mean nothing, a false green.
+
+    SCOPE, stated because the row label overstates it: an mc_v18 season is a PROXY for "the M1
+    path", not the M1 path. Row 4 in this same report shows 0/7 M1 junctures executing, so most
+    M1 stub sites are unreachable by this probe. Parked as S2-R1.
     """
-    return _blocked(
-        'stub_invocations',
-        'Stub invocations on the M1 path == 0',
-        'a headless season run wrapped in stubwire.reset_invocations()',
-        'stubwire.invocations is process-cumulative; a static read is not a measurement',
-    )
+    if _mc_v18 is None:
+        return _blocked(
+            'stub_invocations',
+            'Stub invocations on the M1 path == 0',
+            'a working engine.mc_v18 import',
+            f'engine import failed: {type(_ENGINE_IMPORT_ERROR).__name__}: {_ENGINE_IMPORT_ERROR}',
+        )
+    result = _run_probe_season(M1_PROBE_SEED)
+    value = result.stub_hits
+    return {
+        'row': 'stub_invocations',
+        'label': 'Stub invocations on the M1 path == 0',
+        'state': 'measured',
+        'value': value,
+        'passes': value == 0,
+        'unblocked_by': None,
+        'detail': (
+            f'1-season probe (seed={M1_PROBE_SEED}): {value} stub_resolve call(s) '
+            'during the run; CampaignResult.stub_hits, which run_campaign computes as its own '
+            'before/after delta on the process-cumulative '
+            'engine.substrate.stubwire.invocations counter).'
+        ),
+    }
 
 
 def row_determinism():
-    return _blocked(
-        'determinism',
-        'Same seed -> same KeyLog.content_hash()',
-        'a headless season run executed twice under one seed',
-        'KeyLog.content_hash() exists (engine/substrate/keys.py); it needs a run to hash',
-    )
+    """Same seed -> same KeyLog.content_hash().
+
+    MEASURED (S2): the same seed run twice, independently, and their
+    engine.substrate.keys.KeyLog.content_hash() values compared. This file previously
+    conceded the hash "exists ... it needs a run to hash" (row_determinism, pre-S2) — the run
+    now exists (_run_probe_season).
+    """
+    if _mc_v18 is None:
+        return _blocked(
+            'determinism',
+            'Same seed -> same KeyLog.content_hash()',
+            'a working engine.mc_v18 import',
+            f'engine import failed: {type(_ENGINE_IMPORT_ERROR).__name__}: {_ENGINE_IMPORT_ERROR}',
+        )
+    r1 = _run_probe_season(M1_PROBE_SEED)
+    r2 = _run_probe_season(M1_PROBE_SEED)
+    h1, h2 = r1.key_log_hash, r2.key_log_hash
+    match = bool(h1) and h1 == h2
+    return {
+        'row': 'determinism',
+        'label': 'Same seed -> same KeyLog.content_hash()',
+        'state': 'measured',
+        'value': f'{h1[:12]}…' if h1 else '(empty)',
+        'passes': match,
+        'unblocked_by': None,
+        'detail': (
+            f'two independent 1-season runs, seed={M1_PROBE_SEED}: '
+            + ('hashes match' if match else 'HASHES DIVERGE OR EMPTY')
+            + f' ({h1[:12] if h1 else "<empty>"}… vs {h2[:12] if h2 else "<empty>"}…, '
+              f'{r1.keys_emitted}/{r2.keys_emitted} keys emitted)'
+        ),
+    }
 
 
 def row_key_log_closure():
@@ -205,11 +305,22 @@ def row_m1_junctures():
 
 
 def row_invariant_violations():
+    """N seeds, zero invariant violations — over a season run. Still `blocked` (S2 did not
+    wire this): the season-loop invariant sweep this row measures is a materially larger
+    lift than rows 1-2 (a per-season assertion battery, not a single probe run + hash
+    compare). A first, narrower step toward it now exists at the individual-engine level —
+    tests/valoria/test_dice_engine_properties.py, seeded property sweeps over
+    engine/autoload/dice_engine.py's Pool Minimum / Die Rule bounds and degree ladder — per
+    this row's own guidance below, "ahead of the loop". That file does not touch a season
+    KeyLog, so it cannot make this row `measured`; it is the beginning this row named, not
+    its completion.
+    """
     return _blocked(
         'invariant_violations',
         'N seeds, zero invariant violations',
         'property-based tests (Hypothesis) over a season run',
-        'properties can be authored against individual engines TODAY, ahead of the loop',
+        'properties can be authored against individual engines TODAY, ahead of the loop '
+        '(begun: tests/valoria/test_dice_engine_properties.py)',
     )
 
 
@@ -243,8 +354,10 @@ def collect():
         'measured': len(measured),
         'blocked': len(blocked),
         'failed': len(failed),
-        'note': ('Four of five rows require a headless season run that does not exist yet. '
-                 'This gate reports what it measured and never guesses the rest.'),
+        'note': ('Rows 1-2 now measured from a real headless probe season (S2). Row 3 stays '
+                 'PARTIAL (static contract check only) and row 5 stays blocked (needs a '
+                 'season-run invariant sweep, not yet wired). This gate reports what it '
+                 'measured and never guesses the rest.'),
     }
 
 

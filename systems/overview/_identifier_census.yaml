@@ -239,6 +239,7 @@ identifiers:
     purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
     built_in:
     - py:engine/mc_v18.py
+    - py:tools/m1_acceptance.py
     - py:tools/trace_execution_phases.py
     - typed:engine/engine_params/sim_params.json
     disposition: BUILT
