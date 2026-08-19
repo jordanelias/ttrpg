@@ -16,7 +16,14 @@
       "mcp__claude-code-remote__fire_trigger",
       "mcp__claude_code_remote__fire_trigger",
       "Skill(loop)"
-    ]
+    ],
+    "allow": [
+  "Bash(git *)",
+  "Bash(python tools/*)", "Bash(python3 tools/*)",
+  "Bash(python -m pytest*)", "Bash(python3 -m pytest*)",
+  "Bash(grep *)", "Bash(sed *)", "Bash(wc *)", "Bash(ls *)",
+  "Bash(find *)", "Bash(head *)", "Bash(tail *)", "Bash(diff *)"
+]
   },
   "hooks": {
     "PreToolUse": [
