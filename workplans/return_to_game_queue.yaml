@@ -23,13 +23,16 @@
 # the experiment mid-run. Same for `held:` H2/H4 below — both were EXECUTED 2026-08-19 by Jordan's
 # ruling and are no longer held.
 #
-# HOW TO RUN IT.
-#   1. Pick the first step whose `state: pending` and whose `precondition` observable holds ON DISK.
-#      Verify the precondition yourself — do not trust a `done` marker you did not write.
-#   2. Run the driver against it:  Workflow({ scriptPath: ".claude/wf_return_to_game.js", args: "<id>" })
-#   3. The driver produces, critiques (structurally read-only critics), reconciles, and returns.
-#   4. YOU commit, set `state`, and write `evidence` + `critic_verdict` back into this file.
-#   5. Loop until your context is degrading, then Persist (below) and END THE TURN.
+# HOW IT WAS RUN — HISTORY, NOT INSTRUCTIONS. DO NOT FOLLOW THIS.
+#   Two read-only audits found that the imperative runbook survived twelve lines under the
+#   SUPERSEDED notice above, so a session scanning for something to do still found a live,
+#   loop-shaped procedure. Rewritten in the past tense 2026-08-19; the steps are recorded so the
+#   S0/S1/S2 evidence below is interpretable, not so anyone repeats them.
+#   Each step was: pick the first `state: pending` whose precondition held on disk; run the driver
+#   (.claude/wf_return_to_game.js) against it; it produced, put three structurally read-only critics
+#   on the result, and reconciled; the session then committed and wrote `evidence` +
+#   `critic_verdict` back here; and repeated until context degraded.
+#   ⛔ That loop is OVER. Do not pick a pending step. Do not run the driver.
 #
 # WHY THERE IS NO AUTO-CHAIN. CLAUDE.md §11 forbids a session arming its own wake-up, and the
 # deny-list in .claude/settings.json is CI-enforced (tests/valoria/test_no_polling_triggers.py).
