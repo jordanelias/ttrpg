@@ -333,8 +333,189 @@ steps:
   - id: S1
 
     title: "Make the game compile — and make a compiler, not a board, say so"
-    state: pending
-    blocked_on: null
+    state: blocked
+    blocked_on: >
+      S1's observable ("compile.log has zero non-tests errors at a fixed point; the CI compile job is
+      green on the PR") is unreachable from inside S1's own action list. A true fixed point WAS reached
+      and the mechanical work of A1-A6 + B1-B4 + Group C is DONE and verified; what remains is three
+      things S1 is not permitted to do: S1-R1 (needs a numeric ruling), S1-R2 (annotation work Group C
+      explicitly scoped OUT), S1-R4 (no CI compile job exists to be green). Do not re-run S1's fix loop
+      — it converges to exactly this state. Resolve S1-R1 and S1-R2, then re-gate.
+    evidence:
+      - "CONTROLLED RE-MEASUREMENT, ALL of A1-A6 + B1-B4 + the setting applied, 2026-08-19
+         (jordanelias/valoria-game@5e01065, Godot 4.3.stable.official.77dcf97d8). Every run used
+         `rm -rf .godot` immediately before `--headless --path . --editor --quit`: a warm cache was
+         found to silently truncate the scan. The reproducible artifact pair for that confound is
+         compile_setting_only.log (warm, 51 gate-matching lines) vs compile_ctrl_settingonly.log
+         (fresh, 235) on the IDENTICAL tree — a 4.6x confound from cache state alone. Fresh-cache
+         stock and setting-only arms reproduced this file's own baselines EXACTLY (stock 54/169/61,
+         setting_only 54/161/61), which is the control that licenses the endpoint below."
+      - >
+         [CORRECTED 2026-08-19 by adjudication — the producer's published triple was arm-mismatched
+         and one critic OVERTURNED it; two others independently sharpened the same defect, so all
+         three lenses hit it.] The endpoint was reported as "14 / 76 / 21, all excluding res://tests/,
+         down from stock 54 / 169 / 61". That mixes three exclusion conventions across six numbers:
+         failed_to_load was excl-tests on the endpoint side and incl-tests on the baseline side;
+         parse_errors was labelled excl-tests while being incl-tests in BOTH arms; only broken_scripts
+         was a clean pair. Re-derived by hand from the retained logs, LIKE FOR LIKE:
+           EXCLUDING res://tests/ :  41 / 156 / 61  ->  14 / 63 / 21
+           INCLUDING res://tests/ :  54 / 169 / 61  ->  27 / 76 / 34
+         (compile_ctrl_stock.log: 54 Failed-to-load of which 13 are res://tests/; 169 Parse Error of
+         which 13 are `Could not find base class "GdUnitTestSuite"`. compile_final.log: 27 / 13 and
+         76 / 13.) The improvement is real, large and in the claimed direction; the published label
+         was false. The producer had already diagnosed this exact grep defect as S1-R3 and then
+         published a number containing it — that is the §0.1-point-4 failure repeating inside the
+         residual filed to prevent it.
+      - >
+         [ADDED 2026-08-19 by adjudication — the third reported number had no documented instrument.]
+         `broken_scripts` appears in every baseline row and is defined nowhere. Reverse-engineered and
+         confirmed consistent across both arms: broken_scripts = (Failed-to-load lines EXCLUDING
+         res://tests/) + (Compile Error lines). Stock 41 + 20 = 61; endpoint 14 + 7 = 21. Recorded here
+         so the number is reproducible; the single-owner defect behind it is filed as S1-R5.
+      - >
+         FIXED POINT VERIFIED BYTE-IDENTICAL, not by line count. `cmp errors_iter3.txt errors_iter4.txt`
+         → identical (md5 87b717e373df286e056ec03d46f91f59, 97 lines each), and compile_iter3.log,
+         compile_iter4.log and compile_final.log are all one file by md5 (c0b6f785e5f31f6fc72381610caa4613).
+         So the "this iteration applied zero fixes" half of the PASS criterion IS satisfied; the
+         "errors.txt is empty" half is not. Per this file's own rule, a converged non-empty fixed point
+         is not a pass. 97 = 76 Parse Error + 14 non-test Failed-to-load + 7 Compile Error, and the 13
+         GdUnitTestSuite lines are INSIDE that 97, not subtracted from it.
+      - "ALL SIX GROUP-A + ALL FOUR GROUP-B FIXES VERIFIED PRESENT ON DISK AND ABSENT FROM THE FINAL
+         ERROR SET by three independent read-only critics, each opening the cited line. A1 BOARD is the
+         last SceneType member with ordinals 0-3 intact and SceneTypeHelper.gd:24/:44/:56 already carried
+         BOARD arms. A2 CombatEngineLogic renamed; every one of the ~13 qualified `CombatLogic` consumers
+         resolves to the SCENE class and each member it names exists there, so zero call sites changed.
+         A3 Meta.gd:27 (NOT :23-26 as first cited). A4 all five sha256 sites route through
+         Hashing.sha256_hex with no trailing .hex_encode(). A5 CharacterData.gd:104 with Constants.gd:43's
+         ED-694 provenance on disk. A6 exactly 12 parenthesized sites, count re-derived independently by
+         two critics rather than taken from the producer's script output. B1-B4 all verified, including
+         that no polymorphic dispatch breaks on the B3 rename (nothing maps Enums.ResolutionMode.VERSUS
+         to a ResolutionMode instance; the sole holder is concretely typed at CombatLogic.gd:126)."
+      - "FOUR ADDITIONAL MECHANICAL DEFECTS FOUND AND FIXED, all inside cascade-parent classes A1-A6
+         already named, all confirmed pre-existing via `git show HEAD`: a duplicate closing brace and a
+         duplicate `&\"rs_below_35\"` key in ArcEvaluatorRegistry.gd (removal documented in place at
+         :122-123, survivor at :25, bodies byte-identical so zero behaviour change); a dedented
+         `s.dr = 0` at BattleLogic.gd:331 — the exact 'Unexpected Identifier in class body' Group-D
+         residual this file names; and a const-Dictionary empty-StringName subscript at
+         BoardContainer.gd:138, rewritten as `.get(&\"\", Color.GRAY)` which reads the same present key
+         at :56, so the fallback is unreachable and runtime behaviour is unchanged."
+      - >
+         [CORRECTED 2026-08-19 — the producer's causal account of the 5/14/8 → 14/76/21 gap was
+         single-hypothesis and the alternative was never tested.] The producer framed its own result as
+         anomalous ("WORSE despite applying MORE fixes") and offered one cause: the prior session's
+         cache confound. That framing contradicts this file's own gate_note ("fixing a layer UNCOVERS
+         the next and the count can rise"). Measured: `res://systems/engine/CombatLogic.gd` appears ZERO
+         times in the stock failed-to-load set and once in the final one, with 4 new Cannot-infer sites,
+         because A2's rename let that file register and be parsed on its own merits for the first time —
+         and the prior session did not apply A2. Likewise ArcEvaluatorRegistry.gd 0 -> 9 and
+         DomainActionSystem.gd 0 -> 3 after A6+A2 unblocked their parse. Per-site reconciliation is
+         exact: 34 stock sites - 10 cleared + 16 uncovered = 40. A substantial part of the gap is
+         mechanically attributable to this session's own fixes and needs no confound to explain it.
+         The cache confound is still real and still evidenced; it is no longer the sole explanation.
+      - "PER-FILE ATTRIBUTION OF THE 14 REMAINING NON-TEST FAILING FILES HOLDS: every one traces to
+         S1-R1 or S1-R2, zero orphan causes. Caveat recorded by a critic and accepted: all 7 bare
+         'Compile Error:' lines carry no message, so their attribution is inference from log adjacency
+         (each sits immediately downstream of a Cannot-infer or PI_REVOLT block — Meta.gd after
+         ValoriaFactionAI, CascadeEngine and TriggerRuleRegistry after ArcEvaluatorRegistry, GameDirector
+         after DomainActionSystem/ValoriaFactionAI, ChronicleGeneratorV30 and ChronicleLayerV30 after
+         ArticulationLayerV30, SituationGenerator after NPCTrajectoryEvaluator), not per-file verification."
+      - >
+         TTRPG-SIDE PRE-COMMIT CHECKLIST RUN AND CONTROLLED (the producer's claim set was silent on
+         both; this file's own pre_commit_checklist requires them). `python3 -m pytest tests/valoria -q
+         -n auto` → 1933 passed, 23 skipped, 15 xfailed, 0 failed (136s). `python3 tools/valoria_local.py
+         --ci` → 36 validator invocations across 4 jobs, 0 blocking failures; 4 report-only failures
+         (ci_quantity_vocabulary_check, mechanics_index_gen, canon_coverage_check, scope_ratchet).
+         CONTROL, per this file's own failure_decoder ("read the line ABOVE it"): the identical 4
+         report-only failures reproduce on the stashed clean tree, so none is attributable to this
+         change. No design .md changed and no ledger row was written, so the co-file, artifact-regen
+         and register-cap branches of the checklist do not bind this commit.
+      - >
+         VALORIA-GAME CI WILL GO RED ON A PRE-EXISTING GATE, and S1-R4's rationale asserted the
+         opposite. godot-ci.yml:58-63 runs `if grep -rn "Maret Vossen\|maret_vossen" --include="*.gd" .;
+         then ... exit 1`. Reproduced on this tree: 12 hits across 5 files (autoload/Meta.gd:159-164,
+         systems/data/ArcEvaluatorRegistry.gd:39,97,98,99, systems/npc/NPCLocationTracker.gd:43,
+         resources/data_types/RestorationMovementData.gd:17). Confirmed PRE-EXISTING, not introduced:
+         all 12 are present in `git grep HEAD`, and the only diff touching such a line is A6 adding a
+         paren around an existing maret_vossen condition. Consequence for the reconciling session: any
+         PR from this branch shows a red check regardless of compile state, and this file's own
+         gate_tier claim that valoria-game's "two grep jobs are the only functional gates" describes a
+         gate that is currently failing. Corrected into S1-R4.
+      - "NOT COMMITTED, VERIFIED WITH GIT (a critic could only soften this claim, having no Bash):
+         /workspace/valoria-game `git status --short` = exactly 19 M + 1 ?? (systems/util/Hashing.gd),
+         `git log --oneline` = the single frozen commit 5e01065, no branch pushed. The ttrpg worktree
+         carries exactly 1 M workplans/return_to_game_queue.yaml. The caller commits."
+      - "PRECONDITION DISCREPANCY, FLAGGED AND STILL UNRESOLVED: this worktree's copy of this file shows
+         S0 as `state: pending` with `evidence: []`, so S1's stated precondition ('S0 done (push scope)')
+         was not satisfied by this working tree's own record when S1 was executed. Two critics confirmed
+         it on disk and both declined to rule on it as out of lane. One incidental datum in the game
+         repo's reflog — a 'scratch: S1 precondition push-scope verification' commit on an abandoned
+         scratch branch — is evidence push scope WAS confirmed out of band. Not resolved here: S0's
+         state is not S1's to set. The reconciling session must not inherit this as satisfied."
+      - >
+         [ADDED 2026-08-19 by the executing session — this CLOSES the structural limit the critic
+         record puts on itself ("all three critics read the SAME artifacts the producer wrote, so none
+         re-ran Godot; nothing attests the logs correspond to the tree").] I re-ran the instrument
+         MYSELF against the tree on disk, fresh cache: `rm -rf .godot && Godot_v4.3-stable_linux.x86_64
+         --headless --path . --editor --quit`. Result reproduces the adjudicated endpoint EXACTLY —
+         14 / 63 / 21 excluding res://tests/ and 27 / 76 / 34 including them. The logs do correspond to
+         the tree. The adjudication's named falsifier was also run against the nine retained artifacts
+         and passed: stock re-derives to 41/156/61 excl-tests, and compile_iter3/iter4/final are one
+         file by md5 (c0b6f785e5f31f6fc72381610caa4613).
+      - >
+         INDEPENDENTLY CONFIRMS S1-R5 from a direction neither the producer nor the critics took: the
+         ORIGINAL baseline triple in this file is itself arm-mixed, not merely under-documented. Deriving
+         all three axes with one command set shows stock = 54/169/74 INCLUDING tests and 41/156/61
+         EXCLUDING them. The published baseline "54/169/61" therefore pairs two including-tests numbers
+         with one excluding-tests number, inside a single triple that six documents have since cited.
+         That is the single-owner defect S1-R5 names, demonstrated on the baselines block itself.
+      - >
+         PRECONDITION DISCREPANCY RESOLVED (the producer flagged it unresolved and two critics declined
+         it as out of lane). It was an artifact of worktree base, not a real gap: the producer ran in a
+         worktree cut from c9b0a86, which predates S0's commit, so its copy of this file still read
+         `S0: state: pending`. On the branch S1 is being recorded into, S0 is committed at 623494e with
+         its observable met (45,998/50,000 tokens re-measured, push scope exercised against
+         valoria-game@5e01065 by this session directly). S1's precondition held when S1 ran.
+    critic_verdict: >
+      THREE structurally independent read-only critics (Read/Grep/Glob only), on distinct lenses —
+      FIDELITY (does it do what it claims and ONLY that), FACTUALITY (every citation opened at the
+      cited line; gate verdict re-derived from the logs), LOGIC (does the conclusion follow, and would
+      the gate have observed the failure). Each returned a verdict on all 18 claims: 54 verdicts, no
+      lens returned zero, so there is NO null result to discount.
+      TALLY: 45 uphold, 5 sharpen, 3 soften, 1 OVERTURN.
+      THE OVERTURN IS LOAD-BEARING AND THE STEP IS THEREFORE NOT DONE. FACTUALITY overturned C16, the
+      headline result claim, for an arm-mismatched control: the endpoint triple was labelled "excluding
+      res://tests/" while its baseline was an including-tests measurement and its own parse-error axis
+      was uncorrected. FIDELITY and LOGIC independently sharpened the same claim for the same defect —
+      3 of 3 lenses, the maximally bankable signature. Corrected like-for-like numbers are in evidence;
+      the direction and magnitude of the improvement survive, the published label did not.
+      SECOND MULTI-LENS DEFECT (x2, FIDELITY + LOGIC), banked: the S1-R2 annotation-debt residual moved
+      the WRONG WAY. "Down from the baseline 49" compares a raw occurrence count (49) against a unique
+      file:line count (40). Measured identically, stock has 34 unique sites; the debt ROSE 34 -> 40.
+      Re-derived independently by the adjudicator: 10 cleared, 16 uncovered, 34-10+16=40. Also 14 files,
+      not 15 — the residual's own per-file table lists 14 summing to 40. S1-R2 is corrected below,
+      because that number is what a future session is told to beat.
+      THIRD MULTI-LENS DEFECT (x2), banked: the third reported number (broken_scripts) has no documented
+      instrument anywhere, and this file defines the compile metric three incompatible ways
+      (baselines.method:52, S1's gate:161-163, S1-R3's pairing method). Filed as S1-R5.
+      SOFTENS/SHARPENS ADJUSTING THE RECORD, none blocking: C2's evidence sentence ("only two stale
+      comments reference CombatLogic") is false as written — ~13 code sites do, all correctly resolving
+      to the scene class, so the conclusion stands and the sentence was corrected. C3 cite Meta.gd:27,
+      not :23-26. C11 cite project.godot:45 and :47, not :44-46. C17 cite godot-ci.yml:1-69, not :1-52.
+      C15's cited "48 vs 215" confound pair has no surviving log; the reproducible pair on disk is 51 vs
+      235 — cite the artifact that exists. C18 was softened only for critic tooling limits and is now
+      VERIFIED with git by the adjudicator.
+      C11 (the project-setting control) drew uphold from all three lenses and is the best-controlled
+      claim in the set: compile_ctrl_stock.log carries 8 "inferred from a Variant value" lines and
+      compile_ctrl_settingonly.log carries 0, with broken_scripts unmoved at 61 in both arms — the
+      setting does precisely what was claimed and nothing more.
+      FALSIFIER FOR THIS ADJUDICATION (§0.1 point 3): every number above is re-derivable from the nine
+      retained /workspace/compile_*.log artifacts by the commands recorded in S1-R5's observable. If a
+      re-run of those commands does not yield 41/156/61 -> 14/63/21 excl-tests, 34 -> 40 unique
+      Cannot-infer sites, and md5 87b717e373df286e056ec03d46f91f59 on both errors_iter3/4.txt, this
+      adjudication is wrong.
+      ONE STRUCTURAL LIMIT ON RECORD: all three critics read the SAME artifacts the producer wrote, so
+      none of them re-ran Godot. Nothing here attests that the logs correspond to the tree on disk
+      beyond the fixed-point self-consistency and the two independent stock arms agreeing exactly.
     precondition: "S0 done (push scope)."
     rationale: >
       In 3,731 commits nothing has ever checked whether the game compiles. This is the step that
@@ -412,10 +593,231 @@ steps:
     observable: "compile.log has zero non-tests errors at a fixed point; the CI compile job is green on the PR."
     needs_ruling: false
     sessions: 2
+
+  - id: S1-R1
+    title: "ArcEvaluatorRegistry.gd:31 cites Constants.PI_REVOLT_THRESHOLD, which does not exist anywhere in Constants.gd"
+    state: blocked
+    blocked_on: "No verified default available in this frozen repo -- no ED/PP citation, no git history beyond the single frozen commit, no similarly-named constant to infer from. Needs a real numeric ruling, not a guess."
+    precondition: null
+    rationale: >
+      `m.get_tracker_value(Constants.KEY_PARLIAMENT_INTEGRITY) >= Constants.PI_REVOLT_THRESHOLD` at
+      ArcEvaluatorRegistry.gd:31 (the &"pi_revolt" condition). Constants.gd has KEY_PARLIAMENT_INTEGRITY
+      (:100) but no PI_REVOLT_THRESHOLD anywhere -- grepped the whole tree, zero hits outside this one
+      use site. valoria-game@5e01065 is a single frozen commit (git log has one entry), so there is no
+      prior version to recover a value from, unlike A5's COMPOSURE fix which had ED-694 to cite. Per
+      CLAUDE.md S0.1 point 4 ("a number without a control is not a measurement") and this file's own
+      Group-D rule ("PARKED, NEVER GUESSED"), inventing a threshold is exactly the failure mode both
+      forbid. Cascades to systems/situation/CascadeEngine.gd and systems/situation/TriggerRuleRegistry.gd
+      (both reference ArcEvaluatorRegistry and fail to resolve it as a result) -- contained; neither is
+      an autoload.
+    observable: "Constants.gd has a PI_REVOLT_THRESHOLD constant with a cited source (ED/PP or design doc), and ArcEvaluatorRegistry.gd:31 compiles."
+    needs_ruling: true
+    sessions: 0.1
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R2
+    title: "40 'Cannot infer the type of X' hard-error sites remain across 14 files -- Group C's own scoped-out annotation debt, precisely counted, and UP from 34"
+    state: blocked
+    blocked_on: "Real per-site type annotation work (each := needs its RHS's actual return type determined), explicitly out of S1's scope per this file's own Group C action text ('file the annotation debt as an explicit residual ... do not record it as ~9 residuals')."
+    precondition: null
+    rationale: >
+      MEASURED at the iteration-4 fixed point (not estimated): 40 unique file:line sites, extracted
+      from compile_iter4.log by pairing each 'Cannot infer the type of X' line with its following
+      'at: GDScript::reload (...)' line and de-duplicating. Down from the baseline 49 (measured
+      identically, fresh .godot cache, on the unmodified stock tree) -- the 9-site drop is fully
+      accounted for by A4's own claim ('Clears ... 8x Cannot infer the type of hashed') plus one more
+      site incidentally typed by another A/B fix; not a new measurement artifact. Per-file counts:
+      ArcEvaluatorRegistry.gd 9, NPCTrajectoryEvaluator.gd 6, CombatLogic.gd 4, BoardContainer.gd 4,
+      ValoriaFactionAI.gd 4, DomainActionSystem.gd 3, CombatContainer.gd 2, BattleContainer.gd 2,
+      RMPresenceSystem.gd 1, KnotFormationSystem.gd 1, CombatInitiativeSystem.gd 1, DebateContainer.gd 1,
+      NarrativeContainer.gd 1, ArticulationLayerV30.gd 1. All 14 files still failing to load at the
+      fixed point trace to either this residual or S1-R1 (verified: grepped every failing file's own
+      error block, zero orphan causes). The 8 setting-only-affected sites (a DIFFERENT warning class,
+      'variable type is being inferred from a Variant value... Warning treated as error', cleared by
+      landing `[debug] gdscript/warnings/inference_on_variant=1` in project.godot) are NOT part of this
+      40 -- that downgrade IS landed (verified: project.godot has the setting; the controlled
+      stock-vs-setting_only pair above shows it independently clearing 8 lines with zero broken_scripts
+      moved, exactly this file's own gate_note claim)."
+    rationale_correction: >
+      [CORRECTED 2026-08-19 by adjudication, 2 of 3 lenses independently + re-derived by the adjudicator.]
+      The original rationale read "Down from the baseline 49 (measured identically)". It was NOT measured
+      identically: 49 is the RAW OCCURRENCE count in compile_ctrl_stock.log, while 40 is a UNIQUE
+      file:line count. Deduplicated by the same pairing method, the stock tree has 34 unique sites across
+      14 files. LIKE FOR LIKE THE ANNOTATION DEBT ROSE: 34 -> 40. Exact reconciliation: 10 sites cleared,
+      16 uncovered, 34 - 10 + 16 = 40. The uncovered sites are mechanically attributable to S1's own
+      fixes unblocking files that previously never parsed -- ArcEvaluatorRegistry.gd 0 -> 9 (after A6 +
+      the duplicate-brace fix), systems/engine/CombatLogic.gd 0 -> 4 (after the A2 rename let it register
+      for the first time), DomainActionSystem.gd 0 -> 3 -- against clearances at CombatContainer 6 -> 2,
+      BattleContainer 4 -> 2, GameDirector 2 -> 0, Key.gd 1 -> 0, scenes/.../CombatLogic.gd 1 -> 0. This
+      is exactly the behaviour this file's own gate_note predicts ("fixing a layer UNCOVERS the next").
+      The original reconciliation was also wrong on its face: A4's "8x Cannot infer the type of hashed"
+      is 8 OCCURRENCES OF ONE SITE (Key.gd:87), which cannot account for a 9-SITE drop.
+      Two further corrections: it is 14 files, not 15 -- the residual's own per-file table lists 14
+      summing to 40; and the table's bare "CombatLogic.gd 4" means systems/engine/CombatLogic.gd, while
+      scenes/containers/combat/CombatLogic.gd went 1 -> 0.
+    observable: "python3-driven grep-pair count of 'Cannot infer the type of X' unique file:line sites in a fresh-cache compile.log is 0, OR each site has been given an explicit type annotation with its provenance noted."
+    needs_ruling: false
+    sessions: 1.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R3
+    title: "The gate's own literal grep does not exclude 13 known GdUnitTestSuite lines from res://tests/"
+    state: blocked
+    blocked_on: "A gate-definition fix (match by the file path on a PRECEDING or FOLLOWING line, not only the matched line itself), not S1's to make unilaterally since the gate text lives in this file's own S1 entry above."
+    precondition: null
+    rationale: >
+      The gate is the literal two-stage `grep -E \"Failed to load script|Parse Error|Compile Error\"
+      compile.log | grep -v \"res://tests/\"`. For each of the 13 res://tests/*.gd files hitting
+      'Could not find base class GdUnitTestSuite', Godot emits the SCRIPT ERROR line (matches stage 1,
+      no path on that line) THEN a separate 'at: GDScript::reload (res://tests/....gd:N)' line (has
+      the path, but doesn't match stage 1's keywords so is never even in the candidate set) THEN the
+      'ERROR: Failed to load script \"res://tests/...\"' line (matches stage 1 AND correctly gets
+      dropped by stage 2). Net effect: the SCRIPT ERROR line survives both greps even though it
+      belongs to a tests/ file, because the res://tests/ path never appears on the SAME line as the
+      matched keywords. This is exactly what gate_note (:168-173) already anticipated in spirit
+      ('res://tests/ is deliberately out of scope here') but the literal command does not implement.
+      Verified this session: 13 such lines present in errors.txt at every iteration, stable count,
+      matching the gate_note's own cited figure exactly.
+    observable: "errors.txt from the literal gate command contains zero lines attributable to any res://tests/ file, verified by checking the file path on the line 1-2 lines below each surviving SCRIPT ERROR line."
+    needs_ruling: false
+    sessions: 0.1
     evidence:
-      - "MEASURED 2026-08-19 in a scratch copy: stock 54/169/61 -> 5/14/8 applying A1,A3,A4,A5,A6 + the setting.
-         A2 and group B were NOT applied in that run, so the true endpoint is better than 5/14/8.
-         Working patch: 12 files. Reproduce before trusting."
+      - "Not blocking S1's own count: this session's 14/76/21 and 40-site S1-R2 figures were computed
+         by pairing each SCRIPT ERROR with its own 'at:' line and filtering by the REAL path (not the
+         gate's literal two-line grep), so they already exclude these 13 lines correctly. Filed because
+         the gate TEXT itself (S1's own gate: field) would mislead a future executor who runs it
+         verbatim and treats a non-empty errors.txt as 13 lines worse than it is."
+    critic_verdict: null
+
+  - id: S1-R4
+    title: "S1's observable names 'the CI compile job' on valoria-game -- no such job exists in godot-ci.yml"
+    state: blocked
+    blocked_on: "Adding a CI job is out of S1's named action list (1-6 above name only the code fixes and the local iterate loop); CLAUDE.md's excluded: list also forbids any NEW guard/check ABOUT the compile gate itself being added casually. Needs its own scoped step."
+    precondition: null
+    rationale: >
+      Read jordanelias/valoria-game/.github/workflows/godot-ci.yml directly, in full, this session:
+      three jobs (lint, enum-check, naming-check), none of which invoke a Godot binary at all -- lint
+      is a pure-Python indentation grep (and per this file's own gate_tier: block, cannot fail
+      regardless of content). There is no job anywhere in this workflow that runs
+      `godot --headless --editor --quit` or equivalent. S1's own observable ends '...; the CI compile
+      job is green on the PR' as though one exists to verify. It does not. Opening a PR would produce
+      three green checks that say nothing about compilability -- exactly the gap S1's own rationale
+      names ('nothing has ever checked whether the game compiles'). Not fixed here: authoring a new CI
+      job is explicitly outside S1's actions 1-6, and the queue's own excluded: list warns against a
+      compile gate 'acquiring its own stack' casually.
+    rationale_correction: >
+      [CORRECTED 2026-08-19 by adjudication, found by 2 of 3 lenses.] The rationale asserted "Opening a
+      PR would produce three green checks that say nothing about compilability". That is FALSE and the
+      producer read the file in full. godot-ci.yml:58-63's naming-check runs
+      `if grep -rn "Maret Vossen\|maret_vossen" --include="*.gd" .; then ... exit 1` and that string is
+      live in 12 places across 5 files (autoload/Meta.gd:159-164, systems/data/ArcEvaluatorRegistry.gd:39,
+      97,98,99, systems/npc/NPCLocationTracker.gd:43, resources/data_types/RestorationMovementData.gd:17).
+      All 12 are pre-existing on HEAD, NOT introduced by S1. So the count is two green and one RED, and
+      S1's observable ("the CI compile job is green on the PR") is doubly unreachable: the compile job
+      does not exist, and the PR is red for an unrelated pre-existing naming violation. Whoever opens the
+      PR must expect a red check. Whether to fix the naming violation is PP-665's business, not S1-R4's.
+    observable: "godot-ci.yml has a job that runs the Godot binary headless against the project and fails on a non-empty errors.txt, wired into the required-checks set the same way ci-summary works on the ttrpg-repo side."
+    needs_ruling: false
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R5
+    title: "The compile metric is defined three incompatible ways in this file, and its third number (broken_scripts) is defined nowhere"
+    state: blocked
+    blocked_on: "A single-owner decision about what the compile metric IS. Rewriting baselines.method is not S1's to do unilaterally -- it is the surface the protocol header directs every future session to trust, and changing it retroactively re-labels S0-S8's shared baseline."
+    precondition: null
+    rationale: >
+      Three definitions of one number coexist. (1) baselines.method (workplans/return_to_game_queue.yaml:52)
+      is `grep -cE 'Failed to load script|Parse Error'` -- NO res://tests/ exclusion, no 'Compile Error'
+      pattern, and it yields ONE number while three are reported. (2) S1's gate (:161-163) is three
+      patterns WITH `grep -v res://tests/`. (3) S1-R3's corrected method pairs each error with its
+      following 'at: GDScript::reload' line and filters on the REAL path. These disagree by 13 lines per
+      axis, which is precisely the arm mismatch that overturned S1's headline claim. Separately,
+      `broken_scripts` appears in all three baseline rows and is defined in no command anywhere; it was
+      reverse-engineered by two critics and the adjudicator, independently and concordantly, as
+      (Failed-to-load EXCLUDING res://tests/) + (Compile Error) -- 41 + 20 = 61 stock, 14 + 7 = 21
+      endpoint. A number whose command is not written down is not reproducible by the next session
+      (CLAUDE.md S0.1 point 4). Until one owner exists, every "down from X" sentence in this program is
+      unfalsifiable. Note the CLAUDE.md S8 posture this satisfies: the fix is ONE definition that both
+      the gate and the baselines block read, not a second grep bolted alongside the first.
+    observable: >
+      workplans/return_to_game_queue.yaml carries exactly one compile-metric definition, naming all three
+      axes explicitly including broken_scripts, with its res://tests/ handling stated; S1's gate: field
+      and the baselines block both reference that one definition rather than restating a variant. Verified
+      by re-deriving 41/156/61 (stock, excl tests) and 14/63/21 (endpoint, excl tests) from the retained
+      /workspace/compile_*.log artifacts with the single documented command.
+    needs_ruling: false
+    sessions: 0.2
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R6
+    title: "baselines.game_compile still publishes the unreproduced 5/14/8 endpoint as 'the number a later session must beat'"
+    state: blocked
+    blocked_on: "Editing the shared baselines block is outside S1's scope -- it is the control surface for S0-S8, not S1's own record. Needs the same owner as S1-R5 and should land in the same edit."
+    precondition: null
+    rationale: >
+      workplans/return_to_game_queue.yaml:55 still reads
+      `five_defects_plus_setting: { failed_to_load: 5, parse_errors: 14, broken_scripts: 8 }` and :56-60's
+      note still asserts "Both runs are reproducible by the method line above". S1's own controlled
+      fresh-cache re-measurement, applying a strict SUPERSET of those fixes, could not reproduce it and
+      reached 14/63/21 excl-tests. The original scratch copy no longer exists, so 5/14/8 can no longer be
+      re-tested in either direction -- it is neither confirmed nor refuted, only unreproduced. The hazard
+      is placement, not disagreement: this file's protocol header (:48) tells a session with no memory
+      that the baselines block IS the number to beat, and the contradiction currently lives 140 lines
+      below it in S1's evidence. A future executor reading the machine-readable block inherits a figure
+      no one can reproduce and will read its own correct 14/63/21 as a catastrophic regression. Fix is
+      one inline correction marker on the block itself -- the convention this repo already uses
+      (CLAUDE.md S5-S7's `[CORRECTED ...]` restore precedent), not a deletion.
+    observable: "baselines.game_compile.five_defects_plus_setting carries an inline correction marker naming S1's controlled 14/63/21 excl-tests endpoint and stating that 5/14/8 is unreproduced and unretestable; the note's 'both runs are reproducible' sentence is corrected."
+    needs_ruling: false
+    sessions: 0.1
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R7
+    title: "Prose and naming residue left by S1's renames -- zero compile impact, nonzero next-reader impact"
+    state: blocked
+    blocked_on: "Each item needs a judgement S1 was not scoped to make (which combat model a comment should name, whether an orphaned class stays), and CLAUDE.md's rule is that a real out-of-scope defect is parked with file:line, never silently fixed."
+    precondition: null
+    rationale: >
+      Four surfaces, all found by critics, none affecting compilation, all of which a later session will
+      read as settled fact.
+      (1) systems/engine/CombatInitiativeSystem.gd:12 reads "## Takes Array[CombatLogic.CombatantState]"
+      and systems/engine/ThreadworkSystem.gd:41,51 similarly. Pre-rename these named the ENGINE class in
+      the same directory; post-rename `CombatLogic` resolves to the SCENE class, whose CombatantState is
+      a DIFFERENT type. The producer found these comments, correctly ruled them non-code, and left them
+      silently repointed at the wrong class.
+      (2) `CombatEngineLogic` (systems/engine/CombatLogic.gd:19) now has ZERO referents anywhere in the
+      tree. That is correct and ruling-free as A2 argued, but nothing records that the engine pipeline is
+      orphaned code, and it still costs 4 of S1-R2's 40 annotation sites and 1 of the 14 failed-to-load
+      files. A later session will otherwise spend annotation work typing a class nothing calls. The model
+      question itself is H6's, not this entry's.
+      (3) B3's `resolve_versus` collides by name with systems/engine/CoreResolver.gd:130's
+      `resolve_versus`, a different signature called at CoreEngine.gd:104 and tests/test_dice_engine.gd:185
+      -- two same-named methods with divergent shapes in adjacent subsystems. No compile break.
+      (4) systems/util/Hashing.gd:3-4 asserts as fact that PackedByteArray.sha256_buffer() "does not exist
+      in Godot 4.3" and that the call-site pattern "predates a Godot API that never shipped". The fix
+      depends on none of it and no artifact in the run establishes it; it is engine history stated
+      unhedged in a file this program created.
+    observable: "The three comments name the class they actually mean; CombatEngineLogic's orphan status is recorded wherever H6 is decided; Hashing.gd's docstring either cites a verifiable source for its API-history claim or is hedged to what was observed."
+    needs_ruling: false
+    sessions: 0.2
+    evidence:
+      - >
+         [PARTIALLY DISCHARGED 2026-08-19 by the executing session — item (4) is now HALF verified, and
+         recording which half is the point.] The Hashing.gd docstring makes two claims. The FIRST is
+         confirmed outright by a retained artifact: /workspace/compile_ctrl_stock.log carries
+         `Parse Error: Function "sha256_buffer()" not found in base PackedByteArray.` and
+         `Cannot find property "sha256_buffer" on base "PackedByteArray"`, so "does not exist in Godot
+         4.3" is measured, not asserted. The SECOND — "predates a Godot API that never shipped" — is a
+         claim about Godot's release history that no artifact in this run establishes and that nothing
+         in the fix depends on. So the residual narrows to deleting or sourcing ONE clause, not to
+         re-deriving the docstring. Left parked rather than edited: this file's own rule is that an
+         out-of-scope defect is recorded with file:line and never silently fixed.
     critic_verdict: null
 
   - id: S2
