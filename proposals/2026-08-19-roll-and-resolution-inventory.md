@@ -165,3 +165,66 @@ Extraction walked `engine/`, `systems/`, `tests/sim/`, parsed each file with `as
 - The three per-subsystem import counts in §3.1 are file-level greps for `dice_engine|sigma_leverage`, so a file importing a *wrapper* that itself imports the engine counts as 0. That understates indirect use and is the number I'd attack first.
 
 **Spot-verified by hand:** the seven factions obstacle sites, `dice_engine.roll_pool`'s ignored `tn`, `massbattle.roll_pool`'s honoured `tn`, `massbattle.compute_degree`'s delegation, threadwork's decoupled roll-then-adjudicate, and the absence of any `queue_scene("combat")`.
+
+---
+
+# §7 DEFINITIONS AND PARAMETERS — which systems import from `engine/` or `references/`
+
+Asked as a follow-up. The answer is structural and it is worse than "some systems don't."
+
+## §7.1 `references/` has ZERO runtime readers
+
+**Nothing in `engine/` or `systems/` loads any file under `references/`.** The four grep hits are all prose comments. Specifically:
+
+| Registry | Runtime readers | `tools/` readers |
+|---|---|---|
+| `references/descriptor_registry.yaml` (the stat vocabulary owner) | **0** — one mention, in a comment at `game_state.py:106` | — |
+| `references/names_index.yaml` (the naming owner) | **0** | — |
+| `references/module_contracts.yaml` (the IO owner) | **0** | — |
+| *all registries combined* | **0** | **44 modules** |
+
+**The registries are a governance layer, not a runtime layer.** They are read by CI and tooling — 44 `tools/` modules — and by nothing the game executes. That is not a defect in itself; YAML registries as a CI surface is a legitimate pattern. But it has a consequence nobody has written down:
+
+> **Every stat name, faction name and key-type string in the runtime is a hand-copied literal.** The registries govern them by convention and a warn-tier CI check, never by import. There is no mechanism by which changing `descriptor_registry.yaml` changes what the code does.
+
+Measured duplication: **10** attribute-name literal lists, **11** faction-roster literals, **15** distinct key-type strings written as literals in code.
+
+Worse, the copies don't even agree with their registry. `descriptor_registry.yaml` names the attributes **Acuity, Will, Attunement**; the code writes `cog`, `spirit`, `att` — the *aliases*, one of which (`Cognition`) is tagged `[ASSUMPTION] … Jordan veto`. The registry's primary names appear as code identifiers **nowhere**.
+
+## §7.2 `engine/engine_params/` — one runtime loader, total
+
+| Export | Loaded at runtime by |
+|---|---|
+| `key_types.json` | **`engine/cross_scale/echo_transport.py:68-69`** — the only one |
+| `combat_engine_v1.json` | nothing (read by `workbench/structure_scan.py`, a tool) |
+| `params_tables.yaml` | nothing |
+
+The typed exports exist **for the Godot port**, and on the Python side they are write-only artifacts with a round-trip check. So the "typed layer" CLAUDE.md §5 describes as partly-built is, from the runtime's perspective, essentially unused.
+
+## §7.3 Engine imports by subsystem — the full table
+
+| Subsystem | `.py` files | importing `engine.*` | % | Engine modules used |
+|---|---:|---:|---:|---|
+| factions | 18 | 16 | **88%** | autoload, dice_engine, game_state, substrate |
+| overview | 8 | 5 | 62% | game_state, season_manager, substrate |
+| fieldwork | 5 | 3 | 60% | autoload, dice_engine, substrate |
+| world | 6 | 3 | 50% | substrate, canon_buckets |
+| social_contest | 20 | 9 | 45% | autoload, dice_engine, game_state, sigma_leverage |
+| threadwork | 9 | 4 | 44% | autoload, dice_engine, substrate |
+| characters | 5 | 1 | 20% | substrate only |
+| mass_battle | 6 | 1 | 16% | autoload only |
+| **combat** | **29** | **2** | **6%** | autoload, dice_engine |
+| **settlements** | **8** | **0** | **0%** | **— none —** |
+
+**`settlements` imports nothing from `engine/` at all.** It is fully self-contained, and it is also the *only* subsystem that loads external data at runtime — its own geography YAML (`registry.py:248`), not a registry.
+
+**`combat` at 6% is the striking one.** The subsystem the repo treats as its most developed — 29 files, the physics engine, the balance workbench — touches the engine core in two files. That is consistent with §3.3: it resolves by probability gate, so it needs neither the dice owner nor the substrate.
+
+## §7.4 What this means
+
+1. **"Point at centralized definitions" is currently unachievable for a runtime module**, because the centralized definitions have no loader. Any design that says a module should resolve identifiers "via `descriptor_registry`" — including my own fieldwork proposal §6 — is specifying something the tree cannot do today. **That is a correction to my own work**, and it applies to the epistemic-propositions design too, which routes predicate names through registries.
+2. **The vocabulary gate is warn-tier and reads code, not the reverse.** So the registries can drift from the runtime indefinitely, and the drift is already measurable — the primary attribute names exist in no code.
+3. **If the Key substrate is the model** — `key_types.json` cooked from markdown and *loaded* by `echo_transport` — then the pattern for fixing this already exists in the tree, once, and could be extended to the stat vocabulary. That is the smallest concrete proposal this inventory suggests: **give `descriptor_registry.yaml` a cooked export and one runtime loader**, so stat names become imported rather than copied.
+4. **Order of operations for anything Godot-facing:** GDScript will need these definitions too, and it cannot read Python literals. Every hand-copied literal in §7.1 is a value that must be re-typed by hand for the port, or exported first.
+
+**Method note:** §7.3's counts are file-level AST import scans for any module whose root package is `engine`. A file importing a *wrapper* that itself imports the engine counts as 0, so these numbers understate indirect use — the same caveat as §6, and the number I would attack first if I wanted to argue combat is better integrated than 6% suggests.
