@@ -448,6 +448,8 @@ identifiers:
     purpose: '[4E. The First Leap] Skill | Domain | Effect :: ★ **Leap Scar** (unique) | Scene Battle (Thread) | First Leap per session: +1D (not −1 Ob, to avoid OB_FLOOR interaction at high TS).'
     built_in:
     - py:systems/factions/sim/mass_seizure.py
+    - py:tools/export_game_constants.py
+    - typed:engine/engine_params/game_constants.json
     disposition: BUILT
     doc_status: null
     in_table: true

@@ -668,11 +668,12 @@
   "Authority": {
    "ambiguous": true,
    "category": "pressure_point",
-   "file_count": 68,
+   "file_count": 69,
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 2,
     "godot/godot_architecture_specification.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/campaign_modes_v30.md": 1,
@@ -1093,7 +1094,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 94,
+   "file_count": 95,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1113,6 +1114,7 @@
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 6,
     "proposals/2026-08-18-next-session-handoff.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 19,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -5185,7 +5187,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Social and cultural reach. Cannot drop below 1 (faction remains extant).",
-   "file_count": 79,
+   "file_count": 80,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -5196,6 +5198,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 7,
@@ -6646,13 +6649,14 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Military power. 0 = cannot Muster.",
-   "file_count": 85,
+   "file_count": 86,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
     "canon/03_canonical_timeline.md": 3,
     "engine/mc_v18_walkthrough.md": 2,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/campaign_architecture_v30.md": 3,
     "systems/_architecture/canonical_registry.md": 3,
@@ -6981,7 +6985,7 @@
   "Order": {
    "ambiguous": true,
    "category": "settlement_stat",
-   "file_count": 87,
+   "file_count": 88,
    "legacy_count": 0,
    "locations": {
     "godot/data_serialization_spec.md": 1,
@@ -6990,6 +6994,7 @@
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
     "proposals/2026-08-18-breaking-the-recursion.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 20,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 3,
@@ -8805,12 +8810,13 @@
   "Solmund": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 57,
+   "file_count": 58,
    "legacy_count": 1,
    "locations": {
     "canon/00_philosophical_foundations.md": 15,
     "canon/02_foundations_amendment_leap_mechanism.md": 2,
     "canon/03_canonical_timeline.md": 17,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 3,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -8879,6 +8885,7 @@
     "fieldwork",
     "npcs",
     "overview",
+    "proposals",
     "settlements",
     "threadwork",
     "ui",
@@ -10700,7 +10707,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Economic capacity. 0 = cannot Trade or fund Wealth-requiring actions.",
-   "file_count": 61,
+   "file_count": 62,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -10708,6 +10715,7 @@
     "engine/mc_v18_walkthrough.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "systems/_architecture/canonical_registry.md": 3,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/conflict_architecture_proposal.md": 1,
@@ -10976,9 +10984,10 @@
    ],
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 21,
+   "file_count": 22,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 2,
     "systems/_architecture/campaign_architecture_v30.md": 1,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/session_a_spec_patches.md": 2,
@@ -11010,6 +11019,7 @@
     "characters",
     "factions",
     "npcs",
+    "proposals",
     "victory"
    ],
    "term": "Yrsa Vossen"
@@ -11738,7 +11748,9 @@
    "census": {
     "victory": {
      "built_in": [
-      "py:engine/autoload/victory.py"
+      "py:engine/autoload/victory.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -22094,7 +22106,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 97,
+   "file_count": 98,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -22113,6 +22125,7 @@
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
     "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 6,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -22641,12 +22654,13 @@
   "companion": {
    "ambiguous": false,
    "definition": "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc.",
-   "file_count": 35,
+   "file_count": 36,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
     "godot/scene_tree_architecture.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 3,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/repo-reorganization-v1.md": 2,
     "proposals/social_contest_consolidation_integration_v1.md": 12,
     "systems/_architecture/companion_app_design_note.md": 1,
@@ -33173,7 +33187,7 @@
   "fieldwork": {
    "ambiguous": true,
    "definition": "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure.",
-   "file_count": 71,
+   "file_count": 72,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 1,
@@ -33187,6 +33201,7 @@
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 70,
     "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 3,
     "proposals/repo-reorganization-v1.md": 9,
     "proposals/social_contest_consolidation_integration_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -37715,9 +37730,10 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` \u2192 `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:296-300`, `engine/mc_v18.py:298`"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/overview/overview_flow_skeleton_v1.md": 1,
     "systems/world/world_flow_skeleton_v1.md": 2
@@ -37728,6 +37744,7 @@
    "subsystems": [
     "_architecture",
     "overview",
+    "proposals",
     "world"
    ],
    "term": "insurgencies_formed"
@@ -37762,11 +37779,12 @@
   "insurgency_pipeline": {
    "ambiguous": false,
    "definition": "GD-3 enforcement boundary. State machine: disorganized -> emergent -> extra-parliamentary | parliamentary. Promoted-RM with PT<3 emergence is extra-parliamentary.",
-   "file_count": 10,
+   "file_count": 11,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 2,
     "engine/sim_reference_README.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 3,
     "proposals/repo-reorganization-v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 4,
@@ -39055,7 +39073,9 @@
    "census": {
     "fieldwork": {
      "built_in": [
-      "py:systems/fieldwork/sim/knots.py"
+      "py:systems/fieldwork/sim/knots.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -39078,7 +39098,9 @@
    "census": {
     "fieldwork": {
      "built_in": [
-      "py:systems/fieldwork/sim/knots.py"
+      "py:systems/fieldwork/sim/knots.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -39516,7 +39538,7 @@
   "knots": {
    "ambiguous": false,
    "definition": "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc.",
-   "file_count": 23,
+   "file_count": 24,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 6,
@@ -39530,6 +39552,7 @@
     "proposals/2026-08-16-system-scores-census.md": 7,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 3,
     "proposals/repo-reorganization-v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 3,
     "systems/_architecture/key_echo_armature_v1.md": 2,
@@ -40946,7 +40969,7 @@
   "mass_battle": {
    "ambiguous": false,
    "definition": "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage. \u26a0\ufe0f STALE (ED-IN-0025, 2026-07-07, C-VERIFY-1): predates ED-MB-0001/0002/0003 + the Cannae gauge harness (tests/coverage_matrix.md); test_status needs re-survey before re-setting the enum \u2014 do not hand-flip it. See supersession_register.yaml (C-VERIFY-2 rows).",
-   "file_count": 41,
+   "file_count": 42,
    "legacy_count": 0,
    "locations": {
     "engine/sim_reference_README.md": 2,
@@ -40958,6 +40981,7 @@
     "proposals/2026-08-18-culling-plan-v1.md": 1,
     "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 2,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 4,
@@ -44347,9 +44371,10 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` \u2192 `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:301-304`, `engine/mc_v18.py:299`"
     }
    },
-   "file_count": 4,
+   "file_count": 5,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "systems/_architecture/key_echo_armature_v1.md": 1,
     "systems/npcs/npcs_flow_skeleton_v1.md": 4,
     "systems/overview/overview_flow_skeleton_v1.md": 2,
@@ -44362,6 +44387,7 @@
     "_architecture",
     "npcs",
     "overview",
+    "proposals",
     "world"
    ],
    "term": "npcs_generated"
@@ -44369,11 +44395,12 @@
   "npe": {
    "ambiguous": false,
    "definition": "NPC Population Engine.",
-   "file_count": 7,
+   "file_count": 8,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-16-system-scores-census.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 2,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/engine_atlas_v1.md": 5,
     "systems/npcs/npcs_flow_skeleton_v1.md": 49,
@@ -44397,7 +44424,9 @@
    "census": {
     "characters": {
      "built_in": [
-      "py:systems/factions/sim/mass_seizure.py"
+      "py:systems/factions/sim/mass_seizure.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -45949,10 +45978,11 @@
   "parliamentary_transfer": {
    "ambiguous": false,
    "definition": "CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending.",
-   "file_count": 12,
+   "file_count": 13,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 15,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/factions/faction_systems_overview_v30.md": 4,
@@ -53863,16 +53893,18 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called by :: `combat_engine_v1/workbench/balance.py` CLI (`weapon_matchup_table`, `attribute_parity_table`, `run_all`, \u2026) | `systems/combat/combat_engine_v1/workbench/balance.py:222` (if __name__) | Jordan/operator, direct invocation (CLAUDE.md \u00a79 routing table)"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 2,
     "systems/combat/combat_flow_skeleton_v1.md": 1
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "combat"
+    "combat",
+    "proposals"
    ],
    "term": "run_all"
   },
@@ -56741,7 +56773,9 @@
    "census": {
     "_architecture": {
      "built_in": [
-      "py:systems/overview/sim/ms_track.py"
+      "py:systems/overview/sim/ms_track.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -56751,7 +56785,9 @@
     },
     "overview": {
      "built_in": [
-      "py:systems/overview/sim/ms_track.py"
+      "py:systems/overview/sim/ms_track.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -59423,7 +59459,7 @@
   "social_contest": {
    "ambiguous": false,
    "definition": "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only).",
-   "file_count": 39,
+   "file_count": 40,
    "legacy_count": 0,
    "locations": {
     "godot/godot_conversion_strategy_v1.md": 2,
@@ -59432,6 +59468,7 @@
     "proposals/2026-08-18-breaking-the-recursion.md": 2,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "proposals/repo-reorganization-v1.md": 8,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 3,
@@ -65545,7 +65582,9 @@
      "built_in": [
       "py:engine/autoload/sigma_leverage.py",
       "py:systems/combat/combat_engine_v1/workbench/presets.py",
-      "py:systems/threadwork/sim/operations.py"
+      "py:systems/threadwork/sim/operations.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -65557,7 +65596,9 @@
      "built_in": [
       "py:engine/autoload/sigma_leverage.py",
       "py:systems/combat/combat_engine_v1/workbench/presets.py",
-      "py:systems/threadwork/sim/operations.py"
+      "py:systems/threadwork/sim/operations.py",
+      "py:tools/export_game_constants.py",
+      "typed:engine/engine_params/game_constants.json"
      ],
      "disposition": "BUILT",
      "docs": [
@@ -68664,10 +68705,11 @@
      "purpose": "Specified at architecture level: x86_64 with IEEE-754 default rounding (round-to-nearest-even)."
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-next-session-handoff.md": 3,
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
     "systems/_architecture/key_substrate_v30.md": 1
    },
    "sources": [
@@ -68691,16 +68733,18 @@
      "purpose": "leader: yrsa_vossen # per npc_roster #3 + PP-685 canonical"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-20-return-to-game-plan-v1.md": 2,
     "systems/factions/faction_state_authoring_v30.md": 2
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "factions"
+    "factions",
+    "proposals"
    ],
    "term": "yrsa_vossen"
   },

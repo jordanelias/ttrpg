@@ -242,6 +242,49 @@ output, which is exactly the distinction `CLAUDE.md` §0.1 pt 5 draws — so it 
 5. Delete `valoria-game/docs/design_sync.md`'s claim to be the sync record, or repoint it at this
    mechanism. A hand-written 2026-05-04 snapshot is not a bridge.
 
+> ✅ **EXECUTED 2026-08-20**, with **two corrections to the design above that the execution forced.**
+>
+> **Correction 1 — the mapping is hand-confirmed, never name-matched, and step 1's "emit only names
+> that have a single owner" was not enough.** A first pass matched by name. It produced **six
+> divergences and adversarially re-checking found that none of them were real**: four from near-name
+> guessing (`MOMENTUM_MAX` vs the kernel's tanh ceiling `M_MAX`; `OB_CAP` vs `SEIZURE_OB_CAP`, a
+> negative modifier bound) and two from *exact*-name collisions where one word names two quantities —
+> `POOL_FLOOR` is the port's universal dice-pool floor (1) while `combat_engine_v1/core.py:47`'s is
+> the Combat Pool minimum (5), which the port calls `COMBAT_POOL_MINIMUM` and which **agrees**; and
+> `ACCORD_MIN` is a clamp bound here, a victory threshold there. This is `§0.1` pt 4 and `§4`'s
+> idempotent-meaning rule meeting in one place. The exporter now carries an explicit `collisions`
+> block recording each look-alike and why it is not a match, so the next session cannot re-derive it.
+>
+> **Correction 2 — `KNOWN_DIVERGENT` was the wrong shape.** The two divergences that are *real* share
+> no name with anything and a name-keyed list could not hold them. They are **model** disagreements,
+> recorded as `divergences` with both sides quoted, printed loudly on every run, and explicitly not
+> closable by copying a number:
+> - **`accord_range`** — the engine models accord as a continuous float clamped `[0.5, 7.0]`
+>   (`engine/autoload/game_state.py:160`), bucketed to a 0–4 index by `ACCORD_MAP` (`:61`); the port
+>   models it as an integer clamped `[0, 3]` (`Constants.gd:144-145`, cited to `peninsular_strain_v30
+>   §2`). Two different state models for one field.
+> - **`coherence_bands`** — the engine has **six** bands with low-edge encoding (`coherence.py:43-47`:
+>   Stable ≥8, Dissonant 7–5, Fragmented 4–3, Fractured ==2, Severed ==1, Crisis ==0); the port has
+>   **four** with top-edge encoding, no Crisis band, and its `SEVERED=0` collides with the engine's
+>   `CRISIS=0`. They disagree in band count, edge convention, and at the Dissonant boundary (5 vs 6).
+>
+> Both are added to §7 as **Q8** and **Q9**. A name-matching checker would have reported six false
+> divergences and missed both of these.
+>
+> **What landed.** `tools/export_game_constants.py` (writer, composes on `sim_params.json` +
+> `combat_engine_v1.json` rather than re-extracting) → `engine/engine_params/game_constants.json`;
+> blocking `--check` wired into `valoria-ci.yml`, `valoria_local.py` and
+> `references/ci_checks_registry.yaml` alongside its two siblings.
+> `valoria-game` commit `7e0c8ed`: `resources/generated/game_constants.json` (**the first `.json`
+> file that repository has ever contained**), `tools/check_constants_parity.py`, and a
+> `Constants Parity (vs design oracle)` CI job. **13 hand-confirmed pairs gated; 147 numeric
+> constants have no oracle owner yet** — reported as the frontier, not failed, because a gate that is
+> red on arrival gets disabled.
+>
+> **Residual, stated rather than hidden:** the JSON is copied into the game repo **by hand**. The
+> ttrpg-side `--check` guards the ttrpg side only; nothing yet detects the copy going stale. Closing
+> that needs a cross-repo hop neither CI has.
+
 #### C2. Make `references/` load-bearing at runtime
 Today `descriptor_registry.yaml` and `module_contracts.yaml` are read by apparatus only (C1 in §1.C),
 while the rosters code runs on are hardcoded twins in `engine/autoload/game_state.py`.
@@ -364,6 +407,12 @@ re-derived. **Starts only after Act B is green.**
 - **Do not re-derive an inventory.** `references/apparatus_registry.yaml`,
   `references/ci_checks_registry.yaml`, `references/restructure_ledger.md` and the two 2026-08-18
   proposals already hold them. Cite; do not rebuild.
+- **Know what a document costs here before you write one.** Adding the single proposal file you are
+  reading dirtied **21 generated glossary files and 16 identifier-census files**, all of which are
+  freshness-gated and blocking. Regenerate them (`tools/build_identifier_census.py` then
+  `tools/observability/build_glossary.py`, in that order — the glossary is built from the census)
+  and never hand-edit either. This tax is real, it is aligned with §0.3's goal, and it is a reason to
+  prefer a commit message over a document.
 - **Do not schedule a check-in.** `CLAUDE.md` §11; seven denied primitives; the rule overrides any
   hosted instruction to the contrary.
 
@@ -413,6 +462,8 @@ aggregates (A4). Each row's gate is an execution artifact of its own.
 | **Q5** | **A1's choice** — drop the banner's `HANDOFF.md` relay, or keep it and amend §0.3? | Act A1 | §3.A1 |
 | **Q6** | `registers/editorial_ledger_in.jsonl:50-51` — **two rows share id `ED-IN-0194`** with conflicting `needs_jordan`. Reported 2026-08-19, not ruled. | ledger integrity | — |
 | **Q7** | `registers/editorial_ledger_in.jsonl` has ~108 tokens of headroom under a blocking cap (ED-IN-0185 Q5). Raise the cap, split the file, or accept that IN cannot file. | any future IN row | `culling-plan-v1.md` preamble |
+| **Q8** | **`accord_range`** — the engine models accord as a continuous float clamped `[0.5, 7.0]` bucketed to a 0–4 index; the port models it as an integer clamped `[0, 3]`. Which is canonical? | every accord-driven outcome; `constants-parity`'s divergence list | `export_game_constants.py` `DIVERGENCES` |
+| **Q9** | **`coherence_bands`** — engine: six bands, low-edge encoding, `SEVERED=1`, `CRISIS=0`. Port: four bands, top-edge encoding, `SEVERED=0`, no Crisis. Band count and edge convention? | threadwork outcomes in the port; juncture 6's chronicle wiring | `coherence.py:43-47` vs `Constants.gd:54-57` |
 
 ---
 

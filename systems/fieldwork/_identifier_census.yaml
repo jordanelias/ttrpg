@@ -423,6 +423,8 @@ identifiers:
     purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
+    - py:tools/export_game_constants.py
+    - typed:engine/engine_params/game_constants.json
     disposition: BUILT
     doc_status: null
     in_table: true
@@ -433,6 +435,8 @@ identifiers:
     purpose: '[2. IN] Input | Kind | Origin | Anchor :: `KNOT_DISPOSITION_MIN`, `KNOT_BONDS_MIN`, `KNOT_TS_MIN_PARTY`, `KNOT_FORMATION_TN`, `KNOT_FORMATION_OB` | `param` | module-level constants | `systems/fieldwork/sim/knots.py:52-59`'
     built_in:
     - py:systems/fieldwork/sim/knots.py
+    - py:tools/export_game_constants.py
+    - typed:engine/engine_params/game_constants.json
     disposition: BUILT
     doc_status: null
     in_table: true
