@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import copy
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields as dc_fields
 
 # canonical_accord relocated to engine/substrate/canon_buckets.py (OI-52a, ED-IN-0097, 2026-07-29
 # — see that module's docstring for the full cycle-break rationale). Re-exported here so every
@@ -34,6 +34,7 @@ from dataclasses import dataclass, field
 # call site keeps working unchanged — engine/substrate/ has no internal dependents, so this import
 # does not reintroduce the cycle it was moved to break.
 from engine.substrate.canon_buckets import canonical_accord  # noqa: F401 (re-export)
+from engine.substrate import descriptors  # sole runtime reader of references/descriptor_registry.yaml
 
 
 # Canonical starting state (mc_v17.py L62-82, sourced from mc_v15.py)
@@ -139,6 +140,27 @@ class Faction:
         """Called by season_manager on arc boundary (new_arc=True)."""
         self.council_used_this_arc = False
         self.parl_transfer_used_this_arc = False  # OI-04 Wave-2 canon gate (§1.1 Frequency)
+
+
+# ── references/ IS LOAD-BEARING HERE, AT RUNTIME (2026-08-20) ────────────────────────────────────
+# Until this line, `references/descriptor_registry.yaml` was read by TOOLS ONLY: measured across
+# both trees, no module under engine/ or systems/ loaded it, and every runtime mention was a comment
+# or a docstring — while MULTS above and the Faction fields below were hardcoded twins of what it
+# declares. A registry nothing executes is a document, not a root, and the premise this repo works
+# from is that systems/ stems from engine/ AND references/.
+#
+# The check runs at import and ONE WAY: a faction stat declared in the registry with no field here
+# stops the engine from importing. It deliberately does NOT fail on the reverse, because exactly one
+# such field exists — `L` (Legitimacy/Mandate), written by 32 .adjust() call sites and declared
+# nowhere in the registry — and whether it is a base descriptor or derived like Mandate is Jordan's
+# ruling to make, not a check's.
+#
+# NOT YET WIRED, and the gap is recorded rather than quietly closed: the registry's PER-STAT floors
+# were ratified 2026-07-08 (ED-IN-0029) — Influence floors at 1, the rest at 0 — while `adjust`
+# above applies a blanket floor of 0.5 to every stat and no caller overrides it. Wiring
+# `descriptors.faction_bounds()` into `adjust` moves the seeded campaign goldens, so it belongs in
+# its own commit with the delta measured (CLAUDE.md §0.1 pt 4), not here.
+descriptors.assert_faction_roster_is_covered({f.name for f in dc_fields(Faction)})
 
 
 @dataclass

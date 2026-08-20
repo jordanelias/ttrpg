@@ -4733,6 +4733,68 @@
     }
    }
   },
+  "test_descriptors_runtime.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "The descriptor registry is load-bearing at RUNTIME, and this proves the check can fail.",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 96,
+   "modules_under_test": [
+    "engine",
+    "engine.autoload.game_state",
+    "engine.substrate",
+    "engine_params",
+    "tools/export_descriptors.py"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 7,
+   "tests": {
+    "test_ratified_but_unimplemented_items_stay_visible": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "These are RATIFIED canon decisions the executable model has not implemented. The list may"
+    },
+    "test_the_attribute_roster_declares_itself_open_until_the_tenth_is_named": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Jordan ruled 2026-08-14 that the roster will be ten. Nine ship. The sentinel must persist"
+    },
+    "test_the_check_does_not_fire_on_code_fields_with_no_registry_entry": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "One-way by design: `L` is declared nowhere and must NOT raise."
+    },
+    "test_the_export_is_current": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A stale artifact means the engine is running on a roster the registry no longer declares."
+    },
+    "test_the_live_engine_roster_passes_the_check": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "The real Faction dataclass covers every registry-declared faction stat."
+    },
+    "test_the_registry_reader_reads_the_cooked_artifact_not_the_yaml": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Same discipline as keys.py vs key_types.json: one exporter owns the parse."
+    },
+    "test_the_roster_check_can_actually_fail": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Plant a registry stat with no implementing field; the check must raise."
+    }
+   }
+  },
   "test_dg2_yield_residuals.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -5177,6 +5239,65 @@
      "assertionless": false,
      "assertions": 3,
      "summary": "Same inputs, same bytes \u2014 otherwise `--check` above is a coin flip."
+    }
+   }
+  },
+  "test_engine_does_not_import_systems.py": {
+   "assertionless_count": 0,
+   "baselines": [
+    {
+     "name": "BASELINE_TOTAL",
+     "size": null
+    }
+   ],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "`engine/` must not name `systems/`. Six sites still do; this pins them so they can only go away.",
+   "helper_loc": 10,
+   "helpers": [
+    {
+     "loc": 10,
+     "name": "_offenders"
+    }
+   ],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 120,
+   "modules_under_test": [
+    "engine",
+    "engine.autoload.game_state",
+    "systems",
+    "systems.factions.sim.treaty"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_no_new_engine_to_systems_inversion": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_allow_list_can_only_shrink": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": null
+    },
+    "test_the_documented_cycle_is_still_real": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "`CLAUDE.md` \u00a73 says the graph is acyclic and autoload is a leaf. It is not, and this records"
+    },
+    "test_the_total_did_not_rise": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_this_check_can_observe_its_own_failure": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "An assertion that cannot observe the failure it excludes is an absent assertion (\u00a70.1 pt 2)."
     }
    }
   },
@@ -6188,7 +6309,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 37
+     "size": 38
     }
    ],
    "cites_measurement": false,
@@ -6218,7 +6339,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 387,
+   "loc": 388,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -6250,6 +6371,7 @@
     "tools/ci_workplan_pointer_check.py",
     "tools/compliance_check.py",
     "tools/currency_consistency_check.py",
+    "tools/export_descriptors.py",
     "tools/export_engine_params.py",
     "tools/export_game_constants.py",
     "tools/export_key_types.py",
@@ -12349,7 +12471,7 @@
    "FA": 7,
    "FI": 1,
    "GO": 2,
-   "IN": 44,
+   "IN": 45,
    "MB": 5,
    "PC": 8,
    "SC": 2,
@@ -12475,16 +12597,16 @@
     "test_troop_density_cap.py"
    ]
   },
-  "files": 162,
-  "files_citing_a_measurement": 18,
+  "files": 164,
+  "files_citing_a_measurement": 19,
   "files_claiming_mutation": 10,
-  "files_naming_a_module": 122,
+  "files_naming_a_module": 124,
   "files_with_a_kill_count": 1,
-  "files_with_a_lane": 47,
-  "helper_defs": 311,
-  "helper_loc": 2876,
-  "ratchet_baselines": 10,
-  "tests": 1423,
+  "files_with_a_lane": 48,
+  "helper_defs": 312,
+  "helper_loc": 2886,
+  "ratchet_baselines": 11,
+  "tests": 1435,
   "undocumented_files": 0
  }
 }

@@ -166,6 +166,7 @@ def main(argv):
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
         ('export_key_types.py',         ['--check'], True),   # key registry md -> typed-JSON round-trip (ED-IN-0136; blocking)
         ('export_game_constants.py',    ['--check'], True),   # oracle -> Godot-facing constants round-trip (blocking)
+        ('export_descriptors.py',       ['--check'], True),   # descriptor registry -> the artifact the engine reads at runtime (blocking)
         # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
         # because --check could not fail and this list did not run it. Both fixed.

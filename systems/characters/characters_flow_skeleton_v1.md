@@ -25,15 +25,15 @@ grepping `characters.sim` / `sim.personal.(conviction|beliefs|companion)` across
 | `conviction.mark_belief_revision_pending` | `systems/characters/sim/conviction.py:254 mark_belief_revision_pending` | `systems/characters/sim/beliefs.py:177 mark_belief_revision_pending`, `systems/characters/sim/beliefs.py:228 mark_belief_revision_pending` (both intra-subsystem, late-imported) |
 | `conviction.get_state` | `systems/characters/sim/conviction.py:264 get_state` | — |
 | `conviction.reset_all` | `systems/characters/sim/conviction.py:268 reset_all` | — |
-| `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`) |
-| `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` — see §7 gap 4 |
+| `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:330 serialize_world` (duck-typed via `hasattr`) |
+| `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:409-410 restore_world` — see §7 gap 4 |
 | `beliefs.add_belief` | `systems/characters/sim/beliefs.py:121 add_belief` | — (see §7 gap 2) |
 | `beliefs.revise_belief` | `systems/characters/sim/beliefs.py:140 revise_belief` | — (see §7 gap 5) |
 | `beliefs.social_success` | `systems/characters/sim/beliefs.py:189 social_success` | `systems/social_contest/sim/contest_legacy_stub.py:242 social_success` (late-imported at :240) — see §7 gap 1 |
 | `beliefs.get_active_beliefs` | `systems/characters/sim/beliefs.py:237 get_active_beliefs` | — |
 | `beliefs.reset_all` | `systems/characters/sim/beliefs.py:243 reset_all` | — |
-| `beliefs.Belief.to_dict` | `systems/characters/sim/beliefs.py:60 to_dict` | `engine/autoload/game_state.py:310-311 serialize_world` (duck-typed via `hasattr`) |
-| `beliefs.Belief.from_dict` | `systems/characters/sim/beliefs.py:78 from_dict` | `engine/autoload/game_state.py:391 restore_world` — see §7 gap 4 |
+| `beliefs.Belief.to_dict` | `systems/characters/sim/beliefs.py:60 to_dict` | `engine/autoload/game_state.py:332-333 serialize_world` (duck-typed via `hasattr`) |
+| `beliefs.Belief.from_dict` | `systems/characters/sim/beliefs.py:78 from_dict` | `engine/autoload/game_state.py:413 restore_world` — see §7 gap 4 |
 | `companion.run_companion_scene` | `systems/characters/sim/companion.py:28 run_companion_scene` | `engine/tests/test_pipeline_reach.py:760 run_companion_scene` (conformance probe only) — see §7 gap 1 |
 
 ## 2. IN
@@ -47,13 +47,13 @@ grepping `characters.sim` / `sim.personal.(conviction|beliefs|companion)` across
 | `certainty` (int) | arg (default) | caller | `systems/characters/sim/conviction.py:169 apply_conviction_scar` |
 | `season` (int) | arg (default) | caller | `systems/characters/sim/conviction.py:170 apply_conviction_scar` |
 | `world` | world-state | caller (optional `World` instance) | `systems/characters/sim/conviction.py:75 _store` |
-| `world.convictions` | registry | `engine/autoload/game_state.py:194 convictions` field | `systems/characters/sim/conviction.py:78 _store` |
-| `world.beliefs` | registry | `engine/autoload/game_state.py:195 beliefs` field | `systems/characters/sim/beliefs.py:108 _store` |
+| `world.convictions` | registry | `engine/autoload/game_state.py:216 convictions` field | `systems/characters/sim/conviction.py:78 _store` |
+| `world.beliefs` | registry | `engine/autoload/game_state.py:217 beliefs` field | `systems/characters/sim/beliefs.py:108 _store` |
 | `belief_id`, `new_position`, `evidence` | arg | caller | `systems/characters/sim/beliefs.py:140-141 revise_belief` |
 | `aligned` (bool), `current_momentum` (int) | arg | caller | `systems/characters/sim/beliefs.py:189-190 social_success` |
 | `underlying_convictions` (list) | arg (default) | caller | `systems/characters/sim/beliefs.py:123 add_belief` |
 | `scene` | arg | caller (unused by the stub body) | `systems/characters/sim/companion.py:28 run_companion_scene` |
-| snapshot dict entries `'convictions'`, `'beliefs'` | world-state (deserialized) | `engine/autoload/game_state.py:332 restore_world` argument | `engine/autoload/game_state.py:386 restore_world`, `engine/autoload/game_state.py:390 restore_world` |
+| snapshot dict entries `'convictions'`, `'beliefs'` | world-state (deserialized) | `engine/autoload/game_state.py:354 restore_world` argument | `engine/autoload/game_state.py:408 restore_world`, `engine/autoload/game_state.py:412 restore_world` |
 
 ## 3. Flow
 
@@ -89,13 +89,13 @@ grepping `characters.sim` / `sim.personal.(conviction|beliefs|companion)` across
 - S6 `[gate]` Unconditionally calls the single-owner stub primitive and returns a typed `StubResult`; no `scene` argument is read, no state is touched. `systems/characters/sim/companion.py:29-33 run_companion_scene`
 
 **S7. World lifecycle: write direction (live)**
-- S7.1 `create_world` builds a fresh `World`; `convictions`/`beliefs` default to empty dicts and are not populated during world-gen. `engine/autoload/game_state.py:194-195 World`, `engine/autoload/game_state.py:235-246 create_world`
-- S7.2 `[write]` At the end of every campaign run, `serialize_world` duck-type-calls `.to_dict()` on every value in `world.convictions` / `world.beliefs` (empty in production — see §7 gap 2) into the snapshot dict. `engine/autoload/game_state.py:308-312 serialize_world`
+- S7.1 `create_world` builds a fresh `World`; `convictions`/`beliefs` default to empty dicts and are not populated during world-gen. `engine/autoload/game_state.py:216-217 World`, `engine/autoload/game_state.py:257-268 create_world`
+- S7.2 `[write]` At the end of every campaign run, `serialize_world` duck-type-calls `.to_dict()` on every value in `world.convictions` / `world.beliefs` (empty in production — see §7 gap 2) into the snapshot dict. `engine/autoload/game_state.py:330-334 serialize_world`
 - S7.3 `[emit]` The snapshot becomes `CampaignResult.final_state`. `engine/mc_v18.py:307` (final_state=game_state.serialize_world(world))
 
 **S8. World lifecycle: read direction (test-only — see §7 gap 4)**
-- S8.1 `[branch]` If `'convictions'` is present in the snapshot, late-import `ConvictionState` and rebuild `world.convictions` via `from_dict`. `engine/autoload/game_state.py:386-389 restore_world`
-- S8.2 `[branch]` If `'beliefs'` is present, late-import `Belief` and rebuild `world.beliefs` via `from_dict`. `engine/autoload/game_state.py:390-393 restore_world`
+- S8.1 `[branch]` If `'convictions'` is present in the snapshot, late-import `ConvictionState` and rebuild `world.convictions` via `from_dict`. `engine/autoload/game_state.py:408-411 restore_world`
+- S8.2 `[branch]` If `'beliefs'` is present, late-import `Belief` and rebuild `world.beliefs` via `from_dict`. `engine/autoload/game_state.py:412-415 restore_world`
 
 ## 4. OUT
 
@@ -105,8 +105,8 @@ grepping `characters.sim` / `sim.personal.(conviction|beliefs|companion)` across
 | `ConvictionThresholdState` | return value | — (no caller — §7 gap 5) | `systems/characters/sim/conviction.py:244-251 check_conviction_threshold` |
 | `RevisionResult` | return value | caller of `revise_belief`/`social_success` (`systems/social_contest/sim/contest_legacy_stub.py` for `social_success`) | `systems/characters/sim/beliefs.py:180-186`, `systems/characters/sim/beliefs.py:229-234` |
 | `StubResult` | return value | `engine/tests/test_pipeline_reach.py` conformance probe only | `systems/characters/sim/companion.py:29-33 run_companion_scene` |
-| `world.convictions` (dict of `ConvictionState`) | world-state (write) | `engine/autoload/game_state.py` snapshot | `engine/autoload/game_state.py:308-309 serialize_world` |
-| `world.beliefs` (dict of list[`Belief`]) | world-state (write) | `engine/autoload/game_state.py` snapshot | `engine/autoload/game_state.py:310-312 serialize_world` |
+| `world.convictions` (dict of `ConvictionState`) | world-state (write) | `engine/autoload/game_state.py` snapshot | `engine/autoload/game_state.py:330-331 serialize_world` |
+| `world.beliefs` (dict of list[`Belief`]) | world-state (write) | `engine/autoload/game_state.py` snapshot | `engine/autoload/game_state.py:332-334 serialize_world` |
 | `CampaignResult.final_state['convictions'/'beliefs']` | return value | nothing reads these two keys downstream — see §7 gap 2 | `engine/mc_v18.py:307 final_state` |
 
 ## 5. State touched
@@ -133,7 +133,7 @@ grepping `characters.sim` / `sim.personal.(conviction|beliefs|companion)` across
 |---|---|---|---|
 | in | `fieldwork` (FI) | `systems/fieldwork/sim/knots.py` late-imports and calls `conviction.apply_conviction_scar` from `apply_knot_loss`'s break-consequence branch | `systems/fieldwork/sim/knots.py:348-352 apply_knot_loss` |
 | in | `social_contest` (SC) | `systems/social_contest/sim/contest_legacy_stub.py` late-imports and calls `beliefs.social_success` from `run_contest`'s post-contest resolution | `systems/social_contest/sim/contest_legacy_stub.py:239-247 run_contest` |
-| down | `engine.autoload` (core) | `game_state.py` imports `ConvictionState`/`Belief` directly to deserialize a campaign snapshot | `engine/autoload/game_state.py:386-393 restore_world` |
+| down | `engine.autoload` (core) | `game_state.py` imports `ConvictionState`/`Belief` directly to deserialize a campaign snapshot | `engine/autoload/game_state.py:408-415 restore_world` |
 | up | `engine.substrate` (core) | `companion.py` imports the single-owner stub primitive | `systems/characters/sim/companion.py:17` (import stubwire) |
 
 ## 7. Traced gaps

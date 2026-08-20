@@ -496,7 +496,7 @@ identifiers:
     identifier: key_log
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.key_log` / `KeyLog` entries | W (queued, deferred-apply) | `engine.cross_scale.echo_transport` substrate, not this subsystem''s own module or `zoom_in_out` (which never touches `world`) — `world.key_log` is aliased onto the same log object by `engine/mc_v18.py:249` | `engine/cross_scale/echo_transport.py:438 emit_scene_echo`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.key_log` / `KeyLog` entries | W (queued, deferred-apply) | `engine.cross_scale.echo_transport` substrate, not this subsystem''s own module or `zoom_in_out` (which never touches `world`) — `world.key_log` is aliased onto the same log object by `engine/mc_v18.py:249` | `engine/cross_scale/echo_transport.py:448 emit_scene_echo`'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py

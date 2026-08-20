@@ -35,7 +35,7 @@ identifiers:
     identifier: accord_echo
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:309-323 key`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:319-333 key`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -54,7 +54,7 @@ identifiers:
     identifier: ACCORD_MAP
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:224-232 Territory`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:246-254 Territory`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -64,7 +64,7 @@ identifiers:
     identifier: accounting_boundary
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:309-323 key`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:319-333 key`'
     built_in:
     - py:engine/substrate/keys.py
     disposition: BUILT
@@ -357,7 +357,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:257 populate_from_geography` (inside `create_world`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:279 populate_from_geography` (inside `create_world`)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -404,7 +404,7 @@ identifiers:
     identifier: echo_ctx
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx[''target_settlement'']`, `echo[''scene_outcome'']` | `arg` | Optional fields on a scene''s `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx[''target_settlement'']`, `echo[''scene_outcome'']` | `arg` | Optional fields on a scene''s `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared`'
     built_in:
     - py:engine/cross_scale/echo_transport.py
     disposition: BUILT
@@ -971,7 +971,7 @@ identifiers:
     identifier: npc_drift_state
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `World.npc_drift_state` | `RW` (declared only — no live writer other than the module fallback; see §7) | `engine/autoload/game_state.py` (declared) / `temperaments.py` (`_drift_store`) | `engine/autoload/game_state.py:199 npc_drift_state`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `World.npc_drift_state` | `RW` (declared only — no live writer other than the module fallback; see §7) | `engine/autoload/game_state.py` (declared) / `temperaments.py` (`_drift_store`) | `engine/autoload/game_state.py:221 npc_drift_state`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -1078,7 +1078,7 @@ identifiers:
     identifier: populate_from_geography
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:257 populate_from_geography` (inside `create_world`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:279 populate_from_geography` (inside `create_world`)'
     built_in:
     - py:systems/settlements/sim/registry.py
     disposition: BUILT
@@ -1312,7 +1312,7 @@ identifiers:
     identifier: restore_world
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:416-418 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:438-440 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -1332,7 +1332,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:327 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -1390,7 +1390,7 @@ identifiers:
     identifier: scene_outcome
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx[''target_settlement'']`, `echo[''scene_outcome'']` | `arg` | Optional fields on a scene''s `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx[''target_settlement'']`, `echo[''scene_outcome'']` | `arg` | Optional fields on a scene''s `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared`'
     built_in:
     - py:engine/cross_scale/domain_echo.py
     - py:engine/cross_scale/echo_transport.py
@@ -1422,7 +1422,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:327 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -1583,7 +1583,7 @@ identifiers:
     identifier: STARTING_ACCORD
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:224-232 Territory`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:246-254 Territory`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:systems/factions/sim/mass_seizure.py
@@ -1594,7 +1594,7 @@ identifiers:
     identifier: STARTING_OWNER
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:224-232 Territory`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:246-254 Territory`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -1616,7 +1616,7 @@ identifiers:
     identifier: STARTING_PT
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geo…'
+    purpose: '`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:279 populate_from_geo…'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -1693,7 +1693,7 @@ identifiers:
     identifier: target_settlement
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx[''target_settlement'']`, `echo[''scene_outcome'']` | `arg` | Optional fields on a scene''s `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx[''target_settlement'']`, `echo[''scene_outcome'']` | `arg` | Optional fields on a scene''s `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared`'
     built_in:
     - py:engine/cross_scale/echo_transport.py
     - py:engine/tests/test_accord_echo.py
@@ -1795,7 +1795,7 @@ identifiers:
     identifier: territory_infrastructure
     docs:
     - systems/settlements/settlements_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:399-401 InfrastructureState`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:421-423 InfrastructureState`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

@@ -98,19 +98,19 @@ found elsewhere in the tree.]
 
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
-| `World.npcs` | RW | `engine/autoload/game_state.py` (declared) / `systems/world/sim/npe.py` (read+written) | `engine/autoload/game_state.py:185 npcs` |
-| `World.npc_counter` | RW | `engine/autoload/game_state.py` (declared) / `systems/world/sim/npe.py` (incremented) | `engine/autoload/game_state.py:186 npc_counter` |
+| `World.npcs` | RW | `engine/autoload/game_state.py` (declared) / `systems/world/sim/npe.py` (read+written) | `engine/autoload/game_state.py:207 npcs` |
+| `World.npc_counter` | RW | `engine/autoload/game_state.py` (declared) / `systems/world/sim/npe.py` (incremented) | `engine/autoload/game_state.py:208 npc_counter` |
 | `Territory.accord` / `.prosperity` / `.owner` | R | `engine/autoload/game_state.py` (`Territory`) | `systems/world/sim/npe.py:175-197 _ecology_weights` |
 | `World.rng` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:231 rng` / `systems/world/sim/npe.py:333 rng` |
 | `World.season` | R | `engine/autoload/game_state.py` | `systems/world/sim/npe.py:369 NPCAction` |
 | `_npcs_by_territory` / `_npc_counter` (module fallback) | RW | `systems/world/sim/npe.py` | `systems/world/sim/npe.py:95-96` |
-| serialized `snapshot['npcs']` / `snapshot['npc_counter']` | W (serialize) / R (restore) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:305-308 npc_counter` / `engine/autoload/game_state.py:379-383 NPC` |
+| serialized `snapshot['npcs']` / `snapshot['npc_counter']` | W (serialize) / R (restore) | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:327-330 npc_counter` / `engine/autoload/game_state.py:401-405 NPC` |
 
 ## 6. Seams
 
 | Direction | Peer | Mechanism | Anchor |
 |---|---|---|---|
-| up | `engine/autoload/game_state` | `World.npcs`/`.npc_counter` registry fields owned by game_state, populated by npe | `engine/autoload/game_state.py:185-186 npcs` |
+| up | `engine/autoload/game_state` | `World.npcs`/`.npc_counter` registry fields owned by game_state, populated by npe | `engine/autoload/game_state.py:207-208 npcs` |
 | lateral | `systems/overview/sim/accounting` | `simulate_npc_actions` called every season from `run_accounting` step 5 | `systems/overview/sim/accounting.py:50 simulate_npc_actions` / `systems/overview/sim/accounting.py:138 simulate_npc_actions` |
 | lateral | `engine/mc_v18` | honest-deferral `stubwire.stub_resolve('generate_npc(world-gen|season-tick)', ...)` fired once per season instead of calling `generate_npc` | `engine/mc_v18.py:186-194 stub_resolve` |
 | down | `engine/substrate/canon_buckets` | `_ecology_weights` imports `canonical_accord` as a no-deps leaf | `systems/world/sim/npe.py:44 canonical_accord` |

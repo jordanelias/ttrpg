@@ -309,7 +309,7 @@ identifiers:
     identifier: comovement_deck
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:201 comovement_deck`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:223 comovement_deck`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -330,7 +330,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.clocks[''MS'']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:244 clocks`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.clocks[''MS'']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:266 clocks`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -799,7 +799,7 @@ identifiers:
     identifier: threadcut_beings
     docs:
     - systems/threadwork/threadwork_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:200 threadcut_beings`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:222 threadcut_beings`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

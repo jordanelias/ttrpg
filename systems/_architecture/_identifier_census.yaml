@@ -1017,7 +1017,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.classify_scene_outcome` | `engine/cross_scale/echo_transport.py:134 classify_scene_outcome` | `engine/cross_scale/echo_transport.py:448` (inside `emit_scene_echo`, def at `:360`; internal)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.classify_scene_outcome` | `engine/cross_scale/echo_transport.py:144 classify_scene_outcome` | `engine/cross_scale/echo_transport.py:448` (inside `emit_scene_echo`, def at `:360`; internal)'
     built_in:
     - py:engine/cross_scale/echo_transport.py
     disposition: BUILT
@@ -2505,7 +2505,7 @@ identifiers:
     identifier: final_state
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '`CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:262 serialize_world`,'
+    purpose: '`CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:284 serialize_world`,'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -3323,7 +3323,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.make_scheduler` | `engine/cross_scale/echo_transport.py:173 make_scheduler` | `engine/mc_v18.py:243`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.make_scheduler` | `engine/cross_scale/echo_transport.py:183 make_scheduler` | `engine/mc_v18.py:243`'
     built_in:
     - py:engine/cross_scale/echo_transport.py
     disposition: BUILT
@@ -4470,7 +4470,7 @@ identifiers:
     identifier: restore_world
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:332 restore_world`'
+    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:354 restore_world`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -4585,7 +4585,7 @@ identifiers:
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.emit_scene_echo` | `engine/cross_scale/echo_transport.py:360 emit_scene_echo` | `engine/cross_scale/scene_dispatch.py:392` (inside `_resolve_slot`); `engine/cross_scale/parliamentary_bridge.py:212` (inside `run_parliamentary_scene`, def at `:180`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.emit_scene_echo` | `engine/cross_scale/echo_transport.py:370 emit_scene_echo` | `engine/cross_scale/scene_dispatch.py:392` (inside `_resolve_slot`); `engine/cross_scale/parliamentary_bridge.py:212` (inside `run_parliamentary_scene`, def at `:180`)'
     built_in:
     - py:engine/cross_scale/parliamentary_bridge.py
     disposition: BUILT
@@ -5085,7 +5085,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '`CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:262 serialize_world`,'
+    purpose: '`CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:284 serialize_world`,'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

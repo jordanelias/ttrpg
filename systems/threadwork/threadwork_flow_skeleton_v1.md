@@ -41,12 +41,12 @@
 |---|---|---|---|
 | `actor` (duck-typed practitioner: `.spirit`, `.ts`, `.history`, `.actor_id`) | `arg` | caller-supplied; no World practitioner-stat schema exists | `systems/threadwork/sim/operations.py:15-19` (module docstring ASSUMPTION) |
 | `target` / `target_state` / `target_moment` dict (`scale`, `recency`, ...) | `arg` | caller-supplied | `systems/threadwork/sim/operations.py:224 target_state`, `:248 target` |
-| `world.practitioners` (Coherence store) | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:182 practitioners` |
-| `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:200 threadcut_beings` |
-| `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:201 comovement_deck` |
-| `world.clocks['MS']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:244 clocks` |
+| `world.practitioners` (Coherence store) | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:204 practitioners` |
+| `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:222 threadcut_beings` |
+| `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:223 comovement_deck` |
+| `world.clocks['MS']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:266 clocks` |
 | `world.rng` | `world-state` | fallback rng source when no `rng` arg given | `systems/threadwork/sim/operations.py:172 world.rng` |
-| Snapshot dict on load | `file` | `engine/autoload/game_state.py` snapshot restore | `engine/autoload/game_state.py:365 CoherenceState`, `:405 ThreadcutState` |
+| Snapshot dict on load | `file` | `engine/autoload/game_state.py` snapshot restore | `engine/autoload/game_state.py:387 CoherenceState`, `:405 ThreadcutState` |
 | TN/Ob/Coherence-cost tables (`TN_STANDARD`, `DEPTH_OB`, `MENDING_OB`, `COHERENCE_COST_BY_SCALE`, ...) | `param` | module-level constants | `systems/threadwork/sim/operations.py:47-117` |
 | `CO_MOVEMENT_CARDS` (15-card table) | `param` | module-level constant | `systems/threadwork/sim/co_movement.py:35 CO_MOVEMENT_CARDS` |
 | `a_knot_id` / `b_knot_id` | `arg` | caller-supplied, optional | `systems/threadwork/sim/opposing.py:105 a_knot_id` |

@@ -59,8 +59,8 @@
   - **S2.1** `[branch]` The only production module that constructs and emits real `Key` objects
     anywhere in `engine/` is `echo_transport.py`; it maps `scene_type -> key type` for exactly
     two families (`"contest"`, `"combat"`) and separately builds one `scene.accord_echo` Key.
-    `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`,
-    `engine/cross_scale/echo_transport.py:309-311 Key`
+    `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`,
+    `engine/cross_scale/echo_transport.py:319-321 Key`
   - **S2.2** `[gate]` Both paths require the calling scene's `ctx['echo']` block to already carry
     explicit fields (`actor_faction`/`most_relevant_stat` for the §5.2 leg;
     `echo['scene_outcome']` for the accord-echo leg) — neither is populated by any live
@@ -123,7 +123,7 @@ list and the shared stub counter. `render_protagonist_lens`/`generate_chronicle_
 | **Tier 3 chronicle layer is entirely uncalled.** `generate_chronicle_entry` is likewise never invoked. | `engine/cross_scale/articulation.py:53-59`; whole-repo grep for the symbol name finds no call site |
 | **Tier 2's own trigger-evaluation function is never invoked by production code either.** `evaluate_articulation_triggers`'s only caller in the tree is a stub-conversion regression probe that asserts it is *still* stub-wired, not a consumer of its output; `engine/mc_v18.py`'s season loop never calls it. | `engine/tests/test_pipeline_reach.py:749-762 _OI17_FULL_MODULE_ENTRYPOINTS` / `:767 test_oi17_full_module_conversions_are_stub_wired` |
 | **10 of the 13 subscribed trigger type_ids have zero production emitter anywhere in `.py` code.** (`state.scar_acquired`, `state.coup_attempted`, `state.succession`, `mechanical.mission_shift`, `da.covert_betrayal`, `meta.knot_formed`, `meta.knot_ruptured`, `env.peninsular_strain_shock`, `meta.cascade_cluster_event`, `state.belief_revised`.) Nothing outside the roster constant itself and the test fixture constructs a `Key` of these types, so the corresponding callbacks can never fire in a real campaign. | `engine/cross_scale/articulation.py:117-126 _TRIGGER_TYPE_IDS`; whole-repo grep for each literal type string as a Python value returns only `tests/valoria/test_articulation_subscriber.py` |
-| **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE` |
+| **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE` |
 | **`scene.combat_resolved`'s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `'0'`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:71-81 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_combat_pair_key_reaches_articulation_subscriber_under_flag_on` |
 | **`scene.accord_echo`'s one live emission path is organically dormant.** It requires a caller-declared `echo['scene_outcome']`, which no live `scene_dispatch.py`/`parliamentary_bridge.py` caller sets today. | `engine/cross_scale/echo_transport.py:34-37` |
 | **Net: `subscribe_all` wires all 13 callbacks at every default campaign boot, but under default flags none of the 13 can ever fire in a live campaign** — the whole Tier-2 trigger flow is structurally present and dormant, not partially reachable. | Composite of the four rows above; `engine/mc_v18.py:241-258` (default-flag boot path) |

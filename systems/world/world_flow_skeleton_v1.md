@@ -25,9 +25,9 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 
 | Callable | Anchor | Called by |
 |---|---|---|
-| `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign` |
-| `serialize_world(world)` | `engine/autoload/game_state.py:262 serialize_world` | `engine/mc_v18.py:307 run_campaign` |
-| `restore_world(snapshot)` | `engine/autoload/game_state.py:332 restore_world` | — (no production caller; only `engine/tests/test_world_population.py:82`) |
+| `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign` |
+| `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:307 run_campaign` |
+| `restore_world(snapshot)` | `engine/autoload/game_state.py:354 restore_world` | — (no production caller; only `engine/tests/test_world_population.py:82`) |
 | `check_insurgency_triggers(world)` | `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers` | `systems/overview/sim/accounting.py:124 run_accounting` |
 | `check_insurgency_promotion(insurgency_id, world)` | `systems/world/sim/insurgency_pipeline.py:199 check_insurgency_promotion` | `systems/overview/sim/accounting.py:132 run_accounting` |
 | `get_insurgencies(world=None)` | `systems/world/sim/insurgency_pipeline.py:258 get_insurgencies` | `systems/overview/sim/accounting.py:131 run_accounting` |
@@ -39,16 +39,16 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `trigger_miraculous_event(event_type, world)` | `systems/world/sim/miraculous_event.py:28 trigger_miraculous_event` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:758` stub-wire probe) |
 | `process_rm_pt_decay(world)` | `systems/world/sim/restoration_movement.py:30 process_rm_pt_decay` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:759` stub-wire probe) |
 | `check_rm_emergence_trigger(world)` | `systems/world/sim/restoration_movement.py:38 check_rm_emergence_trigger` | — (stub; not called anywhere, not even by a stub-wire probe) |
-| `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta` |
+| `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta` |
 
 ## 2. IN
 
 | Input | Kind | Origin | Anchor |
 |---|---|---|---|
-| `seed: int \| None` | arg | caller of `create_world` | `engine/autoload/game_state.py:212 create_world` |
-| `snapshot: dict` | arg | caller of `restore_world` | `engine/autoload/game_state.py:332 restore_world` |
+| `seed: int \| None` | arg | caller of `create_world` | `engine/autoload/game_state.py:234 create_world` |
+| `snapshot: dict` | arg | caller of `restore_world` | `engine/autoload/game_state.py:354 restore_world` |
 | `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | module-level starting-state tables | `engine/autoload/game_state.py:46-93` |
-| `world.territories` (dict) | world-state | `World` dataclass | `engine/autoload/game_state.py:166 World.territories` |
+| `world.territories` (dict) | world-state | `World` dataclass | `engine/autoload/game_state.py:188 World.territories` |
 | `Territory.accord` / `.pt` / `.prosperity` / `.owner` | world-state | `Territory` dataclass, read by `insurgency_pipeline`/`npe` | `systems/world/sim/insurgency_pipeline.py:228-239`, `systems/world/sim/npe.py:180-200` |
 | `world.season` | world-state | `World.season` | `systems/world/sim/insurgency_pipeline.py:167`, `systems/world/sim/npe.py:369` |
 | `world.rng` | world-state | `World.rng` | `systems/world/sim/npe.py:231 generate_npc`, `systems/world/sim/npe.py:333 simulate_npc_actions` |
@@ -65,10 +65,10 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 - **S1** `engine.mc_v18.run_campaign` calls `game_state.create_world(seed)` to build the
   starting `World`. `engine/mc_v18.py:224 run_campaign`
   - **S1.1** `[write]` Builds `Faction`/`Territory` maps from the `STARTING_*` module tables.
-    `engine/autoload/game_state.py:216-233 create_world`
-  - **S1.2** `[write]` Initializes `World.clocks` (CI/MS/IP/PI/Strain/Turmoil). `engine/autoload/game_state.py:244 create_world`
+    `engine/autoload/game_state.py:238-255 create_world`
+  - **S1.2** `[write]` Initializes `World.clocks` (CI/MS/IP/PI/Strain/Turmoil). `engine/autoload/game_state.py:266 create_world`
   - **S1.3** `[emit]` Down-seam: calls `systems.settlements.sim.registry.populate_from_geography(world)`
-    to populate `world.settlements` before returning. `engine/autoload/game_state.py:257-258 create_world`
+    to populate `world.settlements` before returning. `engine/autoload/game_state.py:279-280 create_world`
 - **S2** `[loop]` `run_campaign` iterates seasons (`for _ in range(max_s)`), calling
   `season.run_season(world, action_callback=...)` each iteration until a winner is set or the season
   cap is reached. `engine/mc_v18.py:260-267 run_campaign`
@@ -115,15 +115,15 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
   would otherwise be. `engine/mc_v18.py:186-194 _faction_actions_callback` (§7 gap 3)
 - **S6** `[write]` At campaign end (winner found or season cap reached), `run_campaign` calls
   `game_state.serialize_world(world)` to build `CampaignResult.final_state`.
-  `engine/mc_v18.py:307 run_campaign` → `engine/autoload/game_state.py:262 serialize_world`
+  `engine/mc_v18.py:307 run_campaign` → `engine/autoload/game_state.py:284 serialize_world`
   - **S6.1** `[gate, default-off]` `restore_world` exists as the inverse of S6 but is exercised only
-    by its own round-trip test, never by a production caller. `engine/autoload/game_state.py:332 restore_world`
+    by its own round-trip test, never by a production caller. `engine/autoload/game_state.py:354 restore_world`
 
 ## 4. OUT
 
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
-| `World` instance | world-state | `engine.mc_v18.run_campaign` and everything downstream in the season loop | `engine/autoload/game_state.py:212 create_world`, `engine/mc_v18.py:224` |
+| `World` instance | world-state | `engine.mc_v18.run_campaign` and everything downstream in the season loop | `engine/autoload/game_state.py:234 create_world`, `engine/mc_v18.py:224` |
 | `list[InsurgencyEvent]` | emit | discarded by caller (`accounting.py` comment: "Events list discarded here") | `systems/world/sim/insurgency_pipeline.py:96-99`, `systems/overview/sim/accounting.py:119-124` |
 | `PromotionResult` | emit | discarded by caller's loop | `systems/world/sim/insurgency_pipeline.py:103-107`, `systems/overview/sim/accounting.py:131-132` |
 | `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:296-300`, `engine/mc_v18.py:298` |
@@ -131,13 +131,13 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` → `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:301-304`, `engine/mc_v18.py:299` |
 | serialized snapshot `dict` | file/registry | `CampaignResult.final_state`; any save-game caller | `engine/autoload/game_state.py:264`, `engine/autoload/game_state.py:274`, `engine/mc_v18.py:307` |
 | `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter → `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39` |
-| `canonical_pt(continuous_pt) -> int` | registry (leaf fn) | production bucketing callers in factions and overview | `engine/autoload/game_state.py:73 canonical_pt`, `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta` |
+| `canonical_pt(continuous_pt) -> int` | registry (leaf fn) | production bucketing callers in factions and overview | `engine/autoload/game_state.py:74 canonical_pt`, `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta` |
 
 ## 5. State touched
 
 | Field | R/W/RW | Owning module | Anchor |
 |---|---|---|---|
-| `World.territories` | W (created) | `engine.autoload.game_state` | `engine/autoload/game_state.py:222-233 create_world` |
+| `World.territories` | W (created) | `engine.autoload.game_state` | `engine/autoload/game_state.py:244-255 create_world` |
 | `World.territories` | R | `systems.world.sim.insurgency_pipeline` | `systems/world/sim/insurgency_pipeline.py:117` |
 | `Territory.accord` | R | `systems.world.sim.insurgency_pipeline`, `systems.world.sim.npe` | `systems/world/sim/insurgency_pipeline.py:228-230`, `systems/world/sim/npe.py:189` |
 | `Territory.pt` | R | `systems.world.sim.insurgency_pipeline` | `systems/world/sim/insurgency_pipeline.py:237-239` |
@@ -149,8 +149,8 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `World.npc_counter` | RW | `systems.world.sim.npe` | `systems/world/sim/npe.py:108-109` |
 | `World.season` | R | `systems.world.sim.insurgency_pipeline`, `systems.world.sim.npe` | `systems/world/sim/insurgency_pipeline.py:167`, `systems/world/sim/insurgency_pipeline.py:171`, `systems/world/sim/insurgency_pipeline.py:176`, `systems/world/sim/npe.py:369` |
 | `World.rng` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:231`, `systems/world/sim/npe.py:333` |
-| `World.clocks` | W (created) | `engine.autoload.game_state` | `engine/autoload/game_state.py:244 create_world` |
-| `World.settlements` | W (created, via down-seam) | `engine.autoload.game_state` → `systems.settlements.sim.registry` | `engine/autoload/game_state.py:257-258 create_world` |
+| `World.clocks` | W (created) | `engine.autoload.game_state` | `engine/autoload/game_state.py:266 create_world` |
+| `World.settlements` | W (created, via down-seam) | `engine.autoload.game_state` → `systems.settlements.sim.registry` | `engine/autoload/game_state.py:279-280 create_world` |
 | `Territory.accord` | R | `systems.overview.sim.accounting` | `systems/overview/sim/accounting.py:88 _probe_province_accord_drift` |
 
 ## 6. Seams

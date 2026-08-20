@@ -289,7 +289,7 @@ identifiers:
     identifier: from_dict
     docs:
     - systems/characters/characters_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` — see §7 gap 4'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:409-410 restore_world` — see §7 gap 4'
     built_in:
     - py:systems/characters/sim/beliefs.py
     - py:systems/characters/sim/conviction.py
@@ -614,7 +614,7 @@ identifiers:
     identifier: restore_world
     docs:
     - systems/characters/characters_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` — see §7 gap 4'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:409-410 restore_world` — see §7 gap 4'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -692,7 +692,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/characters/characters_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:330 serialize_world` (duck-typed via `hasattr`)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -797,7 +797,7 @@ identifiers:
     identifier: to_dict
     docs:
     - systems/characters/characters_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:330 serialize_world` (duck-typed via `hasattr`)'
     built_in:
     - py:systems/characters/sim/beliefs.py
     - py:systems/characters/sim/conviction.py

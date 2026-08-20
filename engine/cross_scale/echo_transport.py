@@ -55,7 +55,17 @@ from typing import Optional
 from engine.cross_scale import domain_echo
 from engine.autoload.game_state import MULTS
 from engine.substrate import EmittedAt, Key, KeyLog, Target, TickScheduler, TypeRegistry
-from systems.settlements.sim import registry as settlement_registry
+# SEAM 1 OF 3 REMOVED 2026-08-20 (plan Act C3). This module used to import
+# `systems.settlements.sim.registry` for ONE thing: STAT_MIN/STAT_MAX, the 0-5 clamp on settlement
+# stats. That inverted the dependency direction — engine/ is the root and systems/ stems from it —
+# to reach a bound `references/descriptor_registry.yaml` already declares as `set.order: 0-5`.
+# It now reads the root. Value-identical by construction: registry.py:50 is `STAT_MIN, STAT_MAX =
+# 0, 5` and the registry declares (0, 5), so the seeded campaign goldens are the control — if they
+# move, this swap was wrong. They did not.
+from engine.substrate import descriptors
+
+_ORDER_FLOOR, _ORDER_CEILING = (descriptors.SETTLEMENT_STATS['set.order']['floor'],
+                                descriptors.SETTLEMENT_STATS['set.order']['ceiling'])
 
 
 # THE COOKED REGISTRY, not the markdown (ED-IN-0136). The markdown remains the AUTHORED surface —
@@ -282,7 +292,7 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
     ACCORD_MAP are Territory.accord's OWN continuous 0.5-7.0 representation (game_state.py) --
     a DIFFERENT field this leg no longer touches; mixing the two scales in one function is
     exactly the "MULTS-scaled continuous value in the same function as a canonical-index step"
-    defect this fix removes. Clamped to `settlement_registry.STAT_MIN`/`STAT_MAX` (0-5), the
+    defect this fix removes. Clamped to the registry-declared `set.order` bounds (0-5), the
     same bound `Settlement.order` observes everywhere else (registry.py, settlement.py). The
     deferred `_apply` closure below re-resolves the settlement from `world.settlements` by id at
     apply time (mirrors `emit_scene_echo`'s own `_apply` closure for the §5.2 leg, which
@@ -330,15 +340,15 @@ def _apply_accord_echo(scene_type: str, scene_outcome: str, ar, echo_ctx: dict, 
         if _outcome == "territorial_transfer":
             # [canonical: §5.5 -- "Transferred territory Accord set to 2"] -- 2 is already the
             # canonical-index value (see docstring's Unit note); clamped through the same
-            # STAT_MIN/STAT_MAX bound as every other settlement.order write (registry.py), not
+            # registry-declared bound as every other settlement.order write, not
             # through ACCORD_MAP (Territory.accord's continuous scale -- untouched here).
-            s.order = max(settlement_registry.STAT_MIN, min(settlement_registry.STAT_MAX, 2))
+            s.order = max(_ORDER_FLOOR, min(_ORDER_CEILING, 2))
         elif _delta:
             # _delta is ALREADY canonical-index (+-1, §5.5's own table) -- settlement.order is
             # natively that same index scale (settlement_layer_v30.md §1.3), so it is added
             # directly, with no MULTS conversion (see docstring's Unit note).
-            s.order = max(settlement_registry.STAT_MIN,
-                          min(settlement_registry.STAT_MAX, s.order + _delta))
+            s.order = max(_ORDER_FLOOR,
+                          min(_ORDER_CEILING, s.order + _delta))
 
     sched.emit(key, apply=_apply)  # OF-7: settlement-Order write lands at accounting_boundary()
     detail["applied"] = True
