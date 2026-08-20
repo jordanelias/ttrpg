@@ -35,12 +35,12 @@ on:
       - 'tools/observability/build_incompleteness.py'  # the Missing-face scanner itself
       - 'skills/valoria-vector-audit/scripts/vector_audit.py'  # emits the Missing card's audit rows
       - '.github/workflows/dashboard.yml'
-  schedule:
-    # Daily fallback — staleness (workplan drift, CI status) can change even with
-    # no commits to the paths above. NOTE: GitHub auto-disables scheduled workflows
-    # after 60 days with no repository activity; the push trigger above is the
-    # actual freshness backstop, this cron is a convenience, not the only path.
-    - cron: '17 6 * * *'
+  # NO SCHEDULE. Removed 2026-08-20: the daily cron ran this job's two work-GENERATING
+  # steps unattended (vector_audit --emit-findings, build_incompleteness), publishing a
+  # fresh manufactured-work feed every morning with no human in the loop. That is the same
+  # channel audit-refresh.yml's weekly cron was severed for on 2026-08-19 (CLAUDE.md 0.3,
+  # term T3); severing one workflow and leaving the other running severed nothing. The push
+  # trigger above and workflow_dispatch remain — the dashboard is available, not automatic.
   workflow_dispatch: {}
 
 concurrency:
@@ -81,15 +81,15 @@ jobs:
       - name: Regenerate decisions digest (Missing-face prose rollup input)
         run: python3 tools/observability/build_decisions.py
 
-      - name: Emit vector-audit structural findings (Missing-face input)
-        # ~70s (curate_tokens): the audit's Mode-B implied-missing + Mode-H isolate
-        # rows the ledger surfaces. MUST run before build_incompleteness.
-        run: python3 skills/valoria-vector-audit/scripts/vector_audit.py --repo-root . --emit-findings tools/observability/audit_findings.json
-
-      - name: Regenerate Incompleteness Ledger (Missing face)
-        # Whole-tree scan for every stub/null/missing/excluded/unverified thing;
-        # writes incompleteness.json that the next step's build_incompleteness card reads.
-        run: python3 tools/observability/build_incompleteness.py
+      # THE TWO WORK-GENERATING STEPS THAT STOOD HERE WERE REMOVED 2026-08-20.
+      # They were `vector_audit.py --emit-findings` and `build_incompleteness.py` — a
+      # whole-tree scan for every stub/null/missing/unverified thing, re-run daily and
+      # published as the "Missing" card. Under CLAUDE.md 0.1 pt 5's load-bearing predicate
+      # their subject is this repository's own process, not the game and not a Jordan
+      # decision, so the feed is not evidence anything needs fixing — it is the generator.
+      # dashboard_data.py degrades gracefully when the feeds are absent (build_incompleteness
+      # and the audit-modes reader both return available:false with a note), so the cards
+      # simply say "not generated". Both scripts still exist and can be run by hand.
 
       - name: Build dashboard data.json
         env:
