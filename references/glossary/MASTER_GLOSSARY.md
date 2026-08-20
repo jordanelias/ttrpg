@@ -670,7 +670,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **expectation_alignment_modifier** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 1 | identifier_census |
 | **expectation_weight** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
 | **expected_convictions** | _no curated definition_ | [factions](GLOSSARY_factions.md) | 2 | identifier_census |
-| **export_params_constants** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 2 | identifier_census |
+| **export_params_constants** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md), [proposals](GLOSSARY_proposals.md) | 3 | identifier_census |
 | **exposure_per_player** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **exposure_threshold_crossed** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 2 | identifier_census |
 | **exposure_witnesses** | _no curated definition_ | [_architecture](GLOSSARY__architecture.md) | 1 | identifier_census |
@@ -1754,7 +1754,7 @@ Per-subsystem views: [_architecture](GLOSSARY__architecture.md), [articulation](
 | **unified_canon_target** | _no curated definition_ | [fieldwork](GLOSSARY_fieldwork.md) | 1 | identifier_census |
 | **unit_a** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md), [threadwork](GLOSSARY_threadwork.md) | 4 | identifier_census |
 | **unit_b** | _no curated definition_ | [mass_battle](GLOSSARY_mass_battle.md), [proposals](GLOSSARY_proposals.md), [threadwork](GLOSSARY_threadwork.md) | 4 | identifier_census |
-| **units** | Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis. | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 51 | mechanics_index |
+| **units** | Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis. | [_architecture](GLOSSARY__architecture.md), [characters](GLOSSARY_characters.md), [combat](GLOSSARY_combat.md), [engine](GLOSSARY_engine.md), [factions](GLOSSARY_factions.md), [fieldwork](GLOSSARY_fieldwork.md), [godot](GLOSSARY_godot.md), [mass_battle](GLOSSARY_mass_battle.md), [npcs](GLOSSARY_npcs.md), [proposals](GLOSSARY_proposals.md), [settlements](GLOSSARY_settlements.md), [threadwork](GLOSSARY_threadwork.md), [ui](GLOSSARY_ui.md), [victory](GLOSSARY_victory.md), [world](GLOSSARY_world.md) | 52 | mechanics_index |
 | **unlocked_codex_entries** | _no curated definition_ | [ui](GLOSSARY_ui.md) | 1 | identifier_census |
 | **update_protagonist_concern_queue** | _no curated definition_ | [articulation](GLOSSARY_articulation.md) | 1 | identifier_census |
 | **update_protagonist_memory_index** | _no curated definition_ | [articulation](GLOSSARY_articulation.md) | 1 | identifier_census |

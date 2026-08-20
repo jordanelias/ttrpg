@@ -1115,7 +1115,7 @@
     "proposals/2026-08-18-next-session-handoff.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
     "proposals/2026-08-20-return-to-game-plan-v1.md": 19,
-    "proposals/2026-08-21-execution-order-v1.md": 7,
+    "proposals/2026-08-21-execution-order-v1.md": 9,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -31383,10 +31383,11 @@
      "purpose": "on capture, not on trust: `tools/export_params_constants.py` writes"
     }
    },
-   "file_count": 2,
+   "file_count": 3,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-18-culling-plan-v1.md": 1,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "systems/_architecture/repository_keep_set_v1.md": 2
    },
    "sources": [
@@ -66995,7 +66996,7 @@
   "units": {
    "ambiguous": false,
    "definition": "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis.",
-   "file_count": 51,
+   "file_count": 52,
    "legacy_count": 0,
    "locations": {
     "engine/sigma_leverage_engine_armature.md": 2,
@@ -67007,6 +67008,7 @@
     "proposals/2026-08-18-culling-plan-v1.md": 3,
     "proposals/2026-08-18-next-session-handoff.md": 1,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 23,
     "proposals/pc_formation_system.md": 3,

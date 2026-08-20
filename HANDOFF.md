@@ -52,9 +52,17 @@ and this root file remains the one stable SessionStart entry point.
 document is still the authority on what each act is and why. If you are about to write a new plan
 instead of taking a step, that is the loop; take the step.
 
-`state: next` is currently **S2 — move M1 juncture 1**: fractional pools (`sigma_leverage.py:284`
-rounds the pool before sampling, though `dice_engine.continuous_engine_sample` already accepts a
-fractional one) and the `score/2` obstacle classification. S1 landed 2026-08-21.
+`state: next` is currently **S2 — culling wave 5: untrack the generated data** (~126,000 lines;
+RULED 2026-08-21 by Jordan, "we can't break out of recursion without culling"). It is independent of
+every architectural step — nothing under `engine/` or `systems/` reads any of it — and it is the wave
+that attacks the loop directly: adding one document to `proposals/` currently churns three generated
+indexes and reds a blocking gate. The work is the **gate flip** (build in CI, do not diff a committed
+copy), one gate at a time, never a silent `git rm`.
+
+Then **S3 — move M1 juncture 1**: fractional pools (`sigma_leverage.py:284` rounds the pool before
+sampling, though `dice_engine.continuous_engine_sample` already accepts a fractional one; measured
+2026-08-21, **20 of 40 strategic rolls in a 4-season campaign already pass a fractional pool and are
+silently rounded**) and the `score/2` obstacle classification. S1 landed 2026-08-21.
 
 _Cross-cutting items only — lane-owned work lives in `registers/handoffs/HANDOFF_<LANE>.md`.
 Rewritten 2026-08-14 (ED-IN-0189): this section had opened with a blocker resolved 2026-07-30 and

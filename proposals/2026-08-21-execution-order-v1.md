@@ -67,10 +67,20 @@ run and it wrote 1,022 lines of apparatus and zero lines of game. S2 is the game
 second rather than fourth because the experiment needs a data point in the other direction more than
 the architecture needs another week.
 
-**(d) Cull last, not first.** Eight consolidation plans preceded this one and averaged **+82,020
-lines**. The common failure is culling while the architecture is still moving, so the cull removes
-the thing the next architecture step needed. S5 collapses the guard tiers *after* S4 has settled what
-dispatches what.
+**(d) Cull by DEPENDENCY, not by phase — corrected 2026-08-21 on Jordan's ruling
+("we can't break out of recursion without culling").** The first draft of this document put every
+cull last, inheriting "cull last" wholesale from the culling plan's own sequencing. That was wrong,
+and measuring it showed why: the waves are not one thing. **Wave 5 — untracking generated data,
+~126,000 lines — is independent of every architectural step here**, because nothing in `engine/` or
+`systems/` reads any of it. It is also the wave that most directly attacks the loop, which is the
+part the phase-ordering obscured: this session added *one* document to `proposals/` and thereby
+churned the glossary, the test register and the identifier census, and failed a blocking gate on the
+glossary. That is the generator running on generated data, and no amount of doctrine reaches it.
+So Wave 5 is now **S2**, ahead of the game work.
+
+What genuinely must wait is narrower than "culling": Waves 1, 2, 3 and 6 touch apparatus that S5
+(contracts-as-registration) rewires, and collapsing guard tiers before S5 has settled what dispatches
+what is how the previous eight consolidation plans failed. Those stay late, at S6.
 
 ---
 
@@ -128,7 +138,64 @@ remain hardcoded twins in `game_state.py`. That is C2's remaining two thirds and
 
 ---
 
-### S2 — Move M1 juncture 1 · `state: next`
+### S2 — Untrack the generated data · `state: next` · culling Wave 5, ~126,000 lines
+
+**Goals served:** the loop itself. This is the cull Jordan named as the precondition, and it is the
+one with no architectural dependency.
+
+**Precondition:** none. Nothing under `engine/` or `systems/` reads any target.
+
+**Measured 2026-08-21, current tree:**
+
+| target | lines | generator |
+|---|---:|---|
+| `references/glossary/` (21 files) | 75,829 | `tools/observability/build_glossary.py` |
+| `systems/*/_identifier_census.yaml` (15) | 26,292 | `tools/build_identifier_census.py` |
+| `references/test_register.json` | 12,638 | `tools/build_test_register.py` |
+| `references/key_graph.json` | 2,840 | `tools/build_key_graph.py` |
+| `references/execution_map.json` + `EXECUTION_MAP.md` + `execution_trace.json` | 2,675 | `tools/build_execution_map.py` |
+| `engine_atlas.json` + `ENGINE_ATLAS.md`, `CONTRACT_INDEX.md`, `KEY_INDEX.md`, `definitions.yaml`, the 4 vocab views, `identifier_census.json` | ~6,000 | five builders |
+
+**Why this is the cull that counts, stated as evidence rather than as a principle.** Adding one
+477-line document to `proposals/` in the S1 commit regenerated three of these indexes, produced ~200
+lines of diff churn in files no human wrote, and turned `pytest tests/valoria` red on
+`test_build_glossary` until the glossary was rebuilt. The culling plan records the same failure twice
+more: two sibling branches collided on 18 files "over nothing", every conflict a generated file and
+zero in source; and three times in one session an edit to *prose* staled `engine_atlas.json` and
+failed a blocking gate — once because the word "audit" appeared one more time in a comment.
+
+**The gate flip this requires, and it is the whole of the work.** Several freshness checks operate by
+diffing the *committed* copy against a fresh build (`vocab_store --check`, `definitions_store
+--check`, `test_engine_atlas`, `test_test_register`, `test_build_glossary`,
+`build_identifier_census --check`). Untracking means flipping each to **build in CI, do not diff a
+committed copy**. One deliberate pass, gate by gate — **not a silent `git rm`**. A gate left diffing
+an untracked file fails permanently and gets deleted by the next session, which loses the check.
+
+**Two hard gates from the culling plan §5 bind here.**
+1. **`engine/engine_params/params_tables.yaml` is NOT regenerable** — its 43 source docs were
+   evacuated and `export_params_constants.py` exists nowhere in the tree. It is a **source, not an
+   artifact**. KEEP TRACKED, excluded from this wave. (S6 pins it.)
+2. **`validate_ed_citations.py:368` reads the identifier census.** Detach it or confirm it degrades
+   safely before untracking `identifier_census.json`, or every valid `ED-` citation risks reading as
+   fabricated.
+
+**Gate.**
+```
+git ls-files | xargs wc -l | tail -1        # tracked-line total falls by ~126,000
+python3 -m pytest tests/valoria -q          # green with NO generated file committed
+touch a new proposals/*.md, run the suite   # no generated-file churn, no red gate
+```
+The third line is the falsifier: the defect being removed is *prose edit churns generated data*, so
+the test is a prose edit that does not.
+
+**Commit:** `[cleanup] Culling wave 5: untrack generated data, and flip the freshness gates to build-in-CI (ED-IN-0194)`
+
+**Do not:** untrack `params_tables.yaml`; `git rm` without flipping the paired gate in the same
+commit; or extend this into Waves 1/2/3/6, which S5 rewires.
+
+---
+
+### S3 — Move M1 juncture 1 · `state: after S2`
 
 **Goals served:** the deliverable. This is the only step here that can change `0/7`.
 
@@ -214,7 +281,7 @@ if it exceeds ~150 lines, stop and split.
 
 ---
 
-### S3 — Give each juncture an execution artifact · `state: blocked-by S2`
+### S4 — Give each juncture an execution artifact · `state: blocked-by S3`
 
 **Goals served:** 4 (guardrails that can observe what they guard).
 
@@ -248,7 +315,7 @@ input is wrong.
 
 ---
 
-### S4 — Contracts as the registration table · `state: blocked-by S3`
+### S5 — Contracts as the registration table · `state: blocked-by S4`
 
 **Goals served:** 1 (engine → systems direction), 3 (commensurate), 6 (central definition → modular
 apparatus). This is the highest-leverage step in the programme and the one that most repays care.
@@ -313,9 +380,24 @@ being restored while the code contradicts it, and it is the only thing holding t
 
 ---
 
-### S5 — Collapse the L3 rungs and pin what is actually read · `state: blocked-by S4`
+### S6 — Collapse the L3 rungs, run the dependent cull waves, and pin what is actually read · `state: blocked-by S5`
 
-**Goals served:** 5 (gates at L2 at the deepest), 4.
+**Goals served:** 5 (gates at L2 at the deepest), 4, and the rest of the cull.
+
+**This step now carries culling Waves 1, 2 and 6** (`2026-08-18-culling-plan-v1.md`, RATIFIED,
+ED-IN-0194) — the ones that had to wait, because each removes apparatus that S5 rewires. Wave 5 ran
+at S2. Their order inside this step is the culling plan's own, which was adjudicated and should not
+be re-derived: **6b (tombstones) before 6a**, then Wave 1 (leaves), then Wave 2 (meta-gates, orphaned
+by wave 1), then 6f, then 6c. **Wave 3 does not run** — see §4.
+
+**Wave 4 (`audit/` → fork ref) is mostly already done, and what remains is not a cull.** Measured
+2026-08-21: **16 of the 17 units the plan marks "delete outright, no extraction" are already gone**,
+taken by #323's −97,454-line commit; the residue of that set is 1,870 lines. `audit/` still holds
+79,085 lines, and that is almost entirely the **~33 game-subject working papers the plan requires to
+be EXTRACTED first** — their surviving conclusions belong in `systems/` heads or `proposals/`, the
+workings do not. That is authorship work on game subjects, not removal, and it should be scheduled as
+such rather than as a wave. One blocker the plan names is already clear:
+`tests/valoria/test_fork_divergence.py`, which imported from `audit/`, was deleted in `4ab18df`.
 
 Measured 2026-08-20: 72 of 170 files in `tests/valoria` take a tool as their subject; 11 of 74 tools
 take another tool as theirs. The deepest rungs are the three files `CLAUDE.md` §0.1 pt 5 already
@@ -344,7 +426,7 @@ has an integrity check that fails on a hand edit — demonstrate it by making on
 
 ---
 
-### S6 — Cross the repo boundary · `state: blocked-by S5, and by attaching the repo`
+### S7 — Cross the repo boundary · `state: blocked-by S6, and by attaching the repo`
 
 **Goals served:** 4, 3.
 
@@ -366,7 +448,7 @@ the divergence list is red on a `KNOWN_DIVERGENT` set that can only shrink.
 
 ---
 
-### S7 — Act D, then Act E · `state: blocked-by S6`
+### S8 — Act D, and Act E's residue · `state: blocked-by S7`
 
 Unchanged from the 2026-08-20 plan, **including its two corrections**: merge the `ci_names_check`
 facade but leave `ci_names_consistency` standalone (D2), and D4 is struck — `broken_dependency_checker`
@@ -375,8 +457,12 @@ porting call sites (D1): three sites currently give three different answers abou
 and `pathres.resolve(max_hops=1)` does not reproduce `bdc`'s `FORK:<ref>:<ref>` pairing format that
 `bdc`'s caller checks, so a drop-in port silently changes output.
 
-Act E's waves run in the plan's adjudicated order. **Wave 3 stays held** while the §0.3 banner
-experiment is live — it edits the surface under test.
+**Act E has no waves left to run here.** Wave 5 ran at S2; Waves 1, 2 and 6 ran at S6; Wave 4's
+delete-outright set is already gone and its extraction half is authorship work on game subjects, to
+be scheduled on its own; **Wave 3 does not run at all** without the ruling in §4. What remains under
+Act E is the residue: confirming the culling plan's §5 hard gates all held, and closing
+`registers/editorial_ledger_in.jsonl`'s ~108-token headroom problem (ED-IN-0185 Q5, overdue), which
+currently means **no lane can file a ledger row at all**.
 
 ---
 
@@ -406,8 +492,14 @@ experiment is live — it edits the surface under test.
 | **Q3** | **Godot 4.3 or 4.6?** `project.godot:11` and CI pin 4.3; `CLAUDE.md` and `godot/` say 4.6. | what the compile ratchet's 84 means | 2026-08-20 plan §1.D5 |
 | **Q4** | **S5's disposition.** Narrow `test_gate_coverage.py` to the four export round-trips and amend §0.1 pt 5 to name it as kept — or delete it and accept that local-green can drift from CI-green? | S5 | §2 S5 |
 | **Q5** | `registers/editorial_ledger_in.jsonl:50-51` — two rows share id `ED-IN-0194` with conflicting `needs_jordan`. Reported 2026-08-19, unruled. | ledger integrity | — |
+| **Q6 — HOW DEEP DOES THE CULL GO (a)?** `tools/ci_claim_provenance_check.py` and `tools/ci_vacuous_assertion_check.py` are **literal encodings of `CLAUDE.md` §0.1 points 3 and 2**. By this repository's own load-bearing predicate they are recursive — they audit ledger prose and test code, not the game — and two independent lenses flagged them. But **if they go, §0.1 must be struck in the same commit** rather than left pointing at deleted guards. Delete both and amend §0.1, or keep both and record the exemption? | culling plan §5 gate 6; the depth of S6 | `2026-08-18-culling-plan-v1.md` §5.6 — **held for you since 2026-08-18** |
+| **Q7 — HOW DEEP DOES THE CULL GO (b)?** **Wave 3 ends structurally-independent adversarial review.** `.claude/wf_*.js` + `.claude/agents/valoria-critic.md` are layer 4 by the rule and should be deleted — and they are the mechanism that caught four errors in the culling-plan session's own work, and the read-only critic posture that caught the falsified load-bearing claim in S1. **The rule says delete; the evidence says it works.** | Wave 3, which is otherwise held indefinitely | `2026-08-18-culling-plan-v1.md` §5.7 — **held for you since 2026-08-18** |
 
-Q4 is new. Q1, Q1b, Q2, Q3 and Q5 are the 2026-08-20 plan's §7 queue, unchanged and still open;
+**Q6 and Q7 are the two that gate how much of the recursion actually gets removed**, and both have
+been held since 2026-08-18 without a ruling. Everything else in the cull can proceed without them;
+neither the guards in Q6 nor the review apparatus in Q7 can be touched until they are answered.
+
+Q4, Q6 and Q7 are named here. Q1, Q1b, Q2, Q3 and Q5 are the 2026-08-20 plan's §7 queue, unchanged and still open;
 its Q4 (ED-SC-0003/0004/0005) and Q8/Q9 (`accord_range`, `coherence_bands`) gate junctures and port
 semantics that no step above reaches, and stay queued there rather than being restated here.
 
