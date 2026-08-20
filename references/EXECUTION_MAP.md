@@ -38,9 +38,9 @@ Every node below is annotated `RUNS` or `does not run`. Nodes that do not run ar
     <sub>`systems/overview/sim/season.py` → `action_callback(world)`</sub>
     <sub>The injection point. mc_v18 passes `_faction_actions_callback`; **Godot passes its own to drive UI scene flow** (season.py's own docstring). This is the seam the port hangs on.</sub>
     - **`loop.s2.factions`** Faction actions, per parliamentary faction holding territory  — modules: `faction_state` *(does not run)*, `faction_politics` *(does not run)*
-      <sub>`engine/mc_v18.py` → `faction_take_action(faction, world, world.rng)`</sub>
+      <sub>`engine/mc_v18.py` → `composition.require('faction_action')(faction, world, world.rng)`</sub>
       <sub>**MEASURED 483,395 calls (99.08% of campaign)** — `mass_battle` 481,653, `factions` 1,215, `engine/autoload` 244, `engine/substrate` 135, `social_contest` 84</sub>
-      <sub>GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort.</sub>
+      <sub>GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort. The driver resolves this by ROLE since 2026-08-20 (plan Act C3 seam 2) — it no longer imports the subsystem, so the provider is declared in references/module_contracts.yaml under composition_roles and the Godot port reads the same map.</sub>
     - **`loop.s2.scenes`** Scene phase — the personal-scale seam  — modules: `social_contest`, `personal_combat` *(does not run)*, `fieldwork_knots` *(does not run)*, `threadwork` *(does not run)*
       <sub>`engine/cross_scale/scene_dispatch.py` → `def run_scene_phase`</sub>
       <sub>**MEASURED 84 calls (0.02% of campaign)** — `engine/cross_scale` 72, `scene_slate` 12</sub>

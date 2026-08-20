@@ -98,9 +98,12 @@ SPINE = [
      "The injection point. mc_v18 passes `_faction_actions_callback`; **Godot passes its own to "
      "drive UI scene flow** (season.py's own docstring). This is the seam the port hangs on."),
     ("loop.s2.factions", "loop.s2", "Faction actions, per parliamentary faction holding territory",
-     "engine/mc_v18.py", "faction_take_action(faction, world, world.rng)",
+     "engine/mc_v18.py", "composition.require('faction_action')(faction, world, world.rng)",
      ["faction_state", "faction_politics"],
-     "GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort."),
+     "GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort. "
+     "The driver resolves this by ROLE since 2026-08-20 (plan Act C3 seam 2) — it no longer imports "
+     "the subsystem, so the provider is declared in references/module_contracts.yaml under "
+     "composition_roles and the Godot port reads the same map."),
     ("loop.s2.scenes", "loop.s2", "Scene phase — the personal-scale seam",
      "engine/cross_scale/scene_dispatch.py", "def run_scene_phase",
      ["social_contest", "personal_combat", "fieldwork_knots", "threadwork"],

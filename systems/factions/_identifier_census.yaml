@@ -39,7 +39,7 @@ identifiers:
     identifier: accounting_boundary
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: 'S5** `[write]` Accounting boundary: apply deferred Key effects, advance the tick counter — `engine/mc_v18.py:158-161 accounting_boundary`.'
+    purpose: 'S5** `[write]` Accounting boundary: apply deferred Key effects, advance the tick counter — `engine/mc_v18.py:166-169 accounting_boundary`.'
     built_in:
     - py:engine/substrate/keys.py
     disposition: BUILT
@@ -67,7 +67,7 @@ identifiers:
     identifier: action_callback
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` → `action_callback` | `engine/mc_v18.py:130 world`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` → `action_callback` | `engine/mc_v18.py:138 world`'
     built_in:
     - py:systems/overview/sim/season.py
     disposition: BUILT
@@ -1333,7 +1333,7 @@ identifiers:
     identifier: echo_scheduler
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` (gated on `world.echo_scheduler`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene` (gated on `world.echo_scheduler`)'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -1677,7 +1677,7 @@ identifiers:
     identifier: faction_take_action
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:130 faction_take_action` (inside `_faction_actions_callback`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `faction_take_action(faction, world, rng)` | `systems/factions/sim/faction_action.py:197 faction_take_action` | `engine/mc_v18.py:138 composition.require` (inside `_faction_actions_callback`; resolved by ROLE `faction_action` since 2026-08-20, plan Act C3 seam 2 — the driver no longer imports the subsystem)'
     built_in:
     - py:systems/factions/sim/faction_action.py
     disposition: BUILT
@@ -3137,7 +3137,7 @@ identifiers:
     identifier: run_parliamentary_scene
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene` (gated on `world.echo_scheduler`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene(world, rng)` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene` (gated on `world.echo_scheduler`)'
     built_in:
     - py:engine/cross_scale/parliamentary_bridge.py
     disposition: BUILT
@@ -3157,7 +3157,7 @@ identifiers:
     identifier: run_scene_phase
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: S3** `[emit]` Scene phase dispatch (peer subsystem, not traced further here) — `engine/mc_v18.py:141-142 run_scene_phase`.
+    purpose: S3** `[emit]` Scene phase dispatch (peer subsystem, not traced further here) — `engine/mc_v18.py:149-150 run_scene_phase`.
     built_in:
     - py:engine/cross_scale/scene_dispatch.py
     disposition: BUILT
@@ -3167,7 +3167,7 @@ identifiers:
     identifier: run_season
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` → `action_callback` | `engine/mc_v18.py:130 world`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` | arg | passed through `season.run_season` → `action_callback` | `engine/mc_v18.py:138 world`'
     built_in:
     - py:systems/overview/sim/season.py
     disposition: BUILT

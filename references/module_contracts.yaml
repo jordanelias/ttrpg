@@ -54,6 +54,28 @@ status: EXTRACTED_STAGE1  # campaign_architecture stub remains; personal_combat 
 # Model corrected off the v30 placeholder (Agi×2/TN-7/mult-STR) to the canonical sigma engine + ED-1041
 # bilateral-Ob wounds. See the personal_combat entry below + the 2026-06-22 personal-combat audit.
 
+# ── COMPOSITION ROLES (added 2026-08-20, plan Act C3) ────────────────────────────────────────────
+# WHY THIS IS HERE AND NOT IN engine/. The premise this repo works from is that `systems/` stems
+# from `engine/` and `references/`. Until 2026-08-20 the campaign driver `engine/mc_v18.py` named
+# its subsystems directly (`from systems.factions.sim.faction_action import faction_take_action`),
+# which inverts that: the root named its own dependents, and the package graph acquired a cycle.
+#
+# These rows move the naming to where the premise says it belongs — a registry under `references/`.
+# `engine/substrate/composition.py` resolves a ROLE to a callable through the cooked artifact
+# `engine/engine_params/composition.json` (written by `tools/export_composition.py`, blocking
+# `--check`), so `engine/` states WHAT it needs and `references/` states WHICH module provides it.
+#
+# Adding a subsystem to the campaign loop is now a row here, not an import in the engine.
+# `target` is `dotted.module:callable`. The resolver imports lazily, at first call.
+composition_roles:
+  faction_action:
+    target: "systems.factions.sim.faction_action:faction_take_action"
+    needed_by: "engine/mc_v18.py — per-season faction action dispatch, passed to the season driver"
+    note: "GD-2 mandatory-actions precedence is enforced inside the callable, not by the caller."
+  season_driver:
+    target: "systems.overview.sim.season:run_season"
+    needed_by: "engine/mc_v18.py — composes advance_season -> action_callback -> run_accounting"
+
 modules:
 
   - module: faction_state

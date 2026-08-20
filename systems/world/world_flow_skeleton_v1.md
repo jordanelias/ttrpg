@@ -25,8 +25,8 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 
 | Callable | Anchor | Called by |
 |---|---|---|
-| `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign` |
-| `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:307 run_campaign` |
+| `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign` |
+| `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:315 run_campaign` |
 | `restore_world(snapshot)` | `engine/autoload/game_state.py:354 restore_world` | — (no production caller; only `engine/tests/test_world_population.py:82`) |
 | `check_insurgency_triggers(world)` | `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers` | `systems/overview/sim/accounting.py:124 run_accounting` |
 | `check_insurgency_promotion(insurgency_id, world)` | `systems/world/sim/insurgency_pipeline.py:199 check_insurgency_promotion` | `systems/overview/sim/accounting.py:132 run_accounting` |
@@ -63,7 +63,7 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 ## 3. Flow
 
 - **S1** `engine.mc_v18.run_campaign` calls `game_state.create_world(seed)` to build the
-  starting `World`. `engine/mc_v18.py:224 run_campaign`
+  starting `World`. `engine/mc_v18.py:232 run_campaign`
   - **S1.1** `[write]` Builds `Faction`/`Territory` maps from the `STARTING_*` module tables.
     `engine/autoload/game_state.py:238-255 create_world`
   - **S1.2** `[write]` Initializes `World.clocks` (CI/MS/IP/PI/Strain/Turmoil). `engine/autoload/game_state.py:266 create_world`
@@ -71,7 +71,7 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
     to populate `world.settlements` before returning. `engine/autoload/game_state.py:279-280 create_world`
 - **S2** `[loop]` `run_campaign` iterates seasons (`for _ in range(max_s)`), calling
   `season.run_season(world, action_callback=...)` each iteration until a winner is set or the season
-  cap is reached. `engine/mc_v18.py:260-267 run_campaign`
+  cap is reached. `engine/mc_v18.py:268-275 run_campaign`
   - **S2.1** `[gate]` `run_season` Step 1: `season_manager.advance_season(world)` (peer-owned;
     orchestrates when the world-subsystem steps below fire, does not itself touch this subsystem's
     state). `systems/overview/sim/season.py:69 run_season`
@@ -112,10 +112,10 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 - **S5** `[branch, default-off]` `generate_npc` is fully implemented but has no call site at
   world-gen (S1) or season-tick (S2); the absence is explicitly recorded, not silent, via a named
   `stubwire.stub_resolve('generate_npc(world-gen|season-tick)', ...)` call sitting where the call
-  would otherwise be. `engine/mc_v18.py:186-194 _faction_actions_callback` (§7 gap 3)
+  would otherwise be. `engine/mc_v18.py:194-202 _faction_actions_callback` (§7 gap 3)
 - **S6** `[write]` At campaign end (winner found or season cap reached), `run_campaign` calls
   `game_state.serialize_world(world)` to build `CampaignResult.final_state`.
-  `engine/mc_v18.py:307 run_campaign` → `engine/autoload/game_state.py:284 serialize_world`
+  `engine/mc_v18.py:315 run_campaign` → `engine/autoload/game_state.py:284 serialize_world`
   - **S6.1** `[gate, default-off]` `restore_world` exists as the inverse of S6 but is exercised only
     by its own round-trip test, never by a production caller. `engine/autoload/game_state.py:354 restore_world`
 
@@ -180,7 +180,7 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `restore_world` has no production caller anywhere in the traced tree — exercised only by its own round-trip test. | `engine/autoload/game_state.py:334`; `engine/tests/test_world_population.py:82` |
 | Stale "no registry" docstrings: `insurgency_pipeline.py` and `npe.py` both open with an `[ASSUMPTION]` comment stating `game_state.World` has no insurgency/NPC registry and describing the fields as a pending schema migration. `World` has already carried `insurgencies`, `uncontrolled_streaks`, `npcs` and `npc_counter` since the 2026-05-19 migration, and both modules' own `_ins_store`/`_streak_store`/`_npc_store` helpers already route through them when a `world` is supplied — the comments were not updated after the migration landed. | `systems/world/sim/insurgency_pipeline.py:13-16` vs `engine/autoload/game_state.py:185-188`; `systems/world/sim/npe.py:10-15` vs `engine/autoload/game_state.py:187-188` |
 | Homing mismatch: `npe.py`'s own canon citation is `systems/fieldwork/investigation_systems_v30.md` SYSTEM 1 (NPE) — a fieldwork design doc, not one under `systems/world/` or `systems/npcs/`. Its runtime home is `systems/world/sim/`, and its only production call site is wired through `systems/overview/sim/accounting.py`. `systems/npcs/` has no `sim/` directory and no code anywhere in the repo imports an NPC-generation module from it — `npe.py` is the sole implementation, split across three different "owners" (canon: fieldwork; location: world; conceptual subject: npcs). | `systems/world/sim/npe.py:1-24`; `ls systems/npcs/` (no `sim/` present); repo-wide grep finds no `systems.npcs.*` import anywhere |
-| `references/module_contracts.yaml` registers only `miraculous_event` among this subsystem's four sim modules, despite `insurgency_pipeline.py`, `npe.py` and `restoration_movement.py` each declaring explicit "Entry points" in their own docstrings. | `references/module_contracts.yaml:922-937` (present entry) vs no `module: insurgency_pipeline\|npe\|restoration_movement` row anywhere in that file |
+| `references/module_contracts.yaml` registers only `miraculous_event` among this subsystem's four sim modules, despite `insurgency_pipeline.py`, `npe.py` and `restoration_movement.py` each declaring explicit "Entry points" in their own docstrings. | `references/module_contracts.yaml:944-959` (present entry) vs no `module: insurgency_pipeline\|npe\|restoration_movement` row anywhere in that file |
 | `restoration_movement.py`'s cited canon sources (a `designs/audit/2026-05-14-balance-audit/...` file and `designs/provincial/restoration_movement_v30.md`) resolve to nothing in the current working tree — `designs/` was retired 2026-07-19 (`CLAUDE.md` §3) and no `restoration_movement`-named doc exists anywhere in the repo outside this one `.py` file. By contrast `insurgency_pipeline.py`'s own `[CANON-GATED]: ... cited but not yet authored` comment is now stale in the other direction — `systems/world/insurgency_pipeline_v30.md` exists on disk with `## Status: CANONICAL`. | `systems/world/sim/restoration_movement.py:4`, `systems/world/sim/restoration_movement.py:6` (no matching file found by repo-wide search); `systems/world/sim/insurgency_pipeline.py:18-21` vs `systems/world/insurgency_pipeline_v30.md:3` |
-| **The contract coverage is inverted from the execution.** `miraculous_event` — this subsystem's one module with a `module_contracts.yaml` entry — never executes anywhere in the traced season loop (S3). The two modules that carry all of this subsystem's measured execution every season, `insurgency_pipeline` and `npe`, have no contract entry at all. | `references/execution_map.json:1121 executes`; `references/execution_trace.json:120 insurgency_pipeline`; `references/execution_trace.json:121 npe`; `references/module_contracts.yaml:922-937 miraculous_event` |
+| **The contract coverage is inverted from the execution.** `miraculous_event` — this subsystem's one module with a `module_contracts.yaml` entry — never executes anywhere in the traced season loop (S3). The two modules that carry all of this subsystem's measured execution every season, `insurgency_pipeline` and `npe`, have no contract entry at all. | `references/execution_map.json:1121 executes`; `references/execution_trace.json:120 insurgency_pipeline`; `references/execution_trace.json:121 npe`; `references/module_contracts.yaml:944-959 miraculous_event` |
 | `systems/world/` has no `CURRENT.md` head row, despite `systems/world/insurgency_pipeline_v30.md` existing on disk with `## Status: CANONICAL`. | `systems/_architecture/subsystem_flow_skeletons_v1.md:150 world` |

@@ -208,7 +208,7 @@ identifiers:
     identifier: dispatch_combat_bridge
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` (unrelated combat flag, gates a sibling branch in the same dispatcher) | flag | `engine/mc_v18.py:237 dispatch_combat_bridge` | `engine/cross_scale/scene_dispatch.py:232 dispatch_combat_bridge`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.dispatch_combat_bridge` (unrelated combat flag, gates a sibling branch in the same dispatcher) | flag | `engine/mc_v18.py:245 dispatch_combat_bridge` | `engine/cross_scale/scene_dispatch.py:232 dispatch_combat_bridge`'
     built_in:
     - py:engine/mc_v18.py
     - py:engine/tests/test_combat_bridge_seam.py
@@ -250,7 +250,7 @@ identifiers:
     identifier: echo_scheduler
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` presence (ECHO_TRANSPORT flag) | flag | `engine/mc_v18.py` per-campaign setup | `engine/mc_v18.py:148 echo_scheduler`, `engine/mc_v18.py:243 echo_scheduler`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world.echo_scheduler` presence (ECHO_TRANSPORT flag) | flag | `engine/mc_v18.py` per-campaign setup | `engine/mc_v18.py:156 echo_scheduler`, `engine/mc_v18.py:251 echo_scheduler`'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -802,7 +802,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` | R | set once per campaign by `mc_v18`; read by both seams as a gate | `engine/mc_v18.py:243 run_campaign`, `engine/cross_scale/scene_dispatch.py:390 _resolve_slot`, `engine/cross_scale/parliamentary_bridge.py:190 run_parliamentary_scene`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `world.echo_scheduler` | R | set once per campaign by `mc_v18`; read by both seams as a gate | `engine/mc_v18.py:251 run_campaign`, `engine/cross_scale/scene_dispatch.py:390 _resolve_slot`, `engine/cross_scale/parliamentary_bridge.py:190 run_parliamentary_scene`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -823,7 +823,7 @@ identifiers:
     identifier: run_parliamentary_scene
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:150 run_parliamentary_scene`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_parliamentary_scene` | `engine/cross_scale/parliamentary_bridge.py:180 run_parliamentary_scene` | `engine/mc_v18.py:158 run_parliamentary_scene`'
     built_in:
     - py:engine/cross_scale/parliamentary_bridge.py
     disposition: BUILT
@@ -843,7 +843,7 @@ identifiers:
     identifier: run_scene_phase
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_scene_phase` | `engine/cross_scale/scene_dispatch.py:416 run_scene_phase` | `engine/mc_v18.py:141 run_scene_phase`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_scene_phase` | `engine/cross_scale/scene_dispatch.py:416 run_scene_phase` | `engine/mc_v18.py:149 run_scene_phase`'
     built_in:
     - py:engine/cross_scale/scene_dispatch.py
     disposition: BUILT
@@ -864,7 +864,7 @@ identifiers:
     identifier: scenes_resolved
     docs:
     - systems/social_contest/social_contest_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.scenes_resolved` counter increment | write | `mc_v18._faction_actions_callback` telemetry | `engine/mc_v18.py:142 _faction_actions_callback`, `engine/mc_v18.py:151-152 _faction_actions_callback`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.scenes_resolved` counter increment | write | `mc_v18._faction_actions_callback` telemetry | `engine/mc_v18.py:150 _faction_actions_callback`, `engine/mc_v18.py:159-160 _faction_actions_callback`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/mc_v18.py

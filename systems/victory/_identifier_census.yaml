@@ -8,7 +8,7 @@ docs:
 - systems/victory/victory_v30_index.md
 - systems/victory/victory_v30_infill.md
 counts:
-  BUILT: 28
+  BUILT: 29
   UNRESOLVED: 11
 identifiers:
   accord_min:
@@ -87,7 +87,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` (`World`) | arg | `game_state.create_world` | `engine/mc_v18.py:224 create_world`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `world` (`World`) | arg | `game_state.create_world` | `engine/mc_v18.py:232 create_world`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -97,7 +97,7 @@ identifiers:
     identifier: DEFAULT_PARAMS
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS[''VICTORY_THRESHOLD'']` | param | `engine/mc_v18.py:42 DEFAULT_PARAMS` | `engine/mc_v18.py:53 VICTORY_THRESHOLD` (declared, unread — see §7)'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `DEFAULT_PARAMS[''VICTORY_THRESHOLD'']` | param | `engine/mc_v18.py:50 DEFAULT_PARAMS` | `engine/mc_v18.py:61 VICTORY_THRESHOLD` (declared, unread — see §7)'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -281,7 +281,7 @@ identifiers:
     identifier: run_batch
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_batch` | `engine/mc_v18.py:311 run_batch` | `engine/mc_v18.py:334` (`__main__`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `run_batch` | `engine/mc_v18.py:319 run_batch` | `engine/mc_v18.py:334` (`__main__`)'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -291,7 +291,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `check_all_factions` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `check_all_factions` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -305,6 +305,16 @@ identifiers:
     purpose: S3.2** Season composition (`run_season`) executes — outside this subsystem, prerequisite only.
     built_in:
     - py:systems/overview/sim/season.py
+    disposition: BUILT
+    doc_status: null
+    in_table: false
+  season_driver:
+    identifier: season_driver
+    docs:
+    - systems/victory/victory_flow_skeleton_v1.md
+    purpose: '`engine/mc_v18.py:275 composition.require` (the `season_driver` role; the driver stopped importing `run_season` by name 2026-08-20)'
+    built_in:
+    - typed:engine/engine_params/composition.json
     disposition: BUILT
     doc_status: null
     in_table: false

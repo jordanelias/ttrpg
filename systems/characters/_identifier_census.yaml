@@ -279,7 +279,7 @@ identifiers:
     identifier: final_state
     docs:
     - systems/characters/characters_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state[''convictions''/''beliefs'']` | return value | nothing reads these two keys downstream — see §7 gap 2 | `engine/mc_v18.py:307 final_state`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `CampaignResult.final_state[''convictions''/''beliefs'']` | return value | nothing reads these two keys downstream — see §7 gap 2 | `engine/mc_v18.py:315 final_state`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT

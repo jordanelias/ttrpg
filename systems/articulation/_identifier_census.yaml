@@ -297,7 +297,7 @@ identifiers:
     identifier: DISPATCH_COMBAT_BRIDGE
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`''s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `''0''`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:71-81 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`''s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `''0''`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:79-89 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_'
     built_in:
     - py:engine/mc_v18.py
     - py:engine/tests/test_combat_bridge_seam.py
@@ -309,7 +309,7 @@ identifiers:
     identifier: echo_scheduler
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:258 subscribe_all`'
+    purpose: '[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:266 subscribe_all`'
     built_in:
     - py:engine/tests/test_accord_echo.py
     - py:engine/tests/test_echo_transport.py
@@ -323,7 +323,7 @@ identifiers:
     identifier: effective_params
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | kind | origin | anchor :: `ECHO_TRANSPORT` (params/env flag; default ON) | flag | `effective_params` / `os.environ` | `engine/mc_v18.py:57-67 _echo_transport_on` (definition; call site `engine/mc_v18.py:241 _echo_transport_on`)'
+    purpose: '[2. IN] Input | kind | origin | anchor :: `ECHO_TRANSPORT` (params/env flag; default ON) | flag | `effective_params` / `os.environ` | `engine/mc_v18.py:65-75 _echo_transport_on` (definition; call site `engine/mc_v18.py:249 _echo_transport_on`)'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -472,7 +472,7 @@ identifiers:
     identifier: make_scheduler
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:258 subscribe_all`'
+    purpose: '[2. IN] Input | kind | origin | anchor :: `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:266 subscribe_all`'
     built_in:
     - py:engine/cross_scale/echo_transport.py
     disposition: BUILT
@@ -594,7 +594,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:258 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:266 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -690,7 +690,7 @@ identifiers:
     identifier: sim_module
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: (`references/module_contracts.yaml:966` `sim_module`), per standing rule 1.
+    purpose: (`references/module_contracts.yaml:988` `sim_module`), per standing rule 1.
     built_in:
     - py:tools/build_key_graph.py
     - py:tools/observability/build_graph.py
@@ -710,7 +710,7 @@ identifiers:
     identifier: stub_hits
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | kind | consumer | anchor :: `stubwire.invocations` delta | telemetry counter | `CampaignResult.stub_hits` | `engine/mc_v18.py:300 stub_hits`'
+    purpose: '[4. OUT] Output | kind | consumer | anchor :: `stubwire.invocations` delta | telemetry counter | `CampaignResult.stub_hits` | `engine/mc_v18.py:308 stub_hits`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -731,7 +731,7 @@ identifiers:
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
     - systems/articulation/articulation_layer_v30.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:258 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:266 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:649 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests)'
     built_in:
     - py:engine/cross_scale/articulation.py
     disposition: BUILT
@@ -778,7 +778,7 @@ identifiers:
     identifier: test_combat_pair_key_reaches_articulation_subscriber_under_flag_on
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`''s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `''0''`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:71-81 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_resolved`''s one live emission path is behind a default-off flag.** Reaching it requires `DISPATCH_COMBAT_BRIDGE=1` (default `''0''`); the reach test for this path is an `xfail` under the default. | `engine/mc_v18.py:79-89 _dispatch_combat_bridge_on`, `engine/cross_scale/scene_dispatch.py:55`, `engine/tests/test_pipeline_reach.py:693-695 test_'
     built_in:
     - py:engine/tests/test_pipeline_reach.py
     disposition: BUILT

@@ -13,9 +13,9 @@
 
 | Callable | Anchor | Called by |
 |---|---|---|
-| `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:212 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and indirectly by the generated verification script in `tools/build_fork.py:353`; and tests |
-| `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:311 run_batch` | `engine/mc_v18.py:334 __main__`; no external-tooling call site — `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block |
-| `_faction_actions_callback(world)` | `engine/mc_v18.py:116 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`) |
+| `run_campaign(seed, max_seasons, params) -> CampaignResult` | `engine/mc_v18.py:220 run_campaign` | `engine/mc_v18.py:317` (direct caller — `run_batch`'s loop; `run_batch` itself is reached only from `__main__` at `engine/mc_v18.py:334`); no in-tree production subsystem calls it — invoked externally by `tools/trace_execution_phases.py:147`, and indirectly by the generated verification script in `tools/build_fork.py:353`; and tests |
+| `run_batch(n, base_seed, params) -> BatchResult` | `engine/mc_v18.py:319 run_batch` | `engine/mc_v18.py:342 __main__`; no external-tooling call site — `tools/dashboard_data.py` and `systems/mass_battle/sim/massbattle.py` mention `run_batch` only in comments, not calls; live callers are tests and its own `__main__` block |
+| `_faction_actions_callback(world)` | `engine/mc_v18.py:124 _faction_actions_callback` | `engine/mc_v18.py:267` (passed as `action_callback=` to `run_season`) |
 | `run_season(world, action_callback=None) -> SeasonResult` | `systems/overview/sim/season.py:48 run_season` | `engine/mc_v18.py:267` |
 | `run_accounting(world)` | `systems/overview/sim/accounting.py:95 run_accounting` | `systems/overview/sim/season.py:72` |
 | `compute_seasonal_ci_delta(world, ...) -> dict` | `systems/overview/sim/ci_track.py:100 compute_seasonal_ci_delta` | `systems/overview/sim/ci_track.py:186` (via `apply_seasonal_ci`) |
@@ -28,27 +28,27 @@
 | `apply_rs_delta(delta, source, world)` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` | `engine/cross_scale/echo_transport.py:355` |
 | `advance_season(world) -> SeasonResult` | `engine/autoload/season_manager.py:31 advance_season` | `systems/overview/sim/season.py:69` |
 | `check_arc_boundary(season) -> bool` | `engine/autoload/season_manager.py:46 check_arc_boundary` | — declared entry point, zero callers (see §7); only a prose mention at `systems/factions/sim/treaty.py:127` |
-| `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign` |
-| `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign` |
-| `reset()` (victory streak) | `engine/autoload/victory.py:47 reset` | `engine/mc_v18.py:225 run_campaign` |
+| `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:232 run_campaign` |
+| `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:278 run_campaign` |
+| `reset()` (victory streak) | `engine/autoload/victory.py:47 reset` | `engine/mc_v18.py:233 run_campaign` |
 
 ## 2. IN
 
 | Input | Kind | Origin | Anchor |
 |---|---|---|---|
-| `seed` | arg (optional — falls back to wall-clock time if omitted; see §3 S1.1) | caller | `engine/mc_v18.py:212 run_campaign` |
-| `max_seasons` | arg (shadowed — never read; see §7) | caller | `engine/mc_v18.py:212 run_campaign` |
-| `params` | arg (dict, optional overrides) | caller | `engine/mc_v18.py:213 run_campaign` |
-| `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:42-54 DEFAULT_PARAMS` |
-| `ECHO_TRANSPORT` | flag (params override, else env var, default `'1'`) | caller / environment | `engine/mc_v18.py:57-67 _echo_transport_on` |
-| `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `'0'`) | caller / environment | `engine/mc_v18.py:70-81 _dispatch_combat_bridge_on` |
+| `seed` | arg (optional — falls back to wall-clock time if omitted; see §3 S1.1) | caller | `engine/mc_v18.py:220 run_campaign` |
+| `max_seasons` | arg (shadowed — never read; see §7) | caller | `engine/mc_v18.py:220 run_campaign` |
+| `params` | arg (dict, optional overrides) | caller | `engine/mc_v18.py:221 run_campaign` |
+| `DEFAULT_PARAMS` (`CAMPAIGN_SEASONS`, `VICTORY_THRESHOLD`) | param | module constant | `engine/mc_v18.py:50-62 DEFAULT_PARAMS` |
+| `ECHO_TRANSPORT` | flag (params override, else env var, default `'1'`) | caller / environment | `engine/mc_v18.py:65-75 _echo_transport_on` |
+| `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `'0'`) | caller / environment | `engine/mc_v18.py:78-89 _dispatch_combat_bridge_on` |
 | `action_callback` | arg (Callable) | caller (`mc_v18` supplies `_faction_actions_callback`) | `systems/overview/sim/season.py:48 run_season` |
 | `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61` |
 | `world.clocks` seed values (`CI`, `MS`, `IP`, `PI`, `Strain`, `Turmoil`) | world-state | `create_world` | `engine/autoload/game_state.py:266 create_world` |
 | `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:23` |
 | `SEASONS_PER_YEAR` | param | module constant | `systems/overview/sim/ms_track.py:48` |
 | `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta` |
-| `world.factions[*].parliamentary`/`.territories` | world-state | `engine/autoload/game_state.py` | `engine/mc_v18.py:124-128 _faction_actions_callback` |
+| `world.factions[*].parliamentary`/`.territories` | world-state | `engine/autoload/game_state.py` | `engine/mc_v18.py:132-136 _faction_actions_callback` |
 | `world.rng` | world-state | `create_world` | `engine/autoload/game_state.py:195 World` |
 | `world.echo_scheduler` presence | registry | set by `run_campaign` | `engine/mc_v18.py:241-250` |
 | `game_state.ALL_PLAYABLE_15` | param | module constant | `engine/mc_v18.py:282` |
@@ -57,11 +57,11 @@
 
 ## 3. Flow
 
-- **S1** `[gate]` Campaign init — `engine/mc_v18.py:212 run_campaign`
+- **S1** `[gate]` Campaign init — `engine/mc_v18.py:220 run_campaign`
   - **S1.1** `[branch]` if `seed is None`: draw the seed from wall-clock time instead — the campaign's determinism seam `engine/mc_v18.py:215-216`
-  - **S1.2** `world = game_state.create_world(seed)` `engine/mc_v18.py:224 create_world`
-  - **S1.3** `[write]` `victory.reset()` `engine/mc_v18.py:225 reset`
-  - **S1.4** `[write]` `scene_slate.clear()` `engine/mc_v18.py:226 clear`
+  - **S1.2** `world = game_state.create_world(seed)` `engine/mc_v18.py:232 create_world`
+  - **S1.3** `[write]` `victory.reset()` `engine/mc_v18.py:233 reset`
+  - **S1.4** `[write]` `scene_slate.clear()` `engine/mc_v18.py:234 clear`
   - **S1.5** `effective_params = DEFAULT_PARAMS` merged with `params` `engine/mc_v18.py:228-231`
   - **S1.6** `[branch]` `world.dispatch_combat_bridge = _dispatch_combat_bridge_on(...)` (default OFF) `engine/mc_v18.py:237`
   - **S1.7** `[branch][write]` if `ECHO_TRANSPORT` on (default ON): attach `world.echo_scheduler` / `world.key_log` / `world._echo_key_seq`, then `articulation.subscribe_all(world.echo_scheduler)` `engine/mc_v18.py:241-258`
@@ -161,12 +161,12 @@
 
 | Gap | Evidence anchor |
 |---|---|
-| `DEFAULT_PARAMS['VICTORY_THRESHOLD'] = 11` is a documented DEAD param — the live victory gate is `engine/autoload/victory.py`'s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params['VICTORY_THRESHOLD']`. | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESHOLD` (the live constant, unconnected to the dict) |
-| `run_campaign`'s `max_seasons` argument is a dead param of the same class — `effective_params` is seeded from `DEFAULT_PARAMS`, which always carries `CAMPAIGN_SEASONS`, so `effective_params.get('CAMPAIGN_SEASONS', max_seasons)`'s fallback to the `max_seasons` argument is unreachable; the only way to actually move the season count is `params={'CAMPAIGN_SEASONS': ...}`. | `engine/mc_v18.py:212 run_campaign` (signature); `engine/mc_v18.py:228-231` (shadowing site) |
+| `DEFAULT_PARAMS['VICTORY_THRESHOLD'] = 11` is a documented DEAD param — the live victory gate is `engine/autoload/victory.py`'s own module-level `VICTORY_THRESHOLD = 15`; nothing in `season.py`/`accounting.py`/`victory.py` reads `effective_params['VICTORY_THRESHOLD']`. | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`; `engine/autoload/victory.py:27 VICTORY_THRESHOLD` (the live constant, unconnected to the dict) |
+| `run_campaign`'s `max_seasons` argument is a dead param of the same class — `effective_params` is seeded from `DEFAULT_PARAMS`, which always carries `CAMPAIGN_SEASONS`, so `effective_params.get('CAMPAIGN_SEASONS', max_seasons)`'s fallback to the `max_seasons` argument is unreachable; the only way to actually move the season count is `params={'CAMPAIGN_SEASONS': ...}`. | `engine/mc_v18.py:220 run_campaign` (signature); `engine/mc_v18.py:228-231` (shadowing site) |
 | `CampaignResult.stub_hits`'s own field comment asserts "0 while no live call site is stub-wired yet" — stale: this skeleton's S2.2.2.5/S2.2.2.6 record two `stubwire.stub_resolve` call sites (`generate_npc`, `form_knot`) that run every season, so hits ARE live, not zero-by-construction. | `engine/mc_v18.py:93-96` (comment); `engine/mc_v18.py:186-194`, `engine/mc_v18.py:204-209` (the live stub-wired call sites) |
 | `stubwire.stub_resolve` call for `generate_npc(world-gen|season-tick)` — no automatic NPC generation is wired anywhere in the season loop; the comment states no canonical trigger exists to cite (only `simulate_npc_actions`, the drift half, runs live). | `engine/mc_v18.py:186-194` |
 | `stubwire.stub_resolve` call for `form_knot(world-gen|season-tick)` — no automatic Knot formation is wired anywhere in the season loop; the comment states the personal-scale prerequisite fields (Disposition, Bonds) do not exist on the aggregate `World`. | `engine/mc_v18.py:204-209` |
-| `world.clocks['Turmoil']` is read as the Political-Stability victory gate (`ps = world.clocks.get('Turmoil', 0.0)`) but has **zero write sites** anywhere in the tree outside its `create_world` seed of `0.0` — the gate is therefore permanently satisfied (`ps_ok` always `True`) in every traced campaign. `references/module_contracts.yaml`'s own `peninsular_strain` module entry independently records the same finding ("Turmoil has NO tracker file anywhere ... verified: grep for a Turmoil writer finds none"). | `engine/autoload/game_state.py:246` (seed); `engine/autoload/victory.py:73` (read); `references/module_contracts.yaml:640-642` |
+| `world.clocks['Turmoil']` is read as the Political-Stability victory gate (`ps = world.clocks.get('Turmoil', 0.0)`) but has **zero write sites** anywhere in the tree outside its `create_world` seed of `0.0` — the gate is therefore permanently satisfied (`ps_ok` always `True`) in every traced campaign. `references/module_contracts.yaml`'s own `peninsular_strain` module entry independently records the same finding ("Turmoil has NO tracker file anywhere ... verified: grep for a Turmoil writer finds none"). | `engine/autoload/game_state.py:246` (seed); `engine/autoload/victory.py:73` (read); `references/module_contracts.yaml:662-664` |
 | `world.clocks['PI']` and `world.clocks['Strain']` are seeded at world creation and have no reader or writer anywhere else in the codebase (production or test). | `engine/autoload/game_state.py:246` |
 | `systems/overview/sim/ip_track.py`'s two declared entry points (`apply_ip_delta`, `check_phased_occupation_threshold`) are both `stubwire.stub_resolve` typed no-ops (Pass 2l armature stub) with **zero production call sites**; `apply_ip_delta` is exercised only by a generic pipeline-reach test, `check_phased_occupation_threshold` by nothing at all. `systems/mass_battle/sim/altonian_reinforcements.py` names `ip_track` as a dependency in its module docstring but contains no actual call. | `systems/overview/sim/ip_track.py:29-42`; `engine/tests/test_pipeline_reach.py:756-757`; `systems/mass_battle/sim/altonian_reinforcements.py:9` (docstring-only reference) |
 | `systems/overview/sim/rs_track.py`'s `apply_rs_delta` is itself a `stubwire.stub_resolve` typed no-op (RS has no live write path per its own module docstring), reachable only through `engine/cross_scale/echo_transport.py`'s violence-row Accord Echo leg, which requires `world.echo_scheduler` attached AND a caller-declared `ctx['echo']['scene_outcome']` — no live trigger in the campaign loop declares that field (per `echo_transport.py`'s own module docstring), so the call site is WIRED but DORMANT in any seeded campaign today. | `systems/overview/sim/rs_track.py:15-33`; `engine/cross_scale/echo_transport.py:348-355` |
@@ -177,5 +177,5 @@
 | `DISPATCH_COMBAT_BRIDGE` defaults OFF (`os.environ.get('DISPATCH_COMBAT_BRIDGE', '0')`) — the S1.6 branch and its downstream `engine.cross_scale.scene_dispatch` combat-bridge leg take the unchanged legacy path in every default-configured campaign traced here. | `engine/mc_v18.py:70-81` |
 | `accounting.py`'s module docstring cites parliamentary_transfer.py line 210 as the province-Accord write site feeding the drift probe's divergence; `systems/factions/sim/parliamentary_transfer.py:210` is that file's §1.3 last-territory-protection guard, not an Accord write — the actual write (`terr.accord = ACCORD_MAP[accord_level]`) is at `systems/factions/sim/parliamentary_transfer.py:278`. The mass_seizure.py half of the same citation resolves correctly. | `systems/overview/sim/accounting.py:31-32` (stale citation); `systems/factions/sim/parliamentary_transfer.py:210` (cited line, not a write) |
 | `compute_seasonal_ci_delta`'s Step 3 (Assert) / Step 4 (Suppress) parameters (`assert_attempted`, `assert_success`, `suppress_attempted`, `suppress_success`) are never supplied by `accounting.run_accounting`'s call at `apply_seasonal_ci(world)` — those steps are always no-ops (`0`) in the traced season loop; the docstring states they are caller-driven faction actions resolved elsewhere, not invoked from this flow. | `systems/overview/sim/accounting.py:110-112`; `systems/overview/sim/ci_track.py:100-104`, `systems/overview/sim/ci_track.py:142-152` |
-| `peninsular_strain`'s contract declares `env.crisis` among its emits, also emitted by `scenario_authoring`; no `consumes:` row anywhere in the file carries `env.crisis`, unlike its three sibling `env.*` types, which each have a `from:` consumer row — a dangling emit. Worse: none of `peninsular_strain`'s four declared emits (`env.crisis`, `env.disaster`, `env.peninsular_strain_shock`, `env.population_change`) is produced by any `.py` in `engine/`, `systems/`, or `tools/` — the only tree hits are a subscription-roster string, two code comments, and a dashboard label, not an emitter. | `references/module_contracts.yaml:649 env.crisis`; `references/module_contracts.yaml:952 env.crisis`; `engine/cross_scale/articulation.py:124` |
+| `peninsular_strain`'s contract declares `env.crisis` among its emits, also emitted by `scenario_authoring`; no `consumes:` row anywhere in the file carries `env.crisis`, unlike its three sibling `env.*` types, which each have a `from:` consumer row — a dangling emit. Worse: none of `peninsular_strain`'s four declared emits (`env.crisis`, `env.disaster`, `env.peninsular_strain_shock`, `env.population_change`) is produced by any `.py` in `engine/`, `systems/`, or `tools/` — the only tree hits are a subscription-roster string, two code comments, and a dashboard label, not an emitter. | `references/module_contracts.yaml:671 env.crisis`; `references/module_contracts.yaml:974 env.crisis`; `engine/cross_scale/articulation.py:124` |
 | `ms_track.py`'s module docstring still carries a `[DRIFT: accounting._ms_decay ...]` block claiming `accounting.py` inlines PP-255 baseline decay separately — stale. `accounting.py` has no `_ms_decay`; it imports `apply_ms_baseline_decay` and calls it, Year-End-cadence-gated. `references/module_contracts.yaml`'s `peninsular_strain` `state:` row already corrected this exact claim (2026-07-29) and recorded that `ms_track.py`'s own copy was left uncorrected, out of that file's scope. | `systems/overview/sim/ms_track.py:19-25`; `systems/overview/sim/accounting.py:43`; `systems/overview/sim/accounting.py:117` |

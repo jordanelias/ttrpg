@@ -918,7 +918,7 @@ identifiers:
     identifier: check_all_factions
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '`engine/autoload/victory.py:103 check_all_factions`, called at `engine/mc_v18.py:270 run_campaign`.'
+    purpose: '`engine/autoload/victory.py:103 check_all_factions`, called at `engine/mc_v18.py:278 run_campaign`.'
     built_in:
     - py:engine/autoload/victory.py
     disposition: BUILT
@@ -1555,7 +1555,7 @@ identifiers:
     identifier: DEFAULT_PARAMS
     docs:
     - systems/_architecture/engine_atlas_v1.md
-    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: f | The driver''s victory-threshold param is dead: the live gate is the victory module''s own constant, a different owner with no wiring between them — pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:42-54 DEFAULT_PARAMS`'
+    purpose: '[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: f | The driver''s victory-threshold param is dead: the live gate is the victory module''s own constant, a different owner with no wiring between them — pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:50-62 DEFAULT_PARAMS`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -2053,7 +2053,7 @@ identifiers:
     identifier: effective_params
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ECHO_TRANSPORT` flag | flag | `effective_params` dict or `os.environ`, default ON | `engine/mc_v18.py:57-67 _echo_transport_on`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `ECHO_TRANSPORT` flag | flag | `effective_params` dict or `os.environ`, default ON | `engine/mc_v18.py:65-75 _echo_transport_on`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -2150,7 +2150,7 @@ identifiers:
     - systems/_architecture/key_type_registry_v30.md
     - systems/_architecture/ners_vsg_reconciliation_v1.md
     - systems/_architecture/propagation_spec_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` — the `module_contracts.yaml`-declared contract this scheduler notionally realizes — carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:863-866`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` — the `module_contracts.yaml`-declared contract this scheduler notionally realizes — carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:885-888`'
     built_in: []
     disposition: UNRESOLVED
     doc_status: null
@@ -3066,7 +3066,7 @@ identifiers:
     identifier: key_log_hash
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.content_hash` | `engine/substrate/keys.py:459 content_hash` | `engine/mc_v18.py:305 key_log_hash`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.content_hash` | `engine/substrate/keys.py:459 content_hash` | `engine/mc_v18.py:313 key_log_hash`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -3143,7 +3143,7 @@ identifiers:
     identifier: keys_emitted
     docs:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.__len__` | `engine/substrate/keys.py:358 __len__` | `engine/mc_v18.py:306 keys_emitted`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.__len__` | `engine/substrate/keys.py:358 __len__` | `engine/mc_v18.py:314 keys_emitted`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -4943,7 +4943,7 @@ identifiers:
     - systems/_architecture/key_substrate_v30.md
     - systems/_architecture/key_type_registry_v30.md
     - systems/_architecture/propagation_spec_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock`''s declared emit `mechanical.season_change` is itself a dangling emit — the only `from: [engine_clock]` consumer row in the file is for its sibling `mechanical.accounting`. | `references/module_contracts.yaml:876 mechanical.season_change`; `references/module_contracts.yaml:82`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock`''s declared emit `mechanical.season_change` is itself a dangling emit — the only `from: [engine_clock]` consumer row in the file is for its sibling `mechanical.accounting`. | `references/module_contracts.yaml:898 mechanical.season_change`; `references/module_contracts.yaml:104`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -5251,7 +5251,7 @@ identifiers:
     - systems/_architecture/_architecture_flow_skeleton_v1.md
     - systems/_architecture/engine_atlas_v1.md
     - systems/_architecture/subsystem_flow_skeletons_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` — the `module_contracts.yaml`-declared contract this scheduler notionally realizes — carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:863-866`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: `engine_clock` — the `module_contracts.yaml`-declared contract this scheduler notionally realizes — carries `sim_module: none`; no code was ever joined to `TickScheduler`/`KeyLog` under that contract name | `references/module_contracts.yaml:885-888`'
     built_in:
     - py:tools/build_key_graph.py
     - py:tools/observability/build_graph.py

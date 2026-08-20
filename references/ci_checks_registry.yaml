@@ -293,6 +293,12 @@ ci_checks:
     ci_job: validators
     notes: "Added 2026-08-20. BLOCKING (deterministic, no external pins). WHY IT EXISTS: measured the same day, references/ was load-bearing on TOOLS AND PROSE ONLY — no module under engine/ or systems/ loaded descriptor_registry.yaml or module_contracts.yaml, every runtime hit was a comment or docstring, and the rosters code ran on were hardcoded twins in engine/autoload/game_state.py. game_state.py now calls descriptors.assert_faction_roster_is_covered() at IMPORT, so a registry stat with no code field stops the engine from importing. The check runs ONE WAY: a code field with no registry entry is not an error, because exactly one exists (L / Legitimacy, written by 32 .adjust() sites, declared nowhere) and its disposition is Jordan's ruling. The export also records two RATIFIED-BUT-UNIMPLEMENTED items in its `unimplemented` block rather than silently closing them: the L gap, and ED-IN-0029's per-stat floors (Influence 1, rest 0) which Faction.adjust still overrides with a blanket 0.5. Falsifier: tests/valoria/test_descriptors_runtime.py plants a registry stat with no field and asserts the import-time check raises."
 
+  - path: tools/export_composition.py
+    level: 5
+    role: "Registry -> typed-JSON: engine/engine_params/composition.json must match references/module_contracts.yaml composition_roles (--check mode). It is the writer for engine/substrate/composition.py, through which engine/mc_v18.py resolves its subsystem callables by ROLE instead of importing them by name."
+    ci_job: validators
+    notes: "Added 2026-08-20 (plan Act C3 seam 2). BLOCKING. It IMPORTS AND RESOLVES every declared target at export time, which is the whole reason import-by-string is safe here: a typo or a moved module reds this gate rather than failing a campaign run. Before this, engine/mc_v18.py:37-38 imported systems.factions.sim.faction_action and systems.overview.sim.season at module level — the root naming its own dependents, and one half of the live package cycle faction_action -> engine.autoload.game_state -> systems.factions.sim.treaty. Falsifier: tests/valoria/test_engine_does_not_import_systems.py asserts require() RAISES on an undeclared role (no silent default) and that every declared role resolves."
+
   - path: tools/build_identifier_census.py
     level: 5
     role: "Freshness gate for the per-subsystem identifier census (systems/*/_identifier_census.yaml) and its roll-up references/identifier_census.json: --check re-derives both and exits 1 on drift."

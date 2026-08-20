@@ -116,6 +116,10 @@ jobs:
           # references/descriptor_registry.yaml -> the cooked artifact engine/substrate/descriptors.py
           # reads AT RUNTIME. Blocking: if this drifts, the engine imports a stale roster.
           v python3 tools/export_descriptors.py --check
+          # references/module_contracts.yaml composition_roles -> the role map engine/mc_v18.py
+          # resolves through. Blocking, and it IMPORTS every target at export time, so a broken row
+          # reds CI instead of failing a campaign run hours later.
+          v python3 tools/export_composition.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
           v python3 tools/build_test_register.py --check

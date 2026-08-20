@@ -205,7 +205,7 @@
    "parent": "loop.s2",
    "title": "Faction actions, per parliamentary faction holding territory",
    "source": "engine/mc_v18.py",
-   "anchor": "faction_take_action(faction, world, world.rng)",
+   "anchor": "composition.require('faction_action')(faction, world, world.rng)",
    "anchor_present": true,
    "modules": [
     "faction_state",
@@ -225,7 +225,7 @@
    },
    "measured_calls": 483395,
    "modules_executing": [],
-   "note": "GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort."
+   "note": "GD-2 mandatory-actions precedence enforced inside. Errors print to stderr, never abort. The driver resolves this by ROLE since 2026-08-20 (plan Act C3 seam 2) \u2014 it no longer imports the subsystem, so the provider is declared in references/module_contracts.yaml under composition_roles and the Godot port reads the same map."
   },
   {
    "id": "loop.s2.scenes",
