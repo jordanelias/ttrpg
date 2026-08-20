@@ -173,6 +173,14 @@ Twelve `.gd` sites plus two `.tres` files still say `maret_vossen` (D1). In one 
 for the first time** — check the job's step list, not just the job conclusion. If "Verify Solmund
 naming" then fails, that is a real finding that has been invisible since May; fix it in the same PR.
 
+> ✅ **EXECUTED 2026-08-20** — `valoria-game` commit `4f6e2c6`. All 12 `.gd` sites and both `.tres`
+> files renamed; canonical form verified against `references/names_index.yaml:242` rather than
+> assumed. **The prediction held: the masked gate was also red.** Once step 3 was allowed to pass,
+> step 4 would have failed on `docs/conversion_ledger.md:157` — a historical migration row naming
+> the deprecated token as data. Excluded by basename on the same rationale as `ci_naming_check.py`'s
+> `EXCLUDE` list, not by directory, so a real use elsewhere still fails. The Yrsa step was widened to
+> `*.tres` in the same commit: the data layer had been slipping a gate the code layer could not.
+
 #### B2. Harden the compile ratchet against B5's three evasions
 Edit `/workspace/valoria-game/.github/workflows/godot-ci.yml`, step "Open the project headless and
 count errors":
