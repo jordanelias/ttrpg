@@ -83,7 +83,7 @@ identifiers:
     identifier: canonical_pt
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -123,7 +123,7 @@ identifiers:
     identifier: compute_seasonal_ci_delta
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
     built_in:
     - py:systems/overview/sim/ci_track.py
     disposition: BUILT
@@ -133,7 +133,7 @@ identifiers:
     identifier: continuous_pt
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -154,7 +154,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -381,7 +381,7 @@ identifiers:
     identifier: resolve_mass_seizure
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`'
     built_in:
     - py:systems/factions/sim/mass_seizure.py
     disposition: BUILT
@@ -391,7 +391,7 @@ identifiers:
     identifier: restore_world
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `restore_world(snapshot)` | `engine/autoload/game_state.py:332 restore_world` | — (no production caller; only `engine/tests/test_world_population.py:82`)'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `restore_world(snapshot)` | `engine/autoload/game_state.py:354 restore_world` | — (no production caller; only `engine/tests/test_world_population.py:82`)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -456,7 +456,7 @@ identifiers:
     identifier: run_campaign
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`'
     built_in:
     - py:engine/mc_v18.py
     - py:tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py
@@ -490,7 +490,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/world/world_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:262 serialize_world` | `engine/mc_v18.py:307 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:307 run_campaign`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

@@ -215,7 +215,7 @@ identifiers:
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
     - systems/articulation/articulation_layer_v30.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`''s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`''s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -256,7 +256,7 @@ identifiers:
     identifier: contest_resolved
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`''s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`''s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`'
     built_in:
     - key:key_type_registry_v30.md
     disposition: BUILT
@@ -422,7 +422,7 @@ identifiers:
     identifier: KEY_TYPE_BY_SCENE
     docs:
     - systems/articulation/articulation_flow_skeleton_v1.md
-    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`''s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`'
+    purpose: '[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`''s `KEY_TYPE_BY_SCENE` maps only `"contest"` and `"combat"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) — no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`'
     built_in:
     - py:engine/cross_scale/echo_transport.py
     disposition: BUILT

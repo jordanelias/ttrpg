@@ -42,7 +42,7 @@ callables `run_campaign`/`run_batch` themselves.
 | `world.factions[faction_id]` (`Faction`) | world-state | `game_state.Faction` | `engine/autoload/victory.py:59 check_peninsular_sovereignty` |
 | `world.territories` (`dict[Territory]`) | world-state | `game_state.Territory` | `engine/autoload/victory.py:65 check_peninsular_sovereignty` |
 | `world.clocks['Turmoil']` | world-state | `game_state.create_world` init (never rewritten — §7) | `engine/autoload/victory.py:73 check_peninsular_sovereignty` |
-| `game_state.ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py:37 ALL_PLAYABLE_15` | `engine/autoload/victory.py:57 check_peninsular_sovereignty` |
+| `game_state.ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py:38 ALL_PLAYABLE_15` | `engine/autoload/victory.py:57 check_peninsular_sovereignty` |
 | `VICTORY_THRESHOLD` / `ACCORD_MIN` / `PS_MAX` / `SUSTAIN_SEASONS` (module constants) | param | `engine/autoload/victory.py:27-30` | `engine/autoload/victory.py:70 check_peninsular_sovereignty` |
 | `DEFAULT_PARAMS['VICTORY_THRESHOLD']` | param | `engine/mc_v18.py:42 DEFAULT_PARAMS` | `engine/mc_v18.py:53 VICTORY_THRESHOLD` (declared, unread — see §7) |
 | `params` override dict | param | caller of `run_campaign` | `engine/mc_v18.py:229-230 run_campaign` |
@@ -88,21 +88,21 @@ callables `run_campaign`/`run_batch` themselves.
 | `world.winner` write — fallback path | world-state | `CampaignResult` | `engine/mc_v18.py:286 run_campaign` |
 | `CampaignResult.winner` | struct field | `run_batch` win tally | `engine/mc_v18.py:317-319 run_batch` |
 | `BatchResult.win_share` / `.all_winners` | struct field | test suite / tools consumers | `engine/tests/test_mc_v18_regression.py:112-113 test_mc_v18_batch_matches_golden` |
-| `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:273 serialize_world` |
+| `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:295 serialize_world` |
 
 ## 5. State touched
 
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
-| `world.winner` | RW | `engine/autoload/game_state.py` (`World`) | `engine/autoload/game_state.py:170 World` |
+| `world.winner` | RW | `engine/autoload/game_state.py` (`World`) | `engine/autoload/game_state.py:192 World` |
 | `victory._qualifying_streak` | RW | `engine/autoload/victory.py` | `engine/autoload/victory.py:44 _qualifying_streak` |
-| `world.clocks['Turmoil']` | R (never written anywhere — §7) | `engine/autoload/game_state.py` (`World.clocks`) | `engine/autoload/game_state.py:244 create_world` |
-| `world.territories[*].accord` | R | `engine/autoload/game_state.py` (`Territory`) | `engine/autoload/game_state.py:145 Territory` |
-| `world.territories[*].owner` | R | `engine/autoload/game_state.py` (`Territory`) | `engine/autoload/game_state.py:144 Territory` |
-| `world.factions` | R | `engine/autoload/game_state.py` (`World`) | `engine/autoload/game_state.py:165 World` |
-| `world.factions[*].parliamentary` | R | `engine/autoload/game_state.py` (`Faction`) | `engine/autoload/game_state.py:97 Faction` |
-| `world.factions[*].L` | R | `engine/autoload/game_state.py` (`Faction`) | `engine/autoload/game_state.py:98 Faction` |
-| `world.factions[*].territories` | R | `engine/autoload/game_state.py` (`Faction`) | `engine/autoload/game_state.py:109 Faction` |
+| `world.clocks['Turmoil']` | R (never written anywhere — §7) | `engine/autoload/game_state.py` (`World.clocks`) | `engine/autoload/game_state.py:266 create_world` |
+| `world.territories[*].accord` | R | `engine/autoload/game_state.py` (`Territory`) | `engine/autoload/game_state.py:167 Territory` |
+| `world.territories[*].owner` | R | `engine/autoload/game_state.py` (`Territory`) | `engine/autoload/game_state.py:166 Territory` |
+| `world.factions` | R | `engine/autoload/game_state.py` (`World`) | `engine/autoload/game_state.py:187 World` |
+| `world.factions[*].parliamentary` | R | `engine/autoload/game_state.py` (`Faction`) | `engine/autoload/game_state.py:98 Faction` |
+| `world.factions[*].L` | R | `engine/autoload/game_state.py` (`Faction`) | `engine/autoload/game_state.py:99 Faction` |
+| `world.factions[*].territories` | R | `engine/autoload/game_state.py` (`Faction`) | `engine/autoload/game_state.py:110 Faction` |
 
 ## 6. Seams
 
@@ -118,7 +118,7 @@ callables `run_campaign`/`run_batch` themselves.
 | Gap | Evidence anchor |
 |---|---|
 | `mc_v18.DEFAULT_PARAMS['VICTORY_THRESHOLD']` (a dict entry, value 11) is declared but never read anywhere — the live GD-1 gate is `victory.py`'s own module constant `VICTORY_THRESHOLD` (value 15), a different owner with no wiring between them. Repo-wide grep for `effective_params['VICTORY_THRESHOLD']` / `effective_params.get('VICTORY_THRESHOLD')` returns zero matches. | `engine/mc_v18.py:42-54 DEFAULT_PARAMS` (declaration + dead-param comment); `engine/autoload/victory.py:27 VICTORY_THRESHOLD` (the real, differently-valued gate); pinned live by `engine/tests/test_f7_smoke_oracle.py:190-198 test_f7_victory_threshold_is_a_dead_param`, which asserts sweeping the dead param 11→999→1 moves no `win_share` outcome |
-| `world.clocks['Turmoil']` (read as the Political-Stability gate `ps_ok`) is initialized once to `0.0` and never written anywhere else in the tree — repo-wide grep for any `clocks['Turmoil']`/`clocks["Turmoil"]` assignment or `.clocks['Turmoil'] =` finds only the initializer and the victory.py reader. `ps_ok` is therefore unconditionally `True` for the life of every campaign; the PS clause of the GD-1 gate is structurally a no-op. No test pins this as intentional. Tracked: ED-WR-0004 (open, RULED — wire Turmoil writes via peninsular_strain). | `engine/autoload/victory.py:73-74 check_peninsular_sovereignty` (the read); `engine/autoload/game_state.py:244 create_world` (the sole write, at world-gen); repo-wide grep for `clocks[` under `engine/` and `systems/` finds writers for `CI`/`MS`/`MASS_SEIZURE_USED` only, never `Turmoil` or `Strain` |
+| `world.clocks['Turmoil']` (read as the Political-Stability gate `ps_ok`) is initialized once to `0.0` and never written anywhere else in the tree — repo-wide grep for any `clocks['Turmoil']`/`clocks["Turmoil"]` assignment or `.clocks['Turmoil'] =` finds only the initializer and the victory.py reader. `ps_ok` is therefore unconditionally `True` for the life of every campaign; the PS clause of the GD-1 gate is structurally a no-op. No test pins this as intentional. Tracked: ED-WR-0004 (open, RULED — wire Turmoil writes via peninsular_strain). | `engine/autoload/victory.py:73-74 check_peninsular_sovereignty` (the read); `engine/autoload/game_state.py:266 create_world` (the sole write, at world-gen); repo-wide grep for `clocks[` under `engine/` and `systems/` finds writers for `CI`/`MS`/`MASS_SEIZURE_USED` only, never `Turmoil` or `Strain` |
 | `references/module_contracts.yaml` declares four world-state-era gates on the `victory` module (`g_ms0` MS=0→Post-Calamity Era, `g_ms5` sustained MS≤5→Second Calamity, `g_msrec` MS-recovery, `g_diss` all-factions-dissolved→Anarchy Era) — none appear in `engine/autoload/victory.py`, whose only exported checks implement GD-1 (peninsular sovereignty) alone. Repo-wide grep for the era-transition strings ("Post-Calamity", "Second Calamity", "Anarchy Era", "Phased Occupation") returns zero `.py` matches. | `references/module_contracts.yaml:832-852` (the four `gates:` entries) and its own `gap_notes` at `references/module_contracts.yaml:854` ("world-state era transitions ... are UNKEYED — no mechanical_event/state_transition type exists") |
 | Three of `VictoryResult`'s five fields (`qualifies_this_season`, `consecutive_qualifying`, `reason`) are computed every season but never read by `run_campaign`, which inspects only `.won` / `.faction_id`. Repo-wide grep for `.qualifies_this_season` / `.consecutive_qualifying` / `.reason` on a `VictoryResult`-shaped object finds no reader outside `victory.py` itself. The remaining field, `.held`, is not dead: `check_all_factions` reads it as the sort tie-break key (§3 S4.10), which decides which faction wins a same-season multi-winner tie. | `engine/autoload/victory.py:96-100 check_peninsular_sovereignty` (dataclass construction, all fields populated); `engine/mc_v18.py:271-274 run_campaign` (the only caller of `check_all_factions`'s result — reads `.won` and `.faction_id` only); `engine/autoload/victory.py:109 check_all_factions` (the `.held` tie-break reader) |
 | The fallback winner-by-territory-count path (S5) is inline procedural code in the orchestrator, not a callable inside `engine/autoload/victory.py` — every campaign whose winner is not set by the sustained GD-1 check has its winner decided entirely outside the `victory` module, by a formula weighting held-territory count, `Faction.L`, and `len(Faction.territories)`, undocumented in `references/module_contracts.yaml`'s `victory` entry, which lists only the GD-1 resolver and the four (unimplemented) era gates above. | `engine/mc_v18.py:276-286 run_campaign` (the fallback block itself, comment-marked "v17 L753-761"); `references/module_contracts.yaml:819-861` (the `victory` module contract, silent on this path); `engine/tests/test_parliamentary_transfer_bridge.py:117-119` (a test explicitly naming both `engine/autoload/victory.py` and `mc_v18.py`'s fallback scoring as the two things "victory scoring actually reads") |

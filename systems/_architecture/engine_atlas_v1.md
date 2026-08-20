@@ -65,8 +65,8 @@ One ordered loop; `run_campaign` is the engine's single driver — `engine/mc_v1
 
 **Boot, once per campaign.** **S1** `create_world(seed)` builds the `Faction`/`Territory` maps from the
 starting tables, seeds `World.clocks`, and calls down into settlements to populate `world.settlements`
-from the geography YAML — `engine/autoload/game_state.py:212 create_world`, called at
-`engine/mc_v18.py:224 run_campaign`; settlements down-seam `engine/autoload/game_state.py:257-258 create_world`.
+from the geography YAML — `engine/autoload/game_state.py:234 create_world`, called at
+`engine/mc_v18.py:224 run_campaign`; settlements down-seam `engine/autoload/game_state.py:279-280 create_world`.
 **S2** The victory streak tracker and the scene slate are module-level, not `world` state, so they are
 explicitly cleared — `engine/mc_v18.py:225-226 run_campaign`. **S3** Two flags resolve once:
 `DISPATCH_COMBAT_BRIDGE` (default OFF) is stashed on `world` — `engine/mc_v18.py:237 run_campaign` — and
@@ -124,7 +124,7 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
 **Close.** **S10** For every campaign whose winner is not set by the sustained check, an inline block in
 the driver — not in the victory module — scores every parliamentary faction and picks the maximum —
 `engine/mc_v18.py:276-286 run_campaign`. **S11** The world is dict-serialized into
-`CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:262 serialize_world`,
+`CampaignResult.final_state` alongside the telemetry counters — `engine/autoload/game_state.py:284 serialize_world`,
 called at `engine/mc_v18.py:307 run_campaign`.
 
 **What the spine does *not* do** — the absences are structural, each evidenced in §3. **No combat scene
@@ -133,7 +133,7 @@ is ever queued**, so the whole combat dispatch branch is unreachable regardless 
 dispatcher and the driver imports no threadwork module — `engine/cross_scale/scene_dispatch.py:216-224 _resolve_slot`.
 **No fieldwork or investigation scene is ever queued** (same trigger set). **No NPC is generated and no
 Knot formed** (S7.5's markers). **The Accord-Echo leg never fires organically**, because no live producer
-declares the field that gates it — `engine/cross_scale/echo_transport.py:157-162 classify_scene_outcome`.
+declares the field that gates it — `engine/cross_scale/echo_transport.py:167-172 classify_scene_outcome`.
 
 ---
 
@@ -173,8 +173,8 @@ authoritative for them.
 `emit` → termination caps → default-fill → validate-and-append → deferred-apply queue → synchronous subscriber
 notify, `engine/substrate/keys.py:510 emit` — and is the only place deferred world writes land,
 `engine/substrate/keys.py:581 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
-four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:309 Key`,
-`engine/cross_scale/echo_transport.py:416 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:375 Key`
+four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:319 Key`,
+`engine/cross_scale/echo_transport.py:426 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:375 Key`
 and `systems/factions/sim/parliamentary_transfer.py:162 Key`. Two of its three termination guards are
 structurally unreachable, the queue path they defend having no production caller —
 `engine/substrate/keys.py:525 schedule_emission` (§3a).
@@ -291,7 +291,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 |---|---|---|---|
 | a | The combat dispatch branch is dead at the *trigger*, not the wiring: no live trigger queues a `combat` scene, so neither the bridge nor the legacy engine is reachable, independent of the flag | combat, `_architecture` | `engine/cross_scale/scene_dispatch.py:75 evaluate_triggers` |
 | a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` |
-| a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:332 restore_world` |
+| a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:354 restore_world` |
 | a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:215 generate_npc` |
 | b | The ratified per-settlement Mandate/Treasury pipeline has no step in the accounting cascade — recorded in the module's own port-blocking note | overview, settlements | `systems/overview/sim/accounting.py:11-13 run_accounting` |
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
@@ -299,7 +299,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | c | Phase-boundary hooks named for threadwork are empty bodies called unconditionally every phase, in both battle trees | mass_battle, threadwork | `systems/mass_battle/sim/massbattle.py:301-303 threadwork_check` |
 | d | A faction module's in-code claim to be the first Key emitter outside the transport is stale, and its quoted per-campaign emission measurement cannot hold given the dormancy of the branch it measured | factions, `_architecture` | `systems/factions/sim/faction_action.py:342-345 _emit_battle_concluded` |
 | d | A comment declares a canonical thirteen-member Conviction set and calls the legacy nine "superseded" — directly above a nine-member tuple; a caller passes a name absent from it, so every such call silently no-ops. **Which surface is wrong is unsettled by the tree** | characters, fieldwork | `systems/characters/sim/conviction.py:43-46 CONVICTIONS` |
-| e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:416 Key` |
+| e | The combat contract declares the engine as its own Key emitter and consumer; every production construction site lives outside the subsystem | combat, `_architecture` | `engine/cross_scale/echo_transport.py:426 Key` |
 | e | A track's design doc is homed in one subsystem while its code lives in another — and it executes despite its map flag saying otherwise | characters, overview | `systems/overview/sim/ci_track.py:170 apply_ci_delta` |
 | e | The static execution map declares the faction contract non-executing; the seeded trace records calls into it in **five of the seven** traced phases — all but `loop.s2.scenes` and `loop.victory` | factions | `references/execution_trace.json:33 faction_state` |
 | f | The driver's victory-threshold param is dead: the live gate is the victory module's own constant, a different owner with no wiring between them — pinned by a falsifier test that sweeps the dead param and moves no outcome | overview, victory | `engine/mc_v18.py:42-54 DEFAULT_PARAMS` |
@@ -307,7 +307,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | f | Permanently-placeholdered inputs: battle terrain is always passed as a placeholder, and the CI Assert/Suppress parameters are never supplied by the only caller | factions, overview | `systems/factions/sim/faction_action.py:436 _try_conquest` |
 | g | A contract-layer wiring cycle spans four subsystems | factions, npcs, characters, social_contest | `audit/2026-08-06-vector-audit/structure_audit/data/structure_metrics.json:337 cycles` |
 | g | The Church Tribunal is implemented **twice** — once as a kernel proceeding, once in the faction lane — sharing canon prose and no code | social_contest, factions | `systems/factions/sim/tribunal.py:87 run_excommunication_tribunal` |
-| g | Two uncoordinated settlement-scale entity families are built in the same world-creation call from two different sources, cross-validated by nothing but a report-only probe | settlements, world | `engine/autoload/game_state.py:257-258 create_world` |
+| g | Two uncoordinated settlement-scale entity families are built in the same world-creation call from two different sources, cross-validated by nothing but a report-only probe | settlements, world | `engine/autoload/game_state.py:279-280 create_world` |
 
 **Which kinds each subsystem carries.** From the source register's own subsystem attributions; each
 subsystem's §7 is authoritative for its own rows, and a blank cell means "none attributed here", not

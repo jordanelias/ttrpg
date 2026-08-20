@@ -916,7 +916,7 @@ identifiers:
     identifier: consul_used
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:133 consul_used`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:134 consul_used`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -1787,7 +1787,7 @@ identifiers:
     identifier: from_dict
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:381 TreatyRecord` (`restore_world`, deserialization only)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:403 TreatyRecord` (`restore_world`, deserialization only)'
     built_in:
     - py:systems/characters/sim/beliefs.py
     - py:systems/characters/sim/conviction.py
@@ -3020,7 +3020,7 @@ identifiers:
     identifier: reset_arc
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_arc()` | `engine/autoload/game_state.py:135 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_arc()` | `engine/autoload/game_state.py:136 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -3030,7 +3030,7 @@ identifiers:
     identifier: reset_seasonal
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_seasonal()` | `engine/autoload/game_state.py:131 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal`'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_seasonal()` | `engine/autoload/game_state.py:132 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -3069,7 +3069,7 @@ identifiers:
     identifier: restore_world
     docs:
     - systems/factions/factions_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:381 TreatyRecord` (`restore_world`, deserialization only)'
+    purpose: '[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:403 TreatyRecord` (`restore_world`, deserialization only)'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT

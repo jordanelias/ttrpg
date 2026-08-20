@@ -11649,7 +11649,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` \u2014 dormant in a seeded campaign (see \u00a77) | `engine/cross_scale/echo_transport.py:309-323 key`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` \u2014 dormant in a seeded campaign (see \u00a77) | `engine/cross_scale/echo_transport.py:319-333 key`"
     }
    },
    "file_count": 8,
@@ -11731,7 +11731,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML \u2014 see \u00a77) | `engine/autoload/game_state.py:224-232 Territory`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML \u2014 see \u00a77) | `engine/autoload/game_state.py:246-254 Territory`"
     }
    },
    "file_count": 0,
@@ -11841,7 +11841,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` \u2014 dormant in a seeded campaign (see \u00a77) | `engine/cross_scale/echo_transport.py:309-323 key`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` \u2014 dormant in a seeded campaign (see \u00a77) | `engine/cross_scale/echo_transport.py:319-333 key`"
     },
     "social_contest": {
      "built_in": [
@@ -13856,7 +13856,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `game_state.ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py:37 ALL_PLAYABLE_15` | `engine/autoload/victory.py:57 check_peninsular_sovereignty`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `game_state.ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py:38 ALL_PLAYABLE_15` | `engine/autoload/victory.py:57 check_peninsular_sovereignty`"
     }
    },
    "file_count": 0,
@@ -19008,7 +19008,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
     }
    },
    "file_count": 1,
@@ -21270,7 +21270,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.classify_scene_outcome` | `engine/cross_scale/echo_transport.py:134 classify_scene_outcome` | `engine/cross_scale/echo_transport.py:448` (inside `emit_scene_echo`, def at `:360`; internal)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.classify_scene_outcome` | `engine/cross_scale/echo_transport.py:144 classify_scene_outcome` | `engine/cross_scale/echo_transport.py:448` (inside `emit_scene_echo`, def at `:360`; internal)"
     },
     "settlements": {
      "built_in": [
@@ -22255,7 +22255,7 @@
       "systems/articulation/articulation_flow_skeleton_v1.md",
       "systems/articulation/articulation_layer_v30.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `\"contest\"` and `\"combat\"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) \u2014 no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `\"contest\"` and `\"combat\"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) \u2014 no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`"
     },
     "combat": {
      "built_in": [
@@ -22635,7 +22635,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:201 comovement_deck`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.comovement_deck` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:223 comovement_deck`"
     }
    },
    "file_count": 1,
@@ -23241,7 +23241,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
     }
    },
    "file_count": 2,
@@ -23714,7 +23714,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:133 consul_used`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.consul_used` | W | `engine/autoload/game_state.py` | `engine/autoload/game_state.py:134 consul_used`"
     },
     "overview": {
      "built_in": [
@@ -23724,7 +23724,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
     }
    },
    "file_count": 2,
@@ -23927,7 +23927,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `\"contest\"` and `\"combat\"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) \u2014 no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `\"contest\"` and `\"combat\"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) \u2014 no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`"
     },
     "factions": {
      "built_in": [
@@ -24026,7 +24026,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
     }
    },
    "file_count": 1,
@@ -24758,7 +24758,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
     }
    },
    "file_count": 2,
@@ -25183,7 +25183,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`"
     },
     "settlements": {
      "built_in": [
@@ -25193,7 +25193,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:257 populate_from_geography` (inside `create_world`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:279 populate_from_geography` (inside `create_world`)"
     },
     "threadwork": {
      "built_in": [
@@ -25203,7 +25203,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.clocks['MS']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:244 clocks`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.clocks['MS']` (Mending Stability) | `world-state` | `engine/autoload/game_state.py:246` `create_world` clock init | `engine/autoload/game_state.py:266 clocks`"
     },
     "victory": {
      "built_in": [
@@ -25223,7 +25223,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`"
     }
    },
    "file_count": 10,
@@ -28956,7 +28956,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared`"
     }
    },
    "file_count": 1,
@@ -33529,7 +33529,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "`CampaignResult.final_state` alongside the telemetry counters \u2014 `engine/autoload/game_state.py:262 serialize_world`,"
+     "purpose": "`CampaignResult.final_state` alongside the telemetry counters \u2014 `engine/autoload/game_state.py:284 serialize_world`,"
     },
     "characters": {
      "built_in": [
@@ -33579,7 +33579,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:273 serialize_world`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:295 serialize_world`"
     },
     "world": {
      "built_in": [
@@ -34284,7 +34284,7 @@
      "docs": [
       "systems/characters/characters_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` \u2014 see \u00a77 gap 4"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:409-410 restore_world` \u2014 see \u00a77 gap 4"
     },
     "factions": {
      "built_in": [
@@ -34303,7 +34303,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:381 TreatyRecord` (`restore_world`, deserialization only)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:403 TreatyRecord` (`restore_world`, deserialization only)"
     },
     "fieldwork": {
      "built_in": [
@@ -38660,7 +38660,7 @@
      "docs": [
       "systems/social_contest/social_contest_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.key_log` / `KeyLog` entries | W (queued, deferred-apply) | `engine.cross_scale.echo_transport` substrate, not this subsystem's own module or `zoom_in_out` (which never touches `world`) \u2014 `world.key_log` is aliased onto the same log object by `engine/mc_v18.py:249` | `engine/cross_scale/echo_transport.py:438 emit_scene_echo`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `world.key_log` / `KeyLog` entries | W (queued, deferred-apply) | `engine.cross_scale.echo_transport` substrate, not this subsystem's own module or `zoom_in_out` (which never touches `world`) \u2014 `world.key_log` is aliased onto the same log object by `engine/mc_v18.py:249` | `engine/cross_scale/echo_transport.py:448 emit_scene_echo`"
     }
    },
    "file_count": 4,
@@ -38857,7 +38857,7 @@
      "docs": [
       "systems/articulation/articulation_flow_skeleton_v1.md"
      ],
-     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `\"contest\"` and `\"combat\"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) \u2014 no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:97-100 KEY_TYPE_BY_SCENE`"
+     "purpose": "[7. Traced gaps] Gap | Evidence anchor :: **`scene.combat_felled` is subscribed but has no emission path at all.** `echo_transport.py`'s `KEY_TYPE_BY_SCENE` maps only `\"contest\"` and `\"combat\"` scene types (to `scene.contest_resolved`/`scene.combat_resolved`) \u2014 no code path builds a `scene.combat_felled` Key. | `engine/cross_scale/echo_transport.py:107-110 KEY_TYPE_BY_SCENE`"
     }
    },
    "file_count": 0,
@@ -40796,7 +40796,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.make_scheduler` | `engine/cross_scale/echo_transport.py:173 make_scheduler` | `engine/mc_v18.py:243`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.make_scheduler` | `engine/cross_scale/echo_transport.py:183 make_scheduler` | `engine/mc_v18.py:243`"
     },
     "articulation": {
      "built_in": [
@@ -43945,7 +43945,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `World.npc_drift_state` | `RW` (declared only \u2014 no live writer other than the module fallback; see \u00a77) | `engine/autoload/game_state.py` (declared) / `temperaments.py` (`_drift_store`) | `engine/autoload/game_state.py:199 npc_drift_state`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `World.npc_drift_state` | `RW` (declared only \u2014 no live writer other than the module fallback; see \u00a77) | `engine/autoload/game_state.py` (declared) / `temperaments.py` (`_drift_store`) | `engine/autoload/game_state.py:221 npc_drift_state`"
     }
    },
    "file_count": 1,
@@ -45848,7 +45848,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
     },
     "social_contest": {
      "built_in": [
@@ -48096,7 +48096,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:257 populate_from_geography` (inside `create_world`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:279 populate_from_geography` (inside `create_world`)"
     },
     "world": {
      "built_in": [
@@ -51853,7 +51853,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_arc()` | `engine/autoload/game_state.py:135 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_arc()` | `engine/autoload/game_state.py:136 reset_arc` | `engine/autoload/season_manager.py:39 reset_arc`"
     },
     "overview": {
      "built_in": [
@@ -51863,7 +51863,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`"
     }
    },
    "file_count": 2,
@@ -52014,7 +52014,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_seasonal()` | `engine/autoload/game_state.py:131 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `Faction.reset_seasonal()` | `engine/autoload/game_state.py:132 reset_seasonal` | `engine/autoload/season_manager.py:42 reset_seasonal`"
     },
     "overview": {
      "built_in": [
@@ -52024,7 +52024,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
     }
    },
    "file_count": 2,
@@ -52527,7 +52527,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:73 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `canonical_pt(continuous_pt)` | `engine/autoload/game_state.py:74 canonical_pt` | `systems/factions/sim/mass_seizure.py:256 resolve_mass_seizure`, `systems/overview/sim/ci_track.py:133 compute_seasonal_ci_delta`"
     }
    },
    "file_count": 2,
@@ -52855,7 +52855,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:332 restore_world`"
+     "purpose": "[3. Gap kinds, and the cross-lane rows] Kind | Cross-lane row | Subsystems | Anchor / link :: a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:354 restore_world`"
     },
     "characters": {
      "built_in": [
@@ -52865,7 +52865,7 @@
      "docs": [
       "systems/characters/characters_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:387-388 restore_world` \u2014 see \u00a77 gap 4"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.from_dict` | `systems/characters/sim/conviction.py:136 from_dict` | `engine/autoload/game_state.py:409-410 restore_world` \u2014 see \u00a77 gap 4"
     },
     "factions": {
      "built_in": [
@@ -52875,7 +52875,7 @@
      "docs": [
       "systems/factions/factions_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:381 TreatyRecord` (`restore_world`, deserialization only)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `TreatyRecord.from_dict(...)` | `systems/factions/sim/treaty.py:76-82 from_dict` (dataclass, module-level) | `engine/autoload/game_state.py:403 TreatyRecord` (`restore_world`, deserialization only)"
     },
     "npcs": {
      "built_in": [
@@ -52895,7 +52895,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:416-418 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:438-440 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`)"
     },
     "threadwork": {
      "built_in": [
@@ -52915,7 +52915,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `restore_world(snapshot)` | `engine/autoload/game_state.py:332 restore_world` | \u2014 (no production caller; only `engine/tests/test_world_population.py:82`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `restore_world(snapshot)` | `engine/autoload/game_state.py:354 restore_world` | \u2014 (no production caller; only `engine/tests/test_world_population.py:82`)"
     }
    },
    "file_count": 7,
@@ -54065,7 +54065,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:327 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)"
     },
     "social_contest": {
      "built_in": [
@@ -54109,7 +54109,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `create_world(seed)` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`"
     }
    },
    "file_count": 15,
@@ -54356,7 +54356,7 @@
       "systems/_architecture/_architecture_flow_skeleton_v1.md",
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.emit_scene_echo` | `engine/cross_scale/echo_transport.py:360 emit_scene_echo` | `engine/cross_scale/scene_dispatch.py:392` (inside `_resolve_slot`); `engine/cross_scale/parliamentary_bridge.py:212` (inside `run_parliamentary_scene`, def at `:180`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `echo_transport.emit_scene_echo` | `engine/cross_scale/echo_transport.py:370 emit_scene_echo` | `engine/cross_scale/scene_dispatch.py:392` (inside `_resolve_slot`); `engine/cross_scale/parliamentary_bridge.py:212` (inside `run_parliamentary_scene`, def at `:180`)"
     },
     "factions": {
      "built_in": [
@@ -55951,7 +55951,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared`"
     }
    },
    "file_count": 11,
@@ -57423,7 +57423,7 @@
      "docs": [
       "systems/overview/overview_flow_skeleton_v1.md"
      ],
-     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
+     "purpose": "[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`"
     }
    },
    "file_count": 2,
@@ -57452,7 +57452,7 @@
      "docs": [
       "systems/_architecture/engine_atlas_v1.md"
      ],
-     "purpose": "`CampaignResult.final_state` alongside the telemetry counters \u2014 `engine/autoload/game_state.py:262 serialize_world`,"
+     "purpose": "`CampaignResult.final_state` alongside the telemetry counters \u2014 `engine/autoload/game_state.py:284 serialize_world`,"
     },
     "characters": {
      "built_in": [
@@ -57462,7 +57462,7 @@
      "docs": [
       "systems/characters/characters_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:330 serialize_world` (duck-typed via `hasattr`)"
     },
     "npcs": {
      "built_in": [
@@ -57492,7 +57492,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:327 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`)"
     },
     "threadwork": {
      "built_in": [
@@ -57512,7 +57512,7 @@
      "docs": [
       "systems/victory/victory_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:273 serialize_world`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:295 serialize_world`"
     },
     "world": {
      "built_in": [
@@ -57522,7 +57522,7 @@
      "docs": [
       "systems/world/world_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:262 serialize_world` | `engine/mc_v18.py:307 run_campaign`"
+     "purpose": "[1. Entry points] Callable | Anchor | Called by :: `serialize_world(world)` | `engine/autoload/game_state.py:284 serialize_world` | `engine/mc_v18.py:307 run_campaign`"
     }
    },
    "file_count": 8,
@@ -60387,7 +60387,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML \u2014 see \u00a77) | `engine/autoload/game_state.py:224-232 Territory`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML \u2014 see \u00a77) | `engine/autoload/game_state.py:246-254 Territory`"
     },
     "world": {
      "built_in": [
@@ -60458,7 +60458,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML \u2014 see \u00a77) | `engine/autoload/game_state.py:224-232 Territory`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML \u2014 see \u00a77) | `engine/autoload/game_state.py:246-254 Territory`"
     },
     "world": {
      "built_in": [
@@ -60523,7 +60523,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geo\u2026"
+     "purpose": "`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:279 populate_from_geo\u2026"
     },
     "world": {
      "built_in": [
@@ -62815,7 +62815,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared`"
     }
    },
    "file_count": 3,
@@ -63814,7 +63814,7 @@
      "docs": [
       "systems/settlements/settlements_flow_skeleton_v1.md"
      ],
-     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:399-401 InfrastructureState`"
+     "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:421-423 InfrastructureState`"
     }
    },
    "file_count": 1,
@@ -65000,7 +65000,7 @@
      "docs": [
       "systems/threadwork/threadwork_flow_skeleton_v1.md"
      ],
-     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:200 threadcut_beings`"
+     "purpose": "[2. IN] Input | Kind | Origin | Anchor :: `world.threadcut_beings` | `world-state` | `engine/autoload/game_state.py` `World` dataclass | `engine/autoload/game_state.py:222 threadcut_beings`"
     }
    },
    "definition": "P-06 - no layer-2 self-rendering.",
@@ -65648,7 +65648,7 @@
      "docs": [
       "systems/characters/characters_flow_skeleton_v1.md"
      ],
-     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:308 serialize_world` (duck-typed via `hasattr`)"
+     "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `conviction.ConvictionState.to_dict` | `systems/characters/sim/conviction.py:125 to_dict` | `engine/autoload/game_state.py:330 serialize_world` (duck-typed via `hasattr`)"
     },
     "fieldwork": {
      "built_in": [

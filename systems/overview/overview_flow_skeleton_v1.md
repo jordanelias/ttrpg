@@ -28,7 +28,7 @@
 | `apply_rs_delta(delta, source, world)` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` | `engine/cross_scale/echo_transport.py:355` |
 | `advance_season(world) -> SeasonResult` | `engine/autoload/season_manager.py:31 advance_season` | `systems/overview/sim/season.py:69` |
 | `check_arc_boundary(season) -> bool` | `engine/autoload/season_manager.py:46 check_arc_boundary` | — declared entry point, zero callers (see §7); only a prose mention at `systems/factions/sim/treaty.py:127` |
-| `create_world(seed=None) -> World` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign` |
+| `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign` |
 | `check_all_factions(world) -> list[VictoryResult]` | `engine/autoload/victory.py:103 check_all_factions` | `engine/mc_v18.py:270 run_campaign` |
 | `reset()` (victory streak) | `engine/autoload/victory.py:47 reset` | `engine/mc_v18.py:225 run_campaign` |
 
@@ -44,12 +44,12 @@
 | `DISPATCH_COMBAT_BRIDGE` | flag (params override, else env var, default `'0'`) | caller / environment | `engine/mc_v18.py:70-81 _dispatch_combat_bridge_on` |
 | `action_callback` | arg (Callable) | caller (`mc_v18` supplies `_faction_actions_callback`) | `systems/overview/sim/season.py:48 run_season` |
 | `STARTING_STATS`, `STARTING_OWNER`, `ACCORD_MAP`, `PT_MAP` | param | module constant | `engine/autoload/game_state.py:46-61` |
-| `world.clocks` seed values (`CI`, `MS`, `IP`, `PI`, `Strain`, `Turmoil`) | world-state | `create_world` | `engine/autoload/game_state.py:244 create_world` |
+| `world.clocks` seed values (`CI`, `MS`, `IP`, `PI`, `Strain`, `Turmoil`) | world-state | `create_world` | `engine/autoload/game_state.py:266 create_world` |
 | `SEASONS_PER_ARC` | param | module constant | `engine/autoload/season_manager.py:23` |
 | `SEASONS_PER_YEAR` | param | module constant | `systems/overview/sim/ms_track.py:48` |
 | `assert_attempted`/`assert_success`/`suppress_attempted`/`suppress_success` | arg (caller-driven CI Assert/Suppress outcome) | caller — not supplied by `accounting.run_accounting` | `systems/overview/sim/ci_track.py:100-104 compute_seasonal_ci_delta` |
 | `world.factions[*].parliamentary`/`.territories` | world-state | `engine/autoload/game_state.py` | `engine/mc_v18.py:124-128 _faction_actions_callback` |
-| `world.rng` | world-state | `create_world` | `engine/autoload/game_state.py:173 World` |
+| `world.rng` | world-state | `create_world` | `engine/autoload/game_state.py:195 World` |
 | `world.echo_scheduler` presence | registry | set by `run_campaign` | `engine/mc_v18.py:241-250` |
 | `game_state.ALL_PLAYABLE_15` | param | module constant | `engine/mc_v18.py:282` |
 | `world.factions[*].L` | world-state | `engine/autoload/game_state.py` | `engine/mc_v18.py:284` |
@@ -123,8 +123,8 @@
 | `world.dispatch_combat_bridge` | W | `engine/mc_v18.py`; read by `engine/cross_scale/scene_dispatch.py` | `engine/mc_v18.py:237` |
 | `world.scenes_resolved` | RW | `engine/mc_v18.py`, `engine/cross_scale/parliamentary_bridge.py` | `engine/mc_v18.py:142`, `engine/mc_v18.py:152`, `engine/mc_v18.py:297` |
 | `world.accord_drift_probe_hits` | RW | `systems/overview/sim/accounting.py` (write), `engine/mc_v18.py` (read) | `systems/overview/sim/accounting.py:83-92`; `engine/mc_v18.py:304` |
-| `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135` |
-| `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140` |
+| `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135` |
+| `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140` |
 | `scene_slate._queue` (module-level global, not `world`-scoped) | RW | `engine/autoload/scene_slate.py` | `engine/autoload/scene_slate.py:31`, `engine/autoload/scene_slate.py:34-59` |
 | `stubwire.invocations` (module-level global counter) | RW | `engine/substrate/stubwire.py`; snapshotted per-campaign by `run_campaign` | `engine/mc_v18.py:222`, `engine/mc_v18.py:300` |
 | `victory._qualifying_streak` (module-level global, not `world`-scoped) | RW | `engine/autoload/victory.py` — reset per campaign by `victory.reset()`, not by `create_world` | `engine/autoload/victory.py:44-49`, `engine/autoload/victory.py:79-84` |

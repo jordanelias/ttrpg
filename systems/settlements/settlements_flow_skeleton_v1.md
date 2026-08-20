@@ -13,7 +13,7 @@
 
 | Callable | Anchor | Called-by |
 |---|---|---|
-| `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:257 populate_from_geography` (inside `create_world`) |
+| `populate_from_geography(world, path=None)` | `systems/settlements/sim/registry.py:215 populate_from_geography` | `engine/autoload/game_state.py:279 populate_from_geography` (inside `create_world`) |
 | `register_settlement(s, world=None)` | `systems/settlements/sim/registry.py:171 register_settlement` | `systems/settlements/sim/registry.py:264 register_settlement` (only production call, from inside `populate_from_geography` itself); `tools/sim_harness/adapters/pr119_governance/pr119_integrated_campaign.py:112 register_settlement` (prototype harness, not wired to CI) |
 | `get_settlement(sid, world=None)` | `systems/settlements/sim/registry.py:176 get_settlement` | `systems/settlements/sim/settlement.py:107 get_settlement` |
 | `province_members(province_id, world=None)` | `systems/settlements/sim/registry.py:180 province_members` | `systems/settlements/sim/settlement.py:175 province_members`; `systems/overview/sim/accounting.py:85 province_members` |
@@ -31,8 +31,8 @@
 | `apply_strain_shock(strain_delta, affected_territories, world=None)` | `systems/settlements/sim/temperaments.py:142 apply_strain_shock` | `—` (no importer) |
 | `get_faction_aggregate(faction_name)` | `systems/settlements/sim/temperaments.py:163 get_faction_aggregate` | `—` (no importer) |
 | `ledger_add` / `ledger_has` / `ledger_get` / `ledger_sweep` | `systems/settlements/sim/ledger.py:47`, `systems/settlements/sim/ledger.py:61`, `systems/settlements/sim/ledger.py:65`, `systems/settlements/sim/ledger.py:69` | Only via `Settlement.add_tag`/`has_tag`/`tags` (`systems/settlements/sim/registry.py:99-107`) and `succeed_governor`'s `ledger_sweep` call (`systems/settlements/sim/registry.py:206`) — itself uncalled in production; live tag-writers are only `tools/sim_harness/adapters/pr119_governance/*.py` |
-| `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:327 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`) |
-| `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:416-418 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`) |
+| `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:349 settlements` | `engine/mc_v18.py:307 serialize_world` (end of `run_campaign`) |
+| `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:438-440 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`) |
 
 ## 2. IN
 
@@ -42,15 +42,15 @@
 | `LEGAL_TYPES` | `param` | Module-level constant, validated against on load | `systems/settlements/sim/registry.py:45-48 LEGAL_TYPES` |
 | `world` (`GameState`/`World`) | `world-state` | Caller-supplied on every registry/ledger/infrastructure/adjacency entry point | `systems/settlements/sim/registry.py:165 settlement_store` |
 | `settlement_id` / `province_id` / `territory_id` / `sid` | `arg` | Caller-supplied key | e.g. `systems/settlements/sim/registry.py:176 get_settlement` |
-| `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:291 echo_ctx`, `:167 declared` |
+| `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:301 echo_ctx`, `:167 declared` |
 | `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:243 world.echo_scheduler` |
-| `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:224-232 Territory` |
+| `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:246-254 Territory` |
 | `world.territories[tid].templar` | `world-state` | `Territory` dataclass field, read as a seed for infrastructure Axis-2 backward compat | `systems/settlements/sim/infrastructure.py:130-131 templar_seed` |
 
 ## 3. Flow
 
 **S1. World-gen registration** — `[write]`
-`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:257 populate_from_geography`), which for each sorted `sid` validates `type` against `LEGAL_TYPES` `[gate]` (`systems/settlements/sim/registry.py:254-257`), unpacks `stats` into `(prosperity, defense, order)` `[gate]` (`systems/settlements/sim/registry.py:258`), constructs a `Settlement` and registers it into `world.settlements` (`systems/settlements/sim/registry.py:259-264`).
+`create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:223-234`), independently calls `populate_from_geography(world)` to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:279 populate_from_geography`), which for each sorted `sid` validates `type` against `LEGAL_TYPES` `[gate]` (`systems/settlements/sim/registry.py:254-257`), unpacks `stats` into `(prosperity, defense, order)` `[gate]` (`systems/settlements/sim/registry.py:258`), constructs a `Settlement` and registers it into `world.settlements` (`systems/settlements/sim/registry.py:259-264`).
 
 **S2. Per-season faction/scene phase (no settlement write)**
 `run_campaign`'s season loop calls `run_season` → `_faction_actions_callback` (`engine/mc_v18.py:264-267`, `engine/mc_v18.py:116`), which dispatches faction Domain Actions (`faction_take_action`, reads `ADJACENCY` for target/threat derivation — S2.1) and scene resolution (`scene_dispatch.run_scene_phase` — S2.2).
@@ -94,21 +94,21 @@ Two production sites write `Territory.accord` directly, never going through `Set
 
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
-| `world.settlements: dict[sid, Settlement]` | `registry` | `serialize_world`, `province_members`/`province_accord` readers, `echo_transport._apply_accord_echo` | `engine/autoload/game_state.py:209 settlements` |
+| `world.settlements: dict[sid, Settlement]` | `registry` | `serialize_world`, `province_members`/`province_accord` readers, `echo_transport._apply_accord_echo` | `engine/autoload/game_state.py:231 settlements` |
 | `province_accord(...)` return (`int`) | `arg` | `_probe_province_accord_drift` only, in production | `systems/settlements/sim/registry.py:190 province_accord` |
 | `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:304 accord_drift_probe_hits` |
-| `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:399-401 InfrastructureState` |
+| `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:421-423 InfrastructureState` |
 | `ADJACENCY[tid]: set[str]` | `key` | `faction_action._conquest_targets`/`_threat_signal`, `insurgency_pipeline._contiguous_uncontrolled_groups` | `systems/settlements/sim/adjacency.py:9 ADJACENCY` |
-| Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:309-323 key` |
+| Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:319-333 key` |
 | `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:307 final_state` |
 
 ## 5. State touched
 
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
-| `World.settlements` | `RW` | `engine/autoload/game_state.py` (declared), written by `registry.py` | `engine/autoload/game_state.py:209 settlements` |
-| `World.territory_infrastructure` | `RW` | `engine/autoload/game_state.py` (declared), written by `infrastructure.py` | `engine/autoload/game_state.py:198 territory_infrastructure` |
-| `World.npc_drift_state` | `RW` (declared only — no live writer other than the module fallback; see §7) | `engine/autoload/game_state.py` (declared) / `temperaments.py` (`_drift_store`) | `engine/autoload/game_state.py:199 npc_drift_state` |
+| `World.settlements` | `RW` | `engine/autoload/game_state.py` (declared), written by `registry.py` | `engine/autoload/game_state.py:231 settlements` |
+| `World.territory_infrastructure` | `RW` | `engine/autoload/game_state.py` (declared), written by `infrastructure.py` | `engine/autoload/game_state.py:220 territory_infrastructure` |
+| `World.npc_drift_state` | `RW` (declared only — no live writer other than the module fallback; see §7) | `engine/autoload/game_state.py` (declared) / `temperaments.py` (`_drift_store`) | `engine/autoload/game_state.py:221 npc_drift_state` |
 | `World.accord_drift_probe_hits` | `W` (dynamic attribute, not a dataclass field) | `systems/overview/sim/accounting.py` | `systems/overview/sim/accounting.py:92 accord_drift_probe_hits` |
 | `Settlement.order` | `RW` | `registry.py` (dataclass); written by `echo_transport._apply_accord_echo`'s deferred `_apply` (dormant, S2.2.4); read by `registry.province_accord` | `systems/settlements/sim/registry.py:65 order`, `engine/cross_scale/echo_transport.py:335-341` |
 | `Settlement.prosperity` | `RW` | `registry.py` (dataclass); written only at `populate_from_geography`; read by `registry.province_effective_prosperity` (no production reader) | `systems/settlements/sim/registry.py:63 prosperity` |
@@ -116,7 +116,7 @@ Two production sites write `Territory.accord` directly, never going through `Set
 | `Settlement.governor_id` | `W` | `registry.succeed_governor` (no production caller) | `systems/settlements/sim/registry.py:205 governor_id` |
 | `Settlement.legitimacy` / `.popular_support` | — | Declared, never read or written anywhere in `sim/` (module docstring's own PRE-LPS-1 note) | `systems/settlements/sim/registry.py:69-74 legitimacy` |
 | `Settlement.ledger` (`list[LedgerTag]`) | `RW` | `ledger.py` primitives via `Settlement.add_tag`/`has_tag`/`tags`; only live writers are the `tools/sim_harness` prototype adapters | `systems/settlements/sim/registry.py:87 ledger` |
-| `Territory.accord` | `RW` | `engine/autoload/game_state.py` (dataclass); written directly by `systems/factions/sim/parliamentary_transfer.py:278` and `systems/factions/sim/mass_seizure.py:293`, bypassing `Settlement.order` entirely; read (never written) by the S5 drift probe | `engine/autoload/game_state.py:145 accord` |
+| `Territory.accord` | `RW` | `engine/autoload/game_state.py` (dataclass); written directly by `systems/factions/sim/parliamentary_transfer.py:278` and `systems/factions/sim/mass_seizure.py:293`, bypassing `Settlement.order` entirely; read (never written) by the S5 drift probe | `engine/autoload/game_state.py:167 accord` |
 
 ## 6. Seams
 

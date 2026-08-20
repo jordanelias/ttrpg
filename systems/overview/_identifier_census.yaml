@@ -318,7 +318,7 @@ identifiers:
     identifier: consul_used
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -328,7 +328,7 @@ identifiers:
     identifier: council_used_this_arc
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:systems/factions/sim/council_solmund.py
@@ -339,7 +339,7 @@ identifiers:
     identifier: create_world
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:212 create_world` | `engine/mc_v18.py:224 run_campaign`'
+    purpose: '[1. Entry points] Callable | Anchor | Called by :: `create_world(seed=None) -> World` | `engine/autoload/game_state.py:234 create_world` | `engine/mc_v18.py:224 run_campaign`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -635,7 +635,7 @@ identifiers:
     identifier: parl_transfer_used_this_arc
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:engine/tests/test_parliamentary_transfer_bridge.py
@@ -737,7 +737,7 @@ identifiers:
     identifier: reset_arc
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:135 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.council_used_this_arc`, `.parl_transfer_used_this_arc` | W | `engine/autoload/game_state.py:136 reset_arc` (called on arc boundary via `advance_season`) | `engine/autoload/game_state.py:137-140`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -747,7 +747,7 @@ identifiers:
     identifier: reset_seasonal
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -873,7 +873,7 @@ identifiers:
     identifier: senator_inward_used
     docs:
     - systems/overview/overview_flow_skeleton_v1.md
-    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:131 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
+    purpose: '[5. State touched] Field | R/W | Owning module | Anchor :: `Faction.senator_inward_used`, `.consul_used` | W | `engine/autoload/game_state.py:132 reset_seasonal` (called every season via `advance_season`) | `engine/autoload/game_state.py:133-135`'
     built_in:
     - py:engine/autoload/game_state.py
     - py:systems/factions/sim/crown_initiative.py

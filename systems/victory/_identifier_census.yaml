@@ -37,7 +37,7 @@ identifiers:
     identifier: ALL_PLAYABLE_15
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `game_state.ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py:37 ALL_PLAYABLE_15` | `engine/autoload/victory.py:57 check_peninsular_sovereignty`'
+    purpose: '[2. IN] Input | Kind | Origin | Anchor :: `game_state.ALL_PLAYABLE_15` | registry | `engine/autoload/game_state.py:38 ALL_PLAYABLE_15` | `engine/autoload/victory.py:57 check_peninsular_sovereignty`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
@@ -139,7 +139,7 @@ identifiers:
     identifier: final_state
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:273 serialize_world`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:295 serialize_world`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT
@@ -312,7 +312,7 @@ identifiers:
     identifier: serialize_world
     docs:
     - systems/victory/victory_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:273 serialize_world`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `world.winner` (serialized) | field (dict) | `CampaignResult.final_state` via `serialize_world` | `engine/autoload/game_state.py:295 serialize_world`'
     built_in:
     - py:engine/autoload/game_state.py
     disposition: BUILT
