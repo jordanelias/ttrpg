@@ -25,17 +25,77 @@ from engine.substrate import descriptors  # noqa: E402
 
 
 def test_the_roster_check_can_actually_fail():
-    """Plant a registry stat with no implementing field; the check must raise."""
-    real = dict(descriptors.FACTION_FIELD_MAP)
-    descriptors.FACTION_FIELD_MAP['fac.invented'] = 'NoSuchField'
+    """Plant a REGISTRY stat with no bound field; the check must raise.
+
+    THE FAILURE IS PLANTED IN `FACTION_STATS`, NOT `FACTION_FIELD_MAP`, AND THAT DISTINCTION IS THE
+    ENTIRE VALUE OF THIS TEST. Until 2026-08-21 it mutated `FACTION_FIELD_MAP` — the hand-maintained
+    dict in `tools/export_descriptors.py`. That proved the function raises when handed a bad map. It
+    could not prove the claim being made, which is about the REGISTRY, and the claim was false: a
+    sixth registry stat passed the check and the engine imported. §0.1 pt 2 says an assertion must
+    be able to observe the failure it excludes; this one was observing a failure one layer below the
+    one it excluded, and was green throughout.
+    """
+    real = dict(descriptors.FACTION_STATS)
+    descriptors.FACTION_STATS['fac.invented'] = {'name': 'Invented', 'floor': 0, 'ceiling': 7}
     try:
         with pytest.raises(RuntimeError) as exc:
             descriptors.assert_faction_roster_is_covered({'L', 'Sta', 'W', 'I', 'Mil', 'intel'})
         assert 'fac.invented' in str(exc.value)
-        assert 'do not silence this check' in str(exc.value)
+        assert 'do not silence this check' in str(exc.value).lower()
     finally:
-        descriptors.FACTION_FIELD_MAP.clear()
-        descriptors.FACTION_FIELD_MAP.update(real)
+        descriptors.FACTION_STATS.clear()
+        descriptors.FACTION_STATS.update(real)
+
+
+def test_the_roster_check_fails_when_a_bound_field_is_deleted():
+    """Stage 2 of the check: the registry key is bound, but the dataclass no longer has the field."""
+    with pytest.raises(RuntimeError) as exc:
+        descriptors.assert_faction_roster_is_covered({'L', 'Sta', 'W', 'I', 'Mil'})  # `intel` gone
+    assert 'fac.intel' in str(exc.value)
+    assert 'intel' in str(exc.value)
+
+
+def test_a_registry_edit_breaks_the_engine_end_to_end(tmp_path):
+    """THE CLAIM, TESTED WHOLE: registry -> exporter -> reader -> raise. No monkeypatching.
+
+    The two tests above mutate the loaded artifact, which is fast but still one step removed from
+    the sentence in `engine/substrate/descriptors.py`: *add a stat to the registry and the engine
+    stops importing*. This one adds a sixth faction stat to a COPY of the real
+    `references/descriptor_registry.yaml`, runs the real `tools/export_descriptors.py` over it, and
+    asserts the real check refuses the result. It is the only test here that would have caught the
+    2026-08-21 defect from a cold read, so it is the one that must never be deleted for being slow.
+    """
+    import importlib.util
+
+    src = (REPO / 'references' / 'descriptor_registry.yaml').read_text(encoding='utf-8')
+    anchor = '    - {key: fac.stability, name: Stability, scale: "0-7"}'
+    assert anchor in src, 'the registry\'s faction_stats block moved — re-anchor this test, do not drop it'
+    doctored = tmp_path / 'registry.yaml'
+    doctored.write_text(
+        src.replace(anchor, anchor + '\n    - {key: fac.zeal,      name: Zeal,      scale: "0-7"}'),
+        encoding='utf-8')
+
+    spec = importlib.util.spec_from_file_location(
+        '_export_descriptors_probe', REPO / 'tools' / 'export_descriptors.py')
+    exporter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(exporter)
+    exporter.SRC = str(doctored)
+    cooked = exporter.build()
+
+    assert 'fac.zeal' in cooked['faction_stats'], 'the exporter did not carry the new registry stat'
+    assert 'fac.zeal' not in cooked['faction_field_map'], \
+        'the field map is hand-maintained; a registry edit must NOT populate it (that is the point)'
+
+    real_stats = dict(descriptors.FACTION_STATS)
+    descriptors.FACTION_STATS.clear()
+    descriptors.FACTION_STATS.update(cooked['faction_stats'])
+    try:
+        with pytest.raises(RuntimeError) as exc:
+            descriptors.assert_faction_roster_is_covered({'L', 'Sta', 'W', 'I', 'Mil', 'intel'})
+        assert 'fac.zeal' in str(exc.value)
+    finally:
+        descriptors.FACTION_STATS.clear()
+        descriptors.FACTION_STATS.update(real_stats)
 
 
 def test_the_live_engine_roster_passes_the_check():
@@ -44,7 +104,8 @@ def test_the_live_engine_roster_passes_the_check():
 
     from engine.autoload.game_state import Faction
     covered = descriptors.assert_faction_roster_is_covered({f.name for f in dc_fields(Faction)})
-    assert covered == len(descriptors.FACTION_FIELD_MAP)
+    assert covered == len(descriptors.FACTION_STATS), \
+        'the check must report the number of REGISTRY stats verified, not the number of map rows'
     assert covered >= 5, 'the registry declared fewer faction stats than expected — check the export'
 
 

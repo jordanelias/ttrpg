@@ -1094,7 +1094,7 @@
    "ambiguous": true,
    "category": "clock",
    "definition": "**Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker.",
-   "file_count": 95,
+   "file_count": 96,
    "glossary_part": "PART TWELVE \u2014 COLLISION / DISAMBIGUATION TABLE",
    "legacy_count": 0,
    "locations": {
@@ -1115,6 +1115,7 @@
     "proposals/2026-08-18-next-session-handoff.md": 5,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
     "proposals/2026-08-20-return-to-game-plan-v1.md": 19,
+    "proposals/2026-08-21-execution-order-v1.md": 7,
     "proposals/repo-reorganization-v1.md": 18,
     "proposals/valoria_fork_plan_of_record_v1.md": 17,
     "systems/_architecture/campaign_architecture_v30.md": 10,
@@ -3656,7 +3657,7 @@
   "Evidence": {
    "ambiguous": true,
    "category": "pressure_point",
-   "file_count": 77,
+   "file_count": 78,
    "legacy_count": 0,
    "locations": {
     "canon/02_canon_constraints.md": 1,
@@ -3665,6 +3666,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 14,
     "proposals/2026-08-18-recursion-interrogation-log.md": 1,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 1,
     "systems/_architecture/canonical_registry.md": 1,
@@ -5187,7 +5189,7 @@
    "ambiguous": true,
    "category": "faction_stat",
    "definition": "Social and cultural reach. Cannot drop below 1 (faction remains extant).",
-   "file_count": 80,
+   "file_count": 81,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -5199,6 +5201,7 @@
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "proposals/repo-reorganization-v1.md": 1,
     "proposals/valoria_fork_plan_of_record_v1.md": 2,
     "systems/_architecture/campaign_modes_v30.md": 7,
@@ -5878,13 +5881,14 @@
   "Legitimacy": {
    "ambiguous": false,
    "category": "settlement_stat",
-   "file_count": 33,
+   "file_count": 34,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
     "godot/godot_conversion_strategy_v1.md": 1,
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 2,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "proposals/canonical_nomenclature_v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 3,
     "systems/_architecture/derived_stats_v30.md": 10,
@@ -6323,7 +6327,7 @@
    "ambiguous": true,
    "category": "mechanic",
    "definition": "Institutional authority and political legitimacy. 0 = Collapse state.",
-   "file_count": 102,
+   "file_count": 103,
    "glossary_part": "PART FOUR \u2014 FACTION STATS",
    "legacy_count": 0,
    "locations": {
@@ -6335,6 +6339,7 @@
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 8,
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 4,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "proposals/grounded_event_card_deck_v1.md": 26,
     "proposals/social_contest_consolidation_integration_v1.md": 3,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 2,
@@ -8659,12 +8664,13 @@
   "Size": {
    "ambiguous": false,
    "definition": "Unit headcount stat (replaces Strength). At 0: unit destroyed. Pool contribution capped at Command. (PP-232)",
-   "file_count": 26,
+   "file_count": 27,
    "glossary_part": "PART FIVE \u2014 COMBAT TERMS",
    "legacy_count": 0,
    "locations": {
     "godot/implementation_sequence.md": 1,
     "proposals/2026-08-16-system-scores-census.md": 1,
+    "proposals/2026-08-21-execution-order-v1.md": 2,
     "proposals/multiunit_envelopment_plan.md": 1,
     "proposals/pc_formation_system.md": 1,
     "systems/_architecture/canonical_registry.md": 8,
@@ -8810,13 +8816,14 @@
   "Solmund": {
    "ambiguous": false,
    "category": "proper_noun",
-   "file_count": 58,
+   "file_count": 59,
    "legacy_count": 1,
    "locations": {
     "canon/00_philosophical_foundations.md": 15,
     "canon/02_foundations_amendment_leap_mechanism.md": 2,
     "canon/03_canonical_timeline.md": 17,
     "proposals/2026-08-20-return-to-game-plan-v1.md": 3,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "systems/_architecture/canonical_registry.md": 2,
     "systems/_architecture/complete_systems_reference.md": 1,
     "systems/_architecture/derived_stats_v30.md": 1,
@@ -22106,7 +22113,7 @@
   "combat": {
    "ambiguous": true,
    "definition": "Personal combat resolution (sigma-leverage d_sigma; pool=max(5,History+6); additive-coupled damage; ED-1041 bilateral-Ob wounds). Hosts Strike / Feint / Bind / Approach / Disarm / etc. as EngineModules. Repointed 2026-06-23 off the deprecated v30 sim (was systems/combat/sim/combat.py / combat_v30) per the 2026-06-22 audit.",
-   "file_count": 98,
+   "file_count": 99,
    "legacy_count": 0,
    "locations": {
     "engine/mc_v18_walkthrough.md": 1,
@@ -22126,6 +22133,7 @@
     "proposals/2026-08-18-next-session-handoff.md": 2,
     "proposals/2026-08-18-recursion-interrogation-log.md": 6,
     "proposals/2026-08-20-return-to-game-plan-v1.md": 1,
+    "proposals/2026-08-21-execution-order-v1.md": 2,
     "proposals/mass_battle_fighting_withdrawal_v1.md": 11,
     "proposals/pc_formation_system.md": 1,
     "proposals/repo-reorganization-v1.md": 35,
@@ -23840,16 +23848,18 @@
      "purpose": "[1. Entry points] Callable | Anchor | Called-by :: `KeyLog.serialize` | `engine/substrate/keys.py:453 serialize` | `engine/substrate/keys.py:460 content_hash` (internal)"
     }
    },
-   "file_count": 1,
+   "file_count": 2,
    "legacy_count": 0,
    "locations": {
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 4
    },
    "sources": [
     "identifier_census"
    ],
    "subsystems": [
-    "_architecture"
+    "_architecture",
+    "proposals"
    ],
    "term": "content_hash"
   },
@@ -37236,7 +37246,7 @@
   "infrastructure": {
    "ambiguous": false,
    "definition": "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending.",
-   "file_count": 58,
+   "file_count": 59,
    "legacy_count": 0,
    "locations": {
     "canon/00_philosophical_foundations.md": 3,
@@ -37248,6 +37258,7 @@
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 1,
     "proposals/2026-08-18-next-session-handoff.md": 3,
     "proposals/2026-08-18-recursion-interrogation-log.md": 5,
+    "proposals/2026-08-21-execution-order-v1.md": 2,
     "proposals/grounded_event_card_deck_v1.md": 1,
     "proposals/repo-reorganization-v1.md": 4,
     "proposals/valoria_fork_plan_of_record_v1.md": 1,
@@ -42886,11 +42897,12 @@
      "purpose": "S2.7.9b Assemble `net_sigma` from `defence_sigma` (fed the S2.7.9a-selected `msig[mode]`), `attack_sigma`, `armor_defeat_sigma`, `initiative_sigma` via `assemble_net_sigma`."
     }
    },
-   "file_count": 6,
+   "file_count": 7,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md": 1,
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 4,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/combat/combat_engine_v1/combat_balancing_methodology.md": 1,
     "systems/combat/combat_engine_v1/combat_throughlines_v1.md": 2,
@@ -53391,10 +53403,11 @@
      "purpose": "[6. Seams] Direction | Peer | Mechanism | Anchor :: `up` | `engine/autoload/sigma_leverage.py` | The kernel's roll/degree/leverage primitives (`roll_net`, `net_boost`, `degree`, `effective_ob`, `level`) are imported, not reimplemented | `systems/social_contest/sim/contest/resolver.py:23-24 roll_net`, `systems/social_contest/sim/contest/primitives.py:9 Stasis`"
     }
    },
-   "file_count": 3,
+   "file_count": 4,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 18,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md": 1,
     "systems/social_contest/social_contest_flow_skeleton_v1.md": 6
    },
@@ -61421,12 +61434,13 @@
      "purpose": "[4. OUT] Output | Kind | Consumer | Anchor :: `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter \u2192 `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39`"
     }
    },
-   "file_count": 13,
+   "file_count": 14,
    "legacy_count": 0,
    "locations": {
     "proposals/2026-08-15-character-and-faction-stats-and-progression.md": 3,
     "proposals/2026-08-16-system-scores-census.md": 1,
     "proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md": 2,
+    "proposals/2026-08-21-execution-order-v1.md": 1,
     "systems/_architecture/_architecture_flow_skeleton_v1.md": 5,
     "systems/_architecture/engine_atlas_v1.md": 1,
     "systems/articulation/articulation_flow_skeleton_v1.md": 3,

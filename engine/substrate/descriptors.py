@@ -81,23 +81,51 @@ def faction_bounds(field):
 
 
 def assert_faction_roster_is_covered(implemented_fields):
-    """Raise if the registry declares a faction stat the code has no field for.
+    """Raise if the REGISTRY declares a faction stat the executable model does not implement.
 
     THIS IS THE POINT OF THE MODULE: it makes `references/descriptor_registry.yaml` load-bearing at
     RUNTIME rather than by convention. Add a stat to the registry without adding its field and the
     engine stops importing, instead of silently running on a roster that no longer matches canon.
 
+    IT ITERATES `FACTION_STATS`, WHICH IS THE REGISTRY-DERIVED HALF OF THE ARTIFACT, AND THAT IS THE
+    WHOLE CORRECTNESS ARGUMENT. Until 2026-08-21 it iterated `FACTION_FIELD_MAP` instead — the
+    hand-maintained `FACTION_KEY_TO_FIELD` dict in `tools/export_descriptors.py`. A registry edit
+    does not touch that dict, so the claim in this docstring was FALSE as shipped: adding
+    `fac.zeal` to the registry, re-cooking, and calling this function returned `covered=5` and the
+    engine imported fine. The two-stage check below is what the claim actually requires:
+
+      stage 1 — every registry key is BOUND to a field name by the export's `faction_field_map`;
+      stage 2 — every bound field name is IMPLEMENTED by the dataclass.
+
+    A new registry stat fails stage 1 (nobody has said which field it is). A registry stat whose
+    field was deleted fails stage 2. Both stop the import, which is what "load-bearing" means.
+
     The check runs one way ONLY. Code fields with no registry entry are NOT an error here, because
     exactly one exists — `L` — and whether it is a base descriptor or derived like Mandate is an
     open ruling. Failing on it would force this session to answer a question that is Jordan's.
+    That one-way property is structural, not a special case: this function never enumerates
+    `implemented_fields`, only registry keys, so an unregistered field cannot reach either stage.
     """
     have = set(implemented_fields)
-    missing = sorted(k for k, f in FACTION_FIELD_MAP.items() if f not in have)
-    if missing:
+
+    unbound = sorted(k for k in FACTION_STATS if k not in FACTION_FIELD_MAP)
+    if unbound:
+        raise RuntimeError(
+            'descriptor_registry.yaml declares faction stat(s) that nothing binds to a field of '
+            'engine/autoload/game_state.py:Faction: ' + ', '.join(unbound) + '. Add the field to '
+            'Faction, then add the key -> field row to FACTION_KEY_TO_FIELD in '
+            'tools/export_descriptors.py and re-run it — or retire the registry entry. Do not '
+            'silence this check: a stat canon declares and the engine cannot name is exactly the '
+            'drift this module exists to stop.'
+        )
+
+    unimplemented = sorted(k for k in FACTION_STATS if FACTION_FIELD_MAP[k] not in have)
+    if unimplemented:
         raise RuntimeError(
             'descriptor_registry.yaml declares faction stat(s) the executable model does not '
-            'implement: ' + ', '.join(missing) + '. Add the field to '
-            'engine/autoload/game_state.py:Faction (and a MULTS entry if it is adjustable), or '
-            'retire the registry entry — do not silence this check.'
+            'implement: ' + ', '.join(f'{k} -> {FACTION_FIELD_MAP[k]}' for k in unimplemented) +
+            '. Add the field to engine/autoload/game_state.py:Faction (and a MULTS entry if it is '
+            'adjustable), or retire the registry entry — do not silence this check.'
         )
-    return len(FACTION_FIELD_MAP)
+
+    return len(FACTION_STATS)

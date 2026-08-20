@@ -46,6 +46,16 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
+**▶ THE STEP TO TAKE: `proposals/2026-08-21-execution-order-v1.md` §2, first step whose `state:` is
+`next`.** Written 2026-08-21 at Jordan's request. It is **not** a tenth planning surface: it replaces
+§5 (Sequencing summary) of `proposals/2026-08-20-return-to-game-plan-v1.md` and nothing else — that
+document is still the authority on what each act is and why. If you are about to write a new plan
+instead of taking a step, that is the loop; take the step.
+
+`state: next` is currently **S2 — move M1 juncture 1**: fractional pools (`sigma_leverage.py:284`
+rounds the pool before sampling, though `dice_engine.continuous_engine_sample` already accepts a
+fractional one) and the `score/2` obstacle classification. S1 landed 2026-08-21.
+
 _Cross-cutting items only — lane-owned work lives in `registers/handoffs/HANDOFF_<LANE>.md`.
 Rewritten 2026-08-14 (ED-IN-0189): this section had opened with a blocker resolved 2026-07-30 and
 carried nothing newer than July, while being **the only section the SessionStart banner reads**.
