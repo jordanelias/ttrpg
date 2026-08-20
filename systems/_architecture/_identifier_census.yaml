@@ -5006,6 +5006,8 @@ identifiers:
     purpose: 'Arc vs year cadence: SEASONS_PER_ARC and SEASONS_PER_YEAR are both 4, but new_arc fires on season%4==1 (start) while year-end decay fires on season%4==0 (end) — a real one-tick offset, not a bug, named here so it isn''t "fixed" into alignment later.'
     built_in:
     - py:systems/overview/sim/ms_track.py
+    - py:tools/export_game_constants.py
+    - typed:engine/engine_params/game_constants.json
     disposition: BUILT
     doc_status: null
     in_table: false

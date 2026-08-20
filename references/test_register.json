@@ -178,72 +178,6 @@
     }
    }
   },
-  "test_audit_refresh_coverage.py": {
-   "assertionless_count": 0,
-   "baselines": [],
-   "cites_measurement": false,
-   "declared_lane": null,
-   "documented": true,
-   "guards": "Every generated artifact that can go stale must have something that un-stales it (ED-IN-0180).",
-   "helper_loc": 3,
-   "helpers": [
-    {
-     "loc": 3,
-     "name": "audit_refresh_yaml"
-    }
-   ],
-   "lane_derived": false,
-   "lanes": [],
-   "loc": 217,
-   "modules_under_test": [
-    "tools"
-   ],
-   "mutation_claimed": false,
-   "mutation_count": null,
-   "test_count": 8,
-   "tests": {
-    "test_a_family_without_a_refresher_must_say_why": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "`refresher: None` means \"nothing regenerates this\" and NOTHING MORE (ED-IN-0182)."
-    },
-    "test_every_declared_refresher_exists_on_disk": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": null
-    },
-    "test_every_family_declares_a_refresher": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "A family with no `refresher` key is the state that hid mechanics-index. `None` is a valid"
-    },
-    "test_every_family_points_at_a_live_artifact": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "THE CHECK THAT WOULD HAVE CAUGHT npc-audit, and it had rotted twice before anyone did."
-    },
-    "test_every_refreshable_family_is_actually_run_by_the_cron": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "THE REGRESSION. Declaring a refresher the cron never invokes is the same blind spot with"
-    },
-    "test_every_refreshed_artifact_is_actually_committed": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "RUNNING A GENERATOR IS NOT REFRESHING AN ARTIFACT (ED-IN-0182)."
-    },
-    "test_mechanics_index_is_NOT_wired_because_its_generator_is_destructive": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "The inverse of what this test asserted an hour ago, and the inversion is the finding."
-    },
-    "test_the_join_is_not_vacuous": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "Assert that it asserted \u2014 a workflow that ran nothing would pass the test above trivially"
-    }
-   }
-  },
   "test_battle_concluded_key.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -4885,6 +4819,59 @@
     }
    }
   },
+  "test_dice_engine_properties.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": false,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Property tests against engine/autoload/dice_engine.py \u2014 an INDIVIDUAL engine, ahead of the",
+   "helper_loc": 9,
+   "helpers": [
+    {
+     "loc": 9,
+     "name": "_expected_degree"
+    }
+   ],
+   "lane_derived": true,
+   "lanes": [
+    "IN"
+   ],
+   "loc": 150,
+   "modules_under_test": [
+    "engine.autoload"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 5,
+   "tests": {
+    "test_degree_from_net_boundary_values_exactly": {
+     "assertionless": false,
+     "assertions": 6,
+     "summary": "Example-based edges at the exact band transitions -- the seeded sweep above lands near"
+    },
+    "test_degree_from_net_is_total_over_the_sweep_and_never_raises": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "A ladder with a gap would raise (falling through an if/elif chain to an implicit None)"
+    },
+    "test_degree_from_net_matches_the_documented_margin_formula_property": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": null
+    },
+    "test_roll_pool_is_deterministic_given_an_identically_seeded_rng": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "A narrower, individual-engine echo of row_determinism's shape (same seed -> same"
+    },
+    "test_roll_pool_respects_pool_minimum_and_die_rule_bounds_property": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": null
+    }
+   }
+  },
   "test_ed_citation_integrity.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -5684,79 +5671,6 @@
     }
    }
   },
-  "test_fork_divergence.py": {
-   "assertionless_count": 0,
-   "baselines": [],
-   "cites_measurement": false,
-   "declared_lane": null,
-   "documented": true,
-   "guards": "The anti-fabrication ratchet over the restructure-ledger consumers (ED-IN-0178).",
-   "helper_loc": 15,
-   "helpers": [
-    {
-     "loc": 8,
-     "name": "_load_fork_divergence_module"
-    },
-    {
-     "loc": 5,
-     "name": "fd"
-    },
-    {
-     "loc": 2,
-     "name": "verdicts"
-    }
-   ],
-   "lane_derived": true,
-   "lanes": [
-    "IN"
-   ],
-   "loc": 146,
-   "modules_under_test": [
-    "engine/anything_fabricated.md",
-    "engine/params/core.md",
-    "systems/combat/combat_v30.md"
-   ],
-   "mutation_claimed": false,
-   "mutation_count": null,
-   "test_count": 7,
-   "tests": {
-    "test_baseline_pairs_still_separate_evacuated_from_fabricated": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "THE RATCHET. Losing a pair is an anti-fabrication regression, not a style drift."
-    },
-    "test_bdc_cannot_see_engine_paths_at_all": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "THE FINDING THAT OUTRANKS EVERY COLLAPSE ABOVE (ED-IN-0182)."
-    },
-    "test_bdc_still_collapses_the_two_hop_chain_and_that_is_recorded_not_asserted": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "The finding the plan's per-consumer framing could not express."
-    },
-    "test_the_baseline_is_not_vacuous": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "An empty or trivially-satisfied baseline would make the ratchet decorative."
-    },
-    "test_the_control_is_dead_everywhere": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "A path with NO ledger row must resolve nowhere. If this ever passes somewhere, the alias"
-    },
-    "test_the_probe_reaches_every_consumer": {
-     "assertionless": false,
-     "assertions": 1,
-     "summary": "Assert that it asserted. An import failure inside probe_all must not read as agreement."
-    },
-    "test_the_ratchet_can_observe_a_loss": {
-     "assertionless": false,
-     "assertions": 2,
-     "summary": "Positive control: plant a regression and require the comparison to report exactly it."
-    }
-   }
-  },
   "test_forked_status.py": {
    "assertionless_count": 0,
    "baselines": [],
@@ -6274,7 +6188,7 @@
     },
     {
      "name": "EXPECTED_COMMANDS",
-     "size": 36
+     "size": 37
     }
    ],
    "cites_measurement": false,
@@ -6304,7 +6218,7 @@
    "lanes": [
     "IN"
    ],
-   "loc": 386,
+   "loc": 387,
    "modules_under_test": [
     "engine/tests",
     "tools",
@@ -6337,6 +6251,7 @@
     "tools/compliance_check.py",
     "tools/currency_consistency_check.py",
     "tools/export_engine_params.py",
+    "tools/export_game_constants.py",
     "tools/export_key_types.py",
     "tools/freshness_gate.py",
     "tools/mechanics_index_gen.py",
@@ -7824,6 +7739,67 @@
      "assertionless": false,
      "assertions": 1,
      "summary": "The guards hold: no link to an authoring abbreviation, and no cite-ID token (PP_329)."
+    }
+   }
+  },
+  "test_m1_acceptance_probe.py": {
+   "assertionless_count": 0,
+   "baselines": [],
+   "cites_measurement": true,
+   "declared_lane": null,
+   "documented": true,
+   "guards": "Behaviour pins for the S2 acceptance-oracle probe rows (return_to_game_queue.yaml S2,",
+   "helper_loc": 0,
+   "helpers": [],
+   "lane_derived": false,
+   "lanes": [],
+   "loc": 115,
+   "modules_under_test": [
+    "tools"
+   ],
+   "mutation_claimed": false,
+   "mutation_count": null,
+   "test_count": 8,
+   "tests": {
+    "test_a_different_seed_can_diverge_from_the_probe_seed": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Falsifier for 'the hash is a constant string regardless of input' -- content_hash()"
+    },
+    "test_check_exit_code_tracks_a_real_measured_failure": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "--check's exit code must be DERIVED from collect()['failed'], never a constant --"
+    },
+    "test_collect_reports_at_least_four_of_five_rows_measured_or_partial": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "The step's own gate (return_to_game_queue.yaml S2 `observable`)."
+    },
+    "test_determinism_row_is_measured_and_passes": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": null
+    },
+    "test_engine_probe_import_succeeded": {
+     "assertionless": false,
+     "assertions": 1,
+     "summary": "Falsifier for every test below: if engine.mc_v18 failed to import, both rows would"
+    },
+    "test_probe_season_hash_matches_across_independent_helper_calls": {
+     "assertionless": false,
+     "assertions": 3,
+     "summary": "Exercises _run_probe_season directly (row_determinism already does this internally;"
+    },
+    "test_stub_invocations_reproducible_under_the_fixed_probe_seed": {
+     "assertionless": false,
+     "assertions": 2,
+     "summary": "Same fixed seed, measured twice, independently -> same stub-call count. This is"
+    },
+    "test_stub_invocations_row_is_measured_not_blocked": {
+     "assertionless": false,
+     "assertions": 5,
+     "summary": null
     }
    }
   },
@@ -12500,15 +12476,15 @@
    ]
   },
   "files": 162,
-  "files_citing_a_measurement": 17,
+  "files_citing_a_measurement": 18,
   "files_claiming_mutation": 10,
   "files_naming_a_module": 122,
   "files_with_a_kill_count": 1,
   "files_with_a_lane": 47,
-  "helper_defs": 314,
-  "helper_loc": 2885,
+  "helper_defs": 311,
+  "helper_loc": 2876,
   "ratchet_baselines": 10,
-  "tests": 1425,
+  "tests": 1423,
   "undocumented_files": 0
  }
 }

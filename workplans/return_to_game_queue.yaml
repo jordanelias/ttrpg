@@ -1,19 +1,38 @@
 # return_to_game_queue.yaml — THE EXECUTABLE QUEUE for the Return-to-Game program.
 #
 # ─────────────────────────────────────────────────────────────────────────────────────────────
-# IF YOU ARE A SESSION WITH NO MEMORY, READ THIS BLOCK AND NOTHING ELSE FIRST.
+# ⛔ SUPERSEDED 2026-08-19. DO NOT RESUME THIS QUEUE. DO NOT RUN THE DRIVER.
 #
-# WHAT THIS IS. A program that returns Jordan to building the game. It runs UNATTENDED. No step
-# blocks on a human. You execute it by running the driver below; you stop when your context is
-# degrading; you persist before you stop. There is nothing to ask anyone.
+# This header used to read "IF YOU ARE A SESSION WITH NO MEMORY, READ THIS BLOCK AND NOTHING ELSE
+# FIRST … It runs UNATTENDED … You execute it by running the driver below … Loop." That is a file
+# that ARMS ITSELF: it instructed any memoryless session to start executing it, its supersession
+# lived only in HANDOFF.md, and steps S3-S8 still read `state: pending`. A read-only audit found it
+# to be one of the two surviving carriers by which a fully compliant session could hand itself
+# apparatus work — the reroute CLAUDE.md §0.3 predicts, in the file that was supposed to end it.
 #
-# HOW TO RUN IT.
-#   1. Pick the first step whose `state: pending` and whose `precondition` observable holds ON DISK.
-#      Verify the precondition yourself — do not trust a `done` marker you did not write.
-#   2. Run the driver against it:  Workflow({ scriptPath: ".claude/wf_return_to_game.js", args: "<id>" })
-#   3. The driver produces, critiques (structurally read-only critics), reconciles, and returns.
-#   4. YOU commit, set `state`, and write `evidence` + `critic_verdict` back into this file.
-#   5. Loop until your context is degrading, then Persist (below) and END THE TURN.
+# WHAT TO READ INSTEAD: the SessionStart banner, then HANDOFF.md's "THE DELIVERABLE" block, then
+# CLAUDE.md §0.2. Your work is the current M1 juncture and nothing else (CLAUDE.md §0).
+#
+# WHY THIS FILE STILL EXISTS: it holds MEASURED FACTS worth keeping — the controlled compile
+# numbers, the gate tier, the failure decoder, and the residual record. It is a REFERENCE, not a
+# queue. `state: pending` on S3-S8 means "never started", not "next up".
+#
+# ⚠ S7 IS INERT AND MUST NOT BE EXECUTED: it instructs a session to prepend a line to
+# tools/session_status.py's banner. Act 3 replaced that banner outright and CLAUDE.md §0.3 declares
+# it a running experiment whose whole method is "change nothing else". Executing S7 would corrupt
+# the experiment mid-run. Same for `held:` H2/H4 below — both were EXECUTED 2026-08-19 by Jordan's
+# ruling and are no longer held.
+#
+# HOW IT WAS RUN — HISTORY, NOT INSTRUCTIONS. DO NOT FOLLOW THIS.
+#   Two read-only audits found that the imperative runbook survived twelve lines under the
+#   SUPERSEDED notice above, so a session scanning for something to do still found a live,
+#   loop-shaped procedure. Rewritten in the past tense 2026-08-19; the steps are recorded so the
+#   S0/S1/S2 evidence below is interpretable, not so anyone repeats them.
+#   Each step was: pick the first `state: pending` whose precondition held on disk; run the driver
+#   (.claude/wf_return_to_game.js) against it; it produced, put three structurally read-only critics
+#   on the result, and reconciled; the session then committed and wrote `evidence` +
+#   `critic_verdict` back here; and repeated until context degraded.
+#   ⛔ That loop is OVER. Do not pick a pending step. Do not run the driver.
 #
 # WHY THERE IS NO AUTO-CHAIN. CLAUDE.md §11 forbids a session arming its own wake-up, and the
 # deny-list in .claude/settings.json is CI-enforced (tests/valoria/test_no_polling_triggers.py).
@@ -67,7 +86,7 @@ steps:
 
   - id: S0
     title: "Clear the runway — the three things that silently stall an unattended executor"
-    state: pending
+    state: done
     blocked_on: null
     precondition: null
     rationale: >
@@ -90,13 +109,448 @@ steps:
     observable: "ci_register_size_check reports editorial_ledger_in.jsonl under 47,000 tokens; a scratch-branch push to valoria-game succeeds; gates: is populated."
     needs_ruling: false
     sessions: 0.5
+    evidence:
+      - "LOCATION, read this first: the producer ran in the isolated run worktree
+         .claude/worktrees/wf_a6d9c7eb-bf0-2/ and never said so, so every path it cited resolved
+         to nothing at the repo root and a commit staged from there would have been EMPTY while
+         still recording S0 done. Three critics independently hit this. RESOLVED at adjudication:
+         both trees shared base c9b0a86, the worktree diff was extracted and `git apply`d into
+         /home/user/ttrpg (applied clean), and all evidence below is measured in the REPO ROOT."
+      - "CONTROLLED measurement, both arms taken by the adjudicator with one instrument
+         (python3 tools/ci_register_size_check.py) in one session -- the producer had only a
+         post-edit arm and quoted a baseline from another session/tree (CLAUDE.md S0.1 point 4).
+         BEFORE (repo root, pre-apply): editorial_ledger_in.jsonl 49,920/50,000, headroom 80;
+         editorial_ledger_in_archive.jsonl 131,302/150,000, headroom 18,698.
+         AFTER  (repo root, post-apply): editorial_ledger_in.jsonl 45,998/50,000, headroom 4,002;
+         editorial_ledger_in_archive.jsonl 135,224/150,000, headroom 14,776.
+         Live -3,922 tokens, archive +3,922 -- EXACT conservation, which is the independent check
+         that the move was whole-row and byte-preserving rather than a re-edit. Tool exit 0."
+      - "OBSERVABLE MET as written in THIS file (:90): 'under 47,000 tokens' -> 45,998. The
+         'an OK line, not WARN' phrasing the producer argued against is NOT in this file (repo-wide
+         grep, zero hits); it came from the driver prompt. WARN fires at 85% of cap (42,500) and is
+         report-only by the tool's own design (ci_register_size_check.py:153,178,187-188), so WARN
+         here is expected and not a miss. No future pass should archive extra ids chasing an 'OK'
+         this file never asked for."
+      - "GUARD EXECUTED, not merely inspected: pytest tests/valoria/test_ledger_hygiene.py -> 19
+         passed (confirming the producer's count). Independently parsed both files post-move:
+         live-vs-archive id overlap is the EMPTY SET, and all five archived ids are terminal
+         (status=resolved, needs_jordan=false). ED-IN-0194 survives untouched with both its rows.
+         The ED-IN-0112 split incident is the failure this excludes and it cannot have occurred."
+      - "INSTRUMENT DEFECT in the producer's C1, confirmed and corrected. Its stated method
+         (`grep -c` per bare id, 'each returned 1') is NOT reproducible: on the pre-edit file
+         ED-IN-0189 and ED-IN-0190 each return 4, ED-IN-0191/0192 return 2 -- the bare id also
+         matches citations arrays and cross-references in other rows. The correct instrument is
+         the JSON field, `grep -c '\"id\": \"ED-IN-0189\"'`, which returns 1 for all five and is
+         what the guard itself uses (test_ledger_hygiene.py:219-231 reads entry['id']). The
+         CONCLUSION (exactly one row per id) is upheld; its provenance is replaced."
+      - "PUSH SCOPE: verified, and the falsifier the observable never ran has now been run.
+         The observable tested only `contents: write` (a branch push). S0's RATIONALE is that S1
+         cannot OPEN A PR -- which needs `pull_requests: write`, a distinct permission, and this
+         session's permission set is demonstrably NOT uniform (create-ref succeeds, delete-ref
+         403s). Falsifier executed at adjudication: opened draft PR jordanelias/valoria-game#1
+         from scratch-s0-push-test and closed it immediately. PR-open scope is HELD. S1's
+         precondition is discharged against its rationale, not just against its observable."
+      - "FULL SUITE RUN (the producer ran only a targeted subset; this file's own
+         pre_commit_checklist:517 warns that targeted runs are how the atlas failure reached CI):
+         pytest tests/valoria -q -n auto -> 1 failed, 1932 passed, 23 skipped, 15 xfailed.
+         The failure is test_ci_common_primitives.py::test_no_module_actually_loads_id_reservations.
+         CONTROLLED: it fails IDENTICALLY with S0's edits stashed, so it is NOT caused by this step.
+         Cause: the test walks ci_common.REPO and its SELF_EXCLUDE matches by exact relative path,
+         so the harness's own .claude/worktrees/ COPIES of the two self-excluded files are scanned
+         and match. .claude/worktrees/ is gitignored (.gitignore:22, zero tracked files), so a CI
+         checkout never sees it and this test is GREEN in CI. Filed as S0-R5 -- it is a local
+         false-red that makes the checklist's own instruction unusable while a worktree exists."
+      - "BLOCKING VALIDATORS re-run in the repo root post-apply, all exit 0: ci_register_size_check,
+         ci_claim_provenance_check, validate_ed_citations, broken_dependency_checker,
+         ci_editorial_checker, ci_co_file_checker, ci_workplan_pointer_check. Coverage is not lost
+         by archiving: ci_claim_provenance_check.py:88 lists the IN archive in LEDGERS, and
+         validate_ed_citations globs editorial_ledger_*_archive.jsonl, so the five moved ids still
+         resolve for every citing surface including CLAUDE.md."
+      - "ARTIFACT CORRECTED IN PLACE at adjudication (two lenses caught it independently): the
+         gates: block asserted 'all 9 CHECKS entries (:59-95) are tier=report_only ... blocking_failures
+         (:177)'. review_core.py's CHECKS has ELEVEN entries -- 9 report_only and 2 tier=info
+         (audit.staleness :69, workplan.state :70) -- and blocking_failures is at :178. The
+         load-bearing statement is 'NO entry is tier=blocking', which is true and is what the
+         conclusion (blocking-on-regression only) rests on. Left uncorrected, an unattended executor
+         diffing the tier map against CHECKS would find a phantom two-row mismatch."
+      - "gates: IS POPULATED -- 7 top-level subkeys (jobs, compliance_check_internals,
+         validators_job_tools, validators_report_job_tools, local_only_tools, valoria_game_ci,
+         residuals), parses as valid YAML. Roughly thirty of its line citations were opened at the
+         cited line by two independent lenses and every one was exact. This is the step's strongest
+         artifact; its one defect is duplication, filed as S0-R2."
+    critic_verdict: >
+      ADJUDICATED done. Three read-only critics (FIDELITY, FACTUALITY, LOGIC) x 14 claims = 42
+      verdicts. ZERO OVERTURNS on any claim, load-bearing or otherwise; all three returned full
+      14-claim coverage, so there is NO null result to declare. Distribution: 26 uphold, 11 soften,
+      5 sharpen. Per the adjudication rule a soften or sharpen adjusts recorded evidence and does
+      not block, so state is done -- NOT by averaging verdicts, but because nothing was overturned
+      and the one genuine BLOCKER (worktree-only edits, surfaced independently by all three lenses)
+      was resolved at adjudication rather than waived: the diff now lives in the repo root and every
+      number above was re-measured there. Four softens were CLOSED by taking the evidence the
+      producer omitted -- the missing pre-edit control arm (C5), the unexecuted hygiene suite (C4),
+      the unreproducible grep instrument (C1, conclusion upheld / provenance replaced), and the
+      unrun PR-scope falsifier (C8). C6 is resolved in the producer's favour and then some: the
+      discrepancy it honestly reported does not exist against THIS file, whose observable says only
+      'under 47,000 tokens'. The producer's restraint in not widening scope to chase a phantom 'OK'
+      was correct. Six real defects nobody had claimed are parked as S0-R1..S0-R6 rather than
+      silently fixed; two of them (archive headroom, gates/gate_tier duplication) were found by
+      multiple lenses independently and are the bankable kind. One residual is materially WORSE
+      than the producer reported and was verified live via the GitHub API -- see S0-R4.
+
+  - id: S0-R1
+    title: "S0 moved the cap problem one file downstream: the IN archive is at 90% and has no next home"
+    state: blocked
+    blocked_on: "No sanctioned third-level archive exists. Needs a convention decision before S8's sweep, not at the wall."
+    precondition: null
+    rationale: >
+      Found independently by all three lenses -- the bankable kind, and the sharpest finding of the
+      review: S0 relieved a blocking cap by spending 21% of the next file's remaining headroom
+      (3,922 of 18,698 measured tokens) and recorded the live file's headroom in gates: while
+      omitting the archive's. registers/editorial_ledger_in_archive.jsonl now sits at
+      135,224/150,000 -- 90% of a BLOCKING cap, 14,776 tokens of headroom. At the measured
+      ~784 tokens/row this absorbs roughly 18 more IN rows. S8's commit_order
+      (workplans/return_to_game_queue.yaml:376-382) plans exactly such a sweep over 48 terminal rows
+      plus buckets A and E, against 25 open IN rows. tools/ci_register_size_check.py:87-136 has rows
+      for _archive.jsonl and NOTHING beyond it, so the next writer to cross 150,000 hits a blocking
+      cap with no sanctioned move -- the same structurally-unlucky-next-writer failure the tool's
+      own WARN comment (:139-152) exists to prevent. This is S0's own defect class, relocated.
+    observable: "A third-level archive convention (or a compaction rule) exists in tools/ci_register_size_check.py's THRESHOLDS, and editorial_ledger_in_archive.jsonl is under 85% of its cap."
+    needs_ruling: true
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R2
+    title: "gates: and gate_tier: are two independently-rotting owners of one measurement in one file"
+    state: blocked
+    blocked_on: "Needs a single-owner decision (fold gate_tier: into gates:, or reduce it to a pointer). Not S0's to make unilaterally."
+    precondition: null
+    rationale: >
+      Found by two lenses independently. The gates: block S0 authored re-asserts SIX facts that
+      already live in this file's pre-existing gate_tier: block at :480-506, with no cross-pointer
+      in either direction: ci_names_check report-only in both tiers; ci_supersession_check and
+      ci_audit_registry_check structurally incapable of failing; contract-conformance
+      continue-on-error :219; lanchester ending || true :375; valoria-game lint cannot fail;
+      compliance_check blocking-in-CI-and-absent-from-local. Both blocks label themselves MEASURED.
+      This is CLAUDE.md S8 ('every rule lives once') and the exact ED-IN-0147 pattern S1 of CLAUDE.md
+      records for the CURRENT.md date stamp -- a duplicated fact rots independently of its subject.
+      The next CI change updates one and leaves the other lying, and an unattended executor has no
+      rule for which wins. The composing fix is to make gate_tier: a pointer at gates:, NOT to
+      maintain both. Parked rather than fixed here because deleting a block another step may cite
+      is a scope decision, and because S0 introduced the duplication -- it should not also
+      unilaterally resolve which copy is canonical.
+    observable: "workplans/return_to_game_queue.yaml contains exactly one owner of the gate tier; the other is a pointer or is gone."
+    needs_ruling: false
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R3
+    title: "No gate observes 'an UNSETTLED id was archived' -- only the split case is guarded"
+    state: blocked
+    blocked_on: "Needs the guard written before S8's larger archive sweep runs; writing it is not S0's scope."
+    precondition: null
+    rationale: >
+      tests/valoria/test_ledger_hygiene.py:234 catches SPLIT ids and catches them well -- it reads
+      entry['id'] rather than a substring, asserts non-vacuity at :254, and its SPLIT_GRANDFATHERED
+      set (:189-194) holds only four pre-cutover flat ids, so it genuinely covered this move. But
+      NOTHING anywhere asserts that a row moved into an archive has a TERMINAL last status. For S0's
+      five ids that predicate does hold (verified by hand at adjudication: all status=resolved,
+      needs_jordan=false) -- by hand, not by a gate. S8's commit_order (:378-382) plans a much larger
+      sweep driven by greps over descriptions; that is exactly where an open id gets archived and
+      drops silently off the open-work surface. Per CLAUDE.md S0.1 point 5 the guard is the thing
+      that makes the pattern safe, and if you cannot write the guard you have not understood the
+      pattern. It does not exist yet.
+    observable: "A test in tests/valoria/ fails when an id whose last row is unresolved or needs_jordan=true appears in any *_archive.jsonl."
+    needs_ruling: false
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R4
+    title: "TWO undeletable scratch branches on the frozen game repo, not one -- verified live"
+    state: blocked
+    blocked_on: "Delete-ref permission is not held by this session (HTTP 403, four attempts across two sessions). Needs whoever holds it."
+    precondition: null
+    rationale: >
+      The producer's residual named ONE scratch branch. A critic found a second in the reflog, and
+      adjudication confirmed BOTH are live on the remote via the GitHub API:
+      claude/s0-pushscope-probe @ 2cd1f4becb0c19e358f23fff2929ef2bc7e36181 and
+      scratch-s0-push-test @ d97e080789847cba85ead201a47a185b4b0c0931. The first one's own commit
+      message reads '[infrastructure] S0 push-scope probe (deleted immediately)' -- that parenthetical
+      is FALSE on the remote; only the local branch was deleted. Deletion re-attempted at adjudication
+      on both: HTTP 403 on each, non-transient, matching the producer's two earlier attempts. So the
+      session's scope creates refs and opens PRs but cannot delete refs. Also on that remote: closed
+      draft PR #1, opened and closed at adjudication as the PR-scope falsifier (see S0 evidence).
+      CLAUDE.md describes valoria-game as frozen since 2026-05-04, so this litter is visible.
+      Carries no content and blocks nothing -- S1 needs create-ref and pull_requests:write, both
+      verified held.
+    observable: "jordanelias/valoria-game has neither claude/s0-pushscope-probe nor scratch-s0-push-test."
+    needs_ruling: false
+    sessions: 0.1
+    evidence: []
+    critic_verdict: null
+
+  - id: S0-R5
+    title: "The driver's own worktree falsely reds a blocking unit test, breaking this file's pre-commit checklist"
+    state: blocked
+    blocked_on: "Needs SELF_EXCLUDE to match by basename or to prune .claude/worktrees/ from the walk; a test change is out of S0's scope."
+    precondition: null
+    rationale: >
+      Found at adjudication by running the FULL suite the producer skipped. pytest tests/valoria
+      -q -n auto returns 1 failed, 1932 passed:
+      test_ci_common_primitives.py::test_no_module_actually_loads_id_reservations. It is NOT caused
+      by S0 -- controlled by stashing S0's edits and re-running, where it fails identically. Cause:
+      the test walks ci_common.REPO and its SELF_EXCLUDE (:327-330) matches by EXACT RELATIVE PATH,
+      so the harness's own .claude/worktrees/<run>/ copies of the two self-excluded files
+      (test_ci_common_primitives.py and tools/ci_common.py) are walked and match their own patterns.
+      .claude/worktrees/ is gitignored (.gitignore:22, zero tracked files) so CI never sees it and
+      the test is green there. The damage is local and precise: this file's pre_commit_checklist:517
+      instructs every executor to run the full suite, and any executor that does so while a driver
+      worktree exists gets a red they cannot attribute -- a manufactured silent stall in the exact
+      program built to prevent silent stalls.
+    observable: "pytest tests/valoria -q -n auto is green in the repo root while a .claude/worktrees/ run worktree exists on disk."
+    needs_ruling: false
+    sessions: 0.25
+    evidence:
+      - "INDEPENDENTLY REPRODUCED by the executing session before committing S0, which is what
+         promoted this from a critic assertion to a measured fact. With the run worktree present:
+         1 failed / 1932 passed, the failure being exactly
+         test_ci_common_primitives.py::test_no_module_actually_loads_id_reservations.
+         `git worktree remove --force .claude/worktrees/wf_a6d9c7eb-bf0-2 && git worktree prune`
+         -> that file alone returns 36 passed, and the FULL suite returns 1933 passed / 0 failed,
+         identical to the pre-S0 baseline taken at the start of the same session."
+      - "THAT IS A WORKAROUND, NOT THE FIX, and the observable above is deliberately written so it
+         cannot be closed by one: it requires the suite to be green WHILE a worktree exists. Removing
+         the worktree only removes the precondition. Every driver run recreates it, so the next
+         executor that follows pre_commit_checklist:517 with a run worktree still on disk gets the
+         same unattributable red. Entry stays `blocked` on the SELF_EXCLUDE change."
+      - >
+         MECHANISM PROVEN DIRECTLY, AND IT HAS NOW FIRED THREE TIMES IN ONE SESSION (the S0, S1 and S2
+         driver runs). The earlier evidence was a correlation -- remove the worktree, the red goes away.
+         This is the mechanism itself: the assertion message names the walked paths, and they are the
+         worktree copies of the two SELF_EXCLUDE entries --
+         `.claude/worktrees/<run>/tests/valoria/test_ci_common_primitives.py` and
+         `.claude/worktrees/<run>/tools/ci_common.py`. SELF_EXCLUDE matches by exact relative path, so a
+         copy at a different path is not excluded and matches its own pattern. Three firings in one
+         session, one per driver run, makes the recurrence rate ONE PER STEP EXECUTED: this is not an
+         edge case, it is the normal condition of running this program.
+      - >
+         AND THE WORKAROUND IS NOT ALWAYS AVAILABLE: while its run is in flight the worktree is `locked`
+         (git worktree list shows the flag), so an executor that runs the checklist DURING a step cannot
+         remove it and must attribute the red by hand. That is the case for fixing SELF_EXCLUDE rather
+         than documenting the workaround.
+    critic_verdict: null
+
+  - id: S0-R6
+    title: "single_owner_check CI-wiring debt is already tracked in three places -- cite, do not open a fourth"
+    state: blocked
+    blocked_on: "Tracked elsewhere with a costed remediation item; this entry exists to stop a fifth surface being opened."
+    precondition: null
+    rationale: >
+      S0's gates.local_only_tools records, correctly and as measured, that single_owner_check.py
+      (tools/valoria_local.py:243, the CLAUDE.md S8 single-owner guard) is invoked nowhere in
+      .github/workflows/valoria-ci.yml and nowhere in tools/review_core.py's CHECKS, so its findings
+      are never enforced in CI. A critic established the debt is ALREADY tracked at
+      registers/handoffs/HANDOFF_IN.md:151, at audit/2026-08-14-five-lens-repo-assessment/00_findings.md:68
+      with a costed item at 01_plan.md:73 ('B3 | Register single_owner_check.py in
+      ci_checks_registry.yaml with a role: line'), and again at
+      audit/2026-08-17-weekly-review/00_findings.md:294. Recording it a fourth time reproduces this
+      file's own documented count-spread problem (:354-361, where four instruments report four
+      different needs_jordan counts) one register down. Resolution is B3 in the existing plan, not a
+      new work item here.
+    observable: "single_owner_check.py has a role: line in references/ci_checks_registry.yaml and a CI wiring, per B3 -- tracked there, not here."
+    needs_ruling: false
+    sessions: 0
     evidence: []
     critic_verdict: null
 
   - id: S1
+
     title: "Make the game compile — and make a compiler, not a board, say so"
-    state: pending
-    blocked_on: null
+    state: blocked
+    blocked_on: >
+      S1's observable ("compile.log has zero non-tests errors at a fixed point; the CI compile job is
+      green on the PR") is unreachable from inside S1's own action list. A true fixed point WAS reached
+      and the mechanical work of A1-A6 + B1-B4 + Group C is DONE and verified; what remains is three
+      things S1 is not permitted to do: S1-R1 (needs a numeric ruling), S1-R2 (annotation work Group C
+      explicitly scoped OUT), S1-R4 (no CI compile job exists to be green). Do not re-run S1's fix loop
+      — it converges to exactly this state. Resolve S1-R1 and S1-R2, then re-gate.
+    evidence:
+      - "CONTROLLED RE-MEASUREMENT, ALL of A1-A6 + B1-B4 + the setting applied, 2026-08-19
+         (jordanelias/valoria-game@5e01065, Godot 4.3.stable.official.77dcf97d8). Every run used
+         `rm -rf .godot` immediately before `--headless --path . --editor --quit`: a warm cache was
+         found to silently truncate the scan. The reproducible artifact pair for that confound is
+         compile_setting_only.log (warm, 51 gate-matching lines) vs compile_ctrl_settingonly.log
+         (fresh, 235) on the IDENTICAL tree — a 4.6x confound from cache state alone. Fresh-cache
+         stock and setting-only arms reproduced this file's own baselines EXACTLY (stock 54/169/61,
+         setting_only 54/161/61), which is the control that licenses the endpoint below."
+      - >
+         [CORRECTED 2026-08-19 by adjudication — the producer's published triple was arm-mismatched
+         and one critic OVERTURNED it; two others independently sharpened the same defect, so all
+         three lenses hit it.] The endpoint was reported as "14 / 76 / 21, all excluding res://tests/,
+         down from stock 54 / 169 / 61". That mixes three exclusion conventions across six numbers:
+         failed_to_load was excl-tests on the endpoint side and incl-tests on the baseline side;
+         parse_errors was labelled excl-tests while being incl-tests in BOTH arms; only broken_scripts
+         was a clean pair. Re-derived by hand from the retained logs, LIKE FOR LIKE:
+           EXCLUDING res://tests/ :  41 / 156 / 61  ->  14 / 63 / 21
+           INCLUDING res://tests/ :  54 / 169 / 61  ->  27 / 76 / 34
+         (compile_ctrl_stock.log: 54 Failed-to-load of which 13 are res://tests/; 169 Parse Error of
+         which 13 are `Could not find base class "GdUnitTestSuite"`. compile_final.log: 27 / 13 and
+         76 / 13.) The improvement is real, large and in the claimed direction; the published label
+         was false. The producer had already diagnosed this exact grep defect as S1-R3 and then
+         published a number containing it — that is the §0.1-point-4 failure repeating inside the
+         residual filed to prevent it.
+      - >
+         [ADDED 2026-08-19 by adjudication — the third reported number had no documented instrument.]
+         `broken_scripts` appears in every baseline row and is defined nowhere. Reverse-engineered and
+         confirmed consistent across both arms: broken_scripts = (Failed-to-load lines EXCLUDING
+         res://tests/) + (Compile Error lines). Stock 41 + 20 = 61; endpoint 14 + 7 = 21. Recorded here
+         so the number is reproducible; the single-owner defect behind it is filed as S1-R5.
+      - >
+         FIXED POINT VERIFIED BYTE-IDENTICAL, not by line count. `cmp errors_iter3.txt errors_iter4.txt`
+         → identical (md5 87b717e373df286e056ec03d46f91f59, 97 lines each), and compile_iter3.log,
+         compile_iter4.log and compile_final.log are all one file by md5 (c0b6f785e5f31f6fc72381610caa4613).
+         So the "this iteration applied zero fixes" half of the PASS criterion IS satisfied; the
+         "errors.txt is empty" half is not. Per this file's own rule, a converged non-empty fixed point
+         is not a pass. 97 = 76 Parse Error + 14 non-test Failed-to-load + 7 Compile Error, and the 13
+         GdUnitTestSuite lines are INSIDE that 97, not subtracted from it.
+      - "ALL SIX GROUP-A + ALL FOUR GROUP-B FIXES VERIFIED PRESENT ON DISK AND ABSENT FROM THE FINAL
+         ERROR SET by three independent read-only critics, each opening the cited line. A1 BOARD is the
+         last SceneType member with ordinals 0-3 intact and SceneTypeHelper.gd:24/:44/:56 already carried
+         BOARD arms. A2 CombatEngineLogic renamed; every one of the ~13 qualified `CombatLogic` consumers
+         resolves to the SCENE class and each member it names exists there, so zero call sites changed.
+         A3 Meta.gd:27 (NOT :23-26 as first cited). A4 all five sha256 sites route through
+         Hashing.sha256_hex with no trailing .hex_encode(). A5 CharacterData.gd:104 with Constants.gd:43's
+         ED-694 provenance on disk. A6 exactly 12 parenthesized sites, count re-derived independently by
+         two critics rather than taken from the producer's script output. B1-B4 all verified, including
+         that no polymorphic dispatch breaks on the B3 rename (nothing maps Enums.ResolutionMode.VERSUS
+         to a ResolutionMode instance; the sole holder is concretely typed at CombatLogic.gd:126)."
+      - "FOUR ADDITIONAL MECHANICAL DEFECTS FOUND AND FIXED, all inside cascade-parent classes A1-A6
+         already named, all confirmed pre-existing via `git show HEAD`: a duplicate closing brace and a
+         duplicate `&\"rs_below_35\"` key in ArcEvaluatorRegistry.gd (removal documented in place at
+         :122-123, survivor at :25, bodies byte-identical so zero behaviour change); a dedented
+         `s.dr = 0` at BattleLogic.gd:331 — the exact 'Unexpected Identifier in class body' Group-D
+         residual this file names; and a const-Dictionary empty-StringName subscript at
+         BoardContainer.gd:138, rewritten as `.get(&\"\", Color.GRAY)` which reads the same present key
+         at :56, so the fallback is unreachable and runtime behaviour is unchanged."
+      - >
+         [CORRECTED 2026-08-19 — the producer's causal account of the 5/14/8 → 14/76/21 gap was
+         single-hypothesis and the alternative was never tested.] The producer framed its own result as
+         anomalous ("WORSE despite applying MORE fixes") and offered one cause: the prior session's
+         cache confound. That framing contradicts this file's own gate_note ("fixing a layer UNCOVERS
+         the next and the count can rise"). Measured: `res://systems/engine/CombatLogic.gd` appears ZERO
+         times in the stock failed-to-load set and once in the final one, with 4 new Cannot-infer sites,
+         because A2's rename let that file register and be parsed on its own merits for the first time —
+         and the prior session did not apply A2. Likewise ArcEvaluatorRegistry.gd 0 -> 9 and
+         DomainActionSystem.gd 0 -> 3 after A6+A2 unblocked their parse. Per-site reconciliation is
+         exact: 34 stock sites - 10 cleared + 16 uncovered = 40. A substantial part of the gap is
+         mechanically attributable to this session's own fixes and needs no confound to explain it.
+         The cache confound is still real and still evidenced; it is no longer the sole explanation.
+      - "PER-FILE ATTRIBUTION OF THE 14 REMAINING NON-TEST FAILING FILES HOLDS: every one traces to
+         S1-R1 or S1-R2, zero orphan causes. Caveat recorded by a critic and accepted: all 7 bare
+         'Compile Error:' lines carry no message, so their attribution is inference from log adjacency
+         (each sits immediately downstream of a Cannot-infer or PI_REVOLT block — Meta.gd after
+         ValoriaFactionAI, CascadeEngine and TriggerRuleRegistry after ArcEvaluatorRegistry, GameDirector
+         after DomainActionSystem/ValoriaFactionAI, ChronicleGeneratorV30 and ChronicleLayerV30 after
+         ArticulationLayerV30, SituationGenerator after NPCTrajectoryEvaluator), not per-file verification."
+      - >
+         TTRPG-SIDE PRE-COMMIT CHECKLIST RUN AND CONTROLLED (the producer's claim set was silent on
+         both; this file's own pre_commit_checklist requires them). `python3 -m pytest tests/valoria -q
+         -n auto` → 1933 passed, 23 skipped, 15 xfailed, 0 failed (136s). `python3 tools/valoria_local.py
+         --ci` → 36 validator invocations across 4 jobs, 0 blocking failures; 4 report-only failures
+         (ci_quantity_vocabulary_check, mechanics_index_gen, canon_coverage_check, scope_ratchet).
+         CONTROL, per this file's own failure_decoder ("read the line ABOVE it"): the identical 4
+         report-only failures reproduce on the stashed clean tree, so none is attributable to this
+         change. No design .md changed and no ledger row was written, so the co-file, artifact-regen
+         and register-cap branches of the checklist do not bind this commit.
+      - >
+         VALORIA-GAME CI WILL GO RED ON A PRE-EXISTING GATE, and S1-R4's rationale asserted the
+         opposite. godot-ci.yml:58-63 runs `if grep -rn "Maret Vossen\|maret_vossen" --include="*.gd" .;
+         then ... exit 1`. Reproduced on this tree: 12 hits across 5 files (autoload/Meta.gd:159-164,
+         systems/data/ArcEvaluatorRegistry.gd:39,97,98,99, systems/npc/NPCLocationTracker.gd:43,
+         resources/data_types/RestorationMovementData.gd:17). Confirmed PRE-EXISTING, not introduced:
+         all 12 are present in `git grep HEAD`, and the only diff touching such a line is A6 adding a
+         paren around an existing maret_vossen condition. Consequence for the reconciling session: any
+         PR from this branch shows a red check regardless of compile state, and this file's own
+         gate_tier claim that valoria-game's "two grep jobs are the only functional gates" describes a
+         gate that is currently failing. Corrected into S1-R4.
+      - "NOT COMMITTED, VERIFIED WITH GIT (a critic could only soften this claim, having no Bash):
+         /workspace/valoria-game `git status --short` = exactly 19 M + 1 ?? (systems/util/Hashing.gd),
+         `git log --oneline` = the single frozen commit 5e01065, no branch pushed. The ttrpg worktree
+         carries exactly 1 M workplans/return_to_game_queue.yaml. The caller commits."
+      - "PRECONDITION DISCREPANCY, FLAGGED AND STILL UNRESOLVED: this worktree's copy of this file shows
+         S0 as `state: pending` with `evidence: []`, so S1's stated precondition ('S0 done (push scope)')
+         was not satisfied by this working tree's own record when S1 was executed. Two critics confirmed
+         it on disk and both declined to rule on it as out of lane. One incidental datum in the game
+         repo's reflog — a 'scratch: S1 precondition push-scope verification' commit on an abandoned
+         scratch branch — is evidence push scope WAS confirmed out of band. Not resolved here: S0's
+         state is not S1's to set. The reconciling session must not inherit this as satisfied."
+      - >
+         [ADDED 2026-08-19 by the executing session — this CLOSES the structural limit the critic
+         record puts on itself ("all three critics read the SAME artifacts the producer wrote, so none
+         re-ran Godot; nothing attests the logs correspond to the tree").] I re-ran the instrument
+         MYSELF against the tree on disk, fresh cache: `rm -rf .godot && Godot_v4.3-stable_linux.x86_64
+         --headless --path . --editor --quit`. Result reproduces the adjudicated endpoint EXACTLY —
+         14 / 63 / 21 excluding res://tests/ and 27 / 76 / 34 including them. The logs do correspond to
+         the tree. The adjudication's named falsifier was also run against the nine retained artifacts
+         and passed: stock re-derives to 41/156/61 excl-tests, and compile_iter3/iter4/final are one
+         file by md5 (c0b6f785e5f31f6fc72381610caa4613).
+      - >
+         INDEPENDENTLY CONFIRMS S1-R5 from a direction neither the producer nor the critics took: the
+         ORIGINAL baseline triple in this file is itself arm-mixed, not merely under-documented. Deriving
+         all three axes with one command set shows stock = 54/169/74 INCLUDING tests and 41/156/61
+         EXCLUDING them. The published baseline "54/169/61" therefore pairs two including-tests numbers
+         with one excluding-tests number, inside a single triple that six documents have since cited.
+         That is the single-owner defect S1-R5 names, demonstrated on the baselines block itself.
+      - >
+         PRECONDITION DISCREPANCY RESOLVED (the producer flagged it unresolved and two critics declined
+         it as out of lane). It was an artifact of worktree base, not a real gap: the producer ran in a
+         worktree cut from c9b0a86, which predates S0's commit, so its copy of this file still read
+         `S0: state: pending`. On the branch S1 is being recorded into, S0 is committed at 623494e with
+         its observable met (45,998/50,000 tokens re-measured, push scope exercised against
+         valoria-game@5e01065 by this session directly). S1's precondition held when S1 ran.
+    critic_verdict: >
+      THREE structurally independent read-only critics (Read/Grep/Glob only), on distinct lenses —
+      FIDELITY (does it do what it claims and ONLY that), FACTUALITY (every citation opened at the
+      cited line; gate verdict re-derived from the logs), LOGIC (does the conclusion follow, and would
+      the gate have observed the failure). Each returned a verdict on all 18 claims: 54 verdicts, no
+      lens returned zero, so there is NO null result to discount.
+      TALLY: 45 uphold, 5 sharpen, 3 soften, 1 OVERTURN.
+      THE OVERTURN IS LOAD-BEARING AND THE STEP IS THEREFORE NOT DONE. FACTUALITY overturned C16, the
+      headline result claim, for an arm-mismatched control: the endpoint triple was labelled "excluding
+      res://tests/" while its baseline was an including-tests measurement and its own parse-error axis
+      was uncorrected. FIDELITY and LOGIC independently sharpened the same claim for the same defect —
+      3 of 3 lenses, the maximally bankable signature. Corrected like-for-like numbers are in evidence;
+      the direction and magnitude of the improvement survive, the published label did not.
+      SECOND MULTI-LENS DEFECT (x2, FIDELITY + LOGIC), banked: the S1-R2 annotation-debt residual moved
+      the WRONG WAY. "Down from the baseline 49" compares a raw occurrence count (49) against a unique
+      file:line count (40). Measured identically, stock has 34 unique sites; the debt ROSE 34 -> 40.
+      Re-derived independently by the adjudicator: 10 cleared, 16 uncovered, 34-10+16=40. Also 14 files,
+      not 15 — the residual's own per-file table lists 14 summing to 40. S1-R2 is corrected below,
+      because that number is what a future session is told to beat.
+      THIRD MULTI-LENS DEFECT (x2), banked: the third reported number (broken_scripts) has no documented
+      instrument anywhere, and this file defines the compile metric three incompatible ways
+      (baselines.method:52, S1's gate:161-163, S1-R3's pairing method). Filed as S1-R5.
+      SOFTENS/SHARPENS ADJUSTING THE RECORD, none blocking: C2's evidence sentence ("only two stale
+      comments reference CombatLogic") is false as written — ~13 code sites do, all correctly resolving
+      to the scene class, so the conclusion stands and the sentence was corrected. C3 cite Meta.gd:27,
+      not :23-26. C11 cite project.godot:45 and :47, not :44-46. C17 cite godot-ci.yml:1-69, not :1-52.
+      C15's cited "48 vs 215" confound pair has no surviving log; the reproducible pair on disk is 51 vs
+      235 — cite the artifact that exists. C18 was softened only for critic tooling limits and is now
+      VERIFIED with git by the adjudicator.
+      C11 (the project-setting control) drew uphold from all three lenses and is the best-controlled
+      claim in the set: compile_ctrl_stock.log carries 8 "inferred from a Variant value" lines and
+      compile_ctrl_settingonly.log carries 0, with broken_scripts unmoved at 61 in both arms — the
+      setting does precisely what was claimed and nothing more.
+      FALSIFIER FOR THIS ADJUDICATION (§0.1 point 3): every number above is re-derivable from the nine
+      retained /workspace/compile_*.log artifacts by the commands recorded in S1-R5's observable. If a
+      re-run of those commands does not yield 41/156/61 -> 14/63/21 excl-tests, 34 -> 40 unique
+      Cannot-infer sites, and md5 87b717e373df286e056ec03d46f91f59 on both errors_iter3/4.txt, this
+      adjudication is wrong.
+      ONE STRUCTURAL LIMIT ON RECORD: all three critics read the SAME artifacts the producer wrote, so
+      none of them re-ran Godot. Nothing here attests that the logs correspond to the tree on disk
+      beyond the fixed-point self-consistency and the two independent stock arms agreeing exactly.
     precondition: "S0 done (push scope)."
     rationale: >
       In 3,731 commits nothing has ever checked whether the game compiles. This is the step that
@@ -174,15 +628,236 @@ steps:
     observable: "compile.log has zero non-tests errors at a fixed point; the CI compile job is green on the PR."
     needs_ruling: false
     sessions: 2
+
+  - id: S1-R1
+    title: "ArcEvaluatorRegistry.gd:31 cites Constants.PI_REVOLT_THRESHOLD, which does not exist anywhere in Constants.gd"
+    state: blocked
+    blocked_on: "No verified default available in this frozen repo -- no ED/PP citation, no git history beyond the single frozen commit, no similarly-named constant to infer from. Needs a real numeric ruling, not a guess."
+    precondition: null
+    rationale: >
+      `m.get_tracker_value(Constants.KEY_PARLIAMENT_INTEGRITY) >= Constants.PI_REVOLT_THRESHOLD` at
+      ArcEvaluatorRegistry.gd:31 (the &"pi_revolt" condition). Constants.gd has KEY_PARLIAMENT_INTEGRITY
+      (:100) but no PI_REVOLT_THRESHOLD anywhere -- grepped the whole tree, zero hits outside this one
+      use site. valoria-game@5e01065 is a single frozen commit (git log has one entry), so there is no
+      prior version to recover a value from, unlike A5's COMPOSURE fix which had ED-694 to cite. Per
+      CLAUDE.md S0.1 point 4 ("a number without a control is not a measurement") and this file's own
+      Group-D rule ("PARKED, NEVER GUESSED"), inventing a threshold is exactly the failure mode both
+      forbid. Cascades to systems/situation/CascadeEngine.gd and systems/situation/TriggerRuleRegistry.gd
+      (both reference ArcEvaluatorRegistry and fail to resolve it as a result) -- contained; neither is
+      an autoload.
+    observable: "Constants.gd has a PI_REVOLT_THRESHOLD constant with a cited source (ED/PP or design doc), and ArcEvaluatorRegistry.gd:31 compiles."
+    needs_ruling: true
+    sessions: 0.1
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R2
+    title: "40 'Cannot infer the type of X' hard-error sites remain across 14 files -- Group C's own scoped-out annotation debt, precisely counted, and UP from 34"
+    state: blocked
+    blocked_on: "Real per-site type annotation work (each := needs its RHS's actual return type determined), explicitly out of S1's scope per this file's own Group C action text ('file the annotation debt as an explicit residual ... do not record it as ~9 residuals')."
+    precondition: null
+    rationale: >
+      MEASURED at the iteration-4 fixed point (not estimated): 40 unique file:line sites, extracted
+      from compile_iter4.log by pairing each 'Cannot infer the type of X' line with its following
+      'at: GDScript::reload (...)' line and de-duplicating. Down from the baseline 49 (measured
+      identically, fresh .godot cache, on the unmodified stock tree) -- the 9-site drop is fully
+      accounted for by A4's own claim ('Clears ... 8x Cannot infer the type of hashed') plus one more
+      site incidentally typed by another A/B fix; not a new measurement artifact. Per-file counts:
+      ArcEvaluatorRegistry.gd 9, NPCTrajectoryEvaluator.gd 6, CombatLogic.gd 4, BoardContainer.gd 4,
+      ValoriaFactionAI.gd 4, DomainActionSystem.gd 3, CombatContainer.gd 2, BattleContainer.gd 2,
+      RMPresenceSystem.gd 1, KnotFormationSystem.gd 1, CombatInitiativeSystem.gd 1, DebateContainer.gd 1,
+      NarrativeContainer.gd 1, ArticulationLayerV30.gd 1. All 14 files still failing to load at the
+      fixed point trace to either this residual or S1-R1 (verified: grepped every failing file's own
+      error block, zero orphan causes). The 8 setting-only-affected sites (a DIFFERENT warning class,
+      'variable type is being inferred from a Variant value... Warning treated as error', cleared by
+      landing `[debug] gdscript/warnings/inference_on_variant=1` in project.godot) are NOT part of this
+      40 -- that downgrade IS landed (verified: project.godot has the setting; the controlled
+      stock-vs-setting_only pair above shows it independently clearing 8 lines with zero broken_scripts
+      moved, exactly this file's own gate_note claim)."
+    rationale_correction: >
+      [CORRECTED 2026-08-19 by adjudication, 2 of 3 lenses independently + re-derived by the adjudicator.]
+      The original rationale read "Down from the baseline 49 (measured identically)". It was NOT measured
+      identically: 49 is the RAW OCCURRENCE count in compile_ctrl_stock.log, while 40 is a UNIQUE
+      file:line count. Deduplicated by the same pairing method, the stock tree has 34 unique sites across
+      14 files. LIKE FOR LIKE THE ANNOTATION DEBT ROSE: 34 -> 40. Exact reconciliation: 10 sites cleared,
+      16 uncovered, 34 - 10 + 16 = 40. The uncovered sites are mechanically attributable to S1's own
+      fixes unblocking files that previously never parsed -- ArcEvaluatorRegistry.gd 0 -> 9 (after A6 +
+      the duplicate-brace fix), systems/engine/CombatLogic.gd 0 -> 4 (after the A2 rename let it register
+      for the first time), DomainActionSystem.gd 0 -> 3 -- against clearances at CombatContainer 6 -> 2,
+      BattleContainer 4 -> 2, GameDirector 2 -> 0, Key.gd 1 -> 0, scenes/.../CombatLogic.gd 1 -> 0. This
+      is exactly the behaviour this file's own gate_note predicts ("fixing a layer UNCOVERS the next").
+      The original reconciliation was also wrong on its face: A4's "8x Cannot infer the type of hashed"
+      is 8 OCCURRENCES OF ONE SITE (Key.gd:87), which cannot account for a 9-SITE drop.
+      Two further corrections: it is 14 files, not 15 -- the residual's own per-file table lists 14
+      summing to 40; and the table's bare "CombatLogic.gd 4" means systems/engine/CombatLogic.gd, while
+      scenes/containers/combat/CombatLogic.gd went 1 -> 0.
+    observable: "python3-driven grep-pair count of 'Cannot infer the type of X' unique file:line sites in a fresh-cache compile.log is 0, OR each site has been given an explicit type annotation with its provenance noted."
+    needs_ruling: false
+    sessions: 1.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R3
+    title: "The gate's own literal grep does not exclude 13 known GdUnitTestSuite lines from res://tests/"
+    state: blocked
+    blocked_on: "A gate-definition fix (match by the file path on a PRECEDING or FOLLOWING line, not only the matched line itself), not S1's to make unilaterally since the gate text lives in this file's own S1 entry above."
+    precondition: null
+    rationale: >
+      The gate is the literal two-stage `grep -E \"Failed to load script|Parse Error|Compile Error\"
+      compile.log | grep -v \"res://tests/\"`. For each of the 13 res://tests/*.gd files hitting
+      'Could not find base class GdUnitTestSuite', Godot emits the SCRIPT ERROR line (matches stage 1,
+      no path on that line) THEN a separate 'at: GDScript::reload (res://tests/....gd:N)' line (has
+      the path, but doesn't match stage 1's keywords so is never even in the candidate set) THEN the
+      'ERROR: Failed to load script \"res://tests/...\"' line (matches stage 1 AND correctly gets
+      dropped by stage 2). Net effect: the SCRIPT ERROR line survives both greps even though it
+      belongs to a tests/ file, because the res://tests/ path never appears on the SAME line as the
+      matched keywords. This is exactly what gate_note (:168-173) already anticipated in spirit
+      ('res://tests/ is deliberately out of scope here') but the literal command does not implement.
+      Verified this session: 13 such lines present in errors.txt at every iteration, stable count,
+      matching the gate_note's own cited figure exactly.
+    observable: "errors.txt from the literal gate command contains zero lines attributable to any res://tests/ file, verified by checking the file path on the line 1-2 lines below each surviving SCRIPT ERROR line."
+    needs_ruling: false
+    sessions: 0.1
     evidence:
-      - "MEASURED 2026-08-19 in a scratch copy: stock 54/169/61 -> 5/14/8 applying A1,A3,A4,A5,A6 + the setting.
-         A2 and group B were NOT applied in that run, so the true endpoint is better than 5/14/8.
-         Working patch: 12 files. Reproduce before trusting."
+      - "Not blocking S1's own count: this session's 14/76/21 and 40-site S1-R2 figures were computed
+         by pairing each SCRIPT ERROR with its own 'at:' line and filtering by the REAL path (not the
+         gate's literal two-line grep), so they already exclude these 13 lines correctly. Filed because
+         the gate TEXT itself (S1's own gate: field) would mislead a future executor who runs it
+         verbatim and treats a non-empty errors.txt as 13 lines worse than it is."
+    critic_verdict: null
+
+  - id: S1-R4
+    title: "S1's observable names 'the CI compile job' on valoria-game -- no such job exists in godot-ci.yml"
+    state: blocked
+    blocked_on: "Adding a CI job is out of S1's named action list (1-6 above name only the code fixes and the local iterate loop); CLAUDE.md's excluded: list also forbids any NEW guard/check ABOUT the compile gate itself being added casually. Needs its own scoped step."
+    precondition: null
+    rationale: >
+      Read jordanelias/valoria-game/.github/workflows/godot-ci.yml directly, in full, this session:
+      three jobs (lint, enum-check, naming-check), none of which invoke a Godot binary at all -- lint
+      is a pure-Python indentation grep (and per this file's own gate_tier: block, cannot fail
+      regardless of content). There is no job anywhere in this workflow that runs
+      `godot --headless --editor --quit` or equivalent. S1's own observable ends '...; the CI compile
+      job is green on the PR' as though one exists to verify. It does not. Opening a PR would produce
+      three green checks that say nothing about compilability -- exactly the gap S1's own rationale
+      names ('nothing has ever checked whether the game compiles'). Not fixed here: authoring a new CI
+      job is explicitly outside S1's actions 1-6, and the queue's own excluded: list warns against a
+      compile gate 'acquiring its own stack' casually.
+    rationale_correction: >
+      [CORRECTED 2026-08-19 by adjudication, found by 2 of 3 lenses.] The rationale asserted "Opening a
+      PR would produce three green checks that say nothing about compilability". That is FALSE and the
+      producer read the file in full. godot-ci.yml:58-63's naming-check runs
+      `if grep -rn "Maret Vossen\|maret_vossen" --include="*.gd" .; then ... exit 1` and that string is
+      live in 12 places across 5 files (autoload/Meta.gd:159-164, systems/data/ArcEvaluatorRegistry.gd:39,
+      97,98,99, systems/npc/NPCLocationTracker.gd:43, resources/data_types/RestorationMovementData.gd:17).
+      All 12 are pre-existing on HEAD, NOT introduced by S1. So the count is two green and one RED, and
+      S1's observable ("the CI compile job is green on the PR") is doubly unreachable: the compile job
+      does not exist, and the PR is red for an unrelated pre-existing naming violation. Whoever opens the
+      PR must expect a red check. Whether to fix the naming violation is PP-665's business, not S1-R4's.
+    observable: "godot-ci.yml has a job that runs the Godot binary headless against the project and fails on a non-empty errors.txt, wired into the required-checks set the same way ci-summary works on the ttrpg-repo side."
+    needs_ruling: false
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R5
+    title: "The compile metric is defined three incompatible ways in this file, and its third number (broken_scripts) is defined nowhere"
+    state: blocked
+    blocked_on: "A single-owner decision about what the compile metric IS. Rewriting baselines.method is not S1's to do unilaterally -- it is the surface the protocol header directs every future session to trust, and changing it retroactively re-labels S0-S8's shared baseline."
+    precondition: null
+    rationale: >
+      Three definitions of one number coexist. (1) baselines.method (workplans/return_to_game_queue.yaml:52)
+      is `grep -cE 'Failed to load script|Parse Error'` -- NO res://tests/ exclusion, no 'Compile Error'
+      pattern, and it yields ONE number while three are reported. (2) S1's gate (:161-163) is three
+      patterns WITH `grep -v res://tests/`. (3) S1-R3's corrected method pairs each error with its
+      following 'at: GDScript::reload' line and filters on the REAL path. These disagree by 13 lines per
+      axis, which is precisely the arm mismatch that overturned S1's headline claim. Separately,
+      `broken_scripts` appears in all three baseline rows and is defined in no command anywhere; it was
+      reverse-engineered by two critics and the adjudicator, independently and concordantly, as
+      (Failed-to-load EXCLUDING res://tests/) + (Compile Error) -- 41 + 20 = 61 stock, 14 + 7 = 21
+      endpoint. A number whose command is not written down is not reproducible by the next session
+      (CLAUDE.md S0.1 point 4). Until one owner exists, every "down from X" sentence in this program is
+      unfalsifiable. Note the CLAUDE.md S8 posture this satisfies: the fix is ONE definition that both
+      the gate and the baselines block read, not a second grep bolted alongside the first.
+    observable: >
+      workplans/return_to_game_queue.yaml carries exactly one compile-metric definition, naming all three
+      axes explicitly including broken_scripts, with its res://tests/ handling stated; S1's gate: field
+      and the baselines block both reference that one definition rather than restating a variant. Verified
+      by re-deriving 41/156/61 (stock, excl tests) and 14/63/21 (endpoint, excl tests) from the retained
+      /workspace/compile_*.log artifacts with the single documented command.
+    needs_ruling: false
+    sessions: 0.2
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R6
+    title: "baselines.game_compile still publishes the unreproduced 5/14/8 endpoint as 'the number a later session must beat'"
+    state: blocked
+    blocked_on: "Editing the shared baselines block is outside S1's scope -- it is the control surface for S0-S8, not S1's own record. Needs the same owner as S1-R5 and should land in the same edit."
+    precondition: null
+    rationale: >
+      workplans/return_to_game_queue.yaml:55 still reads
+      `five_defects_plus_setting: { failed_to_load: 5, parse_errors: 14, broken_scripts: 8 }` and :56-60's
+      note still asserts "Both runs are reproducible by the method line above". S1's own controlled
+      fresh-cache re-measurement, applying a strict SUPERSET of those fixes, could not reproduce it and
+      reached 14/63/21 excl-tests. The original scratch copy no longer exists, so 5/14/8 can no longer be
+      re-tested in either direction -- it is neither confirmed nor refuted, only unreproduced. The hazard
+      is placement, not disagreement: this file's protocol header (:48) tells a session with no memory
+      that the baselines block IS the number to beat, and the contradiction currently lives 140 lines
+      below it in S1's evidence. A future executor reading the machine-readable block inherits a figure
+      no one can reproduce and will read its own correct 14/63/21 as a catastrophic regression. Fix is
+      one inline correction marker on the block itself -- the convention this repo already uses
+      (CLAUDE.md S5-S7's `[CORRECTED ...]` restore precedent), not a deletion.
+    observable: "baselines.game_compile.five_defects_plus_setting carries an inline correction marker naming S1's controlled 14/63/21 excl-tests endpoint and stating that 5/14/8 is unreproduced and unretestable; the note's 'both runs are reproducible' sentence is corrected."
+    needs_ruling: false
+    sessions: 0.1
+    evidence: []
+    critic_verdict: null
+
+  - id: S1-R7
+    title: "Prose and naming residue left by S1's renames -- zero compile impact, nonzero next-reader impact"
+    state: blocked
+    blocked_on: "Each item needs a judgement S1 was not scoped to make (which combat model a comment should name, whether an orphaned class stays), and CLAUDE.md's rule is that a real out-of-scope defect is parked with file:line, never silently fixed."
+    precondition: null
+    rationale: >
+      Four surfaces, all found by critics, none affecting compilation, all of which a later session will
+      read as settled fact.
+      (1) systems/engine/CombatInitiativeSystem.gd:12 reads "## Takes Array[CombatLogic.CombatantState]"
+      and systems/engine/ThreadworkSystem.gd:41,51 similarly. Pre-rename these named the ENGINE class in
+      the same directory; post-rename `CombatLogic` resolves to the SCENE class, whose CombatantState is
+      a DIFFERENT type. The producer found these comments, correctly ruled them non-code, and left them
+      silently repointed at the wrong class.
+      (2) `CombatEngineLogic` (systems/engine/CombatLogic.gd:19) now has ZERO referents anywhere in the
+      tree. That is correct and ruling-free as A2 argued, but nothing records that the engine pipeline is
+      orphaned code, and it still costs 4 of S1-R2's 40 annotation sites and 1 of the 14 failed-to-load
+      files. A later session will otherwise spend annotation work typing a class nothing calls. The model
+      question itself is H6's, not this entry's.
+      (3) B3's `resolve_versus` collides by name with systems/engine/CoreResolver.gd:130's
+      `resolve_versus`, a different signature called at CoreEngine.gd:104 and tests/test_dice_engine.gd:185
+      -- two same-named methods with divergent shapes in adjacent subsystems. No compile break.
+      (4) systems/util/Hashing.gd:3-4 asserts as fact that PackedByteArray.sha256_buffer() "does not exist
+      in Godot 4.3" and that the call-site pattern "predates a Godot API that never shipped". The fix
+      depends on none of it and no artifact in the run establishes it; it is engine history stated
+      unhedged in a file this program created.
+    observable: "The three comments name the class they actually mean; CombatEngineLogic's orphan status is recorded wherever H6 is decided; Hashing.gd's docstring either cites a verifiable source for its API-history claim or is hedged to what was observed."
+    needs_ruling: false
+    sessions: 0.2
+    evidence:
+      - >
+         [PARTIALLY DISCHARGED 2026-08-19 by the executing session — item (4) is now HALF verified, and
+         recording which half is the point.] The Hashing.gd docstring makes two claims. The FIRST is
+         confirmed outright by a retained artifact: /workspace/compile_ctrl_stock.log carries
+         `Parse Error: Function "sha256_buffer()" not found in base PackedByteArray.` and
+         `Cannot find property "sha256_buffer" on base "PackedByteArray"`, so "does not exist in Godot
+         4.3" is measured, not asserted. The SECOND — "predates a Godot API that never shipped" — is a
+         claim about Godot's release history that no artifact in this run establishes and that nothing
+         in the fix depends on. So the residual narrows to deleting or sourcing ONE clause, not to
+         re-deriving the docstring. Left parked rather than edited: this file's own rule is that an
+         out-of-scope defect is recorded with file:line and never silently fixed.
     critic_verdict: null
 
   - id: S2
     title: "Arm the acceptance oracle — give m1_acceptance.py the run it is blocked on"
-    state: pending
+    state: done
     blocked_on: null
     precondition: "none — independent of S1, may run in parallel in a separate session."
     rationale: >
@@ -201,6 +876,278 @@ steps:
     observable: "python3 tools/m1_acceptance.py --summary shows >=4 of 5 rows measured/partial rather than BLOCKED; --check exit code now means something."
     needs_ruling: false
     sessions: 1
+    evidence:
+      - "LOCATION, read this first -- THE SAME BLOCKER AS S0, THIRD RECURRENCE, AND IT IS NOW
+         RESOLVED. The producer ran in the isolated run worktree .claude/worktrees/wf_35d5f40b-8aa-2/
+         and never said so; all three lenses independently found that NONE of the 7 FILES CHANGED
+         existed at /home/user/ttrpg, so a commit staged there would have been EMPTY while recording
+         S2 done. RESOLVED at adjudication by the S0 precedent: both trees shared base c9b0a86 (the
+         5 touched files had zero drift between c9b0a86 and the root HEAD 8bd3275), the worktree diff
+         was extracted and `git apply`d clean, the 2 untracked test files copied, and the spent
+         worktree was then REMOVED (`git worktree remove --force` + prune). Every number below is
+         measured in the REPO ROOT with no worktree on disk."
+      - "GATE RE-MEASURED AT THE REPO ROOT, byte-identical to the producer's worktree run:
+         row 1 stub_invocations = 2 FAIL (measured), row 2 determinism PASS hash 2b98c63e14f5...
+         (measured), row 3 key_log_closure PARTIAL, row 4 m1_junctures 0/7 FAIL (measured),
+         row 5 invariant_violations BLOCKED. --json reports states
+         ['measured','measured','partial','measured','blocked'] and failed=2. OBSERVABLE MET:
+         4 of 5 rows non-blocked (>=4 required) and --check exits 1 from TWO measured failures
+         rather than, as pre-S2, from the board-read m1_junctures row alone."
+      - "CONTROL, taken by the adjudicator with one instrument in one session (CLAUDE.md S0.1 pt 4).
+         PRE-S2 arm via `git stash --include-untracked` on the repo root: rows 1/2/5 BLOCKED,
+         2/5 non-blocked, --check exit 1. POST-S2 arm: 4/5 non-blocked, --check exit 1. The
+         producer's C5 is confirmed, including its own honest caveat that the exit CODE is
+         numerically unchanged -- what changed is what it is derived FROM."
+      - "SS8 VIOLATION IN THE STEP'S OWN NEW CODE -- FOUND BY 2 OF 3 LENSES, CONFIRMED BY A RUN
+         FALSIFIER, AND CORRECTED IN PLACE AT ADJUDICATION. _run_probe_season() opened with
+         `_stubwire.reset_invocations()`, justified by a docstring claiming a stale prior probe's
+         invocations would otherwise leak into CampaignResult.stub_hits. That leak is IMPOSSIBLE:
+         engine/mc_v18.py:222 snapshots `_stub_start = stubwire.invocations` and :300 returns
+         `stub_hits = stubwire.invocations - _stub_start` -- run_campaign is already the single
+         owner of that delta. FALSIFIER EXECUTED (not reasoned): with reset_invocations()
+         monkeypatched to a no-op and the cumulative counter standing at 6, the row still reported
+         exactly 2. The reset was also a contract breach -- engine/substrate/stubwire.py:71 says
+         'Never called from a production code path' and tools/dashboard_data.py:1256-1260 imports
+         this module and calls collect() IN-PROCESS. Correction applied: the reset and its now-unused
+         `_stubwire` import are gone, the false docstring is replaced with the falsifier and the
+         measured cost, and the row detail no longer mislabels the instrument as 'delta since reset'.
+         CONTROL ON THE CORRECTION: the gate reports the identical 2 / PASS / 2b98c63e14f5... after it."
+      - "COST MEASURED, both arms, closing the critics' 'no control' finding (S0.1 pt 4 applies to a
+         favourable number too). The producer's only basis was an INHERITED, uninstrumented '~2.5s
+         for 50 seasons' copied from queue prose into a tool docstring. Measured here, 3 subprocess
+         runs per arm, median: `tools/m1_acceptance.py --summary` 0.153s pre-S2 -> 0.617s post-S2,
+         +0.46s for the three campaigns collect() now runs. The uninstrumented figure was deleted
+         from the docstring and replaced with this one. The dashboard-cost worry is bounded: 0.46s
+         per deploy."
+      - "THE DASHBOARD SILENT-DISAGREEMENT HAZARD DOES NOT FIRE -- measured, not assumed. The LOGIC
+         lens flagged that .github/workflows/dashboard.yml:71 installs pyyaml ONLY, so if the new
+         engine import failed there, C4's fallback would silently report rows 1-2 `blocked` on the
+         published card while the CLI reports them `measured` -- against build_program's own
+         docstring ('if a number here disagrees with the CLI, the CLI is right and this is a bug').
+         Instrumented: importing engine.mc_v18 in a clean subprocess pulls in exactly one
+         third-party package, `yaml`. The dashboard job's install is sufficient. Structural residual
+         (the fallback is silent if the import EVER breaks) parked as S2-R6."
+      - "THE ONE OVERTURN IS REFUTED BY THE CRITIC'S OWN NAMED FALSIFIER. FACTUALITY overturned C14's
+         attribution that scope_ratchet's REGRESSED verdict is pre-existing drift and not this step's
+         files, reasoning that `git ls-files` cannot see uncommitted files so the reading was
+         guaranteed clean by construction; it named the falsifier: 'git add both new test files, then
+         scope_ratchet --check and read tracked.files; if it reports <=3112 I am wrong.' RUN, with
+         both files staged: tracked.files = 1440 against ceiling 3112 / target 3103 -- AT TARGET.
+         CONTROL arm (stash): 1438. Delta exactly +2, the two new files, with 1,672 files of headroom.
+         Both arms carry the IDENTICAL REGRESSED verdict from ed.stale +122 and
+         ed.needs_jordan_stale +62. The producer's attribution stands; the overturn does not."
+      - "A DEFECT TWO LENSES AGREED ON, AND BOTH WERE WRONG. FACTUALITY and LOGIC each concluded
+         independently that references/identifier_census.json 'cannot have changed' / is
+         byte-identical between trees, and that its presence in FILES CHANGED was unexplained. It
+         DID change: `git diff` shows `engine_names: 6238 -> 6240` at :97. Both lenses compared the
+         per-subsystem rollup blocks and grepped for built_in / m1_acceptance / CAMPAIGN_SEASONS,
+         missing the file-level total two lines from the end. Recorded because 'two lenses found it
+         separately' is the signal this protocol banks -- here it was bankable-wrong. The half of
+         their soften that IS right: the producer's C11 mis-describes WHAT changed in that file (it
+         carries no built_in arrays); the mention-counter mechanism and the YAML/glossary half are
+         exact."
+      - "ALL BLOCKING GATES GREEN AT THE REPO ROOT, worktree removed, artifacts regenerated in the
+         checklist's mandated order (build_test_register -> build_identifier_census ->
+         build_engine_atlas -> observability/build_glossary; the atlas re-emitted byte-identical):
+         pytest tests/valoria -q -n auto -> 1946 passed, 23 skipped, 15 xfailed, 0 FAILED [exit 0];
+         pytest engine/tests -q -> 2051 passed, 5 xfailed [exit 0];
+         tools/valoria_local.py --ci -> '36 validator invocation(s) across 4 job(s); 0 blocking
+         failure(s)', report-only failures ci_quantity_vocabulary_check / mechanics_index_gen /
+         canon_coverage_check / scope_ratchet -- the same four S1 recorded against a stashed clean
+         tree; compliance_check --check-only --repo-state . -> '[COMPLIANCE OK] 64 warning(s),
+         0 errors' [exit 0]; review_core --check -> '[REVIEW-STATE] AMBER -- no blocking failures or
+         regressions' [exit 0]; build_test_register --check and build_identifier_census --check both
+         clean; broken_dependency_checker -> 'All dependencies verified' [exit 0]."
+      - "S0-R5 DID NOT FIRE, and this is a STRONGER arm than the producer had. Two lenses correctly
+         warned that the producer's clean 1946/0-failed was taken INSIDE the worktree, and that
+         S0-R5 records `pytest tests/valoria -n auto` at the repo root returning 1 failed
+         (test_ci_common_primitives::test_no_module_actually_loads_id_reservations) whenever a
+         .claude/worktrees/ run worktree exists. The worktree was removed before this run, so the
+         repo-root suite is genuinely 0-failed. The count also reconciles independently: S1's
+         baseline 1933 + 13 new tests (8 probe + 5 dice) = 1946, skipped/xfailed unchanged."
+      - "tools_or_workflow_changed CHECKLIST BRANCH, which the producer never addressed and FIDELITY
+         flagged: EXECUTED and found non-binding. broken_dependency_checker (blocking, path-exists +
+         invocation-has-row) exits 0 -- m1_acceptance.py is not a CI-invoked check, has no
+         ci_checks_registry.yaml row today, and needs none; test_gate_coverage's EXPECTED_COMMANDS
+         covers CI commands only. The one real staleness FIDELITY found (apparatus_registry.yaml:942
+         still says imported_internally: false) is confirmed and DELIBERATELY NOT fixed here:
+         regenerating it drags in 2 unrelated pre-existing drift rows (ci_pp_frozen_check.py, a
+         second claude-workflow), which is scope-widening a step commit (CLAUDE.md S0.1 pt 5 -- sweep
+         only what the task is load-bearing on, file the rest). It self-heals on audit-refresh.yml's
+         schedule. Parked as S2-R5. FIDELITY's related sub-claim that the registry omits
+         engine.mc_v18 from `imports` is wrong -- the generator only tracks tools/ modules, and the
+         regenerated row still reads [ci_common, yaml]."
+      - "CROSS-TEST CONTAMINATION HAZARD (LOGIC): closed twice over. Every in-process reader of the
+         process-global stubwire counter was run in ONE pytest process together with the module that
+         calls collect() -- test_scope_ratchet + test_stubwire + test_articulation_subscriber +
+         test_handoff_dispatch_validity + both new files -> 56 passed. And the reset that created the
+         breach is now gone entirely."
+      - "PRODUCER WORK THAT SURVIVED UNCHALLENGED, so a later reader does not re-litigate it: the
+         defensive engine import + honest `blocked` degradation (C4, upheld x3); the 8 probe tests
+         including the non-vacuous-hash falsifier (C7, upheld x3); the 5 seeded dice-engine property
+         tests, whose degree-ladder oracle is genuinely re-derived rather than re-invoked and whose
+         boundary cases pin exactly the bands the 2026-08-14 Jordan ruling moved (C8, upheld/sharpened
+         -- LOGIC's caveat that the roll_pool half is a regression pin rather than an independent
+         check is recorded and correct); and the refusal to add `hypothesis` to a blocking job's
+         install list (C9, upheld x3)."
+    critic_verdict: >
+      ADJUDICATED done. Three read-only critics (FIDELITY, FACTUALITY, LOGIC) x 17 claims = 51
+      verdicts; all three returned full 17-claim coverage, so there is NO null result to declare.
+      Distribution: 34 uphold, 13 soften, 11 sharpen, 1 overturn. The single OVERTURN (FACTUALITY on
+      C14, the scope_ratchet attribution) was tested rather than averaged away, using the falsifier
+      the critic itself named -- with both new files STAGED, tracked.files reads 1440 against a 3112
+      ceiling, controlled against 1438 unstaged. The overturn is REFUTED and, decisively, it was
+      never load-bearing on this step's observable in any case; the LOGIC lens had independently
+      upheld the same claim. So no overturn stands and state is done -- not by averaging, but because
+      the one genuine BLOCKER (worktree-only edits, found by all three lenses, third recurrence of
+      the S0 defect) was RESOLVED at adjudication rather than waived, and every number was
+      re-measured in the repo root with the worktree removed. Three softens were CLOSED by taking
+      evidence the producer omitted: the missing cost control (measured, 0.153s -> 0.617s), the
+      unaddressed tools_or_workflow_changed branch (run; non-binding), and the worktree-scoped test
+      green (re-run at the root, 0 failed). ONE CORRECTION WAS APPLIED TO THE CODE rather than parked,
+      because it is a CLAUDE.md SS8 violation inside this step's own new lines and its falsifier was
+      cheap: the inert stubwire.reset_invocations() wrapper -- which the queue step itself and this
+      file's pre-S2 blocker text both prescribed -- is deleted, proven by a run falsifier to change no
+      reported value, and the gate emits identical numbers after. Six defects nobody claimed are
+      parked as S2-R1..S2-R6 rather than silently fixed. And one finding runs the other way: TWO
+      lenses independently asserted references/identifier_census.json could not have changed, and it
+      demonstrably did (engine_names 6238 -> 6240) -- multi-lens agreement is a strong signal, not a
+      proof, and this is the counterexample that keeps it honest.
+
+  - id: S2-R1
+    title: "The M1 bar's row 1 is UNSATISFIABLE as written: the only 2 stub hits are deliberate no-fabrication deferrals"
+    state: blocked
+    blocked_on: "A design call, not a code fix: either close OI-05/OI-07 (which means authoring NPC + knot generation canon) or amend the acceptance bar to whitelist declared deferrals. Neither is S2's to make."
+    precondition: null
+    rationale: >
+      S2 turned row 1 from a guess into a measurement and the measurement FAILS at 2 -- the most
+      valuable thing the step produced. Both hits are structurally located: engine/mc_v18.py:186
+      (generate_npc) and :204 (form_knot), inside _faction_actions_callback (:116), which
+      run_campaign invokes once per season (:267) -- so the count scales with season depth and
+      1 season => 2 is a property of the probe, not a constant of the engine. Both sites are
+      DELIBERATE: their stub_resolve `reason` text cites OI-05/OI-07 and says "Honest deferral,
+      not fabrication (CLAUDE.md SS5/SS7)". So a bar reading "stub invocations == 0" currently
+      demands the repo either fabricate that canon or keep failing its own gate forever. Recorded
+      by the producer as a residual and independently by the FIDELITY lens, which explicitly
+      declined to rule on it as out-of-lane.
+    observable: "Either engine/mc_v18.py:186/:204 no longer call stub_resolve, or row 1's pass condition names an explicit allowlist of design-gated deferrals and m1_acceptance --check exits 0 on that row."
+    needs_ruling: true
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R2
+    title: "Row 1's label says 'the M1 path'; the probe measures an mc_v18 season, and 0/7 M1 junctures execute"
+    state: blocked
+    blocked_on: "Fixing it properly means either cross-conditioning row 1 on row 4 or rewording the bar — both change what the acceptance gate asserts, which is S3+ territory."
+    precondition: null
+    rationale: >
+      Found independently by 2 of 3 lenses (FIDELITY C1, LOGIC C1b) and it is the sharpest
+      unclaimed finding: the row is labelled "Stub invocations on the M1 path == 0" while row 4 in
+      the SAME report shows 0/7 M1 junctures executing (1 blocked, 4 in_progress, 2 not_started per
+      workplans/workplan_v6_progress.yaml:35-88). An mc_v18 season is a PROXY for the M1 path, not
+      the M1 path; most M1 stub sites are unreachable by the probe. The asymmetry that makes this
+      worth parking rather than shrugging at: pre-S2 the row was `blocked` and could not emit a
+      false green, whereas `measured` can -- if the two OI deferrals of S2-R1 were closed, row 1
+      would read 0/PASS while the M1 path remained entirely unbuilt. S2 disclosed the instrument in
+      the row detail and (at adjudication) in row_stub_invocations' docstring; nothing yet makes the
+      gate itself refuse to green a proxy.
+    observable: "row_stub_invocations either reports `partial` (not `measured`) while m1_junctures < total, or its label names the probe rather than 'the M1 path'."
+    needs_ruling: true
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R3
+    title: "The determinism row PASSes on a 2-key KeyLog and cannot observe an almost-empty season"
+    state: blocked
+    blocked_on: "Needs the stronger instrument to be chosen (final_state vs a key floor) — a gate-semantics decision, and row 5's season sweep may subsume it."
+    precondition: null
+    rationale: >
+      Found by 2 of 3 lenses. `match = bool(h1) and h1 == h2` can only observe a TOTALLY empty log
+      (engine/mc_v18.py:103 empties key_log_hash only when ECHO_TRANSPORT is off), and the gate's
+      own output records 2/2 keys emitted -- against mc_v18.py:104's note that keys_emitted is
+      "0 while scenes defer (SC bridge pending)". A regression dropping the season to one emitted
+      key still reads PASS. A far stronger instrument sits unused on the same object:
+      CampaignResult.final_state = game_state.serialize_world(world) (mc_v18.py:307), which would
+      see non-determinism anywhere in the faction/battle/victory/accounting paths the seed actually
+      drives. Related: test_a_different_seed_can_diverge_from_the_probe_seed asserts inequality of
+      the TUPLE (key_log_hash, stub_hits) and carries an `or fixed.keys_emitted == 0` escape, so an
+      empty-season regression would convert that falsifier into a tautology instead of a red. The
+      escape is inert today (2 keys) and was left alone rather than edited under S2's scope.
+    observable: "row_determinism compares final_state (or asserts a minimum emitted-key floor), and the divergence test's keys_emitted escape hatch is gone."
+    needs_ruling: false
+    sessions: 0.5
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R4
+    title: "The newly-meaningful --check exit code has no automated consumer"
+    state: blocked
+    blocked_on: "Wiring it into CI turns a 0/7-junctures board state into a red build; needs a decision on report-only vs blocking first."
+    precondition: null
+    rationale: >
+      LOGIC lens, on the step's own observable ("--check exit code now means something"). Confirmed
+      by repo-wide grep: outside *.md the only references to m1_acceptance are
+      tools/dashboard_data.py (imports the module and calls collect(); never reads an exit code),
+      .github/workflows/dashboard.yml:25 (a path FILTER, not an invocation),
+      tests/valoria/test_scope_ratchet.py:281, tools/evacuation_plan.py:581 (a prose comment) and
+      references/apparatus_registry.yaml. There is NO entry in references/ci_checks_registry.yaml,
+      none in tools/valoria_local.py, none in .github/workflows/valoria-ci.yml. So the exit code S2
+      armed cannot cause any CI failure. The step's observable is still met -- the code is now
+      DERIVED from measured facts rather than one board read -- but "means something" and "is
+      observed by something" are different properties and only the first was delivered.
+    observable: "m1_acceptance --check has a row in references/ci_checks_registry.yaml and is invoked by a named CI job (blocking or report-only, stated)."
+    needs_ruling: true
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R5
+    title: "apparatus_registry.yaml's m1_acceptance row is stale, and regenerating it drags in unrelated drift"
+    state: blocked
+    blocked_on: "Not blocking anything; deliberately deferred so an S2 commit does not absorb 2 unrelated pre-existing registry rows."
+    precondition: null
+    rationale: >
+      FIDELITY lens. references/apparatus_registry.yaml:942-957 records tools/m1_acceptance.py with
+      imported_internally: false; a tests/valoria file now imports it, so that field is wrong.
+      Regenerating (tools/build_apparatus_registry.py) was attempted at adjudication and REVERTED:
+      the fresh output also adds ci_pp_frozen_check.py and a second claude-workflow, pre-existing
+      drift unrelated to S2 -- exactly the widening CLAUDE.md SS0.1 pt 5 says to file rather than
+      sweep. Non-blocking: no workflow gates on it, and audit-refresh.yml:76 regenerates it on
+      schedule, so it self-heals. Note FIDELITY's companion sub-claim is WRONG and should not be
+      re-filed: the generator tracks only tools/ modules, so the row's `imports: [ci_common, yaml]`
+      is correct and does not omit engine.mc_v18.
+    observable: "references/apparatus_registry.yaml regenerates with no diff, in a commit whose scope is registry drift."
+    needs_ruling: false
+    sessions: 0.25
+    evidence: []
+    critic_verdict: null
+
+  - id: S2-R6
+    title: "Two m1_acceptance test surfaces now exist, and the dashboard's engine-import fallback is silent"
+    state: blocked
+    blocked_on: "Both are conventions/robustness, not correctness; neither has a forcing event."
+    precondition: null
+    rationale: >
+      Two small findings, parked together because both are about how the S2 surface will age.
+      (a) ADJACENT CONVENTION (FACTUALITY): tests/valoria/test_scope_ratchet.py:269-277 is the
+      existing home of m1_acceptance's tests and carries a written reason -- "Housed HERE rather than
+      in a new file on purpose ... a new file would raise tracked.files -- the ceiling this very
+      module enforces." S2 created tests/valoria/test_m1_acceptance_probe.py anyway, splitting one
+      module's test surface across two owners. The stated COST is measured and turns out negligible
+      (tracked.files 1438 -> 1440 against a 3112 ceiling, S2's evidence), so this is a tidiness call,
+      not a scope breach -- and it does NOT apply to test_dice_engine_properties.py, which tests a
+      different module and rightly has its own file. (b) SILENT FALLBACK (LOGIC): tools/m1_acceptance
+      degrades rows 1-2 to `blocked` on an engine ImportError, and tools/dashboard_data.py:1256-1260
+      calls collect() in-process, so a future import break would publish `blocked` on the dashboard
+      card while the CLI (run in a fuller environment) reports `measured` -- against build_program's
+      own docstring that the CLI is authoritative. Measured today as NOT firing: engine.mc_v18 pulls
+      in exactly one third-party package (yaml) and dashboard.yml:71 installs it. Also unguarded:
+      a raise INSIDE run_campaign at row-evaluation time is uncaught and would crash the CLI outright.
+    observable: "the probe tests live in one owner, and an engine failure at row-evaluation time degrades the row rather than crashing --summary."
+    needs_ruling: false
+    sessions: 0.25
     evidence: []
     critic_verdict: null
 
@@ -568,4 +1515,102 @@ cull_couplings_missed_by_both_documents:
   - "A golden re-record needs a tests/coverage_matrix.md entry (ci_co_file_checker.py:78, blocking) and that
      file is at 94% of its blocking 15,000-token cap. A re-record note can trip a size gate in the same commit."
 
-gates: {}   # populated by S0 — measured, never assumed
+gates:  # MEASURED 2026-08-19 (S0 action 3), not assumed. Two repos: ttrpg design repo
+        # (.github/workflows/valoria-ci.yml) and jordanelias/valoria-game
+        # (.github/workflows/godot-ci.yml, at commit 5e01065585c451733a603bda9c3b7fccf2a462f8).
+        # Method: read each workflow file directly, cross-referenced against tools/valoria_local.py's
+        # per-tool blocking flags and, for review_core, against tools/review_core.py's own CHECKS list
+        # and --check exit logic (read, not assumed). valoria-game's lint-job claim was additionally
+        # verified empirically (see valoria_game_ci.lint below).
+
+  jobs:  # top-level jobs in ttrpg's valoria-ci.yml
+    syntax-check:         { tier: blocking, why: 'required by ci-summary needs, valoria-ci.yml:421' }
+    validators:           { tier: blocking, why: '19 tool invocations under v(), no continue-on-error, exit $fail at :131; required by ci-summary needs :422' }
+    validators-report:    { tier: report_only, why: 'job-level continue-on-error true at :138 AND body always exit 0 at :194; absent from ci-summary needs :420-426' }
+    contract-conformance: { tier: report_only, why: 'step-level continue-on-error true at :219; absent from ci-summary needs' }
+    unit-tests:           { tier: blocking, why: 'pytest tests/valoria -n auto at :299; required by ci-summary needs :423' }
+    sim-regression:       { tier: blocking, why: 'pytest engine/tests at :321; required by ci-summary needs :424' }
+    field-goldens:        { tier: blocking, why: 'ci_golden_modes_check.py at :345; required by ci-summary needs :425' }
+    lanchester-signature: { tier: report_only, why: 'job title says REPORT-ONLY; body ends "|| true" at :375; absent from ci-summary needs' }
+    compliance-check:     { tier: blocking, why: 'both internal steps lack continue-on-error, required by ci-summary needs :426 -- but its two steps differ, see compliance_check_internals' }
+    ci-summary:           { tier: blocking, why: 'the single required branch-protection status check per its own comment :414-415; if:always() at :419, fails if any needed job result != success' }
+
+  compliance_check_internals:  # the two steps INSIDE the blocking compliance-check job have different failure semantics
+    compliance_check_py_check_only:
+      tier: blocking
+      why: 'valoria-ci.yml:401-402, "compliance_check.py --check-only --repo-state .", no continue-on-error; ABSENT from tools/valoria_local.py entirely (grepped, zero hits) -- local-green != CI-green, per CLAUDE.md S8 ED-1082 correction'
+    review_core_py_check:
+      tier: blocking_on_regression
+      why: 'valoria-ci.yml:404-411, "review_core.py --check", no continue-on-error. Verified by reading tools/review_core.py: all 11 CHECKS entries (:59-96) are non-blocking -- 9 tier=report_only and 2 tier=info (audit.staleness :69, workplan.state :70) -- zero tier=blocking, so collect()s blocking_failures (:178) is structurally always 0 (the load-bearing statement is NO entry is tier=blocking, not that every entry is report_only; corrected at S0 adjudication after two independent critics caught the miscount); --check (main():275) fails only if blocking_failures OR regressions_vs_baseline -- so this step is blocking ONLY on a signal regressing past its registers/review_baseline.yaml ceiling (_apply_ratchet, :155-170), never on a pre-existing at-or-under-baseline report_only failure.'
+
+  validators_job_tools:  # inside the blocking `validators` job, valoria-ci.yml:100-130 -- all 19 blocking in CI.
+                          # `local` is the SAME script's blocking flag in tools/valoria_local.py's
+                          # (script,args,blocking) list at :153-243 -- CI and local tiers frequently diverge.
+    ci_register_size_check.py:    { ci: blocking, local: blocking }                        # valoria-ci.yml:100, valoria_local.py:160
+    ci_hooks_verifier.py:         { ci: blocking, local: report_only }                      # :101, :234 -- CI-only residual, ED-IN-0176
+    ci_co_file_checker.py:        { ci: blocking, local: blocking }                         # :102, :158
+    ci_editorial_checker.py:      { ci: blocking, local: blocking }                         # :103, :159
+    ci_pp_frozen_check.py:        { ci: blocking, local: blocking }                         # :104, :154
+    ci_naming_check.py:           { ci: blocking, local: blocking, note: 'distinct tool from ci_names_check below' }  # :105, :155
+    ci_names_consistency.py:      { ci: blocking, local: blocking }                         # :106, :156
+    export_engine_params.py:      { ci: blocking, local: blocking, args: '--check' }        # :107, :166
+    export_key_types.py:          { ci: blocking, local: blocking, args: '--check' }        # :108, :167
+    build_test_register.py:       { ci: blocking, local: blocking, args: '--check' }        # :111, :171
+    build_identifier_census.py:   { ci: blocking, local: report_only, args: '--check' }     # :122, :235 -- CI-only residual, ED-IN-0172
+    ci_sim_fabrication_check.py:  { ci: blocking, local: blocking }                         # :123, :162
+    ci_claim_provenance_check.py: { ci: blocking, local: blocking }                         # :124, :175
+    ci_claude_workflow_paths.py:  { ci: blocking, local: report_only }                      # :125, :187 -- report-only locally, blocking in CI (ED-IN-0085)
+    ci_wf_harness_check.py:       { ci: blocking, local: report_only }                      # :126, :186 -- report-only locally, blocking in CI (ED-IN-0087)
+    ci_vetting_check.py:          { ci: blocking, local: blocking }                         # :127, :161
+    validate_ed_citations.py:     { ci: blocking, local: report_only }                      # :128, :236 -- CI-only residual
+    broken_dependency_checker.py: { ci: blocking, local: report_only }                      # :129, :237 -- CI-only residual
+    freshness_gate.py:            { ci: blocking, local: report_only }                      # :130, :198 -- report-only locally, blocking in CI (ED-PC-0040)
+
+  validators_report_job_tools:  # inside the report-only `validators-report` job, valoria-ci.yml:158-194.
+                                 # wrapped in w() (:164, never propagates status); body ends unconditional exit 0 (:194).
+    ci_supersession_check.py:        { ci: report_only, local: report_only, why: 'structurally cannot fail -- own code always returns 0' }        # :173, valoria_local.py:163
+    ci_audit_registry_check.py:      { ci: report_only, local: report_only, why: 'always exits 0 by design per its own registry row' }             # :174, :173
+    ci_names_check.py:               { ci: report_only, local: report_only, why: 'report-only in BOTH tiers -- distinct tool from ci_naming_check/ci_names_consistency above, both of which ARE blocking' }  # :175, :157
+    currency_consistency_check.py:   { ci: report_only, local: report_only }                                                                       # :176, :172
+    ci_quantity_vocabulary_check.py: { ci: report_only, local: absent }                                                                             # :177, absent from valoria_local.py entirely
+    mechanics_index_gen.py:          { ci: report_only, local: absent, args: '--strict' }                                                           # :178, absent
+    ci_generation_consistency.py:    { ci: report_only, local: report_only }                                                                       # :179, :164
+    canon_coverage_check.py:         { ci: report_only, local: absent, args: '--strict --json' }                                                    # :180, absent
+    ci_module_shape_check.py:        { ci: report_only, local: report_only }                                                                       # :181, :165
+    ci_workplan_pointer_check.py:    { ci: report_only, local: report_only, why: 'report-only in BOTH tiers -- confirmed by direct read, matches S0s known-fact' }  # :182, :193
+    wiring_map_check.py:             { ci: report_only, local: report_only, args: '--check', why: 'also folded into review_core CHECKS as wiring.coverage (review_core.py:64) -- additionally blocking-on-regression via the compliance-check job, same shape as review_core_py_check above' }  # :183, :174
+    scope_ratchet.py:                { ci: report_only, local: report_only, args: '--check' }                                                       # :191, :210
+    ci_vacuous_assertion_check.py:   { ci: report_only, local: absent }                                                                             # :192, absent
+    ci_program_claim_check.py:       { ci: report_only, local: absent }                                                                             # :193, absent
+
+  local_only_tools:  # present in tools/valoria_local.py, confirmed absent from both the ttrpg-repo
+                      # workflow jobs above (grepped) and from tools/review_core.py's CHECKS list (grepped)
+    single_owner_check.py:
+      ci: not_wired
+      local: report_only
+      why: 'CLAUDE.md S8 single-owner guard -- zero references in valoria-ci.yml and zero in review_core.py CHECKS; violations it finds are never checked in CI at all'  # valoria_local.py:243
+
+  valoria_game_ci:  # .github/workflows/godot-ci.yml in jordanelias/valoria-game, measured at commit 5e01065585c451733a603bda9c3b7fccf2a462f8
+    lint:
+      tier: cannot_fail
+      why: 'job body is find . -name STAR.gd -exec python3 -c ... {} SEMI -- GNU finds own exit status does not propagate the -exec childs nonzero exit in that form. VERIFIED EMPIRICALLY THIS SESSION in this worktrees shell: find /tmp -maxdepth 0 -exec python3 -c "import sys; sys.exit(1)" {} SEMI exits 0. The job cannot fail regardless of GDScript content -- S1s compile job is the first functional syntax gate on that repo.'
+    enum-check:
+      tier: blocking
+      why: 'direct grep -rn ... && exit 1 shell pattern, no -exec indirection -- propagates correctly'
+    naming-check:
+      tier: blocking
+      why: 'same direct grep-and-exit pattern as enum-check'
+
+  residuals:
+    - 'git push origin --delete scratch-s0-push-test (jordanelias/valoria-game) returned HTTP 403 twice
+       (retried once, not transient), even though the original push CREATING that branch succeeded --
+       the push scope this session holds can create refs but apparently cannot delete them. The branch
+       (commit d97e080, one throwaway file .s0_push_scope_test.txt, message "test: S0 push-scope
+       verification (scratch, to be deleted)") is still on the remote; the local branch and working
+       tree were cleaned up (checked out main, git branch -D scratch-s0-push-test). No gh CLI and no
+       delete-ref MCP tool were available in this session to remove it another way. Not a blocker for
+       S1 (opening a PR needs no delete-ref permission) -- flagged for whoever does branch cleanup.'
+    - 'single_owner_check.py (tools/valoria_local.py:243, the CLAUDE.md S8 single-owner guard) is not
+       invoked anywhere in .github/workflows/valoria-ci.yml and not in tools/review_core.py CHECKS
+       (both grepped, zero matches) -- its findings are local-only and never enforced in CI. Left
+       unresolved per S0s "do not widen the step" rule.'

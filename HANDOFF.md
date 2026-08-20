@@ -52,27 +52,65 @@ carried nothing newer than July, while being **the only section the SessionStart
 Everything struck from it was already recorded in `HANDOFF_IN.md` or the ledgers; nothing was lost,
 and the July narrative is in `git log HANDOFF.md`._
 
-### ▶ RUN THIS (2026-08-19) — `workplans/return_to_game_queue.yaml`
+### ▶ THE DELIVERABLE (2026-08-19) — build the game; `done` means it runs
 
-**The Return-to-Game program. It is an executable queue, not a plan to read.** Nine steps, S0–S8,
-~8 sessions, **zero of which require a ruling from Jordan**. Open the queue file, read the block at
-the top, take the first `state: pending` step whose precondition holds on disk, execute it, commit,
-write the state back, and stop when your context is degrading. There is nothing to ask anyone.
+**RULED 2026-08-19 by Jordan: "I need to break out of the infrastructure loop in the repository."**
+The doctrine amendments that terminate it are live in `CLAUDE.md` §0, §0.1 pt 5, §0.2, §0.3 — read
+those first, because they change what you are allowed to produce.
 
-- **The entire human ask is `jordan_docket:` — seven one-sentence questions, each with a
-  recommendation**, down from 109 open `needs_jordan` rows (26 close as overtaken, 32 proceed at a
-  stated default under ED-1094, 64 park off the critical path, 8 are structurally dead). Answer D1
-  first if you answer only one; it is the multiplier that keeps the queue drained.
-- **Order matters and is load-bearing.** S1–S4 change what "done" means in this repo from a document
-  state to a program state. S5–S8 shrink things afterward. A cull or a reconcile run while `done`
-  still means "a document exists" is the ninth consolidation plan.
-- **S1 is measured, not estimated.** Godot 4.3 headless against `valoria-game@5e01065`: stock is
-  **54 script-load failures / 169 parse errors / 61 broken scripts**; applying five defect fixes plus
-  the project setting reached **5 / 14 / 8** in one unattended pass. Reproduction method is in the file.
-- ⚠️ **Four claims in the 2026-08-18 documents below are refuted there with evidence** — three
-  `sha256_buffer` sites (there are five), the defect list being "complete", the project setting being
-  worth more than the defects (alone it moves 169→161 and clears zero scripts), and `ci_names_check`
-  being blocking in CI (it is report-only in **both** tiers — do not spend budget on its 17 hits).
+**Your work is the current M1 juncture, and nothing else.** The banner prints it and whether it
+runs. `done` means the behaviour executes (§0.2) — never that a document exists with a `## Status:`
+line. `python tools/m1_acceptance.py --summary` is the instrument.
+
+**Three rules that override the habit of this repository:**
+1. **A finding that needs no ruling is fixed in this commit or dropped.** Not filed. The adversarial
+   pass is a stage, not a deliverable — at most one paragraph in the commit message, and at most one
+   ledger row, only if it needs a human (§0).
+2. **A guard must be load-bearing on the game or on a Jordan decision** (§0.1 pt 5). A defect in an
+   artifact that only this repo's process depends on means that artifact can be wrong without cost:
+   delete it, or accept it and write nothing.
+3. **Work is this session's work only if Jordan asked for it this session, or it traces to an open
+   M1 juncture.** If something broken blocks the milestone, fix it minimally, without adding a guard.
+
+**Do not open a new planning surface.** There are nine. The measured cost of the tenth is in §0.3.
+
+---
+
+**Program state (PR #323).** The Return-to-Game queue `workplans/return_to_game_queue.yaml` ran S0,
+S1, S2 on 2026-08-19. It is **superseded as the steering surface**, is a **reference not a queue**,
+and its own header now says so. Do not resume it; do not run its driver; **S7 is inert and must not
+be executed** (it would prepend to the banner that §0.3 declares a running experiment).
+
+**The 19 residuals are DISPOSITIONED, 2026-08-19 — they are not a backlog.** An earlier version of
+this paragraph said "keep it for the measured facts and the 19 parked residuals", which read as live
+work and was flagged by three independent audits as this commit's own doctrine violated by the
+commit that installed it (§0: *a finding that needs no ruling is either fixed in this commit or
+dropped*). Disposition:
+- **14 carry `needs_ruling: false` → DROPPED.** They are apparatus findings about this repo's own
+  machinery. Under §0 they had to be fixed here or dropped, and they are dropped. They remain
+  readable in the file as history; **nothing may take them as work.** Do not re-file them.
+- **5 carry `needs_ruling: true`** (S0-R1, S1-R1, S2-R1, S2-R2, S2-R4) → they are legitimate under
+  the row gate, but they live in a workplans YAML rather than the `needs_jordan` ledger queue, which
+  is a second uninstrumented home for human-decision items. Route them through Jordan's docket.
+- What is worth keeping is the **measured facts**: the controlled compile numbers, the gate tier,
+  the failure decoder.
+
+| | | |
+|---|---|---|
+| **S0** | `done` | IN ledger 49,920 → 45,998 tokens; `gates:` measured; push scope live. |
+| **S1** | `blocked` | Compile improved, not clean. Code in **jordanelias/valoria-game#2**. Do NOT re-run its fix loop — it provably converges to that state. |
+| **S2** | `done` | `m1_acceptance` rows 1-2 now measured from a real probe season. Row 1 honestly **FAILs**. |
+
+⚠️ **The compile numbers, measured like-for-like with fresh caches** (the advertised `5/14/8` is
+unreproduced and now unretestable): excluding `res://tests/` **41/156/61 → 14/63/21**; including
+them **54/169/74 → 27/76/34**. The old `54/169/61` baseline is itself arm-mixed.
+
+⚠️ **Two traps that cost real time.** A warm `.godot` cache silently truncates the scan (51 vs 235
+gate-matching lines on an identical tree) — always `rm -rf .godot` first. A leftover driver worktree
+under `.claude/worktrees/` falsely reds a blocking unit test; it fired on four of four runs.
+
+⚠️ **`valoria-game` CI is not evidence.** Its `GDScript Lint` job reported green on a tree with 97
+compile errors; `find -exec` does not propagate exit status and it never parses GDScript.
 
 ### ⭐ READ SECOND (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
 
@@ -200,22 +238,24 @@ present a zero obstacle.
 or derived from settlement L/PS; (3) does Treasury exist separately from Wealth; (4) is the scale
 0–7 or 1–7, uniformly.
 
-### Open and agent-executable — no ruling needed
+### ⛔ WITHDRAWN 2026-08-19 — this section used to hand out apparatus work as "no ruling needed"
 
-- **The remediation plan's remaining tracks** (`audit/2026-08-14-five-lens-repo-assessment/01_plan.md`).
-  Track A is done as of this commit. Still open: **B** (owner-in-code — `TN_STANDARD` has three live
-  definitions and none in its owner `dice_engine.py`; the bare-RNG sweep; register
-  `single_owner_check.py` in `ci_checks_registry.yaml`, whose absence makes CLAUDE.md §4 false as
-  written), **C** (gate perimeter — `validate_ed_citations` cannot see `audit/`;
-  `broken_dependency_checker` cannot see `engine/` at all), **D** (`tests/` governance — 159
-  `sys.path.insert` across 131 files, no registry), **E** (godot status line, vocabulary entries,
-  the `WI = End+6` transcription defect in `combat_reference_v1.md:218,347`).
-- **The plan's binding rule, and it is the point:** a step may add a guard **only** in the same commit
-  as a burn-down of the thing it guards, and every ratchet it touches must leave with a **lower**
-  pinned maximum. If the guards land and the burn-downs do not, the plan has failed by its own
-  standard.
+It listed tracks **B–E** of `audit/2026-08-14-five-lens-repo-assessment/01_plan.md` — owner-in-code
+sweeps, gate-perimeter widening, `sys.path.insert` governance across 131 test files, vocabulary
+entries — under the heading *"Open and agent-executable — no ruling needed"*. Every item is
+audit-sourced work on this repository's own machinery, pre-authorised for any session that read
+this file. That is precisely the T3 carrier CLAUDE.md §0.3 describes, sitting in the continuity
+surface, and it is now excluded twice over: by §0's selection term (work is this session's work only
+if Jordan asked this session, or it traces to an open M1 juncture — none of B–E does) and by §0.1
+pt 5 (the artifacts are load-bearing only on process). **Do not take this work. Do not restore this
+section.** The plan file still exists if a human ever wants it.
+
+**One item from it survives, because it is the opposite of apparatus** — it is engine code on the
+critical path of M1 juncture 1, which is why the board now names it as the increment:
+
 - **The largest unimplemented piece of the #311 ruling:** obstacles as score/2 plus modifiers is
-  **wired nowhere**.
+  **wired nowhere** (`engine/autoload/dice_engine.py:118-123` says so itself). Paired with
+  fractional dice pools (`sigma_leverage.py:284` still does `int(round(pool))`). See the board.
 
 ### Standing state
 

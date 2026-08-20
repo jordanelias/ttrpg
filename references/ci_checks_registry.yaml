@@ -281,6 +281,12 @@ ci_checks:
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
 
+  - path: tools/export_game_constants.py
+    level: 5
+    role: "Oracle -> Godot-facing constants round-trip: engine/engine_params/game_constants.json must match the values sim_params.json and combat_engine_v1.json already export from their Python owners (--check mode). It is the WRITER half of the ttrpg -> jordanelias/valoria-game constants bridge; the reader half is that repo's tools/check_constants_parity.py."
+    ci_job: validators
+    notes: "Added 2026-08-20. BLOCKING (deterministic, composes on two already-gated exports, no external pins). WHY IT EXISTS: measured the same day, valoria-game read ZERO bytes of any engine_params file and all ~200 constants in its systems/util/Constants.gd were hand-transcribed with no comparer. PAIRS ARE HAND-CONFIRMED, NEVER NAME-MATCHED — a first pass that matched by name produced six divergences and adversarial re-checking found none of them real (four from near-name guessing, two from exact-name collisions where the same word names different quantities), while the two REAL divergences it found later share no name with anything. The tool's COLLISIONS block records the look-alikes so they are not re-derived; DIVERGENCES records real model disagreements that need a ruling, not a value copy, and that list can only shrink."
+
   - path: tools/build_identifier_census.py
     level: 5
     role: "Freshness gate for the per-subsystem identifier census (systems/*/_identifier_census.yaml) and its roll-up references/identifier_census.json: --check re-derives both and exits 1 on drift."

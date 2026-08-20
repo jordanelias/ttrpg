@@ -26,8 +26,11 @@
 # Glyph legend (rendering, workplan_status.py): ■ done · ◐ in_progress · ⊘ blocked · ▢ not_started
 
 as_of:
-  sha: "9933ff2"
-  date: "2026-08-14"
+  sha: "c75c561"
+  date: "2026-08-19"
+  # Bumped 2026-08-19 with the juncture 1-2 rewrite (Act 2). This stamp had read 9933ff2 /
+  # 2026-08-14 while rows below said "rewritten 2026-08-19" — false by this file's own rule 3,
+  # and the duplicated-stamp rot class ED-IN-0147 records. Caught by a read-only audit.
 
 milestones:
   M1:
@@ -36,26 +39,26 @@ milestones:
       - n: 1
         label: "Strategic decision"
         owner: "FA"
-        owner_deliverable: "FA decision-surface work (J-5) + the `domain_actions` module home, which IN must author first"
+        owner_deliverable: "FA decision-surface work (J-5). RESOLUTION runs: faction strategic actions roll the canonical d10 through sigma_leverage on the single-owner degree ladder (PR #311). Two gaps remain, both in CODE."
         state: not_started
-        blocked_on: null
-        next: "author the domain_actions home (ED-FA-0002) — junctures 1-2 still have NO owning design doc, the single largest M1 gap — + ratification-flip the FA §1.0c/§1.0d/§2.5 riders RULED 2026-07-13 (ED-IN-0046/0047), landing E11 (symmetric suspicion-reduction) in the same pass; fork-10 no longer blocks faction-scope work"
+        blocked_on: null   # SEMANTIC, fixed 2026-08-19: blocked_on means "cannot proceed AT ALL" — tools/workplan_status.py:70 skips any row that sets it. This juncture CAN proceed (the fractional-dice half needs no ruling), so the soft gate on the other half is recorded in `next` instead of here. Same rule now applied to j6.
+        next: "EXECUTABLE (rewritten 2026-08-19, Act 2 — done means it runs, CLAUDE.md 0.2): wire the score/2 obstacle derivation Jordan ruled, which this row's own evidence records as wired NOWHERE; and implement fractional dice pools — sigma_leverage.roll_net_continuous still does int(round(pool)), so only the RESULT is fractional. Verify both against engine/ and the FA sim. The ratification-flip of the RULED FA riders is bookkeeping that rides along; it is not the increment and cannot close this juncture. ⚠ SOFT GATE on the score/2 half only: under that ruling the faction stat roster IS the obstacle surface, and it disagrees across FOUR surfaces — descriptor_registry.yaml:103-111 lists 5 (Influence 1-7, siblings 0-7), game_state.py:101-111 implements 6, canonical_registry.md:113 puts Wealth/Military at 1-7, generation_sourcebook_v1.md:34 is a fourth variant; ED-FA-0004 open; and the registry's own source field cites the evacuated engine/params/. That packet is AWAITING RULING at HANDOFF.md:209+ ('NEEDS JORDAN … not ruled') — do not read it as ruled. Wire score/2 provisionally against the coded roster; the fractional-dice half is unaffected."
         evidence: ["ED-FA-0002/0003 filed open 2026-07-05 (edge-playability EP-2/EP-10)", "ED-FA-0006 (2026-07-08) scoped domain_actions down to an outcome-tag crosswalk but did not author the doc", "fork-10 faction count RULED = 4 (ED-IN-0047, 2026-07-13; resolves ED-FA-0001) — faction-scope bank/binding work unblocked", "FA decision-surface riders §1.0c Court Attendance / §1.0d Kaochengfa / §2.5+§2.5a Guild ladder authored as PROPOSED in faction_politics_v30.md (2026-07-09) and RULED (ED-IN-0046/0047, 2026-07-13) — awaiting the ratification-flip + E11 authoring", "2026-08-14 (PR #311, ED-IN-0187): faction strategic actions now roll the canonical d10 through sigma_leverage (the d6/4+ convention is deleted) and resolve on the single-owner margin degree ladder (dice_engine.degree_from_net); CONQUEST_MIN_MIL deleted. ⚠ CORRECTED 2026-08-15 (ED-IN-0191): an earlier version of this row said \"resolution mechanics for this juncture are settled — the missing piece is the design doc, not the dice\". That is FALSE and PR #312 refutes it in two places. The score/2 obstacle derivation Jordan ruled (\"the obstacle is their corresponding score/2 plus whatever specific modifiers exist for them in that instance\") is wired NOWHERE, and fractional DICE are not implemented — sigma_leverage.roll_net_continuous does int(round(pool)), so pools are still whole dice and only the result is fractional. The dice are NOT settled"]
       - n: 2
         label: "Domain action"
         owner: "IN"
-        owner_deliverable: "`domain_actions` authoring — the doc does not exist; echo render rides narrative Stage 0"
+        owner_deliverable: "domain_actions BEHAVIOUR. valoria-game/systems/engine/DomainActionSystem.gd is 276 lines and implements all three phases; echo render rides narrative Stage 0."
         state: not_started
         blocked_on: null
-        next: "domain_actions authoring (IN); echo render rides narrative Stage 0"
+        next: "EXECUTABLE (rewritten 2026-08-19, Act 2): DomainActionSystem.gd EXISTS and runs — Phase 1 roll(action,meta,rng)->Degree, Phase 2a scene_for()->SceneOpportunity|null, Phase 2b resolve_abstractly()->Array[Consequence] (docstring :1-14). Verify it against the FA sim and record the contract in references/module_contracts.yaml at the [ASSUMPTION] grade 11 of 27 resolvers already carry. The design doc may FOLLOW verified behaviour; authoring it is explicitly excluded and does not close this juncture."
         evidence: ["ED-IN-0028 echo-transport substrate landed 2026-07-08 (sim/cross_scale/echo_transport.py, flag-gated) — cross-scale plumbing only, not domain_actions authoring itself"]
       - n: 3
         label: "Social contest"
         owner: "SC"
         owner_deliverable: "SC Stage 4 (four deliberative games), gated on the P0 docket ED-SC-0003/0004/0005"
-        state: in_progress
-        blocked_on: null
-        next: "Stage 4 (four deliberative games) — gated on P0 docket ED-SC-0003/0004/0005 (all needs_jordan: Piety/Persuasion naming, canonical Argue-pool formula, bonus-die cap)"
+        state: blocked
+        blocked_on: "HARD, on three rulings — VERIFIED 2026-08-19 against the ledgers, not inferred: ED-SC-0003, ED-SC-0004 and ED-SC-0005 are all status=open AND needs_jordan=true in registers/editorial_ledger_sc.jsonl. They are the Piety/Persuasion name collision, the canonical Argue-pool formula, and the bonus-die cap. The third is explicitly 'Jordan's design number'. This row previously read blocked_on: null while carrying that gate in its `next` text — the gate is now where an instrument can see it."
+        next: "BLOCKED — do not manufacture an increment here. Stage 4 needs ED-SC-0004 first: it chooses the canonical Argue-pool formula and two contradictory implementations are simultaneously live. ⚠ Before treating ED-SC-0005 as a third gate, read ED-SC-0017: it argues the cap is ALREADY ruled by canon and enforced in code (kernel M_MAX=1.5 tanh, sigma_leverage.py:100,137-144), so the docket may be one item shorter than it looks. Six other SC ids are open with needs_jordan false if lane work is wanted."
         evidence: ["ED-SC-0002 resolved 2026-07-08 (composed keying ruling)", "ED-SC-0006/0007 executed 2026-07-08 (PR #95/#96) — contest kernel wired live in mc_v18 campaign (no longer dead-in-campaign) + parliamentary vote/Domain-Echo composition; ECHO_TRANSPORT flipped default ON (Jordan)", "Fable 5 subsystem audit RATIFIED 2026-07-05 (PR #80) sequenced P0→P1→Stage4→calibration", "ED-SC-0012 resolved 2026-07-08 (PR #104) — pessimist subtractive-action audit now fully executed across all 6 lanes (SC was the last outstanding one); 4 audit-residual decision packets (DP-1..DP-4) authored for Jordan, no verdict smuggled in", "Parliamentary Censure wired into campaign loop 2026-07-08 (PR #105) surfaced ED-SC-0015 (total-victory Mandate stacking, −1 vs −2) — filed needs_jordan; PR #117's open-items docket recommends the −1 cap but nothing is ratified yet", "2026-08-06..08 (ED-SC-0017..0030): three-lens pessimistic NERS audit + consolidation programme v2 filed at audit/2026-08-06-social-contest-three-lens-audit/ and proposals/. FINDINGS ONLY — no design text changed, no head moved. Headline: the subsystem carries THREE resolution models under one name; the canonical head's §4 loop has no engine, the kernel's loop has no canonical prose. ED-SC-0020/0021 held for Jordan", "2026-08-14 (PR #311): sigma_leverage.degree — the contest resolution surface — is the second degree site HELD OUT of the unified ladder; its top band is a deliberate pool-aware bar and the ruling flips its net==ob cell"]
       - n: 4
         label: "Personal combat"
@@ -63,7 +66,7 @@ milestones:
         owner_deliverable: "PC R3 U-series front half — one legible fight; NOT phase4_5"
         state: in_progress
         blocked_on: null
-        next: "R3 U3 (Edges primitive, ED-PC-0004) — soft-gated on JD-2 (edges data table FLAG rows; default = land marked-provisional if unruled, so U3 is not hard-blocked); ED-PC-0008's bookkeeping (ledger status still open despite its findings being actioned by ED-PC-0009/0011) and ED-PC-0012 (point floor-lock, sabre-class) are open but explicitly non-blocking residuals"
+        next: "Resume the R3 U-series against combat_completion_plan_v4.md (v4.1, the plan of record ratified by PR #273); combat_engine_v1/ is the head. ⚠ Do NOT migrate combat_engine_v1/core.py's degree site — test_degree_ladder_single_owner.py:187 asserts it still diverges, so 'fixing' it reds the guard. [The prior text cited ED-PC-0004 as next; it is RESOLVED (editorial_ledger_pc_archive.jsonl:2). A 2026-08-19 correction then claimed an ID-EXHAUSTION block from HANDOFF_PC.md:50-53 — that was FALSE and is retracted: id_reservations.yaml:124 reads next_free 57 with ED-PC-0056 allocated 2026-08-08, and this row's own evidence says so. Two antagonists caught it. The lesson: the prose describing a register is not the register.]"
         evidence: ["R3 plan-of-record RATIFIED 2026-07-04", "U0 units-honesty DONE (PR #79, ED-PC-0002)", "ED-PC-0005 wound ruling resolved+executed 2026-07-08 (combat scope only; non-combat calibration spun out as ED-PC-0006, resolved 2026-07-08)", "JD-1 RULED 2026-07-08 (Jordan: \"accept plan bands\") — U1 PoB recalibration DONE (ED-PC-0010, PR #99); T0 register item closed", "JD-4/JD-9 DETERMINED 2026-07-08 (ED-PC-0009) + U2 live-wired 2026-07-08 (ED-PC-0011, PR #109, 13-agent adversarial validation) — graded mode-affordance + Phase-C percussion enactment DONE; U0/U1/U2 all landed", "2026-08-08 (ED-PC-0056): personal-combat design docs consolidated 5 -> 1 at systems/combat/combat_reference_v1.md; head UNCHANGED (combat_engine_v1/ still canonical, engine wins on disagreement). §11.4 Surrender/Disengage recovered — live spec with no engine implementation, held for Jordan", "2026-08-14 (PR #311): combat_engine_v1/core.py is one of TWO degree sites HELD OUT of the unified ladder — migrating it moves the Failure edge two whole successes and breaks a ratified invariant (guandao settles 2.5% -> 47.5% of plate fights against a 40% ceiling). Asserted to still diverge, so resolving it fails the guard rather than leaving a stale exemption"]
       - n: 5
         label: "Thread operation"
@@ -71,15 +74,15 @@ milestones:
         owner_deliverable: "ED-WR-0001/0002 sweeps, then thread preconditions ED-1010/1011"
         state: in_progress
         blocked_on: null
-        next: "WR sweeps ED-WR-0001/0002 (still open, cheap, unblocking); then thread preconditions ED-1010/1011"
+        next: "ED-WR-0001/0002 are open + needs_jordan false, but BOTH ARE DOCUMENT EDITS — a [SUPERSEDED-BY: GD-1] banner sweep over peninsular_strain_v30's ~8 co-victory sites, and an MS/RS rename plus flipping names_index.yaml:132 clock.ms from warn to block. Under §0.2 neither closes this juncture, whose done-condition is executing behaviour. ED-WR-0002's named target params/threadwork.md was evacuated 2026-08-05 (content frozen in engine_params/params_tables.yaml, never hand-edit). ⚠ ED-1010/1011 are NOT ungated: both carry jordan_decision: pending in the flat ledger (editorial_ledger.jsonl:157,158). [A 2026-08-19 correction billed this as '▶ EXECUTABLE TODAY … game work it can finish end-to-end' — retracted on both counts: it is prose work, and the tail dependency is Jordan-gated. The lane-format needs_jordan field was checked; the flat ledger's equivalent was not.]"
         evidence: ["Stratum-B 2026-07-07: ED-871 closed (Mending cost fix) + C-TW-12 closed (knots.py rebuilt onto ED-912 gauge), both with pinned regression tests", "ED-WR-0007 subtractive-action verdicts executed 2026-07-08 (threadwork Pulling/Mending prose distilled)"]
       - n: 6
         label: "Season close"
         owner: "IN"
         owner_deliverable: "ED-1051 engine_clock ratification, then ordering flags ORD-3/ORD-4"
-        state: blocked
-        blocked_on: "ED-1051 (engine_clock ratification; home candidate = propagation_spec_v1)"
-        next: "rule ED-1051, then ORD-3/ORD-4 ordering flags"
+        state: in_progress
+        blocked_on: null
+        next: "▶ EMITTER MISSING, CONSUMER ALREADY BUILT — the running-code increment, and it needs no ruling. ChronicleLayerV30.gd:82 subscribes to mechanical.accounting with 9 passing tests, and :22 disclaims emitting; GameDirector.gd:134 calls Meta.advance_season() and emits NEITHER mechanical.accounting NOR mechanical.season_change. module_contracts.yaml:866-870 records no emitter exists for either. Wire the emitter — that executes. ED-1051 (open, needs_jordan) gates only RATIFICATION of the engine_clock contract, which is why blocked_on is null: the work is not blocked, the paperwork is. [Retracted 2026-08-19: an earlier correction said to record the season order as a new [ASSUMPTION] engine_clock entry — module_contracts.yaml:863-876 already HAS that entry, its doc:null is a held disposition pending ED-1051, and the schema has no season-ordering field, so following it meant inventing one.]"
         evidence: ["propagation_spec_v1 CANONICAL (ED-1093)"]
       - n: 7
         label: "Articulation render"
@@ -87,7 +90,7 @@ milestones:
         owner_deliverable: "narrative engine Stage 0 (ED-IN-0004 render-gap close)"
         state: in_progress
         blocked_on: null
-        next: "execute narrative Stage 0 (ED-IN-0004 render-gap close) — design PROPOSED, not yet implemented"
+        next: "▶ RUNNING-CODE INCREMENT, no ruling (ED-IN-0004 open, needs_jordan false). ArticulationLayerV30.gd EXISTS — 818 lines, live-wired to the Key bus at :149-177, with tests. The gap is IN CODE: its trigger match at :213-245 handles exactly ten key types and returns TRIGGER_NONE for all others, so scene.battle_concluded and scene.investigation_resolved (both registered at KeyTypeRegistry.gd:85-86) fire and render nothing. Add those trigger arms. [A 2026-08-19 correction claimed 'the code is absent' — FALSE, retracted; it would have caused a second articulation layer to be written. The gap is real and is better evidenced in the port than in the ledger.]"
         evidence: ["PR #78 narrative engine v1+v2 designs (Stage 0 spec'd)"]
 
   M2:

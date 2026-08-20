@@ -1343,6 +1343,8 @@ identifiers:
     - py:engine/autoload/sigma_leverage.py
     - py:systems/combat/combat_engine_v1/workbench/presets.py
     - py:systems/threadwork/sim/operations.py
+    - py:tools/export_game_constants.py
+    - typed:engine/engine_params/game_constants.json
     disposition: BUILT
     doc_status: null
     in_table: false

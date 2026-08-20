@@ -106,6 +106,13 @@ jobs:
           v python3 tools/ci_names_consistency.py
           v python3 tools/export_engine_params.py --check
           v python3 tools/export_key_types.py --check
+          # ED — the writer half of the ttrpg -> Godot constants bridge. Blocking for the same
+          # reason as its two siblings: it is deterministic and has no external pins. Its READER
+          # half lives in the jordanelias/valoria-game repo, as a constants-parity checker run by
+          # its own `Constants Parity (vs design oracle)` CI job, and cannot be
+          # gated from here — that cross-repo hop is the residual, recorded in
+          # proposals/2026-08-20-return-to-game-plan-v1.md Act C1.
+          v python3 tools/export_game_constants.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
           v python3 tools/build_test_register.py --check

@@ -269,7 +269,20 @@ E: pass/fail — <defect, severity, lesson/property>
 REMEDIATION (worst-first):
   <severity> <finding> → Lesson <n> / P-<x>: <concrete fix>
 ```
-**Output:** `ners_verdict_<engine>.md`. P1/P2/P3 canonical-gap findings append to the relevant `registers/editorial_ledger_<lane>.jsonl` (lane chosen by the engine's subsystem), per `references/id_reservations.yaml`'s Collision Guard allocation protocol (see `valoria-editorial-register`'s ID Law section) — commit gate; if blocked, stage inline and flag `[DRIFT]`.
+**Output:** `ners_verdict_<engine>.md`.
+
+⚠ **The standing ledger-append order that stood here was REMOVED 2026-08-20.** It read: *"P1/P2/P3
+canonical-gap findings append to the relevant `registers/editorial_ledger_<lane>.jsonl` … commit
+gate; if blocked, stage inline and flag `[DRIFT]`."* Unconditional, on every run. That is precisely
+the T3 carrier CLAUDE.md §0.3 measures — findings become rows, rows become the next session's work,
+no human in the loop — and it survived the 2026-08-19 sweep that stripped the same class of order
+from seven other `SKILL.md` files, so this skill alone kept the loop's prompt-level generator alive.
+
+**What to do with a finding now, per CLAUDE.md §0 (the adversarial pass is a STAGE, not a
+DELIVERABLE):** fix it in this commit, or drop it. Append **at most one** ledger row, and only if
+that row requires a human decision (`needs_jordan: true`) — a finding that needs no ruling is not a
+row. When you do allocate, `references/id_reservations.yaml`'s Collision Guard protocol still governs
+(see `valoria-editorial-register`'s ID Law section).
 
 ---
 
@@ -359,11 +372,12 @@ Starting assessments, **not** pipeline-confirmed. Each needs a full Stage 0→4 
 
 ## Dashboard registry logging (MANDATORY on completion)
 
-When this skill's run concludes — pass, fail, or partial — append one record to the
-Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
-GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
-every time, not only on request — a skipped append is what makes the dashboard's
-verdict table go stale.
+**Append only when a human asks for a record. Never because this skill ran.**
+
+This paragraph ordered an append to `references/audit_registry.jsonl` "every time, not only on
+request". Mandate removed 2026-08-19 by Jordan's ruling to break the build/audit/gate recursion;
+`proposals/2026-08-18-breaking-the-recursion.md` §5.2 names this class the flow layer that matters
+most, because a prompt-level order fires before any doctrine is consulted. Do not restore it.
 
 ```bash
 python tools/audit_registry.py append \

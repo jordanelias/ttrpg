@@ -93,6 +93,26 @@ CHECKS = [
     # that baseline row is Jordan's addition, not this wave's.
     {"id": "contracts.join",    "argv": ["skills/valoria-vector-audit/scripts/structure_audit.py", "--contracts-join"],
      "tier": "report_only", "lane": "IN", "count_re": r"(\d+) unresolvable"},
+    # m1.acceptance — THE GAME'S EXECUTION VERDICT, ADDED 2026-08-19 (Act 2 completion).
+    #
+    # WHY THIS ROW EXISTS. Every other signal in this registry is lane IN and grades the
+    # apparatus. That was the whole of T2 (CLAUDE.md §0.3): the Stop hook and the blocking
+    # compliance-check job could both go green on a repo where the game does not run, so
+    # "done means it runs" (§0.2) was doctrine with nothing enforcing it. An adversarial pass
+    # found that gap and it is fixed here rather than filed. This is the ONE row in CHECKS whose
+    # subject is the game, and it is why the §0.1-pt-5 load-bearing predicate keeps it.
+    #
+    # NO NEW INSTRUMENT. tools/m1_acceptance.py is an existing CLI with an existing --check that
+    # exits 1 only on a MEASURED failure (blocked rows never fail it, so an unbuilt subsystem
+    # cannot manufacture a red). review_core runs it; it does not reimplement it.
+    #
+    # POLARITY AND SEED. count_re captures FAILING ROWS, so the ratchet is a ceiling that must go
+    # DOWN — the opposite of a juncture count, which would have had to go up. Seeded at its
+    # measured value in registers/review_baseline.yaml (2: stub_invocations and m1_junctures).
+    # report_only here is NOT advisory: review_core --check runs inside the BLOCKING
+    # compliance-check job, so this is blocking-on-regression. The game getting worse now reds CI.
+    {"id": "m1.acceptance",     "argv": ["tools/m1_acceptance.py", "--check"],
+     "tier": "report_only", "lane": "IN", "count_re": r"(\d+) row\(s\) failing"},
 ]
 
 _GRADE_ORDER = {"GREEN": 0, "AMBER": 1, "RED": 2}

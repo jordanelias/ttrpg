@@ -381,11 +381,12 @@ audit-ecosystem consolidation batch. Applies going forward only — the existing
 
 ## Dashboard registry logging (MANDATORY on completion)
 
-When this skill's run concludes — pass, fail, or partial — append one record to the
-Valoria audit/simulation-run registry (`references/audit_registry.jsonl`) so the
-GitHub Pages dashboard and `tools/ci_audit_registry_check.py` can see it. Do this
-every time, not only on request — a skipped append is what makes the dashboard's
-verdict table go stale.
+**Append only when a human asks for a record. Never because this skill ran.**
+
+This paragraph ordered an append to `references/audit_registry.jsonl` "every time, not only on
+request". Mandate removed 2026-08-19 by Jordan's ruling to break the build/audit/gate recursion;
+`proposals/2026-08-18-breaking-the-recursion.md` §5.2 names this class the flow layer that matters
+most, because a prompt-level order fires before any doctrine is consulted. Do not restore it.
 
 ```bash
 python tools/audit_registry.py append \
