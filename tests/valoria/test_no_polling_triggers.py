@@ -92,13 +92,46 @@ def test_mcp_denies_cover_the_server_name_spellings():
 
 
 def test_hooks_survive_alongside_the_deny_list():
-    # Regression guard on the edit that introduced permissions: the deny-list was added
-    # to a file whose only prior content was the hooks block. Losing the hooks would
-    # disable the naming guard and the SessionStart banner.
+    """Regression guard on the edit that introduced `permissions`: the deny-list was added to a
+    file whose only prior content was the hooks block, so losing the hooks was a live risk.
+
+    STRENGTHENED 2026-08-21 after an adversarial pass found it VACUOUS. It asserted only
+    `{'PreToolUse','SessionStart','Stop'} <= set(hooks)` — KEY PRESENCE — while culling wave 3
+    (ED-IN-0194) emptied two of the three to `[]`. The assertion stayed green over a config where
+    two thirds of the hooks it names had been removed, and its own comment still claimed it was
+    protecting the SessionStart banner, which no longer exists.
+
+    What is asserted now is what actually matters and is still true: the PreToolUse naming guard
+    is WIRED AND ITS TARGET EXISTS. SessionStart and Stop are deliberately empty — §0.3 records
+    why — so this pins them as EMPTY rather than as present-but-unchecked. Re-adding a hook to
+    either fails here, which is correct: putting a generated surface back at session start is the
+    T1 growth CLAUDE.md §0.3 tells the next session not to repeat, and it should require reading
+    this test.
+    """
     with open(SETTINGS, encoding='utf-8') as f:
         cfg = json.load(f)
     hooks = cfg.get('hooks', {})
-    assert {'PreToolUse', 'SessionStart', 'Stop'} <= set(hooks)
+    assert {'PreToolUse', 'SessionStart', 'Stop'} <= set(hooks), \
+        'a hook key was removed entirely — keep it present and empty so the intent stays visible'
+
+    commands = [h.get('command', '')
+                for group in hooks.get('PreToolUse', [])
+                for h in group.get('hooks', [])]
+    assert any('hook_naming_guard' in c for c in commands), \
+        'the PreToolUse naming guard is gone — CLAUDE.md §4 names it as the edit-time half of the ' \
+        'Solmund gate'
+    for c in commands:
+        tool = c.split()[-1] if c.split() else ''
+        if tool.startswith('tools/'):
+            assert os.path.exists(os.path.join(ROOT, tool)), \
+                f'a wired hook points at {tool}, which does not exist — a hook naming a deleted ' \
+                f'script fails silently at session start'
+
+    for empty in ('SessionStart', 'Stop'):
+        assert hooks[empty] == [], (
+            f'{empty} has a hook again. That is not forbidden, but it is the surface CLAUDE.md '
+            f'§0.3 records as T1 — read that section before re-adding one, and update this '
+            f'assertion deliberately rather than deleting it.')
 
 
 def test_claude_md_documents_the_rule():

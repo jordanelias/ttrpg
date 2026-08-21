@@ -26,8 +26,10 @@ All 18 resolved with one command:
 
 ```
 git merge --no-ff <this-branch>
-python tools/observability/build_glossary.py && git add references/glossary/
-python tools/build_test_register.py
+# build_glossary.py + references/glossary/ and build_test_register.py + test_register.json
+# were RETIRED 2026-08-21 (culling waves 1-2, ED-IN-0194). Both lines removed rather than
+# left runnable — a regeneration block that names deleted tools fails at the first line and
+# looks like a broken repo to whoever runs it.
 python tools/build_engine_atlas.py
 python tools/build_identifier_census.py
 python tools/link_values_pointers.py --build

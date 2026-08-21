@@ -1,8 +1,10 @@
 # Handoff
 
 Plain, hand-maintained continuity for Valoria. Update this when you pause mid-task; a
-git commit *is* the session close. The SessionStart banner (`tools/session_status.py`)
-surfaces the "Next actions" section below, alongside `git status` / last commit.
+git commit *is* the session close. **Nothing surfaces this file automatically** — the
+SessionStart banner that used to relay "Next actions" was retired 2026-08-21 with the rest
+of the session machinery (ED-IN-0194), and `CLAUDE.md` §0.3 records the result of the
+experiment it was the instrument for. Read this file, and your lane's, yourself.
 
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).

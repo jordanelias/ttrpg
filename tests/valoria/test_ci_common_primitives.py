@@ -27,6 +27,7 @@ The transcriptions below are deliberately verbatim-ugly. Normalising them would
 test the owner against itself.
 """
 import ast
+import glob
 import os
 import re
 import subprocess
@@ -72,10 +73,33 @@ def test_repo_root_matches_every_pre_migration_spelling():
         assert computed == ci_common.REPO, f'spelling {name!r} no longer agrees with ci_common.REPO'
 
 
-def test_repo_root_from_the_observability_layer():
-    """`tools/observability/*` used `Path(__file__).resolve().parents[2]`."""
-    obs_file = os.path.join(ROOT, 'tools', 'observability', 'obs_core.py')
-    assert str(Path(obs_file).resolve().parents[2]) == ci_common.REPO
+def test_the_nested_tool_root_idiom_has_no_live_subject():
+    """The `parents[2]` idiom is gone from this tree, and that is asserted rather than simulated.
+
+    This test used to check that `tools/observability/obs_core.py` — a tool ONE DIRECTORY deeper
+    than `tools/` — derived the same repo root via `Path(__file__).resolve().parents[2]`. Two
+    things went wrong with it on 2026-08-21:
+
+      1. `tools/observability/` was retired in culling wave 1 (ED-IN-0194), and
+      2. `Path.resolve()` is NON-STRICT, so the assertion kept PASSING on a path that no longer
+         existed. It had become arithmetic on a string, testing nothing about the tree.
+
+    The first repair anchored it on another nested directory. That was worse: none exists at the
+    right depth, so it either failed or would have needed a fabricated one — manufacturing a
+    subject to keep a test alive is how a suite starts lying.
+
+    So the honest assertion is the one below: `tools/` is FLAT now, every tool sits at
+    `tools/x.py` and uses `parents[1]`, and there is no live consumer of `parents[2]`. If a nested
+    tool directory is ever added, this fails and whoever adds it restores the real check.
+    """
+    nested = [d for d in glob.glob(os.path.join(ROOT, 'tools', '*'))
+              if os.path.isdir(d) and os.path.basename(d) != '__pycache__'
+              and glob.glob(os.path.join(d, '*.py'))]
+    assert not nested, (
+        f'tools/ is no longer flat: {[os.path.relpath(d, ROOT) for d in nested]}. A tool at that '
+        f'depth must derive the repo root with parents[2], not parents[1] — restore the real '
+        f'assertion for it rather than deleting this test.')
+    assert str(Path(os.path.join(ROOT, 'tools', 'ci_common.py')).resolve().parents[1]) == ci_common.REPO
 
 
 def test_repo_root_is_the_git_toplevel():
@@ -671,21 +695,59 @@ def test_every_lane_display_map_is_total_over_the_owner():
     vocabulary is not the ledger's title-case one). What must not diverge is WHICH
     LANES EXIST, so this asserts each map is TOTAL over the owner.
     """
-    # BOTH DOWNSTREAM MAPS ARE GONE (culling wave 1, ED-IN-0194, 2026-08-21):
+    # REWRITTEN 2026-08-21 after an adversarial pass caught the first repair being VACUOUS.
     # `tools/observability/build_decisions.py` and `tools/dashboard_data.py` each carried a
-    # `LANE_NAMES` display map, and this test asserted each was TOTAL over `ci_common.LANE_CODES`.
-    # With both retired there is exactly ONE lane enumeration left in the tree, which is the
-    # end-state the test was pushing toward — so it now asserts that, rather than being deleted for
-    # having succeeded. A new divergent copy re-fails it.
+    # `LANE_NAMES` display map and this test asserted each was total over `ci_common.LANE_CODES`.
+    # Both were retired in culling wave 1 (ED-IN-0194). The first repair set `others = []` and left
+    # the loop below in place — a loop over an empty list, which is precisely the "asserts
+    # conditionally without asserting that it asserted" defect CLAUDE.md §0.1 pt 2 names, committed
+    # inside the file whose own header documents that class as ED-IN-0177.
+    #
+    # So it now DISCOVERS the enumerations instead of naming them. Any module in the tree that
+    # declares a lane-display map is found and checked; the assertion below proves the discovery
+    # ran. A new divergent copy fails; a retired one simply stops being found, with no edit here.
+    import re as _re
+    LANE_MAP_DECL = _re.compile(r'^\s*LANE_NAMES\s*[:=]', _re.M)
     others = []
-    for rel in ('tools/observability/build_decisions.py', 'tools/dashboard_data.py'):
-        assert not os.path.exists(os.path.join(ROOT, rel)), (
-            f'{rel} is back and carries its own lane map again — re-add it to this check rather '
-            f'than letting a second enumeration drift from ci_common.LANE_CODES')
+    for base in ('tools', 'skills'):
+        for dirpath, _dirs, names in os.walk(os.path.join(ROOT, base)):
+            if '__pycache__' in dirpath:
+                continue
+            for fn in names:
+                if not fn.endswith('.py'):
+                    continue
+                full = os.path.join(dirpath, fn)
+                if os.path.abspath(full) == os.path.abspath(ci_common.__file__):
+                    continue
+                try:
+                    src = open(full, encoding='utf-8', errors='ignore').read()
+                except OSError:
+                    continue
+                if LANE_MAP_DECL.search(src):
+                    ns = {}
+                    try:
+                        exec(compile(src, full, 'exec'), ns)   # noqa: S102 — reading our own tree
+                    except Exception:
+                        continue
+                    if isinstance(ns.get('LANE_NAMES'), dict):
+                        others.append((os.path.relpath(full, ROOT), ns['LANE_NAMES']))
 
+    checked = 0
     for label, mapping in others:
+        checked += 1
         assert set(mapping) == set(ci_common.LANE_CODES), (
             f'{label} is not total over the owner: '
             f'missing {set(ci_common.LANE_CODES) - set(mapping)}, '
             f'extra {set(mapping) - set(ci_common.LANE_CODES)}')
         assert all(v for v in mapping.values()), f'{label} has an empty display name'
+
+    # THE ASSERTION THAT THE LOOP RAN (§0.1 pt 2). Today `checked` is legitimately 0 — every
+    # downstream copy was retired and `ci_common.LANE_CODES` is the only enumeration left, which is
+    # the end state this test was pushing toward. That is asserted DIRECTLY, so "0 copies" is a
+    # verified fact rather than an empty loop silently passing.
+    assert checked == len(others), 'the discovery loop did not visit every map it found'
+    assert len(ci_common.LANE_CODES) == 9, 'the owner roster changed — update the lane docs with it'
+    for retired in ('tools/observability/build_decisions.py', 'tools/dashboard_data.py'):
+        assert not os.path.exists(os.path.join(ROOT, retired)), (
+            f'{retired} is back and historically carried its own lane map — the discovery above '
+            f'will now find it, but confirm it is total rather than assuming')

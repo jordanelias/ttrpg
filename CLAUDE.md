@@ -24,7 +24,9 @@ multi-agent mechanics live in §10; the disposition below applies whether you're
   A wrong assumption caught in a plan is free; caught in a merged commit it becomes editorial debt.
 - **Build bottom-up from primitives.** Find the single-owner primitive first and compose on top of it
   — never re-implement a rule that already lives once (§8's core invariant). New tooling reuses
-  `obs_core` / `audit_staleness` / `review_core` / the registries; new mechanics resolve from the
+  the registries and `engine/substrate/`'s leaf readers (`descriptors`, `composition`, `keys`) —
+  `obs_core`, `audit_staleness` and `review_core` were RETIRED 2026-08-21 (ED-IN-0194) and are
+  named here only so a reader of an older commit knows why they are gone; new mechanics resolve from the
   Key substrate up. Emergence is the goal: small correct primitives, composed, not a bespoke
   top-level special case. If you find yourself special-casing an entity or outcome, stop — that's
   scripting drift (§10 guardrails).
@@ -299,10 +301,10 @@ are more "current state" files than there should be; trust them in this strict p
 
 - **The working tree is the source of truth.** Read and edit local files directly (Read/Write/Edit,
   Grep/Glob). **Do not re-fetch from the GitHub API** and do not trust memory over disk — the checkout
-  is fresher than any cache. *(Caveat, CORRECTED 2026-08-05 — this rule is now essentially clean: the
-  integrity gates were ported off the GitHub API by ED-1053, and the only remaining API caller is
-  `tools/dashboard_data.py`, which fetches Actions/PR status — state that exists only on GitHub, not
-  repo content. It is not an exception to this rule.)*
+  is fresher than any cache. *(CLEAN AS OF 2026-08-21 — the caveat is gone, not weakened. ED-1053
+  ported the integrity gates off the GitHub API in 2026-06, leaving one caller, `tools/dashboard_data.py`,
+  which fetched Actions/PR status. That tool was retired in culling wave 1 (ED-IN-0194), so **no tool
+  in this repository reads the GitHub API at all.** The rule now holds without exception.)*
 - **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
   on `main`, branch first. Commit message format:
   `[scope] description` where scope ∈
@@ -572,7 +574,7 @@ Do not represent the skeleton as a runnable head-start.
 > time and are corrected inline, marked `[CORRECTED 2026-08-05]`. Everything else is verbatim.
 
 - **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`, branch-protected `main`): syntax,
-  register sizes, hooks verifier, co-file rules, editorial markers, naming + names-consistency/drift,
+  register sizes, co-file rules, editorial markers, naming + names-consistency/drift,
   sim anti-fabrication, supersession, PP-674 vetting, ED-citation integrity, the `tests/valoria/` pytest
   suite, integrity, and compliance. **CI is the unbypassable boundary.** *[CORRECTED 2026-08-05: the 25
   per-gate jobs were collapsed into `validators` (blocking) + `validators-report` (never fails) by
@@ -604,26 +606,30 @@ re-implement a rule.** Known violations of this invariant (treat as bugs, don't 
   half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
   BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
   compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
-- **Observability apparatus consolidated (2026-07-15, ED-IN-0068).** `tools/observability/obs_core.py`
-  is now the single owner of the primitives that were re-implemented ≥4 ways (editorial-ledger read,
-  the 9-code lane roster **including GO**, the reconciled `## Status:` regex, the narrow needs-Jordan
-  vs corpus-wide marker vocabularies, the `window.VALORIA_X` JS-bundle writer); the generators import
-  it. `tools/observability/build_proposals.py` generates the **unified proposals/open-work register**
-  (`PROPOSALS.md` triad — one lane-partitioned view of every unratified item, covering
-  `proposals/` by location), refreshed by `audit-refresh.yml` alongside the decisions digest;
-  it complements `DECISIONS.md` (marker-level debt) rather than duplicating it.
-  `tools/build_apparatus_registry.py` generates `references/apparatus_registry.{yaml,md}` — the
-  inventory of every tool/skill/hook/workflow with its output destination + format + orphan status
-  (orphan flag derived from `structure_audit`'s import graph). That prune pass retired 4 zero-importer
-  dead pure-function tools (`propagator`, `verify_cuts`, `coverage_matrix`, `find_references`) to
-  `deprecated/tools/`. Still deliberately deferred (blocking-gate risk): migrating
-  `currency_consistency_check`'s flat-file-only ledger reader and the `ci_audit_registry_check`
-  all-entries reader onto `core` — each needs its own expected-delta test, not a drop-in.
-- **`tools/pathres.py` declares itself the SOLE PARSER of `references/restructure_ledger.md` and is
-  not** *[added 2026-08-05, ED-IN-0147]* — `broken_dependency_checker.py`, `ci_claude_workflow_paths.py`
-  and two `skills/valoria-vector-audit/scripts/` modules still parse it independently. The
-  consolidation `pathres` was written to perform never landed. A single-owner comment asserting a
-  property the tree lacks is worse than no comment: it stops the next reader from looking.
+- **Observability apparatus — RETIRED 2026-08-21 (culling waves 1-2, ED-IN-0194).** This bullet used
+  to describe `tools/observability/obs_core.py` as "the single owner" of five primitives, with
+  `build_proposals.py`, `build_apparatus_registry.py` and the rest as live generators. The whole tier
+  is gone, at `FORK:3be53ef`. Two things survive it and are the live statement now: the dependency-free
+  primitives (repo root, the 9-code lane roster **including GO**, token estimate, id regexes) are owned
+  by **`tools/ci_common.py`**, and `ci_common` no longer forwards anything to another module — the lazy
+  `obs_core` re-exports were deleted with it, because they imported cleanly and would have raised at
+  CALL time. The generated feeds (`PROPOSALS.md`, `DECISIONS.md`, `apparatus_registry.{yaml,md}`) had
+  no runtime consumer in `engine/` or `systems/`.
+- **`tools/pathres.py` is closer to the SOLE PARSER of `references/restructure_ledger.md` than it was,
+  and the gap is now named precisely** *[added 2026-08-05 ED-IN-0147; narrowed 2026-08-21 ED-IN-0194]*.
+  `ci_claude_workflow_paths.py` was retired, and `ci_claim_provenance_check.py` — added as a reader the
+  same day — routes through `pathres.load_alias_map()` rather than parsing the file itself. Remaining
+  independent parsers: `broken_dependency_checker.py` and two `skills/valoria-vector-audit/scripts/`
+  modules.
+
+  ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES, and a caller asking "is this exact file
+  retired" must NOT use it.** The ledger carries ~162 directory-prefix `FORK:` rows, and a `FORK:`
+  target has no existence check because the content is at a ref — so `resolve()` returns FORKED for
+  *any* invented filename under a forked directory. That is fine for "does this reference point
+  anywhere" and catastrophic for an anti-fabrication gate: shipped for a few hours on 2026-08-21 in
+  `ci_claim_provenance_check`, where it made a fabricated `MEASURED-BY:` path pass across 162
+  namespaces. Ask `load_alias_map()` for an exact row instead. Falsifier:
+  `tests/valoria/test_claim_provenance_fields.py::test_a_fabricated_path_under_a_forked_directory_still_violates`.
 
 *Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
 `patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
@@ -656,16 +662,16 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
 | NERS resolver stress methodology | `valoria-resolution-diagnostic` |
-| Emergent-arc generation | `valoria-arc-generator` |
+| Emergent-arc generation | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `arcs/` was evacuated 2026-08-05. |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
-| "Where are we in the workplan?" / resume-with-options / progress board | `valoria-workplan-navigator` |
+| "Where are we in the workplan?" / progress board | **RETIRED 2026-08-21** (ED-IN-0194). Read `workplans/workplan_v6_progress.yaml` directly, and `python tools/m1_acceptance.py --summary` for whether the milestone RUNS — which is the only reading of "where are we" that §0.2 accepts. |
 | Index/infill doc hygiene | auto-enforced by `ci_co_file_checker` + the compliance size gate; split a new oversized doc with `valoria-chunker` (the `valoria-atomizer` skill + its `references/design_registry.yaml` work-list were **retired 2026-07-21** — atomization complete for every subsystem) |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc into index + chunks | `valoria-chunker` |
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
-| Incremental module-by-module sim build | `valoria-simulator` |
+| Incremental module-by-module sim build | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `sim/` was retired 2026-07-21. |
 | "What's the state of the repo?" | **No tool. RETIRED 2026-08-21** (ED-IN-0194) — `review_core.py`, `scope_ratchet.py` and the observability generators all went. Read `CURRENT.md`, `HANDOFF.md` and `git log`. If you want the milestone's state, that is `python tools/m1_acceptance.py --summary`, which measures execution rather than aggregating apparatus verdicts. |
-| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). Complements, does not replace, `review_core.py --check`: that one grades repo-wide signals against `registers/review_baseline.yaml`; `/code-review` reads the change itself. |
+| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). It is now the ONLY review surface: `review_core.py --check` and its `registers/review_baseline.yaml` ratchet were retired 2026-08-21 (ED-IN-0194), so nothing grades repo-wide signals any more and nothing is supposed to. `/code-review` reads the change itself, which is the reading that was always worth having. |
 | Orchestrating a multi-agent audit | Use the **Agent tool** directly with `.claude/agents/valoria-critic.md` for read-only critic stages. The `.claude/wf_*.js` scripts, their `tools/wf_harness.js` owner and both harness gates were retired 2026-08-21 (ED-IN-0194); `valoria-critic` was KEPT by ruling, so structurally-independent review survives without the script layer. §10's relay still applies. |
 
 `valoria-orchestrator` is **retired** to `deprecated/skills/` (the old `/home/claude` GraphQL session
@@ -695,7 +701,7 @@ orchestrator's routing table — `deprecated/skills/…/model_routing_table.md`,
 canonical** per §1/§3; this section is the live owner and does not defer to it.)
 
 **Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0087).** Nothing else in the tree binds
-tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrors it.
+tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrored it until 2026-08-21, when it was retired (ED-IN-0194); this table is now the only home.
 
 | Tier | Model ID | Context | In / Out $/MTok | Relative cost | Prompt-cache minimum |
 |---|---|---|---|---|---|
@@ -784,8 +790,10 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
   ships *paired with* **rank-by-independent-rediscovery** so the alarm never becomes pressure to
   manufacture findings; and **disagreement records with required adjudication**, where an
   out-of-lane record is a terminal `observation` no later ruling can overwrite (observe, don't
-  judge). Behaviour is pinned by `tests/valoria/test_wf_harness.py`, which executes the harness
-  under node — mutation-verified, 13/13 mutants killed.
+  judge). Behaviour WAS pinned by `tests/valoria/test_wf_harness.py`, mutation-verified 13/13 — that
+  test went with the harness on 2026-08-21 (ED-IN-0194). The four properties are recorded above
+  because they were earned and are worth re-deriving; nothing enforces them today, and that is the
+  honest state rather than a gap to paper over with a replacement script.
 
 ---
 

@@ -1465,6 +1465,25 @@ adversarial review survives the wave written to end it.
 | `tools/workplan_status.py` | `FORK:3be53ef` | FORKED |
 | `.claude/wf_world_schema_gaps.js` | `FORK:3be53ef` | FORKED |
 
+**Named files inside forked directories.** The directory rows above are for path resolution; these
+are the individual files that a `MEASURED-BY:` marker or a doc citation names BY NAME. They exist
+separately and deliberately: `tools/ci_claim_provenance_check.py` requires an EXACT row, never a
+directory-prefix match, because a prefix match would let a fabricated filename under a retired
+directory pass the anti-fabrication gate. Retiring an instrument that a settled claim cites costs
+one line here — that is the correct price.
+
+| Old Path | New Path | Status |
+|----------|----------|--------|
+| `tools/observability/obs_core.py` | `FORK:3be53ef` | FORKED |
+| `tools/observability/build_glossary.py` | `FORK:3be53ef` | FORKED |
+| `tools/observability/build_decisions.py` | `FORK:3be53ef` | FORKED |
+| `tools/observability/build_proposals.py` | `FORK:3be53ef` | FORKED |
+| `tools/observability/build_incompleteness.py` | `FORK:3be53ef` | FORKED |
+| `tools/observability/build_lexicon.py` | `FORK:3be53ef` | FORKED |
+| `tools/observability/build_graph.py` | `FORK:3be53ef` | FORKED |
+| `.claude/wf_wave4_central.js` | `FORK:3be53ef` | FORKED |
+| `tests/valoria/fixtures/wf_donor.js` | `FORK:3be53ef` | FORKED |
+
 **Paired tests retired with their subjects** — a test whose subject is gone is not a test. Listed
 separately because several are cited by `MEASURED-BY:` markers in settled ledger entries: those
 claims were true and their instrument is at the ref, so the markers resolve here rather than

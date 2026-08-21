@@ -5,10 +5,18 @@ The ONE new P1 primitive of the Connective-Tissue & Compliance Orchestration Pla
 2026-07-29). Every OI-17-class stub (a `NotImplementedError` standing in for design-gated
 behavior) converts to a call here instead of raising or fabricating a value. This makes
 "explicitly not built" a single, greppable, typed shape rather than N different silent
-`"not live"` strings or unconditional raises scattered across the tree — composed on by
-`structure_audit.py` (the `stub_wired` node attribute) and `review_core.py` (the
-`stubs.count` ratchet signal) without a second registry (CLAUDE.md §8 "every rule lives
-once"; §0.1 point 5 "one owner for the operation, every site routed through it").
+`"not live"` strings or unconditional raises scattered across the tree — composed on without a
+second registry (CLAUDE.md §8 "every rule lives once"; §0.1 point 5 "one owner for the
+operation, every site routed through it").
+
+TWO OF ITS THREE CONSUMERS ARE GONE, AND THE PRIMITIVE IS STILL RIGHT. `review_core.py`'s
+`stubs.count` ratchet retired 2026-08-21 (ED-IN-0194) and `test_stubwire.py`'s third surface
+went with it; `structure_audit.py`'s `stub_wired` node attribute survives. What survives
+alongside it is the consumer that always mattered most: **`tools/m1_acceptance.py` row 1 counts
+`stub_resolve` calls during a seeded probe season**, and that row is one of the two rows in this
+repository that measure execution rather than reading a document (CLAUDE.md §0.2). So this
+module's telemetry now feeds the milestone gate rather than an apparatus ratchet, which is a
+better subject than the one it was written for — do not retire it with its retired consumers.
 
 Contract (frozen, per the plan's §2.1 pin — do not widen without updating the plan):
   - `StubResult` — a frozen dataclass `{module, io_contract, reason, stub: True}`. `stub` is
@@ -45,9 +53,11 @@ class StubResult:
 
 # Module-level invocation counter (§2.1: "the season loop folds it into campaign telemetry").
 # Process-lifetime cumulative; callers wanting a per-run delta snapshot `invocations` before and
-# after (see engine/mc_v18.py's stub_hits wiring) rather than this module resetting itself —
-# resetting on every call would make the counter useless for the ratchet signal in
-# tools/review_core.py, which reads a fresh subprocess's cumulative count.
+# after (see engine/mc_v18.py's stub_hits wiring) rather than this module resetting itself.
+# The original reason named tools/review_core.py's ratchet, which read a fresh subprocess's
+# cumulative count; that tool retired 2026-08-21 (ED-IN-0194). The reason still holds for the
+# consumer that replaced it — tools/m1_acceptance.py row 1 takes a before/after delta around a
+# seeded probe season, and a self-resetting counter would break exactly that read.
 invocations: int = 0
 
 

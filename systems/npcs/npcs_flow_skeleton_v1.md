@@ -92,7 +92,7 @@ found elsewhere in the tree.]
 | `list[NPCAction]` (return value) | arg | `systems/overview/sim/accounting.run_accounting`, which discards it by design | `systems/overview/sim/accounting.py:138 simulate_npc_actions` |
 | Mutated `NPC.stance` values (in-place) | write | `world.npcs` store (same objects `get_npcs_in_territory` would read) | `systems/world/sim/npe.py:360-365 issue` |
 | `StubResult(module, io_contract, reason)` | arg | caller of `select_action`/`evaluate_priority_stack` — none in production | `engine/autoload/npc_ai.py:34-38 select_action` |
-| `stubwire.invocations` increment | write | `engine/substrate/stubwire.py` module counter, folded into `CampaignResult.stub_hits` | `engine/substrate/stubwire.py:65-66 invocations` |
+| `stubwire.invocations` increment | write | `engine/substrate/stubwire.py` module counter, folded into `CampaignResult.stub_hits` | `engine/substrate/stubwire.py:61 invocations` |
 
 ## 5. State touched
 

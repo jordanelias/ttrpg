@@ -3,9 +3,9 @@
  "by_subsystem": {
   "_architecture": {
    "BUILT": 223,
-   "UNRESOLVED": 424,
+   "UNRESOLVED": 420,
    "docs": 43,
-   "identifiers": 647
+   "identifiers": 643
   },
   "articulation": {
    "BUILT": 43,
@@ -39,9 +39,9 @@
   },
   "mass_battle": {
    "BUILT": 122,
-   "UNRESOLVED": 94,
+   "UNRESOLVED": 93,
    "docs": 7,
-   "identifiers": 216
+   "identifiers": 215
   },
   "npcs": {
    "BUILT": 33,

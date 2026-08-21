@@ -24,7 +24,7 @@ from engine.substrate import stubwire
 # OI-17 (ED-IN-0091 plan §2.2/§3 Wave 1): converted from an unconditional
 # `raise NotImplementedError` to the single-owner stub-wire primitive (engine/substrate/stubwire.py,
 # plan §2.1) — a typed no-op instead of a crash, visible to structure_audit's `stub_wired`
-# attribute and review_core's `stubs.count` ratchet by construction (greppable import, no second
+# attribute and m1_acceptance row 1's stub count by construction (greppable import, no second
 # registry). `io_contract` below cites this module's own docstring "Entry points" declaration.
 #
 # SELF-FLAG ONLY (plan §3 Wave 1 task A scope note): this converts the unconditional raises to

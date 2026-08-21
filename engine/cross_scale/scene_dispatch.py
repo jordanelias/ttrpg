@@ -361,7 +361,7 @@ def _resolve_slot(slot, world, rng):
             # OI-02 total-mapping fallback (ED-IN-0091 plan §2.2): every scene_type is either a
             # canonical resolver (above) or an explicitly-flagged stub-wire call — never a silent
             # "not live" string (the prior behaviour here, deleted). Visible via stubwire's
-            # greppable import + structure_audit's stub_wired attribute + review_core's
+            # greppable import + structure_audit's stub_wired attribute + m1_acceptance row 1's
             # stubs.count ratchet (plan §2.1), not a bespoke string this call site alone can drift.
             stub = stubwire.stub_resolve(
                 'engine.cross_scale.scene_dispatch', f'scene_type={st!r}',

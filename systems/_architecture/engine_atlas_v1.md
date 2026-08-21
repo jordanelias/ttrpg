@@ -281,7 +281,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 |---|---|
 | **(a) Built but unreachable** | Real logic exists; no production path reaches it |
 | **(b) Declared but unbuilt** | A contract or registry declares it; no code implements it |
-| **(c) Stub-wired no-ops** | The call site exists and runs; the body is a typed no-op routed through `engine/substrate/stubwire.py:54 stub_resolve`, so it is an explicitly flagged not-built site, not a silent stub |
+| **(c) Stub-wired no-ops** | The call site exists and runs; the body is a typed no-op routed through `engine/substrate/stubwire.py:64 stub_resolve`, so it is an explicitly flagged not-built site, not a silent stub |
 | **(d) Doc↔code divergence** | A docstring, comment or citation the code contradicts |
 | **(e) Contract↔code divergence** | The declared shape and the traced code disagree |
 | **(f) Dead constants, params, fields** | Declared and never read, or computed and discarded |
@@ -395,4 +395,4 @@ This page is **structure only**. Deliberately absent, with where each actually l
 | **Numbers** — constants, thresholds, table values, costs | in code (principle 7 / ED-1050); prose tables at `engine/engine_params/params_tables.yaml`; the typed combat export at `engine/engine_params/combat_engine_v1.json` |
 | **Balance** — win rates, matchups, calibration | `systems/combat/combat_engine_v1/workbench/balance.py` and the audit corpus under `audit/` |
 | **What is current** · **continuity** · **editorial debt / unratified proposals** | `CURRENT.md` · `HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` · the `registers/` ledgers plus the generated `tools/observability/DECISIONS.md` / `PROPOSALS.md` |
-| **Repo-state verdict** · **Godot port plan** · **sim-reference conventions** | `python tools/review_core.py --summary` · `godot/godot_conversion_strategy_v1.md` · `engine/sim_reference_README.md` |
+| **Repo-state verdict** · **Godot port plan** · **sim-reference conventions** | `python tools/m1_acceptance.py --summary   [review_core.py RETIRED 2026-08-21, ED-IN-0194]` · `godot/godot_conversion_strategy_v1.md` · `engine/sim_reference_README.md` |

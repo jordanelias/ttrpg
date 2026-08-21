@@ -74,7 +74,7 @@
   no-op via `stubwire.stub_resolve` — no state is read from or written to `world` or the `Key`.
   `engine/cross_scale/articulation.py:141 stub_resolve`
 - **S5** `[write]` `stubwire.invocations` (a process-cumulative module-global counter) increments
-  by one per firing. `engine/substrate/stubwire.py:66 invocations`
+  by one per firing. `engine/substrate/stubwire.py:61 invocations`
 - **S6** `[emit]` At campaign end, `run_campaign` reads the pre/post delta of that counter into
   `CampaignResult.stub_hits`. `engine/mc_v18.py:308 stub_hits`
 
@@ -97,7 +97,7 @@ No `Key`, world-state field, or rendered artifact is ever produced by this modul
 |---|---|---|---|
 | `world.echo_scheduler` | R | `engine.mc_v18` / `engine.cross_scale.echo_transport` | `engine/mc_v18.py:266 subscribe_all` |
 | `TickScheduler.subscriptions` | W (append-only, via `.subscribe`) | `engine.substrate.keys` | `engine/substrate/keys.py:507 subscribe` |
-| `stubwire.invocations` | W | `engine.substrate.stubwire` | `engine/substrate/stubwire.py:66 invocations` |
+| `stubwire.invocations` | W | `engine.substrate.stubwire` | `engine/substrate/stubwire.py:61 invocations` |
 
 Articulation owns no field of its own on `world`, `GameState`, or any faction/territory/NPC
 record — it reads the scheduler handed to it and writes only into that scheduler's subscription

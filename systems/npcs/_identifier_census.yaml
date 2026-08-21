@@ -962,7 +962,7 @@ identifiers:
     identifier: stub_hits
     docs:
     - systems/npcs/npcs_flow_skeleton_v1.md
-    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `stubwire.invocations` increment | write | `engine/substrate/stubwire.py` module counter, folded into `CampaignResult.stub_hits` | `engine/substrate/stubwire.py:65-66 invocations`'
+    purpose: '[4. OUT] Output | Kind | Consumer | Anchor :: `stubwire.invocations` increment | write | `engine/substrate/stubwire.py` module counter, folded into `CampaignResult.stub_hits` | `engine/substrate/stubwire.py:61 invocations`'
     built_in:
     - py:engine/mc_v18.py
     disposition: BUILT

@@ -38,9 +38,10 @@ jobs:
       #
       # `find | xargs`, not `tools/*.py`: the shell glob does not descend into
       # `tools/observability/` or `tools/sim_harness/`, which is half the uncovered set.
-      # `py_compile` is kept as the mechanism (rather than `compileall`) because
-      # `ci_gate_coverage.jobs()` keys "this job is compile-only, it invokes nothing" on
-      # that literal token, and `test_gate_coverage` pins that classification.
+      # `py_compile` is kept as the mechanism (rather than `compileall`). It USED to be required:
+      # `ci_gate_coverage.jobs()` keyed "this job is compile-only, it invokes nothing" on that
+      # literal token and `test_gate_coverage` pinned the classification. Both retired 2026-08-21
+      # (ED-IN-0194); the mechanism stays because it is the right one, not because a parser needs it.
       #
       # SHIPPED WITH THE `invoked_by` FIX, NOT BEFORE IT — see G9's note in
       # tools/build_apparatus_registry.py. Being compiled is not being invoked, and the
@@ -60,15 +61,17 @@ jobs:
   # (checkout + setup-python + pip, ~10-30s). The wall clock was runner setup, not
   # work. Collapsed to two jobs -> 23 fewer boots.
   #
-  # EVERY validator invocation line IS PRESERVED VERBATIM, and that is the whole
-  # safety argument. `tools/valoria_local.py --ci` derives what it runs from
-  # `ci_gate_coverage.jobs()`, which regex-scans each job BODY (not each step) for
-  # tool invocations. Verified empirically before this change: a single job with N
-  # validator lines in one `run:` block parses to exactly N commands. So the work-list
-  # still IS the workflow and cannot drift -- the property that made `--ci`
-  # trustworthy survives the collapse. A roster in a data file would NOT have.
-  # tests/valoria/test_gate_coverage.py pins the full command set (EXPECTED_COMMANDS)
-  # and that the two jobs keep their blocking tiers apart.
+  # ⚠ THE ANTI-DRIFT GUARD IS GONE, 2026-08-21 (ED-IN-0194) — recorded here rather than left for
+  # someone to infer from a missing file. `tools/valoria_local.py --ci` derived its work-list from
+  # `ci_gate_coverage.jobs()`, which regex-scanned each job BODY, so the local list could not drift
+  # from this workflow; `test_gate_coverage.py` pinned the full command set and the tier split.
+  # All three were retired: their subject was this repository's own gate wiring, which CLAUDE.md
+  # §0.1 pt 5 excludes.
+  #
+  # CONSEQUENCE: `valoria_local.py --staged` and this file are now two independently maintained
+  # lists, and LOCAL-GREEN NO LONGER IMPLIES CI-GREEN. That asymmetry is acceptable only because CI
+  # is the unbypassable boundary (CLAUDE.md §8) — do not describe local-green as authoritative, and
+  # when you add a validator here, add it there in the same commit.
   #
   # NO FAIL-FAST. Each validator runs even if an earlier one failed, and the job
   # exits non-zero at the end if any did. Fail-fast would report one failure per
@@ -410,9 +413,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # fetch-depth: 0 is REQUIRED, not an optimisation (ED-IN-0123, 2026-08-03). This job runs
-          # `review_core.py --check`, whose `currency.stamps` signal shells out to
-          # currency_consistency_check, which compares CURRENT.md's reconcile stamp against
+          # fetch-depth: 0 is REQUIRED, not an optimisation (ED-IN-0123, 2026-08-03). The reason is
+          # unchanged but its carrier moved: this job used to run `review_core.py --check` (retired
+          # 2026-08-21, ED-IN-0194) whose `currency.stamps` signal shelled out to
+          # currency_consistency_check. That checker still runs in `validators-report` and still
+          # compares CURRENT.md's reconcile stamp against
           # `git log -1 --format=%cs -- <each canonical head>`. At the default depth-1 there is
           # exactly ONE commit, so every path returns HEAD's date and EVERY canonical head falsely
           # reads as touched today. MEASURED: the signal went RED here while passing on full history,

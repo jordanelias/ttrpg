@@ -83,7 +83,7 @@ pin.
 
 ## 4. Cross-surface wiring
 - **Claude:** `session_status.py` SessionStart stanza (BUILT); `CLAUDE.md` routing row *"state of
-  repo? → `python tools/review_core.py --summary`"* + `references/definitions/` as the vocabulary
+  repo? → `python tools/m1_acceptance.py --summary   [review_core.py RETIRED 2026-08-21, ED-IN-0194 — this charter is history, not a live contract]`"* + `references/definitions/` as the vocabulary
   authority (Phase 2); skill situational-awareness pointers to `review_core --json`; the artifact
   becomes the armature's face (`VALORIA_REVIEW` + `VALORIA_LEXICON`). No `.claude/agents/` roster
   (roster discipline — the engine is a tool, not a recurred role).

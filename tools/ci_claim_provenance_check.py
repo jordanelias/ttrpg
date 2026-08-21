@@ -115,19 +115,40 @@ _ED_ID = re.compile(r"^(ED-[A-Z]+)-(\d+)$")
 
 
 def _resolves_through_restructure_ledger(target):
-    """True if `references/restructure_ledger.md` retires `target` to a ref or a live successor.
+    """True if `references/restructure_ledger.md` has an EXACT row retiring `target`.
 
-    Delegates to `tools/pathres.py`, which CLAUDE.md §8 names the sole parser of that ledger.
-    Re-implementing the parse here would make this the fifth reader of one file, which is the
-    §8 violation the ledger's own header complains about. Degrades to False (i.e. still a
-    violation) if pathres is unavailable, so an import problem can never silently green the gate.
+    EXACT ROWS ONLY, AND THAT IS THE WHOLE CORRECTNESS ARGUMENT. The first version of this
+    helper (2026-08-21, same day) called `pathres.resolve()` and accepted any status other than
+    DEAD. `pathres` matches DIRECTORY PREFIXES (`pathres.py:187-194`), and the ledger carries 162
+    directory-prefix `FORK:` rows — `tools/observability/`, `tools/sim_harness/`, `dashboard/`,
+    `deprecated/`, `arcs/`, ~70 `audit/<unit>/` and more. A `FORK:` target has no existence check
+    and cannot have one, because the content is at a ref. So that version made
+    `MEASURED-BY: tools/observability/never_existed.py` resolve FORKED and PASS.
+
+    That is fabrication passing an anti-fabrication gate, across 162 whole namespaces, and it
+    looked exactly like a fix. Caught by an adversarial read-only pass the same day; reproduced
+    before fixing:
+
+        tools/observability/never_existed.py  -> FORKED   (should have been a violation)
+        tools/sim_harness/totally_made_up.py  -> FORKED   (should have been a violation)
+
+    Requiring an exact row restores the property: a retired instrument is recorded BY NAME, so a
+    made-up filename under a retired directory has no row and still violates. Retiring a tool
+    therefore costs one ledger line — which is the correct price, and the reason the ledger's own
+    header says rows are exact.
+
+    Deliberately does NOT delegate to `pathres.resolve()`: that function answers "does this point
+    anywhere", and this gate is asking a narrower question — "is THIS FILE recorded as retired".
+    It uses `pathres.load_alias_map()`, so the ledger is still parsed by its single owner and this
+    is not a fifth parser. Degrades to False (still a violation) if pathres is unavailable, so an
+    import failure can never silently green the gate.
     """
     try:
         import sys as _sys
         _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import pathres
-        r = pathres.resolve(target)
-        return r.status != 'DEAD'
+        exact, _prefix_rows_deliberately_ignored = pathres.load_alias_map()
+        return target in exact
     except Exception:
         return False
 
