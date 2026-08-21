@@ -18,7 +18,7 @@ requires a human decision; this document's decision requests are §4, addressed 
 
 ## 0. If you are a session with no memory, read this section and then §3's first `state: next` step
 
-**Your work is one step.** Take the first step in §2 whose `state:` is `next`. Do that step, run its
+**Your work is one step.** Take the first step in §3 whose `state:` is `next`. Do that step, run its
 gate, commit, update its `state:` to `done` with the evidence line, and stop. Do not read ahead and
 do not "also fix" what you notice on the way — §1 explains why that instruction is load-bearing
 rather than merely tidy.
@@ -39,7 +39,7 @@ already happened in this repository, more than once:
    Its output is edits to the thing under review plus at most one paragraph in the commit message.
    At most one ledger row, only if it needs a ruling (`needs_jordan: true`).
 3. **You will be tempted to mark a step done because the document says so.** `CLAUDE.md` §0.2: done
-   means the behaviour executes. Every gate in §2 is a command with an observable result. Run it.
+   means the behaviour executes. Every gate in §3 is a command with an observable result. Run it.
    Paste its output into the evidence line. A gate you did not run is a step you did not do.
 
 ---
@@ -57,15 +57,20 @@ statement the tree makes about itself is cheaper the earlier it happens and comp
 `valoria-game`'s CI green — third. That work is real and necessary, and a session started from the
 SessionStart banner cannot begin it: this repository's GitHub scope is `jordanelias/ttrpg`, and the
 game clone must be attached before a single line of it can be read. Any order that puts an
-unreachable step early converts a working session into a blocked one. Cross-repo work is S6, and S6
+unreachable step early converts a working session into a blocked one. Cross-repo work is **S9**, and it
 opens by attaching the repo.
 
 **(c) Something must move `0/7` before more architecture lands.** Thirteen commits have landed since
 the last one that changed how the game plays (#311). `CLAUDE.md` §0.3 declares the empty banner a
 running experiment whose method is *change nothing else and watch one session*; one session has now
-run and it wrote 1,022 lines of apparatus and zero lines of game. S2 is the game commit, and it is
-second rather than fourth because the experiment needs a data point in the other direction more than
-the architecture needs another week.
+run and it wrote 1,022 lines of apparatus and zero lines of game. **S8 is the game commit**, and it is
+marked unblocked throughout rather than queued behind the architecture, because the experiment needs a
+data point in the other direction more than the architecture needs another week.
+
+⚠ **This constraint is NOT yet satisfied, and saying so is the point of writing it down.** S1, S2 and
+S3 have all landed and none of them changed how the game plays; `0/7` is unmoved. S8 is a two-line
+change to `sigma_leverage.py:284` plus a classification, and it has been available since S3 greened
+the suite. If the next session takes S4 instead, that is a choice, not a dependency.
 
 **(d) Cull by DEPENDENCY, not by phase — corrected 2026-08-21 on Jordan's ruling
 ("we can't break out of recursion without culling").** The first draft of this document put every
@@ -76,11 +81,12 @@ and measuring it showed why: the waves are not one thing. **Wave 5 — untrackin
 part the phase-ordering obscured: this session added *one* document to `proposals/` and thereby
 churned the glossary, the test register and the identifier census, and failed a blocking gate on the
 glossary. That is the generator running on generated data, and no amount of doctrine reaches it.
-So Wave 5 is now **S2**, ahead of the game work.
+So Wave 5 is now **S4**, ahead of the remaining architecture — and waves 1-3, which S5 rewires around,
+ran first at S2/S3 because they were what made the tree inconsistent.
 
-What genuinely must wait is narrower than "culling": Waves 1, 2, 3 and 6 touch apparatus that S5
-(contracts-as-registration) rewires, and collapsing guard tiers before S5 has settled what dispatches
-what is how the previous eight consolidation plans failed. Those stay late, at S6.
+What genuinely must wait is narrower than "culling": **Wave 6** touches apparatus that S5
+(contracts-as-registration) rewires, and collapsing the remaining consolidations before S5 has settled
+what dispatches what is how the previous eight consolidation plans failed. That stays late, at **S6**.
 
 ---
 
@@ -121,7 +127,7 @@ Two-stage registry-driven roster check + an end-to-end falsifier that runs the r
 doctored registry copy; `NESTED_BASELINE = 16` added to the inversion ratchet so indenting a seam is
 net-zero rather than progress. Mutation-verified both ways. C2 marked PARTIAL in the plan of record.
 
-### S2 — Culling waves 1 + 2 · `state: done, NOT GREEN` (2026-08-21)
+### S2 — Culling waves 1 + 2 · `state: done` (2026-08-21)
 
 76k lines retired; rebased onto PR #325. Four corrections to the ratified plan, all measured:
 `engine/engine_params/*.json` are **runtime inputs** and are excluded from wave 5 (removing
@@ -131,12 +137,12 @@ CI and it is rewired report-only; `wiring_manifest.yaml` is **deferred, not dele
 folds it into the registration table. Carve-outs per Jordan's ruling: `m1_acceptance.py`, both §0.1
 guards, `test_known_red_register.py`.
 
-**⚠ The suite is red at S2 and S3 is what greens it.** Every failure is a test whose subject S2
-deleted. Do not push S2 alone.
+S2 left the suite red at 42 failures, every one a test whose subject it deleted. **S3 cleared them:
+1,622 passed / 0 failed.**
 
 ---
 
-### S3 — Wave 3, and green the suite · `state: next`
+### S3 — Wave 3, and green the suite · `state: done` (2026-08-21)
 
 **Goal:** no tool errors, no missing pointers, no orphans. This is the step that pays for S2.
 
@@ -200,7 +206,7 @@ either §0.1 guard. Do not write a replacement banner.
 
 ---
 
-### S4 — Wave 5: untrack the generated data · `state: blocked-by S3`
+### S4 — Wave 5: untrack the generated data · `state: next`
 
 **Goal:** no read/write failures from generated artifacts; end the document tax.
 

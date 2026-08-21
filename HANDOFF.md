@@ -52,16 +52,20 @@ and this root file remains the one stable SessionStart entry point.
 document is still the authority on what each act is and why. If you are about to write a new plan
 instead of taking a step, that is the loop; take the step.
 
-`state: next` is currently **S3 — culling wave 3, and green the suite.** S2 landed waves 1+2
-(76k lines) and left the suite RED at 42 failures, every one a test whose subject S2 deleted; S3 is
-what pays for that. It also **ends the §0.3 banner experiment** — wave 3 deletes
-`tools/session_status.py`, which *is* the banner — so amend §0.3 in the same commit. Keep
-`.claude/agents/valoria-critic.md` (Jordan, 2026-08-21).
+`state: next` is currently **S4 — culling wave 5: untrack the generated data.** S1, S2 and S3 have
+landed: the load-bearing claim is true, waves 1-3 retired ~84,000 lines, the suite is **1,622 passed
+/ 0 failed**, and the four connectivity gates (broken-deps, claim-provenance, currency, register
+size) are all green with zero dead tool references anywhere.
 
-This branch is **rebased onto PR #325**, which brought `engine/substrate/composition.py`,
-`tools/export_composition.py` and `module_contracts.yaml`'s `composition_roles:` block. That is the
-injection mechanism the whole programme targets — engine names a ROLE, references names the MODULE,
-the exporter imports every target behind a blocking gate. Copy it; do not invent a second registry.
+**⚠ THE GAME IS STILL AT 0/7, AND THAT IS NOW THE OLDEST UNPAID ITEM.** S8 — fractional pools at
+`sigma_leverage.py:284` plus the `score/2` classification — is `unblocked throughout` and has been
+available since S3. It is a two-line change with a measured golden delta. Nothing in S4-S7 depends
+on it, and nothing it depends on is missing. If you take S4 first, that is a choice, not a
+dependency, and §1(c) of the execution order says so.
+
+**There is no SessionStart banner any more.** Wave 3 retired `tools/session_status.py`; the §0.3
+experiment is closed and its result is recorded in `CLAUDE.md` §0.3. Orient from `CURRENT.md`, this
+file, and the execution order. Do not build a replacement.
 
 _Cross-cutting items only — lane-owned work lives in `registers/handoffs/HANDOFF_<LANE>.md`.
 Rewritten 2026-08-14 (ED-IN-0189): this section had opened with a blocker resolved 2026-07-30 and
