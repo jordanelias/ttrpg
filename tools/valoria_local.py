@@ -160,7 +160,6 @@ def main(argv):
         ('ci_register_size_check.py',   [],          True),
         ('ci_vetting_check.py',         [],          True),
         ('ci_sim_fabrication_check.py', [mode_flag], True),
-        ('ci_supersession_check.py',    [mode_flag], False),  # warn-only churn guard
         ('ci_generation_consistency.py', [],         False),  # warn-only v40 currency gate
         ('ci_module_shape_check.py',    [],          False),  # report-only container/shape hygiene (ED-1085)
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
@@ -171,9 +170,7 @@ def main(argv):
         # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
         # because --check could not fail and this list did not run it. Both fixed.
-        ('build_test_register.py',      ['--check'], True),   # params prose -> YAML capture, byte-lossless (ED-IN-0139; blocking)
         ('currency_consistency_check.py', [],        False),  # report-only recency gate (ED-1087)
-        ('ci_audit_registry_check.py',   [],          False),  # report-only audit-registry freshness gate
         ('wiring_map_check.py',          ['--check'], False),  # report-only wiring-manifest tag/coverage gate (ED-IN-0074)
         ('ci_claim_provenance_check.py', [mode_flag], True),   # a MEASURED ledger claim must name a re-runnable instrument (ED-PC-0040; blocking)
         # ED-IN-0087: the .claude/wf_*.js run-discipline prelude has one owner (tools/wf_harness.js)
@@ -193,7 +190,6 @@ def main(argv):
         # targets, every target resolves on disk. It deliberately does NOT check "every live plan has a
         # pointer" — liveness was measured un-inferable, so a guessing guard would be wrong in both
         # directions. Report-only on the names-drift graduation lane while the convention beds in.
-        ('ci_workplan_pointer_check.py', [],          False),  # workplans pointer integrity (ED-IN-0103; report-only)
         # ED-PC-0040: freshness was CI-only, so five consecutive local-green commits shipped a stale
         # canonical_sha__ pin (ED-PC-0035 edited references/module_contracts.yaml without refreshing it) and it
         # only surfaced when a PR finally ran the integrity job. Report-only here — CI stays the blocking
@@ -210,7 +206,6 @@ def main(argv):
         # author. Scope growth is a signal for the author to see and answer, never a reason to
         # refuse someone else's commit. If it ever becomes blocking, that is Jordan's call with
         # a loud ED-1094 call-out, not a quiet flag change.
-        ('scope_ratchet.py',             ['--check'], False),  # scope ceilings + G13 activity control (ED-IN-0112)
         # ────────────────────────────────────────────────────────────────────────────────
         # THE CI-ONLY RESIDUAL, CLOSED (ED-IN-0176). Four validators sat in CI's BLOCKING
         # `validators` job and in no local list, so `valoria_local` could report "all local

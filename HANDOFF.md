@@ -46,23 +46,22 @@ and this root file remains the one stable SessionStart entry point.
 
 ## Next actions
 
-**▶ THE STEP TO TAKE: `proposals/2026-08-21-execution-order-v1.md` §2, first step whose `state:` is
+**▶ THE STEP TO TAKE: `proposals/2026-08-21-execution-order-v1.md` §3, first step whose `state:` is
 `next`.** Written 2026-08-21 at Jordan's request. It is **not** a tenth planning surface: it replaces
 §5 (Sequencing summary) of `proposals/2026-08-20-return-to-game-plan-v1.md` and nothing else — that
 document is still the authority on what each act is and why. If you are about to write a new plan
 instead of taking a step, that is the loop; take the step.
 
-`state: next` is currently **S2 — culling wave 5: untrack the generated data** (~126,000 lines;
-RULED 2026-08-21 by Jordan, "we can't break out of recursion without culling"). It is independent of
-every architectural step — nothing under `engine/` or `systems/` reads any of it — and it is the wave
-that attacks the loop directly: adding one document to `proposals/` currently churns three generated
-indexes and reds a blocking gate. The work is the **gate flip** (build in CI, do not diff a committed
-copy), one gate at a time, never a silent `git rm`.
+`state: next` is currently **S3 — culling wave 3, and green the suite.** S2 landed waves 1+2
+(76k lines) and left the suite RED at 42 failures, every one a test whose subject S2 deleted; S3 is
+what pays for that. It also **ends the §0.3 banner experiment** — wave 3 deletes
+`tools/session_status.py`, which *is* the banner — so amend §0.3 in the same commit. Keep
+`.claude/agents/valoria-critic.md` (Jordan, 2026-08-21).
 
-Then **S3 — move M1 juncture 1**: fractional pools (`sigma_leverage.py:284` rounds the pool before
-sampling, though `dice_engine.continuous_engine_sample` already accepts a fractional one; measured
-2026-08-21, **20 of 40 strategic rolls in a 4-season campaign already pass a fractional pool and are
-silently rounded**) and the `score/2` obstacle classification. S1 landed 2026-08-21.
+This branch is **rebased onto PR #325**, which brought `engine/substrate/composition.py`,
+`tools/export_composition.py` and `module_contracts.yaml`'s `composition_roles:` block. That is the
+injection mechanism the whole programme targets — engine names a ROLE, references names the MODULE,
+the exporter imports every target behind a blocking gate. Copy it; do not invent a second registry.
 
 _Cross-cutting items only — lane-owned work lives in `registers/handoffs/HANDOFF_<LANE>.md`.
 Rewritten 2026-08-14 (ED-IN-0189): this section had opened with a blocker resolved 2026-07-30 and

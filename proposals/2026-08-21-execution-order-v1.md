@@ -1,6 +1,6 @@
 # Execution order — the return to the game, as steps a session can perform
 
-## Status: PROPOSED — **merging this PR RATIFIES the step ordering** (ED-1094, and the flip is co-located here rather than left to an unprompted follow-up, which is the failure ED-1083 recorded). Two items are **HELD** for explicit sign-off and are named in §4: **Q4** (S5's disposition of `test_gate_coverage.py`) and **S2 Half B's provisional `score/2` wiring**, which reads a roster Q1 has not ruled on. Execution order requested by Jordan, 2026-08-21.
+## Status: PROPOSED — **merging this PR RATIFIES the step ordering** (ED-1094, and the flip is co-located here rather than left to an unprompted follow-up, which is the failure ED-1083 recorded). Two items are **HELD** for explicit sign-off and are named in §5: **S3 ends the §0.3 banner experiment** (Wave 3 deletes `session_status.py`, which *is* the banner — Jordan's 2026-08-21 ruling governs, but the experiment ends rather than pauses), and **S8 Half B's provisional `score/2` wiring**, which reads a roster Q1 has not ruled on. Execution order requested by Jordan, 2026-08-21.
 
 ## Date: 2026-08-21 · Lane: IN (cross-cutting) · ED: none allocated
 
@@ -16,7 +16,7 @@ requires a human decision; this document's decision requests are §4, addressed 
 
 ---
 
-## 0. If you are a session with no memory, read this section and then §2's first `state: next` step
+## 0. If you are a session with no memory, read this section and then §3's first `state: next` step
 
 **Your work is one step.** Take the first step in §2 whose `state:` is `next`. Do that step, run its
 gate, commit, update its `state:` to `done` with the evidence line, and stop. Do not read ahead and
@@ -84,389 +84,310 @@ what is how the previous eight consolidation plans failed. Those stay late, at S
 
 ---
 
-## 2. The steps
+## 2. The target state, in one paragraph
 
-Each step carries: the goal it serves, its precondition, the exact files, the change, an executable
-gate, the commit subject, and an explicit do-not. Sizes are the reviewer's estimate of the diff, not
-a budget to fill.
+**One pattern, applied everywhere, and nothing outside it.** An *authored surface* under
+`references/` (or a single Python owner) is cooked by *one exporter* in `tools/` behind a blocking
+`--check`, into *one artifact* under `engine/engine_params/`, read by *one leaf* under
+`engine/substrate/`. Nothing else parses the authored surface; nothing else reads the artifact;
+`systems/` and the Godot port consume the leaf. Four instances already run:
 
----
+| authored surface | exporter | artifact | leaf reader |
+|---|---|---|---|
+| `references/descriptor_registry.yaml` | `export_descriptors.py` | `descriptors.json` | `substrate/descriptors.py` |
+| `references/module_contracts.yaml` › `composition_roles:` | `export_composition.py` | `composition.json` | `substrate/composition.py` |
+| `systems/_architecture/key_type_registry_v30.md` | `export_key_types.py` | `key_types.json` | `substrate/keys.py` |
+| `combat_engine_v1/config.py` | `export_engine_params.py` | `combat_engine_v1.json` | the port |
 
-### S1 — Make the claim on `main` true · `state: done` (2026-08-21)
-
-**Goals served:** 3 (engine/references commensurate), 5 (gate depth).
-
-**What was wrong.** `engine/substrate/descriptors.py:assert_faction_roster_is_covered` iterated
-`FACTION_FIELD_MAP` — the artifact's copy of `FACTION_KEY_TO_FIELD`, a five-row dict hand-maintained
-at `tools/export_descriptors.py:64` — and never `FACTION_STATS`, the registry-derived half. A
-registry edit does not touch that dict, so the documented behaviour ("add a stat to the registry
-without adding its field and the engine stops importing") could not occur. The repository's own
-falsifier, `test_the_roster_check_can_actually_fail`, planted its failure in the same hand-maintained
-dict, so it proved the function raises when handed a bad map and could not observe the claim being
-false. `CLAUDE.md` §0.1 pt 2 applied one layer below the claim, green throughout.
-
-**What landed.**
-- `engine/substrate/descriptors.py` — the check is now two-stage over `FACTION_STATS`: stage 1 fails
-  when a registry key is bound to no field, stage 2 when a bound field is not implemented. It returns
-  the number of *registry* stats verified. The one-way property is now structural rather than
-  incidental: the function never enumerates `implemented_fields`, only registry keys, so `L` cannot
-  reach either stage and Jordan's open ruling stays Jordan's.
-- `tests/valoria/test_descriptors_runtime.py` — the falsifier plants its failure in `FACTION_STATS`;
-  a second test covers stage 2; and `test_a_registry_edit_breaks_the_engine_end_to_end` runs the real
-  `tools/export_descriptors.py` over a doctored copy of the real registry and asserts the real check
-  refuses it. That third test is the only one that would have caught this from a cold read.
-- `tests/valoria/test_engine_does_not_import_systems.py` — `NESTED_BASELINE = 16` added beside
-  `BASELINE_TOTAL = 5`. The top-level ratchet counted column-0 imports only, so the cheapest way to
-  lower it was to indent an import into the function that used it: the metric read as progress while
-  the cycle got harder to see. Counting both makes that move net-zero.
-- `proposals/2026-08-20-return-to-game-plan-v1.md` — C2 marked **PARTIAL**; the three hardcoded twins
-  are named as outstanding.
-
-**Evidence (run, not asserted).**
-```
-$ python3 scratch/falsify.py          # fac.zeal added to a registry copy, real exporter, real check
-  RESULT: assert RAISED — descriptor_registry.yaml declares faction stat(s) that nothing binds …
-$ pytest tests/valoria/test_descriptors_runtime.py -q                    9 passed
-$ pytest tests/valoria/test_engine_does_not_import_systems.py -q         7 passed
-mutation, old map-driven check restored:   2 failed (both new falsifiers)  ← they kill the defect
-mutation, one top-level import indented:   2 failed — "FELL 5 -> 4" AND "ROSE 16 -> 17"
-```
-
-**Residual, deliberately not closed here:** the runtime footprint of `references/` is still
-`set.order`'s two bounds in `echo_transport.py`. `MULTS`, `ALL_PLAYABLE_15` and `STARTING_STATS`
-remain hardcoded twins in `game_state.py`. That is C2's remaining two thirds and it belongs to S4.
+`composition.py` is the shape the rest must copy, and it is worth stating why it works: the engine
+names a **role**, the registry names the **module**, and the exporter **imports every declared target
+at export time behind a blocking gate** — so import-by-string cannot fail late, and `systems` stays
+out of `engine`'s import graph. That is "injectable code"; `descriptors.py` is the same trick for
+"injectable definitions". Everything below either extends this pattern, or deletes something that
+competes with it.
 
 ---
 
-### S2 — Untrack the generated data · `state: next` · culling Wave 5, ~126,000 lines
+## 3. The steps
 
-**Goals served:** the loop itself. This is the cull Jordan named as the precondition, and it is the
-one with no architectural dependency.
+Each step: goal, precondition, exact files, the change, an executable gate, the commit subject, an
+explicit do-not.
 
-**Precondition:** none. Nothing under `engine/` or `systems/` reads any target.
+---
 
-**Measured 2026-08-21, current tree:**
+### S1 — Make the load-bearing claim true · `state: done` (2026-08-21)
 
-| target | lines | generator |
-|---|---:|---|
-| `references/glossary/` (21 files) | 75,829 | `tools/observability/build_glossary.py` |
-| `systems/*/_identifier_census.yaml` (15) | 26,292 | `tools/build_identifier_census.py` |
-| `references/test_register.json` | 12,638 | `tools/build_test_register.py` |
-| `references/key_graph.json` | 2,840 | `tools/build_key_graph.py` |
-| `references/execution_map.json` + `EXECUTION_MAP.md` + `execution_trace.json` | 2,675 | `tools/build_execution_map.py` |
-| `engine_atlas.json` + `ENGINE_ATLAS.md`, `CONTRACT_INDEX.md`, `KEY_INDEX.md`, `definitions.yaml`, the 4 vocab views, `identifier_census.json` | ~6,000 | five builders |
+Two-stage registry-driven roster check + an end-to-end falsifier that runs the real exporter over a
+doctored registry copy; `NESTED_BASELINE = 16` added to the inversion ratchet so indenting a seam is
+net-zero rather than progress. Mutation-verified both ways. C2 marked PARTIAL in the plan of record.
 
-**Why this is the cull that counts, stated as evidence rather than as a principle.** Adding one
-477-line document to `proposals/` in the S1 commit regenerated three of these indexes, produced ~200
-lines of diff churn in files no human wrote, and turned `pytest tests/valoria` red on
-`test_build_glossary` until the glossary was rebuilt. The culling plan records the same failure twice
-more: two sibling branches collided on 18 files "over nothing", every conflict a generated file and
-zero in source; and three times in one session an edit to *prose* staled `engine_atlas.json` and
-failed a blocking gate — once because the word "audit" appeared one more time in a comment.
+### S2 — Culling waves 1 + 2 · `state: done, NOT GREEN` (2026-08-21)
 
-**The gate flip this requires, and it is the whole of the work.** Several freshness checks operate by
-diffing the *committed* copy against a fresh build (`vocab_store --check`, `definitions_store
---check`, `test_engine_atlas`, `test_test_register`, `test_build_glossary`,
-`build_identifier_census --check`). Untracking means flipping each to **build in CI, do not diff a
-committed copy**. One deliberate pass, gate by gate — **not a silent `git rm`**. A gate left diffing
-an untracked file fails permanently and gets deleted by the next session, which loses the check.
+76k lines retired; rebased onto PR #325. Four corrections to the ratified plan, all measured:
+`engine/engine_params/*.json` are **runtime inputs** and are excluded from wave 5 (removing
+`descriptors.json` makes `import engine.autoload.game_state` raise); `tag_normalizer.py` is **not**
+a zero-caller leaf and was restored; `review_core.py` was the only carrier of `m1.acceptance` into
+CI and it is rewired report-only; `wiring_manifest.yaml` is **deferred, not deleted**, because S5
+folds it into the registration table. Carve-outs per Jordan's ruling: `m1_acceptance.py`, both §0.1
+guards, `test_known_red_register.py`.
 
-**Two hard gates from the culling plan §5 bind here.**
-1. **`engine/engine_params/params_tables.yaml` is NOT regenerable** — its 43 source docs were
-   evacuated and `export_params_constants.py` exists nowhere in the tree. It is a **source, not an
-   artifact**. KEEP TRACKED, excluded from this wave. (S6 pins it.)
-2. **`validate_ed_citations.py:368` reads the identifier census.** Detach it or confirm it degrades
-   safely before untracking `identifier_census.json`, or every valid `ED-` citation risks reading as
-   fabricated.
+**⚠ The suite is red at S2 and S3 is what greens it.** Every failure is a test whose subject S2
+deleted. Do not push S2 alone.
+
+---
+
+### S3 — Wave 3, and green the suite · `state: next`
+
+**Goal:** no tool errors, no missing pointers, no orphans. This is the step that pays for S2.
+
+**Precondition:** none. Jordan ruled Wave 3 runs, **keeping `.claude/agents/valoria-critic.md`**.
+
+**Delete.** `ci_gate_coverage.py` — first rewrite `valoria_local.py` to drop `--ci` (its lines
+23–143) and sever `broken_dependency_checker.py:33`'s import of it · `ci_hooks_verifier.py` —
+**only after** confirming `tests/valoria/test_no_polling_triggers.py` independently asserts all seven
+deny-list primitives (culling plan §5.3; that test is KEPT regardless) · `ci_wf_harness_check.py` +
+`tools/wf_harness.js` + `ci_claude_workflow_paths.py` + `.claude/wf_*.js` · `single_owner_check.py` ·
+and the session/process machinery: `session_status.py`, `session_handoff_reminder.py`,
+`session_open_work.py`, `handoff_atomize.py`, `workplan_status.py`, editing `.claude/settings.json`
+hooks in the same commit.
+
+**KEEP `.claude/agents/valoria-critic.md`.** It is a standalone agent definition; with the `wf_*.js`
+scripts gone it is invoked through the Agent tool directly. Nothing else references it, so it costs
+one file and preserves the read-only critic posture that caught S1's falsified claim.
+
+**Tests deleted with their subjects.** `test_gate_coverage` · `test_blocking_tier_is_honest` ·
+`test_wf_harness` · `test_wf_harness_check` · `test_single_owner_check` · `test_handoff_structure` ·
+`test_handoff_dispatch_validity` · `test_retired_tree_apparatus` · `test_retired_tree_scanner` ·
+`test_session_open_work`.
+
+**Then repair, do not delete, the tests whose subject only PARTLY died.** These are the rest of the
+42 and each needs a decision, not a sweep: `test_ci_common` and `test_ci_common_primitives` lose
+their `build_apparatus_registry` / `obs_core` / `dashboard_data` rows and keep the others;
+`test_stubwire` already lost its `review_core` third in S2; `test_vector_audit` and
+`test_structure_audit` lose their `build_incompleteness` rows. `test_engine_atlas` and
+`test_flow_skeletons` are **not** apparatus casualties — they are stale artifacts and stale anchors,
+fixed by S4's regeneration and by re-tracing anchors respectively.
+
+**⚠ THIS ENDS THE §0.3 BANNER EXPERIMENT, and that must be said out loud in the commit.** Wave 3
+deletes `session_status.py`, which *is* the banner. The culling plan's own standing rule was "Wave 3
+does NOT run while the §0.3 experiment is live — it edits the surface under test." Jordan's ruling of
+2026-08-21 is newer and governs, but the experiment ends rather than pauses, so **amend §0.3 in the
+same commit** to record that it ran for one session and what that session did, instead of leaving
+doctrine describing an instrument that no longer exists.
+
+**Replace the banner with nothing, deliberately.** A new session orients from `CLAUDE.md` §1 and
+`HANDOFF.md`, which is what those files are for. Do not write a smaller banner; that is the loop.
 
 **Gate.**
 ```
-git ls-files | xargs wc -l | tail -1        # tracked-line total falls by ~126,000
-python3 -m pytest tests/valoria -q          # green with NO generated file committed
-touch a new proposals/*.md, run the suite   # no generated-file churn, no red gate
+python3 -m pytest tests/valoria -q                    # 0 failed — the whole point of this step
+for t in $(grep -oE "tools/[a-z_0-9]+\.py" .github/workflows/valoria-ci.yml | sort -u); do
+  [ -f "$t" ] || echo "DEAD: $t"; done                # empty
+python3 tools/broken_dependency_checker.py            # Total broken: 0
+python3 tools/valoria_local.py --staged               # exit 0, no missing-script skips
 ```
-The third line is the falsifier: the defect being removed is *prose edit churns generated data*, so
-the test is a prose edit that does not.
+The second and third lines are the "no missing pointers / no orphans" acceptance, and they are the
+reason this step is not finished when the suite goes green.
 
-**Commit:** `[cleanup] Culling wave 5: untrack generated data, and flip the freshness gates to build-in-CI (ED-IN-0194)`
+**Also fix here, because they are exactly the class this step is named for:** the one broken path
+`broken_dependency_checker` still reports — `tools/dashboard_data.py`, cited by live ledger entry
+`ED-IN-0069` — and `.githooks/pre-commit` if it names anything retired.
 
-**Do not:** untrack `params_tables.yaml`; `git rm` without flipping the paired gate in the same
-commit; or extend this into Waves 1/2/3/6, which S5 rewires.
+**Commit:** `[cleanup] Culling wave 3: retire the wiring-checkers and session machinery, and end the §0.3 banner experiment (ED-IN-0194)`
+
+**Do not:** delete `valoria-critic`, `test_no_polling_triggers`, `test_known_red_register`, or
+either §0.1 guard. Do not write a replacement banner.
 
 ---
 
-### S3 — Move M1 juncture 1 · `state: after S2`
+### S4 — Wave 5: untrack the generated data · `state: blocked-by S3`
 
-**Goals served:** the deliverable. This is the only step here that can change `0/7`.
+**Goal:** no read/write failures from generated artifacts; end the document tax.
 
-**Precondition:** none. Both halves are named in the SessionStart banner and neither has been touched.
+**Measured:** one added `proposals/` file dirtied **21 glossary files and 16 census files**, all
+freshness-gated and blocking. `references/glossary/` (75,829 lines) already went in S2 because its
+generator did.
 
-**Half A — fractional dice pools. This is a two-line change with a measured golden delta.**
+**Remaining targets.** `systems/*/_identifier_census.yaml` (15 files, 26,292) ·
+`references/identifier_census.json` · `references/{execution_map.json, EXECUTION_MAP.md,
+execution_trace.json}` · `references/{engine_atlas.json, ENGINE_ATLAS.md}` ·
+`references/{CONTRACT_INDEX.md, KEY_INDEX.md}` · `references/key_graph.json` ·
+`references/definitions/definitions.yaml` + the 4 vocab views.
 
-`engine/autoload/sigma_leverage.py:284`, inside `roll_net_continuous`:
+**EXCLUDED, and this is the commensurability boundary — do not untrack these:**
+`engine/engine_params/*.json` and `params_tables.yaml`. They are **runtime inputs**, read at import
+by `substrate/{descriptors,keys,composition}.py`, `autoload/{sigma_leverage,dice_engine}.py` and
+`cross_scale/echo_transport.py`. Untrack them and a fresh clone does not import. Proven in S2.
 
-```python
-effective_pool = max(1, int(round(pool)))       # ← the defect
-return dice_engine.continuous_engine_sample(pool=float(effective_pool), tn=tn, rng=rng)
-```
+**The gate flip IS the work.** Each freshness check that diffs a *committed* copy against a fresh
+build (`vocab_store --check`, `definitions_store --check`, `test_engine_atlas`,
+`build_identifier_census --check`) flips to **build in CI, do not diff a committed copy**. One
+deliberate pass, gate by gate. A gate left diffing an untracked file fails permanently and gets
+deleted by the next session, which loses the check.
 
-`dice_engine.continuous_engine_sample` **already accepts a fractional pool** — its docstring says
-so at `dice_engine.py:92` ("Pool may be fractional (enables fractional Ob / TN modifiers)") and its
-body does `mean = mu * pool; std = sigma * math.sqrt(pool)` with no rounding. The rounding is
-imposed by the caller alone. Replace it with a pool **floor** that preserves canon and drops the
-quantisation:
+**Regeneration order is not arbitrary — the glossary was built FROM the census:**
+`build_execution_map` → `build_engine_atlas` → `build_identifier_census` → the exporters. Re-run each
+`--check` after.
 
-```python
-effective_pool = max(1.0, float(pool))         # [canonical: params/core.md §Pool Floor (all systems)]
-```
+**Hard gate (culling plan §5.5):** `validate_ed_citations.py:368` reads the identifier census.
+Detach it or confirm it degrades safely **before** untracking, or valid `ED-` citations risk reading
+as fabricated.
 
-- **Do not touch `roll_net` at line 273.** That is the *discrete* d10 path; whole dice are correct
-  there and `int(round())` stays.
-- `systems/factions/sim/faction_action.py:_successes` carries a docstring that currently states this
-  gap as unfixed and names it "worse than an unimplemented feature, because the call site asserted
-  the opposite". Rewrite that paragraph to describe what the code now does. Leave the ED-IN-0187
-  citation.
-- **The goldens will move, and that is the measurement.** Under §0.1 pt 4 a number without a control
-  is not a measurement: record the before and after of the seeded campaign goldens in the commit
-  message, and say which direction and by how much. Re-record only after you can explain the sign.
+**Gate.** `git ls-files | xargs wc -l` falls by ~35,000 further; suite green with no generated file
+committed; and the falsifier — **add a throwaway `proposals/*.md`, run the suite, observe zero
+generated-file churn and no red gate**, then delete it.
 
-**Half B — the `score/2` obstacle derivation. Do not begin by writing code.**
-
-Jordan ruled 2026-08-14 that an obstacle rolled against a character or faction is *"their
-corresponding score/2 plus whatever specific modifiers exist"*. `dice_engine.py:118-123` records the
-ruling; `tools/export_descriptors.py`'s own audit records it as wired **nowhere**.
-
-The FA surface has exactly two obstacle sites today, both fixed literals:
-`faction_action.py:540` (`ob = 1`, Muster) and `:562` (`ob = 2`, Govern). **Neither is obviously in
-scope**, because both are rolls against the world rather than against an opposing faction, and the
-ruling's antecedent is "rolled against a character or faction". So the first deliverable of Half B is
-a classification, not an edit:
-
-1. Enumerate every FA action resolver and label each **opposed** (the roll's difficulty derives from
-   a specific target faction or character) or **unopposed** (fixed difficulty).
-2. Wire `score/2 + modifiers` into the opposed set only, reading the score from the roster
-   `engine/autoload/game_state.py:Faction` actually implements — the six-field one. This is
-   **provisional** and the banner authorises it: Q1 gates which roster is canonical, not the
-   arithmetic.
-3. Leave the unopposed set's literals alone and record the classification in the commit message. If
-   the opposed set turns out to be empty, **say so and stop** — that is a real finding and it
-   converts Half B into a question for Jordan rather than a code change.
-
-**Two sites you must not touch.**
-- `systems/combat/combat_engine_v1/core.py:77` — the personal-combat obstacle is a declared HOLD.
-  It rolls against a fixed `DECISIVE_OB = 3` and carries opposition in `net_sigma`; deriving Ob from
-  the defender moves band placement, which is entangled with the guandao/plate collision the same
-  docstring records as Jordan's to resolve. `tests/valoria/test_degree_ladder_single_owner.py`
-  records the hold.
-- `sigma_leverage.degree` — the second declared hold (ED-IN-0187). Do not unify it here.
-
-**Gate.**
-```
-python3 -m pytest tests/valoria -q                       # must be green
-python3 -m pytest engine/tests -q                        # goldens: expect movement from Half A
-python3 tools/m1_acceptance.py --summary                 # record the verdict before and after
-```
-Plus, and this is the row that matters: a seeded FA probe whose recorded outcome **differs** from the
-same seed on `1e4c6f4`, with the delta explained. If nothing differs, Half A did not take effect.
-
-**Commit:** `[simulation] M1 juncture 1: fractional pools reach the sampler, and the FA obstacle surface classified (ED-IN-0187)`
-
-**Do not:** re-record a golden you cannot explain; add a guard for either change (both are game
-subjects, so a guard is *permitted* — but neither is a pattern defect, and §0.1 pt 5 asks for a
-pattern before a guard); or mark juncture 1 `done` on the board. S3 is what makes `done` mean
-anything.
-
-**Size:** Half A ~15 lines plus golden re-records. Half B unknown until the classification exists;
-if it exceeds ~150 lines, stop and split.
+**Commit:** `[cleanup] Culling wave 5: untrack generated data and flip the freshness gates to build-in-CI (ED-IN-0194)`
 
 ---
 
-### S4 — Give each juncture an execution artifact · `state: blocked-by S3`
+### S5 — Finish the centralization: one pattern, everywhere · `state: blocked-by S4`
 
-**Goals served:** 4 (guardrails that can observe what they guard).
+**Goal:** centralized definitions and injectable code, consumed by wrappers and systems. This is the
+step the whole programme exists to reach.
 
-**Why.** `tools/m1_acceptance.py` row 4 — the row that aggregates "all seven junctures execute" —
-counts `state: done` strings in `workplans/workplan_v6_progress.yaml`, a hand-edited board. Seven
-one-word edits green it. The gate declares this itself, in its own output, unprompted
-(`⚠ DOC-DERIVED`), which is the honest failure mode. But `review_core.py:114-115` carries
-`m1.acceptance` into the **required** compliance CI job, so those seven word-edits also drive a
-required ratchet from 2 failing rows to 1. That makes row 4 the one place left where prose moves a
-hard gate — inside the gate whose purpose is to stop prose moving gates.
+**5a — Finish the seam inversion.** PR #325 lowered the ratchet 5 → 3 via `composition.require`.
+Remaining: `engine/cross_scale/parliamentary_bridge.py` (3 imports) **and the lateral duplicate of
+the same seam at `systems/factions/sim/parliamentary_transfer.py:54`** — one seam owned twice. Add
+its role to `composition_roles:`, resolve through `require()`, delete both imports, lower
+`BASELINE_TOTAL` 3 → 0 in the same commit. Then the 16 function-local imports the `NESTED_BASELINE`
+ratchet pins, `game_state.py`'s eleven first.
 
-**What to build.** Follow rows 1 and 2, which are already execution-bound and cannot be written into
-passing: row 1 runs a seeded `mc_v18` probe season and counts `stub_resolve` calls; row 2 runs the
-same seed twice and compares `KeyLog.content_hash()`. Give each of the seven junctures one artifact
-of that kind — a seeded run, a key-log hash, an emitted key, a probe result. Replace the string count
-with the conjunction of the seven.
+**When `BASELINE_TOTAL` hits 0:** delete `test_the_documented_cycle_is_still_real` **and correct
+`CLAUDE.md` §3 in the same commit** — that test exists solely to stop §3's "acyclic, autoload is a
+leaf" being restored while the code contradicts it.
 
-**Expect immediate greens, and do not suppress them.** Five of M1's seven junctures have real
-implementations in `valoria-game` while the board scores 0/7. Both facts are true at once and
-`CLAUDE.md` §0.2 names that contradiction a **board defect, not a work item**. A juncture that greens
-the moment it is measured was always done; recording that is the point.
+**5b — Give the hardcoded rosters an authored surface.** `engine/autoload/game_state.py` still
+carries `MULTS` (:46), `ALL_PLAYABLE_15` (:41), `STARTING_OWNER` (:48), `STARTING_STATS` (:55),
+`STARTING_GARRISON` (:95) as literals with no authored source. These are **world data**, not code.
+Author them into `references/` (a `world_initial_state.yaml`, or rows on an existing registry), cook
+them by the same pattern, and delete the literals. This closes C2's remaining two thirds.
 
-**Gate.** `python3 tools/m1_acceptance.py --summary` prints no `DOC-DERIVED` line, **and** editing
-any `state:` in `workplan_v6_progress.yaml` changes no row's verdict. Demonstrate the second one by
-editing the board, re-running, showing no change, and reverting.
+**5c — Fold `wiring_manifest.yaml` into `module_contracts.yaml`,** as the culling plan directs and S2
+deferred. One registry, two blocks (`composition_roles:`, `modules:`), one exporter each. Then
+`wiring_map_check.py` retires into `export_composition --check`.
 
-**Commit:** `[infrastructure] M1 acceptance row 4 becomes execution-bound (CLAUDE.md §0.2)`
+**5d — Implement `per_stat_floors` (ED-IN-0029, ratified 2026-07-08, never implemented).**
+`Faction.adjust` applies a blanket 0.5/7.0 to every stat while the registry declares Influence floor
+1 and the rest 0, and none of its 32 callers overrides it. Wire `descriptors.faction_bounds()`.
+**This moves the seeded goldens** — its own commit, delta measured and explained, per §0.1 pt 4.
 
-**Do not:** tighten the board, add a guard on the board, or delete row 4. The row is right; its
-input is wrong.
-
----
-
-### S5 — Contracts as the registration table · `state: blocked-by S4`
-
-**Goals served:** 1 (engine → systems direction), 3 (commensurate), 6 (central definition → modular
-apparatus). This is the highest-leverage step in the programme and the one that most repays care.
-
-**The 2026-08-20 plan's C3 says "move seams to registration-driven composition" without naming the
-registration source.** That is an invitation to invent one, and this repository does not need a new
-registry. It has `references/module_contracts.yaml`: 27 modules, read by 30 tools, read at runtime by
-**nothing**.
-
-**The change.**
-1. `tools/export_contracts.py` cooks `module_contracts.yaml` → `engine/engine_params/contracts.json`,
-   with a blocking `--check`. Fifth instance of a pattern with four working precedents — copy
-   `export_descriptors.py`'s shape, including its habit of *recording* what it cannot resolve rather
-   than closing it.
-2. `engine/substrate/contracts.py` is the sole runtime reader. stdlib only, a true leaf, reads the
-   cooked artifact and never the YAML — the same discipline as `keys.py` vs `key_types.json` and
-   `descriptors.py` vs `descriptors.json`.
-3. `engine/cross_scale/scene_dispatch.py` dispatches by **registered resolver name** instead of its
-   hardcoded per-subsystem branches (currently `:233-352`, including four function-local
-   `systems.*` imports at `:273,287,351,352`).
-4. Each `systems/<sub>/sim/` module registers itself against its contract entry.
-
-**What this closes at once.** The remaining engine→systems seams invert, because `engine/` names a
-table rather than a subsystem. `references/` becomes load-bearing on *dispatch* rather than on two
-integers. The three-file tax — the coordinated edits to `game_state.py:368-420`,
-`scene_dispatch.py:233-352` and `mc_v18.py:37-38` that adding any subsystem currently requires —
-collapses to one registry row. And the 10 `doc: null` and 11 `[ASSUMPTION]`-grade contracts stop
-being documentation debt and become runtime debt, which is the only kind this repository reliably
-pays.
-
-**It needs no new guard, and this is a design property rather than an economy.** A subsystem missing
-from the table does not dispatch. The registry *is* the check. If you find yourself writing
-`test_every_subsystem_is_registered`, the registration is not actually driving anything and you have
-built a parallel index — stop and re-read step 3.
-
-**Sequencing inside S4.** Land the exporter and reader first, with nothing consuming them, and prove
-`--check` round-trips. Then convert dispatch one subsystem at a time, running `engine/tests` after
-each. Goldens must not move — this is a mechanism change, not a behaviour change, and unmoved
-goldens are the control that says so.
-
-**Also finish C2 here**, since the twins and the dispatch table are the same problem: delete `MULTS`,
-`ALL_PLAYABLE_15` and `STARTING_STATS` from `game_state.py` in favour of the cooked artifacts.
-Wiring the registry's per-stat floors into `Faction.adjust` (ratified 2026-07-08 as ED-IN-0029,
-never implemented, currently a blanket 0.5/7.0 over 32 call sites) **moves goldens** — give it its
-own commit with the delta measured, exactly as `descriptors.py`'s docstring already says.
+**5e — The invariant, made enforceable.** One test, game-subject, replacing the retired
+`single_owner_check`: *every file under `engine/engine_params/` has exactly one exporter that writes
+it and exactly one leaf under `engine/substrate/` that reads it, and no other module parses its
+authored surface.* Derive both sides from the tree, not a hand list. This is the guard that keeps the
+pattern from decaying back into ad-hoc readers, and it earns its existence under §0.1 pt 5 because
+its subject is the bridge the port is generated against.
 
 **Gate.**
 ```
 grep -rE "^(from|import)\s+systems[.\s]" engine --include=*.py | grep -v engine/tests   # empty
-python3 -m pytest tests/valoria/test_engine_does_not_import_systems.py -q  # BASELINE_TOTAL 5 -> 0
-                                                                          # NESTED_BASELINE below 16
-python3 -m pytest engine/tests -q            # unmoved, except the floors commit
-python3 tools/export_contracts.py --check
+python3 -m pytest tests/valoria/test_engine_does_not_import_systems.py -q  # BASELINE_TOTAL 0
+python3 -m pytest engine/tests -q      # unmoved, EXCEPT the 5d commit, whose delta is recorded
+for e in engine/engine_params/*; do echo "$e"; done  # each has one exporter + one leaf reader
 ```
-When `BASELINE_TOTAL` reaches 0, delete `test_the_documented_cycle_is_still_real` **and correct
-`CLAUDE.md` §3's "acyclic, autoload is a leaf" in the same commit** — that test exists to stop §3
-being restored while the code contradicts it, and it is the only thing holding the correction.
 
-**Commit:** `[infrastructure] Act C3: module_contracts.yaml becomes the dispatch registry`
+**Commit:** one per sub-step. `[infrastructure] S5c: module_contracts.yaml becomes the single registration table`, etc.
 
-**Size:** large. Expect several commits. Split at subsystem boundaries, never mid-conversion.
+**Do not:** invent a second registry; special-case a subsystem in `scene_dispatch.py`; or fold 5d
+into any other commit.
 
 ---
 
-### S6 — Collapse the L3 rungs, run the dependent cull waves, and pin what is actually read · `state: blocked-by S5`
+### S6 — Wave 6 consolidations, FORK semantics, and the ledger cap · `state: blocked-by S5`
 
-**Goals served:** 5 (gates at L2 at the deepest), 4, and the rest of the cull.
+**6b before 6a** — 6b's tombstones gate 6a, and `deprecated/archives/editorial*` is read by
+`validate_ed_citations.py`; delete it before the tombstone list lands and **every valid `ED-`
+citation reads as fabricated** (culling plan §5.2). Then 6f, then 6c.
 
-**This step now carries culling Waves 1, 2 and 6** (`2026-08-18-culling-plan-v1.md`, RATIFIED,
-ED-IN-0194) — the ones that had to wait, because each removes apparatus that S5 rewires. Wave 5 ran
-at S2. Their order inside this step is the culling plan's own, which was adjudicated and should not
-be re-derived: **6b (tombstones) before 6a**, then Wave 1 (leaves), then Wave 2 (meta-gates, orphaned
-by wave 1), then 6f, then 6c. **Wave 3 does not run** — see §4.
+**FORK semantics first, then the call sites (D1).** Three surviving sites give three different
+answers about the same ledger row: `pathres.py:184-191` returns a `FORKED` status,
+`broken_dependency_checker.py:164` returns `FORK:<ref>:<original-ref>`, `ci_claude_workflow_paths.py`
+has no FORK handling and resolves a forked file to `None`. Decide what a FORK row resolves to, once,
+then port. ⚠ `pathres.resolve(max_hops=1)` claims to reproduce `bdc` exactly and does **not**
+reproduce its pairing format, which `bdc`'s caller checks — a drop-in port silently changes output.
 
-**Wave 4 (`audit/` → fork ref) is mostly already done, and what remains is not a cull.** Measured
-2026-08-21: **16 of the 17 units the plan marks "delete outright, no extraction" are already gone**,
-taken by #323's −97,454-line commit; the residue of that set is 1,870 lines. `audit/` still holds
-79,085 lines, and that is almost entirely the **~33 game-subject working papers the plan requires to
-be EXTRACTED first** — their surviving conclusions belong in `systems/` heads or `proposals/`, the
-workings do not. That is authorship work on game subjects, not removal, and it should be scheduled as
-such rather than as a wave. One blocker the plan names is already clear:
-`tests/valoria/test_fork_divergence.py`, which imported from `audit/`, was deleted in `4ab18df`.
+**Naming trio is a two-of-three merge (D2):** merge the `ci_names_check` facade; leave
+`ci_names_consistency` standalone (different invariant, and it hard-requires PyYAML which the
+register-size validators deliberately avoid). **D4 is struck** — `bdc` absorbing `freshness_gate` is
+aggregation, not deduplication.
 
-Measured 2026-08-20: 72 of 170 files in `tests/valoria` take a tool as their subject; 11 of 74 tools
-take another tool as theirs. The deepest rungs are the three files `CLAUDE.md` §0.1 pt 5 already
-names as forbidden — and all three are still present, and `test_gate_coverage.py` gained a row in
-*both* of the commits that were supposed to end the loop, including the one that wrote the
-prohibition. Either the doctrine names the wrong file or those commits violated it twice; leaving the
-contradiction is worse than either resolution.
+**Unblock the ledger.** `registers/editorial_ledger_in.jsonl` has ~108 tokens of headroom under a
+blocking cap, which means **no lane can file a row at all** (ED-IN-0185 Q5, overdue). Raise, split,
+or accept — Jordan's call, §4 Q8. Also resolve the duplicate `ED-IN-0194` at lines 50-51.
 
-**The disposition, which needs Jordan's confirmation (§4):**
-- `test_gate_coverage.py` — **narrow, do not delete.** Four of its rows cover the `export_*.py
-  --check` round-trips that produce the Godot bridge, so it is transitively load-bearing on the game
-  and wholesale deletion could let an export silently fall out of CI. Keep those four rows, drop the
-  rest, and amend §0.1 pt 5 to name the narrowed file as *kept* with the reason.
-- `test_wf_harness_check.py`, `test_blocking_tier_is_honest.py` — **delete.** Guard-of-guard with no
-  path to the game.
-- **Pin `engine/engine_params/params_tables.yaml`.** Two engine modules read it
-  (`sigma_leverage.py`, `dice_engine.py`) and its generator was retired with `engine/params/`, so it
-  is hand-edit-only with no integrity check — while three artifacts nobody reads
-  (`game_constants.json`, `sim_params.json`, `value_pointer_links.json`) each have a blocking one.
-  The protection is inverted relative to consumption; a content hash pinned in CI is enough.
-
-**Gate.** No file in `tests/valoria` takes a test or a guard as its subject; `params_tables.yaml`
-has an integrity check that fails on a hand edit — demonstrate it by making one.
-
-**Commit:** `[cleanup] Collapse the guard tiers to L2 and pin the artifact the engine actually reads`
+**Re-home what `scope_ratchet` was measuring.** It reported REGRESSED on `ed.stale` (199 vs 76) and
+`ed.needs_jordan_stale` (83 vs 21) up to its deletion and nothing reports them now. Those are
+**ledger** facts. If they are watched again, the instrument is a ledger-subject one — not a
+five-ceiling repository ratchet.
 
 ---
 
-### S7 — Cross the repo boundary · `state: blocked-by S6, and by attaching the repo`
+### S7 — Wave 4's residue: extraction, not culling · `state: blocked-by S6`
 
-**Goals served:** 4, 3.
+**16 of the 17 "delete outright" units are already gone** (#323 took them; residue 1,870 lines).
+`audit/` still holds 79,085 lines and that is almost entirely the **~33 game-subject working papers
+the plan requires to be EXTRACTED first** — their surviving conclusions belong in `systems/` heads or
+`proposals/`, the workings do not. Named explicitly by the plan: the mass-battle stress-test
+octagon/rotation/geometric-contact models, `narrative_engine_design_v2_churn.md` (**RATIFIED and
+`CURRENT.md`-referenced — it must MOVE, not fork**), the contest gate packets, the world-churn audit
+(backs 9 open Jordan decisions), the degree-reband delta, the degree-vocabulary census.
 
-**Open by attaching `jordanelias/valoria-game`.** It is not in this session's scope by default and
-nothing below can be read, let alone verified, until it is. Everything this repository records about
-it is second-hand — including everything in this document.
-
-Then, in order: finish **PP-665** (12 live `maret_vossen` sites named at §1.D1 of the 2026-08-20
-plan) so `godot-ci.yml` goes green for the first time since 2026-05-04 **and the Solmund naming step
-executes even once** — it has been SKIPPED behind a failing Yrsa step for months, so a gate nobody
-has ever seen run is about to run; expect it to fail and budget for that. Then harden the compile
-ratchet to compare error **sets** rather than counts. Then land
-`valoria-game/tools/check_constants_parity.py`, the reader half of `game_constants.json`, so the
-export bridge acquires its first consumer and the ~90 hand-transcribed constants in
-`systems/util/Constants.gd` acquire a comparer.
-
-**Gate.** `godot-ci.yml` green on `main`; the game reads its first `.json` from `engine_params/`;
-the divergence list is red on a `KNOWN_DIVERGENT` set that can only shrink.
+**This is authorship work on game subjects and should be scheduled as such**, not as a wave. Nothing
+under `engine/` or `tools/` opens a file in `audit/` — every mention is a docstring citation
+(measured 2026-08-21) — so the fork-ref move is safe once extraction is done. One blocker the plan
+names is already clear: `test_fork_divergence.py` was deleted in `4ab18df`.
 
 ---
 
-### S8 — Act D, and Act E's residue · `state: blocked-by S7`
+### S8 — M1 juncture 1 · `state: unblocked throughout; slot it anywhere after S3`
 
-Unchanged from the 2026-08-20 plan, **including its two corrections**: merge the `ci_names_check`
-facade but leave `ci_names_consistency` standalone (D2), and D4 is struck — `broken_dependency_checker`
-absorbing `freshness_gate` is aggregation, not §8 consolidation. Fix FORK **semantics** before
-porting call sites (D1): three sites currently give three different answers about the same ledger row,
-and `pathres.resolve(max_hops=1)` does not reproduce `bdc`'s `FORK:<ref>:<ref>` pairing format that
-`bdc`'s caller checks, so a drop-in port silently changes output.
+**Half A, fractional pools — and it is NOT a dormant bug.** Measured 2026-08-21: a 4-season seeded
+campaign makes 40 calls to `roll_net_continuous` and **20 already pass a fractional pool** (4.3, 4.6,
+4.9, 5.3, 5.5, …), every one silently rounded. `sigma_leverage.py:284` does
+`max(1, int(round(pool)))` while `dice_engine.continuous_engine_sample` already accepts fractional
+input and says so at `dice_engine.py:92`. Replace with `max(1.0, float(pool))` — the canonical pool
+floor survives, the quantisation goes. **Do not touch `roll_net` at :273**, the discrete path.
 
-**Act E has no waves left to run here.** Wave 5 ran at S2; Waves 1, 2 and 6 ran at S6; Wave 4's
-delete-outright set is already gone and its extraction half is authorship work on game subjects, to
-be scheduled on its own; **Wave 3 does not run at all** without the ruling in §4. What remains under
-Act E is the residue: confirming the culling plan's §5 hard gates all held, and closing
-`registers/editorial_ledger_in.jsonl`'s ~108-token headroom problem (ED-IN-0185 Q5, overdue), which
-currently means **no lane can file a ledger row at all**.
+⚠ `systems/combat/combat_engine_v1/core.py:56` routes through the same function, so personal combat
+is in the blast radius **by construction**; whether its pools are fractional is not yet measured.
+Measure before editing, because the byte-exact golden-modes CI job pins it.
+
+**Half B, the `score/2` obstacle — begins as a classification, not an edit.** The FA surface has two
+obstacle sites, both fixed literals: `faction_action.py:540` (`ob = 1`, Muster) and `:562` (`ob = 2`,
+Govern). Neither is obviously in scope: the ruling's antecedent is "rolled against a character or
+faction" and both are rolls against the world. Enumerate every FA resolver, label each **opposed** or
+**unopposed**, wire `score/2 + modifiers` into the opposed set only, against the six-field roster the
+code implements (provisional — Q1 gates which roster is canonical, not the arithmetic). **If the
+opposed set is empty, say so and stop** — that is a finding, and it converts Half B into a question.
+
+**Two declared holds you must not touch:** `combat_engine_v1/core.py:77` (fixed `DECISIVE_OB = 3`,
+entangled with the guandao/plate collision) and `sigma_leverage.degree` (ED-IN-0187).
+
+**Gate.** A seeded FA probe whose recorded outcome **differs** from the same seed before the change,
+with the golden delta explained. If nothing differs, Half A did not take effect.
 
 ---
 
-## 3. What this order deliberately does not do
+### S9 — Cross-repo residue · `state: blocked-by attaching jordanelias/valoria-game`
+
+**Most of this act is already done** and the earlier plan is stale on it. In `valoria-game`: PP-665
+finished, **CI green for the first time since 2026-05-04**, the masked `Verify Solmund naming` step
+executed for the first time ever (and was itself red, fixed in the same commit), and Act C1's
+**reader half shipped** — `tools/check_constants_parity.py`, `resources/generated/game_constants.json`
+(the first `.json` that repo has ever contained), and a `Constants Parity (vs design oracle)` CI job.
+
+**What remains: B2 and B3.** B2 — harden the compile ratchet: assert the project actually finished
+loading before comparing counts; path-anchor the `res://tests/` exclusion, which currently drops any
+line containing `GdUnitTestSuite` anywhere; compare error **sets**, not counts, so "fix five, add
+five" fails. Godot 4.3 downloads through the proxy, so this is locally measurable — 84 errors
+reproduce exactly, 63 of them `Cannot infer the type of X`. B3 — make one GDScript test execute;
+gdUnit4 vendoring is 403 through the proxy, so the fallback is a `tests/run_all.gd` `SceneTree`
+script over the pure-logic classes.
+
+---
+
+## 4. What this order deliberately does not do
 
 - **It does not add a step for the review that produced it.** No `test_plan_compliance`, no progress
   register for the steps, no findings document. §0.1 pt 5 forbids the first two and §0 forbids the
@@ -482,7 +403,7 @@ currently means **no lane can file a ledger row at all**.
 
 ---
 
-## 4. Rulings that gate steps
+## 5. Rulings that gate steps
 
 | Q | Question | Blocks | Where the evidence is |
 |---|---|---|---|
@@ -490,22 +411,28 @@ currently means **no lane can file a ledger row at all**.
 | **Q1b** | **The ratified floors nobody implemented.** ED-IN-0029 (2026-07-08) floored Influence at 1 and the rest at 0. `Faction.adjust` has applied a blanket 0.5/7.0 ever since and no caller overrides it. Wire them, with the golden delta measured? | S4's final commit | `export_descriptors.py` `unimplemented.per_stat_floors` |
 | **Q2** | **Name the tenth attribute.** You ruled ten on 2026-08-14; the registry ships nine, and `Constants.gd:28` already declares `ATTRIBUTE_COUNT = 10`. The game is ahead of canon. | closing the `pending_tenth` sentinel | `CLAUDE.md` §5 |
 | **Q3** | **Godot 4.3 or 4.6?** `project.godot:11` and CI pin 4.3; `CLAUDE.md` and `godot/` say 4.6. | what the compile ratchet's 84 means | 2026-08-20 plan §1.D5 |
-| **Q4** | **S5's disposition.** Narrow `test_gate_coverage.py` to the four export round-trips and amend §0.1 pt 5 to name it as kept — or delete it and accept that local-green can drift from CI-green? | S5 | §2 S5 |
+| ~~Q4~~ | **RULED 2026-08-21 — `test_gate_coverage.py` is DELETED with `ci_gate_coverage.py` in S3.** Superseded by the ruling below: Wave 3 runs, and the gate-coverage pair is a Wave 3 target. Local-green may now drift from CI-green; that risk is accepted, and the four `export_*` round-trips it protected are individually blocking in CI regardless. | — | §3 S3 |
 | **Q5** | `registers/editorial_ledger_in.jsonl:50-51` — two rows share id `ED-IN-0194` with conflicting `needs_jordan`. Reported 2026-08-19, unruled. | ledger integrity | — |
-| **Q6 — HOW DEEP DOES THE CULL GO (a)?** `tools/ci_claim_provenance_check.py` and `tools/ci_vacuous_assertion_check.py` are **literal encodings of `CLAUDE.md` §0.1 points 3 and 2**. By this repository's own load-bearing predicate they are recursive — they audit ledger prose and test code, not the game — and two independent lenses flagged them. But **if they go, §0.1 must be struck in the same commit** rather than left pointing at deleted guards. Delete both and amend §0.1, or keep both and record the exemption? | culling plan §5 gate 6; the depth of S6 | `2026-08-18-culling-plan-v1.md` §5.6 — **held for you since 2026-08-18** |
-| **Q7 — HOW DEEP DOES THE CULL GO (b)?** **Wave 3 ends structurally-independent adversarial review.** `.claude/wf_*.js` + `.claude/agents/valoria-critic.md` are layer 4 by the rule and should be deleted — and they are the mechanism that caught four errors in the culling-plan session's own work, and the read-only critic posture that caught the falsified load-bearing claim in S1. **The rule says delete; the evidence says it works.** | Wave 3, which is otherwise held indefinitely | `2026-08-18-culling-plan-v1.md` §5.7 — **held for you since 2026-08-18** |
+| ~~Q6~~ | **RULED 2026-08-21 — KEEP both guards.** `ci_claim_provenance_check.py` and `ci_vacuous_assertion_check.py` stay, and `CLAUDE.md` §0.1 stays intact with them. They are the one place doctrine is mechanised rather than merely asserted; the load-bearing predicate is overridden here deliberately, and the exemption is recorded rather than silent. | — | culling plan §5.6, held 2026-08-18 → ruled |
+| ~~Q7~~ | **RULED 2026-08-21 — Wave 3 RUNS, `valoria-critic` is KEPT.** `.claude/wf_*.js`, `wf_harness.js`, the wiring-checkers and the session machinery go; `.claude/agents/valoria-critic.md` survives as a standalone agent definition, invoked through the Agent tool now that the workflow scripts are gone. Structurally-independent adversarial review therefore survives the wave that was written to end it. ⚠ **The cost this ruling carries: Wave 3 deletes `session_status.py`, so the §0.3 banner experiment ENDS.** S3 amends §0.3 in the same commit. | — | culling plan §5.7, held 2026-08-18 → ruled |
+| ~~m1_acceptance~~ | **RULED 2026-08-21 — CARVED OUT of Wave 1, kept.** Wave 1 as ratified deleted it; §0.2 made it the definition of `done` one day after that ratification. | — | §3 S2 |
+| **Q8 — the ledger cap.** `registers/editorial_ledger_in.jsonl` has ~108 tokens of headroom under a **blocking** cap, so **no lane can file a row at all** (ED-IN-0185 Q5, overdue). Raise the cap, split the file, or accept that IN cannot file? Separately, lines 50-51 carry **two rows sharing id `ED-IN-0194`** with conflicting `needs_jordan`, reported 2026-08-19 and unruled. | S6; any future ledger row in any lane | `registers/editorial_ledger_in.jsonl` |
 
-**Q6 and Q7 are the two that gate how much of the recursion actually gets removed**, and both have
-been held since 2026-08-18 without a ruling. Everything else in the cull can proceed without them;
-neither the guards in Q6 nor the review apparatus in Q7 can be touched until they are answered.
+**The two that gated how deep the cull goes are now answered.** Q6 and Q7 had been held since
+2026-08-18; Jordan ruled both on 2026-08-21 and the answers are recorded above rather than left as
+open rows, so no later session re-opens a settled question. **Q8 is now the only ruling that blocks
+a step in this document** — S6 cannot close the ledger work without it, and no lane can file a row
+in the meantime.
 
-Q4, Q6 and Q7 are named here. Q1, Q1b, Q2, Q3 and Q5 are the 2026-08-20 plan's §7 queue, unchanged and still open;
-its Q4 (ED-SC-0003/0004/0005) and Q8/Q9 (`accord_range`, `coherence_bands`) gate junctures and port
-semantics that no step above reaches, and stay queued there rather than being restated here.
+Q1, Q1b, Q2 and Q3 are the 2026-08-20 plan's §7 queue, unchanged and still open. That plan's own
+Q4 (ED-SC-0003/0004/0005 — 0004 has two contradictory live implementations; read ED-SC-0017 first,
+it argues 0005 is already ruled) hard-blocks **M1 juncture 3**, and its Q8/Q9 (`accord_range`,
+`coherence_bands` — two state models for one field, twice) gate port semantics. None of those are
+reached by any step here, so they stay queued there rather than being restated.
 
 ---
 
-## 5. Provenance
+## 6. Provenance
 
 Produced 2026-08-21 from a read-only adversarial review of `c9b0a86`, `4ab18df` and `1e4c6f4`
 (PRs #322, #323, #324) against the working tree at `1e4c6f4`. Seven findings; the two that changed
